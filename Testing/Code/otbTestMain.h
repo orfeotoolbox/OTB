@@ -59,6 +59,7 @@ int main(int ac, char* av[] )
   double lToleranceDiffValue(0);
   double lEpsilon(0);
   bool lIgnoreOrder(false);
+  double epsilonBoundary(0.0);
 
   std::vector<std::string> baselineFilenamesBinary;
   std::vector<std::string> testFilenamesBinary;
@@ -71,8 +72,6 @@ int main(int ac, char* av[] )
   std::vector<std::string> testFilenamesImage;
   std::vector<std::string> baselineFilenamesAscii;
   std::vector<std::string> testFilenamesAscii;
-  std::vector<std::string> baselineFilenamesList;
-  std::vector<std::string> testFilenamesList;
   std::vector<std::string> ignoredLines;
   ignoredLines.clear();
 
@@ -122,10 +121,15 @@ int main(int ac, char* av[] )
     }
     if (strcmp(av[1], "--ignore-order") == 0)
     {
-      std::cout << "******************* Order option identified" << std::endl;
       lIgnoreOrder = true;
       av += 1;
       ac -= 1;
+    }
+    if (strcmp(av[1], "--epsilon-boundary") == 0)
+    {
+      epsilonBoundary = atof(av[2]);
+      av += 2;
+      ac -= 2;
     }
     if (strcmp(av[1], "--compare-image") == 0)
     {
@@ -237,64 +241,6 @@ int main(int ac, char* av[] )
       }
 
     }
-    else if (strcmp(av[1], "--compare-list") == 0)
-    {
-      lFlagRegression = true;
-      lEpsilon = (double)(::atof(av[2]));
-      baselineFilenamesList.reserve(1);
-      testFilenamesList.reserve(1);
-      baselineFilenamesList.push_back(av[3]);
-      testFilenamesList.push_back(av[4]);
-      av += 4;
-      ac -= 4;
-
-      if ( ac > 1 )
-      {
-        if (strcmp(av[1], "--ignore-lines-with") == 0)
-        {
-          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
-          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
-          {
-            ignoredLines.push_back(av[3+i]);
-          }
-          av += 2+nbIgnoredLines;
-          ac -= 2+nbIgnoredLines;
-        }
-      }
-
-    }
-
-    else if (strcmp(av[1], "--compare-n-list") == 0)
-    {
-      lFlagRegression = true;
-      lEpsilon = (double)(::atof(av[2]));
-      // Number of comparisons to do
-      unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
-      baselineFilenamesList.reserve(nbComparisons);
-      testFilenamesList.reserve(nbComparisons);
-      // Retrieve all the file names
-      for (unsigned int i = 0; i<nbComparisons;++i)
-      {
-        baselineFilenamesList.push_back(av[4+2*i]);
-        testFilenamesList.push_back(av[5+2*i]);
-      }
-      av+=3+2*nbComparisons;
-      ac-=3+2*nbComparisons;
-
-      if ( ac > 1 )
-      {
-        if (strcmp(av[1], "--ignore-lines-with") == 0)
-        {
-          unsigned int nbIgnoredLines=(unsigned int)(::atoi(av[2]));
-          for (unsigned int  i=0; i<nbIgnoredLines; ++i )
-          {
-            ignoredLines.push_back(av[3+i]);
-          }
-          av += 2+nbIgnoredLines;
-          ac -= 2+nbIgnoredLines;
-        }
-      }
-    }
     else if (strcmp(av[1], "--compare-metadata") == 0)
     {
       lFlagRegression = true;
@@ -383,6 +329,12 @@ int main(int ac, char* av[] )
           {
             testHelper.IgnoreLineOrderOff();
           }
+
+          if (epsilonBoundary != 0.0)
+          {
+            testHelper.SetEpsilonBoundaryChecking(epsilonBoundary);
+          }
+
           // Non regression test for images
           if ((baselineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
           {
@@ -525,66 +477,6 @@ int main(int ac, char* av[] )
                                           lEpsilon,
                                           ignoredLines);
               }
-              result += multiResult;
-            }
-          }
-/******************************************/
-/******************************************/
-/******************************************/
-// Non regression test for list
-          if ((baselineFilenamesList.size()>0) && (testFilenamesList.size()>0))
-          {
-            // Creates iterators on baseline filenames vector and test filenames vector
-            std::vector<std::string>::iterator itbaselineFilenames = baselineFilenamesList.begin();
-            std::vector<std::string>::iterator itTestFilenames = testFilenamesList.begin();
-            std::vector<std::string>::iterator itIgnoredLines = ignoredLines.begin();
-            // Warning message
-            if (ignoredLines.size() > 0 )
-            {
-              std::cout << "The lines containing the expressions ";
-              for (;itIgnoredLines!=ignoredLines.end();++itIgnoredLines)
-              {
-                std::cout << (*itIgnoredLines) <<" ";
-              }
-              std::cout << "are not considered"<< std::endl;
-            }
-
-            // For each couple of baseline and test file, do the comparison
-            for (;(itbaselineFilenames != baselineFilenamesList.end())
-                 &&(itTestFilenames != testFilenamesList.end());
-                 ++itbaselineFilenames,++itTestFilenames)
-            {
-              std::string baselineFilenameList= (*itbaselineFilenames);
-              std::string testFilenameList= (*itTestFilenames);
-
-              std::map<std::string,int> baselines = testHelper.RegressionTestbaselines(const_cast<char*>(baselineFilenameList.c_str()));
-              std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
-              multiResult = 1;
-              std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl;
-
-              while (baseline!=baselines.rend() && (multiResult!=0))
-              {
-                std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
-                testHelper.ReportErrorsOff();
-                baseline->second = testHelper.RegressionTestListFile(testFilenameList.c_str(),
-                                   (baseline->first).c_str(),
-                                   lEpsilon,
-                                   ignoredLines);
-
-                multiResult = baseline->second;
-                ++baseline;
-              }
-	      if (multiResult != 0)
-              {
-                baseline = baselines.rbegin();
-                testHelper.ReportErrorsOn();
-                baseline->second
-                    = testHelper.RegressionTestListFile(testFilenameList.c_str(),
-                                          (baseline->first).c_str(),
-                                          lEpsilon,
-                                          ignoredLines);
-              }
-
               result += multiResult;
             }
           }

@@ -55,9 +55,6 @@ public:
   int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
       const double epsilon, std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestListFile(const char * testListFileName, const char * baselineListFileName,
-      const double epsilon, std::vector<std::string> ignoredLines) const;
-
   int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
       const double toleranceDiffPixelImage) const;
 
@@ -77,6 +74,11 @@ public:
   void IgnoreLineOrderOff()
   {
     m_IgnoreLineOrder=false;
+  }
+
+  void SetEpsilonBoundaryChecking(double epsilonBoundary)
+  {
+    m_EpsilonBoundaryChecking = epsilonBoundary;
   }
 
 private:
