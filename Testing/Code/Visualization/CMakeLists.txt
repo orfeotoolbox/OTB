@@ -337,6 +337,12 @@ ADD_TEST(vrTuSplittedWidgetManagerNew ${VISUREFAC_TESTS1}
 otbSplittedWidgetManagerNew
 )
 
+#---------- otb::VerticalAsymptote --------
+ADD_TEST(vrTuVerticalAsymptoteCurveNew ${VISUREFAC_TESTS1}
+otbVerticalAsymptoteCurveNew
+)
+
+
 # Testing srcs
 SET(Visualization_SRCS1
 otbVisualizationTests1.cxx
@@ -383,6 +389,7 @@ otbStandardImageViewerRGBNew.cxx
 otbStandardImageViewer.cxx
 otbPackedWidgetManagerNew.cxx
 otbSplittedWidgetManagerNew.cxx
+otbVerticalAsymptoteCurveNew.cxx
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
