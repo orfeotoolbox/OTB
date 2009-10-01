@@ -7,14 +7,11 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance de base
-SET(TOL 0.0)
-
-#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
-SET(EPS 0.001)
+SET(NOTOL 0.0)
 
 #Tolerance sur diff pixel image
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
-SET(EPSILON 0.00000001)
+SET(EPSILON_8 0.00000001)
 
 SET(FUSION_TESTS1 ${CXX_TEST_PATH}/otbFusionTests1)
 
@@ -32,7 +29,7 @@ ADD_TEST(fuTuBayesianFusionFilterNew ${FUSION_TESTS1}
 )
 
 ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS1}
-    --compare-image ${TOL}  ${BASELINE}/fuTvBayesianFusion.tif
+    --compare-image ${NOTOL}  ${BASELINE}/fuTvBayesianFusion.tif
                            ${TEMP}/fuTvBayesianFusion.tif
         otbBayesianFusionFilter
 	${INPUTDATA}/multiSpect.tif
@@ -48,7 +45,7 @@ ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS1}
 )
 
 ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS1}
-    --compare-image ${EPSILON}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
+    --compare-image ${EPSILON_8}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
                            ${TEMP}/fuTvRcsPanSharpeningFusion.tif
         otbSimpleRcsPanSharpeningFusionImageFilter
 	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
