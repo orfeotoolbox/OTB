@@ -7,7 +7,7 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
+SET(NOTOL 0.0)
 
 
 SET(SPATIALREASONING_TESTS1 ${CXX_TEST_PATH}/otbSpatialReasoningTests1)
@@ -22,7 +22,7 @@ ADD_TEST(srTuRCC8CalculatorNew ${SPATIALREASONING_TESTS1}
          otbImageToImageRCC8CalculatorNew)
 
 ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS1}
-   --compare-ascii ${TOL}
+   --compare-ascii ${NOTOL}
  		   ${BASELINE_FILES}/srRCC8CalculatorOutput.txt
  		   ${TEMP}/srRCC8CalculatorOutput.txt
 	 otbImageToImageRCC8Calculator
@@ -41,7 +41,7 @@ ADD_TEST(srTuPolygonRCC8CalculatorNew ${SPATIALREASONING_TESTS1}
          otbPolygonToPolygonRCC8CalculatorNew)
 
 ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS1}
-   --compare-ascii ${TOL}
+   --compare-ascii ${NOTOL}
  		   ${BASELINE_FILES}/srRCC8PolygonToPolygonCalculatorOutput.txt
  		   ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
 	 otbPolygonToPolygonRCC8Calculator
@@ -110,7 +110,7 @@ ADD_TEST(srTuRCC8GraphFileWriterNew ${SPATIALREASONING_TESTS2}
          otbRCC8GraphFileWriterNew)
 
 ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${TOL}
+	--compare-ascii	${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
 			${TEMP}/srRCC8GraphWriterOutput1.dot
 	 otbRCC8GraphFileWriter
@@ -128,7 +128,7 @@ ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS2}
 )
 
 ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${TOL}
+	--compare-ascii	${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
 			${TEMP}/srRCC8GraphIOEndToEndOut.dot
 	 otbRCC8GraphIOEndToEnd
@@ -151,7 +151,7 @@ ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2}
 
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${TOL}
+	--compare-ascii	${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
 			${TEMP}/srRCC8GraphFilterOutput.dot
 	 otbImageMultiSegmentationToRCC8GraphFilter
@@ -163,7 +163,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS2}
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS2}
-	--compare-ascii	${TOL}
+	--compare-ascii	${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
 			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
 	 otbImageMultiSegmentationToRCC8GraphFilter
@@ -175,7 +175,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS2}
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${TOL}
+	--compare-ascii ${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
 			${TEMP}/srRCC8GraphFilterOutput2.dot
 	 otbImageMultiSegmentationToRCC8GraphFilter
@@ -188,7 +188,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
 )
 
 ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${TOL}
+	--compare-ascii ${NOTOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
 			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
 	 otbImageMultiSegmentationToRCC8GraphFilter
@@ -208,7 +208,7 @@ ADD_TEST(srTuPolygonListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2}
 
 
 ADD_TEST(srTvPolygonListToRCC8GraphFilter ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${TOL}
+	--compare-ascii ${NOTOL}
 		${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilterOuptut.dot
 		${TEMP}/srTvPolygonListToRCC8GraphFilterOuptut.dot
          otbPolygonListToRCC8GraphFilter
@@ -220,7 +220,7 @@ ADD_TEST(srTvPolygonListToRCC8GraphFilter ${SPATIALREASONING_TESTS2}
 	 ${INPUTDATA}/rcc8_mire4.png)
 
 ADD_TEST(srTvPolygonListToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
-	--compare-ascii ${TOL}
+	--compare-ascii ${NOTOL}
 		${BASELINE_FILES}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
 		${TEMP}/srTvPolygonListToRCC8GraphFilter2Ouptut.dot
          otbPolygonListToRCC8GraphFilter
