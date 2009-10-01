@@ -177,11 +177,17 @@ ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/prTvSensorModelTerraSarX_Upsala.txt
+        ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
 )
 ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
+  --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/prTvSensorModelTerraSarX_Toronto.txt
+        ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
