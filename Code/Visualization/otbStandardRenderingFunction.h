@@ -18,11 +18,9 @@
 #ifndef __otbStandardRenderingFunction_h
 #define __otbStandardRenderingFunction_h
 
-
 #include <cassert>
 #include <iomanip>
 #include <vector>
-
 
 #include "otbMacro.h"
 #include "otbChannelSelectorFunctor.h"
@@ -264,7 +262,7 @@ public:
     }
     oss << std::endl;
 
-//     unsigned int inputChannels = VisualizationPixelTraits::PixelSize(spixel);
+    // unsigned int inputChannels = VisualizationPixelTraits::PixelSize(spixel);
 
     InternalPixelType spixelRepresentation = this->EvaluatePixelRepresentation(spixel);
     OutputPixelType spixelDisplay = this->EvaluateTransferFunction(spixelRepresentation);
@@ -303,6 +301,26 @@ public:
      m_AutoMinMax = false;
      UpdateTransferedMinMax();
      otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
+   }
+
+  /**
+   * Get Parameters Min and and max for each band
+   */
+   virtual  ParametersType GetParameters()
+   {
+     unsigned int nbBands = m_TransferedMaximum.size();
+     ParametersType         param;
+     param.SetSize(2*nbBands);
+     
+     // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
+     for(unsigned int i = 0; i< nbBands ; i++)
+     {
+       // Min Band 
+       param.SetElement(2*i,m_TransferedMinimum[i]);
+       // Max Band 
+       param.SetElement(2*i+1,m_TransferedMaximum[i]);
+     }
+     return param;
    }
 
   virtual void SetChannelList(std::vector<unsigned int>& channels)
