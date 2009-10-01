@@ -120,6 +120,12 @@ public:
   /** Get the number of curves */
  unsigned int GetNumberOfCurves();
 
+ /** TransformPoint */
+ PointType TransformPoint(PointType spacePoint)
+   {
+     return m_SpaceToScreenTransform->TransformPoint(spacePoint);
+   }
+
 protected:
   /** Constructor */
   Curves2DWidget();
