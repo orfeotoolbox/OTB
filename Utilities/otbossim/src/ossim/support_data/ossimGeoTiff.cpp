@@ -1184,15 +1184,15 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          return false;
       }
    }
-   else if(theModelTransformation.size() == 16)
+   /*else if(theModelTransformation.size() == 16)
    {
-      ossimNotify(ossimNotifyLevel_WARN)
+     ossimNotify(ossimNotifyLevel_WARN)
          << "ossimGeoTiff::addImageGeometry: Do not support rotated "
          << "map models yet.  You should provide the image as a sample "
          << "and we will fix it" << std::endl;
       
 //       return false;
-   }
+}*/
   
    if ((theRasterType == OSSIM_PIXEL_IS_AREA)&&
        (!modelTransformFlag))

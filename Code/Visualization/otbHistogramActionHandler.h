@@ -82,8 +82,6 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
     // Variable declaration
     PointType             spacePoint, screenPoint;
-    bool modifyLeft       = false;
-    bool modifyRight      = false;
     
     // Left screen abcisse 
     spacePoint[0]     = m_LeftAsymptote->GetAbcisse();
@@ -101,7 +99,6 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	    {
 	      // Position Clicked 
 	      double x = Fl::event_x();
-	      double y = Fl::event_y();
 		
 	      //std::cout <<"I clicked in position " << x << "," << y << std::endl;
 	      //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
@@ -110,41 +107,36 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 		{
 		  if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
 		    {
-		      modifyLeft = true;
-		      std::cout <<" Modify Left"<< std::endl;
+		      m_ModifyLeft = true;
 		    }
 		  else
 		    {
-		      modifyRight = true;
-		      std::cout <<" Modify Right"<< std::endl;
+		      m_ModifyRight = true;
 		    }
 		}
 	      return true;
 	    }
 	  case FL_RELEASE:
 	    {
-	      modifyLeft  = false;
-	      modifyRight = false;
+	      m_ModifyLeft  = false;
+	      m_ModifyRight = false;
 	      return true;
 	    }
 	  case FL_DRAG:
 	    {
-	      //std::cout <<" space Point abcisseR " << abcisseR  << " abcisseL " << abcisseL << std::endl;
-	      //std::cout <<"screen abcisseR " <<  m_RightAsymptote->GetAbcisse() << " abcisseL " << m_LeftAsymptote->GetAbcisse() << std::endl;
-	      
-	      
 	      double x = Fl::event_x();
-	      
-	      if(modifyLeft)
+
+	      if(m_ModifyLeft)
 		{
 		  double tx = x - abcisseL;
 		  m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+		  m_Curve->redraw();
 		  
 		  //Update The Rendering Function min and max
 		  //....
 		}
 		
-	      if(modifyRight)
+	      if(m_ModifyRight)
 		{
 		  double tx = x - abcisseR;
 		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx); 
@@ -183,7 +175,10 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 protected:
   /** Constructor */
   HistogramActionHandler() : m_View(), m_Model(), m_RenderingFunction()
-  {}
+    {
+       m_ModifyLeft  = false;
+       m_ModifyRight = false;
+    }
 
   /** Destructor */
   virtual ~HistogramActionHandler(){}
@@ -212,6 +207,10 @@ private:
   // Left And Rigth Asymptote
   VerticalAsymptotePointerType  m_LeftAsymptote;
   VerticalAsymptotePointerType  m_RightAsymptote;
+  
+  bool m_ModifyLeft ;
+  bool m_ModifyRight;
+    
   
 
 }; // end class

@@ -45,8 +45,8 @@ public:
   /** Standard typedefs */
   typedef ImageViewerHistogramAndTransferFunctionWidget         Self;
   typedef HistogramAndTransferFunctionWidget<THistogram,TPixel> Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -59,7 +59,7 @@ public:
   typedef TLabel LabelType;
   typedef ImageViewerBase<PixelType, LabelType> ParentType;
   typedef ParentType* ParentPointerType;
-
+  
   typedef typename Superclass::TransferFunctionPointerType TransferFunctionPointerType;
   typedef ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
   typedef typename AffineTransferFunctionType::Pointer AffineTransferFunctionPointerType;

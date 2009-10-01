@@ -851,7 +851,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 
   /** Get The Bounding Region*/
   OutputImageDirRegionType    region = rectangle->GetBoundingRegion();
-  region.Crop( m_OrientationFilter->GetOutput()->GetLargestPossibleRegion() );
+  region.Crop(m_OrientationFilter->GetOutput()->GetRequestedRegion());
   itk::ImageRegionIterator<OutputImageDirType> it(m_OrientationFilter->GetOutput(), region/*m_OrientationFilter->GetOutput()->GetRequestedRegion()*/);
   it.GoToBegin();
 
@@ -862,7 +862,7 @@ LineSegmentDetector<TInputImage, TPrecision>
       if( rectangle->IsInside( it.GetIndex()) && m_OrientationFilter->GetOutput()->GetRequestedRegion().IsInside( it.GetIndex()) )
         {
           ++pts;
-
+	  
           if(this->IsAligned(it.Get(), rec[5] /*theta*/ ,rec[6] /*Prec*/))
             NbAligned++;
         }

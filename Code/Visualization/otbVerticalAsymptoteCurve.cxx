@@ -45,13 +45,11 @@ void  VerticalAsymptoteCurve::Render(const RegionType& extent,const AffineTransf
   spacePoint[0] = m_Abcisse;
   spacePoint[1] = extent.GetIndex()[1];
   screenPoint   = space2ScreenTransform->TransformPoint(spacePoint);
-  std::cout <<"Space Point " << spacePoint <<  " screenPoint "<< screenPoint<< std::endl;
   glVertex2d(screenPoint[0],spacePoint[1]);
 
   // LL
   spacePoint[1] = extent.GetIndex()[1]+ extent.GetSize()[1]; 
   screenPoint   = space2ScreenTransform->TransformPoint(spacePoint);
-  std::cout <<"Space Point " << spacePoint <<  " screenPoint "<< screenPoint<< std::endl;
   glVertex2d(screenPoint[0],spacePoint[1]);
   glEnd();
 }
@@ -67,7 +65,6 @@ VerticalAsymptoteCurve::BeforeRendering()
   m_Maximum[0] = -10; 
 }
 
-
  
 VerticalAsymptoteCurve::PointType  
 VerticalAsymptoteCurve
@@ -75,7 +72,6 @@ VerticalAsymptoteCurve
 {
   return m_Minimum;
 }
-
  
 VerticalAsymptoteCurve::PointType 
 VerticalAsymptoteCurve

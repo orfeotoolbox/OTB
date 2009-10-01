@@ -171,7 +171,7 @@ protected:
    * \return  key point orientation
    */
   virtual double AssignOrientation(const NeighborhoodType& neigh,
-                                   double S);
+                                   double S, IndexType cindex);
 
   /** ComputeDescriptor
    *
@@ -183,12 +183,29 @@ protected:
    */
   virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh,
                                        double O,
-                                       double S);
+                                       double S, IndexType cindex);
   /**
    * Compute min a b c
    */
   virtual int GetMin( int a , int b , int c);
 
+  /**
+   * Compute Integral Images
+   */
+  virtual void IntegralImage();
+
+  /**
+   * HaarX & HaarY : Response To HaarWavelet
+   */
+  virtual double HaarX(unsigned int row , unsigned int col,double S);
+  virtual double HaarY(unsigned int row , unsigned int col,double S);
+
+  virtual double BoxIntegral( int row,  int col,  int nbRow ,  int nbCol);
+
+  /**
+   * Getangle
+   */
+  virtual double GetAngle(unsigned int  X, unsigned int Y);
 private:
 
   ImageToSURFKeyPointSetFilter(const Self&); //purposely not implemented
@@ -208,6 +225,7 @@ private:
   InputImagePointerType m_ImageCurrent;
   InputImagePointerType m_ImageMovedPrev;
   InputImagePointerType m_ImageMovedNext;
+  InputImagePointerType m_IntegralImage;
 
   /** ImageToDeterminantHessianFilter filter */
   DetHessianPointerFilter m_DetHessianFilter;
@@ -224,5 +242,6 @@ private:
 #endif
 
 #endif
+
 
 

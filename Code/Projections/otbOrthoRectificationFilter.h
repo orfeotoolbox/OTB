@@ -28,6 +28,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbCompositeTransform.h"
 #include "otbInverseSensorModel.h"
 
+#include "otbVectorImage.h"
+#include "otbImage.h"
+
 namespace otb
 {
 /** \class OrthoRectificationFilter
