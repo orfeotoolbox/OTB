@@ -12,9 +12,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
-SET(EPSILON 0.00000000001)
-SET(EPSILON_10e6 0.000001)
+SET(NOTOL 0.0)
+SET(EPSILON_6 0.000001)
 
 
 SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
@@ -31,7 +30,7 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
---compare-list ${EPSILON_10e6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
+--compare-list ${EPSILON_6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
                         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -39,7 +38,7 @@ ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
         )
 
 ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
---compare-list ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
+--compare-list ${NOTOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
                         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
@@ -58,7 +57,7 @@ ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTest ${UTILITIES_TESTS}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
                 ${TEMP}/svm_model_test
                 svmTest
                 ${INPUTDATA}/svm_model
@@ -66,7 +65,7 @@ ADD_TEST(utTvSvmTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTestNewVersionFileGenericModelTest ${UTILITIES_TESTS}
---compare-ascii ${TOL}  ${BASELINE_FILES}/utTvsvm_model_image_generic_version_test
+--compare-ascii ${NOTOL}  ${BASELINE_FILES}/utTvsvm_model_image_generic_version_test
                 ${TEMP}/utTvsvm_model_image_generic_version_test
                 svmTest
                 ${INPUTDATA}/svm_model_image_generic_version
@@ -74,7 +73,7 @@ ADD_TEST(utTvSvmTestNewVersionFileGenericModelTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model_image_generic_kernel
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model_image_generic_kernel
                 ${TEMP}/svm_model_image_generic_kernel_test
                 svmGenericKernelTest
                 ${INPUTDATA}/svm_model_image_generic_kernel
@@ -82,14 +81,14 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmGenericKernelBasicOperationsTest ${UTILITIES_TESTS}
---compare-ascii ${TOL}  ${BASELINE_FILES}/utTvsvmGenericKernelBasicOperationsTest.txt
+--compare-ascii ${NOTOL}  ${BASELINE_FILES}/utTvsvmGenericKernelBasicOperationsTest.txt
                 	 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
               svmGenericKernelBasicOperationsTest
 		 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
 )
 
 ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
---compare-n-ascii ${TOL} 3
+--compare-n-ascii ${NOTOL} 3
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorResTest.txt
 		  ${TEMP}/SVMComposedKernelFunctorTestRes.txt
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
@@ -112,7 +111,7 @@ ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
 #)
 
 ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
---compare-ascii ${EPSILON_10e6}  ${BASELINE_FILES}/ut6S_function_main_test.txt
+--compare-ascii ${EPSILON_6}  ${BASELINE_FILES}/ut6S_function_main_test.txt
                 ${TEMP}/ut6S_function_main_test.txt
                 SIXSFunctionMainOtbTest
                 ${INPUTDATA}/in6S_otb
@@ -121,7 +120,7 @@ ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
 
 # -------            lib tinyXMLlib   ------------------------------
 ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
-        --compare-ascii ${TOL}
+        --compare-ascii ${NOTOL}
                         ${BASELINE_FILES}/utTinyXML_testStdout.txt
                         ${TEMP}/utTinyXML_testStdout.txt
                 tinyXMLlibTest
@@ -154,7 +153,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   FOREACH(num 6 8 19 20)
 #                           ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-ascii ${TOL}
+#                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
@@ -163,7 +162,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 #                   ENDFOREACH(num)
 #                   FOREACH(num 2 4 9 11 15)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-ascii ${TOL}
+#                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
@@ -175,7 +174,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 13)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-ascii ${TOL}
+#                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                           galibTests${num}
@@ -185,7 +184,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   FOREACH(num 3 18)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-ascii ${TOL}
+#                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #
@@ -197,7 +196,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 5)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-ascii ${TOL}
+#                           --compare-ascii ${NOTOL}
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                                           ${TEMP}/utGalibTest${num}_bog.dat
 #                            galibTests${num}
@@ -209,7 +208,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # Test 7 commented becasue impossible to specific he bog.dat file name in the process ;-(
 #SET(num 7)
 #        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#        --compare-ascii ${TOL}
+#        --compare-ascii ${NOTOL}
 #                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat
 #                        ${TEMP}/utGalibTest${num}_bog.dat
 #        galibTests${num}
@@ -221,7 +220,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 10)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-n-ascii ${TOL} 4
+#                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
 #                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
 #                                           ${BASELINE_FILES}/utGalibTest${num}_pop.nospec.dat
@@ -239,7 +238,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 21)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-n-ascii ${TOL} 5
+#                           --compare-n-ascii ${NOTOL} 5
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog1.dat
 #                                           ${TEMP}/utGalibTest${num}_bog1.dat
 #                                           ${BASELINE_FILES}/utGalibTest${num}_bog2.dat
@@ -261,7 +260,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 22)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-n-ascii ${TOL} 4
+#                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
 #                                           ${TEMP}/utGalibTest${num}_sinusoid.dat
 #                                           ${BASELINE_FILES}/utGalibTest${num}_pop.initial.dat
@@ -279,7 +278,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 23)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-n-ascii ${TOL} 4
+#                           --compare-n-ascii ${NOTOL} 4
 #                                           ${BASELINE_FILES}/utGalibTest${num}_popi.dat
 #                                           ${TEMP}/utGalibTest${num}_popi.dat
 #                                           ${BASELINE_FILES}/utGalibTest${num}_popf.dat
@@ -297,7 +296,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 #                   SET(num 24)
 #                   ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
-#                           --compare-n-ascii ${TOL} 3
+#                           --compare-n-ascii ${NOTOL} 3
 #                                           ${BASELINE_FILES}/utGalibTest${num}_population.dat
 #                                           ${TEMP}/utGalibTest${num}_population.dat
 #                                           ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat
@@ -408,7 +407,7 @@ ADD_TEST( utTvKmlhellokmz   ${UTILITIES_TESTS}
         )
 
 ADD_TEST( utTvKmlprettykml   ${UTILITIES_TESTS}
-        --compare-ascii ${TOL}
+        --compare-ascii ${NOTOL}
                         ${BASELINE_FILES}/utkmlprettykml.txt
                         ${TEMP}/utkmlprettykml.txt
         kmlprettykml
