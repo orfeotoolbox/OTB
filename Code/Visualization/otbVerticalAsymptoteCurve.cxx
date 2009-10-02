@@ -35,7 +35,6 @@ VerticalAsymptoteCurve::VerticalAsymptoteCurve()
  
 void  VerticalAsymptoteCurve::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
 {
-  double x,y;
   PointType spacePoint, screenPoint;
   
   // Rendering bounds
