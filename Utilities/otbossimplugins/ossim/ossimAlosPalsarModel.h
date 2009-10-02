@@ -101,14 +101,6 @@ protected:
 
 private:
   /**
-   *  @brief Slant Range for each Ground Range (SRGR) number of coefficients sets
-   */
-  int   theNumberSRGR;
-  /**
-   * @brief SRGR coefficient sets
-   */
-  double theSRGRCoeffset[1][3];
-  /**
    * @brief Pixel spacing
    */
   double thePixelSpacing;

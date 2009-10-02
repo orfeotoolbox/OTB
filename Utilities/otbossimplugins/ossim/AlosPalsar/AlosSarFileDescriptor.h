@@ -13,6 +13,7 @@
 #ifndef AlosSarFileDescriptor_h
 #define AlosSarFileDescriptor_h
 
+// TODO Rename to AlosSarLeaderFileDescriptor
 
 #include<iostream>
 #include <cstdlib>

@@ -40,13 +40,9 @@ namespace ossimplugins
 RTTI_DEF1(ossimAlosPalsarModel, "ossimAlosPalsarModel", ossimGeometricSarSensorModel);
 
 ossimAlosPalsarModel::ossimAlosPalsarModel():
-  theNumberSRGR(0),
   thePixelSpacing(0),
   theAlosSarLeader(NULL)
 {
-  theSRGRCoeffset[0][0]=0.0;
-  theSRGRCoeffset[0][1]=0.0;
-  theSRGRCoeffset[0][2]=0.0;
 }
 
 ossimAlosPalsarModel::~ossimAlosPalsarModel()
@@ -65,9 +61,7 @@ ossimObject* ossimAlosPalsarModel::dup() const
 
 double ossimAlosPalsarModel::getSlantRangeFromGeoreferenced(double col) const
 {
-  const double c =  2.99792458e+8;
-  double tn = theSRGRCoeffset[0][0] + theSRGRCoeffset[0][1] * col + theSRGRCoeffset[0][2] * col*col ;
-  return tn * (c/2.0);
+  // TODO Add user warning and reference to ERS Model
 }
 
 bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const char *prefix)
@@ -350,6 +344,9 @@ bool ossimAlosPalsarModel::loadState (const ossimKeywordlist &kwl, const char *p
     }
   }
 
+// Products georeferenced to ground range are not handled in AlosPalsarModel
+  _isProductGeoreferenced = false;
+/*
   if (result)
   {
     result = InitSRGR(kwl, prefix);
@@ -363,6 +360,7 @@ bool ossimAlosPalsarModel::loadState (const ossimKeywordlist &kwl, const char *p
       }
     }
   }
+*/
 
   return result;
 }
@@ -579,6 +577,8 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
   theImageSize.y      = atoi(nbLin_str);
   theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
 
+// AlosPalsarModel currently does not handle GCPs
+/* Do not use GCPs for now
   // Ground Control Points extracted from the model : corner points
   std::list<ossimGpt> groundGcpCoordinates ;
   std::list<ossimDpt> imageGcpCoordinates ;
@@ -625,42 +625,16 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
 
   // Default optimization
   optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
+*/
 
   return true;
 }
 
+// Note: Products georeferenced to ground range are not handled in AlosPalsarModel
+//  therefore the following method will not be used
 bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 {
-  // Product type = PRI
-  ossimString filename(kwl.find("filename"));
-  filename.upcase();
-  //std::transform(filename.begin(), filename.end(), filename.begin(), toupper);
-  string::size_type loc = filename.find("PRI");
-  if( loc != string::npos ) {
-     _isProductGeoreferenced = true;
-   } else {
-     _isProductGeoreferenced = false;
-   }
-
-  // Number of SRGR Coef
-  theNumberSRGR = 3;
-
-  // Range time for first mid and last pixel
-  double t1 = atof(kwl.find("zero_dop_range_time_f_pixel"))*1e-3;
-  double t2 = atof(kwl.find("zero_dop_range_time_c_pixel"))*1e-3;
-  double t3 = atof(kwl.find("zero_dop_range_time_l_pixel"))*1e-3;
-
-  // Range pixels numbers corresponding
-  // Todo : check if it works with "DECREASING LINE TIME"
-  // double x1 = 0.0;
-  double x2 = atof(kwl.find("sc_pix")) - 1.0;
-  double x3 = 2.0*(x2+1.0) -1.0 ;
-
-  theSRGRCoeffset[0][0] = t1;
-  theSRGRCoeffset[0][1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
-  theSRGRCoeffset[0][2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
-
-  return true;
+  // TODO Add user warning and reference to ERS Model
 }
 
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
