@@ -778,7 +778,11 @@ void GDALImageIO::Write(const void* buffer)
   value = NULL;
 
   m_poDataset->FlushCache();
-  GDALClose(m_poDataset);
+   if(m_poDataset != NULL)
+     {
+     GDALClose(m_poDataset);
+     m_poDataset = NULL;
+     }
 }
 
 /** TODO : Methode WriteImageInformation non implementee */
