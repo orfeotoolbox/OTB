@@ -62,7 +62,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   std::cout << "Begin Integral Image"<< std::endl;
   this->IntegralImage();
   std::cout << "Done"<< std::endl;
-    
+
   double k;
   double sigma_in = 2.;
   SizeType radius;
@@ -70,7 +70,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   /*New Adds*/
   double fscale = 1.;
   double initSigma = 1.6;
-  
+
   /*Output*/
   OutputPointSetPointerType  outputPointSet = this->GetOutput();
 
@@ -195,24 +195,24 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 
           //keyPoint[2] =  sigma_in/pow(k,(double)jj)*pow(2.,(double)i);
           //double sigmaDetected = sigma_in/pow(k,(double)jj)*pow(2.,(double)i);
-	  
-	  double fSize         = initSigma*pow(2.,((double)i+1.)/m_OctavesNumber);
-	  double sigmaDetected = fSize * fscale;
-	  
-  	  radius.Fill((int)sigmaDetected*6);
+
+      double fSize         = initSigma*pow(2.,((double)i+1.)/m_OctavesNumber);
+      double sigmaDetected = fSize * fscale;
+
+        radius.Fill((int)sigmaDetected*6);
 
           /*
             Computing the orientation of the key point detected
           */
           NeighborhoodIteratorType itNeighOrientation(radius,m_IntegralImage/*this->GetInput()*/ ,
-						      /*this->GetInput()*/m_IntegralImage->GetLargestPossibleRegion());
+                              /*this->GetInput()*/m_IntegralImage->GetLargestPossibleRegion());
 
           itNeighOrientation.SetLocation(it.GetIndex());
 
           /** TO DO*/
           //keyPoint[3] = AssignOrientation( itNeighOrientation.GetNeighborhood() ,keyPoint[2] );
-	  double orientationDetected = AssignOrientation( itNeighOrientation.GetNeighborhood() , sigmaDetected , it.GetIndex());
-	  
+      double orientationDetected = AssignOrientation( itNeighOrientation.GetNeighborhood() , sigmaDetected , it.GetIndex());
+
           /*Filling the Point pointSet Part*/
           outputPointSet->SetPoint(m_NumberOfPoints, keyPoint);
 
@@ -220,7 +220,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
           /*----------------------------------------*/
           /*  Descriptor Computation                */
           /*----------------------------------------*/
-	  radius.Fill(vcl_floor(sigmaDetected*10));
+      radius.Fill(vcl_floor(sigmaDetected*10));
 
           NeighborhoodIteratorType itNeighDescriptor(radius,this->GetInput(),
               this->GetInput()->GetLargestPossibleRegion());
@@ -363,57 +363,57 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   unsigned int scale = vcl_floor(S + 0.5 );
   std::vector<double> resX, resY, Angs;
 
-  for(int i = -6; i <= 6; ++i) 
+  for(int i = -6; i <= 6; ++i)
   {
-    for(int j = -6; j <= 6; ++j) 
+    for(int j = -6; j <= 6; ++j)
     {
-      if(i*i + j*j < 36) 
+      if(i*i + j*j < 36)
       {
-	double w = 1./(2.*M_PI*4*S*S)*vcl_exp(-(  i*i+j*j  ) / (2.*4.*S*S) );
-	resX.push_back( w*this->HaarX(cindex[1] + j*scale ,cindex[0] + i*scale , 4*scale));
-	resY.push_back( w*this->HaarY(cindex[1] + j*scale ,cindex[0] + i*scale , 4*scale));
-	Angs.push_back(GetAngle(resX.back(), resY.back()));
+    double w = 1./(2.*CONST_PI*4*S*S)*vcl_exp(-(  i*i+j*j  ) / (2.*4.*S*S) );
+    resX.push_back( w*this->HaarX(cindex[1] + j*scale ,cindex[0] + i*scale , 4*scale));
+    resY.push_back( w*this->HaarY(cindex[1] + j*scale ,cindex[0] + i*scale , 4*scale));
+    Angs.push_back(GetAngle(resX.back(), resY.back()));
       }
     }
   }
-  
-  //Calculate the dominant direction 
+
+  //Calculate the dominant direction
   double sumX, sumY;
   double max=0., orientation = 0.;
   double ang1, ang2, ang;
-  
+
   // loop slides pi/3 window around feature point
-  for(ang1 = 0; ang1 < 2*M_PI;  ang1 += 0.15) 
+  for(ang1 = 0; ang1 < 2*CONST_PI;  ang1 += 0.15)
     {
-      ang2 = ( (ang1 + M_PI/3. > 2*M_PI )  ? ang1 - 5.*M_PI/3. : ang1+M_PI/3.0f);
-      sumX = sumY = 0; 
-      for(unsigned int k = 0; k < Angs.size(); k++) 
-	{
-	  // get angle from the x-axis of the sample point
-	  ang = Angs[k];
-	  
-	  // determine whether the point is within the window
-	  if (ang1 < ang2 && ang1 < ang && ang < ang2) 
-	    {
-	      sumX+=resX[k];  
-	      sumY+=resY[k];
-	    } 
-	  else if (ang2 < ang1 && 
-		   ((ang > 0 && ang < ang2) || (ang > ang1 && ang < 2*M_PI) )) 
-	    {
-	      sumX+=resX[k];  
-	      sumY+=resY[k];
-	    }
-	}
-      
-      // if the vector produced from this window is longer than all 
+      ang2 = ( (ang1 + CONST_PI/3. > 2*CONST_PI )  ? ang1 - 5.*CONST_PI/3. : ang1+CONST_PI/3.0f);
+      sumX = sumY = 0;
+      for(unsigned int k = 0; k < Angs.size(); k++)
+    {
+      // get angle from the x-axis of the sample point
+      ang = Angs[k];
+
+      // determine whether the point is within the window
+      if (ang1 < ang2 && ang1 < ang && ang < ang2)
+        {
+          sumX+=resX[k];
+          sumY+=resY[k];
+        }
+      else if (ang2 < ang1 &&
+           ((ang > 0 && ang < ang2) || (ang > ang1 && ang < 2*CONST_PI) ))
+        {
+          sumX+=resX[k];
+          sumY+=resY[k];
+        }
+    }
+
+      // if the vector produced from this window is longer than all
       // previous vectors then this forms the new dominant direction
-      if (sumX*sumX + sumY*sumY > max) 
-	{
-	  // store largest orientation
-	  max = sumX*sumX + sumY*sumY;
-	  orientation = GetAngle(sumX, sumY);
-	}
+      if (sumX*sumX + sumY*sumY > max)
+    {
+      // store largest orientation
+      max = sumX*sumX + sumY*sumY;
+      orientation = GetAngle(sumX, sumY);
+    }
     }
   return orientation;
 }
@@ -455,7 +455,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   //Size of the image
   InputImagePointerType intimage = m_IntegralImage;
   SizeType  size = intimage->GetLargestPossibleRegion().GetSize();
-  
+
   // The subtraction by one for row/col is because row/col is inclusive.
   int r1 = std::min((double)row,           (double)size[1]) - 1;
   int c1 = std::min((double)col,           (double)size[0]) - 1;
@@ -469,7 +469,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   i2[1] = r1; i2[0] = c2;
   i3[1] = r2; i3[0] = c1;
   i4[1] = r2; i4[0] = c2;
- 
+
   if (r1 >= 0 && c1 >= 0)  A = intimage->GetPixel(i1);//data[r1 * size[0] + c1];
   if (r1 >= 0 && c2 >= 0)  B = intimage->GetPixel(i2);//data[r1 * size[0] + c2];
   if (r2 >= 0 && c1 >= 0)  C = intimage->GetPixel(i3);//data[r2 * size[0] + c1];
@@ -492,16 +492,16 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 //   int y, x, sample_x, sample_y, count=0;
 //   int i = 0, ix = 0, j = 0, jx = 0, xs = 0, ys = 0;
 //   double  dx, dy, mdx, mdy, co, si;
-  
+
 //   VectorType  descriptorVector;
 //   descriptorVector.resize(64);
-  
+
 //   double gauss_s1 = 0.f, gauss_s2 = 0.f;
 //   double rx = 0.f, ry = 0.f, rrx = 0.f, rry = 0.f, len = 0.f;
 //   double cx = -0.5f, cy = 0.f; //Subregion centers for the 4x4 gaussian weighting
 
 
-  
+
 //   x = cindex[0];
 //   y = cindex[1];
 //   co = vcl_cos(O);
@@ -520,7 +520,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 //     cx += 1.f;
 //     cy = -0.5f;
 
-//     while(j < 12) 
+//     while(j < 12)
 //     {
 //       dx=dy=mdx=mdy=0.f;
 //       cy += 1.f;
@@ -533,17 +533,17 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 //       xs = vcl_floor(x + ( -jx*sigma*si + ix*sigma*co) +0.5);
 //       ys = vcl_floor(y + ( jx*sigma*co + ix*sigma*si)  +0.5 );
 
-//       for (int k = i; k < i + 9; ++k) 
+//       for (int k = i; k < i + 9; ++k)
 //       {
-//         for (int l = j; l < j + 9; ++l) 
+//         for (int l = j; l < j + 9; ++l)
 //         {
 //           //Get coords of sample point on the rotated axis
 //           sample_x =vcl_floor(x + (-l*sigma*si + k*sigma*co) + 0.5 );
 //           sample_y = vcl_floor(y + ( l*sigma*co + k*sigma*si) + 0.5 );
 
 //           //Get the gaussian weighted x and y responses
-// 	  gauss_s1= 1./(2.0f*M_PI*sigma*sigma)*vcl_exp(-((xs-sample_x)*(xs-sample_x) +  (ys-sample_y)*(ys-sample_y) ) / (2*2.5*2.5*sigma*sigma) );
-	  
+//       gauss_s1= 1./(2.0f*CONST_PI*sigma*sigma)*vcl_exp(-((xs-sample_x)*(xs-sample_x) +  (ys-sample_y)*(ys-sample_y) ) / (2*2.5*2.5*sigma*sigma) );
+
 //           rx = this->HaarX(sample_y, sample_x, 2*sigma);
 //           ry = this->HaarY(sample_y, sample_x, 2*sigma);
 
@@ -553,7 +553,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 
 // //           rrx = gauss_s1*rrx;
 // //           rry = gauss_s1*rry;
-	  
+
 //            rrx = gauss_s1*rx;
 //            rry = gauss_s1*ry;
 
@@ -566,7 +566,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 //       }
 
 //       //Add the values to the descriptorVectorriptor vector
-//       //gauss_s2 = 1./(2.0f*M_PI*1.5*1.5)*vcl_exp(-((cx-2.)*(cx-2.) +  (cy-2.)*(cy-2.) ) / (2*1.5*1.5) );
+//       //gauss_s2 = 1./(2.0f*CONST_PI*1.5*1.5)*vcl_exp(-((cx-2.)*(cx-2.) +  (cy-2.)*(cy-2.) ) / (2*1.5*1.5) );
 //       gauss_s2 = 1.;
 //       descriptorVector[count++] = dx*gauss_s2;
 //       descriptorVector[count++] = dy*gauss_s2;
@@ -595,7 +595,7 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   TransformType::Pointer eulerTransform = TransformType::New();
   TransformType::ParametersType  ParamVec(5);
   PointImageType pSrc , pDst;
-  
+
   VectorType  descriptorVector;
   descriptorVector.resize(64);
 
@@ -613,58 +613,58 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   double cy = 0.;
   double si = vcl_sin(O);
   double co = vcl_cos(O);
-  
+
   for(int i = -10 * sigma ; i < 10 * sigma ; i+= 5*sigma )
+  {
+    cx += 1.;
+    cy = -0.5;
+    for(int j = -10 * sigma ; j < 10 * sigma ; j+= 5*sigma )
     {
-      cx += 1.;
-      cy = -0.5;
-      for(int j = -10 * sigma ; j < 10 * sigma ; j+= 5*sigma )
-	{
-	  cy += 1.;
-	  double dx = 0.,dy =0., mdx = 0.,mdy = 0.;
-	
-	  for(int  k = i ; k< i+5*sigma ; k+= sigma )
-	    for(int  l = j ; l< j+5*sigma ; l+= sigma )
-	      {
-		double distance = vcl_sqrt(k*k  + i*i);
-		if(distance < 10*S)
-		  {
-		    typename InputImageType::OffsetType offset ;
-		    offset[0] = k;
-		    offset[1] = l;
+      cy += 1.;
+      double dx = 0.,dy =0., mdx = 0.,mdy = 0.;
 
-		    IndexType currentI = cindex + offset;
-		    //m_IntegralImage->TransformIndexToPhysicalPoint(currentI,pSrc);
-		    //pDst = eulerTransform->TransformPoint(pSrc);
-		    //Get coords of sample point on the rotated axis
-		    pDst[0] = vcl_floor( (cindex[0] + (-l*si + k*co)) + 0.5 );
-		    pDst[1] = vcl_floor( (cindex[1] + ( l*co + k*si)) + 0.5 );
-		  
-		    double w = 1./(2.*3.3*M_PI*S*S)*vcl_exp(-(  offset[0]*offset[0]+ offset[1]*offset[1]) / (2.*3.3*3.3*S*S) );
-		    double rx = this->HaarX(pDst[1],pDst[0],2*sigma); 
-		    double ry = this->HaarY(pDst[1],pDst[0],2*sigma); 
+      for(int  k = i ; k< i+5*sigma ; k+= sigma )
+        for(int  l = j ; l< j+5*sigma ; l+= sigma )
+        {
+          double distance = vcl_sqrt(static_cast<double>(k*k  + i*i));
+          if(distance < 10*S)
+          {
+            typename InputImageType::OffsetType offset ;
+            offset[0] = k;
+            offset[1] = l;
 
-		    //Get the gaussian weighted x and y responses on rotated axis
-		    double rrx = -rx*vcl_sin(O) + ry*vcl_cos(O);
-		    double rry = rx*vcl_cos(O) + ry*vcl_sin(O);
-		    rrx *= w;
-		    rry *= w;
+            IndexType currentI = cindex + offset;
+            //m_IntegralImage->TransformIndexToPhysicalPoint(currentI,pSrc);
+            //pDst = eulerTransform->TransformPoint(pSrc);
+            //Get coords of sample point on the rotated axis
+            pDst[0] = vcl_floor( (cindex[0] + (-l*si + k*co)) + 0.5 );
+            pDst[1] = vcl_floor( (cindex[1] + ( l*co + k*si)) + 0.5 );
 
-		    dx += rrx;
-		    dy += rry;
-		    mdx += vcl_abs(rrx);
-		    mdy += vcl_abs(rry);
-		  }
-	      }
-	
-	  //Edit the descriptor
-	  double w2 = 1./(2.*M_PI*1.5*1.5)*vcl_exp(-(   (cx -2.)*(cx -2.)+ (cy-2.)*(cy-2.)) / (2.*1.5*1.5 ));
-	  descriptorVector[count++] = w2*dx;
-	  descriptorVector[count++] = w2*dy;
-	  descriptorVector[count++] = w2*mdx;
-	  descriptorVector[count++] = w2*mdy;
-	}
+            double w = 1./(2.*3.3*CONST_PI*S*S)*vcl_exp(-(  offset[0]*offset[0]+ offset[1]*offset[1]) / (2.*3.3*3.3*S*S) );
+            double rx = this->HaarX(pDst[1],pDst[0],2*sigma);
+            double ry = this->HaarY(pDst[1],pDst[0],2*sigma);
+
+            //Get the gaussian weighted x and y responses on rotated axis
+            double rrx = -rx*vcl_sin(O) + ry*vcl_cos(O);
+            double rry = rx*vcl_cos(O) + ry*vcl_sin(O);
+            rrx *= w;
+            rry *= w;
+
+            dx += rrx;
+            dy += rry;
+            mdx += vcl_abs(rrx);
+            mdy += vcl_abs(rry);
+          }
+        }
+
+      //Edit the descriptor
+      double w2 = 1./(2.*CONST_PI*1.5*1.5)*vcl_exp(-(   (cx -2.)*(cx -2.)+ (cy-2.)*(cy-2.)) / (2.*1.5*1.5 ));
+      descriptorVector[count++] = w2*dx;
+      descriptorVector[count++] = w2*dy;
+      descriptorVector[count++] = w2*mdx;
+      descriptorVector[count++] = w2*mdy;
     }
+  }
 
 //   int i = 0,  col, raw  , Nbin, pas = 1;
 //   double xx = 0, yy = 0;
@@ -722,19 +722,19 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 //           double distanceXcompensee_2 = (pSrc[0] - r)*(pSrc[0] - r);
 //           double distanceYcompensee_2 = (pSrc[1] - r)*(pSrc[1] - r);
 
-//           w = 1./(2.*M_PI*S*S)*vcl_exp(-( distanceXcompensee_2 + distanceYcompensee_2 ) / (2*3.3*3.3*S*S) );
+//           w = 1./(2.*CONST_PI*S*S)*vcl_exp(-( distanceXcompensee_2 + distanceYcompensee_2 ) / (2*3.3*3.3*S*S) );
 
 //           dx = 0.5 * (neigh[(col+pas) + raw * Largeur] - neigh[(col-pas) + raw *Largeur]) * w;
 //           dy = 0.5 * (neigh[col + (raw+ pas)* Largeur] - neigh[col + (raw-pas)*Largeur])  * w;
 
-// 	  //dx = this->HaarX(pSrc[1]   ,pSrc[0] , 2*vcl_floor(S+0.5));
-// 	  //dy = this->HaarY(pSrc[1] ,pSrc[0]  , 2*vcl_floor(S+0.5));
+//       //dx = this->HaarX(pSrc[1]   ,pSrc[0] , 2*vcl_floor(S+0.5));
+//       //dy = this->HaarY(pSrc[1] ,pSrc[0]  , 2*vcl_floor(S+0.5));
 
 //           descriptorVector[4*Nbin  ] += dx;
 //           descriptorVector[4*Nbin+1] += dy;
 //           descriptorVector[4*Nbin+2] += vcl_abs(dx);
 //           descriptorVector[4*Nbin+3] += vcl_abs(dy);
-//         } 
+//         }
 //       }
 //     }
 //     ++i;
@@ -764,12 +764,12 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   m_IntegralImage->SetRegions(sourceImage->GetLargestPossibleRegion());
   m_IntegralImage->Allocate();
   m_IntegralImage->FillBuffer(0.);
-  
+
   itk::ImageRegionIterator<InputImageType>   itSource(sourceImage,
-						       sourceImage->GetLargestPossibleRegion());
-  
+                               sourceImage->GetLargestPossibleRegion());
+
   itk::ImageRegionIterator<InputImageType>   itInt(m_IntegralImage,
-						    m_IntegralImage->GetLargestPossibleRegion());
+                            m_IntegralImage->GetLargestPossibleRegion());
 
   itSource.GoToBegin();
   itInt.GoToBegin();
@@ -778,32 +778,32 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   while(!itSource.IsAtEnd())
     {
       IndexType index = itSource.GetIndex();
-      
-      if(index[0]  == 0)
-	  rowSum = 0.;
-      
-      if(index[1]  == 0 )
-	{
-	  rowSum += itSource.Get();
-	  itInt.Set(rowSum);
-	} 
-      else
-	{
-	  //Index of the upper pixel (raw -1 & col)
-	  IndexType prevIndex = index;
-	  prevIndex[1] -= 1;
-	  itInt.SetIndex(prevIndex);
-	  double prevValue = itInt.Get();
 
-	  //Edit the integral image
-	  itInt.SetIndex(index);
-	  rowSum += itSource.Get(); 
-	  itInt.Set(prevValue + rowSum);
-	}
+      if(index[0]  == 0)
+      rowSum = 0.;
+
+      if(index[1]  == 0 )
+    {
+      rowSum += itSource.Get();
+      itInt.Set(rowSum);
+    }
+      else
+    {
+      //Index of the upper pixel (raw -1 & col)
+      IndexType prevIndex = index;
+      prevIndex[1] -= 1;
+      itInt.SetIndex(prevIndex);
+      double prevValue = itInt.Get();
+
+      //Edit the integral image
+      itInt.SetIndex(index);
+      rowSum += itSource.Get();
+      itInt.Set(prevValue + rowSum);
+    }
       ++itSource;
       ++itInt;
     }
-  
+
 }
 
 /*----------------------------------------------------------------
@@ -815,18 +815,18 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
 ::GetAngle(unsigned int  X, unsigned int Y)
 {
   if(X > 0 && Y >= 0)
-    return atan(Y/X);
-  
+    return vcl_atan2(Y,X);
+
   if(X < 0 && Y >= 0)
-    return M_PI - atan(-Y/X);
+    return CONST_PI - vcl_atan2(-Y,X);
 
   if(X < 0 && Y < 0)
-    return  M_PI+ atan(Y/X);
-  
-  if(X > 0 && Y < 0)
-    return 2*M_PI - atan(-Y/X);
+    return  CONST_PI + vcl_atan2(Y,X);
 
-  
+  if(X > 0 && Y < 0)
+    return 2*CONST_PI - vcl_atan2(-Y,X);
+
+
   return 0;
 }
 
