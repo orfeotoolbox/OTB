@@ -772,17 +772,13 @@ void GDALImageIO::Write(const void* buffer)
     {
       itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str()<<".");
     }
+    m_poBands[nbComponents]->FlushCache();
   }
 
   delete [] value;
   value = NULL;
 
   m_poDataset->FlushCache();
-   if(m_poDataset != NULL)
-     {
-     GDALClose(m_poDataset);
-     m_poDataset = NULL;
-     }
 }
 
 /** TODO : Methode WriteImageInformation non implementee */

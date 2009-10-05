@@ -73,7 +73,9 @@ ImageFileWriter<TInputImage>
                         itk::ImageIOFactory::WriteMode ) );
   this->SetNumberOfStreamDivisions( static_cast<unsigned int>( CalculateNumberOfStreamDivisions() ) );
   this->Superclass::Write();
-
+  //TODO: Force ImageIO desctructor. Should be fixed once GDALImageIO
+  //will be refactored.
+  this->SetImageIO(NULL);
 }
 
 /**
