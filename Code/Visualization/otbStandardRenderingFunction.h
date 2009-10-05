@@ -288,10 +288,15 @@ public:
      */
    virtual void SetParameters( const ParametersType & parameters)
    {
+     //Clear the min and max vectors
+     m_Minimum.clear();
+     m_Maximum.clear();
+     
      if (parameters.Size() % 2 != 0)
      {
        itkExceptionMacro( << "Min And Max should be provided for every band to display" );
      }
+     
      for (unsigned int i=0; i< parameters.Size(); ++i)
      {
        m_Minimum.push_back(parameters[i]);
@@ -301,6 +306,7 @@ public:
      m_AutoMinMax = false;
      UpdateTransferedMinMax();
      otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
+     this->Modified();
    }
 
   /**
