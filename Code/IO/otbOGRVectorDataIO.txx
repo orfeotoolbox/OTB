@@ -317,6 +317,8 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
       driverOGR="MapInfo File";
     else if (extension=="GML")
       driverOGR="GML";
+    else if (extension=="GPX")
+      driverOGR="GPX";
     else
       driverOGR="NOT-FOUND";
   }
