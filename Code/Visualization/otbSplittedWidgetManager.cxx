@@ -117,7 +117,7 @@ void
 SplittedWidgetManager
 ::Refresh()
 {
- m_InternalScrollWidget ->redraw();
+ m_InternalFullWidget ->redraw();
  m_InternalScrollWidget ->redraw();
  m_InternalZoomWidget->redraw();
  m_IntenalPixelWidget->redraw();

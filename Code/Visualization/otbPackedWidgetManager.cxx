@@ -114,7 +114,7 @@ PackedWidgetManager
 ::Refresh()
 {
  m_InternalScrollWidget ->redraw();
- m_InternalScrollWidget ->redraw();
+ m_InternalFullWidget ->redraw();
  m_InternalZoomWidget->redraw();
  m_IntenalPixelWidget->redraw();
  m_InternalCurveWidget->redraw();
