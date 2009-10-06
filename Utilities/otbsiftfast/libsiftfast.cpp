@@ -1616,41 +1616,40 @@ void PlaceInIndex(float* fdesc, float mag, float ori, float rx, float cx)
         neworient = (int)oribin;
     ofrac = oribin-(float)neworient;
 
-   if( newrow >= -1 && newrow < 4 && neworient >= 0 && neworient <= 8 && rfrac >= 0 && rfrac < 1)
-      {
-	for(int i = 0; i < 2; ++i) {
-	  if( (unsigned int)(i+newrow) >= 4 )
+    assert( newrow >= -1 && newrow < 4 && neworient >= 0 && neworient <= 8 && rfrac >= 0 && rfrac < 1);
+    
+    for(int i = 0; i < 2; ++i) {
+        if( (unsigned int)(i+newrow) >= 4 )
             continue;
         
-	  float frowgrad;
-	  if( i == 0 )
+        float frowgrad;
+        if( i == 0 )
             frowgrad = mag*(1-rfrac);
-	  else
+        else
             frowgrad = mag*rfrac;
         
-	  for(int j = 0; j < 2; ++j) {
+        for(int j = 0; j < 2; ++j) {
             if( (unsigned int)(j+newcol) >= 4 )
-	      continue;
+                continue;
 
             float fcolgrad;
             if( j == 0 )
-	      fcolgrad = frowgrad*(1-cfrac);
+                fcolgrad = frowgrad*(1-cfrac);
             else
-	      fcolgrad = frowgrad*cfrac;
+                fcolgrad = frowgrad*cfrac;
             
             float* pfdescorient = fdesc + 8*(4*(i+newrow)+j+newcol);
             for(int k = 0; k < 2; ++k) {
-	      float forigrad;
-	      if( k == 0 )
-		forigrad = fcolgrad*(1-ofrac);
-	      else
-		forigrad = fcolgrad*ofrac;
+                float forigrad;
+                if( k == 0 )
+                    forigrad = fcolgrad*(1-ofrac);
+                else
+                    forigrad = fcolgrad*ofrac;
 
-	      pfdescorient[(neworient+k)&7] += forigrad;
+                pfdescorient[(neworient+k)&7] += forigrad;
             }
-	  }
-	}
-      }
+        }
+    }
 }
 
 void FreeKeypoints(Keypoint keypt)

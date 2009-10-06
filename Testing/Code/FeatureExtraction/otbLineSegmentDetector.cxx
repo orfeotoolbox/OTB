@@ -62,12 +62,10 @@ int otbLineSegmentDetector( int argc, char * argv[] )
 
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-  reader->Update();
-  
-//   lsdFilter->SetInput(reader->GetOutput());
+  lsdFilter->SetInput(reader->GetOutput());
 
-//   drawLineFilter->SetInput(reader->GetOutput());
-//   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
+  drawLineFilter->SetInput(reader->GetOutput());
+  drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
 
   
 //   LinesListType::const_iterator it    = lsdFilter->GetOutput()->begin();
@@ -101,13 +99,13 @@ int otbLineSegmentDetector( int argc, char * argv[] )
 
  
 
-//   /** Write The Output Image*/
-//   WriterType::Pointer writer = WriterType::New();
-//   writer->SetFileName(outfname);
-//   writer->SetInput(drawLineFilter->GetOutput());
-//   writer->Update();
+  /** Write The Output Image*/
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outfname);
+  writer->SetInput(drawLineFilter->GetOutput());
+  writer->Update();
 
-//   std::cout << " lsdFilter Output Size" << lsdFilter->GetOutput()->size() <<std::endl;
+  std::cout << " lsdFilter Output Size" << lsdFilter->GetOutput()->size() <<std::endl;
   
   
   return EXIT_SUCCESS;

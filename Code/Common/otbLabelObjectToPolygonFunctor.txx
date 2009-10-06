@@ -472,7 +472,7 @@ void
 LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 ::WalkLeft(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state)
   {
-    //assert( vcl_abs(static_cast<long int>(line+m_LineOffset-endPoint[1]))<=1 && "End point not with +/-1 line from line");
+    assert( vcl_abs(static_cast<long int>(line+m_LineOffset-endPoint[1]))<=1 && "End point not with +/-1 line from line");
 
     typename PolygonType::VertexType::VectorType offset;
 
@@ -538,7 +538,7 @@ void
 LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 ::WalkRight(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state)
  {
-   //assert( vcl_abs(static_cast<long int>(line+m_LineOffset-endPoint[1]))<=1 && "End point not with +/-1 line from line");
+   assert( vcl_abs(static_cast<long int>(line+m_LineOffset-endPoint[1]))<=1 && "End point not with +/-1 line from line");
 
     typename PolygonType::VertexType::VectorType offset;
 
