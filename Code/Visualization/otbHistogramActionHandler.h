@@ -60,12 +60,13 @@ public:
   typedef typename ViewType::ImageWidgetType::PointType   PointType;
 
   /** Curve Widget*/
-  typedef Curves2DWidget                       CurveWidgetType;
-  typedef typename CurveWidgetType::Pointer    CurveWidgetPointerType;
+  typedef Curves2DWidget                           CurveWidgetType;
+  typedef typename CurveWidgetType::Pointer        CurveWidgetPointerType;
 
   /** Rendering Function Type */
-  typedef TRenderingFunction                       SRenderingFunctionType;
-  typedef typename SRenderingFunctionType::Pointer SRenderingFunctionPointerType;
+  typedef TRenderingFunction                              RenderingFunctionType;
+  typedef typename RenderingFunctionType::Pointer         RenderingFunctionPointerType;
+  typedef typename RenderingFunctionType::ParametersType  ParametersType;
   
   /** */
   typedef VerticalAsymptoteCurve                   VerticalAsymptoteType;
@@ -73,10 +74,9 @@ public:
 
   
 
-   /** Handle Boundaries translation
-   * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
+  /** Handle vertical asymptotes translation
+   * \param widgetId The id of the handled Curve widget
+   * \param event kind of event ot handle : FL_DRAG , FL_PUSH, FL_RELEASE
    */
 virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
@@ -99,8 +99,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	    {
 	      // Position Clicked 
 	      double x = Fl::event_x();
-		
-	      //std::cout <<"I clicked in position " << x << "," << y << std::endl;
+	      
 	      //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
 		
 	      if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
@@ -118,6 +117,16 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	    }
 	  case FL_RELEASE:
 	    {
+	      if(m_ModifyLeft || m_ModifyRight)
+		{
+		  //
+		  m_Model->Update();
+		  //
+/* 		  m_View->GetScrollWidget()->redraw(); */
+/* 		  m_View->GetFullWidget()->redraw(); */
+/* 		  m_View->GetZoomWidget()->redraw(); */
+		}
+	      
 	      m_ModifyLeft  = false;
 	      m_ModifyRight = false;
 	      return true;
@@ -131,9 +140,12 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 		  double tx = x - abcisseL;
 		  m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
 		  m_Curve->redraw();
-		  
-		  //Update The Rendering Function min and max
-		  //....
+
+		  //  Update The Rendering Function min and max
+		  ParametersType param = m_RenderingFunction->GetParameters();
+		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse());
+		  m_RenderingFunction->SetParameters(param);
 		}
 		
 	      if(m_ModifyRight)
@@ -141,11 +153,13 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 		  double tx = x - abcisseR;
 		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx); 
 		  m_Curve->redraw();
-		    
-		  //Update The Rendering Function min and max
-		  //....
+		  
+		  //  Update The Rendering Function min and max
+		  ParametersType param = m_RenderingFunction->GetParameters();
+		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
+		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse()+tx);
+		  m_RenderingFunction->SetParameters(param);
 		}
-	      
 	      return true;
 	    }
 	  }
@@ -167,17 +181,20 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
   /** Get The left asymptote*/
   itkSetObjectMacro(LeftAsymptote,VerticalAsymptoteType);
   itkSetObjectMacro(RightAsymptote,VerticalAsymptoteType);
-  
-  
+    
   /** Set/Get the rendering Function */
-  itkSetObjectMacro(RenderingFunction , SRenderingFunctionType);
+  itkSetObjectMacro(RenderingFunction , RenderingFunctionType);
+
+  /** Set/Get the channel dealed with in the image*/
+  itkSetMacro(Channel,unsigned int);
 
 protected:
   /** Constructor */
   HistogramActionHandler() : m_View(), m_Model(), m_RenderingFunction()
     {
-       m_ModifyLeft  = false;
-       m_ModifyRight = false;
+      m_Channel = 0;
+      m_ModifyLeft  = false;
+      m_ModifyRight = false;
     }
 
   /** Destructor */
@@ -202,17 +219,19 @@ private:
   CurveWidgetPointerType m_Curve; 
 
   // StandardRenderingFunction
-  SRenderingFunctionPointerType  m_RenderingFunction;  
+  RenderingFunctionPointerType  m_RenderingFunction;  
 
   // Left And Rigth Asymptote
   VerticalAsymptotePointerType  m_LeftAsymptote;
   VerticalAsymptotePointerType  m_RightAsymptote;
   
+  // Flags
   bool m_ModifyLeft ;
   bool m_ModifyRight;
-    
   
-
+  //Channel we're dealing handling
+  unsigned int m_Channel;
+  
 }; // end class
 } // end namespace otb
 #endif
