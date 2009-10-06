@@ -288,8 +288,8 @@ bool ossimRadarSat2ProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
       double prf;
       if ( getNominalPrf(xdoc, prf) )
       {
-         sp->set_prf(prf * sp->get_nAzimuthLook() );
-         // sp->set_prf(prf);
+//          sp->set_prf(prf * sp->get_nAzimuthLook() );
+         sp->set_prf(prf);
       }
       else
       {
