@@ -202,8 +202,8 @@ public:
         if (this->GetHistogramList().IsNull())
         {
           this->RenderHistogram();
-  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-  //          <<"provided to the rendering function with SetHistogramList()" );
+	  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+	  //          <<"provided to the rendering function with SetHistogramList()" );
         }
         for(unsigned int comp = 0; comp < nbComps;++comp)
         {
@@ -314,7 +314,7 @@ public:
    */
    virtual  ParametersType GetParameters()
    {
-     unsigned int nbBands = m_TransferedMaximum.size();
+     unsigned int nbBands = m_Minimum.size();/*TransferedMaximum*/
      ParametersType         param;
      param.SetSize(2*nbBands);
      
@@ -322,9 +322,9 @@ public:
      for(unsigned int i = 0; i< nbBands ; i++)
      {
        // Min Band 
-       param.SetElement(2*i,m_TransferedMinimum[i]);
+       param.SetElement(2*i,/*TransferedMinimum*/m_Minimum[i]);
        // Max Band 
-       param.SetElement(2*i+1,m_TransferedMaximum[i]);
+       param.SetElement(2*i+1,/*TransferedMaximum*/m_Maximum[i]);
      }
      return param;
    }

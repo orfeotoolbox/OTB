@@ -103,10 +103,19 @@ ImageLayer<TImage,TOutputImage>
 //     this->UpdateListSample();
 //   }
   // Render quicklook
+
+
   if(this->GetHasQuicklook())
     {
     itk::TimeProbe probe;
     probe.Start();
+
+    // Impacting modified on the the rendering function
+    if(m_RenderingFunction->GetMTime() > m_QuicklookRenderingFilter->GetOutput()->GetUpdateMTime())
+      {
+      m_QuicklookRenderingFilter->Modified();
+      }
+
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
@@ -117,7 +126,13 @@ ImageLayer<TImage,TOutputImage>
     {
     itk::TimeProbe probe;
     probe.Start();
-//    std::cout<<"Extent: "<<this->GetExtent()<<" Largest: "<<m_Image->GetLargestPossibleRegion()<<" ExtractRegion: "<<this->GetExtractRegion()<<std::endl;
+
+    // Impacting modified on the the rendering function
+    if(m_RenderingFunction->GetMTime() > m_ExtractRenderingFilter->GetOutput()->GetUpdateMTime())
+      {
+      m_ExtractRenderingFilter->Modified();
+      }
+
     m_ExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetExtractRegion());
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
@@ -135,6 +150,12 @@ ImageLayer<TImage,TOutputImage>
       {
       itk::TimeProbe probe;
       probe.Start();
+    // Impacting modified on the the rendering function
+    if(m_RenderingFunction->GetMTime() > m_ScaledExtractRenderingFilter->GetOutput()->GetUpdateMTime())
+      {
+      m_ScaledExtractRenderingFilter->Modified();
+      }
+
       m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
       m_ScaledExtractRenderingFilter->Update();
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
