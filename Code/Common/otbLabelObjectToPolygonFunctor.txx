@@ -515,7 +515,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       }
 
     // if the end point is not on line n, add an intermediate point
-    if(line+m_LineOffset != endPoint[1] && m_CurrentPoint[0]> endPoint[0]+1)
+    if(static_cast<int>(line+m_LineOffset) != endPoint[1] && m_CurrentPoint[0]> endPoint[0]+1)
       {
       m_CurrentPoint[0] = endPoint[0]+1;
       newPoint = m_CurrentPoint;
@@ -576,7 +576,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       }
 
     // if the end point is not on line n, add an intermediate point
-    if(line+m_LineOffset != endPoint[1] && m_CurrentPoint[0]< endPoint[0]-1 )
+    if( static_cast<int>(line+m_LineOffset) != endPoint[1] && m_CurrentPoint[0]< endPoint[0]-1 )
       {
       m_CurrentPoint[0] = endPoint[0]-1;
       newPoint = m_CurrentPoint;
