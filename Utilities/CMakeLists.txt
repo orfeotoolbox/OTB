@@ -33,7 +33,7 @@ IF(NOT OTB_USE_EXTERNAL_BOOST)
   SUBDIRS(BGL)
 ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
 
-SUBDIRS(otbsvm dxflib InsightJournal otbossim otbossimplugins otb6S tinyXMLlib otbkml otbedison otbsiftfast)
+SUBDIRS(otbsvm dxflib InsightJournal otbossim otbossimplugins otb6S tinyXMLlib otbkml otbedison otbsiftfast otbconfigfile)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )
