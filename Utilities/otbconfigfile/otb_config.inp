@@ -1,0 +1,5 @@
+#example properties for OTB and ...
+LANG=fr
+GEOIDE=/home/manuel/toto
+WORLD=/home/manuel/tata
+SRTM=/home/manuel/titi
