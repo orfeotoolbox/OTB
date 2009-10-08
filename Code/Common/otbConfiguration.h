@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "/home/christop/manuel/Cnes/otb/Dev/OTB/Utilities/otbconfigfile/ConfigFile.h"
+#include "ConfigFile.h"
 
 namespace otb
 {
@@ -39,24 +39,23 @@ namespace otb
       typedef itk::Object Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
-
+      
+      
       /** Standard macro */
-      itkNewMacro(Self);
       itkTypeMacro(Configuration,Object);
-
-     
-      /** Get arg */
-//       itkGetStringMacro(Language);
-//       itkGetStringMacro(GeodidePath);
-//       itkGetStringMacro(WorldShapePath);
-//       itkGetStringMacro(SRTMPath);
-//       itkGetStringMacro(NodeId);
-//       itkGetStringMacro(NodeId);
-//       itkGetStringMacro(NodeId);
-      /** Load parameters from the configuration file*/
-//  void Load() {
-//         
-//       } 
+      /** This is protected for the singleton. Use GetInstance() instead. */
+      itkNewMacro(Self);
+      
+      /** Get the unique instanc1e of the model */
+//       static Pointer GetInstance()
+//       {   
+//         if (!Instance)
+//         {
+//           Instance = Self::New();
+//         }
+//         return Instance;
+//       };
+      
       ConfigFile * GetOTBConfig()
       {
         return m_OTBConfig;
@@ -66,32 +65,23 @@ namespace otb
       {
         return m_OTBConfig->read<std::string>( "LANG" );
       };
+//       std::string lib(OTB_CONFIG); 
+      
     protected:
+      
       /** Constructor */
-      Configuration()
-      {
-        m_OTBConfig = new ConfigFile("/home/christop/example.inp");
-//         ConfigFile config( "/home/christop/example.inp" );
-//         m_Language = config.read<std::string>( "LANG" );
-//         m_GeodidePath = config.read<std::string>( "GEOIDE" );  
-//         m_WorldShapePath =  config.read<std::string>( "WORLD" );   
-//         m_SRTMPath = config.read<std::string>( "SRTM" );      
-      };
+      Configuration(){
+        std::string OTBBinDir(OTB_CONFIG);
+        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb_config.inp");  
+      }
+      ;
       /** Destructor */
-      ~Configuration() {};
+      ~Configuration(){};
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const
-      {
-        Superclass::PrintSelf(os, indent);
-      };
+      void PrintSelf(std::ostream& os, itk::Indent indent) const {};
     private:
-//       ConfigFile * m_ConfigFile;
-//       std::string m_Language;
-//       std::string m_GeodidePath;
-//       std::string m_WorldShapePath;
-//       std::string m_SRTMPath;
-//       unsigned int m_TileSizeX;
-//       unsigned int m_TileSizeY;
+      /** The instance singleton */
+//       static Pointer Instance = NULL;
       ConfigFile * m_OTBConfig;
 };
 }// end namespace

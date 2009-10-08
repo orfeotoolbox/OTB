@@ -20,14 +20,14 @@
 #include <fstream>
 #include "otbConfiguration.h"
 
-int otbConfiguration(int argc, char * argv[])
+int otbConfigurationTest(int argc, char * argv[])
 {
-
+  std::cout << "begin config test" << std::endl;
   typedef otb::Configuration        ConfigurationType;
   
   //Instantiation
+//   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
   ConfigurationType::Pointer conf = ConfigurationType::New();
-  
 //   conf->Load();
   
   std::string lang = conf->GetLanguage(); 

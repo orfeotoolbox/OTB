@@ -45,8 +45,8 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS1}
         )
 
 # -------            otb::Configuration  -------------
-ADD_TEST(coTuConfiguration ${COMMON_TESTS1}
-        otbConfiguration
+ADD_TEST(coTuConfigurationTest ${COMMON_TESTS1}
+        otbConfigurationTest
         )
 
 # -------            otb::CommandLibneArgumentParser  -------------
@@ -949,7 +949,7 @@ otbVectorDataToLabelMapFilter
 SET(BasicCommon_SRCS1
 otbCommonTests1.cxx
 otbSystemTest.cxx
-otbConfiguration.cxx
+otbConfigurationTest.cxx
 otbTestCommandLineArgumentParser.cxx
 #otbTestCommandLineArgumentParserGUI.cxx
 otbTestCommandLineArgumentParserHelp.cxx
