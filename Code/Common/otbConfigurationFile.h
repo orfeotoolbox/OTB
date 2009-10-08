@@ -15,8 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbConfiguration_h
-#define __otbConfiguration_h
+#ifndef __otbConfigurationFile_h
+#define __otbConfigurationFile_h
+
+#include "otbConfigure.h"
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -25,24 +27,24 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
-/** \class Configuration
-   *    \brief Manage OTB configuration file
+/** \class ConfigurationFile
+   *    \brief Manage OTB ConfigurationFile file
 */
   
-  class Configuration 
+  class ConfigurationFile 
   : public itk::Object
   {
     public:
       /** Standard class typedef */
       
-      typedef Configuration Self;
+      typedef ConfigurationFile Self;
       typedef itk::Object Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
       
       
       /** Standard macro */
-      itkTypeMacro(Configuration,Object);
+      itkTypeMacro(ConfigurationFile,Object);
       /** This is protected for the singleton. Use GetInstance() instead. */
       itkNewMacro(Self);
       
@@ -70,13 +72,13 @@ namespace otb
     protected:
       
       /** Constructor */
-      Configuration(){
+      ConfigurationFile(){
         std::string OTBBinDir(OTB_CONFIG);
         m_OTBConfig = new ConfigFile(OTBBinDir + "/otb_config.inp");  
       }
       ;
       /** Destructor */
-      ~Configuration(){};
+      ~ConfigurationFile(){};
       /** PrintSelf method */
       void PrintSelf(std::ostream& os, itk::Indent indent) const {};
     private:

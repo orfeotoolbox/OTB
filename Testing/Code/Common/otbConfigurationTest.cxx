@@ -18,12 +18,12 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include <fstream>
-#include "otbConfiguration.h"
+#include "otbConfigurationFile.h"
 
 int otbConfigurationTest(int argc, char * argv[])
 {
-  std::cout << "begin config test" << std::endl;
-  typedef otb::Configuration        ConfigurationType;
+//   std::cout << "begin config test" << std::endl;
+  typedef otb::ConfigurationFile        ConfigurationType;
   
   //Instantiation
 //   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
@@ -32,10 +32,10 @@ int otbConfigurationTest(int argc, char * argv[])
   
   std::string lang = conf->GetLanguage(); 
   
+  std::cout << "config language " << lang << std::endl;
+  
   if (lang != "fr")
       return EXIT_FAILURE;
-  
-  std::cout << "config language " << lang << std::endl;
   
   return EXIT_SUCCESS;
 }

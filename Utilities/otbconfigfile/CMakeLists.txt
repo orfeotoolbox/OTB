@@ -2,13 +2,14 @@ PROJECT(otbConfigFilelib)
 
 FILE(GLOB otbConfigFilelib_SRCS "*.cpp")
 FILE(GLOB otbConfigFilelib_HDRS "*.h")
-ADD_LIBRARY(otbConfigFile ${otbConfigFilelib_SRCS})
+SET(otbConfigFile_DEFAULT otb_config.inp)
+ADD_LIBRARY(otbConfigFile ${otbConfigFilelib_SRCS} ${otbConfigFile_DEFAULT})
 TARGET_LINK_LIBRARIES(otbConfigFile)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbConfigFile PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
 
-INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbconfigfile")
+# INCLUDE_DIRECTORIES("${OTB_SOURCE_DIR}/Utilities/otbconfigfile")
 
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS otbConfigFile
@@ -22,3 +23,6 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbConfigFilelib
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+#copy the configuration file in the binary directory
+INSTALL(FILES ${otbConfigFile_DEFAULT} DESTINATION ${CMAKE_INSTALL_PREFIX})
