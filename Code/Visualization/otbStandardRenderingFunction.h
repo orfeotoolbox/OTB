@@ -122,7 +122,7 @@ public:
     */
   virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const
   {
-    if ((spixel.Size() != 1) && (spixel.Size() != 3) && (spixel.Size() != 4))
+    if ((spixel.Size() != 1) && (spixel.Size() != 3) && (spixel.Size() != 2)&& (spixel.Size() != 4))
     {
       itkExceptionMacro( << "the PixelRepresentation function should give an output of "
        << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !" );
