@@ -100,8 +100,6 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	      // Position Clicked 
 	      double x = Fl::event_x();
 	      
-	      //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
-		
 	      if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
 		{
 		  if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
@@ -119,12 +117,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	    {
 	      if(m_ModifyLeft || m_ModifyRight)
 		{
-		  //
 		  m_Model->Update();
-		  //
-/* 		  m_View->GetScrollWidget()->redraw(); */
-/* 		  m_View->GetFullWidget()->redraw(); */
-/* 		  m_View->GetZoomWidget()->redraw(); */
 		}
 	      
 	      m_ModifyLeft  = false;
@@ -144,7 +137,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 		  //  Update The Rendering Function min and max
 		  ParametersType param = m_RenderingFunction->GetParameters();
 		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
-		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse());
+		  param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse());
 		  m_RenderingFunction->SetParameters(param);
 		}
 		
@@ -157,7 +150,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 		  //  Update The Rendering Function min and max
 		  ParametersType param = m_RenderingFunction->GetParameters();
 		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
-		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse()+tx);
+		  param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse()+tx);
 		  m_RenderingFunction->SetParameters(param);
 		}
 	      return true;
