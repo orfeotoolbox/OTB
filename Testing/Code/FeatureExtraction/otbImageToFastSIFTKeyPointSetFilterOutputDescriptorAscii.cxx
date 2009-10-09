@@ -78,9 +78,9 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
   outfile << "Number of SIFT key points: " << filter->GetOutput()->GetNumberOfPoints() << std::endl;
 
  if(filter->GetOutput()->GetPointData()->Size() != filter->GetOutput()->GetPoints()->Size() )
-	return EXIT_FAILURE;
+       return EXIT_FAILURE;
  if(filter->GetOutput()->GetPointData()->Size() == 0 )
-	return EXIT_FAILURE;
+       return EXIT_FAILURE;
 
   // Copy the PointSet to std::vector< std::vector >
   while ( pIt!=filter->GetOutput()->GetPoints()->End() &&  pDataIt!=filter->GetOutput()->GetPointData()->End() )
@@ -111,12 +111,12 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
 
   while ( itData != imageData.end() )
   {
-	unsigned int itDescriptor = 0;
-	outfile << "[ ";
+       unsigned int itDescriptor = 0;
+       outfile << "[ ";
     while (itDescriptor < stopVal )
     //while (itDescriptor < static_cast<int>((*itData).size()-2) )
      {
-	  outfile << std::fixed << std::setprecision(5) << (*itData)[itDescriptor+2] << " ";
+         outfile << std::fixed << std::setprecision(5) << (*itData)[itDescriptor+2] << " ";
       itDescriptor++;
     }
     outfile << "]" << std::endl;

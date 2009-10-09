@@ -30,7 +30,7 @@
 int otbSubsampleImageFilter ( int argc, char * argv[] )
 {
   const char * inputFileName = argv[1];
-	const char * outputFileName1 = argv[2];
+       const char * outputFileName1 = argv[2];
   const char * outputFileName2 = argv[3];
 
   const unsigned int Dimension = 2;

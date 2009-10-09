@@ -53,7 +53,7 @@ IkonosImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType &
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -72,25 +72,25 @@ IkonosImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType &
  std::string key= "support_data.band_name";
  ossimString keywordString = kwl.find(key.c_str());
  if(keywordString=="Pan")
-	{
-	  outputValuesVariableLengthVector[0] = 1375.8;
-	}
+       {
+         outputValuesVariableLengthVector[0] = 1375.8;
+       }
       else if(keywordString=="Blue")
-	{
-	  outputValuesVariableLengthVector[0] = 1930.9;
-	}
+       {
+         outputValuesVariableLengthVector[0] = 1930.9;
+       }
       else if(keywordString=="Green")
-	{
-	  outputValuesVariableLengthVector[0] = 1854.8;
-	}
+       {
+         outputValuesVariableLengthVector[0] = 1854.8;
+       }
       else if(keywordString=="Red")
-	{
-	  outputValuesVariableLengthVector[0] = 1556.5;
-	}
+       {
+         outputValuesVariableLengthVector[0] = 1556.5;
+       }
       else if(keywordString=="NIR")
-	{
-	  outputValuesVariableLengthVector[0] = 1156.9;
-	}
+       {
+         outputValuesVariableLengthVector[0] = 1156.9;
+       }
      
   return outputValuesVariableLengthVector;
 }
@@ -101,7 +101,7 @@ IkonosImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) cons
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -138,7 +138,7 @@ IkonosImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) co
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -173,7 +173,7 @@ IkonosImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) con
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -209,7 +209,7 @@ IkonosImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) c
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -245,7 +245,7 @@ IkonosImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) con
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -281,7 +281,7 @@ IkonosImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType & d
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -318,7 +318,7 @@ IkonosImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType &
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -353,7 +353,7 @@ IkonosImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType & 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -395,7 +395,7 @@ IkonosImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   VariableLengthVectorType outputValuesVariableLengthVector;
@@ -412,7 +412,7 @@ IkonosImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   int productionYear = this->GetProductionYear(dict);
@@ -480,7 +480,7 @@ IkonosImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType & di
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -503,7 +503,7 @@ IkonosImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -573,7 +573,7 @@ IkonosImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;

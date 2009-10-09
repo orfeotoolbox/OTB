@@ -201,7 +201,7 @@ protected:
     Superclass::PrintSelf( os, indent );
     os << indent << "Attributes: "<< std::endl;
     for(AttributesMapConstIteratorType it = m_Attributes.begin();
-	it!=m_Attributes.end();++it)
+       it!=m_Attributes.end();++it)
       {
       os<<indent<<indent<<it->first<<" = "<<it->second<<std::endl;
       }

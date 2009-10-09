@@ -99,37 +99,37 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
       while(itLinesListCur != itLinesListCurEnd )
         {
           /** Check If segments are already computed */
-	  if( segmentsUsedMatrix[counterTest][counterCur]== 0 && segmentsUsedMatrix[counterCur][counterTest] == 0 )
-	    {
+         if( segmentsUsedMatrix[counterTest][counterCur]== 0 && segmentsUsedMatrix[counterCur][counterTest] == 0 )
+           {
               /** Set the segments to USED (== 1)*/
               segmentsUsedMatrix[counterTest][counterCur] = 1;
               segmentsUsedMatrix[counterCur][counterTest] = 1;
               
-	      /** Compute the angle formed by the two segments */
-	      double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
+             /** Compute the angle formed by the two segments */
+             double Angle = this->ComputeAngleFormedBySegments(*itLinesListTest, *itLinesListCur);
 
-	      /** Check if the angle is a right one */
+             /** Check if the angle is a right one */
                   if(vcl_abs(Angle - CONST_PI_2) <= m_ThresholdAngle )
-		{
-		  /** Right angle coordinate*/
-		  PointType              RightAngleCoordinate;
-		  RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
-		
-		  /** Compute the distance between the two segments and the right angle formed by this segments*/
-		  double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest);
-		  double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) ;
-		
-		  /** Use Pythagore to compute the distance between the two segments*/
-		  double SegmentDistance = vcl_sqrt(dist1*dist1 + dist2*dist2);
-		
-// 		  if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
-// 		     this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
-		  if(SegmentDistance < m_ThresholdDistance)
-		    {
-		      /** If Right Angle & not so far from segments:  Add it to the pointSet*/
-		      this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
-		    }
-		}
+              {
+                /** Right angle coordinate*/
+                PointType              RightAngleCoordinate;
+                RightAngleCoordinate = this->ComputeAngleRightCoordinate(*itLinesListTest, *itLinesListCur);
+              
+                /** Compute the distance between the two segments and the right angle formed by this segments*/
+                double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest);
+                double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) ;
+              
+                /** Use Pythagore to compute the distance between the two segments*/
+                double SegmentDistance = vcl_sqrt(dist1*dist1 + dist2*dist2);
+              
+//                 if(this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest) <m_ThresholdDistance &&
+//                    this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) <m_ThresholdDistance)
+                if(SegmentDistance < m_ThresholdDistance)
+                  {
+                    /** If Right Angle & not so far from segments:  Add it to the pointSet*/
+                    this->AddRightAngleToPointSet(RightAngleCoordinate , *itLinesListTest , *itLinesListCur );
+                  }
+              }
             }
           ++counterCur;
           ++itLinesListCur;

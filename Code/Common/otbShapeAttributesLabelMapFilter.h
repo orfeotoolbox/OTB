@@ -96,7 +96,7 @@ public:
   /// Flusser moments typedef
   typedef Polygon<double>                                           PolygonType;
   typedef Functor::LabelObjectToPolygonFunctor<LabelObjectType,
-					       PolygonType>         PolygonFunctorType;
+                                          PolygonType>         PolygonFunctorType;
   typedef FlusserPathFunction<PolygonType>                          FlusserPathFunctionType;
   
   /**

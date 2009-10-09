@@ -116,20 +116,20 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
     for(LabelType label = minMax->GetMinimum(); label <=minMax->GetMaximum(); ++label)
       {
         if(labelMapFilter->GetOutput()->HasLabel(label) && label != labelMapFilter->GetOutput()->GetBackgroundValue())
-	{
-	std::cout<<"Vectorizing object "<<label<<std::endl;
-	chrono.Start();
-	PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
-	chrono.Stop();
+       {
+       std::cout<<"Vectorizing object "<<label<<std::endl;
+       chrono.Start();
+       PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
+       chrono.Stop();
         
         //correct polygon
         PolygonType::Pointer correct_polygon = correctPolygon(polygon);
         
-	DataNodeType::Pointer node = DataNodeType::New();
-	node->SetNodeType(otb::FEATURE_POLYGON);
+       DataNodeType::Pointer node = DataNodeType::New();
+       node->SetNodeType(otb::FEATURE_POLYGON);
         node->SetPolygonExteriorRing(correct_polygon);
-	data->GetDataTree()->Add(node,folder1);
-	}
+       data->GetDataTree()->Add(node,folder1);
+       }
       }
     }
     std::cout<<"Average vectorization time: "<<chrono.GetMeanTime()<<" s."<<std::endl;

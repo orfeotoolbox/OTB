@@ -48,16 +48,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     {
       unsigned int size =  this->GetFunctor().GetNoisePolynomialCoefficientsList()[0].size();
       for(unsigned int i=1; i<this->GetFunctor().GetNoisePolynomialCoefficientsList().size(); i++)
-	{
-	  if( this->GetFunctor().GetNoisePolynomialCoefficientsList()[i].size() != size )
-	    itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
-	}
+       {
+         if( this->GetFunctor().GetNoisePolynomialCoefficientsList()[i].size() != size )
+           itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
+       }
       
       if( this->GetFunctor().GetTimeUTC().size() != this->GetFunctor().GetNoisePolynomialCoefficientsList().size() )
-	itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
+       itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
 
       if(this->GetFunctor().GetPRF() == 0.)
-	itkExceptionMacro(<<"PRF can't be null.");
+       itkExceptionMacro(<<"PRF can't be null.");
       
     }
 
@@ -262,9 +262,9 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     {
       os << "Noise polinomial coefficient: [   ";
       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList()[0].size(); ++i)
-	{
-	  os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
-	}
+       {
+         os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
+       }
       os << "]" << std::endl;
     }
   else
@@ -272,16 +272,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       os << "Pulse Repetition Frequency  : " << this->GetPRF() << std::endl;
       os << "Noise acquisitions          : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList().size(); ++i)
-	{
-	  os << "Noise acquisition "<< i << ":" << std::endl;
-	  os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
-	  os << "Noise polinomial coefficient: [   ";
-	  for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
-	    {
-	      os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
-	    }
+       {
+         os << "Noise acquisition "<< i << ":" << std::endl;
+         os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
+         os << "Noise polinomial coefficient: [   ";
+         for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
+           {
+             os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
+           }
       os << "]" << std::endl;
-	}
+       }
     }
 }
 

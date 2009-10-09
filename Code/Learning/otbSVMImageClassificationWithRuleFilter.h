@@ -93,15 +93,15 @@ protected:
   virtual ~SVMImageClassificationWithRuleFilter() {};
 
   /** GenerateOutputInformation
-	 * Set the number of bands of the output rule image.
-	 * Copy informations from the input image if existing.
-	 **/
-	virtual void GenerateOutputInformation();
+        * Set the number of bands of the output rule image.
+        * Copy informations from the input image if existing.
+        **/
+       virtual void GenerateOutputInformation();
 
-	/** AllocateOutputs
-	 * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
-	 **/
-	virtual void AllocateOutputs();
+       /** AllocateOutputs
+        * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
+        **/
+       virtual void AllocateOutputs();
 
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,int threadId);

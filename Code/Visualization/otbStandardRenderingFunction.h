@@ -202,8 +202,8 @@ public:
         if (this->GetHistogramList().IsNull())
         {
           this->RenderHistogram();
-	  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-	  //          <<"provided to the rendering function with SetHistogramList()" );
+         //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+         //          <<"provided to the rendering function with SetHistogramList()" );
         }
         for(unsigned int comp = 0; comp < nbComps;++comp)
         {
@@ -357,8 +357,8 @@ public:
     /** Set/Get the AutoMinMax mode */
   virtual void SetAutoMinMax(bool val)
   {
-	m_AutoMinMax = val;
-	this->Modified();
+       m_AutoMinMax = val;
+       this->Modified();
   }
   itkGetMacro(AutoMinMax,bool);
   itkBooleanMacro(AutoMinMax);

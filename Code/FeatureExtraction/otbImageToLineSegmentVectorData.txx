@@ -198,123 +198,123 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
       typename LineSpatialObjectType::const_iterator  itEnd = this->GetLines()->GetNthElement(i)->end();
    
       while(it != itEnd)
-	{
-	  VertexType p1,p2;
-	  typename LineType::Pointer l = LineType::New();
-	  typename LineSpatialObjectType::LineType::PointListType & pointsList = (*it)->GetPoints();
-	  typename LineSpatialObjectType::LineType::PointListType::const_iterator itPoints = pointsList.begin();
-	  p1[0] =(*itPoints).GetPosition()[0];     //First Vertex
-	  p1[1] =(*itPoints).GetPosition()[1];
-	  ++itPoints;
-	  p2[0] =(*itPoints).GetPosition()[0];     //Second Vertex
-	  p2[1] =(*itPoints).GetPosition()[1];
+       {
+         VertexType p1,p2;
+         typename LineType::Pointer l = LineType::New();
+         typename LineSpatialObjectType::LineType::PointListType & pointsList = (*it)->GetPoints();
+         typename LineSpatialObjectType::LineType::PointListType::const_iterator itPoints = pointsList.begin();
+         p1[0] =(*itPoints).GetPosition()[0];     //First Vertex
+         p1[1] =(*itPoints).GetPosition()[1];
+         ++itPoints;
+         p2[0] =(*itPoints).GetPosition()[0];     //Second Vertex
+         p2[1] =(*itPoints).GetPosition()[1];
 
-	  bool go = false;
-	  // horizontal line
-	  if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
-	    {
-	      go = true;
-	    }
-	  // point over the border
-	  else if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold || vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
-	    {
-	      // have to fuse?
-	      unsigned int j=0;
-	      bool done = false;
-	      VertexType p1Old;
-	      VertexType p2Old;
-	      while(j<vertexList.size() && done==false)
-		{
-		  p1Old = vertexList[j][0];
-		  p2Old = vertexList[j][1];
-	
-		  // if p1=p1old and p2=p2Old or p1=p2old and p2=p1Old mod 1
-		  if( ( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold ) ||
-		      ( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
-		      ( vcl_abs(p1[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
-		      ( vcl_abs(p2[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p1Old[1])<m_ThreadDistanceThreshold )     )
-		    {
-		      done = true;
-		    }
-		  ++j;
-		}
-	      if(done==true && j!=0)
-		{
-		  DoubleVertexType vert;
-		  // keep the 2 lines extramities
-		  // p1 is the common point -> keep p2
-		  if(vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold)
-		    {
-		      vert.push_back(p2);
-		      // p1 is the same as p1Old -> keep p2Old
-		      if( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold )
-			vert.push_back(p2Old);
-		      else
-			vert.push_back(p1Old);
-		    }
-		  // p2 is the common point -> keep p1
-		  else
-		    {
-		      vert.push_back(p1);
-		      // p2 is the same as p1Old -> keep p1Old
-		      if( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1]<m_ThreadDistanceThreshold) )
-			vert.push_back(p1Old);
-		      else
-			vert.push_back(p2Old);
-		    }
-		  vertexNewList.push_back(vert);
-		  // j-1 because of the ++j at the end of the while
-		  vertexList.erase(vertexList.begin()+(j-1));
-		}
-	      else if(j==0)
-		{
-		  DoubleVertexType vert;
-		  vert.push_back(p1);
-		  vert.push_back(p2);
-		  vertexNewList.push_back(vert);
-		}
-	      // no point to fuse
-	      else
-		go = true;	
-	    }// else if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold || vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
-	  else
-	    {
-	      go = true;
-	    }
+         bool go = false;
+         // horizontal line
+         if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
+           {
+             go = true;
+           }
+         // point over the border
+         else if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold || vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
+           {
+             // have to fuse?
+             unsigned int j=0;
+             bool done = false;
+             VertexType p1Old;
+             VertexType p2Old;
+             while(j<vertexList.size() && done==false)
+              {
+                p1Old = vertexList[j][0];
+                p2Old = vertexList[j][1];
+       
+                // if p1=p1old and p2=p2Old or p1=p2old and p2=p1Old mod 1
+                if( ( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold ) ||
+                    ( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
+                    ( vcl_abs(p1[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
+                    ( vcl_abs(p2[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p1Old[1])<m_ThreadDistanceThreshold )     )
+                  {
+                    done = true;
+                  }
+                ++j;
+              }
+             if(done==true && j!=0)
+              {
+                DoubleVertexType vert;
+                // keep the 2 lines extramities
+                // p1 is the common point -> keep p2
+                if(vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold)
+                  {
+                    vert.push_back(p2);
+                    // p1 is the same as p1Old -> keep p2Old
+                    if( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold )
+                     vert.push_back(p2Old);
+                    else
+                     vert.push_back(p1Old);
+                  }
+                // p2 is the common point -> keep p1
+                else
+                  {
+                    vert.push_back(p1);
+                    // p2 is the same as p1Old -> keep p1Old
+                    if( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1]<m_ThreadDistanceThreshold) )
+                     vert.push_back(p1Old);
+                    else
+                     vert.push_back(p2Old);
+                  }
+                vertexNewList.push_back(vert);
+                // j-1 because of the ++j at the end of the while
+                vertexList.erase(vertexList.begin()+(j-1));
+              }
+             else if(j==0)
+              {
+                DoubleVertexType vert;
+                vert.push_back(p1);
+                vert.push_back(p2);
+                vertexNewList.push_back(vert);
+              }
+             // no point to fuse
+             else
+              go = true;       
+           }// else if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold || vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
+         else
+           {
+             go = true;
+           }
 
 
-	  if( go==true)
-	  {
-	      l->AddVertex(p1);
-	      l->AddVertex(p2);
+         if( go==true)
+         {
+             l->AddVertex(p1);
+             l->AddVertex(p2);
 
-	      DataNodePointerType node = DataNodeType::New();
-	      node->SetNodeType(otb::FEATURE_LINE);
-	      node->SetLine(l);
-	      vlines->GetDataTree()->Add(node,folder);
-	    }
+             DataNodePointerType node = DataNodeType::New();
+             node->SetNodeType(otb::FEATURE_LINE);
+             node->SetLine(l);
+             vlines->GetDataTree()->Add(node,folder);
+           }
 
-	  ++it;
-	}  // End while(it != itEnd) loop
+         ++it;
+       }  // End while(it != itEnd) loop
 
       // write the false alarm in vertexList (those that don't have a continuation in the next thread)
       for(unsigned int k=0; k<vertexList.size(); ++k)
-	{
-	  typename LineType::Pointer l = LineType::New();
-	  l->AddVertex(vertexList[k][0]);
-	  l->AddVertex(vertexList[k][1]);
+       {
+         typename LineType::Pointer l = LineType::New();
+         l->AddVertex(vertexList[k][0]);
+         l->AddVertex(vertexList[k][1]);
 
-	  DataNodePointerType node = DataNodeType::New();
-	  node->SetNodeType(otb::FEATURE_LINE);
-	  node->SetLine(l);
-	  vlines->GetDataTree()->Add(node,folder);
-	}
+         DataNodePointerType node = DataNodeType::New();
+         node->SetNodeType(otb::FEATURE_LINE);
+         node->SetLine(l);
+         vlines->GetDataTree()->Add(node,folder);
+       }
       vertexList.clear();
       vertexList = vertexNewList;
       vertexNewList.clear();
       whereAmI[0] += regionList[i].GetSize()[0];
       whereAmI[1] += regionList[i].GetSize()[1];
-	
+       
     }// End for loop
 
   return vlines;

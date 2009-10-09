@@ -254,11 +254,11 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
       labelObject->SetAttribute(oss.str().c_str(), maxIdx[dim]);
       
       for(unsigned int dim2 = 0;dim2 < ImageDimension;++dim2)
-	{
-	oss.str("");
-	oss<<"STATS::"<<m_FeatureName<<"::PrincipalAxis"<<dim<<dim2;
-	labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
-	}
+       {
+       oss.str("");
+       oss<<"STATS::"<<m_FeatureName<<"::PrincipalAxis"<<dim<<dim2;
+       labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
+       }
       }
     }
 }

@@ -238,12 +238,12 @@ public:
   /** Get/Set Filter function coef. */
   void SetFilterFunctionCoef( FilterFunctionCoefVectorType vect )
   {
-  	m_FilterFunctionCoef = vect;
-  	this->Modified();
+         m_FilterFunctionCoef = vect;
+         this->Modified();
   }
   FilterFunctionCoefVectorType GetFilterFunctionCoef()
   {
-  	return m_FilterFunctionCoef;
+         return m_FilterFunctionCoef;
   }
 
   /** Compute the functor parameters */

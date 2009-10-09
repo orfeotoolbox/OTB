@@ -111,13 +111,13 @@ PrintableImageFilter<TInputImage, TMaskImage>
       typename InputImageType::ConstPointer inputPtr = this->GetInput();
  
       if( !inputMaskPtr )
-	{
-	  itkExceptionMacro(<<"No mask detected");
-	}
+       {
+         itkExceptionMacro(<<"No mask detected");
+       }
       if( inputMaskPtr->GetLargestPossibleRegion().GetSize() !=  inputPtr->GetLargestPossibleRegion().GetSize())
-	{
-	  itkExceptionMacro(<<"Input size ("<<inputPtr->GetLargestPossibleRegion().GetSize()<<") and Mask size ("<<inputMaskPtr->GetLargestPossibleRegion().GetSize()<<") must be the same");
-	}
+       {
+         itkExceptionMacro(<<"Input size ("<<inputPtr->GetLargestPossibleRegion().GetSize()<<") and Mask size ("<<inputMaskPtr->GetLargestPossibleRegion().GetSize()<<") must be the same");
+       }
     }
 }
 

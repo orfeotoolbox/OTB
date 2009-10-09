@@ -211,7 +211,7 @@ ExhaustiveExponentialOptimizer
     newPosition[i] = this->GetInitialPosition()[i]
                      * this->GetScales()[i]
                      * vcl_pow(m_GeometricProgression,
-			       static_cast<double>(m_CurrentIndex[i]-m_NumberOfSteps[i]) * m_StepLength);
+                            static_cast<double>(m_CurrentIndex[i]-m_NumberOfSteps[i]) * m_StepLength);
     }
 }
 

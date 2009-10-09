@@ -362,10 +362,10 @@ WaveletGenerator<DAUBECHIES20>
 /**
  * Template specialization for the Spline Biorthogonal Wavelet.
  *
- *	M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
- *	Image Coding Using Wavelet Transform
- *	IEEE Transactions on Image Processing,
- *	vol 1(2), pp:205-220, April 1992
+ *       M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
+ *       Image Coding Using Wavelet Transform
+ *       IEEE Transactions on Image Processing,
+ *       vol 1(2), pp:205-220, April 1992
  */
 template <>
 const char * WaveletGenerator<SPLINE_BIORTHOGONAL_2_4>::GetWaveletName () const
@@ -412,15 +412,15 @@ WaveletGenerator<SPLINE_BIORTHOGONAL_2_4>
 /**
  * Template specialization for the Spline Biorthogonal Wavelet.
  *
- *	M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
- *	Image Coding Using Wavelet Transform
- *	IEEE Transactions on Image Processing,
- *	vol 1(2), pp:205-220, April 1992
+ *       M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
+ *       Image Coding Using Wavelet Transform
+ *       IEEE Transactions on Image Processing,
+ *       vol 1(2), pp:205-220, April 1992
  *
- *	Also in Daubechies's "Ten Lectures on Wavelet": in
- *	less disparate filter lengths, pp 278--279.
+ *       Also in Daubechies's "Ten Lectures on Wavelet": in
+ *       less disparate filter lengths, pp 278--279.
  *
- *	Also known as 7/9 filter.
+ *       Also known as 7/9 filter.
  */
 template <>
 const char * WaveletGenerator<SPLINE_BIORTHOGONAL_4_4>::GetWaveletName () const

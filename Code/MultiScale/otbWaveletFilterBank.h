@@ -252,7 +252,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -435,7 +435,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with

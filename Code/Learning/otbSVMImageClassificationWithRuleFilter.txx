@@ -38,7 +38,7 @@ void
 SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
 ::GenerateOutputInformation ()
 {
-	Superclass::GenerateOutputInformation();
+       Superclass::GenerateOutputInformation();
 
   if ( this->GetModel() == NULL )
   {
@@ -46,11 +46,11 @@ SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
   }
 
   // add output information on the rule image
-	this->GetOutputRule()->SetNumberOfComponentsPerPixel(
-		this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
+       this->GetOutputRule()->SetNumberOfComponentsPerPixel(
+              this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
 
-	this->GetOutputRule()->CopyInformation( this->GetInput() );
-	this->GetOutputRule()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+       this->GetOutputRule()->CopyInformation( this->GetInput() );
+       this->GetOutputRule()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
 }
 
 template < class TInputImage, class TOutputImage, class TMaskImage >
@@ -66,10 +66,10 @@ SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
   }
 
   // add allocation for the rule image
-	OutputRuleImageType * output = this->GetOutputRule();
-	output->SetNumberOfComponentsPerPixel(
-		this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
-	output->Allocate();
+       OutputRuleImageType * output = this->GetOutputRule();
+       output->SetNumberOfComponentsPerPixel(
+              this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
+       output->Allocate();
 }
 
 template < class TInputImage, class TOutputImage, class TMaskImage >

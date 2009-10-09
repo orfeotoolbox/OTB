@@ -108,7 +108,7 @@ void
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-	v = std::numeric_limits<ValueType>::signaling_NaN();
+       v = std::numeric_limits<ValueType>::signaling_NaN();
 }
 
 

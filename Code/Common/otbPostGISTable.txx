@@ -169,7 +169,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
     
     //get holes
     //sqlCmd << ",";
-    typedef typename PolygonListType::ConstIterator 	PolygonListConstIteratorType;
+    typedef typename PolygonListType::ConstIterator        PolygonListConstIteratorType;
     for (PolygonListConstIteratorType itPolygonList = polygonListInteriorRing->Begin();itPolygonList!=polygonListInteriorRing->End();++itPolygonList)
     {
       /** correct current polygon interior ring */

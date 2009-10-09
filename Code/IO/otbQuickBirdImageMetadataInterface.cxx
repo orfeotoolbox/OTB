@@ -56,7 +56,7 @@ QuickBirdImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryTyp
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -99,7 +99,7 @@ QuickBirdImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) c
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -134,7 +134,7 @@ QuickBirdImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict )
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -168,7 +168,7 @@ QuickBirdImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -202,7 +202,7 @@ QuickBirdImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -236,7 +236,7 @@ QuickBirdImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -270,7 +270,7 @@ QuickBirdImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -305,7 +305,7 @@ QuickBirdImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryTyp
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -339,7 +339,7 @@ QuickBirdImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -374,7 +374,7 @@ QuickBirdImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType ImageKeywordlist;
@@ -414,7 +414,7 @@ QuickBirdImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
  
    ImageKeywordlistType ImageKeywordlist;
@@ -482,96 +482,96 @@ QuickBirdImageMetadataInterface
   if (keywordStringBId == ossimString("P") )
     outputValuesVariableLengthVector.SetSize(1);
   else
-  	outputValuesVariableLengthVector.SetSize(4);
+         outputValuesVariableLengthVector.SetSize(4);
   outputValuesVariableLengthVector.Fill(1.);
  
   if (!isPost20030606)
   {
-  	if(bitsPerPixel==16)
-  	{
- 	  if (keywordStringBId == ossimString("P"))
- 	  {
- 	  	if (TDILevel != 10)
- 	  		outputValuesVariableLengthVector[0] = 0.08381880;
- 	  	else if (TDILevel != 13)
- 	  		outputValuesVariableLengthVector[0] = 0.06447600;
- 	  	else if (TDILevel != 18)
- 	  		outputValuesVariableLengthVector[0] = 0.04656600;
- 	  	else if (TDILevel != 24)
- 	  		outputValuesVariableLengthVector[0] = 0.03494440;
- 	  	else if (TDILevel != 32)
- 	  		outputValuesVariableLengthVector[0] = 0.02618840;
-  	  }
-  	  else
-  	  {
- 	  	outputValuesVariableLengthVector[0] = 0.01604120;
-   	  	outputValuesVariableLengthVector[1] = 0.01438470;
- 	  	outputValuesVariableLengthVector[2] = 0.01267350;
-	  	outputValuesVariableLengthVector[3] = 0.01542420;
- 	  }
-  		
-  	}
-  	else
-  	{
- 	  if (keywordStringBId == ossimString("P"))
- 	  {
- 	  	if (TDILevel != 10)
- 	  		outputValuesVariableLengthVector[0] = 1.02681367;
- 	  	else if (TDILevel != 13)
- 	  		outputValuesVariableLengthVector[0] = 1.02848939;
- 	  	else if (TDILevel != 18)
- 	  		outputValuesVariableLengthVector[0] = 1.02794702;
- 	  	else if (TDILevel != 24)
- 	  		outputValuesVariableLengthVector[0] = 1.02989685;
- 	  	else if (TDILevel != 32)
- 	  		outputValuesVariableLengthVector[0] = 1.02739898;
+         if(bitsPerPixel==16)
+         {
+          if (keywordStringBId == ossimString("P"))
+          {
+                 if (TDILevel != 10)
+                        outputValuesVariableLengthVector[0] = 0.08381880;
+                 else if (TDILevel != 13)
+                        outputValuesVariableLengthVector[0] = 0.06447600;
+                 else if (TDILevel != 18)
+                        outputValuesVariableLengthVector[0] = 0.04656600;
+                 else if (TDILevel != 24)
+                        outputValuesVariableLengthVector[0] = 0.03494440;
+                 else if (TDILevel != 32)
+                        outputValuesVariableLengthVector[0] = 0.02618840;
+           }
+           else
+           {
+                 outputValuesVariableLengthVector[0] = 0.01604120;
+                   outputValuesVariableLengthVector[1] = 0.01438470;
+                 outputValuesVariableLengthVector[2] = 0.01267350;
+                outputValuesVariableLengthVector[3] = 0.01542420;
+          }
+                
+         }
+         else
+         {
+          if (keywordStringBId == ossimString("P"))
+          {
+                 if (TDILevel != 10)
+                        outputValuesVariableLengthVector[0] = 1.02681367;
+                 else if (TDILevel != 13)
+                        outputValuesVariableLengthVector[0] = 1.02848939;
+                 else if (TDILevel != 18)
+                        outputValuesVariableLengthVector[0] = 1.02794702;
+                 else if (TDILevel != 24)
+                        outputValuesVariableLengthVector[0] = 1.02989685;
+                 else if (TDILevel != 32)
+                        outputValuesVariableLengthVector[0] = 1.02739898;
 
-		ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-  	  	outputValuesVariableLengthVector[0] *= keywordStringAbsCalFactor.toDouble();
-  	  }
-  	  else
-  	  {
-  	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
-	    outputValuesVariableLengthVector[0] = 1.12097834 * keywordStringAcalFact.toDouble();
-    	keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
-      	outputValuesVariableLengthVector[1] = 1.37652632 * keywordStringAcalFact.toDouble();
-      	keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
-     	outputValuesVariableLengthVector[2] = 1.30954587 * keywordStringAcalFact.toDouble();
-     	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
-     	outputValuesVariableLengthVector[3] = 0.98368622 * keywordStringAcalFact.toDouble();
-  	  }
-  	}
+              ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
+                  outputValuesVariableLengthVector[0] *= keywordStringAbsCalFactor.toDouble();
+           }
+           else
+           {
+             ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
+           outputValuesVariableLengthVector[0] = 1.12097834 * keywordStringAcalFact.toDouble();
+           keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
+             outputValuesVariableLengthVector[1] = 1.37652632 * keywordStringAcalFact.toDouble();
+             keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
+            outputValuesVariableLengthVector[2] = 1.30954587 * keywordStringAcalFact.toDouble();
+            keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
+            outputValuesVariableLengthVector[3] = 0.98368622 * keywordStringAcalFact.toDouble();
+           }
+         }
 
     
    }
   else
   {
- 	  if (keywordStringBId == ossimString("P"))
- 	  {
- 	  	ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-  	  	outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
-  	  }
-  	  else
-  	  {
-  	    ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
-	    outputValuesVariableLengthVector[0] = keywordStringAcalFact.toDouble();
-      	keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
-    	outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
-      	keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
-     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();
-     	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
-     	outputValuesVariableLengthVector[3] = keywordStringAcalFact.toDouble();
-  	  }
+          if (keywordStringBId == ossimString("P"))
+          {
+                 ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
+                  outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
+           }
+           else
+           {
+             ossimString keywordStringAcalFact = kwl.find("support_data.B_band_absCalFactor");
+           outputValuesVariableLengthVector[0] = keywordStringAcalFact.toDouble();
+             keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
+           outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
+             keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
+            outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();
+            keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
+            outputValuesVariableLengthVector[3] = keywordStringAcalFact.toDouble();
+           }
   }
 
   if (keywordStringBId == ossimString("P") )
   {
-	outputValuesVariableLengthVector[0] = 0.398 / outputValuesVariableLengthVector[0];
+       outputValuesVariableLengthVector[0] = 0.398 / outputValuesVariableLengthVector[0];
   }
   else
   {
       outputValuesVariableLengthVector[0] = 0.068 / outputValuesVariableLengthVector[0];
-	  outputValuesVariableLengthVector[1] = 0.099 / outputValuesVariableLengthVector[1];
+         outputValuesVariableLengthVector[1] = 0.099 / outputValuesVariableLengthVector[1];
       outputValuesVariableLengthVector[2] = 0.071 / outputValuesVariableLengthVector[2];
       outputValuesVariableLengthVector[3] = 0.114 / outputValuesVariableLengthVector[3];
   }
@@ -584,7 +584,7 @@ QuickBirdImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType &
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -607,7 +607,7 @@ QuickBirdImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & d
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -631,7 +631,7 @@ QuickBirdImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -679,7 +679,7 @@ QuickBirdImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
+         itkExceptionMacro(<<"Invalid Metadata, no QuickBird Image");
   }
   
   ImageKeywordlistType imageKeywordlist;

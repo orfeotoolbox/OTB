@@ -502,11 +502,11 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
       labelObject->SetAttribute( oss.str().c_str(),principalMoments[dim]);
       
       for(unsigned int dim2 = 0;dim2 < ImageDimension;++dim2)
-	{
-	oss.str("");
-	oss<<"SHAPE::PrincipalAxis"<<dim<<dim2;
-	labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
-	}
+       {
+       oss.str("");
+       oss<<"SHAPE::PrincipalAxis"<<dim<<dim2;
+       labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
+       }
       }
     
     labelObject->SetAttribute("SHAPE::RegionElongation", maxSize / minSize );

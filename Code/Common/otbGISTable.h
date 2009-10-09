@@ -65,14 +65,14 @@ public:
   
   typedef itk::Point<TPrecision , SpatialDimension > PointType;
   typedef PolyLineParametricPathWithValue < TPrecision , SpatialDimension >  LineType;
-  typedef typename LineType::Pointer 	LinePointerType;
+  typedef typename LineType::Pointer        LinePointerType;
   
-  typedef Polygon < TPrecision > 	        PolygonType;
-  typedef typename PolygonType::Pointer 	                PolygonPointerType;
-  typedef typename PolygonType::ConstPointer 	        PolygonConstPointerType;
-  typedef ObjectList< PolygonType > 	        PolygonListType;
-  typedef typename PolygonListType::Pointer 	        PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
+  typedef Polygon < TPrecision >                PolygonType;
+  typedef typename PolygonType::Pointer                        PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                PolygonConstPointerType;
+  typedef ObjectList< PolygonType >                PolygonListType;
+  typedef typename PolygonListType::Pointer                PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer        PolygonListConstPointerType;
   /** Acessors */
 
   //itkStaticConstMacro(GISDimension, unsigned int, SpatialDimension);

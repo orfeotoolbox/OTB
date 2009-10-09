@@ -93,76 +93,76 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
     
     if(widgetId == m_Curve->GetIdentifier())
       {
-	switch (event)
-	  {
-	  case FL_PUSH:
-	    {
-	      // Position Clicked
-	      double x = Fl::event_x();
-	
-	      //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
-		
-	      if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
-		{
-		  if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
-		    {
-		      m_ModifyLeft = true;
-		    }
-		  else
-		    {
-		      m_ModifyRight = true;
-		    }
-		}
-	      return true;
-	    }
-	  case FL_RELEASE:
-	    {
-	      if(m_ModifyLeft || m_ModifyRight)
-		{
-		  //
-		  m_Model->Update();
-		  //
-/* 		  m_View->GetScrollWidget()->redraw(); */
-/* 		  m_View->GetFullWidget()->redraw(); */
-/* 		  m_View->GetZoomWidget()->redraw(); */
-		}
-	
-	      m_ModifyLeft  = false;
-	      m_ModifyRight = false;
-	      return true;
-	    }
-	  case FL_DRAG:
-	    {
-	      double x = Fl::event_x();
+       switch (event)
+         {
+         case FL_PUSH:
+           {
+             // Position Clicked
+             double x = Fl::event_x();
+       
+             //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
+              
+             if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
+              {
+                if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
+                  {
+                    m_ModifyLeft = true;
+                  }
+                else
+                  {
+                    m_ModifyRight = true;
+                  }
+              }
+             return true;
+           }
+         case FL_RELEASE:
+           {
+             if(m_ModifyLeft || m_ModifyRight)
+              {
+                //
+                m_Model->Update();
+                //
+/*                 m_View->GetScrollWidget()->redraw(); */
+/*                 m_View->GetFullWidget()->redraw(); */
+/*                 m_View->GetZoomWidget()->redraw(); */
+              }
+       
+             m_ModifyLeft  = false;
+             m_ModifyRight = false;
+             return true;
+           }
+         case FL_DRAG:
+           {
+             double x = Fl::event_x();
 
-	      if(m_ModifyLeft)
-		{
-		  double tx = x - abcisseL;
-		  m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
-		  m_Curve->redraw();
+             if(m_ModifyLeft)
+              {
+                double tx = x - abcisseL;
+                m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+                m_Curve->redraw();
 
-		  //  Update The Rendering Function min and max
-		  ParametersType param = m_RenderingFunction->GetParameters();
-		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
-		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse());
-		  m_RenderingFunction->SetParameters(param);
-		}
-		
-	      if(m_ModifyRight)
-		{
-		  double tx = x - abcisseR;
-		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
-		  m_Curve->redraw();
-		
-		  //  Update The Rendering Function min and max
-		  ParametersType param = m_RenderingFunction->GetParameters();
-		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
-		  param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse()+tx);
-		  m_RenderingFunction->SetParameters(param);
-		}
-	      return true;
-	    }
-	  }
+                //  Update The Rendering Function min and max
+                ParametersType param = m_RenderingFunction->GetParameters();
+                param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+                param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse());
+                m_RenderingFunction->SetParameters(param);
+              }
+              
+             if(m_ModifyRight)
+              {
+                double tx = x - abcisseR;
+                m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+                m_Curve->redraw();
+              
+                //  Update The Rendering Function min and max
+                ParametersType param = m_RenderingFunction->GetParameters();
+                param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
+                param.SetElement(2*m_Channel, m_RightAsymptote->GetAbcisse()+tx);
+                m_RenderingFunction->SetParameters(param);
+              }
+             return true;
+           }
+         }
       }
     return false;
   }

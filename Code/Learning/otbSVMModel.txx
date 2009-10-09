@@ -134,9 +134,9 @@ SVMModel<TValue,TLabel>::DeleteProblem()
     for(int i = 0; i < m_Problem.l;++i)
       {
       if(m_Problem.x[i])
-	{
-	delete [] m_Problem.x[i];
-	}
+       {
+       delete [] m_Problem.x[i];
+       }
       }
     delete [] m_Problem.x;
     m_Problem.x = NULL;
@@ -235,7 +235,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
      
      // Populate the svm nodes
      for(typename MeasurementType::const_iterator eIt = measure.begin();
-	 eIt!=measure.end() && elementIndex < elements ;++eIt,++elementIndex)
+        eIt!=measure.end() && elementIndex < elements ;++eIt,++elementIndex)
        {
        m_Problem.x[sampleIndex][elementIndex].index = elementIndex+1;
        m_Problem.x[sampleIndex][elementIndex].value = (*eIt);
@@ -285,9 +285,9 @@ SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
     for(i=0;i<length;i++)
       {
       if(target[i] == m_Problem.y[i])
-	{
-	++total_correct;
-	}
+       {
+       ++total_correct;
+       }
       }
     double accuracy = total_correct/length;
     
