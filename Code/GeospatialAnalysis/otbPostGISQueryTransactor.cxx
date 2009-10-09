@@ -23,7 +23,7 @@
 namespace otb
 {
 
-PostGISQueryTransactor::PostGISQueryTransactor() : PostGISQueryTransactor::Superclass() 
+PostGISQueryTransactor::PostGISQueryTransactor() : PostGISQueryTransactor::Superclass()
 {
   m_ViewName = "default_view";
 }
@@ -32,14 +32,14 @@ PostGISQueryTransactor::PostGISQueryTransactor(const PostGISQueryTransactor& pgt
   : PostGISQueryTransactor::Superclass()
 {
   m_TransactionString = pgt.GetTransactionString();
-  m_ViewName = pgt.GetViewName();    
+  m_ViewName = pgt.GetViewName();
 }
 
 PostGISQueryTransactor& PostGISQueryTransactor::operator=(const PostGISQueryTransactor& pgt) throw() {
     m_TransactionString = pgt.GetTransactionString();
     m_ViewName = pgt.GetViewName();
     return *this;
-} 
+}
 
 void PostGISQueryTransactor::operator()(pqxx::nontransaction &T)
 {

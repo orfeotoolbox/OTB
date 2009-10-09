@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-         This software is distributed WITHOUT ANY WARRANTY; without even 
-         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+         This software is distributed WITHOUT ANY WARRANTY; without even
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
          PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 namespace otb {
 
 template < class TImage, class TInternalImage >
-ImageSeriesFileReader< TImage, TInternalImage > 
+ImageSeriesFileReader< TImage, TInternalImage >
 ::ImageSeriesFileReader ()
 {
    m_ExtractorList = ExtractSelectionListType::New();
@@ -33,7 +33,7 @@ ImageSeriesFileReader< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReader< TImage, TInternalImage > 
+ImageSeriesFileReader< TImage, TInternalImage >
 ::AllocateListOfComponents ()
 {
   for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
@@ -46,7 +46,7 @@ ImageSeriesFileReader< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReader< TImage, TInternalImage > 
+ImageSeriesFileReader< TImage, TInternalImage >
 ::GenerateData( unsigned int idx )
 {
   itk::OStringStream msg;
@@ -85,7 +85,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 }
 
 /**
- * TestBandSelection tests if the templated Image type is compatible 
+ * TestBandSelection tests if the templated Image type is compatible
  * with the bande selection provided in the Meta File
  */
 template < class TPixel, class TInternalPixel >
@@ -120,10 +120,10 @@ template < class TPixel, class TInternalPixel >
 void
 ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 ::GenerateData( unsigned int idx )
-{ 
+{
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
 
-  ReaderType * reader 
+  ReaderType * reader
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
   reader->SetFileName( this->m_ListOfFileNames[ idx ] );
@@ -141,7 +141,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, Image< TInternalPixel, 2 > >
 }
 
 /* *********************************************************************
- * Methods that are specific to instanciation with Image type for TImage 
+ * Methods that are specific to instanciation with Image type for TImage
  * and VectorImage as TInternalImage
  * *********************************************************************
  */
@@ -175,7 +175,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 }
 
 /**
- * TestBandSelection tests if the templated Image type is compatible 
+ * TestBandSelection tests if the templated Image type is compatible
  * with the bande selection provided in the Meta File
  */
 template < class TPixel, class TInternalPixel >
@@ -195,7 +195,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 }
 
 /**
- * GenerateData for Image type as output and VectorImage type for reading 
+ * GenerateData for Image type as output and VectorImage type for reading
  */
 template < class TPixel, class TInternalPixel >
 void
@@ -204,7 +204,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 {
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
 
-  ReaderType * reader 
+  ReaderType * reader
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
   reader->SetFileName( this->m_ListOfFileNames[ idx ] );
@@ -223,7 +223,7 @@ ImageSeriesFileReader< Image< TPixel, 2 >, VectorImage< TInternalPixel, 2 > >
 }
 
 /* ******************************************************************
- * Methods that are specific to instanciation with VectorImage types 
+ * Methods that are specific to instanciation with VectorImage types
  * ******************************************************************
  */
 
@@ -265,7 +265,7 @@ ImageSeriesFileReader< VectorImage< TPixel, 2 >, VectorImage< TInternalPixel, 2 
 {
   otbMsgDebugMacro( << "Reading " << idx << "th image: " << this->m_ListOfFileNames[ idx ] );
 
-  ReaderType * reader 
+  ReaderType * reader
     = static_cast<ReaderType*>( this->m_ImageFileReaderList->GetNthElement( idx ) );
 
   reader->SetFileName( this->m_ListOfFileNames[ idx ] );

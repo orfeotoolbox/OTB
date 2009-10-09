@@ -93,7 +93,7 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
     outputPointSet->SetPoint(numkeys,point);
     outputPointSet->SetPointData(numkeys,data);
 
-    //Fill the current point and its orientation 
+    //Fill the current point and its orientation
     std::pair< OutputPointType,double>     pair;
     pair.first  = point;
     pair.second = key->ori;

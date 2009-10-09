@@ -45,7 +45,7 @@ namespace otb
 template<class TInputImage, class TPrecision=double >
 class ITK_EXPORT PersistentLineSegmentDetector :
 public PersistentImageFilter<TInputImage, TInputImage>
-{  
+{
   public:
   /** Standard Self typedef */
   typedef PersistentLineSegmentDetector Self;
@@ -80,10 +80,10 @@ public PersistentImageFilter<TInputImage, TInputImage>
   typedef itk::ExtractImageFilter<ImageType, ImageType>        ExtractorType;
   typedef typename ExtractorType::Pointer                      ExtractorPointerType;
 
-  typedef ObjectList<ExtractorType>                            ExtractorListType; 
+  typedef ObjectList<ExtractorType>                            ExtractorListType;
   typedef ObjectList<LineDetectorType>                         LineDetectorListType;
 
-  // Vector of region 
+  // Vector of region
   typedef std::vector<RegionType>                              RegionListType;
 
   virtual void Reset(void);

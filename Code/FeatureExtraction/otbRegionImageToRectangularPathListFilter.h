@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,7 +33,7 @@ namespace otb
   
 /** \class RegionImageToRectangularPathListFilter
  * \class ImageToPathListAlignFilter
- * \brief Base class used to implement filter to model regions by rectangles. 
+ * \brief Base class used to implement filter to model regions by rectangles.
  *
  */
 template <class TInputImage, class TOutputPath>
@@ -60,13 +60,13 @@ public:
   /** Some convenient typedefs. */
   typedef typename Superclass::OutputPathListType     OutputPathListType;
   
-  typedef typename Superclass::InputImageType         InputImageType;          
-  typedef typename Superclass::InputImageRegionType   InputImageRegionType;    
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::InputImageRegionType   InputImageRegionType;
   typedef typename InputImageType::Pointer            InputImagePointer;
   typedef typename InputImageType::ConstPointer       InputImageConstPointer;
   
-  typedef typename InputImageType::SizeType           SizeType;                 
-  typedef typename InputImageType::ValueType          ValueType;  
+  typedef typename InputImageType::SizeType           SizeType;
+  typedef typename InputImageType::ValueType          ValueType;
   typedef typename InputImageType::PixelType          PixelType;
   
   typedef typename Superclass::OutputPathType         OutputPathType;
@@ -77,7 +77,7 @@ public:
   //typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
   typedef double                                                  RealType;
 //  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType;
-  typedef typename otb::Image<RealType,InputImageDimension>      RealImageType; 
+  typedef typename otb::Image<RealType,InputImageDimension>      RealImageType;
   typedef typename RealImageType::Pointer                        RealImageTypePointer;
   typedef typename RealImageType::IndexType                      RealImageTypeIndexType;
         

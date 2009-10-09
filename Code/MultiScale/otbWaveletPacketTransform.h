@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -40,16 +40,16 @@ namespace otb {
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely, 
+ * It yields a list of images on the FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from 
+ * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
  *
- * The user is supposed to initialize Cost properly (through GetCost() macro) 
- * depending on its type before calling an Update(). The Cost class has to contain 
+ * The user is supposed to initialize Cost properly (through GetCost() macro)
+ * depending on its type before calling an Update(). The Cost class has to contain
  * a New() and Evaluate() function.
  *
  * \sa FullyDecomposedWaveletPacketCost
@@ -92,16 +92,16 @@ private:
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely, 
+ * It yields a list of images on the FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from 
+ * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
  *
- * The user is supposed to initialize Cost properly (through GetCost() macro) 
- * depending on its type before calling an Update(). The Cost class has to contain 
+ * The user is supposed to initialize Cost properly (through GetCost() macro)
+ * depending on its type before calling an Update(). The Cost class has to contain
  * a New() and Evaluate() function.
  *
  * This is the specific declaration of the Forward transformation.
@@ -168,10 +168,10 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
-   * In this implementation, we are not (yet?) dealing with M-band decomposition 
+   * In this implementation, we are not (yet?) dealing with M-band decomposition
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
@@ -197,9 +197,9 @@ private:
   void operator= ( const Self & );
 
   /**
-   * For multiscale decomposition, m_SubsampleImageFactor is set to 1. 
+   * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
    * It yields also a stationnary decomposition.
-   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is 
+   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2. This is its default value.
    */
   unsigned int m_SubsampleImageFactor;
@@ -222,17 +222,17 @@ private:
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely, 
+ * It yields a list of images on the FORWARD decomposition. Conversely,
  * it takes an image list but yield a single list on the INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from 
+ * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
  *
  * This is the specific declaration of the Inverse transformation.
  *
- * In this specialization, the Cost template class is not usefull and then 
+ * In this specialization, the Cost template class is not usefull and then
  * declared to as FullyDecomposedWaveletPacketCost.
  *
  * \sa FullyDecomposedWaveletPacketCost
@@ -240,7 +240,7 @@ private:
  * \sa WaveletTransform
  */
 template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter, 
+class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter,
                                           INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
   : public ImageListToImageFilter< TInputImage, TOutputImage >
 {
@@ -289,16 +289,16 @@ public:
 
   /** Get/Set the decomposition rule */
   const std::vector<bool> & GetWaveletPacketRule () const {
-    return this->m_WaveletPacketRule; } 
+    return this->m_WaveletPacketRule; }
   void SetWaveletPacketRule ( const std::vector<bool> & rule ) {
-    this->m_WaveletPacketRule = rule; 
+    this->m_WaveletPacketRule = rule;
     this->Modified(); }
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
-   * In this implementation, we are not (yet?) dealing with M-band decomposition 
+   * In this implementation, we are not (yet?) dealing with M-band decomposition
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
@@ -315,7 +315,7 @@ protected:
   WaveletPacketTransform();
   virtual ~WaveletPacketTransform() {}
 
-  /** GenerateOutputInformation 
+  /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy informations from the input image if existing.
     **/
@@ -328,7 +328,7 @@ protected:
   virtual void GenerateData ();
 
   /** Performs (if any) the local decomposition (called recursively) */
-  virtual unsigned int SetInputFilters ( unsigned int & ruleID, InputImageIterator & inputIter, 
+  virtual unsigned int SetInputFilters ( unsigned int & ruleID, InputImageIterator & inputIter,
                                           unsigned int filterID );
 
   /** Get the depth of decomposition and the number of filters from m_WaveletPacketRule */
@@ -340,9 +340,9 @@ private:
   void operator= ( const Self & );
 
   /**
-   * For multiscale decomposition, m_SubsampleImageFactor is set to 1. 
+   * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
    * It yields also a stationnary decomposition.
-   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is 
+   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2. This is its default value.
    */
   unsigned int m_SubsampleImageFactor;

@@ -32,7 +32,7 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{KeyPointDensityImageFilter}. 
+// \doxygen{otb}{KeyPointDensityImageFilter}.
 // This filter computes a local density of keypoints (SIFT or SURF,
 // for instance) on an image and can
 // be useful to detect man made objects or urban areas, for
@@ -179,7 +179,7 @@ int main(int argc, char* argv[] )
   // the writer, but before that we run the
   // \code{GenerateOutputInformation()} on the reader so the filter
   // gets the information about the image size (needed for the SIFT
-  // computation). 
+  // computation).
   //
   // Software Guide : EndLatex
 
@@ -201,7 +201,7 @@ int main(int argc, char* argv[] )
   // \includegraphics[width=0.25\textwidth]{PrettySIFTDensityOutput.eps}
   // \itkcaption[SIFT Density Filter]{Result of applying the
   // \doxygen{otb}{KeypointDensityImageFilter} to an image. From left
-  // to right : 
+  // to right :
   // original image, SIF density.}
   // \label{fig:SIFTDENSITY_FILTER}
   // \end{figure}

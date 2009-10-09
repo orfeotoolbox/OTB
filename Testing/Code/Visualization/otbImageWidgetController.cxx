@@ -32,7 +32,7 @@ int otbImageWidgetController( int argc, char * argv[] )
   controller->AddActionHandler(ActionHandlerType::New());
   controller->AddActionHandler(ActionHandlerType::New());
 
-  // Clearing 
+  // Clearing
   controller->ClearAllActionHandlers();
 
   // Adding three handlers again

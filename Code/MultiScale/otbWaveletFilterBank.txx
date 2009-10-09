@@ -954,7 +954,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
     outputRegionForThread.GetNumberOfPixels() * this->GetNumberOfInputs() );
 
   InputImageRegionType inputRegionForThread;
-	this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+       this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
   unsigned int dir = 0;
 

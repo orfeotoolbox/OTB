@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,7 +38,7 @@ void
 SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
 ::GenerateOutputInformation ()
 {
-	Superclass::GenerateOutputInformation();
+       Superclass::GenerateOutputInformation();
 
   if ( this->GetModel() == NULL )
   {
@@ -46,11 +46,11 @@ SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
   }
 
   // add output information on the rule image
-	this->GetOutputRule()->SetNumberOfComponentsPerPixel(
-		this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
+       this->GetOutputRule()->SetNumberOfComponentsPerPixel(
+              this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
 
-	this->GetOutputRule()->CopyInformation( this->GetInput() );
-	this->GetOutputRule()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
+       this->GetOutputRule()->CopyInformation( this->GetInput() );
+       this->GetOutputRule()->SetRegions( this->GetInput()->GetLargestPossibleRegion() );
 }
 
 template < class TInputImage, class TOutputImage, class TMaskImage >
@@ -66,10 +66,10 @@ SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
   }
 
   // add allocation for the rule image
-	OutputRuleImageType * output = this->GetOutputRule();
-	output->SetNumberOfComponentsPerPixel(
-		this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
-	output->Allocate();
+       OutputRuleImageType * output = this->GetOutputRule();
+       output->SetNumberOfComponentsPerPixel(
+              this->GetModel()->GetNumberOfClasses() * ( this->GetModel()->GetNumberOfClasses()-1 ) / 2 );
+       output->Allocate();
 }
 
 template < class TInputImage, class TOutputImage, class TMaskImage >
@@ -105,7 +105,7 @@ SVMImageClassificationWithRuleFilter< TInputImage, TOutputImage, TMaskImage >
   }
 
   bool validPoint = true;
-  typename ModelType::DistancesVectorType defaultDistancesVector 
+  typename ModelType::DistancesVectorType defaultDistancesVector
     ( outputRulePtr->GetNumberOfComponentsPerPixel() );
   defaultDistancesVector.Fill( itk::NumericTraits< RuleValueType >::ZeroValue() );
 

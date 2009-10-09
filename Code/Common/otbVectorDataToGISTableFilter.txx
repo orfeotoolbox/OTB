@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
   m_InputGISConnection = InputGISConnectionType::New();
   m_DropExistingGISTable = false;
   m_GISTableName = "vectordata_to_gis";
-}  
+}
   
 
 
@@ -77,7 +77,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 }
 
 template<class TVectorData , class TGISTable>
-void 
+void
 VectorDataToGISTableFilter< TVectorData, TGISTable >
 ::GenerateInputRequestedRegion()
 {/*
@@ -93,7 +93,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
 
 /*
 template<class TInputImage, class TVectorData >
-void 
+void
 LabelMapToVectorDataFilter<TInputImage, TVectorData>
 ::EnlargeOutputRequestedRegion(DataObject *)
 {
@@ -150,7 +150,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
       
       /**Test if the driver is available*/
       if ( gisWriter->CanWriteFile(outputOGRConnStr.data()) ) {
-        //Write VectorData to the GIS Table using OGR translation 
+        //Write VectorData to the GIS Table using OGR translation
         gisWriter->SetFileName(outputOGRConnStr);
         otbGenericMsgDebugMacro(<<"Write vector data to GIS table " << outputOGRConnStr);
         
@@ -164,7 +164,7 @@ VectorDataToGISTableFilter< TVectorData, TGISTable >
         output->SetTableName (inputRoot->Get()->GetNodeId());
         std::cout << "tablename " << output->GetTableName() << std::endl;
       }
-      else 
+      else
       {
         itkGenericExceptionMacro(<< "Not valid connection string (PG:*) " << outputOGRConnStr);
       }

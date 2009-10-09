@@ -594,14 +594,14 @@ public:
   typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
   MSAVI() : m_S(0.4)
   {
-	m_WDVIfunctor.SetS(m_S);
+       m_WDVIfunctor.SetS(m_S);
   };
   virtual ~MSAVI() {};
 /** Set/Get Slop of soil line */
   void SetS( const double s)
   {
     m_S = s;
-	m_WDVIfunctor.SetS(m_S);
+       m_WDVIfunctor.SetS(m_S);
   }
   double GetS(void)const
   {

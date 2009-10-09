@@ -25,8 +25,8 @@ namespace otb
 {
 /** \class PostGISTable
  * \brief this class represents a table of a geospatial database (PostGIS).
- *  
- * 
+ *
+ *
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
  *
@@ -54,13 +54,13 @@ public:
   typedef typename ConnectionType::Pointer ConnectionPointerType;
   typedef itk::Point<TPrecision , SpatialDimension > PointType;
   typedef PolyLineParametricPathWithValue < TPrecision , SpatialDimension >  LineType;
-  typedef typename LineType::Pointer 	LinePointerType;
-  typedef Polygon < TPrecision > 	        PolygonType;
-  typedef typename PolygonType::Pointer 	                PolygonPointerType;
-  typedef typename PolygonType::ConstPointer 	        PolygonConstPointerType;
-  typedef ObjectList< PolygonType > 	        PolygonListType;
-  typedef typename PolygonListType::Pointer 	        PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
+  typedef typename LineType::Pointer        LinePointerType;
+  typedef Polygon < TPrecision >                PolygonType;
+  typedef typename PolygonType::Pointer                        PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                PolygonConstPointerType;
+  typedef ObjectList< PolygonType >                PolygonListType;
+  typedef typename PolygonListType::Pointer                PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer        PolygonListConstPointerType;
   
   /** typedefs for correct polygon */
   typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
@@ -80,8 +80,8 @@ public:
   
   /** Get attributes of the Table*/ //TODO implement
   
-  /** Get srid of the geometric column*/ //TODO implement 
-  //virtual 
+  /** Get srid of the geometric column*/ //TODO implement
+  //virtual
   /** Init basic SQL command*/
   void InsertBegin( std::stringstream & sqlCmd );
   /** Add Point content to the GIS Table*/

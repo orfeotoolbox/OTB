@@ -57,11 +57,11 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     // Use +1 because image start index is 0
     if( colId < static_cast<unsigned int>(width_2) )
       {
-	curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId+1);
+       curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId+1);
       }
     else
       {
-	curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
+       curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
       }
 
     return curRange;
@@ -76,31 +76,31 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     DoubleVectorType curCoeffs;
     if(m_UseFastCalibrationMethod)
       {
-	curCoeffs = m_NoisePolynomialCoefficientsList[0];
+       curCoeffs = m_NoisePolynomialCoefficientsList[0];
       }
     else
       {
-	// m_ImageSize[1]-(lineId+1) because the first acquisition line is the last image one.
-	// line+1 because image starts to 0.
-	//double interval =  static_cast<double>(m_ImageSize[1]) / static_cast<double>(m_NoisePolynomialCoefficientsList.size());
-	// compute utc time of the line
-	double currTimeUTC = m_TimeUTC[0] + static_cast<double>(m_ImageSize[1]-(lineId-1))*m_InvPRF;
-	unsigned int id = 0;
-	bool go = true;
-	// deduct the corresponding noise acquisition index
-	while( id<m_TimeUTC.size() && go)
-	  {
-	    if( currTimeUTC < m_TimeUTC[id] )
-		go = false;
-	    id++;
-	  }
-	id--;
+       // m_ImageSize[1]-(lineId+1) because the first acquisition line is the last image one.
+       // line+1 because image starts to 0.
+       //double interval =  static_cast<double>(m_ImageSize[1]) / static_cast<double>(m_NoisePolynomialCoefficientsList.size());
+       // compute utc time of the line
+       double currTimeUTC = m_TimeUTC[0] + static_cast<double>(m_ImageSize[1]-(lineId-1))*m_InvPRF;
+       unsigned int id = 0;
+       bool go = true;
+       // deduct the corresponding noise acquisition index
+       while( id<m_TimeUTC.size() && go)
+         {
+           if( currTimeUTC < m_TimeUTC[id] )
+              go = false;
+           id++;
+         }
+       id--;
 
-	double timeCoef = 1. / (m_TimeUTC[id]- m_TimeUTC[id-1]) * (currTimeUTC-m_TimeUTC[id-1]);
-	for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
-	  {
-	    curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j]) * timeCoef );
-	  }
+       double timeCoef = 1. / (m_TimeUTC[id]- m_TimeUTC[id-1]) * (currTimeUTC-m_TimeUTC[id-1]);
+       for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
+         {
+           curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j]) * timeCoef );
+         }
     }
 
 
@@ -157,11 +157,11 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
     // Use +1 because image start index is 0
     if( colId < static_cast<unsigned int>(width_2) )
       {
-	curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId+1);
+       curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId+1);
       }
     else
       {
-	curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
+       curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
       }
 
     return curRange;
@@ -176,31 +176,31 @@ TerraSarCalibrationComplexImageFunctor<TInput, TOutput>
     DoubleVectorType curCoeffs;
     if(m_UseFastCalibrationMethod)
       {
-	curCoeffs = m_NoisePolynomialCoefficientsList[0];
+       curCoeffs = m_NoisePolynomialCoefficientsList[0];
       }
     else
       {
-	// m_ImageSize[1]-(lineId+1) because the first acquisition line is the last image one.
-	// line+1 because image starts to 0.
-	double interval =  static_cast<double>(m_ImageSize[1]) / static_cast<double>(m_NoisePolynomialCoefficientsList.size());
-	// compute utc time of the line
-	double currTimeUTC = m_TimeUTC[0] + static_cast<double>(m_ImageSize[1]-(lineId-1))*m_InvPRF;
-	unsigned int id = 0;
-	bool go = true;
-	// deduct the corresponding noise acquisition index
-	while( id<m_TimeUTC.size() && go)
-	  {
-	    if( currTimeUTC < m_TimeUTC[id] )
-		go = false;
-	    id++;
-	  }
-	id--;
+       // m_ImageSize[1]-(lineId+1) because the first acquisition line is the last image one.
+       // line+1 because image starts to 0.
+       double interval =  static_cast<double>(m_ImageSize[1]) / static_cast<double>(m_NoisePolynomialCoefficientsList.size());
+       // compute utc time of the line
+       double currTimeUTC = m_TimeUTC[0] + static_cast<double>(m_ImageSize[1]-(lineId-1))*m_InvPRF;
+       unsigned int id = 0;
+       bool go = true;
+       // deduct the corresponding noise acquisition index
+       while( id<m_TimeUTC.size() && go)
+         {
+           if( currTimeUTC < m_TimeUTC[id] )
+              go = false;
+           id++;
+         }
+       id--;
 
-	double timeCoef = 1. / (m_TimeUTC[id]- m_TimeUTC[id-1]) * (currTimeUTC-m_TimeUTC[id-1]);
-	for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
-	  {
-	    curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j]) * timeCoef );
-	  }
+       double timeCoef = 1. / (m_TimeUTC[id]- m_TimeUTC[id-1]) * (currTimeUTC-m_TimeUTC[id-1]);
+       for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
+         {
+           curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j]) * timeCoef );
+         }
     }
 
 

@@ -57,7 +57,7 @@ void
 SVMPointSetModelEstimator<TInputPointSet, TTrainingPointSet>
 ::SetInputPointSet(const TInputPointSet * inputPointSet)
 {
-  this->itk::ProcessObject::SetNthInput(0,const_cast<TInputPointSet *>(inputPointSet));  
+  this->itk::ProcessObject::SetNthInput(0,const_cast<TInputPointSet *>(inputPointSet));
 }
 
 

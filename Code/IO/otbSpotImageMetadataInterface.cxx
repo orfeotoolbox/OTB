@@ -54,7 +54,7 @@ SpotImageMetadataInterface::GetInstrument( const MetaDataDictionaryType & dict )
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -78,7 +78,7 @@ SpotImageMetadataInterface::GetInstrumentIndex( const MetaDataDictionaryType & d
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -103,7 +103,7 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -126,7 +126,7 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
  {
    if (!keywordStrings[i].empty())
    {
-	 outputValues.push_back(keywordStrings[i].toDouble());
+        outputValues.push_back(keywordStrings[i].toDouble());
    }
  }
 
@@ -136,8 +136,8 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
  //In the case of SPOT, the bands are in a different order:
  // XS3, XS2. XS1, SWIR in the tif file.
  if(outputValues.size() != 4)
-	itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
-	  
+       itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
+       
   outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
@@ -152,7 +152,7 @@ SpotImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -188,7 +188,7 @@ SpotImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) cons
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -224,7 +224,7 @@ SpotImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -258,7 +258,7 @@ SpotImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) const
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -292,7 +292,7 @@ SpotImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict ) con
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -325,7 +325,7 @@ SpotImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType & dic
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -359,7 +359,7 @@ SpotImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType & d
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -394,7 +394,7 @@ SpotImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType & di
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -429,7 +429,7 @@ SpotImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -478,7 +478,7 @@ SpotImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Ikonos Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -526,7 +526,7 @@ SpotImageMetadataInterface::GetSatElevation( const MetaDataDictionaryType & dict
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -549,7 +549,7 @@ SpotImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict )
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -571,7 +571,7 @@ SpotImageMetadataInterface::GetSatAzimuth( const MetaDataDictionaryType & dict )
  
   if( (step-48)<0 )
   {
-	satAz += 90.;
+       satAz += 90.;
   }
   else
     satAz = satAz - 90.;
@@ -585,7 +585,7 @@ SpotImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -637,7 +637,7 @@ SpotImageMetadataInterface
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
+         itkExceptionMacro(<<"Invalid Metadata, no Spot Image");
   }
   
   ImageKeywordlistType imageKeywordlist;

@@ -19,7 +19,7 @@
 #define __otbHistogramActionHandler_h
 
 #include "otbCurves2DWidget.h"
-#include "otbVerticalAsymptoteCurve.h" 
+#include "otbVerticalAsymptoteCurve.h"
 
 
 namespace otb
@@ -83,7 +83,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
     // Variable declaration
     PointType             spacePoint, screenPoint;
     
-    // Left screen abcisse 
+    // Left screen abcisse
     spacePoint[0]     = m_LeftAsymptote->GetAbcisse();
     double  abcisseL  = m_Curve->TransformPoint(spacePoint)[0];
     
@@ -93,69 +93,69 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
     
     if(widgetId == m_Curve->GetIdentifier())
       {
-	switch (event)
-	  {
-	  case FL_PUSH:
-	    {
-	      // Position Clicked 
-	      double x = Fl::event_x();
-	      
-	      if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
-		{
-		  if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
-		    {
-		      m_ModifyLeft = true;
-		    }
-		  else
-		    {
-		      m_ModifyRight = true;
-		    }
-		}
-	      return true;
-	    }
-	  case FL_RELEASE:
-	    {
-	      if(m_ModifyLeft || m_ModifyRight)
-		{
-		  m_Model->Update();
-		}
-	      
-	      m_ModifyLeft  = false;
-	      m_ModifyRight = false;
-	      return true;
-	    }
-	  case FL_DRAG:
-	    {
-	      double x = Fl::event_x();
+       switch (event)
+         {
+         case FL_PUSH:
+           {
+             // Position Clicked
+             double x = Fl::event_x();
+       
+             if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
+              {
+                if (vcl_abs(x-abcisseL)<vcl_abs(x-abcisseR))
+                  {
+                    m_ModifyLeft = true;
+                  }
+                else
+                  {
+                    m_ModifyRight = true;
+                  }
+              }
+             return true;
+           }
+         case FL_RELEASE:
+           {
+             if(m_ModifyLeft || m_ModifyRight)
+              {
+                m_Model->Update();
+              }
+       
+             m_ModifyLeft  = false;
+             m_ModifyRight = false;
+             return true;
+           }
+         case FL_DRAG:
+           {
+             double x = Fl::event_x();
 
-	      if(m_ModifyLeft)
-		{
-		  double tx = x - abcisseL;
-		  m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
-		  m_Curve->redraw();
+             if(m_ModifyLeft)
+              {
+                double tx = x - abcisseL;
+                m_LeftAsymptote->SetAbcisse(m_LeftAsymptote->GetAbcisse() + tx);
+                m_Curve->redraw();
 
-		  //  Update The Rendering Function min and max
-		  ParametersType param = m_RenderingFunction->GetParameters();
-		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
+                //  Update The Rendering Function min and max
+                ParametersType param = m_RenderingFunction->GetParameters();
+                param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
 		  param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse());
-		  m_RenderingFunction->SetParameters(param);
-		}
-		
-	      if(m_ModifyRight)
-		{
-		  double tx = x - abcisseR;
-		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx); 
-		  m_Curve->redraw();
-		  
-		  //  Update The Rendering Function min and max
-		  ParametersType param = m_RenderingFunction->GetParameters();
-		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
+                m_RenderingFunction->SetParameters(param);
+              }
+              
+             if(m_ModifyRight)
+              {
+                double tx = x - abcisseR;
+                m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+                m_Curve->redraw();
+              
+                //  Update The Rendering Function min and max
+                ParametersType param = m_RenderingFunction->GetParameters();
+                param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
 		  param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse()+tx);
-		  m_RenderingFunction->SetParameters(param);
-		}
-	      return true;
-	    }
-	  }
+                m_RenderingFunction->SetParameters(param);
+              }
+             return true;
+           }
+         }
       }
     return false;
   }
@@ -209,10 +209,10 @@ private:
   ModelPointerType m_Model;
 
   // Curve Widget To Handle Events on
-  CurveWidgetPointerType m_Curve; 
+  CurveWidgetPointerType m_Curve;
 
   // StandardRenderingFunction
-  RenderingFunctionPointerType  m_RenderingFunction;  
+  RenderingFunctionPointerType  m_RenderingFunction;
 
   // Left And Rigth Asymptote
   VerticalAsymptotePointerType  m_LeftAsymptote;

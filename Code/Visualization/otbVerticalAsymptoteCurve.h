@@ -65,11 +65,11 @@ public:
   /// Get the max for each axis from the data available
   virtual PointType GetMaximum();
 
-  /// Set/Get the Asymptote color 
+  /// Set/Get the Asymptote color
   itkSetMacro(VerticalAsymptoteColor,ColorType);
   itkGetMacro(VerticalAsymptoteColor,ColorType);
 
-  /// Set the abcisse 
+  /// Set the abcisse
   itkSetMacro(Abcisse,double);
   itkGetMacro(Abcisse,double);
   

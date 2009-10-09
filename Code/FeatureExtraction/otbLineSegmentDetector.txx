@@ -184,14 +184,14 @@ LineSegmentDetector<TInputImage,TPrecision >
   InputIndexType id = modulusImage->GetRequestedRegion().GetIndex();
 
 
-  // Don't take in carre the boudary of the image. 
-  // Special cases for streamed call 
+  // Don't take in carre the boudary of the image.
+  // Special cases for streamed call
   if( modulusImage->GetRequestedRegion().GetIndex()[0] == 0)
     {
       id[0]++;
       size[0]--;
       if( modulusImage->GetRequestedRegion().GetSize()[0]+modulusImage->GetRequestedRegion().GetIndex()[0] == m_ImageSize[0])
-	size[0]--;
+       size[0]--;
     }
   else if( modulusImage->GetRequestedRegion().GetSize()[0]+modulusImage->GetRequestedRegion().GetIndex()[0] ==  m_ImageSize[0])
     {
@@ -203,7 +203,7 @@ LineSegmentDetector<TInputImage,TPrecision >
       id[1]++;
       size[1]--;
       if( modulusImage->GetRequestedRegion().GetSize()[1]+modulusImage->GetRequestedRegion().GetIndex()[1] == m_ImageSize[1])
-	size[1]--;
+       size[1]--;
     }
    else if( modulusImage->GetRequestedRegion().GetSize()[1]+modulusImage->GetRequestedRegion().GetIndex()[1] ==  m_ImageSize[1])
     {
@@ -222,7 +222,7 @@ LineSegmentDetector<TInputImage,TPrecision >
       OutputIndexType index = it.GetIndex();
       unsigned int bin = static_cast<unsigned int> (static_cast<double>(it.Value())/lengthBin);
       if( it.Value()- m_Threshold >1e-10 )
-	tempHisto[NbBin-bin-1].push_back(it.GetIndex());
+       tempHisto[NbBin-bin-1].push_back(it.GetIndex());
       
       ++it;
     }
@@ -253,9 +253,9 @@ LineSegmentDetector<TInputImage, TPrecision>
 
           /** If the point is not yet computed */
           if(!this->IsUsed(index))
-	    {
-	      this->GrowRegion(index);
-	    }
+           {
+             this->GrowRegion(index);
+           }
           ++ItIndexVector;
         }
       ++ItCoordinateList;
@@ -476,7 +476,7 @@ LineSegmentDetector<TInputImage, TPrecision>
     {
       itLabel.SetIndex(index);
       if( itLabel.Get() == 1 )
-	isUsed = true;
+       isUsed = true;
     }
   else
     {
@@ -487,7 +487,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 //   radiusLabel.Fill(0);
 //   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
 //                                                               m_UsedPointImage->GetRequestedRegion());
-//   
+//
 //   itLabel.SetLocation(index);
 //   if(*(itLabel.GetCenterValue()) == 1)
 //     isUsed = true;
@@ -565,15 +565,15 @@ LineSegmentDetector<TInputImage, TPrecision>
           InputIndexType NeighIndex = itNeigh.GetIndex(s);
           double angleComp =   itNeighDir.GetPixel(s);
 
-	  if(this->GetInput()->GetLargestPossibleRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
-	    {
-	      if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
-		{
+         if(this->GetInput()->GetLargestPossibleRegion().IsInside(NeighIndex))  /** Check if the index is inside the image*/
+           {
+             if( !this->IsUsed(NeighIndex) && this->IsAligned(angleComp, regionAngle, m_Prec) )
+              {
 
-		  this->SetPixelToUsed(NeighIndex);
-		  reg.push_back(NeighIndex);
-		}
-	    }
+                this->SetPixelToUsed(NeighIndex);
+                reg.push_back(NeighIndex);
+              }
+           }
           ++s;
         }
     }/** End Searching loop*/

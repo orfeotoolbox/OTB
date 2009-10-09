@@ -31,7 +31,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{InnerProductPCAImageFilter}. 
+// \doxygen{otb}{InnerProductPCAImageFilter}.
 // This filter computes a Principal Component Analysis using an
 // efficient method based on the inner product in order to compute the
 // covariance matrix.
@@ -143,7 +143,7 @@ int main( int argc, char* argv[] )
   // \includegraphics[width=0.25\textwidth]{PrettyInnerProductPCAOutput3.eps}
   // \itkcaption[Inner Product PCA Filter]{Result of applying the
   // \doxygen{otb}{InnerProductPCAImageFilter} to an image. From left
-  // to right and top to bottom: 
+  // to right and top to bottom:
   // original image, first PC, second PC, third PC.}
   // \label{fig:INNERPRODUCTPCA_FILTER}
   // \end{figure}

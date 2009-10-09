@@ -27,10 +27,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 /** \class EdgeDensityImageFilter
- *  \brief This composite filter computes the density of the edges around a pixel. 
- *   
- *   
- */  
+ *  \brief This composite filter computes the density of the edges around a pixel.
+ *
+ *
+ */
 
 namespace otb
 {
@@ -73,7 +73,7 @@ public:
   typedef TDensityCount                                  DensityCountFunctionType;
 
   /** PointSetToDensityImageFilter support*/
-  typedef otb::BinaryImageToDensityImageFilter<InputImageType, 
+  typedef otb::BinaryImageToDensityImageFilter<InputImageType,
                                                OutputImageType,
                                                DensityCountFunctionType>   DensityImageType;
   

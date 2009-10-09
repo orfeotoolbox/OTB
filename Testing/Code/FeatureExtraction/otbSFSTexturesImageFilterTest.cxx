@@ -38,7 +38,7 @@ int otbSFSTexturesImageFilterTest(int argc, char * argv[])
   unsigned int spatialThresh    = atoi(argv[8]);
   unsigned int dirNb            = atoi(argv[9]);
   unsigned int maxConsideration = atoi(argv[10]);
-  double alpha                  = atof(argv[11]);  
+  double alpha                  = atof(argv[11]);
 
 
   typedef otb::Image<PixelType,Dimension>                   ImageType;
@@ -47,7 +47,7 @@ int otbSFSTexturesImageFilterTest(int argc, char * argv[])
   typedef otb::ImageFileWriter<ImageType>                   WriterType;
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
 
-  FilterType::Pointer filter       = FilterType::New(); 
+  FilterType::Pointer filter       = FilterType::New();
   ReaderType::Pointer reader       = ReaderType::New();
   WriterType::Pointer writerLength = WriterType::New();
   WriterType::Pointer writerWidth  = WriterType::New();

@@ -9,12 +9,12 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -50,7 +50,7 @@ BoxAndWhiskerImageFilter < TInputImage >
 template < class TInputImage >
 void
 BoxAndWhiskerImageFilter < TInputImage >
-::ThreadedGenerateData( 
+::ThreadedGenerateData(
   const OutputImageRegionType &outputRegionForThread,
   int threadId )
 {
@@ -58,7 +58,7 @@ BoxAndWhiskerImageFilter < TInputImage >
   OutputImageType * outputPtr = this->GetOutput();
 
   // data-set boundary faces
-  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> 
+  typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>
     ImageBoundaryFacesCalculatorType;
   typename ImageBoundaryFacesCalculatorType::FaceListType faceList;
   ImageBoundaryFacesCalculatorType boundaryCalculator;
@@ -67,7 +67,7 @@ BoxAndWhiskerImageFilter < TInputImage >
   // face iterator
   typename ImageBoundaryFacesCalculatorType::FaceListType::iterator faceIterator;
 
-  // local iterators  
+  // local iterators
   itk::ImageRegionConstIterator<InputImageType> inputIter;
   itk::ImageRegionIterator<OutputImageType> outputIter;
 
@@ -75,11 +75,11 @@ BoxAndWhiskerImageFilter < TInputImage >
   itk::ProgressReporter progress ( this, threadId, outputRegionForThread.GetNumberOfPixels() );
 
   /**
-   *  Process each of the boundary faces.  
+   *  Process each of the boundary faces.
    *  These are N-d regions which border the edge of the buffer.
    */
-  for ( faceIterator = faceList.begin(); 
-      faceIterator != faceList.end(); 
+  for ( faceIterator = faceList.begin();
+      faceIterator != faceList.end();
       ++faceIterator )
   {
     inputIter = itk::ImageRegionConstIterator<InputImageType> ( inputPtr, *faceIterator );
@@ -101,11 +101,11 @@ BoxAndWhiskerImageFilter < TInputImage >
 }
 
 template < class TInputImage >
-typename BoxAndWhiskerImageFilter < TInputImage >::PixelType 
+typename BoxAndWhiskerImageFilter < TInputImage >::PixelType
 BoxAndWhiskerImageFilter < TInputImage >
 ::PerformBoxAndWhiskerDetection ( const PixelType & pixel )
 {
-  typedef std::vector< ValueType > VectorType; 
+  typedef std::vector< ValueType > VectorType;
   typedef otb::Statistics::EuclideanDistanceWithMissingValue< PixelType > OutlierType;
 
   unsigned int i;

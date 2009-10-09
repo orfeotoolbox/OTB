@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,10 +32,10 @@ namespace otb {
 /** \class SubsampleImageFilter
  * \brief Performs a down sampling of an image
  *
- * This class performs a simple resampling image filtering. 
+ * This class performs a simple resampling image filtering.
  *
- * The third template is a FORWARD/INVERSE InverseOrForwardTransformationEnum 
- * enumeration type. With FORWARD, the output image is of the same size of the one of 
+ * The third template is a FORWARD/INVERSE InverseOrForwardTransformationEnum
+ * enumeration type. With FORWARD, the output image is of the same size of the one of
  * the input image. But the output image contains only co-located subsample, the reset being 0.
  * When INVERSE is used, the input image is considered to as the sub-sampled. then, the output
  * image is larger. Inital pixel values are preserved but the output image is interleaved with
@@ -45,7 +45,7 @@ namespace otb {
  * \sa SubsampleImageRegionConstIterator
  * \sa DecimateImageFilter
  */
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 class ITK_EXPORT SubsampleImageFilter :
   public itk::ImageToImageFilter< TInputImage, TOutputImage >
@@ -107,13 +107,13 @@ protected:
   /** Internal test function to check if there is any direction to subsample */
   bool IsSubsampleFactorOne () const;
 
-  /** Since input and output image are very likely to be of different size. 
+  /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion 
+  virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );         
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
@@ -124,7 +124,7 @@ protected:
   virtual void BeforeThreadedGenerateData ();
 
   /** Allows multithreading */
-  virtual void ThreadedGenerateData 
+  virtual void ThreadedGenerateData
     ( const OutputImageRegionType & outputRegionForThread, int threadId );
 
   virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
@@ -134,7 +134,7 @@ private:
   void operator= ( const Self & ); // purposely not implemented
 
   InputImageIndexType m_SubsampleFactor;
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

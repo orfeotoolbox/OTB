@@ -279,7 +279,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   InputObject->ComputeBoundingBox();
   bool originspecified = false;
   if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
-    {      
+    {
       ChildrenType children;
       children=InputObject->GetChildren(0);
       IteratorType iter = children->begin();
@@ -288,29 +288,29 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
       
       (*iter)->ComputeBoundingBox();
       for (i=0;i<ObjectDimension;++i)
-	{
-	  minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-	}
+       {
+         minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
+       }
       
       while (iter != end)
-	{
-	  (*iter)->ComputeBoundingBox();
-	  for (i=0;i<ObjectDimension;++i)
-	    {
-	      if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
-		{
-		  minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
-		}
-	    }
-	  ++iter;
-	}
+       {
+         (*iter)->ComputeBoundingBox();
+         for (i=0;i<ObjectDimension;++i)
+           {
+             if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
+              {
+                minimum[i]=(*iter)->GetBoundingBox()->GetMinimum()[i];
+              }
+           }
+         ++iter;
+       }
       
       for (i=0;i<ObjectDimension;++i)
-	{
-	  size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
-	  origine[i]=(long int) minimum[i];
-	  originspecified = true;
-	}
+       {
+         size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i])+1;
+         origine[i]=(long int) minimum[i];
+         originspecified = true;
+       }
 
       itkDebugMacro(<<"minx= "<<minimum[0]<<", miny= "<<minimum[0]<<", maxx= "<<InputObject->GetBoundingBox()->GetMaximum()[0]<<", maxy= "<<InputObject->GetBoundingBox()->GetMaximum()[1]);
     }
@@ -318,10 +318,10 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     {
       
       for (i=0;i<ObjectDimension;++i)
-	{
-	  size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
-			       - InputObject->GetBoundingBox()->GetMinimum()[i]);
-	} 
+       {
+         size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
+                            - InputObject->GetBoundingBox()->GetMinimum()[i]);
+       }
     }
   
   typename OutputImageType::IndexType index;
@@ -337,8 +337,8 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   {
     if (m_Size[i] != 0)
       {
-	specified = true;
-	break;
+       specified = true;
+       break;
       }
   }
   
@@ -358,10 +358,10 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   for (i = 0; i < OutputImageDimension; ++i)
     {
       if (m_Spacing[i] != 0)
-	{
-	  specified = true;
-	  break;
-	}
+       {
+         specified = true;
+         break;
+       }
     }
   
   if (specified)
@@ -425,24 +425,24 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     if ( m_InsideValue != 0 ||  m_OutsideValue != 0 )
     {
       if ( val)
-	{
-	  if (m_UseObjectValue)
-	    {
-	      it.Set(static_cast<ValueType>(val));
-	    }
-	  else
-	    {
-	      it.Set(m_InsideValue);
-	    }
-	}
+       {
+         if (m_UseObjectValue)
+           {
+             it.Set(static_cast<ValueType>(val));
+           }
+         else
+           {
+             it.Set(m_InsideValue);
+           }
+       }
       else
-	{
-	  it.Set(m_OutsideValue);
-	}
+       {
+         it.Set(m_OutsideValue);
+       }
     }
     else
       {
-	it.Set(static_cast<ValueType>(val));
+       it.Set(static_cast<ValueType>(val));
       }
     ++it;
   }

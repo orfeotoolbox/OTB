@@ -28,8 +28,8 @@ PURPOSE.  See the above copyright notices for more information.
  *  \brief This composite filter binaries a edge detection image output.
  *  The used edge detection filter is given as template of the class.
  *  The class only supports Image.
- *   
- */  
+ *
+ */
 
 namespace otb
 {

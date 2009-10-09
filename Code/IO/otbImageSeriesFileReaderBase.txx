@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-         This software is distributed WITHOUT ANY WARRANTY; without even 
-         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+         This software is distributed WITHOUT ANY WARRANTY; without even
+         the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
          PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -25,7 +25,7 @@
 namespace otb {
 
 template < class TImage, class TInternalImage >
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::ImageSeriesFileReaderBase ()
 {
   m_OutputList = OutputImageListType::New();
@@ -38,7 +38,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::SetFileName ( const std::string & file )
 {
   return SetFileName( file.c_str() );
@@ -46,10 +46,10 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::SetFileName ( const char * file )
 {
-  if ( file && ( file == m_FileName ) ) 
+  if ( file && ( file == m_FileName ) )
     return;
 
   if ( file )
@@ -66,7 +66,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageListType *
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GetOutput ()
 {
   if ( this->GetNumberOfOutputs() < 1 )
@@ -77,7 +77,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageType *
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GetOutput ( unsigned int idx )
 {
   if ( this->GetNumberOfOutputs() < 1 )
@@ -91,7 +91,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::ReadMetaFile ()
 {
   m_ListOfFileNames.clear();
@@ -104,7 +104,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   std::ifstream inputFile ( m_FileName.c_str(), std::ios_base::in );
 
   inputFile >> aLine;
-  if ( aLine != "ENVI" ) 
+  if ( aLine != "ENVI" )
   {
     inputFile.close();
     itk::OStringStream msg;
@@ -115,7 +115,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   }
 
   inputFile >> aLine;
-  if ( aLine != "META" ) 
+  if ( aLine != "META" )
   {
     inputFile.close();
     itk::OStringStream msg;
@@ -126,7 +126,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
   }
   
   inputFile >> aLine;
-        if ( aLine != "FILE" ) 
+        if ( aLine != "FILE" )
         {
     inputFile.close();
     itk::OStringStream msg;
@@ -138,7 +138,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
   while ( 1 )
   {
-    /* 
+    /*
      * Reading the filenames
      */
     do {
@@ -165,14 +165,14 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
       }
     }
     else
-      return; // normal exit 
+      return; // normal exit
     
     inputFile >> aLine;
 
     std::cerr << "-> " << aLine << "\n";
 
     // Get the Image fileName
-    // The test may modify image file name to add the path 
+    // The test may modify image file name to add the path
     // Or throw an exception when not found nor readable
     TestFileExistanceAndReadability( aLine, kImageFileName );
     m_ListOfFileNames.push_back( aLine );
@@ -285,7 +285,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
     IndexType index;
     index[0] = beg_col - 1;
-    index[1] = beg_line - 1; 
+    index[1] = beg_line - 1;
 
     SizeType size;
     size[0] = end_col - beg_col + 1;
@@ -301,7 +301,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::AllocateListOfComponents ()
 {
   for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
@@ -312,11 +312,11 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 }
 
 /**
- * GenerateData 
+ * GenerateData
  */
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GenerateData( unsigned int idx )
 {
   itk::OStringStream msg;
@@ -328,7 +328,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GenerateData( )
 {
   for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
@@ -340,7 +340,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
  */
 template < class TImage, class TInternalImage >
 typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageListType *
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GenerateOutput()
 {
   this->Update();
@@ -349,7 +349,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 typename ImageSeriesFileReaderBase< TImage, TInternalImage >::OutputImageType *
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::GenerateOutput( unsigned int idx )
 {
   this->GenerateData( idx );
@@ -359,7 +359,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::PrintSelf ( std::ostream& os, itk::Indent indent ) const
 {
   Superclass::PrintSelf(os, indent);
@@ -372,8 +372,8 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
     for ( unsigned int i = 0; i < GetNumberOfOutputs(); ++i )
     {
       os << indent << "  " << "Filename       : " << m_ListOfFileNames[i] << "\n";
-      os << indent << "  " << "RegionSelection: Index( " 
-        << m_ListOfRegionSelection[i].GetIndex()[0] << ", " 
+      os << indent << "  " << "RegionSelection: Index( "
+        << m_ListOfRegionSelection[i].GetIndex()[0] << ", "
         << m_ListOfRegionSelection[i].GetIndex()[1] << ") Size( "
         << m_ListOfRegionSelection[i].GetSize()[0] << ", "
         << m_ListOfRegionSelection[i].GetSize()[1] << ")\n";
@@ -394,7 +394,7 @@ ImageSeriesFileReaderBase< TImage, TInternalImage >
 
 template < class TImage, class TInternalImage >
 void
-ImageSeriesFileReaderBase< TImage, TInternalImage > 
+ImageSeriesFileReaderBase< TImage, TInternalImage >
 ::TestFileExistanceAndReadability ( std::string & file, FileType fileType )
 {
   // Test if the file exists.

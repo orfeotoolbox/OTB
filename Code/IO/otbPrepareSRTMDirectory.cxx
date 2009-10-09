@@ -114,7 +114,7 @@ bool PrepareSRTMDirectory::Evaluate()
       else
       {
         inputfilename << "S";
-	outputfilename << "S";
+       outputfilename << "S";
       }
       
       inputfilename << std::setfill('0') << std::setw(2) << vcl_abs(j);
@@ -143,9 +143,9 @@ bool PrepareSRTMDirectory::Evaluate()
       ossimFilename inputFile(inputfilename.str().c_str());
       ossimFilename outputFile(outputfilename.str().c_str());
       if(!inputFile.exists())
-	{
-	  itkExceptionMacro(<<"ERROR, can't find file "<<inputFile);
-	}
+       {
+         itkExceptionMacro(<<"ERROR, can't find file "<<inputFile);
+       }
       inputFile.copyFileTo(outputFile);
 
 

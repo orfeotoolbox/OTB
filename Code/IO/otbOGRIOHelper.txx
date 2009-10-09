@@ -24,7 +24,7 @@
 
 
 
-namespace otb 
+namespace otb
 {
 
 
@@ -177,9 +177,9 @@ OGRIOHelper<TVectorData>
   node->SetPolygonInteriorRings(intRings);
 
   return node;
-}  
+}
   
-template<class TVectorData> 
+template<class TVectorData>
 inline void OGRIOHelper<TVectorData>
 ::ConvertOGRLayerToDataTreeNode (OGRLayer * layer, InternalTreeNodeType * documentPtr) const
 {
@@ -551,7 +551,7 @@ inline void OGRIOHelper<TVectorData>
     chrono.Stop();
     ++counter;
   }//end While feature
-  otbMsgDevMacro(<<layer->GetFeatureCount()<<" features read, average insertion time "<<chrono.GetMeanTime()<<" s");    
+  otbMsgDevMacro(<<layer->GetFeatureCount()<<" features read, average insertion time "<<chrono.GetMeanTime()<<" s");
 }
     
     
@@ -847,7 +847,7 @@ OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS)
   }
   
   return m_Kept;
-}  
+}
 /*
 template<class TLabelObject, class TPolygon>
 inline typename OGRIOHelper<TLabelObject,TPolygon>

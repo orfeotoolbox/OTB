@@ -23,7 +23,7 @@
 namespace otb
 {
 
-VerticalAsymptoteCurve::VerticalAsymptoteCurve() 
+VerticalAsymptoteCurve::VerticalAsymptoteCurve()
 {
   // Default histogram color
   m_VerticalAsymptoteColor.Fill(0.5);
@@ -47,7 +47,7 @@ void  VerticalAsymptoteCurve::Render(const RegionType& extent,const AffineTransf
   glVertex2d(screenPoint[0],spacePoint[1]);
 
   // LL
-  spacePoint[1] = extent.GetIndex()[1]+ extent.GetSize()[1]; 
+  spacePoint[1] = extent.GetIndex()[1]+ extent.GetSize()[1];
   screenPoint   = space2ScreenTransform->TransformPoint(spacePoint);
   glVertex2d(screenPoint[0],spacePoint[1]);
   glEnd();
@@ -61,18 +61,18 @@ VerticalAsymptoteCurve::BeforeRendering()
   m_Minimum[1] = 100;
   
   m_Maximum[1] = -10;
-  m_Maximum[0] = -10; 
+  m_Maximum[0] = -10;
 }
 
  
-VerticalAsymptoteCurve::PointType  
+VerticalAsymptoteCurve::PointType
 VerticalAsymptoteCurve
 ::GetMinimum()
 {
   return m_Minimum;
 }
  
-VerticalAsymptoteCurve::PointType 
+VerticalAsymptoteCurve::PointType
 VerticalAsymptoteCurve
 ::GetMaximum()
 {

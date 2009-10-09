@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,17 +38,17 @@ typedef enum {
   SPLINE_BIORTHOGONAL_2_4, // 6
   SPLINE_BIORTHOGONAL_4_4, // 7
   SYMLET8, // 8
-  TotalNumberOfDefinedMotherWavelets 
+  TotalNumberOfDefinedMotherWavelets
 } MotherWaveletOperatorEnum;
 
 /** \class WaveletGenerator
  * \brief Wavelet coefficient definition
  *
- * The wavelet coefficent definitions mainly come from 
- * "Ten Lecture on Wavelets", of Ingrid Daubechies, 
+ * The wavelet coefficent definitions mainly come from
+ * "Ten Lecture on Wavelets", of Ingrid Daubechies,
  * Society for Industrial and Applied Mathematics, 1992.
  *
- * The class is templated with the wavelet ID from the 
+ * The class is templated with the wavelet ID from the
  * MotherWaveletOperatorEnum type. The members throw an
  * exception if the template specialisation is not defined
  * according to the wavelet ID.

@@ -77,7 +77,7 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   /*
   ImageKeywordlistType imageKeywordlist;
@@ -115,7 +115,7 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   /*
   ImageKeywordlistType imageKeywordlist;
@@ -153,9 +153,9 @@ TerraSarImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) c
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /* 
+  /*
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -189,7 +189,7 @@ TerraSarImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) c
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   /*
   ImageKeywordlistType imageKeywordlist;
@@ -225,7 +225,7 @@ TerraSarImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict )
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   /*
   ImageKeywordlistType imageKeywordlist;
@@ -260,7 +260,7 @@ TerraSarImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType &
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -294,7 +294,7 @@ TerraSarImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   
   ImageKeywordlistType imageKeywordlist;
@@ -329,7 +329,7 @@ TerraSarImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType 
 {
   if( !this->CanRead( dict ) )
   {
-  	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
   
   ImageKeywordlistType imageKeywordlist;

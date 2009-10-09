@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -33,11 +33,11 @@ int otbWaveletInverseTransformNew(int argc, char * argv[])
   const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > 
+  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension >
     InverseWaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE > 
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE >
     InverseFilterBank;
-  typedef otb::WaveletTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE > 
+  typedef otb::WaveletTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE >
     InvFilterType;
   
   InvFilterType::Pointer invFilter = InvFilterType::New();

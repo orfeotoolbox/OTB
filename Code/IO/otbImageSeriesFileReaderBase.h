@@ -55,12 +55,12 @@ namespace otb {
   };
 
 /** \class ImageSeriesFileReaderBase
- * \brief 
+ * \brief
  * \sa ImageSeriesFileReader
  */
  
 template < class TImage, class TInternalImage = TImage >
-class ITK_EXPORT ImageSeriesFileReaderBase 
+class ITK_EXPORT ImageSeriesFileReaderBase
   : public ImageListSource< TImage >
 {
 public:

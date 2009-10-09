@@ -47,7 +47,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
   geoPoint[1] = atof(argv[5]);//44.08;
 
   height = demHandler->GetHeightAboveMSL(geoPoint);
-  height2 = demHandler->GetHeightAboveEllipsoid(geoPoint); 
+  height2 = demHandler->GetHeightAboveEllipsoid(geoPoint);
 
   std::ofstream file;
   file.open(outputfilename);

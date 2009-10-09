@@ -47,7 +47,7 @@ public:
   typedef ImageMetadataInterfaceBase::VectorType               VectorType;
   typedef ImageMetadataInterfaceBase::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageMetadataInterfaceBase::ImageKeywordlistType     ImageKeywordlistType;
-  typedef ImageMetadataInterfaceBase::Pointer 	               ImageMetadataInterfaceBasePointerType;
+  typedef ImageMetadataInterfaceBase::Pointer                       ImageMetadataInterfaceBasePointerType;
  
   /** Create the appropriate ImageMetadataInterfaceFactory depending on the particulars of the file. */
   static ImageMetadataInterfaceBasePointerType CreateIMI( const MetaDataDictionaryType & dict );

@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -52,7 +52,7 @@ public:
   
   typedef Image<double, 2>                                                              InternSingleImageType;
   typedef itk::DiscreteGaussianImageFilter<InternSingleImageType,InternSingleImageType> GaussianFilterType;
-  typedef typename GaussianFilterType::Pointer                                          GaussianFilterPointerType; 
+  typedef typename GaussianFilterType::Pointer                                          GaussianFilterPointerType;
   typedef PerBandVectorImageFilter<InputImageType, InputImageType, GaussianFilterType>  PerBandFilterType;
   typedef typename PerBandFilterType::Pointer                                           PerBandFilterPointerType;
   typedef StreamingShrinkImageFilter<InputImageType, InputImageType>                    ShrinkImageFilterType;
@@ -60,7 +60,7 @@ public:
 
 
   void SetVariance(double var)
-    { 
+    {
       m_Variance = var;
       m_GaussianFilter->SetVariance(m_Variance);
       this->Modified();

@@ -29,7 +29,7 @@
 
 int otbLineSpatialObjectListToRightAnglePointSetFilter( int argc, char * argv[] )
 {
-  const   char * infname   = argv[1];  
+  const   char * infname   = argv[1];
   const   char * outfname  = argv[2];
   
   const unsigned int                                                Dimension = 2;
@@ -42,13 +42,13 @@ int otbLineSpatialObjectListToRightAnglePointSetFilter( int argc, char * argv[] 
   typedef LinesListType::LineType                                   LineType;
   typedef std::vector<LineType*>                                    VectorLines;
   typedef itk::PointSet<VectorLines , Dimension>                    PointSetType;
-  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType, 
+  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType,
                                                                PointSetType >    RightAngleFilterType;
  
   /** Creatop, of an instance of the filters */
   RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
   ReaderType::Pointer            reader            = ReaderType::New();
-  PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
+  PointSetType::Pointer          segmentOrtho      = PointSetType::New();
 
 
   /** Creation of  lines */

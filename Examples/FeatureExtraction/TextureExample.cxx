@@ -41,7 +41,7 @@
 //
 // This example illustrates the use of the
 // \doxygen{otb}{ContrastTextureFunctor}, and more generally it
-// demonstrates how to compute Haralick's textural features. 
+// demonstrates how to compute Haralick's textural features.
 // \relatedClasses
 //  \begin{itemize}
 //  \item \doxygen{otb}{EnergyTextureFunctor}
@@ -189,10 +189,10 @@ int main(int argc, char * argv[])
 // any case.
 //
 // The offset is always an array of N values, where N is the number of
-// dimensions of the image.  
+// dimensions of the image.
 //
 // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   textureFilter->SetRadius(radius);
 
   typedef ImageType::OffsetType OffsetType;
@@ -209,7 +209,7 @@ int main(int argc, char * argv[])
 // the \code{Update} method of the writer.
 //
 // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   textureFilter->SetInput(reader->GetOutput());
   writer->SetInput(textureFilter->GetOutput());
 

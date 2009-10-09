@@ -187,7 +187,7 @@ bool OGRVectorDataIO<TData>::CanWriteFile( const char* filename ) const
     return false;
   }
   
-  return ( this->GetOGRDriverName(filename) != "NOT-FOUND" );   
+  return ( this->GetOGRDriverName(filename) != "NOT-FOUND" );
 }
 
 template<class TData>
@@ -292,7 +292,7 @@ template<class TData>
 }
 
 
-template<class TData>    
+template<class TData>
 std::string
 OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
 {
@@ -308,7 +308,7 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
   {
     driverOGR="PostgreSQL";
   }
-  else 
+  else
   {
     extension = System::GetExtension(upperName);
     if (extension=="SHP")

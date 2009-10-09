@@ -133,23 +133,23 @@ AtmosphericCorrectionParameters
   
   while ( std::getline( file, line ) )
   {
-  	ossimString osLine(line);
+         ossimString osLine(line);
     std::vector<ossimString> keywordStrings = osLine.split(separatorList);
 
     if(keywordStrings.size() == 2 || keywordStrings.size() == 3)
     {
       if(bandId != 0)
       {
-	function->SetFilterFunctionValues(vect);
-	m_WavelenghtSpectralBand.push_back(function);
-	function = FilterFunctionValues::New();
-	vect.clear();
+       function->SetFilterFunctionValues(vect);
+       m_WavelenghtSpectralBand.push_back(function);
+       function = FilterFunctionValues::New();
+       vect.clear();
       }
       bandId++;
       function->SetMinSpectralValue(keywordStrings[0].toDouble());
       function->SetMaxSpectralValue(keywordStrings[1].toDouble());
       if(keywordStrings.size() == 3)
-	function->SetUserStep(keywordStrings[2].toDouble());
+       function->SetUserStep(keywordStrings[2].toDouble());
     }
     else if(keywordStrings.size()==1)
       vect.push_back(keywordStrings[0].toDouble());

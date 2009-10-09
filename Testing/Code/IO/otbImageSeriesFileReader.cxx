@@ -64,7 +64,7 @@ int otbImageSeriesFileReader(int argc, char* argv[] )
                           outputFilenameBase.ext()
                         );
 
-	WriterType::Pointer writer = WriterType::New();
+       WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFilename);
     writer->SetInput(reader->GetOutput(i));
     writer->Update();

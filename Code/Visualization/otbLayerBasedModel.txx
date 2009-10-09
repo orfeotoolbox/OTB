@@ -162,4 +162,4 @@ LayerBasedModel<TLayer>
 
 } // end namespace otb
 
-#endif 
+#endif

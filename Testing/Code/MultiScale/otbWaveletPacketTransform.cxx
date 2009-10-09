@@ -55,9 +55,9 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
   CostType::NumberOfAllowedDecompositions = level;
   
   /* Forward Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > 
+  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension >
     WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD > 
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
     ForwardFilterBank;
   typedef otb::WaveletPacketTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD, CostType >
     FilterType;
@@ -68,11 +68,11 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
   filter->Update();
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > 
+  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension >
     InverseWaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE > 
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE >
     InverseFilterBank;
-  typedef otb::WaveletPacketTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE > 
+  typedef otb::WaveletPacketTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE >
     InvFilterType;
   
   InvFilterType::Pointer invFilter = InvFilterType::New();

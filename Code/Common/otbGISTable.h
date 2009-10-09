@@ -30,7 +30,7 @@ namespace otb
 /** \class GISTable
  * \brief this class represents a table of a geospatial database (ie. PostGIS).
  *
- * 
+ *
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
  *
@@ -65,14 +65,14 @@ public:
   
   typedef itk::Point<TPrecision , SpatialDimension > PointType;
   typedef PolyLineParametricPathWithValue < TPrecision , SpatialDimension >  LineType;
-  typedef typename LineType::Pointer 	LinePointerType;
+  typedef typename LineType::Pointer        LinePointerType;
   
-  typedef Polygon < TPrecision > 	        PolygonType;
-  typedef typename PolygonType::Pointer 	                PolygonPointerType;
-  typedef typename PolygonType::ConstPointer 	        PolygonConstPointerType;
-  typedef ObjectList< PolygonType > 	        PolygonListType;
-  typedef typename PolygonListType::Pointer 	        PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer 	PolygonListConstPointerType;
+  typedef Polygon < TPrecision >                PolygonType;
+  typedef typename PolygonType::Pointer                        PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                PolygonConstPointerType;
+  typedef ObjectList< PolygonType >                PolygonListType;
+  typedef typename PolygonListType::Pointer                PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer        PolygonListConstPointerType;
   /** Acessors */
 
   //itkStaticConstMacro(GISDimension, unsigned int, SpatialDimension);
@@ -92,8 +92,8 @@ public:
   
   /** Get attributes of the Table*/ //TODO implement
   
-  /** Get srid of the geometric column*/ //TODO implement 
-  //virtual 
+  /** Get srid of the geometric column*/ //TODO implement
+  //virtual
   /** Add Point content to the GIS Table*/ //TODO implement
   virtual void InsertPoint( const PointType &pt, const std::string & attribute = 0 ){};
   virtual void InsertMultiPoint(){};

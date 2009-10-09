@@ -159,20 +159,20 @@ PersistentInnerProductVectorImageFilter<TInputImage>
     innerProduct.set_size( numberOfTrainingImages, numberOfTrainingImages );
     innerProduct.fill( 0 );
 
-    // Concatenate threaded matrix 
+    // Concatenate threaded matrix
     for ( unsigned int thread = 0; thread < numberOfThreads; thread++)
     {
         innerProduct += m_ThreadInnerProduct[thread];
     }
 
-    //--------------------------------------------------------------------- 
+    //---------------------------------------------------------------------
     // Fill the rest of the inner product matrix and make it symmetric
     //---------------------------------------------------------------------
     for(unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); ++band_x)
     {
         for(unsigned int band_y = band_x+1; band_y < numberOfTrainingImages; ++band_y)
-        {  
-            innerProduct[band_x][band_y] = innerProduct[band_y][band_x];    
+        {
+            innerProduct[band_x][band_y] = innerProduct[band_y][band_x];
         }// end band_y loop
     }// end band_x loop
 
@@ -217,12 +217,12 @@ PersistentInnerProductVectorImageFilter<TInputImage>
         }
         mean /= static_cast<double>(vectorValue.GetSize());
 
-        // Matrix iteration  
+        // Matrix iteration
         for(unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
         {
             for(unsigned int band_y = 0; band_y <= band_x; ++band_y )
             {
-                m_ThreadInnerProduct[threadId][band_x][band_y] += 
+                m_ThreadInnerProduct[threadId][band_x][band_y] +=
                 (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
             } // end: band_y loop
         } // end: band_x loop
@@ -237,12 +237,12 @@ PersistentInnerProductVectorImageFilter<TInputImage>
     while (!it.IsAtEnd())
     {
         PixelType vectorValue = it.Get();
-        // Matrix iteration  
+        // Matrix iteration
         for(unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
         {
             for(unsigned int band_y = 0; band_y <= band_x; ++band_y )
             {
-                m_ThreadInnerProduct[threadId][band_x][band_y] += 
+                m_ThreadInnerProduct[threadId][band_x][band_y] +=
                 (static_cast<double>(vectorValue[band_x]) ) * (static_cast<double>(vectorValue[band_y]) );
             } // end: band_y loop
         } // end: band_x loop

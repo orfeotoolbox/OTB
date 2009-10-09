@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb {
  * Standart (useless) definition for unknown wavelet
  */
 template < MotherWaveletOperatorEnum TMotherWaveletOperator >
-const char * 
+const char *
 WaveletGenerator< TMotherWaveletOperator >
 ::GetWaveletName () const
 {
@@ -90,7 +90,7 @@ WaveletGenerator<HAAR>
 
   coeff.resize(3);
   // stands for z^{-1}
-  coeff[0] = 0.0; 
+  coeff[0] = 0.0;
   // stands for z^0
   coeff[1] = 0.5 * sqrt2;
   // stands for z^1
@@ -362,10 +362,10 @@ WaveletGenerator<DAUBECHIES20>
 /**
  * Template specialization for the Spline Biorthogonal Wavelet.
  *
- *	M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
- *	Image Coding Using Wavelet Transform
- *	IEEE Transactions on Image Processing,
- *	vol 1(2), pp:205-220, April 1992
+ *       M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
+ *       Image Coding Using Wavelet Transform
+ *       IEEE Transactions on Image Processing,
+ *       vol 1(2), pp:205-220, April 1992
  */
 template <>
 const char * WaveletGenerator<SPLINE_BIORTHOGONAL_2_4>::GetWaveletName () const
@@ -412,15 +412,15 @@ WaveletGenerator<SPLINE_BIORTHOGONAL_2_4>
 /**
  * Template specialization for the Spline Biorthogonal Wavelet.
  *
- *	M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
- *	Image Coding Using Wavelet Transform
- *	IEEE Transactions on Image Processing,
- *	vol 1(2), pp:205-220, April 1992
+ *       M.Antonini, M.Barlaud, P.Mathieu, I.Daubechies
+ *       Image Coding Using Wavelet Transform
+ *       IEEE Transactions on Image Processing,
+ *       vol 1(2), pp:205-220, April 1992
  *
- *	Also in Daubechies's "Ten Lectures on Wavelet": in 
- *	less disparate filter lengths, pp 278--279.
+ *       Also in Daubechies's "Ten Lectures on Wavelet": in
+ *       less disparate filter lengths, pp 278--279.
  *
- *	Also known as 7/9 filter.
+ *       Also known as 7/9 filter.
  */
 template <>
 const char * WaveletGenerator<SPLINE_BIORTHOGONAL_4_4>::GetWaveletName () const

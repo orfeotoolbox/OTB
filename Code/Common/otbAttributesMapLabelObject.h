@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -30,10 +30,10 @@ namespace Functor
 
 /** \class AttributesMapLabelObjectAccessor
  *  \brief Allows to acces a given field of an AttributesMapLabelObject
- * 
+ *
  * The name of the attribute to retrieve can be set by using the
  * SetAttributeName method.
- * 
+ *
  * \sa AttributesMapLabelObject
  */
 template< class TLabelObject >
@@ -44,7 +44,7 @@ public:
   typedef TLabelObject                                  LabelObjectType;
   typedef typename LabelObjectType::AttributesValueType AttributeValueType;
 
-  /** 
+  /**
    * Please note that no exception catching is done here.
    * \param labelObject The pointer to the label object
    * \return The attribute value.
@@ -89,10 +89,10 @@ private:
  *
  *\sa LabelObject, ShapeLabelObject, StatisticsLabelObject
  *
- * \ingroup DataRepresentation 
+ * \ingroup DataRepresentation
  */
 template < class TLabel, unsigned int VImageDimension, class TAttributesValue >
-class ITK_EXPORT AttributesMapLabelObject 
+class ITK_EXPORT AttributesMapLabelObject
 : public itk::LabelObject< TLabel, VImageDimension >
 {
 public:
@@ -162,7 +162,7 @@ public:
     return m_Attributes.size();
   }
 
-  /** 
+  /**
    * Returns the list of available attributes
    */
   std::vector<std::string> GetAvailableAttributes() const
@@ -201,7 +201,7 @@ protected:
     Superclass::PrintSelf( os, indent );
     os << indent << "Attributes: "<< std::endl;
     for(AttributesMapConstIteratorType it = m_Attributes.begin();
-	it!=m_Attributes.end();++it)
+       it!=m_Attributes.end();++it)
       {
       os<<indent<<indent<<it->first<<" = "<<it->second<<std::endl;
       }

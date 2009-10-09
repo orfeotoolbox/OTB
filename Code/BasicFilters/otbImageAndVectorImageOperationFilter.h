@@ -64,37 +64,37 @@ public:
       {
       case MULTIPLICATION:
       {
-	vInTmp *= static_cast<InternalInputPixelType>(inPix);
-	break;
+       vInTmp *= static_cast<InternalInputPixelType>(inPix);
+       break;
       }
       case ADDITION:
-	{
-	  vInTmp += static_cast<InternalInputPixelType>(inPix);
-	  break;
-	}
+       {
+         vInTmp += static_cast<InternalInputPixelType>(inPix);
+         break;
+       }
       case DIVISON:
-	{
-	  if(inPix!=0)
-	    vInTmp /= static_cast<InternalInputPixelType>(inPix);
-	  else
-	    {
-	      vInTmp.Fill(0);
-	    }
-	  break;
-	}
+       {
+         if(inPix!=0)
+           vInTmp /= static_cast<InternalInputPixelType>(inPix);
+         else
+           {
+             vInTmp.Fill(0);
+           }
+         break;
+       }
       case SUBSTRACTION:
-	{
-	  vInTmp -= static_cast<InternalInputPixelType>(inPix);
-	  break;
-	}
+       {
+         vInTmp -= static_cast<InternalInputPixelType>(inPix);
+         break;
+       }
       default:
-	{
-	}
+       {
+       }
       }
 
     for(unsigned int i=0; i<vInTmp.Size(); i++)
       {
-	out[i] = static_cast<InternalInputPixelType>(vInTmp[i]);
+       out[i] = static_cast<InternalInputPixelType>(vInTmp[i]);
       }
     return out;
   }
@@ -107,7 +107,7 @@ public:
 /** \class ImageAndVectorImageOperationFilter
  * \brief Provides simple pixel to pixel operation between Image and VectorImage.
  *
- * Apply an operation (multiplication, division, addition or substraction) between 
+ * Apply an operation (multiplication, division, addition or substraction) between
  * the input image and each channel of the vector input image.
  * Use SetOperation( MULTIPLICATION, ADDITION, DIVISON or SUBSTRACTION ) to select the wanted operation.
  * Default is an addition.
@@ -120,12 +120,12 @@ public:
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
 class ITK_EXPORT ImageAndVectorImageOperationFilter:
-public itk::BinaryFunctorImageFilter<TInputImage, 
-				     TVectorInputImage, 
-				     TOutputImage, 
-				     Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType, 
-										  ITK_TYPENAME TVectorInputImage::PixelType, 
-										  ITK_TYPENAME TOutputImage::PixelType       > >
+public itk::BinaryFunctorImageFilter<TInputImage,
+                                 TVectorInputImage,
+                                 TOutputImage,
+                                 Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
+                                                                        ITK_TYPENAME TVectorInputImage::PixelType,
+                                                                        ITK_TYPENAME TOutputImage::PixelType       > >
 //ImageToImageFilter< TVectorInputImage, TOutputImage >
 {
 public:
@@ -133,9 +133,9 @@ public:
   /** Standard class typedefs. */
   typedef ImageAndVectorImageOperationFilter                       Self;
   //typedef itk::ImageToImageFilter<TVectorInputImage, TOutputImage> Superclass;
-  typedef Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType, 
-                                                       ITK_TYPENAME TVectorInputImage::PixelType, 
-						       ITK_TYPENAME TOutputImage::PixelType      > FunctorType;
+  typedef Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
+                                                       ITK_TYPENAME TVectorInputImage::PixelType,
+                                                 ITK_TYPENAME TOutputImage::PixelType      > FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TVectorInputImage, TOutputImage, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
@@ -150,7 +150,7 @@ public:
   /** Typedef for the images.   */
   typedef TInputImage                              InputImageType;
   typedef typename InputImageType::PixelType       InputPixelType;
-  typedef TVectorInputImage                        VectorInputImageType;  
+  typedef TVectorInputImage                        VectorInputImageType;
   typedef typename VectorInputImageType::PixelType VectorInputPixelType;
   typedef TOutputImage                             OutputImageType;
   typedef typename OutputImageType::PixelType      OutputPixelType;
@@ -232,7 +232,7 @@ private:
   bool m_UseAddition;
   bool m_UseMultiplication;
   bool m_UseDivision;
-  bool m_UseSubstraction;  
+  bool m_UseSubstraction;
 };
 
 } // end namespace otb

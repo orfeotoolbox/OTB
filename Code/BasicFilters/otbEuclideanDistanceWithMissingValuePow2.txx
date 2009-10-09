@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ inline double
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::Evaluate(const TVector &x1, const TVector &x2) const
 {
-  if( itk::MeasurementVectorTraits::GetLength( x1 ) != 
+  if( itk::MeasurementVectorTraits::GetLength( x1 ) !=
     itk::MeasurementVectorTraits::GetLength( x2 ) )
   {
     itkExceptionMacro( << "Vector lengths must be equal." );
@@ -57,13 +57,13 @@ inline double
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::Evaluate(const TVector &x) const
 {
-  MeasurementVectorSizeType 
+  MeasurementVectorSizeType
     measurementVectorSize = this->GetMeasurementVectorSize();
-  if(measurementVectorSize == 0) 
+  if(measurementVectorSize == 0)
   {
     itkExceptionMacro( << "Please set the MeasurementVectorSize first" );
   }
-  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize, 
+  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize,
     "EuclideanDistance::Evaluate Origin and input vector have different lengths");
 
   double temp, distance = itk::NumericTraits< double >::Zero ;
@@ -97,9 +97,9 @@ template< class TVector >
 /*static */
 bool
 EuclideanDistanceWithMissingValuePow2< TVector >
-::IsMissingValue ( const ValueType & v) 
+::IsMissingValue ( const ValueType & v)
 {
-  return static_cast<bool>( vnl_math_isnan( static_cast<double>( v ) ) ); 
+  return static_cast<bool>( vnl_math_isnan( static_cast<double>( v ) ) );
 }
 
 template< class TVector >
@@ -108,7 +108,7 @@ void
 EuclideanDistanceWithMissingValuePow2< TVector >
 ::SetToMissingValue ( ValueType & v )
 {
-	v = std::numeric_limits<ValueType>::signaling_NaN();
+       v = std::numeric_limits<ValueType>::signaling_NaN();
 }
 
 

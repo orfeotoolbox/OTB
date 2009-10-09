@@ -21,19 +21,19 @@ namespace otb
 {
 
 PackedWidgetManager
-::PackedWidgetManager() 
+::PackedWidgetManager()
 {
   m_PackedWidget = new ImageWidgetPackedManagerType();
 }
 
 PackedWidgetManager
-::~PackedWidgetManager() 
+::~PackedWidgetManager()
 {
   delete m_PackedWidget;
 }
 
 
-void 
+void
 PackedWidgetManager
 ::RegisterFullWidget(WidgetType* fullWidget)
 {
@@ -45,9 +45,9 @@ PackedWidgetManager
 }
 
 
-void 
+void
 PackedWidgetManager
-::RegisterScrollWidget(WidgetType* scrollWidget) 
+::RegisterScrollWidget(WidgetType* scrollWidget)
 {
   m_InternalScrollWidget = scrollWidget;
   m_PackedWidget->m_QuicklookGroup->add(scrollWidget);
@@ -57,7 +57,7 @@ PackedWidgetManager
 
 }
 
-void 
+void
 PackedWidgetManager
 ::RegisterZoomWidget(WidgetType* zoomWidget)
 {
@@ -67,7 +67,7 @@ PackedWidgetManager
   zoomWidget->resize(m_PackedWidget->m_ZoomGroup->x(),m_PackedWidget->m_ZoomGroup->y(),
                      m_PackedWidget->m_ZoomGroup->w(),m_PackedWidget->m_ZoomGroup->h());
 }
-void 
+void
 PackedWidgetManager
 ::RegisterPixelDescriptionWidget(Fl_Output * pixelWidget)
 {
@@ -79,7 +79,7 @@ PackedWidgetManager
 
 }
 
-void 
+void
 PackedWidgetManager
 ::RegisterHistogramWidget(WidgetType* curveWidget)
 {
@@ -90,7 +90,7 @@ PackedWidgetManager
                                             m_PackedWidget->m_HistogramsGroup->w(),m_PackedWidget->m_HistogramsGroup->h());
  }
 
-void 
+void
 PackedWidgetManager
 ::Show()
 {
@@ -102,14 +102,14 @@ PackedWidgetManager
   m_InternalZoomWidget->show();
  }
 
-void 
+void
 PackedWidgetManager
 ::Hide()
 {
   m_PackedWidget->m_Window->hide();
 }
 
-void 
+void
 PackedWidgetManager
 ::Refresh()
 {
@@ -120,7 +120,7 @@ PackedWidgetManager
  m_InternalCurveWidget->redraw();
 }
 
-void 
+void
 PackedWidgetManager
 ::UnRegisterAll()
 {
@@ -131,7 +131,7 @@ PackedWidgetManager
   m_PackedWidget->m_HistogramsGroup->remove(m_InternalCurveWidget);
 }
 
-void 
+void
 PackedWidgetManager
 ::SetLabel(const char * label)
 {

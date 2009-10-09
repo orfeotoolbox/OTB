@@ -85,7 +85,7 @@ int otbKullbackLeiblerSupervizedDistanceImageFilter(int argc, char * argv[])
 
     typedef unsigned char OutputPixelType;
     typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-    typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >    
+    typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >
       RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
     rescaler->SetOutputMinimum(0);

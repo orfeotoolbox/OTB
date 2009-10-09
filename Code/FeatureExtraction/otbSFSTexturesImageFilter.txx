@@ -117,7 +117,7 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
   return static_cast<OutputImageType * >(this->itk::ProcessObject::GetOutput(1) );
 }
 
-//Return output PSI image 
+//Return output PSI image
 template <class TInputImage, class TOutputImage>
 const typename SFSTexturesImageFilter<TInputImage, TOutputImage>::OutputImageType *
 SFSTexturesImageFilter<TInputImage, TOutputImage>
@@ -408,12 +408,12 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
     while ( !outputIt1.IsAtEnd() )
     {
 
-      outputFunctor = m_FunctorList[threadId]( neighInputIt);    
+      outputFunctor = m_FunctorList[threadId]( neighInputIt);
       for(unsigned int i = 0; i<outItList.size(); ++i)
         {
           if( textStatus[i]==true )
             (*outItList[i]).Set( outputFunctor[i] );
-        }        
+        }
       
       ++neighInputIt;
       for(unsigned int i = 0; i<outItList.size(); ++i)

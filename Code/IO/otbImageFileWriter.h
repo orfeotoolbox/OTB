@@ -72,7 +72,7 @@ public:
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
 
-  /** A special Write() method. It invokes the creating of the 
+  /** A special Write() method. It invokes the creating of the
     * specific otb::ImageIOFactory.
     */
   virtual void Write(void);

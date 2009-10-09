@@ -9,12 +9,12 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,8 +29,8 @@ namespace otb {
 /** \class BoxAndWhiskerImageFilter
  * \brief This class performs the detection of outlier with the Box and Whisker technique
  *
- * This is appropriated to perform simple outlier detection over vector data. 
- * The input image has to contain vector pixel through a VectorImage type. 
+ * This is appropriated to perform simple outlier detection over vector data.
+ * The input image has to contain vector pixel through a VectorImage type.
  * When an outlier is detected, it is treated to as an missing value through the function
  * \code{otb::EuclideanDistanceWithMissingValue::SetToMissingValue()}.
  *
@@ -44,7 +44,7 @@ namespace otb {
  */
 template < class TInputImage >
 class ITK_EXPORT BoxAndWhiskerImageFilter
-  : public itk::InPlaceImageFilter< TInputImage > 
+  : public itk::InPlaceImageFilter< TInputImage >
 {
   public :
   /** Standard class typedefs. */

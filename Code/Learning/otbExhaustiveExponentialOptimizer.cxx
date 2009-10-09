@@ -115,7 +115,7 @@ ExhaustiveExponentialOptimizer
   itkDebugMacro("ResumeWalk");
   m_Stop = false;
  
-  while( !m_Stop ) 
+  while( !m_Stop )
     {
     ParametersType currentPosition = this->GetCurrentPosition();
     
@@ -127,12 +127,12 @@ ExhaustiveExponentialOptimizer
 
     m_CurrentValue = this->GetValue( currentPosition );
     
-    if (m_CurrentValue > m_MaximumMetricValue) 
+    if (m_CurrentValue > m_MaximumMetricValue)
       {
       m_MaximumMetricValue = m_CurrentValue;
       m_MaximumMetricValuePosition = currentPosition;
       }
-    if (m_CurrentValue < m_MinimumMetricValue) 
+    if (m_CurrentValue < m_MinimumMetricValue)
       {
       m_MinimumMetricValue = m_CurrentValue;
       m_MinimumMetricValuePosition = currentPosition;
@@ -165,7 +165,7 @@ ExhaustiveExponentialOptimizer
 void
 ExhaustiveExponentialOptimizer
 ::AdvanceOneStep( void )
-{ 
+{
   itkDebugMacro("AdvanceOneStep");
 
   const unsigned int  spaceDimension = m_CostFunction->GetNumberOfParameters();
@@ -181,7 +181,7 @@ ExhaustiveExponentialOptimizer
 
 void
 ExhaustiveExponentialOptimizer
-::IncrementIndex( ParametersType &newPosition ) 
+::IncrementIndex( ParametersType &newPosition )
 {
   unsigned int idx = 0;
   const unsigned int  spaceDimension = m_CostFunction->GetNumberOfParameters();
@@ -208,10 +208,10 @@ ExhaustiveExponentialOptimizer
 
   for(unsigned int i=0; i<spaceDimension; i++)
     {
-    newPosition[i] = this->GetInitialPosition()[i] 
+    newPosition[i] = this->GetInitialPosition()[i]
                      * this->GetScales()[i]
                      * vcl_pow(m_GeometricProgression,
-			       static_cast<double>(m_CurrentIndex[i]-m_NumberOfSteps[i]) * m_StepLength);
+                            static_cast<double>(m_CurrentIndex[i]-m_NumberOfSteps[i]) * m_StepLength);
     }
 }
 
@@ -227,7 +227,7 @@ ExhaustiveExponentialOptimizer
   os << indent << "CurrentIteration = " << m_CurrentIteration << std::endl;
   os << indent << "Stop = " << m_Stop << std::endl;
   os << indent << "CurrentParameter = " << m_CurrentParameter << std::endl;
-  os << indent << "GeometricProgression = " << m_GeometricProgression << std::endl; 
+  os << indent << "GeometricProgression = " << m_GeometricProgression << std::endl;
   os << indent << "CurrentIndex = " << m_CurrentIndex << std::endl;
   os << indent << "MaximumNumberOfIterations = " << m_MaximumNumberOfIterations << std::endl;
   os << indent << "MaximumMetricValue = " << m_MaximumMetricValue << std::endl;

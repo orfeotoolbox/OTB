@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -80,9 +80,9 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 template <class TInputImage, class TOutputImage,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
-void 
+void
 SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
   Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
@@ -108,10 +108,10 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
 template <class TInputImage, class TOutputImage,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
-void 
+void
 SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -161,7 +161,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   InputImageRegionType inputRegionForThread;
         this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
-  SubsampledImageRegionConstIterator< InputImageType > inputIter 
+  SubsampledImageRegionConstIterator< InputImageType > inputIter
     ( this->GetInput(), inputRegionForThread );
 
   switch ( DirectionOfTransformation )
@@ -173,7 +173,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
       while ( !inputIter.IsAtEnd() )
       {
-        outputIter.SetOffset( 
+        outputIter.SetOffset(
           static_cast< typename SubsampledImageRegionIterator< OutputImageType >::OffsetType >
                             ( inputIter.GetOffset() ) );
         outputIter.Set( static_cast< OutputPixelType >( inputIter.Get() ) );

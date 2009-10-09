@@ -31,7 +31,7 @@ int otbBoxAndWhiskerImageFilterNew ( int argc, char * argv[] )
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
   typedef otb::BoxAndWhiskerImageFilter< ImageType > FilterType;
 
-	FilterType::Pointer filter = FilterType::New();
+       FilterType::Pointer filter = FilterType::New();
   
   return EXIT_SUCCESS;
 }

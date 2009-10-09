@@ -23,7 +23,7 @@
 namespace otb
 {
 
-template <class THistogram> 
+template <class THistogram>
 HistogramCurve<THistogram>
 ::HistogramCurve() : m_Histogram(), m_HistogramColor()
 {
@@ -31,13 +31,13 @@ HistogramCurve<THistogram>
   m_HistogramColor.Fill(0.5);
 }
 
-template <class THistogram> 
+template <class THistogram>
 HistogramCurve<THistogram>
 ::~HistogramCurve()
 {}
 
-template <class THistogram> 
-void  
+template <class THistogram>
+void
 HistogramCurve<THistogram>
 ::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
 {
@@ -111,7 +111,7 @@ HistogramCurve<THistogram>
   glDisable(GL_BLEND);
 }
 
-template <class THistogram> 
+template <class THistogram>
 void
 HistogramCurve<THistogram>
 ::BeforeRendering()
@@ -154,23 +154,23 @@ HistogramCurve<THistogram>
     }
   mean/=nbSamples;
   squaremean/=nbSamples;
-  m_Maximum[1] = mean + 6*vcl_sqrt(squaremean - mean*mean); 
+  m_Maximum[1] = mean + 6*vcl_sqrt(squaremean - mean*mean);
   m_BinWidth = (last-first)/(nbSamples);
 }
 
 
-template <class THistogram> 
+template <class THistogram>
 typename HistogramCurve<THistogram>
-::PointType 
+::PointType
 HistogramCurve<THistogram>
 ::GetMinimum()
 {
   return m_Minimum;
 }
 
-template <class THistogram> 
+template <class THistogram>
 typename HistogramCurve<THistogram>
-::PointType 
+::PointType
 HistogramCurve<THistogram>
 ::GetMaximum()
 {

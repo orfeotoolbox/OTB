@@ -37,7 +37,7 @@ namespace otb {
  * by using a (templated) elementary wavelet transform.
  *
  * Here the number of decomposition is given. The output is given
- * in the GetOutput() list of images ranked from the low-pass part to the 
+ * in the GetOutput() list of images ranked from the low-pass part to the
  * highest frequency part.
  *
  * Output image organization depends on the number of Dim on the image
@@ -50,7 +50,7 @@ namespace otb {
  * \sa WaveletPacketTransform
  *
  */
-template < class TInputImage, class TOutputImage, class TFilter, 
+template < class TInputImage, class TOutputImage, class TFilter,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 class ITK_EXPORT WaveletTransform
   : public itk::ImageSource< TOutputImage >
@@ -85,7 +85,7 @@ private:
  * by using a (templated) elementary wavelet transform.
  *
  * Here the number of decomposition is given. The output is given
- * in the GetOutput() list of images ranked from the low-pass part to the 
+ * in the GetOutput() list of images ranked from the low-pass part to the
  * highest frequency part.
  *
  * Output image organization depends on the number of Dim on the image
@@ -142,8 +142,8 @@ public:
   {
     if ( idx >= m_NumberOfDecompositions )
     {
-      itkExceptionMacro( << "Impossible to GetNthFilter with the index element " 
-        << idx << "; this element don't exist, the size of the filter list is " 
+      itkExceptionMacro( << "Impossible to GetNthFilter with the index element "
+        << idx << "; this element don't exist, the size of the filter list is "
         << m_FilterList->Size() << "." );
     }
     return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
@@ -158,10 +158,10 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
-   * In this implementation, we are not (yet?) dealing with M-band decomposition 
+   * In this implementation, we are not (yet?) dealing with M-band decomposition
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
@@ -185,9 +185,9 @@ private:
   unsigned int m_NumberOfDecompositions;
 
   /**
-   * For multiscale decomposition, m_SubsampleImageFactor is set to 1. 
+   * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
    * It yields also a stationnary decomposition.
-   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is 
+   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2. This is its default value.
    */
   unsigned int m_SubsampleImageFactor;
@@ -205,7 +205,7 @@ private:
  * by using a (templated) elementary wavelet transform.
  *
  * Here the number of decomposition is given. The output is given
- * in the GetOutput() list of images ranked from the low-pass part to the 
+ * in the GetOutput() list of images ranked from the low-pass part to the
  * highest frequency part.
  *
  * Output image organization depends on the number of Dim on the image
@@ -217,7 +217,7 @@ private:
  * Here is the specialisation of the INVERSE transformation.
  *
  * The filter should be implemented with TInputImage for input and output image
- * template. Transtyping to TOuputImage is performed by standart C++-style at pixel 
+ * template. Transtyping to TOuputImage is performed by standart C++-style at pixel
  * level.
  *
  * \sa WaveletFilterBank
@@ -272,8 +272,8 @@ public:
   {
     if ( idx >= m_NumberOfDecompositions )
     {
-      itkExceptionMacro( << "Impossible to GetNthFilter with the index element " 
-        << idx << "; this element don't exist, the size of the filter list is " 
+      itkExceptionMacro( << "Impossible to GetNthFilter with the index element "
+        << idx << "; this element don't exist, the size of the filter list is "
         << m_FilterList->Size() << "." );
     }
     return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
@@ -287,10 +287,10 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
-   * In this implementation, we are not (yet?) dealing with M-band decomposition 
+   * In this implementation, we are not (yet?) dealing with M-band decomposition
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
@@ -301,7 +301,7 @@ protected:
   WaveletTransform();
   virtual ~WaveletTransform() {}
 
-  /** GenerateOutputInformation 
+  /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy informations from the input image if existing.
     **/
@@ -320,9 +320,9 @@ private:
   unsigned int m_NumberOfDecompositions;
 
   /**
-   * For multiscale decomposition, m_SubsampleImageFactor is set to 1 (default). 
+   * For multiscale decomposition, m_SubsampleImageFactor is set to 1 (default).
    * It yields also a stationnary decomposition.
-   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is 
+   * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2.
    */
   unsigned int m_SubsampleImageFactor;

@@ -385,7 +385,7 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 
     otbMsgDevMacro(<< "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: "
                      << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage)));
-    otbMsgDevMacro(<< "m_ImageDeltaEnergy: " << m_ImageDeltaEnergy); 
+    otbMsgDevMacro(<< "m_ImageDeltaEnergy: " << m_ImageDeltaEnergy);
 
     ++m_NumberOfIterations;
 

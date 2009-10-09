@@ -31,7 +31,7 @@
 
 int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii( int argc, char * argv[] )
 {
-  const   char * infname   = argv[1];  
+  const   char * infname   = argv[1];
   const   char * outfname  = argv[2];
   
   const unsigned int                                                Dimension = 2;
@@ -46,13 +46,13 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii( int ar
   typedef std::vector<LineType*>                                    VectorLines;
   typedef itk::PointSet<VectorLines , Dimension>                    PointSetType;
   typedef otb::LineSegmentDetector<ImageType , PixelType>           lsdFilterType;
-  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType, 
+  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType,
                                                                PointSetType >    RightAngleFilterType;
   
   /** Creatop, of an instance of the filters */
   RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
   ReaderType::Pointer            reader            = ReaderType::New();
-  PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
+  PointSetType::Pointer          segmentOrtho      = PointSetType::New();
   lsdFilterType::Pointer         lsdFilter         = lsdFilterType::New();
 
 
@@ -60,7 +60,7 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii( int ar
 
   // Begin the process
   reader->SetFileName(infname);
-  lsdFilter->SetInput(reader->GetOutput());  
+  lsdFilter->SetInput(reader->GetOutput());
   
   rightAngleFilter->SetInputImage(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -37,11 +37,11 @@ namespace otb {
  * \brief One level stationary wavelet transform
  *
  * This implementation performs a low-pass / high-pass wavelet transformation
- * of an image. The wavelet transformation is defined by a inner product 
+ * of an image. The wavelet transformation is defined by a inner product
  * (ie. convolution-like operation).
  *
  * the inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse 
+ * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -66,7 +66,7 @@ namespace otb {
  *     Dim (n-1)   Dim (n-2)   Dim (n-3)   ...   Dim 1  Dim 0
  *
  *  ->  x_(n-1)     x_(n-2)     x_(n-3)           x_1    x_0
- *    
+ *
  * And conversely in the inverse transformation.
  *
  * \todo: At present version, there is not consideration on meta data information that can be transmited
@@ -79,7 +79,7 @@ namespace otb {
  *
  * \ingroup Streamed
  */
-template < class TInputImage, class TOutputImage, 
+template < class TInputImage, class TOutputImage,
             class TWaveletOperator,
             InverseOrForwardTransformationEnum TDirectionOfTransformation >
 class ITK_EXPORT WaveletFilterBank
@@ -109,13 +109,13 @@ private:
   
 /** \class FilterBank
  * \brief Template specialization of FilterBank for forward transformaiton
- * 
+ *
  * This implementation performs a low-pass / high-pass wavelet transformation
- * of an image. The wavelet transformation is defined by a inner product 
+ * of an image. The wavelet transformation is defined by a inner product
  * (ie. convolution-like operation).
  *
  * The inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse 
+ * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -140,7 +140,7 @@ private:
  *     Dim (n-1)   Dim (n-2)   Dim (n-3)   ...   Dim 1  Dim 0
  *
  *  ->  x_(n-1)     x_(n-2)     x_(n-3)           x_1    x_0
- *    
+ *
  * And conversely in the inverse transformation.
  *
  * \todo: At present version, there is not consideration on meta data information that can be transmited
@@ -198,7 +198,7 @@ public:
   itkSetMacro(UpSampleFilterFactor,unsigned int);
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
    * In this implementation, we are not dealing with M-band decomposition then m_SubsampleImageFactor
@@ -211,7 +211,7 @@ protected:
   WaveletFilterBank();
   virtual ~WaveletFilterBank() {}
 
-  /** GenerateOutputInformation 
+  /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy informations from the input image if existing.
     **/
@@ -219,7 +219,7 @@ protected:
 
   /** The forward transformation needs a larger input requested
    * region than the output requested region (larger by subsampling
-   * but also by the kernel size used in the filter bank).  
+   * but also by the kernel size used in the filter bank).
    *
    * Then, the class needs to provide an implementation
    * for GenerateInputRequestedRegion() in order to inform the
@@ -233,9 +233,9 @@ protected:
    */
   virtual void BeforeThreadedGenerateData ();
 
-  /** Internal Data Allocation 
+  /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
-   * subsampling if required... 
+   * subsampling if required...
    */
   virtual void AllocateInternalData ( const OutputImageRegionType& outputRegion );
 
@@ -245,29 +245,29 @@ protected:
   virtual void AfterThreadedGenerateData ();
 
   /** CallCopyOutputRegionToInputRegion
-   * Since input and output image may be of different size when a 
-   * subsampling factor has tp be applied, Region estimation 
+   * Since input and output image may be of different size when a
+   * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion 
+  virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
 
   /** CallCopyOutputRegionToInputRegion
-   * This function is also redefined in order to adapt the shape of the regions with 
+   * This function is also redefined in order to adapt the shape of the regions with
    * resect to the direction (among the dimensions) of the filtering.
    */
   virtual void CallCopyOutputRegionToInputRegion ( unsigned int direction,
     InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
-  virtual void CallCopyInputRegionToOutputRegion ( unsigned int direction, 
+  virtual void CallCopyInputRegionToOutputRegion ( unsigned int direction,
     OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** Generate data redefinition */
   virtual void ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
 
   /** Iterative call to the forward filter bank at each dimension. */
-  virtual void ThreadedGenerateDataAtDimensionN ( unsigned int idx, unsigned int direction, 
+  virtual void ThreadedGenerateDataAtDimensionN ( unsigned int idx, unsigned int direction,
                                       itk::ProgressReporter & reporter,
                                       const OutputImageRegionType& outputRegionForThread, int threadId );
 
@@ -279,8 +279,8 @@ private:
   unsigned int m_SubsampleImageFactor;
 
   /** the easiest way to store internal images is to keep track of the splits
-   * at each direction. Then, std::vector< InternalImagesTabular > is a tab of 
-   * size ImageDimension-1 and each InternalImagesTabular contains intermediate 
+   * at each direction. Then, std::vector< InternalImagesTabular > is a tab of
+   * size ImageDimension-1 and each InternalImagesTabular contains intermediate
    * images.
    */
   typedef std::vector< OutputImagePointerType > InternalImagesTabular ;
@@ -292,11 +292,11 @@ private:
  * \brief Template specialization of FilterBank for inverse transformation
  *
  * This implementation performs a low-pass / high-pass wavelet transformation
- * of an image. The wavelet transformation is defined by a inner product 
+ * of an image. The wavelet transformation is defined by a inner product
  * (ie. convolution-like operation).
  *
  * The inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse 
+ * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -321,7 +321,7 @@ private:
  *     Dim (n-1)   Dim (n-2)   Dim (n-3)   ...   Dim 1  Dim 0
  *
  *  ->  x_(n-1)     x_(n-2)     x_(n-3)           x_1    x_0
- *    
+ *
  * And conversely in the inverse transformation.
  *
  * \todo: At present version, there is not consideration on meta data information that can be transmited
@@ -379,7 +379,7 @@ public:
   itkSetMacro(UpSampleFilterFactor,unsigned int);
 
   /**
-   * Set/Get the level of down sampling of the image used in forward algorithm. 
+   * Set/Get the level of down sampling of the image used in forward algorithm.
    * (or upsampling in the inverse case)
    *
    * In this implementation, we are dealing with M-band decomposition then m_SubsampleImageFactor
@@ -393,7 +393,7 @@ protected:
   WaveletFilterBank();
   virtual ~WaveletFilterBank() {}
 
-  /** GenerateOutputInformation 
+  /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
     * Copy informations from the input image if existing.
     **/
@@ -401,7 +401,7 @@ protected:
 
   /** The inverse transformation needs larger inputs requested
    * region than the output requested region (larger by subsampling
-   * but also by the kernel size used in the filter bank).  
+   * but also by the kernel size used in the filter bank).
    *
    * Then, the class needs to provide an implementation
    * for GenerateInputRequestedRegion() in order to inform the
@@ -416,9 +416,9 @@ protected:
    */
   virtual void BeforeThreadedGenerateData ();
 
-  /** Internal Data Allocation 
+  /** Internal Data Allocation
    * If m_SubsampleImageFactor != 1, internal data with progressive region size
-   * subsampling if required... 
+   * subsampling if required...
    */
   virtual void AllocateInternalData ( const OutputImageRegionType& outputRegion );
 
@@ -428,32 +428,32 @@ protected:
   virtual void AfterThreadedGenerateData ();
 
   /** CallCopyOutputRegionToInputRegion
-   * Since input and output image may be of different size when a 
-   * subsampling factor has tp be applied, Region estimation 
+   * Since input and output image may be of different size when a
+   * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion 
+  virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );	 
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
 
   /** CallCopyOutputRegionToInputRegion
-   * This function is also redefined in order to adapt the shape of the regions with 
+   * This function is also redefined in order to adapt the shape of the regions with
    * resect to the direction (among the dimensions) of the filtering.
    */
   virtual void CallCopyOutputRegionToInputRegion ( unsigned int direction,
     InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
-  virtual void CallCopyInputRegionToOutputRegion ( unsigned int direction, 
+  virtual void CallCopyInputRegionToOutputRegion ( unsigned int direction,
     OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** Generate data redefinition */
   virtual void ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
 
-  /** 
-   * Iterative call to the forward filter bank at each dimension. 
+  /**
+   * Iterative call to the forward filter bank at each dimension.
    * Used for the multiresolution case only.
    */
-  virtual void ThreadedGenerateDataAtDimensionN ( unsigned int direction, 
+  virtual void ThreadedGenerateDataAtDimensionN ( unsigned int direction,
                                       itk::ProgressReporter & reporter,
                                       const OutputImageRegionType& outputRegionForThread, int threadId );
 
@@ -465,8 +465,8 @@ private:
   unsigned int m_SubsampleImageFactor;
 
   /** the easiest way to store internal images is to keep track of the splits
-   * at each direction. Then, std::vector< InternalImagesTabular > is a tab of 
-   * size ImageDimension-1 and each InternalImagesTabular contains intermediate 
+   * at each direction. Then, std::vector< InternalImagesTabular > is a tab of
+   * size ImageDimension-1 and each InternalImagesTabular contains intermediate
    * images. Internal images are used for multiresolution case only.
    */
   typedef std::vector< OutputImagePointerType > InternalImagesTabular ;

@@ -11,8 +11,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -158,7 +158,7 @@ protected:
    *  \brief where the white areas represents the urban areas.
    */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor< 
+          class TFunction = Functor::RadiometricNonWaterNonVegetationIndexFunctor<
                                                                  typename TInputImage::PixelType,
                                                                  typename TOutputImage::PixelType> >
 class ITK_EXPORT UrbanAreaDetectionImageFilter :

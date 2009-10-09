@@ -37,7 +37,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
   bool resp = l2.GetIndex()[1]> l1.GetIndex()[1];
   resp = resp
     || (l2.GetIndex()[1] == l1.GetIndex()[1]
-	&& (l1.GetIndex()[0]+ static_cast<long>(l1.GetLength())) < l2.GetIndex()[0]);
+       && (l1.GetIndex()[0]+ static_cast<long>(l1.GetLength())) < l2.GetIndex()[0]);
   return resp;
 }
 
@@ -103,217 +103,217 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     while(goesOn)
       {
       switch(m_CurrentState)
-	{
-	case UP_RIGHT:
-	{
-	// First candidate run
-	IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine-1);
-	if(IsRunIndexValid(firstCandidateRun))
-	  {
-	  // Second candidate run
-	  IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine,RightEnd(m_CurrentRun),firstCandidateRun);
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Down-Right case
-	    m_CurrentRun = secondCandidateRun;
-	    m_CurrentState = DOWN_RIGHT;
-	    m_PositionFlag = LEFT_END;
-	    WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+       {
+       case UP_RIGHT:
+       {
+       // First candidate run
+       IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine-1);
+       if(IsRunIndexValid(firstCandidateRun))
+         {
+         // Second candidate run
+         IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine,RightEnd(m_CurrentRun),firstCandidateRun);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Down-Right case
+           m_CurrentRun = secondCandidateRun;
+           m_CurrentState = DOWN_RIGHT;
+           m_PositionFlag = LEFT_END;
+           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  else
-	    {
-	    // Up-Right case
-	    m_CurrentLine--;
-	    m_CurrentRun = firstCandidateRun;
-	    m_CurrentState = UP_RIGHT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Up-Right case
+           m_CurrentLine--;
+           m_CurrentRun = firstCandidateRun;
+           m_CurrentState = UP_RIGHT;
+           m_PositionFlag = RIGHT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	else
-	  {
-	  IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine-1,RightEnd(m_CurrentRun),m_CurrentRun);
+           }
+         }
+       else
+         {
+         IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine-1,RightEnd(m_CurrentRun),m_CurrentRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Up-Left Case
-	    m_CurrentState = UP_LEFT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
-	    m_CurrentLine--;
-	    m_CurrentRun = secondCandidateRun;
-	    }
-	  else
-	    {
-	    // Down-Left case
-	    m_CurrentState = DOWN_LEFT;
-	    m_PositionFlag = LEFT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
-	    }
-	  }
-	break;
-	}
-	case DOWN_LEFT:
-	{
-	// First candidate run
-	IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine+1);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Up-Left Case
+           m_CurrentState = UP_LEFT;
+           m_PositionFlag = RIGHT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
+           m_CurrentLine--;
+           m_CurrentRun = secondCandidateRun;
+           }
+         else
+           {
+           // Down-Left case
+           m_CurrentState = DOWN_LEFT;
+           m_PositionFlag = LEFT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         }
+       break;
+       }
+       case DOWN_LEFT:
+       {
+       // First candidate run
+       IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine+1);
 
-	if(IsRunIndexValid(firstCandidateRun))
-	  {
-	  // Second candidate run
-	  IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine,LeftEnd(m_CurrentRun),firstCandidateRun);
+       if(IsRunIndexValid(firstCandidateRun))
+         {
+         // Second candidate run
+         IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine,LeftEnd(m_CurrentRun),firstCandidateRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Up-Left case
-	    m_CurrentRun = secondCandidateRun;
-	    m_CurrentState = UP_LEFT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
-	    }
-	  else
-	    {
-	    // Down-Left case
-	    m_CurrentLine++;
-	    m_CurrentRun = firstCandidateRun;
-	    m_CurrentState = DOWN_LEFT;
-	    m_PositionFlag = LEFT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Up-Left case
+           m_CurrentRun = secondCandidateRun;
+           m_CurrentState = UP_LEFT;
+           m_PositionFlag = RIGHT_END;
+           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Down-Left case
+           m_CurrentLine++;
+           m_CurrentRun = firstCandidateRun;
+           m_CurrentState = DOWN_LEFT;
+           m_PositionFlag = LEFT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	else
-	  {
-	  IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine+1,LeftEnd(m_CurrentRun),m_CurrentRun);
+           }
+         }
+       else
+         {
+         IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine+1,LeftEnd(m_CurrentRun),m_CurrentRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Down-Right case
-	    m_CurrentRun = secondCandidateRun;
-	    m_CurrentLine++;
-	    m_CurrentState = DOWN_RIGHT;
-	    m_PositionFlag = LEFT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Down-Right case
+           m_CurrentRun = secondCandidateRun;
+           m_CurrentLine++;
+           m_CurrentState = DOWN_RIGHT;
+           m_PositionFlag = LEFT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  else
-	    {
-	    // Up-Right case
-	    m_CurrentState = UP_RIGHT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Up-Right case
+           m_CurrentState = UP_RIGHT;
+           m_PositionFlag = RIGHT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	break;
-	}
-	case DOWN_RIGHT:
-	{
-	IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine+1);
+           }
+         }
+       break;
+       }
+       case DOWN_RIGHT:
+       {
+       IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine+1);
 
-	if(IsRunIndexValid(firstCandidateRun))
-	  {
-	  IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine,RightEnd(m_CurrentRun),firstCandidateRun);
+       if(IsRunIndexValid(firstCandidateRun))
+         {
+         IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine,RightEnd(m_CurrentRun),firstCandidateRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Up-Left case
-	    m_CurrentState = UP_LEFT;
-	    m_PositionFlag = RIGHT_END;
-	    m_CurrentRun = secondCandidateRun;
-	    WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Up-Left case
+           m_CurrentState = UP_LEFT;
+           m_PositionFlag = RIGHT_END;
+           m_CurrentRun = secondCandidateRun;
+           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  else
-	    {
-	    // Down-Left case
-	    m_CurrentLine++;
-	    m_CurrentRun = firstCandidateRun;
-	    m_CurrentState = DOWN_LEFT;
-	    m_PositionFlag = LEFT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Down-Left case
+           m_CurrentLine++;
+           m_CurrentRun = firstCandidateRun;
+           m_CurrentState = DOWN_LEFT;
+           m_PositionFlag = LEFT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	else
-	  {
-	  IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine+1,LeftEnd(m_CurrentRun),m_CurrentRun);
+           }
+         }
+       else
+         {
+         IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine+1,LeftEnd(m_CurrentRun),m_CurrentRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Down-Right case
-	    m_CurrentLine++;
-	    m_CurrentRun = secondCandidateRun;
-	    m_CurrentState = DOWN_RIGHT;
-	    m_PositionFlag = LEFT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
-	    }
-	  else
-	    {
-	    // Up-Right case
-	    m_CurrentState = UP_RIGHT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Down-Right case
+           m_CurrentLine++;
+           m_CurrentRun = secondCandidateRun;
+           m_CurrentState = DOWN_RIGHT;
+           m_PositionFlag = LEFT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Up-Right case
+           m_CurrentState = UP_RIGHT;
+           m_PositionFlag = RIGHT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	break;
-	}
-	case UP_LEFT:
-	{
-	IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine-1);
+           }
+         }
+       break;
+       }
+       case UP_LEFT:
+       {
+       IndexType firstCandidateRun = Within(m_CurrentPoint,m_CurrentLine-1);
 
-	if(IsRunIndexValid(firstCandidateRun))
-	  {
-	  IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine,LeftEnd(m_CurrentRun),firstCandidateRun);
+       if(IsRunIndexValid(firstCandidateRun))
+         {
+         IndexType secondCandidateRun = RightMostLeftEndInside(m_CurrentLine,LeftEnd(m_CurrentRun),firstCandidateRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Down-Right case
-	    m_CurrentRun = secondCandidateRun;
-	    m_CurrentState = DOWN_RIGHT;
-	    m_PositionFlag = LEFT_END;
-	    WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Down-Right case
+           m_CurrentRun = secondCandidateRun;
+           m_CurrentState = DOWN_RIGHT;
+           m_PositionFlag = LEFT_END;
+           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  else
-	    {
-	    // Up-Right case
-	    m_CurrentLine--;
-	    m_CurrentRun = firstCandidateRun;
-	    m_CurrentState = UP_RIGHT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
-	    }
-	  }
-	else
-	  {
-	  IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine-1,RightEnd(m_CurrentRun),m_CurrentRun);
+           }
+         else
+           {
+           // Up-Right case
+           m_CurrentLine--;
+           m_CurrentRun = firstCandidateRun;
+           m_CurrentState = UP_RIGHT;
+           m_PositionFlag = RIGHT_END;
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         }
+       else
+         {
+         IndexType secondCandidateRun = LeftMostRightEndInside(m_CurrentLine-1,RightEnd(m_CurrentRun),m_CurrentRun);
 
-	  if(IsRunIndexValid(secondCandidateRun))
-	    {
-	    // Up-Left case
-	    m_CurrentState = UP_LEFT;
-	    m_PositionFlag = RIGHT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
-	    m_CurrentLine--;
-	    m_CurrentRun = secondCandidateRun;
+         if(IsRunIndexValid(secondCandidateRun))
+           {
+           // Up-Left case
+           m_CurrentState = UP_LEFT;
+           m_PositionFlag = RIGHT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
+           m_CurrentLine--;
+           m_CurrentRun = secondCandidateRun;
 
-	    }
-	  else
-	    {
-	    // Down-Left case
-	    m_CurrentState = DOWN_LEFT;
-	    m_PositionFlag = LEFT_END;
-	    WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           }
+         else
+           {
+           // Down-Left case
+           m_CurrentState = DOWN_LEFT;
+           m_PositionFlag = LEFT_END;
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
 
-	    }
-	  }
-	break;
-	}
-	}
+           }
+         }
+       break;
+       }
+       }
       goesOn = m_CurrentPoint != m_StartingPoint;
       }
 
@@ -350,12 +350,12 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     switch(m_PositionFlag)
       {
       case LEFT_END:
-	rightoffset=1;
-	break;
+       rightoffset=1;
+       break;
 
       case RIGHT_END:
-	leftoffset=-1;
-	break;
+       leftoffset=-1;
+       break;
       }
 
     typename RunsPerLineType::iterator it = m_InternalDataSet.at(line).begin();
@@ -364,9 +364,9 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     while(resp[0] < 0 && it!= m_InternalDataSet.at(line).end())
       {
       if( point[0]>=(it->GetIndex()[0])+leftoffset && point[0]<(it->GetIndex()[0]+static_cast<long>(it->GetLength()))+rightoffset)
-	{
-	resp[0]=idx;
-	}
+       {
+       resp[0]=idx;
+       }
       ++idx;
       ++it;
       }
@@ -418,14 +418,14 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       {
       /// Index is a the right of point
       if(it->GetIndex()[0] > point[0]
-	 /// Index is inside run range
-	 && it->GetIndex()[0]-1 >= lrun.GetIndex()[0]
-	 && it->GetIndex()[0]-1 < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
-	{
-	resp[0]=idx;
-	}
-	++idx;
-	++it;
+        /// Index is inside run range
+        && it->GetIndex()[0]-1 >= lrun.GetIndex()[0]
+        && it->GetIndex()[0]-1 < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
+       {
+       resp[0]=idx;
+       }
+       ++idx;
+       ++it;
       }
     return resp;
   }
@@ -455,14 +455,14 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       {
       /// Index is a the left of point
       if(it->GetIndex()[0] + static_cast<long>(it->GetLength()) <= point[0]
-	 /// right end is inside run range
-	 && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) >= lrun.GetIndex()[0]
-	 && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
-	{
-	resp[0]=idx;
-	}
-	--idx;
-	++it;
+        /// right end is inside run range
+        && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) >= lrun.GetIndex()[0]
+        && it->GetIndex()[0]+ static_cast<long>(it->GetLength()) < lrun.GetIndex()[0]+ static_cast<long>(lrun.GetLength()))
+       {
+       resp[0]=idx;
+       }
+       --idx;
+       ++it;
       }
     return resp;
   }
@@ -479,27 +479,27 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     switch(state)
        {
        case UP_RIGHT:
-	 offset[1]=1;
-	 break;
+        offset[1]=1;
+        break;
        case UP_LEFT:
-	 offset[1]=1;
-	 break;
+        offset[1]=1;
+        break;
        case DOWN_RIGHT:
-	 offset[1]=0;
-	 break;
+        offset[1]=0;
+        break;
        case DOWN_LEFT:
-	 offset[1]=0;
-	 break;
+        offset[1]=0;
+        break;
        }
 
     switch(m_PositionFlag)
       {
       case LEFT_END:
-	offset[0] = 0;
-	break;
+       offset[0] = 0;
+       break;
       case RIGHT_END:
-	offset[0]=1;
-	break;
+       offset[0]=1;
+       break;
       }
     typename PolygonType::VertexType newPoint;
 
@@ -545,21 +545,21 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     switch(state)
        {
        case UP_RIGHT:
-	 offset[0]=1;
-	 offset[1]=1;
-	 break;
+        offset[0]=1;
+        offset[1]=1;
+        break;
        case UP_LEFT:
-	 offset[0]=0;
-	 offset[1]=1;
-	 break;
+        offset[0]=0;
+        offset[1]=1;
+        break;
        case DOWN_RIGHT:
-	 offset[0]=1;
-	 offset[1]=0;
-	 break;
+        offset[0]=1;
+        offset[1]=0;
+        break;
        case DOWN_LEFT:
-	 offset[0]=0;
-	 offset[1]=0;
-	 break;
+        offset[0]=0;
+        offset[1]=0;
+        break;
        }
 
     typename PolygonType::VertexType newPoint;

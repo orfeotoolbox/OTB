@@ -26,7 +26,7 @@
 
 
 template <class TScalarInput, class TScalarOutput>
-class ITK_EXPORT TextureFunctorTest : 
+class ITK_EXPORT TextureFunctorTest :
 public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
 {
 public:
@@ -38,7 +38,7 @@ public:
   
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    double out = neigh.GetCenterValue(); 
+    double out = neigh.GetCenterValue();
     
     return out;
   }

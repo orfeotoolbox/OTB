@@ -245,15 +245,15 @@ public:
   void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi );
   void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute )
   {
-  	this->UpdateAeronetData( file, year, month, day, hour, minute, 0.4 );
+         this->UpdateAeronetData( file, year, month, day, hour, minute, 0.4 );
   };
   void UpdateAeronetData( std::string file, int year, int hour, int minute, double epsi )
   {
-  	this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, epsi );
+         this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, epsi );
   };
   void UpdateAeronetData( std::string file, int year, int hour, int minute )
   {
-  	this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, 0.4 );
+         this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, 0.4 );
   };
     
   /** Read a file that contains filter function values.

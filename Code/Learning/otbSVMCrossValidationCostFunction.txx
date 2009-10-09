@@ -32,7 +32,7 @@ namespace otb
   {}
   template<class TModel>
   typename SVMCrossValidationCostFunction<TModel>
-  ::MeasureType 
+  ::MeasureType
   SVMCrossValidationCostFunction<TModel>
   ::GetValue(const ParametersType &parameters) const
   {
@@ -55,7 +55,7 @@ namespace otb
   }
 
   template<class TModel>
-  void 
+  void
   SVMCrossValidationCostFunction<TModel>
   ::GetDerivative(const ParametersType &parameters, DerivativeType &derivative) const
   {
@@ -83,7 +83,7 @@ namespace otb
   }
 
   template<class TModel>
-  unsigned int 
+  unsigned int
   SVMCrossValidationCostFunction<TModel>
   ::GetNumberOfParameters (void) const
   {
@@ -112,45 +112,45 @@ namespace otb
 
     default:
       // C
-      return 1;   
+      return 1;
     }
   }
 
   template<class TModel>
-  void 
+  void
   SVMCrossValidationCostFunction<TModel>
   ::UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType & parameters) const
   {
     switch(m_Model->GetKernelType())
       {
       case LINEAR:
-	// C
-	svm_parameters.C = parameters[0];
-	break;
+       // C
+       svm_parameters.C = parameters[0];
+       break;
 
       case POLY:
-	// C, gamma and coef0
-	svm_parameters.C = parameters[0];
-	svm_parameters.gamma = parameters[1];
-	svm_parameters.coef0 = parameters[2];
-	break;
+       // C, gamma and coef0
+       svm_parameters.C = parameters[0];
+       svm_parameters.gamma = parameters[1];
+       svm_parameters.coef0 = parameters[2];
+       break;
 
       case RBF:
-	// C and gamma
-	svm_parameters.C = parameters[0];
-	svm_parameters.gamma = parameters[1];
-	break;
+       // C and gamma
+       svm_parameters.C = parameters[0];
+       svm_parameters.gamma = parameters[1];
+       break;
 
       case SIGMOID:
-	// C, gamma and coef0
-	svm_parameters.C = parameters[0];
-	svm_parameters.gamma = parameters[1];
-	svm_parameters.coef0 = parameters[2];
-	break;
+       // C, gamma and coef0
+       svm_parameters.C = parameters[0];
+       svm_parameters.gamma = parameters[1];
+       svm_parameters.coef0 = parameters[2];
+       break;
 
       default:
-	svm_parameters.C = parameters[0];
-	break;
+       svm_parameters.C = parameters[0];
+       break;
       }
   }
 

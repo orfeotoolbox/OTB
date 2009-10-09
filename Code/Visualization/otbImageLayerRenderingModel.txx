@@ -27,14 +27,14 @@ namespace otb
 
 template <class TOutputImage, class TLayer>
 ImageLayerRenderingModel<TOutputImage, TLayer>
-::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(), 
+::ImageLayerRenderingModel() : m_Name("Default"), m_RasterizedQuicklook(),
                                m_HasQuicklook(false),m_RasterizedExtract(),m_HasExtract(false),
                                m_ExtractRegion(), m_RasterizedScaledExtract(), m_HasScaledExtract(false),
-                               m_ScaledExtractRegion(), m_Updating(false), m_QuicklookBlendingFilterList(), 
+                               m_ScaledExtractRegion(), m_Updating(false), m_QuicklookBlendingFilterList(),
                                m_ExtractBlendingFilterList(), m_ScaledExtractBlendingFilterList()
 
 {
-  // Initalize the blending filter list 
+  // Initalize the blending filter list
   m_QuicklookBlendingFilterList = BlendingFilterListType::New();
   m_ExtractBlendingFilterList = BlendingFilterListType::New();
   m_ScaledExtractBlendingFilterList = BlendingFilterListType::New();
@@ -189,7 +189,7 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
       {
       itk::TimeProbe probe;
       probe.Start();
-      // If quicklook is activated and available for this layer 
+      // If quicklook is activated and available for this layer
       if(m_HasQuicklook && it.Get()->GetHasQuicklook())
         {
         // Blend it with the current rasterized quicklook
@@ -203,7 +203,7 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
         m_RasterizedQuicklook = blender->GetOutput();
         }
       
-      // If extract is activated and available for this layer 
+      // If extract is activated and available for this layer
       if(m_HasExtract && it.Get()->GetHasExtract())
         {
         // Blend it with the current rasterized extract
@@ -218,7 +218,7 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
         m_RasterizedExtract = blender->GetOutput();
         }
 
-      // If scaledExtract is activated and available for this layer 
+      // If scaledExtract is activated and available for this layer
       if(m_HasScaledExtract && it.Get()->GetHasScaledExtract())
         {
         // Blend it with the current rasterized scaledExtract
@@ -382,4 +382,4 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
 
 } // end namespace otb
 
-#endif 
+#endif

@@ -36,7 +36,7 @@ PostGISFromStringTransactor::PostGISFromStringTransactor(const PostGISFromString
 PostGISFromStringTransactor& PostGISFromStringTransactor::operator=(const PostGISFromStringTransactor& pgt) throw() {
     m_TransactionString = pgt.GetTransactionString();
     return *this;
-} 
+}
   
 void PostGISFromStringTransactor::operator()(pqxx::nontransaction &T)
 {

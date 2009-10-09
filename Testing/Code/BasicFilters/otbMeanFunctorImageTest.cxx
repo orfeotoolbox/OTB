@@ -36,7 +36,7 @@ int otbMeanFunctorImageTest(int argc, char * argv[])
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType > 
+  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType >
   MeanFunctorType;
 
   typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType, MeanFunctorType> MeanFilterType;

@@ -26,7 +26,7 @@
 
 namespace otb
 {
-template <class TVectorData> 
+template <class TVectorData>
 VectorDataGlComponent<TVectorData>
 ::VectorDataGlComponent() : m_VectorData(),m_Spacing(), m_Origin(), m_GluTesselator(),
                             m_Color(), m_LineWidth(1.5),m_CrossWidth(10),m_RenderPolygonBoundariesOnly(false)
@@ -51,16 +51,16 @@ VectorDataGlComponent<TVectorData>
   gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType) TesselationCombineCallback);
 }
 
-template <class TVectorData> 
+template <class TVectorData>
 VectorDataGlComponent<TVectorData>
-::~VectorDataGlComponent() 
+::~VectorDataGlComponent()
 {
   // Delete the tesselator
   gluDeleteTess(m_GluTesselator);
 }
 
-template <class TVectorData>   
-void 
+template <class TVectorData>
+void
 VectorDataGlComponent<TVectorData>
 ::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
 {
@@ -103,8 +103,8 @@ VectorDataGlComponent<TVectorData>
   glDisable(GL_BLEND);
   glLineWidth(previousWidth);
 }
-   template <class TVectorData>   
-void 
+   template <class TVectorData>
+void
 VectorDataGlComponent<TVectorData>
 ::RenderPoint(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
@@ -127,8 +127,8 @@ VectorDataGlComponent<TVectorData>
   glEnd();
 }
 
-template <class TVectorData>   
-void 
+template <class TVectorData>
+void
 VectorDataGlComponent<TVectorData>
 ::RenderLine(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
@@ -157,8 +157,8 @@ VectorDataGlComponent<TVectorData>
   glEnd();
 }
 
-template <class TVectorData>   
-void 
+template <class TVectorData>
+void
 VectorDataGlComponent<TVectorData>
 ::RenderPolygon(DataNodePointerType dataNode, const RegionType & /*extent*/, const AffineTransformType * transform)
 {
@@ -179,7 +179,7 @@ VectorDataGlComponent<TVectorData>
   typename PolygonType::VertexListType::ConstIterator vIt = extRing->GetVertexList()->Begin();
 
   while(vIt!= extRing->GetVertexList()->End())
-    {    
+    {
     // Take into account pixel spacing and origin
     PointType spacePoint = vIt.Value();
     spacePoint[0]*= m_Spacing[0];
@@ -218,7 +218,7 @@ VectorDataGlComponent<TVectorData>
 
     // Render each of its vertex
      while(vIt!= pIt.Get()->GetVertexList()->End())
-       {    
+       {
        // Take into account pixel spacing and origin
        PointType spacePoint = vIt.Value();
        spacePoint[0]*= m_Spacing[0];
@@ -257,8 +257,8 @@ VectorDataGlComponent<TVectorData>
     }
 }
 
-template <class TVectorData>   
-void 
+template <class TVectorData>
+void
 VectorDataGlComponent<TVectorData>
 ::Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform)
 {

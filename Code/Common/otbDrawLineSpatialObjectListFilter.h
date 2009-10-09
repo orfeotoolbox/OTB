@@ -28,8 +28,8 @@ namespace otb
  * \brief Composite filter which draw lines in an image.
  *
  * This class implements a composite filter that draws a list of lines in
- * an input Image. This class 
- * 
+ * an input Image. This class
+ *
  *
  *
  */

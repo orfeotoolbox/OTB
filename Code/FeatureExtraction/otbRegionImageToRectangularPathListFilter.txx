@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@
 #ifndef __otbRegionImageToRectangularPathListFilter_txx
 #define __otbRegionImageToRectangularPathListFilter_txx
 
-#include <iostream> 
+#include <iostream>
 #include <exception>
 #include "otbRegionImageToRectangularPathListFilter.h"
 #include "itkImageRegionIterator.h"
@@ -32,7 +32,7 @@
 #include "itkNumericTraits.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
-#include "otbMath.h" 
+#include "otbMath.h"
 #include "itkBinaryThresholdImageFunction.h"
 #include "itkNeighborhoodBinaryThresholdImageFunction.h"
 #include "itkFloodFilledImageFunctionConditionalIterator.h"
@@ -67,18 +67,18 @@ template <class TInputImage, class TOutputPath>
 void
 RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
 ::GenerateData(void)
-{ 
+{
   typename InputImageType::SizeType Taille;
   //this->DebugOn();
   //itkDebugMacro(<< "RegionImageToRectangularPathListFilter::GenerateData() called");
 
 
-  // Get the input and output pointers 
+  // Get the input and output pointers
   const InputImageType  * InputImage   = this->GetInput();
   OutputPathListType *   OutputPath   = this->GetOutput();
   // Generate the image
 
-/* Filter algorithm */  
+/* Filter algorithm */
    
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
   itkDebugMacro(<< "Input image size : " << Taille);
@@ -220,8 +220,8 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       adevXY = vcl_sqrt(crossTermAXY) / n;
 
       // Compute eigenvalues and eigenvectors of variance-covariance matrix (for DIRECTION)
-      double delta, 
-        l1, l2, /* eigenvalues */ 
+      double delta,
+        l1, l2, /* eigenvalues */
         y1, y2, /* eigenvectors y coordinate, for x = 1*/
         x1 = 1, /* first eigenvector x coordinate */
         x2 = 1, /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
@@ -239,8 +239,8 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       }
 
       // Compute eigenvalues and eigenvectors of absolute mean deviation matrix (for PROPORTIONS)
-      double adelta, 
-        al1, al2, /* eigenvalues */ 
+      double adelta,
+        al1, al2, /* eigenvalues */
         ay1, ay2, /* eigenvectors y coordinate, for x = 1*/
         ax1 = 1, /* first eigenvector x coordinate */
         ax2 = 1; /* second eigenvector x coordinate, 1 except in special case when covarXY == 0 */
@@ -341,7 +341,7 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
       // Build rectangle list, converting image coordinates into physical coordinates
       typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
   
-      ContinuousIndexType point;  
+      ContinuousIndexType point;
 
       OutputPathPointerType path = OutputPathType::New();
     
@@ -387,7 +387,7 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
 
   itkDebugMacro(<< "ImageToPathListAlignFilter::GenerateData() finished");
 
-} // end update function  
+} // end update function
 
 
 template <class TInputImage, class TOutputPath>

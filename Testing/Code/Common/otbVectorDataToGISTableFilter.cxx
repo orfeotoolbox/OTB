@@ -72,7 +72,7 @@ int otbVectorDataToGISTableFilter(int argc, char * argv[])
   //std::string myTableName = "VectorDataToPostGIS";
   //data->SetTableName(myTableName);
   //std::cout << "YES" << std::endl;
-  //input : the vectordata 
+  //input : the vectordata
   
   typedef unsigned short int PixelType;
 

@@ -48,16 +48,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     {
       unsigned int size =  this->GetFunctor().GetNoisePolynomialCoefficientsList()[0].size();
       for(unsigned int i=1; i<this->GetFunctor().GetNoisePolynomialCoefficientsList().size(); i++)
-	{
-	  if( this->GetFunctor().GetNoisePolynomialCoefficientsList()[i].size() != size )
-	    itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
-	}
+       {
+         if( this->GetFunctor().GetNoisePolynomialCoefficientsList()[i].size() != size )
+           itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
+       }
       
       if( this->GetFunctor().GetTimeUTC().size() != this->GetFunctor().GetNoisePolynomialCoefficientsList().size() )
-	itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
+       itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
 
       if(this->GetFunctor().GetPRF() == 0.)
-	itkExceptionMacro(<<"PRF can't be null.");
+       itkExceptionMacro(<<"PRF can't be null.");
       
     }
 
@@ -71,7 +71,7 @@ template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::SetCalFactor( double val )
-{ 
+{
   this->GetFunctor().SetCalFactor( val );
   this->Modified();
 }
@@ -80,15 +80,15 @@ template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetCalFactor() const
-{ 
-  return this->GetFunctor().GetCalFactor(); 
+{
+  return this->GetFunctor().GetCalFactor();
 }
 
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityMin( double val ) 
-{ 
+::SetNoiseRangeValidityMin( double val )
+{
   this->GetFunctor().SetNoiseRangeValidityMin( val );
   this->Modified();
 }
@@ -96,16 +96,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityMin() const 
-{ 
-  return this->GetFunctor().GetNoiseRangeValidityMin(); 
+::GetNoiseRangeValidityMin() const
+{
+  return this->GetFunctor().GetNoiseRangeValidityMin();
 }
 
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityMax( double val ) 
-{ 
+::SetNoiseRangeValidityMax( double val )
+{
   this->GetFunctor().SetNoiseRangeValidityMax( val );
   this->Modified();
 }
@@ -114,15 +114,15 @@ template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetNoiseRangeValidityMax() const
-{ 
+{
   return this->GetFunctor().GetNoiseRangeValidityMax();
 }
 
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityRef( double val ) 
-{ 
+::SetNoiseRangeValidityRef( double val )
+{
   this->GetFunctor().SetNoiseRangeValidityRef( val );
   this->Modified();
 }
@@ -132,8 +132,8 @@ template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetNoiseRangeValidityRef() const
-{ 
-  return this->GetFunctor().GetNoiseRangeValidityRef(); 
+{
+  return this->GetFunctor().GetNoiseRangeValidityRef();
 }
 
 
@@ -141,8 +141,8 @@ template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::SetLocalIncidentAngle( double val )
-{ 
-  this->GetFunctor().SetLocalIncidentAngle( val ); 
+{
+  this->GetFunctor().SetLocalIncidentAngle( val );
   this->Modified();
 }
 
@@ -150,7 +150,7 @@ template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetLocalIncidentAngle() const
-{ 
+{
   return this->GetFunctor().GetLocalIncidentAngle();
 }
 
@@ -159,7 +159,7 @@ double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetSinLocalIncidentAngle() const
 {
-  return this->GetFunctor().GetSinLocalIncidentAngle(); 
+  return this->GetFunctor().GetSinLocalIncidentAngle();
 }
  
 template <class TInputImage, class TOutputImage>
@@ -176,7 +176,7 @@ template <class TInputImage, class TOutputImage>
 typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::DoubleVectorVectorType
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetNoisePolynomialCoefficientsList() const
-{ 
+{
   return this->GetFunctor().GetNoisePolynomialCoefficientsList();
 }
 
@@ -185,15 +185,15 @@ void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::SetUseFastCalibrationMethod( bool b )
 {
-  this->GetFunctor().SetUseFastCalibrationMethod( b ); 
+  this->GetFunctor().SetUseFastCalibrationMethod( b );
   this->Modified();
 }
  
 template <class TInputImage, class TOutputImage>
 bool
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetUseFastCalibrationMethod() const 
-{ 
+::GetUseFastCalibrationMethod() const
+{
   return this->GetFunctor().GetUseFastCalibrationMethod();
 }
 
@@ -201,8 +201,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetTimeUTC( LIntVectorType vect ) 
-{ 
+::SetTimeUTC( LIntVectorType vect )
+{
   this->GetFunctor().SetTimeUTC( vect );
   this->Modified();
 }
@@ -212,7 +212,7 @@ template <class TInputImage, class TOutputImage>
 typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::LIntVectorType
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetTimeUTC() const
-{ 
+{
   return this->GetFunctor().GetTimeUTC();
 }
 
@@ -220,9 +220,9 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetPRF( double val ) 
-{ 
-  this->GetFunctor().SetPRF( val ); 
+::SetPRF( double val )
+{
+  this->GetFunctor().SetPRF( val );
   this->Modified();
 }
 
@@ -231,7 +231,7 @@ template <class TInputImage, class TOutputImage>
 double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetPRF() const
-{ 
+{
   return this->GetFunctor().GetPRF();
 }
 
@@ -241,7 +241,7 @@ double
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetInvPRF() const
 {
-  return this->GetFunctor().GetInvPRF(); 
+  return this->GetFunctor().GetInvPRF();
 }
 
 /**PrintSelf method */
@@ -262,9 +262,9 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     {
       os << "Noise polinomial coefficient: [   ";
       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList()[0].size(); ++i)
-	{
-	  os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
-	}
+       {
+         os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
+       }
       os << "]" << std::endl;
     }
   else
@@ -272,17 +272,17 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       os << "Pulse Repetition Frequency  : " << this->GetPRF() << std::endl;
       os << "Noise acquisitions          : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
       for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList().size(); ++i)
-	{
-	  os << "Noise acquisition "<< i << ":" << std::endl;
-	  os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
-	  os << "Noise polinomial coefficient: [   ";
-	  for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
-	    {
-	      os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
-	    }
+       {
+         os << "Noise acquisition "<< i << ":" << std::endl;
+         os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
+         os << "Noise polinomial coefficient: [   ";
+         for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
+           {
+             os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
+           }
       os << "]" << std::endl;
-	}
-    }  
+       }
+    }
 }
 
 

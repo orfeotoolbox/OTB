@@ -116,12 +116,12 @@ ImageFittingPolygonListFilter<TPath, TImage>
             start[0] = static_cast<long int>(currentPoint[0]-m_Radius);
             start[1] = static_cast<long int>(currentPoint[1]-m_Radius);
             region.SetIndex(start);
-	    region.Crop(inputImagePtr->GetLargestPossibleRegion());
+           region.Crop(inputImagePtr->GetLargestPossibleRegion());
 
             NeighborhoodIteratorType nIt(inputImagePtr, region);
             double maxValue=0.0;
             VertexType maxPoint = currentPoint;
-	    nIt.GoToBegin();
+           nIt.GoToBegin();
             while( !nIt.IsAtEnd() )
             {
               if (regionLargest.IsInside(nIt.GetIndex()))
@@ -134,7 +134,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                   maxPoint=middlePoint;
                 }
               }
-	      ++nIt;
+             ++nIt;
             }
             currentPoint=maxPoint;
             newPolygon->AddVertex(maxPoint);
@@ -160,7 +160,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
           NeighborhoodIteratorType nIt(inputImagePtr, region);
           double maxValue=0.0;
           VertexType maxPoint = currentPoint;
-	  nIt.GoToBegin();
+         nIt.GoToBegin();
 
           while( !nIt.IsAtEnd() )
           {
@@ -174,7 +174,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                 maxPoint=middlePoint;
               }
             }
-	    ++nIt;
+           ++nIt;
           }
           currentPoint=maxPoint;
           newPolygon->AddVertex(maxPoint);
@@ -198,7 +198,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
           NeighborhoodIteratorType nIt(inputImagePtr, region);
           double maxValue=0.0;
           VertexType maxPoint = currentPoint;
-	  nIt.GoToBegin();
+         nIt.GoToBegin();
          while ( !nIt.IsAtEnd() )
           {
             if (regionLargest.IsInside(nIt.GetIndex()))
@@ -211,7 +211,7 @@ ImageFittingPolygonListFilter<TPath, TImage>
                 maxPoint=middlePoint;
               }
             }
-	    ++nIt;
+           ++nIt;
           }
           currentPoint=maxPoint;
           newPolygon->AddVertex(maxPoint);

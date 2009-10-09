@@ -38,18 +38,18 @@ CrossGlComponent
   m_Spacing.Fill(1.);
   
   // Create the tesselator
-  m_GluTesselator = gluNewTess(); 
+  m_GluTesselator = gluNewTess();
 }
 
 CrossGlComponent
-::~CrossGlComponent() 
+::~CrossGlComponent()
 {
   // Delete the tesselator
   gluDeleteTess(m_GluTesselator);
 }
 
 
-void 
+void
 CrossGlComponent
 ::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
 {
@@ -90,7 +90,7 @@ CrossGlComponent
 }
  
   
-void 
+void
 CrossGlComponent
 ::Render(unsigned int id, const RegionType & extent, const AffineTransformType * space2ScreenTransform)
 {

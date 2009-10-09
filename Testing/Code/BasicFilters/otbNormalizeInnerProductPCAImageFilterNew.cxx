@@ -23,7 +23,7 @@ int otbNormalizeInnerProductPCAImageFilterNew( int argc, char* argv[] )
   typedef double PixelType;
   const unsigned int Dimension = 2;
 
-  // Typedef 
+  // Typedef
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::NormalizeInnerProductPCAImageFilter<ImageType,ImageType> FilterType;
 

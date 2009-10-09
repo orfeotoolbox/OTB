@@ -32,9 +32,9 @@ int otbWaveletTransformNew(int argc, char * argv[])
 
   /* Forward Transformation */
   typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD > 
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
     ForwardFilterBank;
-  typedef otb::WaveletTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD > 
+  typedef otb::WaveletTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD >
     FilterType;
   
   FilterType::Pointer filter = FilterType::New();

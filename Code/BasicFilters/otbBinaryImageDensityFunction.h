@@ -36,7 +36,7 @@ namespace otb
  * If called with a ContinuousIndex or Point, the calculation is performed
  * at the nearest neighbor.
  *
- * This class is templated over the input image type and the 
+ * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double ).
  *
  * \ingroup ImageFunctions
@@ -78,17 +78,17 @@ class ITK_EXPORT BinaryImageDensityFunction :
   
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
-    { 
+    {
       IndexType index;
       this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
+      return this->EvaluateAtIndex( index );
     }
-  virtual RealType EvaluateAtContinuousIndex( 
+  virtual RealType EvaluateAtContinuousIndex(
     const ContinuousIndexType& cindex ) const
-    { 
+    {
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ); 
+      return this->EvaluateAtIndex( index );
     }
 
   /** Get/Set the radius of the neighborhood over which the

@@ -59,21 +59,21 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::Image< InputPixelType,  Dimension >    ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We instantiate the reader and set the file name for the input image.
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We define now the type for the segment detector filter. It is
@@ -84,7 +84,7 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
     
   typedef otb::LineSegmentDetector<ImageType,
                                                  PrecisionType> LsdFilterType;
@@ -93,7 +93,7 @@ int main( int argc, char * argv[] )
   
   LsdFilterType::Pointer  lsdFilter = LsdFilterType::New();
 
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // In order to be able to display the results, we will draw the
@@ -103,7 +103,7 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
 
   typedef otb::DrawLineSpatialObjectListFilter< ImageType,
@@ -111,7 +111,7 @@ int main( int argc, char * argv[] )
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
 
 
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We can now define the type for the writer, instantiate it and set
@@ -119,20 +119,20 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   typedef otb::ImageFileWriter<ImageType>        WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
 
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // We plug the pipeline.
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   lsdFilter->SetInput(reader->GetOutput());
   writer->SetInput(drawLineFilter->GetOutput());
@@ -140,7 +140,7 @@ int main( int argc, char * argv[] )
   drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
 
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // Before calling the \code{Update()} method of the writer in order to
@@ -150,12 +150,12 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
 
   reader->GenerateOutputInformation();
   writer->Update();
 
-  // Software Guide : EndCodeSnippet      
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LSD} shows the result of applying the line segment

@@ -136,33 +136,33 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage,TOutputImage>
   
   if(m_AeronetFileName != "")
     {
-      m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
-						 imageMetadataInterface->GetYear(dict),
-						 imageMetadataInterface->GetHour(dict),
-						 imageMetadataInterface->GetMinute(dict) );    
+      m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName,
+                                           imageMetadataInterface->GetYear(dict),
+                                           imageMetadataInterface->GetHour(dict),
+                                           imageMetadataInterface->GetMinute(dict) );
     }
 
   // load fiter function values
   if(m_FilterFunctionValuesFileName != "")
     {
       m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
-   } 
-  // the user has set the filter function values 
+   }
+  // the user has set the filter function values
   else
     {
       if( m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel() )
-	{
-	  itkExceptionMacro(<<"Filter Function and image channels mismatch.");
-	}
+       {
+         itkExceptionMacro(<<"Filter Function and image channels mismatch.");
+       }
       for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
-	{
-	  FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-	  functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
-	  
-	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
-	}
+       {
+         FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+         functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+       
+         m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+       }
     }
   
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();

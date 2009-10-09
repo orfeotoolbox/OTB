@@ -156,7 +156,7 @@ public:
   // REVIEW: I agree, we should not be calling intialize ourselve, it
   // would better be seamless
   virtual void Initialize(){};//FIXME should disappear and be
-			      //automatic (IsModified())
+                           //automatic (IsModified())
 
 
 protected:

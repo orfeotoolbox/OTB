@@ -100,7 +100,7 @@ private:
   /** Enable/Disable center data */
   bool m_CenterData;
 
-  /** Inner Product Matrix pre computed */ 
+  /** Inner Product Matrix pre computed */
   MatrixType m_InnerProduct;
 
   /** Contains Eigen Vectors Of Inner Product Matrix computed */

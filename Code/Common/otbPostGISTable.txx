@@ -36,7 +36,7 @@ namespace otb
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
  PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::PostGISTable() 
+  ::PostGISTable()
 {
   m_Connection = ConnectionType::New();
   this->SetSrid(-1);
@@ -110,9 +110,9 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   {
     for (uint i=0 ; i < SpatialDimension ; i++)
     {
-      sqlCmd << itVertex.Value()[i] << " "; 
+      sqlCmd << itVertex.Value()[i] << " ";
       ++itVertex;
-    } 
+    }
     sqlCmd << ",";
   }
   //Erase the last ','
@@ -151,9 +151,9 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
     //std::cout << "vertex: " << itVertex.Value()<< std::endl;
     for (uint i=0 ; i < SpatialDimension ; ++i)
     {
-      sqlCmd << itVertex.Value()[i] << " "; 
+      sqlCmd << itVertex.Value()[i] << " ";
       //++itVertex;
-    } 
+    }
     sqlCmd << ",";
     ++itVertex;
   }
@@ -163,13 +163,13 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   //std::cout << "apres arase  " << sqlCmd.str() << std::endl;
   sqlCmd << "),";
   //std::cout << "ext polygon: " << sqlCmd.str() << std::endl;
-  //Add interior polygons 
+  //Add interior polygons
   if ( !polygonListInteriorRing.IsNull() )
   {
     
     //get holes
     //sqlCmd << ",";
-    typedef typename PolygonListType::ConstIterator 	PolygonListConstIteratorType;
+    typedef typename PolygonListType::ConstIterator        PolygonListConstIteratorType;
     for (PolygonListConstIteratorType itPolygonList = polygonListInteriorRing->Begin();itPolygonList!=polygonListInteriorRing->End();++itPolygonList)
     {
       /** correct current polygon interior ring */
@@ -186,7 +186,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
         {
           sqlCmd << itVertex.Value()[i] << " ";
           ++itVertex;
-        } 
+        }
         sqlCmd << ",";
         ++itVertex;
       }
@@ -217,11 +217,11 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::InsertGeometries (const std::string &sqlCmd )
 {
   typedef otb::PostGISFromStringTransactor TransactorType;
-  TransactorType myStringTransactor; 
+  TransactorType myStringTransactor;
   //std::cout << "transactor string"  << sqlCmd<< std::endl;
   myStringTransactor.SetTransactionString( sqlCmd );
   //this->GetConnection()->ConnectToDB();
-this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
+this->GetConnection()->GetConnection()->perform( myStringTransactor );
 // this->GetConnection()->PerformTransaction( myStringTransactor );
   //myStringTransactor ( *( this->GetConnection()->GetConnection() ) );
 }
@@ -272,15 +272,15 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
       "FROM \""+ this->GetTableName() + "\" WHERE NOT geometrytype(\"the_geom\") IS NULL";
   
   typedef otb::PostGISFromStringTransactor TransactorType;
-  TransactorType myStringTransactor; 
+  TransactorType myStringTransactor;
   //std::cout << "transactor string"  << sqlCmd<< std::endl;
   myStringTransactor.SetTransactionString( query );
   //this->GetConnection()->ConnectToDB();
   
   //typedef pqxx::result ResultType;
-  //ResultType R = this->GetConnection()->GetConnection()->perform( myStringTransactor ); 
+  //ResultType R = this->GetConnection()->GetConnection()->perform( myStringTransactor );
   
-}      
+}
 
 
 

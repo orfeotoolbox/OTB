@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -237,7 +237,7 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 //       {
 //       typename LabelObjectType::CentroidType pP;
 //       output->TransformIndexToPhysicalPoint(iidx, pP);
-// 
+//
 //       for(unsigned int i=0; i<ImageDimension; i++)
 //         {
 //         for(unsigned int j=0; j<ImageDimension; j++)
@@ -502,11 +502,11 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
       labelObject->SetAttribute( oss.str().c_str(),principalMoments[dim]);
       
       for(unsigned int dim2 = 0;dim2 < ImageDimension;++dim2)
-	{
-	oss.str("");
-	oss<<"SHAPE::PrincipalAxis"<<dim<<dim2;
-	labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
-	}
+       {
+       oss.str("");
+       oss<<"SHAPE::PrincipalAxis"<<dim<<dim2;
+       labelObject->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
+       }
       }
     
     labelObject->SetAttribute("SHAPE::RegionElongation", maxSize / minSize );

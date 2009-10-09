@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -76,7 +76,7 @@ public:
   typedef typename ModelType::DistancesVectorType       DistanceValueType;
   typedef typename DistanceValueType::ValueType         RuleValueType;
 
-  typedef VectorImage< RuleValueType, OutputImageType::ImageDimension >  
+  typedef VectorImage< RuleValueType, OutputImageType::ImageDimension >
                                                         OutputRuleImageType;
   typedef typename OutputRuleImageType::Pointer         OutputRuleImagePointerType;
   typedef typename OutputRuleImageType::RegionType      OutputRuleImageRegionType;
@@ -92,16 +92,16 @@ protected:
   /** Destructor */
   virtual ~SVMImageClassificationWithRuleFilter() {};
 
-  /** GenerateOutputInformation 
-	 * Set the number of bands of the output rule image.
-	 * Copy informations from the input image if existing.
-	 **/
-	virtual void GenerateOutputInformation();
+  /** GenerateOutputInformation
+        * Set the number of bands of the output rule image.
+        * Copy informations from the input image if existing.
+        **/
+       virtual void GenerateOutputInformation();
 
-	/** AllocateOutputs
-	 * Output allocation redefinition for VectorImage (used in TOutputRuleImage) 
-	 **/
-	virtual void AllocateOutputs();
+       /** AllocateOutputs
+        * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
+        **/
+       virtual void AllocateOutputs();
 
   /** Threaded generate data */
   virtual void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,int threadId);

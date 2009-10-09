@@ -76,17 +76,17 @@ class ITK_EXPORT MaskFunctor
     {
       OutputPixelType outPix;
       if( maskPix==m_BackgroundValue )
-	{
-	  outPix.SetSize( inPix.Size() );
-	  for(unsigned int i=0; i<outPix.Size(); i++)
-	    {
-	      outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
-	    }
-	}
+       {
+         outPix.SetSize( inPix.Size() );
+         for(unsigned int i=0; i<outPix.Size(); i++)
+           {
+             outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
+           }
+       }
       else
-	{
-	  outPix = m_ObjectColor;
-	}
+       {
+         outPix = m_ObjectColor;
+       }
 
       return outPix;
     }
@@ -195,7 +195,7 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   {
     if(chList.size() != 3)
       {
-	itkExceptionMacro(<<"Invalid channel list, size is "<<chList.size()<<" instead of 3");
+       itkExceptionMacro(<<"Invalid channel list, size is "<<chList.size()<<" instead of 3");
       }
     m_ChannelList = chList;
     this->Modified();

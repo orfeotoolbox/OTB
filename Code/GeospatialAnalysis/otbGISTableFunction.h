@@ -32,8 +32,8 @@ namespace otb
  * a const transaction on a GISTable.
  *
  * The input table is set via method SetInputTable().
- * 
- * 
+ *
+ *
  * \sa GISTable
  * \sa GISConnection
  *

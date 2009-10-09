@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -21,7 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbAttributesMapLabelObject.h"
 #include "itkAttributeOpeningLabelMapFilter.h"
 
-namespace otb 
+namespace otb
 {
 
 /** \class AttributesMapOpeningLabelMapFilter
@@ -30,15 +30,15 @@ namespace otb
  * This class extends the itk::AttributeOpeningLabelMapFilter to
  * handle AttributesMapLabelObject. Thus it allows to perform openings
  * for any kind of attributes in the attributes map.
- * 
+ *
  * \sa AttributeLabelObject, AttributeOpeningLabelMapFilter
  *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  */
 template<class TImage>
-class ITK_EXPORT AttributesMapOpeningLabelMapFilter 
+class ITK_EXPORT AttributesMapOpeningLabelMapFilter
 : public itk::AttributeOpeningLabelMapFilter<TImage,
-	      Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> >
+             Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> >
 {
 public:
   /** Standard class typedefs. */

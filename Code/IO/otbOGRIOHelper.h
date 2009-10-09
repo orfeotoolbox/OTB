@@ -20,20 +20,20 @@
 
 #include <vector>
 
-//TODO change this include  have to define from what inherate this class 
+//TODO change this include  have to define from what inherate this class
 //#include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
 #include "ogrsf_frmts.h"
 #include "otbVectorData.h"
 
-namespace otb 
+namespace otb
 {
 
 
 
-/** \class OGRIOHelper 
+/** \class OGRIOHelper
  *  \brief This class IO OGR
  *
- */ 
+ */
 template <class TVectorData >
 class OGRIOHelper
 {
@@ -78,7 +78,7 @@ public:
 
   inline DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry) const;
 
-  inline void ConvertOGRLayerToDataTreeNode (OGRLayer * layer, InternalTreeNodeType * documentPtr) const; 
+  inline void ConvertOGRLayerToDataTreeNode (OGRLayer * layer, InternalTreeNodeType * documentPtr) const;
   /** end conversion tools */
   
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source, OGRDataSource * m_DataSource, OGRGeometryCollection * ogrCollection, OGRLayer * ogrCurrentLayer, OGRSpatialReference * oSRS);
@@ -89,7 +89,7 @@ public:
   
   private:
   /** Number of layer in the Tree*/
-  unsigned int m_Kept; 
+  unsigned int m_Kept;
 }; // end class OGRIOHelper
 
 

@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -38,13 +38,13 @@ namespace otb {
  * statistics and statistics usefull for classification (not spatially
  * dependent statitistics). Reduced set contains only mean, variance,
  * skewness and kurtosis.
- * 
+ *
  * \sa itk::StatisticsLabelMapFilter
  *
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
 template<class TImage, class TFeatureImage>
-class ITK_EXPORT StatisticsAttributesLabelMapFilter : 
+class ITK_EXPORT StatisticsAttributesLabelMapFilter :
     public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
@@ -75,7 +75,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(StatisticsAttributesLabelMapFilter,InPlaceLabelMapFilter);

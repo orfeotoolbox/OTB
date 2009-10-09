@@ -53,7 +53,7 @@ int otbTerraSarRadarBrightnessImageFilterTest(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->SetNumberOfStreamDivisions(1);
-  writer->Update(); 
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

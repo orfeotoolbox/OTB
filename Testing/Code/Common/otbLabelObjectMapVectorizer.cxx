@@ -10,8 +10,8 @@
   See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,7 +41,7 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
   typedef otb::Image<LabelType,Dimension>        LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
   
-  // Label map typedef 
+  // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                            LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
@@ -116,20 +116,20 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
     for(LabelType label = minMax->GetMinimum(); label <=minMax->GetMaximum(); ++label)
       {
         if(labelMapFilter->GetOutput()->HasLabel(label) && label != labelMapFilter->GetOutput()->GetBackgroundValue())
-	{
-	std::cout<<"Vectorizing object "<<label<<std::endl;
-	chrono.Start();
-	PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
-	chrono.Stop();
+       {
+       std::cout<<"Vectorizing object "<<label<<std::endl;
+       chrono.Start();
+       PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
+       chrono.Stop();
         
         //correct polygon
         PolygonType::Pointer correct_polygon = correctPolygon(polygon);
         
-	DataNodeType::Pointer node = DataNodeType::New();
-	node->SetNodeType(otb::FEATURE_POLYGON);
+       DataNodeType::Pointer node = DataNodeType::New();
+       node->SetNodeType(otb::FEATURE_POLYGON);
         node->SetPolygonExteriorRing(correct_polygon);
-	data->GetDataTree()->Add(node,folder1);
-	}
+       data->GetDataTree()->Add(node,folder1);
+       }
       }
     }
     std::cout<<"Average vectorization time: "<<chrono.GetMeanTime()<<" s."<<std::endl;

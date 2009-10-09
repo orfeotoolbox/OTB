@@ -59,11 +59,13 @@ int otbSensorModel( int argc, char* argv[] )
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
   forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-
+  forwardSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double,2> imagePoint;
-  imagePoint[0]=10;
-  imagePoint[1]=10;
+//   imagePoint[0]=10;
+//   imagePoint[1]=10;
+  imagePoint[0]=3069;
+  imagePoint[1]=1218;
 
   itk::Point<double,2> geoPoint;
   geoPoint = forwardSensorModel->TransformPoint(imagePoint);
@@ -72,7 +74,7 @@ int otbSensorModel( int argc, char* argv[] )
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
   InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
   inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-
+  inverseSensorModel->SetAverageElevation(16.19688987731934);
 
   itk::Point<double,2> reversedImagePoint;
   reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);

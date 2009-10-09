@@ -40,12 +40,12 @@ void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::SetChange( const InputPixelType & original, const OutputPixelType & result )
 {
-  OutputPixelType  current = this->GetFunctor().GetChange(original); 
+  OutputPixelType  current = this->GetFunctor().GetChange(original);
   if ( current != result )
     {
     this->GetFunctor().SetChange(original, result);
     this->Modified();
-    }  
+    }
 }
 
 /**
@@ -57,7 +57,7 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::SetChangeMap( const ChangeMapType & changeMap )
 {
   //If the whole map is being set then we assume that a real change is made
-  this->GetFunctor().SetChangeMap(changeMap); 
+  this->GetFunctor().SetChangeMap(changeMap);
   this->Modified();
 }
 
@@ -70,7 +70,7 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::ClearChangeMap( )
 {
   //If the whole map is being set then we assume that a real change is made
-  this->GetFunctor().ClearChangeMap(); 
+  this->GetFunctor().ClearChangeMap();
   this->Modified();
 }
 
@@ -92,7 +92,7 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void 
+void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
