@@ -40,7 +40,7 @@ namespace otb
 
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarRadarBrightnessImageFilter :
-  public itk::UnaryFunctorImageFilter< 
+  public itk::UnaryFunctorImageFilter<
     TInputImage,
     TOutputImage,
     ITK_TYPENAME Functor::TerraSarRadarBrightnessImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
@@ -57,7 +57,7 @@ public:
   ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
   /** "typedef" for standard classes. */
   typedef TerraSarRadarBrightnessImageFilter    Self;
-  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType > 
+  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType >
                                                 Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;

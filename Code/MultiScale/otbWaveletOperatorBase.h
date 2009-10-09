@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,23 +34,23 @@ namespace otb {
  * \brief A NeighborhoodOperator wavelet base class
  *
  * This class is the mother class for any wavelet operator that requires
- * "a-trou" approach for shift-invariant wavelet transform. This class has 
- * to be derived, it cannot be used directly since GenerateCoefficients() method 
+ * "a-trou" approach for shift-invariant wavelet transform. This class has
+ * to be derived, it cannot be used directly since GenerateCoefficients() method
  * is still pure virtual.
  *
  * Any wavelet operator that inherits from this WaveletOperatorBase is to be used
- * as a NeighborhoodOperator that should be applied to a 
+ * as a NeighborhoodOperator that should be applied to a
  * NeighborhoodIterator using the NeighborhoodInnerProduct method.
  *
  * It is assumed that any wavelet definition is directional.
  *
- * Set the level of up-sampling though SetUpSampleFactor() before calling 
- * CreateDirectional(). Each class that inherits from WaveletOperatorBase has 
- * to re-implement GenerateCoefficients(). 
+ * Set the level of up-sampling though SetUpSampleFactor() before calling
+ * CreateDirectional(). Each class that inherits from WaveletOperatorBase has
+ * to re-implement GenerateCoefficients().
  *
  * The name of the wavelet is defined here but left pure virtual. It is defined
  * with the LowPass and HighPass inheritance.
- *  
+ *
  * \sa WaveletLowPassOperator
  * \sa WaveletHighPassOperator
  * \sa NeighborhoodOperator
@@ -78,12 +78,12 @@ public:
   /** Construction */
   WaveletOperatorBase() :
     m_UpSampleFactor( 0 )
-  { 
+  {
     m_WaveletGenerator = WaveletGeneratorType::New();
   }
 
   /** Construction by copy */
-  WaveletOperatorBase( const Self & other ) 
+  WaveletOperatorBase( const Self & other )
     : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other),
       m_UpSampleFactor( other.GetUpSampleFactor() )
   {
@@ -103,7 +103,7 @@ public:
   /**
    * Get the level of up sampling of the filter
    */
-  unsigned int GetUpSampleFactor () const 
+  unsigned int GetUpSampleFactor () const
   {
     return this->m_UpSampleFactor;
   }
@@ -138,37 +138,37 @@ protected:
   typedef typename Superclass::CoefficientVector CoefficientVector;
   typedef typename Superclass::PixelType PixelType;
 
-  /** 
+  /**
    * Perform the "a-trou" algorithm for shift-invariant transformation.
    * It transforms the filter \f$ H(z) \f$ into \f$ H(z^2) \f$.
    */
   void UpSamplingCoefficients ( CoefficientVector & coeff ) ;
   
-  /** 
+  /**
    * Performs filter reversion, ie. \f$ H(z^{-1}) \f$.
    */
   void RevertFilter ( CoefficientVector & coeff );
 
-  /** 
+  /**
    * Performs the definition of high pass filter in an orthogonal framework
    * It follows conjugate quadrature filter (CQF) of the chapter 5 of
-   * "Ten Lecture on Wavelets", of Ingrid Daubechies, 
+   * "Ten Lecture on Wavelets", of Ingrid Daubechies,
    * Society for Industrial and Applied Mathematics, 1992.
-   * 
+   *
    * It defines filter coefficients as \f$ G(z) = - z H(-z^{-1}) \f$.
-   * According to Daubechies'notation, it concerns the synthesis (Inverse) 
+   * According to Daubechies'notation, it concerns the synthesis (Inverse)
    * part of the filter banc.
    */
   void GenerateForwardHighPassFilterFromLowPassFilter ( CoefficientVector & coeff );
 
-  /** 
+  /**
    * Performs the definition of high pass filter in an orthogonal framework
    * It follows conjugate quadrature filter (CQF) of the chapter 5 of
-   * "Ten Lecture on Wavelets", of Ingrid Daubechies, 
+   * "Ten Lecture on Wavelets", of Ingrid Daubechies,
    * Society for Industrial and Applied Mathematics, 1992.
-   * 
+   *
    * It defines filter coefficients as \f$ G(z) = z H(-z^{-1}) \f$.
-   * According to Daubechies'notation, it concerns the synthesis (Inverse) 
+   * According to Daubechies'notation, it concerns the synthesis (Inverse)
    * part of the filter banc.
    */
   void GenerateInverseHighPassFilterFromLowPassFilter ( CoefficientVector & coeff );
@@ -188,14 +188,14 @@ protected:
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
-  {    
-    this->FillCenteredDirectional(coeff);  
+  {
+    this->FillCenteredDirectional(coeff);
   }
 
 #if 0
-  /** 
+  /**
    * Performs the definition of high pass filter from low pass in a
-   * bi-orthogonal framework (ie. Quadrature mirror filter). 
+   * bi-orthogonal framework (ie. Quadrature mirror filter).
    * It defines filter coefficients as \f$ g_n = (-1)^{n+1} h_{-n} \f$
    */
   void GetHighPassFilterFromQuadratureLowPassFilter ( CoefficientVector & coeff )
@@ -219,12 +219,12 @@ protected:
   }
 
 
-  /** 
+  /**
    * Performs the definition of synthesis filter from analysis one.
    * Input is the forward low pass filter coefficients.
    * It performs \f$ {\tilde G}(z) = -H(-z) \f$.
    */
-  void GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff ) 
+  void GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff )
   {
     unsigned long length = static_cast<unsigned long>( coeff.size() );
     unsigned long medianPosition = length/2;
@@ -238,13 +238,13 @@ protected:
     }
   }
 
-  /** 
+  /**
    * Performs the definition of synthesis filter from analysis one.
    * Input is the forward high pass filter coefficients. It is valid
    * for orthogonal and biorthogonal cases.
    * It performs \f$ {\tilde H}(z) = G(-z) \f$.
    */
-  void GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff ) 
+  void GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff )
   {
     unsigned long length = static_cast<unsigned long>( coeff.size() );
     unsigned long medianPosition = length/2;

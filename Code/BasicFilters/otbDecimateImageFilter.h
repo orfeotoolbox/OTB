@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb {
 /** \class DecimateImageFilter
  * \brief Performs a down sampling of an image
  *
- * This class performs a basic down sampling of an image. On the contrary to 
+ * This class performs a basic down sampling of an image. On the contrary to
  * itk::ResampleImageFilter, it does not perform any interpolation.
  *
  * \sa ResampleImageFilter
@@ -77,13 +77,13 @@ protected:
   }
   virtual ~DecimateImageFilter() {}
 
-  /** Since input and output image are very likely to be of different size. 
+  /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
-  virtual void CallCopyOutputRegionToInputRegion 
+  virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );         
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
@@ -91,7 +91,7 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Allows multithreading */
-  virtual void ThreadedGenerateData 
+  virtual void ThreadedGenerateData
     ( const OutputImageRegionType & outputRegionForThread, int threadId );
 
   virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
@@ -101,7 +101,7 @@ private:
   void operator= ( const Self & ); // purposely not implemented
 
   unsigned int m_DecimationFactor;
-}; // end of class 
+}; // end of class
 
 
 } // end of namespace otb

@@ -32,12 +32,12 @@ namespace otb
  * \brief Change Sets of Labels
  *
  * Adapt the itkChangeLabelImageFilter for multichannel images.
- * 
+ *
  */
 
 
 
-namespace Functor {  
+namespace Functor {
   
 template< class TInput, class TOutput>
 class VectorChangeLabel
@@ -72,23 +72,23 @@ public:
     return !(*this != other);
     }
   TOutput GetChange( const TInput & original )
-    {  
-    return m_ChangeMap[original]; 
+    {
+    return m_ChangeMap[original];
     }
 
   void SetChange( const TInput & original, const TOutput & result )
-    { 
-    m_ChangeMap[original] = result; 
+    {
+    m_ChangeMap[original] = result;
     }
   
   void SetChangeMap( const ChangeMapType & changeMap )
-    { 
-    m_ChangeMap = changeMap; 
+    {
+    m_ChangeMap = changeMap;
     }
 
   void ClearChangeMap( )
-    { 
-    m_ChangeMap.clear(); 
+    {
+    m_ChangeMap.clear();
     }
 
   inline TOutput operator()( const TInput & A )
@@ -118,17 +118,17 @@ private:
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ChangeLabelImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-                                        Functor::VectorChangeLabel< typename TInputImage::PixelType, 
+    public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+                                        Functor::VectorChangeLabel< typename TInputImage::PixelType,
                                                                     typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
   typedef ChangeLabelImageFilter   Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, 
-    Functor::VectorChangeLabel< 
-    typename TInputImage::PixelType, 
-    typename TOutputImage::PixelType>   
+  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+    Functor::VectorChangeLabel<
+    typename TInputImage::PixelType,
+    typename TOutputImage::PixelType>
   >                                Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -221,7 +221,7 @@ private:
 
 namespace otb
 {
-namespace Functor {  
+namespace Functor {
   
 template< class TInput, class TOutput>
   class VectorChangeLabel : public ChangeLabel

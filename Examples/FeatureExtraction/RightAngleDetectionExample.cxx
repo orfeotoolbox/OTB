@@ -39,12 +39,12 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter}. 
+// \doxygen{otb}{LineSpatialObjectListToRightAnglePointSetFilter}.
 // This filter detects the right angles in an image by exploiting the
 // output of a line detection algorithm. Typically the
 // \doxygen{otb}{LineSegmentDetector} class will be used. The right
 // angle detection algorithm is described in detail in
-// \cite{RightAngleDetection}. 
+// \cite{RightAngleDetection}.
 //
 // The first step required to use this filter is to include its header file.
 //
@@ -56,7 +56,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 int main( int argc, char * argv[] )
 {
-  const   char * infname   = argv[1];  
+  const   char * infname   = argv[1];
   const   char * outfname  = argv[2];
   const   char * inprettyfname = argv[3];
   const   char * outprettyfname  = argv[4];
@@ -97,7 +97,7 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
   typedef LinesListType::LineType            LineType;
   typedef std::vector<LineType*>             LineVectorType;
   // Software Guide : EndCodeSnippet
@@ -108,7 +108,7 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   typedef itk::PointSet<LineVectorType, Dimension>     PointSetType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -118,7 +118,7 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   typedef otb::LineSegmentDetector<ImageType , PixelType>   LsdFilterType;
 
   // Software Guide : EndCodeSnippet
@@ -133,7 +133,7 @@ int main( int argc, char * argv[] )
   
   typedef itk::MinimumMaximumImageCalculator<ImageType>  MinMaxFilterType;
   
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
     LinesListType, PointSetType>
     RightAngleFilterType;
@@ -145,7 +145,7 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   LsdFilterType::Pointer         lsdFilter         = LsdFilterType::New();
   RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
 
@@ -160,21 +160,21 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
 
-  lsdFilter->SetInput(reader->GetOutput());  
+  lsdFilter->SetInput(reader->GetOutput());
   rightAngleFilter->SetInputImage(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());
 
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
-  // You can choose how far the right angle segments can be, and the tolerance 
+  // You can choose how far the right angle segments can be, and the tolerance
   // to consider an angle between two segments as an right one.
   //
     //
   // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet  
+  // Software Guide : BeginCodeSnippet
 
   rightAngleFilter->SetThresholdAngle(angleThreshold);
   rightAngleFilter->SetThresholdDistance(distanceThreshold);
@@ -188,8 +188,8 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
-  PointSetType::Pointer          segmentOrtho      = PointSetType::New();     
+  // Software Guide : BeginCodeSnippet
+  PointSetType::Pointer          segmentOrtho      = PointSetType::New();
   segmentOrtho = rightAngleFilter->GetOutput();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -200,7 +200,7 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   PointSetType::PointType   pRight;
   LineVectorType            outputVectorLines;
   LinesListType::Pointer    outputLinesList = LinesListType::New();
@@ -215,7 +215,7 @@ int main( int argc, char * argv[] )
       //
       // Software Guide : EndLatex
 
-      // Software Guide : BeginCodeSnippet    
+      // Software Guide : BeginCodeSnippet
       segmentOrtho->GetPoint(i, &pRight);
       // Software Guide : EndCodeSnippet
       // Software Guide : BeginLatex
@@ -226,7 +226,7 @@ int main( int argc, char * argv[] )
       //
       // Software Guide : EndLatex
 
-      // Software Guide : BeginCodeSnippet          
+      // Software Guide : BeginCodeSnippet
       segmentOrtho->GetPointData(i, &outputVectorLines);
       outputLinesList->push_back(outputVectorLines[0]);
       outputLinesList->push_back(outputVectorLines[1]);
@@ -243,7 +243,7 @@ int main( int argc, char * argv[] )
   // The value assigned to the line is the maximum of the input image.
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet          
+  // Software Guide : BeginCodeSnippet
   typedef otb::DrawLineSpatialObjectListFilter< ImageType,
     ImageType > DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();

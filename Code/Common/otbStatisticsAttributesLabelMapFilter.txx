@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@
 #include "vnl/algo/vnl_real_eigensystem.h"
 #include "vnl/algo/vnl_symmetric_eigensystem.h"
 
-namespace otb 
+namespace otb
 {
 
 template <class TImage, class TFeatureImage>
@@ -108,7 +108,7 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
       output->TransformIndexToPhysicalPoint(idx, physicalPosition);
       for(unsigned int i=0; i<ImageDimension; i++)
         {
-        centerOfGravity[i] += physicalPosition[i] * v; 
+        centerOfGravity[i] += physicalPosition[i] * v;
         centralMoments[i][i] += v * physicalPosition[i] * physicalPosition[i];
         for(unsigned int j=i+1; j<ImageDimension; j++)
           {
@@ -218,7 +218,7 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 
   // If we want all the features
   if(!m_ReducedAttributeSet)
-    {    
+    {
     oss.str("");
     oss<<"STATS::"<<m_FeatureName<<"::Minimum";
     labelObject->SetAttribute(oss.str().c_str(),(double)min );

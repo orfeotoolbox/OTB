@@ -527,7 +527,7 @@ QuickBirdImageMetadataInterface
  	  		outputValuesVariableLengthVector[0] = 1.02739898;
 
 		ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-  	  	outputValuesVariableLengthVector[0] *= keywordStringAbsCalFactor.toDouble(); 	  	  	
+  	  	outputValuesVariableLengthVector[0] *= keywordStringAbsCalFactor.toDouble();
   	  }
   	  else
   	  {
@@ -539,7 +539,7 @@ QuickBirdImageMetadataInterface
      	outputValuesVariableLengthVector[2] = 1.30954587 * keywordStringAcalFact.toDouble();
      	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
      	outputValuesVariableLengthVector[3] = 0.98368622 * keywordStringAcalFact.toDouble();
-  	  }  		
+  	  }
   	}
 
     
@@ -549,7 +549,7 @@ QuickBirdImageMetadataInterface
  	  if (keywordStringBId == ossimString("P"))
  	  {
  	  	ossimString keywordStringAbsCalFactor = kwl.find("support_data.absCalFactor");
-  	  	outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble(); 
+  	  	outputValuesVariableLengthVector[0] = keywordStringAbsCalFactor.toDouble();
   	  }
   	  else
   	  {
@@ -558,14 +558,14 @@ QuickBirdImageMetadataInterface
       	keywordStringAcalFact = kwl.find("support_data.G_band_absCalFactor");
     	outputValuesVariableLengthVector[1] = keywordStringAcalFact.toDouble();
       	keywordStringAcalFact = kwl.find("support_data.R_band_absCalFactor");
-     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();     	
+     	outputValuesVariableLengthVector[2] = keywordStringAcalFact.toDouble();
      	keywordStringAcalFact = kwl.find("support_data.N_band_absCalFactor");
      	outputValuesVariableLengthVector[3] = keywordStringAcalFact.toDouble();
-  	  }  		
+  	  }
   }
 
   if (keywordStringBId == ossimString("P") )
-  {  
+  {
 	outputValuesVariableLengthVector[0] = 0.398 / outputValuesVariableLengthVector[0];
   }
   else

@@ -78,7 +78,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
 {
   if(m_ClampThreshold==0.)
     {
-      itkExceptionMacro(<<"Invalid Clamp Threshold must be greater than 0.0"); 
+      itkExceptionMacro(<<"Invalid Clamp Threshold must be greater than 0.0");
     }
 
   if (m_AutomaticInputMinMaxComputation)

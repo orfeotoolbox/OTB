@@ -29,7 +29,7 @@ int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
   typedef double PixelType;
   const unsigned int Dimension = 2;
 
-  // Typedef 
+  // Typedef
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader< ImageType >                     ReaderType;
   typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;

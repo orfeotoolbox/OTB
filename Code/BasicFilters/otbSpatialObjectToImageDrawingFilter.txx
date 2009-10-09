@@ -279,7 +279,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   InputObject->ComputeBoundingBox();
   bool originspecified = false;
   if (!strcmp(InputObject->GetNameOfClass(),"GroupSpatialObject"))
-    {      
+    {
       ChildrenType children;
       children=InputObject->GetChildren(0);
       IteratorType iter = children->begin();
@@ -321,7 +321,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 	{
 	  size[i] = (long int)(InputObject->GetBoundingBox()->GetMaximum()[i]
 			       - InputObject->GetBoundingBox()->GetMinimum()[i]);
-	} 
+	}
     }
   
   typename OutputImageType::IndexType index;

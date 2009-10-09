@@ -61,15 +61,15 @@ Rectangle<TValue>
    
   
   /** Compute the distance to the orthogonal median of the rectangle*/
-  if( this->ComputeEuclideanDistanceToSegment( p1, p2    , point) - (m_Width/2.) < 1e-10 
-      && this->ComputeEuclideanDistanceToSegment(middleP , corner, point) - (lengthSeg/2.) < 1e-10) 
+  if( this->ComputeEuclideanDistanceToSegment( p1, p2    , point) - (m_Width/2.) < 1e-10
+      && this->ComputeEuclideanDistanceToSegment(middleP , corner, point) - (lengthSeg/2.) < 1e-10)
     return true;
   else
     return false;
 }
 
 
-  /** 
+  /**
    * Method to compute the distance between a point and a segment
    */
   template<class TValue>
@@ -90,9 +90,9 @@ Rectangle<TValue>
     
     /** distance from Point P to Segment Q1Q2*/
     return  (Num/SegmentLength);
-  }  
+  }
   
-  /** 
+  /**
    * Method to compute the Bounding region of a rectangle
    */
   
@@ -108,7 +108,7 @@ Rectangle<TValue>
     ++it;
     VertexType p2 = it.Value();
     
-    /** Compute the four corners of the recatangle*/    
+    /** Compute the four corners of the recatangle*/
     double dx        = vcl_cos(m_Orientation);
     double dy        = vcl_sin(m_Orientation);
     double halfWidth = m_Width/2;
@@ -192,7 +192,7 @@ Rectangle<TValue>
   }
 
   /*
-   * Method add vertex 
+   * Method add vertex
    *
    */
 template<class TValue>

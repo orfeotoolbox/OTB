@@ -133,7 +133,7 @@ PrintableImageFilter<TInputImage, TMaskImage>
 {
   this->BeforeGenerateData();
 
-  // let this loop to be compliant with previous version of the class where m_ChannelList didn't exist... 
+  // let this loop to be compliant with previous version of the class where m_ChannelList didn't exist...
   if(m_Extractor->GetNbChannels() == 0)
     {
       for(unsigned int i=0; i<m_ChannelList.size(); i++)

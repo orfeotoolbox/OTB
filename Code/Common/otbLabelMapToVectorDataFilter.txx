@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -74,7 +74,7 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
 }
 
 template<class TLabelMap, class TVectorData >
-void 
+void
 LabelMapToVectorDataFilter<TLabelMap, TVectorData>
 ::GenerateInputRequestedRegion()
 {/*
@@ -90,7 +90,7 @@ LabelMapToVectorDataFilter<TLabelMap, TVectorData>
 
 /*
 template<class TInputImage, class TVectorData >
-void 
+void
 LabelMapToVectorDataFilter<TInputImage, TVectorData>
 ::EnlargeOutputRequestedRegion(DataObject *)
 {
@@ -141,7 +141,7 @@ void
     typename PolygonType::Pointer polygon = functor(labelObject);
     
     /** Erase aligned points*/
-//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
+//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon);
     
     
     /**Close polygon if necessary*/

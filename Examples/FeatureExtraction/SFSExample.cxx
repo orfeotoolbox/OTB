@@ -31,7 +31,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{SFSTexturesImageFilter}. 
+// \doxygen{otb}{SFSTexturesImageFilter}.
 // This filter computes the Structural Feature Set as descibed in
 // \cite{SFS}. These features are textural parameters which give
 // information about the structure of lines passing through each pixel
@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
   unsigned int spatialThresh    = atoi(argv[15]);
   unsigned int dirNb            = atoi(argv[16]);
   unsigned int maxConsideration = atoi(argv[17]);
-  double alpha                  = atof(argv[18]);  
+  double alpha                  = atof(argv[18]);
 
 // Software Guide : BeginLatex
 //
@@ -76,11 +76,11 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType,Dimension>                   ImageType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::ImageFileWriter<ImageType>                   WriterType;
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // The we can instantiate the type for the SFS filter, which is
@@ -88,9 +88,9 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> SFSFilterType;
-// Software Guide : EndCodeSnippet  
+// Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // After that, we can instantiate the filter. We will also instantiate
@@ -99,8 +99,8 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet  
-  SFSFilterType::Pointer filter    = SFSFilterType::New(); 
+// Software Guide : BeginCodeSnippet
+  SFSFilterType::Pointer filter    = SFSFilterType::New();
   ReaderType::Pointer reader       = ReaderType::New();
   WriterType::Pointer writerLength = WriterType::New();
   WriterType::Pointer writerWidth  = WriterType::New();
@@ -108,7 +108,7 @@ int main(int argc, char * argv[])
   WriterType::Pointer writerRatio  = WriterType::New();
   WriterType::Pointer writerSD     = WriterType::New();
   WriterType::Pointer writerPsi    = WriterType::New();
-// Software Guide : EndCodeSnippet    
+// Software Guide : EndCodeSnippet
 
   reader->SetFileName(inName);
 
@@ -130,13 +130,13 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // In order to disable the computation of a feature, the
@@ -147,17 +147,17 @@ int main(int argc, char * argv[])
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet    
+// Software Guide : BeginCodeSnippet
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
 
-  // Software Guide : EndCodeSnippet    
+  // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
 // Now, we plug the pipeline using all the writers.
 //
 // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet      
+// Software Guide : BeginCodeSnippet
   filter->SetInput( reader->GetOutput() );
 
 

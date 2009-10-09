@@ -27,7 +27,7 @@
 namespace otb
 {
 // TODO: Check memory allocation in this class
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 SVMModel<TValue,TLabel>::SVMModel()
 {
   // Default parameters
@@ -56,13 +56,13 @@ SVMModel<TValue,TLabel>::SVMModel()
   this->Initialize();
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 SVMModel<TValue,TLabel>::~SVMModel()
 {
   this->DeleteModel();
   this->DeleteProblem();
 }
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::Initialize()
 {
@@ -90,11 +90,11 @@ SVMModel<TValue,TLabel>::Initialize()
   m_Problem.y = NULL;
   m_Problem.x = NULL;
 
-  m_ProblemUpToDate = false;  
+  m_ProblemUpToDate = false;
 }
 
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::Reset()
 {
@@ -108,17 +108,17 @@ SVMModel<TValue,TLabel>::Reset()
   this->Initialize();
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::DeleteModel()
-{ 
+{
   if(m_Model)
     {
     svm_destroy_model(m_Model);
     m_Model = NULL;
     }
 }
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::DeleteProblem()
 {
@@ -147,7 +147,7 @@ SVMModel<TValue,TLabel>::DeleteProblem()
 
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::AddSample(const MeasurementType & measure, const LabelType & label)
 {
   SampleType newSample(measure,label);
@@ -156,7 +156,7 @@ SVMModel<TValue,TLabel>::AddSample(const MeasurementType & measure, const LabelT
 }
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::ClearSamples()
 {
   m_Samples.clear();
@@ -164,7 +164,7 @@ SVMModel<TValue,TLabel>::ClearSamples()
 }
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::SetSamples(const SamplesVectorType & samples)
 {
   m_Samples = samples;
@@ -172,7 +172,7 @@ SVMModel<TValue,TLabel>::SetSamples(const SamplesVectorType & samples)
 }
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::BuildProblem()
 {
   // Check if problem is up-to-date
@@ -197,7 +197,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
   // Deallocate any previous problem
   this->DeleteProblem();
 
-  // Allocate the problem 
+  // Allocate the problem
   m_Problem.l = probl;
   m_Problem.y = new double[probl];
   m_Problem.x = new struct svm_node*[probl];
@@ -283,7 +283,7 @@ SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
     double total_correct = 0.;
     
     for(i=0;i<length;i++)
-      { 
+      {
       if(target[i] == m_Problem.y[i])
 	{
 	++total_correct;
@@ -299,7 +299,7 @@ SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
 }
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::ConsistencyCheck()
 {
   if (m_Parameters.svm_type == ONE_CLASS && this->GetDoProbabilityEstimates())
@@ -317,7 +317,7 @@ SVMModel<TValue,TLabel>::ConsistencyCheck()
 }
 
 template <class TValue, class TLabel>
-void 
+void
 SVMModel<TValue,TLabel>::Train()
 {
   // If the model is already up-to-date, return
@@ -353,7 +353,7 @@ SVMModel<TValue,TLabel>::EvaluateLabel(const MeasurementType & measure) const
   if(!m_ModelUpToDate)
     {
     itkExceptionMacro(<<"Model is not up-to-date, can not predict label");
-    } 
+    }
 
   // Check probability prediction
   bool predict_probability = 1;
@@ -469,7 +469,7 @@ SVMModel<TValue,TLabel>::EvaluateHyperplanesDistances(const MeasurementType & me
   return (distances);
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SetModel(struct svm_model* aModel)
 {
@@ -479,7 +479,7 @@ SVMModel<TValue,TLabel>::SetModel(struct svm_model* aModel)
 }
 
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SaveModel(const char* model_file_name) const
 {
@@ -490,7 +490,7 @@ SVMModel<TValue,TLabel>::SaveModel(const char* model_file_name) const
   }
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
 {
@@ -505,8 +505,8 @@ SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
   m_ModelUpToDate = true;
 }
 
-template <class TValue,class TLabel> 
-typename SVMModel<TValue,TLabel>::Pointer 
+template <class TValue,class TLabel>
+typename SVMModel<TValue,TLabel>::Pointer
 SVMModel<TValue,TLabel>::GetCopy() const
 {
   Pointer modelCopy = New();
@@ -522,7 +522,7 @@ SVMModel<TValue,TLabel>::PrintSelf(std::ostream& os, itk::Indent indent) const
   Superclass::PrintSelf(os,indent);
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector)
 {
@@ -593,7 +593,7 @@ SVMModel<TValue,TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector
     }
 }
 
-template <class TValue,class TLabel> 
+template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SetAlpha( double ** alpha, int nbOfSupportVector )
 {

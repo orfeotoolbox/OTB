@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -27,26 +27,26 @@
 namespace otb
 {
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer>
-ListSampleToVariableDimensionHistogramGenerator< TListSample, 
-                                THistogramMeasurement, 
+ListSampleToVariableDimensionHistogramGenerator< TListSample,
+                                THistogramMeasurement,
                                 TFrequencyContainer >
 ::ListSampleToVariableDimensionHistogramGenerator()
 {
   m_Histogram = HistogramType::New();
   m_MarginalScale = 100;
   m_AutoMinMax = true;
-}  
+}
 
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer >
 void
-ListSampleToVariableDimensionHistogramGenerator< TListSample, 
-                                THistogramMeasurement, 
+ListSampleToVariableDimensionHistogramGenerator< TListSample,
+                                THistogramMeasurement,
                                 TFrequencyContainer >
 ::GenerateData()
 {
@@ -88,34 +88,34 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       {
       if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
         {
-        margin = 
-          ( (THistogramMeasurement)(upper[i] - lower[i]) / 
-            (THistogramMeasurement) m_Sizes[i] ) / 
+        margin =
+          ( (THistogramMeasurement)(upper[i] - lower[i]) /
+            (THistogramMeasurement) m_Sizes[i] ) /
           (THistogramMeasurement) m_MarginalScale;
         h_upper[i] = (THistogramMeasurement) (upper[i] + margin);
         if(h_upper[i] <= upper[i])
-          { 
+          {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
           // Histogram measurement type would force the clipping the max value.
           // Therefore we must call the following to include the max value:
           m_Histogram->SetClipBinsAtEnds(false);
-          // The above function is okay since here we are within the autoMinMax 
+          // The above function is okay since here we are within the autoMinMax
           // computation and clearly the user intended to include min and max.
           }
         }
       else
         {
-        h_upper[i] = ((THistogramMeasurement) upper[i]) + 
+        h_upper[i] = ((THistogramMeasurement) upper[i]) +
           itk::NumericTraits< THistogramMeasurement >::One;
         if(h_upper[i] <= upper[i])
-          { 
+          {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
           // Histogram measurement type would force the clipping the max value.
           // Therefore we must call the following to include the max value:
           m_Histogram->SetClipBinsAtEnds(false);
-          // The above function is okay since here we are within the autoMinMax 
+          // The above function is okay since here we are within the autoMinMax
           // computation and clearly the user intended to include min and max.
           }
         }
@@ -167,12 +167,12 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Leaving");
 }
 
-template< class TListSample, 
-          class THistogramMeasurement, 
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer >
 void
-ListSampleToVariableDimensionHistogramGenerator< TListSample, 
-                                THistogramMeasurement, 
+ListSampleToVariableDimensionHistogramGenerator< TListSample,
+                                THistogramMeasurement,
                                 TFrequencyContainer >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -184,7 +184,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   os << indent << "HistogramMax: "<< m_HistogramMax << std::endl;
 }
 
-} // end of namespace itk 
+} // end of namespace itk
 
 #endif
 

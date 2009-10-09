@@ -86,7 +86,7 @@ int otbTerraSarCalibrationCplxImageFilterTest(int argc, char * argv[])
   
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
-  writer->Update(); 
+  writer->Update();
   
 
   return EXIT_SUCCESS;

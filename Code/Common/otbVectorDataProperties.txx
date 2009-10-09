@@ -33,22 +33,22 @@ VectorDataProperties<TVectorData>
 //   m_InputGISConnection = InputGISConnectionType::New();
 //   m_DropExistingGISTable = false;
 //   m_GISTableName = "otb_to_gis_sample";
-} 
+}
   */
-template <class TVectorData>  
+template <class TVectorData>
 bool VectorDataProperties<TVectorData>
 ::IsBoundingRegionNull()
 {
   for (unsigned int i = 0;i<VectorDataDimension;++i)
   {
     if ( ( m_BoundingRegion.GetOrigin(i) != itk::NumericTraits<Type>::ZeroValue()) ||  ( m_BoundingRegion.GetSize(i) != itk::NumericTraits<Type>::ZeroValue() ) )
-      return false;  
-  } 
+      return false;
+  }
   return true;
 }
 /**
   *   Add a region
- */  
+ */
 template <class TVectorData>
 void
 VectorDataProperties<TVectorData>
@@ -56,7 +56,7 @@ VectorDataProperties<TVectorData>
 {
 //   std::cout << "add region: " << region << std::endl;
   if (this->IsBoundingRegionNull() )
-  {  
+  {
     m_BoundingRegion = region;
   }
   else
@@ -92,7 +92,7 @@ VectorDataProperties<TVectorData>
 }
 
 template<class TVectorData>
-void 
+void
 VectorDataProperties<TVectorData>
 ::ProcessNode(InternalTreeNodeType * source)
 {

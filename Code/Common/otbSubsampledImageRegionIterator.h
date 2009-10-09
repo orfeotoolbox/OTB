@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -29,7 +29,7 @@ namespace otb {
  * \brief Regular subsample iterator over an image
  *
  * This iterator is a itk::ImageRegionConstIterator that perform a subsampled
- * scan over an image. It runs one pixel over X (in row, line, slice... dimensions), 
+ * scan over an image. It runs one pixel over X (in row, line, slice... dimensions),
  * if X is the (integer) value of the SubsampleFactor.
  *
  * It inherits from SubsampledImageRegionConstIterator and can modify the pixel values...
@@ -38,7 +38,7 @@ namespace otb {
  * \sa SubsampledImageRegionConstIterator
  */
 template < class TImage >
-class ITK_EXPORT SubsampledImageRegionIterator 
+class ITK_EXPORT SubsampledImageRegionIterator
         : public SubsampledImageRegionConstIterator< TImage >
 {
 public:
@@ -66,7 +66,7 @@ public:
   typedef typename Superclass::IndexValueType IndexValueType;
 
   // Constructors
-  SubsampledImageRegionIterator() 
+  SubsampledImageRegionIterator()
     : SubsampledImageRegionConstIterator< TImage > () { }
 
   SubsampledImageRegionIterator ( const ImageType *ptr, const RegionType &region )
@@ -85,15 +85,15 @@ public:
   void Set( const PixelType & value) const
   {
     this->m_PixelAccessorFunctor.Set( *(const_cast<InternalPixelType *>(
-      this->m_Buffer + this->m_Offset ) ), value ); 
+      this->m_Buffer + this->m_Offset ) ), value );
   }
 
-  PixelType & Value(void) 
-  { 
-    return *(const_cast<InternalPixelType *>(this->m_Buffer+this->m_Offset)); 
+  PixelType & Value(void)
+  {
+    return *(const_cast<InternalPixelType *>(this->m_Buffer+this->m_Offset));
   }
 
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

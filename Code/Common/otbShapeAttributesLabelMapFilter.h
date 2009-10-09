@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,15 +32,15 @@
 
 //#include "itkObjectFactory.h"
   
-namespace otb 
+namespace otb
 {
 
 /** \class ShapeAttributesLabelMapFilter
  * \brief This class is a fork of the itk::ShapeLabelMapFilter working with AttributesMapLabelObject.
  *
  * The keys of the attributes inserted into the attributes map follow
- * the following rule: "SHAPE:NameOfAttributes". 
- * 
+ * the following rule: "SHAPE:NameOfAttributes".
+ *
  * With respect to the original itk filter, this filter also compute
  * the Flusser moments for each LabelObject.
  *
@@ -55,7 +55,7 @@ namespace otb
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
 template<class TImage, class TLabelImage=Image< typename TImage::PixelType, TImage::ImageDimension > >
-class ITK_EXPORT ShapeAttributesLabelMapFilter : 
+class ITK_EXPORT ShapeAttributesLabelMapFilter :
     public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
@@ -69,7 +69,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
   
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
   
   /** Runtime information support. */
   itkTypeMacro(ShapeAttributesLabelMapFilter,InPlaceLabelMapFilter);

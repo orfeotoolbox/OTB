@@ -39,21 +39,21 @@ int otbPrintableImageFilterWithMask( int argc, char * argv[] )
   typedef otb::PrintableImageFilter< InputImageType>     FilterType;
   typedef FilterType::OutputImageType                    OutputImageType;
   typedef OutputImageType::PixelType                     OutputPixelType;
-  typedef FilterType::MaskImageType                      MaskImageType; 
+  typedef FilterType::MaskImageType                      MaskImageType;
   typedef FilterType::MaskPixelType                      MaskPixelType;
 
   typedef otb::ImageFileReader< InputImageType >            InputReaderType;
-  typedef otb::ImageFileReader< MaskImageType >             MaskReaderType; 
+  typedef otb::ImageFileReader< MaskImageType >             MaskReaderType;
   typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
 
 
   FilterType::Pointer      printableImageFilter = FilterType::New();
   InputReaderType::Pointer inputReader          = InputReaderType::New();
-  MaskReaderType::Pointer  maskReader           = MaskReaderType::New();  
+  MaskReaderType::Pointer  maskReader           = MaskReaderType::New();
   WriterType::Pointer      writer               = WriterType::New();
 
   inputReader->SetFileName( inputFilename );
-  maskReader->SetFileName( masktFilename ); 
+  maskReader->SetFileName( masktFilename );
   maskReader->GenerateOutputInformation();
   writer->SetFileName( outputFilename );
 

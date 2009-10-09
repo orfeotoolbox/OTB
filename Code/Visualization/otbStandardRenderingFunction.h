@@ -321,9 +321,9 @@ public:
      // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
      for(unsigned int i = 0; i< nbBands ; i++)
      {
-       // Min Band 
+       // Min Band
        param.SetElement(2*i,/*TransferedMinimum*/m_Minimum[i]);
-       // Max Band 
+       // Max Band
        param.SetElement(2*i+1,/*TransferedMaximum*/m_Maximum[i]);
      }
      return param;

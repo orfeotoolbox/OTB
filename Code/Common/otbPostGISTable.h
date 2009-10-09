@@ -25,8 +25,8 @@ namespace otb
 {
 /** \class PostGISTable
  * \brief this class represents a table of a geospatial database (PostGIS).
- *  
- * 
+ *
+ *
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
  *
@@ -80,8 +80,8 @@ public:
   
   /** Get attributes of the Table*/ //TODO implement
   
-  /** Get srid of the geometric column*/ //TODO implement 
-  //virtual 
+  /** Get srid of the geometric column*/ //TODO implement
+  //virtual
   /** Init basic SQL command*/
   void InsertBegin( std::stringstream & sqlCmd );
   /** Add Point content to the GIS Table*/

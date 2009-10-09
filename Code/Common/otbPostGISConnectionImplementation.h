@@ -27,7 +27,7 @@ namespace otb
 /** \class PostGISConnectionImplementation
  * \brief this class represents a connection to a PostGIS data base.
  *
- * 
+ *
  *
  */
 

@@ -28,7 +28,7 @@ namespace otb
 template <class TInputImage , class TOutputImage, class TEdgeDetection>
 EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
 ::EdgeDetectorImageFilter()
-{ 
+{
   this->SetNumberOfRequiredInputs( 1 );
   
   m_Detector =  DetectionType::New();
@@ -72,7 +72,7 @@ m_Detector->Update();
   -----------------------------------------------------------------*/
 template <class TInputImage , class TOutputImage, class TEdgeDetection>
 void
-EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>  
+EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

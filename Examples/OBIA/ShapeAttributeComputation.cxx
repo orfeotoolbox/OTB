@@ -24,7 +24,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the 
+//  This example shows the
 //
 //  Software Guide : EndLatex
 

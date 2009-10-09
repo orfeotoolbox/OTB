@@ -119,7 +119,7 @@ public:
   /** Clear all*/
   void Clear() { m_IndexList.clear(); m_ColorList.clear(); };
   void ClearIndex(unsigned int id)
-  { 
+  {
     this->RemoveIndex(id);
     this->RemoveColor(id);
   };

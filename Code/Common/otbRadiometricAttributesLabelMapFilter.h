@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,7 +32,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "otbStatisticsAttributesLabelMapFilter.h"
 
-namespace otb 
+namespace otb
 {
 /** \class RadiometricAttributesLabelMapFilter
  *  \brief This filter computes radiometric attributes for each object.
@@ -40,22 +40,22 @@ namespace otb
  * Images are supposed to be standard 4-bands image (B,G,R,NIR). The
  * index of each channel can be set via the Set***ChannelIndex()
  * accessors.
- * 
+ *
  * This filter internally applies the
  * StatisticsAttributesLabelMapFilter to the following features: GEMI,
  * NDVI, IR, IC, IB, NDWI2, Intensity and original B, G, R and NIR channels.
- * 
+ *
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.
  *
  * \sa StatisticsAttributesImageFilter AttributesMapLabelObject
  * \sa GEMI NDVI IR IC IB NDWI2
- * \sa VectorIntensityImageFilter 
- * 
+ * \sa VectorIntensityImageFilter
+ *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  */
 template<class TImage, class TFeatureImage>
-class ITK_EXPORT RadiometricAttributesLabelMapFilter : 
+class ITK_EXPORT RadiometricAttributesLabelMapFilter :
     public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
@@ -69,7 +69,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
 
   /** Standard New method. */
-  itkNewMacro(Self);  
+  itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(RadiometricAttributesLabelMapFilter,InPlaceLabelMapFilter);

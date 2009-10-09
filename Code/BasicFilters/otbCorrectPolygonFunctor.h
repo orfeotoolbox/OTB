@@ -57,7 +57,7 @@ public:
     simplifyFunctor.SetTolerance(0.0);
         
     /** Erase aligned points and close polygon*/
-    return  closeFunctor ( simplifyFunctor(input) ); 
+    return  closeFunctor ( simplifyFunctor(input) );
     
   }
 

@@ -43,7 +43,7 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
   const double       run      = atoi(argv[5]);
 
 
-  // typedefs 
+  // typedefs
   typedef double                                     PixelType;
   typedef itk::RGBPixel<unsigned char>               RGBPixelType;
   typedef otb::Image<RGBPixelType,2>                 OutputImageType;
@@ -154,7 +154,7 @@ int otbImageViewerEndToEndSingleLayer( int argc, char * argv[] )
     {
     fullWindow.add(view->GetFullWidget());
     fullWindow.resizable(view->GetFullWidget());
-    fullWindow.show(); 
+    fullWindow.show();
     view->GetFullWidget()->show();
     view->GetFullWidget()->resize(0,0,fullSize,fullSize);
     }

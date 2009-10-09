@@ -37,16 +37,16 @@ namespace otb
  *  \brief Calculates the calibration of TerraSar sensor images.
  *
  *  For details, please refer to Infoterra documentation : "Radiometric Calibration of TerraSAR-X Data".
- *  Using FastCalibration boolean allows to compute the result considering the first noise polygone 
- *  coeffcients for each line or to use every polygones coefficient given. 
- *  The code was made considering that the first acquisition point is the lower left one. 
+ *  Using FastCalibration boolean allows to compute the result considering the first noise polygone
+ *  coeffcients for each line or to use every polygones coefficient given.
+ *  The code was made considering that the first acquisition point is the lower left one.
  *
  * \ingroup Radiometry
  */
 
 template<class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarCalibrationImageFilter :
-  public UnaryFunctorWithIndexImageFilter< 
+  public UnaryFunctorWithIndexImageFilter<
     TInputImage,
     TOutputImage,
     ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
@@ -101,8 +101,8 @@ public:
   /** Vector of vector that contain noise polinomial coefficient */
   void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect );
   DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else, 
-   *  will use all of them and applied it according to its acquisition UTC time and the coordinates 
+  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
+   *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   void SetUseFastCalibrationMethod( bool b );
   bool GetUseFastCalibrationMethod() const;

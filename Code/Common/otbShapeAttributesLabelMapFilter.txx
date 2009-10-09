@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -237,7 +237,7 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
 //       {
 //       typename LabelObjectType::CentroidType pP;
 //       output->TransformIndexToPhysicalPoint(iidx, pP);
-// 
+//
 //       for(unsigned int i=0; i<ImageDimension; i++)
 //         {
 //         for(unsigned int j=0; j<ImageDimension; j++)

@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -78,7 +78,7 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 }
 
 template<class TGISTable, class TVectorData >
-void 
+void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GenerateInputRequestedRegion()
 {/*
@@ -118,12 +118,12 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   /**Create usual root elements of the output vectordata*/
 //   DataNodePointerType document = DataNodeType::New();
 //   DataNodePointerType folder1 = DataNodeType::New();
-//   
+//
 //   document->SetNodeType(DOCUMENT);
 //   folder1->SetNodeType(FOLDER);
-//   
+//
 //   DataNodePointerType root = output->GetDataTree()->GetRoot()->Get();
-// 
+//
 //   output->GetDataTree()->Add(document,root);
 //   output->GetDataTree()->Add(folder1,document);
   
@@ -133,8 +133,8 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   const std::string inputOGRConnStr=input->GetOGRStrConnection();
   //Try  if the Db is readable
 //   std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
-  if ( gisReader->CanReadFile( inputOGRConnStr.data() ) ) 
-  { 
+  if ( gisReader->CanReadFile( inputOGRConnStr.data() ) )
+  {
     //Read GISTable data and copy in the output VectorData
     
     gisReader->SetFileName(inputOGRConnStr);

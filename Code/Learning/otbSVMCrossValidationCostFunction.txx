@@ -32,7 +32,7 @@ namespace otb
   {}
   template<class TModel>
   typename SVMCrossValidationCostFunction<TModel>
-  ::MeasureType 
+  ::MeasureType
   SVMCrossValidationCostFunction<TModel>
   ::GetValue(const ParametersType &parameters) const
   {
@@ -55,7 +55,7 @@ namespace otb
   }
 
   template<class TModel>
-  void 
+  void
   SVMCrossValidationCostFunction<TModel>
   ::GetDerivative(const ParametersType &parameters, DerivativeType &derivative) const
   {
@@ -83,7 +83,7 @@ namespace otb
   }
 
   template<class TModel>
-  unsigned int 
+  unsigned int
   SVMCrossValidationCostFunction<TModel>
   ::GetNumberOfParameters (void) const
   {
@@ -112,12 +112,12 @@ namespace otb
 
     default:
       // C
-      return 1;   
+      return 1;
     }
   }
 
   template<class TModel>
-  void 
+  void
   SVMCrossValidationCostFunction<TModel>
   ::UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType & parameters) const
   {

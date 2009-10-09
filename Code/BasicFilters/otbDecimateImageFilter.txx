@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -63,9 +63,9 @@ DecimateImageFilter< TInputImage, TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 DecimateImageFilter< TInputImage, TOutputImage >
-::CallCopyOutputRegionToInputRegion 
+::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
   Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
@@ -87,10 +87,10 @@ DecimateImageFilter< TInputImage, TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage>
-void 
+void
 DecimateImageFilter< TInputImage, TOutputImage >
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )         
+( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
   Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
 
@@ -119,12 +119,12 @@ DecimateImageFilter< TInputImage, TOutputImage >
   InputImageRegionType inputRegionForThread;
         this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
 
-  SubsampledImageRegionConstIterator< InputImageType > decimationIterator 
+  SubsampledImageRegionConstIterator< InputImageType > decimationIterator
     ( this->GetInput(), inputRegionForThread );
   decimationIterator.SetSubsampleFactor( GetDecimationFactor() );
   decimationIterator.GoToBegin();
 
-  itk::ImageRegionIterator< InputImageType > outputIter 
+  itk::ImageRegionIterator< InputImageType > outputIter
     ( this->GetOutput(), outputRegionForThread );
   outputIter.GoToBegin();
 

@@ -156,7 +156,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
  * For that we have to fuse different thread output, in particular for line that throw thread.
  * For that, for each thread and each detected line, we look if one of its extrema is over a thread lower limit (RegionList.GetSize()[1]).
  * If yes, we store the line. If no, we add it to the vector data.
- * At the next loop (ie. next thread), for each line, we check that it doesn't have a point in common with lines that end at the end of 
+ * At the next loop (ie. next thread), for each line, we check that it doesn't have a point in common with lines that end at the end of
  * the previous thread.
  * If yes we compute the extrema (one point ineach thread).
  * If not, we add it to the vector data, else we store it.
@@ -229,7 +229,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		  p2Old = vertexList[j][1];
 	
 		  // if p1=p1old and p2=p2Old or p1=p2old and p2=p1Old mod 1
-		  if( ( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold ) || 
+		  if( ( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold ) ||
 		      ( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
 		      ( vcl_abs(p1[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p2Old[1])<m_ThreadDistanceThreshold ) ||
 		      ( vcl_abs(p2[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p1Old[1])<m_ThreadDistanceThreshold )     )
@@ -247,7 +247,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		    {
 		      vert.push_back(p2);
 		      // p1 is the same as p1Old -> keep p2Old
-		      if( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold ) 
+		      if( vcl_abs(p1[0]-p1Old[0])<m_ThreadDistanceThreshold && vcl_abs(p1[1]-p1Old[1])<m_ThreadDistanceThreshold )
 			vert.push_back(p2Old);
 		      else
 			vert.push_back(p1Old);
@@ -257,7 +257,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		    {
 		      vert.push_back(p1);
 		      // p2 is the same as p1Old -> keep p1Old
-		      if( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1]<m_ThreadDistanceThreshold) ) 
+		      if( vcl_abs(p2[0]-p2Old[0])<m_ThreadDistanceThreshold && vcl_abs(p2[1]-p2Old[1]<m_ThreadDistanceThreshold) )
 			vert.push_back(p1Old);
 		      else
 			vert.push_back(p2Old);
@@ -270,7 +270,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 		{
 		  DoubleVertexType vert;
 		  vert.push_back(p1);
-		  vert.push_back(p2); 
+		  vert.push_back(p2);
 		  vertexNewList.push_back(vert);
 		}
 	      // no point to fuse
@@ -314,7 +314,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
       vertexNewList.clear();
       whereAmI[0] += regionList[i].GetSize()[0];
       whereAmI[1] += regionList[i].GetSize()[1];
-	  
+	
     }// End for loop
 
   return vlines;

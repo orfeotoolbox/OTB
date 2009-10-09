@@ -153,7 +153,7 @@ void Curves2DWidget::UpdateSpaceToScreenTransform()
   RegionType::SizeType extentSize;
   
   // Extent index
-  extentIndex[0]=m_Margins[0];  
+  extentIndex[0]=m_Margins[0];
   extentIndex[1]=m_Margins[1];
 
   // Extent size
@@ -171,7 +171,7 @@ void Curves2DWidget::UpdateSpaceToScreenTransform()
   matrix(1,1)=(static_cast<double>(m_Extent.GetSize()[1]))/m_AxisLength[1];
   m_SpaceToScreenTransform->SetMatrix(matrix);
   
-  // Set the translation 
+  // Set the translation
   AffineTransformType::OutputVectorType translation;
   translation[0]=m_Extent.GetIndex()[0]-m_AxisOrigin[0];
   translation[1]=m_Extent.GetIndex()[1]-m_AxisOrigin[1];
@@ -192,7 +192,7 @@ void Curves2DWidget::RenderAxis()
   spaceCenter.Fill(0.);
   PointType screenCenter = m_SpaceToScreenTransform->TransformPoint(spaceCenter);
 
-  // Update zero crossing coords 
+  // Update zero crossing coords
   if(m_ZeroCrossingAxis)
     {
 

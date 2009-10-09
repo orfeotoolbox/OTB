@@ -9,11 +9,11 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
-Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved.
 See ITCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -22,14 +22,14 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbPeriodicSOM.h"
 
-namespace otb 
+namespace otb
 {
 /**
  *  \class SOMWithMissingValue
  *  \brief This class implements SOM training with missing value
  *
  *  The distance between vectors that may have missing components is holded
- *  by the EuclideanDistanceWithMissingValue class in the SOMMap distance 
+ *  by the EuclideanDistanceWithMissingValue class in the SOMMap distance
  *  template. Nevertheless, this class re-implements the UpdateMap method to
  *  adapt the evaluation of each component of the 'newNeuron' when dealing
  *  with missing values.
@@ -41,7 +41,7 @@ namespace otb
  *  \sa EuclideanDistanceWithMissingValue
  */
 template < class TListSample, class TMap,
-     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor, 
+     class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
      class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT SOMWithMissingValue
 : public PeriodicSOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
@@ -49,8 +49,8 @@ class ITK_EXPORT SOMWithMissingValue
   public:
   /** Standard typedefs */
   typedef SOMWithMissingValue Self;
-  typedef PeriodicSOM< TListSample, TMap, 
-              TSOMLearningBehaviorFunctor, 
+  typedef PeriodicSOM< TListSample, TMap,
+              TSOMLearningBehaviorFunctor,
               TSOMNeighborhoodBehaviorFunctor > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -100,11 +100,11 @@ class ITK_EXPORT SOMWithMissingValue
     Superclass::PrintSelf(os,indent); }
 
   private:
-  SOMWithMissingValue ( const Self & );  // purposely not implemented 
+  SOMWithMissingValue ( const Self & );  // purposely not implemented
   void operator=(const Self&);  // purposely not implemented
 
 
-}; // end of class 
+}; // end of class
 
 } // end of namespace otb
 

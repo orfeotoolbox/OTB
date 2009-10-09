@@ -137,7 +137,7 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
  // XS3, XS2. XS1, SWIR in the tif file.
  if(outputValues.size() != 4)
 	itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
-	  
+	
   outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];

@@ -25,7 +25,7 @@ namespace otb
   
 /** \class ExhaustiveExponentialOptimizer
  * \brief This optimizer performs an exhaustive search on an exponential scale.
- * 
+ *
  * This optimizer is equivalent to an exhaustive search in a discrete grid
  * defined over the parametric space. The grid is centered on the initial
  * position. The subdivisions of the grid along each one of the dimensions
@@ -33,13 +33,13 @@ namespace otb
  * scale factor m_ScaleFactor, with the exponant following an
  * arithmetic progression from 0 to m_NumberOfSteps * m_StepLength in
  * both positive and negative direction.
- * 
- * This optimizer can be use to perform a preliminary coarse search on 
+ *
+ * This optimizer can be use to perform a preliminary coarse search on
  * the search space.
  *
  * \ingroup Numerics Optimizers
  */
-class ITK_EXPORT ExhaustiveExponentialOptimizer : 
+class ITK_EXPORT ExhaustiveExponentialOptimizer :
                     public itk::SingleValuedNonLinearOptimizer
 {
 public:
@@ -94,7 +94,7 @@ protected:
   unsigned long        m_CurrentIteration;
   bool                 m_Stop;
   unsigned int         m_CurrentParameter;
-  double               m_GeometricProgression; 
+  double               m_GeometricProgression;
   ParametersType       m_CurrentIndex;
   unsigned long        m_MaximumNumberOfIterations;
   MeasureType          m_MaximumMetricValue;
@@ -102,7 +102,7 @@ protected:
   ParametersType       m_MinimumMetricValuePosition;
   ParametersType       m_MaximumMetricValuePosition;
   
-private:  
+private:
   ExhaustiveExponentialOptimizer(const Self&); //purposely not implemented
   void operator=(const Self&);//purposely not implemented
 

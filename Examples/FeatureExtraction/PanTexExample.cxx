@@ -41,7 +41,7 @@
 // This example illustrates the use of the
 // \doxygen{otb}{PanTexTextureImageFilter}. This texture parameter was
 // first introduced in \cite{PanTex} and is very useful for urban area
-// detection. 
+// detection.
 // \relatedClasses
 //  \begin{itemize}
 //  \item \doxygen{otb}{ContrastTextureFunctor}
@@ -113,7 +113,7 @@ int main(int argc, char * argv[])
 // the \code{Update} method of the writer.
 //
 // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet    
+  // Software Guide : BeginCodeSnippet
   textureFilter->SetInput(reader->GetOutput());
   writer->SetInput(textureFilter->GetOutput());
 

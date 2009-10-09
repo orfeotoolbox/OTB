@@ -48,7 +48,7 @@ template <class TInputImage, class TOutputImage, class TFunction  >
 void
 FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 ::BeforeThreadedGenerateData()
-{ 
+{
   Superclass::BeforeThreadedGenerateData();
 
   InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));

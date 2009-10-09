@@ -29,7 +29,7 @@ namespace otb
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::EdgeDensityImageFilter()
-{ 
+{
   this->SetNumberOfRequiredInputs( 1 );
   
   m_NeighborhoodRadius.Fill( 1 );
@@ -72,7 +72,7 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
   -----------------------------------------------------------------*/
 template <class TInputImage , class TOutputImage, class TEdgeDetector, class TDensityCount>
 void
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>  
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

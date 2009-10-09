@@ -28,13 +28,13 @@ namespace otb
 
 
 /** \class PostGISCreateTableTransactor
- * \brief PQXX-based transactor for creating PostGIS tables 
+ * \brief PQXX-based transactor for creating PostGIS tables
  *
- * 
+ *
  * The copy constructor and the "=" operator have to be defined for
  * deep copy, so that libpqxx is able to get the values set for the
  * class variables.
- * 
+ *
  *
  * \ingroup GISTransactors
  */

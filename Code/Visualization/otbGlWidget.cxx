@@ -92,7 +92,7 @@ void GlWidget::resize(int x, int y, int w, int h)
 {
   // Distinguish between resize, move and not changed events
   // (The system window manager may generate multiple resizing events,
-  // so we'd rather avoid event flooding here) 
+  // so we'd rather avoid event flooding here)
   bool reportMove   = false;
   bool reportResize = false;
   if(this->x() != x || this->y() != y)

@@ -138,7 +138,7 @@ int main( int argc, char *argv[] )
   //
   // The ARVI (Atmospherically Resistant Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
-  // Note that we also can use other functors which operate with the 
+  // Note that we also can use other functors which operate with the
   // Red, Blue and Nir channels such as EVI, ARVI and TSARVI.
   //
   //  Software Guide : EndLatex

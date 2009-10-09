@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -26,16 +26,16 @@ namespace otb {
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
-::PrintSelf ( std::ostream &os, itk::Indent i ) const  
-{ 
+::PrintSelf ( std::ostream &os, itk::Indent i ) const
+{
   os << i << "Wavelet kind : " << GetWaveletName() << "\n";
   os << i << "Up-Sampling factor " << GetUpSampleFactor() << "\n";
   Superclass::PrintSelf(os, i.GetNextIndent());
   os << i << "Wavelet coeff: [ ";
   for ( typename Superclass::ConstIterator iter = Superclass::Begin();
-    iter != Superclass::End(); 
+    iter != Superclass::End();
     ++iter )
   {
     os << *iter << ' ';
@@ -46,9 +46,9 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
-::UpSamplingCoefficients ( CoefficientVector & coeff ) 
+::UpSamplingCoefficients ( CoefficientVector & coeff )
 {
   if ( m_UpSampleFactor <= 1 )
     return;
@@ -71,7 +71,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 ::RevertFilter ( CoefficientVector & coeff )
 {
@@ -91,7 +91,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 ::GenerateForwardHighPassFilterFromLowPassFilter ( CoefficientVector & coeff )
 {
@@ -122,7 +122,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 ::GenerateInverseHighPassFilterFromLowPassFilter ( CoefficientVector & coeff )
 {
@@ -130,7 +130,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
   CoefficientVector highPassCoeff ( length + 2 );
 
-  double sign = -1; 
+  double sign = -1;
   for ( unsigned int i = 0; i < length; i++ )
   {
     highPassCoeff[i] = sign * coeff[i];
@@ -149,7 +149,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 ::GenerateInverseLowPassFilterFromHighPassFilter ( CoefficientVector & coeff )
 {
@@ -157,7 +157,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
   CoefficientVector highPassCoeff ( length + 2 );
 
-  double sign = 1; 
+  double sign = 1;
   for ( unsigned int i = 0; i < length; i++ )
   {
     highPassCoeff[i] = sign * coeff[i];
@@ -176,7 +176,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
-void 
+void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 ::ReduceFilterLength ( CoefficientVector & coeff )
 {

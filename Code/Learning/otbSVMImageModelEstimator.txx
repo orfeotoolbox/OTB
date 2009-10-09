@@ -58,7 +58,7 @@ void
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::SetInputImage(const TInputImage * inputImage)
 {
-  this->itk::ProcessObject::SetNthInput(0,const_cast<TInputImage*>(inputImage));  
+  this->itk::ProcessObject::SetNthInput(0,const_cast<TInputImage*>(inputImage));
 }
 
 

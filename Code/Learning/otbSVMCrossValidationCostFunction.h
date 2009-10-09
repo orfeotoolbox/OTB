@@ -28,8 +28,8 @@ namespace otb
  * \brief This function returns the cross validation accuracy of a SVM model.
  *
  * It allows to perform parameters selection to maximize the
- * accuracy using ITK optimizers. 
- * 
+ * accuracy using ITK optimizers.
+ *
  * Given an input SVM model, the number of parameters depends on the
  * type of kernel:
  * - Linear kernel : C
@@ -42,11 +42,11 @@ namespace otb
  *
  * The GetValueAndDerivatives() uses the GetValue() function to
  * compute the partial derivatives. as such, it can be quite intensive.
- * 
+ *
  * \ingroup ClassificationFilters
  */
-template <class TModel> 
-class ITK_EXPORT SVMCrossValidationCostFunction 
+template <class TModel>
+class ITK_EXPORT SVMCrossValidationCostFunction
   : public itk::SingleValuedCostFunction
 {
 public:

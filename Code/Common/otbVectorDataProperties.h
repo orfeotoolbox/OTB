@@ -74,7 +74,7 @@ class ITK_EXPORT VectorDataProperties : public itk::DataObject
     /** Get/Set the VectorData. */
 //      itkGetObjectMacro(VectorDataObject, VectorDataType);
     void SetVectorDataObject(const VectorDataType * v) {m_VectorDataObject=const_cast <VectorDataType *>(v); }
-//     
+//
     RegionType GetBoundingRegion() {return m_BoundingRegion;}
     void SetBoundingRegion(RegionType & region) {m_BoundingRegion=region; }
     

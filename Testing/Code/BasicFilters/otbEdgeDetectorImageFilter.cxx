@@ -34,7 +34,7 @@ int otbEdgeDetectorImageFilter(int argc, char* argv[] )
 
   /**Instancitation of an object*/
   ReaderType::Pointer         reader      = ReaderType::New();
-  WriterType::Pointer         writer      = WriterType::New(); 
+  WriterType::Pointer         writer      = WriterType::New();
   DetectorType::Pointer       detector    = DetectorType::New();
   SobelDetectionType::Pointer sobelFilter = SobelDetectionType::New();
 

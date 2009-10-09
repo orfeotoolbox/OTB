@@ -10,8 +10,8 @@ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+This software is distributed WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -20,16 +20,16 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include <vector>
 
-//TODO change this include  have to define from what inherate this class 
+//TODO change this include  have to define from what inherate this class
 #include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
 
-namespace otb 
+namespace otb
 {
 
 namespace Functor
 {
 
-/** \class LabelObjectToPolygonFunctor 
+/** \class LabelObjectToPolygonFunctor
  *  \brief This class vectorizes a LabelObject to a Polygon.
  *
  * The algorithm follows a finite states machine described in the
@@ -43,13 +43,13 @@ namespace Functor
  * ensure ordered RLE), and the finite states machine tracks the edge
  * following 8 canonical states given by the configuration of two
  * consecutive raws of lines.
- * 
+ *
  * Iterations are done until convergence which is guaranteed to
  * happen.
  *
  * Please be aware that this functor is not thread-safe.
  *
- */ 
+ */
 template <class TLabelObject, class TPolygon >
 class LabelObjectToPolygonFunctor
 {
@@ -81,7 +81,7 @@ private:
  /// Compare two line in the lexicographical order
   static bool LexicographicalLineCompare(const LineType &  l1, const LineType & l2);
 
-  /// Check if the given run index (index in line,line) is valid 
+  /// Check if the given run index (index in line,line) is valid
   inline bool IsRunIndexValid(const IndexType & index) const;
 
   /// Check if the point lies within the range of the line

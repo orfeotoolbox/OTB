@@ -33,7 +33,7 @@
 #include "itkNumericTraits.h"
 
 int otbVectorDataToLabelMapFilter(int argc, char * argv[])
-{ 
+{
   
   /** Rasterize vectorData to LabelMap (only available for polygon yet)*/
   if ( argc != 3 )
@@ -53,7 +53,7 @@ int otbVectorDataToLabelMapFilter(int argc, char * argv[])
   typedef otb::Image<LabelType,Dimension>        LabeledImageType;
   typedef otb::ImageFileWriter<LabeledImageType> WriterType;
   
-  // Label map typedef 
+  // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                            LabelMapType;
  
@@ -65,7 +65,7 @@ int otbVectorDataToLabelMapFilter(int argc, char * argv[])
   
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  //Update the reader 
+  //Update the reader
   reader->Update();
   
   VectorDataToLabelMapFilterType::Pointer myFilter = VectorDataToLabelMapFilterType::New();

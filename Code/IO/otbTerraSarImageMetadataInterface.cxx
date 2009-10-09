@@ -155,7 +155,7 @@ TerraSarImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) c
   {
   	itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /* 
+  /*
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))

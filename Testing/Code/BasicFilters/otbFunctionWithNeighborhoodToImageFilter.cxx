@@ -25,7 +25,7 @@
 #include "otbTextureImageFunction.h"
 
 template <class TScalarInput, class TScalarOutput>
-class ITK_EXPORT FunctorTest : 
+class ITK_EXPORT FunctorTest :
 public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
 {
 public:
@@ -36,7 +36,7 @@ public:
   
   virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
   {
-    double out = neigh.GetCenterValue(); 
+    double out = neigh.GetCenterValue();
     
     return out;
   }

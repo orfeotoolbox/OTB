@@ -83,17 +83,17 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
     }
   
   if(m_AeronetFileName != "")
-    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName, 
+    m_CorrectionParameters->UpdateAeronetData( m_AeronetFileName,
 					       imageMetadataInterface->GetYear(dict),
 					       imageMetadataInterface->GetHour(dict),
-					       imageMetadataInterface->GetMinute(dict) );    
+					       imageMetadataInterface->GetMinute(dict) );
   
   // load fiter function values
   if(m_FilterFunctionValuesFileName != "")
     {
       m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
-   } 
-  // the user has set the filter function values 
+   }
+  // the user has set the filter function values
   else
     {
       bool ffvfOK = true;
@@ -108,14 +108,14 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 	  // if no ffvf set, set 1 as coef
 	  if(ffvfOK)
 	    functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-	    
+	
 	  functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
 	  functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
 
 	  // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max
 	  if(!ffvfOK)
 	    functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
-	    
+	
 	  m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
 	}
     }
@@ -142,7 +142,7 @@ template <class TInputImage, class TOutputImage>
 void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::UpdateFunctors()
-{  
+{
   this->GetFunctorVector().clear();
 
   for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)

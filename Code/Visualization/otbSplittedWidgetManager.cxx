@@ -21,19 +21,19 @@ namespace otb
 {
 
 SplittedWidgetManager
-::SplittedWidgetManager() 
+::SplittedWidgetManager()
 {
   m_SplittedWidget = new ImageWidgetSplittedManagerType();
 }
 
 SplittedWidgetManager
-::~SplittedWidgetManager() 
+::~SplittedWidgetManager()
 {
   delete m_SplittedWidget;
 }
 
 
-void 
+void
 SplittedWidgetManager
 ::RegisterFullWidget(WidgetType* fullWidget)
 {
@@ -44,9 +44,9 @@ SplittedWidgetManager
 }
 
 
-void 
+void
 SplittedWidgetManager
-::RegisterScrollWidget(WidgetType* scrollWidget) 
+::RegisterScrollWidget(WidgetType* scrollWidget)
 {
   m_InternalScrollWidget = scrollWidget;
   m_SplittedWidget->m_QuicklookGroup->add(scrollWidget);
@@ -55,7 +55,7 @@ SplittedWidgetManager
 
 }
 
-void 
+void
 SplittedWidgetManager
 ::RegisterZoomWidget(WidgetType* zoomWidget)
 {
@@ -64,7 +64,7 @@ SplittedWidgetManager
   m_SplittedWidget->m_ZoomGroup->resizable(zoomWidget);
   zoomWidget->resize(0,0,m_SplittedWidget->m_ZoomGroup->w(),m_SplittedWidget->m_ZoomGroup->h());
 }
-void 
+void
 SplittedWidgetManager
 ::RegisterPixelDescriptionWidget(Fl_Output * pixelWidget)
 {
@@ -75,7 +75,7 @@ SplittedWidgetManager
 
 }
 
-void 
+void
 SplittedWidgetManager
 ::RegisterHistogramWidget(WidgetType* curveWidget)
 {
@@ -85,7 +85,7 @@ SplittedWidgetManager
   curveWidget->resize(0,0,m_SplittedWidget->m_HistogramsGroup->w(),m_SplittedWidget->m_HistogramsGroup->h());
  }
 
-void 
+void
 SplittedWidgetManager
 ::Show()
 {
@@ -102,7 +102,7 @@ SplittedWidgetManager
   m_InternalZoomWidget->show();
 }
 
-void 
+void
 SplittedWidgetManager
 ::Hide()
 {
@@ -113,7 +113,7 @@ SplittedWidgetManager
   m_SplittedWidget->m_HistogramsGroup->hide();
 }
 
-void 
+void
 SplittedWidgetManager
 ::Refresh()
 {
@@ -124,7 +124,7 @@ SplittedWidgetManager
  m_InternalCurveWidget->redraw();
 }
 
-void 
+void
 SplittedWidgetManager
 ::SetLabel(const char * label)
 {
@@ -154,7 +154,7 @@ SplittedWidgetManager
   m_SplittedWidget->m_HistogramsGroup->copy_label(oss5.str().c_str());
 }
 
-void 
+void
 SplittedWidgetManager
 ::UnRegisterAll()
 {

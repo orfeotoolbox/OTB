@@ -181,7 +181,7 @@ protected:
 private:
   VectorImage(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-    /** Only here to have access to projection and coordinates datas. 
+    /** Only here to have access to projection and coordinates datas.
   Those method will disappear.
   Use Default because don't need to know the sensor type*/
   typename DefaultImageMetadataInterface::Pointer m_ImageMetadataInterface;

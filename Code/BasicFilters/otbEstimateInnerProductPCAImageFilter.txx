@@ -54,7 +54,7 @@ template<class TInputImage, class TOutputImage>
 void
 EstimateInnerProductPCAImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation(void)
-{ 
+{
   Superclass::GenerateOutputInformation();
   this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired);
 }

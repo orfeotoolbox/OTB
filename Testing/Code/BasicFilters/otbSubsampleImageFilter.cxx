@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -41,7 +41,7 @@ int otbSubsampleImageFilter ( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFileName );
 
-  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::INVERSE > 
+  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::INVERSE >
     InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
   invFilter->SetInput( reader->GetOutput() );
@@ -55,7 +55,7 @@ int otbSubsampleImageFilter ( int argc, char * argv[] )
   writer1->SetInput( invFilter->GetOutput() );
   writer1->Update();
 
-  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::FORWARD > 
+  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::FORWARD >
     ForwardFilterType;
   ForwardFilterType::Pointer filter = ForwardFilterType::New();
   filter->SetInput( invFilter->GetOutput() );

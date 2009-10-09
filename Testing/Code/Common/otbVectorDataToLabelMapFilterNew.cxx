@@ -22,7 +22,7 @@
 #include "otbAttributesMapLabelObject.h"
 
 int otbVectorDataToLabelMapFilterNew(int argc, char * argv[])
-{ 
+{
   typedef unsigned short                         LabelType;
   const unsigned int Dimension = 2;
   typedef otb::VectorData<double,Dimension> VectorDataType;

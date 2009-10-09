@@ -46,7 +46,7 @@ template<class TInputImage, class TOutputImage>
 void
 NormalizeInnerProductPCAImageFilter<TInputImage,TOutputImage>
 ::GenerateOutputInformation(void)
-{ 
+{
   Superclass::GenerateOutputInformation();
 }
 

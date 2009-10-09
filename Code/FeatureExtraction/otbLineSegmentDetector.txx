@@ -184,8 +184,8 @@ LineSegmentDetector<TInputImage,TPrecision >
   InputIndexType id = modulusImage->GetRequestedRegion().GetIndex();
 
 
-  // Don't take in carre the boudary of the image. 
-  // Special cases for streamed call 
+  // Don't take in carre the boudary of the image.
+  // Special cases for streamed call
   if( modulusImage->GetRequestedRegion().GetIndex()[0] == 0)
     {
       id[0]++;
@@ -487,7 +487,7 @@ LineSegmentDetector<TInputImage, TPrecision>
 //   radiusLabel.Fill(0);
 //   NeighborhoodLabelIteratorType                       itLabel(radiusLabel,m_UsedPointImage,
 //                                                               m_UsedPointImage->GetRequestedRegion());
-//   
+//
 //   itLabel.SetLocation(index);
 //   if(*(itLabel.GetCenterValue()) == 1)
 //     isUsed = true;

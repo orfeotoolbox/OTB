@@ -31,7 +31,7 @@ namespace otb
    *    \brief Manage OTB ConfigurationFile file
 */
   
-  class ConfigurationFile 
+  class ConfigurationFile
   : public itk::Object
   {
     public:
@@ -50,7 +50,7 @@ namespace otb
       
       /** Get the unique instanc1e of the model */
 //       static Pointer GetInstance()
-//       {   
+//       {
 //         if (!Instance)
 //         {
 //           Instance = Self::New();
@@ -67,14 +67,14 @@ namespace otb
       {
         return m_OTBConfig->read<std::string>( "LANG" );
       };
-//       std::string lib(OTB_CONFIG); 
+//       std::string lib(OTB_CONFIG);
       
     protected:
       
       /** Constructor */
       ConfigurationFile(){
         std::string OTBBinDir(OTB_CONFIG);
-        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb_config.inp");  
+        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb_config.inp");
       }
       ;
       /** Destructor */

@@ -32,7 +32,7 @@ namespace otb
    *  \brief This class represent a Rectangle.
    *
    *  A rectangle is defined by the median of the width, an orientation and a width
-   *  
+   *
    */
   template<class TValue=double>
     class ITK_EXPORT Rectangle
@@ -54,10 +54,10 @@ namespace otb
       itkTypeMacro(Rectangle, itk::Object);
 
       /** Derived typedefs */
-      typedef itk::ContinuousIndex<ValueType,2>             ContinuousIndexType;                    
-      typedef ContinuousIndexType                           VertexType;  
+      typedef itk::ContinuousIndex<ValueType,2>             ContinuousIndexType;
+      typedef ContinuousIndexType                           VertexType;
       typedef itk::VectorContainer<unsigned, VertexType>    VertexListType;
-      typedef typename VertexListType::Pointer              VertexListPointerType;      
+      typedef typename VertexListType::Pointer              VertexListPointerType;
       typedef typename VertexListType::ConstIterator        VertexListConstIteratorType;
       
       
@@ -69,7 +69,7 @@ namespace otb
       
       typedef itk::ImageRegion<2>                       RegionType;
       
-      /** 
+      /**
        * Set/Get the parameters the a rectangle
        *  - width and orientation
        */
@@ -78,7 +78,7 @@ namespace otb
       itkSetMacro(Width,ValueType);
    
       itkSetMacro(Orientation,ValueType);
-      itkGetMacro(Orientation,ValueType);     
+      itkGetMacro(Orientation,ValueType);
 
       /**
        * Check wether point is strictly inside the rectangle.

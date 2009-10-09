@@ -75,7 +75,7 @@ int otbRegionImageToRectangularPathListFilter(int argc, char * argv[])
     exit(-1);
   }
     
-  while(listIt != pathList->End()) 
+  while(listIt != pathList->End())
     {
 
       for (PathType::VertexListType::ConstIterator vit  = listIt.Get()->GetVertexList()->Begin();

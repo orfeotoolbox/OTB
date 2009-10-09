@@ -83,7 +83,7 @@ ImageMetadataInterfaceBase::GetGCPCount( const MetaDataDictionaryType & dict) co
 }
 
 
-OTB_GCP & 
+OTB_GCP &
 ImageMetadataInterfaceBase::GetGCPs( MetaDataDictionaryType & dict, unsigned int GCPnum )
 {
   std::string key;
@@ -237,7 +237,7 @@ ImageMetadataInterfaceBase::GetGCPZ( const MetaDataDictionaryType & dict, unsign
 }
 
 
-ImageMetadataInterfaceBase::VectorType 
+ImageMetadataInterfaceBase::VectorType
 ImageMetadataInterfaceBase::GetGeoTransform( const MetaDataDictionaryType & dict ) const
 {
   VectorType adfGeoTransform;

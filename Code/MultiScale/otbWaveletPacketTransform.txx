@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -66,8 +66,8 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
 template < class TInputImage, class TOutputImage, class TFilter, class TCost >
 void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
-::GenerateData 
-( unsigned int depth, 
+::GenerateData
+( unsigned int depth,
   OutputImageType * outputPtr,
   itk::ProgressAccumulator * progress )
 {
@@ -117,7 +117,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
 template < class TInputImage, class TOutputImage, class TFilter >
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
 ::WaveletPacketTransform ()
-  : m_SubsampleImageFactor(2), m_NumberOfFilters(0), m_DepthOfDecomposition(0) 
+  : m_SubsampleImageFactor(2), m_NumberOfFilters(0), m_DepthOfDecomposition(0)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfInputs(1);
@@ -163,9 +163,9 @@ void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
 ::GenerateData ()
 {
-  if ( m_WaveletPacketRule[0] != true ) 
+  if ( m_WaveletPacketRule[0] != true )
   {
-    throw itk::ExceptionObject( __FILE__, __LINE__, 
+    throw itk::ExceptionObject( __FILE__, __LINE__,
       "No decomposition to perform in Generic data... Check WaveletPacketRule tab",
       ITK_LOCATION );
   }
@@ -179,19 +179,19 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 
   if ( m_NumberOfFilters == 0 )
   {
-    throw itk::ExceptionObject( __FILE__, __LINE__, 
+    throw itk::ExceptionObject( __FILE__, __LINE__,
       "No filter found in the decomposition tree... Check WaveletPacketRule tab",
       ITK_LOCATION );
   }
 
   InputImageIterator inputIterator = this->GetInput()->Begin();
 
-  unsigned int pos = 1; 
+  unsigned int pos = 1;
   SetInputFilters( pos, inputIterator, 0 );
 
   if ( pos != m_WaveletPacketRule.size() || inputIterator != this->GetInput()->End() )
   {
-    throw itk::ExceptionObject( __FILE__, __LINE__, 
+    throw itk::ExceptionObject( __FILE__, __LINE__,
       "Bad decomposition tree implementation...",
       ITK_LOCATION );
   }
@@ -202,7 +202,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
   progress->SetMiniPipelineFilter(this);
 
   for ( pos = m_NumberOfFilters; pos > 0; pos-- )
-  { 
+  {
     FilterPointerType filter = m_FilterList->GetNthElement(pos-1);
     progress->RegisterInternalFilter( filter, 1.f/static_cast<float>( m_NumberOfFilters ) );
     filter->Update();
@@ -214,7 +214,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 template < class TInputImage, class TOutputImage, class TFilter >
 unsigned int
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
-::SetInputFilters 
+::SetInputFilters
 ( unsigned int & ruleID, InputImageIterator & imgIt, unsigned int filterID )
 {
   unsigned int nextFilterID = filterID+1;
@@ -243,7 +243,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 template < class TInputImage, class TOutputImage, class TFilter >
 void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
-::InterpretRule () 
+::InterpretRule ()
 {
   if ( m_FilterList && m_FilterList->Size() != 0 )
   {
@@ -261,7 +261,7 @@ WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomp
 template < class TInputImage, class TOutputImage, class TFilter >
 void
 WaveletPacketTransform< TInputImage, TOutputImage, TFilter, INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
-::InterpretRule 
+::InterpretRule
 ( unsigned int & ruleID, unsigned int curDepth )
 {
   if ( curDepth > m_DepthOfDecomposition )

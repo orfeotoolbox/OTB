@@ -37,7 +37,7 @@ int otbBinaryImageDensityFunction(int argc, char* argv[] )
 
   /**Instancitation ofa Smart Pointer*/
   FunctionType::Pointer       filter = FunctionType::New();
-  ReaderType::Pointer         reader = ReaderType::New(); 
+  ReaderType::Pointer         reader = ReaderType::New();
   
   std::ofstream outfile(outfname);
 
@@ -54,15 +54,15 @@ int otbBinaryImageDensityFunction(int argc, char* argv[] )
   FunctionType::PointType     pDst;
   IndexType                   index;
 
-  index[0] = 0; 
+  index[0] = 0;
   index[1] = 0;
   outfile << "Density computed for the point : " << index << " is "<< filter->EvaluateAtIndex(index) << std::endl;
     
-  index[0] = static_cast<unsigned int >(size[0]/2.); 
+  index[0] = static_cast<unsigned int >(size[0]/2.);
   index[1] = static_cast<unsigned int >(size[1]/4.);
   outfile << "Density computed for the point : " << index << " is "<< filter->EvaluateAtIndex(index) << std::endl;
   
-  pDst[0] = static_cast<unsigned int >(size[0]/2.); 
+  pDst[0] = static_cast<unsigned int >(size[0]/2.);
   pDst[1] = static_cast<unsigned int >(size[1]/4.);
   outfile << "Density computed for the point : " <<  pDst<< " is "<< filter->Evaluate(pDst) << std::endl;
    

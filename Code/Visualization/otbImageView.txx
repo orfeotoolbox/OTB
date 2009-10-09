@@ -120,7 +120,7 @@ ImageView<TViewerModel>
 
     // Read the buffer
     const RegionType qlRegion =  m_Model->GetRasterizedQuicklook()
-      ->GetLargestPossibleRegion(); 
+      ->GetLargestPossibleRegion();
     m_ScrollWidget->ReadBuffer(m_Model->GetRasterizedQuicklook(),qlRegion);
 
     // Compute the appropriate scale
@@ -159,7 +159,7 @@ ImageView<TViewerModel>
 ::UpdateFullWidget()
 {
   if(m_Model->GetHasExtract())
-    { 
+    {
     otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
     m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
                              ->GetLargestPossibleRegion());
@@ -203,7 +203,7 @@ ImageView<TViewerModel>
     m_ZoomWidget->label(label.c_str());
 
     m_ZoomWidget->redraw();
-    }  
+    }
 }
 
 

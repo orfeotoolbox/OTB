@@ -43,7 +43,7 @@ ImageFileWriter<TInputImage>
   // create default region splitter
   m_RegionSplitterUseToEstimateNumberOfStreamDivisions = itk::ImageRegionSplitter<InputImageDimension>::New();
 
-  this->Superclass::SetNumberOfStreamDivisions(10); 
+  this->Superclass::SetNumberOfStreamDivisions(10);
 }
 
 

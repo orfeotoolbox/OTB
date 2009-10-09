@@ -30,8 +30,8 @@ namespace otb
  * TransactorGISTableFunction is a baseclass for all objects that evaluate
  * a const transaction on a GISTable using an external transactor.
  *
- * 
- * 
+ *
+ *
  *
  * \ingroup TransactorGISTableFunctions
  */

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -32,9 +32,9 @@ namespace Statistics {
  *
  * This class is derived from EuclideanDistanceWithMissingValuePow2 class that handle the missing value
  * functonnalities. Here, the square root is included in the evaluation...
- * 
+ *
  * The class can be templated over any container that holds data elements, as
- * for template of EuclideanDistance. 
+ * for template of EuclideanDistance.
  *
  * The only restriction is that elemnts have to support '\code{NaN}'.
  *
@@ -48,12 +48,12 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
   public:
     /** Standard "Self" typedef. */
     typedef EuclideanDistanceWithMissingValue Self;
-    typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2< TVector > 
+    typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2< TVector >
       Superclass;
-    typedef itk::SmartPointer< Self > Pointer ; 
+    typedef itk::SmartPointer< Self > Pointer ;
     typedef itk::SmartPointer<const Self> ConstPointer;
 
-    typedef typename Superclass::MeasurementVectorSizeType 
+    typedef typename Superclass::MeasurementVectorSizeType
       MeasurementVectorSizeType;
 
     /** Run-time type information (and related methods). */
@@ -74,7 +74,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
       return ::vcl_sqrt( Superclass::Evaluate( x1, x2 ) ); }
 
     /** Gets the cooridnate distance between a and b. NOTE: a and b
-    * should be type of component */ 
+    * should be type of component */
     double Evaluate(const ValueType &a, const ValueType &b) const {
       return ::vcl_sqrt( Superclass::Evaluate( a, b ) ); }
 
@@ -85,7 +85,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
 
   protected:
     EuclideanDistanceWithMissingValue() {}
-    virtual ~EuclideanDistanceWithMissingValue() {} 
+    virtual ~EuclideanDistanceWithMissingValue() {}
 } ; // end of class
 
 } // end namespace statistics

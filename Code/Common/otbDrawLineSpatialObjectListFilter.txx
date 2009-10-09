@@ -122,9 +122,9 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
             this->CropRightSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
         }
 
-      /** 
-       * If an extremity is under the region 
-       * Technically, the X component of the index is inside the image 
+      /**
+       * If an extremity is under the region
+       * Technically, the X component of the index is inside the image
        */
       if(this->IsDownsideTheImage(&indexBeginLine)  && input->GetLargestPossibleRegion().IsInside(indexEndLine))
         this->CropSegment(&indexBeginLine,&indexEndLine, &outputRegionForThread);
@@ -136,7 +136,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
       /** If the segments are not in the region (upside or downside the region)*/
       if(!(this->IsUpsideTheRegion(&indexBeginLine,&outputRegionForThread)   && this->IsUpsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
          !(this->IsDownsideTheRegion(&indexBeginLine,&outputRegionForThread) && this->IsDownsideTheRegion(&indexEndLine,&outputRegionForThread)) &&
-         !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine, &outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread)) 
+         !(this->IsColumnOutsideOfTheRegion(&indexBeginLine,&indexEndLine, &outputRegionForThread) && this->IsColumnOutsideOfTheRegion(&indexEndLine,&indexBeginLine,&outputRegionForThread))
          )
         {
 
@@ -231,7 +231,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 
 
 /**
- * 
+ *
  *
  */
 template <class TInputImage, class TOutput>
@@ -246,7 +246,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
   if (  ((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0])) && ((*otherToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) ))
     res  = true;
   
-  if((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))  
+  if((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) && this->IsUpsideTheRegion(otherToCheck,outputRegionForThread))
     res1 = true;
   
   if((*indexToCheck)[0]>=static_cast<OutputIndexValueType>(size[0]) && this->IsDownsideTheRegion(otherToCheck,outputRegionForThread) )
@@ -292,7 +292,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 
   if( (*indexToCrop)[0] < (*otherIndex)[0])
     lengthSegment = (*otherIndex)[1] -(*indexToCrop)[1];
-  else 
+  else
     lengthSegment = (*indexToCrop)[1] -(*otherIndex)[1];
   
   slope = lengthSegment/( tempOtherIndexX - static_cast<double>((*indexToCrop)[0]));
@@ -311,7 +311,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
       double Y = static_cast<double>(m_Length-1)/*tstart[1]+size[1]-1*/;
       tempIndex[1] = static_cast<OutputIndexValueType>(Y);
       tempIndex[0] = static_cast<OutputIndexValueType>((Y-origin) / slope);  // X = (Y-B)/A
-    } 
+    }
 
   (*indexToCrop)[0] = tempIndex[0];
   (*indexToCrop)[1] = tempIndex[1];

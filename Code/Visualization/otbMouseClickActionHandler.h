@@ -25,12 +25,12 @@ namespace otb
 /** \class MouseClickActionHandler
 *   \brief Implements clicking on widgets
 *   Triggers the IndexClicked(); methods on the destination.
-* 
+*
 *   \sa ImageWidgetController
 *   \sa ImageWidgetActionHandler
 */
 
-template <class TModel,class TView> 
+template <class TModel,class TView>
 class MouseClickActionHandler
   : public ImageWidgetActionHandler
 {
@@ -156,7 +156,7 @@ private:
 
   int m_MouseButton;
 
-}; // end class 
+}; // end class
 } // end namespace otb
 #endif
 

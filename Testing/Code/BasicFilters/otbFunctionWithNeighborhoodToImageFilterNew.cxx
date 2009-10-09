@@ -41,7 +41,7 @@ public:
   void SetOffset(OffsetType off){ m_Offset=off; };
 
   inline TOutputScalarType operator()(const NeighborhoodType &neigh)
-    { 
+    {
       return static_cast<TOutputScalarType>(neigh.GetCenterValue());
     }
 

@@ -43,7 +43,7 @@
 // The following example illustrates the use of the
 // otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
 // use of the Angular Vegetation Index (AVI).
-// The equation for the Angular Vegetation Index involves the gren, red 
+// The equation for the Angular Vegetation Index involves the gren, red
 // and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
 // wavelengths for the green, red and NIR bands and $\tan^{-1}$ is the arctangent function.
 //
@@ -182,8 +182,8 @@ int main( int argc, char *argv[] )
   //
   // The $\lambda$ R,G and NIR parameters are set. The
   // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-  // class sets the default values of $\lambda$ to $660$, $560$ and 
-  // $830$. 
+  // class sets the default values of $\lambda$ to $660$, $560$ and
+  // $830$.
   //
   //  Software Guide : EndLatex
 

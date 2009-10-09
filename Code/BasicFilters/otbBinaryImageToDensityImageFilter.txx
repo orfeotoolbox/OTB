@@ -135,7 +135,7 @@ BinaryImageToDensityImageFilter<TInputImage, TOutputImage, TCountFunction>
   typename InputImageType::IndexType index;
  
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
       it = itk::ConstNeighborhoodIterator<TInputImage>(r, inputPtr, *fit);
       
       itOut = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit);

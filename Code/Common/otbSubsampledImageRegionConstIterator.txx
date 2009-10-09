@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -28,7 +28,7 @@ namespace otb {
 
 template < class TImage >
 SubsampledImageRegionConstIterator< TImage >
-::SubsampledImageRegionConstIterator() 
+::SubsampledImageRegionConstIterator()
   : itk::ImageRegionConstIterator<TImage> ()
 {
   m_SubsampleFactor.Fill(1);
@@ -123,12 +123,12 @@ SubsampledImageRegionConstIterator< TImage >
   for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
   {
     m_FirstUsableIndex[i] = startIndex[i];
-    while ( m_FirstUsableIndex[i] 
+    while ( m_FirstUsableIndex[i]
       != ( m_SubsampleFactor[i] * ( m_FirstUsableIndex[i] / m_SubsampleFactor[i] ) ) )
     {
       ++m_FirstUsableIndex[i];
     }
-    m_LastUsableIndex[i] = startIndex[i] 
+    m_LastUsableIndex[i] = startIndex[i]
       + static_cast<IndexValueType>( m_SubsampleFactor[i] * ( (size[i]-1) / m_SubsampleFactor[i] ) );
   }
 
@@ -148,7 +148,7 @@ SubsampledImageRegionConstIterator< TImage >
   const SizeType& size = this->m_Region.GetSize();
 
   this->m_SpanBeginOffset = this->m_Offset;
-  this->m_SpanEndOffset = this->m_Offset 
+  this->m_SpanEndOffset = this->m_Offset
                           + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                           + 1;
 }
@@ -172,7 +172,7 @@ SubsampledImageRegionConstIterator< TImage >
 
   for ( unsigned int i = 0; i < ImageIteratorDimension; ++i )
   {
-    while ( theIndex[i] 
+    while ( theIndex[i]
       != ( m_SubsampleFactor[i] * ( theIndex[i] / m_SubsampleFactor[i] ) ) )
     {
       ++theIndex[i];
@@ -181,7 +181,7 @@ SubsampledImageRegionConstIterator< TImage >
     if ( theIndex[i] >  static_cast<IndexValueType>( this->m_Region.GetIndex()[i] + this->m_Region.GetSize()[i] ) )
     {
       theIndex[i] = ind[i];
-      while ( theIndex[i] 
+      while ( theIndex[i]
         != ( m_SubsampleFactor[i] * ( theIndex[i] / m_SubsampleFactor[i] ) ) )
       {
         --theIndex[i];
@@ -207,14 +207,14 @@ SubsampledImageRegionConstIterator< TImage >
   const SizeType& size = this->m_Region.GetSize();
 
   this->m_SpanBeginOffset = this->m_Offset;
-  this->m_SpanEndOffset = this->m_Offset 
+  this->m_SpanEndOffset = this->m_Offset
                           + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                           + 1;
 
 }
 
 template < class TImage >
-typename SubsampledImageRegionConstIterator< TImage >::RegionType 
+typename SubsampledImageRegionConstIterator< TImage >::RegionType
 SubsampledImageRegionConstIterator< TImage >
 ::GenerateOutputInformation () const
 {
@@ -233,7 +233,7 @@ SubsampledImageRegionConstIterator< TImage >
   newRegion.SetIndex( startIndex );
   newRegion.SetSize( size );
 
-#if 0 
+#if 0
 // #ifndef NDEBUG
   std::cerr << "InitialImageSize (";
   for ( unsigned int i = 0; i < ImageIteratorDimension-1; i++ )
@@ -273,7 +273,7 @@ SubsampledImageRegionConstIterator< TImage >
 ::Increment ()
 {
   // Get the index of the last pixel on the span (row)
-  IndexType ind = this->m_Image->ComputeIndex( 
+  IndexType ind = this->m_Image->ComputeIndex(
     static_cast<typename Superclass::OffsetValueType>(this->m_Offset) );
 
   const IndexType& startIndex = this->m_Region.GetIndex();
@@ -305,7 +305,7 @@ SubsampledImageRegionConstIterator< TImage >
     }
   }
   this->m_Offset = this->m_Image->ComputeOffset( ind );
-  this->m_SpanEndOffset = this->m_Offset 
+  this->m_SpanEndOffset = this->m_Offset
                             + static_cast<IndexValueType>( m_SubsampleFactor[0] * ((size[0]-1) / m_SubsampleFactor[0]) )
                             + 1;
   this->m_SpanBeginOffset = this->m_Offset;

@@ -30,7 +30,7 @@ namespace otb
 /** \class GISTable
  * \brief this class represents a table of a geospatial database (ie. PostGIS).
  *
- * 
+ *
  * \sa GISTableFileReader
  * \sa GISTableFileWriter
  *
@@ -92,8 +92,8 @@ public:
   
   /** Get attributes of the Table*/ //TODO implement
   
-  /** Get srid of the geometric column*/ //TODO implement 
-  //virtual 
+  /** Get srid of the geometric column*/ //TODO implement
+  //virtual
   /** Add Point content to the GIS Table*/ //TODO implement
   virtual void InsertPoint( const PointType &pt, const std::string & attribute = 0 ){};
   virtual void InsertMultiPoint(){};

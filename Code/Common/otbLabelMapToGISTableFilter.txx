@@ -9,8 +9,8 @@
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -34,7 +34,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   m_DropExistingGISTable = false;
   //default value of the gis table name
   m_GISTableName = "labelmap_to_gis_table";
-}  
+}
   
 
 
@@ -82,7 +82,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
 }
 
 template<class TLabelMap , class TGISTable>
-void 
+void
 LabelMapToGISTableFilter< TLabelMap, TGISTable >
 ::GenerateInputRequestedRegion()
 {/*
@@ -99,7 +99,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
 /*Distance: 5.19615
  -> Test EXIT SUCCESS.
 template<class TInputImage, class TLabelMap >
-void 
+void
 LabelMapToLabelMapFilter<TInputImage, TLabelMap>
 ::EnlargeOutputRequestedRegion(DataObject *)
 {
@@ -136,7 +136,7 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   FunctorType functor;
 //   SimplifyFunctorType simplifyFunctor;
 //   simplifyFunctor.SetTolerance (0.0);
-//   
+//
 //   CloseFunctorType closeFunctor;
   
   CorrectFunctorType correctFunctor;
@@ -159,12 +159,12 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
     //std::cout << "polygon : " << polygon << std::endl;
     
     //Simply polygon (erase aligned points)
-//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon); 
+//     PolygonPointerType simplifyPolygon = simplifyFunctor(polygon);
     //std::cout << "simplify polygon : " << simplifyPolygon << std::endl;
     
     //Close polygon if necessary
-//     PolygonPointerType closePolygon = closeFunctor(simplifyPolygon); 
-    PolygonPointerType correctPolygon = correctFunctor(polygon); 
+//     PolygonPointerType closePolygon = closeFunctor(simplifyPolygon);
+    PolygonPointerType correctPolygon = correctFunctor(polygon);
     //std::cout << "simplify polygon : " << closePolygon << std::endl;
     
     this->GetOutput()->InsertPolygons( static_cast<typename TGISTable::PolygonConstPointerType> (correctPolygon), static_cast<typename TGISTable::PolygonListConstPointerType> (0), oss.str());

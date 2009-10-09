@@ -74,7 +74,7 @@ VectorDataFileReader<TOutputVectorData>
 
   // Test if the file can be open for reading access.
   //Only if m_FileName speciy a filename (not a dirname)
-  // FIXME shapefile should be able to open a directory and load the 
+  // FIXME shapefile should be able to open a directory and load the
   // individual shapefiles as layers
   if ( System::IsAFileName( this->m_FileName ) == true )
   {

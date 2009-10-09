@@ -30,7 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb}{EdgeDensityImageFilter}. 
+// \doxygen{otb}{EdgeDensityImageFilter}.
 // This filter computes a local density of edges on an image and can
 // be useful to detect man made objects or urban areas, for
 // instance. The filter has been implemented in a generic way, so that
@@ -156,10 +156,10 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  cannyFilter->SetUpperThreshold(upperThreshold); 
+  cannyFilter->SetUpperThreshold(upperThreshold);
   cannyFilter->SetLowerThreshold(lowerThreshold);
-  cannyFilter->SetVariance(variance); 
-  cannyFilter->SetMaximumError(maximumError); 
+  cannyFilter->SetVariance(variance);
+  cannyFilter->SetMaximumError(maximumError);
 
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex

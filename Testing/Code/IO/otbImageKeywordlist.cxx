@@ -68,7 +68,7 @@ int otbImageKeywordlist( int argc, char* argv[] )
     otb::ImageKeywordlist otb_kwl;
     otb_kwl.SetKeywordlist( geom_kwl );
 
-    otb_kwl.convertToOSSIMKeywordlist( geom_kwl2 ); 
+    otb_kwl.convertToOSSIMKeywordlist( geom_kwl2 );
 
     hasMetaData = projection->loadState(geom_kwl2);
     hasMetaData = projection->saveState(geom_kwl3);

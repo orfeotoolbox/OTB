@@ -19,7 +19,7 @@
 #define __otbHistogramActionHandler_h
 
 #include "otbCurves2DWidget.h"
-#include "otbVerticalAsymptoteCurve.h" 
+#include "otbVerticalAsymptoteCurve.h"
 
 
 namespace otb
@@ -83,7 +83,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
     // Variable declaration
     PointType             spacePoint, screenPoint;
     
-    // Left screen abcisse 
+    // Left screen abcisse
     spacePoint[0]     = m_LeftAsymptote->GetAbcisse();
     double  abcisseL  = m_Curve->TransformPoint(spacePoint)[0];
     
@@ -97,9 +97,9 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	  {
 	  case FL_PUSH:
 	    {
-	      // Position Clicked 
+	      // Position Clicked
 	      double x = Fl::event_x();
-	      
+	
 	      //typename SRenderingFunctionType::ParametersType param = m_RenderingFunction->GetParameters();
 		
 	      if ((vcl_abs(x-abcisseL)<50) || (vcl_abs(x-abcisseR)<50))
@@ -126,7 +126,7 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 /* 		  m_View->GetFullWidget()->redraw(); */
 /* 		  m_View->GetZoomWidget()->redraw(); */
 		}
-	      
+	
 	      m_ModifyLeft  = false;
 	      m_ModifyRight = false;
 	      return true;
@@ -151,9 +151,9 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
 	      if(m_ModifyRight)
 		{
 		  double tx = x - abcisseR;
-		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx); 
+		  m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
 		  m_Curve->redraw();
-		  
+		
 		  //  Update The Rendering Function min and max
 		  ParametersType param = m_RenderingFunction->GetParameters();
 		  param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
@@ -216,10 +216,10 @@ private:
   ModelPointerType m_Model;
 
   // Curve Widget To Handle Events on
-  CurveWidgetPointerType m_Curve; 
+  CurveWidgetPointerType m_Curve;
 
   // StandardRenderingFunction
-  RenderingFunctionPointerType  m_RenderingFunction;  
+  RenderingFunctionPointerType  m_RenderingFunction;
 
   // Left And Rigth Asymptote
   VerticalAsymptotePointerType  m_LeftAsymptote;

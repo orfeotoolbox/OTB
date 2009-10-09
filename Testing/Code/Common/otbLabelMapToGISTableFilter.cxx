@@ -52,7 +52,7 @@ int otbLabelMapToGISTableFilter(int argc, char * argv[])
   typedef otb::Image<LabelType,Dimension>        LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
   
-  // Label map typedef 
+  // Label map typedef
   typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                            LabelMapType;
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;

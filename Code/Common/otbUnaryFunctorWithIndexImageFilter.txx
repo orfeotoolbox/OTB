@@ -105,7 +105,7 @@ UnaryFunctorWithIndexImageFilter<TInputImage, TOutputImage, TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while( !inputIt.IsAtEnd() ) 
+  while( !inputIt.IsAtEnd() )
     {
       outputIt.Set( m_Functor( inputIt.Get(), inputIt.GetIndex() ) );
       ++inputIt;

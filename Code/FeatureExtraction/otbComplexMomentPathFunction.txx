@@ -132,7 +132,7 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
   PrecisionType ds;
   VertexType dest;
 
-  // This variable will be used to normalize the moment 
+  // This variable will be used to normalize the moment
   PrecisionType norm = 0.;
 
   while(it!=vertexList->End())
@@ -144,17 +144,17 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
     dest[1]  -= centroid[1];
   
     // Don't forget the ds part of the integration process
-    ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
+    ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.));
     norm+=ds;
     value += ds * EvaluateComplexMomentAtIndex(source);
     source=dest;
     ++it;
     }
   // Close the loop
-  dest = vertexList->Begin().Value();  
+  dest = vertexList->Begin().Value();
   dest[0]  -= centroid[0];
   dest[1]  -= centroid[1];
-  ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.)); 
+  ds = vcl_sqrt(vcl_pow(dest[0]-source[0],2.)+vcl_pow(dest[1]-source[1],2.));
   norm+=ds;
   value += EvaluateComplexMomentAtIndex(source)*ds;
   norm = vcl_pow(norm,((PrecisionType)m_P+(PrecisionType)m_Q)/2.);

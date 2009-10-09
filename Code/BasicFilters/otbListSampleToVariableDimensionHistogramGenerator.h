@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -36,17 +36,17 @@ namespace otb{
  *  This class is a fork from itk::ListSampleToHistogramGenerator
  *  adapted to produce VariableDimensionHistogram, whose dimension can
  *  be chosen at runtime.
- *  
+ *
  *  Since the MeasurementVectorSize template parameter is no longer
  *  needed, it has been removed.
- * 
+ *
  * For more information, please refer to the
  * ListSampleToHistogramGenerator class documentation.
  *
  * \sa VariableDimensionHistogram, ListSample, ListSampleToHistogramGenerator
  */
-template< class TListSample, 
-          class THistogramMeasurement,  
+template< class TListSample,
+          class THistogramMeasurement,
           class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
     public itk::Object
@@ -65,7 +65,7 @@ public:
   itkNewMacro(Self);
 
    /** Type needed for defining the limits of the histogram bins */
-  typedef typename itk::NumericTraits< THistogramMeasurement >::RealType 
+  typedef typename itk::NumericTraits< THistogramMeasurement >::RealType
                                                  HistogramMeasurementRealType;
 
   typedef itk::Statistics::VariableDimensionHistogram< HistogramMeasurementRealType,
@@ -76,8 +76,8 @@ public:
 
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
-    { 
-     m_List = list; 
+    {
+     m_List = list;
     }
 
   void SetMarginalScale(float scale)
@@ -89,7 +89,7 @@ public:
   HistogramType* GetOutput() const
   { return m_Histogram; }
 
-  void Update() 
+  void Update()
   { this->GenerateData(); }
 
   itkSetMacro(AutoMinMax,bool);
@@ -125,7 +125,7 @@ private:
 
 }; // end of class
 
-} // end of namespace itk 
+} // end of namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbListSampleToVariableDimensionHistogramGenerator.txx"

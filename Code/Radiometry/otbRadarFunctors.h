@@ -101,7 +101,7 @@ public:
     // Beta naught computation, will be the Modulus of the result
     double beta = m_BetaNaughtFunctor(static_cast<double>(std::abs(inPix)));
 
-    // Phase 
+    // Phase
     double phase = std::arg(inPix);
 
     // We retrieve the complex value from the modulus and the phase.
@@ -148,8 +148,8 @@ public:
   void SetNoiseRangeValidityRef( double val ) { m_NoiseRangeValidityRef = val; };
   double GetNoiseRangeValidityRef() const { return m_NoiseRangeValidityRef; };
   void SetLocalIncidentAngle( double val )
-  { 
-    m_LocalIncidentAngle = val; 
+  {
+    m_LocalIncidentAngle = val;
     m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
   };
   double GetLocalIncidentAngle() const { return m_LocalIncidentAngle; };
@@ -190,8 +190,8 @@ private:
   DoubleVectorVectorType m_NoisePolynomialCoefficientsList;
   /** Image Size */
   SizeType m_ImageSize;
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else, 
-   *  will use all of them and applied it according to its acquisition UTC time and the coordinates 
+  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
+   *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   bool m_UseFastCalibrationMethod;
   /** TimeUTC for each noise coefficient acquisition (in second). */
@@ -239,8 +239,8 @@ public:
   void SetNoiseRangeValidityRef( double val ) { m_NoiseRangeValidityRef = val; };
   double GetNoiseRangeValidityRef() const { return m_NoiseRangeValidityRef; };
   void SetLocalIncidentAngle( double val )
-  { 
-    m_LocalIncidentAngle = val; 
+  {
+    m_LocalIncidentAngle = val;
     m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
   };
   double GetLocalIncidentAngle() const { return m_LocalIncidentAngle; };
@@ -281,8 +281,8 @@ private:
   DoubleVectorVectorType m_NoisePolynomialCoefficientsList;
   /** Image Size */
   SizeType m_ImageSize;
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else, 
-   *  will use all of them and applied it according to its acquisition UTC time and the coordinates 
+  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
+   *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   bool m_UseFastCalibrationMethod;
   /** TimeUTC for each noise coefficient acquisition (in second). */

@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb {
  * \class WaveletLowPassOperator
  * \brief Specific implementation of scale part of wavelet transformator
  *
- * This class implements the generic construction of the low pass filter 
+ * This class implements the generic construction of the low pass filter
  * in a wavelet transformation.
  *
  * \sa WaveletOperatorBase
@@ -42,13 +42,13 @@ template < MotherWaveletOperatorEnum TMotherWaveletOperator,
             class TPixel, unsigned int VDimension,
             class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletLowPassOperator
-  : public WaveletOperatorBase< TMotherWaveletOperator, 
+  : public WaveletOperatorBase< TMotherWaveletOperator,
                                 TPixel, VDimension, TAllocator >
 {
 public:
   /** Standard typedefs */
   typedef WaveletLowPassOperator Self;
-  typedef WaveletOperatorBase< TMotherWaveletOperator, 
+  typedef WaveletOperatorBase< TMotherWaveletOperator,
                                 TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(WaveletLowPassOperator, WaveletOperatorBase);
@@ -59,8 +59,8 @@ public:
 
 protected:
 
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  
-  { 
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  {
     os << i << "WaveletLowPassOperator {this=" << this << "}" << std::endl;
     Superclass::PrintSelf(os, i.GetNextIndent());
   }

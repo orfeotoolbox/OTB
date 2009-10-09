@@ -69,7 +69,7 @@ PixelDescriptionModel<TOutputImage>
 }
 
 template <class TOutputImage>
-void     
+void
 PixelDescriptionModel<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -77,7 +77,7 @@ PixelDescriptionModel<TOutputImage>
 }
 
 template <class TOutputImage>
-void 
+void
 PixelDescriptionModel<TOutputImage>
 ::NotifyListener(ListenerType * listener)
 {
@@ -86,4 +86,4 @@ PixelDescriptionModel<TOutputImage>
 
 } // end namespace otb
 
-#endif 
+#endif

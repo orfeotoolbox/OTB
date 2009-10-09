@@ -30,7 +30,7 @@ int otbConfigurationTest(int argc, char * argv[])
   ConfigurationType::Pointer conf = ConfigurationType::New();
 //   conf->Load();
   
-  std::string lang = conf->GetLanguage(); 
+  std::string lang = conf->GetLanguage();
   
   std::cout << "config language " << lang << std::endl;
   

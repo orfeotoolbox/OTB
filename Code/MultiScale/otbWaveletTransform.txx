@@ -9,11 +9,11 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved. 
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
   See ITCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -61,7 +61,7 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
   filter->SetSubsampleImageFactor( GetSubsampleImageFactor() );
 
   std::cerr << "Allocating " << (1 + GetNumberOfDecompositions() * ( filter->GetNumberOfOutputs() - 1 ) ) << " output\n";
-  this->GetOutput()->Resize( 
+  this->GetOutput()->Resize(
     1 + GetNumberOfDecompositions() * ( filter->GetNumberOfOutputs() - 1 ) );
 
   std::cerr << "Using " << this->GetOutput()->Size() << " outputs...\n";
@@ -70,13 +70,13 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
     this->GetOutput()->SetNthElement( idx, OutputImageType::New() );
   }
 
-  progress->RegisterInternalFilter( filter, 
+  progress->RegisterInternalFilter( filter,
     1.f/static_cast<float>( GetNumberOfDecompositions() ) );
   filter->Update();
 
   for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++ )
   {
-    this->GetOutput()->SetNthElement( 
+    this->GetOutput()->SetNthElement(
       this->GetOutput()->Size() - filter->GetNumberOfOutputs() + idx,
       filter->GetOutput( idx ) );
   }
@@ -90,13 +90,13 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
     if ( GetSubsampleImageFactor() == 1 )
       filter->SetUpSampleFilterFactor( nbDecomp+1 );
 
-    progress->RegisterInternalFilter( filter, 
+    progress->RegisterInternalFilter( filter,
       1.f/static_cast<float>( GetNumberOfDecompositions() ) );
     filter->Update();
 
     for ( unsigned int idx = 1; idx < filter->GetNumberOfOutputs(); idx++ )
     {
-      this->GetOutput()->SetNthElement( 
+      this->GetOutput()->SetNthElement(
         this->GetOutput()->Size() - 1 - (nbDecomp+1) * (filter->GetNumberOfOutputs()-1) + idx,
         filter->GetOutput( idx ) );
     }
@@ -158,7 +158,7 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
 ::GenerateData ()
 {
   FilterPointerType filter = FilterType::New();
-  m_NumberOfDecompositions = ( this->GetInput()->Size() - 1 ) 
+  m_NumberOfDecompositions = ( this->GetInput()->Size() - 1 )
                               / ( filter->GetNumberOfInputs() - 1 );
 
   std::cerr << "Found " << m_NumberOfDecompositions << " decompositions\n";
