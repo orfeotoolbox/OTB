@@ -1126,3 +1126,16 @@ INCLUDE(CPack)
 
 ENDIF(OTB_USE_CPACK)
 
+
+#-----------------------------------------------------------------------------
+# Manage OTB Configuration file otb_config.inputs
+# SET(otbConfigFile_DEFAULT otb_config.inp)
+# #copy the configuration file in the binary directory
+# ADD_CUSTOM_COMMAND(
+#   OUTPUT ${OTB_BINARY_DIR}/${otbConfigFile_DEFAULT}
+#   COMMAND ${CMAKE_COMMAND} -E copy ${OTB_SOURCE_DIR}/Utilities/otbconfigfile/${otbConfigFile_DEFAULT} ${OTB_BINARY_DIR}/${otbConfigFile_DEFAULT}
+#   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${otbConfigFile_DEFAULT}
+#   COMMENT "Copy configuration file to OTB_BINARY_DIR"
+#   )
+# 
+# INSTALL(FILES ${OTB_SOURCE_DIR}/Utilities/otbconfigfile/${otbConfigFile_DEFAULT} DESTINATION ${CMAKE_INSTALL_PREFIX})
