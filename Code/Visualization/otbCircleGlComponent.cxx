@@ -116,12 +116,15 @@ CircleGlComponent
 
   // Draw the center
   //glColor4d(m_ColorList[id][0],m_ColorList[id][1],m_ColorList[id][2],1)
-  glColor4d(0, 0, 0, 1);
-  glEnable(GL_BLEND);
-  glPointSize(2);
-  glBegin(GL_POINTS); 
-  glVertex2d(screenPoint[0],screenPoint[1]);
-  glEnd();
+  if(m_Radius>4)
+    {
+      glColor4d(0, 0, 0, 1);
+      glEnable(GL_BLEND);
+      glPointSize(2);
+      glBegin(GL_POINTS); 
+      glVertex2d(screenPoint[0],screenPoint[1]);
+      glEnd();
+    }
 }
 
 }
