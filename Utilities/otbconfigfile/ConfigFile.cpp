@@ -16,7 +16,7 @@ ConfigFile::ConfigFile( string filename, string delimiter,
 	
 	in >> (*this);
 }
-
+   
 
 ConfigFile::ConfigFile()
 	: myDelimiter( string(1,'=') ), myComment( string(1,'#') )
