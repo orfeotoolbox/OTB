@@ -111,6 +111,10 @@ public :
   /** Set second transformation */
   itkSetObjectMacro(SecondTransform,SecondTransformType);
 
+/** Get First and second transform*/
+  itkGetConstReferenceMacro(FirstTransform,FirstTransformPointerType);
+  itkGetConstReferenceMacro(SecondTransform,SecondTransformPointerType);
+
 
 
   /**  Method to transform a point. */
