@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCrossGlComponent_cxx
-#define __otbCrossGlComponent_cxx
-
 #include "otbCrossGlComponent.h"
 
 
@@ -117,6 +114,3 @@ CrossGlComponent
 }
 
 }
-#endif
-
-

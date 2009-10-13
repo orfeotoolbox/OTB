@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVerticalAsymptoteCurve_cxx
-#define __otbVerticalAsymptoteCurve_cxx
-
 #include "otbVerticalAsymptoteCurve.h"
 
 namespace otb
@@ -81,6 +78,3 @@ VerticalAsymptoteCurve
 
 
 } // end namespace otb
-#endif
-
-
