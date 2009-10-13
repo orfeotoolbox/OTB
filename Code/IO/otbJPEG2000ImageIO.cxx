@@ -499,7 +499,7 @@ void JPEG2000ImageIO::ReadImageInformation()
 }
 
 
-bool JPEG2000ImageIO::CanWriteFile( const char* filename )
+bool JPEG2000ImageIO::CanWriteFile( const char* /*filename*/ )
 {
   return false;
 //     std::string lFileName(filename);
@@ -518,7 +518,7 @@ bool JPEG2000ImageIO::CanWriteFile( const char* filename )
 //       }
 }
 
-void JPEG2000ImageIO::Write(const void* buffer)
+void JPEG2000ImageIO::Write(const void* /*buffer*/)
 {
   // char * charstarbuffer = static_cast<char *>(buffer);
 

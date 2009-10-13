@@ -37,7 +37,7 @@ extern "C"
 {
   typedef GLvoid (CALLBACK * FunctionPointerType)();
 
-  void CALLBACK CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
+  void CALLBACK CombineCallback(GLdouble coords[3],GLdouble * /*data*/[4], GLfloat /*weights*/[4],GLdouble **dataOut)
   {
     GLdouble * vertex = new GLdouble[3];
     vertex[0] = coords[0];

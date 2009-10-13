@@ -494,7 +494,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
 }
 
 int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
-    const double toleranceDiffPixelImage) const
+    const double /*toleranceDiffPixelImage*/) const
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
   typedef otb::Image<double, ITK_TEST_DIMENSION_MAX> ImageType;

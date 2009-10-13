@@ -92,7 +92,7 @@ CrossGlComponent
   
 void
 CrossGlComponent
-::Render(unsigned int id, const RegionType & extent, const AffineTransformType * space2ScreenTransform)
+::Render(unsigned int id, const RegionType & /*extent*/, const AffineTransformType * space2ScreenTransform)
 {
   glColor4d(m_ColorList[id][0],m_ColorList[id][1],m_ColorList[id][2],m_ColorList[id][3]);
 

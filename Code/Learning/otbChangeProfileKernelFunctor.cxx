@@ -48,7 +48,7 @@ ChangeProfileKernelFunctor
 double
 ChangeProfileKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-               const svm_parameter & param ) const
+               const svm_parameter & /*param*/ ) const
 {
   double theMax(0.);
   double theCur(0.);

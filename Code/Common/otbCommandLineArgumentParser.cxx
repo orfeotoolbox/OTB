@@ -28,7 +28,7 @@ namespace otb
 
 // --------- CommandLineArgumentParseResult  ----------------------------------------
 void CommandLineArgumentParseResult
-::PrintSelf(std::ostream& os/*, itk::Indent indent*/)const
+::PrintSelf(std::ostream& /*os*/ /*, itk::Indent indent*/)const
 {
 
 }
@@ -179,7 +179,7 @@ void CommandLineArgumentParser
 }
 
 void CommandLineArgumentParser
-::ParseGUI(CommandLineArgumentParseResult * outResult,bool failOnUnknownTrailingParameters )
+::ParseGUI(CommandLineArgumentParseResult * /*outResult*/,bool /*failOnUnknownTrailingParameters*/ )
 {
   /* OTB Comment : Todo : use OTB_USE_VISU_GUI cmake option for generate this method
       Fl_Window *window = new Fl_Window(320,(m_OptionList.size()+2)*50);

@@ -43,7 +43,7 @@ MixturePolyRBFKernelFunctor
 double
 MixturePolyRBFKernelFunctor
 ::operator() ( const svm_node * x, const svm_node * y,
-               const svm_parameter & param ) const
+               const svm_parameter & /*param*/ ) const
 {
   double kernel_poly = 0.0;
   if ( m_Mixture > 0.0 )

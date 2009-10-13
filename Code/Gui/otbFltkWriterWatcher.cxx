@@ -45,7 +45,7 @@ FltkWriterWatcher
 
 
 void FltkWriterWatcher
-::BuildGUI(int x, int y, int w, int h,const char * comment)
+::BuildGUI(int x, int y, int w, int h,const char * /*comment*/)
 {
   m_Window = new Fl_Window(x,y,w+10,h+15);
   m_Window->label(m_Comment.c_str());
