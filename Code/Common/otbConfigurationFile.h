@@ -30,24 +30,24 @@ namespace otb
 /** \class ConfigurationFile
    *    \brief Manage OTB ConfigurationFile file
 */
-  
+
   class ConfigurationFile
   : public itk::Object
   {
     public:
       /** Standard class typedef */
-      
+
       typedef ConfigurationFile Self;
       typedef itk::Object Superclass;
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
-      
-      
+
+
       /** Standard macro */
       itkTypeMacro(ConfigurationFile,Object);
       /** This is protected for the singleton. Use GetInstance() instead. */
       itkNewMacro(Self);
-      
+
       /** Get the unique instanc1e of the model */
 //       static Pointer GetInstance()
 //       {
@@ -57,24 +57,25 @@ namespace otb
 //         }
 //         return Instance;
 //       };
-      
+
       ConfigFile * GetOTBConfig()
       {
         return m_OTBConfig;
       };
-      
+
       std::string GetLanguage()
       {
-        return m_OTBConfig->read<std::string>( "LANG" );
+        return m_OTBConfig->read<std::string>( "OTB_LANG" );
       };
 //       std::string lib(OTB_CONFIG);
-      
+
     protected:
-      
+
       /** Constructor */
-      ConfigurationFile(){
+      ConfigurationFile()
+      {
         std::string OTBBinDir(OTB_CONFIG);
-        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb_config.inp");
+        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb.conf");
       }
       ;
       /** Destructor */

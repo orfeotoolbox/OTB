@@ -1127,14 +1127,14 @@ INCLUDE(CPack)
 ENDIF(OTB_USE_CPACK)
 
 
-FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/generate-config-properties.cpp")
-SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb_config.inp")
+FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/GenerateConfigProperties.cpp")
+SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb.conf")
 
-ADD_EXECUTABLE(generate-config-properties ${otbconfigfileCreation_SRCS})
+ADD_EXECUTABLE(GenerateConfigProperties ${otbconfigfileCreation_SRCS})
 
 ADD_CUSTOM_COMMAND(
-          TARGET generate-config-properties
+          TARGET GenerateConfigProperties
           POST_BUILD
-          COMMAND generate-config-properties
+          COMMAND GenerateConfigProperties
           ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}"
-          COMMENT "Generating otb_config.inp" )
+          COMMENT "Generating ${otbconfigfile_DEFAULT}" )
