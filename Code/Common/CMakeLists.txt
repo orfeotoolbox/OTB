@@ -26,6 +26,18 @@ IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBCommon PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
 
+FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/generate-config-properties.cpp")
+SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb_config.inp")
+
+ADD_EXECUTABLE(generate-config-properties ${otbconfigfileCreation_SRCS})
+
+ADD_CUSTOM_COMMAND(
+          TARGET OTBCommon
+          POST_BUILD
+          COMMAND generate-config-properties
+          ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}"
+          COMMENT "Generating otb_config.inp" )
+
 IF(NOT OTB_INSTALL_NO_LIBRARIES)
   INSTALL(TARGETS OTBCommon
     RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries

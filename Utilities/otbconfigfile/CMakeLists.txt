@@ -2,23 +2,6 @@ PROJECT(otbconfigfile)
 
 FILE(GLOB otbconfigfilelib_SRCS "ConfigFile.cpp")
 FILE(GLOB otbconfigfilelib_HDRS "ConfigFile.h")
-FILE(GLOB otbconfigfileCreation_SRCS "generate-config-properties.cpp")
-FILE(GLOB otbconfigfile_DEFAULT "otb_config.inp")
-
-ADD_EXECUTABLE(generate-config-properties ${otbconfigfileCreation_SRCS})
-ADD_CUSTOM_COMMAND(
-          OUTPUT ${OTB_BINARY_DIR}/${otbconfigfile_DEFAULT}
-          COMMAND ${OTB_BINARY_DIR}/bin/generate-config-properties
-          ARGS "${OTB_BINARY_DIR}/${otbconfigfile_DEFAULT}" "${OTB_LANG}"
-          DEPENDS generate-config-properties
-          COMMENT "Generating otb_config.inp" )
-          
-          
-SET_SOURCE_FILES_PROPERTIES(
-     ${otbconfigfilelib_SRCS} PROPERTIES
-     OBJECT_DEPENDS "${OTB_BINARY_DIR}/${otbconfigfile_DEFAULT}"
-     )
-
 
 ADD_LIBRARY(otbconfigfile ${otbconfigfilelib_SRCS} )
 
