@@ -1125,3 +1125,16 @@ ENDIF(WIN32 AND NOT UNIX AND NOT CYGWIN)
 INCLUDE(CPack)
 
 ENDIF(OTB_USE_CPACK)
+
+
+FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/generate-config-properties.cpp")
+SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb_config.inp")
+
+ADD_EXECUTABLE(generate-config-properties ${otbconfigfileCreation_SRCS})
+
+ADD_CUSTOM_COMMAND(
+          TARGET generate-config-properties
+          POST_BUILD
+          COMMAND generate-config-properties
+          ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}"
+          COMMENT "Generating otb_config.inp" )
