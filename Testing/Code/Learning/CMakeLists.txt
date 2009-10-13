@@ -461,8 +461,6 @@ otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests2 "${BasicLearning_SRCS2}" "OTBLearning;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbLearningTests3 "${BasicLearning_SRCS3}" "OTBLearning;OTBIO;OTBTesting")

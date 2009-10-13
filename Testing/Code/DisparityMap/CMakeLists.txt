@@ -368,8 +368,6 @@ otbStreamingWarpImageFilterNew.cxx
 otbStreamingWarpImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbDisparityMapTests1 "${BasicDisparityMap_SRCS1}" "OTBDisparityMap;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbDisparityMapTests2 "${BasicDisparityMap_SRCS2}" "OTBDisparityMap;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbDisparityMapTests3 "${BasicDisparityMap_SRCS3}" "OTBDisparityMap;OTBIO;OTBTesting")

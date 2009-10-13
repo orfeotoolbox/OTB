@@ -150,9 +150,6 @@ otbKullbackLeiblerSupervizedDistanceImageFilterNew.cxx
 otbKullbackLeiblerSupervizedDistanceImageFilter.cxx
 )
 
-
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbChangeDetectionTests1 "${BasicChangeDetection_SRCS1}" "OTBChangeDetection;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbChangeDetectionTests2 "${BasicChangeDetection_SRCS2}" "OTBChangeDetection;OTBIO;OTBTesting")
 

@@ -224,8 +224,6 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
 # 	-out ${TEMP}/objtest2-result.tif
 # 	)
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon)
 

@@ -67,8 +67,6 @@ otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
 otbSimpleRcsPanSharpeningFusionImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbFusionTests1 "${Fusion_SRCS1}" "OTBFusion;OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
