@@ -92,7 +92,7 @@ BinaryImageDensityFunction<TInputImage,TCoordRep>
    for (unsigned int i = 0; i < size; ++i)
      {
        const RealType value = static_cast<RealType>( it.GetPixel(i) );
-       sum           += value;
+       sum += value;
      }
 
    const RealType  num = static_cast<RealType>( size );
