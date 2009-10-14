@@ -198,13 +198,15 @@ public:
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
-
-        if (this->GetHistogramList().IsNull())
-        {
+	
+	// Comment the condition cause if we change the channel list order 
+	// this condition doesn't allow us to recompute the histograms
+	//if (this->GetHistogramList().IsNull()) 
+	//{ 
           this->RenderHistogram();
-         //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-         //          <<"provided to the rendering function with SetHistogramList()" );
-        }
+	  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+	  //          <<"provided to the rendering function with SetHistogramList()" );
+	//}
         for(unsigned int comp = 0; comp < nbComps;++comp)
         {
           // Compute quantiles
@@ -314,7 +316,7 @@ public:
    */
    virtual  ParametersType GetParameters()
    {
-     unsigned int nbBands = m_Minimum.size();/*TransferedMaximum*/
+     unsigned int nbBands = m_PixelRepresentationFunction.GetOutputSize();
      ParametersType         param;
      param.SetSize(2*nbBands);
      
