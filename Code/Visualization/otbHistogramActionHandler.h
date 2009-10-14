@@ -117,8 +117,8 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
          case FL_RELEASE:
            {
              if(m_ModifyLeft || m_ModifyRight)
-              {
-                m_Model->Update();
+	       {
+		 m_Model->Update();
               }
        
              m_ModifyLeft  = false;
@@ -140,7 +140,6 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
                 param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
 		param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse());
                 m_RenderingFunction->SetParameters(param);
-		m_RenderingFunction->Initialize();
               }
               
              if(m_ModifyRight)
@@ -154,7 +153,6 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
                 param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
 		param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse()+tx);
                 m_RenderingFunction->SetParameters(param);
-		m_RenderingFunction->Initialize();
               }
              return true;
            }
