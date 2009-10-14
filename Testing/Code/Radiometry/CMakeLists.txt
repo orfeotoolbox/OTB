@@ -1191,8 +1191,6 @@ otbTerraSarCalibrationCplxImageFilterTest.cxx
 )
 
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbRadiometryTests1 "${Radiometry_SRCS1}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests2 "${Radiometry_SRCS2}" "OTBRadiometry;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbRadiometryTests3 "${Radiometry_SRCS3}" "OTBRadiometry;OTBIO;OTBTesting")

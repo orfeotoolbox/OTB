@@ -50,8 +50,6 @@ otbPostGISCreateTableTransactorCreate.cxx
 otbPostGISFromStringTransactorNew.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbGeospatialAnalysisTests "${GEOSPATIALANALYSIS_SRCS}" "OTBGeospatialAnalysis;OTBTesting;OTBCommon;pq;pqxx")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )

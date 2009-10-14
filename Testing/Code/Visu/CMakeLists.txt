@@ -218,8 +218,6 @@ otbImageWidgetTransferFunctionsNew.cxx
 otbImageViewerWithOverlay.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbVisuTests1 "${BasicVisu_SRCS1}" "OTBVisu;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbVisuTests2 "${BasicVisu_SRCS2}" "OTBVisu;OTBIO;OTBTesting")
 

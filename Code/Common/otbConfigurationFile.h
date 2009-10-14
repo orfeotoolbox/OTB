@@ -45,46 +45,41 @@ namespace otb
 
       /** Standard macro */
       itkTypeMacro(ConfigurationFile,Object);
-      /** This is protected for the singleton. Use GetInstance() instead. */
-      itkNewMacro(Self);
+      
 
       /** Get the unique instanc1e of the model */
-//       static Pointer GetInstance()
-//       {
-//         if (!Instance)
-//         {
-//           Instance = Self::New();
-//         }
-//         return Instance;
-//       };
+      static Pointer GetInstance();
 
       ConfigFile * GetOTBConfig()
       {
         return m_OTBConfig;
       };
-
-      std::string GetLanguage()
-      {
-        return m_OTBConfig->read<std::string>( "OTB_LANG" );
+      
+      /** Get parameter*/
+      template<typename T> T GetParameter(const std::string & key) const {
+        try
+        {
+          return m_OTBConfig->read<T>( key );
+        }
+        catch( ConfigFile::key_not_found& e ) {
+          itkExceptionMacro(<< "Error - Key '" << e.key << "' not found.");
+        }
+        
       };
-//       std::string lib(OTB_CONFIG);
 
     protected:
-
+      /** This is protected for the singleton. Use GetInstance() instead. */
+      itkNewMacro(Self);
       /** Constructor */
-      ConfigurationFile()
-      {
-        std::string OTBBinDir(OTB_CONFIG);
-        m_OTBConfig = new ConfigFile(OTBBinDir + "/otb.conf");
-      }
-      ;
+      ConfigurationFile();
+      
       /** Destructor */
-      ~ConfigurationFile(){};
+      ~ConfigurationFile();
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const {};
+      void PrintSelf(std::ostream& os, itk::Indent indent) const ;
     private:
       /** The instance singleton */
-//       static Pointer Instance = NULL;
+      static Pointer Instance;
       ConfigFile * m_OTBConfig;
 };
 }// end namespace

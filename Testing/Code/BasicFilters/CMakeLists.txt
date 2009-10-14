@@ -1808,8 +1808,6 @@ otbImageAndVectorImageOperationFilterNew.cxx
 otbImageAndVectorImageOperationFilterTest.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests1 "${BasicFilters_SRCS1}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests2 "${BasicFilters_SRCS2}" "OTBBasicFilters;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbBasicFiltersTests3 "${BasicFilters_SRCS3}" "OTBBasicFilters;OTBIO;OTBTesting")

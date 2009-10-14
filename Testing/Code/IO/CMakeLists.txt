@@ -2298,7 +2298,6 @@ otbImageKeywordlist.cxx
 otbTerraSarImageMetadataInterface.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")

@@ -27,14 +27,13 @@ int otbConfigurationTest(int argc, char * argv[])
   
   //Instantiation
 //   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
-  ConfigurationType::Pointer conf = ConfigurationType::New();
+  ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
 //   conf->Load();
+  std::string lang = conf->GetParameter<std::string>("OTB_LANG");
   
-  std::string lang = conf->GetLanguage();
+  std::cout << conf << std::endl;
   
-  std::cout << "config language " << lang << std::endl;
-  
-  if (lang != "fr")
+  if (lang != "fr_FR.UTF-8")
       return EXIT_FAILURE;
   
   return EXIT_SUCCESS;

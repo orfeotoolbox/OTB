@@ -177,8 +177,6 @@ otbMRFSamplerRandomMAPNew.cxx
 otbMRFSamplerRandomMAP.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbMarkovTests1 "${Markov_SRCS1}" "OTBMarkov;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbMarkovTests2 "${Markov_SRCS2}" "OTBMarkov;OTBIO;OTBTesting")
 

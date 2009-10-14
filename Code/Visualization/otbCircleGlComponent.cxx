@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCircleGlComponent_cxx
-#define __otbCircleGlComponent_cxx
-
 #include "otbCircleGlComponent.h"
 
 
@@ -128,6 +125,3 @@ CircleGlComponent
 }
 
 }
-#endif
-
-

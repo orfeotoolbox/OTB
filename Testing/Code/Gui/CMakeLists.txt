@@ -38,8 +38,6 @@ otbFltkFilterWatcher.cxx
 otbFltkWriterWatcher.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 # ${TIFF_LIBRARY}
 
 # To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE configuration

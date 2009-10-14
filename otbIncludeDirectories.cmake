@@ -41,6 +41,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/SARPolarimetry
   ${OTB_SOURCE_DIR}/Code/Markov
   ${OTB_SOURCE_DIR}/Code/GeospatialAnalysis
+  ${OTB_SOURCE_DIR}/Code/Testing
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
   ${OTB_SOURCE_DIR}/Utilities/otbossim
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
@@ -300,6 +301,8 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   SARPolarimetry
   Markov
   Fusion
+  GeospatialAnalysis
+  Testing
   Utilities
   Utilities/ITK
   Utilities/otbsvm

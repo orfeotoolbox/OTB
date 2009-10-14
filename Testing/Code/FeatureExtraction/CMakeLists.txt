@@ -1949,8 +1949,6 @@ otbImageToLineSegmentVectorData.cxx
 otbSqrtSpectralAngleImageFilter.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests1 "${BasicFeatureExtraction_SRCS1}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests2 "${BasicFeatureExtraction_SRCS2}" "OTBFeatureExtraction;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbFeatureExtractionTests3 "${BasicFeatureExtraction_SRCS3}" "OTBFeatureExtraction;OTBIO;OTBTesting")

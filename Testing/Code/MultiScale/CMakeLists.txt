@@ -508,8 +508,6 @@ otbWaveletPacketInverseTransformNew.cxx
 otbWaveletPacketTransform.cxx
 )
 
-INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
-
 OTB_ADD_EXECUTABLE(otbMultiScaleTests1 "${BasicMultiScale_SRCS1}" "OTBMultiScale;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbMultiScaleTests2 "${BasicMultiScale_SRCS2}" "OTBMultiScale;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbMultiScaleTests3 "${BasicMultiScale_SRCS3}" "OTBMultiScale;OTBIO;OTBTesting")
