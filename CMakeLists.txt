@@ -1136,5 +1136,5 @@ ADD_CUSTOM_COMMAND(
           TARGET GenerateConfigProperties
           POST_BUILD
           COMMAND GenerateConfigProperties
-          ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}"
+          ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}" "${OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING}" "${OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING}"
           COMMENT "Generating ${otbconfigfile_DEFAULT}" )
