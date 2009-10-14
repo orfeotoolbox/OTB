@@ -1,22 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
-Copyright (c) CS Systemes d'information. All rights reserved.
-See CSCopyright.txt for details.
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbBinaryImageDensityFunction_txx
 #define __otbBinaryImageDensityFunction_txx
 
@@ -65,12 +64,12 @@ BinaryImageDensityFunction<TInputImage,TCoordRep>
    RealType var;
 
    sum = itk::NumericTraits<RealType>::Zero;
-  
+
    if( !this->GetInputImage() )
      {
        return ( itk::NumericTraits<RealType>::max() );
      }
-  
+
    if ( !this->IsInsideBuffer( index ) )
      {
        return ( itk::NumericTraits<RealType>::max() );
@@ -95,7 +94,7 @@ BinaryImageDensityFunction<TInputImage,TCoordRep>
 
    const RealType  num = static_cast<RealType>( size );
    var =  sum/num;
-  
+
    return var;
 }
 
