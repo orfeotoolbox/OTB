@@ -32,13 +32,13 @@ namespace Statistics {
  *
  * This class is derived from EuclideanDistance class. In addition
  * to the initial Evaluate method, the class does not perform calculation
- * when a component does not contain any data. The 'no data' case is perform through the \code{SetToMissingValue()}
- * which performs a \code{Nan} affectation.
+ * when a component does not contain any data. The 'no data' case is perform through the \code SetToMissingValue() \endcode
+ * which performs a \code Nan \endcode affectation.
  *
  * The class can be templated over any container that holds data elements, as
  * for template of EuclideanDistance.
  *
- * The only restriction is that elemnts have to support '\code{NaN}'.
+ * The only restriction is that elements have to support NaN values.
  *
  * \sa EuclideanDistance
  * \sa EuclideanDistanceWithMissingValue
