@@ -294,7 +294,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   // Switch keywordlists
   inverseTransform->SetInputKeywordList(m_OutputKeywordList);
-  inverseTransform->SetInputKeywordList(m_InputKeywordList);
+  inverseTransform->SetOutputKeywordList(m_InputKeywordList);
 
   // Switch dictionnaries
   inverseTransform->SetInputDictionary(m_OutputDictionary);
@@ -324,7 +324,7 @@ typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::GetInverseTransform() const
 {
-  typename  Self::Pointer inverseTransform = Self::New();
+  Self * inverseTransform = Self::New();
 
   bool success = this->GetInverse(inverseTransform);
 
