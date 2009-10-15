@@ -34,7 +34,10 @@ int otbConfigurationTest(int argc, char * argv[])
   std::cout << conf << std::endl;
   
   if (lang != "fr_FR.UTF-8")
-      return EXIT_FAILURE;
+  {
+    std::cout << "Locale language " << lang << std::endl;
+    return EXIT_FAILURE;
+  }
   
   return EXIT_SUCCESS;
 }
