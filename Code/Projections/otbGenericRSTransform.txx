@@ -306,7 +306,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   // Switch origins
   inverseTransform->SetInputOrigin(m_OutputOrigin);
-  inverseTransform->SetOutputOrigin(m_InputSpacing);
+  inverseTransform->SetOutputOrigin(m_InputOrigin);
   
   // Copy some more parameters
   inverseTransform->SetAverageElevation(m_AverageElevation);
