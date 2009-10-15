@@ -280,7 +280,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 bool
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::GetInverse(Self * inverseTransform)
+::GetInverse(Self * inverseTransform) const
 {
   // Test the inverseTransform pointer
   if(inverseTransform == NULL)
@@ -322,9 +322,9 @@ template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputD
 typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 ::InverseTransformBasePointer
 GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
-::GetInverseTransform()
+::GetInverseTransform() const
 {
-  Self::Pointer inverseTransform = Self::New();
+  typename  Self::Pointer inverseTransform = Self::New();
 
   bool success = this->GetInverse(inverseTransform);
 

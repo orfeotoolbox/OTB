@@ -73,7 +73,7 @@ namespace otb
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
       typedef typename TransformType::Pointer                                     TransformPointerType;
 
-      typedef Superclass::InverseTransformBasePointer InverseTransformBasePointer;
+      typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
