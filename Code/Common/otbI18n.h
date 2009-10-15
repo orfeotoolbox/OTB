@@ -15,10 +15,12 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbI18n_h
 #define __otbI18n_h
 
 #include "otbConfigure.h"
+#include "otbConfigurationFile.h"
 
 #if defined(OTB_I18N)
 #include <libintl.h>
@@ -30,10 +32,13 @@
 
 #if defined(OTB_I18N)
 #define otbI18nMacro() \
-  setlocale( LC_ALL, QUOTEME(OTB_LANG) );\
+  typedef otb::ConfigurationFile        ConfigurationType;\
+  ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
+  std::string lang = conf->GetParameter<std::string>("OTB_LANG");\
+  setlocale( LC_ALL, lang.c_str() );\
   bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
   textdomain( "otb" );\
-  std::cout << "Language: " << QUOTEME(OTB_LANG) << std::endl;\
+  std::cout << "Language: " << lang << std::endl;\
   std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;
 #else
 #define otbI18nMacro()\

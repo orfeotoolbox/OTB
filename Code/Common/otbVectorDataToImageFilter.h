@@ -134,7 +134,7 @@ template <class TVectorData, class TImage>
     */
     itkSetMacro(UseAsOverlay, bool);
     itkGetMacro(UseAsOverlay, bool);
-    itkBooleanMacro(UseAsOverlay)
+    itkBooleanMacro(UseAsOverlay);
 
   protected:
     /** Constructor */

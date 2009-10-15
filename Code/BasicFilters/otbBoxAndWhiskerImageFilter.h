@@ -32,12 +32,12 @@ namespace otb {
  * This is appropriated to perform simple outlier detection over vector data.
  * The input image has to contain vector pixel through a VectorImage type.
  * When an outlier is detected, it is treated to as an missing value through the function
- * \code{otb::EuclideanDistanceWithMissingValue::SetToMissingValue()}.
+ * \code otb::EuclideanDistanceWithMissingValue::SetToMissingValue() \endcode.
  *
  * A component is considered to as a missing value when
  * \f$ \| x_i - \beta \left( x_{3/4} - x_{1/4} \right) \| > \| x_{1/2} \| \f$
  * where \f$ x_{1/4}, x_{1/2}, x_{3/4} \f$ stand for the first, second (median) and
- * thrid quantile values.
+ * third quantile values.
  *
  * \ingroup Streamed
  * \sa EuclideanDistanceWithMissingValue
@@ -83,7 +83,7 @@ class ITK_EXPORT BoxAndWhiskerImageFilter
   /** Get the Radius (all to 1) */
   itkGetConstReferenceMacro(Radius, SizeType);
 
-  /** Fix the \em whisker */
+  /** Fix the whisker */
   itkGetConstMacro(Beta,double);
   itkSetMacro(Beta,double);
   itkGetConstMacro(NumberFound,unsigned int);

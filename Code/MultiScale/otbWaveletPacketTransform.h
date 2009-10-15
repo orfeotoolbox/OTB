@@ -85,7 +85,7 @@ private:
   void operator= ( const Self & );
 };
 
-/** \class Wavelet Packet Transform
+/** \class WaveletPacketTransform
  * \brief Wavelet packet forward transformation framework
  *
  * This class defines the Wavelet Packet transformation of an image
@@ -215,7 +215,7 @@ private:
 
 }; // end of class
 
-/** \class Wavelet Packet Transform
+/** \class WaveletPacketTransform
  * \brief Wavelet packet inverse transformation framework
  *
  * This class defines the Wavelet Packet transformation of an image
