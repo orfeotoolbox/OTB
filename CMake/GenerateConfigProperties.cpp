@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
    /** write available parameters to a vector */
    for (unsigned int i=0;i<nbParameters;++i)
    {
-     if ( argc >= ( i+3 ) )
+     if ( argc >= static_cast<int>( i+3 ) )
      {
        /** Get the default parameter (from cmake)*/
        paramVector.push_back( argv[i+2] );
