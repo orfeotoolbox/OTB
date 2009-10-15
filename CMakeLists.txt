@@ -93,7 +93,27 @@ IF(NOT OTB_NO_LIBRARY_VERSION)
      )
 ENDIF(NOT OTB_NO_LIBRARY_VERSION)
 
+SET(OTB_BUILD_PEDANTIC OFF CACHE BOOL
+    "Choose compilation in pedantic or relaxed mode")
 
+IF(WIN32)
+  IF (MSVC)
+    IF(OTB_BUILD_PEDANTIC)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+    ENDIF()
+
+    IF (MSVC80)
+      ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+      ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
+    ENDIF()
+  ENDIF()
+ELSE()
+  IF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+    IF(OTB_BUILD_PEDANTIC)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    ENDIF()
+  ENDIF()
+ENDIF(WIN32)
 #-----------------------------------------------------------------------------
 
 # Case for release 2.2.1
@@ -1126,15 +1146,3 @@ INCLUDE(CPack)
 
 ENDIF(OTB_USE_CPACK)
 
-
-FILE(GLOB otbconfigfileCreation_SRCS "${OTB_SOURCE_DIR}/CMake/GenerateConfigProperties.cpp")
-SET(otbconfigfile_DEFAULT "${OTB_BINARY_DIR}/otb.conf")
-
-ADD_EXECUTABLE(GenerateConfigProperties ${otbconfigfileCreation_SRCS})
-
-ADD_CUSTOM_COMMAND(
-          TARGET GenerateConfigProperties
-          POST_BUILD
-          COMMAND GenerateConfigProperties
-          ARGS "${otbconfigfile_DEFAULT}" "${OTB_LANG}" "${OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING}" "${OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING}"
-          COMMENT "Generating ${otbconfigfile_DEFAULT}" )
