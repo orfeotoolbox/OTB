@@ -73,6 +73,8 @@ namespace otb
       typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
       typedef typename TransformType::Pointer                                     TransformPointerType;
 
+      typedef Superclass::InverseTransformBasePointer InverseTransformBasePointer;
+
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
 
@@ -177,6 +179,10 @@ namespace otb
 
       virtual void  InstanciateTransform();
 
+      // Get inverse methods
+      bool GetInverse(Self * inverseTransform) const;
+      virtual InverseTransformBasePointer GetInverseTransform() const;
+      
 
       protected:
       GenericRSTransform();

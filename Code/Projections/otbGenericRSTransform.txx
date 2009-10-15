@@ -277,6 +277,66 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   return outputPoint;
 }
 
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+bool
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::GetInverse(Self * inverseTransform)
+{
+  // Test the inverseTransform pointer
+  if(inverseTransform == NULL)
+    {
+    return false;
+    }
+
+  // Swich projection refs
+  inverseTransform->SetInputProjectionRef(m_OutputProjectionRef);
+  inverseTransform->SetOutputProjectionRef(m_InputProjectionRef);
+
+  // Switch keywordlists
+  inverseTransform->SetInputKeywordList(m_OutputKeywordList);
+  inverseTransform->SetInputKeywordList(m_InputKeywordList);
+
+  // Switch dictionnaries
+  inverseTransform->SetInputDictionary(m_OutputDictionary);
+  inverseTransform->SetOutputDictionary(m_InputDictionary);
+
+  // Switch spacings
+  inverseTransform->SetInputSpacing(m_OutputSpacing);
+  inverseTransform->SetOutputSpacing(m_InputSpacing);
+
+  // Switch origins
+  inverseTransform->SetInputOrigin(m_OutputOrigin);
+  inverseTransform->SetOutputOrigin(m_InputSpacing);
+  
+  // Copy some more parameters
+  inverseTransform->SetAverageElevation(m_AverageElevation);
+  inverseTransform->SetDEMDirectory(m_DEMDirectory);
+ 
+  // Instantiate transform
+  inverseTransform->InstanciateTransform();
+
+  return true;
+}
+
+template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::InverseTransformBasePointer
+GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
+::GetInverseTransform()
+{
+  Self::Pointer inverseTransform = Self::New();
+
+  bool success = this->GetInverse(inverseTransform);
+
+  if(!success)
+    {
+    itkExceptionMacro(<<"Failed to create inverse transform");
+    }
+
+  return inverseTransform;
+}
+
+
   //TODO
 // template<class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 // void
