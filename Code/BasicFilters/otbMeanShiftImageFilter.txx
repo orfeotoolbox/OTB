@@ -1,20 +1,21 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-PURPOSE.  See the above copyright notices for more information.
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbMeanShiftImageFilter_txx
 #define __otbMeanShiftImageFilter_txx
 
@@ -225,7 +226,10 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     index+=inputPtr->GetNumberOfComponentsPerPixel();
   }
 
-  edisonProcessor.DefineLInput(data,inputRequestedRegion.GetSize()[1],inputRequestedRegion.GetSize()[0],inputPtr->GetNumberOfComponentsPerPixel());
+  edisonProcessor.DefineLInput(data,
+                               inputRequestedRegion.GetSize()[1],
+                               inputRequestedRegion.GetSize()[0],
+                               inputPtr->GetNumberOfComponentsPerPixel());
 
   //define default kernel paramerters...
   kernelType  k[2] = {Uniform, Uniform};
@@ -311,7 +315,10 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
     index+=outputPtr->GetNumberOfComponentsPerPixel();
   }
 
-  edisonProcessor.DefineLInput(data,outputRequestedRegion.GetSize()[1],outputRequestedRegion.GetSize()[0],outputPtr->GetNumberOfComponentsPerPixel());
+  edisonProcessor.DefineLInput(data,
+                               outputRequestedRegion.GetSize()[1],
+                               outputRequestedRegion.GetSize()[0],
+                               outputPtr->GetNumberOfComponentsPerPixel());
 
   // define default kernel paramerters...
   kernelType  k[2] = {Uniform, Uniform};
@@ -377,11 +384,12 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   typename LabeledOutputType::IndexType boundIndex;
 
-  for (LabelType label = 0; label < numRegions; ++label)
+  for (LabelType label = 0; static_cast<unsigned int>(label) < numRegions; ++label)
   {
     OutputPixelType pixel;
-    TBufferConverter::FloatArrayToPixel(modes,static_cast<unsigned int>(label*clusteredOutputPtr->GetNumberOfComponentsPerPixel()),
-                                        pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
+    TBufferConverter::FloatArrayToPixel(modes,
+                static_cast<unsigned int>(label*clusteredOutputPtr->GetNumberOfComponentsPerPixel()),
+                pixel,clusteredOutputPtr->GetNumberOfComponentsPerPixel(),invScale);
     // Filling the modes map
     m_Modes[label]=pixel;
     regionIndeces = regionList->GetRegionIndeces(static_cast<int>(label));
