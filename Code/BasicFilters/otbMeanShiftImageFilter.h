@@ -41,7 +41,7 @@ public:
   template <class TPixel>
   static inline void
   FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel,
-                    const unsigned int nbComp, double scale)
+                    const unsigned int /*nbComp*/, double scale)
   {
     pixel = static_cast<TPixel>(scale * data[index]);
   }

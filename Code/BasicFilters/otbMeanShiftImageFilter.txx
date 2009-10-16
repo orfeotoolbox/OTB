@@ -384,7 +384,7 @@ MeanShiftImageFilter<TInputImage,TOutputImage,TLabeledOutput,TBufferConverter>
 
   typename LabeledOutputType::IndexType boundIndex;
 
-  for (LabelType label = 0; static_cast<unsigned int>(label) < numRegions; ++label)
+  for (LabelType label = 0; label < static_cast<LabelType>(numRegions); ++label)
   {
     OutputPixelType pixel;
     TBufferConverter::FloatArrayToPixel(modes,
