@@ -36,6 +36,8 @@ CircleGlComponent
   m_Radius = 10;
   // Create the tesselator
   m_GluTesselator = gluNewTess(); 
+  // Center representation
+  m_CenterRepresentation = CROSS;
 }
 
 CircleGlComponent
@@ -113,13 +115,24 @@ CircleGlComponent
 
   // Draw the center
   //glColor4d(m_ColorList[id][0],m_ColorList[id][1],m_ColorList[id][2],1)
-  if(m_Radius>4)
+  if( m_CenterRepresentation == CIRCLE && m_Radius>4 )
     {
       glColor4d(0, 0, 0, 1);
       glEnable(GL_BLEND);
       glPointSize(2);
       glBegin(GL_POINTS); 
       glVertex2d(screenPoint[0],screenPoint[1]);
+      glEnd();
+    }
+  else if( m_CenterRepresentation == CROSS )
+    {
+      glColor4d(0, 0, 0, 1);
+      glBegin(GL_LINES);
+      // Draw a cross
+      glVertex2d(screenPoint[0]-m_Radius,screenPoint[1]);
+      glVertex2d(screenPoint[0]+m_Radius,screenPoint[1]);
+      glVertex2d(screenPoint[0],screenPoint[1]-m_Radius);
+      glVertex2d(screenPoint[0],screenPoint[1]+m_Radius);
       glEnd();
     }
 }

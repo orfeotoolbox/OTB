@@ -69,6 +69,8 @@ public:
   typedef std::vector<IndexType> IndexListType;
   typedef std::vector<ColorType> ColorListType;
 
+  typedef enum { CIRCLE, CROSS } CenterRepresentationEnumType;
+
   /** Runtime information */
   itkTypeMacro(CircleGlComponent,GlComponent);
 
@@ -132,6 +134,10 @@ public:
   itkSetMacro(Radius,double);
   itkGetMacro(Radius,double);
 
+  /** Set/Get the center circle radius. */
+  itkSetMacro(CenterRepresentation,CenterRepresentationEnumType);
+  itkGetMacro(CenterRepresentation,CenterRepresentationEnumType);
+
 protected:
   /** Constructor */
   CircleGlComponent();
@@ -174,6 +180,9 @@ private:
   
   /** Default color : red*/
   ColorType m_RedColor;
+
+  /** Center representation */ 
+  CenterRepresentationEnumType m_CenterRepresentation;
 
 }; // end class
 } // end namespace otb
