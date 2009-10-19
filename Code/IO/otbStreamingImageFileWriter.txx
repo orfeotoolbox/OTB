@@ -26,6 +26,16 @@
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
 
+#include "imaging/ossimImageHandlerRegistry.h"
+#include "ossim/imaging/ossimImageHandlerSarFactory.h"
+#include "imaging/ossimImageHandler.h"
+#include "init/ossimInit.h"
+#include "base/ossimKeywordlist.h"
+
+#include "itkMetaDataObject.h"
+#include "otbImageKeywordlist.h"
+#include "otbMetaDataKey.h"
+
 #include "otbConfigure.h"
 
 namespace otb
@@ -521,6 +531,29 @@ StreamingImageFileWriter<TInputImage>
       this->GetOutput(idx)->DataHasBeenGenerated();
     }
   }
+  
+  // Write the image keyword list if any
+  ossimKeywordlist geom_kwl;
+  ImageKeywordlist otb_kwl;
+  
+  itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
+  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
+
+  if(geom_kwl.getSize()>0)
+    {
+    otbMsgDevMacro(<<"Exporting keywordlist ...");
+    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
+  
+  if(!handler)
+    {
+    otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
+    }
+    handler->setImageGeometry(geom_kwl);
+    handler->saveImageGeometry();
+    handler->close();
+    }
 
   /**
    * Release any inputs if marked for release
