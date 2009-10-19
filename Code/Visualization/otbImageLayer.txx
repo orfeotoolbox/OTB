@@ -244,6 +244,7 @@ ImageLayer<TImage,TOutputImage>
   // The ouptut stringstream
   itk::OStringStream oss;
   oss<<"Layer: "<<this->GetName();
+  oss<<std::endl<<"Image Size: "<<m_Image->GetLargestPossibleRegion().GetSize();
   // If we are inside the buffered region
   if(m_Image->GetBufferedRegion().IsInside(index))
     {
