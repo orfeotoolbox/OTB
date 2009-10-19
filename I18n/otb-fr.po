@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-16 12:53+0800\n"
-"PO-Revision-Date: 2009-10-19 09:10+0200\n"
+"PO-Revision-Date: 2009-10-19 09:26+0200\n"
 "Last-Translator: Emmanuel Christophe\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -306,7 +306,7 @@ msgstr "Composition coloree"
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:658
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:707
 msgid "Channel: "
-msgstr ""
+msgstr "Canal:"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:616
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:665
@@ -336,7 +336,7 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:739
 msgid "Histogram"
-msgstr ""
+msgstr "Histogramme"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:747
 msgid "Left Viewer Histogram"
@@ -412,7 +412,7 @@ msgstr ""
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:863
 msgid "Save parameters"
-msgstr ""
+msgstr "Sauver les parametres"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:871
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:810
@@ -439,7 +439,7 @@ msgstr "Ouvrir image"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:109
 msgid "Save result image"
-msgstr ""
+msgstr "Sauver resultat"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:110
 msgid "Save classif as vector data (Experimental)"
@@ -447,11 +447,11 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:111
 msgid "Open SVM model"
-msgstr ""
+msgstr "Ouvrir modele SVM"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:112
 msgid "Save SVM model"
-msgstr ""
+msgstr "Sauver Modele SVM"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:113
 msgid "Import vector data (ROI)"
