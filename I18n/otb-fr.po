@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-09-16 12:53+0800\n"
-"PO-Revision-Date: 2009-10-19 09:26+0200\n"
+"PO-Revision-Date: 2009-10-19 14:30+0200\n"
 "Last-Translator: Emmanuel Christophe\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -363,7 +363,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:786
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:724
 msgid "Kernel Type"
-msgstr ""
+msgstr "Type de noyau"
 
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:796
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:735
@@ -476,7 +476,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:121
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:161
 msgid "SVM"
-msgstr ""
+msgstr "SVM"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:368
 msgid "Supervised Classification Application"
@@ -508,7 +508,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:414
 msgid "Edit Classes"
-msgstr ""
+msgstr "Editer les classes"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:415
 msgid "Tools to edit classes attributes"
@@ -517,7 +517,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:422
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1749
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:423
 msgid "Add a new class"
@@ -536,7 +536,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:444
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:445
 msgid "Change the name of the selected class"
@@ -546,7 +546,7 @@ msgstr ""
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:330
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:524
 msgid "Color"
-msgstr ""
+msgstr "Couleur"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:456
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:331
@@ -560,7 +560,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:475
 msgid "Training"
-msgstr ""
+msgstr "Entrainement"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:476
 msgid "Display the training set"
@@ -569,7 +569,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:489
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:996
 msgid "Validation"
-msgstr ""
+msgstr "Validation"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:490
 msgid ""
@@ -599,7 +599,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:528
 msgid "Classification"
-msgstr ""
+msgstr "Classification"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:529
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1786
@@ -611,7 +611,7 @@ msgstr ""
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:536
 #: Pireo/PireoViewerGUI.cxx:260
 msgid "Display"
-msgstr ""
+msgstr "Afficher"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:537
 msgid "Display the results of the classification"
@@ -619,7 +619,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:549
 msgid "Learn"
-msgstr ""
+msgstr "Apprentissage"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:550
 msgid "Learn the SVM model from training samples"
@@ -635,7 +635,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:578
 msgid "Regions of interest"
-msgstr ""
+msgstr "Regions d'interet"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:579
 msgid "Tools to edit the regions of interest"
@@ -650,7 +650,7 @@ msgstr ""
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:262
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:547
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:598
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:352
@@ -674,7 +674,7 @@ msgstr ""
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:630
 msgid "Polygon"
-msgstr ""
+msgstr "Polygone"
 
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:631
 msgid "Switch between polygonal or rectangular selection"
@@ -1024,7 +1024,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:42
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:56
 msgid "Menu"
-msgstr ""
+msgstr "Menu"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:44
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1879
@@ -1037,7 +1037,7 @@ msgstr "Fermer image"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:45
 msgid "Save Result"
-msgstr ""
+msgstr "Sauver resultat"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:593
 msgid "Touzi"
@@ -1051,13 +1051,13 @@ msgstr ""
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:170
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:232
 msgid "Spectral Angle"
-msgstr ""
+msgstr "Angle Spectral"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:596
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:617
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1651
 msgid "Variance"
-msgstr ""
+msgstr "Variance"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:597
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:612
@@ -1086,7 +1086,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:603
 msgid "Contrast"
-msgstr ""
+msgstr "Contraste"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:604
 msgid "Correlation"
@@ -1102,7 +1102,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:607
 msgid "Energy"
-msgstr ""
+msgstr "Energie"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:608
 msgid "Entropy"
@@ -1166,7 +1166,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:627
 msgid "Morphology"
-msgstr ""
+msgstr "Morphologie"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:628
 msgid "Morphological Opening Profile (experimental)"
@@ -1379,7 +1379,7 @@ msgstr ""
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:856
 msgid "Pixel coordinates"
-msgstr ""
+msgstr "Coordonnees Pixel"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:862
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1030
@@ -1697,7 +1697,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1868
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:254
 msgid "Save result"
-msgstr ""
+msgstr "Sauver Resultat"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1869
 #: LandCoverMap/otbLandCoverMapView.cxx:114
@@ -1719,7 +1719,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1902
 #: LandCoverMap/otbLandCoverMapView.cxx:125
 msgid "Quit Application"
-msgstr ""
+msgstr "Quitter"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1913
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:478
@@ -1791,7 +1791,7 @@ msgstr ""
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:328
 #: StereoscopicApplication/otbStereoscopicApplicationViewGroup.cxx:198
 msgid "Parameters"
-msgstr ""
+msgstr "Parametres"
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:216
 msgid "This area allows you to tune parameters from the registration algorithm"
@@ -1801,7 +1801,7 @@ msgstr ""
 #: Segmentation/otbPreprocessingViewGroup.cxx:71
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:82
 msgid "Number of iterations"
-msgstr ""
+msgstr "Nombre d'iterations"
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:223
 msgid "Allows you to tune the number of iterations of the registration algorithm"
@@ -1926,7 +1926,7 @@ msgstr ""
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:380
 msgid "Intensity"
-msgstr ""
+msgstr "Intensite"
 
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:381
 msgid "Show or hide the deformation intensity iin the color composition"
@@ -1958,7 +1958,7 @@ msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:58
 msgid "Vector Data"
-msgstr ""
+msgstr "Donnees vecteur"
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:59
 msgid "Import Vector"
@@ -1971,7 +1971,7 @@ msgstr ""
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:62
 #: Pireo/PireoViewerGUI.cxx:232 Pireo/PireoViewerGUI.cxx:233
 msgid "Save"
-msgstr ""
+msgstr "Sauver"
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:63
 msgid "Save Full"
@@ -2093,7 +2093,7 @@ msgstr ""
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:452
 msgid "Load"
-msgstr ""
+msgstr "Charger"
 
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:472
 #: LandCoverMap/otbLandCoverMapView.cxx:113
@@ -2136,7 +2136,7 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:164
 msgid "Full Resolution image"
-msgstr ""
+msgstr "Image Pleine Resolution"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:171
 msgid "Nomenclature"
@@ -2148,7 +2148,7 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:202
 msgid "Roads"
-msgstr ""
+msgstr "Routes"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:211
 msgid "Bare soil"
@@ -2156,7 +2156,7 @@ msgstr ""
 
 #: LandCoverMap/otbLandCoverMapView.cxx:220
 msgid "Shadows"
-msgstr ""
+msgstr "Ombres"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:44
 msgid "Save label image"
@@ -2164,7 +2164,7 @@ msgstr "Sauver image resultat"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:45
 msgid "Save Polygon"
-msgstr ""
+msgstr "Sauver polygones"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:126
 msgid "Object Counting Application"
@@ -2172,7 +2172,7 @@ msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:133
 msgid "Extract"
-msgstr ""
+msgstr "Extraire"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:162
 msgid "Use SVM for Classification"
@@ -2200,7 +2200,7 @@ msgstr ""
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:240
 msgid "Reference Pixel"
-msgstr ""
+msgstr "Pixel De Reference"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:247
 msgid "Threshold Value"
@@ -2402,11 +2402,11 @@ msgstr "Choisir image XS"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:578 OrthoRectif/otbOrthoRectifGUI.cxx:516
 msgid "Coordinates"
-msgstr ""
+msgstr "Coordonnees"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:583
 msgid "Map projection"
-msgstr ""
+msgstr "Projection"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:584 OrthoRectif/otbOrthoRectifGUI.cxx:522
 msgid "Select the map projection type"
@@ -2414,7 +2414,7 @@ msgstr ""
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:592
 msgid "Cartographic coordinates"
-msgstr ""
+msgstr "Coordonnees Cartographique"
 
 #: OrthoFusion/otbOrthoFusionGUI.cxx:599 OrthoFusion/otbOrthoFusionGUI.cxx:642
 #: OrthoFusion/otbOrthoFusionGUI.cxx:664 OrthoRectif/otbOrthoRectifGUI.cxx:546
@@ -2736,7 +2736,7 @@ msgstr ""
 
 #: Pireo/PreProcessParametersGUI.cxx:98
 msgid "Select Filter"
-msgstr ""
+msgstr "Filtre selectionne"
 
 #: Pireo/PreProcessParametersGUI.cxx:103
 msgid "Use Filter"
@@ -2848,7 +2848,7 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:256
 msgid "Start "
-msgstr ""
+msgstr "Demarrer"
 
 #: Pireo/PireoViewerGUI.cxx:257
 msgid "Pause ||"
@@ -2876,7 +2876,7 @@ msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:267
 msgid "Choose filter"
-msgstr ""
+msgstr "Choisir Filtre"
 
 #: Pireo/PireoViewerGUI.cxx:270
 msgid "View loaded image filenames"
@@ -3043,11 +3043,11 @@ msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:230
 msgid "Linear Interpolation"
-msgstr ""
+msgstr "Interpolation Lineaire"
 
 #: Pireo/RegistrationParametersGUI.cxx:231
 msgid "B-Spline Interpolation"
-msgstr ""
+msgstr "Interpolation B-Spline"
 
 #: Pireo/RegistrationParametersGUI.cxx:296
 msgid "Mean Squares Metric"
@@ -3099,7 +3099,7 @@ msgstr ""
 #: Pireo/RegistrationParametersGUI.cxx:973
 #: Pireo/RegistrationParametersGUI.cxx:1250
 msgid "Select"
-msgstr ""
+msgstr "Selectionner"
 
 #: Pireo/RegistrationParametersGUI.cxx:714
 #: Pireo/RegistrationParametersGUI.cxx:842
@@ -3284,7 +3284,7 @@ msgstr ""
 
 #: Pireo/RegistrationParametersGUI.cxx:1273
 msgid "Refresh GUI"
-msgstr ""
+msgstr "Rafraichir"
 
 #: Pireo/RegistrationParametersGUI.cxx:1295
 msgid "&Help"
@@ -3314,7 +3314,7 @@ msgstr ""
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:488
 msgid "Polarization parameters"
-msgstr ""
+msgstr "Parametres Polarisation"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:498
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:306
@@ -3434,7 +3434,7 @@ msgstr "Vert"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:739
 msgid "Blue"
-msgstr ""
+msgstr "Bleu"
 
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:867
 msgid "Grayscale"
@@ -3580,7 +3580,7 @@ msgstr ""
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:78
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:82
 msgid "Settings"
-msgstr ""
+msgstr "Parametres"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:79
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:84
@@ -3644,7 +3644,7 @@ msgstr ""
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:169
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:187
 msgid "Input image"
-msgstr ""
+msgstr "Image en Entree"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:361
 msgid "Luminance"
@@ -3717,7 +3717,7 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:553
 msgid "Aeronet File"
-msgstr ""
+msgstr "Fichier Aeronet"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:566
 msgid "Filter Function Values File"
@@ -3806,7 +3806,7 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:715
 msgid "Close the window"
-msgstr ""
+msgstr "Fermer"
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:723
 msgid "Set up Radiometric parameters"
@@ -3814,17 +3814,17 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:732
 msgid "Atmospheric parameters"
-msgstr ""
+msgstr "Parametres Atmospherique"
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:170
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:93
 msgid "Import segments"
-msgstr ""
+msgstr "Importer Segments"
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:171
 #: Segmentation/otbSegmentationApplicationViewGroup.cxx:94
 msgid "Save results"
-msgstr ""
+msgstr "Sauver"
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:214
 msgid "Road extraction application"
@@ -3851,7 +3851,7 @@ msgstr "Canal"
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:279
 msgid "Use spectral angle"
-msgstr ""
+msgstr "Utiliser Angle Spectral"
 
 #: RoadExtraction/otbRoadExtractionViewGroup.cxx:288
 msgid "Reference pixel"
@@ -4040,7 +4040,7 @@ msgstr ""
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:91
 msgid "Thresholds"
-msgstr ""
+msgstr "Seuils"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:99
 msgid "View feature "
@@ -4060,7 +4060,7 @@ msgstr ""
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:134
 msgid "Update"
-msgstr ""
+msgstr "Mettre a Jour"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:145
 msgid "Features"
@@ -4432,7 +4432,7 @@ msgstr ""
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:83
 msgid "Configure "
-msgstr ""
+msgstr "Configurer"
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:329
 msgid "Urban Area Extraction Application"
