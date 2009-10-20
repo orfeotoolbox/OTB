@@ -181,12 +181,22 @@ public:
         //m_PixelRepresentationFunction, now, we may get a better default
         if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
         {
-           if (this->GetListSample()->GetMeasurementVectorSize() >=3)
-           {
-             m_PixelRepresentationFunction.SetRedChannelIndex(0);
-             m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-             m_PixelRepresentationFunction.SetBlueChannelIndex(2);
-           }
+	  // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
+	  if (this->GetListSample()->GetMeasurementVectorSize() >=4)
+	  {
+	    m_PixelRepresentationFunction.SetRedChannelIndex(2);
+	    m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+	    m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+	  }
+	  
+	  // Classic case
+	  if (this->GetListSample()->GetMeasurementVectorSize() ==3)
+	  {
+	    m_PixelRepresentationFunction.SetRedChannelIndex(0);
+	    m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+	    m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+	  }
+	   
         }
       }
       if(m_AutoMinMax)
