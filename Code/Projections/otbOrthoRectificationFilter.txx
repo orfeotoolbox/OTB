@@ -77,6 +77,10 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
 
+  // Set an empty keyword list as the output is not in sensor geometry anymore
+//   ImageKeywordlist otb_kwl;
+//   itk::EncapsulateMetaData< ImageKeywordlist >(dict,MetaDataKey::OSSIMKeywordlistKey,otb_kwl);
+
 }
 
 
