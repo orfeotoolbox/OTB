@@ -291,12 +291,18 @@ void MWImageIO::Write(const void* buffer)
   std::streamsize cpt = 0;
 
   const char * p = static_cast<const char *>(buffer);
-
+//   const float * p = dynamic_cast<const float *>(buffer);
+  
+//   float image[m_Dimensions[0]*m_Dimensions[0]];
+  
+//   for (unsigned int 
+  
   for (unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
   {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
     offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
     m_File.seekp(offset, std::ios::beg);
+//     m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
     m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
     cpt += numberOfBytesToBeWrite;
   }
@@ -327,14 +333,17 @@ void MWImageIO::WriteImageInformation()
   {
     itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
   }
-
+  
+  //Comment by MG to review write process
+  
   //Writing header information
-  if ( 0 ) {}
-  if (  (this->GetComponentType() != FLOAT) )
-  {
-    itkExceptionMacro(<< "MegaWave fimage format only accepts FLOAT32 data type");
-  }
-
+//   if ( 0 ) {}
+//   if (  (this->GetComponentType() != FLOAT) )
+//   {
+//     itkExceptionMacro(<< "MegaWave fimage format only accepts FLOAT32 data type");
+//   }
+  m_ComponentType = FLOAT;
+  
   m_File.seekp(0, std::ios::beg );
 
   char header[64];
