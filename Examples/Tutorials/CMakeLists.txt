@@ -22,6 +22,8 @@ TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 IF(OTB_USE_VISU_GUI)
   ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
   TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization ${OTB_VISU_GUI_LIBRARIES})
+
+  SUBDIRS(BasicApplication)
 ENDIF(OTB_USE_VISU_GUI)
 
 ADD_EXECUTABLE(OrthoFusion OrthoFusion.cxx )
