@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-10-23 06:36+1100\n"
-"PO-Revision-Date: 2009-10-19 14:30+0200\n"
-"Last-Translator: Emmanuel Christophe\n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2009-10-23 23:41+1100\n"
+"Last-Translator: \n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
 #: ObjectCountingApplication/otbObjectCountingViewGroup.cxx:42
 #: FineRegistrationApplication/otbFineRegistrationApplicationViewGroup.cxx:42
@@ -4714,10 +4714,9 @@ msgstr "Donnees vecteur"
 #: Code/Modules/otbViewerModuleGroup.cxx:247
 #, fuzzy
 msgid "Hide"
-msgstr "Tout masquer"
+msgstr "Masquer"
 
 #: Code/Modules/otbViewerModuleGroup.cxx:257
-#, fuzzy
 msgid "Hide All"
 msgstr "Tout masquer"
 
@@ -4753,7 +4752,7 @@ msgstr "Quitter"
 
 #: Code/Modules/otbViewerModuleGroup.cxx:504
 msgid "Show"
-msgstr ""
+msgstr "Afficher"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:35
 msgid "Frost"
@@ -4770,21 +4769,19 @@ msgstr "Quitter"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:63
 msgid "Filter type"
-msgstr ""
+msgstr "Type de filtre"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:74
-#, fuzzy
 msgid "Lee filter parameters"
-msgstr "Parametres d'interpolation"
+msgstr "Parametres de Lee"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:83
 msgid "Radius parameter for Lee filter"
-msgstr ""
+msgstr "Parametres du rayon de Lee"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:91
-#, fuzzy
 msgid "Frost filter parameters"
-msgstr "Parametres d'interpolation"
+msgstr "Parametres de Frost"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:104
 msgid "DeRamp"
@@ -4798,7 +4795,7 @@ msgstr "Ouvrir image"
 
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:87
 msgid "Elevation value    "
-msgstr ""
+msgstr "Altitude"
 
 #: Code/Modules/otbWriterViewGroup.cxx:78
 msgid "unsigned char"
@@ -4829,19 +4826,16 @@ msgid "unsigned int"
 msgstr ""
 
 #: Code/Modules/otbWriterViewGroup.cxx:146
-#, fuzzy
 msgid "Writer application"
-msgstr "Quitter"
+msgstr "Application d'ecriture"
 
 #: Code/Modules/otbWriterViewGroup.cxx:177
-#, fuzzy
 msgid "Output pixel type"
-msgstr "Image de sortie"
+msgstr "Type pixel de sortie"
 
 #: Code/Modules/otbWriterViewGroup.cxx:185
-#, fuzzy
 msgid "Use scaling"
-msgstr "Utiliser Angle Spectral"
+msgstr "Utiliser echelle"
 
 #: Code/Modules/otbWriterViewGroup.cxx:200
 #, fuzzy
@@ -4850,20 +4844,19 @@ msgstr "Liste d'images"
 
 #: Code/Modules/otbWriterViewGroup.cxx:234
 msgid "Selected output channels"
-msgstr ""
+msgstr "Canaux de sortie selectionnes"
 
 #: Code/Modules/otbWriterViewGroup.cxx:311
 msgid "Band"
-msgstr ""
+msgstr "Bande"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:21
-#, fuzzy
 msgid "Translation"
-msgstr "Validation"
+msgstr "Translation"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:22
 msgid "Affine"
-msgstr ""
+msgstr "Affine"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:23
 msgid "Similarity2D"
@@ -4875,7 +4868,7 @@ msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:109
 msgid "Transformation"
-msgstr ""
+msgstr "Transformation"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:119
 msgid "Transform Value"
@@ -4887,11 +4880,11 @@ msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:127
 msgid "Euclidean distances"
-msgstr ""
+msgstr "Distances euclidiennes"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:138
 msgid "Mean Square Error:"
-msgstr ""
+msgstr "Erreur quadratique moyenne:"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:146
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:154
@@ -4918,7 +4911,7 @@ msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:208
 msgid "Contains selected points"
-msgstr ""
+msgstr "Contient les points selectionnes"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:241
 msgid "Focus Point"
@@ -4926,7 +4919,7 @@ msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:242
 msgid "Focus on the selected point couple."
-msgstr ""
+msgstr "Focalise sur le couple de point selectionne"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:252
 #, fuzzy
@@ -4972,29 +4965,26 @@ msgid "Guess"
 msgstr ""
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:343
-#, fuzzy
 msgid "Full moving"
-msgstr "Retourner image a recaler"
+msgstr "Full image a recaler"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:351
-#, fuzzy
 msgid "Scroll moving"
-msgstr "Image de navigation"
+msgstr "Scroll image a recaler"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:359
 msgid "Zoom moving"
-msgstr ""
+msgstr "Zoom image a recaler"
 
 #: Code/Modules/otbReaderModuleGUI.cxx:58
 msgid "Open"
-msgstr ""
+msgstr "Ouvrir"
 
 #: Code/Modules/otbReaderModuleGUI.cxx:82
 msgid "Data type "
-msgstr ""
+msgstr "Type donnees"
 
 #: Code/Modules/otbReaderModuleGUI.cxx:91
-#, fuzzy
 msgid "Name "
 msgstr "Nom"
 
@@ -5021,7 +5011,7 @@ msgstr ""
 
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:117
 msgid "Min Region Size"
-msgstr ""
+msgstr "Taille region min"
 
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:118
 msgid "Set the MeanShift minimum region size"
@@ -5029,16 +5019,15 @@ msgstr ""
 
 #: Code/Modules/otbCachingModuleGUI.cxx:7
 msgid "Caching Data"
-msgstr ""
+msgstr "Mise des donnees en cache"
 
 #: Code/Modules/otbProjectionGroup.cxx:168
 msgid "SENSOR MODEL"
-msgstr ""
+msgstr "MODEL CAPTEUR"
 
 #: Code/Modules/otbProjectionGroup.cxx:435
-#, fuzzy
 msgid "Splines"
-msgstr "Diaporama"
+msgstr "Splines"
 
 #: Code/Modules/otbProjectionGroup.cxx:440
 #, fuzzy
