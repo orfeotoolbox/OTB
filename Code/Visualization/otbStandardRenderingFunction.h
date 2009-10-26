@@ -181,22 +181,22 @@ public:
         //m_PixelRepresentationFunction, now, we may get a better default
         if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
         {
-	  // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
-	  if (this->GetListSample()->GetMeasurementVectorSize() >=4)
-	  {
-	    m_PixelRepresentationFunction.SetRedChannelIndex(2);
-	    m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-	    m_PixelRepresentationFunction.SetBlueChannelIndex(0);
-	  }
-	  
-	  // Classic case
-	  if (this->GetListSample()->GetMeasurementVectorSize() ==3)
-	  {
-	    m_PixelRepresentationFunction.SetRedChannelIndex(0);
-	    m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-	    m_PixelRepresentationFunction.SetBlueChannelIndex(2);
-	  }
-	   
+         // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
+         if (this->GetListSample()->GetMeasurementVectorSize() >=4)
+         {
+           m_PixelRepresentationFunction.SetRedChannelIndex(2);
+           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+           m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+         }
+         
+         // Classic case
+         if (this->GetListSample()->GetMeasurementVectorSize() ==3)
+         {
+           m_PixelRepresentationFunction.SetRedChannelIndex(0);
+           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+           m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+         }
+          
         }
       }
       if(m_AutoMinMax)
@@ -208,15 +208,15 @@ public:
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
-	
-	// Comment the condition cause if we change the channel list order 
-	// this condition doesn't allow us to recompute the histograms
-	//if (this->GetHistogramList().IsNull()) 
-	//{ 
+       
+       // Comment the condition cause if we change the channel list order 
+       // this condition doesn't allow us to recompute the histograms
+       //if (this->GetHistogramList().IsNull()) 
+       //{ 
           this->RenderHistogram();
-	  //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-	  //          <<"provided to the rendering function with SetHistogramList()" );
-	//}
+         //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+         //          <<"provided to the rendering function with SetHistogramList()" );
+       //}
         for(unsigned int comp = 0; comp < nbComps;++comp)
         {
           // Compute quantiles

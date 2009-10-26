@@ -204,13 +204,13 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
       sensorModel->SetImageGeometry(m_OutputKeywordList);
       if ( !m_DEMDirectory.empty())
-	{
+       {
         sensorModel->SetDEMDirectory(m_DEMDirectory);
-	}
+       }
       else if (m_AverageElevation != -32768.0)
-	{
+       {
         sensorModel->SetAverageElevation(m_AverageElevation);
-	}
+       }
       m_OutputTransform = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");

@@ -117,8 +117,8 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
          case FL_RELEASE:
            {
              if(m_ModifyLeft || m_ModifyRight)
-	       {
-		 m_Model->Update();
+              {
+               m_Model->Update();
               }
        
              m_ModifyLeft  = false;
@@ -138,20 +138,20 @@ virtual bool HandleWidgetEvent(std::string widgetId, int event)
                 //  Update The Rendering Function min and max
                 ParametersType param = m_RenderingFunction->GetParameters();
                 param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse() + tx);
-		param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse());
+              param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse());
                 m_RenderingFunction->SetParameters(param);
               }
               
              if(m_ModifyRight)
               {
                 double tx = x - abcisseR;
-		m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
+              m_RightAsymptote->SetAbcisse(m_RightAsymptote->GetAbcisse() + tx);
                 m_Curve->redraw();
               
                 //  Update The Rendering Function min and max
                 ParametersType param = m_RenderingFunction->GetParameters();
                 param.SetElement(2*m_Channel, m_LeftAsymptote->GetAbcisse());
-		param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse()+tx);
+              param.SetElement(2*m_Channel+1, m_RightAsymptote->GetAbcisse()+tx);
                 m_RenderingFunction->SetParameters(param);
               }
              return true;
