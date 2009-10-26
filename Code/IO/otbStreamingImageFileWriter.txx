@@ -546,13 +546,16 @@ StreamingImageFileWriter<TInputImage>
     ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
   
-  if(!handler)
-    {
-    otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
-    }
-    handler->setImageGeometry(geom_kwl);
-    handler->saveImageGeometry();
-    handler->close();
+    if(!handler)
+      {
+      otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
+      }
+    else
+      {
+      handler->setImageGeometry(geom_kwl);
+      handler->saveImageGeometry();
+      handler->close();
+      }
     }
 
   /**
