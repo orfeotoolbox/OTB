@@ -166,23 +166,19 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
   // Move to the next layer
   ++it;
  
-  // Walk the remaining layers
+  m_QuicklookBlendingFilterList->Clear();
+  m_ExtractBlendingFilterList->Clear();
+  m_ScaledExtractBlendingFilterList->Clear();
+
   unsigned int count = 0;
+  // Walk the remaining layers
   while(it!=this->GetLayers()->End())
     {
     // Populate Blending filter list if needed
-    if(count >= m_QuicklookBlendingFilterList->Size())
-      {
+   
       m_QuicklookBlendingFilterList->PushBack(BlendingFilterType::New());
-      }
-     if(count >= m_ExtractBlendingFilterList->Size())
-      {
       m_ExtractBlendingFilterList->PushBack(BlendingFilterType::New());
-      }
-    if(count >= m_ScaledExtractBlendingFilterList->Size())
-      {
       m_ScaledExtractBlendingFilterList->PushBack(BlendingFilterType::New());
-      }
 
     // If a layer is visible
     if(it.Get()->GetVisible())
