@@ -1,5 +1,8 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0109 
+version 1.0110 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
 header_name {.h} 
 code_name {.cxx}
 class MsgReporterGUI {open
@@ -8,7 +11,7 @@ class MsgReporterGUI {open
   } {
     Fl_Window wMainWindow {
       label {Msg Reporter} open
-      xywh {331 57 670 90} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
+      xywh {507 51 670 90} type Double box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186 resizable visible
     } {
       Fl_Group gMsgReporter {open
         tooltip {Navigate through the image} xywh {0 -4 670 93} box PLASTIC_DOWN_BOX color 23 labelfont 1 labelsize 12 labelcolor 186

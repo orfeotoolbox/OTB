@@ -84,6 +84,7 @@ ObjectList<TObject>
 ::PushBack(ObjectType* element)
 {
   m_InternalContainer.push_back(element);
+  this->Modified();
 }
 
 /**
@@ -97,6 +98,7 @@ ObjectList<TObject>
   if ( m_InternalContainer.size() > 0 )
   {
     m_InternalContainer.pop_back();
+    this->Modified();
   }
 }
 
@@ -115,6 +117,7 @@ ObjectList<TObject>
     itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
   }
   m_InternalContainer[index]=element;
+  this->Modified();
 }
 /**
  * Set the nth element of the list.
@@ -131,6 +134,7 @@ ObjectList<TObject>
     itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
   }
   m_InternalContainer[index]=const_cast<ObjectType*>(element);
+  this->Modified();
 }
 
 /**
@@ -186,6 +190,7 @@ ObjectList<TObject>
     itkExceptionMacro(<<"Impossible to erase the index element "<<index<<"; the size of the list is "<<m_InternalContainer.size()<<"." );
   }
   m_InternalContainer.erase(m_InternalContainer.begin()+index);
+  this->Modified();
 }
 /**
  * Clear the object list.
@@ -196,6 +201,7 @@ ObjectList<TObject>
 ::Clear(void)
 {
   m_InternalContainer.clear();
+  this->Modified();
 }
 
 /**
@@ -207,6 +213,7 @@ ObjectList<TObject>
 ::Insert(Iterator position, ObjectPointerType element)
 {
   Iterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  this->Modified();
   return iter;
 }
 
@@ -219,6 +226,7 @@ ObjectList<TObject>
 ::Insert(ReverseIterator position, ObjectPointerType element)
 {
   ReverseIterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  this->Modified();
   return iter;
 }
 
@@ -329,6 +337,7 @@ ObjectList<TObject>
 ::Erase(Iterator begin, Iterator end)
 {
   m_InternalContainer.erase(begin.GetIter(),end.GetIter());
+  this->Modified();
 }
 /**
  * Erase loc element.
@@ -340,6 +349,7 @@ ObjectList<TObject>
 ::Erase(Iterator loc)
 {
   m_InternalContainer.erase(loc.GetIter());
+  this->Modified();
 }
 
 /**PrintSelf method */

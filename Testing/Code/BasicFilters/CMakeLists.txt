@@ -334,7 +334,12 @@ ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS3}
 		    ${TEMP}/bfTvImageListToVectorImageFilter.png
 )
 
-
+ADD_TEST(bfTvImageListToVectorImageFilter2 ${BASICFILTERS_TESTS3}
+		    otbImageListToVectorImageFilter2
+          ${INPUTDATA}/poupees_c1.hdr
+          ${INPUTDATA}/poupees_c2.hdr
+          ${INPUTDATA}/poupees_c3.hdr
+)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1633,6 +1638,7 @@ otbVectorImageToImageListFilterNew.cxx
 otbVectorImageToImageListFilter.cxx
 otbImageListToVectorImageFilterNew.cxx
 otbImageListToVectorImageFilter.cxx
+otbImageListToVectorImageFilter2.cxx
 )
 
 # A enrichir

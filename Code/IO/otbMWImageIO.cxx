@@ -138,7 +138,7 @@ void MWImageIO::Read(void* buffer)
   for (int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
   {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+    offset +=  static_cast<std::streamoff> ( this->GetComponentSize() * lPremiereColonne );
     m_File.seekg(offset, std::ios::beg);
     m_File.read( static_cast<char *>( p + cpt ), numberOfBytesToBeRead );
     numberOfBytesRead = m_File.gcount();
@@ -288,22 +288,30 @@ void MWImageIO::Write(const void* buffer)
   std::streamoff headerLength = static_cast<std::streamoff> (64*sizeof(char)) + static_cast<std::streamoff> (m_Ncom*sizeof(char));
   std::streamoff offset;
   std::streamsize numberOfBytesToBeWrite = this->GetComponentSize() * lNbColonnes;
+//   std::streamsize numberOfBytesToBeWriteFloat = sizeof(float) * lNbColonnes;
   std::streamsize cpt = 0;
 
   const char * p = static_cast<const char *>(buffer);
 //   const float * p = dynamic_cast<const float *>(buffer);
   
-//   float image[m_Dimensions[0]*m_Dimensions[0]];
+//   float floatImage[m_Dimensions[0]*m_Dimensions[1]];
   
-//   for (unsigned int 
+//   std::streamsize counter = 0;
+//   std::cout << "begin conversion" << std::endl;
+//   for (unsigned int i=0;i<m_Dimensions[0]*m_Dimensions[1];++i)
+//   {
+//     floatImage[i] = static_cast< float > ( *(p+counter) );
+//     std::cout << "float " << floatImage[i] << std::endl;
+//     counter+=sizeof(char);
+//   }
   
   for (unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
   {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
+    offset +=  static_cast<std::streamoff> ( this->GetComponentSize() * lPremiereColonne );
     m_File.seekp(offset, std::ios::beg);
-//     m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
     m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
+//     m_File.write( (char *)( floatImage + cpt ), numberOfBytesToBeWriteFloat );
     cpt += numberOfBytesToBeWrite;
   }
 }
@@ -437,4 +445,3 @@ std::string MWImageIO::GetExtension( const std::string& filename )
 
 
 } // end namespace otb
-

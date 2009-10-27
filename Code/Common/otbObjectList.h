@@ -171,6 +171,7 @@ public:
     void Set ( ObjectPointerType element )
     {
       (*m_Iter) = element;
+      this->Modified();
     }
     /**
        * Increment.
