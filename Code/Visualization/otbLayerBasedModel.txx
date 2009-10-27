@@ -124,6 +124,7 @@ LayerBasedModel<TLayer>
       found = true;
       }
     ++index;
+    ++it;
     }
   
   if(found)
