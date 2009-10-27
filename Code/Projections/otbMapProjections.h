@@ -85,6 +85,8 @@ typedef LambertConformalConicMapProjection<INVERSE>                LambertConfor
 typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;
 typedef Lambert2EtenduProjection<INVERSE>                          Lambert2EtenduInverseProjection;
 typedef Lambert2EtenduProjection<FORWARD>                          Lambert2EtenduForwardProjection;
+typedef Lambert3CartoSudProjection<INVERSE>                          Lambert3CartoSudInverseProjection;
+typedef Lambert3CartoSudProjection<FORWARD>                          Lambert3CartoSudForwardProjection;
 typedef Lambert93Projection<INVERSE>                               Lambert93InverseProjection;
 typedef Lambert93Projection<FORWARD>                               Lambert93ForwardProjection;
 typedef SVY21MapProjection<INVERSE>                                SVY21InverseProjection;
