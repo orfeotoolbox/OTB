@@ -39,10 +39,10 @@ class ITK_EXPORT ObjectList : public itk::DataObject
 {
 public:
   /** Standard typedefs */
-  typedef ObjectList Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef ObjectList                      Self;
+  typedef itk::DataObject                 Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkTypeMacro(ObjectList,DataObject);
@@ -52,8 +52,8 @@ public:
 
   /** Template parameter typedefs */
   typedef TObject ObjectType;
-  typedef itk::SmartPointer<ObjectType> ObjectPointerType;
-  typedef std::vector<ObjectPointerType> InternalContainerType;
+  typedef itk::SmartPointer<ObjectType>   ObjectPointerType;
+  typedef std::vector<ObjectPointerType>  InternalContainerType;
 
   /**
    * Set the minimum capacity of the vector.

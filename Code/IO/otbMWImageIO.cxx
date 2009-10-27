@@ -138,7 +138,7 @@ void MWImageIO::Read(void* buffer)
   for (int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
   {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff> ( this->GetComponentSize() * lPremiereColonne );
+    offset +=  static_cast<std::streamoff>( this->GetComponentSize() * lPremiereColonne );
     m_File.seekg(offset, std::ios::beg);
     m_File.read( static_cast<char *>( p + cpt ), numberOfBytesToBeRead );
     numberOfBytesRead = m_File.gcount();
@@ -308,7 +308,7 @@ void MWImageIO::Write(const void* buffer)
   for (unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
   {
     offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-    offset +=  static_cast<std::streamoff> ( this->GetComponentSize() * lPremiereColonne );
+    offset +=  static_cast<std::streamoff>( this->GetComponentSize() * lPremiereColonne );
     m_File.seekp(offset, std::ios::beg);
     m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
 //     m_File.write( (char *)( floatImage + cpt ), numberOfBytesToBeWriteFloat );
