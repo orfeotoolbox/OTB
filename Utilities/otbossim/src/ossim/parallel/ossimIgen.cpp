@@ -7,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 13676 2008-10-03 17:35:02Z gpotts $
+// $Id: ossimIgen.cpp 15785 2009-10-21 14:55:04Z dburken $
 
 #include <iterator>
 #include <sstream>
@@ -22,6 +22,7 @@
 #endif
 
 #include <ossim/parallel/ossimIgen.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimStdOutProgress.h>
@@ -46,7 +47,6 @@
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -67,7 +67,7 @@ static ossimTrace traceDebug(ossimString("ossimIgen:debug"));
 static ossimTrace traceLog(ossimString("ossimIgen:log"));
 
 ossimIgen::ossimIgen()
-   :
+   :theContainer(new ossimConnectableContainer()),
     theProductProjection(0),
     theOutputRect(),
     theBuildThumbnailFlag(false),
@@ -342,26 +342,25 @@ bool ossimIgen::loadProduct()//ossimKeywordlist& kwl,
       CLOG << " Creating object1..." << std::endl;
    }
 
-   theContainer.deleteAllChildren();
+   theContainer->deleteAllChildren();
 
-   theContainer.loadState(theKwl);
+   theContainer->loadState(theKwl);
 
    theProductProjection = buildProductProjection(theKwl);
 
-   if(theProductProjection)
+   if(theProductProjection.valid())
    {
       vector<ossimImageViewTransform*> transforms;
-      setView(&theContainer, theProductProjection);
+      setView(theContainer.get(), theProductProjection.get());
       // if it's a thumbnail then adjust the GSD and
       // reset the view proj to the chain.
       if(theBuildThumbnailFlag)
       {
          buildThumbnail();
-         delete theProductProjection;
          
          theProductProjection = buildProductProjection(theKwl);
          
-         setView(&theContainer, theProductProjection);
+         setView(theContainer.get(), theProductProjection.get());
       }
       
    }
@@ -386,7 +385,7 @@ bool ossimIgen::loadProduct()//ossimKeywordlist& kwl,
    }
    theOutputRect = rect;
    
-   if(theProductProjection)
+   if(theProductProjection.valid())
    {
       theProductProjection->saveState(proj, "projection.");
          
@@ -404,12 +403,12 @@ bool ossimIgen::loadProduct()//ossimKeywordlist& kwl,
 
 void ossimIgen::outputProduct()
 {
-   ossimImageChain* chain = getChain();
-   if(chain)
+   ossimRefPtr<ossimImageChain> chain = getChain();
+   if(chain.valid())
    {
       chain->initialize();
    }
-   ossimImageSourceSequencer* sequencer = 0;
+   ossimRefPtr<ossimImageSourceSequencer> sequencer = 0;
    
 #ifdef OSSIM_HAS_MPI
 #  if OSSIM_HAS_MPI
@@ -447,36 +446,56 @@ void ossimIgen::outputProduct()
    
 #endif
    
-   std::vector<ossimConnectableObject*> imageWriters =
-      theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter),
+   ossimConnectableObject::ConnectableObjectList imageWriters =
+      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter),
                                         false);
    if(imageWriters.size() > 0)
    {
       ossimImageFileWriter* writer =
-         PTR_CAST(ossimImageFileWriter, imageWriters[0]);
+         PTR_CAST(ossimImageFileWriter, imageWriters[0].get());
       
-      writer->changeSequencer(sequencer);
-      writer->connectMyInputTo(chain);
+      writer->changeSequencer(sequencer.get());
+      writer->connectMyInputTo(chain.get());
+
+      //---
+      // Check for writing to standard output flag.
+      // Not all writers support this so check and throw an error if not
+      // supported.
+      //---
+      const char* lookup = theKwl.find("igen.write_to_stdout");
+      if (lookup)
+      {
+         // cout << "igen.write_to_stdout: " << lookup << endl;
+         if ( ossimString(lookup).toBool() )
+         {
+            if ( writer->setOutputStream(std::cout) == false )
+            {
+               std::string err = "ERROR:  The write to standard out flag is set; however, writer does not support going to standard out. Bummer...";
+               throw(ossimException(err));
+            }
+         }
+      }     
+      
       writer->initialize();
    }
    else
    {
-      delete sequencer;
+      sequencer->disconnect();
       sequencer = 0;
    }
-   
-   std::vector<ossimConnectableObject*> processObjects =
-      theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimProcessInterface),
+
+   ossimConnectableObject::ConnectableObjectList processObjects =
+      theContainer->findAllObjectsOfType(STATIC_TYPE_INFO(ossimProcessInterface),
                                         false);
    ossim_uint32 i = 0;
-   ossimImageFileWriter* writer  = 0;
+   ossimRefPtr<ossimImageFileWriter> writer  = 0;
    for(i = 0; ((i < processObjects.size())&&(!writer)); ++i)
    {
       writer = PTR_CAST(ossimImageFileWriter,
-                        processObjects[i]);
+                        processObjects[i].get());
    }
 
-   if(writer)
+   if(writer.valid())
    {
       ossimRefPtr<ossimProjection> proj = buildProductProjection(theKwl);
       ossimMapProjection *mapProj = PTR_CAST(ossimMapProjection,proj.get());
@@ -511,12 +530,12 @@ void ossimIgen::outputProduct()
                writer->addListener(prog);
             }
             
-            setView(chain, view.get());
+            setView(chain.get(), view.get());
             chain->initialize();
             cut->setRectangle(clipRect);
             chain->initialize();
             writer->disconnect();
-            writer->connectMyInputTo(chain);
+            writer->connectMyInputTo(chain.get());
             writer->setFilename(tempFile.dirCat(tileName));
             writer->initialize();
 
@@ -614,13 +633,13 @@ void ossimIgen::outputProduct()
       for(ossim_uint32 i = 0; i < processObjects.size(); ++i)
       {
          if(!PTR_CAST(ossimImageFileWriter,
-                      processObjects[i]))
+                      processObjects[i].get()))
          {
             ossimProcessInterface* process = PTR_CAST(ossimProcessInterface,
-                                                      processObjects[i]);
+                                                      processObjects[i].get());
             if(process)
             {
-               processObjects[i]->connectMyInputTo(chain);
+               processObjects[i]->connectMyInputTo(chain.get());
                process->execute();
             }
          }
@@ -630,12 +649,10 @@ void ossimIgen::outputProduct()
 
 void ossimIgen::deleteAttributes()
 {
-   if(theProductProjection)
-   {
-      delete theProductProjection;
-      theProductProjection = 0;
-   }
-   theContainer.deleteAllChildren();
+   theProductProjection = 0;
+   theContainer->disconnect();
+   theContainer->deleteAllChildren();
+   theContainer = 0;
 }
 
 ossimProjection* ossimIgen::createImageProjection(const ossimKeywordlist& kwl)
@@ -674,10 +691,10 @@ ossimProjection* ossimIgen::buildProductProjection(const ossimKeywordlist& kwl,
    double      originLat = 0.0;
    double      originLon = 0.0;
    
-   ossimProjection* projection = 0;
+   ossimRefPtr<ossimProjection> projection = 0;
    projection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, "product.projection.");
    
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, projection);
+   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, projection.get());
    
 
    if(mapProj)
@@ -725,7 +742,6 @@ ossimProjection* ossimIgen::buildProductProjection(const ossimKeywordlist& kwl,
                      originLon,
                      true);
       }
-      delete mapProj;
       
       projection = ossimProjectionFactoryRegistry::instance()->createProjection(projKwl);
 
@@ -739,7 +755,7 @@ ossimProjection* ossimIgen::buildProductProjection(const ossimKeywordlist& kwl,
    }
 
    
-   return projection;
+   return projection.release();
 }
 
 void ossimIgen::setView(ossimConnectableObject* obj,
@@ -749,17 +765,17 @@ void ossimIgen::setView(ossimConnectableObject* obj,
    {
       return;
    }
-   vector<ossimConnectableObject*> result;
+   ossimConnectableObject::ConnectableObjectList result;
    obj->findAllInputsOfType(result, STATIC_TYPE_INFO(ossimViewInterface), true, true);
 
    for(ossim_uint32 i = 0; i < result.size();++i)
    {
       ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface,
-                                                   result[i]);
+                                                   result[i].get());
       if(viewInterface)
       {
-         ossimObject* obj = viewObj->dup();
-         viewInterface->setView(obj, true);
+         ossimRefPtr<ossimObject> obj = viewObj->dup();
+         viewInterface->setView(obj.get());
       }
    }
 }
@@ -768,22 +784,18 @@ void ossimIgen::setView(ossimConnectableObject* obj,
 bool ossimIgen::getOutputRect(const ossimKeywordlist& kwl,
                               ossimDrect& rect)
 {
-   ossimProjection* viewProj = buildProductProjection(kwl);
-   ossimImageChain* chain = getChain();
+   ossimRefPtr<ossimProjection> viewProj = buildProductProjection(kwl);
+   ossimImageChain* chain    = getChain();
    
    
    
    if(chain)
    {
-      setView(chain, viewProj);
+      setView(chain, viewProj.get());
       chain->initialize();
       rect = chain->getBoundingRect();
       
       return true;
-   }
-   if(viewProj)
-   {
-      delete viewProj;
    }
 
    return false;
@@ -792,8 +804,8 @@ bool ossimIgen::getOutputRect(const ossimKeywordlist& kwl,
 void ossimIgen::buildThumbnail()
 {
    double resolution = ossim::max(theThumbnailResolution.x, theThumbnailResolution.y);
-   ossimProjection* viewProj   = buildProductProjection(theKwl);
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, viewProj);
+   ossimRefPtr<ossimProjection> viewProj   = buildProductProjection(theKwl);
+   ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(viewProj.get());
    
    
    ossimDrect rect;
@@ -821,13 +833,12 @@ void ossimIgen::buildThumbnail()
       mapProj->saveState(theKwl, "product.projection.");
    }
    
-   delete viewProj;
 }
 
 ossimImageChain* ossimIgen::getChain()
 {
-   ossimConnectableObject* obj = theContainer.findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain),
+   ossimConnectableObject* obj = theContainer->findFirstObjectOfType(STATIC_TYPE_NAME(ossimImageChain),
                                                                     false);
 
-   return PTR_CAST(ossimImageChain, obj);
+   return dynamic_cast<ossimImageChain*>(obj);
 }

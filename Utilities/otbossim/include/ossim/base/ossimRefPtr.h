@@ -13,17 +13,17 @@ template<class T> class ossimRefPtr
  public:
    typedef T element_type;
    
-   ossimRefPtr() :thePtr(0) {}
-   ossimRefPtr(T* t):thePtr(t)              { if (thePtr) thePtr->ref(); }
-   ossimRefPtr(const ossimRefPtr& rp):thePtr(rp.thePtr)  { if (thePtr) thePtr->ref(); }
-   ~ossimRefPtr()                           { if (thePtr) thePtr->unref(); thePtr=0; }
+   ossimRefPtr() :m_ptr(0) {}
+   ossimRefPtr(T* t):m_ptr(t)              { if (m_ptr) m_ptr->ref(); }
+   ossimRefPtr(const ossimRefPtr& rp):m_ptr(rp.m_ptr)  { if (m_ptr) m_ptr->ref(); }
+   ~ossimRefPtr()                           { if (m_ptr) m_ptr->unref(); m_ptr=0; }
    
    inline ossimRefPtr& operator = (const ossimRefPtr& rp)
       {
-         if (thePtr==rp.thePtr) return *this;
-         T* tmpPtr = thePtr;
-         thePtr = rp.thePtr;
-         if (thePtr) thePtr->ref();
+         if (m_ptr==rp.m_ptr) return *this;
+         T* tmpPtr = m_ptr;
+         m_ptr = rp.m_ptr;
+         if (m_ptr) m_ptr->ref();
          // unref second to prevent any deletion of any object which might
          // be referenced by the other object. i.e rp is child of the
          // original _ptr.
@@ -33,45 +33,44 @@ template<class T> class ossimRefPtr
    
    inline ossimRefPtr& operator = (T* ptr)
       {
-         if (thePtr==ptr) return *this;
-         T* tmpPtr = thePtr;
-         thePtr = ptr;
-         if (thePtr) thePtr->ref();
+         if (m_ptr==ptr) return *this;
+         T* tmpPtr = m_ptr;
+         m_ptr = ptr;
+         if (m_ptr) m_ptr->ref();
          // unref second to prevent any deletion of any object which might
          // be referenced by the other object. i.e rp is child of the
-         // original thePtr.
+         // original m_ptr.
          if (tmpPtr) tmpPtr->unref();
          return *this;
       }
    
    // comparison operators for ossimRefPtr.
-   inline bool operator == (const ossimRefPtr& rp) const { return (thePtr==rp.thePtr); }
-   inline bool operator != (const ossimRefPtr& rp) const { return (thePtr!=rp.thePtr); }
-   inline bool operator < (const ossimRefPtr& rp) const { return (thePtr<rp.thePtr); }
-   inline bool operator > (const ossimRefPtr& rp) const { return (thePtr>rp.thePtr); }
+   inline bool operator == (const ossimRefPtr& rp) const { return (m_ptr==rp.m_ptr); }
+   inline bool operator != (const ossimRefPtr& rp) const { return (m_ptr!=rp.m_ptr); }
+   inline bool operator < (const ossimRefPtr& rp) const { return (m_ptr<rp.m_ptr); }
+   inline bool operator > (const ossimRefPtr& rp) const { return (m_ptr>rp.m_ptr); }
    
    // comparion operator for const T*.
-   inline bool operator == (const T* ptr) const { return (thePtr==ptr); }
-   inline bool operator != (const T* ptr) const { return (thePtr!=ptr); }
-   inline bool operator < (const T* ptr) const { return (thePtr<ptr); }
-   inline bool operator > (const T* ptr) const { return (thePtr>ptr); }
+   inline bool operator == (const T* ptr) const { return (m_ptr==ptr); }
+   inline bool operator != (const T* ptr) const { return (m_ptr!=ptr); }
+   inline bool operator < (const T* ptr) const { return (m_ptr<ptr); }
+   inline bool operator > (const T* ptr) const { return (m_ptr>ptr); }
    
+   inline T& operator*()  { return *m_ptr; }
    
-   inline T& operator*()  { return *thePtr; }
+   inline const T& operator*() const { return *m_ptr; }
    
-   inline const T& operator*() const { return *thePtr; }
+   inline T* operator->() { return m_ptr; }
    
-   inline T* operator->() { return thePtr; }
+   inline const T* operator->() const   { return m_ptr; }
    
-   inline const T* operator->() const   { return thePtr; }
+   inline bool operator!() const	{ return m_ptr==0L; }
    
-   inline bool operator!() const	{ return thePtr==0L; }
+   inline bool valid() const	{ return m_ptr!=0L; }
    
-   inline bool valid() const	{ return thePtr!=0L; }
+   inline T* get() { return m_ptr; }
    
-   inline T* get() { return thePtr; }
-   
-   inline const T* get() const { return thePtr; }
+   inline const T* get() const { return m_ptr; }
    
    /** take control over the object pointed to by ref_ptr, unreference but do not delete even if ref count goes to 0,
     * return the pointer to the object.
@@ -79,10 +78,10 @@ template<class T> class ossimRefPtr
     * only use when absolutely required.*/
    inline T* take() { return release();}
    
-   inline T* release() { T* tmp=thePtr; if (thePtr) thePtr->unref_nodelete(); thePtr=0; return tmp;}
+   inline T* release() { T* tmp=m_ptr; if (m_ptr) m_ptr->unref_nodelete(); m_ptr=0; return tmp;}
    
  private:
-   T* thePtr;
+   T* m_ptr;
 };
 
 #endif

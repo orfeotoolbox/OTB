@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToIndexFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToIndexFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimRgbToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -21,7 +21,7 @@ RTTI_DEF1(ossimRgbToIndexFilter,
 
 ossimRgbToIndexFilter::ossimRgbToIndexFilter()
    :ossimImageSourceFilter(),
-    theLut(0),
+    theLut(new ossimRgbLutDataObject()),
     theTile(NULL)
 {
 }
@@ -29,13 +29,14 @@ ossimRgbToIndexFilter::ossimRgbToIndexFilter()
 ossimRgbToIndexFilter::ossimRgbToIndexFilter(ossimImageSource* inputSource,
                                              const ossimRgbLutDataObject& rgbLut)
    :ossimImageSourceFilter(inputSource),
-    theLut(rgbLut),
+    theLut((ossimRgbLutDataObject*)rgbLut.dup()),
     theTile(NULL)
 {
 }
 
 ossimRgbToIndexFilter::~ossimRgbToIndexFilter()
 {
+   theLut = 0;
 }
 
 void ossimRgbToIndexFilter::initialize()
@@ -138,7 +139,7 @@ ossimRefPtr<ossimImageData> ossimRgbToIndexFilter::convertInputTile(ossimRefPtr<
 
       for(ossim_uint32 offset = 0; offset < upper; ++offset)
       {
-         *outBand = theLut.findIndex(*band[0], *band[1], *band[2]);
+         *outBand = theLut->findIndex(*band[0], *band[1], *band[2]);
          
          ++outBand;
          ++band[0];
@@ -156,7 +157,7 @@ bool ossimRgbToIndexFilter::saveState(ossimKeywordlist& kwl,
    ossimString newPrefix = prefix;
    newPrefix = newPrefix + "lut.";
 
-   theLut.saveState(kwl, newPrefix.c_str());
+   theLut->saveState(kwl, newPrefix.c_str());
 
    return ossimImageSourceFilter::saveState(kwl, prefix);
 }
@@ -166,7 +167,7 @@ bool ossimRgbToIndexFilter::loadState(const ossimKeywordlist& kwl, const char* p
    ossimString newPrefix = prefix;
    newPrefix = newPrefix + "lut.";
 
-   theLut.loadState(kwl, newPrefix.c_str());
+   theLut->loadState(kwl, newPrefix.c_str());
    
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
@@ -193,7 +194,7 @@ ossimScalarType ossimRgbToIndexFilter::getOutputScalarType() const
 
 void ossimRgbToIndexFilter::setLut(ossimRgbLutDataObject& lut)
 {
-   theLut = lut;
+   theLut = (ossimRgbLutDataObject*) lut.dup();
 }
 
 double ossimRgbToIndexFilter::getNullPixelValue(ossim_uint32 band)const

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiEllipseObject.cpp 13348 2008-07-30 15:33:53Z dburken $
+// $Id: ossimGeoAnnotationMultiEllipseObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiEllipseObject.h>
 #include <ossim/imaging/ossimAnnotationMultiEllipseObject.h>
@@ -61,53 +61,16 @@ ossimGeoAnnotationMultiEllipseObject::ossimGeoAnnotationMultiEllipseObject(const
 }
    
 void ossimGeoAnnotationMultiEllipseObject::transform(
-   ossimProjection* projection)
+   ossimImageGeometry* projection)
 {
    const std::vector<ossimGpt>::size_type BOUNDS = thePointList.size();
    theProjectedObject->resize(BOUNDS);
    for(std::vector<ossimGpt>::size_type i = 0; i < BOUNDS; ++i)
    {
-      projection->worldToLineSample(thePointList[i], (*theProjectedObject)[i]);
+      projection->worldToLocal(thePointList[i], (*theProjectedObject)[i]);
       
    }
    computeBoundingRect();
-}
-
-void ossimGeoAnnotationMultiEllipseObject::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      const std::vector<ossimGpt>::size_type BOUNDS = thePointList.size();
-      theProjectedObject->resize(BOUNDS);
-
-      for (std::vector<ossimGpt>::size_type i = 0; i < BOUNDS; ++i)
-      {
-         ossimDpt r0Pt;
-         projection->worldToLineSample(thePointList[i], r0Pt);
-         
-         if (rrds)
-         {
-            // Transform r0 point to new rrds level.
-            try
-            {
-               ossimDpt rnPt;
-               model.r0ToRn(rrds, r0Pt, rnPt);
-               (*theProjectedObject)[i] = rnPt;
-            }
-            catch (const ossimException& e)
-            {
-               ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-            }
-         }
-         else
-         {
-            (*theProjectedObject)[i] = r0Pt;
-         }
-      }
-      computeBoundingRect();
-   }
 }
 
 void ossimGeoAnnotationMultiEllipseObject::setFillFlag(bool fillFlag)

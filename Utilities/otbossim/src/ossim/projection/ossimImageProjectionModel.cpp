@@ -16,7 +16,6 @@
 #include <ossim/projection/ossimImageProjectionModel.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/projection/ossimProjection.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 RTTI_DEF1(ossimImageProjectionModel,
           "ossimImageProjectionModel",
@@ -30,11 +29,7 @@ ossimImageProjectionModel::ossimImageProjectionModel()
 
 ossimImageProjectionModel::~ossimImageProjectionModel()
 {
-   if (theProjection)
-   {
-      delete theProjection;
-      theProjection = 0;
-   }
+   theProjection = 0;
 }
 
 void ossimImageProjectionModel::initialize(const ossimImageHandler& ih)
@@ -42,20 +37,14 @@ void ossimImageProjectionModel::initialize(const ossimImageHandler& ih)
    // Initialize base.
    ossimImageModel::initialize(ih);
    
-   if (theProjection)
-   {
-      delete theProjection;
-      theProjection = 0;
-   }
+   theProjection = 0;
 
-   // cast away constness for  ossimImageHandler::getImageGeometry call.
-   ossimImageHandler* iih = const_cast<ossimImageHandler*>(&ih);
-
-   ossimKeywordlist kwl;
-   if ( iih->getImageGeometry(kwl, 0) )
+   // Fetch the handler's image geometry and see if it has a projection:
+   ossimImageHandler* iih = const_cast<ossimImageHandler*>(&ih); // cast away constness
+   ossimImageGeometry* image_geom = iih->getImageGeometry();
+   if (image_geom)
    {
-      theProjection = ossimProjectionFactoryRegistry::instance()->
-         createProjection(kwl);
+      theProjection = image_geom->getProjection();
    }
 }
 

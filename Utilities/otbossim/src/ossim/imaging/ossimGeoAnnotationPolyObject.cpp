@@ -6,12 +6,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.cpp 13387 2008-08-04 21:30:04Z dburken $
+// $Id: ossimGeoAnnotationPolyObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationPolyObject.h>
-#include <ossim/imaging/ossimAnnotationPolyObject.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimImageProjectionModel.h>
 #include <ossim/base/ossimException.h>
@@ -72,17 +71,13 @@ ossimGeoAnnotationPolyObject::ossimGeoAnnotationPolyObject(
    const ossimGeoAnnotationPolyObject& rhs)
    :ossimGeoAnnotationObject(rhs),
     thePolygon(rhs.thePolygon),
-    theProjectedPolyObject(rhs.theProjectedPolyObject?(ossimAnnotationPolyObject*)rhs.theProjectedPolyObject->dup():(ossimAnnotationPolyObject*)NULL)
+    theProjectedPolyObject(rhs.theProjectedPolyObject.valid()?(ossimAnnotationPolyObject*)rhs.theProjectedPolyObject->dup():(ossimAnnotationPolyObject*)NULL)
 {
 }
 
 ossimGeoAnnotationPolyObject::~ossimGeoAnnotationPolyObject()
 {
-   if(theProjectedPolyObject)
-   {
-      delete theProjectedPolyObject;
-      theProjectedPolyObject = NULL;
-   }
+   theProjectedPolyObject = NULL;
 }
 
 ossimObject* ossimGeoAnnotationPolyObject::dup()const
@@ -98,14 +93,14 @@ void ossimGeoAnnotationPolyObject::applyScale(double x,
       thePolygon[i].lond(thePolygon[i].lond()*x);
       thePolygon[i].latd(thePolygon[i].latd()*y);
    }
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->applyScale(x, y);
    }
       
 }
 
-void ossimGeoAnnotationPolyObject::transform(ossimProjection* projection)
+void ossimGeoAnnotationPolyObject::transform(ossimImageGeometry* projection)
 {
    // make sure it's not null
    if(!projection)
@@ -117,52 +112,12 @@ void ossimGeoAnnotationPolyObject::transform(ossimProjection* projection)
    
    for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
    {
-      projection->worldToLineSample(thePolygon[index], poly[index]);
+      projection->worldToLocal(thePolygon[index], poly[index]);
    }
 
    // update the bounding rect
    //
    theProjectedPolyObject->computeBoundingRect();
-}
-
-void ossimGeoAnnotationPolyObject::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      ossimPolygon& poly = theProjectedPolyObject->getPolygon();
-      const std::vector<ossimGpt>::size_type BOUNDS = thePolygon.size();
-
-      for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
-      {
-         ossimDpt r0Pt;
-         projection->worldToLineSample(thePolygon[index], r0Pt);
-
-         if (rrds)
-         {
-            // Transform r0 point to new rrds level.
-            try
-            {
-               ossimDpt rnPt;
-               model.r0ToRn(rrds, r0Pt, rnPt);
-               poly[index] = rnPt;
-            }
-            catch (const ossimException& e)
-            {
-               ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-            } 
-         }
-         else
-         {
-            poly[index] = r0Pt;
-         }
-      }
-
-      // update the bounding rect
-      theProjectedPolyObject->computeBoundingRect();
-
-   } // End: if (projection)
 }
 
 std::ostream& ossimGeoAnnotationPolyObject::print(std::ostream& out)const
@@ -183,7 +138,7 @@ std::ostream& ossimGeoAnnotationPolyObject::print(std::ostream& out)const
 
 void ossimGeoAnnotationPolyObject::draw(ossimRgbImage& anImage)const
 {
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->draw(anImage);
    }
@@ -192,7 +147,7 @@ void ossimGeoAnnotationPolyObject::draw(ossimRgbImage& anImage)const
 ossimAnnotationObject* ossimGeoAnnotationPolyObject::getNewClippedObject(
    const ossimDrect& rect)const
 {
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       return theProjectedPolyObject->getNewClippedObject(rect);
    }
@@ -202,7 +157,7 @@ ossimAnnotationObject* ossimGeoAnnotationPolyObject::getNewClippedObject(
 
 bool ossimGeoAnnotationPolyObject::intersects(const ossimDrect& rect)const
 {
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       return theProjectedPolyObject->intersects(rect);
    }
@@ -213,7 +168,7 @@ bool ossimGeoAnnotationPolyObject::intersects(const ossimDrect& rect)const
 void ossimGeoAnnotationPolyObject::getBoundingRect(ossimDrect& rect)const
 {
    rect.makeNan();
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->getBoundingRect(rect);
    }
@@ -221,7 +176,7 @@ void ossimGeoAnnotationPolyObject::getBoundingRect(ossimDrect& rect)const
 
 void ossimGeoAnnotationPolyObject::computeBoundingRect()
 {
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->computeBoundingRect();
    }
@@ -236,7 +191,7 @@ void ossimGeoAnnotationPolyObject::setPolygon(const std::vector<ossimGpt>& poly)
 {
    thePolygon = poly;
    std::vector<ossimDpt> projectedPoints(thePolygon.size());
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->setPolygon(projectedPoints);
    }
@@ -246,7 +201,7 @@ void ossimGeoAnnotationPolyObject::setPolygon(const std::vector<ossimGpt>& poly)
 
 void ossimGeoAnnotationPolyObject::setFillFlag(bool flag)
 {
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->setFillFlag(flag);
    }
@@ -257,7 +212,7 @@ void ossimGeoAnnotationPolyObject::setColor(ossim_uint8 r,
                                             ossim_uint8 b)
 {
    ossimAnnotationObject::setColor(r, g, b);
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->setColor(r, g, b);
    }
@@ -266,7 +221,7 @@ void ossimGeoAnnotationPolyObject::setColor(ossim_uint8 r,
 void ossimGeoAnnotationPolyObject::setThickness(ossim_uint8 thickness)
 {
    ossimAnnotationObject::setThickness(thickness);
-   if(theProjectedPolyObject)
+   if(theProjectedPolyObject.valid())
    {
       theProjectedPolyObject->setThickness(thickness);
    }

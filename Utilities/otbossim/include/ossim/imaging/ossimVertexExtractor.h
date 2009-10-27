@@ -5,7 +5,7 @@
 // Author: David Burken (dburken@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimVertexExtractor.h 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimVertexExtractor.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimVertexExtractor_HEADER
 #define ossimVertexExtractor_HEADER
@@ -34,7 +34,6 @@ class OSSIMDLLEXPORT ossimVertexExtractor : public ossimOutputSource,
 public:
    ossimVertexExtractor(ossimImageSource* inputSource=NULL);
 
-   virtual ~ossimVertexExtractor();
 
   virtual ossimObject* getObject()
   {
@@ -112,7 +111,8 @@ public:
 
    vector<ossimIpt> getVertices() { return theVertice; }
    
-private:
+protected:
+   virtual ~ossimVertexExtractor();
    /*!
     *  Walks each line from left and right side detecting first non null pixel.
     *  Returns true on success, false on error.

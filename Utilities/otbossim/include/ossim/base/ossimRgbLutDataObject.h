@@ -6,13 +6,14 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbLutDataObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbLutDataObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbLutDataObject_HEADER
 #define ossimRgbLutDataObject_HEADER
 #include <ossim/base/ossimRgbVector.h>
 #include <ossim/base/ossimObject.h>
 #include <iosfwd>
-class OSSIMDLLEXPORT ossimKeywordlist;
+
+class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimRgbLutDataObject : public ossimObject
 {
@@ -24,7 +25,10 @@ public:
     */
    ossimRgbLutDataObject(unsigned long numberOfEntries=0);
    ossimRgbLutDataObject(const ossimRgbLutDataObject& lut);
-   virtual ~ossimRgbLutDataObject();
+   virtual ossimObject* dup()const
+   {
+      return new ossimRgbLutDataObject(*this);
+   }
    const ossimRgbVector& operator[](unsigned int index)const
       {
          return index<theNumberOfEntries?theLut[index]:theLut[theNumberOfEntries-1];
@@ -76,6 +80,8 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 protected:
+   virtual ~ossimRgbLutDataObject();
+
    ossimRgbVector *theLut;
    ossim_uint32 theNumberOfEntries;
 

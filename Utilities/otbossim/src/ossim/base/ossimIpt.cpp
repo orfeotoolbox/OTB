@@ -10,7 +10,7 @@
 // Contains class definitions for ipt.
 //
 //*******************************************************************
-//  $Id: ossimIpt.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimIpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -139,7 +139,30 @@ std::ostream& operator<<(std::ostream& os, const ossimIpt& pt)
 ossimString ossimIpt::toString() const
 {
    std::ostringstream os;
-   print(os);
+   os << "(";
+   
+   if (x != OSSIM_INT_NAN)
+   {
+      os << x;
+   }
+   else
+   {
+      os << "nan";
+   }
+   
+   os << ",";
+   
+   if (y != OSSIM_INT_NAN)
+   {
+      os << y;
+   }
+   else
+   {
+      os << "nan";
+   }
+   
+   os << ")";
+   
    return ossimString(os.str());
 }
 

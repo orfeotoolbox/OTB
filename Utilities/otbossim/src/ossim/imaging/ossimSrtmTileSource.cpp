@@ -9,12 +9,13 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.cpp 10275 2007-01-15 16:39:53Z dburken $
+// $Id: ossimSrtmTileSource.cpp 15801 2009-10-23 20:04:16Z gpotts $
 
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 RTTI_DEF1(ossimSrtmTileSource,
                "ossimSrtmTileSource",
@@ -25,7 +26,7 @@ static ossimTrace traceDebug("ossimSrtmTileSource:debug");
 ossimSrtmTileSource::ossimSrtmTileSource()
    :
    ossimGeneralRasterTileSource(),
-   theSrtmSupportData()
+   m_SrtmSupportData()
 {
 }
 
@@ -52,7 +53,7 @@ bool ossimSrtmTileSource::open()
    // in a omd file so this is a one time hit typically taken when building
    // reduced res sets.
    //---
-   if (!theSrtmSupportData.setFilename(theImageFile, true))
+   if (!m_SrtmSupportData.setFilename(theImageFile, true))
    {
       if (traceDebug()) CLOG << " Unable to set filename"<< std::endl;
       
@@ -60,7 +61,7 @@ bool ossimSrtmTileSource::open()
    }
 
    ossimKeywordlist kwl;
-   theSrtmSupportData.saveState(kwl);
+   m_SrtmSupportData.saveState(kwl);
    
    ossimGeneralRasterInfo generalRasterInfo;
    bool result = generalRasterInfo.loadState(kwl);
@@ -81,29 +82,34 @@ bool ossimSrtmTileSource::open()
    return result;
 }
    
-bool ossimSrtmTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                              const char* prefix)
+//**************************************************************************************************
+//! Returns the image geometry object associated with this tile source or NULL if non defined.
+//! The geometry contains full-to-local image transform as well as projection (image-to-world)
+//**************************************************************************************************
+ossimImageGeometry* ossimSrtmTileSource::getInternalImageGeometry()
 {
    // Check for override for an external geometry file, or a previous save.
-   if(ossimImageHandler::getImageGeometry(kwl, prefix))
+   if(!theGeometry.valid())
+      theGeometry = new ossimImageGeometry();
+   ossimKeywordlist kwl;
+   if (m_SrtmSupportData.getImageGeometry(kwl))
    {
-      return true;
+      // Capture for next time.
+      ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      if (proj)
+      {
+         theGeometry->setProjection(proj);
+         return theGeometry.get();
+      }
    }
 
-   if (theSrtmSupportData.getImageGeometry(kwl, prefix))
-   {
-      // Capture for next time...
-      setImageGeometry(kwl);
-      return true;
-   }
-
-   return false;
+   return 0;
 }
 
 bool ossimSrtmTileSource::saveState(ossimKeywordlist& kwl,
                                     const char* prefix)const
 {
-   if (theSrtmSupportData.saveState(kwl, prefix))
+   if (m_SrtmSupportData.saveState(kwl, prefix))
    {
       return ossimImageHandler::saveState(kwl,prefix);
    }
@@ -113,9 +119,9 @@ bool ossimSrtmTileSource::saveState(ossimKeywordlist& kwl,
 bool ossimSrtmTileSource::loadState(const ossimKeywordlist& kwl,
                                     const char* prefix)
 {
-   if (theSrtmSupportData.loadState(kwl, prefix))
+   if (m_SrtmSupportData.loadState(kwl, prefix))
    {
-      setFilename(theSrtmSupportData.getFilename());
+      setFilename(m_SrtmSupportData.getFilename());
       if (open())
       {
          // Must call to pick up id for connections.

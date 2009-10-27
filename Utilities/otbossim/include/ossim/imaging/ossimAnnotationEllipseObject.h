@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationEllipseObject.h 11360 2007-07-23 20:49:37Z dburken $
+// $Id: ossimAnnotationEllipseObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationEllipseObject_HEADER
 #define ossimAnnotationEllipseObject_HEADER
 
@@ -26,7 +26,6 @@ public:
 
    virtual ossimObject* dup()const;
 
-   virtual ~ossimAnnotationEllipseObject();
 
    virtual void applyScale(double x, double y);
 
@@ -88,6 +87,7 @@ public:
                           const char* prefix=0);
    
 protected:
+   virtual ~ossimAnnotationEllipseObject();
    ossimDpt      theCenter;
    ossimDpt      theWidthHeight;
    ossim_float64 theAzimuthInDegrees;

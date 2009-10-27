@@ -36,7 +36,7 @@ ossimImageModel::~ossimImageModel()
 
 void ossimImageModel::initialize(const ossimImageHandler& ih)
 {
-   theSubImageOffset = ih.getSubImageOffset(0);
+   theSubImageOffset = ossimDpt();
    theLines          = ih.getNumberOfLines(0);
    theSamples        = ih.getNumberOfSamples(0);
    ih.getDecimationFactors(theDecimationFactors);

@@ -149,7 +149,7 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_Geodetic (char *MGRS,
+  long Convert_OSSIM_MGRS_To_Geodetic (const char *MGRS,
                                  double *Latitude,
                                  double *Longitude);
 /*
@@ -185,7 +185,7 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_UTM (char   *MGRS,
+  long Convert_OSSIM_MGRS_To_UTM (const char   *MGRS,
                             long   *Zone,
                             char   *Hemisphere,
                             double *Easting,
@@ -227,7 +227,7 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_UPS ( char   *MGRS,
+  long Convert_OSSIM_MGRS_To_UPS ( const char   *MGRS,
                              char   *Hemisphere,
                              double *Easting,
                              double *Northing);

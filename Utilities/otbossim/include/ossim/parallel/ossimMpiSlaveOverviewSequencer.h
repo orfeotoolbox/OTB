@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiSlaveOverviewSequencer.h 10152 2006-12-30 20:54:39Z dburken $
+// $Id: ossimMpiSlaveOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMpiSlaveOverviewSequencer_HEADER
 #define ossimMpiSlaveOverviewSequencer_HEADER
 
@@ -25,8 +25,6 @@ public:
    /** default constructor */
    ossimMpiSlaveOverviewSequencer();
    
-   /** virtual destructor */
-   virtual ~ossimMpiSlaveOverviewSequencer();
 
    /**
     * @return Always false for this implementation.
@@ -57,6 +55,8 @@ public:
    virtual void slaveProcessTiles();
    
 protected:
+   /** virtual destructor */
+   virtual ~ossimMpiSlaveOverviewSequencer();
 
    int  theRank;
    int  theNumberOfProcessors;

@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimViewController.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimViewController.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimViewController_HEADER
 #define ossimViewController_HEADER
 #include <ossim/base/ossimSource.h>
@@ -43,7 +43,7 @@ public:
                                     const ossimConnectableObject* obj)const;
    virtual const ossimObject* findFirstViewOfType(RTTItypeid typeId)const;
 protected:
-   ossimObject* theView;
+   ossimRefPtr<ossimObject> theView;
    
 TYPE_DATA
 };

@@ -1,13 +1,15 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.cpp 13619 2008-09-29 19:10:31Z gpotts $
+// $Id: ossimNitfCommon.cpp 15410 2009-09-11 19:45:38Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -16,10 +18,11 @@
 #include <stdexcept>
 #include <iostream>
 #include <ossim/support_data/ossimNitfCommon.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimDms.h>
-#include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimIrect.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimTrace.h>
 
 static const ossimTrace traceDebug(ossimString("ossimNitfCommon:debug"));
 
@@ -458,3 +461,79 @@ ossimString ossimNitfCommon::encodeGeographicDecimalDegrees(const ossimDpt& ul,
    
    return ossimString(out.str());
 }
+
+ossimString ossimNitfCommon::getNitfPixelType(ossimScalarType scalarType)
+{
+   ossimString pixelType;
+   switch(scalarType)
+   {
+      case OSSIM_UCHAR:
+      case OSSIM_USHORT11:
+      case OSSIM_USHORT16:
+      {
+         pixelType = "INT";
+         break;
+      }
+      case OSSIM_SSHORT16:
+      {
+         pixelType    = "SI";
+         break;
+      }
+      case OSSIM_FLOAT:
+      case OSSIM_NORMALIZED_FLOAT:
+      case OSSIM_DOUBLE:
+      case OSSIM_NORMALIZED_DOUBLE:
+      {
+         pixelType    = "R";
+         break;
+      }
+      default:
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << __FILE__ << ":" << __LINE__
+            << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         break;
+      }
+   }
+   return pixelType;
+}
+
+ossimString ossimNitfCommon::getCompressionRate(const ossimIrect& rect,
+                                                ossim_uint32 bands,
+                                                ossimScalarType scalar,
+                                                ossim_uint64 lengthInBytes)
+{
+   ossimString result("");
+   
+   ossim_float64 uncompressedSize =
+      ossim::scalarSizeInBytes(scalar) * rect.width() * rect.height() * bands;
+   ossim_float64 bitsPerPix = ossim::getBitsPerPixel(scalar);
+   ossim_float64 rate = ( bitsPerPix *
+                          (static_cast<ossim_float64>(lengthInBytes) /
+                           uncompressedSize) );
+
+   // Multiply by ten as there is an implied decimal point.
+   rate *= 10.0;
+
+   // Convert to string with zero precision.
+   ossimString s = ossimString::toString(rate, 0);
+
+   if (s.size())
+   {
+      if (s.size() <= 3)
+      {
+         result = "N";
+         if (s.size() == 2)
+         {
+            result += "0";
+         }
+         else if (s.size() == 1)
+         {
+            result += "00";
+         }
+         result += s;
+      }
+   }
+   return result;
+}
+

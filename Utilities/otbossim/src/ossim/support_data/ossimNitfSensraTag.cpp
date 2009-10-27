@@ -9,9 +9,10 @@
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimNitfSensraTag.cpp 14659 2009-06-05 17:37:39Z dburken $
 
 #include <istream>
+#include <iomanip>
 #include <ossim/support_data/ossimNitfSensraTag.h>
 
 RTTI_DEF1(ossimNitfSensraTag, "ossimNitfSensraTag", ossimNitfRegisteredTag);
@@ -145,6 +146,45 @@ void ossimNitfSensraTag::clearFields()
    theSwathFrames[SWATH_FRAMES_SIZE] = '\0';
    theNSwaths[N_SWATHS_SIZE] = '\0';
    theSpotNum[SPOT_NUM_SIZE] = '\0';
+}
+
+std::ostream& ossimNitfSensraTag::print(
+   std::ostream& out, const std::string& prefix) const
+{
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+   
+   out << std::setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:" << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "REFROW:" << theRefRow << "\n"
+       << pfx << std::setw(24) << "REFCOL:" << theRefCol << "\n"
+       << pfx << std::setw(24) << "SENSORMODEL:" << theSensorModel<< "\n"
+       << pfx << std::setw(24) << "SENSORMOUNT:" << theSensorMount << "\n"
+       << pfx << std::setw(24) << "SENSORLOC:" << theSensorLoc << "\n"
+       << pfx << std::setw(24) << "SENSORALTSRC:" << theSensorAltSrc<< "\n"
+       << pfx << std::setw(24) << "SENSORALT:" << theSensorAlt << "\n"
+       << pfx << std::setw(24) << "SENSORALTUNIT:" << theSensorAltUnit << "\n"
+       << pfx << std::setw(24) << "SENSORAGL:" << theSensorAgl << "\n"
+       << pfx << std::setw(24) << "SENSORPITCH:" << theSensorPitch << "\n"
+       << pfx << std::setw(24) << "SENSORROLL:" << theSensorRoll<< "\n"
+       << pfx << std::setw(24) << "SENSORYAW:" << theSensorYaw << "\n"
+       << pfx << std::setw(24) << "PLATFORMPITCH:" << thePlatformPitch << "\n"
+       << pfx << std::setw(24) << "PLATFORMROLL:" << thePlatformRoll << "\n"
+       << pfx << std::setw(24) << "PLATFORMHDG:" << thePlatformHdg << "\n"
+       << pfx << std::setw(24) << "GROUNDSPDSRC:" << theGroundSpdSrc << "\n"
+       << pfx << std::setw(24) << "GROUNDSPEED:" << theGroundSpeed << "\n"
+       << pfx << std::setw(24) << "GROUNDSPDUNIT:" << theGroundSpdUnit << "\n"
+       << pfx << std::setw(24) << "GROUNDTRACK:" << theGroundTrack << "\n"
+       << pfx << std::setw(24) << "VERTICALVEL:" << theVerticalVel<< "\n"
+       << pfx << std::setw(24) << "VERTVELUNIT:" << theVertVelUnit << "\n"
+       << pfx << std::setw(24) << "SWATHFRAMES:" << theSwathFrames<< "\n"
+       << pfx << std::setw(24) << "NSWATHS:" << theNSwaths << "\n"
+       << pfx << std::setw(24) << "SPOTNUM:" << theSpotNum << "\n";
+   
+   return out;
 }
 
 ossimString ossimNitfSensraTag::getRefRow()const

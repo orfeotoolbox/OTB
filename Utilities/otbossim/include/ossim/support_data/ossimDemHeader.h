@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 //         Orginally written by Jamie Moyers (jmoyers@geeks.com)
@@ -8,7 +10,7 @@
 // Description: This class parses a DEM header.
 //
 //********************************************************************
-// $Id: ossimDemHeader.h 10263 2007-01-14 19:06:41Z dburken $
+// $Id: ossimDemHeader.h 15309 2009-09-01 15:47:15Z dburken $
 
 #ifndef ossimDemHeader_HEADER
 #define ossimDemHeader_HEADER
@@ -19,6 +21,7 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimDemPoint.h>
 
+class ossimFilename;
 class ossimString;
 class ossimKeywordlist;
 
@@ -32,9 +35,33 @@ public:
                                              const ossimDemHeader& header);
    friend OSSIM_DLL std::istream& operator>>(std::istream& s,
                                              ossimDemHeader& header);
-   
-   std::ostream& print(std::ostream& s) const;
-   
+
+   /**
+    * @brief open method that takes a file.
+    *
+    * @param file File name to open.
+    *
+    * @return true on success false on error.
+    */
+   bool open(const ossimFilename& file);
+
+   /**
+    * @brief open method that takes a stream.
+    *
+    * @param is The input stream to read from.
+    *
+    * @return stream
+    */
+   std::istream& open(std::istream& is);
+
+   /**
+    * Print method.
+    *
+    * @param out Stream to print to.
+    * 
+    * @return std::ostream&
+    */   
+   std::ostream& print(std::ostream& out) const;
    
    // Accessors
 

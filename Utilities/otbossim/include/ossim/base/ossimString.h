@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 13586 2008-09-17 01:35:25Z gpotts $
+// $Id: ossimString.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -275,6 +277,12 @@ public:
    static bool          toBool(const ossimString& aString);
    int                  toInt()const;
    static int           toInt(const ossimString& aString);
+   
+   ossim_int16          toInt16()const;
+   static ossim_int16   toInt16(const ossimString& aString);
+   ossim_uint16         toUInt16()const;
+   static ossim_uint16  toUInt16(const ossimString& aString);
+
    ossim_int32          toInt32()const;
    static ossim_int32   toInt32(const ossimString& aString);
    ossim_uint32         toUInt32()const;
@@ -326,9 +334,7 @@ public:
     * "e-10" will not be trimmed to "e-1".
     */
    static ossimString toString(ossim_float32 aValue,
-                               int  precision    = 8,
-                               bool trimZeroFlag = false,
-                               bool scientific   = false );
+                               int  precision    = 8 );
    
    /**
     * @param aValue Value to convert to string.
@@ -345,9 +351,7 @@ public:
     * "e-10" will not be trimmed to "e-1".
     */
    static ossimString toString(ossim_float64 aValue,
-                               int  precision    = 15,
-                               bool trimZeroFlag = false,
-                               bool scientific   = false);
+                               int  precision    = 15);
 
    static ossimString stripLeading(const ossimString &value,
                                    char characterToStrip);
@@ -398,7 +402,7 @@ public:
    ossimString urlEncode()const;
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 13586 2008-09-17 01:35:25Z gpotts $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 15766 2009-10-20 12:37:09Z gpotts $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

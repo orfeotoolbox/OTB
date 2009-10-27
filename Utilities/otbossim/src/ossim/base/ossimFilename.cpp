@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 14242 2009-04-07 20:18:59Z dburken $
+// $Id: ossimFilename.cpp 14886 2009-07-15 15:40:50Z gpotts $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -210,17 +210,26 @@ ossimFilename::ossimFilename()
 
 ossimFilename::ossimFilename(const ossimFilename& src)
    : ossimString(src)
-{}
+{
+}
+
 ossimFilename::ossimFilename(const ossimString& src)
    : ossimString(src)
-{}
+{
+	convertToNative();
+}
+
 ossimFilename::ossimFilename(const char* src)
    : ossimString(src)
-{}
+{
+	convertToNative();
+}
 
 template <class Iter> ossimFilename::ossimFilename(Iter s, Iter e)
    : ossimString(s, e)
-{}
+{
+	convertToNative();
+}
 
 bool ossimFilename::operator == (const ossimFilename& rhs)const
 {
@@ -434,13 +443,13 @@ ossimFilename ossimFilename::expand() const
       if ( needsExpansion() )
       {
 
-#if defined(_WIN32)
-         result.convertBackToForwardSlashes();
-#endif
+//#if defined(_WIN32)
+//         result.convertBackToForwardSlashes();
+//#endif
 
          bool addCwd = false;
          
-         if ( (size() > 1) && (*(begin()) == '~') && (*(begin()+1) == '/') )
+         if ( (size() > 1) && (*(begin()) == '~') && (*(begin()+1) == thePathSeparator) )
          {
             ossimFilename homeDir =
                ossimEnvironmentUtility::instance()->getUserDir();
@@ -449,13 +458,13 @@ ossimFilename ossimFilename::expand() const
             result = homeDir.dirCat(s);
          }
          else if( (size() > 1) &&
-                  (*(begin()) == '.') && (*(begin()+1) == '/') )
+                  (*(begin()) == '.') && (*(begin()+1) == thePathSeparator) )
          {
             // dot slash i.e. ./foo
             addCwd = true;
          }
          else if ( (size() > 2)  && (*(begin()) == '.')
-                   && (*(begin()+1) == '.') && (*(begin()+2) == '/') )
+                   && (*(begin()+1) == '.') && (*(begin()+2) == thePathSeparator) )
          {
             // ../foo
             addCwd = true;
@@ -487,10 +496,6 @@ ossimFilename ossimFilename::expand() const
          {
             // now expand any environment variable substitutions
             
-#if defined(_WIN32)
-            result.convertBackToForwardSlashes();
-#endif        
-            
             ossimFilename finalResult;
             const char* tempPtr = result.c_str();
             ossim_int32 startIdx = -1;
@@ -517,7 +522,7 @@ ossimFilename ossimFilename::expand() const
                         getEnvironmentVariable(ossimString(tempPtr+startIdx,
                                                            tempPtr+scanIdx)));
 #if defined(_WIN32) // do windows style replacment
-                     value.convertBackToForwardSlashes();
+ //                    value.convertBackToForwardSlashes();
 #endif
                      finalResult += value;
                      // reset start idx indicator to not set so we are ready for next pattern
@@ -540,14 +545,17 @@ ossimFilename ossimFilename::expand() const
                   ++scanIdx;
                }
             }
+#if defined(_WIN32)
+
+#else        
             finalResult.gsub("//", "/", true);
-            
+#endif       
             result = finalResult;
          
          } // matches:  if ( result.needsExpansion() )
 
 #if defined(_WIN32)
-         result.convertForwardToBackSlashes();
+ //        result.convertForwardToBackSlashes();
 #endif        
 
       } // matches: if ( needsExpansion() )
@@ -667,9 +675,9 @@ ossimFilename ossimFilename::file() const
 {
    ossimFilename file = *this;
 
-   file.convertBackToForwardSlashes();
+   //file.convertBackToForwardSlashes();
 
-   size_type pos = file.rfind('/');
+   size_type pos = file.rfind(thePathSeparator);
    if (pos == npos)
       return *this;
    else
@@ -679,13 +687,13 @@ ossimFilename ossimFilename::file() const
 ossimFilename ossimFilename::path() const
 {
    ossimFilename file = *this;
-   file.convertBackToForwardSlashes();
+   //file.convertBackToForwardSlashes();
 
     // finds the last occurrence of the given string; in this case '/';
-    size_type pos = file.rfind('/');
+    size_type pos = file.rfind(thePathSeparator);
 
     if (pos == 0)
-       return ossimFilename(ossimFilename("/"));
+       return ossimFilename(ossimFilename(thePathSeparator));
     if (pos == npos)
     {
        // We got to the end of the file and did not find a path separator.
@@ -720,10 +728,10 @@ ossimFilename ossimFilename::drive()const
 ossimFilename ossimFilename::fileNoExtension()const
 {
    ossimFilename f = *this;
-   f.convertBackToForwardSlashes();
+   //f.convertBackToForwardSlashes();
 
    size_type dot_pos   = f.rfind('.');
-   size_type slash_pos = f.rfind('/');
+   size_type slash_pos = f.rfind(thePathSeparator);
 
    if(dot_pos == npos)
    {
@@ -910,32 +918,27 @@ ossimFilename ossimFilename::dirCat(const ossimFilename& file) const
    ossimFilename dir      = *this;
    ossimFilename tempFile = file;
       
-#if defined(_WIN32)
-      dir.convertBackToForwardSlashes();
-      tempFile.convertBackToForwardSlashes();
-#endif   
-
    // Check the end and see if it already has a "/".
    string::const_iterator i = dir.end();
 
    --i; // decrement past the trailing null.
 
-   if ( (*i) != '/')
+   if ( (*i) != thePathSeparator)
    {
-      dir += "/";
+      dir += ossimString(thePathSeparator);
    }
 
    // check for dot slash or just slash: ./foo or /foo   
    std::string::iterator iter = tempFile.begin();
    if (iter != tempFile.end())
    {
-      if ((*iter) == '/')
+      if ((*iter) == thePathSeparator)
       {
          ++iter; // skip slash
       }
       else if (tempFile.size() > 1)
       {
-         if ( ((*iter) == '.') &&  ( *(iter + 1) == '/') )
+         if ( ((*iter) == '.') &&  ( *(iter + 1) == thePathSeparator) )
          {
             iter = iter + 2; // skip dot slash
          }
@@ -943,10 +946,6 @@ ossimFilename ossimFilename::dirCat(const ossimFilename& file) const
    }   
 
    dir += std::string(iter, tempFile.end());
-
-#if defined(_WIN32)
-      dir.convertForwardToBackSlashes();
-#endif   
 
    return dir;
 }
@@ -986,13 +985,13 @@ bool ossimFilename::createDirectory(bool recurseFlag,
    if(exists()) return true;
 
    ossimFilename tempFile = *this;
-   tempFile.convertBackToForwardSlashes();
+   //tempFile.convertBackToForwardSlashes();
    vector<ossimString> result;
 
 
    if(recurseFlag)
    {
-      ossimString::split(result,"/");
+      ossimString::split(result,thePathSeparator);
 
       if(result.size())
       {
@@ -1000,9 +999,9 @@ bool ossimFilename::createDirectory(bool recurseFlag,
 
          for(ossim_uint32 i = 1; i < result.size(); ++i)
          {
-            current += ("/"+result[i]);
+            current += (thePathSeparator+result[i]);
 
-            if(current != "/")
+            if(current != thePathSeparator)
             {
                if(!ossimFilename(current).exists())
                {
@@ -1197,8 +1196,11 @@ bool ossimFilename::isRelative() const
    bool result = true;
    if (size())
    {
+      //---
       // Look for unix "/"...
-      if ( *(begin()) == '/' )
+      // ESH: Look for Windows "\" (with prepending escape character \)
+      //---
+      if ( (*(begin()) == '/') || (*(begin()) == '\\') )
       {
          result = false;
       }
@@ -1235,4 +1237,14 @@ bool ossimFilename::needsExpansion() const
       }    
    }
    return result;
+}
+
+void ossimFilename::convertToNative()
+{
+#if defined(_WIN32)
+    convertForwardToBackSlashes();
+#else
+	convertBackToForwardSlashes();
+#endif
+	
 }

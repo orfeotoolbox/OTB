@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionFactory.h 12623 2008-04-07 14:10:08Z gpotts $
+//  $Id: ossimStatePlaneProjectionFactory.h 15080 2009-08-15 19:32:07Z dburken $
 #ifndef ossimStatePlaneProjectionFactory_HEADER
 #define ossimStatePlaneProjectionFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -42,7 +42,7 @@ public:
                                              const char* prefix=0)const;
 
    virtual const ossimStatePlaneProjectionInfo* getInfo(
-      ossim_int32 pcsCode)const;
+      ossim_uint32 pcsCode)const;
    
    const ossimStatePlaneProjectionInfo* getInfo(const ossimString& name)const;
    virtual ossimObject* createObject(const ossimString& typeName)const;

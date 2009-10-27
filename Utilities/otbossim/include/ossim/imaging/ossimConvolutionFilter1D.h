@@ -8,7 +8,7 @@
 //
 // efficient for gradients & separable convolution kernels (like gaussian)
 //*******************************************************************
-// $Id: ossimConvolutionFilter1D.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConvolutionFilter1D.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimConvolutionFilter1D_HEADER
 #define ossimConvolutionFilter1D_HEADER
@@ -36,7 +36,6 @@ public:
    * own class methods
    */
    ossimConvolutionFilter1D(ossimObject* owner=NULL);
-   virtual ~ossimConvolutionFilter1D();
 
    virtual inline const std::vector<ossim_float64>& getKernel()const { return theKernel; }
    virtual void setKernel(const std::vector<ossim_float64>& aKernel);
@@ -72,6 +71,7 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,const char* prefix = 0)const;
    
 protected:
+   virtual ~ossimConvolutionFilter1D();
 
    /**
     * Allocates theTile.

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramThreshholdFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramThreshholdFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHistogramThreshholdFilter_HEADER
 #define ossimHistogramThreshholdFilter_HEADER
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
@@ -21,7 +21,6 @@ public:
                                   double maxValuePercent,
                                   ossimImageSource* inputSource,
                                   ossimMultiResLevelHistogram* histogram);
-   virtual ~ossimHistogramThreshholdFilter();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
    
@@ -38,6 +37,7 @@ public:
                           const char* prefix=0)const;
    
 protected:
+   virtual ~ossimHistogramThreshholdFilter();
    
    double theMinValuePercent;
    double theMaxValuePercent;

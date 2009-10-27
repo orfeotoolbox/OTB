@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageToPlaneNormalFilter.cpp 13382 2008-08-04 18:53:26Z gpotts $
+// $Id: ossimImageToPlaneNormalFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -113,19 +113,12 @@ void ossimImageToPlaneNormalFilter::initialize()
       theBlankTile = (ossimImageData*)(theTile->dup());
       theTile->initialize();
 
-
       if(theTrackScaleFlag)
       {
-         ossimKeywordlist kwl;
-         theInputConnection->getImageGeometry(kwl);
-
-         ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->
-            createProjection(kwl);
-
-         if(proj)
+         const ossimImageGeometry* geom = theInputConnection->getImageGeometry();
+         if(geom)
          {
-            ossimDpt pt = proj->getMetersPerPixel();
-
+            ossimDpt pt = geom->getMetersPerPixel();
             if(!pt.hasNans())
             {
                theXScale = pt.x;

@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimAzimEquDistProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAzimEquDistProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAzimEquDistProjection_HEADER
 #define ossimAzimEquDistProjection_HEADER
@@ -30,7 +30,6 @@ public:
       {
          *this = rhs;
       }
-   virtual ~ossimAzimEquDistProjection(){}
    virtual ossimObject *dup()const
    {
       return new ossimAzimEquDistProjection(*this);
@@ -82,6 +81,8 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 protected:   
+   virtual ~ossimAzimEquDistProjection(){}
+   
    mutable double abs_Azeq_Origin_Lat;
    mutable double Azeq_a;                  /* Semi-major axis of ellipsoid in meters */
    mutable double Azeq_f;          /* Flattening of ellipsoid */

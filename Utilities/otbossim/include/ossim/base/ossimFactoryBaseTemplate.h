@@ -12,15 +12,15 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimFactoryBaseTemplate.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimFactoryBaseTemplate.h 14799 2009-06-30 08:54:44Z dburken $
 
 #ifndef ossimFactory_HEADER
 #define ossimFactory_HEADER
 #include <ossim/base/ossimConstants.h>
 #include <list>
-using namespace std;
-class OSSIMDLLEXPORT ossimKeywordlist;
-class OSSIMDLLEXPORT ossimString;
+
+class ossimKeywordlist;
+class ossimString;
 
 /*!****************************************************************************
  *
@@ -78,7 +78,7 @@ public:
     * PURE VIRTUAL METHOD: getList()
     * Returns name list of all products represented by this factory:
     */
-   virtual list<ossimString> getList() const = 0;
+   virtual std::list<ossimString> getList() const = 0;
 
    /*!
     * METHOD: registerFactory()
@@ -104,7 +104,7 @@ protected:
    /*!
     * Member contains list of sub-factories associated with this factory:
     */
-   list<ossimFactoryBase<Product>*> theRegistry;
+   std::list<ossimFactoryBase<Product>*> theRegistry;
    
 };
 

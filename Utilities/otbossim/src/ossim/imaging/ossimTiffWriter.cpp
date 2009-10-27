@@ -5,7 +5,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 11971 2007-11-01 16:44:19Z gpotts $
+//  $Id: ossimTiffWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <algorithm>
 #include <sstream>
@@ -54,7 +54,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 11971 2007-11-01 16:44:19Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -71,6 +71,7 @@ ossimTiffWriter::ossimTiffWriter()
       theForceBigTiffFlag(false),
       theBigTiffFlag(false)
 {
+   theColorLut = new ossimNBandLutDataObject();
    ossim::defaultTileSize(theOutputTileSize);
    theOutputImageType = "tiff_tiled_band_separate";
 
@@ -304,7 +305,7 @@ Call setFilename method.\n",
                       ((scalarType == OSSIM_UINT8)||
                        (scalarType == OSSIM_UINT16)||
                        (scalarType == OSSIM_USHORT11))&&
-                      (theColorLut.getNumberOfEntries() > 0)&&
+                      (theColorLut->getNumberOfEntries() > 0)&&
                       (theInputConnection->getNumberOfOutputBands() == 1));
    if(lutEnabled)
    {
@@ -319,11 +320,11 @@ Call setFilename method.\n",
          memset(g, '\0', sizeof(ossim_uint16)*256);
          memset(b, '\0', sizeof(ossim_uint16)*256);
          
-         for(ossim_uint32 i = 0; i < theColorLut.getNumberOfEntries(); i++)
+         for(ossim_uint32 i = 0; i < theColorLut->getNumberOfEntries(); i++)
          {
-            r[i] = (ossim_uint16) ((theColorLut[i][0]/255.0)*65535);
-            g[i] = (ossim_uint16) ((theColorLut[i][1]/255.0)*65535);
-            b[i] = (ossim_uint16) ((theColorLut[i][2]/255.0)*65535);
+            r[i] = (ossim_uint16) (((*theColorLut)[i][0]/255.0)*65535);
+            g[i] = (ossim_uint16) (((*theColorLut)[i][1]/255.0)*65535);
+            b[i] = (ossim_uint16) (((*theColorLut)[i][2]/255.0)*65535);
          }
          TIFFSetField(theTif, TIFFTAG_COLORMAP, r, g ,b);
       }
@@ -334,11 +335,11 @@ Call setFilename method.\n",
          memset(g, '\0', sizeof(ossim_uint16)*65536);
          memset(b, '\0', sizeof(ossim_uint16)*65536);
          
-         for(ossim_uint32 i = 0; i < theColorLut.getNumberOfEntries(); i++)
+         for(ossim_uint32 i = 0; i < theColorLut->getNumberOfEntries(); i++)
          {
-            r[i] = (ossim_uint16) (theColorLut[i][0]);
-            g[i] = (ossim_uint16) (theColorLut[i][1]);
-            b[i] = (ossim_uint16) (theColorLut[i][2]);
+            r[i] = (ossim_uint16) ((*theColorLut)[i][0]);
+            g[i] = (ossim_uint16) ((*theColorLut)[i][1]);
+            b[i] = (ossim_uint16) ((*theColorLut)[i][2]);
          }
          TIFFSetField(theTif, TIFFTAG_COLORMAP, r, g ,b);
       }
@@ -613,7 +614,7 @@ Call setFilename method.\n",
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 11971 $ $Date: 2007-11-02 00:44:19 +0800 (Fri, 02 Nov 2007) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15766 $ $Date: 2009-10-20 20:37:09 +0800 (Tue, 20 Oct 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -965,7 +966,7 @@ bool ossimTiffWriter::writeFile()
    {
       theNBandToIndexFilter = new ossimNBandToIndexFilter;
       theNBandToIndexFilter->connectMyInputTo(0, theInputConnection->getInput());
-      theNBandToIndexFilter->setLut(theColorLut);
+      theNBandToIndexFilter->setLut(*theColorLut.get());
       theNBandToIndexFilter->initialize();
       theInputConnection->disconnect();
       theInputConnection->connectMyInputTo(0, theNBandToIndexFilter.get());
@@ -976,7 +977,7 @@ bool ossimTiffWriter::writeFile()
       theNBandToIndexFilter = 0;
    }
    
-   if (traceDebug() && theInputConnection)
+   if (traceDebug() && theInputConnection.get())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << "DEBUG:"
@@ -1072,7 +1073,7 @@ bool ossimTiffWriter::writeFile()
    // Write the geotiff tags.
    if (theOutputGeotiffTagsFlag)
    {
-      if(theViewController) // let this override
+      if(theViewController.get()) // let this override
       {                     // found in ossimImageWriter base
          ossimMapProjection* proj = PTR_CAST(ossimMapProjection,
                                              theViewController->getView());
@@ -1112,12 +1113,14 @@ bool ossimTiffWriter::writeFile()
       }
       else
       {
-         ossimKeywordlist kwl;
-         theInputConnection->getImageGeometry(kwl);
-         
-         ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->
-            createProjection(kwl);
-         ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
+         // Fetch the map projection of the input image if it exists:
+         ossimMapProjection* mapProj = 0;
+         const ossimImageGeometry* imgGeom = theInputConnection->getImageGeometry();
+         if (imgGeom)
+         {
+            const ossimProjection* proj = imgGeom->getProjection();
+            mapProj = PTR_CAST(ossimMapProjection, proj);
+         }
          if(mapProj)
          {
             ossimRefPtr<ossimMapProjectionInfo> projectionInfo
@@ -1133,17 +1136,8 @@ bool ossimTiffWriter::writeFile()
                      << "\nError detected writing geotiff tags.  Returning..."
                      << std::endl;
                }
-               if(proj)
-               {
-                  delete proj;
-               }
                return false;
             }
-         }
-         if(proj)
-         {
-            delete proj;
-            proj = NULL;
          }
       }
 
@@ -1197,7 +1191,7 @@ bool ossimTiffWriter::writeFile()
 
 void ossimTiffWriter::setLut(const ossimNBandLutDataObject& lut)
 {
-   theColorLut = lut;
+   theColorLut = (ossimNBandLutDataObject*)lut.dup();
 }
 
 bool ossimTiffWriter::saveState(ossimKeywordlist& kwl,
@@ -1245,7 +1239,7 @@ bool ossimTiffWriter::saveState(ossimKeywordlist& kwl,
       else
       {
          ossimString newPrefix = ossimString(prefix) + "lut.";
-         theColorLut.saveState(kwl, newPrefix.c_str());
+         theColorLut->saveState(kwl, newPrefix.c_str());
       }
    }
 
@@ -1342,11 +1336,11 @@ bool ossimTiffWriter::loadState(const ossimKeywordlist& kwl,
    theLutFilename = ossimFilename(theLutFilename.trim());
    if(theLutFilename != "")
    {
-      theColorLut.open(theLutFilename);
+      theColorLut->open(theLutFilename);
    }
    else
    {
-      theColorLut.loadState(kwl, newPrefix.c_str());
+      theColorLut->loadState(kwl, newPrefix.c_str());
    }
 
    if(ossimImageFileWriter::loadState(kwl,
@@ -1396,11 +1390,11 @@ bool ossimTiffWriter::writeToTiles()
 
    if(theColorLutFlag)
    {
-      tempTile = ossimImageDataFactory::instance()->create(this, 1, theInputConnection);
+      tempTile = ossimImageDataFactory::instance()->create(this, 1, theInputConnection.get());
    }
    else
    {
-      tempTile = ossimImageDataFactory::instance()->create(this, theInputConnection);
+      tempTile = ossimImageDataFactory::instance()->create(this, theInputConnection.get());
    }
    if(tempTile.valid())
    {
@@ -1968,7 +1962,7 @@ void ossimTiffWriter::setProperty(ossimRefPtr<ossimProperty> property)
    else if(property->getName() == "lut_file")
    {
       theLutFilename = ossimFilename(property->valueToString());
-      theColorLut.open(theLutFilename);
+      theColorLut->open(theLutFilename);
    }
    else if(property->getName() == "color_lut_flag")
    {

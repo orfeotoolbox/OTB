@@ -37,8 +37,6 @@ public:
    /** @brief default constructor */
    ossimImageModel();
 
-   /** @brief virtual destructor */
-   virtual ~ossimImageModel();
 
    /**
     * @brief Method to initialize class from an image handler.
@@ -172,6 +170,8 @@ public:
  
 
 protected:
+   /** @brief virtual destructor */
+   virtual ~ossimImageModel();
 
    /** Offset from the full image. */
    ossimDpt theSubImageOffset;

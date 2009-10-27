@@ -1,9 +1,8 @@
 //*******************************************************************
-// Copyright (C) 2000 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
-//
-// see top level LICENSE.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 //
@@ -11,10 +10,11 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.cpp 12772 2008-05-02 14:45:33Z gpotts $
+// $Id: ossimNitfRpcBase.cpp 14576 2009-05-20 13:58:45Z dburken $
 
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <ossim/support_data/ossimNitfRpcBase.h>
 #include <ossim/support_data/ossimNitfCommon.h>
@@ -697,60 +697,86 @@ void ossimNitfRpcBase::setSampleDenominatorCoeff(
   theSampleDenominatorCoefficient[idx] = s;  
 }
 
-std::ostream& ossimNitfRpcBase::print(std::ostream& out) const
+std::ostream& ossimNitfRpcBase::print(std::ostream& out,
+                                      const std::string& prefix) const
 {
-   out << "ossimNitfRpcBase::print"
-       << "\ntheSuccess:               " << theSuccess
-       << "\ntheErrorBias:             " << theErrorBias
-       << "\ntheErrRand:               " << theErrRand
-       << "\ntheLineOffset:            " << theLineOffset
-       << "\ntheSampleOffset:          " << theSampleOffset
-       << "\ntheGeodeticLatOffset:     " << theGeodeticLatOffset
-       << "\ntheGeodeticLonOffset:     " << theGeodeticLonOffset
-       << "\ntheGeodeticHeightOffset:  " << theGeodeticHeightOffset
-       << "\ntheLineScale:             " <<theLineScale
-       << "\ntheSampleScale:           " << theSampleScale
-       << "\ntheGeodeticLatScale:      " << theGeodeticLatScale
-       << "\ntheGeodeticLonScale:      " << theGeodeticLonScale
-       << "\ntheGeodeticHeightScale:   " << theGeodeticHeightScale
-       << std::endl;
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"
+       << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "SUCCESS:"
+       << theSuccess << "\n" 
+       << pfx << std::setw(24) << "ERR_BIAS:"
+       << theErrorBias << "\n"
+       << pfx << std::setw(24) << "ERR_RAND:"
+       <<theErrRand  << "\n" 
+       << pfx << std::setw(24) << "LINE_OFF:"
+       << theLineOffset << "\n"
+       << pfx << std::setw(24) << "SAMP_OFF:"
+       << theSampleOffset << "\n" 
+       << pfx << std::setw(24) << "LAT_OFF:"
+       << theGeodeticLatOffset << "\n"
+       << pfx << std::setw(24) << "LONG_OFF:"
+       << theGeodeticLonOffset << "\n" 
+       << pfx << std::setw(24) << "HEIGHT_OFF:"
+       << theGeodeticHeightOffset << "\n"
+       << pfx << std::setw(24) << "LINE_SCALE:"
+       << theLineScale  << "\n" 
+       << pfx << std::setw(24)
+       << "SAMP_SCALE:" << theSampleScale << "\n"
+       << pfx << std::setw(24) << "LAT_SCALE:"
+       << theGeodeticLatScale << "\n" 
+       << pfx << std::setw(24) << "LONG_SCALE:"
+       << theGeodeticLonScale << "\n"
+       << pfx << std::setw(24) << "HEIGHT_SCALE:"
+       << theGeodeticHeightScale << "\n";
 
    ossim_int32 i;
+   ossimString s;
    
    for (i=0; i<LINE_NUMERATOR_COEFFICIENT_COUNT; ++i)
    {
-      out << "\ntheLineNumeratorCoefficient[" << i << "]: "
-          << theLineNumeratorCoefficient[i];
+      s = "LINE_NUM_COEFF_";
+      s += ossimString::toString(i);
+      s += ":";
+      out << pfx << std::setw(24) << s
+          << theLineNumeratorCoefficient[i] << "\n";
    }
 
-   out << std::endl;
-   
    for (i=0; i<LINE_DENOMINATOR_COEFFICIENT_COUNT; ++i)
    {
-      out << "\ntheLineDenominatorCoefficient[" << i << "]: "
-          << theLineDenominatorCoefficient[i];
+      s = "LINE_DEN_COEFF_";
+      s += ossimString::toString(i);
+      s += ":";
+      out << pfx << std::setw(24) << s
+          << theLineDenominatorCoefficient[i] << "\n";
    }
 
-   out << std::endl;
-   
-
-   for (i=0; i<SAMPLE_NUMERATOR_COEFFICIENT_COUNT; ++i)
+   for (i=0; i<LINE_NUMERATOR_COEFFICIENT_COUNT; ++i)
    {
-      out << "\ntheSampleNumeratorCoefficient[" << i << "]: "
-          << theSampleNumeratorCoefficient[i];
+      s = "SAMP_NUM_COEFF_";
+      s += ossimString::toString(i);
+      s += ":";
+      out << pfx << std::setw(24) << s
+          << theSampleNumeratorCoefficient[i] << "\n";
    }
 
-   out << std::endl;
-   
-
-   for (i=0; i<SAMPLE_DENOMINATOR_COEFFICIENT_COUNT; ++i)
+   for (i=0; i<LINE_DENOMINATOR_COEFFICIENT_COUNT; ++i)
    {
-      out << "\ntheSampleDenominatorCoefficient[" << i << "]: "
-          << theSampleDenominatorCoefficient[i];
+      s = "SAMP_DEN_COEFF_";
+      s += ossimString::toString(i);
+      s += ":";
+      out << pfx << std::setw(24) << s
+          << theSampleDenominatorCoefficient[i] << "\n";
    }
 
-   out << std::endl;
-      
+   out.flush();
+   
    return out;
 }
 

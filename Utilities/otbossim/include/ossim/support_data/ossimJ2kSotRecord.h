@@ -16,6 +16,7 @@
 #define ossimJ2kSotRecord_HEADER
 
 #include <iosfwd>
+#include <string>
 
 #include <ossim/base/ossimConstants.h>
 
@@ -39,14 +40,17 @@ public:
    void parseStream(std::istream& in);
 
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
     */
-   std::ostream& print(std::ostream& out) const;
-
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
+   
    /**
     * operator<<.
     */
@@ -54,7 +58,7 @@ public:
       std::ostream& out, const ossimJ2kSotRecord& obj);
 
    /** Start of tile-part marker code. 0xff90 */
-   ossim_uint16 theSotMarker;
+   ossim_uint16 theMarker;
    
    /** Length in bytes of the marker segment. */
    ossim_uint16 theLsot;

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 //
@@ -13,7 +12,7 @@
 // JpegTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.h 13054 2008-06-23 13:55:13Z gpotts $
+//  $Id: ossimJpegTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimJpegTileSource_HEADER
 #define ossimJpegTileSource_HEADER
@@ -34,21 +33,34 @@ public:
 
    ossimJpegTileSource(const char* jpeg_file);
 
-   virtual ~ossimJpegTileSource();
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString className()    const;
+   virtual ossimString getClassName()    const;
 
    /**
     *  Returns a pointer to a tile given an origin representing the upper
     *  left corner of the tile to grab from the image.
     *  Satisfies pure virtual from TileSource class.
     */
-   virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tile_rect,
+   virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
 
-    /**
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
+
+   /**
      *  Returns the number of bands in the image.
      *  Satisfies pure virtual from ImageHandler class.
      */
@@ -146,6 +158,7 @@ public:
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 protected:
+   virtual ~ossimJpegTileSource();
 	class PrivateData;
    /**
     *  Returns true if no errors initializing object.
@@ -166,7 +179,7 @@ protected:
     * @note this method assumes that setImageRectangle has been called on
     * theTile.
     */
-   void fillTile(const ossimIrect& clip_rect);
+   void fillTile(const ossimIrect& clip_rect, ossimImageData* tile);
 
    ossimRefPtr<ossimImageData>  theTile;
    ossimRefPtr<ossimImageData>  theCacheTile;

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageHeader.cpp 15436 2009-09-17 00:12:59Z dburken $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
@@ -305,5 +305,49 @@ void ossimNitfImageHeader::checkForGeographicTiePointTruncation(
          << "Tie point will be truncated in image header:  "
          << tie
          << std::endl;
+   }
+}
+
+void ossimNitfImageHeader::getDecimationFactor(ossim_float64& result) const
+{
+   //---
+   // Look for string like:
+   // 
+   // "/2" = 1/2
+   // "/4  = 1/4
+   // ...
+   // "/16 = 1/16
+   // 
+   // If it is full resolution it should be "1.0"
+   //
+   // or
+   //
+   // "0.5" which is the same as "/2"
+   // "0.25" which is the same as "/4"
+   //---
+   ossimString os = getImageMagnification();
+
+   // Spec says to fill with spaces so strip them.
+   os.trim(ossimString(" "));
+
+   if (os.size())
+   {
+      if ( os.contains("/") )
+      {
+         os = os.after("/");
+         result = os.toFloat64();
+         if (result)
+         {
+            result = 1.0 / result;
+         }
+      }
+      else
+      {
+         result = os.toFloat64();
+      }
+   }
+   else
+   {
+      result = ossim::nan();
    }
 }

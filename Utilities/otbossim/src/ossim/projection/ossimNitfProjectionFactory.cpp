@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 13909 2008-12-03 20:55:04Z gpotts $
+// $Id: ossimNitfProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -38,7 +38,7 @@
 #include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 
-
+#include <ossim/imaging/ossimNitfTileSource.h>
 //---
 // Define Trace flags for use within this file:
 //---
@@ -92,11 +92,9 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
       return result; // result is NULL
    }
 
-   ossimNitfFile* nitf = new ossimNitfFile();
+   ossimRefPtr<ossimNitfFile> nitf = new ossimNitfFile();
    if (!nitf->parseFile(filename))
    {
-      delete nitf;
-      nitf = NULL;
       return result; // result is NULL
    }
 
@@ -114,22 +112,11 @@ ossimNitfProjectionFactory::createProjection(const ossimFilename& filename,
       }
    }
 
-   ossimString coordinateSystem   = imageHeader->getCoordinateSystem();
-   ossimString version = nitf->getHeader()->getVersion();
-   if (coordinateSystem == "G" || coordinateSystem == "D")
-   {
-      result = makeGeographic(imageHeader.get(), coordinateSystem, filename);
-   }
-   else if(coordinateSystem == "N" || coordinateSystem == "S")
-   {
-      if((coordinateSystem == 'N') && (version.toDouble() > 2.0))
-      {
-         result = makeUtm(imageHeader.get(), coordinateSystem, filename);
-      }
-   }
-
+   result = createProjectionFromHeaders(nitf->getHeader(),
+                                        imageHeader.get());
    if (traceDebug())
    {
+      ossimString coordinateSystem   = imageHeader->getCoordinateSystem();
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " DEBUG:"
          << "\ncoordinateSysetm:       " << coordinateSystem
@@ -171,6 +158,31 @@ void ossimNitfProjectionFactory::getTypeNameList(std::vector<ossimString>& typeL
    
 }
 
+ossimProjection* ossimNitfProjectionFactory::createProjection(ossimImageHandler* handler)const
+{
+   ossimNitfTileSource* nitfTileSource = dynamic_cast<ossimNitfTileSource*> (handler);
+   ossimProjection* result = 0;
+   if(nitfTileSource)
+   {
+      result = createModel(nitfTileSource);
+      
+      if(!result)
+      {
+         ossimNitfImageHeader* imageHeader = nitfTileSource->getCurrentImageHeader();
+         if(imageHeader)
+         {
+            result = createProjectionFromHeaders(nitfTileSource->getFileHeader(),imageHeader);
+         }
+      }
+   }
+   else if(isNitf(handler->getFilename()))
+   {
+      result =  createProjection(handler->getFilename(), handler->getCurrentEntry());
+   }
+   
+   return result;
+}
+
 bool ossimNitfProjectionFactory::isNitf(const ossimFilename& filename)const
 {
    std::ifstream in(filename.c_str(), ios::in|ios::binary);
@@ -189,10 +201,48 @@ bool ossimNitfProjectionFactory::isNitf(const ossimFilename& filename)const
    return false;
 }
 
+ossimProjection* ossimNitfProjectionFactory::createModel(ossimNitfTileSource* nitf)const
+{
+   ossimRefPtr<ossimProjection> result;
+   if(nitf)
+   {
+      if(nitf->getCurrentImageHeader())
+      {
+         ossimNitfRpcModel* model = new ossimNitfRpcModel;
+         result = model;
+         if(!model->parseImageHeader(nitf->getCurrentImageHeader()))
+         {
+            result = 0;
+         }
+      }
+   }
+   
+   return result.release();
+}
+
+ossimProjection* ossimNitfProjectionFactory::createProjectionFromHeaders(ossimNitfFileHeader* fileHeader,
+                                                                         ossimNitfImageHeader* imageHeader)const
+{
+   ossimProjection* result = 0;
+   ossimString version = fileHeader->getVersion();
+   ossimString coordinateSystem   = imageHeader->getCoordinateSystem();
+   if (coordinateSystem == "G" || coordinateSystem == "D")
+   {
+      result = makeGeographic(imageHeader, coordinateSystem);
+   }
+   else if(coordinateSystem == "N" || coordinateSystem == "S")
+   {
+      if((coordinateSystem == 'N') && (version.toDouble() > 2.0))
+      {
+         result = makeUtm(imageHeader, coordinateSystem);
+      }
+   }
+   return result;
+}
+
 ossimProjection* ossimNitfProjectionFactory::makeGeographic(
    const ossimNitfImageHeader* hdr,
-   const ossimString& coordinateSysetm,
-   const ossimFilename& filename) const
+   const ossimString& coordinateSysetm) const
 {
    ossimProjection* proj = NULL;
    if (!hdr)
@@ -209,7 +259,7 @@ ossimProjection* ossimNitfProjectionFactory::makeGeographic(
    // Look for points from the BLOCKA tag.  This may or may not be present.
    // If present since it has six digit precision use it for the points.
    //---
-   if ( getBlockaPoints(hdr, gpts, filename) == false )
+   if ( getBlockaPoints(hdr, gpts) == false )
    {
       ossimString geographicLocation = hdr->getGeographicLocation();
 
@@ -278,8 +328,7 @@ ossimProjection* ossimNitfProjectionFactory::makeGeographic(
 
 ossimProjection* ossimNitfProjectionFactory::makeUtm(
    const ossimNitfImageHeader* hdr,
-   const ossimString& coordinateSystem,
-   const ossimFilename& filename) const
+   const ossimString& coordinateSystem) const
 {
    ossimUtmProjection* proj = NULL;
    if (!hdr)
@@ -325,7 +374,7 @@ ossimProjection* ossimNitfProjectionFactory::makeUtm(
       std::vector<ossimGpt> gpts;
 
       // Try blocka points first as they are more accurate.
-      if ( getBlockaPoints(hdr, gpts, filename) == false )
+      if ( getBlockaPoints(hdr, gpts) == false )
       {
          ossimGpt ul = proj->inverse(utmPoints[0]);
          ossimGpt ur = proj->inverse(utmPoints[1]);
@@ -359,7 +408,7 @@ ossimProjection* ossimNitfProjectionFactory::makeUtm(
       //---
       ossimDpt tie;
       std::vector<ossimGpt> gpts;
-      if ( getBlockaPoints(hdr, gpts, filename) )
+      if ( getBlockaPoints(hdr, gpts) )
       {
          if (traceDebug())
          {
@@ -447,7 +496,7 @@ ossimProjection* ossimNitfProjectionFactory::makeBilinear(
    ossimDpt lr(cols-1.0, rows-1.0);
    ossimDpt ll(0.0, rows-1.0);
 
-   ossimBilinearProjection* proj = 0;
+   ossimRefPtr<ossimBilinearProjection> proj;
    try
    {
      proj = new ossimBilinearProjection(ul,
@@ -461,14 +510,10 @@ ossimProjection* ossimNitfProjectionFactory::makeBilinear(
    }
    catch(...)
    {
-      if(proj)
-      {
-         delete proj;
-         proj = 0;
-      }
+      proj = 0;
    }
    
-   return proj;
+   return proj.release();
 }
 
 bool ossimNitfProjectionFactory::isSkewed(
@@ -494,8 +539,7 @@ bool ossimNitfProjectionFactory::isSkewed(
 
 bool ossimNitfProjectionFactory::getBlockaPoints(
    const ossimNitfImageHeader* hdr,
-   std::vector<ossimGpt>& gpts,
-   const ossimFilename& filename) const
+   std::vector<ossimGpt>& gpts) const
 {
    if (!hdr)
    {

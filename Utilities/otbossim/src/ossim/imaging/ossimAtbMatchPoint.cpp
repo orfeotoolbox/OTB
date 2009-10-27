@@ -9,7 +9,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbMatchPoint.cpp 12912 2008-05-28 15:05:54Z gpotts $
+//  $Id: ossimAtbMatchPoint.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimAtbMatchPoint.h>
 #include <ossim/imaging/ossimAtbPointSource.h>
@@ -31,12 +31,7 @@ static ossimTrace traceDebug ("ossimAtbMatchPoint:debug");
 //*****************************************************************************
 ossimAtbMatchPoint::~ossimAtbMatchPoint()
 {
-   vector<ossimAtbPointSource*>::iterator source = thePointSourceList.begin();
-   while (source != thePointSourceList.end())
-   {
-      delete *source;
-      source++;
-   }
+   thePointSourceList.clear();
 }
    
 //*****************************************************************************

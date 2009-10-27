@@ -10,7 +10,7 @@
 // Contains class definition for ossimResampler.
 // 
 //*******************************************************************
-//  $Id: ossimResampler.cpp 11411 2007-07-27 13:53:51Z dburken $
+//  $Id: ossimResampler.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 
 #include <iostream>
@@ -698,7 +698,7 @@ void ossimResampler::resampleTile(T,// not used
                                   const ossimDpt& deltaUr,
                                   const ossimDpt& outLength)
 {
-   ossimImageData* dupIn = input;
+   ossimRefPtr<ossimImageData> dupIn = input;
    ossimDpt origin = input->getOrigin();
    ossimDpt newInputUl = inputUl;
    ossimDpt newInputUr = inputUr;
@@ -737,7 +737,7 @@ void ossimResampler::resampleTile(T,// not used
                                  roundedRect.height());
       dupIn->setOrigin(roundedRect.ul());
       dupIn->initialize();
-      resampleTile(static_cast<T>(0), input, dupIn);
+      resampleTile(static_cast<T>(0), input, dupIn.get());
    }
    long    inWidth        = dupIn->getWidth();
    long    inHeight       = dupIn->getHeight();
@@ -800,10 +800,7 @@ void ossimResampler::resampleTile(T,// not used
          end.y   += newDeltaUr.y;
       }
    }
-   if(theResamplerType != ossimResampler_NEAREST_NEIGHBOR)
-   {
-      delete dupIn;
-   }
+   dupIn = 0;
 }
 
 template <class T>

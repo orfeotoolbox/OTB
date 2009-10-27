@@ -15,19 +15,22 @@
 // Quick Bird ".TIL" files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimQuickbirdTiffTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimQuickbirdTiffTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimQuickbirdTiffTileSource_HEADER
 #define ossimQuickbirdTiffTileSource_HEADER
 
 #include <ossim/imaging/ossimTiffTileSource.h>
+#include <ossim/base/ossim2dTo2dShiftTransform.h>
 
-class ossimQuickbirdTiffTileSource : public ossimTiffTileSource
+class OSSIM_DLL ossimQuickbirdTiffTileSource : public ossimTiffTileSource
 {
 public:
-  virtual bool open();
-
- protected:
-
+   virtual bool open();
+   virtual ossimImageGeometry* getImageGeometry();
+   
+protected:
+   ossimRefPtr<ossim2dTo2dTransform> m_transform;
+   
 TYPE_DATA   
 };
 #endif

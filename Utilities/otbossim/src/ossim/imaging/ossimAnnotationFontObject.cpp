@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationFontObject.cpp 13964 2009-01-14 16:30:07Z gpotts $
+// $Id: ossimAnnotationFontObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationFontObject.h>
 #include <ossim/font/ossimFontFactoryRegistry.h>
@@ -16,7 +16,6 @@ RTTI_DEF1(ossimAnnotationFontObject, "ossimAnnotationFontObject", ossimAnnotatio
 ossimAnnotationFontObject::ossimAnnotationFontObject()
    :ossimAnnotationObject(),
     theFont(ossimFontFactoryRegistry::instance()->getDefaultFont()),
-    theOwnsFontFlag(false),
     thePosition(0,0),
     theString(""),
     theRotation(0.0),
@@ -40,7 +39,6 @@ ossimAnnotationFontObject::ossimAnnotationFontObject(const ossimIpt& upperLeft,
                                                      unsigned char b)
    :ossimAnnotationObject(r,g,b),
     theFont(ossimFontFactoryRegistry::instance()->getDefaultFont()),
-    theOwnsFontFlag(false),
     theString(s),
     thePixelSize(pixelSize),
     theRotation(rotation),
@@ -74,34 +72,14 @@ ossimAnnotationFontObject::ossimAnnotationFontObject(const ossimAnnotationFontOb
     theVerticalShear(rhs.theVerticalShear),
     theBoundingRect(rhs.theBoundingRect)
 {
-   theOwnsFontFlag = false;
-   if(rhs.theOwnsFontFlag&&theFont)
-   {
-      theFont = (ossimFont*)rhs.theFont->dup();
-      theOwnsFontFlag = true;
-   }
-   else
-   {
-      theFont = rhs.theFont;
-   }
-   
+   theFont = rhs.theFont;
    setFontInfo();
 }
 
 
 ossimAnnotationFontObject::~ossimAnnotationFontObject()
 {
-   if(theFont&&theOwnsFontFlag)
-   {
-      delete theFont;
-      theFont = NULL;
-      theOwnsFontFlag = false;
-   }
-   else
-   {
-      theFont = NULL;
-      theOwnsFontFlag = false;
-   }
+   theFont = 0;
 }
 
 void ossimAnnotationFontObject::draw(ossimRgbImage& anImage)const
@@ -206,7 +184,7 @@ void ossimAnnotationFontObject::draw(ossimRgbImage& anImage)const
 
 std::ostream& ossimAnnotationFontObject::print(std::ostream& out)const
 {
-   if(theFont)
+   if(theFont.valid())
    {
       out << "Family:          " << theFont->getFamilyName() << endl
           << "Style:           " << theFont->getStyleName()  << endl;
@@ -230,7 +208,7 @@ void ossimAnnotationFontObject::getBoundingRect(ossimDrect& rect)const
 void ossimAnnotationFontObject::computeBoundingRect()
 {
    setFontInfo();
-   if(theFont)
+   if(theFont.valid())
    {
       ossimIrect textRect;
       theFont->getBoundingBox(textRect);
@@ -250,21 +228,13 @@ bool ossimAnnotationFontObject::isPointWithin(const ossimDpt& imagePoint)const
    return theBoundingRect.pointWithin(imagePoint);
 }
 
-void ossimAnnotationFontObject::setFont(ossimFont* font,
-                                        bool ownsFontFlag)
+void ossimAnnotationFontObject::setFont(ossimFont* font)
 {
-   if(theOwnsFontFlag)
-   {
-      delete theFont;
-      theFont = (ossimFont*)NULL;
-   }
-   theFont = font;
-   theOwnsFontFlag = ownsFontFlag;
+    theFont = font;
 
    if(!theFont)
    {
       theFont = ossimFontFactoryRegistry::instance()->getDefaultFont();
-      theOwnsFontFlag = false;
    }
 }
 
@@ -286,7 +256,7 @@ void ossimAnnotationFontObject::setUpperLeftPosition(const ossimIpt& position)
 
 void ossimAnnotationFontObject::setFontInfo()const
 {
-   if(theFont)
+   if(theFont.valid())
    {
       theFont->setString(theString);
       theFont->setRotation(theRotation);
@@ -326,7 +296,7 @@ void ossimAnnotationFontObject::setPointSize(const ossimIpt& size)
 {
    thePixelSize = size;
    setFontInfo();
-   if (theFont)
+   if (theFont.valid())
    {
       theFont->getBoundingBox(theBoundingRect);
    }
@@ -338,7 +308,7 @@ void ossimAnnotationFontObject::setRotation(double rotation)
 {
    theRotation = rotation;
    setFontInfo();
-   if (theFont)
+   if (theFont.valid())
    {
       theFont->getBoundingBox(theBoundingRect);
    }
@@ -351,7 +321,7 @@ void ossimAnnotationFontObject::setScale(const ossimDpt& scale)
    theHorizontalScale = scale.x;
    theVerticalScale   = scale.y;
    setFontInfo();
-   if (theFont)
+   if (theFont.valid())
    {
       theFont->getBoundingBox(theBoundingRect);
    }
@@ -364,7 +334,7 @@ void ossimAnnotationFontObject::setShear(const ossimDpt& shear)
    theHorizontalShear = shear.x;
    theVerticalShear   = shear.y;
    setFontInfo();
-   if (theFont)
+   if (theFont.valid())
    {
       theFont->getBoundingBox(theBoundingRect);
    }
@@ -382,7 +352,7 @@ void ossimAnnotationFontObject::setGeometryInformation(const ossimFontInformatio
    theVerticalShear   = info.theShear.y;
    
    setFontInfo();
-   if (theFont)
+   if (theFont.valid())
    {
       theFont->getBoundingBox(theBoundingRect);
    }

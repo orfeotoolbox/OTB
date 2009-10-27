@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.h 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimImageHistogramSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageHistogramSource_HEADER
 #define ossimImageHistogramSource_HEADER
 #include <ossim/base/ossimHistogramSource.h>
@@ -32,8 +32,6 @@ public:
 	};
    ossimImageHistogramSource(ossimObject* owner = 0);
    
-   virtual ~ossimImageHistogramSource();
-
    virtual ossimObject* getObject();
    virtual const ossimObject* getObject()const;
 
@@ -79,9 +77,9 @@ public:
                           const char* prefix=0);
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
-
 	
 protected:
+   virtual ~ossimImageHistogramSource();
 	void getBinInformation(ossim_uint32& numberOfBins,
 								  ossim_float64& minValue,
 								  ossim_float64& maxValue)const;

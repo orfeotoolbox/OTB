@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandMergeSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimBandMergeSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimBandMergeSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -23,7 +23,7 @@ ossimBandMergeSource::ossimBandMergeSource()
 {
 }
 
-ossimBandMergeSource::ossimBandMergeSource(vector<ossimImageSource*>& inputSources)
+ossimBandMergeSource::ossimBandMergeSource(ossimConnectableObject::ConnectableObjectList& inputSources)
    :ossimImageCombiner(inputSources),
     theNumberOfOutputBands(0),
     theTile(NULL)

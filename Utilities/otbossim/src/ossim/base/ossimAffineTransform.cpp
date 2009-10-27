@@ -9,7 +9,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAffineTransform.cpp 12953 2008-06-01 16:24:05Z dburken $
+//  $Id: ossimAffineTransform.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <ossim/base/ossimAffineTransform.h>
@@ -24,11 +24,44 @@ RTTI_DEF1(ossimAffineTransform, "ossimAffineTransform", ossim2dTo2dTransform);
 //*****************************************************************************
 ossimAffineTransform::ossimAffineTransform()
    :
+      ossim2dTo2dTransform(),
+      theScale(1.0, 1.0),
+      theRotation(0.0),
+      theTranslation(0.0, 0.0),
+      theAffineEnabledFlag(true),      
       theForwardXform(3, 3),
-      theInverseXform(3, 3),
-      theAffineEnabledFlag(true)
+      theInverseXform(3, 3)
 {
    setIdentity();
+}
+
+ossimAffineTransform::ossimAffineTransform(const ossimAffineTransform& src)
+   :
+      ossim2dTo2dTransform(src),
+      theScale(src.theScale),
+      theRotation(src.theRotation),
+      theTranslation(src.theTranslation),
+      theAffineEnabledFlag(src.theAffineEnabledFlag),
+      theForwardXform(src.theForwardXform),
+      theInverseXform(src.theInverseXform)
+{
+}
+
+const ossimAffineTransform& ossimAffineTransform::operator=(
+   const ossimAffineTransform& rhs)
+{
+   if (this != &rhs)
+   {
+      ossim2dTo2dTransform::operator=(rhs);
+      
+      theScale             = rhs.theScale;
+      theRotation          = rhs.theRotation;
+      theTranslation       = rhs.theTranslation;
+      theAffineEnabledFlag = rhs.theAffineEnabledFlag;
+      theForwardXform      = rhs.theForwardXform;
+      theInverseXform      = rhs.theInverseXform;
+   }
+   return *this;
 }
 
 //*****************************************************************************

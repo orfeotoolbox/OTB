@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 14379 2009-04-20 22:16:35Z dburken $
+// $Id: ossimCibCadrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 using namespace std;
 
@@ -41,7 +41,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 14379 2009-04-20 22:16:35Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -254,47 +254,81 @@ bool ossimCibCadrgTileSource::open()
 ossimRefPtr<ossimImageData> ossimCibCadrgTileSource::getTile(
    const  ossimIrect& rect, ossim_uint32 resLevel)
 {
-   ossimIpt origin = rect.ul();
+   if (theTile.valid())
+   {
+      // Image rectangle must be set prior to calling getTile.
+      theTile->setImageRectangle(rect);
       
-   if(!isOpen())
-   {
-      return ossimRefPtr<ossimImageData>();
-   }
-   ossimIrect imageRect = getImageRectangle();
-   if( (!rect.intersects(imageRect) )||
-       (theProductType == OSSIM_PRODUCT_TYPE_UNKNOWN) )
-   {
-      return ossimRefPtr<ossimImageData>();
-   }
-   
-   theTile->setImageRectangle(rect);
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
+      if ( getTile( theTile.get(), resLevel ) == false )
       {
-         return theOverview->getTile(rect, resLevel);
+         if (theTile->getDataObjectStatus() != OSSIM_NULL)
+         {
+            theTile->makeBlank();
+         }
       }
-   }
-
-   //---
-   // Start with a blank tile in case there is not total coverage for rect.
-   //---
-   theTile->makeBlank();
-   
-   vector<ossimFrameEntryData> frames = getIntersectingEntries(rect);
-   if(frames.size() > 0)
-   {
-      //---
-      // Now lets render each frame.  Note we will have to find subframes
-      // that intersect the rectangle of interest for each frame.
-      //---
-      fillTile(rect, frames);
-
-      // Revalidate tile status.
-      theTile->validate();
    }
    
    return theTile;
+}
+
+bool ossimCibCadrgTileSource::getTile(ossimImageData* result,
+                                      ossim_uint32 resLevel)
+{
+   bool status = false;
+
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) &&
+       (theProductType != OSSIM_PRODUCT_TYPE_UNKNOWN) )
+   {
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
+
+         ossimIrect rect = result->getImageRectangle();
+
+         ossimIrect imageRect = getImageRectangle();
+
+         if ( rect.intersects(imageRect) )
+         {
+            //---
+            // Start with a blank tile in case there is not total coverage
+            // for rect.
+            //---
+            result->makeBlank();
+   
+            vector<ossimFrameEntryData> frames = getIntersectingEntries(rect);
+            if(frames.size() > 0)
+            {
+               //---
+               // Now lets render each frame.  Note we will have to find
+               // subframes
+               // that intersect the rectangle of interest for each frame.
+               //---
+               fillTile(rect, frames, result);
+               
+               // Revalidate tile status.
+               result->validate();
+            }
+         }
+         else
+         {
+            result->makeBlank();
+         }
+      }
+   }
+   
+   return status;
 }
 
 ossim_uint32 ossimCibCadrgTileSource::getNumberOfInputBands()const
@@ -345,7 +379,7 @@ ossim_uint32 ossimCibCadrgTileSource::getNumberOfLines(ossim_uint32 reduced_res_
    {
       return theNumberOfLines;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -359,7 +393,7 @@ ossim_uint32 ossimCibCadrgTileSource::getNumberOfSamples(ossim_uint32 reduced_re
    {
       return theNumberOfSamples;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }
@@ -403,22 +437,20 @@ ossimIrect ossimCibCadrgTileSource::getImageRectangle(ossim_uint32 reduced_res_l
    
 
    
-bool ossimCibCadrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                            const char* prefix)
+ossimImageGeometry* ossimCibCadrgTileSource::getImageGeometry()
 {
    if(!theEntryToRender)
    {
       return false;
    }
 
-   if (theGeometryKwl.getSize())
-   {
-      kwl = theGeometryKwl;
-      return true;
-   }
+   if (theGeometry.valid())
+      return theGeometry.get();
 
    // datum
    // WGS 84
+   ossimKeywordlist kwl;
+   const char* prefix = 0; // legacy
    kwl.add(prefix,
            ossimKeywordNames::DATUM_KW,
            "WGE",
@@ -679,9 +711,10 @@ bool ossimCibCadrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
                true);        
     }
 
-    setImageGeometry(kwl);
-    
-    return true;
+    // Capture this for next time.
+    theGeometry = new ossimImageGeometry;
+    theGeometry->loadState(kwl, prefix);
+    return theGeometry.get();
 }
    
 ossimScalarType ossimCibCadrgTileSource::getOutputScalarType() const
@@ -706,8 +739,8 @@ ossim_uint32 ossimCibCadrgTileSource::getCurrentEntry()const
 
 bool ossimCibCadrgTileSource::setCurrentEntry(ossim_uint32 entryIdx)
 {
-   // Must clear or getImageGeometry method will use last entries.
-   theGeometryKwl.clear();
+   // Clear the geometry.
+   theGeometry = 0;
 
    // Must clear or openOverview will use last entries.
    theOverviewFile.clear();
@@ -809,7 +842,7 @@ bool ossimCibCadrgTileSource::isValidRLevel(ossim_uint32 reduced_res_level) cons
    {
       return true;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->isValidRLevel(reduced_res_level);
    }
@@ -966,8 +999,10 @@ vector<ossimCibCadrgTileSource::ossimFrameEntryData> ossimCibCadrgTileSource::ge
    return result;
 }
 
-void ossimCibCadrgTileSource::fillTile(const ossimIrect& tileRect,
-                                       const vector<ossimFrameEntryData>& framesInvolved)
+void ossimCibCadrgTileSource::fillTile(
+   const ossimIrect& tileRect,
+   const vector<ossimFrameEntryData>& framesInvolved,
+   ossimImageData* tile)
 {
    ossim_uint32 idx = 0;
    for(idx = 0;
@@ -984,21 +1019,25 @@ void ossimCibCadrgTileSource::fillTile(const ossimIrect& tileRect,
          {
             fillSubTileCib(*theWorkFrame,
                            tileRect,
-                           framesInvolved[idx]);
+                           framesInvolved[idx],
+                           tile);
          }
          else
          {
             fillSubTileCadrg(*theWorkFrame,
                              tileRect,
-                             framesInvolved[idx]);
+                             framesInvolved[idx],
+                             tile);
          }
       }
    }
 }
 
-void ossimCibCadrgTileSource::fillSubTileCadrg(const ossimRpfFrame&  aFrame,
-                                               const ossimIrect& tileRect,
-                                               const ossimFrameEntryData& frameEntryData)
+void ossimCibCadrgTileSource::fillSubTileCadrg(
+   const ossimRpfFrame&  aFrame,
+   const ossimIrect& tileRect,
+   const ossimFrameEntryData& frameEntryData,
+   ossimImageData* tile)
 {;
    // first let's grab the absolute position of the frame rectangle in pixel space
    ossimIrect frameRect(frameEntryData.thePixelCol,
@@ -1013,6 +1052,18 @@ void ossimCibCadrgTileSource::fillSubTileCadrg(const ossimRpfFrame&  aFrame,
    const ossimRpfCompressionSection* compressionSection = aFrame.getCompressionSection();
    
    if(!compressionSection)
+   {
+      return;
+   }
+
+   const vector<ossimRpfColorGrayscaleTable>& colorTable =
+      aFrame.getColorGrayscaleTable();
+
+   // ESH 03/2009 -- Partial fix for ticket #646.
+   // Crash fix on reading RPFs: Make sure the colorTable vector 
+   // has entries before trying to make use of them. 
+   int numTables = colorTable.size();
+   if ( numTables <= 0 )
    {
       return;
    }
@@ -1048,9 +1099,7 @@ void ossimCibCadrgTileSource::fillSubTileCadrg(const ossimRpfFrame&  aFrame,
                             (offsetRect.lr().y)/256);
    
    ossim_uint32 readPtr  = 0;
-   const vector<ossimRpfColorGrayscaleTable>& colorTable =
-      aFrame.getColorGrayscaleTable();
-   
+
    ossim_int32 row = 0;
    ossim_int32 col = 0;
    ossim_uint32 i = 0;
@@ -1121,18 +1170,21 @@ void ossimCibCadrgTileSource::fillSubTileCadrg(const ossimRpfFrame&  aFrame,
                                   frameRect.ul().y + tempRow,
                                   frameRect.ul().x + tempCol + 255,
                                   frameRect.ul().y + tempRow + 255);
-         theTile->loadTile(theUncompressedBuffer,
-                              subRectToFill,
-                              OSSIM_BSQ);
+         tile->loadTile(theUncompressedBuffer,
+                        subRectToFill,
+                        OSSIM_BSQ);
       }
    }
 }
 
-void ossimCibCadrgTileSource::fillSubTileCib(const ossimRpfFrame&  aFrame,
-                                               const ossimIrect& tileRect,
-                                               const ossimFrameEntryData& frameEntryData)
+void ossimCibCadrgTileSource::fillSubTileCib(
+   const ossimRpfFrame&  aFrame,
+   const ossimIrect& tileRect,
+   const ossimFrameEntryData& frameEntryData,
+   ossimImageData* tile)
 {
-   // first let's grab the absolute position of the frame rectangle in pixel space
+   // first let's grab the absolute position of the frame rectangle in pixel
+   // space
    ossimIrect frameRect(frameEntryData.thePixelCol,
                         frameEntryData.thePixelRow,
                         frameEntryData.thePixelCol + CIBCADRG_FRAME_WIDTH  - 1,
@@ -1145,6 +1197,18 @@ void ossimCibCadrgTileSource::fillSubTileCib(const ossimRpfFrame&  aFrame,
    const ossimRpfCompressionSection* compressionSection = aFrame.getCompressionSection();
    
    if(!compressionSection)
+   {
+      return;
+   }
+
+   const vector<ossimRpfColorGrayscaleTable>& colorTable =
+      aFrame.getColorGrayscaleTable();
+
+   // ESH 03/2009 -- Partial fix for ticket #646.
+   // Crash fix on reading RPFs: Make sure the colorTable vector 
+   // has entries before trying to make use of them. 
+   int numTables = colorTable.size();
+   if ( numTables <= 0 )
    {
       return;
    }
@@ -1178,9 +1242,6 @@ void ossimCibCadrgTileSource::fillSubTileCib(const ossimRpfFrame&  aFrame,
                               offsetRect.ul().y/256,
                               (offsetRect.lr().x)/256,
                               (offsetRect.lr().y)/256);
-
-      const vector<ossimRpfColorGrayscaleTable>& colorTable =
-                                        aFrame.getColorGrayscaleTable();
 
       ossim_int32 row = 0;
       ossim_int32 col = 0;
@@ -1243,9 +1304,9 @@ void ossimCibCadrgTileSource::fillSubTileCib(const ossimRpfFrame&  aFrame,
                                      frameRect.ul().y + tRow,
                                      frameRect.ul().x + tCol + 255,
                                      frameRect.ul().y + tRow + 255);
-            theTile->loadTile(theUncompressedBuffer,
-                              subRectToFill,
-                              OSSIM_BSQ);
+            tile->loadTile(theUncompressedBuffer,
+                           subRectToFill,
+                           OSSIM_BSQ);
          }
       }
    }  
@@ -1307,11 +1368,7 @@ const ossimRpfTocEntry* ossimCibCadrgTileSource::findFirstFrame()
 
 void ossimCibCadrgTileSource::deleteAll()
 {
-   if(theOverview)
-   {
-      delete theOverview;
-      theOverview = 0;
-   }
+   theOverview = 0;
    if(theTableOfContents)
    {
       delete theTableOfContents;
@@ -1484,7 +1541,12 @@ void ossimCibCadrgTileSource::populateLut()
          const vector<ossimRpfColorGrayscaleTable>& colorTable =
             aFrame.getColorGrayscaleTable();
 
-         ossim_uint32 numElements = colorTable[0].getNumberOfElements();
+         // ESH 03/2009 -- Partial fix for ticket #646.
+         // Crash fix on reading RPFs: Make sure the colorTable vector 
+         // has entries before trying to make use of them. 
+         int numTables = colorTable.size();
+
+         ossim_uint32 numElements = (numTables > 0) ? colorTable[0].getNumberOfElements() : 0;
          if(numElements > 0)
          {
             if((theProductType == OSSIM_PRODUCT_TYPE_CIB)||

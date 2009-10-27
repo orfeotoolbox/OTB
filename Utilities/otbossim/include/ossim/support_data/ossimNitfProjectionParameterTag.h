@@ -1,15 +1,14 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfProjectionParameterTag.h 14586 2009-05-20 22:45:03Z dburken $
 
 #ifndef ossimNitfProjectionParameterTag_HEADER
 #define ossimNitfProjectionParameterTag_HEADER
@@ -24,7 +23,16 @@ public:
    virtual ossimString getRegisterTagName()const;
    virtual void parseStream(std::istream& in);
    virtual void writeStream(std::ostream& out);
-   virtual std::ostream& print(std::ostream& out)const;
+
+   /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
+
    virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
    virtual void clearParameters();

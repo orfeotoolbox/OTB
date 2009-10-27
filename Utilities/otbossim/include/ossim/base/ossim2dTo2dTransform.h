@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim2dTo2dTransform.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossim2dTo2dTransform.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossim2dTo2dTransform_HEADER
 #define ossim2dTo2dTransform_HEADER
 #include <ossim/base/ossimObject.h>
@@ -27,18 +27,21 @@ public:
 
    virtual void inverse(ossimDpt&  modify_this) const;
       
+   virtual const ossim2dTo2dTransform& operator=(
+      const ossim2dTo2dTransform& rhs);
+   
    /*!
     * Used by the inverse iterator.  This will give it a good initial value
     * that is within the input transforms
     */
    virtual ossimDpt getOrigin() const;
 
-   virtual std::ostream& print(std::ostream& out) const = 0;
+   virtual std::ostream& print(std::ostream& out) const;
    
-   bool saveState(ossimKeywordlist& kwl,
+   virtual bool saveState(ossimKeywordlist& kwl,
                    const char* prefix = 0)const;
    
-   bool loadState(const ossimKeywordlist& kwl,
+   virtual bool loadState(const ossimKeywordlist& kwl,
                   const char* prefix = 0);
    
    void setConvergenceThreshold(const double& new_threshold);
@@ -49,8 +52,7 @@ public:
 
 protected:
    ossim2dTo2dTransform();
-   void operator =(const ossim2dTo2dTransform& rhs);
-
+   virtual ~ossim2dTo2dTransform(){}
    double theConvergenceThreshold;
    int    theMaxIterations;
 

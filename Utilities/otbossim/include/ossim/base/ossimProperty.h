@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProperty.h 10174 2007-01-03 18:24:31Z gpotts $
+// $Id: ossimProperty.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimProperty_HEADER
 #define ossimProperty_HEADER
 #include <ossim/base/ossimObject.h>
@@ -29,7 +29,6 @@ public:
    };
    ossimProperty(const ossimString& name=ossimString(""));
    ossimProperty(const ossimProperty& rhs);
-   virtual ~ossimProperty();
    
    const  ossimProperty& operator = (const ossimProperty& rhs);
    virtual const ossimProperty& assign(const ossimProperty& rhs);
@@ -70,6 +69,7 @@ public:
    virtual ossimRefPtr<ossimXmlNode> toXml()const;
    
 protected:
+   virtual ~ossimProperty();
    ossimString             theName;
    ossimString             theDescription;
    bool                    theReadOnlyFlag;

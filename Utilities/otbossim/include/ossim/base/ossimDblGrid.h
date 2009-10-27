@@ -24,7 +24,7 @@
 //   spacing are specified to the constructor.
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.h 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimDblGrid.h 14799 2009-06-30 08:54:44Z dburken $
 
 #ifndef ossimDblGrid_HEADER
 #define ossimDblGrid_HEADER
@@ -33,7 +33,7 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimCommon.h>
 
-class OSSIMDLLEXPORT ossimDrect;
+class ossimDrect;
 
 /*!****************************************************************************
  *

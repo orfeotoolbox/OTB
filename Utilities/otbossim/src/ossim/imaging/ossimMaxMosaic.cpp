@@ -11,7 +11,7 @@
 //              of all inputs to top of the mosaic output. 
 //
 //*************************************************************************
-// $Id: ossimMaxMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
+// $Id: ossimMaxMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimMaxMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -29,7 +29,7 @@ ossimMaxMosaic::ossimMaxMosaic()
 {
 }
 
-ossimMaxMosaic::ossimMaxMosaic(const vector<ossimImageSource*>& inputSources)
+ossimMaxMosaic::ossimMaxMosaic(ossimConnectableObject::ConnectableObjectList& inputSources)
     : ossimImageCombiner(inputSources),
       theTile(NULL)
 {

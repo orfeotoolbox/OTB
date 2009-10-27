@@ -7,13 +7,14 @@
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimVpfTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfTileSource.h 15812 2009-10-25 13:09:24Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimVpfTileSource_HEADER
 #define ossimVpfTileSource_HEADER
 
 #include <ossim/imaging/ossimVpfAnnotationSource.h>
 #include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimViewInterface.h>
 
 
@@ -23,7 +24,6 @@ class OSSIMDLLEXPORT ossimVpfTileSource : public ossimImageHandler,
 public:
    
    ossimVpfTileSource();
-   virtual ~ossimVpfTileSource();
 
    virtual void close();
 
@@ -97,13 +97,8 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix);
    
-   /*!
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+   virtual ossimImageGeometry* getImageGeometry();
 
    /*!
     * Returns the output pixel type of the tile source.
@@ -148,7 +143,7 @@ public:
 
    virtual const ossimObject* getView()const;
    
-   virtual bool setView(ossimObject*  baseObject, bool ownsTheView = false);
+   virtual bool setView(ossimObject*  baseObject);
 
    void getAllFeatures(std::vector<ossimVpfAnnotationFeatureInfo*>& featureList);
   
@@ -159,7 +154,8 @@ public:
    void computeBoundingRect();
 
 protected:
-   ossimVpfAnnotationSource* theAnnotationSource;
+   virtual ~ossimVpfTileSource();
+   ossimRefPtr<ossimVpfAnnotationSource> m_AnnotationSource;
    
    
 TYPE_DATA

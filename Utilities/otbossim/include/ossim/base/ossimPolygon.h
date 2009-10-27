@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimPolygon.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimPolygon_HEADER
 #define ossimPolygon_HEADER
@@ -28,7 +28,7 @@ using namespace std;
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimIrect.h>
 
-class OSSIMDLLEXPORT ossimLine;
+class ossimLine;
 
 /******************************************************************************
  *

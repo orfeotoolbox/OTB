@@ -1,13 +1,15 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 10203 2007-01-09 15:42:22Z dburken $
+// $Id: ossimOverviewBuilderBase.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimOverviewBuilderBase_HEADER
 #define ossimOverviewBuilderBase_HEADER
 
@@ -34,28 +36,31 @@ public:
    /** default constructor */
    ossimOverviewBuilderBase();
 
-   /** virtual destructor */
-   virtual ~ossimOverviewBuilderBase();
-
    /**
     * @brief Sets the input to the builder. (pure virtual)
     * 
     * @param imageSource The input to the builder.
     * 
-    * @param bool youOwnItFlag If true this object own the imageSource
-    * memory and will delete imageSource at destruction or change of
-    * imageSource.
-    * 
     * @return True on successful initializion, false on error.
     */
-   virtual bool setInputSource(ossimImageHandler* imageSource,
-                               bool youOwnItFlag) = 0;
+   virtual bool setInputSource(ossimImageHandler* imageSource) = 0;
 
    /**
     * @brief Sets the output file name. (pure virtual)
     * @prama file This will be the output file name like foo.ovr
     */
    virtual void setOutputFile(const ossimFilename& file)=0;
+
+   /**
+    * @brief Gets the output file name. (pure virtual)
+    *
+    * @return The output file name or ossimFilename::NIL if it was not set
+    * yet and the image handle has not been initialized.
+    *
+    * @note This will return ossimFilename::NIL unless one of was called,
+    * setInputSource or setOutputFile.
+    */
+   virtual ossimFilename getOutputFile() const=0;
 
    /**
     * @brief Sets the overview output type. (pure virtual)
@@ -87,6 +92,24 @@ public:
     * @param typeList List of ossimStrings to add to.
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const=0;
+
+   /**
+    * @brief Get the overview stop dimension.
+    * @return The overview stop dimension.
+    */
+   virtual ossim_uint32 getOverviewStopDimension() const;
+
+   /**
+    * @brief Sets the overview stop dimension.
+    *
+    * This controls how many layers will be built. If set to 64 then the
+    * builder will stop when height and width for current level are less
+    * than or equal to 64.  Note a default can be set in the ossim preferences
+    * file, setting the keyword "overview_stop_dimension".
+    * 
+    * @param dim The overview stop dimension
+    */
+   virtual void setOverviewStopDimension(ossim_uint32 dim);
  
    /**
     * @brief Builds the overviews. (pure virtual)
@@ -95,8 +118,37 @@ public:
     */
    virtual bool execute()=0;
 
+   static const char* OVERVIEW_STOP_DIMENSION_KW;
  
 protected:
+   /** virtual destructor */
+   virtual ~ossimOverviewBuilderBase();
+
+   /**
+    *  @brief Gets the required number of res levels.
+    *
+    *  Convenience method to get the required number of reduced resolution
+    *  data sets to get to the smallest dimension of the output tile size.
+    *  Note that this include r0.
+    *
+    *  @param ih Pointer to the image handler.
+    *
+    *  @return number of res levels.
+    */
+   ossim_uint32 getRequiredResLevels(const ossimImageHandler* ih) const;
+  
+   /**
+    * @brief Gets the default stop dimension.
+    *
+    * Looks for overview_stop_dimension, then will use minimum default tile
+    * size if that is not found.
+    * 
+    * @returns Returns the default stop dimension.
+    */
+   ossim_uint32 getDefaultStopDimension() const;
+   
+   ossim_uint32 theOverviewStopDimension;
+   
 
    /** for rtti stuff */
    TYPE_DATA

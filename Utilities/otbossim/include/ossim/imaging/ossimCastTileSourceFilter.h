@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimCastTileSourceFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimCastTileSourceFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimCastTileSourceFilter_HEADER
 #define ossimCastTileSourceFilter_HEADER
 
@@ -19,7 +19,6 @@ class OSSIMDLLEXPORT ossimCastTileSourceFilter : public ossimImageSourceFilter
 public:
    ossimCastTileSourceFilter(ossimImageSource* inputSource=NULL,
 			     ossimScalarType scalarType=OSSIM_UCHAR);
-   virtual ~ossimCastTileSourceFilter();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
    virtual void initialize();
@@ -69,6 +68,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
      
 protected:
+   virtual ~ossimCastTileSourceFilter();
 
    void allocate(const ossimRefPtr<ossimImageData> inputTile);
    

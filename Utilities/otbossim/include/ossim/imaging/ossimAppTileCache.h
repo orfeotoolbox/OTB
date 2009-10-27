@@ -10,7 +10,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppTileCache.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAppTileCache.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAppTileCache_HEADER
 #define ossimAppTileCache_HEADER
 #include <map>
@@ -19,6 +19,7 @@ using namespace std;
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDpt3d.h>
+#include <ossim/base/ossimRefPtr.h>
 // class ossimTile;
 class ossimTileCache;
 class ossimDataObject;
@@ -59,16 +60,16 @@ public:
     * Will remove a tile completly from the cache.  The
     * returned tile is no longer owned by the cache.
     */
-   ossimDataObject* removeTile(ossimAppCacheId id,
-                              const ossimDpt3d &origin,
-                              unsigned long resLevel);
+   ossimRefPtr<ossimDataObject> removeTile(ossimAppCacheId id,
+                                           const ossimDpt3d &origin,
+                                           unsigned long resLevel);
    /*!
     * Will insert a tile into the cache.
     */
-   ossimDataObject* insert(ossimAppCacheId id,
-                          const ossimDpt3d &origin,
-                          const ossimDataObject* data,
-                          ossim_uint32 resLevel=0);
+   ossimRefPtr<ossimDataObject> insert(ossimAppCacheId id,
+                                       const ossimDpt3d &origin,
+                                       const ossimDataObject* data,
+                                       ossim_uint32 resLevel=0);
    
    /*!
     * This will delete the specified cache. The LRU queue will
@@ -133,7 +134,7 @@ protected:
     * and return it to the caller. This is used by the insert
     * when the max cache size is exceeded.
     */
-   ossimDataObject* removeTile();
+   ossimRefPtr<ossimDataObject> removeTile();
 
 
    static ossimAppTileCache *theInstance;

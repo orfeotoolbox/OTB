@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageReconstructionFilterRegistry.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimImageReconstructionFilterRegistry.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageReconstructionFilterRegistry_HEADER
 #define ossimImageReconstructionFilterRegistry_HEADER
 #include <ossim/imaging/ossimImageSourceFactoryBase.h>
@@ -13,7 +13,6 @@
 class ossimImageReconstructionFilterRegistry : public ossimImageSourceFactoryBase
 {
 public:
-   virtual ~ossimImageReconstructionFilterRegistry();
    static ossimImageReconstructionFilterRegistry* instance();
    virtual ossimObject* createObject(const ossimString& name)const;
    virtual ossimObject* createObject(const ossimKeywordlist& kwl,
@@ -25,6 +24,7 @@ public:
    bool findFactory(ossimImageSourceFactoryBase* factory)const;
    
 protected:
+   virtual ~ossimImageReconstructionFilterRegistry();
    ossimImageReconstructionFilterRegistry(); // hide
    ossimImageReconstructionFilterRegistry(const ossimImageReconstructionFilterRegistry&){}//hide
    void operator = (ossimImageReconstructionFilterRegistry&){}// hide

@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
+//  $Id: ossimDoqqTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimDoqqTileSource.h>
 #include <ossim/support_data/ossimDoqq.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
@@ -69,17 +69,20 @@ bool ossimDoqqTileSource::open(const ossimFilename& filename)
    return result;
 }
 
-bool ossimDoqqTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                           const char* prefix)
+//**************************************************************************************************
+//! Returns the image geometry object associated with this tile source or NULL if non defined.
+//! The geometry contains full-to-local image transform as well as projection (image-to-world)
+//**************************************************************************************************
+ossimImageGeometry* ossimDoqqTileSource::getImageGeometry()
 {
-   if (theGeometryKwl.getSize())
-   {
-      kwl = theGeometryKwl;
-      return true;
-   }
+   if (theGeometry.valid())
+      return theGeometry.get();
    
    if(theHeaderInformation.valid())
    {
+      ossimKeywordlist kwl;
+      const char* prefix = 0; // legacy
+
       ossimString proj  = theHeaderInformation->theProjection.trim().upcase();
       ossimString datum = theHeaderInformation->theDatum.trim().upcase();
 
@@ -154,11 +157,11 @@ bool ossimDoqqTileSource::getImageGeometry(ossimKeywordlist& kwl,
               true);
 
       // Capture this for next time.
-      setImageGeometry(kwl);
-      
-      return true;
+      theGeometry = new ossimImageGeometry;
+      theGeometry->loadState(kwl, prefix);
+      return theGeometry.get();
    }
-   return false;
+   return 0;
 }
 
 ossimRefPtr<ossimProperty> ossimDoqqTileSource::getProperty(const ossimString& name)const

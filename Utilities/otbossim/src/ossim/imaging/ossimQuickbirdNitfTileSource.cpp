@@ -10,11 +10,12 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdNitfTileSource.cpp 13330 2008-07-28 18:04:40Z dburken $
+//  $Id: ossimQuickbirdNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimQuickbirdNitfTileSource.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossim2dTo2dShiftTransform.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 
 RTTI_DEF1(ossimQuickbirdNitfTileSource, "ossimQuickbirdNitfTileSource", ossimNitfTileSource);
@@ -92,7 +93,7 @@ bool ossimQuickbirdNitfTileSource::open()
       ossimIpt urPt;
       ossimIpt lrPt;
       ossimIpt llPt;
-      
+      ossimDpt shift;
       if(tileFile.getInfo(info, theImageFile.file().upcase()))
       {
          ulPt.makeNan();
@@ -103,63 +104,14 @@ bool ossimQuickbirdNitfTileSource::open()
          if((info.theUlXOffset != OSSIM_INT_NAN) &&
             (info.theUlYOffset != OSSIM_INT_NAN))
          {
-            theSubImageOffset = ossimIpt(info.theUlXOffset, info.theUlYOffset);
+            shift = ossimIpt(info.theUlXOffset, info.theUlYOffset);
          }
          else
          {
-            theSubImageOffset = ossimIpt(0,0);
+            shift = ossimIpt(0,0);
          }
-          
-         ulPt = theSubImageOffset;
-         
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimQuickbirdNitfTileSource::open(file) DEBUG:"
-               << "\nSub image offset  = " << theSubImageOffset
-               << std::endl;
-         }
-         
-         if((info.theUrXOffset != OSSIM_INT_NAN) &&
-            (info.theUrYOffset != OSSIM_INT_NAN))
-         {
-            urPt = ossimIpt(info.theUrXOffset,
-                            info.theUrYOffset);
-         }
-         else
-         {
-            urPt = tempBounds.ur() + ulPt;
-         }
-         
-         if((info.theLrXOffset != OSSIM_INT_NAN) &&
-            (info.theLrYOffset != OSSIM_INT_NAN))
-         {
-            lrPt = ossimIpt(info.theLrXOffset,
-                            info.theLrYOffset);
-         }
-         else
-         {
-            lrPt = tempBounds.lr() + ulPt;
-         }
-         
-         if((info.theLlXOffset != OSSIM_INT_NAN) &&
-            (info.theLlYOffset != OSSIM_INT_NAN))
-         {
-            llPt = ossimIpt(info.theLlXOffset,
-                            info.theLlYOffset);
-         }
-         else
-         {
-            llPt = tempBounds.ll() + ulPt;
-         }
+         m_transform = new ossim2dTo2dShiftTransform(shift);
       }
-
-      //---
-      // Set the base class image rectangle in case a sub image offset was
-      // picked up here.
-      //---
-      setBoundingRectangle(ossimIrect(ulPt, urPt, lrPt, llPt));
-      
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
@@ -185,4 +137,19 @@ bool ossimQuickbirdNitfTileSource::open()
    }
    
    return openedTileFile;
+}
+
+ossimImageGeometry* ossimQuickbirdNitfTileSource::getImageGeometry()
+{
+   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
+   
+   if(result)
+   {
+      if(!result->getTransform())
+      {
+         result->setTransform(m_transform.get());
+      }
+   }
+   
+   return result;
 }

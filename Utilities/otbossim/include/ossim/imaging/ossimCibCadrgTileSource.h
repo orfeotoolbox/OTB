@@ -9,7 +9,7 @@
 //              CADRG file.
 //
 //-----------------------------------------------------------------------
-//$Id: ossimCibCadrgTileSource.h 12990 2008-06-04 19:14:34Z gpotts $
+//$Id: ossimCibCadrgTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimCibCadrgTileSource_HEADER
 #define ossimCibCadrgTileSource_HEADER 1
 #include <ossim/imaging/ossimImageHandler.h>
@@ -57,13 +57,6 @@ public:
    ossimCibCadrgTileSource();
 
    /**
-    * Destructor.
-    *
-    * Will return allocated memory back to the heap.
-    */
-   virtual ~ossimCibCadrgTileSource();
-
-   /**
     * This method is defined in the base class ossimObject.
     * This class overrides the default implementation
     * to return its own short name.
@@ -101,6 +94,20 @@ public:
     */
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& rect,
                                                ossim_uint32 resLevel = 0);
+
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
 
    /**
     *  Satisfies pure virtual requirement from ImageHandler class.
@@ -201,10 +208,10 @@ public:
                           const char* prefix=0);
    
    /**
-    *  Populates the keyword list with image geometry information.  This
+    *  Populates the geometry object with image geometry information.  This
     *  method is used to relay projection/model information to users.
     *  Returns true if geometry info is present, false if not.
-    *  Keywords supported by this object are:
+    *  Keywords supported by this class are:
     *  @verbatim
     *  datum:    // datum code>   // Datum code
     *  ul_lat:   // upper left latitude
@@ -229,15 +236,9 @@ public:
     *  type:              // class name of the object for factory driven reconstruction
     *  map_scale:         // Map scale of the image
     *  @endverbatim
-    *  @see ossimImageSource for further code example on using the geometry
-    *       information in kwl.
-    *  @param kwl Keywordlist to populate the image geometry with.
-    *  @param prefix A unique prefix to prepend to the keywords.
-    *    
-    *  @return True if image geometry is present and false otherwise.
+    *  @see ossimImageSource for further code example on using the geometry.
     */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   virtual ossimImageGeometry* getImageGeometry();
    
    /**
     * This method allows you to query the scalar type of the output data.
@@ -383,7 +384,14 @@ public:
    
 
 protected:
-
+   /**
+    * Destructor.
+    *
+    * Will return allocated memory back to the heap.
+    */
+   virtual ~ossimCibCadrgTileSource();
+   
+   
 	void updatePropertiesToFirstValidFrame();
    /**
     * Sets the entry to be renderer.  The entry within the table
@@ -471,7 +479,8 @@ protected:
     * @param framesInvolved All intersecting frames used to render the region.
     */
    void fillTile(const ossimIrect& tileRect,
-                 const vector<ossimFrameEntryData>& framesInvolved);
+                 const vector<ossimFrameEntryData>& framesInvolved,
+                 ossimImageData* tile);
 
    /**
     * Will uncompress the CIB file using a VQ decompression algorithm.
@@ -482,7 +491,8 @@ protected:
     */
    void fillSubTileCib(const ossimRpfFrame& aFrame,
                        const ossimIrect& tileRect,
-                       const ossimFrameEntryData& frameEntryData);
+                       const ossimFrameEntryData& frameEntryData,
+                       ossimImageData* tile);
    
    /**
     * Will uncompress the CADRG file using a VQ decompression algorithm.
@@ -493,7 +503,8 @@ protected:
     */
    void fillSubTileCadrg(const ossimRpfFrame& aFrame,
                          const ossimIrect& tileRect,
-                         const ossimFrameEntryData& frameEntryData);
+                         const ossimFrameEntryData& frameEntryData,
+                         ossimImageData* tile);
    
    /**
     * Will allocate an internal buffer for the given product.  If the product is

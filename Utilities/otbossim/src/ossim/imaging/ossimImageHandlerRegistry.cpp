@@ -2,14 +2,14 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts (gpotts@imagelinks.com)
+// Author:  Garrett Potts
 //
 // Description:
 //
 // Contains class definition for ImageHandlerRegistry.
 //
 //*******************************************************************
-//  $Id: ossimImageHandlerRegistry.cpp 14053 2009-03-04 12:25:51Z gpotts $
+//  $Id: ossimImageHandlerRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandlerFactory.h>

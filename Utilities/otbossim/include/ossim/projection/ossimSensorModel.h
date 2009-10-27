@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 13673 2008-10-03 15:10:52Z gpotts $
+//  $Id: ossimSensorModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -79,8 +79,6 @@ public:
    ossimSensorModel();
    ossimSensorModel(const ossimSensorModel& copy_this);
    ossimSensorModel(const ossimKeywordlist& geom_kwl);
-
-   virtual ~ossimSensorModel();
 
    virtual ossimObject* getBaseObject();
    virtual const ossimObject* getBaseObject()const;
@@ -245,6 +243,8 @@ public:
    virtual bool isAffectedByElevation() const { return true; }
    
 protected:
+   virtual ~ossimSensorModel();
+   
    /*!
     * METHOD: extrapolate()
     * Extrapolates solutions for points outside of the image. The second

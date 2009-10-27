@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMapCompositionSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMapCompositionSource_HEADER
 #define ossimMapCompositionSource_HEADER
 #include <ossim/imaging/ossimAnnotationSource.h>
@@ -32,7 +32,6 @@ public:
    };
 
    ossimMapCompositionSource();
-   virtual ~ossimMapCompositionSource();
    
    virtual ossimScalarType getOutputScalarType() const;
    virtual ossim_uint32    getNumberOfOutputBands() const;
@@ -192,15 +191,11 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix=0)const;
-
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix=0);
-
-
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0)const;
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
 protected:
+   virtual ~ossimMapCompositionSource();
    ossimIpt            theViewWidthHeight;
    ossimGridLineType   theMeterGridType;
    ossimGridLineType   theGeographicGridType;
@@ -218,7 +213,7 @@ protected:
    // title info
    //
    ossimString          theTitleString;
-   ossimFont*           theTitleFont;
+   ossimRefPtr<ossimFont>           theTitleFont;
    ossimFontInformation theTitleFontInfo;
    ossimRgbVector       theTitleColor;
    
@@ -236,22 +231,22 @@ protected:
    // grid label font
    //
    ossimFontInformation theGeographicTopLabelFontInfo;
-   ossimFont*           theGeographicTopLabelFont;
+   ossimRefPtr<ossimFont>           theGeographicTopLabelFont;
    ossimFontInformation theGeographicBottomLabelFontInfo;
-   ossimFont*           theGeographicBottomLabelFont;
+   ossimRefPtr<ossimFont>           theGeographicBottomLabelFont;
    ossimFontInformation theGeographicLeftLabelFontInfo;
-   ossimFont*           theGeographicLeftLabelFont;
+   ossimRefPtr<ossimFont>           theGeographicLeftLabelFont;
    ossimFontInformation theGeographicRightLabelFontInfo;
-   ossimFont*           theGeographicRightLabelFont;
+   ossimRefPtr<ossimFont>           theGeographicRightLabelFont;
 
    ossimFontInformation theMeterTopLabelFontInfo;
-   ossimFont*           theMeterTopLabelFont;
+   ossimRefPtr<ossimFont>           theMeterTopLabelFont;
    ossimFontInformation theMeterBottomLabelFontInfo;
-   ossimFont*           theMeterBottomLabelFont;
+   ossimRefPtr<ossimFont>           theMeterBottomLabelFont;
    ossimFontInformation theMeterLeftLabelFontInfo;
-   ossimFont*           theMeterLeftLabelFont;
+   ossimRefPtr<ossimFont>           theMeterLeftLabelFont;
    ossimFontInformation theMeterRightLabelFontInfo;
-   ossimFont*           theMeterRightLabelFont;
+   ossimRefPtr<ossimFont>           theMeterRightLabelFont;
    
    // grid label dms format strings
    //
@@ -294,9 +289,7 @@ protected:
    //  tick spacing in meter units
    ossimDpt            theMeterSpacing;
    
-   ossimMapProjection* theInputProjection;
-
-   vector<ossimAnnotationObject*> theFixedAnnotationList;
+   ossimAnnotationSource::AnnotationObjectListType theFixedAnnotationList;
 
    /*!
     * Override base classes drawAnnotations so we can layout
@@ -332,6 +325,10 @@ protected:
    
    ossimIrect getViewingRect()const;
    
+   //! Fetches the input connection's image geometry and verifies that it is a map projection.
+   //! Returns NULL if no valid projection found.
+   const ossimMapProjection* inputMapProjection() const;
+
 // For RTTI
 TYPE_DATA
 };

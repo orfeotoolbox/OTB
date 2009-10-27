@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSubImageTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSubImageTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimSubImageTileSource_HEADER
 #define ossimSubImageTileSource_HEADER
@@ -49,7 +49,6 @@ public:
    ossimSubImageTileSource(ossimImageSource* inputSource,
                            const ossimIpt&   offset);
 
-   virtual ~ossimSubImageTileSource();
    /*!
     * Permits setting the image's offset relative to the full image space.
     */
@@ -81,6 +80,8 @@ public:
                           const char* prefix=0)const;
 
 private:
+   virtual ~ossimSubImageTileSource();
+   
    ossimIpt                    theSubImageOffset;
    ossimRefPtr<ossimImageData> theTile;
    TYPE_DATA

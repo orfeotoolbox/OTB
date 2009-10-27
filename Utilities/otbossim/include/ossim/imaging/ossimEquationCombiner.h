@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEquationCombiner.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEquationCombiner.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimEquationCombiner_HEADER
 #define ossimEquationCombiner_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -163,7 +163,6 @@ class OSSIMDLLEXPORT ossimEquationCombiner : public ossimImageCombiner
 {
 public:
    ossimEquationCombiner();
-   virtual ~ossimEquationCombiner();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -237,12 +236,15 @@ protected:
       ossimEquDataType d;
    };
 
+   virtual ~ossimEquationCombiner();
+   
+   
    ossimScalarType             theOutputScalarType;
    ossimString                 theEquation;
    mutable ossimEquTokenizer  *theLexer;
    ossimRefPtr<ossimImageData> theTile;
-   ossimCastTileSourceFilter  *theCastFilter;
-   ossimCastTileSourceFilter  *theCastOutputFilter;
+   ossimRefPtr<ossimCastTileSourceFilter>  theCastFilter;
+   ossimRefPtr<ossimCastTileSourceFilter> theCastOutputFilter;
    
    mutable int                theCurrentId;
    mutable std::stack<ossimEquValue> theValueStack;

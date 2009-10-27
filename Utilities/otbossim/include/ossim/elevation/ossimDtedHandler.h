@@ -16,7 +16,7 @@
 //              Derived from ossimElevCellHandler.
 //<
 //*****************************************************************************
-// $Id: ossimDtedHandler.h 14296 2009-04-14 17:25:00Z gpotts $
+// $Id: ossimDtedHandler.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimDtedHandler_HEADER
 #define ossimDtedHandler_HEADER
@@ -34,7 +34,6 @@ class OSSIM_DLL ossimDtedHandler : public ossimElevCellHandler
 public:
    ossimDtedHandler(const ossimFilename& dted_file, bool memoryMapFlag=false);
    
-   virtual ~ossimDtedHandler();
 
    enum
    {
@@ -83,8 +82,9 @@ public:
 
    virtual void setMemoryMapFlag(bool flag);
    
-private:
-   // Disallow operator= and copy constrution...
+protected:
+   virtual ~ossimDtedHandler();
+  // Disallow operator= and copy constrution...
    const ossimDtedHandler& operator=(const ossimDtedHandler& rhs);
    ossimDtedHandler(const ossimDtedHandler&);
 

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationBitmap.cpp 13348 2008-07-30 15:33:53Z dburken $
+// $Id: ossimGeoAnnotationBitmap.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGeoAnnotationBitmap.h>
 #include <ossim/projection/ossimProjection.h>
@@ -175,11 +175,11 @@ void ossimGeoAnnotationBitmap::getBoundingRect(ossimDrect& rect)const
    }
 }
 
-void ossimGeoAnnotationBitmap::transform(ossimProjection* projection)
+void ossimGeoAnnotationBitmap::transform(ossimImageGeometry* projection)
 {
    if(projection)
    {
-      projection->worldToLineSample(theCenterPoint, theProjectedPoint);
+      projection->worldToLocal(theCenterPoint, theProjectedPoint);
       theProjectedPoint = ossimIpt(theProjectedPoint);
       if(theImageData.valid())
       {
@@ -189,43 +189,6 @@ void ossimGeoAnnotationBitmap::transform(ossimProjection* projection)
          theImageData->setOrigin(origin);
       }
    }
-}
-
-void ossimGeoAnnotationBitmap::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      projection->worldToLineSample(theCenterPoint, theProjectedPoint);
-      if (rrds)
-      {
-         // Transform r0 point to new rrds level.
-         try
-         {
-            ossimDpt rnPt;
-            model.r0ToRn(rrds, theProjectedPoint, rnPt);
-            theProjectedPoint = rnPt;
-            
-         }
-         catch (const ossimException& e)
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-         }
-      }
-
-      // Not sure about cast???  drb.
-      // theProjectedPoint = ossimIpt(theProjectedPoint);
-      
-      if(theImageData.valid())
-      {
-         ossimDpt origin(theProjectedPoint.x - theImageData->getWidth()/2.0,
-                         theProjectedPoint.y - theImageData->getHeight()/2.0);
-         
-         theImageData->setOrigin(origin);
-      } 
-   }
-      
 }
 
 void ossimGeoAnnotationBitmap::setImageData(

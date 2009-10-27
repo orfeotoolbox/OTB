@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimBrightnessMatch.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBrightnessMatch.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBrightnessMatch_HEADER
 #define ossimBrightnessMatch_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -22,7 +22,6 @@ public:
    ossimBrightnessMatch();
 
 
-   virtual ~ossimBrightnessMatch();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
@@ -41,6 +40,8 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
 protected:
+   virtual ~ossimBrightnessMatch();
+   
    double          theTargetBrightness;
    double          theInputBrightness;
    ossimRefPtr<ossimImageData> theNormTile;

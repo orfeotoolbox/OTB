@@ -10,7 +10,7 @@
 // Used to represent an double point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.h 11398 2007-07-26 13:29:58Z dburken $
+//  $Id: ossimDpt.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimDpt_HEADER
 #define ossimDpt_HEADER
 
@@ -21,10 +21,10 @@
 #include <ossim/base/ossimString.h>
 
 // Forward class declarations.
-class OSSIMDLLEXPORT ossimIpt;
-class OSSIMDLLEXPORT ossimFpt;
-class OSSIMDLLEXPORT ossimDpt3d;
-class OSSIMDLLEXPORT ossimGpt;
+class ossimIpt;
+class ossimFpt;
+class ossimDpt3d;
+class ossimGpt;
 
 class OSSIMDLLEXPORT ossimDpt
 {

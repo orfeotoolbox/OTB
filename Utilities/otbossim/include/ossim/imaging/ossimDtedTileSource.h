@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc. 
 //
 // License:  LGPL
 //
@@ -14,13 +13,12 @@
 // handler for DTED files.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.h 14137 2009-03-25 20:23:05Z dburken $
+// $Id: ossimDtedTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimDtedTileSource_HEADER
 #define ossimDtedTileSource_HEADER
 
 #include <fstream>
-using namespace std;
 
 #include <ossim/imaging/ossimImageHandler.h>
 
@@ -31,7 +29,6 @@ class OSSIM_DLL ossimDtedTileSource : public ossimImageHandler
 public:
       
    ossimDtedTileSource();
-   virtual ~ossimDtedTileSource();
 
    enum
    {
@@ -43,7 +40,7 @@ public:
    
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString className()const;
+   virtual ossimString getClassName()const;
 
    /**
     *  Returns true if "theImageFile" can be opened and is a valid adrg file.
@@ -53,6 +50,20 @@ public:
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tile_rect,
                                                ossim_uint32 resLevel=0);
    
+  /**
+   * Method to get a tile.   
+   *
+   * @param result The tile to stuff.  Note The requested rectangle in full
+   * image space and bands should be set in the result tile prior to
+   * passing.  It will be an error if:
+   * result.getNumberOfBands() != this->getNumberOfOutputBands()
+   *
+   * @return true on success false on error.  If return is false, result
+   *  is undefined so caller should handle appropriately with makeBlank or
+   * whatever.
+   */
+  virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
+  
    /**
     *  Returns the number of bands in the image.
     *  Satisfies pure virtual requirement from ImageHandler class.
@@ -100,13 +111,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-   /**
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   //! Returns the image geometry object associated with this tile source or NULL if not defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.
@@ -163,7 +170,9 @@ public:
    virtual void getPropertyNames(
       std::vector<ossimString>& propertyNames)const;
    
-private:
+protected:
+   virtual ~ossimDtedTileSource();
+
    // Disallow operator= and copy constrution...
    const ossimDtedTileSource& operator=(const  ossimDtedTileSource& rhs);
    ossimDtedTileSource(const ossimDtedTileSource&);
@@ -177,13 +186,14 @@ private:
     *  Returns true on success, false on error.
     */
    bool fillBuffer(const ossimIrect& tile_rect,
-                   const ossimIrect& clip_rect);
+                   const ossimIrect& clip_rect,
+                   ossimImageData* tile);
 
    void gatherStatistics();
    ossim_sint16 convertSignedMagnitude(ossim_uint16& s) const;
    
    ossimRefPtr<ossimImageData> theTile;
-   mutable ifstream           theFileStr;
+   mutable std::ifstream      theFileStr;
    ossim_uint32               theTileWidth;
    ossim_uint32               theTileHeight;   
    ossim_uint32               theNumberOfLines;

@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfsubfielddefn.cpp 12978 2008-06-04 00:04:14Z dburken $
+ * $Id: ossimDdfsubfielddefn.cpp 15261 2009-08-26 12:47:58Z dburken $
  */
 
 #include <cstring>
@@ -434,48 +434,71 @@ ossimDDFSubfieldDefn::ExtractFloatData( const char * pachSourceData,
           // Interpret the bytes of data.
           switch( eBinaryFormat )
           {
-            case UInt:
-              if( nFormatWidth == 1 )
-                  return( abyData[0] );
-              else if( nFormatWidth == 2 )
-                  return( *((ossim_uint16 *) abyData) );
-              else if( nFormatWidth == 4 )
-                  return( *((ossim_uint32 *) abyData) );
-              else
-              {
-                  // CPLAssert( false );
-                  return 0.0;
-              }
+             case UInt:
+                if( nFormatWidth == 1 )
+                {
+                   return( abyData[0] );
+                }
+                else if( nFormatWidth == 2 )
+                {
+                   ossim_uint16* ptr = (ossim_uint16*) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 4 )
+                {
+                   ossim_uint32* ptr = (ossim_uint32*) abyData;
+                   return *ptr;
+                }
+                else
+                {
+                   // CPLAssert( false );
+                   return 0.0;
+                }
+                
+             case SInt:
+                if( nFormatWidth == 1 )
+                {
+                   signed char* ptr = (signed char*) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 2 )
+                {
+                   ossim_int16* ptr = (ossim_int16*) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 4 )
+                {
+                   ossim_int32* ptr = (ossim_int32*) abyData;
+                   return *ptr;
+                }
+                else
+                {
+                   // CPLAssert( false );
+                   return 0.0;
+                }
             
-            case SInt:
-              if( nFormatWidth == 1 )
-                  return( *((signed char *) abyData) );
-              else if( nFormatWidth == 2 )
-                  return( *((ossim_int16 *) abyData) );
-              else if( nFormatWidth == 4 )
-                  return( *((ossim_int32 *) abyData) );
-              else
-              {
-                  // CPLAssert( false );
-                  return 0.0;
-              }
-            
-            case FloatReal:
-              if( nFormatWidth == 4 )
-                  return( *((float *) abyData) );
-              else if( nFormatWidth == 8 )
-                  return( *((double *) abyData) );
-              else
-              {
-                  // CPLAssert( false );
-                  return 0.0;
-              }
-
-            case NotBinary:            
-            case FPReal:
-            case FloatComplex:
-              // CPLAssert( false );
-              return 0.0;
+             case FloatReal:
+                if( nFormatWidth == 4 )
+                {
+                   float* ptr = (float*) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 8 )
+                {
+                   double* ptr = (double*) abyData;
+                   return *ptr;
+                }
+                else
+                {
+                   // CPLAssert( false );
+                   return 0.0;
+                }
+                
+             case NotBinary:            
+             case FPReal:
+             case FloatComplex:
+                // CPLAssert( false );
+                return 0.0;
           }
           break;
           // end of 'b'/'B' case.
@@ -571,56 +594,79 @@ ossimDDFSubfieldDefn::ExtractIntData( const char * pachSourceData,
           {
             case UInt:
               if( nFormatWidth == 4 )
-                  return( (int) *((ossim_uint32 *) abyData) );
+              {
+                 ossim_uint32* ptr = (ossim_uint32*) abyData;
+                 return *ptr;
+              }
               else if( nFormatWidth == 1 )
-                  return( abyData[0] );
+              {
+                 return( abyData[0] );
+              }
               else if( nFormatWidth == 2 )
-                  return( *((ossim_uint16 *) abyData) );
+              {
+                 ossim_uint16* ptr = (ossim_uint16*)abyData;
+                 return *ptr;
+              }
               else
               {
-                  // CPLAssert( false );
-                  return 0;
+                 // CPLAssert( false );
+                 return 0;
               }
-            
-            case SInt:
-              if( nFormatWidth == 4 )
-                  return( *((ossim_int32 *) abyData) );
-              else if( nFormatWidth == 1 )
-                  return( *((signed char *) abyData) );
-              else if( nFormatWidth == 2 )
-                  return( *((ossim_int16 *) abyData) );
-              else
-              {
-                  // CPLAssert( false );
-                  return 0;
-              }
-            
-            case FloatReal:
-              if( nFormatWidth == 4 )
-                  return( (int) *((float *) abyData) );
-              else if( nFormatWidth == 8 )
-                  return( (int) *((double *) abyData) );
-              else
-              {
-                  // CPLAssert( false );
-                  return 0;
-              }
+              
+             case SInt:
+                if( nFormatWidth == 4 )
+                {
+                   ossim_int32* ptr = (ossim_int32 *) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 1 )
+                {
+                   signed char* ptr = (signed char *) abyData;
+                   return *ptr;
+                }
+                else if( nFormatWidth == 2 )
+                {
+                   ossim_int16* ptr = (ossim_int16 *) abyData;
+                   return *ptr;
+                }
+                else
+                {
+                   // CPLAssert( false );
+                   return 0;
+                }
+                
+             case FloatReal:
+                if( nFormatWidth == 4 )
+                {
+                   float* ptr = (float *) abyData;
+                   return (int) *ptr;
+                }
+                else if( nFormatWidth == 8 )
+                {
+                   double* ptr = (double *) abyData;
+                   return (int) *ptr;
+                }
+                else
+                {
+                   // CPLAssert( false );
+                   return 0;
+                }
 
-            case NotBinary:            
-            case FPReal:
-            case FloatComplex:
-              // CPLAssert( false );
-              return 0;
+             case NotBinary:            
+             case FPReal:
+             case FloatComplex:
+                // CPLAssert( false );
+                return 0;
           }
           break;
           // end of 'b'/'B' case.
       }
-
-      default:
-        // CPLAssert( false );
-        return 0;
+      
+       default:
+          // CPLAssert( false );
+          return 0;
     }
-
+    
     // CPLAssert( false );
     return 0;
 }

@@ -6,17 +6,17 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimRgbVector.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimRgbVector.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimRgbVector_HEADER
 #define ossimRgbVector_HEADER
 #include <iostream>
 using namespace std;
 #include <ossim/base/ossimConstants.h>
 
-class OSSIMDLLEXPORT ossimJpegYCbCrVector;
-class OSSIMDLLEXPORT ossimHsiVector;
-class OSSIMDLLEXPORT ossimHsvVector;
-class OSSIMDLLEXPORT ossimCmyVector;
+class ossimJpegYCbCrVector;
+class ossimHsiVector;
+class ossimHsvVector;
+class ossimCmyVector;
 
 class OSSIMDLLEXPORT ossimRgbVector
 {

@@ -9,7 +9,7 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 11683 2007-09-07 17:25:30Z gpotts $
+//  $Id: ossimTiffWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
@@ -28,9 +28,7 @@ class OSSIMDLLEXPORT ossimTiffWriter : public ossimImageFileWriter
 public:
 
    ossimTiffWriter();
-   
-   virtual ~ossimTiffWriter();
-   
+      
    enum UnitType
    {
       UNDEFINED                    =     0,
@@ -139,6 +137,7 @@ public:
    bool hasImageType(const ossimString& imageType) const;
    
 protected:
+   virtual ~ossimTiffWriter();
    
    virtual bool writeFile();
 
@@ -211,7 +210,7 @@ protected:
    bool                    theColorLutFlag;
    ossimRefPtr<ossimMapProjectionInfo> theProjectionInfo;
    ossimIpt                theOutputTileSize;
-   ossimNBandLutDataObject theColorLut;
+   ossimRefPtr<ossimNBandLutDataObject> theColorLut;
    ossimFilename           theLutFilename;
    bool                    theForceBigTiffFlag;
    bool                    theBigTiffFlag;

@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.h 11724 2007-09-13 19:28:07Z gpotts $
+//  $Id: ossimMultiBandHistogram.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMultiBandHistogram_HEADER
 #define ossimMultiBandHistogram_HEADER
 #include <vector>
@@ -16,8 +16,8 @@
 #include <ossim/base/ossimXmlNode.h>
 #include <ossim/base/ossimReferenced.h>
 
-class OSSIMDLLEXPORT ossimHistogram;
-class OSSIMDLLEXPORT ossimKeywordlist;
+class ossimHistogram;
+class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimMultiBandHistogram : public ossimReferenced
 {
@@ -28,7 +28,6 @@ public:
                            long numberOfBuckets,
                            float minValue,
                            float maxValue);
-   virtual ~ossimMultiBandHistogram();
 
    void create(long numberOfBands,
                long numberOfBuckets,
@@ -57,6 +56,7 @@ public:
    virtual bool loadState(const ossimRefPtr<ossimXmlNode> xmlNode);
    
 protected:
+   virtual ~ossimMultiBandHistogram();
    class  ossimProprietaryHeaderInformation
    {
    public:

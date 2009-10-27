@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToHsvSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToHsvSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbToHsvSource_HEADER
 #define ossimJpegRgbToYCbCrSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -18,7 +18,6 @@ class ossimRgbToHsvSource : public ossimImageSourceFilter
 public:
    ossimRgbToHsvSource();
    ossimRgbToHsvSource(ossimImageSource* inputSource);
-   virtual ~ossimRgbToHsvSource();
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
@@ -32,6 +31,7 @@ public:
    virtual void initialize();
        
 protected:
+   virtual ~ossimRgbToHsvSource();
 
    /**
     * Called on first getTile, will initialize all data needed.

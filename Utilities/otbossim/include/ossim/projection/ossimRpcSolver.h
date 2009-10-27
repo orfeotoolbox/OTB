@@ -1,16 +1,14 @@
 //*****************************************************************************
 // FILE: ossimRpcModel.h
 //
-// Copyright (C) 2004 Intelligence Data Systems, Inc.
-//
-// LICENSE: LGPL
-//
-// see top level LICENSE.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimRpcSolver.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRpcSolver_HEADER
 #define ossimRpcSolver_HEADER
 
@@ -19,33 +17,37 @@
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDrect.h>
+#include <ossim/base/ossimReferenced.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/projection/ossimRpcProjection.h>
 
 class ossimProjection;
+class ossimImageGeometry;
 class ossimNitfRegisteredTag;
 
-
 /**
- * This currently only support Rational poilynomial B format.  This can be found in
- * the NITF registered commercial tag document.
+ * This currently only support Rational poilynomial B format.  This can be
+ * found in the NITF registered commercial tag document.
+ *
+ * @note x=longitude, y=latitude, z=height
  * 
  * <pre>
  * Format is:
- *          coeff[ 0]       + coeff[ 1]*x     + coeff[ 2]*y     + coeff[ 3]*z     +
- *          coeff[ 4]*x*y   + coeff[ 5]*x*z   + coeff[ 6]*y*z   + coeff[ 7]*x*x   +
- *          coeff[ 8]*y*y   + coeff[ 9]*z*z   + coeff[10]*x*y*z + coeff[11]*x*x*x +
- *          coeff[12]*x*y*y + coeff[13]*x*z*z + coeff[14]*x*x*y + coeff[15]*y*y*y +
- *          coeff[16]*y*z*z + coeff[17]*x*x*z + coeff[18]*y*y*z + coeff[19]*z*z*z;
+ *  coeff[ 0]       + coeff[ 1]*x     + coeff[ 2]*y     + coeff[ 3]*z     +
+ *  coeff[ 4]*x*y   + coeff[ 5]*x*z   + coeff[ 6]*y*z   + coeff[ 7]*x*x   +
+ *  coeff[ 8]*y*y   + coeff[ 9]*z*z   + coeff[10]*x*y*z + coeff[11]*x*x*x +
+ *  coeff[12]*x*y*y + coeff[13]*x*z*z + coeff[14]*x*x*y + coeff[15]*y*y*y +
+ *  coeff[16]*y*z*z + coeff[17]*x*x*z + coeff[18]*y*y*z + coeff[19]*z*z*z;
  *
  *       where coeff is one of XNum, XDen, YNum, and YDen.  So there are 80
  *       coefficients all together.
  *
  *       
- * Currently we use a linear least squares fit to solve the coefficients.  This is the simplest
- * to implement.  We probably relly need a nonlinear minimizer to fit the coefficients but I don't have
- * time to experiment.  Levenberg Marquardt might be a solution to look into.
+ * Currently we use a linear least squares fit to solve the coefficients.
+ * This is the simplest to implement.  We probably relly need a nonlinear
+ * minimizer to fit the coefficients but I don't have time to experiment.
+ * Levenberg Marquardt might be a solution to look into.
  *
  *
  * 
@@ -70,30 +72,36 @@ class ossimNitfRegisteredTag;
  * </pre>
  * 
  */ 
-class OSSIM_DLL ossimRpcSolver
+class OSSIM_DLL ossimRpcSolver : public ossimReferenced
 {
 public:
    /**
-    * The use elvation flag will deterimne if we force the height t be 0.  If the elevation
-    * is enabled then we use the height field of the control points to determine the
-    * coefficients of the RPC00 polynomial.  If its false then we will ignore the height
-    * by setting the height field to 0.0.
+    * The use elvation flag will deterimne if we force the height t be 0.
+    * If the elevation is enabled then we use the height field of the control
+    * points to determine the coefficients of the RPC00 polynomial.  If its
+    * false then we will ignore the height by setting the height field to 0.0.
     *
     * Note:  even if the elevation is enabled all NAN heights are set to 0.0.
     */
    ossimRpcSolver(bool useElevation=false,
                   bool useHeightAboveMSLFlag=false);
 
-	virtual ~ossimRpcSolver(){}
+   
    /**
     * This will convert any projector to an RPC model
     */
    void solveCoefficients(const ossimDrect& imageBouunds,
-                          const ossimProjection& imageProj,
+                          ossimProjection* imageProj,
                           ossim_uint32 xSamples=8,
                           ossim_uint32 ySamples=8,
                           bool shiftTo0Flag=true);
-
+   
+   void solveCoefficients(const ossimDrect& imageBouunds,
+                          ossimImageGeometry* geom,
+                          ossim_uint32 xSamples=8,
+                          ossim_uint32 ySamples=8,
+                          bool shiftTo0Flag=true);
+   
    /**
     * takes associated image points and ground points
     * and solves the coefficents for the rational polynomial for
@@ -109,13 +117,13 @@ public:
    /**
     * Creates and Rpc model from the coefficients
     */
-   ossimRefPtr<ossimRpcModel> createRpcModel()const;
+   ossimImageGeometry* createRpcModel()const;
 
    /**
     * Create a simple rpc projection which is a dumbed down
     * rpc model.
     */
-   ossimRefPtr<ossimRpcProjection> createRpcProjection()const;
+   ossimImageGeometry* createRpcProjection()const;
 
 
    /**
@@ -164,6 +172,8 @@ public:
    ossimRefPtr<ossimNitfRegisteredTag> getNitfRpcBTag() const;
    
 protected:
+	virtual ~ossimRpcSolver(){}
+   
    virtual void solveInitialCoefficients(NEWMAT::ColumnVector& coeff,
                                          const std::vector<double>& f,
                                          const std::vector<double>& x,

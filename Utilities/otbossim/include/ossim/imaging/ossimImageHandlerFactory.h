@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageHandlerFactoryMaker.
 //*******************************************************************
-//  $Id: ossimImageHandlerFactory.h 10103 2006-12-14 16:12:19Z gpotts $
+//  $Id: ossimImageHandlerFactory.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimImageHandlerFactory_HEADER
 #define ossimImageHandlerFactory_HEADER
@@ -33,7 +33,6 @@ public:
    virtual ossimImageHandler* open(const ossimKeywordlist& kwl,
                                    const char* prefix=0)const;
 
-   
    virtual ossimObject* createObject(const ossimString& typeName)const;
    
    /*!
@@ -49,8 +48,23 @@ public:
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
    virtual void getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const;
-  
+
 protected:
+
+   /**
+    * @brief Open method that looks at extension e.g. "tif", "jpg" to select
+    * class to open.
+    *
+    * This is to be called by standard open before just going down the list
+    * of classes the brute force hard way.
+    * 
+    * @param fileName The filename to open.
+    * 
+    * @return Pointer to image handler or null if nothing opened.
+    */
+   virtual ossimImageHandler* openFromExtension(
+      const ossimFilename& fileName) const;
+  
    ossimImageHandlerFactory(){}
    ossimImageHandlerFactory(const ossimImageHandlerFactory&){}
    void operator = (const ossimImageHandlerFactory&){}

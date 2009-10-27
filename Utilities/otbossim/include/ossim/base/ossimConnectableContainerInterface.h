@@ -8,18 +8,17 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimConnectableContainerInterface.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectableContainerInterface.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimConnectableContainerInterface_HEADER
 #define ossimConnectableContainerInterface_HEADER
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimId.h>
+#include <ossim/base/ossimConnectableObject.h>
 #include <vector>
 
-class OSSIMDLLEXPORT ossimObject;
-class OSSIMDLLEXPORT ossimConnectableObject;
-class OSSIMDLLEXPORT ossimString;
+class ossimString;
 
 class OSSIMDLLEXPORT ossimConnectableContainerInterface
 {
@@ -36,11 +35,11 @@ public:
     * Example: passing STATIC_TYPE_INFO(ossimImageRenderer) as an argument will
     *          look for all ossimImageRenderer's and return the list.
     */
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const RTTItypeid& typeInfo,
-                                                                     bool recurse=true)=0;
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const ossimString& className,
-                                                                     bool recurse=true)=0;
-
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const RTTItypeid& typeInfo,
+                                                                              bool recurse=true)=0;
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const ossimString& className,
+                                                                              bool recurse=true)=0;
+   
    /*!
     * Will find the firt object of the past in type.  Use the RTTI type info.An optional
     * recurse flag will say if there is another container then recurse it to

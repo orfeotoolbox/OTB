@@ -10,8 +10,9 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimDirectory.cpp 11079 2007-05-29 19:58:57Z gpotts $
+// $Id: ossimDirectory.cpp 14776 2009-06-25 14:34:06Z dburken $
 
+#include <cstring> /* for strncasecmp */
 #include <iostream>
 
 #if defined (_WIN32)
@@ -273,4 +274,48 @@ void ossimDirectory::findAllFilesThatMatch(std::vector<ossimFilename>& result,
          }
       }while(getNext(filename));
    }
+}
+
+// ESH 07/2008, Trac #234: OSSIM is case sensitive 
+// when using worldfile templates during ingest
+bool ossimDirectory::findCaseInsensitiveEquivalents(
+   const ossimFilename &filename, 
+   std::vector<ossimFilename>& result,
+   bool bExcludeExactMatch )
+{
+   bool bSuccess = false;
+   ossimFilename candidate;
+   bool bFoundCandidate = getFirst( candidate );
+   int compareSize = static_cast<int>( filename.length() );
+   
+   while( bFoundCandidate == true )
+   {
+      // Do a case insensitive string compare
+#if defined (_WIN32)
+      bool bFoundEquivalent = _strnicmp( filename.c_str(), candidate.c_str(), 
+                                         compareSize ) == 0 ? true : false;
+#else
+      //bool bFoundEquivalent =  strnicmp( filename.c_str(), candidate.c_str(), // 
+      //                                         compareSize ) == 0 ? true : false;
+      bool bFoundEquivalent =  strncasecmp( filename.c_str(), candidate.c_str(), 
+                                            compareSize ) == 0 ? true : false;
+#endif
+      
+      if ( bFoundEquivalent == true )
+      {
+         bool bFoundExact = ( filename == candidate.c_str() ) ? true : false;
+         bool bShouldExclude = ( bFoundExact == true && 
+                                 bExcludeExactMatch == true ) ? true : false;
+         
+         if ( bShouldExclude == false )
+         {
+            bSuccess = true;
+            result.push_back( candidate );
+         }
+      }
+      
+      bFoundCandidate = getNext( candidate );
+   }
+   
+   return bSuccess;
 }

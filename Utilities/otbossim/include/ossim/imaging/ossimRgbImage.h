@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbImage.h 11830 2007-10-10 13:34:25Z dburken $
+// $Id: ossimRgbImage.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbImage_HEADER
 #define ossimRgbImage_HEADER
 
@@ -27,7 +27,6 @@ public:
     */
    ossimRgbImage(ossimRefPtr<ossimImageData>& currentImageData);
    
-   virtual ~ossimRgbImage();
 
    /**
     * Will construct a new single band image data object.
@@ -322,6 +321,7 @@ public:
    const ossimRefPtr<ossimImageData> getImageData()const;
 
 protected:
+   virtual ~ossimRgbImage();
 
    /**
     * This object operates on the ossimImageData.  Note the

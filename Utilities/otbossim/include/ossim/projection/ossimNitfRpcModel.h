@@ -1,7 +1,9 @@
 //*****************************************************************************
 // FILE: ossimNitfRpcModel.h
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR: Oscar Kramer
 //
@@ -12,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimNitfRpcModel.h 11720 2007-09-12 14:59:30Z gpotts $
+//  $Id: ossimNitfRpcModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimNitfRpcModel_HEADER
 #define ossimNitfRpcModel_HEADER
@@ -67,8 +69,16 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
-   virtual bool parseFile(const ossimFilename& nitfFile);
+   /**
+    * @brief Method to parse an nitf file and initialize model.
+    * @param entryIndex The entry to get model for.  Note the nitf's can have
+    * multiple entries; each with a different projection.
+    * @return true on success, false on error.
+    */
+   virtual bool parseFile(const ossimFilename& nitfFile,
+                          ossim_uint32 entryIndex=0);
    
+   virtual bool parseImageHeader(const ossimNitfImageHeader* ih);
 private:
 
    /**

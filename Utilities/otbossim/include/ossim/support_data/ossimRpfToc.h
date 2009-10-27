@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfToc.h 14535 2009-05-18 13:11:55Z dburken $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -44,7 +44,8 @@ public:
     * @return output stream.
     */
    std::ostream& print(std::ostream& out,
-                       const std::string& prefix=std::string()) const;
+                       const std::string& prefix=std::string(),
+                       bool printOverviews=false) const;
    
    unsigned long getNumberOfEntries()const{return (ossim_uint32)theTocEntryList.size();}
    const ossimRpfTocEntry* getTocEntry(unsigned long index)const;

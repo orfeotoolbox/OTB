@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See LICENSE.txt file in the top level directory.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -10,29 +12,33 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 14268 2009-04-10 15:40:01Z dburken $
+//  $Id: ossimImageHandler.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <algorithm>
 
 #include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/base/ossimStringProperty.h>
-#include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimEventIds.h>
+
 #include <ossim/base/ossimContainerEvent.h>
-#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimEventIds.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimFilenameProperty.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimPolygon.h>
+#include <ossim/base/ossimStdOutProgress.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimTrace.h>
+
+#include <ossim/imaging/ossimHistogramWriter.h>
+#include <ossim/imaging/ossimImageHandlerRegistry.h>
+#include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimTiffOverviewBuilder.h>
-#include <ossim/imaging/ossimHistogramWriter.h>
-#include <ossim/imaging/ossimImageHistogramSource.h>
-#include <ossim/base/ossimStdOutProgress.h>
-#include <ossim/base/ossimPolygon.h>
+
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/base/ossimFilenameProperty.h>
-#include <ossim/imaging/ossimImageHandlerRegistry.h>
-
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 
 //***
@@ -41,23 +47,26 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 14268 2009-04-10 15:40:01Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
+// GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
+// the image geometry object. The code is ready in ossimImageGeometry for this (more or less), but
+// the ossimImageGeometry::m_decimationFactors is not being set nor referenced. Can you do this?
+// I'm a little foggy on how we want to incorporate R-level scaling into the geometry object.
    
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimImageHandler::ossimImageHandler()
-      :
-      ossimImageSource(0,
-                       0,
-                       0,
-                       true,
-                       false),// output list is not fixed
-      theImageFile(ossimFilename::NIL),
-      theOverview(0),
-      theSubImageOffset(0, 0),
-      theValidImageVertices(0),
-      theMetaData(),
-      theGeometryKwl()
+:
+ossimImageSource(0, 0, 0, true, false /* output list is not fixed */ ),
+theImageFile(ossimFilename::NIL),
+theOverview(0),
+//theSubImageOffset(0, 0),
+theValidImageVertices(0),
+theMetaData(),
+theStartingResLevel(0)
 {
    if (traceDebug())
    {
@@ -72,15 +81,17 @@ ossimImageHandler::ossimImageHandler()
    }
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimImageHandler::~ossimImageHandler()
 {
-   if (theOverview)
-   {
-      delete theOverview;
-      theOverview = 0;
-   }
+   theOverview = 0;
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 void ossimImageHandler::initialize()
 {
 }
@@ -111,6 +122,8 @@ bool ossimImageHandler::saveState(ossimKeywordlist& kwl,
            ossimKeywordNames::OVERVIEW_FILE_KW,
            theOverviewFile.c_str(),
            true);
+
+   kwl.add(prefix, "start_res_level", true);
    
    return true;
 }
@@ -172,14 +185,15 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
          << "filename = " << theImageFile << std::endl;
    }
    
-   // Check for an external geometry file.
+   // Check for an external geometry file to initialize our image geometry object:
    lookup = kwl.find(prefix, ossimKeywordNames::GEOM_FILE_KW);
    if (lookup)
    {
       ossimKeywordlist geomKwl;
       if (geomKwl.addFile(lookup) == true)
       {
-         theGeometryKwl = geomKwl;
+         theGeometry = new ossimImageGeometry;
+         theGeometry->loadState(geomKwl);
          if(traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
@@ -196,6 +210,13 @@ bool ossimImageHandler::loadState(const ossimKeywordlist& kwl,
    if (lookup)
    {
       initVertices(lookup);
+   }
+
+   // Starting resolution level.
+   lookup = kwl.find(prefix, "start_res_level");
+   if (lookup)
+   {
+      theStartingResLevel = ossimString(lookup).toUInt32();
    }
 
    if(getNumberOfInputs())
@@ -304,7 +325,12 @@ bool ossimImageHandler::initVertices(const char* file)
 
 ossim_uint32 ossimImageHandler::getNumberOfDecimationLevels() const
 {
-   return (theOverview?theOverview->getNumberOfDecimationLevels():1);
+   ossim_uint32 result = 1; // Add r0
+   if (theOverview.valid())
+   {
+      result += theOverview->getNumberOfDecimationLevels();
+   }
+   return result;
 }
 
 ossim_uint32 ossimImageHandler::getNumberOfReducedResSets() const
@@ -316,13 +342,7 @@ ossimIrect ossimImageHandler::getImageRectangle(ossim_uint32 resLevel) const
 {
    ossimIrect result;
    
-   if( !isOpen() )
-   {
-      result.makeNan();
-      return result;
-   }
-   
-   if( isValidRLevel(resLevel) )
+   if( isOpen() && isValidRLevel(resLevel) )
    {
       ossim_int32 lines   = getNumberOfLines(resLevel);
       ossim_int32 samples = getNumberOfSamples(resLevel);
@@ -335,41 +355,17 @@ ossimIrect ossimImageHandler::getImageRectangle(ossim_uint32 resLevel) const
          result = ossimIrect(0, 0, samples-1, lines-1);
       }
    }
-   
-   //---
-   // Special case to handle overviews with no R0.
-   //---
-   else if( isValidRLevel(resLevel+1) )
+   else
    {
-      ossim_int32 lines   = getNumberOfLines(resLevel+1);
-      ossim_int32 samples = getNumberOfSamples(resLevel+1);
-      if( lines && samples )
-      {
-         result = ossimIrect(0, 0, samples*2-1, lines*2-1);
-      }
-      else
-      {
-         result.makeNan();
-      }
+      result.makeNan();
    }
-   
+
    return result;
 }
 
 ossimIrect ossimImageHandler::getBoundingRect(ossim_uint32 resLevel) const
 {
-   ossimIrect result = getImageRectangle(resLevel);
-
-   if (result.isNan() == false)
-   {
-      ossimIpt offset = getSubImageOffset(resLevel);
-      if (offset.isNan() == false)
-      {
-         result = result + offset;
-      }
-   }
-
-   return result;
+   return getImageRectangle(resLevel);
 }
 
 
@@ -383,7 +379,7 @@ void ossimImageHandler::getDecimationFactor(ossim_uint32 resLevel,
    }
    else
    {
-      result.x = 1.0 / pow((double)2, (double)resLevel);
+      result.x = 1.0 / ((ossim_float64)(1<<resLevel));
       result.y = result.x;
    }
 }
@@ -405,8 +401,8 @@ bool ossimImageHandler::buildHistogram(int numberOfRLevels)
       ossimFilename file =
          getFilenameWithThisExtension(ossimString(".his"));
       
-      ossimImageHistogramSource* histoSource = new ossimImageHistogramSource;
-      ossimHistogramWriter* writer = new ossimHistogramWriter;
+      ossimRefPtr<ossimImageHistogramSource> histoSource = new ossimImageHistogramSource;
+      ossimRefPtr<ossimHistogramWriter> writer = new ossimHistogramWriter;
       
       if(numberOfRLevels)
       {
@@ -418,13 +414,14 @@ bool ossimImageHandler::buildHistogram(int numberOfRLevels)
       }
       histoSource->connectMyInputTo(0, this);
       histoSource->enableSource();
-      writer->connectMyInputTo(0, histoSource);
+      writer->connectMyInputTo(0, histoSource.get());
       writer->setFilename(file);
       writer->addListener(&theStdOutProgress);
       writer->execute();
-      
-      delete histoSource;
-      delete writer;
+      histoSource->disconnect();
+      writer->disconnect();
+      histoSource = 0;
+      writer = 0;
    }
    else
    {
@@ -508,7 +505,7 @@ bool ossimImageHandler::buildOverview(const ossimFilename& filename,
 
    theOverviewFile = filename;
    ossimTiffOverviewBuilder tiffBuilder;
-   if ( tiffBuilder.setInputSource(this, false) == false )
+   if ( tiffBuilder.setInputSource(this) == false )
    {
       return false;
    }
@@ -551,135 +548,166 @@ bool ossimImageHandler::buildOverview(const ossimFilename& filename,
    return true;
 }
 
-//*******************************************************************
-// Public method:
-//*******************************************************************
-bool ossimImageHandler::getImageGeometry(ossimKeywordlist& kwl,
-                                         const char* prefix)
+//*****************************************************************************
+//! Returns the image geometry object associated with this tile source or
+//! NULL if non defined.
+//! The geometry contains full-to-local image transform as well as projection
+//! (image-to-world).
+//*****************************************************************************
+ossimImageGeometry* ossimImageHandler::getImageGeometry()
 {
-   if (traceDebug())
+   if (theGeometry.valid())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimImageHandler::getImageGeometry DEBUG: entered..."
-         << std::endl;
+      if(getNumberOfDecimationLevels() !=
+         theGeometry->getNumberOfDecimations())
+      {
+         std::vector<ossimDpt> decimationList;
+         getDecimationFactors(decimationList);
+         theGeometry->setDiscreteDecimation(decimationList);
+      }
+      return theGeometry.get();
    }
    
-   if (theGeometryKwl.getSize())
+   //---
+   // Check factory for external geom:
+   //---
+   getExternalImageGeometry();
+   if (theGeometry.valid())
    {
-      kwl.add(prefix, theGeometryKwl);
-      //kwl = theGeometryKwl;
-      return true;
+      return theGeometry.get();  // We should return here.
+   }
+   // ok,  now let's start with an empty geometry and then call the extension plugins.
+   //
+   theGeometry = new ossimImageGeometry();
+   
+   //---
+   // And finally allow factories to extend the internal geometry.
+   // This allows plugins for tagged formats with tags not know in the base
+   // to extend the internal geometry.
+   //
+   // Plugins can do handler->getImageGeometry() then modify/extend.
+   //---
+   if(!ossimImageGeometryRegistry::instance()->extendGeometry( this ))
+   {
+      // Check for internal, for geotiff, nitf and so on as last resort for getting some kind of geometry
+      // loaded
+      //
+      getInternalImageGeometry();
    }
    
-   bool result = false;
-   ossimRefPtr<ossimProjection> proj = 0;
-   ossimFilename filename = getFilenameWithThisExtension(ossimString(".geom"));
+   return theGeometry.get();
+}
+
+ossimImageGeometry* ossimImageHandler::getExternalImageGeometry()
+{
+   // If already defined, return it:
+   if (theGeometry.valid())
+   {
+      return theGeometry.get();
+   }
+   
+   //---
+   // No geometry object has been set up yet. Check for external geometry file.
+   //---
+   // Try "foo.geom" if image is "foo.tif":
+   //
+   ossimFilename filename = getFilenameWithThisExtension(ossimString(".geom"), false);
+   
    if(!filename.exists())
    {
-      // Try tacking on the entry like "foo_e0.hdf".
+      // Try "foo_e0.tif" if image is "foo.tif" where "e0" is entry index.
       filename = getFilenameWithThisExtension(ossimString(".geom"), true);
    }
+   
+   ossimRefPtr<ossimImageGeometry> geom = 0;
+   
    if(filename.exists())
    {
-      if(kwl.addFile(filename))
+      // Open the geom file as a KWL and initialize our geometry object:
+      ossimKeywordlist geomKwl(filename);
+      
+      ossimString prefix = "";
+      
+      // Try loadState with no prefix.
+      const char* lookup = geomKwl.find(prefix.c_str(),
+                                        ossimKeywordNames::TYPE_KW);
+      if (lookup)
       {
-         ossimString tempPrefix =
-            "image"+ossimString::toString(getCurrentEntry())+".";
-         kwl.stripPrefixFromAll(tempPrefix);
+         ossimString type = lookup;
          
-         if(kwl.find(ossimKeywordNames::TYPE_KW))
+         if(type == "ossimImageGeometry")
          {
-            ossimKeywordlist kwlTemp(kwl);
-            
-            kwlTemp.add(ossimKeywordNames::GEOM_FILE_KW,
-                        filename.c_str(),
-                        true);
-
-            proj = ossimProjectionFactoryRegistry::instance()->
-               createProjection(kwlTemp);
-            if(proj.valid())
+            // Try it with no prefix.
+            geom = new ossimImageGeometry;
+            if(!geom->loadState(geomKwl, prefix.c_str()))
             {
-               result = true;
-               kwl.add(prefix, kwlTemp);//kwl = kwlTemp;
+               geom = 0;
+            }
+         }
+         
+         if (!geom)
+         {
+            // Try with "image0 type prefix.
+            prefix = "image"+ossimString::toString(getCurrentEntry()) + ".";
+            
+            lookup = geomKwl.find(prefix.c_str(), ossimKeywordNames::TYPE_KW);
+            if(lookup)
+            {
+               type = lookup;
+               if(type == "ossimImageGeometry")
+               {
+                  geom = new ossimImageGeometry;
+                  if(!geom->loadState(geomKwl, prefix.c_str()))
+                  {
+                     geom = 0;
+                  }
+               }
             }
          }
       }
    }
-
    
-   if(!result)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimImageHandler::getImageGeometry DEBUG:"
-            << "\nCalling createProjection"
-            << "\ngetFilename():      " << getFilename()
-            << "\ngetCurrentEntry():  " << getCurrentEntry()
-            << std::endl;
-      }
-      
-      proj = ossimProjectionFactoryRegistry::instance()->
-         createProjection(getFilename(),
-                          getCurrentEntry());
-      if(proj.valid())
-      {
-         result = proj->saveState(kwl, prefix);
-         
-         result = true;
-      }
-   }
-   
-   if (result == true)
-   {
-      theGeometryKwl.clear();
-      // Capture the geometry for next time.
-//      theGeometryKwl = kwl;
-      theGeometryKwl.add(kwl, prefix, true);
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimImageHandler::getImageGeometry DEBUG:"
-         << "boolean return:  " << result
-         << std::endl;
-   }
-   
-   return result;
+   theGeometry = geom.get();
+   return theGeometry.get();
 }
 
-void ossimImageHandler::setImageGeometry(const ossimKeywordlist& kwl)
+ossimImageGeometry* ossimImageHandler::getInternalImageGeometry()
 {
-   theGeometryKwl = kwl;
+   // Default, derived classes should override.
+   if ( !theGeometry )
+   {
+      // allocate an empty geometry if nothing present
+      theGeometry = new ossimImageGeometry();
+   }
+   
+   return theGeometry.get();
+}
+
+void ossimImageHandler::setImageGeometry( ossimImageGeometry* geom)
+{
+   theGeometry = geom;
 }
 
 void ossimImageHandler::saveImageGeometry() const
 {
-   ossimFilename geometryFile =
-      getFilenameWithThisExtension(ossimString(".geom"));
+   ossimFilename geometryFile = getFilenameWithThisExtension(ossimString(".geom"));
    saveImageGeometry(geometryFile);
 }
 
-void ossimImageHandler::saveImageGeometry(
-   const ossimFilename& geometry_file) const
+void ossimImageHandler::saveImageGeometry(const ossimFilename& geometry_file) const
 {
-   theGeometryKwl.write(geometry_file.c_str());
+   if (theGeometry.valid())
+   {
+      ossimKeywordlist kwl;
+      theGeometry->saveState(kwl);
+      kwl.write(geometry_file.chars());
+   }
 }
 
 void ossimImageHandler::closeOverview()
 {
-   if(theOverview)
-   {
-      delete theOverview;
-      theOverview = 0;
-   }
+   theOverview = 0;
 }
-
-// const ossimFilename& ossimImageHandler::getOverviewFile()const
-// {
-//    return theOverviewFile;
-// }
 
 bool ossimImageHandler::hasOverviews() const
 {
@@ -688,28 +716,55 @@ bool ossimImageHandler::hasOverviews() const
 
 bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
 {
+   bool result = false;
+   
    closeOverview();
-   
-   theOverviewFile = overview_file;
-   // make sure we don't open ourselves.
-   if(theImageFile == theOverviewFile) return false;
-   
-   theOverview = new ossimTiffTileSource;
 
-   if ( theOverview->open(theOverviewFile) )
+   if (overview_file != theImageFile) // Make sure we don't open ourselves.
    {
+      result = true;
+      
       //---
-      // This is not really a container event; however, using for now.
+      // Get the number of level before the call to opening the overview so
+      // the overview can be told what it's starting res level is.
       //---
-      ossimContainerEvent event(this, theOverview, OSSIM_EVENT_ADD_OBJECT_ID);
-      fireEvent(event);
+      ossim_uint32 overviewStartingResLevel =
+         getNumberOfDecimationLevels();
+      
+      // Try to open:
+      theOverview = ossimImageHandlerRegistry::instance()->open(overview_file);
+      
+      if (theOverview.valid())
+      {
+         // Set the starting res level of the overview.
+         theOverview->setStartingResLevel(overviewStartingResLevel);
+         
+         // Capture the file name.
+         theOverviewFile = overview_file;
 
-      return true;
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "overview starting res level: " << overviewStartingResLevel
+               << "\noverview levels: "
+               << theOverview->getNumberOfDecimationLevels()
+               << "\nlevels: " << getNumberOfDecimationLevels()
+               << endl;
+         }
+         
+         //---
+         // This is not really a container event; however, using for now.
+         //---
+         ossimContainerEvent event(this,
+                                   theOverview.get(),
+                                   OSSIM_EVENT_ADD_OBJECT_ID);
+         fireEvent(event);
+         
+
+      }
    }
-
-   delete theOverview;
-   theOverview = 0;
-   return false;
+   
+   return result;
 }
 
 bool ossimImageHandler::openOverview()
@@ -871,12 +926,27 @@ bool ossimImageHandler::open(const ossimFilename& imageFile,
 
 bool ossimImageHandler::isValidRLevel(ossim_uint32 resLevel) const
 {
-   if (resLevel < getNumberOfDecimationLevels())
+   bool result = false;
+   
+   const ossim_uint32 LEVELS = getNumberOfDecimationLevels();
+   
+   if ( !theStartingResLevel) // Not an overview.
    {
-      return true;
+      result = (resLevel < LEVELS);
    }
-
-   return false;
+   else  // Used as overview.
+   {
+      if (resLevel >= theStartingResLevel)
+      {
+         //---
+         // Adjust the res level to be zero based for this overview before
+         // checking.
+         //---
+         result = ( (resLevel - theStartingResLevel) < LEVELS);
+      }
+   }
+   
+   return result;
 }
 
 void ossimImageHandler::getValidImageVertices(vector<ossimIpt>& validVertices,
@@ -913,12 +983,8 @@ void ossimImageHandler::getValidImageVertices(vector<ossimIpt>& validVertices,
 
 void ossimImageHandler::close()
 {
-   if (theOverview)
-   {
-      delete theOverview;
-      theOverview = 0;
-   }
-
+   theOverview = 0;
+   theGeometry = 0;
    theValidImageVertices.clear();
 }
 
@@ -1032,9 +1098,9 @@ ossim_uint32 ossimImageHandler::getNumberOfEntries()const
 
 void ossimImageHandler::completeOpen()
 {
-  loadMetaData();
-  openOverview();
-  openValidVertices();
+   loadMetaData();
+   openOverview();
+   openValidVertices();
 }
 
 bool ossimImageHandler::canConnectMyInputTo(ossim_int32 inputIndex,
@@ -1046,33 +1112,6 @@ bool ossimImageHandler::canConnectMyInputTo(ossim_int32 inputIndex,
 bool ossimImageHandler::hasMetaData()const
 {
    return theMetaData.isValid();
-}
-
-ossimIpt ossimImageHandler::getSubImageOffset(ossim_uint32 resLevel) const
-{
-   if (resLevel == 0)
-   {
-      return theSubImageOffset;
-   }
-
-   ossimIpt offset;
-   offset.makeNan();
-   if (isValidRLevel(resLevel))
-   {
-      ossimDpt decimation;
-      getDecimationFactor(resLevel, decimation);
-      if(!decimation.hasNans()) // Should never have nans...
-      {
-         offset.x = ossim::round<int>(theSubImageOffset.x*decimation.x);
-         offset.y = ossim::round<int>(theSubImageOffset.y*decimation.y);
-      }
-   }
-   return offset;
-}
-
-void ossimImageHandler::setSubImageOffset(const ossimIpt& p)
-{
-   theSubImageOffset = p;
 }
 
 void ossimImageHandler::setFilename(const ossimFilename& filename)
@@ -1216,6 +1255,23 @@ ossimFilename ossimImageHandler::getFilenameWithThisExtension(
    return f;
 }
 
+bool ossimImageHandler::getOverviewTile(ossim_uint32 resLevel,
+                                        ossimImageData* result)
+{
+   bool status = false;
+   
+   if (theOverview.valid())
+   {
+      if (theOverview->isValidRLevel(resLevel) && result &&
+          (result->getNumberOfBands() == getNumberOfOutputBands()) )
+      {
+         status = theOverview->getTile(result, resLevel);
+      }
+   }
+   
+   return status;
+}
+
 ossimRefPtr<ossimNBandLutDataObject> ossimImageHandler::getLut()const
 {
    return theLut;
@@ -1257,3 +1313,15 @@ ossimFilename ossimImageHandler::createDefaultValidVerticesFilename() const
    
    return result;
 }
+
+ossim_uint32 ossimImageHandler::getStartingResLevel() const
+{
+   return theStartingResLevel;
+}
+
+void ossimImageHandler::setStartingResLevel(ossim_uint32 level)
+{
+   theStartingResLevel = level;
+}
+
+   

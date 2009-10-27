@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandClipFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandClipFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBandClipFilter_HEADER
 #define ossimBandClipFilter_HEADER
 #include <vector>
@@ -43,7 +43,6 @@ public:
                         double maxPix,
                         ossimBandClipType clipType=ossimBandClipType_NONE);
 
-   virtual ~ossimBandClipFilter();
 
    void setClipType(ossimBandClipType clipType);
 
@@ -73,6 +72,7 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix = NULL)const;
 protected:
+   virtual ~ossimBandClipFilter();
 
    void runClip();
    void runClamp();

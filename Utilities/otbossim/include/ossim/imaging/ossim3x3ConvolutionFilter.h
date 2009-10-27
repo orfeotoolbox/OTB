@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim3x3ConvolutionFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossim3x3ConvolutionFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossim3x3ConvolutionFilter_HEADER
 #define ossim3x3ConvolutionFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -18,7 +18,6 @@ class ossim3x3ConvolutionFilter : public ossimImageSourceFilter
 {
 public:
    ossim3x3ConvolutionFilter(ossimObject* owner=NULL);
-   virtual ~ossim3x3ConvolutionFilter();
 
    virtual ossimString getShortName()const{return ossimString("3x3 Convolution");}
    virtual ossimString getLongName()const{return ossimString("Convolves the input image with a 3x3 kernel");}
@@ -48,6 +47,7 @@ public:
                           const char* prefix = 0)const;
    
 protected:
+   virtual ~ossim3x3ConvolutionFilter();
 
    /**
     * Allocates theTile.

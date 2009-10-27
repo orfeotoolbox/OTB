@@ -4,7 +4,7 @@
 // 
 // Author:  Garrett Potts
 //*******************************************************************
-//  $Id: ossimResampler.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimResampler.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimResampler_HEADER
 #define ossimResampler_HEADER
@@ -40,8 +40,6 @@ public:
       ossimResampler_BICUBIC          = 3
    };
    ossimResampler();
-   
-   virtual ~ossimResampler();
 
    
    /*!
@@ -143,6 +141,7 @@ public:
          return false;
       }
 protected:
+   virtual ~ossimResampler();
 
    ossimDpt                   theOutputToInputRatio;
    ossimResLevelResamplerType theResamplerType;  

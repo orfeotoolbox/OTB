@@ -9,7 +9,7 @@
 // Helper class for using NEWMAT::Matrix's.
 //
 //*******************************************************************
-//  $Id: ossimMatrix3x3.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMatrix3x3.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimMatrix3x3_HEADER
 #define ossimMatrix3x3_HEADER
@@ -20,7 +20,7 @@
 #include <ossim/matrix/newmatio.h>
 #include <ossim/base/ossimConstants.h>
 
-class OSSIMDLLEXPORT ossimColumnVector3d;
+class ossimColumnVector3d;
 
 class OSSIMDLLEXPORT ossimMatrix3x3
 {

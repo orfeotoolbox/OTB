@@ -12,7 +12,7 @@
 // Class declaration for ossimDtedFactory.
 // This is the base class interface for elevation cell factories.
 //*****************************************************************************
-// $Id: ossimDtedFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDtedFactory.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimDtedFactory_HEADER
 #define ossimDtedFactory_HEADER
 
@@ -26,11 +26,11 @@ public:
    ossimDtedFactory();
    ossimDtedFactory(const ossimFilename& dir);
       
-   virtual ~ossimDtedFactory();
 
    virtual ossimElevSource* getNewElevSource(const ossimGpt& gpt) const;
    virtual void createIndex();
 protected:
+   virtual ~ossimDtedFactory();
 
 TYPE_DATA
 };

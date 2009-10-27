@@ -1,7 +1,9 @@
 //*****************************************************************************
 // FILE: ossimSensorModel.cc
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR: Oscar Kramer
 //
@@ -25,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 13771 2008-10-22 19:33:54Z gpotts $
+//  $Id: ossimSensorModel.cpp 14538 2009-05-18 13:31:58Z dburken $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -439,7 +441,6 @@ std::ostream& ossimSensorModel::print(std::ostream& out) const
        << "\n        theRefGndPt: " << theRefGndPt
        << "\n        theRefImgPt: " << theRefImgPt
        << "\n theBoundGndPolygon: \n" << theBoundGndPolygon
-       << "\n theBoundGndPolygon: " << theBoundGndPolygon
        << "\n   theImageClipRect: " << theImageClipRect
        << "\n theNominalPosError: " << theNominalPosError
        << endl;

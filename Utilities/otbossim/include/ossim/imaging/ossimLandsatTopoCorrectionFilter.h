@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimLandsatTopoCorrectionFilter.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimLandsatTopoCorrectionFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimLandsatTopoCorrectionFilter_HEADER
 #define ossimLandsatTopoCorrectionFilter_HEADER
 #include <ossim/base/ossimFilename.h>
@@ -15,7 +15,6 @@ class OSSIM_DLL ossimLandsatTopoCorrectionFilter : public ossimTopographicCorrec
 {
 public:
    ossimLandsatTopoCorrectionFilter();
-   virtual ~ossimLandsatTopoCorrectionFilter();
    ossimLandsatTopoCorrectionFilter(ossimImageSource* colorSource,
                                     ossimImageSource* elevSource,
                                     const ossimFilename& landsatFileName=ossimFilename(""));
@@ -32,6 +31,7 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
 protected:
+   virtual ~ossimLandsatTopoCorrectionFilter();
    ossimFilename theLandsatHeader;
    ossimFilename findLandsatHeader();
 //   virtual void computeC();

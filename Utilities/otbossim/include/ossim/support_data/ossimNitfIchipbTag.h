@@ -11,7 +11,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.h 10177 2007-01-03 19:22:09Z gpotts $
+// $Id: ossimNitfIchipbTag.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNitfIchipbTag_HEADER
 #define ossimNitfIchipbTag_HEADER
 
@@ -20,7 +20,7 @@
 
 class ossimDpt;
 class ossimDrect;
-
+class ossim2dTo2dTransform;
 class OSSIM_DLL ossimNitfIchipbTag : public ossimNitfRegisteredTag
 {
 public:
@@ -93,13 +93,13 @@ public:
    virtual void clearFields();
    
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
     */
-   virtual std::ostream& print(std::ostream& out) const;
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
 
    /**
     * @return The Non-linear transformation flag.
@@ -244,17 +244,8 @@ public:
     */
    void getFullImageRect(ossimDrect& rect) const;
 
-   /**
-    * Initializes offset with the sub image offset.
-    *
-    * @param pt The point to initialize with the offset.
-    *
-    * @note Rectangle is shifted by -0.5 since per spec (0,0) is the
-    * considered the upper left corner of the upper left pixel and we use a
-    * point method where (0,0) refers to the center of the pixel.
-    */
-   void getSubImageOffset(ossimDpt& pt) const;
-
+   ossim2dTo2dTransform* newTransform()const;
+   
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;

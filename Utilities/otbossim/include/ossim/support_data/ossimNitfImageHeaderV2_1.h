@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.h 15611 2009-10-08 18:50:33Z dburken $
 
 #ifndef ossimNitfImageHeaderV2_1_HEADER
 #define ossimNitfImageHeaderV2_1_HEADER
@@ -59,7 +59,6 @@ public:
    virtual ossimString getCategory()const;
    virtual ossimString getRepresentation()const;
    virtual ossimString getCoordinateSystem()const;
-   virtual ossimString getGeographicLocation()const;
    virtual ossimString getPixelValueType()const;
 
 
@@ -79,26 +78,6 @@ public:
    virtual void setNumberOfRows(ossim_uint32 rows);
    virtual void setNumberOfCols(ossim_uint32 cols);
 
-   virtual void setGeographicLocationDms(const ossimDpt& ul,
-                                         const ossimDpt& ur,
-                                         const ossimDpt& lr,
-                                         const ossimDpt& ll);
-   
-   virtual void setGeographicLocationDecimalDegrees(const ossimDpt& ul,
-                                                    const ossimDpt& ur,
-                                                    const ossimDpt& lr,
-                                                    const ossimDpt& ll);
-   virtual void setUtmNorth(ossim_uint32 zone,
-                            const ossimDpt& ul,
-                            const ossimDpt& ur,
-                            const ossimDpt& lr,
-                            const ossimDpt& ll);
-   virtual void setUtmSouth(ossim_uint32 zone,
-                            const ossimDpt& ul,
-                            const ossimDpt& ur,
-                            const ossimDpt& lr,
-                            const ossimDpt& ll);
-                            
    virtual void setSecurityClassificationSystem(const ossimString& value);
    virtual void setCodewords(const ossimString& value);
    virtual void setControlAndHandling(const ossimString& value);

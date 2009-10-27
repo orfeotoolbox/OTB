@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 //         Orginally written by Jamie Moyers (jmoyers@geeks.com)
@@ -8,12 +10,15 @@
 // Description: This class parses a DEM header.
 //
 //********************************************************************
-// $Id: ossimDemHeader.cpp 13694 2008-10-08 20:16:02Z dburken $
+// $Id: ossimDemHeader.cpp 15327 2009-09-01 20:31:16Z dburken $
 
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <ossim/support_data/ossimDemHeader.h>
 #include <ossim/support_data/ossimDemUtil.h>
+
+#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimConstants.h>
@@ -57,7 +62,7 @@ static const char* VERTICAL_DATUM[]
 static const int MAX_VERTICAL_DATUM_INDEX = 2;
 
 static const char* HORIZONTAL_DATUM[]
-= { "North Amercian Datum 1927 (NAD 27)",
+= { "North American Datum 1927 (NAD 27)",
     "World Geoditic System 1972 (WGS 72)",
     "WGS 84",
     "NAD 83",
@@ -365,198 +370,266 @@ operator<<(std::ostream& s, const ossimDemHeader& header)
    return header.print(s);
 }
 
-std::ostream& ossimDemHeader::print(std::ostream& s) const
+bool ossimDemHeader::open(const ossimFilename& file)
 {
-   // Note:  This is only a partial print for now...
-   
-   s << setiosflags(std::ios::fixed) << std::setprecision(10)
-     << "USGS DEM Header Info:"
-     << "\nQuadrangle name:                " << getQuadName().c_str()
-     << "\nProcess info:                   " << getProcessInfo().c_str()
-     << "\nSE Geo Corner X(SDDMMSS.SSSS):  " << getSEGeoCornerX()
-     << "\nSE Geo Corner Y(SDDMMSS.SSSS):  " << getSEGeoCornerY()
-     << "\nProcess code:                   ";
+   bool result = ossimDemUtil::isUsgsDem(file);
+   std::ifstream is(file.c_str(), std::ios_base::in | std::ios_base::binary);
+   if ( is.good() )
+   {
+      open(is);
+      is.close();
+   }
+   else
+   {
+      result = false;
+   }
+   return result;
+}
 
+std::istream& ossimDemHeader::open(std::istream& is)
+{
+   if ( is.good() )
+   {
+      char* bufstr = new char[1024];
+      char* temp   = new char[1024];
+      ossim_int32 i;
+      
+      ossimDemUtil::getRecord(is, bufstr);
+      
+      strncpy(temp, bufstr, 40);
+      temp[40] = '\0';
+      _quadName = temp;
+      
+      strncpy(temp,bufstr+40,40);
+      temp[40] = '\0';
+      _processInfo = temp;
+      
+      ossimDemUtil::getDouble(bufstr, 109, 13, _seGeoCornerX);
+      ossimDemUtil::getDouble(bufstr, 122, 13, _seGeoCornerY);
+      _processCode = ossimDemUtil::getLong(bufstr, 135, 1);
+      
+      strncpy(temp,bufstr+137,3);
+      temp[3] = '\0';
+      _sectionIndicator = temp;
+      
+      strncpy(temp,bufstr+140,4);
+      temp[4] = '\0';
+      _mapCenterCode = temp;
+      
+      _levelCode = ossimDemUtil::getLong(bufstr, 144, 6);
+      _elevPattern = ossimDemUtil::getLong(bufstr, 150, 6);
+      _groundRefSysCode = ossimDemUtil::getLong(bufstr, 156, 6);
+      _groundRefSysZone = ossimDemUtil::getLong(bufstr, 162, 6);
+      _groundRefSysUnits = ossimDemUtil::getLong(bufstr, 528, 6);
+      _elevUnits = ossimDemUtil::getLong(bufstr, 534, 6);
+      _numPolySides = ossimDemUtil::getLong(bufstr, 540, 6);
+      
+      for (i = 0; i < 4; i++)
+      {
+         double x,y;
+         ossim_int32 pos = 546 + (i * 48);
+         ossimDemUtil::getDouble(bufstr, pos, 24, x);
+         ossimDemUtil::getDouble(bufstr, pos + 24, 24, y);
+      _demCorners.push_back(ossimDemPoint(x,y));
+      }
+      
+      ossimDemUtil::getDouble(bufstr, 738, 24, _minElevation);
+      ossimDemUtil::getDouble(bufstr, 762, 24, _maxElevation);
+      ossimDemUtil::getDouble(bufstr, 786, 24, _counterclockAngle );
+      _elevAccuracyCode = ossimDemUtil::getLong(bufstr, 810, 6);
+      ossimDemUtil::getDouble(bufstr, 816, 12, _spatialResX);
+      ossimDemUtil::getDouble(bufstr, 828, 12, _spatialResY);
+      ossimDemUtil::getDouble(bufstr, 840, 12, _spatialResZ);
+      _profileRows = ossimDemUtil::getLong(bufstr, 852, 6);
+      _profileColumns = ossimDemUtil::getLong(bufstr, 858, 6);
+      _largeContInt = ossimDemUtil::getLong(bufstr, 864, 5);
+      _maxSourceUnits = ossimDemUtil::getLong(bufstr, 869, 1);
+      _smallContInt = ossimDemUtil::getLong(bufstr, 870, 5);
+      _minSourceUnits = ossimDemUtil::getLong(bufstr, 875, 1);
+      _sourceDate = ossimDemUtil::getLong(bufstr, 876, 4);
+      _inspRevDate = ossimDemUtil::getLong(bufstr, 880, 4);
+      
+      strncpy(temp, bufstr+884,1);
+      temp[1]='\0';
+      _inspFlag = temp;
+      
+      _valFlag = ossimDemUtil::getLong(bufstr, 885, 1);
+      _suspectVoidFlg = ossimDemUtil::getLong(bufstr, 886, 2);
+      _vertDatum = ossimDemUtil::getLong(bufstr, 888, 2);
+      _horizDatum = ossimDemUtil::getLong(bufstr, 890, 2);
+      if (_horizDatum == 0)
+         _horizDatum = 1;   // Default to NAD27
+      
+      _dataEdition = ossimDemUtil::getLong(bufstr, 892, 4);
+      _perctVoid = ossimDemUtil::getLong(bufstr, 896, 4);
+      _westEdgeFlag = ossimDemUtil::getLong(bufstr, 900, 2);
+      _northEdgeFlag = ossimDemUtil::getLong(bufstr, 902, 2);
+      _eastEdgeFlag = ossimDemUtil::getLong(bufstr, 904, 2);
+      _southEdgeFlag = ossimDemUtil::getLong(bufstr, 906, 2);
+      ossimDemUtil::getDouble(bufstr, 908, 7, _vertDatumShift);
+
+      delete [] bufstr;
+      delete [] temp;
+      bufstr = 0;
+      temp = 0;
+   }
+   return is;
+}
+
+
+std::ostream& ossimDemHeader::print(std::ostream& out) const
+{
+   const int W = 24; // format width
+   const int CW = W-8; // format corner width
+   
+   // Capture the original flags then set float output to full precision.
+   std::ios_base::fmtflags f = out.flags();
+
+   // Note:  This is only a partial print for now...
+   std::string prefix = "usgs_dem.";
+   
+   out << std::setiosflags(std::ios_base::fixed|std::ios_base::left)
+       << std::setprecision(10)
+      
+       << prefix << std::setw(W)
+       << "quadrangle_name:" << getQuadName().c_str() << "\n"
+       << prefix << std::setw(W)
+       << "process_info:" << getProcessInfo().c_str() << "\n"
+       << prefix << std::setw(W)
+       << "se_geo_corner_x:" << getSEGeoCornerX() << "\n"
+       << prefix << std::setw(W)
+       << "se_geo_corner_y:" << getSEGeoCornerY() << "\n"
+       << prefix << std::setw(W)
+       << "process_code:";
+   
    ossim_int32 tmpl = getProcessCode() - 1;
    if ( tmpl >= 0 && tmpl <= MAX_PROCESS_CODE_INDEX)
    {
-      s << PROCESS_CODE[tmpl];
+      out << PROCESS_CODE[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown" << "\n";
    }
 
-   s << "\nSection Indicator:       " << getSectionIndicator().c_str()
-     << "\nMapping Center Code:     " << getMappingCenterCode().c_str()
-     << "\nLevel Code:              " << getLevelCode()
-     << "\nElev Pattern:            " << getElevPattern()
-     << "\nGround Ref Sys:          ";
-
+   out << prefix << std::setw(W)
+       << "section_indicator: " << getSectionIndicator().c_str() << "\n"
+       << prefix << std::setw(W)
+       << "mapping_center_code: " << getMappingCenterCode().c_str() << "\n"
+       << prefix << std::setw(W)
+       << "level_code: " << getLevelCode() << "\n"
+       << prefix << std::setw(W)
+       << "elev_pattern: " << getElevPattern() << "\n"
+       << prefix << std::setw(W) << "ground_ref_sys: ";
+   
    tmpl = getGroundRefSysCode();
    if ( tmpl >= 0 && tmpl <= MAX_GROUND_REF_SYSTEM_INDEX)
    {
-      s << GROUND_REF_SYSTEM[tmpl];
+      out << GROUND_REF_SYSTEM[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown\n";
    }
-
-   s << "\nGround Ref Sys Zone:     " << getGroundRefSysZone()
-
-     << "\nGround Ref Sys Units:    ";
+   
+   out << prefix << std::setw(W)
+       << "ground_ref_sys_zone: " << getGroundRefSysZone() << "\n"
+       << prefix << std::setw(W)
+       << "ground_ref_sys_units:";
    tmpl = getGroundRefSysUnits();
    if ( tmpl >= 0 && tmpl <= MAX_GROUND_REF_SYSTEM_UNITS_INDEX)
    {
-      s << GROUND_REF_SYSTEM_UNITS[tmpl];
+      out << GROUND_REF_SYSTEM_UNITS[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown\n";
    }
          
-   s << "\nElevation Units:         ";
+   out << prefix << std::setw(W)
+       << "elevation_units: ";
    tmpl = getElevationUnits();
    if ( tmpl >= 0 && tmpl <= MAX_GROUND_REF_SYSTEM_UNITS_INDEX)
    {
-      s << GROUND_REF_SYSTEM_UNITS[tmpl];
+      out << GROUND_REF_SYSTEM_UNITS[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown\n";
    }
 
-   s << "\nNumber Poly Sides:       " << getNumPolySides()
-     << "\nCounterclock Angle:      " << getCounterclockAngle()
-     << "\nElev Accuracy Code:      " << getElevAccuracyCode()
-     << "\nMinimum Elevation:       " << getMinimumElev()
-     << "\nMaximum Elevation:       " << getMaximumElev()
-     << "\nSpatial Res X:           " << getSpatialResX()
-     << "\nSpatial Res Y:           " << getSpatialResY()
-     << "\nSpatial Res Z:           " << getSpatialResZ()
-     << "\nProfile Rows:            " << getProfileRows()
-     << "\nProfile Columns:         " << getProfileColumns()
-     << "\nVertical datum:          ";
-
+   out << prefix << std::setw(W)
+       << "number_poly_sides: " << getNumPolySides() << "\n"
+       << prefix << std::setw(W)
+       << "counterclock_angle: " << getCounterclockAngle()<< "\n"
+       << prefix << std::setw(W)
+       << "elev_accuracy_code: " << getElevAccuracyCode()<< "\n"
+       << prefix << std::setw(W)
+       << "minimum_elevation: " << getMinimumElev() << "\n"
+       << prefix << std::setw(W)
+       << "maximum_elevation: " << getMaximumElev() << "\n"
+       << prefix << std::setw(W)
+       << "spatial_res_x: " << getSpatialResX() << "\n"
+       << prefix << std::setw(W)
+       << "spatial_res_y: " << getSpatialResY() << "\n"
+       << prefix << std::setw(W)
+       << "spatial_res_z:" << getSpatialResZ() << "\n"
+       << prefix << std::setw(W)
+       << "profile_rows: " << getProfileRows() << "\n"
+       << prefix << std::setw(W)
+       << "profile_columns:" << getProfileColumns() << "\n"
+       << prefix << std::setw(W)
+       << "source_date:" << getSourceDate() << "\n"
+       << prefix << std::setw(W)
+       << "revision_date:" << getInspRevDate() << "\n"
+       << prefix  << std::setw(W)
+       << "vertical_datum:";
+   
    tmpl = getVertDatum() - 1;
    if ( tmpl >= 0 && tmpl <= MAX_VERTICAL_DATUM_INDEX)
    {
-      s << VERTICAL_DATUM[tmpl];
+      out << VERTICAL_DATUM[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown\n";
    }
 
-   s << "\nVertical datum shift:    " << getVertDatumShift()
-     << "\nHorizontal datum:        ";
+   out << prefix << std::setw(W)
+       << "vertical_datum_shift:" << getVertDatumShift() << "\n"
+       << prefix << std::setw(W)
+       << "horizontal_datum:";
    tmpl = getHorizDatum() - 1;
    if ( tmpl >= 0 && tmpl <= MAX_HORIZONTAL_DATUM_INDEX)
    {
-      s << HORIZONTAL_DATUM[tmpl];
+      out << HORIZONTAL_DATUM[tmpl] << "\n";
    }
    else
    {
-      s << "Unknown";
+      out << "unknown\n";
    }
 
    const ossimDemPointVector CORNERS = getDEMCorners();
    for (unsigned int i=0; i < CORNERS.size(); ++i)
    {
-      s << "Corner[" << i << "].x:  " << CORNERS[i].getX()
-        << "\nCorner[" << i << "].y:  " << CORNERS[i].getY()
-        << std::endl;
-         
+      out << prefix << "corner[" << i
+          << std::setw(CW)<< "].x:  " << CORNERS[i].getX() << "\n"
+          << prefix << "corner[" << i
+          << std::setw(CW)<< "].y:  " << CORNERS[i].getY() << "\n"
+          << std::endl;
    }
 
-   s << std::endl;
-   
-   return s;
+   out << std::endl;
+
+   // Reset flags.
+   out.setf(f);   
+
+   return out;
 }
 
-std::istream&
-operator>>(std::istream& s, ossimDemHeader& header)
+std::istream& operator>>(std::istream& s, ossimDemHeader& header)
 {
-   char bufstr[1024];
-   char temp[1024];
-   ossim_int32 i;
-
-   ossimDemUtil::getRecord(s,bufstr);
-
-   strncpy(temp, bufstr, 40);
-   temp[40] = '\0';
-   header._quadName = temp;
-
-   strncpy(temp,bufstr+40,40);
-   temp[40] = '\0';
-   header._processInfo = temp;
-   
-   ossimDemUtil::getDouble(bufstr, 109, 13, header._seGeoCornerX);
-   ossimDemUtil::getDouble(bufstr, 122, 13, header._seGeoCornerY);
-   header._processCode = ossimDemUtil::getLong(bufstr, 135, 1);
-
-   strncpy(temp,bufstr+137,3);
-   temp[3] = '\0';
-   header._sectionIndicator = temp;
-
-   strncpy(temp,bufstr+140,4);
-   temp[4] = '\0';
-   header._mapCenterCode = temp;
-    
-   header._levelCode = ossimDemUtil::getLong(bufstr, 144, 6);
-   header._elevPattern = ossimDemUtil::getLong(bufstr, 150, 6);
-   header._groundRefSysCode = ossimDemUtil::getLong(bufstr, 156, 6);
-   header._groundRefSysZone = ossimDemUtil::getLong(bufstr, 162, 6);
-   header._groundRefSysUnits = ossimDemUtil::getLong(bufstr, 528, 6);
-   header._elevUnits = ossimDemUtil::getLong(bufstr, 534, 6);
-   header._numPolySides = ossimDemUtil::getLong(bufstr, 540, 6);
-
-   for (i = 0; i < 4; i++)
-   {
-      double x,y;
-      ossim_int32 pos = 546 + (i * 48);
-      ossimDemUtil::getDouble(bufstr, pos, 24, x);
-      ossimDemUtil::getDouble(bufstr, pos + 24, 24, y);
-      header._demCorners.push_back(ossimDemPoint(x,y));
-   }
-
-   ossimDemUtil::getDouble(bufstr, 738, 24, header._minElevation);
-   ossimDemUtil::getDouble(bufstr, 762, 24, header._maxElevation);
-   ossimDemUtil::getDouble(bufstr, 786, 24, header._counterclockAngle );
-   header._elevAccuracyCode = ossimDemUtil::getLong(bufstr, 810, 6);
-   ossimDemUtil::getDouble(bufstr, 816, 12, header._spatialResX);
-   ossimDemUtil::getDouble(bufstr, 828, 12, header._spatialResY);
-   ossimDemUtil::getDouble(bufstr, 840, 12, header._spatialResZ);
-   header._profileRows = ossimDemUtil::getLong(bufstr, 852, 6);
-   header._profileColumns = ossimDemUtil::getLong(bufstr, 858, 6);
-   header._largeContInt = ossimDemUtil::getLong(bufstr, 864, 5);
-   header._maxSourceUnits = ossimDemUtil::getLong(bufstr, 869, 1);
-   header._smallContInt = ossimDemUtil::getLong(bufstr, 870, 5);
-   header._minSourceUnits = ossimDemUtil::getLong(bufstr, 875, 1);
-   header._sourceDate = ossimDemUtil::getLong(bufstr, 876, 4);
-   header._inspRevDate = ossimDemUtil::getLong(bufstr, 880, 4);
-   
-   strncpy(temp, bufstr+884,1);
-   temp[1]='\0';
-   header._inspFlag = temp;
-
-   header._valFlag = ossimDemUtil::getLong(bufstr, 885, 1);
-   header._suspectVoidFlg = ossimDemUtil::getLong(bufstr, 886, 2);
-   header._vertDatum = ossimDemUtil::getLong(bufstr, 888, 2);
-   header._horizDatum = ossimDemUtil::getLong(bufstr, 890, 2);
-   if (header._horizDatum == 0)
-      header._horizDatum = 1;   // Default to NAD27
-
-   header._dataEdition = ossimDemUtil::getLong(bufstr, 892, 4);
-   header._perctVoid = ossimDemUtil::getLong(bufstr, 896, 4);
-   header._westEdgeFlag = ossimDemUtil::getLong(bufstr, 900, 2);
-   header._northEdgeFlag = ossimDemUtil::getLong(bufstr, 902, 2);
-   header._eastEdgeFlag = ossimDemUtil::getLong(bufstr, 904, 2);
-   header._southEdgeFlag = ossimDemUtil::getLong(bufstr, 906, 2);
-   ossimDemUtil::getDouble(bufstr, 908, 7, header._vertDatumShift);
-
-   return s;  
+   return header.open(s);
 }
 
 bool ossimDemHeader::getImageGeometry(ossimKeywordlist& kwl,

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 14257 2009-04-09 21:32:08Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.cpp 15411 2009-09-11 19:46:32Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -56,17 +56,17 @@ std::ostream& operator <<(std::ostream& out,
               << std::endl;
 }
 
-ossim_int32 ossimNitfImageInfoRecordV2_1::getHeaderLength()const
+ossim_uint32 ossimNitfImageInfoRecordV2_1::getHeaderLength()const
 {
-   return ossimString(theImageSubheaderLength).toInt32();
+   return ossimString(theImageSubheaderLength).toUInt32();
 }
 
-ossim_int32 ossimNitfImageInfoRecordV2_1::getImageLength()const
+ossim_uint64 ossimNitfImageInfoRecordV2_1::getImageLength()const
 {
-   return ossimString(theImageLength).toInt32();
+   return ossimString(theImageLength).toUInt64();
 }
 
-ossim_int32 ossimNitfImageInfoRecordV2_1::getTotalLength()const
+ossim_uint64 ossimNitfImageInfoRecordV2_1::getTotalLength()const
 {
    return (getHeaderLength() + getImageLength());
 }
@@ -125,7 +125,7 @@ void ossimNitfImageInfoRecordV2_1::setSubheaderLength(ossim_uint32 length)
    theImageSubheaderLength[6] = '\0';
 }
 
-void ossimNitfImageInfoRecordV2_1::setImageLength(ossim_uint32 length)
+void ossimNitfImageInfoRecordV2_1::setImageLength(ossim_uint64 length)
 {
    ostringstream out;
 
@@ -687,7 +687,7 @@ ossim_int32 ossimNitfFileHeaderV2_1::getHeaderSize()const
    return theHeaderSize;
 }
 
-ossim_int32 ossimNitfFileHeaderV2_1::getFileSize()const
+ossim_int64 ossimNitfFileHeaderV2_1::getFileSize()const
 {
    ossimString temp = theFileLength;
 
@@ -697,7 +697,7 @@ ossim_int32 ossimNitfFileHeaderV2_1::getFileSize()const
    }
    else
    {
-      return temp.toInt32();
+      return temp.toInt64();
    }
 }
 
@@ -939,7 +939,10 @@ void ossimNitfFileHeaderV2_1::addImageInfoRecord(const ossimNitfImageInfoRecordV
 
 void ossimNitfFileHeaderV2_1::replaceImageInfoRecord(int i, const ossimNitfImageInfoRecordV2_1& recordInfo)
 {
-   theNitfImageInfoRecords[i]=recordInfo;
+   if ( i < static_cast<int>(theNitfImageInfoRecords.size()) )
+   {
+      theNitfImageInfoRecords[i] = recordInfo;
+   }
 }
 
 ossimNitfSymbolHeader *ossimNitfFileHeaderV2_1::allocateSymbolHeader()const
@@ -966,18 +969,17 @@ void ossimNitfFileHeaderV2_1::initializeAllOffsets()
       theImageOffsetList.push_back(ossimNitfImageOffsetInformation(tally,
                                                                    tally + (ossim_uint64)theNitfImageInfoRecords[idx].getHeaderLength()));
       tally += theNitfImageInfoRecords[idx].getTotalLength();
+
    }
 }
 
 ossimNitfImageHeader*
-ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_int32 imageNumber,
+ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_uint32 imageNumber,
                                            std::istream& in)const
 {
    ossimNitfImageHeader *result = 0;
    
-   if((getNumberOfImages() > 0) &&
-      (imageNumber < (ossim_int32)theImageOffsetList.size()) &&
-      (imageNumber >= 0))
+   if( (getNumberOfImages() > 0) && (imageNumber < theImageOffsetList.size()) )
    {
       result = allocateImageHeader();
       in.seekg(theImageOffsetList[imageNumber].theImageHeaderOffset, ios::beg);
@@ -996,7 +998,7 @@ ossimNitfFileHeaderV2_1::getNewImageHeader(ossim_int32 imageNumber,
 }
 
 ossimNitfSymbolHeader*
-ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_int32 symbolNumber,
+ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_uint32 symbolNumber,
                                             std::istream& in)const
 {
    // Currently not implemented...
@@ -1007,7 +1009,7 @@ ossimNitfFileHeaderV2_1::getNewSymbolHeader(ossim_int32 symbolNumber,
 }
 
 ossimNitfLabelHeader*
-ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_int32 labelNumber,
+ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_uint32 labelNumber,
                                            std::istream& in)const
 {
    // Currently not implemented...
@@ -1017,7 +1019,7 @@ ossimNitfFileHeaderV2_1::getNewLabelHeader(ossim_int32 labelNumber,
 }
 
 ossimNitfTextHeader*
-ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_int32 textNumber,
+ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_uint32 textNumber,
                                           std::istream& in)const
 {
    // Currently not implemented...
@@ -1027,8 +1029,8 @@ ossimNitfFileHeaderV2_1::getNewTextHeader(ossim_int32 textNumber,
 }
 
 ossimNitfDataExtensionSegment*
-ossimNitfFileHeaderV2_1::getNewDataExtensionSegment(ossim_int32 dataExtNumber,
-                                                    std::istream& in)const
+ossimNitfFileHeaderV2_1::getNewDataExtensionSegment(
+   ossim_uint32 dataExtNumber, std::istream& in)const
 {
    // Currently not implemented...
    ossimNitfDataExtensionSegment *result = 0;
