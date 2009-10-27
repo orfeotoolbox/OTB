@@ -101,14 +101,15 @@ ImageFileWriter<TInputImage>
     otbMsgDevMacro(<<"Exporting keywordlist ...");
     ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
-  
+
     if(!handler)
       {
       otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
       }
     else
       {
-      handler->setImageGeometry(geom_kwl);
+//       handler->setImageGeometry(geom_kwl);
+      handler->loadState(geom_kwl);
       handler->saveImageGeometry();
       handler->close();
       }

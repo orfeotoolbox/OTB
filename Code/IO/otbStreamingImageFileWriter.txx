@@ -531,11 +531,11 @@ StreamingImageFileWriter<TInputImage>
       this->GetOutput(idx)->DataHasBeenGenerated();
     }
   }
-  
+
   // Write the image keyword list if any
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
-  
+
   itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
   itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
   otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
@@ -545,14 +545,15 @@ StreamingImageFileWriter<TInputImage>
     otbMsgDevMacro(<<"Exporting keywordlist ...");
     ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
-  
+
     if(!handler)
       {
       otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
       }
     else
       {
-      handler->setImageGeometry(geom_kwl);
+//       handler->setImageGeometry(geom_kwl);
+      handler->loadState(geom_kwl);
       handler->saveImageGeometry();
       handler->close();
       }
