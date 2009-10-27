@@ -59,8 +59,8 @@ static ossimTrace traceDebug("ossimTerraSarModel:debug");
 namespace ossimplugins
 {
 RTTI_DEF1(ossimTerraSarModel,
-          "ossimTerraSarModel",
-          ossimGeometricSarSensorModel);
+		"ossimTerraSarModel",
+		ossimGeometricSarSensorModel);
 }
 
 ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
@@ -141,6 +141,11 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open";
 
+   bool debug = false;
+
+   if (debug)
+      cout << "Opening file" << endl;
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -158,10 +163,14 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       ossimXmlDocument* xdoc = new ossimXmlDocument();
       if ( xdoc->openFile(file) )
       {
+
          ossimTerraSarProductDoc tsDoc;
 
          result = tsDoc.isTerraSarX(xdoc);
-        
+         if (debug)
+            cout << "result of IsTSX " << result << endl;
+
+
          if (result)
          {
             if (traceDebug())
@@ -172,9 +181,14 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 
             // Set the base class number of lines and samples
             result = tsDoc.initImageSize(xdoc, theImageSize);
-            
+
+            if (debug)
+               cout << "result of initImageSize" << result << endl;
+
+
             if (result)
             {
+
                // Set the base class clip rect.
                theImageClipRect = ossimDrect(
                   0, 0,
@@ -189,6 +203,8 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
             if (result)
             {
                result = tsDoc.getSceneId(xdoc, theImageID);
+               if (debug)
+                  cout << "result of getting SceneIDe" << result << endl;
             }
 
             // Set the sensor ID to the mission ID.
@@ -197,8 +213,15 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                result = tsDoc.getMission(xdoc, theSensorID);
             }
 
+            if (debug)
+               cout << "result of getting MissionID...." << result << endl;
+
             // Set the base class gsd:
             result = tsDoc.initGsd(xdoc, theGSD);
+
+            if (debug)
+               cout << "result of getting GSD...." << result << endl;
+
             if (result)
             {
                theMeanGSD = (theGSD.x + theGSD.y)/2.0;
@@ -208,17 +231,28 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
             {
                /*result = */initSRGR(xdoc, tsDoc);
 
+               if (debug)
+                  cout << "result of initSRGR.... " << result << endl;
+
                if (result)
                {
                   result = initPlatformPosition(xdoc, tsDoc);
+
+                  if (debug)
+                     cout << "result of initPlatformPosition.... " << result << endl;
 
                   if (result)
                   {
                      result = initSensorParams(xdoc, tsDoc);
 
+                     if (debug)
+                        cout << "result of initSensorParams.... " << result << endl;
+
                      if (result)
                      {
                         result = initRefPoint(xdoc, tsDoc);
+                        if (debug)
+                           cout << "result of initRefPoint.... " << result << endl;
 
                         if (result)
                         {
@@ -260,10 +294,18 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       
    } // matches: if ( file.exists() )
 
+
+   if (debug)
+      cout << "Initialized values...." << endl;
+
+
    if (result)
    {
       theProductXmlFile = file;
-      
+
+      if (debug)
+         cout << "theProductXmlFile : " << file << endl;
+
       // Assign the ossimSensorModel::theBoundGndPolygon
       ossimGpt ul;
       ossimGpt ur;
@@ -273,6 +315,14 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
       lineSampleToWorld(theImageClipRect.ur(), ur);
       lineSampleToWorld(theImageClipRect.lr(), lr);
       lineSampleToWorld(theImageClipRect.ll(), ll);
+
+      if (debug)
+      {
+         cout << "4 corners from Projection: " << endl;
+         cout << ul << ", " << ur << ", " << lr << ", " << ll << endl;
+      }
+
+
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
    }
    else
@@ -765,45 +815,52 @@ double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double c
   int maxIter = 50, nIter=0 ;
   double estimatedGroundRange, estimatedSlantRangeTime, actualGroundRange, estimatedSlantRange ; 
 
-  
-  // actual ground range computation relative to the image near side
-  // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-  actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ; 
 
-  estimatedSlantRangeTime = _sceneCenterRangeTime ;
-  while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
-    // estimated ground range computation from SrToGr
-    estimatedGroundRange = 0.0 ; 
-    for (int i=0; i<_SrToGr_coeffs.size(); i++) {
-      estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
-    }
-    
-    // comparison between the estimated ground range and the actual ground range
-    iterError = actualGroundRange - estimatedGroundRange ;
+// actual ground range computation relative to the image near side
+// in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
+actualGroundRange = _refPoint->get_distance() - _sensor->get_col_direction() * (col-_refPoint->get_pix_col()) * _SrToGr_scaling_factor ; 
 
-    // estimated slant range update
-    estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
+estimatedSlantRangeTime = _sceneCenterRangeTime ;
+while ((fabs(iterError)>EPSILON)&& (nIter<maxIter)) {
+// estimated ground range computation from SrToGr
+estimatedGroundRange = 0.0 ; 
+for (int i=0; i<_SrToGr_coeffs.size(); i++) {
+estimatedGroundRange += _SrToGr_coeffs[i]*pow(estimatedSlantRangeTime-_SrToGr_R0,_SrToGr_exponent[i]);
+}
 
-    nIter++;
-  }
+// comparison between the estimated ground range and the actual ground range
+iterError = actualGroundRange - estimatedGroundRange ;
 
-  estimatedSlantRange = estimatedSlantRangeTime* CLUM / 2.0 ;
+// estimated slant range update
+estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
 
-  return  estimatedSlantRange  ;
+nIter++;
+}
+
+estimatedSlantRange = estimatedSlantRangeTime* CLUM / 2.0 ;
+
+return  estimatedSlantRange  ;
 }
 */
 
 bool ossimplugins::ossimTerraSarModel::InitSensorParams(
    const ossimKeywordlist &kwl, const char *prefix)
 {
+
+
+
+
    const char* central_freq_str = kwl.find(prefix,"central_freq");
    double central_freq = atof(central_freq_str);
    const char* fr_str = kwl.find(prefix,"fr");
    double fr = atof(fr_str);
    const char* fa_str = kwl.find(prefix,"fa");
    double fa = atof(fa_str);
-   
-   //number of different looks 
+
+
+
+
+   //number of different looks
    // const char* n_azilok_str = kwl.find(prefix,"n_azilok");
    // double n_azilok = atof(n_azilok_str);
    const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
@@ -1314,22 +1371,32 @@ bool ossimplugins::ossimTerraSarModel::initPlatformPosition(const ossimXmlDocume
 }
 
 bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* xdoc,
-                                          const ossimTerraSarProductDoc& tsDoc)
+                                                        const ossimTerraSarProductDoc& tsDoc)
 {
    static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initSensorParams";
-   
+   bool debug=true;
+
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
    }
-   
+
+   if (debug)
+      cout << "Entering initSensorParams ...." << endl;
+
+
    if (_sensor )
    {
       delete _sensor;
    }
    _sensor =  new SensorParams();
-   
+
+
    bool result = tsDoc.initSensorParams(xdoc, _sensor);
+
+   if (debug)
+      cout << "result for  tsDoc.initSensorParams " << result << endl;
 
    if (!result)
    {
