@@ -50,6 +50,7 @@ See OTBCopyright.txt for details.
 #include "otbUtmMapProjection.h"
 #include "otbLambertConformalConicMapProjection.h"
 #include "otbLambert2EtenduProjection.h"
+#include "otbLambert3CartoSudProjection.h"
 #include "otbLambert93Projection.h"
 #include "otbEckert4MapProjection.h"
 #include "otbTransMercatorMapProjection.h"
