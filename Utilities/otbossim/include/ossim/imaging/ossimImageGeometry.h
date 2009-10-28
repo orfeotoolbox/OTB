@@ -187,7 +187,7 @@ public:
    //! @return The number of decimation factors
    ossim_uint32 getNumberOfDecimations()const
    {
-      return m_decimationFactors.size();
+      return (ossim_uint32)m_decimationFactors.size();
    }
    //! Creates a new instance of ossimImageGeometry with the same transform and projection.
    //! Overrides base-class version requiring loadState() and saveState() (not implemented yet)

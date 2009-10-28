@@ -72,6 +72,12 @@ namespace ossimplugins
        * transform as well as projection (image-to-world).
        */
       virtual ossimImageGeometry* getImageGeometry();
+
+      /**
+       * @param Method to get geometry from the xml file or internal geotiff
+       * tags.
+       */
+      virtual ossimImageGeometry* getInternalImageGeometry();
       
    private:
       

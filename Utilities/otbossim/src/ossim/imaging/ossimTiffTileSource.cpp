@@ -12,7 +12,7 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 15798 2009-10-23 19:15:20Z gpotts $
+//  $Id: ossimTiffTileSource.cpp 15825 2009-10-27 15:31:44Z dburken $
 
 #include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -47,6 +47,7 @@ static ossimTrace traceDebug("ossimTiffTileSource:debug");
 ossimTiffTileSource::ossimTiffTileSource()
    :
       ossimImageHandler(),
+      theTiffPtr(0),
       theTile(0),
       theBuffer(0),
       theBufferSize(0),
@@ -54,7 +55,6 @@ ossimTiffTileSource::ossimTiffTileSource()
       theBufferRLevel(0),
       theCurrentTileWidth(0),
       theCurrentTileHeight(0),
-      theTiffPtr(0),
       theSamplesPerPixel(0),
       theBitsPerSample(0),
       theSampleFormatUnit(0),

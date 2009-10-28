@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffTileSource.h 15825 2009-10-27 15:31:44Z dburken $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -205,6 +205,9 @@ protected:
     *    between constructor and public open method.
     */
    bool open();
+
+   // Must be protected for derived ossimTerraSarTiffReader.
+   TIFF* theTiffPtr; 
    
 private:
 
@@ -274,7 +277,6 @@ private:
    ossim_uint32         theBufferRLevel;
    ossim_uint32         theCurrentTileWidth;
    ossim_uint32         theCurrentTileHeight;
-   TIFF*                theTiffPtr;
 
    ossim_uint16         theSamplesPerPixel;
    ossim_uint16         theBitsPerSample;

@@ -333,7 +333,7 @@ bool ossimImageGeometry::operator==(const ossimImageGeometry& other) const
 //**************************************************************************************************
 ossimDpt ossimImageGeometry::decimationFactor(ossim_uint32 r_index) const
 {
-   ossim_uint32 size = m_decimationFactors.size();
+   ossim_uint32 size = (ossim_uint32)m_decimationFactors.size();
    if (size)
    {
       if (r_index < size)
@@ -354,7 +354,7 @@ ossimDpt ossimImageGeometry::decimationFactor(ossim_uint32 r_index) const
 void ossimImageGeometry::decimationFactor(ossim_uint32 r_index,
                                           ossimDpt& result) const
 {
-   const ossim_uint32 SIZE = m_decimationFactors.size();
+   const ossim_uint32 SIZE = (ossim_uint32)m_decimationFactors.size();
    if (SIZE)
    {
       if (r_index < SIZE)
