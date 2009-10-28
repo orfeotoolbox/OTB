@@ -72,7 +72,8 @@ public :
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef TOssimMapProjection        OssimMapProjectionType;
+  typedef TOssimMapProjection                       OssimMapProjectionType;
+  typedef ossimRefPtr<OssimMapProjectionType>       OssimMapProjectionPointerType;
   typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
   typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 
@@ -135,7 +136,7 @@ public :
 protected:
   MapProjection();
   virtual ~MapProjection();
-  OssimMapProjectionType* m_MapProjection;
+  OssimMapProjectionPointerType m_MapProjection;
   std::string m_ProjectionRefWkt;
   virtual void InstanciateProjection();
 
