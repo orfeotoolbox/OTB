@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -70,7 +69,7 @@ TerraSarImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) c
   else
     return false;
 }
-  
+
 
 int
 TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
@@ -94,20 +93,20 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
   ossimString separatorList;
   key = "support_data.image_date";
   separatorList = "-T";
- 
+
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
- 
+
   if(keywordStrings.size() <= 2)
     itkExceptionMacro(<<"Invalid Day");
 
  ossimString day = keywordStrings[2];
- 
+
    return day.toInt();
   */
   return 1;
 }
-  
+
 
 
 int
@@ -132,8 +131,8 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
   ossimString separatorList;
   key = "support_data.image_date";
   separatorList = "-T";
- 
- 
+
+
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
@@ -141,7 +140,7 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
     itkExceptionMacro(<<"Invalid Month");
 
   ossimString month = keywordStrings[1];
- 
+
   return month.toInt();
   */
   return 1;
@@ -262,7 +261,7 @@ TerraSarImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType &
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -296,7 +295,7 @@ TerraSarImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -331,7 +330,7 @@ TerraSarImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType 
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
