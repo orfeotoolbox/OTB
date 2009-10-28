@@ -8,7 +8,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfFrameFileReader.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRpfFrameFileReader.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/support_data/ossimRpfFrameFileReader.h>
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <ossim/support_data/ossimRpfImageDescriptionSubheader.h>
@@ -51,7 +51,7 @@ ossimRpfFrameFileReader::~ossimRpfFrameFileReader()
 ossimErrorCode ossimRpfFrameFileReader::parseFile(const ossimFilename& fileName)
 {
    ifstream in(fileName, ios::in | ios::binary);
-   ossimNitfFile *nitfFile = new ossimNitfFile;
+   ossimRefPtr<ossimNitfFile> nitfFile = new ossimNitfFile;
 
    if(!in)
    {
@@ -63,9 +63,7 @@ ossimErrorCode ossimRpfFrameFileReader::parseFile(const ossimFilename& fileName)
       nitfFile->getHeader();
    if(!nitfFileHeader)
    {
-      delete nitfFile;
-      nitfFile = NULL;
-      
+      nitfFile = 0;
       return ossimErrorCodes::OSSIM_ERROR;
    }
    if(theRpfHeader)
@@ -76,8 +74,7 @@ ossimErrorCode ossimRpfFrameFileReader::parseFile(const ossimFilename& fileName)
    ossimNitfTagInformation info; 
    nitfFileHeader->getTag(info, "RPFHDR");
    // we no longer need access to the nitf header.  We got what we needed
-   delete nitfFile;
-   nitfFile = NULL;
+   nitfFile = 0;
    theFilename = fileName;
    if(info.getTagName() == "RPFHDR")
    {      

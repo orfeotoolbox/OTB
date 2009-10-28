@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToGreyFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToGreyFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbToGreyFilter_HEADER
 #define ossimRgbToGreyFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -26,7 +26,6 @@ public:
                         double c1 = 1.0/3.0,
                         double c2 = 1.0/3.0,
                         double c3 = 1.0/3.0);
-   virtual ~ossimRgbToGreyFilter();
    
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
@@ -51,6 +50,7 @@ public:
                           const char* prefix=0);
 
 protected:
+   virtual ~ossimRgbToGreyFilter();
 
    /**
     * Called on first getTile, will initialize all data needed.

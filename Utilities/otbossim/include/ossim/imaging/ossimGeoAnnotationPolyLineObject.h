@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyLineObject.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationPolyLineObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationPolyLineObject_HEADER
 #define ossimGeoAnnotationPolyLineObject_HEADER
 #include <ossim/base/ossimGpt.h>
@@ -23,26 +23,11 @@ public:
                                      ossim_uint8 b=255,
                                      ossim_uint8 thickness=1);
    ossimGeoAnnotationPolyLineObject(const ossimGeoAnnotationPolyLineObject& rhs);
-   virtual ~ossimGeoAnnotationPolyLineObject();
    virtual ossimObject* dup()const;
 
    virtual void applyScale(double x, double y);
 
-   virtual void transform(ossimProjection* projection);
-
-   /**
-    * @brief Transforms from geographic to image space for a
-    * reduced resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);
+   virtual void transform(ossimImageGeometry* projection);
    
    virtual std::ostream& print(std::ostream& out)const;
    virtual void draw(ossimRgbImage& anImage)const;
@@ -70,6 +55,8 @@ public:
    virtual void setThickness(ossim_uint8 thickness);
 
 protected:
+   virtual ~ossimGeoAnnotationPolyLineObject();
+   
    std::vector<ossimGpt>           thePolygon;
    ossimAnnotationMultiLineObject* theProjectedMultiLineObject;
 

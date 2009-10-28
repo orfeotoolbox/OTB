@@ -18,6 +18,7 @@
 #include <ossim/base/ossimConstants.h>
 
 class ossimFilename;
+class ossimKeywordlist;
 
 /**
  * @brief Info Base.
@@ -64,6 +65,13 @@ public:
     * @return The overview flag.
     */
    bool getProcessOverviewFlag() const;
+
+   /**
+    * @brief Method to dump info to a keyword list.
+    * @param kwl The keyword list to initialize.
+    * @return true on success, false on error.
+    */
+   bool getKeywordlist(ossimKeywordlist& kwl);
 
 protected:
    

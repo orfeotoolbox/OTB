@@ -17,7 +17,7 @@
 //    the fourth band will not be drawn to.
 //
 //*************************************************************************
-// $Id: ossimAnnotationSource.h 13330 2008-07-28 18:04:40Z dburken $
+// $Id: ossimAnnotationSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationSource_HEADER
 #define ossimAnnotationSource_HEADER
 
@@ -26,13 +26,14 @@
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/imaging/ossimRgbImage.h>
+#include <ossim/imaging/ossimAnnotationObject.h>
 
-class ossimAnnotationObject;
 class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimAnnotationSource : public ossimImageSourceFilter
 {
 public:
+   typedef std::vector<ossimRefPtr<ossimAnnotationObject> > AnnotationObjectListType;
    ossimAnnotationSource(ossimImageSource* inputSource=0);
    virtual ~ossimAnnotationSource();
 
@@ -93,16 +94,16 @@ public:
     * Calls the isPointWithin all Annotation
     * Objects.  Note:  Do not delete these objects.
     */
-   std::vector<ossimAnnotationObject*> pickObjects(const ossimDpt& imagePoint);
+   AnnotationObjectListType pickObjects(const ossimDpt& imagePoint);
 
    /*!
     * Note: do not delete the objects returned.
     */
-   std::vector<ossimAnnotationObject*> pickObjects(const ossimDrect& imageRect);
+   AnnotationObjectListType pickObjects(const ossimDrect& imageRect);
 
-   const std::vector<ossimAnnotationObject*>& getObjectList()const;
+   const AnnotationObjectListType& getObjectList()const;
 
-   std::vector<ossimAnnotationObject*>& getObjectList();
+   AnnotationObjectListType& getObjectList();
 
    /*!
      Clears theAnnotationObjectList vector.  All elements are deleted.
@@ -145,7 +146,7 @@ protected:
     * These will be all your primitives in
     * Example: lines, circles, text ...
     */
-   std::vector<ossimAnnotationObject*> theAnnotationObjectList;   
+   AnnotationObjectListType theAnnotationObjectList;   
 
 TYPE_DATA
 };

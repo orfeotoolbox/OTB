@@ -11,7 +11,7 @@
 //
 // Contains class declaration for LookUpTable. 
 //*******************************************************************
-//  $Id: ossimLookUpTable.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLookUpTable.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimLookUpTable_HEADER
 #define ossimLookUpTable_HEADER
@@ -22,7 +22,7 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimKeyword.h>
 
-class OSSIMDLLEXPORT ossimKeywordlist;
+class ossimKeywordlist;
 
 //*******************************************************************
 // CLASS:  LookUpTable

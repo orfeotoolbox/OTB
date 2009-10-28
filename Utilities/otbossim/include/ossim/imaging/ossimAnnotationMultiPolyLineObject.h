@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyLineObject.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimAnnotationMultiPolyLineObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationMultiPolyLineObject_HEADER
 #define ossimAnnotationMultiPolyLineObject_HEADER
 
@@ -28,7 +28,6 @@ public:
 
    virtual ossimObject* dup()const;
 
-   virtual ~ossimAnnotationMultiPolyLineObject();
    virtual void applyScale(double x,
                            double y);
    virtual void draw(ossimRgbImage& anImage)const;
@@ -47,6 +46,7 @@ public:
    const std::vector<ossimPolyLine>& getMultiPolyLine()const;
    std::vector<ossimPolyLine>& getMultiPolyLine();
 protected:
+   virtual ~ossimAnnotationMultiPolyLineObject();
    vector<ossimPolyLine> theMultiPolyLine;
    ossimDrect           theBoundingRect;
 

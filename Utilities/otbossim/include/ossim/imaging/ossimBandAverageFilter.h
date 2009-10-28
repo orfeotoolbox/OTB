@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandAverageFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandAverageFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBandAverageFilter_HEADER
 #define ossimBandAverageFilter_HEADER
 #include <vector>
@@ -27,7 +27,6 @@ public:
    ossimBandAverageFilter();
    ossimBandAverageFilter(ossimImageSource* input,
                           const std::vector<double>& weights);
-   virtual ~ossimBandAverageFilter();
 
    /**
     * The data object argument is deprecated and should not be used.
@@ -93,7 +92,9 @@ public:
                           const char* prefix=0)const;
 
 protected:
-   ossimRefPtr<ossimImageData> theTile;
+   virtual ~ossimBandAverageFilter();
+   
+  ossimRefPtr<ossimImageData> theTile;
    std::vector<double>         theWeights;
 
    void checkWeights();

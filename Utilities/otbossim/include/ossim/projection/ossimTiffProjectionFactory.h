@@ -11,7 +11,7 @@
 // a projection name and a datum if desired.  Currently the default
 // datum will be WGS84.
 //*******************************************************************
-//  $Id: ossimTiffProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
+//  $Id: ossimTiffProjectionFactory.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimTiffProjectionFactory_HEADER
 #define ossimTiffProjectionFactory_HEADER
@@ -40,6 +40,7 @@ public:
    virtual ossimProjection* createProjection(const ossimString& name)const;
    virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
                                              const char* prefix = 0)const;
+   ossimProjection* createProjection(ossimImageHandler* handler)const;
 
    virtual ossimObject* createObject(const ossimString& typeName)const;
 

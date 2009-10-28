@@ -6,43 +6,42 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObjectFactoryRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimObjectFactoryRegistry.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimObjectFactoryRegistry_HEADER
 #define ossimObjectFactoryRegistry_HEADER
 #include <vector>
 
 #include <ossim/base/ossimObject.h>
+#include <ossim/base/ossimObjectFactory.h>
+#include <ossim/base/ossimFactoryListInterface.h>
 
-class OSSIMDLLEXPORT ossimObjectFactory;
-class OSSIMDLLEXPORT ossimKeywordlist;
-class OSSIMDLLEXPORT ossimString;
-
-class OSSIMDLLEXPORT ossimObjectFactoryRegistry : public ossimObject
+class ossimKeywordlist;
+class ossimString;
+class OSSIMDLLEXPORT ossimObjectFactoryRegistry : public ossimObject,
+                                                  public ossimFactoryListInterface<ossimObjectFactory, ossimObject>
 {
 public:
    virtual ~ossimObjectFactoryRegistry();
    static ossimObjectFactoryRegistry* instance();
-   /*!
-    * Should use the registerFactory to add a factory to the list.
-    * This method will call registerFactory.
-    */
-   bool                addFactory(ossimObjectFactory* factory);
-
-   /*!
-    * Registers a factory to the list.
-    */
-   bool                registerFactory(ossimObjectFactory* factory);
-   void                unregisterFactory(ossimObjectFactory* factory);
    
-   virtual ossimObject* createObject(const ossimString& name)const;
+   virtual ossimObject* createObject(const ossimString& name)const
+   {
+      return createObjectFromRegistry(name);
+   }
    virtual ossimObject* createObject(const ossimKeywordlist& kwl,
-                                     const char* prefix=0)const;
+                                     const char* prefix=0)const
+   {
+      return createObjectFromRegistry(kwl, prefix);
+   }
    
    /*!
     * Returns a type list of all objects that can be instantiated
     * through the createObjectMethods above.
     */
-   virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
+   virtual void getTypeNameList(std::vector<ossimString>& typeList)const
+   {
+      getAllTypeNamesFromRegistry(typeList);
+   }
 
    /*!
     * returns a list of objects that are of the passed in
@@ -61,9 +60,9 @@ protected:
    ossimObjectFactoryRegistry(const ossimObjectFactoryRegistry&):ossimObject(){}//hide
    void operator =(const ossimObjectFactoryRegistry&){}//hide
    
-   std::vector<ossimObjectFactory*>   theFactoryList;
+//   std::vector<ossimObjectFactory*>   theFactoryList;
 
-   ossimObjectFactory* findFactory(ossimObjectFactory* factory)const;
+//   ossimObjectFactory* findFactory(ossimObjectFactory* factory)const;
 
 TYPE_DATA
 };

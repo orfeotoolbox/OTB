@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 14251 2009-04-09 16:25:19Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 15611 2009-10-08 18:50:33Z dburken $
 
 
 #include <iomanip>
@@ -22,7 +22,6 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <stdexcept>
 #include <sstream>
@@ -720,11 +719,6 @@ ossimString ossimNitfImageHeaderV2_0::getCoordinateSystem()const
 	return theCoordinateSystem;
 }
 
-ossimString ossimNitfImageHeaderV2_0::getGeographicLocation()const
-{
-	return theGeographicLocation;
-}
-
 ossimString ossimNitfImageHeaderV2_0::getPixelValueType()const
 {
    return ossimString(thePixelValueType).trim();
@@ -967,68 +961,6 @@ void ossimNitfImageHeaderV2_0::setNumberOfCols(ossim_uint32 cols)
    
    out << cols;
    ossimNitfCommon::setField(theSignificantCols, out.str(), 8, ios::right, '0');
-}
-
-void ossimNitfImageHeaderV2_0::setGeographicLocationDms(const ossimDpt& ul,
-                                                        const ossimDpt& ur,
-                                                        const ossimDpt& lr,
-                                                        const ossimDpt& ll)
-{
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-      << ossimDms(ul.y, true).toString("ddmmss.ssssC").c_str()
-      << ossimDms(ul.x, false).toString("dddmmss.ssssC").c_str()
-      << ossimDms(ur.y, true).toString("ddmmss.ssssC").c_str()
-      << ossimDms(ur.x, false).toString("dddmmss.ssssC").c_str()
-      << ossimDms(lr.y, true).toString("ddmmss.ssssC").c_str()
-      << ossimDms(lr.x, false).toString("dddmmss.ssssC").c_str()
-      << ossimDms(ll.y, true).toString("ddmmss.ssssC").c_str()
-      << ossimDms(ll.x, false).toString("dddmmss.ssssC").c_str()
-      << std::endl;
-      
-      checkForGeographicTiePointTruncation(ul);
-      checkForGeographicTiePointTruncation(ur);
-      checkForGeographicTiePointTruncation(lr);
-      checkForGeographicTiePointTruncation(ll);
-   }
-   
-   theCoordinateSystem[0] = 'G';
-   
-   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDms(ul,ur,lr,ll).c_str(), 60);
-}
-void ossimNitfImageHeaderV2_0::setGeographicLocationDecimalDegrees(
-                                                                   const ossimDpt& ul,
-                                                                   const ossimDpt& ur,
-                                                                   const ossimDpt& lr,
-                                                                   const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'D';
-   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDecimalDegrees(ul, ur, lr, ll).c_str(), 60);
-}
-
-void ossimNitfImageHeaderV2_0::setUtmNorth(ossim_uint32 zone,
-                                           const ossimDpt& ul,
-                                           const ossimDpt& ur,
-                                           const ossimDpt& lr,
-                                           const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'N';
-   
-   memcpy(theGeographicLocation,
-          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
-}
-
-void ossimNitfImageHeaderV2_0::setUtmSouth(ossim_uint32 zone,
-                                           const ossimDpt& ul,
-                                           const ossimDpt& ur,
-                                           const ossimDpt& lr,
-                                           const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'S';
-   
-   memcpy(theGeographicLocation,
-          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
 }
 
 void ossimNitfImageHeaderV2_0::setProperty(ossimRefPtr<ossimProperty> property)

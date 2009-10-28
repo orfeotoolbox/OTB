@@ -5,12 +5,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationEllipseObject.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationEllipseObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationEllipseObject_HEADER
 #define ossimGeoAnnotationEllipseObject_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
-
-class ossimAnnotationEllipseObject;
+#include <ossim/imaging/ossimAnnotationEllipseObject.h>
 
 class OSSIMDLLEXPORT ossimGeoAnnotationEllipseObject : public ossimGeoAnnotationObject
 {
@@ -30,7 +29,6 @@ public:
                                    ossim_uint8 b = 255,
                                    ossim_uint8 thickness = 1);
    ossimGeoAnnotationEllipseObject(const ossimGeoAnnotationEllipseObject& rhs);
-   virtual ~ossimGeoAnnotationEllipseObject();
 
    virtual ossimObject* dup()const;
 
@@ -41,21 +39,7 @@ public:
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;
    virtual void getBoundingRect(ossimDrect& rect)const;
    virtual void computeBoundingRect();
-   virtual void transform(ossimProjection* projection);
-
-   /**
-    * @brief Transforms from geographic to image space for a reduced
-    * resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);
+   virtual void transform(ossimImageGeometry* projection);
 
    /**
     * Saves the current state of this object.
@@ -149,11 +133,12 @@ public:
    virtual void getCenter(ossimGpt& gpt) const;
 
 protected:
+   virtual ~ossimGeoAnnotationEllipseObject();
 
    void getWidthHeightInPixels(ossimDpt& widthHeight,
-                               const ossimProjection* projection) const;
+                               const ossimImageGeometry* projection) const;
    
-   ossimAnnotationEllipseObject* theProjectedEllipse;
+   ossimRefPtr<ossimAnnotationEllipseObject> theProjectedEllipse;
    ossimGpt                      theCenter;
    ossimDpt                      theWidthHeight;
 

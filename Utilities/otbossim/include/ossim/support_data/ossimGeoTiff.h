@@ -3,35 +3,42 @@
 //
 // License:  See top level LICENSE.txt file.
 //
-// Author:  David Burken
-//
 // Description:
-// Class definition for ossimGeoTiff which is designed to read and hold tag
+// 
+// Class declaration for ossimGeoTiff which is designed to read and hold tag
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 12058 2007-11-16 19:31:11Z dburken $
+// $Id: ossimGeoTiff.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGeoTiff_HEADER
-#define ossimGeoTiff_HEADER
+#define ossimGeoTiff_HEADER 1
+#include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/base/ossimRefPtr.h>
-  // #include <stdio.h>
+
 #include <vector>
 
 #include <tiffio.h>
+#include <geo_normalize.h>
+#include <OpenThreads/Mutex>
+#include <OpenThreads/ScopedLock>
 
 class ossimFilename;
 class ossimKeywordlist;
 class ossimTieGptSet;
 
-class ossimGeoTiff : public ossimErrorStatusInterface
+class OSSIM_DLL ossimGeoTiff : public ossimErrorStatusInterface
 {
 public:
+   /** default constructor */
+   ossimGeoTiff();
+
    ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx=0);
+
    ~ossimGeoTiff();
   
    enum
@@ -89,7 +96,7 @@ public:
 /*       PHOTO_YCBCR       = 6,   // !CCIR 601  */
 /*       PHOTO_CIELAB      = 8    // !1976 CIE L*a*b* */
 /*    }; */
-
+#if 0
    enum ModelType
    {
       UNKNOWN               = 0,
@@ -97,7 +104,7 @@ public:
       MODEL_TYPE_GEOGRAPHIC = 2,  // Geographic latitude-longitude System 
       MODEL_TYPE_GEOCENTRIC = 3
    };
-
+#endif
    static int getPcsUnitType(ossim_int32 pcsCode);
 
    static bool writeTags(TIFF* tiffOut,
@@ -109,6 +116,26 @@ public:
     *  Returns true on success, false on error.
     */
    bool readTags(const ossimFilename& file, ossim_uint32 entryIdx=0);
+
+   /**
+    * @brief Method to parse the tiff file from an open tiff pointer for a
+    * given index.
+    *
+    * This will initialize this container for a subsequent call to
+    * addImageGeometry.
+    * 
+    * @param tiff The opened TIFF* to read from.
+    * 
+    * @param entryIdx Entry (tiff directory) to read.
+    *
+    * @param ownTiffPtrFlag If true the tiff pointer will be deleted by this
+    * object; else, it will simply zero out the pointer at the end of method.
+    * This allows for external code to pass in their open tiff pointer
+    * without this object closing it.
+    *
+    * @return true on success, false on error.
+    */
+   bool readTags(TIFF* tiff, ossim_uint32 entryIdx, bool ownTiffPtrFlag);
 
    /**
     *  Returns the map zone as an interger.
@@ -220,7 +247,7 @@ private:
    ossim_uint32          theLength;                        // tag 257
    ossim_uint16          theBitsPerSample;                 // tag 258
 
-   ModelType             theModelType;                     // key 1024
+   ossim_uint16          theModelType;                     // key 1024
    ossim_uint16          theRasterType;                    // key 1025
    ossim_uint16          theGcsCode;                       // key 2048
    ossim_uint16          theDatumCode;                     // key 2050
@@ -237,9 +264,11 @@ private:
    mutable double        theOriginLat;                     // key 3081
    double                theFalseEasting;                  // key 3082
    double                theFalseNorthing;                 // key 3083
-   mutable double        theCenterLon;                     // key 3088
-   mutable double        theCenterLat;                     // key 3099
    double                theScaleFactor;                   // key 3092
+   
+   GTIFDefn*             theNormalizedDefinitions;
+   static OpenThreads::Mutex theMutex;
+
 };
 
 #endif

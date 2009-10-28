@@ -10,7 +10,7 @@
 // Description: Class declaration for image generator.
 //
 //*************************************************************************
-// $Id: ossimIgen.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimIgen.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimIgen_HEADER
 #define ossimIgen_HEADER
 
@@ -44,9 +44,9 @@ public:
    virtual void outputProduct();
    
 protected:
-   ossimConnectableContainer theContainer;
+   ossimRefPtr<ossimConnectableContainer> theContainer;
 
-   ossimProjection*  theProductProjection;
+   ossimRefPtr<ossimProjection>  theProductProjection;
    ossimDrect        theOutputRect;
    bool              theBuildThumbnailFlag;
    ossimIpt          theThumbnailResolution;

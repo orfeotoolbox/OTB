@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToIndexFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToIndexFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbToIndexFilter_HEADER
 #define ossimRgbToIndexFilter_HEADER
 #include <ossim/base/ossimRgbVector.h>
@@ -50,7 +50,6 @@ public:
    ossimRgbToIndexFilter();
    ossimRgbToIndexFilter(ossimImageSource* inputSource,
                            const ossimRgbLutDataObject& rgbLut);
-   virtual ~ossimRgbToIndexFilter();
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -83,11 +82,12 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 protected:
+   virtual ~ossimRgbToIndexFilter();
    void allocate();
    
    virtual ossimRefPtr<ossimImageData> convertInputTile(ossimRefPtr<ossimImageData>& tile);
 
-   ossimRgbLutDataObject       theLut;
+   ossimRefPtr<ossimRgbLutDataObject>       theLut;
    ossimRefPtr<ossimImageData> theTile;
    
 TYPE_DATA

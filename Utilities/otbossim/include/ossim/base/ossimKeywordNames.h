@@ -8,7 +8,7 @@
 // Description: Common file for global Keywors.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.h 11731 2007-09-17 13:48:57Z gpotts $
+// $Id: ossimKeywordNames.h 15464 2009-09-23 19:30:35Z okramer $
 
 #ifndef ossimKeywordNames_HEADER
 #define ossimKeywordNames_HEADER
@@ -77,6 +77,7 @@ public:
    static const char* HORIZONTAL_SIZE_KW;
    static const char* ID_KW;
    static const char* IMAGE_FILE_KW;
+   static const char* IMAGE_ID_KW;
    static const char* IMAGE_MODEL_TRANSFORM_MATRIX_KW;
    static const char* IMAGE_MODEL_TRANSFORM_UNIT_KW;
    static const char* IMAGE_PATH_KW;
@@ -138,6 +139,11 @@ public:
    static const char* QUALITY_KW;
    static const char* RADIOMETRY_KW;
    static const char* REDUCED_RES_LEVEL_KW;
+   static const char* REF_GPT_LAT_KW;
+   static const char* REF_GPT_LON_KW;
+   static const char* REF_GPT_HGT_KW;
+   static const char* REF_IPT_LINE_KW;
+   static const char* REF_IPT_SAMP_KW;
    static const char* ROTATION_KW;
    static const char* SCALAR_TYPE_KW;
    static const char* SCALE_PER_PIXEL_X_KW;
@@ -147,6 +153,7 @@ public:
    static const char* SCALE_Y_KW;
    static const char* SCALE_FACTOR_X_KW;
    static const char* SCALE_FACTOR_Y_KW;
+   static const char* SENSOR_ID_KW;
    static const char* STD_PARALLEL_1_KW;
    static const char* STD_PARALLEL_2_KW;
    static const char* THICKNESS_KW;

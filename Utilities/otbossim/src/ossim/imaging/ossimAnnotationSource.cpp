@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationSource.cpp 11885 2007-10-18 15:23:58Z dburken $
+// $Id: ossimAnnotationSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationSource.h>
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -225,13 +225,12 @@ bool ossimAnnotationSource::deleteObject(ossimAnnotationObject* anObject)
 {
    if(anObject)
    {
-      std::vector<ossimAnnotationObject*>::iterator current =
+      AnnotationObjectListType::iterator current =
          theAnnotationObjectList.begin();
       while(current != theAnnotationObjectList.end())
       {
          if(*current == anObject)
          {
-            delete anObject;
             theAnnotationObjectList.erase(current);
             return true;
          }
@@ -246,7 +245,7 @@ bool ossimAnnotationSource::saveState(ossimKeywordlist& kwl,
                                       const char* prefix)const
 {
    // Save the state of all annotation objects we have.
-   std::vector<ossimAnnotationObject*>::const_iterator obj =
+   AnnotationObjectListType::const_iterator obj =
       theAnnotationObjectList.begin();
    ossim_uint32 objIdx = 0;
    while (obj < theAnnotationObjectList.end())
@@ -287,19 +286,19 @@ bool ossimAnnotationSource::loadState(const ossimKeywordlist& kwl,
       {
          ++numberOfMatches;
          
-         ossimAnnotationObject* obj = 0;
+         ossimRefPtr<ossimAnnotationObject> obj = 0;
          obj = ossimAnnotationObjectFactory::instance()->
             create(kwl, newPrefix.c_str());
-         if (obj)
+         if (obj.valid())
          {
-            if(!addObject(obj))
+            if(!addObject(obj.get()))
             {
                ossimNotify(ossimNotifyLevel_WARN)
                   << "ossimGeoAnnotationSource::loadState\n"
                   << "Object " << obj->getClassName()
                   << " is not a geographic object" << endl;
-               delete obj;
-            }
+               obj = 0;
+           }
          }
       }
 
@@ -325,7 +324,7 @@ void ossimAnnotationSource::computeBoundingRect()
       
       theAnnotationObjectList[0]->getBoundingRect(theRectangle);
       
-      std::vector<ossimAnnotationObject*>::iterator object =
+      AnnotationObjectListType::iterator object =
          (theAnnotationObjectList.begin()+1);
       while(object != theAnnotationObjectList.end())
       {
@@ -344,11 +343,11 @@ void ossimAnnotationSource::computeBoundingRect()
    }
 }
 
-std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
+ossimAnnotationSource::AnnotationObjectListType ossimAnnotationSource::pickObjects(
    const ossimDpt& imagePoint)
 {
-   std::vector<ossimAnnotationObject*> result;
-   std::vector<ossimAnnotationObject*>::iterator currentObject;
+   AnnotationObjectListType result;
+   AnnotationObjectListType::iterator currentObject;
 
    currentObject = theAnnotationObjectList.begin();
 
@@ -364,17 +363,17 @@ std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
    return result;
 }
 
-std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
+ossimAnnotationSource::AnnotationObjectListType ossimAnnotationSource::pickObjects(
    const ossimDrect& imageRect)
 {
-   std::vector<ossimAnnotationObject*> result;
-   std::vector<ossimAnnotationObject*>::iterator currentObject;
+   AnnotationObjectListType result;
+   AnnotationObjectListType::iterator currentObject;
 
    currentObject = theAnnotationObjectList.begin();
 
    while(currentObject != theAnnotationObjectList.end())
    {
-      ossimAnnotationObject* current = (*currentObject);
+      ossimRefPtr<ossimAnnotationObject> current = (*currentObject);
       if(current->isPointWithin(imageRect.ul()))
       {
          result.push_back(*currentObject);
@@ -399,20 +398,7 @@ std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
 
 void ossimAnnotationSource::deleteAll()
 {
-   std::vector<ossimAnnotationObject*>::iterator obj;
-
-   obj = theAnnotationObjectList.begin();
-
-   while(obj != theAnnotationObjectList.end())
-   {
-      if(*obj)
-      {
-         delete *obj;
-         *obj = 0;
-      }
-      
-      ++obj;
-   }
+   AnnotationObjectListType::iterator obj;
 
    theAnnotationObjectList.clear();
 }
@@ -423,11 +409,11 @@ void ossimAnnotationSource::drawAnnotations(ossimRefPtr<ossimImageData> tile)
 
    if(theImage->getImageData().valid())
    {
-      std::vector<ossimAnnotationObject*>::iterator object =
+      AnnotationObjectListType::iterator object =
          theAnnotationObjectList.begin();
       while(object != theAnnotationObjectList.end())
       {
-         if(*object)
+         if((*object).valid())
          {
             (*object)->draw(*theImage);
          }
@@ -436,13 +422,13 @@ void ossimAnnotationSource::drawAnnotations(ossimRefPtr<ossimImageData> tile)
    }
 }
 
-const std::vector<ossimAnnotationObject*>&
+const ossimAnnotationSource::AnnotationObjectListType&
 ossimAnnotationSource::getObjectList()const
 {
    return theAnnotationObjectList;
 }
 
-std::vector<ossimAnnotationObject*>& ossimAnnotationSource::getObjectList()
+ossimAnnotationSource::AnnotationObjectListType& ossimAnnotationSource::getObjectList()
 {
    return theAnnotationObjectList;
 }

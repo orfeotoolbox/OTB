@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimGeoPolyCutter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/projection/ossimProjection.h>
@@ -22,19 +22,10 @@ ossimGeoPolyCutter::ossimGeoPolyCutter()
 {
    ossimViewInterface::theObject = this;
    theGeoPolygonList.push_back(ossimGeoPolygon());
-   theViewProjection = NULL;
-   theOwnsViewFlag = false;
 }
 
 ossimGeoPolyCutter::~ossimGeoPolyCutter()
 {
-   if(theOwnsViewFlag && theViewProjection)
-   {
-      delete theViewProjection;
-      
-      theViewProjection = NULL;
-      theOwnsViewFlag = false;
-   }
 }
 
 bool ossimGeoPolyCutter::saveState(ossimKeywordlist& kwl,
@@ -63,7 +54,7 @@ bool ossimGeoPolyCutter::saveState(ossimKeywordlist& kwl,
             fillType.c_str(),
             true);   
 
-    if(theViewProjection)
+    if(theViewProjection.valid())
     {
        ossimString viewPrefix = prefix;
        viewPrefix += "view.";
@@ -119,18 +110,8 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
 
    ossimString viewPrefix = prefix;
    viewPrefix += "view.";
-   ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
+   theViewProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
                                                                                         viewPrefix);
-   if(proj)
-   {
-      if(theViewProjection&&theOwnsViewFlag)
-      {
-         delete theViewProjection;
-      }
-      theViewProjection = proj;
-      theOwnsViewFlag = true;
-   }
-   
    transformVertices();
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
@@ -139,7 +120,7 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
 void ossimGeoPolyCutter::setPolygon(const vector<ossimDpt>& polygon,
                                  ossim_uint32 index)
 {
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       ossimPolyCutter::setPolygon(polygon);
       invertPolygon(index);
@@ -149,7 +130,7 @@ void ossimGeoPolyCutter::setPolygon(const vector<ossimDpt>& polygon,
 void ossimGeoPolyCutter::setPolygon(const vector<ossimIpt>& polygon,
                                  ossim_uint32 index)
 {
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       ossimPolyCutter::setPolygon(polygon);
       invertPolygon(index);
@@ -184,7 +165,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimGpt>& polygon)
    theGeoPolygonList.push_back(polygon);
    thePolygonList.push_back(ossimPolygon());
 
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       transformVertices(((int)theGeoPolygonList.size())-1);
    }
@@ -192,7 +173,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimGpt>& polygon)
 
 void ossimGeoPolyCutter::addPolygon(const vector<ossimIpt>& polygon)
 {
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
@@ -202,7 +183,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimIpt>& polygon)
 
 void ossimGeoPolyCutter::addPolygon(const vector<ossimDpt>& polygon)
 {
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
@@ -212,7 +193,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimDpt>& polygon)
 
 void ossimGeoPolyCutter::addPolygon(const ossimPolygon& polygon)
 {
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
@@ -225,7 +206,7 @@ void ossimGeoPolyCutter::addPolygon(const ossimGeoPolygon& polygon)
    ossimPolyCutter::addPolygon(ossimPolygon());
    theGeoPolygonList.push_back(polygon);
    
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       transformVertices(((int)theGeoPolygonList.size())-1);
    }
@@ -248,34 +229,26 @@ void ossimGeoPolyCutter::invertPolygon(int polygonNumber)
    }
 }
 
-bool ossimGeoPolyCutter::setView(ossimObject* baseObject,
-                                 bool ownsTheView)
+bool ossimGeoPolyCutter::setView(ossimObject* baseObject)
 {
-   if(PTR_CAST(ossimProjection, baseObject))
+   ossimProjection* proj = dynamic_cast<ossimProjection*>(baseObject);
+   if(proj)
    {
-      if(theViewProjection && theOwnsViewFlag)
-      {
-         delete theViewProjection;
-      }
-      theViewProjection = PTR_CAST(ossimProjection, baseObject);
-      theOwnsViewFlag   = ownsTheView;
-
+      theViewProjection = proj;
       transformVertices();
-
       return true;
    }
-
    return false;
 }
 
 ossimObject* ossimGeoPolyCutter::getView()
 {
-   return theViewProjection;
+   return theViewProjection.get();
 }
 
 const ossimObject* ossimGeoPolyCutter::getView()const
 {
-   return theViewProjection;
+   return theViewProjection.get();
 }
 
 void ossimGeoPolyCutter::transformVertices()

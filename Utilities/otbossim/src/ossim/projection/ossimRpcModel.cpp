@@ -13,7 +13,7 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 11522 2007-08-07 21:57:59Z dburken $
+//  $Id: ossimRpcModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimRpcModel.h>
 
@@ -826,22 +826,22 @@ bool ossimRpcModel::saveState(ossimKeywordlist& kwl,
       key = LINE_NUM_COEF_KW;
       key += os.str();
       kwl.add(prefix, key.c_str(), theLineNumCoef[i],
-              true, 15, false, true);
+              true, 15);
       
       key = LINE_DEN_COEF_KW;
       key += os.str();
       kwl.add(prefix, key.c_str(), theLineDenCoef[i],
-              true, 15, false, true);
+              true, 15);
 
       key = SAMP_NUM_COEF_KW;
       key += os.str();
       kwl.add(prefix, key.c_str(), theSampNumCoef[i],
-              true, 15, false, true);
+              true, 15);
 
       key = SAMP_DEN_COEF_KW;
       key += os.str();
       kwl.add(prefix, key.c_str(), theSampDenCoef[i],
-              true, 15, false, true);
+              true, 15);
    }
       
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel::saveState(): returning..." << std::endl;

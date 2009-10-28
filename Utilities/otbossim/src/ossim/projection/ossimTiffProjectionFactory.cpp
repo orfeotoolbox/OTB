@@ -7,7 +7,7 @@
 //   Contains implementation of class ossimTiffProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimTiffProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimTiffProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/support_data/ossimGeoTiff.h>
@@ -16,6 +16,7 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/imaging/ossimTiffTileSource.h>
 #include <fstream>
 
 ossimTiffProjectionFactory* ossimTiffProjectionFactory::theInstance = 0;
@@ -41,14 +42,6 @@ ossimTiffProjectionFactory::createProjection(const ossimFilename& filename,
    if(!filename.exists())
    {
       return NULL;
-   }
-
-   // See if there is an external geomtry.
-   ossimProjection* result = createProjectionFromGeometryFile(filename,
-                                                              entryIdx);
-   if (result)
-   {
-      return result;
    }
 
    if(isTiff(filename))
@@ -84,6 +77,27 @@ ossimTiffProjectionFactory::createProjection(const ossimKeywordlist &keywordList
 ossimProjection* ossimTiffProjectionFactory::createProjection(const ossimString &name) const
 {
    return NULL;
+}
+
+ossimProjection* ossimTiffProjectionFactory::createProjection(ossimImageHandler* handler)const
+{
+   ossimTiffTileSource* tiff = dynamic_cast<ossimTiffTileSource*> (handler);
+   
+   if(tiff)
+   {
+      ossimGeoTiff geotiff;
+      ossimKeywordlist kwl;
+      
+      geotiff.readTags(tiff->tiffPtr(), tiff->getCurrentEntry(), false);
+      
+      if(geotiff.addImageGeometry(kwl))
+      {
+         return ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      }
+      
+   }
+   
+   return 0;
 }
 
 ossimObject* ossimTiffProjectionFactory::createObject(const ossimString& typeName)const

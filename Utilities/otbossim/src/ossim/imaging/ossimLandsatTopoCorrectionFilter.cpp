@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimLandsatTopoCorrectionFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimLandsatTopoCorrectionFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimLandsatTopoCorrectionFilter.h>
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/support_data/ossimFfL7.h>
@@ -59,13 +59,13 @@ void ossimLandsatTopoCorrectionFilter::setLandsatHeader(const ossimFilename& hea
    if(header != "")
    {
       theLandsatHeader = header;
-      ossimFfL7 headerL7(header.c_str());
-      headerL7.getGain(theGain);
-      headerL7.getBias(theBias);
-      headerL7.getSunElevation(theLightSourceElevationAngle);
-      headerL7.getSunAzimuth(theLightSourceAzimuthAngle);
+      ossimRefPtr<ossimFfL7> headerL7 = new ossimFfL7(header.c_str());
+      headerL7->getGain(theGain);
+      headerL7->getBias(theBias);
+      headerL7->getSunElevation(theLightSourceElevationAngle);
+      headerL7->getSunAzimuth(theLightSourceAzimuthAngle);
       computeLightDirection();
-      theJulianDay = headerL7.getJulianDay();
+      theJulianDay = headerL7->getJulianDay();
    }
 }
 
@@ -77,7 +77,7 @@ ossimFilename ossimLandsatTopoCorrectionFilter::findLandsatHeader()
    {
       return result;
    }
-   vector<ossimConnectableObject*> handlerList;
+   ossimConnectableObject::ConnectableObjectList handlerList;
 
    getInput(0)->findAllInputsOfType(handlerList,
                                     STATIC_TYPE_INFO(ossimImageHandler),
@@ -88,7 +88,7 @@ ossimFilename ossimLandsatTopoCorrectionFilter::findLandsatHeader()
 
    if(handlerList.size())
    {
-      handler = (ossimImageHandler*)handlerList[0];
+      handler = (ossimImageHandler*)handlerList[0].get();
    }
 
    if(handler)

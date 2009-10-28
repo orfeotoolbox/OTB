@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-//$Id: ossimGeoAnnotationFontObject.cpp 13965 2009-01-14 16:30:52Z gpotts $
+//$Id: ossimGeoAnnotationFontObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 
@@ -43,7 +43,7 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject()
       new ossimAnnotationFontObject(ossimIpt(0,0),
                                     ossimString(""));
    
-   theAnnotationFontObject->setFont(theFont, false);
+   theAnnotationFontObject->setFont(theFont.get());
    
 }
 
@@ -83,7 +83,7 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject(
    :
    ossimGeoAnnotationObject(rhs),
    theCenterGround(rhs.theCenterGround),
-   theFont(rhs.theFont?(ossimFont*)rhs.theFont->dup():(ossimFont*)NULL),
+   theFont(rhs.theFont.valid()?(ossimFont*)rhs.theFont->dup():(ossimFont*)NULL),
    theFontInfo(),
    theAnnotationFontObject(
       new ossimAnnotationFontObject(
@@ -99,21 +99,13 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject(
          rhs.theGreen,
          rhs.theBlue))
 {
-   theAnnotationFontObject->setFont(theFont, false);
+   theAnnotationFontObject->setFont(theFont.get());
 }
 
 ossimGeoAnnotationFontObject::~ossimGeoAnnotationFontObject()
 {
-   if(theAnnotationFontObject)
-   {
-      delete theAnnotationFontObject;
-      theAnnotationFontObject = NULL;
-   }
-   if(theFont)
-   {
-      delete theFont;
-      theFont = NULL;
-   }
+   theAnnotationFontObject = 0;
+   theFont = 0;
 }
 
 ossimObject* ossimGeoAnnotationFontObject::dup()const
@@ -124,24 +116,19 @@ ossimObject* ossimGeoAnnotationFontObject::dup()const
 
 void ossimGeoAnnotationFontObject::setFont(ossimFont* font)
 {
-   if(theFont)
-   {
-     delete theFont;
-     theFont = NULL;
-   }
    theFont = font;
 
-   theAnnotationFontObject->setFont(theFont, false);
+   theAnnotationFontObject->setFont(theFont.get());
 }
 
 ossimFont* ossimGeoAnnotationFontObject::getFont()
 {
-   return theFont;
+   return theFont.get();
 }
 
 void ossimGeoAnnotationFontObject::setPointSize(const ossimIpt& size)
 {
-   if(theAnnotationFontObject)
+   if(theAnnotationFontObject.valid())
    {
       theAnnotationFontObject->setPointSize(size);
    }
@@ -149,7 +136,7 @@ void ossimGeoAnnotationFontObject::setPointSize(const ossimIpt& size)
 
 void ossimGeoAnnotationFontObject::setRotation(double rotation)
 {
-   if(theAnnotationFontObject)
+   if(theAnnotationFontObject.valid())
    {
       theAnnotationFontObject->setRotation(rotation);
    }
@@ -157,7 +144,7 @@ void ossimGeoAnnotationFontObject::setRotation(double rotation)
 
 void ossimGeoAnnotationFontObject::setScale(const ossimDpt& scale)
 {
-   if(theAnnotationFontObject)
+   if(theAnnotationFontObject.valid())
    {
       theAnnotationFontObject->setScale(scale);
    }
@@ -165,7 +152,7 @@ void ossimGeoAnnotationFontObject::setScale(const ossimDpt& scale)
 
 void ossimGeoAnnotationFontObject::setShear(const ossimDpt& shear)
 {
-   if(theAnnotationFontObject)
+   if(theAnnotationFontObject.valid())
    {
       theAnnotationFontObject->setShear(shear);
    }
@@ -175,49 +162,20 @@ void ossimGeoAnnotationFontObject::setColor(ossim_uint8 r,
                                             ossim_uint8 g,
                                             ossim_uint8 b)
 {
-   if(theAnnotationFontObject)
+   if(theAnnotationFontObject.valid())
    {
       theAnnotationFontObject->setColor(r, g, b);
    }
 }
 
-void ossimGeoAnnotationFontObject::transform(ossimProjection* projection)
+void ossimGeoAnnotationFontObject::transform(ossimImageGeometry* projection)
 {
    if(projection)
    {
       ossimDpt ipt;
 
-      projection->worldToLineSample(theCenterGround, ipt);
+      projection->worldToLocal(theCenterGround, ipt);
       theAnnotationFontObject->setCenterPosition(ipt);
-      theAnnotationFontObject->computeBoundingRect();
-   }
-}
-
-void ossimGeoAnnotationFontObject::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      ossimDpt projectedCenter;
-      projection->worldToLineSample(theCenterGround, projectedCenter);
-
-      if (rrds)
-      {
-         // Transform r0 point to new rrds level.
-         try
-         {
-            ossimDpt rnPt;
-            model.r0ToRn(rrds, projectedCenter, rnPt);
-            projectedCenter = rnPt; 
-            
-         }
-         catch (const ossimException& e)
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-         }
-      }
-      theAnnotationFontObject->setCenterPosition(projectedCenter);
       theAnnotationFontObject->computeBoundingRect();
    }
 }
@@ -229,7 +187,7 @@ void ossimGeoAnnotationFontObject::setCenterGround(const ossimGpt& gpt)
 
 ossimAnnotationFontObject* ossimGeoAnnotationFontObject::getFontObject()
 {
-   return theAnnotationFontObject;
+   return theAnnotationFontObject.get();
 }
 
 void ossimGeoAnnotationFontObject::draw(ossimRgbImage& anImage)const
@@ -303,16 +261,12 @@ bool ossimGeoAnnotationFontObject::loadState(const ossimKeywordlist& kwl,
    theFontInfo.loadState(kwl, prefix);
 
    // See if we can make a font.
-   ossimFont* f = ossimFontFactoryRegistry::instance()->
+   ossimRefPtr<ossimFont> f = ossimFontFactoryRegistry::instance()->
       createFont(theFontInfo);
-   if (f)
+   if (f.valid())
    {
-      if (theFont)
-      {
-         delete theFont;
-      }
       theFont = f;
-      theAnnotationFontObject->setFont(theFont, false);
+      theAnnotationFontObject->setFont(theFont.get());
    }
 
    theAnnotationFontObject->setGeometryInformation(theFontInfo);

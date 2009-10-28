@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBlendMosaic.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBlendMosaic_HEADER
 #define ossimBlendMosaic_HEADER
 #include <ossim/imaging/ossimImageMosaic.h>
@@ -17,8 +17,7 @@ class OSSIMDLLEXPORT ossimBlendMosaic : public ossimImageMosaic
 {
 public:
    ossimBlendMosaic();
-   ossimBlendMosaic(vector<ossimImageSource*>& inputSources);
-   virtual ~ossimBlendMosaic();
+   ossimBlendMosaic(ossimConnectableObject::ConnectableObjectList& inputSources);
    virtual void initialize();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
@@ -55,6 +54,7 @@ public:
    void findMinMax(double& minValue, double& maxValue)const;
    
 protected:
+   virtual ~ossimBlendMosaic();
    vector<double>              theWeights;
    ossimRefPtr<ossimImageData> theNormResult;
    /**

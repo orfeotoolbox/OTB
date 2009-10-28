@@ -10,7 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfFrame.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <istream>
 #include <ostream>
@@ -222,7 +222,7 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
    deleteAll();
 
 
-   ossimNitfFile *nitfFile = new ossimNitfFile;
+   ossimRefPtr<ossimNitfFile> nitfFile = new ossimNitfFile;
    nitfFile->parseFile(filename);
    
    const ossimRefPtr<ossimNitfFileHeader> nitfFileHeader =
@@ -230,8 +230,7 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
       
    if(!nitfFileHeader)
    {
-      delete nitfFile;
-      nitfFile = NULL;
+      nitfFile = 0;
       
       return ossimErrorCodes::OSSIM_ERROR;
    }
@@ -239,8 +238,7 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
    nitfFileHeader->getTag(info, "RPFHDR");
       
    // we no longer need access to the nitf header.  We got what we needed
-   delete nitfFile;
-   nitfFile = NULL;
+   nitfFile = 0;
    
    theFilename = filename;
    if(info.getTagName() == "RPFHDR")

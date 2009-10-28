@@ -5,12 +5,13 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimActiveEdgeTable.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimActiveEdgeTable.h 14799 2009-06-30 08:54:44Z dburken $
 #include <iostream>
 #include <vector>
 #include <list>
 #include <ossim/base/ossimIrect.h>
-class OSSIMDLLEXPORT ossimPolygon;
+
+class ossimPolygon;
 
 
 class OSSIMDLLEXPORT ossimActiveEdgeTableNode

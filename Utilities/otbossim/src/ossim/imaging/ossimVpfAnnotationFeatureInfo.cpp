@@ -58,7 +58,7 @@ ossimVpfAnnotationFeatureInfo::~ossimVpfAnnotationFeatureInfo()
    deleteAllObjects();
 }
 
-void ossimVpfAnnotationFeatureInfo::transform(ossimProjection* proj)
+void ossimVpfAnnotationFeatureInfo::transform(ossimImageGeometry* proj)
 {
    if(theEnabledFlag)
    {
@@ -417,11 +417,6 @@ ossimVpfAnnotationFeatureInfo::ossimVpfAnnotationFeatureType ossimVpfAnnotationF
 
 void ossimVpfAnnotationFeatureInfo::deleteAllObjects()
 {
-  for(int idx = 0; idx < (int)theAnnotationArray.size();++idx)
-    {
-      delete theAnnotationArray[idx];
-    }
-
   theAnnotationArray.clear();
 }
 
@@ -449,7 +444,7 @@ void ossimVpfAnnotationFeatureInfo::setDrawingFeaturesToAnnotation()
    case ossimVpfAnnotationFeatureType_TEXT:
    {
       ossimGeoAnnotationFontObject* annotation = NULL;
-      ossimFont* font = ossimFontFactoryRegistry::instance()->createFont(theFontInformation);
+      ossimRefPtr<ossimFont> font = ossimFontFactoryRegistry::instance()->createFont(theFontInformation);
 
       for(int idx = 0; idx < (int)theAnnotationArray.size();++idx)
       {
@@ -459,7 +454,7 @@ void ossimVpfAnnotationFeatureInfo::setDrawingFeaturesToAnnotation()
                               thePenColor.getB());
          annotation->setThickness(theThickness);
          
-         if(font)
+         if(font.valid())
          {
             annotation->setFont((ossimFont*)font->dup());
          }
@@ -467,11 +462,6 @@ void ossimVpfAnnotationFeatureInfo::setDrawingFeaturesToAnnotation()
          annotation->setScale(theFontInformation.theScale);
          annotation->setShear(theFontInformation.theShear);
          annotation->setRotation(theFontInformation.theRotation);
-      }
-      if(font)
-      {
-         delete font;
-         font = NULL;
       }
       break;
    }

@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.cpp 12911 2008-05-28 13:36:06Z gpotts $
+//  $Id: ossimMultiBandHistogram.cpp 14999 2009-07-27 18:56:11Z gpotts $
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -392,7 +392,7 @@ bool ossimMultiBandHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const
 
       band->setTag("Band");
       band->addAttribute("idx", ossimString::toString(idx));
-      band->addChildNode(newNode);
+      band->addChildNode(newNode.get());
       if(theHistogramList[idx].valid())
       {         
          theHistogramList[idx]->saveState(newNode);
@@ -401,7 +401,7 @@ bool ossimMultiBandHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const
       {
          newNode->setTag("ossimHistogram");
       }
-      xmlNode->addChildNode(band);
+      xmlNode->addChildNode(band.get());
    }
 
    return true;

@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimMapViewController.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimMapViewController.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/projection/ossimMapViewController.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -106,17 +106,10 @@ void ossimMapViewController::setFilename(const ossimFilename& file)
       ossimKeywordlist kwl;
       kwl.addFile(file.c_str());
       
-      ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-      if(PTR_CAST(ossimMapProjection, proj))
+      ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      if(dynamic_cast<ossimMapProjection*>(proj.get()))
       {
-         setView(proj);
-      }
-      else
-      {
-         if(proj)
-         {
-            delete proj;
-         }
+         setView(proj.get());
       }
    }
 
@@ -169,7 +162,7 @@ bool ossimMapViewController::loadState(const ossimKeywordlist& kwl,
    ossimSource::loadState(kwl, prefix);
 
    theGeometryFile = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
-   ossimProjection* proj=(ossimProjection*)NULL;
+   ossimRefPtr<ossimProjection> proj;
    
    if(theGeometryFile == "")
    {
@@ -185,16 +178,9 @@ bool ossimMapViewController::loadState(const ossimKeywordlist& kwl,
       proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl2);
    }
    
-   if(PTR_CAST(ossimMapProjection, proj))
+   if(dynamic_cast<ossimMapProjection*>(proj.get()))
    {
-      setView(proj);
-   }
-   else
-   {
-      if(proj)
-      {
-         delete proj;
-      }      
+      setView(proj.get());
    }
 
    return true;

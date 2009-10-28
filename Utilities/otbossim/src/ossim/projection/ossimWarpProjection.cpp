@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimWarpProjection.cpp 11806 2007-10-05 14:55:57Z dburken $
+//  $Id: ossimWarpProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimWarpProjection.h>
 RTTI_DEF1(ossimWarpProjection, "ossimWarpProjection", ossimProjection);
@@ -93,21 +93,9 @@ ossimWarpProjection::ossimWarpProjection(const ossimKeywordlist& geom_kwl,
 //*****************************************************************************
 ossimWarpProjection::~ossimWarpProjection()
 {
-   if(theClientProjection)
-   {
-      delete theClientProjection;
-      theClientProjection = 0;
-   }
-   if(theWarpTransform)
-   {
-      delete theWarpTransform;
-      theWarpTransform = 0;
-   }
-   if(theAffineTransform)
-   {
-      delete theAffineTransform;
-      theAffineTransform = 0;
-   }
+   theClientProjection = 0;
+   theWarpTransform = 0;
+   theAffineTransform = 0;
 }
 
 //*****************************************************************************
@@ -118,7 +106,7 @@ void ossimWarpProjection::worldToLineSample (const ossimGpt& worldPoint,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimWarpProjection::worldToLineSample: Entering..." << std::endl;
 
-   if (theClientProjection && theWarpTransform && theAffineTransform)
+   if (theClientProjection.valid() && theWarpTransform.valid() && theAffineTransform.valid())
    {
       theClientProjection->worldToLineSample(worldPoint, lineSampPt);
       theAffineTransform->inverse(lineSampPt);
@@ -140,7 +128,7 @@ void ossimWarpProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimWarpProjection::lineSampleToWorld: Entering..." << std::endl;
 
-   if (theClientProjection && theWarpTransform && theAffineTransform)
+   if (theClientProjection.valid() && theWarpTransform.valid() && theAffineTransform.valid())
    {
       ossimDpt adjustedPt;
       theWarpTransform->forward(adjustedPt);
@@ -164,7 +152,7 @@ void ossimWarpProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimWarpProjection::lineSampleHeightToWorld: Entering..." << std::endl;
 
-   if (theClientProjection && theWarpTransform && theAffineTransform)
+   if (theClientProjection.valid() && theWarpTransform.valid() && theAffineTransform.valid())
    {
       ossimDpt adjustedPt;
       theAffineTransform->forward(lineSampPt, adjustedPt);
@@ -184,7 +172,7 @@ void ossimWarpProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
 //*****************************************************************************
 std::ostream& ossimWarpProjection::print(std::ostream& out) const
 {
-   if (theClientProjection && theWarpTransform && theAffineTransform)
+   if (theClientProjection.valid() && theWarpTransform.valid() && theAffineTransform.valid())
    {
       out <<
          "ossimWarpProjection:\n"
@@ -218,7 +206,7 @@ bool ossimWarpProjection::saveState(ossimKeywordlist& kwl,
    ossimString affinePrefix   = ossimString(prefix) + AFFINE_PREFIX;
    ossimString quadwarpPrefix = ossimString(prefix) + QUADWARP_PREFIX;
 
-   if (theClientProjection && theWarpTransform && theAffineTransform)
+   if (theClientProjection.valid() && theWarpTransform.valid() && theAffineTransform.valid())
    {
       theClientProjection->saveState(kwl, projPrefix.c_str());
       theAffineTransform->saveState(kwl, affinePrefix.c_str());
@@ -245,8 +233,7 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
    ossimString affinePrefix = ossimString(prefix) + AFFINE_PREFIX;
    ossimString quadwarpPrefix = ossimString(prefix) + QUADWARP_PREFIX;
 
-   if(theClientProjection) delete theClientProjection;
-   theClientProjection = (ossimProjection*)0;
+   theClientProjection = 0;
 
    if (!theWarpTransform)
       theWarpTransform = new ossimQuadTreeWarp();
@@ -257,15 +244,15 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
    theClientProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, projPrefix.c_str());
 
    if(!theClientProjection)
-     {
-       result = false;
-     }
+   {
+      result = false;
+   }
    else
-     {
-       theWarpTransform->loadState(kwl,   quadwarpPrefix.c_str());
-       theAffineTransform->loadState(kwl, affinePrefix.c_str());
-     }
-
+   {
+      theWarpTransform->loadState(kwl,   quadwarpPrefix.c_str());
+      theAffineTransform->loadState(kwl, affinePrefix.c_str());
+   }
+   
    return ossimProjection::loadState(kwl, prefix);
 }
 
@@ -284,7 +271,7 @@ ossimObject* ossimWarpProjection::dup() const
 //*****************************************************************************
 ossimGpt ossimWarpProjection::origin() const
 {
-   if (theClientProjection)
+   if (theClientProjection.valid())
       return theClientProjection->origin();
    return ossimGpt(0.0, 0.0, 0.0);
 }
@@ -294,7 +281,7 @@ ossimGpt ossimWarpProjection::origin() const
 //*****************************************************************************
 ossimDpt  ossimWarpProjection::getMetersPerPixel() const
 {
-   if (theClientProjection)
+   if (theClientProjection.valid())
       return theClientProjection->getMetersPerPixel();
    return ossimDpt(ossim::nan(), ossim::nan());
 }
@@ -304,11 +291,6 @@ void ossimWarpProjection::setNewWarpTransform(ossim2dTo2dTransform* warp)
 {
    if(warp)
    {
-      if(theWarpTransform)
-      {
-         delete theWarpTransform;
-         theWarpTransform = 0;
-      }
       theWarpTransform = warp;
    }
 }
@@ -317,11 +299,6 @@ void ossimWarpProjection::setNewAffineTransform(ossim2dTo2dTransform* affine)
 {
    if(affine)
    {
-      if(theAffineTransform)
-      {
-         delete theAffineTransform;
-         theAffineTransform = 0;
-      }
       theAffineTransform = affine;
    }
 }

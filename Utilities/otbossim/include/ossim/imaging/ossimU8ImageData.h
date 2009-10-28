@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -20,7 +19,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU8ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimU8ImageData.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimU8ImageData_HEADER
 #define ossimU8ImageData_HEADER
@@ -43,7 +42,6 @@ public:
       :ossimImageData(rhs)
       {}
 
-   virtual ~ossimU8ImageData();
 
    virtual ossimObject* dup()const;
 
@@ -163,10 +161,10 @@ public:
                                            float* buf);
    
    virtual ossim_float64 getMinNormalizedPix() const { return theRemapTable[1]; }
-   
-private:
+protected:
+   virtual ~ossimU8ImageData();
 
-   const ossimU8ImageData& operator =(const ossimU8ImageData &rhs);
+private:
 
    static const ossimNormalizedU8RemapTable theRemapTable;
    

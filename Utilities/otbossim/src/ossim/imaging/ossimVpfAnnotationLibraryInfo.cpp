@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 // 
 //**************************************************************************
-// $Id: ossimVpfAnnotationLibraryInfo.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfAnnotationLibraryInfo.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <algorithm>
 
@@ -106,7 +106,7 @@ void ossimVpfAnnotationLibraryInfo::getAllFeatures(std::vector<ossimVpfAnnotatio
    }
 }
 
-void ossimVpfAnnotationLibraryInfo::transform(ossimProjection* proj)
+void ossimVpfAnnotationLibraryInfo::transform(ossimImageGeometry* geom)
 {
    if(traceDebug())
    {
@@ -121,7 +121,7 @@ void ossimVpfAnnotationLibraryInfo::transform(ossimProjection* proj)
          ossimNotify(ossimNotifyLevel_DEBUG) << "transforming coverage = " << theCoverageLayerList[idx]->getName() << std::endl;
       }
       
-      theCoverageLayerList[idx]->transform(proj);
+      theCoverageLayerList[idx]->transform(geom);
    }
 
    if(traceDebug())

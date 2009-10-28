@@ -27,7 +27,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimElevCellHandlerFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimElevCellHandlerFactory.cpp 14800 2009-06-30 08:58:55Z dburken $
 
 #include <ossim/elevation/ossimElevCellHandlerFactory.h>
 #include <ossim/base/ossimString.h>
@@ -70,7 +70,7 @@ ossimElevCellHandler*
 ossimElevCellHandlerFactory::create(const ossimKeywordlist &keywordList,
                                     const char *prefix) const
 {
-   list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator
+   std::list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator
       elevCellFactory;
 
    ossimElevCellHandler* product = 0;
@@ -92,7 +92,7 @@ ossimElevCellHandlerFactory::create(const ossimKeywordlist &keywordList,
 ossimElevCellHandler*
 ossimElevCellHandlerFactory::create(const ossimString &name) const 
 {
-   list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator
+   std::list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator
       elevCellFactory;
 
    ossimElevCellHandler* product = 0;
@@ -111,11 +111,11 @@ ossimElevCellHandlerFactory::create(const ossimString &name) const
 //  METHOD: ossimElevCellHandlerFactory::getList()
 //  
 //*****************************************************************************
-list<ossimString> ossimElevCellHandlerFactory::getList() const 
+std::list<ossimString> ossimElevCellHandlerFactory::getList() const 
 {
-   list<ossimString> rtn_list;
-   list<ossimString> sub_list;
-   list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator factory_iter;
+   std::list<ossimString> rtn_list;
+   std::list<ossimString> sub_list;
+   std::list<ossimFactoryBase<ossimElevCellHandler>*>::const_iterator factory_iter;
 
    factory_iter = theRegistry.begin();
    while(factory_iter != theRegistry.end())

@@ -44,10 +44,10 @@ void ossimGeographicAnnotationGrid::draw(ossimRgbImage& anImage)const
    // the geographic grid to generate will be 0,0 is origin
    // -180lon and 90lat.
    //
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
-      ossimAnnotationLineObject *line=NULL;
-      ossimAnnotationGdBitmapFont *font=NULL;
+      ossimRefPtr<ossimAnnotationLineObject> line=NULL;
+      ossimRefPtr<ossimAnnotationGdBitmapFont> font;
       
       line = new ossimAnnotationLineObject();
       font = new ossimAnnotationGdBitmapFont();
@@ -155,10 +155,8 @@ void ossimGeographicAnnotationGrid::draw(ossimRgbImage& anImage)const
          font->draw(anImage);
       }
 
-      delete line;
-      line = NULL;
-      delete font;
-      font = NULL;
+      line = 0;
+      font = 0;
    }
 }
 
@@ -239,7 +237,7 @@ void ossimGeographicAnnotationGrid::computeBoundingRect()
 {
    static const char* MODULE = "ossimGeographicAnnotationGrid::computeBoundingRect";
    
-   if(theViewProjection)
+   if(theViewProjection.valid())
    {
       vector<ossimDpt> points(4);
 
@@ -260,10 +258,11 @@ void ossimGeographicAnnotationGrid::computeBoundingRect()
       ossimDpt lr = theBoundingRect.lr();
 
       
-      ossimAnnotationGdBitmapFont font;
-      font.setCenterText(ossimDpt(0,0),"ddd@mm'ss.ssssC");
+      ossimRefPtr<ossimAnnotationGdBitmapFont> font = new ossimAnnotationGdBitmapFont();;
+      font->setCenterText(ossimDpt(0,0),"ddd@mm'ss.ssssC");
       ossimDrect boundingRect;
-      font.getBoundingRect(boundingRect);
+      font->getBoundingRect(boundingRect);
+      font = 0;
       
       theBoundingRect = ossimDrect(ul.x - boundingRect.width(),
                                    ul.y - boundingRect.height(),

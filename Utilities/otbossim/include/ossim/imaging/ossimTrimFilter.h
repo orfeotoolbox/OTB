@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTrimFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTrimFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimTrimFilter_HEADER
 #define ossimTrimFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -18,7 +18,6 @@ class ossimTrimFilter : public ossimImageSourceFilter
 {
 public:
    ossimTrimFilter();
-   virtual ~ossimTrimFilter();
 
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
    virtual void getValidImageVertices(vector<ossimIpt>& validVertices,
@@ -58,6 +57,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
 protected:
+   virtual ~ossimTrimFilter();
    double theLeftPercent;
    double theRightPercent;
    double theTopPercent;

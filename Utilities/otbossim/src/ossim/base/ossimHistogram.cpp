@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 13709 2008-10-14 14:55:11Z gpotts $
+// $Id: ossimHistogram.cpp 15766 2009-10-20 12:37:09Z gpotts $
 //
 
 #include <stdio.h>
@@ -1442,11 +1442,11 @@ bool ossimHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const
    {
       for(idx = 0; idx < num;++idx)
       {
-         out << ossimString::toString(counts[idx], 8, true) << " ";
+         out << ossimString::toString(counts[idx], 8) << " ";
       }
       binValues->setText(out.str());
    }
-   xmlNode->addChildNode(binValues);
+   xmlNode->addChildNode(binValues.get());
    
    return true;
 }

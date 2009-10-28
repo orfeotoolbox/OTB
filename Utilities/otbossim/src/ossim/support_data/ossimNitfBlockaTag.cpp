@@ -9,7 +9,7 @@
 // Description: BLOCKA tag class declaration.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfBlockaTag.cpp 14754 2009-06-23 23:13:05Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -106,7 +106,7 @@ std::ostream& ossimNitfBlockaTag::print(std::ostream& out,
 {
    std::string pfx = prefix;
    pfx += getRegisterTagName();
-   pfx += "_";
+   pfx += ".";
    
    // Grab the corners parsed into points.
    ossimDpt ulPt;

@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -9,9 +11,10 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 13155 2008-07-08 15:59:52Z gpotts $
+//  $Id: ossimTiffOverviewBuilder.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
-#include <cstring>
+#include <algorithm> /* for std::fill */
+// #include <cstring>
 #include <sstream>
 using namespace std;
 #include <xtiffio.h>
@@ -48,8 +51,11 @@ RTTI_DEF1(ossimTiffOverviewBuilder,
 
 static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 
+// Property keywords.
+static const char COPY_ALL_KW[] = "copy_all_flag";
+
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 13155 2008-07-08 15:59:52Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 
@@ -60,9 +66,7 @@ ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
    :
       ossimOverviewBuilderBase(),
       theImageHandler(0),
-      theOwnsImageHandlerFlag(false),
       theOutputFile(ossimFilename::NIL),
-      theOutputFileTmp(ossimFilename::NIL),
       theNullDataBuffer(0),
       theBytesPerPixel(1),
       theBitsPerSample(8),
@@ -77,34 +81,26 @@ ossimTiffOverviewBuilder::ossimTiffOverviewBuilder()
       theNullPixelValues(),
       theCopyAllFlag(false),
       theOutputTileSizeSetFlag(false)
-   
 {
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimTiffOverviewBuilder::ossimTiffOverviewBuilder DEBUG:"
-         << std::endl;
+         << "ossimTiffOverviewBuilder::ossimTiffOverviewBuilder DEBUG:\n";
 #ifdef OSSIM_ID_ENABLED
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "OSSIM_ID:  "
          << OSSIM_ID
+         << "\n";
+#endif
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "overview stop dimension: " << theOverviewStopDimension
          << std::endl;
-#endif      
    }
 }
 
 ossimTiffOverviewBuilder::~ossimTiffOverviewBuilder()
 {
-   if (theOwnsImageHandlerFlag && theImageHandler)
-   {
-      delete theImageHandler;
-      theImageHandler = 0;
-   }
-   if (theNullDataBuffer)
-   {
-      delete [] theNullDataBuffer;
-      theNullDataBuffer = 0;
-   }
+   theImageHandler = 0;
 }
 
 void ossimTiffOverviewBuilder::setResampleType(
@@ -113,7 +109,8 @@ void ossimTiffOverviewBuilder::setResampleType(
    theResampleType = resampleType;
 }
 
-bool ossimTiffOverviewBuilder::buildOverview(const ossimFilename& overview_file, bool copy_all)
+bool ossimTiffOverviewBuilder::buildOverview(
+   const ossimFilename& overview_file, bool copy_all)
 {
    if (traceDebug())
    {
@@ -150,14 +147,12 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
 
+   theOutputFile = getOutputFile();
    if (theOutputFile == ossimFilename::NIL)
    {
-      if (initializeOutputFilenamFromHandler() == false)
-      {
-         return false;
-      }
+      return false;
    }
-   theOutputFileTmp = theOutputFile + ".tmp";
+
    // Check the file.  Disallow same file overview building.
    if (theImageHandler->getFilename() == theOutputFile)
    {
@@ -167,29 +162,37 @@ bool ossimTiffOverviewBuilder::execute()
       return false;
    }
 
-   //---
-   // Calculate the number of reduced resolution data sets (rrds).
-   // The image will be reduced until the smallest dimension is
-   // It will go all the way to a 1x1 pixel.
-   //---
-   ossim_int32 number_of_sets = getNumberOfSets();
+   // Add .tmp in case process gets aborted to avoid leaving bad .ovr file.
+   ossimFilename outputFileTemp = theOutputFile + ".tmp";
+
+   // Required number of levels needed including r0.
+   ossim_uint32 requiedResLevels = getRequiredResLevels(theImageHandler.get());
+
+   // Zero based starting resLevel.
+   ossim_uint32 startingResLevel  = 0;
+   if (!theCopyAllFlag)
+   {
+      startingResLevel = theImageHandler->getNumberOfDecimationLevels();
+   }
    
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE
-         << "\nNumber of reduced res sets:  " << number_of_sets
+         << "\nCurrent number of reduced res sets: "
+         << theImageHandler->getNumberOfDecimationLevels()
+         << "\nNumber of required reduced res sets:  " << requiedResLevels
+         << "\nStarting reduced res set:    " << startingResLevel
          << "\nResampling type:  " << getOverviewType().c_str()
          << std::endl;
    }
-   
-   if (!number_of_sets)
+
+   if ( startingResLevel >= requiedResLevels )
    {
       ossimNotify(ossimNotifyLevel_INFO)
          << MODULE << " NOTICE:"
-         << "\nFile size not large enough to require reduced resolution"
-         << " data sets."
-         << "\nReturning..." << std::endl;
+         << "\nImage has required reduced resolution data sets.\nReturning..."
+         << std::endl;
       return false;
    }
    
@@ -213,15 +216,25 @@ bool ossimTiffOverviewBuilder::execute()
       ossimString openMode = "w";
       if((byteCheck*static_cast<ossim_uint64>(2))>fourGigs)
       {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << " Big tiff activated\n";
+         }
          openMode += "8";
+      }
+      else
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG) << " No big tiff activated\n";
+         }
       }
       
       //---
       // See if the file can be opened for writing.
       // Note:  If this file existed previously it will be overwritten.
       //---
-//       tif = TIFFOpen(theOutputFileTmp.c_str(), openMode.c_str());
-      tif = openTiff(theOutputFileTmp, openMode);
+      tif = openTiff(outputFileTemp, openMode);
       if (!tif)
       {
          // Set the error...
@@ -231,7 +244,7 @@ bool ossimTiffOverviewBuilder::execute()
                        MODULE,
                        __FILE__,
                        __LINE__,
-                       theOutputFileTmp.c_str());      
+                       outputFileTemp.c_str());      
          return false;
       } 
 
@@ -245,7 +258,8 @@ bool ossimTiffOverviewBuilder::execute()
          progressListener = new ossimStdOutProgress(0, true);
          addListener(progressListener);
       }
-      if (theCopyAllFlag)
+
+      if (startingResLevel == 0)
       {       
          if (!writeR0(tif))
          {
@@ -265,10 +279,9 @@ bool ossimTiffOverviewBuilder::execute()
             return false;
          }
 
+         ++startingResLevel; // Go to r1.
       }
-         // now try to write out any geo tags
-         //
-      
+
       if (needsAborting())
       {
          closeTiff(tif);
@@ -280,105 +293,90 @@ bool ossimTiffOverviewBuilder::execute()
          }
          return false;
       }
+      
       TIFFFlush(tif);
+      
    } // End of master only write of r0.
-
-   if (number_of_sets > 1)
+        
+   for (ossim_uint32 i = startingResLevel; i < requiedResLevels; ++i)
    {
-      for (ossim_int32 i=1; i<=number_of_sets; ++i)
+      if (ossimMpi::instance()->getRank() == 0 )
       {
-         if (ossimMpi::instance()->getRank() == 0 )
-         {
-            TIFFFlush(tif);
-         }
-         // Sync all processes...
-         ossimMpi::instance()->barrier();
+         TIFFFlush(tif);
+      }
+      // Sync all processes...
+      ossimMpi::instance()->barrier();
+      
+      ossimRefPtr<ossimImageHandler> ih = 0;
 
-         ossimImageHandler* ih = 0;
-         bool deleteLocalHandler = false;
-         
-         //---
-         // If we copied r0 to the overview file use it instead of the
-         // original image handler as it is probably faster.
-         //---
-         if ( (i == 1) && !theCopyAllFlag )
-         {
-            ih = theImageHandler;
-         }
-         else
-         {
-            ih = ossimImageHandlerRegistry::instance()->open(theOutputFileTmp);
-            if (!ih)
-            {
-               // Set the error...
-               ossimSetError(getClassName(),
-                             ossimErrorCodes::OSSIM_OPEN_FILE_ERROR,
-                             "%s file %s line %d\nCannot open file:  %s",
-                             MODULE,
-                             __FILE__,
-                             __LINE__,
-                             theOutputFileTmp.c_str());   
-               return false;
-            }
-            deleteLocalHandler = true;
-         }
-         
-         if ( !writeRn(ih, tif, i) )
+      //---
+      // If we copied r0 to the overview file use it instead of the
+      // original image handler as it is probably faster.
+      //---
+      if ( i <= theImageHandler->getNumberOfDecimationLevels())
+      {
+         ih = theImageHandler;
+      }
+      else
+      {
+         ih = ossimImageHandlerRegistry::instance()->open(outputFileTemp);
+         if (!ih)
          {
             // Set the error...
             ossimSetError(getClassName(),
-                          ossimErrorCodes::OSSIM_WRITE_FILE_ERROR,
-                          "\
-%s file %s line %d\nError creating reduced res set!",
+                          ossimErrorCodes::OSSIM_OPEN_FILE_ERROR,
+                          "%s file %s line %d\nCannot open file:  %s",
                           MODULE,
                           __FILE__,
-                          __LINE__);
-            if (deleteLocalHandler)
-            {
-               delete ih;
-               ih = 0;
-            }
-            if (tif)
-            {
-               closeTiff(tif);
-               tif = 0;
-            }
-            if (progressListener)
-            {
-               removeListener(progressListener);
-               delete progressListener;
-               progressListener = 0;
-            }
+                          __LINE__,
+                          outputFileTemp.c_str());   
             return false;
-         }
-
-         if (needsAborting())
-         {
-            if (deleteLocalHandler)
-            {
-               delete ih;
-               ih = 0;
-            }
-            if (tif)
-            {
-               closeTiff(tif);
-               tif = 0;
-            }
-            if (progressListener)
-            {
-               removeListener(progressListener);
-               delete progressListener;
-               progressListener = 0;
-            }
-            return false;
-         }
-         
-         if (deleteLocalHandler)
-         {
-            delete ih;
-            ih = 0;
          }
       }
+      
+      if ( !writeRn(ih.get(), tif, i) )
+      {
+         // Set the error...
+         ossimSetError(getClassName(),
+                       ossimErrorCodes::OSSIM_WRITE_FILE_ERROR,
+                       "\
+%s file %s line %d\nError creating reduced res set!",
+                       MODULE,
+                       __FILE__,
+                       __LINE__);
+         ih = 0;
+         if (tif)
+         {
+            closeTiff(tif);
+            tif = 0;
+         }
+         if (progressListener)
+         {
+            removeListener(progressListener);
+            delete progressListener;
+            progressListener = 0;
+         }
+         return false;
+      }
+      
+      if (needsAborting())
+      {
+         ih = 0;
+         if (tif)
+         {
+            closeTiff(tif);
+            tif = 0;
+         }
+         if (progressListener)
+         {
+            removeListener(progressListener);
+            delete progressListener;
+            progressListener = 0;
+         }
+         return false;
+      }
+      
+      ih = 0;
    }
 
    if (ossimMpi::instance()->getRank() == 0 )
@@ -395,13 +393,13 @@ bool ossimTiffOverviewBuilder::execute()
          delete progressListener;
          progressListener = 0;
       }
-
-      theOutputFileTmp.rename(theOutputFile);
-		if(traceDebug())
-		{
-			ossimNotify(ossimNotifyLevel_INFO)
-         << "Wrote file:  " << theOutputFile.c_str() << std::endl;
-		}
+      
+      outputFileTemp.rename(theOutputFile);
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_INFO)
+            << "Wrote file:  " << theOutputFile.c_str() << std::endl;
+      }
       ossimFilename file=theOutputFile;
       file = file.setExtension("omd");
       ossimKeywordlist kwl;
@@ -445,15 +443,15 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
    }
    // now set the geotiff tags
    //
-   ossimKeywordlist kwl;
-   theImageHandler->getImageGeometry(kwl);
-   ossimDrect areaOfInterest = theImageHandler->getBoundingRect();
-   ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->
-      createProjection(kwl);
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
-   ossimRefPtr<ossimMapProjectionInfo> projInfo;
+   // Get the geometry from the input.
+   const ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* inputGeom = theImageHandler->getImageGeometry();
+   if (inputGeom)
+      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+
    if(mapProj)
    {
+      ossimDrect areaOfInterest = theImageHandler->getBoundingRect();
       ossimRefPtr<ossimMapProjectionInfo> projInfo = new ossimMapProjectionInfo(mapProj, areaOfInterest);
       ossimGeoTiff::writeTags(tif, projInfo);
    }
@@ -519,7 +517,7 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
             }
             else
             {
-               data = static_cast<tdata_t>(theNullDataBuffer);
+               data = static_cast<tdata_t>(&(theNullDataBuffer.front()));
             }
 
             // Write the tile.
@@ -580,7 +578,7 @@ bool ossimTiffOverviewBuilder::writeR0(TIFF* tif)
 
 bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
                                        TIFF* tif,
-                                       ossim_uint32 rrdsLevel)
+                                       ossim_uint32 resLevel)
 {
    //---
    // Set up the sequencer.  This will be one of three depending on if we're
@@ -605,7 +603,11 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
    }
 
    sequencer->setImageHandler(imageHandler);
-   sequencer->setSourceLevel(rrdsLevel-1);
+
+   ossim_uint32 sourceResLevel =
+      imageHandler->getNumberOfDecimationLevels() - 1;
+
+   sequencer->setSourceLevel(sourceResLevel);
    sequencer->setResampleType(theResampleType);
    sequencer->setTileSize( ossimIpt(theTileWidth, theTileHeight) );
    sequencer->initialize();
@@ -623,18 +625,18 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
    static const char MODULE[] = "ossimTiffOverviewBuilder::writeRn";
 
    ostringstream os;
-   os << "creating r" << rrdsLevel << "...";
+   os << "creating r" << resLevel << "...";
    setCurrentMessage(os.str());
 
-   if (rrdsLevel == 0)
+   if (resLevel == 0)
    {
       return false;
    }
 
    ossimIrect rect;
    sequencer->getOutputImageRectangle(rect);
-   
-   if (!setTags(tif, rect, rrdsLevel))
+
+   if (!setTags(tif, rect, resLevel))
    {
       closeTiff(tif);
       ossimNotify(ossimNotifyLevel_WARN)
@@ -656,7 +658,7 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
          << "\nnumberOfTiles:    " << numberOfTiles
          << std::endl;
    }
-
+ 
    // Tile loop in the line direction.
    ossim_uint32 y = 0;
    for(ossim_uint32 i = 0; i < outputTilesHigh; ++i)
@@ -731,30 +733,12 @@ bool ossimTiffOverviewBuilder::writeRn(ossimImageHandler* imageHandler,
    return true;
 }
 
-ossim_int32 ossimTiffOverviewBuilder::getNumberOfSets() const
-{
-   ossim_int32 a = theImageHandler->getNumberOfSamples(0) <
-             theImageHandler->getNumberOfLines(0) ?
-             theImageHandler->getNumberOfSamples(0) :
-             theImageHandler->getNumberOfLines(0);
-
-   ossim_int32 n = 0;
-
-   while(a > 2)
-   {
-      a /= 2;
-      ++n;
-   }
-
-   return n;
-}
-
 //*******************************************************************
 // Private Method:
 //*******************************************************************
 bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
                                        const ossimIrect& outputRect,
-                                       ossim_int32 rrds_level) const
+                                       ossim_int32 resLevel) const
 {
    if (outputRect.hasNans())
    {
@@ -767,7 +751,7 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    ossim_float64 minSampleValue  = theImageHandler->getMinPixelValue();
    ossim_float64 maxSampleValue  = theImageHandler->getMaxPixelValue();
 
-   if (rrds_level)
+   if (resLevel)
    {
       TIFFSetField( tif, TIFFTAG_SUBFILETYPE, FILETYPE_REDUCEDIMAGE );
    }
@@ -776,7 +760,7 @@ bool ossimTiffOverviewBuilder::setTags(TIFF* tif,
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimTiffOverviewBuilder::setTags DEBUG:"
-         << "\nrrds_level:      " << rrds_level
+         << "\nrrds_level:      " << resLevel
          << "\nimageWidth:      " << imageWidth
          << "\nimageHeight:     " << imageHeight
          << "\nminSampleValue:  " << minSampleValue
@@ -908,7 +892,6 @@ Range is 100 to 1.  Current quality set to default of 75.",
    }
 }
 
-
 bool ossimTiffOverviewBuilder::getCopyAllFlag() const
 {
    return theCopyAllFlag;
@@ -929,14 +912,24 @@ const ossimObject* ossimTiffOverviewBuilder::getObject() const
    return this;
 }
 
-ossimFilename ossimTiffOverviewBuilder::getOutputFile() const
-{
-   return theOutputFile;
-}
-
 void ossimTiffOverviewBuilder::setOutputFile(const ossimFilename& file)
 {
    theOutputFile = file;
+}
+
+ossimFilename ossimTiffOverviewBuilder::getOutputFile() const
+{
+   ossimFilename result = theOutputFile;
+   if (theOutputFile == ossimFilename::NIL)
+   {
+      if (theImageHandler.valid())
+      {
+         bool usePrefix = (theImageHandler->getNumberOfEntries()>1?true:false);
+         result = theImageHandler->
+            getFilenameWithThisExtension(ossimString("ovr"), usePrefix);
+      }
+   }
+   return result;
 }
 
 void ossimTiffOverviewBuilder::setOutputTileSize(const ossimIpt& tileSize)
@@ -946,25 +939,13 @@ void ossimTiffOverviewBuilder::setOutputTileSize(const ossimIpt& tileSize)
    theOutputTileSizeSetFlag = true;
 }
 
-bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource,
-                                              bool youOwnItFlag)
+bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource)
 {
    static const char MODULE[] =
       "ossimTiffOverviewBuilder::initializeFromHandler";
 
-   if (theOwnsImageHandlerFlag && theImageHandler)
-   {
-      delete theImageHandler;
-   }
    theImageHandler         = imageSource;
-   theOwnsImageHandlerFlag = youOwnItFlag;
 
-   if (theNullDataBuffer)
-   {
-      delete [] theNullDataBuffer;
-      theNullDataBuffer = 0;
-   }
-   
    if (!theImageHandler)
    {
       // Set the error...
@@ -1093,13 +1074,14 @@ bool ossimTiffOverviewBuilder::setInputSource(ossimImageHandler* imageSource,
 
    theTileSizeInBytes = theTileWidth * theTileHeight * theBytesPerPixel;
 
-   //***
+   //---
    // Make a buffer to pass to pass to the write tile methods when an image
    // handler returns a null tile.
-   //***
-   theNullDataBuffer = new ossim_uint8[theTileSizeInBytes];
-   
-   memset(theNullDataBuffer, 0, theTileSizeInBytes); // Fill it with zeroes.
+   //---
+   theNullDataBuffer.resize(theTileSizeInBytes);
+
+   // Fill it with zeroes.
+   std::fill(theNullDataBuffer.begin(), theNullDataBuffer.end(), 0);
 
    return true;
 }
@@ -1177,9 +1159,14 @@ void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
          theTiffCompressType = COMPRESSION_NONE;
       }
    }
-   else if(property->getName() == "copy_all_flag")
+   else if(property->getName() == COPY_ALL_KW)
    {
       theCopyAllFlag = property->valueToString().toBool();
+   }
+   else if(property->getName() ==
+           ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW)
+   {
+     theOverviewStopDimension = property->valueToString().toUInt32();
    }
    else if(property->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW)
    {
@@ -1195,50 +1182,9 @@ void ossimTiffOverviewBuilder::getPropertyNames(std::vector<ossimString>& proper
 {
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_QUALITY_KW);
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_TYPE_KW);
-   propertyNames.push_back("copy_all_flag");
-}
-
-bool ossimTiffOverviewBuilder::initializeOutputFilenamFromHandler()
-{
-   if (!theImageHandler)
-   {
-      return false;
-   }
-   
-   // Set the output filename to a default.
-   theOutputFile = theImageHandler->getFilename();
-   if(theImageHandler->getNumberOfEntries() > 1)
-   {
-      ossim_uint32 currentEntry = theImageHandler->getCurrentEntry();
-      theOutputFile.setExtension("");
-      theOutputFile += "_e";
-      theOutputFile += ossimString::toString(currentEntry);
-      
-      //---
-      // Note:  Set extension was not used here deliberately to avoid messing
-      // up a MODIS file in hdf format with multiple '.'s in the file
-      // name.
-      //---
-      theOutputFile += ".ovr";
-   }
-   else
-   {
-      theOutputFile.setExtension("ovr");
-   }
-
-   if (theOutputFile == theImageHandler->getFilename())
-   {
-      // Don't allow this.
-      theOutputFile = ossimFilename::NIL;
-   }
-   theOutputFileTmp += ".tmp";
-
-   if (theOutputFile.empty())
-   {
-      return false;
-   }
-
-   return true;
+   propertyNames.push_back(COPY_ALL_KW);
+   propertyNames.push_back(
+      ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW);
 }
 
 bool ossimTiffOverviewBuilder::canConnectMyInputTo(

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationFontObject.h 13967 2009-01-14 16:32:01Z gpotts $
+// $Id: ossimAnnotationFontObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationFontObject_HEADER
 #define ossimAnnotationFontObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -42,7 +42,6 @@ public:
    ossimAnnotationFontObject(const ossimAnnotationFontObject& rhs);
                              
    
-   virtual ~ossimAnnotationFontObject();
 
    virtual ossimObject* dup()const;
 
@@ -55,8 +54,7 @@ public:
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;
    virtual bool intersects(const ossimDrect& rect)const;
    virtual bool isPointWithin(const ossimDpt& imagePoint)const;
-   virtual void setFont(ossimFont* font,
-                        bool ownsFontFlag=true);
+   virtual void setFont(ossimFont* font);
    virtual void setCenterPosition(const ossimIpt& position);
    virtual void setUpperLeftPosition(const ossimIpt& position);
    virtual void setPointSize(const ossimIpt& size);
@@ -67,8 +65,8 @@ public:
    virtual void applyScale(double x, double y);
                            
 protected:
-   mutable ossimFont*   theFont;
-   bool                 theOwnsFontFlag;
+   virtual ~ossimAnnotationFontObject();
+   mutable ossimRefPtr<ossimFont>   theFont;
    ossimIpt             thePosition;
    ossimString          theString;
    ossimIpt             thePixelSize;

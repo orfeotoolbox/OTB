@@ -10,7 +10,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimFixedTileCache.h 13485 2008-08-22 17:06:20Z gpotts $
+// $Id: ossimFixedTileCache.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFixedTileCache_HEADER
 #define ossimFixedTileCache_HEADER
 #include <map>
@@ -64,7 +64,6 @@ class ossimFixedTileCache : public ossimReferenced
 {
 public:
    ossimFixedTileCache();
-   virtual ~ossimFixedTileCache();
    virtual void setRect(const ossimIrect& rect);
    virtual void setRect(const ossimIrect& rect,
                         const ossimIpt& tileSize);
@@ -128,6 +127,7 @@ public:
    virtual ossim_int32 computeId(const ossimIpt& tileOrigin)const;
    virtual void setTileSize(const ossimIpt& tileSize);
 protected:
+   virtual ~ossimFixedTileCache();
    OpenThreads::ReentrantMutex theMutex;
    ossimIrect   theTileBoundaryRect;
    ossimIpt     theTileSize;

@@ -4,7 +4,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 // class ossimImageGaussianFilter : tile source
 //*******************************************************************
-// $Id: ossimImageGaussianFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageGaussianFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageGaussianFilter_HEADER
 #define ossimImageGaussianFilter_HEADER
 
@@ -30,7 +30,6 @@ public:
    * own methods
    */
    ossimImageGaussianFilter();
-   virtual ~ossimImageGaussianFilter();
 
    inline ossim_float64 getGaussStd()const { return theGaussStd; }
    void setGaussStd(const ossim_float64& v);
@@ -56,6 +55,7 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,const char* prefix = 0)const;
    
 protected:
+   virtual ~ossimImageGaussianFilter();
   /**
    * protected methods
    */
@@ -71,8 +71,8 @@ protected:
   /**
    * subprocesses
    */
-   ossimConvolutionFilter1D* theHF; //horizontal filter
-   ossimConvolutionFilter1D* theVF; //vertical filter
+   ossimRefPtr<ossimConvolutionFilter1D> theHF; //horizontal filter
+   ossimRefPtr<ossimConvolutionFilter1D> theVF; //vertical filter
 
 TYPE_DATA
 };

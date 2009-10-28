@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimGeoPolyCutter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoPolyCutter_HEADER
 #define ossimGeoPolyCutter_HEADER
 #include <ossim/imaging/ossimPolyCutter.h>
@@ -90,7 +90,6 @@ class OSSIM_DLL ossimGeoPolyCutter : public ossimPolyCutter,
 {
 public:
    ossimGeoPolyCutter();
-   virtual ~ossimGeoPolyCutter();
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
    
@@ -188,8 +187,7 @@ public:
     * Will set the view to the passed in object.  Once set it will project the
     * ground polygon relative to the passed in view.
     */
-   virtual bool setView(ossimObject* baseObject,
-                        bool ownsTheView = false);
+   virtual bool setView(ossimObject* baseObject);
 
    /*!
     * \return The current view for this object.
@@ -202,15 +200,12 @@ public:
    virtual const ossimObject* getView()const;
    
 protected:
+   virtual ~ossimGeoPolyCutter();
+   
    /*!
     * The view projection used to project the ground coordinates.
     */
-   ossimProjection* theViewProjection;
-
-   /*!
-    * Specifies whether the view is owned by this object or not.
-    */
-   bool           theOwnsViewFlag;
+   ossimRefPtr<ossimProjection> theViewProjection;
 
    std::vector<ossimGeoPolygon> theGeoPolygonList;
 

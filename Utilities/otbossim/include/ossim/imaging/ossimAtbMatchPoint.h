@@ -12,12 +12,13 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbMatchPoint.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAtbMatchPoint.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAtbMatchPoint_HEADER
 #define ossimAtbMatchPoint_HEADER
 
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimReferenced.h>
 #include <vector>
 using namespace std;
 
@@ -30,7 +31,7 @@ class ossimGridRemapSource;
  * CLASS:  ossimAtbMatchPoint
  *
  *****************************************************************************/
-class ossimAtbMatchPoint
+class ossimAtbMatchPoint : public ossimReferenced
 {
 public:
    ossimAtbMatchPoint()
@@ -40,7 +41,6 @@ public:
                       ossimGridRemapEngine* engine)
       : theViewPoint(view_point), theGridRemapEngine(engine) {}
 
-   ~ossimAtbMatchPoint();
    
    /*!
     * Returns the point in view coordinates associated with this object.
@@ -79,7 +79,9 @@ public:
 
 //   friend ostream& operator << (ostream& os);
 
-private:
+protected:
+   virtual ~ossimAtbMatchPoint();
+   
    ossimDpt                     theViewPoint;
    vector<ossimAtbPointSource*> thePointSourceList; 
    ossimGridRemapEngine*        theGridRemapEngine;

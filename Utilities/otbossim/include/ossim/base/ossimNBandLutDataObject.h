@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandLutDataObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNBandLutDataObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNBandLutDataObject_HEADER
 #define ossimNBandLutDataObject_HEADER
 #include <ossim/base/ossimObject.h>
@@ -270,7 +270,10 @@ public:
                            ossimScalarType bandScalarType = OSSIM_UINT8,
                            ossim_int32 nullPixelIndex=-1);
    ossimNBandLutDataObject(const ossimNBandLutDataObject& lut);
-   virtual ~ossimNBandLutDataObject();
+   ossimObject* dup()const
+   {
+      return new ossimNBandLutDataObject(*this);
+   }
    void create(ossim_uint32 numberOfEntries,
                ossim_uint32 numberOfBands=3);
    const LUT_ENTRY_TYPE* operator[](ossim_uint32 idx)const
@@ -444,6 +447,8 @@ public:
     */ 
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 protected:
+   virtual ~ossimNBandLutDataObject();
+
    LUT_ENTRY_TYPE *theLut;
    ossim_uint32    theNumberOfEntries;
    ossim_uint32    theNumberOfBands;

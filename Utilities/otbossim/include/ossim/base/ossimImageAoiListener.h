@@ -5,13 +5,13 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageAoiListener.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimImageAoiListener.h 14799 2009-06-30 08:54:44Z dburken $
 #ifndef ossimImageAoiListener_HEADER
 #define ossimImageAoiListener_HEADER
 #include <ossim/base/ossimListener.h>
 
-class OSSIMDLLEXPORT ossimImageRectangleEvent;
-class OSSIMDLLEXPORT ossimImagePolygonEvent;
+class ossimImageRectangleEvent;
+class ossimImagePolygonEvent;
 
 class OSSIMDLLEXPORT ossimImageAoiListener : public ossimListener
 {

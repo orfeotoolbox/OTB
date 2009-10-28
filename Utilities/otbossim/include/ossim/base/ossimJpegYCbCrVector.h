@@ -6,14 +6,14 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimJpegYCbCrVector.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimJpegYCbCrVector.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimJpegYCbCrVector_HEADER
 #define ossimJpegYCbCrVector_HEADER
 #include <iostream>
 using namespace std;
 #include <ossim/base/ossimConstants.h>
 
-class OSSIMDLLEXPORT ossimRgbVector;
+class ossimRgbVector;
 
 class OSSIMDLLEXPORT ossimJpegYCbCrVector
 {

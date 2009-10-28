@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFontFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimFontFactoryRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <ossim/font/ossimFontFactoryRegistry.h>
 #include <ossim/font/ossimGdBitmapFont.h>
@@ -20,9 +20,9 @@
 //ossimFontFactoryRegistry* ossimFontFactoryRegistry::theInstance = 0;
 
 ossimFontFactoryRegistry::ossimFontFactoryRegistry()
-   :theDefaultFont(NULL)
+:theDefaultFont(NULL)
 {
-  // theInstance = this;
+   // theInstance = this;
 #if OSSIM_HAS_FREETYPE
    registerFactory(ossimFreeTypeFontFactory::instance());
 #endif
@@ -31,8 +31,8 @@ ossimFontFactoryRegistry::ossimFontFactoryRegistry()
 ossimFontFactoryRegistry* ossimFontFactoryRegistry::instance()
 {
    static ossimFontFactoryRegistry sharedInstance;
-      //theInstance = new ossimFontFactoryRegistry;
-
+   //theInstance = new ossimFontFactoryRegistry;
+   
    return &sharedInstance;
 }
 
@@ -44,7 +44,7 @@ bool ossimFontFactoryRegistry::registerFactory(ossimFontFactoryBase* factory)
       theFactoryList.push_back(factory);
       result = true;
    }
-
+   
    return result;
 }
 
@@ -71,7 +71,7 @@ ossimFont* ossimFontFactoryRegistry::createFont(const ossimFontInformation& info
 {
    ossimFont* result = (ossimFont*)NULL;
    int i = 0;
-
+   
    for(i= 0; ( (i < (int)theFactoryList.size()) &&(!result)); ++i)
    {
       result = theFactoryList[i]->createFont(information);
@@ -84,7 +84,7 @@ ossimFont* ossimFontFactoryRegistry::createFont(const ossimFilename& file)const
 {
    ossimFont* result = (ossimFont*)NULL;
    int i = 0;
-
+   
    for(i= 0; ( (i < (int)theFactoryList.size()) &&(!result)); ++i)
    {
       result = theFactoryList[i]->createFont(file);
@@ -107,7 +107,7 @@ void ossimFontFactoryRegistry::getFontInformationFamilyName(std::vector<ossimFon
 {
    vector<ossimFontInformation> info;
    getFontInformation(info);
-    
+   
    ossimString right = familyName;
    right = right.upcase().trim();
    int i = 0;
@@ -135,7 +135,7 @@ void ossimFontFactoryRegistry::getFontInformationContainingFamilyName(std::vecto
    for(i = 0; i < (int)info.size(); ++i)
    {
       ossimString left  = info[i].theFamilyName;
-
+      
       left  = left.upcase().trim();
       if(left.contains(right))
       {
@@ -150,21 +150,21 @@ ossimFont* ossimFontFactoryRegistry::getDefaultFont()const
    {
       std::vector<ossimFontInformation> infoList;
       getFontInformationContainingFamilyName(infoList,
-					     "Times");
+                                             "Times");
       if(infoList.size() < 1)
-	{
-	  getFontInformationContainingFamilyName(infoList,
-						 "Roman");
-	}
+      {
+         getFontInformationContainingFamilyName(infoList,
+                                                "Roman");
+      }
       if(infoList.size() < 1)
-	{
-	  getFontInformationContainingFamilyName(infoList,
-						 "Sanz");
-	}
+      {
+         getFontInformationContainingFamilyName(infoList,
+                                                "Sanz");
+      }
       if(infoList.size() < 1)
-	{
-	  getFontInformation(infoList);
-	}
+      {
+         getFontInformation(infoList);
+      }
       if(infoList.size())
       {
          theDefaultFont = createFont(infoList[0]);
@@ -177,7 +177,7 @@ ossimFont* ossimFontFactoryRegistry::getDefaultFont()const
                                                  ossimGdSansBold);
       }
    }
-   return theDefaultFont;
+   return theDefaultFont.get();
 }
 
 ossimFontFactoryRegistry::ossimFontFactoryRegistry(const ossimFontFactoryRegistry& /* rhs */ )

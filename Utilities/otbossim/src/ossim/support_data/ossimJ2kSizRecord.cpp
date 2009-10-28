@@ -24,11 +24,11 @@
 
 ossimJ2kSizRecord::ossimJ2kSizRecord()
    :
-   theSizMarker(0xff51),
+   theMarker(0xff51),
    theLsiz(0),
    theRsiz(0),
    theXsiz(0),
-   theYziz(0),
+   theYsiz(0),
    theXOsiz(0),
    theYOsiz(0),
    theXTsiz(0),
@@ -48,11 +48,14 @@ ossimJ2kSizRecord::~ossimJ2kSizRecord()
 
 void ossimJ2kSizRecord::parseStream(std::istream& in)
 {
+   // Get the stream posistion.
+   std::streamoff pos = in.tellg();
+
    // Note: Marker is not read.
    in.read((char*)&theLsiz,      2);
    in.read((char*)&theRsiz,      2);
    in.read((char*)&theXsiz,      4);
-   in.read((char*)&theYziz,      4);
+   in.read((char*)&theYsiz,      4);
    in.read((char*)&theXOsiz,     4);
    in.read((char*)&theYOsiz,     4);
    in.read((char*)&theXTsiz,     4);
@@ -71,7 +74,7 @@ void ossimJ2kSizRecord::parseStream(std::istream& in)
       s.swap(theLsiz);
       s.swap(theRsiz);
       s.swap(theXsiz);
-      s.swap(theYziz);
+      s.swap(theYsiz);
       s.swap(theXOsiz);
       s.swap(theYOsiz);
       s.swap(theXTsiz);
@@ -80,6 +83,12 @@ void ossimJ2kSizRecord::parseStream(std::istream& in)
       s.swap(theYTOsiz);
       s.swap(theCsiz);
    }
+
+   //---
+   // Seek to next record.  This is needed because there are sometimes extra
+   // bytes.
+   //---
+   in.seekg(pos + theLsiz, std::ios_base::beg);
 }
 
 ossimScalarType ossimJ2kSizRecord::getScalarType() const
@@ -119,27 +128,33 @@ ossimScalarType ossimJ2kSizRecord::getScalarType() const
    return result;
 }
 
-std::ostream& ossimJ2kSizRecord::print(std::ostream& out) const
+std::ostream& ossimJ2kSizRecord::print(std::ostream& out,
+                                       const std::string& prefix) const
 {
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
 
-   out << std::setiosflags(std::ios::left) << "ossimJ2kSizRecord::print"
-       << std::setw(24) << "\ntheSizMarker:" << std::hex << theSizMarker
-       << std::setw(24) << "\ntheLsiz:"      << std::dec << theLsiz
-       << std::setw(24) << "\ntheRsiz:"   << theRsiz
-       << std::setw(24) << "\ntheXsiz:"   << theXsiz
-       << std::setw(24) << "\ntheYziz:"   << theYziz
-       << std::setw(24) << "\ntheXOsiz:"  << theXOsiz
-       << std::setw(24) << "\ntheYOsiz:"  << theYOsiz
-       << std::setw(24) << "\ntheXTsiz:"  << theXTsiz
-       << std::setw(24) << "\ntheYTsiz:"  << theYTsiz
-       << std::setw(24) << "\ntheXTOsiz:" << theXTOsiz
-       << std::setw(24) << "\ntheYTOsiz:" << theYTOsiz
-       << std::setw(24) << "\ntheCsiz:"   << theCsiz
-       << std::setw(24) << "\ntheSsiz:"   << int(theSsiz)
-       << std::setw(24) << "\ntheXRsiz:"  << int(theXRsiz)
-       << std::setw(24) << "\ntheYRsiz:"  << int(theYRsiz)
+   std::string pfx = prefix;
+   pfx += "siz.";
+
+   out.setf(std::ios_base::hex, std::ios_base::basefield);
+   out << pfx << "marker: 0x" << theMarker << "\n";
+   out.setf(std::ios_base::fmtflags(0), std::ios_base::basefield);
+
+   out << pfx << "Lsiz:   " << theLsiz       << "\n"
+       << pfx << "Rsiz:   " << theRsiz       << "\n"
+       << pfx << "Xsiz:   " << theXsiz       << "\n"
+       << pfx << "Yziz:   " << theYsiz       << "\n"
+       << pfx << "XOsiz:  " << theXOsiz      << "\n"
+       << pfx << "YOsiz:  " << theYOsiz      << "\n"
+       << pfx << "XTsiz:  " << theXTsiz      << "\n"
+       << pfx << "YTsiz:  " << theYTsiz      << "\n"
+       << pfx << "XTOsiz: " << theXTOsiz     << "\n"
+       << pfx << "YTOsiz: " << theYTOsiz     << "\n"
+       << pfx << "Csiz:   " << theCsiz       << "\n"
+       << pfx << "Ssiz:   " << int(theSsiz)  << "\n"
+       << pfx << "XRsiz:  " << int(theXRsiz) << "\n"
+       << pfx << "YRsiz:  " << int(theYRsiz)
        << std::endl;
 
    // Reset flags.

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //*************************************************************************
-// $Id: ossimBrightnessContrastSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBrightnessContrastSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBrightnessContrastSource_HEADER
 #define ossimBrightnessContrastSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -22,7 +22,6 @@ public:
     */
    ossimBrightnessContrastSource();
 
-   virtual ~ossimBrightnessContrastSource();
 
    /**
     * Will apply the algorithm:
@@ -99,6 +98,7 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
 protected:
+   virtual ~ossimBrightnessContrastSource();
 
    /**
     * Called to initialize tiles by first get tile when theTile or theNormTile

@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionFactory.cpp 13401 2008-08-07 18:07:30Z dburken $
+//  $Id: ossimStatePlaneProjectionFactory.cpp 15080 2009-08-15 19:32:07Z dburken $
 
 #include <fstream>
 #include <sstream>
@@ -152,7 +152,7 @@ ossimProjection* ossimStatePlaneProjectionFactory::createProjection(
    return result;
 }
 
-const ossimStatePlaneProjectionInfo* ossimStatePlaneProjectionFactory::getInfo(ossim_int32 pcsCode)const
+const ossimStatePlaneProjectionInfo* ossimStatePlaneProjectionFactory::getInfo(ossim_uint32 pcsCode)const
 {
    ossimStatePlaneProjectionInfo* info = findInInfoList(pcsCode);
    if (!info)

@@ -10,10 +10,10 @@
 #include <ossim/base/ossimDpt.h>
 
 // Forward class declarations.
-class OSSIMDLLEXPORT ossimIpt;
-class OSSIMDLLEXPORT ossimFpt;
-class OSSIMDLLEXPORT ossimDpt3d;
-class OSSIMDLLEXPORT ossimGpt;
+class ossimIpt;
+class ossimFpt;
+class ossimDpt3d;
+class ossimGpt;
 
 class OSSIMDLLEXPORT ossimTDpt : public ossimDpt
 {

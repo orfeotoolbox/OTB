@@ -10,7 +10,7 @@
 // Description: 
 //
 //*************************************************************************
-// $Id: ossimDirectory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDirectory.h 14776 2009-06-25 14:34:06Z dburken $
 #ifndef ossimDirectory_HEADER
 #define ossimDirectory_HEADER
 
@@ -67,6 +67,28 @@ public:
    void setFlags(int flags) { theFlags = flags; };
    bool fileMatched(ossimFilename &filename) const;
 #endif    
+
+   // ESH 07/2008, Trac #234: OSSIM is case sensitive 
+   // when using worldfile templates during ingest
+   /*!
+    * Case insensitive search for files with the same name but 
+    * with letters that have different case than the input name. 
+    *
+    * On Windows there can only be one match, but the case can be 
+    * different than the input name. On UNIX there can be multiple 
+    * matches.
+    *
+    * If the bExcludeExactMatch input parameter is set to false, 
+    * the original input name will be included in the 'result'
+    * vector if it is found in the directory. Otherwise (the default),
+    * the input name is excluded from the 'result' vector even if it
+    * is found in the directory.
+    *
+    * Returns true if a name has been added to the result vector.
+    */
+   bool findCaseInsensitiveEquivalents( const ossimFilename &filename, 
+                                        std::vector<ossimFilename>& result,
+                                        bool bExcludeExactMatch = true );
    
    // TODO using scandir() when available later, emulating it otherwise
    

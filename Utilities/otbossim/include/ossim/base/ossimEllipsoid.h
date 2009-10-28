@@ -22,11 +22,11 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/matrix/newmat.h>
 
-class OSSIMDLLEXPORT ossimEcefRay;
-class OSSIMDLLEXPORT ossimEcefPoint;
-class OSSIMDLLEXPORT ossimEcefVector;
-class OSSIMDLLEXPORT ossimMatrix4x4;
-class OSSIMDLLEXPORT ossimKeywordlist;
+class ossimEcefRay;
+class ossimEcefPoint;
+class ossimEcefVector;
+class ossimMatrix4x4;
+class ossimKeywordlist;
 
 /*!****************************************************************************
  *

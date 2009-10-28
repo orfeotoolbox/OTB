@@ -13,7 +13,7 @@
 // Converts Lsat to Surface Reflectance values
 //
 //*************************************************************************
-// $Id: ossimAtCorrRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAtCorrRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAtCorrRemapper_HEADER
 #define ossimAtCorrRemapper_HEADER
 
@@ -27,7 +27,6 @@ public:
                        ossimImageSource* inputSource =  NULL,
                        const ossimString& sensorType = "");
 
-   virtual ~ossimAtCorrRemapper();
 
    virtual ossimString getShortName() const;
 
@@ -57,6 +56,7 @@ public:
    void setSensorType(const ossimString& sensorType);
 
 protected:
+   virtual ~ossimAtCorrRemapper();
 
    /*!
     * Method to set unset the enable flag.

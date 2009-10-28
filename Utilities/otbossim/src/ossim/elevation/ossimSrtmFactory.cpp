@@ -10,7 +10,7 @@
 // ossimSrtmElevSource given a ground point.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmFactory.cpp 13282 2008-07-25 15:06:00Z dburken $
+// $Id: ossimSrtmFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib> /* abs() */
 #include <iostream>
@@ -56,7 +56,7 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
 
    ossimElevManager* mgr = ossimElevManager::instance();
    
-   ossimElevSource* srtmPtr = NULL;
+   ossimRefPtr<ossimElevSource> srtmPtr;
 
    if (theDirectory == ossimFilename::NIL)
    {
@@ -66,7 +66,7 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
          << "\nReturning null elevation source..."
          << std::endl;
       
-      return srtmPtr;
+      return srtmPtr.release();
    }
 
    //---
@@ -157,13 +157,12 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
       srtmPtr = new ossimSrtmHandler(srtmFile);
       if (srtmPtr->pointHasCoverage(gpt) )
       {
-         return srtmPtr;
+         return srtmPtr.release();
       }
       else
       {
-         delete srtmPtr;
-         srtmPtr = NULL;
+         srtmPtr = 0;
       }
    }
-   return srtmPtr;
+   return srtmPtr.release();
 }

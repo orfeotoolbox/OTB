@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimScaleFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimScaleFilter_HEADER
 #define ossimScaleFilter_HEADER
 #include <vector>
@@ -44,14 +44,13 @@ public:
    ossimScaleFilter();
    ossimScaleFilter(ossimImageSource* inputSource,
                     const ossimDpt& scaleFactor);
-   virtual ~ossimScaleFilter();
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                    ossim_uint32 resLevel=0);
    
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix);
+
+   virtual ossimImageGeometry* getImageGeometry();
    virtual void initialize();
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result)const
@@ -95,32 +94,32 @@ public:
    void setMinifyFilterType(ossimScaleFilterType filterType)
       {
          setFilterType(filterType,
-                       theMagnifyFilterType);
+                       m_MagnifyFilterType);
       }
    void setMagnifyFilterType(ossimScaleFilterType filterType)
       {
-         setFilterType(theMinifyFilterType,filterType);
+         setFilterType(m_MinifyFilterType,filterType);
       }
    ossimString getMinifyFilterTypeAsString()const
       {
-         return getFilterTypeAsString(theMinifyFilterType);
+         return getFilterTypeAsString(m_MinifyFilterType);
       }
    ossimString getMagnifyFilterTypeAsString()const
       {
-         return getFilterTypeAsString(theMagnifyFilterType);
+         return getFilterTypeAsString(m_MagnifyFilterType);
       }
    void setScaleFactor(const ossimDpt& scale);
    void setBlurFactor(ossim_float64 blur)
       {
-         theBlurFactor = blur;
+         m_BlurFactor = blur;
       }
    ossim_float64 getBlurFactor()const
       {
-         return theBlurFactor;
+         return m_BlurFactor;
       }
    const ossimDpt& getScaleFactor()const
       {
-         return theScaleFactor;
+         return m_ScaleFactor;
       }
    /*!
     * Saves the state of this object.
@@ -133,20 +132,26 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
    
 protected:
-   void allocate();
+   virtual ~ossimScaleFilter();
+  void allocate();
+
+   //! If this object is maintaining an ossimImageGeometry, this method needs to be called after 
+   //! a scale change so that the geometry's projection is modified accordingly.
+   void updateGeometry();
    
-   ossimRefPtr<ossimImageData> theBlankTile;
-   ossimRefPtr<ossimImageData> theTile;
-   ossimFilter*                theMinifyFilter;
-   ossimFilter*                theMagnifyFilter;
-   ossimScaleFilterType        theMinifyFilterType;
-   ossimScaleFilterType        theMagnifyFilterType;
-   ossimDpt                    theScaleFactor;
-   ossimDpt                    theInverseScaleFactor;
-   ossimIpt                    theTileSize;
-   ossimIrect                  theInputRect;
-   ossim_float64               theBlurFactor;
-   
+   ossimRefPtr<ossimImageData> m_BlankTile;
+   ossimRefPtr<ossimImageData> m_Tile;
+   ossimFilter*                m_MinifyFilter;
+   ossimFilter*                m_MagnifyFilter;
+   ossimScaleFilterType        m_MinifyFilterType;
+   ossimScaleFilterType        m_MagnifyFilterType;
+   ossimDpt                    m_ScaleFactor;
+   ossimDpt                    m_InverseScaleFactor;
+   ossimIpt                    m_TileSize;
+   ossimIrect                  m_InputRect;
+   ossim_float64               m_BlurFactor;
+   ossimRefPtr<ossimImageGeometry> m_ScaledGeometry; //!< The input image geometry, altered by the scale
+
    template <class T>
    void runFilterTemplate(T dummy,
                           const ossimIrect& imageRect,

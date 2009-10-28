@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Albers projection code.  
 //*******************************************************************
-//  $Id: ossimAlbersProjection.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimAlbersProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAlbersProjection_HEADER
 #define ossimAlbersProjection_HEADER
@@ -34,8 +34,6 @@ public:
                          double falseEasting,
                          double falseNorthing);
    
-   virtual ~ossimAlbersProjection();
-
    ossimObject *dup()const;
    
    virtual ossimDpt forward(const ossimGpt &worldPoint)    const;
@@ -109,7 +107,8 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
-private:
+protected:
+   virtual ~ossimAlbersProjection();
 
 
    //________________________GEOTRANS__________________________

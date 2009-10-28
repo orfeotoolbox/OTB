@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.h 13329 2008-07-28 18:03:19Z dburken $
+// $Id: ossimImageSource.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimImageSource_HEADER
 #define ossimImageSource_HEADER
 
@@ -16,6 +15,7 @@
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 class ossimDpt;
 
@@ -28,7 +28,6 @@ public:
                     ossim_uint32 outputListSize,
                     bool inputListIsFixedFlag=true,
                     bool outputListIsFixedFlag=true);
-
    virtual ~ossimImageSource();
 
    /**
@@ -42,6 +41,22 @@ public:
    */
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
+
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    *
+    * @note Derived classes should override this method to most efficiently
+    * stuff result.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
    
   /**
    * For RTTI support. overrides ossimImageSource
@@ -165,17 +180,14 @@ public:
                                       ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
                                       ossim_uint32 resLevel=0)const;
 
-   /**
-    * the default is to find the first input source that is of
-    * type ossimImageSource and return its input geometry.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   //! Returns the image geometry object associated with this tile source or NULL if not defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   //! Default implementation returns the image geometry object associated with the next  
+   //! (left) input source (if any) connected to this source in the chain, or NULL.
+   virtual ossimImageGeometry* getImageGeometry();
 
-   /**
-    * Default method to call input's setImageGeometry.
-    */
-   virtual void setImageGeometry(const ossimKeywordlist& kwl);
+   //! Default implementation sets geometry of the first input to the geometry specified.
+   virtual void setImageGeometry(const ossimImageGeometry* geom);
 
    /**
     * Default method to call input's saveImageGeometry.

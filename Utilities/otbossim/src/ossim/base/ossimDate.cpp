@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimDate.cpp 14478 2009-05-08 18:24:22Z dburken $
+// $Id: ossimDate.cpp 15067 2009-08-12 15:14:27Z dburken $
 
 #include <ossim/base/ossimDate.h>
 #include <iomanip>
@@ -109,6 +109,11 @@ int ossimLocalTm::isValid (void) const
             tm_mday > 0 && tm_mday <= maxd[tm_mon] &&
             tm_wday < 7 && tm_yday < 367 &&
             tm_sec < 60 && tm_min < 60 && tm_hour < 24);
+}
+void ossimLocalTm::now()
+{
+   time_t t = time(0);
+   *this = *localtime(&t);
 }
 
 void ossimLocalTm::dSfx (std::ostream & os, int fmt) const
@@ -373,7 +378,7 @@ std::ostream &ossimLocalTm::printTime (std::ostream & os, int fmt) const
 int ossimLocalTm::getYear()const
 {
    int result = tm_year;
-   if (result < 200)
+//   if (result < 200)
    {
       result += 1900;
    }
@@ -612,6 +617,31 @@ ossim_float64 ossimLocalTm::delatInHours(const ossimLocalTm& d)const
 ossim_float64 ossimLocalTm::deltaInDays(const ossimLocalTm& d)const
 {
    return (getJulian()-d.getJulian());
+}
+
+ossimLocalTm ossimLocalTm::convertToGmt()const
+{
+   struct tm gmt = *this;
+#if !defined(_MSC_VER) 
+   tzset();
+#else
+   _tzset();
+#endif
+
+#ifdef __APPLE__
+   gmt.tm_sec -= tm_gmtoff; // Seconds east of UTC
+#else
+   gmt.tm_sec += timezone; // Seconds west of UTC
+   if ( tm_isdst )
+   {
+      gmt.tm_sec -= 3600; // Subtract an hour.
+   }
+#endif
+   
+   time_t t = mktime(&gmt);
+   ossimLocalTm result(*localtime(&t));
+   
+   return result;
 }
 
 void ossimLocalTm::setTimeNoAdjustmentGivenEpoc(time_t ticks)

@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimAffineProjection.h 11805 2007-10-05 14:54:28Z dburken $
+//  $Id: ossimAffineProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAffineProjection_HEADER
 #define ossimAffineProjection_HEADER
@@ -17,8 +17,7 @@
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimIpt.h>
 #include <iosfwd>
-
-class ossim2dTo2dTransform;
+#include <ossim/base/ossim2dTo2dTransform.h>
 
 /*!****************************************************************************
  *
@@ -113,8 +112,8 @@ protected:
    /*!
     * Data Members:
     */
-   ossimProjection*      theClientProjection;
-   ossim2dTo2dTransform* theAffineTransform;
+   ossimRefPtr<ossimProjection>      theClientProjection;
+   ossimRefPtr<ossim2dTo2dTransform> theAffineTransform;
    
    TYPE_DATA
 };

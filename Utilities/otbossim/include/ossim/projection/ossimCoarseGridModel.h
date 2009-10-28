@@ -14,7 +14,7 @@
 //   implementation of an interpolation sensor model.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCoarseGridModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimCoarseGridModel_HEADER
 #define ossimCoarseGridModel_HEADER
@@ -24,6 +24,7 @@
 #include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimFilename.h>
 
+class ossimImageGeometry;
 /******************************************************************************
  *
  * CLASS:  ossimCoarseGridModel
@@ -62,12 +63,17 @@ public:
     * The accuracy of the grid can be controlled by the static method
     * setInterpolationError.
     */
-  virtual void buildGrid(const ossimDrect& imageBounds,
-			 ossimProjection* proj,
-                         double heightDelta=500.0,
-                         bool enableHeightFlag=false,
-                         bool makeAdjustableFlag=true);
-
+   virtual void buildGrid(const ossimDrect& imageBounds,
+                          ossimProjection* proj,
+                          double heightDelta=500.0,
+                          bool enableHeightFlag=false,
+                          bool makeAdjustableFlag=true);
+   virtual void buildGrid(const ossimDrect& imageBounds,
+                          ossimImageGeometry* geom,
+                          double heightDelta=500.0,
+                          bool enableHeightFlag=false,
+                          bool makeAdjustableFlag=true);
+   
    /**
     *  This is used when building a grid from a projector.
     *  You can set the interpolation error.  The default is

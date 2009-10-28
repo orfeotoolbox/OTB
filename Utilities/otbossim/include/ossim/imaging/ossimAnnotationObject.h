@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationObject_HEADER
 #define ossimAnnotationObject_HEADER
 #include <iostream>
@@ -25,7 +25,6 @@ public:
                          ossim_uint8 g=255,
                          ossim_uint8 b=255,
                          ossim_uint8 thickness=1);
-   virtual ~ossimAnnotationObject();
    virtual void applyScale(double x,
                            double y)=0;
    virtual void applyScale(const ossimDpt& scale);
@@ -90,6 +89,7 @@ public:
   static void restIdCounter();
 
 protected:
+   virtual ~ossimAnnotationObject();
    ossim_uint8 theRed;
    ossim_uint8 theGreen;
    ossim_uint8 theBlue;

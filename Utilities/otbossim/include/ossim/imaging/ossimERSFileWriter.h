@@ -10,7 +10,7 @@
 // writing an ERS header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimERSFileWriter.h 10317 2007-01-19 18:11:58Z dburken $
+// $Id: ossimERSFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimERSFileWriter_H
 #define ossimERSFileWriter_H
 
@@ -30,8 +30,6 @@ public:
    /** default constructor */
    ossimERSFileWriter();
 
-   /** virtual destructor */
-   virtual ~ossimERSFileWriter();
 
    /**
     * Initializes the state of the writer.  Users should use this to set
@@ -63,7 +61,9 @@ public:
     */
    virtual bool hasMetadataType(const ossimString& metadataType)const;   
    
-private:
+protected:
+   /** virtual destructor */
+   virtual ~ossimERSFileWriter();
    
    virtual bool writeFile();
 

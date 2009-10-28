@@ -1,23 +1,23 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimCadrgProjection.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCadrgProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimCadrgProjection_HEADER
 #define ossimCadrgProjection_HEADER
 #include <ossim/projection/ossimMapProjection.h>
 
-class ossimCadrgProjection : public ossimMapProjection
+class OSSIM_DLL ossimCadrgProjection : public ossimMapProjection
 {
 public:
    ossimCadrgProjection();
 
                        
-   virtual ~ossimCadrgProjection();
    virtual ossimObject *dup()const;
    virtual ossimGpt inverse(const ossimDpt &eastingNorthing)const;
    virtual ossimDpt forward(const ossimGpt &latLon)const;
@@ -52,6 +52,7 @@ public:
       }
       
 protected:
+   virtual ~ossimCadrgProjection();
    /*
     * Are from the ADRG Mil spec for 1:1,000,000 and
     * are scales for each zone.

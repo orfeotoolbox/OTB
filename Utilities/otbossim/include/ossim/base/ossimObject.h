@@ -8,7 +8,7 @@
 // Description: Base class for ossim objects.
 //
 //*************************************************************************
-// $Id: ossimObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimObject.h 15798 2009-10-23 19:15:20Z gpotts $
 
 #ifndef ossimObject_HEADER
 #define ossimObject_HEADER

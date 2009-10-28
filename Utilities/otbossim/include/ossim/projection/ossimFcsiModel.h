@@ -59,7 +59,7 @@
 //              Initial coding
 //
 //*****************************************************************************
-//  $Id: ossimFcsiModel.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimFcsiModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimFcsiModel_HEADER
 #define ossimFcsiModel_HEADER
@@ -90,7 +90,6 @@ public:
    ossimFcsiModel(const ossimKeywordlist& geom_kwl);
    ossimFcsiModel(const ossimFcsiModel& rhs);
    
-   virtual ~ossimFcsiModel() { delete theOpticalDistortion; }
 
    enum AdjustParamIndex
    {
@@ -182,6 +181,7 @@ public:
    inline virtual bool useForward()const {return true;} //!ground to image faster (you don't need DEM)
 
 protected:
+   virtual ~ossimFcsiModel() { delete theOpticalDistortion; }
 
    /*!
     * Assigns initial default values to adjustable parameters and related

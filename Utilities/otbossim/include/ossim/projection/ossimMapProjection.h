@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 13823 2008-10-31 17:21:22Z dburken $
+//  $Id: ossimMapProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -35,7 +35,6 @@ public:
                       const ossimGpt& origin=ossimGpt());
 
    ossimMapProjection(const ossimMapProjection& src);
-   virtual ~ossimMapProjection();
 
    virtual ossimGpt origin()const;
 
@@ -126,7 +125,7 @@ public:
    virtual const ossimDpt&   getUlEastingNorthing() const;
    virtual const ossimGpt&   getUlGpt() const;
    virtual const ossimDatum* getDatum() const;
-
+   const ossimEllipsoid&     getEllipsoid() const { return theEllipsoid; }
    virtual bool isGeographic()const;
 
    /**
@@ -286,6 +285,7 @@ public:
    virtual bool isAffectedByElevation() const { return false; }
    
 protected:
+   virtual ~ossimMapProjection();
 
    /**
     * This method verifies that the projection parameters match the current

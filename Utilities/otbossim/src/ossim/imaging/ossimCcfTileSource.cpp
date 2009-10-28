@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 //
@@ -11,7 +10,7 @@
 //
 // Contains class definition for ossimCcfTileSource.
 //*******************************************************************
-//  $Id: ossimCcfTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
+//  $Id: ossimCcfTileSource.cpp 15502 2009-09-29 17:59:04Z dburken $
 
 #include <algorithm>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -63,46 +62,82 @@ ossimCcfTileSource::~ossimCcfTileSource()
 ossimRefPtr<ossimImageData> ossimCcfTileSource::getTile(
    const  ossimIrect& rect, ossim_uint32 resLevel)
 {
-   if (!isSourceEnabled() || !isOpen() ||
-       (resLevel >= theCcfHead.numberOfReducedResSets()) )
+   if (theTile.valid())
    {
-      return ossimRefPtr<ossimImageData>();
+      // Image rectangle must be set prior to calling getTile.
+      theTile->setImageRectangle(rect);
+      
+      if ( getTile( theTile.get(), resLevel ) == false )
+      {
+         if (theTile->getDataObjectStatus() != OSSIM_NULL)
+         {
+            theTile->makeBlank();
+         }
+      }
    }
 
-   theTile->setImageRectangle(rect);
+   return theTile;
+}
 
-   ossimIrect image_rect = theCcfHead.imageRect(resLevel);
+bool ossimCcfTileSource::getTile(ossimImageData* result,
+                                 ossim_uint32 resLevel)
+{
+   bool status = false;
+
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      result->ref();  // Increment ref count.
+
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
+         
+         ossimIrect tile_rect = result->getImageRectangle();
+         
+         ossimIrect image_rect = theCcfHead.imageRect(resLevel);
    
-   //***
-   // See if any point of the requested tile is in the image.
-   //***
-   if ( rect.intersects(image_rect) )
-   {
-      ossimIrect clip_rect = rect.clipToRect(image_rect);
-
-      if ( !rect.completely_within(clip_rect) )
-      {
-         // Start with a blank tile.
-         theTile->makeBlank();
+         //---
+         // See if any point of the requested tile is in the image.
+         //---
+         if ( tile_rect.intersects(image_rect) )
+         {
+            ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+            
+            if ( !tile_rect.completely_within(clip_rect) )
+            {
+               // Start with a blank tile.
+               result->makeBlank();
+            }
+            
+            // Load the tile buffer with data from the ccf.
+            status = fillBuffer(tile_rect,
+                                clip_rect,
+                                image_rect,
+                                resLevel,
+                                result);
+            if (status)
+            {
+               result->validate();
+            }
+         }
       }
-
-      // Load the tile buffer with data from the ccf.
-      if (fillBuffer(rect, clip_rect, image_rect, resLevel))
-      {
-         theTile->validate();
-         return theTile;
-      }
-      else
-      {
-         // Error in filling buffer.
-         cerr << "ossimCcfTileSource getTile ERROR:  Returning blank tile..."
-              << endl;
-         return ossimRefPtr<ossimImageData>();
-      }
+      
+      result->unref();  // Decrement ref count.
    }
 
-   // No part of requested tile within the image rectangle.
-   return ossimRefPtr<ossimImageData>();
+   return status;
 }
 
 //*******************************************************************
@@ -111,7 +146,8 @@ ossimRefPtr<ossimImageData> ossimCcfTileSource::getTile(
 bool ossimCcfTileSource::fillBuffer(const ossimIrect& tile_rect,
                                     const ossimIrect& clip_rect,
                                     const ossimIrect& image_rect,
-                                    ossim_uint32 reduced_res_level)
+                                    ossim_uint32 reduced_res_level,
+                                    ossimImageData* tile)
 {
    bool status = false;
    
@@ -120,25 +156,28 @@ bool ossimCcfTileSource::fillBuffer(const ossimIrect& tile_rect,
    //***
    switch (theCcfHead.pixelType())
    {
-   case OSSIM_UCHAR:
-      status = fillUcharBuffer(tile_rect,
-                               clip_rect,
-                               image_rect,
-                               reduced_res_level);
-      break;
-   case OSSIM_USHORT11:
-   case OSSIM_USHORT16:
-      status = fillUshortBuffer(tile_rect,
-                                clip_rect,
-                                image_rect,
-                                reduced_res_level);
-      break;
-   default:
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      cerr << "ossimCcfTileSource fillBuffer ERROR:"
-           << "\nUnsupported pixel type!"
-           << "\nBuffer not filled.  Returning error." << endl;
-      break;
+      case OSSIM_UCHAR:
+         status = fillUcharBuffer(tile_rect,
+                                  clip_rect,
+                                  image_rect,
+                                  reduced_res_level,
+                                  tile);
+         break;
+      case OSSIM_USHORT11:
+      case OSSIM_USHORT16:
+         status = fillUshortBuffer(tile_rect,
+                                   clip_rect,
+                                   image_rect,
+                                   reduced_res_level,
+                                   tile);
+         break;
+      default:
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimCcfTileSource fillBuffer ERROR:"
+            << "\nUnsupported pixel type!"
+            << "\nBuffer not filled.  Returning error." << endl;
+         break;
    }
 
    return status;
@@ -150,11 +189,12 @@ bool ossimCcfTileSource::fillBuffer(const ossimIrect& tile_rect,
 bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
                                          const ossimIrect& clip_rect,
                                          const ossimIrect& image_rect,
-                                         ossim_uint32 reduced_res_level)
+                                         ossim_uint32 reduced_res_level,
+                                         ossimImageData* tile)
 {
    if(!isOpen()) return false;
       
-   const ossim_uint32 TILE_SIZE_PER_BAND     = theTile->getSizePerBand();
+   const ossim_uint32 TILE_SIZE_PER_BAND     = tile->getSizePerBand();
    const ossim_uint32 CHIP_SIZE_PER_BAND     = theCcfHead.chipSizePerBand();
    const ossim_uint32 SAMPLES_PER_CHIP       = theCcfHead.samplesPerChip();
    const ossim_uint32 LINES_PER_CHIP         = theCcfHead.linesPerChip();
@@ -285,10 +325,10 @@ bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
                      // the tile.
                      //***
                      ossim_uint8* d
-                        = (ossim_uint8*)theTile->getBuf() +
+                        = (ossim_uint8*)tile->getBuf() +
                         band * TILE_SIZE_PER_BAND +
                         (chip_clip_rect.ul().y - tile_rect.ul().y) *
-                        theTile->getWidth() + chip_clip_rect.ul().x -
+                        tile->getWidth() + chip_clip_rect.ul().x -
                         tile_rect.ul().x;      
 
                      // Line loop through a chip.
@@ -308,7 +348,7 @@ bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
 
                         // Increment the pointers by one line.
                         s += SAMPLES_PER_CHIP;
-                        d += theTile->getWidth();
+                        d += tile->getWidth();
                      }
                      
                   } // End of band loop.
@@ -340,9 +380,10 @@ bool ossimCcfTileSource::fillUcharBuffer(const ossimIrect& tile_rect,
 bool ossimCcfTileSource::fillUshortBuffer(const ossimIrect& tile_rect,
                                           const ossimIrect& clip_rect,
                                           const ossimIrect& image_rect,
-                                          ossim_uint32 reduced_res_level)
+                                          ossim_uint32 reduced_res_level,
+                                          ossimImageData* tile)
 {
-   const ossim_uint32 TILE_SIZE_PER_BAND     = theTile->getSizePerBand();
+   const ossim_uint32 TILE_SIZE_PER_BAND     = tile->getSizePerBand();
    const ossim_uint32 CHIP_SIZE_PER_BAND     = theCcfHead.chipSizePerBand();
    const ossim_uint32 SAMPLES_PER_CHIP       = theCcfHead.samplesPerChip();
    const ossim_uint32 LINES_PER_CHIP         = theCcfHead.linesPerChip();
@@ -471,10 +512,10 @@ bool ossimCcfTileSource::fillUshortBuffer(const ossimIrect& tile_rect,
                      // the tile.
                      //***
                      ossim_uint16* d
-                        = (ossim_uint16*)theTile->getBuf() +
+                        = (ossim_uint16*)tile->getBuf() +
                         band * TILE_SIZE_PER_BAND +
                         (chip_clip_rect.ul().y - tile_rect.ul().y) *
-                        theTile->getWidth() + chip_clip_rect.ul().x -
+                        tile->getWidth() + chip_clip_rect.ul().x -
                         tile_rect.ul().x;
                      
                      // Line loop through a chip.
@@ -506,7 +547,7 @@ bool ossimCcfTileSource::fillUshortBuffer(const ossimIrect& tile_rect,
 
                         // Increment the pointers by one line.
                         s += SAMPLES_PER_CHIP;
-                        d += theTile->getWidth();
+                        d += tile->getWidth();
                      }
                      
                   } // End of band loop.
@@ -801,7 +842,7 @@ ossimString ossimCcfTileSource::getLongName()const
    return ossimString("ccf reader");
 }
 
-ossimString ossimCcfTileSource::className()const
+ossimString ossimCcfTileSource::getClassName()const
 {
    return ossimString("ossimCcfTileSource");
 }

@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimReadmeFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimReadmeFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimReadmeFileWriter_H
 #define ossimReadmeFileWriter_H
@@ -24,8 +24,6 @@ public:
    /** default constructor */
    ossimReadmeFileWriter();
 
-   /** virtual destructor */
-   virtual ~ossimReadmeFileWriter();
 
    /**
     * Satisfies pure virtual from ossimMetadataWriter base.
@@ -48,7 +46,9 @@ public:
     */
    virtual bool hasMetadataType(const ossimString& metadataType)const;
    
-private:
+protected:
+   /** virtual destructor */
+   virtual ~ossimReadmeFileWriter();
    virtual bool writeFile();
    
 TYPE_DATA

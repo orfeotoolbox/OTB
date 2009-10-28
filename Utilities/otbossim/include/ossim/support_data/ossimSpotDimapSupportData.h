@@ -10,7 +10,7 @@
 // Contains declaration of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.h 14206 2009-04-01 12:11:20Z gpotts $
+// $Id: ossimSpotDimapSupportData.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSpotDimapSupportData_HEADER
 #define ossimSpotDimapSupportData_HEADER
 
@@ -54,7 +54,6 @@ public:
                              bool  processSwir=false);
 
    virtual ossimObject* dup()const;
-   virtual ~ossimSpotDimapSupportData();
 
    void clearFields();
    bool loadXmlFile(const ossimFilename& file,
@@ -155,6 +154,9 @@ public:
                           const char* prefix = 0)const;
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = 0);
+protected:
+   virtual ~ossimSpotDimapSupportData();
+
 private:
    void getLagrangeInterpolation(const ossim_float64& t,
                                  const std::vector<ossimDpt3d>& V,

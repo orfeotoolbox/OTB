@@ -83,7 +83,7 @@ bool ossimImageStatisticsSource::canConnectMyInputTo(ossim_int32 inputIndex,
 template <class T>
 void ossimImageStatisticsSource::computeStatisticsTemplate(T dummyVariable)
 {
-   ossimImageSourceSequencer* sequencer = new ossimImageSourceSequencer;
+   ossimRefPtr<ossimImageSourceSequencer> sequencer = new ossimImageSourceSequencer;
 
    sequencer->connectMyInputTo(getInput());
    sequencer->setToStartOfSequence();
@@ -136,7 +136,6 @@ void ossimImageStatisticsSource::computeStatisticsTemplate(T dummyVariable)
    }
    
    sequencer->disconnect();
-   delete sequencer;
    sequencer = 0;
 }
 

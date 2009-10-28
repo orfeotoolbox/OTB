@@ -9,7 +9,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 14481 2009-05-11 12:09:33Z dburken $
+// $Id: ossimAppFixedTileCache.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -157,17 +157,17 @@ void ossimAppFixedTileCache::flush(ossimAppFixedCacheId cacheId)
 
 void ossimAppFixedTileCache::deleteCache(ossimAppFixedCacheId cacheId)
 {
-   ossimFixedTileCache* cache = getCache(cacheId);
+   ossimRefPtr<ossimFixedTileCache> cache = getCache(cacheId);
    {
       OpenThreads::ScopedWriteLock lock(theMutex);
       std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator iter = theAppCacheMap.find(cacheId);
       
-      if(cache)
+      if(cache.valid())
       {
          theAppCacheMap.erase(iter);
          theCurrentCacheSize -= cache->getCacheSize();
-         delete cache;
       }
+      cache = 0;
    }
 }
 
@@ -289,7 +289,7 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
    {
       OpenThreads::ScopedWriteLock lock(theMutex);
       cacheSize = aCache->getCacheSize();
-      aCache->addTile(data);
+      result  = aCache->addTile(data);
    
       theCurrentCacheSize += (aCache->getCacheSize() - cacheSize);
    }
@@ -300,18 +300,7 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
 void ossimAppFixedTileCache::deleteAll()
 {
    OpenThreads::ScopedWriteLock lock(theMutex);
-   std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator iter = theAppCacheMap.begin();
    theCurrentCacheSize = 0;
-
-   while(iter != theAppCacheMap.end())
-   {
-      if((*iter).second)
-      {
-         delete (*iter).second;
-      }
-      
-      ++iter;
-   }
    theAppCacheMap.clear();
 }
 

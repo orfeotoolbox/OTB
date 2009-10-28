@@ -10,7 +10,7 @@
 // Density is base on alpha weight.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimWatermarkFilter.cpp 12623 2008-04-07 14:10:08Z gpotts $
+// $Id: ossimWatermarkFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <vector>
 
@@ -37,7 +37,7 @@ static const char WATERMARK_MODE_KW[] = "watermark_mode";
 static const char WEIGHT_KW[]         = "weight";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimWatermarkFilter.cpp 12623 2008-04-07 14:10:08Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimWatermarkFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 const ossim_float64 DEFAULT_WEIGHT = 0.20;
@@ -810,7 +810,7 @@ bool ossimWatermarkFilter::openWatermarkFile()
    theWatermark = NULL; // This will destroy any previous tiles.
 
    // Open the watermark image.
-   ossimImageHandler* ih =
+   ossimRefPtr<ossimImageHandler> ih =
       ossimImageHandlerRegistry::instance()->open(theFilename);
    if (!ih)
    {
@@ -837,34 +837,34 @@ bool ossimWatermarkFilter::openWatermarkFile()
    }
 
    ih->initialize();
-   ossimImageSource* imageSource = ih;
-   ossimScalarRemapper* remapper = NULL;
+   ossimRefPtr<ossimImageSource> imageSource = ih.get();
+   ossimRefPtr<ossimScalarRemapper> remapper;
    
    if (ih->getOutputScalarType() != theInputConnection->getOutputScalarType())
    {
       // Remap the watemark to the same scalar type as the input.
-      remapper = new ossimScalarRemapper(imageSource,
+      remapper = new ossimScalarRemapper(imageSource.get(),
                                          theInputConnection->
                                          getOutputScalarType());
       remapper->initialize();
-      imageSource = remapper;
+      imageSource = remapper.get();
    }
    
    // Get the full image rectangle.
    theWatermark = imageSource->getTile(ih->getImageRectangle(), 0);
 
    // Cleanup...
-   if (remapper)
+   if (remapper.valid())
    {
-      delete remapper;
+      remapper->disconnect();
       remapper = NULL;
    }
-   if (ih)
+   if(ih.valid())
    {
-      delete ih;
-      ih = NULL;
+      ih->disconnect();
+      ih = 0;
    }
-   imageSource = NULL;
+   imageSource = 0;
    
    if (theWatermark.valid() == false)
    {

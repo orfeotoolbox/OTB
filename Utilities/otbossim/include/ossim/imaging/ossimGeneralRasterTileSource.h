@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 //
@@ -13,15 +12,12 @@
 // ossimGeneralRasterTileSource is derived from ImageHandler which is
 // derived from ossimTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.h 11181 2007-06-07 19:57:14Z dburken $
+//  $Id: ossimGeneralRasterTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGeneralRasterTileSource_HEADER
 #define ossimGeneralRasterTileSource_HEADER
 
-  // #include <fstream>
 #include <ossim/base/ossimIoStream.h>
-  //using namespace std;
-
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimGeneralRasterInfo.h>
 
@@ -33,11 +29,9 @@ public:
 
    ossimGeneralRasterTileSource();
 
-   virtual ~ossimGeneralRasterTileSource();
-
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString className()const;
+   virtual ossimString getClassName()const;
    
    /**
     *  Returns a pointer to a tile given an origin representing the upper
@@ -46,11 +40,25 @@ public:
     */
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tile_rect,
                                                ossim_uint32 resLevel=0);
+
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);   
    
-    /**
-     *  Returns the number of bands in the image.
-     *  Satisfies pure virtual from ImageHandler class.
-     */
+   /**
+    *  Returns the number of bands in the image.
+    *  Satisfies pure virtual from ImageHandler class.
+    */
    virtual ossim_uint32 getNumberOfInputBands() const;
    
    /**
@@ -120,29 +128,30 @@ public:
    virtual ossim_uint32 getImageTileHeight() const;   
    
    bool isValidRLevel(ossim_uint32 reduced_res_level) const;
-  
+   
    virtual void close();
    virtual bool isOpen() const;
    virtual bool open();
    virtual bool open(const ossimGeneralRasterInfo& info);
-
+   
    /**
     * Override base getXXXXPixValue methods since the null/min/max can be set
     * to something different.  Currently returns the same value for all bands.
     */
-    virtual double getNullPixelValue(ossim_uint32 band=0)const;
-    virtual double getMinPixelValue(ossim_uint32 band=0)const;
-    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
-
+   virtual double getNullPixelValue(ossim_uint32 band=0)const;
+   virtual double getMinPixelValue(ossim_uint32 band=0)const;
+   virtual double getMaxPixelValue(ossim_uint32 band=0)const;
+   
 protected:
+   virtual ~ossimGeneralRasterTileSource();
    /**
     *  Methods return true on succes false on error.
     */
-   virtual bool fillBuffer(const ossimIpt& origin);
-   virtual bool fillBIP(const ossimIpt& origin);
-   virtual bool fillBIL(const ossimIpt& origin);
-   virtual bool fillBSQ(const ossimIpt& origin);
-   virtual bool fillBsqMultiFile(const ossimIpt& origin);
+   virtual bool fillBuffer(const ossimIpt& origin, const ossimIpt& size);
+   virtual bool fillBIP(const ossimIpt& origin, const ossimIpt& size); 
+   virtual bool fillBIL(const ossimIpt& origin, const ossimIpt& size);
+   virtual bool fillBSQ(const ossimIpt& origin, const ossimIpt& size);
+   virtual bool fillBsqMultiFile(const ossimIpt& origin, const ossimIpt& size);
 
    virtual bool initializeHandler();
    virtual void checkBuffer(const ossimIrect& rect);

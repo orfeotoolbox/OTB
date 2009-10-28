@@ -12,7 +12,7 @@
 // Contains class definition for the class "ossimERSTileSource".
 //
 //*******************************************************************
-//  $Id: ossimERSTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimERSTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimERSTileSource_HEADER
 #define ossimERSTileSource_HEADER
@@ -28,7 +28,6 @@ public:
 
    ossimERSTileSource(const ossimKeywordlist& kwl, const char* prefix=0);
    
-   virtual ~ossimERSTileSource();
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName() const;
@@ -36,17 +35,15 @@ public:
 
    virtual bool open(const ossimFilename& filename);
   
-  /*!
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
-
+   //! Returns the image geometry object associated with this tile source or NULL if not defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getImageGeometry();
 
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
+protected:
+   virtual ~ossimERSTileSource();
+
 private:
 
    void openHeader(const ossimFilename& file);

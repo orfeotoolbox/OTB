@@ -13,16 +13,16 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.h 14413 2009-04-27 17:11:12Z dburken $
+//  $Id: ossimIkonosRpcModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimIkonosRpcModel_HEADER
 #define ossimIkonosRpcModel_HEADER
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/projection/ossimRpcModel.h>
+#include <ossim/support_data/ossimIkonosMetaData.h>
 
 class ossimFilename;
-class ossimIkonosMetaData;
 
 /*!****************************************************************************
  *
@@ -37,8 +37,6 @@ public:
 
    ossimIkonosRpcModel(const ossimFilename& metadata,
                        const ossimFilename& rpcdata);
-
-   virtual ~ossimIkonosRpcModel();
 
   virtual bool saveState(ossimKeywordlist& kwl,
 			 const char* prefix=0)const;
@@ -60,6 +58,7 @@ public:
    virtual bool parseFile(const ossimFilename& file);
    
 protected:
+   virtual ~ossimIkonosRpcModel();
    void finishConstruction();
    void parseMetaData(const ossimFilename& metadata);
    void parseRpcData (const ossimFilename& rpcdata);
@@ -69,7 +68,7 @@ protected:
 /*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
 
-   ossimIkonosMetaData* theSupportData;
+   ossimRefPtr<ossimIkonosMetaData> theSupportData;
 
    TYPE_DATA
 };

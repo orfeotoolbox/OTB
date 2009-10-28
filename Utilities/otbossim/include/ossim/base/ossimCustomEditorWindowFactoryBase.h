@@ -6,12 +6,12 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCustomEditorWindowFactoryBase.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimCustomEditorWindowFactoryBase.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimCustomEditorWindowFactoryBase_HEADER
 #define ossimCustomEditorWindowFactoryBase_HEADER
 #include <ossim/base/ossimObjectFactory.h>
 
-class OSSIMDLLEXPORT ossimCustomEditorWindow;
+class ossimCustomEditorWindow;
 
 class OSSIMDLLEXPORT ossimCustomEditorWindowFactoryBase : public ossimObjectFactory
 {

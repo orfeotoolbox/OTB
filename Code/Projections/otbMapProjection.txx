@@ -7,7 +7,7 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -40,10 +40,7 @@ template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform
 MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::~MapProjection()
 {
-  if (m_MapProjection != NULL)
-  {
-    delete m_MapProjection;
-  }
+  m_MapProjection = NULL;
 }
 
 
@@ -52,7 +49,7 @@ const TOssimMapProjection*
 MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetMapProjection () const
 {
-  return this->m_MapProjection;
+  return this->m_MapProjection.get();
 }
 
 template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -60,7 +57,7 @@ TOssimMapProjection*
 MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetMapProjection ()
 {
-  return this->m_MapProjection;
+  return this->m_MapProjection.release();
 }
 
 template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>

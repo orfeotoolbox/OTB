@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimWorldFileWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimWorldFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimWorldFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -55,95 +55,64 @@ bool ossimWorldFileWriter::loadState(const ossimKeywordlist& kwl,
    return ossimMetadataFileWriter::loadState(kwl, prefix);
 }
 
+//**************************************************************************************************
+// Outputs projection information to the output file. Returns TRUE if successful.
+//**************************************************************************************************
 bool ossimWorldFileWriter::writeFile()
 {
-   bool result = true;
    if(!theInputConnection)
-   {
       return false;
-   }
 
    std::ofstream out(theFilename.c_str(), ios_base::out);
    if (!out)
+      return false;
+   
+   // Fetch the map projection of the input image if it exists:
+   const ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* imgGeom = theInputConnection->getImageGeometry();
+   if (imgGeom)
    {
+      const ossimProjection* proj = imgGeom->getProjection();
+      mapProj = PTR_CAST(ossimMapProjection, proj);
+   }
+   if (!mapProj)
+   {
+      out.close();
       return false;
    }
-   
-   ossimKeywordlist kwl;
 
-   theInputConnection->getImageGeometry(kwl);
-   ossimProjection* proj;
-   proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
-
-   if(mapProj)
+   // Convert projection info to proper units:
+   ossimDpt gsd = mapProj->getMetersPerPixel();
+   ossimDpt ul  = mapProj->getUlEastingNorthing();
+   if (theUnits == OSSIM_FEET)
    {
-      ossimMapProjectionInfo* projectionInfo
-         = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
-
-      projectionInfo->setPixelType(thePixelType);
-      
-      if(projectionInfo)
-      {
-         ossimDpt gsd;
-         ossimDpt ul;
-
-         if(projectionInfo->getProjection()->isGeographic())
-         {
-            gsd = projectionInfo->getDecimalDegreesPerPixel();
-            ul  = projectionInfo->ulGroundPt();
-         }
-         else
-         {
-            gsd = projectionInfo->getMetersPerPixel();
-            ul  = projectionInfo->ulEastingNorthingPt();
-
-            if (theUnits == OSSIM_FEET)
-            {
-               gsd.x = ossimUnitConversionTool(gsd.x, OSSIM_METERS).getFeet();
-               gsd.y = ossimUnitConversionTool(gsd.y, OSSIM_METERS).getFeet();
-               ul.x  = ossimUnitConversionTool(ul.x,  OSSIM_METERS).getFeet();
-               ul.y  = ossimUnitConversionTool(ul.y,  OSSIM_METERS).getFeet();
-            }
-            else if (theUnits == OSSIM_US_SURVEY_FEET)
-            {
-               gsd.x = ossimUnitConversionTool(gsd.x,
-                                               OSSIM_METERS).getUsSurveyFeet();
-               gsd.y = ossimUnitConversionTool(gsd.y,
-                                               OSSIM_METERS).getUsSurveyFeet();
-               ul.x  = ossimUnitConversionTool(ul.x,
-                                               OSSIM_METERS).getUsSurveyFeet();
-               ul.y = ossimUnitConversionTool(ul.y,
-                                              OSSIM_METERS).getUsSurveyFeet();
-            }
-         }
-         
-         out << setiosflags(ios::fixed) << setprecision(15)
-             << gsd.x  << endl
-             << 0.0    << endl // rotation value X
-             << 0.0    << endl // rotation value y
-             << -gsd.y << endl
-             << ul.x   << endl
-             << ul.y   << endl;
-         
-         delete projectionInfo;
-      }
+      gsd.x = ossimUnitConversionTool(gsd.x, OSSIM_METERS).getFeet();
+      gsd.y = ossimUnitConversionTool(gsd.y, OSSIM_METERS).getFeet();
+      ul.x  = ossimUnitConversionTool(ul.x,  OSSIM_METERS).getFeet();
+      ul.y  = ossimUnitConversionTool(ul.y,  OSSIM_METERS).getFeet();
    }
-   else
+   else if (theUnits == OSSIM_US_SURVEY_FEET)
    {
-      result = false;
+      gsd.x = ossimUnitConversionTool(gsd.x, OSSIM_METERS).getUsSurveyFeet();
+      gsd.y = ossimUnitConversionTool(gsd.y, OSSIM_METERS).getUsSurveyFeet();
+      ul.x  = ossimUnitConversionTool(ul.x,  OSSIM_METERS).getUsSurveyFeet();
+      ul.y  = ossimUnitConversionTool(ul.y,  OSSIM_METERS).getUsSurveyFeet();
    }
-   if(proj)
-   {
-      delete proj;
-      proj = NULL;
-   }
+
+   // output projection info to file:
+   out << setiosflags(ios::fixed) << setprecision(15)
+      << gsd.x  << endl
+      << 0.0    << endl // rotation value X
+      << 0.0    << endl // rotation value y
+      << -gsd.y << endl
+      << ul.x   << endl
+      << ul.y   << endl;
 
    out.close();
-   
-   return result;
+   return true;
 }
 
+//**************************************************************************************************
 void ossimWorldFileWriter::getMetadatatypeList(
    std::vector<ossimString>& metadatatypeList) const
 {

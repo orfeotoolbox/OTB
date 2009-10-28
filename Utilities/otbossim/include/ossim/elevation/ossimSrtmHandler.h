@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.h 14298 2009-04-14 17:26:03Z gpotts $
+// $Id: ossimSrtmHandler.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSrtmHandler_HEADER
 #define ossimSrtmHandler_HEADER
 
@@ -31,8 +31,6 @@ public:
    /** Constructor that takes a file name. */
    ossimSrtmHandler(const ossimFilename& srtmFile);
 
-   /** destructor */
-   virtual ~ossimSrtmHandler();
 
    enum
    {
@@ -73,7 +71,9 @@ public:
     */
    virtual void close();
    
-private:
+protected:
+   /** destructor */
+   virtual ~ossimSrtmHandler();
    // Disallow operator= and copy constrution...
    const ossimSrtmHandler& operator=(const ossimSrtmHandler& rhs);
    ossimSrtmHandler(const ossimSrtmHandler&);

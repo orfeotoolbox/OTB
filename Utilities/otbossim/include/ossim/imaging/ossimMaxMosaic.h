@@ -11,7 +11,7 @@
 //              of all inputs to the top of the mosaic output. 
 //
 //*************************************************************************
-// $Id: ossimMaxMosaic.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMaxMosaic.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMaxMosaic_HEADER
 #define ossimMaxMosaic_HEADER
 
@@ -29,8 +29,7 @@ class OSSIMDLLEXPORT ossimMaxMosaic : public ossimImageCombiner
 {
 public:
    ossimMaxMosaic();
-   ossimMaxMosaic(const std::vector<ossimImageSource*>& inputSources);
-   virtual ~ossimMaxMosaic();
+   ossimMaxMosaic(ossimConnectableObject::ConnectableObjectList& inputSources);
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -56,7 +55,7 @@ public:
    virtual ossimString getDescription()const;
 
 protected:
-
+   virtual ~ossimMaxMosaic();
    /**
     * Called on first getTile, will initialize all data needed.
     */

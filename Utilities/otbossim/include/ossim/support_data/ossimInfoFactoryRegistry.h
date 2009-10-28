@@ -41,6 +41,13 @@ public:
    void registerFactory(ossimInfoFactoryInterface* factory);
 
    /**
+    * Method to remove a factory from the registry.  Used by plugins when they
+    * are unloaded.
+    * @param factory Factory to remove.
+    */
+   void unregisterFactory(ossimInfoFactoryInterface* factory);
+
+   /**
     * @brief Create method.
     *
     * @param file Some file you want info for.

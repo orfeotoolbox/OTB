@@ -14,11 +14,25 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+
 #include <ossim/support_data/ossimTiffInfo.h>
+
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimEndian.h>
+#include <ossim/base/ossimGeoTiffCoordTransformsLut.h>
+#include <ossim/base/ossimIoStream.h> /* for ossimIOMemoryStream */
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimTieGptSet.h>
 #include <ossim/base/ossimTrace.h>
+
+#include <ossim/projection/ossimBilinearProjection.h>
+#include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
+#include <ossim/projection/ossimStatePlaneProjectionInfo.h>
+#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 
 // Static trace for debugging
 static ossimTrace traceDebug("ossimTiffInfo:debug");
@@ -36,11 +50,30 @@ static const std::string PHOTO_INTERP[] =
    "CIELAB"
 };
 
+static const std::string ANGULAR_UNITS_KW = "angular_units";
+static const std::string CENTER_LATITUDE__KW = "center_latitude";
+static const std::string CENTER_LONGITUDE_KW = "center_longitude";
+static const std::string COORD_TRANS_CODE_KW = "coord_trans_code";
+static const std::string FALSE_ORIGIN_LONGITUDE_KW = "false_origin_longitude";
+static const std::string FALSE_ORIGIN_LATITUDE_KW = "false_origin_latitude";
+static const std::string FALSE_ORIGIN_EASTING_KW = "false_origin_easting";
+static const std::string FALSE_ORIGIN_NORTHING_KW = "false_origin_northing";
+static const std::string IMAGE_LENGTH_KW = "image_length";
+static const std::string IMAGE_WIDTH_KW = "image_width";
+static const std::string LINEAR_UNITS_KW = "linear_units";
+static const std::string MODEL_PIXEL_SCALE_KW = "model_pixel_scale";
+static const std::string MODEL_TIE_POINT_KW = "model_tie_point";
+static const std::string MODEL_TRANSFORM_KW = "model_transform";
+static const std::string MODEL_TYPE_KW = "model_type";
+static const std::string ORIGIN_LATITUDE_KW = "origin_latitude";
+static const std::string ORIGIN_LONGITUDE_KW = "origin_longitude";
+static const std::string RASTER_TYPE_KW = "raster_type";
+
+
 ossimTiffInfo::ossimTiffInfo()
    : ossimInfoBase(),
      theFile(),
-     theEndian(0),
-     theVersion(0)
+     theEndian(0)
 {
 }
 
@@ -93,10 +126,11 @@ bool ossimTiffInfo::open(const ossimFilename& file)
       // Get the version. Note theEndian must be set/unset before calling
       // "readShort".
       //---
-      readShort(theVersion, str);
+      ossim_uint16 version;
+      readShort(version, str);
 
       if ( ( (byteOrder[0] == 'M') || (byteOrder[0] == 'I') ) &&
-           ( (theVersion == 42) || (theVersion == 43) ) )
+           ( (version == 42) || (version == 43) ) )
       {
          result = true;  // is a tif...
       }
@@ -207,7 +241,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
    }
 
    // Get the offset.
-   if (getOffset(seekOffset, str) == false)
+   if (getOffset(seekOffset, str, version) == false)
    {
      ossimNotify(ossimNotifyLevel_WARN) 
         << MODULE << " FATAL ERROR - "
@@ -257,7 +291,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
       // Get the number of directories within the IFD.
       //---
       ossim_uint64 nTags; // Number of tags in an IFD.
-      if (getValue(nTags, str, TWO_OR_EIGHT) == false)
+      if (getValue(nTags, str, TWO_OR_EIGHT, version) == false)
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << MODULE << " FATAL error reading number of direcories."
@@ -315,7 +349,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
          // type.  So if the type is a short and the count is one then
          // read "sizeof(short"(2) bytes.
          //---
-         getValue(count, str, FOUR_OR_EIGHT);
+         getValue(count, str, FOUR_OR_EIGHT, version);
          if (!str)
          {
             ossimNotify(ossimNotifyLevel_WARN)
@@ -330,7 +364,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
          if (arraySizeInBytes == 0)
          {
             // Could be an unhandle type.  Gobble the value.
-            eatValue(str);
+            eatValue(str, version);
          }
          else
          {
@@ -353,7 +387,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
             else // Data to big for field.  Stored elsewhere...
             {
                // Get the offset to the data.
-               getOffset(seekOffset, str);
+               getOffset(seekOffset, str, version);
 
                // Capture the seek position to come back to.
                streamPosition = str.tellg();
@@ -383,19 +417,19 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
                << "\n";
 	 }
 
-         if (tag == GEO_KEY_DIRECTORY_TAG)
+         if (tag == OGEO_KEY_DIRECTORY_TAG)
          {
             // tag 34735 save for printGeoKeys
             geoKeyBlock = reinterpret_cast<ossim_uint16*>(valueArray);
             geoKeyLength = count;
          }
-         else if (tag == GEO_DOUBLE_PARAMS_TAG)
+         else if (tag == OGEO_DOUBLE_PARAMS_TAG)
          {
             // tag 34736 save for printGeoKeys
             geoDoubleBlock  = reinterpret_cast<ossim_float64*>(valueArray);
             geoDoubleLength = count;
          }
-         else if (tag == GEO_ASCII_PARAMS_TAG)
+         else if (tag == OGEO_ASCII_PARAMS_TAG)
          {
             // tag 34737 save for printGeoKeys
             geoAsciiBlock   = reinterpret_cast<ossim_int8*>(valueArray);
@@ -456,7 +490,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
       // Get the next IFD offset.  Continue this loop until the offset is
       // zero.
       //---
-      if (getOffset(seekOffset, str) == false)
+      if (getOffset(seekOffset, str, version) == false)
       {
          ossimNotify(ossimNotifyLevel_WARN)
             << MODULE << " No offset to an image file directory found.\n"
@@ -503,6 +537,686 @@ std::ostream& ossimTiffInfo::print(std::ostream& out) const
    return out;
 }
 
+std::ostream& ossimTiffInfo::print(std::ifstream& inStr,
+                                   std::ostream& outStr) const
+{
+   static const char MODULE[] =
+      "ossimTiffInfo::print(std::ifstream&, std::ostream&)";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " DEBUG Entered...\n";
+   }
+
+   std::streampos startPosition = inStr.tellg();
+   
+   //---
+   // Get the byte order.  The data member "theTiffByteOrder" was set to
+   // BIG_END in the initialization list.  This will be changed if
+   // byte order is LITTLE_END(IBM, DEC).
+   //---
+   char byteOrder[2];
+   inStr.read(byteOrder, 2); // Read the byte order.
+
+   // Get the version:
+   ossim_uint16 version;
+   readShort(version, inStr);
+
+   // Set the tag value length.
+   ossim_uint64 tagValueLength;
+   if (version == 42)
+   {
+      tagValueLength = 4;
+   }
+   else
+   {
+      tagValueLength = 8;
+   }
+
+   outStr << "tiff.version: " << int(version)
+          << ((version==42)?"(classic)\n":"(big)\n")
+          << "tiff.byte_order: ";
+   
+   if (byteOrder[0] == 'M')
+   {
+      outStr << "big_endian\n";
+   }
+   else // OSSIM_LITTLE_ENDIAN
+   {
+      outStr  << "little_endian\n";
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< "system_byte_order: ";
+      if (ossim::byteOrder() == OSSIM_BIG_ENDIAN)
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)<< "big_endian\n";
+      }
+      else // OSSIM_LITTLE_ENDIAN
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)<< "little_endian\n";
+      }
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "tiff.tag_value_length: " << tagValueLength << "\n";
+   }
+
+   //---
+   // Variables used within the loop.
+   //---
+   std::streamoff seekOffset;      // used throughout
+   std::streampos streamPosition;  // used throughout
+
+   if (version == 43)
+   {
+      // We must skip the first four bytes.
+      ossim_uint32 offsetSize;
+      readLong(offsetSize, inStr);
+   }
+
+   // Get the offset.
+   if (getOffset(seekOffset, inStr, version) == false)
+   {
+     ossimNotify(ossimNotifyLevel_WARN) 
+        << MODULE << " FATAL ERROR - "
+        << "No offset to an image file directory found.\n"
+        << "Returning with error."
+        << std::endl;
+     inStr.close();
+     return outStr;
+   }
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " DEBUG: "
+         << "Offset to first ifd:  " << seekOffset
+         << "\n";
+   }
+
+   // Capture the original flags then set float output to full precision.
+   std::ios_base::fmtflags f = outStr.flags();
+   outStr << setiosflags(std::ios::fixed) << std::setprecision(15);
+   
+   // Image File Directory (IFD) loop.
+   ossim_int32 ifdIndex = 0;
+   while(seekOffset)
+   {
+      outStr << "tiff.directory_offset: " << seekOffset << "\n";
+
+      // Seek to the image file directory.
+      inStr.seekg(startPosition+seekOffset, std::ios_base::beg);  
+
+      // directory prefix for prints.
+      std::string prefix = "tiff.";
+      getDirPrefix(ifdIndex, prefix);
+
+      //---
+      // Things we need to save for printGeoKeys:
+      //---
+      ossim_uint16*  geoKeyBlock     = 0;
+      ossim_uint64   geoKeyLength    = 0;
+      ossim_float64* geoDoubleBlock  = 0;
+      ossim_uint64   geoDoubleLength = 0;
+      ossim_int8*    geoAsciiBlock   = 0;
+      ossim_uint64   geoAsciiLength  = 0;
+      
+      //---
+      // Get the number of directories within the IFD.
+      //---
+      ossim_uint64 nTags; // Number of tags in an IFD.
+      if (getValue(nTags, inStr, TWO_OR_EIGHT, version) == false)
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << " FATAL error reading number of direcories."
+            << std::endl;
+         inStr.close();
+         return outStr;
+      }
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << MODULE << " DEBUG:\n"
+            << "ifd:  " << seekOffset
+            << "\ntags in directory:  " << nTags<< "\n";
+      }
+
+      // Tag loop:
+      for (ossim_uint64 tagIdx = 0; tagIdx < nTags; ++tagIdx)
+      {
+         // Variables used within the loop.
+         ossim_uint16   tag              = 0; // Tag number
+         ossim_uint16   type             = 0; // Type(short, long...)
+         ossim_uint64   count            = 0;
+         ossim_uint64   arraySizeInBytes = 0; // 
+         ossim_uint8*   valueArray       = 0; // To hold value.
+         
+         //---
+         // Get the tag.
+         //---
+         readShort(tag, inStr);
+         if (!inStr)
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " FATAL error reading tag number."
+               << std::endl;
+            inStr.close();
+            return outStr;
+         }
+
+         //---
+         // Get the type (byte, ascii, short...)
+         //---
+         readShort(type, inStr);
+         if (!inStr)
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " FATAL error reading type number."
+               << std::endl;
+            inStr.close();
+            return outStr;
+         }
+
+         //---
+         // Get the count.  This is not in bytes.  It is based on the
+         // type.  So if the type is a short and the count is one then
+         // read "sizeof(short"(2) bytes.
+         //---
+         getValue(count, inStr, FOUR_OR_EIGHT, version);
+         if (!inStr)
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE << " FATAL error reading count."
+               << std::endl;
+            inStr.close();
+            return outStr;
+         }
+
+         // Get the array size in bytes.
+         arraySizeInBytes = getArraySizeInBytes(count, type);
+         if (arraySizeInBytes == 0)
+         {
+            // Could be an unhandle type.  Gobble the value.
+            eatValue(inStr, version);
+         }
+         else
+         {
+            // Allocate array.
+            if (valueArray) delete [] valueArray;
+            valueArray = new ossim_uint8[arraySizeInBytes];
+
+            if (arraySizeInBytes <= tagValueLength)
+            {
+               // Read in the value(s).
+               inStr.read((char*)valueArray, arraySizeInBytes);
+
+               // Skip any byes left in the field.
+               if (arraySizeInBytes < tagValueLength)
+               {
+                  // Skip these bytes.
+                  inStr.ignore(tagValueLength-arraySizeInBytes);
+               }
+            }
+            else // Data to big for field.  Stored elsewhere...
+            {
+               // Get the offset to the data.
+               getOffset(seekOffset, inStr, version);
+
+               // Capture the seek position to come back to.
+               streamPosition = inStr.tellg();
+
+               // Seek to the data.
+               inStr.seekg(startPosition+seekOffset, std::ios_base::beg);
+
+               // Read in the value(s).
+               inStr.read((char*)valueArray, arraySizeInBytes);
+
+               // Seek back.
+               inStr.seekg(streamPosition);
+            }
+
+            // Swap the bytes if needed.
+            swapBytes(valueArray, type, count);
+         }
+
+         if( traceDebug() )
+	 {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << MODULE << " DEBUG:"
+               << "\ntag[" << tagIdx << "]:" << tag
+               << "\ntype:                " << type
+               << "\ncount:        " << count
+               << "\narray size in bytes: " << arraySizeInBytes
+               << "\n";
+	 }
+
+         if (tag == OGEO_KEY_DIRECTORY_TAG)
+         {
+            // tag 34735 save for printGeoKeys
+            geoKeyBlock = reinterpret_cast<ossim_uint16*>(valueArray);
+            geoKeyLength = count;
+         }
+         else if (tag == OGEO_DOUBLE_PARAMS_TAG)
+         {
+            // tag 34736 save for printGeoKeys
+            geoDoubleBlock  = reinterpret_cast<ossim_float64*>(valueArray);
+            geoDoubleLength = count;
+         }
+         else if (tag == OGEO_ASCII_PARAMS_TAG)
+         {
+            // tag 34737 save for printGeoKeys
+            geoAsciiBlock   = reinterpret_cast<ossim_int8*>(valueArray);
+            geoAsciiLength  = count;
+         }
+         else
+         {
+            print(outStr,
+                  prefix,
+                  tagIdx,
+                  tag,
+                  type,
+                  count,
+                  arraySizeInBytes,
+                  valueArray);
+            
+            // Free memory if allocated...
+            if (valueArray)
+            {
+               delete [] valueArray;
+               valueArray = 0;
+            }
+         }
+         
+      } // End of tag loop.
+
+      //---
+      // If Geotiff Keys read them.
+      // This had to done last since the keys could
+      // have references to tags GEO_DOUBLE_PARAMS_TAG and
+      // GEO_ASCII_PARAMS_TAG.
+      //---
+      if (geoKeyBlock)
+      {
+         printGeoKeys(outStr, prefix, geoKeyLength, geoKeyBlock,
+                      geoDoubleLength,geoDoubleBlock,
+                      geoAsciiLength,geoAsciiBlock);
+
+         delete [] geoKeyBlock;
+         geoKeyBlock = 0;
+      }
+
+      if (geoDoubleBlock)
+      {
+         delete [] geoDoubleBlock;
+         geoDoubleBlock = 0;
+      }
+      if (geoAsciiBlock)
+      {
+         delete [] geoAsciiBlock;
+         geoAsciiBlock = 0;
+      }
+      geoKeyLength = 0;
+      geoDoubleLength = 0;
+      geoAsciiLength = 0;
+
+      //---
+      // Get the next IFD offset.  Continue this loop until the offset is
+      // zero.
+      //---
+      if (getOffset(seekOffset, inStr, version) == false)
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << " No offset to an image file directory found.\n"
+            << "Returning with error."
+            << std::endl;
+         inStr.close();
+         return outStr;
+      }
+      
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG ossimTiffInfo::readTags: "
+            << "Next Image File Directory(IFD) offset = "
+            << seekOffset << "\n";
+      }
+
+      ++ifdIndex; // next ifd
+
+      //---
+      // Note this does NOT check to see if sub_file_type is '1' simply
+      // skips all directories past the first if theOverviewFlag is false.
+      //---
+      if ( ifdIndex && !theOverviewFlag) // Don't process overviews...
+      {
+         break;
+      }
+      
+   } // End of loop through the IFD's.
+   
+   outStr << std::endl;
+    
+   inStr.close();
+
+   // Reset flags.
+   outStr.setf(f);
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << MODULE << " DEBUG Exited..." << std::endl;
+   }
+   
+   return outStr;
+}
+
+bool ossimTiffInfo::getImageGeometry(ossimKeywordlist& geomKwl,
+                                     ossim_uint32 entryIndex) const
+{
+   static const char MODULE[] = "ossimTiffInfo::getImageGeometry #1";
+   
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << " entered...\n";
+   }
+   
+   bool result = false;
+
+   // Open the file.
+   std::ifstream str;
+   str.open(theFile.c_str(), ios::in | ios::binary);
+   
+   if ( str.is_open() )
+   {
+      result = getImageGeometry(str, geomKwl, entryIndex);
+
+      str.close();
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "geomKwl:\n"
+         << geomKwl
+         << MODULE << " exit status = " << (result?"true":"false") << "\n";
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getImageGeometry(std::ifstream& inStr,
+                                     ossimKeywordlist& geomKwl,
+                                     ossim_uint32 entryIndex) const
+{
+   static const char MODULE[] = "ossimTiffInfo::getImageGeometry #2";
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << " entered...\n";
+   }
+   
+   bool result = false;
+
+   // Do a print to a memory stream.
+   ossimIOMemoryStream memStr;
+   print(inStr, memStr);
+
+   // Since the print is in key:value format we can pass to a keyword list.
+   ossimKeywordlist gtiffKwl;
+   if ( gtiffKwl.parseStream(memStr) )
+   {
+      //---
+      // Start with a return status of true and set to false if something bad
+      // happens.
+      //---
+      result = true;
+
+      
+      if ( traceDebug() )
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "tiffinfo dump to kwl:\n" << gtiffKwl << "\n";
+      }
+      
+      ossimString gtiffPrefix = "tiff.image";
+      gtiffPrefix += ossimString::toString(entryIndex);
+      gtiffPrefix += ".";
+      ossimString geomPrefix = "image";
+      geomPrefix += ossimString::toString(entryIndex);
+      geomPrefix += ".";
+
+      // Get the units first.
+      ossimString units = "";
+      getUnits(gtiffPrefix, gtiffKwl, units);
+      
+      // Get the pixel type.
+      ossimString pixelType;
+      if ( getPixelType(gtiffPrefix, gtiffKwl, pixelType) == false )
+      {
+         pixelType = "pixel_is_point"; // Not an error we'll make assumption?
+      }
+      geomKwl.add(geomPrefix.c_str(),
+                  ossimKeywordNames::PIXEL_TYPE_KW,
+                  pixelType.c_str());
+      
+      // Get the lines.
+      ossim_uint32 height = getLines(gtiffPrefix, gtiffKwl);
+      if (height)
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::NUMBER_LINES_KW,
+                     height);
+      }
+      else
+      {
+         result = false;
+      }
+
+      // Get the samples.
+      ossim_uint32 width = getSamples(gtiffPrefix, gtiffKwl);
+      if (width)
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::NUMBER_SAMPLES_KW,
+                     width);
+      }
+      else
+      {
+         result = false;
+      }
+
+      // Add the pixel type.
+      geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::PIXEL_TYPE_KW,
+                     pixelType.c_str());
+
+      // Get the pixel scale.
+      ossimDpt scale;
+      bool hasScale = getPixelScale(gtiffPrefix, gtiffKwl, scale);
+
+      // Get the tie point.
+      std::vector<ossim_float64> ties;
+      getTiePoint(gtiffPrefix, gtiffKwl, ties);
+
+      //---
+      // Tie count:
+      // NOTE: It takes six doubles to make one tie point ie:
+      // x,y,z,longitude,latitude,height or x,y,z,easting,northing,height
+      //--- 
+      ossim_uint32 tieCount = ties.size()/6;
+      
+      // Get the model transform.
+      std::vector<ossim_float64> xfrm;
+      getModelTransform(gtiffPrefix, gtiffKwl, xfrm);
+
+      bool useXfrm = false;
+      if ( xfrm.size() == 16 )
+      {
+         // Need at least 24 (which is four ties) to use bilinear.
+         if ( !hasScale && ties.size() < 24 )
+         {
+            useXfrm = true;
+         }
+      }
+      if (useXfrm)
+      {
+         std::ostringstream out;
+         ossim_uint32 idx = 0;
+         for(idx =0; idx < 16; ++idx)
+         {
+            out << xfrm[idx] << " ";
+         }
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW,
+                     out.str().c_str(), true);
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW,
+                     units.c_str(), true);
+      }
+      else // Use tie points.
+      {
+         if ( hasScale && (tieCount == 1) )
+         {
+            // Shift the tile to 0,0 pixel of image if not already there.
+            ossimDpt tie;
+            tie.x = ties[3] - ties[0] * scale.x;
+            tie.y = ties[4] - ties[1] * scale.y;
+            geomKwl.add(geomPrefix.c_str(),
+                        ossimKeywordNames::TIE_POINT_XY_KW,
+                        tie.toString().c_str());
+            geomKwl.add(geomPrefix.c_str(),
+                        ossimKeywordNames::TIE_POINT_UNITS_KW,
+                        units.c_str());
+
+            // Add the scale.
+            geomKwl.add(geomPrefix.c_str(),
+                        ossimKeywordNames::PIXEL_SCALE_XY_KW,
+                        scale.toString().c_str());
+            geomKwl.add(geomPrefix.c_str(),
+                        ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+                        units.c_str());
+         }
+         else if (tieCount > 1) // four or better tie points.
+         {
+            ossimTieGptSet tieSet;
+            getTieSets(ties, width, height, tieSet);
+
+            if(tieCount >= 4)
+            {
+               ossimRefPtr<ossimBilinearProjection> proj =
+                  new ossimBilinearProjection;
+               proj->optimizeFit(tieSet);
+               proj->saveState(geomKwl, geomPrefix.c_str());
+               if(traceDebug())
+               {
+                  ossimNotify(ossimNotifyLevel_DEBUG)
+                     << MODULE
+                     << "Creating a bilinear projection"
+                     << std::endl;
+               }
+               
+            }
+            else  // Need at least four ties.
+            {
+               result = false;
+            }
+         }
+         else
+         {
+            result = false;
+         }
+         
+      } // matches: else Use tie points block.
+      
+      ossimString pcsCode;
+      bool hasPcsCode = getPcsCode(gtiffPrefix, gtiffKwl, pcsCode);
+
+      // Set the projection type.
+      if (hasPcsCode)
+      {
+         // Add the pcs code.
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::PCS_CODE_KW,
+                     pcsCode.c_str());
+      }
+      else
+      {
+         ossimString ossimProjectionName = "";
+         if ( getOssimProjectionName(gtiffPrefix, gtiffKwl,
+                                     ossimProjectionName) == false )
+         {
+            ossimProjectionName = "ossimEquDistCylProjection";
+         }
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::TYPE_KW,
+                     ossimProjectionName);
+      }
+      ossimString tmpStr;
+      if ( getStdParallelOne(gtiffPrefix, gtiffKwl, tmpStr) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::STD_PARALLEL_1_KW,
+                     tmpStr);
+      }
+      
+      if ( getStdParallelTwo(gtiffPrefix, gtiffKwl, tmpStr) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::STD_PARALLEL_2_KW,
+                     tmpStr);
+      }
+      
+      ossimDpt eastingNorthing;
+      if ( getFalseEastingNorthing(gtiffPrefix, gtiffKwl,
+                                   eastingNorthing) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::FALSE_EASTING_NORTHING_KW,
+                     eastingNorthing.toString());
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::
+                     FALSE_EASTING_NORTHING_UNITS_KW, units);
+      }
+      
+      ossim_float64 tmpDbl;
+      
+      if ( getOriginLat(gtiffPrefix, gtiffKwl, tmpDbl) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::ORIGIN_LATITUDE_KW,
+                     tmpDbl);
+      }
+      if ( getCentralMeridian(gtiffPrefix, gtiffKwl, tmpDbl) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::CENTRAL_MERIDIAN_KW,
+                     tmpDbl);
+      }
+      
+      if ( getScaleFactor(gtiffPrefix, gtiffKwl, tmpDbl) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::SCALE_FACTOR_KW,
+                     tmpDbl);
+      }
+      
+   } // matches: if ( gtiffKwl.parseStream(memStr) )
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "geomKwl:\n"
+         << geomKwl
+         << MODULE << " exit status = " << (result?"true":"false") << "\n";
+   }
+
+   return result;
+}
+
 void ossimTiffInfo::readShort(ossim_uint16& s, std::ifstream& str) const
 {
    str.read((char*)&s, sizeof(s));
@@ -532,10 +1246,11 @@ void ossimTiffInfo::readLongLong(ossim_uint64& l, std::ifstream& str) const
 
 
 
-bool ossimTiffInfo::getOffset(std::streamoff& offset, std::ifstream& str) const
+bool ossimTiffInfo::getOffset(
+   std::streamoff& offset, std::ifstream& str, ossim_uint16 version) const
 {
    bool status = true;
-   if  (theVersion == 42)
+   if  (version == 42)
    {
       ossim_uint32   littleOffset;
       readLong(littleOffset, str);
@@ -555,11 +1270,12 @@ bool ossimTiffInfo::getOffset(std::streamoff& offset, std::ifstream& str) const
 }
 
 bool ossimTiffInfo::getValue(ossim_uint64& value,
-                            std::ifstream& str,
-                            WordType type) const
+                             std::ifstream& str,
+                             WordType type,
+                             ossim_uint16 version) const
 {
    bool status = true;
-   if  (theVersion == 42)
+   if  (version == 42)
    {
       if (type == TWO_OR_EIGHT)
       {
@@ -597,25 +1313,25 @@ ossim_uint16 ossimTiffInfo::getTypeByteSize(ossim_uint16 type) const
 {
    switch (type)
    {
-      case TIFF_BYTE:
-      case TIFF_ASCII:
-      case TIFF_SBYTE:
-      case TIFF_UNDEFINED:
+      case OTIFF_BYTE:
+      case OTIFF_ASCII:
+      case OTIFF_SBYTE:
+      case OTIFF_UNDEFINED:
          return 1;
          
-      case TIFF_SHORT:
-      case TIFF_SSHORT:
+      case OTIFF_SHORT:
+      case OTIFF_SSHORT:
          return 2;
          
-      case TIFF_LONG:
-      case TIFF_SLONG:
-      case TIFF_IFD:
+      case OTIFF_LONG:
+      case OTIFF_SLONG:
+      case OTIFF_IFD:
          return 4;
          
-      case TIFF_RATIONAL:
-      case TIFF_SRATIONAL:
-      case TIFF_FLOAT:
-      case TIFF_DOUBLE:
+      case OTIFF_RATIONAL:
+      case OTIFF_SRATIONAL:
+      case OTIFF_FLOAT:
+      case OTIFF_DOUBLE:
       case 16:             // TIFF_LONG8 defined in big tiff only.
       case 17:             // TIFF_SLONG8 defined in big tiff only.
       case 18:             // TIFF_IFD8 defined in big tiff only.
@@ -635,9 +1351,9 @@ ossim_uint16 ossimTiffInfo::getTypeByteSize(ossim_uint16 type) const
    return 0;
 }
 
-void ossimTiffInfo::eatValue(std::ifstream& str) const
+void ossimTiffInfo::eatValue(std::ifstream& str, ossim_uint16 version) const
 {
-   if (theVersion == 42)
+   if (version == 42)
    {
       ossim_uint32 dummy;
       readLong(dummy, str);
@@ -693,27 +1409,27 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
 {
    switch(tag)
    {
-      case TIFFTAG_SUBFILETYPE: // tag 254
+      case OTIFFTAG_SUBFILETYPE: // tag 254
       {
          out << prefix << "sub_file_type: ";
          printValue(out, type, valueArray);
          break;
       }
-      case TIFFTAG_IMAGEWIDTH: // tag 256
+      case OTIFFTAG_IMAGEWIDTH: // tag 256
       {
-         out << prefix << "image_width: ";
+         out << prefix << IMAGE_WIDTH_KW << ": ";
          printValue(out, type, valueArray);
          break;
       }
       
-      case TIFFTAG_IMAGELENGTH: // tag 257
+      case OTIFFTAG_IMAGELENGTH: // tag 257
       {
-         out << prefix << "image length: ";
+         out << prefix << IMAGE_LENGTH_KW << ": ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_BITSPERSAMPLE: // tag 258
+      case OTIFFTAG_BITSPERSAMPLE: // tag 258
       {
          out << prefix << "bits_per_sample: ";
          if (count == 1)
@@ -727,9 +1443,9 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
          
-      case TIFFTAG_COMPRESSION: // tag 259
+      case OTIFFTAG_COMPRESSION: // tag 259
       {
-         if ( (count == 1) && (type == TIFF_SHORT) )
+         if ( (count == 1) && (type == OTIFF_SHORT) )
          {
             out << prefix << "compression: ";
             
@@ -747,15 +1463,15 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
 
-      case TIFFTAG_PHOTOMETRIC: // tag 262
+      case OTIFFTAG_PHOTOMETRIC: // tag 262
       {
          out << prefix << "photo_interpretation: ";
 
-         if ( (count == 1) && (type == TIFF_SHORT) )
+         if ( (count == 1) && (type == OTIFF_SHORT) )
          {
             ossim_uint16 s;
             getArrayValue(s, valueArray, 0);
-            if (s <= PHOTO_CIELAB)
+            if (s <= OPHOTO_CIELAB)
             {
                out << PHOTO_INTERP[s] << "\n";
             }
@@ -767,14 +1483,14 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          }
       }
 
-      case TIFFTAG_IMAGEDESCRIPTION: // tag 270
+      case OTIFFTAG_IMAGEDESCRIPTION: // tag 270
       {
          out << prefix << "image_description: ";
          printArray(out, type, count, valueArray);
          break;
       }
 
-      case TIFFTAG_STRIPOFFSETS: // tag 273
+      case OTIFFTAG_STRIPOFFSETS: // tag 273
       {
          if (traceDump())
          {
@@ -791,7 +1507,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          }
          break;
       }
-      case TIFFTAG_ORIENTATION: // tag 274
+      case OTIFFTAG_ORIENTATION: // tag 274
       {
          ossim_uint16 code;
          getArrayValue(code, valueArray, 0);
@@ -799,21 +1515,21 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
       
-      case TIFFTAG_SAMPLESPERPIXEL: // tag 277
+      case OTIFFTAG_SAMPLESPERPIXEL: // tag 277
       {
          out << prefix << "samples_per_pixel: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_ROWSPERSTRIP: // tag 278
+      case OTIFFTAG_ROWSPERSTRIP: // tag 278
       {
          out << prefix << "rows_per_strip: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_STRIPBYTECOUNTS: // tag 279
+      case OTIFFTAG_STRIPBYTECOUNTS: // tag 279
       {
          if (traceDump())
          {
@@ -831,35 +1547,35 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
       
-      case TIFFTAG_MINSAMPLEVALUE: // tag 280
+      case OTIFFTAG_MINSAMPLEVALUE: // tag 280
       {
          out << prefix << "min_sample_value: ";
          printValue(out, type, valueArray);
          break;
       }
-      case TIFFTAG_MAXSAMPLEVALUE: // tag 281
+      case OTIFFTAG_MAXSAMPLEVALUE: // tag 281
       {
          out << prefix << "max_sample_value: ";
          printValue(out, type, valueArray);
          break;
       }
       
-      case TIFFTAG_XRESOLUTION: // tag 282
+      case OTIFFTAG_XRESOLUTION: // tag 282
       {
          out << prefix << "xresolution: ";
          printValue(out, type, valueArray);
          break;
       }
-      case TIFFTAG_YRESOLUTION: // tag 283
+      case OTIFFTAG_YRESOLUTION: // tag 283
       {
          out << prefix << "yresolution: ";
          printValue(out, type, valueArray);
          break;
       }
       
-      case TIFFTAG_PLANARCONFIG: // tag 284
+      case OTIFFTAG_PLANARCONFIG: // tag 284
       {
-         if ( (count == 1) && (type == TIFF_SHORT) )
+         if ( (count == 1) && (type == OTIFF_SHORT) )
          {
             out << prefix << "planar_configuration: ";
             ossim_uint16 v;
@@ -880,7 +1596,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
 
-      case TIFFTAG_RESOLUTIONUNIT: // tag 296
+      case OTIFFTAG_RESOLUTIONUNIT: // tag 296
       {
          out << prefix << "resolution_units: ";
          ossim_uint16 v;
@@ -899,27 +1615,33 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          }
          break;
       }
-      case TIFFTAG_DATETIME: // tag 306
+      case OTIFFTAG_SOFTWARE: // tag 305
+      {
+         out << prefix << "software: ";
+         printArray(out, type, count, valueArray);
+         break;
+      }
+      case OTIFFTAG_DATETIME: // tag 306
       {
          out << prefix << "date_time: ";
          printArray(out, type, count, valueArray);
          break;
       }
-      case TIFFTAG_TILEWIDTH: // tag 322
+      case OTIFFTAG_TILEWIDTH: // tag 322
       {
          out << prefix << "tile_width: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_TILELENGTH: // tag 323
+      case OTIFFTAG_TILELENGTH: // tag 323
       {
          out << prefix << "tile_length: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_TILEOFFSETS: // tag 324
+      case OTIFFTAG_TILEOFFSETS: // tag 324
       {
          if (traceDump())
          {
@@ -936,7 +1658,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
       
-      case TIFFTAG_TILEBYTECOUNTS: // tag 325
+      case OTIFFTAG_TILEBYTECOUNTS: // tag 325
       {
          if (traceDump())
          {
@@ -953,9 +1675,9 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
 
-      case TIFFTAG_SUBIFD: // tag 330
+      case OTIFFTAG_SUBIFD: // tag 330
       {
-         if ( (count == 1) && (type == TIFF_IFD8) )
+         if ( (count == 1) && (type == OTIFF_IFD8) )
          {
             out << prefix << "subimage_descriptor: ";
             ossim_uint64 v;
@@ -969,7 +1691,7 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
       
-      case TIFFTAG_EXTRASAMPLES: // tag 338
+      case OTIFFTAG_EXTRASAMPLES: // tag 338
       {
          out << prefix << "extra_samples: ";
          ossim_uint16 v;
@@ -995,31 +1717,31 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
 
-      case TIFFTAG_SAMPLEFORMAT: // tag 339
+      case OTIFFTAG_SAMPLEFORMAT: // tag 339
       {
-         if ( (count == 1) && (type == TIFF_SHORT) )
+         if ( (count == 1) && (type == OTIFF_SHORT) )
          {
             out << prefix << "sample_format: ";
             ossim_uint16 v;
             getArrayValue(v, valueArray, 0);
             switch (v)
             {
-               case SAMPLEFORMAT_UINT:
+               case OSAMPLEFORMAT_UINT:
                   out << "unsigned integer data\n";
                   break;
-               case SAMPLEFORMAT_INT:
+               case OSAMPLEFORMAT_INT:
                   out << "signed integer data\n";
                   break;
-               case SAMPLEFORMAT_IEEEFP:
+               case OSAMPLEFORMAT_IEEEFP:
                   out << "IEEE floating point data\n";
                   break;
-               case SAMPLEFORMAT_COMPLEXINT:
+               case OSAMPLEFORMAT_COMPLEXINT:
                   out << "complex signed int\n";
                   break;
-               case SAMPLEFORMAT_COMPLEXIEEEFP:
+               case OSAMPLEFORMAT_COMPLEXIEEEFP:
                   out << "complex ieee floating\n";
                   break;
-               case SAMPLEFORMAT_VOID:
+               case OSAMPLEFORMAT_VOID:
                default:
                   out << "untyped data\n";
                   break;
@@ -1028,61 +1750,61 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
          break;
       }
 
-      case TIFFTAG_SMINSAMPLEVALUE: // tag 340
+      case OTIFFTAG_SMINSAMPLEVALUE: // tag 340
       {
          out << prefix << "smin_sample_value: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_SMAXSAMPLEVALUE: // tag 341
+      case OTIFFTAG_SMAXSAMPLEVALUE: // tag 341
       {
          out << prefix << "smax_sample_value: ";
          printValue(out, type, valueArray);
          break;
       }
 
-      case TIFFTAG_COPYRIGHT: // tag 33432
+      case OTIFFTAG_COPYRIGHT: // tag 33432
       {
          out << prefix << "copyright: ";
          printArray(out, type, count, valueArray);
          break;
       }
       
-      case MODEL_PIXEL_SCALE_TAG: // tag 33550
+      case OMODEL_PIXEL_SCALE_TAG: // tag 33550
       {
-         out << prefix << "model_pixel_scale: ";
+         out << prefix << MODEL_PIXEL_SCALE_KW << ": ";
          printArray(out, type, count, valueArray);
          break;
       }
 
-      case MODEL_TIE_POINT_TAG: // tag 33992
+      case OMODEL_TIE_POINT_TAG: // tag 33992
       {
-         out << prefix << "model_tie_point: ";
+         out << prefix << MODEL_TIE_POINT_KW << ": ";
          printArray(out, type, count, valueArray);
          break;
       }
 
-      case MODEL_TRANSFORM_TAG: // tag 34264
+      case OMODEL_TRANSFORM_TAG: // tag 34264
       {
-         out << prefix << "model_transform: ";
+         out << prefix << MODEL_TRANSFORM_KW << ": ";
          printArray(out, type, count, valueArray);
          break;
       }
 
-      case TIFFTAG_PHOTOSHOP:  // tag 34377
+      case OTIFFTAG_PHOTOSHOP:  // tag 34377
       {
          out << prefix << "photoshop_image_resource_blocks: found\n";
          break;
       }
       
-      case GEO_DOUBLE_PARAMS_TAG: // tag 34736
+      case OGEO_DOUBLE_PARAMS_TAG: // tag 34736
       {
          out << prefix << "double_params: ";
          printArray(out, type, count, valueArray);
          break;
       }
-      case GEO_ASCII_PARAMS_TAG: // tag 34737
+      case OGEO_ASCII_PARAMS_TAG: // tag 34737
       {
          out << prefix << "ascii_params: ";
          printArray(out, type, count, valueArray);
@@ -1118,28 +1840,28 @@ std::ostream& ossimTiffInfo::printValue(std::ostream& out,
 {
    switch (type)
    {
-      case TIFF_SHORT:
+      case OTIFF_SHORT:
       {
          ossim_uint16 v;
          getArrayValue(v, valueArray, 0);
          out << v << "\n";
          break;
       }
-      case TIFF_SSHORT:
+      case OTIFF_SSHORT:
       {
          ossim_sint16 v;
          getArrayValue(v, valueArray, 0);
          out << v << "\n";
          break;
       }
-      case TIFF_LONG:
+      case OTIFF_LONG:
       {
          ossim_uint32 v;
          getArrayValue(v, valueArray, 0);
          out << v << "\n";
          break;
       }
-      case TIFF_RATIONAL: // two longs first=numerator, second=denominator
+      case OTIFF_RATIONAL: // two longs first=numerator, second=denominator
       {
          ossim_uint32 num;
          ossim_uint32 den;
@@ -1153,7 +1875,7 @@ std::ostream& ossimTiffInfo::printValue(std::ostream& out,
          break;
          
       }
-      case TIFF_SLONG:
+      case OTIFF_SLONG:
       {
          ossim_sint32 v;
          getArrayValue(v, valueArray, 0);
@@ -1178,7 +1900,7 @@ std::ostream& ossimTiffInfo::printArray(std::ostream& out,
    {
       switch (type)
       {
-         case TIFF_BYTE:
+         case OTIFF_BYTE:
          {
             for (ossim_uint64 i = 0; i < arraySizeInBytes; ++i)
             {
@@ -1188,7 +1910,7 @@ std::ostream& ossimTiffInfo::printArray(std::ostream& out,
             break;
          }
 
-         case TIFF_ASCII:
+         case OTIFF_ASCII:
          {
             for (ossim_uint64 i = 0; i < arraySizeInBytes; ++i)
             {
@@ -1197,7 +1919,7 @@ std::ostream& ossimTiffInfo::printArray(std::ostream& out,
             out << "\n";
             break;
          }
-         case TIFF_SHORT:
+         case OTIFF_SHORT:
           {
              ossim_uint16* p = (ossim_uint16*)valueArray;
              for (ossim_uint64 i = 0; i < arraySizeInBytes; ++i)
@@ -1207,7 +1929,7 @@ std::ostream& ossimTiffInfo::printArray(std::ostream& out,
             out << "\n";
             break;
          }
-         case TIFF_LONG:
+         case OTIFF_LONG:
           {
              ossim_uint32* p = (ossim_uint32*)valueArray;
              for (ossim_uint64 i = 0; i < arraySizeInBytes; ++i)
@@ -1217,7 +1939,7 @@ std::ostream& ossimTiffInfo::printArray(std::ostream& out,
             out << "\n";
             break;
          }
-         case TIFF_DOUBLE:
+         case OTIFF_DOUBLE:
           {
              ossim_float64* p = (ossim_float64*)valueArray;
              for (ossim_uint64 i = 0; i < arraySizeInBytes; ++i)
@@ -1297,18 +2019,18 @@ std::ostream& ossimTiffInfo::printGeoKeys(
 
          switch (key)
          {
-            case GT_MODEL_TYPE_GEO_KEY:  // key 1024 Section 6.3.1.1 Codes
+            case OGT_MODEL_TYPE_GEO_KEY:  // key 1024 Section 6.3.1.1 Codes
             {
                printModelType(out, prefix, code);
                break;
             }               
-            case GT_RASTER_TYPE_GEO_KEY:  // key 1025 Section 6.3.1.2 Code
+            case OGT_RASTER_TYPE_GEO_KEY:  // key 1025 Section 6.3.1.2 Code
             {
                printRasterType(out, prefix, code);
                break;
             }
 
-            case GT_CITATION_GEO_KEY: // key 1026
+            case OGT_CITATION_GEO_KEY: // key 1026
             {
                if (tag == 34737) // using ascii array
                {
@@ -1327,13 +2049,13 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
 
-            case GEOGRAPHIC_TYPE_GEO_KEY:  // key 2048  Section 6.3.2.1 Codes
+            case OGEOGRAPHIC_TYPE_GEO_KEY:  // key 2048  Section 6.3.2.1 Codes
             {
                out << prefix << "gcs_type: " << code << "\n";
                break;
             }
 
-            case GEOG_CITATION_GEO_KEY: // key 2049
+            case OGEOG_CITATION_GEO_KEY: // key 2049
             {
                if (tag == 34737) // using ascii array
                {
@@ -1352,33 +2074,33 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
 
-            case GEOG_GEODETIC_DATUM_GEO_KEY:// key 2050  Section 6.3.2.2 Codes
+            case OGEOG_GEODETIC_DATUM_GEO_KEY:// key 2050 Section 6.3.2.2 Codes
             {
                out << prefix << "geodetic_datum: " << code << "\n";
                break;
             }
             
-            case GEOG_LINEAR_UNITS_GEO_KEY:// key 2052  Section 6.3.1.3 Codes
+            case OGEOG_LINEAR_UNITS_GEO_KEY:// key 2052  Section 6.3.1.3 Codes
             {
                out << prefix << "linear_units_code: " << code << "\n";
                printLinearUnits(out, prefix, code);
                break;
             }
             
-            case GEOG_ANGULAR_UNITS_GEO_KEY:// key 2054  Section 6.3.1.4 Codes
+            case OGEOG_ANGULAR_UNITS_GEO_KEY:// key 2054  Section 6.3.1.4 Codes
             {
                out << prefix << "angular_units_code: " << code << "\n";
                printAngularUnits(out, prefix, code);
                break;
             }
             
-            case GEOG_ELLIPSOID_GEO_KEY:// key 2056  Section 6.3.23 Codes
+            case OGEOG_ELLIPSOID_GEO_KEY:// key 2056  Section 6.3.23 Codes
             {
                out << prefix << "ellipsoid_code: " << code << "\n";
                break;
             }
             
-            case GEOG_SEMI_MAJOR_AXIS: // key 2057
+            case OGEOG_SEMI_MAJOR_AXIS: // key 2057
             {
                if (tag == 34736) // using double array
                {
@@ -1392,7 +2114,7 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                }
                break;
             }
-            case GEOG_SEMI_MINOR_AXIS: // key 2058
+            case OGEOG_SEMI_MINOR_AXIS: // key 2058
             {
                if (tag == 34736) // using double array
                {
@@ -1407,13 +2129,13 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
 
-            case PROJECTED_CS_TYPE_GEO_KEY: // key 3072 Section 6.3.3.1 codes
+            case OPROJECTED_CS_TYPE_GEO_KEY: // key 3072 Section 6.3.3.1 codes
             {
                out << prefix << "pcs_code: " << code << "\n";
                break;
             }
 
-            case PCS_CITATION_GEO_KEY: // key 3073 ascii
+            case OPCS_CITATION_GEO_KEY: // key 3073 ascii
             {
                if (tag == 34737) // using ascii array
                {
@@ -1433,27 +2155,27 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
       
-            case PROJECTION_GEO_KEY: // key 3074 Section 6.3.3.2 codes
+            case OPROJECTION_GEO_KEY: // key 3074 Section 6.3.3.2 codes
             {
                out << prefix << "proj_code: " << code << "\n";
                break;
             }
             
-            case PROJ_COORD_TRANS_GEO_KEY:  // key 3075 Section 6.3.3.3 codes
+            case OPROJ_COORD_TRANS_GEO_KEY:  // key 3075 Section 6.3.3.3 codes
             {
-               out << prefix << "coord_trans_code: " << code << "\n";
+               out << prefix << COORD_TRANS_CODE_KW << ": " << code << "\n";
                printCoordTrans(out, prefix, code);
                break;
             }
          
-            case LINEAR_UNITS_GEO_KEY:  // key 3076 Section 6.3.1.3 codes
+            case OLINEAR_UNITS_GEO_KEY:  // key 3076 Section 6.3.1.3 codes
             {
                out << prefix << "linear_units_code: " << code << "\n";
                printLinearUnits(out, prefix, code);
                break;
             }
 
-            case PROJ_STD_PARALLEL1_GEO_KEY:  // key 3078
+            case OPROJ_STD_PARALLEL1_GEO_KEY:  // key 3078
             {
                if (tag == 34736) // using double array
                {
@@ -1461,14 +2183,15 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && (code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "std_parallel1: "
+                     out << prefix
+                         << ossimKeywordNames::STD_PARALLEL_1_KW << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
          
-            case PROJ_STD_PARALLEL2_GEO_KEY:  // key 3079
+            case OPROJ_STD_PARALLEL2_GEO_KEY:  // key 3079
             {
                if (tag == 34736) // using double array
                {
@@ -1476,14 +2199,15 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "std_parallel2: "
+                     out << prefix
+                         << ossimKeywordNames::STD_PARALLEL_2_KW << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
          
-            case PROJ_NAT_ORIGIN_LONG_GEO_KEY:  // key 3080
+            case OPROJ_NAT_ORIGIN_LONG_GEO_KEY:  // key 3080
             {
                if (tag == 34736) // using double array
                {
@@ -1491,14 +2215,14 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "origin_longitude: "
+                     out << prefix << ORIGIN_LONGITUDE_KW << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
                
-            case PROJ_NAT_ORIGIN_LAT_GEO_KEY:  // key 3081
+            case OPROJ_NAT_ORIGIN_LAT_GEO_KEY:  // key 3081
             {
                if (tag == 34736) // using double array
                {
@@ -1506,14 +2230,14 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "origin_latitude: "
+                     out << prefix << ORIGIN_LATITUDE_KW << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
 
-            case PROJ_FALSE_EASTING_GEO_KEY:  // key 3082
+            case OPROJ_FALSE_EASTING_GEO_KEY:  // key 3082
             {
                if (tag == 34736) // using double array
                {
@@ -1521,14 +2245,15 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "false_easting: "
+                     out << prefix
+                         << ossimKeywordNames::FALSE_EASTING_KW<< ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
 
-            case PROJ_FALSE_NORTHING_GEO_KEY:  // key 3083
+            case OPROJ_FALSE_NORTHING_GEO_KEY:  // key 3083
             {
                if (tag == 34736) // using double array
                {
@@ -1536,14 +2261,80 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "false_northing: "
+                     out << prefix
+                         << ossimKeywordNames::FALSE_NORTHING_KW
+                         << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
                break;
             }
             
-            case PROJ_CENTER_LONG_GEO_KEY:  // key 3088
+            case OPROJ_FALSE_ORIGIN_LONG_GEO_KEY:  // key 3084
+            {
+               if (tag == 34736) // using double array
+               {
+                  // Code is index into array.
+                  if ( geoDoubleBlock && ( code < geoDoubleLength) )
+                  {
+                     // Always count of one.
+                     out << prefix
+                         << FALSE_ORIGIN_LONGITUDE_KW << ": "
+                         << geoDoubleBlock[code] << "\n";
+                  }
+               }
+               break;
+            }
+            
+            case OPROJ_FALSE_ORIGIN_LAT_GEO_KEY:  // key 3085
+            {
+               if (tag == 34736) // using double array
+               {
+                  // Code is index into array.
+                  if ( geoDoubleBlock && ( code < geoDoubleLength) )
+                  {
+                     // Always count of one.
+                     out << prefix
+                         << FALSE_ORIGIN_LATITUDE_KW << ": "
+                         << geoDoubleBlock[code] << "\n";
+                  }
+               }
+               break;
+            }
+            
+            case OPROJ_FALSE_ORIGIN_EASTING_GEO_KEY:  // key 3086
+            {
+               if (tag == 34736) // using double array
+               {
+                  // Code is index into array.
+                  if ( geoDoubleBlock && ( code < geoDoubleLength) )
+                  {
+                     // Always count of one.
+                     out << prefix
+                         <<  FALSE_ORIGIN_EASTING_KW<< ": "
+                         << geoDoubleBlock[code] << "\n";
+                  }
+               }
+               break;
+            }
+            
+            case OPROJ_FALSE_ORIGIN_NORTHING_GEO_KEY:  // key 3087
+            {
+               if (tag == 34736) // using double array
+               {
+                  // Code is index into array.
+                  if ( geoDoubleBlock && ( code < geoDoubleLength) )
+                  {
+                     // Always count of one.
+                     out << prefix
+                         <<  FALSE_ORIGIN_NORTHING_KW<< ": "
+                         << geoDoubleBlock[code] << "\n";
+                  }
+               }
+               break;
+            }
+           
+            case OPROJ_CENTER_LONG_GEO_KEY:  // key 3088
             {
                if (tag == 34736) // using double array
                {
@@ -1558,7 +2349,7 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
 
-            case PROJ_CENTER_LAT_GEO_KEY:  // key 3089
+            case OPROJ_CENTER_LAT_GEO_KEY:  // key 3089
             {
                if (tag == 34736) // using double array
                {
@@ -1573,7 +2364,7 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                break;
             }
 
-            case PROJ_SCALE_AT_NAT_ORIGIN_GEO_KEY:  // key 3092
+            case OPROJ_SCALE_AT_NAT_ORIGIN_GEO_KEY:  // key 3092
             {
                if (tag == 34736) // using double array
                {
@@ -1581,7 +2372,8 @@ std::ostream& ossimTiffInfo::printGeoKeys(
                   if ( geoDoubleBlock && ( code < geoDoubleLength) )
                   {
                      // Always count of one.
-                     out << prefix << "scale_factor: "
+                     out << prefix << ossimKeywordNames::SCALE_FACTOR_KW
+                         << ": "
                          << geoDoubleBlock[code] << "\n";
                   }
                }
@@ -1626,7 +2418,7 @@ std::ostream& ossimTiffInfo::printModelType(std::ostream& out,
                                            ossim_uint16 code) const
 {
    // key 1024 Section 6.3.1.1 Codes
-   out << prefix << "model_type: ";
+   out << prefix << MODEL_TYPE_KW << ": ";
    if (code == 1)
    {
       out << "projected\n";
@@ -1651,7 +2443,7 @@ std::ostream& ossimTiffInfo::printRasterType(std::ostream& out,
                                             ossim_uint16 code) const
 {
    // key 1025 Section 6.3.1.2 Codes
-   out << prefix << "raster_type: ";
+   out << prefix << RASTER_TYPE_KW << ": ";
    if (code == 1)
    {
       out << "pixel_is_area\n";
@@ -1672,7 +2464,7 @@ std::ostream& ossimTiffInfo::printAngularUnits(std::ostream& out,
                                               ossim_uint16 code) const
 {
    // key 2054 Section 6.3.1.4 Codes
-   out << prefix << "angular_units: ";
+   out << prefix << ANGULAR_UNITS_KW << ": ";
    switch (code)
    {
       case 9101:
@@ -1881,7 +2673,7 @@ std::ostream& ossimTiffInfo::printLinearUnits(std::ostream& out,
                                              ossim_uint16 code) const
 {
    // key 3076 Section 6.3.1.3 Codes
-   out << prefix << "linear_units: ";
+   out << prefix << LINEAR_UNITS_KW << ": ";
    switch (code)
    {
       case 9001:
@@ -2033,4 +2825,588 @@ void ossimTiffInfo::getDirPrefix(ossim_int32 index,
    s << index;
    prefix += s.str();
    prefix += ".";
+}
+
+bool ossimTiffInfo::getPixelScale(const ossimString& gtiffPrefix,
+                                  const ossimKeywordlist& gtiffKwl,
+                                  ossimDpt& scale) const
+{
+   bool result = false;
+
+   std::vector<ossim_float64> floats;
+   if ( getFloats(gtiffPrefix, MODEL_PIXEL_SCALE_KW, gtiffKwl, floats) )
+   {
+      if ( floats.size() == 3 )
+      {
+         scale.x = floats[0];
+         scale.y = floats[1];
+         result = true;
+      }
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getTiePoint(const ossimString& gtiffPrefix,
+                                const ossimKeywordlist& gtiffKwl,
+                                std::vector<ossim_float64>& ties) const
+{
+   return getFloats(gtiffPrefix, MODEL_TIE_POINT_KW, gtiffKwl, ties);
+}
+
+bool ossimTiffInfo::getModelTransform(const ossimString& gtiffPrefix,
+                                      const ossimKeywordlist& gtiffKwl,
+                                      std::vector<ossim_float64>& xfrm) const
+{
+   return getFloats(gtiffPrefix, MODEL_TRANSFORM_KW, gtiffKwl, xfrm);
+}
+
+bool ossimTiffInfo::getFloats(const ossimString& gtiffPrefix,
+                              const ossimString& key,
+                              const ossimKeywordlist& gtiffKwl,
+                              std::vector<ossim_float64>& floats) const
+{
+   bool result = false;
+   
+   const char* lookup = gtiffKwl.find(gtiffPrefix.c_str(), key.c_str());
+   if ( lookup )
+   {
+      ossimString line = lookup;
+      result  = getFloats(line, floats);
+   }
+
+   return result; 
+}
+
+bool ossimTiffInfo::getFloats(const ossimString& line,
+                              std::vector<ossim_float64>& floats) const
+{
+   bool result = false;
+   
+   floats.clear();
+   
+   if (line.size())
+   {
+      ossim_float64 f;
+      std::istringstream is(line);
+
+      is >> f; // Get the first double.
+      while ( ! is.fail() )
+      {
+         floats.push_back(f);
+         is >> f;
+      }
+   }
+
+   if ( floats.size() )
+   {
+      result = true;
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getPcsCode(const ossimString& gtiffPrefix,
+                               const ossimKeywordlist& gtiffKwl,
+                               ossimString& pcsCode) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::PCS_CODE_KW);
+
+   if (lookup)
+   {
+      pcsCode = lookup;
+
+      // See if we handle this code in our projection factories.
+      
+      ossim_uint32 code = pcsCode.toUInt32();
+
+      if ( code != OUSER_DEFINED )
+      {
+         const ossimStatePlaneProjectionInfo* info =
+            ossimStatePlaneProjectionFactory::instance()->getInfo(code);
+         if ( info )
+         {
+            result = true;
+            delete info;
+            info = 0;
+         }
+         else
+         {
+            ossimRefPtr<ossimProjection> proj = ossimPcsCodeProjectionFactory::instance()->
+               createProjection(pcsCode);
+            if (proj.valid())
+            {
+               result = true;
+            }
+            proj = 0;
+        }
+      }
+   }
+   
+   return result;
+}
+
+bool ossimTiffInfo::getUnits(const ossimString& gtiffPrefix,
+                             const ossimKeywordlist& gtiffKwl,
+                             ossimString& units) const
+{
+   bool result = true;
+   
+   ossimString linearUnits = "";
+   getLinearUnits(gtiffPrefix, gtiffKwl, linearUnits);
+      
+   ossimString angularUnits = "";
+   getAngularUnits(gtiffPrefix, gtiffKwl, angularUnits);
+
+   ossimString modelType;
+   getModelType(gtiffPrefix, gtiffKwl, modelType);
+   
+   if (modelType == "geographic")
+   {
+      if (angularUnits.size())
+      {
+         units = angularUnits;
+      }
+      else
+      {
+         units = "degrees";
+      }
+   }
+   else if (modelType == "projected")
+   {
+      if (linearUnits.size())
+      {
+         units = linearUnits;
+      }
+      else
+      {
+         units = "meters";
+      }
+   }
+   else
+   {
+      units = "meters";
+   }
+
+   return result;
+}
+
+
+bool ossimTiffInfo::getLinearUnits(const ossimString& gtiffPrefix,
+                                   const ossimKeywordlist& gtiffKwl,
+                                   ossimString& linearUnits) const
+{
+   bool result = false;
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), LINEAR_UNITS_KW.c_str());
+   if (lookup)
+   {
+      linearUnits = lookup;
+      result = true;
+   }
+   return result;
+}
+
+bool ossimTiffInfo::getAngularUnits(const ossimString& gtiffPrefix,
+                                    const ossimKeywordlist& gtiffKwl,
+                                    ossimString& angularUnits) const
+{
+   bool result = false;
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ANGULAR_UNITS_KW.c_str());
+   if (lookup)
+   {
+      angularUnits = lookup;
+      result = true;
+   }
+   return result;
+}
+
+bool ossimTiffInfo::getPixelType(const ossimString& gtiffPrefix,
+                                 const ossimKeywordlist& gtiffKwl,
+                                 ossimString& pixelType) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), RASTER_TYPE_KW.c_str());
+   if (lookup)
+   {
+      pixelType = lookup;
+      result = true;
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getModelType(const ossimString& gtiffPrefix,
+                                 const ossimKeywordlist& gtiffKwl,
+                                 ossimString& modelType) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), MODEL_TYPE_KW.c_str());
+   if (lookup)
+   {
+      modelType = lookup;
+      result = true;
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getOssimProjectionName(const ossimString& gtiffPrefix,
+                                           const ossimKeywordlist& gtiffKwl,
+                                           ossimString& ossimProj) const
+{
+   bool result = false;
+
+   ossimProj.clear();
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), COORD_TRANS_CODE_KW.c_str());
+   
+   if (lookup)
+   {
+      ossim_uint32 code = ossimString(lookup).toUInt32();
+
+      ossimGeoTiffCoordTransformsLut lut;
+
+      ossimProj = lut.getEntryString(code);
+      
+      if (ossimProj.size())
+      {
+         result = true;
+      }
+   }
+
+   return result;
+}
+
+ossim_uint32 ossimTiffInfo::getLines(const ossimString& gtiffPrefix,
+                                     const ossimKeywordlist& gtiffKwl) const
+{
+   ossim_uint32 result = 0;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), IMAGE_LENGTH_KW.c_str());
+
+   if (lookup)
+   {
+      result = ossimString(lookup).toUInt32();
+   }
+
+   return result;
+}
+
+ossim_uint32 ossimTiffInfo::getSamples(const ossimString& gtiffPrefix,
+                                       const ossimKeywordlist& gtiffKwl) const
+{
+   ossim_uint32 result = 0;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), IMAGE_WIDTH_KW.c_str());
+
+   if (lookup)
+   {
+      result = ossimString(lookup).toUInt32();
+   }   
+
+   return result;
+}
+
+bool ossimTiffInfo::getStdParallelOne(const ossimString& gtiffPrefix,
+                                      const ossimKeywordlist& gtiffKwl,
+                                      ossimString& value) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::STD_PARALLEL_1_KW);
+   
+   if (lookup)
+   {
+      value = lookup;
+      result = true;
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getStdParallelTwo(const ossimString& gtiffPrefix,
+                                      const ossimKeywordlist& gtiffKwl,
+                                      ossimString& value) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::STD_PARALLEL_2_KW);
+   
+   if (lookup)
+   {
+      value = lookup;
+      result = true;
+   }
+
+   return result;
+}
+
+bool ossimTiffInfo::getFalseEasting(const ossimString& gtiffPrefix,
+                                    const ossimKeywordlist& gtiffKwl,
+                                    ossimString& value) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::FALSE_EASTING_KW);
+   
+   if (lookup)
+   {
+      value = lookup;
+      result = true;
+   }
+
+   return result; 
+}
+
+bool ossimTiffInfo::getFalseNorthing(const ossimString& gtiffPrefix,
+                                     const ossimKeywordlist& gtiffKwl,
+                                     ossimString& value) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::FALSE_NORTHING_KW);
+   
+   if (lookup)
+   {
+      value = lookup;
+      result = true;
+   }
+
+   return result; 
+}
+
+bool ossimTiffInfo::getFalseEastingNorthing(const ossimString& gtiffPrefix,
+                                            const ossimKeywordlist& gtiffKwl,
+                                            ossimDpt& eastingNorthing) const
+{
+   bool result = false;
+   ossimString value;
+   if ( getFalseEasting(gtiffPrefix, gtiffKwl, value) )
+   {
+      eastingNorthing.x = value.toFloat64();
+
+      if ( getFalseNorthing(gtiffPrefix, gtiffKwl, value) )
+      {
+         eastingNorthing.y = value.toFloat64();
+         result = true;
+      }
+   }
+   return result;
+}
+      
+bool ossimTiffInfo::getScaleFactor(const ossimString& gtiffPrefix,
+                                   const ossimKeywordlist& gtiffKwl,
+                                   ossim_float64& value) const
+{
+   bool result = false;
+
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::SCALE_FACTOR_KW);
+   
+   if (lookup)
+   {
+      value = ossimString(lookup).toFloat64();
+      result = true;
+   }
+
+   return result; 
+}
+
+bool ossimTiffInfo::getOriginLat(const ossimString& gtiffPrefix,
+                                 const ossimKeywordlist& gtiffKwl,
+                                 ossim_float64& value) const
+{
+   bool result = false;
+
+   //---
+   // Not sure of the order of precidence here.
+   //---
+   const char* projOriginLatGeoKey =
+      gtiffKwl.find(gtiffPrefix.c_str(), ORIGIN_LATITUDE_KW.c_str());
+
+   //---
+   // Go for this key first as it is used in geotiff spec example:
+   // http://www.remotesensing.org/geotiff/spec/geotiff3.html#3.1.3.
+   //---
+   if (projOriginLatGeoKey)
+   {
+      value = ossimString(projOriginLatGeoKey).toFloat64();
+      result = true;
+   }
+   else
+   {
+      const char* projCenterLatGeoKey =
+         gtiffKwl.find(gtiffPrefix.c_str(), CENTER_LATITUDE__KW.c_str());
+
+      if (projCenterLatGeoKey)
+      {
+         value = ossimString(projCenterLatGeoKey).toFloat64();
+         result = true;
+      }
+      else
+      {
+         const char* projFalseOriginLatGeoKey =
+            gtiffKwl.find(gtiffPrefix.c_str(),
+                          FALSE_ORIGIN_LATITUDE_KW.c_str());
+
+         if (projFalseOriginLatGeoKey)
+         {
+            //---
+            // Seems the term "false" implies it should be added to the real
+            // origin?
+            //---
+            value = ossimString(projFalseOriginLatGeoKey).toFloat64();
+            result = true;
+         }
+      }
+   }
+   
+   return result;
+}
+
+bool ossimTiffInfo::getCentralMeridian(const ossimString& gtiffPrefix,
+                                       const ossimKeywordlist& gtiffKwl,
+                                       ossim_float64& value) const
+{
+   bool result = false;
+
+   //---
+   // Not sure of the order of precidence here.
+   //---
+   const char* projCenterLongGeoKey =
+      gtiffKwl.find(gtiffPrefix.c_str(), CENTER_LONGITUDE_KW.c_str());
+
+   //---
+   // Go for this key first as it is used in geotiff spec example:
+   // http://www.remotesensing.org/geotiff/spec/geotiff3.html#3.1.3.
+   //---
+   if (projCenterLongGeoKey)
+   {
+      value = ossimString(projCenterLongGeoKey).toFloat64();
+      result = true;
+   }
+   else
+   {
+      const char* projOriginLongGeoKey =
+         gtiffKwl.find(gtiffPrefix.c_str(), ORIGIN_LONGITUDE_KW.c_str());
+
+      if (projOriginLongGeoKey)
+      {
+         value = ossimString(projOriginLongGeoKey).toFloat64();
+         result = true;
+      }
+      else
+      {
+         const char* projFalseOriginLongGeoKey =
+            gtiffKwl.find(gtiffPrefix.c_str(),
+                          FALSE_ORIGIN_LONGITUDE_KW.c_str());
+
+         if (projFalseOriginLongGeoKey)
+         {
+            //---
+            // Seems the term "false" implies it should be added to the real
+            // origin?
+            //---
+            value = ossimString(projFalseOriginLongGeoKey).toFloat64();
+            result = true;
+         }
+      }
+   }
+   
+   return result;
+}
+
+void ossimTiffInfo::getTieSets(const std::vector<ossim_float64>& ties,
+                               ossim_uint32 width,
+                               ossim_uint32 height,
+                               ossimTieGptSet& tieSet) const
+{
+   ossim_uint32 idx = 0;
+   ossim_uint32 tieCount = ties.size()/6;
+   const double* tiePointsPtr = &ties.front();
+   double offset = 0;
+   if (hasOneBasedTiePoints(ties, width, height))
+   {
+      offset = -1.0;
+   }
+   
+   for(idx = 0; idx < tieCount; ++idx)
+   {
+      ossimDpt xyPixel(tiePointsPtr[0]+offset, tiePointsPtr[1]+offset);
+      // tie[3] = x, tie[4]
+      ossimGpt gpt(tiePointsPtr[4], tiePointsPtr[3], tiePointsPtr[5]);
+      
+      tieSet.addTiePoint(new ossimTieGpt(gpt, xyPixel, .5));
+      tiePointsPtr+=6;
+   }
+}
+
+bool ossimTiffInfo::hasOneBasedTiePoints(
+   const std::vector<ossim_float64>& ties,
+   ossim_uint32 width, ossim_uint32 height) const
+{
+   bool result = false;
+   
+   // Assuming ties of (x,y,z,lat,lon,hgt) so size should be divide by 3.
+   if (ties.size()%6)
+   {
+      return result;
+   }
+   
+   ossim_float64 minX = 999999.0;
+   ossim_float64 minY = 999999.0;
+   ossim_float64 maxX = 0.0;
+   ossim_float64 maxY = 0.0;
+
+   const ossim_uint32 SIZE = ties.size();
+   ossim_uint32 tieIndex = 0;
+
+   while (tieIndex < SIZE)
+   {
+      if ( ties[tieIndex]   < minX ) minX = ties[tieIndex];
+      if ( ties[tieIndex]   > maxX ) maxX = ties[tieIndex];
+      if ( ties[tieIndex+1] < minY ) minY = ties[tieIndex+1];
+      if ( ties[tieIndex+1] > maxY ) maxY = ties[tieIndex+1];
+      tieIndex += 6;
+   }
+
+   if ( (minX == 1) && (maxX == width) &&
+        (minY == 1) && (maxY == height) )
+   {
+      result = true;
+   }
+
+#if 0
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimGeoTiff::hasOneBasedTiePoints DEBUG:"
+         << "\nminX:       " << minX
+         << "\nmaxX:       " << maxX
+         << "\nminY:       " << minY
+         << "\nmaxY:       " << maxY
+         << "\ntheWidth:   " << theWidth
+         << "\ntheLength:  " << theLength
+         << "\none based:  " << (result?"true":"false")
+         << std::endl;
+   }
+#endif
+   
+   return result;
 }

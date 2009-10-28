@@ -7,7 +7,7 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.h 12623 2008-04-07 14:10:08Z gpotts $
+//  $Id: ossimCacheTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimCacheTileSource_HEADER
 #define ossimCacheTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -24,7 +24,6 @@ public:
     */
    ossimCacheTileSource();
    // ossimCacheTileSource(ossimImageSource* inputSource);
-   virtual ~ossimCacheTileSource();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
@@ -58,6 +57,7 @@ public:
    
 
 protected:
+   virtual ~ossimCacheTileSource();
 
    void allocate();
    

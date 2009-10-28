@@ -18,6 +18,7 @@
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimDate.h>
+#include <ossim/base/ossimRefPtr.h>
 
 class ossimFfL7;
 
@@ -29,7 +30,7 @@ public:
    ossimTileMapTileSource(const ossimKeywordlist& kwl,
                            const char* prefix=0);
 
-   virtual ~ossimTileMapTileSource();
+
 
    virtual ossimString getShortName() const;
 
@@ -52,17 +53,10 @@ public:
 
    ossimFilename getBandFilename(ossim_uint32 idx)const;
 
-   bool isPan()const;
-   bool isVir()const;
-   bool isTm()const;
+   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getImageGeometry();
 
-  /*!
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
 
 
    virtual bool loadState(const ossimKeywordlist& kwl,
@@ -81,11 +75,14 @@ public:
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+protected:
+  virtual ~ossimTileMapTileSource();
+
 private:
 
    void openHeader(const ossimFilename& file);
 
-   ossimFfL7* theFfHdr;
+   ossimRefPtr<ossimFfL7> theFfHdr;
 
    TYPE_DATA
 };

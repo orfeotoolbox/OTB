@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandToIndexFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNBandToIndexFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNBandToIndexFilter_HEADER
 #define ossimNBandToIndexFilter_HEADER
 #include <ossim/base/ossimNBandLutDataObject.h>
@@ -47,7 +47,6 @@ public:
     * Initializes the min value to 0 and the max value to 4000.
     */
    ossimNBandToIndexFilter();
-   virtual ~ossimNBandToIndexFilter();
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -105,6 +104,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 protected:
+   virtual ~ossimNBandToIndexFilter();
    void allocate();
 
    

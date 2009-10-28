@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimValueAssignImageSourceFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimValueAssignImageSourceFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimValueAssignImageSourceFilter_HEADER
 #define ossimValueAssignImageSourceFilter_HEADER
 
@@ -49,7 +49,6 @@ public:
    };
    
    ossimValueAssignImageSourceFilter(ossimObject* owner=NULL);
-   virtual ~ossimValueAssignImageSourceFilter();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                    ossim_uint32 resLevel=0);
 
@@ -74,6 +73,7 @@ public:
                           const char* prefix=NULL);
    
 protected:
+   virtual ~ossimValueAssignImageSourceFilter();
 
    /**
     * Called on first getTile, will initialize all data needed.

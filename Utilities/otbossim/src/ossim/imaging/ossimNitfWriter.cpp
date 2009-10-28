@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 11385 2007-07-25 13:56:38Z gpotts $
+//  $Id: ossimNitfWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <fstream>
 #include <algorithm>
@@ -13,22 +15,23 @@
 #include <iomanip>
 #include <tiffio.h>
 #include <ossim/imaging/ossimNitfWriter.h>
+#include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/base/ossimContainerProperty.h>
 #include <ossim/base/ossimDate.h>
-#include <ossim/base/ossimPreferences.h>
-#include <ossim/base/ossimRefPtr.h>
-#include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimEndian.h>
+#include <ossim/base/ossimNumericProperty.h>
+#include <ossim/base/ossimPreferences.h>
+#include <ossim/base/ossimProperty.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimTrace.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimRpcSolver.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/imaging/ossimRectangleCutFilter.h>
-#include <ossim/base/ossimProperty.h>
-#include <ossim/base/ossimContainerProperty.h>
-#include <ossim/base/ossimStringProperty.h>
-#include <ossim/base/ossimNumericProperty.h>
-#include <ossim/base/ossimBooleanProperty.h>
+#include <ossim/support_data/ossimNitfCommon.h>
 #include <ossim/support_data/ossimNitfGeoPositioningTag.h>
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
 #include <ossim/support_data/ossimNitfLocalCartographicTag.h>
@@ -36,18 +39,16 @@
 #include <ossim/support_data/ossimNitfNameConversionTables.h>
 #include <ossim/support_data/ossimNitfBlockaTag.h>
 
-RTTI_DEF1(ossimNitfWriter, "ossimNitfWriter", ossimImageFileWriter);
+RTTI_DEF1(ossimNitfWriter, "ossimNitfWriter", ossimNitfWriterBase);
 
 static ossimTrace traceDebug(ossimString("ossimNitfWriter:debug"));
                              
 ossimNitfWriter::ossimNitfWriter(const ossimFilename& filename,
                                  ossimImageSource* inputSource)
-   : ossimImageFileWriter(filename, inputSource, NULL),
-     theOutputStream(NULL),
+   : ossimNitfWriterBase(filename, inputSource),
+     theOutputStream(0),
      theFileHeader(),
-     theImageHeader(),
-     theEnableRpcbTagFlag(false),
-     theEnableBlockaTagFlag(true)
+     theImageHeader()
 {
    //---
    // Since the internal nitf tags are not very accurate, write an external
@@ -122,9 +123,9 @@ bool ossimNitfWriter::writeFile()
 
       return false;
    }
-
+   
    // Write out the geometry info.
-   writeGeometry();
+   writeGeometry(theImageHeader.get(), theInputConnection.get());
 
    // addStandardTags();
    
@@ -178,27 +179,9 @@ void ossimNitfWriter::setProperty(ossimRefPtr<ossimProperty> property)
          theImageHeader->setProperties(propertyList);
       }
    }
-   else if (name == "enable_rpcb_tag")
-   {
-      ossimBooleanProperty* boolProperty = PTR_CAST(ossimBooleanProperty,
-                                                    property.get());
-      if (boolProperty)
-      {
-         theEnableRpcbTagFlag = boolProperty->getBoolean();
-      }
-   }
-   else if (name == "enable_blocka_tag")
-   {
-      ossimBooleanProperty* boolProperty = PTR_CAST(ossimBooleanProperty,
-                                                    property.get());
-      if (boolProperty)
-      {
-         theEnableBlockaTagFlag = boolProperty->getBoolean();
-      }
-   }
    else
    {
-      ossimImageFileWriter::setProperty(property);
+      ossimNitfWriterBase::setProperty(property);
    }
 }
 
@@ -226,36 +209,21 @@ ossimRefPtr<ossimProperty> ossimNitfWriter::getProperty(const ossimString& name)
       
       result = container;
    }
-   else if(name == "enable_rpcb_tag")
-   {
-      ossimBooleanProperty* boolProperty =
-         new ossimBooleanProperty(name, theEnableRpcbTagFlag);
-
-      result = boolProperty;
-   }   
-   else if(name == "enable_blocka_tag")
-   {
-      ossimBooleanProperty* boolProperty =
-         new ossimBooleanProperty(name, theEnableBlockaTagFlag);
-
-      result = boolProperty;
-   }   
    else
    {
-      return ossimImageFileWriter::getProperty(name);
+      return ossimNitfWriterBase::getProperty(name);
    }
 
    return result;
 }
 
-void ossimNitfWriter::getPropertyNames(std::vector<ossimString>& propertyNames)const
+void ossimNitfWriter::getPropertyNames(
+   std::vector<ossimString>& propertyNames)const
 {
-   ossimImageFileWriter::getPropertyNames(propertyNames);
+   ossimNitfWriterBase::getPropertyNames(propertyNames);
 
    propertyNames.push_back("file_header");
    propertyNames.push_back("image_header");
-   propertyNames.push_back("enable_rpcb_tag");
-   propertyNames.push_back("enable_blocka_tag");
 }
 
 bool ossimNitfWriter::writeBlockBandSeparate()
@@ -290,9 +258,10 @@ bool ossimNitfWriter::writeBlockBandSeparate()
    ossim_uint64 headerLength = ((ossim_uint64)theOutputStream->tellp() - headerStart) /* + 1 */;
    
    ossimString representation;
-   theImageHeader->setActualBitsPerPixel(getActualBitsPerPixel());
-   theImageHeader->setBitsPerPixel(getBitsPerPixel());
-   theImageHeader->setPixelType(getNitfPixelType());
+   theImageHeader->setActualBitsPerPixel(
+      ossim::getActualBitsPerPixel(scalarType));
+   theImageHeader->setBitsPerPixel(ossim::getBitsPerPixel(scalarType));
+   theImageHeader->setPixelType(ossimNitfCommon::getNitfPixelType(scalarType));
    theImageHeader->setNumberOfBands(bands);
    theImageHeader->setImageMode('B');// blocked
 
@@ -397,15 +366,15 @@ bool ossimNitfWriter::writeBlockBandSeparate()
       ++tileNumber;
    }
 
-   ossim_uint64 pos = theOutputStream->tellp();
+   std::streamoff pos = theOutputStream->tellp();
 
-   setComplexityLevel(pos);
+   setComplexityLevel(pos, theFileHeader.get());
 
    /*
     * Need to change the way I compute file length and header length later
     * We need to figure out a better way to compute.
     */
-   theFileHeader->setFileLength(pos);
+   theFileHeader->setFileLength(static_cast<ossim_uint64>(pos));
    theFileHeader->setHeaderLength(headerLength);
    theOutputStream->seekp(0, ios::beg);
    imageInfoRecord.setSubheaderLength(imageHeaderSize);
@@ -451,9 +420,10 @@ bool ossimNitfWriter::writeBlockBandSequential()
    ossim_uint64 headerLength = ((ossim_uint64)theOutputStream->tellp() - headerStart) /* + 1 */;
    
    ossimString representation;
-   theImageHeader->setActualBitsPerPixel(getActualBitsPerPixel());
-   theImageHeader->setBitsPerPixel(getBitsPerPixel());
-   theImageHeader->setPixelType(getNitfPixelType());
+   theImageHeader->setActualBitsPerPixel(
+      ossim::getActualBitsPerPixel(scalarType));
+   theImageHeader->setBitsPerPixel(ossim::getBitsPerPixel(scalarType));
+   theImageHeader->setPixelType(ossimNitfCommon::getNitfPixelType(scalarType));
    theImageHeader->setNumberOfBands(bands);
    theImageHeader->setImageMode('S');// blocked
    
@@ -572,15 +542,15 @@ bool ossimNitfWriter::writeBlockBandSequential()
       }
    }
    
-   ossim_uint64 pos = theOutputStream->tellp();
+   std::streamoff pos = theOutputStream->tellp();
 
-   setComplexityLevel(pos);
+   setComplexityLevel(pos, theFileHeader.get());
 
    /*
     * Need to change the way I compute file length and header length later
     * We need to figure out a better way to compute.
     */
-   theFileHeader->setFileLength(pos);
+   theFileHeader->setFileLength(static_cast<ossim_uint64>(pos));
    theFileHeader->setHeaderLength(headerLength);
    theOutputStream->seekp(0, ios::beg);
    imageInfoRecord.setSubheaderLength(imageHeaderSize);
@@ -597,111 +567,6 @@ void ossimNitfWriter::addRegisteredTag(
    ossimNitfTagInformation tagInfo;
    tagInfo.setTagData(registeredTag.get());
      theImageHeader->addTag(tagInfo);
-}
-
-void ossimNitfWriter::writeGeometry()
-{
-   if ( (theImageHeader.valid() == false) || !theInputConnection )
-   {
-      return;
-   }
-   
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-   ossimRefPtr<ossimProjection> proj =
-      ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   
-   if(proj.valid() == false)
-   {
-      // No projection info.
-      return;
-   }
-
-   // Get the requested bounding rectangles.
-   ossimIrect rect = theInputConnection->getBoundingRect();
-
-   // See if it's a map projection; else, a sensor model.
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj.get());
-   if (mapProj)
-   {
-      // Use map info to get the corners.
-      ossimMapProjectionInfo mapInfo(mapProj, rect);
-      mapInfo.setPixelType(OSSIM_PIXEL_IS_AREA);
-      
-      // See if it's utm.
-      ossimUtmProjection* utmProj = PTR_CAST(ossimUtmProjection, proj.get());
-      if(utmProj)
-      {
-         ossimDpt ul = mapInfo.ulEastingNorthingPt();
-         ossimDpt ur = mapInfo.urEastingNorthingPt();
-         ossimDpt lr = mapInfo.lrEastingNorthingPt();
-         ossimDpt ll = mapInfo.llEastingNorthingPt();
-         
-         if(utmProj->getHemisphere() == 'N')
-         {
-            theImageHeader->setUtmNorth(utmProj->getZone(), ul, ur, lr, ll);
-         }
-         else
-         {
-            theImageHeader->setUtmSouth(utmProj->getZone(), ul, ur, lr, ll);
-         }
-      }
-      else
-      {
-         ossimGpt ul = mapInfo.ulGroundPt();
-         ossimGpt ur = mapInfo.urGroundPt();
-         ossimGpt lr = mapInfo.lrGroundPt();
-         ossimGpt ll = mapInfo.llGroundPt();
-         theImageHeader->setGeographicLocationDms(ul, ur, lr, ll);
-      }
-
-      if (theEnableBlockaTagFlag)
-      {
-         addBlockaTag(mapInfo);
-      }
-   }
-
-   if (theEnableRpcbTagFlag)
-   {
-      addRpcbTag(rect, proj);
-   }
-}
-
-void ossimNitfWriter::setComplexityLevel(ossim_uint64 endPosition)
-{
-   //---
-   // See MIL-STD-2500C, Table A-10:
-   //
-   // Lots of rules here, but for now we will key off of file size.
-   //---
-
-   if (!theFileHeader)
-   {
-      return;
-   }
-
-   const ossim_uint64 MB   = 1024 * 1024;
-   const ossim_uint64 MB50 = 50   * MB;
-   const ossim_uint64 GIG  = 1000 * MB;
-   const ossim_uint64 GIG2 = 2    * GIG;
-   
-   ossimString complexity = "03"; // Less than 50 mb.
-   
-
-   if ( (endPosition >= MB50) && (endPosition < GIG) )
-   {
-      complexity = "05";
-   }
-   else if ( (endPosition >= GIG) && (endPosition < GIG2) )
-   {
-      complexity = "06";
-   }
-   else if (endPosition >= GIG2)
-   {
-      complexity = "07";
-   }
-   
-   theFileHeader->setComplexityLevel(complexity);
 }
 
 #if 0
@@ -750,257 +615,14 @@ void ossimNitfWriter::addStandardTags()
 }
 #endif
 
-void ossimNitfWriter::addBlockaTag(ossimMapProjectionInfo& mapInfo)
-{
-   if (!theImageHeader)
-   {
-      return;
-   }
-
-   // Capture the current pixel type.
-   ossimPixelType originalPixelType = mapInfo.getPixelType();
-
-   // This tag wants corners as area:
-   mapInfo.setPixelType(OSSIM_PIXEL_IS_AREA);
-   
-   // Stuff the blocka tag which has six digit precision.
-   ossimNitfBlockaTag* blockaTag = new ossimNitfBlockaTag();
-   
-   // Set the block number.
-   blockaTag->setBlockInstance(1);
-
-   // Set the number of lines.
-   blockaTag->setLLines(mapInfo.linesPerImage());
-
-   // Set first row, first column.
-   blockaTag->setFrfcLoc(ossimDpt(mapInfo.ulGroundPt()));
-   
-   // Set first row, last column.
-   blockaTag->setFrlcLoc(ossimDpt(mapInfo.urGroundPt()));
-   
-   // Set last row, last column.
-   blockaTag->setLrlcLoc(ossimDpt(mapInfo.lrGroundPt()));
-   
-   // Set last row, first column.
-   blockaTag->setLrfcLoc(ossimDpt(mapInfo.llGroundPt()));
-   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimNitfWriter::writeGeometry DEBUG:"
-         << "\nBLOCKA Tag:" << *((ossimObject*)(blockaTag))
-         << std::endl;
-   }
-   
-   // Add the tag to the header.
-   ossimRefPtr<ossimNitfRegisteredTag> blockaTagRp = blockaTag;
-   ossimNitfTagInformation blockaTagInfo(blockaTagRp);
-   theImageHeader->addTag(blockaTagInfo);
-
-   // Reset the pixel type to original value
-   mapInfo.setPixelType(originalPixelType);
-}
-
-void ossimNitfWriter::addRpcbTag(const ossimIrect& rect,
-                                 ossimRefPtr<ossimProjection> proj)
-{
-   if (!proj.valid())
-   {
-      return;
-   }
-
-   bool useElevation = false;
-
-   if (PTR_CAST(ossimMapProjection, proj.get()))
-   {
-      // If we're already map projected turn the elevation off.
-      useElevation = false;
-   }
-
-   // Make an rpc solver.
-   ossimRpcSolver rs(useElevation);
-   
-   // Compute the coefficients.
-   rs.solveCoefficients(ossimDrect(rect),
-                        *proj.get(),
-                        64,
-                        64);
-   
-   // Add the tag.
-   ossimRefPtr<ossimNitfRegisteredTag> tag = rs.getNitfRpcBTag();
-   ossimNitfTagInformation tagInfo(tag);
-   theImageHeader->addTag(tagInfo);
-   
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimNitfWriter::addRpcbTag DEBUG:"
-         << "\nRPCB Tag:" << *((ossimObject*)(tag.get()))
-         << "\nProjection:" << std::endl;
-      
-      proj->print(ossimNotify(ossimNotifyLevel_DEBUG));
-      
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nRect: " << rect << std::endl;
-   }
-}
-
-ossim_uint32 ossimNitfWriter::getActualBitsPerPixel() const
-{
-   ossim_uint32 actualBitsPerPixel = 0;
-   if (theInputConnection)
-   {
-      ossimScalarType scalarType = theInputConnection->getOutputScalarType();
-      switch(scalarType)
-      {
-         case OSSIM_UCHAR:
-         {
-            actualBitsPerPixel = 8;
-            break;
-         }
-         case OSSIM_USHORT11:
-         {
-            actualBitsPerPixel = 11;
-            break;
-         }
-         case OSSIM_USHORT16:
-         case OSSIM_SSHORT16:
-         {
-            actualBitsPerPixel = 16;
-            break;
-         }
-         case OSSIM_FLOAT:
-         case OSSIM_NORMALIZED_FLOAT:
-         {
-            actualBitsPerPixel = 32;
-            break;
-         }
-         case OSSIM_DOUBLE:
-         case OSSIM_NORMALIZED_DOUBLE:
-         {
-            actualBitsPerPixel = 64;
-            break;
-         }
-         default:
-         {
-            break;
-         }
-      }
-   }
-   
-   return actualBitsPerPixel;
-}
-
-ossim_uint32 ossimNitfWriter::getBitsPerPixel() const
-{
-   ossim_uint32 bitsPerPixel = 0;
-
-   if (theInputConnection)
-   {
-      ossimScalarType scalarType = theInputConnection->getOutputScalarType();
-      switch(scalarType)
-      {
-         case OSSIM_UCHAR:
-         {
-            bitsPerPixel = 8;
-            break;
-         }
-         case OSSIM_USHORT11:
-         {
-            bitsPerPixel = 16;
-            break;
-         }
-         case OSSIM_USHORT16:
-         case OSSIM_SSHORT16:
-         {
-            bitsPerPixel = 16;
-            break;
-         }
-         case OSSIM_FLOAT:
-         case OSSIM_NORMALIZED_FLOAT:
-         {
-            bitsPerPixel = 32;
-            break;
-         }
-         case OSSIM_DOUBLE:
-         case OSSIM_NORMALIZED_DOUBLE:
-         {
-            bitsPerPixel = 64;
-            break;
-         }
-         default:
-         {
-            break;
-         }
-      }
-   }
-   return bitsPerPixel;
-}
-
-ossimString ossimNitfWriter::getNitfPixelType() const
-{
-   ossimString pixelType;
-   if (theInputConnection)
-   {
-      ossimScalarType scalarType = theInputConnection->getOutputScalarType();
-      switch(scalarType)
-      {
-         case OSSIM_UCHAR:
-         case OSSIM_USHORT11:
-         case OSSIM_USHORT16:
-         {
-            pixelType = "INT";
-            break;
-         }
-         case OSSIM_SSHORT16:
-         {
-            pixelType    = "SI";
-            break;
-         }
-         case OSSIM_FLOAT:
-         case OSSIM_NORMALIZED_FLOAT:
-         case OSSIM_DOUBLE:
-         case OSSIM_NORMALIZED_DOUBLE:
-         {
-            pixelType    = "R";
-            break;
-         }
-         default:
-         {
-            break;
-         }
-      }
-   }
-   return pixelType;
-}
-
 bool ossimNitfWriter::saveState(ossimKeywordlist& kwl,
                                 const char* prefix) const
 {
-   kwl.add(prefix, "enable_rpcb_tag", theEnableRpcbTagFlag, true);
-   kwl.add(prefix, "enable_blocka_tag", theEnableBlockaTagFlag, true);
-
-   return ossimImageFileWriter::saveState(kwl, prefix);
+   return ossimNitfWriterBase::saveState(kwl, prefix);
 }
 
 bool ossimNitfWriter::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
-   // Look for the rpcb enable flag keyword.
-   const char* lookup = kwl.find(prefix, "enable_rpcb_tag");
-   if(lookup)
-   {
-      ossimString os = lookup;
-      theEnableRpcbTagFlag = os.toBool();
-   }
-
-   // Look for the blocka enable flag keyword.
-   lookup = kwl.find(prefix, "enable_blocka_tag");
-   if(lookup)
-   {
-      ossimString os = lookup;
-      theEnableBlockaTagFlag = os.toBool();
-   }
-
-   return ossimImageFileWriter::loadState(kwl, prefix);
+   return ossimNitfWriterBase::loadState(kwl, prefix);
 }

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandMergeSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandMergeSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBandMergeSource_HEADER
 #define ossimBandMergeSource_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -20,8 +20,7 @@ class OSSIM_DLL ossimBandMergeSource : public ossimImageCombiner
 {
 public:
    ossimBandMergeSource();
-   ossimBandMergeSource(vector<ossimImageSource*>& inputSources);
-   virtual ~ossimBandMergeSource();
+   ossimBandMergeSource(ossimConnectableObject::ConnectableObjectList& inputSources);
    
    /**
     * This will merge all the bands from the input source list
@@ -49,6 +48,7 @@ public:
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    
 protected:
+   virtual ~ossimBandMergeSource();
    /** Performs allocation of "theTile". */
    void allocate();
    

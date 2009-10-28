@@ -4,7 +4,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 // class ossimImageGaussianFilter : tile source
 //*******************************************************************
-// $Id: ossimImageGaussianFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageGaussianFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <cmath>
 #include <ossim/imaging/ossimImageGaussianFilter.h>
 #include <ossim/base/ossimNumericProperty.h>
@@ -36,13 +36,21 @@ ossimImageGaussianFilter::ossimImageGaussianFilter()
    theVF->setStrictNoData(theStrictNoData);
 
    //tie them up
-   theVF->connectMyInputTo(0,theHF);
+   theVF->connectMyInputTo(0,theHF.get());
 }
 
 ossimImageGaussianFilter::~ossimImageGaussianFilter()
 {
-   delete theHF;
-   delete theVF;
+   if(theHF.valid())
+   {
+      theHF->disconnect();
+      theHF = 0;
+   }
+   if(theVF.valid())
+   {
+      theVF->disconnect();
+      theVF = 0;
+   }
 }
 
 void ossimImageGaussianFilter::setProperty(ossimRefPtr<ossimProperty> property)

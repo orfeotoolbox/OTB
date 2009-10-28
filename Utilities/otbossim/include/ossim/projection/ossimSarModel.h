@@ -14,7 +14,7 @@
 //                    21 Mar 2006, paragraph E.3.8, SAR MPDSR
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSarModel.h 11166 2007-06-07 14:12:54Z dburken $
+// $Id: ossimSarModel.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSarModel_HEADER
 #define ossimSarModel_HEADER
 
@@ -47,9 +47,6 @@ public:
 
    /** @brief default constructor */
    ossimSarModel();
-
-   /** @brief virtual destructor */
-   virtual ~ossimSarModel();
 
    /**
     * @brief Method to load or recreate the state of an ossimSarModel from
@@ -148,7 +145,10 @@ public:
       const ossimDpt& ipos, NEWMAT::SymmetricMatrix& Cov);
    
 protected:
-
+   /** @brief virtual destructor */
+   virtual ~ossimSarModel();
+   
+   
    /*!
     * Assigns initial default values to adjustable parameters and related
     * members.

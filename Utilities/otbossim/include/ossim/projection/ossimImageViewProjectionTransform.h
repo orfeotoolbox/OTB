@@ -2,7 +2,8 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// AUTHOR: Garrett Potts (gpotts@imagelinks.com)
+// AUTHOR: Garrett Potts (gpotts@imagelinks.com)  
+//         Oscar Kramer (oscar@krameranalytic.com)
 //
 // DESCRIPTION: Contains declaration of ossimImageViewProjectionTransform.
 //    This class provides an image to view transform that utilizes two
@@ -12,144 +13,77 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.h 13516 2008-08-29 14:54:12Z dburken $
+//  $Id: ossimImageViewProjectionTransform.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimImageViewProjectionTransform_HEADER
 #define ossimImageViewProjectionTransform_HEADER
 
 #include <ossim/projection/ossimImageViewTransform.h>
-#include <ossim/projection/ossimProjection.h>
-
-class ossimProjection;
-class ossimMapProjection;
+#include <ossim/imaging/ossimImageGeometry.h>
 
 class OSSIMDLLEXPORT ossimImageViewProjectionTransform : public ossimImageViewTransform
 {
 public:
-   ossimImageViewProjectionTransform(ossimProjection* imageProjection=0,
-                                     ossimProjection* viewProjection=0,
-                                     bool ownsImageProjectionFlag=true,
-                                     bool ownsViewProjectionFlag=true);
+   ossimImageViewProjectionTransform(ossimImageGeometry* imageGeometry=0,
+                                     ossimImageGeometry* viewGeometry=0);
 
-   /** copy constructor */
+   //! copy constructor 
    ossimImageViewProjectionTransform(const ossimImageViewProjectionTransform& src);
 
-   virtual ossimObject* dup()const
-   {
-      return new ossimImageViewProjectionTransform(*this);
-   }
+   virtual ossimObject* dup() const { return new ossimImageViewProjectionTransform(*this); }
    virtual ~ossimImageViewProjectionTransform();
 
-   virtual bool isValid()const
-      {
-         return (theImageProjection&&theViewProjection);
-      }
-  virtual bool isIdentity()const
-  {
-    if(theImageProjection&&theViewProjection)
-      {
-	return (*theImageProjection)==(*theViewProjection);
-      }
-    
-    return true;
-  }
-   virtual void imageToView(const ossimDpt& imagePoint,
-                            ossimDpt&       viewPoint)const;
-   virtual void viewToImage(const ossimDpt& viewPoint,
-                            ossimDpt&       imagePoint)const;
+   //! Satisfies base class pure virtual. Returns TRUE if both input and output geoms exist.
+   virtual bool isValid() const { return (m_ImageGeometry.valid() && m_ViewGeometry.valid()); }
 
-//   virtual void getRoundTripErrorView(ossimDpt& result,
-// 				     const ossimDpt& viewPt)const;
+   //! Returns TRUE if both input and output geometries are identical. Presently implemented as
+   //! limited compare of geometry pointers
+   virtual bool isIdentity() const { return (m_ImageGeometry == m_ViewGeometry); }
 
-//   virtual void getRoundTripErrorImage(ossimDpt& result,
-// 				      const ossimDpt& imagePt)const;
-   /*!
-    * Will not allocate a new projection.  It will just copy
-    * the pointer and delete the one it owns if they addresses
-    * are different.  It will own the passes in projection.
-    */
-   void setViewProjection(ossimProjection* viewProjection,
-                          bool ownsViewProjection=false);   
+   //! Assigns the geometry to use for output view. This object does NOT own the geometry.
+   void setViewGeometry(ossimImageGeometry* g) { m_ViewGeometry = g; }   
 
-   /*!
-    * Will allocate a new projection and copy it.
-    */
-   void setViewProjection(const ossimProjection& viewProjection);
+   //! Assigns the geometry to use for input image. This object does NOT own the geometry.
+   void setImageGeometry(ossimImageGeometry* g) { m_ImageGeometry = g; }  
 
-   /*!
-    * Will not allocate a new projection.  It will just copy
-    * the pointer and delete the one it owns if they addresses
-    * are different. Flag indicates whether this becomes owner.
-    */
-   void setImageProjection(ossimProjection* imageProjection,
-                           bool ownsImageProjection=false);
+   //! Workhorse of the object. Converts image-space to view-space.
+   virtual void imageToView(const ossimDpt& imagePoint, ossimDpt& viewPoint) const;
 
-   /*!
-    * Will allocate a new projection and copy it.
-    */
-   void setImageProjection(const ossimProjection& imageProjection);
+   //! Other workhorse of the object. Converts view-space to image-space.
+   virtual void viewToImage(const ossimDpt& viewPoint, ossimDpt& imagePoint) const;
 
+   //! Dumps contents to stream
    virtual std::ostream& print(std::ostream& out) const;
    
-   ossimProjection* getImageProjection();
-   ossimProjection* getViewProjection();
+   ossimImageGeometry* getImageGeometry()  { return m_ImageGeometry.get(); }
+   ossimImageGeometry* getViewGeometry()   { return m_ViewGeometry.get(); }
+   const ossimImageGeometry* getImageGeometry()const  { return m_ImageGeometry.get(); }
+   const ossimImageGeometry* getViewGeometry()const   { return m_ViewGeometry.get(); }
+   
+   //! OLK: Not sure where this is used, but needed to satisfy ossimViewInterface base class.
+   //! The ownership flag is ignored.
+   virtual bool setView(ossimObject* baseObject);
+   virtual       ossimObject* getView()       { return m_ViewGeometry.get(); }
+   virtual const ossimObject* getView() const { return m_ViewGeometry.get(); }
 
-   virtual bool setView(ossimObject* baseObject,
-                        bool ownsTheView = false);
-   virtual ossimObject* getView()
-      {
-         return theViewProjection;
-      }
-   virtual const ossimObject* getView()const
-      {
-         return theViewProjection;
-      }
+   //! Returns the GSD of input image.
+   virtual ossimDpt getInputMetersPerPixel()const;
 
-   virtual ossimDpt getInputMetersPerPixel()const
-      {
-         ossimDpt result;
+   //! Returns the GSD of the output view.
+   virtual ossimDpt getOutputMetersPerPixel() const;
 
-         result.makeNan();
-
-         if(theImageProjection)
-         {
-            result = theImageProjection->getMetersPerPixel();
-         }
-
-         return result;
-      }
-   virtual ossimDpt getOutputMetersPerPixel()const
-      {
-         ossimDpt result;
-
-         result.makeNan();
-
-         if(theViewProjection)
-         {
-            result = theViewProjection->getMetersPerPixel();
-         }
-
-         return result;
-      }
+   //! Gets the image bounding rect in view-space coordinates
    virtual ossimDrect getImageToViewBounds(const ossimDrect& imageRect)const;
    
-   virtual bool loadState(const ossimKeywordlist& kwl,
-                          const char* prefix =0);
+   //! After rewrite for incorporating ossimImageGeometry: No longer needed.  
+   virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix =0);
    
-   virtual bool saveState(ossimKeywordlist& kwl,
-                          const char* prefix = 0)const;
+   //! After rewrite for incorporating ossimImageGeometry: No longer needed.  
+   virtual bool saveState(ossimKeywordlist& kwl, const char* prefix = 0)const;
+
 protected:
-   ossimProjection* theImageProjection;
-   ossimProjection* theViewProjection;
-   bool             theOwnsImageProjFlag;
-   bool             theOwnsViewProjFlag;
-   mutable bool     theSameProjection;
-   mutable bool     theInputMapProjectionFlag;
-   mutable bool     theOutputMapProjectionFlag;
-   void checkSameProjection();
-//    void findWorldPoint(const ossimDpt& imagePoint,
-//                        ossimGpt& worldPt,
-//                        ossimMapProjection* proj)const;
+   ossimRefPtr<ossimImageGeometry> m_ImageGeometry;
+   ossimRefPtr<ossimImageGeometry> m_ViewGeometry;
    
 TYPE_DATA
 };

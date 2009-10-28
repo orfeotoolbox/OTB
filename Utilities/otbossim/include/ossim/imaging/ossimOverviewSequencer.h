@@ -7,7 +7,7 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 10269 2007-01-15 15:33:37Z dburken $
+// $Id: ossimOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimOverviewSequencer_HEADER
 #define ossimOverviewSequencer_HEADER
 
@@ -29,8 +29,6 @@ public:
    /** default constructor */
    ossimOverviewSequencer();
    
-   /** virtual destructor */
-   virtual ~ossimOverviewSequencer();
    
    /**
     * @return The number of tiles within the area of interest.
@@ -136,6 +134,8 @@ public:
       ossimFilterResampler::ossimFilterResamplerType resampleType);
    
 protected:
+   /** virtual destructor */
+   virtual ~ossimOverviewSequencer();
 
    /**
     * @brief Gets the image rectangle for the input tile for

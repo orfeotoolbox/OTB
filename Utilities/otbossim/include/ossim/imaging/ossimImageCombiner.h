@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.h 10777 2007-04-25 14:49:17Z gpotts $
+// $Id: ossimImageCombiner.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageCombiner_HEADER
 #define ossimImageCombiner_HEADER
 #include <vector>
@@ -29,8 +29,7 @@ public:
                       bool inputListIsFixedFlag,
                       bool outputListIsFixedFlag);
    
-   ossimImageCombiner(const std::vector<ossimImageSource*>& inputSources);
-   virtual ~ossimImageCombiner();   
+   ossimImageCombiner(ossimConnectableObject::ConnectableObjectList& inputSources);
 
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result) const;
@@ -39,8 +38,7 @@ public:
 
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0) const;
 
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=NULL);
+   virtual ossimImageGeometry* getImageGeometry();
 
    virtual void initialize();
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=NULL);
@@ -127,6 +125,7 @@ public:
 
    
 protected:
+   virtual ~ossimImageCombiner();   
    void precomputeBounds()const;
 
    ossim_uint32                theLargestNumberOfInputBands;

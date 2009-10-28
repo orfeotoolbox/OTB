@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimGeomFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeomFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGeomFileWriter_H
 #define ossimGeomFileWriter_H
@@ -22,8 +22,6 @@ public:
    /** default constructor */
    ossimGeomFileWriter();
 
-   /** virtual destructor */
-   virtual ~ossimGeomFileWriter();
 
    /**
     * Satisfies pure virtual from ossimMetadataWriter base.
@@ -46,7 +44,9 @@ public:
     */
    virtual bool hasMetadataType(const ossimString& metadataType)const;
 
-private:
+protected:
+   /** virtual destructor */
+   virtual ~ossimGeomFileWriter();
 
    /** Write a geometry file to "theFilename". */
    virtual bool writeFile();

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfFileHeader.h 14662 2009-06-07 16:15:23Z dburken $
 #ifndef ossimNitfFileHeader_HEADER
 #define ossimNitfFileHeader_HEADER
 
@@ -138,7 +138,7 @@ public:
    virtual bool getTag(ossimNitfTagInformation& tagInfo,
                        const ossimString& tagName)const;
    
-   virtual ossim_int32 getFileSize()const=0;
+   virtual ossim_int64 getFileSize()const=0;
    virtual const char* getVersion()const=0;
    virtual const char* getDateTime()const=0;
    virtual ossimDrect getImageRect()const=0;
@@ -150,16 +150,18 @@ public:
    bool hasText()const;
    bool hasLabels()const;
    bool hasDataExtSegments()const;
-   virtual ossimNitfImageHeader* getNewImageHeader(ossim_int32 imageNumber,
+
+   virtual ossimNitfImageHeader* getNewImageHeader(ossim_uint32 imageNumber,
                                                    std::istream& in)const=0;
-   virtual ossimNitfSymbolHeader* getNewSymbolHeader(ossim_int32 symbolNumber,
+   virtual ossimNitfSymbolHeader* getNewSymbolHeader(ossim_uint32 symbolNumber,
                                                     std::istream& in)const=0;
-   virtual ossimNitfLabelHeader* getNewLabelHeader(ossim_int32 labelNumber,
+   virtual ossimNitfLabelHeader* getNewLabelHeader(ossim_uint32 labelNumber,
                                                    std::istream& in)const=0;
-   virtual ossimNitfTextHeader* getNewTextHeader(ossim_int32 textNumber,
+   virtual ossimNitfTextHeader* getNewTextHeader(ossim_uint32 textNumber,
                                                 std::istream& in)const=0;
    virtual ossimNitfDataExtensionSegment* getNewDataExtensionSegment(
-      ossim_int32 dataExtNumber, std::istream& in)const=0;
+      ossim_uint32 dataExtNumber, std::istream& in)const=0;
+   
    virtual ossimNitfImageHeader*    allocateImageHeader()const=0;
    virtual ossimNitfSymbolHeader*   allocateSymbolHeader()const=0;
    virtual ossimNitfLabelHeader*    allocateLabelHeader()const=0;

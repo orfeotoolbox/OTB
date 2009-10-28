@@ -7,12 +7,13 @@
 //
 // Author: Garrett Potts
 //
-// $Id: ossimProcessListener.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimProcessListener.h 14799 2009-06-30 08:54:44Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimProcessListener_HEADER
 #define ossimProcessListener_HEADER
 #include <ossim/base/ossimListener.h>
-class OSSIMDLLEXPORT ossimProcessProgressEvent;
+
+class ossimProcessProgressEvent;
 
 class OSSIMDLLEXPORT ossimProcessListener : public ossimListener
 {

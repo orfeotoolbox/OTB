@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageDisplayWriter.h 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimImageDisplayWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageDisplayWriter_HEADER
 #define ossimImageDisplayWriter_HEADER
 
@@ -25,9 +25,7 @@ class ossimImageDisplayWriter :  public ossimImageWriter,
 
 {
 public:
-   virtual ~ossimImageDisplayWriter(){}
    
-
    bool canConnectMyInputTo(ossim_int32 inputIndex,
                             const ossimConnectableObject* object)const
       {
@@ -65,6 +63,8 @@ public:
    virtual void show()=0;
    
 protected:
+   virtual ~ossimImageDisplayWriter(){}
+   
    ossimImageDisplayWriter(ossimObject* owner=NULL);
    ossimImageDisplayWriter(ossimObject* owner,
                            ossim_uint32 numberOfInputs,

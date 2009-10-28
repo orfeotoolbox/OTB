@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimMaskFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMaskFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef  ossimMaskFilter_HEADER
 #define  ossimMaskFilter_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -88,10 +88,6 @@ public:
 		  ossimImageSource* imageSource,
 		  ossimImageSource* maskSource);
 
-   /**
-    * Will delete its owned tile.
-    */
-   virtual ~ossimMaskFilter();
 
    /**
     * Sets the mask type.
@@ -166,6 +162,10 @@ public:
       ossimRefPtr<ossimImageData> maskSourceData);
    
 protected:
+   /**
+    * Will delete its owned tile.
+    */
+   virtual ~ossimMaskFilter();
    
    void allocate();
    

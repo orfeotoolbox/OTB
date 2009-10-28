@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDataObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDataObject.h 15798 2009-10-23 19:15:20Z gpotts $
 
 #ifndef ossimDataObject_HEADER
 #define ossimDataObject_HEADER
@@ -17,7 +17,7 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDpt3d.h>
 
-class OSSIMDLLEXPORT ossimSource;
+class ossimSource;
 
 class OSSIMDLLEXPORT ossimDataObject : public ossimObject
 {
@@ -26,8 +26,8 @@ public:
                    ossimDataObjectStatus status=OSSIM_STATUS_UNKNOWN);
    
    ossimDataObject(const ossimDataObject& rhs);
-
    virtual ~ossimDataObject();
+
 
 
    virtual ossim_uint32 getHashId()const=0;

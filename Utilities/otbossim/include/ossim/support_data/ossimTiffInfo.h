@@ -13,11 +13,18 @@
 #ifndef ossimTiffInfo_HEADER
 #define ossimTiffInfo_HEADER
 
+#include <iosfwd>
+#include <string>
+#include <vector>
+
 #include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimInfoBase.h>
 #include <ossim/base/ossimFilename.h>
 
+class ossimDpt;
 class ossimEndian;
+class ossimKeywordlist;
+class ossimTieGptSet;
 
 /**
  * @brief TIFF info class.
@@ -34,91 +41,100 @@ public:
    /** virtual destructor */
    virtual ~ossimTiffInfo();
 
+   /**
+    * Anonymous enumerations.  Note prefixed with 'O' to avoid conflict with
+    * libtiff.
+    */
    enum
    {
-      UNDEFINED                        = 0,
-      PIXEL_IS_AREA                    = 1,
-      PIXEL_IS_POINT                   = 2,
-      TIFFTAG_SUBFILETYPE              = 254,
-      TIFFTAG_IMAGEWIDTH               = 256,
-      TIFFTAG_IMAGELENGTH              = 257,
-      TIFFTAG_BITSPERSAMPLE            = 258,
-      TIFFTAG_COMPRESSION              = 259,
-      TIFFTAG_PHOTOMETRIC              = 262,
-      TIFFTAG_IMAGEDESCRIPTION         = 270,
-      TIFFTAG_MODEL                    = 272,
-      TIFFTAG_STRIPOFFSETS             = 273,
-      TIFFTAG_ORIENTATION	       = 274,
-      TIFFTAG_SAMPLESPERPIXEL          = 277,
-      TIFFTAG_ROWSPERSTRIP             = 278,
-      TIFFTAG_STRIPBYTECOUNTS          = 279,
-      TIFFTAG_MINSAMPLEVALUE           = 280,
-      TIFFTAG_MAXSAMPLEVALUE           = 281,
-      TIFFTAG_XRESOLUTION              = 282,
-      TIFFTAG_YRESOLUTION              = 283,
-      TIFFTAG_PLANARCONFIG             = 284,
-      TIFFTAG_RESOLUTIONUNIT           = 296,
-      TIFFTAG_DATETIME                 = 306,
-      TIFFTAG_TILEWIDTH                = 322,
-      TIFFTAG_TILELENGTH               = 323,
-      TIFFTAG_TILEOFFSETS              = 324,
-      TIFFTAG_TILEBYTECOUNTS           = 325,
-      TIFFTAG_EXTRASAMPLES             = 338,
-      TIFFTAG_SAMPLEFORMAT             = 339,
-      TIFFTAG_SMINSAMPLEVALUE          = 340,
-      TIFFTAG_SMAXSAMPLEVALUE          = 341,
-      SAMPLEFORMAT_UINT                = 1,
-      SAMPLEFORMAT_INT                 = 2,
-      SAMPLEFORMAT_IEEEFP              = 3,
-      SAMPLEFORMAT_VOID                = 4,
-      SAMPLEFORMAT_COMPLEXINT          = 5,
-      SAMPLEFORMAT_COMPLEXIEEEFP       = 6,
-      TIFFTAG_SUBIFD                   = 330,
-      GT_MODEL_TYPE_GEO_KEY            = 1024,
-      GT_RASTER_TYPE_GEO_KEY           = 1025,
-      GT_CITATION_GEO_KEY              = 1026,
-      GEOGRAPHIC_TYPE_GEO_KEY          = 2048,
-      GEOG_CITATION_GEO_KEY            = 2049,
-      GEOG_GEODETIC_DATUM_GEO_KEY      = 2050,
-      GEOG_LINEAR_UNITS_GEO_KEY        = 2052,
-      GEOG_ANGULAR_UNITS_GEO_KEY       = 2054,
-      GEOG_ELLIPSOID_GEO_KEY           = 2056,
-      GEOG_SEMI_MAJOR_AXIS             = 2057,
-      GEOG_SEMI_MINOR_AXIS             = 2058,
-      PROJECTED_CS_TYPE_GEO_KEY        = 3072,
-      PCS_CITATION_GEO_KEY             = 3073,
-      PROJECTION_GEO_KEY               = 3074,
-      PROJ_COORD_TRANS_GEO_KEY         = 3075,
-      LINEAR_UNITS_GEO_KEY             = 3076,
-      PROJ_STD_PARALLEL1_GEO_KEY       = 3078,
-      PROJ_STD_PARALLEL2_GEO_KEY       = 3079,
-      PROJ_NAT_ORIGIN_LONG_GEO_KEY     = 3080,
-      PROJ_NAT_ORIGIN_LAT_GEO_KEY      = 3081,
-      PROJ_FALSE_EASTING_GEO_KEY       = 3082,
-      PROJ_FALSE_NORTHING_GEO_KEY      = 3083,
-      PROJ_CENTER_LONG_GEO_KEY         = 3088,
-      PROJ_CENTER_LAT_GEO_KEY          = 3089,
-      PROJ_SCALE_AT_NAT_ORIGIN_GEO_KEY = 3092,
-      LINEAR_METER                     = 9001,
-      LINEAR_FOOT                      = 9002,
-      LINEAR_FOOT_US_SURVEY            = 9003,
-      ANGULAR_DEGREE                   = 9102,
-      ANGULAR_ARC_MINUTE               = 9103,
-      ANGULAR_ARC_SECOND               = 9104,
-      ANGULAR_GRAD                     = 9105,
-      ANGULAR_GON                      = 9106,
-      ANGULAR_DMS                      = 9107,
-      ANGULAR_DMS_HEMISPHERE           = 9108,
-      PCS_BRITISH_NATIONAL_GRID        = 27700,
-      USER_DEFINED                     = 32767,
-      TIFFTAG_COPYRIGHT                = 33432,
-      MODEL_PIXEL_SCALE_TAG            = 33550,
-      MODEL_TIE_POINT_TAG              = 33922,
-      MODEL_TRANSFORM_TAG              = 34264,
-      TIFFTAG_PHOTOSHOP                = 34377,
-      GEO_KEY_DIRECTORY_TAG            = 34735,
-      GEO_DOUBLE_PARAMS_TAG            = 34736,
-      GEO_ASCII_PARAMS_TAG             = 34737
+      UNDEFINED                           = 0,
+      OPIXEL_IS_AREA                      = 1,
+      OPIXEL_IS_POINT                     = 2,
+      OTIFFTAG_SUBFILETYPE                = 254,
+      OTIFFTAG_IMAGEWIDTH                 = 256,
+      OTIFFTAG_IMAGELENGTH                = 257,
+      OTIFFTAG_BITSPERSAMPLE              = 258,
+      OTIFFTAG_COMPRESSION                = 259,
+      OTIFFTAG_PHOTOMETRIC                = 262,
+      OTIFFTAG_IMAGEDESCRIPTION           = 270,
+      OTIFFTAG_MODEL                      = 272,
+      OTIFFTAG_STRIPOFFSETS               = 273,
+      OTIFFTAG_ORIENTATION                = 274,
+      OTIFFTAG_SAMPLESPERPIXEL            = 277,
+      OTIFFTAG_ROWSPERSTRIP               = 278,
+      OTIFFTAG_STRIPBYTECOUNTS            = 279,
+      OTIFFTAG_MINSAMPLEVALUE             = 280,
+      OTIFFTAG_MAXSAMPLEVALUE             = 281,
+      OTIFFTAG_XRESOLUTION                = 282,
+      OTIFFTAG_YRESOLUTION                = 283,
+      OTIFFTAG_PLANARCONFIG               = 284,
+      OTIFFTAG_RESOLUTIONUNIT             = 296,
+      OTIFFTAG_SOFTWARE                   = 305,
+      OTIFFTAG_DATETIME                   = 306,
+      OTIFFTAG_TILEWIDTH                  = 322,
+      OTIFFTAG_TILELENGTH                 = 323,
+      OTIFFTAG_TILEOFFSETS                = 324,
+      OTIFFTAG_TILEBYTECOUNTS             = 325,
+      OTIFFTAG_EXTRASAMPLES               = 338,
+      OTIFFTAG_SAMPLEFORMAT               = 339,
+      OTIFFTAG_SMINSAMPLEVALUE            = 340,
+      OTIFFTAG_SMAXSAMPLEVALUE            = 341,
+      OSAMPLEFORMAT_UINT                  = 1,
+      OSAMPLEFORMAT_INT                   = 2,
+      OSAMPLEFORMAT_IEEEFP                = 3,
+      OSAMPLEFORMAT_VOID                  = 4,
+      OSAMPLEFORMAT_COMPLEXINT            = 5,
+      OSAMPLEFORMAT_COMPLEXIEEEFP         = 6,
+      OTIFFTAG_SUBIFD                     = 330,
+      OGT_MODEL_TYPE_GEO_KEY              = 1024,
+      OGT_RASTER_TYPE_GEO_KEY             = 1025,
+      OGT_CITATION_GEO_KEY                = 1026,
+      OGEOGRAPHIC_TYPE_GEO_KEY            = 2048,
+      OGEOG_CITATION_GEO_KEY              = 2049,
+      OGEOG_GEODETIC_DATUM_GEO_KEY        = 2050,
+      OGEOG_LINEAR_UNITS_GEO_KEY          = 2052,
+      OGEOG_ANGULAR_UNITS_GEO_KEY         = 2054,
+      OGEOG_ELLIPSOID_GEO_KEY             = 2056,
+      OGEOG_SEMI_MAJOR_AXIS               = 2057,
+      OGEOG_SEMI_MINOR_AXIS               = 2058,
+      OPROJECTED_CS_TYPE_GEO_KEY          = 3072,
+      OPCS_CITATION_GEO_KEY               = 3073,
+      OPROJECTION_GEO_KEY                 = 3074,
+      OPROJ_COORD_TRANS_GEO_KEY           = 3075,
+      OLINEAR_UNITS_GEO_KEY               = 3076,
+      OPROJ_STD_PARALLEL1_GEO_KEY         = 3078,
+      OPROJ_STD_PARALLEL2_GEO_KEY         = 3079,
+      OPROJ_NAT_ORIGIN_LONG_GEO_KEY       = 3080,
+      OPROJ_NAT_ORIGIN_LAT_GEO_KEY        = 3081,
+      OPROJ_FALSE_EASTING_GEO_KEY         = 3082,
+      OPROJ_FALSE_NORTHING_GEO_KEY        = 3083,
+      OPROJ_FALSE_ORIGIN_LONG_GEO_KEY     = 3084,
+      OPROJ_FALSE_ORIGIN_LAT_GEO_KEY      = 3085,
+      OPROJ_FALSE_ORIGIN_EASTING_GEO_KEY  = 3086,
+      OPROJ_FALSE_ORIGIN_NORTHING_GEO_KEY = 3087,
+      OPROJ_CENTER_LONG_GEO_KEY           = 3088,
+      OPROJ_CENTER_LAT_GEO_KEY            = 3089,
+      OPROJ_SCALE_AT_NAT_ORIGIN_GEO_KEY   = 3092,
+      OLINEAR_METER                       = 9001,
+      OLINEAR_FOOT                        = 9002,
+      OLINEAR_FOOT_US_SURVEY              = 9003,
+      OANGULAR_DEGREE                     = 9102,
+      OANGULAR_ARC_MINUTE                 = 9103,
+      OANGULAR_ARC_SECOND                 = 9104,
+      OANGULAR_GRAD                       = 9105,
+      OANGULAR_GON                        = 9106,
+      OANGULAR_DMS                        = 9107,
+      OANGULAR_DMS_HEMISPHERE             = 9108,
+      OPCS_BRITISH_NATIONAL_GRID          = 27700,
+      OUSER_DEFINED                       = 32767,
+      OTIFFTAG_COPYRIGHT                  = 33432,
+      OMODEL_PIXEL_SCALE_TAG              = 33550,
+      OMODEL_TIE_POINT_TAG                = 33922,
+      OMODEL_TRANSFORM_TAG                = 34264,
+      OTIFFTAG_PHOTOSHOP                  = 34377,
+      OGEO_KEY_DIRECTORY_TAG              = 34735,
+      OGEO_DOUBLE_PARAMS_TAG              = 34736,
+      OGEO_ASCII_PARAMS_TAG               = 34737
    };
 
    enum CompressType
@@ -129,22 +145,22 @@ public:
  
    enum PhotoInterpretation
    {
-      PHOTO_MINISWHITE  = 0,   // min value is white 
-      PHOTO_MINISBLACK  = 1,   // min value is black 
-      PHOTO_RGB         = 2,   // RGB color model 
-      PHOTO_PALETTE     = 3,   // color map indexed 
-      PHOTO_MASK        = 4,   // $holdout mask 
-      PHOTO_SEPARATED   = 5,   // !color separations 
-      PHOTO_YCBCR       = 6,   // !CCIR 601 
-      PHOTO_CIELAB      = 8    // !1976 CIE L*a*b*
+      OPHOTO_MINISWHITE  = 0,   // min value is white 
+      OPHOTO_MINISBLACK  = 1,   // min value is black 
+      OPHOTO_RGB         = 2,   // RGB color model 
+      OPHOTO_PALETTE     = 3,   // color map indexed 
+      OPHOTO_MASK        = 4,   // $holdout mask 
+      OPHOTO_SEPARATED   = 5,   // !color separations 
+      OPHOTO_YCBCR       = 6,   // !CCIR 601 
+      OPHOTO_CIELAB      = 8    // !1976 CIE L*a*b*
    };
 
    enum ModelType
    {
-      UNKNOWN               = 0,
-      MODEL_TYPE_PROJECTED  = 1,  // Projection Coordinate System
-      MODEL_TYPE_GEOGRAPHIC = 2,  // Geographic latitude-longitude System 
-      MODEL_TYPE_GEOCENTRIC = 3
+      UNKNOWN                = 0,
+      OMODEL_TYPE_PROJECTED  = 1,  // Projection Coordinate System
+      OMODEL_TYPE_GEOGRAPHIC = 2,  // Geographic latitude-longitude System 
+      OMODEL_TYPE_GEOCENTRIC = 3
    };
 
    enum WordType
@@ -155,23 +171,23 @@ public:
 
    enum
    {
-      TIFF_NOTYPE = 0,      /* placeholder */
-      TIFF_BYTE = 1,        /* 8-bit unsigned integer */
-      TIFF_ASCII = 2,       /* 8-bit bytes w/ last byte null */
-      TIFF_SHORT = 3,       /* 16-bit unsigned integer */
-      TIFF_LONG = 4,        /* 32-bit unsigned integer */
-      TIFF_RATIONAL = 5,    /* 64-bit unsigned fraction */
-      TIFF_SBYTE = 6,       /* !8-bit signed integer */
-      TIFF_UNDEFINED = 7,   /* !8-bit untyped data */
-      TIFF_SSHORT = 8,      /* !16-bit signed integer */
-      TIFF_SLONG = 9,       /* !32-bit signed integer */
-      TIFF_SRATIONAL = 10,  /* !64-bit signed fraction */
-      TIFF_FLOAT = 11,      /* !32-bit IEEE floating point */
-      TIFF_DOUBLE = 12,     /* !64-bit IEEE floating point */
-      TIFF_IFD = 13,        /* %32-bit unsigned integer (offset) */
-      TIFF_LONG8 = 16,      /* BigTIFF 64-bit unsigned integer */
-      TIFF_SLONG8 = 17,     /* BigTIFF 64-bit signed integer */
-      TIFF_IFD8 = 18        /* BigTIFF 64-bit unsigned integer (offset) */
+      OTIFF_NOTYPE = 0,      /* placeholder */
+      OTIFF_BYTE = 1,        /* 8-bit unsigned integer */
+      OTIFF_ASCII = 2,       /* 8-bit bytes w/ last byte null */
+      OTIFF_SHORT = 3,       /* 16-bit unsigned integer */
+      OTIFF_LONG = 4,        /* 32-bit unsigned integer */
+      OTIFF_RATIONAL = 5,    /* 64-bit unsigned fraction */
+      OTIFF_SBYTE = 6,       /* !8-bit signed integer */
+      OTIFF_UNDEFINED = 7,   /* !8-bit untyped data */
+      OTIFF_SSHORT = 8,      /* !16-bit signed integer */
+      OTIFF_SLONG = 9,       /* !32-bit signed integer */
+      OTIFF_SRATIONAL = 10,  /* !64-bit signed fraction */
+      OTIFF_FLOAT = 11,      /* !32-bit IEEE floating point */
+      OTIFF_DOUBLE = 12,     /* !64-bit IEEE floating point */
+      OTIFF_IFD = 13,        /* %32-bit unsigned integer (offset) */
+      OTIFF_LONG8 = 16,      /* BigTIFF 64-bit unsigned integer */
+      OTIFF_SLONG8 = 17,     /* BigTIFF 64-bit signed integer */
+      OTIFF_IFD8 = 18        /* BigTIFF 64-bit unsigned integer (offset) */
    };
 
    /**
@@ -182,7 +198,7 @@ public:
     * @return true on success false on error.
     */
    virtual bool open(const ossimFilename& file);
-   
+
    /**
     * Print method.
     *
@@ -191,6 +207,55 @@ public:
     * @return std::ostream&
     */
    virtual std::ostream& print(std::ostream& out) const;
+
+   /**
+    * @brief Print method.
+    * 
+    * Print method that takes a stream that should be positions at the start
+    * of tiff stream. This was added to see embedded information on embedded
+    * geotiff's in a geojp2 file.
+    *
+    * @param out Stream to print to.
+    * 
+    * @return std::ostream&
+    */
+   virtual std::ostream& print(std::ifstream& inStr,
+                               std::ostream& outStr) const;
+
+   /**
+    *  @brief extracts geometry info to keyword list.  This method assumes
+    *  that open has been called and theFile is set.
+    *  
+    *  Populates the keyword list with image geometry information.  This
+    *  method is used to relay projection/model information to users.
+    *
+    *  @param geomKwl Keyword list that will be initialized with geometry info.
+    *  Returns true if geometry info is present, false if not.
+    *
+    *  @param entryIndex Entry to get geometry from. 
+    */
+   bool getImageGeometry(ossimKeywordlist& geomKwl,
+                         ossim_uint32 entryIndex) const;
+   /**
+    *  @brief extracts geometry info from stream to keyword list.
+    *  
+    *  Populates the keyword list with image geometry information.  This
+    *  method is used to relay projection/model information to users.
+    *
+    *  @note that the str should be position at start of tiff portion. This
+    *  was written to allow passing a stream positioned at an embedded tiff
+    *  image in a jp2 file.
+    *
+    *  @param str Stream position at start of tiff image.
+    *
+    *  @param geomKwl Keyword list that will be initialized with geometry info.
+    *  Returns true if geometry info is present, false if not.
+    *
+    *  @param entryIndex Entry to get geometry from. 
+    */
+   bool getImageGeometry(std::ifstream& str,
+                         ossimKeywordlist& geomKwl,
+                         ossim_uint32 entryIndex) const;
 
 private:
    
@@ -221,7 +286,8 @@ private:
     *
     * @return true if stream is good, false if not.
     */
-   bool getOffset(std::streamoff& offset, std::ifstream& str) const;
+   bool getOffset(std::streamoff& offset, std::ifstream& str,
+                  ossim_uint16 version) const;
    
    /**
     * This will read either 2 , 4or 8 bytes depending on the version and
@@ -229,7 +295,8 @@ private:
     *
     * @return true if stream is good, false if not.
     */
-   bool getValue(ossim_uint64& val, std::ifstream& str, WordType type) const;
+   bool getValue(ossim_uint64& val, std::ifstream& str, WordType type,
+                 ossim_uint16 version) const;
    
    ossim_uint64 getArraySizeInBytes(ossim_uint64 length,
                                     ossim_uint16 type) const;
@@ -242,7 +309,7 @@ private:
    /**
     * Eats the value field.  Either 4 or 8 bytes depending on the version.
     */
-   void eatValue(std::ifstream& str) const;
+   void eatValue(std::ifstream& str, ossim_uint16 version) const;
    
    void swapBytes(ossim_uint8* v, ossim_uint16 type, ossim_uint64 count) const;
    
@@ -313,10 +380,202 @@ private:
    /** @brief adds imageN. to prefix where N is zero base directory index. */
    void getDirPrefix(ossim_int32 dirIndex, std::string& prefix) const;
 
+   /**
+    * @brief Gets the required pixel scale from keyword list looking for the
+    * key model_pixel_scale.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param scale The point to initialize.
+    * @return true on success, false on error.
+    */
+   bool getPixelScale(const ossimString& gtiffPrefix,
+                      const ossimKeywordlist& gtiffKwl,
+                      ossimDpt& scale) const;
+   
+   /**
+    * @brief Gets the model_tie_point array.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param ties The array to initialize.
+    * @return true on success, false on error.
+    */
+   bool getTiePoint(const ossimString& gtiffPrefix,
+                    const ossimKeywordlist& gtiffKwl,
+                    std::vector<ossim_float64>& ties) const;
+
+   /**
+    * @brief Gets the model_transform array.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param ties The array to initialize.
+    * @return true on success, false on error.
+    */
+   bool getModelTransform(const ossimString& gtiffPrefix,
+                          const ossimKeywordlist& gtiffKwl,
+                          std::vector<ossim_float64>& xfrm) const;
+
+   /**
+    * @brief Extracts float values from keyword list that match key.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param key to look for.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param floats Array to stuff.  Will have size of zero on failure.
+    * @return true on success, false on error.  If size of array is zero it
+    * will return false.
+    */
+   bool  getFloats(const ossimString& gtiffPrefix,
+                   const ossimString& key,
+                   const ossimKeywordlist& gtiffKwl,
+                   std::vector<ossim_float64>& floats) const;
+
+   /**
+    * @brief Extracts float values from lookup line and puts in floats array.
+    * @param lookup Line to parse like:
+    * "0.00138888888889 0.00138888888889, 0.0"
+    * @param floats Array to stuff.  Will have size of zero on failure.
+    */
+   bool getFloats(const ossimString& line,
+                  std::vector<ossim_float64>& floats) const;
+
+   /**
+    * @brief Gets the pcs code from the keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param pcsCode The code to initialize.
+    * @return true on success, false on error.
+    */
+   bool getPcsCode(const ossimString& gtiffPrefix,
+                   const ossimKeywordlist& gtiffKwl,
+                   ossimString& pcsCode) const;
+
+   /**
+    * @brief Gets units from keyword list as a string. This will be angular
+    * or linear base on the model type.  The default is meters if not found.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param linearUnits The string to initialize with units.
+    * @return true on success, false on error.
+    */
+   bool getUnits(const ossimString& gtiffPrefix,
+                 const ossimKeywordlist& gtiffKwl,
+                 ossimString& units) const;
+   /**
+    * @brief Gets the linear units from keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param linearUnits The string to initialize with units.
+    * @return true on success, false on error.
+    */
+   bool getLinearUnits(const ossimString& gtiffPrefix,
+                       const ossimKeywordlist& gtiffKwl,
+                       ossimString& linearUnits) const;
+
+   /**
+    * @brief Gets the units from keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param angularUnit The string to initialize with units.
+    * @return true on success, false on error.
+    */
+   bool getAngularUnits(const ossimString& gtiffPrefix,
+                        const ossimKeywordlist& gtiffKwl,
+                        ossimString& units) const;
+
+
+   /**
+    * @brief Gets the pixel type (point or area) from keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param unit The string to initialize with pixel type.
+    * @return true on success, false on error.
+    */   
+   bool getPixelType(const ossimString& gtiffPrefix,
+                     const ossimKeywordlist& gtiffKwl,
+                     ossimString& pixelType) const;
+
+   /**
+    * @brief Gets the model type from keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param modelType The string to initialize with pixel type.
+    * @return true on success, false on error.
+    */   
+   bool getModelType(const ossimString& gtiffPrefix,
+                     const ossimKeywordlist& gtiffKwl,
+                     ossimString& modeType) const;
+
+   /**
+    * @brief Gets the ossimProjection from keyword list as a string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param ossimProj The string to initialize with pixel type.
+    * @return true on success, false on error.
+    */   
+   bool getOssimProjectionName(const ossimString& gtiffPrefix,
+                               const ossimKeywordlist& gtiffKwl,
+                               ossimString& ossimProj) const;
+   
+   /**
+    * @brief Gets the number of lines from keyword list.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @return Number of lines or 0 if lines not found.
+    */   
+   ossim_uint32 getLines(const ossimString& gtiffPrefix,
+                         const ossimKeywordlist& gtiffKwl) const;
+
+   /**
+    * @brief Gets the number of samples from keyword list.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @return Number of lines or 0 if lines not found.
+    */   
+   ossim_uint32 getSamples(const ossimString& gtiffPrefix,
+                           const ossimKeywordlist& gtiffKwl) const;
+
+   bool getStdParallelOne(const ossimString& gtiffPrefix,
+                          const ossimKeywordlist& gtiffKwl,
+                          ossimString& value) const;
+
+   bool getStdParallelTwo(const ossimString& gtiffPrefix,
+                          const ossimKeywordlist& gtiffKwl,
+                          ossimString& value) const;
+   
+   bool getFalseEasting(const ossimString& gtiffPrefix,
+                        const ossimKeywordlist& gtiffKwl,
+                        ossimString& value) const;
+
+   bool getFalseNorthing(const ossimString& gtiffPrefix,
+                         const ossimKeywordlist& gtiffKwl,
+                         ossimString& value) const;
+
+   bool getFalseEastingNorthing(const ossimString& gtiffPrefix,
+                                const ossimKeywordlist& gtiffKwl,
+                                ossimDpt& eastingNorthing) const;
+
+   bool getScaleFactor(const ossimString& gtiffPrefix,
+                       const ossimKeywordlist& gtiffKwl,
+                       ossim_float64& value) const;
+
+   bool getOriginLat(const ossimString& gtiffPrefix,
+                     const ossimKeywordlist& gtiffKwl,
+                     ossim_float64& value) const;
+
+   bool getCentralMeridian(const ossimString& gtiffPrefix,
+                           const ossimKeywordlist& gtiffKwl,
+                           ossim_float64& value) const;
+
+   void getTieSets(const std::vector<ossim_float64>& ties,
+                   ossim_uint32 width,
+                   ossim_uint32 height,
+                   ossimTieGptSet& tieSet) const;
+
+   bool hasOneBasedTiePoints(const std::vector<ossim_float64>& ties,
+                             ossim_uint32 width,
+                             ossim_uint32 height) const;
    
    ossimFilename  theFile;
    ossimEndian*   theEndian;
-   ossim_uint16   theVersion;
 };
 
 #endif /* End of "#ifndef ossimTiffInfo_HEADER" */

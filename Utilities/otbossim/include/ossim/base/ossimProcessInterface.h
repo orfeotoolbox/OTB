@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProcessInterface.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimProcessInterface.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimProcessInterface_HEADER
 #define ossimProcessInterface_HEADER
 #include <iosfwd>
@@ -15,8 +15,8 @@
 #include <ossim/base/ossimProcessProgressEvent.h>
 #include <ossim/base/ossimListenerManager.h>
 
-class OSSIMDLLEXPORT ossimObject;
-class OSSIMDLLEXPORT ossimListenerManager;
+class ossimObject;
+class ossimListenerManager;
 
 class OSSIMDLLEXPORT ossimProcessInterface
 {

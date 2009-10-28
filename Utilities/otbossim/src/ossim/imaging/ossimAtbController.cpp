@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbController.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimAtbController.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimAtbController.h>
 
@@ -95,12 +95,15 @@ ossimAtbController::ossimAtbController(ossimGridRemapEngine* engine)
    //***
    // Assign default engine if non provided:
    //***
-   delete theGridRemapEngine;
    if (engine)
-      theGridRemapEngine = (ossimGridRemapEngine*)engine->dup();
+   {
+      theGridRemapEngine = engine;
+   }
    else
+   {
       theGridRemapEngine
-         = ossimGridRemapEngineFactory::create(DEFAULT_ATB_REMAP_ENGINE);
+      = ossimGridRemapEngineFactory::create(DEFAULT_ATB_REMAP_ENGINE);
+   }
    
    if (traceExec())  CLOG << "returning..." << endl;
 }
@@ -116,17 +119,8 @@ ossimAtbController::ossimAtbController(ossimGridRemapEngine* engine)
 //*****************************************************************************
 ossimAtbController::~ossimAtbController()
 {
-   if (!theContainer)
-   {
-      //***
-      // No container exists that assumed ownership of the remappers, so delete
-      // them here:
-      //***
-      for (unsigned int i=0; i<getNumberOfInputs(); i++)
-         delete getInput(i);
-   }
-   
-   delete theGridRemapEngine;
+   theContainer = 0;
+   theGridRemapEngine = 0;;
 }
 
 //*****************************************************************************
@@ -142,7 +136,6 @@ void ossimAtbController::initializeWithCombiner(ossimImageCombiner* combiner,
    //***
    // Assign default engine if non provided:
    //***
-   delete theGridRemapEngine;
    if (engine)
       theGridRemapEngine = (ossimGridRemapEngine*)engine->dup();
    else
@@ -188,7 +181,7 @@ void ossimAtbController::initializeWithCombiner(ossimImageCombiner* combiner,
             //***
             remapper = new ossimGridRemapSource(input_image,
                                                 theGridRemapEngine);
-            if (theContainer)
+            if (theContainer.valid())
                theContainer->addChild(remapper);
             
             add_list.push_back(remapper);
@@ -458,7 +451,7 @@ void ossimAtbController::setKernelSize(int side_size)
    static const char MODULE[] = "ossimAtbController::setKernelSize(N)";
    if (traceExec())  CLOG << "entering..." << endl;
 
-   vector<ossimAtbMatchPoint*>::iterator mpi = theMatchPoints.begin();
+   vector<ossimRefPtr<ossimAtbMatchPoint> >::iterator mpi = theMatchPoints.begin();
    while (mpi != theMatchPoints.end())
       (*mpi)->setKernelSize(side_size);
 
@@ -538,24 +531,21 @@ void ossimAtbController::setGridRemapEngine(ossimGridRemapEngine* engine)
    static const char MODULE[] = "ossimAtbController::setGridRemapEngine()";
    if (traceExec())  CLOG << "entering..." << endl;
 
-   if (theGridRemapEngine)
-      delete theGridRemapEngine;
-
    theGridRemapEngine = engine;
 
    //***
    // Communicate the new engine to all member's interested:
    //***
    ossimGridRemapSource* remapper;
-   vector<ossimConnectableObject*>::iterator iter=theInputObjectList.begin();
+   ossimConnectableObject::ConnectableObjectList::iterator iter=theInputObjectList.begin();
    while (iter != theInputObjectList.end())
    {
-      remapper = PTR_CAST(ossimGridRemapSource, *iter);
+      remapper = PTR_CAST(ossimGridRemapSource, (*iter).get());
       remapper->setRemapEngine(engine);
       iter++;
    }
 
-   vector<ossimAtbMatchPoint*>::iterator match_point = theMatchPoints.begin();
+   vector<ossimRefPtr<ossimAtbMatchPoint> >::iterator match_point = theMatchPoints.begin();
    while (match_point != theMatchPoints.end())
    {
       (*match_point)->setGridRemapEngine(engine);

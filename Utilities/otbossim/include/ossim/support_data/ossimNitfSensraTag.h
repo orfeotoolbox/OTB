@@ -1,15 +1,15 @@
 //*******************************************************************
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Walt Bunch
 //
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfSensraTag.h 14659 2009-06-05 17:37:39Z dburken $
 #ifndef ossimNitfSensraTag_HEADER
 #define ossimNitfSensraTag_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -56,6 +56,15 @@ public:
    virtual ossim_uint32 getSizeInBytes()const;
    virtual void clearFields();
 
+   /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const;
+   
   // The set methods below taking ossimString args will truncate and
   // pad with spaces, as necessary, to match enumed size
    void setRefRow(ossimString refRow);
