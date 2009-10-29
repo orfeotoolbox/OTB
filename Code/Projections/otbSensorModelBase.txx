@@ -43,7 +43,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions>
   m_DEMHandler = DEMHandlerType::New();
   m_UseDEM = false;
   m_DEMIsLoaded = false;
-  m_AverageElevation = -32768.0;
+  m_AverageElevation = 0.0;
 
 }
 
