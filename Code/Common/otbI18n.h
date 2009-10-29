@@ -35,7 +35,7 @@
   typedef otb::ConfigurationFile        ConfigurationType;\
   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
   std::string lang = conf->GetParameter<std::string>("OTB_LANG");\
-  setlocale( LC_ALL, lang.c_str() );\
+  setlocale( LC_MESSAGES, lang.c_str() );\
   bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
   textdomain( "otb" );\
   std::cout << "Language: " << lang << std::endl;\
