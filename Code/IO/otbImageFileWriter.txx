@@ -109,7 +109,7 @@ ImageFileWriter<TInputImage>
     else
       {
 //       handler->setImageGeometry(geom_kwl);
-      handler->loadState(geom_kwl);
+      handler->getImageGeometry()->getProjection()->loadState(geom_kwl);
       handler->saveImageGeometry();
       handler->close();
       }
