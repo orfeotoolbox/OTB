@@ -79,7 +79,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 		 */
         ossimKeywordlist geom;
         std::cout<<"Read ossim Keywordlist...";
-		  if  (! handler->saveState(geom)) {
+		  if  (! handler->getImageGeometry()->getProjection()->saveState(geom)) {
 				std::cout << "Bad metadata parsing "<< std::endl;
 				return EXIT_FAILURE;
 		  }
