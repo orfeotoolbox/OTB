@@ -55,7 +55,8 @@ public:
 	virtual ossim_uint32 getNumberOfDecimationLevels() const;
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result) const;
-  
+   virtual void getDecimationFactors(std::vector<ossimDpt>& decimations)const;
+   
 protected:
    ossimRefPtr<ossimImageData> theImage;
    ossimRefPtr<ossimImageData> theResult;

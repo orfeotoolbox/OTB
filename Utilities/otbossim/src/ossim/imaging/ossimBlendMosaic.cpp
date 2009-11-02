@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.cpp 12912 2008-05-28 15:05:54Z gpotts $
+// $Id: ossimBlendMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimBlendMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -20,7 +20,7 @@ ossimBlendMosaic::ossimBlendMosaic()
 {
 }
 
-ossimBlendMosaic::ossimBlendMosaic(vector<ossimImageSource*>& inputSources)
+ossimBlendMosaic::ossimBlendMosaic(ossimConnectableObject::ConnectableObjectList& inputSources)
    : ossimImageMosaic(inputSources),
      theNormResult(NULL)
 {

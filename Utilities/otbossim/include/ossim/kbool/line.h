@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: line.h 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: line.h 14798 2009-06-29 19:19:22Z dburken $
 */
 
 #ifndef LINE_H
@@ -19,7 +19,7 @@
 #include <ossim/kbool/booleng.h>
 #include <ossim/kbool/link.h>
 
-class A2DKBOOLDLLEXP Bool_Engine;
+class Bool_Engine;
 
 // Status of a point to a line
 enum PointStatus {LEFT_SIDE, RIGHT_SIDE, ON_AREA, IN_AREA};

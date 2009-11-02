@@ -10,10 +10,11 @@
 //              file and will also delete it upon destruction
 //
 //*************************************************************************
-// $Id: ossimTempFilename.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTempFilename.cpp 15524 2009-09-30 01:02:26Z dburken $
 #include <stdlib.h>
 #include <fstream>
 #include <ossim/base/ossimTempFilename.h>
+#include <ossim/base/ossimEnvironmentUtility.h>
 #include <time.h>
 
 ossimTempFilename::ossimTempFilename(const ossimString& tempDir,
@@ -65,10 +66,10 @@ void ossimTempFilename::generate(bool createAsDirectoryFlag)
 
    if(tempDirCopy == "")
    {
-      tempDirCopy = ossimString(getenv("TEMP"));
+      tempDirCopy = ossimEnvironmentUtility::instance()->getEnvironmentVariable("TEMP");
       if(tempDirCopy=="")
       {
-         tempDirCopy  = ossimString(getenv("TMP"));
+         tempDirCopy  = ossimEnvironmentUtility::instance()->getEnvironmentVariable("TMP");
       }
       if(tempDirCopy == "")
       {

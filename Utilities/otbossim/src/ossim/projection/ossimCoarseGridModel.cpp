@@ -14,7 +14,7 @@
 //   elevations relative to the ellipsoid.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.cpp 11955 2007-10-31 16:10:22Z gpotts $
+//  $Id: ossimCoarseGridModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -27,6 +27,7 @@ RTTI_DEF1(ossimCoarseGridModel, "ossimCoarseGridModel", ossimSensorModel);
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/elevation/ossimElevManager.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 #include <cstdio>
 #include <fstream>
@@ -159,9 +160,19 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
                                      bool enableHeightFlag,
                                      bool makeAdjustableFlag)
 {
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
+   geom->setProjection(proj);
+   buildGrid(imageBounds, geom.get(), heightDelta, enableHeightFlag, makeAdjustableFlag);
+}   
+void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
+                                     ossimImageGeometry* geom,
+                                     double heightDelta,
+                                     bool enableHeightFlag,
+                                     bool makeAdjustableFlag)
+{
    theHeightEnabledFlag =  enableHeightFlag;
    
-   if(proj&&(!imageBounds.hasNans()))
+   if(geom->getProjection()&&(!imageBounds.hasNans()))
    {
      // don't let it get any smaller than 100, 100 pixels
      // on the input projector
@@ -201,7 +212,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
         theDlonDparamGrid = NULL;
      }
      
-     proj->lineSampleToWorld(imageBounds.midPoint(), gpt);
+     geom->localToWorld(imageBounds.midPoint(), gpt);
 
      do
      {
@@ -233,13 +244,15 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
               ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
                           imageOrigin.y + norm.y*(imageSize.y-1));
               
-              proj->lineSampleToWorld(pt, gpt);
+              geom->localToWorld(pt, gpt);
               double h = gpt.height();
               if(ossim::isnan(h))
               {
                  h += heightDelta;
               }
-              proj->lineSampleHeightToWorld(pt, h, gpt2);
+              ossimDpt fullPt;
+              geom->localToFullImage(pt, fullPt);
+              geom->getProjection()->lineSampleHeightToWorld(fullPt, h, gpt2);
               gpt.changeDatum(targetDatum);
               gpt2.changeDatum(targetDatum);
               
@@ -293,7 +306,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
                                   imageOrigin.y + norm.y*(imageSize.y-1));
               ossimDpt testIpt;
 
-               proj->lineSampleToWorld(imagePoint, gpt);
+               geom->localToWorld(imagePoint, gpt);
                worldToLineSample(gpt, testIpt);
 //               lineSampleToWorld(imagePoint, bilinearGpt);
 //               gpt.changeDatum(targetDatum);
@@ -315,7 +328,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
      gridSize = theLatGrid.size();
 
      ossimAdjustableParameterInterface* adjustableParameters = PTR_CAST(ossimAdjustableParameterInterface,
-                                                                        proj);
+                                                                        geom->getProjection());
      removeAllAdjustments();
      if(adjustableParameters&&makeAdjustableFlag)
      {
@@ -365,8 +378,9 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
                           
                           ossimDpt pt(imageOrigin.x + norm.x*(imageSize.x-1),
                                       imageOrigin.y + norm.y*(imageSize.y-1));
-                          
-                          proj->lineSampleHeightToWorld(pt, 0.0, gpt);
+                          ossimDpt fullPt;
+                          geom->localToFullImage(pt, fullPt);
+                          geom->getProjection()->lineSampleHeightToWorld(fullPt, 0.0, gpt);
 
                           gpt.changeDatum(targetDatum);
                           gpt2.latd(theLatGrid(pt));

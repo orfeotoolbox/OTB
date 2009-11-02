@@ -34,8 +34,6 @@ public:
    /** @brief default constructor */
    ossimImageProjectionModel();
 
-   /** @brief virtual destructor */
-   virtual ~ossimImageProjectionModel();
 
    /**
     * @brief Method to initialize class from an image handler.
@@ -51,7 +49,9 @@ public:
     */
    const ossimProjection* getProjection() const;
 
-private:
+protected:
+   /** @brief virtual destructor */
+   virtual ~ossimImageProjectionModel();
 
    ossimProjection* theProjection;
 

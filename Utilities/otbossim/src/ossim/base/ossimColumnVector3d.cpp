@@ -8,7 +8,7 @@
 //              coordinate.
 //
 //*******************************************************************
-//  $Id: ossimColumnVector3d.cpp 11408 2007-07-27 13:43:00Z dburken $
+//  $Id: ossimColumnVector3d.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 #include <ossim/base/ossimColumnVector3d.h>
@@ -17,9 +17,9 @@
 ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
 {
    std::ostringstream os;
-   os << setiosflags(ios::fixed) << setprecision(precision);
+   os << setprecision(precision);
    
-   os << "( ";
+   os << "(";
    if ( ossim::isnan(data[0]) == false)
    {
       os << data[0];
@@ -28,7 +28,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << ", ";
+   os << ",";
    if ( ossim::isnan(data[1]) == false )
    {
       os << data[1];
@@ -37,7 +37,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << ", ";
+   os << ",";
    if ( ossim::isnan(data[2]) == false )
    {
       os << data[2];
@@ -46,7 +46,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << " )";
+   os << ")";
    
    return ossimString(os.str());
 }

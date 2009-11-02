@@ -5,7 +5,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 13081 2008-06-25 19:35:34Z dburken $
+// $Id: ossimKeywordlist.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <fstream>
 #include <list>
@@ -25,7 +25,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 13081 2008-06-25 19:35:34Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(char delimiter)
@@ -106,7 +106,7 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
    // Check for null prefix.
    ossimString tmpPrefix;
    if (prefix) tmpPrefix = prefix;
-   
+
    regExp.compile(("^("+tmpPrefix+")").c_str());
 
    while(iter != kwl.theMap.end())
@@ -504,18 +504,14 @@ void ossimKeywordlist::add(const char*  prefix,
 void ossimKeywordlist::add(const char* key,
                            ossim_float32 value,
                            bool overwrite,
-                           int precision,
-                           bool trimZeroFlag,
-                           bool scientific)
+                           int precision)
 {
    if (key)
    {
       ossimString k = key;
 
       ossimString v = ossimString::toString(value,
-                                            precision,
-                                            trimZeroFlag,
-                                            scientific);
+                                            precision);
 
       KeywordMap::iterator i = getMapEntry(k);
 
@@ -534,9 +530,7 @@ void ossimKeywordlist::add(const char* prefix,
                            const char* key,
                            ossim_float32 value,
                            bool overwrite,
-                           int precision,
-                           bool trimZeroFlag,
-                           bool scientific)
+                           int precision)
 {
    if (key)
    {
@@ -545,9 +539,7 @@ void ossimKeywordlist::add(const char* prefix,
       k += key;
 
       ossimString v = ossimString::toString(value,
-                                            precision,
-                                            trimZeroFlag,
-                                            scientific);
+                                            precision);
 
       KeywordMap::iterator i = getMapEntry(k);
 
@@ -565,18 +557,14 @@ void ossimKeywordlist::add(const char* prefix,
 void ossimKeywordlist::add(const char* key,
                            ossim_float64 value,
                            bool overwrite,
-                           int precision,
-                           bool trimZeroFlag,
-                           bool scientific)
+                           int precision)
 {
    if (key)
    {
       ossimString k = key;
 
       ossimString v = ossimString::toString(value,
-                                            precision,
-                                            trimZeroFlag,
-                                            scientific);
+                                            precision);
 
       KeywordMap::iterator i = getMapEntry(k);
 
@@ -595,9 +583,7 @@ void ossimKeywordlist::add(const char* prefix,
                            const char* key,
                            ossim_float64 value,
                            bool overwrite,
-                           int precision,
-                           bool trimZeroFlag,
-                           bool scientific)
+                           int precision)
 {
    if (key)
    {
@@ -606,9 +592,7 @@ void ossimKeywordlist::add(const char* prefix,
       k += key;
 
       ossimString v = ossimString::toString(value,
-                                            precision,
-                                            trimZeroFlag,
-                                            scientific);
+                                            precision);
 
       KeywordMap::iterator i = getMapEntry(k);
 
@@ -862,7 +846,7 @@ bool ossimKeywordlist::parseStream(std::istream& is,
    {
       return false;
    }
-   
+
    ossimString line;
 
    while(!is.eof() && is.good())
@@ -930,7 +914,7 @@ bool ossimKeywordlist::parseStream(std::istream& is,
                   theMap.insert(std::make_pair(key, value));
                }
             }
-            
+
          } // End of:  if(pos != line.npos)
 
       } // End of:  if(line != "")
@@ -1203,7 +1187,7 @@ void ossimKeywordlist::downcaseKeywords()
    {
       tempMap.insert(make_pair(ossimString::downcase(iter->first),
                                iter->second));
-                               
+
       ++iter;
    }
    theMap = tempMap;
@@ -1218,7 +1202,7 @@ void ossimKeywordlist::upcaseKeywords()
    {
       tempMap.insert(make_pair(ossimString::upcase(iter->first),
                                iter->second));
-                               
+
       ++iter;
    }
    theMap = tempMap;

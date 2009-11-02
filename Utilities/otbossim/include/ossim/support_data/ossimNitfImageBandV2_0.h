@@ -9,15 +9,16 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageBandV2_0.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageBandV2_0.h 15416 2009-09-11 20:58:51Z dburken $
 #ifndef ossimNitfImageBandV2_0_HEADER
 #define ossimNitfImageBandV2_0_HEADER
 
 #include <string>
+#include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfImageBand.h>
 #include <ossim/support_data/ossimNitfImageLutV2_0.h>
 
-class ossimNitfImageBandV2_0 : public ossimNitfImageBand
+class OSSIM_DLL ossimNitfImageBandV2_0 : public ossimNitfImageBand
 {
 public:
    

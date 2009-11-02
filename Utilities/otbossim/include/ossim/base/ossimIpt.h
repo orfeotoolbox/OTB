@@ -10,7 +10,7 @@
 // Used to represent an interger point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimIpt.h 11414 2007-07-27 15:10:00Z dburken $
+//  $Id: ossimIpt.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimIpt_HEADER
 #define ossimIpt_HEADER
@@ -21,9 +21,9 @@
 #include <ossim/base/ossimDpt.h>
 
 // Forward class declarations.
-class OSSIMDLLEXPORT ossimFpt;
-class OSSIMDLLEXPORT ossimDpt3d;
-class OSSIMDLLEXPORT ossimString;
+class ossimFpt;
+class ossimDpt3d;
+class ossimString;
 
 class OSSIMDLLEXPORT ossimIpt
 {

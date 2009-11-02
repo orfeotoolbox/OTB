@@ -12,7 +12,7 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.h 9262 2006-07-14 20:49:28Z dburken $
+// $Id: ossimSrtmTileSource.h 15800 2009-10-23 20:03:45Z gpotts $
 #ifndef ossimSrtmTileSource_HEADER
 #define ossimSrtmTileSource_HEADER
 
@@ -25,8 +25,6 @@ class OSSIMDLLEXPORT ossimSrtmTileSource : public ossimGeneralRasterTileSource
 public:
    ossimSrtmTileSource();
 
-   virtual ~ossimSrtmTileSource();
-
    virtual ossimString getShortName() const;
    
    virtual ossimString getLongName() const;
@@ -35,14 +33,9 @@ public:
 
    virtual bool open();
    
-   /**
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *
-    *  @return true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getInternalImageGeometry();
 
    /**
     * Method to save the state of an object to a keyword list.
@@ -60,8 +53,9 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
 
-private:
-   ossimSrtmSupportData theSrtmSupportData;
+protected:
+   virtual ~ossimSrtmTileSource();
+   ossimSrtmSupportData m_SrtmSupportData;
    
 TYPE_DATA
 };

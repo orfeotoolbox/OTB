@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 13711 2008-10-14 16:49:38Z gpotts $
+// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 
@@ -55,7 +55,7 @@ ossimGeoAnnotationMultiPolyLineObject::ossimGeoAnnotationMultiPolyLineObject(
     theMultiPolyLine(rhs.theMultiPolyLine),
     theBoundingRect(rhs.theBoundingRect),
     theDatum(rhs.theDatum),
-    theProjectedPolyLineObject(rhs.theProjectedPolyLineObject?(ossimAnnotationMultiPolyLineObject*)rhs.theProjectedPolyLineObject->dup():0)
+    theProjectedPolyLineObject(rhs.theProjectedPolyLineObject.valid()?(ossimAnnotationMultiPolyLineObject*)rhs.theProjectedPolyLineObject->dup():0)
 {
 }
 
@@ -66,11 +66,7 @@ ossimObject* ossimGeoAnnotationMultiPolyLineObject::dup()const
 
 ossimGeoAnnotationMultiPolyLineObject::~ossimGeoAnnotationMultiPolyLineObject()
 {
-   if(theProjectedPolyLineObject)
-   {
-      delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = 0;
-   }
+   theProjectedPolyLineObject = 0;
 }
 
 void ossimGeoAnnotationMultiPolyLineObject::applyScale(double x, double y)
@@ -80,7 +76,7 @@ void ossimGeoAnnotationMultiPolyLineObject::applyScale(double x, double y)
       << endl;
 }
 
-void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projection)
+void ossimGeoAnnotationMultiPolyLineObject::transform(ossimImageGeometry* projection)
 {
    if(!projection)
    {
@@ -117,7 +113,7 @@ void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projectio
          tempPoint.latd(theMultiPolyLine[polyI][pointI].lat);
          tempPoint.lond(theMultiPolyLine[polyI][pointI].lon);
          ossimDpt temp;
-         projection->worldToLineSample(tempPoint, temp);
+         projection->worldToLocal(tempPoint, temp);
          if(!temp.hasNans())
          {
 	    multiPolyLine[polyI].addPoint(temp);
@@ -125,74 +121,6 @@ void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projectio
       }
       multiPolyLine[polyI].roundToIntegerBounds(true);
    }
-}
-
-void ossimGeoAnnotationMultiPolyLineObject::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      allocateProjectedPolyLine();
-
-      //---
-      // NOTE:
-      // allocateProjectedPolygon() will set theProjectedPolyLineObject to 0 if
-      // theMultiPolyLine is empty (theMultiPolyLine.size() == 0).  So check
-      // before accessing pointer to avoid a core dump.
-      //---
-      if(theProjectedPolyLineObject)
-      {
-         std::vector<ossimPolyLine>& multiPolyLine =
-            theProjectedPolyLineObject->getMultiPolyLine();
-         ossimGpt tempPoint(0,0, ossim::nan(), theDatum);
-   
-         for(vector<ossimPolyLine>::size_type polyI = 0;
-             polyI < theMultiPolyLine.size();
-             ++polyI)
-         {
-            ossimPolyLine polyLine;
-            
-            ossim_uint32 numberOfVertices =
-               theMultiPolyLine[polyI].getNumberOfVertices();
-            for(ossim_uint32 pointI = 0; pointI < numberOfVertices; ++pointI)
-            {
-               tempPoint.latd(theMultiPolyLine[polyI][pointI].lat);
-               tempPoint.lond(theMultiPolyLine[polyI][pointI].lon);
-               ossimDpt r0Pt;
-               projection->worldToLineSample(tempPoint, r0Pt);
-               if ( !r0Pt.hasNans() )
-               {
-                  if (rrds)
-                  {
-                     // Transform r0 point to new rrds level.
-                     try
-                     {
-                        ossimDpt rnPt;
-                        model.r0ToRn(rrds, r0Pt, rnPt);
-                        multiPolyLine[polyI].addPoint(rnPt);
-                     }
-                     catch (const ossimException& e)
-                     {
-                        ossimNotify(ossimNotifyLevel_WARN)
-                           << e.what() << std::endl;
-                     } 
-                  }
-                  else
-                  {
-                     multiPolyLine[polyI].addPoint(r0Pt);
-                  }
-               }
-               
-            } // End point loop
-            
-            multiPolyLine[polyI].roundToIntegerBounds(true);
-            
-         } // End poly line loop
-         
-      } // End if (theProjectedPolyLineObject)
-      
-   } // End if (projection)
 }
 
 std::ostream& ossimGeoAnnotationMultiPolyLineObject::print(std::ostream& out)const
@@ -222,7 +150,7 @@ ossimAnnotationObject* ossimGeoAnnotationMultiPolyLineObject::getNewClippedObjec
 
 void ossimGeoAnnotationMultiPolyLineObject::draw(ossimRgbImage& anImage)const
 {
-   if(theProjectedPolyLineObject)
+   if(theProjectedPolyLineObject.valid())
    {
       theProjectedPolyLineObject->draw(anImage);
    }
@@ -241,11 +169,7 @@ void ossimGeoAnnotationMultiPolyLineObject::addPoint(ossim_uint32 polygonIndex,
       theMultiPolyLine[polygonIndex].addPoint(pt);
       
       // we will have to reset the projected polygon
-      if(theProjectedPolyLineObject)
-      {
-         delete theProjectedPolyLineObject;
-         theProjectedPolyLineObject = 0;
-      }
+      theProjectedPolyLineObject = 0;
    }
 }
 
@@ -253,17 +177,13 @@ void ossimGeoAnnotationMultiPolyLineObject::setMultiPolyLine(
    const vector<ossimPolyLine>& multiPoly)
 {
    theMultiPolyLine = multiPoly;
-   if(theProjectedPolyLineObject)
-   {
-      delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = 0;
-   }
+   theProjectedPolyLineObject = 0;
 }
 
 void ossimGeoAnnotationMultiPolyLineObject::computeBoundingRect()
 {
    theBoundingRect.makeNan();
-   if(theProjectedPolyLineObject)
+   if(theProjectedPolyLineObject.valid())
    {
       theProjectedPolyLineObject->computeBoundingRect();
       theProjectedPolyLineObject->getBoundingRect(theBoundingRect);
@@ -273,7 +193,7 @@ void ossimGeoAnnotationMultiPolyLineObject::computeBoundingRect()
 
 bool ossimGeoAnnotationMultiPolyLineObject::isPointWithin(const ossimDpt& imagePoint)const
 {
-   if(theProjectedPolyLineObject)
+   if(theProjectedPolyLineObject.valid())
    {
       return theProjectedPolyLineObject->isPointWithin(imagePoint);
    }
@@ -286,7 +206,7 @@ void ossimGeoAnnotationMultiPolyLineObject::setColor(ossim_uint8 r,
                                                      ossim_uint8 b)
 {
    ossimAnnotationObject::setColor(r, g, b);
-   if(theProjectedPolyLineObject)
+   if(theProjectedPolyLineObject.valid())
    {
       theProjectedPolyLineObject->setColor(r, g, b);
    }
@@ -295,7 +215,7 @@ void ossimGeoAnnotationMultiPolyLineObject::setColor(ossim_uint8 r,
 void ossimGeoAnnotationMultiPolyLineObject::setThickness(ossim_uint8 thickness)
 {
    ossimAnnotationObject::setThickness(thickness);
-   if(theProjectedPolyLineObject)
+   if(theProjectedPolyLineObject.valid())
    {
       theProjectedPolyLineObject->setThickness(thickness);
    }
@@ -399,11 +319,7 @@ bool ossimGeoAnnotationMultiPolyLineObject::loadState(
 
 void ossimGeoAnnotationMultiPolyLineObject::allocateProjectedPolyLine()
 {
-   if(theProjectedPolyLineObject)
-   {
-      delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = 0;
-   }
+   theProjectedPolyLineObject = 0;
    
    if(theMultiPolyLine.size())
    {

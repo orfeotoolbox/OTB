@@ -10,7 +10,7 @@
 // "Earth Gravity Model 1996".
 //
 //*******************************************************************
-//  $Id: ossimGeoidEgm96.h 11496 2007-08-06 09:18:28Z dburken $
+//  $Id: ossimGeoidEgm96.h 14799 2009-06-30 08:54:44Z dburken $
 
 #ifndef ossimGeoidEgm96_HEADER
 #define ossimGeoidEgm96_HEADER
@@ -25,7 +25,7 @@
 #define GEOID_LAT_ERROR             0x0008
 #define GEOID_LON_ERROR             0x0010
 
-class OSSIMDLLEXPORT ossimGpt;
+class ossimGpt;
 
 class OSSIMDLLEXPORT ossimGeoidEgm96 : public ossimGeoid
 {

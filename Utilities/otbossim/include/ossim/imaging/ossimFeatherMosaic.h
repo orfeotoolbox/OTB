@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimFeatherMosaic.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFeatherMosaic.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFeatherMosaic_HEADER
 #define ossimFeatherMosaic_HEADER
 #include <vector>
@@ -25,13 +25,13 @@ class OSSIMDLLEXPORT ossimFeatherMosaic : public ossimImageMosaic
 {
 public:
    ossimFeatherMosaic();
-   ossimFeatherMosaic(vector<ossimImageSource*>& inputSources);
-   virtual ~ossimFeatherMosaic();
+   ossimFeatherMosaic(ossimConnectableObject::ConnectableObjectList& inputSources);
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                    ossim_uint32 resLevel=0);
    virtual void initialize();
        
 protected:
+   virtual ~ossimFeatherMosaic();
    /**
     * This is only visible by this class and will remain here
     * unless we want to move it later.

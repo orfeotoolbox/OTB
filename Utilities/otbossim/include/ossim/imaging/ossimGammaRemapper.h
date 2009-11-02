@@ -12,7 +12,7 @@
 // Gamma remapper.
 //
 //*************************************************************************
-// $Id: ossimGammaRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGammaRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGammaRemapper_HEADER
 #define ossimGammaRemapper_HEADER
 
@@ -26,7 +26,6 @@ public:
    ossimGammaRemapper(ossimImageSource* inputSource);
    ossimGammaRemapper(ossimObject* owner, ossimImageSource* inputSource);
 
-   virtual ~ossimGammaRemapper();
 
    virtual ossimString getShortName()const;
 
@@ -51,6 +50,7 @@ public:
    virtual void enableSource();
    
 protected:
+   virtual ~ossimGammaRemapper();
 
    /*!
     * Method to set unset the enable flag.

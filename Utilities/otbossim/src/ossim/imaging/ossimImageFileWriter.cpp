@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimImageFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 
 #include <tiff.h> /* for tiff compression defines */
@@ -50,7 +50,7 @@
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -118,18 +118,14 @@ ossimImageFileWriter::ossimImageFileWriter(const ossimFilename& file,
 
 ossimImageFileWriter::~ossimImageFileWriter()
 {
-   if(theInputConnection)
-   {
-      delete theInputConnection;
-      theInputConnection = NULL;
-   }
+   theInputConnection = 0;
    theProgressListener = NULL;
    removeListener((ossimConnectableObjectListener*)this);
 }
 
 void ossimImageFileWriter::initialize()
 {
-   if(theInputConnection)
+   if(theInputConnection.valid())
    {
       theInputConnection->initialize();
       setAreaOfInterest(theInputConnection->getBoundingRect());
@@ -139,15 +135,11 @@ void ossimImageFileWriter::initialize()
 void ossimImageFileWriter::changeSequencer(ossimImageSourceSequencer* sequencer)
 {
    if(!sequencer) return;
-   if(theInputConnection)
+   if(theInputConnection.valid())
    {
       sequencer->setAreaOfInterest(theInputConnection->getAreaOfInterest());
    }
 
-   if(theInputConnection)
-   {
-      delete theInputConnection;
-   }
    theInputConnection = sequencer;
    theInputConnection->connectMyInputTo(0, getInput(0));
 }
@@ -420,7 +412,7 @@ bool ossimImageFileWriter::loadState(const ossimKeywordlist& kwl,
 }
 
 bool ossimImageFileWriter::writeOverviewFile(ossim_uint16 tiff_compress_type,
-                                             ossim_int32 jpeg_compress_quality) const
+                                             ossim_int32 jpeg_compress_quality) 
 {
    if(theFilename == "") return false;
 
@@ -436,7 +428,7 @@ bool ossimImageFileWriter::writeOverviewFile(ossim_uint16 tiff_compress_type,
 
    ossimRefPtr<ossimTiffOverviewBuilder> ob = new ossimTiffOverviewBuilder();
    
-   if ( ob->setInputSource( ih.get(), false ) )
+   if ( ob->setInputSource(ih.get()) )
    {
       // Give the listener to the overview builder if set.
       if (theProgressListener)
@@ -462,7 +454,7 @@ bool ossimImageFileWriter::writeOverviewFile(ossim_uint16 tiff_compress_type,
    return true;
 }
 
-bool ossimImageFileWriter::writeEnviHeaderFile() const
+bool ossimImageFileWriter::writeEnviHeaderFile() 
 {
    if( (theFilename == "") || !theInputConnection ||
        theAreaOfInterest.hasNans())
@@ -479,7 +471,7 @@ bool ossimImageFileWriter::writeEnviHeaderFile() const
       new ossimEnviHeaderFileWriter();
    
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->initialize();
    writer->setFilename(outputFile);
    writer->setPixelType(thePixelType);
@@ -489,7 +481,7 @@ bool ossimImageFileWriter::writeEnviHeaderFile() const
    return writer->execute();
 }
 
-bool ossimImageFileWriter::writeErsHeaderFile() const
+bool ossimImageFileWriter::writeErsHeaderFile() 
 {
    if( (theFilename == "") || !theInputConnection ||
        theAreaOfInterest.hasNans())
@@ -506,7 +498,7 @@ bool ossimImageFileWriter::writeErsHeaderFile() const
 	   new ossimERSFileWriter();
    
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->initialize();
    writer->setFilename(outputFile);
    writer->setPixelType(thePixelType);
@@ -516,7 +508,7 @@ bool ossimImageFileWriter::writeErsHeaderFile() const
    return writer->execute();
 }
 
-bool ossimImageFileWriter::writeExternalGeometryFile() const
+bool ossimImageFileWriter::writeExternalGeometryFile() 
 {
    if( (theFilename == "") || !theInputConnection ||
        theAreaOfInterest.hasNans())
@@ -532,9 +524,10 @@ bool ossimImageFileWriter::writeExternalGeometryFile() const
    ossimRefPtr<ossimMetadataFileWriter> writer = new ossimGeomFileWriter();
 
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
-   writer->initialize();
+//   writer->connectMyInputTo(0, theInputConnection.get());
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->setFilename(geomFile);
+   writer->initialize();
    writer->setPixelType(thePixelType);
    writer->setAreaOfInterest(theAreaOfInterest);
 
@@ -542,7 +535,7 @@ bool ossimImageFileWriter::writeExternalGeometryFile() const
    return writer->execute();
 }
 
-bool ossimImageFileWriter::writeFgdcFile() const
+bool ossimImageFileWriter::writeFgdcFile() 
 {
    if( (theFilename == "") || !theInputConnection ||
        theAreaOfInterest.hasNans())
@@ -558,7 +551,7 @@ bool ossimImageFileWriter::writeFgdcFile() const
    ossimRefPtr<ossimMetadataFileWriter> writer = new ossimFgdcFileWriter();
    
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->initialize();
    writer->setFilename(outputFile);
    writer->setPixelType(thePixelType);
@@ -568,7 +561,7 @@ bool ossimImageFileWriter::writeFgdcFile() const
    return writer->execute();
 }
 
-bool ossimImageFileWriter::writeJpegWorldFile() const
+bool ossimImageFileWriter::writeJpegWorldFile() 
 {
    if(theFilename == "")
    {
@@ -582,7 +575,7 @@ bool ossimImageFileWriter::writeJpegWorldFile() const
    return writeWorldFile(file);
 }
 
-bool ossimImageFileWriter::writeReadmeFile() const
+bool ossimImageFileWriter::writeReadmeFile() 
 {
    if( (theFilename == "") || !theInputConnection ||
        theAreaOfInterest.hasNans())
@@ -600,7 +593,7 @@ bool ossimImageFileWriter::writeReadmeFile() const
       new ossimReadmeFileWriter();
    
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->initialize();
    writer->setFilename(outputFile);
    writer->setPixelType(thePixelType);
@@ -610,7 +603,7 @@ bool ossimImageFileWriter::writeReadmeFile() const
    return writer->execute();
 }
 
-bool ossimImageFileWriter::writeTiffWorldFile() const
+bool ossimImageFileWriter::writeTiffWorldFile() 
 {
    if(theFilename == "")
    {
@@ -624,7 +617,7 @@ bool ossimImageFileWriter::writeTiffWorldFile() const
    return writeWorldFile(file);
 }
 
-bool ossimImageFileWriter::writeMetaDataFiles() const
+bool ossimImageFileWriter::writeMetaDataFiles() 
 {
    bool status = true;
    
@@ -728,14 +721,14 @@ bool ossimImageFileWriter::writeMetaDataFiles() const
    return status;
 }
 
-bool ossimImageFileWriter::writeHistogramFile() const
+bool ossimImageFileWriter::writeHistogramFile() 
 {
    if(theFilename == "") return false;
 
    ossimFilename histogram_file = theFilename;
    histogram_file.setExtension(ossimString("his"));
 
-   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->
+   ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->
       open(theFilename);
 
    if (!handler)
@@ -743,20 +736,20 @@ bool ossimImageFileWriter::writeHistogramFile() const
       return false;
    }
 
-   ossimImageHistogramSource* histoSource = new ossimImageHistogramSource;
+   ossimRefPtr<ossimImageHistogramSource> histoSource = new ossimImageHistogramSource;
 
-   ossimHistogramWriter* writer = new ossimHistogramWriter;
+   ossimRefPtr<ossimHistogramWriter> writer = new ossimHistogramWriter;
    histoSource->setMaxNumberOfRLevels(1); // Only compute for r0.
-   histoSource->connectMyInputTo(0, handler);
+   histoSource->connectMyInputTo(0, handler.get());
    histoSource->enableSource();
-   writer->connectMyInputTo(0, histoSource);
+   writer->connectMyInputTo(0, histoSource.get());
    writer->setFilename(histogram_file);
    writer->addListener(&theStdOutProgress);
    writer->execute();
-
-   delete handler;
-   delete writer;
-
+   writer->disconnect();
+   histoSource->disconnect();
+   handler->disconnect();
+   writer = 0; histoSource = 0; handler = 0;
    return true;
 }
 
@@ -933,7 +926,7 @@ const ossimObject* ossimImageFileWriter::getObject() const
 void ossimImageFileWriter::setAreaOfInterest(const ossimIrect& inputRect)
 {
    ossimImageWriter::setAreaOfInterest(inputRect);
-   if(theInputConnection)
+   if(theInputConnection.valid())
    {
       theInputConnection->setAreaOfInterest(inputRect);
    }
@@ -941,7 +934,7 @@ void ossimImageFileWriter::setAreaOfInterest(const ossimIrect& inputRect)
 
 ossimImageSourceSequencer* ossimImageFileWriter::getSequencer()
 {
-   return theInputConnection;
+   return theInputConnection.get();
 }
 
 bool ossimImageFileWriter::execute()
@@ -1000,17 +993,16 @@ bool ossimImageFileWriter::execute()
          << "Area of interest:  " << theAreaOfInterest << endl;
    }
    
-   bool needToDeleteInput = false;
+   ossimRefPtr<ossimImageSource> savedInput;
    if (theScaleToEightBitFlag)
    {
       if(theInputConnection->getOutputScalarType() != OSSIM_UINT8)
       {
-         ossimImageSource* inputSource=new ossimScalarRemapper;
+         savedInput = new ossimScalarRemapper;
          
-         inputSource->connectMyInputTo(0, theInputConnection->getInput(0));
-         theInputConnection->connectMyInputTo(0, inputSource);
+         savedInput->connectMyInputTo(0, theInputConnection->getInput(0));
+         theInputConnection->connectMyInputTo(0, savedInput.get());
          theInputConnection->initialize();
-         needToDeleteInput = true;
       }
    }
 
@@ -1067,17 +1059,15 @@ bool ossimImageFileWriter::execute()
       } // End of "if (getSequencer() && getSequencer()->isMaster()))
    }
 
-   if(needToDeleteInput)
+   if(savedInput.valid())
    {
       ossimConnectableObject* obj = theInputConnection->getInput(0);
       if(obj)
       {
          theInputConnection->connectMyInputTo(0, obj->getInput(0));
-         delete obj;
-         obj = NULL;
       }
    }
-   
+   savedInput = 0;
    return result;
 }
 
@@ -1440,13 +1430,13 @@ void ossimImageFileWriter::getPixelTypeString(ossimString& type) const
 
 void ossimImageFileWriter::setTileSize(const ossimIpt& tileSize)
 {
-   if (theInputConnection)
+   if (theInputConnection.valid())
    {
       theInputConnection->setTileSize(tileSize);
    }
 }
 
-bool ossimImageFileWriter::writeWorldFile(const ossimFilename& file) const
+bool ossimImageFileWriter::writeWorldFile(const ossimFilename& file) 
 {
    if( !theInputConnection || theAreaOfInterest.hasNans())
    {
@@ -1457,7 +1447,7 @@ bool ossimImageFileWriter::writeWorldFile(const ossimFilename& file) const
    ossimRefPtr<ossimWorldFileWriter> writer = new ossimWorldFileWriter();
    
    // Set things up.
-   writer->connectMyInputTo(0, theInputConnection);
+   writer->connectMyInputTo(0, theInputConnection.get());
    writer->initialize();
    writer->setFilename(file);
    writer->setAreaOfInterest(theAreaOfInterest);

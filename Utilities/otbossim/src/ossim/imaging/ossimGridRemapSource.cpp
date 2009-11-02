@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGridRemapSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGridRemapSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGridRemapSource.h>
 
@@ -79,7 +79,7 @@ ossimGridRemapSource::ossimGridRemapSource(ossimImageSource* inputSource,
 ossimGridRemapSource::~ossimGridRemapSource()
 {
    deallocateGrids();
-   delete theRemapEngine;
+   theRemapEngine = 0;
 }
 
 //*****************************************************************************
@@ -180,7 +180,7 @@ bool ossimGridRemapSource::loadState(const ossimKeywordlist& kwl,
    // Reset object in preparation for reassignment:
    //***
    deallocateGrids();
-   delete theRemapEngine;
+   theRemapEngine = 0;
    
    //***
    // Read the remap engine type:
@@ -348,10 +348,8 @@ void ossimGridRemapSource::deallocateGrids()
 //*****************************************************************************
 void ossimGridRemapSource::setRemapEngine(ossimGridRemapEngine* engine)
 {
-   if (theRemapEngine)
-      delete theRemapEngine;
 
-   theRemapEngine = (ossimGridRemapEngine*)engine->dup();
+   theRemapEngine = engine;
    theGridIsFilled = false;
 }
 

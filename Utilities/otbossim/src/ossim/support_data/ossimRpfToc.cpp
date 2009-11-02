@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfToc.cpp 15810 2009-10-24 14:54:27Z dburken $
 
 #include <iostream>
 
@@ -56,25 +56,25 @@ ossimErrorCode ossimRpfToc::parseFile(const ossimFilename &fileName)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimRpfToc::parseFile: entered....." << std::endl;
    }
-   ossimNitfFile *nitfFile = new ossimNitfFile;
+
+   ossimRefPtr<ossimNitfFile> nitfFile = new ossimNitfFile;
 
    clearAll();
 
    nitfFile->parseFile(fileName);
 
-   const ossimRefPtr<ossimNitfFileHeader> nitfFileHeader =
+   ossimRefPtr<const ossimNitfFileHeader> nitfFileHeader =
       nitfFile->getHeader();
    
    if(theRpfHeader)
    {
       delete theRpfHeader;
-      theRpfHeader = NULL;
+      theRpfHeader = 0;
    }
    
    if(!nitfFileHeader)
    {
-      delete nitfFile;
-      nitfFile = NULL;
+      nitfFile = 0;
       
       if(traceDebug())
       {
@@ -86,9 +86,10 @@ ossimErrorCode ossimRpfToc::parseFile(const ossimFilename &fileName)
    ossimNitfTagInformation info; 
    nitfFileHeader->getTag(info, "RPFHDR");
    
-   // we no longer need access to the nitf header.  We got what we needed
-   delete nitfFile;
-   nitfFile = NULL;
+   // we no longer need access to the nitf header.  We got what we needed.
+   nitfFileHeader = 0;
+   nitfFile = 0;
+   
    theFilename = fileName;
 
    if(info.getTagName() == "RPFHDR")
@@ -148,7 +149,8 @@ ossimErrorCode ossimRpfToc::parseFile(const ossimFilename &fileName)
 }
 
 std::ostream& ossimRpfToc::print(std::ostream& out,
-                                 const std::string& prefix) const
+                                 const std::string& prefix,
+                                 bool printOverviews) const
 {
    if(theRpfHeader)
    {
@@ -173,8 +175,8 @@ std::ostream& ossimRpfToc::print(std::ostream& out,
                (*tocEntry)->getBoundaryInformation();
 
             ossimString scale = REC.getScale();
-            
-            if (scale.contains("OVERVIEW") == false)
+            if ( (scale.contains("OVERVIEW")) == false ||
+                 printOverviews )
             {
                std::string entryPrefix = prefix;
                entryPrefix += "image";

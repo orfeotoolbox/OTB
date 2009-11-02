@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiResLevelHistogram.h 11721 2007-09-13 13:19:34Z gpotts $
+//  $Id: ossimMultiResLevelHistogram.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMultiResLevelHistogram_HEADER
 #define ossimMultiResLevelHistogram_HEADER
 #include <vector>
@@ -25,7 +25,6 @@ public:
    ossimMultiResLevelHistogram(ossim_uint32 numberOfResLevels);
    ossimMultiResLevelHistogram(const ossimMultiResLevelHistogram& rhs);
    
-   virtual ~ossimMultiResLevelHistogram();
 
    ossimRefPtr<ossimHistogram> getHistogram(ossim_uint32 band,
                                             ossim_uint32 resLevel=0);
@@ -69,7 +68,8 @@ public:
                           const char* prefix=0)const;
    
 protected:
-   class  ossimProprietaryHeaderInformation
+   virtual ~ossimMultiResLevelHistogram();
+  class  ossimProprietaryHeaderInformation
    {
    public:
       ossimProprietaryHeaderInformation(){clear();}

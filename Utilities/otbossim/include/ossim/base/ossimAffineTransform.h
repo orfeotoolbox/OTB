@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimAffineTransform.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimAffineTransform.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAffineTransform_HEADER
 #define ossimAffineTransform_HEADER
@@ -17,7 +17,20 @@ class OSSIMDLLEXPORT ossimAffineTransform : public ossim2dTo2dTransform
 {
 public:
    ossimAffineTransform();
+   ossimAffineTransform(const ossimAffineTransform& src);
 
+   /**
+    * @brief assignment operator=
+    * @param rhs The data to assign from.
+    * @param A reference to this object.
+    */
+   virtual const ossimAffineTransform& operator=(
+      const ossimAffineTransform& rhs);
+   
+   virtual ossimObject* dup()const
+   {
+      return new ossimAffineTransform(*this);
+   }
    virtual void forward(const ossimDpt& input,
                         ossimDpt& output)const;
    virtual void inverse(const ossimDpt& input,
@@ -81,15 +94,14 @@ public:
       
 protected:
    void computeMatrix();
-   
-   NEWMAT::Matrix theForwardXform;
-   NEWMAT::Matrix theInverseXform;
 
    ossimDpt       theScale;
    double         theRotation;
    ossimDpt       theTranslation;
    bool           theAffineEnabledFlag;
 
+   NEWMAT::Matrix theForwardXform;
+   NEWMAT::Matrix theInverseXform;
 TYPE_DATA      
 };
 

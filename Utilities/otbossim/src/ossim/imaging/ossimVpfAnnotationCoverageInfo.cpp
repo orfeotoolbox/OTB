@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 // 
 //**************************************************************************
-// $Id: ossimVpfAnnotationCoverageInfo.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfAnnotationCoverageInfo.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <vector>
 #include <algorithm>
@@ -73,11 +73,11 @@ ossimIrect ossimVpfAnnotationCoverageInfo::getBoundingProjectedRect()const
 }
 
 
-void ossimVpfAnnotationCoverageInfo::transform(ossimProjection* proj)
+void ossimVpfAnnotationCoverageInfo::transform(ossimImageGeometry* geom)
 {
   for(ossim_uint32 idx = 0; idx < theFeatureInfoArray.size();++idx)
   {
-     theFeatureInfoArray[idx]->transform(proj);
+     theFeatureInfoArray[idx]->transform(geom);
   }
 }
 

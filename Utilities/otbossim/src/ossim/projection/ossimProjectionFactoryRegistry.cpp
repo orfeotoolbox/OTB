@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 14012 2009-01-24 15:35:56Z dburken $
+// $Id: ossimProjectionFactoryRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <algorithm>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -18,6 +18,8 @@
 #include <ossim/projection/ossimMiscProjectionFactory.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
+
+ossimProjectionFactoryRegistry* ossimProjectionFactoryRegistry::m_instance = 0;
 
 
 ossimProjectionFactoryRegistry::ossimProjectionFactoryRegistry()
@@ -36,15 +38,16 @@ void ossimProjectionFactoryRegistry::operator=(const ossimProjectionFactoryRegis
 
 ossimProjectionFactoryRegistry::~ossimProjectionFactoryRegistry()
 {
-   theFactoryList.clear();
 }
 
 ossimProjectionFactoryRegistry* ossimProjectionFactoryRegistry::instance()
 {
-   static ossimProjectionFactoryRegistry sharedInstance;
+   if(!m_instance)
+   {
+      m_instance = new ossimProjectionFactoryRegistry();
+   }
    
-
-   return &sharedInstance;
+   return m_instance;
 }
 
 ossimProjection*
@@ -52,35 +55,22 @@ ossimProjectionFactoryRegistry::createProjection(const ossimFilename& name,
                                                  ossim_uint32 entryIdx)const
 {
    ossimProjection* result = 0;
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory = theFactoryList.begin();
-
-   while( (factory != theFactoryList.end()) && !result )
+   ossim_uint32 idx = 0;
+   for(idx = 0; ((idx < m_factoryList.size())&&(!result)); ++idx)
    {
-      if(*factory)
-      {
-         result = (*factory)->createProjection(name, entryIdx);
-      }
-      
-      ++factory;
+      result = m_factoryList[idx]->createProjection(name, entryIdx);
    }
    
    return result;
 }
 
-ossimProjection* ossimProjectionFactoryRegistry::createProjection(const ossimString& name)const
+ossimProjection* ossimProjectionFactoryRegistry::createProjection(ossimImageHandler* handler)const
 {
    ossimProjection* result = 0;
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory = theFactoryList.begin();
-
-   while((factory != theFactoryList.end()&&!
-          result))
+   ossim_uint32 idx = 0;
+   for(idx = 0; ((idx < m_factoryList.size())&&(!result)); ++idx)
    {
-      if(*factory)
-      {
-         result = (*factory)->createProjection(name);
-      }
-      
-      ++factory;
+      result = m_factoryList[idx]->createProjection(handler);
    }
    
    return result;
@@ -89,18 +79,7 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(const ossimStr
 ossimProjection* ossimProjectionFactoryRegistry::createProjection(
    const ossimKeywordlist& kwl, const char* prefix)const
 {
-   ossimProjection* result = 0;
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory = theFactoryList.begin();
-
-   while( (factory != theFactoryList.end()) && !result )
-   {
-      if(*factory)
-      {
-         result = (*factory)->createProjection(kwl, prefix);
-      }
-      
-      ++factory;
-   }
+   ossimProjection* result = createNativeObjectFromRegistry(kwl, prefix);
 
    if ( (result == 0) && (prefix == 0) )
    {
@@ -140,15 +119,10 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
                   bFoundImageLine = true;
                   ossimString s2 = v[0];
                   s2 += ".";
-                  factory = theFactoryList.begin();
-                  while( (factory != theFactoryList.end()) && !result )
+                  ossim_uint32 idx = 0;
+                  for(;((idx < m_factoryList.size())&&!result); ++idx)
                   {
-                     if(*factory)
-                     {
-                        result = (*factory)->createProjection(kwl, s2.c_str());
-                     }
-                     
-                     ++factory;
+                     result =  m_factoryList[idx]->createProjection(kwl, s2.c_str());
                   }
                }
             }
@@ -162,79 +136,15 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
    return result;
 }
 
-bool ossimProjectionFactoryRegistry::registerFactory(
-   ossimProjectionFactoryBase* factory, bool pushToFrontFlag)
-{
-   if( factory && !findFactory(factory) )
-   {
-      if (pushToFrontFlag)
-      {
-         theFactoryList.insert(theFactoryList.begin(), factory);
-      }
-      else
-      {
-         theFactoryList.push_back(factory);
-      }
-      return true;
-   }
-
-   return false;
-}
-
-void ossimProjectionFactoryRegistry::unregisterFactory(ossimProjectionFactoryBase* factory)
-{
-   std::vector<ossimProjectionFactoryBase*>::iterator iter =  std::find(theFactoryList.begin(),
-                                                                        theFactoryList.end(),
-                                                                        factory);
-   if(iter != theFactoryList.end())
-   {
-      theFactoryList.erase(iter);
-   }
-}
-
-bool ossimProjectionFactoryRegistry::findFactory(ossimProjectionFactoryBase* factory)const
-{
-   return (std::find(theFactoryList.begin(),
-                     theFactoryList.end(),
-                     factory)!=theFactoryList.end());
-}
-
-ossimObject* ossimProjectionFactoryRegistry::createObject(const ossimString& typeName)const
-{
-   return createProjection(typeName);
-}
-
-ossimObject* ossimProjectionFactoryRegistry::createObject(const ossimKeywordlist& kwl,
-                                                          const char* prefix)const
-{
-   return createProjection(kwl, prefix);
-}
-
-void ossimProjectionFactoryRegistry::getTypeNameList(
-   std::vector<ossimString>& typeList)const
-{
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory =
-      theFactoryList.begin();
-
-   while(factory != theFactoryList.end())
-   {
-      if(*factory)
-      {
-         (*factory)->getTypeNameList(typeList);
-      }
-      ++factory;
-   }   
-}
-
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
+   registerFactory(ossimNitfProjectionFactory::instance());   
    registerFactory(ossimSensorModelFactory::instance());
+   registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimSrsProjectionFactory::instance());
-   registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimPcsCodeProjectionFactory::instance());   
    registerFactory(ossimStatePlaneProjectionFactory::instance());
-   registerFactory(ossimNitfProjectionFactory::instance());   
    registerFactory(ossimMiscProjectionFactory::instance());
 }
 

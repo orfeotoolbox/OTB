@@ -21,6 +21,8 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimXmlDocument.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
+#include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/support_data/ossimGeoTiff.h>
 
@@ -169,13 +171,15 @@ bool ossimplugins::ossimTerraSarTiffReader::open(const ossimFilename& file)
             {
                ossimFilename imageFile = file.expand().path();
                imageFile = imageFile.dirCat(s);
-               setFilename(imageFile);
-               
-               result = ossimTiffTileSource::open();
 
+               setFilename(imageFile);
+
+               result = ossimTiffTileSource::open();
                if (result)
                {
                   theProductXmlFile = file;
+
+                  completeOpen();
                }
             }
          }
@@ -201,120 +205,125 @@ void ossimplugins::ossimTerraSarTiffReader::close()
    ossimTiffTileSource::close();
 }
 
-bool ossimplugins::ossimTerraSarTiffReader::getImageGeometry(
-   ossimKeywordlist& kwl, const char* prefix)
+ossimImageGeometry* ossimplugins::ossimTerraSarTiffReader::getImageGeometry()
 {
-   static const char MODULE[] = "ossimplugins::ossimTerraSarTiffReader::getImageGeometry";
+   if ( !theGeometry.valid() )
+   {
+      //---
+      // Check for external geom:
+      //---
+      getExternalImageGeometry();
+      
+      if ( !theGeometry.valid() )
+      {
+         //---
+         // Check the internal geometry first to avoid a factory call.
+         //---
+         getInternalImageGeometry();
+
+         // At this point it is assured theGeometry is set.
+
+         // Check for set projection.
+         if ( !theGeometry->getProjection() )
+         {
+            // Try factories for projection.
+            ossimImageGeometryRegistry::instance()->extendGeometry(this);
+         }
+      }
+   }
+   
+   // Lastly check for set decimation levels.  First time through...
+   if( getNumberOfDecimationLevels() != theGeometry->getNumberOfDecimations() )
+   {
+      std::vector<ossimDpt> decimationList;
+      getDecimationFactors(decimationList);
+      theGeometry->setDiscreteDecimation(decimationList);
+   }
+
+   return theGeometry.get();
+}
+
+ossimImageGeometry*
+ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry()
+{
+   static const char MODULE[] =
+      "ossimplugins::ossimTerraSarTiffReader::getInternalImageGeometry";
    
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " entered...\n";
    }
-   
-   if (theGeometryKwl.getSize())
+
+   if ( !theGeometry )
    {
-      kwl.add(prefix, theGeometryKwl);
-      //kwl = theGeometryKwl;
-      return true;
+      theGeometry = new ossimImageGeometry();
    }
    
-   bool result = false;
-   ossimRefPtr<ossimProjection> proj = 0;
-   ossimFilename filename = getFilenameWithThisExtension(ossimString(".geom"));
-   if(!filename.exists())
+   ossimXmlDocument* xdoc = new ossimXmlDocument();
+   if ( xdoc->openFile(theProductXmlFile) )
    {
-      // Try tacking on the entry like "foo_e0.hdf".
-      filename = getFilenameWithThisExtension(ossimString(".geom"), true);
-   }
-   if(filename.exists())
-   {
-      if(kwl.addFile(filename))
+      ossimTerraSarProductDoc helper;
+      ossimString s;
+      if ( helper.getProjection(xdoc, s) )
       {
-         ossimString tempPrefix =
-            "image"+ossimString::toString(getCurrentEntry())+".";
-         kwl.stripPrefixFromAll(tempPrefix);
-         
-         if(kwl.find(ossimKeywordNames::TYPE_KW))
+         s.upcase();
+         if ( s == "GROUNDRANGE" )
          {
-            ossimKeywordlist kwlTemp(kwl);
+            ossimRefPtr<ossimTerraSarModel> model =
+               new ossimTerraSarModel();
+            if ( model->open(theProductXmlFile) )
+            {
+               // Assign the model to our ossimImageGeometry object.
+               theGeometry->setProjection( model.get() );
+            }
+         }
+         else if ( (s == "MAP") && theTiffPtr )
+         {
+            ossimGeoTiff geotiff;
+
+            //---
+            // Note: must pass false to readTags so it doesn't close our
+            // tiff pointer.
+            //---
+            geotiff.readTags(theTiffPtr, getCurrentEntry(), false);
+            ossimKeywordlist kwl;
+            if(geotiff.addImageGeometry(kwl))
+            {
+               ossimRefPtr<ossimProjection> proj =
+                  ossimProjectionFactoryRegistry::instance()->
+                     createProjection(kwl);
             
-            kwlTemp.add(ossimKeywordNames::GEOM_FILE_KW,
-                        filename.c_str(),
-                        true);
-
-            proj = ossimProjectionFactoryRegistry::instance()->
-               createProjection(kwlTemp);
-            if(proj.valid())
-            {
-               result = true;
-               kwl.add(prefix, kwlTemp);//kwl = kwlTemp;
+               if ( proj.valid() )
+               {
+                  // Assign projection to our ossimImageGeometry object.
+                  theGeometry->setProjection( proj.get() );
+               }
             }
          }
-      }
-   }
-   
-   if(!result)
-   {
-      ossimXmlDocument* xdoc = new ossimXmlDocument();
-      if ( xdoc->openFile(theProductXmlFile) )
-      {
-         ossimTerraSarProductDoc helper;
-         ossimString s;
-         if ( helper.getProjection(xdoc, s) )
+         else
          {
-            s.upcase();
-            if ( s == "GROUNDRANGE" )
+            if (traceDebug())
             {
-               ossimTerraSarModel* model = new ossimTerraSarModel();
-               if ( model->open(theProductXmlFile) )
-               {
-                  result = model->saveState(kwl, prefix);
-               }
-               delete model;
-               model = 0;
-            }
-            else if (s == "MAP")
-            {
-               ossimGeoTiff* gtiff = new ossimGeoTiff( getFilename() );
-               if (gtiff->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
-               {
-                  result = gtiff->addImageGeometry(kwl, prefix);
-               }
-               delete gtiff;
-               gtiff = 0;
-            }
-            else
-            {
-               if (traceDebug())
-               {
-                  ossimNotify(ossimNotifyLevel_DEBUG)
-                     << "WARNING: Unhandled projection: " << s << std::endl;
-                  
-               }
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "WARNING: Unhandled projection: " << s << std::endl;
+               
             }
          }
       }
-
-      delete xdoc;
-      xdoc = 0;
-   }
+      
+   } // matches: if ( xdoc->openFile(theProductXmlFile) )
    
-   if (result == true)
-   {
-      // Capture the geometry for next time.
-      theGeometryKwl.clear();
-      theGeometryKwl.add(kwl, prefix, true);
-   }
+   delete xdoc;
+   xdoc = 0;
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " exit status = " << (result?"true":"false\n")
-         << std::endl;
+         << MODULE << " exited..." << std::endl;
    }
    
-   return result;
+   return theGeometry.get();
 }
 
 bool ossimplugins::ossimTerraSarTiffReader::isTerraSarProductFile(

@@ -9,7 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 12988 2008-06-04 16:49:43Z gpotts $
+// $Id: ossimAdrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 
@@ -30,6 +30,7 @@
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 RTTI_DEF1(ossimAdrgTileSource, "ossimAdrgTileSource", ossimImageHandler)
 
@@ -52,25 +53,25 @@ static ossimTrace traceDebug("ossimAdrgTileSource:debug");
 ossimAdrgTileSource::ossimAdrgTileSource()
    :
       ossimImageHandler(),
-      theTile(0),
-      theTileBuffer(0),
-      theFileStr(),
-      theAdrgHeader(0)
+      m_Tile(0),
+      m_TileBuffer(0),
+      m_FileStr(),
+      m_AdrgHeader(0)
 {
    // Construction not complete.  Users should call "open" method.
 }
 
 ossimAdrgTileSource::~ossimAdrgTileSource()
 {
-   if(theAdrgHeader)
+   if(m_AdrgHeader)
    {
-      delete theAdrgHeader;
-      theAdrgHeader = 0;
+      delete m_AdrgHeader;
+      m_AdrgHeader = 0;
    }
-   if (theTileBuffer)
+   if (m_TileBuffer)
    {
-      delete [] theTileBuffer;
-      theTileBuffer = 0;
+      delete [] m_TileBuffer;
+      m_TileBuffer = 0;
    }
 
    close();
@@ -80,60 +81,84 @@ ossimRefPtr<ossimImageData> ossimAdrgTileSource::getTile(
    const ossimIrect& rect,
    ossim_uint32 resLevel)
 {
-   // This tile source bypassed, or invalid res level, return a blank tile.
-   if (!isSourceEnabled() || !isValidRLevel(resLevel))
+   if (m_Tile.valid())
    {
-      return ossimRefPtr<ossimImageData>();
-   }
-
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
-      {
-         return theOverview->getTile(rect, resLevel);
-      }
-   }
-
-   theTile->setImageRectangle(rect);
-   ossimIrect image_rect = getImageRectangle(resLevel);
-   theTile->makeBlank();
-
-   //***
-   // See if any point of the requested tile is in the image.
-   //***
-   if ( rect.intersects(image_rect) )
-   {
-      ossimIrect clip_rect = rect.clipToRect(image_rect);
+      // Image rectangle must be set prior to calling getTile.
+      m_Tile->setImageRectangle(rect);
       
-//       if ( !rect.completely_within(clip_rect) )
-//       {
-//          // Start with a blank tile.
-//          theTile->makeBlank();
-//       }
-
-      // Load the tile buffer with data from the adrg.
-      if (fillBuffer(rect, clip_rect))
+      if ( getTile( m_Tile.get(), resLevel ) == false )
       {
-         theTile->validate();
+         if (m_Tile->getDataObjectStatus() != OSSIM_NULL)
+         {
+            m_Tile->makeBlank();
+         }
       }
    }
-//    else
-//    {
-//       theTile->makeBlank();
-//    }
+   
+   return m_Tile;
+}
 
-   return theTile;
+bool ossimAdrgTileSource::getTile(ossimImageData* result,
+                                  ossim_uint32 resLevel)
+{
+   bool status = false;
+
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      result->ref();  // Increment ref count.
+
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
+         
+         ossimIrect tile_rect = result->getImageRectangle();
+         
+         ossimIrect image_rect = getImageRectangle(resLevel);
+         
+         result->makeBlank();
+         
+         //---
+         // See if any point of the requested tile is in the image.
+         //---
+         if ( tile_rect.intersects(image_rect) )
+         {
+            ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+            
+            // Load the tile buffer with data from the adrg.
+            status = fillBuffer(tile_rect, clip_rect, result);
+
+            if (status)
+            {
+               result->validate();
+            }
+         }
+      }
+
+      result->unref();  // Decrement ref count.
+   }
+
+   return status;
 }
 
 //*******************************************************************
 // Private Method:
 //*******************************************************************
 bool ossimAdrgTileSource::fillBuffer(const ossimIrect& tile_rect,
-                                     const ossimIrect& clip_rect)
+                                     const ossimIrect& clip_rect,
+                                     ossimImageData* tile)
 {
-//    const ossim_uint8 NULL_PIXEL         = (ossim_uint8)theTile->getNullPix(0);
-   // const ossim_int32 TILE_SIZE_PER_BAND = theTile->getSizePerBand();
-
    //***
    // Shift the upper left corner of the "clip_rect" to the an even chunk
    // boundry.
@@ -147,8 +172,10 @@ bool ossimAdrgTileSource::fillBuffer(const ossimIrect& tile_rect,
    ossim_int32 size_in_x = clip_rect.lr().x - tileOrigin.x + 1;
    ossim_int32 size_in_y = clip_rect.lr().y - tileOrigin.y + 1;
    
-   ossim_int32 tiles_in_x_dir = size_in_x / ADRG_TILE_WIDTH  + (size_in_x % ADRG_TILE_WIDTH  ? 1 : 0);
-   ossim_int32 tiles_in_y_dir = size_in_y / ADRG_TILE_HEIGHT + (size_in_y % ADRG_TILE_HEIGHT ? 1 : 0);
+   ossim_int32 tiles_in_x_dir = size_in_x / ADRG_TILE_WIDTH  +
+      (size_in_x % ADRG_TILE_WIDTH  ? 1 : 0);
+   ossim_int32 tiles_in_y_dir = size_in_y / ADRG_TILE_HEIGHT +
+      (size_in_y % ADRG_TILE_HEIGHT ? 1 : 0);
 
 
    ossimIpt ulTilePt = tileOrigin;
@@ -170,13 +197,13 @@ bool ossimAdrgTileSource::fillBuffer(const ossimIrect& tile_rect,
          {
             ossimIrect tile_clip_rect = clip_rect.clipToRect(adrg_tile_rect);
             
-            //***
+            //---
             // Some point in the chip intersect the tile so grab the
             // data.
-            //***
+            //---
             ossim_int32 row = (ossim_int32) ulTilePt.y / ADRG_TILE_HEIGHT; 
             ossim_int32 col = (ossim_int32) ulTilePt.x / ADRG_TILE_WIDTH;
-            ossim_int32 tileOffset = theAdrgHeader->tim(row, col);
+            ossim_int32 tileOffset = m_AdrgHeader->tim(row, col);
 
             if(tileOffset != 0)
             {
@@ -185,29 +212,25 @@ bool ossimAdrgTileSource::fillBuffer(const ossimIrect& tile_rect,
                int band;
 
                // seek to start of chip
-               theFileStr.seekg(seek_position, ios::beg);
+               m_FileStr.seekg(seek_position, ios::beg);
                for (band=0; band<3; band++)
                {
-                  // Seek to the chip
-//                   theFileStr.seekg(seek_position, ios::beg);
-
                   //***
                   // Read the chip from the ccf file into the chunk buffer.
                   // This will get all the bands.  Bands are interleaved by
                   // chip.
                   //***
-                  if (!theFileStr.read((char*)theTileBuffer,
+                  if (!m_FileStr.read((char*)m_TileBuffer,
                                        ADRG_TILE_SIZE))
                   {
                      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
                      return false;
                   }
 
-//                  seek_position += BAND_OFFSET;
-                  theTile->loadBand(theTileBuffer,
-                                    adrg_tile_rect,
-                                    tile_clip_rect,
-                                    band);
+                  tile->loadBand(m_TileBuffer,
+                                 adrg_tile_rect,
+                                 tile_clip_rect,
+                                 band);
 
                } // End of band loop.
                
@@ -245,16 +268,16 @@ ossimAdrgTileSource::getImageRectangle(ossim_uint32 reduced_res_level) const
 
 void ossimAdrgTileSource::close()
 {
-   if(theAdrgHeader)
+   if(m_AdrgHeader)
    {
-      delete theAdrgHeader;
-      theAdrgHeader = 0;
+      delete m_AdrgHeader;
+      m_AdrgHeader = 0;
    }
-   if(theFileStr.is_open())
+   if(m_FileStr.is_open())
    {
-      theFileStr.close();
+      m_FileStr.close();
    }
-   theTile = 0;
+   m_Tile = 0;
 }
 
 //*******************************************************************
@@ -273,16 +296,16 @@ bool ossimAdrgTileSource::open()
    {
       close();
    }
-   if(theAdrgHeader)
+   if(m_AdrgHeader)
    {
-      delete theAdrgHeader;
-      theAdrgHeader = 0;
+      delete m_AdrgHeader;
+      m_AdrgHeader = 0;
    }
    // Instantiate support data class to parse header file.
-   theAdrgHeader = new ossimAdrgHeader(theImageFile);
+   m_AdrgHeader = new ossimAdrgHeader(theImageFile);
 
    // Check for errors.
-   if (theAdrgHeader->errorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   if (m_AdrgHeader->errorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
       if (traceDebug())
       {
@@ -294,17 +317,17 @@ bool ossimAdrgTileSource::open()
       return false;
    }
 
-   theFileStr.open(theAdrgHeader->imageFile().c_str(),
+   m_FileStr.open(m_AdrgHeader->imageFile().c_str(),
                    ios::in | ios::binary);
 
    // Check the file pointer.
-   if(!theFileStr)
+   if(!m_FileStr)
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nCannot open:  "
-              << theAdrgHeader->imageFile().c_str() << std::endl;
+              << m_AdrgHeader->imageFile().c_str() << std::endl;
       }
       close();
       
@@ -315,27 +338,27 @@ bool ossimAdrgTileSource::open()
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE
-         << "File is opened -> "<< theAdrgHeader->imageFile()<<std::endl;
+         << "File is opened -> "<< m_AdrgHeader->imageFile()<<std::endl;
    }
 
    // allow the base handler to check for other overrides
    completeOpen();
    // Allocate memory.
-   theTile      = ossimImageDataFactory::instance()->create(this, this);
-   theTile->initialize();
-   theTileBuffer  = new ossim_uint8[ADRG_TILE_SIZE];
+   m_Tile      = ossimImageDataFactory::instance()->create(this, this);
+   m_Tile->initialize();
+   m_TileBuffer  = new ossim_uint8[ADRG_TILE_SIZE];
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nminLon:   " << theAdrgHeader->minLon()
-         << "\nminLond:  " << theAdrgHeader->minLongitude() 
-         << "\nminLat:   " << theAdrgHeader->minLat()
-         << "\nminLatd:  " << theAdrgHeader->minLatitude()
-         << "\nmaxLon:   " << theAdrgHeader->maxLon()
-         << "\nmaxLond:  " << theAdrgHeader->maxLongitude()
-         << "\nmaxLat:   " << theAdrgHeader->maxLat()
-         << "\nmaxLatd:  " << theAdrgHeader->maxLatitude()
+         << "\nminLon:   " << m_AdrgHeader->minLon()
+         << "\nminLond:  " << m_AdrgHeader->minLongitude() 
+         << "\nminLat:   " << m_AdrgHeader->minLat()
+         << "\nminLatd:  " << m_AdrgHeader->minLatitude()
+         << "\nmaxLon:   " << m_AdrgHeader->maxLon()
+         << "\nmaxLond:  " << m_AdrgHeader->maxLongitude()
+         << "\nmaxLat:   " << m_AdrgHeader->maxLat()
+         << "\nmaxLatd:  " << m_AdrgHeader->maxLatitude()
          << std::endl;
    }
    
@@ -372,21 +395,23 @@ bool ossimAdrgTileSource::loadState(const ossimKeywordlist& kwl,
 //*******************************************************************
 // Public method:
 //*******************************************************************
-bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                           const char* prefix)
+ossimImageGeometry*  ossimAdrgTileSource::getImageGeometry()
 {
-   if(ossimImageSource::getImageGeometry(kwl, prefix))
+   ossimImageHandler::getImageGeometry();
+   if(!theGeometry.valid())
    {
-      return true;
+      theGeometry = new ossimImageGeometry;
    }
+   if (theGeometry->hasProjection())
+      return theGeometry.get();
 
    // origin of latitude
-   ossim_float64 originLatitude = (theAdrgHeader->maxLatitude() +
-                                   theAdrgHeader->minLatitude()) / 2.0;
+   ossim_float64 originLatitude = (m_AdrgHeader->maxLatitude() +
+                                   m_AdrgHeader->minLatitude()) / 2.0;
    
    // central meridian.
-   ossim_float64 centralMeridian = (theAdrgHeader->maxLongitude() +
-                                    theAdrgHeader->minLongitude()) / 2.0;
+   ossim_float64 centralMeridian = (m_AdrgHeader->maxLongitude() +
+                                    m_AdrgHeader->minLongitude()) / 2.0;
 
    //---
    // Compute the pixel size in latitude and longitude direction.  This will
@@ -394,18 +419,18 @@ bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
    //---
    
    // Samples in full image (used to compute degPerPixelX).
-   ossim_float64 samples = theAdrgHeader->samples();
+   ossim_float64 samples = m_AdrgHeader->samples();
    
    // Lines in full image (used to compute degPerPixelX).
-   ossim_float64 lines = theAdrgHeader->lines();
+   ossim_float64 lines = m_AdrgHeader->lines();
 
    // Degrees in latitude direction of the full image.
-   ossim_float64 degrees_in_lat_dir = theAdrgHeader->maxLatitude() -
-      theAdrgHeader->minLatitude();
+   ossim_float64 degrees_in_lat_dir = m_AdrgHeader->maxLatitude() -
+      m_AdrgHeader->minLatitude();
 
    // Degrees in longitude direction of the full image.
-   ossim_float64 degrees_in_lon_dir = theAdrgHeader->maxLongitude() -
-      theAdrgHeader->minLongitude();
+   ossim_float64 degrees_in_lon_dir = m_AdrgHeader->maxLongitude() -
+      m_AdrgHeader->minLongitude();
    
    ossim_float64 degPerPixelY = degrees_in_lat_dir / lines;
    ossim_float64 degPerPixelX = degrees_in_lon_dir / samples;
@@ -420,19 +445,21 @@ bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
    //---
 
    // OLD:
-   //    double ul_lat = (theAdrgHeader->maxLatitude() + 
-   //                     theAdrgHeader->startRow()*degPerPixelY) - (degPerPixelY*.5);
-   //    double ul_lon = (theAdrgHeader->minLongitude() -
-   //                     theAdrgHeader->startCol()*degPerPixelX) +  (degPerPixelX*.5); 
+   //    double ul_lat = (m_AdrgHeader->maxLatitude() + 
+   //                     m_AdrgHeader->startRow()*degPerPixelY) - (degPerPixelY*.5);
+   //    double ul_lon = (m_AdrgHeader->minLongitude() -
+   //                     m_AdrgHeader->startCol()*degPerPixelX) +  (degPerPixelX*.5); 
    
-   ossim_float64 ul_lat = (theAdrgHeader->maxLatitude() - 
-                    ( (theAdrgHeader->startRow() - 1) *
+   ossim_float64 ul_lat = (m_AdrgHeader->maxLatitude() - 
+                    ( (m_AdrgHeader->startRow() - 1) *
                       degPerPixelY ) - ( degPerPixelY * 0.5 ) );
-   ossim_float64 ul_lon = (theAdrgHeader->minLongitude() +
-                    ( (theAdrgHeader->startCol() -1) *
+   ossim_float64 ul_lon = (m_AdrgHeader->minLongitude() +
+                    ( (m_AdrgHeader->startCol() -1) *
                       degPerPixelX ) +  ( degPerPixelX * 0.5 ) );
    
    // projection type
+   ossimKeywordlist kwl;
+   const char* prefix = 0;
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
            "ossimEquDistCylProjection",
@@ -516,27 +543,29 @@ bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nminLon:             " << theAdrgHeader->minLon()
-         << "\nminLond:            " << theAdrgHeader->minLongitude() 
-         << "\nminLat:             " << theAdrgHeader->minLat()
-         << "\nminLatd:            " << theAdrgHeader->minLatitude()
-         << "\nmaxLon:             " << theAdrgHeader->maxLon()
-         << "\nmaxLond:            " << theAdrgHeader->maxLongitude()
-         << "\nmaxLat:             " << theAdrgHeader->maxLat()
-         << "\nmaxLatd:            " << theAdrgHeader->maxLatitude()
-         << "\nstartRow:           " << theAdrgHeader->startRow()
-         << "\nstartCol:           " << theAdrgHeader->startCol()
-         << "\nstopRow:            " << theAdrgHeader->stopRow()
-         << "\nstopCol:            " << theAdrgHeader->stopCol()
+         << "\nminLon:             " << m_AdrgHeader->minLon()
+         << "\nminLond:            " << m_AdrgHeader->minLongitude() 
+         << "\nminLat:             " << m_AdrgHeader->minLat()
+         << "\nminLatd:            " << m_AdrgHeader->minLatitude()
+         << "\nmaxLon:             " << m_AdrgHeader->maxLon()
+         << "\nmaxLond:            " << m_AdrgHeader->maxLongitude()
+         << "\nmaxLat:             " << m_AdrgHeader->maxLat()
+         << "\nmaxLatd:            " << m_AdrgHeader->maxLatitude()
+         << "\nstartRow:           " << m_AdrgHeader->startRow()
+         << "\nstartCol:           " << m_AdrgHeader->startCol()
+         << "\nstopRow:            " << m_AdrgHeader->stopRow()
+         << "\nstopCol:            " << m_AdrgHeader->stopCol()
          << "\nfull image lines:   " << lines
          << "\nfull image samples: " << samples
          << "\nkwl:\n"               << kwl
          << std::endl;
    }
 
-   setImageGeometry(kwl);
+   ossimProjection* new_proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+   theGeometry = new ossimImageGeometry;
+   theGeometry->setProjection(new_proj);  // assumes management of projection instance
 
-   return true;
+   return theGeometry.get();
 }
 
 //*******************************************************************
@@ -552,7 +581,7 @@ ossimScalarType ossimAdrgTileSource::getOutputScalarType() const
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getTileWidth() const
 {
-   return ( theTile.valid() ? theTile->getWidth() : 0 );
+   return ( m_Tile.valid() ? m_Tile->getWidth() : 0 );
 }
 
 //*******************************************************************
@@ -560,7 +589,7 @@ ossim_uint32 ossimAdrgTileSource::getTileWidth() const
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getTileHeight() const
 {
-   return ( theTile.valid() ? theTile->getHeight() : 0 );
+   return ( m_Tile.valid() ? m_Tile->getHeight() : 0 );
 }
 
 //*******************************************************************
@@ -568,11 +597,11 @@ ossim_uint32 ossimAdrgTileSource::getTileHeight() const
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getNumberOfLines(ossim_uint32 reduced_res_level) const
 {
-   if ( (reduced_res_level == 0) && theAdrgHeader )
+   if ( (reduced_res_level == 0) && m_AdrgHeader )
    {
-      return (theAdrgHeader->stopRow() - theAdrgHeader->startRow()) + 1;
+      return (m_AdrgHeader->stopRow() - m_AdrgHeader->startRow()) + 1;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -585,11 +614,11 @@ ossim_uint32 ossimAdrgTileSource::getNumberOfLines(ossim_uint32 reduced_res_leve
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getNumberOfSamples(ossim_uint32 reduced_res_level) const
 {
-   if ( (reduced_res_level == 0) && theAdrgHeader )
+   if ( (reduced_res_level == 0) && m_AdrgHeader )
    {
-      return (theAdrgHeader->stopCol() - theAdrgHeader->startCol()) + 1;
+      return (m_AdrgHeader->stopCol() - m_AdrgHeader->startCol()) + 1;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }
@@ -633,19 +662,19 @@ ossimString ossimAdrgTileSource::getLongName()const
    return ossimString("adrg reader");
 }
 
-ossimString ossimAdrgTileSource::className()const
+ossimString ossimAdrgTileSource::getClassName()const
 {
    return ossimString("ossimAdrgTileSource");
 }
 
 ossim_uint32 ossimAdrgTileSource::getNumberOfInputBands() const
 {
-   return theAdrgHeader->numberOfBands();
+   return m_AdrgHeader->numberOfBands();
 }
 
 bool ossimAdrgTileSource::isOpen()const
 {
-   return (theAdrgHeader!=0);
+   return (m_AdrgHeader!=0);
 }
 
 void ossimAdrgTileSource::adjustToStartOfTile(ossimIpt& pt) const

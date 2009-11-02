@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceFilter.h 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimImageSourceFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageSourceFilter_HEADER
 #define ossimImageSourceFilter_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -25,7 +25,6 @@ public:
    ossimImageSourceFilter(ossimImageSource* inputSource);
    ossimImageSourceFilter(ossimObject* owner,
                           ossimImageSource* inputSource);
-   virtual ~ossimImageSourceFilter();
 
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
    virtual void getDecimationFactor(ossim_uint32 resLevel,
@@ -108,6 +107,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 protected:
+   virtual ~ossimImageSourceFilter();
    ossimImageSource* theInputConnection;
 TYPE_DATA
 };

@@ -16,6 +16,7 @@
 #ifndef ossimElevCellHandlerFactory_HEADER
 #define ossimElevCellHandlerFactory_HEADER
 
+#include <list>
 #include <ossim/base/ossimFactoryBaseTemplate.h>
 
 class ossimElevCellHandler;
@@ -36,7 +37,7 @@ class ossimElevCellHandlerFactory :
    virtual ossimElevCellHandler* create(const ossimKeywordlist& kwl,
                                         const char* prefix) const;
    
-   virtual list<ossimString> getList() const;
+   virtual std::list<ossimString> getList() const;
    
  protected:
    ossimElevCellHandlerFactory();

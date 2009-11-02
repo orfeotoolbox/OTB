@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfLocalGeographicTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfLocalGeographicTag.cpp 14713 2009-06-13 16:58:31Z dburken $
 #include <ossim/support_data/ossimNitfLocalGeographicTag.h>
 #include <iomanip>
 #include <sstream>
@@ -63,7 +63,7 @@ void ossimNitfLocalGeographicTag::clearFields()
    theLonDensity[9] = '\0';
    theLatDensity[9] = '\0';
    theLonOrigin[15] = '\0';
-   theLatOrigin[15] = '\0';
+   theLatOrigin[14] = '\0';
 }
 
 void ossimNitfLocalGeographicTag::setDegreesPerPixelLat(double deltaLat)

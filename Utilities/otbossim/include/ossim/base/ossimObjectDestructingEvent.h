@@ -4,7 +4,8 @@
 #include <ossim/base/ossimEvent.h>
 #include <ossim/base/ossimEventIds.h>
 
-class OSSIMDLLEXPORT ossimObject;
+class ossimObject;
+
 class OSSIMDLLEXPORT ossimObjectDestructingEvent : public ossimEvent
 {
 public:

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyLineObject.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyLineObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationMultiPolyLineObject_HEADER
 #define ossimGeoAnnotationMultiPolyLineObject_HEADER
 
@@ -31,23 +31,8 @@ public:
    ossimGeoAnnotationMultiPolyLineObject(const ossimGeoAnnotationMultiPolyLineObject& rhs);
    virtual ossimObject* dup()const;
 
-   virtual ~ossimGeoAnnotationMultiPolyLineObject();
-   virtual void transform(ossimProjection* projection);
+   virtual void transform(ossimImageGeometry* projection);
 
-   /**
-    * @brief Transforms from geographic to image space for a
-    * reduced resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);
-   
    virtual void applyScale(double x, double y);
    virtual void draw(ossimRgbImage& anImage)const;
    virtual bool intersects(const ossimDrect& rect)const;
@@ -92,10 +77,12 @@ public:
                           const char* prefix=0);
    
 protected:
+   virtual ~ossimGeoAnnotationMultiPolyLineObject();
+   
    std::vector<ossimPolyLine>          theMultiPolyLine;
    ossimDrect                          theBoundingRect;
    const ossimDatum*                   theDatum;
-   ossimAnnotationMultiPolyLineObject* theProjectedPolyLineObject;
+   ossimRefPtr<ossimAnnotationMultiPolyLineObject> theProjectedPolyLineObject;
    
    void allocateProjectedPolyLine();
 

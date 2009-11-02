@@ -8,7 +8,7 @@
 // ossimConnectableObject since all source's should be connectable
 //
 //*************************************************************************
-// $Id: ossimSource.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimSource.h 15798 2009-10-23 19:15:20Z gpotts $
 
 #ifndef ossimSource_HEADER
 #define ossimSource_HEADER
@@ -17,7 +17,7 @@
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimConstants.h>
 
-class OSSIMDLLEXPORT ossimDataObject;
+class ossimDataObject;
 
 class OSSIMDLLEXPORT ossimSource : public ossimConnectableObject,
 				   public ossimErrorStatusInterface
@@ -29,9 +29,8 @@ public:
                ossim_uint32 outputListSize,
                bool inputListIsFixedFlag=true,
                bool outputListIsFixedFlag=true);
-   
    virtual ~ossimSource();
-
+   
    virtual bool isSourceEnabled()const;
    virtual void enableSource();
    virtual void disableSource();

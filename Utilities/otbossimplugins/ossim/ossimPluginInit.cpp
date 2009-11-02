@@ -73,7 +73,7 @@ extern "C"
 
       /** Register the projection factory. */
       ossimProjectionFactoryRegistry::instance()->
-         registerFactory(ossimPluginProjectionFactory::instance(), true);
+         registerFactory(ossimPluginProjectionFactory::instance());
 
      setDescription(theDescription);
   }

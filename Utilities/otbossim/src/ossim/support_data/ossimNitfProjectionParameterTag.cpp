@@ -1,21 +1,20 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
+// License:  LGPL
 //
-// see top level LICENSE.txt
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfProjectionParameterTag.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <sstream>
 #include <iomanip>
 
 ossimNitfProjectionParameterTag::ossimNitfProjectionParameterTag()
-      :ossimNitfRegisteredTag()
+:ossimNitfRegisteredTag()
 {
    clearFields();
 }
@@ -79,8 +78,32 @@ ossim_uint32 ossimNitfProjectionParameterTag::getSizeInBytes()const
    return (113 + theProjectionParameters.size()*15);
 }
 
-std::ostream& ossimNitfProjectionParameterTag::print(std::ostream& out)const
+std::ostream& ossimNitfProjectionParameterTag::print(
+   std::ostream& out, const std::string& prefix) const
 {
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:" << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"   << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "PRN:"   << theProjectionName << "\n"
+       << pfx << std::setw(24) << "PCO:"   << theProjectionCode << "\n"
+       << pfx << std::setw(24) << "NUM_PRJ:" << theNumberOfParameters << "\n";
+
+   for (ossim_uint32 i = 0; i < theProjectionParameters.size(); ++i)
+   {
+      ossimString s = "PRJ";
+      s += ossimString::toString(i);
+      s += ":";
+      out << pfx << std::setw(24) << s
+          << theProjectionParameters[i] << "\n";
+   }
+
+   out << pfx << std::setw(24) << "XOR:"   <<theFalseXOrigin << "\n"
+       << pfx << std::setw(24) << "YOR:"   <<theFalseYOrigin << std::endl;
+   
    return out;   
 }
     

@@ -28,7 +28,7 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 14075 2009-03-08 22:56:29Z gpotts $
+// $Id: ossimHistogramRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
@@ -52,8 +52,6 @@ public:
    /** default constructor */
    ossimHistogramRemapper();
 
-   /** virtual destructor */
-   virtual ~ossimHistogramRemapper();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
@@ -457,7 +455,19 @@ public:
    virtual ostream& print(ostream& os) const;
 
    friend ostream& operator <<(ostream& os, const ossimHistogramRemapper& hr);
+   /**
+    * Returns the min pixel of the band.
+    */
+   virtual double getMinPixelValue(ossim_uint32 band=0)const;
    
+   /**
+    * Returns the max pixel of the band.
+    */
+   virtual double getMaxPixelValue(ossim_uint32 band=0)const;
+protected:
+   /** virtual destructor */
+   virtual ~ossimHistogramRemapper();
+
 private:
    // Do not allow copy constructor, operator=.
    ossimHistogramRemapper(const ossimHistogramRemapper& hr);

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectableContainer.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <algorithm>
 #include <stack>
@@ -95,8 +95,8 @@ ossimConnectableContainer::~ossimConnectableContainer()
    if(theChildListener)
    {
       delete theChildListener;
-      theChildListener = NULL;
    }
+   theChildListener = 0;
 }
 
 ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const RTTItypeid& typeInfo,
@@ -110,7 +110,7 @@ ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const R
    {
       if(((*current).second)->canCastTo(typeInfo))
       {
-         return (*current).second;
+         return (*current).second.get();
       }
       ++current;
    }
@@ -120,7 +120,7 @@ ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const R
       current = theObjectMap.begin();
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
@@ -148,7 +148,7 @@ ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const o
    {
       if( ((*current).second)->canCastTo(className) )
       {
-         return (*current).second;
+         return (*current).second.get();
       }
       ++current;
    }
@@ -158,7 +158,7 @@ ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const o
       current = theObjectMap.begin();
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
@@ -175,10 +175,10 @@ ossimConnectableObject* ossimConnectableContainer::findFirstObjectOfType(const o
    return result;
 }
 
-std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOfType(const RTTItypeid& typeInfo,
+ossimConnectableObject::ConnectableObjectList ossimConnectableContainer::findAllObjectsOfType(const RTTItypeid& typeInfo,
                                                                                      bool recurse)
 {
-   std::vector<ossimConnectableObject*> result;
+   ossimConnectableObject::ConnectableObjectList result;
 
    connectablObjectMapType::iterator current;
 
@@ -187,7 +187,7 @@ std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOf
    {
       if(((*current).second)->canCastTo(typeInfo))
       {
-         result.push_back( (*current).second);
+         result.push_back( (*current).second.get());
       }
       ++current;
    }
@@ -197,11 +197,11 @@ std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOf
       current = theObjectMap.begin();
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
-            std::vector<ossimConnectableObject*> temp;
+            ConnectableObjectList temp;
             temp = child->findAllObjectsOfType(typeInfo, recurse);
             for(long index=0; index < (long)temp.size();++index)
             {
@@ -214,10 +214,10 @@ std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOf
    return result;
 }
 
-std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOfType(const ossimString& className,
+ossimConnectableObject::ConnectableObjectList ossimConnectableContainer::findAllObjectsOfType(const ossimString& className,
                                                                                      bool recurse)
 {
-   std::vector<ossimConnectableObject*> result;
+   ossimConnectableObject::ConnectableObjectList result;
 
    connectablObjectMapType::iterator current;
 
@@ -226,7 +226,7 @@ std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOf
    {
       if(((*current).second)->canCastTo(className))
       {
-         result.push_back( (*current).second);
+         result.push_back( (*current).second.get());
       }
       ++current;
    }
@@ -236,11 +236,11 @@ std::vector<ossimConnectableObject*> ossimConnectableContainer::findAllObjectsOf
       current = theObjectMap.begin();
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
-            std::vector<ossimConnectableObject*> temp;
+            ossimConnectableObject::ConnectableObjectList temp;
             temp = child->findAllObjectsOfType(className, true);
             for(long index=0; index < (long)temp.size();++index)
             {
@@ -262,9 +262,9 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimId& id,
 
    while(current != theObjectMap.end())
    {
-      if((*current).second && ((*current).second->getId()==id))
+      if((*current).second.valid() && ((*current).second->getId()==id))
       {
-         return (*current).second;
+         return (*current).second.get();
       }
       ++current;
    }
@@ -275,7 +275,7 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimId& id,
 
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
@@ -298,9 +298,9 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimConnect
 
    while(current != theObjectMap.end())
    {
-      if((*current).second && ((*current).second==obj))
+      if((*current).second.valid() && ((*current).second==obj))
       {
-         return (*current).second;
+         return (*current).second.get();
       }
       ++current;
    }
@@ -311,7 +311,7 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimConnect
 
       while(current != theObjectMap.end())
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
 
          if(child)
          {
@@ -329,7 +329,7 @@ ossimConnectableObject* ossimConnectableContainer::findObject(const ossimConnect
 void ossimConnectableContainer::makeUniqueIds()
 {
    connectablObjectMapType::iterator current;
-   std::vector<ossimConnectableObject*> objectList;
+   std::vector<ossimConnectableObject* > objectList;
 
 
    current = theObjectMap.begin();
@@ -337,7 +337,7 @@ void ossimConnectableContainer::makeUniqueIds()
    setId(ossimIdManager::instance()->generateId());
    while(current != theObjectMap.end())
    {
-      objectList.push_back((*current).second);
+      objectList.push_back((*current).second.get());
       ++current;
    }
    theObjectMap.clear();
@@ -375,7 +375,7 @@ ossim_uint32 ossimConnectableContainer::getNumberOfObjects(bool recurse)const
 
       if(recurse)
       {
-         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second);
+         ossimConnectableContainerInterface* child=PTR_CAST(ossimConnectableContainerInterface, (*current).second.get());
          if(child)
          {
             result += child->getNumberOfObjects(true);
@@ -396,7 +396,6 @@ bool ossimConnectableContainer::addChild(ossimConnectableObject* object)
       {
          object->changeOwner(this);
          theObjectMap.insert(std::make_pair(object->getId().getId(), object));
-//         object->addListener((ossimConnectableObjectListener*)this);
          object->addListener(theChildListener);
       }
 
@@ -415,7 +414,7 @@ bool ossimConnectableContainer::removeChild(ossimConnectableObject* object)
       connectablObjectMapType::iterator childIter = theObjectMap.find(object->getId().getId());
       if(childIter != theObjectMap.end())
       {
-         result = (*childIter).second;
+         result = (*childIter).second.get();
          if(result->getOwner() == this)
          {
             result->changeOwner(NULL);
@@ -459,30 +458,30 @@ bool ossimConnectableContainer::saveState(ossimKeywordlist& kwl,
 {
    bool result = true;
    connectablObjectMapType::const_iterator current;
-
+   
    ossim_int32 childIndex = 1;
    current = theObjectMap.begin();
    while(current != theObjectMap.end())
    {
-     ossimString newPrefix = ( (ossimString(prefix) +
-				ossimString("object") +
-				ossimString::toString(childIndex) + "."));
-     if((*current).second)
-       {
-	 bool test = ((*current).second)->saveState(kwl, newPrefix);
-	 if(!test)
-	   {
-	     result = false;
-	   }
-       }
-     ++childIndex;
-     ++current;
+      ossimString newPrefix = ( (ossimString(prefix) +
+                                 ossimString("object") +
+                                 ossimString::toString(childIndex) + "."));
+      if((*current).second.valid())
+      {
+         bool test = ((*current).second)->saveState(kwl, newPrefix);
+         if(!test)
+         {
+            result = false;
+         }
+      }
+      ++childIndex;
+      ++current;
    }
    if(result)
    {
       result = ossimConnectableObject::saveState(kwl, prefix);
    }
-
+   
    return result;
 }
 
@@ -495,7 +494,7 @@ void ossimConnectableContainer::getChildren(std::vector<ossimConnectableObject*>
 
    while(current != theObjectMap.end())
    {
-      temp.push_back((*current).second);
+      temp.push_back((*current).second.get());
    }
    ossim_uint32 i;
    for(i = 0; i < temp.size();++i)
@@ -504,7 +503,7 @@ void ossimConnectableContainer::getChildren(std::vector<ossimConnectableObject*>
       if(!immediateChildrenOnlyFlag)
       {
          ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                             (*current).second);
+                                                             (*current).second.get());
          if(!inter)
          {
             children.push_back(temp[i]);
@@ -521,7 +520,7 @@ void ossimConnectableContainer::getChildren(std::vector<ossimConnectableObject*>
       for(i = 0; i < temp.size(); ++i)
       {
          ossimConnectableContainerInterface* inter = PTR_CAST(ossimConnectableContainerInterface,
-                                                             (*current).second);
+                                                             (*current).second.get());
 
          if(inter)
          {
@@ -542,18 +541,14 @@ void ossimConnectableContainer::deleteAllChildren()
    while(theObjectMap.size())
    {
       current = theObjectMap.begin();
-      temp = (*current).second;
+      temp = (*current).second.get();
       if(temp)
       {
-//         temp->removeListener((ossimConnectableObjectListener*) this);
          temp->removeListener(theChildListener);
+         temp->disconnect();
          (*current).second = NULL;
       }
       theObjectMap.erase(current);
-      if(temp)
-      {
-         delete temp;
-      }
    }
 }
 
@@ -565,7 +560,7 @@ void ossimConnectableContainer::removeAllListeners()
 
    while(current != theObjectMap.end())
    {
-      temp = (*current).second;
+      temp = (*current).second.get();
       if(temp)
       {
          temp->removeListener(theChildListener);
@@ -610,11 +605,11 @@ bool ossimConnectableContainer::addAllObjects(std::map<ossimId,
       {
          ossimNotify(ossimNotifyLevel_DEBUG) << "trying to create source with prefix: " << newPrefix << "\n";
       }
-      ossimObject* object = ossimObjectFactoryRegistry::instance()->createObject(kwl,
+      ossimRefPtr<ossimObject> object = ossimObjectFactoryRegistry::instance()->createObject(kwl,
                                                                                  newPrefix.c_str());
-      if(object)
+      if(object.valid())
       {
-         ossimConnectableObject* connectable = PTR_CAST(ossimConnectableObject, object);
+         ossimConnectableObject* connectable = PTR_CAST(ossimConnectableObject, object.get());
          if(connectable)
          {
             if(traceDebug())
@@ -634,11 +629,6 @@ bool ossimConnectableContainer::addAllObjects(std::map<ossimId,
                idMapping.insert(std::make_pair(id, inputConnectionIds));
             }
             addChild(connectable);
-         }
-         else
-         {
-            delete object;
-            object = NULL;
          }
       }
    }
@@ -738,7 +728,7 @@ ossimConnectableObject* ossimConnectableContainer::getConnectableObject(
    {
       if (i == index)
       {
-         return (*current).second;
+         return (*current).second.get();
       }
       ++current;
       ++i;

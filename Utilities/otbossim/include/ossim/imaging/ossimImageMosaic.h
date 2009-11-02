@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageMosaic.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageMosaic.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageMosaic_HEADER
 #define ossimImageMosaic_HEADER
 #include <vector>
@@ -27,8 +27,7 @@ class OSSIMDLLEXPORT ossimImageMosaic : public ossimImageCombiner
 {
 public:
    ossimImageMosaic();
-   ossimImageMosaic(const std::vector<ossimImageSource*>& inputSources);
-   virtual ~ossimImageMosaic();
+   ossimImageMosaic(ossimConnectableObject::ConnectableObjectList& inputSources);
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -50,6 +49,7 @@ public:
                           const char* prefix=0);
 
 protected:
+   virtual ~ossimImageMosaic();
 
    /**
     * Called on first getTile, will initialize all data needed.

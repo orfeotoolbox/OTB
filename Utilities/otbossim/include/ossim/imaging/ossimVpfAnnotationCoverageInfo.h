@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 // 
 //**************************************************************************
-// $Id: ossimVpfAnnotationCoverageInfo.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfAnnotationCoverageInfo.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimVpfAnnotationCoverageInfo_HEADER
 #define ossimVpfAnnotationCoverageInfo_HEADER
 #include <ossim/imaging/ossimVpfAnnotationFeatureInfo.h>
@@ -33,7 +33,7 @@ public:
   void getEnabledFeatures(std::vector<ossimVpfAnnotationFeatureInfo*>& result);
   void getAllFeatures(std::vector<ossimVpfAnnotationFeatureInfo*>& result);
 
-  void transform(ossimProjection* proj);
+  void transform(ossimImageGeometry* geom);
   ossimIrect getBoundingProjectedRect()const;
   void buildCoverage();
   void buildCoverage(const ossimString& feature);

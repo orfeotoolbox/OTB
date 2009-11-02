@@ -14,17 +14,16 @@ static ossimTrace traceDebug("ossimVpfAnnotationSource:debug");
 ossimVpfAnnotationSource::ossimVpfAnnotationSource()
    :ossimGeoAnnotationSource()
 {
-  if(!theProjection)
-    {
-      theProjection = new ossimEquDistCylProjection;
-      theOwnsProjectionFlag = true;
-    }
-   ossimMapProjection* mapProj = (ossimMapProjection*) theProjection;
+  if(!m_geometry)
+  {
+     m_geometry = new ossimImageGeometry(0, new ossimEquDistCylProjection);
+  }
+   ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(m_geometry->getProjection());
 
    if(mapProj)
-     {
-       mapProj->setMetersPerPixel(ossimDpt(30, 30));
-     }
+   {
+      mapProj->setMetersPerPixel(ossimDpt(30, 30));
+   }
 }
 
 ossimVpfAnnotationSource::~ossimVpfAnnotationSource()
@@ -90,23 +89,23 @@ ossimFilename ossimVpfAnnotationSource::getFilename()const
    return theFilename;
 }
 
-void ossimVpfAnnotationSource::transformObjects(ossimProjection* projection)
+void ossimVpfAnnotationSource::transformObjects(ossimImageGeometry* geom)
 {
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimVpfAnnotationSource::transformObjects DEBUG: entered..." << std::endl;
    }
-   ossimProjection* proj = projection;
+   ossimImageGeometry* tempGeom = geom;
    
-   if(!proj)
+   if(!tempGeom)
    {
-      proj = theProjection;
+      tempGeom = m_geometry.get();
    }
    
-   if(!proj) return;
+   if(!tempGeom) return;
    for(int idx = 0; idx < (int)theLibraryInfo.size(); ++idx)
    {
-      theLibraryInfo[idx]->transform(proj);
+      theLibraryInfo[idx]->transform(tempGeom);
    }
    computeBoundingRect();
    if(traceDebug())

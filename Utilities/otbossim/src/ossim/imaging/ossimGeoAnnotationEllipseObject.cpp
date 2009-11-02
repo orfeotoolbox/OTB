@@ -5,12 +5,11 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationEllipseObject.cpp 13348 2008-07-30 15:33:53Z dburken $
+// $Id: ossimGeoAnnotationEllipseObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 
 #include <ossim/imaging/ossimGeoAnnotationEllipseObject.h>
-#include <ossim/imaging/ossimAnnotationEllipseObject.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimImageProjectionModel.h>
 #include <ossim/base/ossimException.h>
@@ -47,7 +46,7 @@ ossimGeoAnnotationEllipseObject::ossimGeoAnnotationEllipseObject(
 ossimGeoAnnotationEllipseObject::ossimGeoAnnotationEllipseObject(
    const ossimGeoAnnotationEllipseObject& rhs)
    :ossimGeoAnnotationObject(rhs),
-    theProjectedEllipse(rhs.theProjectedEllipse?(ossimAnnotationEllipseObject*)rhs.theProjectedEllipse->dup():(ossimAnnotationEllipseObject*)0),
+    theProjectedEllipse(rhs.theProjectedEllipse.valid()?(ossimAnnotationEllipseObject*)rhs.theProjectedEllipse->dup():(ossimAnnotationEllipseObject*)0),
     theCenter(rhs.theCenter),
     theWidthHeight(rhs.theWidthHeight),
     theEllipseWidthHeightUnitType(rhs.theEllipseWidthHeightUnitType)
@@ -56,9 +55,8 @@ ossimGeoAnnotationEllipseObject::ossimGeoAnnotationEllipseObject(
 
 ossimGeoAnnotationEllipseObject::~ossimGeoAnnotationEllipseObject()
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
-      delete theProjectedEllipse;
       theProjectedEllipse = 0;
    }
 }
@@ -71,7 +69,7 @@ ossimObject* ossimGeoAnnotationEllipseObject::dup()const
 void ossimGeoAnnotationEllipseObject::applyScale(double x,
                                                  double y)
 {
-   if(theProjectedEllipse) theProjectedEllipse->applyScale(x, y);
+   if(theProjectedEllipse.valid()) theProjectedEllipse->applyScale(x, y);
    theCenter.lond(theCenter.lond()*x);
    theCenter.latd(theCenter.latd()*y);
    theWidthHeight .x *= x;
@@ -89,7 +87,7 @@ std::ostream& ossimGeoAnnotationEllipseObject::print(std::ostream& out)const
 
 void ossimGeoAnnotationEllipseObject::draw(ossimRgbImage& anImage)const
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->draw(anImage);
    }
@@ -97,7 +95,7 @@ void ossimGeoAnnotationEllipseObject::draw(ossimRgbImage& anImage)const
 
 bool ossimGeoAnnotationEllipseObject::intersects(const ossimDrect& rect)const
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->intersects(rect);
    }
@@ -109,7 +107,7 @@ ossimAnnotationObject* ossimGeoAnnotationEllipseObject::getNewClippedObject(cons
 {
    if(intersects(rect))
    {
-      if(theProjectedEllipse)
+      if(theProjectedEllipse.valid())
       {
          return theProjectedEllipse->getNewClippedObject(rect);
       }
@@ -120,7 +118,7 @@ ossimAnnotationObject* ossimGeoAnnotationEllipseObject::getNewClippedObject(cons
 
 void ossimGeoAnnotationEllipseObject::getBoundingRect(ossimDrect& rect)const
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->getBoundingRect(rect);
    }
@@ -132,13 +130,13 @@ void ossimGeoAnnotationEllipseObject::getBoundingRect(ossimDrect& rect)const
 
 void ossimGeoAnnotationEllipseObject::computeBoundingRect()
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->computeBoundingRect();
    }
 }
 
-void ossimGeoAnnotationEllipseObject::transform(ossimProjection* projection)
+void ossimGeoAnnotationEllipseObject::transform(ossimImageGeometry* projection)
 {
    if(!projection)
    {
@@ -150,50 +148,12 @@ void ossimGeoAnnotationEllipseObject::transform(ossimProjection* projection)
    ossimDpt projectedWidthHeight;
 
    // first get the center projected
-   projection->worldToLineSample(theCenter, projectedCenter);
+   projection->worldToLocal(theCenter, projectedCenter);
 
    getWidthHeightInPixels(projectedWidthHeight, projection);
 
    theProjectedEllipse->setCenterWidthHeight(projectedCenter,
                                              projectedWidthHeight);      
-}
-
-void ossimGeoAnnotationEllipseObject::transform(
-   const ossimImageProjectionModel& model,
-   ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-
-      // Ellipse center, height and width in image space.
-      ossimDpt projectedCenter;
-      ossimDpt projectedWidthHeight;
-
-      // first get the center projected
-      projection->worldToLineSample(theCenter, projectedCenter);
-      
-      if (rrds)
-      {
-         // Transform r0 point to new rrds level.
-         try
-         {
-            ossimDpt rnPt;
-            model.r0ToRn(rrds, projectedCenter, rnPt);
-            projectedCenter = rnPt;
-            
-         }
-         catch (const ossimException& e)
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-         }
-      }
-
-      getWidthHeightInPixels(projectedWidthHeight, projection);
-      
-      theProjectedEllipse->setCenterWidthHeight(projectedCenter,
-                                                projectedWidthHeight);
-   }
 }
 
 bool ossimGeoAnnotationEllipseObject::saveState(ossimKeywordlist& kwl,
@@ -292,7 +252,7 @@ void ossimGeoAnnotationEllipseObject::setWidthHeight(const ossimDpt& pt)
 
 void ossimGeoAnnotationEllipseObject::setAzimuth(ossim_float64 azimuth)
 {
-   if (theProjectedEllipse)
+   if (theProjectedEllipse.valid())
    {
       theProjectedEllipse->setAzimuth(azimuth);
    }
@@ -300,7 +260,7 @@ void ossimGeoAnnotationEllipseObject::setAzimuth(ossim_float64 azimuth)
    
 ossim_float64 ossimGeoAnnotationEllipseObject::getAzimuth() const
 {
-   if (theProjectedEllipse)
+   if (theProjectedEllipse.valid())
    {
       return theProjectedEllipse->getAzimuth();
    }
@@ -308,7 +268,7 @@ ossim_float64 ossimGeoAnnotationEllipseObject::getAzimuth() const
 }
 
 void ossimGeoAnnotationEllipseObject::getWidthHeightInPixels(
-   ossimDpt& widthHeight, const ossimProjection* projection) const
+   ossimDpt& widthHeight, const ossimImageGeometry* projection) const
 {
    switch (theEllipseWidthHeightUnitType)
    {
@@ -323,8 +283,8 @@ void ossimGeoAnnotationEllipseObject::getWidthHeightInPixels(
       case OSSIM_MINUTES:
       case OSSIM_SECONDS:
       {
-         ossimGpt origin = projection->origin();
-         ossimDpt gsd = projection->getMetersPerPixel();
+         ossimGpt origin = projection->hasProjection()?projection->getProjection()->origin():ossimGpt();
+         ossimDpt gsd    = projection->getMetersPerPixel();
          
          ossimUnitConversionTool uct(origin,
                                      theWidthHeight.x,
@@ -375,7 +335,7 @@ void ossimGeoAnnotationEllipseObject::setColor(ossim_uint8 r,
                                                ossim_uint8 g,
                                                ossim_uint8 b)
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->setColor(r, g, b);
    }
@@ -384,7 +344,7 @@ void ossimGeoAnnotationEllipseObject::setColor(ossim_uint8 r,
 
 void ossimGeoAnnotationEllipseObject::setThickness(ossim_uint8 thickness)
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->setThickness(thickness);
    }
@@ -392,7 +352,7 @@ void ossimGeoAnnotationEllipseObject::setThickness(ossim_uint8 thickness)
 
 void ossimGeoAnnotationEllipseObject::setFillFlag(bool flag)
 {
-   if(theProjectedEllipse)
+   if(theProjectedEllipse.valid())
    {
       theProjectedEllipse->setFillFlag(flag);
    }
@@ -400,7 +360,7 @@ void ossimGeoAnnotationEllipseObject::setFillFlag(bool flag)
 
 bool ossimGeoAnnotationEllipseObject::getFillFlag() const
 {
-   if (theProjectedEllipse)
+   if (theProjectedEllipse.valid())
    {
       return theProjectedEllipse->getFillFlag();
    }
@@ -409,7 +369,7 @@ bool ossimGeoAnnotationEllipseObject::getFillFlag() const
 
 void ossimGeoAnnotationEllipseObject::setDrawAxesFlag(bool flag)
 {
-   if (theProjectedEllipse)
+   if (theProjectedEllipse.valid())
    {
       theProjectedEllipse->setDrawAxesFlag(flag);
    }
@@ -417,7 +377,7 @@ void ossimGeoAnnotationEllipseObject::setDrawAxesFlag(bool flag)
 
 bool ossimGeoAnnotationEllipseObject::getDrawAxesFlag() const
 {
-   if (theProjectedEllipse)
+   if (theProjectedEllipse.valid())
    {
       return theProjectedEllipse->getDrawAxesFlag();
    }

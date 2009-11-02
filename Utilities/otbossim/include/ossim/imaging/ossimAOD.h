@@ -13,7 +13,7 @@
 // correction.
 //
 //*************************************************************************
-// $Id: ossimAOD.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAOD.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAOD_HEADER
 #define ossimAOD_HEADER
 
@@ -27,7 +27,6 @@ public:
    ossimAOD(ossimImageSource* inputSource);
    ossimAOD(ossimObject* owner, ossimImageSource* inputSource);
 
-   virtual ~ossimAOD();
 
    virtual ossimString getShortName() const;
 
@@ -49,6 +48,7 @@ public:
    static void writeTemplate(ostream& os);
 
 protected:
+   virtual ~ossimAOD();
 
    void allocate();
    

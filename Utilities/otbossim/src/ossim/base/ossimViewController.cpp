@@ -33,12 +33,7 @@ ossimViewController::ossimViewController(ossimObject* owner,
 
 ossimViewController::~ossimViewController()
 {
-   if(theView)
-   {
-      delete theView;
-      theView = NULL;
-      propagateView();
-   }
+   theView = 0;
 }
 
 ossimString ossimViewController::getShortName()const
@@ -70,7 +65,7 @@ bool ossimViewController::propagateView()
    if(inter)
    {
       RTTItypeid typeId = STATIC_TYPE_INFO(ossimViewInterface);
-      vector<ossimConnectableObject*> result = inter->findAllObjectsOfType(typeId,
+      ossimConnectableObject::ConnectableObjectList result = inter->findAllObjectsOfType(typeId,
                                                                            true);
       if(result.size() > 0)
       {
@@ -80,32 +75,20 @@ bool ossimViewController::propagateView()
          //
          for(index = 0; index < result.size(); ++index)
          {
-            ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface, result[index]);
+            ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface, result[index].get());
 
             if(viewInterface)
             {
-               if(theView)
+               if(!viewInterface->setView(theView.get()))
                {
-                  ossimObject* dupObject = theView->dup();
-                  if(!viewInterface->setView(dupObject, true))
-                  {
-                     returnResult = false;
-                     delete dupObject;
-                  }
-               }
-               else
-               {
-                  if(!viewInterface->setView((ossimObject*)NULL, true))
-                  {
-                     returnResult = false;
-                  }
+                  returnResult = false;
                }
             }
          }
 
          for(index = 0; index < result.size(); ++index)
          {
-            ossimPropertyEvent event(result[index]);
+            ossimPropertyEvent event(result[index].get());
             result[index]->fireEvent(event);
             result[index]->propagateEventToOutputs(event);
          }
@@ -117,11 +100,6 @@ bool ossimViewController::propagateView()
 
 bool ossimViewController::setView(ossimObject* object)
 {
-   if(theView&&(theView != object))
-   {
-      delete theView;
-      theView = NULL;
-   }
    theView = object;
 
    return true;
@@ -129,12 +107,12 @@ bool ossimViewController::setView(ossimObject* object)
 
 ossimObject* ossimViewController::getView()
 {
-   return theView;
+   return theView.get();
 }
 
 const ossimObject* ossimViewController::getView()const
 {
-   return theView;
+   return theView.get();
 }
 
 const ossimObject* ossimViewController::findFirstViewOfType(RTTItypeid typeId)const
@@ -144,7 +122,7 @@ const ossimObject* ossimViewController::findFirstViewOfType(RTTItypeid typeId)co
    if(inter)
    {
       RTTItypeid viewInterfaceType = STATIC_TYPE_INFO(ossimViewInterface);
-      vector<ossimConnectableObject*> result = inter->findAllObjectsOfType(viewInterfaceType,
+      ossimConnectableObject::ConnectableObjectList result = inter->findAllObjectsOfType(viewInterfaceType,
                                                                            true);
       if(result.size() > 0)
       {
@@ -153,7 +131,7 @@ const ossimObject* ossimViewController::findFirstViewOfType(RTTItypeid typeId)co
          for(index = 0; index < result.size(); ++index)
          {
 
-            ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface, result[index]);
+            ossimViewInterface* viewInterface = PTR_CAST(ossimViewInterface, result[index].get());
 
             if(viewInterface)
             {

@@ -12,7 +12,7 @@
 //              the intensity source.
 //
 //*************************************************************************
-// $Id: ossimFusionCombiner.h 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimFusionCombiner.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFusionCombiner_HEADER
 #define ossimFusionCombiner_HEADER
 
@@ -23,7 +23,6 @@ class OSSIMDLLEXPORT ossimFusionCombiner : public ossimImageCombiner
 public:
   ossimFusionCombiner();
   ossimFusionCombiner(ossimObject* owner);
-  virtual ~ossimFusionCombiner();   
   virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0) const;
   bool canConnectMyInputTo(ossim_int32 inputIndex,
 			   const ossimConnectableObject* object)const;
@@ -31,6 +30,7 @@ public:
    
   virtual void initialize();
 protected:
+   virtual ~ossimFusionCombiner();   
   ossimRefPtr<ossimImageData> theTile;
   ossimRefPtr<ossimImageData> theNormTile;
   ossimRefPtr<ossimImageData> theNormIntensity;

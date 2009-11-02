@@ -17,9 +17,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU16ImageData.cpp 11721 2007-09-13 13:19:34Z gpotts $
-
-#include <string.h>  // for memset function
+// $Id: ossimU16ImageData.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimU16ImageData.h>
 #include <ossim/base/ossimSource.h>
@@ -36,14 +34,13 @@ ossimU16ImageData::ossimU16ImageData()
    :
       ossimImageData()
 {
+   theScalarType = OSSIM_UINT16;
 }
 
 ossimU16ImageData::ossimU16ImageData(ossimSource* source,
                                      ossim_uint32 bands)
    :
-      ossimImageData(source,
-                     OSSIM_USHORT16,
-                     bands)
+      ossimImageData(source, OSSIM_UINT16, bands)
 {
 }
 
@@ -52,11 +49,7 @@ ossimU16ImageData::ossimU16ImageData(ossimSource* source,
                                      ossim_uint32 width,
                                      ossim_uint32 height)
    :
-      ossimImageData(source,
-                     OSSIM_USHORT16,
-                     bands,
-                     width,
-                     height)
+      ossimImageData(source, OSSIM_UINT16, bands, width, height)
 {
 }
 
@@ -112,31 +105,24 @@ void ossimU16ImageData::getNormalizedFloat(ossim_uint32 offset,
                                            ossim_uint32 bandNumber,
                                            float& result)const
 {
-   // make sure that the types and width and height are good.
-   if( (getDataObjectStatus() == OSSIM_NULL) && isValidBand(bandNumber) )
+   if( (getDataObjectStatus() != OSSIM_NULL) && isValidBand(bandNumber) )
    {
-      return;
+      const ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
+      result =
+         static_cast<float>(theRemapTable.normFromPix(sourceBuf[offset]));
    }
-   
-   const ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
-   result = static_cast<float>(theRemapTable.normFromPix(sourceBuf[offset]));
 }
 
 void ossimU16ImageData::setNormalizedFloat(ossim_uint32 offset,
                                            ossim_uint32 bandNumber,
                                            float inputValue)
 {
-   // make sure that the types and width and height are
-   // good.
-   if((getDataObjectStatus() == OSSIM_NULL)&&
-      (bandNumber < getNumberOfBands()))
+   if( (getDataObjectStatus() != OSSIM_NULL) &&  isValidBand(bandNumber) )
    {
-      return;
+      ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
+      sourceBuf[offset]
+         = static_cast<ossim_uint16>(theRemapTable.pixFromNorm(inputValue));
    }
-
-   ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
-   sourceBuf[offset]
-      = static_cast<ossim_uint16>(theRemapTable.pixFromNorm(inputValue));
 }
 
 void

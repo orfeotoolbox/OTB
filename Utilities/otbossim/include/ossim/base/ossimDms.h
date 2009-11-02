@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.h 12952 2008-06-01 16:23:19Z dburken $
+//  $Id: ossimDms.h 15249 2009-08-25 13:12:11Z gpotts $
 #ifndef ossimDms_HEADER
 #define ossimDms_HEADER
 // #include <iostream>
@@ -78,7 +78,7 @@ public:
     * "45 5 6"  will assume degrees minutes seconds
     * "45"      will assume degrees.
     * "-45"
-    * "4e5W"
+    * "45W"
     *
     * @return true on success, false if unhandled characters are found.
     */

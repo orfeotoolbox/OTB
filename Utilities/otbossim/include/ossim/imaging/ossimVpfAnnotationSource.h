@@ -11,7 +11,6 @@ class ossimVpfAnnotationSource : public ossimGeoAnnotationSource
 {
 public:
    ossimVpfAnnotationSource();
-   virtual ~ossimVpfAnnotationSource();
    virtual bool open();
    virtual bool open(const ossimFilename& file);
    virtual bool isOpen()const;
@@ -20,7 +19,7 @@ public:
    virtual ossimFilename getFilename()const;
   virtual void computeBoundingRect();
 
-   virtual void transformObjects(ossimProjection* projection=0);
+   virtual void transformObjects(ossimImageGeometry* geom=0);
 
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=NULL)const;
@@ -33,6 +32,8 @@ public:
   virtual void setAllFeatures(const std::vector<ossimVpfAnnotationFeatureInfo*>& features);
  
 protected:
+   virtual ~ossimVpfAnnotationSource();
+   
    ossimVpfDatabase theDatabase;
    ossimFilename    theFilename;
    std::vector<ossimVpfAnnotationLibraryInfo*> theLibraryInfo;

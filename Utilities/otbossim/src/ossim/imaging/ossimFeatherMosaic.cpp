@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimFeatherMosaic.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimFeatherMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimFeatherMosaic.h>
 #include <ossim/base/ossimDpt.h>
@@ -30,7 +30,7 @@ ossimFeatherMosaic::ossimFeatherMosaic()
 {
 }
 
-ossimFeatherMosaic::ossimFeatherMosaic(std::vector<ossimImageSource*>& inputSources)
+ossimFeatherMosaic::ossimFeatherMosaic(ossimConnectableObject::ConnectableObjectList& inputSources)
    :ossimImageMosaic(inputSources),
     theInputFeatherInformation(NULL),
     theAlphaSum(NULL),

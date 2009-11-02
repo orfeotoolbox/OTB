@@ -185,3 +185,8 @@ void ossimMemoryImageSource::getDecimationFactor(ossim_uint32 resLevel,
       result.y = result.x;
    }
 }
+
+void ossimMemoryImageSource::getDecimationFactors(std::vector<ossimDpt>& decimations)const
+{
+   decimations.push_back(ossimDpt(1.0,1.0));
+}

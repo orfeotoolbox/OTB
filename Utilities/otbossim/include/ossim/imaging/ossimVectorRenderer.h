@@ -10,7 +10,7 @@
 // the "rasterizeVectorData" data method.
 //               
 //*******************************************************************
-// $Id: ossimVectorRenderer.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimVectorRenderer.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimVectorRenderer_HEADER
 #define ossimVectorRenderer_HEADER
 
@@ -27,7 +27,6 @@ public:
    ossimVectorRenderer();
    ossimVectorRenderer(ossimImageSource* inputSource,
                        ossimImageViewTransform *transform = NULL);
-   virtual ~ossimVectorRenderer();
       
    /**
     * Renders the vector data to a data object.  The area which is
@@ -89,6 +88,7 @@ public:
    virtual ossim_int32 getNumberOfObjects() const;
 
 protected:
+   virtual ~ossimVectorRenderer();
    
    /**
     * Sets the bounding rectangle of current vector data loaded.

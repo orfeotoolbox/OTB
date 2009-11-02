@@ -7,7 +7,7 @@
 // Description: implementation for image mosaic
 //
 //*************************************************************************
-// $Id: ossimImageMosaic.cpp 12745 2008-04-27 03:38:04Z gpotts $
+// $Id: ossimImageMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -25,7 +25,7 @@ ossimImageMosaic::ossimImageMosaic()
 
 }
 
-ossimImageMosaic::ossimImageMosaic(const vector<ossimImageSource*>& inputSources)
+ossimImageMosaic::ossimImageMosaic(ossimConnectableObject::ConnectableObjectList& inputSources)
     : ossimImageCombiner(inputSources),
       theTile(NULL)
 {

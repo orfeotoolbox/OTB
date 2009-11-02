@@ -1,13 +1,15 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
 // Description: Utility class for global nitf methods.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfCommon.h 13619 2008-09-29 19:10:31Z gpotts $
+// $Id: ossimNitfCommon.h 15410 2009-09-11 19:45:38Z dburken $
 #ifndef ossimNitfCommon_HEADER
 #define ossimNitfCommon_HEADER
 
@@ -16,6 +18,7 @@
 #include <iostream>
 
 class ossimDpt;
+class ossimIrect;
 
 /** class ossimNitfCommon for global utility methods */   
 class OSSIM_DLL ossimNitfCommon
@@ -141,6 +144,38 @@ public:
                                                      const ossimDpt& ur,
                                                      const ossimDpt& lr,
                                                      const ossimDpt& ll);
+
+   /**
+    * @brief Get the nitf pixel type string from scalar type.
+    *
+    * @param scalarType The scalar type.
+    *
+    * @return Pixel type as string, e.g.: "INT", "SI", "R"
+    */
+   static ossimString getNitfPixelType(ossimScalarType scalarType);
+
+   /**
+    * @brief Get compression rate (COMRAT) which is bits perpixel per band.
+    *
+    * This corresponds to the nitf image header COMRAT field.  Return is in
+    * the form of Nxyz "N" for numerically lossles, where "xyz"
+    * indicates the expected achieved bit rate (in bits per pixel per band)
+    * for the final layer of each tile. The decimal point is implicit and
+    * assumed to be one digit from the right (i.e. xy.z).
+    * 
+    * @param rect Image rectangles.
+    * @param bands
+    * @param scalar
+    * @param lengthInBytes Compressed length of image pixels.
+    * @return Approximate number of bits per pixel for the compressed image as
+    * a string which follows the nitf comrat field convention.  This will
+    * return an empty string if comrat is bigger than three digits.
+    */
+   static ossimString getCompressionRate(const ossimIrect& rect,
+                                         ossim_uint32 bands,
+                                         ossimScalarType scalar,
+                                         ossim_uint64 lengthInBytes);
+   
    
 }; // End of class ossimNitfCommon.
    

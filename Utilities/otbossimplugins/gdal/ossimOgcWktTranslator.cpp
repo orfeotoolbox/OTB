@@ -15,7 +15,7 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 14589 2009-05-20 23:51:14Z dburken $
+//  $Id: ossimOgcWktTranslator.cpp 14729 2009-06-16 18:14:59Z gpotts $
 
 #include <cstdio>
 #include <gdal.h>
@@ -706,6 +706,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
              << "to be added to the transaltion to OSSIM\n"
              << wkt << endl;
        }
+	  return false;
     }
 
     // extract out the datum

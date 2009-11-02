@@ -6,6 +6,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR: Garrett Potts
+//         Oscar Kramer (oscar@krameranalytic.com)
 //
 // DESCRIPTION: Contains declaration of ossimImageViewProjectionTransform.
 //    This class provides an image to view transform that utilizes two
@@ -15,398 +16,231 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.cpp 13516 2008-08-29 14:54:12Z dburken $
+//  $Id: ossimImageViewProjectionTransform.cpp 15766 2009-10-20 12:37:09Z gpotts $
 //
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
-#include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/projection/ossimEquDistCylProjection.h>
-#include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/base/ossimGeoPolygon.h>
 #include <ossim/base/ossimPolyArea2d.h>
-#include <ossim/base/ossimAdjustableParameterInterface.h>
 
 RTTI_DEF1(ossimImageViewProjectionTransform,
           "ossimImageViewProjectionTransform",
           ossimImageViewTransform);
 
-//***
-// Define Trace flags for use within this file:
-//***
-// #include <ossim/base/ossimTrace.h>
-// static ossimTrace traceExec  ("ossimImageViewProjectionTransform:exec");
-// static ossimTrace traceDebug ("ossimImageViewProjectionTransform:debug");
+//*****************************************************************************
+//  CONSTRUCTOR: ossimImageViewProjectionTransform
+//*****************************************************************************
+ossimImageViewProjectionTransform::ossimImageViewProjectionTransform
+(  ossimImageGeometry* imageGeometry, ossimImageGeometry* viewGeometry)
+:  m_ImageGeometry(imageGeometry),
+   m_ViewGeometry(viewGeometry)
+{
+}
 
 //*****************************************************************************
 //  CONSTRUCTOR: ossimImageViewProjectionTransform
-//  
 //*****************************************************************************
-ossimImageViewProjectionTransform::ossimImageViewProjectionTransform
-(  ossimProjection* imageProjection,
-   ossimProjection* viewProjection,
-   bool ownsImageProjectionFlag,
-   bool ownsViewProjectionFlag)
-   :
-      ossimImageViewTransform(),
-      theImageProjection(imageProjection),
-      theViewProjection(viewProjection),
-      theOwnsImageProjFlag(ownsImageProjectionFlag),
-      theOwnsViewProjFlag(ownsViewProjectionFlag),
-      theSameProjection(false),
-      theInputMapProjectionFlag(false),
-      theOutputMapProjectionFlag(false)
+ossimImageViewProjectionTransform::
+ossimImageViewProjectionTransform(const ossimImageViewProjectionTransform& src)
+: ossimImageViewTransform(src),
+  m_ImageGeometry(src.m_ImageGeometry),
+  m_ViewGeometry(src.m_ViewGeometry)
 {
-   if(!theViewProjection)
-   {
-//      theViewProjection    = new ossimEquDistCylProjection;
-      theOwnsViewProjFlag  = true;
-   }
- 
-   if(!theImageProjection)
-   {
-      theImageProjection   = new ossimEquDistCylProjection;
-      theOwnsImageProjFlag = true;
-   }
 }
-
-ossimImageViewProjectionTransform::ossimImageViewProjectionTransform(
-   const ossimImageViewProjectionTransform& src)
-   : ossimImageViewTransform(src),
-     theImageProjection(0),
-     theViewProjection(0),
-     theOwnsImageProjFlag(src.theOwnsImageProjFlag),
-     theOwnsViewProjFlag(src.theOwnsViewProjFlag),
-     theSameProjection(src.theSameProjection),
-     theInputMapProjectionFlag(src.theInputMapProjectionFlag),
-     theOutputMapProjectionFlag(src.theOutputMapProjectionFlag)
-{
-   if(theOwnsImageProjFlag)
-   {
-      theImageProjection = src.theImageProjection?(ossimProjection*)src.theImageProjection->dup():(ossimProjection*)0;
-   }
-   else
-   {
-      theImageProjection = src.theImageProjection;
-   }
-   if(theOwnsViewProjFlag)
-   {
-      theViewProjection = src.theViewProjection?(ossimProjection*)src.theViewProjection->dup():(ossimProjection*)0;
-   }
-   else
-   {
-      theViewProjection = src.theViewProjection;
-   }
-}
-
 
 //*****************************************************************************
 //  DESTRUCTOR: ~ossimImageViewProjectionTransform
-//  
 //*****************************************************************************
 ossimImageViewProjectionTransform::~ossimImageViewProjectionTransform()
 {
-   if(theImageProjection && theOwnsImageProjFlag)
-   {
-      delete theImageProjection;
-      theImageProjection = 0;
-   }
-   if(theViewProjection && theOwnsViewProjFlag)
-   {
-      delete theViewProjection;
-      theViewProjection = 0;
-   }
 }
 
 //*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::imageToView
-//  
+//  Workhorse of the object. Converts image-space to view-space.
 //*****************************************************************************
-void ossimImageViewProjectionTransform::imageToView
-(   const ossimDpt& imagePoint,
-    ossimDpt&       viewPoint) const
+void ossimImageViewProjectionTransform::imageToView(const ossimDpt& ip, ossimDpt& vp) const
 {
-   if(theImageProjection&&theViewProjection)
-   {
-      ossimGpt gpt;
+    // Check for same geometries on input and output (this includes NULL geoms):
+    if (m_ImageGeometry == m_ViewGeometry)
+    {
+        vp = ip;
+        return;
+    }
 
-//       if(theInputMapProjectionFlag)
-// 	{
-// 	  ((ossimMapProjection*)theImageProjection)->lineSampleToWorldIterate(imagePoint,
-// 									      gpt);
-// 	}
-//       else
-// 	{
-      theImageProjection->lineSampleToWorld(imagePoint, gpt);
-//	}
-      
-      if(gpt.isLatNan()||gpt.isLonNan())
-      {
-         viewPoint.makeNan();
-         return;
-      }
-      theViewProjection->worldToLineSample(gpt, viewPoint);
+    // Otherwise we need access to good geoms. Check for a bad geometry object:
+    if (!m_ImageGeometry || !m_ViewGeometry)
+    {
+        vp.makeNan();
+        return;
+    }
+
+    // Check for same projection on input and output sides to save projection to ground:
+    if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+    {
+        // Check for possible same 2D transforms as well:
+        if (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform())
+        {
+            vp = ip;
+            return;
+        }
+
+        // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
+        ossimDpt fp;
+        m_ImageGeometry->localToFullImage(ip, fp);
+        m_ViewGeometry->fullToLocalImage(fp, vp);
+        return;
+    }
+
+    // Completely different left and right side geoms (typical situation). Need to project to ground
+    ossimGpt gp;
+    m_ImageGeometry->localToWorld(ip, gp);
+    m_ViewGeometry->worldToLocal(gp, vp);
+
 #if 0
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimImageViewProjectionTransform::imageToView:"
-            <<"\n    viewPoint:  "<<viewPoint
-            <<"\n    gpt:        "<<gpt
-            <<"\n    imagePoint: "<<imagePoint<<std::endl;
-         
-      }
+    if (traceDebug())
+    {
+     ossimNotify(ossimNotifyLevel_DEBUG)<<"DEBUG ossimImageViewProjectionTransform::imageToView:"
+        <<"\n    ip: "<<ip
+        <<"\n    gp: "<<gp
+        <<"\n    vp: "<<vp<<std::endl;
+     
+    }
 #endif
-   }
 }
    
 //*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::viewToImage
-//  
+//  Other workhorse of the object. Converts view-space to image-space.
 //*****************************************************************************
-void ossimImageViewProjectionTransform::viewToImage
-(   const ossimDpt& viewPoint,
-    ossimDpt&       imagePoint) const
+void ossimImageViewProjectionTransform::viewToImage(const ossimDpt& vp, ossimDpt& ip) const
 {
-   bool transformed = false;
-   if(theSameProjection)
-   {
-      ossimDpt en;
-      ossimMapProjection* mapIProj = (ossimMapProjection*)theImageProjection;
-      ossimMapProjection* mapVProj = (ossimMapProjection*)theViewProjection;
+    // Check for same geometries on input and output (this includes NULL geoms):
+    if (m_ImageGeometry == m_ViewGeometry)
+    {
+        ip = vp;
+        return;
+    }
 
-      if(mapIProj&&mapVProj)
-      {
-         mapVProj->lineSampleToEastingNorthing(viewPoint, en);
-         mapIProj->eastingNorthingToLineSample(en, imagePoint);
-         return;
-      }
-   }
-   
-   if(!transformed&&theImageProjection&&theViewProjection)
-   {
-      ossimGpt gpt;
-      theViewProjection->lineSampleToWorld(viewPoint, gpt);
-      
-      if(gpt.isLatNan()||gpt.isLonNan())
-      {
-         imagePoint.makeNan();
-         return;
-      }
-      theImageProjection->worldToLineSample(gpt, imagePoint);
-      
+    // Otherwise we need access to good geoms. Check for a bad geometry object:
+    if (!m_ImageGeometry || !m_ViewGeometry)
+    {
+        ip.makeNan();
+        return;
+    }
+
+    // Check for same projection on input and output sides to save projection to ground:
+    if (m_ImageGeometry->getProjection() == m_ViewGeometry->getProjection())
+    {
+        // Check for possible same 2D transforms as well:
+        if (m_ImageGeometry->getTransform() == m_ViewGeometry->getTransform())
+        {
+            ip = vp;
+            return;
+        }
+
+        // Not the same 2D transform, so just perform local-image -> full-image -> local-view:
+        ossimDpt fp;
+        m_ViewGeometry->localToFullImage(vp, fp);
+        m_ImageGeometry->fullToLocalImage(fp, ip);
+        return;
+    }
+
+    // Completely different left and right side geoms (typical situation). Need to project to ground
+    ossimGpt gp;
+    m_ViewGeometry->localToWorld(vp, gp);
+    m_ImageGeometry->worldToLocal(gp, ip);
+
 #if 0
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimImageViewProjectionTransform::viewToImage:"
-            <<"\n    viewPoint:  "<<viewPoint
-            <<"\n    gpt:        "<<gpt
-            <<"\n    imagePoint: "<<imagePoint<<std::endl;
-      }
+    if (traceDebug())
+    {
+        ossimNotify(ossimNotifyLevel_DEBUG)<<"DEBUG ossimImageViewProjectionTransform::viewToImage:"
+            <<"\n    vp: "<<vp
+            <<"\n    gp: "<<gp
+            <<"\n    ip: "<<ip<<std::endl;
+
+    }
 #endif
-//       if(removeError&&!imagePoint.hasNans()&&!viewPoint.hasNans())
-//       {
-//          ossimDpt err;
-         
-// 	 getRoundTripErrorImage(err, ossimIpt(imagePoint));
-//          imagePoint+=err;
-//          if( fabs(imagePoint.x - (int)imagePoint.x) <= FLT_EPSILON)
-//          {
-//             imagePoint.x = (int)imagePoint.x;
-//          }
-//          if( fabs(imagePoint.y - (int)imagePoint.y) <= FLT_EPSILON)
-//          {
-//             imagePoint.y = (int)imagePoint.y;
-//          }
-//       }
-   }
 }
 
 //*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::setViewProjection
-//  
+//! OLK: Not sure where this is used, but needed to satisfy ossimViewInterface base class.
 //*****************************************************************************
-void ossimImageViewProjectionTransform::setViewProjection(ossimProjection* viewProjection, bool ownsViewProjection) 
+bool ossimImageViewProjectionTransform::setView(ossimObject* baseObject)
 {
-   if(theViewProjection &&
-      (theViewProjection!=viewProjection) &&
-      theOwnsViewProjFlag)
+   ossimImageGeometry* g = dynamic_cast<ossimImageGeometry*>(baseObject);
+   if (g)
    {
-      delete theViewProjection;
-      theViewProjection = (ossimProjection*)0;
-   }
-   theOwnsViewProjFlag = ownsViewProjection;
-   theViewProjection   = viewProjection;
-   if(PTR_CAST(ossimMapProjection,
-               theViewProjection))
-   {
-      theOutputMapProjectionFlag = true;
+      m_ViewGeometry = g;
+      return true;
    }
    else
    {
-      theOutputMapProjectionFlag = false;
-   }
-   checkSameProjection();
-}
-
-bool ossimImageViewProjectionTransform::setView(ossimObject* baseObject,
-                                                bool ownsTheView)
-{
-   bool result = true;
-   if(baseObject)
-   {
-      // if not null then we will set it if it is of
-      // our type
-      ossimProjection* proj = PTR_CAST(ossimProjection, baseObject);
-      
+      ossimProjection* proj = dynamic_cast<ossimProjection*>(baseObject);
       if(proj)
       {
-         setViewProjection(proj, ownsTheView);
+         if(m_ViewGeometry.valid())
+         {
+            m_ViewGeometry->setProjection(proj);
+         }
+         else
+         {
+            m_ViewGeometry = new ossimImageGeometry(0, proj);
+         }
       }
-      else
-      {
-         result = false;
-      }
    }
-   else
-   {
-      // if it's null we will just clear the view out
-      setViewProjection((ossimProjection*)0, true);
-   }
-
-   checkSameProjection();
-   return result;
+   return false;
 }
 
 //*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::setImageProjection
-//  
-//*****************************************************************************
-void ossimImageViewProjectionTransform::setImageProjection(ossimProjection* imageProjection, bool ownsImageProjection)
-{
-   if(theImageProjection &&
-      (theImageProjection!=imageProjection) &&
-      theOwnsImageProjFlag)
-   {
-      delete theImageProjection;
-      theImageProjection = (ossimProjection*)0;
-   }
-   theOwnsImageProjFlag = ownsImageProjection;
-   theImageProjection = imageProjection;
-   if(PTR_CAST(ossimMapProjection,
-               theImageProjection))
-   {
-      theInputMapProjectionFlag = true;
-   }
-   else
-   {
-      theInputMapProjectionFlag = false;
-   }
-   
-   checkSameProjection();
-}
-
-//*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::setViewProjection
-//  
-//*****************************************************************************
-void ossimImageViewProjectionTransform::setViewProjection(const ossimProjection& viewProjection)                                                          
-{
-   if(theViewProjection && theOwnsViewProjFlag)
-   {
-      delete theViewProjection;
-      theViewProjection = (ossimProjection*)0;
-   }
-   theViewProjection   = (ossimProjection*)viewProjection.dup();
-   theOwnsViewProjFlag = true;
-   if(PTR_CAST(ossimMapProjection,
-               theViewProjection))
-   {
-      theOutputMapProjectionFlag = true;
-   }
-   else
-   {
-      theOutputMapProjectionFlag = false;
-   }
-   checkSameProjection();
-}
-
-//*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::setImageProjection
-//  
-//*****************************************************************************
-void ossimImageViewProjectionTransform::setImageProjection(const ossimProjection& imageProjection)
-{
-   if(theImageProjection && theOwnsImageProjFlag)
-   {
-      delete theImageProjection;
-   }
-
-   theImageProjection = (ossimProjection*)imageProjection.dup();
-   if(PTR_CAST(ossimMapProjection,
-               theImageProjection))
-   {
-      theInputMapProjectionFlag = true;
-   }
-   theOwnsImageProjFlag = true;
-   checkSameProjection();
-}
-
-//*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::print
+//  Dumps contents to stream
 //*****************************************************************************
 std::ostream& ossimImageViewProjectionTransform::print(std::ostream& out)const
 {
-   if(theImageProjection)
-   {
-      out << "image projection: " << endl;
-      theImageProjection->print(out);
-   }
-   if(theViewProjection)
-   {
-      out << "view projection: " << endl;
-      theViewProjection->print(out);
-   }
-   return out;
+    out << "ossimImageViewProjectionTransform::print: ..... entered " <<endl;
+
+    if(m_ImageGeometry.valid())
+    {
+        out << "  Input Image (LEFT) Geometry: " << endl;
+        m_ImageGeometry->print(out);
+    }
+    else
+    {
+        out << "  None defined." << endl;
+    }
+    if(m_ViewGeometry.valid())
+    {
+        out << "Output View (RIGHT) Geometry: " << endl;
+        m_ViewGeometry->print(out);
+    }
+    else
+    {
+        out << "  None defined." << endl;
+    }
+    return out;
 }
 
-//*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::getImageProjection
-//*****************************************************************************
-ossimProjection* ossimImageViewProjectionTransform::getImageProjection()
-{
-   return theImageProjection;
-}
-
-//*****************************************************************************
-//  METHOD: ossimImageViewProjectionTransform::getViewProjection
-//  
-//*****************************************************************************
-ossimProjection* ossimImageViewProjectionTransform::getViewProjection()
-{
-   return theViewProjection;
-}
-
+//**************************************************************************************************
+// Converts the local image space rect into bounding view-space rect
+//**************************************************************************************************
 ossimDrect ossimImageViewProjectionTransform::getImageToViewBounds(const ossimDrect& imageRect)const
 {
+    // Let base class try:
    ossimDrect result = ossimImageViewTransform::getImageToViewBounds(imageRect);
 
-   if(result.hasNans()&&theImageProjection&&theViewProjection)
+   // If not successful, compute using input and output geometries:
+   if (result.hasNans() && m_ImageGeometry.valid() && m_ViewGeometry.valid() &&
+       m_ImageGeometry->hasProjection() && m_ViewGeometry->hasProjection())
    {
       ossimGeoPolygon viewClip;
-      theViewProjection->getGroundClipPoints(viewClip);
+      m_ViewGeometry->getProjection()->getGroundClipPoints(viewClip);
       if(viewClip.size())
       {
-         std::vector<ossimPolygon> visiblePolygons;
-         
          std::vector<ossimGpt> imageGpts(4);
-         const ossimDatum* viewDatum = theViewProjection->origin().datum();
-         theImageProjection->lineSampleToWorld(imageRect.ul(), imageGpts[0]);
-         theImageProjection->lineSampleToWorld(imageRect.ur(), imageGpts[1]);
-         theImageProjection->lineSampleToWorld(imageRect.lr(), imageGpts[2]);
-         theImageProjection->lineSampleToWorld(imageRect.ll(), imageGpts[3]);
+         m_ImageGeometry->localToWorld(imageRect.ul(), imageGpts[0]);
+         m_ImageGeometry->localToWorld(imageRect.ur(), imageGpts[1]);
+         m_ImageGeometry->localToWorld(imageRect.lr(), imageGpts[2]);
+         m_ImageGeometry->localToWorld(imageRect.ll(), imageGpts[3]);
 
+         const ossimDatum* viewDatum = m_ViewGeometry->getProjection()->origin().datum();
          imageGpts[0].changeDatum(viewDatum);
          imageGpts[1].changeDatum(viewDatum);
          imageGpts[2].changeDatum(viewDatum);
@@ -415,111 +249,71 @@ ossimDrect ossimImageViewProjectionTransform::getImageToViewBounds(const ossimDr
          ossimPolyArea2d viewPolyArea(viewClip.getVertexList());
          ossimPolyArea2d imagePolyArea(imageGpts);
          viewPolyArea &= imagePolyArea;
+         std::vector<ossimPolygon> visiblePolygons;
          viewPolyArea.getVisiblePolygons(visiblePolygons);
          if(visiblePolygons.size())
          {
-            
             std::vector<ossimDpt> vpts;
             ossim_uint32 idx = 0;
             for(idx=0; idx<visiblePolygons[0].getNumberOfVertices();++idx)
             {
                ossimDpt tempPt;
-               ossimGpt gpt(visiblePolygons[0][idx].lat,
-                            visiblePolygons[0][idx].lon,
-                            0.0,
-                            viewDatum);
-               theViewProjection->worldToLineSample(gpt,
-                                                    tempPt);
+               ossimGpt gpt(visiblePolygons[0][idx].lat, visiblePolygons[0][idx].lon, 0.0,  viewDatum);
+               m_ViewGeometry->worldToLocal(gpt, tempPt);
                vpts.push_back(tempPt);
             }
             result = ossimDrect(vpts);
          }
       }
-      
    }
-
    return result;
 }
 
 //*****************************************************************************
 //  METHOD: ossimImageViewProjectionTransform::loadState
-//  
 //*****************************************************************************
 bool ossimImageViewProjectionTransform::loadState(const ossimKeywordlist& kwl,
                                                   const char* prefix)
 {
-   ossimString newPrefix = prefix;
-
-   if(theImageProjection)
-   {
-      delete theImageProjection;
-      theImageProjection = 0;
-   }
-   if(theViewProjection)
-   {
-      delete theViewProjection;
-      theViewProjection = 0;
-   }
-
-   newPrefix = ossimString(prefix) + "view_proj.";
-   theViewProjection
-      = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, newPrefix.c_str());
-
-   theImageProjection
-      = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
-                                                                     (ossimString(prefix)+"image_proj.").c_str());
-   
-   theOwnsImageProjFlag = true;   
-   theOwnsViewProjFlag = true;
-   if(PTR_CAST(ossimMapProjection,
-               theImageProjection))
-   {
-      theInputMapProjectionFlag = true;
-   }
-   else
-   {
-      theInputMapProjectionFlag = false;
-   }
-   if(PTR_CAST(ossimMapProjection,
-               theViewProjection))
-   {
-      theOutputMapProjectionFlag = true;
-   }
-   else
-   {
-      theOutputMapProjectionFlag = false;
-   }
-
    return ossimImageViewTransform::loadState(kwl, prefix);
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 bool ossimImageViewProjectionTransform::saveState(ossimKeywordlist& kwl,
                                                   const char* prefix)const
 {
-   if(theViewProjection)
-   {
-      theViewProjection->saveState(kwl,
-                                   (ossimString(prefix) + "view_proj.").c_str());
-   }
-   ossimAdjustableParameterInterface* adjustablesInterface = PTR_CAST(ossimAdjustableParameterInterface,
-                                                                      theImageProjection);
-   if(adjustablesInterface)
-   {
-      if(adjustablesInterface->hasDirtyAdjustments())
-      {
-         theImageProjection->saveState(kwl,
-                                       (ossimString(prefix) + "image_proj.").c_str());            
-      }
-   }
-   kwl.add(prefix,
-           "type",
-           STATIC_TYPE_NAME(ossimImageViewProjectionTransform),
-           true);
-   
    return ossimImageViewTransform::saveState(kwl, prefix);
 }
 
-void ossimImageViewProjectionTransform::checkSameProjection()
+//**************************************************************************************************
+// Returns the GSD of input image.
+//**************************************************************************************************
+ossimDpt ossimImageViewProjectionTransform::getInputMetersPerPixel() const
 {
-   theSameProjection = false;
+    ossimDpt result;
+
+    if(m_ImageGeometry->hasProjection())
+        result = m_ImageGeometry->getProjection()->getMetersPerPixel();
+    else
+        result.makeNan();
+
+    return result;
 }
+
+//**************************************************************************************************
+// Returns the GSD of the output view.
+//**************************************************************************************************
+ossimDpt ossimImageViewProjectionTransform::getOutputMetersPerPixel() const
+{
+    ossimDpt result;
+
+    if(m_ViewGeometry->hasProjection())
+        result = m_ViewGeometry->getProjection()->getMetersPerPixel();
+    else
+        result.makeNan();
+
+    return result;
+}
+

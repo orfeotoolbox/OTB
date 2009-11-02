@@ -1,12 +1,6 @@
 #ifndef bool_globals_HEADER
 #define bool_globals_HEADER
 
-// Disable the warning when truncating from __int64 to const B_INT
-#ifdef _WIN32
-#pragma warning(disable: 4305)
-#pragma warning(disable: 4309)
-#endif
-
 #include <limits> /* for numeric_limits::min/max */
 #include <string>
 #include <ossim/base/ossimConstants.h>
@@ -145,11 +139,5 @@ class A2DKBOOLDLLEXP Bool_Engine_Error
 		int _degree;
 		int _fatal;
 };
-
-// Re-enable the warning for other files
-#ifdef _WIN32
-#pragma warning(default: 4305)
-#pragma warning(default: 4309)
-#endif
 
 #endif

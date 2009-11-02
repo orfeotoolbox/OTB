@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 14529 2009-05-16 23:55:18Z dburken $
+// $Id: ossimImageData.cpp 15792 2009-10-22 18:03:13Z dburken $
 
 #include <iterator>
 
@@ -77,9 +77,29 @@ ossimImageData::ossimImageData(ossimSource* owner,
    initializeDefaults();
 }
 
-ossimImageData::ossimImageData(const ossimImageData &rhs) : ossimRectilinearDataObject(rhs)
+ossimImageData::ossimImageData(const ossimImageData &rhs)
+   : ossimRectilinearDataObject(rhs),
+     theNullPixelValue(rhs.theNullPixelValue),
+     theMinPixelValue(rhs.theMinPixelValue),
+     theMaxPixelValue(rhs.theMaxPixelValue),
+     theOrigin(rhs.theOrigin)
 {
-   *this = rhs;
+}
+
+const ossimImageData& ossimImageData::operator=(const ossimImageData& rhs)
+{
+   if (this != &rhs)
+   {
+      // ossimRectilinearDataObject initialization:
+      ossimRectilinearDataObject::operator=(rhs);
+      
+      // ossimImageData (this) members:
+      theNullPixelValue = rhs.theNullPixelValue;
+      theMinPixelValue  = rhs.theMinPixelValue;
+      theMaxPixelValue  = rhs.theMaxPixelValue;
+      theOrigin         = rhs.theOrigin;      
+   }
+   return *this;
 }
 
 ossimImageData::~ossimImageData()
@@ -1069,7 +1089,7 @@ ossimDataObjectStatus ossimImageData::validate() const
 template <class T>
 ossimDataObjectStatus ossimImageData::validate(T /* dummyTemplate */ ) const
 {
-   if (getBuf() == 0)
+   if (theDataBuffer.size() == 0)
    {
       setDataObjectStatus(OSSIM_NULL);
       return OSSIM_NULL;
@@ -1172,10 +1192,7 @@ Invalid scalar type:  %d",
 
 template <class T> void ossimImageData::makeBlank(T /* dummyTemplate */ )
 {
-   if ( (getBuf() == 0) || (getDataObjectStatus() == OSSIM_EMPTY) )
-   {
-      return; // nothing to do...
-   }
+   // Note: Empty buffer or already OSSIM_EMPTY checked in public method.
    
    const ossim_uint32 BANDS = getNumberOfBands();
    const ossim_uint32 SPB   = getSizePerBand();
@@ -1912,8 +1929,8 @@ bool ossimImageData::isNull(const ossimIpt& pt)const
 {
    ossim_int32 xNew = (pt.x - theOrigin.x);
    ossim_int32 yNew = (pt.y - theOrigin.y);
-   if(xNew < 0 || xNew >= (int)theSpatialExtents[0] ||
-      yNew < 0 || yNew >= (int)theSpatialExtents[1])
+   if(xNew < 0 || xNew >= static_cast<ossim_int32>(theSpatialExtents[0]) ||
+      yNew < 0 || yNew >= static_cast<ossim_int32>(theSpatialExtents[1]) )
    {
       return true;
    }
@@ -1926,8 +1943,8 @@ bool ossimImageData::isNull(const ossimIpt& pt, ossim_uint32 band)const
 {
    ossim_int32 xNew = (pt.x - theOrigin.x);
    ossim_int32 yNew = (pt.y - theOrigin.y);
-   if(xNew < 0 || xNew >= (int)theSpatialExtents[0] ||
-      yNew < 0 || yNew >= (int)theSpatialExtents[1])
+   if(xNew < 0 || xNew >= static_cast<ossim_int32>(theSpatialExtents[0]) ||
+      yNew < 0 || yNew >= static_cast<ossim_int32>(theSpatialExtents[1]) )
    {
       return true;
    }
@@ -3741,16 +3758,16 @@ bool ossimImageData::isPointWithin(const ossimIpt& point)const
 {
    return ((point.x >= theOrigin.x)&&
            (point.y >= theOrigin.y)&&
-           ((point.x - theOrigin.x)<static_cast<long>(theSpatialExtents[0]))&&
-           ((point.y - theOrigin.y)<static_cast<long>(theSpatialExtents[1])));
+           ((point.x - theOrigin.x)<static_cast<ossim_int32>(theSpatialExtents[0]))&&
+           ((point.y - theOrigin.y)<static_cast<ossim_int32>(theSpatialExtents[1])));
 }
 
 bool ossimImageData::isPointWithin(ossim_int32 x, ossim_int32 y)const
 {
    return ((x >= theOrigin.x)&&
            (y >= theOrigin.y)&&
-           ((x - theOrigin.x) < static_cast<long>(theSpatialExtents[0]))&&
-           ((y - theOrigin.y) < static_cast<long>(theSpatialExtents[1])));
+           ((x - theOrigin.x) < static_cast<ossim_int32>(theSpatialExtents[0]))&&
+           ((y - theOrigin.y) < static_cast<ossim_int32>(theSpatialExtents[1])));
 }
 
 void ossimImageData::unloadTile(void* dest,
@@ -3784,7 +3801,7 @@ File %s line %d\nUnknown scalar type!",
                        __FILE__,
                        __LINE__);      
          return;
-   } // End of "switch (getScalarType())"
+   }
 }
 
 void ossimImageData::unloadTileToBip(void* dest,
@@ -4008,8 +4025,97 @@ File %s line %d\nUnsupported scalar type for method!",
    }
 }
 
+void ossimImageData::unloadBand( void* dest,
+                                 ossim_uint32 src_band,
+                                 ossim_uint32 dest_band,
+                                 const ossimIrect& dest_rect,
+                                 ossimInterleaveType il_type,
+                                 OverwriteBandRule ow_type ) const
+{
+   unloadBand( dest, src_band, dest_band, dest_rect, getImageRectangle(), il_type, ow_type );
+}
+
+void ossimImageData::unloadBand( void* dest,
+                                 ossim_uint32 src_band,
+                                 ossim_uint32 dest_band,
+                                 const ossimIrect& dest_rect,
+                                 const ossimIrect& clip_rect,
+                                 ossimInterleaveType il_type,
+                                 OverwriteBandRule ow_type ) const
+{
+   static const char  MODULE[] = "ossimImageData::unloadBand";
+
+   if ( il_type == OSSIM_BSQ )
+   {
+      unloadBandToBsq( dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+   }
+   else
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " NOTICE:"
+         << "\nUnsupported interleave type:  " << il_type << "  Returning..."
+         << std::endl;
+   }
+}
+
+void ossimImageData::unloadBandToBsq( void* dest,
+                                      ossim_uint32 src_band,
+                                      ossim_uint32 dest_band,
+                                      const ossimIrect& dest_rect,
+                                      const ossimIrect& clip_rect,
+                                      OverwriteBandRule ow_type ) const
+{
+   switch (getScalarType())
+   {
+      case OSSIM_UINT8:
+         unloadBandToBsqTemplate(ossim_uint8(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_SINT8:
+         unloadBandToBsqTemplate(ossim_sint8(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_UINT16:
+      case OSSIM_USHORT11:
+         unloadBandToBsqTemplate(ossim_uint16(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_SINT16:
+         unloadBandToBsqTemplate(ossim_sint16(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_UINT32:
+         unloadBandToBsqTemplate(ossim_uint32(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_SINT32:
+         unloadBandToBsqTemplate(ossim_sint32(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_NORMALIZED_FLOAT:
+      case OSSIM_FLOAT32:
+         unloadBandToBsqTemplate(ossim_float32(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_NORMALIZED_DOUBLE:
+      case OSSIM_FLOAT64:
+         unloadBandToBsqTemplate(ossim_float64(0), dest, src_band, dest_band, dest_rect, clip_rect, ow_type );
+         return;
+
+      case OSSIM_SCALAR_UNKNOWN:
+      default:
+         ossimSetError(getClassName(),
+            ossimErrorCodes::OSSIM_ERROR,
+            "ossimImageData::unloadBandToBsq\n\
+            File %s line %d\nUnsupported scalar type for method!",
+            __FILE__,
+            __LINE__);      
+         return;
+   }
+}
+
 template <class T>
-void ossimImageData::unloadBandTemplate(T, // dummy tmeplate variable
+void ossimImageData::unloadBandTemplate(T, // dummy template variable
                                         void* dest,
                                         const ossimIrect& dest_rect,
                                         const ossimIrect& clip_rect,
@@ -4356,11 +4462,12 @@ ossimImageData::unloadTileToBilTemplate(T,  // dummy template arg...
    }
 }
 
-template <class T> void ossimImageData::nullTileAlphaTemplate(T,
-                                                              const ossim_uint8* src,
-                                                              const ossimIrect& src_rect,
-                                                              const ossimIrect& clip_rect,
-                                                              bool multiplyAlphaFlag)
+template <class T> void ossimImageData::nullTileAlphaTemplate(
+   T,
+   const ossim_uint8* src,
+   const ossimIrect& src_rect,
+   const ossimIrect& clip_rect,
+   bool multiplyAlphaFlag)
 {
    static const char  MODULE[] = "ossimImageData::nullTileAlphaTemplate";
    
@@ -4521,37 +4628,36 @@ ossimImageData::unloadTileToBsqTemplate(T,  // dummy template arg...
       return;
    }
 
-   ossim_uint32 num_bands     = getNumberOfBands();
-   ossim_uint32 band          = 0;
+   ossim_uint32 num_bands = getNumberOfBands();
+   ossim_uint32 band      = 0;
    if(!dataIsNull)
    {
-      ossim_uint32 num_bands     = getNumberOfBands();
       ossim_uint32 d_width       = dest_rect.lr().x - dest_rect.ul().x + 1;
       ossim_uint32 d_band_offset = d_width * (dest_rect.lr().y-dest_rect.ul().y+1);
       ossim_uint32 s_width       = getWidth();
       ossim_uint32 s_offset      = (output_clip_rect.ul().y - img_rect.ul().y) *
-                             s_width + (output_clip_rect.ul().x - img_rect.ul().x);
-      
+                                   s_width + (output_clip_rect.ul().x - img_rect.ul().x);
+
       T* d        = static_cast<T*>(dest);
       const T** s = new const T*[num_bands];
-      
+
       // Grab a pointers to each one.
       for (band=0; band<num_bands; ++band)
       {
          s[band] = reinterpret_cast<const T*>(getBuf(band));
-         
+
          // Move to first valid pixel.
          s[band] += s_offset;
       }
-      
+
       // Move to first valid pixel.
       d += (output_clip_rect.ul().y - dest_rect.ul().y) * d_width +
            (output_clip_rect.ul().x - dest_rect.ul().x);
-      
+
       for (band=0; band<num_bands; ++band)
       {
          ossim_uint32 d_buf_offset = 0;
-         
+
          for (ossim_int32 line=output_clip_rect.ul().y;
               line<=output_clip_rect.lr().y; ++line)
          {
@@ -4562,7 +4668,7 @@ ossimImageData::unloadTileToBsqTemplate(T,  // dummy template arg...
                d[d_buf_offset+i] = s[band][i];
                ++i;
             }
-         
+
             d_buf_offset += d_width;
             s[band]      += s_width;
          }
@@ -4599,6 +4705,164 @@ ossimImageData::unloadTileToBsqTemplate(T,  // dummy template arg...
                ++i;
             }
             
+            d_buf_offset += d_width;
+         }
+         d += d_band_offset;
+      }
+   }
+}
+
+template <class T> void
+ossimImageData::unloadBandToBsqTemplate(T,  // dummy template arg...
+                                        void* dest,
+                                        ossim_uint32 src_band,
+                                        ossim_uint32 dest_band,
+                                        const ossimIrect& dest_rect,
+                                        const ossimIrect& clip_rect,
+                                        OverwriteBandRule ow_type) const
+{
+   static const char  MODULE[] = "ossimImageData::unloadBandToBsq";
+
+   // Check the pointers.
+   if (!dest)
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " ERROR:"
+         << "\nNULL pointer passed to method!  Returning..." << std::endl;
+      return;
+   }
+
+   bool dataIsNull = false;
+   if (getDataObjectStatus() == OSSIM_NULL)
+   {
+      dataIsNull = true;
+   }
+
+   ossimIrect img_rect = getImageRectangle();
+
+   // Clip the clip_rect to the tile rect.
+   ossimIrect output_clip_rect = clip_rect.clipToRect(img_rect);
+
+   // Clip it again to the destination rect.
+   output_clip_rect = dest_rect.clipToRect(output_clip_rect);
+
+   // Check the output clip rect for intersection.
+   if (output_clip_rect.hasNans())
+   {
+      return;
+   }
+   if ( !(output_clip_rect.intersects(dest_rect)) )
+   {
+      return;
+   }
+
+   ossim_uint32 num_bands = getNumberOfBands();
+   ossim_uint32 band      = 0;
+   if(!dataIsNull)
+   {
+      ossim_uint32 d_width       = dest_rect.lr().x - dest_rect.ul().x + 1;
+      ossim_uint32 d_band_offset = d_width * (dest_rect.lr().y-dest_rect.ul().y+1);
+      ossim_uint32 s_width  = getWidth();
+      ossim_uint32 s_offset = (output_clip_rect.ul().y - img_rect.ul().y) *
+         s_width + (output_clip_rect.ul().x - img_rect.ul().x);
+
+      T* d        = static_cast<T*>(dest);
+      const T** s = new const T*[num_bands];
+
+      // Grab a pointers to each one.
+      for (band=0; band<num_bands; ++band)
+      {
+         s[band] = reinterpret_cast<const T*>(getBuf(band));
+
+         // Move to first valid pixel.
+         s[band] += s_offset;
+      }
+
+      // Move to first valid pixel.
+      d += (output_clip_rect.ul().y - dest_rect.ul().y) * d_width +
+           (output_clip_rect.ul().x - dest_rect.ul().x);
+
+      ossim_uint32 d_dest_band_offset = dest_band * d_band_offset;
+      ossim_uint32 d_buf_offset = 0;
+
+      for (ossim_int32 line=output_clip_rect.ul().y;
+         line<=output_clip_rect.lr().y; ++line)
+      {
+         ossim_int32 i=0;
+         for (ossim_int32 samp=output_clip_rect.ul().x;
+            samp<=output_clip_rect.lr().x; ++samp)
+         {
+            ossim_uint32 d_pixel_offset = d_buf_offset+i;
+            ossim_uint32 d_dest_band_pixel_offset = d_pixel_offset + d_dest_band_offset;
+
+            switch( ow_type )
+            {
+               case COLOR_DISCREPANCY:
+               {
+                  T d_dest_band = d[d_dest_band_pixel_offset];
+
+                  for ( band=0; band<num_bands; ++band )
+                  {
+                     if (band!=dest_band)
+                     {
+                        T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
+                        
+                        // test for the color discrepancy
+                        if ( d_other_band != d_dest_band )
+                        {
+                           d[d_dest_band_pixel_offset] = s[src_band][i];
+                           break;
+                        }
+                     }
+                  }
+               }
+               break;
+
+               case NULL_RULE:
+               default:
+               {
+                  d[d_dest_band_pixel_offset] = s[src_band][i];
+               }
+               break;
+            }
+
+            ++i;
+         }
+
+         d_buf_offset += d_width;
+         s[src_band]  += s_width;
+      }
+
+      // Free up memory allocated for pointers.
+      delete [] s;
+   }
+   else
+   {
+      ossim_uint32 d_width       = dest_rect.lr().x - dest_rect.ul().x + 1;
+      ossim_uint32 d_band_offset = d_width * (dest_rect.lr().y-dest_rect.ul().y+1);
+
+      ossim_uint8* d = static_cast<ossim_uint8*>(dest);
+
+      // Move to first valid pixel.
+      d += (output_clip_rect.ul().y - dest_rect.ul().y) * d_width +
+         (output_clip_rect.ul().x - dest_rect.ul().x);
+
+      for (band=0; band<num_bands; ++band)
+      {
+         ossim_uint8 np = static_cast<ossim_uint8>(theNullPixelValue[band]);
+         ossim_uint32 d_buf_offset = 0;
+
+         for (ossim_int32 line=output_clip_rect.ul().y;
+            line<=output_clip_rect.lr().y; ++line)
+         {
+            ossim_int32 i=0;
+            for (ossim_int32 samp=output_clip_rect.ul().x;
+               samp<=output_clip_rect.lr().x; ++samp)
+            {
+               d[d_buf_offset+i] = np;
+               ++i;
+            }
+
             d_buf_offset += d_width;
          }
          d += d_band_offset;
@@ -5660,50 +5924,153 @@ std::ostream& ossimImageData::print(std::ostream& out) const
    return ossimRectilinearDataObject::print(out);
 }
 
+void ossimImageData::stretchMinMax()
+{
+   if ( (getDataObjectStatus() != OSSIM_NULL) &&
+        (getDataObjectStatus() != OSSIM_EMPTY) )
+   {
+      switch (getScalarType())
+      {
+         case OSSIM_UINT8:
+         {
+            stretchMinMax(ossim_uint8(0));
+            return;
+         }  
+         case OSSIM_SINT8:
+         {
+            stretchMinMax(ossim_sint8(0));
+            return;
+         }  
+         case OSSIM_UINT16:
+         case OSSIM_USHORT11:
+         {
+            stretchMinMax(ossim_uint16(0));
+            return;
+         }  
+         case OSSIM_SINT16:
+         {
+            stretchMinMax(ossim_sint16(0));
+            return;
+         }  
+         case OSSIM_UINT32:
+         {
+            stretchMinMax(ossim_uint32(0));
+            return;
+         }
+         case OSSIM_SINT32:
+         {
+            stretchMinMax(ossim_sint32(0));
+            return;
+         }  
+         case OSSIM_FLOAT32:
+         case OSSIM_NORMALIZED_FLOAT:
+         {
+            stretchMinMax(ossim_float32(0.0));
+            return;
+         }  
+         case OSSIM_NORMALIZED_DOUBLE:
+         case OSSIM_FLOAT64:
+         {
+            stretchMinMax(ossim_float64(0.0));
+            return;
+         }  
+         case OSSIM_SCALAR_UNKNOWN:
+         default:
+         {
+            setDataObjectStatus(OSSIM_STATUS_UNKNOWN);
+            ossimSetError(getClassName(),
+                          ossimErrorCodes::OSSIM_ERROR,
+                          "ossimImageData::stretchMinMax File %s line %d\n\
+Invalid scalar type:  %d",
+                          __FILE__,
+                          __LINE__,
+                          getScalarType());
+            break;
+         }
+      }
+   }
+}
+
+template <class T> void ossimImageData::stretchMinMax(T dummyTemplate)
+{
+   const ossim_uint32 BANDS  = getNumberOfBands();
+   const ossim_uint32 SPB    = getSizePerBand();
+
+   // scalar min
+   const ossim_float64 S_MIN = ossim::defaultMin(getScalarType());
+
+   // scalar max
+   const ossim_float64 S_MAX = ossim::defaultMax(getScalarType());
+
+   // scalar range
+   const ossim_float64 S_RNG = S_MAX-S_MIN+1.0;
+
+   for(ossim_uint32 band = 0; band < BANDS; ++band)
+   {
+      T* s = static_cast<T*>(getBuf(band));
+
+      if (s)
+      {
+         const ossim_float64 T_NUL = theNullPixelValue[band]; // tile null
+         const ossim_float64 T_MIN = theMinPixelValue[band];  // tile min
+         const ossim_float64 T_MAX = theMaxPixelValue[band];  // tile max
+         const ossim_float64 T_RNG = T_MAX-T_MIN+1;           // tile range
+         const ossim_float64 SPP = S_RNG / T_RNG; // stretch per pixel
+         
+         for(ossim_uint32 i = 0; i < SPB; ++i)
+         {
+            if (s[i] != T_NUL)
+            {
+               ossim_float64 p = s[i];
+               if (p <= T_MIN)
+               {
+                  p = S_MIN;
+               }
+               else if (p >= T_MAX)
+               {
+                  p = S_MAX;
+               }
+               else
+               {
+                  p = (p - T_MIN + 1.0) * SPP + S_MIN - 1.0;
+               }
+               s[i] = ossim::round<T>(p);
+            }
+         }
+      }
+   } 
+}
+
 ossim_uint32 ossimImageData::getWidth()const
 {
-   if(theSpatialExtents) return theSpatialExtents[0];
-   return 0;
+   return theSpatialExtents[0];
 }
 
 ossim_uint32 ossimImageData::getHeight()const
 {
-   if(theSpatialExtents) return theSpatialExtents[1];
-   return 0;
+   return theSpatialExtents[1];
 }
 
 void ossimImageData::getWidthHeight(ossim_uint32& w, ossim_uint32& h)
 {
-   if(theSpatialExtents)
-   {
-      w = theSpatialExtents[0];
-      h = theSpatialExtents[1];
-   }
+   w = theSpatialExtents[0];
+   h = theSpatialExtents[1];
 }
 
 void ossimImageData::setWidth(ossim_uint32 width)
 {
-   if(theSpatialExtents)
-   {
-      theSpatialExtents[0] = width;
-   }
+   theSpatialExtents[0] = width;
 }
 
 void ossimImageData::setHeight(ossim_uint32 height)
 {
-   if(theSpatialExtents)
-   {
-      theSpatialExtents[1] = height;
-   }
+   theSpatialExtents[1] = height;
 }
 
 void ossimImageData::setWidthHeight(ossim_uint32 w, ossim_uint32 h)
 {
-   if(theSpatialExtents)
-   {
-      theSpatialExtents[0] = w;
-      theSpatialExtents[1] = h;
-   }
+   theSpatialExtents[0] = w;
+   theSpatialExtents[1] = h;
 }
 
 void ossimImageData::setOrigin(const ossimIpt& origin)
@@ -5714,16 +6081,4 @@ void ossimImageData::setOrigin(const ossimIpt& origin)
 ossim_uint32 ossimImageData::getDataSizeInBytes()const
 {
    return getSizeInBytes();
-}
-
-const ossimImageData& ossimImageData::operator=(const ossimImageData& rhs)
-{
-   theOrigin = rhs.theOrigin;
-
-   // let STL do the copying
-   theNullPixelValue = rhs.theNullPixelValue;
-   theMinPixelValue = rhs.theMinPixelValue;
-   theMaxPixelValue = rhs.theMaxPixelValue;
-
-   return *this;
 }

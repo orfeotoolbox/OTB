@@ -11,7 +11,7 @@
 // Committe (FGDC) format.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimFgdcFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFgdcFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFgdcFileWriter_HEADER
 #define ossimFgdcFileWriter_HEADER
 
@@ -30,8 +30,6 @@ public:
    /** constructor */
    ossimFgdcFileWriter();
 
-   /** destructor */
-   virtual ~ossimFgdcFileWriter();
    
    /**
     * Method to load the state from a keyword list.
@@ -108,6 +106,8 @@ public:
    bool writeTemplate(const ossimFilename& file) const;
 
 protected:
+   /** destructor */
+   virtual ~ossimFgdcFileWriter();
 
    /**
     * Writes file to disk.

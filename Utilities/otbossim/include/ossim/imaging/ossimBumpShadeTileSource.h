@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBumpShadeTileSource.h 13382 2008-08-04 18:53:26Z gpotts $
+// $Id: ossimBumpShadeTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBumpShadeTileSource_HEADER
 #define ossimBumpShadeTileSource_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -104,7 +104,6 @@ public:
     */
    ossimBumpShadeTileSource(ossimImageSource* colorSource,
                             ossimImageSource* bumpMapSource);
-   virtual ~ossimBumpShadeTileSource();
       
    ossimString getShortName()const;
    ossimString getLongName()const;
@@ -239,6 +238,7 @@ public:
    /* ------------------ PROPERTY INTERFACE END ------------------- */
    
 protected:
+   virtual ~ossimBumpShadeTileSource();
    void allocate();
    /**
     * The result of the illumination equation is stored in

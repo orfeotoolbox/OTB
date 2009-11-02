@@ -10,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 14217 2009-04-03 12:59:37Z gpotts $
+//  $Id: ossimIrect.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER 1
@@ -38,8 +38,8 @@
 //***
 // Forward class declarations.
 //***
-class OSSIMDLLEXPORT ossimDrect;
-class OSSIMDLLEXPORT ossimKeywordlist;
+class ossimDrect;
+class ossimKeywordlist;
 
 //*******************************************************************
 // CLASS:  ossimIrect

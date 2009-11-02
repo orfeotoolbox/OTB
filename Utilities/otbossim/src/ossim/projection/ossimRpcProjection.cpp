@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//$Id: ossimRpcProjection.cpp 13770 2008-10-22 19:33:24Z gpotts $
+//$Id: ossimRpcProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimRpcProjection.h>
@@ -16,6 +16,7 @@
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimEcefVector.h>
 #include <ossim/base/ossimTieGptSet.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 
 RTTI_DEF3(ossimRpcProjection, "ossimRpcProjection", ossimProjection, ossimOptimizableProjection,
           ossimAdjustableParameterInterface);
@@ -1030,14 +1031,14 @@ ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVari
 {
 #if 1
    //NOTE : ignore targetVariance
-   ossimRpcSolver solver(false, false); //TBD : choices should be part of setupFromString
+   ossimRefPtr<ossimRpcSolver> solver = new ossimRpcSolver(false, false); //TBD : choices should be part of setupFromString
 
    std::vector<ossimDpt> imagePoints;
    std::vector<ossimGpt> groundPoints;
    tieSet.getSlaveMasterPoints(imagePoints, groundPoints);
-   solver.solveCoefficients(imagePoints, groundPoints);
+   solver->solveCoefficients(imagePoints, groundPoints);
 
-   ossimRefPtr< ossimRpcProjection > optProj = solver.createRpcProjection();
+   ossimRefPtr< ossimImageGeometry > optProj = solver->createRpcProjection();
    if (!optProj)
    {
       ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimRpcProjection::optimizeFit(): error when optimizing the RPC with given tie points"
@@ -1045,11 +1046,14 @@ ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVari
       return -1.0;
    }
 
-   ossimKeywordlist kwl;
-   optProj->saveState(kwl);
-   this->loadState(kwl);
+   if(optProj->hasProjection())
+   {
+      ossimKeywordlist kwl;
+      optProj->getProjection()->saveState(kwl);
+      this->loadState(kwl);
+   }
 
-   return std::pow(solver.getRmsError(), 2); //variance in pixel^2
+   return std::pow(solver->getRmsError(), 2); //variance in pixel^2
 #else
    // COPIED from ossimRpcProjection
    //

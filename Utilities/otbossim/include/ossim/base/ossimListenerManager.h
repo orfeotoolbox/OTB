@@ -7,15 +7,15 @@
 //
 //
 //*************************************************************************
-// $Id: ossimListenerManager.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimListenerManager.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimListenerManager_HEADER
 #define ossimListenerManager_HEADER
 #include <ossim/base/ossimConstants.h>
 #include <list>
 #include <ossim/base/ossimRtti.h>
 
-class OSSIMDLLEXPORT ossimListener;
-class OSSIMDLLEXPORT ossimEvent;
+class ossimListener;
+class ossimEvent;
 
 class OSSIMDLLEXPORT ossimListenerManager
 {

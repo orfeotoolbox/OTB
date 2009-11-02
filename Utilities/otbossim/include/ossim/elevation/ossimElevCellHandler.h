@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.h 11317 2007-07-17 20:39:10Z dburken $
+// $Id: ossimElevCellHandler.h 15766 2009-10-20 12:37:09Z gpotts $
 
 
 #ifndef ossimElevCellHandler_HEADER
@@ -41,7 +41,6 @@ public:
    ossimElevCellHandler (const char* elev_filename);
    ossimElevCellHandler (const ossimElevCellHandler& src);
 
-   virtual ~ossimElevCellHandler();
 
    const ossimElevCellHandler& operator=(const ossimElevCellHandler& rhs);
    virtual ossimFilename getFilename() const;
@@ -85,6 +84,7 @@ public:
       
 protected:
    ossimElevCellHandler ();
+   virtual ~ossimElevCellHandler();
    
    /**
     * Virtual method for reading 

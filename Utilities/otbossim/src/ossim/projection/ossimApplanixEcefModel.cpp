@@ -1,12 +1,13 @@
 //*******************************************************************
-// Copyright (C) 2005 Garrett Potts
 //
-// LGPL
+// License:  LGPL
 // 
+// See LICENSE.txt file in the top level directory for more details.
+//
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 13691 2008-10-07 12:46:58Z dburken $
+//  $Id: ossimApplanixEcefModel.cpp 15434 2009-09-16 20:38:18Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -25,7 +26,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 13691 2008-10-07 12:46:58Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 15434 2009-09-16 20:38:18Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -397,6 +398,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
    {
       std::cout << "ossimApplanixEcefModel::loadState: ......... entered" << std::endl;
    }
+
    theImageClipRect = ossimDrect(0,0,4076,4091);
    theRefImgPt      = ossimDpt(2046.0, 2038.5);
 
@@ -494,6 +496,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(ecef_platform_position);
+         tempString.split(splitString, ossimString(" "));
          if(splitString.size() > 2)
          {
             theEcefPlatformPosition  = ossimEcefPoint(splitString[0].toDouble(),
@@ -505,6 +508,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(latlonh_platform_position);
+         tempString.split(splitString, ossimString(" "));
          std::string datumString;
          double lat=0.0, lon=0.0, h=0.0;
          if(splitString.size() > 2)
@@ -546,6 +550,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(image_size);
+         tempString.split(splitString, ossimString(" "));
          double w=1, h=1;
          if(splitString.size() == 2)
          {
@@ -563,6 +568,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(principal_point);
+         tempString.split(splitString, ossimString(" "));
          if(splitString.size() == 2)
          {
             thePrincipalPoint.x = splitString[0].toDouble();
@@ -573,6 +579,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(pixel_size);
+         tempString.split(splitString, ossimString(" "));
          if(splitString.size() == 1)
          {
             thePixelSize.x = splitString[0].toDouble();
@@ -598,9 +605,9 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
          {
             std::vector<ossimString> splitString;
             ossimString tempString(value);
+            tempString.split(splitString, ossimString(" "));
             double distance = 0.0;
             double distortion = 0.0;
-
             if(splitString.size() == 2)
             {
                distance = splitString[0].toDouble();
@@ -642,6 +649,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(principal_point);
+         tempString.split(splitString, ossimString(" "));
          if(splitString.size() == 2)
          {
             thePrincipalPoint.x = splitString[0].toDouble();
@@ -660,6 +668,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
       {
          std::vector<ossimString> splitString;
          ossimString tempString(pixel_size);
+         tempString.split(splitString, ossimString(" "));
          if(splitString.size() == 1)
          {
             thePixelSize.x = splitString[0].toDouble();
@@ -714,6 +723,7 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
          computeGsd();
       }
    }
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << std::setprecision(15) << std::endl;

@@ -118,7 +118,7 @@
 #include <ossim/base/ossimConstants.h>
 /////////////////////////////////////////////////////////////
 
-class OSSIMDLLEXPORT RTTITypeinfo;
+class RTTITypeinfo;
 
 class OSSIMDLLEXPORT RTTItypeid	
 		{							// Main class for RTTI interface.

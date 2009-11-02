@@ -13,7 +13,7 @@
 // pure virtual methods that all elevation source factories must implement.
 //
 //**************************************************************************
-// $Id: ossimDtedFactory.cpp 12982 2008-06-04 01:12:46Z dburken $
+// $Id: ossimDtedFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib> /* abs() */
 #include <sstream>
@@ -53,7 +53,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
    
    ossimElevManager* mgr = ossimElevManager::instance();
    
-   ossimElevSource* dted_ptr = 0;
+   ossimRefPtr<ossimElevSource> dted_ptr;
    
    if (theDirectory == ossimFilename::NIL)
    {
@@ -62,7 +62,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
          << "DTED directory has not been set!"
          << "\nReturning null elevation source..."
          << std::endl;
-      return dted_ptr;
+      return dted_ptr.release();
    }
    
    // Build up a dted file name.
@@ -121,11 +121,10 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       if ( (!(dted_ptr->getErrorStatus())) &&
            dted_ptr->pointHasCoverage(gpt) )
       {
-         return dted_ptr;
+         return dted_ptr.release();
       }
       else
       {
-         delete dted_ptr;
          dted_ptr = 0;
       }
    }
@@ -148,11 +147,10 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       if ( (!(dted_ptr->getErrorStatus())) &&
            dted_ptr->pointHasCoverage(gpt) )
       {
-         return dted_ptr;
+         return dted_ptr.release();
       }
       else
       {
-         delete dted_ptr;
          dted_ptr = 0;
       }
    }
@@ -175,16 +173,15 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       if ( (!(dted_ptr->getErrorStatus())) &&
            dted_ptr->pointHasCoverage(gpt) )
       {
-         return dted_ptr;
+         return dted_ptr.release();
       }
       else
       {
-         delete dted_ptr;
          dted_ptr = 0;
       }
    }
 
-   return dted_ptr;
+   return dted_ptr.release();
 }
 
 void ossimDtedFactory::createIndex()

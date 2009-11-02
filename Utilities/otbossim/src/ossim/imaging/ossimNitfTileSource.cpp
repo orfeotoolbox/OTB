@@ -9,18 +9,12 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 14380 2009-04-20 22:23:24Z dburken $
+//  $Id: ossimNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <jerror.h>
 
+#include <algorithm> /* for std::fill */
+
 #include <ossim/imaging/ossimNitfTileSource.h>
-
-#include <ossim/base/ossimPackedBits.h>
-#include <ossim/support_data/ossimNitfIchipbTag.h>
-#include <ossim/support_data/ossimNitfImageHeaderV2_0.h>
-#include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
-#include <ossim/support_data/ossimNitfStdidcTag.h>
-#include <ossim/support_data/ossimNitfVqCompressionHeader.h>
-
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimTrace.h>
@@ -31,20 +25,27 @@
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimInterleaveTypeLut.h>
+#include <ossim/base/ossimPackedBits.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimJpegMemSrc.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
-
-
+#include <ossim/base/ossim2dTo2dShiftTransform.h>
 #include <ossim/base/ossimContainerProperty.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/support_data/ossimNitfIchipbTag.h>
+#include <ossim/support_data/ossimNitfImageHeaderV2_0.h>
+#include <ossim/support_data/ossimNitfImageHeaderV2_1.h>
+#include <ossim/support_data/ossimNitfStdidcTag.h>
+#include <ossim/support_data/ossimNitfVqCompressionHeader.h>
+
 
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 14380 2009-04-20 22:23:24Z dburken $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
    
 //---
@@ -95,6 +96,7 @@ ossimNitfTileSource::ossimNitfTileSource()
       thePackedBitsFlag(false),
       theCompressedBuf(0),
       theDecimationFactor(1.0),
+      theDecimationFactors(),
       theNitfBlockOffset(0),
       theNitfBlockSize(0)
 {
@@ -132,18 +134,8 @@ void ossimNitfTileSource::destroy()
 
    theCacheTile = 0;
    theTile      = 0;
-
-   if(theOverview)
-   {
-      delete theOverview;
-      theOverview = 0;
-   }
-   if(theCompressedBuf)
-   {
-      delete [] theCompressedBuf;
-      theCompressedBuf = 0;
-   }
-}
+   theOverview = 0;
+ }
 
 bool ossimNitfTileSource::isOpen()const
 {
@@ -152,18 +144,31 @@ bool ossimNitfTileSource::isOpen()const
 
 bool ossimNitfTileSource::open()
 {
+   bool result = false;
+   
    if(isOpen())
    {
       close();
    }
    
    theErrorStatus = ossimErrorCodes::OSSIM_OK;
-
-   if ( !parseFile() )
+   
+   if ( parseFile() )
    {
-      return false;
+      result = allocate();
    }
-   return allocate();
+   if (result)
+   {
+      completeOpen();
+
+      //---
+      // computeDecimationFactors must be called after completeOpen so that the
+      // overviews are picked up.
+      //---
+      result = computeDecimationFactors();
+   }
+   
+   return result;
 }
 
 void ossimNitfTileSource::close()
@@ -234,7 +239,7 @@ bool ossimNitfTileSource::parseFile()
    //---
    for (ossim_uint32 i = 0; i < theNumberOfImages; ++i)
    {
-      ossimNitfImageHeader* hdr = theNitfFile->getNewImageHeader(i);
+      ossimRefPtr<ossimNitfImageHeader> hdr = theNitfFile->getNewImageHeader(i);
       if (!hdr)
       {
          setErrorStatus();
@@ -248,7 +253,7 @@ bool ossimNitfTileSource::parseFile()
       }
       if (traceDebug())
       {
-         if(hdr)
+         if(hdr.valid())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
                << MODULE << "DEBUG:"
@@ -266,7 +271,7 @@ bool ossimNitfTileSource::parseFile()
             theNitfImageHeader.push_back(hdr);
          }
       }
-      else if ( canUncompress(hdr) )
+      else if ( canUncompress(hdr.get()) )
       {
          theEntryList.push_back(i);
          theCacheEnabledFlag = true;
@@ -287,10 +292,6 @@ bool ossimNitfTileSource::parseFile()
    if(theEntryList.size()<1)
    {
       return false;
-   }
-   if(theNitfImageHeader.size() == 1)
-   {
-      theLut = theNitfImageHeader[0]->createLut(0);
    }
    if(theEntryList.size()>0)
    {
@@ -321,7 +322,14 @@ bool ossimNitfTileSource::parseFile()
          theCurrentEntry = theEntryList[0];
       }
    }
-
+   
+   // initialize the lut to the current entry if the current entry has a lut.
+   //
+   if(theNitfImageHeader[theCurrentEntry]->getRepresentation().contains("LUT"))
+   {
+      theLut = theNitfImageHeader[theCurrentEntry]->createLut(0);
+   }
+   
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -390,12 +398,6 @@ bool ossimNitfTileSource::allocate()
 
    // Set the decimation factor.
    initializeDecimationFactor();
-
-   // Initialize the sub image offset.
-   if (initializeSubImageOffset() == false)
-   {
-      return false;
-   }
    
    // Initialize the image rectangle. before the cache size is done
    if (initializeImageRect() == false)
@@ -419,7 +421,6 @@ bool ossimNitfTileSource::allocate()
    {
       return false;
    }
-
 
    // Initialize the cache tile interleave type.
    initializeCacheTileInterLeaveType();
@@ -455,9 +456,6 @@ bool ossimNitfTileSource::allocate()
    //---
    initializeOutputTile();
 
-   // Call base class complete open.
-   completeOpen();
-
    return true;
 }
 
@@ -470,7 +468,20 @@ bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
       
       if (code == "C3") // jpeg
       {
-         result = true;
+         if (hdr->getBitsPerPixelPerBand() == 8)
+         {
+            result = true;
+         }
+         else
+         {
+            if(traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "Entry with jpeg compression (C3) has an unsupported "
+                  << "JPEG data precision: " << hdr->getBitsPerPixelPerBand()
+                  << std::endl;
+            }
+         }
       }
       else if(isVqCompressed( code ) &&
               (hdr->getCompressionHeader().valid()) )
@@ -502,7 +513,7 @@ void ossimNitfTileSource::initializeReadMode()
    ossimString imode           = hdr->getIMode();
    ossimString compressionCode = hdr->getCompressionCode();
 
-   if ( (imode == "B") && (compressionCode == "C3") )
+   if ( (compressionCode == "C3") && ((imode == "B")||(imode == "P")) )
    {
       theReadMode = READ_JPEG_BLOCK; 
    }
@@ -638,6 +649,13 @@ void ossimNitfTileSource::initializeScalarType()
             else if(bitsPerPixel < 32)
             {
                theScalarType = OSSIM_FLOAT32;
+            }
+         }
+         else
+         {
+            if(bitsPerPixel<8)
+            {
+               theScalarType = OSSIM_UINT8;
             }
          }
          break;
@@ -831,126 +849,161 @@ bool ossimNitfTileSource::initializeBlockSize()
 
 void ossimNitfTileSource::initializeDecimationFactor()
 {
-   theDecimationFactor = 1.0;
-   
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
-   if (!hdr)
+   if (hdr)
    {
-      return;
+      hdr->getDecimationFactor(theDecimationFactor);
    }
 
-   //---
-   // Look for string like:
-   // "/2" = 1/2
-   // "/4  = 1/4
-   // ...
-   // "/16 = 1/16
-   // If it is full resolution it should be "1.0"
-   //---
-   ossimString os = hdr->getImageMagnification();
-   if ( os.contains("/") )
+   if ( !hdr || ossim::isnan(theDecimationFactor) )
    {
-      os = os.after("/");
-      ossim_float64 d = os.toFloat64();
-      if (d)
-      {
-         theDecimationFactor = 1.0 / d;
-      }
+      theDecimationFactor = 1.0;
    }
 }
 
-bool ossimNitfTileSource::initializeSubImageOffset()
+#if 0
+ossimImageGeometry* ossimNitfTileSource::getImageGeometry()
 {
-   // Start with nan offset.
-   theSubImageOffset.makeNan();
-   
-   const ossimNitfImageHeader* hdr = getCurrentImageHeader();
-   if (!hdr)
-   {
-      return false;
-   }
-
    //---
-   // Look for the STDIDC tag for a sub image offset.
-   //
-   // See: STDI-002 Table 7.3 for documentation.
+   // Call base class getImageGeometry which will check for external geometry
+   // or an already set geometry.
    //---
-   ossimRefPtr<ossimNitfRegisteredTag> tag =
-      hdr->getTagData(ossimString("STDIDC"));
-   if (tag.valid() && (hdr->getIMode() == "B") )
-   {
-      ossimNitfStdidcTag* stdidc = PTR_CAST(ossimNitfStdidcTag, tag.get());
-      if (stdidc)
-      {
-         ossim_int32 startCol = stdidc->getStartColumn().toInt32();
-         ossim_int32 startRow = stdidc->getStartRow().toInt32();
-         if ( (startCol > 0) && (startRow > 0) )
-         {
-            // field are one based; hence, the - 1.
-            theSubImageOffset.x =
-               (startCol-1) * hdr->getNumberOfPixelsPerBlockHoriz();
-            theSubImageOffset.y =
-               (startRow-1) * hdr->getNumberOfPixelsPerBlockVert();
-         }
-      }
-   }
+   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
 
-   if (theSubImageOffset.hasNans())
+   if (result)
    {
-      //---
-      // Test for the ichipb tag and set the sub image if needed.
-      // 
-      // NOTE:
-      // 
-      // There are nitf writers that set the ichipb offsets and only have
-      // IGEOLO field present.  For these it has been determined
-      // (but still in question) that we should not apply the sub image offset.
-      //
-      // See trac # 1578
-      // http://trac.osgeo.org/ossim/ticket/1578
-      //---
-      tag = hdr->getTagData(ossimString("ICHIPB"));
-      if (tag.valid())
+      if ( !result->getTransform() )
       {
-         ossimNitfIchipbTag* ichipb = PTR_CAST(ossimNitfIchipbTag, tag.get());
-         if (ichipb)
+         ossimRefPtr<ossim2dTo2dTransform> transform = 0;
+         
+         const ossimNitfImageHeader* hdr = getCurrentImageHeader();
+         if (hdr)
          {
-            const ossimRefPtr<ossimNitfRegisteredTag> blocka =
-               hdr->getTagData(ossimString("BLOCKA"));
-            const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
-               hdr->getTagData(ossimString("RPC00A"));              
-            const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
-               hdr->getTagData(ossimString("RPC00B"));
-            
             //---
-            // If any of these tags are present we will use the sub image from
-            // the ichipb tag.
+            // Test for the ichipb tag and set the sub image if needed.
+            // 
+            // NOTE # 1:
+            // 
+            // There are nitf writers that set the ichipb offsets and only have
+            // IGEOLO field present.  For these it has been determined
+            // (but still in question) that we should not apply the sub image
+            // offset.
+            //
+            // See trac # 1578
+            // http://trac.osgeo.org/ossim/ticket/1578
+            //
+            // NOTE # 2:
+            //
+            // Let the ICHIPB have precedence over the STDIDC tag as we could
+            // have a chip of a segment.
             //---
-            if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+            ossimRefPtr<ossimNitfRegisteredTag> tag =
+               hdr->getTagData(ossimString("ICHIPB"));
+            if (tag.valid())
             {
-               ossimDpt pt;
-               ichipb->getSubImageOffset(pt);
-               theSubImageOffset = pt;
+               ossimNitfIchipbTag* ichipb =
+                  PTR_CAST(ossimNitfIchipbTag, tag.get());
+               if (ichipb)
+               {
+                  const ossimRefPtr<ossimNitfRegisteredTag> blocka =
+                     hdr->getTagData(ossimString("BLOCKA"));
+                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00a =
+                     hdr->getTagData(ossimString("RPC00A"));              
+                  const ossimRefPtr<ossimNitfRegisteredTag> rpc00b =
+                     hdr->getTagData(ossimString("RPC00B"));
+                  
+                  //---
+                  // If any of these tags are present we will use the sub
+                  // image from the ichipb tag.
+                  //---
+                  if ( blocka.get() || rpc00a.get() || rpc00b.get() )
+                  {
+                     transform = ichipb->newTransform();
+                  }
+               }
             }
-         }
-      }
-   }
+   
+            if ( !transform)
+            {
+               //---
+               // Look for the STDIDC tag for a sub image (segment) offset.
+               //
+               // See: STDI-002 Table 7.3 for documentation.
+               //---
+               tag = hdr->getTagData(ossimString("STDIDC"));
+               if (tag.valid() && (hdr->getIMode() == "B") )
+               {
+                  ossimDpt shift;
+                  ossimNitfStdidcTag* stdidc =
+                     PTR_CAST(ossimNitfStdidcTag, tag.get());
+                  if (stdidc)
+                  {
+                     ossim_int32 startCol = stdidc->getStartColumn().toInt32();
+                     ossim_int32 startRow = stdidc->getStartRow().toInt32();
+                     if ( (startCol > 0) && (startRow > 0) )
+                     {
+                        
+                        // field are one based; hence, the - 1.
+                        shift.x = (startCol-1) *
+                           hdr->getNumberOfPixelsPerBlockHoriz();
+                        shift.y = (startRow-1) *
+                           hdr->getNumberOfPixelsPerBlockVert();
+                     }
+                     if(shift.x > 0 ||
+                        shift.y > 0)
+                     {
+                        transform = new ossim2dTo2dShiftTransform(shift);
+                     }
+                  }
+               }
+            }
+            
+         } // matches: if (hdr)
 
-   // If still nan set to upper left corner (typically 0,0):
-   if (theSubImageOffset.hasNans())
-   {
-      theSubImageOffset = hdr->getImageRect().ul();
-   }
+         if ( transform.valid() )
+         {
+            result->setTransform( transform.get() );
+         }
+         //else
+         //{
+         //   ossimImageGeometryRegistry::instance()->createTransform(this);
+         //}
+         
+         
+      } // matches: if ( !result->getTransform() )
+
+      if ( !result->getProjection() )
+      {
+         ossimRefPtr<ossimProjection> proj =
+            ossimProjectionFactoryRegistry::instance()->
+               createProjection(this);
+         if ( proj.valid() )
+         {
+            result->setProjection( proj.get() );
+         }
+         //else
+         //{
+         //   ossimImageGeometryRegistry::instance()->createProjection(this);
+         //}
+         
+      }
+      
+   } // matches: if (result)
 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimNitfTileSource::initializeSubImageOffset DEBUG:"
-         << "\nSub image offset:  " << theSubImageOffset
-         << endl;
+         << "ossimNitfTileSource::createImageGeometry DEBUG:\n";
+
+      if (result)
+      {
+         result->print(ossimNotify(ossimNotifyLevel_DEBUG)) << "\n";
+      }
    }
-   return true;
+
+   return result;
 }
+#endif
 
 bool ossimNitfTileSource::initializeImageRect()
 {
@@ -960,35 +1013,10 @@ bool ossimNitfTileSource::initializeImageRect()
       theImageRect.makeNan();
       return false;
    }
-
-   bool initialized = false;
-
-   const ossimRefPtr<ossimNitfRegisteredTag> tag =
-      hdr->getTagData(ossimString("ICHIPB"));
-   if (tag.valid())
-   {
-      ossimNitfIchipbTag* ichipb = PTR_CAST(ossimNitfIchipbTag, tag.get());
-      if (ichipb)
-      {
-         // This has the sub image offset applied...
-         ossimDrect rect;
-         ichipb->getFullImageRect(rect);
-         
-         theBlockImageRect = rect;
-         theImageRect      = rect;
-         initialized       = true;
-      }
-   }
-
-   if (!initialized)
-   {
-      theBlockImageRect = hdr->getBlockImageRect();
-      theImageRect      = hdr->getImageRect();
-      
-      theBlockImageRect += theSubImageOffset;
-      theImageRect      += theSubImageOffset;
-   }
-
+   
+   theBlockImageRect = hdr->getBlockImageRect();
+   theImageRect      = hdr->getImageRect();
+   
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1061,12 +1089,12 @@ void ossimNitfTileSource::initializeCacheTileInterLeaveType()
       case READ_BIB_BLOCK:
       case READ_BSQ_BLOCK:
       case READ_BIB:
+      case READ_JPEG_BLOCK:  
          theCacheTileInterLeaveType = OSSIM_BSQ;
          break;
 
       case READ_BIP_BLOCK:
       case READ_BIP:
-      case READ_JPEG_BLOCK:
          theCacheTileInterLeaveType = OSSIM_BIP;
          break;
 
@@ -1111,17 +1139,11 @@ void ossimNitfTileSource::initializeCompressedBuf()
       return;
    }
 
-   if(theCompressedBuf)
-   {
-      delete [] theCompressedBuf;
-      theCompressedBuf = 0;
-   }
-
    if( (hdr->getRepresentation().upcase().contains("LUT")) ||
        ( isVqCompressed(hdr->getCompressionCode()) ) )
    {
-      theCompressedBuf = new ossim_uint8[theReadBlockSizeInBytes];
-      memset(theCompressedBuf, '\0', theReadBlockSizeInBytes);
+      theCompressedBuf.resize(theReadBlockSizeInBytes);
+      std::fill(theCompressedBuf.begin(), theCompressedBuf.end(), '\0');
    }
 }
 
@@ -1143,46 +1165,44 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
       return ossimRefPtr<ossimImageData>();
    }
 
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
-      {
-         // Subtract any offsets since the overview doesn't know about them.
-         ossimIrect rr_rect = tileRect - getSubImageOffset(resLevel);
-
-         //---
-         // If there is a sub image offset then we will not be requesting
-         // the same rectangle as was requested from us.  For this reason,
-         // we'll do a setOrigin, rather than just returning the getTile
-         // result.
-         //---
-         ossimRefPtr<ossimImageData> tileData = theOverview->getTile(rr_rect,
-                                                                     resLevel);
-         if(tileData.valid())
-         {
-            tileData->setImageRectangle(tileRect);
-         
-            if(getOutputScalarType() == OSSIM_USHORT11)
-            {
-               //---
-               // Temp fix:
-               // The overview handler could return a tile of OSSIM_UINT16 if
-               // the max sample value was not set to 2047.  
-               //---
-               tileData->setScalarType(OSSIM_USHORT11);
-            }
-         }
-         
-         return tileData;
-      }
-   }
-
    if (!theTile.valid())
    {
       return theTile;
    }
-   
+
+   // Rectangle must be set prior to getOverviewTile call.
    theTile->setImageRectangle(tileRect);
+
+   if (resLevel)
+   {
+      if ( getOverviewTile(resLevel, theTile.get() ) )
+      {
+         return theTile;
+      }
+   }
+   
+   ossim_uint32 level = resLevel;
+   if (theStartingResLevel)  // Used as overview.
+   {
+      if (theStartingResLevel <= resLevel)
+      {
+         //---
+         // Adjust the level to be relative to the reader using this as
+         // overview.
+         //---
+         level -= theStartingResLevel; 
+      }
+   }
+
+   //---
+   // See if the whole tile is going to be filled, if not, start out with
+   // a blank tile so data from a previous load gets wiped out.
+   //---
+   if ( !tileRect.completely_within(theImageRect) )
+   {
+      // Start with a blank tile.
+      theTile->makeBlank();
+   }
    
    //---
    // See if any point of the requested tile is in the image.
@@ -1190,24 +1210,22 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
    if ( tileRect.intersects(theBlockImageRect) )
    {
       ossimIrect clipRect = tileRect.clipToRect(theImageRect);
-
-      //---
-      // See if the whole tile is going to be filled, if not, start out with
-      // a blank tile so data from a previous load gets wiped out.
-      //---
-      if ( !tileRect.completely_within(clipRect) )
-      {
-         // Start with a blank tile.
-         theTile->makeBlank();
-      }
             
       // See if the requested clip rect is already in the cache tile.
       if ( (clipRect.completely_within(theCacheTile->getImageRectangle()))&&
            (theCacheTile->getDataObjectStatus() != OSSIM_EMPTY)&&
            (theCacheTile->getBuf()))
       {
+         //---
+         // Note: Clip the cache tile(nitf block) to the image clipRect since
+         // there are nitf blocks that go beyond the image dimensions, i.e.,
+         // edge blocks.
+         //---        
+         ossimIrect cr =
+               theCacheTile->getImageRectangle().clipToRect(clipRect);
          theTile->loadTile(theCacheTile->getBuf(),
                            theCacheTile->getImageRectangle(),
+                           cr,
                            theCacheTileInterLeaveType);
          //---
          // Validate the tile.  This will set the status to full, partial
@@ -1229,23 +1247,21 @@ ossimRefPtr<ossimImageData> ossimNitfTileSource::getTile(
          }
          else
          {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << __FILE__ << __LINE__
+               << " loadTile failed!"
+               << std::endl;
             theTile->makeBlank(); // loadTile failed...
          }
       }
    } // End of if ( tileRect.intersects(image_rect) )
-   else
-   {
-      // No part of requested tile within the image rectangle.
-      theTile->makeBlank();
-   }
 
    return theTile;   
 }
 
 bool ossimNitfTileSource::loadTile(const ossimIrect& clipRect)
 {
-   // Subtract any offsets and work in zero based image space.
-   ossimIrect zbClipRect  = clipRect - theSubImageOffset;
+   ossimIrect zbClipRect  = clipRect;
 
    const ossim_uint32 BLOCK_HEIGHT = theCacheSize.y;
    const ossim_uint32 BLOCK_WIDTH  = theCacheSize.x;
@@ -1257,8 +1273,7 @@ bool ossimNitfTileSource::loadTile(const ossimIrect& clipRect)
    // block boundry.  
    //---
    ossimIpt nitfBlockOrigin = zbClipRect.ul();
-//   adjustToStartOfBlock(nitfBlockOrigin, BLOCK_HEIGHT, BLOCK_WIDTH);
-   
+
    // Vertical block loop.
    ossim_int32 y = nitfBlockOrigin.y;
    while (y < zbClipRect.lr().y)
@@ -1267,16 +1282,28 @@ bool ossimNitfTileSource::loadTile(const ossimIrect& clipRect)
       ossim_int32 x = nitfBlockOrigin.x;
       while (x < zbClipRect.lr().x)
       {
-         if (loadBlock(x, y))
+         if ( loadBlockFromCache(x, y, clipRect) == false )
          {
-            theTile->loadTile(theCacheTile->getBuf(),
-                              theCacheTile->getImageRectangle(),
-                              theCacheTileInterLeaveType);
-         }
-         else
-         {
-            // Error loading...
-            return false;
+            if ( loadBlock(x, y) )
+            {
+               //---
+               // Note: Clip the cache tile(nitf block) to the image clipRect
+               // since there are nitf blocks that go beyond the image
+               // dimensions, i.e., edge blocks.
+               //---    
+               ossimIrect cr =
+                  theCacheTile->getImageRectangle().clipToRect(clipRect);
+               
+               theTile->loadTile(theCacheTile->getBuf(),
+                                 theCacheTile->getImageRectangle(),
+                                 cr,
+                                 theCacheTileInterLeaveType);
+            }
+            else
+            {
+               // Error loading...
+               return false;
+            }
          }
          
          x += BLOCK_WIDTH; // Go to next block.
@@ -1286,6 +1313,42 @@ bool ossimNitfTileSource::loadTile(const ossimIrect& clipRect)
    }
 
    return true;
+}
+
+bool ossimNitfTileSource::loadBlockFromCache(ossim_uint32 x, ossim_uint32 y,
+                                             const ossimIrect& clipRect)
+{
+   bool result = false;
+   
+   if (theCacheEnabledFlag)
+   {
+      //---
+      // The origin set in the cache tile must have the sub image offset in it
+      // since "theTile" is relative to any sub image offset.  This is so that
+      // "theTile->loadTile(theCacheTile)" will work.
+      //---
+      ossimIpt origin(x, y);
+
+      ossimRefPtr<ossimImageData> tempTile =
+         ossimAppFixedTileCache::instance()->getTile(theCacheId, origin);
+      if (tempTile.valid())
+      {
+         //---
+         // Note: Clip the cache tile(nitf block) to the image clipRect since
+         // there are nitf blocks that go beyond the image dimensions, i.e.,
+         // edge blocks.
+         //---    
+         ossimIrect cr =
+            tempTile->getImageRectangle().clipToRect(clipRect);
+
+         theTile->loadTile(tempTile.get()->getBuf(),
+                           tempTile->getImageRectangle(),
+                           cr,
+                           theCacheTileInterLeaveType);
+         result = true;
+      }
+   }
+   return result;
 }
 
 bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
@@ -1305,21 +1368,7 @@ bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
    // "theTile->loadTile(theCacheTile)" will work.
    //---
    ossimIpt origin(x, y);
-   origin = origin + theSubImageOffset;
-   
-   if (theCacheEnabledFlag)
-   {
-      // See if it's in the cache already.
-      ossimRefPtr<ossimImageData> tempTile = 0;
-      tempTile = ossimAppFixedTileCache::instance()->
-         getTile(theCacheId, origin);
-      if (tempTile.valid())
-      {
-         theTile->loadTile(tempTile.get());
-         return true;
-      }
-   }
-   
+    
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    theCacheTile->setOrigin(origin);
    ossim_uint32 readSize = theReadBlockSizeInBytes;
@@ -1374,7 +1423,7 @@ bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
             if(isVqCompressed(hdr->getCompressionCode())||
                hdr->getRepresentation().upcase().contains("LUT"))
             {
-               buf = theCompressedBuf;
+               buf = (ossim_uint8*)&(theCompressedBuf.front());
             }
             else
             {
@@ -1395,11 +1444,13 @@ bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
                }
                else if(isVqCompressed(hdr->getCompressionCode()))
                {
-                  vqUncompress(theCacheTile, theCompressedBuf);
+                  vqUncompress(theCacheTile,
+                               (ossim_uint8*)&(theCompressedBuf.front()));
                }
                else if(hdr->getRepresentation().upcase().contains("LUT"))
                {
-                  lutUncompress(theCacheTile, theCompressedBuf);
+                  lutUncompress(theCacheTile,
+                                (ossim_uint8*)&(theCompressedBuf.front()));
                }
             }
          }
@@ -1532,7 +1583,7 @@ void ossimNitfTileSource::convertTransparentToNull(ossimRefPtr<ossimImageData> t
    if(!hdr||!tile) return;
 
    if(!tile->getBuf()) return;
-   ossimIpt tempOrigin = tile->getOrigin()-theSubImageOffset;
+   ossimIpt tempOrigin = tile->getOrigin();
    ossim_uint32 blockNumber = getBlockNumber(tempOrigin);
    ossim_uint32 numberOfBands = tile->getNumberOfBands();
    ossim_uint32 band = 0;
@@ -1950,61 +2001,38 @@ ossim_uint32 ossimNitfTileSource::getNumberOfOutputBands() const
 
 ossim_uint32 ossimNitfTileSource::getNumberOfLines(ossim_uint32 resLevel) const
 {
+   ossim_uint32 result = 0;
    if (resLevel == 0)
    {
       const ossimNitfImageHeader* hdr = getCurrentImageHeader();
-      if (!hdr)
+      if (hdr)
       {
-         return 0;
+         result = hdr->getNumberOfRows();
       }
-      return  hdr->getNumberOfRows();
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
-      return theOverview->getNumberOfLines(resLevel);
+      result = theOverview->getNumberOfLines(resLevel);
    }
-   return 0;
+   return result;
 }
 
 ossim_uint32 ossimNitfTileSource::getNumberOfSamples(ossim_uint32 resLevel) const
 {
+   ossim_uint32 result = 0;
    if (resLevel == 0)
    {
       const ossimNitfImageHeader* hdr = getCurrentImageHeader();
-      if (!hdr)
+      if (hdr)
       {
-         return 0;
+         result = hdr->getNumberOfCols();
       }
-      return  hdr->getNumberOfCols();
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
-      return theOverview->getNumberOfSamples(resLevel);
+      result = theOverview->getNumberOfSamples(resLevel);
    }
-   return 0;
-}
-
-void ossimNitfTileSource::adjustToStartOfBlock(ossimIpt& pt,
-                                               ossim_int32 tile_height,
-                                               ossim_int32 tile_width) const
-{
-   if (pt.x > 0)
-   {
-      pt.x = pt.x/tile_width*tile_width;
-   }
-   else if (pt.x < 0)
-   {
-      pt.x = (pt.x-tile_width)/tile_width*tile_width;
-   }
-
-   if (pt.y > 0)
-   {
-      pt.y = pt.y/tile_height*tile_height;
-   }
-   else if (pt.y < 0)
-   {
-      pt.y = (pt.y-tile_height)/tile_height*tile_height;
-   }
+   return result;
 }
 
 ossim_uint32 ossimNitfTileSource::getBlockNumber(const ossimIpt& block_origin) const
@@ -2014,7 +2042,7 @@ ossim_uint32 ossimNitfTileSource::getBlockNumber(const ossimIpt& block_origin) c
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    if (!hdr)
    {
-      return blockNumber;
+      return blockNumber; 
    }
 
    ossim_uint32 blockY;
@@ -2137,7 +2165,7 @@ ossimString ossimNitfTileSource::getLongName()const
    return ossimString("nitf reader");
 }
 
-ossimString ossimNitfTileSource::className()const
+ossimString ossimNitfTileSource::getClassName()const
 {
    return ossimString("ossimNitfTileSource");
 }
@@ -2172,8 +2200,8 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
       {
          if ( entryIdx < theNumberOfImages )
          {
-            // Must clear or getImageGeometry method will use last entries.
-            theGeometryKwl.clear();
+            // Clear the geometry.
+            theGeometry = 0;
             
             // Must clear or openOverview will use last entries.
             theOverviewFile.clear();
@@ -2185,6 +2213,17 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
             // need to reinitialize some things.
             //---
             result = allocate();
+            if (result)
+            {
+               completeOpen();
+
+               //---
+               // computeDecimationFactors must be called after completeOpen
+               // so that the
+               // overviews are picked up.
+               //---
+               result = computeDecimationFactors();
+            }
          }
          else
          {
@@ -2200,7 +2239,15 @@ bool ossimNitfTileSource::setCurrentEntry(ossim_uint32 entryIdx)
          theCurrentEntry = entryIdx;
       }
    }
-
+   
+   if(result)
+   {
+      if(theNitfImageHeader[theCurrentEntry]->getRepresentation().contains("LUT"))
+      {
+         theLut = theNitfImageHeader[theCurrentEntry]->createLut(0);
+      }
+      
+   }
    return result;
 }
 
@@ -2238,7 +2285,17 @@ const ossimNitfFileHeader* ossimNitfTileSource::getFileHeader()const
 {
    if(theNitfFile.valid())
    {
-      return theNitfFile->getHeader().get();
+      return theNitfFile->getHeader();
+   }
+   
+   return 0;
+}
+
+ossimNitfFileHeader* ossimNitfTileSource::getFileHeader()
+{
+   if(theNitfFile.valid())
+   {
+      return theNitfFile->getHeader();
    }
    
    return 0;
@@ -2246,33 +2303,112 @@ const ossimNitfFileHeader* ossimNitfTileSource::getFileHeader()const
 
 const ossimNitfImageHeader* ossimNitfTileSource::getCurrentImageHeader() const
 {
-   return theNitfImageHeader[theCurrentEntry].get();
+   if(theNitfImageHeader.size())
+   {
+      return theNitfImageHeader[theCurrentEntry].get();
+   }
+   
+   return 0;
+}
+
+ossimNitfImageHeader* ossimNitfTileSource::getCurrentImageHeader()
+{
+   if(theNitfImageHeader.size())
+   {
+      return theNitfImageHeader[theCurrentEntry].get();
+   }
+   
+   return 0;
 }
 
 void ossimNitfTileSource::getDecimationFactor(ossim_uint32 resLevel,
                                               ossimDpt& result) const
 {
-   if (resLevel == 0)
+   if (resLevel < theDecimationFactors.size())
    {
-      result.x = theDecimationFactor;
-      result.y = theDecimationFactor;
+      result.x = theDecimationFactors[resLevel].x;
+      result.y = theDecimationFactors[resLevel].y;
    }
    else
    {
-      result.x = theDecimationFactor /
-         pow( static_cast<ossim_float64>(2.0),
-              static_cast<ossim_float64>(resLevel) );
-      result.y = result.x;
+      result.makeNan();
    }
+}
+
+bool ossimNitfTileSource::computeDecimationFactors()
+{
+   bool result = true;
+   
+   theDecimationFactors.clear();
+   
+   const ossim_uint32 LEVELS = getNumberOfDecimationLevels();
+
+   for (ossim_uint32 level = 0; level < LEVELS; ++level)
+   {
+      ossimDpt pt;
+      
+      if (level == 0)
+      {
+         pt.x = theDecimationFactor;
+         pt.y = theDecimationFactor;
+      }
+      else
+      {
+         /* 
+            ESH 02/2009 -- No longer assume powers of 2 reduction 
+            in linear size from resLevel 0 (Tickets # 467,529).
+         */
+         
+         // Get the sample decimation.
+         ossim_float64 r0 = getNumberOfSamples(0);
+         ossim_float64 rL = getNumberOfSamples(level);
+         if ( (r0 > 0.0) && (rL > 0.0) )
+         {
+            pt.x = theDecimationFactor * rL / r0;
+         }
+         else
+         {
+            result = false;
+            break;
+         }
+
+         // Get the line decimation.
+         r0 = getNumberOfLines(0);
+         rL = getNumberOfLines(level);
+         if ( (r0 > 0.0) && (rL > 0.0) )
+         {
+            pt.y = theDecimationFactor * rL / r0;
+         }
+         else
+         {
+            result = false;
+            break;
+         }
+      }
+
+      theDecimationFactors.push_back(pt);
+   }
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimNitfTileSource::computeDecimationFactors DEBUG\n";
+      for (ossim_uint32 i = 0; i < theDecimationFactors.size(); ++i)
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "decimation[" << i << "]: " << theDecimationFactors[i]
+            << std::endl;
+      }
+   }
+   
+   return result;
 }
 
 void ossimNitfTileSource::setBoundingRectangle(const ossimIrect& imageRect)
 {
    theImageRect = imageRect;
-   theSubImageOffset = theImageRect.ul();
-   
    // now shift the internal block rect as well
-   theBlockImageRect = (theBlockImageRect - theBlockImageRect.ul()) + theSubImageOffset;
+   theBlockImageRect = (theBlockImageRect - theBlockImageRect.ul());
 }
 
 ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& name)const
@@ -2286,7 +2422,7 @@ ossimRefPtr<ossimProperty> ossimNitfTileSource::getProperty(const ossimString& n
    {
       if(theNitfFile.valid())
       {
-         if(theNitfFile->getHeader().valid())
+         if(theNitfFile->getHeader())
          {
             ossimRefPtr<ossimProperty> p = theNitfFile->getHeader()->getProperty(name);
             if(p.valid())
@@ -2334,7 +2470,7 @@ void ossimNitfTileSource::getPropertyNames(std::vector<ossimString>& propertyNam
 {
    ossimImageHandler::getPropertyNames(propertyNames);
    propertyNames.push_back(ossimKeywordNames::ENABLE_CACHE_KW);
-   if(theNitfFile->getHeader().valid())
+   if(theNitfFile->getHeader())
    {
       theNitfFile->getHeader()->getPropertyNames(propertyNames);
    }
@@ -2552,22 +2688,31 @@ bool ossimNitfTileSource::scanForJpegBlockOffsets()
    while ( theFileStr.get(c) ) 
    {
       ++blockSize;
-      if (static_cast<ossim_uint8>(c) == 0xff)
+      if (static_cast<ossim_uint8>(c) == 0xff) // Found FF byte.
       {
-         if ( theFileStr.get(c) )
+         //---
+         // Loop to skip multiple 0xff's in cases like FF FF D8
+         //---
+         while ( theFileStr.get(c) )
          {
             ++blockSize;
-
-            if (static_cast<ossim_uint8>(c) == 0xd8) // At SOI marker...
+            if (static_cast<ossim_uint8>(c) != 0xff)
             {
-               std::streamoff pos = theFileStr.tellg();
-               theNitfBlockOffset.push_back(pos-2);
+               break;
             }
-            else if (static_cast<ossim_uint8>(c) == 0xd9) // At EOI marker...
-            {
-               theNitfBlockSize.push_back(blockSize);
-               blockSize = 0;
-            }
+         }
+         
+         if (static_cast<ossim_uint8>(c) == 0xd8) 
+         {
+            // At SOI 0xFFD8 marker...
+            std::streamoff pos = theFileStr.tellg();
+            theNitfBlockOffset.push_back(pos-2);
+         }
+         else if (static_cast<ossim_uint8>(c) == 0xd9)
+         {
+            // At EOI 0xD9marker...
+            theNitfBlockSize.push_back(blockSize);
+            blockSize = 0;
          }
       }
    }
@@ -2629,17 +2774,15 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    theFileStr.seekg(theNitfBlockOffset[blockNumber], ios::beg);
    
    // Read the block into memory.
-   ossim_uint8* compressedBuf = new ossim_uint8[theNitfBlockSize[blockNumber]];
-   
-   if (!theFileStr.read((char*)compressedBuf, theNitfBlockSize[blockNumber]))
+   std::vector<ossim_uint8> compressedBuf(theNitfBlockSize[blockNumber]);
+   if (!theFileStr.read((char*)&(compressedBuf.front()),
+                        theNitfBlockSize[blockNumber]))
    {
       theFileStr.clear();
       ossimNotify(ossimNotifyLevel_FATAL)
-         << "ossimNitfTileSource::loadBlock Read Error!"
+         << "ossimNitfTileSource::uncompressJpegBlock Read Error!"
          << "\nReturning error..." << endl;
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      delete [] compressedBuf;
-      compressedBuf = 0;
       return false;
    }
 
@@ -2671,8 +2814,6 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
        * We need to clean up the JPEG object, close the input file, and return.
        */
      jpeg_destroy_decompress(&cinfo);
-     delete [] compressedBuf;
-     compressedBuf = 0;
      return false;
    }
 
@@ -2684,7 +2825,7 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    // memory so we will use "ossimJpegMemorySrc" in place of " jpeg_stdio_src".
    //---
    ossimJpegMemorySrc (&cinfo,
-                       compressedBuf,
+                       &(compressedBuf.front()),
                        static_cast<size_t>(theReadBlockSizeInBytes));
 
    /* Step 3: read file parameters with jpeg_read_header() */
@@ -2697,8 +2838,6 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       if (loadJpegQuantizationTables(cinfo) == false)
       {
          jpeg_destroy_decompress(&cinfo);
-         delete [] compressedBuf;
-         compressedBuf = 0;
          return false;
       }
    }
@@ -2710,8 +2849,6 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       if (loadJpegHuffmanTables(cinfo) == false)
       {
          jpeg_destroy_decompress(&cinfo);
-         delete [] compressedBuf;
-         compressedBuf = 0;
          return false;
       }
    }
@@ -2725,8 +2862,38 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    /* Step 5: Start decompressor */
    jpeg_start_decompress(&cinfo);
    
+   const ossim_uint32 SAMPLES = cinfo.output_width;
+
+   //---
+   // Note: Some nitf will be tagged with a given number of lines but the last
+   // jpeg block may go beyond that to a complete block.  So it you clamp to
+   // last line of the nitf you will get a libjpeg error:
+   // 
+   // "Application transferred too few scanlines"
+   //
+   // So here we will always read the full jpeg block even if it is beyond the
+   // last line of the nitf.
+   //---
+   const ossim_uint32 LINES_TO_READ =
+      min(static_cast<ossim_uint32>(theCacheSize.y), cinfo.output_height);
+
    /* JSAMPLEs per row in output buffer */
-   int row_stride = cinfo.output_width * cinfo.output_components;
+   const ossim_uint32 ROW_STRIDE = SAMPLES * cinfo.output_components;
+
+   if ( (SAMPLES < theCacheTile->getWidth() ) ||
+        (LINES_TO_READ < theCacheTile->getHeight()) )
+   {
+      theCacheTile->makeBlank();
+   }
+
+   if ( (SAMPLES > theCacheTile->getWidth()) ||
+        (LINES_TO_READ > theCacheTile->getHeight()) )
+   {
+      // Error...
+      jpeg_finish_decompress(&cinfo);
+      jpeg_destroy_decompress(&cinfo);
+      return false;
+   }
    
    // Get pointers to the cache tile buffers.
    std::vector<ossim_uint8*> destinationBuffer(theNumberOfInputBands);
@@ -2735,17 +2902,13 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    {
       destinationBuffer[band] = theCacheTile->getUcharBuf(band);
    }
-   
-   // Make a temp line buffer
-   ossim_uint8* lineBuffer = new ossim_uint8[row_stride];
-   JSAMPROW jbuf[1];
-   jbuf[0] = (JSAMPROW) lineBuffer;
 
-   ossim_uint32 linesToRead =
-      min(static_cast<ossim_uint32>(theCacheSize.y),
-          (getNumberOfLines()-y) );
-                                 
-   while (cinfo.output_scanline < linesToRead)
+   // Make a temp line buffer
+   std::vector<ossim_uint8> lineBuffer(ROW_STRIDE);
+   JSAMPROW jbuf[1];
+   jbuf[0] = (JSAMPROW) &(lineBuffer.front());
+
+   while (cinfo.output_scanline < LINES_TO_READ)
    {
       // Read a line from the jpeg file.
       jpeg_read_scanlines(&cinfo, jbuf, 1);
@@ -2753,9 +2916,17 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       //---
       // Copy the line which if band interleaved by pixel the the band
       // separate buffers.
+      //
+      // Note:
+      // Not sure if IMODE of 'B' is interleaved the same as image with
+      // IMODE of 'P'.
+      //
+      // This works with all samples with IMODE of B and P but I only have
+      // one band 'B' and three band 'P'.  So if we ever get a three band
+      // 'B' it could be wrong here. (drb - 20090615)
       //---
-      ossim_int32 index = 0;
-      for (ossim_int32 sample = 0; sample < row_stride; ++sample)
+      ossim_uint32 index = 0;
+      for (ossim_uint32 sample = 0; sample < SAMPLES; ++sample)         
       {
          for (band = 0; band < theNumberOfInputBands; ++band)
          {
@@ -2766,7 +2937,7 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
       
       for (band = 0; band < theNumberOfInputBands; ++band)
       {
-         destinationBuffer[band] += row_stride;
+         destinationBuffer[band] += theCacheSize.x;         
       }
    }
 
@@ -2774,12 +2945,6 @@ bool ossimNitfTileSource::uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y)
    jpeg_finish_decompress(&cinfo);
    jpeg_destroy_decompress(&cinfo);
 
-   delete [] compressedBuf;
-   compressedBuf = 0;
-   
-   // Delete the line buffer.
-   delete [] lineBuffer;
-   lineBuffer = 0;
    return true;
 }
 
@@ -3033,4 +3198,16 @@ bool ossimNitfTileSource::loadJpegHuffmanTables(
       huff_ptr->huffval[i] = DC_HUFFVAL[i];
    }
    return true;
+}
+
+// Protected to disallow use...
+ossimNitfTileSource::ossimNitfTileSource(const ossimNitfTileSource& /* obj */)
+{
+}
+
+// Protected to disallow use...
+ossimNitfTileSource& ossimNitfTileSource::operator=(
+   const ossimNitfTileSource& /* rhs */)
+{
+   return *this;
 }

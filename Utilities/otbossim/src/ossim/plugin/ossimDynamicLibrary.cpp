@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*********************************************************************
-// $Id: ossimDynamicLibrary.cpp 13616 2008-09-29 15:32:12Z dburken $
+// $Id: ossimDynamicLibrary.cpp 15003 2009-07-27 18:58:27Z gpotts $
 #include <ossim/plugin/ossimDynamicLibrary.h>
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/base/ossimTrace.h>
@@ -42,12 +42,12 @@ bool ossimDynamicLibrary::load()
 
 bool ossimDynamicLibrary::load(const ossimString& name)
 {
-   ossimFilename libraryName = name;
+   ossimFilename libraryName = name.trim();
+   if(libraryName.empty()||!libraryName.isFile()) return false;
+   
 #  if defined(__WIN32__) || defined(_WIN32)
-   libraryName.convertForwardToBackSlashes();
    theLibrary = LoadLibrary(libraryName.c_str());
 #  else 
-   libraryName.convertBackToForwardSlashes();
    theLibrary = dlopen(libraryName.c_str(), RTLD_LAZY);
 #endif
 

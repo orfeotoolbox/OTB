@@ -13,12 +13,13 @@
 // signed short data.
 //
 //*************************************************************************
-// $Id: ossimS16ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimS16ImageData.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimS16ImageData_HEADER
 #define ossimS16ImageData_HEADER
 
 #include <ossim/imaging/ossimImageData.h>
+#include <ossim/imaging/ossimNormalizedS16RemapTable.h>
 
 class OSSIMDLLEXPORT ossimS16ImageData : public ossimImageData
 {
@@ -33,7 +34,6 @@ public:
 
    ossimS16ImageData(const ossimS16ImageData &rhs);
    
-   virtual ~ossimS16ImageData();
 
    /*!
     * Perform object duplication.
@@ -169,13 +169,12 @@ public:
    virtual void copyNormalizedBufferToTile(ossim_uint32 band,
                                            float* buf);
 protected:
+   virtual ~ossimS16ImageData();
    ossimS16ImageData();
 
 private:
 
-   // Disallow from use...
-   const ossimS16ImageData& operator =(const ossimS16ImageData &rhs)
-                                     {return *this;}
+   static const ossimNormalizedS16RemapTable theRemapTable;
 
 TYPE_DATA
 };

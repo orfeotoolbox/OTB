@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 14218 2009-04-03 13:00:21Z gpotts $
+//  $Id: ossimDrect.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -42,8 +42,8 @@
 //***
 // Forward class declarations.
 //***
-class OSSIMDLLEXPORT ossimIrect;
-class OSSIMDLLEXPORT ossimPolygon;
+class ossimIrect;
+class ossimPolygon;
 
 //*******************************************************************
 // CLASS:  ossimDrect

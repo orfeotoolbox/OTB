@@ -31,7 +31,7 @@ protected:
    /*!
     * Holds the view projection.
     */
-   ossimMapProjection* theViewProjection;
+   ossimRefPtr<ossimMapProjection> theViewProjection;
 
    ossimGrect       theGroundRect;
 

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIndexToRgbLutFilter.h 10147 2006-12-21 12:34:02Z gpotts $
+// $Id: ossimIndexToRgbLutFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimIndexToRgbLutFilter_HEADER
 #define ossimIndexToRgbLutFilter_HEADER
 #include <ossim/base/ossimRgbVector.h>
@@ -115,7 +115,6 @@ public:
                            double minValue,
                            double maxValue,
                            ossimIndexToRgbLutFilterInterpolationType interpolationType);
-   virtual ~ossimIndexToRgbLutFilter();
    
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& origin,
                                                ossim_uint32 resLevel=0);
@@ -173,13 +172,14 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=NULL);
 protected:
+   virtual ~ossimIndexToRgbLutFilter();
 
    /**
     * Called on first getTile, will initialize all data needed.
     */
    void allocate();
    
-   ossimRgbLutDataObject theLut;
+   ossimRefPtr<ossimRgbLutDataObject> theLut;
    double theMinValue;
    double theMaxValue;
    double theMinMaxDeltaLength;

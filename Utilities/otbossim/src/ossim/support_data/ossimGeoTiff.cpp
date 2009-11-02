@@ -3,14 +3,13 @@
 //
 // License:  See top level LICENSE.txt file.
 //
-// Author:  David Burken
-//
 // Description:
+// 
 // Class definition for ossimGeoTiff which is designed to read and hold tag
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 14369 2009-04-20 21:32:33Z dburken $
+// $Id: ossimGeoTiff.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -45,18 +44,21 @@
 #include <sstream>
 #include <cstdlib>
 
+
 static const ossimGeoTiffCoordTransformsLut COORD_TRANS_LUT;
 static const ossimGeoTiffDatumLut DATUM_LUT;
+OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 14369 2009-04-20 21:32:33Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 //---
 // Static trace for debugging
 //---
 static ossimTrace traceDebug("ossimGeoTiff:debug");
-ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
+
+ossimGeoTiff::ossimGeoTiff()
    :
       theTiffPtr(0),
       theGeoKeyOffset(0),
@@ -66,15 +68,13 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       theHemisphere("N"),
       theProjectionName("unknown"),
       theDatumName("unknown"),
-      
       theScale(),
       theTiePoint(),
       theModelTransformation(),
-      
       theWidth(0),
       theLength(0),
       theBitsPerSample(),
-      theModelType(UNKNOWN),
+      theModelType(0),
       theRasterType(UNDEFINED),
       theGcsCode(0),
       theDatumCode(0),
@@ -91,9 +91,47 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
       theOriginLat(0.0),
       theFalseEasting(0.0),
       theFalseNorthing(0.0),
-      theCenterLon(0.0),
-      theCenterLat(0.0),
-      theScaleFactor(0.0)
+      theScaleFactor(0.0),
+      theNormalizedDefinitions(0)
+{
+}
+
+
+ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
+   :
+      theTiffPtr(0),
+      theGeoKeyOffset(0),
+      theGeoKeyLength(0),
+      theGeoKeysPresentFlag(false),
+      theZone(0),
+      theHemisphere("N"),
+      theProjectionName("unknown"),
+      theDatumName("unknown"),
+      theScale(),
+      theTiePoint(),
+      theModelTransformation(),
+      theWidth(0),
+      theLength(0),
+      theBitsPerSample(),
+      theModelType(0),
+      theRasterType(UNDEFINED),
+      theGcsCode(0),
+      theDatumCode(0),
+      theAngularUnits(0),
+      thePcsCode(0),
+      theSavePcsCodeFlag(false),
+      thePcsCitation(),
+      theProjGeoCode(0),
+      theCoorTransGeoCode(0),
+      theLinearUnitsCode(UNDEFINED),
+      theStdPar1(0.0),
+      theStdPar2(0.0),
+      theOriginLon(0.0),
+      theOriginLat(0.0),
+      theFalseEasting(0.0),
+      theFalseNorthing(0.0),
+      theScaleFactor(0.0),
+      theNormalizedDefinitions(0)
 {
    if (traceDebug())
    {
@@ -130,6 +168,11 @@ ossimGeoTiff::ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx)
 
 ossimGeoTiff::~ossimGeoTiff()
 {
+   if(theNormalizedDefinitions)
+   {
+      delete theNormalizedDefinitions;
+      theNormalizedDefinitions = 0;
+   }
    if(theTiffPtr)
    {
       XTIFFClose(theTiffPtr);
@@ -170,15 +213,18 @@ int ossimGeoTiff::getPcsUnitType(ossim_int32 pcsCode)
    return pcsUnits;
 }
 
+#define EPSG_CODE_MAX 32767
 bool ossimGeoTiff::writeTags(TIFF* tifPtr,
                              const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
                              bool imagineNad27Flag)
 {
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+   
    const ossimMapProjection* mapProj = projectionInfo->getProjection();
    if(!mapProj) return false;
    GTIF* gtif = GTIFNew(tifPtr);
 
-    // Get some things we need thoughout.
+    // Get some things we need throughout.
    ossimGpt origin      = mapProj->origin();
    double falseEasting  =  mapProj->getFalseEasting();
    double falseNorthing =  mapProj->getFalseNorthing();
@@ -222,75 +268,520 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    {
       units = getPcsUnitType(pcsCode);
    }
-//    if (isStatePlane)
-//    {
-//       if (units != getPcsUnitType(pcsCode))
-//       {
-//          //---
-//          // State plane pcs codes imply units, so if user overroad with
-//          // theLinearUnits make the projection user defined by setting the
-//          // pcs code to 0.
-//          //---
-//          pcsCode = 0;
-//       }
-//    }
 
    if (units == UNDEFINED)
    {
       units = LINEAR_METER;
    }
-   
+
    if (pcsCode)
    {
-      GTIFKeySet(gtif,
-                 ProjectedCSTypeGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 pcsCode);
+      const ossimStatePlaneProjectionInfo* info =
+         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCode);
+      if (info)
+      {
+         // ESH 05/2008 -- ArcMap 9.2 compatibility hack
+         // If the PCS code is for a HARN state plane and the implied pcs 
+         // code's units is feet (us or intl), we find the equivalent code 
+         // for units of meters.  We're doing this because ArcMap (9.2 and 
+         // less) doesn't understand the non-meters HARN codes.  However, 
+         // the units are left unchanged in this process, so the units can 
+         // be different than the user-specified pcs code. ArcMap 9.2 
+         // seems to understand the mixed definition just fine.
+         int unitType = getPcsUnitType(pcsCode);
+         if (unitType == LINEAR_FOOT_US_SURVEY || unitType == LINEAR_FOOT)
+         {
+            const ossimString& pcsCodeName = info->name();
+            if ( pcsCodeName.empty() == false )
+            {
+               if ( pcsCodeName.contains("HARN")  == true && 
+                    pcsCodeName.contains("_Feet") == true )
+               {
+                  ossimString feetStr("_Feet");
+                  ossimString newPcsCodeName( pcsCodeName.before(feetStr).c_str() );
+                  if ( newPcsCodeName.empty() == false )
+                  {
+                     info = ossimStatePlaneProjectionFactory::instance()->getInfo(newPcsCodeName);
+                     if ( info != NULL )
+                     {
+                        // pcs code for equivalent HARN/meters definition
+                        ossimString newPcsCode( ossimString::toString( info->code() ) );
+
+                        // Make sure the code can be used in the tiff file. 
+                        // It has to fit into an unsigned short.
+                        if ( info->code() < EPSG_CODE_MAX ) 
+                           pcsCode = static_cast<ossim_uint16>( info->code() );
+                     }
+                  }
+               }
+            }
+         }
+         // End pcs code switch hack
+      }
+
+      GTIFKeySet(gtif, GeographicTypeGeoKey,    TYPE_SHORT, 1, USER_DEFINED);
+      GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1, USER_DEFINED);
+      GTIFKeySet(gtif, ProjectionGeoKey ,       TYPE_SHORT, 1, USER_DEFINED);
+      GTIFKeySet(gtif, GeogEllipsoidGeoKey,     TYPE_SHORT, 1, USER_DEFINED);
+      GTIFKeySet(gtif, ProjectedCSTypeGeoKey,   TYPE_SHORT, 1, pcsCode);
    }
-   
-//    if (traceDebug())
-//    {
-//       CLOG << " DEBUG:\n"
-//            << "Geotiff ProjectedCSTypeGeoKey:  "
-//            << pcsCode
-//            << std::endl;
-//    }
-   
+   else
+   {
+      ossimString datumCode = "WGE";
+      ossimString datumName = "WGE";
+      // Attemp to get the datum code
+      const ossimDatum* datum = mapProj->getDatum();
+      if(datum)
+      {
+         datumCode = datum->code();
+         datumName = datum->name();
+      }
+
+      short gcs = USER_DEFINED;
+
+      if (datumCode == "WGE") gcs = GCS_WGS_84;
+      else if (datumCode == "WGD") gcs = GCS_WGS_72;
+      else if (datumCode == "NAR-C") gcs = GCS_NAD83;
+      else if (datumCode == "NAR") gcs = GCS_NAD83;
+      else if (datumCode == "NAS-C") gcs = GCS_NAD27;
+      else if (datumCode == "NAS") gcs = GCS_NAD27;
+      else if (datumCode == "ADI-M") gcs = GCS_Adindan;
+      else if (datumCode == "ARF-M") gcs = GCS_Arc_1950;
+      else if (datumCode == "ARS-M") gcs = GCS_Arc_1960;
+      else if (datumCode == "EUR-7" || datumCode == "EUR-M") gcs = GCS_ED50;
+      else if ((datumCode == "OGB-7") ||
+               (datumCode == "OGB-M") ||
+               (datumCode == "OGB-A") ||
+               (datumCode == "OGB-B") ||
+               (datumCode == "OGB-C") ||
+               (datumCode == "OGB-D")) gcs = GCS_OSGB_1936;
+      else if (datumCode == "TOY-M") gcs = GCS_Tokyo;
+      else
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "DATUM = " << datumCode << " tag not written " << std::endl
+               << "Please let us know so we can add it"          << std::endl;
+         }
+      }
+
+      // ***
+      // ERDAS Imagine < v8.7 has a NAD27 Conus Bug.  They are not using the
+      // proper GCS code.  They use user-defined fields and Geog cititaion tag to
+      // define.  Sucks!  It is an open issue at Leica.  This is a work around
+      // flag for this issue.
+      // ***
+      if((datumCode == "NAS-C") && imagineNad27Flag)
+      {
+         gcs = USER_DEFINED;
+
+         std::ostringstream os;
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15766 $ $Date: 2009-10-20 20:37:09 +0800 (Tue, 20 Oct 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+
+         GTIFKeySet(gtif,
+                    GeogCitationGeoKey,
+                    TYPE_ASCII,
+                    1,
+                    os.str().c_str());
+
+         // User-Defined
+         GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1,
+                    KvUserDefined );
+         // User-Defined
+         GTIFKeySet(gtif, GeogEllipsoidGeoKey, TYPE_SHORT, 1,
+                    KvUserDefined );
+      }
+      else
+      {
+         GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
+      }
+
+      // Write the projection parameters.
+
+      bool setFalseEastingNorthingFlag = false;
+      
+      if ( projName == "ossimUtmProjection" )
+      {
+         //---
+         // UTM tags needed example from the geo tiff spec page:
+         // ModelTiepointTag       = (0, 0, 0,  350807.4, 5316081.3, 0.0)
+         // ModelPixelScaleTag     = (100.0, 100.0, 0.0)
+         // GeoKeyDirectoryTag:
+         //       GTModelTypeGeoKey        =  1      (ModelTypeProjected)
+         //       GTRasterTypeGeoKey       =  1      (RasterPixelIsArea)
+         //       ProjectedCSTypeGeoKey    =  32660  (PCS_WGS84_UTM_zone_60N)
+         //       PCSCitationGeoKey        =  "UTM Zone 60 N with WGS84"
+         //
+         // NOTE:
+         // The "ProjectedCSTypeGeoKey" can be constructed using the map zone
+         // and the datum.
+         //---
+         const ossimUtmProjection* utmProjection = dynamic_cast<const ossimUtmProjection*>(mapProj);
+
+         // Attempt to get the pcs key.
+         int mapZone = utmProjection->getZone();
+         ossimString hemisphere = utmProjection->getHemisphere();
+         short projSysCode=0;
+
+         //---
+         // Use a projection code that does not imply a datum.
+         // See section "6.3.3.2 Projection Codes" for definition.
+         //---
+         if (mapZone > 0) // Northern hemisphere.
+         {
+            projSysCode = 16000 + mapZone;
+         }
+         else if (mapZone < 0) // Southern hemisphere.
+         {
+            hemisphere = "S";
+            projSysCode = 16100 + abs(mapZone);
+         }
+         
+         // Set the Projected Coordinate System Type to be user defined.
+         GTIFKeySet(gtif,
+                    ProjectedCSTypeGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    USER_DEFINED);
+         
+         // Set the geographic type to be user defined.
+         GTIFKeySet(gtif,
+                    GeographicTypeGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    USER_DEFINED);
+         
+         // Set the ProjectionGeoKey in place of the ProjectedCSTypeGeoKey.
+         GTIFKeySet(gtif,
+                    ProjectionGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    projSysCode);
+
+         std::ostringstream os;
+         os << "UTM Zone " << dec << mapZone << hemisphere.c_str()
+            << " with " << datumName << " datum";
+         
+         GTIFKeySet(gtif,
+                    PCSCitationGeoKey,
+                    TYPE_ASCII,
+                    1,
+                    os.str().c_str());
+         
+      } // End of "if ( projName == "ossimUtmProjection" )
+      
+      else if(projName == "ossimBngProjection")
+      {
+         // User-Defined
+         GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1,
+		    PCS_BRITISH_NATIONAL_GRID);//KvUserDefined );
+         
+         // User-Defined
+         GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1,
+		    KvUserDefined );
+         
+         GTIFKeySet(gtif,
+                    PCSCitationGeoKey,
+                    TYPE_ASCII,
+                    26,
+                    "PCS_British_National_Grid");
+         
+         GTIFKeySet(gtif,
+                    ProjCoordTransGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    (uint16)CT_TransverseMercator);
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());
+
+         setFalseEastingNorthingFlag = true;
+
+         double scale = ossimString(scaleFactor).toDouble();
+
+         GTIFKeySet(gtif,
+                    ProjScaleAtNatOriginGeoKey,
+                    TYPE_DOUBLE,
+                    1,
+                    scale);
+      }
+      else if( projName == "ossimSinusoidalProjection")
+      {
+         GTIFKeySet(gtif,
+                    ProjCoordTransGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    (uint16)CT_Sinusoidal);
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());
+
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());
+
+         setFalseEastingNorthingFlag = true;
+      }
+      else if( (projName == "ossimEquDistCylProjection")||
+               (projName == "ossimLlxyProjection"))
+      {
+         GTIFKeySet(gtif,
+		    ProjNatOriginLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());
+      }
+      else if ( (projName == "ossimLambertConformalConicProjection") ||
+                (projName == "ossimAlbersProjection") )
+      {
+         //---
+         // Lambert Conformal Conic:
+         // tags needed example from the geo tiff spec page:
+         // ModelTiepointTag     = (  80,  100, 0,  200000,  1500000, 0)
+         // ModelPixelScaleTag         = (1000, 1000, 0)
+         // GeoKeyDirectoryTag:
+         //       GTModelTypeGeoKey           =  1     (ModelTypeProjected)
+         //       GTRasterTypeGeoKey          =  1     (RasterPixelIsArea)
+         //       GeographicTypeGeoKey        =  4267  (GCS_NAD27)
+         //       ProjectedCSTypeGeoKey       =  32767 (user-defined)
+         //       ProjectionGeoKey            =  32767 (user-defined)
+         //       ProjLinearUnitsGeoKey       =  9001     (Linear_Meter)
+         //       ProjCoordTransGeoKey        =  8 (CT_LambertConfConic_2SP)
+         //            ProjStdParallel1GeoKey     =  41.333
+         //            ProjStdParallel2GeoKey     =  48.666
+         //            ProjCenterLongGeoKey       =-120.0
+         //            ProjNatOriginLatGeoKey     =  45.0
+         //            ProjFalseEastingGeoKey,    = 200000.0
+         //            ProjFalseNorthingGeoKey,   = 1500000.0
+         //
+         // NOTE: Albers Same as Lambert with the exception of the
+         //       ProjCoordTransGeoKey which is:  CT_AlbersEqualArea.
+         //---
+         
+         if (projName == "ossimLambertConformalConicProjection")
+         {
+            GTIFKeySet(gtif,
+                       ProjCoordTransGeoKey,
+                       TYPE_SHORT,
+                       1,
+                       (uint16)CT_LambertConfConic_2SP );
+         }
+         else // Albers
+         {
+            GTIFKeySet(gtif,
+                       ProjCoordTransGeoKey,
+                       TYPE_SHORT,
+                       1,
+                       (uint16)CT_AlbersEqualArea);
+         }
+         
+         // User-Defined
+         GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1,
+                    KvUserDefined );
+
+         // User-Defined
+         GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1,
+		    KvUserDefined );
+
+         double phi1 = ossimString(stdParallel1).toDouble();
+
+         GTIFKeySet(gtif,
+		    ProjStdParallel1GeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    phi1);  // 1st parallel
+
+         double phi2 = ossimString(stdParallel2).toDouble();
+
+         GTIFKeySet(gtif,
+		    ProjStdParallel2GeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    phi2);  // 2nd parallel
+
+         GTIFKeySet(gtif,
+		    ProjCenterLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());  // Longitude at the origin.
+
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());  // Origin
+
+         setFalseEastingNorthingFlag = true;
+
+      }  // End of Lambert.
+
+
+      else if ( projName == "ossimMercatorProjection" )
+      {
+         GTIFKeySet(gtif,
+                    ProjCoordTransGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    (uint16)CT_TransverseMercator);
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());
+
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());
+
+         setFalseEastingNorthingFlag = true;
+
+         double scale = ossimString(scaleFactor).toDouble();
+
+         GTIFKeySet(gtif,
+                    ProjScaleAtNatOriginGeoKey,
+                    TYPE_DOUBLE,
+                    1,
+                    scale);
+      }
+      else if ( projName == "ossimTransMercatorProjection" )
+      {
+         //---
+         // Transverse Mercator ( no example in the geo tiff spec.
+         // Requires:
+         //    - latitude/longitude of the origin
+         //    - easting/northing of some tie point(line/sample 0,0)
+         //    - false easting/northing
+         //    - The scale factor.
+         //---
+
+         //---
+         // The easting/northing is the distance from the origin plus the
+         // false easting/northing.  In other words if line 0 is 5,000
+         // meters from the origin and the false northing is 5,000 meters,
+         // then the northing would be 10,000.  The same goes for the easting.
+         //---
+         GTIFKeySet(gtif,
+                    ProjCoordTransGeoKey,
+                    TYPE_SHORT,
+                    1,
+                    (uint16)CT_TransverseMercator);
+         
+         // User-Defined
+         GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1, KvUserDefined );
+         
+         // User-Defined
+         GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1, KvUserDefined );
+         
+         GTIFKeySet(gtif,
+		    ProjNatOriginLongGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.lond());
+
+         GTIFKeySet(gtif,
+		    ProjNatOriginLatGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    origin.latd());
+
+         setFalseEastingNorthingFlag = true;
+
+         double scale = ossimString(scaleFactor).toDouble();
+
+         GTIFKeySet(gtif,
+                    ProjScaleAtNatOriginGeoKey,
+                    TYPE_DOUBLE,
+                    1,
+                    scale);
+      } // End of TM
+
+      if (setFalseEastingNorthingFlag == true)
+      {
+
+         GTIFKeySet(gtif,
+		    ProjFalseEastingGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    falseEasting);
+
+         GTIFKeySet(gtif,
+		    ProjFalseNorthingGeoKey,
+		    TYPE_DOUBLE,
+		    1,
+		    falseNorthing);
+      }
+   }
+
    //---
    // Set the model type and units.
    //---
    if (units == ossimGeoTiff::ANGULAR_DEGREE)
    {
       GTIFKeySet(gtif,
-                 GTModelTypeGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 ModelTypeGeographic);
+         GTModelTypeGeoKey,
+         TYPE_SHORT,
+         1,
+         ModelTypeGeographic);
 
       // Set the units key.
       GTIFKeySet(gtif,
-                 GeogAngularUnitsGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 units);
+         GeogAngularUnitsGeoKey,
+         TYPE_SHORT,
+         1,
+         units);
    }
    else
    {
       GTIFKeySet(gtif,
-                 GTModelTypeGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 ModelTypeProjected);
+         GTModelTypeGeoKey,
+         TYPE_SHORT,
+         1,
+         ModelTypeProjected);
 
       // Set the units key.
       GTIFKeySet(gtif,
-                 ProjLinearUnitsGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 units);
+         ProjLinearUnitsGeoKey,
+         TYPE_SHORT,
+         1,
+         units);
    }
-   
+
+   // Set the ellipsoid major/minor axis.
+   GTIFKeySet(gtif,
+              GeogSemiMajorAxisGeoKey,
+              TYPE_DOUBLE,
+              1,
+              mapProj->getA());
+
+   GTIFKeySet(gtif,
+              GeogSemiMinorAxisGeoKey,
+              TYPE_DOUBLE,
+              1,
+              mapProj->getB());
 
    // Set the pixel type.
    if (projectionInfo->getPixelType() == OSSIM_PIXEL_IS_POINT)
@@ -307,8 +798,8 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    //---
    // Set the tie point and scale.
    //---
-   double   tiePoints[6]  = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-   double   pixScale[3]   = { 0.0, 0.0, 0.0 };
+   double  tiePoints[6]  = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+   double  pixScale[3]   = { 0.0, 0.0, 0.0 };
    switch (units)
    {
       case LINEAR_FOOT:
@@ -319,7 +810,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          pixScale[1]   = ossim::mtrs2ft(projectionInfo->getMetersPerPixel().y);
          falseEasting  = ossim::mtrs2ft(falseEasting);
          falseNorthing = ossim::mtrs2ft(falseNorthing);
-         
+
          break;
       }
       case LINEAR_FOOT_US_SURVEY:
@@ -349,466 +840,68 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          pixScale[1]  = projectionInfo->getMetersPerPixel().y;
          break;
       }
-         
+
    } // End of "switch (units)"
-   
-   TIFFSetField( tifPtr, TIFFTAG_GEOTIEPOINTS, 6, tiePoints );
+
+   TIFFSetField( tifPtr, TIFFTAG_GEOTIEPOINTS,  6, tiePoints );
    TIFFSetField( tifPtr, TIFFTAG_GEOPIXELSCALE, 3, pixScale );
 
-   
-   ossimString datumCode = "WGE";
-   ossimString datumName = "WGE";
-   // Attemp to get the datum code
-   const ossimDatum* datum = mapProj->getDatum();
-   if(datum)
-   {
-      datumCode = datum->code();
-      datumName = datum->name();
-   }
 
-   short gcs = USER_DEFINED;
-
-   if (datumCode == "WGE") gcs = GCS_WGS_84;
-   else if (datumCode == "WGD") gcs = GCS_WGS_72;
-   else if (datumCode == "NAR-C") gcs = GCS_NAD83;
-   else if (datumCode == "NAR") gcs = GCS_NAD83;
-   else if (datumCode == "NAS-C") gcs = GCS_NAD27;
-   else if (datumCode == "NAS") gcs = GCS_NAD27;
-   else if (datumCode == "ADI-M") gcs = GCS_Adindan;
-   else if (datumCode == "ARF-M") gcs = GCS_Arc_1950;
-   else if (datumCode == "ARS-M") gcs = GCS_Arc_1960;
-   else if (datumCode == "EUR-7" || datumCode == "EUR-M") gcs = GCS_ED50;
-   else if ((datumCode == "OGB-7") ||
-            (datumCode == "OGB-M") ||
-            (datumCode == "OGB-A") ||
-            (datumCode == "OGB-B") ||
-            (datumCode == "OGB-C") ||
-            (datumCode == "OGB-D")) gcs = GCS_OSGB_1936;
-   else if (datumCode == "TOY-M") gcs = GCS_Tokyo;
-   else
-   {
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DATUM = " << datumCode << " tag not written " << std::endl
-            << "Please let us know so we can add it"          << std::endl;
-      }
-   }
-
-   // ***
-   // ERDAS Imagine < v8.7 has a NAD27 Conus Bug.  They are not using the
-   // proper GCS code.  They use user-defined fields and Geog cititaion tag to
-   // define.  Sucks!  It is an open issue at Leica.  This is a work around
-   // flag for this issue.
-   // ***
-   if((datumCode == "NAS-C") && imagineNad27Flag)
-   {
-      gcs = USER_DEFINED;
-
-      std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 14369 $ $Date: 2009-04-21 05:32:33 +0800 (Tue, 21 Apr 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
-
-      GTIFKeySet(gtif,
-                 GeogCitationGeoKey,
-                 TYPE_ASCII,
-                 1,
-                 os.str().c_str());
-
-      // User-Defined
-      GTIFKeySet(gtif, GeogGeodeticDatumGeoKey, TYPE_SHORT, 1,
-                 KvUserDefined );
-      // User-Defined
-      GTIFKeySet(gtif, GeogEllipsoidGeoKey, TYPE_SHORT, 1,
-                 KvUserDefined );
-   }
-   else
-   {
-      GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
-   }
-
-   // Set the ellipsoid major/minor axis.
-   GTIFKeySet(gtif,
-              GeogSemiMajorAxisGeoKey,
-              TYPE_DOUBLE,
-              1,
-              mapProj->getA());
-
-   GTIFKeySet(gtif,
-              GeogSemiMinorAxisGeoKey,
-              TYPE_DOUBLE,
-              1,
-              mapProj->getB());
-
-   // Write the projection parameters.
-
-   bool setFalseEastingNorthingFlag = false;
-   
-   if ( (projName == "ossimUtmProjection") && !pcsCode )
-   {
-      //---
-      // UTM tags needed example from the geo tiff spec page:
-      // ModelTiepointTag       = (0, 0, 0,  350807.4, 5316081.3, 0.0)
-      // ModelPixelScaleTag     = (100.0, 100.0, 0.0)
-      // GeoKeyDirectoryTag:
-      //       GTModelTypeGeoKey        =  1      (ModelTypeProjected)
-      //       GTRasterTypeGeoKey       =  1      (RasterPixelIsArea)
-      //       ProjectedCSTypeGeoKey    =  32660  (PCS_WGS84_UTM_zone_60N)
-      //       PCSCitationGeoKey        =  "UTM Zone 60 N with WGS84"
-      //
-      // NOTE:
-      // The "ProjectedCSTypeGeoKey" can be constructed using the map zone
-      // and the datum.
-      //---
-      const ossimUtmProjection* utmProjection = dynamic_cast<const ossimUtmProjection*>(mapProj);
-
-      // Attempt to get the pcs key.
-      int mapZone = utmProjection->getZone();
-      ossimString hemisphere = utmProjection->getHemisphere();
-      short projSysCode=0;
-
-      //---
-      // Use a projection code that does not imply a datum.
-      // See section "6.3.3.2 Projection Codes" for definition.
-      //---
-      if (mapZone > 0) // Northern hemisphere.
-      {
-         projSysCode = 16000 + mapZone;
-      }
-      else if (mapZone < 0) // Southern hemisphere.
-      {
-         hemisphere = "S";
-         projSysCode = 16100 + abs(mapZone);
-      }
-      
-      // Set the Projected Coordinate System Type to be user defined.
-      GTIFKeySet(gtif,
-                 ProjectedCSTypeGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 USER_DEFINED);
-      
-      // Set the geographic type to be user defined.
-      GTIFKeySet(gtif,
-                 GeographicTypeGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 USER_DEFINED);
-      
-      // Set the ProjectionGeoKey in place of the ProjectedCSTypeGeoKey.
-      GTIFKeySet(gtif,
-                 ProjectionGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 projSysCode);
-   
-//       if (traceDebug())
-//       {
-//          CLOG << " DEBUG:\n"
-//               << "Geotiff ProjectedCSTypeGeoKey:  "
-//               << pcsCode
-//               << std::endl;
-//       }
-      
-      std::ostringstream os;
-      os << "UTM Zone " << dec << mapZone << hemisphere.c_str()
-         << " with " << datumName << " datum";
-      
-      GTIFKeySet(gtif,
-                 PCSCitationGeoKey,
-                 TYPE_ASCII,
-                 1,
-                 os.str().c_str());
-      
-   } // End of "if ( (projName == "ossimUtmProjection") && !pcsCode )
-   
-   else if(projName == "ossimBngProjection")
-   {
-      // User-Defined
-      GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1,
-		 PCS_BRITISH_NATIONAL_GRID);//KvUserDefined );
-      
-      // User-Defined
-      GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1,
-		 KvUserDefined );
-      
-      GTIFKeySet(gtif,
-                 PCSCitationGeoKey,
-                 TYPE_ASCII,
-                 26,
-                 "PCS_British_National_Grid");
-      
-      GTIFKeySet(gtif,
-                 ProjCoordTransGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 (uint16)CT_TransverseMercator);
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());
-
-      setFalseEastingNorthingFlag = true;
-
-      double scale = ossimString(scaleFactor).toDouble();
-
-      GTIFKeySet(gtif,
-                 ProjScaleAtNatOriginGeoKey,
-                 TYPE_DOUBLE,
-                 1,
-                 scale);
-   }
-   else if( projName == "ossimSinusoidalProjection")
-   {
-      GTIFKeySet(gtif,
-                 ProjCoordTransGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 (uint16)CT_Sinusoidal);
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());
-
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());
-
-      setFalseEastingNorthingFlag = true;
-   }
-   else if( (projName == "ossimEquDistCylProjection")||
-            (projName == "ossimLlxyProjection"))
-   {
-      GTIFKeySet(gtif,
-		 ProjNatOriginLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());
-   }
-   else if ( ( (projName == "ossimLambertConformalConicProjection") &&
-               (!pcsCode)) ||
-             (projName == "ossimAlbersProjection") )
-   {
-      //---
-      // Lambert Conformal Conic:
-      // tags needed example from the geo tiff spec page:
-      // ModelTiepointTag     = (  80,  100, 0,  200000,  1500000, 0)
-      // ModelPixelScaleTag         = (1000, 1000, 0)
-      // GeoKeyDirectoryTag:
-      //       GTModelTypeGeoKey           =  1     (ModelTypeProjected)
-      //       GTRasterTypeGeoKey          =  1     (RasterPixelIsArea)
-      //       GeographicTypeGeoKey        =  4267  (GCS_NAD27)
-      //       ProjectedCSTypeGeoKey       =  32767 (user-defined)
-      //       ProjectionGeoKey            =  32767 (user-defined)
-      //       ProjLinearUnitsGeoKey       =  9001     (Linear_Meter)
-      //       ProjCoordTransGeoKey        =  8 (CT_LambertConfConic_2SP)
-      //            ProjStdParallel1GeoKey     =  41.333
-      //            ProjStdParallel2GeoKey     =  48.666
-      //            ProjCenterLongGeoKey       =-120.0
-      //            ProjNatOriginLatGeoKey     =  45.0
-      //            ProjFalseEastingGeoKey,    = 200000.0
-      //            ProjFalseNorthingGeoKey,   = 1500000.0
-      //
-      // NOTE: Albers Same as Lambert with the exception of the
-      //       ProjCoordTransGeoKey which is:  CT_AlbersEqualArea.
-      //---
-      
-      if (projName == "ossimLambertConformalConicProjection")
-      {
-         GTIFKeySet(gtif,
-                    ProjCoordTransGeoKey,
-                    TYPE_SHORT,
-                    1,
-                    (uint16)CT_LambertConfConic_2SP );
-      }
-      else // Albers
-      {
-         GTIFKeySet(gtif,
-                    ProjCoordTransGeoKey,
-                    TYPE_SHORT,
-                    1,
-                    (uint16)CT_AlbersEqualArea);
-      }
-      
-      // User-Defined
-      GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1,
-                 KvUserDefined );
-
-      // User-Defined
-      GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1,
-		 KvUserDefined );
-
-      double phi1 = ossimString(stdParallel1).toDouble();
-
-      GTIFKeySet(gtif,
-		 ProjStdParallel1GeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 phi1);  // 1st parallel
-
-      double phi2 = ossimString(stdParallel2).toDouble();
-
-      GTIFKeySet(gtif,
-		 ProjStdParallel2GeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 phi2);  // 2nd parallel
-
-      GTIFKeySet(gtif,
-		 ProjCenterLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());  // Longitude at the origin.
-
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());  // Origin
-
-      setFalseEastingNorthingFlag = true;
-
-   }  // End of Lambert.
-
-
-   else if ( (projName == "ossimMercatorProjection"))// && !pcsCode )
-   {
-      GTIFKeySet(gtif,
-                 ProjCoordTransGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 (uint16)CT_TransverseMercator);
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());
-
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());
-
-      setFalseEastingNorthingFlag = true;
-
-      double scale = ossimString(scaleFactor).toDouble();
-
-      GTIFKeySet(gtif,
-                 ProjScaleAtNatOriginGeoKey,
-                 TYPE_DOUBLE,
-                 1,
-                 scale);
-   }
-   else if ( (projName == "ossimTransMercatorProjection") && !pcsCode )
-   {
-      //---
-      // Transverse Mercator ( no example in the geo tiff spec.
-      // Requires:
-      //    - latitude/longitude of the origin
-      //    - easting/northing of some tie point(line/sample 0,0)
-      //    - false easting/northing
-      //    - The scale factor.
-      //---
-
-      //---
-      // The easting/northing is the distance from the origin plus the
-      // false easting/northing.  In other words if line 0 is 5,000
-      // meters from the origin and the false northing is 5,000 meters,
-      // then the northing would be 10,000.  The same goes for the easting.
-      //---
-      GTIFKeySet(gtif,
-                 ProjCoordTransGeoKey,
-                 TYPE_SHORT,
-                 1,
-                 (uint16)CT_TransverseMercator);
-      
-      // User-Defined
-      GTIFKeySet(gtif, ProjectedCSTypeGeoKey, TYPE_SHORT, 1, KvUserDefined );
-      
-      // User-Defined
-      GTIFKeySet(gtif, ProjectionGeoKey, TYPE_SHORT, 1, KvUserDefined );
-      
-      GTIFKeySet(gtif,
-		 ProjNatOriginLongGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.lond());
-
-      GTIFKeySet(gtif,
-		 ProjNatOriginLatGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 origin.latd());
-
-      setFalseEastingNorthingFlag = true;
-
-      double scale = ossimString(scaleFactor).toDouble();
-
-      GTIFKeySet(gtif,
-                 ProjScaleAtNatOriginGeoKey,
-                 TYPE_DOUBLE,
-                 1,
-                 scale);
-   } // End of TM
-
-   if (setFalseEastingNorthingFlag == true)
-   {
-
-      GTIFKeySet(gtif,
-		 ProjFalseEastingGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 falseEasting);
-
-      GTIFKeySet(gtif,
-		 ProjFalseNorthingGeoKey,
-		 TYPE_DOUBLE,
-		 1,
-		 falseNorthing);
-   }
-  
-   
    GTIFWriteKeys(gtif); // Write out geotiff tags.
    GTIFFree(gtif);
-   
+
    return true;
 }
 
 bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 {
-   if(theTiffPtr)
-   {
-      XTIFFClose(theTiffPtr);
-      theTiffPtr = 0;
-   }
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+
+   bool result = false;
    
-   theTiffPtr = XTIFFOpen(file.c_str(), "r");
-   if(!theTiffPtr) return false;
-   if(!TIFFSetDirectory(theTiffPtr, (ossim_uint16)entryIdx))
+   TIFF* tiff = XTIFFOpen(file.c_str(), "r");
+   if(tiff)
+   {
+      result = readTags(tiff, entryIdx, true);
+   }
+
+   return result;
+}
+
+bool ossimGeoTiff::readTags(
+   TIFF* tiff, ossim_uint32 entryIdx, bool ownTiffPtrFlag)
+{
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+
+   if ( !tiff )
    {
       return false;
    }
-   GTIF* gtif = GTIFNew(theTiffPtr);
-   if(!gtif) return false;
+
+   if(!TIFFSetDirectory(tiff, (ossim_uint16)entryIdx))
+   {
+      return false;
+   }
+   
+   GTIF* gtif = GTIFNew(tiff);
+   if(!gtif)
+   {
+      return false;
+   }
+
+   if(theTiffPtr)
+   {
+      XTIFFClose(theTiffPtr);
+   }
+   theTiffPtr = tiff;
+   
+   if(theNormalizedDefinitions)
+   {
+      delete theNormalizedDefinitions;
+   }
+   theNormalizedDefinitions = new GTIFDefn;
+   GTIFGetDefn(gtif, theNormalizedDefinitions);
+   ossim_uint32 idx = 0;
    theGeoKeysPresentFlag = true;
    if(traceDebug())
    {
@@ -826,14 +919,25 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
                     &theWidth ))
    {
    }
+   theScaleFactor     = 0.0;
+   theModelType       = theNormalizedDefinitions->Model;
+   theGcsCode         = theNormalizedDefinitions->GCS;
+   theDatumCode       = theNormalizedDefinitions->Datum;
+   theAngularUnits    = theNormalizedDefinitions->UOMAngle;
+   theProjGeoCode     = theNormalizedDefinitions->ProjCode;
+   theLinearUnitsCode = theNormalizedDefinitions->UOMLength;
+#if 0
    ossim_uint16 modelType;
    if(GTIFKeyGet(gtif, GTModelTypeGeoKey, &modelType, 0, 1))
    {
       theModelType = (ModelType)modelType;
    }
+#endif
    if(GTIFKeyGet(gtif, GTRasterTypeGeoKey, &theRasterType, 0, 1))
    {
    }
+   
+#if 0
    if(GTIFKeyGet(gtif, GeographicTypeGeoKey, &theGcsCode, 0, 1))
    {
    }
@@ -843,6 +947,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    if(GTIFKeyGet(gtif, GeogAngularUnitsGeoKey, &theAngularUnits, 0, 1))
    {
    }
+#endif
    
    theSavePcsCodeFlag = false;
    if(GTIFKeyGet(gtif, ProjectedCSTypeGeoKey, &thePcsCode, 0, 1))
@@ -886,30 +991,81 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
                parsePcsCode(thePcsCode);
             }
          }
-         
       }  // End of "if(GTIFKeyGet(gtif, GTCitationGeoKey..."
    }
    
    char* buf = 0;
-   double tempDouble=0.0;
-   theCenterLon = ossim::nan();
-   theCenterLat = ossim::nan();
    theOriginLon = ossim::nan();
    theOriginLat = ossim::nan();
    if(GTIFKeyGet(gtif, PCSCitationGeoKey , &buf, 0, 1))
    {
       thePcsCitation = ossimString(buf);
    }
-   if(GTIFKeyGet(gtif, ProjectionGeoKey, &theProjGeoCode,0 ,1))
+   parseProjGeoCode(theProjGeoCode);
+   GTIFKeyGet(gtif, ProjCoordTransGeoKey , &theCoorTransGeoCode, 0, 1);
+   for(idx = 0; idx < (ossim_uint32)theNormalizedDefinitions->nParms; ++idx)
    {
-      parseProjGeoCode(theProjGeoCode);
+      switch(theNormalizedDefinitions->ProjParmId[idx])
+      {
+         case ProjStdParallel1GeoKey:
+         {
+            theStdPar1 = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjStdParallel2GeoKey:
+         {
+            theStdPar2 = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjOriginLongGeoKey:
+         {
+            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjOriginLatGeoKey:
+         {
+            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjFalseEastingGeoKey:
+         {
+            theFalseEasting = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjFalseNorthingGeoKey:
+         {
+            theFalseNorthing = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjCenterLongGeoKey:
+         {
+            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjCenterLatGeoKey:
+         {
+            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjFalseOriginLatGeoKey:
+         {
+            theOriginLat = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjFalseOriginLongGeoKey:
+         {
+            theOriginLon = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+         case ProjScaleAtNatOriginGeoKey:
+         {
+            theScaleFactor = theNormalizedDefinitions->ProjParm[idx];
+            break;
+         }
+      }
    }
-   if(GTIFKeyGet(gtif, ProjCoordTransGeoKey , &theCoorTransGeoCode, 0, 1))
-   {
-   }
-   if(GTIFKeyGet(gtif, ProjLinearUnitsGeoKey, &theLinearUnitsCode, 0, 1))
-   {
-   }
+   
+#if 0
    if(GTIFKeyGet(gtif, ProjStdParallel1GeoKey, &theStdPar1, 0, 1))
    {
    }
@@ -947,6 +1103,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    if(GTIFKeyGet(gtif, ProjScaleAtNatOriginGeoKey, &theScaleFactor, 0, 1))
    {
    }
+#endif
    theScale.clear();
    ossim_uint16 pixScaleSize = 0;
    double* pixScale=0;
@@ -962,18 +1119,25 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
    {
       theTiePoint.insert(theTiePoint.begin(),
                          tiepoints, tiepoints+tiePointSize);
-      if(ossim::isnan(theOriginLon) && 
-         (pixScaleSize > 1) &&
-         (tiePointSize > 3))
+ 
+      // ESH 05/2009 -- If the image is in a projected coordinate system, the
+      // tiepoints will be projected coordinates not lat/lon. Let's avoid setting
+      // the origin lon/lat to projected x/y. Fix for ticket #711.
+      if ( theModelType == ModelTypeGeographic )
       {
-         theOriginLon = tiepoints[3] - tiepoints[0] * pixScale[0]; 
-      }
-      
-      if(ossim::isnan(theOriginLat) && 
-         (pixScaleSize > 1) &&
-         (tiePointSize > 3))
-      {
-         theOriginLat = tiepoints[4] + tiepoints[1] * fabs(pixScale[1]);
+         if(ossim::isnan(theOriginLon) && 
+            (pixScaleSize > 1) &&
+            (tiePointSize > 3))
+         {
+            theOriginLon = tiepoints[3] - tiepoints[0] * pixScale[0]; 
+         }
+         
+         if(ossim::isnan(theOriginLat) && 
+            (pixScaleSize > 1) &&
+            (tiePointSize > 3))
+         {
+            theOriginLat = tiepoints[4] + tiepoints[1] * fabs(pixScale[1]);
+         }
       }
    }
    theModelTransformation.clear();
@@ -1004,12 +1168,7 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
                             tempDoubleParam,
                             tempDoubleParam+doubleParamSize);
    }
-#if 0
-   std::copy(theDoubleParam.begin(),
-             theDoubleParam.end(),
-             std::ostream_iterator<double>(std::cout, " " ));
-   std::cout << "\n" << std::endl;
-#endif
+
    char* tempAsciiParam=0;
    theAsciiParam = "";
 	
@@ -1025,38 +1184,78 @@ bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
       setOssimProjectionName();  // Initialize the ossim projection name.
       setOssimDatumName();       // Initialize the ossim datum name.
    }
-   
-   
-   if(ossim::isnan(theOriginLon)||
-      ossim::isnan(theOriginLat))
+
+   // commenting this out.  Frank mentioned the GTIFFGetDefn which in geo_normalize
+   // this should be all we need.
+   //
+#if 0  
+   /* 
+      ESH 05/2009: Replacing badly broken code for making 
+      use of TIFFTAG_GEODOUBLEPARAMS.
+
+      Read the geokey directory tag in order to see how 
+      the TIFFTAG_GEODOUBLEPARAMS are defined.
+
+      For structure of geokey directory, see:
+      http://www.remotesensing.org/geotiff/spec/geotiff2.4.html
+   */
+   ossim_uint16  gkdParamSize = 0;
+   ossim_uint16* gkdParams = 0;
+   if(TIFFGetField(theTiffPtr, TIFFTAG_GEOKEYDIRECTORY, &gkdParamSize, &gkdParams))
    {
-      
-      ossimString projName = getOssimProjectionName();
-      if(projName == "ossimLambertConformalConicProjection")
+      ossim_uint16 numKeys = gkdParams ? gkdParams[3] : 0;
+      ossim_uint16 key = 0;
+      for( key=0; key<numKeys; ++key )
       {
-         if(theDoubleParam.size() >= 6)
+         ossim_uint16 loc = (key+1) * 4;
+         ossim_uint16 ind = gkdParams[loc+3];
+
+         if ( gkdParams[loc+1] == TIFFTAG_GEODOUBLEPARAMS && 
+              gkdParams[loc+2] == 1 && 
+              ind >= 0 && ind < doubleParamSize )
          {
-            theOriginLat = theDoubleParam[0];
-            theOriginLon = theDoubleParam[1];
-            theStdPar1 = theDoubleParam[2];
-            theStdPar2 = theDoubleParam[3];
-            theFalseEasting = theDoubleParam[4];
-            theFalseNorthing = theDoubleParam[5];
-         }
-      }
-      else
-      {
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "Need to add double param support for projection = "
-               << projName << std::endl;
+            double dval = theDoubleParam[ind];
+            switch( gkdParams[loc] )
+            {
+               case ProjStdParallel1GeoKey:     theStdPar1       = dval; break;
+               case ProjStdParallel2GeoKey:     theStdPar2       = dval; break;
+               case ProjNatOriginLongGeoKey:    theOriginLon     = dval; break;
+               /* case ProjOriginLongGeoKey:       theOriginLon     = dval; break; (alias) */
+               case ProjNatOriginLatGeoKey:     theOriginLat     = dval; break;
+               /* case ProjOriginLatGeoKey:        theOriginLat     = dval; break; (alias) */
+               case ProjFalseEastingGeoKey:     theFalseEasting  = dval; break;
+               case ProjFalseNorthingGeoKey:    theFalseNorthing = dval; break;
+               case ProjCenterLongGeoKey:       theCenterLon     = dval; break;
+               case ProjCenterLatGeoKey:        theCenterLat     = dval; break;
+               case ProjScaleAtNatOriginGeoKey: theScaleFactor   = dval; break;
+               default: 
+                  if(traceDebug())
+                  {
+                     ossimNotify(ossimNotifyLevel_DEBUG)
+                        << "ossimGeoTiff::readTags: Unrecognized geokey directory entry."
+                        << "\ngeokey directory index = " << loc
+                        << "\ngeokey = " << gkdParams[loc]
+                        << "\ndouble array index = " << ind
+                        << "\ndval = " << dval
+                        << std::endl;
+                  }
+                  break;
+            }
          }
       }
    }
-   
+#endif
+
    GTIFFree(gtif);
 
+   if (ownTiffPtrFlag == false)
+   {
+      //---
+      // Zero out the pointer so the destructor doesn't close it on some
+      // external code.
+      //---
+      theTiffPtr = 0;
+   }
    
    return true;
 }
@@ -1129,7 +1328,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    {
       //---
       // Should we check the model type??? (drb)
-      // if (theModelType == MODEL_TYPE_GEOGRAPHIC)
+      // if (theModelType == ModelTypeGeographic)
       //---
       if(tieCount >= 4)
       {
@@ -1159,7 +1358,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
             // create a bilinear model
 
             // Should we check the model type (drb)
-            // if (theModelType == MODEL_TYPE_GEOGRAPHIC)
+            // if (theModelType == ModelTypeGeographic)
             
             ossimRefPtr<ossimBilinearProjection> proj =
                new ossimBilinearProjection;
@@ -1184,15 +1383,18 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          return false;
       }
    }
-   /*else if(theModelTransformation.size() == 16)
+   else if(theModelTransformation.size() == 16)
    {
-     ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimGeoTiff::addImageGeometry: Do not support rotated "
-         << "map models yet.  You should provide the image as a sample "
-         << "and we will fix it" << std::endl;
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimGeoTiff::addImageGeometry: Do not support rotated "
+            << "map models yet.  You should provide the image as a sample "
+            << "and we will fix it" << std::endl;
+      }
       
 //       return false;
-}*/
+   }
   
    if ((theRasterType == OSSIM_PIXEL_IS_AREA)&&
        (!modelTransformFlag))
@@ -1209,7 +1411,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    {
       
       kwl.add(prefix,
-              "pcs_code",
+              ossimKeywordNames::PCS_CODE_KW,
               thePcsCode,
               true);
       if(!modelTransformFlag)
@@ -1254,7 +1456,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    // Add the tie point and scale.  Convert to either meters or decimal
    // degrees if needed.
    //---
-   if (theModelType == MODEL_TYPE_GEOGRAPHIC)
+   if (theModelType == ModelTypeGeographic)
    {
       if (!theAngularUnits && traceDebug())
       {
@@ -1336,7 +1538,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          }
       }  // End of switch on theAngularUnits.
    }
-   else if (theModelType == MODEL_TYPE_PROJECTED)
+   else if (theModelType == ModelTypeProjected)
    {
       if(!modelTransformFlag)
       {
@@ -1363,6 +1565,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
                  theOriginLat);
       }
+#if 0
       else if(ossim::isnan(theCenterLat) == false)
       {
          // origin
@@ -1370,20 +1573,21 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
                  theCenterLat);
       }
-
+#endif
       if(ossim::isnan(theOriginLon) == false)
       {
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::CENTRAL_MERIDIAN_KW,
                  theOriginLon);
       }
+#if 0
       else if(ossim::isnan(theCenterLon) == false)
       {
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::CENTRAL_MERIDIAN_KW,
                  theCenterLon);
       }
-
+#endif
       // std paralles for conical projections
       kwl.add(copyPrefix.c_str(),
               ossimKeywordNames::STD_PARALLEL_1_KW,
@@ -1468,17 +1672,6 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
               theScaleFactor,
               true);  // overwrite keyword if previously added...
    }
-   else if (getOssimProjectionName() == "ossimLambertConformalConicProjection")
-   {
-      if (ossim::isnan(theCenterLon) == false)
-      {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                 theCenterLon,
-                 true); // overwrite keyword if previously added...
-      }
-   }
-
    //---
    // Get the model transformation info if it's present.
    //---
@@ -1494,7 +1687,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
       }
       kwl.add(copyPrefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW, out.str().c_str(), true);
       ossimUnitType modelTransformUnitType = OSSIM_UNIT_UNKNOWN;
-      if(theModelType == MODEL_TYPE_GEOGRAPHIC)
+      if(theModelType == ModelTypeGeographic)
       {
          switch(theAngularUnits)
          {
@@ -1517,7 +1710,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
             }
          }
       }
-      else if(theModelType == MODEL_TYPE_PROJECTED)
+      else if(theModelType == ModelTypeProjected)
       {
          switch(theLinearUnitsCode)
          {
@@ -1555,11 +1748,6 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          << "DEBUG ossimGeoTiff::addImageGeometry: Keyword list dump:\n"
          << kwl << std::endl;
    }
-#if 0
-   std::cout << "_________________________________________________________" << std::endl;
-   std::cout << kwl << std::endl;
-   std::cout << "_________________________________________________________" << std::endl;
-#endif
    
    return true;
 }
@@ -1612,7 +1800,7 @@ void ossimGeoTiff::setOssimProjectionName()
    // If still unknown check for the model type.
    if (theProjectionName == "unknown")
    {
-      if (theModelType == MODEL_TYPE_GEOGRAPHIC)
+      if (theModelType == ModelTypeGeographic)
       {
          theProjectionName = "ossimEquDistCylProjection";
       }

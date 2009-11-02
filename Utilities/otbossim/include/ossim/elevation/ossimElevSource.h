@@ -10,7 +10,7 @@
 //   all objects providing height information given horizontal ground position.
 //
 //*****************************************************************************
-// $Id: ossimElevSource.h 14297 2009-04-14 17:25:31Z gpotts $
+// $Id: ossimElevSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimElevSource_HEADER
 #define ossimElevSource_HEADER
@@ -32,7 +32,6 @@ class OSSIM_DLL ossimElevSource : public ossimSource
 {
 public:
 
-   virtual ~ossimElevSource();
 
    virtual const ossimElevSource& operator = (const ossimElevSource& src);
    /**
@@ -150,6 +149,7 @@ public:
 
 
 protected:
+   virtual ~ossimElevSource();
    /**
     * Constructors/Destructors:
     */

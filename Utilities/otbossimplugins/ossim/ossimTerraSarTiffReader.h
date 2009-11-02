@@ -67,18 +67,17 @@ namespace ossimplugins
       virtual void close();
       
       /**
-       *  Populates the keyword list with image geometry information.  This
-       *  method is used to relay projection/model information to users.
-       *
-       *  @param kwl Keyword list that will be initialized with geometry info.
-       *  Returns true if geometry info is present, false if not.
-       *
-       *  @param prefix The prefix is added to the resulting keyword list
-       *  keywords.  So is you if you pass in a prefix of "image01.", the
-       *  keyword ul_lat will be like:  "image01.ul_lat:  -40.00000"
+       * Returns the image geometry object associated with this tile source or
+       * NULL if non defined.  The geometry contains full-to-local image
+       * transform as well as projection (image-to-world).
        */
-      virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                    const char* prefix=0);   
+      virtual ossimImageGeometry* getImageGeometry();
+
+      /**
+       * @param Method to get geometry from the xml file or internal geotiff
+       * tags.
+       */
+      virtual ossimImageGeometry* getInternalImageGeometry();
       
    private:
       

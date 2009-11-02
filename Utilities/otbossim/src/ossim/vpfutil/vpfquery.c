@@ -251,11 +251,11 @@ static char *get_token( char *expression,
 {
    register int i, stopflag;
 
-   *token_type = (int)NULL;
+   *token_type = 0;
 
    if (*expression == '\0') {
       *token_type = FINISHED;
-      *token_value = (int)NULL;
+      *token_value = 0;
       return expression;
    }
 
@@ -346,7 +346,7 @@ static char *get_token( char *expression,
    }
 
    *token_type = VALUE;
-   *token_value = (int)NULL;
+   *token_value = 0;
    return expression;
 }
 

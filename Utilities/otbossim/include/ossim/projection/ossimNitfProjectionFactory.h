@@ -9,7 +9,7 @@
 //
 // Contains class declaration for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
+// $Id: ossimNitfProjectionFactory.h 15766 2009-10-20 12:37:09Z gpotts $
 //----------------------------------------------------------------------------
 #ifndef ossimNitfProjectionFactory_HEADER
 #define ossimNitfProjectionFactory_HEADER
@@ -20,7 +20,9 @@
 class ossimProjection;
 class ossimString;
 class ossimGpt;
+class ossimNitfTileSource;
 class ossimNitfImageHeader;
+class ossimNitfFileHeader;
 class ossimDpt;
 
 class OSSIMDLLEXPORT ossimNitfProjectionFactory : public ossimProjectionFactoryBase
@@ -66,6 +68,8 @@ public:
     */
    virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
                                              const char* prefix = 0)const;
+   
+   virtual ossimProjection* createProjection(ossimImageHandler* handler)const;
    /**
     * Creates an object given a type name.
     *
@@ -92,20 +96,29 @@ public:
 
 private:
    /**
+    * This will look for the most accurate sensor model for the NITF.  If non found then we will
+    * use the createProjectionFromHeaders call to create a simple bilinear styl mapping using the 
+    * coordinates of the igeolo.
+    */
+   ossimProjection* createModel(ossimNitfTileSource* nitf)const;
+   
+   ossimProjection* createProjectionFromHeaders(ossimNitfFileHeader* fileHeader,
+                                                ossimNitfImageHeader* imageHeader)const;
+   
+   
+   /**
     * @param hdr The nitf image header.
     *
     * @param coordianteSystem The coordinate system as a string.
     *
     * @param geographicLocation This should contain the four corner strings.
     *
-    * @param filename The nitf file name.
-    * 
     * @return Either an  ossimEquDistCylProjection or ossimBilinearProjection
     * depending upon if the corner points line up evenly.
     */
    ossimProjection* makeGeographic(const ossimNitfImageHeader* hdr,
-                                   const ossimString& coordinateSysetm,
-                                   const ossimFilename& filename) const;
+                                   const ossimString& coordinateSysetm)const;//,
+                                   //const ossimFilename& filename) const;
 
    /**
     * @param hdr The nitf image header.
@@ -114,13 +127,11 @@ private:
     *
     * @param geographicLocation This should contain the four corner strings.
     *
-    * @param filename The nitf file name.
-    * 
     * @return ossimUtmProjection
     */
    ossimProjection* makeUtm(const ossimNitfImageHeader* hdr,
-                            const ossimString& coordinateSysetm,
-                            const ossimFilename& filename) const;
+                            const ossimString& coordinateSysetm)const;//,
+                            //const ossimFilename& filename) const;
    
    /**
     * @param hdr The nitf image header.
@@ -213,13 +224,11 @@ private:
     * @param gpts Ground points to initialize from BLOCKA tag.  This should
     * be an empty vector.
     *
-    * @param filename The nitf file name.
-    * 
     * @return true if BLOCKA tag was parsed.
     */
    bool getBlockaPoints(const ossimNitfImageHeader* hdr,
-                        std::vector<ossimGpt>& gpts,
-                        const ossimFilename& filename) const;
+                        std::vector<ossimGpt>& gpts)const;//,
+                        //const ossimFilename& filename) const;
    
    /**
     * Private constructor, users must go through instance() method.

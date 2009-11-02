@@ -47,7 +47,7 @@ int ossimKeywordlistTest(int argc, char* argv[])
         }
 
         ossimKeywordlist geom;
-        handler->getImageGeometry(geom);
+        handler->saveState(geom);
         ofstream file;
         file.open(argv[2]);
         file << " keywordlist:"<<std::endl<<geom<<std::endl;

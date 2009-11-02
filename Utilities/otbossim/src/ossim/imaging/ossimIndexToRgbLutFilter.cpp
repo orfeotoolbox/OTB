@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIndexToRgbLutFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
+// $Id: ossimIndexToRgbLutFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimIndexToRgbLutFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimRgbVector.h>
@@ -28,6 +28,7 @@ static const char* INTERPOLATION_TYPE_KW = "interpolation_type";
 
 ossimIndexToRgbLutFilter::ossimIndexToRgbLutFilter()
    :ossimImageSourceFilter(),
+    theLut(new ossimRgbLutDataObject()),
     theMinValue(ossim::nan()),
     theMaxValue(ossim::nan()),
     theMinMaxDeltaLength(ossim::nan()),
@@ -45,7 +46,7 @@ ossimIndexToRgbLutFilter::ossimIndexToRgbLutFilter(ossimImageSource* inputSource
                                                  double maxValue,
                                                  ossimIndexToRgbLutFilterInterpolationType interpolationType)
    :ossimImageSourceFilter(inputSource),
-    theLut(lut),
+    theLut((ossimRgbLutDataObject*)lut.dup()),
     theMinValue(minValue),
     theMaxValue(maxValue),
     theMinValueOverride(false),
@@ -118,7 +119,7 @@ ossimRefPtr<ossimImageData> ossimIndexToRgbLutFilter::convertInputTile(const oss
    outBuf[0] = (ossim_uint8*)(theTile->getBuf(0));
    outBuf[1] = (ossim_uint8*)(theTile->getBuf(1));
    outBuf[2] = (ossim_uint8*)(theTile->getBuf(2));
-   long numberOfEntries = (long)theLut.getNumberOfEntries();
+   long numberOfEntries = (long)theLut->getNumberOfEntries();
 
    if(!numberOfEntries)
    {
@@ -378,7 +379,7 @@ void ossimIndexToRgbLutFilter::normalizeValue(double value,
 void ossimIndexToRgbLutFilter::getColorNormIndex(double index,
                                                  ossimRgbVector& result)
 {
-   long numberOfEntries = theLut.getNumberOfEntries();
+   long numberOfEntries = theLut->getNumberOfEntries();
    index*=numberOfEntries;
    if(theInterpolationType == ossimIndexToRgbLutFilter_LINEAR)
    {
@@ -389,8 +390,8 @@ void ossimIndexToRgbLutFilter::getColorNormIndex(double index,
       int lutIndex2 = lutIndex+1;
       if(lutIndex2>=numberOfEntries) lutIndex2 = numberOfEntries-1;
       
-      result = theLut[lutIndex]*(1.0-lutT) +
-               theLut[lutIndex2]*(lutT);
+      result = (*theLut)[lutIndex]*(1.0-lutT) +
+               (*theLut)[lutIndex2]*(lutT);
       
    }
    else
@@ -398,7 +399,7 @@ void ossimIndexToRgbLutFilter::getColorNormIndex(double index,
       int i = ossim::round<int>(index);
       i = i < 0?0:i;
       i = i >numberOfEntries?numberOfEntries:i;
-      result = theLut[i];
+      result = (*theLut)[i];
    }
 }
 
@@ -407,7 +408,7 @@ void ossimIndexToRgbLutFilter::getColor(double index,
 {
    if(theInterpolationType == ossimIndexToRgbLutFilter_LINEAR)
    {
-      long numberOfEntries = theLut.getNumberOfEntries();
+      long numberOfEntries = theLut->getNumberOfEntries();
       int lutIndex = (int)index;
       
       double lutT   = index - lutIndex;
@@ -415,12 +416,12 @@ void ossimIndexToRgbLutFilter::getColor(double index,
       
       if(lutIndex2>=numberOfEntries) lutIndex2 = numberOfEntries-1;
       
-      result = theLut[lutIndex]*(1.0-lutT) +
-               theLut[lutIndex2]*(lutT);
+      result = (*theLut)[lutIndex]*(1.0-lutT) +
+               (*theLut)[lutIndex2]*(lutT);
    }
    else
    {
-      result = theLut[ossim::round<int>(index)];
+      result = (*theLut)[ossim::round<int>(index)];
    }
 }
 
@@ -457,11 +458,11 @@ bool ossimIndexToRgbLutFilter::saveState(ossimKeywordlist& kwl,
    {
       kwl.add(newPrefix.c_str(), "lut_file", theLutFile.c_str(), true);
       ossimKeywordlist kwl2;
-      theLut.saveState(kwl2);
+      theLut->saveState(kwl2);
    }
    else
    {
-      theLut.saveState(kwl, newPrefix.c_str());
+      theLut->saveState(kwl, newPrefix.c_str());
    }
 
    return ossimImageSourceFilter::saveState(kwl, prefix);
@@ -533,7 +534,7 @@ bool ossimIndexToRgbLutFilter::loadState(const ossimKeywordlist& kwl,
    {
       theLutFile = "";
    }
-   theLut.loadState(kwl, newPrefix.c_str());
+   theLut->loadState(kwl, newPrefix.c_str());
 
    bool result = ossimImageSourceFilter::loadState(kwl, prefix);
 
@@ -561,7 +562,7 @@ ossimScalarType ossimIndexToRgbLutFilter::getOutputScalarType() const
 
 void ossimIndexToRgbLutFilter::setLut(ossimRgbLutDataObject& lut)
 {
-   theLut = lut;
+   theLut = new ossimRgbLutDataObject(lut);
 }
 
 void ossimIndexToRgbLutFilter::setLut(const ossimFilename& file)
@@ -570,7 +571,7 @@ void ossimIndexToRgbLutFilter::setLut(const ossimFilename& file)
    if(file.exists())
    {
       ossimKeywordlist kwl(file.c_str());
-      theLut.loadState(kwl);
+      theLut->loadState(kwl);
    }
 }
 

@@ -1,9 +1,11 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 14056 2009-03-04 20:32:58Z gpotts $
+// $Id: ossimImageHandlerFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -18,7 +20,7 @@
 #include <ossim/imaging/ossimUsgsDemTileSource.h>
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
-// #include <ossim/imaging/ossimERSTileSource.h>
+#include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
 #include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimTrace.h>
@@ -35,7 +37,7 @@ RTTI_DEF1(ossimImageHandlerFactory, "ossimImageHandlerFactory", ossimImageHandle
 ossimImageHandlerFactory* ossimImageHandlerFactory::theInstance = 0;
 ossimImageHandlerFactory::~ossimImageHandlerFactory()
 {
-   theInstance = (ossimImageHandlerFactory*)NULL;
+   theInstance = (ossimImageHandlerFactory*)0;
 }
 
 ossimImageHandlerFactory* ossimImageHandlerFactory::instance()
@@ -52,9 +54,9 @@ ossimImageHandlerFactory* ossimImageHandlerFactory::instance()
    return theInstance;
 }
 
-ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)const
+ossimImageHandler* ossimImageHandlerFactory::open(
+   const ossimFilename& fileName)const
 {
-
    ossimFilename copyFilename = fileName;
 
    if(traceDebug())
@@ -64,13 +66,13 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
          << std::endl
          << "Attempting to open file " << copyFilename << std::endl;
    }
-   ossimImageHandler* result = NULL;
+   ossimRefPtr<ossimImageHandler> result = 0;
 
    // Check for empty file.
    copyFilename.trim();
    if (copyFilename.empty())
    {
-      return result;
+      return result.release();
    }
 
    // for all of our imagehandlers the filename must exist.
@@ -78,10 +80,27 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    // we need to move this.
    if(!copyFilename.exists()) return 0;
 
-   if(copyFilename.ext() == "gz")
+   ossimString ext = copyFilename.ext().downcase();
+
+   if(ext == "gz")
    {
       copyFilename = copyFilename.setExtension("");
    }
+
+   // Try opening from extension logic first.
+   result = openFromExtension(copyFilename);
+   {
+      if (result.valid())
+      {
+         return result.release();
+      }
+   }
+
+   //---
+   // If here do it the brute force way by going down the list of available
+   // readers...
+   //---
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -90,9 +109,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimJpegTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
 
    // test if TileMap
@@ -105,9 +124,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimTileMapTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
       // test if Radarsat
    if(traceDebug())
@@ -119,9 +138,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimRadarSatTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
     // test if Radarsat2
 //    if(traceDebug())
@@ -133,9 +152,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 //    result = new ossimRadarSat2TileSource;
 //    if(result->open(copyFilename))
 //    {
-//       return result;
+//       return result.release();
 //    }
-//    delete result;
+//    result = 0;
 
       // test if TerraSAR
 //    if(traceDebug())
@@ -147,9 +166,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 //    result = new ossimTerraSarTileSource;
 //    if(result->open(copyFilename))
 //    {
-//       return result;
+//       return result.release();
 //    }
-//    delete result;
+//    result = 0;
 
    // this must be checked first before the TIFF handler
    if(traceDebug())
@@ -161,9 +180,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimQuickbirdTiffTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -174,9 +193,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimTiffTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -187,9 +206,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimCibCadrgTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -199,9 +218,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimDoqqTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -211,10 +230,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimDtedTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
 
-   delete result;
+   result = 0;
 
    // this must be checked first before the NITF raw handler
 
@@ -227,9 +246,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimQuickbirdNitfTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -239,9 +258,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimNitfTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -252,9 +271,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimUsgsDemTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -265,9 +284,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimLandsatTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -277,21 +296,21 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimVpfTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
-//    if(traceDebug())
-//    {
-//       ossimNotify(ossimNotifyLevel_DEBUG)
-//          << "trying ERS" << std::endl;
-//    }
-//    result = new ossimERSTileSource;
-//    if(result->open(copyFilename))
-//    {
-//       return result;
-//    }
-//    delete result;
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying ERS" << std::endl;
+   }
+   result = new ossimERSTileSource;
+   if(result->open(copyFilename))
+   {
+      return result.release();
+   }
+   result = 0;
 
    // Note:  SRTM should be in front of general raster...
    if(traceDebug())
@@ -303,9 +322,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimSrtmTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -316,9 +335,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimGeneralRasterTileSource;
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -331,9 +350,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -344,10 +363,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    result = new ossimCcfTileSource();
    if(result->open(copyFilename))
    {
-      return result;
+      return result.release();
    }
 
-   delete result;
+   result = 0;
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -365,7 +384,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
          << "ossimImageHandlerFactory::open(kwl, prefix) DEBUG: entered..."
          << std::endl;
    }
-   ossimImageHandler* result = NULL;
+   ossimRefPtr<ossimImageHandler> result = 0;
 
    if(traceDebug())
    {
@@ -376,9 +395,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -388,9 +407,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimCcfTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -401,9 +420,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimCibCadrgTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -413,9 +432,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimDoqqTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -425,9 +444,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimDtedTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -437,9 +456,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimJpegTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -450,10 +469,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = new ossimQuickbirdNitfTileSource;
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-
-   delete result;
+   result = 0;
 
 
    if(traceDebug())
@@ -464,9 +482,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimNitfTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    // TileMap
    if(traceDebug())
@@ -478,10 +496,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = new ossimTileMapTileSource;
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
 
-   delete result;
+   result = 0;
 
       // RadarSat
    if(traceDebug())
@@ -493,10 +511,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = new ossimRadarSatTileSource;
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
 
-   delete result;
+   result = 0;
 
   // RadarSat2
 //    if(traceDebug())
@@ -508,10 +526,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 //    result = new ossimRadarSat2TileSource;
 //    if(result->loadState(kwl, prefix))
 //    {
-//       return result;
+//       return result.release();
 //    }
 //
-//    delete result;
+//    result = 0;
 
       // TerraSAR
 //    if(traceDebug())
@@ -523,10 +541,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
 //    result = new ossimTerraSarTileSource;
 //    if(result->loadState(kwl, prefix))
 //    {
-//       return result;
+//       return result.release();
 //    }
 //
-//    delete result;
+//    result = 0;
 
    // Must be before tiff...
    if(traceDebug())
@@ -538,10 +556,10 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = new ossimQuickbirdTiffTileSource;
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
 
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -551,9 +569,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimTiffTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -564,9 +582,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimUsgsDemTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -576,9 +594,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimLandsatTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -588,22 +606,22 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = new ossimVpfTileSource;
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
-//    if(traceDebug())
-//    {
-//       ossimNotify(ossimNotifyLevel_DEBUG)
-//          << "trying ERS" << std::endl;
-//    }
-//    result = new ossimERSTileSource;
-//    if(result->loadState(kwl, prefix))
-//    {
-//       return result;
-//    }
-//    delete result;
-   // Note:  SRTM should be in front of general raster...
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying ERS" << std::endl;
+   }
+   result = new ossimERSTileSource;
+   if(result->loadState(kwl, prefix))
+   {
+      return result.release();
+   }
+   result = 0;
+  // Note:  SRTM should be in front of general raster...
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -613,9 +631,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimSrtmTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -626,9 +644,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result  = new ossimGeneralRasterTileSource();
    if(result->loadState(kwl, prefix))
    {
-      return result;
+      return result.release();
    }
-   delete result;
+   result = 0;
 
    if(traceDebug())
    {
@@ -636,7 +654,168 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
          << "ossimImageHandlerFactory::open(kwl, prefix) DEBUG: returning..."
          << std::endl;
    }
-   return (ossimImageHandler*)NULL;
+   return (ossimImageHandler*)0;
+}
+
+ossimImageHandler* ossimImageHandlerFactory::openFromExtension(
+   const ossimFilename& fileName) const
+{
+   ossimString ext = fileName.ext().downcase();
+
+   ossimRefPtr<ossimImageHandler> result = 0;
+
+   //---
+   // Ovr can be combined with "tif" once we get rid of
+   // ossimQuickbirdTiffTileSource
+   //---
+   if (ext == "ovr")
+   {
+      result = new ossimTiffTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "tif") || (ext == "tiff") )
+   {
+      // this must be checked first before the TIFF handler
+      result = new ossimQuickbirdTiffTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+
+      result = new ossimTiffTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "ntf") || (ext == "nitf") )
+   {
+      // this must be checked first before the NITF raw handler
+      result = new ossimQuickbirdNitfTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+
+      result = new ossimNitfTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (fileName == "a.toc") || (ext == "toc") )
+   {
+      result = new ossimCibCadrgTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "jpg") || (ext == "jpeg") )
+   {
+      result = new ossimJpegTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "doq") || (ext == "doqq") )
+   {
+      result = new ossimDoqqTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "dt2") || (ext == "dt1") || (ext == "dt3") ||
+        (ext == "dt4") || (ext == "dt5") || (ext == "dt0") )
+   {
+      result = new ossimDtedTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if (ext == "hgt")
+   {
+      result = new ossimSrtmTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if (ext == "dem")
+   {
+      result = new ossimUsgsDemTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if (ext == "fst")
+   {
+      result = new ossimLandsatTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if ( (ext == "ras") || (ext == "raw") )
+   {
+      result = new ossimGeneralRasterTileSource;
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if (ext == "img")
+   {
+      result  = new ossimAdrgTileSource();
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   if (ext == "ccf")
+   {
+      result = new ossimCcfTileSource();
+      if(result->open(fileName))
+      {
+         return result.release();
+      }
+      result = 0;
+   }
+
+   return result.release();
 }
 
 ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)const
@@ -681,10 +860,10 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimLandsatTileSource();
    }
-//    if(STATIC_TYPE_NAME(ossimERSTileSource) == typeName)
-//    {
-//       return new ossimERSTileSource();
-//    }
+   if(STATIC_TYPE_NAME(ossimERSTileSource) == typeName)
+   {
+      return new ossimERSTileSource();
+   }
    if(STATIC_TYPE_NAME(ossimSrtmTileSource) == typeName)
    {
       return new ossimSrtmTileSource();
@@ -699,7 +878,7 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
       return new ossimTileMapTileSource();
    }
 
-   return (ossimObject*)NULL;
+   return (ossimObject*)0;
 }
 
 void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
@@ -736,7 +915,7 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimKeywordlist& kwl,
          << "ossimImageHandlerFactory::createObject(kwl, prefix) DEBUG:"
          << " entering ..." << std::endl;
    }
-   ossimObject* result = (ossimObject*)NULL;
+   ossimObject* result = (ossimObject*)0;
    const char* type = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
 
    if(type)
@@ -784,7 +963,7 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimTiffTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimUsgsDemTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimLandsatTileSource));
-//    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapTileSource));

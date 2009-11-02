@@ -4,17 +4,16 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimProjectionFactoryBase.h 12081 2007-11-26 21:44:18Z dburken $
+//  $Id: ossimProjectionFactoryBase.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimProjectionFactoryBase_HEADER
 #define ossimProjectionFactoryBase_HEADER
 
-#include <list>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimObjectFactory.h>
 
 class ossimProjection;
-
+class ossimImageHandler;
 class OSSIM_DLL ossimProjectionFactoryBase : public ossimObjectFactory
 {
 public:
@@ -39,6 +38,8 @@ public:
     */
    virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
                                              const char* prefix)const=0;
+   
+   virtual ossimProjection* createProjection(ossimImageHandler* handler)const;
 
 protected:
 

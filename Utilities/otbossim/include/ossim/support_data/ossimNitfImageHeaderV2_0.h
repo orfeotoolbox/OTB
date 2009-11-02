@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.h 15611 2009-10-08 18:50:33Z dburken $
 #ifndef ossimNitfImageHeaderV2_0_HEADER
 #define ossimNitfImageHeaderV2_0_HEADER
 #include <ossim/support_data/ossimNitfImageHeaderV2_X.h>
@@ -56,14 +56,13 @@ public:
 
    /** @return The IDATIM field unparsed. */
    virtual ossimString  getImageDateAndTime() const;
-   
    virtual ossimString  getAcquisitionDateMonthDayYear(
       ossim_uint8 separationChar='-')const;
    virtual ossimString  getCategory()const;
    virtual ossimString  getImageSource()const;
    virtual ossimString  getRepresentation()const;
    virtual ossimString  getCoordinateSystem()const;
-   virtual ossimString  getGeographicLocation()const;
+
    virtual ossimString  getPixelValueType()const;
    virtual bool         hasBlockMaskRecords()const;
    virtual bool         hasPadPixelMaskRecords()const;
@@ -82,25 +81,6 @@ public:
                             const ossimNitfImageBandV2_0& info);
    virtual void setNumberOfRows(ossim_uint32 rows);
    virtual void setNumberOfCols(ossim_uint32 cols);
-   virtual void setGeographicLocationDms(const ossimDpt& ul,
-                                         const ossimDpt& ur,
-                                         const ossimDpt& lr,
-                                         const ossimDpt& ll);
-   
-   virtual void setGeographicLocationDecimalDegrees(const ossimDpt& ul,
-                                                    const ossimDpt& ur,
-                                                    const ossimDpt& lr,
-                                                    const ossimDpt& ll);
-   virtual void setUtmNorth(ossim_uint32 zone,
-                            const ossimDpt& ul,
-                            const ossimDpt& ur,
-                            const ossimDpt& lr,
-                            const ossimDpt& ll);
-   virtual void setUtmSouth(ossim_uint32 zone,
-                            const ossimDpt& ul,
-                            const ossimDpt& ur,
-                            const ossimDpt& lr,
-                            const ossimDpt& ll);
    
    static const ossimString ISCODE_KW;
    static const ossimString ISCTLH_KW;

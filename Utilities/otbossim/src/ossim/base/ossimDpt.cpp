@@ -8,7 +8,7 @@
 // Contains class definitions for ossimDpt.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.cpp 11408 2007-07-27 13:43:00Z dburken $
+//  $Id: ossimDpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -153,7 +153,32 @@ std::ostream& operator<<(std::ostream& os, const ossimDpt& pt)
 ossimString ossimDpt::toString(ossim_uint32 precision) const
 {
    std::ostringstream os;
-   print(os, precision);
+   os << std::setprecision(precision);
+
+   os << "(";
+   if (ossim::isnan(x) == false)
+   {
+      os << x;
+   }
+   else
+   {
+      os << "nan";
+   }
+   
+   os << ",";
+   
+   if (ossim::isnan(y) == false)
+   {
+      os << y;
+   }
+   else
+   {
+      os << "nan";
+   }
+   
+   os << ")";
+   
+   //print(os, precision);
    return ossimString(os.str());
 }
 

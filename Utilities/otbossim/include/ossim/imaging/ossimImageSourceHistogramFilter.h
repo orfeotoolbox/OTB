@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSourceHistogramFilter.h 11740 2007-09-19 12:16:40Z gpotts $
+// $Id: ossimImageSourceHistogramFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageSourceHistogramFilter_HEADER
 #define ossimImageSourceHistogramFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -18,7 +18,6 @@ public:
    ossimImageSourceHistogramFilter();
    ossimImageSourceHistogramFilter(ossimImageSource* inputSource,
                         ossimRefPtr<ossimMultiResLevelHistogram> histogram);
-   virtual ~ossimImageSourceHistogramFilter();
    virtual void setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    virtual bool setHistogram(const ossimFilename& filename);
    virtual const ossimFilename& getHistogramFilename()const;
@@ -39,7 +38,8 @@ public:
    virtual std::ostream& print(std::ostream& out) const;
 
 protected:
-   long                         theCurrentResLevel;
+   virtual ~ossimImageSourceHistogramFilter();
+   ossim_int32                         theCurrentResLevel;
 
 private:
    ossimRefPtr<ossimMultiResLevelHistogram> theHistogram;

@@ -17,7 +17,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU8ImageData.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimU8ImageData.cpp 15495 2009-09-29 11:19:04Z dburken $
 
 #include <cstring>  // for memset function
 using namespace std;
@@ -642,12 +642,5 @@ void ossimU8ImageData::copyNormalizedBufferToTile(ossim_uint32 band,
          d[index] = theRemapTable.pixFromNorm(s[index]);
       }
    }
-}
-
-
-const ossimU8ImageData& ossimU8ImageData::operator=(
-   const ossimU8ImageData& /* rhs */)
-{
-   return *this;
 }
 

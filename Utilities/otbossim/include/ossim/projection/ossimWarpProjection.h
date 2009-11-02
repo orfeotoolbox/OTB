@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimWarpProjection.h 11805 2007-10-05 14:54:28Z dburken $
+//  $Id: ossimWarpProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimWarpProjection_HEADER
 #define ossimWarpProjection_HEADER
@@ -102,15 +102,15 @@ public:
 
    virtual ossim2dTo2dTransform* getWarpTransform()
       {
-         return theWarpTransform;
+         return theWarpTransform.get();
       }
    virtual ossim2dTo2dTransform* getAffineTransform()
       {
-         return theAffineTransform;
+         return theAffineTransform.get();
       }
    virtual ossimProjection* getClientProjection()
       {
-         return theClientProjection;
+         return theClientProjection.get();
       }
    virtual void setNewWarpTransform(ossim2dTo2dTransform* warp);
    virtual void setNewAffineTransform(ossim2dTo2dTransform* affine);
@@ -128,18 +128,18 @@ protected:
    /*!
     * Data Members:
     */
-   ossimProjection*      theClientProjection;
-   ossim2dTo2dTransform* theWarpTransform;
-   ossim2dTo2dTransform* theAffineTransform;
+   ossimRefPtr<ossimProjection>      theClientProjection;
+   ossimRefPtr<ossim2dTo2dTransform> theWarpTransform;
+   ossimRefPtr<ossim2dTo2dTransform> theAffineTransform;
    
    TYPE_DATA
 };
 
 inline bool ossimWarpProjection::isAffectedByElevation() const
 {
-   return ( theClientProjection ?
+   return ( theClientProjection.valid() ?
             theClientProjection->isAffectedByElevation() :
-            true );
+            false );
 }
 
 #endif

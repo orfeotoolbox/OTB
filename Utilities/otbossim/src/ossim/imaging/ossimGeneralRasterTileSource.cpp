@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -8,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 13768 2008-10-22 19:32:18Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -75,110 +77,140 @@ ossimGeneralRasterTileSource::~ossimGeneralRasterTileSource()
 ossimRefPtr<ossimImageData> ossimGeneralRasterTileSource::getTile(
    const ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
-   if( !isOpen() || !isSourceEnabled() || !isValidRLevel(resLevel) )
+   if (theTile.valid())
    {
-      return ossimRefPtr<ossimImageData>();
-   }
-   
-   // general rasters can have a subimage as an offset so let's make sure we 
-   // shift it if its in the header
-   ossimIrect zeroBasedTileRect = tile_rect - getSubImageOffset(resLevel);
-
-   if (theOverview)
-   {
-      if (resLevel || theOverview->hasR0())
+      // Image rectangle must be set prior to calling getTile.
+      theTile->setImageRectangle(tile_rect);
+      
+      if ( getTile( theTile.get(), resLevel ) == false )
       {
-         //---
-         // Overviews are not aware of sub image offsets so request a zero
-         // based rectangle.
-         //---
-         ossimRefPtr<ossimImageData> tile =
-            theOverview->getTile(zeroBasedTileRect, resLevel);
-         if (tile.valid())
+         if (theTile->getDataObjectStatus() != OSSIM_NULL)
          {
-            //---
-            // Since the overview request was zero based we must reset the
-            // rectangle to be relative to any sub image offset.
-            //---
-            tile->setImageRectangle(tile_rect);
-            
-            if(getOutputScalarType() == OSSIM_USHORT11)
-            {
-               //---
-               // Temp fix:
-               // The overview handler could return a tile of OSSIM_UINT16 if
-               // the max sample value was not set to 2047.
-               //---
-               tile->setScalarType(OSSIM_USHORT11);
-            }
-         }
-
-         return tile;
-      }
-   }
-
-   theTile->setImageRectangle(zeroBasedTileRect);
-   
-   ossimIrect image_rect = ossimIrect(0, 
-				      0, 
-				      getNumberOfSamples(resLevel) - 1,
-				      getNumberOfLines(resLevel) - 1);
-
-   ossimIrect clip_rect = zeroBasedTileRect.clipToRect(image_rect);
-    
-   checkBuffer(tile_rect);
-
-   //***
-   // Check origin to see if it falls with the image.  If not, return a
-   // blank chip.
-   //***
-   if ( zeroBasedTileRect.intersects(image_rect) )
-   {
-      if ( ! zeroBasedTileRect.completely_within(theBufferRect) )
-      {
-         // A new buffer must be loaded.
-         if ( !zeroBasedTileRect.completely_within(clip_rect) )
-         {
-            //***
-            // Start with a blank tile since the whole tile buffer will not be
-            // filled.
-            //***
             theTile->makeBlank();
          }
+      }
+   }
+   
+   return theTile;
+}
 
-         if(!fillBuffer(clip_rect.ul()))
+bool ossimGeneralRasterTileSource::getTile(ossimImageData* result,
+                                           ossim_uint32 resLevel)
+{
+   bool status = false;
+   
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel)  &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      if (status)
+      {
+         if(getOutputScalarType() == OSSIM_USHORT11)
          {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "Error from fill buffer..."
-               << endl;
-            //***
-            // Error in filling buffer.
-            //***
-            setErrorStatus();
-            return ossimRefPtr<ossimImageData>();
+            //---
+            // Temp fix:
+            // The overview handler could return a tile of OSSIM_UINT16 if
+            // the max sample value was not set to 2047.
+            //---
+            result->setScalarType(OSSIM_USHORT11);
          }
       }
+      
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
          
-      theTile->loadTile(theBuffer,
-                        theBufferRect,
-                        clip_rect,
-                        theBufferInterleave);
-      theTile->validate();
-   }
-   else
-   {
-      // tile does not intersect the image rectangle.
-      return ossimRefPtr<ossimImageData>();
-   }
+         //---
+         // Subtract any sub image offset to get the zero based image space
+         // rectangle.
+         //---
+         ossimIrect tile_rect = result->getImageRectangle();
+         
+         // This should be the zero base image rectangle for this res level.
+         ossimIrect image_rect = getImageRectangle(resLevel);
+         
+         //---
+         // See if any point of the requested tile is in the image.
+         //---
+         if ( tile_rect.intersects(image_rect) )
+         {
+            // Make the tile rectangle zero base.
+            result->setImageRectangle(tile_rect);
 
-   return theTile;
-   
+            // This will reallocate the buffer if needed.
+            checkBuffer(tile_rect);
+
+            // Initialize the tile if needed as we're going to stuff it.
+            if (result->getDataObjectStatus() == OSSIM_NULL)
+            {
+               result->initialize();
+            }
+
+            ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+
+            if ( ! tile_rect.completely_within(theBufferRect) )
+            {
+               // A new buffer must be loaded.
+               
+               if ( !tile_rect.completely_within(clip_rect) )
+               {
+                  //---
+                  // Start with a blank tile since the whole tile buffer will
+                  // not be
+                  // filled.
+                  //---
+                  result->makeBlank();
+               }
+               
+               ossimIpt size(static_cast<ossim_int32>(result->getWidth()),
+                             static_cast<ossim_int32>(result->getHeight()));
+               
+               if( !fillBuffer(clip_rect.ul(), size) )
+               {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                     << "Error from fill buffer..."
+                     << endl;
+                  //---
+                  // Error in filling buffer.
+                  //---
+                  setErrorStatus();
+                  status = false;
+               }
+            }
+            
+            result->loadTile(theBuffer,
+                             theBufferRect,
+                             clip_rect,
+                             theBufferInterleave);
+            result->validate();
+
+            // Set the rectangle back.
+            result->setImageRectangle(tile_rect);
+            
+         }
+         else // No intersection.
+         {
+            result->makeBlank();
+         }
+      }
+   }
+   return status;
 }
 
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin)
+     bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin,
+                                                   const ossimIpt& size)
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBuffer";
 
@@ -186,25 +218,26 @@ bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin)
    bool status = false;
    switch (theImageData.interleaveType())
    {
-   case OSSIM_BIP:
-      status = fillBIP(origin);
-      break;
-   case OSSIM_BIL:
-      status = fillBIL(origin);
-      break;
-   case OSSIM_BSQ:
-      status = fillBSQ(origin);
-      break;
-   case OSSIM_BSQ_MULTI_FILE:
-      status = fillBsqMultiFile(origin);
-      break;
-   default:
-      ossimNotify(ossimNotifyLevel_WARN) << MODULE << " ERROR:\n"
-                                         << " Unsupported interleave type:  "
-                                         << ILUT.getEntryString(theImageData.interleaveType())
-                                         << endl;
+      case OSSIM_BIP:
+         status = fillBIP(origin, size);
+         break;
+      case OSSIM_BIL:
+         status = fillBIL(origin, size);
+         break;
+      case OSSIM_BSQ:
+         status = fillBSQ(origin, size);
+         break;
+      case OSSIM_BSQ_MULTI_FILE:
+         status = fillBsqMultiFile(origin, size);
+         break;
+      default:
+         ossimNotify(ossimNotifyLevel_WARN)
+            << MODULE << " ERROR:\n"
+            << " Unsupported interleave type:  "
+            << ILUT.getEntryString(theImageData.interleaveType())
+            << endl;
    }
-
+   
    if (status && theSwapBytesFlag)
    {
       ossimEndian oe;
@@ -219,7 +252,8 @@ bool ossimGeneralRasterTileSource::fillBuffer(const ossimIpt& origin)
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin)
+bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin,
+                                           const ossimIpt& size )
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBIP";
    
@@ -228,9 +262,9 @@ bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin)
    //***
    theBufferRect.set_ul(origin);
 
-   theBufferRect.set_lry(min( (origin.y + (ossim_int32)theTile->getHeight() -1),
+   theBufferRect.set_lry(min( (origin.y + size.y -1),
                               theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min( (origin.x + (ossim_int32)theTile->getWidth() -1),
+   theBufferRect.set_lrx(min( (origin.x + size.x -1),
                               theImageData.imageRect().lr().x));
    
    ossim_sint64 currentLine = origin.y;
@@ -270,7 +304,7 @@ bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin)
    
    ossim_uint8* buf = theBuffer;
 
-   ossim_uint64 height = theTile->getHeight();
+   ossim_uint64 height = size.y;
    
    while ((currentLine <= static_cast<ossim_sint64>(theImageData.imageRect().lr().y)) &&
           linesProcessed < height)
@@ -310,7 +344,8 @@ bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin)
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin)
+bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
+                                           const ossimIpt& size)
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBIL";
    
@@ -318,9 +353,9 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin)
    // This will fill a buffer the full width of valid samples * tileHeight().
    //***
    theBufferRect.set_ul(origin);
-   theBufferRect.set_lry(min((origin.y + (ossim_int32)theTile->getHeight() - 1),
+   theBufferRect.set_lry(min((origin.y + size.y - 1),
                              theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + (ossim_int32)theTile->getWidth() - 1),
+   theBufferRect.set_lrx(min((origin.x + size.x - 1),
                              theImageData.imageRect().lr().x));
    
    ossim_sint64 currentLine = origin.y;
@@ -351,7 +386,7 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin)
    }
 #endif
 
-   ossim_uint64 height    = theTile->getHeight();
+   ossim_uint64 height    = size.y;
    ossim_sint64 num_bands = theImageData.numberOfBands();
    
    while ((currentLine <= static_cast<ossim_sint64>(theImageData.imageRect().lr().y)) &&
@@ -398,7 +433,8 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin)
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin)
+bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin,
+                                           const ossimIpt& size)
 {
    static const char MODULE[] = "ossimGeneralRasterTileSource::fillBSQ";
 
@@ -407,9 +443,9 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin)
    //***
    theBufferRect.set_ul(origin);
    
-   theBufferRect.set_lry(min((origin.y + (ossim_int32)theTile->getHeight() -1),
+   theBufferRect.set_lry(min((origin.y + size.y -1),
                              theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + (ossim_int32)theTile->getWidth() - 1),
+   theBufferRect.set_lrx(min((origin.x + size.x - 1),
                              theImageData.imageRect().lr().x));
    
    //***
@@ -449,7 +485,7 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin)
       = theImageData.bytesPerRawLine() * theImageData.rawLines();
 
    ossim_int32 num_bands = theImageData.numberOfBands();
-   ossim_int32 height    = theTile->getHeight();
+   ossim_int32 height    = size.y;
    
    for (ossim_int32 band = 0; band < num_bands; ++band)
    {
@@ -501,7 +537,8 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin)
 //*******************************************************************
 // Private Method:
 //*******************************************************************
-bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin)
+bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin,
+                                                    const ossimIpt& size)
 {
    static const char MODULE[]
       = "ossimGeneralRasterTileSource::fillBsqMultiFile";
@@ -514,9 +551,9 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin)
    //***
    theBufferRect.set_ul(origin);
    
-   theBufferRect.set_lry(min((origin.y + (ossim_int32)theTile->getHeight() -1),
+   theBufferRect.set_lry(min((origin.y + size.y -1),
                              theImageData.imageRect().lr().y));
-   theBufferRect.set_lrx(min((origin.x + (ossim_int32)theTile->getWidth() - 1),
+   theBufferRect.set_lrx(min((origin.x + size.x - 1),
                              theImageData.imageRect().lr().x));
    
    //***
@@ -552,7 +589,7 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin)
 #endif
 
    ossim_int32 num_bands = theImageData.numberOfBands();
-   ossim_int32 height    = theTile->getHeight();
+   ossim_int32 height    = size.y;
    
    for (ossim_int32 band = 0; band < num_bands; ++band)
    {
@@ -601,29 +638,6 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin)
    return true;
 }
 
-//*******************************************************************
-// Public Method:
-//*******************************************************************
-// ossimIrect
-// ossimGeneralRasterTileSource::getImageRectangle(ossim_uint32 reduced_res_level) const
-// {
-//   if(reduced_res_level < getNumberOfDecimationLevels())
-//     {
-//       ossimDpt decimation;
-//       getDecimationFactor(reduced_res_level, decimation);
-//       ossimIpt offset = theImageData.subImageOffset();
-//       offset.x = ossim::round<int>(offset.x*decimation.x);
-//       offset.y = ossim::round<int>(offset.y*decimation.y);
-      
-//       return ossimIrect(offset.x,                         // upper left x
-// 			offset.y,                         // upper left y
-// 			offset.x + getNumberOfSamples(reduced_res_level) - 1,  // lower right x
-// 			offset.y + getNumberOfLines(reduced_res_level)   - 1); // lower right y
-//     }
-//   ossimIrect result;
-//   result.makeNan();
-//   return result;
-// }
 //*******************************************************************
 // Public method:
 //*******************************************************************
@@ -689,7 +703,7 @@ ossimGeneralRasterTileSource::isValidRLevel(ossim_uint32 reduced_res_level) cons
    {
       return true;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->isValidRLevel(reduced_res_level);
    }
@@ -716,7 +730,7 @@ ossimGeneralRasterTileSource::getNumberOfLines(ossim_uint32 reduced_res_level) c
    {
       return theImageData.validLines();
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -734,7 +748,7 @@ getNumberOfSamples(ossim_uint32 reduced_res_level) const
    {
       return theImageData.validSamples();
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }
@@ -888,7 +902,7 @@ bool ossimGeneralRasterTileSource::initializeHandler()
       return false;
    }
    
-   theSubImageOffset = theImageData.subImageOffset();
+//   theSubImageOffset = theImageData.subImageOffset();
 
    ossim_uint32 number_of_bands = theImageData.numberOfBands();
 
@@ -1133,7 +1147,7 @@ ossimString ossimGeneralRasterTileSource::getLongName()const
    return ossimString("general raster reader");
 }
 
-ossimString ossimGeneralRasterTileSource::className()const
+ossimString ossimGeneralRasterTileSource::getClassName()const
 {
    return ossimString("ossimGeneralRasterTileSource");
 }

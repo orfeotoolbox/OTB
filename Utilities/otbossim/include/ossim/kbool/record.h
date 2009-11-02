@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: record.h 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: record.h 14798 2009-06-29 19:19:22Z dburken $
 */
 
 #ifndef RECORD_H
@@ -26,7 +26,7 @@ enum BEAM_TYPE { NORMAL,FLAT};
 enum DIRECTION  {GO_LEFT,GO_RIGHT};
 
 //extern void DeleteRecordPool();
-class A2DKBOOLDLLEXP Bool_Engine;
+class Bool_Engine;
 
 class A2DKBOOLDLLEXP Record
 {

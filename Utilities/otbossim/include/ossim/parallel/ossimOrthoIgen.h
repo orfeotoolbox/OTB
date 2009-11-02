@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.h 14021 2009-02-06 02:08:19Z gpotts $
+// $Id: ossimOrthoIgen.h 15785 2009-10-21 14:55:04Z dburken $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
@@ -100,7 +100,12 @@ public:
    void setThumbnailResolution(const ossimIpt& res);
    void setThumbnailFlag(bool flag);
 
-   bool setupIgenKwl(ossimKeywordlist& kwl);
+   /**
+    * @brief Sets up the igen keyword list for the process.
+    *
+    * This throws ossimException on error.
+    */
+   void setupIgenKwl(ossimKeywordlist& kwl);
    
 protected:
    ossimString theThumbnailRes;
@@ -129,7 +134,9 @@ protected:
    ossim_float64 theHighPercentClip;
    bool          theUseAutoMinMaxFlag;
    bool          theScaleToEightBitFlag;
-   PropertyMap theWriterProperties;
+   // ossimString   theSrsCode;
+   bool          theStdoutFlag;
+   PropertyMap   theWriterProperties;
    
    std::vector<ossimOrthoIgenFilename> theFilenames;
    
@@ -137,9 +144,21 @@ protected:
    
    ossimRefPtr<ossimConnectableObject> setupCutter(ossimKeywordlist& kwl,
                                                    ossimConnectableObject* input);
-   bool setupWriter(ossimKeywordlist& kwl,
+
+   /**
+    * @brief Set up the writer for the process.
+    *
+    * This throws ossimException on error.
+    */
+   void setupWriter(ossimKeywordlist& kwl,
                     ossimConnectableObject* input);
-   bool setupView(ossimKeywordlist& kwl);
+
+   /**
+    * @brief Set up the view for the process.
+    *
+    * This throws ossimException on error.
+    */
+   void setupView(ossimKeywordlist& kwl);
 
    /**
     * Sets up any annotation from --annotate option.

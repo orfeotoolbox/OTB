@@ -11,7 +11,7 @@
 // This class is used to remap image data from one scalar type to another.
 //
 //*******************************************************************
-//  $Id: ossimScalarRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimScalarRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimScalarRemapper_HEADER
 #define ossimScalarRemapper_HEADER
 
@@ -23,8 +23,6 @@ public:
    ossimScalarRemapper();
    ossimScalarRemapper(ossimImageSource* inputSource,
                        ossimScalarType outputScalarType);
-
-   virtual ~ossimScalarRemapper();
 
    virtual void initialize();
 
@@ -85,7 +83,8 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
-private:
+protected:
+   virtual ~ossimScalarRemapper();
 
    /**
     *  Called on first getTile, will initialize all data needed.

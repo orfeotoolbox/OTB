@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimConvolutionSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimConvolutionSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimConvolutionSource_HEADER
 #define ossimConvolutionSource_HEADER
 #include <vector>
@@ -29,7 +29,6 @@ public:
                           const NEWMAT::Matrix& convolutionMatix);
    ossimConvolutionSource(ossimImageSource* inputSource,
                           const vector<NEWMAT::Matrix>& convolutionList);
-   virtual ~ossimConvolutionSource();
    
    virtual void setConvolution(const double* kernel, int nrows, int ncols, bool doWeightedAverage=false);
    virtual void setConvolution(const NEWMAT::Matrix& convolutionMatrix, bool doWeightedAverage=false);
@@ -49,14 +48,15 @@ public:
    virtual void initialize();
    
 protected:
+   virtual ~ossimConvolutionSource();
 
    void allocate();
    
    ossimRefPtr<ossimImageData> theTile;
-   long                        theMaxKernelWidth;
-   long                        theMaxKernelHeight;
+   ossim_int32                 theMaxKernelWidth;
+   ossim_int32                 theMaxKernelHeight;
    
-   vector<ossimDiscreteConvolutionKernel*> theConvolutionKernelList;
+   std::vector<ossimDiscreteConvolutionKernel* > theConvolutionKernelList;
    virtual void setKernelInformation();
    virtual void deleteConvolutionList();
 

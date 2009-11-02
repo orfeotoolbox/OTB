@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimObjectFactoryRegistry.cpp 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimObjectFactoryRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 
@@ -15,6 +15,7 @@ RTTI_DEF1(ossimObjectFactoryRegistry, "ossimObjectFactoryRegistry", ossimObject)
 #include <ossim/base/ossimObjectFactory.h>
 #include <ossim/base/ossimBaseObjectFactory.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/base/ossimRefPtr.h>
 using namespace std;
 
 
@@ -33,6 +34,7 @@ ossimObjectFactoryRegistry* ossimObjectFactoryRegistry::instance()
    return &sharedInstance;
 }
 
+#if 0
 bool ossimObjectFactoryRegistry::addFactory(ossimObjectFactory* factory)
 {
    return registerFactory(factory);
@@ -132,6 +134,7 @@ ossimObjectFactory* ossimObjectFactoryRegistry::findFactory(ossimObjectFactory* 
 
    return NULL;
 }
+#endif
 
 void ossimObjectFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeList,
                                                  const ossimString& baseType)const
@@ -149,18 +152,16 @@ void ossimObjectFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeL
    else
    {
       int i = 0;
-      ossimObject* obj = (ossimObject*)NULL;
+      ossimRefPtr<ossimObject> obj;
       for(i = 0; i < (int)allTypeList.size(); ++i)
       {
          obj = createObject(allTypeList[i]);
-         if(obj)
+         if(obj.valid())
          {
             if(obj->canCastTo(baseType))
             {
                typeList.push_back(allTypeList[i]);
             }
-            delete obj;
-            obj = (ossimObject*)NULL;
          }
       }
    }

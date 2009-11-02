@@ -8,7 +8,7 @@
 // Description: Common file for global Keywords.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.cpp 11731 2007-09-17 13:48:57Z gpotts $
+// $Id: ossimKeywordNames.cpp 15464 2009-09-23 19:30:35Z okramer $
 
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -67,6 +67,7 @@ const char* ossimKeywordNames::HEMISPHERE_KW = "hemisphere";
 const char* ossimKeywordNames::HORIZONTAL_SIZE_KW = "horizontal_size";
 const char* ossimKeywordNames::ID_KW ="id";
 const char* ossimKeywordNames::IMAGE_FILE_KW = "image_file";
+const char* ossimKeywordNames::IMAGE_ID_KW = "image_id";
 const char* ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW = "image_model_transform_matrix";
 const char* ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW = "image_model_transform_unit";
 const char* ossimKeywordNames::IMAGE_PATH_KW = "image_path";
@@ -129,6 +130,11 @@ const char* ossimKeywordNames::PROJECTION_KW     = "projection";
 const char* ossimKeywordNames::QUALITY_KW        = "quality";
 const char* ossimKeywordNames::RADIOMETRY_KW = "radiometry";
 const char* ossimKeywordNames::REDUCED_RES_LEVEL_KW = "reduced_res_level";
+const char* ossimKeywordNames::REF_GPT_LAT_KW  = "ref_point_lat";
+const char* ossimKeywordNames::REF_GPT_LON_KW  = "ref_point_lon";
+const char* ossimKeywordNames::REF_GPT_HGT_KW  = "ref_point_hgt";
+const char* ossimKeywordNames::REF_IPT_LINE_KW = "ref_point_line";
+const char* ossimKeywordNames::REF_IPT_SAMP_KW = "ref_point_samp";
 const char* ossimKeywordNames::ROTATION_KW = "rotation";
 const char* ossimKeywordNames::SCALE_PER_PIXEL_X_KW = "scale_per_pixel_x";
 const char* ossimKeywordNames::SCALE_PER_PIXEL_Y_KW = "scale_per_pixel_y";
@@ -138,6 +144,7 @@ const char* ossimKeywordNames::SCALE_FACTOR_X_KW = "scale_factor_x";
 const char* ossimKeywordNames::SCALE_FACTOR_Y_KW = "scale_factor_y";
 const char* ossimKeywordNames::SCALE_X_KW = "scale_x";
 const char* ossimKeywordNames::SCALE_Y_KW = "scale_y";
+const char* ossimKeywordNames::SENSOR_ID_KW = "sensor";
 const char* ossimKeywordNames::STD_PARALLEL_1_KW = "std_parallel_1";
 const char* ossimKeywordNames::STD_PARALLEL_2_KW = "std_parallel_2";
 const char* ossimKeywordNames::THICKNESS_KW = "thickness";

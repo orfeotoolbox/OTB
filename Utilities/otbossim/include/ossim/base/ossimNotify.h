@@ -7,7 +7,7 @@
 //
 // Contains class declaration for ossimNotify
 //-------------------------------------------------------------------
-//  $Id: ossimNotify.h 9370 2006-08-02 22:02:58Z dburken $
+//  $Id: ossimNotify.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimNotify_HEADER
 #define ossimNotify_HEADER
 #include <iostream>
@@ -22,7 +22,7 @@ extern "C"
   * Notification level enumeration.  This specifies the
   * level of the mesage being written.
   */
-OSSIMDLLEXPORT enum ossimNotifyLevel
+enum ossimNotifyLevel
 {
    ossimNotifyLevel_ALWAYS = 0,
    ossimNotifyLevel_FATAL  = 1,
@@ -36,7 +36,7 @@ OSSIMDLLEXPORT enum ossimNotifyLevel
  * Flags to allow the user to turn off certain notification levels
  * 
  */
-OSSIMDLLEXPORT enum ossimNotifyFlags
+enum ossimNotifyFlags
 {
    ossimNotifyFlags_NONE   = 0,
    ossimNotifyFlags_FATAL  = 1,

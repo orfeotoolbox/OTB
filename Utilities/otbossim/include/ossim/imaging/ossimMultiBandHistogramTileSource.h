@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMultiBandHistogramTileSource.h 11951 2007-10-31 14:34:38Z gpotts $
+// $Id: ossimMultiBandHistogramTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMultiBandHistogramTileSource_HEADER
 #define ossimMultiBandHistogramTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
@@ -23,7 +23,6 @@ public:
                                   double maxValuePercent,
                                   ossimImageSource* inputSource,
                                   ossimMultiResLevelHistogram* histogram);
-   virtual ~ossimMultiBandHistogramTileSource();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
 
@@ -83,6 +82,7 @@ public:
                           const char* prefix=0)const;
    
 protected:
+   virtual ~ossimMultiBandHistogramTileSource();
 
    void allocate();
    
