@@ -100,7 +100,7 @@ public:
   
   //virtual void AddController(VisuModelPointerType  modelRenderingLayer  ,VisuViewPointerType visuView);
 
-  virtual void OpenInputImage(const char * filename);
+  virtual unsigned int OpenInputImage(const char * filename);
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem );

@@ -40,19 +40,30 @@ ImageViewerManagerController
 
 
 
-void
+unsigned int
 ImageViewerManagerController
 ::OpenInputImage(const char * filename)
 {
+  unsigned int numberOfOpenedImages = 0;
   try
   {
     std::string strFilename = filename;
-    m_Model->OpenImage( strFilename );
+    numberOfOpenedImages = m_Model->OpenImage( strFilename );
   }
-  catch (itk::ExceptionObject & err)
+  catch ( ... )
   {
-    MsgReporter::GetInstance()->SendError(err.GetDescription());
+    try
+    {
+      std::string strFilename = filename;
+      numberOfOpenedImages = m_Model->OpenImageList( strFilename );
+    }
+    catch (itk::ExceptionObject & err)
+    {
+      MsgReporter::GetInstance()->SendError(err.GetDescription());
+    }
   }
+
+  return numberOfOpenedImages;
 }
 
 /**

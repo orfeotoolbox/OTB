@@ -113,39 +113,43 @@ void
 ImageViewerManagerViewGUI
 ::Initialize(const char * cfname)
 {
-  //Initialise the boolean pair
-  PairType      pair(false,false); //(Not displayed , Packed View)
+  unsigned int numberOfOpenedImages = m_ImageViewerManagerController->OpenInputImage(cfname);
+  for ( unsigned int i = 0; i < numberOfOpenedImages; i++ )
+  {
+    //Initialise the boolean pair
+    PairType      pair(false,false); //(Not displayed , Packed View)
 
-  //Put a new WidgetManager in the list
-  if(bSplitted->value() && !bPacked->value())
-    {
-      SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New();
-      SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New();
+    //Put a new WidgetManager in the list
+    if(bSplitted->value() && !bPacked->value())
+      {
+        SplittedWidgetManagerType::Pointer widgetManager      =  SplittedWidgetManagerType::New();
+        SplittedWidgetManagerType::Pointer linkwidgetManager  =  SplittedWidgetManagerType::New();
 
-      m_WidgetManagerList->PushBack(widgetManager);
-      m_LinkWidgetManagerList->PushBack(linkwidgetManager);
-      pair.second = true;
-    }
-  else
-    {
-      PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New();
-      PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New();
-      m_WidgetManagerList->PushBack(widgetManager);
-      m_LinkWidgetManagerList->PushBack(linkwidgetManager);
-    }
+        m_WidgetManagerList->PushBack(widgetManager);
+        m_LinkWidgetManagerList->PushBack(linkwidgetManager);
+        pair.second = true;
+      }
+    else
+      {
+        PackedWidgetManagerType::Pointer widgetManager         =   PackedWidgetManagerType::New();
+        PackedWidgetManagerType::Pointer linkwidgetManager     =   PackedWidgetManagerType::New();
+        m_WidgetManagerList->PushBack(widgetManager);
+        m_LinkWidgetManagerList->PushBack(linkwidgetManager);
+      }
 
-  //Put the status of the last added image
-  m_DisplayStatusList.push_back(pair);
-  m_LinkedDisplayStatusList.push_back(false);
+    //Put the status of the last added image
+    m_DisplayStatusList.push_back(pair);
+    m_LinkedDisplayStatusList.push_back(false);
 
-  // Call the Controller
-  m_ImageViewerManagerController->OpenInputImage(cfname);
+    // Call the Controller
+    //m_ImageViewerManagerController->OpenInputImage(cfname);
 
-  //Update the Progress Bar
-  this->UpdateDiaporamaProgressBar();
+    //Update the Progress Bar
+    this->UpdateDiaporamaProgressBar();
 
-  //Update the Link Setup
-  this->UpdateLinkSetupWindow();
+    //Update the Link Setup
+    this->UpdateLinkSetupWindow();
+  }
 }
 
 /**

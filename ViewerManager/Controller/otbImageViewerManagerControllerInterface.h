@@ -68,7 +68,7 @@ public:
   itkTypeMacro(ImageViewerManagerControllerInterface,Superclass);
 
   /** Users actions */
-  virtual void OpenInputImage(const char * filename) =0;
+  virtual unsigned int OpenInputImage(const char * filename) =0;
   virtual void CloseImage(unsigned int selectedItem) = 0;
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem) = 0;
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem) = 0; 

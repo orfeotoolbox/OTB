@@ -22,6 +22,7 @@ See OTBCopyright.txt for details.
 #include "otbMacro.h"
 
 #include "otbImageFileWriter.h"
+#include "otbImageSeriesFileReader.h"
 #include "otbFltkFilterWatcher.h"
 
 
@@ -61,7 +62,7 @@ ImageViewerManagerModel
   listener->Notify();
 }
 
-void
+unsigned int
 ImageViewerManagerModel
 ::OpenImage(std::string filename)
 {
@@ -132,7 +133,91 @@ ImageViewerManagerModel
   this->NotifyAll();
   m_HasImageOpened = false;
 
+  return 1;
 }
+
+/**
+ * Read a series of images, including cropping facilities throught
+ * the ImageSeriesFileReader 
+ */
+unsigned int
+ImageViewerManagerModel
+::OpenImageList(std::string filename)
+{
+  /** Reader*/
+  typedef ImageSeriesFileReader< ImageType > ImageSeriesReaderType;
+  ImageSeriesReaderType::Pointer reader = ImageSeriesReaderType::New();
+  reader->SetFileName(filename);
+  reader->Update();
+
+  for (  unsigned int i = 0; i < reader->GetOutput()->Size(); i++ )
+  {
+    /** Generate the layer*/
+    LayerGeneratorPointerType visuGenerator = LayerGeneratorType::New();
+    visuGenerator->SetImage(reader->GetOutput()->GetNthElement(i));
+    FltkFilterWatcher qlwatcher(visuGenerator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+    visuGenerator->GenerateLayer();
+    RenderingFunctionType::Pointer  rendrerFunction  = visuGenerator->GetRenderingFunction();
+
+    /** Rendering image*/
+    VisuModelPointerType rendering = VisuModelType::New();
+    rendering->AddLayer(visuGenerator->GetLayer());
+
+    rendering->Update();
+
+    /** View*/
+    VisuViewPointerType visuView = this->BuiltVisu(rendering);
+
+    /** Build the pixelDescription View*/
+    PixelDescriptionViewType::Pointer pixelView = PixelDescriptionViewType::New();
+    PixelDescriptionModelPointerType pixelModel = PixelDescriptionModelType::New();
+    pixelModel->SetLayers(rendering->GetLayers());
+    pixelView->SetModel(pixelModel);
+
+    /** Controller*/
+    WidgetControllerPointerType controller = this->BuiltController(rendering, visuView ,pixelModel );
+
+    /** Finish Builting the visu*/
+    visuView->SetController(controller);
+
+    /** Build the curve Widget */
+    CurvesWidgetType::Pointer   curveWidget = CurvesWidgetType::New();
+
+    /** Store all the information in the structure*/
+    ObjectsTracked currentComponent;
+
+    currentComponent.fileName   = reader->GetFileName(i); 
+    currentComponent.pLayer     = visuGenerator->GetLayer();
+    currentComponent.pReader    = reader->GetImageFileReader(i);
+    currentComponent.pRendering = rendering;
+    currentComponent.pVisuView  = visuView;
+    currentComponent.pWidgetController = controller;
+    currentComponent.pRenderFunction  = rendrerFunction;
+    currentComponent.pPixelView   = pixelView;
+    currentComponent.pPixelModel  = pixelModel;
+    currentComponent.pCurveWidget = curveWidget;
+
+    assert(currentComponent.pLayer);
+    assert(currentComponent.pReader);
+    assert(currentComponent.pRendering);
+    assert(currentComponent.pVisuView);
+    assert(currentComponent.pWidgetController);
+    assert(currentComponent.pRenderFunction);
+    assert(currentComponent.pPixelView);
+    assert(currentComponent.pPixelModel);
+    assert(currentComponent.pCurveWidget);
+
+    /** Add the the struct in the list*/
+    m_ObjectTrackedList.push_back(currentComponent);
+
+    m_HasImageOpened = true;
+    this->NotifyAll();
+    m_HasImageOpened = false;
+  }
+
+  return reader->GetOutput()->Size();
+}
+
 
 /**
  * Built a part of the visu, create a pointer and add a model to the visu

@@ -152,7 +152,8 @@ public:
   /** Get the unique instanc1e of the model */
   static Pointer GetInstance();
 
-  virtual void OpenImage(std::string strfilename);
+  virtual unsigned int OpenImage(std::string strfilename);
+  virtual unsigned int OpenImageList(std::string strfilename);
   virtual void CloseImage(unsigned int selectedItem);
   virtual void UpdateRGBChannelOrder(int redChoice , int greenChoice, int BlueChoice, unsigned int selectedItem);
   virtual void UpdateGrayScaleChannelOrder(int choice, unsigned int selectedItem);
