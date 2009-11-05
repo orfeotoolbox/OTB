@@ -14,6 +14,7 @@
 #include <AlosSarRecordHeader.h>
 
 #include <AlosSarDataFileDescriptor.h>
+#include <AlosSarSignalData.h>
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -26,6 +27,7 @@ namespace ossimplugins
 {
 
 const int AlosSarData::AlosSarDataFileDescriptorID = 1;
+const int AlosSarData::AlosSarSignalDataID = 2;
 
 AlosSarData::AlosSarData()
 {
@@ -70,6 +72,24 @@ std::istream& operator>>(std::istream& is, AlosSarData& data)
     is.read(buff, header.get_length()-12);
     delete buff;
   }
+
+  std::streampos filePosition;
+
+  filePosition = is.tellg();
+  is>>header;
+
+  record = new AlosSarSignalData;
+
+  if (record != NULL)
+  {
+    record->Read(is);
+    data._records[header.get_rec_seq()] = record;
+    std::cout << "Record sequence number = " << header.get_rec_seq() << std::endl;
+  }
+  is.seekg(filePosition); // Rewind file pointer to start of record
+  // Then, advance pointer to next record
+  is.seekg(static_cast<std::streamoff>(header.get_length()), std::ios::cur);
+
   return is;
 }
 
@@ -140,6 +160,21 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
+  const AlosSarSignalData *signalData = get_AlosSarSignalData();
+  if (datafiledesc != NULL)
+  {
+    kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(),true);
+    kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(),true);
+    // FIXME debug
+    std::cout << std::endl << "pulse_repetition_frequency = " << signalData->get_pulse_repetition_frequency() << std::endl;
+    std::cout << std::endl << "slant_range_to_1st_data_sample = " << signalData->get_slant_range_to_1st_data_sample() << std::endl;
+  }
+  else
+  {
+    result = false;
+  }
+
+
   return result;
 }
 
@@ -147,6 +182,11 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
 const AlosSarDataFileDescriptor * AlosSarData::get_AlosSarDataFileDescriptor() const
 {
   return dynamic_cast<const AlosSarDataFileDescriptor*>(_records.find(AlosSarDataFileDescriptorID)->second);
+}
+
+const AlosSarSignalData * AlosSarData::get_AlosSarSignalData() const
+{
+  return dynamic_cast<const AlosSarSignalData*>(_records.find(AlosSarSignalDataID)->second);
 }
 
 }

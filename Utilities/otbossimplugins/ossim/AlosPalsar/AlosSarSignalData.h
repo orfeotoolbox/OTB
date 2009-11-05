@@ -91,17 +91,28 @@ public:
   };
 
 
-  int slant_range_to_1st_data_sample() const
+  int get_pulse_repetition_frequency() const
+  {
+    return _pulse_repetition_frequency;
+  };
+
+  int get_slant_range_to_1st_data_sample() const
   {
     return _slant_range_to_1st_data_sample;
   };
 
 
 protected:
+
+  /**
+  * @brief pulse_repetition_frequency
+  */
+  int _pulse_repetition_frequency;
+
   /**
   * @brief slant_range_to_1st_data_sample
   */
-  int   _slant_range_to_1st_data_sample;
+  int _slant_range_to_1st_data_sample;
 
 private:
 };

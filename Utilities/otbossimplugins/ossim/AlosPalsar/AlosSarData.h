@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include "AlosSarDataFileDescriptor.h"
+#include "AlosSarSignalData.h"
 #include <map>
 
 class ossimKeywordlist;
@@ -82,6 +83,7 @@ public:
 
 
   const AlosSarDataFileDescriptor * get_AlosSarDataFileDescriptor() const;
+  const AlosSarSignalData * get_AlosSarSignalData() const;
 
 protected:
   typedef std::map<int, AlosSarRecord*> RecordType;
@@ -89,6 +91,7 @@ protected:
 
 
   static const int AlosSarDataFileDescriptorID;
+  static const int AlosSarSignalDataID;
 private:
 
 };

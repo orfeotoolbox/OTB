@@ -37,7 +37,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarRecordHeader& data)
 
 std::istream& operator>>(std::istream& is, AlosSarRecordHeader& data)
 {
-  is.read((char*)&(data._rec_seq),4);
+  is.read((char*)&(data._rec_seq),4); // TODO Change dangerous C-style cast to static cast.
   data.SwitchEndian(data._rec_seq);
   is.read((char*)&(data._rec_sub1),1);
   is.read((char*)&(data._rec_type),1);

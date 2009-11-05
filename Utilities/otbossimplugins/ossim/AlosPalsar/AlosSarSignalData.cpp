@@ -11,6 +11,8 @@
 // $Id$
 
 #include <AlosSarSignalData.h>
+#include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimEndian.h>
 
 
 namespace ossimplugins
@@ -34,64 +36,106 @@ std::ostream& operator<<(std::ostream& os, const AlosSarSignalData& data)
 
 std::istream& operator>>(std::istream& is, AlosSarSignalData& data)
 {
-  int tmpint;
+  ossim_uint16 tmpuint16;
+  ossim_uint32 tmpuint32;
+  ossimEndian oe;
 
-  char buf4[5];
-  buf4[4] = '\0';
+  std::cout << std::endl << "File pointer location = " << is.tellg() << std::endl;
+  std::cout << std::endl;
 
-  is.read(buf4,4);
-  tmpint = buf4;
-  std::cout << 'Line number = ' << tmpint;
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Data line number = " << tmpuint32 << std::endl;
 
-  is.read(buf4,4);
-  tmpint = buf4;
-  std::cout << 'SAR image data record index = ' << tmpint;
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Data record index = " << tmpuint32 << std::endl;
 
-// TODO Complete modification below
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Actual count of left-fill pixels = " << tmpuint32 << std::endl;
 
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Actual count of data pixels = " << tmpuint32 << std::endl;
 
-  char buf6[7];
-  buf6[6] = '\0';
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Actual count of right-fill pixels = " << tmpuint32 << std::endl;
 
-  char buf168[169];
-  buf168[168] = '\0';
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Sensor parameters update flag = " << tmpuint32 << std::endl;
 
-  char buf94[95];
-  buf94[94] = '\0';
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Scene start year = " << tmpuint32 << std::endl;
 
-  char buf8[9];
-  buf8[8] = '\0';
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Scene start day of year = " << tmpuint32 << std::endl;
 
-  is.read(buf168,168);
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Sensor acquisition milliseconds of day = " << tmpuint32 << std::endl;
 
-  is.read(buf6,6);
-  data._num_lines = atoi(buf6);
+  is.read(reinterpret_cast<char*>(&tmpuint16), 2);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint16);}
+  std::cout << "SAR channel indicator = " << tmpuint16 << std::endl;
 
-  is.read(buf94,94);
+  is.read(reinterpret_cast<char*>(&tmpuint16), 2);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint16);}
+  std::cout << "SAR channel code = " << tmpuint16 << std::endl;
 
-  int tmpval;
-  is.read(buf8,8);
-  tmpval = atoi(buf8);
-  data._num_pix_in_line = tmpval/8; // Assume data always in 8-byte complex format
+  is.read(reinterpret_cast<char*>(&tmpuint16), 2);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint16);}
+  std::cout << "Transmitted polarization = " << tmpuint16 << std::endl;
 
-  char buf432[433];
-  buf432[432] = '\0';
+  is.read(reinterpret_cast<char*>(&tmpuint16), 2);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint16);}
+  std::cout << "Received polarization = " << tmpuint16 << std::endl;
 
-  is.read(buf432,432);
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "PRF (mHz) = " << tmpuint32 << std::endl;
+  data._pulse_repetition_frequency = static_cast<int>(tmpuint32);
+
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Scan ID for SCAN SAR mode = " << tmpuint32 << std::endl;
+
+  is.read(reinterpret_cast<char*>(&tmpuint16), 2);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint16);}
+  std::cout << "Onboard range compressed flag = " << tmpuint16 << std::endl;
+
+  is.seekg(50, std::ios_base::cur);
+
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Slant range to 1st data sample (m) = " << tmpuint32 << std::endl;
+  data._slant_range_to_1st_data_sample = static_cast<int>(tmpuint32);
+
+  is.read(reinterpret_cast<char*>(&tmpuint32), 4);
+  if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)  {oe.swap(tmpuint32);}
+  std::cout << "Data record window position = " << tmpuint32 << std::endl;
+
+  std::cout << std::endl << "File pointer location = " << is.tellg() << std::endl;
+  std::cout << std::endl;
+
   return is;
 }
 
 AlosSarSignalData::AlosSarSignalData(const AlosSarSignalData& rhs):
   AlosSarRecord(rhs),
-  _num_lines(rhs._num_lines),
-  _num_pix_in_line(rhs._num_pix_in_line)
+  _pulse_repetition_frequency(rhs._pulse_repetition_frequency),
+  _slant_range_to_1st_data_sample(rhs._slant_range_to_1st_data_sample)
 {
 }
 
 AlosSarSignalData& AlosSarSignalData::operator=(const AlosSarSignalData& rhs)
 {
-  _num_lines = rhs._num_lines;
-  _num_pix_in_line = rhs._num_pix_in_line;
+  _pulse_repetition_frequency = rhs._pulse_repetition_frequency;
+  _slant_range_to_1st_data_sample = rhs._slant_range_to_1st_data_sample;
   return *this;
 }
 }
