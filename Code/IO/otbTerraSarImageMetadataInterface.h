@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbTerraSarImageMetadataInterface_h
 #define __otbTerraSarImageMetadataInterface_h
 
@@ -46,13 +47,13 @@ public:
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TerraSarImageMetadataInterface, itk::Object);
- 
+
   typedef itk::ImageBase< 2 >                   ImageType;
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
@@ -67,35 +68,35 @@ public:
 
   /** Get the imaging acquisition day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & ) const;
-  
+
   /** Get the imaging acquisition month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & ) const;
-  
+
   /** Get the imaging acquisition year from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & ) const;
-   
+
   /** Get the imaging acquisition hour from the ossim metadata */
   int GetHour( const MetaDataDictionaryType & ) const;
-  
+
   /** Get the imaging acquisition minute from the ossim metadata */
   int GetMinute( const MetaDataDictionaryType & ) const;
 
   /** Get the imaging production day from the ossim metadata */
   int GetProductionDay( const MetaDataDictionaryType & ) const;
-  
+
   /** Get the imaging production month from the ossim metadata */
   int GetProductionMonth( const MetaDataDictionaryType & ) const;
-  
+
   /** Get the imaging production year from the ossim metadata */
   int GetProductionYear( const MetaDataDictionaryType & ) const;
-   
+
   bool CanRead( const MetaDataDictionaryType & ) const;
 
 protected:
   TerraSarImageMetadataInterface();
   virtual ~TerraSarImageMetadataInterface() {};
 
-  
+
 private:
   TerraSarImageMetadataInterface(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
