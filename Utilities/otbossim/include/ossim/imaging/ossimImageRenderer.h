@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimImageRenderer.h 13330 2008-07-28 18:04:40Z dburken $
+// $Id: ossimImageRenderer.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimImageRenderer_HEADER
 #define ossimImageRenderer_HEADER
@@ -29,7 +29,6 @@ public:
    ossimImageRenderer();
    ossimImageRenderer(ossimImageSource* inputSource,
                       ossimImageViewTransform* imageViewTrans = NULL);
-   virtual ~ossimImageRenderer();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
@@ -49,7 +48,7 @@ public:
    virtual void initialize();
 
    /**
-    * TheResampler will adjust the rect to whatever the view is.  So it
+    * m_Resampler will adjust the rect to whatever the view is.  So it
     * will project the full image rect onto the view and return the upright
     * bounding rect.
     */
@@ -70,29 +69,23 @@ public:
                           const char* prefix=0);
 
    void setImageViewTransform(ossimImageViewTransform* transform);
-   ossimImageViewTransform* getImageViewTransform(){return theImageViewTransform;}
+   ossimImageViewTransform* getImageViewTransform() { return m_ImageViewTransform; }
 
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
-   virtual bool setView(ossimObject* baseObject,
-                        bool ownsTheView = false);
-   ossimFilterResampler* getResampler()
-      {
-         return theResampler;
-      }
+   //! Returns instance to the input image geometry. This may be a NULL pointer.
+   //! This is only valid if the IVT is a projection type IVT (IVPT) 
+   virtual ossimImageGeometry* getImageGeometry();
+
+   virtual bool setView(ossimObject* baseObject);
+   ossimFilterResampler* getResampler() { return m_Resampler; }
    virtual ossimObject* getView();
    virtual const ossimObject* getView()const;
 
-   virtual void getDecimationFactor(ossim_uint32 resLevel,
-                                    ossimDpt& result)const;
+   virtual void getDecimationFactor(ossim_uint32 resLevel, ossimDpt& result)const;
   virtual void getDecimationFactors(vector<ossimDpt>& decimations)const;
   virtual ossim_uint32 getNumberOfDecimationLevels()const;
   
-
-   virtual void setAutoUpdateInputTransformFlag(bool flag)
-      {
-         theAutoUpdateInputTransform = flag;
-      }
+   virtual void setAutoUpdateInputTransformFlag(bool flag){ m_AutoUpdateInputTransform = flag; }
+   
    /**
     * ordering specifies how the vertices should be arranged.
     * valid image vertices is basically the tightly fit convex hull
@@ -117,86 +110,38 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+protected:
+   virtual ~ossimImageRenderer();
 
 private:
    
-
    class ossimRendererSubRectInfo
    {
    public:
-      friend std::ostream& operator <<(std::ostream& out,
-                                       const ossimRendererSubRectInfo& rhs)
-         {
-            return out << "vul:   " << rhs.theVul << endl
-                       << "vur:   " << rhs.theVur << endl
-                       << "vlr:   " << rhs.theVlr << endl
-                       << "vll:   " << rhs.theVll << endl
-                       << "iul:   " << rhs.theIul << endl
-                       << "iur:   " << rhs.theIur << endl
-                       << "ilr:   " << rhs.theIlr << endl
-                       << "ill:   " << rhs.theIll << endl
-                       << "scale: " << rhs.theViewToImageScale << endl;
-               
-         }
-      ossimRendererSubRectInfo()
-         {
-            theVul.makeNan();
-            theVur.makeNan();
-            theVlr.makeNan();
-            theVll.makeNan();
-            theIul.makeNan();
-            theIur.makeNan();
-            theIlr.makeNan();
-            theIll.makeNan();
-            theViewToImageScale.makeNan();
-            theImageToViewScale.makeNan();            
-         }
+      friend std::ostream& operator <<(std::ostream& out, const ossimRendererSubRectInfo& rhs)
+      {
+         return out << "vul:   " << rhs.m_Vul << endl
+            << "vur:   " << rhs.m_Vur << endl
+            << "vlr:   " << rhs.m_Vlr << endl
+            << "vll:   " << rhs.m_Vll << endl
+            << "iul:   " << rhs.m_Iul << endl
+            << "iur:   " << rhs.m_Iur << endl
+            << "ilr:   " << rhs.m_Ilr << endl
+            << "ill:   " << rhs.m_Ill << endl
+            << "scale: " << rhs.m_ViewToImageScale << endl;
+
+      }
+
+      ossimRendererSubRectInfo();
       ossimRendererSubRectInfo(const ossimDpt& vul,
                                const ossimDpt& vur,
                                const ossimDpt& vlr,
-                               const ossimDpt& vll)
-         :theVul(vul),
-          theVur(vur),
-          theVlr(vlr),
-          theVll(vll)
-         {
-            theIul.makeNan();
-            theIur.makeNan();
-            theIlr.makeNan();
-            theIll.makeNan();
-            theViewToImageScale.makeNan();
-            theImageToViewScale.makeNan();            
-         }
+                               const ossimDpt& vll);
          
-      bool imageHasNans()const
-         {
-            return ( theIul.hasNans()||
-                     theIur.hasNans()||
-                     theIlr.hasNans()||
-                     theIll.hasNans());
-         }
-      
-      bool imageIsNan()const
-         {
-            return ( theIul.hasNans()&&
-                     theIur.hasNans()&&
-                     theIlr.hasNans()&&
-                     theIll.hasNans());
-         }
-      bool viewHasNans()const
-      {
-         return ( theVul.hasNans()||
-                  theVur.hasNans()||
-                  theVlr.hasNans()||
-                  theVll.hasNans());
-      }
-      bool viewIsNan()const
-      {
-         return ( theVul.hasNans()&&
-                  theVur.hasNans()&&
-                  theVlr.hasNans()&&
-                  theVll.hasNans());
-      }
+      bool imageHasNans()const;
+      bool imageIsNan()const;
+      bool viewHasNans()const;
+      bool viewIsNan()const;
       void splitView(ossimImageViewTransform* transform,
                      ossimRendererSubRectInfo& ulRect,
                      ossimRendererSubRectInfo& urRect,
@@ -206,89 +151,19 @@ private:
       void transformViewToImage(ossimImageViewTransform* transform);
       void transformImageToView(ossimImageViewTransform* transform);
       
-      void roundToInteger()
-         {
-            theIul = ossimIpt(theIul);
-            theIur = ossimIpt(theIur);
-            theIlr = ossimIpt(theIlr);
-            theIll = ossimIpt(theIll);
-
-            theVul = ossimIpt(theVul);
-            theVur = ossimIpt(theVur);
-            theVlr = ossimIpt(theVlr);
-            theVll = ossimIpt(theVll);
-         }
+      void roundToInteger();
       void stretchImageOut(bool enableRound=false);
-      ossimDrect getViewRect()const
-         {
-            return ossimDrect(theVul,
-                              theVur,
-                              theVlr,
-                              theVll);            
-         }
-      ossimDrect getImageRect()const
-         {
-            return ossimDrect(theIul,
-                              theIur,
-                              theIlr,
-                              theIll);
-         }
-      void roundImageToInteger()
-         {
-            theIul = ossimIpt(theIul);
-            theIur = ossimIpt(theIur);
-            theIlr = ossimIpt(theIlr);
-            theIll = ossimIpt(theIll);
-         }
-      void roundViewToInteger()
-         {
-            theVul = ossimIpt(theVul);
-            theVur = ossimIpt(theVur);
-            theVlr = ossimIpt(theVlr);
-            theVll = ossimIpt(theVll);
-         }
-      bool isViewEqual(const ossimRendererSubRectInfo& infoRect)const
-         {
-            return ( (theVul == infoRect.theVul)&&
-                     (theVur == infoRect.theVur)&&
-                     (theVlr == infoRect.theVlr)&&
-                     (theVll == infoRect.theVll));
-         }
-      bool isViewEqual(const ossimDrect& viewRect)const
-         {
-            return ( (theVul == viewRect.ul())&&
-                     (theVur == viewRect.ur())&&
-                     (theVlr == viewRect.lr())&&
-                     (theVll == viewRect.ll()));
-         }
-      ossimDpt getAbsValueViewToImageScales()const
-         {
-            if(theViewToImageScale.hasNans())
-            {
-               return theImageToViewScale;
-            }
-            return ossimDpt(fabs(theViewToImageScale.x),
-                            fabs(theViewToImageScale.y));
-         }
-      ossimDpt getAbsValueImageToViewScales()const
-         {
-            if(theImageToViewScale.hasNans())
-            {
-               return theImageToViewScale;
-            }
-            
-            return ossimDpt(fabs(theImageToViewScale.x),
-                            fabs(theImageToViewScale.y));
-         }
-      bool isViewAPoint()const
-         {
-            return ((theVul == theVur)&&
-                    (theVul == theVlr)&&
-                    (theVul == theVll));
-         }
+      ossimDrect getViewRect()const;
+      ossimDrect getImageRect()const;
+      void roundImageToInteger();
+      void roundViewToInteger();
+      bool isViewEqual(const ossimRendererSubRectInfo& infoRect)const;
+      bool isViewEqual(const ossimDrect& viewRect)const;
+      ossimDpt getAbsValueViewToImageScales()const;
+      ossimDpt getAbsValueImageToViewScales()const;
+      bool isViewAPoint()const;
       bool isIdentity()const;
-      bool canBilinearInterpolate(ossimImageViewTransform* transform,
-				  double error)const;
+      bool canBilinearInterpolate(ossimImageViewTransform* transform, double error)const;
 
       ossimDpt getParametricCenter(const ossimDpt& ul, const ossimDpt& ur, 
 				    const ossimDpt& lr, const ossimDpt& ll)const;
@@ -305,18 +180,18 @@ private:
 		       ossimDpt& leftMid,
 		       ossimDpt& center)const;
 
-      ossimDpt theIul;
-      ossimDpt theIur;
-      ossimDpt theIlr;
-      ossimDpt theIll;
+      ossimDpt m_Iul;
+      ossimDpt m_Iur;
+      ossimDpt m_Ilr;
+      ossimDpt m_Ill;
 
-      ossimIpt theVul;
-      ossimIpt theVur;
-      ossimIpt theVlr;
-      ossimIpt theVll;
+      ossimIpt m_Vul;
+      ossimIpt m_Vur;
+      ossimIpt m_Vlr;
+      ossimIpt m_Vll;
 
-      ossimDpt theViewToImageScale;
-      ossimDpt theImageToViewScale;
+      ossimDpt m_ViewToImageScale;
+      ossimDpt m_ImageToViewScale;
       
    };
 
@@ -331,10 +206,8 @@ private:
    ossimIrect getBoundingImageRect()const;
 
    
-   /**
-    *this is called on a property event and on input connection changes.
-    */
-   void checkTransform();
+   //! this is called on a property event and on input connection changes.
+   void checkIVT();
 
    void computeRects();
 
@@ -366,10 +239,10 @@ private:
 
    virtual void fireProgressEvent(double percentComplete);
    
-   ossimFilterResampler*       theResampler;
-   ossimRefPtr<ossimImageData> theBlankTile;
-   ossimRefPtr<ossimImageData> theTile;
-   ossimRefPtr<ossimImageData> theTemporaryBuffer;
+   ossimFilterResampler*       m_Resampler;
+   ossimRefPtr<ossimImageData> m_BlankTile;
+   ossimRefPtr<ossimImageData> m_Tile;
+   ossimRefPtr<ossimImageData> m_TemporaryBuffer;
 
    /**
     * This is going to allow us to chain multiple
@@ -380,27 +253,166 @@ private:
     * The default will be r-level 0 request coming
     * from the right.
     */
-   ossim_uint32             theStartingResLevel;
-   ossimImageViewTransform *theImageViewTransform;
-   mutable ossimIrect               theBoundingRect;
-   mutable ossimIrect               theBoundingViewRect;
-
-   /**
-    * Holds a pre-computed input rect.
-    */
-//   ossimIrect                theInputRect;
-
-   /**
-    * Holds a precomputed output rect.
-    */
-//   ossimIrect                theOutputRect;
-
-   ossim_uint32               theMaxRecursionLevel;
-   bool                       theAutoUpdateInputTransform;
-   vector<ossimDpt>           theInputDecimationFactors;
-   ossim_uint32               theMaxLevelsToCompute;
+   ossim_uint32             m_StartingResLevel;
+   ossimImageViewTransform *m_ImageViewTransform;
+   mutable ossimIrect       m_BoundingRect;
+   mutable ossimIrect       m_BoundingViewRect;
+   ossim_uint32             m_MaxRecursionLevel;
+   bool                     m_AutoUpdateInputTransform;
+   vector<ossimDpt>         m_InputDecimationFactors;
+   ossim_uint32             m_MaxLevelsToCompute;
    
 TYPE_DATA
 };
+
+inline ossimImageRenderer::ossimRendererSubRectInfo::ossimRendererSubRectInfo()
+{
+   m_Vul.makeNan();
+   m_Vur.makeNan();
+   m_Vlr.makeNan();
+   m_Vll.makeNan();
+   m_Iul.makeNan();
+   m_Iur.makeNan();
+   m_Ilr.makeNan();
+   m_Ill.makeNan();
+   m_ViewToImageScale.makeNan();
+   m_ImageToViewScale.makeNan();            
+}
+
+inline ossimImageRenderer::ossimRendererSubRectInfo::ossimRendererSubRectInfo(const ossimDpt& vul,
+                         const ossimDpt& vur,
+                         const ossimDpt& vlr,
+                         const ossimDpt& vll)
+                         :m_Vul(vul),
+                         m_Vur(vur),
+                         m_Vlr(vlr),
+                         m_Vll(vll)
+{
+   m_Iul.makeNan();
+   m_Iur.makeNan();
+   m_Ilr.makeNan();
+   m_Ill.makeNan();
+   m_ViewToImageScale.makeNan();
+   m_ImageToViewScale.makeNan();            
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::imageHasNans()const
+{
+   return ( m_Iul.hasNans()||
+      m_Iur.hasNans()||
+      m_Ilr.hasNans()||
+      m_Ill.hasNans());
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::imageIsNan()const
+{
+   return ( m_Iul.hasNans()&&
+      m_Iur.hasNans()&&
+      m_Ilr.hasNans()&&
+      m_Ill.hasNans());
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::viewHasNans()const
+{
+   return ( m_Vul.hasNans()||
+      m_Vur.hasNans()||
+      m_Vlr.hasNans()||
+      m_Vll.hasNans());
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::viewIsNan()const
+{
+   return ( m_Vul.hasNans()&&
+      m_Vur.hasNans()&&
+      m_Vlr.hasNans()&&
+      m_Vll.hasNans());
+}
+
+inline void ossimImageRenderer::ossimRendererSubRectInfo::roundToInteger()
+{
+   m_Iul = ossimIpt(m_Iul);
+   m_Iur = ossimIpt(m_Iur);
+   m_Ilr = ossimIpt(m_Ilr);
+   m_Ill = ossimIpt(m_Ill);
+
+   m_Vul = ossimIpt(m_Vul);
+   m_Vur = ossimIpt(m_Vur);
+   m_Vlr = ossimIpt(m_Vlr);
+   m_Vll = ossimIpt(m_Vll);
+}
+
+inline ossimDrect ossimImageRenderer::ossimRendererSubRectInfo::getViewRect()const
+{
+   return ossimDrect(m_Vul,
+      m_Vur,
+      m_Vlr,
+      m_Vll);            
+}
+
+inline ossimDrect ossimImageRenderer::ossimRendererSubRectInfo::getImageRect()const
+{
+   return ossimDrect(m_Iul,
+      m_Iur,
+      m_Ilr,
+      m_Ill);
+}
+
+inline void ossimImageRenderer::ossimRendererSubRectInfo::roundImageToInteger()
+{
+   m_Iul = ossimIpt(m_Iul);
+   m_Iur = ossimIpt(m_Iur);
+   m_Ilr = ossimIpt(m_Ilr);
+   m_Ill = ossimIpt(m_Ill);
+}
+
+inline void ossimImageRenderer::ossimRendererSubRectInfo::roundViewToInteger()
+{
+   m_Vul = ossimIpt(m_Vul);
+   m_Vur = ossimIpt(m_Vur);
+   m_Vlr = ossimIpt(m_Vlr);
+   m_Vll = ossimIpt(m_Vll);
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::isViewEqual(const ossimRendererSubRectInfo& infoRect)const
+{
+   return ( (m_Vul == infoRect.m_Vul)&&
+      (m_Vur == infoRect.m_Vur)&&
+      (m_Vlr == infoRect.m_Vlr)&&
+      (m_Vll == infoRect.m_Vll));
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::isViewEqual(const ossimDrect& viewRect)const
+{
+   return ( (m_Vul == viewRect.ul())&&
+      (m_Vur == viewRect.ur())&&
+      (m_Vlr == viewRect.lr())&&
+      (m_Vll == viewRect.ll()));
+}
+
+inline ossimDpt ossimImageRenderer::ossimRendererSubRectInfo::getAbsValueViewToImageScales()const
+{
+   if(m_ViewToImageScale.hasNans())
+   {
+      return m_ImageToViewScale;
+   }
+   return ossimDpt(fabs(m_ViewToImageScale.x), fabs(m_ViewToImageScale.y));
+}
+
+inline ossimDpt ossimImageRenderer::ossimRendererSubRectInfo::getAbsValueImageToViewScales()const
+{
+   if(m_ImageToViewScale.hasNans())
+   {
+      return m_ImageToViewScale;
+   }
+
+   return ossimDpt(fabs(m_ImageToViewScale.x), fabs(m_ImageToViewScale.y));
+}
+
+inline bool ossimImageRenderer::ossimRendererSubRectInfo::isViewAPoint()const
+{
+   return ((m_Vul == m_Vur)&&
+      (m_Vul == m_Vlr)&&
+      (m_Vul == m_Vll));
+}
 
 #endif

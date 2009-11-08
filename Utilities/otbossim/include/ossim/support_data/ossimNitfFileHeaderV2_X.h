@@ -1,9 +1,10 @@
 #ifndef ossimNitfFileHeaderV2_X_HEADER
 #define ossimNitfFileHeaderV2_X_HEADER
+#include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimDate.h>
 
-class ossimNitfFileHeaderV2_X : public ossimNitfFileHeader
+class OSSIM_DLL ossimNitfFileHeaderV2_X : public ossimNitfFileHeader
 {
 public:
    ossimNitfFileHeaderV2_X();

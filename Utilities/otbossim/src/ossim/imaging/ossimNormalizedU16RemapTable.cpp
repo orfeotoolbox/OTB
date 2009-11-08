@@ -1,31 +1,44 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
 // 
-// Author:  David Burken (dburken@imagelinks.com)
+// See LICENSE.txt file in the top level directory for more details.
+// 
 // Description:
 //
 // Contains class definition for ossimNormalizedU16RemapTable.
+// 
 //*******************************************************************
-//  $Id: ossimNormalizedU16RemapTable.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimNormalizedU16RemapTable.cpp 15743 2009-10-17 13:00:45Z dburken $
 
 #include <ossim/imaging/ossimNormalizedU16RemapTable.h>
 
-double ossimNormalizedU16RemapTable::theTable[TABLE_ENTRIES];
-bool   ossimNormalizedU16RemapTable::theTableIsInitialized = false;
+ossim_float64 ossimNormalizedU16RemapTable::theTable[TABLE_ENTRIES];
+bool          ossimNormalizedU16RemapTable::theTableIsInitialized = false;
+
 
 ossimNormalizedU16RemapTable::ossimNormalizedU16RemapTable()
+   : ossimNormalizedRemapTable()
 {
    if (!theTableIsInitialized)
    {
-      //***
+      const ossim_int32   ENTRIES     = getEntries();
+      const ossim_float64 DENOMINATOR = getNormalizer();
+      
+      //---
       // Initialize the remap table.
-      //***
-      for (ossim_int32 i = 0; i < TABLE_ENTRIES; i++)
+      //---
+      theTable[0] = 0.0; // Index zero always for null.
+      for (ossim_int32 i = 1; i < ENTRIES; ++i)
       {
-         ossim_float64 tmp = i;
-         theTable[i] = tmp / 65535.0;
+         theTable[i] = static_cast<ossim_float64>(i)/DENOMINATOR;
       }
+
       theTableIsInitialized = true;
    }
 }
+
+ossimNormalizedU16RemapTable::~ossimNormalizedU16RemapTable()
+{}
+
+

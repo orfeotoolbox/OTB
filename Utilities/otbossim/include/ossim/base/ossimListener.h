@@ -8,12 +8,12 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimListener.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimListener.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimListener_HEADER
 #define ossimListener_HEADER
 #include <ossim/base/ossimObject.h>
 
-class OSSIMDLLEXPORT ossimEvent;
+class ossimEvent;
 
 /*!
  * Base class for all listners.  Listners nned to derive from this

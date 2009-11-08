@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.h 13459 2008-08-20 12:48:50Z gpotts $
+//  $Id: ossimImageViewAffineTransform.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimImageViewAffineTransform_HEADER
 #define ossimImageViewAffineTransform_HEADER
 #include <ossim/projection/ossimImageViewTransform.h>
@@ -61,7 +61,7 @@ public:
    }
 
    virtual bool isValid()const;
-   virtual bool setView(ossimObject* obj, bool ownsProjection=false);
+   virtual bool setView(ossimObject* obj);
    virtual ossimObject* getView();
    virtual const ossimObject* getView()const;
    

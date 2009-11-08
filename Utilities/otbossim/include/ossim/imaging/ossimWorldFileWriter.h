@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimWorldFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimWorldFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimWorldFileWriter_H
 #define ossimWorldFileWriter_H
@@ -20,9 +20,6 @@ public:
    
    /** default constructor */
    ossimWorldFileWriter();
-
-   /** default constructor */
-   virtual ~ossimWorldFileWriter();
 
    /**
     * Load state method:
@@ -79,7 +76,9 @@ public:
     */
    void setLinearUnits(ossimUnitType units);
    
-private:
+protected:
+   /** default constructor */
+   virtual ~ossimWorldFileWriter();
    virtual bool writeFile();
 
    ossimUnitType theUnits;

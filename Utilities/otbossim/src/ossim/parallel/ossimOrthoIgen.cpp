@@ -1,10 +1,15 @@
-// $Id: ossimOrthoIgen.cpp 14069 2009-03-08 21:25:47Z dburken $
+// $Id: ossimOrthoIgen.cpp 15785 2009-10-21 14:55:04Z dburken $
 #include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
 #include <ossim/parallel/ossimIgen.h>
-#include <ossim/base/ossimNotifyContext.h>
-#include <ossim/base/ossimTrace.h>
+#include <ossim/parallel/ossimMpi.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimObjectFactoryRegistry.h>
+#include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/imaging/ossimImageHandler.h>
@@ -15,16 +20,14 @@
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
-#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimTiffWriter.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/imaging/ossimEastingNorthingCutter.h>
-#include <ossim/base/ossimUnitConversionTool.h>
-#include <ossim/parallel/ossimMpi.h>
+
+
 
 static ossimTrace traceDebug("ossimOrthoIgen:debug");
 static ossimTrace traceLog("ossimOrthoIgen:log");
@@ -87,6 +90,8 @@ ossimOrthoIgen::ossimOrthoIgen()
    theHighPercentClip(ossim::nan()),
    theUseAutoMinMaxFlag(false),
    theScaleToEightBitFlag(false),
+   // theSrsCode(),
+   theStdoutFlag(false),
    theFilenames()
 {
    // setDefaultValues();
@@ -129,6 +134,12 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
 
    argumentParser.getApplicationUsage()->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
    argumentParser.getApplicationUsage()->addCommandLineOption("--writer-prop","Passes a name=value pair to the writer for setting it's property.  Any number of these can appear on the line.");
+
+#if 0 /* TODO */
+   argumentParser.getApplicationUsage()->addCommandLineOption("--srs-code","Takes spatial reference system(srs) code supplied to the option and attempts to derive output projection.   This will return an error if the projection cannont be derived from code.");
+#endif
+   
+   argumentParser.getApplicationUsage()->addCommandLineOption("--stdout","Output the image to standard out.  This will return an error if writer does not support writing to standard out.  Callers should combine this with the --ossim-logfile option to ensure output image stream does not get corrupted.  You must still pass an output file so the writer type can be determined like \"dummy.png\".");
 }
 
 void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
@@ -240,16 +251,31 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theUseAutoMinMaxFlag = true;
    }
-   if(argumentParser.read("--scale-to-8-bit"))
-   {
-      theScaleToEightBitFlag = true;
-   }
+
    if(argumentParser.read("--meters", doubleParam))
    {
       theDeltaPerPixelUnit = OSSIM_METERS;
       theDeltaPerPixelOverride.x = tempDouble;
       theDeltaPerPixelOverride.y = tempDouble;
    }
+   
+   if(argumentParser.read("--scale-to-8-bit"))
+   {
+      theScaleToEightBitFlag = true;
+   }
+
+#if 0
+   if (argumentParser.read("--srs-code", stringParam))
+   {
+      theSrsCode = tempString;
+   }
+#endif
+ 
+   if (argumentParser.read("--stdout"))
+   {
+      theStdoutFlag = true;
+   }
+   
    if(argumentParser.read("--writer-template",
                           stringParam))
    {
@@ -373,15 +399,20 @@ bool ossimOrthoIgen::execute()
    ossimKeywordlist inputGeom;
    if(ossimMpi::instance()->getRank() == 0)
    {
-      if(!setupIgenKwl(igenKwl))
+      try
+      {
+         setupIgenKwl(igenKwl);
+      }
+      catch (const ossimException& e)
       {
          if (traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimOrthoIgen::execute DEBUG: setupIgenKwl returned false..."
+               << "ossimOrthoIgen::execute DEBUG: setupIgenKwl caught exception."
                << std::endl;
          }
-         return false;
+
+         throw; // re-throw exception
       }
 
       if (traceLog())
@@ -398,7 +429,17 @@ bool ossimOrthoIgen::execute()
    
    ossimIgen *igen = new ossimIgen;
    igen->initialize(igenKwl);
-   igen->outputProduct();
+
+   try
+   {
+      igen->outputProduct();
+   }
+   catch(const ossimException& e)
+   {
+      delete igen;
+      igen = 0;
+      throw; // re-throw
+   }
    
 //    if(ossimMpi::instance()->getRank() == 0)
 //    {
@@ -408,7 +449,7 @@ bool ossimOrthoIgen::execute()
 //          << std::endl;
 //    }
    delete igen;
-   igen = NULL;
+   igen = 0;
 
    return true;
 }
@@ -505,7 +546,7 @@ void ossimOrthoIgen::setCutDxDy(const ossimDpt& dpt,
    theCutDxDyUnit = unit;
 }
 
-bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
+void ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
 {
    if (traceDebug())
    {
@@ -524,6 +565,12 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
               theThumbnailRes.c_str(),
               true);
    }
+
+   // Pass the write to standard out flag to ossimIgen.
+   kwl.add("igen.write_to_stdout", theStdoutFlag, true);
+
+   // TODO: kwl.add("igen.srs_code", theSrsCode, true);
+   
    if(theSlaveBuffers == "")
    {
       kwl.add("igen.slave_tile_buffers",
@@ -537,15 +584,20 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
               true);
    }
    ossim_uint32 inputFileIdx = 0;
-   if(!setupView(kwl))
+
+   try
+   {
+      setupView(kwl);
+   }
+   catch (const ossimException& e)
    {
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimOrthoIgen::execute DEBUG: setupView returned false..."
+            << "ossimOrthoIgen::execute DEBUG: setupView through exception!"
             << std::endl;
       }
-       return false;
+      throw; // re-throw exception
    }
 
    if(theFilenames.size() > 1)
@@ -577,9 +629,7 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
       
       if(!mosaicObject)
       {
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "Unable to create a mosaic object" << std::endl;
-         return false;
+         throw(ossimException(std::string("Unable to create a mosaic object...")));
       }
       bool orthoMosaic = (PTR_CAST(ossimOrthoImageMosaic, mosaicObject.get())!=0);
 
@@ -752,7 +802,11 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
               "ossimImageChain",
               true);
 
-      if(!setupWriter(kwl, input.get()))
+      try
+      {
+         setupWriter(kwl, input.get());
+      }
+      catch (const ossimException& e)
       {
          if (traceDebug())
          {
@@ -760,12 +814,14 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                << "ossimOrthoIgen::execute DEBUG: setupWriter returned false..."
                << std::endl;
          }
-         return false;
+         throw; // re-throw exception
       }
       
+   } // matches: if(theFilenames.size() > 1)
+   else
+   {
+      throw(ossimException(std::string("Must suppy an output file.")));
    }
-
-   return true;
 }
 
 ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupCutter(
@@ -917,7 +973,8 @@ ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupCutter(
    return result;
 }
 
-bool ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl, ossimConnectableObject* input)
+void ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl,
+                                 ossimConnectableObject* input)
 {
    ossimFilename outputFilename = theFilenames[theFilenames.size()-1].theFilename;
    ossimImageFileWriter* writer = 0;
@@ -1036,14 +1093,12 @@ bool ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl, ossimConnectableObject* 
       }
       else
       {
-         return false;
+         throw(ossimException(std::string("Unable to create writer.")));
       }
    }
-   
-   return true;
 }
 
-bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
+void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
 {
    if (traceDebug())
    {
@@ -1070,7 +1125,7 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
          if(!theDeltaPerPixelOverride.hasNans())
          {
             ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, productObj.get());
-
+            
             if(mapProj)
             {
                if(mapProj->isGeographic())
@@ -1103,34 +1158,23 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
    }
    else
    {
-      ossimKeywordlist inputGeom;
       // Open up the image.
       ossimFilename input  = theFilenames[0].theFilename;
-      ossimRefPtr<ossimImageHandler> handler =
-         ossimImageHandlerRegistry::instance()->open(input);
+      ossimRefPtr<ossimImageHandler> handler = ossimImageHandlerRegistry::instance()->open(input);
+
       if(!handler)
       {
-         if (traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimOrthoIgen::setupView DEBUG:"
-               << "\nCould not open: " << input.c_str()
-               << std::endl;
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimOrthoIgen::setupView DEBUG:"
-               << "Leaving...." << __LINE__
-               << std::endl;
-         }
-         return false;
+         std::string errMsg = "Could not open file: ";
+         errMsg += input;
+         throw(ossimException(errMsg));
       }
-      handler->getImageGeometry(inputGeom);
-      
-      // Get the input projection.
-      ossimRefPtr<ossimProjection> inputProj =
-         ossimProjectionFactoryRegistry::instance()->createProjection(
-            inputGeom);
-      if(inputProj.valid()&&
-         (theProjectionType !=OSSIM_UNKNOWN_PROJECTION))
+
+      const ossimProjection* inputProj = 0;
+      const ossimImageGeometry* inputGeom = handler->getImageGeometry();
+      if (inputGeom)
+         inputProj = inputGeom->getProjection();
+
+      if(inputProj && (theProjectionType !=OSSIM_UNKNOWN_PROJECTION))
       {
          // Get the input resolution.
          ossimDpt metersPerPixel = inputProj->getMetersPerPixel();
@@ -1159,25 +1203,23 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
             outputProjection->setOrigin(gpt);
             // Set the resolution.
 //             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
-            outputProjection->setDecimalDegreesPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
-                                                                                         gsdUnits).getValue(OSSIM_DEGREES),
-                                                                 ossimUnitConversionTool(gsd.y,
-                                                                                         gsdUnits).getValue(OSSIM_DEGREES)));
+            outputProjection->setDecimalDegreesPerPixel
+               (ossimDpt(ossimUnitConversionTool(gsd.x, gsdUnits).getValue(OSSIM_DEGREES),
+                         ossimUnitConversionTool(gsd.y, gsdUnits).getValue(OSSIM_DEGREES)));
+
             // Save the state to keyword list.
             outputProjection->saveState(kwl, "product.projection.");
          }
-         else if((theProjectionType == OSSIM_UTM_PROJECTION)||
+         else if ((theProjectionType == OSSIM_UTM_PROJECTION) ||
                  ((theProjectionType == OSSIM_INPUT_PROJECTION) &&
-                  !PTR_CAST(ossimMapProjection, inputProj.get())))
+                  !PTR_CAST(ossimMapProjection, inputProj)))
             
          {
             // Default to UTM.
             ossimUtmProjection* utm = new ossimUtmProjection;
             ossimGpt midGpt;
             
-            
-            inputProj->lineSampleToWorld(ossimDpt(rect.midPoint()),
-                                         midGpt);
+            inputProj->lineSampleToWorld(ossimDpt(rect.midPoint()), midGpt);
             
             utm->setZone(midGpt);
             utm->setHemisphere(midGpt);
@@ -1221,7 +1263,6 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
          << "Leaving...." << __LINE__
          << std::endl;
    }
-   return true;
 }
 
 ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupAnnotation(
@@ -1248,17 +1289,14 @@ ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupAnnotation(
                                                obj.get());
       if (oga)
       {
+         ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry;
+         geom->loadState(kwl, "product.projection.");
          // Connect to input.
          oga->connectMyInputTo(input);
          
-         // Set the view.
-         ossimRefPtr<ossimProjection> viewProj =
-            ossimProjectionFactoryRegistry::instance()->createProjection(
-               kwl, "product.projection.");
-         if (viewProj.valid())
+         if (geom->hasProjection())
          {
-            oga->setProjection(viewProj.get(),
-                               false); // False for doesn't own projection.
+            oga->setGeometry(geom.get()); 
          }
 
          result = oga;

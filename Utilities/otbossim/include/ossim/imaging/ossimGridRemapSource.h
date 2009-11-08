@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGridRemapSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGridRemapSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGridRemapSource_HEADER
 #define ossimGridRemapSource_HEADER
@@ -45,8 +45,6 @@ public:
    ossimGridRemapSource();
    ossimGridRemapSource(ossimImageSource* inputSource,
                         ossimGridRemapEngine* engine);
-
-   virtual ~ossimGridRemapSource();
 
    /*!ossimAtbPointSource
     * Initializes the remap engine. This object implements specific algorithms
@@ -127,6 +125,8 @@ public:
    void setGridFilename(const ossimFilename& grid_filename);
    
 protected:
+   virtual ~ossimGridRemapSource();
+
    /*!
     * Deallocates grid memory.
     */

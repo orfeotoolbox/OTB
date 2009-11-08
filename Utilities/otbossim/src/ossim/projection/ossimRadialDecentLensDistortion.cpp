@@ -10,7 +10,7 @@
 // MeanRadialLens distortion.
 //
 //*******************************************************************
-//  $Id: ossimRadialDecentLensDistortion.cpp 13010 2008-06-08 21:12:45Z dburken $
+//  $Id: ossimRadialDecentLensDistortion.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <ossim/projection/ossimRadialDecentLensDistortion.h>
@@ -114,9 +114,7 @@ bool ossimRadialDecentLensDistortion::saveState(ossimKeywordlist& kwl,
               key.c_str(),
               theRadialDistortionParameters[i],
               true,  // overwrite
-              15,    // precision
-              false, // trim zeroes
-              true); // scientific
+              15); // scientific
 
       //---
       // Decentering distortion coefficients:
@@ -127,9 +125,7 @@ bool ossimRadialDecentLensDistortion::saveState(ossimKeywordlist& kwl,
               key.c_str(),
               theDecentDistortionParameters[i],
               true,  // overwrite
-              15,    // precision
-              false, // trim zeroes
-              true); // scientific
+              15); // scientific
    }
 
    //***

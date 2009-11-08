@@ -4,8 +4,6 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  David Burken
-//
 // Description: Utility class to encapsulate parsing TerraSAR-X product.xml
 // file.
 // 
@@ -730,9 +728,26 @@ bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
 bool ossimplugins::ossimTerraSarProductDoc::getImageDataStrartWith(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-      "/level1Product/productSpecific/complexImageInfo/imageDataStartWith";
-   return ossim::getPath(path, xdoc, s);
+   bool result = true;
+   ossimString path = "/level1Product/productSpecific/complexImageInfo";
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   xdoc->findNodes(path, xnodes);
+   if ( xnodes.size() )
+   {
+      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      {
+         if (xnodes[i].valid())
+         {
+            result = ossim::findFirstNode(ossimString("imageDataStartWith"),
+                                          xnodes[i], s);
+         }
+      }
+   }
+   else
+   {
+      result=false;
+   }
+   return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getOrbitDirection(
@@ -849,33 +864,101 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
 bool ossimplugins::ossimTerraSarProductDoc::getCommonPrf(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-         "/level1Product/productSpecific/complexImageInfo/commonPRF";
-   return ossim::getPath(path, xdoc, s);
+   bool result = true;
+   ossimString path = "/level1Product/productSpecific/complexImageInfo";
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   xdoc->findNodes(path, xnodes);
+   if ( xnodes.size() )
+   {
+      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      {
+         if (xnodes[i].valid())
+         {
+            result = ossim::findFirstNode(ossimString("commonPRF"),
+                                          xnodes[i], s);
+         }
+      }
+   }
+   else
+   {
+      result=false;
+   }
+   return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getCommonRsf(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path
-      = "/level1Product/productSpecific/complexImageInfo/commonRSF";
-   return ossim::getPath(path, xdoc, s);
+   bool result = true;
+   ossimString path = "/level1Product/productSpecific/complexImageInfo";
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   xdoc->findNodes(path, xnodes);
+   if ( xnodes.size() )
+   {
+      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      {
+         if (xnodes[i].valid())
+         {
+            result = ossim::findFirstNode(ossimString("commonRSF"),
+                                          xnodes[i], s);
+         }
+      }
+   }
+   else
+   {
+      result=false;
+   }
+   return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getNumberOfRangeLooks(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-      "/level1Product/processing/processingParameter/rangeLooks";
-   return ossim::getPath(path, xdoc, s);
+   bool result = true;
+   ossimString path = "/level1Product/processing/processingParameter";
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   xdoc->findNodes(path, xnodes);
+   if ( xnodes.size() )
+   {
+      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      {
+         if (xnodes[i].valid())
+         {
+            result = ossim::findFirstNode(ossimString("rangeLooks"),
+                                          xnodes[i], s);
+         }
+      }
+   }
+   else
+   {
+      result=false;
+   }
+   return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getNumberOfAzimuthLooks(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-      "/level1Product/processing/processingParameter/azimuthLooks";
-   return ossim::getPath(path, xdoc, s);
+   bool result = true;
+   ossimString path = "/level1Product/processing/processingParameter";
+   std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+   xdoc->findNodes(path, xnodes);
+   if ( xnodes.size() )
+   {
+      for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+      {
+         if (xnodes[i].valid())
+         {
+            result = ossim::findFirstNode(ossimString("azimuthLooks"),
+                                          xnodes[i], s);
+         }
+      }
+   }
+   else
+   {
+      result=false;
+   }
+   return result;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getNumberOfColumns(

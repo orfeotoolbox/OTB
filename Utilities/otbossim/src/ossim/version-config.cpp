@@ -13,7 +13,7 @@
 //
 // $Id$
 //----------------------------------------------------------------------------
-#include <cstdlib>
+
 #include <ctime>
 #include <fstream>   
 #include <string>
@@ -29,15 +29,21 @@
  */
 int main(int argc, char* argv[])
 {
+   enum
+   {
+      OK=0,
+      ERROR=1
+   };
+   
    if (argc != 3)
    {
-      exit(1);
+      return ERROR;
    }
 
    std::ofstream os(argv[1]);
    if (!os)
    {
-      exit(1);
+      return ERROR;
    }
 
    // Get the version.  This is now passed in from the make file.
@@ -104,5 +110,5 @@ int main(int argc, char* argv[])
    
    std::cout << "wrote file: " << argv[1] << std::endl;
 
-   exit(0);
+   return OK;
 }

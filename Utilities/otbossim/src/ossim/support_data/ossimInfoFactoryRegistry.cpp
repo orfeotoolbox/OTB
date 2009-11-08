@@ -9,6 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
+#include <algorithm> /* for std::find */
+
 #include <ossim/base/ossimFilename.h>
 #include <ossim/support_data/ossimInfoFactoryRegistry.h>
 #include <ossim/support_data/ossimInfoFactoryInterface.h>
@@ -31,6 +33,18 @@ void ossimInfoFactoryRegistry::registerFactory(
    if (factory)
    {
       theFactoryList.push_back(factory);
+   }
+}
+
+void ossimInfoFactoryRegistry::unregisterFactory(
+   ossimInfoFactoryInterface* factory)
+{
+   std::vector<ossimInfoFactoryInterface*>::iterator i =
+      std::find(theFactoryList.begin(), theFactoryList.end(), factory);
+   
+   if( i != theFactoryList.end() )
+   {
+      theFactoryList.erase(i);
    }
 }
 

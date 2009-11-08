@@ -8,22 +8,36 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSharpenFilter.cpp 12981 2008-06-04 01:05:54Z dburken $
+// $Id: ossimImageSharpenFilter.cpp 15446 2009-09-21 17:35:42Z gpotts $
 #include <cstdlib> /* for abs() */
 #include <ossim/imaging/ossimImageSharpenFilter.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/base/ossimNumericProperty.h>
 
 RTTI_DEF1(ossimImageSharpenFilter, "ossimImageSharpenFilter", ossimImageSourceFilter);
 
+static const char* KERNEL_WIDTH_KW = "kernel_width";
+static const char* KERNEL_SIGMA_KW = "kernel_sigma";
+
 ossimImageSharpenFilter::ossimImageSharpenFilter(ossimObject* owner)
    :ossimImageSourceFilter(owner),
-    theTile(NULL)
+   theWidth(3),
+   theSigma(.5)
 {
+   theConvolutionSource = new ossimConvolutionSource;
 }
 
 ossimImageSharpenFilter::~ossimImageSharpenFilter()
 {
+}
+
+void ossimImageSharpenFilter::setWidthAndSigma(ossim_uint32 w, ossim_float64 sigma)
+{
+   theWidth = w;
+   theWidth |= 1;
+   if(theWidth < 3) theWidth = 3;
+   theSigma = sigma;
 }
 
 ossimRefPtr<ossimImageData> ossimImageSharpenFilter::getTile(
@@ -34,327 +48,81 @@ ossimRefPtr<ossimImageData> ossimImageSharpenFilter::getTile(
    {
       return NULL;
    }
-
    if(!isSourceEnabled())
    {
       return theInputConnection->getTile(tileRect, resLevel);
    }
-   
-   // we have a 3x3 matrix so stretch the rect out to cover
-   // the required pixels
-   //
-   ossimIrect newRect(ossimIpt(tileRect.ul().x - 1,
-                               tileRect.ul().y - 1),
-                      ossimIpt(tileRect.lr().x + 1,
-                               tileRect.lr().y + 1));
-   
-   ossimRefPtr<ossimImageData> data =
-      theInputConnection->getTile(newRect, resLevel);
-
-   if ( !data.valid() ||
-        ( data->getDataObjectStatus() == OSSIM_NULL ) ||
-        ( data->getDataObjectStatus() == OSSIM_EMPTY ) )
-   {
-      // Caller wants tileRect, not newRect so don't return "data".
-      return theInputConnection->getTile(tileRect, resLevel);
-   }
-
-   if (!theTile)
-   {
-      allocate(); // First time through...
-   }
-   
-   long w     = tileRect.width();
-   long h     = tileRect.height();
-   long tileW = theTile->getWidth();
-   long tileH = theTile->getHeight();
-   if((w != tileW)||
-      (h != tileH))
-   {
-      theTile->setWidth(w);
-      theTile->setHeight(h);
-      if((w*h)!=(tileW*tileH))
-      {
-         theTile->initialize();
-      }
-      else
-      {
-         theTile->makeBlank();
-      }
-   }
-   else
-   {
-      theTile->makeBlank();
-   }
-   theTile->setOrigin(tileRect.ul());
-   
-   switch(data->getScalarType())
-   {
-   case OSSIM_UCHAR:
-   {
-      if(data->getDataObjectStatus() == OSSIM_FULL)
-      {
-         sharpenFull(static_cast<ossim_uint8>(0),
-                     data,
-                     theTile);
-      }
-      else
-      {
-         sharpenPartial(static_cast<ossim_uint8>(0),
-                        data,
-                        theTile);
-      }
-      break;
-   }
-   case OSSIM_FLOAT: 
-   case OSSIM_NORMALIZED_FLOAT:
-   {
-      if(data->getDataObjectStatus() == OSSIM_FULL)
-      {
-         sharpenFull(static_cast<float>(0),
-                     data,
-                     theTile);
-      }
-      else
-      {
-         sharpenPartial(static_cast<float>(0),
-                        data,
-                        theTile);
-      }
-      break;
-   }
-   case OSSIM_USHORT16:
-   case OSSIM_USHORT11:
-   {
-      if(data->getDataObjectStatus() == OSSIM_FULL)
-      {
-         sharpenFull(static_cast<ossim_uint16>(0),
-                     data,
-                     theTile);
-      }
-      else
-      {
-         sharpenPartial(static_cast<ossim_uint16>(0),
-                        data,
-                        theTile);
-      }
-      break;
-   }
-   case OSSIM_SSHORT16:
-   {
-      if(data->getDataObjectStatus() == OSSIM_FULL)
-      {
-         sharpenFull(static_cast<ossim_sint16>(0),
-                     data,
-                     theTile);
-      }
-      else
-      {
-         sharpenPartial(static_cast<ossim_sint16>(0),
-                        data,
-                        theTile);
-      }
-      break;
-   }
-   case OSSIM_DOUBLE:
-   case OSSIM_NORMALIZED_DOUBLE:
-   {
-      if(data->getDataObjectStatus() == OSSIM_FULL)
-      {
-         sharpenFull(static_cast<double>(0),
-                     data,
-                     theTile);
-      }
-      else
-      {
-         sharpenPartial(static_cast<double>(0),
-                        data,
-                        theTile);
-      }
-      break;
-   }
-   default:
-   {
-      ossimNotify(ossimNotifyLevel_WARN) << "ossimImageSharpenFilter::getTile WARNING: Scalar type = " << theTile->getScalarType() << " Not supported!" << std::endl;
-      break;
-   }
-   }
-   theTile->validate();
-   
-   return theTile;
-}
-
-
-template<class T> void ossimImageSharpenFilter::sharpenPartial(
-   T,
-   const ossimRefPtr<ossimImageData>& inputData,
-   ossimRefPtr<ossimImageData>& outputData)
-{
-   double sum = 0.0;
-   ossim_int32 inputW        = (ossim_int32)inputData->getWidth();
-   ossim_int32 outputW       = (ossim_int32)outputData->getWidth();
-   ossim_int32 outputH       = (ossim_int32)outputData->getHeight();
-   ossim_int32 numberOfBands = (ossim_int32)inputData->getNumberOfBands();
-   ossimIpt outputOrigin = outputData->getOrigin();
-   ossimIpt inputOrigin  = inputData->getOrigin();
-   
-   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
-      inputW + std::abs(outputOrigin.x - inputOrigin.x);
-   ossim_int32 ulKernelStart    = -inputW - 1;
-   ossim_int32 leftKernelStart  = -1;
-   ossim_int32 llKernelStart    = inputW  - 1;
-   
-   const T* ulKernelStartBuf   = NULL;
-   const T* leftKernelStartBuf = NULL;
-   const T* llKernelStartBuf   = NULL;
-   
-   for(ossim_int32 band = 0; band < numberOfBands; ++band)
-   {
-      const T* inputBuf  = static_cast<const T*>(inputData->getBuf(band)) +
-         startInputOffset;
-      T* outputBuf = static_cast<T*>(outputData->getBuf(band));
-      T maxPix     = static_cast<T>(inputData->getMaxPix(band));
-      T minPix     = static_cast<T>(inputData->getMinPix(band));
-      T nullPix    = static_cast<T>(inputData->getNullPix(band));
-      
-      if(inputBuf&&outputBuf)
-      {
-         for(ossim_int32 row = 0; row < outputW; ++row)
-         {
-            ossim_int32 rowOffset    = inputW*row;
-            ulKernelStartBuf   = inputBuf + (rowOffset + ulKernelStart);
-            leftKernelStartBuf = inputBuf + (rowOffset + leftKernelStart);
-            llKernelStartBuf   = inputBuf + (rowOffset + llKernelStart);
-            for(ossim_int32 col = 0; col < outputH; ++col)
-            {
-               if((ulKernelStartBuf[0]   != nullPix)&&
-                  (ulKernelStartBuf[1]   != nullPix)&&
-                  (ulKernelStartBuf[2]   != nullPix)&&
-                  (leftKernelStartBuf[0] != nullPix)&&
-                  (leftKernelStartBuf[1] != nullPix)&&
-                  (leftKernelStartBuf[2] != nullPix)&&
-                  (llKernelStartBuf[0]   != nullPix)&&
-                  (llKernelStartBuf[1]   != nullPix)&&
-                  (llKernelStartBuf[2]   != nullPix))
-               {
-                  sum = -1.0*(double)ulKernelStartBuf[0]  + -2.0*(double)ulKernelStartBuf[1] + -1.0*(double)ulKernelStartBuf[2] +
-                        -2.0*(double)leftKernelStartBuf[0]  + 16.0*(double)leftKernelStartBuf[1] + -2.0*(double)leftKernelStartBuf[2] +
-                        -1.0*(double)llKernelStartBuf[0]  + -2.0*(double)llKernelStartBuf[1] + -1.0*(double)llKernelStartBuf[2];
-                  sum /= 4.0;
-                  
-                  if(sum > maxPix)
-                  {
-                     *outputBuf = maxPix;
-                  }
-                  else if(sum < minPix || ((T)sum == nullPix))
-                  {
-                     *outputBuf = minPix;
-                  }
-                  else
-                  {
-                     *outputBuf = static_cast<T>(sum);
-                  }
-               }
-               else
-               {
-                  *outputBuf = nullPix;
-               }
-               
-               ++ulKernelStartBuf;
-               ++leftKernelStartBuf;
-               ++llKernelStartBuf;
-               ++outputBuf;
-            }
-         }
-      }
-   }
-}
-
-template<class T> void ossimImageSharpenFilter::sharpenFull(
-   T,
-   const ossimRefPtr<ossimImageData>& inputData,
-   ossimRefPtr<ossimImageData>& outputData)
-{
-   double sum = 0.0;
-   ossim_int32 inputW        = (ossim_int32)inputData->getWidth();
-   ossim_int32 outputW       = (ossim_int32)outputData->getWidth();
-   ossim_int32 outputH       = (ossim_int32)outputData->getHeight();
-   ossim_int32 numberOfBands = (ossim_int32)inputData->getNumberOfBands();
-   ossimIpt outputOrigin = outputData->getOrigin();
-   ossimIpt inputOrigin  = inputData->getOrigin();
-   
-   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
-      inputW + std::abs(outputOrigin.x - inputOrigin.x);
-   ossim_int32 ulKernelStart    = -inputW - 1;
-   ossim_int32 leftKernelStart  = -1;
-   ossim_int32 llKernelStart    = inputW  - 1;
-   
-   const T* ulKernelStartBuf   = NULL;
-   const T* leftKernelStartBuf = NULL;
-   const T* llKernelStartBuf   = NULL;
-   
-   for(ossim_int32 band = 0; band < numberOfBands; ++band)
-   {
-      const T* inputBuf  = static_cast<const T*>(inputData->getBuf(band)) +
-         startInputOffset;
-      T* outputBuf = static_cast<T*>(outputData->getBuf(band));
-      T maxPix     = static_cast<T>(inputData->getMaxPix(band));
-      T minPix     = static_cast<T>(inputData->getMinPix(band));
-      T nullPix    = static_cast<T>(inputData->getNullPix(band));
-      
-      if(inputBuf&&outputBuf)
-      {
-         for(ossim_int32 row = 0; row < outputW; ++row)
-         {
-            ossim_int32 rowOffset    = inputW*row;
-            ulKernelStartBuf   = inputBuf + (rowOffset + ulKernelStart);
-            leftKernelStartBuf = inputBuf + (rowOffset + leftKernelStart);
-            llKernelStartBuf   = inputBuf + (rowOffset + llKernelStart);
-            for(ossim_int32 col = 0; col < outputH; ++col)
-            {
-               sum = -1.0*(double)ulKernelStartBuf[0]  + -2.0*(double)ulKernelStartBuf[1] + -1.0*(double)ulKernelStartBuf[2] +
-                     -2.0*(double)leftKernelStartBuf[0]  + 16.0*(double)leftKernelStartBuf[1] + -2.0*(double)leftKernelStartBuf[2] +
-                     -1.0*(double)llKernelStartBuf[0]  + -2.0*(double)llKernelStartBuf[1] + -1.0*(double)llKernelStartBuf[2];
-               sum /= 4.0;
-               
-               if(sum > maxPix)
-               {
-                  *outputBuf = maxPix;
-               }
-               else if((sum < minPix) || (sum == nullPix))
-               {
-                  *outputBuf = minPix;
-               }
-               else
-               {
-                  *outputBuf = static_cast<T>(sum);
-               }
-               
-               ++ulKernelStartBuf
-                  ;
-               ++leftKernelStartBuf;
-               ++llKernelStartBuf;
-               ++outputBuf;
-            }
-         }
-      }
-   }
+   return theConvolutionSource->getTile(tileRect, resLevel);   
 }
 
 void ossimImageSharpenFilter::initialize()
 {
-   // Hmmm... (drb)
+   ossimImageSourceFilter::initialize();
+   if(theConvolutionSource->getInput()!=getInput())
+   {
+      theConvolutionSource->disconnectAllInputs();
+      theConvolutionSource->connectMyInputTo(0, getInput());
+   }
+   buildConvolutionMatrix();   
 }
 
-void ossimImageSharpenFilter::allocate()
-{   
-   theTile = NULL;
-   if(theInputConnection)
+void ossimImageSharpenFilter::buildConvolutionMatrix()
+{
+   std::vector<double> theKernel(theWidth*theWidth);
+   double* kernel = &theKernel.front();
+   //width = findWidth(sigma);
+   ossim_int32 i = 0 ;
+   ossim_int32 u = 0 ;
+   ossim_int32 v = 0 ;
+   double normalize = 0.0 ;
+   ossim_int32 w2 = theWidth>>1;
+   for (v = -w2; v <= w2; ++v)
    {
-      ossimImageDataFactory* idf = ossimImageDataFactory::instance();
-      theTile = idf->create(this, this);
-      theTile->initialize();
+      for (u = -w2; u <= w2; ++u)
+      {
+         double value = laplacianOfGaussian(u, v, theSigma);
+         kernel[i] = value;
+         normalize += kernel[i] ;
+         ++i ;
+      }
    }
+   if (fabs(normalize) <= 1e-6)
+   {
+      normalize = 1.0;
+   }
+   normalize=(1.0/normalize);
+   ossim_int32 size = static_cast<ossim_int32>(theWidth*theWidth);
+   for (i = 0; i < size; ++i)
+   {
+      kernel[i]=kernel[i]*normalize;
+   } 
+      
+#if 0
+   // print the kernel
+   for (i = 0; i < width*width; ++i)
+   {
+      if((i%width)==0)
+      {
+         std::cout << std::endl;
+      }
+      std::cout << kernel[i] <<", ";
+   } 
+   std::cout << std::endl;
+#endif
+   theConvolutionSource->setConvolution(kernel, theWidth, theWidth, false);
+}
+
+void ossimImageSharpenFilter::connectInputEvent(ossimConnectionEvent &event)
+{
+   ossimImageSourceFilter::connectInputEvent(event);
+   theConvolutionSource->connectMyInputTo(0, getInput());
+   buildConvolutionMatrix();
+}
+
+void ossimImageSharpenFilter::disconnectInputEvent(ossimConnectionEvent &event)
+{
+   ossimImageSourceFilter::disconnectInputEvent(event);
+   theConvolutionSource->connectMyInputTo(0, getInput());
 }
 
 ossimString ossimImageSharpenFilter::getShortName() const
@@ -364,6 +132,92 @@ ossimString ossimImageSharpenFilter::getShortName() const
 
 ossimString ossimImageSharpenFilter::getLongName() const
 {
-   return ossimString("Sharpens the input input");
+   return ossimString("Sharpens the input");
 }
 
+void ossimImageSharpenFilter::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   if(!property) return;
+   if(property->getName() == KERNEL_WIDTH_KW)
+   {
+      theWidth = property->valueToString().toDouble();
+      theWidth |=1;
+      if(theWidth < 3) theWidth = 3;
+      initialize();
+   }
+   else if(property->getName() == KERNEL_SIGMA_KW)
+   {
+      theSigma = property->valueToString().toDouble();
+      if(theWidth < .1) theWidth = .5;
+      initialize();
+   }
+   else
+   {
+      ossimImageSourceFilter::setProperty(property.get());
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimImageSharpenFilter::getProperty(const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> property = 0;
+   if(name == KERNEL_WIDTH_KW)
+   {
+      property = new ossimNumericProperty("Kernel width",
+                                          ossimString::toString(theWidth),
+                                          3.0,
+                                          64.0);
+      property->setCacheRefreshBit();
+      
+   }
+   else if(name == KERNEL_SIGMA_KW)
+   {
+      property = new ossimNumericProperty("Kernel sigma",
+                                          ossimString::toString(theSigma),
+                                          .1,
+                                          32);
+      property->setCacheRefreshBit();
+   }
+   else 
+   {
+      property = ossimImageSourceFilter::getProperty(name);
+   }
+   
+   return property.get();
+}
+
+void ossimImageSharpenFilter::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   ossimImageSourceFilter::getPropertyNames(propertyNames);
+   propertyNames.push_back(KERNEL_WIDTH_KW);
+   propertyNames.push_back(KERNEL_SIGMA_KW);
+}
+
+bool ossimImageSharpenFilter::loadState(const ossimKeywordlist& kwl,
+                                        const char* prefix)
+{
+   bool result = ossimImageSourceFilter::loadState(kwl, prefix);
+   ossimString kernelWidth = kwl.find(prefix, KERNEL_WIDTH_KW);
+   ossimString kernelSigma = kwl.find(prefix, KERNEL_SIGMA_KW);
+   kernelWidth = kernelWidth.trim();
+   kernelSigma = kernelSigma.trim();
+   if(!kernelWidth.empty())
+   {
+      theWidth = kernelWidth.toUInt32();
+      theWidth |= 1; // make it odd and check for size
+      if(theWidth < 3) theWidth = 3;
+   }
+   if(!kernelSigma.empty())
+   {
+      theSigma = kernelSigma.toFloat64();
+   }
+   buildConvolutionMatrix();
+   return result;
+}
+
+bool ossimImageSharpenFilter::saveState(ossimKeywordlist& kwl,
+                                        const char* prefix)const
+{
+   kwl.add(prefix, KERNEL_WIDTH_KW, theWidth, true);
+   kwl.add(prefix, KERNEL_SIGMA_KW, theSigma, true);
+   return ossimImageSourceFilter::saveState(kwl, prefix);
+}

@@ -6,13 +6,15 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimFontFactoryRegistry.h 13508 2008-08-27 15:51:38Z gpotts $
+// $Id: ossimFontFactoryRegistry.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFontFactoryRegistry_HEADER
 #define ossimFontFactoryRegistry_HEADER
 #include <vector>
 #include <ossim/base/ossimFontInformation.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/font/ossimFontFactoryBase.h>
+#include <ossim/font/ossimFont.h>
+#include <ossim/base/ossimRefPtr.h>
 
 
 class OSSIMDLLEXPORT ossimFontFactoryRegistry
@@ -52,7 +54,7 @@ public:
    ossimFont* getDefaultFont()const;
    
 protected:
-   mutable ossimFont* theDefaultFont;
+   mutable ossimRefPtr<ossimFont> theDefaultFont;
 
    //static ossimFontFactoryRegistry* theInstance;
 

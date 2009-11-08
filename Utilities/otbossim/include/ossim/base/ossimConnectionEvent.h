@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 // 
 //*************************************************************************
-// $Id: ossimConnectionEvent.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectionEvent.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimConnectionEvent_HEADER
 #define ossimConnectionEvent_HEADER
 
@@ -34,8 +34,8 @@ public:
 
    ossimConnectionEvent(ossimObject* object,
                         long id,
-                        const std::vector<ossimConnectableObject*>& newList,
-                        const std::vector<ossimConnectableObject*>& oldList,
+                        const ossimConnectableObject::ConnectableObjectList& newList,
+                        const ossimConnectableObject::ConnectableObjectList& oldList,
                         ossimConnectionDirectionType whichDirection);
 
    ossimConnectionEvent(ossimObject* object,
@@ -56,9 +56,9 @@ public:
    
    virtual ossim_uint32 getNumberOfOldObjects()const;
    
-   virtual ossimConnectableObject* getOldObject(ossim_uint32 i=0)const;
+   virtual ossimConnectableObject* getOldObject(ossim_uint32 i=0);
 
-   virtual ossimConnectableObject* getNewObject(ossim_uint32 i=0)const;
+   virtual ossimConnectableObject* getNewObject(ossim_uint32 i=0);
 
    virtual bool isDisconnect()const;
    
@@ -69,8 +69,8 @@ public:
    virtual bool isOutputDirection()const;
    
 protected:
-   std::vector<ossimConnectableObject*> theNewObjectList;
-   std::vector<ossimConnectableObject*> theOldObjectList;
+   ossimConnectableObject::ConnectableObjectList theNewObjectList;
+   ossimConnectableObject::ConnectableObjectList theOldObjectList;
    ossimConnectionDirectionType         theDirectionType;
 
 TYPE_DATA

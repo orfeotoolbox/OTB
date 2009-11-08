@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimAtCorrGridRemapper.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAtCorrGridRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAtCorrGridRemapper_HEADER
 #define ossimAtCorrGridRemapper_HEADER
 #include <ossim/imaging/ossimAtCorrRemapper.h>
@@ -61,7 +61,6 @@ public:
                            ossimImageSource* inputSource =  NULL,
                            const ossimString& sensorType = "");
    
-   virtual ~ossimAtCorrGridRemapper();
 
 
    void setGridRect(const ossimIrect& rect)
@@ -120,7 +119,8 @@ public:
                           const char* prefix=0)const;
 
 protected:
-   ossimIrect theGridBounds;
+   virtual ~ossimAtCorrGridRemapper();
+  ossimIrect theGridBounds;
    ossimIpt   theUlGridBound;
    ossimIpt   theGridSize;
    std::vector< std::vector< std::vector<double> > >theAGrid;

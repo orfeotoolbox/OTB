@@ -1,21 +1,21 @@
 //*******************************************************************
 //
-// LICENSE: See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 // 
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 14247 2009-04-08 17:51:25Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 15611 2009-10-08 18:50:33Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
-#include <cstddef> // for NULL
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -395,37 +395,45 @@ void ossimNitfImageHeaderV2_1::writeStream(std::ostream &out)
    //
    ossim_uint32 totalLength = getTotalTagLength();
 
-   totalLength += 3; // per Table A-3 of MIL-STD-2500B
-
-   if(totalLength <= 99999)
+   if (totalLength == 0)
    {
-      std::ostringstream tempOut;
-
-      tempOut << std::setw(5)
-              << std::setfill('0')
-              << std::setiosflags(ios::right)
-              << totalLength;
-      
-      memcpy(theExtendedSubheaderDataLen, tempOut.str().c_str(), 5);
-
       out.write(theExtendedSubheaderDataLen, 5);
-      memset(theExtendedSubheaderOverflow, '0', 3);
-
-      if(totalLength > 0)
-      {
-         out.write(theExtendedSubheaderOverflow, 3);
-         
-         ossim_uint32 i = 0;
-         
-         for(i = 0; i < theTagList.size(); ++i)
-         {
-            theTagList[i].writeStream(out);
-         }
-      }
    }
    else
    {
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNitfFileHeaderV2_1::writeStream: Only support writing of total tag length < 99999" << std::endl;
+      totalLength += 3; // per Table A-3 of MIL-STD-2500B
+      
+      if(totalLength <= 99999)
+      {
+         std::ostringstream tempOut;
+         
+         tempOut << std::setw(5)
+                 << std::setfill('0')
+                 << std::setiosflags(ios::right)
+                 << totalLength;
+         
+         memcpy(theExtendedSubheaderDataLen, tempOut.str().c_str(), 5);
+         
+         out.write(theExtendedSubheaderDataLen, 5);
+         memset(theExtendedSubheaderOverflow, '0', 3);
+         
+         if(totalLength > 0)
+         {
+            out.write(theExtendedSubheaderOverflow, 3);
+            
+            ossim_uint32 i = 0;
+            
+            for(i = 0; i < theTagList.size(); ++i)
+            {
+               theTagList[i].writeStream(out);
+            }
+         }
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING ossimNitfFileHeaderV2_1::writeStream: Only support writing of total tag length < 99999" << std::endl;
+      }
    }
 }
 
@@ -666,12 +674,7 @@ ossimString ossimNitfImageHeaderV2_1::getRepresentation()const
 
 ossimString ossimNitfImageHeaderV2_1::getCoordinateSystem()const
 {
-	return theCoordinateSystem;
-}
-
-ossimString ossimNitfImageHeaderV2_1::getGeographicLocation()const
-{
-	return theGeographicLocation;
+   return theCoordinateSystem;
 }
 
 bool ossimNitfImageHeaderV2_1::hasBlockMaskRecords()const
@@ -989,70 +992,6 @@ void ossimNitfImageHeaderV2_1::setNumberOfCols(ossim_uint32 cols)
    ossimNitfCommon::setField(theSignificantCols, out.str(), 8, ios::right, '0');
 }
 
-void ossimNitfImageHeaderV2_1::setGeographicLocationDms(const ossimDpt& ul,
-                                                        const ossimDpt& ur,
-                                                        const ossimDpt& lr,
-                                                        const ossimDpt& ll)
-{
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << ossimDms(ul.y, true).toString("ddmmss.ssssC").c_str()
-         << ossimDms(ul.x, false).toString("dddmmss.ssssC").c_str()
-         << ossimDms(ur.y, true).toString("ddmmss.ssssC").c_str()
-         << ossimDms(ur.x, false).toString("dddmmss.ssssC").c_str()
-         << ossimDms(lr.y, true).toString("ddmmss.ssssC").c_str()
-         << ossimDms(lr.x, false).toString("dddmmss.ssssC").c_str()
-         << ossimDms(ll.y, true).toString("ddmmss.ssssC").c_str()
-         << ossimDms(ll.x, false).toString("dddmmss.ssssC").c_str()
-         << std::endl;
-
-      checkForGeographicTiePointTruncation(ul);
-      checkForGeographicTiePointTruncation(ur);
-      checkForGeographicTiePointTruncation(lr);
-      checkForGeographicTiePointTruncation(ll);
-   }
-      
-   theCoordinateSystem[0] = 'G';
-
-   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDms(ul, ur, lr, ll).c_str(), 60);
-}
-
-void ossimNitfImageHeaderV2_1::setGeographicLocationDecimalDegrees(
-   const ossimDpt& ul,
-   const ossimDpt& ur,
-   const ossimDpt& lr,
-   const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'D';
-
-   memcpy(theGeographicLocation, ossimNitfCommon::encodeGeographicDecimalDegrees(ul, ur, lr, ll).c_str(), 60);
-}
-
-void ossimNitfImageHeaderV2_1::setUtmNorth(ossim_uint32 zone,
-                                           const ossimDpt& ul,
-                                           const ossimDpt& ur,
-                                           const ossimDpt& lr,
-                                           const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'N';
-   
-   memcpy(theGeographicLocation,
-          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
-}
-
-void ossimNitfImageHeaderV2_1::setUtmSouth(ossim_uint32 zone,
-                                           const ossimDpt& ul,
-                                           const ossimDpt& ur,
-                                           const ossimDpt& lr,
-                                           const ossimDpt& ll)
-{
-   theCoordinateSystem[0] = 'S';
-   
-   memcpy(theGeographicLocation,
-          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
-}
-
 void ossimNitfImageHeaderV2_1::setSecurityClassificationSystem(const ossimString& value)
 {
    ossimNitfCommon::setField(theSecurityClassificationSys, value, 2);
@@ -1208,7 +1147,7 @@ void ossimNitfImageHeaderV2_1::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_1::getProperty(const ossimString& name)const
 {
-   ossimProperty* property = NULL;
+   ossimProperty* property = 0;
 
    if(name == ISCLSY_KW)
    {
@@ -1322,5 +1261,5 @@ const ossimRefPtr<ossimNitfImageBand> ossimNitfImageHeaderV2_1::getBandInformati
       return (ossimNitfImageBand*)theImageBands[idx].get();
    }
    
-   return NULL;
+   return 0;
 }

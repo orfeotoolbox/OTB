@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationLineObject.cpp 13348 2008-07-30 15:33:53Z dburken $
+// $Id: ossimGeoAnnotationLineObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimGeoAnnotationLineObject.h>
 #include <ossim/imaging/ossimAnnotationLineObject.h>
 #include <ossim/projection/ossimProjection.h>
@@ -74,48 +74,15 @@ void ossimGeoAnnotationLineObject::applyScale(double x, double y)
    }
 }
 
-void ossimGeoAnnotationLineObject::transform(ossimProjection* projection)
+void ossimGeoAnnotationLineObject::transform(ossimImageGeometry* projection)
 {
    if(projection)
    {
       ossimDpt projectedStart;
       ossimDpt projectedEnd;
       
-      projection->worldToLineSample(theStart, projectedStart);
-      projection->worldToLineSample(theEnd,   projectedEnd);
-
-      theProjectedLineObject->setLine(projectedStart, projectedEnd);
-   }
-}
-
-void ossimGeoAnnotationLineObject::transform(
-   const ossimImageProjectionModel& model, ossim_uint32 rrds)
-{
-   const ossimProjection* projection = model.getProjection();
-   if (projection)
-   {
-      ossimDpt projectedStart;
-      ossimDpt projectedEnd;
-      projection->worldToLineSample(theStart, projectedStart);
-      projection->worldToLineSample(theEnd,   projectedEnd);
-
-      if (rrds)
-      {
-         // Transform r0 point to new rrds level.
-         try
-         {
-            ossimDpt startRnPt;
-            ossimDpt endRnPt;
-            model.r0ToRn(rrds, projectedStart, startRnPt);
-            model.r0ToRn(rrds, projectedEnd,   endRnPt);
-            projectedStart = startRnPt;
-            projectedEnd   = endRnPt;
-         }
-         catch (const ossimException& e)
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << e.what() << std::endl;
-         }
-      }
+      projection->worldToLocal(theStart, projectedStart);
+      projection->worldToLocal(theEnd,   projectedEnd);
 
       theProjectedLineObject->setLine(projectedStart, projectedEnd);
    }

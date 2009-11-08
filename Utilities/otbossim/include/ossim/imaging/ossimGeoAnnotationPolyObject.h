@@ -6,16 +6,15 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationPolyObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationPolyObject_HEADER
 #define ossimGeoAnnotationPolyObject_HEADER
 
 #include <vector>
-
 #include <ossim/base/ossimGpt.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
-class ossimAnnotationPolyObject;
-
+#include <ossim/imaging/ossimAnnotationPolyObject.h>
+ 
 class OSSIMDLLEXPORT ossimGeoAnnotationPolyObject : public ossimGeoAnnotationObject
 {
 public:
@@ -34,28 +33,13 @@ public:
 
    ossimGeoAnnotationPolyObject(const ossimGeoAnnotationPolyObject& rhs);
 
-   virtual ~ossimGeoAnnotationPolyObject();
 
    virtual ossimObject* dup()const;
 
    virtual void applyScale(double x, double y);
 
-   virtual void transform(ossimProjection* projection);
+   virtual void transform(ossimImageGeometry* projection);
 
-   /**
-    * @brief Transforms from geographic to image space for a
-    * reduced resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);  
-   
    virtual std::ostream& print(std::ostream& out)const;
 
    virtual void draw(ossimRgbImage& anImage)const;
@@ -94,8 +78,10 @@ public:
                           const char* prefix=0);
    
 protected:
+   virtual ~ossimGeoAnnotationPolyObject();
+
    std::vector<ossimGpt>      thePolygon;
-   ossimAnnotationPolyObject* theProjectedPolyObject;
+   ossimRefPtr<ossimAnnotationPolyObject> theProjectedPolyObject;
 
 TYPE_DATA
 };

@@ -16,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.h 13473 2008-08-22 14:19:49Z gpotts $
+// $Id: ossimTableRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimTableRemapper_HEADER
 #define ossimTableRemapper_HEADER
 
@@ -34,9 +34,6 @@ public:
 
    /** default constructor */
    ossimTableRemapper();
-
-   /** virtual destructor */
-   virtual ~ossimTableRemapper();
 
    virtual ossimScalarType getOutputScalarType() const;
     
@@ -63,6 +60,8 @@ public:
    friend ostream& operator << (ostream& os,  const ossimTableRemapper& tr);
 
 protected:
+   /** virtual destructor */
+   virtual ~ossimTableRemapper();
 
    /**
     * Method:  setTable

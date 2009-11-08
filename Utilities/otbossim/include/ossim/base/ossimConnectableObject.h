@@ -11,7 +11,7 @@
 // all connectable objects.
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.h 12645 2008-04-09 21:02:33Z dburken $
+// $Id: ossimConnectableObject.h 15798 2009-10-23 19:15:20Z gpotts $
 
 #ifndef ossimConnectableObject_HEADER
 #define ossimConnectableObject_HEADER
@@ -23,6 +23,7 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimListenerManager.h>
 #include <ossim/base/ossimPropertyInterface.h>
+#include <ossim/base/ossimRefPtr.h>
 
 /**
  * This class is the base of all connectable objects.  It will manage
@@ -38,6 +39,7 @@ class  OSSIMDLLEXPORT  ossimConnectableObject : public ossimObject,
                                                 public ossimPropertyInterface
 {
 public:
+   typedef std::vector<ossimRefPtr<ossimConnectableObject> > ConnectableObjectList;
    enum ossimConnectableObjectDirectionType
    {
       CONNECTABLE_DIRECTION_NONE   = 0,
@@ -55,7 +57,6 @@ public:
                           bool outputListIsFixedFlag=true);
 
    virtual ~ossimConnectableObject();
-
    /**
     * All connectable objects will have id's.  This allows us to
     * set the id of this object.
@@ -192,9 +193,9 @@ public:
     * Will disconnect the object at the given input index and generate
     * a connection event.
     */
-   virtual ossimConnectableObject* disconnectMyInput(ossim_int32 inputIndex,
-						     bool disconnectOutputFlag=true,
-						     bool createEventFlag = true);
+   virtual ossimRefPtr<ossimConnectableObject> disconnectMyInput(ossim_int32 inputIndex,
+                                                                 bool disconnectOutputFlag=true,
+                                                                 bool createEventFlag = true);
   
   /**
    * Finds the index of the passed in input and calls
@@ -207,7 +208,7 @@ public:
     *
     */
    virtual void disconnectMyInputs(
-      std::vector<ossimConnectableObject*>& inputList,
+      ConnectableObjectList& inputList,
       bool disconnectOutputFlag=true,
       bool createEventFlag=true);
    
@@ -218,9 +219,9 @@ public:
     * says do you want this method to disconnect the output pointer to
     * this object.
     */
-   virtual ossimConnectableObject* disconnectMyOutput(ossim_int32 outputIndex,
-						      bool disconnectInputFlag=true,
-						      bool createEventFlag = true);
+   virtual ossimRefPtr<ossimConnectableObject> disconnectMyOutput(ossim_int32 outputIndex,
+                                                                  bool disconnectInputFlag=true,
+                                                                  bool createEventFlag = true);
   
    /**
     * Will disconnect the output object.  It will get the index of
@@ -231,7 +232,7 @@ public:
                                    bool createEventFlag=true);
 
    virtual void disconnectMyOutputs(
-      std::vector<ossimConnectableObject*>& outputList,
+      ConnectableObjectList& outputList,
       bool disconnectOutputFlag=true,
       bool createEventFlag=true);
    
@@ -263,7 +264,7 @@ public:
                                         bool createEventFlag=true);
    
    virtual bool connectMyInputTo(
-      std::vector<ossimConnectableObject*>& inputList,
+      ConnectableObjectList& inputList,
       bool makeOutputConnection=true,
       bool createEventFlag = true);   
 
@@ -280,7 +281,7 @@ public:
                                          bool createEventFlag=true);
    
    virtual bool connectMyOutputTo(
-      std::vector<ossimConnectableObject*>& outputList,
+      ConnectableObjectList& outputList,
       bool makeInputConnection=true,
       bool createEventFlag=true);
    
@@ -290,7 +291,7 @@ public:
     * added.
     */
    virtual bool connectInputList(
-      std::vector<ossimConnectableObject*>& inputList);
+      ConnectableObjectList& inputList);
    
    /**
     * Will disconnect itself from all outputs and reset to the passed in
@@ -298,7 +299,7 @@ public:
     * added.
     */
    virtual bool connectOutputList(
-      std::vector<ossimConnectableObject*>& outputList);
+      ConnectableObjectList& outputList);
    
    /**
     * Returns the number of input objects.
@@ -369,43 +370,43 @@ public:
     */
    virtual void setNumberOfOutputs(ossim_int32 numberOfInputs);
    
-   const std::vector<ossimConnectableObject*>& getInputList()const
+   const ConnectableObjectList& getInputList()const
       {
          return theInputObjectList;
       }
-   const std::vector<ossimConnectableObject*>& getOutputList()const
+   const ConnectableObjectList& getOutputList()const
       {
          return theOutputObjectList;
       }
-   std::vector<ossimConnectableObject*>& getInputList()
+   ConnectableObjectList& getInputList()
       {
          return theInputObjectList;
       }
-   std::vector<ossimConnectableObject*>& getOutputList()
+   ConnectableObjectList& getOutputList()
       {
          return theOutputObjectList;
       }
 
    virtual void findAllInputsOfType(
-      std::vector<ossimConnectableObject*>& result,
+      ConnectableObjectList& result,
       const RTTItypeid& typeInfo,
       bool propagateToInputs=true,
       bool recurseChildren=false);
 
    virtual void findAllInputsOfType(
-      std::vector<ossimConnectableObject*>& result,
+      ConnectableObjectList& result,
       const ossimString& className,
       bool propagateToInputs=true,
       bool recurseChildren=false);
    
    virtual void findAllOutputsOfType(
-      std::vector<ossimConnectableObject*>& result,
+      ConnectableObjectList& result,
       const ossimString& className,
       bool propagateToOutputs=true,
       bool recurseChildren=false);
    
    virtual void findAllOutputsOfType(
-      std::vector<ossimConnectableObject*>& result,
+      ConnectableObjectList& result,
       const RTTItypeid& typeInfo,
       bool propagateToOutputs=true,
       bool recurseChildren=false);
@@ -482,6 +483,7 @@ public:
    bool moveInputToBottom(const ossimId& id);
     
 protected:
+   
    ossimId      theId;
    ossimString  theDescription;
    ossimObject* theOwner;
@@ -499,12 +501,12 @@ protected:
    /**
     * Holds a list of input objects.
     */
-   std::vector<ossimConnectableObject*>     theInputObjectList;
+   ConnectableObjectList     theInputObjectList;
    
    /**
     * Holds a list of output objects.
     */
-   std::vector<ossimConnectableObject*>     theOutputObjectList;
+   ConnectableObjectList     theOutputObjectList;
 
 private:
 TYPE_DATA

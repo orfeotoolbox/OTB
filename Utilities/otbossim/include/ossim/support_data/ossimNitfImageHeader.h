@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageHeader.h 15436 2009-09-17 00:12:59Z dburken $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -94,6 +94,16 @@ public:
 
    /** @return IMAG field */
    virtual ossimString  getImageMagnification()const=0;
+
+   /**
+    * @brief Convenience method to get the decimation factor as a double from
+    * the string returned be the getImageMagnification() method.
+    *
+    * @param result Initialized with the decimation factor as a double.
+    * Will return an ossim::nan() if something bad happens like the string is
+    * empty so callers should check result with ossim::isnan(result).
+    */
+   virtual void getDecimationFactor(ossim_float64& result) const;
    
    virtual bool hasBlockMaskRecords()const=0;
    virtual bool hasPadPixelMaskRecords()const=0;

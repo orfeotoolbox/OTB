@@ -15,7 +15,7 @@
 // information and error output.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimAdjMapModel.cpp 13004 2008-06-08 20:18:37Z dburken $
+// $Id: ossimAdjMapModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib> /* for atof */
 #include <ossim/projection/ossimAdjMapModel.h>
@@ -336,7 +336,7 @@ bool ossimAdjMapModel::loadState(const ossimKeywordlist& kwl, const char* prefix
          setParameterCenter(i, value);
       }
    }
-   catch (const char* message)
+   catch (const char* /*message*/)
    {
       theErrorStatus++;
       success = false;

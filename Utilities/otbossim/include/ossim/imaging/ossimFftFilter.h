@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimFftFilter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimFftFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFftFilter_HEADER
 #define ossimFftFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -27,7 +27,6 @@ public:
    ossimFftFilter(ossimImageSource* inputSource);
    ossimFftFilter(ossimObject* owner,
                   ossimImageSource* inputSource);
-   virtual ~ossimFftFilter();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                    ossim_uint32 resLevel=0);
    virtual void initialize();
@@ -60,9 +59,10 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix = 0)const;
 protected:
+   virtual ~ossimFftFilter();
    ossimRefPtr<ossimImageData> theTile;
    ossimFftFilterDirectionType theDirectionType;
-   ossimScalarRemapper*        theScalarRemapper;
+   ossimRefPtr<ossimScalarRemapper>        theScalarRemapper;
    template <class T>
    void runFft(T dummy,
                ossimRefPtr<ossimImageData>& input,

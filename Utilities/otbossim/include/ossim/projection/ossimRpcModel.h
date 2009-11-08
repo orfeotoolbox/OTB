@@ -11,7 +11,7 @@
 //   (USM).
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.h 11521 2007-08-07 21:55:58Z dburken $
+//  $Id: ossimRpcModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimRpcModel_HEADER
 #define ossimRpcModel_HEADER
@@ -64,9 +64,6 @@ public:
 
    /** @brief copy construtor */
    ossimRpcModel(const ossimRpcModel& copy_this);
-
-   /** @brief virtual destructor */
-   virtual ~ossimRpcModel();
 
    void setAttributes(ossim_float64 theSampleOffset,
                       ossim_float64 theLineOffset,
@@ -234,6 +231,9 @@ protected:
       NUM_ADJUSTABLE_PARAMS // not an index
    };
 
+   /** @brief virtual destructor */
+   virtual ~ossimRpcModel();
+   
    //***
    // Methods for computing RPC polynomial and its derivatives:
    //***

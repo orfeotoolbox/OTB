@@ -5,12 +5,12 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimViewInterface.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimViewInterface.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimViewInterface_HEADER
 #define ossimViewInterface_HEADER
 #include <ossim/base/ossimRtti.h>
 
-class OSSIMDLLEXPORT ossimObject;
+class ossimObject;
 
 class OSSIMDLLEXPORT ossimViewInterface
 {
@@ -21,7 +21,7 @@ public:
 
    /*!
     * The derived classes should overrid this method and
-    * return true or fals whether it was able to cast the
+    * return true or false whether it was able to cast the
     * past in view to a view that it can interface to.
     * So if you are a projective view you might
     * cast to an ossimProjection.  The ownsTheView specifies
@@ -30,7 +30,7 @@ public:
     * need to re-allocate the pointer or just delete its old
     * pointer and set it to the passed in pointer.
     */
-   virtual bool setView(ossimObject* baseObject, bool ownsTheView = false)=0;
+   virtual bool setView(ossimObject* baseObject)=0;
    virtual ossimObject* getView()=0;
    virtual const ossimObject* getView()const=0;
    virtual void refreshView();

@@ -1,12 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 //*************************************************************************
-// $Id: ossimImageDataFactory.cpp 13474 2008-08-22 14:20:42Z gpotts $
+// $Id: ossimImageDataFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/imaging/ossimU11ImageData.h>
@@ -14,6 +17,7 @@
 #include <ossim/imaging/ossimS16ImageData.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimScalarTypeLut.h>
 
@@ -22,7 +26,7 @@ static ossimTrace traceDebug("ossimImageDataFactory:debug");
 
 ossimImageDataFactory* ossimImageDataFactory::theInstance = 0;
 OpenThreads::Mutex ossimImageDataFactory::theInstanceMutex;
-ossimImageDataFactory::ossimImageDataFactory()
+ossimImageDataFactory::ossimImageDataFactory() 
 {
    theInstance = 0;
 }
@@ -82,30 +86,21 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
          result = new ossimU8ImageData(owner, bands, width, height);
          break;
       }
-
       case OSSIM_USHORT11:
       {
          result = new ossimU11ImageData(owner, bands, width, height);
          break;
       }
-      
-      // ther are bugs in the 16 bit that I don't have time to find.
-      // The default image data object works good though.
-      //
-      // So for now I will comment these out.  I think it has something to
-      // do with the normalization it makes everything black
-      //
-      //
-//       case OSSIM_USHORT16:
-//       {
-//          result = new ossimU16ImageData(owner, bands, width, height);
-//          break;
-//       }
-//       case OSSIM_SSHORT16:
-//       {
-//          result = new ossimS16ImageData(owner, bands, width, height);
-//          break;
-//       }
+      case OSSIM_UINT16:
+      {
+         result = new ossimU16ImageData(owner, bands, width, height);
+         break;
+      }
+      case OSSIM_SINT16:
+      {
+         result = new ossimS16ImageData(owner, bands, width, height);
+         break;
+      }
       default:
       {
          // create a generic image data implementation.
@@ -113,7 +108,7 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
          break;
       }
    }
-   
+
    return result;
 }
 
@@ -153,30 +148,21 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
          result = new ossimU8ImageData(owner, bands, width, height);
          break;
       }
-
       case OSSIM_USHORT11:
       {
          result = new ossimU11ImageData(owner, bands, width, height);
          break;
       }
-      
-      // ther are bugs in the 16 bit that I don't have time to find.
-      // The default image data object works good though.
-      //
-      // So for now I will comment these out.  I think it has something to
-      // do with the normalization it makes everything black
-      //
-      //
-//       case OSSIM_USHORT16:
-//       {
-//          result = new ossimU16ImageData(owner, bands, width, height);
-//          break;
-//       }
-//       case OSSIM_SSHORT16:
-//       {
-//          result = new ossimS16ImageData(owner, bands, width, height);
-//          break;
-//       }
+      case OSSIM_UINT16:
+      {
+         result = new ossimU16ImageData(owner, bands, width, height);
+         break;
+      }
+      case OSSIM_SINT16:
+      {
+         result = new ossimS16ImageData(owner, bands, width, height);
+         break;
+      }
       default:
       {
          // create a generic image data implementation.
@@ -184,7 +170,7 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
          break;
       }
    }
-   
+
    return result;
 }
 
@@ -212,8 +198,9 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    }
    else
    {
-      cerr << "ossimImageDataFactory::create ERROR:"
-           << "\nNULL input source!" << endl;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimImageDataFactory::create ERROR:"
+         << "\nNULL input source!" << std::endl;
    }
    
    return result;
@@ -244,8 +231,9 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    }
    else
    {
-      cerr << "ossimImageDataFactory::create ERROR:"
-           << "\nNULL input source!" << endl;
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimImageDataFactory::create ERROR:"
+         << "\nNULL input source!" << std::endl;
    }
 
    return result;

@@ -7,7 +7,7 @@
 // Description: Base class for all projections (2D-to-3D transform)
 //
 //*******************************************************************
-//  $Id: ossimProjection.h 11805 2007-10-05 14:54:28Z dburken $
+//  $Id: ossimProjection.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimProjection_HEADER
 #define ossimProjection_HEADER
 #include <iostream>
@@ -109,7 +109,7 @@ public:
    virtual bool isAffectedByElevation() const=0;
    
 protected:
-   
+  
 
    TYPE_DATA
 };

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfFile.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <fstream>
 #include <iostream>
@@ -40,7 +40,8 @@ std::ostream& operator <<(std::ostream& out, const ossimNitfFile& data)
 }
 
 std::ostream& ossimNitfFile::print(std::ostream& out,
-                                   const std::string& prefix) const
+                                   const std::string& prefix,
+                                   bool printOverviews) const
 {
    if(theNitfFileHeader.valid())
    {
@@ -54,13 +55,32 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
          ossimNitfImageHeader* ih = getNewImageHeader(idx);
          if(ih)
          {
-            // Add our prefix onto prefix.
-            std::string s = pfx;
-            s += "image";
-            s += ossimString::toString(idx);
-            s += ".";
+            bool printIt = true;
             
-            ih->print(out, s);
+            if ( !printOverviews )
+            {
+               // Check the IMAG field.
+               ossim_float64 imag;
+               ih->getDecimationFactor(imag);
+               if ( !ossim::isnan(imag) )
+               {
+                  if ( imag < 1.0)
+                  {
+                     printIt = false;
+                  }
+               }
+            }
+
+            if (printIt)
+            {
+               // Add our prefix onto prefix.
+               std::string s = pfx;
+               s += "image";
+               s += ossimString::toString(idx);
+               s += ".";
+               
+               ih->print(out, s);
+            }
             
             delete ih;
             ih = 0;
@@ -80,7 +100,7 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
               ossimErrorCodes::OSSIM_OK )
          {
             pfx += "rpf.";
-            toc->print(out, pfx);
+            toc->print(out, pfx, printOverviews);
          }
          delete toc;
          toc = 0;
@@ -202,9 +222,14 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
    return true;
 }
 
-const ossimRefPtr<ossimNitfFileHeader> ossimNitfFile::getHeader() const
+const ossimNitfFileHeader* ossimNitfFile::getHeader() const
 {
-   return theNitfFileHeader;
+   return theNitfFileHeader.get();
+}
+
+ossimNitfFileHeader* ossimNitfFile::getHeader() 
+{
+   return theNitfFileHeader.get();
 }
 
 ossimIrect ossimNitfFile::getImageRect()const
@@ -217,74 +242,79 @@ ossimIrect ossimNitfFile::getImageRect()const
    return ossimIrect(ossimIpt(0,0), ossimIpt(0,0));
 }
 
-ossimNitfImageHeader* ossimNitfFile::getNewImageHeader(long imageNumber)const
+ossimNitfImageHeader* ossimNitfFile::getNewImageHeader(
+   ossim_uint32 imageNumber)const
 {
+   ossimNitfImageHeader* result = 0;
    if(theNitfFileHeader.valid())
    {
       std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
 
-      return theNitfFileHeader->getNewImageHeader(imageNumber,
-                                                  in);
+      result = theNitfFileHeader->getNewImageHeader(imageNumber, in);
       in.close();
    }
    
-   return 0;
+   return result;
 }
 
-ossimNitfSymbolHeader* ossimNitfFile::getNewSymbolHeader(long symbolNumber)const
+ossimNitfSymbolHeader* ossimNitfFile::getNewSymbolHeader(
+   ossim_uint32 symbolNumber)const
 {
+   ossimNitfSymbolHeader* result = 0;
    if(theNitfFileHeader.valid())
    {
       std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
 
-      return theNitfFileHeader->getNewSymbolHeader(symbolNumber,
-                                                   in);
+      result = theNitfFileHeader->getNewSymbolHeader(symbolNumber, in);
       in.close();
    }
    
-   return 0;
+   return result;
 }
 
-ossimNitfLabelHeader* ossimNitfFile::getNewLabelHeader(long labelNumber)const
+ossimNitfLabelHeader* ossimNitfFile::getNewLabelHeader(
+   ossim_uint32 labelNumber)const
 {
+   ossimNitfLabelHeader* result = 0;
    if(theNitfFileHeader.valid())
    {
       std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
 
-      return theNitfFileHeader->getNewLabelHeader(labelNumber,
-                                                  in);
+      result = theNitfFileHeader->getNewLabelHeader(labelNumber, in);
       in.close();
    }
    
-   return 0;
+   return result;
 }
 
-ossimNitfTextHeader* ossimNitfFile::getNewTextHeader(long textNumber)const
+ossimNitfTextHeader* ossimNitfFile::getNewTextHeader(
+   ossim_uint32 textNumber)const
 {
+   ossimNitfTextHeader* result = 0;
    if(theNitfFileHeader.valid())
    {
       std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
 
-      return theNitfFileHeader->getNewTextHeader(textNumber,
-                                                 in);
+      result = theNitfFileHeader->getNewTextHeader(textNumber, in);
       in.close();
    }
    
-   return 0;
+   return result;
 }
 
-ossimNitfDataExtensionSegment* ossimNitfFile::getNewDataExtensionSegment(long dataExtNumber)const
+ossimNitfDataExtensionSegment* ossimNitfFile::getNewDataExtensionSegment(
+   ossim_uint32 dataExtNumber)const
 {
+   ossimNitfDataExtensionSegment* result = 0;
    if(theNitfFileHeader.valid())
    {
       std::ifstream in(theFilename.c_str(), std::ios::in|std::ios::binary);
 
-      return theNitfFileHeader->getNewDataExtensionSegment(dataExtNumber,
-                                                           in);
+      result = theNitfFileHeader->getNewDataExtensionSegment(dataExtNumber, in);
       in.close();
    }
    
-   return 0;
+   return result;
 }
 
 ossimString ossimNitfFile::getVersion()const

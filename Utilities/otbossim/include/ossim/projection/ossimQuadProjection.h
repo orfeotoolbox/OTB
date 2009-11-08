@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimQuadProjection.h 11805 2007-10-05 14:54:28Z dburken $
+// $Id: ossimQuadProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimQuadProjection_HEADER
 #define ossimQuadProjection_HEADER
 
@@ -24,7 +24,6 @@ class ossimQuadProjection : public ossimProjection
                        const ossimGpt& lrg,
                        const ossimGpt& llg);
                        
-   virtual ~ossimQuadProjection();
    virtual ossimObject *dup()const;
    virtual ossimGpt origin()const;
    
@@ -63,6 +62,8 @@ class ossimQuadProjection : public ossimProjection
    virtual bool isAffectedByElevation() const { return false; }
 
  protected:
+   virtual ~ossimQuadProjection();
+   
    ossimIrect theInputRect;
    ossimGpt theUlg;
    ossimGpt theUrg;

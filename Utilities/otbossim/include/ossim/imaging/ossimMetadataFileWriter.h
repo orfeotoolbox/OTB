@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimMetadataFileWriter.h 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimMetadataFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimMetadataFileWriter_H
 #define ossimMetadataFileWriter_H
@@ -55,7 +55,6 @@ class OSSIMDLLEXPORT ossimMetadataFileWriter :
 public:
    ossimMetadataFileWriter();
    
-   virtual ~ossimMetadataFileWriter();
 
    virtual ossimObject*       getObject();
    virtual const ossimObject* getObject() const;
@@ -159,6 +158,7 @@ public:
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 protected:
+   virtual ~ossimMetadataFileWriter();
    /**
     * Write out the file.
     * @return true on success, false on error.

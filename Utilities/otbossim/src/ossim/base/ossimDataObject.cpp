@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDataObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDataObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/base/ossimDataObject.h>
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -25,7 +24,7 @@ ossimDataObject::ossimDataObject(ossimSource* source,
 
 ossimDataObject::ossimDataObject(const ossimDataObject& rhs)
    : ossimObject(),
-     theOwner(NULL),
+     theOwner(0),
      theDataObjectStatus(rhs.theDataObjectStatus)
 {
 }
@@ -129,7 +128,11 @@ const ossimDataObject* ossimDataObject::operator=(const ossimDataObject* rhs)
 
 const ossimDataObject& ossimDataObject::operator=(const ossimDataObject& rhs)
 {
-   assign(&rhs);
+   if (this != &rhs)
+   {
+      theOwner            = rhs.theOwner;
+      theDataObjectStatus = rhs.theDataObjectStatus; 
+   }
    return *this;
 }
 

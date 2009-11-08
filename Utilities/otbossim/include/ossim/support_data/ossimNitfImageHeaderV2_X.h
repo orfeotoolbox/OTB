@@ -1,8 +1,9 @@
 #ifndef ossimNitfImageHeaderV2_X_HEADER
 #define ossimNitfImageHeaderV2_X_HEADER
+#include <ossim/base/ossimConstants.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 
-class ossimNitfImageHeaderV2_X : public ossimNitfImageHeader
+class OSSIM_DLL ossimNitfImageHeaderV2_X : public ossimNitfImageHeader
 {
 public:
    ossimNitfImageHeaderV2_X();
@@ -71,6 +72,28 @@ public:
     * @return IMAG field
     */
    virtual ossimString  getImageMagnification()const;
+
+   virtual void setGeographicLocationDms(const ossimDpt& ul,
+                                         const ossimDpt& ur,
+                                         const ossimDpt& lr,
+                                         const ossimDpt& ll);
+   
+   virtual void setGeographicLocationDecimalDegrees(const ossimDpt& ul,
+                                                    const ossimDpt& ur,
+                                                    const ossimDpt& lr,
+                                                    const ossimDpt& ll);
+   virtual void setUtmNorth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
+   
+   virtual void setUtmSouth(ossim_uint32 zone,
+                            const ossimDpt& ul,
+                            const ossimDpt& ur,
+                            const ossimDpt& lr,
+                            const ossimDpt& ll);
+  
 
    static const ossimString IID1_KW;
    static const ossimString IDATIM_KW;

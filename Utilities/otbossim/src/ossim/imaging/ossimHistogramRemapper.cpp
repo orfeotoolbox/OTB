@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 14068 2009-03-08 21:23:24Z dburken $
+// $Id: ossimHistogramRemapper.cpp 15390 2009-09-09 13:15:31Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -42,7 +42,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 14068 2009-03-08 21:23:24Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 15390 2009-09-09 13:15:31Z gpotts $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -1584,25 +1584,50 @@ void ossimHistogramRemapper::setupTable()
       theTable.resize(size_in_bytes);
    }
 
-   //---
-   // Last check for NaNs in key data members and set to some default if so.
-   // This could occur if someone stripped a keyword list down to a minimal
-   // set of keywords.
-   //---
-   for (ossim_uint32 band = 0; band < BANDS; ++band)
+   ossimImageSource* input = dynamic_cast<ossimImageSource*>(getInput());
+   double minPix = ossim::defaultMin(getOutputScalarType());
+   double maxPix = ossim::defaultMax(getOutputScalarType());
+   
+   if(input)
    {
-      const double MIN = getMinPixelValue(band);
-      const double MAX = getMaxPixelValue(band);
-      
-      if ( ossim::isnan(theMinOutputValue[band]) )
+      //---
+      // Last check for NaNs in key data members and set to some default if so.
+      // This could occur if someone stripped a keyword list down to a minimal
+      // set of keywords.
+      //---
+      for (ossim_uint32 band = 0; band < BANDS; ++band)
       {
-         theMinOutputValue[band] = MIN;
-      }
-      if ( ossim::isnan(theMaxOutputValue[band]) )
+         minPix = input->getMinPixelValue(band);
+         maxPix = input->getMaxPixelValue(band);
+         if ( ossim::isnan(theMinOutputValue[band]) )
+         {
+            theMinOutputValue[band] = minPix;
+         }
+         if ( ossim::isnan(theMaxOutputValue[band]) )
+         {
+            theMaxOutputValue[band] = maxPix;
+         }
+      }   
+   }
+   else
+   {
+      //---
+      // Last check for NaNs in key data members and set to some default if so.
+      // This could occur if someone stripped a keyword list down to a minimal
+      // set of keywords.
+      //---
+      for (ossim_uint32 band = 0; band < BANDS; ++band)
       {
-         theMaxOutputValue[band] = MAX;
-      }
-   }   
+         if ( ossim::isnan(theMinOutputValue[band]) )
+         {
+            theMinOutputValue[band] = minPix;
+         }
+         if ( ossim::isnan(theMaxOutputValue[band]) )
+         {
+            theMaxOutputValue[band] = maxPix;
+         }
+      }   
+   }
 }
 
 void ossimHistogramRemapper::verifyEnabled()
@@ -1715,7 +1740,7 @@ ossimHistogramRemapper& ossimHistogramRemapper::operator=(const ossimHistogramRe
 {
    return *this;
 }
-		
+
 void ossimHistogramRemapper::setBypassFlag(bool flag)
 {
    if (theBypassFlag != flag)
@@ -1731,3 +1756,22 @@ void ossimHistogramRemapper::setBypassFlag(bool flag)
       theBypassFlag = flag;
    }
 }
+
+double ossimHistogramRemapper::getMinPixelValue(ossim_uint32 band)const
+{
+   if(theEnableFlag&&!theBypassFlag &&(band < theMinOutputValue.size()))
+   {
+      return theMinOutputValue[band];
+   }
+   return ossimTableRemapper::getMinPixelValue(band);
+}
+
+double ossimHistogramRemapper::getMaxPixelValue(ossim_uint32 band)const
+{
+   if(!theBypassFlag &&(band < theMaxOutputValue.size()))
+   {
+      return theMaxOutputValue[band];
+   }
+   return ossimTableRemapper::getMaxPixelValue(band);
+}
+

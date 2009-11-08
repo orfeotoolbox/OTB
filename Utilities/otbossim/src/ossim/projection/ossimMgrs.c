@@ -915,7 +915,7 @@ long Make_OSSIM_MGRS_String (char* OSSIM_MGRS,
 } /* Make_OSSIM_MGRS_String */
 
 
-long Break_OSSIM_MGRS_String (char* OSSIM_MGRS,
+long Break_OSSIM_MGRS_String (const char* OSSIM_MGRS,
                         long* Zone,
                         long Letters[OSSIM_MGRS_LETTERS],
                         double* Easting,
@@ -1108,7 +1108,7 @@ long Convert_Geodetic_To_OSSIM_MGRS (double Latitude,
 } /* Convert_Geodetic_To_OSSIM_MGRS */
 
 
-long Convert_OSSIM_MGRS_To_Geodetic (char* OSSIM_MGRS, 
+long Convert_OSSIM_MGRS_To_Geodetic (const char* OSSIM_MGRS, 
                                double *Latitude, 
                                double *Longitude)
 /*
@@ -1208,7 +1208,7 @@ long Convert_UTM_To_OSSIM_MGRS (long Zone,
 } /* Convert_UTM_To_OSSIM_MGRS */
 
 
-long Convert_OSSIM_MGRS_To_UTM (char   *OSSIM_MGRS,
+long Convert_OSSIM_MGRS_To_UTM (const char   *OSSIM_MGRS,
                           long   *Zone,
                           char   *Hemisphere,
                           double *Easting,
@@ -1289,7 +1289,7 @@ long Convert_UPS_To_OSSIM_MGRS (char   Hemisphere,
 } /* Convert_UPS_To_OSSIM_MGRS */
 
 
-long Convert_OSSIM_MGRS_To_UPS ( char   *OSSIM_MGRS,
+long Convert_OSSIM_MGRS_To_UPS ( const char   *OSSIM_MGRS,
                            char   *Hemisphere,
                            double *Easting,
                            double *Northing)

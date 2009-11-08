@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimImageCombiner.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -54,7 +54,7 @@ ossimImageCombiner::ossimImageCombiner(ossimObject* owner,
    theComputeFullResBoundsFlag = true;
 }
 
-ossimImageCombiner::ossimImageCombiner(const std::vector<ossimImageSource*>& inputSources)
+ossimImageCombiner::ossimImageCombiner(ossimConnectableObject::ConnectableObjectList& inputSources)
    :ossimImageSource(NULL,
                      inputSources.size(),
                      0,
@@ -69,7 +69,7 @@ ossimImageCombiner::ossimImageCombiner(const std::vector<ossimImageSource*>& inp
 	theComputeFullResBoundsFlag = true;
    for(ossim_uint32 index = 0; index < inputSources.size(); ++index)
    {
-      connectMyInputTo(index, inputSources[index]);
+      connectMyInputTo(index, inputSources[index].get());
    }
    addListener((ossimConnectableObjectListener*)this);
    initialize();
@@ -650,17 +650,13 @@ bool ossimImageCombiner::hasDifferentInputs()const
    return theHasDifferentInputs;
 }
 
-bool ossimImageCombiner::getImageGeometry(ossimKeywordlist& kwl,
-                                          const char* prefix)
+ossimImageGeometry* ossimImageCombiner::getImageGeometry()
 {
    if(getInput(0))
    {
-      ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                                  getInput(0));
+      ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
       if(inter)
-      {
-         return inter->getImageGeometry(kwl, prefix);
-      }
+         return inter->getImageGeometry();
    }
    
    return false;

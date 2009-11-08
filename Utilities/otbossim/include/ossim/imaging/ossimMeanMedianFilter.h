@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimMeanMedianFilter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMeanMedianFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMeanMedianFilter_HEADER
 #define ossimMeanMedianFilter_HEADER
 
@@ -22,7 +22,7 @@
  * the center pixel is replaced.
  *
  */
-class ossimMeanMedianFilter : public ossimImageSourceFilter
+class OSSIM_DLL ossimMeanMedianFilter : public ossimImageSourceFilter
 {
 public:
 
@@ -48,7 +48,6 @@ public:
    };
 
    ossimMeanMedianFilter(ossimObject* owner=NULL);
-   virtual ~ossimMeanMedianFilter();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
@@ -94,6 +93,7 @@ public:
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
 
 protected:
+   virtual ~ossimMeanMedianFilter();
    
    ossimRefPtr<ossimImageData> theTile;
    ossimMeanMedianFilterType   theFilterType;

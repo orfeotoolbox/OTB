@@ -30,7 +30,7 @@ public:
 
   ossimIrect getBoundingProjectedRect()const;
   
-  void transform(ossimProjection* proj);
+  void transform(ossimImageGeometry* geom);
   void buildLibrary();
   void buildLibrary(const ossimString& coverageName, const ossimString& feature);
   void deleteAllCoverage();

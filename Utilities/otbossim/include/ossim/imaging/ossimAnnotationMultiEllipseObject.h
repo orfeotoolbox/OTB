@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiEllipseObject.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimAnnotationMultiEllipseObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationMultiEllipseObject_HEADER
 #define ossimAnnotationMultiEllipseObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -33,7 +33,6 @@ public:
 
    ossimObject* dup()const;
 
-   virtual ~ossimAnnotationMultiEllipseObject();
 
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;
    virtual void applyScale(double x, double y);
@@ -57,6 +56,7 @@ public:
    const ossimDpt& operator[](int i)const;
    
 protected:
+   virtual ~ossimAnnotationMultiEllipseObject();
    std::vector<ossimDpt>  thePointList;
    ossimDpt               theWidthHeight;
    bool                   theFillFlag;

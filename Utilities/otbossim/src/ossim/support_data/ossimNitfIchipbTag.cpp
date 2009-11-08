@@ -11,7 +11,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfIchipbTag.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimNitfIchipbTag.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstring> /* for memcpy */
 #include <iomanip>
@@ -22,6 +22,7 @@
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossim2dBilinearTransform.h>
 
 static const ossimString XFRM_FLAG_KW = "XFRM_FLAG";
 static const ossimString SCALE_FACTOR_KW = "SCALE_FACTOR";
@@ -166,31 +167,40 @@ void ossimNitfIchipbTag::clearFields()
    theFullImageCol[FI_COL_SIZE]      = '\0';
 }
 
-std::ostream& ossimNitfIchipbTag::print(std::ostream& out) const
+std::ostream& ossimNitfIchipbTag::print(std::ostream& out,
+                                        const std::string& prefix) const
 {
-   out << setiosflags(std::ios::left) << "ossimNitfIchipbTag::print"
-       << std::setw(24) << "\nXFRM_FLAG:"     <<theXfrmFlag
-       << std::setw(24) << "\nSCALE_FACTOR:"  <<theScaleFactor
-       << std::setw(24) << "\nANAMRPH_CORR:"  <<theAnamrphCorr
-       << std::setw(24) << "\nSCANBLK_NUM:"   <<theScanBlock
-       << std::setw(24) << "\nOP_ROW_11:"     <<theOpRow11
-       << std::setw(24) << "\nOP_COL_11:"     <<theOpCol11
-       << std::setw(24) << "\nOP_ROW_12:"     <<theOpRow12
-       << std::setw(24) << "\nOP_COL_12:"     <<theOpCol12
-       << std::setw(24) << "\nOP_ROW_21:"     <<theOpRow21
-       << std::setw(24) << "\nOP_COL_21:"     <<theOpCol21
-       << std::setw(24) << "\nOP_ROW_22:"     <<theOpRow22
-       << std::setw(24) << "\nOP_COL_22:"     <<theOpCol22
-       << std::setw(24) << "\nFI_ROW_11:"     <<theFiRow11
-       << std::setw(24) << "\nFI_COL_11:"     <<theFiCol11
-       << std::setw(24) << "\nFI_ROW_12:"     <<theFiRow12
-       << std::setw(24) << "\nFI_COL_12:"     <<theFiCol12
-       << std::setw(24) << "\nFI_ROW_21:"     <<theFiRow21
-       << std::setw(24) << "\nFI_COL_21:"     <<theFiCol21
-       << std::setw(24) << "\nFI_ROW_22:"     <<theFiRow22
-       << std::setw(24) << "\nFI_COL_22:"     <<theFiCol22
-       << std::setw(24) << "\nFI_ROW:"        <<theFullImageRow
-       << std::setw(24) << "\nFI_COL:"        <<theFullImageCol
+   std::string pfx = prefix;
+   pfx += getRegisterTagName();
+   pfx += ".";
+
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "CETAG:"
+       << getRegisterTagName() << "\n"
+       << pfx << std::setw(24) << "CEL:"
+       << getSizeInBytes() << "\n"
+       << pfx << std::setw(24) << "XFRM_FLAG:"     << theXfrmFlag << "\n"
+       << pfx << std::setw(24) << "SCALE_FACTOR:"  << theScaleFactor << "\n"
+       << pfx << std::setw(24) << "ANAMRPH_CORR:"  << theAnamrphCorr << "\n"
+       << pfx << std::setw(24) << "SCANBLK_NUM:"   << theScanBlock << "\n"
+       << pfx << std::setw(24) << "OP_ROW_11:"     << theOpRow11 << "\n"
+       << pfx << std::setw(24) << "OP_COL_11:"     << theOpCol11 << "\n"
+       << pfx << std::setw(24) << "OP_ROW_12:"     << theOpRow12 << "\n"
+       << pfx << std::setw(24) << "OP_COL_12:"     << theOpCol12 << "\n"
+       << pfx << std::setw(24) << "OP_ROW_21:"     << theOpRow21 << "\n"
+       << pfx << std::setw(24) << "OP_COL_21:"     << theOpCol21 << "\n"
+       << pfx << std::setw(24) << "OP_ROW_22:"     << theOpRow22 << "\n"
+       << pfx << std::setw(24) << "OP_COL_22:"     << theOpCol22 << "\n"
+       << pfx << std::setw(24) << "FI_ROW_11:"     << theFiRow11 << "\n"
+       << pfx << std::setw(24) << "FI_COL_11:"     << theFiCol11 << "\n"
+       << pfx << std::setw(24) << "FI_ROW_12:"     << theFiRow12 << "\n"
+       << pfx << std::setw(24) << "FI_COL_12:"     << theFiCol12 << "\n"
+       << pfx << std::setw(24) << "FI_ROW_21:"     << theFiRow21 << "\n"
+       << pfx << std::setw(24) << "FI_COL_21:"     << theFiCol21 << "\n"
+       << pfx << std::setw(24) << "FI_ROW_22:"     << theFiRow22 << "\n"
+       << pfx << std::setw(24) << "FI_COL_22:"     << theFiCol22 << "\n"
+       << pfx << std::setw(24) << "FI_ROW:"        << theFullImageRow << "\n"
+       << pfx << std::setw(24) << "FI_COL:"        << theFullImageCol
        << std::endl;
 
    return out;
@@ -306,6 +316,7 @@ ossim_uint32 ossimNitfIchipbTag::getFullImageCols() const
    return ossimString::toUInt32(theFullImageCol);
 }
  
+#if 0
 void ossimNitfIchipbTag::getImageRect(ossimDrect& rect) const
 {
    ossimDpt pt;
@@ -323,19 +334,40 @@ void ossimNitfIchipbTag::getFullImageRect(ossimDrect& rect) const
 {
    ossimDpt pt;
 
-   pt.x = getFiCol11() - 0.5;
-   pt.y = getFiRow11() - 0.5;
+   ossim_float64 minX = ossim::min(getFiCol11(), getFiCol22());
+   ossim_float64 maxX = ossim::max(getFiCol11(), getFiCol22());
+   ossim_float64 minY = ossim::min(getFiRow11(), getFiRow22());
+   ossim_float64 maxY = ossim::max(getFiRow11(), getFiRow22());
+   
+   pt.x = minX - 0.5;
+   pt.y = minY - 0.5;
    rect.set_ul(pt);
 
-   pt.x = getFiCol22() - 0.5;
-   pt.y = getFiRow22() - 0.5;
+   pt.x = maxX - 0.5;
+   pt.y = maxY - 0.5;
    rect.set_lr(pt);
 }
 
 void ossimNitfIchipbTag::getSubImageOffset(ossimDpt& pt) const
 {
-   pt.x = getFiCol11() - 0.5;
-   pt.y = getFiRow11() - 0.5;
+   ossimDrect rect;
+   
+   getFullImageRect(rect);
+   
+   pt = rect.ul();
+}
+#endif
+
+ossim2dTo2dTransform* ossimNitfIchipbTag::newTransform()const
+{
+   return new ossim2dBilinearTransform(ossimDpt(getOpCol11(), getOpRow11()),
+                                       ossimDpt(getOpCol12(), getOpRow12()),
+                                       ossimDpt(getOpCol21(), getOpRow21()),
+                                       ossimDpt(getOpCol22(), getOpRow22()),
+                                       ossimDpt(getFiCol11(), getFiRow11()),
+                                       ossimDpt(getFiCol12(), getFiRow12()),
+                                       ossimDpt(getFiCol21(), getFiRow21()),
+                                       ossimDpt(getFiCol22(), getFiRow22()));
 }
 
 void ossimNitfIchipbTag::setProperty(ossimRefPtr<ossimProperty> property)

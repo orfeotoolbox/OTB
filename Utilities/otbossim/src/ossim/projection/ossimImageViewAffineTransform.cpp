@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageViewAffineTransform.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageViewAffineTransform.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimImageViewAffineTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -321,8 +321,7 @@ bool ossimImageViewAffineTransform::isValid()const
    return true;
 }
 
-bool ossimImageViewAffineTransform::setView(ossimObject* /* obj */,
-                                            bool /* ownsProjection*/ )
+bool ossimImageViewAffineTransform::setView(ossimObject* /* obj */)
 {
    return false;
 }

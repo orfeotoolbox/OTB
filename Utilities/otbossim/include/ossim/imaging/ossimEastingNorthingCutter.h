@@ -11,7 +11,6 @@ public:
    ossimEastingNorthingCutter(ossimObject* owner,
                               ossimImageSource* inputSource=NULL);
    ossimEastingNorthingCutter(ossimImageSource* inputSource=NULL);
-   virtual ~ossimEastingNorthingCutter();
    
    void setEastingNorthingRectangle(const ossimDpt& ul,
                                     const ossimDpt& lr);
@@ -23,8 +22,7 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
-   virtual bool setView(ossimObject* baseObject,
-                        bool ownsTheView = false);
+   virtual bool setView(ossimObject* baseObject);
 
    virtual ossimObject* getView();
    virtual const ossimObject* getView()const;
@@ -32,10 +30,11 @@ public:
    virtual void initialize();
    
 protected:
+   virtual ~ossimEastingNorthingCutter();
    ossimDpt theUlEastingNorthing;
    ossimDpt theLrEastingNorthing;
    
-   ossimProjection* theViewProjection;
+   ossimRefPtr<ossimProjection> theViewProjection;
 
 
    void transformVertices();

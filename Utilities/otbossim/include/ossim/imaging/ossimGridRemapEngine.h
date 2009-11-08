@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGridRemapEngine.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGridRemapEngine.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGridRemapEngine_HEADER
 #define ossimGridRemapEngine_HEADER
@@ -56,6 +56,7 @@ protected:
       : theNumberOfParams(numParams), theNumberOfBands(numBands) {}
 
    ossimGridRemapEngine() {}
+   virtual ~ossimGridRemapEngine() {}
 
    virtual void computeRemapNode(ossimAtbPointSource*  point_source,
                                  void*                 source_value,

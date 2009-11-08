@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Ken Melero
 // 
 // Description: Container class for a tiff world file data.
 //
 //********************************************************************
-// $Id: ossimTiffWorld.cpp 9464 2006-08-28 18:53:04Z dburken $
+// $Id: ossimTiffWorld.cpp 14777 2009-06-25 14:43:52Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -15,6 +17,7 @@
 using namespace std;
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimUnitConversionTool.h>
@@ -54,9 +57,33 @@ ossimTiffWorld::ossimTiffWorld(const char* file,
    ifstream is;
    is.open(file);
 
-   if(!is)
+   if( !is.is_open() )
    {
-      return;
+      // ESH 07/2008, Trac #234: OSSIM is case sensitive 
+      // when using worldfile templates during ingest
+      // -- If first you don't succeed with the user-specified
+      // filename, try again with the results of a case insensitive search.
+      ossimFilename fullName(file);
+      ossimDirectory directory(fullName.path());
+      ossimFilename filename(fullName.file());
+      
+      std::vector<ossimFilename> result;
+      bool bSuccess = directory.findCaseInsensitiveEquivalents(
+         filename, result );
+      if ( bSuccess == true )
+      {
+         int numResults = result.size();
+         int i;
+         for ( i=0; i<numResults && !is.is_open(); ++i )
+         {
+            is.open( result[i].c_str() );
+         }
+      }
+      
+      if ( !is.is_open() )
+      {
+         return;
+      }
    }
 
    is >> theXScale

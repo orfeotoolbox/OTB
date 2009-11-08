@@ -12,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimMapProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimMapProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -175,7 +175,6 @@ ossimProjection* ossimMapProjectionFactory::createProjection(const ossimKeywordl
 
 //*****************************************************************************
 //  METHOD: ossimSensorModelFactory::create(projection_name)
-//  
 //*****************************************************************************
 ossimProjection* ossimMapProjectionFactory::createProjection(const ossimString &name) const
 {

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEquationCombiner.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimEquationCombiner.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <sstream>
@@ -398,16 +398,16 @@ ossimEquationCombiner::~ossimEquationCombiner()
       theLexer = NULL;
    }
 
-   if(theCastFilter)
+   if(theCastFilter.valid())
    {
-      delete theCastFilter;
-      theCastFilter = (ossimCastTileSourceFilter*)NULL;
+      theCastFilter->disconnect();
+      theCastFilter = 0;
    }
 
-   if(theCastOutputFilter)
+   if(theCastOutputFilter.valid())
    {
-      delete theCastOutputFilter;
-      theCastOutputFilter = NULL;
+      theCastOutputFilter->disconnect();
+      theCastOutputFilter = 0;
    }
    // make sure they are cleared
    clearStacks();
@@ -510,7 +510,7 @@ ossimRefPtr<ossimImageData> ossimEquationCombiner::getTile(
       
       ossimRefPtr<ossimImageData> outputTile =  parseEquation();
 
-      if(theCastOutputFilter)
+      if(theCastOutputFilter.valid())
       {
          outputTile = theCastOutputFilter->applyCast(outputTile);
       }
@@ -543,10 +543,9 @@ void ossimEquationCombiner::setOutputScalarType(ossimScalarType scalarType)
       {
          theOutputScalarType = OSSIM_FLOAT64;
       }
-      if(theCastOutputFilter)
+      if(theCastOutputFilter.valid())
       {
-         delete theCastOutputFilter;
-         theCastOutputFilter = NULL;
+         theCastOutputFilter = 0;
       }
 
       if(theOutputScalarType != OSSIM_FLOAT64)
@@ -633,7 +632,7 @@ void ossimEquationCombiner::initialize()
 
    theTile = ossimImageDataFactory::instance()->create(this, OSSIM_FLOAT64, getNumberOfOutputBands(), getTileWidth(), getTileHeight());
    theTile->initialize();
-   if(theCastOutputFilter)
+   if(theCastOutputFilter.valid())
    {
       theCastOutputFilter->initialize();
    }
@@ -2952,10 +2951,10 @@ bool ossimEquationCombiner::applyConvolution(ossimImageData* &result,
    ossimConnectableObject* obj = getInput(index);
    if(obj)
    {
-      ossimConvolutionSource* conv = new ossimConvolutionSource(NULL, m);
+      ossimRefPtr<ossimConvolutionSource> conv = new ossimConvolutionSource(NULL, m);
 
       conv->connectMyInputTo(0, obj);
-      theCastFilter->connectMyInputTo(0, conv);
+      theCastFilter->connectMyInputTo(0, conv.get());
       
       ossimRefPtr<ossimImageData> tempData =
          theCastFilter->getTile(theTile->getImageRectangle(),
@@ -2968,8 +2967,8 @@ bool ossimEquationCombiner::applyConvolution(ossimImageData* &result,
       {
          result = (ossimImageData*)theTile->dup();
       }
-
-      delete conv;
+      conv->disconnect();
+      conv = 0;
    }
    if(result)
    {
@@ -3010,11 +3009,11 @@ bool ossimEquationCombiner::applyBlurr(ossimImageData* &result,
    ossimConnectableObject* obj = getInput(index);
    if(obj)
    {
-      ossimConvolutionSource* conv = new ossimConvolutionSource(NULL,
+      ossimRefPtr<ossimConvolutionSource> conv = new ossimConvolutionSource(NULL,
                                                                 m);
 
       conv->connectMyInputTo(0, obj);
-      theCastFilter->connectMyInputTo(0, conv);
+      theCastFilter->connectMyInputTo(0, conv.get());
       theCastFilter->initialize();
 
       ossimRefPtr<ossimImageData> tempData =
@@ -3024,7 +3023,8 @@ bool ossimEquationCombiner::applyBlurr(ossimImageData* &result,
       {
          result = (ossimImageData*)tempData->dup();
       }
-      delete conv;
+      conv->disconnect();
+      conv = 0;
    }
 
    if(result)
@@ -3062,11 +3062,11 @@ bool ossimEquationCombiner::applyShift(ossimImageData* &result,
    ossimConnectableObject* obj = getInput(index);
    if(obj)
    {
-      ossimSubImageTileSource* shiftSource =
+      ossimRefPtr<ossimSubImageTileSource> shiftSource =
          new ossimSubImageTileSource(NULL, ossimIpt(x, y));
 
       shiftSource->connectMyInputTo(0, obj);
-      theCastFilter->connectMyInputTo(0, shiftSource);
+      theCastFilter->connectMyInputTo(0, shiftSource.get());
 
        ossimRefPtr<ossimImageData> tempData =
           theCastFilter->getTile(theTile->getImageRectangle(),
@@ -3075,7 +3075,8 @@ bool ossimEquationCombiner::applyShift(ossimImageData* &result,
        {
           result = (ossimImageData*)tempData->dup();
        }
-       delete shiftSource;
+      shiftSource->disconnect();
+      shiftSource = 0;
    }
 
    if(result)

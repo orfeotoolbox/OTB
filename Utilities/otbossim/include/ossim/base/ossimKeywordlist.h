@@ -8,7 +8,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 13015 2008-06-10 16:04:52Z dburken $
+// $Id: ossimKeywordlist.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER
@@ -25,8 +25,7 @@
 
 static const char DEFAULT_DELIMITER = ':';
 
-class OSSIMDLLEXPORT ossimFilename;
-class OSSIMDLLEXPORT ossimString;
+class ossimFilename;
 
 
 class OSSIMDLLEXPORT ossimKeywordlist : public ossimErrorStatusInterface,
@@ -163,9 +162,7 @@ public:
    void add(const char*   key,
             ossim_float32 value,
             bool          overwrite    = true,
-            int           precision    = 8,
-            bool          trimZeroFlag = false,
-            bool          scientific   = false);
+            int           precision    = 8);
 
    /**
     * @param key Key for key-value pair.
@@ -185,9 +182,7 @@ public:
             const char*   key,
             ossim_float32 value,
             bool          overwrite    = true,
-            int           precision    = 8,
-            bool          trimZeroFlag = false,
-            bool          scientific   = false);
+            int           precision    = 8);
 
    /**
     * @param key Key for key-value pair.
@@ -206,9 +201,7 @@ public:
    void add(const char*   key,
             ossim_float64 value,
             bool          overwrite    = true,
-            int           precision    = 15,
-            bool          trimZeroFlag = false,
-            bool          scientific   = false);
+            int           precision    = 15);
 
    /**
     * @param key Key for key-value pair.
@@ -228,9 +221,7 @@ public:
             const char*   key,
             ossim_float64 value,
             bool          overwrite    = true,
-            int           precision    = 15,
-            bool          trimZeroFlag = false,
-            bool          scientific   = false);
+            int           precision    = 15);
 
    /*!
     *  find methods

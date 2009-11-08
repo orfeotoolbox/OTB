@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.cpp 12136 2007-12-07 14:26:43Z gpotts $
+// $Id: ossimBilinearProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 using namespace std;
@@ -25,7 +25,7 @@ using namespace std;
 #include <ossim/base/ossimTieGptSet.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 12136 2007-12-07 14:26:43Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 // static const ossim_uint32 MINIMUM_NMBER_OF_POINTS = 4;
@@ -514,3 +514,14 @@ ossimBilinearProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targe
    tieSet.getSlaveMasterPoints(imagePoints, groundPoints);
    return setTiePoints(imagePoints, groundPoints); //variance in meters
 }
+
+//**************************************************************************************************
+//! Access method for tie point information
+//**************************************************************************************************
+void ossimBilinearProjection::getTiePoints(std::vector<ossimDpt>& lsPt, 
+                                           std::vector<ossimGpt>& geoPt) const
+{
+   lsPt  = theLineSamplePt;
+   geoPt = theGeographicPt;
+}
+

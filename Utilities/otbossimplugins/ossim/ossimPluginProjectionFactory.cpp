@@ -12,6 +12,7 @@
 
 #include "ossimPluginProjectionFactory.h"
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>
 #include "ossimRadarSatModel.h"
 #include "ossimEnvisatAsarModel.h"
@@ -26,59 +27,57 @@ namespace ossimplugins
 
 ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 {
-   static ossimPluginProjectionFactory* factoryInstance = new ossimPluginProjectionFactory();
+   static ossimPluginProjectionFactory* factoryInstance =
+      new ossimPluginProjectionFactory();
 
    return factoryInstance;
 }
 
-ossimProjection* ossimPluginProjectionFactory::createProjection(const ossimFilename& filename,
-                                                                ossim_uint32 /*entryIdx*/)const
+ossimProjection* ossimPluginProjectionFactory::createProjection(
+   const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
 {
-   ossimProjection* result = 0;
+   ossimRefPtr<ossimProjection> result = 0;
 
    if ( !result )
    {
-      ossimRadarSat2Model* model = new ossimRadarSat2Model();
+      ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
-         result = model;
+         result = model.get();
       }
       else
       {
-         delete model;
          model = 0;
       }
    }
 
    if ( !result )
    {
-      ossimTerraSarModel* model = new ossimTerraSarModel();
+      ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
       if ( model->open(filename) )
       {
-         result = model;
+         result = model.get();
       }
       else
       {
-         delete model;
          model = 0;
       }
    }
 
    if ( !result )
    {
-      ossimErsSarModel* model = new ossimErsSarModel();
+      ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
       if ( model->open(filename) )
       {
-         result = model;
+         result = model.get();
       }
       else
       {
-         delete model;
          model = 0;
       }
    }
 
-   return result;
+   return result.release();
 }
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
@@ -118,7 +117,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimKeywordlist& kwl, const char* prefix)const
 {
-   ossimProjection* result = 0;
+   ossimRefPtr<ossimProjection> result = 0;
 
    const char* lookup = kwl.find(prefix, ossimKeywordNames::TYPE_KW);
    if (lookup)
@@ -130,7 +129,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          result = new ossimRadarSat2Model();
          if ( !result->loadState(kwl, prefix) )
          {
-            delete result;
             result = 0;
          }
       }
@@ -139,7 +137,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          result = new ossimTerraSarModel();
          if ( !result->loadState(kwl, prefix) )
          {
-            delete result;
             result = 0;
          }
       }
@@ -148,13 +145,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          result = new ossimErsSarModel();
          if ( !result->loadState(kwl, prefix) )
          {
-            delete result;
             result = 0;
          }
       }
    }
 
-   return result;
+   return result.release();
 }
 
 ossimObject* ossimPluginProjectionFactory::createObject(

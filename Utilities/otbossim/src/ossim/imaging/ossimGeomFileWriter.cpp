@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimGeomFileWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeomFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGeomFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -37,28 +37,22 @@ ossimGeomFileWriter::~ossimGeomFileWriter()
 
 bool ossimGeomFileWriter::writeFile()
 {
-   // Get the geometry from the input.
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-
-   // Create the projection.
-   ossimRefPtr<ossimProjection> proj =
-      ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   if (!proj.valid())
+   if(!theInputConnection) return false;
+   ossimRefPtr<ossimImageGeometry> geom = theInputConnection->getImageGeometry();
+   if(geom.valid())
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimGeomFileWriter::writeFile DEBUG:"
-            << "\nCreate projection failed!"
-            << "\nGeometry kwl: " << kwl
-            << endl;
-      }
-
-      return false;
+      ossimKeywordlist kwl;
+      geom->saveState(kwl);
+      return kwl.write(theFilename.c_str());
    }
-   
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj.get());
+   return false;
+#if 0
+   // Get the geometry from the input.
+   const ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   if (inputGeom)
+      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+
    if (!mapProj)
    {
       if (traceDebug())
@@ -68,7 +62,6 @@ bool ossimGeomFileWriter::writeFile()
             << "\nNot a map projection!"
             << endl;
       }
-
       return false;
    }
 
@@ -77,14 +70,15 @@ bool ossimGeomFileWriter::writeFile()
       = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
    
    // Set the tie points.
+   ossimKeywordlist kwl;
    projectionInfo->getGeom(kwl);
 
    // Write it to disk.
    return kwl.write(theFilename.c_str());
+#endif
 }
 
-void ossimGeomFileWriter::getMetadatatypeList(
-   std::vector<ossimString>& metadatatypeList) const
+void ossimGeomFileWriter::getMetadatatypeList(std::vector<ossimString>& metadatatypeList) const
 {
    metadatatypeList.push_back(ossimString("ossim_geometry")); 
 }

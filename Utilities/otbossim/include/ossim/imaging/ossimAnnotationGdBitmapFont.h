@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationGdBitmapFont.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimAnnotationGdBitmapFont.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationGdBitmapFont_HEADER
 #define ossimAnnotationGdBitmapFont_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -30,7 +30,6 @@ public:
                                unsigned char b = 255,
                                long thickness = 1);
    ossimAnnotationGdBitmapFont(const ossimAnnotationGdBitmapFont& rhs);
-   virtual ~ossimAnnotationGdBitmapFont();
 
    virtual ossimObject* dup()const
       {
@@ -109,6 +108,7 @@ public:
    virtual bool isPointWithin(const ossimDpt& imagePoint)const;
    
 protected:
+   virtual ~ossimAnnotationGdBitmapFont();
    ossimGdFontPtr theFontPtr;
    ossimString    theText;
    ossimDrect     theBoundingRect;

@@ -10,7 +10,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppTileCache.cpp 13214 2008-07-23 17:43:51Z dburken $
+// $Id: ossimAppTileCache.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimAppTileCache.h>
 #include <ossim/imaging/ossimTileCache.h>
@@ -96,11 +96,11 @@ ossimDataObject *ossimAppTileCache::get(ossimAppCacheId id,
    return result;
 }
 
-ossimDataObject* ossimAppTileCache::removeTile(ossimAppCacheId id,
+ossimRefPtr<ossimDataObject> ossimAppTileCache::removeTile(ossimAppCacheId id,
                                               const ossimDpt3d &origin,
                                               unsigned long resLevel)
 {
-   ossimDataObject *result = 0;
+   ossimRefPtr<ossimDataObject> result = 0;
    if(id>0)
    {
       ossimTileCache *aCache = this->get(id);
@@ -110,7 +110,7 @@ ossimDataObject* ossimAppTileCache::removeTile(ossimAppCacheId id,
          result = aCache->remove(origin,
                                  resLevel);
          // adjust the byte count
-         if(result)
+         if(result.valid())
          {
             theCurrentCacheSize -= result->getDataSizeInBytes();
          }
@@ -121,10 +121,10 @@ ossimDataObject* ossimAppTileCache::removeTile(ossimAppCacheId id,
    return result;
 }
 
-ossimDataObject* ossimAppTileCache::insert(ossimAppCacheId appId,
-                                          const ossimDpt3d &origin,
-                                          const ossimDataObject* data,
-                                          ossim_uint32 resLevel)
+ossimRefPtr<ossimDataObject> ossimAppTileCache::insert(ossimAppCacheId appId,
+                                                       const ossimDpt3d &origin,
+                                                       const ossimDataObject* data,
+                                                       ossim_uint32 resLevel)
 {
    static const char MODULE[] = "ossimAppTileCache::insert";
    ossimDataObject *result = 0;
@@ -136,21 +136,14 @@ ossimDataObject* ossimAppTileCache::insert(ossimAppCacheId appId,
       return result;
    }
    
-   ossimDataObject *tileToInsert = 0;
+   ossimRefPtr<ossimDataObject> tileToInsert = 0;
    long dataSize = data->getDataSizeInBytes();
    
    if( (theCurrentCacheSize+dataSize) > theMaxCacheSize)
    {
-      ossimDataObject *tempTile     = 0;
       do
       {
-         tempTile = removeTile();
-
-         if(tempTile)
-         {
-            delete tempTile;
-            tempTile = 0;
-         }
+         ossimRefPtr<ossimDataObject> tile = removeTile();
       }while((theCurrentCacheSize+dataSize) > theMaxCacheSize);
    }
 
@@ -159,7 +152,7 @@ ossimDataObject* ossimAppTileCache::insert(ossimAppCacheId appId,
       tileToInsert = (ossimDataObject*)data->dup();
 
       result = aCache->insert(origin,
-                              tileToInsert,
+                              tileToInsert.get(),
                               resLevel);
       if(!result)
       {
@@ -167,7 +160,6 @@ ossimDataObject* ossimAppTileCache::insert(ossimAppCacheId appId,
             << MODULE << " ERROR: can't insert and should not happen"
             << endl;
 
-         delete tileToInsert;
          tileToInsert = 0;
       }
       else
@@ -269,9 +261,9 @@ void ossimAppTileCache::deleteAppCacheFromQueue(ossimAppCacheId appId)
    }
 }
 
-ossimDataObject* ossimAppTileCache::removeTile()
+ossimRefPtr<ossimDataObject> ossimAppTileCache::removeTile()
 {
-   ossimDataObject *result = 0;
+   ossimRefPtr<ossimDataObject> result;
    if(!theUsedQueue.empty())
    {
       ossimAppCacheTileInfo &info = *(theUsedQueue.begin());

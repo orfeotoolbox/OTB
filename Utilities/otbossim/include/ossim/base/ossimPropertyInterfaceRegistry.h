@@ -2,8 +2,8 @@
 #define ossimPropertyInterfaceRegistry_HEADER
 #include <ossim/base/ossimObjectFactory.h>
 
-class OSSIMDLLEXPORT ossimPropertyInterfaceFactory;
-class OSSIMDLLEXPORT ossimPropertyInterface;
+class ossimPropertyInterfaceFactory;
+class ossimPropertyInterface;
 
 #include <ossim/base/ossimRtti.h>
 
@@ -39,7 +39,6 @@ public:
    
    bool addFactory( ossimPropertyInterfaceFactory* factory );
    bool registerFactory(ossimPropertyInterfaceFactory* factory);
-
 protected:
    ossimPropertyInterfaceRegistry()
       :ossimObjectFactory()

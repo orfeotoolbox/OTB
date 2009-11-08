@@ -6,14 +6,14 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCmyVector.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimCmyVector.h 14789 2009-06-29 16:48:14Z dburken $
 #include <iostream>
 #include <ossim/base/ossimConstants.h>
 
-class OSSIMDLLEXPORT ossimJpegYCbCrVector;
-class OSSIMDLLEXPORT ossimHsiVector;
-class OSSIMDLLEXPORT ossimHsvVector;
-class OSSIMDLLEXPORT ossimRgbVector;
+class ossimJpegYCbCrVector;
+class ossimHsiVector;
+class ossimHsvVector;
+class ossimRgbVector;
 
 class OSSIMDLLEXPORT ossimCmyVector
 {

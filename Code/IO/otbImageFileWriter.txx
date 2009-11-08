@@ -101,15 +101,18 @@ ImageFileWriter<TInputImage>
     otbMsgDevMacro(<<"Exporting keywordlist ...");
     ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
-  
+
     if(!handler)
       {
       otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
       }
     else
       {
-      handler->setImageGeometry(geom_kwl);
-      handler->saveImageGeometry();
+        //FIXME find out exactly what we are trying to do here
+        //there is no meaning to blindly save the kwl if we didn't update it in the pipeline
+//       handler->setImageGeometry(geom_kwl);
+//       handler->getImageGeometry()->getProjection()->loadState(geom_kwl);
+//       handler->saveImageGeometry();
       handler->close();
       }
     }

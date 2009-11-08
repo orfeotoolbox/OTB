@@ -4,8 +4,6 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  David Burken
-//
 // Description: Utility class to encapsulate parsing RadarSat2 product.xml
 // file.
 //
@@ -16,6 +14,9 @@
 
 #include <list>
 #include <vector>
+#include <sstream>
+#include <vector>
+
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRefPtr.h>
 
@@ -26,9 +27,34 @@ class ossimXmlDocument;
 class ossimXmlNode;
 class ossimString;
 
+
+using namespace std;
+
+typedef struct
+{
+   double biasError;
+   double randomError;
+   double lineFitQuality;
+   double pixelFitQuality;
+   double lineOffset;
+   double pixelOffset;
+   double latitudeOffset;
+   double longitudeOffset;
+   double heightOffset;
+   double lineScale;
+   double pixelScale;
+   double latitudeScale;
+   double longitudeScale;
+   double heightScale;
+   vector<double> lineNumeratorCoefficients;
+   vector<double> lineDenominatorCoefficients;
+   vector<double> pixelNumeratorCoefficients;
+   vector<double> pixelDenominatorCoefficients;
+   
+}RPCModel;
+
 namespace ossimplugins
 {
-
 class PlatformPosition;
 class RefPoint;
 class SensorParams;
@@ -50,7 +76,9 @@ public:
     * @return true if present, false if not.
     */
    bool isRadarSat2(const ossimXmlDocument* xdoc) const;
-
+      
+   RPCModel getRpcData(const ossimXmlDocument* xdoc) const;
+      
    /**
     * @brief Method to initialize PlatformPosition object from
     * RadarSat "product.xml" file.

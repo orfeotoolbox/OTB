@@ -15,7 +15,7 @@
 // as the raster file but with an .ers extension.
 //
 //*******************************************************************
-//  $Id: ossimERSTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimERSTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/support_data/ossimERS.h>
@@ -141,28 +141,24 @@ bool ossimERSTileSource::open(const ossimFilename& fileName)
 }
    
 
-bool ossimERSTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                          const char* prefix)
+ossimImageGeometry* ossimERSTileSource::getImageGeometry()
 {
-   if (theGeometryKwl.getSize())
-   {
-      kwl = theGeometryKwl;
-      return true;
-   }
-   
+   if (theGeometry.valid())
+      return theGeometry.get();
+
    if(theHdr)
    {
-      
-      bool result = theHdr->toOssimProjectionGeom(kwl, prefix);
+      ossimKeywordlist kwl;
+      bool result = theHdr->toOssimProjectionGeom(kwl);
       if (result == true)
       {
-         // Capture for next time.
-         setImageGeometry(kwl);
+         theGeometry = new ossimImageGeometry;
+         theGeometry->loadState(kwl);
+         return theGeometry.get();
       }
-      return result;
    }
 
-   return false;
+   return 0;
 }
 
 bool ossimERSTileSource::loadState(const ossimKeywordlist& kwl,

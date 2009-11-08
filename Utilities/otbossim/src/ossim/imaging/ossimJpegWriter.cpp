@@ -5,7 +5,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 13134 2008-07-04 02:11:35Z gpotts $
+//  $Id: ossimJpegWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <cstdio>
@@ -105,17 +105,15 @@ bool ossimJpegWriter::writeFile()
          return false;
       }
    }
-   
-   bool needToDeleteInput = false;
+   ossimRefPtr<ossimImageSource> savedInput;
    
    if(theInputConnection->getOutputScalarType() != OSSIM_UINT8)
    {
-      ossimImageSource* inputSource=new ossimScalarRemapper;
+      savedInput = new ossimScalarRemapper;
       
-      inputSource->connectMyInputTo(0, theInputConnection->getInput(0));
-      theInputConnection->connectMyInputTo(0, inputSource);
+      savedInput->connectMyInputTo(0, theInputConnection->getInput(0));
+      theInputConnection->connectMyInputTo(0, savedInput.get());
       theInputConnection->initialize();
-      needToDeleteInput = true;
    }
    
    if(theInputConnection->isMaster())
@@ -306,17 +304,15 @@ bool ossimJpegWriter::writeFile()
    {
       theInputConnection->slaveProcessTiles();
    }
-   if(needToDeleteInput)
+   if(savedInput.valid())
    {
       ossimConnectableObject* obj = theInputConnection->getInput(0);
       if(obj)
       {
          theInputConnection->connectMyInputTo(0, obj->getInput(0));
-         delete obj;
-         obj = NULL;
       }
    }
-   
+   savedInput = 0;   
    return true;
 }
 

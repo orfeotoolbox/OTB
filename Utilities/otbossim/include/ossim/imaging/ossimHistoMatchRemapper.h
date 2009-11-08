@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimHistoMatchRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimHistoMatchRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHistoMatchRemapper_HEADER
 #define ossimHistoMatchRemapper_HEADER
 #include <vector>
@@ -26,7 +26,6 @@ public:
                            const vector<double>& inputMeanPerBand   = vector<double>(),
                            const vector<double>& inputSigmaPerBand  = vector<double>()
                            );
-   virtual ~ossimHistoMatchRemapper();
 
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
@@ -49,6 +48,8 @@ public:
                           const char* prefix=NULL);
 
 protected:
+   virtual ~ossimHistoMatchRemapper();
+   
    ossimRefPtr<ossimImageData> theBlankTile;
    
    vector<double> theTargetMeanPerBand;

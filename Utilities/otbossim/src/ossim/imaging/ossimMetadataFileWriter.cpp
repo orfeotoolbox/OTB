@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimMetadataFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimMetadataFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimMetadataFileWriter.h>
 #include <ossim/base/ossimTrace.h>
@@ -30,7 +30,7 @@ RTTI_DEF3(ossimMetadataFileWriter,
 static ossimTrace traceDebug("ossimMetadataFileWriter:degug");
 
 ossimMetadataFileWriter::ossimMetadataFileWriter()
-   :
+   :ossimConnectableObject(0),
       ossimProcessInterface(),
       ossimConnectableObjectListener(),
       theInputConnection(NULL),
@@ -38,17 +38,18 @@ ossimMetadataFileWriter::ossimMetadataFileWriter()
       thePixelType(OSSIM_PIXEL_IS_POINT),
       theAreaOfInterest()
 {
+   addListener((ossimConnectableObjectListener*)this);
    theAreaOfInterest.makeNan();
 }
 
 ossimMetadataFileWriter::~ossimMetadataFileWriter()
 {
+   removeListener((ossimConnectableObjectListener*)this);
 }
 
 void ossimMetadataFileWriter::initialize()
 {
-   theInputConnection = PTR_CAST(ossimImageSource,
-                                 getInput());
+   theInputConnection = dynamic_cast<ossimImageSource*> (getInput(0));
 }
 
 bool ossimMetadataFileWriter::loadState(const ossimKeywordlist& kwl,
@@ -99,7 +100,6 @@ void ossimMetadataFileWriter::disconnectInputEvent(ossimConnectionEvent& event)
 
 void ossimMetadataFileWriter::connectInputEvent(ossimConnectionEvent& event)
 {
-   theInputConnection = PTR_CAST(ossimImageSource, getInput());
    initialize();
 }
 
@@ -131,7 +131,6 @@ const ossimObject* ossimMetadataFileWriter::getObject() const
 bool ossimMetadataFileWriter::execute()
 {
    bool result = false;
-   
    if (!theInputConnection)
    {
       initialize();

@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.h 12136 2007-12-07 14:26:43Z gpotts $
+// $Id: ossimBilinearProjection.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBilinearProjection_HEADER
 #define ossimBilinearProjection_HEADER
 
@@ -31,7 +31,6 @@ public:
                            const ossimGpt& urg,
                            const ossimGpt& lrg,
                            const ossimGpt& llg);
-   virtual ~ossimBilinearProjection();
    virtual ossimObject *dup()const;
    virtual ossimGpt origin()const;
    
@@ -90,7 +89,11 @@ public:
     */
    virtual bool isAffectedByElevation() const { return false; } 
    
+   //! Access method for tie point information
+   void getTiePoints(std::vector<ossimDpt>& lsPt, std::vector<ossimGpt>& geoPt) const;
+
 protected:
+   virtual ~ossimBilinearProjection();
    void initializeBilinear();
 
    /**

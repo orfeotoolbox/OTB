@@ -7,12 +7,12 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimProjectionFactoryBase.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimProjectionFactoryBase.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/base/ossimFilename.h>
-
+#include <ossim/imaging/ossimImageHandler.h>
 //---
 // Define Trace flags for use within this file:
 //---
@@ -88,3 +88,10 @@ ossimProjection* ossimProjectionFactoryBase::createProjectionFromGeometryFile(co
 
    return NULL;
 }
+
+ossimProjection* ossimProjectionFactoryBase::createProjection(ossimImageHandler* handler)const
+{
+   if(!handler) return 0;
+   return createProjection(handler->getFilename(), handler->getCurrentEntry());
+}
+

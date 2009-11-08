@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.cpp 9526 2006-09-06 16:18:51Z dburken $
+// $Id: ossimRLevelFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimRLevelFilter.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -21,6 +21,7 @@ static ossimTrace traceDebug("ossimRLevelFilter:debug");
 
 RTTI_DEF1(ossimRLevelFilter, "ossimRLevelFilter", ossimImageSourceFilter);
 
+//**************************************************************************************************
 ossimRLevelFilter::ossimRLevelFilter()
    : ossimImageSourceFilter(),
      theCurrentRLevel(0),
@@ -28,10 +29,12 @@ ossimRLevelFilter::ossimRLevelFilter()
 {
 }
 
+//**************************************************************************************************
 ossimRLevelFilter::~ossimRLevelFilter()
 {
 }
 
+//**************************************************************************************************
 void ossimRLevelFilter::getDecimationFactor(ossim_uint32 resLevel,
                                             ossimDpt& result) const
 {
@@ -44,93 +47,84 @@ void ossimRLevelFilter::getDecimationFactor(ossim_uint32 resLevel,
                                            result);
 }
 
+//**************************************************************************************************
 bool ossimRLevelFilter::getOverrideGeometryFlag() const
 {
    return theOverrideGeometryFlag;
 }
 
+//**************************************************************************************************
 void ossimRLevelFilter::setOverrideGeometryFlag(bool override)
 {
    theOverrideGeometryFlag = override;
 }
 
+//**************************************************************************************************
 void ossimRLevelFilter::setCurrentRLevel(ossim_uint32 rlevel)
 {
    theCurrentRLevel = rlevel;
+   updateGeometry();
 }
 
+//**************************************************************************************************
 ossim_uint32 ossimRLevelFilter::getCurrentRLevel()const
 {
    return theCurrentRLevel;
 }
 
-bool ossimRLevelFilter::getImageGeometry(ossimKeywordlist& kwl,
-                                         const char* prefix)
+//**************************************************************************************************
+// Returns a pointer reference to the active image geometry at this filter. The input source
+// geometry is modified, so we need to maintain our own geometry object as a data member.
+//**************************************************************************************************
+ossimImageGeometry* ossimRLevelFilter::getImageGeometry()
 {
+   // Have we already defined our own geometry? Return it if so:
+   if (m_ScaledGeometry.valid())
+      return m_ScaledGeometry.get();
+
    if (!theInputConnection)
-   {
-      return false;
-   }
+      return 0;
 
    ossim_uint32 rlevel = getCurrentRLevel();
-   bool status = theInputConnection->getImageGeometry(kwl, prefix);
+   ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
 
-   if (!theOverrideGeometryFlag || (status == false) ||
-       (rlevel == 0) || (getEnableFlag() == false) )
-   {
-      return status;
-   }
+   // If no scaling is happening, just return the input image geometry:
+   if ((!inputGeom) || (rlevel == 0) || (getEnableFlag() == false))
+      return inputGeom;
 
-   ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->
-      createProjection(kwl);
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);;
-   if(mapProj)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimRLevelFilter::getImageGeometry DEBUG:"
-            << "\nOriginal projection:\n";
-         mapProj->print(ossimNotify(ossimNotifyLevel_DEBUG));
-      }
+   // Need to create a copy of the input geom and modify it as our own, then pass that:
+   m_ScaledGeometry = new ossimImageGeometry(*inputGeom);
+   updateGeometry();
 
-      ossimDpt decimation;
-      getDecimationFactor(rlevel, decimation);
-      decimation.x = 1.0/decimation.x;
-      decimation.y = 1.0/decimation.y;
-
-      //---
-      // This will adjust both the scale and the tie point to account for
-      // decimation.
-      //---
-      mapProj->applyScale(decimation,
-                          true);  // recenter tie point flag
-
-      //---
-      // There are still old keywords out there so clear the original
-      // geometry file out prior to saving.
-      //---
-      kwl.clear();
-
-      // Save off the changes back to the keyword list.
-      mapProj->saveState(kwl, prefix);
-
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimRLevelFilter::getImageGeometry DEBUG:"
-            << "\nUpdated projection:\n";
-         mapProj->print(ossimNotify(ossimNotifyLevel_DEBUG));
-         
-      }
-
-      return true;
-
-   } // End of "if(mapProj))"
-
-   return status;
+   // Return our version of the image geometry:
+   return m_ScaledGeometry.get();
 }
 
+//**************************************************************************************************
+//! If this object is maintaining an ossimImageGeometry, this method needs to be called after 
+//! a scale change so that the geometry's projection is modified accordingly.
+//**************************************************************************************************
+void ossimRLevelFilter::updateGeometry()
+{
+   if (m_ScaledGeometry.valid())
+   {
+      // Modify the image geometry's projection with the scale factor before returning geom:
+      ossimProjection* proj = m_ScaledGeometry->getProjection();
+      ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);;
+      if(mapProj)
+      {
+         ossimDpt decimation;
+         getDecimationFactor(theCurrentRLevel, decimation);
+         decimation.x = 1.0/decimation.x;
+         decimation.y = 1.0/decimation.y;
+
+         // This will adjust both the scale and the tie point to account for decimation.
+         mapProj->applyScale(decimation, true);  // recenter tie point flag
+      }
+   }
+}
+
+//**************************************************************************************************
 void ossimRLevelFilter::getSummedDecimation(ossimDpt& result) const
 {
    // Start with fresh values.
@@ -170,6 +164,7 @@ void ossimRLevelFilter::getSummedDecimation(ossimDpt& result) const
    }
 }
 
+//**************************************************************************************************
 ossimIrect ossimRLevelFilter::getBoundingRect(ossim_uint32 resLevel)const
 {
    ossimIrect rect;
@@ -183,6 +178,7 @@ ossimIrect ossimRLevelFilter::getBoundingRect(ossim_uint32 resLevel)const
    return theInputConnection->getBoundingRect(resLevel);
 }
 
+//**************************************************************************************************
 ossimRefPtr<ossimImageData> ossimRLevelFilter::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
@@ -201,6 +197,7 @@ ossimRefPtr<ossimImageData> ossimRLevelFilter::getTile(
    return theInputConnection->getTile(tileRect, theCurrentRLevel);
 }
 
+//**************************************************************************************************
 bool ossimRLevelFilter::loadState(const ossimKeywordlist& kwl,
                                   const char* prefix)
 {
@@ -208,18 +205,18 @@ bool ossimRLevelFilter::loadState(const ossimKeywordlist& kwl,
    const char* override = kwl.find(prefix, OVERRIDE_GEOMETRY_KW);
 
    if(current)
-   {
       theCurrentRLevel = ossimString(current).toULong();
-   }
 
    if(override)
-   {
       theOverrideGeometryFlag = ossimString(override).toBool();
-   }
 
    return ossimImageSourceFilter::loadState(kwl, prefix);
+
+   // An existing image geometry object here will need to be updated:
+   updateGeometry();
 }
 
+//**************************************************************************************************
 bool ossimRLevelFilter::saveState(ossimKeywordlist& kwl,
                                   const char* prefix)const
 {

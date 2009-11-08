@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimReadmeFileWriter.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimReadmeFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -18,8 +18,8 @@ using namespace std;
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -31,16 +31,25 @@ RTTI_DEF1(ossimReadmeFileWriter,
 static const char DEFAULT_FILE_NAME[] = "output_readme.txt";
 static ossimTrace traceDebug("ossimReadmeFileWriter:debug");
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimReadmeFileWriter::ossimReadmeFileWriter()
-   :
-      ossimMetadataFileWriter()
+:
+ossimMetadataFileWriter()
 {
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimReadmeFileWriter::~ossimReadmeFileWriter()
 {
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 bool ossimReadmeFileWriter::writeFile()
 {
    static const char MODULE[] = "ossimReadmeFileWriter::writeFile";
@@ -59,52 +68,25 @@ bool ossimReadmeFileWriter::writeFile()
 
    std::ofstream out(theFilename.c_str(), ios_base::out);
    if (!out)
-   {
       return false;
-   }
 
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-   
-   ossimProjection* proj;
-   proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   if (!proj)
+   // Fetch the map projection of the input image if it exists:
+   const ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* imgGeom = theInputConnection->getImageGeometry();
+   if (imgGeom)
    {
-      if (traceDebug())
-      {
-         CLOG << "DEBUG:"
-              << "\nCould not create projection from geometry!"
-              << "\nGeometry keyword list dump:\n"
-              << kwl
-              << "\nReturning..."
-              << endl;
-      }
-      return false;
+      const ossimProjection* proj = imgGeom->getProjection();
+      mapProj = PTR_CAST(ossimMapProjection, proj);
    }
-   
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
    if (!mapProj)
    {
-      if (traceDebug())
-      {
-         CLOG << "DEBUG:"
-              << "\nCould not create map projection from geometry!"
-              << "\nGeometry keyword list dump:\n"
-              << kwl
-              << "\nReturning..."
-              << endl;
-      }
-
-      delete proj;
+      out.close();
       return false;
    }
 
-   ossimMapProjectionInfo* projectionInfo
-      = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
-
+   ossimMapProjectionInfo* projectionInfo = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
    if(projectionInfo)
    {
-	   
       out << setiosflags(ios::fixed)
           << setiosflags(ios::left)
           << setw(16) << "Image: "
@@ -134,16 +116,16 @@ bool ossimReadmeFileWriter::writeFile()
           << projectionInfo->getUsSurveyFeetPerPixel().y
           << " U.S. feet";
       
-      const char* type  = kwl.find(ossimKeywordNames::TYPE_KW);
-      const char* zone  = kwl.find(ossimKeywordNames::ZONE_KW);
-      const char* datum = kwl.find(ossimKeywordNames::DATUM_KW);
-      const char* ellipsoid = kwl.find(ossimKeywordNames::ELLIPSE_CODE_KW);
-      
+      const ossimString type  = TYPE_NAME(mapProj);
+      const ossimString datum = mapProj->getDatum()->code();
+      const ossimString ellipsoid = mapProj->getEllipsoid().code();
+
       if(type)
          out << setw(17) << "\nProjection:" << type;
-      
-      if(zone)
-         out << setw(17) << "\nUTM map zone:" << zone;
+
+      const ossimUtmProjection* utmProj = PTR_CAST(ossimUtmProjection, mapProj);
+      if (utmProj)
+         out << setw(17) << "\nUTM map zone:" << utmProj->getZone();
       
       if(datum && ellipsoid)
          out << setw(17) << "\nDatum:"      << datum
@@ -160,15 +142,15 @@ bool ossimReadmeFileWriter::writeFile()
       ossimString tmpString;
       double tmpDouble;
       
-      const char* parallel1
-         = kwl.find(ossimKeywordNames::STD_PARALLEL_1_KW);
-      const char* parallel2
-         = kwl.find(ossimKeywordNames::STD_PARALLEL_2_KW);
-      const char* scaleFactor
-         = kwl.find(ossimKeywordNames::SCALE_FACTOR_KW);
+      // HACK: Easiest way to get projection info for optional params is via the old keywordlist:
+      ossimKeywordlist kwl;
+      mapProj->saveState(kwl);
+      const char* parallel1   = kwl.find(ossimKeywordNames::STD_PARALLEL_1_KW);
+      const char* parallel2   = kwl.find(ossimKeywordNames::STD_PARALLEL_2_KW);
+      const char* scaleFactor = kwl.find(ossimKeywordNames::SCALE_FACTOR_KW);
+      
       
       ossimString proj_name = mapProj->getClassName();
-      
       if ( ( proj_name.contains("Lambert")           ) ||
            ( proj_name.contains("Albers")            ) ||
            ( proj_name.contains("TransverseMercator" ) ) )
@@ -222,6 +204,7 @@ bool ossimReadmeFileWriter::writeFile()
       
       if (proj_name.contains("TransverseMercator"))
       {
+
          out << setiosflags(ios::left)
              << "\n"
              << setw(18) << "Scale Factor:"
@@ -450,25 +433,22 @@ bool ossimReadmeFileWriter::writeFile()
       delete projectionInfo;
    }
    
-   if(proj)
-   {
-      delete proj;
-      proj = NULL;
-   }
-
    out.close();
-   
    return true;
 }
 
-void ossimReadmeFileWriter::getMetadatatypeList(
-   std::vector<ossimString>& metadatatypeList) const
+//**************************************************************************************************
+// 
+//**************************************************************************************************
+void ossimReadmeFileWriter::getMetadatatypeList(std::vector<ossimString>& metadatatypeList) const
 {
    metadatatypeList.push_back(ossimString("ossim_readme")); 
 }
 
-bool ossimReadmeFileWriter::hasMetadataType(
-   const ossimString& metadataType)const
+//**************************************************************************************************
+// 
+//**************************************************************************************************
+bool ossimReadmeFileWriter::hasMetadataType(const ossimString& metadataType) const
 {
    return (metadataType == "ossim_readme");
 }

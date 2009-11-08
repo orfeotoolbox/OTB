@@ -1,13 +1,13 @@
 //----------------------------------------------------------------------------
 //
-// License:  See top level LICENSE.txt file.
-//
-// Author:  David Burken
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 10272 2007-01-15 15:38:25Z dburken $
+// $Id: ossimOverviewSequencer.cpp 15794 2009-10-23 12:30:26Z dburken $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
 #include <ossim/base/ossimNotify.h>
@@ -21,7 +21,7 @@
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 10272 2007-01-15 15:38:25Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 15794 2009-10-23 12:30:26Z dburken $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -273,8 +273,7 @@ void ossimOverviewSequencer::getInputTileRectangle(ossimIrect& inputRect) const
    
    getOutputTileRectangle(inputRect);
    inputRect = inputRect * theDecimationFactor;
-   inputRect = inputRect + theImageHandler->
-      getSubImageOffset(theSourceResLevel);
+   inputRect = inputRect;
 
 #if 0
    if (traceDebug())
@@ -409,92 +408,130 @@ void  ossimOverviewSequencer::resampleTile(const ossimImageData* inputTile, T  /
    }
 #endif
    
-   ossim_uint32 bands = theTile->getNumberOfBands();
+   const ossim_uint32 BANDS = theTile->getNumberOfBands();
+   const ossim_uint32 LINES = theTile->getHeight();
+   const ossim_uint32 SAMPS = theTile->getWidth();
+   const ossim_uint32 INPUT_WIDTH = theDecimationFactor*theTileSize.x;
    
-   for (ossim_uint32 band=0; band<bands; ++band)
+   T nullPixel              = 0;
+   ossim_float64 weight     = 0.0;
+   ossim_float64 value      = 0.0;
+   ossim_uint32 sampOffset  = 0;
+   
+   if (theResampleType ==
+       ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR)
    {
-      const T* s = static_cast<const T*>(inputTile->getBuf(band)); // source
-      T*       d = static_cast<T*>(theTile->getBuf(band));         // destination
-      
-      T  nullPixel = static_cast<T>(inputTile->getNullPix(band));
-
-      ossim_uint32  lines      = theTile->getHeight();
-      ossim_uint32  samps      = theTile->getWidth();
-      ossim_uint32  inputWidth = theDecimationFactor*theTileSize.x;
-      ossim_float64 weight     = 0.0;
-      ossim_float64 value      = 0.0;
-      
-      for (ossim_uint32 i=0; i<lines; ++i)
+      for (ossim_uint32 band=0; band<BANDS; ++band)
       {
-         ossim_uint32 lineOffset1 = i*theDecimationFactor*inputWidth;
-         ossim_uint32 lineOffset2 = (i*theDecimationFactor+1)*inputWidth;
+         const T* s = static_cast<const T*>(inputTile->getBuf(band)); // source
+         T*       d = static_cast<T*>(theTile->getBuf(band)); // destination
          
-         for (ossim_uint32 j=0; j<samps; ++j)
+         nullPixel = static_cast<T>(inputTile->getNullPix(band));
+         weight = 0.0;
+         value  = 0.0;
+         
+         for (ossim_uint32 i=0; i<LINES; ++i)
          {
-            ossim_uint32 sampOffset = j*theDecimationFactor;
-            
-            switch(theResampleType)
+            for (ossim_uint32 j=0; j<SAMPS; ++j)
             {
-               case ossimFilterResampler::ossimFilterResampler_NEAREST_NEIGHBOR:
+               sampOffset = j*theDecimationFactor;
+               
+               weight = 1.0;
+               value  = *(s + i*theDecimationFactor*INPUT_WIDTH + sampOffset);
+               
+               if(weight)
                {
-                  weight = 1.0;
-                  value  = *(s + i*inputWidth + sampOffset);
-                  break;
+                  d[j] = static_cast<T>( value/weight );
                }
-               case ossimFilterResampler::ossimFilterResampler_BOX:
-               default:
+               else
                {
-                  weight = 0.0;
-                  value  = 0.0;
-
-                  //---
-                  // Grab four pixels from the source, average, and assign
-                  // to output.
-                  //---
-                  ossim_float64 ul = *(s + lineOffset1 + sampOffset);
-                  ossim_float64 ur = *(s + lineOffset1 + sampOffset + 1);
-                  ossim_float64 ll = *(s + lineOffset2 + sampOffset);
-                  ossim_float64 lr = *(s + lineOffset2 + sampOffset + 1);
-                  
-                  if(ul != nullPixel)
-                  {
-                     ++weight;
-                     value += ul;
-                  }
-                  if(ur != nullPixel)
-                  {
-                     ++weight;
-                     value += ur;
-                  }
-                  if(ll != nullPixel)
-                  {
-                     ++weight;
-                     value += ll;
-                  }
-                  if(lr != nullPixel)
-                  {
-                     ++weight;
-                     value += lr;
-                  }
-                  break;
+                  d[j] = nullPixel;
                }
                
-            } // End of switch(theResampleType)
-         
-            if(weight)
-            {
-               d[j] = static_cast<T>( value/weight );
-            }
-            else
-            {
-               d[j] = nullPixel;
-            }
+            } // End of sample loop.
             
-         } // End of sample loop.
+            d += theTileSize.x;
+            
+         } // End of line loop.
          
-         d += theTileSize.x;
-         
-      } // End of line loop.
+      } // End of band loop.
       
-   } // End of band loop.
+   }
+   else // ossimFilterResampler::ossimFilterResampler_BOX
+   {
+      ossim_uint32 lineOffset1 = 0;
+      ossim_uint32 lineOffset2 = 0;
+      ossim_float64 ul = 0.0;
+      ossim_float64 ur = 0.0;
+      ossim_float64 ll = 0.0;
+      ossim_float64 lr = 0.0;
+
+      for (ossim_uint32 band=0; band<BANDS; ++band)
+      {
+         const T* s = static_cast<const T*>(inputTile->getBuf(band)); // source
+         T*       d = static_cast<T*>(theTile->getBuf(band)); // destination
+
+         nullPixel = static_cast<T>(inputTile->getNullPix(band));
+         weight = 0.0;
+         value  = 0.0;
+         
+         for (ossim_uint32 i=0; i<LINES; ++i)
+         {
+            lineOffset1 = i*theDecimationFactor*INPUT_WIDTH;
+            lineOffset2 = (i*theDecimationFactor+1)*INPUT_WIDTH;
+            
+            for (ossim_uint32 j=0; j<SAMPS; ++j)
+            {
+               sampOffset = j*theDecimationFactor;
+               
+               weight = 0.0;
+               value  = 0.0;
+               
+               //---
+               // Grab four pixels from the source, average, and assign
+               // to output.
+               //---
+               ul = *(s + lineOffset1 + sampOffset);
+               ur = *(s + lineOffset1 + sampOffset + 1);
+               ll = *(s + lineOffset2 + sampOffset);
+               lr = *(s + lineOffset2 + sampOffset + 1);
+               
+               if(ul != nullPixel)
+               {
+                  ++weight;
+                  value += ul;
+               }
+               if(ur != nullPixel)
+               {
+                  ++weight;
+                  value += ur;
+               }
+               if(ll != nullPixel)
+               {
+                  ++weight;
+                  value += ll;
+               }
+               if(lr != nullPixel)
+               {
+                  ++weight;
+                  value += lr;
+               }
+
+               if(weight)
+               {
+                  d[j] = static_cast<T>( value/weight );
+               }
+               else
+               {
+                  d[j] = nullPixel;
+               }
+            
+            } // End of sample loop.
+            
+            d += theTileSize.x;
+            
+         } // End of line loop.
+         
+      } // End of band loop.
+   }
 }

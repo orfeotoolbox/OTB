@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 13913 2008-12-04 19:16:38Z gpotts $
+//  $Id: ossimMapProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <cstdlib>
@@ -50,7 +50,7 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
     theUlEastingNorthing(0, 0),
     theFalseEastingNorthing(0, 0),
     thePcsCode(0),
-    theElevationLookupFlag(true),
+    theElevationLookupFlag(false),
     theModelTransformUnitType(OSSIM_UNIT_UNKNOWN)
 {
    theUlGpt = theOrigin;
@@ -69,7 +69,7 @@ ossimMapProjection::ossimMapProjection(const ossimMapProjection& src)
         theUlEastingNorthing(src.theUlEastingNorthing),
         theFalseEastingNorthing(src.theFalseEastingNorthing),
         thePcsCode(src.thePcsCode),
-        theElevationLookupFlag(true),
+        theElevationLookupFlag(false),
         theModelTransform(src.theModelTransform),
         theInverseModelTransform(src.theInverseModelTransform),
         theModelTransformUnitType(src.theModelTransformUnitType)

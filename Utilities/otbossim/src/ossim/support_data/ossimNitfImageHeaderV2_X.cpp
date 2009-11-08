@@ -4,13 +4,18 @@
 #include <iomanip>
 
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimStringProperty.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimNitfImageHeader.h>
 #include <ossim/support_data/ossimNitfCommon.h>
 
 #include <sstream>
+
+static const ossimTrace traceDebug(
+   ossimString("ossimNitfImageHeaderV2_X:debug"));
 
 const ossimString ossimNitfImageHeaderV2_X::IID1_KW = "iid1";
 const ossimString ossimNitfImageHeaderV2_X::IDATIM_KW = "idatim";
@@ -666,4 +671,78 @@ ossimString ossimNitfImageHeaderV2_X::getImageMagnification()const
 {
    return ossimString(theImageMagnification).trim();
 }
+
+void ossimNitfImageHeaderV2_X::setGeographicLocationDms(const ossimDpt& ul,
+                                                        const ossimDpt& ur,
+                                                        const ossimDpt& lr,
+                                                        const ossimDpt& ll)
+{
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+      << ossimDms(ul.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ul.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(ur.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ur.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(lr.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(lr.x, false).toString("dddmmss.ssssC").c_str()
+      << ossimDms(ll.y, true).toString("ddmmss.ssssC").c_str()
+      << ossimDms(ll.x, false).toString("dddmmss.ssssC").c_str()
+      << std::endl;
+      
+      checkForGeographicTiePointTruncation(ul);
+      checkForGeographicTiePointTruncation(ur);
+      checkForGeographicTiePointTruncation(lr);
+      checkForGeographicTiePointTruncation(ll);
+   }
+   
+   theCoordinateSystem[0] = 'G';
+   
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeGeographicDms(ul,ur,lr,ll).c_str(), 60);
+}
+
+void ossimNitfImageHeaderV2_X::setGeographicLocationDecimalDegrees(
+   const ossimDpt& ul,
+   const ossimDpt& ur,
+   const ossimDpt& lr,
+   const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'D';
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeGeographicDecimalDegrees(
+             ul, ur, lr, ll).c_str(), 60);
+}
+
+void ossimNitfImageHeaderV2_X::setUtmNorth(ossim_uint32 zone,
+                                           const ossimDpt& ul,
+                                           const ossimDpt& ur,
+                                           const ossimDpt& lr,
+                                           const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'N';
+   
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+}
+
+void ossimNitfImageHeaderV2_X::setUtmSouth(ossim_uint32 zone,
+                                           const ossimDpt& ul,
+                                           const ossimDpt& ur,
+                                           const ossimDpt& lr,
+                                           const ossimDpt& ll)
+{
+   theCoordinateSystem[0] = 'S';
+   
+   memcpy(theGeographicLocation,
+          ossimNitfCommon::encodeUtm(zone, ul, ur, lr, ll).c_str(), 60);
+}
+
+
+
+
+
+
+
+
 

@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //          Frank Warmerdam (warmerdam@pobox.com)
@@ -11,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 11959 2007-10-31 19:22:56Z gpotts $
+//  $Id: ossimTiffTileSource.h 15825 2009-10-27 15:31:44Z dburken $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -39,19 +41,17 @@ public:
    };
 
    ossimTiffTileSource();
-	
-   virtual ~ossimTiffTileSource();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
 
-   /*!
+   /**
     *  Returns true if the image_file can be opened and is a valid tiff file.
     */
-  virtual bool open(const ossimFilename& image_file);
-  virtual void close();
-
-   /*!
+   virtual bool open(const ossimFilename& image_file);
+   virtual void close();
+   
+   /**
     *  Returns a pointer to a tile given an origin representing the upper left
     *  corner of the tile to grab from the image.
     *  Satisfies pure virtual from TileSource class.
@@ -59,31 +59,45 @@ public:
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
    
-   /*!
-     *  Returns the number of bands in the image.
-     *  Satisfies pure virtual from ImageHandler class.
-     */
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
+   
+   /**
+    *  Returns the number of bands in the image.
+    *  Satisfies pure virtual from ImageHandler class.
+    */
    virtual ossim_uint32 getNumberOfInputBands() const;
    virtual ossim_uint32 getNumberOfOutputBands () const;
    
-   /*!
-     *  Returns the number of lines in the image.
-     *  Satisfies pure virtual from ImageHandler class.
-     */
-   virtual ossim_uint32 getNumberOfLines(ossim_uint32 reduced_res_level = 0) const;
-
-   /*!
+   /**
+    *  Returns the number of lines in the image.
+    *  Satisfies pure virtual from ImageHandler class.
+    */
+   virtual ossim_uint32 getNumberOfLines(ossim_uint32 resLevel = 0) const;
+   
+   /**
     *  Returns the number of samples in the image.
     *  Satisfies pure virtual from ImageHandler class.
     */
-   virtual ossim_uint32 getNumberOfSamples(ossim_uint32 reduced_res_level = 0) const;
+   virtual ossim_uint32 getNumberOfSamples(ossim_uint32 resLevel = 0) const;
 
-   /*!
+   /**
     *  Returns the number of image file directories in the tiff image.
     */
    virtual ossim_uint32 getNumberOfDirectories() const;
    
-   /*!
+   /**
     * Returns the number of reduced resolution data sets (rrds).
     * Notes:
     *
@@ -95,14 +109,14 @@ public:
     */
    virtual ossim_uint32 getNumberOfDecimationLevels() const;
    
-   /*!
+   /**
     * Method to save the state of an object to a keyword list.
     * Return true if ok or false on error.
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
    
-   /*!
+   /**
     * Method to the load (recreate) the state of an object from a keyword
     * list.  Return true if ok or false on error.
     */
@@ -111,22 +125,22 @@ public:
 
    virtual bool isOpen()const;
 
-   /*!
+   /**
     * Returns the output pixel type of the tile source.
     */
    virtual ossimScalarType getOutputScalarType() const;
 
-   /*!
+   /**
     * Returns the width of the output tile.
     */
    virtual ossim_uint32 getTileWidth() const;
    
-   /*!
+   /**
     * Returns the height of the output tile.
     */
    virtual ossim_uint32 getTileHeight() const;
 
-   /*!
+   /**
     *  Returns true if the first directory of the tiff image did not have
     *  the reduced resolution file type set.
     */
@@ -135,15 +149,9 @@ public:
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    
-   virtual bool isValidRLevel(ossim_uint32 reduced_res_level) const;
-   
-   /*!
-    * Returns the highest available reduced resolution data sets (rrds).
-    * Note:  zero based
-    */
-   ossim_uint32 getHighestReducedResSet() const;
+   virtual bool isValidRLevel(ossim_uint32 resLevel) const;
 
-   /*!
+   /**
     * @return The tile width of the image or 0 if the image is not tiled.
     * Note: this is not the same as the ossimImageSource::getTileWidth which
     * returns the output tile width, which can be different than the
@@ -151,7 +159,7 @@ public:
     */
    virtual ossim_uint32 getImageTileWidth() const;
 
-   /*!
+   /**
     * @return The tile width of the image or 0 if the image is not tiled.
     * Note: this is not the same as the ossimImageSource::getTileHeight which
     * returns the output tile width which can be different than the internal
@@ -169,8 +177,25 @@ public:
    
    virtual std::ostream& print(std::ostream& os) const;
 
+   TIFF* tiffPtr()
+   {
+      return theTiffPtr;
+   }
+#if 0
+   /**
+    * @brief Method to get the image geometry object associated with this
+    * image.
+    *
+    * The geometry contains full-to-local image transform as well as
+    * projection (image-to-world).
+    *
+    * @return ossimImageGeometry* or null if not defined.
+    */
+   virtual ossimImageGeometry* getImageGeometry();
+#endif   
 protected:
-   /*!
+   virtual ~ossimTiffTileSource();
+   /**
     *  Returns true if no errors initializing object.
     *
     *  Notes:
@@ -180,16 +205,19 @@ protected:
     *    between constructor and public open method.
     */
    bool open();
+
+   // Must be protected for derived ossimTerraSarTiffReader.
+   TIFF* theTiffPtr; 
    
 private:
 
-   /*!
+   /**
     *  Adjust point to even tile boundary.  Assumes 0,0 origin.
     *  Shifts in the upper left direction.
     */
    void adjustToStartOfTile(ossimIpt& pt) const;
 
-   /*!
+   /**
     *  If the tiff source has R0 then this returns the current tiff directory
     *  that the tiff pointer is pointing to; else, it returns the current
     *  directory + 1.
@@ -201,22 +229,29 @@ private:
    bool allocateBuffer();
    
    bool loadTile(const ossimIrect& tile_rect,
-                 const ossimIrect& clip_rect);
+                 const ossimIrect& clip_rect,
+                 ossimImageData* result);
    
    bool loadFromRgbaU8Tile(const ossimIrect& tile_rect,
-                           const ossimIrect& clip_rect);
+                           const ossimIrect& clip_rect,
+                           ossimImageData* result);
    
    bool loadFromRgbaU8Strip(const ossimIrect& tile_rect,
-                            const ossimIrect& clip_rect);
-
-   bool loadFromRgbaU8aStrip(const ossimIrect& tile_rect,
-                             const ossimIrect& clip_rect);
+                            const ossimIrect& clip_rect,
+                            ossimImageData* result);
    
-   bool loadFromScanLine(const ossimIrect& clip_rect);
-
-   bool loadFromTile(const ossimIrect& clip_rect);
-
+   bool loadFromRgbaU8aStrip(const ossimIrect& tile_rect,
+                             const ossimIrect& clip_rect,
+                             ossimImageData* result);
+   
+   bool loadFromScanLine(const ossimIrect& clip_rect,
+                         ossimImageData* result);
+   
+   bool loadFromTile(const ossimIrect& clip_rect,
+                     ossimImageData* result);
+   
    void setReadMethod();
+   
    virtual void initializeBuffers();
 
    /**
@@ -240,7 +275,8 @@ private:
    ossim_uint32         theBufferSize;
    ossimIrect           theBufferRect;
    ossim_uint32         theBufferRLevel;
-   TIFF*                theTiffPtr;
+   ossim_uint32         theCurrentTileWidth;
+   ossim_uint32         theCurrentTileHeight;
 
    ossim_uint16         theSamplesPerPixel;
    ossim_uint16         theBitsPerSample;

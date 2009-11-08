@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.h 14662 2009-06-07 16:15:23Z dburken $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
@@ -25,12 +25,12 @@ public:
    friend std::ostream& operator <<(std::ostream& out,
                                     const ossimNitfImageInfoRecordV2_1 &data);
    
-   ossim_int32 getHeaderLength()const;
-   ossim_int32 getImageLength()const;
-   ossim_int32 getTotalLength()const;
+   ossim_uint32 getHeaderLength()const;
+   ossim_uint64 getImageLength()const;
+   ossim_uint64 getTotalLength()const;
    
    void setSubheaderLength(ossim_uint32 length);
-   void setImageLength(ossim_uint32 length);
+   void setImageLength(ossim_uint64 length);
    
    /**
     * Is a 6 byte numeric 000439-999999
@@ -129,7 +129,7 @@ public:
    virtual ossim_int32 getNumberOfTextSegments()const;
    virtual ossim_int32 getNumberOfDataExtSegments()const;
    virtual ossim_int32 getHeaderSize()const;
-   virtual ossim_int32 getFileSize()const;
+   virtual ossim_int64 getFileSize()const;
    virtual const char* getVersion()const;
    virtual const char* getDateTime()const;
    virtual ossimDrect getImageRect()const;
@@ -137,16 +137,16 @@ public:
    virtual void addImageInfoRecord(const ossimNitfImageInfoRecordV2_1& recordInfo);
    virtual void replaceImageInfoRecord(int i, const ossimNitfImageInfoRecordV2_1& recordInfo);
    
-   virtual ossimNitfImageHeader*  getNewImageHeader(ossim_int32 imageNumber,
+   virtual ossimNitfImageHeader*  getNewImageHeader(ossim_uint32 imageNumber,
                                                     std::istream& in)const;
-   virtual ossimNitfSymbolHeader* getNewSymbolHeader(ossim_int32 symbolNumber,
+   virtual ossimNitfSymbolHeader* getNewSymbolHeader(ossim_uint32 symbolNumber,
                                                      std::istream& in)const;
-   virtual ossimNitfLabelHeader* getNewLabelHeader(ossim_int32 labelNumber,
+   virtual ossimNitfLabelHeader* getNewLabelHeader(ossim_uint32 labelNumber,
                                                    std::istream& in)const;
-   virtual ossimNitfTextHeader* getNewTextHeader(ossim_int32 textNumber,
+   virtual ossimNitfTextHeader* getNewTextHeader(ossim_uint32 textNumber,
                                                    std::istream& in)const;
    virtual ossimNitfDataExtensionSegment* getNewDataExtensionSegment(
-      ossim_int32 dataExtNumber, std::istream& in)const;
+      ossim_uint32 dataExtNumber, std::istream& in)const;
 
    virtual ossimNitfImageHeader*  allocateImageHeader()const;
    virtual ossimNitfSymbolHeader* allocateSymbolHeader()const;
@@ -271,7 +271,7 @@ private:
     * all the bytes read for the header portion.  This can be used
     * to skip past the header data.
     */
-   ossim_int32 theHeaderSize;
+   ossim_uint32 theHeaderSize;
 
    /**
     * This will be pre-computed when the header file is opened.  This is

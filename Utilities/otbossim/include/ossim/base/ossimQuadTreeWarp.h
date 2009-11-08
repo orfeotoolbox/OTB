@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimQuadTreeWarp.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimQuadTreeWarp.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimQuadTreeWarp_HEADER
 #define ossimQuadTreeWarp_HEADER
 
@@ -19,7 +19,7 @@
 #include <vector>
 #include <iosfwd>
 
-class OSSIMDLLEXPORT ossimQuadTreeWarpNode;
+class ossimQuadTreeWarpNode;
 
 class OSSIMDLLEXPORT ossimQuadTreeWarpVertex
 {
@@ -122,7 +122,6 @@ public:
 
    virtual ossimObject* dup()const;
 
-   virtual ~ossimQuadTreeWarp();
    
    virtual ossimDpt getOrigin()const;
 
@@ -248,6 +247,7 @@ public:
    
       
 protected:
+   virtual ~ossimQuadTreeWarp();
    bool                             theWarpEnabledFlag;
    ossimQuadTreeWarpNode*           theTree;
    std::vector<ossimQuadTreeWarpVertex*> theVertexList;

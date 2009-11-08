@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.h 13475 2008-08-22 14:21:54Z gpotts $
+// $Id: ossimImageChain.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimImageChain_HEADER
 #define ossimImageChain_HEADER
 #include <vector>
@@ -176,8 +176,7 @@ public:
                                       ossimVertexOrdering ordering=OSSIM_CLOCKWISE_ORDER,
                                       ossim_uint32 resLevel=0)const;
    
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=NULL);
+   virtual ossimImageGeometry* getImageGeometry();
 
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result) const;
@@ -199,15 +198,14 @@ public:
    virtual void initialize();
    virtual void enableSource();
    virtual void disableSource();
-   vector<ossimConnectableObject*>& getChildren();
    
    bool canConnectMyInputTo(ossim_int32 myInputIndex,
                             const ossimConnectableObject* object)const
       {
          if(theImageChainList.size()&&
-            theImageChainList[theImageChainList.size()-1])
+            theImageChainList[theImageChainList.size()-1].valid())
          {
-            ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject, theImageChainList[theImageChainList.size()-1]);
+            ossimConnectableObject* obj = PTR_CAST(ossimConnectableObject, theImageChainList[theImageChainList.size()-1].get());
             if(obj)
             {
                return obj->canConnectMyInputTo(myInputIndex,
@@ -249,9 +247,9 @@ public:
     * Example: passing STATIC_TYPE_INFO(ossimImageRenderer) as an argument will
     *          look for all ossimImageRenderer's and return the list.
     */
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const RTTItypeid& typeInfo,
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const RTTItypeid& typeInfo,
                                                                      bool recurse=true);
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const ossimString& className,
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const ossimString& className,
                                                                      bool recurse=true);
 
    /**
@@ -331,12 +329,12 @@ public:
    
 protected:
    friend class ossimImageChainChildListener;
-   /**
+  /**
     * This will hold a sequence of image sources.
     * theFirst one in the list will be the head of the
     * list and the last one is the tail.
     */
-   vector<ossimConnectableObject*> theImageChainList;
+   ossimConnectableObject::ConnectableObjectList theImageChainList;
    
    ossimRefPtr<ossimImageData>     theBlankTile;
    ossimImageChainChildListener*   theChildListener;

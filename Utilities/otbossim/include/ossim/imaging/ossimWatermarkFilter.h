@@ -12,7 +12,7 @@
 // Density is base on alpha weight.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimWatermarkFilter.h 12623 2008-04-07 14:10:08Z gpotts $
+// $Id: ossimWatermarkFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimWatermarkFilter_HEADER
 #define ossimWatermarkFilter_HEADER
 
@@ -49,9 +49,6 @@ public:
       
    /** contructor */
    ossimWatermarkFilter();
-
-   /** destructor */
-   virtual ~ossimWatermarkFilter();
 
    /** @return Short name of filter. */
    virtual ossimString getShortName()   const;
@@ -197,7 +194,9 @@ public:
     */
    virtual std::ostream& print(std::ostream& out) const;
 
-private:
+protected:
+   /** destructor */
+   virtual ~ossimWatermarkFilter();
 
    /**
     * Allocates / recomputes things that are needed.  Clears theDirtyFlag

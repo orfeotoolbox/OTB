@@ -6,7 +6,7 @@
 //
 // Description: 
 //
-// $Id: ossimVpfTileSource.cpp 9306 2006-07-19 18:23:40Z dburken $
+// $Id: ossimVpfTileSource.cpp 15812 2009-10-25 13:09:24Z dburken $
 //----------------------------------------------------------------------------
 #include <ossim/imaging/ossimVpfTileSource.h>
 
@@ -17,23 +17,19 @@ ossimVpfTileSource::ossimVpfTileSource()
       ossimViewInterface()
 {
    theObject = this;
-   theAnnotationSource = new ossimVpfAnnotationSource;
-   theAnnotationSource->setNumberOfBands(3);
+   m_AnnotationSource = new ossimVpfAnnotationSource;
+   m_AnnotationSource->setNumberOfBands(3);
 }
 
 ossimVpfTileSource::~ossimVpfTileSource()
 {
-   if(theAnnotationSource)
-   {
-      delete theAnnotationSource;
-      theAnnotationSource = NULL;
-   }
+   m_AnnotationSource = 0;
 }
 
 bool ossimVpfTileSource::saveState(ossimKeywordlist& kwl,
 				   const char* prefix)const
 {
-   return theAnnotationSource->saveState(kwl, prefix);
+   return m_AnnotationSource->saveState(kwl, prefix);
 }
 
 bool ossimVpfTileSource::loadState(const ossimKeywordlist& kwl,
@@ -41,7 +37,7 @@ bool ossimVpfTileSource::loadState(const ossimKeywordlist& kwl,
 {
    if (ossimImageHandler::loadState(kwl, prefix))
    {
-      return theAnnotationSource->loadState(kwl, prefix);
+      return m_AnnotationSource->loadState(kwl, prefix);
    }
 
    return false;
@@ -49,33 +45,33 @@ bool ossimVpfTileSource::loadState(const ossimKeywordlist& kwl,
 
 void ossimVpfTileSource::close()
 {
-   theAnnotationSource->close();
+   m_AnnotationSource->close();
 }
 
 bool ossimVpfTileSource::open()
 {
-   return theAnnotationSource->open(theImageFile);
+   return m_AnnotationSource->open(theImageFile);
 }
 
 ossimRefPtr<ossimImageData> ossimVpfTileSource::getTile(
    const ossimIrect& tileRect, ossim_uint32 resLevel)
 {
-   return theAnnotationSource->getTile(tileRect, resLevel);
+   return m_AnnotationSource->getTile(tileRect, resLevel);
 }
 
 ossim_uint32 ossimVpfTileSource::getNumberOfInputBands() const
 {
-   return theAnnotationSource->getNumberOfOutputBands();
+   return m_AnnotationSource->getNumberOfOutputBands();
 }
 
 ossim_uint32 ossimVpfTileSource::getNumberOfOutputBands() const
 {
-   return theAnnotationSource->getNumberOfOutputBands();
+   return m_AnnotationSource->getNumberOfOutputBands();
 }
 
 ossim_uint32 ossimVpfTileSource::getNumberOfLines(ossim_uint32 /* reduced_res_level */) const
 {
-   ossimIrect theBounds = theAnnotationSource->getBoundingRect();
+   ossimIrect theBounds = m_AnnotationSource->getBoundingRect();
    
    if(theBounds.hasNans())
    {
@@ -87,7 +83,7 @@ ossim_uint32 ossimVpfTileSource::getNumberOfLines(ossim_uint32 /* reduced_res_le
 
 ossim_uint32 ossimVpfTileSource::getNumberOfSamples(ossim_uint32 /* reduced_res_level */) const
 {
-   ossimIrect theBounds = theAnnotationSource->getBoundingRect();
+   ossimIrect theBounds = m_AnnotationSource->getBoundingRect();
    
    if(theBounds.hasNans())
    {
@@ -104,46 +100,40 @@ ossim_uint32 ossimVpfTileSource::getNumberOfDecimationLevels() const
 
 ossimIrect ossimVpfTileSource::getImageRectangle(ossim_uint32 /* reduced_res_level */) const
 {
-   return theAnnotationSource->getBoundingRect();
+   return m_AnnotationSource->getBoundingRect();
 }
 
-bool ossimVpfTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                          const char* prefix)
+//**************************************************************************************************
+// Returns the image geometry object associated with this tile source or NULL if non defined.
+//**************************************************************************************************
+ossimImageGeometry* ossimVpfTileSource::getImageGeometry()
 {
-   if (theGeometryKwl.getSize())
-   {
-      kwl = theGeometryKwl;
-      return true;
-   }
+   if (theGeometry.valid())
+      return theGeometry.get();
    
-   ossimObject* view = theAnnotationSource->getView();
-   if(view)
+   const ossimImageGeometry* annotGeom = m_AnnotationSource->getImageGeometry();
+   if (annotGeom)
    {
-      bool result = view->saveState(kwl, prefix);
-      if (result)
-      {
-         // Capture for next time...
-         setImageGeometry(kwl);
-      }
-      return result;
+      // Copy the annotation source's geometry as our own:
+      theGeometry = new ossimImageGeometry(*annotGeom);
+      return theGeometry.get();
    }
-   
-   return false;
+   return 0;
 }
 
 ossimScalarType ossimVpfTileSource::getOutputScalarType() const
 {
-   return theAnnotationSource->getOutputScalarType();
+   return m_AnnotationSource->getOutputScalarType();
 }
 
 ossim_uint32 ossimVpfTileSource::getTileWidth() const
 {
-   return theAnnotationSource->getTileWidth();         
+   return m_AnnotationSource->getTileWidth();         
 }
 
 ossim_uint32 ossimVpfTileSource::getTileHeight() const
 {
-   return theAnnotationSource->getTileHeight();
+   return m_AnnotationSource->getTileHeight();
 }
 
 ossim_uint32 ossimVpfTileSource::getImageTileWidth() const
@@ -158,62 +148,55 @@ ossim_uint32 ossimVpfTileSource::getImageTileHeight() const
 
 bool ossimVpfTileSource::isOpen()const
 {
-   return theAnnotationSource->isOpen();
+   return m_AnnotationSource->isOpen();
 }
    
 double ossimVpfTileSource::getNullPixelValue(ossim_uint32 band)const
 {
-   return theAnnotationSource->getNullPixelValue(band);
+   return m_AnnotationSource->getNullPixelValue(band);
 }
 
 double ossimVpfTileSource::getMinPixelValue(ossim_uint32 band)const
 {
-   return theAnnotationSource->getMinPixelValue(band);
+   return m_AnnotationSource->getMinPixelValue(band);
 }
       
 double ossimVpfTileSource::getMaxPixelValue(ossim_uint32 band)const
 {
-   return theAnnotationSource->getMaxPixelValue(band);
+   return m_AnnotationSource->getMaxPixelValue(band);
 }
 
 ossimObject* ossimVpfTileSource::getView()
 {
-   return theAnnotationSource->getView();
+   return m_AnnotationSource->getView();
 }
 
 const ossimObject* ossimVpfTileSource::getView()const
 {
-   return theAnnotationSource->getView();
+   return m_AnnotationSource->getView();
 }
    
-bool ossimVpfTileSource::setView(ossimObject*  baseObject,
-                                 bool ownsTheView)
+bool ossimVpfTileSource::setView(ossimObject*  baseObject)
 {
-   return theAnnotationSource->setView(baseObject, ownsTheView);
+   return m_AnnotationSource->setView(baseObject);
 }
 
 void ossimVpfTileSource::getAllFeatures(std::vector<ossimVpfAnnotationFeatureInfo*>& featureList)
 {
-   if(theAnnotationSource)
-   {
-      theAnnotationSource->getAllFeatures(featureList);
-   }
+   m_AnnotationSource->getAllFeatures(featureList);
 }
 
 void ossimVpfTileSource::setAllFeatures(std::vector<ossimVpfAnnotationFeatureInfo*>& featureList)
 {
-   if(theAnnotationSource)
-   {
-      theAnnotationSource->setAllFeatures(featureList);
-   }
+   m_AnnotationSource->setAllFeatures(featureList);
 }
 
 void ossimVpfTileSource::transformObjects()
 {
-   theAnnotationSource->transformObjects();
+   m_AnnotationSource->transformObjects();
 }
 
 void ossimVpfTileSource::computeBoundingRect()
 {
-   theAnnotationSource->computeBoundingRect();
+   m_AnnotationSource->computeBoundingRect();
 }

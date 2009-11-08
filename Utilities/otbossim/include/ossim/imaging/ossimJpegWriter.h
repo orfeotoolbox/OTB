@@ -9,7 +9,7 @@
 // Contains class definition for JpegWriter.
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.h 9817 2006-10-30 12:35:40Z dburken $
+//  $Id: ossimJpegWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimJpegWriter_HEADER
 #define ossimJpegWriter_HEADER
 
@@ -26,9 +26,6 @@ public:
 
    /** default constructor */
    ossimJpegWriter();
-
-   /** virtual destructor */
-   virtual ~ossimJpegWriter();
 
    /**
     * void getImageTypeList(std::vector<ossimString>& imageTypeList)const
@@ -91,6 +88,10 @@ public:
 
    bool hasImageType(const ossimString& imageType) const;
 
+protected:
+   /** virtual destructor */
+   virtual ~ossimJpegWriter();
+   
    
 private:
    virtual bool writeFile();

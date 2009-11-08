@@ -11,7 +11,7 @@
 //
 // Contains class declaration of ossimDtedElevationImageSource.
 //
-// $Id: ossimDtedElevationImageSource.cpp 11419 2007-07-27 16:24:57Z dburken $
+// $Id: ossimDtedElevationImageSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <vector>
@@ -22,7 +22,6 @@ using namespace std;
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/elevation/ossimDtedHandler.h>
-#include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/imaging/ossimDtedElevationImageSource.h>
 #include <ossim/imaging/ossimDtedTileSource.h>
@@ -71,18 +70,18 @@ ossimRefPtr<ossimImageData> ossimDtedElevationImageSource::getBlock(
    findCells(rect, vf);
 
    // Create a mosaic of them.
-   ossimImageChain* mosaic = createMosaic(vf);
+   ossimRefPtr<ossimImageChain> mosaic = createMosaic(vf);
    if (!mosaic)
    {
-      return NULL;
+      return 0;
    }
 
    // Get the view.
-   ossimMapProjection* view = getView(mosaic);
+   ossimMapProjection* view = getView(mosaic.get());
    if (!view)
    {
-      delete mosaic;
-      return NULL;
+      mosaic = 0;
+      return 0;
    }
    
    // Set the output resolution.
@@ -99,7 +98,7 @@ ossimRefPtr<ossimImageData> ossimDtedElevationImageSource::getBlock(
    
    ossimRefPtr<ossimImageData> result = mosaic->getTile(tileRect);
 
-   delete mosaic;
+   mosaic = 0;
    
    if (traceDebug())
    {
@@ -298,21 +297,21 @@ void ossimDtedElevationImageSource::resampleCellBilinear(
          << endl;
    }
 
-   ossimDtedHandler* dh = new ossimDtedHandler(dtedFile);
+   ossimRefPtr<ossimDtedHandler> dh = new ossimDtedHandler(dtedFile);
    if (!dh)
    {
       return;
    }
    if (dh->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-      delete dh;
+      dh = 0;
       return;
    }
 
    ossim_float32* buf = id.getFloatBuf();
    if (!buf)
    {
-      delete dh;
+      dh = 0;
       return;
    }
    
@@ -382,8 +381,8 @@ void ossimDtedElevationImageSource::resampleCellBilinear(
          << " Exited..."
          << endl;
    }
-   
-   delete dh;
+
+   dh = 0;
 }
 
 void ossimDtedElevationImageSource::resampleCellNearestNeighbor(
@@ -393,18 +392,18 @@ void ossimDtedElevationImageSource::resampleCellNearestNeighbor(
    const ossimDpt& requestedPostSpacing) const
 {
    // Open the cell.
-   ossimImageHandler* dts = new ossimDtedTileSource();
+   ossimRefPtr<ossimImageHandler> dts = new ossimDtedTileSource();
    dts->open(dtedFile);
 
    if (dts->isOpen() == false)
    {
-      delete dts;
+      dts = 0;
       return;
    }
 
    // Get the post spacing of the cell.
    ossimDpt cellPostSpacing;
-   ((ossimDtedTileSource*)dts)->getPostSpacing(cellPostSpacing);
+   ((ossimDtedTileSource*)dts.get())->getPostSpacing(cellPostSpacing);
 
 //    // Compute the rlevel to grab from.
 //    ossim_uint32 rLevel = computeRLevel(dts->getNumberOfDecimationLevels(),
@@ -600,7 +599,6 @@ ossimImageChain* ossimDtedElevationImageSource::createMosaic(
       return NULL;
    }
    
-   ossimImageChain* chainResult = NULL;
    ossimString defaultDescription="ossimOrthoImageMosaic";;
    ossimKeywordlist kwl;
    
@@ -640,24 +638,23 @@ ossimImageChain* ossimDtedElevationImageSource::createMosaic(
            10,
            true);
    
-    ossimObject* objResult =
-       ossimObjectFactoryRegistry::instance()->createObject(kwl);
-    chainResult      = PTR_CAST(ossimImageChain, objResult);
-    if(chainResult)
-    {
-	chainResult->makeUniqueIds();
-        chainResult->setDescription(defaultDescription);
-        for(idx = 0; idx < inputList.size(); ++idx)
-        {
-           chainResult->connectMyInputTo(inputList[idx]);
-        }
-    }
-    else if(objResult)
-    {
-	delete objResult;
-    }
-    
-    return chainResult;
+   ossimRefPtr<ossimObject> objResult =
+   ossimObjectFactoryRegistry::instance()->createObject(kwl);
+   ossimRefPtr<ossimImageChain> chainResult      = PTR_CAST(ossimImageChain, objResult.get());
+   if(chainResult.valid())
+   {
+      chainResult->makeUniqueIds();
+      chainResult->setDescription(defaultDescription);
+      for(idx = 0; idx < inputList.size(); ++idx)
+      {
+         chainResult->connectMyInputTo(inputList[idx]);
+      }
+   }
+   else
+   {
+      chainResult = 0;
+   }
+   return chainResult.release();
 }
 
 ossimMapProjection* ossimDtedElevationImageSource::getView(

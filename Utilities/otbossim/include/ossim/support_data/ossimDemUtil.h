@@ -11,7 +11,7 @@
 // Description: This class provides some simple utilities for DEMs.
 //
 //********************************************************************
-// $Id: ossimDemUtil.h 14482 2009-05-12 11:42:38Z gpotts $
+// $Id: ossimDemUtil.h 15307 2009-09-01 15:41:07Z dburken $
 
 #ifndef ossimDemUtil_HEADER
 #define ossimDemUtil_HEADER
@@ -22,9 +22,31 @@
 #include <iostream>
 #include <fstream>
 
+class ossimFilename;
+
 class ossimDemUtil
 {
 public:
+
+   /**
+    * @brief Does basic sanity checks to see if file is a dem.
+    *
+    * 1) Check extension for .dem
+    *
+    * 2) Look for file.omd (ossim meta data) file containing keyword
+    *    "dem_type" with value of "usgs_dem".
+    *
+    * 3) Check 512 bytes and make sure there is no binary data.
+    *
+    * @note
+    * There is a keyword list template stored in the templates directory:
+    * "ossim/etc/templates/usgs_dem_template.kwl"
+    *
+    * @param file The file to check.
+    *
+    * @return true on success, false on error.
+    */
+   static bool isUsgsDem(const ossimFilename& file);
 
    /**
     *  Reads a single record from a DEM.

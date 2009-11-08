@@ -10,7 +10,7 @@
 // writing an ERS header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimERSFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimERSFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimERSFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -67,134 +67,61 @@ bool ossimERSFileWriter::writeFile()
    theHdr.theCelltype = theInputConnection->getOutputScalarType();
    
    // Get the geometry from the input.
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-   
-   // Create the projection.
    ossimMapProjection* mapProj = 0;
-   ossimRefPtr<ossimProjection> proj =
-      ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   if (proj.valid())
+   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   if (inputGeom)
+      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+   if (mapProj)
    {
-      mapProj = PTR_CAST(ossimMapProjection, proj.get());
-      
-      if (mapProj)
+      // Create the projection info.
+      ossimRefPtr<ossimMapProjectionInfo> projectionInfo
+         = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
+
+      // Set the tie points in the keyword list.
+      ossimKeywordlist kwl;
+      projectionInfo->getGeom(kwl);
+
+      // Get the projection type.
+      const char* lookup;
+      ossimString projection;
+      lookup = kwl.find(ossimKeywordNames::TYPE_KW);
+      if (lookup)
       {
-         // Create the projection info.
-         ossimRefPtr<ossimMapProjectionInfo> projectionInfo
-            = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
-         
-         // Set the tie points in the keyword list.
-         projectionInfo->getGeom(kwl);
-         
-         
-         const char* lookup;
-         // Get the projection type.
-         ossimString projection;
-         lookup = kwl.find(ossimKeywordNames::TYPE_KW);
+         projection = lookup;
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimERSFileWriter::writeFile WARNING:"
+            << "\nNo projection type found!\nReturning..."
+            << std::endl;
+         return false; // Have to have the projection type!
+      }
+
+      if (projection == "ossimUtmProjection")
+      {
+         ossimString utm;
+         lookup = kwl.find(ossimKeywordNames::HEMISPHERE_KW);
          if (lookup)
          {
-            projection = lookup;
+            utm = lookup;
+            utm += "UTM";
          }
          else
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimERSFileWriter::writeFile WARNING:"
-               << "\nNo projection type found!\nReturning..."
-               << std::endl;
-            return false; // Have to have the projection type!
-         }
-         
-         if (projection == "ossimUtmProjection")
-         {
-            ossimString utm;
-            lookup = kwl.find(ossimKeywordNames::HEMISPHERE_KW);
-            if (lookup)
-            {
-               utm = lookup;
-               utm += "UTM";
-            }
-            else
-               return false;
-            
-            lookup = kwl.find(ossimKeywordNames::ZONE_KW);
-            if (lookup)
-               utm += lookup;
-            else
-               return false;
-            
-            theHdr.theProjection = utm;
-            theHdr.theCoordSysType = "EN";
-            
-            
-            //we get tie points
-            lookup = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
-            tmp = lookup;
-            if (lookup)
-            {
-               tmp = tmp.trim("(");
-               tmp = tmp.trim(")");
-               ossimString a = tmp.before(",", 0);
-               ossimString b = tmp.after(",", 0);
-               theHdr.theOriginX = a.toDouble();
-               theHdr.theOriginY = b.toDouble();
-            }
-            //set the tie point unit type to meters
-            theHdr.theTieUnitType = OSSIM_METERS;
-            
-         }
-         else if (projection == "ossimEquDistCylProjection")
-         {
-            theHdr.theProjection = "GEODETIC";
-            theHdr.theCoordSysType = "LL";
-            
-            //we get tie points
-            lookup = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
-            tmp = lookup;
-            if (lookup)
-            {
-               tmp = tmp.trim("(");
-               tmp = tmp.trim(")");
-               ossimString a = tmp.before(",", 0);
-               ossimString b = tmp.after(",", 0);
-               theHdr.theOriginX = a.toDouble();
-               theHdr.theOriginY = b.toDouble();
-            }
-            //set the tie point unit type to degrees
-            theHdr.theTieUnitType = OSSIM_DEGREES;
+            return false;
 
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << "ossimERSFileWriter::writeFile WARNING:"
-               << "\nOnly LatLon and UTM supported!\nReturning..."
-               << std::endl;
-            return false;		
-         }
-
-         // Get the datum.
-         ossimString datum = "WGS-84";
-         lookup = kwl.find(ossimKeywordNames::DATUM_KW);
+         lookup = kwl.find(ossimKeywordNames::ZONE_KW);
          if (lookup)
-         {
-            ossimString os = lookup;
-            if (os == "WGE")
-            {
-               theHdr.theDatum = "WGS84";
-            }
-            else
-            {
-               ossimNotify(ossimNotifyLevel_WARN)
-                  << "ossimERSFileWriter::writeFile WARNING:"
-                  << "\nOnly WGS84 supported!\nReturning..."
-                  << std::endl;
-               return false; // Datum has to be WGS84 for now...
-            }
-         }
-		
-         //get cell size
-         lookup = kwl.find(ossimKeywordNames::PIXEL_SCALE_XY_KW);
+            utm += lookup;
+         else
+            return false;
+
+         theHdr.theProjection = utm;
+         theHdr.theCoordSysType = "EN";
+
+
+         //we get tie points
+         lookup = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
          tmp = lookup;
          if (lookup)
          {
@@ -202,21 +129,85 @@ bool ossimERSFileWriter::writeFile()
             tmp = tmp.trim(")");
             ossimString a = tmp.before(",", 0);
             ossimString b = tmp.after(",", 0);
- 
-            theHdr.theCellSizeX = a.toDouble();
-            theHdr.theCellSizeY = b.toDouble();
+            theHdr.theOriginX = a.toDouble();
+            theHdr.theOriginY = b.toDouble();
          }
+         //set the tie point unit type to meters
+         theHdr.theTieUnitType = OSSIM_METERS;
 
-         //get pixel is area or point
-         if(thePixelType == OSSIM_PIXEL_IS_POINT)
+      }
+      else if (projection == "ossimEquDistCylProjection")
+      {
+         theHdr.theProjection = "GEODETIC";
+         theHdr.theCoordSysType = "LL";
+
+         //we get tie points
+         lookup = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
+         tmp = lookup;
+         if (lookup)
          {
-            theHdr.theOriginX -= theHdr.theCellSizeX/2.0;
-            theHdr.theOriginY += theHdr.theCellSizeY/2.0;
+            tmp = tmp.trim("(");
+            tmp = tmp.trim(")");
+            ossimString a = tmp.before(",", 0);
+            ossimString b = tmp.after(",", 0);
+            theHdr.theOriginX = a.toDouble();
+            theHdr.theOriginY = b.toDouble();
+         }
+         //set the tie point unit type to degrees
+         theHdr.theTieUnitType = OSSIM_DEGREES;
+
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimERSFileWriter::writeFile WARNING:"
+            << "\nOnly LatLon and UTM supported!\nReturning..."
+            << std::endl;
+         return false;		
+      }
+
+      // Get the datum.
+      ossimString datum = "WGS-84";
+      lookup = kwl.find(ossimKeywordNames::DATUM_KW);
+      if (lookup)
+      {
+         ossimString os = lookup;
+         if (os == "WGE")
+         {
+            theHdr.theDatum = "WGS84";
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimERSFileWriter::writeFile WARNING:"
+               << "\nOnly WGS84 supported!\nReturning..."
+               << std::endl;
+            return false; // Datum has to be WGS84 for now...
          }
       }
 
+      //get cell size
+      lookup = kwl.find(ossimKeywordNames::PIXEL_SCALE_XY_KW);
+      tmp = lookup;
+      if (lookup)
+      {
+         tmp = tmp.trim("(");
+         tmp = tmp.trim(")");
+         ossimString a = tmp.before(",", 0);
+         ossimString b = tmp.after(",", 0);
+
+         theHdr.theCellSizeX = a.toDouble();
+         theHdr.theCellSizeY = b.toDouble();
+      }
+
+      //get pixel is area or point
+      if(thePixelType == OSSIM_PIXEL_IS_POINT)
+      {
+         theHdr.theOriginX -= theHdr.theCellSizeX/2.0;
+         theHdr.theOriginY += theHdr.theCellSizeY/2.0;
+      }
    }
-	   
+
    return theHdr.writeFile(theFilename);
 }
 

@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -9,10 +11,12 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 11699 2007-09-10 15:23:26Z gpotts $
+//  $Id: ossimTiffOverviewBuilder.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
+
+#include <vector>
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimFilename.h>
@@ -122,13 +126,6 @@ public:
    virtual const ossimObject* getObject() const;
 
    /**
-    * @return The output filename.  This will be derived from the image
-    * handlers filename unless the method buildOverview has been called which
-    * takes a filename.
-    */
-   ossimFilename getOutputFile() const;
-
-   /**
     * @return true if input is an image handler.
     */
    virtual bool canConnectMyInputTo(ossim_int32 index,
@@ -140,13 +137,9 @@ public:
     *
     * @param imageSource The input to the builder.
     *
-    * @param bool youOwnItFlag If true this obect will delete imageSource
-    * at destruction.
-    *
     * @return True on successful initializion, false on error.
     */
-   virtual bool setInputSource(ossimImageHandler* imageSource,
-                               bool youOwnItFlag);
+   virtual bool setInputSource(ossimImageHandler* imageSource);
    
    /**
     * @brief Sets the output filename.
@@ -154,6 +147,20 @@ public:
     * @param file The output file name.
     */
    virtual void  setOutputFile(const ossimFilename& file);
+
+   /**
+    * @brief Gets the output file name. (pure virtual)
+    *
+    * @return The output file name or ossimFilename::NIL if it was not set
+    * yet and the image handle has not been initialized.
+    *
+    * @note This is non-const as a call to this may force initialization of
+    * overview builder output file name if the it was not set already.
+    *
+    * @note This will return ossimFilename::NIL unless one of was called,
+    * setInputSource or setOutputFile.
+    */
+   virtual ossimFilename getOutputFile() const;
 
    void setOutputTileSize(const ossimIpt& tileSize);
 
@@ -206,33 +213,19 @@ public:
 private:
 
    /**
-    * @brief Method to initialize output file name from image handler.
-    * @return true on success, false on error.
-    */
-   bool initializeOutputFilenamFromHandler();
-   
-   /**
-    *  Returns the number of reduced resolution data sets to get the smallest
-    *  dimension >= 32 && < 64.
-    */
-  ossim_int32 getNumberOfSets() const;
-
-   /**
     *  Copy the full resolution image data to the output tif image.
     */
   bool writeR0(TIFF* tif);
 
    /**
-    *  Write reduced resolution data set to the tif file.  "rrds_level" must
-    *  be greater than 1 for this method as it uses subsequent rrds_levels
-    *  from the tif file.
+    *  Write reduced resolution data set to the tif file.
     */
    bool writeRn(ossimImageHandler* imageHandler,
                 TIFF* tif,
-                ossim_uint32 rrdsLevel);
+                ossim_uint32 resLevel);
    
    /**
-    *  Set the tiff tags for the appropriate rrds_level.  Level zero is the
+    *  Set the tiff tags for the appropriate resLevel.  Level zero is the
     *  full resolution image.
     *
     *  @param tif Pointer to the tif file.
@@ -241,33 +234,34 @@ private:
     */
    bool setTags(TIFF* tif,
                 const ossimIrect& outputRect,
-                ossim_int32 rrds_level) const;
+                ossim_int32 resLevel) const;
 
    TIFF* openTiff(const ossimString& filename,
                   const ossimString& openMode);
+
    void closeTiff(TIFF* tif);
+
    // Disallow these...
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
    ossimTiffOverviewBuilder& operator=(const ossimTiffOverviewBuilder& rhs); 
 
-   ossimImageHandler* theImageHandler;
-   bool               theOwnsImageHandlerFlag;
-   ossimFilename      theOutputFile;
-   ossimFilename      theOutputFileTmp;
-   ossim_uint8*       theNullDataBuffer;
-   ossim_int32        theBytesPerPixel;
-   ossim_int32        theBitsPerSample;
-   ossim_int32        theTileWidth;
-   ossim_int32        theTileHeight;
-   ossim_int32        theTileSizeInBytes;
-   ossim_int32        theSampleFormat;
-   ossim_int32        theCurrentTiffDir;
-   ossim_uint16       theTiffCompressType;
-   ossim_int32        theJpegCompressQuality;
+   ossimRefPtr<ossimImageHandler>                 theImageHandler;
+   ossimFilename                                  theOutputFile;
+   std::vector<ossim_uint8>                       theNullDataBuffer;
+   ossim_int32                                    theBytesPerPixel;
+   ossim_int32                                    theBitsPerSample;
+   ossim_int32                                    theTileWidth;
+   ossim_int32                                    theTileHeight;
+   ossim_int32                                    theTileSizeInBytes;
+   ossim_int32                                    theSampleFormat;
+   ossim_int32                                    theCurrentTiffDir;
+   ossim_uint16                                   theTiffCompressType;
+   ossim_int32                                    theJpegCompressQuality;
    ossimFilterResampler::ossimFilterResamplerType theResampleType;
-   vector<double>      theNullPixelValues;
-   bool               theCopyAllFlag;
-   bool               theOutputTileSizeSetFlag;
+   std::vector<double>                            theNullPixelValues;
+   bool                                           theCopyAllFlag;
+   bool                                           theOutputTileSizeSetFlag;
+
 TYPE_DATA   
 };
    

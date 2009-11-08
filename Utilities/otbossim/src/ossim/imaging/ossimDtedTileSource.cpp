@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -12,11 +11,10 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 14137 2009-03-25 20:23:05Z dburken $
+// $Id: ossimDtedTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <iostream>
-#include <fstream>
 using namespace std;
 
 #include <ossim/imaging/ossimDtedTileSource.h>
@@ -32,7 +30,6 @@ using namespace std;
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimS16ImageData.h>
 #include <ossim/support_data/ossimDtedVol.h>
 #include <ossim/support_data/ossimDtedHdr.h>
 #include <ossim/support_data/ossimDtedUhl.h>
@@ -91,7 +88,7 @@ ossimString ossimDtedTileSource::getLongName()const
    return ossimString("dted reader");
 }
 
-ossimString ossimDtedTileSource::className()const
+ossimString ossimDtedTileSource::getClassName()const
 {
    return ossimString("ossimDtedTileSource");
 }   
@@ -108,74 +105,78 @@ ossimRefPtr<ossimImageData> ossimDtedTileSource::getTile(
       }
    }
 
-   // This tile source bypassed, or invalid res level, return a blank tile.
-   if (!isOpen()||!isSourceEnabled() || !isValidRLevel(resLevel))
-   {
-      return ossimRefPtr<ossimImageData>();
-   }
-
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
-      {
-         ossimRefPtr<ossimImageData> temp =
-            theOverview->getTile(tile_rect, resLevel);
-         if(temp.valid() && temp->getBuf())
-         {
-            temp->setMinPix(theTile->getMinPix(), theTile->getNumberOfBands());
-            temp->setMaxPix(theTile->getMaxPix(), theTile->getNumberOfBands());
-            temp->setNullPix(theTile->getNullPix(),
-                             theTile->getNumberOfBands());
-         }
-         else
-         {
-            return ossimRefPtr<ossimImageData>();
-         }
-         return temp;
-      }
-   }
-
-   // Set the origing and resize if needed...
+   // Image rectangle must be set prior to calling getTile.
    theTile->setImageRectangle(tile_rect);
    
-   ossimIrect image_rect = getImageRectangle(resLevel);
-   
-   //***
-   // See if any point of the requested tile is in the image.
-   //***
-   if ( tile_rect.intersects(image_rect) )
+   if ( getTile( theTile.get(), resLevel ) == false )
    {
-      ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
-      
-      if ( !tile_rect.completely_within(clip_rect) )
+      if (theTile->getDataObjectStatus() != OSSIM_NULL)
       {
-         // Start with a blank tile.
          theTile->makeBlank();
       }
+   }
 
-      // Load the tile buffer with data from the dted cell.
-      if (fillBuffer(tile_rect, clip_rect))
-      {
-         theTile->validate();
-         return theTile;
-      }
-      else
-      {
-         return ossimRefPtr<ossimImageData>();
-      }
-      
-   } // End of if ( tile_rect.intersects(image_rect) )
+   return theTile;
+}
 
-   // No part of requested tile within the image rectangle.
-   return ossimRefPtr<ossimImageData>();
+bool ossimDtedTileSource::getTile(ossimImageData* result,
+                                  ossim_uint32 resLevel)
+{
+   bool status = false;
    
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      result->ref(); // Increment ref count.
+
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      
+      if (!status) // Did not get an overview tile.
+      {  
+         ossimIrect image_rect = getImageRectangle(resLevel);
+
+         ossimIrect tile_rect = result->getImageRectangle();
+         
+         //---
+         // See if any point of the requested tile is in the image.
+         //---
+         if ( tile_rect.intersects(image_rect) )
+         {
+            ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+            
+            if ( !tile_rect.completely_within(clip_rect) )
+            {
+               // Start with a blank tile.
+               result->makeBlank();
+            }
+
+            // Load the tile buffer with data from the dted cell.
+            status = fillBuffer(tile_rect, clip_rect, result);
+            
+         } // End of if ( tile_rect.intersects(image_rect) )
+      }
+
+       result->unref(); // Decrement ref count.
+   }
+   
+   return status;
 }
 
 //*******************************************************************
 // Private Method:
 //*******************************************************************
 bool ossimDtedTileSource::fillBuffer(const ossimIrect& tile_rect,
-                                     const ossimIrect& clip_rect)
+                                     const ossimIrect& clip_rect,
+                                     ossimImageData* tile)
 {
    //***
    // NOTE:
@@ -183,7 +184,7 @@ bool ossimDtedTileSource::fillBuffer(const ossimIrect& tile_rect,
    // The "tile_rect" and "clip_rect" is organized positive line down.
    //***
 
-   const ossim_int32 TILE_WIDTH = theTile->getWidth();
+   const ossim_int32 TILE_WIDTH = tile->getWidth();
    
    //***
    // Position the file pointer to the first record needed.
@@ -200,7 +201,7 @@ bool ossimDtedTileSource::fillBuffer(const ossimIrect& tile_rect,
    // Get a pointer positioned at the first valid pixel in
    // the tile.  Tiles are organized positive line down.
    //***
-   ossim_sint16* d = static_cast<ossim_sint16*>(theTile->getBuf());
+   ossim_sint16* d = static_cast<ossim_sint16*>(tile->getBuf());
    
    // Loop in the longitude or sample direction.
    for (ossim_int32 samp = clip_rect.ul().x; samp <= clip_rect.lr().x; samp++)
@@ -224,7 +225,8 @@ bool ossimDtedTileSource::fillBuffer(const ossimIrect& tile_rect,
       seek_position += theDataRecordSize;
    }
 
-
+   tile->validate();
+   
    return true;
 }
 
@@ -399,20 +401,17 @@ bool ossimDtedTileSource::loadState(const ossimKeywordlist& kwl,
    return false;
 }
 
-bool ossimDtedTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                           const char* prefix)
+//**************************************************************************************************
+// Returns the image geometry object associated with this tile source or NULL if not defined.
+// The geometry contains full-to-local image transform as well as projection (image-to-world)
+//**************************************************************************************************
+ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
 {
-   static const char MODULE[] = "ossimDtedTileSource::getImageGeometry";
+   static const char* MODULE = "ossimDtedTileSource::getImageGeometry() -- ";
 
-   if (traceDebug()) CLOG << " Entered..." << endl;
+   if (theGeometry.valid())
+      return theGeometry.get();
 
-   // Previously saved...
-   if (theGeometryKwl.getSize())
-   {
-      kwl = theGeometryKwl;
-      return true;
-   }   
-      
    if(!theFileStr)
    {
       if (traceDebug())
@@ -455,7 +454,7 @@ bool ossimDtedTileSource::getImageGeometry(ossimKeywordlist& kwl,
    // since the DTED post spacing is considered to be square.  Save its
    // state to the keyword list.
    //***
-   ossimString projPref = prefix?prefix:"";
+//   ossimString projPref = prefix?prefix:"";
 //   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
 //    ossimProjection* proj
 //       = new ossimEquDistCylProjection(*(datum->ellipsoid()),
@@ -476,6 +475,8 @@ bool ossimDtedTileSource::getImageGeometry(ossimKeywordlist& kwl,
                 (uhl.latInterval() * (uhl.numLatPoints()-1.0));
    
    // Add the tie point.
+   ossimKeywordlist kwl;
+   const char* prefix = 0; // legacy
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
            "ossimEquDistCylProjection",
@@ -550,10 +551,10 @@ bool ossimDtedTileSource::getImageGeometry(ossimKeywordlist& kwl,
 
    if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << "kwl:\n" << kwl << MODULE << " Exited..." << endl;
 
-   // Capture for next time.
-   setImageGeometry(kwl);
-   
-   return true;
+   // Capture this for next time.
+   theGeometry = new ossimImageGeometry;
+   theGeometry->loadState(kwl, prefix);
+   return theGeometry.get();
 }
 
 ossimScalarType
@@ -578,7 +579,7 @@ ossim_uint32 ossimDtedTileSource::getNumberOfLines(ossim_uint32 reduced_res_leve
    {
       return theNumberOfLines;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -592,7 +593,7 @@ ossim_uint32 ossimDtedTileSource::getNumberOfSamples(ossim_uint32 reduced_res_le
    {
       return theNumberOfSamps;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }

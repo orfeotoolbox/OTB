@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -20,7 +19,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU11ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimU11ImageData.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimU11ImageData_HEADER
 #define ossimU11ImageData_HEADER
@@ -41,7 +40,6 @@ public:
 
    ossimU11ImageData(const ossimU11ImageData &rhs);
    
-   virtual ~ossimU11ImageData();
 
    virtual ossimObject* dup()const;
 
@@ -173,13 +171,10 @@ public:
                                            float* buf);
 
 protected:
+   virtual ~ossimU11ImageData();
    ossimU11ImageData();
 
 private:
-
-   // Disallow from use...
-   const ossimU11ImageData& operator =(const ossimU11ImageData &rhs)
-                                     {return *this;}
 
    static const ossimNormalizedU11RemapTable theRemapTable;
    

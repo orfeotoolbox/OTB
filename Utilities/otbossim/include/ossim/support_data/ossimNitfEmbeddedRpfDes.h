@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfEmbeddedRpfDes.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfEmbeddedRpfDes.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNitfEmbeddedRpfDes_HEADER
 #define ossimNitfEmbeddedRpfDes_HEADER
 
@@ -21,7 +21,6 @@ class OSSIMDLLEXPORT ossimNitfEmbeddedRpfDes : public ossimNitfRegisteredTag
 {
 public:
    ossimNitfEmbeddedRpfDes();
-   virtual ~ossimNitfEmbeddedRpfDes();
    /*!
     * This will return the name of the registered tag for this
     * user defined header.
@@ -38,6 +37,8 @@ public:
     */
    virtual std::ostream& print(std::ostream& out,
                                const std::string& prefix=std::string()) const;
+protected:
+   virtual ~ossimNitfEmbeddedRpfDes();
 
 TYPE_DATA
 private:

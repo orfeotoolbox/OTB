@@ -1,16 +1,14 @@
 //*****************************************************************************
 // FILE: ossimRpcModel.h
 //
-// Copyright (C) 2004 Intelligence Data Systems, Inc.
-//
-// LICENSE: LGPL
-//
-// see top level LICENSE.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 13559 2008-09-10 11:16:12Z gpotts $
+//  $Id: ossimRpcSolver.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <ctime>
@@ -27,7 +25,8 @@
 #include <ossim/matrix/newmatio.h>
 #include <ossim/elevation/ossimElevManager.h>
 #include <ossim/support_data/ossimNitfRpcBTag.h>
-
+#include <ossim/imaging/ossimImageGeometry.h>
+#include <ossim/base/ossim2dTo2dIdentityTransform.h>
 ossimRpcSolver::ossimRpcSolver(bool useElevation,
                                bool useHeightAboveMSLFlag)
 {
@@ -53,7 +52,18 @@ ossimRpcSolver::ossimRpcSolver(bool useElevation,
 }
 
 void ossimRpcSolver::solveCoefficients(const ossimDrect& imageBounds,
-                                       const ossimProjection& proj,
+                                       ossimProjection* proj,
+                                       ossim_uint32 xSamples,
+                                       ossim_uint32 ySamples,
+                                       bool shiftTo0Flag)
+{
+   ossimRefPtr<ossimImageGeometry> geom = new ossimImageGeometry();
+   geom->setProjection(proj);
+   solveCoefficients(imageBounds, geom.get(), xSamples, ySamples, shiftTo0Flag);
+}
+
+void ossimRpcSolver::solveCoefficients(const ossimDrect& imageBounds,
+                                       ossimImageGeometry* geom,
                                        ossim_uint32 xSamples,
                                        ossim_uint32 ySamples,
                                        bool shiftTo0Flag)
@@ -101,8 +111,7 @@ void ossimRpcSolver::solveCoefficients(const ossimDrect& imageBounds,
          ossimDpt dpt(w*xnorm + ul.x,
                       h*ynorm + ul.y);
          
-         proj.lineSampleToWorld(dpt,
-                                gpt);
+         geom->localToWorld(dpt, gpt);
          gpt.changeDatum(defaultGround.datum());
 
          if(shiftTo0Flag)
@@ -386,7 +395,7 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
    theError = sqrt(sumSquareError/imagePoints.size());
 }
 
-ossimRefPtr<ossimRpcModel> ossimRpcSolver::createRpcModel()const
+ossimImageGeometry* ossimRpcSolver::createRpcModel()const
 {
    ossimRpcModel* model = new ossimRpcModel;
    
@@ -404,10 +413,10 @@ ossimRefPtr<ossimRpcModel> ossimRpcSolver::createRpcModel()const
                         theXDenCoeffs,
                         theYNumCoeffs,
                         theYDenCoeffs);
-   return model;
+   return new ossimImageGeometry(new ossim2dTo2dIdentityTransform, model);
 }
 
-ossimRefPtr<ossimRpcProjection> ossimRpcSolver::createRpcProjection()const
+ossimImageGeometry* ossimRpcSolver::createRpcProjection()const
 {
    ossimRpcProjection* proj = new ossimRpcProjection;
    
@@ -425,7 +434,7 @@ ossimRefPtr<ossimRpcProjection> ossimRpcSolver::createRpcProjection()const
                        theXDenCoeffs,
                        theYNumCoeffs,
                        theYDenCoeffs);
-   return proj;
+   return new ossimImageGeometry(new ossim2dTo2dIdentityTransform, proj);
 }
 
 const std::vector<double>& ossimRpcSolver::getImageXNumCoefficients()const
@@ -669,7 +678,7 @@ void ossimRpcSolver::setupSystemOfEquations(NEWMAT::Matrix& equations,
       equations[idx][14] = x[idx]*x[idx]*y[idx];
       equations[idx][15] = y[idx]*y[idx]*y[idx];
       equations[idx][16] = y[idx]*z[idx]*z[idx];
-      equations[idx][17] = z[idx]*x[idx]*z[idx];
+      equations[idx][17] = x[idx]*x[idx]*z[idx];
       equations[idx][18] = y[idx]*y[idx]*z[idx];
       equations[idx][19] = z[idx]*z[idx]*z[idx];
       equations[idx][20] = -f[idx]*x[idx];
@@ -688,7 +697,7 @@ void ossimRpcSolver::setupSystemOfEquations(NEWMAT::Matrix& equations,
       equations[idx][33] = -f[idx]*x[idx]*x[idx]*y[idx];
       equations[idx][34] = -f[idx]*y[idx]*y[idx]*y[idx];
       equations[idx][35] = -f[idx]*y[idx]*z[idx]*z[idx];
-      equations[idx][36] = -f[idx]*z[idx]*x[idx]*z[idx];
+      equations[idx][36] = -f[idx]*x[idx]*x[idx]*z[idx];
       equations[idx][37] = -f[idx]*y[idx]*y[idx]*z[idx];
       equations[idx][38] = -f[idx]*z[idx]*z[idx]*z[idx];
    }
@@ -725,7 +734,7 @@ void ossimRpcSolver::setupWeightMatrix(NEWMAT::DiagonalMatrix& result, // holds 
        row[14] = x[idx]*x[idx]*y[idx];
        row[15] = y[idx]*y[idx]*y[idx];
        row[16] = y[idx]*z[idx]*z[idx];
-       row[17] = z[idx]*x[idx]*z[idx];
+       row[17] = x[idx]*x[idx]*z[idx];
        row[18] = y[idx]*y[idx]*z[idx];
        row[19] = z[idx]*z[idx]*z[idx];
 

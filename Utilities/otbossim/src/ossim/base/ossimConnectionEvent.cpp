@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectionEvent.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectionEvent.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/base/ossimConnectionEvent.h>
 
@@ -21,8 +21,8 @@ ossimConnectionEvent::ossimConnectionEvent(ossimObject* object, long id)
 ossimConnectionEvent::ossimConnectionEvent(
    ossimObject* object,
    long id,
-   const std::vector<ossimConnectableObject*>& newList,
-   const std::vector<ossimConnectableObject*>& oldList,
+   const ossimConnectableObject::ConnectableObjectList& newList,
+   const ossimConnectableObject::ConnectableObjectList& oldList,
    ossimConnectionDirectionType whichDirection)
    : ossimEvent(object, id),
      theNewObjectList(newList),
@@ -84,21 +84,21 @@ ossim_uint32 ossimConnectionEvent::getNumberOfOldObjects()const
    return theOldObjectList.size();
 }
 
-ossimConnectableObject* ossimConnectionEvent::getOldObject(ossim_uint32 i)const
+ossimConnectableObject* ossimConnectionEvent::getOldObject(ossim_uint32 i)
 {
    if(i < getNumberOfOldObjects())
    {
-      return theOldObjectList[i];
+      return theOldObjectList[i].get();
    }
    
    return (ossimConnectableObject*)NULL;
 }
 
-ossimConnectableObject* ossimConnectionEvent::getNewObject(ossim_uint32 i)const
+ossimConnectableObject* ossimConnectionEvent::getNewObject(ossim_uint32 i)
 {
    if(i < getNumberOfNewObjects())
    {
-      return theNewObjectList[i];
+      return theNewObjectList[i].get();
    }
    
    return (ossimConnectableObject*)NULL;

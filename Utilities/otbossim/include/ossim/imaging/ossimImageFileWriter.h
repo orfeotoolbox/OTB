@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 11181 2007-06-07 19:57:14Z dburken $
+//  $Id: ossimImageFileWriter.h 15798 2009-10-23 19:15:20Z gpotts $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -44,8 +44,8 @@ public:
    ossimImageFileWriter(const ossimFilename& filename = ossimFilename(),
                         ossimImageSource* inputSource=0,
                         ossimObject* owner=0);
-   
    virtual ~ossimImageFileWriter();
+   
    
    virtual ossimObject* getObject();
 
@@ -90,36 +90,36 @@ public:
     * Will write an envi header file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.hdr".
     */
-   virtual bool writeEnviHeaderFile() const;
+   virtual bool writeEnviHeaderFile() ;
 
    /**
     * Will write an ER Mapper header file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.hdr".
     */
-   virtual bool writeErsHeaderFile() const;
+   virtual bool writeErsHeaderFile() ;
 
    /**
     * Will write an external geometry file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.geom".
     */
-   virtual bool writeExternalGeometryFile() const;
+   virtual bool writeExternalGeometryFile() ;
 
    /**
     * Will write an fgdc file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.xml".
     */
-   virtual bool writeFgdcFile() const;
+   virtual bool writeFgdcFile() ;
 
    /**
     * Returns true on success, false on error.
     */
-   virtual bool writeHistogramFile() const;
+   virtual bool writeHistogramFile() ;
 
    /**
     * Will write a jpeg world file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.jpw".
     */
-   virtual bool writeJpegWorldFile() const;
+   virtual bool writeJpegWorldFile() ;
 
    /**
     * Write out an ossim overview file from the source_file.
@@ -141,19 +141,19 @@ public:
     * @return true on success, false on error.
     */
    virtual bool writeOverviewFile(ossim_uint16 tiff_compress_type = 1,
-                                  ossim_int32 jpeg_compress_quality = 75)const;
+                                  ossim_int32 jpeg_compress_quality = 75);
 
    /**
     * Will write a readme file.  If "theFilename" is "foo.tif"
     * then this will write out "foo_readme.txt".
     */
-   virtual bool writeReadmeFile() const;
+   virtual bool writeReadmeFile() ;
 
    /**
     * Will write a readme file.  If "theFilename" is "foo.tif"
     * then this will write out "foo.tfw".
     */
-   virtual bool writeTiffWorldFile() const;
+   virtual bool writeTiffWorldFile() ;
 
    /**
     * Convenience method that calls meta data write methods that are flagged
@@ -172,7 +172,7 @@ public:
     *
     * @return true if all files flagged are written, false if not.
     */
-   virtual bool writeMetaDataFiles() const;
+   virtual bool writeMetaDataFiles() ;
 
    virtual void setAreaOfInterest(const ossimIrect& inputRect);
 
@@ -388,7 +388,7 @@ protected:
     *
     * @return true on success, false on error.
     */
-   bool writeWorldFile(const ossimFilename& file) const;
+   bool writeWorldFile(const ossimFilename& file);
    
    /**
     * Write out the file.
@@ -396,8 +396,8 @@ protected:
     */
    virtual bool writeFile() = 0;
    
-   ossimImageSourceSequencer* theInputConnection;
-   ossimViewController*       theViewController;
+   ossimRefPtr<ossimImageSourceSequencer> theInputConnection;
+   ossimRefPtr<ossimViewController>       theViewController;
    ossimListener*             theProgressListener;
    ossimFilename              theFilename;
    ossimString                theOutputImageType;

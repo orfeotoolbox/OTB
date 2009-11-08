@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationPolyObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationPolyObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationPolyObject_HEADER
 #define ossimAnnotationPolyObject_HEADER
 
@@ -34,7 +34,6 @@ public:
 
    ossimObject* dup()const;
 
-   virtual ~ossimAnnotationPolyObject();
 
    virtual void applyScale(double x, double y);
 
@@ -70,7 +69,8 @@ public:
    virtual void setFillFlag(bool flag);
 
 protected:
-   ossimPolygon thePolygon;
+   virtual ~ossimAnnotationPolyObject();
+  ossimPolygon thePolygon;
    ossimDrect   theBoundingRect;
    bool         theFillEnabled;
 

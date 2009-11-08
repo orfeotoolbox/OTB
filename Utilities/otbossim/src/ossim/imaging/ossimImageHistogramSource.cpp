@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimImageHistogramSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -293,7 +293,7 @@ void ossimImageHistogramSource::computeNormalModeHistogram()
       ossim_float64 maxValue     = 0;
       getBinInformation(numberOfBins, minValue, maxValue);
 		
-      ossimImageSourceSequencer* sequencer = new ossimImageSourceSequencer;
+      ossimRefPtr<ossimImageSourceSequencer> sequencer = new ossimImageSourceSequencer;
       sequencer->connectMyInputTo(0, getInput(0));
       sequencer->initialize();
       
@@ -365,7 +365,7 @@ void ossimImageHistogramSource::computeNormalModeHistogram()
             }
          }
       }
-      delete sequencer;
+      sequencer->disconnect();
       sequencer = 0;
    }
 }

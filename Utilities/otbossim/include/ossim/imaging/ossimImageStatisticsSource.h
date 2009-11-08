@@ -6,7 +6,6 @@ class OSSIMDLLEXPORT ossimImageStatisticsSource : public ossimSource
 {
 public:
    ossimImageStatisticsSource();
-   virtual ~ossimImageStatisticsSource();
    
    
    virtual void computeStatistics();
@@ -19,6 +18,7 @@ public:
    const std::vector<ossim_float64>& getMax()const;
    
 protected:
+   virtual ~ossimImageStatisticsSource();
    void clearStatistics();
    template <class T>
    void computeStatisticsTemplate(T dummyVariable);

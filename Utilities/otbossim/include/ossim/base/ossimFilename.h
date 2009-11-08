@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 14233 2009-04-07 01:16:26Z dburken $
+// $Id: ossimFilename.h 14886 2009-07-15 15:40:50Z gpotts $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -229,6 +229,8 @@ public:
     */
    bool needsExpansion() const;
    
+   protected:
+	   void convertToNative();
    /*!
     * since windows uses \ for path separation
     * and unix / we need to be consistent.

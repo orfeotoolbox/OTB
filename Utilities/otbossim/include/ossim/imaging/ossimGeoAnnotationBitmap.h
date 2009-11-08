@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationBitmap.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationBitmap.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationBitmap_HEADER
 #define ossimGeoAnnotationBitmap_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -24,8 +24,6 @@ public:
                             unsigned char b = 255);
    
    ossimGeoAnnotationBitmap(const ossimGeoAnnotationBitmap& rhs);
-
-   virtual ~ossimGeoAnnotationBitmap();
    
    virtual ossimObject* dup()const;
 
@@ -38,26 +36,14 @@ public:
    virtual std::ostream& print(std::ostream& out)const;
    virtual void draw(ossimRgbImage& anImage)const;
    virtual void getBoundingRect(ossimDrect& rect)const;
-   virtual void transform(ossimProjection* projection);
+   virtual void transform(ossimImageGeometry* projection);
 
-   /**
-    * @brief Transforms from geographic to image space for a reduced
-    * resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);
-   
    virtual void setImageData(ossimRefPtr<ossimImageData>& imageData);
    virtual void computeBoundingRect();
 
 protected:
+   virtual ~ossimGeoAnnotationBitmap();
+   
    ossimGpt                    theCenterPoint;
    ossimDpt                    theProjectedPoint;
    ossimRefPtr<ossimImageData> theImageData;

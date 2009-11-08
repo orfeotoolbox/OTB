@@ -1,11 +1,13 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.h 9252 2006-07-14 14:06:13Z dburken $
+// $Id: ossimRectilinearDataObject.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimRectilinearDataObject_HEADER
 #define ossimRectilinearDataObject_HEADER
 #include <ossim/base/ossimDataObject.h>
@@ -13,6 +15,10 @@
 class OSSIMDLLEXPORT ossimRectilinearDataObject : public ossimDataObject
 {
 public:
+
+   /** default constructor */
+   ossimRectilinearDataObject();
+
    ossimRectilinearDataObject(const ossimRectilinearDataObject&rhs);
       
    ossimRectilinearDataObject(ossim_uint32 numberOfSpatialComponents,
@@ -62,8 +68,8 @@ public:
                               ossimScalarType   scalarType=OSSIM_SCALAR_UNKNOWN,
                               ossimDataObjectStatus status=OSSIM_NULL);
    
-   virtual ~ossimRectilinearDataObject();
 
+   virtual ~ossimRectilinearDataObject();
    /**
     * How many components make up this data object.  For
     * example:  If this were an RGB image data object then
@@ -121,12 +127,19 @@ public:
 
    virtual std::ostream& print(std::ostream& out) const;
 
+   /**
+    * @brief assignment operator=
+    * @param rhs The data to assign from.
+    * @param A reference to this object.
+    */
+   virtual const ossimRectilinearDataObject& operator=(
+      const ossimRectilinearDataObject& rhs);
+
 protected:
-   ossim_uint32             theNumberOfDataComponents;
-   ossim_uint32             theNumberOfSpatialComponents;
-   ossimScalarType          theScalarType;
-   std::vector<ossim_uint8> theDataBuffer;
-   ossim_uint32*            theSpatialExtents;
+   ossim_uint32              theNumberOfDataComponents;
+   ossimScalarType           theScalarType;
+   std::vector<ossim_uint8>  theDataBuffer;
+   std::vector<ossim_uint32> theSpatialExtents;
    
 TYPE_DATA
 };

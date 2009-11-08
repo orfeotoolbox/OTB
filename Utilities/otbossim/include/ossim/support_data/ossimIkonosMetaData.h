@@ -9,7 +9,7 @@
 // This class parses a Space Imaging Ikonos meta data file.
 //
 //********************************************************************
-// $Id: ossimIkonosMetaData.h 14412 2009-04-27 16:58:46Z dburken $
+// $Id: ossimIkonosMetaData.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimIkonosMetaData_HEADER
 #define ossimIkonosMetaData_HEADER
@@ -31,8 +31,6 @@ public:
    /** @brief default constructor */
    ossimIkonosMetaData();
 
-   /** virtual destructor */
-   virtual ~ossimIkonosMetaData();
 
    /**
     * @brief Open method that takes the image file, derives the metadata,
@@ -99,7 +97,11 @@ public:
     * @note Currently NOT implemented.
     */
    bool parseRpcData(const ossimFilename& data_file);
-   
+
+protected:
+   /** virtual destructor */
+   virtual ~ossimIkonosMetaData();
+
 private:
    ossim_float64 theNominalCollectionAzimuth;
    ossim_float64 theNominalCollectionElevation;

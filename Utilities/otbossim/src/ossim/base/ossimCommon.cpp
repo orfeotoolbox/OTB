@@ -1,13 +1,15 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: David Burken
 //
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 13666 2008-10-02 19:59:15Z gpotts $
+// $Id: ossimCommon.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 
@@ -20,10 +22,27 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/matrix/newmat.h>
+#include <ossim/base/ossimDpt.h>
 static ossimTrace traceDebug("ossimCommon:debug");
 
 // stores a floating point nan value
 const ossim::IntFloatBitCoercion ossim::nanValue(~ossim_int64(0));
+
+std::istream& ossim::skipws(std::istream& in)
+{
+   int c = in.peek();
+   while( !in.fail() && ossim::isWhiteSpace(c))
+   {
+      in.ignore(1);
+      c = in.peek();
+   }
+   
+   return in;
+}
+bool ossim::isWhiteSpace(int c)
+{
+   return ( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') ) ;
+}
 
 ossimByteOrder ossim::byteOrder()
 {
@@ -278,6 +297,124 @@ ossim_uint32 ossim::scalarSizeInBytes(ossimScalarType scalarType)
   }
   
   return 1;
+}
+
+bool ossim::isSigned(ossimScalarType scalarType)
+{
+   bool result = false;
+   switch(scalarType)
+   {
+      case OSSIM_SINT8:
+      case OSSIM_SINT16:
+      case OSSIM_SINT32:
+      case OSSIM_FLOAT32:
+      case OSSIM_FLOAT64:
+      {
+         result = true;
+         break;
+      }
+      default:
+      {
+         break;
+      }
+  }
+  return result;
+}
+
+ossim_uint32 ossim::getActualBitsPerPixel(ossimScalarType scalarType)
+{
+   ossim_uint32 actualBitsPerPixel = 0;
+   switch(scalarType)
+   {
+      case OSSIM_UINT8:
+      case OSSIM_SINT8:
+      {
+         actualBitsPerPixel = 8;
+         break;
+      }
+      case OSSIM_USHORT11:
+      {
+         actualBitsPerPixel = 11;
+         break;
+      }
+      case OSSIM_UINT16:
+      case OSSIM_SINT16:
+      {
+         actualBitsPerPixel = 16;
+         break;
+      }
+      case OSSIM_FLOAT32:
+      case OSSIM_NORMALIZED_FLOAT:
+      {
+         actualBitsPerPixel = 32;
+         break;
+      }
+      case OSSIM_FLOAT64:
+      case OSSIM_NORMALIZED_DOUBLE:
+      {
+         actualBitsPerPixel = 64;
+         break;
+      }
+      default:
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << __FILE__ << ":" << __LINE__
+               << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         }
+         break;
+      }
+   }
+   return actualBitsPerPixel;
+}
+
+ossim_uint32 ossim::getBitsPerPixel(ossimScalarType scalarType)
+{
+   ossim_uint32 bitsPerPixel = 0;
+   switch(scalarType)
+   {
+      case OSSIM_UINT8:
+      case OSSIM_SINT8:
+      {
+         bitsPerPixel = 8;
+         break;
+      }
+      case OSSIM_USHORT11:
+      {
+         bitsPerPixel = 16;
+         break;
+      }
+      case OSSIM_UINT16:
+      case OSSIM_SINT16:
+      {
+         bitsPerPixel = 16;
+         break;
+      }
+      case OSSIM_FLOAT32:
+      case OSSIM_NORMALIZED_FLOAT:
+      {
+         bitsPerPixel = 32;
+         break;
+      }
+      case OSSIM_FLOAT64:
+      case OSSIM_NORMALIZED_DOUBLE:
+      {
+         bitsPerPixel = 64;
+         break;
+      }
+      default:
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << __FILE__ << ":" << __LINE__
+               << "\nUnhandled scalar type:  " << scalarType << std::endl;
+         }
+         break;
+      }
+   }
+   return bitsPerPixel;
 }
 
 void ossim::defaultTileSize(ossimIpt& tileSize)
@@ -540,3 +677,80 @@ void ossim::lexQuotedTokens(const std::string& str,
       start = str.find_first_not_of(whitespace, end);
    }
 }
+
+void ossim::toStringList(ossimString& resultStringOfPoints,
+                         const std::vector<ossimDpt>& pointList)
+{
+   ossim_uint32 idx = 0;
+   for(;idx < pointList.size();++idx)
+   {
+      ossimString pt = pointList[idx].toString();
+      if(resultStringOfPoints.empty())
+      {
+         resultStringOfPoints = pt;
+      }
+      else
+      {
+         resultStringOfPoints += (" " + pt);
+      }
+   }
+}
+
+void ossim::toStringList(ossimString& resultStringOfPoints,
+                         const std::vector<ossimIpt>& pointList)
+{
+   ossim_uint32 idx = 0;
+   for(;idx < pointList.size();++idx)
+   {
+      ossimString pt = pointList[idx].toString();
+      if(resultStringOfPoints.empty())
+      {
+         resultStringOfPoints = pt;
+      }
+      else
+      {
+         resultStringOfPoints += (" " + pt);
+      }
+   }
+}
+
+void ossim::toVector(std::vector<ossimDpt>& result,
+                     const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> splitResult;
+   
+   stringOfPoints.split(splitResult, " ");
+   
+   if(splitResult.size() > 0)
+   {
+      ossimDpt tempPoint;
+      ossim_uint32 idx = 0;
+      for(;idx < splitResult.size(); ++idx)
+      {
+         tempPoint = ossimDpt(0.0,0.0);
+         tempPoint.toPoint(splitResult[idx]);
+         result.push_back(tempPoint);
+      }
+   }
+}
+
+void ossim::toVector(std::vector<ossimIpt>& result,
+                     const ossimString& stringOfPoints)
+{
+   std::vector<ossimString> splitResult;
+   
+   stringOfPoints.split(splitResult, " ");
+   
+   if(splitResult.size() > 0)
+   {
+      ossimDpt tempPoint;
+      ossim_uint32 idx = 0;
+      for(;idx < splitResult.size(); ++idx)
+      {
+         tempPoint = ossimDpt(0.0,0.0);
+         tempPoint.toPoint(splitResult[idx]);
+         result.push_back(tempPoint);
+      }
+   }
+}
+

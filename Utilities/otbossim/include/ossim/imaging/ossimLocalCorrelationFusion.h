@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimLocalCorrelationFusion.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLocalCorrelationFusion.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimLocalCorrelationFusion_HEADER
 #define ossimLocalCorrelationFusion_HEADER
 #include <ossim/imaging/ossimFusionCombiner.h>
@@ -40,7 +40,6 @@ class OSSIM_DLL ossimLocalCorrelationFusion : public ossimFusionCombiner,
 {
 public:
    ossimLocalCorrelationFusion();
-   virtual ~ossimLocalCorrelationFusion();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
    virtual void initialize();
@@ -62,6 +61,7 @@ public:
                           const char* prefix=0);
    
 protected:
+   virtual ~ossimLocalCorrelationFusion();
    void setFilters();
    bool computeRegression(ossim_float64& slopeResult,
                           const ossimIpt& origin,

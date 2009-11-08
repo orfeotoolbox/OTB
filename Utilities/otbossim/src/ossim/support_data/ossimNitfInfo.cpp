@@ -23,27 +23,17 @@ ossimNitfInfo::ossimNitfInfo()
 
 ossimNitfInfo::~ossimNitfInfo()
 {
-   if (theNitfFile)
-   {
-      delete theNitfFile;
-      theNitfFile = 0;
-   }
+   theNitfFile = 0;
 }
 
 bool ossimNitfInfo::open(const ossimFilename& file)
 {
-   if (theNitfFile)
-   {
-      delete theNitfFile;
-   }
-
    theNitfFile = new ossimNitfFile();
 
    bool result = theNitfFile->parseFile(file);
 
    if (result == false)
    {
-      delete theNitfFile;
       theNitfFile = 0;
    }
 
@@ -55,7 +45,7 @@ std::ostream& ossimNitfInfo::print(std::ostream& out) const
    if (theNitfFile)
    {
       std::string prefix;
-      theNitfFile->print(out, prefix);
+      theNitfFile->print(out, prefix, getProcessOverviewFlag());
    }
    return out;
 }

@@ -10,7 +10,7 @@
 // Contains class declaration for ossimGeneralRasterWriter.
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeneralRasterWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimGeneralRasterWriter_HEADER
 #define ossimGeneralRasterWriter_HEADER
@@ -27,7 +27,6 @@ public:
    ossimGeneralRasterWriter();
    ossimGeneralRasterWriter(ossimImageSource* inputSource,
                             const ossimFilename& file=ossimFilename(""));
-   virtual ~ossimGeneralRasterWriter();
 
    /**
     * void getImageTypeList(std::vector<ossimString>& imageTypeList)const
@@ -60,6 +59,8 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+protected:
+   virtual ~ossimGeneralRasterWriter();
 
 private:
    virtual bool writeFile();

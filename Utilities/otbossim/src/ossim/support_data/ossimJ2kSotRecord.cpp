@@ -22,7 +22,7 @@
 
 ossimJ2kSotRecord::ossimJ2kSotRecord()
    :
-   theSotMarker(0xff90),
+   theMarker(0xff90),
    theLsot(0),
    theIsot(0),
    thePsot(0),
@@ -55,15 +55,28 @@ void ossimJ2kSotRecord::parseStream(std::istream& in)
    }
 }
 
-std::ostream& ossimJ2kSotRecord::print(std::ostream& out) const
+std::ostream& ossimJ2kSotRecord::print(std::ostream& out,
+                                       const std::string& prefix) const
 {
-   out << std::setiosflags(std::ios::left) << "ossimJ2kSotRecord::print"
-       << std::setw(24) << "\ntheLsot:"  << theLsot
-       << std::setw(24) << "\ntheIsot:"  << theIsot
-       << std::setw(24) << "\nthePsot:"  << thePsot
-       << std::setw(24) << "\ntheTpsot:" << int(theTpsot)
-       << std::setw(24) << "\ntheTnsot:" << int(theTnsot)
+   // Capture the original flags.
+   std::ios_base::fmtflags f = out.flags();
+
+   std::string pfx = prefix;
+   pfx += "sot.";
+
+   out.setf(std::ios_base::hex, std::ios_base::basefield);
+   out << pfx << "marker: 0x" << theMarker << "\n";
+   out.setf(std::ios_base::fmtflags(0), std::ios_base::basefield);
+
+   out << pfx << "Lsot:   "  << theLsot      << "\n"
+       << pfx << "Isot:   "  << theIsot      << "\n"
+       << pfx << "Psot:   "  << thePsot      << "\n"
+       << pfx << "Tpsot:  " << int(theTpsot) << "\n"
+       << pfx << "Tnsot:  " << int(theTnsot)
        << std::endl;
+
+   // Reset flags.
+   out.setf(f);
 
    return out;
 }

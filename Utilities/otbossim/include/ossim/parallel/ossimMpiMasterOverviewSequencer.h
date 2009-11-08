@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiMasterOverviewSequencer.h 10152 2006-12-30 20:54:39Z dburken $
+// $Id: ossimMpiMasterOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimMpiMasterOverviewSequencer_HEADER
 #define ossimMpiMasterOverviewSequencer_HEADER
 
@@ -28,9 +28,6 @@ public:
    /** default constructor */
    ossimMpiMasterOverviewSequencer();
    
-   /** virtual destructor */
-   virtual ~ossimMpiMasterOverviewSequencer();
-
    /**
     * This must be called.  We can only initialize this
     * object completely if we know all connections
@@ -65,6 +62,8 @@ public:
    virtual ossimRefPtr<ossimImageData> getNextTile();
    
 protected:
+   /** virtual destructor */
+   virtual ~ossimMpiMasterOverviewSequencer();
 
    int  theRank;
    int  theNumberOfProcessors;

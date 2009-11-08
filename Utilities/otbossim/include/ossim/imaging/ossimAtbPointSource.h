@@ -12,12 +12,14 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbPointSource.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAtbPointSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAtbPointSource_HEADER
 #define ossimAtbPointSource_HEADER
 
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimRefPtr.h>
 
 class ossimImageSource;
 class ossimImageData;
@@ -29,14 +31,13 @@ class ossimGridRemapEngine;
  * CLASS: ossimAtbPointSource 
  *
  *****************************************************************************/
-class ossimAtbPointSource
+class ossimAtbPointSource : public ossimReferenced
 {
 public:
    ossimAtbPointSource();
    ossimAtbPointSource(ossimGridRemapSource* remap_source,
                        const ossimDpt&       view_point);
 
-   ~ossimAtbPointSource();
 
    /*!
     * Sets the pointer of the source of pixels used to compute the stats.
@@ -46,7 +47,7 @@ public:
    /*!
     * Returns the reference to the remapper feeding this source.
     */
-   ossimGridRemapSource* getRemapSource() { return theRemapSource; }
+   ossimGridRemapSource* getRemapSource() { return theRemapSource.get(); }
 
    /*!
     * Sets the view coordinates corresponding to this point.
@@ -80,11 +81,14 @@ public:
     */
    void setGridRemapEngine(ossimGridRemapEngine* engine)
       { theGridRemapEngine = engine; }
-   
+protected:
+   virtual ~ossimAtbPointSource();
+
 private:
-   ossimGridRemapSource* theRemapSource;
+   
+   ossimRefPtr<ossimGridRemapSource> theRemapSource;
    ossimDpt              theViewPoint;
-   ossimGridRemapEngine* theGridRemapEngine;
+   ossimRefPtr<ossimGridRemapEngine> theGridRemapEngine;
    int                   theKernelSize;
    bool                  theViewPointIsValid;
 };

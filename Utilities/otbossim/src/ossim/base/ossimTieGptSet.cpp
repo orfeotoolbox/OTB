@@ -80,7 +80,7 @@ ossimTieGptSet::exportAsGmlNode(ossimString aGmlVersion)const
    for(vector<ossimRefPtr<ossimTieGpt> >::const_iterator it = theTies.begin(); it != theTies.end(); ++it)
    {
       ossimRefPtr<ossimXmlNode> tienode = (*it)->exportAsGmlNode(aGmlVersion);
-      node->addChildNode(tienode);
+      node->addChildNode(tienode.get());
       //TBD : add attribute / counter?
    }
 

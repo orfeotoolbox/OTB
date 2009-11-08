@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 13468 2008-08-20 18:25:57Z gpotts $
+//  $Id: ossimLandsatTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -59,11 +59,7 @@ ossimLandsatTileSource::ossimLandsatTileSource(const ossimKeywordlist& kwl,
 //*******************************************************************
 ossimLandsatTileSource::~ossimLandsatTileSource()
 {
-   if (theFfHdr)
-   {
-      delete theFfHdr;
-      theFfHdr = NULL;
-   }
+   theFfHdr = NULL;
 }
 
 bool ossimLandsatTileSource::open()
@@ -212,11 +208,7 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
    //***
    ossimFilename hdr = file.file();
    hdr.downcase();
-   if(theFfHdr)
-   {
-      delete theFfHdr;
-      theFfHdr = 0;
-   }
+   theFfHdr = 0;
    if ( hdr.contains("hpn") || hdr.contains("hrf") || hdr.contains("htm") )
    {
       theFfHdr = new ossimFfL7(file.c_str());      
@@ -227,13 +219,12 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
    } 
 	else 
 	{
-      theFfHdr = NULL;
+      theFfHdr = 0;
       return;
    }
    if (theFfHdr->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-      delete theFfHdr;
-      theFfHdr = NULL;
+      theFfHdr = 0;
    }
    return;
 
@@ -324,32 +315,22 @@ void ossimLandsatTileSource::openHeader(const ossimFilename& file)
 #endif
 }
    
-bool ossimLandsatTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                              const char* prefix)
+ossimImageGeometry*  ossimLandsatTileSource::getImageGeometry()
 {
-   // Check for override for an external geometry file, or a previous save.
-   if(ossimImageHandler::getImageGeometry(kwl, prefix))
-   {
-      return true;
-   }
-   
-   if (!theFfHdr) return false;
+   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
+   if (result->getProjection())
+      return theGeometry.get();
+
+   if (!theFfHdr) return result;
 
    // Make a model
-   ossimLandSatModel model(*theFfHdr);
+   ossimLandSatModel* model = new ossimLandSatModel (*theFfHdr);
 
-   if (model.getErrorStatus() != ossimErrorCodes::OSSIM_OK)
-   {
-   
+   if (model->getErrorStatus() != ossimErrorCodes::OSSIM_OK)
       return false;
-   }
 
-   bool result = model.saveState(kwl, prefix);
-   if (result)
-   {
-      // Capture for next time...
-      setImageGeometry(kwl);
-   }
+   //initialize the image geometry object with the model
+   result->setProjection(model);
    return result;
 }
 
@@ -394,7 +375,7 @@ ossimRefPtr<ossimProperty> ossimLandsatTileSource::getProperty(
 			return (new ossimStringProperty(name, "landsat7"));
 		}
 	}
-   else if (theFfHdr)
+   else if (theFfHdr.valid())
    {
       result = theFfHdr->getProperty(name);
    }
@@ -411,7 +392,7 @@ void ossimLandsatTileSource::getPropertyNames(
    std::vector<ossimString>& propertyNames)const
 {
 	propertyNames.push_back("file_type");
-   if (theFfHdr)
+   if (theFfHdr.valid())
    {
       theFfHdr->getPropertyNames(propertyNames);
    }

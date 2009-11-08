@@ -2,7 +2,7 @@ PROJECT(otbossim)
 
 SET(OSSIM_MAJOR_VERSION_NUMBER "1")
 SET(OSSIM_MINOR_VERSION_NUMBER "7")
-SET(OSSIM_PATCH_VERSION_NUMBER "16")
+SET(OSSIM_PATCH_VERSION_NUMBER "20")
 SET(OSSIM_RELEASE_NUMBER "?")
 SET(OSSIM_VERSION "${OSSIM_MAJOR_VERSION_NUMBER}-${OSSIM_MINOR_VERSION_NUMBER}-${OSSIM_PATCH_VERSION_NUMBER}" )
 
@@ -50,7 +50,9 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   # Removing sources not in use any more (switched to ossim plugins)
   REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ErsSar/*")
   REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/RadarSat2/*")
+  REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ossimRadarSat2TileSource.cpp")
   REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/TerraSar/*")
+  REMOVE(ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ossimTerraSarTileSource.cpp")
 
   # Adjust the compiler flags to avoid problems with ossim code.
   IF(CMAKE_COMPILER_IS_GNUCXX)

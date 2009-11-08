@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramEqualization.h 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimHistogramEqualization.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHistogramEqualization_HEADER
 #define ossimHistogramEqualization_HEADER
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
@@ -22,7 +22,6 @@ public:
    ossimHistogramEqualization(ossimImageSource* inputSource,
                               ossimRefPtr<ossimMultiResLevelHistogram> histogram,
                               bool inverseFlag);
-   virtual ~ossimHistogramEqualization();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
 
@@ -41,6 +40,7 @@ public:
    virtual std::ostream& print(std::ostream& out) const;
 
 protected:
+   virtual ~ossimHistogramEqualization();
 
    /**
     * Called on first getTile, will initialize all data needed.

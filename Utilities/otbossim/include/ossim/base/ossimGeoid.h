@@ -19,8 +19,8 @@
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimErrorStatusInterface.h>
 
-class OSSIMDLLEXPORT ossimGpt;
-class OSSIMDLLEXPORT ossimFilename;
+class ossimGpt;
+class ossimFilename;
 
 class OSSIMDLLEXPORT ossimGeoid : public ossimObject,
 				  public ossimErrorStatusInterface

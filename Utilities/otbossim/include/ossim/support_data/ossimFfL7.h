@@ -8,7 +8,7 @@
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.h 10749 2007-04-23 16:46:15Z dburken $
+// $Id: ossimFfL7.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimFfL7_HEADER
 #define ossimFfL7_HEADER
@@ -42,7 +42,6 @@ class OSSIMDLLEXPORT ossimFfL7 : public ossimReferenced,
 public:
    ossimFfL7  ();
    ossimFfL7  (const char* headerFile);
-   virtual ~ossimFfL7();
    
    void   dump(std::ostream& os) const;
       //> Provides a readable dump of this object.
@@ -177,6 +176,9 @@ public:
    double  theOrientationAngle;   // degrees
    double  theSunElevation;       // degrees
    double  theSunAzimuth;         // degrees
+
+protected:
+   virtual ~ossimFfL7();
 
 private:
    

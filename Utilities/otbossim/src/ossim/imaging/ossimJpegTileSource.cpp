@@ -8,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 13054 2008-06-23 13:55:13Z gpotts $
+//  $Id: ossimJpegTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #if defined(__BORLANDC__)
 #include <iostream>
 using std::size_t;
@@ -212,46 +212,75 @@ void ossimJpegTileSource::allocate()
 }
 
 ossimRefPtr<ossimImageData> ossimJpegTileSource::getTile(
-   const ossimIrect& tile_rect, ossim_uint32 resLevel)
+   const ossimIrect& rect, ossim_uint32 resLevel)
 {
-   if(!isSourceEnabled()||!isOpen()||!isValidRLevel(resLevel))
+   if (theTile.valid())
    {
-      return ossimRefPtr<ossimImageData>();
-   }
-   
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
+      // Image rectangle must be set prior to calling getTile.
+      theTile->setImageRectangle(rect);
+      
+      if ( getTile( theTile.get(), resLevel ) == false )
       {
-         return theOverview->getTile(tile_rect, resLevel);
+         if (theTile->getDataObjectStatus() != OSSIM_NULL)
+         {
+            theTile->makeBlank();
+         }
       }
    }
-
-   if (!theTile.valid())
-   {
-      return ossimRefPtr<ossimImageData>();
-   }
-
-   theTile->setImageRectangle(tile_rect);
-   if (getImageRectangle(0).intersects(tile_rect))
-   {
-      // Make a clip rect.
-      ossimIrect clip_rect = tile_rect.clipToRect(getImageRectangle(0));
-
-      fillTile(clip_rect);
-   }
-   else
-   {
-      // No point in requested tile within the image rectangle.
-      return ossimRefPtr<ossimImageData>();
-   }
-
+   
    return theTile;
 }
 
-void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
+bool ossimJpegTileSource::getTile(ossimImageData* result,
+                                  ossim_uint32 resLevel)
 {
-   if (!theTile || !theFilePtr) return;
+   bool status = false;
+   
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      result->ref();  // Increment ref count.
+      
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
+         
+         ossimIrect tile_rect = result->getImageRectangle();       
+
+         if (getImageRectangle(0).intersects(tile_rect))
+         {
+            // Make a clip rect.
+            ossimIrect clip_rect = tile_rect.clipToRect(getImageRectangle(0));
+            
+            fillTile(clip_rect, result);
+         }
+         else // No intersection...
+         {
+            result->makeBlank();
+         }
+      }
+
+      result->unref();  // Decrement ref count.
+   }
+
+   return status;
+}
+
+void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect,
+                                   ossimImageData* tile)
+{
+   if (!theFilePtr) return;
 
    ossimIrect buffer_rect = clip_rect;
    buffer_rect.stretchToTileBoundary(theCacheSize);
@@ -259,9 +288,9 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
    buffer_rect.set_lrx(getImageRectangle(0).lr().x);
 
    // Check for a partial tile.
-   if ( ! theTile->getImageRectangle().completely_within(buffer_rect) )
+   if ( ! tile->getImageRectangle().completely_within(buffer_rect) )
    {
-      theTile->makeBlank();
+      tile->makeBlank();
    }
 
    ossim_int32 number_of_cache_tiles = buffer_rect.height()/theCacheSize.y;
@@ -277,7 +306,7 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
 
    ossimIpt origin = buffer_rect.ul();
    
-   for (int tile = 0; tile < number_of_cache_tiles; ++tile)
+   for (int tileIdx = 0; tileIdx < number_of_cache_tiles; ++tileIdx)
    {
       // See if it's in the cache already.
       ossimRefPtr<ossimImageData> tempTile;
@@ -285,7 +314,7 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
          getTile(theCacheId, origin);
       if (tempTile.valid())
       {
-         theTile->loadTile(tempTile.get());
+         tile->loadTile(tempTile.get());
       }
       else
       {
@@ -357,21 +386,18 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
          }
          theCacheTile->validate();
          
-         theTile->loadTile(theCacheTile.get());
+         tile->loadTile(theCacheTile.get());
          
          // Add it to the cache for the next time.
          ossimAppFixedTileCache::instance()->addTile(theCacheId, theCacheTile);
          
-
-//         delete[] buf;
-
       } // End of reading for jpeg file.
       
       origin.y += theCacheSize.y;
       
    } // for (int tile = 0; tile < number_of_cache_tiles; ++tile)
 
-   theTile->validate();
+   tile->validate();
 }
 
 //*******************************************************************
@@ -550,7 +576,7 @@ bool ossimJpegTileSource::isValidRLevel(ossim_uint32 reduced_res_level) const
    {
       return true;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->isValidRLevel(reduced_res_level);
    }
@@ -559,8 +585,8 @@ bool ossimJpegTileSource::isValidRLevel(ossim_uint32 reduced_res_level) const
       cerr << MODULE << " Invalid reduced_res_level:  " << reduced_res_level
            << "\nHighest available:  " << (getNumberOfDecimationLevels() - 1)
            << endl;
-      return false;
    }
+   return false;
 }
 
 //*******************************************************************
@@ -572,7 +598,7 @@ ossim_uint32 ossimJpegTileSource::getNumberOfLines(ossim_uint32 reduced_res_leve
    {
       return theImageRect.lr().y - theImageRect.ul().y + 1;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -589,7 +615,7 @@ ossim_uint32 ossimJpegTileSource::getNumberOfSamples(ossim_uint32 reduced_res_le
    {
       return theImageRect.lr().x - theImageRect.ul().x + 1;;
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }
@@ -617,7 +643,7 @@ ossimString ossimJpegTileSource::getLongName()const
    return ossimString("jpg reader");
 }
 
-ossimString  ossimJpegTileSource::className()const
+ossimString  ossimJpegTileSource::getClassName()const
 {
    return ossimString("ossimJpegTileSource");
 }

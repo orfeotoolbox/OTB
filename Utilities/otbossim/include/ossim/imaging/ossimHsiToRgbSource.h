@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHsiToRgbSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHsiToRgbSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHsiToRgbSource_HEADER
 #define ossimHsiToRgbSource_HEADER
 
@@ -19,7 +19,6 @@ class ossimHsiToRgbSource : public ossimImageSourceFilter
 public:
    ossimHsiToRgbSource();
    ossimHsiToRgbSource(ossimImageSource* inputSource);
-   virtual ~ossimHsiToRgbSource();
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
 
@@ -31,6 +30,7 @@ public:
 
    virtual void initialize();
 protected:
+   virtual ~ossimHsiToRgbSource();
 
    /**
     * Called on first getTile, will initialize all data needed.
