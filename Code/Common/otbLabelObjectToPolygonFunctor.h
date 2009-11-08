@@ -66,7 +66,7 @@ public:
    * \param labelObject the label object to vectorize
    * \return The vectorized label object as a polygon.
    */
-  inline PolygonPointerType operator()(const LabelObjectType * labelObject);
+  inline PolygonType * operator()(const LabelObjectType * labelObject);
   
 private:
   /// Internal structures
@@ -109,6 +109,8 @@ private:
   /// Walk right to update the finite states machine.
   inline void WalkRight(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state);
  
+  PolygonPointerType m_Polygon;
+
   // Internal structure to store runs
   RunsPerLineVectorType m_InternalDataSet;
 
