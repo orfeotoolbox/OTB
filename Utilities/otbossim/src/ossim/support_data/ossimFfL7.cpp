@@ -8,7 +8,7 @@
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.cpp 13663 2008-10-02 18:47:32Z gpotts $
+// $Id: ossimFfL7.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
   // #include <cstdlib>
 
@@ -692,7 +692,7 @@ unsigned int ossimFfL7::getBandCount()const
 {
    ossimString tmp(theBandsPresentString);
    tmp.trim(); //remove spaces
-   return tmp.length();
+   return (unsigned int)tmp.length();
 //   return strlen(tmp.chars()); //beurk! should implement length in ossimString
 }
  

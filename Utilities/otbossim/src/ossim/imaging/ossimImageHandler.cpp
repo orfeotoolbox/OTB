@@ -12,7 +12,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageHandler.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <algorithm>
 
@@ -47,7 +47,7 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
 
 // GARRETT! All of the decimation factors are scattered throughout. We want to fold that into 
@@ -62,6 +62,7 @@ ossimImageHandler::ossimImageHandler()
 :
 ossimImageSource(0, 0, 0, true, false /* output list is not fixed */ ),
 theImageFile(ossimFilename::NIL),
+theSupplementaryDirectory(ossimFilename::NIL),
 theOverview(0),
 //theSubImageOffset(0, 0),
 theValidImageVertices(0),
@@ -379,7 +380,21 @@ void ossimImageHandler::getDecimationFactor(ossim_uint32 resLevel,
    }
    else
    {
-      result.x = 1.0 / ((ossim_float64)(1<<resLevel));
+      /*
+         ESH 02/2009 -- No longer assume powers of 2 reduction
+         in linear size from resLevel 0 (Tickets # 467,529).
+      */
+      ossim_int32 x  = getNumberOfLines(resLevel);
+      ossim_int32 x0 = getNumberOfLines(0);
+
+      if ( x > 0 && x0 > 0 ) 
+      {
+         result.x = ((double)x) / x0; 
+      }
+      else 
+      {
+         result.x = 1.0 / (1<<resLevel);
+      }
       result.y = result.x;
    }
 }
@@ -1092,7 +1107,7 @@ ossim_uint32 ossimImageHandler::getNumberOfEntries()const
    std::vector<ossim_uint32> tempList;
    getEntryList(tempList);
    
-   return tempList.size();
+   return (ossim_uint32)tempList.size();
 }
 
 
@@ -1124,6 +1139,15 @@ const ossimFilename& ossimImageHandler::getFilename()const
    return theImageFile;
 }
 
+void ossimImageHandler::setSupplementaryDirectory(const ossimFilename& dir)
+{
+   theSupplementaryDirectory = dir;
+}
+
+const ossimFilename& ossimImageHandler::getSupplementaryDirectory()const
+{
+   return theSupplementaryDirectory;
+}
 
 void ossimImageHandler::setProperty(ossimRefPtr<ossimProperty> property)
 {
@@ -1235,6 +1259,16 @@ ossimFilename ossimImageHandler::getFilenameWithThisExtension(
 {
    // Get the image file.
    ossimFilename f = getFilename();
+
+   // If the supplementary directory is set, find the extension
+   // at that location instead of at the default.
+   if ( theSupplementaryDirectory.empty() == false )
+   {
+      ossimFilename fname = f.file();
+
+      f.setPath( theSupplementaryDirectory );
+      f.dirCat( fname );
+   }
 
    // Wipe out the extension.
    f.setExtension("");

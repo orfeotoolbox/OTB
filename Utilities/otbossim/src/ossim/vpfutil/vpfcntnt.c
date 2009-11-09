@@ -134,7 +134,7 @@ void vpf_dump_table( char *tablename, char *outname )
 		  fprintf(fp,"%c\n",ch);
 	       } else {
 		  buf = (char *)get_table_element(j,row,table,NULL,&n);
-		  n = strlen(table.header[j].name) + 2;
+		  n = (long)strlen(table.header[j].name) + 2;
 		  for (k=0;(unsigned int)k<strlen(buf);k++) {
 		     fprintf(fp,"%c",buf[k]);
 		     n++;

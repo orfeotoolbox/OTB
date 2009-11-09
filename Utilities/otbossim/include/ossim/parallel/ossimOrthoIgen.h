@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.h 15785 2009-10-21 14:55:04Z dburken $
+// $Id: ossimOrthoIgen.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
@@ -124,6 +124,7 @@ protected:
    ossimFilename theCombinerTemplate;
    ossimFilename theAnnotationTemplate;
    ossimFilename theWriterTemplate;
+   ossimFilename theSupplementaryDirectory;
    ossimString   theSlaveBuffers;
    ossimOrthoIgen::OriginType theCutOriginType;
    ossimDpt      theCutOrigin;

@@ -9,7 +9,7 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfToc.cpp 15810 2009-10-24 14:54:27Z dburken $
+// $Id: ossimRpfToc.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <iostream>
 
@@ -229,6 +229,54 @@ ossim_int32 ossimRpfToc::getTocEntryIndex(const ossimRpfTocEntry* entry)
    }
 
    return -1;
+}
+
+ossim_uint32 ossimRpfToc::getNumberOfFramesHorizontal(ossim_uint32 idx) const
+{
+   ossim_uint32 nFrames = 0;
+   const ossimRpfTocEntry* pEntry = getTocEntry( idx );
+   if ( pEntry != NULL )
+   {
+      nFrames = pEntry->getNumberOfFramesHorizontal();
+   }
+   return nFrames;
+}
+
+ossim_uint32 ossimRpfToc::getNumberOfFramesVertical(ossim_uint32 idx) const
+{
+   ossim_uint32 nFrames = 0;
+   const ossimRpfTocEntry* pEntry = getTocEntry( idx );
+   if ( pEntry != NULL )
+   {
+      nFrames = pEntry->getNumberOfFramesVertical();
+   }
+   return nFrames;
+}
+
+bool ossimRpfToc::getRpfFrameEntry(ossim_uint32 entryIdx, 
+                                   ossim_uint32 row,
+                                   ossim_uint32 col,
+                                   ossimRpfFrameEntry& result)const
+{
+   const ossimRpfTocEntry* pEntry = getTocEntry( entryIdx );
+   if ( pEntry != NULL )
+   {
+      return pEntry->getEntry( row, col, result );
+   }
+   return false;
+}
+
+const ossimString ossimRpfToc::getRelativeFramePath( ossim_uint32 entryIdx,
+                                                     ossim_uint32 row,
+                                                     ossim_uint32 col) const
+{
+   ossimRpfFrameEntry frameEntry;
+   bool bResult = getRpfFrameEntry( entryIdx, row, col, frameEntry );
+   if ( bResult == true )
+   {
+      return frameEntry.getPathToFrameFileFromRoot();
+   }
+   return ossimString("");
 }
 
 void ossimRpfToc::deleteAll()

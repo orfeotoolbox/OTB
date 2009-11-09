@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 14296 2009-04-14 17:25:00Z gpotts $
+// $Id: ossimDtedHandler.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -218,7 +218,7 @@ void ossimDtedHandler::mapToMemory()
    std::ifstream in(theFilename.c_str(), 
                     std::ios::in|std::ios::binary);
    theMemoryMap.resize(theFilename.fileSize());
-   in.read((char*)(&theMemoryMap.front()), theMemoryMap.size());
+   in.read((char*)(&theMemoryMap.front()), (std::streamsize)theMemoryMap.size());
    in.close();
 }
 

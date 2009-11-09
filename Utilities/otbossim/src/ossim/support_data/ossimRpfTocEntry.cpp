@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfTocEntry.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfTocEntry.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <istream>
 #include <ostream>
@@ -79,9 +79,9 @@ void ossimRpfTocEntry::setEntry(const ossimRpfFrameEntry& entry,
                                 long row,
                                 long col)
 {
-   if(row < (long)theFrameEntryArray.size())
+   if(row < (long)theFrameEntryArray.size() && row >= 0)
    {
-      if(col < (long)theFrameEntryArray[row].size())
+      if(col < (long)theFrameEntryArray[row].size() && col >= 0)
       {
          theFrameEntryArray[row][col] = entry;
       }
@@ -92,9 +92,9 @@ bool ossimRpfTocEntry::getEntry(long row,
                                 long col,
                                 ossimRpfFrameEntry& result)const
 {
-   if(row < (long)theFrameEntryArray.size())
+   if(row < (long)theFrameEntryArray.size() && row >= 0)
    {
-      if(col < (long)theFrameEntryArray[row].size())
+      if(col < (long)theFrameEntryArray[row].size() && col >= 0)
       {
          result = theFrameEntryArray[row][col];
       }
@@ -117,11 +117,11 @@ bool ossimRpfTocEntry::getEntry(long row,
  */
 bool ossimRpfTocEntry::isEmpty()const
 {
-   long rows = theFrameEntryArray.size();
+   long rows = (long)theFrameEntryArray.size();
    long cols = 0;
    if(rows > 0)
    {
-      cols = theFrameEntryArray[0].size();
+      cols = (long)theFrameEntryArray[0].size();
       for(long rowIndex = 0; rowIndex < rows; ++ rowIndex)
       {
          for(long colIndex = 0; colIndex < cols; ++colIndex)

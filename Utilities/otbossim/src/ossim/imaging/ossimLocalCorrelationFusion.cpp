@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimLocalCorrelationFusion.cpp 11347 2007-07-23 13:01:59Z gpotts $
+//  $Id: ossimLocalCorrelationFusion.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimLocalCorrelationFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -160,7 +160,7 @@ ossimRefPtr<ossimImageData> ossimLocalCorrelationFusion::getTile(const ossimIrec
    }
    double panAttenuator = computeParameterOffset(REGRESSION_COEFFICIENT_ATTENUATOR_OFFSET);
    double delta = 0.0;
-   ossim_uint32 bandsSize = bands.size();
+   ossim_uint32 bandsSize = (ossim_uint32)bands.size();
    ossim_float64 slopeClamp = computeParameterOffset(REGRESSION_COEFFICIENT_CLAMP_OFFSET);
    ossim_float64 minSlope = -slopeClamp;
    ossim_float64 maxSlope = slopeClamp;

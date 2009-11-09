@@ -1047,7 +1047,7 @@ bool ossimTiffInfo::getImageGeometry(std::ifstream& inStr,
       // NOTE: It takes six doubles to make one tie point ie:
       // x,y,z,longitude,latitude,height or x,y,z,easting,northing,height
       //--- 
-      ossim_uint32 tieCount = ties.size()/6;
+      ossim_uint32 tieCount = (ossim_uint32)ties.size()/6;
       
       // Get the model transform.
       std::vector<ossim_float64> xfrm;
@@ -3338,7 +3338,7 @@ void ossimTiffInfo::getTieSets(const std::vector<ossim_float64>& ties,
                                ossimTieGptSet& tieSet) const
 {
    ossim_uint32 idx = 0;
-   ossim_uint32 tieCount = ties.size()/6;
+   ossim_uint32 tieCount = (ossim_uint32)ties.size()/6;
    const double* tiePointsPtr = &ties.front();
    double offset = 0;
    if (hasOneBasedTiePoints(ties, width, height))
@@ -3374,7 +3374,7 @@ bool ossimTiffInfo::hasOneBasedTiePoints(
    ossim_float64 maxX = 0.0;
    ossim_float64 maxY = 0.0;
 
-   const ossim_uint32 SIZE = ties.size();
+   const ossim_uint32 SIZE = (ossim_uint32)ties.size();
    ossim_uint32 tieIndex = 0;
 
    while (tieIndex < SIZE)

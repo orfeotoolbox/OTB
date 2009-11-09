@@ -6,7 +6,7 @@
 // TR # 136 kminear      Fix extractVertices method
 //
 //*************************************************************************
-// $Id: ossimVertexExtractor.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimVertexExtractor.cpp 15836 2009-10-30 12:29:09Z dburken $
 
 #include <fstream>
 using namespace std;
@@ -24,7 +24,7 @@ RTTI_DEF2(ossimVertexExtractor, "ossimVertexExtractor",
 
 ossimVertexExtractor::ossimVertexExtractor(ossimImageSource* inputSource)
       :
-      ossimOutputSource(NULL, // owner
+      ossimOutputSource(0, // owner
                         1,
                         0,
                         true,
@@ -34,10 +34,10 @@ ossimVertexExtractor::ossimVertexExtractor(ossimImageSource* inputSource)
       theFilename(ossimFilename::NIL),
       theFileStream(),
       theVertice(4),
-      theLeftEdge(NULL),
-      theRightEdge(NULL)
+      theLeftEdge(0),
+      theRightEdge(0)
 {
-   if (inputSource == NULL)
+   if (inputSource == 0)
    {
       ossimNotify(ossimNotifyLevel_WARN) << "ossimVertexExtractor::ossimVertexExtractor ERROR"
                                          << "\nNULL input image source passed to constructor!"
@@ -54,12 +54,12 @@ ossimVertexExtractor::~ossimVertexExtractor()
    if (theLeftEdge)
    {
       delete [] theLeftEdge;
-      theLeftEdge = NULL;
+      theLeftEdge = 0;
    }
    if (theRightEdge)
    {
       delete [] theRightEdge;
-      theRightEdge = NULL;
+      theRightEdge = 0;
    }
 }
 
@@ -1797,12 +1797,12 @@ bool ossimVertexExtractor::extractVertices()
    if (leftSlope)
    {
       delete [] leftSlope;
-      leftSlope = NULL;
+      leftSlope = 0;
    }
    if (rightSlope)
    {
       delete [] rightSlope;
-      rightSlope = NULL;
+      rightSlope = 0;
    }
    
    if(traceDebug())

@@ -9,7 +9,7 @@
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimTileCache.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef DataCache_HEADER
 #define DataCache_HEADER
@@ -61,7 +61,7 @@ public:
 
 
    
-   virtual long numberOfItems()const{return theCache?theCache->size():0;}
+   virtual long numberOfItems()const{return theCache?(long)theCache->size():(long)0;}
    virtual void display()const;
 
    virtual ossim_uint32 sizeInBytes(){return theSizeInBytes;}

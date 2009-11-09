@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdffielddefn.cpp 12978 2008-06-04 00:04:14Z dburken $
+ * $Id: ossimDdffielddefn.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
  */
 
 #include <cstring>
@@ -118,7 +118,7 @@ void ossimDDFFieldDefn::AddSubfield( ossimDDFSubfieldDefn *poNewSFDefn,
         _formatControls = strdup( "()" );
     }
     
-    int nOldLen = strlen(_formatControls);
+    int nOldLen = (int)strlen(_formatControls);
     
     char *pszNewFormatControls = (char *) 
         malloc(nOldLen+3+strlen(poNewSFDefn->GetFormat()));
@@ -189,9 +189,9 @@ int ossimDDFFieldDefn::GenerateDDREntry( char **ppachData,
                                     int *pnLength )
 
 {
-    *pnLength = 9 + strlen(_fieldName) + 1 
-        + strlen(_arrayDescr) + 1
-        + strlen(_formatControls) + 1;
+    *pnLength = 9 + (int)strlen(_fieldName) + 1 
+        + (int)strlen(_arrayDescr) + 1
+        + (int)strlen(_formatControls) + 1;
 
     if( strlen(_formatControls) == 0 )
         *pnLength -= 1;
@@ -580,14 +580,14 @@ char *ossimDDFFieldDefn::ExpandFormat( const char * pszSrc )
             if( (int) (strlen(pszExpandedContents) + strlen(pszDest) + 1)
                 > nDestMax )
             {
-                nDestMax = 2 * (strlen(pszExpandedContents) + strlen(pszDest));
+                nDestMax = 2 * ((int)strlen(pszExpandedContents) + (int)strlen(pszDest));
                 pszDest = (char *) realloc(pszDest,nDestMax+1);
             }
 
             strcat( pszDest, pszExpandedContents );
-            iDst = strlen(pszDest);
+            iDst = (int)strlen(pszDest);
             
-            iSrc = iSrc + strlen(pszContents) + 2;
+            iSrc = iSrc + (int)strlen(pszContents) + 2;
 
             free( pszContents );
             free( pszExpandedContents );
@@ -613,7 +613,7 @@ char *ossimDDFFieldDefn::ExpandFormat( const char * pszSrc )
                     > nDestMax )
                 {
                     nDestMax = 
-                        2 * (strlen(pszExpandedContents) + strlen(pszDest));
+                        2 * ((int)strlen(pszExpandedContents) + (int)strlen(pszDest));
                     pszDest = (char *) realloc(pszDest,nDestMax+1);
                 }
 
@@ -622,12 +622,12 @@ char *ossimDDFFieldDefn::ExpandFormat( const char * pszSrc )
                     strcat( pszDest, "," );
             }
 
-            iDst = strlen(pszDest);
+            iDst = (int)strlen(pszDest);
             
             if( pszNext[0] == '(' )
-                iSrc = iSrc + strlen(pszContents) + 2;
+                iSrc = iSrc + (int)strlen(pszContents) + 2;
             else
-                iSrc = iSrc + strlen(pszContents);
+                iSrc = iSrc + (int)strlen(pszContents);
 
             free( pszContents );
             free( pszExpandedContents );

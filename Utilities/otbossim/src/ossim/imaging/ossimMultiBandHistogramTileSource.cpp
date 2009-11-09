@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMultiBandHistogramTileSource.cpp 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimMultiBandHistogramTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimMultiBandHistogramTileSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -184,7 +184,7 @@ void ossimMultiBandHistogramTileSource::allocate()
          }
          if(numberOfBands > theMinValuePercentArray.size())
          {
-            for(i = theMinValuePercentArray.size(); i < numberOfBands; ++i)
+            for(i = (ossim_uint32)theMinValuePercentArray.size(); i < numberOfBands; ++i)
             {
                theMinValuePercentArray[i] = 0.0;
                theMaxValuePercentArray[i] = 0.0;

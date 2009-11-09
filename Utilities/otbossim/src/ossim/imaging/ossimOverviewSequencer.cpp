@@ -7,7 +7,7 @@
 // Description: Sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.cpp 15794 2009-10-23 12:30:26Z dburken $
+// $Id: ossimOverviewSequencer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimOverviewSequencer.h>
 #include <ossim/base/ossimNotify.h>
@@ -21,7 +21,7 @@
 
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 15794 2009-10-23 12:30:26Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimOverviewSequencer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
 
 static ossimTrace traceDebug("ossimOverviewSequencer:debug");
@@ -190,6 +190,18 @@ void ossimOverviewSequencer::initialize()
 void ossimOverviewSequencer::setToStartOfSequence()
 {
    theCurrentTileNumber = 0;
+}
+
+// ESH 08/2009: Adding support for non-sequential tile access, which is needed by the virtual image writer classes.
+ossim_uint32 ossimOverviewSequencer::getCurrentTileNumber() const
+{
+   return theCurrentTileNumber;
+}
+
+// ESH 08/2009: Adding support for non-sequential tile access, which is needed by the virtual image writer classes.
+void ossimOverviewSequencer::setCurrentTileNumber( ossim_uint32 tileNumber )
+{
+   theCurrentTileNumber = tileNumber;
 }
 
 ossimRefPtr<ossimImageData> ossimOverviewSequencer::getNextTile()

@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoTiff.h 15868 2009-11-06 22:30:38Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER 1
@@ -18,6 +18,7 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
+#include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimRefPtr.h>
 
 #include <vector>
@@ -29,6 +30,7 @@
 
 class ossimFilename;
 class ossimKeywordlist;
+class ossimProjection;
 class ossimTieGptSet;
 
 class OSSIM_DLL ossimGeoTiff : public ossimErrorStatusInterface
@@ -110,6 +112,23 @@ public:
    static bool writeTags(TIFF* tiffOut,
                          const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
                          bool imagineNad27Flag=false);
+
+   /**
+    * @brief Writes a geotiff box to a buffer.
+    *
+    * This will write a degenerate GeoTIFF file to a temp file, copy file to
+    * the buffer and then delete the temp file.
+    *
+    * @param tmpFile The temporary filename.
+    * @param rect The output image rect.
+    * @param proj Pointer to output projection.
+    * @param buf The buffer to stuff with data.
+    * @return true on success, false on error.
+    */
+   static bool writeJp2GeotiffBox(const ossimFilename& tmpFile,
+                                  const ossimIrect& rect,
+                                  const ossimProjection* proj,
+                                  std::vector<ossim_uint8>& buf);
    
    /**
     *  Reads tags.

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 14535 2009-05-18 13:11:55Z dburken $
+// $Id: ossimRpfToc.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -49,13 +49,61 @@ public:
    
    unsigned long getNumberOfEntries()const{return (ossim_uint32)theTocEntryList.size();}
    const ossimRpfTocEntry* getTocEntry(unsigned long index)const;
-   /*!
+   /**
     * Returns -1 if not found.
     */
    ossim_int32 getTocEntryIndex(const ossimRpfTocEntry* entry);
    
    const ossimRpfHeader* getRpfHeader()const{return theRpfHeader;}
-   
+
+   /**
+    * For the given entry index, this routine returns the number of 
+    * frames that exist in the horizontal direction. If the entry index
+    * is invalid, 0 frames are returned.
+    *
+    * @param idx the entry index.
+    * @return number of frames in the horizontal direction
+    */
+   ossim_uint32 getNumberOfFramesHorizontal(ossim_uint32 idx)const;
+
+   /**
+    * For the given entry index, this routine returns the number of 
+    * frames that exist in the vertical direction. If the entry index
+    * is invalid, 0 frames are returned.
+    *
+    * @param idx the entry index.
+    * @return number of frames in the vertical direction
+    */
+   ossim_uint32 getNumberOfFramesVertical(ossim_uint32 idx)const;
+
+   /**
+    * For the given entry index, frame row, and frame column, this 
+    * routine returns the corresponding ossimRpfFrameEntry instance. 
+    *
+    * @param entryIdx the entry index.
+    * @param row the frame row.
+    * @param col the frame col.
+    * @return true if successful
+    */
+   bool getRpfFrameEntry(ossim_uint32 entryIdx, 
+                         ossim_uint32 row,
+                         ossim_uint32 col,
+                         ossimRpfFrameEntry& result)const;
+
+   /**
+    * For the given entry index, frame row, and frame column, this 
+    * routine returns the corresponding name of the frame image
+    * with respect to the location of the toc file. 
+    *
+    * @param entryIdx the entry index.
+    * @param row the frame row.
+    * @param col the frame col.
+    * @return the name of the frame image
+    */
+   const ossimString getRelativeFramePath( ossim_uint32 entryIdx,
+                                           ossim_uint32 row,
+                                           ossim_uint32 col)const;
+
 private:
    void deleteAll();
    void clearAll();

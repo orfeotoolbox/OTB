@@ -143,7 +143,7 @@ ossim_uint32 ossimDoubleGridProperty::getNumberOfCols()const
 {
   if(getNumberOfRows())
     {
-      return theValues[0].size();
+      return (ossim_uint32)theValues[0].size();
     }
   return 0;
 }

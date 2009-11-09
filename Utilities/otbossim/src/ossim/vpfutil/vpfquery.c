@@ -175,7 +175,7 @@ static void return_token( char *expr, char *token )
    stopflag=0;
    while (expr[0] == ' ') {
       for (i=0;i<ndelim;i++)
-	 if (ossim_strncasecmp(expr,delimstr[i],strlen(delimstr[i])) == 0) {
+	 if (ossim_strncasecmp(expr,delimstr[i],(unsigned int)strlen(delimstr[i])) == 0) {
 	    stopflag=1;
 	    break;
 	 }
@@ -185,7 +185,7 @@ static void return_token( char *expr, char *token )
    strcpy(token,expr);
    for (i=0;(unsigned int)i<strlen(token);i++) {
       for (j=0;j<ndelim;j++) {
-	 if (ossim_strncasecmp(expr,delimstr[j],strlen(delimstr[j]))==0) {
+	 if (ossim_strncasecmp(expr,delimstr[j],(unsigned int)strlen(delimstr[j]))==0) {
 	    if (n>0)
 	       token[i] = '\0';
 	    else
@@ -270,7 +270,7 @@ static char *get_token( char *expression,
    stopflag = 0;
    while ((expression[0] == '\"') || (expression[0] == ' ')) {
       for (i=0;i<ndelim;i++)
-	 if (ossim_strncasecmp(expression,delimstr[i],strlen(delimstr[i]))==0) {
+	 if (ossim_strncasecmp(expression,delimstr[i],(unsigned int)strlen(delimstr[i]))==0) {
 	    stopflag=1;
 	    break;
 	 }
@@ -324,7 +324,7 @@ static char *get_token( char *expression,
 	 expression++;
       token[i] = '\0';
       *token_type = STRING;
-      *token_value = strlen(token);
+      *token_value = (int)strlen(token);
       return expression;
    }
 

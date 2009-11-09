@@ -7,7 +7,7 @@
 // Description: The factory registry for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryRegistry.h 9930 2006-11-22 19:23:40Z dburken $
+// $Id: ossimOverviewBuilderFactoryRegistry.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef ossimOverviewBuilderFactoryRegistry_HEADER
 #define ossimOverviewBuilderFactoryRegistry_HEADER
@@ -60,7 +60,7 @@ public:
    /**
     * @brief Creates a builder from a string.  This should match a string from
     * the getTypeNameList() method.
-    * @return Pointer to ossimOverviewBuilderInterface or NULL is not found
+    * @return Pointer to ossimOverviewBuilderBase or NULL is not found
     * within registered factories.
     */
    ossimOverviewBuilderBase* createBuilder(const ossimString& typeName) const;

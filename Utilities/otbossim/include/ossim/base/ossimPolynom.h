@@ -617,7 +617,7 @@ LMSfit(const EXPT_SET&                expset,
    nullify();
 
    //check size
-   int nobs = obs_input.size();
+   int nobs = (int)obs_input.size();
    if (nobs != (int)obs_output.size())
    {
       std::cerr<<"ossimPolynom::LMSfit ERROR observation input/output must have the same size"<<std::endl;
@@ -628,7 +628,7 @@ LMSfit(const EXPT_SET&                expset,
       std::cerr<<"ossimPolynom::LMSfit ERROR observation count is zero"<<std::endl;
       return false;
    }
-   int ncoeff = expset.size();  
+   int ncoeff = (int)expset.size();  
    if (ncoeff<=0)
    {
       std::cerr<<"ossimPolynom::LMSfit ERROR exponent count is zero"<<std::endl;

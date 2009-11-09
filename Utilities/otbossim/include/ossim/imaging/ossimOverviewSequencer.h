@@ -7,7 +7,7 @@
 // Description: Class definition for sequencer for building overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimOverviewSequencer.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef ossimOverviewSequencer_HEADER
 #define ossimOverviewSequencer_HEADER
 
@@ -132,7 +132,21 @@ public:
     */ 
    void setResampleType(
       ossimFilterResampler::ossimFilterResamplerType resampleType);
-   
+
+   /**
+    * @return The index location of the current tile.
+    */ 
+   ossim_uint32 getCurrentTileNumber() const;
+
+   /**
+    * @brief Will set the internal pointers to the specified
+    * tile number.  To get the data for this tile number and then 
+    * to set up to the next tile in the sequence just call 
+    * getNextTile.
+    * @param tileNumber The index location of the desired tile.
+    */
+   void setCurrentTileNumber( ossim_uint32 tileNumber );
+
 protected:
    /** virtual destructor */
    virtual ~ossimOverviewSequencer();

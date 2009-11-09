@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoTiff.cpp 15868 2009-11-06 22:30:38Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -23,6 +23,7 @@
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimProjection.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
@@ -50,7 +51,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 15868 2009-11-06 22:30:38Z dburken $";
 #endif
 
 //---
@@ -377,7 +378,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15766 $ $Date: 2009-10-20 20:37:09 +0800 (Tue, 20 Oct 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15868 $ $Date: 2009-11-07 06:30:38 +0800 (Sat, 07 Nov 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,
@@ -853,10 +854,118 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    return true;
 }
 
+bool ossimGeoTiff::writeJp2GeotiffBox(const ossimFilename& tmpFile,
+                                      const ossimIrect& rect,
+                                      const ossimProjection* proj,
+                                      std::vector<ossim_uint8>& buf)
+{
+   //---
+   // Snip from The "GeoTIFF Box" Specification for JPEG 2000 Metadata:
+   // This box contains a valid GeoTIFF image.  The image is "degenerate", in
+   // that it represents a very simple image with specific constraints:
+   // . the image height and width are both 1
+   // . the datatype is 8-bit
+   // . the colorspace is grayscale
+   // . the (single) pixel must have a value of 0 for its (single) sample
+   //
+   // NOTE: It also states little endian but I think libtiff writes whatever
+   // endianesss the host is.
+   //
+   // Also assuming class tiff for now.  Not big tiff.
+   //---
+   bool result = true;
+   
+   TIFF* tiff = XTIFFOpen(tmpFile.c_str(), "w");
+   if (tiff)
+   {
+      // Write the projection info out.
+      ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
+      if(mapProj)
+      {
+         ossimRefPtr<ossimMapProjectionInfo> projectionInfo
+            = new ossimMapProjectionInfo(mapProj, rect);
+         ossimGeoTiff::writeTags(tiff, projectionInfo, false);
+      }
+
+      // Basic tiff tags.
+      TIFFSetField( tiff, TIFFTAG_IMAGEWIDTH, 1 );
+      TIFFSetField( tiff, TIFFTAG_IMAGELENGTH, 1 );
+      TIFFSetField( tiff, TIFFTAG_BITSPERSAMPLE, 8 );
+      TIFFSetField( tiff, TIFFTAG_SAMPLESPERPIXEL, 1 );
+      TIFFSetField( tiff, TIFFTAG_ROWSPERSTRIP, 1 );
+      TIFFSetField( tiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG );
+      TIFFSetField( tiff, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_MINISBLACK );
+
+      // One pixel image:
+      ossim_uint8 pixel = 0;
+      TIFFWriteEncodedStrip( tiff, 0, (char *) &pixel, 1 );
+
+      TIFFWriteDirectory( tiff );
+      XTIFFClose( tiff );
+
+      // Get the size.  Note 16 bytes added for the JP2 UUID:
+      const std::vector<ossim_uint8>::size_type UUID_SIZE = 16;
+      const std::vector<ossim_uint8>::size_type BOX_SIZE = UUID_SIZE +
+         static_cast<std::vector<ossim_uint8>::size_type>(tmpFile.fileSize());
+
+      // Create the buffer.
+      buf.resize( BOX_SIZE );
+
+      if ( BOX_SIZE == buf.size() )
+      {
+         const ossim_uint8 GEOTIFF_UUID[UUID_SIZE] = 
+         {
+            0xb1, 0x4b, 0xf8, 0xbd,
+            0x08, 0x3d, 0x4b, 0x43,
+            0xa5, 0xae, 0x8c, 0xd7,
+            0xd5, 0xa6, 0xce, 0x03
+         };
+
+         // Copy the UUID.
+         std::vector<ossim_uint8>::size_type i;
+         for (i = 0; i < UUID_SIZE; ++i)
+         {
+            buf[i] = GEOTIFF_UUID[i];
+         }
+
+         // Copy the tiff.
+         std::ifstream str;
+         str.open(tmpFile.c_str(), ios::in | ios::binary);
+         if (str.is_open())
+         {
+            char ch;
+            for (; i < BOX_SIZE; ++i)
+            {
+               str.get(ch);
+               buf[i] = static_cast<ossim_uint8>(ch);
+            }
+         }
+      }
+      else
+      {
+         result = false;
+      }
+
+      // Remove the temp file.
+      tmpFile.remove();
+      
+   }
+   else
+   {
+      result = false;
+      
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimGeoTiff::writeJp2GeotiffBox ERROR:\n"
+            << "Could not open " << tmpFile << std::endl;
+      }
+   }
+   return result;
+}
+
 bool ossimGeoTiff::readTags(const ossimFilename& file, ossim_uint32 entryIdx)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-
    bool result = false;
    
    TIFF* tiff = XTIFFOpen(file.c_str(), "r");
@@ -1307,7 +1416,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    ossimString copyPrefix(prefix);
    double x_tie_point = 0.0;
    double y_tie_point = 0.0;
-   ossim_uint32 tieCount = theTiePoint.size()/6;
+   ossim_uint32 tieCount = (ossim_uint32)theTiePoint.size()/6;
 
    if( (theScale.size() == 3) && (tieCount == 1))
    {
@@ -2215,7 +2324,7 @@ bool ossimGeoTiff::getModelTransformFlag() const
 void ossimGeoTiff::getTieSet(ossimTieGptSet& tieSet) const
 {
    ossim_uint32 idx = 0;
-   ossim_uint32 tieCount = theTiePoint.size()/6;
+   ossim_uint32 tieCount = (ossim_uint32)theTiePoint.size()/6;
    const double* tiePointsPtr = &theTiePoint.front();
    double offset = 0;
    if (hasOneBasedTiePoints())
@@ -2249,7 +2358,7 @@ bool ossimGeoTiff::hasOneBasedTiePoints() const
    ossim_float64 maxX = 0.0;
    ossim_float64 maxY = 0.0;
 
-   const ossim_uint32 SIZE = theTiePoint.size();
+   const ossim_uint32 SIZE = (ossim_uint32)theTiePoint.size();
    ossim_uint32 tieIndex = 0;
 
    while (tieIndex < SIZE)

@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 14886 2009-07-15 15:40:50Z gpotts $
+// $Id: ossimFilename.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -499,7 +499,7 @@ ossimFilename ossimFilename::expand() const
             ossimFilename finalResult;
             const char* tempPtr = result.c_str();
             ossim_int32 startIdx = -1;
-            ossim_int32 resultSize = result.size();
+            ossim_int32 resultSize = (ossim_uint32)result.size();
             ossim_int32 scanIdx = 0;
             while(scanIdx < resultSize)
             {

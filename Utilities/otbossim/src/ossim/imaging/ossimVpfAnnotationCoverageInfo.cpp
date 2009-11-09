@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 // 
 //**************************************************************************
-// $Id: ossimVpfAnnotationCoverageInfo.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimVpfAnnotationCoverageInfo.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <vector>
 #include <algorithm>
@@ -182,7 +182,7 @@ bool ossimVpfAnnotationCoverageInfo::loadState(const ossimKeywordlist& kwl,
       vector<ossimString> keys =
 	kwl.getSubstringKeyList( regExpression );
       std::vector<int> theNumberList(keys.size());
-      int offset = (ossimString(prefix)+"feature").size();
+      int offset = (int)(ossimString(prefix)+"feature").size();
       int idx = 0;
       for(idx = 0; idx < (int)theNumberList.size();++idx)
 	{

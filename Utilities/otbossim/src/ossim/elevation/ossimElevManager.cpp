@@ -19,7 +19,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimElevManager.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <algorithm>
 
@@ -49,7 +49,7 @@ RTTI_DEF1(ossimElevManager, "ossimElevManager" , ossimElevSource)
 static ossimTrace traceDebug ("ossimElevManager:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
 
 ossimElevManager* ossimElevManager::theInstance = 0;
@@ -180,8 +180,8 @@ bool ossimElevManager::loadState(const ossimKeywordlist& kwl,
    ossimString regExpression =  ossimString("^(") + copyPrefix + "elevation_source[0-9]+.)";
    vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );
-   long numberOfSources = keys.size();
-   ossim_uint32 offset = (copyPrefix+"elevation_source").size();
+   long numberOfSources = (long)keys.size();
+   ossim_uint32 offset = (ossim_uint32)(copyPrefix+"elevation_source").size();
    ossim_uint32 idx = 0;
    std::vector<int> theNumberList(numberOfSources);
    for(idx = 0; idx < theNumberList.size();++idx)
@@ -581,7 +581,7 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
       // Search through the list of elevation sources for a valid elevation
       // post.
       //---
-      ossim_uint32 size = theElevSourceList.size();
+      ossim_uint32 size = (ossim_uint32)theElevSourceList.size();
       for (ossim_uint32 i = 0; i < size; ++i)
       {
          //---
@@ -799,7 +799,7 @@ void ossimElevManager::addElevSource(ossimElevSource* source)
 
 ossim_uint32 ossimElevManager::getNumberOfFactories()const
 {
-   return theElevSourceFactoryList.size();
+   return (ossim_uint32)theElevSourceFactoryList.size();
 }
 
 const ossimRefPtr<ossimElevSourceFactory> ossimElevManager::getFactory(ossim_uint32 idx)const
@@ -1859,7 +1859,7 @@ ossimRefPtr<ossimElevSource> ossimElevManager::getElevSourceForPoint(
       // Search through the list of elevation sources for a valid elevation
       // post.
       //---
-      ossim_uint32 size = theElevSourceList.size();
+      ossim_uint32 size = (ossim_uint32)theElevSourceList.size();
       for (ossim_uint32 i = 0; i < size; ++i)
       {
          //---

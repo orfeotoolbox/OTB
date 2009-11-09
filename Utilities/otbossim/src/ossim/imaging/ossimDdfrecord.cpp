@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfrecord.cpp 12978 2008-06-04 00:04:14Z dburken $
+ * $Id: ossimDdfrecord.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
  */
 
 #include <cstring>
@@ -34,7 +34,7 @@
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimCplUtil.h>
 
-// CPL_CVSID("$Id: ossimDdfrecord.cpp 12978 2008-06-04 00:04:14Z dburken $");
+// CPL_CVSID("$Id: ossimDdfrecord.cpp 15833 2009-10-29 01:41:53Z eshirschorn $");
 
 static const size_t nLeaderSize = 24;
 
@@ -266,7 +266,7 @@ int ossimDDFRecord::ReadHeader()
     char        achLeader[nLeaderSize];
     int         nReadBytes;
 
-    nReadBytes = fread(achLeader,1,nLeaderSize,poModule->GetFP());
+    nReadBytes = (int)fread(achLeader,1,(int)nLeaderSize,poModule->GetFP());
     if( nReadBytes == 0 && feof( poModule->GetFP() ) )
     {
         return false;

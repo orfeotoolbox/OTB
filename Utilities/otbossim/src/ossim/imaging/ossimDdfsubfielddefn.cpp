@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfsubfielddefn.cpp 15261 2009-08-26 12:47:58Z dburken $
+ * $Id: ossimDdfsubfielddefn.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
  */
 
 #include <cstring>
@@ -80,7 +80,7 @@ void ossimDDFSubfieldDefn::SetName( const char * pszNewName )
 
     pszName = strdup( pszNewName );
 
-    for( i = strlen(pszName)-1; i > 0 && pszName[i] == ' '; i-- )
+    for( i = (int)strlen(pszName)-1; i > 0 && pszName[i] == ' '; i-- )
         pszName[i] = '\0';
 }
 
@@ -801,7 +801,7 @@ int ossimDDFSubfieldDefn::FormatStringValue( char *pachData, int nBytesAvailable
     int nSize;
 
     if( nValueLength == -1 )
-        nValueLength = strlen(pszValue);
+        nValueLength = (int)strlen(pszValue);
 
     if( bIsVariable )
     {
@@ -865,7 +865,7 @@ int ossimDDFSubfieldDefn::FormatIntValue( char *pachData, int nBytesAvailable,
 
     if( bIsVariable )
     {
-        nSize = strlen(szWork) + 1;
+        nSize = (int)strlen(szWork) + 1;
     }
     else
     {                                                                  
@@ -954,7 +954,7 @@ int ossimDDFSubfieldDefn::FormatFloatValue( char *pachData, int nBytesAvailable,
 
     if( bIsVariable )
     {
-        nSize = strlen(szWork) + 1;
+        nSize = (int)strlen(szWork) + 1;
     }
     else
     {

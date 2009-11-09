@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimBngProjection.cpp 11949 2007-10-31 14:33:29Z gpotts $
+//  $Id: ossimBngProjection.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/projection/ossimBngProjection.h>
 #include <ossim/projection/ossimTranmerc.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -183,7 +183,7 @@ long ossimBngProjection::Find_Index (char letter,
  */
   ossim_uint32 i = 0;
   ossim_uint32 not_Found = 1;
-  ossim_uint32 length = strlen(letter_Array);
+  ossim_uint32 length = (ossim_uint32)strlen(letter_Array);
   ossim_uint32 Error_Code = BNG_NO_ERROR;
 
   while ((i < length) && (not_Found))
@@ -267,7 +267,7 @@ long ossimBngProjection::Break_BNG_String (char* BNG,
   long num_digits = 0;
   long num_letters;
   long temp_error = 0;
-  long length = strlen(BNG);
+  long length = (long)strlen(BNG);
   long error_code = BNG_NO_ERROR;
 
   string_Broken = 1;

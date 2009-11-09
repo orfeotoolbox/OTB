@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimFilenameProperty.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimFilenameProperty.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/base/ossimFilenameProperty.h>
 
 RTTI_DEF1(ossimFilenameProperty, "ossimFilenameProperty", ossimProperty);
@@ -80,7 +80,7 @@ void ossimFilenameProperty::clearFilterList()
 
 ossim_uint32 ossimFilenameProperty::getNumberOfFilters()const
 {
-   return theFilterList.size();
+   return (ossim_uint32)theFilterList.size();
 }
 
 void ossimFilenameProperty::setFilter(ossim_uint32 idx,

@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimImageHandler.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -549,7 +549,17 @@ public:
    ossim_uint32 getStartingResLevel() const;
    
    void setStartingResLevel(ossim_uint32 level);
-   
+
+  /**
+   * Sets the supplementary directory
+   */
+  virtual void setSupplementaryDirectory(const ossimFilename& dir);
+
+  /**
+   * Returns the supplementary directory
+   */
+  virtual const ossimFilename& getSupplementaryDirectory()const;
+
 protected:
    
    
@@ -592,6 +602,7 @@ protected:
 
    ossimFilename        theImageFile;
    ossimFilename        theOverviewFile;
+   ossimFilename        theSupplementaryDirectory;
    ossimRefPtr<ossimImageHandler>   theOverview;
    vector<ossimIpt>     theValidImageVertices;
    ossimImageMetaData   theMetaData;

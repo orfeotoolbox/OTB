@@ -13,7 +13,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimIkonosRpcModel.cpp 15828 2009-10-28 13:11:31Z dburken $
 
 #include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
@@ -425,14 +425,24 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
 //*****************************************************************************
 bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
 {
-   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseHdrData(data_file): entering..." << std::endl;
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel::parseHdrData(data_file): entering..."
+         << std::endl;
+   }
    
-  if( !data_file.exists() )
-    {
-      if (traceExec()) ossimNotify(ossimNotifyLevel_WARN)<< "ossimIkonosRpcModel::parseHdrData(data_file) WARN:"<< "\nrpc data file <" << data_file << ">. "<< "doesn't exist..." << std::endl;
+   if( !data_file.exists() )
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimIkonosRpcModel::parseHdrData(data_file) WARN:"
+            << "\nrpc data file <" << data_file << ">. "<< "doesn't exist..."
+            << std::endl;
+      }
       return false;
-    }
-     
+   }
 
    FILE* fptr = fopen (data_file, "r");
    if (!fptr)
@@ -543,24 +553,36 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
 //*****************************************************************************
 void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
 {
-   if (traceExec())      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): entering..." << std::endl;
-
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel::parseRpcData(data_file): entering..."
+         << std::endl;
+   }
+      
    if( !data_file.exists() )
-    {
-      if (traceExec()) ossimNotify(ossimNotifyLevel_WARN)<< "ossimIkonosRpcModel::parseRpcData(data_file) WARN:"<< "\nrpc data file <" << data_file << ">. "<< "doesn't exist..." << std::endl;
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimIkonosRpcModel::parseRpcData(data_file) WARN:"
+            << "\nrpc data file <" << data_file << ">. "<< "doesn't exist..."
+            << std::endl;
+      }
       return;
     }
-
+   
    //***
    // The Ikonos RPC data file is conveniently formatted as KWL file:
    //***
    ossimKeywordlist kwl (data_file);
    if (kwl.getErrorStatus())
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "ERROR ossimIkonosRpcModel::parseRpcData(data_file): Could not open RPC data file <" << data_file << ">. "
-                                          << "Aborting..." << std::endl;
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << "ERROR ossimIkonosRpcModel::parseRpcData(data_file): Could not open RPC data file <" << data_file << ">. " << "Aborting..." << std::endl;
       theErrorStatus++;
-      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "returning with error..." << std::endl;
+      if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
+         << "returning with error..." << std::endl;
       return;
    }
 
@@ -658,6 +680,12 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
                                           << keyword << std::endl;
       return;
    }
+   else
+     {
+       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
+       theSensorID = theSupportData->getSensorID();
+     }
+   
 
    theLatScale = atof(buf);
    

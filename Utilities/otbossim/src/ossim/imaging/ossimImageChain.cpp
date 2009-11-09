@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageChain.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -539,7 +539,7 @@ bool ossimImageChain::removeChild(ossimConnectableObject* object)
             ossimConnectableObject::ConnectableObjectList output = object->getOutputList();
             
             // remember the old size before removing
-            ossim_uint32 chainSize = theImageChainList.size();
+            ossim_uint32 chainSize = (ossim_uint32)theImageChainList.size();
             current = theImageChainList.erase(current);
             
             // Clear connections between this object and child.
@@ -1294,9 +1294,9 @@ bool ossimImageChain::addAllSources(map<ossimId, vector<ossimId> >& idMapping,
    ossimString regExpression =  ossimString("^(") + copyPrefix + "object[0-9]+.)";
    vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );
-   long numberOfSources = keys.size();//kwl.getNumberOfSubstringKeys(regExpression);
+   long numberOfSources = (long)keys.size();//kwl.getNumberOfSubstringKeys(regExpression);
 
-   int offset = (copyPrefix+"object").size();
+   int offset = (int)(copyPrefix+"object").size();
    int idx = 0;
    std::vector<int> theNumberList(numberOfSources);
    for(idx = 0; idx < (int)theNumberList.size();++idx)
@@ -1398,8 +1398,8 @@ void ossimImageChain::findInputConnectionIds(vector<ossimId>& result,
    vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );
    
-   ossim_int32 offset = (copyPrefix+"input_connection").size();
-   ossim_uint32 numberOfKeys = keys.size();
+   ossim_int32 offset = (ossim_int32)(copyPrefix+"input_connection").size();
+   ossim_uint32 numberOfKeys = (ossim_uint32)keys.size();
    std::vector<int> theNumberList(numberOfKeys);
    for(idx = 0; idx < theNumberList.size();++idx)
    {
@@ -1433,7 +1433,7 @@ bool ossimImageChain::connectAllSources(const map<ossimId, vector<ossimId> >& id
 
          if(currentSource)
          {
-            long upperBound = (*iter).second.size();
+            long upperBound = (long)(*iter).second.size();
             for(long index = 0; index < upperBound; ++index)
             {
                if((*iter).second[index].getId() > -1)
@@ -1471,7 +1471,7 @@ bool ossimImageChain::saveState(ossimKeywordlist& kwl,
    {
       return result;
    }
-   ossim_uint32 upper = theImageChainList.size();
+   ossim_uint32 upper = (ossim_uint32)theImageChainList.size();
    ossim_uint32 counter = 1;
 
    if (upper)
@@ -1526,7 +1526,7 @@ void ossimImageChain::initialize()
    static const char* MODULE = "ossimImageChain::initialize()";
    if (traceDebug()) CLOG << " Entered..." << std::endl;
    
-   long upper = theImageChainList.size();
+   long upper = (ossim_uint32)theImageChainList.size();
    
    for(long index = upper - 1; index >= 0; --index)
    {
@@ -1574,7 +1574,7 @@ void ossimImageChain::enableSource()
 
 void ossimImageChain::disableSource()
 {
-   long upper = theImageChainList.size();
+   long upper = (ossim_uint32)theImageChainList.size();
    
    for(long index = upper - 1; index >= 0; --index)
    {
@@ -1614,7 +1614,7 @@ bool ossimImageChain::deleteLast()
    if (theImageChainList.size() == 0) return false;
 
    // Clear any listeners, memory.
-   ossim_uint32 index = theImageChainList.size() - 1;
+   ossim_uint32 index = (ossim_uint32)theImageChainList.size() - 1;
    theImageChainList[index]->
       removeListener((ossimConnectableObjectListener*)this);
    theImageChainList[index]->removeListener(theChildListener);
@@ -1628,7 +1628,7 @@ bool ossimImageChain::deleteLast()
 
 void ossimImageChain::deleteList()
 {
-   long upper = theImageChainList.size();
+   long upper = (long)theImageChainList.size();
    for(long index = 0; index < upper; ++index)
    {
       theImageChainList[index]->removeListener((ossimConnectableObjectListener*)this);

@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimNitfTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <jerror.h>
 
 #include <algorithm> /* for std::fill */
@@ -45,7 +45,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
    
 //---
@@ -298,7 +298,7 @@ bool ossimNitfTileSource::parseFile()
       theCurrentEntry = theEntryList[0];
    }
 
-   theNumberOfImages = theNitfImageHeader.size();
+   theNumberOfImages = (ossim_uint32)theNitfImageHeader.size();
    
    if (theNitfImageHeader.size() != theNumberOfImages)
    {
@@ -2177,7 +2177,7 @@ ossim_uint32 ossimNitfTileSource::getCurrentEntry() const
 
 ossim_uint32 ossimNitfTileSource::getNumberOfEntries() const
 {
-   return theEntryList.size();
+   return (ossim_uint32)theEntryList.size();
 }
 
 void ossimNitfTileSource::getEntryList(std::vector<ossim_uint32>& entryList)const
@@ -2599,7 +2599,7 @@ void ossimNitfTileSource::vqUncompress(ossimRefPtr<ossimImageData> destination, 
    ossim_uint32 compressionIdx    = 0;
    ossim_uint32 uncompressIdx     = 0;
    ossim_uint32 uncompressYidx    = 0;
-   ossim_uint32 rows   = table.size();
+   ossim_uint32 rows   = (ossim_uint32)table.size();
    ossim_uint32 cols   = 0;
    ossim_uint32 rowIdx = 0;
    ossim_uint32 colIdx = 0;

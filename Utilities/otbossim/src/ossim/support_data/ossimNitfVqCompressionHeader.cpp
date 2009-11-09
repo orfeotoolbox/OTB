@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfVqCompressionHeader.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <iostream>
 
@@ -250,7 +250,7 @@ ossim_uint32 ossimNitfVqCompressionHeader::getImageCodeBitLength()const
 
 ossim_uint32 ossimNitfVqCompressionHeader::getNumberOfTables()const
 {
-   return theTable.size();
+   return (ossim_uint32)theTable.size();
 }
 
 const std::vector<ossimNitfVqCompressionOffsetTableData>& ossimNitfVqCompressionHeader::getTable()const

@@ -110,7 +110,7 @@ void ossimNitfEngrdaTag::parseStream(std::istream& in)
 
       // ENGDATA - Engineering Data
       element.theEngDat.resize(engDatC);
-      in.read((char*)&(element.theEngDat.front()), element.theEngDat.size());
+      in.read((char*)&(element.theEngDat.front()), (std::streamsize)element.theEngDat.size());
       theTreLength += engDatC;
       
       theData.push_back(element);
@@ -136,7 +136,7 @@ void ossimNitfEngrdaTag::writeStream(std::ostream& out)
       out.write(s.data(), ENGLN_SIZE);
 
       // ENGLBL - label field
-      out.write(theData[i].theEngLbl.data(), theData[i].theEngLbl.size());
+      out.write(theData[i].theEngLbl.data(), (std::streamsize)theData[i].theEngLbl.size());
 
       // ENGMTXC - data column count
       getValueAsString(theData[i].theEngMtxC, ENGMTXC_SIZE, s); 
@@ -161,7 +161,7 @@ void ossimNitfEngrdaTag::writeStream(std::ostream& out)
 
       // ENGDATA - Engineering Data NOTE: should be big endian...
       out.write((char*)&(theData[i].theEngDat.front()),
-                theData[i].theEngDat.size());
+                (std::streamsize)theData[i].theEngDat.size());
 
    } // Matches: for (ossim_uint16 i = 0; i < ELEMENT_COUNT; ++i)
    

@@ -4,7 +4,7 @@
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionFactory.cpp 15080 2009-08-15 19:32:07Z dburken $
+//  $Id: ossimStatePlaneProjectionFactory.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <fstream>
 #include <sstream>
@@ -411,10 +411,13 @@ bool ossimStatePlaneProjectionFactory::findLine(
    return false;
 }
 
+#define EPSG_CODE_MAX 32767
 bool ossimStatePlaneProjectionFactory::findLine(
    const ossimString& name, std::vector<ossimString> &result) const
 {
 	OpenThreads::ScopedReadLock lock(theMutex);
+   std::string savedLine;
+   bool bSavedLine = false;
    // Iterate throught the cvs files to try and find pcs code.
    std::vector<ossimFilename>::const_iterator i = theCsvFiles.begin();
    while (i != theCsvFiles.end())
@@ -449,10 +452,27 @@ bool ossimStatePlaneProjectionFactory::findLine(
 
          if (result[NAME_INDEX] == name)
          {
-            return true;
+            // ESH 05/2008 -- Return EPSG codes preferentially
+            if ( result[PCS_CODE_INDEX].toInt() < EPSG_CODE_MAX )
+               return true;
+            else
+            {
+               savedLine.assign(line.c_str());
+               bSavedLine = true;
+               break;
+            }
          }
       }
       ++i; // go to next csv file
+   }
+
+   // ESH 05/2008 -- If we've found an ESRI-style or user-defined 
+   // pcs code and nothing else, we'll try to make do with it.
+   if ( bSavedLine == true )
+   {
+      // Split the line between commas stripping quotes.
+      splitLine(savedLine, result);
+      return ( (result.size() == KEYS_SIZE) && (result[NAME_INDEX] == name) );
    }
    return false;
 }

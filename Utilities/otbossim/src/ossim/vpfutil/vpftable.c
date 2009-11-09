@@ -215,7 +215,7 @@ static char *cpy_del(char *src, char delimiter, long int *ind )
 
   /* Start with temporary string value */
 
-  tempstr = (char *)vpfmalloc ( strlen ( temp ) + 10 ) ;
+  tempstr = (char *)vpfmalloc ( (unsigned long)strlen ( temp ) + 10 ) ;
 
   if ( *temp == '"' ) {	/* If field is quoted, do no error checks */
 
@@ -371,7 +371,7 @@ long int parse_data_def( vpf_table_type *table )
 	swap_four((char *)&k,(char *)&ddlen);
      }
      if ( ddlen < 0 ) {
-       return (long int)NULL ;
+       return (long int)0 ;
      }
 
      STORAGE_BYTE_ORDER = table->byte_order;
@@ -382,7 +382,7 @@ long int parse_data_def( vpf_table_type *table )
      buf[0] = byte; /* already have the first byte of the buffer */
      Read_Vpf_Char(&buf[1],table->fp,ddlen-1) ;
    } else {
-     table->ddlen = strlen ( table->defstr ) ;
+     table->ddlen = (long)strlen ( table->defstr ) ;
      ddlen = table->ddlen ;
      buf = (char *)vpfmalloc((ddlen+3)*sizeof(char));
      strncpy ( buf, table->defstr, ddlen ) ;
@@ -435,7 +435,7 @@ long int parse_data_def( vpf_table_type *table )
 
      if ( i == 0 )
        if ( ossim_strcasecmp ( table->header[0].name, "ID" ) ) {
-	 return (long int)NULL ;
+	      return (long int)0 ;
        }
 
      if(table->header[i].count == -1)
@@ -521,7 +521,7 @@ long int parse_data_def( vpf_table_type *table )
        break ;
      } /** switch type **/
 
-     if (status) return (long int)NULL;
+     if (status) return (long int)0;
 
      table->header[i].keytype     = vpf_get_char  (&p,buf);
      des = get_string(&p,buf, FIELD_SEPERATOR );
@@ -544,7 +544,7 @@ long int parse_data_def( vpf_table_type *table )
 	 end_of_rec = TRUE;
      } else {
        if (strcmp(tdx,"-") != 0) {
-	  table->header[i].tdx =(char*) vpfmalloc ( strlen ( tdx ) +1 ) ;
+	  table->header[i].tdx =(char*) vpfmalloc ( (unsigned long)strlen ( tdx ) +1 ) ;
 	  strcpy (table->header[i].tdx, tdx );
        } else table->header[i].tdx = (char *)NULL;
      }
@@ -556,7 +556,7 @@ long int parse_data_def( vpf_table_type *table )
 	  end_of_rec = TRUE;
 	} else {
 	  if (strcmp(doc,"-") != 0) {
-	     table->header[i].narrative = (char*)vpfmalloc ( strlen(doc) +1) ;
+	     table->header[i].narrative = (char*)vpfmalloc ( (unsigned long)strlen(doc) +1) ;
 	     strcpy (table->header[i].narrative, doc );
 	  } else table->header[i].narrative = (char *)NULL;
 	}
@@ -780,7 +780,7 @@ vpf_table_type vpf_open_table( const char * tablename,
 
    /* Parse out name and path */
    j = -1;
-   i=strlen(tablepath);
+   i=(long)strlen(tablepath);
    while (i>0) {
 #ifdef __MSDOS__
       if (tablepath[i] == '\\') {
@@ -795,7 +795,7 @@ vpf_table_type vpf_open_table( const char * tablename,
    strncpy(table.name,&(tablepath[j+1]),12);
    rightjust(table.name);
    strupr(table.name);
-   table.path = (char *)vpfmalloc((strlen(tablepath)+5)*sizeof(char));
+   table.path = (char *)vpfmalloc(((unsigned long)strlen(tablepath)+5)*(unsigned long)sizeof(char));
    strcpy(table.path, tablepath);
    table.path[j+1] = '\0';
 
