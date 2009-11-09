@@ -43,7 +43,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 
 template<class TLabelObject, class TPolygon>
 inline typename LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
-::PolygonPointerType
+::PolygonType *
 LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
 ::operator()(const LabelObjectType * labelObject)
 {
@@ -52,7 +52,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
     m_PositionFlag = LEFT_END;
     m_InternalDataSet.clear();
 
-    PolygonPointerType polygon = PolygonType::New();
+    m_Polygon = PolygonType::New();
 
     // Get the internal container
     LineContainerType lcontainer = labelObject->GetLineContainer();
@@ -118,7 +118,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = secondCandidateRun;
            m_CurrentState = DOWN_RIGHT;
            m_PositionFlag = LEFT_END;
-           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          else
@@ -128,7 +128,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = firstCandidateRun;
            m_CurrentState = UP_RIGHT;
            m_PositionFlag = RIGHT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -141,7 +141,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            // Up-Left Case
            m_CurrentState = UP_LEFT;
            m_PositionFlag = RIGHT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),m_Polygon, m_CurrentState);
            m_CurrentLine--;
            m_CurrentRun = secondCandidateRun;
            }
@@ -150,7 +150,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            // Down-Left case
            m_CurrentState = DOWN_LEFT;
            m_PositionFlag = LEFT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
            }
          }
        break;
@@ -171,7 +171,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = secondCandidateRun;
            m_CurrentState = UP_LEFT;
            m_PositionFlag = RIGHT_END;
-           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
            }
          else
            {
@@ -180,7 +180,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = firstCandidateRun;
            m_CurrentState = DOWN_LEFT;
            m_PositionFlag = LEFT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -195,7 +195,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentLine++;
            m_CurrentState = DOWN_RIGHT;
            m_PositionFlag = LEFT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          else
@@ -203,7 +203,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            // Up-Right case
            m_CurrentState = UP_RIGHT;
            m_PositionFlag = RIGHT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -223,7 +223,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentState = UP_LEFT;
            m_PositionFlag = RIGHT_END;
            m_CurrentRun = secondCandidateRun;
-           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine+1,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          else
@@ -233,7 +233,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = firstCandidateRun;
            m_CurrentState = DOWN_LEFT;
            m_PositionFlag = LEFT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -248,14 +248,14 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = secondCandidateRun;
            m_CurrentState = DOWN_RIGHT;
            m_PositionFlag = LEFT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
            }
          else
            {
            // Up-Right case
            m_CurrentState = UP_RIGHT;
            m_PositionFlag = RIGHT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -275,7 +275,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = secondCandidateRun;
            m_CurrentState = DOWN_RIGHT;
            m_PositionFlag = LEFT_END;
-           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine-1,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          else
@@ -285,7 +285,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            m_CurrentRun = firstCandidateRun;
            m_CurrentState = UP_RIGHT;
            m_PositionFlag = RIGHT_END;
-           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkRight(m_CurrentLine,m_CurrentPoint,RightEnd(m_CurrentRun),m_Polygon, m_CurrentState);
            }
          }
        else
@@ -297,7 +297,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            // Up-Left case
            m_CurrentState = UP_LEFT;
            m_PositionFlag = RIGHT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,RightEnd(secondCandidateRun),m_Polygon, m_CurrentState);
            m_CurrentLine--;
            m_CurrentRun = secondCandidateRun;
 
@@ -307,7 +307,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
            // Down-Left case
            m_CurrentState = DOWN_LEFT;
            m_PositionFlag = LEFT_END;
-           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),polygon, m_CurrentState);
+           WalkLeft(m_CurrentLine,m_CurrentPoint,LeftEnd(m_CurrentRun),m_Polygon, m_CurrentState);
 
            }
          }
@@ -317,7 +317,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       goesOn = m_CurrentPoint != m_StartingPoint;
       }
 
-    return polygon;
+    return m_Polygon;
 }
 
 template<class TLabelObject, class TPolygon>
