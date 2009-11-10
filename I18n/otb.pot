@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: otb 3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-10 13:49+0800\n"
+"POT-Creation-Date: 2009-11-10 14:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2170,6 +2170,7 @@ msgstr ""
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:185
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:353
 #: Code/Modules/otbProjectionGroup.cxx:455
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:45
 msgid "Input image"
 msgstr ""
 
@@ -5287,11 +5288,13 @@ msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:494
 #: Code/Modules/otbAlgebraGroup.cxx:63
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:33
 msgid "First image"
 msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
 #: Code/Modules/otbAlgebraGroup.cxx:64
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:34
 msgid "Second image"
 msgstr ""
 
@@ -5304,6 +5307,7 @@ msgid "Help me..."
 msgstr ""
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:114
+#: Code/Application/otbInputViewGroup.cxx:24
 msgid "Set inputs"
 msgstr ""
 
@@ -5327,10 +5331,6 @@ msgstr ""
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:186
 msgid "Root  instance label"
-msgstr ""
-
-#: Code/Application/otbInputViewGroup.cxx:24
-msgid "Set Inputs"
 msgstr ""
 
 #: Code/Application/otbInputViewGroup.cxx:50
@@ -6087,83 +6087,83 @@ msgid "File/Save dataset"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:101
-msgid "File/Extract ROI from dataset"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:102
 msgid "File/Save dataset (advanced)"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:103
-msgid "SAR/Despeckle image"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:104
-msgid "SAR/Compute intensity and log-intensity"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:106
-msgid "Filtering/Feature extraction"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:107
-msgid "Learning/SVM classification"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:108
-msgid "Learning/KMeans clustering"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:109
-msgid "Geometry/Orthorectification"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:110
-msgid "Geometry/Reproject image"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:111
-msgid "Geometry/Superimpose two images"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:112
-msgid "Geometry/Homologous points extraction"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:113
-msgid "Geometry/GCP To Sensor Model"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:115
-msgid "Filtering/Mean shift clustering"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:116
-msgid "Filtering/Pan-sharpen an image"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:117
-msgid "Visualization/Viewer"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:118
+#: Code/Application/Monteverdi.cxx:102
 msgid "File/Cache dataset"
 msgstr ""
 
-#: Code/Application/Monteverdi.cxx:119
+#: Code/Application/Monteverdi.cxx:103
+msgid "File/Extract ROI from dataset"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:104
 msgid "File/Concatenate images"
 msgstr ""
 
+#: Code/Application/Monteverdi.cxx:106
+msgid "Visualization/Viewer"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:108
+msgid "Filtering/Band math"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:109
+msgid "Filtering/Threshold"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:110
+msgid "Filtering/Pansharpening"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:111
+msgid "Filtering/Mean shift clustering"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:112
+msgid "Filtering/Feature extraction"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:113
+msgid "Filtering/Change detection"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:115
+msgid "SAR/Despeckle image"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:116
+msgid "SAR/Compute intensity and log-intensity"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:118
+msgid "Learning/SVM classification"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:119
+msgid "Learning/KMeans clustering"
+msgstr ""
+
 #: Code/Application/Monteverdi.cxx:121
-msgid "Filtering/Band Math"
+msgid "Geometry/Orthorectification"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:122
-msgid "Filtering/Change Detection"
+msgid "Geometry/Reproject image"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:123
-msgid "Filtering/Threshold"
+msgid "Geometry/Superimpose two images"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:124
+msgid "Geometry/Homologous points extraction"
+msgstr ""
+
+#: Code/Application/Monteverdi.cxx:125
+msgid "Geometry/GCP to sensor model"
 msgstr ""
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:168
@@ -6182,6 +6182,276 @@ msgstr ""
 msgid "Dataset"
 msgstr ""
 
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:46
+msgid "Fix image"
+msgstr ""
+
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:47
+msgid "Moving Image"
+msgstr ""
+
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:106
+msgid "Transformed moving image"
+msgstr ""
+
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:211
+msgid "Result image"
+msgstr ""
+
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:100
+msgid "Input image with new keyword list"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:36
+msgid "Reference image for reprojection"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:38
+msgid "Image to reproject"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:159
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:182
+msgid "Image superimposable to reference"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:193
+msgid "Choose the dataset dir..."
+msgstr ""
+
+#: Code/Modules/Caching/otbCachingModule.cxx:36
+#: Code/Modules/Writer/otbWriterModule.cxx:33
+#: Code/Modules/WriterMVC/otbWriterMVCModule.cxx:45
+msgid "Dataset to write"
+msgstr ""
+
+#: Code/Modules/Caching/otbCachingModule.cxx:50
+msgid "Caching dataset (0%)"
+msgstr ""
+
+#: Code/Modules/Caching/otbCachingModule.cxx:82
+msgid "Caching dataset"
+msgstr ""
+
+#: Code/Modules/Caching/otbCachingModule.cxx:176
+msgid "Cached data from"
+msgstr ""
+
+#: Code/Modules/Writer/otbWriterModule.cxx:72
+msgid "Choose the dataset file..."
+msgstr ""
+
+#: Code/Modules/Writer/otbWriterModule.cxx:96
+msgid "Writing dataset"
+msgstr ""
+
+#: Code/Modules/Reader/otbReaderModule.cxx:41
+msgid "Unknown"
+msgstr ""
+
+#: Code/Modules/Reader/otbReaderModule.cxx:42
+msgid "Optical image"
+msgstr ""
+
+#: Code/Modules/Reader/otbReaderModule.cxx:43
+msgid "SAR image"
+msgstr ""
+
+#: Code/Modules/Reader/otbReaderModule.cxx:44
+msgid "Vector"
+msgstr ""
+
+#: Code/Modules/Orthorectification/otbOrthorectificationModule.cxx:34
+msgid "Image to apply OrthoRectification on"
+msgstr ""
+
+#: Code/Modules/Orthorectification/otbOrthorectificationModule.cxx:84
+msgid "Orthorectified image"
+msgstr ""
+
+#: Code/Modules/Projection/otbProjectionModule.cxx:39
+msgid "Image to project"
+msgstr ""
+
+#: Code/Modules/Projection/otbProjectionModule.cxx:76
+msgid "Projected image"
+msgstr ""
+
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:31
+msgid "Image to read"
+msgstr ""
+
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:213
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:263
+msgid "Image extracted"
+msgstr ""
+
+#: Code/Modules/Concatenate/otbConcatenateModule.cxx:30
+msgid "Image to concatenate"
+msgstr ""
+
+#: Code/Modules/Concatenate/otbConcatenateModule.cxx:75
+msgid "Image concatenated"
+msgstr ""
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:31
+msgid "Panchromatic image"
+msgstr ""
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:32
+msgid "Multispectral image"
+msgstr ""
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:74
+msgid "Pansharpened image"
+msgstr ""
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:34
+msgid "Image to apply Classification on"
+msgstr ""
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:88
+msgid "Classified image"
+msgstr ""
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:114
+msgid "Vectors of classified image"
+msgstr ""
+
+#: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:45
+msgid "Image to apply feature extraction"
+msgstr ""
+
+#: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:88
+msgid "Feature image extraction"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:38
+msgid "Image to cluster"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:117
+msgid "Generating decision tree"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:253
+msgid "Tree generated"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:262
+msgid "Optimization ended"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:289
+msgid "The labeled image from kmeans classification"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:291
+msgid "The clustered image from kmeans classification"
+msgstr ""
+
 #: Code/Modules/MeanShift/otbMeanShiftModuleView.cxx:108
 msgid "Select an input image"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:45
+msgid "Image to apply MeanShift on"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:107
+msgid "Result of the MeanShift filtering"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:113
+msgid "Result of the MeanShift clustering"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:119
+msgid "Result of the MeanShift labeling"
+msgstr ""
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:104
+msgid "Image to threshold"
+msgstr ""
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:131
+#: Code/Modules/Viewer/otbViewerModule.cxx:251
+msgid "Generating QuickLook ..."
+msgstr ""
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:303
+#: Code/Modules/Threshold/otbThresholdModule.cxx:307
+msgid "Thresholded image"
+msgstr ""
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:31
+msgid "Complex image to extract intensity from"
+msgstr ""
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:72
+msgid "Intensity of the complex image"
+msgstr ""
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:73
+msgid "Log10-intensity of the complex image"
+msgstr ""
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:35
+msgid "Left image"
+msgstr ""
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:36
+msgid "Right image"
+msgstr ""
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:102
+msgid "Change image Label"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:74
+msgid "Pixels"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:75
+msgid "Frequency"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:173
+msgid "Image to visualize"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:175
+msgid "VectorData to visualize"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:600
+msgid "Changed class color"
+msgstr ""
+
+#: Code/Modules/Speckle/otbSpeckleFilteringModule.cxx:39
+msgid "Image to apply speckle filtering on"
+msgstr ""
+
+#: Code/Modules/Speckle/otbSpeckleFilteringModule.cxx:75
+msgid "Speckle filtered image"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:30
+msgid "This is my input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:36
+msgid "This is my optional input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:39
+msgid "This is my multiple input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:126
+msgid "This is my image output"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:131
+msgid "These are my pointset outputs"
 msgstr ""

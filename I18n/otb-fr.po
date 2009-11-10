@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-10 13:49+0800\n"
-"PO-Revision-Date: 2009-11-10 13:47+0800\n"
-"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox."
-"org>\n"
+"POT-Creation-Date: 2009-11-10 14:44+0800\n"
+"PO-Revision-Date: 2009-11-10 14:47+0800\n"
+"Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>"
+"\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1866,7 +1866,6 @@ msgstr "Menu"
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:58
 #: ImageToDBRegistration/otbImageToDBRegistrationViewGroup.cxx:314
 #: Code/Modules/otbViewerModuleGroup.cxx:209
-#, fuzzy
 msgid "Vector data"
 msgstr "Donnees vecteur"
 
@@ -2188,6 +2187,7 @@ msgstr ""
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:185
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:353
 #: Code/Modules/otbProjectionGroup.cxx:455
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:45
 msgid "Input image"
 msgstr "Image en Entree"
 
@@ -2454,9 +2454,8 @@ msgid "Grid (default)"
 msgstr ""
 
 #: Pireo/PireoViewerGUI.cxx:262
-#, fuzzy
 msgid "Vector Field"
-msgstr "Image vecteur"
+msgstr "Champ vecteur"
 
 #: Pireo/PireoViewerGUI.cxx:263
 #, fuzzy
@@ -2746,7 +2745,7 @@ msgstr "Parametres d'interpolation"
 #: Pireo/RegistrationParametersGUI.cxx:766
 #: Pireo/RegistrationParametersGUI.cxx:817
 msgid "Initialize with image geometry"
-msgstr ""
+msgstr "Initialisation avec la geometrie d'une image"
 
 #: Pireo/RegistrationParametersGUI.cxx:785
 #, fuzzy
@@ -5365,11 +5364,13 @@ msgstr ""
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:494
 #: Code/Modules/otbAlgebraGroup.cxx:63
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:33
 msgid "First image"
 msgstr "Image 1"
 
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:532
 #: Code/Modules/otbAlgebraGroup.cxx:64
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:34
 #, fuzzy
 msgid "Second image"
 msgstr "Image de navigation"
@@ -5380,12 +5381,12 @@ msgstr ""
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:94
 msgid "Help me..."
-msgstr ""
+msgstr "Aidez moi..."
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:114
-#, fuzzy
+#: Code/Application/otbInputViewGroup.cxx:24
 msgid "Set inputs"
-msgstr "Parametres"
+msgstr "Donnees d'entree"
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:140
 #, fuzzy
@@ -5395,12 +5396,12 @@ msgstr "Image de sortie"
 #: Code/Application/otbMonteverdiViewGroup.cxx:147
 #: Code/Application/otbMonteverdiViewGroup.cxx:192
 msgid "Old instance label"
-msgstr ""
+msgstr "Ancien nom d'instance"
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:153
 #: Code/Application/otbMonteverdiViewGroup.cxx:198
 msgid "New instance label"
-msgstr ""
+msgstr "Nouveau nom d'instance"
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:179
 #, fuzzy
@@ -5409,16 +5410,11 @@ msgstr "Image de sortie"
 
 #: Code/Application/otbMonteverdiViewGroup.cxx:186
 msgid "Root  instance label"
-msgstr ""
-
-#: Code/Application/otbInputViewGroup.cxx:24
-#, fuzzy
-msgid "Set Inputs"
-msgstr "Parametres"
+msgstr "Base du nom d'instance"
 
 #: Code/Application/otbInputViewGroup.cxx:50
 msgid "Instance label"
-msgstr ""
+msgstr "Nom d'instance"
 
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:35
 msgid "Frost"
@@ -6176,9 +6172,8 @@ msgstr "Bande"
 
 #: Code/Modules/otbViewerModuleGroup.cxx:202
 #: Code/Modules/otbViewerModuleGroup.cxx:210
-#, fuzzy
 msgid "Vector data propreties"
-msgstr "Donnees vecteur"
+msgstr "Proprietes donnees vecteur"
 
 #: Code/Modules/otbViewerModuleGroup.cxx:247
 #, fuzzy
@@ -6260,90 +6255,84 @@ msgid "File/Save dataset"
 msgstr "Fichier/Sauver donnees"
 
 #: Code/Application/Monteverdi.cxx:101
-msgid "File/Extract ROI from dataset"
-msgstr "Fichier/Extraire ROI"
-
-#: Code/Application/Monteverdi.cxx:102
 msgid "File/Save dataset (advanced)"
 msgstr "Fichier/Sauver donnees (avance)"
 
-#: Code/Application/Monteverdi.cxx:103
-msgid "SAR/Despeckle image"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:104
-msgid "SAR/Compute intensity and log-intensity"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:106
-#, fuzzy
-msgid "Filtering/Feature extraction"
-msgstr "Selection des canaux"
-
-#: Code/Application/Monteverdi.cxx:107
-#, fuzzy
-msgid "Learning/SVM classification"
-msgstr "Classification"
-
-#: Code/Application/Monteverdi.cxx:108
-#, fuzzy
-msgid "Learning/KMeans clustering"
-msgstr "Classification"
-
-#: Code/Application/Monteverdi.cxx:109
-msgid "Geometry/Orthorectification"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:110
-msgid "Geometry/Reproject image"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:111
-msgid "Geometry/Superimpose two images"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:112
-msgid "Geometry/Homologous points extraction"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:113
-msgid "Geometry/GCP To Sensor Model"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:115
-msgid "Filtering/Mean shift clustering"
-msgstr ""
-
-#: Code/Application/Monteverdi.cxx:116
-#, fuzzy
-msgid "Filtering/Pan-sharpen an image"
-msgstr "Fichier/Concatener images"
-
-#: Code/Application/Monteverdi.cxx:117
-#, fuzzy
-msgid "Visualization/Viewer"
-msgstr "Validation"
-
-#: Code/Application/Monteverdi.cxx:118
+#: Code/Application/Monteverdi.cxx:102
 msgid "File/Cache dataset"
 msgstr "Fichier/Mise en cache des donnees"
 
-#: Code/Application/Monteverdi.cxx:119
+#: Code/Application/Monteverdi.cxx:103
+msgid "File/Extract ROI from dataset"
+msgstr "Fichier/Extraire ROI"
+
+#: Code/Application/Monteverdi.cxx:104
 msgid "File/Concatenate images"
 msgstr "Fichier/Concatener images"
 
+#: Code/Application/Monteverdi.cxx:106
+msgid "Visualization/Viewer"
+msgstr "Visualisation/Image"
+
+#: Code/Application/Monteverdi.cxx:108
+msgid "Filtering/Band math"
+msgstr "Filtrage/Math bandes"
+
+#: Code/Application/Monteverdi.cxx:109
+msgid "Filtering/Threshold"
+msgstr "Filtrage/Seuillage"
+
+#: Code/Application/Monteverdi.cxx:110
+msgid "Filtering/Pansharpening"
+msgstr "Filtrage/Pansharpening"
+
+#: Code/Application/Monteverdi.cxx:111
+msgid "Filtering/Mean shift clustering"
+msgstr "Filtrage/Mean shift clusterisation"
+
+#: Code/Application/Monteverdi.cxx:112
+msgid "Filtering/Feature extraction"
+msgstr "Filtrage/Extraction de features"
+
+#: Code/Application/Monteverdi.cxx:113
+msgid "Filtering/Change detection"
+msgstr "Filtrage/Detection de changements"
+
+#: Code/Application/Monteverdi.cxx:115
+msgid "SAR/Despeckle image"
+msgstr "SAR/Suppression du speckle"
+
+#: Code/Application/Monteverdi.cxx:116
+msgid "SAR/Compute intensity and log-intensity"
+msgstr "SAR/Calcul intensite et log-intensite"
+
+#: Code/Application/Monteverdi.cxx:118
+msgid "Learning/SVM classification"
+msgstr "Apprentissage/Classification par SVM"
+
+#: Code/Application/Monteverdi.cxx:119
+msgid "Learning/KMeans clustering"
+msgstr "Apprentissage/KMeans clusterisation"
+
 #: Code/Application/Monteverdi.cxx:121
-msgid "Filtering/Band Math"
-msgstr ""
+msgid "Geometry/Orthorectification"
+msgstr "Geometrie/Orthorectification"
 
 #: Code/Application/Monteverdi.cxx:122
-msgid "Filtering/Change Detection"
-msgstr ""
+msgid "Geometry/Reproject image"
+msgstr "Geometrie/Reprojection d'une image"
 
 #: Code/Application/Monteverdi.cxx:123
-#, fuzzy
-msgid "Filtering/Threshold"
-msgstr "Seuils"
+msgid "Geometry/Superimpose two images"
+msgstr "Geometrie/Superposition de deux images"
+
+#: Code/Application/Monteverdi.cxx:124
+msgid "Geometry/Homologous points extraction"
+msgstr "Geometrie/Extraction des points homologues"
+
+#: Code/Application/Monteverdi.cxx:125
+msgid "Geometry/GCP to sensor model"
+msgstr "Geometrie/GCP vers modele capteur"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:168
 msgid "File/Quit"
@@ -6351,7 +6340,7 @@ msgstr "Fichier/Quitter"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:169
 msgid "?/Help"
-msgstr ""
+msgstr "?/Aide"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:182
 msgid "Datasets Browser"
@@ -6362,10 +6351,319 @@ msgstr ""
 msgid "Dataset"
 msgstr "Ouvrir image"
 
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:46
+#, fuzzy
+msgid "Fix image"
+msgstr "Retourner image fixe"
+
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:47
+#, fuzzy
+msgid "Moving Image"
+msgstr "Ouvrir image a recaler"
+
+#: Code/Modules/HomologousPointExtraction/otbHomologousPointExtractionModule.cxx:106
+#, fuzzy
+msgid "Transformed moving image"
+msgstr "Ouvrir image a recaler"
+
+#: Code/Modules/Algebra/otbAlgebraModule.cxx:211
+#, fuzzy
+msgid "Result image"
+msgstr "Sauver resultat"
+
+#: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:100
+msgid "Input image with new keyword list"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:36
+msgid "Reference image for reprojection"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:38
+#, fuzzy
+msgid "Image to reproject"
+msgstr "Image extension"
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:159
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:182
+msgid "Image superimposable to reference"
+msgstr ""
+
+#: Code/Modules/Superimposition/otbSuperimpositionModule.cxx:193
+msgid "Choose the dataset dir..."
+msgstr ""
+
+#: Code/Modules/Caching/otbCachingModule.cxx:36
+#: Code/Modules/Writer/otbWriterModule.cxx:33
+#: Code/Modules/WriterMVC/otbWriterMVCModule.cxx:45
+#, fuzzy
+msgid "Dataset to write"
+msgstr "Ouvrir image"
+
+#: Code/Modules/Caching/otbCachingModule.cxx:50
+#, fuzzy
+msgid "Caching dataset (0%)"
+msgstr "Mise des donnees en cache"
+
+#: Code/Modules/Caching/otbCachingModule.cxx:82
+#, fuzzy
+msgid "Caching dataset"
+msgstr "Mise des donnees en cache"
+
+#: Code/Modules/Caching/otbCachingModule.cxx:176
+msgid "Cached data from"
+msgstr ""
+
+#: Code/Modules/Writer/otbWriterModule.cxx:72
+msgid "Choose the dataset file..."
+msgstr ""
+
+#: Code/Modules/Writer/otbWriterModule.cxx:96
+#, fuzzy
+msgid "Writing dataset"
+msgstr "Ouvrir image"
+
+#: Code/Modules/Reader/otbReaderModule.cxx:41
+msgid "Unknown"
+msgstr "Inconnu"
+
+#: Code/Modules/Reader/otbReaderModule.cxx:42
+msgid "Optical image"
+msgstr "Image optique"
+
+#: Code/Modules/Reader/otbReaderModule.cxx:43
+msgid "SAR image"
+msgstr "Image SAR"
+
+#: Code/Modules/Reader/otbReaderModule.cxx:44
+msgid "Vector"
+msgstr "Vecteur"
+
+#: Code/Modules/Orthorectification/otbOrthorectificationModule.cxx:34
+#, fuzzy
+msgid "Image to apply OrthoRectification on"
+msgstr "Geometrie/Orthorectification"
+
+#: Code/Modules/Orthorectification/otbOrthorectificationModule.cxx:84
+#, fuzzy
+msgid "Orthorectified image"
+msgstr "Image fixe filtree"
+
+#: Code/Modules/Projection/otbProjectionModule.cxx:39
+#, fuzzy
+msgid "Image to project"
+msgstr "Image extension"
+
+#: Code/Modules/Projection/otbProjectionModule.cxx:76
+#, fuzzy
+msgid "Projected image"
+msgstr "Image vecteur"
+
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:31
+#, fuzzy
+msgid "Image to read"
+msgstr "Image extension"
+
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:213
+#: Code/Modules/ExtractROI/otbExtractROIModule.cxx:263
+#, fuzzy
+msgid "Image extracted"
+msgstr "Image extension"
+
+#: Code/Modules/Concatenate/otbConcatenateModule.cxx:30
+#, fuzzy
+msgid "Image to concatenate"
+msgstr "Image extension"
+
+#: Code/Modules/Concatenate/otbConcatenateModule.cxx:75
+#, fuzzy
+msgid "Image concatenated"
+msgstr "Image extension"
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:31
+#, fuzzy
+msgid "Panchromatic image"
+msgstr "Image de navigation"
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:32
+#, fuzzy
+msgid "Multispectral image"
+msgstr "Image optique"
+
+#: Code/Modules/PanSharpening/otbPanSharpeningModule.cxx:74
+#, fuzzy
+msgid "Pansharpened image"
+msgstr "Ouvrir image"
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:34
+#, fuzzy
+msgid "Image to apply Classification on"
+msgstr "Classification"
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:88
+#, fuzzy
+msgid "Classified image"
+msgstr "Retourner image fixe"
+
+#: Code/Modules/Classification/otbSupervisedClassificationModule.cxx:114
+#, fuzzy
+msgid "Vectors of classified image"
+msgstr "Image vecteur"
+
+#: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:45
+msgid "Image to apply feature extraction"
+msgstr ""
+
+#: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:88
+#, fuzzy
+msgid "Feature image extraction"
+msgstr "Selection des canaux"
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:38
+#, fuzzy
+msgid "Image to cluster"
+msgstr "Liste d'images"
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:117
+msgid "Generating decision tree"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:253
+msgid "Tree generated"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:262
+msgid "Optimization ended"
+msgstr ""
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:289
+#, fuzzy
+msgid "The labeled image from kmeans classification"
+msgstr "Utiliser Angle Spectral"
+
+#: Code/Modules/KMeans/otbKMeansModule.cxx:291
+#, fuzzy
+msgid "The clustered image from kmeans classification"
+msgstr "Utiliser Angle Spectral"
+
 #: Code/Modules/MeanShift/otbMeanShiftModuleView.cxx:108
 #, fuzzy
 msgid "Select an input image"
 msgstr "Choisir image XS"
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:45
+msgid "Image to apply MeanShift on"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:107
+msgid "Result of the MeanShift filtering"
+msgstr ""
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:113
+#, fuzzy
+msgid "Result of the MeanShift clustering"
+msgstr "Filtrage/Mean shift clusterisation"
+
+#: Code/Modules/MeanShift/otbMeanShiftModule.cxx:119
+msgid "Result of the MeanShift labeling"
+msgstr ""
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:104
+#, fuzzy
+msgid "Image to threshold"
+msgstr "Seuils"
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:131
+#: Code/Modules/Viewer/otbViewerModule.cxx:251
+msgid "Generating QuickLook ..."
+msgstr ""
+
+#: Code/Modules/Threshold/otbThresholdModule.cxx:303
+#: Code/Modules/Threshold/otbThresholdModule.cxx:307
+#, fuzzy
+msgid "Thresholded image"
+msgstr "Seuils"
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:31
+msgid "Complex image to extract intensity from"
+msgstr ""
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:72
+msgid "Intensity of the complex image"
+msgstr ""
+
+#: Code/Modules/SARIntensity/otbSarIntensityModule.cxx:73
+msgid "Log10-intensity of the complex image"
+msgstr ""
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:35
+#, fuzzy
+msgid "Left image"
+msgstr "Image vecteur"
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:36
+#, fuzzy
+msgid "Right image"
+msgstr "Image 1"
+
+#: Code/Modules/ChangeDetection/otbChangeDetectionModule.cxx:102
+msgid "Change image Label"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:74
+#, fuzzy
+msgid "Pixels"
+msgstr "Coordonnees Pixel"
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:75
+msgid "Frequency"
+msgstr ""
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:173
+msgid "Image to visualize"
+msgstr "Image a visualiser"
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:175
+msgid "VectorData to visualize"
+msgstr "Donnees vecteurs a visualiser"
+
+#: Code/Modules/Viewer/otbViewerModule.cxx:600
+#, fuzzy
+msgid "Changed class color"
+msgstr "Changer la classe"
+
+#: Code/Modules/Speckle/otbSpeckleFilteringModule.cxx:39
+msgid "Image to apply speckle filtering on"
+msgstr ""
+
+#: Code/Modules/Speckle/otbSpeckleFilteringModule.cxx:75
+#, fuzzy
+msgid "Speckle filtered image"
+msgstr "Sauver l'image recalee"
+
+#: StarterKit/otbExampleModule.cxx:30
+msgid "This is my input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:36
+msgid "This is my optional input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:39
+msgid "This is my multiple input"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:126
+msgid "This is my image output"
+msgstr ""
+
+#: StarterKit/otbExampleModule.cxx:131
+msgid "These are my pointset outputs"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Set Inputs"
+#~ msgstr "Parametres"
 
 #~ msgid "Reference Pixel"
 #~ msgstr "Pixel De Reference"
