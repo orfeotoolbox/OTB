@@ -116,8 +116,12 @@ ADD_TEST(prTePlaceNameToLonLatExampleTest ${EXE_TESTS2}
         Toulouse
 )
 ADD_TEST(prTeCoordinateToNameExampleTest ${EXE_TESTS2}
+         --compare-ascii ${TOL}
+         ${BASELINE}/CoordinateToNameExample.txt
+         ${TEMP}/CoordinateToNameExample.txt
     CoordinateToNameExampleTest
          103.78 1.29
+         ${TEMP}/CoordinateToNameExample.txt
 )
 ENDIF( OTB_USE_CURL )
 
