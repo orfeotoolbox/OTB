@@ -40,4 +40,5 @@ void RegisterTests()
   REGISTER_TEST(otbGeocentricTransformNew);
   REGISTER_TEST(otbGeocentricTransform);
   REGISTER_TEST(otbVectorDataExtractROIandProjection);
+  REGISTER_TEST(otbCoordinateToNameTest);
 }

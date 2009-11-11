@@ -460,6 +460,31 @@ ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+
+IF( OTB_USE_CURL )
+
+ADD_TEST(prTvCoordinateToNameTest ${PROJECTIONS_TESTS3}
+    --compare-ascii ${NOTOL}
+         ${BASELINE}/CoordinateToNameTest.txt
+         ${TEMP}/CoordinateToNameTest.txt
+    otbCoordinateToNameTest
+         103.78 1.29
+         ${TEMP}/CoordinateToNameTest.txt
+)
+
+#this test intentionaly uses the same baseline as the previous one
+ADD_TEST(prTvCoordinateToNameMultithreadTest ${PROJECTIONS_TESTS3}
+    --compare-ascii ${NOTOL}
+         ${BASELINE}/CoordinateToNameTest.txt
+         ${TEMP}/CoordinateToNameMultithreadTest.txt
+    otbCoordinateToNameTest
+         103.78 1.29
+         ${TEMP}/CoordinateToNameMultithreadTest.txt
+         1
+)
+
+ENDIF( OTB_USE_CURL )
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -495,7 +520,9 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
+otbCoordinateToNameTest.cxx
 )
+
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")
