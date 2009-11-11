@@ -34,6 +34,7 @@ CoordinateToName::CoordinateToName()
   m_Lat = -1000.0;
   m_PlaceName = "";
   m_CountryName = "";
+  m_TempFileName = "out-SignayriUt1.xml";
 }
 
 /**
@@ -91,7 +92,7 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
   CURL *curl;
   CURLcode res;
 
-  FILE* output_file = fopen("out.xml","w");
+  FILE* output_file = fopen(m_TempFileName.c_str(),"w");
   curl = curl_easy_init();
 
 //   std::cout << "URL data " << urlStream.str().data() << std::endl;
@@ -123,7 +124,7 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
 
 void CoordinateToName::ParseXMLGeonames()
 {
-  TiXmlDocument doc( "out.xml" );
+  TiXmlDocument doc( m_TempFileName.c_str() );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
 
@@ -137,6 +138,8 @@ void CoordinateToName::ParseXMLGeonames()
   {
     m_CountryName=childCountryName->GetText();
   }
+
+  remove(m_TempFileName.c_str());
 }
 
 } // namespace otb

@@ -28,7 +28,6 @@ namespace otb
  * \class CoordinateToName
  * \brief Retrieve Geographical information for Longitude and Latitude coordinates
  *
-
  */
 
 
@@ -72,6 +71,7 @@ private:
   double m_Lat;
   std::string m_PlaceName;
   std::string m_CountryName;
+  std::string m_TempFileName;
 };
 
 } // namespace otb
