@@ -680,33 +680,31 @@ ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS7}
 #         ${INPUTDATA}/poupeesBIL
 #         ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png )
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests8 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 # -------            otb::ImageFileWriter pour CAI  ------------------------------
 # Niveau de Gris
 
-ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2PNG_cthead1.png
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileWriterPNG2PNG_cthead1.png )
 
-ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS8}
+ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS7}
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
 
-ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
         otbImageFileReaderTest
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
 
-ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
+ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/pdsImage.img
                            ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif
         otbImageFileReaderTest
@@ -714,19 +712,19 @@ ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS8}
         ${TEMP}/ioTvImageFileReaderPDS2TIFF.tif)
 # RGB
 
-ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileWriterRGB_PNG2PNG.png
                     ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png
         otbImageFileWriterRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileWriterRGB_PNG2PNG.png )
 
-ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS8}
+ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS7}
         otbImageFileWriterRGBTest
         ${INPUTDATA}/couleurs_extrait.png
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr )
 
-ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS8}
+ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs_extrait.png
                     ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png
         otbImageFileReaderRGBTest
@@ -734,7 +732,7 @@ ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS8}
         ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png )
 
 # WRITER GDAL
-ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS8}
+ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS7}
 	otbImageFileWriterRGBTest
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
         ${TEMP}/poupees.tiff )
@@ -744,26 +742,26 @@ ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS8}
 # -------            otb::ImageFileWriter pour GDAL  ------------------------------
 
 
-ADD_TEST(ioTvImageReaderWriterRgbPNG2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbPNG2PNG ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png )
 
-ADD_TEST(ioTvImageReaderWriterRgbPNG2TIF ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbPNG2TIF ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif )
-ADD_TEST(ioTvImageReaderWriterRgbPNG2ENVI ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbPNG2ENVI ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.png
                      ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees.hdr )
-ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS7}
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
 #   --compare-image ${EPSILON_9} ${INPUTDATA}/poupees.png
 #                 ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg
@@ -771,31 +769,58 @@ ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS8}
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg )
 
-ADD_TEST(ioTvImageReaderWriterRgbTIF2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbTIF2PNG ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.tif
                      ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.tif
         ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png )
-ADD_TEST(ioTvImageReaderWriterRgbENVI2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbENVI2PNG ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees
                      ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees
         ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png )
-ADD_TEST(ioTvImageReaderWriterRgbJPEG2PNG ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbJPEG2PNG ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs.jpg
                      ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs.jpg
         ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
-ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS8}
+ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS7}
    --compare-image ${EPSILON_9}   ${INPUTDATA}/couleurs.jpg
                      ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif
         otbImageFileReaderRGBTest
         ${INPUTDATA}/couleurs.jpg
         ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests8 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IF( OTB_USE_CURL )
+
+ADD_TEST(coTvCoordinateToNameTest ${PROJECTIONS_TESTS3}
+    --compare-ascii ${NOTOL}
+         ${BASELINE}/CoordinateToNameTest.txt
+         ${TEMP}/CoordinateToNameTest.txt
+    otbCoordinateToNameTest
+         103.78 1.29
+         ${TEMP}/CoordinateToNameTest.txt
+)
+
+#this test intentionaly uses the same baseline as the previous one
+ADD_TEST(coTvCoordinateToNameMultithreadTest ${PROJECTIONS_TESTS3}
+    --compare-ascii ${NOTOL}
+         ${BASELINE}/CoordinateToNameTest.txt
+         ${TEMP}/CoordinateToNameMultithreadTest.txt
+    otbCoordinateToNameTest
+         103.78 1.29
+         ${TEMP}/CoordinateToNameMultithreadTest.txt
+         1
+)
+
+ENDIF( OTB_USE_CURL )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1593,6 +1618,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ENDIF(OTB_COMPILE_JPEG2000)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1634,6 +1660,7 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -2181,13 +2208,12 @@ SET(BasicIO_SRCS7
 otbIOTests7.cxx
 otbImageFileReaderTest.cxx
 otbImageFileReaderRGBTest.cxx
+otbImageFileWriterTest.cxx
+otbImageFileWriterRGBTest.cxx
 )
 SET(BasicIO_SRCS8
 otbIOTests8.cxx
-otbImageFileWriterTest.cxx
-otbImageFileReaderTest.cxx
-otbImageFileReaderRGBTest.cxx
-otbImageFileWriterRGBTest.cxx
+otbCoordinateToNameTest.cxx
 )
 SET(BasicIO_SRCS9
 otbIOTests9.cxx

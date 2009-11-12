@@ -28,9 +28,5 @@
 
 void RegisterTests()
 {
-
-  REGISTER_TEST(otbImageFileWriterTest);
-  REGISTER_TEST(otbImageFileReaderTest);
-  REGISTER_TEST(otbImageFileReaderRGBTest);
-  REGISTER_TEST(otbImageFileWriterRGBTest);
+  REGISTER_TEST(otbCoordinateToNameTest);
 }
