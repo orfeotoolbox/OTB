@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "itkPoint.h"
 #include "itkMultiThreader.h"
 
 namespace otb
@@ -50,11 +51,35 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  typedef itk::Point<double,2>              PointType;
+
   itkGetMacro( Lon, double );
   itkGetMacro( Lat, double );
 
   itkSetMacro( Lon, double );
   itkSetMacro( Lat, double );
+
+  /**
+   * Set the lon/lat only if they are far enough from the current point to
+   * avoid triggering too many updates
+   */
+  bool SetLonLat(PointType point)
+  {
+    if ((vcl_abs(point[0] - m_Lon) > m_UpdateDistance) || (vcl_abs(point[1] - m_Lat) > m_UpdateDistance))
+    {
+      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
+      m_Lon = point[0];
+      m_Lat = point[1];
+      //TODO Check whether it is better to have something imprecise or nothing at all
+      m_IsValid = false;
+      return true;
+    }
+    else
+    {
+      std::cout << "Keeping lon/lat" << std::endl;
+      return false;
+    }
+  }
 
   std::string GetPlaceName() const
   {
@@ -105,6 +130,9 @@ private:
   double m_Lat;
   bool m_Multithread;
   bool m_IsValid;
+  //Minimum distance to trigger an update of the coordinates
+  //specified in degrees
+  double m_UpdateDistance;
 
   std::string m_PlaceName;
   std::string m_CountryName;
