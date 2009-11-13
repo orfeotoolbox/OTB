@@ -17,9 +17,12 @@
 =========================================================================*/
 
 #include "otbCoordinateToName.h"
+#include "otbMacro.h"
+
+#ifdef OTB_USE_CURL
 #include "tinyxml.h"
 #include <curl/curl.h>
-#include "otbMacro.h"
+#endif
 
 namespace otb
 {
@@ -98,7 +101,7 @@ void CoordinateToName::DoEvaluate()
 
 void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
 {
-
+#ifdef OTB_USE_CURL
   CURL *curl;
   CURLcode res;
 
@@ -122,12 +125,13 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
     /* always cleanup */
     curl_easy_cleanup(curl);
   }
-
+#endif
 }
 
 
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
 {
+#ifdef OTB_USE_CURL
   TiXmlDocument doc( m_TempFileName.c_str() );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
@@ -144,6 +148,7 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
   }
 
   remove(m_TempFileName.c_str());
+#endif
 }
 
 } // namespace otb
