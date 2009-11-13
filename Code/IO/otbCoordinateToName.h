@@ -35,7 +35,6 @@ namespace otb
  *
  */
 
-
 class ITK_EXPORT CoordinateToName : public itk::Object
 {
 public:
@@ -128,8 +127,10 @@ private:
 
   double m_Lon;
   double m_Lat;
+
   bool m_Multithread;
   bool m_IsValid;
+
   //Minimum distance to trigger an update of the coordinates
   //specified in degrees
   double m_UpdateDistance;
@@ -142,6 +143,5 @@ private:
 };
 
 } // namespace otb
-
 
 #endif

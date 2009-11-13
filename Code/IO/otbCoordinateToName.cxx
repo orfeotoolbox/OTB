@@ -28,8 +28,8 @@ namespace otb
 {
 
 /**
-   * Constructor
-   */
+ * Constructor
+ */
 
 CoordinateToName::CoordinateToName():
     m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false)
@@ -45,9 +45,8 @@ CoordinateToName::CoordinateToName():
 }
 
 /**
-   *
-   */
-
+ * PrintSelf
+ */
 void
 CoordinateToName
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -78,7 +77,6 @@ CoordinateToName::ThreadFunction( void *arg )
   CoordinateToName::Pointer lThis = (CoordinateToName*)(pInfo->UserData);
   lThis->DoEvaluate();
 }
-
 
 
 void CoordinateToName::DoEvaluate()
@@ -136,12 +134,14 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
 
-  TiXmlElement* childName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "name" ).Element();
+  TiXmlElement* childName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).
+      FirstChild( "name" ).Element();
   if ( childName )
   {
     placeName=childName->GetText();
   }
-  TiXmlElement* childCountryName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "countryName" ).Element();
+  TiXmlElement* childCountryName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).
+      FirstChild( "countryName" ).Element();
   if ( childCountryName )
   {
     countryName=childCountryName->GetText();
@@ -152,4 +152,3 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
 }
 
 } // namespace otb
-
