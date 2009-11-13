@@ -68,6 +68,7 @@ bool CoordinateToName::Evaluate()
   {
     DoEvaluate();
   }
+  return true;
 }
 
 ITK_THREAD_RETURN_TYPE
@@ -76,6 +77,7 @@ CoordinateToName::ThreadFunction( void *arg )
   struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(arg);
   CoordinateToName::Pointer lThis = (CoordinateToName*)(pInfo->UserData);
   lThis->DoEvaluate();
+  return 0;
 }
 
 
