@@ -84,14 +84,9 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
       currentPoint[1] = ossimGPointRef.lat;
 
 //      otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
-      if (this->m_UseDEM)
-      {
-        heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
-      }
-      else
-      {
-        heightTmp = this->m_AverageElevation;
-      }
+
+      heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
+
 //       otbMsgDevMacro(<< "height : " << heightTmp);
 
       this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);
