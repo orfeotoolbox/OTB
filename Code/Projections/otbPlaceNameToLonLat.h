@@ -51,8 +51,6 @@ public:
   itkGetMacro( Lat, double );
   itkGetMacro( PlaceName, std::string );
 
-  itkSetMacro( Lon, double );
-  itkSetMacro( Lat, double );
   itkSetMacro( PlaceName, std::string );
 
   typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum;//Not implemented yet TODO
@@ -79,6 +77,5 @@ private:
 };
 
 } // namespace otb
-
 
 #endif

@@ -59,6 +59,7 @@ ImageLayer<TImage,TOutputImage>
   m_ScaledExtractRenderingFilter->SetInput(m_ScaledExtractFilter->GetOutput());
 
   m_Transform = TransformType::New();
+  m_CoordinateToName = CoordinateToName::New();
 
   m_PlaceName = "";
   m_CountryName = "";
@@ -273,18 +274,16 @@ ImageLayer<TImage,TOutputImage>
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss<< "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss<< "(estimated location)" << std::endl;
 
-//       if ((m_PlaceName == "") && (m_CountryName == ""))
-//       {
-//         CoordinateToName::Pointer conv = CoordinateToName::New();
-//         conv->SetLon(point[0]);
-//         conv->SetLat(point[1]);
-//         conv->Evaluate();
-//
-//         m_PlaceName = conv->GetPlaceName();
-//         m_CountryName = conv->GetCountryName();
-//       }
-//       if (m_PlaceName != "") oss << "Near " << m_PlaceName;
-//       if (m_CountryName != "") oss << " in " << m_CountryName;
+      if (m_CoordinateToName->SetLonLat(point))
+      {
+         m_CoordinateToName->Evaluate();
+      }
+
+      m_PlaceName = m_CoordinateToName->GetPlaceName();
+      m_CountryName = m_CoordinateToName->GetCountryName();
+
+      if (m_PlaceName != "") oss << "Near " << m_PlaceName;
+      if (m_CountryName != "") oss << " in " << m_CountryName;
     }
     else
     {

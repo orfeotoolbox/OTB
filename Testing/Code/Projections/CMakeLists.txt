@@ -460,6 +460,9 @@ ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -496,6 +499,7 @@ otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 )
+
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")

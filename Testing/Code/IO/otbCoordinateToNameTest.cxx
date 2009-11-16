@@ -20,13 +20,15 @@
 #endif
 
 #include <fstream>
+#include <cstdlib>
+#include <OpenThreads/Thread>
 
 #include "otbCoordinateToName.h"
 
-int main( int argc, char* argv[] )
+int otbCoordinateToNameTest( int argc, char* argv[] )
 {
 
-  if (argc!=4)
+  if (argc < 4)
   {
     std::cout << argv[0] <<" <lon> <lat> <outputfile>"
               << std::endl;
@@ -39,7 +41,18 @@ int main( int argc, char* argv[] )
   otb::CoordinateToName::Pointer conv = otb::CoordinateToName::New();
   conv->SetLon(atof(argv[1]));
   conv->SetLat(atof(argv[2]));
-  conv->Evaluate();
+
+  if ((argc > 4) && atoi(argv[4]) == 1)
+  {
+    conv->MultithreadOn();
+    conv->Evaluate();
+    OpenThreads::Thread::microSleep(10000000);//Make sure that the web request has the time to complete
+  }
+  else
+  {
+    conv->MultithreadOff();
+    conv->Evaluate();
+  }
 
   std::string name = conv->GetPlaceName();
   std::string country = conv->GetCountryName();
