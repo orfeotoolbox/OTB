@@ -13,10 +13,10 @@ ENDIF( NOT OTB_USE_PQXX )
 
 ADD_LIBRARY(OTBCommon ${OTBCommon_SRCS})
 TARGET_LINK_LIBRARIES (OTBCommon ITKAlgorithms ITKStatistics ITKCommon otbconfigfile)
-IF (OTB_USE_MAPNIK)
+IF(OTB_USE_MAPNIK)
     TARGET_LINK_LIBRARIES(OTBCommon ${MAPNIK_LIBRARY})
 ENDIF(OTB_USE_MAPNIK)
-IF (OTB_USE_PQXX)
+IF(OTB_USE_PQXX)
 #TODO this line should be refined when we will like to have this capability with windows
     TARGET_LINK_LIBRARIES(OTBCommon pq pqxx)
 ENDIF(OTB_USE_PQXX)

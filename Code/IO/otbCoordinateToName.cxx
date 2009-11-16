@@ -17,29 +17,36 @@
 =========================================================================*/
 
 #include "otbCoordinateToName.h"
+#include "otbMacro.h"
+
+#ifdef OTB_USE_CURL
 #include "tinyxml.h"
 #include <curl/curl.h>
-#include "otbMacro.h"
+#endif
 
 namespace otb
 {
 
 /**
-   * Constructor
-   */
+ * Constructor
+ */
 
-CoordinateToName::CoordinateToName()
+CoordinateToName::CoordinateToName():
+    m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false)
 {
-  m_Lon = -1000.0;
-  m_Lat = -1000.0;
   m_PlaceName = "";
   m_CountryName = "";
+  m_TempFileName = "out-SignayriUt1.xml";
+
+  m_Threader = itk::MultiThreader::New();
+
+  m_UpdateDistance = 0.01;//about 1km at equator
+
 }
 
 /**
-   *
-   */
-
+ * PrintSelf
+ */
 void
 CoordinateToName
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -53,7 +60,29 @@ CoordinateToName
 
 bool CoordinateToName::Evaluate()
 {
+  if (m_Multithread)
+  {
+    m_Threader->SpawnThread(ThreadFunction, this);
+  }
+  else
+  {
+    DoEvaluate();
+  }
+  return true;
+}
 
+ITK_THREAD_RETURN_TYPE
+CoordinateToName::ThreadFunction( void *arg )
+{
+  struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *)(arg);
+  CoordinateToName::Pointer lThis = (CoordinateToName*)(pInfo->UserData);
+  lThis->DoEvaluate();
+  return 0;
+}
+
+
+void CoordinateToName::DoEvaluate()
+{
   std::ostringstream urlStream;
   urlStream << "http://ws.geonames.org/findNearbyPlaceName?lat=";
   urlStream << m_Lat;
@@ -61,40 +90,23 @@ bool CoordinateToName::Evaluate()
   urlStream << m_Lon;
   otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
   RetrieveXML(urlStream);
-  ParseXMLGeonames();
-
-  return true;
+  std::string placeName = "";
+  std::string countryName = "";
+  ParseXMLGeonames(placeName, countryName);
+  m_PlaceName = placeName;
+  m_CountryName = countryName;
+  m_IsValid = true;
 }
 
-/*
-//This method will be necessary to process the file directly in memory
-//without writing it to the disk. Waiting for the xml lib to handle that
-//also
-static size_t
-curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
-  void *data)
+
+void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
 {
-  register int realsize = (int)(size * nmemb);
-
-  std::vector<char> *vec
-    = static_cast<std::vector<char>*>(data);
-  const char* chPtr = static_cast<char*>(ptr);
-  vec->insert(vec->end(), chPtr, chPtr + realsize);
-
-  return realsize;
-}
-*/
-
-void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
-{
-
+#ifdef OTB_USE_CURL
   CURL *curl;
   CURLcode res;
 
-  FILE* output_file = fopen("out.xml","w");
+  FILE* output_file = fopen(m_TempFileName.c_str(),"w");
   curl = curl_easy_init();
-
-//   std::cout << "URL data " << urlStream.str().data() << std::endl;
 
 
   char url[256];
@@ -105,11 +117,7 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
   {
     std::vector<char> chunk;
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    /*
-    //Step needed to handle curl without temporary file
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,this->curlHandlerWriteMemoryCallback);
-    curl_easy_setopt(curl, CURLOPT_FILE, (void *)&chunk);
-    */
+
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
     res = curl_easy_perform(curl);
 
@@ -117,27 +125,32 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream)
     /* always cleanup */
     curl_easy_cleanup(curl);
   }
-
+#endif
 }
 
 
-void CoordinateToName::ParseXMLGeonames()
+void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
 {
-  TiXmlDocument doc( "out.xml" );
+#ifdef OTB_USE_CURL
+  TiXmlDocument doc( m_TempFileName.c_str() );
   doc.LoadFile();
   TiXmlHandle docHandle( &doc );
 
-  TiXmlElement* childName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "name" ).Element();
+  TiXmlElement* childName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).
+      FirstChild( "name" ).Element();
   if ( childName )
   {
-    m_PlaceName=childName->GetText();
+    placeName=childName->GetText();
   }
-  TiXmlElement* childCountryName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).FirstChild( "countryName" ).Element();
+  TiXmlElement* childCountryName = docHandle.FirstChild( "geonames" ).FirstChild( "geoname" ).
+      FirstChild( "countryName" ).Element();
   if ( childCountryName )
   {
-    m_CountryName=childCountryName->GetText();
+    countryName=childCountryName->GetText();
   }
+
+  remove(m_TempFileName.c_str());
+#endif
 }
 
 } // namespace otb
-
