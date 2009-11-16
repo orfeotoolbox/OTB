@@ -21,6 +21,7 @@
 
 #include <fstream>
 #include <cstdlib>
+#include <OpenThreads/Thread>
 
 #include "otbCoordinateToName.h"
 
@@ -45,7 +46,7 @@ int otbCoordinateToNameTest( int argc, char* argv[] )
   {
     conv->MultithreadOn();
     conv->Evaluate();
-    sleep(10);//Make sure that the web request has the time to complete
+    OpenThreads::Thread::microSleep(10000000);//Make sure that the web request has the time to complete
   }
   else
   {

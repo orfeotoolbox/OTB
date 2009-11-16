@@ -800,7 +800,7 @@ ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS7}
 
 IF( OTB_USE_CURL )
 
-ADD_TEST(coTvCoordinateToNameTest ${PROJECTIONS_TESTS3}
+ADD_TEST(coTvCoordinateToNameTest ${IO_TESTS8}
     --compare-ascii ${NOTOL}
          ${BASELINE}/CoordinateToNameTest.txt
          ${TEMP}/CoordinateToNameTest.txt
@@ -810,7 +810,7 @@ ADD_TEST(coTvCoordinateToNameTest ${PROJECTIONS_TESTS3}
 )
 
 #this test intentionaly uses the same baseline as the previous one
-ADD_TEST(coTvCoordinateToNameMultithreadTest ${PROJECTIONS_TESTS3}
+ADD_TEST(coTvCoordinateToNameMultithreadTest ${IO_TESTS8}
     --compare-ascii ${NOTOL}
          ${BASELINE}/CoordinateToNameTest.txt
          ${TEMP}/CoordinateToNameMultithreadTest.txt
