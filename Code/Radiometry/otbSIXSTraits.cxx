@@ -111,6 +111,7 @@ SIXSTraits::ComputeAtmosphericParameters(
       s[cpt] = FilterFunctionValues6S[i];
       cpt++;
     }
+
     // Call 6s main function
     otbMsgDevMacro(<< "Start call 6S main function ...");
     otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday,

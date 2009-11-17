@@ -20,6 +20,7 @@
 
 #include "itkImageRegionConstIterator.h"
 #include "otbMacro.h"
+#include "otbI18n.h"
 #include "itkTimeProbe.h"
 #include "otbStandardRenderingFunction.h"
 
@@ -120,7 +121,8 @@ ImageLayer<TImage,TOutputImage>
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+        << " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
     }
   // If there are pixels to render
   if(this->GetExtractRegion().GetNumberOfPixels() > 0)
@@ -138,7 +140,8 @@ ImageLayer<TImage,TOutputImage>
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+        << " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
     this->SetHasExtract(true);
     }
   else
@@ -162,7 +165,8 @@ ImageLayer<TImage,TOutputImage>
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
       this->SetHasScaledExtract(true);
       probe.Stop();
-      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+          << " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
       }
   else
     {
@@ -200,7 +204,8 @@ ImageLayer<TImage,TOutputImage>
     // Check if we need to generate the histogram again
     if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
       {
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"
+          << " Regenerating histogram due to pippeline update.");
 
       // Update the histogram source
       histogramSource->Update();
@@ -223,7 +228,8 @@ ImageLayer<TImage,TOutputImage>
         m_ListSample->PushBack(sample);
         ++it;
       }
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"
+          << " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
 
       m_RenderingFunction->SetListSample(m_ListSample);
 
@@ -244,8 +250,8 @@ ImageLayer<TImage,TOutputImage>
   m_RenderingFunction->Initialize(); //FIXME check, but the call must be done in the generator. To be moved to the layer?
   // The ouptut stringstream
   itk::OStringStream oss;
-  oss<<"Layer: "<<this->GetName();
-  oss<<std::endl<<"Image Size: "<<m_Image->GetLargestPossibleRegion().GetSize();
+  oss<< otbGetTextMacro("Layer") << ": "<<this->GetName();
+  oss<<std::endl<< otbGetTextMacro("Image size") << ": " <<m_Image->GetLargestPossibleRegion().GetSize();
   // If we are inside the buffered region
   if(m_Image->GetBufferedRegion().IsInside(index))
     {
@@ -255,8 +261,8 @@ ImageLayer<TImage,TOutputImage>
     // Else we extrapolate the value from the quicklook
     {
     IndexType ssindex = index;
-    ssindex[0]/=this->GetQuicklookSubsamplingRate();
-    ssindex[1]/=this->GetQuicklookSubsamplingRate();
+    ssindex[0] /= this->GetQuicklookSubsamplingRate();
+    ssindex[1] /= this->GetQuicklookSubsamplingRate();
 
     if(m_Quicklook->GetBufferedRegion().IsInside(ssindex))
       {
@@ -274,20 +280,24 @@ ImageLayer<TImage,TOutputImage>
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss<< "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss<< "(estimated location)" << std::endl;
 
-      if (m_CoordinateToName->SetLonLat(point))
+      // We do not want to refresh the location if we are pointing in the scroll view
+      if (m_Image->GetBufferedRegion().IsInside(index))
       {
-         m_CoordinateToName->Evaluate();
+        if (m_CoordinateToName->SetLonLat(point))
+        {
+          m_CoordinateToName->Evaluate();
+        }
       }
 
       m_PlaceName = m_CoordinateToName->GetPlaceName();
       m_CountryName = m_CoordinateToName->GetCountryName();
 
-      if (m_PlaceName != "") oss << "Near " << m_PlaceName;
-      if (m_CountryName != "") oss << " in " << m_CountryName;
+      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName;
+      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName;
     }
     else
     {
-      oss << "Location unknown" << std::endl;
+      oss << otbGetTextMacro("Location unknown") << std::endl;
     }
   }
   return oss.str();

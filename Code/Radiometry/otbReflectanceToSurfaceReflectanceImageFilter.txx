@@ -94,7 +94,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
       m_CorrectionParameters->LoadFilterFunctionValue( m_FilterFunctionValuesFileName );
    }
   // the user has set the filter function values
-  else
+  else if( m_CorrectionParameters->GetWavelenghtSpectralBand().size() != this->GetInput()->GetNumberOfComponentsPerPixel())
     {
       bool ffvfOK = true;
       if( m_FilterFunctionCoef.size() == 0 )
@@ -105,23 +105,22 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
       for(unsigned int i=0; i<this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
        {
          FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
-         // if no ffvf set, set 1 as coef
+
          if(ffvfOK)
            functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-       
-         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-         functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
-
-         // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max
-         if(!ffvfOK)
-           functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
+	 else // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max and 1 as coef
+	   {
+	     functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+	     functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+	     functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
+	   }
        
          m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
        }
+     
     }
-  
+
   Parameters2RadiativeTermsPointerType param2Terms = Parameters2RadiativeTermsType::New();
-  
   param2Terms->SetInput(m_CorrectionParameters);
   param2Terms->Update();
   m_AtmosphericRadiativeTerms = param2Terms->GetOutput();

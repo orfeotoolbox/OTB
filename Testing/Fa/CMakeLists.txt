@@ -19,7 +19,7 @@ SET(TOL 0.0)
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests3)
 SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests9)
-SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests8)
+SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests7)
 SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests1)
 
 # -------       FAs traitees -----------------------------------

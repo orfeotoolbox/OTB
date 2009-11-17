@@ -148,7 +148,7 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
   {
     countryName=childCountryName->GetText();
   }
-
+  otbMsgDevMacro(<<"Near " << placeName << " in " << countryName);
   remove(m_TempFileName.c_str());
 #endif
 }

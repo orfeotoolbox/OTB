@@ -10,23 +10,23 @@ class ImageWidgetSplittedManager {open
   Function {ImageWidgetSplittedManager()} {open selected return_type void
   } {
     Fl_Window m_FullGroup {
-      label {Full Window}
+      label {Full window}
       xywh {673 230 630 565} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
     Fl_Window m_QuicklookGroup {
-      label {Scroll Window}
+      label {Scroll window}
       xywh {1309 229 215 180} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
     Fl_Window m_ZoomGroup {
-      label {Zoom Window}
+      label {Zoom window}
       xywh {1309 436 215 170} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
     Fl_Window m_HistogramsGroup {
-      label {Histogram Window}
+      label {Histogram window}
       xywh {387 234 280 160} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
     Fl_Window m_PixelDescriptionGroup {
-      label {Pixel Description Window}
+      label {Pixel description window}
       xywh {1309 633 215 160} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {}
   }

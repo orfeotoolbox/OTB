@@ -20,6 +20,7 @@
 
 #include "otbPixelDescriptionModel.h"
 #include "otbMacro.h"
+#include "otbI18n.h"
 #include "itkTimeProbe.h"
 
 namespace otb
@@ -50,7 +51,7 @@ PixelDescriptionModel<TOutputImage>
 {
   // The output stringstream
   itk::OStringStream oss;
-  oss<<"Index: "<<index<<std::endl;
+  oss<< otbGetTextMacro("Index") << ": "<<index<<std::endl;
   // Report pixel info for each visible layer
   for(typename Superclass::LayerIteratorType it = this->GetLayers()->Begin();
       it != this->GetLayers()->End(); ++it)
