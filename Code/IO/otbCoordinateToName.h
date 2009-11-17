@@ -66,7 +66,7 @@ public:
   {
     if ((vcl_abs(point[0] - m_Lon) > m_UpdateDistance) || (vcl_abs(point[1] - m_Lat) > m_UpdateDistance))
     {
-      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
+//      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
       m_Lon = point[0];
       m_Lat = point[1];
       //TODO Check whether it is better to have something imprecise or nothing at all
@@ -75,7 +75,7 @@ public:
     }
     else
     {
-      std::cout << "Keeping lon/lat" << std::endl;
+//      std::cout << "Keeping lon/lat" << std::endl;
       return false;
     }
   }
