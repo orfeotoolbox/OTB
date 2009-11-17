@@ -121,7 +121,8 @@ ImageLayer<TImage,TOutputImage>
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+        << " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
     }
   // If there are pixels to render
   if(this->GetExtractRegion().GetNumberOfPixels() > 0)
@@ -139,7 +140,8 @@ ImageLayer<TImage,TOutputImage>
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+        << " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
     this->SetHasExtract(true);
     }
   else
@@ -163,7 +165,8 @@ ImageLayer<TImage,TOutputImage>
       this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
       this->SetHasScaledExtract(true);
       probe.Stop();
-      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"<< " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
+          << " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
       }
   else
     {
@@ -201,7 +204,8 @@ ImageLayer<TImage,TOutputImage>
     // Check if we need to generate the histogram again
     if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
       {
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Regenerating histogram due to pippeline update.");
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"
+          << " Regenerating histogram due to pippeline update.");
 
       // Update the histogram source
       histogramSource->Update();
@@ -224,7 +228,8 @@ ImageLayer<TImage,TOutputImage>
         m_ListSample->PushBack(sample);
         ++it;
       }
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"<< " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
+      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"
+          << " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
 
       m_RenderingFunction->SetListSample(m_ListSample);
 
@@ -256,8 +261,8 @@ ImageLayer<TImage,TOutputImage>
     // Else we extrapolate the value from the quicklook
     {
     IndexType ssindex = index;
-    ssindex[0]/=this->GetQuicklookSubsamplingRate();
-    ssindex[1]/=this->GetQuicklookSubsamplingRate();
+    ssindex[0] /= this->GetQuicklookSubsamplingRate();
+    ssindex[1] /= this->GetQuicklookSubsamplingRate();
 
     if(m_Quicklook->GetBufferedRegion().IsInside(ssindex))
       {

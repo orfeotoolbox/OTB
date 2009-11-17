@@ -13,7 +13,7 @@
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
-//
+
 =========================================================================*/
 #ifndef __otbStandardRenderingFunction_h
 #define __otbStandardRenderingFunction_h
@@ -101,9 +101,9 @@ public:
 
 
   /** Extrema vector */
-  typedef std::vector<RealScalarType>                    ExtremaVectorType;
-  typedef TTransferFunction                          TransferFunctionType;
-  typedef TPixelRepresentationFunction               PixelRepresentationFunctionType;
+  typedef std::vector<RealScalarType>                               ExtremaVectorType;
+  typedef TTransferFunction                                         TransferFunctionType;
+  typedef TPixelRepresentationFunction                              PixelRepresentationFunctionType;
   typedef typename PixelRepresentationFunctionType::ChannelListType ChannelListType;
 
   /** Convert the input pixel to a pixel representation that can be displayed on
@@ -183,7 +183,7 @@ public:
         if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
         {
          // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
-         if (this->GetListSample()->GetMeasurementVectorSize() >=4)
+         if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
          {
            m_PixelRepresentationFunction.SetRedChannelIndex(2);
            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
@@ -191,7 +191,7 @@ public:
          }
          
          // Classic case
-         if (this->GetListSample()->GetMeasurementVectorSize() ==3)
+         if (this->GetListSample()->GetMeasurementVectorSize() == 3)
          {
            m_PixelRepresentationFunction.SetRedChannelIndex(0);
            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
@@ -202,8 +202,8 @@ public:
       }
       if(m_AutoMinMax)
       {
-
-        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();//FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+        //FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
+        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
 
         otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
         // For each components, use the histogram to compute min and max
@@ -221,8 +221,10 @@ public:
         for(unsigned int comp = 0; comp < nbComps;++comp)
         {
           // Compute quantiles
-          m_Minimum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
-          m_Maximum.push_back(static_cast<ScalarType>(this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
+          m_Minimum.push_back(static_cast<ScalarType>(
+              this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
+          m_Maximum.push_back(static_cast<ScalarType>(
+              this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
           otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
               <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
               <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
@@ -284,13 +286,17 @@ public:
     oss << otbGetTextMacro("Value computed") << ": "
             << static_cast<typename itk::NumericTraits<InternalPixelType>::PrintType>(spixelRepresentation) << std::endl;
     oss << otbGetTextMacro("Value displayed") << ": " << std::endl;
-    oss << otbGetTextMacro("R") << " " << std::setw(3)<< static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[0]) << ", ";
-    oss << otbGetTextMacro("G") << " " << std::setw(3)<< static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[1]) << ", ";
-    oss << otbGetTextMacro("B") << " " << std::setw(3)<< static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[2]);
+    oss << otbGetTextMacro("R") << " " << std::setw(3)
+      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[0]) << ", ";
+    oss << otbGetTextMacro("G") << " " << std::setw(3)
+      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[1]) << ", ";
+    oss << otbGetTextMacro("B") << " " << std::setw(3)
+      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[2]);
     if (spixelDisplay.Size() == 4)
     {
       oss << ", ";
-      oss << otbGetTextMacro("A") << " " << std::setw(3)<< static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[3]);
+      oss << otbGetTextMacro("A") << " " << std::setw(3)
+        << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[3]);
     }
     oss << std::endl;
     return oss.str();
@@ -332,7 +338,7 @@ public:
      param.SetSize(2*nbBands);
      
      // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
-     for(unsigned int i = 0; i< nbBands ; i++)
+     for(unsigned int i = 0; i< nbBands; ++i)
      {
        // Min Band
        param.SetElement(2*i,/*TransferedMinimum*/m_Minimum[i]);
@@ -469,5 +475,3 @@ private:
 } // end namespace otb
 
 #endif
-
-
