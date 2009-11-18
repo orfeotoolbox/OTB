@@ -118,7 +118,7 @@ public:
   typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
 
 
-  typedef typename itk::Size<>  RadiusSizeType;
+  typedef typename itk::Size<Input1ImageType::ImageDimension>  RadiusSizeType;
 
   itkSetMacro(Radius, RadiusSizeType);
 
