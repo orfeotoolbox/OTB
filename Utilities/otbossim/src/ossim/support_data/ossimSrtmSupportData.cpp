@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 13094 2008-06-27 15:41:45Z dburken $
+// $Id: ossimSrtmSupportData.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cmath>
 #include <fstream>
@@ -871,7 +871,7 @@ bool ossimSrtmSupportData::computeMinMaxTemplate(T dummy,
    ossimByteOrder endianType = ossim::byteOrder();
    for (ossim_uint32 line = 0; line < theNumberOfLines; ++line)
    {
-      theFileStream->read(char_buf, BYTES_IN_LINE);
+      theFileStream->read(char_buf, (std::streamsize)BYTES_IN_LINE);
       if(endianType == OSSIM_LITTLE_ENDIAN)
       {
          swapper.swap(line_buf, theNumberOfSamples);

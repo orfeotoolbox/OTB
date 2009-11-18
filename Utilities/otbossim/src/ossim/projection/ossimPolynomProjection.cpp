@@ -526,7 +526,7 @@ ossim_uint32
 ossimPolynomProjection::degreesOfFreedom()const
 {
    //is number of desired monoms * 2
-   return theExpSet.size() * 2;
+   return (ossim_uint32)theExpSet.size() * 2;
 }
 
 bool

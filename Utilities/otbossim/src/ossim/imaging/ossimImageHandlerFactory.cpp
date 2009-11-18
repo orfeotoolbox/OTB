@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
 //
 // License:  LGPL
-//
+// 
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageHandlerFactory.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -23,6 +23,7 @@
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
 #include <ossim/imaging/ossimTileMapTileSource.h>
+#include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
@@ -47,8 +48,8 @@ ossimImageHandlerFactory* ossimImageHandlerFactory::instance()
       theInstance = new ossimImageHandlerFactory;
 
       // let's turn off tiff error reporting
-      TIFFSetErrorHandler(NULL);
-      TIFFSetWarningHandler(NULL);
+      TIFFSetErrorHandler(0);
+      TIFFSetWarningHandler(0);
    }
 
    return theInstance;
@@ -58,7 +59,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    const ossimFilename& fileName)const
 {
    ossimFilename copyFilename = fileName;
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -81,7 +82,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    if(!copyFilename.exists()) return 0;
 
    ossimString ext = copyFilename.ext().downcase();
-
+   
    if(ext == "gz")
    {
       copyFilename = copyFilename.setExtension("");
@@ -100,6 +101,18 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    // If here do it the brute force way by going down the list of available
    // readers...
    //---
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying OSSIM Virtual Image" << std::endl;
+   }
+   result = new ossimVirtualImageHandler;
+   if(result->open(copyFilename))
+   {
+      return result.release();
+   }
+   result = 0;
 
    if(traceDebug())
    {
@@ -344,16 +357,16 @@ ossimImageHandler* ossimImageHandlerFactory::open(
       ossimNotify(ossimNotifyLevel_DEBUG)
       << "trying adrg" << std::endl;
    }
-
+   
    // test if ADRG
    result  = new ossimAdrgTileSource();
-
+   
    if(result->open(copyFilename))
    {
       return result.release();
    }
    result = 0;
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -365,14 +378,14 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    {
       return result.release();
    }
-
+   
    result = 0;
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimImageHandlerFactory::open(filename) DEBUG: returning..." << std::endl;
    }
-   return (ossimImageHandler*)NULL;
+   return (ossimImageHandler*)0;
 }
 
 ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
@@ -398,7 +411,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
       return result.release();
    }
    result = 0;
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -558,9 +571,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    {
       return result.release();
    }
-
+   
    result = 0;
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -677,7 +690,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(
       }
       result = 0;
    }
-
+   
    if ( (ext == "tif") || (ext == "tiff") )
    {
       // this must be checked first before the TIFF handler
@@ -723,7 +736,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(
       }
       result = 0;
    }
-
+   
    if ( (ext == "jpg") || (ext == "jpeg") )
    {
       result = new ossimJpegTileSource;
@@ -733,7 +746,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(
       }
       result = 0;
    }
-
+   
    if ( (ext == "doq") || (ext == "doqq") )
    {
       result = new ossimDoqqTileSource;
@@ -763,7 +776,7 @@ ossimImageHandler* ossimImageHandlerFactory::openFromExtension(
          return result.release();
       }
       result = 0;
-   }
+   }  
 
    if (ext == "dem")
    {
@@ -884,7 +897,7 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
 void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    extensionList.push_back("img");
-   extensionList.push_back("ccf");
+   extensionList.push_back("ccf"); 
    extensionList.push_back("toc");
    extensionList.push_back("tif");
    extensionList.push_back("tiff");

@@ -11,7 +11,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffOverviewBuilder.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -133,7 +133,7 @@ public:
 
    /**
     * @brief Sets the input to the builder. Satisfies pure virtual from
-    * ossimOverviewBuilderInterface.
+    * ossimOverviewBuilderBase.
     *
     * @param imageSource The input to the builder.
     *
@@ -143,7 +143,7 @@ public:
    
    /**
     * @brief Sets the output filename.
-    * Satisfies pure virtual from ossimOverviewBuilderInterface.
+    * Satisfies pure virtual from ossimOverviewBuilderBase.
     * @param file The output file name.
     */
    virtual void  setOutputFile(const ossimFilename& file);
@@ -167,7 +167,7 @@ public:
    /**
     * @brief Sets the overview output type.
     *
-    * Satisfies pure virtual from ossimOverviewBuilderInterface.
+    * Satisfies pure virtual from ossimOverviewBuilderBase.
     * 
     * Currently handled types are:
     * "ossim_tiff_nearest" and "ossim_tiff_box"
@@ -181,20 +181,20 @@ public:
 
    /**
     * @brief Gets the overview type.
-    * Satisfies pure virtual from ossimOverviewBuilderInterface.
+    * Satisfies pure virtual from ossimOverviewBuilderBase.
     * @return The overview output type as a string.
     */
    virtual ossimString getOverviewType() const;
 
    /**
     * @brief Method to populate class supported types.
-    * Satisfies pure virtual from ossimOverviewBuilderInterface.
+    * Satisfies pure virtual from ossimOverviewBuilderBase.
     * @param typeList List of ossimStrings to add to.
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 
    /**
-    * @biref Method to set properties.
+    * @brief Method to set properties.
     * @param property Property to set.
     *
     * @note Currently supported property:

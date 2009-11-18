@@ -156,14 +156,14 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
 
   switch ( type ) {
   case VpfChar:
-    retval = fread ( to, sizeof (char), count, from ) ;
+    retval = (long)fread ( to, sizeof (char), count, from ) ;
     break ;
   case VpfShort:
     {
       short int stemp ,
                 *sptr = (short *) to ;
       for ( i=0; i < count; i++ ) {
-	retval = fread ( &stemp, sizeof (short), 1, from ) ;
+	retval = (long)fread ( &stemp, sizeof (short), 1, from ) ;
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER)
 	   swap_two ( (char*)&stemp, (char*)sptr ) ;
 	else
@@ -178,12 +178,12 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
 	long int itemp,
 	  *iptr = (long int *) to ;
 	for ( i=0; i < count; i++ ) {
-	  retval = fread ( &itemp, sizeof (long int), 1, from ) ;
+	  retval = (long)fread ( &itemp, sizeof (long int), 1, from ) ;
 	  swap_four ( (char*)&itemp, (char*)iptr ) ;
 	  iptr++ ;
 	}
       } else {
-	retval = fread ( to, sizeof (long int), count, from ) ;
+	retval = (long)fread ( to, sizeof (long int), count, from ) ;
       }
     }  
     break ;
@@ -192,7 +192,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
       float ftemp ,
             *fptr = (float *) to ;
       for ( i=0; i < count; i++ ) {
-        retval = fread ( &ftemp, sizeof (float), 1, from ) ;
+        retval = (long)fread ( &ftemp, sizeof (float), 1, from ) ;
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER)
 	   swap_four ( (char*)&ftemp, (char*)fptr ) ;
 	else
@@ -206,7 +206,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
       double dtemp ,
              *dptr = (double *) to ;
       for ( i=0; i < count; i++ ) {
-        retval = fread ( &dtemp, sizeof (double), 1, from ) ;
+        retval = (long)fread ( &dtemp, sizeof (double), 1, from ) ;
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER)
 	   swap_eight ( (char*)&dtemp, (char*)dptr ) ;
 	else
@@ -218,7 +218,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
   case VpfDate:
     {
       date_type *dp = (date_type *) to ;
-      retval = fread(dp,sizeof(date_type)-1,count,from);
+      retval = (long)fread(dp,sizeof(date_type)-1,count,from);
     }
     break ;
   case VpfCoordinate:
@@ -227,13 +227,13 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
 	 coordinate_type ctemp ,
 		      *cptr = (coordinate_type *) to ;
 	 for ( i=0; i < count; i++ ) {
-	   retval = fread ( &ctemp, sizeof (coordinate_type), 1, from ) ;
+	   retval = (long)fread ( &ctemp, sizeof (coordinate_type), 1, from ) ;
 	   swap_four ( (char*)&ctemp.x, (char*)&cptr->x ) ;
 	   swap_four ( (char*)&ctemp.y, (char*)&cptr->y ) ;
 	   cptr++ ;
 	 }
       } else {
-	 retval = fread ( to, sizeof (coordinate_type), count, from ) ;
+	 retval = (long)fread ( to, sizeof (coordinate_type), count, from ) ;
       }
     }  
     break ;
@@ -242,7 +242,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
       double_coordinate_type dctemp ,
                              *dcptr = (double_coordinate_type *) to ;
       for ( i=0; i < count; i++ ) {
-        retval = fread ( &dctemp, sizeof (double_coordinate_type), 1, from ) ;
+        retval = (long)fread ( &dctemp, sizeof (double_coordinate_type), 1, from ) ;
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER) {
 	   swap_eight ( (char*)&dctemp.x, (char*)&dcptr->x ) ;
 	   swap_eight ( (char*)&dctemp.y, (char*)&dcptr->y ) ;
@@ -259,7 +259,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
       tri_coordinate_type ttemp ,
                           *tptr = (tri_coordinate_type *) to ;
       for ( i=0; i < count; i++ ) {
-        retval = fread ( &ttemp, sizeof (tri_coordinate_type), 1, from ) ;
+        retval = (long)fread ( &ttemp, sizeof (tri_coordinate_type), 1, from ) ;
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER) {
 	   swap_four ( (char*)&ttemp.x, (char*)&tptr->x ) ;
 	   swap_four ( (char*)&ttemp.y, (char*)&tptr->y ) ;
@@ -278,7 +278,7 @@ long int VpfRead ( void *to, VpfDataType type, long int count, FILE *from )
       double_tri_coordinate_type dttemp ,
                                  *dtptr = (double_tri_coordinate_type *) to ;
       for ( i=0; i < count; i++ ) {
-        retval = fread ( &dttemp,sizeof (double_tri_coordinate_type), 1, from);
+        retval = (long)fread ( &dttemp, sizeof (double_tri_coordinate_type), 1, from);
 	if (STORAGE_BYTE_ORDER != MACHINE_BYTE_ORDER) {
 	   swap_eight ( (char*)&dttemp.x, (char*)&dtptr->x ) ;
 	   swap_eight ( (char*)&dttemp.y, (char*)&dtptr->y ) ;
@@ -394,7 +394,7 @@ int add_null_values ( char *name, vpf_table_type table, FILE *fpout )
     case 'T':
       cval = get_string ( &ptr, line, FIELD_SEPERATOR ) ;
       free ( table.header[i].nullval.Char ) ;   /* get rid of default */
-      table.header[i].nullval.Char = (char *) vpfmalloc ( strlen (cval)+1) ;
+      table.header[i].nullval.Char = (char *) vpfmalloc ( (unsigned long)strlen (cval)+1) ;
       strcpy ( table.header[i].nullval.Char, cval ) ;
       free (cval) ;
       break ;
@@ -492,11 +492,11 @@ long int index_length( long int row_number,
 	 fseek( table.xfp, (long int)(row_number*recsize), SEEK_SET );
 
 	 if ( ! Read_Vpf_Int(&pos,table.xfp,1) ) {
-	   len = (long int)NULL ;
+	   len = (long int)0 ;
 	 }
 
 	 if ( ! Read_Vpf_Int(&ulen,table.xfp,1) ) {
-	   return (long int)NULL ;
+	   return (long int)0 ;
 	 }
 	 len = ulen;
 	 break;
@@ -508,7 +508,7 @@ long int index_length( long int row_number,
 	   /* Just an error check, should never get here in writing */
 	   fprintf(stderr,"\nindex_length: error trying to access row %d",
 		   (int)row_number ) ;
-	   len = (long int)NULL ;
+	   len = (long int)0 ;
 	}
 	break;
    }
@@ -581,7 +581,7 @@ long int index_pos( long int row_number,
 	 recsize = sizeof(index_cell);
 	 fseek( table.xfp, (long int)(row_number*recsize), SEEK_SET );
 	 if ( ! Read_Vpf_Int(&pos,table.xfp,1) ) {
-	   pos = (unsigned long int)NULL ;
+	   pos = (unsigned long int)0 ;
 	 }
 	 break;
       case RAM:
@@ -592,7 +592,7 @@ long int index_pos( long int row_number,
 	   /* Just an error check, should never get here in writing */
 	   fprintf(stderr,"\nindex_length: error trying to access row %d",
 		   (int)row_number ) ;
-	   pos = (unsigned long int)NULL;
+	   pos = (unsigned long int)0;
 	 }
 	 break;
    }

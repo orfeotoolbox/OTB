@@ -9,7 +9,7 @@
 // Description: Container class for a tiff world file data.
 //
 //********************************************************************
-// $Id: ossimTiffWorld.cpp 14777 2009-06-25 14:43:52Z dburken $
+// $Id: ossimTiffWorld.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <iostream>
 #include <fstream>
@@ -72,7 +72,7 @@ ossimTiffWorld::ossimTiffWorld(const char* file,
          filename, result );
       if ( bSuccess == true )
       {
-         int numResults = result.size();
+         int numResults = (int)result.size();
          int i;
          for ( i=0; i<numResults && !is.is_open(); ++i )
          {

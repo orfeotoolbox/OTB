@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -324,7 +324,7 @@ bool ossimGeneralRasterTileSource::fillBIP(const ossimIpt& origin,
       //***
       // Read the line of image data.   
       //***
-      theFileStrList[0]->read((char*)buf, buffer_width);
+      theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
       if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
       {
          theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -409,7 +409,7 @@ bool ossimGeneralRasterTileSource::fillBIL(const ossimIpt& origin,
          //***
          // Read the line of image data.   
          //***
-         theFileStrList[0]->read((char*)buf, buffer_width);
+         theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
          if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -512,7 +512,7 @@ bool ossimGeneralRasterTileSource::fillBSQ(const ossimIpt& origin,
          //***
          // Read the line of image data.   
          //***
-         theFileStrList[0]->read((char*)buf, buffer_width);
+         theFileStrList[0]->read((char*)buf, (std::streamsize)buffer_width);
          if ((long)theFileStrList[0]->gcount() !=  (long)buffer_width) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
@@ -616,7 +616,7 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin,
          //***
          // Read the line of image data.   
          //***
-         theFileStrList[band]->read((char*)buf, buffer_width);
+         theFileStrList[band]->read((char*)buf, (std::streamsize)buffer_width);
          if ((long)theFileStrList[band]->gcount() !=  (long)buffer_width) 
          {
             theErrorStatus = ossimErrorCodes::OSSIM_ERROR;

@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimHistoMatchRemapper.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimHistoMatchRemapper.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimHistoMatchRemapper.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -62,7 +62,7 @@ ossimRefPtr<ossimImageData> ossimHistoMatchRemapper::getTile(
    }
 
    theBlankTile->setOrigin(tileRect.ul());
-   ossim_uint32 numberOfBands = theInputMeanPerBand.size();
+   ossim_uint32 numberOfBands = (ossim_uint32)theInputMeanPerBand.size();
 
    numberOfBands = numberOfBands>tile->getNumberOfBands()?tile->getNumberOfBands():numberOfBands;
    double result = 0;

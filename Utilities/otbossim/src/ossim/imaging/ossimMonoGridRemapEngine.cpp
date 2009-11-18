@@ -16,7 +16,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimMonoGridRemapEngine.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMonoGridRemapEngine.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimMonoGridRemapEngine.h>
 
@@ -259,7 +259,7 @@ void ossimMonoGridRemapEngine::assignRemapValues (
    // Declare a 2D array that will contain all of the contributing sources'
    // MONO mean values. Also declare the accumulator target vector.
    //***
-   int num_contributors = sources_list.size();
+   int num_contributors = (int)sources_list.size();
    double** contributor_pixel = new double* [num_contributors];
    for (i=0; i<num_contributors; i++)
       contributor_pixel[i] = new double[1];

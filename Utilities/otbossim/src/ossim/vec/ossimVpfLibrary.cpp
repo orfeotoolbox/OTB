@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimVpfLibrary.cpp 13023 2008-06-10 16:26:24Z dburken $
+// $Id: ossimVpfLibrary.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 
 #include <ossim/vec/ossimVpfLibrary.h>
@@ -55,7 +55,7 @@ bool ossimVpfLibrary::openLibrary(ossimVpfDatabase* database,
       
       ossimVpfTable table;
       
-      theNumberOfCoverages = theCoverageNames.size();
+      theNumberOfCoverages = (ossim_uint32)theCoverageNames.size();
       returnCode = (theNumberOfCoverages> 0);
    }
    

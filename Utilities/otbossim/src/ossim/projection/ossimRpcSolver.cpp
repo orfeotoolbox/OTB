@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimRpcSolver.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cstdlib>
 #include <ctime>
@@ -546,7 +546,7 @@ void ossimRpcSolver::solveCoefficients(NEWMAT::ColumnVector& coeff,
    ossim_uint32 idx = 0;
    NEWMAT::Matrix m;
 
-   NEWMAT::ColumnVector r(f.size());
+   NEWMAT::ColumnVector r((int)f.size());
 
    for(idx = 0; idx < f.size(); ++idx)
    {
@@ -554,7 +554,7 @@ void ossimRpcSolver::solveCoefficients(NEWMAT::ColumnVector& coeff,
    }
 
    NEWMAT::ColumnVector tempCoeff;
-   NEWMAT::DiagonalMatrix weights(f.size());
+   NEWMAT::DiagonalMatrix weights((int)f.size());
    NEWMAT::ColumnVector denominator(20);
 
    // initialize the weight matrix to the identity

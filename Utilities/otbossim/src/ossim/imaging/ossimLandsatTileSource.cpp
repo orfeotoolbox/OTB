@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimLandsatTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -158,7 +158,7 @@ bool ossimLandsatTileSource::open()
    ossimGeneralRasterInfo generalRasterInfo(fileList,
 					    OSSIM_UINT8,
 					    OSSIM_BSQ_MULTI_FILE,
-					    fileList.size(),
+					    (ossim_uint32)fileList.size(),
 					    theFfHdr->getLinesPerBand(),
 					    theFfHdr->getPixelsPerLine(),
 					    0,
@@ -169,7 +169,7 @@ bool ossimLandsatTileSource::open()
       generalRasterInfo = ossimGeneralRasterInfo(fileList,
                                                  OSSIM_UINT8,
                                                  OSSIM_BSQ,
-                                                 fileList.size(),
+                                                 (ossim_uint32)fileList.size(),
                                                  theFfHdr->getLinesPerBand(),
                                                  theFfHdr->getPixelsPerLine(),
                                                  0,
@@ -178,7 +178,7 @@ bool ossimLandsatTileSource::open()
    }
    theMetaData.clear();
    theMetaData.setScalarType(OSSIM_UINT8);
-   theMetaData.setNumberOfBands(fileList.size());   
+   theMetaData.setNumberOfBands((ossim_uint32)fileList.size());   
    theImageData = generalRasterInfo;
    if(initializeHandler())
    {

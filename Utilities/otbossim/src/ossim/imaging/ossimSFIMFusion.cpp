@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 13371 2008-08-02 13:42:42Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -152,7 +152,7 @@ ossimRefPtr<ossimImageData> ossimSFIMFusion::getTile(const ossimIrect& rect,
       bands[idx] = (ossim_float32*)normColorOutputData->getBuf(idx);
    }
    // double delta = 0.0;
-   ossim_uint32 bandsSize = bands.size();
+   ossim_uint32 bandsSize = (ossim_uint32)bands.size();
    double normMinPix = 0.0;
    for(y = 0; y < h; ++y)
    {

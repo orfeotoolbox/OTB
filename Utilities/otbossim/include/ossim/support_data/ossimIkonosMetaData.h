@@ -9,7 +9,7 @@
 // This class parses a Space Imaging Ikonos meta data file.
 //
 //********************************************************************
-// $Id: ossimIkonosMetaData.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimIkonosMetaData.h 15828 2009-10-28 13:11:31Z dburken $
 
 #ifndef ossimIkonosMetaData_HEADER
 #define ossimIkonosMetaData_HEADER

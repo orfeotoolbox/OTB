@@ -27,7 +27,7 @@ class ossimProjection;
  * @brief OSSIM nitf writer base class to hold methods common to
  * all nitf writers.
  */
-class ossimNitfWriterBase : public ossimImageFileWriter
+class OSSIM_DLL ossimNitfWriterBase : public ossimImageFileWriter
 {
 public:
 

@@ -255,7 +255,7 @@ long ossimGeoref::Convert_GEOREF_To_Geodetic (char *georef,
 
   origin_long = (double)LONGITUDE_LOW;
   origin_lat = (double)LATITUDE_LOW;
-  georef_length = strlen(georef);
+  georef_length = (long)strlen(georef);
   if ((georef_length < GEOREF_MINIMUM) || (georef_length > GEOREF_MAXIMUM) 
       || ((georef_length % 2) != 0))
   {

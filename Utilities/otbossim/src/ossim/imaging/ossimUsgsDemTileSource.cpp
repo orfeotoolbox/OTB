@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimUsgsDemTileSource.cpp 15837 2009-10-30 12:41:08Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -42,8 +42,8 @@ static const char USGS_DEM_KW[] = "usgs_dem";
 ossimUsgsDemTileSource::ossimUsgsDemTileSource()
    :
       ossimImageHandler(),
-      theDem(NULL),
-      theTile(NULL),
+      theDem(0),
+      theTile(0),
       theNullValue(0.0),
       theMinHeight(0.0),
       theMaxHeight(0.0),
@@ -59,9 +59,9 @@ ossimUsgsDemTileSource::~ossimUsgsDemTileSource()
    if (theDem)
    {
       delete theDem;
-      theDem = NULL;
+      theDem = 0;
    }
-   theTile = NULL;
+   theTile = 0;
 }
 
 ossimRefPtr<ossimImageData> ossimUsgsDemTileSource::getTile(

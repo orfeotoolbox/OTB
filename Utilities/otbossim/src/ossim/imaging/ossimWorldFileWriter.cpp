@@ -6,7 +6,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimWorldFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimWorldFileWriter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimWorldFileWriter.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -15,6 +15,8 @@
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/projection/ossimStatePlaneProjectionInfo.h>
+#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/base/ossimUnitConversionTool.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -84,6 +86,20 @@ bool ossimWorldFileWriter::writeFile()
    // Convert projection info to proper units:
    ossimDpt gsd = mapProj->getMetersPerPixel();
    ossimDpt ul  = mapProj->getUlEastingNorthing();
+
+   // ESH 05/2008 -- If the pcs code has been given, we
+   // make use of the implied units.
+   ossim_uint16 pcsCode = mapProj->getPcsCode();
+   if ( pcsCode > 0 )
+   {
+      const ossimStatePlaneProjectionInfo* info =
+         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCode);
+      if (info)
+      {
+         theUnits = info->getUnitType();
+      }
+   }
+
    if (theUnits == OSSIM_FEET)
    {
       gsd.x = ossimUnitConversionTool(gsd.x, OSSIM_METERS).getFeet();

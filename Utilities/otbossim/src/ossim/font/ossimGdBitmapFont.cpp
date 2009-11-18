@@ -6,7 +6,7 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimGdBitmapFont.cpp 12276 2008-01-07 19:58:43Z dburken $
+// $Id: ossimGdBitmapFont.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/font/ossimGdBitmapFont.h>
 #include "string.h"
 
@@ -136,7 +136,7 @@ void ossimGdBitmapFont::rasterizeNormal()
 {
    ossimIrect outBox;
    ossimIrect inBox(0,0,
-                    theStringToRasterize.length()*theGdFontPtr->w-1,
+                    (ossim_int32)theStringToRasterize.length()*theGdFontPtr->w-1,
                     theGdFontPtr->h-1);
    
    getBoundingBox(outBox);
@@ -164,7 +164,7 @@ void ossimGdBitmapFont::rasterizeNormal()
       }
 
       // which col do we start on
-      bufOffset = character*theGdFontPtr->w;
+      bufOffset = (long)character*theGdFontPtr->w;
       
       // get the starting offset to the bitmap
       charOffset  = charOffset*theGdFontPtr->w*theGdFontPtr->h;

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAdjustableParameterInterface.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAdjustableParameterInterface.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 #include <ossim/base/ossimAdjustableParameterInterface.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -40,7 +40,7 @@ void ossimAdjustableParameterInterface::newAdjustment(ossim_uint32 numberOfParam
       theAdjustmentList[theAdjustmentList.size()-1].setDescription("Initial adjustment");
    }
 
-   theCurrentAdjustment = theAdjustmentList.size() - 1;
+   theCurrentAdjustment = (ossim_uint32)theAdjustmentList.size() - 1;
 
 }
 
@@ -100,7 +100,7 @@ void ossimAdjustableParameterInterface::resetAdjustableParameters(bool notify)
 
     setCurrentAdjustment(saveCurrent);
 
-    eraseAdjustment(theAdjustmentList.size()-1, false);
+    eraseAdjustment((ossim_uint32)theAdjustmentList.size()-1, false);
     
     if(notify)
     {
@@ -120,7 +120,7 @@ void ossimAdjustableParameterInterface::copyAdjustment(ossim_uint32 idx, bool no
 
        if(idx == theCurrentAdjustment)
        {
-          theCurrentAdjustment = theAdjustmentList.size() - 1;
+          theCurrentAdjustment = (ossim_uint32)theAdjustmentList.size() - 1;
        }
        if(notify)
        {
@@ -204,7 +204,7 @@ void ossimAdjustableParameterInterface::eraseAdjustment(ossim_uint32 idx, bool n
          }
          else
          {
-            theCurrentAdjustment = theAdjustmentList.size() - 1;
+            theCurrentAdjustment = (ossim_uint32)theAdjustmentList.size() - 1;
          }
          
       }
@@ -643,7 +643,7 @@ void ossimAdjustableParameterInterface::getAdjustment(ossim_uint32 idx, ossimAdj
 
 ossim_uint32 ossimAdjustableParameterInterface::getNumberOfAdjustments()const
 {
-   return theAdjustmentList.size();
+   return (ossim_uint32)theAdjustmentList.size();
 }
 
 ossim_uint32 ossimAdjustableParameterInterface::getCurrentAdjustmentIdx()const

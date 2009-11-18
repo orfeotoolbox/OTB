@@ -223,7 +223,7 @@ bool ossimVpfAnnotationSource::loadState(const ossimKeywordlist& kwl,
 	  vector<ossimString> keys =
 	    kwl.getSubstringKeyList( regExpression );
 	  std::vector<int> theNumberList(keys.size());
-	  int offset = (ossimString(prefix)+"library").size();
+	  int offset = (int)(ossimString(prefix)+"library").size();
 
 	  for(idx = 0; idx < (int)theNumberList.size();++idx)
 	    {

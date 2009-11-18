@@ -7,7 +7,7 @@
 // Description: The base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactoryBase.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimOverviewBuilderFactoryBase.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef ossimOverviewBuilderFactoryBase_HEADER
 #define ossimOverviewBuilderFactoryBase_HEADER
@@ -36,7 +36,7 @@ public:
     * @brief Creates a builder from a string.  This should match a string from
     * the getTypeNameList() method.  Pure virtual.
     * 
-    * @return Pointer to ossimOverviewBuilderInterface or NULL is not found
+    * @return Pointer to ossimOverviewBuilderBase or NULL is not found
     * within registered factories.
     */
    virtual ossimOverviewBuilderBase* createBuilder(const ossimString& typeName) const = 0;

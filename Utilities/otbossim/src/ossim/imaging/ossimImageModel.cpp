@@ -137,7 +137,7 @@ void ossimImageModel::getBoundingRectangle(ossim_uint32 rrds,
 }
 ossim_uint32 ossimImageModel::getNumberOfDecimationLevels()const
 {
-   return theDecimationFactors.size();
+   return (ossim_uint32)theDecimationFactors.size();
 }
 
 void ossimImageModel::setTargetRrds(ossim_uint32 rrds)

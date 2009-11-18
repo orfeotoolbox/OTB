@@ -437,7 +437,7 @@ static void dirpath( char *path )
 {
    register unsigned int i;
 
-   i = strlen(path)-1;
+   i = (int)strlen(path)-1;
    while ( (i>0) && (path[i] != '\\') ) i--;
    if (i<(strlen(path)-1)) i++;
    path[i] = '\0';

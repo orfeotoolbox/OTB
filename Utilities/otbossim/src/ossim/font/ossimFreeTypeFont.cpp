@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.cpp 9099 2006-06-13 21:21:10Z dburken $
+// $Id: ossimFreeTypeFont.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 // ossimFreeTypeFont.h should be load prior to checking for OSSIM_HAS_FREETYPE.
 #include <ossim/font/ossimFreeTypeFont.h>
@@ -172,7 +172,7 @@ void ossimFreeTypeFont::layoutGlyphs(const ossimString& s )
    FT_UInt    load_flags;
    FT_UInt    num_grays;
    FT_UInt    prev_index = 0;
-   FT_UInt num_glyphs = s.size();
+   FT_UInt num_glyphs = (FT_UInt)s.size();
    int error = 0;
    
    deleteGlyphs(theStringLayout);
@@ -261,7 +261,7 @@ const ossim_uint8* ossimFreeTypeFont::rasterize()
    setupForRasterization();
    layoutGlyphs(theStringToRasterize);
 
-   int num_glyphs = theStringLayout.size();
+   int num_glyphs = (int)theStringLayout.size();
    int        n;
    FT_Vector  delta;
    int        error;
@@ -371,7 +371,7 @@ void ossimFreeTypeFont::getBoundingBox(ossimIrect& box)
    setupForRasterization();
    layoutGlyphs(theStringToRasterize);
 
-   int num_glyphs = theStringLayout.size();
+   int num_glyphs = (int)theStringLayout.size();
    int        n;
    FT_Vector  delta;
    int        error;

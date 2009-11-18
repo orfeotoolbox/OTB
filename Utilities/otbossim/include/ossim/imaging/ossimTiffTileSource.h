@@ -13,7 +13,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 15825 2009-10-27 15:31:44Z dburken $
+//  $Id: ossimTiffTileSource.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -252,7 +252,7 @@ private:
    
    void setReadMethod();
    
-   virtual void initializeBuffers();
+   virtual bool initializeBuffers();
 
    /**
     * Change tiff directory and sets theCurrentDirectory.

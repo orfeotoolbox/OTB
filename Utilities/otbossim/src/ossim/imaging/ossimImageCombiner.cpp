@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimImageCombiner.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -56,15 +56,15 @@ ossimImageCombiner::ossimImageCombiner(ossimObject* owner,
 
 ossimImageCombiner::ossimImageCombiner(ossimConnectableObject::ConnectableObjectList& inputSources)
    :ossimImageSource(NULL,
-                     inputSources.size(),
+                     (ossim_uint32)inputSources.size(),
                      0,
                      false,
                      false),
-    theLargestNumberOfInputBands(0),
-    theInputToPassThrough(0),
-    theHasDifferentInputs(false),
-    theNormTile(NULL),
-    theCurrentIndex(0)
+                     theLargestNumberOfInputBands(0),
+                     theInputToPassThrough(0),
+                     theHasDifferentInputs(false),
+                     theNormTile(NULL),
+                     theCurrentIndex(0)
 {
 	theComputeFullResBoundsFlag = true;
    for(ossim_uint32 index = 0; index < inputSources.size(); ++index)

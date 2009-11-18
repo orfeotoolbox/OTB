@@ -124,7 +124,7 @@ private:
 
 /** \class OTB_GCP
  *
- * \brief This OTB_GCP class is used to manege the GCP parameters
+ * \brief This OTB_GCP class is used to manage the GCP parameters
  * in OTB.
  *
  */

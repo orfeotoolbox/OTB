@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageRenderer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <iostream>
 using namespace std;
@@ -41,7 +41,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -926,7 +926,7 @@ void ossimImageRenderer::fillTile(ossimRefPtr<ossimImageData> outputData,
    ossimDpt decimation;
    decimation.makeNan(); // initialize to nan.
    theInputConnection->getDecimationFactor(resLevel, decimation);
-   double requestScale = 1.0 / pow( (double)2.0, (double)resLevel );
+   double requestScale = 1.0 / (1<<resLevel);
    double closestScale = decimation.hasNans() ? requestScale : decimation.x;
 
    double differenceTest = 0.0;
