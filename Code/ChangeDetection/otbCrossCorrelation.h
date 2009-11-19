@@ -16,7 +16,7 @@
 
 =========================================================================*/
 #ifndef __otbCrossCorrelation_h
-#define __otbCrossCorrelationChangeDetector_h
+#define __otbCrossCorrelation_h
 
 
 namespace otb
