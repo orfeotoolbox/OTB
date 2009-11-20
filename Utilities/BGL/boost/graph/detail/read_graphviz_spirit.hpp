@@ -30,10 +30,10 @@
 
 #include <boost/spirit/iterator/multi_pass.hpp>
 #include <boost/spirit/core.hpp>
-#include <boost/spirit/utility/confix.hpp>
-#include <boost/spirit/utility/distinct.hpp>
-#include <boost/spirit/utility/lists.hpp>
-#include <boost/spirit/utility/escape_char.hpp>
+#include <boost/spirit/butility/confix.hpp>
+#include <boost/spirit/butility/distinct.hpp>
+#include <boost/spirit/butility/lists.hpp>
+#include <boost/spirit/butility/escape_char.hpp>
 #include <boost/spirit/attribute.hpp>
 #include <boost/spirit/dynamic.hpp>
 #include <boost/spirit/actor.hpp>

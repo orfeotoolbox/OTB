@@ -8,7 +8,7 @@
 #define BOOST_REVERSE_ITERATOR_23022003THW_HPP
 
 #include <boost/iterator.hpp>
-#include <boost/utility.hpp>
+#include <boost/butility.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 
 namespace boost

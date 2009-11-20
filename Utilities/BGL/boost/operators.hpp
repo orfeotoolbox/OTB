@@ -5,7 +5,7 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/libs/utility/operators.htm for documentation.
+//  See http://www.boost.org/libs/butility/operators.htm for documentation.
 
 //  Revision History
 //  21 Oct 02 Modified implementation of operators to allow compilers with a

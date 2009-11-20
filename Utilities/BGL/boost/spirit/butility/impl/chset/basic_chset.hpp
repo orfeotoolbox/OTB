@@ -12,7 +12,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 #include <bitset>
-#include <boost/spirit/utility/impl/chset/range_run.hpp>
+#include <boost/spirit/butility/impl/chset/range_run.hpp>
 
 namespace boost { namespace spirit {
 
@@ -99,4 +99,4 @@ namespace boost { namespace spirit {
 
 #endif
 
-#include <boost/spirit/utility/impl/chset/basic_chset.ipp>
+#include <boost/spirit/butility/impl/chset/basic_chset.ipp>

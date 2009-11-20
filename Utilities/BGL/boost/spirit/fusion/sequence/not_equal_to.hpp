@@ -14,7 +14,7 @@
 #include <boost/spirit/fusion/sequence/detail/sequence_not_equal_to.hpp>
 
 #ifdef FUSION_COMFORMING_COMPILER
-#include <boost/utility/enable_if.hpp>
+#include <boost/butility/enable_if.hpp>
 #include <boost/spirit/fusion/sequence/is_sequence.hpp>
 #include <boost/spirit/fusion/sequence/as_fusion_sequence.hpp>
 #endif

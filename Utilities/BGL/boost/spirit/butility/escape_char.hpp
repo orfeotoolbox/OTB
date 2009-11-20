@@ -17,7 +17,7 @@
 
 #include <boost/spirit/debug.hpp>
 
-#include <boost/spirit/utility/impl/escape_char.ipp>
+#include <boost/spirit/butility/impl/escape_char.ipp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace spirit {

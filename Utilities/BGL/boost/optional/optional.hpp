@@ -27,7 +27,7 @@
 #include "boost/mpl/not.hpp"
 #include "boost/detail/reference_content.hpp"
 #include "boost/none_t.hpp"
-#include "boost/utility/compare_pointees.hpp"
+#include "boost/butility/compare_pointees.hpp"
 
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
 // VC6.0 has the following bug:

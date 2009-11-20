@@ -16,7 +16,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
-//  http://www.boost.org/libs/utility/throw_exception.html
+//  http://www.boost.org/libs/butility/throw_exception.html
 //
 
 #include <boost/config.hpp>
