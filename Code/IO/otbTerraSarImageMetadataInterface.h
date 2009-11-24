@@ -63,6 +63,27 @@ public:
   /** Set the image used to get the metadata */
   itkSetObjectMacro(Image,ImageType);
 
+ /** Get the radiometric bias from the ossim metadata */
+  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & ) const
+  {
+    VariableLengthVectorType toto;
+    return toto;
+  };
+  
+  /** Get the radiometric gain from the ossim metadata */
+  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & ) const
+  {
+    VariableLengthVectorType toto;
+    return toto;
+  };
+  
+  /** Get the solar irradiance from the ossim metadata */
+  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & ) const
+  {
+    VariableLengthVectorType toto;
+    return toto;
+  };
+
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 

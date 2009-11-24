@@ -52,6 +52,8 @@ TerraSarImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::cout<<kwl<<std::endl;
+ std::cout<<"##########################################################"<<std::endl;
+
   std::string key= "sensor";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());

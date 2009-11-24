@@ -1952,6 +1952,10 @@ ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
         otbQuickBirdImageMetadataInterfaceNew
 )
 
+ADD_TEST(ioTuTerraSarImageMetadataInterfaceNew ${IO_TESTS17}
+        otbTerraSarImageMetadataInterfaceNew
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
@@ -1987,6 +1991,14 @@ ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
         otbImageMetadataInterfaceTest
         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
+)
+
+ADD_TEST(ioTvImageMetadataInterfaceTerraSarTest ${IO_TESTS17}
+         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTerraSarTest.txt
+                         ${TEMP}/ioTvImageMetadataInterfaceTerraSarTest.txt
+        otbImageMetadataInterfaceTest
+        ${LARGEDATA}/TERRASARX/2007-12-15_Toronto_SSC/TSX1_SAR__SSC______SL_S_SRA_20071215T112105_20071215T112107/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/ioTvImageMetadataInterfaceTerraSarTest.txt
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
@@ -2318,6 +2330,7 @@ otbPointSetFileReader2.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
+otbTerraSarImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )

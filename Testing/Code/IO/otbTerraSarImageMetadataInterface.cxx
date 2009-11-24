@@ -43,6 +43,8 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
 
   otb::TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
 
+  reader->GetOutput()->GetMetaDataDictionary().Print(std::cout);
+
   std::ofstream file;
   file.open(outputFilename);
   file<<"GetSensorID:        "<<lImageMetadata->GetSensorID(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
