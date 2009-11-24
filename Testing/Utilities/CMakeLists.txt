@@ -30,16 +30,18 @@ SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 IF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(utTvOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
---compare-list ${EPSILON_6}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
-                        ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
+--ignore-order --compare-ascii ${EPSILON_6}  
+	       ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
+	       ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
         )
 
 ADD_TEST(utTvOssimKeywordlistBlossevilleIkonosTest ${UTILITIES_TESTS}
---compare-list ${NOTOL}  ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
-                        ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
+--ignore-order --compare-ascii ${NOTOL} 
+	        ${BASELINE_FILES}/utOssimKeywordlistBlossevilleIkonos.txt
+		${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
         ossimKeywordlistTest
         ${IMAGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_grn_0000000.tif
         ${TEMP}/utOssimKeywordlistBlossevilleIkonos.txt
