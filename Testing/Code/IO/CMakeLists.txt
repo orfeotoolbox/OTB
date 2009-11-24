@@ -1769,9 +1769,11 @@ ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
 # CanRead OGR PostGIS()
+IF(OTB_USE_PQXX)
 ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
+ENDIF(OTB_USE_PQXX)
 
 # CanWrite OGR GML()
 ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
@@ -1784,10 +1786,12 @@ ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
 # Canwrite OGR PostGIS()
+IF(OTB_USE_PQXX)
 ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
-        
+ENDIF(OTB_USE_PQXX)
+      
 ADD_TEST(ioTuKMLVectorDataIO ${IO_TESTS15}
         otbKMLVectorDataIONew )
 
