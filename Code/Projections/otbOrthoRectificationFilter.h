@@ -83,12 +83,12 @@ public :
   itkTypeMacro( OrthoRectificationFilter, StreamingResampleImageFilter );
 
   /** Accessors */
-  virtual void SetMapProjection (MapProjectionType* _arg)
+  virtual void SetMapProjection (MapProjectionType* arg)
   {
-    if (this->m_MapProjection != _arg)
+    if (this->m_MapProjection != arg)
     {
-      this->m_MapProjection = _arg;
-      m_CompositeTransform->SetFirstTransform(_arg);
+      this->m_MapProjection = arg;
+      m_CompositeTransform->SetFirstTransform(arg);
       m_IsComputed = false;
       this->Modified();
     }
