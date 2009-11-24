@@ -42,7 +42,7 @@ int otbSensorModel( int argc, char* argv[] )
 
   std::ofstream file;
   file.open(outFilename);
-  file << std::setprecision(20);
+  file << std::setprecision(15);
 
 
   typedef otb::VectorImage<double, 2> ImageType;
