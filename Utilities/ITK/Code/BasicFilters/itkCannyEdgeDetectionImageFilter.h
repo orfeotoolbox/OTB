@@ -194,14 +194,14 @@ public:
     return this->m_Threshold; 
     }
 
-  ///* Set the Threshold value for detected edges. */
+  /** Set the Threshold value for detected edges. */
   itkSetMacro(UpperThreshold, OutputImagePixelType );
   itkGetConstMacro(UpperThreshold, OutputImagePixelType);
 
   itkSetMacro(LowerThreshold, OutputImagePixelType );
   itkGetConstMacro(LowerThreshold, OutputImagePixelType);
 
-  /* Set the Thresholdvalue for detected edges. */
+  /** Set the Thresholdvalue for detected edges. */
   itkSetMacro(OutsideValue, OutputImagePixelType);
   itkGetConstMacro(OutsideValue, OutputImagePixelType);
   

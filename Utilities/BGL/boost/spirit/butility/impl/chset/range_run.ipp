@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include <algorithm> // for std::lower_bound
 #include <boost/spirit/core/assert.hpp> // for BOOST_SPIRIT_ASSERT
-#include <boost/spirit/utility/impl/chset/range_run.hpp>
+#include <boost/spirit/butility/impl/chset/range_run.hpp>
 #include <boost/spirit/debug.hpp>
 #include <boost/limits.hpp>
 

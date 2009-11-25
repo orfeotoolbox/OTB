@@ -5,7 +5,7 @@
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-// For more information, see http://www.boost.org/libs/utility
+// For more information, see http://www.boost.org/libs/butility
 #ifndef BOOST_RESULT_OF_HPP
 #define BOOST_RESULT_OF_HPP
 
@@ -54,7 +54,7 @@ struct result_of : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 
 } // end namespace detail
 
-#define BOOST_PP_ITERATION_PARAMS_1 (3,(0,BOOST_RESULT_OF_NUM_ARGS,<boost/utility/detail/result_of_iterate.hpp>))
+#define BOOST_PP_ITERATION_PARAMS_1 (3,(0,BOOST_RESULT_OF_NUM_ARGS,<boost/butility/detail/result_of_iterate.hpp>))
 #include BOOST_PP_ITERATE()
 
 #else

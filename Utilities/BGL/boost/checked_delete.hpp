@@ -18,7 +18,7 @@
 //  accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-//  See http://www.boost.org/libs/utility/checked_delete.html for documentation.
+//  See http://www.boost.org/libs/butility/checked_delete.html for documentation.
 //
 
 namespace boost

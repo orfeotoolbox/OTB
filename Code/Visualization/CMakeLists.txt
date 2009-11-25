@@ -2,17 +2,10 @@
 
 FILE(GLOB OTBVisualization_SRCS "*.cxx" )
 
-# To suppress "ld: cycle in dylib re-exports with /usr/X11R6/lib/libGL.dylib" error on APPLE and SHARED configuration 
-IF(APPLE AND BUILD_SHARED_LIBS)
-      FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-        SET(CMAKE_SHARED_LINKER_FLAGS${c} "${CMAKE_SHARED_LINKER_FLAGS${c}} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib")
-      ENDFOREACH(c)
-ENDIF(APPLE AND BUILD_SHARED_LIBS)
-
 FLTK_WRAP_UI(OTBVisualization otbImageWidgetPackedManager.fl otbImageWidgetSplittedManager.fl)
 
 ADD_LIBRARY(OTBVisualization ${OTBVisualization_SRCS} ${OTBVisualization_FLTK_UI_SRCS})
-TARGET_LINK_LIBRARIES (OTBVisualization OTBGui OTBCommon ${OTB_VISU_GUI_LIBRARIES})
+TARGET_LINK_LIBRARIES (OTBVisualization OTBGui OTBCommon OTBIO ${OTB_VISU_GUI_LIBRARIES})
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBVisualization PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)

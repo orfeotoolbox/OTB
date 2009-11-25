@@ -12,7 +12,7 @@
 #ifndef BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
 #define BOOST_UTILITY_TYPED_INPLACE_FACTORY_25AGO2003_HPP
 
-#include <boost/utility/detail/in_place_factory_prefix.hpp>
+#include <boost/butility/detail/in_place_factory_prefix.hpp>
 
 namespace boost {
 
@@ -51,7 +51,7 @@ BOOST_PP_REPEAT( BOOST_MAX_INPLACE_FACTORY_ARITY, BOOST_DEFINE_TYPED_INPLACE_FAC
 
 } // namespace boost
 
-#include <boost/utility/detail/in_place_factory_suffix.hpp>
+#include <boost/butility/detail/in_place_factory_suffix.hpp>
 
 #endif
 

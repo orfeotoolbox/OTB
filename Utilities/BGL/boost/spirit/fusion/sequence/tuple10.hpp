@@ -16,7 +16,7 @@
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/vector/vector10.hpp>
 #include <boost/mpl/if.hpp>
-#include <boost/utility/addressof.hpp>
+#include <boost/butility/addressof.hpp>
 
 namespace boost { namespace fusion
 {

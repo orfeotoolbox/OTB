@@ -3,10 +3,10 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
-//  See http://www.boost.org/libs/utility for most recent version including documentation.
+//  See http://www.boost.org/libs/butility for most recent version including documentation.
 
 // compressed_pair: pair that "compresses" empty members
-// (see libs/utility/compressed_pair.htm)
+// (see libs/butility/compressed_pair.htm)
 //
 // JM changes 25 Jan 2004:
 // For the case where T1 == T2 and both are empty, then first() and second()
