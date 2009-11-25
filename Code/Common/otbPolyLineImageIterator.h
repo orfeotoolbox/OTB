@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbPolyLineImageIterator_h
@@ -43,7 +43,7 @@ class ITK_EXPORT PolyLineImageIterator
 {
 public:
   /** Standard typedefs */
-  typedef PolyLineImageIterator  Self;
+  typedef PolyLineImageIterator                    Self;
   typedef PolyLineImageConstIterator<TImage,TPath> Superclass;
 
   itkStaticConstMacro(ImageIteratorDimension, unsigned int,
@@ -89,7 +89,8 @@ public:
   {
     this->Superclass::operator=(it);
     return *this;
-  };
+  }
+
   /** Constructor establishes an iterator to walk along a line */
   PolyLineImageIterator(ImageType *imagePtr,PathType * pathPtr)
       : Superclass(imagePtr,pathPtr) {};
