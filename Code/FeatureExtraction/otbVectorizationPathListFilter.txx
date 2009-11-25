@@ -12,7 +12,7 @@
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbVectorizationPathListFilter_txx
@@ -196,7 +196,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
               nDirIt.SetLocation(newIndex);
               nFlagIt.SetLocation(newIndex);
 
-              if (nModIt.GetCenterPixel()==0)
+              if (nModIt.GetCenterPixel() == 0)
               {
                 //we need to check that in case the barycenter is out...
                 flagFinish=true;
