@@ -63,53 +63,35 @@ public:
   /** Set the image used to get the metadata */
   itkSetObjectMacro(Image,ImageType);
 
- /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & ) const
-  {
-    VariableLengthVectorType toto;
-    return toto;
-  };
-  
-  /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & ) const
-  {
-    VariableLengthVectorType toto;
-    return toto;
-  };
-  
-  /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & ) const
-  {
-    VariableLengthVectorType toto;
-    return toto;
-  };
-
   /** Get the sensor ID from the ossim metadata */
   std::string GetSensorID(const MetaDataDictionaryType & dict ) const;
 
-  /** Get the imaging acquisition day from the ossim metadata */
+  /** Get the imaging start acquisition day from the ossim metadata */
   int GetDay( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging acquisition month from the ossim metadata */
+  /** Get the imaging start acquisition month from the ossim metadata */
   int GetMonth( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging acquisition year from the ossim metadata */
+  /** Get the imaging start acquisition year from the ossim metadata */
   int GetYear( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging acquisition hour from the ossim metadata */
+  /** Get the imaging start acquisition hour from the ossim metadata */
   int GetHour( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging acquisition minute from the ossim metadata */
+  /** Get the imaging start acquisition minute from the ossim metadata */
   int GetMinute( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging production day from the ossim metadata */
+  /** Get the imaging production day from the ossim metadata : generationTime variable */
   int GetProductionDay( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging production month from the ossim metadata */
+  /** Get the imaging production month from the ossim metadata : generationTime variable */
   int GetProductionMonth( const MetaDataDictionaryType & ) const;
 
-  /** Get the imaging production year from the ossim metadata */
+  /** Get the imaging production year from the ossim metadata : generationTime variable */
   int GetProductionYear( const MetaDataDictionaryType & ) const;
+
+  /** Get the calibration.calFactor : generationTime variable */
+   double GetCalibrationFactor( const MetaDataDictionaryType & ) const;
 
   bool CanRead( const MetaDataDictionaryType & ) const;
 

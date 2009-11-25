@@ -44,20 +44,17 @@ std::string
 TerraSarImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict ) const
 {
   ImageKeywordlistType ImageKeywordlist;
-  std::cout<<"theSensorID"<<std::endl;
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, ImageKeywordlist);
   }
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  std::cout<<kwl<<std::endl;
- std::cout<<"##########################################################"<<std::endl;
 
   std::string key= "sensor";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());
-
+ 
   return output;
 }
 
@@ -65,8 +62,7 @@ bool
 TerraSarImageMetadataInterface::CanRead( const MetaDataDictionaryType & dict ) const
 {
   std::string sensorID = GetSensorID(dict);
-  std::cout<<"sensorID : "<<sensorID<<std::endl;
-  if (sensorID.find("TerraSar") != std::string::npos)
+  if (sensorID.find("TSX") != std::string::npos)
     return true;
   else
     return false;
@@ -80,7 +76,7 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /*
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -93,7 +89,7 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.image_date";
+  key = "azimuth_start_time";
   separatorList = "-T";
 
   ossimString keywordString = kwl.find(key.c_str());
@@ -105,8 +101,6 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
  ossimString day = keywordStrings[2];
 
    return day.toInt();
-  */
-  return 1;
 }
 
 
@@ -118,7 +112,7 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /*
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -131,7 +125,7 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.image_date";
+  key = "azimuth_start_time";
   separatorList = "-T";
 
 
@@ -144,8 +138,6 @@ TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) 
   ossimString month = keywordStrings[1];
 
   return month.toInt();
-  */
-  return 1;
 }
 
 
@@ -156,7 +148,7 @@ TerraSarImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) c
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /*
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -169,7 +161,7 @@ TerraSarImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) c
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.image_date";
+  key = "azimuth_start_time";
   separatorList = "-T";
 
   ossimString keywordString = kwl.find(key.c_str());
@@ -181,8 +173,7 @@ TerraSarImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) c
   ossimString year = keywordStrings[0];
 
   return year.toInt();
-  */
-  return 1;
+
 }
 
 int
@@ -192,7 +183,7 @@ TerraSarImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) c
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /*
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -205,20 +196,18 @@ TerraSarImageMetadataInterface::GetHour( const MetaDataDictionaryType & dict ) c
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.image_date";
+  key = "azimuth_start_time";
   separatorList = "-T:";
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
-  if(  keywordStrings.size() <= 2 )
+  if(  keywordStrings.size() <= 4 )
     itkExceptionMacro("Invalid Hour");
 
   ossimString hour = keywordStrings[3];
 
   return hour.toInt();
-  */
-  return 1;
 }
 
 int
@@ -228,7 +217,7 @@ TerraSarImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict )
   {
          itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
   }
-  /*
+ 
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -241,19 +230,17 @@ TerraSarImageMetadataInterface::GetMinute( const MetaDataDictionaryType & dict )
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.image_date";
+  key = "azimuth_start_time";
   separatorList = "-T:";
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
-  if(  keywordStrings.size() <= 2 )
+  if(  keywordStrings.size() <= 5 )
     itkExceptionMacro("Invalid Minute");
 
   ossimString minute = keywordStrings[4];
 
   return minute.toInt();
-  */
-  return 1;
 }
 
 int
@@ -276,14 +263,14 @@ TerraSarImageMetadataInterface::GetProductionDay( const MetaDataDictionaryType &
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.generation_time";
+  key = "generation_time";
   separatorList = "-T:";
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
   if(keywordStrings.size() <= 2)
-    itkExceptionMacro(<<"Invalid Day");
+    itkExceptionMacro(<<"Invalid Production Day");
 
   ossimString day = keywordStrings[2];
 
@@ -310,14 +297,14 @@ TerraSarImageMetadataInterface::GetProductionMonth( const MetaDataDictionaryType
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.generation_time";
+  key = "generation_time";
   separatorList = "-T";
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
   if(keywordStrings.size() <= 2)
-    itkExceptionMacro(<<"Invalid Month");
+    itkExceptionMacro(<<"Invalid Production Month");
 
   ossimString month = keywordStrings[1];
 
@@ -345,21 +332,43 @@ TerraSarImageMetadataInterface::GetProductionYear( const MetaDataDictionaryType 
 
   std::string key;
   ossimString separatorList;
-  key = "support_data.generation_time";
+  key = "generation_time";
   separatorList = "-T";
 
   ossimString keywordString = kwl.find(key.c_str());
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
 
   if(  keywordStrings.size() <= 2 )
-    itkExceptionMacro("Invalid Year");
+    itkExceptionMacro("Invalid Production Year");
 
   ossimString year = keywordStrings[0];
 
   return year.toInt();
 }
 
+double
+TerraSarImageMetadataInterface::GetCalibrationFactor( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+         itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+  }
 
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  std::string key = "calibration.calibrationConstant.calFactor";
+  ossimString calFac = kwl.find(key.c_str());
+
+  return calFac.toDouble();
+}
 
 
 } // end namespace otb

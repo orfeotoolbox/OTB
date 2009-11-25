@@ -231,6 +231,21 @@ namespace ossimplugins
        */
       double _calFactor;
 
+      /**
+       * @brief Azimuthal Start Time (Start acquisition time).
+       */
+      ossimString _azStartTime;
+
+      /**
+       * @brief Azimuthal Stop Time (Start acquisition time).
+       */
+      ossimString _azStopTime;
+
+       /**
+       * @brief Generation time.
+       */
+       ossimString _generationTime;
+
       ossimFilename theProductXmlFile;
 
       TYPE_DATA

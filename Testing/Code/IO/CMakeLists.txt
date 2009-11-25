@@ -1992,14 +1992,6 @@ ADD_TEST(ioTvImageMetadataInterfaceSPOTTest ${IO_TESTS17}
         ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
         ${TEMP}/ioTvImageMetadataInterfaceSPOT.txt
 )
-
-ADD_TEST(ioTvImageMetadataInterfaceTerraSarTest ${IO_TESTS17}
-         --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTerraSarTest.txt
-                         ${TEMP}/ioTvImageMetadataInterfaceTerraSarTest.txt
-        otbImageMetadataInterfaceTest
-        ${LARGEDATA}/TERRASARX/2007-12-15_Toronto_SSC/TSX1_SAR__SSC______SL_S_SRA_20071215T112105_20071215T112107/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-        ${TEMP}/ioTvImageMetadataInterfaceTerraSarTest.txt
-)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
@@ -2015,14 +2007,20 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvTerraSarImageMetadataInterface ${IO_TESTS18}
-         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface.txt
-                         ${TEMP}/ioTvITerraSarImageMetadataInterface.txt
+ADD_TEST(ioTvTerraSarImageMetadataInterface_dims ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_dims.txt
+                         ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
         otbTerraSarImageMetadataInterface
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface.txt
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
 )
-
+ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+                         ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+)
 
 ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
   --compare-n-ascii ${NOTOL} 2
