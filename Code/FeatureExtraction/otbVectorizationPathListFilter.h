@@ -7,7 +7,7 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
