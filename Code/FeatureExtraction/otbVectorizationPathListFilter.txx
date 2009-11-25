@@ -147,7 +147,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
         flagFinish = false;
         while (!flagFinish)
         {
-          offsetVector =GetThreeNeighborOffsetFromDirection(nDirIt.GetCenterPixel(),flagReverse);
+          offsetVector = GetThreeNeighborOffsetFromDirection(nDirIt.GetCenterPixel(),flagReverse);
           OffsetIteratorType vecIt = offsetVector.begin();
           bool flagFound=false;
           while (vecIt != offsetVector.end() && !flagFound)
@@ -163,24 +163,25 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
             totalAmplitude = 0;
             for (vecIt = offsetVector.begin(); vecIt != offsetVector.end(); ++vecIt)
             {
-              totalAmplitude += nModIt.GetPixel(*vecIt);
+              double currentAmplitude = nModIt.GetPixel(*vecIt);
               modPtr->TransformIndexToPhysicalPoint(nModIt.GetIndex(*vecIt),tmpPoint);
-              point[0] += nModIt.GetPixel(*vecIt) * tmpPoint[0];
-              point[1] += nModIt.GetPixel(*vecIt) * tmpPoint[1];
+              point[0] += currentAmplitude * tmpPoint[0];
+              point[1] += currentAmplitude * tmpPoint[1];
+              totalAmplitude += currentAmplitude;
             }
-            point[0] = point[0] / totalAmplitude + modPtr->GetSpacing()[0]/2;
-            point[1] = point[1] / totalAmplitude + modPtr->GetSpacing()[1]/2;
+            point[0] = point[0] / totalAmplitude;
+            point[1] = point[1] / totalAmplitude;
             modPtr->TransformPhysicalPointToContinuousIndex(point,vertex);
             if (flagReverse == 0)
             {
-              // otbMsgDebugMacro(<<"Adding new vertex: "<<vertex);
+//               otbMsgDevMacro(<<"Adding new vertex (direct): "<<vertex);
 
               pathTempDirect->AddVertex(vertex);
             }
             else
             {
 
-              // otbMsgDebugMacro(<<"Adding new vertex: "<<vertex);
+//               otbMsgDevMacro(<<"Adding new vertex (reverse): "<<vertex);
 
               pathTempReverse->AddVertex(vertex);
             }
@@ -190,6 +191,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
             IndexType newIndex;
             if (modPtr->TransformPhysicalPointToIndex(point,newIndex))
             {
+//              otbMsgDevMacro(<<"Moving to new center: " << newIndex);
               nModIt.SetLocation(newIndex);
               nDirIt.SetLocation(newIndex);
               nFlagIt.SetLocation(newIndex);
@@ -548,6 +550,7 @@ VectorizationPathListFilter<TInputModulus, TInputDirection, TOutputPath>
     neighborhoodNumber = (neighborhoodNumber + 4) % 8;
   }
   OffsetType tmpOffset;
+//  otbMsgDevMacro(<<"Direction: " << neighborhoodNumber)
   switch ( neighborhoodNumber )
   {
   case 0:
