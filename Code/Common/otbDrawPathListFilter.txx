@@ -42,7 +42,6 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   m_AddValue = false;
 }
 
-
 template <class TInputImage, class TInputPath,class TOutputImage>
 void
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
@@ -62,6 +61,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   }
   return static_cast<const InputPathListType *>(this->ProcessObjectType::GetInput(1));
 }
+
 /**
  * Main computation method
  */
@@ -78,9 +78,9 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   outputPtr->FillBuffer(itk::NumericTraits<OutputImagePixelType>::Zero);
 
   // First, we copy input to output
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
-  typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  typedef typename InputPathListType::ConstIterator PathListIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>            OutputIteratorType;
+  typedef itk::ImageRegionConstIterator<InputImageType>        InputIteratorType;
+  typedef typename InputPathListType::ConstIterator            PathListIteratorType;
   typedef PolyLineImageIterator<OutputImageType,InputPathType> PolyLineIteratorType;
 
   OutputIteratorType outIt(outputPtr,outputPtr->GetLargestPossibleRegion());
@@ -119,6 +119,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
     }
   }
 }
+
 /**
  * Printself method
  */
@@ -129,7 +130,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 {
   Superclass::PrintSelf(os, indent);
 }
+
 } // end namespace otb
 
 #endif
-

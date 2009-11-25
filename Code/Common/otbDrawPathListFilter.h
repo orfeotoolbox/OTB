@@ -59,19 +59,19 @@ public:
   itkTypeMacro(DrawPathListFilter,ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointerType;
-  typedef typename InputImageType::ConstPointer   InputImageConstPointerType;
-  typedef typename InputImageType::RegionType     InputImageRegionType;
-  typedef typename InputImageType::PixelType      InputImagePixelType;
-  typedef typename InputImageType::SizeType       InputImageSizeType;
-  typedef typename InputImageType::ValueType      InputImageValueType;
+  typedef          TInputImage                     InputImageType;
+  typedef typename InputImageType::Pointer         InputImagePointerType;
+  typedef typename InputImageType::ConstPointer    InputImageConstPointerType;
+  typedef typename InputImageType::RegionType      InputImageRegionType;
+  typedef typename InputImageType::PixelType       InputImagePixelType;
+  typedef typename InputImageType::SizeType        InputImageSizeType;
+  typedef typename InputImageType::ValueType       InputImageValueType;
 
-  typedef TInputPath InputPathType;
-  typedef typename InputPathType::Pointer InputPathPointerType;
-  typedef otb::ObjectList<InputPathType> InputPathListType;
+  typedef          TInputPath                      InputPathType;
+  typedef typename InputPathType::Pointer          InputPathPointerType;
+  typedef otb::ObjectList<InputPathType>           InputPathListType;
   typedef typename InputPathListType::ConstPointer InputPathListConstPointerType;
-  typedef typename InputPathListType::Pointer InputPathListPointerType;
+  typedef typename InputPathListType::Pointer      InputPathListPointerType;
 
   typedef          TOutputImage                    OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointerType;
@@ -116,9 +116,11 @@ protected:
 private:
   DrawPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
   /** Default value to draw */
   OutputImagePixelType m_PathValue;
-  /** If set to true, the algorithm try to use path internal metadatadictionnary value */
+
+  /** If set to true, the algorithm try to use path internal metadata dictionnary value */
   bool m_UseInternalPathValue;
 
   bool m_AddValue;
@@ -131,4 +133,3 @@ private:
 #endif
 
 #endif
-
