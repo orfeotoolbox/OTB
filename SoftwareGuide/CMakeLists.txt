@@ -63,6 +63,23 @@ IF( NOT OTB_SOURCE_DIR )
   MESSAGE(FATAL_ERROR "OTB source directory is not set")
 ENDIF( NOT OTB_SOURCE_DIR )
 
+
+OPTION(GENERATE_WRAPPING_DOC "Generate wrappings documentation as well" OFF)
+
+IF(GENERATE_WRAPPING_DOC)
+  FIND_PACKAGE(OTB-Wrapping)
+  IF(OTB-Wrapping_FOUND)
+    FIND_PATH(OTB-Wrapping_SOURCE_DIR FindOTB-Wrapping.cmake.in)
+    IF( NOT OTB-Wrapping_SOURCE_DIR )
+      MESSAGE(FATAL_ERROR "OTB-Wrapping source directory is not set")
+    ENDIF( NOT OTB-Wrapping_SOURCE_DIR )
+    #  SUBDIR(Wrapping)
+  ELSE(OTB-Wrapping_FOUND)
+    MESSAGE(FATAL_ERROR "Cannot generate wrappings documentation without OTB-Wrapping.  Please set OTB-Wrapping_DIR or turn off the GENERATE_WRAPPING_DOC option.")
+  ENDIF(OTB-Wrapping_FOUND)
+ENDIF(GENERATE_WRAPPING_DOC)
+
+
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
 SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon seperated list.")
 
