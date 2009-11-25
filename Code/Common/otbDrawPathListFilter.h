@@ -31,9 +31,9 @@ namespace otb
  * It then uses the otb::PolyLineImageIterator to draw each polyline. This iterator uses
  * the general Bresenham algorithm known to be efficient in segment drawing.
  *
- * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of the input path has a "Value" key.
- * If it is the case, it will use this value to draw the Path instead of the default value. If not, it will use the default
- * value.
+ * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of
+ * the input path has a "Value" key. If it is the case, it will use this value to draw the
+ * Path instead of the default value. If not, it will use the default value.
  *
  * \sa PolyLineParametricPathWithValue
  * \sa MetaDataDictionary
@@ -47,10 +47,10 @@ class ITK_EXPORT DrawPathListFilter : public itk::ImageToImageFilter<TInputImage
 {
 public:
   /** Standard class typedefs. */
-  typedef DrawPathListFilter                Self;
+  typedef DrawPathListFilter                                   Self;
   typedef itk::ImageToImageFilter<TInputImage,TOutputImage>    Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::SmartPointer<Self>                              Pointer;
+  typedef itk::SmartPointer<const Self>                        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

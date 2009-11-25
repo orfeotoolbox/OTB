@@ -105,13 +105,16 @@ public:
   virtual ~PolyLineImageConstIterator() {};
 
 protected: //made protected so other iterators can access
+
   /** Smart pointer to the source image. */
   typename ImageType::ConstWeakPointer m_Image;
+
   /** Smart pointer to the path */
   typename PathType::ConstPointer m_Path;
-  InternalImageIteratorType m_InternalImageIterator;
-  VertexIteratorType m_InternalVertexIterator;
+  InternalImageIteratorType       m_InternalImageIterator;
+  VertexIteratorType              m_InternalVertexIterator;
 };
+
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolyLineImageConstIterator.txx"

@@ -94,7 +94,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   }
 
   // Then we use otb::PolyLineImageIterator to draw polylines
-  for (PathListIteratorType plIt = pathListPtr->Begin(); plIt!=pathListPtr->End();++plIt)
+  for (PathListIteratorType plIt = pathListPtr->Begin(); plIt != pathListPtr->End(); ++plIt)
   {
     OutputImagePixelType value = itk::NumericTraits<OutputImagePixelType>::Zero;
     if (m_UseInternalPathValue && plIt.Get()->GetMetaDataDictionary().HasKey("Value"))
