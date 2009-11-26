@@ -365,10 +365,9 @@ ImageFileReader<TOutputImage>
   }
   // Free memory
   delete handler;
-  std::cout<<geom_kwl<<std::endl;
+
   if (!hasMetaData)
   {
-    std::cout<<"TU PASSES ICI?????????????????????????"<<std::endl;
     // Add the plugins factory
     ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
     ossimProjection * projection = ossimProjectionFactoryRegistry::instance()
