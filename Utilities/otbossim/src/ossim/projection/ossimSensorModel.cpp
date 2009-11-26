@@ -430,6 +430,7 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
 //*****************************************************************************
 std::ostream& ossimSensorModel::print(std::ostream& out) const
 {
+  std::cout<<"..............................................................................."<<std::endl;
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\n ossimSensorModel base-class data members:\n"
        << "\n         theImageID: " << theImageID
@@ -489,9 +490,12 @@ void ossimSensorModel::setGroundRect(const ossimGpt& ul,
 bool ossimSensorModel::saveState(ossimKeywordlist& kwl,
                                  const char*       prefix) const 
 {
+  print(std::cout);
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::saveState: entering..." << std::endl;
 
    kwl.add(prefix, IMAGE_ID_KW, theImageID.chars());
+   //std::cout<<"====================saveStatee::theImageID : "<<theImageID<<std::endl;
+   //std::cout<<"====================saveState::theImageID : "<<kwl.find(prefix, IMAGE_ID_KW)<<std::endl;
    kwl.add(prefix, SENSOR_ID_KW, theSensorID.chars());
    
    kwl.add(prefix,
@@ -549,6 +553,9 @@ bool ossimSensorModel::saveState(ossimKeywordlist& kwl,
            corner.lat,
            true);
    
+  std::cout<<"====================saveStatee::UL_LAT_KW : "<< corner.lat<<std::endl;
+  std::cout<<"====================saveState::UL_LAT_KW : "<<kwl.find(prefix, ossimKeywordNames::UL_LAT_KW)<<std::endl;
+
    kwl.add(prefix,
            ossimKeywordNames::UL_LON_KW,
            corner.lon,
@@ -648,6 +655,8 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
    else
       theImageID = NULL_STRING;
    
+   //std::cout<<"****************loadState::theImageID : "<<theImageID<<"  "<<value<<std::endl;
+
    keyword = SENSOR_ID_KW;
    value = kwl.find(prefix, keyword);
    if (value)
@@ -743,6 +752,7 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
    {
       v[1].lat = ossimString(value).toDouble();
    }
+   std::cout<<"****************loadState::v[1].lat : "<<value<<" , "<<v[1].lat<<"  "<<value<<std::endl;
 
    keyword = ossimKeywordNames::UR_LON_KW;
    value = kwl.find(prefix, keyword);
@@ -816,10 +826,18 @@ bool ossimSensorModel::loadState(const ossimKeywordlist& kwl,
    {
       tmpStr = prefix;
    }
+std::cout<<"++++++++++++++++--++++++++++++ : "<<kwl.find(prefix, IMAGE_ID_KW)<<std::endl;
    loadAdjustments(kwl, tmpStr);
+std::cout<<"++++++++++++++++--++++++++++++ : "<<kwl.find(prefix, IMAGE_ID_KW)<<std::endl;
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::loadState: returning..." << std::endl;
-   return ossimProjection::loadState(kwl, prefix);;
+
+   bool res = ossimProjection::loadState(kwl, prefix);
+   //std::cout<<"++++++++++++++++--++++++++++++ : "<<kwl.find(prefix, IMAGE_ID_KW)<<std::endl;
+   
+   print(std::cout);
+
+   return res;//ossimProjection::loadState(kwl, prefix);
 }
 
 //*****************************************************************************

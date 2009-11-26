@@ -64,8 +64,8 @@ int otbSensorModel( int argc, char* argv[] )
   itk::Point<double,2> imagePoint;
   imagePoint[0]=10;
   imagePoint[1]=10;
-//   imagePoint[0]=3069;
-//   imagePoint[1]=1218;
+  //imagePoint[0]=16271;
+  // imagePoint[1]=15647;
 
   itk::Point<double,2> geoPoint;
   geoPoint = forwardSensorModel->TransformPoint(imagePoint);
