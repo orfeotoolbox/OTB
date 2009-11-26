@@ -921,7 +921,7 @@ if (verify == true) {
 #include <algorithm>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/depth_first_search.hpp>
-#include <boost/butility.hpp>
+#include <boost/utility.hpp>
 #include <boost/tuple/tuple.hpp>
 
 namespace boost {

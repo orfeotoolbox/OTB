@@ -22,7 +22,7 @@
 
 #define VERBOSE 0
 
-#include <boost/butility.hpp>
+#include <boost/utility.hpp>
 #include <boost/graph/property_iter_range.hpp>
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/random.hpp>
