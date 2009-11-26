@@ -163,6 +163,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
          << "file: " << file << "\n";
    }
 
+/*
   ossimFilename filePath = ossimFilename(file.path());
   ossimDirectory directory = ossimDirectory(filePath.path());
 
@@ -170,9 +171,12 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
   ossimString reg = ".xml";
   directory.findAllFilesThatMatch( vectName, reg, 1 );
  
+ 
+*/ 
    bool result = false;
    ossimFilename xmlfile;
-
+   bool findMeatadataFile = findTSXLeader(file, xmlfile);
+/*
   bool goodFileFound = false;
   unsigned int loop = 0;
   while(loop<vectName.size() && !goodFileFound)
@@ -183,12 +187,9 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
     else
       loop++;
 }
-
-   //if ( file.exists() && (file.ext().downcase() == "xml") )
-   if(goodFileFound)
+*/
+   if(findMeatadataFile)
    {
-      xmlfile = vectName[loop];
-  
       //---
       // Instantiate the XML parser:
       //---
@@ -1789,5 +1790,50 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
    return result;
 }
 
+bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,  ossimFilename& metadataFile)
+{
+  bool res = false;
+  if ( file.exists() && (file.ext().downcase() == "xml") )
+  {
+    metadataFile = file;
+    res = true;
+  }
+  else
+  {
+    ossimFilename filePath = ossimFilename(file.path());
+    ossimDirectory directory = ossimDirectory(filePath.path());
 
+    std::vector<ossimFilename> vectName;
+    ossimString reg = ".xml";
+    directory.findAllFilesThatMatch( vectName, reg, 1 );
+
+    bool goodFileFound = false;
+    unsigned int loop = 0;
+    while(loop<vectName.size() && !goodFileFound)
+    {
+      ossimFilename curFile = vectName[loop];
+      if(curFile.file().beforePos(3) == ossimString("TSX"))
+        goodFileFound = true;
+      else
+        loop++;
+    }
+    if(goodFileFound)
+    {
+      metadataFile = vectName[loop];
+      res = true;
+    }
+    else
+    {
+      if (traceDebug())
+      {
+        this->print(ossimNotify(ossimNotifyLevel_DEBUG));
+            
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "ossimplugins::ossimTerraSarModel::findTSXLeader " << " exit status = " << (res?"true":"false\n")
+          << std::endl;
+      }
+    }
+  }
+  return res;
+}
 
