@@ -163,31 +163,10 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
          << "file: " << file << "\n";
    }
 
-/*
-  ossimFilename filePath = ossimFilename(file.path());
-  ossimDirectory directory = ossimDirectory(filePath.path());
-
-  std::vector<ossimFilename> vectName;
-  ossimString reg = ".xml";
-  directory.findAllFilesThatMatch( vectName, reg, 1 );
- 
- 
-*/ 
    bool result = false;
    ossimFilename xmlfile;
    bool findMeatadataFile = findTSXLeader(file, xmlfile);
-/*
-  bool goodFileFound = false;
-  unsigned int loop = 0;
-  while(loop<vectName.size() && !goodFileFound)
-  {
-    ossimFilename curFile = vectName[loop];
-    if(curFile.file().beforePos(3) == ossimString("TSX"))
-      goodFileFound = true;
-    else
-      loop++;
-}
-*/
+
    if(findMeatadataFile)
    {
       //---
@@ -515,14 +494,15 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
    }
    
-   // Load the base class.
-   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
    //---
    // Temp:  This must be cleared or you end up with a bounding rect of all
    // zero's.
    //---
    theBoundGndPolygon.clear();
+
+  // Load the base class.
+   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
    if (result)
    {
