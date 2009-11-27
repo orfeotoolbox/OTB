@@ -122,7 +122,10 @@ public :
   virtual void ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
   virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
   //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
-  void SetFalseEasting(double falseEasting);
+  virtual void SetFalseEasting(double falseEasting)
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
 
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt() const;
