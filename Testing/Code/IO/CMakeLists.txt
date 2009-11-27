@@ -2113,6 +2113,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
@@ -2125,6 +2126,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
@@ -2137,6 +2139,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
@@ -2148,6 +2151,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
