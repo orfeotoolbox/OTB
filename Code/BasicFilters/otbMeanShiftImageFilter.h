@@ -166,8 +166,6 @@ public:
   const LabeledOutputType * GetClusterBoundariesOutput() const;
   /** Return the cluster boundaries image output */
   LabeledOutputType * GetClusterBoundariesOutput();
-  /** Return the const vectorized boundaries output */
-  const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
   /** Return the mean-shift mode by label */
   const ModeMapType& GetModes()
   {
