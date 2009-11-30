@@ -38,7 +38,7 @@ int main( int argc, char *argv[] )
   
   // check for input images
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(inputFilename);
+  reader->SetFileName(filename);
   reader->UpdateOutputInformation();
   std::cout << reader << std::endl;
 
