@@ -46,7 +46,7 @@ public:
 
   typedef itk::Object Superclass;
 
-  itkTypeMacro(CoordinateToName, Object);
+  itkTypeMacro(CoordinateToName, itk::Object);
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
