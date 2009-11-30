@@ -14,12 +14,12 @@
 # pragma once
 #endif
 
-#include <boost/functional/hash/hash.hpp>
-#include <boost/functional/hash/pair.hpp>
-#include <boost/functional/hash/vector.hpp>
-#include <boost/functional/hash/list.hpp>
-#include <boost/functional/hash/deque.hpp>
-#include <boost/functional/hash/set.hpp>
-#include <boost/functional/hash/map.hpp>
+#include <boost/bfunctional/hash/hash.hpp>
+#include <boost/bfunctional/hash/pair.hpp>
+#include <boost/bfunctional/hash/vector.hpp>
+#include <boost/bfunctional/hash/list.hpp>
+#include <boost/bfunctional/hash/deque.hpp>
+#include <boost/bfunctional/hash/set.hpp>
+#include <boost/bfunctional/hash/map.hpp>
 
 #endif

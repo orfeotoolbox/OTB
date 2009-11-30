@@ -16,7 +16,7 @@
 
 #include <boost/config.hpp>
 #include <deque>
-#include <boost/functional/hash/hash.hpp>
+#include <boost/bfunctional/hash/hash.hpp>
 
 namespace boost
 {

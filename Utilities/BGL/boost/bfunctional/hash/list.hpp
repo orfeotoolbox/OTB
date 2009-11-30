@@ -8,21 +8,21 @@
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
 //  issue 6.18. 
 
-#if !defined(BOOST_FUNCTIONAL_HASH_VECTOR_HPP)
-#define BOOST_FUNCTIONAL_HASH_VECTOR_HPP
+#if !defined(BOOST_FUNCTIONAL_HASH_LIST_HPP)
+#define BOOST_FUNCTIONAL_HASH_LIST_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
 #include <boost/config.hpp>
-#include <vector>
-#include <boost/functional/hash/hash.hpp>
+#include <list>
+#include <boost/bfunctional/hash/hash.hpp>
 
 namespace boost
 {
     template <class T, class A>
-    std::size_t hash_value(std::vector<T, A> const& v)
+    std::size_t hash_value(std::list<T, A> const& v)
     {
         return hash_range(v.begin(), v.end());
     }
@@ -31,9 +31,9 @@ namespace boost
     namespace hash_detail
     {
         template <class T, class A>
-        struct call_hash<std::vector<T, A> >
+        struct call_hash<std::list<T, A> >
         {
-            static std::size_t call(std::vector<T, A> const& val)
+            static std::size_t call(std::list<T, A> const& val)
             {
                 return boost::hash_value(val);
             }
@@ -43,3 +43,4 @@ namespace boost
 }
 
 #endif
+

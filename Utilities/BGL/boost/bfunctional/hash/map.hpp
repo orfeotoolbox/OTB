@@ -8,27 +8,28 @@
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
 //  issue 6.18. 
 
-#if !defined(BOOST_FUNCTIONAL_HASH_SET_HPP)
-#define BOOST_FUNCTIONAL_HASH_SET_HPP
+#if !defined(BOOST_FUNCTIONAL_HASH_MAP_HPP)
+#define BOOST_FUNCTIONAL_HASH_MAP_HPP
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif
 
 #include <boost/config.hpp>
-#include <set>
-#include <boost/functional/hash/hash.hpp>
+#include <map>
+#include <boost/bfunctional/hash/hash.hpp>
+#include <boost/bfunctional/hash/pair.hpp>
 
 namespace boost
 {
-    template <class K, class C, class A>
-    std::size_t hash_value(std::set<K, C, A> const& v)
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::map<K, T, C, A> const& v)
     {
         return hash_range(v.begin(), v.end());
     }
 
-    template <class K, class C, class A>
-    std::size_t hash_value(std::multiset<K, C, A> const& v)
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::multimap<K, T, C, A> const& v)
     {
         return hash_range(v.begin(), v.end());
     }
@@ -36,19 +37,19 @@ namespace boost
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     namespace hash_detail
     {
-        template <class K, class C, class A>
-        struct call_hash<std::set<K, C, A> >
+        template <class K, class T, class C, class A>
+        struct call_hash<std::map<K, T, C, A> >
         {
-            static std::size_t call(std::set<K, C, A> const& val)
+            static std::size_t call(std::map<K, T, C, A> const& val)
             {
                 return boost::hash_value(val);
             }
         };
 
-        template <class K, class C, class A>
-        struct call_hash<std::multiset<K, C, A> >
+        template <class K, class T, class C, class A>
+        struct call_hash<std::multimap<K, T, C, A> >
         {
-            static std::size_t call(std::multiset<K, C, A> const& val)
+            static std::size_t call(std::multimap<K, T, C, A> const& val)
             {
                 return boost::hash_value(val);
             }
@@ -58,4 +59,5 @@ namespace boost
 }
 
 #endif
+
 
