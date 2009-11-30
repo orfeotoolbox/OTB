@@ -727,7 +727,7 @@ ENDMACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS)
 #
 IF(APPLE AND NOT FLTK_USE_X)
     FIND_PROGRAM(ITK_APPLE_RESOURCE Rez /Developer/Tools)
-    FIND_FILE(ITK_FLTK_RESOURCE mac.r /usr/local/include/FL)
+    FIND_FILE(ITK_FLTK_RESOURCE mac.r ${FLTK_DIR}/include/FL)
     IF(NOT ITK_FLTK_RESOURCE)
       MESSAGE("Fltk resources not found, GUI application will not respond to mouse events")
     ENDIF(NOT ITK_FLTK_RESOURCE)
