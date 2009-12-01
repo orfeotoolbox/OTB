@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbVectorImageToAmplitudeImageFilter_h
@@ -61,15 +61,15 @@ class ITK_EXPORT VectorImageToAmplitudeImageFilter
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageToAmplitudeImageFilter Self;
+  typedef VectorImageToAmplitudeImageFilter                  Self;
   typedef itk::UnaryFunctorImageFilter<
                      TInputImage,
                      TOutputImage,
                      Functor::VectorToAmplitudeFunctor<
                          typename TInputImage::PixelType,
                          typename TOutputImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -86,7 +86,7 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
-  };
+  }
 
 private:
   VectorImageToAmplitudeImageFilter(const Self&); //purposely not implemented
