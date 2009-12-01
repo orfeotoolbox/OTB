@@ -26,15 +26,15 @@ int main( int argc, char *argv[] )
 {
   if (argc < 1)
     {
-    std::cout << "Usage : inputImage" << std::endl ;
+    std::cout << "Usage : inputImage" << std::endl;
     return EXIT_FAILURE;
     }
 
   char * filename = argv[1];
   
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType >        ImageType;
-  typedef otb::ImageFileReader<ImageType>      ReaderType;
+  typedef double                              PixelType;
+  typedef otb::VectorImage< PixelType >       ImageType;
+  typedef otb::ImageFileReader<ImageType>     ReaderType;
   
   // check for input images
   ReaderType::Pointer reader = ReaderType::New();
