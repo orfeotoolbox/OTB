@@ -1952,6 +1952,10 @@ ADD_TEST(ioTuQuickBirdImageMetadataInterfaceNew ${IO_TESTS17}
         otbQuickBirdImageMetadataInterfaceNew
 )
 
+ADD_TEST(ioTuTerraSarImageMetadataInterfaceNew ${IO_TESTS17}
+        otbTerraSarImageMetadataInterfaceNew
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvImageMetadataInterfaceQBTest ${IO_TESTS17}
          --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceQB.txt
@@ -2003,14 +2007,20 @@ ADD_TEST(ioTvImageMetadataInterfaceTest ${IO_TESTS17}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 IF(OTB_DATA_USE_LARGEINPUT)
-ADD_TEST(ioTvTerraSarImageMetadataInterface ${IO_TESTS18}
-         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface.txt
-                         ${TEMP}/ioTvITerraSarImageMetadataInterface.txt
+ADD_TEST(ioTvTerraSarImageMetadataInterface_dims ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_dims.txt
+                         ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
         otbTerraSarImageMetadataInterface
         ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos
-        ${TEMP}/ioTvTerraSarImageMetadataInterface.txt
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_dims.txt
 )
-
+ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
+         --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+                         ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+        otbTerraSarImageMetadataInterface
+        ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/ioTvTerraSarImageMetadataInterface_TORONTO.txt
+)
 
 ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
   --compare-n-ascii ${NOTOL} 2
@@ -2103,6 +2113,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
@@ -2115,6 +2126,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
@@ -2127,6 +2139,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
@@ -2138,6 +2151,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto_saveState_loadState.txt
+	  --ignore-lines-with 1 product_xml_filename
     otbImageKeywordlist
          ${LARGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
@@ -2318,6 +2332,7 @@ otbPointSetFileReader2.cxx
 otbSpotImageMetadataInterfaceNew.cxx
 otbQuickBirdImageMetadataInterfaceNew.cxx
 otbIkonosImageMetadataInterfaceNew.cxx
+otbTerraSarImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 )

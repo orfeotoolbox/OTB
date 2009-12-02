@@ -1,12 +1,17 @@
 # This is the root OTB CMakeLists file.
 # $Id$
 #
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
 PROJECT(OTB)
+
+# Path to additional CMake modules
+SET(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/CMake
+    ${CMAKE_MODULE_PATH})
 
 INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
 SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
@@ -587,7 +592,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   ENDIF (NOT JPEG_LIBRARY)
   ENDIF(GDAL_HAS_JPEG)
 
-  # Check if ${GDAL_LIBRARY} has jpeg library
+  # Check if ${GDAL_LIBRARY} has ogr library
   TRY_COMPILE(GDAL_HAS_OGR
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasOGR.cxx
@@ -727,7 +732,7 @@ ENDMACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS)
 #
 IF(APPLE AND NOT FLTK_USE_X)
     FIND_PROGRAM(ITK_APPLE_RESOURCE Rez /Developer/Tools)
-    FIND_FILE(ITK_FLTK_RESOURCE mac.r /usr/local/include/FL)
+    FIND_FILE(ITK_FLTK_RESOURCE mac.r ${FLTK_DIR}/include/FL)
     IF(NOT ITK_FLTK_RESOURCE)
       MESSAGE("Fltk resources not found, GUI application will not respond to mouse events")
     ENDIF(NOT ITK_FLTK_RESOURCE)
@@ -881,16 +886,6 @@ MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 
 #-----------------------------------------------------------------------------
-# Perform a setup of OTB Wrapping. This will provide CMake options for
-# individual wrapping as well as determine if CableSwig is required. If it is,
-# OTB_NEED_CableSwig will be set. This file also tries to locate CableSwig by
-# searching first in the source tree of OTB, and if that fails, it searches
-# for a binary built of CableSwig.
-#
-INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbWrapSetup.cmake)
-
-
-#-----------------------------------------------------------------------------
 # Option for generate Patented examples  !!!
 OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
 MARK_AS_ADVANCED(OTB_USE_PATENTED)
@@ -946,8 +941,6 @@ OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 # Dispatch the build into the proper subdirectories.
 
 SUBDIRS(Utilities Code)
-
-SUBDIRS(Wrapping)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(Examples)
@@ -1014,8 +1007,7 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
                ${OTB_BINARY_DIR}/otbConfigure.h)
 
 #-----------------------------------------------------------------------------
-# The entire OTB tree should use the same include path, except for the
-# Wrapping directory.
+# The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
 INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)

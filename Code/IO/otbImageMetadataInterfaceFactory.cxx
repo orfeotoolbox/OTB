@@ -28,6 +28,8 @@
 #include "otbSpotImageMetadataInterfaceFactory.h"
 #include "otbQuickBirdImageMetadataInterfaceFactory.h"
 // SAR Sensors
+//#include "otbTerraSarImageMetadataInterfaceFactory.h"
+
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -87,7 +89,7 @@ ImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory( IkonosImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( SpotImageMetadataInterfaceFactory::New() );
       itk::ObjectFactoryBase::RegisterFactory( QuickBirdImageMetadataInterfaceFactory::New() );
-      //itk::ObjectFactoryBase::RegisterFactory( QuickBirdImageMetadataInterfaceFactory::New() );
+      //itk::ObjectFactoryBase::RegisterFactory( TerraSarImageMetadataInterfaceFactory::New() );
       firstTime = false;
     }
   }

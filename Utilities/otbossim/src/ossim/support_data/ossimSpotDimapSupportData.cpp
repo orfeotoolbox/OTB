@@ -1258,6 +1258,11 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    kwl.add(prefix,
+           "image_id",
+           theImageID,
+           true);
+
+   kwl.add(prefix,
            "instrument",
            theInstrument,
            true);
@@ -1514,6 +1519,7 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theNumBands        = ossimString(kwl.find(prefix, ossimKeywordNames::NUMBER_BANDS_KW)).toUInt32();
    theAcquisitionDate = kwl.find(prefix, ossimKeywordNames::IMAGE_DATE_KW);
    theProductionDate  = kwl.find(prefix, "production_date");
+   theImageID         = kwl.find(prefix, "image_id");
    theInstrument      = kwl.find(prefix, "instrument");
    theInstrumentIndex = ossimString(kwl.find(prefix, "instrument_index")).toUInt32();
    theStepCount       = ossimString(kwl.find(prefix, "step_count")).toInt32();

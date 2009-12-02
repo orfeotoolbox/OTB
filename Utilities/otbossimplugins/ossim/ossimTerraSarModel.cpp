@@ -13,6 +13,7 @@
 #include <ossimPluginCommon.h>
 #include <ossimTerraSarProductDoc.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
@@ -39,6 +40,9 @@ static const char ALT_SR_GR_COEFFICIENT1_KW[] = "alt_sr_gr_coeff1";
 static const char ALT_SR_GR_COEFFICIENT2_KW[] = "alt_sr_gr_coeff2";
 static const char PRODUCT_TYPE[] = "product_type";
 static const char RADIOMETRIC_CORRECTION[] = "radiometricCorrection";
+static const char AZ_START_TIME[] = "azimuth_start_time";
+static const char AZ_STOP_TIME[] = "azimuth_stop_time";
+static const char GENERATION_TIME[] = "generation_time";
 
 static const char ACQUISITION_INFO[] = "acquisitionInfo.";
 static const char IMAGING_MODE[] = "imagingMode";
@@ -80,6 +84,9 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polLayer(),
      _noise(0),
      _calFactor(0.),
+     _azStartTime(),
+     _azStopTime(),
+    _generationTime(),
      theProductXmlFile()
 {
 }
@@ -102,6 +109,9 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polLayer(rhs._polLayer),
      _noise(rhs._noise),
      _calFactor(rhs._calFactor),
+     _azStartTime(rhs._azStartTime),
+     _azStopTime(rhs._azStopTime),
+     _generationTime(rhs._generationTime),
      theProductXmlFile(rhs.theProductXmlFile)
 {
 }
@@ -154,14 +164,16 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
    }
 
    bool result = false;
+   ossimFilename xmlfile;
+   bool findMeatadataFile = findTSXLeader(file, xmlfile);
 
-   if ( file.exists() && (file.ext().downcase() == "xml") )
+   if(findMeatadataFile)
    {
       //---
       // Instantiate the XML parser:
       //---
       ossimXmlDocument* xdoc = new ossimXmlDocument();
-      if ( xdoc->openFile(file) )
+      if ( xdoc->openFile(xmlfile) )
       {
 
          ossimTerraSarProductDoc tsDoc;
@@ -169,7 +181,6 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
          result = tsDoc.isTerraSarX(xdoc);
          if (debug)
             cout << "result of IsTSX " << result << endl;
-
 
          if (result)
          {
@@ -204,17 +215,17 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
             {
                result = tsDoc.getSceneId(xdoc, theImageID);
                if (debug)
-                  cout << "result of getting SceneIDe" << result << endl;
+                  cout << "result of getting SceneID" << result << endl;
             }
 
             // Set the sensor ID to the mission ID.
             if (result)
             {
                result = tsDoc.getMission(xdoc, theSensorID);
+            
+               if (debug)
+                  cout << "result of getting MissionID...." << result << endl;
             }
-
-            if (debug)
-               cout << "result of getting MissionID...." << result << endl;
 
             // Set the base class gsd:
             result = tsDoc.initGsd(xdoc, theGSD);
@@ -272,14 +283,23 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
                                     ossimString s;
                                     result = tsDoc.getCalFactor(xdoc, s);
                                     _calFactor = s.toFloat64();
+                                    if (result)
+                                    {
+                                      result = tsDoc.getAzimuthStartTime(xdoc, _azStartTime);
+                                      if (result)
+                                      {
+                                        result = tsDoc.getAzimuthStopTime(xdoc, _azStopTime);
+                                        if (result)
+                                        {
+                                          result = tsDoc.getGenerationTime(xdoc, _generationTime);
+                                        }
+                                      }
+                                    }
                                   }
                                 }
                               }
                             }
-
                         }
-
-
                      }
                   }
                }
@@ -301,10 +321,10 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 
    if (result)
    {
-      theProductXmlFile = file;
+      theProductXmlFile = xmlfile;
 
       if (debug)
-         cout << "theProductXmlFile : " << file << endl;
+         cout << "theProductXmlFile : " << xmlfile << endl;
 
       // Assign the ossimSensorModel::theBoundGndPolygon
       ossimGpt ul;
@@ -397,6 +417,7 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    }
 
    kwl.add(prefix, PRODUCT_TYPE, _productType.c_str());
+
    kwl.add(prefix, RADIOMETRIC_CORRECTION, _radiometricCorrection.c_str());
 
    ossimString kw = ACQUISITION_INFO;
@@ -415,6 +436,10 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    _noise->saveState(kwl,prefix);
 
    kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor).c_str());
+   kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
+   kwl.add(prefix, AZ_STOP_TIME, _azStopTime.c_str());
+   kwl.add(prefix, GENERATION_TIME, _generationTime.c_str());
+
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -451,6 +476,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
 
    // Get the product.xml file name.
    lookup = kwl.find(prefix, PRODUCT_XML_FILE_KW);
+
    if (lookup)
    {
       theProductXmlFile = lookup;
@@ -468,14 +494,15 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
    }
    
-   // Load the base class.
-   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
    //---
    // Temp:  This must be cleared or you end up with a bounding rect of all
    // zero's.
    //---
    theBoundGndPolygon.clear();
+
+  // Load the base class.
+   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
    if (result)
    {
@@ -719,6 +746,57 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
+     lookup = kwl.find(prefix, AZ_START_TIME);
+      if (lookup)
+      {
+         _azStartTime = lookup;
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << AZ_START_TIME << "\n";
+         } 
+         result = false;
+      }
+
+      lookup = kwl.find(prefix, AZ_STOP_TIME);
+      if (lookup)
+      {
+         _azStopTime = lookup;
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << AZ_STOP_TIME << "\n";
+         } 
+         result = false;
+      }
+
+      lookup = kwl.find(prefix, GENERATION_TIME);
+      if (lookup)
+      {
+         _generationTime = lookup;
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << GENERATION_TIME << "\n";
+         } 
+         result = false;
+      }
+
 
    if (traceDebug())
    {
@@ -782,8 +860,11 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    }
 
    out << CALIBRATION_CALFACTOR <<  ": " << _calFactor << "\n";
-   // Reset flags.
+   out << AZ_START_TIME <<  ": " << _azStartTime << "\n";
+   out << AZ_STOP_TIME <<  ": " << _azStopTime << "\n";
+   out << GENERATION_TIME <<  ": " << _generationTime << "\n";
 
+   // Reset flags.
 
    ossimString kw = ACQUISITION_INFO;
    ossimString kw2 = kw + IMAGING_MODE;
@@ -1689,5 +1770,50 @@ bool ossimplugins::ossimTerraSarModel::initNoise(
    return result;
 }
 
+bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,  ossimFilename& metadataFile)
+{
+  bool res = false;
+  if ( file.exists() && (file.ext().downcase() == "xml") )
+  {
+    metadataFile = file;
+    res = true;
+  }
+  else
+  {
+    ossimFilename filePath = ossimFilename(file.path());
+    ossimDirectory directory = ossimDirectory(filePath.path());
 
+    std::vector<ossimFilename> vectName;
+    ossimString reg = ".xml";
+    directory.findAllFilesThatMatch( vectName, reg, 1 );
+
+    bool goodFileFound = false;
+    unsigned int loop = 0;
+    while(loop<vectName.size() && !goodFileFound)
+    {
+      ossimFilename curFile = vectName[loop];
+      if(curFile.file().beforePos(3) == ossimString("TSX"))
+        goodFileFound = true;
+      else
+        loop++;
+    }
+    if(goodFileFound)
+    {
+      metadataFile = vectName[loop];
+      res = true;
+    }
+    else
+    {
+      if (traceDebug())
+      {
+        this->print(ossimNotify(ossimNotifyLevel_DEBUG));
+            
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "ossimplugins::ossimTerraSarModel::findTSXLeader " << " exit status = " << (res?"true":"false\n")
+          << std::endl;
+      }
+    }
+  }
+  return res;
+}
 

@@ -62,7 +62,7 @@ public:
     normalizeInPlace(vecA);
     normalizeInPlace(vecB);
 
-    return static_cast<TOutput>( - vcl_log(PhiMI(vecA, vecB)+epsilon) );
+    return static_cast<TOutput>( - vcl_log( static_cast<double>(PhiMI(vecA, vecB)+epsilon) ));
   }
 
 protected:
@@ -92,7 +92,7 @@ protected:
 
     for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
-      (*itx) = ((*itx)-Ex)/vcl_sqrt(Vx);
+    (*itx) = ((*itx)-Ex)/static_cast<TOutput>(vcl_sqrt(static_cast<double>(Vx)));
     }
 
 

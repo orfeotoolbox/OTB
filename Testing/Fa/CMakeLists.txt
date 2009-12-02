@@ -215,6 +215,9 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/boundary_of_labelled_image2.tif
 	)
 
+ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg 
+        ${INPUTDATA}/toulouse_auat.jpg
+	)
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94
 # has somebody working on it
@@ -235,6 +238,9 @@ TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000041-mean_shift  0000041-mean_shift.cxx)
 TARGET_LINK_LIBRARIES(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
+
+ADD_EXECUTABLE(0000132-jpg 0000132-jpg.cxx )
+TARGET_LINK_LIBRARIES(0000132-jpg OTBIO OTBVisu)
 
 ADD_EXECUTABLE(PolygonsVectorization PolygonsVectorization.cxx)
 TARGET_LINK_LIBRARIES(PolygonsVectorization OTBIO OTBCommon)

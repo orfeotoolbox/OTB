@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbVectorImageToAmplitudeImageFilter_h
@@ -20,6 +20,7 @@ See OTBCopyright.txt for details.
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbMath.h"
+#include "itkConceptChecking.h"
 
 namespace otb
 {
@@ -36,6 +37,11 @@ public:
   {
     return static_cast<TOutput>(vcl_sqrt(A.GetSquaredNorm()));
   }
+
+  itkConceptMacro(OutputShouldNotBeVectorImageCheck,
+                    (itk::Concept::Convertible<TOutput, double>));
+
+
 }; // end namespace Functor
 }
 
@@ -46,18 +52,24 @@ public:
  * \ingroup Streamed
  * \ingroup Threaded
  */
+
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageToAmplitudeImageFilter
-      : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,Functor::VectorToAmplitudeFunctor<
-      typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+      : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+        Functor::VectorToAmplitudeFunctor<
+            typename TInputImage::PixelType, typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageToAmplitudeImageFilter            Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,Functor::VectorToAmplitudeFunctor<
-  typename TInputImage::PixelType, typename TOutputImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef VectorImageToAmplitudeImageFilter                  Self;
+  typedef itk::UnaryFunctorImageFilter<
+                     TInputImage,
+                     TOutputImage,
+                     Functor::VectorToAmplitudeFunctor<
+                         typename TInputImage::PixelType,
+                         typename TOutputImage::PixelType> > Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -74,11 +86,12 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os,indent);
-  };
+  }
 
 private:
   VectorImageToAmplitudeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
+
 }// End namespace otb
 #endif

@@ -83,7 +83,7 @@ public:
     {
       for (unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
-        crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
+        crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(static_cast<double>(varA*varB)));
       }
     }
     else if (varA==itk::NumericTraits<TOutput>::Zero && varB==itk::NumericTraits<TOutput>::Zero)

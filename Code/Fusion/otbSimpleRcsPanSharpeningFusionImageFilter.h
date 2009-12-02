@@ -57,8 +57,11 @@ public:
   <TXsImageType, TOutputImageType> Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
-  typedef otb::Image<double,2>                InternalImageType;
-  typedef otb::VectorImage<double>            InternalVectorImageType;
+  
+  //typedef otb::Image<double,2>                InternalImageType;
+  //typedef otb::VectorImage<double>            InternalVectorImageType;
+  typedef otb::Image<double,TPanImageType::ImageDimension>          InternalImageType;
+  typedef otb::VectorImage<double,TPanImageType::ImageDimension>    InternalVectorImageType;
 
   typedef typename InternalImageType::PixelType InternalPixelType;
   typedef typename itk::NumericTraits<InternalPixelType>::RealType InternalRealType;

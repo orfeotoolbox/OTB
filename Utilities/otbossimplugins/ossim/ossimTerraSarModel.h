@@ -156,6 +156,14 @@ namespace ossimplugins
       bool initNoise(
                         const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
 
+      /**
+       * @brief Method to find the metadata file
+       * TerraSAR file (image or xml).
+       * @param file image or metadata path.
+       * @param metadataFile matadata path.
+       * @return ture if mateadata found, false otherwise.
+       */
+      bool findTSXLeader(const ossimFilename& file, ossimFilename& metadataFile);
 
       /**
        * @brief Slant Range TO Ground Range Projection reference point
@@ -230,6 +238,21 @@ namespace ossimplugins
        * @brief CalFactor (Calibration node).
        */
       double _calFactor;
+
+      /**
+       * @brief Azimuthal Start Time (Start acquisition time).
+       */
+      ossimString _azStartTime;
+
+      /**
+       * @brief Azimuthal Stop Time (Start acquisition time).
+       */
+      ossimString _azStopTime;
+
+       /**
+       * @brief Generation time.
+       */
+       ossimString _generationTime;
 
       ossimFilename theProductXmlFile;
 

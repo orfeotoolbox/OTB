@@ -849,7 +849,7 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStartTime(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
    ossimString path =
-      "/level1Product/productInfo/sceneInfo/start/timeUTC";
+      "/level1Product/instrument/settings/rxGainSetting/startTimeUTC";
    return ossim::getPath(path, xdoc, s);
 }
 
@@ -857,7 +857,7 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
    ossimString path =
-      "/level1Product/productInfo/sceneInfo/stop/timeUTC";
+     "/level1Product/instrument/settings/rxGainSetting/stopTimeUTC";
    return ossim::getPath(path, xdoc, s);
 }
 
