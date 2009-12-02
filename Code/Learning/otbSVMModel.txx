@@ -540,7 +540,6 @@ SVMModel<TValue,TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector
   delete[] (m_Model->SV);
   m_Model->SV = NULL;
 
-  this->SetNumberOfSupportVectors(nbOfSupportVector);
   m_Model->SV = new struct svm_node*[m_Model->l];
 
   // copy new SV values
@@ -605,8 +604,6 @@ SVMModel<TValue,TLabel>::SetAlpha( double ** alpha, int nbOfSupportVector )
     delete[] m_Model->sv_coef[i];
   }
   delete [] m_Model->sv_coef;
-
-  this->SetNumberOfSupportVectors(nbOfSupportVector);
 
   // copy new sv_coef values
   m_Model->sv_coef = new double*[m_Model->nr_class-1];
