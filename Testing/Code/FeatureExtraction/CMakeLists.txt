@@ -994,7 +994,7 @@ ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUR
 )
 
 ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputInterestPointAscii ${FEATUREEXTRACTION_TESTS10}
---compare-ascii ${EPSILON_3}
+--ignore-order --compare-ascii ${EPSILON_3}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputInterestPoint.txt
          otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii
