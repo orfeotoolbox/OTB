@@ -67,8 +67,6 @@ ${SoftwareGuide_SOURCE_DIR}/SoftwareGuideConfiguration.tex.in
 ${SoftwareGuide_BINARY_DIR}/SoftwareGuideConfiguration.tex
 )
 
-ADD_CUSTOM_TARGET(SoftwareGuideLatex  ALL echo)
-
 SET( Tex_SRCS
   Abstract.tex
   Applications.tex
@@ -107,25 +105,20 @@ SET( SoftwareGuide_Tex_SRCS
  )
 ENDFOREACH( file )
 
-
-
-SET( ITK_EXAMPLES_TEX_SRCS_NAMES
-#  Bonjour.cxx
-#  Test.cxx
-  MeanImageFilter.tex
-  )
-
-FOREACH( exampletexname ${ITK_EXAMPLES_TEX_SRCS_NAMES})
-  SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${SoftwareGuide_BINARY_DIR}/Examples/${exampletexname} )
+FOREACH( exampletexname ${EXAMPLES_TEX_FILES})
+  SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
 ENDFOREACH( exampletexname )
 
-
-
+FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
+  SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
+ENDFOREACH( exampletexname )
 
 IF(LATEX_COMPILER)
 
+  MESSAGE("HAVe latex compiler")
+
   IF (NOT UNIX)
-    SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
+    SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
 
     CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/LaTeXWrapper.bat.in
                    ${SoftwareGuide_BINARY_DIR}/LaTeXWrapper.bat)
@@ -143,7 +136,7 @@ IF(LATEX_COMPILER)
       SET (LATEX_WRAPPER2 "")
     ENDIF (TEX4HT_COMPILER)
   ELSE (NOT UNIX)
-    SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex:${SoftwareGuide_SOURCE_DIR}:${SoftwareGuide_SOURCE_DIR}/Latex:${SoftwareGuide_SOURCE_DIR}/Art:${SoftwareGuide_BINARY_DIR}:${SoftwareGuide_BINARY_DIR}/Examples:${SoftwareGuide_BINARY_DIR}/Art:${SoftwareGuide_BINARY_DIR}/Latex)
+    SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex:${SoftwareGuide_SOURCE_DIR}:${SoftwareGuide_SOURCE_DIR}/Latex:${SoftwareGuide_SOURCE_DIR}/Art:${SoftwareGuide_BINARY_DIR}:${SoftwareGuide_BINARY_DIR}/Examples:${SoftwareGuide_BINARY_DIR}/Wrappings/Java:${SoftwareGuide_BINARY_DIR}/Art:${SoftwareGuide_BINARY_DIR}/Latex)
 
     CONFIGURE_FILE(${SoftwareGuide_SOURCE_DIR}/LaTeXWrapper.sh.in
                    ${SoftwareGuide_BINARY_DIR}/LaTeXWrapper.sh)
@@ -162,26 +155,31 @@ IF(LATEX_COMPILER)
     ENDIF (TEX4HT_COMPILER)
   ENDIF (NOT UNIX)
 
+
   ADD_CUSTOM_COMMAND(
-    SOURCE    ${SoftwareGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS} ${ITK_EXAMPLES_TEX_SRCS}
+    SOURCE    ${SoftwareGuide_Tex_SRCS}  ${ITK_EXAMPLES_TEX_SRCS}
     COMMAND   ${LATEX_WRAPPER1}
     ARGS      ${LATEX_WRAPPER2}
               ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
-    TARGET    SoftwareGuideLatex
     DEPENDS   ${SoftwareGuide_Tex_SRCS} ${ITK_EXAMPLES_TEX_SRCS}
-    OUTPUTS   SoftwareGuide.dvi
+    OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.dvi
+    COMMENT   "Generating dvi file"
   )
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.dvi)
 
   IF(DVIPS_CONVERTER)
+    MESSAGE("DVIPS converter")
     ADD_CUSTOM_COMMAND(
       SOURCE    SoftwareGuide.dvi
       COMMAND   ${DVIPS_WRAPPER1}
       ARGS      ${DVIPS_WRAPPER2}
                 SoftwareGuide.dvi ${DVIPS_CONVERTER_OPTIONS} -o  SoftwareGuide.ps
-      TARGET    SoftwareGuideLatex
-      DEPENDS   SoftwareGuide.ind SoftwareGuide.bbl
-      OUTPUTS   SoftwareGuide.ps
+      DEPENDS   SoftwareGuide.ind SoftwareGuide.bbl SoftwareGuide.dvi
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ps
+      COMMENT   "Generating ps file"
     )
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ps)
+
   ENDIF(DVIPS_CONVERTER)
 
   IF(PS2PDF_CONVERTER)
@@ -189,15 +187,10 @@ IF(LATEX_COMPILER)
       SOURCE    SoftwareGuide.ps
       COMMAND   ${PS2PDF_CONVERTER}
       ARGS      ${PS2PDF_CONVERTER_OPTIONS} SoftwareGuide.ps
-      TARGET    SoftwareGuideLatex
-      OUTPUTS   SoftwareGuide.pdf
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.pdf
+      COMMENT   "Generating pdf file"
     )
-    ADD_CUSTOM_COMMAND(
-      SOURCE    SoftwareGuideLatex
-      COMMAND   echo
-      TARGET    SoftwareGuideLatex
-      DEPENDS   SoftwareGuide.pdf
-    )
+    SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.pdf)
   ENDIF(PS2PDF_CONVERTER)
 
   IF(MAKEINDEX_COMPILER)
@@ -206,17 +199,19 @@ IF(LATEX_COMPILER)
       COMMAND   ${LATEX_WRAPPER1}
       ARGS      ${LATEX_WRAPPER2}
                 ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.tex
-      TARGET    SoftwareGuideLatex
-      OUTPUTS   SoftwareGuide.idx
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.idx
+      COMMENT   "Generating idx file"
     )
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.idx)
+  
     ADD_CUSTOM_COMMAND(
       SOURCE    SoftwareGuide.idx
       COMMAND   ${MAKEINDEX_COMPILER}
       ARGS      SoftwareGuide
-      TARGET    SoftwareGuideLatex
-      OUTPUTS   SoftwareGuide.ind
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ind
+      COMMENT   "Generating ind file"
     )
-
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.ind)
   ENDIF(MAKEINDEX_COMPILER)
 
   IF(BIBTEX_COMPILER)
@@ -224,13 +219,15 @@ IF(LATEX_COMPILER)
       SOURCE    SoftwareGuide.aux
       COMMAND   ${BIBTEX_COMPILER}
       ARGS      SoftwareGuide
-      TARGET    SoftwareGuideLatex
-      OUTPUTS   SoftwareGuide.bbl
+      OUTPUT    ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.bbl
+      COMMENT   "Generating bbl file"
     )
+  SET(TEX_OUTPUTS ${TEX_OUTPUTS} ${SoftwareGuide_SOURCE_DIR}/Latex/SoftwareGuide.bbl)
   ENDIF(BIBTEX_COMPILER)
 
 
 ENDIF(LATEX_COMPILER)
 
 
+ADD_CUSTOM_TARGET(SoftwareGuideLatex ALL DEPENDS ${TEX_OUTPUTS})
 
