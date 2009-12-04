@@ -25,7 +25,7 @@ namespace otb
 namespace Functor
 {
 /** \class SumVarianceextureFunctor
- *  \brief This functor calculates the sum variance image texture according to Haralick descriptiors.
+ *  \brief This functor calculates the sum variance image texture according to Haralick descriptors.
  *
  *  Computes sum variance using joint histogram (neighborhood and offset neighborhood).
  *  The formula is:
@@ -71,11 +71,11 @@ public:
                 double sVal = (static_cast<double>(s)+0.5)*this->GetNeighBinLength();
                 if( vcl_abs(rVal + sVal - nCeil) < vcl_abs(this->GetNeighBinLength()) )
                   {
-                    Px_y +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+                    Px_y += static_cast<double>(this->GetHisto()[r][s])*areaInv;
                   }
                 if( vcl_abs(rVal + sVal - nCeil2) < vcl_abs(this->GetNeighBinLength()) )
                   {
-                    Px_y2 +=  static_cast<double>(this->GetHisto()[r][s])*areaInv;
+                    Px_y2 += static_cast<double>(this->GetHisto()[r][s])*areaInv;
                   }
               }
           }
@@ -86,11 +86,7 @@ public:
   }
 };
 
-
-
-
-  } // namespace Functor
+} // namespace Functor
 } // namespace otb
 
 #endif
-
