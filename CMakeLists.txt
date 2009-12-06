@@ -878,9 +878,10 @@ ENDIF(OTB_DISABLE_UTILITIES_COMPILATION)
 #-----------------------------------------------------------------------------
 # Option to define streaming activation in applications
 # Use by otbConfigure.h.in
-SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 8*4000*4000 CACHE STRING "Image size to activate using streaming for applications.")
+# Note: 8*4000*4000 = 128000000 (double 4000x4000 image)
+SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
 MARK_AS_ADVANCED(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
-SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 8*4000*4000 CACHE STRING "Max size buffer for streaming.")
+SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
 MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 
