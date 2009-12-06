@@ -21,6 +21,7 @@
 #include "otbStreamingTraits.h"
 #include "otbMacro.h"
 #include "otbConfigure.h"
+#include "otbConfigurationFile.h"
 
 #include "itkInterpolateImageFunction.h"
 #include "itkBSplineInterpolateImageFunction.h"
@@ -111,8 +112,25 @@ unsigned long StreamingTraits<TImage>
   case SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS  : // Just like SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
   case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
   {
-    const std::streamoff streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
-    const std::streamoff streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+    typedef otb::ConfigurationFile        ConfigurationType;
+    ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
+    std::string lang = conf->GetParameter<std::string>("OTB_LANG");
+    std::streamoff streamMaxSizeBufferForStreamingBytes;
+    std::streamoff streamImageSizeToActivateStreamingBytes;
+    try
+    {
+       streamMaxSizeBufferForStreamingBytes = conf->GetParameter<std::streamoff>("OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING");
+       streamImageSizeToActivateStreamingBytes = conf->GetParameter<std::streamoff>("OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING");
+    }
+    catch(...)
+    {
+    // We should never have to go here if the configuration file is
+    // correct and found. In case it is not fallback on the cmake
+    // defined constants.
+      streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
+      streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+    }
+
     //Convert in octet unit
     std::streamoff streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
     const std::streamoff streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
