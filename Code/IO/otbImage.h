@@ -72,8 +72,8 @@ public:
 
   /** Accessor type that convert data between internal and external
    *  representations.  */
-  typedef itk::DefaultPixelAccessor< PixelType > AccessorType;
-  typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
+  //typedef itk::DefaultPixelAccessor< PixelType > AccessorType;
+  //typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
   typedef itk::NeighborhoodAccessorFunctor< Self >
@@ -120,16 +120,16 @@ public:
   typedef typename Superclass::OffsetValueType OffsetValueType;
 
   /** Return the Pixel Accessor object */
-  AccessorType GetPixelAccessor( void )
-  {
-    return AccessorType();
-  }
+//   AccessorType GetPixelAccessor( void )
+//   {
+//     return AccessorType();
+//   }
 
-  /** Return the Pixel Accesor object */
-  const AccessorType GetPixelAccessor( void ) const
-  {
-    return AccessorType();
-  }
+//   /** Return the Pixel Accesor object */
+//   const AccessorType GetPixelAccessor( void ) const
+//   {
+//     return AccessorType();
+//   }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
