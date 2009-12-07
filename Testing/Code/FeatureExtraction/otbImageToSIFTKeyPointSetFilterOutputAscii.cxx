@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbImageToSIFTKeyPointSetFilter.h"
@@ -67,6 +67,7 @@ int otbImageToSIFTKeyPointSetFilterOutputAscii(int argc, char * argv[])
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
   if (filter->GetOutput()->GetPointData() == NULL)
   {
+    std::cerr << "No sift point found!" << std::endl;
     return EXIT_FAILURE;//Avoid the subsequent segfault, but need to check if that what the test want to do
   }
   PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();

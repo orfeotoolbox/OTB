@@ -620,6 +620,13 @@ IF(GETTEXT_FOUND)
   SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
   SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
   SUBDIRS(I18n)
+  FIND_PATH(GETTEXT_INCLUDE_DIR
+    libintl.h
+    DOC "Path to gettext include directory (where libintl.h can be found)")
+  MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
+  IF(GETTEXT_INCLUDE_DIR)
+    INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
+  ENDIF(GETTEXT_INCLUDE_DIR)
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS
@@ -878,9 +885,10 @@ ENDIF(OTB_DISABLE_UTILITIES_COMPILATION)
 #-----------------------------------------------------------------------------
 # Option to define streaming activation in applications
 # Use by otbConfigure.h.in
-SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 8*4000*4000 CACHE STRING "Image size to activate using streaming for applications.")
+# Note: 8*4000*4000 = 128000000 (double 4000x4000 image)
+SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
 MARK_AS_ADVANCED(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
-SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 8*4000*4000 CACHE STRING "Max size buffer for streaming.")
+SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
 MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 

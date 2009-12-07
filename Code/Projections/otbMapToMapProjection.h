@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbMapToMapProjection_h
@@ -30,12 +30,17 @@ namespace otb
 
 
 /** \class MapToMapProjection
-
-* \brief Class for switching from a Map Projection coordinates to other Map Projection coordinates.
+*
+* \brief <b>DEPRECATED</b>: Class for switching from a Map Projection coordinates to
+* other Map Projection coordinates.
+*
+* <b>DEPRECATED</b>: Use otb::GenericMapProjection instead
 * It converts MapProjection1 coordinates to MapProjection2 coordinates by using MapProjection methods.
 * It takes a point in input.
-* (X_1, Y_1) -> (lat, lon) -> (X_2, Y_2)
+* (X_1, Y_1) -> (lon, lat) -> (X_2, Y_2)
+*
 * \ingroup Transform
+* \sa GenericMapProjection
 */
 template <class TInputMapProjection,
 class TOutputMapProjection,

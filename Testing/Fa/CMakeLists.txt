@@ -215,7 +215,8 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/boundary_of_labelled_image2.tif
 	)
 
-ADD_TEST(FA-0000132-jpg  ${INPUTDATA}/toulouse_auat.jpg
+ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg 
+        ${INPUTDATA}/toulouse_auat.jpg
 	)
 # -------       Vectorization issue   -----------------------------------
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=94

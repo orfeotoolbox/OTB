@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: otb-fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-11-10 14:44+0800\n"
-"PO-Revision-Date: 2009-11-10 14:47+0800\n"
+"PO-Revision-Date: 2009-12-01 14:17+0800\n"
 "Last-Translator: Emmanuel Christophe <emmanuel.christophe@orfeo-toolbox.org>"
 "\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -384,9 +384,8 @@ msgid "Scroll image"
 msgstr "Image de navigation"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:142
-#, fuzzy
 msgid "Feature selection"
-msgstr "Selection des canaux"
+msgstr "Selection des attributs"
 
 #: LandCoverMap/otbLandCoverMapView.cxx:152
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:442
@@ -2157,7 +2156,7 @@ msgstr "Seuils"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:97
 msgid "View feature "
-msgstr ""
+msgstr "Voir les attributs"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:108
 msgid "Inside seeds"
@@ -2177,7 +2176,7 @@ msgstr "Mettre a Jour"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:143
 msgid "Features"
-msgstr ""
+msgstr "Attributs"
 
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:151
 msgid "Distance to hyperplane"
@@ -4652,7 +4651,7 @@ msgstr "Selection des canaux"
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1750
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1701
 msgid "Add feature to list (one per selected channel)"
-msgstr ""
+msgstr "Ajoute un attribut a la liste (un par canal selectionne)"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1760
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1794
@@ -4672,7 +4671,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1773
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1723
 msgid "Feature Information"
-msgstr ""
+msgstr "Information sur les attributs"
 
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1785
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1734
@@ -4744,7 +4743,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:1927
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1863
 msgid "Feature"
-msgstr ""
+msgstr "Attribut"
 
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:72
 msgid "Open vector"
@@ -5468,9 +5467,8 @@ msgid "Deramp parameter for Frost image filter"
 msgstr "Parametres du rayon de Lee"
 
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:759
-#, fuzzy
 msgid "Feature Parameters"
-msgstr "Sauver les parametres"
+msgstr "Parametres des attributs"
 
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1815
 #, fuzzy
@@ -5886,9 +5884,8 @@ msgstr "Effacer"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:220
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:231
-#, fuzzy
 msgid "Clear feature list"
-msgstr "Liste d'images"
+msgstr "Effacer la liste d'attributs"
 
 #: Code/Modules/otbHomologousPointExtractionViewGroup.cxx:241
 msgid "Focus point"
@@ -6158,9 +6155,8 @@ msgid "Use scaling"
 msgstr "Utiliser echelle"
 
 #: Code/Modules/otbWriterViewGroup.cxx:201
-#, fuzzy
 msgid "Feature image list"
-msgstr "Liste d'images"
+msgstr "Liste d'attributs"
 
 #: Code/Modules/otbWriterViewGroup.cxx:235
 msgid "Selected output channels"
@@ -6292,7 +6288,7 @@ msgstr "Filtrage/Mean shift clusterisation"
 
 #: Code/Application/Monteverdi.cxx:112
 msgid "Filtering/Feature extraction"
-msgstr "Filtrage/Extraction de features"
+msgstr "Filtrage/Extraction d'attributs"
 
 #: Code/Application/Monteverdi.cxx:113
 msgid "Filtering/Change detection"
@@ -6512,12 +6508,11 @@ msgstr "Image vecteur"
 
 #: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:45
 msgid "Image to apply feature extraction"
-msgstr ""
+msgstr "Image pour la selection d'attributs"
 
 #: Code/Modules/FeatureExtraction/otbFeatureExtractionModule.cxx:88
-#, fuzzy
 msgid "Feature image extraction"
-msgstr "Selection des canaux"
+msgstr "Extraction d'attributs"
 
 #: Code/Modules/KMeans/otbKMeansModule.cxx:38
 #, fuzzy
