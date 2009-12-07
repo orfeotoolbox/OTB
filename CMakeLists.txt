@@ -620,6 +620,13 @@ IF(GETTEXT_FOUND)
   SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
   SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
   SUBDIRS(I18n)
+  FIND_PATH(GETTEXT_INCLUDE_DIR
+    libintl.h
+    DOC "Path to gettext include directory (where libintl.h can be found)")
+  MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
+  IF(GETTEXT_INCLUDE_DIR)
+    INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
+  ENDIF(GETTEXT_INCLUDE_DIR)
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS
