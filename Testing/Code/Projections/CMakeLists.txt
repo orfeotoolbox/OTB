@@ -370,21 +370,23 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
 ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
-        --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGenericMapProjection.txt
-        ${TEMP}/prTvGenericMapProjection.txt
+        --compare-ascii ${EPSILON_4} 
+            ${BASELINE_FILES}/prTvGenericMapProjection.txt
+            ${TEMP}/prTvGenericMapProjection.txt
         otbGenericMapProjection
-        ${TEMP}/prTvGenericMapProjection.txt
+            ${TEMP}/prTvGenericMapProjection.txt
 )
 
 ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
 
-ADD_TEST(prTuGenericRSTransform ${PROJECTIONS_TESTS3}  otbGenericRSTransform
- --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGenericMapProjection.txt
- ${BASELINE_FILES}/prTvGenericRSTransform.txt
- ${TEMP}/prTvGenericRSTransform.txt
- 1.35617289802566
- 43.4876035537
- ${TEMP}/prTvGenericRSTransform.txt
+ADD_TEST(prTvGenericRSTransform ${PROJECTIONS_TESTS3} 
+         --compare-ascii ${EPSILON_4}
+	     ${BASELINE_FILES}/prTvGenericRSTransform.txt
+	     ${TEMP}/prTvGenericRSTransform.txt
+	 otbGenericRSTransform
+	     1.35617289802566
+	     43.4876035537
+	     ${TEMP}/prTvGenericRSTransform.txt
 )
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
