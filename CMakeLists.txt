@@ -623,6 +623,8 @@ IF(GETTEXT_FOUND)
   FIND_PATH(GETTEXT_INCLUDE_DIR
     libintl.h
     DOC "Path to gettext include directory (where libintl.h can be found)")
+ FIND_LIBRARY(GETTEXT_LIBRARY gettextlib
+    DOC "GetText library")
   MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
   IF(GETTEXT_INCLUDE_DIR)
     INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
