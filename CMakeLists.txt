@@ -1000,7 +1000,7 @@ CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
+FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
 
 OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
