@@ -121,7 +121,7 @@ public:
   /** Clear all*/
   void Clear() { m_IndexList.clear(); m_ColorList.clear(); };
   void ClearIndex(unsigned int id)
-  { 
+  {
     this->RemoveIndex(id);
     this->RemoveColor(id);
   };
@@ -181,7 +181,7 @@ private:
   /** Default color : red*/
   ColorType m_RedColor;
 
-  /** Center representation */ 
+  /** Center representation */
   CenterRepresentationEnumType m_CenterRepresentation;
 
 }; // end class

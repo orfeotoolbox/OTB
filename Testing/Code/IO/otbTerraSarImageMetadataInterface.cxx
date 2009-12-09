@@ -54,7 +54,7 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
   file<<"GetProductionDay:     "<<lImageMetadata->GetProductionDay(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetProductionMonth:   "<<lImageMetadata->GetProductionMonth(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetProductionYear:    "<<lImageMetadata->GetProductionYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
-  file<<"GetCalibrationFactor: "<<lImageMetadata->GetCalibrationFactor(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;  
+  file<<"GetCalibrationFactor: "<<lImageMetadata->GetCalibrationFactor(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file.close();
 
   return EXIT_SUCCESS;

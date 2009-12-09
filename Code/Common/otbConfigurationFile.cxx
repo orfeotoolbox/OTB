@@ -34,7 +34,7 @@ ConfigurationFile
   {
     itkExceptionMacro(<< "Error - File '" << e.filename << "' not found.");
   }
-}  
+}
 
 ConfigurationFile
 ::~ConfigurationFile()
@@ -53,12 +53,12 @@ ConfigurationFile
 };
 
 
-void 
+void
 ConfigurationFile
-::PrintSelf(std::ostream& os, itk::Indent indent) const 
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent; 
+  os << indent;
   os << (*m_OTBConfig);
       
 }

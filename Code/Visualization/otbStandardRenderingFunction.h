@@ -210,10 +210,10 @@ public:
         m_Minimum.clear();
         m_Maximum.clear();
        
-       // Comment the condition cause if we change the channel list order 
+       // Comment the condition cause if we change the channel list order
        // this condition doesn't allow us to recompute the histograms
-       //if (this->GetHistogramList().IsNull()) 
-       //{ 
+       //if (this->GetHistogramList().IsNull())
+       //{
           this->RenderHistogram();
          //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
          //          <<"provided to the rendering function with SetHistogramList()" );

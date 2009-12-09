@@ -35,20 +35,20 @@ CircleGlComponent
   m_Spacing.Fill(1.);
   m_Radius = 10;
   // Create the tesselator
-  m_GluTesselator = gluNewTess(); 
+  m_GluTesselator = gluNewTess();
   // Center representation
   m_CenterRepresentation = CROSS;
 }
 
 CircleGlComponent
-::~CircleGlComponent() 
+::~CircleGlComponent()
 {
   // Delete the tesselator
   gluDeleteTess(m_GluTesselator);
 }
 
 
-void 
+void
 CircleGlComponent
 ::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
 {
@@ -89,7 +89,7 @@ CircleGlComponent
 }
  
   
-void 
+void
 CircleGlComponent
 ::Render(unsigned int id, const RegionType & /*extent*/, const AffineTransformType * space2ScreenTransform)
 {
@@ -109,7 +109,7 @@ CircleGlComponent
   // Draw a disk
   glEnable(GL_BLEND);
   glPointSize(m_Radius);
-  glBegin(GL_POINTS); 
+  glBegin(GL_POINTS);
   glVertex2d(screenPoint[0],screenPoint[1]);
   glEnd();
 
@@ -120,7 +120,7 @@ CircleGlComponent
       glColor4d(0, 0, 0, 1);
       glEnable(GL_BLEND);
       glPointSize(2);
-      glBegin(GL_POINTS); 
+      glBegin(GL_POINTS);
       glVertex2d(screenPoint[0],screenPoint[1]);
       glEnd();
     }
