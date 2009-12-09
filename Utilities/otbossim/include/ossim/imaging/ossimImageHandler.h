@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:   See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
@@ -10,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 14047 2009-03-03 02:24:10Z gpotts $
+// $Id: ossimImageHandler.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -21,7 +23,6 @@
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/imaging/ossimFilterResampler.h>
-class ossimTiffTileSource;
 
 /**
  *  This class defines an abstract Handler which all image handlers(loaders)
@@ -44,12 +45,12 @@ public:
     * Constructor (default):
     */
    ossimImageHandler();
-
    /**
     * Destructor:
     * Derived classes should implement.
     */
    virtual ~ossimImageHandler();
+   
 
    //virtual ossimObject* dup()const;
    /**
@@ -243,21 +244,26 @@ public:
                               bool includeFullResFlag=false);
    
    /**
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *
-    *  @param kwl Keyword list that will be initialized with geometry info.
-    *  Returns true if geometry info is present, false if not.
-    *
-    *  @param prefix The prefix is added to the resulting keyword list
-    *  keywords.  So is you if you pass in a prefix of "image01.", the
-    *  keyword ul_lat will be like:  "image01.ul_lat:  -40.00000"
+    * Returns the image geometry object associated with this tile source or
+    * NULL if non defined.  The geometry contains full-to-local image
+    * transform as well as projection (image-to-world).
     */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   virtual ossimImageGeometry* getImageGeometry();
 
    /**
-    * Sets the image geometry keyword list.
+    * Returns the image geometry object associated with this tile source or
+    * NULL if non defined.  The geometry contains full-to-local image
+    * transform as well as projection (image-to-world).
+    *
+    * This method just looks for external .geom style override only.
+    * If you want to go through a registry then call getImageGeometry().
+    */
+   virtual ossimImageGeometry* getExternalImageGeometry();
+   
+   virtual ossimImageGeometry* getInternalImageGeometry();
+   
+   /**
+    * Sets the image geometry object.
     *
     * @note Callers should note that this will override any existing
     *       geometry.
@@ -265,7 +271,7 @@ public:
     * @note This does not write the geometry to disk, to do so call
     *       one of the saveImageGeometry methods. 
     */
-   virtual void setImageGeometry(const ossimKeywordlist& kwl);
+   virtual void setImageGeometry(ossimImageGeometry* geom);
 
    /**
     * Saves the image geometry to a file that will be made based on the image
@@ -352,22 +358,6 @@ public:
    virtual ossim_uint32 getNumberOfReducedResSets()const;
    
    /**
-    * @param resLevel Reduced resolution set for requested offset.
-    * 
-    * @return Returns the offset between the relative image rectangle and
-    * the absolute, or full, image rectangle. This is typically (0,0) unless
-    * this is a sub-image.  If a resLevel other than zero is requested the
-    * decimation factor will be applied to offset.  If resLevel is not valid
-    * an the ossimIpt returned will be nan's.
-    */
-   ossimIpt getSubImageOffset(ossim_uint32 resLevel) const;
-
-   /**
-    * Permits initializing this sub-image's offset relative to full image space.
-    */
-   void setSubImageOffset(const ossimIpt& p);
-
-   /**
     * Sets the filename
     */
    virtual void setFilename(const ossimFilename& filename);
@@ -392,7 +382,13 @@ public:
                           const char* prefix=0);
 
    /**
-    * Determines if the passed in reslution level is valid
+    * @brief Determines if the passed in reslution level is valid.
+    *
+    * If this reader is used as an overview the caller should pass in a
+    * resLevel relative to the full image.
+    * 
+    * @param resLevel zero base resolution level.
+    * @return true on success, false on error.
     */
    virtual bool isValidRLevel(ossim_uint32 resLevel) const;
 
@@ -475,7 +471,7 @@ public:
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
-
+   
    /**
     * @return The current entry number.
     *
@@ -483,19 +479,19 @@ public:
     * if of multiple entry image type.
     */
    virtual ossim_uint32 getCurrentEntry()const;
-
+   
    /**
     * @return The number of entries (images) in the image file.
     */
    virtual ossim_uint32 getNumberOfEntries()const;
-
+   
    /**
     * @param entryList This is the list to initialize with entry indexes.
     *
     * @note This implementation returns puts one entry "0" in the list.
     */
    virtual void getEntryList(std::vector<ossim_uint32>& entryList) const;
-
+   
    /**
     * @param entryStringList List to initialize with strings associated with
     * entries.
@@ -508,6 +504,7 @@ public:
       std::vector<ossimString>& entryStringList) const;
    
    ossimFilename getOverviewFile()const;
+
    /**
     * @param entryIdx Entry number to select.
     *
@@ -517,39 +514,68 @@ public:
     * @return true if it was able to set the current entry and false otherwise.
     */
    virtual bool setCurrentEntry(ossim_uint32 entryIdx);
-
+   
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
-
+   
    /**
-   * Returns the image file with extension set.
-   *
-   * Examples:
-   * 
-   * - theImageFile          = "foo.hdf"
-   * - The number of entries = 1
-   * - ext parameter         = "geom"
-   * - return of method will = "foo.geom"
-   *
-   * - theImageFile          = "foo.hdf"
-   * - The number of entries = 12
-   * - The current entry     = 3
-   * - ext parameter         = "geom"
-   * - return of method will = "foo_e3.geom"
-   *
-   * @param ext Extension to tack onto file.  Can have or have not ".", it will
-   * be added if "." is not the first character.
-   *
-   * @param set_e0_prefix If true and the number of entries = 1 then
-   * "foo.geom" would come out "foo_e0.geom" instead. Default = false.
-   * 
-   * @return theImageFile with sent extension.
-   */
-  ossimFilename getFilenameWithThisExtension(const ossimString& ext,
-                                             bool set_e0_prefix=false) const;
+    * Returns the image file with extension set.
+    *
+    * Examples:
+    * 
+    * - theImageFile          = "foo.hdf"
+    * - The number of entries = 1
+    * - ext parameter         = "geom"
+    * - return of method will = "foo.geom"
+    *
+    * - theImageFile          = "foo.hdf"
+    * - The number of entries = 12
+    * - The current entry     = 3
+    * - ext parameter         = "geom"
+    * - return of method will = "foo_e3.geom"
+    *
+    * @param ext Extension to tack onto file.  Can have or have not ".", it
+    * will be added if "." is not the first character.
+    *
+    * @param set_e0_prefix If true and the number of entries = 1 then
+    * "foo.geom" would come out "foo_e0.geom" instead. Default = false.
+    * 
+    * @return theImageFile with sent extension.
+    */
+   ossimFilename getFilenameWithThisExtension(const ossimString& ext,
+                                              bool set_e0_prefix=false) const;
+   
+   ossim_uint32 getStartingResLevel() const;
+   
+   void setStartingResLevel(ossim_uint32 level);
    
 protected:
+   
+   
+  // void setStartingResLevel(ossim_uint32 level);
+
+  /**
+   * @brief Method to get an overview tile.  Derived classes should override if
+   * they have built in overviews or something different than the standard
+   * external overview file.  Image handlers can call this method from getTile
+   * in place of inlining code or if derived class needs to override this
+   * method.
+   *
+   * @param resLevel The resolution level to pull from with resLevel 0 being
+   * full res.
+   * 
+   * @param result The tile to stuff. 
+   * passing. 
+   *
+   * @return true on success false on error.  Typically this will return false
+   * if resLevel==0 unless the overview has r0.  If return is false, result
+   * is undefined so caller should handle appropriately with makeBlank or
+   * whatever.
+   */
+  virtual bool getOverviewTile(ossim_uint32 resLevel,
+                               ossimImageData* result);  
+  
    /**
     *  Opens file and attempts to initialize the valid image vertices.
     *  Returns true on success, false on error.
@@ -566,12 +592,17 @@ protected:
 
    ossimFilename        theImageFile;
    ossimFilename        theOverviewFile;
-   ossimTiffTileSource* theOverview;
-   ossimIpt             theSubImageOffset;
+   ossimRefPtr<ossimImageHandler>   theOverview;
    vector<ossimIpt>     theValidImageVertices;
    ossimImageMetaData   theMetaData;
-   ossimKeywordlist     theGeometryKwl;
+   mutable ossimRefPtr<ossimImageGeometry> theGeometry;
    ossimRefPtr<ossimNBandLutDataObject> theLut;
+
+   /**
+    * theStartingResLevel If set to something other than zero(default) this is
+    * indicative that the reader is an overview.
+    */
+   ossim_uint32         theStartingResLevel; // 0 being full or highest res.
    
 TYPE_DATA
 };

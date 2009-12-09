@@ -1,9 +1,8 @@
 //*******************************************************************
-// Copyright (C) 2002 ImageLinks Inc. 
 //
-// License:  See top level LICENSE.txt file.
-//
-// Author: David Burken
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Description:
 //
@@ -12,12 +11,11 @@
 // is intended to be an image handler for USGS dem files.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimUsgsDemTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimUsgsDemTileSource_HEADER
 #define ossimUsgsDemTileSource_HEADER
 
-  // #include <fstream>
 #include <ossim/imaging/ossimImageHandler.h>
 
 class ossimImageData;
@@ -29,11 +27,10 @@ public:
       
    ossimUsgsDemTileSource();
    
-   virtual ~ossimUsgsDemTileSource();
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString className()    const;
+   virtual ossimString getClassName() const;
 
    /**
     *  Returns true if the "theImageFile can be opened.
@@ -48,6 +45,20 @@ public:
 
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tile_rect,
                                                ossim_uint32 resLevel=0);
+
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);
    
    /**
     *  Returns the number of bands in the image.
@@ -99,12 +110,15 @@ public:
                           const char* prefix=0);
    
    /**
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
+    * @brief Initializes theGeometry from USGS DEM header.
+    *
+    * This is called by base ossimImageHandler::getImageGeometry if
+    * theGeometry is not set.  External callers should not go through this
+    * method but call "getImageGeometry" instead for efficiency reasons.
+    * 
+    * @return Pointer to geometry or null if header not found.
     */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   virtual ossimImageGeometry* getInternalImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.
@@ -139,7 +153,8 @@ public:
 
    virtual bool isOpen()const;
    
-private:
+protected:
+   virtual ~ossimUsgsDemTileSource();
    // Disallow operator= and copy constrution...
    const ossimUsgsDemTileSource& operator=(const  ossimUsgsDemTileSource& rhs);
    ossimUsgsDemTileSource(const ossimUsgsDemTileSource&);
@@ -149,7 +164,8 @@ private:
     */
    template <class T> bool fillBuffer(T, // dummy template variable
                                       const ossimIrect& tile_rect,
-                                      const ossimIrect& clip_rect);
+                                      const ossimIrect& clip_rect,
+                                      ossimImageData* tile);
 
    void gatherStatistics();
 

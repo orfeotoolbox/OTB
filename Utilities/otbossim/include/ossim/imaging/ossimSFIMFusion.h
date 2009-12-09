@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.h 13371 2008-08-02 13:42:42Z gpotts $
+//  $Id: ossimSFIMFusion.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSFIMFusion_HEADER
 #define ossimSFIMFusion_HEADER
 #include <ossim/imaging/ossimFusionCombiner.h>
@@ -33,7 +33,6 @@ class OSSIM_DLL ossimSFIMFusion : public ossimFusionCombiner,
 {
 public:
    ossimSFIMFusion();
-   virtual ~ossimSFIMFusion();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
    virtual void initialize();
@@ -60,6 +59,7 @@ public:
                           const char* prefix=0);
    
 protected:
+   virtual ~ossimSFIMFusion();
    void setFilters();
    bool computeRegression(ossim_float64& slopeResult,
                           const ossimIpt& origin,

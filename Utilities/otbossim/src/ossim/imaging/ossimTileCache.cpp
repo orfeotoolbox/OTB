@@ -6,7 +6,7 @@
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimTileCache.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimTileCache.h>
 #include <ossim/base/ossimDataObject.h>
@@ -56,7 +56,7 @@ ossimDataObject* ossimTileCache::get(const ossimDpt3d &origin,
          if(info->theOrigin   == origin &&
             info->theResLevel == resLevel)
          {
-            return info->theCachedTile;
+            return info->theCachedTile.get();
          }
       }
 
@@ -84,7 +84,7 @@ ossimDataObject* ossimTileCache::remove(const ossimDpt3d &origin,
             theCache[bucket].erase(anIterator);
             theSizeInBytes -= info->theCachedTile->getDataSizeInBytes();
 
-            result = info->theCachedTile;
+            result = info->theCachedTile.get();
 
             delete info;
             return result;
@@ -164,7 +164,6 @@ void ossimTileCache::deleteAll()
       while(anIterator != theCache[bucket].end())
       {
          CacheDataPtr info = (*anIterator).second;
-         delete info->theCachedTile;
          delete info;
          
          ++anIterator;

@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimCustomEditorWindowRegistry.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimCustomEditorWindowRegistry.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimCustomEditorWindowRegistry_HEADER
 #define ossimCustomEditorWindowRegistry_HEADER
 #include <ossim/base/ossimObject.h>
@@ -14,7 +14,7 @@
 #include <ossim/base/ossimCustomEditorWindowFactoryBase.h>
 
 #include <vector>
-class OSSIMDLLEXPORT ossimCustomEditorWindowFactoryBase;
+class ossimCustomEditorWindowFactoryBase;
 
 class OSSIMDLLEXPORT ossimCustomEditorWindowRegistry : public ossimCustomEditorWindowFactoryBase
 {

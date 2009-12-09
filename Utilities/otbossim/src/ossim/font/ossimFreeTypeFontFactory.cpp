@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFontFactory.cpp 12179 2007-12-12 21:20:45Z dburken $
+// $Id: ossimFreeTypeFontFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_FREETYPE. */
 
@@ -44,7 +44,7 @@ ossimFreeTypeFontFactory* ossimFreeTypeFontFactory::instance()
 ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFontInformation& information)const
 
 {
-   ossimFont* result = (ossimFont*)NULL;
+   ossimRefPtr<ossimFont> result;
    
    ossimString rightFamilyName = information.theFamilyName;
    ossimString rightStyleName  = information.theStyleName;
@@ -69,12 +69,11 @@ ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFontInformation& info
                information.thePointSize)
             {
                result = new ossimFreeTypeFont(theFontInformationList[i].theFilename);
-               if(result)
+               if(result.valid())
                {
                   if(result->getErrorStatus())
                   {
-                     delete result;
-                     result = NULL;
+                     result = 0;
                      ossimNotify(ossimNotifyLevel_WARN) <<"WARNING ossimFreeTypeFontFactory::createFont:  unable to open font file "
                                                         << theFontInformationList[i].theFilename << std::endl;
                   }
@@ -84,12 +83,11 @@ ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFontInformation& info
          else
          {
             result = new ossimFreeTypeFont(theFontInformationList[i].theFilename);
-            if(result)
+            if(result.valid())
             {
                if(result->getErrorStatus())
                {
-                  delete result;
-                  result = NULL;
+                  result = 0;
                   ossimNotify(ossimNotifyLevel_WARN) <<  "WARNING ossimFreeTypeFontFactory::createFont: unable to open font file "
                                                      << theFontInformationList[i].theFilename << std::endl;
                }
@@ -107,7 +105,7 @@ ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFontInformation& info
       }         
    }
 
-   if(result)
+   if(result.valid())
    {
       result->setScale(information.theScale.x,
                        information.theScale.y);
@@ -118,20 +116,19 @@ ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFontInformation& info
       result->setRotation(information.theRotation);
    }
    
-   return result;
+   return result.release();
 }
 
 ossimFont* ossimFreeTypeFontFactory::createFont(const ossimFilename& file)const
 {
-   ossimFont* result = new ossimFreeTypeFont(file);
+   ossimRefPtr<ossimFont> result = new ossimFreeTypeFont(file);
 
    if(result->getErrorStatus())
    {
-      delete result;
-      result = (ossimFont*)NULL;
+      result = 0;
    }
    
-   return result;
+   return result.release();
 }
 
 void ossimFreeTypeFontFactory::getFontInformation(std::vector<ossimFontInformation>& informationList)const
@@ -145,7 +142,7 @@ void ossimFreeTypeFontFactory::getFontInformation(std::vector<ossimFontInformati
 
 bool ossimFreeTypeFontFactory::addFile(const ossimFilename& file)
 {
-   ossimFreeTypeFont* font = new ossimFreeTypeFont(file);
+   ossimRefPtr<ossimFreeTypeFont> font = new ossimFreeTypeFont(file);
    
    std::vector<ossimFontInformation> fontInfoList;
    
@@ -167,7 +164,6 @@ bool ossimFreeTypeFontFactory::addFile(const ossimFilename& file)
    }
 
    // Free memory.
-   delete font;
    font = 0;
    
    return result;

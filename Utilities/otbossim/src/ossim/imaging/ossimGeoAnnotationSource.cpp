@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -21,7 +21,7 @@ RTTI_DEF2(ossimGeoAnnotationSource,
 
 ostream& operator <<(ostream& out, const ossimGeoAnnotationSource& rhs)
 {
-   const vector<ossimAnnotationObject*> &tempList = rhs.getObjectList();
+   const ossimAnnotationSource::AnnotationObjectListType &tempList = rhs.getObjectList();
    for(ossim_uint32 index = 0; index < tempList.size(); ++index)
    {
       out << "output " << index << endl;
@@ -31,30 +31,27 @@ ostream& operator <<(ostream& out, const ossimGeoAnnotationSource& rhs)
    return out;
 }
 
-ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimProjection* projection,
+ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimImageGeometry* geom,
                                                    bool ownsProjectionFlag)
    :ossimAnnotationSource(),
     ossimViewInterface(),
-    theProjection(projection),
-    theOwnsProjectionFlag(ownsProjectionFlag)
+    m_geometry(geom)
 {
    ossimViewInterface::theObject = this;
 }
 
 ossimGeoAnnotationSource::ossimGeoAnnotationSource(ossimImageSource* inputSource,
-                                                   ossimProjection* projection,
+                                                   ossimImageGeometry* geom,
                                                    bool ownsProjectionFlag)
    :ossimAnnotationSource(inputSource),
     ossimViewInterface(),
-    theProjection(projection),
-    theOwnsProjectionFlag(ownsProjectionFlag)
+    m_geometry(geom)
 {
    ossimViewInterface::theObject = this;
 }
 
 ossimGeoAnnotationSource::~ossimGeoAnnotationSource()
 {
-   removeProjection();
 }
 
 bool ossimGeoAnnotationSource::addObject(ossimAnnotationObject* anObject)
@@ -64,9 +61,9 @@ bool ossimGeoAnnotationSource::addObject(ossimAnnotationObject* anObject)
    if(objectToAdd)
    {
       ossimAnnotationSource::addObject(objectToAdd);
-      if(theProjection)
+      if(m_geometry.valid())
       {
-         objectToAdd->transform(theProjection);
+         objectToAdd->transform(m_geometry.get());
          computeBoundingRect();
       }
       return true;
@@ -75,26 +72,26 @@ bool ossimGeoAnnotationSource::addObject(ossimAnnotationObject* anObject)
    return false;
 }
 
-void ossimGeoAnnotationSource::setProjection(ossimProjection* projection,
-                                             bool ownsProjectionFlag)
+void ossimGeoAnnotationSource::setGeometry(ossimImageGeometry* geom)
 {
-   // remove our current set projection first
-   removeProjection();
-
-   theProjection         = projection;
-   theOwnsProjectionFlag = ownsProjectionFlag;
-   transformObjects(theProjection);
-   
+   m_geometry = geom;
+   transformObjects(m_geometry.get());
 }
 
-bool ossimGeoAnnotationSource::setView(ossimObject* baseObject,
-                                       bool ownsTheView)
+bool ossimGeoAnnotationSource::setView(ossimObject* baseObject)
 {
    ossimProjection* proj = PTR_CAST(ossimProjection, baseObject);
    if(proj)
    {
-      setProjection(proj, ownsTheView);
-
+      if(m_geometry.valid())
+      {
+         m_geometry->setProjection(proj);
+      }
+      else
+      {
+         m_geometry = new ossimImageGeometry(0, proj);
+      }
+      setGeometry(m_geometry.get());
       return true;
    }
 
@@ -103,12 +100,12 @@ bool ossimGeoAnnotationSource::setView(ossimObject* baseObject,
 
 ossimObject* ossimGeoAnnotationSource::getView()
 {
-   return theProjection;
+   return m_geometry.get();
 }
 
 const ossimObject* ossimGeoAnnotationSource::getView()const
 {
-   return theProjection;
+   return m_geometry.get();
 }
 
 void ossimGeoAnnotationSource::computeBoundingRect()
@@ -122,7 +119,7 @@ void ossimGeoAnnotationSource::computeBoundingRect()
       ossimDrect rect;
       theAnnotationObjectList[0]->getBoundingRect(theRectangle);
       
-      vector<ossimAnnotationObject*>::iterator object = (theAnnotationObjectList.begin()+1);
+      AnnotationObjectListType::iterator object = (theAnnotationObjectList.begin()+1);
       while(object != theAnnotationObjectList.end())
       {
          (*object)->getBoundingRect(rect);
@@ -132,19 +129,16 @@ void ossimGeoAnnotationSource::computeBoundingRect()
    }
 }
 
-void ossimGeoAnnotationSource::transformObjects(ossimProjection* projection)
+void ossimGeoAnnotationSource::transformObjects(ossimImageGeometry* geom)
 {
-   if(!theProjection && !projection)
+   ossimRefPtr<ossimImageGeometry> tempGeom = geom;
+   if(!tempGeom)
    {
-      return;
-   }
-   if(!projection)
-   {
-      projection = theProjection;
+      tempGeom = m_geometry.get();
    }
 
-   if(!theProjection) return;
-   vector<ossimAnnotationObject*>::iterator currentObject;
+   if(!tempGeom) return;
+   AnnotationObjectListType::iterator currentObject;
 
    currentObject = theAnnotationObjectList.begin();
 
@@ -153,35 +147,24 @@ void ossimGeoAnnotationSource::transformObjects(ossimProjection* projection)
       // this is safe since we trapped all adds to make
       // sure that each object added to the list is
       // geographic.
-      ossimGeoAnnotationObject* object = static_cast<ossimGeoAnnotationObject*>(*currentObject);
+      ossimGeoAnnotationObject* object = static_cast<ossimGeoAnnotationObject*>((*currentObject).get());
 
       // transform the object to image space.
-      object->transform(projection);
+      object->transform(m_geometry.get());
 
       ++currentObject;
    }
    computeBoundingRect();
 }
 
-void ossimGeoAnnotationSource::removeProjection()
+ossimImageGeometry* ossimGeoAnnotationSource::getImageGeometry()
 {
-   if(theProjection&&theOwnsProjectionFlag)
+   if(!m_geometry.valid())
    {
-      delete theProjection;
+      return ossimImageSource::getImageGeometry();
    }
-
-   theProjection = 0;
-}
-
-bool ossimGeoAnnotationSource::getImageGeometry(ossimKeywordlist& kwl,
-						const char* prefix)
-{
-  if(theProjection)
-    {
-      theProjection->saveState(kwl, prefix);
-      return true;
-    }
-  return ossimImageSource::getImageGeometry(kwl, prefix);
+   
+   return m_geometry.get();
 }
 
 bool ossimGeoAnnotationSource::saveState(ossimKeywordlist& kwl,
@@ -194,13 +177,19 @@ bool ossimGeoAnnotationSource::saveState(ossimKeywordlist& kwl,
 bool ossimGeoAnnotationSource::loadState(const ossimKeywordlist& kwl,
                                          const char* prefix)
 {
-   ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,"view_proj.");
-
-   if(proj)
+   m_geometry = new ossimImageGeometry;
+   
+   ossimString newPrefix = ossimString(prefix)+"view_proj.";
+   if(!m_geometry->loadState(kwl, newPrefix.c_str()))
    {
-      removeProjection();
-      theOwnsProjectionFlag = true;
-      theProjection = proj;
+      m_geometry = 0;
+   }
+   else
+   {
+      if(!m_geometry->hasProjection())
+      {
+         m_geometry = 0;
+      }
    }
    
    return ossimAnnotationSource::loadState(kwl, prefix);

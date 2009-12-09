@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -20,7 +19,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU16ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
+// $Id: ossimU16ImageData.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimU16ImageData_HEADER
 #define ossimU16ImageData_HEADER
@@ -41,7 +40,6 @@ public:
 
    ossimU16ImageData(const ossimU16ImageData &rhs);
 
-   virtual ~ossimU16ImageData();
 
    /*!
     * Perform object duplication.
@@ -176,14 +174,11 @@ public:
    virtual void copyNormalizedBufferToTile(ossim_uint32 band,
                                            float* buf);
 protected:
+   virtual ~ossimU16ImageData();
    ossimU16ImageData();
 
 
 private:
-
-   // Disallow from use...
-   const ossimU16ImageData& operator =(const ossimU16ImageData &rhs)
-                                     {return *this;}
 
    static const ossimNormalizedU16RemapTable theRemapTable;
    

@@ -9,7 +9,7 @@
 // Contains definition of class ossimSpot5Model.
 //
 //*****************************************************************************
-// $Id: ossimSpot5Model.cpp 14206 2009-04-01 12:11:20Z gpotts $
+// $Id: ossimSpot5Model.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -139,25 +139,15 @@ ossimSpot5Model::~ossimSpot5Model()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimSpot5Model(): entering..." << std::endl;
 
-   if (theSupportData)
-   {
-      delete theSupportData;
-      theSupportData = NULL;
-   }
-
+   theSupportData = 0;
+   
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG DESTRUCTOR: ~ossimSpot5Model(): returning..." << std::endl;
 }
 
 ossimSpot5Model::ossimSpot5Model(const ossimSpot5Model& rhs)
    :ossimSensorModel(rhs)
 {
-   if(theSupportData)
-   {
-
-      delete theSupportData;
-      theSupportData = 0;
-   }
-   if(rhs.theSupportData)
+   if(rhs.theSupportData.valid())
    {
       theSupportData = (ossimSpotDimapSupportData*)rhs.theSupportData->dup();
    }
@@ -493,16 +483,15 @@ std::ostream& ossimSpot5Model::print(std::ostream& out) const
 bool ossimSpot5Model::saveState(ossimKeywordlist& kwl,
                           const char* prefix) const
 {
-  if(theSupportData)
-    {
-      ossimString supportPrefix = ossimString(prefix) + "support_data.";
-      theSupportData->saveState(kwl, supportPrefix);
-    }
+  if(theSupportData.valid())
+  {
+     ossimString supportPrefix = ossimString(prefix) + "support_data.";
+     theSupportData->saveState(kwl, supportPrefix);
+  }
   else
-    {
-      return false;
-    }
-
+  {
+     return false;
+  }
 
    return ossimSensorModel::saveState(kwl, prefix);
 }
@@ -727,24 +716,25 @@ ossimSpot5Model::setupOptimizer(const ossimString& init_file)
    }
    if(spot5Test.exists())
    {
-      ossimSpotDimapSupportData *meta = new ossimSpotDimapSupportData;
+      ossimRefPtr<ossimSpotDimapSupportData> meta = new ossimSpotDimapSupportData;
       if(meta->loadXmlFile(spot5Test))
       {
-         initFromMetadata(meta);
+         initFromMetadata(meta.get());
          if (getErrorStatus())
          {
             tryKwl = true;
-            delete meta;
             meta=0;
+         }
+         else
+         {
+            return true;
          }
       }
       else
       {
-         delete meta;
          meta=0;
          tryKwl = true;
       }
-      return true;
    }
    if(tryKwl)
    {

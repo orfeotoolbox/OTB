@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimFftFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
+//  $Id: ossimFftFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimFftFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -49,9 +49,9 @@ ossimFftFilter::ossimFftFilter(ossimObject* owner,
 
 ossimFftFilter::~ossimFftFilter()
 {
-   if(theScalarRemapper)
+   if(theScalarRemapper.valid())
    {
-      delete theScalarRemapper;
+      theScalarRemapper->disconnect();
       theScalarRemapper = 0;
    }
 }

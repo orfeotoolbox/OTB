@@ -11,7 +11,7 @@
 //              Modified selection of adjustable parameters..
 //
 //*****************************************************************************
-//  $Id: ossimLandSatModel.h 14049 2009-03-03 02:25:27Z gpotts $
+//  $Id: ossimLandSatModel.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimLandSatModel_HEADER
 #define ossimLandSatModel_HEADER
@@ -48,7 +48,6 @@ public:
    ossimLandSatModel(const ossimKeywordlist& geom_kwl);
    ossimLandSatModel(const ossimLandSatModel& rhs);
    virtual ossimObject* dup()const;
-   virtual ~ossimLandSatModel();
 
    enum ProjectionType
    {
@@ -123,6 +122,7 @@ public:
 
 protected:
 
+   virtual ~ossimLandSatModel();
    /*!
     * Initializes the model given a fast format header.
     */

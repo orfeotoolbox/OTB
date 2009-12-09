@@ -1,19 +1,18 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt.
-//
-// Author:  David Burken
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Description:
 //
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 11419 2007-07-27 16:24:57Z dburken $
+// $Id: ossimUsgsDemTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <fstream>
-
 #include <ossim/imaging/ossimUsgsDemTileSource.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
@@ -28,7 +27,8 @@
 #include <ossim/support_data/ossimDemHeader.h>
 #include <ossim/support_data/ossimDemProfile.h>
 #include <ossim/support_data/ossimDemGrid.h>
-
+#include <ossim/support_data/ossimDemUtil.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
 RTTI_DEF1(ossimUsgsDemTileSource, "ossimUsgsDemTileSource", ossimImageHandler)
 
@@ -67,80 +67,102 @@ ossimUsgsDemTileSource::~ossimUsgsDemTileSource()
 ossimRefPtr<ossimImageData> ossimUsgsDemTileSource::getTile(
    const  ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
-   // This tile source bypassed, or invalid res level, return a blank tile.
-   if (!isOpen() || !isSourceEnabled() || !isValidRLevel(resLevel))
+   if (theTile.valid())
    {
-      return ossimRefPtr<ossimImageData>();
-   }
-
-   if (theOverview)
-   {
-      if (theOverview->hasR0() || resLevel)
-      {
-         ossimRefPtr<ossimImageData> temp = theOverview->getTile(tile_rect,
-                                                                 resLevel);
-         if(temp.valid() && temp->getBuf())
-         {
-            temp->setMinPix(theTile->getMinPix(), theTile->getNumberOfBands());
-            temp->setMaxPix(theTile->getMaxPix(), theTile->getNumberOfBands());
-            temp->setNullPix(theTile->getNullPix(), theTile->getNumberOfBands());
-         }
-         else
-         {
-            return ossimRefPtr<ossimImageData>();
-         }
-         return temp;
-      }
-   }
-
-   if (!theTile.valid())
-   {
-      return theTile;
-   }
-
-   theTile->setImageRectangle(tile_rect);
-   
-   ossimIrect image_rect = getImageRectangle(resLevel);
-   
-   //***
-   // See if any point of the requested tile is in the image.
-   //***
-   if ( tile_rect.intersects(image_rect) )
-   {
-      ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+      // Image rectangle must be set prior to calling getTile.
+      theTile->setImageRectangle(tile_rect);
       
-      if ( !tile_rect.completely_within(clip_rect) )
+      if ( getTile( theTile.get(), resLevel ) == false )
       {
-         // Start with a blank tile.
-         theTile->makeBlank();
+         if (theTile->getDataObjectStatus() != OSSIM_NULL)
+         {
+            theTile->makeBlank();
+         }
       }
+   }
+   
+   return theTile;
+}
 
-      // Load the tile buffer with data from the dem cell.
-      bool status;
-      if (theScalarType == OSSIM_FLOAT32)
+bool ossimUsgsDemTileSource::getTile(ossimImageData* result,
+                                     ossim_uint32 resLevel)
+{
+   bool status = false;
+
+   //---
+   // Not open, this tile source bypassed, or invalid res level,
+   // return a blank tile.
+   //---
+   if( isOpen() && isSourceEnabled() && isValidRLevel(resLevel) &&
+       result && (result->getNumberOfBands() == getNumberOfOutputBands()) )
+   {
+      result->ref(); // Increment ref count.
+
+      //---
+      // Check for overview tile.  Some overviews can contain r0 so always
+      // call even if resLevel is 0.  Method returns true on success, false
+      // on error.
+      //---
+      status = getOverviewTile(resLevel, result);
+      
+      if (status) // From old code.  Not sure if still needed.
       {
-         status = fillBuffer(ossim_float32(0.0), tile_rect, clip_rect);
-      }
-      else
-      {
-         status = fillBuffer(ossim_sint16(0), tile_rect, clip_rect);
-  
-      }
-      if (status == true)
-      {
-         theTile->validate();
-         return theTile;
-      }
-      else
-      {
-         return ossimRefPtr<ossimImageData>();
+         result->setMinPix(theTile->getMinPix(), theTile->getNumberOfBands());
+         result->setMaxPix(theTile->getMaxPix(), theTile->getNumberOfBands());
+         result->setNullPix(theTile->getNullPix(), theTile->getNumberOfBands());
       }
       
-   } // End of if ( tile_rect.intersects(image_rect) )
+      if (!status) // Did not get an overview tile.
+      {
+         status = true;
+         
+         ossimIrect tile_rect = result->getImageRectangle();
+         
+         ossimIrect image_rect = getImageRectangle(resLevel);
+         
+         //---
+         // See if any point of the requested tile is in the image.
+         //---
+         if ( tile_rect.intersects(image_rect) )
+         {
+            ossimIrect clip_rect = tile_rect.clipToRect(image_rect);
+            
+            if ( !tile_rect.completely_within(clip_rect) )
+            {
+               // Start with a blank tile.
+               result->makeBlank();
+            }
+            
+            // Load the tile buffer with data from the dem cell.
+            if (theScalarType == OSSIM_FLOAT32)
+            {
+               status = fillBuffer(ossim_float32(0.0),
+                                   tile_rect,
+                                   clip_rect,
+                                   result);
+            }
+            else
+            {
+               status = fillBuffer(ossim_sint16(0),
+                                   tile_rect,
+                                   clip_rect,
+                                   result);
+            }
+            if (status == true)
+            {
+               result->validate();
+            }
+         }    
+         else // No intersection:  if ( tile_rect.intersects(image_rect) )
+         {
+            result->makeBlank();
+         }
+      }
 
-   // No part of requested tile within the image rectangle.
-   return ossimRefPtr<ossimImageData>();
-   
+      result->unref(); // Decrement ref count.
+   }
+
+   return status;
 }
 
 //*******************************************************************
@@ -149,11 +171,12 @@ ossimRefPtr<ossimImageData> ossimUsgsDemTileSource::getTile(
 template <class T>
 bool ossimUsgsDemTileSource::fillBuffer(T,
                                         const ossimIrect& tile_rect,
-                                        const ossimIrect& clip_rect)
+                                        const ossimIrect& clip_rect,
+                                        ossimImageData* tile)
 {
-   const uint32 TILE_WIDTH = theTile->getWidth();
+   const uint32 TILE_WIDTH = tile->getWidth();
 
-   T* d = static_cast<T*>(theTile->getBuf());
+   T* d = static_cast<T*>(tile->getBuf());
    
    ossim_float32 spatialResZ = theDem->getHeader().getSpatialResZ();
    if (spatialResZ == 0.0) spatialResZ = 1.0;
@@ -202,200 +225,74 @@ bool ossimUsgsDemTileSource::open()
            << "\nAttempting to parse file:  " << theImageFile.c_str()
            << std::endl;
    }
-   
-   if (!theImageFile.exists()) // See if file exists.
+
+   theIsDemFlag = ossimDemUtil::isUsgsDem(theImageFile);
+
+   if (theIsDemFlag)
    {
+      // Open up the file for reading.
+      std::ifstream is(theImageFile.c_str(),
+                       std::ios_base::in | std::ios_base::binary);
+      if (is.good())
+      {
+         // Start out with a fresh dem.
+         if (theDem) delete theDem;
+         
+         //---
+         // Set the null to -32768.  This will also be the missing data values.
+         //---
+         theNullValue = OSSIM_DEFAULT_NULL_PIX_SINT16;
+         
+         //---
+         // Read the dem.
+         // 
+         // NOTE:  This defines the missing data value.  It should be the
+         // same as null for mosaicing and min/max calculations.
+         //---
+         theDem = new ossimDemGrid(theNullValue);
+         theDem->read(is);
+         
+         is.close();
+      }
+      else
+      {
+         theIsDemFlag = false;
+      }
+   }
+   
+   if (theIsDemFlag)
+   {
+      theFeetFlag  = (theDem->getHeader().getElevationUnits() == 1) ?
+         true : false;
+      
+      theMinHeight = theFeetFlag ? theDem->getHeader().getMinimumElev() *
+         MTRS_PER_FT : theDem->getHeader().getMinimumElev();
+      theMaxHeight = theFeetFlag ? theDem->getHeader().getMaximumElev() *
+         MTRS_PER_FT : theDem->getHeader().getMaximumElev();
+      
+      completeOpen();
+      
+      //---
+      // Set up the tiles.  Note the blank tile will not get initialized to
+      // save memory.  This includes setting the min and max pixel value
+      // gathered from the statistics.
+      //---
+      theTile = ossimImageDataFactory::instance()->create(this, this);
+      theTile->initialize();
+      
       if (traceDebug())
       {
-         CLOG << "DEBUG:"
-              << "\nFile " << theImageFile.c_str() << " does not exist!"
+         CLOG << setiosflags(ios::fixed) << setprecision(5) << "DEBUG:"
+              << "\nNull pix:  " << (theTile->getNullPix(0))
+              << "\nMin  pix:  " << (theTile->getMinPix(0))
+              << "\nMax  pix:  " << (theTile->getMaxPix(0))
+              << "\nlines:     " << theDem->getHeight()
+              << "\nsamples:   " << theDem->getWidth()
               << std::endl;
       }
-      return false;
    }
 
-   //---
-   // Open checks:
-   // 1) Check extension for .dem
-   //
-   // 2) Look for file.omd (ossim meta data) file containing keyword
-   //    "dem_type" with value of "usgs_dem".
-   //
-   // 3) Look for file.kwl (keyword list) file containing keyword
-   //    "dem_type" with value of "usgs_dem".
-   //
-   // NOTE:
-   // There is a keyword list template stored in the templates directory:
-   // "ossim/etc/templates/usgs_dem_template.kwl"
-   //---
-   ossimString ext = theImageFile.ext();
-   ext.downcase();
-   if ( (ext == "kwl") || (ext == "omd") )
-   {
-      // Don't allow keyword list to be fed to open.  Only image files.
-      return false;
-   }
-      
-   if (ext == "dem")
-   {
-      theIsDemFlag = true;
-   }
-
-   // Look for filename.omd
-   ossimFilename kwl_file = theImageFile;
-   kwl_file.setExtension("omd");
-   if (kwl_file.exists()) // See if file exists.
-   {
-      ossimKeywordlist kwl(kwl_file);
-      if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
-      {
-         const char* lookup;
-         
-         if (!theIsDemFlag)
-         {
-            const char* lookup = kwl.find(DEM_TYPE_KW);
-            if (lookup)
-            {
-               ossimString s = lookup;
-               s.downcase();
-               if (s == USGS_DEM_KW)
-               {
-                  theIsDemFlag = true;
-               }
-            }
-         }
-
-         //---
-         // Look for scalar type override.
-         //
-         // Note: We only allow float or signed 16 bit.
-         //---
-         lookup = kwl.find(ossimKeywordNames::SCALAR_TYPE_KW);
-         if (lookup)
-         {
-            ossimScalarType st =
-               static_cast<ossimScalarType>(ossimScalarTypeLut::instance()->
-                                            getEntryNumber(lookup));
-            if ( (st == OSSIM_FLOAT32) || (st == OSSIM_SINT16))
-            {
-               theScalarType = st;
-            }
-            else
-            {
-               if (traceDebug())
-               {
-                  ossimNotify(ossimNotifyLevel_WARN)
-                     << "ossimUsgsDemTileSource::loadState WARNING:"
-                     << "\nInvalid scalar type: "
-                     << ossimScalarTypeLut::instance()->
-                     getEntryString(st)
-                     << std::endl;
-               }
-            }
-         }
-      }
-   }
-
-   if (!theIsDemFlag)
-   {
-      return false;
-   }
-
-   // Open up the file for reading.
-   std::ifstream is(theImageFile.c_str(), ios::in | ios::binary);
-   if (!is)
-   {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      
-      cerr << MODULE << " ERROR!"
-           << "\nCould not open file:  " << theImageFile.c_str()
-           << "\nReturning..." << std::endl;
-      if (traceDebug())  CLOG << "returning with error..." << std::endl;
-      theIsDemFlag = false;
-      return false;
-   }
-
-   //---
-   // SPECIAL HACK (drb):
-   // Check some bytes and make sure there is no binary data.  There are
-   // files out there with .dem extension that are binary rasters.
-   //---
-   ossim_uint8* ubuf = new ossim_uint8[512];
-   is.read((char*)ubuf, 512);
-   if (is)
-   {
-      for (int i = 0; i < 512; ++i)
-      {
-         if (ubuf[i] > 0x7f)
-         {
-            theIsDemFlag = false;
-            break;
-         }
-      }
-   }
-   else
-   {
-      theIsDemFlag = false;
-   }
-   delete [] ubuf;
-   ubuf = NULL;
-   if (theIsDemFlag == false)
-   {
-      is.close();
-      return false;
-   }
-   is.seekg(0, ios::beg);
-   // End of "SPECIAL HACK".
-
-   // Start out with a fresh dem.
-   if (theDem) delete theDem;
-
-   //---
-   // Set the null to -32768.  This will also be the missing data values.
-   //---
-   theNullValue = OSSIM_DEFAULT_NULL_PIX_SINT16;
-
-   //---
-   // Read the dem.
-   // 
-   // NOTE:  This defines the missing data value.  It should be the same as
-   // null for mosaicing and min/max calculations.
-   //---
-   theDem = new ossimDemGrid(theNullValue);
-   theDem->read(is);
-
-   is.close();
-
-   theFeetFlag  = (theDem->getHeader().getElevationUnits() == 1) ?
-                  true : false;
-
-   theMinHeight = theFeetFlag ? theDem->getHeader().getMinimumElev() *
-                  MTRS_PER_FT : theDem->getHeader().getMinimumElev();
-   theMaxHeight = theFeetFlag ? theDem->getHeader().getMaximumElev() *
-                  MTRS_PER_FT : theDem->getHeader().getMaximumElev();
-
-   completeOpen();
-
-   //***
-   // Set up the tiles.  Note the blank tile will not get initialized to save
-   // memory.  This includes setting the min and max pixel value gathered
-   // from the statistics.
-   //***
-   theTile = ossimImageDataFactory::instance()->create(this, this);
-   theTile->initialize();
-
-   if (traceDebug())
-   {
-      CLOG << setiosflags(ios::fixed) << setprecision(5) << "DEBUG:"
-           << "\nNull pix:  " << (theTile->getNullPix(0))
-           << "\nMin  pix:  " << (theTile->getMinPix(0))
-           << "\nMax  pix:  " << (theTile->getMaxPix(0))
-           << "\nlines:     " << theDem->getHeight()
-           << "\nsamples:   " << theDem->getWidth()
-           << std::endl;
-   }
-
-   return true;
+   return theIsDemFlag;
 }
 
 bool ossimUsgsDemTileSource::saveState(ossimKeywordlist& kwl,
@@ -468,53 +365,52 @@ bool ossimUsgsDemTileSource::loadState(const ossimKeywordlist& kwl,
    return false;
 }
 
-bool ossimUsgsDemTileSource::getImageGeometry(ossimKeywordlist& kwl,
-                                              const char* prefix)
+ossimImageGeometry* ossimUsgsDemTileSource::getInternalImageGeometry()
 {
-   if (!theDem)
+   if ( !theGeometry )
    {
-      return false;
+      theGeometry = new ossimImageGeometry();
    }
-
-   // Previously saved...
-   if (theGeometryKwl.getSize())
+   
+   if (theDem)
    {
-      kwl = theGeometryKwl;
-      return true;
-   }  
+      const ossimDemHeader HDR = theDem->getHeader();
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
+            << "\nDEM Header:"
+            << std::endl;
+         HDR.print(ossimNotify(ossimNotifyLevel_DEBUG));
+      }
       
-   const ossimDemHeader HDR = theDem->getHeader();
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
-         << "\nDEM Header:"
-         << std::endl;
-      HDR.print(ossimNotify(ossimNotifyLevel_DEBUG));
+      // The DEM's image geometry is a map projection, obtained here via KWL:
+      ossimKeywordlist proj_kwl;
+      if ( HDR.getImageGeometry(proj_kwl) ) 
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
+               << "keyword list:\n" << proj_kwl
+               << std::endl;
+         }
+         
+         // Capture for next time.
+         ossimRefPtr<ossimProjection> proj =
+            ossimProjectionFactoryRegistry::instance()->
+            createProjection(proj_kwl);
+         if ( proj.valid() )
+         {
+            theGeometry->setProjection(proj.get());
+         }
+      }
    }
-
-   if (HDR.getImageGeometry(kwl, prefix) == false)
-   {
-      return false;
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimUsgsDemTileSource::getImageGeometry DEBUG:"
-         << "keyword list:\n" << kwl
-         << std::endl;
-   }
-
-   // Capture for next time.
-   setImageGeometry(kwl);
-
-   return true;
+   
+   return theGeometry.get();
 }
 
-ossimScalarType
-ossimUsgsDemTileSource::getOutputScalarType() const
+ossimScalarType ossimUsgsDemTileSource::getOutputScalarType() const
 {
    return theScalarType;
 }
@@ -544,7 +440,7 @@ ossim_uint32 ossimUsgsDemTileSource::getNumberOfLines(ossim_uint32 reduced_res_l
          return 0;
       }
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfLines(reduced_res_level);
    }
@@ -567,7 +463,7 @@ ossim_uint32 ossimUsgsDemTileSource::getNumberOfSamples(ossim_uint32 reduced_res
          return 0;
       }
    }
-   else if (theOverview)
+   else if (theOverview.valid())
    {
       return theOverview->getNumberOfSamples(reduced_res_level);
    }
@@ -595,7 +491,7 @@ ossimString ossimUsgsDemTileSource::getLongName() const
    return ossimString("usgs dem reader");
 }
 
-ossimString ossimUsgsDemTileSource::className() const
+ossimString ossimUsgsDemTileSource::getClassName() const
 {
    return ossimString("ossimUsgsDemTileSource");
 }

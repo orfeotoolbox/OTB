@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyObject.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimAnnotationMultiPolyObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAnnotationMultiPolyObject_HEADER
 #define ossimAnnotationMultiPolyObject_HEADER
 #include <ossim/imaging/ossimAnnotationObject.h>
@@ -35,7 +35,6 @@ public:
       {
          return new ossimAnnotationMultiPolyObject(*this);
       }
-   virtual ~ossimAnnotationMultiPolyObject();
    virtual void applyScale(double x,
                            double y);
    virtual void draw(ossimRgbImage& anImage)const;
@@ -73,6 +72,7 @@ public:
          theFillEnabled = flag;
       }
 protected:
+   virtual ~ossimAnnotationMultiPolyObject();
    vector<ossimPolygon> theMultiPolygon;
    ossimDrect           theBoundingRect;
    bool                 theFillEnabled;

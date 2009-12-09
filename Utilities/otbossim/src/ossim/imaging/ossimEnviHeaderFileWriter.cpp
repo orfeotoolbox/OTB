@@ -13,7 +13,7 @@
 // writing an ENVI (The Environment for Visualizing Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeaderFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimEnviHeaderFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimEnviHeaderFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -66,29 +66,23 @@ bool ossimEnviHeaderFileWriter::writeFile()
    theHdr.setBands(theInputConnection->getNumberOfOutputBands());
    
    // Get the geometry from the input.
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-
-   // Create the projection.
-   ossimMapProjection* mapProj =  NULL;
-   ossimRefPtr<ossimProjection> proj =
-      ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   if (proj.valid())
+   // Get the geometry from the input.
+   ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   if (inputGeom)
+      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+   if (mapProj)
    {
-      mapProj = PTR_CAST(ossimMapProjection, proj.get());
+      // Create the projection info.
+      ossimRefPtr<ossimMapProjectionInfo> projectionInfo
+         = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
 
-      if (mapProj)
-      {
-         // Create the projection info.
-         ossimRefPtr<ossimMapProjectionInfo> projectionInfo
-            = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
-         
-         // Set the tie points in the keyword list.
-         projectionInfo->getGeom(kwl);
-         
-         // Pass it on to envi header to set the map info string from geometry.
-         theHdr.setMapInfo(kwl);
-      }
+      // Set the tie points in the keyword list.
+      ossimKeywordlist kwl;
+      projectionInfo->getGeom(kwl);
+
+      // Pass it on to envi header to set the map info string from geometry.
+      theHdr.setMapInfo(kwl);
    }
 
    return theHdr.writeFile(theFilename);

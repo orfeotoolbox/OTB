@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimColorProperty.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimColorProperty.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimColorProperty_HEADER
 #define ossimColorProperty_HEADER
 #include <ossim/base/ossimProperty.h>
@@ -18,7 +18,6 @@ public:
    ossimColorProperty(const ossimString& name=ossimString(""),
                       const ossimRgbVector& value = ossimRgbVector(0,0,0));
    ossimColorProperty(const ossimColorProperty& rhs);
-   virtual ~ossimColorProperty();
    virtual ossimObject* dup()const;
    virtual const ossimProperty& assign(const ossimProperty& rhs);
    virtual bool setValue(const ossimString& value);
@@ -32,6 +31,7 @@ public:
    void setGreen(ossim_uint8 r);
    void setBlue(ossim_uint8 r);
 protected:
+   virtual ~ossimColorProperty();
    ossimRgbVector theValue;
 
 TYPE_DATA

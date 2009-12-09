@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToJpegYCbCrSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToJpegYCbCrSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRgbToJpegYCbCrSource_HEADER
 #define ossimRgbToJpegYCbCrSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
@@ -19,11 +19,11 @@ public:
    
    ossimRgbToJpegYCbCrSource();
    ossimRgbToJpegYCbCrSource(ossimImageSource* inputSource);
-   virtual ~ossimRgbToJpegYCbCrSource();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
        
 protected:
+   virtual ~ossimRgbToJpegYCbCrSource();
    ossimRefPtr<ossimImageData> theBlankTile;
 
 TYPE_DATA

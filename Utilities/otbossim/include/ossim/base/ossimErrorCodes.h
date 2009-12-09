@@ -10,14 +10,14 @@
 // from code to string and string to code.
 //
 //*************************************************************************
-// $Id: ossimErrorCodes.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimErrorCodes.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimErrorCodes_HEADER
 #define ossimErrorCodes_HEADER
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimString.h>
 
-class OSSIMDLLEXPORT ossimString;
 
 /*!
  *  class ossimErrorCodes

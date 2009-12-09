@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Ken Melero
 // 
@@ -8,7 +10,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.h 12988 2008-06-04 16:49:43Z gpotts $
+// $Id: ossimAdrgTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAdrgTileSource_HEADER
 #define ossimAdrgTileSource_HEADER
@@ -41,11 +43,10 @@ public:
    };
       
    ossimAdrgTileSource();
-   virtual ~ossimAdrgTileSource();
 
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString className()const;
+   virtual ossimString getClassName()const;
 
    /**
     *  @return Returns true on success, false on error.
@@ -64,7 +65,20 @@ public:
     */
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
                                                ossim_uint32 resLevel=0);
-   
+   /**
+    * Method to get a tile.   
+    *
+    * @param result The tile to stuff.  Note The requested rectangle in full
+    * image space and bands should be set in the result tile prior to
+    * passing.  It will be an error if:
+    * result.getNumberOfBands() != this->getNumberOfOutputBands()
+    *
+    * @return true on success false on error.  If return is false, result
+    *  is undefined so caller should handle appropriately with makeBlank or
+    * whatever.
+    */
+   virtual bool getTile(ossimImageData* result, ossim_uint32 resLevel=0);   
+
    /**
     *  Returns the number of bands in the image.
     *  Satisfies pure virtual requirement from ImageHandler class.
@@ -106,12 +120,9 @@ public:
                           const char* prefix=0);
    
    /**
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
+    *  Returns the image geometry object associated with this tile source or NULL if non defined.
     */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   virtual ossimImageGeometry* getImageGeometry();
    
    /**
     * Returns the output pixel type of the tile source.
@@ -160,7 +171,8 @@ public:
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
-private:
+protected:
+   virtual ~ossimAdrgTileSource();
    
    /**
     *  Adjust point to even 128 boundary.  Assumes 0,0 origin.
@@ -171,12 +183,13 @@ private:
     *  Returns true on success, false on error.
     */
    bool fillBuffer(const ossimIrect& tile_rect,
-                   const ossimIrect& clip_rect);
+                   const ossimIrect& clip_rect,
+                   ossimImageData* tile);
    
-   ossimRefPtr<ossimImageData>  theTile;
-   ossim_uint8*                 theTileBuffer;
-   std::ifstream                theFileStr;
-   ossimAdrgHeader*             theAdrgHeader;
+   ossimRefPtr<ossimImageData>  m_Tile;
+   ossim_uint8*                 m_TileBuffer;
+   std::ifstream                m_FileStr;
+   ossimAdrgHeader*             m_AdrgHeader;
 
 TYPE_DATA
 };

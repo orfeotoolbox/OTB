@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 14478 2009-05-08 18:24:22Z dburken $
+// $Id: ossimDate.h 14902 2009-07-17 11:26:20Z gpotts $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -40,6 +40,7 @@ public:
    
    int isValid (void) const;             // Test for validity
    
+   void now();
    int compare (ossimLocalTm const & t) const;      // Compare times
    int compare (std::time_t const tt) const;       // Compare times
    
@@ -65,51 +66,51 @@ public:
       ossimLocalTmFormatSepChar       = (int)0x4000,// Separate fields datech
       ossimLocalTmFormatSepSpace      = (int)0x8000,  // Separate fields space
       ossimLocalTmFormatInternational = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatMonText|ossimLocalTmFormatPadMon|
-                                                ossimLocalTmFormatSepSpace),
+                                              ossimLocalTmFormatSepSpace),
       ossimLocalTmFormatIntlShort     = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatMonText|ossimLocalTmFormatPadMon|
-                                                ossimLocalTmFormatSepSpace|ossimLocalTmFormatYearShort),
+                                              ossimLocalTmFormatSepSpace|ossimLocalTmFormatYearShort),
       ossimLocalTmFormatUsa           = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatMonFirst|ossimLocalTmFormatPadDMY|
-                                                ossimLocalTmFormatZeroDMY|ossimLocalTmFormatYearShort|ossimLocalTmFormatSepChar),
+                                              ossimLocalTmFormatZeroDMY|ossimLocalTmFormatYearShort|ossimLocalTmFormatSepChar),
       ossimLocalTmFormatEnglish       = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatYearShort|ossimLocalTmFormatPadDMY|
-                                                ossimLocalTmFormatZeroDMY|ossimLocalTmFormatSepChar),
+                                              ossimLocalTmFormatZeroDMY|ossimLocalTmFormatSepChar),
       ossimLocalTmFormatJapanese      = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatYearFirst|ossimLocalTmFormatPadDMY|
-                                                ossimLocalTmFormatZeroDMY|ossimLocalTmFormatYearShort|ossimLocalTmFormatMonFirst|
-                                                ossimLocalTmFormatSepChar),
+                                              ossimLocalTmFormatZeroDMY|ossimLocalTmFormatYearShort|ossimLocalTmFormatMonFirst|
+                                              ossimLocalTmFormatSepChar),
       ossimLocalTmFormatFull          = (int)(ossimLocalTmFormatDMY|ossimLocalTmFormatDayOfWeek|ossimLocalTmFormatMonText|
-                                                ossimLocalTmFormatSepSpace)
+                                              ossimLocalTmFormatSepSpace)
    };
    
    enum ossimTimeFormat  // Time format (nb: time zones not implemented)
-      {
-         ossimTimeFormatSecs          = (int)0x0001,         // Print seconds
-         ossimTimeFormatZeroSecs      = (int)0x0002,     // Zero fill seconds
-         ossimTimeFormatPadSecs       = (int)0x0004,      // Pad seconds to 2
-         ossimTimeFormatSecsAll       = (int)0x0007,
-         ossimTimeFormatTimeZone      = (int)0x0008,        // Print timezone
-         ossimTimeFormatMins          = (int)0x0010,         // Print minutes
-         ossimTimeFormatZeroMins      = (int)0x0020,     // Zero fill minutes
-         ossimTimeFormatPadMins       = (int)0x0040,      // Pad minutes to 2
-         ossimTimeFormatMinsAll       = (int)0x0070,
-         ossimTimeFormatTZNumeric     = (int)0x0080,      // Print numeric TZ
-         ossimTimeFormatHour          = (int)0x0100,            // Print hour
-         ossimTimeFormatZeroHour      = (int)0x0200,        // Zero fill hour
-         ossimTimeFormatPadHour       = (int)0x0400,  // Pad hour to 2 digits
-         ossimTimeFormatHourAll       = (int)0x0700,
-         ossimTimeFormat24hour        = (int)0x0800,          // 24hour clock
-         ossimTimeFormatSepChar       = (int)0x1000, // Separate field timech
-         ossimTimeFormatSepSpace      = (int)0x2000, // Separate fields space
-         ossimTimeFormatSepAbbrev     = (int)0x4000,     // Add abbreviations
-         ossimTimeFormatAmPm          = (int)0x8000,       // Add 'am' or 'pm'
-         ossimTimeFormatInternational = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormatSecsAll|
-                                              ossimTimeFormat24hour|ossimTimeFormatSepChar),
-         ossimTimeFormatShortTime     = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormat24hour|
-                                              ossimTimeFormatSepChar),
-         ossimTimeFormatClockTime     = (int)(ossimTimeFormatHour|ossimTimeFormatPadHour|ossimTimeFormatMinsAll|
-                                              ossimTimeFormatAmPm|ossimTimeFormatSepChar),
-         ossimTimeFormatLongTime      = (int)(ossimTimeFormatHour|ossimTimeFormatPadHour|ossimTimeFormatMinsAll|
-                                              ossimTimeFormatSecsAll|ossimTimeFormatSepAbbrev|ossimTimeFormatSepSpace),
-         ossimTimeFormatMillitary     = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormat24hour)
-      };
+   {
+      ossimTimeFormatSecs          = (int)0x0001,         // Print seconds
+      ossimTimeFormatZeroSecs      = (int)0x0002,     // Zero fill seconds
+      ossimTimeFormatPadSecs       = (int)0x0004,      // Pad seconds to 2
+      ossimTimeFormatSecsAll       = (int)0x0007,
+      ossimTimeFormatTimeZone      = (int)0x0008,        // Print timezone
+      ossimTimeFormatMins          = (int)0x0010,         // Print minutes
+      ossimTimeFormatZeroMins      = (int)0x0020,     // Zero fill minutes
+      ossimTimeFormatPadMins       = (int)0x0040,      // Pad minutes to 2
+      ossimTimeFormatMinsAll       = (int)0x0070,
+      ossimTimeFormatTZNumeric     = (int)0x0080,      // Print numeric TZ
+      ossimTimeFormatHour          = (int)0x0100,            // Print hour
+      ossimTimeFormatZeroHour      = (int)0x0200,        // Zero fill hour
+      ossimTimeFormatPadHour       = (int)0x0400,  // Pad hour to 2 digits
+      ossimTimeFormatHourAll       = (int)0x0700,
+      ossimTimeFormat24hour        = (int)0x0800,          // 24hour clock
+      ossimTimeFormatSepChar       = (int)0x1000, // Separate field timech
+      ossimTimeFormatSepSpace      = (int)0x2000, // Separate fields space
+      ossimTimeFormatSepAbbrev     = (int)0x4000,     // Add abbreviations
+      ossimTimeFormatAmPm          = (int)0x8000,       // Add 'am' or 'pm'
+      ossimTimeFormatInternational = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormatSecsAll|
+                                           ossimTimeFormat24hour|ossimTimeFormatSepChar),
+      ossimTimeFormatShortTime     = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormat24hour|
+                                           ossimTimeFormatSepChar),
+      ossimTimeFormatClockTime     = (int)(ossimTimeFormatHour|ossimTimeFormatPadHour|ossimTimeFormatMinsAll|
+                                           ossimTimeFormatAmPm|ossimTimeFormatSepChar),
+      ossimTimeFormatLongTime      = (int)(ossimTimeFormatHour|ossimTimeFormatPadHour|ossimTimeFormatMinsAll|
+                                           ossimTimeFormatSecsAll|ossimTimeFormatSepAbbrev|ossimTimeFormatSepSpace),
+      ossimTimeFormatMillitary     = (int)(ossimTimeFormatHourAll|ossimTimeFormatMinsAll|ossimTimeFormat24hour)
+   };
    
    
    static char timech;    // Character used for time separator
@@ -123,7 +124,7 @@ public:
                        int tf =timefmt) const;
    std::ostream& printTime(std::ostream & os, int f =timefmt) const;
    std::ostream& printDate(std::ostream & os, int f =datefmt) const;
-
+   
    /**
     * @brief method to dump all the data members.  This is the tm struct +
     * the theFractionalSecond from this class.
@@ -136,57 +137,57 @@ public:
     * @return stream.
     */
    std::ostream& dump(std::ostream& os) const;
-
-
-    int getYear()const;
-
-    int getShortYear()const;
-    
-    /*!
-     * This is one based i.e. values are returned between 1-12
-     */
-    int getMonth()const;
-    
-    /*!
-     * returns the day 1-31
-     */
-    int getDay()const;
-    double getJulian()const;
-    double getModifiedJulian()const;
-
-    ossimLocalTm& setDay(int day);
+   
+   
+   int getYear()const;
+   
+   int getShortYear()const;
+   
+   /*!
+    * This is one based i.e. values are returned between 1-12
+    */
+   int getMonth()const;
+   
+   /*!
+    * returns the day 1-31
+    */
+   int getDay()const;
+   double getJulian()const;
+   double getModifiedJulian()const;
+   
+   ossimLocalTm& setDay(int day);
    /*!
     * The month is a number bewteen 1 and 12.  We will shift it to the internal
     * representation
     */
-    ossimLocalTm& setMonth(int month);
-    ossimLocalTm& setYear(int year);
-    ossimLocalTm& setDateFromJulian(double jd);
-    ossimLocalTm& setDateFromModifiedJulian(double mjd);
-
-    void setFractionalDay(double fractionalDay);
-    static void extractHmsFromFractionalDay(double fractionalDay,
-                                            int &h,
-                                            int &m,
-                                            int &s,
-                                            double& fractionalSecond);
-    int getHour()const;
-    int getMin()const;
-    int getSec()const;
-    double getFractionalSecond()const;
-    ossimLocalTm& setHour(int h);
-    ossimLocalTm& setMin(int m);
+   ossimLocalTm& setMonth(int month);
+   ossimLocalTm& setYear(int year);
+   ossimLocalTm& setDateFromJulian(double jd);
+   ossimLocalTm& setDateFromModifiedJulian(double mjd);
+   
+   void setFractionalDay(double fractionalDay);
+   static void extractHmsFromFractionalDay(double fractionalDay,
+                                           int &h,
+                                           int &m,
+                                           int &s,
+                                           double& fractionalSecond);
+   int getHour()const;
+   int getMin()const;
+   int getSec()const;
+   double getFractionalSecond()const;
+   ossimLocalTm& setHour(int h);
+   ossimLocalTm& setMin(int m);
    ossimLocalTm& setSec(int s);
    ossimLocalTm& setFloatSec(double s);
-    ossimLocalTm& setFractionalSecond(double fractS);
-
-    /**
-     * getTicks() will call getEpoc.  This is te number of microseconds passed
-     * since (00:00:00 UTC, January 1, 1970)
-     */ 
-    time_t getTicks()const;
-    time_t getEpoc()const;
-    
+   ossimLocalTm& setFractionalSecond(double fractS);
+   
+   /**
+    * getTicks() will call getEpoc.  This is te number of microseconds passed
+    * since (00:00:00 UTC, January 1, 1970)
+    */ 
+   time_t getTicks()const;
+   time_t getEpoc()const;
+   
    void addSeconds(ossim_float64 n);
    void addMinutes(ossim_float64 n);
    void addHours(ossim_float64 n);
@@ -196,22 +197,24 @@ public:
    ossim_float64 deltaInMinutes(const ossimLocalTm& d)const;
    ossim_float64 delatInHours(const ossimLocalTm& d)const;
    ossim_float64 deltaInDays(const ossimLocalTm& d)const;
-    /**
-     * Will not adjust for timezone.  The passed in value is based on seconds.
-     */ 
-    void setTimeNoAdjustmentGivenEpoc(time_t ticks);
-
-    /**
-     * Will adjust for timezone. The passed in value is based on seconds.
-     */ 
-    void setTimeGivenEpoc(time_t ticks);
-    
+   
+   ossimLocalTm convertToGmt()const;
+   /**
+    * Will not adjust for timezone.  The passed in value is based on seconds.
+    */ 
+   void setTimeNoAdjustmentGivenEpoc(time_t ticks);
+   
+   /**
+    * Will adjust for timezone. The passed in value is based on seconds.
+    */ 
+   void setTimeGivenEpoc(time_t ticks);
+   
    bool setIso8601(const std::string& timeString, bool shiftToGmtOffsetZero=false);
    
-    ossimRefPtr<ossimXmlNode> saveXml()const;
-    bool loadXml(ossimRefPtr<ossimXmlNode> dateNode);
-    
- protected:
+   ossimRefPtr<ossimXmlNode> saveXml()const;
+   bool loadXml(ossimRefPtr<ossimXmlNode> dateNode);
+   
+protected:
    // Time suffix
    void tSfx(std::ostream & os, int fmt, char ch) const;
    // Time field formatters
@@ -224,7 +227,7 @@ public:
    void pDate(std::ostream & os, int fmt) const;
    void pMonth(std::ostream & os, int fmt) const;
    void pYear(std::ostream & os, int fmt) const;
-
+   
    double theFractionalSecond;
 };
 

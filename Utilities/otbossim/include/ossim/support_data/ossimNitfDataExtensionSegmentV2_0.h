@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfDataExtensionSegmentV2_0.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfDataExtensionSegmentV2_0.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNitfDataExtensionSegmentV2_0_HEADER
 #define ossimNitfDataExtensionSegmentV2_0_HEADER
 #include <ossim/support_data/ossimNitfDataExtensionSegment.h>
@@ -35,13 +35,14 @@ class OSSIMDLLEXPORT ossimNitfDataExtensionSegmentV2_0 : public ossimNitfDataExt
 {
 public:
    ossimNitfDataExtensionSegmentV2_0();
-   virtual ~ossimNitfDataExtensionSegmentV2_0();
    virtual void parseStream(std::istream &in);
    virtual std::ostream& print(std::ostream& out)const;
    virtual const ossimNitfTagInformation&  getTagInformation()const
       {
          return theTag;
       }
+protected:
+   virtual ~ossimNitfDataExtensionSegmentV2_0();
 
 private:
    void clearFields();

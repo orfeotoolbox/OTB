@@ -6,7 +6,7 @@
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimEastingNorthingCutter.cpp 13711 2008-10-14 16:49:38Z gpotts $
+// $Id: ossimEastingNorthingCutter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <sstream>
@@ -44,11 +44,6 @@ ossimEastingNorthingCutter::ossimEastingNorthingCutter(ossimImageSource* inputSo
 
 ossimEastingNorthingCutter::~ossimEastingNorthingCutter()
 {
-   if(theViewProjection)
-   {
-      delete theViewProjection;
-      theViewProjection = 0;
-   }
 }
 
 void ossimEastingNorthingCutter::setEastingNorthingRectangle(const ossimDpt& ul,
@@ -142,8 +137,7 @@ bool ossimEastingNorthingCutter::loadState(const ossimKeywordlist& kwl,
    return ossimRectangleCutFilter::loadState(kwl, prefix);
 }
 
-bool ossimEastingNorthingCutter::setView(ossimObject* baseObject,
-                                         bool ownsTheView)
+bool ossimEastingNorthingCutter::setView(ossimObject* baseObject)
 {
    ossimProjection* tempProj = PTR_CAST(ossimProjection,
                                         baseObject);
@@ -152,20 +146,8 @@ bool ossimEastingNorthingCutter::setView(ossimObject* baseObject,
       return false;
    }
    
-   if(theViewProjection)
-   {
-      delete theViewProjection;
-      theViewProjection = 0;
-   }
 
-   if(ownsTheView)
-   {
-      theViewProjection = tempProj;
-   }
-   else
-   {
-      theViewProjection = (ossimProjection*)tempProj->dup();
-   }
+   theViewProjection = tempProj;
 
    transformVertices();
 
@@ -174,12 +156,12 @@ bool ossimEastingNorthingCutter::setView(ossimObject* baseObject,
 
 ossimObject* ossimEastingNorthingCutter::getView()
 {
-   return theViewProjection;
+   return theViewProjection.get();
 }
 
 const ossimObject* ossimEastingNorthingCutter::getView()const
 {
-   return theViewProjection;
+   return theViewProjection.get();
 }
 
 void ossimEastingNorthingCutter::transformVertices()
@@ -194,7 +176,7 @@ void ossimEastingNorthingCutter::transformVertices()
    }
 
    ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection,
-                                          theViewProjection);
+                                          theViewProjection.get());
    ossimDpt ul;
    ossimDpt lr;
    ossimDpt easting;

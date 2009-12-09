@@ -6,12 +6,13 @@
 // Author: Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimGeoAnnotationSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationSource_HEADER
 #define ossimGeoAnnotationSource_HEADER
 
 #include <iostream>
 #include <ossim/imaging/ossimAnnotationSource.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/base/ossimViewInterface.h>
 
 class ossimGeoAnnotationObject;
@@ -23,14 +24,13 @@ class OSSIM_DLL ossimGeoAnnotationSource :
 {
 public:
    friend std::ostream& operator <<(std::ostream& out, const ossimGeoAnnotationSource& rhs);
-   ossimGeoAnnotationSource(ossimProjection* projection=NULL,
+   ossimGeoAnnotationSource(ossimImageGeometry* geom=NULL,
                             bool ownsProjectionFlag=false);
 
    ossimGeoAnnotationSource(ossimImageSource* inputSource,
-                            ossimProjection* projection=NULL,
+                            ossimImageGeometry* geom=NULL,
                             bool ownsProjectionFlag=false);
 
-   virtual ~ossimGeoAnnotationSource();
    
    /*!
     * Will add an object to the list.
@@ -39,13 +39,10 @@ public:
     */
    virtual bool addObject(ossimAnnotationObject* anObject);
    virtual void computeBoundingRect();
-   virtual void transformObjects(ossimProjection* projection=0);
-   virtual void setProjection(ossimProjection* projection,
-                              bool ownsProjectionFlag=false);
-   virtual bool setView(ossimObject* baseObject,
-                        bool ownsTheView = false);
-    virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   virtual void transformObjects(ossimImageGeometry* geom=0);
+   virtual void setGeometry(ossimImageGeometry* projection);
+   virtual bool setView(ossimObject* baseObject);
+   virtual ossimImageGeometry*  getImageGeometry();
   
    virtual ossimObject*       getView();
    virtual const ossimObject* getView()const;
@@ -64,10 +61,9 @@ public:
                           const char* prefix=0);
    
 protected:
-   ossimProjection* theProjection;
-   bool           theOwnsProjectionFlag;
+   virtual ~ossimGeoAnnotationSource();
    
-   void removeProjection();
+   ossimRefPtr<ossimImageGeometry> m_geometry;
    
 TYPE_DATA
 };

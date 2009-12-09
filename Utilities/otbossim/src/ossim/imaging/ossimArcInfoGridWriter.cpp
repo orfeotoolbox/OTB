@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimArcInfoGridWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimArcInfoGridWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstring>
 #include <cstdio>
@@ -65,18 +65,16 @@ ossimArcInfoGridWriter::~ossimArcInfoGridWriter()
 bool ossimArcInfoGridWriter::writeFile()
 {
    const char* MODULE = "ossimArcInfoGridWriter::writeFile";
-   
-   ossimCastTileSourceFilter* filter = new ossimCastTileSourceFilter;
-   filter->setOutputScalarType(OSSIM_FLOAT);
-   filter->connectMyInputTo(theInputConnection);
-   filter->initialize();
-   
    if(!theInputConnection)
    {
-      delete filter;
-      
       return false;
    }
+   
+   ossimRefPtr<ossimCastTileSourceFilter> filter = new ossimCastTileSourceFilter;
+   filter->setOutputScalarType(OSSIM_FLOAT);
+   filter->connectMyInputTo(theInputConnection.get());
+   filter->initialize();
+   
    open();
 
    // make sure we have a region of interest
@@ -187,7 +185,7 @@ bool ossimArcInfoGridWriter::writeFile()
    }
    
    close();
-   delete filter;
+   filter = 0;
    return result;
 }
 

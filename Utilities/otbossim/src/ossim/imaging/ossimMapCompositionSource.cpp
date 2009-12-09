@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.cpp 13966 2009-01-14 16:31:17Z gpotts $
+// $Id: ossimMapCompositionSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -28,14 +28,11 @@
 #include <ossim/base/ossimTextProperty.h>
 #include <ossim/base/ossimNumericProperty.h>
 #include <ossim/base/ossimStringProperty.h>
-
 #include <sstream>
+
 using namespace std;
 
-static const char* GRID_TYPE_ENUM_NAMES[] = {"none",
-                                             "line",
-                                             "reseaux"};
-
+static const char* GRID_TYPE_ENUM_NAMES[]     = {"none", "line", "reseaux"};
 static const char* VIEW_WIDTH_KW              = "view_width";
 static const char* VIEW_HEIGHT_KW             = "view_height";
 static const char* METER_GRID_SPACING_X_KW    = "meter_grid_spacing_x";
@@ -63,7 +60,6 @@ static const char* TOP_METER_LABEL_COLOR_KW     = "top_meter_label_color";
 static const char* BOTTOM_METER_LABEL_COLOR_KW  = "bottom_meter_label_color";
 static const char* LEFT_METER_LABEL_COLOR_KW    = "left_meter_label_color";
 static const char* RIGHT_METER_LABEL_COLOR_KW   = "right_meter_label_color";
-
 
 static const char* TOP_GEO_LABEL_FORMAT_KW    = "top_geo_label_format";
 static const char* BOTTOM_GEO_LABEL_FORMAT_KW = "bottom_geo_label_format";
@@ -144,8 +140,7 @@ ossimMapCompositionSource::ossimMapCompositionSource()
     theLeftMeterTickFlag(false),
     theRightMeterTickFlag(false),
     theGeographicSpacing(1.0, 1.0),
-    theMeterSpacing(3600*30, 3600*30),
-    theInputProjection(NULL)
+    theMeterSpacing(3600*30, 3600*30)
 {
    theViewWidthHeight = ossimIpt(-1,-1);
    vector<ossimFontInformation> info;
@@ -157,7 +152,7 @@ ossimMapCompositionSource::ossimMapCompositionSource()
       theGeographicTopLabelFontInfo = info[0];
       theGeographicTopLabelFontInfo.thePointSize = ossimIpt(12,12);
 
-      if(theGeographicTopLabelFont)
+      if(theGeographicTopLabelFont.valid())
       {
          theGeographicBottomLabelFont     = (ossimFont*)theGeographicTopLabelFont->dup();
          theGeographicBottomLabelFontInfo = theGeographicTopLabelFontInfo;
@@ -184,62 +179,16 @@ ossimMapCompositionSource::ossimMapCompositionSource()
 
 ossimMapCompositionSource::~ossimMapCompositionSource()
 {
-   if(theInputProjection)
-   {
-      delete theInputProjection;
-      theInputProjection = NULL;
-   }
-   
-   if(theGeographicTopLabelFont)
-   {
-      delete theGeographicTopLabelFont;
-      theGeographicTopLabelFont = NULL;
-   }
-   if(theGeographicBottomLabelFont)
-   {
-      delete theGeographicBottomLabelFont;
-      theGeographicBottomLabelFont = NULL;
-   }
-   if(theGeographicLeftLabelFont)
-   {
-      delete theGeographicLeftLabelFont;
-      theGeographicLeftLabelFont = NULL;
-   }
-   if(theGeographicRightLabelFont)
-   {
-      delete theGeographicRightLabelFont;
-      theGeographicRightLabelFont = NULL;
-   }
+   theGeographicTopLabelFont = 0;
+   theGeographicBottomLabelFont = 0;
+   theGeographicLeftLabelFont = 0;
+   theGeographicRightLabelFont = 0;
+   theMeterTopLabelFont = 0;
+   theMeterBottomLabelFont = 0;
+   theMeterLeftLabelFont = 0;
 
-   if(theMeterTopLabelFont)
-   {
-      delete theMeterTopLabelFont;
-      theMeterTopLabelFont = NULL;
-   }
-   
-   if(theMeterBottomLabelFont)
-   {
-      delete theMeterBottomLabelFont;
-      theMeterBottomLabelFont = NULL;
-   }
-
-   if(theMeterLeftLabelFont)
-   {
-      delete theMeterLeftLabelFont;
-      theMeterLeftLabelFont = NULL;
-   }
-
-   if(theMeterRightLabelFont)
-   {
-      delete theMeterRightLabelFont;
-      theMeterRightLabelFont = NULL;
-   }
-   
-   if(theTitleFont)
-   {
-      delete theTitleFont;
-      theTitleFont = NULL;
-   }
+   theMeterRightLabelFont = 0;
+   theTitleFont = 0;
    deleteFixedAnnotations();
 }
 
@@ -374,12 +323,7 @@ void ossimMapCompositionSource::setTitleFont(const ossimFontInformation& fontInf
    ossimFont* font = ossimFontFactoryRegistry::instance()->createFont(fontInfo);
    if(font)
    {
-      if(theTitleFont)
-      {
-         delete theTitleFont;
-         theTitleFont = NULL;
-      }
-
+ 
       theTitleFont     = font;
       theTitleFontInfo = fontInfo;      
    }
@@ -407,16 +351,10 @@ void ossimMapCompositionSource::setGeographicTopLabelFont(const ossimFontInforma
 
    if(font)
    {
-      if(theGeographicTopLabelFont)
-      {
-         delete theGeographicTopLabelFont;
-         theGeographicTopLabelFont = NULL;
-      }
-      
       if(traceDebug())
       {
          CLOG << "Previous font info " <<endl
-              << theGeographicTopLabelFont << endl;
+              << theGeographicTopLabelFont.get() << endl;
       }
       theGeographicTopLabelFont = font;
       theGeographicTopLabelFontInfo = fontInfo;
@@ -424,7 +362,7 @@ void ossimMapCompositionSource::setGeographicTopLabelFont(const ossimFontInforma
       if(traceDebug())
       {
          CLOG << "New font info " <<endl
-              << theGeographicTopLabelFont << endl;
+              << theGeographicTopLabelFont.get() << endl;
       }      
    }
 }
@@ -439,12 +377,6 @@ void ossimMapCompositionSource::setGeographicBottomLabelFont(const ossimFontInfo
 
    if(font)
    {
-      if(theGeographicBottomLabelFont)
-      {
-         delete theGeographicBottomLabelFont;
-         theGeographicBottomLabelFont = NULL;
-      }
-      
       theGeographicBottomLabelFont     = font;
       theGeographicBottomLabelFontInfo = fontInfo;
 
@@ -461,12 +393,6 @@ void ossimMapCompositionSource::setGeographicLeftLabelFont(const ossimFontInform
 
    if(font)
    {
-      if(theGeographicLeftLabelFont)
-      {
-         delete theGeographicLeftLabelFont;
-         theGeographicLeftLabelFont = NULL;
-      }
-      
       theGeographicLeftLabelFont     = font;
       theGeographicLeftLabelFontInfo = fontInfo;
 
@@ -484,12 +410,6 @@ void ossimMapCompositionSource::setGeographicRightLabelFont(const ossimFontInfor
 
    if(font)
    {
-      if(theGeographicRightLabelFont)
-      {
-         delete theGeographicRightLabelFont;
-         theGeographicRightLabelFont = NULL;
-      }
-      
       theGeographicRightLabelFont = font;
       theGeographicRightLabelFontInfo = fontInfo;
    }
@@ -506,12 +426,6 @@ void ossimMapCompositionSource::setMeterTopLabelFont(const ossimFontInformation&
 
    if(font)
    {
-      if(theMeterTopLabelFont)
-      {
-         delete theMeterTopLabelFont;
-         theMeterTopLabelFont = NULL;
-      }
-      
       theMeterTopLabelFont     = font;
       theMeterTopLabelFontInfo = fontInfo;
    }
@@ -527,12 +441,6 @@ void ossimMapCompositionSource::setMeterBottomLabelFont(const ossimFontInformati
 
    if(font)
    {
-      if(theMeterBottomLabelFont)
-      {
-         delete theMeterBottomLabelFont;
-         theMeterBottomLabelFont = NULL;
-      }
-      
       theMeterBottomLabelFont     = font;
       theMeterBottomLabelFontInfo = fontInfo;
    }
@@ -548,12 +456,6 @@ void ossimMapCompositionSource::setMeterLeftLabelFont(const ossimFontInformation
 
    if(font)
    {
-      if(theMeterLeftLabelFont)
-      {
-         delete theMeterLeftLabelFont;
-         theMeterLeftLabelFont = NULL;
-      }
-      
       theMeterLeftLabelFont     = font;
       theMeterLeftLabelFontInfo = fontInfo;
    }
@@ -569,12 +471,6 @@ void ossimMapCompositionSource::setMeterRightLabelFont(const ossimFontInformatio
 
    if(font)
    {
-      if(theMeterRightLabelFont)
-      {
-         delete theMeterRightLabelFont;
-         theMeterRightLabelFont = NULL;
-      }
-      
       theMeterRightLabelFont     = font;
       theMeterRightLabelFontInfo = fontInfo;
    }
@@ -655,26 +551,7 @@ void ossimMapCompositionSource::initialize()
    theTile = 0;
    if(theInputConnection)
    {
-      if(theInputProjection)
-      {
-         delete theInputProjection;
-         theInputProjection = NULL;
-      }
-      
       computeBorderRects();
-
-      ossimKeywordlist kwl;
-      
-      theInputConnection->getImageGeometry(kwl);
-      ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-      
-      theInputProjection = PTR_CAST(ossimMapProjection, proj);
-      if(!theInputProjection&&proj)
-      {
-         delete proj;
-         proj = NULL;
-      }
-
       layoutAnnotations();
    }
    else 
@@ -794,26 +671,20 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
       }
       return;
    }
-   if(theInputConnection&&theInputProjection)
+   
+   if(theInputConnection)
    { 
+      const ossimMapProjection* mapProj = inputMapProjection();
       ossimGpt gpt[4];
       ossimDrect rect = getViewingRect();
 
       if(rect.hasNans()) return;
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gpt[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gpt[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gpt[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gpt[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gpt[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gpt[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gpt[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gpt[3]);
       
-      ossimDrect grect(gpt[0],
-                       gpt[1],
-                       gpt[2],
-                       gpt[3],
-                       OSSIM_RIGHT_HANDED);
+      ossimDrect grect(gpt[0], gpt[1], gpt[2], gpt[3], OSSIM_RIGHT_HANDED);
 
       if(grect.hasNans()) return;
       ossimDpt ulLatLon(((int)((grect.ul().x-theGeographicSpacing.x)/theGeographicSpacing.x))*theGeographicSpacing.x,
@@ -863,16 +734,11 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                        0.0,
                        gpt[0].datum());
          
-         theInputProjection->worldToLineSample(tgpt,
-                                               tipt);
-         
-         theInputProjection->worldToLineSample(bgpt,
-                                               bipt);
+         mapProj->worldToLineSample(tgpt, tipt);
+         mapProj->worldToLineSample(bgpt, bipt);
 
          
-         if((!tipt.hasNans()&&
-             !bipt.hasNans()) &&
-            rect.clip(tipt, bipt))
+         if((!tipt.hasNans()&& !bipt.hasNans()) && rect.clip(tipt, bipt))
          {
             ossimIpt rounded(tipt);
             if( (rounded.x >= rect.ul().x)&&
@@ -883,17 +749,15 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                   ossimDms dms(tgpt.lond(), false);
                
                   ossimString dmsString = dms.toString(theTopGeographicFormat.c_str());
-                  ossimAnnotationFontObject* lonLabel = new ossimAnnotationFontObject(ossimIpt(0,0),
-                                                                                      dmsString);
-                  lonLabel->setFont(theGeographicTopLabelFont, false);
-
+                  ossimAnnotationFontObject* lonLabel = 
+                     new ossimAnnotationFontObject(ossimIpt(0,0), dmsString);
+                  lonLabel->setFont(theGeographicTopLabelFont.get());
                   lonLabel->setGeometryInformation(theGeographicTopLabelFontInfo);
                   lonLabel->computeBoundingRect();
                   ossimDrect boundsD;
                   lonLabel->getBoundingRect(boundsD);
                   
-                  ossimIpt center( rounded.x,
-                                   ossim::round<int>(rect.ul().y-(boundsD.height()/2)));
+                  ossimIpt center( rounded.x, ossim::round<int>(rect.ul().y-(boundsD.height()/2)));
                
                   lonLabel->setColor(theTopGeographicLabelColor.getR(), theTopGeographicLabelColor.getG(), theTopGeographicLabelColor.getB());
                   lonLabel->setCenterPosition(center);
@@ -916,10 +780,9 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                }
                if(theTopGeographicTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(rounded.x,
-                                                                                                ossim::round<int>(rect.ul().y-24)),
-                                                                                       ossimIpt(rounded.x,
-                                                                                                ossim::round<int>(rect.ul().y)));
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject
+                     (ossimIpt(rounded.x,ossim::round<int>(rect.ul().y-24)),
+                      ossimIpt(rounded.x, ossim::round<int>(rect.ul().y)));
                   lineLabel->setColor(theTopGeographicLabelColor.getR(), theTopGeographicLabelColor.getG(), theTopGeographicLabelColor.getB());
                   addFixedAnnotation(lineLabel);
                }
@@ -939,26 +802,20 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
    {
       return;
    }
-   if(theInputConnection&&theInputProjection)
+
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimGpt gpt[4];
       ossimDrect rect = getViewingRect();
 
       if(rect.hasNans()) return;
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gpt[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gpt[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gpt[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gpt[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gpt[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gpt[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gpt[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gpt[3]);
       
-      ossimDrect grect(gpt[0],
-                       gpt[1],
-                       gpt[2],
-                       gpt[3],
-                       OSSIM_RIGHT_HANDED);
+      ossimDrect grect(gpt[0], gpt[1], gpt[2], gpt[3], OSSIM_RIGHT_HANDED);
 
       if(grect.hasNans()) return;
       ossimDpt ulLatLon(((int)((grect.ul().x-theGeographicSpacing.x)/theGeographicSpacing.x))*theGeographicSpacing.x,
@@ -1004,11 +861,8 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                        0.0,
                        gpt[0].datum());
          
-         theInputProjection->worldToLineSample(tgpt,
-                                               tipt);
-         
-         theInputProjection->worldToLineSample(bgpt,
-                                               bipt);
+         mapProj->worldToLineSample(tgpt, tipt);
+         mapProj->worldToLineSample(bgpt, bipt);
 
          if(rect.clip(tipt, bipt))
          {
@@ -1024,7 +878,7 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                   ossimAnnotationFontObject* lonLabel = new ossimAnnotationFontObject(ossimIpt(0,0),
                                                                                       dmsString);
                   lonLabel->setGeometryInformation(theGeographicBottomLabelFontInfo);
-                  lonLabel->setFont(theGeographicBottomLabelFont, false);
+                  lonLabel->setFont(theGeographicBottomLabelFont.get());
 //                  lonLabel->setFont(theGeographicBottomLabelFont->dup());
                   
                   lonLabel->computeBoundingRect();
@@ -1078,20 +932,18 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
    {
       return;
    }
-   if(theInputConnection&&theInputProjection)
+   
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimGpt gpt[4];
       ossimDrect rect = getViewingRect();
 
       if(rect.hasNans()) return;
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gpt[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gpt[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gpt[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gpt[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gpt[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gpt[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gpt[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gpt[3]);
       
       ossimDrect grect(gpt[0],
                        gpt[1],
@@ -1141,11 +993,8 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                        gpt[0].datum());
 
          
-         theInputProjection->worldToLineSample(lgpt,
-                                               lipt);
-
-         theInputProjection->worldToLineSample(rgpt,
-                                               ript);
+         mapProj->worldToLineSample(lgpt, lipt);
+         mapProj->worldToLineSample(rgpt, ript);
          if(rect.clip(lipt, ript))
          {
             ossimIpt rounded(lipt);
@@ -1160,7 +1009,7 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                   ossimAnnotationFontObject* latLabel = new ossimAnnotationFontObject(ossimIpt(0,0),
                                                                                       dmsString);
                   latLabel->setGeometryInformation(theGeographicLeftLabelFontInfo);
-                  latLabel->setFont(theGeographicLeftLabelFont, false);
+                  latLabel->setFont(theGeographicLeftLabelFont.get());
 //                  latLabel->setFont(theGeographicLeftLabelFont->dup());
                   
                   latLabel->computeBoundingRect();
@@ -1216,20 +1065,18 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
    {
       return;
    }
-   if(theInputConnection&&theInputProjection)
+
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimGpt gpt[4];
       ossimDrect rect = getViewingRect();
 
       if(rect.hasNans()) return;
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gpt[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gpt[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gpt[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gpt[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gpt[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gpt[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gpt[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gpt[3]);
       
       ossimDrect grect(gpt[0],
                        gpt[1],
@@ -1279,11 +1126,8 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                        gpt[0].datum());
          
          
-         theInputProjection->worldToLineSample(lgpt,
-                                               lipt);
-         
-         theInputProjection->worldToLineSample(rgpt,
-                                               ript);
+         mapProj->worldToLineSample(lgpt, lipt);
+         mapProj->worldToLineSample(rgpt, ript);
          
          if(rect.clip(lipt, ript))
          {
@@ -1299,7 +1143,7 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                   ossimAnnotationFontObject* latLabel = new ossimAnnotationFontObject(ossimIpt(0,0),
                                                                                       dmsString);
                   latLabel->setGeometryInformation(theGeographicRightLabelFontInfo);
-                  latLabel->setFont(theGeographicRightLabelFont, false);
+                  latLabel->setFont(theGeographicRightLabelFont.get());
 //                  latLabel->setFont(theGeographicRightLabelFont->dup());
                   latLabel->computeBoundingRect();
                   ossimDrect boundsD;
@@ -1350,20 +1194,17 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
 
 void ossimMapCompositionSource::addGeographicGridLines()
 {
-   if(theInputConnection&&theInputProjection)
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimGpt gpt[4];
       ossimDrect rect = getViewingRect();
 
       if(rect.hasNans()) return;
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gpt[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gpt[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gpt[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gpt[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gpt[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gpt[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gpt[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gpt[3]);
       
       ossimDrect grect(gpt[0],
                        gpt[1],
@@ -1415,11 +1256,8 @@ void ossimMapCompositionSource::addGeographicGridLines()
                        0.0,
                        gpt[0].datum());
          
-         theInputProjection->worldToLineSample(tgpt,
-                                               tipt);
-         
-         theInputProjection->worldToLineSample(bgpt,
-                                               bipt);
+         mapProj->worldToLineSample(tgpt, tipt);
+         mapProj->worldToLineSample(bgpt, bipt);
 
          if(rect.clip(tipt, bipt))
          {
@@ -1444,10 +1282,8 @@ void ossimMapCompositionSource::addGeographicGridLines()
                        0.0,
                        gpt[0].datum());
 
-         theInputProjection->worldToLineSample(lgpt,
-                                               lipt);
-         theInputProjection->worldToLineSample(rgpt,
-                                               ript);
+         mapProj->worldToLineSample(lgpt, lipt);
+         mapProj->worldToLineSample(rgpt, ript);
          
          if(rect.clip(lipt, ript))
          {
@@ -1466,19 +1302,16 @@ void ossimMapCompositionSource::addGeographicGridLines()
 
 void ossimMapCompositionSource::addGeographicGridReseaux()
 {
-   if(theInputConnection&&theInputProjection)
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimGpt gptArray[4];
       ossimDrect rect = getViewingRect();
       
-      theInputProjection->lineSampleToWorld(rect.ul(),
-                                            gptArray[0]);
-      theInputProjection->lineSampleToWorld(rect.ur(),
-                                            gptArray[1]);
-      theInputProjection->lineSampleToWorld(rect.lr(),
-                                            gptArray[2]);
-      theInputProjection->lineSampleToWorld(rect.ll(),
-                                            gptArray[3]);
+      mapProj->lineSampleToWorld(rect.ul(), gptArray[0]);
+      mapProj->lineSampleToWorld(rect.ur(), gptArray[1]);
+      mapProj->lineSampleToWorld(rect.lr(), gptArray[2]);
+      mapProj->lineSampleToWorld(rect.ll(), gptArray[3]);
       
       ossimDrect grect(gptArray[0],
                        gptArray[1],
@@ -1507,9 +1340,7 @@ void ossimMapCompositionSource::addGeographicGridReseaux()
                          0.0,
                          gptArray[0].datum());
             
-            
-            theInputProjection->worldToLineSample(gpt,
-                                                  ipt);
+            mapProj->worldToLineSample(gpt, ipt);
 
             ossimIpt rounded(ipt);
             if(rect.pointWithin(ossimDpt(rounded)))
@@ -1539,26 +1370,18 @@ void ossimMapCompositionSource::addGeographicGridReseaux()
 
 void ossimMapCompositionSource::addMeterGridLines()
 {
-   if(theInputConnection&&theInputProjection)
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimDpt dptArray[4];
       ossimDrect rect = getViewingRect();
       
-      theInputProjection->lineSampleToEastingNorthing(rect.ul(),
-                                                      dptArray[0]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ur(),
-                                                      dptArray[1]);
-      theInputProjection->lineSampleToEastingNorthing(rect.lr(),
-                                                      dptArray[2]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ll(),
-                                                      dptArray[3]);
+      mapProj->lineSampleToEastingNorthing(rect.ul(), dptArray[0]);
+      mapProj->lineSampleToEastingNorthing(rect.ur(), dptArray[1]);
+      mapProj->lineSampleToEastingNorthing(rect.lr(), dptArray[2]);
+      mapProj->lineSampleToEastingNorthing(rect.ll(), dptArray[3]);
       
-      
-      ossimDrect drect(dptArray[0],
-                       dptArray[1],
-                       dptArray[2],
-                       dptArray[3],
-                       OSSIM_RIGHT_HANDED);
+      ossimDrect drect(dptArray[0], dptArray[1], dptArray[2], dptArray[3], OSSIM_RIGHT_HANDED);
       
       ossimDpt ulMeter(((int)((drect.ul().x-theMeterSpacing.x)/theMeterSpacing.x))*theMeterSpacing.x,
                        ((int)((drect.ul().y+theMeterSpacing.y)/theMeterSpacing.y))*theMeterSpacing.y);
@@ -1577,17 +1400,12 @@ void ossimMapCompositionSource::addMeterGridLines()
          ossimDpt tipt; // top
          ossimDpt bipt; // bottom
 
-         ossimDpt tdpt(horizontal,
-                       meterSpacing.ul().y);
+         ossimDpt tdpt(horizontal, meterSpacing.ul().y);
 
-         ossimDpt bdpt(horizontal,
-                       meterSpacing.lr().y);
+         ossimDpt bdpt(horizontal, meterSpacing.lr().y);
          
-         theInputProjection->eastingNorthingToLineSample(tdpt,
-                                                         tipt);
-         
-         theInputProjection->eastingNorthingToLineSample(bdpt,
-                                                         bipt);
+         mapProj->eastingNorthingToLineSample(tdpt, tipt);
+         mapProj->eastingNorthingToLineSample(bdpt, bipt);
          
          if(rect.clip(tipt, bipt))
          {
@@ -1605,20 +1423,15 @@ void ossimMapCompositionSource::addMeterGridLines()
       {
          ossimDpt lipt;
          ossimDpt ript;
-         ossimDpt ldpt(meterSpacing.ul().x,
-                       vertical);
-         ossimDpt rdpt(meterSpacing.ur().x,
-                       vertical);
+         ossimDpt ldpt(meterSpacing.ul().x, vertical);
+         ossimDpt rdpt(meterSpacing.ur().x, vertical);
 
-         theInputProjection->eastingNorthingToLineSample(ldpt,
-                                                         lipt);
-         theInputProjection->eastingNorthingToLineSample(rdpt,
-                                                         ript);
+         mapProj->eastingNorthingToLineSample(ldpt,  lipt);
+         mapProj->eastingNorthingToLineSample(rdpt,  ript);
          
          if(rect.clip(lipt, ript))
          {
-            ossimAnnotationLineObject* line = new ossimAnnotationLineObject(lipt,
-                                                                            ript);
+            ossimAnnotationLineObject* line = new ossimAnnotationLineObject(lipt, ript);
          
             line->setColor(theMeterGridColor.getR(),
                            theMeterGridColor.getG(),
@@ -1632,19 +1445,16 @@ void ossimMapCompositionSource::addMeterGridLines()
 
 void ossimMapCompositionSource::addMeterGridLabels()
 {
-   if(theInputConnection&&theInputProjection)
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    {
       ossimDpt dptArray[4];
       ossimDrect rect = getViewingRect();
       
-      theInputProjection->lineSampleToEastingNorthing(rect.ul(),
-                                                      dptArray[0]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ur(),
-                                                      dptArray[1]);
-      theInputProjection->lineSampleToEastingNorthing(rect.lr(),
-                                                      dptArray[2]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ll(),
-                                                      dptArray[3]);
+      mapProj->lineSampleToEastingNorthing(rect.ul(), dptArray[0]);
+      mapProj->lineSampleToEastingNorthing(rect.ur(), dptArray[1]);
+      mapProj->lineSampleToEastingNorthing(rect.lr(), dptArray[2]);
+      mapProj->lineSampleToEastingNorthing(rect.ll(), dptArray[3]);
       
       ossimDrect drect(dptArray[0],
                        dptArray[1],
@@ -1675,7 +1485,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
       long extraLeftDelta    = 0;
       long extraRightDelta   = 0;
          
-      if(theTopGeographicLabelFlag&&theGeographicTopLabelFont)
+      if(theTopGeographicLabelFlag&&theGeographicTopLabelFont.valid())
       {  
          ossimDms dms(180, false);
          ossimString dmsString = dms.toString(theTopGeographicFormat.c_str());
@@ -1686,7 +1496,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
          theGeographicTopLabelFont->getBoundingBox(box);
          extraTopDelta = box.height();
       }
-      if(theBottomGeographicLabelFlag&&theGeographicBottomLabelFont)
+      if(theBottomGeographicLabelFlag&&theGeographicBottomLabelFont.valid())
       {  
          ossimDms dms(180, false);
          ossimString dmsString = dms.toString(theBottomGeographicFormat.c_str());
@@ -1696,7 +1506,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
          theGeographicBottomLabelFont->getBoundingBox(box);
          extraBottomDelta = box.height();
       }
-      if(theLeftGeographicLabelFlag&&theGeographicLeftLabelFont)
+      if(theLeftGeographicLabelFlag&&theGeographicLeftLabelFont.valid())
       {  
          ossimDms dms(90.0, true);
          ossimString dmsString = dms.toString(theLeftGeographicFormat.c_str());
@@ -1706,7 +1516,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
          theGeographicLeftLabelFont->getBoundingBox(box);
          extraLeftDelta = box.width();
       }
-      if(theRightGeographicLabelFlag&&theGeographicRightLabelFont)
+      if(theRightGeographicLabelFlag&&theGeographicRightLabelFont.valid())
       {  
          ossimDms dms(90.0, true);
          ossimString dmsString = dms.toString(theRightGeographicFormat.c_str());
@@ -1733,11 +1543,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
             ossimDpt bdpt(horizontal,
                           meterSpacing.lr().y);
             
-            theInputProjection->eastingNorthingToLineSample(tdpt,
-                                                            tipt);
-            
-            theInputProjection->eastingNorthingToLineSample(bdpt,
-                                                            bipt);
+            mapProj->eastingNorthingToLineSample(tdpt, tipt);
+            mapProj->eastingNorthingToLineSample(bdpt, bipt);
             
             rect.clip(tipt, bipt);
             
@@ -1750,7 +1557,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                                                                    ossimString::toString(horizontal).c_str());
                
                
-               topLabel->setFont(theMeterTopLabelFont, false);
+               topLabel->setFont(theMeterTopLabelFont.get());
                
                topLabel->setGeometryInformation(theMeterTopLabelFontInfo);
                topLabel->computeBoundingRect();
@@ -1800,7 +1607,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                                                                       ossimString::toString(horizontal).c_str());
                
                
-               bottomLabel->setFont(theMeterBottomLabelFont, false);
+               bottomLabel->setFont(theMeterBottomLabelFont.get());
                
                bottomLabel->setGeometryInformation(theMeterBottomLabelFontInfo);
                bottomLabel->computeBoundingRect();
@@ -1856,10 +1663,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
             ossimDpt rdpt(meterSpacing.ur().x,
                           vertical);
             
-            theInputProjection->eastingNorthingToLineSample(ldpt,
-                                                            lipt);
-            theInputProjection->eastingNorthingToLineSample(rdpt,
-                                                            ript);
+            mapProj->eastingNorthingToLineSample(ldpt, lipt);
+            mapProj->eastingNorthingToLineSample(rdpt, ript);
             
             if(rect.clip(lipt, ript))
             {
@@ -1868,7 +1673,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                                                                     ossimString::toString(vertical).c_str());
                
                
-               leftLabel->setFont(theMeterLeftLabelFont, false);
+               leftLabel->setFont(theMeterLeftLabelFont.get());
                
                leftLabel->setGeometryInformation(theMeterLeftLabelFontInfo);
                leftLabel->computeBoundingRect();
@@ -1916,7 +1721,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                                                                                      ossimString::toString(vertical).c_str());
                
                
-               rightLabel->setFont(theMeterRightLabelFont, false);
+               rightLabel->setFont(theMeterRightLabelFont.get());
                
                rightLabel->setGeometryInformation(theMeterRightLabelFontInfo);
                rightLabel->computeBoundingRect();
@@ -1966,19 +1771,16 @@ void ossimMapCompositionSource::addMeterGridLabels()
 
 void ossimMapCompositionSource::addMeterGridReseaux()
 {
-   if(theInputConnection&&theInputProjection)
+   const ossimMapProjection* mapProj = inputMapProjection();
+   if(mapProj)
    { 
       ossimDpt dpt[4];
       ossimDrect rect = getViewingRect();
       
-      theInputProjection->lineSampleToEastingNorthing(rect.ul(),
-                                                      dpt[0]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ur(),
-                                                      dpt[1]);
-      theInputProjection->lineSampleToEastingNorthing(rect.lr(),
-                                                      dpt[2]);
-      theInputProjection->lineSampleToEastingNorthing(rect.ll(),
-                                                      dpt[3]);
+      mapProj->lineSampleToEastingNorthing(rect.ul(), dpt[0]);
+      mapProj->lineSampleToEastingNorthing(rect.ur(), dpt[1]);
+      mapProj->lineSampleToEastingNorthing(rect.lr(), dpt[2]);
+      mapProj->lineSampleToEastingNorthing(rect.ll(), dpt[3]);
       
       ossimDrect drect(dpt[0],
                        dpt[1],
@@ -2005,8 +1807,7 @@ void ossimMapCompositionSource::addMeterGridReseaux()
             ossimDpt dpt(horizontal,
                          vertical);
             
-            theInputProjection->eastingNorthingToLineSample(dpt,
-                                                            ipt);
+            mapProj->eastingNorthingToLineSample(dpt, ipt);
 
             ossimIpt rounded(ipt);
             if(rect.pointWithin(ossimDpt(rounded)))
@@ -2040,7 +1841,7 @@ void ossimMapCompositionSource::addTitle()
    ossimAnnotationFontObject* title = new ossimAnnotationFontObject(ossimIpt(0,0),
                                                                     theTitleString);
    title->setGeometryInformation(theTitleFontInfo);
-   title->setFont(theTitleFont, false);
+   title->setFont(theTitleFont.get());
    title->setColor(theTitleColor.getR(),
                    theTitleColor.getG(),
                    theTitleColor.getB());
@@ -2098,10 +1899,10 @@ void ossimMapCompositionSource::drawAnnotations(
    
    if(theImage->getImageData().valid())
    {
-      vector<ossimAnnotationObject*>::iterator object = theFixedAnnotationList.begin();
+      ossimAnnotationSource::AnnotationObjectListType::iterator object = theFixedAnnotationList.begin();
       while(object != theFixedAnnotationList.end())
       {
-         if(*object)
+         if((*object).valid())
          {
             (*object)->draw(*theImage);
          }
@@ -2114,14 +1915,6 @@ void ossimMapCompositionSource::drawAnnotations(
 
 void ossimMapCompositionSource::deleteFixedAnnotations()
 {
-   for(int i = 0; i < (int)theFixedAnnotationList.size();++i)
-   {
-      if(theFixedAnnotationList[i])
-      {
-         delete theFixedAnnotationList[i];
-      }
-   }
-
    theFixedAnnotationList.clear();
 }
 
@@ -3369,53 +3162,6 @@ bool ossimMapCompositionSource::loadState(const ossimKeywordlist& kwl,
    theMeterRightLabelFontInfo.loadState(kwl, (ossimString(prefix) + ossimString(RIGHT_METER_LABEL_FONT_KW) + ".").c_str());
    
    theTitleFontInfo.loadState(kwl, (ossimString(prefix) + ossimString(TITLE_FONT_KW) + ".").c_str());
-   if(theTitleFont)
-   {
-      delete theTitleFont;
-      theTitleFont = NULL;
-   }
-   if(theGeographicTopLabelFont)
-   {
-      delete theGeographicTopLabelFont;
-      theGeographicTopLabelFont = NULL;
-   }
-   if(theGeographicBottomLabelFont)
-   {
-      delete theGeographicBottomLabelFont;
-      theGeographicBottomLabelFont = NULL;
-   }
-   if(theGeographicLeftLabelFont)
-   {
-      delete theGeographicLeftLabelFont;
-      theGeographicLeftLabelFont = NULL;
-   }
-   if(theGeographicRightLabelFont)
-   {
-      delete theGeographicRightLabelFont;
-      theGeographicRightLabelFont = NULL;
-   }
-
-   if(theMeterTopLabelFont)
-   {
-      delete theMeterTopLabelFont;
-      theMeterTopLabelFont = NULL;
-   }
-   if(theMeterBottomLabelFont)
-   {
-      delete theMeterBottomLabelFont;
-      theMeterBottomLabelFont = NULL;
-   }
-   if(theMeterLeftLabelFont)
-   {
-      delete theMeterLeftLabelFont;
-      theMeterLeftLabelFont = NULL;
-   }
-   if(theMeterRightLabelFont)
-   {
-      delete theMeterRightLabelFont;
-      theMeterRightLabelFont = NULL;
-   }
-   
    theTitleFont = ossimFontFactoryRegistry::instance()->createFont(theTitleFontInfo);
    theGeographicTopLabelFont = ossimFontFactoryRegistry::instance()->createFont(theGeographicTopLabelFontInfo);
    theGeographicBottomLabelFont = ossimFontFactoryRegistry::instance()->createFont(theGeographicBottomLabelFontInfo);
@@ -4034,3 +3780,20 @@ void ossimMapCompositionSource::addFixedAnnotation(ossimAnnotationObject* obj)
       theFixedAnnotationList.push_back(obj);
    }
 }
+
+//**************************************************************************************************
+//! Fetches the input connection's image geometry and verifies that it is a map projection.
+//! Returns NULL if no valid projection found.
+//**************************************************************************************************
+const ossimMapProjection* ossimMapCompositionSource::inputMapProjection() const
+{
+   if (!theInputConnection)
+      return 0;
+
+   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   if (!inputGeom)
+      return 0;
+
+   return PTR_CAST(ossimMapProjection, inputGeom->getProjection());
+}
+

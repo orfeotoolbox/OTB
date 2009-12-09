@@ -11,7 +11,7 @@
 // Committe (FGDC) format.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimFgdcFileWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimFgdcFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <fstream>
 using namespace std;
@@ -69,28 +69,11 @@ bool ossimFgdcFileWriter::writeFile()
    }
 
    // Get the geometry from the input.
-   ossimKeywordlist kwl;
-   theInputConnection->getImageGeometry(kwl);
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimFgdcFileWriter::writeFile debug:\n"
-         << "Geometry file:  " << kwl << endl;
-   }
+   ossimMapProjection* mapProj = 0;
+   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
+   if (inputGeom)
+      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
    
-   // Create the projection.
-   ossimRefPtr<ossimProjection> proj =
-      ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-   if (!proj.valid())
-   {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << "ossimFgdcFileWriter::writeFile Could not create projection."
-         << endl;
-      return false;
-   }
-   
-   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj.get());
    if (!mapProj)
    {
       ossimNotify(ossimNotifyLevel_WARN)
@@ -100,8 +83,6 @@ bool ossimFgdcFileWriter::writeFile()
    }
 
    ossimMapProjectionInfo mpi(mapProj, theInputConnection->getBoundingRect());
-
-   
 
    os << "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n"
       << "<?xml-stylesheet type=\"text/xsl\" href=\"/common/fgdc_classic.xsl\" ?>\n";

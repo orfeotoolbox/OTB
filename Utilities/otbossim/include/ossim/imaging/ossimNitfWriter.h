@@ -1,17 +1,18 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.h 9256 2006-07-14 15:28:19Z dburken $
+//  $Id: ossimNitfWriter.h 15612 2009-10-08 18:54:42Z dburken $
 #ifndef ossimNitfWriter_HEADER
 #define ossimNitfWriter_HEADER
 
 #include <iosfwd>
-#include <ossim/imaging/ossimImageFileWriter.h>
+#include <ossim/imaging/ossimNitfWriterBase.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/base/ossimRgbLutDataObject.h>
@@ -21,7 +22,7 @@
 
 class ossimProjection;
 
-class OSSIM_DLL ossimNitfWriter : public ossimImageFileWriter
+class OSSIM_DLL ossimNitfWriter : public ossimNitfWriterBase
 {
 public:
    ossimNitfWriter(const ossimFilename& filename=ossimFilename(""),
@@ -54,8 +55,6 @@ public:
     * @note The following names are handled:
     *  file_header
     *  image_header
-    *  enable_rpcb_tag
-    *  enable_blocka_tag
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
@@ -70,12 +69,6 @@ public:
     * @param prefix Usually something like: "object2."
 
     * @return true on success, false on failure.
-    *
-    * Keywords saved by saveState:
-    * 
-    * enable_rpcb_tag: true
-    *
-    * enable_blocka_tag: true
     */
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
 
@@ -88,12 +81,6 @@ public:
     * @param prefix Usually something like: "object2."
 
     * @return true on success, false on failure.
-    *
-    * Keywords picked up by loadState:
-    * 
-    * enable_rpcb_tag: true
-    *
-    * enable_blocka_tag: true
     */
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
@@ -117,78 +104,14 @@ protected:
     */
    virtual bool writeBlockBandSequential();
 
-   /**
-    * Populates tags with geometry info from projection.  Will write an
-    * rpcb tag if theEnableRpcbTagFlag if set to true.
-    */
-   void writeGeometry();
-
-   /**
-    * Sets the complexity level of theFileHeader.
-    *
-    * @param endPosition This should be the end seek position of the file.
-    */
-   void setComplexityLevel(ossim_uint64 endPosition);
-
    /** Currently disabled... */
    // virtual void addStandardTags();
-
-   /**
-    * Adds the BLOCKA tag.
-    *
-    * @param mapInfo ossimMapProjectionInfo to use to set tag with.
-    *
-    * @note Currently only used with map projected images.
-    */
-   void addBlockaTag(ossimMapProjectionInfo& mapInfo);
-
-   /**
-    * Adds the RPC00B tag.
-    *
-    * @param rect Requested rectangle of image to write.
-    *
-    * @param proj The output projection.
-    */
-   void addRpcbTag(const ossimIrect& rect,
-                   ossimRefPtr<ossimProjection> proj);
-
-   /**
-    * This is bits used.  (OSSIM_USHORT11 = 11)
-    * 
-    * @returns The actual bits per pixel.  This will return 0 if the
-    * input connection is not hooked up or there is an unhandled scalar type.
-    */
-   ossim_uint32 getActualBitsPerPixel() const;
-
-   /**
-    * This the total bits per pixel.  (OSSIM_USHORT11 = 16)
-    * 
-    * @returns The bits per pixel.  This will return 0 if the
-    * input connection is not hooked up or there is an unhandled scalar type.
-    */
-   ossim_uint32 getBitsPerPixel() const;
-
-   /**
-    * @return Pixel type as a string. Like: "INT", "R", "SI".  .  This will
-    * return an empty string if the input connection is not hooked up or
-    * there is an unhandled scalar type.
-    */
-   ossimString getNitfPixelType() const;   
 
    std::ofstream* theOutputStream;
    
    ossimRefPtr<ossimNitfFileHeaderV2_1>  theFileHeader;
    ossimRefPtr<ossimNitfImageHeaderV2_1> theImageHeader;
 
-   /** If true user wants to set RPC00B tag. (DEFAULT = false) */
-   bool theEnableRpcbTagFlag;
-
-   /**
-    * If true user wants to set BLOCKA tag. (DEFAULT = true)
-    * Currently only valid for map projected images.
-    */
-   bool theEnableBlockaTagFlag;
-   
 TYPE_DATA   
 };
 

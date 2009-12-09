@@ -8,7 +8,7 @@
 // Description:  Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.h 13486 2008-08-22 17:07:13Z gpotts $
+//  $Id: ossimBandSelector.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimBandSelector_HEADER
 #define ossimBandSelector_HEADER
 
@@ -30,7 +30,6 @@ public:
    };
    ossimBandSelector();
    
-   virtual ~ossimBandSelector();
    
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
@@ -98,7 +97,8 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;						  
 						  
    
-private:
+protected:
+   virtual ~ossimBandSelector();
 
    /**
     * Called on first getTile, will initialize all data needed.

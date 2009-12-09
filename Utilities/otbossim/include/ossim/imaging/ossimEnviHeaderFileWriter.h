@@ -13,7 +13,7 @@
 // writing an ENVI (The Environment for Visualizing Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeaderFileWriter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEnviHeaderFileWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimEnviHeaderFileWriter_H
 #define ossimEnviHeaderFileWriter_H
@@ -33,8 +33,6 @@ public:
    /** default constructor */
    ossimEnviHeaderFileWriter();
 
-   /** virtual destructor */
-   virtual ~ossimEnviHeaderFileWriter();
 
    /**
     * Initializes the state of the writer.  Users should use this to set
@@ -65,7 +63,10 @@ public:
     * @return true if "metadataType" is supported by writer.
     */
    virtual bool hasMetadataType(const ossimString& metadataType)const;   
-   
+protected:
+   /** virtual destructor */
+   virtual ~ossimEnviHeaderFileWriter();
+
 private:
    
    virtual bool writeFile();

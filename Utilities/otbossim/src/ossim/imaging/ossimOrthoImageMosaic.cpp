@@ -5,46 +5,57 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimOrthoImageMosaic.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 
-
 static ossimTrace traceDebug ("ossimOrthoImageMosaic:debug");
 
 RTTI_DEF1(ossimOrthoImageMosaic, "ossimOrthoImageMosaic", ossimImageMosaic);
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimOrthoImageMosaic::ossimOrthoImageMosaic()
    :ossimImageMosaic()
 {
-   theDelta.makeNan();
-   theUpperLeftTie.makeNan();
+   m_Delta.makeNan();
+   m_UpperLeftTie.makeNan();
 }
 
-ossimOrthoImageMosaic::ossimOrthoImageMosaic(const std::vector<ossimImageSource*>& inputSources)
+//**************************************************************************************************
+// 
+//**************************************************************************************************
+ossimOrthoImageMosaic::ossimOrthoImageMosaic(ossimConnectableObject::ConnectableObjectList& inputSources)
    :ossimImageMosaic(inputSources)
 {
-   theDelta.makeNan();
-   theUpperLeftTie.makeNan();
+   m_Delta.makeNan();
+   m_UpperLeftTie.makeNan();
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimOrthoImageMosaic::~ossimOrthoImageMosaic()
 {
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossim_uint32 ossimOrthoImageMosaic::getNumberOfOverlappingImages(const ossimIrect& rect,
-                                                           ossim_uint32 resLevel)const
+                                                                 ossim_uint32 resLevel)const
 {
    ossim_uint32 result = 0;
-   for(ossim_uint32 i = 0; i < theInputTiePoints.size(); ++i)
+   for(ossim_uint32 i = 0; i < m_InputTiePoints.size(); ++i)
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                       getInput(i));
       if(interface&&
-         !theInputTiePoints[i].hasNans())
+         !m_InputTiePoints[i].hasNans())
       {
          ossimIrect tempRect = getRelativeRect(i, resLevel);
 
@@ -61,17 +72,20 @@ ossim_uint32 ossimOrthoImageMosaic::getNumberOfOverlappingImages(const ossimIrec
    return 0;
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 void ossimOrthoImageMosaic::getOverlappingImages(std::vector<ossim_uint32>& result,
                                                  const ossimIrect& rect,
                                                  ossim_uint32 resLevel)const
 {
    result.clear();
-   for(ossim_uint32 i = 0; i < theInputTiePoints.size(); ++i)
+   for(ossim_uint32 i = 0; i < m_InputTiePoints.size(); ++i)
    {
       ossimImageSource* interface = PTR_CAST(ossimImageSource,
                                                       getInput(i));
       if(interface&&
-         !theInputTiePoints[i].hasNans())
+         !m_InputTiePoints[i].hasNans())
       {
          ossimIrect tempRect = getRelativeRect(i, resLevel);
 
@@ -86,82 +100,61 @@ void ossimOrthoImageMosaic::getOverlappingImages(std::vector<ossim_uint32>& resu
    }
 }
 
-bool ossimOrthoImageMosaic::getImageGeometry(ossimKeywordlist& kwl,
-                                             const char* prefix)
+//**************************************************************************************************
+// Returns the image geometry for the complete mosaic
+//**************************************************************************************************
+ossimImageGeometry* ossimOrthoImageMosaic::getImageGeometry()
 {
-   bool result = true;
-   ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                   getInput(0));
+   // If we already have a geometry object, return it:
+   if (m_Geometry.valid())
+      return m_Geometry.get();
+
+   // The geometry (projection) associated with this mosaic is necessarily the same for all
+   // single-image objects feeding into this combiner, So we will copy the first image source's
+   // geometry, and modify our copy to reflect the mosaic-specific items.
+   ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
    if(interface)
    {
-      interface->getImageGeometry(kwl, prefix);
-      ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
-                                                                                                       prefix);
-      ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj.get());
-      if(!mapProj) return false;
-      
-      if(theUnits == "degrees")
+      const ossimImageGeometry* inputGeom = interface->getImageGeometry();
+      if (inputGeom)
       {
-         mapProj->setDecimalDegreesPerPixel(theDelta);
-         mapProj->setUlGpt(ossimGpt(theUpperLeftTie.y,
-                                    theUpperLeftTie.x,
-                                    0.0,
-                                    mapProj->origin().datum()));
-         
-//           kwl.add(prefix,
-//                  ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-//                  theDelta.y,
-//                  true);
-//           kwl.add(prefix,
-//                  ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-//                  theDelta.x,
-//                   true);
-//           kwl.add(prefix,
-//                   ossimKeywordNames::TIE_POINT_LAT_KW,
-//                   theUpperLeftTie.y,
-//                   true);
-//           kwl.add(prefix,
-//                   ossimKeywordNames::TIE_POINT_LON_KW,
-//                   theUpperLeftTie.x,
-//                   true);
-//           kwl.remove(prefix, ossimKeywordNames::TIE_POINT_EASTING_KW);
-//           kwl.remove(prefix, ossimKeywordNames::TIE_POINT_NORTHING_KW);
-
-         mapProj->saveState(kwl, prefix);
+         m_Geometry = new ossimImageGeometry(*inputGeom);
+         updateGeometry();
       }
-      else if(theUnits == "meters")
-      {
-         mapProj->setMetersPerPixel(theDelta);
-         mapProj->setUlEastingNorthing(theUpperLeftTie);
-//           kwl.add(prefix,
-//                  ossimKeywordNames::METERS_PER_PIXEL_X_KW,
-//                  theDelta.x,
-//                  true);
-//           kwl.add(prefix,
-//                  ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
-//                  theDelta.x,
-//                   true);
-//           kwl.add(prefix,
-//                   ossimKeywordNames::TIE_POINT_EASTING_KW,
-//                   theUpperLeftTie.x,
-//                   true);
-//           kwl.add(prefix,
-//                   ossimKeywordNames::TIE_POINT_NORTHING_KW,
-//                   theUpperLeftTie.y,
-//                   true);
-//           kwl.remove(prefix, ossimKeywordNames::TIE_POINT_LAT_KW);
-//           kwl.remove(prefix, ossimKeywordNames::TIE_POINT_LON_KW);
-         mapProj->saveState(kwl, prefix);
-      }
-      else
-      {
-         result = false;
-      }
+      return m_Geometry.get();
    }
-
-   return result;
+   return 0;
 }
 
+//**************************************************************************************************
+//! If this object is maintaining an ossimImageGeometry, this method needs to be called after 
+//! each time the contents of the mosaic changes.
+//**************************************************************************************************
+void ossimOrthoImageMosaic::updateGeometry()
+{
+   if (!m_Geometry.valid())
+      return;
+
+   ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, m_Geometry->getProjection());
+   if (mapProj)
+   {
+      if(m_Units == "degrees")
+      {
+         mapProj->setDecimalDegreesPerPixel(m_Delta);
+         mapProj->setUlGpt(ossimGpt(m_UpperLeftTie.y, m_UpperLeftTie.x, 0.0,
+                                    mapProj->origin().datum()));
+      }
+      else if(m_Units == "meters")
+      {
+         mapProj->setMetersPerPixel(m_Delta);
+         mapProj->setUlEastingNorthing(m_UpperLeftTie);
+      }
+   }
+}
+
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimIrect ossimOrthoImageMosaic::getBoundingRect(ossim_uint32 resLevel) const
 {
    ossimDpt decimation;
@@ -177,16 +170,19 @@ ossimIrect ossimOrthoImageMosaic::getBoundingRect(ossim_uint32 resLevel) const
    }
    if(decimation.hasNans())
    {
-      return theBoundingRect;
+      return m_BoundingRect;
    }
-   return theBoundingRect*decimation;
+   return m_BoundingRect*decimation;
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 void ossimOrthoImageMosaic::initialize()
 {
-   theInputTiePoints.clear();
-   theDelta.makeNan();
-   theUpperLeftTie.makeNan();
+   m_InputTiePoints.clear();
+   m_Delta.makeNan();
+   m_UpperLeftTie.makeNan();
 
    if(traceDebug())
    {
@@ -197,83 +193,73 @@ void ossimOrthoImageMosaic::initialize()
    }
    if(getNumberOfInputs())
    {
-      theInputTiePoints.resize(getNumberOfInputs());
+      m_InputTiePoints.resize(getNumberOfInputs());
       for(ossim_uint32 i = 0; i < getNumberOfInputs(); ++i)
       {
-         ossimImageSource *interface =
-            PTR_CAST(ossimImageSource, getInput(i));
-         theInputTiePoints[i].makeNan();
+         ossimImageSource *interface = PTR_CAST(ossimImageSource, getInput(i));
+         m_InputTiePoints[i].makeNan();
          if(interface)
          {
-            ossimKeywordlist kwl;
-
-            bool status = interface->getImageGeometry(kwl);
-            if(status)
+            const ossimImageGeometry* geom = interface->getImageGeometry();
+            if(geom)
             {
-               ossimProjection* prj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-               ossimMapProjection* mapPrj = PTR_CAST(ossimMapProjection, prj);
+               const ossimMapProjection* mapPrj = PTR_CAST(ossimMapProjection, geom->getProjection());
                if(mapPrj)
                {
                   if(!mapPrj->isGeographic())
                   {
-                     theUnits = "meters";
-                     theDelta = mapPrj->getMetersPerPixel();
+                     m_Units = "meters";
+                     m_Delta = mapPrj->getMetersPerPixel();
                   }
                   else
                   {
-                     theUnits = "degrees";
-                     theDelta = mapPrj->getDecimalDegreesPerPixel();
+                     m_Units = "degrees";
+                     m_Delta = mapPrj->getDecimalDegreesPerPixel();
                   }
-                  if(theUnits == "degrees")
+                  if(m_Units == "degrees")
                   {
-                     theInputTiePoints[i].x = mapPrj->getUlGpt().lond();
-                     theInputTiePoints[i].y = mapPrj->getUlGpt().latd();
+                     m_InputTiePoints[i].x = mapPrj->getUlGpt().lond();
+                     m_InputTiePoints[i].y = mapPrj->getUlGpt().latd();
                   }
-                  else if(theUnits == "meters")
+                  else if(m_Units == "meters")
                   {
-                     theInputTiePoints[i].x = mapPrj->getUlEastingNorthing().x;;
-                     theInputTiePoints[i].y = mapPrj->getUlEastingNorthing().y;
+                     m_InputTiePoints[i].x = mapPrj->getUlEastingNorthing().x;;
+                     m_InputTiePoints[i].y = mapPrj->getUlEastingNorthing().y;
                   }
 
                   if(traceDebug())
                   {
                      ossimNotify(ossimNotifyLevel_DEBUG)
                         << "tie points for input " << i << " = "
-                        << theInputTiePoints[i] << std::endl;
+                        << m_InputTiePoints[i] << std::endl;
                   }
 
                }
-               if(prj)
-               {
-                  delete prj;
-                  prj = NULL;
-                  mapPrj = NULL;
-               }
             }
-            if(!theInputTiePoints[i].hasNans())
+            if(!m_InputTiePoints[i].hasNans())
             {
-               if(theUpperLeftTie.hasNans())
+               if(m_UpperLeftTie.hasNans())
                {
-                  theUpperLeftTie = theInputTiePoints[i];
+                  m_UpperLeftTie = m_InputTiePoints[i];
                }
-               else if(!theInputTiePoints[i].hasNans())
+               else if(!m_InputTiePoints[i].hasNans())
                {
-                  if(theUnits == "meters")
+                  if(m_Units == "meters")
                   {
-                     theUpperLeftTie.x = std::min(theUpperLeftTie.x, theInputTiePoints[i].x);
-                     theUpperLeftTie.y = std::max(theUpperLeftTie.y, theInputTiePoints[i].y);
+                     m_UpperLeftTie.x = std::min(m_UpperLeftTie.x, m_InputTiePoints[i].x);
+                     m_UpperLeftTie.y = std::max(m_UpperLeftTie.y, m_InputTiePoints[i].y);
                   }
                   else
                   {
-                     theUpperLeftTie.lon = std::min(theUpperLeftTie.lon, theInputTiePoints[i].lon);
-                     theUpperLeftTie.lat = std::max(theUpperLeftTie.lat, theInputTiePoints[i].lat);
+                     m_UpperLeftTie.lon = std::min(m_UpperLeftTie.lon, m_InputTiePoints[i].lon);
+                     m_UpperLeftTie.lat = std::max(m_UpperLeftTie.lat, m_InputTiePoints[i].lat);
                   }
                }
             }
          }
          else
          {
-            theInputTiePoints[i].makeNan();
+            m_InputTiePoints[i].makeNan();
 //            CLOG << "Input " << i << " will not be used since no ortho information exists" << endl;
          }
       }
@@ -283,17 +269,24 @@ void ossimOrthoImageMosaic::initialize()
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "theUpperLeftTie = " << theUpperLeftTie << std::endl
-         << "delta per pixel = " << theDelta        << std::endl
-         << "bounding rect   = " << theBoundingRect << std::endl;
+         << "m_UpperLeftTie = " << m_UpperLeftTie << std::endl
+         << "delta per pixel = " << m_Delta        << std::endl
+         << "bounding rect   = " << m_BoundingRect << std::endl;
    }
    ossimImageMosaic::initialize();
+
+   // Finally, update the geometry (if there was one already defined), to reflect the change in input
+   updateGeometry();
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimOrthoImageMosaic::initialize() DEBUG: Leaving..." << std::endl;
    }
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(ossim_uint32& returnedIdx,
                                                                const ossimIrect& origin,
                                                                ossim_uint32 resLevel)
@@ -368,13 +361,16 @@ ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(ossim_uint32& ret
    return result;
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 void ossimOrthoImageMosaic::computeBoundingRect(ossim_uint32 resLevel)
 {
    const char* MODULE = "ossimOrthoImageMosaic::computeBoundingRect";
    
-   theBoundingRect.makeNan();
+   m_BoundingRect.makeNan();
 
-   for(ossim_uint32 i = 0; i < theInputTiePoints.size(); ++ i)
+   for(ossim_uint32 i = 0; i < m_InputTiePoints.size(); ++ i)
    {
       ossimIrect shiftedRect = getRelativeRect(i, resLevel);
 
@@ -385,18 +381,21 @@ void ossimOrthoImageMosaic::computeBoundingRect(ossim_uint32 resLevel)
       }
       if(!shiftedRect.hasNans())
       {
-         if(theBoundingRect.hasNans())
+         if(m_BoundingRect.hasNans())
          {
-            theBoundingRect = shiftedRect;
+            m_BoundingRect = shiftedRect;
          }
          else
          {
-            theBoundingRect = theBoundingRect.combine(shiftedRect);
+            m_BoundingRect = m_BoundingRect.combine(shiftedRect);
          }
       }
    }
 }
 
+//**************************************************************************************************
+// 
+//**************************************************************************************************
 ossimIrect ossimOrthoImageMosaic::getRelativeRect(ossim_uint32 index,
                                                   ossim_uint32 resLevel)const
 {
@@ -405,17 +404,17 @@ ossimIrect ossimOrthoImageMosaic::getRelativeRect(ossim_uint32 index,
                                                    getInput(index));
    result.makeNan();
    if(interface&&
-      !theInputTiePoints[index].hasNans())
+      !m_InputTiePoints[index].hasNans())
    {
       ossimIrect inputRect = interface->getBoundingRect();
       result = inputRect;
       
       if(!inputRect.hasNans())
       {
-         ossimDpt shift = (theInputTiePoints[index] - theUpperLeftTie);
+         ossimDpt shift = (m_InputTiePoints[index] - m_UpperLeftTie);
          
-         shift.x/= theDelta.x;
-         shift.y/=-theDelta.y;
+         shift.x/= m_Delta.x;
+         shift.y/=-m_Delta.y;
          
 	 result = result + shift;
          if(!resLevel)

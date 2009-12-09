@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFont.h 9105 2006-06-14 01:45:40Z gpotts $
+// $Id: ossimFreeTypeFont.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFreeTypeFont_HEADER
 #define ossimFreeTypeFont_HEADER
 
@@ -41,7 +41,6 @@ public:
       {
          return new ossimFreeTypeFont(*this);
       }
-   virtual ~ossimFreeTypeFont();
 
    virtual const ossim_uint8* getBuf()const
       {
@@ -146,8 +145,9 @@ public:
   {
     return theFontFace;
   }
-private:
-   
+protected:
+   virtual ~ossimFreeTypeFont();
+
    FT_Face       theFontFace;
    FT_Library    theLibrary;
    FT_Matrix     theMatrix;

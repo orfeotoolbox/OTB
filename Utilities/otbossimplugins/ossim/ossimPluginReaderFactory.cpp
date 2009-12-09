@@ -14,6 +14,7 @@
 #include <ossimPluginReaderFactory.h>
 #include <ossimTerraSarTiffReader.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimTrace.h>
@@ -56,10 +57,9 @@ ossimImageHandler* ossimPluginReaderFactory::open(
          << std::endl;
    }
 
-   ossimImageHandler* reader = new ossimTerraSarTiffReader();
+   ossimRefPtr<ossimImageHandler> reader = new ossimTerraSarTiffReader();
    if(reader->open(fileName) == false)
    {
-      delete reader;
       reader = 0;
    }
 
@@ -70,7 +70,7 @@ ossimImageHandler* ossimPluginReaderFactory::open(
          << std::endl;
    }
 
-   return reader;
+   return reader.release();
 }
 
 ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
@@ -84,10 +84,9 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
          << std::endl;
    }
 
-   ossimImageHandler* reader = new ossimTerraSarTiffReader;
+   ossimRefPtr<ossimImageHandler> reader = new ossimTerraSarTiffReader;
    if(reader->loadState(kwl, prefix) == false)
    {
-      delete reader;
       reader = 0;
    }
 
@@ -98,26 +97,28 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
          << std::endl;
    }
 
-   return reader;
+   return reader.release();
 }
 
 ossimObject* ossimPluginReaderFactory::createObject(
    const ossimString& typeName)const
 {
+   ossimRefPtr<ossimObject> result = 0;
    if(typeName == "ossimTerraSarTiffReader")
    {
-      return new ossimTerraSarTiffReader;
+      result = new ossimTerraSarTiffReader;
    }
-   return 0;
+   return result.release();
 }
 
-ossimObject* ossimPluginReaderFactory::createObject(const ossimKeywordlist& kwl,
-                                                 const char* prefix)const
+ossimObject* ossimPluginReaderFactory::createObject(
+   const ossimKeywordlist& kwl, const char* prefix)const
 {
    return this->open(kwl, prefix);
 }
 
-void ossimPluginReaderFactory::getTypeNameList(std::vector<ossimString>& typeList)const
+void ossimPluginReaderFactory::getTypeNameList(
+   std::vector<ossimString>& typeList)const
 {
    typeList.push_back(ossimString("ossimTerraSarTiffReader"));
 }

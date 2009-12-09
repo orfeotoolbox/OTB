@@ -11,7 +11,7 @@
 // manager.
 //
 //********************************************************************
-// $Id: ossimElevImageSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimElevImageSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimElevImageSource_HEADER
 #define ossimElevImageSource_HEADER
@@ -38,7 +38,6 @@ public:
                         const ossimKeywordlist& kwl,
                         const char* prefix=0);
    
-   virtual ~ossimElevImageSource();
 
    /*!
     *  Returns a pointer to a tile given an origin representing the upper left
@@ -131,6 +130,7 @@ public:
    virtual void setMaxPixelValue(ossim_float64 max_pix);
    
 protected:
+   virtual ~ossimElevImageSource();
 
    ossimElevSource*            theElevManager;
    ossimRefPtr<ossimImageData> theTile;

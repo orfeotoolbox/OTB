@@ -6,10 +6,10 @@
 //
 // Author: Garrett Potts
 // 
-// Description: A brief description of the contents of the file.
+// Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 14530 2009-05-16 23:56:54Z dburken $
+// $Id: ossimImageData.h 15798 2009-10-23 19:15:20Z gpotts $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
@@ -26,6 +26,24 @@ class ossimMultiBandHistogram;
 class OSSIMDLLEXPORT ossimImageData : public ossimRectilinearDataObject
 {
 public:
+
+   /** Definitions for the unloadBand routines. */
+   enum OverwriteBandRule
+   {
+      /*
+       * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
+       * of the destination buffer is to be overwritten if any one of the other 
+       * bands of the same pixel have color values that deviate from the  
+       * color value of the selected band. 
+       */
+      COLOR_DISCREPANCY = 0,
+      
+      /*
+       * The selected band of the destination buffer is to be overwritten 
+       * by the selected band of the source image data (no questions asked).
+       */
+      NULL_RULE = 1
+   };
 
    /** @brief copy constructor */
    ossimImageData(const ossimImageData &rhs);
@@ -62,6 +80,14 @@ public:
 
    /** @brief virtual destructor */
    virtual ~ossimImageData();
+
+   /**
+    * @brief assignment operator=
+    * @param rhs The data to assign from.
+    * @param A reference to this object.
+    */
+   virtual const ossimImageData& operator=(const ossimImageData &rhs);
+
 
    /**
     * @return The width of the data object.
@@ -549,50 +575,140 @@ public:
                               const ossimIrect& src_rect,
                               ossim_uint32 band,
                               bool swap_bytes=false);
-   
-   virtual void unloadTile(void* dest,
-                           const ossimIrect& dest_rect,
-                           ossimInterleaveType il_type) const;
-   
-   virtual void unloadTile(void* dest,
-                           const ossimIrect& dest_rect,
-                           const ossimIrect& clip_rect,
-                           ossimInterleaveType il_type) const;
+
+   /**
+    * This routine is designed for overwriting a selected band of the 
+    * destination buffer 'dest' by an independent selected band of the
+    * source buffer according to a user-selected rule, defined by 
+    * OverwriteBandRule.
+    *
+    * Currently the rules available in OverwriteBandRule are: 
+    *
+    * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
+    * of the destination buffer is to be overwritten if any one of the other 
+    * bands of the same pixel have color values that deviate from the  
+    * color value of the selected band. 
+    *
+    * The NULL_RULE rule directs that the selected band of the 
+    * destination buffer is to be overwritten by the selected band of the 
+    * source image data (no questions asked).
+    *
+    * @note The src object should have at least the same number of bands as 
+    * the 'dest' buffer. 
+    *
+    * Currently this routine is only implemented for il_type set to OSSIM_BSQ.
+    *
+    * @param dest The destination buffer with at least the same number of bands
+    * as the src (this) object.
+    * @param src_band  The 0-based band of the source image data.
+    * @param dest_band The 0-based band of the dest buffer.
+    * @param dest_rect The rectangle of the destination buffer.
+    * @param il_type   The interleave type. Only OSSIM_BSQ available.
+    * @param ow_type   The rule for overwriting the destination buffer.
+    */
+   virtual void unloadBand( void* dest,
+                            ossim_uint32 src_band,
+                            ossim_uint32 dest_band,
+                            const ossimIrect& dest_rect,
+                            ossimInterleaveType il_type=OSSIM_BSQ,
+                            OverwriteBandRule ow_type=NULL_RULE ) const;
+
+   /**
+    * This routine is designed for overwriting a selected band of the 
+    * destination buffer 'dest' by an independent selected band of the
+    * source buffer according to a user-selected rule, defined by 
+    * OverwriteBandRule.
+    *
+    * Currently the rules available in OverwriteBandRule are: 
+    *
+    * The COLOR_DISCREPANCY rule directs that the selected band of a pixel
+    * of the destination buffer is to be overwritten if any one of the other 
+    * bands of the same pixel have color values that deviate from the  
+    * color value of the selected band. 
+    *
+    * The NULL_RULE rule directs that the selected band of the 
+    * destination buffer is to be overwritten by the selected band of the 
+    * source image data (no questions asked).
+    *
+    * Note: The src object should have at least the same number of bands as 
+    * the 'dest' buffer. 
+    *
+    * Currently this routine is only implemented for il_type set to OSSIM_BSQ.
+    *
+    * @param dest The destination buffer with at least the same number of bands
+    * as the src (this) object.
+    * @param src_band  The 0-based band of the source image data.
+    * @param dest_band The 0-based band of the dest buffer.
+    * @param dest_rect The rectangle of the destination buffer.
+    * @param clip_rect Only data within will be copied.
+    * @param il_type   The interleave type. Only OSSIM_BSQ available.
+    * @param ow_type   The rule for overwriting the destination buffer.
+    */
+   virtual void unloadBand( void* dest,
+                            ossim_uint32 src_band,
+                            ossim_uint32 dest_band,
+                            const ossimIrect& dest_rect,
+                            const ossimIrect& clip_rect,
+                            ossimInterleaveType il_type=OSSIM_BSQ,
+                            OverwriteBandRule ow_type=NULL_RULE ) const;
 
    /**
     * @param dest The destination buffer.  It is assumed this is a single band
     * and the size of dest_rect.
     * @param dest_rect The rectangle of the destination buffer.
-    * @param band The band to copy (unload) from the tile.
+    * @param src_band The band to copy (unload) from the tile.
     */
    virtual void unloadBand(void* dest,
                            const ossimIrect& dest_rect,
-                           ossim_uint32 band) const;
+                           ossim_uint32 src_band) const;
 
    /**
     * @param dest The destination buffer.  It is assumed this is a single band
     * and the size of dest_rect.
     * @param dest_rect The rectangle of the destination buffer.
     * param clip_rect Only data within the clip_rect will be copied.
-    * @param band The band to copy (unload) from the tile.
+    * @param src_band The band to copy (unload) from the tile.
     */
    virtual void unloadBand(void* dest,
                            const ossimIrect& dest_rect,
                            const ossimIrect& clip_rect,
-                           ossim_uint32 band) const;
+                           ossim_uint32 src_band) const;
    
+   virtual void unloadTile(void* dest,
+                           const ossimIrect& dest_rect,
+                           ossimInterleaveType il_type ) const;
+
+   virtual void unloadTile(void* dest,
+                           const ossimIrect& dest_rect,
+                           const ossimIrect& clip_rect,
+                           ossimInterleaveType il_type) const;
    
    virtual bool isPointWithin(const ossimIpt& point)const;
    virtual bool isPointWithin(ossim_int32 x,
                               ossim_int32 y)const;
 
    virtual std::ostream& print(std::ostream& out) const;
+
+   /**
+    * @brief Performs linear stretch on tile data from min/max to limits of
+    * scalar type.
+    */
+   virtual void stretchMinMax();
    
 protected:
+
    ossimImageData();
 
    /**
-    * Templated valide method.
+    * @brief Templated stretch method.
+    *
+    * Performs linear stretches on tile data from min/max to limits of
+    * scalar type.
+    */
+   template <class T> void stretchMinMax(T dummyTemplate);
+
+   /**
+    * Templated validate method.
     *
     * @return The status of the ossimImageDataMethod.
     *
@@ -620,40 +736,6 @@ protected:
       ossim_float64 computeAverageBandValue(T dummyTemplate,
                                             ossim_uint32 bandNumber) const;
    
-   /**
-    *  
-    *  Takes normPix, unnormalizes and initializes pixel.
-    *  "band" is used as index to get the min/max/null values.
-    */
-   void getPixFromNorm(ossim_int32& pixel,
-                       ossim_float32  normPix,
-                       ossim_uint32 band) const;
-
-   
-   /**
-    *  Takes normPix, unnormalizes and initializes pixel.
-    *  "band" is used as index to get the min/max/null values.
-    */
-   void getPixFromNorm(ossim_int32& pixel,
-                       ossim_float64 normPix,
-                       ossim_uint32 band) const;
-
-   /**
-    *  Take pixel, normalizes and initializes normPix.
-    *  "band" is used as index to get the min/max/null values.
-    */
-   void getNormFromPix  (ossim_int32  pixel,
-                         ossim_float32& normPix,
-                         ossim_uint32 band) const;
-
-   /**
-    *  Take pixel, normalizes and initializes normPix.
-    *  "band" is used as index to get the min/max/null values.
-    */
-   void getNormFromPix (ossim_int32  pixel,
-                        ossim_float64& normPix,
-                        ossim_uint32 band) const;
-
    void loadTileFromBip(const void* src, const ossimIrect& src_rect);
    void loadTileFromBil(const void* src, const ossimIrect& src_rect);
    void loadTileFromBsq(const void* src, const ossimIrect& src_rect);
@@ -677,6 +759,24 @@ protected:
    void unloadTileToBsq(void* dest,
                         const ossimIrect& dest_rect,
                         const ossimIrect& clip_rect) const;
+
+   /**
+    * Called from public unloadBand() routines that have an 
+    * OverwriteBandRule interface.
+    *
+    * @param dest      The destination buffer.
+    * @param src_band  The 0-based band of the source image data.
+    * @param dest_band The 0-based band of the destination buffer.
+    * @param dest_rect The rectangle of the destination buffer.
+    * @param clip_rect Only data within will be copied.
+    * @param ow_type   The rule for overwriting the destination buffer.
+    */
+   virtual void unloadBandToBsq( void* dest,
+                                 ossim_uint32 src_band,
+                                 ossim_uint32 dest_band,
+                                 const ossimIrect& dest_rect,
+                                 const ossimIrect& clip_rect,
+                                 OverwriteBandRule ow_type=NULL_RULE ) const;
 
    /**
     * Copies entire tile to buf passed in.  Data put in buf is normalized.
@@ -771,26 +871,34 @@ protected:
                                                    const ossimIrect& src_rect,
                                                    const ossimIrect& clip_rect);
    
-   template <class T> void unloadTileToBipTemplate(T, // dummy tmeplate variable
+   template <class T> void unloadTileToBipTemplate(T, // dummy template variable
                                                    void* dest,
                                                    const ossimIrect& dest_rect,
                                                    const ossimIrect& clip_rect) const;
 
-   template <class T> void unloadTileToBilTemplate(T, // dummy tmeplate variable
+   template <class T> void unloadTileToBilTemplate(T, // dummy template variable
                                                    void* dest,
                                                    const ossimIrect& dest_rect,
                                                    const ossimIrect& clip_rect) const;
 
-   template <class T> void unloadTileToBsqTemplate(T, // dummy tmeplate variable
+   template <class T> void unloadTileToBsqTemplate(T, // dummy template variable
                                                    void* dest,
                                                    const ossimIrect& dest_rect,
                                                    const ossimIrect& clip_rect) const;
 
-   template <class T> void unloadBandTemplate(T, // dummy tmeplate variable
+   template <class T> void unloadBandTemplate(T, // dummy template variable
                                               void* dest,
                                               const ossimIrect& dest_rect,
                                               const ossimIrect& clip_rect,
                                               ossim_uint32 band) const;
+
+   template <class T> void unloadBandToBsqTemplate(T, // dummy template variable
+                                                   void* dest,
+                                                   ossim_uint32 src_band,
+                                                   ossim_uint32 dest_band,
+                                                   const ossimIrect& dest_rect,
+                                                   const ossimIrect& clip_rect,
+                                                   OverwriteBandRule ow_type=NULL_RULE) const;
 
    /**
     * @brief initializeDefaults() Resizes and sets min/max/null arrays to
@@ -821,12 +929,16 @@ protected:
    
    bool hasSameDimensionsAs(ossimImageData* data)const
    {
-      if(!data) return false;
-      return ((theNumberOfSpatialComponents ==
-               data->theNumberOfSpatialComponents)&
-              (theSpatialExtents[0] == data->theSpatialExtents[0])&&
-              (theSpatialExtents[1] == data->theSpatialExtents[1])&&
-              (theScalarType == data->theScalarType));
+      bool result = false;
+      if(data)
+      {
+         result = ((theSpatialExtents.size() ==
+                    data->theSpatialExtents.size())&&
+                   (theSpatialExtents[0] == data->theSpatialExtents[0])&&
+                   (theSpatialExtents[1] == data->theSpatialExtents[1])&&
+                   (theScalarType == data->theScalarType));
+      }
+      return result;
    }
    
    /**
@@ -845,109 +957,12 @@ protected:
    std::vector<ossim_float64> theMaxPixelValue;
    
    ossimIpt       theOrigin;
-   
+
 private:
-   /**
-    * @note disallow 
-    */
-   const ossimImageData& operator=(const ossimImageData &rhs);
+
    
 TYPE_DATA
 };
-
-inline void ossimImageData::getPixFromNorm(ossim_int32& pixel,
-                                           ossim_float32 normPix,
-                                           ossim_uint32 band) const
-{
-   // If norm pix is 0.0 or negative make if null.
-   ossim_float32 p = theNullPixelValue[band]; 
-   
-   if (normPix > 0.0)
-   {
-      // un-normalize...
-      p = normPix * (theMaxPixelValue[band]-theMinPixelValue[band]+1.0);
-      
-      // handle negative min values.
-      p = p + theMinPixelValue[band] - 1.0;  
-      
-      // Clamp to  max.
-      if (p > theMaxPixelValue[band]) p = theMaxPixelValue[band];
-   
-      //***
-      // If p is less than min, make it min as it wasn't a null before.
-      // Add or subtract 0.5 to p otherwise as it will be cast to an
-      // int for proper rounding.
-      //***
-      p = p > theMinPixelValue[band] ?
-          ( p<0.0 ? p-0.5 : p+0.5 ) :
-          theMinPixelValue[band];
-   }
-
-   // Cast back to an int.
-   pixel = static_cast<ossim_int32>(p);
-}
-
-inline void ossimImageData::getPixFromNorm(ossim_int32& pixel,
-                                           ossim_float64 normPix,
-                                           ossim_uint32 band) const
-{
-   // If norm pix is 0.0 or negative make if null.
-   ossim_float64 p = theNullPixelValue[band]; 
-   
-   if (normPix > 0.0)
-   {
-      // un-normalize...
-      p = normPix * (theMaxPixelValue[band]-theMinPixelValue[band]+1.0);
-      
-      // handle negative min values.
-      p = p + theMinPixelValue[band] - 1.0;  
-      
-      // Clamp to  max.
-      if (p > theMaxPixelValue[band]) p = theMaxPixelValue[band];
-   
-      //***
-      // If p is less than min, make it min as it wasn't a null before.
-      // Add or subtract 0.5 to p otherwise as it will be cast to an
-      // int for proper rounding.
-      //***
-      p = p > theMinPixelValue[band] ?
-          ( p<0.0 ? p-0.5 : p+0.5 ) :
-          theMinPixelValue[band];
-   }
-
-   // Cast back to an int.
-   pixel = static_cast<ossim_int32>(p);
-}
-
-inline void ossimImageData::getNormFromPix(ossim_int32 pixel,
-                                           ossim_float32&  normPix,
-                                           ossim_uint32 band) const
-{
-   if      (pixel == theNullPixelValue[band]) normPix = 0.0;
-   else if (pixel >= theMaxPixelValue[band])  normPix = 1.0;
-
-   //***
-   // Normalize...
-   // Note that this will shift any negatives to positive prior to dividing.
-   //***
-   else normPix = ( (pixel-theMinPixelValue[band]+1) /
-                    (theMaxPixelValue[band] - theMinPixelValue[band] + 1.0) );
-}
-
-inline void ossimImageData::getNormFromPix(ossim_int32  pixel,
-                                           ossim_float64&   normPix,
-                                           ossim_uint32 band) const
-{
-   if      (pixel == theNullPixelValue[band]) normPix = 0.0;
-   else if (pixel >= theMaxPixelValue[band])  normPix = 1.0;
-
-   //***
-   // Normalize...
-   // Note that this will shift any negatives to positive prior to dividing.
-   //***
-   else normPix = ( (pixel-theMinPixelValue[band]+1) /
-                    (theMaxPixelValue[band] - theMinPixelValue[band] + 1.0) );
-}
 
 inline ossimIrect ossimImageData::getImageRectangle() const
 {

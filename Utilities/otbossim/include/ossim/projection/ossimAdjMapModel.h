@@ -15,7 +15,7 @@
 // information and error output.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimAdjMapModel.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAdjMapModel.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimAdjMapModel_HEADER
 #define ossimAdjMapModel_HEADER
 
@@ -53,9 +53,6 @@ public:
 
    //! Constructs given geom filename.
    ossimAdjMapModel(const ossimFilename& geom_filename);
-
-   //! Destructor only deletes the map projection.
-   virtual ~ossimAdjMapModel();
 
    //! Initializes base class data members after map model established.
    //  Returns TRUE if all's well.
@@ -120,6 +117,9 @@ public:
    inline virtual bool useForward()const {return true;} //!ground to image faster (you don't need DEM)
 
 private:
+   //! Destructor only deletes the map projection.
+   virtual ~ossimAdjMapModel();
+   
    //! This is the vector of UNNORMALIZED, BIASED parameters as used in the
    //! model. The collection of normalized, 0-biased, parameters used in
    //! registration are found in the

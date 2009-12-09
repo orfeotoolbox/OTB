@@ -1,7 +1,9 @@
 //*****************************************************************************
 // FILE: ossimSensorModelFactory.cc
 //
-// License:  See LICENSE.txt file in the top level directory.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // AUTHOR:  Oscar Kramer
 //
@@ -9,7 +11,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 13027 2008-06-15 01:37:00Z dburken $
+//  $Id: ossimSensorModelFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -33,6 +35,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 //***
 #include <ossim/projection/ossimCoarseGridModel.h>
 #include <ossim/projection/ossimRpcModel.h>
+#include <ossim/projection/ossimRpcProjection.h>
 #include <ossim/projection/ossimIkonosRpcModel.h>
 #include <ossim/projection/ossimNitfRpcModel.h>
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
@@ -71,7 +74,7 @@ ossimSensorModelFactory* ossimSensorModelFactory::theInstance = 0;
 
 //*****************************************************************************
 //  STATIC METHOD: ossimSensorModelFactory::instance()
-//
+//  
 //*****************************************************************************
 ossimSensorModelFactory*  ossimSensorModelFactory::instance()
 {
@@ -89,7 +92,7 @@ ossimSensorModelFactory*  ossimSensorModelFactory::instance()
 ossimProjection* ossimSensorModelFactory::createProjection(const ossimKeywordlist &keywordList,
                                                            const char *prefix) const
 {
-   ossimProjection *result=NULL;
+   ossimRefPtr<ossimProjection> result;
 
    //
    // Permit specification of geometry file name in lieu of type:
@@ -108,23 +111,22 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimKeywordlis
       if(value)
       {
          result = createProjection(ossimString(value));
-         if(result)
+         if(result.valid())
          {
             if(!result->loadState(keywordList, prefix))
             {
-               delete result;
-               result = NULL;
+               result = 0;
             }
-         }
+        }
       }
    }
-
-   return result;
+   
+   return result.release();
 }
 
 //*****************************************************************************
-//  METHOD:
-//
+//  METHOD: 
+//  
 //*****************************************************************************
 ossimProjection*
 ossimSensorModelFactory::createProjection(const ossimString &name) const
@@ -156,7 +158,7 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimQuickbirdRpcModel;
    }
-
+   
    if(name == STATIC_TYPE_NAME(ossimIkonosRpcModel))
    {
      return new ossimIkonosRpcModel;
@@ -164,7 +166,11 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
 
    if(name == STATIC_TYPE_NAME(ossimNitfRpcModel))
    {
-       return new ossimNitfRpcModel;
+      return new ossimNitfRpcModel;
+   }
+   if(name == STATIC_TYPE_NAME(ossimRpcProjection))
+   {
+      return new ossimRpcProjection;
    }
    if(name == STATIC_TYPE_NAME(ossimFcsiModel))
    {
@@ -243,7 +249,7 @@ ossimSensorModelFactory::createObject(const ossimKeywordlist& kwl,
 {
    return createProjection(kwl, prefix);
 }
-
+   
 //*****************************************************************************
 //  METHOD
 //*****************************************************************************
@@ -274,32 +280,31 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
    //***
    //typeList.push_back(ossimString(MY_NEW_MODEL));
-
+   
 }
 
 ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& filename,
                                                            ossim_uint32  entryIdx) const
 {
    ossimKeywordlist kwl;
-   ossimProjection* model = 0;
+   ossimRefPtr<ossimProjection> model = 0;
 
    ossimFilename geomFile = filename;
    geomFile = geomFile.setExtension("geom");
-
+   
    if(geomFile.exists()&&
       kwl.addFile(filename.c_str()))
    {
       ossimFilename coarseGrid;
-
+      
       const char* type = kwl.find(ossimKeywordNames::TYPE_KW);
       if(type)
       {
-//          if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
-         if(ossimString(type) == STATIC_TYPE_NAME(ossimCoarseGridModel))
+         if(ossimString(type) == ossimString(STATIC_TYPE_NAME(ossimCoarseGridModel)))
          {
             findCoarseGrid(coarseGrid,
                            filename);
-
+            
             if(coarseGrid.exists() &&(coarseGrid != ""))
             {
                kwl.add("grid_file_name",
@@ -308,7 +313,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
                model = new ossimCoarseGridModel(kwl);
                if(!model->getErrorStatus())
                {
-                  return model;
+                  return model.release();
                }
             }
          }
@@ -317,16 +322,15 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
 
    // See if there is an external geomtry.
-   ossimProjection* proj = createProjectionFromGeometryFile(filename,
+   ossimRefPtr<ossimProjection> proj = createProjectionFromGeometryFile(filename,
                                                             entryIdx);
-   if (proj)
+   if (proj.valid())
    {
-      return proj;
+      return proj.release();
    }
 
-   if(model)
+   if(model.valid())
    {
-      delete model;
       model = 0;
    }
    // first check for override
@@ -335,16 +339,16 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    {
       model =  createProjection(kwl);
    }
-   if(model)
+   if(model.valid())
    {
-      return model;
+      return model.release();
    }
 
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModelFactory::createProjection: Testing ossimCoarsGridModel" << std::endl;
    }
-
+   
    ifstream input(geomFile.c_str());
    char ecgTest[4];
    input.read((char*)ecgTest, 3);
@@ -361,7 +365,7 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
                   true);
       return createProjection(kwlTemp);
    }
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModelFactory::createProjection: testing ossimRpcModel" << std::endl;
@@ -378,8 +382,9 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
          << "testing ossimQuickbirdRpcModel"
          << std::endl;
    }
-
+   
    ossimQuickbirdRpcModel* qbModel = new ossimQuickbirdRpcModel;
+   model = qbModel;
    if(qbModel->parseFile(filename))
    {
       if(traceDebug())
@@ -388,20 +393,18 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
             << "DEBUG ossimSensorModelFactory::createProjection: "
             << "returning ossimQuickbirdRpcModel" << std::endl;
       }
-      model = qbModel;
-      return model;
+      return model.release();
    }
    else
    {
-      delete qbModel;
-      qbModel = NULL;
+      model = 0;
    }
-
    //---
    // Test for ikonos rpc.  Could be tiff or nitf which is handled in
    // parseFile method.
    //---
    ossimIkonosRpcModel* ikModel = new ossimIkonosRpcModel;
+   model = ikModel;
    if(ikModel->parseFile(filename))
    {
       if(traceDebug())
@@ -410,13 +413,11 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
             << "DEBUG ossimSensorModelFactory::createProjection: "
             << "returning ossimQuickbirdRpcModel" << std::endl;
       }
-      model = ikModel;
-      return model;
+      return model.release();
    }
    else
    {
-      delete ikModel;
-      ikModel = 0;
+      model = 0;
    }
 
    if(isNitf(filename))
@@ -428,36 +429,35 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
            << " testing ossimNitfRpcModel" << std::endl;
      }
 
-     model = new ossimNitfRpcModel(filename);  // filename = NITF_file
-     if(!model->getErrorStatus())
+     ossimNitfRpcModel* rpcModel = new ossimNitfRpcModel();
+      model = rpcModel;
+     if ( rpcModel->parseFile(filename, entryIdx) ) // filename = NITF_file
      {
-        return model;
+        return model.release();
      }
-     delete model;
      model = 0;
-
+     
      if(traceDebug())
      {
-        ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModelFactory::createProjection: testing ossimIkinosRpcModel" << std::endl;
+        ossimNotify(ossimNotifyLevel_DEBUG)
+           << "DEBUG ossimSensorModelFactory::createProjection: "
+           << "testing ossimIkinosRpcModel" << std::endl;
      }
-
+     
      model = new ossimNitfMapModel(filename); // filename = NITF_file
      if(!model->getErrorStatus())
      {
-        return model;
+        return model.release();
      }
-     delete model;
-     model = 0;
    }
    else if(isLandsat(filename))
    {
       model = new ossimLandSatModel(filename);
       if(!model->getErrorStatus())
-         return model;
-      delete model;
-      model = 0;
+         return model.release();
    }
-
+   model = 0;
+   
    ossimFilename spot5Test = geomFile;
    if(!spot5Test.exists())
    {
@@ -469,36 +469,28 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
          spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
       }
    }
-
    if(spot5Test.exists())
    {
-      ossimSpotDimapSupportData *meta = new ossimSpotDimapSupportData;
+      ossimRefPtr<ossimSpotDimapSupportData> meta = new ossimSpotDimapSupportData;
       if(meta->loadXmlFile(spot5Test))
       {
-         model = new ossimSpot5Model(meta);
+         model = new ossimSpot5Model(meta.get());
          if(!model->getErrorStatus())
          {
-            return model;
+            return model.release();
          }
-         delete model;
          model = 0;
       }
-      else
-      {
-         delete meta;
-         meta = 0;
-      }
    }
-
+   
    model = new ossimCoarseGridModel(geomFile);
-   if(model)
+   if(model.valid())
    {
       if(!model->getErrorStatus())
-         return model;
-      delete model;
+         return model.release();
       model = 0;
    }
-   return model;
+   return model.release();
 }
 
 bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
@@ -511,11 +503,11 @@ bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
   }
   return false;
 }
-
+   
 bool ossimSensorModelFactory::isNitf(const ossimFilename& filename)const
 {
    std::ifstream in(filename.c_str(), ios::in|ios::binary);
-
+   
    if(in)
    {
       char nitfFile[4];
@@ -532,16 +524,17 @@ bool ossimSensorModelFactory::isLandsat(const ossimFilename& filename)const
 {
    ossimFilename temp(filename);
    temp.downcase();
-   ossimFfL7* ff_headerp = 0;
+   ossimRefPtr<ossimFfL7> ff_headerp;
    if (temp.contains("header.dat"))
    {
        ff_headerp = new ossimFfL5(filename);
-   } else {
+   } 
+   else 
+   {
        ff_headerp = new ossimFfL7(filename);
    }
    bool r = !(ff_headerp->getErrorStatus());
-
-   delete ff_headerp;
+   ff_headerp = 0;
    return r;
 }
 
@@ -551,13 +544,13 @@ void ossimSensorModelFactory::findCoarseGrid(ossimFilename& result,
    result = geomFile;
    result.setFile(result.fileNoExtension()+"_ocg");
    result.setExtension("dat");
-
+   
    if(!result.exists())
    {
       result = geomFile;
       result.setExtension("dat");
    }
-
+   
    // let's find a .dat file in the current directory
    //
    if(!result.exists())
@@ -584,7 +577,7 @@ void ossimSensorModelFactory::findCoarseGrid(ossimFilename& result,
                      result = file;
                   }
                }
-
+               
             }
          }while((directoryList.getNext(file))&&(result == ""));
       }

@@ -8,7 +8,7 @@
 #include <ossim/base/ossimFilename.h>
 #include <ossim/matrix/newmat.h>
 
-class OSSIMDLLEXPORT ossimDpt;
+class ossimDpt;
 
 /**
  * storage class for a set of geographic tie points, between master and slave images

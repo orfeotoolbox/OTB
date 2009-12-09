@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimAffineProjection.cpp 11428 2007-07-27 18:44:18Z gpotts $
+//  $Id: ossimAffineProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/projection/ossimAffineProjection.h>
 RTTI_DEF1(ossimAffineProjection, "ossimAffineProjection", ossimProjection);
@@ -77,8 +77,6 @@ ossimAffineProjection::ossimAffineProjection(const ossimKeywordlist& geom_kwl,
 //*****************************************************************************
 ossimAffineProjection::~ossimAffineProjection()
 {
-   delete theClientProjection;
-   delete theAffineTransform;
 }
 
 //*****************************************************************************
@@ -90,7 +88,7 @@ ossimAffineProjection::worldToLineSample (const ossimGpt& worldPoint,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimAffineProjection::worldToLineSample: Entering..." << std::endl;
 
-   if (theClientProjection && theAffineTransform)
+   if (theClientProjection.valid() && theAffineTransform.valid())
    {
       theClientProjection->worldToLineSample(worldPoint, lineSampPt);
       theAffineTransform->inverse(lineSampPt);
@@ -110,7 +108,7 @@ ossimAffineProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimAffineProjection::lineSampleToWorld: Entering..." << std::endl;
 
-   if (theClientProjection && theAffineTransform)
+   if (theClientProjection.valid() && theAffineTransform.valid())
    {
       ossimDpt adjustedPt;
       theAffineTransform->forward(lineSampPt, adjustedPt);
@@ -134,7 +132,7 @@ ossimAffineProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimAffineProjection::lineSampleHeightToWorld: Entering..." << std::endl;
 
-   if (theClientProjection && theAffineTransform)
+   if (theClientProjection.valid() && theAffineTransform.valid())
    {
       ossimDpt adjustedPt;
       theAffineTransform->forward(lineSampPt, adjustedPt);
@@ -154,7 +152,7 @@ ossimAffineProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
 std::ostream& ossimAffineProjection::print(std::ostream& out) const
 {
    
-   if (theClientProjection && theAffineTransform)
+   if (theClientProjection.valid() && theAffineTransform.valid())
    {
       out <<
          "ossimAffineProjection:\n"
@@ -183,7 +181,7 @@ bool ossimAffineProjection::saveState(ossimKeywordlist& kwl,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimAffineProjection::saveState: entering..." << std::endl;
 
-   if (theClientProjection && theAffineTransform)
+   if (theClientProjection.valid() && theAffineTransform.valid())
    {
       theClientProjection->saveState(kwl, prefix);
       theAffineTransform->saveState(kwl, prefix);
@@ -254,7 +252,7 @@ ossimObject* ossimAffineProjection::dup() const
 //*****************************************************************************
 ossimGpt ossimAffineProjection::origin() const
 {
-   if (theClientProjection)
+   if (theClientProjection.valid())
       return theClientProjection->origin();
    return ossimGpt(0.0, 0.0, 0.0);
 }
@@ -264,7 +262,7 @@ ossimGpt ossimAffineProjection::origin() const
 //*****************************************************************************
 ossimDpt  ossimAffineProjection::getMetersPerPixel() const
 {
-   if (theClientProjection)
+   if (theClientProjection.valid())
       return theClientProjection->getMetersPerPixel();
    return ossimDpt(ossim::nan(), ossim::nan());
 }

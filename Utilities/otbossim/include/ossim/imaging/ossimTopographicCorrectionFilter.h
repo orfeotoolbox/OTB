@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTopographicCorrectionFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimTopographicCorrectionFilter_HEADER
 #define ossimTopographicCorrectionFilter_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
@@ -66,8 +66,6 @@ public:
    ossimTopographicCorrectionFilter(ossimImageSource* colorSource,
                                     ossimImageSource* elevSource);
    
-   virtual ~ossimTopographicCorrectionFilter();
-      
    ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tileRect,
                                        ossim_uint32 resLevel=0);
    
@@ -146,6 +144,7 @@ public:
    void computeLightDirection();
 
 protected:
+   virtual ~ossimTopographicCorrectionFilter();
    virtual void allocate();
    
    /*!

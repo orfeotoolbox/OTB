@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 13374 2008-08-04 13:02:22Z gpotts $
+//  $Id: ossimImageSourceSequencer.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>
@@ -26,11 +26,11 @@ static ossimTrace traceDebug("ossimImageSourceSequencer:debug");
    
 ossimImageSourceSequencer::ossimImageSourceSequencer(ossimImageSource* inputSource,
                                                      ossimObject* owner)
-   :ossimImageSource(owner,
-                     1,
-                     1,
-                     true,
-                     true),
+:ossimImageSource(owner,
+                  1,
+                  1,
+                  true,
+                  false),
     theBlankTile(NULL),
     theAreaOfInterest(0,0,0,0),
     theTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),

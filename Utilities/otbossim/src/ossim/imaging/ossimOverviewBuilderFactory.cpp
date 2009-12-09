@@ -7,7 +7,7 @@
 // Description: .
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactory.cpp 9935 2006-11-22 19:30:28Z dburken $
+// $Id: ossimOverviewBuilderFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstddef> /* for NULL */
 
@@ -34,7 +34,7 @@ ossimOverviewBuilderFactory::~ossimOverviewBuilderFactory()
 ossimOverviewBuilderBase* ossimOverviewBuilderFactory::createBuilder(
    const ossimString& typeName) const
 {
-   ossimOverviewBuilderBase* result = new  ossimTiffOverviewBuilder();
+   ossimRefPtr<ossimOverviewBuilderBase> result = new  ossimTiffOverviewBuilder();
    if ( result->hasOverviewType(typeName) == true )
    {
       // Capture the type.  (This builder has more than one.)
@@ -42,20 +42,18 @@ ossimOverviewBuilderBase* ossimOverviewBuilderFactory::createBuilder(
    }
    else
    {
-      delete result;
-      result = NULL;
+      result = 0;
    }
    
-   return result;
+   return result.release();
 }
 
 void ossimOverviewBuilderFactory::getTypeNameList(
    std::vector<ossimString>& typeList) const
 {
-   ossimOverviewBuilderBase* builder = new  ossimTiffOverviewBuilder();
+   ossimRefPtr<ossimOverviewBuilderBase> builder = new  ossimTiffOverviewBuilder();
    builder->getTypeNameList(typeList);
-   delete builder;
-   builder = NULL;
+   builder = 0;
 }
 
 ossimOverviewBuilderFactory::ossimOverviewBuilderFactory()

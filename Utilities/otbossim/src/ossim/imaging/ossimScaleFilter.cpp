@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
+// $Id: ossimScaleFilter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimFilter.h>
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
@@ -19,86 +19,90 @@
 
 RTTI_DEF1(ossimScaleFilter, "ossimScaleFilter", ossimImageSourceFilter);
 
+//**************************************************************************************************
 ossimScaleFilter::ossimScaleFilter()
    :ossimImageSourceFilter(),
-    theBlankTile(NULL),
-    theTile(NULL),
-    theMinifyFilter(NULL),
-    theMagnifyFilter(NULL),
-    theMinifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
-    theMagnifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
-    theScaleFactor(1.0, 1.0),
-    theInverseScaleFactor(1.0, 1.0),
-    theTileSize(64, 64),
-    theBlurFactor(1.0)
+    m_BlankTile(NULL),
+    m_Tile(NULL),
+    m_MinifyFilter(NULL),
+    m_MagnifyFilter(NULL),
+    m_MinifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
+    m_MagnifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
+    m_ScaleFactor(1.0, 1.0),
+    m_InverseScaleFactor(1.0, 1.0),
+    m_TileSize(64, 64),
+    m_BlurFactor(1.0)
 {
-   theInputRect.makeNan();
-   theMinifyFilter  = new ossimNearestNeighborFilter();
-   theMagnifyFilter = new ossimNearestNeighborFilter();
+   m_InputRect.makeNan();
+   m_MinifyFilter  = new ossimNearestNeighborFilter();
+   m_MagnifyFilter = new ossimNearestNeighborFilter();
 }
 
+//**************************************************************************************************
 ossimScaleFilter::ossimScaleFilter(ossimImageSource* inputSource,
                                    const ossimDpt& scaleFactor)
    :ossimImageSourceFilter(inputSource),
-    theBlankTile(NULL),
-    theTile(NULL),
-    theMinifyFilter(NULL),
-    theMagnifyFilter(NULL),
-    theMinifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
-    theMagnifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
-    theScaleFactor(scaleFactor),
-    theTileSize(64, 64),
-    theBlurFactor(1.0)
+    m_BlankTile(NULL),
+    m_Tile(NULL),
+    m_MinifyFilter(NULL),
+    m_MagnifyFilter(NULL),
+    m_MinifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
+    m_MagnifyFilterType(ossimScaleFilter_NEAREST_NEIGHBOR),
+    m_ScaleFactor(scaleFactor),
+    m_TileSize(64, 64),
+    m_BlurFactor(1.0)
 {
-   theInputRect.makeNan();
-   theMinifyFilter  = new ossimNearestNeighborFilter();
-   theMagnifyFilter = new ossimNearestNeighborFilter();
+   m_InputRect.makeNan();
+   m_MinifyFilter  = new ossimNearestNeighborFilter();
+   m_MagnifyFilter = new ossimNearestNeighborFilter();
 }
 
+//**************************************************************************************************
 ossimScaleFilter::~ossimScaleFilter()
 {
-   if(theMinifyFilter)
+   if(m_MinifyFilter)
    {
-      delete theMinifyFilter;
-      theMinifyFilter = NULL;
+      delete m_MinifyFilter;
+      m_MinifyFilter = NULL;
    }
    
-   if(theMagnifyFilter)
+   if(m_MagnifyFilter)
    {
-      delete theMagnifyFilter;
-      theMagnifyFilter = NULL;
+      delete m_MagnifyFilter;
+      m_MagnifyFilter = NULL;
    }
 }
 
+//**************************************************************************************************
 ossimRefPtr<ossimImageData> ossimScaleFilter::getTile(
    const ossimIrect& tileRect, ossim_uint32 resLevel)
 {
    
    if((!isSourceEnabled())||
       (!theInputConnection)||
-      ((theScaleFactor.x == 1.0)&&
-       (theScaleFactor.y == 1.0)&&
-       (theBlurFactor == 1.0)))
+      ((m_ScaleFactor.x == 1.0)&&
+       (m_ScaleFactor.y == 1.0)&&
+       (m_BlurFactor == 1.0)))
    {
       return ossimImageSourceFilter::getTile(tileRect, resLevel);
    }
-   if(!theTile.valid())
+   if(!m_Tile.valid())
    {
       allocate();
    }
 
-   if(!theTile)
+   if(!m_Tile)
    {
       return ossimImageSourceFilter::getTile(tileRect, resLevel);
    }
 
-   theTile->makeBlank();
+   m_Tile->makeBlank();
 
                        
-   ossimIrect imageRect = tileRect*theInverseScaleFactor;
+   ossimIrect imageRect = tileRect*m_InverseScaleFactor;
 
-   theTile->setImageRectangle(tileRect);
-   theBlankTile->setImageRectangle(tileRect);
+   m_Tile->setImageRectangle(tileRect);
+   m_BlankTile->setImageRectangle(tileRect);
 
 
    double xSupport;
@@ -118,15 +122,16 @@ ossimRefPtr<ossimImageData> ossimScaleFilter::getTile(
    
    runFilter(imageRect, tileRect);
    
-   theTile->validate();
+   m_Tile->validate();
    
-   return theTile;
+   return m_Tile;
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::runFilter(const ossimIrect& imageRect,
                                  const ossimIrect& viewRect)
 {
-   switch(theTile->getScalarType())
+   switch(m_Tile->getScalarType())
    {
       case OSSIM_UINT8:
       {
@@ -178,6 +183,7 @@ void ossimScaleFilter::runFilter(const ossimIrect& imageRect,
    }
 }
 
+//**************************************************************************************************
 template <class T>
 void ossimScaleFilter::runFilterTemplate(T dummy,
                                          const ossimIrect& imageRect,
@@ -205,8 +211,8 @@ void ossimScaleFilter::runFilterTemplate(T dummy,
    
    tempData->initialize();
    
-   if((theScaleFactor.x != 1.0)||
-      (theBlurFactor != 1.0))
+   if((m_ScaleFactor.x != 1.0)||
+      (m_BlurFactor != 1.0))
    {
       runHorizontalFilterTemplate(dummy,
                                   inputData,
@@ -218,21 +224,22 @@ void ossimScaleFilter::runFilterTemplate(T dummy,
       tempData->loadTile(inputData.get());
    }
    
-   if((theScaleFactor.y != 1.0)||
-      (theBlurFactor != 1.0))
+   if((m_ScaleFactor.y != 1.0)||
+      (m_BlurFactor != 1.0))
    {
       runVerticalFilterTemplate(dummy,
                                 tempData,
-                                theTile);
+                                m_Tile);
    }
    else
    {
-      theTile->loadTile(tempData.get());
+      m_Tile->loadTile(tempData.get());
    }
    
-   theTile->validate();
+   m_Tile->validate();
 }
 
+//**************************************************************************************************
 ossimIrect ossimScaleFilter::getBoundingRect(ossim_uint32 resLevel)const
 {
    ossimIrect result = ossimImageSourceFilter::getBoundingRect(resLevel);
@@ -243,39 +250,42 @@ ossimIrect ossimScaleFilter::getBoundingRect(ossim_uint32 resLevel)const
                           result.ul().y,
                           result.lr().x+1,
                           result.lr().y+1);
-      result *= theScaleFactor;
+      result *= m_ScaleFactor;
    }
    
    return result;
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::setFilterType(ossimScaleFilterType filterType)
 {
    setFilterType(filterType, filterType);
 }
 
 
+//**************************************************************************************************
 void ossimScaleFilter::setFilterType(ossimScaleFilterType minifyFilterType,
                                      ossimScaleFilterType magnifyFilterType)
 {
-   if(theMinifyFilter)
+   if(m_MinifyFilter)
    {
-      delete theMinifyFilter;
-      theMinifyFilter = NULL;
+      delete m_MinifyFilter;
+      m_MinifyFilter = NULL;
    }
-   if(theMagnifyFilter)
+   if(m_MagnifyFilter)
    {
-      delete theMagnifyFilter;
-      theMagnifyFilter = NULL;
+      delete m_MagnifyFilter;
+      m_MagnifyFilter = NULL;
    }
    
-   theMinifyFilterType  = minifyFilterType;
-   theMagnifyFilterType = magnifyFilterType;
+   m_MinifyFilterType  = minifyFilterType;
+   m_MagnifyFilterType = magnifyFilterType;
    
-   theMinifyFilter  = createNewFilter(minifyFilterType, theMinifyFilterType);
-   theMagnifyFilter = createNewFilter(magnifyFilterType, theMagnifyFilterType);
+   m_MinifyFilter  = createNewFilter(minifyFilterType, m_MinifyFilterType);
+   m_MagnifyFilter = createNewFilter(magnifyFilterType, m_MagnifyFilterType);
 }
 
+//**************************************************************************************************
 ossimFilter* ossimScaleFilter::createNewFilter(ossimScaleFilterType filterType,
                                                ossimScaleFilterType& result)
 {
@@ -348,23 +358,29 @@ ossimFilter* ossimScaleFilter::createNewFilter(ossimScaleFilterType filterType,
    return new ossimNearestNeighborFilter();
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::setScaleFactor(const ossimDpt& scale)
 {
-   theScaleFactor = scale;
-   if(fabs(theScaleFactor.x) <= FLT_EPSILON)
+   m_ScaleFactor = scale;
+   if(fabs(m_ScaleFactor.x) <= FLT_EPSILON)
    {
-      theScaleFactor.x = 1.0;
+      m_ScaleFactor.x = 1.0;
    }
-   if(fabs(theScaleFactor.y) <= FLT_EPSILON)
+   if(fabs(m_ScaleFactor.y) <= FLT_EPSILON)
    {
-      theScaleFactor.y = 1.0;
+      m_ScaleFactor.y = 1.0;
    }
 
-   theInverseScaleFactor.x = 1.0/theScaleFactor.x;
-   theInverseScaleFactor.y = 1.0/theScaleFactor.y;
+   m_InverseScaleFactor.x = 1.0/m_ScaleFactor.x;
+   m_InverseScaleFactor.y = 1.0/m_ScaleFactor.y;
+
+   // A change in the scale factor implies a change to the image geometry. If one has been created
+   // it needs to be modified:
+   updateGeometry();
 }
 
 
+//**************************************************************************************************
 template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
    T dummy,
    const ossimRefPtr<ossimImageData>& input,
@@ -377,8 +393,8 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
    ossim_int32 iw = imageRect.width();
    ossimIpt origin(viewRect.ul());
    ossimIpt imageOrigin(imageRect.ul());
-   ossimIpt inputUl = theInputRect.ul();
-   ossimIpt inputLr = theInputRect.lr();
+   ossimIpt inputUl = m_InputRect.ul();
+   ossimIpt inputLr = m_InputRect.lr();
    
    double scale = 0.0;
    double support = 0.0;
@@ -390,9 +406,9 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
    const ossimFilter* filter = getHorizontalFilter();
    ossim_float64 center = 0.0;
    ossim_int32 bandIdx = 0;
-   ossim_int32 numberOfBands = theTile->getNumberOfBands();
+   ossim_int32 numberOfBands = m_Tile->getNumberOfBands();
    
-   scale = theBlurFactor*ossim::max(1.0/theScaleFactor.x, 1.0);
+   scale = m_BlurFactor*ossim::max(1.0/m_ScaleFactor.x, 1.0);
    
    support=scale*filter->getSupport();
    if (support <= 0.5)
@@ -412,7 +428,7 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
       
       for(x = 0; x < vw; ++x)
       {
-         center=(origin.x + x+ .5)/theScaleFactor.x;
+         center=(origin.x + x+ .5)/m_ScaleFactor.x;
          start=ossim::max((ossim_int32)ossim::round<int>(center-support), (ossim_int32)inputUl.x);
          stop=ossim::min((ossim_int32)ossim::round<int>(center+support), (ossim_int32)inputLr.x);
          ossim_int32 delta = stop-start;
@@ -487,6 +503,7 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
    }
 }
 
+//**************************************************************************************************
 template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
    T dummy,
    const ossimRefPtr<ossimImageData>& input,
@@ -499,8 +516,8 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
    ossim_int32 iw = imageRect.width();
    ossimIpt origin(viewRect.ul());
    ossimIpt imageOrigin(imageRect.ul());
-   ossimIpt inputUl = theInputRect.ul();
-   ossimIpt inputLr = theInputRect.lr();
+   ossimIpt inputUl = m_InputRect.ul();
+   ossimIpt inputLr = m_InputRect.lr();
    double scale = 0.0;
    double support = 0.0;
    ossim_int32 x = 0;
@@ -511,9 +528,9 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
    const ossimFilter* filter = getVerticalFilter();
    ossim_float64 center = 0.0;
    ossim_int32 bandIdx = 0;
-   ossim_int32 numberOfBands = theTile->getNumberOfBands();
+   ossim_int32 numberOfBands = m_Tile->getNumberOfBands();
    
-   scale = theBlurFactor*ossim::max(1.0/theScaleFactor.y, 1.0);
+   scale = m_BlurFactor*ossim::max(1.0/m_ScaleFactor.y, 1.0);
    
    support=scale*filter->getSupport();
    if (support <= 0.5)
@@ -534,7 +551,7 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
      
       for(y = 0; y < vh; ++y)
       {
-         center=(double) ((y + origin.y+0.5)/theScaleFactor.y);
+         center=(double) ((y + origin.y+0.5)/m_ScaleFactor.y);
          start=ossim::max((ossim_int32)ossim::round<int>(center-support), (ossim_int32)inputUl.y);
          stop=ossim::min((ossim_int32)ossim::round<int>(center+support), (ossim_int32)inputLr.y);
          ossim_int32 delta = stop-start;
@@ -606,63 +623,71 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
    }
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::initialize()
 {
    ossimImageSourceFilter::initialize();
 
    // Force an allocate next getTile.
-   theTile = NULL;
-   theBlankTile = NULL;
-   theInputRect.makeNan();
+   m_Tile = NULL;
+   m_BlankTile = NULL;
+   m_InputRect.makeNan();
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::allocate()
 {
-   theTile      = NULL;
-   theBlankTile = NULL;
-   theInputRect.makeNan();
+   m_Tile      = NULL;
+   m_BlankTile = NULL;
+   m_InputRect.makeNan();
 
    if(theInputConnection&&isSourceEnabled())
    {
-      theTile      = ossimImageDataFactory::instance()->create(this, this);
-      theBlankTile = ossimImageDataFactory::instance()->create(this, this);
+      m_Tile      = ossimImageDataFactory::instance()->create(this, this);
+      m_BlankTile = ossimImageDataFactory::instance()->create(this, this);
       
-      theTile->initialize();
+      m_Tile->initialize();
 
-      theInputRect = theInputConnection->getBoundingRect();
+      m_InputRect = theInputConnection->getBoundingRect();
    }
 }
 
-bool ossimScaleFilter::getImageGeometry(ossimKeywordlist& kwl,
-                                        const char* prefix)
+//**************************************************************************************************
+// Returns a pointer reference to the active image geometry at this filter. The input source
+// geometry is modified, so we need to maintain our own geometry object as a data member.
+//**************************************************************************************************
+ossimImageGeometry* ossimScaleFilter::getImageGeometry()
 {
+   // Have we already defined our own geometry? Return it if so:
+   if (m_ScaledGeometry.valid())
+      return m_ScaledGeometry.get();
+
+   // Otherwise we'll need to establish a geometry based on the input connection:
    if(theInputConnection)
    {
-      theInputConnection->getImageGeometry(kwl, prefix);
+      // Fetch the map projection of the input image if it exists:
+      ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
 
-      ossimProjection* proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl,
-                                                                                           prefix);
+      // If trivial case of identity scale, just pass along the input connection's geometry:
+      if ((m_ScaleFactor.x == 1.0) && (m_ScaleFactor.y == 1.0))
+         return inputGeom;
 
-      if(proj)
+      // Need to create a copy of the input geom and modify it as our own, then pass that:
+      if (inputGeom)
       {
-         ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection,
-                                                proj);
+         m_ScaledGeometry = new ossimImageGeometry(*inputGeom);
+         updateGeometry();
 
-         if(mapProj)
-         {
-            mapProj->applyScale(theInverseScaleFactor, true);
-
-            mapProj->saveState(kwl, prefix);
-         }
-         
-         delete proj;
-
-         return true;
+         // Return the modified geometry:
+         return m_ScaledGeometry.get();
       }
    }
-   return false;
+
+   // No geometry defined, return NULL pointer:
+   return 0;
 }
 
+//**************************************************************************************************
 ossimIrect ossimScaleFilter::scaleRect(const ossimIrect input,
                                        const ossimDpt& scaleFactor)const
 {
@@ -680,6 +705,7 @@ ossimIrect ossimScaleFilter::scaleRect(const ossimIrect input,
                      origin.y + (h-1));
 }
 
+//**************************************************************************************************
 ossimString ossimScaleFilter::getFilterTypeAsString(ossimScaleFilterType type)const
 {
    switch(type)
@@ -749,6 +775,7 @@ ossimString ossimScaleFilter::getFilterTypeAsString(ossimScaleFilterType type)co
    return "nearest_neighbor";
 }
 
+//**************************************************************************************************
 ossimScaleFilter::ossimScaleFilterType ossimScaleFilter::getFilterType(const ossimString& type)const
 {
    ossimString typeUpper = type;
@@ -818,61 +845,66 @@ ossimScaleFilter::ossimScaleFilterType ossimScaleFilter::getFilterType(const oss
    return ossimScaleFilter_NEAREST_NEIGHBOR;
 }
 
+//**************************************************************************************************
 void ossimScaleFilter::getSupport(double& x, double& y)
 {
    const ossimFilter* horizontalFilter = getHorizontalFilter();
    const ossimFilter* verticalFilter   = getVerticalFilter();
    
-   x = theBlurFactor*ossim::max(1.0/theScaleFactor.x, 1.0)*
+   x = m_BlurFactor*ossim::max(1.0/m_ScaleFactor.x, 1.0)*
        horizontalFilter->getSupport();
-   y = theBlurFactor*ossim::max(1.0/theScaleFactor.y, 1.0)*
+   y = m_BlurFactor*ossim::max(1.0/m_ScaleFactor.y, 1.0)*
        verticalFilter->getSupport();
 }
 
+//**************************************************************************************************
 const ossimFilter* ossimScaleFilter::getHorizontalFilter()const
 {
-   if(theScaleFactor.x < 1)
+   if(m_ScaleFactor.x < 1)
    {
-      return theMinifyFilter;
+      return m_MinifyFilter;
    }
 
-   return theMagnifyFilter;
+   return m_MagnifyFilter;
 }
 
+//**************************************************************************************************
 const ossimFilter* ossimScaleFilter::getVerticalFilter()const
 {
-   if(theScaleFactor.y < 1)
+   if(m_ScaleFactor.y < 1)
    {
-      return theMinifyFilter;
+      return m_MinifyFilter;
    }
 
-   return theMagnifyFilter;
+   return m_MagnifyFilter;
 }
 
 
 
+//**************************************************************************************************
 bool ossimScaleFilter::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
    kwl.add(prefix,
            ossimKeywordNames::SCALE_X_KW,
-           theScaleFactor.x,
+           m_ScaleFactor.x,
            true);
    kwl.add(prefix,
            ossimKeywordNames::SCALE_Y_KW,
-           theScaleFactor.y,
+           m_ScaleFactor.y,
            true);
    kwl.add(prefix,
            "minify_type",
-           getFilterTypeAsString(theMinifyFilterType),
+           getFilterTypeAsString(m_MinifyFilterType),
            true);
    kwl.add(prefix,
            "magnify_type",
-           getFilterTypeAsString(theMagnifyFilterType),
+           getFilterTypeAsString(m_MagnifyFilterType),
            true);
    
    return ossimImageSourceFilter::saveState(kwl, prefix);
 }
 
+//**************************************************************************************************
 bool ossimScaleFilter::loadState(const ossimKeywordlist& kwl,
                                  const char* prefix)
 {
@@ -885,24 +917,43 @@ bool ossimScaleFilter::loadState(const ossimKeywordlist& kwl,
    ossimString magnify = kwl.find(prefix,
                                   "magnify_type");
    
-   theScaleFactor.x = scalex.toDouble();
-   theScaleFactor.y = scaley.toDouble();
+   m_ScaleFactor.x = scalex.toDouble();
+   m_ScaleFactor.y = scaley.toDouble();
 
-   if(fabs(theScaleFactor.x) <= FLT_EPSILON)
+   if(fabs(m_ScaleFactor.x) <= FLT_EPSILON)
    {
-      theScaleFactor.x = 1.0;
+      m_ScaleFactor.x = 1.0;
    }
-   if(fabs(theScaleFactor.y) <= FLT_EPSILON)
+   if(fabs(m_ScaleFactor.y) <= FLT_EPSILON)
    {
-      theScaleFactor.y = 1.0;
+      m_ScaleFactor.y = 1.0;
    }
 
-   theInverseScaleFactor.x = 1.0/theScaleFactor.x;
-   theInverseScaleFactor.y = 1.0/theScaleFactor.y;
+   m_InverseScaleFactor.x = 1.0/m_ScaleFactor.x;
+   m_InverseScaleFactor.y = 1.0/m_ScaleFactor.y;
    
    setFilterType(getFilterType(minify),
                  getFilterType(magnify));
    
+   // A change in the scale factor implies a change to the image geometry. If one has been created
+   // it needs to be modified:
+   updateGeometry();
+
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
 
+//**************************************************************************************************
+//! If this object is maintaining an ossimImageGeometry, this method needs to be called after 
+//! a scale change so that the geometry's projection is modified accordingly.
+//**************************************************************************************************
+void ossimScaleFilter::updateGeometry()
+{
+   if (m_ScaledGeometry.valid())
+   {
+      // Modify the image geometry's projection with the scale factor before returning geom:
+      ossimProjection* proj = m_ScaledGeometry->getProjection();
+      ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
+      if(mapProj)
+         mapProj->applyScale(m_InverseScaleFactor, true);
+   }
+}

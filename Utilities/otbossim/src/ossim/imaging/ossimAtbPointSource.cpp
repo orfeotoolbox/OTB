@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbPointSource.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimAtbPointSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -111,7 +111,7 @@ void ossimAtbPointSource::setViewPoint(const ossimDpt& view_point)
 
    theViewPoint = view_point;
    
-   if ((theRemapSource) &&
+   if ((theRemapSource.valid()) &&
        (theRemapSource->getBoundingRect().pointWithin(theViewPoint)))
       theViewPointIsValid = true;
    else

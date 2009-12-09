@@ -13,7 +13,7 @@
 // This was written to fix partial null pixels.
 // 
 //*************************************************************************
-// $Id: ossimPixelFlipper.h 12623 2008-04-07 14:10:08Z gpotts $
+// $Id: ossimPixelFlipper.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimPixelFlipper_HEADER
 #define ossimPixelFlipper_HEADER
 
@@ -70,8 +70,6 @@ public:
    /** default constructor */
    ossimPixelFlipper(ossimObject* owner=NULL);
 
-   /** destructor */
-   virtual ~ossimPixelFlipper();
 
    /** @return "Pixel flipper" as an ossimString. */
    virtual ossimString getShortName()const;
@@ -144,6 +142,8 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 protected:
+   /** destructor */
+   virtual ~ossimPixelFlipper();
    template <class T> void flipPixels(T dummy,
                                       ossimImageData* inpuTile,
                                       ossim_uint32 resLevel);

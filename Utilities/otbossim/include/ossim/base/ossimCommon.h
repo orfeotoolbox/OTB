@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// LICENSE: See top level LICENSE.txt file.
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts, with some additions and modifciations by
 // Patrick Melody
@@ -8,7 +10,7 @@
 // Description: Common file for utility functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.h 12910 2008-05-28 11:09:09Z gpotts $
+// $Id: ossimCommon.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimCommon_HEADER
 #define ossimCommon_HEADER
 
@@ -20,10 +22,13 @@
 #define ossimSTATIC_CHECK(expr,msg)  
 
 #include <cmath>
+#include <istream>
 #include <string>
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 class ossimIpt;
+class ossimDpt;
+class ossimString;
 namespace NEWMAT
 {
    class Matrix;
@@ -31,6 +36,8 @@ namespace NEWMAT
 
 namespace ossim
 {
+   OSSIM_DLL std::istream& skipws(std::istream& in);
+   OSSIM_DLL bool isWhiteSpace(int c);
     template<class T>
 /*     inline bool almostEqual(T x, T y, T tolerence = std::numeric_limits<T>::epsilon()) */
 /*         // are x and y within tolerance distance of each other? */
@@ -49,6 +56,7 @@ namespace ossim
 	// is x in the open interval (a,b)?
 	{ return x > a && x < b; }
 
+   
     /**
      * isnan Test for floating point Not A Number (NAN) value.
      * This should be used test for nan.
@@ -124,7 +132,16 @@ namespace ossim
      * DO NOT USE operator==.  Like "if (myDoubleValue == ossim::nan())"
      */
     inline double nan() { return nanValue.bits.floatname; }
-    
+
+   template <class T>
+   inline T abs(const T& value)
+   {
+      if(value < 0)
+      {
+         return -value;
+      }
+      return value;
+   }
     template <class S, class T> 
     inline T lerp(S x, T begin, T end)
 	// linear interpolation from begin to end by x
@@ -381,11 +398,34 @@ namespace ossim
     OSSIM_DLL ossimByteOrder byteOrder();
         // test endianness of current machine 
 
+    // values for various scalar types
     OSSIM_DLL double defaultMin(ossimScalarType scalarType);
     OSSIM_DLL double defaultMax(ossimScalarType scalarType);
     OSSIM_DLL double defaultNull(ossimScalarType scalarType);
     OSSIM_DLL ossim_uint32 scalarSizeInBytes(ossimScalarType scalarType);
-        // values for various scalar types
+    
+    /** @brief @return true if scalar type is signed, false if not. */
+    OSSIM_DLL bool isSigned(ossimScalarType scalarType);
+
+    /**
+     * @brief Get actual bits per pixel for a given scalar type.
+     * 
+     * This is bits used.  (OSSIM_USHORT11 = 11)
+     * 
+     * @returns The actual bits per pixel.  This will return 0 if the
+     * input connection is not hooked up or there is an unhandled scalar type.
+     */
+    OSSIM_DLL ossim_uint32 getActualBitsPerPixel(ossimScalarType scalarType);
+    
+    /**
+     * @brief Get bits per pixel for a given scalar type.
+     * 
+     * This the total bits per pixel.  (OSSIM_USHORT11 = 16)
+     * 
+     * @returns The bits per pixel.  This will return 0 if the
+     * input connection is not hooked up or there is an unhandled scalar type.
+     */
+    OSSIM_DLL ossim_uint32 getBitsPerPixel(ossimScalarType scalarType);  
         
     OSSIM_DLL void defaultTileSize(ossimIpt& tileSize);
 
@@ -405,6 +445,25 @@ namespace ossim
                                    const char* whitespace,
                                    const char* quotes,
                                    std::vector<std::string>& tokens, bool& unbalancedQuotes);
+   /**
+    * Will take a vector of ossimDpt and convert to a string list separated by spaces
+    * For example: 
+    *      (45,34) (12,34)
+    */
+   OSSIM_DLL void toStringList(ossimString& resultStringOfPoints,
+                               const std::vector<ossimDpt>& pointList);
+   OSSIM_DLL void toStringList(ossimString& resultStringOfPoints,
+                               const std::vector<ossimIpt>& pointList);
+   
+   /**
+    * Will take a string list separated by spaces and convert to a vector of ossimDpts.  It will not clear
+    * the passed in list but will append all points found.
+    */
+   OSSIM_DLL void toVector(std::vector<ossimDpt>& result,
+                           const ossimString& stringOfPoints);
+   OSSIM_DLL void toVector(std::vector<ossimIpt>& result,
+                           const ossimString& stringOfPoints);
+   
         // lex str into tokens starting at position start using whitespace  
 	//    chars as delimiters and quotes[0] and quotes[1] as the opening
 	//    and closing quotation chars (for quoting tokens containing whitespace).

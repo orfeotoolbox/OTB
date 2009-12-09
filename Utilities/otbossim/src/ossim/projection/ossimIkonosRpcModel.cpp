@@ -13,16 +13,16 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 14426 2009-04-30 16:22:28Z gpotts $
+//  $Id: ossimIkonosRpcModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <ossim/projection/ossimIkonosRpcModel.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/support_data/ossimIkonosMetaData.h>
 
 
 RTTI_DEF1(ossimIkonosRpcModel, "ossimIkonosRpcModel", ossimRpcModel);
@@ -188,11 +188,7 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& metadata,
 
 ossimIkonosRpcModel::~ossimIkonosRpcModel()
 {
-   if (theSupportData)
-   {
-      delete theSupportData;
-      theSupportData = 0;
-   }
+   theSupportData = 0;
 }
 
 //*****************************************************************************
@@ -212,13 +208,19 @@ void ossimIkonosRpcModel::finishConstruction()
    theRefGndPt.lat  = theLatOffset;
    theRefGndPt.lon  = theLonOffset;
    theRefGndPt.hgt  = theHgtOffset;
-   theMeanGSD       = (theGSD.x + theGSD.y)/2.0;
 
    //***
    // Assign the bounding image space rectangle:
    //***
    theImageClipRect = ossimDrect(0.0, 0.0,
                                  theImageSize.samp-1, theImageSize.line-1);
+
+   //---
+   // NOTE:  We must call "updateModel()" to set parameter used by base
+   // ossimRpcModel prior to calling lineSampleHeightToWorld or all
+   // the world points will be same.
+   //---
+   updateModel();   
 
    //***
    // Assign the bounding ground polygon:
@@ -234,8 +236,34 @@ void ossimIkonosRpcModel::finishConstruction()
    lineSampleHeightToWorld(ip3, 0.0, v3);
    theBoundGndPolygon
       = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
+
+   //---
+   // Call compute gsd:
+   // 
+   // This will set theGSD and theMeanGSD using lineSampleHeightToWorld on
+   // three image points.  Previously this was pulled from metadata.  Some of
+   // which was in US Survey feet and not converted to meters.  This method
+   // is more accurate as it uses the sensor model to compute.
+   //---
+   try
+   {
+      // Method throws ossimException.
+      computeGsd();
+   }
+   catch (const ossimException& e)
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimIkonosRpcModel finishConstruction Caught Exception:\n"
+         << e.what() << std::endl;
+   }
    
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel finishConstruction(): returning..." << std::endl;
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimIkonosRpcModel finishConstruction(): returning..."
+         << std::endl;
+   }
+   
    return;
 }
 
@@ -315,10 +343,9 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
    }
    sscanf(strptr, "%8c %s", dummy, name);
    theSensorID = name;
-   
-   
+
    //***
-   // GSD:
+   // GSD:  NOTE - this will be recomputed by computeGsd method later.
    //***
    strptr = strstr(strptr, "\nPixel Size X:");
    if (!strptr)
@@ -333,6 +360,7 @@ void ossimIkonosRpcModel::parseMetaData(const ossimFilename& data_file)
          return;
       }
    }
+   
    sscanf(strptr, "%14c %lf", dummy, &theGSD.samp);
    strptr = strstr(strptr, "\nPixel Size Y:");
    if (!strptr)
@@ -421,7 +449,7 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
       return false;
    }
 
-   char* strptr;
+   char* strptr = 0;
    // char linebuf[80];
    char dummy[80];
    // , name[80];
@@ -433,7 +461,7 @@ bool ossimIkonosRpcModel::parseHdrData(const ossimFilename& data_file)
    fread(filebuf, 1, 5000, fptr);
 
    //***
-   // GSD:
+   // GSD:  NOTE - this will be recomputed by computeGsd method later.
    //***
    strptr = strstr(filebuf, "\nPixel Size X:");
    if (!strptr)
@@ -551,7 +579,6 @@ void ossimIkonosRpcModel::parseRpcData(const ossimFilename& data_file)
                                           << keyword << std::endl;
       return;
    }
-
    theLineOffset = atof(buf);
       
    keyword = SAMP_OFF_KW;
@@ -747,7 +774,7 @@ void ossimIkonosRpcModel::writeGeomTemplate(ostream& os)
 bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 				    const char* prefix)const
 {
-   if(theSupportData)
+   if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       // copy ossimIkonosMetada-sensor into ossimIkonosRpcModel-sensorId
@@ -755,6 +782,7 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
    }
 
    ossimRpcModel::saveState(kwl, prefix);
+
   // this model just sets the base class values so
   // we do not need to re-construct this model so 
   // specify the type as the base class type
@@ -772,7 +800,7 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimIkonosRpcModel::loadState(const ossimKeywordlist& kwl,
                                     const char* prefix)
 {
-   if(theSupportData)
+   if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->loadState(kwl, supportPrefix);
@@ -783,105 +811,8 @@ bool ossimIkonosRpcModel::loadState(const ossimKeywordlist& kwl,
 
 bool ossimIkonosRpcModel::parseFile(const ossimFilename& file)
 {
-//    if (!ossimRpcModel::ossimParseFile(file))
-//    {
       return parseTiffFile(file);
-//    }
-//    return true;
 }
-
-#if 0
-bool ossimIkonosRpcModel::parseNitfFile(const ossimFilename& geom_file)
-{
-   if(!isNitf(geom_file))
-	   return false;
-   
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel parseNitfFile: entering..." << std::endl;
-
-   ossimKeywordlist kwl(geom_file);
-   const char* value;
-   
-   //***
-   // Assure this keywordlist contains correct type info:
-   //***
-   value = kwl.find(ossimKeywordNames::TYPE_KW);
-   if (!value || (strcmp(value, "ossimIkonosRpcModel")))
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG  ossimIkonosRpcModel parseNitfFile:"
-            << "\nFailed attempt to construct. sensor type \""<<value
-            << "\" does not match \"ossimIkonosRpcModel\"." << std::endl;
-      }
-
-      theErrorStatus++;
-      
-      if (traceExec())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG  ossimIkonosRpcModel parseNitfFile: returning..."
-            << std::endl;
-      }
-      return false;
-   }
-
-   //***
-   // Read meta data filename from geom file:
-   //***
-   value = kwl.find(META_DATA_FILE);
-   if (!value)
-   {
-      theErrorStatus++;
-      if (traceExec())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimIkonosRpcModel parseNitfFile: returning..."
-            << std::endl;
-      }
-      return false;
-   }
-
-   ossimFilename metadata (value);
-
-   //***
-   // Read RPC data filename from geom file:
-   //***
-   value = kwl.find(RPC_DATA_FILE);
-   if (!value)
-   {
-      theErrorStatus++;
-      if (traceExec())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG  ossimIkonosRpcModel parseNitfFile: returning..."
-            << std::endl;
-      }
-      return false;
-   }
-   ossimFilename rpcdata (value);
-
-   parseMetaData(metadata);
-   parseRpcData (rpcdata);
-   finishConstruction();
-
-   ossimString drivePart;
-   ossimString pathPart;
-   ossimString filePart;
-   ossimString extPart;
-   geom_file.split(drivePart,
-                   pathPart,
-                   filePart,
-                   extPart);
-
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG returning..." << std::endl;
-   }
-   
-   return true;
-}
-#endif
 
 bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 {
@@ -903,7 +834,7 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
       {
          // Currently not required by model so we will not error out here.
          ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimIkonosRpcModel::parseTiffFile parse returned false.\n"
+         << "WARNING: ossimIkonosMetaData::open returned false.\n"
          << std::endl;
       }
    }
@@ -952,9 +883,8 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
                        INIT_RPC_GEOM_FILENAME,
                        "");
    ossimKeywordlist kwl (init_rpc_geom);
- 
    saveState(kwl);
-
+   
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimIkonosRpcModel parseTiffFile: returning..." << std::endl;
 
    return true;

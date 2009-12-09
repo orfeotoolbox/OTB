@@ -7,9 +7,10 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRLevelFilter.h 13180 2008-07-16 21:01:56Z dburken $
+// $Id: ossimRLevelFilter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimRLevelFilter_HEADER
 #define ossimRLevelFilter_HEADER
+
 #include <ossim/imaging/ossimImageSourceFilter.h>
 
 /*!
@@ -30,14 +31,13 @@ public:
    /** @brief default constructor */
    ossimRLevelFilter();
 
-   /** @brief virtual destructor. */
-   virtual ~ossimRLevelFilter();
 
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result)const;
 
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=NULL);
+   //! Returns a pointer reference to the active image geometry at this filter. The input source
+   //! geometry is modified, so we need to maintain our own geometry object as a data member.
+   ossimImageGeometry* getImageGeometry();
 
    virtual void setCurrentRLevel(ossim_uint32 rlevel);
 
@@ -76,14 +76,22 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0)const;
 protected:
+   /** @brief virtual destructor. */
+   virtual ~ossimRLevelFilter();
+   
    /*!
     * Initializes result with the sum of decimations from rlevel one to
     * theCurrentRLevel.
     */
    void getSummedDecimation(ossimDpt& result) const;
    
+   //! If this object is maintaining an ossimImageGeometry, this method needs to be called after 
+   //! a scale change so that the geometry's projection is modified accordingly.
+   void updateGeometry();
+
    ossim_uint32 theCurrentRLevel;
    bool         theOverrideGeometryFlag;
+   ossimRefPtr<ossimImageGeometry> m_ScaledGeometry; //!< The input image geometry, altered by the scale
 
 TYPE_DATA
 };

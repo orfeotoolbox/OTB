@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiEllipseObject.h 13349 2008-07-30 15:34:34Z dburken $
+// $Id: ossimGeoAnnotationMultiEllipseObject.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimGeoAnnotationMultiEllipseObject_HEADER
 #define ossimGeoAnnotationMultiEllipseObject_HEADER
 #include <ossim/imaging/ossimGeoAnnotationObject.h>
@@ -34,21 +34,7 @@ public:
 
    virtual ossimAnnotationObject* getNewClippedObject(const ossimDrect& rect)const;
 
-   virtual void transform(ossimProjection* projection);
-
-   /**
-    * @brief Transforms from geographic to image space for a
-    * reduced resolution data set (rrds).
-    *
-    * This will transform any world points to line sample; then, convert any
-    * line sample to the correct rrds point.
-    *
-    * @param model The model to use for transformation.
-    *
-    * @param rrds Reduced resolution data set to use.
-    */
-   virtual void transform(const ossimImageProjectionModel& model,
-                          ossim_uint32 rrds);
+   virtual void transform(ossimImageGeometry* projection);
    
    virtual void applyScale(double x, double y);
 

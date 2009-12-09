@@ -16,7 +16,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 13830 2008-11-02 18:02:03Z dburken $
+// $Id: ossimInit.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 
 #include <ossim/init/ossimInit.h>
@@ -38,6 +38,8 @@
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/imaging/ossimImageSourceFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/base/ossim2dTo2dTransformRegistry.h>
+#include <ossim/imaging/ossimImageGeometryRegistry.h>
 #include <ossim/elevation/ossimElevManager.h>
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
@@ -559,7 +561,8 @@ void ossimInit::initializeDefaultFactories()
    ossimImageWriterFactoryRegistry::instance();
    ossimImageMetaDataWriterRegistry::instance();
    ossimImageHandlerRegistry::instance();
-
+   ossim2dTo2dTransformRegistry::instance();
+   ossimImageGeometryRegistry::instance();
    // Initialize the overview factories.
    ossimOverviewBuilderFactoryRegistry::instance()->
       registerFactory(ossimOverviewBuilderFactory::instance(), true);

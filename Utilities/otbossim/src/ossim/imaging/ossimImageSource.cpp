@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimImageSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -42,24 +41,49 @@ ossimImageSource::~ossimImageSource()
 ossimRefPtr<ossimImageData> ossimImageSource::getTile(const ossimIpt& origin,
                                                       ossim_uint32 resLevel)
 {
-   ossimIrect tile_rect(origin.x,
-                        origin.y,
-                        origin.x + getTileWidth()  - 1,
-                        origin.y + getTileHeight() - 1);
+   ossimIrect tileRect(origin.x,
+                       origin.y,
+                       origin.x + getTileWidth()  - 1,
+                       origin.y + getTileHeight() - 1);
    
-   return getTile(tile_rect, resLevel);
+   return getTile(tileRect, resLevel);
 }
 
 ossimRefPtr<ossimImageData> ossimImageSource::getTile(const ossimIrect& rect,
                                                       ossim_uint32 resLevel)
 {
    ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+                                      getInput(0));
    if(inter)
    {
       return inter->getTile(rect, resLevel);
    }
    return NULL;
+}
+
+bool ossimImageSource::getTile(ossimImageData* result, ossim_uint32 resLevel)
+{
+   bool status = true;
+   
+   if (result)
+   {
+      result->ref();
+      
+      ossimIrect tileRect = result->getImageRectangle();
+      
+      ossimRefPtr<ossimImageData> id = getTile(tileRect, resLevel);
+      if (id.valid())
+      {
+         *result = *(id.get());
+      }
+      else
+      {
+         status = false;
+      }
+      result->unref();
+   }
+
+   return status;
 }
 
 void ossimImageSource::getDecimationFactor(ossim_uint32 resLevel,
@@ -138,7 +162,7 @@ ossim_uint32 ossimImageSource::getTileHeight() const
 ossimIrect ossimImageSource::getBoundingRect(ossim_uint32 resLevel)const
 {
    ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+                                      getInput(0));
    if(inter)
    {
       return inter->getBoundingRect(resLevel);
@@ -229,32 +253,29 @@ double ossimImageSource::getMaxPixelValue(ossim_uint32 band)const
    return ossim::defaultMax(getOutputScalarType());
 }
 
-
-bool ossimImageSource::getImageGeometry(ossimKeywordlist& kwl,
-                                        const char* prefix)
+//**************************************************************************************************
+// Default implementation returns the image geometry object associated with the first input source 
+// (if any) connected to this source, or NULL.
+//**************************************************************************************************
+ossimImageGeometry*  ossimImageSource::getImageGeometry()
 {
-   int i = 0;
-   for(i = 0; i < (int)getNumberOfInputs(); ++i)
+   if (getNumberOfInputs())
    {
-      ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                      getInput(i));
+      ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
       if(interface)
-      {
-         return interface->getImageGeometry(kwl, prefix);
-      }
+         return interface->getImageGeometry();
    }
-   
-   return false;
+   return 0;
 }
 
-void ossimImageSource::setImageGeometry(const ossimKeywordlist& kwl)
+//**************************************************************************************************
+//! Default implementation sets geometry of the first input to the geometry specified.
+//**************************************************************************************************
+void ossimImageSource::setImageGeometry(const ossimImageGeometry* geom)
 {
-   ossimImageSource* inter = PTR_CAST(ossimImageSource,
-                                               getInput(0));
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, getInput(0));
    if (inter)
-   {
-      setImageGeometry(kwl);
-   }
+      setImageGeometry(geom);
 }
 
 void ossimImageSource::saveImageGeometry() const

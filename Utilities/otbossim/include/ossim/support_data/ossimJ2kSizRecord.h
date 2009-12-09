@@ -16,6 +16,7 @@
 #define ossimJ2kSizRecord_HEADER
 
 #include <iosfwd>
+#include <string>
 
 #include <ossim/base/ossimConstants.h>
 
@@ -42,20 +43,23 @@ public:
    ossimScalarType getScalarType() const;
 
    /**
-    * Print method.
-    *
-    * @param out Stream to print to.
-    * 
-    * @return std::ostream&
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    * @param out String to output to.
+    * @param prefix This will be prepended to key.
+    * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
+    * "nitf.file_name:"
+    * @return output stream.
     */
-   std::ostream& print(std::ostream& out) const;
+   std::ostream& print(std::ostream& out,
+                       const std::string& prefix=std::string()) const;
 
    /** operator<< */
    friend OSSIM_DLL std::ostream& operator<<(
       std::ostream& out, const ossimJ2kSizRecord& obj);
 
    /** segmet marker 0xff51 (big endian) */
-   ossim_uint16 theSizMarker;
+   ossim_uint16 theMarker;
 
    /** length of segment minus marker */
    ossim_uint16 theLsiz;
@@ -67,7 +71,7 @@ public:
    ossim_uint32 theXsiz;
 
    /** height of reference grid */
-   ossim_uint32 theYziz;
+   ossim_uint32 theYsiz;
 
    /**
     * Horizontal offset from the orgin of reference grid to the left side

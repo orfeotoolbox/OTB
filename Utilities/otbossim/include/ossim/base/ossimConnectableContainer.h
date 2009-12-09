@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.h 13017 2008-06-10 16:09:17Z dburken $
+// $Id: ossimConnectableContainer.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimConnectableContainer_HEADER
 #define ossimConnectableContainer_HEADER
@@ -25,10 +25,9 @@ class OSSIMDLLEXPORT ossimConnectableContainer : public ossimConnectableObject,
 {
 public:
    typedef std::map<ossim_int64,
-      ossimConnectableObject*> connectablObjectMapType;
+      ossimRefPtr<ossimConnectableObject> > connectablObjectMapType;
    
    ossimConnectableContainer(ossimConnectableObject* owner=0);
-   virtual ~ossimConnectableContainer();
 
    virtual ossimObject* getObject();
    
@@ -56,9 +55,9 @@ public:
     * Example: passing STATIC_TYPE_INFO(ossimImageRenderer) as an argument will
     *          look for all ossimImageRenderer's and return the list.
     */
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const RTTItypeid& typeInfo,
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const RTTItypeid& typeInfo,
                                                             bool recurse=true);
-   virtual std::vector<ossimConnectableObject*> findAllObjectsOfType(const ossimString& className,
+   virtual ossimConnectableObject::ConnectableObjectList findAllObjectsOfType(const ossimString& className,
                                                             bool recurse=true);
 
    /*!
@@ -142,6 +141,7 @@ public:
 //                                ossimConnectableObject* start);
      
 protected:
+   virtual ~ossimConnectableContainer();
    ossimConnectableContainer(const ossimConnectableContainer& rhs);
 
    void removeAllListeners();

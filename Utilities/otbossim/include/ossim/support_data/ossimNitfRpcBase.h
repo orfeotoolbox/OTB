@@ -1,9 +1,8 @@
 //*******************************************************************
-// Copyright (C) 2000 Intelligence Data Systems. 
 //
-// LICENSE: LGPL
-//
-// see top level LICENSE.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 // 
 // Author: Garrett Potts
 //
@@ -14,7 +13,7 @@
 // See: http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.h 11982 2007-11-02 16:34:45Z dburken $
+// $Id: ossimNitfRpcBase.h 14576 2009-05-20 13:58:45Z dburken $
 #ifndef ossimNitfRpcBase_HEADER
 #define ossimNitfRpcBase_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -358,15 +357,14 @@ class OSSIM_DLL ossimNitfRpcBase : public ossimNitfRegisteredTag
   void setSampleDenominatorCoeff(ossim_uint32 idx,
                                const ossimString& coeff);
 
-
-  /**
-   * Print method.
-   *
-   * @param out Stream to print to.
-   * 
-   * @return std::ostream&
-   */
-  virtual std::ostream& print(std::ostream& out) const;
+   /**
+    * @brief Print method that outputs a key/value type format
+    * adding prefix to keys.
+    * @param out Stream to output to.
+    * @param prefix Prefix added to key like "image0.";
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix=std::string()) const;
 
   virtual void setProperty(ossimRefPtr<ossimProperty> property);
   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;

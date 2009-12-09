@@ -1,12 +1,15 @@
 //*******************************************************************
-// License:  See top level LICENSE.txt file.
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 // 
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 13761 2008-10-22 19:28:35Z gpotts $
+// $Id: ossimString.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -22,7 +25,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 13761 2008-10-22 19:28:35Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 15766 2009-10-20 12:37:09Z gpotts $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -461,6 +464,46 @@ int ossimString::toInt(const ossimString& aString)
    return aString.toInt();
 }
 
+ossim_int16 ossimString::toInt16()const
+{
+   ossim_int16 i = 0;
+   if (!empty())
+   {
+      std::istringstream is(*this);
+      is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
+   }
+   return i;
+}
+
+ossim_int16 ossimString::toInt16(const ossimString& aString)
+{
+   return aString.toInt16();
+}
+
+ossim_uint16 ossimString::toUInt16()const
+{
+   ossim_uint16 i = 0;
+   if (!empty())
+   {
+      std::istringstream is(*this);
+      is >> i;
+      if(is.fail())
+      {
+         i = 0;
+      }
+   }
+   return i;
+}
+
+ossim_uint16 ossimString::toUInt16(const ossimString& aString)
+{
+   return aString.toUInt16();
+}
+
 ossim_int32 ossimString::toInt32()const
 {
    ossim_int32 i = 0;
@@ -738,10 +781,18 @@ ossimString ossimString::toString(ossim_uint64 aValue)
 }
 
 ossimString ossimString::toString(ossim_float32 aValue,
-                                  int precision,
-                                  bool trimZeroFlag,
-                                  bool scientific)
+                                  int precision)
 {
+   if ( ossim::isnan(aValue) )
+   {
+      return ossimString("nan");
+   }
+   std::ostringstream s;
+   s << std::setprecision(precision)  << aValue;
+   
+   return    ossimString(s.str());
+
+#if 0
    if ( ossim::isnan(aValue) )
    {
       return ossimString("nan");
@@ -774,41 +825,24 @@ ossimString ossimString::toString(ossim_float32 aValue,
                             result.begin()+result.size()-1);
       }
 
-#if 0      
-      ossim_uint32 size = result.size();
-      if (size == 1) // A single '.'
-      {
-         result = "0";
-      }
-      else
-      {
-         ossimString::const_iterator i = result.begin();
-         if ((*i) == '.')  // .something like ".129" make "0.129"
-         {
-            // .something like ".129" make "0.129"
-            result.insert(0, 1, '0');
-         }
-         else
-         {
-            i = result.end();
-            --i;
-            if ((*i) == '.') // something. like 129. make 129"
-            {
-               // something. like 129. make "0.129"
-               result.push_back('0');
-            }
-         }
-      }
-#endif
    }
    return result;
+#endif
 }
 
 ossimString ossimString::toString(ossim_float64 aValue,
-                                  int precision,
-                                  bool trimZeroFlag,
-                                  bool scientific)
+                                  int precision)
 {
+   if ( ossim::isnan(aValue) )
+   {
+      return ossimString("nan");
+   }
+   std::ostringstream s;
+   s << std::setprecision(precision)  << aValue;
+   
+   return    ossimString(s.str());
+
+#if 0
    if (aValue == ossim::nan())
    {
       return ossimString("nan");
@@ -842,37 +876,9 @@ ossimString ossimString::toString(ossim_float64 aValue,
          return ossimString(result.begin(),
                             result.begin()+result.size()-1);
       }
-#if 0
-      // Trim all zeroes front and back of the '.'.
-      result = result.trim('0');
-
-      ossim_uint32 size = result.size();
-      if (size == 1) // A single '.'
-      {
-         result = "0.0";
-      }
-      else
-      {
-         ossimString::const_iterator i = result.begin();
-         if ((*i) == '.')  // .something like ".129" make "0.129"
-         {
-            // .something like ".129" make "0.129"
-            result.insert(0, 1, '0');
-         }
-         else
-         {
-            i = result.end();
-            --i;
-            if ((*i) == '.') // something. like 129. make "0.129"
-            {
-               // something. like 129. make "0.129"
-               result.push_back('0');
-            }
-         }
-      }
-#endif
    }
    return result;
+#endif
 }
 
 ossimString ossimString::before(const ossimString& str,

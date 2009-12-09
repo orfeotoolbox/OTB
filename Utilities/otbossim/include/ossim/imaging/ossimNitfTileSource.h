@@ -1,6 +1,8 @@
 //*******************************************************************
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  David Burken
 //
@@ -9,7 +11,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 13942 2009-01-01 18:58:36Z dburken $
+//  $Id: ossimNitfTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -58,11 +60,10 @@ public:
 
    ossimNitfTileSource();
    
-   virtual ~ossimNitfTileSource();
    
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString className()    const;
+   virtual ossimString getClassName() const;
 
    /**
     *  Returns true if the image_file can be opened and is a valid nitf file.
@@ -124,7 +125,7 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
-   
+
    /**
     * Returns the output pixel type of the tile source.
     */
@@ -208,10 +209,12 @@ public:
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
 
    const ossimNitfFileHeader* getFileHeader()const;
+   ossimNitfFileHeader* getFileHeader();
    /**
     * @return The image header for the current entry.
     */
    const ossimNitfImageHeader* getCurrentImageHeader() const;
+   ossimNitfImageHeader* getCurrentImageHeader();
 
    /**
     * @brief Gets the decimation factor.
@@ -235,9 +238,22 @@ public:
     */
    virtual void getDecimationFactor(ossim_uint32 resLevel,
                                     ossimDpt& result) const;
-
+   
+   
+//   virtual ossimImageGeometry* getImageGeometry();
 protected:
+   virtual ~ossimNitfTileSource();
 
+   /**
+    * @brief Initiailizes theDecimationFactors.
+    *
+    * To any derived classes that override this should be called after
+    * completeOpen() so that the overviews are picked up.
+    *
+    * @return true on success false on error.
+    */
+   virtual bool computeDecimationFactors();
+   
    /**
     * @param imageRect The full resolution image rectangle.
     *
@@ -246,28 +262,15 @@ protected:
    void setBoundingRectangle(const ossimIrect& imageRect);
    
    /** Copy constructor, disallow... */
-   ossimNitfTileSource(const ossimNitfTileSource& source);
+   ossimNitfTileSource(const ossimNitfTileSource& obj);
 
    /** Operator=, disallow... */
-   ossimNitfTileSource& operator=(const ossimNitfTileSource& source); 
+   ossimNitfTileSource& operator=(const ossimNitfTileSource& rhs); 
 
    /**
     *  Returns true on success, false on error.
     */
    bool loadTile(const ossimIrect& clipRect);
-
-   /**
-    * @param pt Point to adjust.  This will be modified by the method to fall
-    * on an even block boundary.  Behavior is to snap to the nearest upper
-    * left block corner.
-    *
-    * @param tileHeight Height of one tile in pixels.
-    *s
-    * @param tileWidth Width of one tile in pixels.
-    */
-   void adjustToStartOfBlock(ossimIpt& pt,
-                             ossim_int32 tileHeight,
-                             ossim_int32 tileWidth) const;
 
    /**
     * @return Returns the block number given an origin.
@@ -280,22 +283,17 @@ protected:
    void destroy();
 
    /**
-    * Parses "theImageFile" and initializes all nitf headers.
-    *
+    * @brief Parses "theImageFile" and initializes all nitf headers.
     * @return true on success, false on error.
-    *
-    * @note parseFile() and initialize() are separated  so initialize() can
-    * be called on a entry change to an already open nitf file.
     */
-   bool parseFile();
+   virtual bool parseFile();
 
    /**
-    * Allocates all memory with the exception of headers.
-    *
-    * @note parseFile() and allocate() are separated so allocate() can
-    * be called on a entry change to an already open nitf file.
+    * @brief Allocates everything for current entry.
+    * @return True on success, false on error.
+    * @note allocate is called on a entry change to an already open nitf file.
     */
-   bool allocate();
+   virtual bool allocate();
 
    /**
     * @param hdr Pointer to image header.
@@ -311,7 +309,7 @@ protected:
    /**
     * Initializes the data member "theSwapBytesFlag" from the current entry.
     */
-   void initializeSwapBytesFlag();
+   virtual void initializeSwapBytesFlag();
    
    /**
     * Initializes the data member "theReadMode" from the current entry.
@@ -345,13 +343,6 @@ protected:
    void initializeDecimationFactor();
 
    /**
-    * Initializes the data "theSubImageOffset" from the current entry.
-    *
-    * @return true on success, false on error.
-    */
-   virtual bool initializeSubImageOffset();
-
-   /**
     * Initializes the data members "theImageRect" and "theBlockRect"
     * from the current entry.
     *
@@ -367,7 +358,7 @@ protected:
    /**
     * Initializes the data member "theCacheTileInterLeaveType".
     */
-   void initializeCacheTileInterLeaveType();
+   virtual void initializeCacheTileInterLeaveType();
    
    /**
     * Initializes the cache tile size(width and height).  For block images
@@ -399,7 +390,22 @@ protected:
     * @note x and y are zero based relative to the upper left corner so any
     * sub image offset should be subtracted off.
     */
-   bool loadBlock(ossim_uint32 x, ossim_uint32 y);
+   bool loadBlockFromCache(ossim_uint32 x, ossim_uint32 y,
+                           const ossimIrect& clipRect);
+
+   /**
+    * Loads a block of data to theCacheTile.
+    * 
+    * @param x Starting x position of block to load.
+    *
+    * @param y Starting y position of block to load.
+    *
+    * @return true on success, false on error.
+    *
+    * @note x and y are zero based relative to the upper left corner so any
+    * sub image offset should be subtracted off.
+    */
+   virtual bool loadBlock(ossim_uint32 x, ossim_uint32 y);
 
    /**
     * @param x Horizontal upper left pixel position of the requested block.
@@ -485,7 +491,7 @@ protected:
    ossimRefPtr<ossimImageData>   theTile;
    ossimRefPtr<ossimImageData>   theCacheTile;
    ossimRefPtr<ossimNitfFile>    theNitfFile;
-   vector<ossimRefPtr<ossimNitfImageHeader> > theNitfImageHeader;
+   std::vector<ossimRefPtr<ossimNitfImageHeader> > theNitfImageHeader;
    ReadMode                      theReadMode;
    ossimScalarType               theScalarType;
    bool                          theSwapBytesFlag;
@@ -497,7 +503,7 @@ protected:
    ossim_uint32                  theCurrentEntry;
    ossimIrect                    theImageRect;
    std::ifstream                 theFileStr;   
-   vector<ossim_uint32>          theOutputBandList;
+   std::vector<ossim_uint32>     theOutputBandList;
    ossimIpt                      theCacheSize;
    ossimInterleaveType           theCacheTileInterLeaveType;
    bool                          theCacheEnabledFlag;
@@ -505,8 +511,9 @@ protected:
    ossimAppFixedTileCache::ossimAppFixedCacheId theCacheId;
    bool                          thePackedBitsFlag;
    ossimIrect                    theBlockImageRect;
-   ossim_uint8*                  theCompressedBuf;
+   std::vector<ossim_uint8>      theCompressedBuf;
    ossim_float64                 theDecimationFactor;
+   std::vector<ossimDpt>         theDecimationFactors;
 
    //---
    // Have compressed jpeg blocks of variable length so we must scan and

@@ -10,7 +10,7 @@
 // Contains declaration of class ossimSpot5Model.
 // 
 //*****************************************************************************
-// $Id: ossimSpot5Model.h 13976 2009-01-20 16:00:16Z gpotts $
+// $Id: ossimSpot5Model.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimSpot5Model_HEADER
 #define ossimSpot5Model_HEADER
 
@@ -125,7 +125,7 @@ protected:
 /*    virtual ossimGpt extrapolate (const ossimDpt& ip, */
 /* 				 const double& height=ossim::nan()) const; */
 
-   ossimSpotDimapSupportData* theSupportData;
+   ossimRefPtr<ossimSpotDimapSupportData> theSupportData;
 
    //---
    // Image constant parameters:

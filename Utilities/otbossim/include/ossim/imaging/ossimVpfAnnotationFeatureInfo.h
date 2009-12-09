@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimVpfAnnotationFeatureInfo.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimVpfAnnotationFeatureInfo.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimVpfAnnotationFeatureInfo_HEADER
 #define ossimVpfAnnotationFeatureInfo_HEADER
 #include <ossim/base/ossimRgbVector.h>
@@ -147,7 +147,7 @@ public:
   }
   void setDrawingFeaturesToAnnotation();
   ossimIrect getBoundingProjectedRect()const;
-  void transform(ossimProjection* proj);
+  void transform(ossimImageGeometry* proj);
   void buildFeature();
   void deleteAllObjects();
   void drawAnnotations(ossimRgbImage* tile);

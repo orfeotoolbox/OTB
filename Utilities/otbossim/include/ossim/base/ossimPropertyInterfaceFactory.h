@@ -6,15 +6,15 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimPropertyInterfaceFactory.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimPropertyInterfaceFactory.h 14789 2009-06-29 16:48:14Z dburken $
 #ifndef ossimPropertyInterfaceFactory_HEADER
 #define ossimPropertyInterfaceFactory_HEADER
 
 
 #include <ossim/base/ossimRtti.h>
 #include <ossim/base/ossimObjectFactory.h>
-class OSSIMDLLEXPORT ossimObject;
-class OSSIMDLLEXPORT ossimPropertyInterface;
+class ossimObject;
+class ossimPropertyInterface;
 
 class OSSIMDLLEXPORT ossimPropertyInterfaceFactory : public ossimObjectFactory
 {

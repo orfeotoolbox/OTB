@@ -7,7 +7,7 @@
 // Description: The ossim overview builder factory.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderFactory.h 9930 2006-11-22 19:23:40Z dburken $
+// $Id: ossimOverviewBuilderFactory.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimOverviewBuilderFactory_HEADER
 #define ossimOverviewBuilderFactory_HEADER
@@ -23,8 +23,7 @@ class ossimString;
  * @class ossimOverviewBuilderFactory
  * @brief The ossim overview builder factory.
  */
-class OSSIM_DLL ossimOverviewBuilderFactory:
-   public ossimOverviewBuilderFactoryBase
+class OSSIM_DLL ossimOverviewBuilderFactory : public ossimOverviewBuilderFactoryBase
 {
 public:
 

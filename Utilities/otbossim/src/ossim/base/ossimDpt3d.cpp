@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimDpt3d.cpp 14356 2009-04-20 19:59:03Z dburken $
+// $Id: ossimDpt3d.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <sstream>
 #include <ossim/base/ossimDpt3d.h>
@@ -39,9 +39,9 @@ ossimDpt3d::ossimDpt3d(const ossimIpt &aPt)
 std::string ossimDpt3d::toString(ossim_uint32 precision) const
 {
    std::ostringstream os;
-   os << setiosflags(ios::fixed) << setprecision(precision);
+   os <<  setprecision(precision);
    
-   os << "( ";
+   os << "(";
    if ( ossim::isnan(x) == false)
    {
       os << x;
@@ -50,7 +50,7 @@ std::string ossimDpt3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << ", ";
+   os << ",";
    if ( ossim::isnan(y) == false )
    {
       os << y;
@@ -59,7 +59,7 @@ std::string ossimDpt3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << ", ";
+   os << ",";
    if ( ossim::isnan(z) == false )
    {
       os << z;
@@ -68,7 +68,7 @@ std::string ossimDpt3d::toString(ossim_uint32 precision) const
    {
       os << "nan";
    }
-   os << " )";
+   os << ")";
    
    return os.str();
 }

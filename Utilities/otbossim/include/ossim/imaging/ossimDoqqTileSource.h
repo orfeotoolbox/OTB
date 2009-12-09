@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDoqqTileSource.h 12988 2008-06-04 16:49:43Z gpotts $
+//  $Id: ossimDoqqTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimDoqqTileSource_HEADER
 #define ossimDoqqTileSource_HEADER
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
@@ -18,7 +18,6 @@ class OSSIM_DLL ossimDoqqTileSource: public ossimGeneralRasterTileSource
 {
 public:
    ossimDoqqTileSource();
-   virtual ~ossimDoqqTileSource();
    
    ossimString getShortName()const;
    ossimString getLongName()const;
@@ -26,8 +25,10 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
    
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
+   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getImageGeometry();
+
    bool open(const ossimFilename& filename);
    bool open(const ossimGeneralRasterInfo& info);
 
@@ -47,6 +48,7 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 	
 protected:
+   virtual ~ossimDoqqTileSource();
   ossimRefPtr<ossimDoqq>   theHeaderInformation;
   ossimString  theAcqDate;
    

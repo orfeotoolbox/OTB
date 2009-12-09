@@ -9,7 +9,7 @@
 // Contains class declaration for fpt.
 // Used to represent a two dimensional point containing data members x and y.
 //*******************************************************************
-//  $Id: ossimFpt.h 11398 2007-07-26 13:29:58Z dburken $
+//  $Id: ossimFpt.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimFpt_HEADER
 #define ossimFpt_HEADER
@@ -17,8 +17,8 @@
 #include <ossim/base/ossimCommon.h>
 
 // Forward class declarations.
-class OSSIMDLLEXPORT ossimIpt;
-class OSSIMDLLEXPORT ossimDpt;
+class ossimIpt;
+class ossimDpt;
 
 
 class OSSIMDLLEXPORT ossimFpt

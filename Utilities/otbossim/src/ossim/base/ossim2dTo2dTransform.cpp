@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim2dTo2dTransform.cpp 13664 2008-10-02 19:57:24Z gpotts $
+// $Id: ossim2dTo2dTransform.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <sstream>
@@ -20,6 +20,16 @@ RTTI_DEF1(ossim2dTo2dTransform, "ossim2dTo2dTransform", ossimObject);
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNotifyContext.h>
+
+// ### CREATE_COPY ###
+// Implementation of static factory method createCopy() requires includes here of ALL 2D-to-2D
+// transform types that need a deep copy capability:
+#include <ossim/base/ossimAffineTransform.h>
+#include <ossim/projection/ossimImageViewAffineTransform.h>
+#include <ossim/projection/ossimImageViewProjectionTransform.h>
+#include <ossim/projection/ossimMeanRadialLensDistortion.h>
+#include <ossim/base/ossimQuadTreeWarp.h>
+#include <ossim/projection/ossimRadialDecentLensDistortion.h>
 
 //***
 // Define Trace flags for use within this file:
@@ -247,6 +257,24 @@ void ossim2dTo2dTransform::setDxDy(const ossimDpt& dxdy)
    theDxDy.y = dxdy.y;
 }
 
-void ossim2dTo2dTransform::operator=(const ossim2dTo2dTransform& /* rhs */ )
+const ossim2dTo2dTransform& ossim2dTo2dTransform::operator=(const ossim2dTo2dTransform&  rhs )
 {
+   if (this != &rhs)
+   {
+      ossimObject::operator = (rhs);
+      
+      theConvergenceThreshold = rhs.theConvergenceThreshold;
+      theMaxIterations        = rhs.theMaxIterations;
+      theDxDy                 = rhs.theDxDy;
+   }
+   return *this;
 }
+
+std::ostream& ossim2dTo2dTransform::print(std::ostream& out) const
+{
+   out << "convergenceThreshold: " << theConvergenceThreshold << "\n"
+   << "maxIterations:        " << theMaxIterations << "\n"
+   << "dxdy:                 " << theDxDy << "\n";
+   return out;
+}
+

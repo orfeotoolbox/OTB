@@ -14,7 +14,9 @@
 #include <ossim/support_data/ossimInfoFactory.h>
 #include <ossim/support_data/ossimInfoBase.h>
 #include <ossim/support_data/ossimCcfInfo.h>
+#include <ossim/support_data/ossimDemInfo.h>
 #include <ossim/support_data/ossimDtedInfo.h>
+#include <ossim/support_data/ossimJ2kInfo.h>
 #include <ossim/support_data/ossimNitfInfo.h>
 #include <ossim/support_data/ossimTiffInfo.h>
 
@@ -35,6 +37,17 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
 {
    ossimInfoBase* result = 0;
 
+   result = new ossimJ2kInfo();
+   if ( result->open(file) )
+   {
+      return result;
+   }
+   else
+   {
+      delete result;
+      result = 0;
+   }
+
    result = new ossimNitfInfo();
    if ( result->open(file) )
    {
@@ -47,6 +60,17 @@ ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
    }
 
    result = new ossimTiffInfo();
+   if ( result->open(file) )
+   {
+      return result;
+   }
+   else
+   {
+      delete result;
+      result = 0;
+   }
+
+   result = new ossimDemInfo();
    if ( result->open(file) )
    {
       return result;

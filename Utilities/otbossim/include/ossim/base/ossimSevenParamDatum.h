@@ -9,12 +9,13 @@
 // SevenParamDatum. This is a base class for all
 // seven param datums.
 //*******************************************************************
-//  $Id: ossimSevenParamDatum.h 13560 2008-09-10 11:42:57Z gpotts $
+//  $Id: ossimSevenParamDatum.h 14789 2009-06-29 16:48:14Z dburken $
 
 #ifndef ossimSevenParamDatum_HEADER
 #define ossimSevenParamDatum_HEADER
 #include <ossim/base/ossimDatum.h>
-class OSSIMDLLEXPORT ossimEllipsoid;
+
+class ossimEllipsoid;
 
 class OSSIM_DLL ossimSevenParamDatum : public ossimDatum
 {

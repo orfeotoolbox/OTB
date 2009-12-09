@@ -6,7 +6,7 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimReferenced.h>
 
-class OSSIMDLLEXPORT ossimDpt;
+class ossimDpt;
 
 /**
  * storage class for tie point between ground and image

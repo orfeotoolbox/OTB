@@ -12,7 +12,7 @@
 // Remapper to adjust hue, saturation and intensity.
 //
 //*************************************************************************
-// $Id: ossimHsiRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHsiRemapper.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimHsiRemapper_HEADER
 #define ossimHsiRemapper_HEADER
@@ -34,8 +34,6 @@ public:
    };
    
    ossimHsiRemapper();
-
-   virtual ~ossimHsiRemapper();
 
    virtual ossimString getLongName()  const;
    virtual ossimString getShortName() const;
@@ -187,6 +185,7 @@ public:
    void resetMagenta();
    
 protected:
+   virtual ~ossimHsiRemapper();
    void   allocate(const ossimIrect& rect);
    void   verifyEnabled();
    double calculateMinNormValue();

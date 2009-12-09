@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 12447 2008-02-08 17:49:29Z dburken $
+//  $Id: ossimGpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -73,7 +73,37 @@ std::ostream& operator<<(std::ostream& os, const ossimGpt& pt)
 ossimString ossimGpt::toString(ossim_uint32 precision) const
 {
    std::ostringstream os;
-   print(os, precision);
+   
+   os << setprecision(precision);
+   os << "(";
+   
+   if(isLatNan())
+   {
+      os << "nan" << ",";
+   }
+   else
+   {
+      os << latd() << ",";
+   }
+   if(isLonNan())
+   {
+      os << "nan" << ",";
+   }
+   else
+   {
+      os << lond() << ",";
+   }
+   if(isHgtNan())
+   {
+      os << "nan" << ",";
+   }
+   else
+   {
+      // millimeter precision for height
+      os << height() << ",";
+   }
+   
+   os << (theDatum?theDatum->code().c_str():"") << ")";
    return ossimString(os.str());
 }
 

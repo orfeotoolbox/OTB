@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimTilePatch.h 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimTilePatch.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimTilePatch_HEADER
 #define ossimTilePatch_HEADER
@@ -33,7 +33,6 @@ public:
                   long numberOfComponents = 1,
                   long width=128,
                   long height=128);
-   virtual ~ossimTilePatch();
    
    /*!
     * return the tile boundary aligned rectangle for this
@@ -112,6 +111,8 @@ public:
    void convolve(ossimDiscreteConvolutionKernel* kernel);
    
 protected:
+   virtual ~ossimTilePatch();
+   
    ossimRefPtr<ossimImageData>         thePatchData;
    static ossimDiscreteNearestNeighbor nearestNeighborKernel;
    

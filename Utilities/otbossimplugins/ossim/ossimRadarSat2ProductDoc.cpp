@@ -4,8 +4,6 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  David Burken
-//
 // Description: Utility class to encapsulate parsing RadarSat2 product.xml
 // file.
 //
@@ -32,6 +30,12 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
+
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
 
 namespace ossimplugins
 {
@@ -614,10 +618,248 @@ bool ossimRadarSat2ProductDoc::initTiePoints(const ossimXmlDocument* xdoc,
    return result;
 }
 
+
+RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) const
+{
+   ossimString path = "/product/imageAttributes/geographicInformation/rationalFunctions/satellite";
+
+   RPCModel model;
+
+   ossimString searchbiasError = "/product/imageAttributes/geographicInformation/rationalFunctions/biasError";				//the line (y-coordinate)
+   ossimString searchrandomError = "/product/imageAttributes/geographicInformation/rationalFunctions/randomError";			//the line (y-coordinate)
+   ossimString searchlineFitQuality = "/product/imageAttributes/geographicInformation/rationalFunctions/lineFitQuality";				//the line (y-coordinate)
+   ossimString searchpixelFitQuality = "/product/imageAttributes/geographicInformation/rationalFunctions/pixelFitQuality";				//the line (y-coordinate)
+   ossimString searchlineOffset = "/product/imageAttributes/geographicInformation/rationalFunctions/lineOffset";						//the line (y-coordinate)
+   ossimString searchpixelOffset = "/product/imageAttributes/geographicInformation/rationalFunctions/pixelOffset";						//the line (y-coordinate)
+   ossimString searchlatitudeOffset = "/product/imageAttributes/geographicInformation/rationalFunctions/latitudeOffset";				//the line (y-coordinate)
+   ossimString searchlongitudeOffset = "/product/imageAttributes/geographicInformation/rationalFunctions/longitudeOffset";				//the line (y-coordinate)
+   ossimString searchheightOffset = "/product/imageAttributes/geographicInformation/rationalFunctions/heightOffset";						//the line (y-coordinate)
+   ossimString searchlineScale = "/product/imageAttributes/geographicInformation/rationalFunctions/lineScale";						//the line (y-coordinate)
+   ossimString searchpixelScale = "/product/imageAttributes/geographicInformation/rationalFunctions/pixelScale";						//the line (y-coordinate)
+   ossimString searchlatitudeScale = "/product/imageAttributes/geographicInformation/rationalFunctions/latitudeScale";						//the line (y-coordinate)
+   ossimString searchlongitudeScale = "/product/imageAttributes/geographicInformation/rationalFunctions/longitudeScale";						//the line (y-coordinate)
+   ossimString searchheightScale = "/product/imageAttributes/geographicInformation/rationalFunctions/heightScale";						//the line (y-coordinate)
+
+   ossimString searchlineNumeratorCoefficients = "/product/imageAttributes/geographicInformation/rationalFunctions/lineNumeratorCoefficients";						//the line (y-coordinate)
+   ossimString searchlineDenominatorCoefficients = "/product/imageAttributes/geographicInformation/rationalFunctions/lineDenominatorCoefficients";						//the line (y-coordinate)
+   ossimString searchpixelNumeratorCoefficients = "/product/imageAttributes/geographicInformation/rationalFunctions/pixelNumeratorCoefficients";						//the line (y-coordinate)
+   ossimString searchpixelDenominatorCoefficients = "/product/imageAttributes/geographicInformation/rationalFunctions/pixelDenominatorCoefficients";						//the line (y-coordinate)
+
+
+   // strings to hold values found
+   ossimString biasErrorStr;;
+   ossimString randomErrorStr;
+   ossimString lineFitQualityStr;
+   ossimString pixelFitQualityStr;
+   ossimString lineOffsetStr;
+   ossimString pixelOffsetStr;
+   ossimString latitudeOffsetStr;
+   ossimString longitudeOffsetStr;
+   ossimString heightOffsetStr;
+   ossimString lineScaleStr;
+   ossimString pixelScaleStr;
+   ossimString latitudeScaleStr;
+   ossimString longitudeScaleStr;
+   ossimString heightScaleStr;
+
+   std::vector<ossimString> lineNumeratorCoefficientsStr;
+   std::vector<ossimString> lineDenominatorCoefficientsStr;
+   std::vector<ossimString> pixelNumeratorCoefficientsStr;
+   std::vector<ossimString> pixelDenominatorCoefficientsStr;
+
+
+   // doubles to hold values found
+   double biasError = 0;
+   double randomError = 0;
+   double lineFitQuality = 0;
+   double pixelFitQuality = 0;
+   double lineOffset = 0;
+   double pixelOffset = 0;
+   double latitudeOffset = 0;
+   double longitudeOffset = 0;
+   double heightOffset = 0;
+   double lineScale = 0;
+   double pixelScale = 0;
+   double latitudeScale = 0;
+   double longitudeScale = 0;
+   double heightScale = 0;
+
+   vector<double> lineNumeratorCoefficients = vector<double>(20,0);
+   vector<double> lineDenominatorCoefficients = vector<double>(20,0);
+   vector<double> pixelNumeratorCoefficients = vector<double>(20,0);
+   vector<double> pixelDenominatorCoefficients = vector<double>(20,0);
+
+   //the final string outputs to the text file
+
+   //check if this function is being called on the correct SAR data type
+   //function is only applicable for RS2 product.xml files
+   bool rs2Check = isRadarSat2(xdoc);
+   if (rs2Check)
+   {
+      if (!ossim::getPath(searchbiasError, xdoc, biasErrorStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      biasError = biasErrorStr.toDouble();
+
+      if (!ossim::getPath(searchrandomError, xdoc, randomErrorStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      randomError = randomErrorStr.toDouble();
+
+      if (!ossim::getPath(searchlineFitQuality, xdoc, lineFitQualityStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      lineFitQuality = lineFitQualityStr.toDouble();
+
+      if (!ossim::getPath(searchpixelFitQuality, xdoc, pixelFitQualityStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      pixelFitQuality = pixelFitQualityStr.toDouble();
+
+      if (!ossim::getPath(searchlineOffset, xdoc, lineOffsetStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      lineOffset = lineOffsetStr.toDouble();
+
+      if (!ossim::getPath(searchpixelOffset, xdoc, pixelOffsetStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      pixelOffset = pixelOffsetStr.toDouble();
+
+      if (!ossim::getPath(searchlatitudeOffset, xdoc, latitudeOffsetStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      latitudeOffset = latitudeOffsetStr.toDouble();
+
+      if (!ossim::getPath(searchlongitudeOffset, xdoc, longitudeOffsetStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      longitudeOffset = longitudeOffsetStr.toDouble();
+
+      if (!ossim::getPath(searchheightOffset, xdoc, heightOffsetStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      heightOffset = heightOffsetStr.toDouble();
+
+      // --------------
+
+      if (!ossim::getPath(searchlineScale, xdoc, lineScaleStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      lineScale = lineScaleStr.toDouble();
+
+
+      if (!ossim::getPath(searchpixelScale, xdoc, pixelScaleStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      pixelScale = pixelScaleStr.toDouble();
+
+
+      if (!ossim::getPath(searchlatitudeScale, xdoc, latitudeScaleStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      latitudeScale = latitudeScaleStr.toDouble();
+
+      // -----------------------
+
+      if (!ossim::getPath(searchlongitudeScale, xdoc, longitudeScaleStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      longitudeScale = longitudeScaleStr.toDouble();
+
+
+      if (!ossim::getPath(searchheightScale, xdoc, heightScaleStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+      heightScale = heightScaleStr.toDouble();
+
+      // ---- parameters for reading in coeefs ------------
+
+      double val=0;
+
+      // -------------------------------------
+
+
+      if (!ossim::getPath(searchlineNumeratorCoefficients, xdoc, lineNumeratorCoefficientsStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+
+
+      string lineNumeratorCoefficientsStr_N = lineNumeratorCoefficientsStr[0];
+      // place into a stream
+      std::stringstream LNstream(lineNumeratorCoefficientsStr_N);
+
+      for (int i=0; i < 20; i ++)
+      {
+         LNstream >> val;
+         lineNumeratorCoefficients[i] = val;
+      }
+
+      // ------------------
+
+      if (!ossim::getPath(searchlineDenominatorCoefficients, xdoc, lineDenominatorCoefficientsStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+
+
+      string lineDenominatorCoefficientsStr_N = lineDenominatorCoefficientsStr[0];
+
+      // place into a stream
+      std::stringstream LDstream(lineDenominatorCoefficientsStr_N);
+
+      for (int i=0; i < 20; i ++)
+      {
+         LDstream >> val;
+         lineDenominatorCoefficients[i] = val;
+      }
+
+      // ------------------
+
+      if (!ossim::getPath(searchpixelNumeratorCoefficients, xdoc, pixelNumeratorCoefficientsStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+
+      string pixelNumeratorCoefficientsStr_N = pixelNumeratorCoefficientsStr[0];
+
+      // place into a stream
+      std::stringstream PNstream(pixelNumeratorCoefficientsStr_N);
+
+      for (int i=0; i < 20; i ++)
+      {
+         PNstream >> val;
+         pixelNumeratorCoefficients[i] = val;
+      }
+
+      // ------------------
+
+      if (!ossim::getPath(searchpixelDenominatorCoefficients, xdoc, pixelDenominatorCoefficientsStr))
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+
+      string pixelDenominatorCoefficientsStr_N = pixelDenominatorCoefficientsStr[0];
+
+      // place into a stream
+      std::stringstream PDstream(pixelDenominatorCoefficientsStr_N);
+
+      for (int i=0; i < 20; i ++)
+      {
+         PDstream >> val;
+         pixelDenominatorCoefficients[i] = val;
+      }
+
+      // end character search term
+
+      model.biasError = biasError;
+      model.randomError = randomError;
+      model.lineFitQuality = lineFitQuality;
+      model.pixelFitQuality = pixelFitQuality;
+      model.lineOffset = lineOffset;
+      model.pixelOffset = pixelOffset;
+      model.latitudeOffset = latitudeOffset;
+      model.longitudeOffset = longitudeOffset;
+      model.heightOffset = heightOffset;
+      model.lineScale = lineScale;
+      model.pixelScale = pixelScale;
+      model.latitudeScale = latitudeScale;
+      model.longitudeScale = longitudeScale;
+      model.heightScale = heightScale;
+      model.lineNumeratorCoefficients = lineNumeratorCoefficients;
+      model.lineDenominatorCoefficients = lineDenominatorCoefficients;
+      model.pixelNumeratorCoefficients = pixelNumeratorCoefficients;
+      model.pixelDenominatorCoefficients = pixelDenominatorCoefficients;
+   }
+
+   return model;
+}
+
 bool ossimRadarSat2ProductDoc::getSatellite(const ossimXmlDocument* xdoc,
                                             ossimString& s) const
 {
    ossimString path = "/product/sourceAttributes/satellite";
+   // The saved File is an ossimKeywordlist
+
    return ossim::getPath(path, xdoc, s);
 }
 

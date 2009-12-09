@@ -9,7 +9,7 @@
 // Description: This file contains the cache algorithm
 //
 //***********************************
-// $Id: ossimTileCache.h 14370 2009-04-20 21:40:03Z dburken $
+// $Id: ossimTileCache.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef DataCache_HEADER
 #define DataCache_HEADER
@@ -20,9 +20,9 @@ using namespace std;
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDpt3d.h>
-
-class ossimDataObject;
-class ossimTileCache
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimDataObject.h>
+class OSSIM_DLL ossimTileCache
 {
 public:
    
@@ -84,7 +84,7 @@ protected:
            theOrigin(origin),
            theResLevel(resLevel)
          {}
-      ossimDataObject*    theCachedTile;
+      ossimRefPtr<ossimDataObject>    theCachedTile;
       ossimDpt3d         theOrigin;
       unsigned long      theResLevel;
    };

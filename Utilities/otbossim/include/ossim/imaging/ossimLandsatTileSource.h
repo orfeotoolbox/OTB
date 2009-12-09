@@ -11,15 +11,14 @@
 // TileSource.
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.h 10751 2007-04-23 16:49:08Z dburken $
+//  $Id: ossimLandsatTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimLandsatTileSource_HEADER
 #define ossimLandsatTileSource_HEADER
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimDate.h>
-
-class ossimFfL7;
+#include <ossim/support_data/ossimFfL7.h>
 
 class OSSIM_DLL ossimLandsatTileSource : public ossimGeneralRasterTileSource
 {
@@ -29,7 +28,6 @@ public:
    ossimLandsatTileSource(const ossimKeywordlist& kwl,
                            const char* prefix=0);
    
-   virtual ~ossimLandsatTileSource();
 
    virtual ossimString getShortName() const;
    
@@ -56,14 +54,9 @@ public:
    bool isVir()const;
    bool isTm()const;
    
-  /*!
-    *  Populates the keyword list with image geometry information.  This
-    *  method is used to relay projection/model information to users.
-    *  Returns true if geometry info is present, false if not.
-    */
-   virtual bool getImageGeometry(ossimKeywordlist& kwl,
-                                 const char* prefix=0);
-
+   //! Returns the image geometry object associated with this tile source or NULL if non defined.
+   //! The geometry contains full-to-local image transform as well as projection (image-to-world)
+   virtual ossimImageGeometry* getImageGeometry();
 
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
@@ -82,10 +75,11 @@ public:
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 private:
+   virtual ~ossimLandsatTileSource();
 
    void openHeader(const ossimFilename& file);
    
-   ossimFfL7* theFfHdr;
+   ossimRefPtr<ossimFfL7> theFfHdr;
 
    TYPE_DATA
 };

@@ -5,7 +5,7 @@
 // Author: David Burken <dburken@imagelinks.com>
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactoryBase.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimImageSourceFactoryBase.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFactoryBase.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -24,37 +24,27 @@ const ossimImageSourceFactoryBase& ossimImageSourceFactoryBase::operator=(const 
 
 ossimImageSource* ossimImageSourceFactoryBase::createImageSource(const ossimString& name)const
 {
-   ossimObject* result =createObject(name);
+   ossimRefPtr<ossimObject> result =createObject(name);
    
-   if(PTR_CAST(ossimImageSource, result))
+   if(PTR_CAST(ossimImageSource, result.get()))
    {
-      return (ossimImageSource*)result;
+      return (ossimImageSource*)result.release();
    }
+   result = 0;
 
-   if(result)
-   {
-      delete result;
-      result = NULL;
-   }
-
-   return (ossimImageSource*)NULL;
+   return 0;
 }
 
 ossimImageSource* ossimImageSourceFactoryBase::createImageSource(const ossimKeywordlist& kwl,
                                                                  const char* prefix)const
 {
-   ossimObject* result =createObject(kwl, prefix);
+   ossimRefPtr<ossimObject> result =createObject(kwl, prefix);
    
-   if(PTR_CAST(ossimImageSource, result))
+   if(PTR_CAST(ossimImageSource, result.get()))
    {
-      return (ossimImageSource*)result;
+      return (ossimImageSource*)result.release();
    }
-
-   if(result)
-   {
-      delete result;
-      result = NULL;
-   }
-
-   return (ossimImageSource*)NULL;
+   result = 0;
+   
+   return (ossimImageSource*)0;
 }

@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.h 14243 2009-04-07 20:35:45Z dburken $
+// $Id: ossimNitfFile.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimNitfFile_HEADER
 #define ossimNitfFile_HEADER
 
@@ -41,17 +41,19 @@ public:
    /**
     * @brief print method that outputs a key/value type format adding prefix
     * to keys.
-    * @param out String to output to.
+    * @param out Stream to output to.
     * @param prefix This will be prepended to key.
     * e.g. Where prefix = "nitf." and key is "file_name" key becomes:
     * "nitf.file_name:"
+    * @param printOverviews If true overview, if present(e.g. rpf's) will be
+    * printed.
     * @return output stream.
     */
    std::ostream& print(std::ostream& out,
-                       const std::string& prefix=std::string()) const;
+                       const std::string& prefix=std::string(),
+                       bool printOverviews=false) const;
    
    ossimNitfFile();
-   virtual ~ossimNitfFile();
 
    /*!
     *  Opens the nitf file and attempts to parse.
@@ -62,14 +64,15 @@ public:
    /*!
     * Will return the header.
     */
-   const ossimRefPtr<ossimNitfFileHeader> getHeader()const;
+   const ossimNitfFileHeader* getHeader()const;
+   ossimNitfFileHeader* getHeader();
    ossimIrect getImageRect()const;
    
-   ossimNitfImageHeader*  getNewImageHeader(long imageNumber)const;
-   ossimNitfSymbolHeader* getNewSymbolHeader(long symbolNumber)const;
-   ossimNitfLabelHeader*  getNewLabelHeader(long labelNumber)const;
-   ossimNitfTextHeader*   getNewTextHeader(long textNumber)const;
-   ossimNitfDataExtensionSegment* getNewDataExtensionSegment(long dataExtNumber)const;
+   ossimNitfImageHeader*  getNewImageHeader(ossim_uint32 imageNumber)const;
+   ossimNitfSymbolHeader* getNewSymbolHeader(ossim_uint32 symbolNumber)const;
+   ossimNitfLabelHeader*  getNewLabelHeader(ossim_uint32 labelNumber)const;
+   ossimNitfTextHeader*   getNewTextHeader(ossim_uint32 textNumber)const;
+   ossimNitfDataExtensionSegment* getNewDataExtensionSegment(ossim_uint32 dataExtNumber)const;
    
    ossimString getVersion()const;
 
@@ -77,6 +80,7 @@ public:
    ossimFilename getFilename() const;
 
 protected:
+   virtual ~ossimNitfFile();
    ossimNitfImageHeader* allocateImageHeader()const;
    
    ossimFilename                    theFilename;

@@ -566,7 +566,7 @@ long int index_pos( long int row_number,
 		    vpf_table_type table )
 {
    long int   recsize;
-   unsigned long int pos;
+   unsigned long int pos=0;
 
    STORAGE_BYTE_ORDER = table.byte_order;
 

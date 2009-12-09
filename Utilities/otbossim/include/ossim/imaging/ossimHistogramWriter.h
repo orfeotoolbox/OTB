@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.h 11002 2007-05-22 03:23:10Z dburken $
+// $Id: ossimHistogramWriter.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimHistogramWriter_HEADER
 #define ossimHistogramWriter_HEADER
 #include <ossim/base/ossimOutputSource.h>
@@ -36,7 +36,6 @@ public:
    ossimHistogramWriter(ossimImageSource* inputSource=0,
                         ossimObject* owner=0);
 
-   virtual ~ossimHistogramWriter();
    void setAreaOfInterest(const ossimIrect& rect);
 
    virtual ossimObject* getObject();
@@ -86,6 +85,7 @@ public:
    virtual void abort();
    
 protected:
+   virtual ~ossimHistogramWriter();
    virtual void writeHistogram();
    ossimIrect                           theAreaOfInterest;
    ossimFilename                        theFilename;

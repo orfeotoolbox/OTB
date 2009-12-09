@@ -13,7 +13,7 @@
 // Quick Bird ".TIL" files.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimQuickbirdTiffTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimQuickbirdTiffTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <ossim/imaging/ossimQuickbirdTiffTileSource.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
@@ -65,24 +65,41 @@ bool ossimQuickbirdTiffTileSource::open()
          return false;
       }
    }
-
+   ossimDpt shift;
+   
    if((info.theUlXOffset != OSSIM_INT_NAN) &&
       (info.theUlYOffset != OSSIM_INT_NAN))
    {
-      theSubImageOffset = ossimIpt(info.theUlXOffset, info.theUlYOffset);
+      shift = ossimIpt(info.theUlXOffset, info.theUlYOffset);
    }
    else
    {
-      theSubImageOffset = ossimIpt(0,0);
+      shift = ossimIpt(0,0);
    }
    
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimQuickbirdTiffTileSource::open() DEBUG:"
-         << "\nSub image offset  = " << theSubImageOffset
+         << "\nSub image offset  = " << shift
          << std::endl;
    }
+   m_transform = new ossim2dTo2dShiftTransform(shift);
    
    return true;
+}
+
+ossimImageGeometry* ossimQuickbirdTiffTileSource::getImageGeometry()
+{
+   ossimImageGeometry* result = ossimImageHandler::getImageGeometry();
+   
+   if(result)
+   {
+      if(!result->getTransform())
+      {
+         result->setTransform(m_transform.get());
+      }
+   }
+   
+   return result;
 }

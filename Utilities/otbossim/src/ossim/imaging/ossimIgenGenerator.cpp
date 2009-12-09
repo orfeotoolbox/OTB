@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIgenGenerator.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimIgenGenerator.cpp 15766 2009-10-20 12:37:09Z gpotts $
 #include <ossim/imaging/ossimIgenGenerator.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -221,7 +221,7 @@ void ossimIgenGenerator::generateTiledSpecList(bool outputToFileFlag)
 
 void ossimIgenGenerator::generatePixelTiledSpecList(bool outputToFileFlag)
 {
-   ossimProjection* proj = createProductProjection();
+   ossimRefPtr<ossimProjection> proj = createProductProjection();
 
    if((!proj)||(theOutputGeoPolygon.size() != 4))
    {
@@ -325,18 +325,12 @@ void ossimIgenGenerator::generatePixelTiledSpecList(bool outputToFileFlag)
          i++;
       }
    }
-   if(proj)
-   {
-      delete proj;
-      proj = NULL;
-   }
-   
 }
 
 void ossimIgenGenerator::generateGeoTiledSpecList(const ossimDpt& spacing, bool outputToFileFlag)
 {
-   ossimProjection* proj = createProductProjection();
-   if((proj)&&(theOutputGeoPolygon.size() == 4))
+   ossimRefPtr<ossimProjection> proj = createProductProjection();
+   if((proj.valid())&&(theOutputGeoPolygon.size() == 4))
    {
       ossimDrect rect;
 
@@ -456,11 +450,6 @@ void ossimIgenGenerator::generateGeoTiledSpecList(const ossimDpt& spacing, bool 
          ulLat -= spacing.lat;
       }
 
-      if(proj)
-      {
-         delete proj;
-         proj = NULL;
-      }
    }   
 }
 
@@ -478,10 +467,10 @@ void ossimIgenGenerator::generateNoTiledSpecList(bool outputToFileFlag)
       long id = 0;
       if(theOutputGeoPolygon.size())
       {
-         ossimObject* obj = createInput();
-         ossimImageChain* chain = PTR_CAST(ossimImageChain,
-                                           obj);
-         if(chain)
+         ossimRefPtr<ossimObject> obj = createInput();
+         ossimRefPtr<ossimImageChain> chain = PTR_CAST(ossimImageChain,
+                                                       obj.get());
+         if(chain.valid())
          {
             ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
             
@@ -495,11 +484,7 @@ void ossimIgenGenerator::generateNoTiledSpecList(bool outputToFileFlag)
          {
             kwl.add("object1.",theInputKwl, true);
          }
-
-         if(obj)
-         {
-            delete obj;
-         }
+         obj = 0;
       }
       else
       {
@@ -550,18 +535,14 @@ int ossimIgenGenerator::getTileId(const ossimDrect& rect,
 
 ossimIrect ossimIgenGenerator::getInputBoundingRect()const
 {
-   ossimObject* obj = createInput();
-   ossimImageSource* inter = PTR_CAST(ossimImageSource, obj);
+   ossimRefPtr<ossimObject> obj = createInput();
+   ossimImageSource* inter = PTR_CAST(ossimImageSource, obj.get());
    ossimIrect result;
 
    result.makeNan();
    if(inter)
    {
       result = inter->getBoundingRect();
-   }
-   if(obj)
-   {
-      delete obj;
    }
    return result;
 }
@@ -574,8 +555,8 @@ void ossimIgenGenerator::addPadding(ossimGeoPolygon& output,
    {
       case OSSIM_PIXEL:
       {
-         ossimProjection* proj = createProductProjection();
-         if(proj)
+         ossimRefPtr<ossimProjection> proj = createProductProjection();
+         if(proj.valid())
          {
             ossimDpt ul;
             ossimDpt ur;
@@ -612,7 +593,6 @@ void ossimIgenGenerator::addPadding(ossimGeoPolygon& output,
 
             output.setOrdering(OSSIM_CLOCKWISE_ORDER);
          
-            delete proj;
          }
          break;
       }

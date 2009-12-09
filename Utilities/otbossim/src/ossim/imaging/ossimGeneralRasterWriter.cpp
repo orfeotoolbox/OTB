@@ -6,7 +6,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+//  $Id: ossimGeneralRasterWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
 
 #include <cstdlib>
 #include <fstream>
@@ -787,13 +787,13 @@ void ossimGeneralRasterWriter::writeEnviHeader() const
    ossimKeywordlist kwl;
    kwl.add(ossimKeywordNames::INTERLEAVE_TYPE_KW, interleaveType.c_str());
 
-   ossimEnviHeaderFileWriter hdr;
-   hdr.connectMyInputTo(0, theInputConnection);
-   hdr.initialize();
-   hdr.setFilename(headerFile);
-   hdr.loadState(kwl);
-   hdr.setAreaOfInterest(theAreaOfInterest);
-   hdr.execute();
+   ossimRefPtr<ossimEnviHeaderFileWriter> hdr = new ossimEnviHeaderFileWriter;
+   hdr->connectMyInputTo(0, theInputConnection.get());
+   hdr->initialize();
+   hdr->setFilename(headerFile);
+   hdr->loadState(kwl);
+   hdr->setAreaOfInterest(theAreaOfInterest);
+   hdr->execute();
    
    if (traceDebug()) CLOG << " Exited..." << endl;
 }

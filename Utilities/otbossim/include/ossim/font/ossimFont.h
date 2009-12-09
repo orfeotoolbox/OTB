@@ -6,7 +6,7 @@
 // Description: 
 // 
 //********************************************************************
-// $Id: ossimFont.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimFont.h 15766 2009-10-20 12:37:09Z gpotts $
 #ifndef ossimFont_HEADER
 #define ossimFont_HEADER
 #include <ossim/base/ossimIpt.h>
@@ -86,8 +86,6 @@ public:
          theLocalOrigin            = rhs.theLocalOrigin;
          theAffineTransform        = rhs.theAffineTransform;
       }
-   virtual ~ossimFont()
-      {}
    virtual ossimObject* dup()const=0;
 
    /*!
@@ -289,6 +287,8 @@ public:
       }
 
 protected:
+   virtual ~ossimFont()
+   {}
    ossimString theStringToRasterize;
    ossimString theFamilyName;
    ossimString theStyleName;

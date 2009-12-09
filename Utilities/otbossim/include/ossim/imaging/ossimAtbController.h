@@ -11,7 +11,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimAtbController.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAtbController.h 15766 2009-10-20 12:37:09Z gpotts $
 
 #ifndef ossimAtbController_HEADER
 #define ossimAtbController_HEADER
@@ -135,9 +135,9 @@ protected:
    void initializeRemappers();
 
    ossimDrect                       theBoundingRect;
-   ossimConnectableContainer*       theContainer;
+   ossimRefPtr<ossimConnectableContainer>       theContainer;
    ossimGridRemapEngine*            theGridRemapEngine;
-   std::vector<ossimAtbMatchPoint*> theMatchPoints;
+   std::vector<ossimRefPtr<ossimAtbMatchPoint> > theMatchPoints;
    ossimIpt                         theGridSpacing;
 
    TYPE_DATA
