@@ -108,12 +108,12 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 
          if(ffvfOK)
            functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
-	 else // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max and 1 as coef
-	   {
-	     functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
-	     functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
-	     functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
-	   }
+         else // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max and 1 as coef
+           {
+             functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
+             functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
+             functionValues->SetUserStep( functionValues->GetMaxSpectralValue()-functionValues->GetMinSpectralValue()/2. );
+           }
        
          m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
        }
