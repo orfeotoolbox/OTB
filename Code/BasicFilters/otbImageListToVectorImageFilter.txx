@@ -56,10 +56,10 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   InputImageListPointerType inputPtr = this->GetInput();
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
   while (inputListIt!=inputPtr->End())
-  {
-    inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-    ++inputListIt;
-  }
+    {
+      inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      ++inputListIt;
+    }
 }
 /**
  * Main computation method
