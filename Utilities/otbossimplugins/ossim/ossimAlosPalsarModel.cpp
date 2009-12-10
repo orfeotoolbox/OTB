@@ -480,8 +480,9 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
 
   const char* inp_sctim_str = kwl.find(prefix,"inp_sctim");
 
-  const char* rng_gate_str = kwl.find(prefix,"zero_dop_range_time_f_pixel");
-  double rng_gate = atof(rng_gate_str);
+  // Not available for ALOS
+  //const char* rng_gate_str = kwl.find(prefix,"zero_dop_range_time_f_pixel");
+  //double rng_gate = atof(rng_gate_str);
 
   if(_refPoint == NULL)
   {
@@ -566,12 +567,14 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
 
   double c = 2.99792458e+8;
 
-  double distance = (rng_gate*1e-3 + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
+  //double distance = (rng_gate*1e-3 + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
+  const char* slantRange = kwl.find(prefix, "slant_range_to_1st_data_sample");
+  double distance = atof(slantRange);
 
   _refPoint->set_distance(distance);
 
   // in order to use ossimSensorModel::lineSampleToWorld
-  const char* nbCol_str = kwl.find(prefix,"num_pix");
+  const char* nbCol_str = kwl.find(prefix,"num_pix_in_line");
   const char* nbLin_str = kwl.find(prefix,"num_lines");
   theImageSize.x      = atoi(nbCol_str);
   theImageSize.y      = atoi(nbLin_str);

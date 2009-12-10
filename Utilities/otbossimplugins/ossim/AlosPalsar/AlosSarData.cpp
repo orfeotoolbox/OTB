@@ -164,6 +164,7 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
   if (datafiledesc != NULL)
   {
     kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(),true);
+    // slant range to 1st data sample in metres
     kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(),true);
     // FIXME debug
     std::cout << std::endl << "pulse_repetition_frequency = " << signalData->get_pulse_repetition_frequency() << std::endl;
@@ -186,6 +187,7 @@ const AlosSarDataFileDescriptor * AlosSarData::get_AlosSarDataFileDescriptor() c
 
 const AlosSarSignalData * AlosSarData::get_AlosSarSignalData() const
 {
+  // TODO: Check if _records[AlosSarSignalDataID] works
   return dynamic_cast<const AlosSarSignalData*>(_records.find(AlosSarSignalDataID)->second);
 }
 

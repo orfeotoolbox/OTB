@@ -27,7 +27,7 @@ AlosSarDataFileDescriptor::~AlosSarDataFileDescriptor()
 std::ostream& operator<<(std::ostream& os, const AlosSarDataFileDescriptor& data)
 {
   os<<"_num_lines:"<<data._num_lines<<std::endl;
-  os<<"_num_lines:"<<data._num_lines<<std::endl;
+  os<<"_num_pix_in_line:"<<data._num_pix_in_line<<std::endl;
   return os;
 }
 

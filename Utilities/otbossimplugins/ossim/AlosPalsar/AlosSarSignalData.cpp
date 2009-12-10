@@ -28,6 +28,8 @@ AlosSarSignalData::~AlosSarSignalData()
 
 std::ostream& operator<<(std::ostream& os, const AlosSarSignalData& data)
 {
+  os << "_pulse_repetition_frequency:"
+     << data._pulse_repetition_frequency << std::endl;
   os << "_slant_range_to_1st_data_sample:"
      << data._slant_range_to_1st_data_sample << std::endl;
 
