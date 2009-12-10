@@ -230,7 +230,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
         FIND_PACKAGE(OpenThreads)
 ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
-        INCLUDE(${OTB_SOURCE_DIR}/FindOpenThreads.cmake)
+        INCLUDE(${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake)
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
 
 SET(OTB_USE_EXTERNAL_OPENTHREADS 1 CACHE INTERNAL "")
@@ -1059,7 +1059,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
-    ${OTB_SOURCE_DIR}/FindOpenThreads.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR_CM24}
     COMPONENT Development
     )
