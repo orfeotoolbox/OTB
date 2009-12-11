@@ -140,6 +140,16 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS2}
         ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
         303 2 134 330 )
 
+ADD_TEST(coTvExtractROI_QB ${COMMON_TESTS2}
+  --compare-image ${NOTOL}   
+  ${BASELINE}/coTvExtractROI_QB.png
+  ${TEMP}/coTvExtractROI_QB.png
+    otbExtractROI_RGB
+  ${INPUTDATA}/QB_Suburb.png
+  ${TEMP}/coTvExtractROI_QB.png
+  0 0 70 70 
+  )
+
 # -------            otb::VectorDataExtractROI   ------------------------------
 ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)
@@ -207,7 +217,6 @@ ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG1 ${COMMON_TESTS2}
          ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
          -startX 300 -startY 10 -sizeX 250 -sizeY 50 -channels 1 )
 
-
 ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG2 ${COMMON_TESTS2}
   --compare-image ${NOTOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_2.png
                     ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_2.png
@@ -258,6 +267,23 @@ ADD_TEST(coTvTestMultiExtractMultiUpdate ${COMMON_TESTS2}
       1 # first channel
       3 # last channel
 )
+
+ADD_TEST(coTvMultiChannelExtractROI_Romania ${COMMON_TESTS2}
+--compare-image  ${NOTOL}
+		 ${BASELINE}/coTvMultiChannelExtractROI_Romania.tif
+                 ${TEMP}/coTvMultiChannelExtractROI_Romania.tif 
+     otbTestMultiExtractMultiUpdate
+      ${INPUTDATA}/Romania_Extract.tif
+      ${TEMP}/coTvMultiChannelExtractROI_Romania.tif
+      0 # startX
+      0 # startY
+      100 #sizeX
+      100 #sizeY
+      2 # first channel
+      3 # last channel
+)
+
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
