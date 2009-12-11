@@ -233,6 +233,15 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         N
         )
 
+ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
+  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseXS_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
+        otbOrthoRectificationFilter
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
+	367319 4835740 300 300 2.5608 -2.8452 31 N
+        )
+
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
@@ -287,6 +296,9 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         ${INPUTDATA}/DEM/srtm_directory/
 #         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
+
+
+
 
 #========================= Ortho rectif SPOT5 ===============================
 
