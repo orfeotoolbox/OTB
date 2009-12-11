@@ -23,6 +23,29 @@
 
 namespace otb
 {
+/** \class MeanDifferenceImageFilter
+ * \brief Implements neighborhood-wise the computation of mean difference.
+ *
+ * This filter is parametrized over the types of the two
+ * input images and the type of the output image.
+ *
+ * Numeric conversions (castings) are done by the C++ defaults.
+ *
+ * The filter will walk over all the pixels in the two input images, and for
+ * each one of them it will do the following:
+ *
+ * - cast the input 1 pixel value to \c double
+ * - cast the input 2 pixel value to \c double
+ * - compute the difference of the two pixel values
+ * - compute the value of the difference of means
+ * - cast the \c double value resulting to the pixel type of the output image
+ * - store the casted value into the output image.
+ *
+ * The filter expect all images to have the same dimension
+ * (e.g. all 2D, or all 3D, or all ND)
+ *
+ * \ingroup IntensityImageFilters Multithreaded
+ */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MeanDifferenceImageFilter :

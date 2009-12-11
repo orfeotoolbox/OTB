@@ -34,6 +34,16 @@ namespace otb
 namespace Functor
 {
 
+/** \class Functor::LHMI
+ *
+ * - cast the input 1 pixel value to \c double
+ * - cast the input 2 pixel value to \c double
+ * - compute the difference of the two pixel values
+ * - compute the value of the LHMI
+ * - cast the \c double value resulting to the pixel type of the output image
+ *
+ */
+
 template< class TInput1, class TInput2, class TOutput>
 class LHMI
 {
