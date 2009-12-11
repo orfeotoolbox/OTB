@@ -300,6 +300,14 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS4}
 	${TEMP}/feHarris_poupees.png
 	1.0 1.0 1.0)
 
+ADD_TEST(feTvHarrisImageQB ${FEATUREEXTRACTION_TESTS4}
+  --compare-image ${NOTOL}  ${BASELINE}/feHarrisImage_QB.png
+                          ${TEMP}/feHarrisImage_QB.png
+        otbHarrisImage
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/feHarrisImage_QB.png
+	1.0 1.0 1.0)
+
 ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS4}
          otbMultiplyByScalarImageFilterTest)
 
