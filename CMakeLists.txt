@@ -15,6 +15,7 @@ SET(CMAKE_MODULE_PATH
 
 INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
 SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
+INCLUDE(CMakeDependentOption)
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
@@ -286,13 +287,18 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
+        #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
         FIND_PACKAGE(FLTK)
-        IF(FLTK_FOUND)
-           SET(OTB_USE_EXTERNAL_FLTK ON)
-        ELSE(FLTK_FOUND)
-           SET(OTB_USE_EXTERNAL_FLTK OFF)
-        ENDIF(FLTK_FOUND)
+        CMAKE_DEPENDENT_OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON
+                         "FLTK_FOUND" OFF)
+                         
+#        IF(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK ON)
+#        ELSE(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK OFF)
+#        ENDIF(FLTK_FOUND)
 
         # Option for internal/external FLTK
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
