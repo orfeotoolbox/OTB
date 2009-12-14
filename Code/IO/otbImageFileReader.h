@@ -24,7 +24,7 @@ namespace otb
 {
 
 /** \class ImageFileReader
- * \brief Ressource to read an image from a file.
+ * \brief Resource to read an image from a file.
  *
  * \sa ImageSeriesReader
  * \sa ImageIOBase
@@ -37,9 +37,9 @@ class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileReader         Self;
+  typedef ImageFileReader                     Self;
   typedef itk::ImageFileReader<TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::SmartPointer<Self>             Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,8 +59,7 @@ public:
   /** The pixel type of the output image. */
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
-  /** Prepare l'allocation de l'image output lors du premier appel de traitement
-   * pipeline. */
+  /** Prepare image allocation at the first call of the pipeline processing */
   virtual void GenerateOutputInformation(void);
 
   /** Does the real work. */
