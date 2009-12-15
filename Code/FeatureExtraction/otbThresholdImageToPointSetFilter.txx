@@ -21,6 +21,7 @@
 
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -34,40 +35,76 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 }
 
 
+//template <class TInputImage, class TOutputPointSet>
+//void
+//ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
+//::GenerateData()
+//{
+//  InputImageConstPointer   inputPtr  = this->GetInput(0);
+//  OutputPointSetPointer    outputPtr = this->GetOutput();
+//
+//  unsigned int pointId = 0;
+//  typename OutputPointSetType::PointType  position;
+//
+//  outputPtr->Initialize();
+//
+//  typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
+//  InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
+//
+//  // walk the regions, threshold each pixel
+//  while ( !inIt.IsAtEnd() )
+//  {
+//
+//    const InputPixelType value = inIt.Get();
+//    const IndexType index = inIt.GetIndex();
+//
+//    if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
+//    {
+//      position[0] = index[0];
+//      position[1] = index[1];
+//
+//      outputPtr->SetPoint(pointId,position);
+//
+//      pointId++;
+//
+//    }
+//    ++inIt;
+//  }
+//}
+
+
 template <class TInputImage, class TOutputPointSet>
 void
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
-::GenerateData()
+::ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId)
 {
-  InputImageConstPointer   inputPtr  = this->GetInput(0);
-  OutputPointSetPointer    outputPtr = this->GetOutput();
+  otbMsgDevMacro(<< "Processing thread: " << threadId);
+  this->m_PointContainerPerThread[threadId] = PointsContainerType::New();
+  InputImageConstPointer  inputPtr = this->GetInput();
 
-  unsigned int pointId = 0;
+  // Define the iterators
+  itk::ImageRegionConstIterator<TInputImage>  inputIt(inputPtr, inputRegionForThread);
+
+  itk::ProgressReporter progress(this, threadId, inputRegionForThread.GetNumberOfPixels());
+
   typename OutputPointSetType::PointType  position;
 
-  outputPtr->Initialize();
+  inputIt.GoToBegin();
 
-  typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
-  InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
-
-  // walk the regions, threshold each pixel
-  while ( !inIt.IsAtEnd() )
+  while( !inputIt.IsAtEnd() )
   {
-
-    const InputPixelType value = inIt.Get();
-    const IndexType index = inIt.GetIndex();
-
+    const InputPixelType value = inputIt.Get();
     if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
     {
+      //FIXME: non valid for image with dim > 2
+      const IndexType index = inputIt.GetIndex();
       position[0] = index[0];
       position[1] = index[1];
-
-      outputPtr->SetPoint(pointId,position);
-
-      pointId++;
+      this->m_PointContainerPerThread[threadId]->push_back(position);
 
     }
-    ++inIt;
+    ++inputIt;
+    progress.CompletedPixel();  // potential exception thrown here
   }
 }
 

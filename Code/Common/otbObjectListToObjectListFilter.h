@@ -103,9 +103,10 @@ protected:
     Pointer Filter;
   };
 
+  OutputListForThreadType m_ObjectListPerThread;
+
   /** End Multi-threading implementation */
 
-  OutputListForThreadType m_ObjectListPerThread;
 
 private:
   ObjectListToObjectListFilter(const Self&); //purposely not implemented
