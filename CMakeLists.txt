@@ -616,23 +616,26 @@ ENDIF(OTB_USE_EXTERNAL_GDAL)
 #Experimental
 FIND_PACKAGE(Gettext)
 IF(GETTEXT_FOUND)
-  SET(OTB_I18N 1)
-  SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
-  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
-  SUBDIRS(I18n)
-  FIND_PATH(GETTEXT_INCLUDE_DIR
-    libintl.h
-    DOC "Path to gettext include directory (where libintl.h can be found)")
-  MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
-
-  IF(GETTEXT_INCLUDE_DIR)
-    INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
-  ENDIF(GETTEXT_INCLUDE_DIR)
-
   FIND_LIBRARY(GETTEXT_LIBRARY gettextlib DOC "GetText library")
   IF(APPLE OR WIN32)
     FIND_LIBRARY(GETTEXT_INTL_LIBRARY intl DOC "GetText intl library")
   ENDIF(APPLE OR WIN32)
+
+  IF(GETTEXT_LIBRARY)
+      SET(OTB_I18N 1)
+      SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
+      SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
+      ADD_SUBDIRECTORY(I18n)
+      FIND_PATH(GETTEXT_INCLUDE_DIR
+        libintl.h
+        DOC "Path to gettext include directory (where libintl.h can be found)")
+      MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
+    
+      IF(GETTEXT_INCLUDE_DIR)
+        INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
+      ENDIF(GETTEXT_INCLUDE_DIR)
+  ENDIF(GETTEXT_LIBRARY)
+
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS
