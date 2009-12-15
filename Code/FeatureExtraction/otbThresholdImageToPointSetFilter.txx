@@ -22,6 +22,7 @@
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
+#include "otbMacro.h"
 
 namespace otb
 {
