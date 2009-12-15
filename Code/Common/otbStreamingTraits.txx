@@ -114,7 +114,6 @@ unsigned long StreamingTraits<TImage>
   {
     typedef otb::ConfigurationFile        ConfigurationType;
     ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
-    std::string lang = conf->GetParameter<std::string>("OTB_LANG");
     std::streamoff streamMaxSizeBufferForStreamingBytes;
     std::streamoff streamImageSizeToActivateStreamingBytes;
     try

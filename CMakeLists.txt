@@ -15,6 +15,7 @@ SET(CMAKE_MODULE_PATH
 
 INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
 SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
+INCLUDE(CMakeDependentOption)
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
@@ -286,13 +287,18 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
-        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
+        #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
         FIND_PACKAGE(FLTK)
-        IF(FLTK_FOUND)
-           SET(OTB_USE_EXTERNAL_FLTK ON)
-        ELSE(FLTK_FOUND)
-           SET(OTB_USE_EXTERNAL_FLTK OFF)
-        ENDIF(FLTK_FOUND)
+        CMAKE_DEPENDENT_OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON
+                         "FLTK_FOUND" OFF)
+                         
+#        IF(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK ON)
+#        ELSE(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK OFF)
+#        ENDIF(FLTK_FOUND)
 
         # Option for internal/external FLTK
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
@@ -610,23 +616,26 @@ ENDIF(OTB_USE_EXTERNAL_GDAL)
 #Experimental
 FIND_PACKAGE(Gettext)
 IF(GETTEXT_FOUND)
-  SET(OTB_I18N 1)
-  SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
-  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
-  SUBDIRS(I18n)
-  FIND_PATH(GETTEXT_INCLUDE_DIR
-    libintl.h
-    DOC "Path to gettext include directory (where libintl.h can be found)")
-  MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
-
-  IF(GETTEXT_INCLUDE_DIR)
-    INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
-  ENDIF(GETTEXT_INCLUDE_DIR)
-
   FIND_LIBRARY(GETTEXT_LIBRARY gettextlib DOC "GetText library")
   IF(APPLE OR WIN32)
     FIND_LIBRARY(GETTEXT_INTL_LIBRARY intl DOC "GetText intl library")
   ENDIF(APPLE OR WIN32)
+
+  IF(GETTEXT_LIBRARY)
+      SET(OTB_I18N 1)
+      SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
+      SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
+      ADD_SUBDIRECTORY(I18n)
+      FIND_PATH(GETTEXT_INCLUDE_DIR
+        libintl.h
+        DOC "Path to gettext include directory (where libintl.h can be found)")
+      MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
+    
+      IF(GETTEXT_INCLUDE_DIR)
+        INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
+      ENDIF(GETTEXT_INCLUDE_DIR)
+  ENDIF(GETTEXT_LIBRARY)
+
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS
