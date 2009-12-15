@@ -16,6 +16,7 @@
 
 =========================================================================*/
 #include "otbConfigurationFile.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -25,6 +26,8 @@ ConfigurationFile::Pointer ConfigurationFile::Instance = NULL;
 ConfigurationFile
 ::ConfigurationFile()
 {
+  m_OTBConfig = NULL;
+
   std::string OTBBinDir(OTB_CONFIG);
   try
   {
@@ -32,7 +35,7 @@ ConfigurationFile
   }
   catch (ConfigFile::file_not_found& e)
   {
-    itkExceptionMacro(<< "Error - File '" << e.filename << "' not found.");
+    otbMsgDebugMacro(<< "Error - File '" << e.filename << "' not found.");
   }
 }
 
