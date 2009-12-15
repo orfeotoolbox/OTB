@@ -243,7 +243,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_DATA_USE_LARGEINPUT)
  ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}
 --compare-ascii ${EPSILON_7}
-		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
+		${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
          ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
