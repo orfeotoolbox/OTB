@@ -5,6 +5,8 @@ SET(ossimplugins_VERSION_MINOR "7")
 SET(ossimplugins_VERSION_PATCH "15")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/ossim ${CMAKE_CURRENT_SOURCE_DIR}/ossim/otb
+${OTB_SOURCE_DIR}/Utilities/otbossim/include
+${OTB_BINARY_DIR}/Utilities/otbossim/include
 # ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection
 # ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection/otb
 )
