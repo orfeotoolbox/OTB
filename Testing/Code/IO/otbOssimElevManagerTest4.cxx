@@ -50,8 +50,7 @@ int otbOssimElevManagerTest4(int argc,char* argv[])
   size[1]=   atoi(argv[8]);
 
   double* image = new double[size[0]*size[1]];
-
-
+  
   ossimElevManager * elevManager = ossimElevManager::instance();
 
   elevManager->openDirectory(srtmDir);
@@ -68,7 +67,7 @@ int otbOssimElevManagerTest4(int argc,char* argv[])
       ossimWorldPoint.lon=point[0];
       ossimWorldPoint.lat=point[1];
       double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
-
+   
       if (!ossim::isnan(height))
       {
         // Fill the image
@@ -83,9 +82,10 @@ int otbOssimElevManagerTest4(int argc,char* argv[])
   }
 
   std::ofstream file;
+  std::cout<<outfname<<std::endl;
   file.open(outfname, ios::binary|ios::out);
 
-  file.write(reinterpret_cast<char*>(image), sizeof(image)*size[0]*size[1]);
+  file.write(reinterpret_cast<char*>(image), sizeof(double)*size[0]*size[1]);
   file.close();
 
 
