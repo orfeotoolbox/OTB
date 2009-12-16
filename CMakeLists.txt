@@ -955,13 +955,27 @@ OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 
 #-----------------------------------------------------------------------------
+# The entire OTB tree should use the same include path
+
+# Create the list of include directories needed for OTB header files.
+INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+
+# This should be the only INCLUDE_DIRECTORIES command in the entire
+# tree, except for the Utilities and Wrapping directories.  We need to
+# do this in one place to make sure the order is correct.
+INCLUDE_DIRECTORIES(
+  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${OTB_INCLUDE_DIRS_SYSTEM}
+)
+
+#-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
 
-#Note: SUBDIRS is deprecated and should be replaced by ADD_SUBDIRECTORY
-SUBDIRS(Utilities Code)
-#ADD_SUBDIRECTORY(Utilities)
-#ADD_SUBDIRECTORY(Code)
-#ADD_SUBDIRECTORY(Utilities/otbsvm)
+#Note: SUBDIRS is deprecated and is replaced by ADD_SUBDIRECTORY
+#SUBDIRS(Utilities Code)
+ADD_SUBDIRECTORY(Utilities)
+ADD_SUBDIRECTORY(Code)
 
 IF (BUILD_EXAMPLES)
   ADD_SUBDIRECTORY(Examples)
@@ -1031,16 +1045,16 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
 # The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
-INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+#INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
 
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
-INCLUDE_DIRECTORIES(
-  ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  ${OTB_INCLUDE_DIRS_SYSTEM}
-)
+#INCLUDE_DIRECTORIES(
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+#  ${OTB_INCLUDE_DIRS_SYSTEM}
+#)
 
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.

@@ -19,7 +19,10 @@ ELSE(OTB_USE_EXTERNAL_BOOST)
 )
 ENDIF(OTB_USE_EXTERNAL_BOOST)
 
-
+#-----------------------------------------------------------------------------
+# Include directories from the GDAL build tree.
+SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+    ${GDAL_INCLUDE_DIR} )
 
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -97,10 +100,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 )
 
 
-#-----------------------------------------------------------------------------
-# Include directories from the GDAL build tree.
-SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  	${GDAL_INCLUDE_DIR} )
+
 #-----------------------------------------------------------------------------
 # Include directories from the CURL build tree.
 IF(OTB_USE_CURL)
@@ -220,10 +220,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 #For GLU header file
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
   		${OTB_GLU_INCLUDE_PATH} )
-
-#For GDAL header file
-SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  		${GDAL_INCLUDE_DIR} )
 
 #For EXPAT header file
 IF(OTB_USE_EXTERNAL_EXPAT)
