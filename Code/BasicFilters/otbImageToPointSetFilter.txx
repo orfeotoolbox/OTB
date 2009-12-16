@@ -138,10 +138,9 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   str.Filter = this;
 
   // Initializing object per thread
-  typename PointsContainerType::Pointer defaultPointsContainer
-        = OutputPointSetType::PointsContainer::New();
-  this->m_PointContainerPerThread
-        = OutputPointContainerForThreadType(this->GetNumberOfThreads(),defaultPointsContainer);
+  typename PointsContainerType::Pointer defaultPointsContainer = PointsContainerType::New();
+  this->m_PointsContainerPerThread
+        = OutputPointsContainerForThreadType(this->GetNumberOfThreads(),defaultPointsContainer);
 
 
   // Setting up multithreader
@@ -171,19 +170,18 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 ::AfterThreadedGenerateData(void)
 {
   // copy the lists to the output
-  //TODO rename PointContainer in PointsContainer
-  typename OutputPointSetType::PointsContainer * outputPointContainer = this->GetOutput()->GetPoints();
-  outputPointContainer->Initialize();
-  typedef typename OutputPointSetType::PointsContainer::ConstIterator OutputPointContainerIterator;
-  for (unsigned int i=0; i< this->m_PointContainerPerThread.size(); ++i)
+  PointsContainerType * outputPointsContainer = this->GetOutput()->GetPoints();
+  outputPointsContainer->Initialize();
+  typedef typename PointsContainerType::ConstIterator OutputPointsContainerIterator;
+  for (unsigned int i=0; i< this->m_PointsContainerPerThread.size(); ++i)
   {
-    if (this->m_PointContainerPerThread[i].IsNotNull())
+    if (this->m_PointsContainerPerThread[i].IsNotNull())
     {
-      for (OutputPointContainerIterator it = this->m_PointContainerPerThread[i]->Begin();
-           it != this->m_PointContainerPerThread[i]->End();
+      for (OutputPointsContainerIterator it = this->m_PointsContainerPerThread[i]->Begin();
+           it != this->m_PointsContainerPerThread[i]->End();
            ++it)
       {
-        outputPointContainer->push_back(it.Value());
+        outputPointsContainer->push_back(it.Value());
       }
     }
   }

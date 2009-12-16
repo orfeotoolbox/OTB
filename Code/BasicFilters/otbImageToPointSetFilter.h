@@ -78,7 +78,7 @@ protected:
 
   /** Multi-threading implementation */
 
-  typedef std::vector<typename OutputPointSetType::PointsContainer::Pointer> OutputPointContainerForThreadType;
+  typedef std::vector<typename OutputPointSetType::PointsContainer::Pointer> OutputPointsContainerForThreadType;
 
   virtual void BeforeThreadedGenerateData();
 
@@ -99,7 +99,7 @@ protected:
     Pointer Filter;
   };
 
-  OutputPointContainerForThreadType m_PointContainerPerThread;
+  OutputPointsContainerForThreadType m_PointsContainerPerThread;
 
   /** End Multi-threading implementation */
 
