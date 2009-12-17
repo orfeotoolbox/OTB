@@ -38,10 +38,10 @@ class ITK_EXPORT UnaryFunctorObjectListFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorObjectListFilter  Self;
+  typedef UnaryFunctorObjectListFilter                               Self;
   typedef otb::ObjectListToObjectListFilter<TInputList,TOutputList>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>                                    Pointer;
+  typedef itk::SmartPointer<const Self>                              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,12 +50,12 @@ public:
   itkTypeMacro(UnaryFunctorObjectListFilter, ObjectListToObjectListFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
-  typedef TInputList InputListType;
-  typedef TOutputList OutputListType;
-  typedef typename TInputList::ConstPointer InputListPointer;
-  typedef typename TOutputList::Pointer OutputListPointer;
-  typedef typename TInputList::ConstIterator InputListIterator;
+  typedef TFunction                           FunctorType;
+  typedef TInputList                          InputListType;
+  typedef TOutputList                         OutputListType;
+  typedef typename TInputList::ConstPointer   InputListPointer;
+  typedef typename TOutputList::Pointer       OutputListPointer;
+  typedef typename TInputList::ConstIterator  InputListIterator;
   typedef typename TOutputList::ConstIterator OutputListIterator;
 
 
@@ -66,11 +66,12 @@ public:
   FunctorType& GetFunctor()
   {
     return m_Functor;
-  };
+  }
+
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -101,12 +102,6 @@ protected:
   examine in thread threadId */
   virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
 
-
-  /** Internal structure used for passing image data into the threading library */
-  struct ThreadStruct
-  {
-    Pointer Filter;
-  };
 
   /** End Multi-threading implementation */
 

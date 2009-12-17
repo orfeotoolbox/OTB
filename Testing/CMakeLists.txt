@@ -6,11 +6,13 @@ PROJECT(OTBTesting)
 # normal OTB build or as a stand-alone project.  This design is useful
 # for testing the installation tree of OTB.
 
-MAKE_DIRECTORY(${OTBTesting_BINARY_DIR}/Temporary)
+FILE(MAKE_DIRECTORY ${OTBTesting_BINARY_DIR}/Temporary)
 
 IF(OTB_BINARY_DIR)
   # We are building inside the tree.
-  SUBDIRS(Code Fa Utilities)
+  ADD_SUBDIRECTORY(Code)
+  ADD_SUBDIRECTORY(Fa)
+  ADD_SUBDIRECTORY(Utilities)
 ELSE(OTB_BINARY_DIR)
   # We are building as a stand-alone project.
   SET(LIBRARY_OUTPUT_PATH ${OTBTesting_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
@@ -41,8 +43,7 @@ ELSE(OTB_BINARY_DIR)
   FIND_PACKAGE(OTB)
   IF(OTB_FOUND)
     INCLUDE(${OTB_USE_FILE})
-#    SUBDIRS(Code Fa Utilities)
-    SUBDIRS(Code)
+    ADD_SUBDIRECTORY(Code)
   ELSE(OTB_FOUND)
     MESSAGE("OTB not found.  Please set OTB_DIR")
   ENDIF(OTB_FOUND)

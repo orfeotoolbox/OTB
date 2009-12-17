@@ -5,35 +5,34 @@ PROJECT(OTBExamples)
 IF(OTB_BINARY_DIR)
   # We are building inside the tree.
 
-SUBDIRS( 
-  BasicFilters
-  FeatureExtraction
-  DataRepresentation
-  IO
-  Filtering
-  ChangeDetection
-  Learning
-  Classification
-  Segmentation
-  Iterators
-  MultiScale
-  DisparityMap
-  Projections
-  Registration
-  Radiometry
-  SARPolarimetry
-  Fusion
-  Tutorials
-  Markov
-  OBIA
-)
+ADD_SUBDIRECTORY(BasicFilters)
+ADD_SUBDIRECTORY(FeatureExtraction)
+ADD_SUBDIRECTORY(DataRepresentation)
+ADD_SUBDIRECTORY(IO)
+ADD_SUBDIRECTORY(Filtering)
+ADD_SUBDIRECTORY(ChangeDetection)
+ADD_SUBDIRECTORY(Learning)
+ADD_SUBDIRECTORY(Classification)
+ADD_SUBDIRECTORY(Segmentation)
+ADD_SUBDIRECTORY(Iterators)
+ADD_SUBDIRECTORY(MultiScale)
+ADD_SUBDIRECTORY(DisparityMap)
+ADD_SUBDIRECTORY(Projections)
+ADD_SUBDIRECTORY(Registration)
+ADD_SUBDIRECTORY(Radiometry)
+ADD_SUBDIRECTORY(SARPolarimetry)
+ADD_SUBDIRECTORY(Fusion)
+ADD_SUBDIRECTORY(Tutorials)
+ADD_SUBDIRECTORY(Markov)
+ADD_SUBDIRECTORY(OBIA)
+
 
 IF(OTB_USE_VISU_GUI)
-        SUBDIRS(Visu)
+        ADD_SUBDIRECTORY(Visu)
 ENDIF(OTB_USE_VISU_GUI)
 
 IF(OTB_USE_PATENTED)
-  SUBDIRS( Patented )
+  ADD_SUBDIRECTORY( Patented )
 ENDIF(OTB_USE_PATENTED)
 
 #Recopie du fichier README.txt dans l'arborescence BINARY
@@ -64,34 +63,32 @@ ELSE(OTB_BINARY_DIR)
   FIND_PACKAGE(OTB)
   IF(OTB_FOUND)
     INCLUDE(${OTB_USE_FILE})
-    SUBDIRS( 
-        BasicFilters
-        FeatureExtraction
-        DataRepresentation
-        IO
-        Filtering
-        ChangeDetection
-        Learning
-        Classification
-        Segmentation
-        Iterators
-        MultiScale
-        DisparityMap
-        Registration
-        Radiometry
-        SARPolarimetry
-        Fusion
-        Tutorials
-        Markov
-	OBIA
-        )
+        ADD_SUBDIRECTORY(BasicFilters)
+        ADD_SUBDIRECTORY(FeatureExtraction)
+        ADD_SUBDIRECTORY(DataRepresentation)
+        ADD_SUBDIRECTORY(IO)
+        ADD_SUBDIRECTORY(Filtering)
+        ADD_SUBDIRECTORY(ChangeDetection)
+        ADD_SUBDIRECTORY(Learning)
+        ADD_SUBDIRECTORY(Classification)
+        ADD_SUBDIRECTORY(Segmentation)
+        ADD_SUBDIRECTORY(Iterators)
+        ADD_SUBDIRECTORY(MultiScale)
+        ADD_SUBDIRECTORY(DisparityMap)
+        ADD_SUBDIRECTORY(Registration)
+        ADD_SUBDIRECTORY(Radiometry)
+        ADD_SUBDIRECTORY(SARPolarimetry)
+        ADD_SUBDIRECTORY(Fusion)
+        ADD_SUBDIRECTORY(Tutorials)
+        ADD_SUBDIRECTORY(Markov)
+	    ADD_SUBDIRECTORY(OBIA)
 
     IF(OTB_USE_VISU_GUI)
-        SUBDIRS(Visu)
+        ADD_SUBDIRECTORY(Visu)
     ENDIF(OTB_USE_VISU_GUI)
 
     IF(OTB_USE_PATENTED)
-        SUBDIRS( Patented )
+        ADD_SUBDIRECTORY( Patented )
     ENDIF(OTB_USE_PATENTED)
   ELSE(OTB_FOUND)
     MESSAGE("OTB not found.  Please set OTB_DIR")

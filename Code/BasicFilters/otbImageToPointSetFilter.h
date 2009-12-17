@@ -55,8 +55,8 @@ public:
   /** Some PointSet related typedefs. */
   typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
   typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
-
-  typedef   itk::ProcessObject          ProcessObjectType;
+  typedef   typename Superclass::PointsContainerType    PointsContainerType;
+  typedef   itk::ProcessObject                          ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);
@@ -71,8 +71,37 @@ public:
 
 protected:
   ImageToPointSetFilter();
-  ~ImageToPointSetFilter();
+  virtual ~ImageToPointSetFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  virtual void GenerateData(void);
+
+  /** Multi-threading implementation */
+
+  typedef std::vector<typename OutputPointSetType::PointsContainer::Pointer> OutputPointsContainerForThreadType;
+
+  virtual void BeforeThreadedGenerateData();
+
+  virtual void AfterThreadedGenerateData();
+
+  virtual int SplitRequestedRegion(int i, int num, InputImageRegionType& splitRegion);
+
+  virtual void ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId);
+
+  /** Static function used as a "callback" by the MultiThreader.  The threading
+   * library will call this routine for each thread, which will delegate the
+   * control to ThreadedGenerateData(). */
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+
+  /** Internal structure used for passing image data into the threading library */
+  struct ThreadStruct
+  {
+    Pointer Filter;
+  };
+
+  OutputPointsContainerForThreadType m_PointsContainerPerThread;
+
+  /** End Multi-threading implementation */
 
 private:
   ImageToPointSetFilter(const ImageToPointSetFilter&); //purposely not implemented

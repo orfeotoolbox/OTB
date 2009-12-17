@@ -955,16 +955,34 @@ OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 
 #-----------------------------------------------------------------------------
+# The entire OTB tree should use the same include path
+
+# Create the list of include directories needed for OTB header files.
+INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+
+# This should be the only INCLUDE_DIRECTORIES command in the entire
+# tree, except for the Utilities and Wrapping directories.  We need to
+# do this in one place to make sure the order is correct.
+INCLUDE_DIRECTORIES(
+  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${OTB_INCLUDE_DIRS_SYSTEM}
+)
+
+#-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
 
-SUBDIRS(Utilities Code)
+#Note: SUBDIRS is deprecated and is replaced by ADD_SUBDIRECTORY
+#SUBDIRS(Utilities Code)
+ADD_SUBDIRECTORY(Utilities)
+ADD_SUBDIRECTORY(Code)
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(Examples)
+  ADD_SUBDIRECTORY(Examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(Testing)
+  ADD_SUBDIRECTORY(Testing)
 ENDIF (BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
@@ -1027,16 +1045,16 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
 # The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
-INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+#INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
 
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
-INCLUDE_DIRECTORIES(
-  ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  ${OTB_INCLUDE_DIRS_SYSTEM}
-)
+#INCLUDE_DIRECTORIES(
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+#  ${OTB_INCLUDE_DIRS_SYSTEM}
+#)
 
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
@@ -1108,50 +1126,50 @@ MARK_AS_ADVANCED(OTB_USE_CPACK)
 
 IF(OTB_USE_CPACK)
 
-INCLUDE(InstallRequiredSystemLibraries)
-
-SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
-MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
-
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orfeo Toolbox")
-MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-
-SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
-SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
-
-SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING  "Orfeo toolbox contact email")
-
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
-
-#Debian specific
-SET(DEBIAN_PACKAGE_MAINTAINER  "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1.1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
-SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
-MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-SET(CPACK_DEBIAN_PACKAGE_NAME "libotb" CACHE STRING "Debian package name")
-
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/OTBCopyright.txt")
-
-FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
-FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
-
-IF(WIN32 AND NOT UNIX AND NOT CYGWIN)
-#Find gdal dll files, localized in the GDAL_LIBRARY directory
-GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
-SET(GDAL_LIB_DIR "${GDAL_LIB_DIR}/" )
-INSTALL(DIRECTORY ${GDAL_LIB_DIR}
-        DESTINATION                 bin
-        FILES_MATCHING  PATTERN     "*.dll" )
-INSTALL(DIRECTORY ${GDAL_LIB_DIR}
-        DESTINATION                 lib
-        FILES_MATCHING  PATTERN     "*.lib" )
-ENDIF(WIN32 AND NOT UNIX AND NOT CYGWIN)
-
-INCLUDE(CPack)
+    INCLUDE(InstallRequiredSystemLibraries)
+    
+    SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
+    MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
+    
+    SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orfeo Toolbox")
+    MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+    
+    SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
+    SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
+    SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
+    SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
+    
+    SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING  "Orfeo toolbox contact email")
+    
+    SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
+    
+    #Debian specific
+    SET(DEBIAN_PACKAGE_MAINTAINER  "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1.1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
+    MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
+    SET(CPACK_DEBIAN_PACKAGE_NAME "libotb" CACHE STRING "Debian package name")
+    
+    SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+    
+    SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/OTBCopyright.txt")
+    
+    FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
+    FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
+    
+    IF(WIN32 AND NOT UNIX AND NOT CYGWIN)
+    #Find gdal dll files, localized in the GDAL_LIBRARY directory
+    GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
+    SET(GDAL_LIB_DIR "${GDAL_LIB_DIR}/" )
+    INSTALL(DIRECTORY ${GDAL_LIB_DIR}
+            DESTINATION                 bin
+            FILES_MATCHING  PATTERN     "*.dll" )
+    INSTALL(DIRECTORY ${GDAL_LIB_DIR}
+            DESTINATION                 lib
+            FILES_MATCHING  PATTERN     "*.lib" )
+    ENDIF(WIN32 AND NOT UNIX AND NOT CYGWIN)
+    
+    INCLUDE(CPack)
 
 ENDIF(OTB_USE_CPACK)
 
