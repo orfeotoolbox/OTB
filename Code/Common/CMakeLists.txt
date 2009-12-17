@@ -19,7 +19,7 @@ ENDIF(OTB_USE_MAPNIK)
 
 IF(OTB_USE_PQXX)
 #TODO this line should be refined when we will like to have this capability with windows
-    TARGET_LINK_LIBRARIES(OTBCommon pq pqxx)
+    TARGET_LINK_LIBRARIES(OTBCommon ${PQ_LIBRARY} ${PQXX_LIBRARY})
 ENDIF(OTB_USE_PQXX)
 
 IF(OTB_I18N)
