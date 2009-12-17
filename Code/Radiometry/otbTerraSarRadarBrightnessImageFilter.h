@@ -26,7 +26,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMath.h"
-#include "otbRadarFunctors.h"
+#include "otbTerraSarFunctors.h"
 
 namespace otb
 {

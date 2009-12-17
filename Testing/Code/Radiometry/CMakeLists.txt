@@ -1056,37 +1056,7 @@ ADD_TEST(raTvTerraSarRadarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
         ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
 )
 
-# -------            TerraSarRadarBrightnessComplexImageFilter   ------------------------------
-ADD_TEST(raTuTerraSarRadarBrightnessComplexImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarRadarBrightnessComplexImageFilterNew
-)
 
-ADD_TEST(raTvTerraSarRadarBrightnessComplexImageFilterTest ${RADIOMETRY_TESTS9}
-    --compare-image ${EPSILON}  
-                ${BASELINE}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
-                ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
-        otbTerraSarRadarBrightnessComplexImageFilterTest
-        # complex image
-        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
-        ${TEMP}/raTvTerraSarRadarBrightnessComplexImageFilterTest.tif
-)
-
-
-# -------            TerraSarCalibrationCplxImageFilter   ------------------------------
- ADD_TEST(raTuTerraSarCalibrationCplxImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarCalibrationCplxImageFilterNew
-)
-
-ADD_TEST(raTvTerraSarCalibrationCplxImageFilterTest ${RADIOMETRY_TESTS9}
-# TEST GIVE NULL OUTPUT, DON'T HAVE TIME TO CORRECT, SORRY
-#    --compare-image ${EPSILON}  
- #               ${BASELINE}/raTvTerraSarCalibrationClxImageFilterTest.tif
- #               ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
-        otbTerraSarCalibrationCplxImageFilterTest
-        # complex image
-        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
-        ${TEMP}/raTvTerraSarCalibrationCplxImageFilterTest.tif
-)
 
 # A enrichir
 SET(Radiometry_SRCS1
@@ -1184,10 +1154,6 @@ otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
 otbTerraSarRadarBrightnessImageFilterNew.cxx
 otbTerraSarRadarBrightnessImageFilterTest.cxx
-otbTerraSarRadarBrightnessComplexImageFilterNew.cxx
-otbTerraSarRadarBrightnessComplexImageFilterTest.cxx
-otbTerraSarCalibrationCplxImageFilterNew.cxx
-otbTerraSarCalibrationCplxImageFilterTest.cxx
 )
 
 

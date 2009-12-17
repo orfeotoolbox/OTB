@@ -24,7 +24,7 @@
 
 
 #include "otbUnaryFunctorWithIndexImageFilter.h"
-#include "otbRadarFunctors.h"
+#include "otbTerraSarFunctors.h"
 #include "itkMetaDataDictionary.h"
 //#include "itkConstNeighborhoodIterator.h"
 #include "otbMath.h"
