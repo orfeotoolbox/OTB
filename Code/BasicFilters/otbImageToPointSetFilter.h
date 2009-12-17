@@ -19,6 +19,8 @@
 #define __otbImageToPointSetFilter_h
 
 #include "otbPointSetSource.h"
+#include "itkImageRegionSplitter.h"
+#include "otbStreamingTraits.h"
 
 namespace otb
 {
@@ -51,6 +53,8 @@ public:
   typedef   typename InputImageType::ConstPointer   InputImageConstPointer;
   typedef   typename InputImageType::RegionType     InputImageRegionType;
   typedef   typename InputImageType::PixelType      InputImagePixelType;
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                         TInputImage::ImageDimension);
 
   /** Some PointSet related typedefs. */
   typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
@@ -102,6 +106,12 @@ protected:
   OutputPointsContainerForThreadType m_PointsContainerPerThread;
 
   /** End Multi-threading implementation */
+
+  /** Setup for streaming */
+  typedef StreamingTraits<InputImageType>                                        StreamingTraitsType;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
+  typedef typename SplitterType::Pointer                                         RegionSplitterPointer;
+  RegionSplitterPointer m_RegionSplitter;
 
 private:
   ImageToPointSetFilter(const ImageToPointSetFilter&); //purposely not implemented
