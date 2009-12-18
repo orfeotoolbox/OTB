@@ -9,7 +9,7 @@
 //              vpf file.
 //
 //********************************************************************
-// $Id: ossimVpfTable.cpp 13025 2008-06-13 17:06:30Z sbortman $
+// $Id: ossimVpfTable.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/vec/ossimVpfTable.h>
 #include <ossim/vec/vpf.h>
 #include <ossim/base/ossimErrorCodes.h>
@@ -496,7 +496,7 @@ void ossimVpfTable::print(std::ostream& out)const
                else
                {
 		  buf = (char *)get_table_element(j,row,table,NULL,&n);
-		  n = strlen(table.header[j].name) + 2;
+		  n = (long)strlen(table.header[j].name) + 2;
 		  for (k=0;k<(long)strlen(buf);k++)
                   {
                      out << buf[k];

@@ -109,7 +109,7 @@
 void *vpfmalloc(unsigned long size);
 
 #define Whimper(str) {\
-      return ((long int)NULL) ; }
+      return ((long int)0) ; }
 
 #define SWhimper(str) {\
       set_type err; err = set_init (1) ;\
@@ -376,8 +376,8 @@ long int create_thematic_index ( char indextype,
     /* initialize */
     buf = (char *) table_element (tablepos,1,table,NULL,&n);
     REALLOC_DIRECTORY ( 0 ) ;
-    d[0].value.strval = (char *) vpfmalloc ( strlen ( buf ) +1) ;
-    memcpy( d[0].value.strval, buf, strlen(buf) ) ;
+    d[0].value.strval = (char *) vpfmalloc ( (unsigned long)strlen ( buf ) +1) ;
+    memcpy( d[0].value.strval, buf, (unsigned long)strlen(buf) ) ;
     free (buf) ;
     h.nbins++ ;
 
@@ -393,7 +393,7 @@ long int create_thematic_index ( char indextype,
 
       if ( k == h.nbins ) { 		/* New value in column */
 	REALLOC_DIRECTORY ( k ) ;
-	d[k].value.strval = (char *) vpfmalloc ( strlen ( buf ) +1) ;
+	d[k].value.strval = (char *) vpfmalloc ( (unsigned long)strlen ( buf ) +1) ;
 	memcpy( d[0].value.strval, buf, strlen(buf) ) ;
 	h.nbins++ ;
       }
@@ -496,14 +496,14 @@ long int create_thematic_index ( char indextype,
 
   /* only write the table name, no pathname */
 
-  for ( i = strlen ( tablename ); i > 0; i-- )
+  for ( i = (unsigned int)strlen ( tablename ); i > 0; i-- )
     if ( tablename[i] == '/' ) break ;
   if ( i && i < strlen (tablename) )
     strcpy ( h.vpf_table_name, strupr ( &tablename[i+1] ) ) ;
   else
     strcpy( h.vpf_table_name, strupr ( tablename) );
   
-  for ( i=strlen(h.vpf_table_name); i < 12 ; i++ )
+  for ( i=(unsigned int)strlen(h.vpf_table_name); i < 12 ; i++ )
     h.vpf_table_name[i] = ' ' ;
   h.vpf_table_name[11] = '\0';
 
@@ -511,12 +511,12 @@ long int create_thematic_index ( char indextype,
 
   h.table_nrows = table.nrows ;
 
-  if ( write_thematic_index_header ( h, ifp ) == (long int)NULL )
+  if ( write_thematic_index_header ( h, ifp ) == (long int)0 )
     Whimper ( "error writing index header" ) ;
 
   /* Now write out the rest of the header directory */
 
-  if ( write_thematic_index_directory ( h, d, idsize, ifp ) == (long int)NULL )
+  if ( write_thematic_index_directory ( h, d, idsize, ifp ) == (long int)0 )
     Whimper ( "error writing index directory" ) ;
 
   /* now write the data */
@@ -619,7 +619,7 @@ set_type read_thematic_index ( char *idxname,
     SWhimper ( hack ) ;
   }
 
-  if ( read_thematic_index_header ( &h, ifp ) == (long int)NULL )
+  if ( read_thematic_index_header ( &h, ifp ) == (long int)0 )
     SWhimper ( "error reading index header" ) ;
 
   if ( h.index_type == 'G' ) {
@@ -803,15 +803,14 @@ ThematicIndex open_thematic_index ( char *idxname )
     OWhimper ( hack ) ;
   }
 
-  if ( read_thematic_index_header ( &idx.h, idx.fp ) == (long int)NULL )
+  if ( read_thematic_index_header ( &idx.h, idx.fp ) == (long int)0 )
     OWhimper ( "error reading index header" ) ;
 
   if ( idx.h.index_type == 'G' ) {
     /* gazetteer_index  */
-     if (read_gazetteer_index_directory(&idx.gid,&idx.h,idx.fp)
-	 ==(long int)NULL) {
-	fclose(idx.fp);
-	idx.fp = NULL;
+     if (read_gazetteer_index_directory(&idx.gid,&idx.h,idx.fp) == (long int)0) {
+	   fclose(idx.fp);
+	   idx.fp = NULL;
      }
   }
 
@@ -1156,7 +1155,7 @@ long int create_gazetteer_index (char *tablename,
 
   /* only write out the table name, not the rest */
 
-  for ( i = strlen ( tablename ); i > 0; i-- )
+  for ( i = (long)strlen ( tablename ); i > 0; i-- )
     if ( tablename[i] == '/' ) break ;
   if ( i && (unsigned int)i < strlen (tablename) )
     strcpy ( gi.vpf_table_name, strupr ( &tablename[i+1] ) ) ;
@@ -1168,7 +1167,7 @@ long int create_gazetteer_index (char *tablename,
   gi.index_type  = 'G';
   gi.type_count = 1 ;
   gi.id_data_type = 'S' ;
-  gi.nbins       = strlen(idx_set);
+  gi.nbins       = (long)strlen(idx_set);
   gi.table_nrows = t.nrows;
   set_byte_size  = (unsigned int)ceil(t.nrows/8.0);
 
@@ -1216,7 +1215,7 @@ long int create_gazetteer_index (char *tablename,
 
   vpf_close_table(&t);
 
-  if (write_thematic_index_header(gi, idx_fp) == (long int)NULL) {
+  if (write_thematic_index_header(gi, idx_fp) == (long int)0) {
     fclose(idx_fp);
     for (i = 0; i < gi.nbins; i++)
       set_nuke(&idx_bit_sets[i]);
@@ -1337,7 +1336,7 @@ set_type read_gazetteer_index (char *idx_fname, char *query_str )
   set_type            query_set = {0, 0},
 		      xsect_set,
                       result_set;
-  register int        query_len = strlen(query_str),
+  register int        query_len = (int)strlen(query_str),
                       i,
                       j;
   unsigned long       set_byte_size;
@@ -1348,12 +1347,12 @@ set_type read_gazetteer_index (char *idx_fname, char *query_str )
   if (idx_fp == NULL)
     return query_set;
 
-  if (read_thematic_index_header (&gi, idx_fp) == (long int)NULL) {
+  if (read_thematic_index_header (&gi, idx_fp) == (long int)0) {
     fclose(idx_fp);
     return query_set;
   }
 
-  if (read_gazetteer_index_directory (&gid, &gi, idx_fp) == (long int)NULL) {
+  if (read_gazetteer_index_directory (&gid, &gi, idx_fp) == (long int)0) {
     fclose(idx_fp);
     return query_set;
   }
@@ -1478,7 +1477,7 @@ set_type search_gazetteer_index (ThematicIndex *idx, char *query_str )
   set_type            query_set = {0, 0, 0, 0},
 		      xsect_set,
                       result_set;
-  register int        query_len = strlen(query_str),
+  register int        query_len = (int)strlen(query_str),
                       i,
                       j;
   unsigned long       set_byte_size;
@@ -1608,7 +1607,7 @@ long int read_gazetteer_index_directory(
     if ( ( ! Read_Vpf_Char(  &( (*gid)[i].value.cval ),   idx_fp, 1) ) ||
 	 ( ! Read_Vpf_Int(   &( (*gid)[i].start_offset ), idx_fp, 1) ) ||
 	 ( ! Read_Vpf_Int(   &( (*gid)[i].num_items ),    idx_fp, 1) )) {
-      return (long int)NULL ;
+      return (long int)0 ;
     }
   }
   return 1;
@@ -1659,7 +1658,7 @@ long int read_gazetteer_index_directory(
  *************************************************************************/
 
 #define RWhimper() {\
-   return (long int)NULL ; }
+   return (long int)0 ; }
 
 long int read_thematic_index_header ( ThematicIndexHeader *h, FILE *ifp ) 
 {
@@ -1733,7 +1732,7 @@ long int read_thematic_index_header ( ThematicIndexHeader *h, FILE *ifp )
  *************************************************************************/
 
 #define WWhimper() {\
-   return (long int)NULL ; }
+   return (long int)0 ; }
 
 long int write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp ) 
 {
@@ -1812,7 +1811,7 @@ long int write_thematic_index_header ( ThematicIndexHeader h, FILE *ifp )
  *************************************************************************/
 
 #define WTWhimper() {\
-   return (long int)NULL ; }
+   return (long int)0 ; }
 
 long int write_thematic_index_directory ( ThematicIndexHeader h, 
 					  ThematicIndexDirectory *d,
@@ -1921,7 +1920,7 @@ long int write_thematic_index_directory ( ThematicIndexHeader h,
  *************************************************************************/
 
 #define WTGWhimper() {\
-  return (long int)NULL ; }
+  return (long int)0 ; }
 
 long int write_gazetteer_index_directory ( ThematicIndexHeader h, 
 					  ThematicIndexDirectory *d, 

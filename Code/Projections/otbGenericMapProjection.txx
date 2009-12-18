@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbGenericMapProjection_txx
@@ -120,7 +120,7 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 
     if (!projectionInformationAvailable)
     {
-      std::cout << "WARNING: Impossible to create the projection from string: "<< m_ProjectionRefWkt << std::endl;
+      otbMsgDevMacro(<<"WARNING: Impossible to create the projection from string: "<< m_ProjectionRefWkt);
       return false;
     }
 
@@ -129,7 +129,7 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
     //a better solution might be available...
     if (std::string(kwl.find("type")) == "ossimEquDistCylProjection")
     {
-      std::cout << "WARNING: Not instanciating a ossimEquDistCylProjection"<< std::endl;
+      otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection");
       return false;
     }
 

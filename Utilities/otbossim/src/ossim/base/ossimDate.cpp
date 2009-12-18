@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimDate.cpp 15067 2009-08-12 15:14:27Z dburken $
+// $Id: ossimDate.cpp 15853 2009-11-04 19:37:46Z gpotts $
 
 #include <ossim/base/ossimDate.h>
 #include <iomanip>
@@ -104,11 +104,11 @@ int ossimLocalTm::isValid (void) const
         31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
 
-    return (tm_year > 0 &&
-            tm_mon >= 0 && tm_mon < 12 &&
-            tm_mday > 0 && tm_mday <= maxd[tm_mon] &&
-            tm_wday < 7 && tm_yday < 367 &&
-            tm_sec < 60 && tm_min < 60 && tm_hour < 24);
+    return ((tm_year > 0) &&
+            (tm_mon >= 0) && (tm_mon < 12) &&
+            (tm_mday > 0) && (tm_mday <= maxd[tm_mon]) &&
+            (tm_wday < 7) && (tm_yday < 367) &&
+            (tm_sec < 60) && (tm_min < 60) && (tm_hour < 24));
 }
 void ossimLocalTm::now()
 {

@@ -5,7 +5,7 @@
 // AUTHOR: Garrett Potts (gpotts@imagelinks.com)
 //
 //*****************************************************************************
-//  $Id: ossimPolyLine.cpp 13709 2008-10-14 14:55:11Z gpotts $
+//  $Id: ossimPolyLine.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 //
 #include <ossim/base/ossimPolyLine.h>
 #include <ossim/base/ossimCommon.h>
@@ -470,7 +470,7 @@ bool ossimPolyLine::operator==(const ossimPolyLine& polyLine) const
 
 const ossimPolyLine& ossimPolyLine::operator *=(const ossimDpt& scale)
 {
-   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
    ossim_uint32 i = 0;
    
    for(i = 0; i < upper; ++i)
@@ -487,7 +487,7 @@ ossimPolyLine ossimPolyLine::operator *(const ossimDpt& scale)const
    ossimPolyLine result(*this);
 
    ossim_uint32 i = 0;
-   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
    for(i = 0; i < upper; ++i)
    {
       result.theVertexList[i].x*=scale.x;

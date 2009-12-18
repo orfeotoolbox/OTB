@@ -1,15 +1,21 @@
 # This is the root OTB CMakeLists file.
 # $Id$
 #
-CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 NEW)
 ENDIF(COMMAND CMAKE_POLICY)
 
 PROJECT(OTB)
 
+# Path to additional CMake modules
+SET(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/CMake
+    ${CMAKE_MODULE_PATH})
+
 INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
 SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
+INCLUDE(CMakeDependentOption)
 
 # On Visual Studio 8 MS deprecated C. This removes all 1.276E1265 security
 # warnings
@@ -100,19 +106,19 @@ IF(WIN32)
   IF (MSVC)
     IF(OTB_BUILD_PEDANTIC)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-    ENDIF()
+    ENDIF(OTB_BUILD_PEDANTIC)
 
     IF (MSVC80)
       ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
       ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_WARNING)
-    ENDIF()
-  ENDIF()
-ELSE()
+    ENDIF(MSVC80)
+  ENDIF(MSVC)
+ELSE(WIN32)
   IF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     IF(OTB_BUILD_PEDANTIC)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-    ENDIF()
-  ENDIF()
+    ENDIF(OTB_BUILD_PEDANTIC)
+  ENDIF(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(WIN32)
 #-----------------------------------------------------------------------------
 
@@ -225,7 +231,7 @@ ENDIF(OTB_COMPILE_JPEG2000)
 IF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
         FIND_PACKAGE(OpenThreads)
 ELSE(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
-        INCLUDE(${OTB_SOURCE_DIR}/FindOpenThreads.cmake)
+        INCLUDE(${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake)
 ENDIF(EXISTS "${CMAKE_ROOT}/Modules/FindOpenThreads.cmake")
 
 SET(OTB_USE_EXTERNAL_OPENTHREADS 1 CACHE INTERNAL "")
@@ -281,50 +287,49 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # FLTK Library
         #-------------------------------
+        
+        #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+        
         FIND_PACKAGE(FLTK)
-        IF(FLTK_FOUND)
-          OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
-        ELSE(FLTK_FOUND)
-          OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
-        ENDIF(FLTK_FOUND)
+        CMAKE_DEPENDENT_OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON
+                         "FLTK_FOUND" OFF)
+                         
+#        IF(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK ON)
+#        ELSE(FLTK_FOUND)
+#           SET(OTB_USE_EXTERNAL_FLTK OFF)
+#        ENDIF(FLTK_FOUND)
+
         # Option for internal/external FLTK
         MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
-        # Add an option to use or not use FLTK (http://www.fltk.org)
+
         IF(OTB_USE_EXTERNAL_FLTK)
 
-#                 FIND_PACKAGE(FLTK)
                 # Mingw Option doesn't exist in the FindFLTK.cmake default configuration file in CMake installationj directory.
                 # Copy  FLTK_PLATFORM_DEPENDENT_LIBS from FLTK CmakeList.txt
                 IF(MINGW)
                     ADD_DEFINITIONS(-DWIN32)
                     SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
                 ENDIF(MINGW)
-                IF (NOT FLTK_INCLUDE_DIR)
-		        SET( FLTK_INCLUDE_DIR /usr/include )
-                FIND_PACKAGE(FLTK)
-	        ENDIF(NOT FLTK_INCLUDE_DIR)
 
                 IF(FLTK_FOUND)
-		        INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
-		        LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
+                    INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
                 ELSE(FLTK_FOUND)
-                        MESSAGE(FATAL_ERROR
+                    MESSAGE(FATAL_ERROR
 	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
                 ENDIF(FLTK_FOUND)
 
         ELSE(OTB_USE_EXTERNAL_FLTK)
-
+                SET(FLTK_INCLUDE_DIR "")
+                SET(FLTK_LIBRARIES "")
+                
                 SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
-                IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake")
-                        INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
-                ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake")
-                #----------------------------------------------------------------
-                # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
-                SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
-                SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
+                INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
 
         ENDIF(OTB_USE_EXTERNAL_FLTK)
 
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+        SET(FLTK_FLUID_EXECUTABLE ${FLUID_COMMAND})
 ENDIF(OTB_USE_VISU_GUI)
 
 #-------------------------------
@@ -587,7 +592,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
   ENDIF (NOT JPEG_LIBRARY)
   ENDIF(GDAL_HAS_JPEG)
 
-  # Check if ${GDAL_LIBRARY} has jpeg library
+  # Check if ${GDAL_LIBRARY} has ogr library
   TRY_COMPILE(GDAL_HAS_OGR
   ${CMAKE_CURRENT_BINARY_DIR}/CMake
   ${CMAKE_CURRENT_SOURCE_DIR}/CMake/TestGDALHasOGR.cxx
@@ -611,10 +616,26 @@ ENDIF(OTB_USE_EXTERNAL_GDAL)
 #Experimental
 FIND_PACKAGE(Gettext)
 IF(GETTEXT_FOUND)
-  SET(OTB_I18N 1)
-  SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
-  SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
-  SUBDIRS(I18n)
+  FIND_LIBRARY(GETTEXT_LIBRARY gettextlib DOC "GetText library")
+  IF(APPLE OR WIN32)
+    FIND_LIBRARY(GETTEXT_INTL_LIBRARY intl DOC "GetText intl library")
+  ENDIF(APPLE OR WIN32)
+
+  IF(GETTEXT_LIBRARY)
+      SET(OTB_I18N 1)
+      SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
+      SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
+      ADD_SUBDIRECTORY(I18n)
+      FIND_PATH(GETTEXT_INCLUDE_DIR
+        libintl.h
+        DOC "Path to gettext include directory (where libintl.h can be found)")
+      MARK_AS_ADVANCED(GETTEXT_INCLUDE_DIR)
+    
+      IF(GETTEXT_INCLUDE_DIR)
+        INCLUDE_DIRECTORIES(${GETTEXT_INCLUDE_DIR})
+      ENDIF(GETTEXT_INCLUDE_DIR)
+  ENDIF(GETTEXT_LIBRARY)
+
 ELSE(GETTEXT_FOUND)
   SET(OTB_I18N 0)
   MESSAGE(STATUS
@@ -727,7 +748,7 @@ ENDMACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS)
 #
 IF(APPLE AND NOT FLTK_USE_X)
     FIND_PROGRAM(ITK_APPLE_RESOURCE Rez /Developer/Tools)
-    FIND_FILE(ITK_FLTK_RESOURCE mac.r /usr/local/include/FL)
+    FIND_FILE(ITK_FLTK_RESOURCE mac.r ${FLTK_DIR}/include/FL)
     IF(NOT ITK_FLTK_RESOURCE)
       MESSAGE("Fltk resources not found, GUI application will not respond to mouse events")
     ENDIF(NOT ITK_FLTK_RESOURCE)
@@ -873,21 +894,12 @@ ENDIF(OTB_DISABLE_UTILITIES_COMPILATION)
 #-----------------------------------------------------------------------------
 # Option to define streaming activation in applications
 # Use by otbConfigure.h.in
-SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 8*4000*4000 CACHE STRING "Image size to activate using streaming for applications.")
+# Note: 8*4000*4000 = 128000000 (double 4000x4000 image)
+SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 128000000 CACHE STRING "Image size to activate using streaming for applications.")
 MARK_AS_ADVANCED(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
-SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 8*4000*4000 CACHE STRING "Max size buffer for streaming.")
+SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 128000000 CACHE STRING "Max size buffer for streaming.")
 MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
-
-
-#-----------------------------------------------------------------------------
-# Perform a setup of OTB Wrapping. This will provide CMake options for
-# individual wrapping as well as determine if CableSwig is required. If it is,
-# OTB_NEED_CableSwig will be set. This file also tries to locate CableSwig by
-# searching first in the source tree of OTB, and if that fails, it searches
-# for a binary built of CableSwig.
-#
-INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbWrapSetup.cmake)
 
 
 #-----------------------------------------------------------------------------
@@ -943,18 +955,34 @@ OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
 
 #-----------------------------------------------------------------------------
+# The entire OTB tree should use the same include path
+
+# Create the list of include directories needed for OTB header files.
+INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+
+# This should be the only INCLUDE_DIRECTORIES command in the entire
+# tree, except for the Utilities and Wrapping directories.  We need to
+# do this in one place to make sure the order is correct.
+INCLUDE_DIRECTORIES(
+  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${OTB_INCLUDE_DIRS_SYSTEM}
+)
+
+#-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
 
-SUBDIRS(Utilities Code)
-
-SUBDIRS(Wrapping)
+#Note: SUBDIRS is deprecated and is replaced by ADD_SUBDIRECTORY
+#SUBDIRS(Utilities Code)
+ADD_SUBDIRECTORY(Utilities)
+ADD_SUBDIRECTORY(Code)
 
 IF (BUILD_EXAMPLES)
-  SUBDIRS(Examples)
+  ADD_SUBDIRECTORY(Examples)
 ENDIF (BUILD_EXAMPLES)
 
 IF (BUILD_TESTING)
-  SUBDIRS(Testing)
+  ADD_SUBDIRECTORY(Testing)
 ENDIF (BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
@@ -997,7 +1025,7 @@ CHECK_TYPE_SIZE("short int" OTB_SIZEOF_SHORT_INT)
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
+FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
 
 OPTION(OTB_DATA_USE_LARGEINPUT "Use Large inputs images test." OFF)
@@ -1014,20 +1042,19 @@ CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in
                ${OTB_BINARY_DIR}/otbConfigure.h)
 
 #-----------------------------------------------------------------------------
-# The entire OTB tree should use the same include path, except for the
-# Wrapping directory.
+# The entire OTB tree should use the same include path
 
 # Create the list of include directories needed for OTB header files.
-INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+#INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
 
 # This should be the only INCLUDE_DIRECTORIES command in the entire
 # tree, except for the Utilities and Wrapping directories.  We need to
 # do this in one place to make sure the order is correct.
-INCLUDE_DIRECTORIES(
-  ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  ${OTB_INCLUDE_DIRS_SYSTEM}
-)
+#INCLUDE_DIRECTORIES(
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+#  ${OTB_INCLUDE_DIRS_SYSTEM}
+#)
 
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
@@ -1057,7 +1084,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     ${OTB_BINARY_DIR}/OTBBuildSettings.cmake
     ${OTB_BINARY_DIR}/OTBLibraryDepends.cmake
     ${OTB_BINARY_DIR}/UseOTB.cmake
-    ${OTB_SOURCE_DIR}/FindOpenThreads.cmake
+    ${OTB_SOURCE_DIR}/CMake/FindOpenThreads.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR_CM24}
     COMPONENT Development
     )
@@ -1099,50 +1126,50 @@ MARK_AS_ADVANCED(OTB_USE_CPACK)
 
 IF(OTB_USE_CPACK)
 
-INCLUDE(InstallRequiredSystemLibraries)
-
-SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
-MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
-
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orfeo Toolbox")
-MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
-
-SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
-SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
-SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
-SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
-
-SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING  "Orfeo toolbox contact email")
-
-SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
-
-#Debian specific
-SET(DEBIAN_PACKAGE_MAINTAINER  "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
-SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1.1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
-SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
-MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
-SET(CPACK_DEBIAN_PACKAGE_NAME "libotb" CACHE STRING "Debian package name")
-
-SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-
-SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/OTBCopyright.txt")
-
-FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
-FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
-
-IF(WIN32 AND NOT UNIX AND NOT CYGWIN)
-#Find gdal dll files, localized in the GDAL_LIBRARY directory
-GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
-SET(GDAL_LIB_DIR "${GDAL_LIB_DIR}/" )
-INSTALL(DIRECTORY ${GDAL_LIB_DIR}
-        DESTINATION                 bin
-        FILES_MATCHING  PATTERN     "*.dll" )
-INSTALL(DIRECTORY ${GDAL_LIB_DIR}
-        DESTINATION                 lib
-        FILES_MATCHING  PATTERN     "*.lib" )
-ENDIF(WIN32 AND NOT UNIX AND NOT CYGWIN)
-
-INCLUDE(CPack)
+    INCLUDE(InstallRequiredSystemLibraries)
+    
+    SET(CPACK_PACKAGE_NAME "OTB" CACHE STRING "Package name")
+    MARK_AS_ADVANCED(CPACK_PACKAGE_NAME)
+    
+    SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Orfeo Toolbox")
+    MARK_AS_ADVANCED(CPACK_PACKAGE_DESCRIPTION_SUMMARY)
+    
+    SET(CPACK_PACKAGE_VERSION  "${OTB_VERSION_STRING}")
+    SET(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
+    SET(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
+    SET(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
+    
+    SET(CPACK_PACKAGE_CONTACT "contact@orfeo-toolbox.org" CACHE STRING  "Orfeo toolbox contact email")
+    
+    SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Description.txt")
+    
+    #Debian specific
+    SET(DEBIAN_PACKAGE_MAINTAINER  "debian@orfeo-toolbox.org" CACHE STRING  "Debian package maintainer email")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "libgdal1-1.5.0 (>= 1.5.1-0), libfltk1.1 (>= 1.1.7-3), libcurl3 (>=7.15.5-1etch1), libfftw3-3 (>=3.1.2-3.1)" CACHE STRING "Debian package dependance" )
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64" CACHE STRING "arch")
+    MARK_AS_ADVANCED(CPACK_DEBIAN_PACKAGE_ARCHITECTURE)
+    SET(CPACK_DEBIAN_PACKAGE_NAME "libotb" CACHE STRING "Debian package name")
+    
+    SET(CPACK_PACKAGE_INSTALL_DIRECTORY "OrfeoToolbox-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+    
+    SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/OTBCopyright.txt")
+    
+    FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_RPM_PACKAGE_DESCRIPTION)
+    FILE(READ ${CPACK_PACKAGE_DESCRIPTION_FILE} CPACK_DEBIAN_PACKAGE_DESCRIPTION)
+    
+    IF(WIN32 AND NOT UNIX AND NOT CYGWIN)
+    #Find gdal dll files, localized in the GDAL_LIBRARY directory
+    GET_FILENAME_COMPONENT(GDAL_LIB_DIR "${GDAL_LIBRARY}" PATH )
+    SET(GDAL_LIB_DIR "${GDAL_LIB_DIR}/" )
+    INSTALL(DIRECTORY ${GDAL_LIB_DIR}
+            DESTINATION                 bin
+            FILES_MATCHING  PATTERN     "*.dll" )
+    INSTALL(DIRECTORY ${GDAL_LIB_DIR}
+            DESTINATION                 lib
+            FILES_MATCHING  PATTERN     "*.lib" )
+    ENDIF(WIN32 AND NOT UNIX AND NOT CYGWIN)
+    
+    INCLUDE(CPack)
 
 ENDIF(OTB_USE_CPACK)
 

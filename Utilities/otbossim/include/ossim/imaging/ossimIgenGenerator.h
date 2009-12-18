@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimIgenGenerator.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimIgenGenerator.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef ossimIgenGenerator_HEADER
 #define ossimIgenGenerator_HEADER
 #include <stack>
@@ -91,7 +91,7 @@ public:
    
    ossim_uint32 getNumberOfSpecFiles()const
       {
-         return theSpecFileList.size();
+         return (ossim_uint32)theSpecFileList.size();
       }
 
    ossimFilename getSpecFilename(ossim_uint32 specFileIndex = 0)const

@@ -3,10 +3,10 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
-//  See http://www.boost.org/libs/utility for most recent version including documentation.
+//  See http://www.boost.org/libs/butility for most recent version including documentation.
 
 // call_traits: defines typedefs for function usage
-// (see libs/utility/call_traits.htm)
+// (see libs/butility/call_traits.htm)
 
 /* Release notes:
    23rd July 2000:

@@ -16,32 +16,25 @@
 
 =========================================================================*/
 
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-#include "itkByteSwapper.h"
-#include "itkRGBPixel.h"
-#include "itkRGBAPixel.h"
-
-#include "gdal_priv.h"
-//#include <iostream.h>
+#include <iostream>
+#include <fstream>
 #include <string.h>
 #include <list>
 #include <vector>
 #include <math.h>
-//#include <zlib.h>
 
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
-// #include "otbImageMetadata.h"
 #include "otbImage.h"
 
 #include "itkMetaDataObject.h"
-#include "itkPNGImageIO.h"
-#include "itkJPEGImageIO.h"
 
-#include <iostream>
-#include <fstream>
+#include "itkExceptionObject.h"
+#include "itkMacro.h"
+#include "itkRGBPixel.h"
+#include "itkRGBAPixel.h"
+
 
 namespace otb
 {

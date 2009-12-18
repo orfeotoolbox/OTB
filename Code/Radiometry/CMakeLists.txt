@@ -3,7 +3,9 @@
 FILE(GLOB OTBRadiometry_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBRadiometry ${OTBRadiometry_SRCS})
-TARGET_LINK_LIBRARIES (OTBRadiometry OTBCommon otb6S)
+
+#Note: depend on OTBIO instead of otbossim to keep the correct order between gdal and ossim
+TARGET_LINK_LIBRARIES (OTBRadiometry OTBCommon otb6S OTBIO)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(OTBRadiometry PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)

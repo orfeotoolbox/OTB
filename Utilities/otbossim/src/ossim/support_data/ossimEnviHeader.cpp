@@ -10,7 +10,7 @@
 // Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.cpp 11347 2007-07-23 13:01:59Z gpotts $
+// $Id: ossimEnviHeader.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <fstream>
 #include <string>
@@ -265,7 +265,7 @@ std::ostream& ossimEnviHeader::print(std::ostream& out) const
    {
       out << "\nband names = {";
       ossim_uint32 i;
-      ossim_uint32 size = theBandName.size();
+      ossim_uint32 size = (ossim_uint32)theBandName.size();
       for (i = 0; i < size; ++i)
       {
          out << "\n " << theBandName[i];
@@ -301,7 +301,7 @@ std::ostream& ossimEnviHeader::print(std::ostream& out) const
    {
       out << "\nwavelength = {\n";
       ossim_uint32 i;
-      ossim_uint32 size = theWavelength.size();
+      ossim_uint32 size = (ossim_uint32)theWavelength.size();
       for (i = 0; i < size; ++i)
       {
          out << theWavelength[i];

@@ -275,7 +275,7 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
               }
              // no point to fuse
              else
-              go = true;       
+              go = true;
            }// else if( vcl_abs(p1[1]-whereAmI[1])<m_ThreadDistanceThreshold || vcl_abs(p2[1]-whereAmI[1])<m_ThreadDistanceThreshold )
          else
            {

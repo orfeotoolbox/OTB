@@ -19,7 +19,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {MSLabeledOutput.tif}
-//    OUTPUTS: {OBIAShapeAttribute.txt}
+//    OUTPUTS: {OBIAShapeAttribute1.txt}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex

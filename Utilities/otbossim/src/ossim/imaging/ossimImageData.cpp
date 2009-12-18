@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 15792 2009-10-22 18:03:13Z dburken $
+// $Id: ossimImageData.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <iterator>
 
@@ -4801,18 +4801,15 @@ ossimImageData::unloadBandToBsqTemplate(T,  // dummy template arg...
                {
                   T d_dest_band = d[d_dest_band_pixel_offset];
 
-                  for ( band=0; band<num_bands; ++band )
+                  for ( band=0; band<num_bands && band!=dest_band; ++band )
                   {
-                     if (band!=dest_band)
+                     T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
+
+                     // test for the color discrepancy
+                     if ( d_other_band != d_dest_band )
                      {
-                        T d_other_band = d[d_pixel_offset + (band * d_band_offset)];
-                        
-                        // test for the color discrepancy
-                        if ( d_other_band != d_dest_band )
-                        {
-                           d[d_dest_band_pixel_offset] = s[src_band][i];
-                           break;
-                        }
+                        d[d_dest_band_pixel_offset] = s[src_band][i];
+                        break;
                      }
                   }
                }

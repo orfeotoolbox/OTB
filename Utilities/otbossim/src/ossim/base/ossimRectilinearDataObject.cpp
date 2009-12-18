@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRectilinearDataObject.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -143,7 +143,7 @@ ossim_uint32 ossimRectilinearDataObject::getNumberOfDataComponents() const
 
 ossim_uint32 ossimRectilinearDataObject::getNumberOfSpatialComponents() const
 {
-   return theSpatialExtents.size();
+   return (ossim_uint32)theSpatialExtents.size();
 }
 
 const ossim_uint32* ossimRectilinearDataObject::getSpatialExtents()const

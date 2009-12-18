@@ -1069,14 +1069,15 @@ bool ossimRadarSat2Model::loadState (const ossimKeywordlist &kwl,
       }
    }
 
-   // Load the base class.
-   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
-
    //---
    // Temp:  This must be cleared or you end up with a bounding rect of all
    // zero's.
    //---
    theBoundGndPolygon.clear();
+
+   // Load the base class.
+   bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
+
 
    if (result)
    {

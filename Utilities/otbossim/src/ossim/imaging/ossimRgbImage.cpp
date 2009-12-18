@@ -58,7 +58,7 @@
      
 // END OF COPYRIGHT STATEMENT
 //*************************************************************************
-// $Id: ossimRgbImage.cpp 12984 2008-06-04 01:26:24Z dburken $
+// $Id: ossimRgbImage.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cstdlib>
 #include <cmath>
@@ -978,7 +978,7 @@ void ossimRgbImage::drawPolygon(const std::vector<ossimIpt> &p)
    {
       return;
    }
-   int n = p.size();
+   int n = (int)p.size();
    
    int i;
    int lx, ly;
@@ -1005,7 +1005,7 @@ void ossimRgbImage::drawPolygon(const std::vector<ossimDpt> &p)
    {
       return;
    }
-   int n = p.size();
+   int n = (int)p.size();
    
    int i;
    double lx, ly;
@@ -1499,7 +1499,7 @@ void ossimRgbImage::drawFilledPolygon(const std::vector<ossimIpt> &p)
    {
       return;
    }
-   int n = p.size();
+   int n = (int)p.size();
    int i;
    int y;
    int miny, maxy;
@@ -1589,7 +1589,7 @@ void ossimRgbImage::drawFilledPolygon(const std::vector<ossimDpt> &p)
    {
       return;
    }
-   int n = p.size();
+   int n = (int)p.size();
    int i;
    int y;
    int miny, maxy;

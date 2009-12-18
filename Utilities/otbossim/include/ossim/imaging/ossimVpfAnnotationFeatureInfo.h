@@ -1,13 +1,16 @@
 //*******************************************************************
 //
-// LICENSE: LGPL see top level license.txt
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimVpfAnnotationFeatureInfo.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimVpfAnnotationFeatureInfo.h 15836 2009-10-30 12:29:09Z dburken $
 #ifndef ossimVpfAnnotationFeatureInfo_HEADER
 #define ossimVpfAnnotationFeatureInfo_HEADER
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimRgbVector.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimGeoPolygon.h>
@@ -170,13 +173,13 @@ protected:
   ossimRgbVector                theBrushColor;
   ossimVpfCoverage              theCoverage;
   ossimDpt                      thePointRadius;
-  int                          theThickness; 
-  bool                         theFillEnabledFlag;
-  bool                         theEnabledFlag;
+  int                           theThickness; 
+  bool                          theFillEnabledFlag;
+  bool                          theEnabledFlag;
   ossimVpfAnnotationFeatureType theFeatureType;
   ossimFontInformation          theFontInformation;
    
-  std::vector<ossimGeoAnnotationObject*> theAnnotationArray;
+  std::vector<ossimRefPtr<ossimGeoAnnotationObject> > theAnnotationArray;
 
   void buildTxtFeature(const ossimFilename& table,
                        const ossimString&   tableKey,

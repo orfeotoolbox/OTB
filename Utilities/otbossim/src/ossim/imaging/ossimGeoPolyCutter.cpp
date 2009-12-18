@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoPolyCutter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/projection/ossimProjection.h>
@@ -72,7 +72,7 @@ bool ossimGeoPolyCutter::loadState(const ossimKeywordlist& kwl,
    ossimString polygons =  ossimString("^(") + copyPrefix + "geo_polygon[0-9]+.)";
    vector<ossimString> keys =
       kwl.getSubstringKeyList( polygons );
-   int offset = (copyPrefix+"geo_polygon").size();
+   int offset = (int)(copyPrefix+"geo_polygon").size();
    
    std::vector<int> numberList(keys.size());
    for(int idx = 0; idx < (int)numberList.size();++idx)
@@ -177,7 +177,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimIpt>& polygon)
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
-      invertPolygon(thePolygonList.size()-1);
+      invertPolygon((int)thePolygonList.size()-1);
    }
 }
 
@@ -187,7 +187,7 @@ void ossimGeoPolyCutter::addPolygon(const vector<ossimDpt>& polygon)
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
-      invertPolygon(thePolygonList.size()-1);
+      invertPolygon((int)thePolygonList.size()-1);
    }
 }
 
@@ -197,7 +197,7 @@ void ossimGeoPolyCutter::addPolygon(const ossimPolygon& polygon)
    {
       ossimPolyCutter::addPolygon(polygon);
       theGeoPolygonList.push_back(ossimGeoPolygon());
-      invertPolygon(thePolygonList.size()-1);
+      invertPolygon((int)thePolygonList.size()-1);
    }
 }
 

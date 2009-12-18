@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimHistogram.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 //
 
 #include <stdio.h>
@@ -1396,7 +1396,7 @@ bool ossimHistogram::loadState(const ossimRefPtr<ossimXmlNode> xmlNode)
             floatValues.push_back(vString.toFloat32());
          }
       }
-      count = floatValues.size();
+      count = (ossim_uint32)floatValues.size();
      
       if(count)
       {

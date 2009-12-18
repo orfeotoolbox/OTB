@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.cpp 13686 2008-10-07 02:13:52Z gpotts $
+//  $Id: ossimPolygon.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <algorithm>
 #include <iterator>
@@ -141,7 +141,7 @@ double ossimPolygon::area()const
    double area = 0;
    ossim_uint32 i=0;
    ossim_uint32 j=0;
-   ossim_uint32 size = theVertexList.size();
+   ossim_uint32 size = (ossim_uint32)theVertexList.size();
    
    for (i=0;i<size;i++)
    {
@@ -300,7 +300,7 @@ bool ossimPolygon::clipLineSegment(ossimDpt& P, ossimDpt& Q) const
    ossimLine edge, edgeE, edgeL;
    bool intersected=false;
    double num, denom, t;
-   ossim_uint32 npol = theVertexList.size();
+   ossim_uint32 npol = (ossim_uint32)theVertexList.size();
 
    checkOrdering();
    //***
@@ -533,7 +533,7 @@ bool ossimPolygon::operator==(const ossimPolygon& polygon) const
 
 const ossimPolygon& ossimPolygon::operator *=(const ossimDpt& scale)
 {
-   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
    ossim_uint32 i = 0;
    for(i = 0; i < upper; ++i)
    {
@@ -548,7 +548,7 @@ ossimPolygon ossimPolygon::operator *(const ossimDpt& scale)const
 {
    ossimPolygon result(*this);
 
-   ossim_uint32 upper = theVertexList.size();
+   ossim_uint32 upper = (ossim_uint32)theVertexList.size();
    ossim_uint32 i = 0;
    for(i = 0; i < upper; ++i)
    {

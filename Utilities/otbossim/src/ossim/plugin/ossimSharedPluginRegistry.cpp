@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimSharedPluginRegistry.cpp 14046 2009-03-03 02:23:38Z gpotts $
+// $Id: ossimSharedPluginRegistry.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 #include <iterator>
 #include <ossim/plugin/ossimSharedPluginRegistry.h>
@@ -179,7 +179,7 @@ const ossimPluginLibrary* ossimSharedPluginRegistry::getPlugin(ossim_uint32 idx)
 
 ossim_uint32 ossimSharedPluginRegistry::getNumberOfPlugins()const
 {
-   return theLibraryList.size();
+   return (ossim_uint32)theLibraryList.size();
 }
 
 

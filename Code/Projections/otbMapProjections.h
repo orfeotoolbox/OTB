@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbMapProjections_h
@@ -50,6 +50,7 @@ See OTBCopyright.txt for details.
 #include "otbUtmMapProjection.h"
 #include "otbLambertConformalConicMapProjection.h"
 #include "otbLambert2EtenduProjection.h"
+#include "otbLambert3CartoSudProjection.h"
 #include "otbLambert93Projection.h"
 #include "otbEckert4MapProjection.h"
 #include "otbTransMercatorMapProjection.h"
@@ -84,6 +85,8 @@ typedef LambertConformalConicMapProjection<INVERSE>                LambertConfor
 typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;
 typedef Lambert2EtenduProjection<INVERSE>                          Lambert2EtenduInverseProjection;
 typedef Lambert2EtenduProjection<FORWARD>                          Lambert2EtenduForwardProjection;
+typedef Lambert3CartoSudProjection<INVERSE>                          Lambert3CartoSudInverseProjection;
+typedef Lambert3CartoSudProjection<FORWARD>                          Lambert3CartoSudForwardProjection;
 typedef Lambert93Projection<INVERSE>                               Lambert93InverseProjection;
 typedef Lambert93Projection<FORWARD>                               Lambert93ForwardProjection;
 typedef SVY21MapProjection<INVERSE>                                SVY21InverseProjection;

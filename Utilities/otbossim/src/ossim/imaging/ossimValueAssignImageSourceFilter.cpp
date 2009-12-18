@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimValueAssignImageSourceFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimValueAssignImageSourceFilter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/imaging/ossimValueAssignImageSourceFilter.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -135,8 +135,8 @@ void ossimValueAssignImageSourceFilter::validateArrays()
 {
    if(theOutputValueArray.size() != theInputValueArray.size())
    {
-      ossim_uint32 index = std::min(theOutputValueArray.size(),
-                              theInputValueArray.size());
+      ossim_uint32 index = std::min((ossim_uint32)theOutputValueArray.size(),
+                                    (ossim_uint32)theInputValueArray.size());
       
       vector<double> copyVector(theOutputValueArray.begin(),
                                 theOutputValueArray.begin() + index);
@@ -171,7 +171,7 @@ template <class T> void ossimValueAssignImageSourceFilter::executeAssignSeparate
    ossimRefPtr<ossimImageData>& data)
 {
    ossim_uint32 numberOfBands = std::min((ossim_uint32)data->getNumberOfBands(),
-                                   (ossim_uint32)theInputValueArray.size());
+                                         (ossim_uint32)theInputValueArray.size());
    ossim_uint32 maxOffset     = data->getWidth()*data->getHeight();
    
    for(ossim_uint32 band = 0; band<numberOfBands; ++band)
@@ -195,7 +195,7 @@ template <class T> void ossimValueAssignImageSourceFilter::executeAssignGroup(
    ossimRefPtr<ossimImageData>& data)
 {
    ossim_uint32 numberOfBands = std::min((ossim_uint32)data->getNumberOfBands(),
-                                   (ossim_uint32)theInputValueArray.size());
+                                         (ossim_uint32)theInputValueArray.size());
    ossim_uint32 maxOffset     = data->getWidth()*data->getHeight();
    ossim_uint32 band = 0;
    bool equalFlag = false;

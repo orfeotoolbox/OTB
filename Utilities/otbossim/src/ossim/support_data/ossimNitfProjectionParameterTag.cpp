@@ -8,7 +8,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfProjectionParameterTag.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfProjectionParameterTag.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/support_data/ossimNitfProjectionParameterTag.h>
 #include <sstream>
 #include <iomanip>
@@ -75,7 +75,7 @@ void ossimNitfProjectionParameterTag::writeStream(std::ostream& out)
 
 ossim_uint32 ossimNitfProjectionParameterTag::getSizeInBytes()const
 {
-   return (113 + theProjectionParameters.size()*15);
+   return (113 + (ossim_uint32)theProjectionParameters.size()*15);
 }
 
 std::ostream& ossimNitfProjectionParameterTag::print(

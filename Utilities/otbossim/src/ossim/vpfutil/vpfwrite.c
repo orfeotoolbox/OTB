@@ -582,7 +582,7 @@ long int put_table_element( long int              field,
 	str = (char *) vpfmalloc( len + 1 );
 	row[field].ptr = (char *) vpfmalloc ( len + 1 ) ;
 	strcpy( (char*)str, (char*)value );
-	for ( i = strlen((char*)value) ; i < table.header[field].count; i++ )
+	for ( i = (long)strlen((char*)value) ; i < table.header[field].count; i++ )
 	   str[i] = SPACE ;
 	str[len] = '\0';
 	memcpy(row[field].ptr, str, len+1);
@@ -701,7 +701,7 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 
   switch ( type ) {
   case VpfChar:
-    retval = fwrite ( from, sizeof (char), count, to ) ;
+    retval = (long)fwrite ( from, sizeof (char), count, to ) ;
     break ;
   case VpfShort:
     {
@@ -710,10 +710,10 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 		*sptr = (short *) from ;
 	for ( i=0; i < count; i++, sptr++ ) {
 	   swap_two ( (char*)sptr, (char*)&stemp ) ;
-	   retval = fwrite ( &stemp, sizeof (short), 1, to ) ;
+	   retval = (long)fwrite ( &stemp, sizeof (short), 1, to ) ;
 	}
       } else {
-	retval = fwrite ( from, sizeof (short), count, to ) ;
+	retval = (long)fwrite ( from, sizeof (short), count, to ) ;
       }
     }
     break ;
@@ -724,10 +724,10 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	   *iptr = (long int *) from ;
 	 for ( i=0; i < count; i++, iptr++ ) {
 	   swap_four ( (char*)iptr, (char*)&itemp ) ;
-	   retval = fwrite ( &itemp, sizeof (long int), 1, to ) ;
+	   retval = (long)fwrite ( &itemp, sizeof (long int), 1, to ) ;
 	 }
       } else {
-	 retval = fwrite ( from, sizeof (long int), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (long int), count, to ) ;
       }
     }
     break ;
@@ -738,10 +738,10 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	    *fptr = (float *) from ;
 	 for ( i=0; i < count; i++, fptr++ ) {
 	   swap_four ( (char*)fptr, (char*)&ftemp ) ;
-	   retval = fwrite ( &ftemp, sizeof (float), 1, to ) ;
+	   retval = (long)fwrite ( &ftemp, sizeof (float), 1, to ) ;
 	 }
       } else {
-	 retval = fwrite ( from, sizeof (long int), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (long int), count, to ) ;
       }
     }
     break ;
@@ -752,15 +752,15 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	     *dptr = (double *) from ;
 	 for ( i=0; i < count; i++, dptr++ ) {
 	   swap_eight ( (char*)dptr, (char*)&dtemp ) ;
-	   retval = fwrite ( &dtemp, sizeof (double), 1, to ) ;
+	   retval = (long)fwrite ( &dtemp, sizeof (double), 1, to ) ;
 	 }
       } else {
-	 retval = fwrite ( from, sizeof (double), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (double), count, to ) ;
       }
     }
     break ;
   case VpfDate:	/* only write out 20, not 21 chars */
-    retval = fwrite ( from, sizeof ( date_type ) - 1, count, to ) ;
+    retval = (long)fwrite ( from, sizeof ( date_type ) - 1, count, to ) ;
     break ;
   case VpfCoordinate:
     {
@@ -770,10 +770,10 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	 for ( i=0; i < count; i++, cptr++ ) {
 	   swap_four ( (char*)&cptr->x, (char*)&ctemp.x ) ;
 	   swap_four ( (char*)&cptr->y, (char*)&ctemp.y ) ;
-	   retval = fwrite ( &ctemp, sizeof (coordinate_type), 1, to ) ;
+	   retval = (long)fwrite ( &ctemp, sizeof (coordinate_type), 1, to ) ;
 	 }
       } else {
-	 retval = fwrite ( from, sizeof (coordinate_type), count, to ) ;
+	 retval = (long)fwrite ( from, sizeof (coordinate_type), count, to ) ;
       }
     }
     break ;
@@ -785,11 +785,11 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	 for ( i=0; i < count; i++, dcptr++ ) {
 	   swap_eight ( (char*)&dcptr->x, (char*)&dctemp.x ) ;
 	   swap_eight ( (char*)&dcptr->y, (char*)&dctemp.y ) ;
-	   retval = fwrite ( &dctemp, sizeof (double_coordinate_type),
+	   retval = (long)fwrite ( &dctemp, sizeof (double_coordinate_type),
 	                     1, to ) ;
 	 }
       } else {
-	 retval = fwrite ( from, sizeof (double_coordinate_type),
+	 retval = (long)fwrite ( from, sizeof (double_coordinate_type),
 			   count, to ) ;
       }
     }
@@ -803,10 +803,10 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	   swap_four ( (char*)&tptr->x, (char*)&ttemp.x ) ;
 	   swap_four ( (char*)&tptr->y, (char*)&ttemp.y ) ;
 	   swap_four ( (char*)&tptr->z, (char*)&ttemp.z ) ;
-	   retval = fwrite ( &ttemp, sizeof (tri_coordinate_type), 1, to ) ;
+	   retval = (long)fwrite ( &ttemp, sizeof (tri_coordinate_type), 1, to ) ;
 	}
       } else {
-	retval = fwrite ( from, sizeof (tri_coordinate_type), count, to ) ;
+	retval = (long)fwrite ( from, sizeof (tri_coordinate_type), count, to ) ;
       }
     }
     break ;
@@ -819,11 +819,11 @@ long int VpfWrite ( void *from, VpfDataType type, long int count, FILE *to )
 	   swap_eight ( (char*)&dtptr->x, (char*)&dttemp.x ) ;
 	   swap_eight ( (char*)&dtptr->y, (char*)&dttemp.y ) ;
 	   swap_eight ( (char*)&dtptr->z, (char*)&dttemp.z ) ;
-	   retval = fwrite ( &dttemp,sizeof (double_tri_coordinate_type),
+	   retval = (long)fwrite ( &dttemp,sizeof (double_tri_coordinate_type),
 			     1, to);
 	}
       } else {
-	retval = fwrite ( from,sizeof (double_tri_coordinate_type),
+	retval = (long)fwrite ( from,sizeof (double_tri_coordinate_type),
 			  count, to);
       }
     }

@@ -11,7 +11,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolyLine.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimPolyLine.h 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #ifndef ossimPolyLine_HEADER
 #define ossimPolyLine_HEADER
@@ -69,7 +69,7 @@ public:
    
    ossim_uint32 getNumberOfVertices()const
       {
-         return theVertexList.size();
+         return (ossim_uint32)theVertexList.size();
       }
    
    void getIntegerBounds(ossim_int32& minX,

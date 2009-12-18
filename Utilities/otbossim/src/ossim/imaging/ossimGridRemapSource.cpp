@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGridRemapSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGridRemapSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ossim/imaging/ossimGridRemapSource.h>
 
@@ -299,7 +299,7 @@ bool ossimGridRemapSource::saveState(ossimKeywordlist& kwl,
 void ossimGridRemapSource::setGridNode(const ossimDpt& view_pt,
                                        const double*   value)
 {
-   int numGrids = theGrids.size();
+   int numGrids = (int)theGrids.size();
    for (int i=0; i<numGrids; i++)
       theGrids[i]->setNearestNode(view_pt, value[i]);
 

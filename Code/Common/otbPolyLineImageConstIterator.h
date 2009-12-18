@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbPolyLineImageConstIterator_h
@@ -105,13 +105,16 @@ public:
   virtual ~PolyLineImageConstIterator() {};
 
 protected: //made protected so other iterators can access
+
   /** Smart pointer to the source image. */
   typename ImageType::ConstWeakPointer m_Image;
+
   /** Smart pointer to the path */
   typename PathType::ConstPointer m_Path;
-  InternalImageIteratorType m_InternalImageIterator;
-  VertexIteratorType m_InternalVertexIterator;
+  InternalImageIteratorType       m_InternalImageIterator;
+  VertexIteratorType              m_InternalVertexIterator;
 };
+
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolyLineImageConstIterator.txx"

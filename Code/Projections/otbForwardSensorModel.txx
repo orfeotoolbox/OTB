@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbForwardSensorModel_txx
@@ -84,14 +84,9 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
       currentPoint[1] = ossimGPointRef.lat;
 
 //      otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
-      if (this->m_UseDEM)
-      {
-        heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
-      }
-      else
-      {
-        heightTmp = this->m_AverageElevation;
-      }
+
+      heightTmp = this->m_DEMHandler->GetHeightAboveMSL(currentPoint);
+
 //       otbMsgDevMacro(<< "height : " << heightTmp);
 
       this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);

@@ -9,7 +9,7 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimImageData.h 15833 2009-10-29 01:41:53Z eshirschorn $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
@@ -593,13 +593,13 @@ public:
     * destination buffer is to be overwritten by the selected band of the 
     * source image data (no questions asked).
     *
-    * @note The src object should have at least the same number of bands as 
-    * the 'dest' buffer. 
+    * @note: The 'dest' buffer should have at least the same number of bands 
+    * as the 'src' object. 
     *
     * Currently this routine is only implemented for il_type set to OSSIM_BSQ.
     *
-    * @param dest The destination buffer with at least the same number of bands
-    * as the src (this) object.
+    * @param dest      The destination buffer, which should have at least the 
+    * same number of bands as the 'src' object.
     * @param src_band  The 0-based band of the source image data.
     * @param dest_band The 0-based band of the dest buffer.
     * @param dest_rect The rectangle of the destination buffer.
@@ -630,13 +630,13 @@ public:
     * destination buffer is to be overwritten by the selected band of the 
     * source image data (no questions asked).
     *
-    * Note: The src object should have at least the same number of bands as 
-    * the 'dest' buffer. 
+    * @note: The 'dest' buffer should have at least the same number of bands 
+    * as the 'src' object. 
     *
     * Currently this routine is only implemented for il_type set to OSSIM_BSQ.
     *
-    * @param dest The destination buffer with at least the same number of bands
-    * as the src (this) object.
+    * @param dest      The destination buffer, which should have at least the 
+    * same number of bands as the 'src' object.
     * @param src_band  The 0-based band of the source image data.
     * @param dest_band The 0-based band of the dest buffer.
     * @param dest_rect The rectangle of the destination buffer.

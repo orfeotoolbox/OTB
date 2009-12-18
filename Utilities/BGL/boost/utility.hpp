@@ -4,14 +4,14 @@
 //  subject to the Boost Software License, Version 1.0.  (See accompanying file
 //  LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 
-//  See <http://www.boost.org/libs/utility/> for the library's home page.
+//  See <http://www.boost.org/libs/butility/> for the library's home page.
 
 #ifndef BOOST_UTILITY_HPP
 #define BOOST_UTILITY_HPP
 
-#include <boost/utility/addressof.hpp>
-#include <boost/utility/base_from_member.hpp>  
-#include <boost/utility/enable_if.hpp>
+#include <boost/butility/addressof.hpp>
+#include <boost/butility/base_from_member.hpp>  
+#include <boost/butility/enable_if.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/next_prior.hpp>
 #include <boost/noncopyable.hpp>

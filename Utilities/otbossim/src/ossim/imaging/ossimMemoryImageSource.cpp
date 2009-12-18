@@ -181,7 +181,7 @@ void ossimMemoryImageSource::getDecimationFactor(ossim_uint32 resLevel,
    }
    else
    {
-      result.x = 1.0 / pow((double)2, (double)resLevel);
+      result.x = 1.0 / (1<<resLevel);
       result.y = result.x;
    }
 }

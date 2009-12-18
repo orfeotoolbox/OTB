@@ -6,7 +6,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.cpp 13686 2008-10-07 02:13:52Z gpotts $
+//  $Id: ossimGeoPolygon.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <ostream>
 #include <sstream>
@@ -188,7 +188,7 @@ void ossimGeoPolygon::stretchOut(ossimGeoPolygon& newPolygon,
          newPolygon[0].height(theVertexList[i].height());
          newPolygon[0].datum(datum);
          
-         newPolygon[theVertexList.size()-1] = newPolygon[0];
+         newPolygon[(int)theVertexList.size()-1] = newPolygon[0];
       }
    }
 }
@@ -199,7 +199,7 @@ double ossimGeoPolygon::area()const
    double area = 0;
    ossim_uint32 i=0;
    ossim_uint32 j=0;
-   ossim_uint32 size = theVertexList.size();
+   ossim_uint32 size = (ossim_uint32)theVertexList.size();
    
    for (i=0;i<size;i++)
    {

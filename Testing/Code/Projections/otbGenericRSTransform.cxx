@@ -144,8 +144,11 @@ int otbGenericRSTransform( int argc, char* argv[] )
   ofstream ofs;
   ofs.open(outfname);
 
-  ofs<<"Testing geopoint: "<<geoPoint<<std::endl<<std::endl;
+  // Set floatfield to format writing properly
+  ofs.setf(ios::fixed, ios::floatfield);
+  ofs.precision(10);
 
+  ofs<<"Testing geopoint: "<<geoPoint<<std::endl<<std::endl;
 
   ofs<<"Testing wgs84 to wgs84: "<<geoPoint<<" -> "<<wgs2wgs->TransformPoint(geoPoint)<<std::endl;
   
@@ -155,26 +158,41 @@ int otbGenericRSTransform( int argc, char* argv[] )
   lambertPoint = wgs2lambert->TransformPoint(geoPoint);
   tmtPoint = wgs2tmt->TransformPoint(geoPoint);
 
+  ofs.precision(3);
+
   ofs<<"Testing utm 31 north to utm 31 north: "<<utmPoint<<" -> "<<utm2utm->TransformPoint(utmPoint)<<std::endl;
   ofs<<"Testing lambert 2 to lambert 2: "<<lambertPoint<<" -> "<<lambert2lambert->TransformPoint(lambertPoint)<<std::endl;
   ofs<<"Testing transmercator 31 north to transmercator: "<<tmtPoint<<" -> "<<tmt2tmt->TransformPoint(tmtPoint)<<std::endl;
 
-
   ofs<<std::endl<<"Testing geo 2 carto ..."<<std::endl<<std::endl;
 
+  ofs.precision(10);
 
-  ofs<<"Testing wgs84 to utm 31 north: "<<geoPoint<<" -> "<<utmPoint<<std::endl;
-  ofs<<"Testing utm 31 north to wgs84: "<<utmPoint<<" -> "<<utm2wgs->TransformPoint(utmPoint)<<std::endl;
+  ofs<<"Testing wgs84 to utm 31 north: "<<geoPoint;
+  ofs.precision(3);
+  ofs<<" -> "<<utmPoint<<std::endl;
+  ofs<<"Testing utm 31 north to wgs84: "<<utmPoint;
+  ofs.precision(10);
+  ofs<<" -> "<<utm2wgs->TransformPoint(utmPoint)<<std::endl;
 
-  ofs<<"Testing wgs84 to lambert 2: "<<geoPoint<<" -> "<<lambertPoint<<std::endl;
-  ofs<<"Testing lambert 2 to wgs84: "<<lambertPoint<<" -> "<<lambert2wgs->TransformPoint(lambertPoint)<<std::endl;
+  ofs<<"Testing wgs84 to lambert 2: "<<geoPoint;
+  ofs.precision(3);
+  ofs<<" -> "<<lambertPoint<<std::endl;
+  ofs<<"Testing lambert 2 to wgs84: "<<lambertPoint;
+  ofs.precision(10);
+  ofs<<" -> "<<lambert2wgs->TransformPoint(lambertPoint)<<std::endl;
   
-  ofs<<"Testing wgs84 to transmeractor: "<<geoPoint<<" -> "<<tmtPoint<<std::endl;
-  ofs<<"Testing transmercator to wgs84: "<<tmtPoint<<" -> "<<tmt2wgs->TransformPoint(tmtPoint)<<std::endl;
+  ofs<<"Testing wgs84 to transmeractor: "<<geoPoint;
+  ofs.precision(3);
+  ofs<<" -> "<<tmtPoint<<std::endl;
+  ofs<<"Testing transmercator to wgs84: "<<tmtPoint;
+  ofs.precision(10);
+  ofs<<" -> "<<tmt2wgs->TransformPoint(tmtPoint)<<std::endl;
 
 
   ofs<<std::endl<<"Testing cross geo ..."<<std::endl<<std::endl;
 
+  ofs.precision(3);
 
   ofs<<"Testing lambert 2 to utm 31 north: "<<lambertPoint<<" -> "<<lambert2utm->TransformPoint(lambertPoint)<<std::endl;
   ofs<<"Testing utm 31 north to lambert 2: "<<utmPoint<<" -> "<<utm2lambert->TransformPoint(utmPoint)<<std::endl;

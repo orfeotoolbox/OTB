@@ -37,7 +37,7 @@ ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreLee_05_05_04.tif
                           ${TEMP}/bfFiltreLee_05_05_04.tif
         otbLeeFilter
-	${INPUTDATA}/poupees_1canal.c1.hdr
+	${INPUTDATA}/GomaAvant.png                  #poupees_1canal.c1.hdr
 	${TEMP}/bfFiltreLee_05_05_04.tif
 	05 05 4.0)
 
@@ -45,7 +45,7 @@ ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreLee_05_05_12.tif
                            ${TEMP}/bfFiltreLee_05_05_12.tif
         otbLeeFilter
-	${INPUTDATA}/poupees.hdr
+	${INPUTDATA}/GomaAvant.png    #poupees.hdr
 	${TEMP}/bfFiltreLee_05_05_12.tif
 	05 05 12.0)
 
@@ -57,7 +57,7 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS1}
   --compare-image ${EPSILON_7}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.tif
                           ${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
         otbFrostFilter
-	${INPUTDATA}/poupees.hdr
+	${INPUTDATA}/GomaAvant.png   #poupees.hdr
 	${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
 	05 05 0.1)
 
@@ -243,7 +243,7 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_DATA_USE_LARGEINPUT)
  ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}
 --compare-ascii ${EPSILON_7}
-		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
+		${BASELINE_FILES}/bfTvImportGeoInformationKeywordListOutput.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
          ${IMAGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF

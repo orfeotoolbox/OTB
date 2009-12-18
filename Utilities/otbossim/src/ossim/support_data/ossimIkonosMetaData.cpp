@@ -11,7 +11,7 @@
 // This class parses a Space Imaging Ikonos meta data file.
 //
 //********************************************************************
-// $Id: ossimIkonosMetaData.cpp 14546 2009-05-18 18:58:05Z dburken $
+// $Id: ossimIkonosMetaData.cpp 15828 2009-10-28 13:11:31Z dburken $
 
 #include <cstdio>
 #include <iostream>

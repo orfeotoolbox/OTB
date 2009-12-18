@@ -170,7 +170,8 @@ ImageFileReader<TOutputImage>
     ImageRegionType region = output->GetBufferedRegion();
 
     // Adapte the image size with the region
-    std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels()) * static_cast<std::streamoff>(region.GetNumberOfPixels());
+    std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels())
+                               * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
@@ -339,10 +340,8 @@ ImageFileReader<TOutputImage>
   ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
 
 
-
   // Add the radar factory
   ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-
 
 
   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
@@ -357,7 +356,11 @@ ImageFileReader<TOutputImage>
   {
     otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
 //     hasMetaData = handler->getImageGeometry(geom_kwl);
-    hasMetaData = handler->getImageGeometry()->getProjection()->saveState(geom_kwl);
+    ossimProjection* projection = handler->getImageGeometry()->getProjection();
+    if (projection)
+    {
+      hasMetaData = projection->saveState(geom_kwl);
+    }
   }
   // Free memory
   delete handler;
@@ -367,14 +370,14 @@ ImageFileReader<TOutputImage>
     // Add the plugins factory
     ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
     ossimProjection * projection = ossimProjectionFactoryRegistry::instance()
-    ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()),0);
+                   ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
     if (!projection)
     {
-      otbMsgDevMacro( <<"OSSIM Instanciate projection FAILED ! ");
+      otbMsgDevMacro( <<"OSSIM Instantiate projection FAILED ! ");
     }
     else
     {
-      otbMsgDevMacro( <<"OSSIM Instanciate projection SUCCESS ! ");
+      otbMsgDevMacro( <<"OSSIM Instantiate projection SUCCESS ! ");
       hasMetaData = projection->saveState(geom_kwl);
       // Free memory
       delete projection;
@@ -395,7 +398,7 @@ ImageFileReader<TOutputImage>
     ImageKeywordlist otb_kwl;
     otb_kwl.SetKeywordlist( geom_kwl );
 
-    // Update itk MetaData Dictionnary
+    // Update itk MetaData Dictionary
 
     itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
 
@@ -449,7 +452,7 @@ ImageFileReader<TOutputImage>
   }
 
   // Test if the file can be open for reading access.
-  //Only if m_FileName speciy a filname (not a dirname)
+  //Only if m_FileName specify a filename (not a dirname)
   if ( System::IsAFileName( this->m_FileName ) == true )
   {
     std::ifstream readTester;
@@ -477,7 +480,7 @@ ImageFileReader<TOutputImage>
 {
   std::vector<std::string> listFileSearch;
   listFileSearch.push_back("DAT_01.001");
-  listFileSearch.push_back("dat_01.001");// RADARSAT ou SAR_ERS2
+  listFileSearch.push_back("dat_01.001");// RADARSAT or SAR_ERS2
   listFileSearch.push_back("IMAGERY.TIF");
   listFileSearch.push_back("imagery.tif");//For format SPOT5TIF
 // Not recognised as a supported file format by GDAL.

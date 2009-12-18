@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
@@ -138,6 +138,7 @@ void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GenerateData()
 {
+
   AtmosphericCorrectionParametersPointer input = this->GetInput();
   AtmosphericRadiativeTermsPointer output = this->GetOutput();
 
@@ -158,7 +159,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   
   for (unsigned int i=0; i<NbBand; ++i)
   {
-         atmosphericReflectance = 0.;
+    atmosphericReflectance = 0.;
     atmosphericSphericalAlbedo = 0.;
     totalGaseousTransmission = 0.;
     downwardTransmittance = 0.;
@@ -191,6 +192,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       upwardDiffuseTransmittanceForRayleigh,           /** Upward diffuse transmittance for rayleigh */
       upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
     );
+
 
     output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
     output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);

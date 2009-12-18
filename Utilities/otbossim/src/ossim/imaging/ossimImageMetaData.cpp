@@ -10,7 +10,7 @@
 // Contains class definition for ossimImageMetaData.
 // 
 //*******************************************************************
-//  $Id: ossimImageMetaData.cpp 12246 2008-01-03 19:41:35Z dburken $
+//  $Id: ossimImageMetaData.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <vector>
 #include <algorithm>
 #include <ossim/imaging/ossimImageMetaData.h>
@@ -230,7 +230,7 @@ void ossimImageMetaData::loadBandInfo(const ossimKeywordlist& kwl,
    std::vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );
    
-   ossim_uint32 numberOfBands = keys.size();
+   ossim_uint32 numberOfBands = (ossim_uint32)keys.size();
 
    theMinValuesValidFlag  = true;
    theMaxValuesValidFlag  = true;
@@ -249,7 +249,7 @@ void ossimImageMetaData::loadBandInfo(const ossimKeywordlist& kwl,
       setNumberOfBands(numberOfBands);
    }
    
-   int offset = (copyPrefix+"band").size();
+   int offset = (int)(copyPrefix+"band").size();
    int idx = 0;
    std::vector<int> theNumberList(numberOfBands);
    for(idx = 0; idx < (int)theNumberList.size();++idx)

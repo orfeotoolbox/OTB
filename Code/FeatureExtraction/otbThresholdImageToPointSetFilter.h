@@ -25,11 +25,11 @@ namespace otb
 {
 
 /** \class ThresholdImageToPointSetFilter
+ * \brief Produce a PointSet according to filtering conditions
  *
  */
 
 template <class TInputImage,
-//          class TOutputPointSet>
 class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
 class ITK_EXPORT ThresholdImageToPointSetFilter :
       public ImageToPointSetFilter< TInputImage,TOutputPointSet >
@@ -43,8 +43,8 @@ public:
   typedef TInputImage     InputImageType;
 
   typedef ThresholdImageToPointSetFilter                             Self;
-  typedef ImageToPointSetFilter< InputImageType, TOutputPointSet> Superclass;
-  typedef typename Superclass::OutputPointSetType                 OutputPointSetType;
+  typedef ImageToPointSetFilter< InputImageType, TOutputPointSet>    Superclass;
+  typedef typename Superclass::OutputPointSetType                    OutputPointSetType;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
@@ -54,13 +54,14 @@ public:
 
   typedef typename Superclass::InputImagePixelType        InputPixelType;
   typedef typename Superclass::InputImagePointer          InputImagePointer;
+  typedef typename Superclass::InputImageRegionType       InputImageRegionType;
   typedef typename Superclass::InputImageConstPointer     InputImageConstPointer;
   typedef typename Superclass::InputImageType::SizeType   SizeType;
   typedef typename Superclass::InputImageType::IndexType  IndexType;
 
-  //typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
-  typedef   typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
-  typedef   typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
+  typedef typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
+  typedef typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
+  typedef typename Superclass::PointsContainerType            PointsContainerType;
 
   itkSetMacro(LowerThreshold,InputPixelType);
   itkGetConstReferenceMacro(LowerThreshold, InputPixelType);
@@ -71,7 +72,7 @@ protected:
   ThresholdImageToPointSetFilter();
   virtual ~ThresholdImageToPointSetFilter() {};
 
-  virtual void GenerateData();
+  virtual void ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

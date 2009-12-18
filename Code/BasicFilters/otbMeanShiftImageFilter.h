@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbMeanShiftImageFilter_h
@@ -166,8 +166,6 @@ public:
   const LabeledOutputType * GetClusterBoundariesOutput() const;
   /** Return the cluster boundaries image output */
   LabeledOutputType * GetClusterBoundariesOutput();
-  /** Return the const vectorized boundaries output */
-  const PolygonListType * GetVectorizedClusterBoundariesOutput() const;
   /** Return the mean-shift mode by label */
   const ModeMapType& GetModes()
   {

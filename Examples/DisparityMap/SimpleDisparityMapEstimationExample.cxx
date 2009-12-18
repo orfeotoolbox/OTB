@@ -69,7 +69,7 @@ int main (int argc, char* argv[])
   if (argc!= 12)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
+    std::cerr<<" fixedFileName movingFileName fieldOutName imageOutName ";
     std::cerr<<"pointSetStepX pointSetStepY explorationSize windowSize learningRate ";
     std::cerr<<"nbIterations metricThreshold";
 

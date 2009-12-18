@@ -34,6 +34,7 @@ REGISTER_TEST(otbPointSetFileReader2);
 REGISTER_TEST(otbSpotImageMetadataInterfaceNew);
 REGISTER_TEST(otbIkonosImageMetadataInterfaceNew);
 REGISTER_TEST(otbQuickBirdImageMetadataInterfaceNew);
+REGISTER_TEST(otbTerraSarImageMetadataInterfaceNew);
 REGISTER_TEST(otbImageMetadataInterfaceTest);
 REGISTER_TEST(otbImageMetadataInterfaceTest2);
 }

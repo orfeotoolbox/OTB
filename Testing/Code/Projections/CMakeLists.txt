@@ -233,6 +233,15 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2}
         N
         )
 
+ADD_TEST(prTvOrthoRectificationToulouseXS ${PROJECTIONS_TESTS2}
+  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationToulouseXS_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
+        otbOrthoRectificationFilter
+        ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationToulouseXS_UTM.tif
+	367319 4835740 300 300 2.5608 -2.8452 31 N
+        )
+
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
   --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
@@ -287,6 +296,9 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS2}
         ${INPUTDATA}/DEM/srtm_directory/
 #         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
+
+
+
 
 #========================= Ortho rectif SPOT5 ===============================
 
@@ -370,21 +382,23 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTuGenericMapProjectionNew ${PROJECTIONS_TESTS3}  otbGenericMapProjectionNew )
 
 ADD_TEST(prTvGenericMapProjection ${PROJECTIONS_TESTS3}
-        --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGenericMapProjection.txt
-        ${TEMP}/prTvGenericMapProjection.txt
+        --compare-ascii ${EPSILON_4} 
+            ${BASELINE_FILES}/prTvGenericMapProjection.txt
+            ${TEMP}/prTvGenericMapProjection.txt
         otbGenericMapProjection
-        ${TEMP}/prTvGenericMapProjection.txt
+            ${TEMP}/prTvGenericMapProjection.txt
 )
 
 ADD_TEST(prTuGenericRSTransformNew ${PROJECTIONS_TESTS3}  otbGenericRSTransformNew )
 
-ADD_TEST(prTuGenericRSTransform ${PROJECTIONS_TESTS3}  otbGenericRSTransform
- --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGenericMapProjection.txt
- ${BASELINE_FILES}/prTvGenericRSTransform.txt
- ${TEMP}/prTvGenericRSTransform.txt
- 1.35617289802566
- 43.4876035537
- ${TEMP}/prTvGenericRSTransform.txt
+ADD_TEST(prTvGenericRSTransform ${PROJECTIONS_TESTS3} 
+         --compare-ascii ${EPSILON_4}
+	     ${BASELINE_FILES}/prTvGenericRSTransform.txt
+	     ${TEMP}/prTvGenericRSTransform.txt
+	 otbGenericRSTransform
+	     1.35617289802566
+	     43.4876035537
+	     ${TEMP}/prTvGenericRSTransform.txt
 )
 
 ADD_TEST(prTuVectorDataProjectionFilterNew ${PROJECTIONS_TESTS3}  otbVectorDataProjectionFilterNew )
@@ -460,6 +474,9 @@ ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+
+
+
 #=======================================================================================
 SET(Projections_SRCS1
 otbProjectionsTests1.cxx
@@ -496,6 +513,7 @@ otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 )
+
 
 OTB_ADD_EXECUTABLE(otbProjectionsTests1 "${Projections_SRCS1}" "OTBProjections;OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbProjectionsTests2 "${Projections_SRCS2}" "OTBProjections;OTBIO;OTBTesting")

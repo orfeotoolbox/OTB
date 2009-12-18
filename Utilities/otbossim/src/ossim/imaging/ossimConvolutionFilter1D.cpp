@@ -3,7 +3,7 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //*************************************************************************
-// $Id: ossimConvolutionFilter1D.cpp 12912 2008-05-28 15:05:54Z gpotts $
+// $Id: ossimConvolutionFilter1D.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -420,7 +420,7 @@ ossimRefPtr<ossimProperty> ossimConvolutionFilter1D::getProperty(const ossimStri
    if(name == PROPNAME_KERNEL)
    {
       ossimMatrixProperty* property = new ossimMatrixProperty(name);
-      property->resize(1,theKernel.size());
+      property->resize(1,(int)theKernel.size());
       for(ossim_uint32 i=0;i<theKernel.size();++i)
       {
         (*property)(0,i) = theKernel[i];

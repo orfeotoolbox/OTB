@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbVectorizationPathListFilter_h
@@ -59,18 +59,18 @@ public:
   /** Template parameters typedefs */
   typedef TInputModulus InputModulusType;
   typedef typename InputModulusType::ConstPointer InputModulusConstPointerType;
-  typedef typename InputModulusType::PixelType InputPixelType;
-  typedef typename InputModulusType::PointType PointType;
-  typedef typename InputModulusType::IndexType IndexType;
+  typedef typename InputModulusType::PixelType    InputPixelType;
+  typedef typename InputModulusType::PointType    PointType;
+  typedef typename InputModulusType::IndexType    IndexType;
 
-  typedef TInputDirection InputDirectionType;
-  typedef typename InputDirectionType::ConstPointer InputDirectionConstPointerType;
-  typedef TOutputPath OutputPathType;
-  typedef typename OutputPathType::Pointer OutputPathPointerType;
+  typedef TInputDirection                              InputDirectionType;
+  typedef typename InputDirectionType::ConstPointer    InputDirectionConstPointerType;
+  typedef TOutputPath                                  OutputPathType;
+  typedef typename OutputPathType::Pointer             OutputPathPointerType;
   typedef typename OutputPathType::ContinuousIndexType VertexType;
 
   /** Derived typedefs */
-  typedef typename Superclass::OutputPathListType OutputPathListType;
+  typedef typename Superclass::OutputPathListType        OutputPathListType;
   typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;
 
   /** Set/get the input modulus */
@@ -88,7 +88,7 @@ protected:
 
   /** Other internal useful typedefs */
   typedef otb::Image<bool,InputModulusType::ImageDimension> FlagImageType;
-  typedef typename FlagImageType::Pointer FlagImagePointerType;
+  typedef typename FlagImageType::Pointer                   FlagImagePointerType;
 
   typedef itk::ImageRegionConstIterator<InputModulusType>   ModRegionIteratorType;
   typedef itk::ImageRegionConstIterator<InputDirectionType> DirRegionIteratorType;
@@ -104,11 +104,11 @@ protected:
 
   typedef typename ModNeighborhoodIteratorType::RadiusType RadiusType;
   typedef typename ModNeighborhoodIteratorType::OffsetType OffsetType;
-  typedef std::vector<OffsetType> OffsetVectorType;
+  typedef std::vector<OffsetType>                          OffsetVectorType;
 
   typedef typename OutputPathType::VertexListType VertexListType;
-  typedef typename VertexListType::ConstPointer VertexListPointerType;
-  typedef typename VertexListType::ConstIterator VertexIteratorType;
+  typedef typename VertexListType::ConstPointer   VertexListPointerType;
+  typedef typename VertexListType::ConstIterator  VertexIteratorType;
 
   /** Constructor */
   VectorizationPathListFilter();

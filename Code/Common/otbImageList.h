@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbImageList_h
@@ -59,7 +59,6 @@ public:
    * Update images in the list.
    */
   virtual void UpdateOutputInformation(void);
-  virtual void PropagateRequestedRegion(void) throw (itk::InvalidRequestedRegionError);
   virtual void UpdateOutputData(void);
 
 

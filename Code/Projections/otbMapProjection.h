@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbMapProjection_h
@@ -122,7 +122,10 @@ public :
   virtual void ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
   virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
   //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
-  void SetFalseEasting(double falseEasting);
+  virtual void SetFalseEasting(double falseEasting)
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
 
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt() const;

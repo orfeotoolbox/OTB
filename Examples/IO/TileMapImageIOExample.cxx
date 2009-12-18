@@ -96,10 +96,10 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2> ImageType;
+  typedef itk::RGBPixel<unsigned char>    RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::TileMapImageIO ImageIOType;
+  typedef otb::TileMapImageIO             ImageIOType;
 
   ImageIOType::Pointer tileIO = ImageIOType::New();
   ReaderType::Pointer readerTile = ReaderType::New();
@@ -117,7 +117,7 @@ int main( int argc, char* argv[] )
   // that's why we don't want to do an update before extracting a specific
   // area.
   //
-  // The coordinates are refered with an origin at the North Pole and the
+  // The coordinates are referred with an origin at the North Pole and the
   // change date meridian in Mercator projection. So we need to translate the latitude
   // and the longitude in this funny coordinate system:
   //

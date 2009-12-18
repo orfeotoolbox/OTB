@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimTopographicCorrectionFilter.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimTopographicCorrectionFilter.h>
@@ -169,7 +169,7 @@ void ossimTopographicCorrectionFilter::allocate()
       int arraySize = theTile->getNumberOfBands();
       if(theGain.size() > 0)
       {
-         arraySize = theGain.size();
+         arraySize = (int)theGain.size();
       }
       // we will do a non destructive resize onf the arrays
       //
@@ -186,7 +186,7 @@ void ossimTopographicCorrectionFilter::allocate()
             {
                if(theBandMapping[idx] >= theBias.size())
                {
-                  theBandMapping[idx] = theBias.size()-1;
+                  theBandMapping[idx] = (unsigned int)theBias.size()-1;
                }
             }
             else
@@ -853,7 +853,7 @@ void ossimTopographicCorrectionFilter::resizeArrays(ossim_uint32 newSize)
    ossim_uint32 tempIdx = 0;
    if(tempC.size() > 0 && (theC.size() > 0))
    {
-      int numberOfElements = ossim::min(tempC.size(),theC.size());
+      int numberOfElements = ossim::min((int)tempC.size(),(int)theC.size());
 
       std::copy(tempC.begin(), tempC.begin()+numberOfElements,
                 theC.begin());

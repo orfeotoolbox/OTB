@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeader.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfFileHeader.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <ossim/support_data/ossimNitfFileHeader.h>
 #include <ossim/base/ossimContainerProperty.h>
 #include <iostream>
@@ -116,7 +116,7 @@ bool ossimNitfFileHeader::getTagInformation(ossimNitfTagInformation& tag,
 
 int ossimNitfFileHeader::getNumberOfTags()const
 {
-   return theTagList.size();
+   return (int)theTagList.size();
 }
 
 ossim_uint32 ossimNitfFileHeader::getTotalTagLength()const
@@ -142,7 +142,7 @@ ossimRefPtr<ossimProperty> ossimNitfFileHeader::getProperty(const ossimString& n
 
    if(name == TAGS_KW)
    {
-      ossim_uint32 idxMax = theTagList.size();
+      ossim_uint32 idxMax = (ossim_uint32)theTagList.size();
       if(idxMax > 0)
       {
          ossimContainerProperty* containerProperty = new ossimContainerProperty;

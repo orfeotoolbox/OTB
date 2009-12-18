@@ -8,7 +8,7 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.cpp 14482 2009-05-12 11:42:38Z gpotts $
+//  $Id: ossimDms.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cmath>
 #include <cstring> /* for strcpy */
@@ -368,7 +368,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
                theIntDegs = static_cast<int>( std::abs(theDegrees) );
                ossimString temp = ossimString::toString(theIntDegs);
                ossimString prefix;
-               d_s -= temp.length();
+               d_s -= (int)temp.length();
                while(d_s > 0)
                {
                   prefix += '0';

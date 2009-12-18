@@ -130,7 +130,7 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
   unsigned int dataId = 0;
   while (inIt!=inEnd && trIt!=trEnd)
   {
-  typename TTrainingPointSet::PixelType label;
+  typename TTrainingPointSet::PixelType label = itk::NumericTraits<typename TTrainingPointSet::PixelType>::Zero;
   trainingPointSet->GetPointData( dataId, & label );
   
   otbMsgDevMacro(  << " Label " << label );

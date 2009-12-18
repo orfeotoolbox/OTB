@@ -71,7 +71,7 @@ public:
 
   /** Accessor type that convert data between internal and external
   *  representations.  */
-  typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
+  //typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
 
   /** Functor to provide a common API between DefaultPixelAccessor and
    * DefaultVectorPixelAccessor */
@@ -151,16 +151,16 @@ public:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Return the Pixel Accessor object */
-  AccessorType GetPixelAccessor( void )
-  {
-    return AccessorType( this->GetNumberOfComponentsPerPixel() );
-  }
+//   AccessorType GetPixelAccessor( void )
+//   {
+//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+//   }
 
-  /** Return the Pixel Accesor object */
-  const AccessorType GetPixelAccessor( void ) const
-  {
-    return AccessorType( this->GetNumberOfComponentsPerPixel() );
-  }
+//   /** Return the Pixel Accesor object */
+//   const AccessorType GetPixelAccessor( void ) const
+//   {
+//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+//   }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()

@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationPolyObject.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimGeoAnnotationPolyObject.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <sstream>
 
@@ -112,7 +112,7 @@ void ossimGeoAnnotationPolyObject::transform(ossimImageGeometry* projection)
    
    for(std::vector<ossimGpt>::size_type index=0; index < BOUNDS; ++index)
    {
-      projection->worldToLocal(thePolygon[index], poly[index]);
+      projection->worldToLocal(thePolygon[(int)index], poly[(int)index]);
    }
 
    // update the bounding rect

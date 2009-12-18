@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimConnectableContainer.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimConnectableContainer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <algorithm>
 #include <stack>
@@ -582,9 +582,9 @@ bool ossimConnectableContainer::addAllObjects(std::map<ossimId,
    ossimString regExpression =  ossimString("^(") + copyPrefix + "object[0-9]+.)";
    std::vector<ossimString> keys =
       kwl.getSubstringKeyList( regExpression );
-   long numberOfSources = keys.size();
+   long numberOfSources = (long)keys.size();
 
-   int offset = (copyPrefix+"object").size();
+   int offset = (int)(copyPrefix+"object").size();
    int idx = 0;
    std::vector<int> theNumberList(numberOfSources);
    for(idx = 0; idx < (int)theNumberList.size();++idx)
@@ -682,7 +682,7 @@ bool ossimConnectableContainer::connectAllObjects(const std::map<ossimId, std::v
 
          if(currentObject)
          {
-            long upperBound = (*iter).second.size();
+            long upperBound = (long)(*iter).second.size();
             for(long index = 0; index < upperBound; ++index)
             {
                ossimConnectableObject* inputObject = findObject((*iter).second[index]);

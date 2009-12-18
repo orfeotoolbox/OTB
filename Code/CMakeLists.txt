@@ -1,27 +1,27 @@
-SUBDIRS(
-Common
-BasicFilters
-IO
-ChangeDetection
-FeatureExtraction
-Learning
-MultiScale
-DisparityMap
-SpatialReasoning
-Projections
-Radiometry
-Fusion
-Markov
-SARPolarimetry
-Testing
-)
+ADD_SUBDIRECTORY(Common)
+ADD_SUBDIRECTORY(BasicFilters)
+ADD_SUBDIRECTORY(IO)
+ADD_SUBDIRECTORY(ChangeDetection)
+ADD_SUBDIRECTORY(FeatureExtraction)
+ADD_SUBDIRECTORY(Learning)
+ADD_SUBDIRECTORY(MultiScale)
+ADD_SUBDIRECTORY(DisparityMap)
+ADD_SUBDIRECTORY(SpatialReasoning)
+ADD_SUBDIRECTORY(Projections)
+ADD_SUBDIRECTORY(Radiometry)
+ADD_SUBDIRECTORY(Fusion)
+ADD_SUBDIRECTORY(Markov)
+ADD_SUBDIRECTORY(SARPolarimetry)
+ADD_SUBDIRECTORY(Testing)
 
 IF(OTB_USE_VISU_GUI)
-        SUBDIRS(Visu Gui Visualization)
+        ADD_SUBDIRECTORY(Visu)
+        ADD_SUBDIRECTORY(Gui)
+        ADD_SUBDIRECTORY(Visualization)
 ENDIF(OTB_USE_VISU_GUI)
 
 IF(OTB_USE_PQXX)
-        SUBDIRS(GeospatialAnalysis)
+        ADD_SUBDIRECTORY(GeospatialAnalysis)
 ENDIF(OTB_USE_PQXX)
 
 IF(OTB_COMPILE_WITH_FULL_WARNING)

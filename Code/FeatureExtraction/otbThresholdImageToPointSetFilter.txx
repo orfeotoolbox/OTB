@@ -21,6 +21,8 @@
 
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkProgressReporter.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -33,41 +35,38 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
 }
 
-
 template <class TInputImage, class TOutputPointSet>
 void
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
-::GenerateData()
+::ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId)
 {
-  InputImageConstPointer   inputPtr  = this->GetInput(0);
-  OutputPointSetPointer    outputPtr = this->GetOutput();
+  otbMsgDevMacro(<< "Processing thread: " << threadId);
+  this->m_PointsContainerPerThread[threadId] = PointsContainerType::New();
+  InputImageConstPointer  inputPtr = this->GetInput();
 
-  unsigned int pointId = 0;
+  // Define the iterators
+  itk::ImageRegionConstIterator<TInputImage>  inputIt(inputPtr, inputRegionForThread);
+
+  itk::ProgressReporter progress(this, threadId, inputRegionForThread.GetNumberOfPixels());
+
   typename OutputPointSetType::PointType  position;
 
-  outputPtr->Initialize();
+  inputIt.GoToBegin();
 
-  typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
-  InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
-
-  // walk the regions, threshold each pixel
-  while ( !inIt.IsAtEnd() )
+  while( !inputIt.IsAtEnd() )
   {
-
-    const InputPixelType value = inIt.Get();
-    const IndexType index = inIt.GetIndex();
-
+    const InputPixelType value = inputIt.Get();
     if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
     {
+      //FIXME: non valid for image with dim > 2
+      const IndexType index = inputIt.GetIndex();
       position[0] = index[0];
       position[1] = index[1];
-
-      outputPtr->SetPoint(pointId,position);
-
-      pointId++;
+      this->m_PointsContainerPerThread[threadId]->push_back(position);
 
     }
-    ++inIt;
+    ++inputIt;
+    progress.CompletedPixel();  // potential exception thrown here
   }
 }
 

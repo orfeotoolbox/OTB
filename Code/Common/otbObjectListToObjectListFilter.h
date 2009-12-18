@@ -42,10 +42,10 @@ class ITK_EXPORT ObjectListToObjectListFilter : public otb::ObjectListSource<TOu
 {
 public:
   /** Standard class typedefs. */
-  typedef ObjectListToObjectListFilter  Self;
+  typedef ObjectListToObjectListFilter        Self;
   typedef otb::ObjectListSource<TOutputList>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,21 +54,18 @@ public:
   itkTypeMacro(ObjectListToObjectListFilter, ObjectListSource);
 
   /** Some typedefs. */
-  typedef TInputList InputListType;
-  typedef TOutputList OutputListType;
-  typedef typename TInputList::ConstPointer InputListPointer;
-  typedef typename TOutputList::Pointer OutputListPointer;
-  typedef typename TInputList::ConstIterator InputListIterator;
-  typedef typename InputListType::ObjectType InputObjectType;
+  typedef TInputList                          InputListType;
+  typedef TOutputList                         OutputListType;
+  typedef typename TInputList::ConstPointer   InputListPointer;
+  typedef typename TOutputList::Pointer       OutputListPointer;
+  typedef typename TInputList::ConstIterator  InputListIterator;
+  typedef typename InputListType::ObjectType  InputObjectType;
   typedef typename OutputListType::ObjectType OutputObjectType;
 
-  typedef itk::DataObject::Pointer DataObjectPointer;
-
-  typedef std::vector<OutputListPointer> OutputListForThreadType;
+  typedef itk::DataObject::Pointer            DataObjectPointer;
 
   virtual void SetInput( const InputListType *input);
   const InputListType * GetInput(void);
-
 
 protected:
   /** Constructor */
@@ -82,11 +79,14 @@ protected:
 
   /** Multi-threading implementation */
 
+  typedef std::vector<OutputListPointer> OutputListForThreadType;
+
   virtual void BeforeThreadedGenerateData();
 
   virtual void AfterThreadedGenerateData() {};
 
-  virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex, unsigned int& stopIndex);
+  virtual int SplitRequestedRegion(int threadId, int threadCount, unsigned int requestedElements,
+                                   unsigned int& startIndex, unsigned int& stopIndex);
 
   /** startIndex and stopIndex represent the indices of the Objects
    * to examine in thread threadId */
@@ -103,9 +103,10 @@ protected:
     Pointer Filter;
   };
 
+  OutputListForThreadType m_ObjectListPerThread;
+
   /** End Multi-threading implementation */
 
-  OutputListForThreadType m_ObjectListPerThread;
 
 private:
   ObjectListToObjectListFilter(const Self&); //purposely not implemented

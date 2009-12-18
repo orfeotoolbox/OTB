@@ -41,7 +41,7 @@ namespace otb {
  * (ie. convolution-like operation).
  *
  * the inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
+ * forward transformation yields \f$ 2^{\text{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -87,10 +87,10 @@ class ITK_EXPORT WaveletFilterBank
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank Self;
+  typedef WaveletFilterBank                                    Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                              Pointer;
+  typedef itk::SmartPointer<const Self>                        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -115,7 +115,7 @@ private:
  * (ie. convolution-like operation).
  *
  * The inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
+ * forward transformation yields \f$ 2^{\text{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -154,10 +154,10 @@ class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator,
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank Self;
+  typedef WaveletFilterBank                                    Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                              Pointer;
+  typedef itk::SmartPointer<const Self>                        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -166,22 +166,22 @@ public:
   itkTypeMacro(WaveletFilterBank,ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::SizeType InputSizeType;
-  typedef typename InputImageType::IndexType InputIndexType;
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::Pointer     InputImagePointerType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
+  typedef typename InputImageType::SizeType    InputSizeType;
+  typedef typename InputImageType::IndexType   InputIndexType;
+  typedef typename InputImageType::PixelType   InputPixelType;
 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::SizeType OutputSizeType;
-  typedef typename OutputImageType::IndexType OutputIndexType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::SizeType   OutputSizeType;
+  typedef typename OutputImageType::IndexType  OutputIndexType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
-  typedef TWaveletOperator WaveletOperatorType;
-  typedef typename WaveletOperatorType::LowPassOperator LowPassOperatorType;
+  typedef TWaveletOperator                               WaveletOperatorType;
+  typedef typename WaveletOperatorType::LowPassOperator  LowPassOperatorType;
   typedef typename WaveletOperatorType::HighPassOperator HighPassOperatorType;
 
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
@@ -252,7 +252,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -283,7 +283,7 @@ private:
    * size ImageDimension-1 and each InternalImagesTabular contains intermediate
    * images.
    */
-  typedef std::vector< OutputImagePointerType > InternalImagesTabular ;
+  typedef std::vector< OutputImagePointerType > InternalImagesTabular;
   std::vector< InternalImagesTabular > m_InternalImages;
 }; // end of class
   
@@ -296,7 +296,7 @@ private:
  * (ie. convolution-like operation).
  *
  * The inner operator are supposed to be defined through 1D filters. Then, the
- * forward transformation yields \f$ 2^{\test{Dim}} \f$ output images, while the inverse
+ * forward transformation yields \f$ 2^{\text{Dim}} \f$ output images, while the inverse
  * transformation requires \f$ 2^{\text{Dim}} \f$ input image for one output.
  *
  * In case of 1D, GetOutput(0) -> LowPass
@@ -335,10 +335,10 @@ class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator,
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank Self;
+  typedef WaveletFilterBank                                    Self;
   typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                              Pointer;
+  typedef itk::SmartPointer<const Self>                        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -347,22 +347,22 @@ public:
   itkTypeMacro(WaveletFilterBank,ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::SizeType InputSizeType;
-  typedef typename InputImageType::IndexType InputIndexType;
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::Pointer     InputImagePointerType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
+  typedef typename InputImageType::SizeType    InputSizeType;
+  typedef typename InputImageType::IndexType   InputIndexType;
+  typedef typename InputImageType::PixelType   InputPixelType;
 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::SizeType OutputSizeType;
-  typedef typename OutputImageType::IndexType OutputIndexType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::SizeType   OutputSizeType;
+  typedef typename OutputImageType::IndexType  OutputIndexType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
-  typedef TWaveletOperator WaveletOperatorType;
-  typedef typename WaveletOperatorType::LowPassOperator LowPassOperatorType;
+  typedef TWaveletOperator                               WaveletOperatorType;
+  typedef typename WaveletOperatorType::LowPassOperator  LowPassOperatorType;
   typedef typename WaveletOperatorType::HighPassOperator HighPassOperatorType;
 
   typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
@@ -435,7 +435,7 @@ protected:
   virtual void CallCopyOutputRegionToInputRegion
     ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );       
+    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
@@ -469,7 +469,7 @@ private:
    * size ImageDimension-1 and each InternalImagesTabular contains intermediate
    * images. Internal images are used for multiresolution case only.
    */
-  typedef std::vector< OutputImagePointerType > InternalImagesTabular ;
+  typedef std::vector< OutputImagePointerType > InternalImagesTabular;
   std::vector< InternalImagesTabular > m_InternalImages;
 
 }; // end of class
@@ -481,4 +481,3 @@ private:
 #endif
 
 #endif
-

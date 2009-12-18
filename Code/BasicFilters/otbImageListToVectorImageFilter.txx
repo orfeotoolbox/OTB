@@ -7,12 +7,12 @@
 
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+  See OTBCopyright.txt for details.
 
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE,  See the above copyright notices for more information.
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbImageListToVectorImageFilter_txx
@@ -56,10 +56,10 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   InputImageListPointerType inputPtr = this->GetInput();
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
   while (inputListIt!=inputPtr->End())
-  {
-    inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-    ++inputListIt;
-  }
+    {
+      inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      ++inputListIt;
+    }
 }
 /**
  * Main computation method

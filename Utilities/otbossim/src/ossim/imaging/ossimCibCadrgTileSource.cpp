@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimCibCadrgTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 #include <algorithm>
 using namespace std;
 
@@ -33,6 +33,7 @@ using namespace std;
 #include <ossim/support_data/ossimRpfCompressionSection.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
+#include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimCylEquAreaProjection.h>
 #include <ossim/base/ossimEndian.h>
@@ -41,7 +42,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -284,12 +285,22 @@ bool ossimCibCadrgTileSource::getTile(ossimImageData* result,
        result && (result->getNumberOfBands() == getNumberOfOutputBands()) &&
        (theProductType != OSSIM_PRODUCT_TYPE_UNKNOWN) )
    {
-      //---
-      // Check for overview tile.  Some overviews can contain r0 so always
-      // call even if resLevel is 0.  Method returns true on success, false
-      // on error.
-      //---
-      status = getOverviewTile(resLevel, result);
+      // See if the overview class is a virtual image handler. If so, do not 
+      // check the overview tile when resLevel is 0: you cannot assume that the 
+      // virtual overview is consistent with the parent image data, which can
+      // be partially updated.
+      ossimVirtualImageHandler* pVirtual = PTR_CAST( ossimVirtualImageHandler,
+                                                     theOverview.get() );
+      if ( resLevel > 0 || 
+          (resLevel == 0 && pVirtual == NULL) )
+      {
+         //---
+         // Check for overview tile.  Some overviews can contain r0 so always
+         // call even if resLevel is 0 (if overview is not virtual).  Method 
+         // returns true on success, false on error.
+         //---
+         status = getOverviewTile(resLevel, result);
+      }
 
       if (!status) // Did not get an overview tile.
       {
@@ -1062,7 +1073,7 @@ void ossimCibCadrgTileSource::fillSubTileCadrg(
    // ESH 03/2009 -- Partial fix for ticket #646.
    // Crash fix on reading RPFs: Make sure the colorTable vector 
    // has entries before trying to make use of them. 
-   int numTables = colorTable.size();
+   int numTables = (int)colorTable.size();
    if ( numTables <= 0 )
    {
       return;
@@ -1207,7 +1218,7 @@ void ossimCibCadrgTileSource::fillSubTileCib(
    // ESH 03/2009 -- Partial fix for ticket #646.
    // Crash fix on reading RPFs: Make sure the colorTable vector 
    // has entries before trying to make use of them. 
-   int numTables = colorTable.size();
+   int numTables = (int)colorTable.size();
    if ( numTables <= 0 )
    {
       return;
@@ -1544,7 +1555,7 @@ void ossimCibCadrgTileSource::populateLut()
          // ESH 03/2009 -- Partial fix for ticket #646.
          // Crash fix on reading RPFs: Make sure the colorTable vector 
          // has entries before trying to make use of them. 
-         int numTables = colorTable.size();
+         int numTables = (int)colorTable.size();
 
          ossim_uint32 numElements = (numTables > 0) ? colorTable[0].getNumberOfElements() : 0;
          if(numElements > 0)

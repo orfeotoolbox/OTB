@@ -29,6 +29,8 @@
 #include "otbRenderingImageFilter.h"
 #include "otbGenericRSTransform.h"
 
+#include "otbCoordinateToName.h"
+
 namespace otb
 {
 /** \class ImageLayer
@@ -246,6 +248,7 @@ private:
 
   /** Coordinate transform */
   TransformType::Pointer m_Transform;
+  CoordinateToName::Pointer m_CoordinateToName;
 
   /** General info about the image*/
   std::string m_PlaceName;//FIXME the call should be done by a more general method outside of the layer

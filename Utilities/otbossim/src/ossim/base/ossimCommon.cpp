@@ -9,7 +9,7 @@
 // Description: Common file for global functions.
 //
 //*************************************************************************
-// $Id: ossimCommon.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimCommon.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <sstream>
 
@@ -659,22 +659,22 @@ void ossim::lexQuotedTokens(const std::string& str,
          else
          {
             unbalancedQuotes = true;
-            end = str.length();
+            end = (int)str.length();
          }
       }
       else if (str[start] == closeQuote)
       {
          unbalancedQuotes = true;
-         end = str.length();
+         end = (int)str.length();
 	 
       }
       else
       {
-         end = str.find_first_of(whitespace, start);
+         end = (int)str.find_first_of(whitespace, start);
          tokens.push_back(str.substr(start, end-start));
       }
       
-      start = str.find_first_not_of(whitespace, end);
+      start = (ossim_uint32)str.find_first_not_of(whitespace, end);
    }
 }
 
