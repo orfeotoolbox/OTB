@@ -23,9 +23,8 @@ SET(ossimplugins_SOURCES
   ${ossimplugins_ossim_SRCS}
 )
 
-
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
-TARGET_LINK_LIBRARIES(otbossimplugins ${GDAL_LIBRARY} otbossim)
+#TARGET_LINK_LIBRARIES(otbossimplugins ${GDAL_LIBRARY} otbossim)
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbossimplugins PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)

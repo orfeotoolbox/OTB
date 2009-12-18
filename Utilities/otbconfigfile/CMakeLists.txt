@@ -5,7 +5,6 @@ FILE(GLOB otbconfigfilelib_HDRS "ConfigFile.h")
 
 ADD_LIBRARY(otbconfigfile ${otbconfigfilelib_SRCS} )
 
-TARGET_LINK_LIBRARIES(otbconfigfile )
 IF(OTB_LIBRARY_PROPERTIES)
   SET_TARGET_PROPERTIES(otbconfigfile PROPERTIES ${OTB_LIBRARY_PROPERTIES})
 ENDIF(OTB_LIBRARY_PROPERTIES)
