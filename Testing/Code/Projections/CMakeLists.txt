@@ -457,6 +457,17 @@ ADD_TEST(prTvVectorDataProjectionFilterFromMapToGeo ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
 )
 
+ADD_TEST(prTvVectorDataProjectionFilterFromMapToImage ${PROJECTIONS_TESTS3}
+        --compare-ascii ${NOTOL}
+        ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+        otbVectorDataProjectionFilterFromMapToImage
+        ${INPUTDATA}/ToulousePoints-examples.shp
+        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif 
+        ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.kml
+)
+
+
 ADD_TEST(prTuGeocentricTransformNew ${PROJECTIONS_TESTS3}  otbGeocentricTransformNew )
 
 
@@ -509,6 +520,7 @@ otbVectorDataProjectionFilterNew.cxx
 otbVectorDataProjectionFilter.cxx
 otbVectorDataProjectionFilterFromMapToSensor.cxx
 otbVectorDataProjectionFilterFromMapToGeo.cxx
+otbVectorDataProjectionFilterFromMapToImage.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
