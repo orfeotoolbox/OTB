@@ -27,11 +27,11 @@ namespace Functor
 {
 
 /******************************************************************/
-/***********  TerraSarRadarBrightnessImageFunctor *****************/
+/***********  TerraSarBrightnessImageFunctor *****************/
 /******************************************************************/
 template <class TInput, class TOutput>
-TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
-::TerraSarRadarBrightnessImageFunctor()
+TerraSarBrightnessImageFunctor<TInput, TOutput>
+::TerraSarBrightnessImageFunctor()
 {
   m_CalFactor = 1.; 
 }
@@ -39,7 +39,7 @@ TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 TOutput
-TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
+TerraSarBrightnessImageFunctor<TInput, TOutput>
 ::operator() (const TInput & inPix)
 {
   double squareInPix = vcl_pow( static_cast<double>(inPix), 2.);
@@ -52,7 +52,7 @@ TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 std::complex<TOutput>
-TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
+TerraSarBrightnessImageFunctor<TInput, TOutput>
 ::operator() (const std::complex<TInput> & inPix)
 {
    // Beta naught computation, will be the Modulus of the result
@@ -63,7 +63,8 @@ TerraSarRadarBrightnessImageFunctor<TInput, TOutput>
   
   // We retrieve the complex value from the modulus and the phase.
   std::complex<TOutput> res = std::complex<TOutput>(beta*vcl_cos(phase), beta*vcl_sin(phase) );
-  return static_cast<TOutput>(res);
+
+  return res;
 }
 
 
@@ -80,10 +81,11 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     m_NoiseRangeValidityRef = 0.;
     m_LocalIncidentAngle = 0.;
     m_SinLocalIncidentAngle = 0.;
-    m_NoisePolynomialCoefficientsList.clear();
+    m_NoisePolynomialCoefficientsList = DoubleVectorVectorType( 1, DoubleVectorType(1, 0.) );
     m_ImageSize.Fill(0);
     m_UseFastCalibrationMethod = true;
-    m_TimeUTC.clear();
+    m_TimeUTC = LIntVectorType(2, 0);
+    m_TimeUTC[1] = 1;
     m_PRF = 1.;
 }
 
@@ -105,7 +107,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     {
       curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
     }
-  
+
   return curRange;
 }
 
@@ -130,6 +132,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
       unsigned int id = 0;
       bool go = true;
       // deduct the corresponding noise acquisition index
+      
       while( id<m_TimeUTC.size() && go)
 	{
 	  if( currTimeUTC < m_TimeUTC[id] )
@@ -137,13 +140,14 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 	  id++;
 	}
       id--;
-      
+   
       double timeCoef = 1. / (m_TimeUTC[id]- m_TimeUTC[id-1]) * (currTimeUTC-m_TimeUTC[id-1]);
       for(unsigned int j=0; j<m_NoisePolynomialCoefficientsList.size(); j++)
 	{
 	  curCoeffs.push_back( m_NoisePolynomialCoefficientsList[id-1][j] + (m_NoisePolynomialCoefficientsList[id][j] - m_NoisePolynomialCoefficientsList[id-1][j]) * timeCoef );
 	}
     }
+
   return curCoeffs;
 }
 
@@ -157,7 +161,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   double diffCurRange = ComputeCurrentNoise( static_cast<unsigned int>(index[0]) ) - this->GetNoiseRangeValidityRef();
   DoubleVectorType curCoeff = this->ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
 
-  double outRadBr = this->GetRadarBrightness()( static_cast<double>(inPix) );
+  double outRadBr = this->GetBrightness()( static_cast<double>(inPix) );
 
   double NEBN = 0.;
   for(unsigned int i=0; i<curCoeff.size(); i++)
@@ -179,7 +183,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   DoubleVectorType curCoeff = this->ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
   
   double modulus = std::abs(inPix);
-  double outRadBr = static_cast<double>(this->GetRadarBrightness()( modulus ));
+  double outRadBr = static_cast<double>(this->GetBrightness()( modulus ));
   
   double NEBN = 0.;
   for(unsigned int i=0; i<curCoeff.size(); i++)

@@ -39,11 +39,11 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage >
-class ITK_EXPORT TerraSarRadarBrightnessImageFilter :
+class ITK_EXPORT TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
     TInputImage,
     TOutputImage,
-    ITK_TYPENAME Functor::TerraSarRadarBrightnessImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
+    ITK_TYPENAME Functor::TerraSarBrightnessImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -53,10 +53,10 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::TerraSarRadarBrightnessImageFunctor<ITK_TYPENAME TInputImage::InternalPixelType,
+  typedef typename Functor::TerraSarBrightnessImageFunctor<ITK_TYPENAME TInputImage::InternalPixelType,
   ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
   /** "typedef" for standard classes. */
-  typedef TerraSarRadarBrightnessImageFilter    Self;
+  typedef TerraSarBrightnessImageFilter    Self;
   typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType >
                                                 Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(TerraSarRadarBrightnessImageFilter, itk::UnaryFunctorImageFilter);
+  itkTypeMacro(TerraSarBrightnessImageFilter, itk::UnaryFunctorImageFilter);
 
 
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
@@ -84,9 +84,9 @@ public:
 
 protected:
   /** Constructor */
-  TerraSarRadarBrightnessImageFilter();
+  TerraSarBrightnessImageFilter();
   /** Destructor */
-  virtual ~TerraSarRadarBrightnessImageFilter() {};
+  virtual ~TerraSarBrightnessImageFilter() {};
 
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
@@ -98,7 +98,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTerraSarRadarBrightnessImageFilter.txx"
+#include "otbTerraSarBrightnessImageFilter.txx"
 #endif
 
 #endif

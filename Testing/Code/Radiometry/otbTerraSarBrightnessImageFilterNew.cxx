@@ -17,13 +17,13 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarRadarBrightnessImageFilter.h"
+#include "otbTerraSarBrightnessImageFilter.h"
 #include "otbImage.h"
 
-int otbTerraSarRadarBrightnessImageFilterNew(int argc, char * argv[])
+int otbTerraSarBrightnessImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double, 2>                                          ImageType;
-  typedef otb::TerraSarRadarBrightnessImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::Image<double, 2>                                    ImageType;
+  typedef otb::TerraSarBrightnessImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

@@ -34,18 +34,18 @@ namespace Functor
 
 
 /**
-   * \class TerraSarRadarBrightnessImageFunctor
+   * \class TerraSarBrightnessImageFunctor
    *  \brief Compute the radar brightness from an modulus image.
    *
    * \ingroup Functor
    * \ingroup Radiometry
  */
 template <class TInput, class TOutput>
-class TerraSarRadarBrightnessImageFunctor
+class TerraSarBrightnessImageFunctor
 {
 public:
-  TerraSarRadarBrightnessImageFunctor();
- virtual ~TerraSarRadarBrightnessImageFunctor() {};
+  TerraSarBrightnessImageFunctor();
+ virtual ~TerraSarBrightnessImageFunctor() {};
  
  typedef std::vector<double>           DoubleVectorType;
  typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
@@ -87,10 +87,10 @@ public:
   typedef std::vector<long int>                               LIntVectorType;
   typedef itk::Size<2>                                        SizeType;
   typedef itk::Index<2>                                       IndexType;
-  typedef TerraSarRadarBrightnessImageFunctor<double, double> BrightnessFunctorType;
+  typedef TerraSarBrightnessImageFunctor<double, double> BrightnessFunctorType;
 
   /** Accessors */
-  void SetCalFactor( double val ) { m_CalFactor =  val; m_RadarBrightness.SetCalFactor(val); };
+  void SetCalFactor( double val ) { m_CalFactor =  val; m_Brightness.SetCalFactor(val); };
   double GetCalFactor() const { return m_CalFactor; };
   void SetNoiseRangeValidityMin( double val ) { m_NoiseRangeValidityMin = val; };
   double GetNoiseRangeValidityMin() const { return m_NoiseRangeValidityMin; };
@@ -116,7 +116,7 @@ public:
   void SetPRF( double val ) { m_PRF = val; m_InvPRF = 1./m_PRF; };
   double GetPRF() const { return m_PRF; };
   double GetInvPRF() const { return m_InvPRF; };
-  BrightnessFunctorType GetRadarBrightness() { return m_RadarBrightness; };
+  BrightnessFunctorType GetBrightness() { return m_Brightness; };
   double ComputeCurrentNoise( unsigned int colId );
   DoubleVectorType ComputeCurrentCoeffs( unsigned int lineId );
 
@@ -153,7 +153,7 @@ private:
   /** Inverse Pulse Repetition Frequency */
   double m_InvPRF;
  /** Radar Brightness functor */
-  BrightnessFunctorType m_RadarBrightness;
+  BrightnessFunctorType m_Brightness;
 };
 
 

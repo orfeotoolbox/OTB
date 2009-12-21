@@ -1028,6 +1028,16 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# -------            TerraSarCalibrationImageFunctor   ------------------------------
+ADD_TEST(raTvTerraSarCalibrationImageFunctor ${RADIOMETRY_TESTS9}
+# --compare-image ${EPSILON}  
+#                               ${BASELINE}/raTvTerraSarCalibrationImageFunctor.tif
+#                               ${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
+        otbTerraSarCalibrationImageFunctor
+#		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+#		${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
+)
+
 # -------            TerraSarCalibrationImageFilter   ------------------------------
 ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
        otbTerraSarCalibrationImageFilterNew
@@ -1042,18 +1052,28 @@ ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
 		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
 )
 
-# -------            TerraSarRadarBrightnessImageFilter   ------------------------------
-ADD_TEST(raTuTerraSarRadarBrightnessImageFilterNew ${RADIOMETRY_TESTS9}
-       otbTerraSarRadarBrightnessImageFilterNew
+# -------            TerraSarBrightnessImageFunctor   ------------------------------
+ADD_TEST(raTvTerraSarBrightnessImageFunctor ${RADIOMETRY_TESTS9}
+# --compare-image ${EPSILON}  
+#                               ${BASELINE}/raTvTerraSarBrightnessImageFunctor.tif
+#                               ${TEMP}/raTvTerraSarBrightnessImageFunctor.tif
+        otbTerraSarBrightnessImageFunctor
+#		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
+#		${TEMP}/raTvTerraSarBrightnessImageFunctor.tif
 )
 
-ADD_TEST(raTvTerraSarRadarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
+# -------            TerraSarBrightnessImageFilter   ------------------------------
+ADD_TEST(raTuTerraSarBrightnessImageFilterNew ${RADIOMETRY_TESTS9}
+       otbTerraSarBrightnessImageFilterNew
+)
+
+ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
     --compare-image ${EPSILON}  
-                ${BASELINE}/raTvTerraSarRadarBrightnessImageFilterTest.tif
-                ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
-        otbTerraSarRadarBrightnessImageFilterTest
+                ${BASELINE}/raTvTerraSarBrightnessImageFilterTest.tif
+                ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
+        otbTerraSarBrightnessImageFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-        ${TEMP}/raTvTerraSarRadarBrightnessImageFilterTest.tif
+        ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
 )
 
 
@@ -1150,10 +1170,12 @@ otbAeronetExtractDataBadData.cxx
 
 SET(Radiometry_SRCS9
 otbRadiometryTests9.cxx
+otbTerraSarCalibrationImageFunctor.cxx
 otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
-otbTerraSarRadarBrightnessImageFilterNew.cxx
-otbTerraSarRadarBrightnessImageFilterTest.cxx
+otbTerraSarBrightnessImageFunctor.cxx
+otbTerraSarBrightnessImageFilterNew.cxx
+otbTerraSarBrightnessImageFilterTest.cxx
 )
 
 
