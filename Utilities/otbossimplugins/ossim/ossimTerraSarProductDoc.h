@@ -121,7 +121,7 @@ namespace ossimplugins
                          ossimString& s) const;
       
       bool getReferencePoint(const ossimXmlDocument* xdoc,
-                             ossimString& s) const;
+			     ossimString& s) const;
       
       bool getImageDataStrartWith(const ossimXmlDocument* xdoc,
                                   ossimString& s) const;

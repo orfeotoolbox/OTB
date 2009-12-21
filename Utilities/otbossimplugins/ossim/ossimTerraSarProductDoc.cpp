@@ -718,12 +718,12 @@ bool ossimplugins::ossimTerraSarProductDoc::getRadiometricCorrection(
 }
 
 
-bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
-   const ossimXmlDocument* xdoc, ossimString& s) const
-{
-   ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/referencePoint";
-   return ossim::getPath(path, xdoc, s);
-}
+ bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
+    const ossimXmlDocument* xdoc, ossimString& s) const
+ {
+    ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/referencePoint";
+    return ossim::getPath(path, xdoc, s);
+ }
 
 bool ossimplugins::ossimTerraSarProductDoc::getImageDataStrartWith(
    const ossimXmlDocument* xdoc, ossimString& s) const
@@ -848,17 +848,46 @@ bool ossimplugins::ossimTerraSarProductDoc::getRadarCenterFrequency(
 bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStartTime(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-      "/level1Product/instrument/settings/rxGainSetting/startTimeUTC";
-   return ossim::getPath(path, xdoc, s);
+  ossimString path = 
+    "/level1Product/productInfo/sceneInfo/start/timeUTC";
+
+  bool res = ossim::getPath(path, xdoc, s);
+
+  if(!res)
+  {
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< "Node \"/level1Product/productInfo/sceneInfo/start/timeUTC\" invalid, trying \"/level1Product/instrument/settings/rxGainSetting/startTimeUTC\"...\n";
+   }  
+    path = "/level1Product/instrument/settings/rxGainSetting/startTimeUTC";
+    res = ossim::getPath(path, xdoc, s);
+  }
+
+  return res;
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-   ossimString path =
-     "/level1Product/instrument/settings/rxGainSetting/stopTimeUTC";
-   return ossim::getPath(path, xdoc, s);
+    std::cout<<"getAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimeres"<<std::endl;
+  ossimString path = 
+    "/level1Product/productInfo/sceneInfo/stop/timeUTC";
+  
+  bool res = ossim::getPath(path, xdoc, s);
+  
+  if(!res)
+    {
+      if (traceDebug())
+	{
+	  ossimNotify(ossimNotifyLevel_DEBUG)<< "Node \"/level1Product/productInfo/sceneInfo/stop/timeUTC\" invalid, trying \"/level1Product/instrument/settings/rxGainSetting/stopTimeUTC\"...\n";
+	}  
+      path = "/level1Product/instrument/settings/settingRecord/dataSegment segmentID/stopTimeUTC";//  rxGainSetting/stopTimeUTC";
+      res = ossim::getPath(path, xdoc, s);
+      std::cout<<res<<std::endl;
+    }
+  
+  return res;
+
 }
 
 bool ossimplugins::ossimTerraSarProductDoc::getCommonPrf(
