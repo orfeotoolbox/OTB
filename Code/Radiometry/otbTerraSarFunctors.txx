@@ -59,7 +59,7 @@ TerraSarBrightnessImageFunctor<TInput, TOutput>
 
   double beta = operator()(static_cast<double>(std::abs(inPix)));
   // Phase
-  double phase = std::arg(inPix);
+  double phase = static_cast<double>(std::arg(inPix));
   
   // We retrieve the complex value from the modulus and the phase.
   std::complex<TOutput> res = std::complex<TOutput>(beta*vcl_cos(phase), beta*vcl_sin(phase) );
