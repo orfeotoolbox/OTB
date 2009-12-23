@@ -1054,12 +1054,14 @@ ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
 
 # -------            TerraSarBrightnessImageFunctor   ------------------------------
 ADD_TEST(raTvTerraSarBrightnessImageFunctor ${RADIOMETRY_TESTS9}
-# --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarBrightnessImageFunctor.tif
-#                               ${TEMP}/raTvTerraSarBrightnessImageFunctor.tif
+ --compare-ascii ${EPSILON}  
+                               ${BASELINE_FILES}/raTvTerraSarBrightnessImageFunctor.txt
+                               ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
         otbTerraSarBrightnessImageFunctor
-#		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-#		${TEMP}/raTvTerraSarBrightnessImageFunctor.tif
+		12
+		12
+		0
+		${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
 )
 
 # -------            TerraSarBrightnessImageFilter   ------------------------------

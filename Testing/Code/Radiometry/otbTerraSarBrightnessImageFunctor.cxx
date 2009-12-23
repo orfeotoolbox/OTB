@@ -15,6 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include <fstream>
+#include <iomanip>
 #include "itkExceptionObject.h"
 
 #include "otbTerraSarFunctors.h"
@@ -28,11 +30,26 @@ int otbTerraSarBrightnessImageFunctor(int argc, char * argv[])
 
   FunctorType funct;
   
-  ScalarType inPix = 150.2;
-  std::cout << inPix << " -> " << funct.operator()(inPix) << std::endl;
+  if(argc!=5)
+  {
+    std::cout << "argv[0] <Scalar pixel> <Complex pixel (re part)> <Complex pixel (im part)> <output filename>" << std::endl;
 
-  ComplexType inCplxPix(12, 180);
-  std::cout << inCplxPix << " -> " << funct.operator()(inCplxPix) << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
+  ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));
+  char *outFilename = argv[4];
+  std::ofstream file;
+  file.open(outFilename);
+
+  file << std::fixed << std::setprecision(10);
+
+  file << "Scalar pixel : " << inPix << " -> " << funct.operator()(inPix) << std::endl;
+
+  file << "Complex pixel : " << inCplxPix << " -> " << funct.operator()(inCplxPix) << std::endl;
+
+  file.close();
   
   return EXIT_SUCCESS;
 }
