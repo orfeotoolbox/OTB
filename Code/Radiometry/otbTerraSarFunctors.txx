@@ -124,11 +124,11 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     }
   else
     {
-      // m_ImageSize[1]-(lineId+1) because the first acquisition line is the last image one.
-      // line+1 because image starts to 0.
+      // (m_ImageSize[1]-1)-(lineId) because the first acquisition line is the last image one.
+      // (m_ImageSize[1]-1) because image starts to 0.
       //double interval =  static_cast<double>(m_ImageSize[1]) / static_cast<double>(m_NoisePolynomialCoefficientsList.size());
       // compute utc time of the line
-      double currTimeUTC = m_TimeUTC[0] + static_cast<double>(m_ImageSize[1]-(lineId-1))*m_InvPRF;
+      double currTimeUTC = m_TimeUTC[0] + static_cast<double>((m_ImageSize[1]-1)-lineId)*m_InvPRF;
       unsigned int id = 0;
       bool go = true;
       // deduct the corresponding noise acquisition index

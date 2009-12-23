@@ -140,11 +140,12 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   ${ossim_imaging_SRCS}
   ${ossim_parallel_SRCS}
   ${ossim_elevation_SRCS})
-  
-  SET_TARGET_PROPERTIES(otbossim
-    PROPERTIES
-    LINK_INTERFACE_LIBRARIES ""
-  )
+
+  #Apparently not supported by opensolaris at least
+#  SET_TARGET_PROPERTIES(otbossim
+#    PROPERTIES
+#    LINK_INTERFACE_LIBRARIES ""
+#  )
 #  TARGET_LINK_LIBRARIES(otbossim ${GDAL_LIBRARY})#To make sure that gdal appear before geotiff
 #  TARGET_LINK_LIBRARIES(otbossim  ${JPEG_LIBRARY} ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY} ${OPENTHREADS_LIBRARY})
   TARGET_LINK_LIBRARIES(otbossim ${OPENTHREADS_LIBRARY})
