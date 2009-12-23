@@ -34,7 +34,6 @@ TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
   Superclass::BeforeThreadedGenerateData();
 
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
- std::cout<<this->GetCalFactor()<<std::endl;
   if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
     {
       /** TODO : use a factory for RADAR image metadata interface */

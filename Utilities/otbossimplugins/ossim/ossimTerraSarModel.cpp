@@ -218,7 +218,7 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 		    cout << "result of getting SceneID" << result << endl;
 		}
 	      
-	      // Set the sensor ID to the mission ID.
+      // Set the sensor ID to the mission ID.
 	      if (result)
 		{
 		  result = tsDoc.getMission(xdoc, theSensorID);
@@ -1839,6 +1839,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file, 
       }
     }
   }
+
   return res;
 }
 

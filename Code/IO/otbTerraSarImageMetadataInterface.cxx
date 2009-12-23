@@ -52,7 +52,7 @@ TerraSarImageMetadataInterface::GetSensorID( const MetaDataDictionaryType & dict
 
   ossimKeywordlist kwl;
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
-  kwl.print(std::cout);
+
   std::string key= "sensor";
   ossimString keywordString = kwl.find(key.c_str());
   std::string output(keywordString.chars());
@@ -540,7 +540,6 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList( const MetaDataDictionaryTyp
       myDate.setMin(minu);
       myDate.setSec(sec);
       
-      std::cout<<secDec*1e-5/0.864<<std::endl;
       julianDay = myDate.getJulian();
       // add the decimal second to the julian day (0.00001 <-> 0.864s)
       julianDay += secDec*1e-5/0.864;

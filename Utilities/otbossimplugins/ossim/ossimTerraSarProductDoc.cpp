@@ -664,6 +664,8 @@ bool ossimplugins::ossimTerraSarProductDoc::getMission(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
    ossimString path = "/level1Product/generalHeader/mission";
+   ossim::getPath(path, xdoc, s);
+
    return ossim::getPath(path, xdoc, s);
 }
 
