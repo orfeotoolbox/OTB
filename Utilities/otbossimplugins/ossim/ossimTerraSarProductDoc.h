@@ -218,6 +218,9 @@ namespace ossimplugins
                                     ossimString& s) const;
       bool getCalFactor(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
+      bool getRadarFrequency(const ossimXmlDocument* xdoc,
+                                    ossimString& s) const;
+
 
       /**
        * @brief Method to initialize Noise object from

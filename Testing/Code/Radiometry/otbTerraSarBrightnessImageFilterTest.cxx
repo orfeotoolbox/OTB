@@ -44,15 +44,14 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
 
   reader->UpdateOutputInformation();
 
-  std::cout<<reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
+  //std::cout<<reader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
 
-
-  filter->SetCalFactor( 10 );
-
+  if( atoi(argv[3]) == 1 )
+    filter->SetCalFactor( 10 );
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
-  writer->SetNumberOfStreamDivisions(1);
+
   writer->Update();
 
   return EXIT_SUCCESS;

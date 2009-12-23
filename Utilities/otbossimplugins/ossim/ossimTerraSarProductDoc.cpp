@@ -718,8 +718,8 @@ bool ossimplugins::ossimTerraSarProductDoc::getRadiometricCorrection(
 }
 
 
- bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
-    const ossimXmlDocument* xdoc, ossimString& s) const
+bool ossimplugins::ossimTerraSarProductDoc::getReferencePoint(
+   const ossimXmlDocument* xdoc, ossimString& s) const
  {
     ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/referencePoint";
     return ossim::getPath(path, xdoc, s);
@@ -869,7 +869,6 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStartTime(
 bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
-    std::cout<<"getAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimegetAzimuthStopTimeres"<<std::endl;
   ossimString path = 
     "/level1Product/productInfo/sceneInfo/stop/timeUTC";
   
@@ -881,9 +880,8 @@ bool ossimplugins::ossimTerraSarProductDoc::getAzimuthStopTime(
 	{
 	  ossimNotify(ossimNotifyLevel_DEBUG)<< "Node \"/level1Product/productInfo/sceneInfo/stop/timeUTC\" invalid, trying \"/level1Product/instrument/settings/rxGainSetting/stopTimeUTC\"...\n";
 	}  
-      path = "/level1Product/instrument/settings/settingRecord/dataSegment segmentID/stopTimeUTC";//  rxGainSetting/stopTimeUTC";
+      path = "/level1Product/instrument/settings/settingRecord/dataSegment segmentID/stopTimeUTC";
       res = ossim::getPath(path, xdoc, s);
-      std::cout<<res<<std::endl;
     }
   
   return res;
@@ -1057,7 +1055,13 @@ bool ossimplugins::ossimTerraSarProductDoc::getCalFactor(
       "/level1Product/calibration/calibrationConstant/calFactor";
    return ossim::getPath(path, xdoc, s);
 }
-
+bool ossimplugins::ossimTerraSarProductDoc::getRadarFrequency(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/instrument/radarParameters/centerFrequency";
+   return ossim::getPath(path, xdoc, s);
+}
 bool ossimplugins::ossimTerraSarProductDoc::initNoise(
    const ossimXmlDocument* xdoc, ossimplugins::Noise* noise) const
 {

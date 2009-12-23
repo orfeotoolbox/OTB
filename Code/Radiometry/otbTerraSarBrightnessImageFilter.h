@@ -74,17 +74,18 @@ public:
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
 
   /** Accessors */
-  void SetCalFactor(double pCalFactor){
-    this->GetFunctor().SetCalFactor( pCalFactor );
-    this->Modified();
-  }
+  void SetCalFactor(double pCalFactor)
+    {
+      this->GetFunctor().SetCalFactor( pCalFactor );
+      this->Modified();
+    }
   double GetCalFactor(){
     return this->GetFunctor().GetCalFactor();
   }
 
 protected:
   /** Constructor */
-  TerraSarBrightnessImageFilter();
+  TerraSarBrightnessImageFilter(){};
   /** Destructor */
   virtual ~TerraSarBrightnessImageFilter() {};
 

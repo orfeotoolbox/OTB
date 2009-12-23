@@ -240,6 +240,11 @@ namespace ossimplugins
       double _calFactor;
 
       /**
+       * @brief centerFrequency (instrument node).
+       */
+      double _radarFrequency;
+
+      /**
        * @brief Azimuthal Start Time (Start acquisition time).
        */
       ossimString _azStartTime;

@@ -33,7 +33,7 @@ template <class TInput, class TOutput>
 TerraSarBrightnessImageFunctor<TInput, TOutput>
 ::TerraSarBrightnessImageFunctor()
 {
-  m_CalFactor = 1.; 
+  m_CalFactor = itk::NumericTraits<double>::min(); 
 }
 
 

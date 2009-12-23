@@ -53,6 +53,8 @@ static const char POL_LAYER[] = "polLayer";
 
 
 static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
+static const char RADAR_FREQUENCY[] = "radarFrequency";
+
 
 using ::ossimString;
 using ::ossimXmlDocument;
@@ -84,9 +86,10 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polLayer(),
      _noise(0),
      _calFactor(0.),
+     _radarFrequency(0.),
      _azStartTime(),
      _azStopTime(),
-    _generationTime(),
+     _generationTime(),
      theProductXmlFile()
 {
 }
@@ -109,6 +112,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polLayer(rhs._polLayer),
      _noise(rhs._noise),
      _calFactor(rhs._calFactor),
+     _radarFrequency(rhs._radarFrequency),
      _azStartTime(rhs._azStartTime),
      _azStopTime(rhs._azStopTime),
      _generationTime(rhs._generationTime),
@@ -149,183 +153,184 @@ double ossimplugins::ossimTerraSarModel::getSlantRangeFromGeoreferenced(double c
 
 bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 {
-   static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open";
-
-   bool debug = false;
-
-   if (debug)
-      cout << "Opening file" << endl;
-
-   if (traceDebug())
-   {
+  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::open";
+  
+  bool debug = false;
+  
+  if (debug)
+    cout << "Opening file" << endl;
+  
+  if (traceDebug())
+    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << " entered...\n"
-         << "file: " << file << "\n";
-   }
-
-   bool result = false;
-   ossimFilename xmlfile;
-   bool findMeatadataFile = findTSXLeader(file, xmlfile);
-
-   if(findMeatadataFile)
-   {
+	<< MODULE << " entered...\n"
+	<< "file: " << file << "\n";
+    }
+  
+  bool result = false;
+  ossimFilename xmlfile;
+  bool findMeatadataFile = findTSXLeader(file, xmlfile);
+  
+  if(findMeatadataFile)
+    {
       //---
       // Instantiate the XML parser:
       //---
       ossimXmlDocument* xdoc = new ossimXmlDocument();
       if ( xdoc->openFile(xmlfile) )
-      {
-
-         ossimTerraSarProductDoc tsDoc;
-
-         result = tsDoc.isTerraSarX(xdoc);
-         if (debug)
-            cout << "result of IsTSX " << result << endl;
-
-         if (result)
-         {
-            if (traceDebug())
-            {
-               ossimNotify(ossimNotifyLevel_DEBUG)
-                  << "isTerraSarX...\n";
-            }
-
-            // Set the base class number of lines and samples
-            result = tsDoc.initImageSize(xdoc, theImageSize);
-
-            if (debug)
-               cout << "result of initImageSize" << result << endl;
-
-
-            if (result)
-            {
-
-               // Set the base class clip rect.
-               theImageClipRect = ossimDrect(
-                  0, 0,
-                  theImageSize.x-1, theImageSize.y-1);
-            }
-               
-            // Set the sub image offset. tmp hard coded (drb).
-            theSubImageOffset.x = 0.0;
-            theSubImageOffset.y = 0.0;
-            
-            // Set the image ID to the scene ID.
-            if (result)
-            {
-               result = tsDoc.getSceneId(xdoc, theImageID);
-               if (debug)
-                  cout << "result of getting SceneID" << result << endl;
-            }
-
-            // Set the sensor ID to the mission ID.
-            if (result)
-            {
-               result = tsDoc.getMission(xdoc, theSensorID);
-            
-               if (debug)
-                  cout << "result of getting MissionID...." << result << endl;
-            }
-
-            // Set the base class gsd:
-            result = tsDoc.initGsd(xdoc, theGSD);
-
-            if (debug)
-               cout << "result of getting GSD...." << result << endl;
-
-            if (result)
-            {
-               theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-            }
-
-            if (result)
-            {
-               /*result = */initSRGR(xdoc, tsDoc);
-
-               if (debug)
-                  cout << "result of initSRGR.... " << result << endl;
-
-               if (result)
-               {
-                  result = initPlatformPosition(xdoc, tsDoc);
-
-                  if (debug)
-                     cout << "result of initPlatformPosition.... " << result << endl;
-
-                  if (result)
-                  {
-                     result = initSensorParams(xdoc, tsDoc);
-
-                     if (debug)
-                        cout << "result of initSensorParams.... " << result << endl;
-
-                     if (result)
-                     {
-                        result = initRefPoint(xdoc, tsDoc);
-                        if (debug)
-                           cout << "result of initRefPoint.... " << result << endl;
-
-                        if (result)
-                        {
-                            result = tsDoc.getProductType(xdoc, _productType);
-
-                            if (result)
-                            {
-                              result = tsDoc.getRadiometricCorrection(xdoc, _radiometricCorrection);
-                              if (result)
-                              {
-                                result = initAcquisitionInfo(xdoc, tsDoc);
-                                if (result)
-                                {
-                                  result = initNoise(xdoc, tsDoc);
-                                  if (result)
-                                  {
-                                    ossimString s;
-                                    result = tsDoc.getCalFactor(xdoc, s);
-                                    _calFactor = s.toFloat64();
-                                    if (result)
-                                    {
-                                      result = tsDoc.getAzimuthStartTime(xdoc, _azStartTime);
-                                      if (result)
-                                      {
-                                        result = tsDoc.getAzimuthStopTime(xdoc, _azStopTime);
-                                        if (result)
-                                        {
-                                          result = tsDoc.getGenerationTime(xdoc, _generationTime);
-                                        }
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                        }
-                     }
-                  }
-               }
-            }
-         }
-  
-         
-      } // matches: if ( xdoc->openFile(file) )
+	{
+	  ossimTerraSarProductDoc tsDoc;
+	  
+	  result = tsDoc.isTerraSarX(xdoc);
+	  if (debug)
+	    cout << "result of IsTSX " << result << endl;
+	  
+	  if (result)
+	    {
+	      if (traceDebug())
+		{
+		  ossimNotify(ossimNotifyLevel_DEBUG)
+		    << "isTerraSarX...\n";
+		}
+	      
+	      // Set the base class number of lines and samples
+	      result = tsDoc.initImageSize(xdoc, theImageSize);
+	      
+	      if (debug)
+		cout << "result of initImageSize" << result << endl;
+	      
+	      
+	      if (result)
+		{
+		  // Set the base class clip rect.
+		  theImageClipRect = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
+		}
+	      
+	      // Set the sub image offset. tmp hard coded (drb).
+	      theSubImageOffset.x = 0.0;
+	      theSubImageOffset.y = 0.0;
+	      
+	      // Set the image ID to the scene ID.
+	      if (result)
+		{
+		  result = tsDoc.getSceneId(xdoc, theImageID);
+		  if (debug)
+		    cout << "result of getting SceneID" << result << endl;
+		}
+	      
+	      // Set the sensor ID to the mission ID.
+	      if (result)
+		{
+		  result = tsDoc.getMission(xdoc, theSensorID);
+		  
+		  if (debug)
+		    cout << "result of getting MissionID...." << result << endl;
+		}
+	      
+	      // Set the base class gsd:
+	      result = tsDoc.initGsd(xdoc, theGSD);
+	      
+	      if (debug)
+		cout << "result of getting GSD...." << result << endl;
+	      
+	      if (result)
+		{
+		  theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+		}
+	      
+	      if (result)
+		{
+		  /*result = */initSRGR(xdoc, tsDoc);
+		  
+		  if (debug)
+		    cout << "result of initSRGR.... " << result << endl;
+		  
+		  if (result)
+		    {
+		      result = initPlatformPosition(xdoc, tsDoc);
+		      
+		      if (debug)
+			cout << "result of initPlatformPosition.... " << result << endl;
+		      
+		      if (result)
+			{
+			  result = initSensorParams(xdoc, tsDoc);
+			  
+			  if (debug)
+			    cout << "result of initSensorParams.... " << result << endl;
+			  
+			  if (result)
+			    {
+			      result = initRefPoint(xdoc, tsDoc);
+			      if (debug)
+				cout << "result of initRefPoint.... " << result << endl;
+			      
+			      if (result)
+				{
+				  result = tsDoc.getProductType(xdoc, _productType);
+				  
+				  if (result)
+				    {
+				      result = tsDoc.getRadiometricCorrection(xdoc, _radiometricCorrection);
+				      if (result)
+					{
+					  result = initAcquisitionInfo(xdoc, tsDoc);
+					  if (result)
+					    {
+					      result = initNoise(xdoc, tsDoc);
+					      if (result)
+						{
+						  ossimString s;
+						  result = tsDoc.getCalFactor(xdoc, s);
+						  _calFactor = s.toFloat64();
+						  if (result)
+						    {
+						      result = tsDoc.getRadarFrequency(xdoc, s);
+						      _radarFrequency= s.toFloat64();
+						      if (result)
+							{
+							  result = tsDoc.getAzimuthStartTime(xdoc, _azStartTime);
+							  if (result)
+							    {
+							      result = tsDoc.getAzimuthStopTime(xdoc, _azStopTime);
+							      if (result)
+								{
+								  result = tsDoc.getGenerationTime(xdoc, _generationTime);
+								}
+							    }
+							}
+						    }
+						}
+					    }
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	  
+	  
+	} // matches: if ( xdoc->openFile(file) )
       
       delete xdoc;
       xdoc = 0;
       
-   } // matches: if ( file.exists() )
-
-
-   if (debug)
-      cout << "Initialized values...." << endl;
-
-
-   if (result)
-   {
+    } // matches: if ( file.exists() )
+  
+  
+  if (debug)
+    cout << "Initialized values...." << endl;
+  
+  
+  if (result)
+    {
       theProductXmlFile = xmlfile;
-
+      
       if (debug)
-         cout << "theProductXmlFile : " << xmlfile << endl;
-
+	cout << "theProductXmlFile : " << xmlfile << endl;
+      
       // Assign the ossimSensorModel::theBoundGndPolygon
       ossimGpt ul;
       ossimGpt ur;
@@ -436,6 +441,7 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
    _noise->saveState(kwl,prefix);
 
    kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor).c_str());
+   kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
    kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
    kwl.add(prefix, AZ_STOP_TIME, _azStopTime.c_str());
    kwl.add(prefix, GENERATION_TIME, _generationTime.c_str());
@@ -746,6 +752,24 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
+     lookup = kwl.find(prefix, RADAR_FREQUENCY);
+      if (lookup)
+      {
+          s = lookup;
+         _radarFrequency= s.toDouble();
+      }
+      else
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << MODULE
+               << "\nRequired keyword not found: "
+               << RADAR_FREQUENCY << "\n";
+         } 
+         result = false;
+      }
+
      lookup = kwl.find(prefix, AZ_START_TIME);
       if (lookup)
       {
@@ -860,6 +884,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    }
 
    out << CALIBRATION_CALFACTOR <<  ": " << _calFactor << "\n";
+   out << RADAR_FREQUENCY <<  ": " << _radarFrequency<< "\n";
    out << AZ_START_TIME <<  ": " << _azStartTime << "\n";
    out << AZ_STOP_TIME <<  ": " << _azStopTime << "\n";
    out << GENERATION_TIME <<  ": " << _generationTime << "\n";

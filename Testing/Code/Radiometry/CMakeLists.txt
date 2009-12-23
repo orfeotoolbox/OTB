@@ -1076,8 +1076,20 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
         otbTerraSarBrightnessImageFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
+	1 # set calfactor	
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}//raTvTerraSarBrightnessImageFilter_UPSALA.tif
+                ${TEMP}//raTvTerraSarBrightnessImageFilter_UPSALA.tif
+        otbTerraSarBrightnessImageFilterTest
+        ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+        ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
+	0 # don't set calfactor
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 # A enrichir

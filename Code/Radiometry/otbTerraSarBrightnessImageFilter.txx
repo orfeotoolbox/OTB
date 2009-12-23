@@ -19,22 +19,12 @@
 #define __otbTerraSarBrightnessImageFilter_txx
 
 #include "otbTerraSarBrightnessImageFilter.h"
-#include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageMetadataInterfaceBase.h"
-
+//#include "otbImageMetadataInterfaceFactory.h"
+//#include "otbImageMetadataInterfaceBase.h"
+#include "otbTerraSarImageMetadataInterface.h"
 
 namespace otb
 {
-
-/**
- * Constructor
- */
-template <class TInputImage, class TOutputImage>
-TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
-::TerraSarBrightnessImageFilter()
-{
-//  m_CalFactor = 1.;
-}
 
 template <class TInputImage, class TOutputImage>
 void
@@ -42,6 +32,19 @@ TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
+
+  // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
+ std::cout<<this->GetCalFactor()<<std::endl;
+  if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
+    {
+      /** TODO : use a factory for RADAR image metadata interface */
+      TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+      if( !lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary()) )
+	{
+	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+	}
+      this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+    }
 }
 
 }

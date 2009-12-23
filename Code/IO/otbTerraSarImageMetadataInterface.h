@@ -29,6 +29,7 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
+#include <otb/Noise.h>
 #include <string>
 
 namespace otb
@@ -59,6 +60,9 @@ public:
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageKeywordlist                      ImageKeywordlistType;
+  typedef std::vector<double>                   DoubleVectorType;
+  typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
+  typedef std::vector<unsigned int>             UIntVectorType;
 
   /** Set the image used to get the metadata */
   itkSetObjectMacro(Image,ImageType);
@@ -93,7 +97,34 @@ public:
   /** Get the calibration.calFactor : generationTime variable */
    double GetCalibrationFactor( const MetaDataDictionaryType & ) const;
 
-  bool CanRead( const MetaDataDictionaryType & ) const;
+   /** Get the noise structure */
+   ossimplugins::Noise * GetNoise( const MetaDataDictionaryType & ) const;
+
+   /** Get the number of noise records */   
+   unsigned int GetNumberOfNoiseRecords( const MetaDataDictionaryType & ) const;
+
+   /** Get the polynomial degree list */
+   UIntVectorType GetNoisePolynomialDegrees( const MetaDataDictionaryType & ) const;
+
+  /** Get the polynomial coefficient list */
+   DoubleVectorVectorType GetNoisePolynomialCoefficientsList( const MetaDataDictionaryType & ) const;
+
+   /** Get timeUTC noise acquisition list in Julian day */
+   DoubleVectorType GetNoiseTimeUTCList( const MetaDataDictionaryType & ) const;
+
+   /** Get noise minimum validity range list */
+   DoubleVectorType GetNoiseValidityRangeMinList( const MetaDataDictionaryType & ) const;
+
+   /** Get noise maximum validity range list */
+   DoubleVectorType GetNoiseValidityRangeMaxList( const MetaDataDictionaryType & ) const; 
+  
+   /** Get noise reference point list */
+   DoubleVectorType GetNoiseReferencePointList( const MetaDataDictionaryType & ) const; 
+
+   /** Get the radar frequency */
+   double GetRadarFrequency( const MetaDataDictionaryType & ) const;
+   
+   bool CanRead( const MetaDataDictionaryType & ) const;
 
 protected:
   TerraSarImageMetadataInterface();
