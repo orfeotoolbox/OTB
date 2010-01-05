@@ -23,23 +23,21 @@
 
 int otbTerraSarBrightnessImageFunctor(int argc, char * argv[])
 {
+  char *outFilename = argv[5];
+  double calFact =  atof(argv[4]);
+
   typedef double                   ScalarType;
   typedef std::complex<ScalarType> ComplexType;
 
   typedef otb::Functor::TerraSarBrightnessImageFunctor<ScalarType, ScalarType>   FunctorType;
 
   FunctorType funct;
-  
-  if(argc!=5)
-  {
-    std::cout << "argv[0] <Scalar pixel> <Complex pixel (re part)> <Complex pixel (im part)> <output filename>" << std::endl;
-
-    return EXIT_FAILURE;
-  }
+  funct.SetCalFactor(calFact);
 
   ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
   ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));
-  char *outFilename = argv[4];
+  
+
   std::ofstream file;
   file.open(outFilename);
 
