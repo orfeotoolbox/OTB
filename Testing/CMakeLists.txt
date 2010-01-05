@@ -39,6 +39,23 @@ ELSE(OTB_BINARY_DIR)
     FIND_PATH(OTB_DATA_LARGEINPUT_ROOT OTBData.readme $ENV{OTB_DATA_LARGEINPUT_ROOT})
     MARK_AS_ADVANCED(OTB_DATA_LARGEINPUT_ROOT)
   ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+  MACRO(OTB_ADD_EXECUTABLE name sources libraries)
+    ADD_EXECUTABLE(${name} ${sources})
+    TARGET_LINK_LIBRARIES(${name}  ${libraries})
+    IF(OTB_CPP_CHECK_SOURCE_FILE)
+      FOREACH( file ${sources})
+        ADD_CUSTOM_COMMAND( TARGET ${name}
+          PRE_BUILD
+          COMMAND ${OTB_CPP_CHECK_PROG}
+          ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
+          DEPENDS ${libraries}
+          COMMENT "============== C++ checking ${file} source file...  =================="
+          VERBATIM )
+      ENDFOREACH(file)
+    ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
+  ENDMACRO(OTB_ADD_EXECUTABLE)
+  
   # Find OTB and load its settings.
   FIND_PACKAGE(OTB)
   IF(OTB_FOUND)
@@ -67,23 +84,6 @@ ELSE(OTB_BINARY_DIR)
   STRING(REGEX REPLACE "^/" "" OTB_INSTALL_LIB_DIR_CM24 "${OTB_INSTALL_LIB_DIR}")
   STRING(REGEX REPLACE "^/" "" OTB_INSTALL_BIN_DIR_CM24 "${OTB_INSTALL_BIN_DIR}")
   STRING(REGEX REPLACE "^/" "" OTB_INSTALL_INCLUDE_DIR_CM24 "${OTB_INSTALL_INCLUDE_DIR}")
-
-  MACRO(OTB_ADD_EXECUTABLE name sources libraries)
-    ADD_EXECUTABLE(${name} ${sources})
-    TARGET_LINK_LIBRARIES(${name}  ${libraries})
-    IF(OTB_CPP_CHECK_SOURCE_FILE)
-      FOREACH( file ${sources})
-        ADD_CUSTOM_COMMAND( TARGET ${name}
-                            PRE_BUILD
-                            COMMAND ${OTB_CPP_CHECK_PROG}
-                            ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${file}
-                            DEPENDS ${libraries}
-                            COMMENT "============== C++ checking ${file} source file...  =================="
-                            VERBATIM )
-      ENDFOREACH(file)
-    ENDIF(OTB_CPP_CHECK_SOURCE_FILE)
-  ENDMACRO(OTB_ADD_EXECUTABLE)
-
 
 ENDIF(OTB_BINARY_DIR)
 

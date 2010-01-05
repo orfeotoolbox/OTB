@@ -40,7 +40,7 @@ TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
       TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
       if( !lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary()) )
 	{
-	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
 	}
       this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
     }

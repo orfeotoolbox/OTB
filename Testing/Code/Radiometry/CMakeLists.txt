@@ -1058,9 +1058,10 @@ ADD_TEST(raTvTerraSarBrightnessImageFunctor ${RADIOMETRY_TESTS9}
                                ${BASELINE_FILES}/raTvTerraSarBrightnessImageFunctor.txt
                                ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
         otbTerraSarBrightnessImageFunctor
-		12
-		12
-		0
+		12 # real pixel
+		12 # complex real part pixel
+		0  # complex imaginary part pixel
+		1  # calFactor
 		${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
 )
 
