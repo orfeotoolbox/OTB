@@ -1052,6 +1052,7 @@ ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
 		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
 )
 
+
 # -------            TerraSarBrightnessImageFunctor   ------------------------------
 ADD_TEST(raTvTerraSarBrightnessImageFunctor ${RADIOMETRY_TESTS9}
  --compare-ascii ${EPSILON}  
@@ -1083,11 +1084,21 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
     --compare-image ${EPSILON}  
-                ${BASELINE}//raTvTerraSarBrightnessImageFilter_UPSALA.tif
-                ${TEMP}//raTvTerraSarBrightnessImageFilter_UPSALA.tif
+                ${BASELINE}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
+                ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
         otbTerraSarBrightnessImageFilterTest
         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
+	0 # don't set calfactor
+)
+
+ADD_TEST(raTvTerraSarBrightnessImageFilterTORONTO ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
+                ${TEMP}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
+        otbTerraSarBrightnessImageFilterTest
+        ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+        ${TEMP}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
 	0 # don't set calfactor
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
