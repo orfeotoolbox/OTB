@@ -36,6 +36,7 @@ namespace ossimplugins
    class RefPoint;
    class SensorParams;
    class Noise;
+   class IncidenceAngles;
 
    /** @brief Class to encapsulate parsing TerraSAR product xml file. */
    class ossimTerraSarProductDoc
@@ -220,8 +221,21 @@ namespace ossimplugins
                                     ossimString& s) const;
       bool getRadarFrequency(const ossimXmlDocument* xdoc,
                                     ossimString& s) const;
-
-
+/*      bool getCenterIncidenceAngle(const ossimXmlDocument* xdoc,
+				    ossimString& s) const;
+      bool getCornerIncidenceAngles(const ossimXmlDocument* xdoc,
+				    std::vector<ossimString>& s) const;
+*/
+      /**
+       * @brief Method to initialize IncidenceAngles object from
+       * TerraSAR  product xml file.
+       * @param xdoc Opened product xml file.
+       * @param pos Pointer to PlatformPosition object.
+       * @return true on success, false on error.
+	     */
+      bool initIncidenceAngles(const ossimXmlDocument* xdoc,
+			       IncidenceAngles* pos) const;
+      
       /**
        * @brief Method to initialize Noise object from
        * TerraSAR  product xml file.

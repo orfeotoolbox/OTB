@@ -33,16 +33,21 @@ TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
 {
   Superclass::BeforeThreadedGenerateData();
 
+  // Load metada
+  TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+  bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
+
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
   if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
     {
-      /** TODO : use a factory for RADAR image metadata interface */
-      TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
-      if( !lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary()) )
-	{
-	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
-	}
-      this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+      if (mdIsAvailable)
+        {
+          this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+        }
+      else
+        {
+          itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+        }
     }
 }
 

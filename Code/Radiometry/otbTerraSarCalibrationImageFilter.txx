@@ -18,10 +18,11 @@
 #ifndef __otbTerraSarCalibrationImageFilter_txx
 #define __otbTerraSarCalibrationImageFilter_txx
 
+#include <algorithm>
 #include "otbTerraSarCalibrationImageFilter.h"
-#include "otbImageMetadataInterfaceFactory.h"
-#include "otbImageMetadataInterfaceBase.h"
-
+//#include "otbImageMetadataInterfaceFactory.h"
+//#include "otbImageMetadataInterfaceBase.h"
+#include "otbTerraSarImageMetadataInterface.h"
 
 namespace otb
 {
@@ -41,27 +42,144 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 {
   Superclass::BeforeThreadedGenerateData();
 
-  if(this->GetFunctor().GetNoisePolynomialCoefficientsList().size() == 0)
-    itkExceptionMacro(<<"Empty NoisePolynomialCoefficientsList.");
+    // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
+//  std::cout<<this->GetCalFactor()<<std::endl;
+//   if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
+//     {
+//       /** TODO : use a factory for RADAR image metadata interface */
+//       TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+//       if( !lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary()) )
+// 	{
+// 	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+// 	}
+//       this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+//     }
+
+  // Load metadata
+  TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+  bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
+
+  // If the user doesn't set the data AND the metadata is available, set the data
   
-  if( this->GetFunctor().GetUseFastCalibrationMethod() == false )
+  // CalFactor
+  if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
+  {
+    if (mdIsAvailable)
+      {
+        this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+      }
+    else
+      {
+        itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+      }
+  }
+  
+  // NoiseRangeValidityMin
+  if (this->GetNoiseRangeValidityMin() == itk::NumericTraits<double>::min()) 
+  {
+    if (mdIsAvailable)
     {
-      unsigned int size =  this->GetFunctor().GetNoisePolynomialCoefficientsList()[0].size();
-      for(unsigned int i=1; i<this->GetFunctor().GetNoisePolynomialCoefficientsList().size(); i++)
-       {
-         if( this->GetFunctor().GetNoisePolynomialCoefficientsList()[i].size() != size )
-           itkExceptionMacro(<<"Wrong noise polynomial coefficient, degrees mismatch.");
-       }
-      
-      if( this->GetFunctor().GetTimeUTC().size() != this->GetFunctor().GetNoisePolynomialCoefficientsList().size() )
-       itkExceptionMacro(<<"Number of Time UTC and number of noise polynomials mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
-
-      if(this->GetFunctor().GetPRF() == 0.)
-       itkExceptionMacro(<<"PRF can't be null.");
-      
+      DoubleVectorType vecTmp = lImageMetadata->GetNoiseValidityRangeMinList(this->GetInput()->GetMetaDataDictionary());
+      std::sort(vecTmp.begin(), vecTmp.end());
+      this->SetNoiseRangeValidityMin(vecTmp[0]);
     }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
+  
+  // NoiseRangeValidityMax
+  if (this->GetNoiseRangeValidityMax() == itk::NumericTraits<double>::max()) 
+  {
+    if (mdIsAvailable)
+    {
+      DoubleVectorType vecTmp = lImageMetadata->GetNoiseValidityRangeMaxList(this->GetInput()->GetMetaDataDictionary());
+      std::sort(vecTmp.begin(), vecTmp.end());
+      this->SetNoiseRangeValidityMax(vecTmp[vecTmp.size()-1]);
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
 
-  this->GetFunctor().SetImageSize( this->GetInput()->GetLargestPossibleRegion().GetSize() );
+  // NoiseRangeValidityRef
+  if (this->GetNoiseRangeValidityRef() == itk::NumericTraits<double>::Zero) 
+  {
+    if (mdIsAvailable)
+    {
+      double sum = 0;
+      // Get vector
+      DoubleVectorType noiseRefList = lImageMetadata->GetNoiseReferencePointList(this->GetInput()->GetMetaDataDictionary());
+      // Mean computation
+      for (int i=0; i<noiseRefList.size(); i++)
+      {
+	sum += noiseRefList[i];
+      }
+      
+      this->SetNoiseRangeValidityRef( sum / noiseRefList.size() );
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
+  
+  // NoisePolynomialCoefficient
+  if ( ((this->GetNoisePolynomialCoefficientsList())[0][0] == itk::NumericTraits<double>::Zero)
+	 && (this->GetNoisePolynomialCoefficientsList().size() == 1)
+	 &&  (this->GetNoisePolynomialCoefficientsList()[0].size() == 1) )
+  {
+    if (mdIsAvailable)
+    {
+      this->SetNoisePolynomialCoefficientsList(lImageMetadata->GetNoisePolynomialCoefficientsList(this->GetInput()->GetMetaDataDictionary()));
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
+  
+  // Time UTC
+  if ((this->GetTimeUTC()[0] == itk::NumericTraits<double>::Zero) && (this->GetTimeUTC()[1] == 1.) && (this->GetTimeUTC().size() == 2)) 
+  {
+    if (mdIsAvailable)
+    {
+      this->SetTimeUTC(lImageMetadata->GetNoiseTimeUTCList(this->GetInput()->GetMetaDataDictionary()));
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
+  
+  // Radar frequency (PRF)
+  if (this->GetPRF() == 1.) 
+  {
+    if (mdIsAvailable)
+    {
+      this->SetPRF(lImageMetadata->GetRadarFrequency(this->GetInput()->GetMetaDataDictionary()));
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
+  
+  // Incidence Angle
+  if (this->GetLocalIncidentAngle() == itk::NumericTraits<double>::Zero) 
+  {
+    if (mdIsAvailable)
+    {
+      double mean = lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
+      this->SetLocalIncidentAngle(mean);
+    }
+    else
+    {
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+    }
+  }
 }
 
 
@@ -201,7 +319,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetTimeUTC( LIntVectorType vect )
+::SetTimeUTC( DoubleVectorType vect )
 {
   this->GetFunctor().SetTimeUTC( vect );
   this->Modified();
@@ -209,7 +327,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   
 
 template <class TInputImage, class TOutputImage>
-typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::LIntVectorType
+typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::DoubleVectorType
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetTimeUTC() const
 {

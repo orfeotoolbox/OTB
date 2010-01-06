@@ -30,6 +30,7 @@
 #include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
 #include <otb/Noise.h>
+#include <otb/IncidenceAngles.h>
 #include <string>
 
 namespace otb
@@ -56,6 +57,8 @@ public:
   itkTypeMacro(TerraSarImageMetadataInterface, itk::Object);
 
   typedef itk::ImageBase< 2 >                   ImageType;
+  typedef ImageType::IndexType                  IndexType;
+  typedef std::vector<IndexType>                IndexVectorType;
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
@@ -99,10 +102,10 @@ public:
 
    /** Get the noise structure */
    ossimplugins::Noise * GetNoise( const MetaDataDictionaryType & ) const;
-
+   
    /** Get the number of noise records */   
    unsigned int GetNumberOfNoiseRecords( const MetaDataDictionaryType & ) const;
-
+   
    /** Get the polynomial degree list */
    UIntVectorType GetNoisePolynomialDegrees( const MetaDataDictionaryType & ) const;
 
@@ -123,6 +126,27 @@ public:
 
    /** Get the radar frequency */
    double GetRadarFrequency( const MetaDataDictionaryType & ) const;
+   
+   /** Get the incidence angles structure */
+   ossimplugins::IncidenceAngles* GetIncidenceAngles( const MetaDataDictionaryType & ) const;
+   
+   /** Get the number of corner incidence angles */
+   unsigned int GetNumberOfCornerIncidenceAngles( const MetaDataDictionaryType & ) const;
+   
+   /** Get the Mean Incidence angles */
+   double GetMeanIncidenceAngles( const MetaDataDictionaryType & ) const;
+   
+   /** Get the center incidence angle */
+   double GetCenterIncidenceAngle( const MetaDataDictionaryType & ) const;
+    
+   /** Get the center index */
+   IndexType GetCenterIncidenceAngleIndex( const MetaDataDictionaryType & ) const;
+   
+   /** Get the corners incidence angles */
+   DoubleVectorType GetCornersIncidenceAngles( const MetaDataDictionaryType & ) const;
+   
+   /** Get the corners index */
+   IndexVectorType GetCornersIncidenceAnglesIndex( const MetaDataDictionaryType & ) const;
    
    bool CanRead( const MetaDataDictionaryType & ) const;
 

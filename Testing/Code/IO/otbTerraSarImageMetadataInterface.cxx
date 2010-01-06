@@ -41,6 +41,10 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
 
+  typedef itk::ImageBase< 2 >                   ImageType;
+  typedef ImageType::IndexType                  IndexType;
+  typedef std::vector<IndexType>                IndexVectorType;
+  
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName( inputFilename  );
@@ -84,7 +88,19 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
       file<<"Reference point:    "<<ref[i]<<std::endl;
       file<<"Time UTC:           "<<time[i]<<std::endl;
     }
-
+  file<<"Incidence Angles attributs: "<<std::endl;
+  IndexType centerIndexType = lImageMetadata->GetCenterIncidenceAngleIndex(reader->GetOutput()->GetMetaDataDictionary());
+  file<<"GetCenterIncidenceAngle: Value: "<<lImageMetadata->GetCenterIncidenceAngle(reader->GetOutput()->GetMetaDataDictionary());
+  file<<" Index: Row: "<<centerIndexType[0]<<" Column: "<<centerIndexType[1]<<std::endl;
+  file<<"GetNumberOfCornerIncidenceAngles: "<<lImageMetadata->GetNumberOfCornerIncidenceAngles(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  DoubleVectorType cornerIncidenceAngles = lImageMetadata->GetCornersIncidenceAngles(reader->GetOutput()->GetMetaDataDictionary());
+  std::vector<IndexType> tabIndex = lImageMetadata->GetCornersIncidenceAnglesIndex(reader->GetOutput()->GetMetaDataDictionary());
+  file<<"GetCornerIncidenceAngles: "<<std::endl;
+  for( unsigned int i=0; i<cornerIncidenceAngles.size(); i++)
+  {
+    file<<"Incidence Angle "<<i<<": Value: "<<cornerIncidenceAngles[i]<<" Index: Row: "<<tabIndex[i][0]<<" Column: "<<tabIndex[i][1]<<std::endl;
+  }
+  file<<"GetMeanIncidenceAngles: "<<lImageMetadata->GetMeanIncidenceAngles(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file.close();
 
   return EXIT_SUCCESS;
