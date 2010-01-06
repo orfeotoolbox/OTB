@@ -42,18 +42,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 {
   Superclass::BeforeThreadedGenerateData();
 
-    // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
-//  std::cout<<this->GetCalFactor()<<std::endl;
-//   if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
-//     {
-//       /** TODO : use a factory for RADAR image metadata interface */
-//       TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
-//       if( !lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary()) )
-// 	{
-// 	  itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-// 	}
-//       this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
-//     }
+  this->SetImageSize( this->GetInput()->GetLargestPossibleRegion().GetSize() );
 
   // Load metadata
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
@@ -173,6 +162,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     if (mdIsAvailable)
     {
       double mean = lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
+      this->SetLocalIncidentAngle(mean);
       this->SetLocalIncidentAngle(mean);
     }
     else
@@ -296,6 +286,24 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::GetNoisePolynomialCoefficientsList() const
 {
   return this->GetFunctor().GetNoisePolynomialCoefficientsList();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::SetImageSize( SizeType size )
+{
+  this->GetFunctor().SetImageSize( size );
+  this->Modified();
+}
+
+
+template <class TInputImage, class TOutputImage>
+typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::SizeType
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::GetImageSize() const
+{
+  return this->GetFunctor().GetImageSize();
 }
 
 template <class TInputImage, class TOutputImage>

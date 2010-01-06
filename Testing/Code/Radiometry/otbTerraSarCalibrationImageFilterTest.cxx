@@ -72,7 +72,6 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   filter->SetNoiseRangeValidityMax( 1 );
   filter->SetNoiseRangeValidityRef( 0.5 );
   filter->SetLocalIncidentAngle( 15 );
-  filter->SetLocalIncidentAngle( 15 );
 
   std::vector<double> timeUtc;
   timeUtc.push_back(1.);
@@ -84,6 +83,7 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
+
   writer->Update();
   
 

@@ -94,20 +94,18 @@ template <class TInput, class TOutput>
 double
 TerraSarCalibrationImageFunctor<TInput, TOutput>
 ::ComputeCurrentNoise( unsigned int colId )
-{
+{  
   double curRange = 0.;
   double width_2 = static_cast<double>(m_ImageSize[0])/2.;
-  
   // Use +1 because image start index is 0
   if( colId < static_cast<unsigned int>(width_2) )
     {
       curRange = m_NoiseRangeValidityMin + ( m_NoiseRangeValidityRef-m_NoiseRangeValidityMin )/width_2 * static_cast<double>(colId+1);
     }
   else
-    {
+    { 
       curRange = m_NoiseRangeValidityRef + ( m_NoiseRangeValidityMax-m_NoiseRangeValidityRef )/width_2 * (static_cast<double>(colId+1) - width_2 );
     }
-
   return curRange;
 }
 
@@ -159,6 +157,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 ::operator()(const TInput & inPix, IndexType index)
 {
   double diffCurRange = ComputeCurrentNoise( static_cast<unsigned int>(index[0]) ) - this->GetNoiseRangeValidityRef();
+
   DoubleVectorType curCoeff = this->ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
 
   double outRadBr = this->GetBrightness()( static_cast<double>(inPix) );
@@ -168,6 +167,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
     {
       NEBN += curCoeff[i]*vcl_pow( diffCurRange, static_cast<double>(i));
     }
+  
   double sigma = ( outRadBr - this->GetCalFactor()*NEBN ) * this->GetSinLocalIncidentAngle();
 
   return static_cast<TOutput>(sigma);

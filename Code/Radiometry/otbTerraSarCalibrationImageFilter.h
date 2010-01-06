@@ -78,6 +78,8 @@ public:
   typedef itk::MetaDataDictionary                       MetaDataDictionaryType;
   typedef typename FunctorType::DoubleVectorType        DoubleVectorType;
   typedef typename FunctorType::DoubleVectorVectorType  DoubleVectorVectorType;
+  typedef typename InputImageType::SizeType                      SizeType;
+
 //  typedef typename FunctorType::LIntVectorType          LIntVectorType;
 
   /** Accessors */
@@ -102,6 +104,9 @@ public:
   /** Vector of vector that contain noise polinomial coefficient */
   void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect );
   DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
+  /** Image size (setter is protected)*/
+  SizeType GetImageSize() const;
+  
   /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
    *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
@@ -121,6 +126,9 @@ protected:
   TerraSarCalibrationImageFilter();
   /** Destructor */
   virtual ~TerraSarCalibrationImageFilter() {};
+  /** Image Size setter*/
+  void SetImageSize( SizeType size );
+
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
   
