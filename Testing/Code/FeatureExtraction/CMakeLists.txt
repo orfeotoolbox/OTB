@@ -892,7 +892,7 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquare2OutputAscii ${FEATUREEXTRACTION_
          otbImageToSIFTKeyPointSetFilterOutputAscii
 		${INPUTDATA}/carre.png
 		${TEMP}/feTvImageToSIFTKeyPointSetFilterSquareKeysOutput2.txt
-		1 3 0.5 10.0
+		1 3 0.2 0.9
 )
 
 ADD_TEST(feTvImageToSIFTKeyPointSetFilterSquareRotated2OutputAscii ${FEATUREEXTRACTION_TESTS9}
@@ -992,7 +992,7 @@ ADD_TEST(feTuImageToFastSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS10}
 
 #Note the epsilon is according to relative difference
 ADD_TEST(feTvImageToFastSIFTKeyPointSetFilterSceneOutputDescriptorAscii ${FEATUREEXTRACTION_TESTS10}
---ignore-order --epsilon-boundary 0.0001 --compare-ascii ${EPSILON_2}
+--ignore-order --epsilon-boundary 0.01 --compare-ascii ${EPSILON_2}
 		${BASELINE_FILES}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
 		${TEMP}/feTvImageToFastSIFTKeyPointSetFilterSceneKeysOutputDescriptor.txt
          otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii
