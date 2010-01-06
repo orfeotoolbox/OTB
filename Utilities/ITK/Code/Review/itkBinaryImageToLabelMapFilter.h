@@ -28,6 +28,7 @@
 
 //PATCH OTB
 #include "itkLabelMap.h"
+#include "itkLabelObject.h"
 
 namespace itk
 {
