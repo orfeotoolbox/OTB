@@ -72,8 +72,8 @@ int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
   reader1->SetFileName( inputFilename1  );
   reader2->SetFileName( inputFilename2  );
   writer->SetFileName( outputFilename );
-  rescaler->SetOutputMinimum( -1 );
-  rescaler->SetOutputMaximum( 1 );
+  rescaler->SetOutputMinimum( 0 );
+  rescaler->SetOutputMaximum( 255 );
 
   filter->SetInput1( reader1->GetOutput() );
   filter->SetInput2( reader2->GetOutput() );
