@@ -55,7 +55,6 @@ static const char POL_LAYER[] = "polLayer";
 static const char CALIBRATION_CALFACTOR[] = "calibration.calibrationConstant.calFactor";
 static const char RADAR_FREQUENCY[] = "radarFrequency";
 
-
 using ::ossimString;
 using ::ossimXmlDocument;
 
@@ -85,6 +84,7 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel()
      _polarisationMode(),
      _polLayer(),
      _noise(0),
+     _incidenceAngles(0),
      _calFactor(0.),
      _radarFrequency(0.),
      _azStartTime(),
@@ -111,12 +111,13 @@ ossimplugins::ossimTerraSarModel::ossimTerraSarModel(
      _polarisationMode(rhs._polarisationMode),
      _polLayer(rhs._polLayer),
      _noise(rhs._noise),
+     _incidenceAngles(rhs._incidenceAngles),
      _calFactor(rhs._calFactor),
      _radarFrequency(rhs._radarFrequency),
      _azStartTime(rhs._azStartTime),
      _azStopTime(rhs._azStopTime),
      _generationTime(rhs._generationTime),
-     theProductXmlFile(rhs.theProductXmlFile)
+    theProductXmlFile(rhs.theProductXmlFile)
 {
 }
 
@@ -126,7 +127,10 @@ ossimplugins::ossimTerraSarModel::~ossimTerraSarModel()
    {
       delete _noise;
    }
-
+   if (_incidenceAngles != 0)
+   {
+     delete _incidenceAngles;
+   }
 }
 
 ossimString ossimplugins::ossimTerraSarModel::getClassName() const
@@ -296,6 +300,10 @@ bool ossimplugins::ossimTerraSarModel::open(const ossimFilename& file)
 							      if (result)
 								{
 								  result = tsDoc.getGenerationTime(xdoc, _generationTime);
+								  if (result)
+								    {
+								      result = initIncidenceAngles(xdoc, tsDoc);
+								    }
 								}
 							    }
 							}
@@ -439,7 +447,8 @@ bool ossimplugins::ossimTerraSarModel::saveState(ossimKeywordlist& kwl,
 
 
    _noise->saveState(kwl,prefix);
-
+   _incidenceAngles->saveState(kwl,prefix);
+   
    kwl.add(prefix, CALIBRATION_CALFACTOR, ossimString::toString(_calFactor).c_str());
    kwl.add(prefix, RADAR_FREQUENCY, ossimString::toString(_radarFrequency).c_str());
    kwl.add(prefix, AZ_START_TIME, _azStartTime.c_str());
@@ -734,6 +743,17 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
       result = false;
    }
+   if ( _incidenceAngles->loadState(kwl,prefix) == false )
+   {
+     if (traceDebug())
+     {
+       ossimNotify(ossimNotifyLevel_WARN)
+	   << MODULE
+	   << "\n_incidenceAngles->loadState failed!\n";
+     }
+     result = false;
+   }
+     
       lookup = kwl.find(prefix, CALIBRATION_CALFACTOR);
       if (lookup)
       {
@@ -821,7 +841,6 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
 
-
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -881,6 +900,15 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
             << MODULE
             << "\n_noise->print failed!\n";
       }
+   }
+   if ( _incidenceAngles->print(out) == false )
+   {
+     if (traceDebug())
+     {
+       ossimNotify(ossimNotifyLevel_WARN)
+	   << MODULE
+	   << "\n_incidenceAngles->print failed!\n";
+     }
    }
 
    out << CALIBRATION_CALFACTOR <<  ": " << _calFactor << "\n";
@@ -1764,6 +1792,36 @@ bool ossimplugins::ossimTerraSarModel::initAcquisitionInfo(
 
    return result;
 }
+
+bool ossimplugins::ossimTerraSarModel::initIncidenceAngles(
+    const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)
+{
+  static const char MODULE[] = "ossimplugins::ossimTerraSarModel::initIncidenceAngles";
+
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }   
+   
+  if (_incidenceAngles)
+  {
+    delete _incidenceAngles;
+  }
+   
+  _incidenceAngles = new IncidenceAngles();
+   
+  bool result = tsDoc.initIncidenceAngles(xdoc, _incidenceAngles);
+
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)
+	<< MODULE << " exit status = " << (result?"true":"false\n")
+	<< std::endl;
+  }
+
+  return result;
+}
+
 
 bool ossimplugins::ossimTerraSarModel::initNoise(
    const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc)

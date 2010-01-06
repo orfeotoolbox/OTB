@@ -75,17 +75,17 @@ template <class TInput, class TOutput>
 TerraSarCalibrationImageFunctor<TInput, TOutput>
 ::TerraSarCalibrationImageFunctor()
 {
-    m_CalFactor = 1.;
-    m_NoiseRangeValidityMin = 0.;
-    m_NoiseRangeValidityMax = 0.;
-    m_NoiseRangeValidityRef = 0.;
-    m_LocalIncidentAngle = 0.;
-    m_SinLocalIncidentAngle = 0.;
-    m_NoisePolynomialCoefficientsList = DoubleVectorVectorType( 1, DoubleVectorType(1, 0.) );
+    m_CalFactor = itk::NumericTraits<double>::min();
+    m_NoiseRangeValidityMin = itk::NumericTraits<double>::min();
+    m_NoiseRangeValidityMax = itk::NumericTraits<double>::max();
+    m_NoiseRangeValidityRef = itk::NumericTraits<double>::Zero;
+    m_LocalIncidentAngle = itk::NumericTraits<double>::Zero;
+    m_SinLocalIncidentAngle = itk::NumericTraits<double>::Zero;
+    m_NoisePolynomialCoefficientsList = DoubleVectorVectorType( 1, DoubleVectorType(1, itk::NumericTraits<double>::Zero) );
     m_ImageSize.Fill(0);
     m_UseFastCalibrationMethod = true;
-    m_TimeUTC = LIntVectorType(2, 0);
-    m_TimeUTC[1] = 1;
+    m_TimeUTC = DoubleVectorType(2, itk::NumericTraits<double>::Zero);
+    m_TimeUTC[1] = 1.;
     m_PRF = 1.;
 }
 

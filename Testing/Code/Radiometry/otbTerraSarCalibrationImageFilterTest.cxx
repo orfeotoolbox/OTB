@@ -74,10 +74,10 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   filter->SetLocalIncidentAngle( 15 );
   filter->SetLocalIncidentAngle( 15 );
 
-  std::vector<long int> timeUtc;
-  timeUtc.push_back(1);
-  timeUtc.push_back(2);
-  timeUtc.push_back(3);
+  std::vector<double> timeUtc;
+  timeUtc.push_back(1.);
+  timeUtc.push_back(2.);
+  timeUtc.push_back(3.);
   filter->SetTimeUTC(timeUtc);
   filter->SetPRF(50);
   filter->SetUseFastCalibrationMethod( false );

@@ -111,8 +111,8 @@ public:
   SizeType GetImageSize() const { return m_ImageSize; };
   void SetUseFastCalibrationMethod( bool b ) { m_UseFastCalibrationMethod = b; };
   bool GetUseFastCalibrationMethod() const { return m_UseFastCalibrationMethod; };
-  void SetTimeUTC( LIntVectorType vect ) { m_TimeUTC = vect; };
-  LIntVectorType GetTimeUTC() const { return m_TimeUTC; };
+  void SetTimeUTC( DoubleVectorType vect ) { m_TimeUTC = vect; };
+  DoubleVectorType GetTimeUTC() const { return m_TimeUTC; };
   void SetPRF( double val ) { m_PRF = val; m_InvPRF = 1./m_PRF; };
   double GetPRF() const { return m_PRF; };
   double GetInvPRF() const { return m_InvPRF; };
@@ -146,8 +146,8 @@ private:
    *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   bool m_UseFastCalibrationMethod;
-  /** TimeUTC for each noise coefficient acquisition (in second). */
-  LIntVectorType m_TimeUTC;
+  /** TimeUTC for each noise coefficient acquisition (in Julian day). */
+  DoubleVectorType m_TimeUTC;
   /** Pulse Repetition Frequency */
   double m_PRF;
   /** Inverse Pulse Repetition Frequency */

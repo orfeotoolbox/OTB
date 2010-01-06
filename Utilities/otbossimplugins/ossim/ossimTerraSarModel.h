@@ -25,6 +25,7 @@
 
 #include <otb/CivilDateTime.h>
 #include <otb/Noise.h>
+#include <otb/IncidenceAngles.h>
 
 // Forward class declarations outside of namespace ossimplugins.
 class ossimXmlDocument;
@@ -148,6 +149,15 @@ namespace ossimplugins
                         const ossimTerraSarProductDoc& tsDoc);
 
       /**
+       * @brief Method to initialize InfoIncidenceAngle parameters from
+       * TerraSAR product xml file.
+       * @param xdoc Opened product xml file.
+       * @return true on success, false on error.
+       */
+      bool initIncidenceAngles(
+		     const ossimXmlDocument* xdoc, const ossimTerraSarProductDoc& tsDoc);
+
+      /**
        * @brief Method to initialize ImageNoise parameters from
        * TerraSAR product xml file.
        * @param xdoc Opened product xml file.
@@ -233,6 +243,11 @@ namespace ossimplugins
        * @brief Noise (Noise node).
        */
       Noise *_noise;
+      
+      /**
+       * @brief IncidenceAngle (SceneInfo node)
+       */
+      IncidenceAngles *_incidenceAngles;
       
       /**
        * @brief CalFactor (Calibration node).

@@ -22,6 +22,8 @@
 #include <otb/RefPoint.h>
 #include <otb/Noise.h>
 #include <otb/ImageNoise.h>
+#include <otb/IncidenceAngles.h>
+#include <otb/InfoIncidenceAngle.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGpt.h>
@@ -396,7 +398,7 @@ bool ossimplugins::ossimTerraSarProductDoc::initSensorParams(
                else
                {
                   //---
-                  // COSAR Files are stored starting with early azimuth,
+                  // COSAR Files are stored ing with early azimuth,
                   // near range
                   //---
                   sp->set_col_direction(orbitDirectionSign);
@@ -1063,6 +1065,143 @@ bool ossimplugins::ossimTerraSarProductDoc::getRadarFrequency(
    ossimString path =
       "/level1Product/instrument/radarParameters/centerFrequency";
    return ossim::getPath(path, xdoc, s);
+}
+/*bool ossimplugins::ossimTerraSarProductDoc::getCenterIncidenceAngle(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/level1Product/productInfo/sceneInfo/sceneCenterCoord/incidenceAngle";
+   return ossim::getPath(path, xdoc, s);
+}
+bool ossimplugins::ossimTerraSarProductDoc::getCornerIncidenceAngles(
+    const ossimXmlDocument* xdoc, std::vector<ossimString>& s) const
+{
+  bool result = true;
+  ossim_uint32 refRow = 0;
+  ossim_uint32 refColumn = 0;
+  double incidenceAngle = 0.;
+  ossimString stmp;
+  ossimString path = "/level1Product/productInfo/sceneInfo/sceneCornerCoord";
+  std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+  xdoc->findNodes(path, xnodes);
+  if (( xnodes.size() ) && (xnodes.size() == 4))
+  {
+    for (ossim_uint32 i = 0; i < xnodes.size(); ++i)
+    {
+      if (xnodes[i].valid())
+      {
+	result = ossim::findFirstNode(ossimString("refRow"), xnodes[i], stmp);
+	refRow = stmp.toUInt32();
+	result = ossim::findFirstNode(ossimString("refColumn"), xnodes[i], stmp);
+	refColumn = stmp.toUInt32();
+	result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[i], stmp);
+	// values in vector are indexed with this order
+	//   0 -> lower left
+	//   1 -> upper left
+	//   2 -> upper right
+	//   3 -> lower right
+	
+	if (refRow == 1)
+	{
+	  if (refColumn == 1)
+	  {
+	    s[0] = stmp;
+	  }
+	  else
+	  {
+	    s[3] = stmp;
+	  }
+	}
+	else
+	{
+	  if (refColumn == 1)
+	  {
+	    s[1] = stmp;
+	  }
+	  else
+	  {
+	    s[2] = stmp;
+	  }
+	}
+      }
+    }
+  }
+  else
+  {
+    result = false;
+  }
+  
+  return result;
+}*/
+bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
+    const ossimXmlDocument* xdoc, ossimplugins::IncidenceAngles* iangles) const
+{
+  static const char MODULE[] =
+      "ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles";
+  if (traceDebug())
+  {
+    ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+  }
+
+  bool result = true;
+
+  if ( xdoc && iangles )
+  {
+    ossimString stmp;
+
+    ossimString path = "/level1Product/productInfo/sceneInfo/sceneCenterCoord";
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xdoc->findNodes(path, xnodes);
+	
+    if ( (xnodes.size() == 1) && (xnodes[0].valid()) )
+    {
+      InfoIncidenceAngle iaa;
+      
+      result = ossim::findFirstNode(ossimString("refRow"), xnodes[0], stmp);
+      iaa.set_refRow( stmp.toUInt32() );
+      result = ossim::findFirstNode(ossimString("refColumn"), xnodes[0], stmp);
+      iaa.set_refColumn( stmp.toUInt32() );
+      result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes[0], stmp);
+      iaa.set_incidenceAngle( stmp.toDouble() );
+	
+      iangles->set_centerInfoIncidenceAngle(iaa);
+      
+      ossimString path2 = "/level1Product/productInfo/sceneInfo/sceneCornerCoord";
+      std::vector<ossimRefPtr<ossimXmlNode> > xnodes2;
+      
+      xdoc->findNodes(path2, xnodes2);
+      if ( xnodes2.size() )
+      {
+	std::vector<InfoIncidenceAngle> tabIaa;
+	
+	for (ossim_uint32 i = 0; i < xnodes2.size(); ++i)
+	{
+	  if (xnodes2[i].valid())
+	  {
+	    InfoIncidenceAngle iaa2;
+	    
+	    result = ossim::findFirstNode(ossimString("refRow"), xnodes2[i], stmp);
+	    iaa2.set_refRow( stmp.toUInt32() );
+	    result = ossim::findFirstNode(ossimString("refColumn"), xnodes2[i], stmp);
+	    iaa2.set_refColumn( stmp.toUInt32() );
+	    result = ossim::findFirstNode(ossimString("incidenceAngle"), xnodes2[i], stmp);
+	    iaa2.set_incidenceAngle( stmp.toDouble() );
+
+	    tabIaa.push_back(iaa2);
+	  }
+	}
+	
+	iangles->set_cornersInfoIncidenceAngle( tabIaa );
+	iangles->set_numberOfCornerIncidenceAngles( tabIaa.size() );	
+      }
+    }
+    else
+    {
+      result = false;
+    }
+    
+   return result;
+  }
 }
 bool ossimplugins::ossimTerraSarProductDoc::initNoise(
    const ossimXmlDocument* xdoc, ossimplugins::Noise* noise) const

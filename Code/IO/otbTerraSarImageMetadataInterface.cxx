@@ -398,7 +398,6 @@ TerraSarImageMetadataInterface::GetNoise( const MetaDataDictionaryType & dict ) 
   return noise;
 }
 
-
 unsigned int
 TerraSarImageMetadataInterface::GetNumberOfNoiseRecords( const MetaDataDictionaryType & dict ) const
 {
@@ -553,7 +552,6 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList( const MetaDataDictionaryTyp
   return timeList;
 }
 
-
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList( const MetaDataDictionaryType & dict ) const
 {
@@ -585,8 +583,6 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList( const MetaDataDict
 
   return maxList;
 }
-
-
 
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList( const MetaDataDictionaryType & dict ) const
@@ -654,7 +650,6 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList( const MetaDataDictio
   return refPointList;
 }
 
-
 double
 TerraSarImageMetadataInterface::GetRadarFrequency( const MetaDataDictionaryType & dict ) const
 {
@@ -678,5 +673,226 @@ TerraSarImageMetadataInterface::GetRadarFrequency( const MetaDataDictionaryType 
 
   return freq;
 }
+
+
+ossimplugins::IncidenceAngles*
+TerraSarImageMetadataInterface::GetIncidenceAngles( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+    itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  ossimplugins::IncidenceAngles* incidenceAngles = new ossimplugins::IncidenceAngles();
+  incidenceAngles->loadState( kwl, "");
+  
+  return incidenceAngles;
+}
+
+unsigned int
+TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "incidenceAngles.numberOfCornerIncidenceAngles";
+  ossimString nbCornerAngles = kwl.find(key.c_str());
+
+
+  delete ia;
+
+  return static_cast<unsigned int>(nbCornerAngles.toInt());
+}
+
+double
+TerraSarImageMetadataInterface::GetMeanIncidenceAngles( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+
+  ImageKeywordlistType imageKeywordlist;
+
+  double sum = 0.;
+  
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  itk::OStringStream oss;
+
+  std::string key = "incidenceAngles.centerInfoIncidenceAngle.infoIncidenceAngle.incidenceAngle";
+  ossimString centerIncidenceAngle = kwl.find(key.c_str());
+  
+  sum += centerIncidenceAngle.toDouble();
+  
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  for(unsigned int i=0; i<nbAngles; i++)
+  {
+    oss.str("");
+    oss << "incidenceAngles.cornersInfoIncidenceAngle[" << i << "].infoIncidenceAngle.incidenceAngle";
+    ossimString tempVal = kwl.find(oss.str().c_str());
+    
+    sum += tempVal.toDouble();
+  }
+  
+  delete ia;
+  
+  return (sum / (nbAngles + 1));
+}
+
+double
+TerraSarImageMetadataInterface::GetCenterIncidenceAngle( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "incidenceAngles.centerInfoIncidenceAngle.infoIncidenceAngle.incidenceAngle";
+  ossimString tempVal = kwl.find(key.c_str());
+  
+  delete ia;
+
+  return tempVal.toDouble();
+}
+    
+TerraSarImageMetadataInterface::IndexType
+TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+  
+  TerraSarImageMetadataInterface::IndexType it;
+  
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key = "incidenceAngles.centerInfoIncidenceAngle.infoIncidenceAngle.refRow";
+  ossimString tempVal = kwl.find(key.c_str());
+
+  it[0] = tempVal.toInt();
+  
+  key = "incidenceAngles.centerInfoIncidenceAngle.infoIncidenceAngle.refColumn";
+  tempVal = kwl.find(key.c_str());
+
+  it[1] = tempVal.toInt();
+  
+  delete ia;
+
+  return it;
+}
+
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetCornersIncidenceAngles( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+
+  ImageKeywordlistType imageKeywordlist;
+  
+  TerraSarImageMetadataInterface::DoubleVectorType dv;
+  
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  
+  itk::OStringStream oss;
+  
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  for(unsigned int i=0; i<nbAngles; i++)
+  {
+    oss.str("");
+    oss << "incidenceAngles.cornersInfoIncidenceAngle[" << i << "].infoIncidenceAngle.incidenceAngle";
+    ossimString tempVal = kwl.find(oss.str().c_str());
+
+    dv.push_back(tempVal.toDouble());
+  }
+  
+  delete ia;
+  
+  return dv;
+}
+   
+TerraSarImageMetadataInterface::IndexVectorType
+TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex( const MetaDataDictionaryType & dict ) const
+{
+  ossimplugins::IncidenceAngles * ia = this->GetIncidenceAngles( dict );
+
+  ImageKeywordlistType imageKeywordlist;
+  
+  TerraSarImageMetadataInterface::IndexVectorType iv;
+  
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  
+  itk::OStringStream oss;
+  itk::OStringStream oss2;
+  
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(dict);
+  for(unsigned int i=0; i<nbAngles; i++)
+  {
+    TerraSarImageMetadataInterface::IndexType it;
+
+    oss.str("");
+    oss << "incidenceAngles.cornersInfoIncidenceAngle[" << i << "].infoIncidenceAngle.refRow";
+    ossimString tempVal = kwl.find(oss.str().c_str());
+
+    it[0] = tempVal.toInt();
+  
+    oss2.str("");
+    oss2 << "incidenceAngles.cornersInfoIncidenceAngle[" << i << "].infoIncidenceAngle.refColumn";
+    tempVal = kwl.find(oss2.str().c_str());
+
+    it[1] = tempVal.toInt();
+  
+    iv.push_back(it);
+  }
+  
+  delete ia;
+  
+  return iv;
+  
+}
+
 
 } // end namespace otb

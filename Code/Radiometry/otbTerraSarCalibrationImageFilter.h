@@ -26,6 +26,7 @@
 #include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "otbTerraSarFunctors.h"
 #include "itkMetaDataDictionary.h"
+//#include "itkUnaryFunctorImageFilter.h"
 //#include "itkConstNeighborhoodIterator.h"
 #include "otbMath.h"
 
@@ -77,7 +78,7 @@ public:
   typedef itk::MetaDataDictionary                       MetaDataDictionaryType;
   typedef typename FunctorType::DoubleVectorType        DoubleVectorType;
   typedef typename FunctorType::DoubleVectorVectorType  DoubleVectorVectorType;
-  typedef typename FunctorType::LIntVectorType          LIntVectorType;
+//  typedef typename FunctorType::LIntVectorType          LIntVectorType;
 
   /** Accessors */
   /** Calibration Factor */
@@ -106,9 +107,9 @@ public:
    *  of the pixel in the image. */
   void SetUseFastCalibrationMethod( bool b );
   bool GetUseFastCalibrationMethod() const;
-  /** TimeUTC for each noise coefficient acquisition (in second). */
-  void SetTimeUTC( LIntVectorType vect );
-  LIntVectorType GetTimeUTC() const;
+  /** TimeUTC for each noise coefficient acquisition (in Julian day). */
+  void SetTimeUTC( DoubleVectorType vect );
+  DoubleVectorType GetTimeUTC() const;
   /** Pulse Repetition Frequency */
   void SetPRF( double val );
   double GetPRF() const;
