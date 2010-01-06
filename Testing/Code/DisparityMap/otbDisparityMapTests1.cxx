@@ -38,6 +38,4 @@ void RegisterTests()
   REGISTER_TEST(otbPointSetWithTransformToDeformationFieldGeneratorNew);
   REGISTER_TEST(otbNCCRegistrationFilterNew);
   REGISTER_TEST(otbNCCRegistrationFilter);
-  REGISTER_TEST(otbMIRegistrationFilterNew);
-  REGISTER_TEST(otbMIRegistrationFilter);
 }

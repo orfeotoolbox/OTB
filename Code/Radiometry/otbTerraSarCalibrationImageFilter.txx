@@ -54,7 +54,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
        }
       
       if( this->GetFunctor().GetTimeUTC().size() != this->GetFunctor().GetNoisePolynomialCoefficientsList().size() )
-       itkExceptionMacro(<<"Number of Time UTC and number of noise polygonls mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
+       itkExceptionMacro(<<"Number of Time UTC and number of noise polynomials mismatch."<<this->GetFunctor().GetTimeUTC().size()<<"  "<<this->GetFunctor().GetNoisePolynomialCoefficientsList().size());
 
       if(this->GetFunctor().GetPRF() == 0.)
        itkExceptionMacro(<<"PRF can't be null.");

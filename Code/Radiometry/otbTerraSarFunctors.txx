@@ -182,16 +182,15 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   double diffCurRange = this->ComputeCurrentNoise( static_cast<unsigned int>(index[0]) ) - this->GetNoiseRangeValidityRef();
   DoubleVectorType curCoeff = this->ComputeCurrentCoeffs( static_cast<unsigned int>(index[1]) );
   
-  double modulus = std::abs(inPix);
+  double modulus = vcl_abs(inPix);
   double outRadBr = static_cast<double>(this->GetBrightness()( modulus ));
-  
+
   double NEBN = 0.;
   for(unsigned int i=0; i<curCoeff.size(); i++)
     {
       NEBN += curCoeff[i]*vcl_pow( diffCurRange, static_cast<double>(i));
     }
   double sigma = ( outRadBr - this->GetCalFactor()*NEBN ) * this->GetSinLocalIncidentAngle();
-  
   double phase = std::arg(inPix);
   
   std::complex<TOutput> out(sigma*vcl_cos(phase), sigma*vcl_sin(phase));
