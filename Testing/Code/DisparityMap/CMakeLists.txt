@@ -81,21 +81,6 @@ ADD_TEST(dmTvNCCRegistrationFilter ${DISPARITYMAP_TESTS1}
 		${TEMP}/dmNCCRegistrationFilterOutput.tif
 		5 1.0 2)
 
-# -------            otb::MIRegistrationFilter   ----------
-
-ADD_TEST(dmTuMIRegistrationFilterNew ${DISPARITYMAP_TESTS1}
-	 otbMIRegistrationFilterNew)
-
-ADD_TEST(dmTvMIRegistrationFilter ${DISPARITYMAP_TESTS1}
---compare-image ${EPSILON_10}
-		${BASELINE}/dmMIRegistrationFilterOutput.tif
-		${TEMP}/dmMIRegistrationFilterOutput.tif
-		otbMIRegistrationFilter
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
-		${TEMP}/dmMIRegistrationFilterOutput.tif
-		5 1.0 2)
-
 # -------  otb::NNearestPointsLinearInterpolateDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuNNearestPointsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS1}
@@ -339,8 +324,6 @@ otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
 otbNCCRegistrationFilterNew.cxx
 otbNCCRegistrationFilter.cxx
-otbMIRegistrationFilterNew.cxx
-otbMIRegistrationFilter.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGenerator.cxx
