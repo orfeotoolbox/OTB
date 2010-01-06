@@ -614,6 +614,9 @@ ELSE(OTB_USE_EXTERNAL_GDAL)
 ENDIF(OTB_USE_EXTERNAL_GDAL)
 
 #Experimental
+OPTION(OTB_USE_GETTEXT "Get Text Library." ON)
+
+IF(OTB_USE_GETTEXT)
 FIND_PACKAGE(Gettext)
 IF(GETTEXT_FOUND)
   FIND_LIBRARY(GETTEXT_LIBRARY gettextlib DOC "GetText library")
@@ -641,6 +644,7 @@ ELSE(GETTEXT_FOUND)
   MESSAGE(STATUS
               "Gettext not found, internationalization will not be available")
 ENDIF(GETTEXT_FOUND)
+ENDIF(OTB_USE_GETTEXT)
 
 #-------------------------------
 # End connections whith external libraries
