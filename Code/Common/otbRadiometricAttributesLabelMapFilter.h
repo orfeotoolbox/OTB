@@ -45,6 +45,10 @@ namespace otb
  * StatisticsAttributesLabelMapFilter to the following features: GEMI,
  * NDVI, IR, IC, IB, NDWI2, Intensity and original B, G, R and NIR channels.
  *
+ * The feature name is constructed as:
+ * 'STATS' + '::' + RadiometricFeatureName + '::' + StatisticName
+ * For example, accessing the mean of NDVI on a LabelObject with the attribute: 'STATS::Ndvi::Mean'    
+ *
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.
  *
