@@ -10,6 +10,8 @@ TARGET_LINK_LIBRARIES(ShapeAttributeComputation OTBCommon OTBIO ${OTB_IO_UTILITI
 ADD_EXECUTABLE(KeepNObjects KeepNObjects.cxx )
 TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
+ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample otbRadiometricAttributesLabelMapFilterExample.cxx )
+TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -46,7 +48,9 @@ ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
 	${INPUTDATA}/MSLabeledOutput.tif
 	${TEMP}/OBIAShapeAttribute.txt
 )
-      
+    
+#need to add the test of radiometric labelmap filter
+  
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbOBIAExamplesTests otbOBIAExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbOBIAExamplesTests  ITKAlgorithms ITKStatistics ITKNumerics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion OTBTesting)
