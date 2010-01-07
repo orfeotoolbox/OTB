@@ -29,6 +29,7 @@
 #include "itkVariableSizeMatrix.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include <iomanip>
 
 namespace otb
 {
@@ -84,10 +85,13 @@ public:
     double contribution = 0.;
     TOutput outPixel;
     outPixel.SetSize(it.GetCenterPixel().Size());
+    itk::OStringStream oss;
+    oss << std::fixed << std::setprecision(3);
 
     // Loop over each component
     for (unsigned int j=0; j<outPixel.GetSize(); ++j)
     {
+      oss.str("");
       contribution = 0;
       // Load the current channel ponderation value matrix
       WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
@@ -114,7 +118,11 @@ public:
         contribution += static_cast<double>( tempPix[j] )*idVal;
 
       }
-      outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
+      double temp = static_cast<double>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
+      oss<<temp;
+      outPixel[j] = static_cast<RealValueType>( atof(oss.str().c_str()) );
+      
+      //outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j];
     }
     return outPixel;
   }

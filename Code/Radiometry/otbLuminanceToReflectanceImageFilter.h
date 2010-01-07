@@ -31,7 +31,7 @@
 #include "otbMacro.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
-
+#include <iomanip>
 
 namespace otb
 {
@@ -87,7 +87,14 @@ public:
            * static_cast<double>(CONST_PI)
            * m_IlluminationCorrectionCoefficient
            / m_SolarIllumination;
-    outPixel = static_cast<TOutput>(temp);
+    
+    // Set a 1e-3 precision
+    itk::OStringStream oss;
+    oss.str("");
+    oss << std::fixed << std::setprecision(3);
+    oss<<temp;
+    outPixel = static_cast<TOutput>( atof(oss.str().c_str()) );
+  
     return outPixel;
   }
 

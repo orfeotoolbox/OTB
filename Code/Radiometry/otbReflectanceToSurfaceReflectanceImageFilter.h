@@ -29,6 +29,8 @@
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include "itkMetaDataDictionary.h"
 
+#include <iomanip>
+
 namespace otb
 {
 namespace Functor
@@ -94,8 +96,13 @@ public:
     double temp, temp2;
     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
-    outPixel = static_cast<TOutput>(temp2);
-
+ 
+    // Set a 1e-3 precision
+    itk::OStringStream oss;
+    oss.str("");
+    oss << std::fixed << std::setprecision(3);
+    oss<<temp2;
+    outPixel = static_cast<TOutput>( atof(oss.str().c_str()) );
 
     return outPixel;
   }
