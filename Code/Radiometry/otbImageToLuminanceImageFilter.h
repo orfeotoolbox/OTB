@@ -31,7 +31,8 @@
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 
-#include <iomanip>
+
+#include <fstream>
 
 namespace otb
 {
@@ -80,15 +81,7 @@ public:
     TOutput outPixel;
     double temp;
     temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
-    
-    // Set a 1e-3 precision
-    itk::OStringStream oss;
-    oss.str("");
-    oss << std::fixed << std::setprecision(3);
-    oss<<temp;
-    outPixel = static_cast<TOutput>( atof(oss.str().c_str()) );
-    
-
+    outPixel = static_cast<TOutput>(temp);
     return outPixel;
   }
 
