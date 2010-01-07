@@ -46,9 +46,8 @@ int main(int argc, char * argv[])
   
   if( argc != 3)
     {
-    std::cerr << "usage: " << argv[0] << " input foreground" << std::endl;
-    // std::cerr << "  : " << std::endl;
-    exit(1);
+    std::cerr << "usage: " << argv[0] << " input outputcentroidlist" << std::endl;
+    return EXIT_FAILURE;
     }
 
   // read the input image
@@ -85,7 +84,7 @@ int main(int argc, char * argv[])
   // the label objects. If the labels are not consecutive, the GetNthLabelObject() method must be
   // use instead of GetLabelObject(), or an iterator on the label
   // object container of the label map.
-    std::ofstream outfile(argv[2]);
+    std::ofstream outfile( argv[2] );
 
 
   LabelMapType::Pointer labelMap = shape->GetOutput();
@@ -95,10 +94,9 @@ int main(int argc, char * argv[])
     // in the label map.
     const LabelObjectType * labelObject = labelMap->GetLabelObject( label );
     outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t" << labelObject->GetCentroid() << std::endl;
-
     }
 
   outfile.close();
-  return 0;
+  return EXIT_SUCCESS;
 }
 
