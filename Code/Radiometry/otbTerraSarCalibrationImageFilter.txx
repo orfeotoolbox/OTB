@@ -33,6 +33,7 @@ template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter()
 {
+  m_ParamLoaded = false;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -42,8 +43,10 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 {
   Superclass::BeforeThreadedGenerateData();
 
+  if(m_ParamLoaded)
+    return;
   this->SetImageSize( this->GetInput()->GetLargestPossibleRegion().GetSize() );
-
+  
   // Load metadata
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
   bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
@@ -162,7 +165,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     if (mdIsAvailable)
     {
       double mean = lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
-      this->SetLocalIncidentAngle(mean);
       this->SetLocalIncidentAngle(mean);
     }
     else

@@ -136,7 +136,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-
+bool m_ParamLoaded;
 };
 
 

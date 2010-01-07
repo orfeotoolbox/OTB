@@ -28,8 +28,8 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
-  bool useMetadata = true;
-  if(atoi(argv[3]) != 1)
+  bool useMetadata = false;
+  if(atoi(argv[3]) != 0)
     useMetadata = true;
 
   typedef otb::Image<double, 2>                                    ImageType;
