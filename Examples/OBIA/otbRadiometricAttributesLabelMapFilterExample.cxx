@@ -147,9 +147,9 @@ int main(int argc, char * argv[])
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
   radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
-  //radiometricLabelMapFilter->SetReducedAttributeSet(false);
-  radiometricLabelMapFilter->SetRedChannelIndex(1);
-  radiometricLabelMapFilter->SetNIRChannelIndex(2);
+ 
+  radiometricLabelMapFilter->SetRedChannelIndex(2);
+  radiometricLabelMapFilter->SetNIRChannelIndex(3);
   radiometricLabelMapFilter->Update();
 
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();

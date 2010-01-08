@@ -20,11 +20,11 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorData.h"
 #include "otbVectorDataProjectionFilter.h"
-//#include "otbVectorDataExtractROI.h"
+
 #include <fstream>
 #include <iostream>
 
-//#include "itkRGBAPixel.h"
+
 #include "otbImage.h"
 #include "otbLabelMapToVectorDataFilter.h"
 #include "otbAttributesMapLabelObject.h"
