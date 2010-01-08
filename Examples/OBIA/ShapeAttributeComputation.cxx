@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
   typedef itk::LabelImageToLabelMapFilter< ImageType, LabelMapType > ConverterType;
   ConverterType::Pointer converter = ConverterType::New();
   converter->SetInput( reader->GetOutput() );
-//  converter->SetForegroundValue( atoi(argv[2]) );
+  converter->SetBackgroundValue( itk::NumericTraits<LabelType>::min() );
 
   typedef itk::ShapeLabelMapFilter< LabelMapType > ShapeFilterType;
   ShapeFilterType::Pointer shape = ShapeFilterType::New();
