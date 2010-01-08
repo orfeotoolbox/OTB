@@ -48,6 +48,21 @@ ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
 	${INPUTDATA}/MSLabeledOutput.tif
 	${TEMP}/OBIAShapeAttribute.txt
 )
+
+ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
+	--compare-image ${TOL}	${BASELINE}/OBIARadiometricAttributes.tif
+	                        ${TEMP}/OBIARadiometricAttributes.tif
+	OBIARadiometricAttributesTest
+	${INPUTDATA}/qb_RoadExtract2.tif
+	${TEMP}/OBIARadiometricAttributes.txt
+	STATS::Ndvi::Mean
+	0
+	0.3
+	16
+	16
+	200
+	1.0
+)
     
 #need to add the test of radiometric labelmap filter
   

@@ -23,7 +23,29 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the basic approch to perform 
+//  This example shows the basic approch to perform object based analysis on a image.
+//  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
+//  Then each segmented region is converted to a Map of labeled objects.
+//  After the \doxygen{otb}{RadiometricAttributesLabelMapFilter}  computes computes 
+//  radiometric attributes for each object.
+//  Images are supposed to be standard 4-bands image (B,G,R,NIR). The
+//  index of each channel can be set via the Set***ChannelIndex()
+//  accessors.
+//  
+//  This filter internally applies the
+//  StatisticsAttributesLabelMapFilter to the following features: 
+  //  \begin{itemize}
+  //  \item GEMI
+  //  \item NDVI
+  //  \item IR
+  //  \item IC
+  //  \item IB
+  //  \item NDWI2
+  //  \item Intensity
+  //  \item and original B, G, R and NIR channels
+  //  \end{itemize},
+//  Here we use the  \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
+//   
 //
 //  Software Guide : EndLatex
 
@@ -87,19 +109,26 @@ int main(int argc, char * argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
-//std::cout << reffname << std::endl; 
-  //reader->Update();
-//std::cout << reffname << std::endl; 
+
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
   
   //Segment the ref image using Mean Shift
+  // Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftImageFilter<ImageType,ImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
+  // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the images
+  // types.
+  //
+  //  Software Guide : EndLatex
   filter->SetInput(reader->GetOutput());	
 
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
@@ -118,9 +147,9 @@ int main(int argc, char * argv[])
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
   radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
-  //radiometricLabelMapFilter->SetReducedAttributeSet(false);
-  radiometricLabelMapFilter->SetRedChannelIndex(1);
-  radiometricLabelMapFilter->SetNIRChannelIndex(2);
+ 
+  radiometricLabelMapFilter->SetRedChannelIndex(2);
+  radiometricLabelMapFilter->SetNIRChannelIndex(3);
   radiometricLabelMapFilter->Update();
 
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();

@@ -31,6 +31,9 @@
 //  Even though specific reader/writer for Shapefile and the Google KML
 //  are available in OTB, we designed a generic approach for the IO of
 //  this kind of data.
+
+//  The reader/writer for VectorData in OTB is able to access to a variety of 
+//  vector file formats (all OGR supported formats) 
 //
 //  In section \ref{sec:VectorDataProjection}, you will find more information on
 //  how projections work for the vector data and how you can export
@@ -260,4 +263,16 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
+
+//  Software Guide : BeginLatex
+  //
+//  This example can  convert an ESRI Shapefile to 
+//  a MapInfo File but you can also access with the same OTB source code 
+//  to a PostgreSQL datasource,using a connection string as : 
+//  PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"    
+//  Starting with GDAL 1.6.0, the set of tables to be scanned can be overridden 
+//  by specifying tables=[schema.]table[(geom_column_name)]. 
+//  Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
 }
