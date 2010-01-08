@@ -44,7 +44,7 @@
   //  \item Intensity
   //  \item and original B, G, R and NIR channels
   //  \end{itemize},
-//  
+//  Here we use the  \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
 //   
 //
 //  Software Guide : EndLatex
@@ -109,9 +109,7 @@ int main(int argc, char * argv[])
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
-//std::cout << reffname << std::endl; 
-  //reader->Update();
-//std::cout << reffname << std::endl; 
+
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
   
@@ -122,6 +120,13 @@ int main(int argc, char * argv[])
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
+
+  //  Software Guide : BeginLatex
+  //
+  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the images
+  // types and the NDVI functor as template parameters.
+  //
+  //  Software Guide : EndLatex
   filter->SetInput(reader->GetOutput());	
 
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
