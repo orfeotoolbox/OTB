@@ -114,17 +114,19 @@ int main(int argc, char * argv[])
   vreader->SetFileName(reffname);
   
   //Segment the ref image using Mean Shift
+  // Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftImageFilter<ImageType,ImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
   filter->SetMinimumRegionSize(minRegionSize);
   filter->SetScale(scale);
-
+  // Software Guide : EndCodeSnippet
+  
   //  Software Guide : BeginLatex
   //
   // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the images
-  // types and the NDVI functor as template parameters.
+  // types.
   //
   //  Software Guide : EndLatex
   filter->SetInput(reader->GetOutput());	
