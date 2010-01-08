@@ -23,7 +23,29 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the basic approch to perform 
+//  This example shows the basic approch to perform object based analysis on a image.
+//  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
+//  Then each segmented region is converted to a Map of labeled objects.
+//  After the \doxygen{otb}{RadiometricAttributesLabelMapFilter}  computes computes 
+//  radiometric attributes for each object.
+//  Images are supposed to be standard 4-bands image (B,G,R,NIR). The
+//  index of each channel can be set via the Set***ChannelIndex()
+//  accessors.
+//  
+//  This filter internally applies the
+//  StatisticsAttributesLabelMapFilter to the following features: 
+  //  \begin{itemize}
+  //  \item GEMI
+  //  \item NDVI
+  //  \item IR
+  //  \item IC
+  //  \item IB
+  //  \item NDWI2
+  //  \item Intensity
+  //  \item and original B, G, R and NIR channels
+  //  \end{itemize},
+//  
+//   
 //
 //  Software Guide : EndLatex
 
