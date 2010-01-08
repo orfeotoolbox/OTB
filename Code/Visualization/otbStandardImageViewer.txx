@@ -121,7 +121,7 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   typename VectorDataExtractROIType::Pointer vdextract;
 
   // Colors
-  typename HistogramCurveType::ColorType red,green,blue;
+  typename HistogramCurveType::ColorType red,green,blue,gray;
   red.Fill(0);
   red[0]=1.;
   red[3]=0.5;
@@ -134,6 +134,8 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   blue[2]=1.;
   blue[3]=0.5;
 
+  gray.Fill(0.6);
+  
 
   // If there is a VectorData
   if(m_VectorData.IsNotNull())
@@ -224,26 +226,44 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_RenderingModel->Update();
 
   // adding histograms rendering
-  typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-//   rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetRedChannelIndex()));
-  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
-  rhistogram->SetHistogramColor(red);
-  rhistogram->SetLabelColor(red);
+  unsigned int listSize = m_ImageLayer->GetHistogramList()->Size();
 
-  typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-//   ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetGreenChannelIndex()));
-    ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
-  ghistogram->SetHistogramColor(green);
-  ghistogram->SetLabelColor(green);
+  if(listSize>0)
+    {
+      if(listSize==1)
+	{
+	  typename HistogramCurveType::Pointer grayhistogram = HistogramCurveType::New();
+	  grayhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+	  grayhistogram->SetHistogramColor(gray);
+	  grayhistogram->SetLabelColor(gray);
+	  m_CurveWidget->AddCurve(grayhistogram);
+	}
+      else
+	{
+	  typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+	  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+	  rhistogram->SetHistogramColor(red);
+	  rhistogram->SetLabelColor(red);
+	  m_CurveWidget->AddCurve(rhistogram);
+	}
+      if(listSize>1)
+	{
+	  typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+	  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
+	  ghistogram->SetHistogramColor(green);
+	  ghistogram->SetLabelColor(green);
+	  m_CurveWidget->AddCurve(ghistogram);
+	}	 
+      if(listSize>2)
+	{
+	  typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+	  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
+	  bhistogram->SetHistogramColor(blue);
+	  bhistogram->SetLabelColor(blue);
+	  m_CurveWidget->AddCurve(bhistogram);
+	}
+    }
 
-  typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-//   bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(m_RenderingFunction->GetPixelRepresentationFunction().GetBlueChannelIndex()));
-  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
-  bhistogram->SetHistogramColor(blue);
-  bhistogram->SetLabelColor(blue);
-  m_CurveWidget->AddCurve(rhistogram);
-  m_CurveWidget->AddCurve(ghistogram);
-  m_CurveWidget->AddCurve(bhistogram);
   m_CurveWidget->SetXAxisLabel("Pixels");
   m_CurveWidget->SetYAxisLabel("Frequency");
 }
