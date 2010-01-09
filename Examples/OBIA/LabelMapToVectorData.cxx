@@ -42,7 +42,6 @@
 #include <fstream>
 #include <iostream>
 
-
 #include "otbImage.h"
 #include "otbLabelMapToVectorDataFilter.h"
 #include "otbAttributesMapLabelObject.h"
