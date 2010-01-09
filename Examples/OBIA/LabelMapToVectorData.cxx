@@ -70,13 +70,13 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
     const unsigned int Dimension                 = 2;
-    typedef unsigned short                         LabelType;
-    typedef otb::Image<LabelType,Dimension>        LabeledImageType;
-    typedef otb::VectorData<double,2> VectorDataType;
+    typedef unsigned short                       LabelType;
+    typedef otb::Image<LabelType,Dimension>      LabeledImageType;
+    typedef otb::VectorData<double,2> 		 VectorDataType;
   // Software Guide : EndCodeSnippet
 
     // We instantiate reader and writer types
-    typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+    typedef otb::ImageFileReader<LabeledImageType>    LabeledReaderType;
     typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
     // Label map typedef
@@ -88,12 +88,12 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-    typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-    typedef itk::LabelMap<LabelObjectType>                            LabelMapType;
-    typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
-    typedef otb::Polygon<double>                                   PolygonType;
+    typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> 		   LabelObjectType;
+    typedef itk::LabelMap<LabelObjectType>                            		   LabelMapType;
+    typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>  	   LabelMapFilterType;
+    typedef otb::Polygon<double>                                   		   PolygonType;
     typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-    
+    // Software Guide : EndCodeSnippet
     typedef VectorDataType::DataNodeType DataNodeType;
     
     typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> VectorDataFilterType;
@@ -150,7 +150,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
       writer->SetInput( MyFilter->GetOutput());
-  // Software Guide : BeginCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
