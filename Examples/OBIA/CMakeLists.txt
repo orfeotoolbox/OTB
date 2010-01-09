@@ -13,6 +13,9 @@ TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_
 ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample otbRadiometricAttributesLabelMapFilterExample.cxx )
 TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
+ADD_EXECUTABLE(LabelMapToVectorData LabelMapToVectorData.cxx )
+TARGET_LINK_LIBRARIES(LabelMapToVectorData OTBCommon OTBIO OTBBasicFilters ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/OBIA)
@@ -64,6 +67,11 @@ ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	1.0
 )
     
+ADD_TEST(trTeLabelMapToVectorData ${EXE_TESTS}
+	LabelMapToVectorDataTest
+        ${INPUTDATA}/rcc8_mire1.png
+        ${TEMP}/rcc8_mire2_vectorizer.shp
+)
 #need to add the test of radiometric labelmap filter
   
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
