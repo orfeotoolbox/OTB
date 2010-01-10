@@ -106,6 +106,7 @@ int main(int argc, char * argv[])
   //  Now the input image is set and a name is given to the output image.
   //
   //  Software Guide : EndLatex
+
      // Software Guide : BeginCodeSnippet
     lreader->SetFileName(infname);
     writer->SetFileName(outfname);
@@ -113,7 +114,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  Then, the 
+  //  Then, the input image is converted to a map of label objects.
   //  Here each whyte region connected regions are converted. So the background is define all zero pixels. 
   //  Software Guide : EndLatex
 

@@ -49,7 +49,7 @@
 //
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
+
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -112,8 +112,12 @@ int main(int argc, char * argv[])
 
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
+    //  Software Guide : BeginLatex
+  //
+  // Firstly, segment input image using Mean Shift algorithm.
+  //
+  //  Software Guide : EndLatex
   
-  //Segment the ref image using Mean Shift
   // Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftImageFilter<ImageType,ImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
@@ -150,19 +154,25 @@ int main(int argc, char * argv[])
   // compute radiometric value on each label object.
   //
   //  Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
   radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
- 
+  // Software Guide : EndCodeSnippet
+
   //  Software Guide : BeginLatex
   // 
   //  Then, we specify the red and the near infrared channels 
   // 
   //
   //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   radiometricLabelMapFilter->SetRedChannelIndex(2);
   radiometricLabelMapFilter->SetNIRChannelIndex(3);
   radiometricLabelMapFilter->Update();
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   // 
@@ -171,22 +181,28 @@ int main(int argc, char * argv[])
   // controls the thresholding of the input and \code{ReverseOrdering} make this filter to remove the 
   // object with an attribute value greater than \code{Lambda} instead.   
   // 
-  //
   //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();
   opening->SetInput(radiometricLabelMapFilter->GetOutput());
   opening->SetAttributeName(attr);
   opening->SetLambda(thresh);
   opening->SetReverseOrdering(lowerThan);
-  
+  // Software Guide : EndCodeSnippet
+
+
   //  Software Guide : BeginLatex
   // 
   //  Then, Label object selected are transform in a Label Image using the \doxygen{itk}{LabelMapToLabelImageFilter}  
   // 
-  //
   //  Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   LabelMapToLabeledImageFilterType::Pointer labelMap2LabeledImage = LabelMapToLabeledImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
+  // Software Guide : EndCodeSnippet
+
 
   // Software Guide : BeginLatex
   //
@@ -201,5 +217,6 @@ int main(int argc, char * argv[])
   writer->SetInput(labelMap2LabeledImage->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
+
   return EXIT_SUCCESS;
 }

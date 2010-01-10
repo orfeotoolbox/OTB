@@ -271,8 +271,9 @@ int main(int argc, char * argv[])
 //  to a PostgreSQL datasource,using a connection string as : 
 //  PG:"dbname='databasename' host='addr' port='5432' user='x' password='y'"    
 //  Starting with GDAL 1.6.0, the set of tables to be scanned can be overridden 
-//  by specifying tables=[schema.]table[(geom_column_name)]. 
+//  by specifying tables=schema.table. 
+
 //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
+
 }
