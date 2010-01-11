@@ -743,6 +743,13 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
       }
       result = false;
    }
+
+
+   // Load the base class.
+   if ( !_incidenceAngles)
+   {
+      _incidenceAngles = new IncidenceAngles();
+   }  
    if ( _incidenceAngles->loadState(kwl,prefix) == false )
    {
      if (traceDebug())

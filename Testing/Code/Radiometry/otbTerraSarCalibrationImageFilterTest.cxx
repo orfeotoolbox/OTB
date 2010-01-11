@@ -54,7 +54,6 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   
   if( !useMetadata )
   { 
-    std::cout<<"pas de meeeeeeeeeeeeeeetadata"<<std::endl;
     DoubleVectorType coefs;
     coefs.push_back(1.);
     coefs.push_back(0.5);
@@ -97,7 +96,6 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   }
   else
   {
-    std::cout<<"meeeeeeeeeeeeeeeeeeeeeeetadata"<<std::endl;
     // Generate an extract from the large input
     ImageType::RegionType region;
     ImageType::IndexType id;
@@ -109,7 +107,7 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
     extractor->SetExtractionRegion(region);
   
     extractor->SetInput(filter->GetOutput());
-    writer->SetInput(filter/*extractor*/->GetOutput());
+    writer->SetInput(extractor->GetOutput());
   }
   
   filter->SetUseFastCalibrationMethod( false );
