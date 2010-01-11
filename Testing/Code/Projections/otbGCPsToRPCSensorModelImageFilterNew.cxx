@@ -16,21 +16,19 @@
 
 =========================================================================*/
 
-// this file defines the otbProjectionsTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbMacro.h"
+#include "otbImage.h"
+#include "otbGCPsToRPCSensorModelImageFilter.h"
 
-
-#include "otbTestMain.h"
-
-void RegisterTests()
+int otbGCPsToRPCSensorModelImageFilterNew( int argc, char* argv[] )
 {
-  REGISTER_TEST(otbOrthoRectificationFilterNew);
-  REGISTER_TEST(otbOrthoRectificationFilter);
-  REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
-  REGISTER_TEST(otbOrthoRectificationMonoThreadFilter);
-  REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterNew);
-  REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterWithoutDEM);
+  typedef otb::Image<float, 2>     ImageType;
+  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPToSensorModelFilterType;
+  
+  // Instantiation
+  GCPToSensorModelFilterType::Pointer filter = GCPToSensorModelFilterType::New();
+
+  return EXIT_SUCCESS;
+
 }
+
