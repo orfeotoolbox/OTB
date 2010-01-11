@@ -18,7 +18,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {MSLabeledOutput.tif}
+//    INPUTS: {qb_RoadExtract2.tif}
 //    OUTPUTS: {OBIAShapeAttribute.txt}
 //  Software Guide : EndCommandLineArgs
 

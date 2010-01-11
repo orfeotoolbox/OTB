@@ -16,6 +16,13 @@
 
 =========================================================================*/
 
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {rcc8_mire1.png}
+//    OUTPUTS: {rcc8_mire2_vectorizer.shp}
+//  Software Guide : EndCommandLineArgs
+
+
 // Software Guide : BeginLatex
 //
 // \index{otb::LabelMapToVectorDataFilter}
