@@ -79,7 +79,7 @@ bool IncidenceAngles::saveState(ossimKeywordlist& kwl, const char* prefix) const
 
 bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
-   static const char MODULE[] = "IncidenceAngles::loadState";
+  static const char MODULE[] = "IncidenceAngles::loadState";
 
    bool result = true;
 
@@ -87,16 +87,16 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
    const char* lookup = 0;
    
    std::string pfx("");
-   std::string pfx2("");
    if (prefix)
    {
       pfx = prefix;
    }
    pfx += INCIDENCE_ANGLES;
-   pfx2 = pfx;
-   pfx2 += ".";
+   pfx += ".";
+ 
 
-   lookup = kwl.find(pfx2.c_str(), NUMBER_OF_CORNER_INCIDENCE_ANGLES);
+   lookup = kwl.find(pfx.c_str(), NUMBER_OF_CORNER_INCIDENCE_ANGLES);
+
    if (lookup)
    {
      s = lookup;
@@ -105,16 +105,16 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
    else
    {
      ossimNotify(ossimNotifyLevel_WARN)
-        << MODULE << " Keyword not found: " << NUMBER_OF_CORNER_INCIDENCE_ANGLES << " in "<<pfx2.c_str()<<" path.\n";
+        << MODULE << " Keyword not found: " << NUMBER_OF_CORNER_INCIDENCE_ANGLES << " in "<<pfx.c_str()<<" path.\n";
      result = false;
    }
    
-   std::string s1 = pfx + "." + CENTER_INCIDENCE_ANGLE;
+   std::string s1 = pfx + CENTER_INCIDENCE_ANGLE;
    
    result = _centerInfoIncidenceAngle.loadState(kwl, s1.c_str());
 
    _tabCornersInfoIncidenceAngle.clear();
-   std::string s2 = pfx + "." + CORNERS_INCIDENCE_ANGLE;
+   std::string s2 = pfx + CORNERS_INCIDENCE_ANGLE;
    for (unsigned int i = 0; i < _numberOfCornerIncidenceAngles; ++i)
    {
       std::string s3 = s2 + "[" + ossimString::toString(i) + "]";
@@ -127,8 +127,8 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
     ossimNotify(ossimNotifyLevel_WARN)
 	<< MODULE << " Keyword " << NUMBER_OF_CORNER_INCIDENCE_ANGLES << " is different with the number of ImageNoise nodes \n";
    }
-   
-   return result;
+
+  return result;
 }
 
 
