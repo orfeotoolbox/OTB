@@ -167,7 +167,7 @@ int main(int argc, char * argv[])
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
   //  Software Guide : EndLatex
-   // Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
   try
   {
     writer->Update();

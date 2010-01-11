@@ -26,7 +26,7 @@
 //  Software Guide : BeginLatex
 //
 //  This example shows the basic approach for the transformation of a
-//  segmenred (labeled) image into a LabelObjectMap and then back to
+//  segmented (labeled) image into a LabelObjectMap and then back to
 //  an image. For this matter we will need the following header files
 //  which contain the basic classes.
 //
@@ -54,35 +54,88 @@ int main(int argc, char * argv[])
     exit(1);
     }
 
+  //  Software Guide : BeginLatex
+  //
+  // The image types are defined using pixel types and
+  // dimension. The input image is defined as an \doxygen{otb}{Image}.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   const int dim = 2;
-
   typedef unsigned short PixelType;
-
   typedef otb::Image< PixelType, dim > ImageType;
-
+  // Software Guide : EndCodeSnippet
   typedef itk::LabelObject< PixelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType > LabelMapType;
 
+  //  Software Guide : BeginLatex
+  //
+  // The reader is instantiated and 
+  // the input image is set. 
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
 
+  // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  // Then the binary image is transform to a collection 
+  // of label objects. Arguments are:
+  // \begin{itemize}
+  // \item \code{FullyConnected}: Set whether the connected 
+  // components are defined strictly by face connectivity or by 
+  // face+edge+vertex connectivity. Default is FullyConnectedOff.  
+  // \item InputForegroundValue/OutputBackgroundValue specify the
+  // pixel value of input/output of the foreground/background.   
+  // the input image is set.
+  // \end{itemize} 
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef itk::BinaryImageToLabelMapFilter< ImageType, LabelMapType> I2LType;
   I2LType::Pointer i2l = I2LType::New();
   i2l->SetInput( reader->GetOutput() );
   i2l->SetFullyConnected( atoi(argv[5]) );
   i2l->SetInputForegroundValue( atoi(argv[6]) );
   i2l->SetOutputBackgroundValue( atoi(argv[7]) );
+  // Software Guide : EndCodeSnippet
 
+  //  Software Guide : BeginLatex
+  //
+  // Then the inverse process is .
+  // The \doxygen{itk}{LabelMapToLabelImageFilter} converts a 
+  // LabelMap to a labeled image. 
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   typedef itk::LabelMapToLabelImageFilter< LabelMapType, ImageType> L2IType;
   L2IType::Pointer l2i = L2IType::New();
   l2i->SetInput( i2l->GetOutput() );
+  // Software Guide : EndCodeSnippet
 
+  //  Software Guide : BeginLatex
+  //
+  //  The output can be passed to a writer.The invocation 
+  //  of the \code{Update()} method on the writer triggers the
+  //  execution of the pipeline.
+  //
+  //  Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
   typedef itk::ImageFileWriter< ImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput( l2i->GetOutput() );
   writer->SetFileName( argv[2] );
   writer->Update();
+  // Software Guide : EndCodeSnippet
 
   // Pretty image creation for the printing
   typedef otb::Image<unsigned char, dim>                                        OutputPrettyImageType;
