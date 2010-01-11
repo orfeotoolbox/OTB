@@ -27,7 +27,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM( int argc, char* argv[] )
     std::cerr<<"Usage: "<<argv[0]<<" infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz"<<std::endl;
     return EXIT_FAILURE;
     }
-  else if((argc-3)%5!=0)
+  else if((argc-3)%5 != 0)
     {
     std::cerr<<"Inconsistent GCPs description!"<<std::endl;
     return EXIT_FAILURE;
@@ -83,4 +83,3 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

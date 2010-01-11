@@ -184,8 +184,4 @@ private:
 #include "otbGCPsToRPCSensorModelImageFilter.txx"
 #endif
 
-
-
 #endif
-
-

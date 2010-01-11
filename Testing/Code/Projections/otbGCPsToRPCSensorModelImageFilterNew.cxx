@@ -22,7 +22,7 @@
 
 int otbGCPsToRPCSensorModelImageFilterNew( int argc, char* argv[] )
 {
-  typedef otb::Image<float, 2>     ImageType;
+  typedef otb::Image<float, 2>                            ImageType;
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPToSensorModelFilterType;
   
   // Instantiation
