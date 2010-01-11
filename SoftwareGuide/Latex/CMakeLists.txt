@@ -93,7 +93,7 @@ SET( Tex_SRCS
   SystemOverview.tex
   Transforms.tex
   Visualization.tex
-  Wrapping.tex
+  #Wrapping.tex
   Watersheds.tex
   Fusion.tex
   Radiometry.tex
