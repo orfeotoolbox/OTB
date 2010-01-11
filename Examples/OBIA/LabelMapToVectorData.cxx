@@ -31,7 +31,7 @@
 // encoded regions", Francis K. H. Queck, in Pattern Recognition 33
 // (2000), p 1637-1649.
 //
-// This filter converts label object to polygons. 
+//  Only polygon conversion is available yet.
 // Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
@@ -61,7 +61,7 @@ int main(int argc, char * argv[])
  
    //  Software Guide : BeginLatex
    //
-  // The image types are now defined using pixel types and
+  // The image types are defined using pixel types and
   // dimension. The input image is defined as an \doxygen{itk}{Image},
   // the output is a \doxygen{otb}{VectorData}.
   //
@@ -83,7 +83,7 @@ int main(int argc, char * argv[])
   //
   // The Attribute Label Map is
   // instantiated using the image pixel types as template parameters.
-  // The LabelObjectToPolygonFunctor is instantiated with LabelObjectType and PolygonType
+  // The LabelObjectToPolygonFunctor is instantiated with LabelObjectType and PolygonType.
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
@@ -102,8 +102,8 @@ int main(int argc, char * argv[])
     WriterType::Pointer writer = WriterType::New();
 
   //  Software Guide : BeginLatex
-  //
-  //  Now the input image is set and a name is given to the output image.
+  //  Now the reader and writer are instantiated and 
+  //  the input image is set and a name is given to the output image.
   //
   //  Software Guide : EndLatex
 
@@ -115,7 +115,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  Then, the input image is converted to a map of label objects.
-  //  Here each whyte region connected regions are converted. So the background is define all zero pixels. 
+  //  Here each white region connected regions are converted. So the background is define all zero pixels. 
   //  Software Guide : EndLatex
 
 
@@ -129,7 +129,8 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginLatex
     //
-    //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. 
+    //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. This is
+    // the main filter which proceed the vectorization. 
     //  Software Guide : EndLatex
     
     // Software Guide : BeginCodeSnippet
@@ -155,7 +156,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  The invocation of the \code{Update()} method on the writer triggers the
-  //  execution of the pipeline.  It is recommended to place update calls in a
+  //  execution of the pipeline.  As usualn, it is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
   //  Software Guide : EndLatex
