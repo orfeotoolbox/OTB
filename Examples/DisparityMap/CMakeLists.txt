@@ -13,6 +13,9 @@ ADD_EXECUTABLE(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx )
 TARGET_LINK_LIBRARIES(SIFTDisparityMapEstimation OTBFeatureExtraction OTBCommon OTBIO
 ITKIO)
 
+ADD_EXECUTABLE(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx )
+TARGET_LINK_LIBRARIES(EstimateAffineTransformationExample OTBFeatureExtraction OTBCommon OTBIO OTBProjections
+ITKIO)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
@@ -40,6 +43,16 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  ${TEMP}/deformationFieldOutput.png
  ${TEMP}/resampledMovingOutput.png
  100 10 15 10 10 250 0.9
+)
+
+ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${PROJECTIONS_TESTS2}
+   --compare-image ${TOL} 
+         ${BASELINE}/ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/otbEstimateAffineTransformationOutput.tif
+         EstimateAffineTransformationExampleTest
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_pos_spacing.tif
+         ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped_pos_spacing.tif
+         ${TEMP}/otbEstimateAffineTransformationOutput.tif
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
