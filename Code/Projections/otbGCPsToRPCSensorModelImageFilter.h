@@ -1,0 +1,187 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Copyright (c) Institut Telecom / Telecom Bretagne. All rights reserved.
+  See ITCopyright.txt for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef __otbGCPsToRPCSensorModelImageFilter_h
+#define __otbGCPsToRPCSensorModelImageFilter_h
+
+#include "itkInPlaceImageFilter.h"
+#include "otbDEMHandler.h"
+
+namespace otb {
+
+/** \class GCPsToRPCSensorModelImageFilter
+ * \brief This filter estimates a RPC sensor models from GCPs.
+ * 
+ * This filters estimates an RPC sensor model from a list of user
+ * defined GCPs. Internally, it uses an ossimRpcSolver, which performs
+ * the estimation using the well known least-square method.
+ *
+ * The UseImageGCPs flag allows to import GCPs from the image
+ * metadata, if any.
+ *  
+ * GCPs can be passed to the filter using one of the AddGCP method
+ * implementation.
+ * 
+ * The first implementation takes geographic points with elevation (3D
+ * points).
+ * 
+ * The second implementation accepts geographic points without the
+ * elevation information. In this case, either the mean elevation or
+ * an elevation fetch from a SRT directory is used, depending on the
+ * value of the UseDEM flag.
+ *
+ * If UseDEM is set to true, the DEMHandler is used to retrieve the
+ * elevation information. The user can either set its own DEMHandler
+ * using the appropriate setter, or configure the existing internal
+ * DEMHandler using the Getter.
+ *
+ * The residual ground error is available through the appropriate
+ * getter.
+ * 
+ * Please note that GCPs are infered to be given in physical
+ * coordinates. This is seamless in most cases.
+ *
+ * Please note that at least 16 GCPs are required to estimate a proper
+ * RPC sensor model, although no warning will be reported to the user
+ * if the number of GCPs is lower than 16.
+ *
+ * This filter does not modify the image buffer, but only the
+ * metadata. Therefore, it is implemented as an InPlaceImageFilter.
+ * 
+ * The output image can be given to the OrthorectificationFilter.
+ *
+ */
+template < class TImage>
+class ITK_EXPORT GCPsToRPCSensorModelImageFilter :
+  public itk::InPlaceImageFilter< TImage >
+{
+public:
+  /** Standard class typedefs. */
+  typedef GCPsToRPCSensorModelImageFilter    Self;
+  typedef itk::InPlaceImageFilter< TImage >  Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
+
+  /** GCPs typedefs */
+  typedef itk::Point<double,2>               Point2DType;
+  typedef itk::Point<double,3>               Point3DType;
+  typedef std::pair<Point2DType,Point3DType> GCPType;
+  typedef std::vector<GCPType>               GCPsContainerType;
+
+  /** DEM typedef */
+  typedef otb::DEMHandler                    DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer   DEMHandlerPointerType;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(GCPsToRPCSensorModelImageFilter, InPlaceImageFilter);
+
+  /** Extract dimension from input and output image. */
+  itkStaticConstMacro(ImageDimension, unsigned int,
+                      TImage::ImageDimension);
+
+  /** Set/Get/toogle the UseImageGCPs flag */
+  itkSetMacro(UseImageGCPs,bool);
+  itkGetMacro(UseImageGCPs,bool);
+  itkBooleanMacro(UseImageGCPs);
+
+  /** Set/Get/toogle the UseDEM flag */
+  itkSetMacro(UseDEM,bool);
+  itkGetMacro(UseDEM,bool);
+  itkBooleanMacro(UseDEM);
+
+  /** Set/Get the mean elevation */
+  itkSetMacro(MeanElevation,double);
+  itkGetConstReferenceMacro(MeanElevation,double);
+
+  /** Set/Get the DEMHandler */
+  itkSetObjectMacro(DEMHandler,DEMHandlerType);
+  itkGetObjectMacro(DEMHandler,DEMHandlerType);
+
+  /** Get the residual ground error */
+  itkGetConstReferenceMacro(ResidualGroundError,double);
+  
+  /** Get the GCPsContainer
+   * \return The GCPs container */
+  GCPsContainerType & GetGCPsContainer() const;
+
+  /** Set the GCP container */
+  void SetGCPsContainer(const GCPsContainerType & container);
+
+  /** Add a GCP to the GCPContainer. This version of the AddGCP method
+   * accepts a 3D ground point and does not use DEM or MeanElevation
+   * to handle the elevation */
+  void AddGCP(const Point2DType& sensorPoint, const Point3DType& groundPoint);
+
+  /** Add A GCP to the GCPContainer. This version of the AddGCP method
+   * accepts a 3D ground point and use the DEM or MeanElevation to get
+   * the corresponding elevation before calling the AddGCP acception 3D
+   * ground points.*/
+  void AddGCP(const Point2DType& sensorPoint, const Point2DType & groundPoint);
+
+  /** Clear all GCPs */
+  void ClearGCPs();
+
+protected:
+  /** Constructor */
+  GCPsToRPCSensorModelImageFilter();
+  /** Destructor */
+  virtual ~GCPsToRPCSensorModelImageFilter();
+  
+  /** The PrintSelf method */
+  virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
+
+  /** Actual estimation of the sensor model takes place in the
+   * GenerateOutputInformation() method */
+  virtual void GenerateOutputInformation();
+
+private:
+  GCPsToRPCSensorModelImageFilter ( const Self & ); // purposely not implemented
+  void operator= ( const Self & ); // purposely not implemented
+
+  /** True to use GCPs from image metadata as well */
+  bool   m_UseImageGCPs;
+
+  /** The residual ground error */
+  double m_ResidualGroundError;
+
+  /** True if a DEM should be used */
+  bool m_UseDEM;
+
+  /** If no DEM is used, a MeanElevation 
+   * over the image is used instead */
+  double m_MeanElevation;
+
+  /** The DEMHandler */
+  DEMHandlerPointerType m_DEMHandler;
+
+  /** Container of GCPs */
+  GCPsContainerType m_GCPsContainer;
+
+}; // end of class
+
+} // end of namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbGCPsToRPCSensorModelImageFilter.txx"
+#endif
+
+#endif
