@@ -152,7 +152,7 @@ int main( int argc, char* argv[] )
   ofs.precision(10);
 
   ofs<<(ImageType::Pointer)rpcEstimator->GetOutput()<<std::endl;
-  ofs<<"Residual ground error: "<<rpcEstimator->GetResidualGroundError()<<std::endl;
+  ofs<<"Residual ground error: "<<rpcEstimator->GetRMSGroundError()<<std::endl;
   ofs.close();
   // Software Guide : EndCodeSnippet
   
