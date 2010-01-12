@@ -18,7 +18,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {MSLabeledOutput.tif}
+//    INPUTS: {qb_RoadExtract2.tif}
 //    OUTPUTS: {OBIAShapeAttribute.txt}
 //  Software Guide : EndCommandLineArgs
 
@@ -40,8 +40,8 @@
 
 int main(int argc, char * argv[])
 {
-  const int dim = 2;
-  typedef unsigned long PixelType;
+  const int dim                           = 2;
+  typedef unsigned long                   PixelType;
   typedef itk::Image< PixelType, dim >    ImageType;
   
   if( argc != 3)
@@ -59,9 +59,9 @@ int main(int argc, char * argv[])
   // is chosen in order to read some attribute related to the shape
   // of the objects (by opposition to the content of the object, with
   // the StatisticsLabelObejct).
-  typedef unsigned long LabelType;
+  typedef unsigned long                           LabelType;
   typedef itk::ShapeLabelObject< LabelType, dim > LabelObjectType;
-  typedef itk::LabelMap< LabelObjectType > LabelMapType;
+  typedef itk::LabelMap< LabelObjectType >        LabelMapType;
 
   // convert the image in a collection of objects
   typedef itk::LabelImageToLabelMapFilter< ImageType, LabelMapType > ConverterType;
@@ -98,5 +98,4 @@ int main(int argc, char * argv[])
 
   outfile.close();
   return EXIT_SUCCESS;
-}
-
+}       

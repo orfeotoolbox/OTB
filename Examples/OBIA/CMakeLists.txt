@@ -49,14 +49,14 @@ ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
 	                        ${TEMP}/OBIAShapeAttribute.txt
 	OBIAShapeAttributeComputationTest
 	${INPUTDATA}/MSLabeledOutput.tif
-	${TEMP}/OBIAShapeAttribute.tif
+	${TEMP}/OBIAShapeAttribute.txt
 )
 
 ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	--compare-image ${TOL}	${BASELINE}/OBIARadiometricAttributes.tif
 	                        ${TEMP}/OBIARadiometricAttributes.tif
 	OBIARadiometricAttributesTest
-	${INPUTDATA}/qb_RoadExtract2.tif
+	${INPUTDATA}/qb_RoadExtract2.tif  
 	${TEMP}/OBIARadiometricAttributes.tif
 	STATS::Ndvi::Mean
 	0

@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -28,6 +27,7 @@ void RegisterTests()
 {
   REGISTER_TEST(PlaceNameToLonLatExampleTest);
   REGISTER_TEST(CoordinateToNameExampleTest);
+  REGISTER_TEST(EstimateRPCSensorModelExampleTest);
 }
 
 
@@ -38,3 +38,7 @@ void RegisterTests()
 #undef main
 #define main CoordinateToNameExampleTest
 #include "CoordinateToNameExample.cxx"
+
+#undef main
+#define main EstimateRPCSensorModelExampleTest
+#include "EstimateRPCSensorModelExample.cxx"
