@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
     const char * infname = argv[1];
     const char * outfname = argv[2];
  
-   //  Software Guide : BeginLatex
-   //
+  //  Software Guide : BeginLatex
+  //
   // The image types are defined using pixel types and
   // dimension. The input image is defined as an \doxygen{itk}{Image},
   // the output is a \doxygen{otb}{VectorData}.
@@ -75,10 +75,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-    const unsigned int Dimension                 = 2;
-    typedef unsigned short                       LabelType;
-    typedef otb::Image<LabelType,Dimension>      LabeledImageType;
-    typedef otb::VectorData<double,2> 		 VectorDataType;
+    const unsigned int Dimension               = 2;
+    typedef unsigned short                    LabelType;
+    typedef otb::Image<LabelType,Dimension>   LabeledImageType;
+    typedef otb::VectorData<double,2>         VectorDataType;
   // Software Guide : EndCodeSnippet
 
     // We instantiate reader and writer types
@@ -94,15 +94,15 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-    typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> 		   LabelObjectType;
-    typedef itk::LabelMap<LabelObjectType>                            		   LabelMapType;
-    typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>  	   LabelMapFilterType;
-    typedef otb::Polygon<double>                                   		   PolygonType;
+    typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>              LabelObjectType;
+    typedef itk::LabelMap<LabelObjectType>                                         LabelMapType;
+    typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType>         LabelMapFilterType;
+    typedef otb::Polygon<double>                                                   PolygonType;
     typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
     // Software Guide : EndCodeSnippet
-    typedef VectorDataType::DataNodeType DataNodeType;
+    typedef VectorDataType::DataNodeType 					   DataNodeType;
     
-    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType> VectorDataFilterType;
+    typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType>         VectorDataFilterType;
 
 
     LabeledReaderType::Pointer lreader = LabeledReaderType::New();

@@ -62,12 +62,12 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const int dim = 2;
-  typedef unsigned short PixelType;
-  typedef otb::Image< PixelType, dim > ImageType;
+  const int dim                              = 2;
+  typedef unsigned short                     PixelType;
+  typedef otb::Image< PixelType, dim >       ImageType;
   // Software Guide : EndCodeSnippet
   typedef itk::LabelObject< PixelType, dim > LabelObjectType;
-  typedef itk::LabelMap< LabelObjectType > LabelMapType;
+  typedef itk::LabelMap< LabelObjectType >   LabelMapType;
 
   //  Software Guide : BeginLatex
   //
@@ -138,9 +138,9 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, dim>                                        OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                 WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>   RescalerType;
+  typedef otb::Image<unsigned char, dim>                                      OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                         WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType> RescalerType;
 
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -159,10 +159,4 @@ int main(int argc, char * argv[])
 
   return 0;
 }
-
-
-
-
-
-
 
