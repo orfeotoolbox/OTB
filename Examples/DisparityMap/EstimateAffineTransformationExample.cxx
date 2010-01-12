@@ -98,6 +98,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef double        RealType;
+//typedef float        RealType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<RealType,Dimension> ImageType;
@@ -254,8 +255,8 @@ int main (int argc, char* argv[])
   //
   // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-  //typedef itk::Point<float,3>                                 PointType;
-  typedef otb::LeastSquareAffineTransformEstimator<PointType> EstimatorType;
+  typedef itk::Point<double,2>                                 MyPointType;
+  typedef otb::LeastSquareAffineTransformEstimator<MyPointType> EstimatorType;
   
   // instantiation
   EstimatorType::Pointer estimator = EstimatorType::New();
@@ -292,7 +293,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   typedef itk::ResampleImageFilter<
   ImageType,
-  OutputImageType, EstimatorType::AffineTransformPointerType >    ResampleFilterType;
+  OutputImageType >    ResampleFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -304,7 +305,14 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  resampler->SetInput( fixedReader->GetOutput() );
+  resampler->SetInput( movingReader->GetOutput() );
+
+  //typedef itk::ImageRegistrationMethod<
+  //ImageType,
+  //ImageType >    RegistrationType;
+  
+  //RegistrationType::Pointer   registration  = RegistrationType::New();
+
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -320,6 +328,11 @@ int main (int argc, char* argv[])
   // Get the output transform 
   //EstimatorType::AffineTransformPointerType transform = estimator->GetAffineTransform();
   resampler->SetTransform( estimator->GetAffineTransform() );
+  resampler->SetSize( fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize() );
+  resampler->SetOutputOrigin( fixedReader->GetOutput()->GetOrigin() );
+  resampler->SetOutputSpacing( fixedReader->GetOutput()->GetSpacing() );
+  resampler->SetDefaultPixelValue( 100 );
+
   // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
@@ -328,9 +341,6 @@ int main (int argc, char* argv[])
   writer->SetInput( resampler->GetOutput() );
   writer->SetFileName( argv[3] );
   writer->Update();
-
-
-
 
   return EXIT_SUCCESS;
 }
