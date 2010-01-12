@@ -41,9 +41,10 @@ namespace otb
 template <class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
-    TInputImage,
-    TOutputImage,
-    ITK_TYPENAME Functor::TerraSarBrightnessImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
+  TInputImage,
+  TOutputImage,
+  ITK_TYPENAME Functor::TerraSarBrightnessImageFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
+                                                        ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -53,8 +54,12 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage         InputImageType;
   typedef TOutputImage        OutputImageType;
-  typedef typename Functor::TerraSarBrightnessImageFunctor<ITK_TYPENAME TInputImage::InternalPixelType,
-  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
+  typedef typename InputImageType::InternalPixelType                                          InputInternalPixelType;
+  typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
+  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
+  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
+  typedef typename Functor::TerraSarBrightnessImageFunctor< InputValueType, OutputValueType> FunctorType;
+
   /** "typedef" for standard classes. */
   typedef TerraSarBrightnessImageFilter    Self;
   typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, FunctorType >

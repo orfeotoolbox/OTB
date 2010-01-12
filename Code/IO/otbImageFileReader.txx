@@ -339,53 +339,54 @@ ImageFileReader<TOutputImage>
   bool hasMetaData = false;
   ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
 
-
-  // Add the radar factory
-  ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-
-
-  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-  ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
-
-  if (!handler)
-  {
-    otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
-  }
-
-  else
-  {
-    otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
-//     hasMetaData = handler->getImageGeometry(geom_kwl);
-    ossimProjection* projection = handler->getImageGeometry()->getProjection();
-    if (projection)
-    {
-      hasMetaData = projection->saveState(geom_kwl);
-    }
-  }
-  // Free memory
-  delete handler;
-
-  if (!hasMetaData)
-  {
-    // Add the plugins factory
-    ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
-    ossimProjection * projection = ossimProjectionFactoryRegistry::instance()
-                   ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
-    if (!projection)
+  // Test the plugins factory
+  /** Before, the pluginfactory was tested if the ossim one returned false.
+      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource 
+      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory 
+      because the default include factory contains ossimQuickbirdTiffTileSource. */
+  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
+  if (!projection)
     {
       otbMsgDevMacro( <<"OSSIM Instantiate projection FAILED ! ");
     }
-    else
+  else
     {
       otbMsgDevMacro( <<"OSSIM Instantiate projection SUCCESS ! ");
       hasMetaData = projection->saveState(geom_kwl);
+      
       // Free memory
       delete projection;
     }
-  }
-
+  
   if (!hasMetaData)
-  {
+    {
+      // Add the radar factory
+      ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+      
+      
+      ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+      if (!handler)
+	{
+	  otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
+	}
+      
+      else
+	{
+	  otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
+	  //     hasMetaData = handler->getImageGeometry(geom_kwl);
+	  ossimProjection* projection = handler->getImageGeometry()->getProjection();
+	  
+	  if (projection)
+	    {
+	      hasMetaData = projection->saveState(geom_kwl);
+	    }
+	}
+      // Free memory
+      delete handler;
+    }
+  
+  if (!hasMetaData)
+    {
     otbMsgDevMacro( <<"OSSIM MetaData not present ! ");
   }
   else

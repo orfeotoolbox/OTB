@@ -50,7 +50,8 @@ class ITK_EXPORT TerraSarCalibrationImageFilter :
   public UnaryFunctorWithIndexImageFilter<
     TInputImage,
     TOutputImage,
-    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType > >
+    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
+                                                           ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -58,10 +59,14 @@ public:
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
-  typedef typename Functor::TerraSarCalibrationImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-  ITK_TYPENAME OutputImageType::InternalPixelType>                                            FunctorType;
+  typedef TInputImage                                                                         InputImageType;
+  typedef TOutputImage                                                                        OutputImageType;
+  typedef typename InputImageType::InternalPixelType                                          InputInternalPixelType;
+  typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
+  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
+  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
+  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> FunctorType;
+
   /** "typedef" for standard classes. */
   typedef TerraSarCalibrationImageFilter                                                 Self;
   typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
