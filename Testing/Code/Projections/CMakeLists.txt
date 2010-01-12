@@ -334,6 +334,39 @@ ADD_TEST(prTlOrthoRectificationSPOT5 ${PROJECTIONS_TESTS2}
         N
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(prTuGCPsToRPCSensorModelImageFilterNew ${PROJECTIONS_TESTS2}
+         otbGCPsToRPCSensorModelImageFilterNew)
+   
+IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(prTvGCPsToRPCSensorModelImageFilterWithoutDEM ${PROJECTIONS_TESTS2}
+  --compare-ascii ${EPSILON_4} 
+         ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
+         ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
+         otbGCPsToRPCSensorModelImageFilterWithoutDEM
+	 ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
+	 ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
+	 1199 1259 -22.76847 -43.168043 0.
+	 1497 727  -22.688931 -43.066686 0.
+	 699 1146 -22.7254 -43.288651 0.
+	 1379 2457 -22.986073 -43.193502 0.
+	 2592 1846 -22.932684 -42.854215 0.
+	 1430 1797 -22.872988 -43.136813 0.
+	 587 2654 -22.983847  -43.393297 0.
+	 2398 2422 -23.025664 -42.928778 0.
+	 1436 2946 -23.074483 -43.192431 0.
+	 963 2915  -23.047382 -43.310011 0.
+	 1081 1024 -22.721919 -43.18523  0.
+	 1395 1213 -22.769191 -43.116752 0.
+	 1781 2202 -22.959556 -43.069911 0.
+	 2803 1942 -22.958868 -42.808235 0.
+	 980 2734 -22.99534 -43.309672 0.
+	 713 2754 -23.007862 -43.365307 0.
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 #========================= TESTS SINGAPOUR ===============================
 
 #SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
@@ -507,7 +540,10 @@ otbOrthoRectificationFilterNew.cxx
 otbOrthoRectificationFilter.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 otbOrthoRectificationMonoThreadFilter.cxx
+otbGCPsToRPCSensorModelImageFilterNew.cxx
+otbGCPsToRPCSensorModelImageFilterWithoutDEM.cxx
 )
+
 SET(Projections_SRCS3
 otbProjectionsTests3.cxx
 otbCompositeTransformNew.cxx
