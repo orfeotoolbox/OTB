@@ -58,6 +58,7 @@ ossimImageHandlerFactory* ossimImageHandlerFactory::instance()
 ossimImageHandler* ossimImageHandlerFactory::open(
    const ossimFilename& fileName)const
 {
+std::cout<<"ossimImageHandlerFactory::open"<<std::endl;
    ossimFilename copyFilename = fileName;
    
    if(traceDebug())
@@ -73,6 +74,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    copyFilename.trim();
    if (copyFilename.empty())
    {
+std::cout<<"ossimImageHandlerFactory::open 1"<<std::endl;
       return result.release();
    }
 
@@ -93,6 +95,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    {
       if (result.valid())
       {
+	std::cout<<"ossimImageHandlerFactory::open poufpouf"<<std::endl;
          return result.release();
       }
    }
@@ -110,6 +113,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    result = new ossimVirtualImageHandler;
    if(result->open(copyFilename))
    {
+std::cout<<"ossimImageHandlerFactory::open 1.2"<<std::endl;
       return result.release();
    }
    result = 0;
@@ -122,6 +126,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    result = new ossimJpegTileSource;
    if(result->open(copyFilename))
    {
+std::cout<<"ossimImageHandlerFactory::open 2"<<std::endl;
       return result.release();
    }
    result = 0;
@@ -137,6 +142,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    result = new ossimTileMapTileSource;
    if(result->open(copyFilename))
    {
+std::cout<<"ossimImageHandlerFactory::open 3"<<std::endl;
       return result.release();
    }
    result = 0;
@@ -151,10 +157,11 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    result = new ossimRadarSatTileSource;
    if(result->open(copyFilename))
    {
+     std::cout<<"fzrkfjfdbvgirfnblmksdjgk"<<std::endl;
       return result.release();
    }
    result = 0;
-
+     std::cout<<"pas de radarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"<<std::endl;
     // test if Radarsat2
 //    if(traceDebug())
 //    {
