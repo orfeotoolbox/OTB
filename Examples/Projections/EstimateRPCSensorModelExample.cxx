@@ -158,7 +158,9 @@ int main( int argc, char* argv[] )
   
 
   // Software Guide : BeginLatex
-  // The output image can be now given to the \doxygen{otb}{orthorectificationFilter}. 
+  // The output image can be now given to the \doxygen{otb}{orthorectificationFilter}.
+  // Note that this filter allows also to import GCPs from the image
+  // metadata, if any. 
   // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
