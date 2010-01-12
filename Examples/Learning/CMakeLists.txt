@@ -102,6 +102,7 @@ ADD_TEST(leTeSVMImageModelEstimatorExampleTest ${EXE_TESTS}
 	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model.svn
 	${TEMP}/svm_image_model.svn
+	--ignore-lines-with 2 probA probB
 	SVMImageModelEstimatorExampleTest
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${INPUTDATA}/ROI_mask.png
@@ -154,6 +155,7 @@ ADD_TEST(leTeSVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model_generic_kernel.svn
 	${TEMP}/svm_image_model_generic_kernel.svn
+	--ignore-lines-with 2 probA probB
 	SVMGenericKernelImageModelEstimatorExampleTest
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${INPUTDATA}/ROI_mask_multi.png
