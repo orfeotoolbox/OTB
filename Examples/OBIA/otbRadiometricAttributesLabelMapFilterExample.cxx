@@ -17,13 +17,14 @@
 =========================================================================*/
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {XX.tif}
-//    OUTPUTS: {XX.txt}
+//    INPUTS: {/home/grizonnetm/OTB/Dev/OTB-Data/Examples/qb_RoadExtract2.tif}
+//    OUTPUTS: {OBIARadiometricAttribute1.tif}
+//    STATS::Ndvi::Mean 0 0.3 16 16 200 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the basic approch to perform object based analysis on a image.
+//  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
 //  After the \doxygen{otb}{RadiometricAttributesLabelMapFilter}  computes 
@@ -114,7 +115,7 @@ int main(int argc, char * argv[])
   vreader->SetFileName(reffname);
     //  Software Guide : BeginLatex
   //
-  // Firstly, segment input image using Mean Shift algorithm.
+  // Firstly, segment input image using the Mean Shift algorithm.
   //
   //  Software Guide : EndLatex
   
@@ -136,9 +137,20 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());	
 // Software Guide : EndCodeSnippet
+
+//  Software Guide : BeginLatex
+  //
+  // The \doxygen{itk}{LabelImageToLabelMapFilter} type is instantiated using the output
+  // of the \doxygen{otb}{MeanShiftImageFilter}. This filter produces a labeled image 
+  // where each segmented region have a unique label.
+  //
+  //  Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
   labelMapFilter->SetInput(filter->GetLabeledClusteredOutput());
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
+  // Software Guide : EndCodeSnippet
   
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
@@ -163,8 +175,10 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // 
-  //  Then, we specify the red and the near infrared channels 
-  // 
+  // Then, we specify the red and the near infrared channels 
+  // By default, images are supposed to be standard 4-bands 
+  // image (B,G,R,NIR). The index of each channel can 
+  // be set via the Set***ChannelIndex() accessors.
   //
   //  Software Guide : EndLatex
 
@@ -176,7 +190,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // 
-  //  The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will proceed the selection. 
+  // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will proceed the selection. 
   // There are three parameters. \code{AttributeName} specifies the radiometric attribute, \code{Lambda} 
   // controls the thresholding of the input and \code{ReverseOrdering} make this filter to remove the 
   // object with an attribute value greater than \code{Lambda} instead.   
