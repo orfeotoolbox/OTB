@@ -105,7 +105,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       // Get vector
       DoubleVectorType noiseRefList = lImageMetadata->GetNoiseReferencePointList(this->GetInput()->GetMetaDataDictionary());
       // Mean computation
-      for (int i=0; i<noiseRefList.size(); i++)
+      for (unsigned int i=0; i<noiseRefList.size(); i++)
       {
 	sum += noiseRefList[i];
       }
