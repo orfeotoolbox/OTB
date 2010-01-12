@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract2.tif}
 //    OUTPUTS: {OBIAShapeAttribute.txt}
