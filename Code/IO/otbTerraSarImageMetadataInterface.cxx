@@ -401,8 +401,11 @@ TerraSarImageMetadataInterface::GetNoise( const MetaDataDictionaryType & dict ) 
 unsigned int
 TerraSarImageMetadataInterface::GetNumberOfNoiseRecords( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
-  
+  if( !this->CanRead( dict ) )
+  {
+    itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+  }
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -416,8 +419,6 @@ TerraSarImageMetadataInterface::GetNumberOfNoiseRecords( const MetaDataDictionar
   ossimString nbRec = kwl.find(key.c_str());
 
 
-  delete noise;
-
   return static_cast<unsigned int>(nbRec.toInt());
 }
 
@@ -425,8 +426,11 @@ TerraSarImageMetadataInterface::GetNumberOfNoiseRecords( const MetaDataDictionar
 TerraSarImageMetadataInterface::UIntVectorType
 TerraSarImageMetadataInterface::GetNoisePolynomialDegrees( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
-
+  if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
+  
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -448,15 +452,18 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees( const MetaDataDiction
       ossimString tempVal = kwl.find(oss.str().c_str());
       polDeg.push_back( static_cast<unsigned int>(tempVal.toInt()) );
     }  
-  
-  delete noise;
-
+ 
   return polDeg;
 }
 
 TerraSarImageMetadataInterface::DoubleVectorVectorType
 TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList( const MetaDataDictionaryType & dict ) const
 {
+  if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
+
   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
@@ -467,7 +474,6 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList( const MetaDa
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
-  ossimplugins::Noise * noise = this->GetNoise( dict );
   unsigned int nbRec = this->GetNumberOfNoiseRecords(dict);
   UIntVectorType polDegs = this->GetNoisePolynomialDegrees(dict);
   
@@ -489,8 +495,6 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList( const MetaDa
       polCoefList.push_back(polCoef);
     }  
   
-  delete noise;
-
   return polCoefList;
 }
 
@@ -498,7 +502,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList( const MetaDa
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseTimeUTCList( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
+  if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -547,15 +554,16 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList( const MetaDataDictionaryTyp
       timeList.push_back( julianDay );
     }  
 
-  delete noise;
-
   return timeList;
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
+  if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -579,7 +587,6 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList( const MetaDataDict
       maxList.push_back( tempVal.toDouble() );
     }  
 
-  delete noise;
 
   return maxList;
 }
@@ -587,9 +594,12 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList( const MetaDataDict
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
+  if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
 
-  ImageKeywordlistType imageKeywordlist;
+   ImageKeywordlistType imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
   {
@@ -612,15 +622,17 @@ TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList( const MetaDataDict
       minList.push_back( tempVal.toDouble() );
     }  
 
-  delete noise;
-
+ 
   return minList;
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
 TerraSarImageMetadataInterface::GetNoiseReferencePointList( const MetaDataDictionaryType & dict ) const
 {
-  ossimplugins::Noise * noise = this->GetNoise( dict );
+   if( !this->CanRead( dict ) )
+    {
+      itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+    }
 
   ImageKeywordlistType imageKeywordlist;
 
@@ -645,7 +657,6 @@ TerraSarImageMetadataInterface::GetNoiseReferencePointList( const MetaDataDictio
       refPointList.push_back( tempVal.toDouble() );
     }  
 
-  delete noise;
 
   return refPointList;
 }
