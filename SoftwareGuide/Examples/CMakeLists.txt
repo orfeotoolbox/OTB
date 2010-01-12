@@ -224,6 +224,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataExtractROIExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/PlaceNameToLonLatExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Projections/EstimateRPCSensorModelExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SIFTDisparityMapEstimation.cxx
