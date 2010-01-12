@@ -32,7 +32,7 @@ int otbTerraSarBrightnessImageFunctor(int argc, char * argv[])
   typedef otb::Functor::TerraSarBrightnessImageFunctor<ScalarType, ScalarType>   FunctorType;
 
   FunctorType funct;
-  funct.SetCalFactor(calFact);
+  funct.SetCalibrationFactor(calFact);
 
   ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
   ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));

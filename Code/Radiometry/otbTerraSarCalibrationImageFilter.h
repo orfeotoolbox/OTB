@@ -26,9 +26,6 @@
 #include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "otbTerraSarFunctors.h"
 #include "itkMetaDataDictionary.h"
-//#include "itkUnaryFunctorImageFilter.h"
-//#include "itkConstNeighborhoodIterator.h"
-#include "otbMath.h"
 
 namespace otb
 {
@@ -65,14 +62,18 @@ public:
   typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
   typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
-  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> FunctorType;
+  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> FunctorType;  
+
+  /** typedef to access metadata */
+  typedef itk::MetaDataDictionary                                                             MetaDataDictionaryType;
+  typedef typename InputImageType::SizeType                                                   SizeType;
 
   /** "typedef" for standard classes. */
-  typedef TerraSarCalibrationImageFilter                                                 Self;
-  typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
+  typedef TerraSarCalibrationImageFilter                                                      Self;
+  typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-  
+
   /** object factory method. */
   itkNewMacro(Self);
 
@@ -80,60 +81,39 @@ public:
   // Use a with neighborhood to have access to the pixel coordinates
   itkTypeMacro(TerraSarCalibrationImageFilter, UnaryFunctorWithIndexImageFilter);
 
-  typedef itk::MetaDataDictionary                       MetaDataDictionaryType;
-  typedef typename FunctorType::DoubleVectorType        DoubleVectorType;
-  typedef typename FunctorType::DoubleVectorVectorType  DoubleVectorVectorType;
-  typedef typename InputImageType::SizeType                      SizeType;
-
-//  typedef typename FunctorType::LIntVectorType          LIntVectorType;
-
   /** Accessors */
   /** Calibration Factor */
-  void SetCalFactor( double val );
-  double GetCalFactor() const;
-  /** Noise minimal range validity */
-  void SetNoiseRangeValidityMin( double val );
-  double GetNoiseRangeValidityMin() const;
+  void SetCalibrationFactor( double val );
+  double GetCalibrationFactor() const;
 
-  /** Noise maximal range validity */
-  void SetNoiseRangeValidityMax( double val );
-  double GetNoiseRangeValidityMax() const;
-  /** Noise reference range validity */
-  void SetNoiseRangeValidityRef( double val );
-  double GetNoiseRangeValidityRef() const;
   /** Sensor local incident angle in degree */
   void SetLocalIncidentAngle( double val );
   double GetLocalIncidentAngle() const;
-  /** Sinus of the sensor local incident angle in degree */
-  double GetSinLocalIncidentAngle() const;
-  /** Vector of vector that contain noise polinomial coefficient */
-  void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect );
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
-  /** Image size (setter is protected)*/
-  SizeType GetImageSize() const;
   
   /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
    *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   void SetUseFastCalibrationMethod( bool b );
   bool GetUseFastCalibrationMethod() const;
-  /** TimeUTC for each noise coefficient acquisition (in Julian day). */
-  void SetTimeUTC( DoubleVectorType vect );
-  DoubleVectorType GetTimeUTC() const;
+
   /** Pulse Repetition Frequency */
   void SetPRF( double val );
   double GetPRF() const;
-  /** Inverse Pulse Repetition Frequency */
-  double GetInvPRF() const;
 
+  /** Image Size setter. This is provided in case of calbrating an
+* extract of a larger scene. It does not interfer with output image
+* regions */
+  void SetImageSize( SizeType size );
+
+  /** Get the image size */
+  const SizeType& GetImageSize() const;
+  
 protected:
   /** Constructor */
   TerraSarCalibrationImageFilter();
   /** Destructor */
   virtual ~TerraSarCalibrationImageFilter() {};
-  /** Image Size setter*/
-  void SetImageSize( SizeType size );
-
+  
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
   
@@ -141,10 +121,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-bool m_ParamLoaded;
+  // TODO: add private copy and reference construtor
 };
-
-
 
 } // end namespace otb
 

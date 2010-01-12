@@ -76,6 +76,11 @@ public:
   {
     _tabImageNoise = image_noise;
   }
+  
+  const std::vector<ImageNoise> & get_imageNoise() const
+  {
+    return _tabImageNoise;
+  }
 
 protected:
 

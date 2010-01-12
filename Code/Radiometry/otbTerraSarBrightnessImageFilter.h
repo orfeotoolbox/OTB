@@ -79,13 +79,13 @@ public:
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
 
   /** Accessors */
-  void SetCalFactor(double pCalFactor)
+  void SetCalibrationFactor(double pCalibrationFactor)
     {
-      this->GetFunctor().SetCalFactor( pCalFactor );
+      this->GetFunctor().SetCalibrationFactor( pCalibrationFactor );
       this->Modified();
     }
-  double GetCalFactor(){
-    return this->GetFunctor().GetCalFactor();
+  double GetCalibrationFactor(){
+    return this->GetFunctor().GetCalibrationFactor();
   }
 
 protected:

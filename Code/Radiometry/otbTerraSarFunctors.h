@@ -22,16 +22,16 @@
 #ifndef __otbTerraSarFunctors_h
 #define __otbTerraSarFunctors_h
 
-
-#include "itkUnaryFunctorImageFilter.h"
-#include "itkMetaDataDictionary.h"
 #include "otbMath.h"
+#include "itkSize.h"
+#include "itkIndex.h"
+#include <complex>
+#include <otb/ImageNoise.h>
 
 namespace otb
 {
 namespace Functor
 {
-
 
 /**
    * \class TerraSarBrightnessImageFunctor
@@ -52,8 +52,8 @@ public:
  typedef itk::Size<2>                  SizeType;
  
  /** Accessors */
- void SetCalFactor( double val ) { m_CalFactor = val; };
- double GetCalFactor() { return m_CalFactor; };
+ void SetCalibrationFactor( double val ) { m_CalibrationFactor = val; };
+ double GetCalibrationFactor() { return m_CalibrationFactor; };
  
  /** We assume that the input pixel is a scalar -> modulus image */
  inline TOutput operator() (const TInput & inPix);
@@ -62,7 +62,7 @@ public:
 
 private:
   /** Calibration Factor */
-  double m_CalFactor;
+  double m_CalibrationFactor;
 };
 
 
@@ -79,84 +79,175 @@ template<class TInput, class TOutput>
 class TerraSarCalibrationImageFunctor
 {
 public:
+  /** Constructor */
   TerraSarCalibrationImageFunctor();
+  /** Destructor */
   virtual ~TerraSarCalibrationImageFunctor() {};
 
-  typedef std::vector<double>                                 DoubleVectorType;
-  typedef std::vector<DoubleVectorType>                       DoubleVectorVectorType;
-  typedef std::vector<long int>                               LIntVectorType;
-  typedef itk::Size<2>                                        SizeType;
-  typedef itk::Index<2>                                       IndexType;
+  /** Typedef to define the noise records map */
+  typedef ossimplugins::ImageNoise                       ImageNoiseType;
+  typedef std::pair<double,ImageNoiseType>               NoiseRecordType;
+  typedef std::vector<NoiseRecordType >                  NoiseRecordVectorType;
+
+  /** Typedef for image size and index */
+  typedef itk::Size<2>                                   SizeType;
+  typedef itk::Index<2>                                  IndexType;
+
+  /** Typedef for the brightness functor */
   typedef TerraSarBrightnessImageFunctor<double, double> BrightnessFunctorType;
 
-  /** Accessors */
-  void SetCalFactor( double val ) { m_CalFactor =  val; m_Brightness.SetCalFactor(val); };
-  double GetCalFactor() const { return m_CalFactor; };
-  void SetNoiseRangeValidityMin( double val ) { m_NoiseRangeValidityMin = val; };
-  double GetNoiseRangeValidityMin() const { return m_NoiseRangeValidityMin; };
-  void SetNoiseRangeValidityMax( double val ) { m_NoiseRangeValidityMax = val; };
-  double GetNoiseRangeValidityMax() const { return m_NoiseRangeValidityMax; };
-  void SetNoiseRangeValidityRef( double val ) { m_NoiseRangeValidityRef = val; };
-  double GetNoiseRangeValidityRef() const { return m_NoiseRangeValidityRef; };
+  /**
+   * Add a new noise record to the map 
+   */
+  void AddNoiseRecord(double utcAcquisitionTime, const ImageNoiseType& record)
+  {
+    // Create the pair
+    NoiseRecordType newRecord(utcAcquisitionTime,record);
+
+    // Add it to the list
+    m_NoiseRecords.push_back(newRecord);
+  }
+
+  /** returns the number of noise records */
+  unsigned int GetNumberOfNoiseRecords() const
+  {
+    return m_NoiseRecords.size();
+  }
+  
+  /**
+   * Clear all noise records
+   */
+  void ClearNoiseRecords()
+  {
+    m_NoiseRecords.clear();
+  }
+
+  /** Set the calibration factor */
+  void SetCalibrationFactor( double val ) 
+  { 
+    m_CalibrationFactor =  val; 
+    m_Brightness.SetCalibrationFactor(val); 
+  };
+  
+  /** Get the calibration factor */
+  double GetCalibrationFactor() const 
+  { 
+    return m_CalibrationFactor; 
+  };
+
+  /** Set the local incidence angle */
   void SetLocalIncidentAngle( double val )
   {
     m_LocalIncidentAngle = val;
     m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
   };
-  double GetLocalIncidentAngle() const { return m_LocalIncidentAngle; };
-  double GetSinLocalIncidentAngle() const { return m_SinLocalIncidentAngle; };
-  void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect ) { m_NoisePolynomialCoefficientsList = vect; };
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const { return m_NoisePolynomialCoefficientsList; };
-  void SetImageSize( SizeType size ) { m_ImageSize = size; };
-  SizeType GetImageSize() const { return m_ImageSize; };
-  void SetUseFastCalibrationMethod( bool b ) { m_UseFastCalibrationMethod = b; };
-  bool GetUseFastCalibrationMethod() const { return m_UseFastCalibrationMethod; };
-  void SetTimeUTC( DoubleVectorType vect ) { m_TimeUTC = vect; };
-  DoubleVectorType GetTimeUTC() const { return m_TimeUTC; };
-  void SetPRF( double val ) { m_PRF = val; m_InvPRF = 1./m_PRF; };
-  double GetPRF() const { return m_PRF; };
-  double GetInvPRF() const { return m_InvPRF; };
-  BrightnessFunctorType GetBrightness() { return m_Brightness; };
-  double ComputeCurrentNoise( unsigned int colId );
-  DoubleVectorType ComputeCurrentCoeffs( unsigned int lineId );
+  
+  /** Get the local incidence angle */
+  double GetLocalIncidentAngle() const 
+  { 
+    return m_LocalIncidentAngle; 
+  };
+  
+  /** Set the image size */
+  void SetImageSize( SizeType size ) 
+  { 
+    m_ImageSize = size; 
+  };
+  
+  /** Get the image size */
+  const SizeType & GetImageSize() const 
+  { 
+    return m_ImageSize; 
+  };
+  
+  /** Set the UseFastCalibrationMethod flag */
+  void SetUseFastCalibrationMethod( bool b ) 
+  { 
+    m_UseFastCalibrationMethod = b; 
+  };
+  
+  /** Get the UseFastCalibrationMethod flag */
+  bool GetUseFastCalibrationMethod() const 
+  { 
+    return m_UseFastCalibrationMethod; 
+  };
+  
+  /** Set The Pulse Repetition Frequency (PRF) */
+  void SetPRF( double val ) 
+  { 
+    m_PRF = val; 
+    m_InvPRF = 1./m_PRF; 
+  };
 
-  /** We assume that the input pixel is a scalar -> modulus image */
+  /** Get the PRF */
+  double GetPRF() const 
+  { 
+    return m_PRF; 
+  };
+
+  /** Set the acquisition start time */
+  void SetAcquisitionStartTime(double startTime)
+  {
+    m_AcquisitionStartTime = startTime;
+  }
+
+  /** Get the acqusition start time */
+  double GetAcquisitionStartTime(void) const
+  {
+    return m_AcquisitionStartTime;
+  }
+
+  /** Perform the calibration for one pixel (scalar -> modulus image) */
   inline TOutput operator() (const TInput & inPix, IndexType index);
-  /** We assume that the input pixel is a complex -> complex image */
+
+  /** Perform the calibration for one pixel (complex -> complex image) */
   inline std::complex<TOutput> operator() (const std::complex<TInput> & inPix, IndexType index);
 
 private:
+  /** Return the closest noise record in the noise record vector */
+  inline const ImageNoiseType & FindClosestNoiseRecord(double utcTime) const;
+
+  /** Return the current azimuth position (current acquisition time) */
+  inline double ComputeAzimuthPosition(const IndexType& index) const;
+
+  /** Return the current range position */
+  inline double ComputeRangePosition(const ImageNoiseType& noise, const IndexType& index) const;
+
+  /** Return the current NEBN value */
+  inline double ComputeNoiseEquivalentBetaNaught(const ImageNoiseType& noise, double range) const;
+
   /** Calibration Factor */
-  double m_CalFactor;
-  /** Noise minimal range validity */
-  double m_NoiseRangeValidityMin;
-  /** Noise maxinimal range validity */
-  double m_NoiseRangeValidityMax;
-  /** Noise reference range */
-  double m_NoiseRangeValidityRef;
+  double m_CalibrationFactor;
+
+  /** Radar Brightness functor */
+  BrightnessFunctorType m_Brightness;
+
+  /** Noise record vector */
+  NoiseRecordVectorType m_NoiseRecords;
+
   /** Sensor local incident angle in degree */
   double m_LocalIncidentAngle;
+  
   /** sin of the LocalIncidentAngle */
   double m_SinLocalIncidentAngle;
-  /** Vector of vector that contain noise polinomial coefficient */
-  DoubleVectorVectorType m_NoisePolynomialCoefficientsList;
+
   /** Image Size */
   SizeType m_ImageSize;
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
+
+  /** Fast Calibration Method. If set to true, will consider only the first noise coefficient else,
    *  will use all of them and applied it according to its acquisition UTC time and the coordinates
    *  of the pixel in the image. */
   bool m_UseFastCalibrationMethod;
-  /** TimeUTC for each noise coefficient acquisition (in Julian day). */
-  DoubleVectorType m_TimeUTC;
+  
+  /** Acquisition start time */
+  double m_AcquisitionStartTime;
+
   /** Pulse Repetition Frequency */
   double m_PRF;
+
   /** Inverse Pulse Repetition Frequency */
   double m_InvPRF;
- /** Radar Brightness functor */
-  BrightnessFunctorType m_Brightness;
 };
-
-
 
 }// end namespace functor
 } // end namespace otb

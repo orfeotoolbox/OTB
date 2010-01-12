@@ -36,8 +36,6 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
-  typedef FilterType::DoubleVectorType                              DoubleVectorType;
-  typedef FilterType::DoubleVectorVectorType                        DoubleVectorVectorType;
   typedef itk::ExtractImageFilter<ImageType, ImageType>             ExtractorType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -51,68 +49,24 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   reader->UpdateOutputInformation();
 
   filter->SetInput(reader->GetOutput());
-  
-  if( !useMetadata )
-  { 
-    DoubleVectorType coefs;
-    coefs.push_back(1.);
-    coefs.push_back(0.5);
-    coefs.push_back(1.);
-    coefs.push_back(0.1);
-    DoubleVectorVectorType coefVect(1, coefs);
-  
-    coefs.clear();
-    coefs.push_back(10.);
-    coefs.push_back(5);
-    coefs.push_back(10);
-    coefs.push_back(1);
-    coefVect.push_back( coefs );
+  writer->SetInput(filter->GetOutput());
     
-    coefs.clear();
-    coefs.push_back(100);
-    coefs.push_back(50);
-    coefs.push_back(100);
-    coefs.push_back(10);
-    coefVect.push_back( coefs );
+  // Generate an extract from the large input
+  ImageType::RegionType region;
+  ImageType::IndexType id;
+  id[0] = 50;   id[1] = 100;
+  ImageType::SizeType size;
+  size[0] = 150;   size[1] = 100;
+  region.SetIndex(id);
+  region.SetSize(size);
+  extractor->SetExtractionRegion(region);
   
-    filter->SetNoisePolynomialCoefficientsList(coefVect);
-  
-    filter->SetCalFactor( 10 );
-    filter->SetNoiseRangeValidityMin( 0 );
-    filter->SetNoiseRangeValidityMax( 1 );
-    filter->SetNoiseRangeValidityRef( 0.5 );
-    filter->SetLocalIncidentAngle( 15 );
-  
-    std::vector<double> timeUtc;
-    timeUtc.push_back(1.);
-    timeUtc.push_back(2.);
-    timeUtc.push_back(3.);
-    filter->SetTimeUTC(timeUtc);
-    filter->SetPRF(50);
-
-
-    writer->SetInput(filter->GetOutput());
-    
-  }
-  else
-  {
-    // Generate an extract from the large input
-    ImageType::RegionType region;
-    ImageType::IndexType id;
-    id[0] = 50;   id[1] = 100;
-    ImageType::SizeType size;
-    size[0] = 150;   size[1] = 100;
-    region.SetIndex(id);
-    region.SetSize(size);
-    extractor->SetExtractionRegion(region);
-  
-    extractor->SetInput(filter->GetOutput());
+  extractor->SetInput(filter->GetOutput());
     writer->SetInput(extractor->GetOutput());
-  }
-  
+
+
   filter->SetUseFastCalibrationMethod( false );
   writer->Update();
   
-
   return EXIT_SUCCESS;
 }
