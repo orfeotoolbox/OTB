@@ -77,7 +77,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM( int argc, char* argv[] )
   ofs.setf(ios::fixed, ios::floatfield);
   ofs.precision(10);
 
-  ofs<<(ImageType::Pointer)rpcEstimator->GetOutput()<<std::endl;
+  ofs<<rpcEstimator->GetOutput()->GetImageKeywordlist()<<std::endl;
   ofs<<"Residual ground error: "<<rpcEstimator->GetResidualGroundError()<<std::endl;
   ofs.close();
 
