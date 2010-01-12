@@ -2028,7 +2028,7 @@ ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5_saveState_loadState.txt
-         --ignore-lines-with 1 support_data.metadata_file
+         --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
          ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
@@ -2041,6 +2041,7 @@ ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistQuickbird.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
          ${TEMP}/ioTvImageKeywordlistQuickbird_saveState_loadState.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
          ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/ioTvImageKeywordlistQuickbird.txt
@@ -2053,6 +2054,7 @@ ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistIkonos.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
          ${TEMP}/ioTvImageKeywordlistIkonos_saveState_loadState.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbImageKeywordlist
          ${LARGEDATA}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/ioTvImageKeywordlistIkonos.txt
@@ -2159,9 +2161,11 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
-  --compare-ascii ${NOTOL}
+  --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs.txt
+         ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
+         ${TEMP}/ioTvImageKeywordlistErs_saveState_loadState.txt
     otbImageKeywordlist
          ${LARGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
          ${TEMP}/ioTvImageKeywordlistErs.txt
