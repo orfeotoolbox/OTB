@@ -32,7 +32,7 @@ namespace otb {
 template < class TImage >
 GCPsToRPCSensorModelImageFilter<TImage>
 ::GCPsToRPCSensorModelImageFilter() : m_UseImageGCPs(true), 
-				      m_ResidualGroundError(0.), 
+				      m_RMSGroundError(0.), 
 				      m_UseDEM(false),
 				      m_MeanElevation(0.), 
 				      m_DEMHandler(),
@@ -61,7 +61,7 @@ template < class TImage >
 typename GCPsToRPCSensorModelImageFilter< TImage >
 ::GCPsContainerType &
 GCPsToRPCSensorModelImageFilter< TImage >
-::GetGCPsContainer() const
+::GetGCPsContainer()
 {
   // return the GCPs container
   return m_GCPsContainer;
@@ -197,7 +197,7 @@ GCPsToRPCSensorModelImageFilter< TImage >
   rpcSolver->solveCoefficients(sensorPoints,geoPoints);
 
   // Retrieve the residual ground error
-  m_ResidualGroundError = rpcSolver->getRmsError();
+  m_RMSGroundError = rpcSolver->getRmsError();
 
   // Retrieve the output RPC projection
   ossimRefPtr<ossimRpcModel> rpcModel = dynamic_cast<ossimRpcModel*>(rpcSolver->createRpcModel()->getProjection());
@@ -227,7 +227,7 @@ GCPsToRPCSensorModelImageFilter< TImage >
     {
     os<<indent<<"MeanElevation: "<<m_MeanElevation<<std::endl;
     }
-  os<<indent<<"Residual ground error: "<<m_ResidualGroundError<<std::endl;
+  os<<indent<<"RMS ground error: "<<m_RMSGroundError<<std::endl;
 }
 
 } // end of namespace otb

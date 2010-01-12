@@ -51,8 +51,8 @@ namespace otb {
  * using the appropriate setter, or configure the existing internal
  * DEMHandler using the Getter.
  *
- * The residual ground error is available through the appropriate
- * getter.
+ * The RMS (root mean square) ground error is available through the 
+ * appropriate getter.
  * 
  * Please note that GCPs are infered to be given in physical
  * coordinates. This is seamless in most cases.
@@ -117,11 +117,11 @@ public:
   itkGetObjectMacro(DEMHandler,DEMHandlerType);
 
   /** Get the residual ground error */
-  itkGetConstReferenceMacro(ResidualGroundError,double);
+  itkGetConstReferenceMacro(RMSGroundError,double);
   
   /** Get the GCPsContainer
    * \return The GCPs container */
-  GCPsContainerType & GetGCPsContainer() const;
+  GCPsContainerType & GetGCPsContainer();
 
   /** Set the GCP container */
   void SetGCPsContainer(const GCPsContainerType & container);
@@ -161,7 +161,7 @@ private:
   bool   m_UseImageGCPs;
 
   /** The residual ground error */
-  double m_ResidualGroundError;
+  double m_RMSGroundError;
 
   /** True if a DEM should be used */
   bool m_UseDEM;
