@@ -35,16 +35,15 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
-{std::cout<<"ossimPluginProjectionFactory::createProjection"<<std::endl;
-   ossimRefPtr<ossimProjection> result = 0;
+{
+  ossimRefPtr<ossimProjection> result = 0;
 
    if ( !result )
    {
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
-	std::cout<<"radarsatttttttttttttttttttttttttttttttttttt"<<std::endl;
-         result = model.get();
+	result = model.get();
       }
       else
       {
@@ -55,10 +54,9 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    if ( !result )
    {
       ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
-      std::cout<<filename<<std::endl;
-      if ( model->open(filename) )
+
+     if ( model->open(filename) )
       {
-	std::cout<<"terrasarrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"<<std::endl;
          result = model.get();
       }
       else
@@ -72,7 +70,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       ossimRefPtr<ossimErsSarModel> model = new ossimErsSarModel();
       if ( model->open(filename) )
       {
-	std::cout<<"ersssssssssssssssssssssssssssssssssssssssssssssssssss"<<std::endl;
          result = model.get();
       }
       else
@@ -80,7 +77,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          model = 0;
       }
    }
-std::cout<<"ossimPluginProjectionFactory::createProjection OUTTTTTTTTTTTTTTTTt"<<std::endl;
+
    return result.release();
 }
 
