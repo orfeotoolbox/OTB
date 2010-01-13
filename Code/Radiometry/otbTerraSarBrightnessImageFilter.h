@@ -114,7 +114,7 @@ public:
   }
 
   /** Set the ResultsInDecibels flag */
-  void SetResultsIndecibels(bool db)
+  void SetResultsInDecibels(bool db)
   {
     this->GetFunctor().SetResultsInDecibels(db);
     this->Modified();
