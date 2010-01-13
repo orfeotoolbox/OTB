@@ -59,11 +59,11 @@ ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	${INPUTDATA}/qb_RoadExtract2.tif  
 	${TEMP}/OBIARadiometricAttributes.tif
 	STATS::Ndvi::Mean
-	0
-	0.3
+	1
+	-0.3
 	16
 	16
-	200
+	10
 	1.0
 )
     
