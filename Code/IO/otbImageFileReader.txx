@@ -352,13 +352,8 @@ ImageFileReader<TOutputImage>
     }
   else
     {
-      std::cout<<"sdfkvjbsdfkvbfdb"<<std::endl;
       otbMsgDevMacro( <<"OSSIM Instantiate projection SUCCESS ! ");
       hasMetaData = projection->saveState(geom_kwl);
-      
-      
-      
-      std::cout<<"123416123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231354321231"<<std::endl;  
       
       // Free memory
       delete projection;
@@ -366,7 +361,6 @@ ImageFileReader<TOutputImage>
   
   if (!hasMetaData)
     {
-            std::cout<<"----------------------"<<std::endl;
       // Add the radar factory
       ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
       
@@ -405,25 +399,19 @@ ImageFileReader<TOutputImage>
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
     otb_kwl.SetKeywordlist( geom_kwl );
-           std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
  
     // Update itk MetaData Dictionary
 
     itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
-          std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
  
     itk::EncapsulateMetaData< ImageKeywordlist >(dict,
-        MetaDataKey::OSSIMKeywordlistKey,
-        otb_kwl);
-          std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
+        MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
  
   }
-          std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
  
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-         std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
  
   typedef typename TOutputImage::IndexType   IndexType;
 
@@ -444,8 +432,7 @@ ImageFileReader<TOutputImage>
   }
 
   output->SetLargestPossibleRegion(region);
-         std::cout<<"************************************************************************************************************************"<<std::endl;
- 
+
 }
 
 template <class TOutputImage>
