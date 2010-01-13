@@ -67,6 +67,7 @@
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
+#include "otbMacro.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -98,14 +99,13 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
 
   typedef double        RealType;
-//typedef float        RealType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<RealType,Dimension> ImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
   // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // The SIFTs obtained for the matching will be stored in vector
   // form inside a point set. So we need the following types:
@@ -264,7 +264,9 @@ int main (int argc, char* argv[])
   for (LandmarkListType::Iterator it = landmarkList->Begin();
      it != landmarkList->End(); ++it)
   {
-          estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
+        otbMsgDevMacro(<<"landmark1" << it.Get()->GetPoint1() );
+        otbMsgDevMacro(<<"landmark2" << it.Get()->GetPoint2() );        
+        estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
   }
 
   // Trigger computation

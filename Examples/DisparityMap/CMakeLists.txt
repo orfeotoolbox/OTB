@@ -45,7 +45,7 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  100 10 15 10 10 250 0.9
 )
 
-ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${PROJECTIONS_TESTS2}
+ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
    --compare-image ${TOL} 
          ${BASELINE}/ROI_IKO_PAN_LesHalles.tif
          ${TEMP}/otbEstimateAffineTransformationOutput.tif
