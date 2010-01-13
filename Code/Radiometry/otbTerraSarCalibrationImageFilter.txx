@@ -247,12 +247,17 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       currentLine = inputIt.GetIndex()[1];
             
       // And check if we changed of NoiseRecord
-      if(currentAzimuthPosition < currentNoiseRecordIt->first 
-	 && currentNoiseRecordIt != m_NoiseRecords.end())
+      if(currentAzimuthPosition < currentNoiseRecordIt->first)
 	{
-	// If so, update the functor
+	// Update the iterator
 	++currentNoiseRecordIt;
-	calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
+
+	// If we are not at the last record
+	if(currentNoiseRecordIt != m_NoiseRecords.end())
+	  {
+	  // Update the functor noise record
+	  calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
+	  }
 	}
       }
     // Apply the calibration functor
