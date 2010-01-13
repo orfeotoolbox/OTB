@@ -1028,12 +1028,12 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS9 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# -------            TerraSarCalibrationImageFunctor   ------------------------------
-ADD_TEST(raTvTerraSarCalibrationImageFunctor ${RADIOMETRY_TESTS9}
+# -------            TerraSarCalibrationFunctor   ------------------------------
+ADD_TEST(raTvTerraSarCalibrationFunctor ${RADIOMETRY_TESTS9}
 # --compare-image ${EPSILON}  
 #                               ${BASELINE}/raTvTerraSarCalibrationImageFunctor.tif
 #                               ${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
-        otbTerraSarCalibrationImageFunctor
+        otbTerraSarCalibrationFunctor
 #		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
 #		${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
 )
@@ -1082,7 +1082,7 @@ ADD_TEST(raTvTerraSarBrightnessFunctor ${RADIOMETRY_TESTS9}
  --compare-ascii ${EPSILON}  
                                ${BASELINE_FILES}/raTvTerraSarBrightnessImageFunctor.txt
                                ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt
-        otbTerraSarBrightnessImageFunctor
+        otbTerraSarBrightnessFunctor
 		12 # real pixel
 		12 # complex real part pixel
 		0  # complex imaginary part pixel
@@ -1220,10 +1220,10 @@ otbAeronetExtractDataBadData.cxx
 
 SET(Radiometry_SRCS9
 otbRadiometryTests9.cxx
-otbTerraSarCalibrationImageFunctor.cxx
+otbTerraSarCalibrationFunctor.cxx
 otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
-otbTerraSarBrightnessImageFunctor.cxx
+otbTerraSarBrightnessFunctor.cxx
 otbTerraSarBrightnessImageFilterNew.cxx
 otbTerraSarBrightnessImageFilterTest.cxx
 )

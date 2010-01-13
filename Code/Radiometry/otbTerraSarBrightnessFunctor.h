@@ -45,10 +45,6 @@ public:
   TerraSarBrightnessFunctor();
  virtual ~TerraSarBrightnessFunctor() {};
  
- typedef std::vector<double>           DoubleVectorType;
- typedef std::vector<DoubleVectorType> DoubleVectorVectorType;
- typedef itk::Size<2>                  SizeType;
- 
  /** Accessors */
  void SetCalibrationFactor( double val ) { m_CalibrationFactor = val; };
  double GetCalibrationFactor() { return m_CalibrationFactor; };

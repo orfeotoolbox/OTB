@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarFunctors_h
-#define __otbTerraSarFunctors_h
+#ifndef __otbTerraSarCalibrationFunctor_h
+#define __otbTerraSarCalibrationFunctor_h
 
 #include "otbMath.h"
 #include "otbTerraSarBrightnessFunctor.h"
@@ -44,13 +44,13 @@ namespace Functor
    * \ingroup Radiometry
  */
 template<class TInput, class TOutput>
-class TerraSarCalibrationImageFunctor
+class TerraSarCalibrationFunctor
 {
 public:
   /** Constructor */
-  TerraSarCalibrationImageFunctor();
+  TerraSarCalibrationFunctor();
   /** Destructor */
-  virtual ~TerraSarCalibrationImageFunctor() {};
+  virtual ~TerraSarCalibrationFunctor() {};
 
   /** Typedef to define the noise records map */
   typedef ossimplugins::ImageNoise                  ImageNoiseType;
@@ -184,7 +184,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTerraSarFunctors.txx"
+#include "otbTerraSarCalibrationFunctor.txx"
 #endif
 
 #endif

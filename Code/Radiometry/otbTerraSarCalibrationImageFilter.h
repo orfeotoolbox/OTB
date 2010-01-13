@@ -23,7 +23,7 @@
 #define __otbTerraSarCalibrationImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "otbTerraSarFunctors.h"
+#include "otbTerraSarCalibrationFunctor.h"
 #include "itkMetaDataDictionary.h"
 
 namespace otb
@@ -67,7 +67,7 @@ public:
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
 
   /** Calibration functor typedef */
-  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> CalibrationFunctorType;  
+  typedef typename Functor::TerraSarCalibrationFunctor< InputValueType, OutputValueType>      CalibrationFunctorType;  
 
   /** typedef to access metadata */
   typedef itk::MetaDataDictionary                                                             MetaDataDictionaryType;

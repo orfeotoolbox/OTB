@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarFunctors_txx
-#define __otbTerraSarFunctors_txx
+#ifndef __otbTerraSarCalibrationFunctor_txx
+#define __otbTerraSarCalibrationFunctor_txx
 
-#include "otbTerraSarFunctors.h"
+#include "otbTerraSarCalibrationFunctor.h"
 
 
 namespace otb
@@ -26,8 +26,8 @@ namespace otb
 namespace Functor
 {
 template <class TInput, class TOutput>
-TerraSarCalibrationImageFunctor<TInput, TOutput>
-::TerraSarCalibrationImageFunctor()
+TerraSarCalibrationFunctor<TInput, TOutput>
+::TerraSarCalibrationFunctor()
 {
   // Initialise values 
   m_CalibrationFactor = itk::NumericTraits<double>::Zero;
@@ -40,7 +40,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 double 
-TerraSarCalibrationImageFunctor<TInput, TOutput>
+TerraSarCalibrationFunctor<TInput, TOutput>
 ::ComputeRangePosition(const IndexType & index) const
 {
   // First compute the range step for the given noise record
@@ -55,7 +55,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 double 
-TerraSarCalibrationImageFunctor<TInput, TOutput>
+TerraSarCalibrationFunctor<TInput, TOutput>
 ::ComputeNoiseEquivalentBetaNaught(double range) const
 {
   // Formula: NEBN = Ks * SUM( coef_i * (tau - tau_ref)^i)
@@ -89,7 +89,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 TOutput
-TerraSarCalibrationImageFunctor<TInput, TOutput>
+TerraSarCalibrationFunctor<TInput, TOutput>
 ::operator()(const TInput & inPix, IndexType index)
 {
   // Formula: sigma = (Ks.|DN|²-NEBN) * sin Theta_local
@@ -128,7 +128,7 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 
 template <class TInput, class TOutput>
 std::complex<TOutput>
-TerraSarCalibrationImageFunctor<TInput, TOutput>
+TerraSarCalibrationFunctor<TInput, TOutput>
 ::operator()(const std::complex<TInput> & inPix, IndexType index)
 {
   // First, extract modulus and phase

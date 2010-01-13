@@ -17,16 +17,16 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarFunctors.h"
+#include "otbTerraSarCalibrationFunctor.h"
 #include "itkIndex.h"
 
-int otbTerraSarCalibrationImageFunctor(int argc, char * argv[])
+int otbTerraSarCalibrationFunctor(int argc, char * argv[])
 {
   typedef double                   ScalarType;
   typedef std::complex<ScalarType> ComplexType;
   typedef itk::Index<>             IndexType;
 
-  typedef otb::Functor::TerraSarCalibrationImageFunctor<ScalarType, ScalarType>   FunctorType;
+  typedef otb::Functor::TerraSarCalibrationFunctor<ScalarType, ScalarType>   FunctorType;
 
   FunctorType funct;
   

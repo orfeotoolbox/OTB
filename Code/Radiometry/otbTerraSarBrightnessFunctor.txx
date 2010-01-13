@@ -20,6 +20,7 @@
 
 #include "otbTerraSarBrightnessFunctor.h"
 
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -46,15 +47,6 @@ TerraSarBrightnessFunctor<TInput, TOutput>
 
   // Then apply the calibration factor
   double beta = m_CalibrationFactor*squareInPix;
-  
-//   if(beta > 0.)
-//     {
-//     beta = 10 * vcl_log10(beta);
-//     }
-//   else
-//     {
-//     beta  = -50;
-//     }
 
   return static_cast<TOutput>(beta); 
 }
@@ -69,24 +61,11 @@ TerraSarBrightnessFunctor<TInput, TOutput>
   double modulus = vcl_sqrt(inPix.real()*inPix.real() + inPix.imag()*inPix.imag());
   double phase   = vcl_atan2(inPix.imag(),inPix.real());
 
-  if(modulus > vcl_sqrt(1/m_CalibrationFactor))
-    {
-    std::cout<<"Odd pixel: "<<inPix<<" (modulus: "<<modulus<<", 1/sqrt(CalFac): "<<1/vcl_sqrt(m_CalibrationFactor)<<") "<<std::endl;
-    }
-
-
-  //std::cout<<"Modulus: "<<modulus<<", phase: "<<phase<<std::endl;
-  //std::cout<<"Calibration factor: "<<m_CalibrationFactor<<std::endl;
-
   // Then, calibrate the modulus
   double beta = this->operator()(modulus);
   
-  //std::cout<<"Beta: "<<beta<<std::endl;
-
   // Last, put back the phase
   std::complex<TOutput> out(std::polar(beta,phase));
-
-  //std::cout<<"Out: "<<out<<std::endl;
 
   return out;
 }
