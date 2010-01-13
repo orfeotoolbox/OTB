@@ -519,8 +519,6 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
   // Load the base class.
    bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
-   std::cout<<kwl<<std::endl;
-
    if (result)
    {
       lookup = kwl.find(prefix,SR_GR_R0_KW);
