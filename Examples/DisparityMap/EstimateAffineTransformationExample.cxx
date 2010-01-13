@@ -50,7 +50,9 @@
 // Software Guide : BeginCodeSnippet
 
 #include "otbKeyPointSetsMatchingFilter.h"
-#include "otbSiftFastImageFilter.h"
+//#include "otbSiftFastImageFilter.h"
+#include "otbImageToSIFTKeyPointSetFilter.h"
+
 // Disabling deprecation warning if on visual
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -79,12 +81,22 @@
 
 int main (int argc, char* argv[])
 {
-  if (argc!= 4)
+  if (argc!= 9)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName resamplingImageFileName" << std::endl;
+    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold" << std::endl;
     return EXIT_FAILURE;
   }
+
+  const char * fixedfname = argv[1];
+  const char * movingfname = argv[2];
+  const char * outputImageFilename = argv[3];
+  
+  const unsigned int octaves = atoi(argv[4]);
+  const unsigned int scales = atoi(argv[5]);
+  float threshold = atof(argv[6]);
+  float ratio = atof(argv[7]);
+  const double secondOrderThreshold = atof(argv[8]);
 
   const unsigned int Dimension = 2;
 
@@ -126,7 +138,9 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType>
+  //typedef otb::SiftFastImageFilter<ImageType,PointSetType>
+  //ImageToSIFTKeyPointSetFilterType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>
   ImageToSIFTKeyPointSetFilterType;
 
   // Software Guide : EndCodeSnippet
@@ -190,8 +204,8 @@ int main (int argc, char* argv[])
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
-  fixedReader->SetFileName(argv[1]);
-  movingReader->SetFileName(argv[2]);
+  fixedReader->SetFileName(fixedfname);
+  movingReader->SetFileName(movingfname);
   fixedReader->UpdateOutputInformation();
   movingReader->UpdateOutputInformation();
 
@@ -221,20 +235,82 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  double secondOrderThreshold = 0.5;
+  
   bool useBackMatching = 0;
 
   filter1->SetInput(0, fixedReader->GetOutput() );
-  filter1->SetScalesNumber(3);
+  //filter1->SetScalesNumber(3);
   filter2->SetInput(0, movingReader->GetOutput() );
-  filter2->SetScalesNumber(3);
+  //filter2->SetScalesNumber(3);
 
-  euclideanMatcher->SetInput1(filter1->GetOutput());
-  euclideanMatcher->SetInput2(filter2->GetOutput());
+  // Software Guide : BeginCodeSnippet
+  filter1->SetOctavesNumber(octaves);
+  filter1->SetScalesNumber(scales);
+
+  filter1->SetDoGThreshold(threshold);
+  filter1->SetEdgeThreshold(ratio);
+
+  filter2->SetOctavesNumber(octaves);
+  filter2->SetScalesNumber(scales);
+
+  filter2->SetDoGThreshold(threshold);
+  filter2->SetEdgeThreshold(ratio);
+// Software Guide : EndCodeSnippet
+
+  filter1->Update();
+  filter2->Update();
+
+  //filter1->SetNumberOfThreads(1);
+  //filter2->SetNumberOfThreads(1);
+
+  //Take the minimum point set to compute euclidian diff
+  PointSetType::Pointer ptSet1 = filter1->GetOutput();
+  PointSetType::Pointer ptSet2 = filter2->GetOutput();
+  
+  typedef PointSetType::PointsContainer PointsContainer;
+  typedef PointsContainer::Iterator PointsIterator;
+
+  PointSetType::Pointer ptSet1bis = PointSetType::New();
+  PointSetType::Pointer ptSet2bis = PointSetType::New();
+  //PointsContainer::Pointer pt1Container;
+  //PointsContainer::Pointer pt2Container;
+  //bool 1isMin = ptSet1->GetNumberOfPoints() <= ptSet2->GetNumberOfPoints();
+  //LandmarkListType::Iterator it
+  unsigned int sizeMin=ptSet2->GetNumberOfPoints();
+  if ( ptSet1->GetNumberOfPoints() < ptSet2->GetNumberOfPoints() )
+  {
+        sizeMin = ptSet1->GetNumberOfPoints();
+  }
+  
+
+  //PointsIterator pointIterator = points->Begin();
+  //PointsIterator end = points->End();
+  unsigned int dataId =  0;
+  //while ( pointIterator != end )
+   //typedef PointSetType::PointContainer PointDataContainer;
+   PointsContainer::Pointer      points1 = ptSet1->GetPoints();
+   PointsContainer::Pointer      points2 = ptSet2->GetPoints();
+   typedef PointsContainer::Iterator           PointsIterator;
+   PointsIterator     pointsIterator1 = points1->Begin();
+   PointsIterator     pointsIterator2 = points2->Begin();
+   for (unsigned int dataId=0;dataId < sizeMin;++dataId)
+   {    
+        ptSet1bis->SetPoint( dataId , pointsIterator1->Value() );
+        ptSet2bis->SetPoint( dataId , pointsIterator2->Value() );
+        std::cout <<  pointsIterator1->Value() << std::endl;
+        
+        ++pointsIterator1;
+        ++pointsIterator2; 
+   }
+std::cout << "add over"<< std::endl;
+  euclideanMatcher->SetInput1(ptSet1);
+std::cout << "add over"<< std::endl;
+  euclideanMatcher->SetInput2(ptSet2);
+std::cout << "add over"<< std::endl;
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
   euclideanMatcher->Update();
-
+std::cout << "add over"<< std::endl;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -260,12 +336,14 @@ int main (int argc, char* argv[])
   
   // instantiation
   EstimatorType::Pointer estimator = EstimatorType::New();
-
+  std::cout << "landmark list size " << landmarkList->Size() << std::endl;  
   for (LandmarkListType::Iterator it = landmarkList->Begin();
      it != landmarkList->End(); ++it)
   {
-        otbMsgDevMacro(<<"landmark1" << it.Get()->GetPoint1() );
-        otbMsgDevMacro(<<"landmark2" << it.Get()->GetPoint2() );        
+        //otbMsgDevMacro(<<"landmark1" << it.Get()->GetPoint1() );
+        //otbMsgDevMacro(<<"landmark2" << it.Get()->GetPoint2() );        
+        std::cout << "landmark1" << it.Get()->GetPoint1() << std::endl;   
+        std::cout << "landmark2" << it.Get()->GetPoint2() << std::endl;        
         estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
   }
 
@@ -328,8 +406,11 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   // Get the output transform 
-  //EstimatorType::AffineTransformPointerType transform = estimator->GetAffineTransform();
-  resampler->SetTransform( estimator->GetAffineTransform() );
+  typedef EstimatorType::AffineTransformType AffineTransformType;
+  AffineTransformType::Pointer transform = AffineTransformType::New();
+  transform->GetInverse( estimator->GetAffineTransform() );
+  
+  resampler->SetTransform( transform );
   resampler->SetSize( fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize() );
   resampler->SetOutputOrigin( fixedReader->GetOutput()->GetOrigin() );
   resampler->SetOutputSpacing( fixedReader->GetOutput()->GetSpacing() );
@@ -341,7 +422,7 @@ int main (int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetInput( resampler->GetOutput() );
-  writer->SetFileName( argv[3] );
+  writer->SetFileName( outputImageFilename );
   writer->Update();
 
   return EXIT_SUCCESS;
