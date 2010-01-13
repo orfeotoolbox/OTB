@@ -1199,11 +1199,11 @@ bool ossimplugins::ossimTerraSarProductDoc::initIncidenceAngles(
     {
       result = false;
     }
-    
-   return result;
   }
-  return false;
+  
+  return result;
 }
+  return false;
 bool ossimplugins::ossimTerraSarProductDoc::initNoise(
    const ossimXmlDocument* xdoc, ossimplugins::Noise* noise) const
 {

@@ -184,5 +184,7 @@ int main(int argc, char * argv[])
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
   }
+
+  return EXIT_SUCCESS;
   
 }

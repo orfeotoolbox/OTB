@@ -151,8 +151,8 @@ GCPsToRPCSensorModelImageFilter< TImage >
       {
       // Store row/col in an index
       typename TImage::IndexType index;
-      index[0] = imagePtr->GetGCPCol(i);
-      index[1] = imagePtr->GetGCPRow(i);
+      index[0] = static_cast<long int>(imagePtr->GetGCPCol(i));
+      index[1] = static_cast<long int>(imagePtr->GetGCPRow(i));
 
       // Transform to physical point
       Point2DType physPoint;

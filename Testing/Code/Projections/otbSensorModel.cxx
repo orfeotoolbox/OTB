@@ -54,6 +54,30 @@ int otbSensorModel( int argc, char* argv[] )
   file << "*** KEYWORD LIST ***\n";
   file << reader->GetOutput()->GetImageKeywordlist();
 
+  //** Truncate precision of meters_per_pixel */
+  ossimKeywordlist geom_kwl;
+  ossimString s;
+	double value;
+  reader->GetOutput()->GetImageKeywordlist().convertToOSSIMKeywordlist( geom_kwl);
+	
+  file << std::setprecision(5);
+	
+	s = geom_kwl.find("meters_per_pixel_x");
+	if (s != "")
+	{
+		value = s.toDouble();
+		file << "truncate_meter_per_pixel_x " << value << std::endl;
+	}
+	
+	s = geom_kwl.find("meters_per_pixel_y");
+	if (s != "")
+	{
+		value = s.toDouble();
+		file << "truncate_meter_per_pixel_y " << value << std::endl;
+	}
+	
+	file << std::setprecision(15);
+	
   file << "\n*** TRANSFORM ***\n";
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
@@ -82,6 +106,7 @@ int otbSensorModel( int argc, char* argv[] )
   file << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
   file.close();
+	
   return EXIT_SUCCESS;
 }
 
