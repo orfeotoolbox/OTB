@@ -19,8 +19,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTerraSarRadarBrightnessImageFilter_h
-#define __otbTerraSarRadarBrightnessImageFilter_h
+#ifndef __otbTerraSarBrightnessImageFilter_h
+#define __otbTerraSarBrightnessImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataDictionary.h"
