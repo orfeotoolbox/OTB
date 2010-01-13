@@ -345,14 +345,20 @@ ImageFileReader<TOutputImage>
       thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory 
       because the default include factory contains ossimQuickbirdTiffTileSource. */
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
+
   if (!projection)
     {
       otbMsgDevMacro( <<"OSSIM Instantiate projection FAILED ! ");
     }
   else
     {
+      std::cout<<"sdfkvjbsdfkvbfdb"<<std::endl;
       otbMsgDevMacro( <<"OSSIM Instantiate projection SUCCESS ! ");
       hasMetaData = projection->saveState(geom_kwl);
+      
+      
+      
+      std::cout<<"123416123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231123416354321231354321231"<<std::endl;  
       
       // Free memory
       delete projection;
@@ -360,6 +366,7 @@ ImageFileReader<TOutputImage>
   
   if (!hasMetaData)
     {
+            std::cout<<"----------------------"<<std::endl;
       // Add the radar factory
       ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
       
@@ -398,20 +405,26 @@ ImageFileReader<TOutputImage>
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
     otb_kwl.SetKeywordlist( geom_kwl );
-
+           std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
+ 
     // Update itk MetaData Dictionary
 
     itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
-
+          std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
+ 
     itk::EncapsulateMetaData< ImageKeywordlist >(dict,
         MetaDataKey::OSSIMKeywordlistKey,
         otb_kwl);
+          std::cout<<"------------------------------------------------------------------------------------------------------------------------------------"<<std::endl;
+ 
   }
-
+          std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+ 
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-
+         std::cout<<"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<<std::endl;
+ 
   typedef typename TOutputImage::IndexType   IndexType;
 
   IndexType start;
@@ -431,7 +444,8 @@ ImageFileReader<TOutputImage>
   }
 
   output->SetLargestPossibleRegion(region);
-
+         std::cout<<"************************************************************************************************************************"<<std::endl;
+ 
 }
 
 template <class TOutputImage>
@@ -488,6 +502,7 @@ ImageFileReader<TOutputImage>
 //        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
   listFileSearch.push_back("IMAG_01.DAT");
   listFileSearch.push_back("imag_01.dat");//For format SPOT4
+
   std::string str_FileName;
   bool fic_trouve(false);
 
