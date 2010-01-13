@@ -111,6 +111,10 @@ public:
   itkSetMacro(PRF,double);
   itkGetMacro(PRF,double);
 
+  /** Set the default value (replacing negative sigma */
+  itkSetMacro(DefaultValue,double);
+  itkGetMacro(DefaultValue,double);
+
   /** The Calibration algorithm uses the original product size to
    * compute the range and azimuth location. Hence, if the input image is
    * an extract of the original product, this information must be set.
@@ -175,6 +179,10 @@ private:
 
   /** Noise record vector */
   NoiseRecordVectorType m_NoiseRecords;
+  
+  /** Default value (for negative sigma) */
+  bool m_DefaultValue;
+
 };
 
 } // end namespace otb

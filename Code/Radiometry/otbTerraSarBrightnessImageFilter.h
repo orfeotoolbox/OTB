@@ -88,6 +88,17 @@ public:
     return this->GetFunctor().GetCalibrationFactor();
   }
 
+  void SetResultsIndecibels(bool db)
+  {
+    this->GetFunctor().SetResultsInDecibels(db);
+    this->Modified();
+  }
+
+  bool GetResultsInDecibels()
+  {
+    return this->GetFunctor().GetResultsInDecibels();
+  }
+
 protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};

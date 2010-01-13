@@ -48,6 +48,18 @@ public:
  /** Accessors */
  void SetCalibrationFactor( double val ) { m_CalibrationFactor = val; };
  double GetCalibrationFactor() { return m_CalibrationFactor; };
+
+  /** Set results in decibels */
+  void SetResultsInDecibels(bool db)
+  {
+    m_ResultsInDecibels = db;
+  }
+
+  /** Get the value of the flag */
+  bool GetResultsInDecibels()
+  {
+    return m_ResultsInDecibels;
+  }
  
  /** We assume that the input pixel is a scalar -> modulus image */
  inline TOutput operator() (const TInput & inPix);
@@ -57,6 +69,9 @@ public:
 private:
   /** Calibration Factor */
   double m_CalibrationFactor;
+
+  /** Shall we compute results in decibels ? */
+  bool m_ResultsInDecibels;
 };
 
 }// end namespace functor

@@ -36,6 +36,8 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   m_OriginalProductSize.Fill(0);
   m_UseFastCalibration = false;
   m_ResultsInDecibels = true;
+  m_Brightness.SetResultsInDecibels(false);
+  m_DefaultValue = 0.00001; // Default value is 10^-5
 }
 
 template <class TInput, class TOutput>
@@ -97,11 +99,15 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   // First, compute the brightness using the brightness functor
   double beta0 = m_Brightness( static_cast<double>(inPix) );
 
-  // Compute the simplified version by neglecting noise
-  double sigma = beta0 * m_SinLocalIncidentAngle;
+  // Initialise sigma
+  double sigma = 0.;
 
   // If fast calibration is off, compute noise
-  if(!m_UseFastCalibration)
+  if(m_UseFastCalibration)
+    {
+    sigma = beta0 * m_SinLocalIncidentAngle; 
+    }
+  else
     {
     // Compute the range position for this noise record
     double currentRange = this->ComputeRangePosition(index);
@@ -110,10 +116,13 @@ TerraSarCalibrationFunctor<TInput, TOutput>
     double NEBN = this->ComputeNoiseEquivalentBetaNaught(currentRange);
     
     // Last, apply formula
-    // Please note the absolute value allowing to ensure that sigma is
-    // positive. The lower bound of sigma - NEBN is in the worst case
-    // (-NEBN), in the case were sigma is far below the noise level.  
-    sigma = vcl_abs(sigma - NEBN * m_SinLocalIncidentAngle);
+    sigma = (beta0 - NEBN) * m_SinLocalIncidentAngle;
+
+    // Handle negative sigma case
+    if(sigma <=0)
+      {
+      sigma = m_DefaultValue;
+      }
     }
 
   // If results are in dB

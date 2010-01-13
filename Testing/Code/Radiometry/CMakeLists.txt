@@ -1043,46 +1043,81 @@ ADD_TEST(raTuTerraSarCalibrationImageFilterNew ${RADIOMETRY_TESTS9}
        otbTerraSarCalibrationImageFilterNew
 )
 
-ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON}  
-                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest.tif
-                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
-        otbTerraSarCalibrationImageFilterTest
-		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-		${TEMP}/raTvTerraSarCalibrationImageFilterTest.tif
-		0 # don't use metadata
-)
-
-ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTest ${RADIOMETRY_TESTS9}
- --compare-image ${EPSILON}  
-                               ${BASELINE}/raTvTerraSarCalibrationComplexImageFilterTest.tif
-                               ${TEMP}/raTvTerraSarCalibrationComplexImageFilterTest.tif
-        otbTerraSarCalibrationImageComplexFilterTest
-		${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
-		${TEMP}/raTvTerraSarCalibrationComplexImageFilterTest.tif
-		0 # don't use metadata
-)
-
 IF(OTB_DATA_USE_LARGEINPUT)
+
+ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALACoarse ${RADIOMETRY_TESTS9}
+ --compare-image ${EPSILON}  
+                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
+        otbTerraSarCalibrationImageFilterTest
+                ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALACoarse.tif
+		1 # Use fast calibration
+		0 # Results in linear scale
+		2000 2000 250 250 # Extract
+)
+
+ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTOCoarse ${RADIOMETRY_TESTS9}
+ --compare-image ${EPSILON}  
+                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
+        otbTerraSarCalibrationImageComplexFilterTest
+                ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTOCoarse.tif
+		1 # Use fast calibration
+		0 # Results in linear scale
+		2000 2000 250 250 # Extract
+)
+
 ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALA ${RADIOMETRY_TESTS9}
  --compare-image ${EPSILON}  
-                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
-                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
+                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
         otbTerraSarCalibrationImageFilterTest
                 ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
 		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALA.tif
-		1 # use metadata
+		0 # No fast calibration
+		0 # Results in linear scale
+		2000 2000 250 250 # Extract
 )
 
 ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTO ${RADIOMETRY_TESTS9}
  --compare-image ${EPSILON}  
-                               ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
-                               ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
+                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
         otbTerraSarCalibrationImageComplexFilterTest
                 ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
 		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
-		1 # use metadata
+		0 # No fast calibration
+		0 # Results in linear scale
+		2000 2000 250 250 # Extract
 )
+
+
+ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALADb ${RADIOMETRY_TESTS9}
+ --compare-image ${EPSILON}  
+                 ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
+        otbTerraSarCalibrationImageFilterTest
+                ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
+		${TEMP}/raTvTerraSarCalibrationImageFilterTest_UPSALADb.tif
+		0 # No fast calibration
+		1 # Results in logarithmic
+		2000 2000 250 250 # Extract
+)
+
+ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTODb ${RADIOMETRY_TESTS9}
+ --compare-image ${EPSILON}  
+                 ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
+                 ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
+        otbTerraSarCalibrationImageComplexFilterTest
+                ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
+		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTODb.tif
+		0 # No fast calibration
+		1 # Results in logarithmic scale
+		2000 2000 250 250 # Extract
+)
+
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 

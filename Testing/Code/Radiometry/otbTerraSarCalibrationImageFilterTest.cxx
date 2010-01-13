@@ -28,11 +28,11 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
-  bool useMetadata = true;
-  if(atoi(argv[3]) == 0)
-    useMetadata = false;
+  const bool   useFastCalibration = atoi(argv[3]);
+  const bool   resultsInDbs = atoi(argv[4]);
 
-  typedef otb::Image<std::complex<double>, 2>                       ImageType;
+  typedef double					            PixelType;
+  typedef otb::Image<PixelType, 2>                                  ImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
@@ -49,24 +49,29 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   reader->UpdateOutputInformation();
 
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfThreads(1);
-  writer->SetInput(filter->GetOutput());
-    
-  // Generate an extract from the large input
-  ImageType::RegionType region;
-  ImageType::IndexType id;
-  id[0] = 2000;   id[1] = 2000;
-  ImageType::SizeType size;
-  size[0] = 2000;   size[1] = 2000;
-  region.SetIndex(id);
-  region.SetSize(size);
-  extractor->SetExtractionRegion(region);
+  filter->SetUseFastCalibration(useFastCalibration);
+  filter->SetResultsInDecibels(resultsInDbs);
+     
+  if(argc == 9)
+    {
+    ImageType::RegionType region;
+    ImageType::IndexType id;
+    id[0] =atoi(argv[5]);   
+    id[1] = atoi(argv[6]);
+    ImageType::SizeType size;
+    size[0] = atoi(argv[7]);
+    size[1] = atoi(argv[8]);
+    region.SetIndex(id);
+    region.SetSize(size);
+    extractor->SetExtractionRegion(region);
+    extractor->SetInput(filter->GetOutput());
+    writer->SetInput(extractor->GetOutput());
+    }
+  else
+    {
+    writer->SetInput(filter->GetOutput());
+    }
   
-  extractor->SetInput(filter->GetOutput());
-  writer->SetInput(extractor->GetOutput());
-
-
-  filter->SetUseFastCalibration( false );
   writer->Update();
   
   return EXIT_SUCCESS;

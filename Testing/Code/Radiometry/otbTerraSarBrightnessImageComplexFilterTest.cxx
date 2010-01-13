@@ -67,7 +67,7 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
     }
   else
     {
-      filter->SetCalFactor( 10 );
+      filter->SetCalibrationFactor( 10 );
       writer->SetInput(filter->GetOutput());
     }
 

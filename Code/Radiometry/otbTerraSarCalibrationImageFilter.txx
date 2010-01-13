@@ -40,7 +40,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 				     m_OriginalProductSize(),
 				     m_UseFastCalibration(false),
 				     m_ResultsInDecibels(true),
-				     m_NoiseRecords()
+				     m_NoiseRecords(),
+				     m_DefaultValue(0.00001)
 				     
 {}
 
@@ -171,12 +172,10 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
     }
   }
-
   // Ensure that noise records are sorted by decreasing acquisition
   // date
   std::sort(m_NoiseRecords.begin(),m_NoiseRecords.end(), &Self::CompareNoiseRecords);
 }
-
 
 template <class TInputImage, class TOutputImage>
 void
@@ -209,7 +208,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   calibrationFunctor.SetUseFastCalibration(m_UseFastCalibration);
   calibrationFunctor.SetResultsInDecibels(m_ResultsInDecibels);
   calibrationFunctor.SetOriginalProductSize(m_OriginalProductSize);
-
+  calibrationFunctor.SetDefaultValue(m_DefaultValue);
 
   // Set up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());

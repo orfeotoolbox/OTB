@@ -139,6 +139,18 @@ public:
   { 
     return m_ResultsInDecibels; 
   };
+
+  /** Set the default value */
+  void SetDefaultValue(double value)
+  {
+    m_DefaultValue = value;
+  }
+
+  /** Get the default value */
+  void GetDefaultValue(void)
+  {
+    return m_DefaultValue;
+  }
   
   /** Perform the calibration for one pixel (scalar -> modulus image) */
   inline TOutput operator() (const TInput & inPix, IndexType index);
@@ -178,6 +190,9 @@ private:
 
   /** Compute results in dB */
   bool m_ResultsInDecibels;
+
+  /** Default value for negative sigma */
+  double m_DefaultValue;
 };
 
 }// end namespace functor

@@ -31,7 +31,8 @@ template <class TInput, class TOutput>
 TerraSarBrightnessFunctor<TInput, TOutput>
 ::TerraSarBrightnessFunctor()
 {
-  m_CalibrationFactor = itk::NumericTraits<double>::Zero; 
+  m_CalibrationFactor = itk::NumericTraits<double>::Zero;
+  m_ResultsInDecibels = true;
 }
 
 
@@ -47,6 +48,12 @@ TerraSarBrightnessFunctor<TInput, TOutput>
 
   // Then apply the calibration factor
   double beta = m_CalibrationFactor*squareInPix;
+
+  // Results in decibels case
+  if(m_ResultsInDecibels)
+    {
+    beta = 10 * vcl_log10(beta);
+    }
 
   return static_cast<TOutput>(beta); 
 }
