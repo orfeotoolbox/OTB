@@ -93,13 +93,13 @@ int otbImageKeywordlist( int argc, char* argv[] )
   if (s != "")
   {
     valueX = s.toDouble();
-    file << "truncate_meters_per_pixel_x " << valueX << std::endl;
+    file << "truncate_meter_per_pixel_x " << valueX << std::endl;
   }
   s = geom_kwl2.find("meters_per_pixel_y");
   if (s != "")
   {
     valueY = s.toDouble();
-    file << "truncate_meters_per_pixel_y " << valueY << std::endl;
+    file << "truncate_meter_per_pixel_y " << valueY << std::endl;
   }
 
   otb_kwl2.convertToOSSIMKeywordlist( geom_kwl3);
@@ -107,13 +107,13 @@ int otbImageKeywordlist( int argc, char* argv[] )
   if (s != "")
   {
     valueX = s.toDouble();
-    file2 << "truncate_meters_per_pixel_x " << valueX << std::endl;
+    file2 << "truncate_meter_per_pixel_x " << valueX << std::endl;
   }
   s = geom_kwl3.find("meters_per_pixel_y");
   if (s != "")  
   {
     valueY = s.toDouble();
-    file2 << "truncate_meters_per_pixel_y " << valueY << std::endl;
+    file2 << "truncate_meter_per_pixel_y " << valueY << std::endl;
   }
 
   file.close();

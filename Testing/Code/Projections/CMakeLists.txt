@@ -98,7 +98,7 @@ ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
          ${TEMP}/prTvSensorModelSpot5.txt
---ignore-lines-with 1 support_data.metadata_file
+--ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/SPOT5/TEHERAN/IMAGERY.TIF
          ${TEMP}/prTvSensorModelSpot5.txt
@@ -108,6 +108,7 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
          ${TEMP}/prTvSensorModelQuickbird.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/prTvSensorModelQuickbird.txt
@@ -117,6 +118,7 @@ ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
          ${TEMP}/prTvSensorModelIkonos.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/IKONOS/BLOSSEVILLE/po_2619900_pan_0000000.tif
          ${TEMP}/prTvSensorModelIkonos.txt
@@ -126,6 +128,7 @@ ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRapidEye.txt
          ${TEMP}/prTvSensorModelRapidEye.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
          ${TEMP}/prTvSensorModelRapidEye.txt
@@ -171,6 +174,7 @@ ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelTerraSarX.txt
          ${TEMP}/prTvSensorModelTerraSarX.txt
+         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX.txt
@@ -180,6 +184,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Upsala.txt
         ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
+        --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
@@ -188,6 +193,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Toronto.txt
         ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
+        --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
