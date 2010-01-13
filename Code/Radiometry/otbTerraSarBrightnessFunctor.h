@@ -30,14 +30,22 @@ namespace otb
 {
 namespace Functor
 {
-
 /**
-   * \class TerraSarBrightnessFunctor
-   *  \brief Compute the radar brightness from an modulus image.
-   *
-   * \ingroup Functor
-   * \ingroup Radiometry
+ * \class TerraSarBrightnessImageFunctor
+ *  \brief Compute beta naught coefficient.
+ * 
+ * This functor is intended to be used by the
+ * TerrasarBrightnessImageFilter.
+ * 
+ * For more information on Terrasar calibration, 
+ * please refer to the
+ * documentation of this filter.
+ *
+ * \sa TerraSarBrightnessImageFilter
+ * \ingroup Functor
+ * \ingroup Radiometry
  */
+
 template <class TInput, class TOutput>
 class TerraSarBrightnessFunctor
 {

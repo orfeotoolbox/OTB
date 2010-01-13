@@ -37,11 +37,19 @@ namespace otb
 namespace Functor
 {
 /**
-   * \class TerraSarCalibrationImageFunctor
-   *  \brief Compute sigma naught coefficient from a modulus image.
-   *
-   * \ingroup Functor
-   * \ingroup Radiometry
+ * \class TerraSarCalibrationImageFunctor
+ *  \brief Compute sigma naught coefficient.
+ * 
+ * This functor is intended to be used by the
+ * TerrasarCalibrationImageFilter.
+ * 
+ * For more information on Terrasar calibration, 
+ * please refer to the
+ * documentation of this filter.
+ *
+ * \sa TerraSarCalibrationImageFilter
+ * \ingroup Functor
+ * \ingroup Radiometry
  */
 template<class TInput, class TOutput>
 class TerraSarCalibrationFunctor

@@ -28,16 +28,55 @@
 
 namespace otb
 {
-
-
 /** \class TerraSarCalibrationImageFilter
  *  \brief Calculates the calibration of TerraSar sensor images.
  *
- *  For details, please refer to Infoterra documentation : "Radiometric Calibration of TerraSAR-X Data".
- *  Using FastCalibration boolean allows to compute the result considering the first noise polygone
- *  coeffcients for each line or to use every polygones coefficient given.
- *  The code was made considering that the first acquisition point is the lower left one.
+ * Implementation of the calibration algorithm has been made following
+ * Infoterra documentation  "Radiometric Calibration of TerraSAR-X
+ * Data".
  *
+ * This filter computes the sigma naught (\f$ \sigma^{0} \f$) using the following formula:
+ * \f[\sigma^{0} = ( k_{s} \cdot |DN|^{2} - NEBN) \cdot sin(\theta_{loc}\f]
+ * 
+ * Where \f$ k_{s} \f$ is the calibration factor, \f$NEBN\f$ is the
+ * Noise Equivalent Beta Naugth and \f$ \theta_{loc} \f$ is the local
+ * incident angle.
+ *
+ * NEBN is interpolated for each range position according to the
+ * polynomial coefficients from the most recent noise record.
+ * 
+ * \f$ \theta_{loc} \f$ is the mean incident angle over the scene. For
+ * now, this filter does not support more accurate behaviour like
+ * incident angle interpolation from metadata or the Geocoded
+ * Incidence Angle mask optional 1B product (GIM).
+ *
+ * All parameters are imported from the input image metadata, even if
+ * one can set different values using the proper accessors.
+ *
+ * The UseFastCalibration flag alllows to derive a coarser yet faster
+ * calibration by neglecting the noise term.
+ * 
+ * Results can be obtained either in linear or logarithmic scale
+ * (decibels), using the ResultsInDecibels flag.
+ *
+ * When signal value is too small with respect to the noise term, it
+ * may happen that \f$\sigma_{0} \f$ becomes negative. In that case
+ * the value is replaced by a default value, which can be tuned by the
+ * user.
+ * 
+ * This filter works with either real or complex image. In the case of
+ * the complex images (SLC products for instance), modulus and phase
+ * are extracted, sigma naught is computed from the modulus and the
+ * phase is set back to the result.
+ *
+ * For implementation details, consider reading the code
+ * TerraSarCalibrationFunctor.
+ *
+ * \sa TerraSarCalibrationFunctor
+ * \sa TerraSarBrightnessImageFilter
+ * 
+ * \ingroup Streamed
+ * \ingroup Multithreaded 
  * \ingroup Radiometry
  */
 
@@ -47,40 +86,44 @@ class ITK_EXPORT TerraSarCalibrationImageFilter :
 {
 public:
   /** "typedef" for standard classes. */
-  typedef TerraSarCalibrationImageFilter                                                      Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>                                   Superclass;
-  typedef itk::SmartPointer<Self>                                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                                       ConstPointer;
+  typedef TerraSarCalibrationImageFilter                                   Self;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>                Superclass;
+  typedef itk::SmartPointer<Self>                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                    ConstPointer;
 
   /** Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro( InputImageDimension, unsigned int, 
+		       TInputImage::ImageDimension);
+  itkStaticConstMacro( OutputImageDimension, unsigned int, 
+		       TOutputImage::ImageDimension);
 
-  /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage                                                                         InputImageType;
-  typedef TOutputImage                                                                        OutputImageType;
-  typedef typename InputImageType::RegionType                                                 InputImageRegionType;
-  typedef typename OutputImageType::RegionType                                                OutputImageRegionType;
-  typedef typename InputImageType::InternalPixelType                                          InputInternalPixelType;
-  typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
-  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
-  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
+  /** "typedef" to simplify the variables definition 
+   * and the declaration. */
+  typedef TInputImage                                                      InputImageType;
+  typedef TOutputImage                                                     OutputImageType;
+  typedef typename InputImageType::RegionType                              InputImageRegionType;
+  typedef typename OutputImageType::RegionType                             OutputImageRegionType;
+  typedef typename InputImageType::InternalPixelType                       InputInternalPixelType;
+  typedef typename OutputImageType::InternalPixelType                      OutputInternalPixelType;
+  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType  InputValueType;
+  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType OutputValueType;
 
   /** Calibration functor typedef */
-  typedef typename Functor::TerraSarCalibrationFunctor< InputValueType, OutputValueType>      CalibrationFunctorType;  
+  typedef typename Functor::TerraSarCalibrationFunctor<InputValueType, 
+						       OutputValueType>    CalibrationFunctorType;  
 
   /** typedef to access metadata */
-  typedef itk::MetaDataDictionary                                                             MetaDataDictionaryType;
-  typedef typename InputImageType::SizeType                                                   SizeType;
+  typedef itk::MetaDataDictionary                                          MetaDataDictionaryType;
+  typedef typename InputImageType::SizeType                                SizeType;
 
   /** Noise records typedefs */
-  typedef ossimplugins::ImageNoise                                                            ImageNoiseType;
+  typedef ossimplugins::ImageNoise                                         ImageNoiseType;
   /** 
    * This is used to store the noise record along with its
    * acquisition time 
    */
-  typedef std::pair<double,ImageNoiseType>                                                    NoiseRecordType;
-  typedef std::vector<NoiseRecordType>                                                        NoiseRecordVectorType;
+  typedef std::pair<double,ImageNoiseType>                                 NoiseRecordType;
+  typedef std::vector<NoiseRecordType>                                     NoiseRecordVectorType;
 
   /** object factory method. */
   itkNewMacro(Self);
