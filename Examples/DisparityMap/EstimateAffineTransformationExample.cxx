@@ -266,7 +266,35 @@ int main (int argc, char* argv[])
   //Take the minimum point set to compute euclidian diff
   PointSetType::Pointer ptSet1 = filter1->GetOutput();
   PointSetType::Pointer ptSet2 = filter2->GetOutput();
-  
+
+  typedef PointSetType::PointsContainer PointsContainer;
+  PointsContainer::Pointer ptContainer;
+
+  unsigned int minPtSetSize=ptSet1->GetNumberOfPoints();
+  ptContainer1 = ptSet1->GetPoints();
+  ptContainer2 = ptSet2->GetPoints();
+  if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
+  {
+        //minPtSetSize = ptSet2->GetNumberOfPoints();
+	//minPtSetSize = ptSet2->GetNumberOfPoints();
+ 	ptContainer1 = ptSet2->GetPoints();
+  	ptContainer2 = ptSet1->GetPoints();
+  }
+
+  for (unsigned int id=ptContainer1->GetSize();id < ptContainer2->GetSize();++id)
+  {
+  	ptContainer2->DeleteIndex( id );
+  }
+
+  if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
+  {
+        ptSet1->SetPoints(ptContainer2);
+  }
+  else
+  {
+  	ptSet2->SetPoints(ptContainer2);
+  }
+  /*
   typedef PointSetType::PointsContainer PointsContainer;
   typedef PointsContainer::Iterator PointsIterator;
 
@@ -302,16 +330,19 @@ int main (int argc, char* argv[])
         ++pointsIterator1;
         ++pointsIterator2; 
    }
-std::cout << "add over"<< std::endl;
+*/
+
   euclideanMatcher->SetInput1(ptSet1);
-std::cout << "add over"<< std::endl;
   euclideanMatcher->SetInput2(ptSet2);
-std::cout << "add over"<< std::endl;
+
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
   euclideanMatcher->Update();
-std::cout << "add over"<< std::endl;
+
   // Software Guide : EndCodeSnippet
+
+
+
   // Software Guide : BeginLatex
   //
   // The matched points will be stored into a landmark list.
