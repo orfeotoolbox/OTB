@@ -174,7 +174,7 @@ ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelTerraSarX.txt
          ${TEMP}/prTvSensorModelTerraSarX.txt
-         --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+        --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/dims/TSX-1.SAR.L1B/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX.txt
@@ -184,7 +184,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Upsala.txt
         ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
-        --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+        --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/TSX1_SAR__MGD.xml
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
@@ -193,7 +193,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Toronto.txt
         ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
-        --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
+        --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
          ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
