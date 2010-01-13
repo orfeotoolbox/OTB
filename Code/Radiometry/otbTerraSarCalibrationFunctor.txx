@@ -35,7 +35,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   m_SinLocalIncidentAngle = itk::NumericTraits<double>::Zero;
   m_OriginalProductSize.Fill(0);
   m_UseFastCalibration = false;
-  m_ResultsInDecibels = true;
+  m_ResultsInDecibels = false;
   m_Brightness.SetResultsInDecibels(false);
   m_DefaultValue = 0.00001; // Default value is 10^-5
 }

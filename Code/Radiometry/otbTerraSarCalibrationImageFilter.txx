@@ -39,7 +39,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 				     m_PRF(1.),
 				     m_OriginalProductSize(),
 				     m_UseFastCalibration(false),
-				     m_ResultsInDecibels(true),
+				     m_ResultsInDecibels(false),
 				     m_NoiseRecords(),
 				     m_DefaultValue(0.00001)
 				     

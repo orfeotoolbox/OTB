@@ -32,7 +32,7 @@ TerraSarBrightnessFunctor<TInput, TOutput>
 ::TerraSarBrightnessFunctor()
 {
   m_CalibrationFactor = itk::NumericTraits<double>::Zero;
-  m_ResultsInDecibels = true;
+  m_ResultsInDecibels = false;
 }
 
 
