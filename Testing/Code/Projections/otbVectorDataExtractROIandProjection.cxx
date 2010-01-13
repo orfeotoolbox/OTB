@@ -80,7 +80,7 @@ int otbVectorDataExtractROIandProjection(int argc, char * argv[])
 
   unsigned int elementsKeptAfterProj = extractROI->GetOutput()->Size();
   std::cout << "After projection: kept " << elementsKeptAfterProj << " features." << std::endl;
-
+  
   extractROI->SetInput(reader->GetOutput());
   extractROI->Update();
 

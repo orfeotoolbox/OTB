@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(OrthoRectificationExampleTest);
   REGISTER_TEST(MapProjectionExampleTest);
   REGISTER_TEST(VectorDataProjectionExampleTest);
+  REGISTER_TEST(EstimateRPCSensorModelExample);
 }
 
 #undef main
@@ -43,4 +44,6 @@ void RegisterTests()
 #define main VectorDataProjectionExampleTest
 #include "VectorDataProjectionExample.cxx"
 
-
+#undef main
+#define main EstimateRPCSensorModelExample
+#include "EstimateRPCSensorModelExample.cxx"

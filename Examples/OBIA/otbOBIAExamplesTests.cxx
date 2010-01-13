@@ -27,7 +27,7 @@ void RegisterTests()
 {
   REGISTER_TEST(OBIAImageToLabelToImageTest);
   REGISTER_TEST(OBIAShapeAttributeComputationTest);
-  REGISTER_TEST(OBIARadiometricAttributesTest);
+  REGISTER_TEST(RadiometricAttributesLabelMapFilterExample);
   REGISTER_TEST(LabelMapToVectorDataTest);
 }
 
@@ -40,7 +40,7 @@ void RegisterTests()
 #include "ShapeAttributeComputation.cxx"
 
 #undef main
-#define main OBIARadiometricAttributesTest
+#define main RadiometricAttributesLabelMapFilterExample
 #include "otbRadiometricAttributesLabelMapFilterExample.cxx"
 
 #undef main

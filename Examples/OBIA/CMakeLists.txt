@@ -19,8 +19,8 @@ TARGET_LINK_LIBRARIES(LabelMapToVectorData OTBCommon OTBIO OTBBasicFilters ${OTB
 IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/OBIA)
-
 SET(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+
 #Remote sensing images (large images )
 IF(OTB_DATA_USE_LARGEINPUT)
   SET(INPUTLARGEDATA ${OTB_DATA_LARGEINPUT_ROOT} )
@@ -55,7 +55,7 @@ ADD_TEST(trTeOBIAShapeAttributeComputationTest ${EXE_TESTS}
 ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	--compare-image ${TOL}	${BASELINE}/OBIARadiometricAttributes.tif
 	                        ${TEMP}/OBIARadiometricAttributes.tif
-	OBIARadiometricAttributesTest
+	RadiometricAttributesLabelMapFilterExample
 	${INPUTDATA}/qb_RoadExtract2.tif  
 	${TEMP}/OBIARadiometricAttributes.tif
 	STATS::Ndvi::Mean
