@@ -1030,12 +1030,7 @@ ADD_TEST(raTvAeronet_ArcachonLevel10_ExtractData ${RADIOMETRY_TESTS8}
 
 # -------            TerraSarCalibrationFunctor   ------------------------------
 ADD_TEST(raTvTerraSarCalibrationFunctor ${RADIOMETRY_TESTS9}
-# --compare-image ${EPSILON}  
-#                               ${BASELINE}/raTvTerraSarCalibrationImageFunctor.tif
-#                               ${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
         otbTerraSarCalibrationFunctor
-#		${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
-#		${TEMP}/raTvTerraSarCalibrationImageFunctor.tif
 )
 
 # -------            TerraSarCalibrationImageFilter   ------------------------------
@@ -1147,7 +1142,8 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
         otbTerraSarBrightnessImageFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilterTest.tif
-	0 # don't use metadata	
+	0 # don't use metadata
+	0 # results in linear scale
 )
 
 ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTest ${RADIOMETRY_TESTS9}
@@ -1157,7 +1153,8 @@ ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTest ${RADIOMETRY_TESTS9}
         otbTerraSarBrightnessImageComplexFilterTest
         ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
         ${TEMP}/raTvTerraSarBrightnessImageComplexFilterTest.tif
-	0 # don't use metadata	
+	0 # don't use metadata
+	0 # results in linear scale
 )
 
 IF(OTB_DATA_USE_LARGEINPUT)
@@ -1169,6 +1166,8 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
         ${LARGEINPUT}/TERRASARX/UPSALA_GLACIER/TSX1_SAR__MGD/IMAGEDATA/IMAGE_HH_SRA_strip_012.tif
         ${TEMP}/raTvTerraSarBrightnessImageFilter_UPSALA.tif
 	1 # use metadata
+	0 # results in linear scale
+	2000 2000 250 250 # Extract
 )
 
 ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
@@ -1179,6 +1178,8 @@ ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
         ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
 	1 # use metadata
+	0 # results in linear scale
+	2000 2000 250 250 # Extract
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 

@@ -33,6 +33,7 @@ int otbTerraSarBrightnessFunctor(int argc, char * argv[])
 
   FunctorType funct;
   funct.SetCalibrationFactor(calFact);
+  funct.SetResultsInDecibels(false);
 
   ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
   ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));

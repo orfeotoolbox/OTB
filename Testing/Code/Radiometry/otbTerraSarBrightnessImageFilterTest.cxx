@@ -28,11 +28,10 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
-  bool useMetadata = false;
-  if(atoi(argv[3]) != 0)
-    useMetadata = true;
+  const bool   useMetadata    = atoi(argv[3]);
+  const bool   resultsInDb    = atoi(argv[4]);
 
-  typedef otb::Image<std::complex<double>, 2>                      ImageType;
+  typedef otb::Image<double, 2>                                    ImageType;
   typedef otb::ImageFileReader<ImageType>                          ReaderType;
   typedef otb::ImageFileWriter<ImageType>                          WriterType;
   typedef otb::TerraSarBrightnessImageFilter<ImageType, ImageType> FilterType;
@@ -48,16 +47,16 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
   writer->SetFileName(outputFileName);
   reader->UpdateOutputInformation();
   filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfThreads(1);
+  filter->SetResultsInDecibels(resultsInDb);
 
   if( useMetadata )
     {
       // Generate an extract from the large input
       ImageType::RegionType region;
       ImageType::IndexType id;
-      id[0] = 2000;   id[1] = 2000;
+      id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
       ImageType::SizeType size;
-      size[0] = 2000;   size[1] = 2000;
+      size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
       region.SetIndex(id);
       region.SetSize(size);
       extractor->SetExtractionRegion(region);
