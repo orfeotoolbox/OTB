@@ -1053,6 +1053,16 @@ ADD_TEST(raTvTerraSarCalibrationImageFilterTest ${RADIOMETRY_TESTS9}
 		0 # don't use metadata
 )
 
+ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTest ${RADIOMETRY_TESTS9}
+ --compare-image ${EPSILON}  
+                               ${BASELINE}/raTvTerraSarCalibrationComplexImageFilterTest.tif
+                               ${TEMP}/raTvTerraSarCalibrationComplexImageFilterTest.tif
+        otbTerraSarCalibrationImageComplexFilterTest
+		${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+		${TEMP}/raTvTerraSarCalibrationComplexImageFilterTest.tif
+		0 # don't use metadata
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALA ${RADIOMETRY_TESTS9}
  --compare-image ${EPSILON}  
@@ -1064,13 +1074,13 @@ ADD_TEST(raTvTerraSarCalibrationImageFilterTestUPSALA ${RADIOMETRY_TESTS9}
 		1 # use metadata
 )
 
-ADD_TEST(raTvTerraSarCalibrationImageFilterTestTORONTO ${RADIOMETRY_TESTS9}
+ADD_TEST(raTvTerraSarCalibrationImageComplexFilterTestTORONTO ${RADIOMETRY_TESTS9}
  --compare-image ${EPSILON}  
-                               ${BASELINE}/raTvTerraSarCalibrationImageFilterTest_TORONTO.tif
-                               ${TEMP}/raTvTerraSarCalibrationImageFilterTest_TORONTO.tif
-        otbTerraSarCalibrationImageFilterTest
+                               ${BASELINE}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
+                               ${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
+        otbTerraSarCalibrationImageComplexFilterTest
                 ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-		${TEMP}/raTvTerraSarCalibrationImageFilterTest_TORONTO.tif
+		${TEMP}/raTvTerraSarCalibrationImageComplexFilterTest_TORONTO.tif
 		1 # use metadata
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1105,6 +1115,16 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterTest ${RADIOMETRY_TESTS9}
 	0 # don't use metadata	
 )
 
+ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTest ${RADIOMETRY_TESTS9}
+    --compare-image ${EPSILON}  
+                ${BASELINE}/raTvTerraSarBrightnessImageComplexFilterTest.tif
+                ${TEMP}/raTvTerraSarBrightnessImageComplexFilterTest.tif
+        otbTerraSarBrightnessImageComplexFilterTest
+        ${INPUTDATA}/ExtractIMAGE_HH_SRA_spot_074.tif
+        ${TEMP}/raTvTerraSarBrightnessImageComplexFilterTest.tif
+	0 # don't use metadata	
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
     --compare-image ${EPSILON}  
@@ -1116,13 +1136,13 @@ ADD_TEST(raTvTerraSarBrightnessImageFilterUPSALA ${RADIOMETRY_TESTS9}
 	1 # use metadata
 )
 
-ADD_TEST(raTvTerraSarBrightnessImageFilterTORONTO ${RADIOMETRY_TESTS9}
+ADD_TEST(raTvTerraSarBrightnessImageComplexFilterTORONTO ${RADIOMETRY_TESTS9}
     --compare-image ${EPSILON}  
-                ${BASELINE}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
-                ${TEMP}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
-        otbTerraSarBrightnessImageFilterTest
+                ${BASELINE}/raTvTerraSarBrightnessComplexImageFilter_TORONTO.tif
+                ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
+        otbTerraSarBrightnessImageComplexFilterTest
         ${LARGEINPUT}/TERRASARX/TORONTO/TSX1_SAR__SSC/IMAGEDATA/IMAGE_HH_SRA_spot_074.cos
-        ${TEMP}/raTvTerraSarBrightnessImageFilter_TORONTO.tif
+        ${TEMP}/raTvTerraSarBrightnessImageComplexFilter_TORONTO.tif
 	1 # use metadata
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
@@ -1223,9 +1243,11 @@ otbRadiometryTests9.cxx
 otbTerraSarCalibrationImageFunctor.cxx
 otbTerraSarCalibrationImageFilterNew.cxx
 otbTerraSarCalibrationImageFilterTest.cxx
+otbTerraSarCalibrationImageComplexFilterTest.cxx
 otbTerraSarBrightnessImageFunctor.cxx
 otbTerraSarBrightnessImageFilterNew.cxx
 otbTerraSarBrightnessImageFilterTest.cxx
+otbTerraSarBrightnessImageComplexFilterTest.cxx
 )
 
 

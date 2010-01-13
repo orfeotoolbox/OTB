@@ -31,8 +31,10 @@ REGISTER_TEST(otbTerraSarBrightnessImageFunctor);
 REGISTER_TEST(otbTerraSarCalibrationImageFunctor);
 REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
 REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
+REGISTER_TEST(otbTerraSarCalibrationImageComplexFilterTest);
 REGISTER_TEST(otbTerraSarBrightnessImageFilterNew);
 REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
+REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
 }
 
 
