@@ -32,7 +32,7 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   if(atoi(argv[3]) == 0)
     useMetadata = false;
 
-  typedef otb::Image<double, 2>                                     ImageType;
+  typedef otb::Image<std::complex<double>, 2>                       ImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
@@ -49,23 +49,24 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   reader->UpdateOutputInformation();
 
   filter->SetInput(reader->GetOutput());
+  filter->SetNumberOfThreads(1);
   writer->SetInput(filter->GetOutput());
     
   // Generate an extract from the large input
   ImageType::RegionType region;
   ImageType::IndexType id;
-  id[0] = 50;   id[1] = 100;
+  id[0] = 2000;   id[1] = 2000;
   ImageType::SizeType size;
-  size[0] = 150;   size[1] = 100;
+  size[0] = 2000;   size[1] = 2000;
   region.SetIndex(id);
   region.SetSize(size);
   extractor->SetExtractionRegion(region);
   
   extractor->SetInput(filter->GetOutput());
-    writer->SetInput(extractor->GetOutput());
+  writer->SetInput(extractor->GetOutput());
 
 
-  filter->SetUseFastCalibrationMethod( false );
+  filter->SetUseFastCalibration( false );
   writer->Update();
   
   return EXIT_SUCCESS;

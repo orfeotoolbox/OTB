@@ -25,145 +25,49 @@ namespace otb
 {
 namespace Functor
 {
-
-/******************************************************************/
-/***********  TerraSarBrightnessImageFunctor *****************/
-/******************************************************************/
-template <class TInput, class TOutput>
-TerraSarBrightnessImageFunctor<TInput, TOutput>
-::TerraSarBrightnessImageFunctor()
-{
-  m_CalibrationFactor = itk::NumericTraits<double>::min(); 
-}
-
-
-template <class TInput, class TOutput>
-TOutput
-TerraSarBrightnessImageFunctor<TInput, TOutput>
-::operator() (const TInput & inPix)
-{
-  // Formula: Beta^0 = Ks * |DN|²
-
-  // First, square the input pixel
-  double squareInPix = vcl_pow( static_cast<double>(inPix), 2.);
-
-  // Then apply the calibration factor
-  double beta = m_CalibrationFactor*squareInPix;
-  
-  return static_cast<TOutput>(beta);  
-}
-
-
-template <class TInput, class TOutput>
-std::complex<TOutput>
-TerraSarBrightnessImageFunctor<TInput, TOutput>
-::operator() (const std::complex<TInput> & inPix)
-{
-   // Beta naught computation, will be the Modulus of the result
-
-  double beta = operator()(static_cast<double>(std::abs(inPix)));
-  // Phase
-  double phase = static_cast<double>(std::arg(inPix));
-  
-  // We retrieve the complex value from the modulus and the phase.
-  std::complex<TOutput> res = std::complex<TOutput>(beta*vcl_cos(phase), beta*vcl_sin(phase) );
-
-  return res;
-}
-
-
-/******************************************************************/
-/***********      TerraSarCalibrationImageFunctor  ****************/
-/******************************************************************/
 template <class TInput, class TOutput>
 TerraSarCalibrationImageFunctor<TInput, TOutput>
 ::TerraSarCalibrationImageFunctor()
 {
   // Initialise values 
-  m_CalibrationFactor = itk::NumericTraits<double>::min();
+  m_CalibrationFactor = itk::NumericTraits<double>::Zero;
   m_LocalIncidentAngle = itk::NumericTraits<double>::Zero;
   m_SinLocalIncidentAngle = itk::NumericTraits<double>::Zero;
-  m_ImageSize.Fill(0);
-  m_UseFastCalibrationMethod = false;
-  m_PRF = 1.;
-  m_InvPRF = 1.;
-  m_AcquisitionStartTime = itk::NumericTraits<double>::Zero;
-}
-
-
-template <class TInput, class TOutput>
-const typename TerraSarCalibrationImageFunctor<TInput, TOutput>
-::ImageNoiseType &
-TerraSarCalibrationImageFunctor<TInput, TOutput>
-::FindClosestNoiseRecord( double utcTime ) const
-{  
-  // Iterators
-  NoiseRecordVectorType::const_iterator it, closest;
-
-  // Initial search values
-  it = m_NoiseRecords.begin();
-  double delta = vcl_abs(utcTime - it->first);
-  closest = it;
-
-  // First increment
-  ++it;
-
-  // Iterate on the noise records to find the closest
-  while(it != m_NoiseRecords.end())
-    {
-    double newDelta = vcl_abs(utcTime-it->first);
-
-    // Check if this one is closer
-    if(newDelta < delta)
-      {
-      // If so, update search values
-      delta = newDelta;
-      closest = it;
-      }
-    // Increment
-    ++it;
-    }
-  return closest->second;
+  m_OriginalProductSize.Fill(0);
+  m_UseFastCalibration = false;
+  m_ResultsInDecibels = true;
 }
 
 template <class TInput, class TOutput>
 double 
 TerraSarCalibrationImageFunctor<TInput, TOutput>
-::ComputeAzimuthPosition(const IndexType & index) const
-{
-  double currentTime = m_AcquisitionStartTime + (m_ImageSize[1]-index[1]-1) * m_InvPRF;
-  return currentTime;
-}
-
-template <class TInput, class TOutput>
-double 
-TerraSarCalibrationImageFunctor<TInput, TOutput>
-::ComputeRangePosition(const ImageNoiseType & noise, const IndexType & index) const
+::ComputeRangePosition(const IndexType & index) const
 {
   // First compute the range step for the given noise record
-  double rangeStep = (noise.get_validityRangeMax()-noise.get_validityRangeMin())
-                     /static_cast<double>(m_ImageSize[0]);
+  double rangeStep = (m_NoiseRecord.get_validityRangeMax()-m_NoiseRecord.get_validityRangeMin())
+                     /static_cast<double>(m_OriginalProductSize[0]);
   
   // Compute the range position using the rangeStep
-  double position = index[0] * rangeStep + noise.get_validityRangeMin();
+  double position = index[0] * rangeStep + m_NoiseRecord.get_validityRangeMin();
 
   return position;
 }
+
 template <class TInput, class TOutput>
 double 
 TerraSarCalibrationImageFunctor<TInput, TOutput>
-::ComputeNoiseEquivalentBetaNaught(const ImageNoiseType & noise, double range) const
+::ComputeNoiseEquivalentBetaNaught(double range) const
 {
   // Formula: NEBN = Ks * SUM( coef_i * (tau - tau_ref)^i)
   
   // Retrieve the polynomial degree
-  unsigned int polynomialDegree = noise.get_polynomialDegree();
+  unsigned int polynomialDegree = m_NoiseRecord.get_polynomialDegree();
 
   // Compute tau - tau_ref
-  double deltaTau = range - noise.get_referencePoint();
+  double deltaTau = range - m_NoiseRecord.get_referencePoint();
 
   // Get polynomial coefficients
-  std::vector<double>  coefficients = noise.get_polynomialCoefficients();
+  std::vector<double>  coefficients = m_NoiseRecord.get_polynomialCoefficients();
 
   // Initialize nebn value
   double nebn = 0.;
@@ -193,31 +97,30 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
   // First, compute the brightness using the brightness functor
   double beta0 = m_Brightness( static_cast<double>(inPix) );
 
-  // Then compute the current acquisition time
-  double currentAzimuth = this->ComputeAzimuthPosition(index);
+  // Compute the simplified version by neglecting noise
+  double sigma = beta0 * m_SinLocalIncidentAngle;
 
-  // Retrieve the associated noise record
-  ImageNoiseType currentNoiseRecord;
-
-  // If fast calibration is on, use always the first noise record
-  if(m_UseFastCalibrationMethod)
+  // If fast calibration is off, compute noise
+  if(!m_UseFastCalibration)
     {
-    currentNoiseRecord = m_NoiseRecords[0].second;
+    // Compute the range position for this noise record
+    double currentRange = this->ComputeRangePosition(index);
+    
+    // Compute the NEBN
+    double NEBN = this->ComputeNoiseEquivalentBetaNaught(currentRange);
+    
+    // Last, apply formula
+    // Please note the absolute value allowing to ensure that sigma is
+    // positive. The lower bound of sigma - NEBN is in the worst case
+    // (-NEBN), in the case were sigma is far below the noise level.  
+    sigma = vcl_abs(sigma - NEBN * m_SinLocalIncidentAngle);
     }
-  else
+
+  // If results are in dB
+  if(m_ResultsInDecibels)
     {
-    // Else, find the closest noise record
-    currentNoiseRecord = this->FindClosestNoiseRecord(currentAzimuth);
+    sigma = 10 * vcl_log10(sigma);
     }
-
-  // Compute the range position for this noise record
-  double currentRange = this->ComputeRangePosition(currentNoiseRecord,index);
-  
-  // Compute the NEBN
-  double NEBN = this->ComputeNoiseEquivalentBetaNaught(currentNoiseRecord,currentRange);
-
-  // Last, apply formula
-  double sigma = ( beta0 - NEBN ) * m_SinLocalIncidentAngle;
 
   // Cast and return
   return static_cast<TOutput>(sigma);
@@ -229,14 +132,14 @@ TerraSarCalibrationImageFunctor<TInput, TOutput>
 ::operator()(const std::complex<TInput> & inPix, IndexType index)
 {
   // First, extract modulus and phase
-  double modulus = vcl_abs(inPix);
-  double phase   = std::arg(inPix);
+  double modulus = vcl_sqrt(inPix.real()*inPix.real() + inPix.imag()*inPix.imag());
+  double phase   = vcl_atan2(inPix.imag(),inPix.real());
 
   // Then, calibrate the modulus
   double sigma = this->operator()(modulus,index);
   
   // Last, put back the phase
-  std::complex<TOutput> out(sigma*vcl_cos(phase), sigma*vcl_sin(phase));
+  std::complex<TOutput> out(std::polar(sigma,phase));
   
   // And return the result
   return out;

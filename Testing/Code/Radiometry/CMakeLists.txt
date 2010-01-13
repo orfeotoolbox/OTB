@@ -1077,8 +1077,8 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 
 
-# -------            TerraSarBrightnessImageFunctor   ------------------------------
-ADD_TEST(raTvTerraSarBrightnessImageFunctor ${RADIOMETRY_TESTS9}
+# -------            TerraSarBrightnessFunctor   ------------------------------
+ADD_TEST(raTvTerraSarBrightnessFunctor ${RADIOMETRY_TESTS9}
  --compare-ascii ${EPSILON}  
                                ${BASELINE_FILES}/raTvTerraSarBrightnessImageFunctor.txt
                                ${TEMP}/raTvTerraSarBrightnessImageFunctor.txt

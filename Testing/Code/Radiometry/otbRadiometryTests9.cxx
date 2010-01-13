@@ -27,7 +27,7 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbTerraSarBrightnessImageFunctor);
+REGISTER_TEST(otbTerraSarBrightnessFunctor);
 REGISTER_TEST(otbTerraSarCalibrationImageFunctor);
 REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
 REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);

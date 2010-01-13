@@ -26,7 +26,7 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMath.h"
-#include "otbTerraSarFunctors.h"
+#include "otbTerraSarBrightnessFunctor.h"
 
 namespace otb
 {
@@ -43,7 +43,7 @@ class ITK_EXPORT TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
   TInputImage,
   TOutputImage,
-  ITK_TYPENAME Functor::TerraSarBrightnessImageFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
+  ITK_TYPENAME Functor::TerraSarBrightnessFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
                                                         ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
 {
 public:
@@ -58,7 +58,7 @@ public:
   typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
   typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
-  typedef typename Functor::TerraSarBrightnessImageFunctor< InputValueType, OutputValueType> FunctorType;
+  typedef typename Functor::TerraSarBrightnessFunctor< InputValueType, OutputValueType> FunctorType;
 
   /** "typedef" for standard classes. */
   typedef TerraSarBrightnessImageFilter    Self;

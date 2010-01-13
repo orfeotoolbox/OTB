@@ -22,8 +22,7 @@
 #ifndef __otbTerraSarCalibrationImageFilter_h
 #define __otbTerraSarCalibrationImageFilter_h
 
-
-#include "otbUnaryFunctorWithIndexImageFilter.h"
+#include "itkImageToImageFilter.h"
 #include "otbTerraSarFunctors.h"
 #include "itkMetaDataDictionary.h"
 
@@ -44,13 +43,15 @@ namespace otb
 
 template<class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarCalibrationImageFilter :
-  public UnaryFunctorWithIndexImageFilter<
-    TInputImage,
-    TOutputImage,
-    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
-                                                           ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
+    public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
+  /** "typedef" for standard classes. */
+  typedef TerraSarCalibrationImageFilter                                                      Self;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>                                   Superclass;
+  typedef itk::SmartPointer<Self>                                                             Pointer;
+  typedef itk::SmartPointer<const Self>                                                       ConstPointer;
+
   /** Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
@@ -58,70 +59,122 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage                                                                         InputImageType;
   typedef TOutputImage                                                                        OutputImageType;
+  typedef typename InputImageType::RegionType                                                 InputImageRegionType;
+  typedef typename OutputImageType::RegionType                                                OutputImageRegionType;
   typedef typename InputImageType::InternalPixelType                                          InputInternalPixelType;
   typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
   typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
-  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> FunctorType;  
+
+  /** Calibration functor typedef */
+  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> CalibrationFunctorType;  
 
   /** typedef to access metadata */
   typedef itk::MetaDataDictionary                                                             MetaDataDictionaryType;
   typedef typename InputImageType::SizeType                                                   SizeType;
 
-  /** "typedef" for standard classes. */
-  typedef TerraSarCalibrationImageFilter                                                      Self;
-  typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
-  typedef itk::SmartPointer<Self>                                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                                       ConstPointer;
+  /** Noise records typedefs */
+  typedef ossimplugins::ImageNoise                                                            ImageNoiseType;
+  /** 
+   * This is used to store the noise record along with its
+   * acquisition time 
+   */
+  typedef std::pair<double,ImageNoiseType>                                                    NoiseRecordType;
+  typedef std::vector<NoiseRecordType>                                                        NoiseRecordVectorType;
 
   /** object factory method. */
   itkNewMacro(Self);
 
   /** return class name. */
-  // Use a with neighborhood to have access to the pixel coordinates
-  itkTypeMacro(TerraSarCalibrationImageFilter, UnaryFunctorWithIndexImageFilter);
+  itkTypeMacro(TerraSarCalibrationImageFilter,ImageToImageFilter);
 
   /** Accessors */
   /** Calibration Factor */
-  void SetCalibrationFactor( double val );
-  double GetCalibrationFactor() const;
+  itkSetMacro(CalibrationFactor,double);
+  itkGetMacro(CalibrationFactor,double);
 
   /** Sensor local incident angle in degree */
-  void SetLocalIncidentAngle( double val );
-  double GetLocalIncidentAngle() const;
+  itkSetMacro(LocalIncidentAngle,double);
+  itkGetMacro(LocalIncidentAngle,double);
   
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
-   *  will use all of them and applied it according to its acquisition UTC time and the coordinates
-   *  of the pixel in the image. */
-  void SetUseFastCalibrationMethod( bool b );
-  bool GetUseFastCalibrationMethod() const;
+  /** If fast calibration is On, noise is ignored */
+  itkSetMacro(UseFastCalibration,bool);
+  itkGetMacro(UseFastCalibration,bool);
+  itkBooleanMacro(UseFastCalibration);
+
+  /** Activate if you wish results in decibels */
+  itkSetMacro(ResultsInDecibels,bool);
+  itkGetMacro(ResultsInDecibels,bool);
+  itkBooleanMacro(ResultsInDecibels);
 
   /** Pulse Repetition Frequency */
-  void SetPRF( double val );
-  double GetPRF() const;
+  itkSetMacro(PRF,double);
+  itkGetMacro(PRF,double);
 
-  /** Image Size setter. This is provided in case of calbrating an
-* extract of a larger scene. It does not interfer with output image
-* regions */
-  void SetImageSize( SizeType size );
-
-  /** Get the image size */
-  const SizeType& GetImageSize() const;
+  /** The Calibration algorithm uses the original product size to
+   * compute the range and azimuth location. Hence, if the input image is
+   * an extract of the original product, this information must be set.
+   * If not set, the LargestPossibleRegion of the input image is
+   * used. Please note that this parameter has no influence on the output
+   * image regions. */
+  itkSetMacro(OriginalProductSize,SizeType);
+  itkGetConstReferenceMacro(OriginalProductSize,SizeType);
   
+  /**
+   * Add a new noise record for calibration.
+   * \param utcAcquisitionTime Noise record time
+   * \param record The noise record
+   */
+  void AddNoiseRecord(double utcAcquisitionTime, const ImageNoiseType& record);
+
+  /**
+   * Clear all noise records 
+   */
+  void ClearNoiseRecords();
+
 protected:
   /** Constructor */
   TerraSarCalibrationImageFilter();
   /** Destructor */
-  virtual ~TerraSarCalibrationImageFilter() {};
+  virtual ~TerraSarCalibrationImageFilter();
   
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
-  
+
+  /** Threaded generate Data */
+  virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,int threadId);
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  // TODO: add private copy and reference construtor
+  TerraSarCalibrationImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  /** Method used to order noise records by increasing acquisition
+   * date */
+  static bool CompareNoiseRecords(const NoiseRecordType& record1, const NoiseRecordType& record2);
+
+  /** Calibration Factor */
+  double m_CalibrationFactor;
+
+  /** Sensor local incident angle in degree */
+  double m_LocalIncidentAngle;
+
+  /** Pulse Repetition Frequency */
+  double m_PRF;
+
+  /** Original product size */
+  SizeType m_OriginalProductSize;
+
+  /** Use fast calibration ? */
+  bool m_UseFastCalibration;
+
+  /** Results in decibels ? */
+  bool m_ResultsInDecibels;
+
+  /** Noise record vector */
+  NoiseRecordVectorType m_NoiseRecords;
 };
 
 } // end namespace otb
