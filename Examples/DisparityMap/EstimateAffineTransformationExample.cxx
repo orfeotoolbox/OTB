@@ -238,9 +238,9 @@ int main (int argc, char* argv[])
   
   bool useBackMatching = 0;
 
-  filter1->SetInput(0, fixedReader->GetOutput() );
+  filter1->SetInput( fixedReader->GetOutput() );
   //filter1->SetScalesNumber(3);
-  filter2->SetInput(0, movingReader->GetOutput() );
+  filter2->SetInput( movingReader->GetOutput() );
   //filter2->SetScalesNumber(3);
 
   // Software Guide : BeginCodeSnippet
@@ -257,86 +257,64 @@ int main (int argc, char* argv[])
   filter2->SetEdgeThreshold(ratio);
 // Software Guide : EndCodeSnippet
 
+  std::cout << "SIFT process fixed image" << std::endl;
   filter1->Update();
+  std::cout << "SIFT process moving image" << std::endl;
   filter2->Update();
 
   //filter1->SetNumberOfThreads(1);
   //filter2->SetNumberOfThreads(1);
 
-  //Take the minimum point set to compute euclidian diff
+  //Take the minimum point set to compute euclidian diff (vector lengths must be equal)
   PointSetType::Pointer ptSet1 = filter1->GetOutput();
   PointSetType::Pointer ptSet2 = filter2->GetOutput();
 
   typedef PointSetType::PointsContainer PointsContainer;
-  PointsContainer::Pointer ptContainer;
+  PointsContainer::Pointer              ptContainer1,ptContainer2;
 
-  unsigned int minPtSetSize=ptSet1->GetNumberOfPoints();
+  //Save point container to extract 2 points container with size = min (container1, container2)
+  //TODO simplify subset selection in this itk::PointSet
   ptContainer1 = ptSet1->GetPoints();
   ptContainer2 = ptSet2->GetPoints();
   if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
   {
-        //minPtSetSize = ptSet2->GetNumberOfPoints();
-	//minPtSetSize = ptSet2->GetNumberOfPoints();
  	ptContainer1 = ptSet2->GetPoints();
   	ptContainer2 = ptSet1->GetPoints();
   }
+ 
+  PointsContainer::Pointer ptContainerRes =   PointsContainer::New();
+  typedef PointsContainer::Iterator           PointsIterator;
+  PointsIterator     pointsIterator =         ptContainer2->Begin();
 
-  for (unsigned int id=ptContainer1->GetSize();id < ptContainer2->GetSize();++id)
+  //Construct new point container (subset of input pointset)
+  for (unsigned int id=0;id < ptContainer1->Size();++id)
   {
-  	ptContainer2->DeleteIndex( id );
+  	ptContainerRes->InsertElement(id, pointsIterator->Value()); 
+	++pointsIterator;
   }
 
   if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
   {
-        ptSet1->SetPoints(ptContainer2);
+        ptSet1->SetPoints(ptContainerRes);
   }
   else
   {
-  	ptSet2->SetPoints(ptContainer2);
+  	ptSet2->SetPoints(ptContainerRes);
   }
-  /*
-  typedef PointSetType::PointsContainer PointsContainer;
-  typedef PointsContainer::Iterator PointsIterator;
 
-  PointSetType::Pointer ptSet1bis = PointSetType::New();
-  PointSetType::Pointer ptSet2bis = PointSetType::New();
-  //PointsContainer::Pointer pt1Container;
-  //PointsContainer::Pointer pt2Container;
-  //bool 1isMin = ptSet1->GetNumberOfPoints() <= ptSet2->GetNumberOfPoints();
-  //LandmarkListType::Iterator it
-  unsigned int sizeMin=ptSet2->GetNumberOfPoints();
-  if ( ptSet1->GetNumberOfPoints() < ptSet2->GetNumberOfPoints() )
-  {
-        sizeMin = ptSet1->GetNumberOfPoints();
-  }
-  
+  std::cout << "SIFT points size" << std::endl;
+  std::cout << ptSet1->GetNumberOfPoints() << std::endl;
+  std::cout << ptSet2->GetNumberOfPoints() << std::endl;
 
-  //PointsIterator pointIterator = points->Begin();
-  //PointsIterator end = points->End();
-  unsigned int dataId =  0;
-  //while ( pointIterator != end )
-   //typedef PointSetType::PointContainer PointDataContainer;
-   PointsContainer::Pointer      points1 = ptSet1->GetPoints();
-   PointsContainer::Pointer      points2 = ptSet2->GetPoints();
-   typedef PointsContainer::Iterator           PointsIterator;
-   PointsIterator     pointsIterator1 = points1->Begin();
-   PointsIterator     pointsIterator2 = points2->Begin();
-   for (unsigned int dataId=0;dataId < sizeMin;++dataId)
-   {    
-        ptSet1bis->SetPoint( dataId , pointsIterator1->Value() );
-        ptSet2bis->SetPoint( dataId , pointsIterator2->Value() );
-        std::cout <<  pointsIterator1->Value() << std::endl;
-        
-        ++pointsIterator1;
-        ++pointsIterator2; 
-   }
-*/
 
-  euclideanMatcher->SetInput1(ptSet1);
-  euclideanMatcher->SetInput2(ptSet2);
+  //euclideanMatcher->SetInput1(ptSet1);
+  //euclideanMatcher->SetInput2(ptSet2);
+  euclideanMatcher->SetInput1(filter1->GetOutput());
+  euclideanMatcher->SetInput2(filter2->GetOutput());
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
+  std::cout << "Update euclidian distance" << std::endl;
   euclideanMatcher->Update();
 
   // Software Guide : EndCodeSnippet
@@ -353,7 +331,7 @@ int main (int argc, char* argv[])
 
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-
+  std::cout << "Get landmark" << std::endl;
   // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
