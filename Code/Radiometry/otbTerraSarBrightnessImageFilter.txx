@@ -19,8 +19,6 @@
 #define __otbTerraSarBrightnessImageFilter_txx
 
 #include "otbTerraSarBrightnessImageFilter.h"
-//#include "otbImageMetadataInterfaceFactory.h"
-//#include "otbImageMetadataInterfaceBase.h"
 #include "otbTerraSarImageMetadataInterface.h"
 
 namespace otb
@@ -38,11 +36,11 @@ TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
   bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
 
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
-  if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
+  if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero) 
     {
       if (mdIsAvailable)
         {
-          this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+          this->SetCalibrationFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
         }
       else
         {

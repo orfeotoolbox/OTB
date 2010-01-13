@@ -19,9 +19,9 @@
 #include <iomanip>
 #include "itkExceptionObject.h"
 
-#include "otbTerraSarFunctors.h"
+#include "otbTerraSarBrightnessFunctor.h"
 
-int otbTerraSarBrightnessImageFunctor(int argc, char * argv[])
+int otbTerraSarBrightnessFunctor(int argc, char * argv[])
 {
   char *outFilename = argv[5];
   double calFact =  atof(argv[4]);
@@ -29,10 +29,11 @@ int otbTerraSarBrightnessImageFunctor(int argc, char * argv[])
   typedef double                   ScalarType;
   typedef std::complex<ScalarType> ComplexType;
 
-  typedef otb::Functor::TerraSarBrightnessImageFunctor<ScalarType, ScalarType>   FunctorType;
+  typedef otb::Functor::TerraSarBrightnessFunctor<ScalarType, ScalarType>   FunctorType;
 
   FunctorType funct;
-  funct.SetCalFactor(calFact);
+  funct.SetCalibrationFactor(calFact);
+  funct.SetResultsInDecibels(false);
 
   ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
   ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));

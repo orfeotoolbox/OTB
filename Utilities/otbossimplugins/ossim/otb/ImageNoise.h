@@ -67,26 +67,62 @@ public:
    {
       _timeUTC = value;
    }
+
+  const ossimString & get_timeUTC(void) const
+  {
+    return _timeUTC;
+  }
+
    void set_validityRangeMin(double value)
    {
       _validityRangeMin = value;
    }
+  
+  double get_validityRangeMin(void) const
+  {
+    return _validityRangeMin;
+  }
+
    void set_validityRangeMax(double value)
    {
       _validityRangeMax = value;
    }
+
+  double get_validityRangeMax(void) const
+  {
+    return _validityRangeMax;
+  }
+
    void set_referencePoint(double value)
    {
       _referencePoint = value;
    }
+
+  double get_referencePoint(void) const
+  {
+    return _referencePoint;
+  }
+  
    void set_polynomialDegree(unsigned int value)
    {
       _polynomialDegree = value;
    }
+
+  unsigned int get_polynomialDegree() const
+  {
+    return _polynomialDegree;
+  }
+
+
    void set_polynomialCoefficients(const std::vector<double>& value)
    {
       _polynomialCoefficients = value;
    }
+
+  const std::vector<double> & get_polynomialCoefficients(void) const
+  {
+    return _polynomialCoefficients;
+  }
 
 protected:
 

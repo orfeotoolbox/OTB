@@ -19,10 +19,13 @@
 #define __otbTerraSarCalibrationImageFilter_txx
 
 #include <algorithm>
+
 #include "otbTerraSarCalibrationImageFilter.h"
-//#include "otbImageMetadataInterfaceFactory.h"
-//#include "otbImageMetadataInterfaceBase.h"
 #include "otbTerraSarImageMetadataInterface.h"
+
+#include "itkImageRegionConstIteratorWithIndex.h"
+#include "itkImageRegionIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -31,9 +34,51 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::TerraSarCalibrationImageFilter()
+::TerraSarCalibrationImageFilter() : m_CalibrationFactor(itk::NumericTraits<double>::Zero),
+				     m_LocalIncidentAngle(itk::NumericTraits<double>::Zero),
+				     m_PRF(1.),
+				     m_OriginalProductSize(),
+				     m_UseFastCalibration(false),
+				     m_ResultsInDecibels(true),
+				     m_NoiseRecords(),
+				     m_DefaultValue(0.00001)
+				     
+{}
+
+template <class TInputImage, class TOutputImage>
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::~TerraSarCalibrationImageFilter()
 {
-  m_ParamLoaded = false;
+  // Clear any noise records
+  this->ClearNoiseRecords();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::AddNoiseRecord(double utcAcquisitionTime, const ImageNoiseType& record)
+{
+  // Create the pair
+  NoiseRecordType newRecord(utcAcquisitionTime,record);
+  
+  // Add it to the list
+  m_NoiseRecords.push_back(newRecord);
+  }
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::ClearNoiseRecords()
+{
+  m_NoiseRecords.clear();
+}
+
+template <class TInputImage, class TOutputImage>
+bool
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::CompareNoiseRecords(const NoiseRecordType& record1, const NoiseRecordType& record2)
+{
+  return (record1.first > record2.first);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -41,338 +86,184 @@ void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  Superclass::BeforeThreadedGenerateData();
-
-  if(m_ParamLoaded)
-    return;
-  this->SetImageSize( this->GetInput()->GetLargestPossibleRegion().GetSize() );
+  // Set the product original size
+  if (m_OriginalProductSize[0] == 0 && m_OriginalProductSize[1] == 0)
+    {
+    m_OriginalProductSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
+    }
   
-  // Load metadata
+  // Build the metadata interface
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+
+  // Check availability
   bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
 
-  // If the user doesn't set the data AND the metadata is available, set the data
+  // If the user did not set the data AND the metadata is available, set the data
   
-  // CalFactor
-  if (this->GetCalFactor() == itk::NumericTraits<double>::min()) 
+  // CalibrationFactor
+  if (m_CalibrationFactor == itk::NumericTraits<double>::Zero) 
   {
     if (mdIsAvailable)
       {
-        this->SetCalFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
+        m_CalibrationFactor = lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary());
       }
     else
       {
-        itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+        itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
       }
-  }
-  
-  // NoiseRangeValidityMin
-  if (this->GetNoiseRangeValidityMin() == itk::NumericTraits<double>::min()) 
-  {
-    if (mdIsAvailable)
-    {
-      DoubleVectorType vecTmp = lImageMetadata->GetNoiseValidityRangeMinList(this->GetInput()->GetMetaDataDictionary());
-      std::sort(vecTmp.begin(), vecTmp.end());
-      this->SetNoiseRangeValidityMin(vecTmp[0]);
-    }
-    else
-    {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-    }
-  }
-  
-  // NoiseRangeValidityMax
-  if (this->GetNoiseRangeValidityMax() == itk::NumericTraits<double>::max()) 
-  {
-    if (mdIsAvailable)
-    {
-      DoubleVectorType vecTmp = lImageMetadata->GetNoiseValidityRangeMaxList(this->GetInput()->GetMetaDataDictionary());
-      std::sort(vecTmp.begin(), vecTmp.end());
-      this->SetNoiseRangeValidityMax(vecTmp[vecTmp.size()-1]);
-    }
-    else
-    {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-    }
   }
 
-  // NoiseRangeValidityRef
-  if (this->GetNoiseRangeValidityRef() == itk::NumericTraits<double>::Zero) 
-  {
-    if (mdIsAvailable)
+  // Noise records
+  if(m_NoiseRecords.empty())
     {
-      double sum = 0;
-      // Get vector
-      DoubleVectorType noiseRefList = lImageMetadata->GetNoiseReferencePointList(this->GetInput()->GetMetaDataDictionary());
-      // Mean computation
-      for (unsigned int i=0; i<noiseRefList.size(); i++)
+    if (mdIsAvailable)
       {
-	sum += noiseRefList[i];
-      }
+      // Retrieve the number of noise records
+      unsigned int nbNoiseRecords = lImageMetadata->GetNumberOfNoiseRecords(this->GetInput()->GetMetaDataDictionary());
       
-      this->SetNoiseRangeValidityRef( sum / noiseRefList.size() );
-    }
+      // Retrieve the noise records
+      ossimplugins::Noise * noiseRecords = lImageMetadata->GetNoise(this->GetInput()->GetMetaDataDictionary());
+      
+      // Retrieve corresponding times
+      std::vector<double> noiseTimes = lImageMetadata->GetNoiseTimeUTCList(this->GetInput()->GetMetaDataDictionary());
+
+      if(!m_UseFastCalibration && ( noiseTimes.empty() || nbNoiseRecords == 0))
+	{
+	itkExceptionMacro(<<"No noise records found. Consider using fast calibration.");
+	}
+      
+      // For each noise record, add it
+      for(unsigned int i = 0; i < nbNoiseRecords;++i)
+	{
+	this->AddNoiseRecord(noiseTimes[i],noiseRecords->get_imageNoise()[i]);
+	}
+      
+      // Free memory
+      delete noiseRecords;
+      }
     else
-    {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+      {
+        itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
+      }
     }
-  }
-  
-  // NoisePolynomialCoefficient
-  if ( ((this->GetNoisePolynomialCoefficientsList())[0][0] == itk::NumericTraits<double>::Zero)
-	 && (this->GetNoisePolynomialCoefficientsList().size() == 1)
-	 &&  (this->GetNoisePolynomialCoefficientsList()[0].size() == 1) )
-  {
-    if (mdIsAvailable)
-    {
-      this->SetNoisePolynomialCoefficientsList(lImageMetadata->GetNoisePolynomialCoefficientsList(this->GetInput()->GetMetaDataDictionary()));
-    }
-    else
-    {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-    }
-  }
-  
-  // Time UTC
-  if ((this->GetTimeUTC()[0] == itk::NumericTraits<double>::Zero) && (this->GetTimeUTC()[1] == 1.) && (this->GetTimeUTC().size() == 2)) 
-  {
-    if (mdIsAvailable)
-    {
-      this->SetTimeUTC(lImageMetadata->GetNoiseTimeUTCList(this->GetInput()->GetMetaDataDictionary()));
-    }
-    else
-    {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-    }
-  }
   
   // Radar frequency (PRF)
   if (this->GetPRF() == 1.) 
   {
     if (mdIsAvailable)
     {
-      this->SetPRF(lImageMetadata->GetRadarFrequency(this->GetInput()->GetMetaDataDictionary()));
+      m_PRF = lImageMetadata->GetRadarFrequency(this->GetInput()->GetMetaDataDictionary());
     }
     else
     {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
     }
   }
   
-  // Incidence Angle
-  if (this->GetLocalIncidentAngle() == itk::NumericTraits<double>::Zero) 
+  // Incident Angle
+  if (m_LocalIncidentAngle == itk::NumericTraits<double>::Zero) 
   {
     if (mdIsAvailable)
     {
-      double mean = lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
-      this->SetLocalIncidentAngle(mean);
+      m_LocalIncidentAngle =  lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
     }
     else
     {
-      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
+      itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supported");
     }
   }
-}
-
-
-/******************************* ACCESSORS ********************************/
-
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetCalFactor( double val )
-{
-  this->GetFunctor().SetCalFactor( val );
-  this->Modified();
-}
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetCalFactor() const
-{
-  return this->GetFunctor().GetCalFactor();
+  // Ensure that noise records are sorted by decreasing acquisition
+  // date
+  std::sort(m_NoiseRecords.begin(),m_NoiseRecords.end(), &Self::CompareNoiseRecords);
 }
 
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityMin( double val )
+::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
+                        int threadId)
 {
-  this->GetFunctor().SetNoiseRangeValidityMin( val );
-  this->Modified();
-}
+  // Retrieve input and output pointer
+  typename InputImageType::ConstPointer inputPtr = this->GetInput();
+  typename OutputImageType::Pointer     outputPtr = this->GetOutput(0);
   
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityMin() const
-{
-  return this->GetFunctor().GetNoiseRangeValidityMin();
-}
+  // Define the portion of the input to walk for this thread, using
+  // the CallCopyOutputRegionToInputRegion method allows for the input
+  // and output images to be different dimensions
+  InputImageRegionType inputRegionForThread;
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityMax( double val )
-{
-  this->GetFunctor().SetNoiseRangeValidityMax( val );
-  this->Modified();
-}
- 
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityMax() const
-{
-  return this->GetFunctor().GetNoiseRangeValidityMax();
-}
+  // Define the iterators
+  itk::ImageRegionConstIteratorWithIndex<TInputImage>  inputIt(inputPtr, inputRegionForThread);
+  itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
 
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoiseRangeValidityRef( double val )
-{
-  this->GetFunctor().SetNoiseRangeValidityRef( val );
-  this->Modified();
-}
-
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoiseRangeValidityRef() const
-{
-  return this->GetFunctor().GetNoiseRangeValidityRef();
-}
-
-
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetLocalIncidentAngle( double val )
-{
-  this->GetFunctor().SetLocalIncidentAngle( val );
-  this->Modified();
-}
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetLocalIncidentAngle() const
-{
-  return this->GetFunctor().GetLocalIncidentAngle();
-}
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetSinLocalIncidentAngle() const
-{
-  return this->GetFunctor().GetSinLocalIncidentAngle();
-}
- 
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect )
-{
-  this->GetFunctor().SetNoisePolynomialCoefficientsList( vect );
-  this->Modified();
-}
-
-
-template <class TInputImage, class TOutputImage>
-typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::DoubleVectorVectorType
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetNoisePolynomialCoefficientsList() const
-{
-  return this->GetFunctor().GetNoisePolynomialCoefficientsList();
-}
-
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetImageSize( SizeType size )
-{
-  this->GetFunctor().SetImageSize( size );
-  this->Modified();
-}
-
-
-template <class TInputImage, class TOutputImage>
-typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::SizeType
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetImageSize() const
-{
-  return this->GetFunctor().GetImageSize();
-}
-
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetUseFastCalibrationMethod( bool b )
-{
-  this->GetFunctor().SetUseFastCalibrationMethod( b );
-  this->Modified();
-}
- 
-template <class TInputImage, class TOutputImage>
-bool
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetUseFastCalibrationMethod() const
-{
-  return this->GetFunctor().GetUseFastCalibrationMethod();
-}
-
-
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetTimeUTC( DoubleVectorType vect )
-{
-  this->GetFunctor().SetTimeUTC( vect );
-  this->Modified();
-}
+  // Initialize iterators
+  inputIt.GoToBegin();
+  outputIt.GoToBegin();
   
+  // Set up the functor
+  CalibrationFunctorType calibrationFunctor;
+  calibrationFunctor.SetCalibrationFactor(m_CalibrationFactor);
+  calibrationFunctor.SetLocalIncidentAngle(m_LocalIncidentAngle);
+  calibrationFunctor.SetUseFastCalibration(m_UseFastCalibration);
+  calibrationFunctor.SetResultsInDecibels(m_ResultsInDecibels);
+  calibrationFunctor.SetOriginalProductSize(m_OriginalProductSize);
+  calibrationFunctor.SetDefaultValue(m_DefaultValue);
 
-template <class TInputImage, class TOutputImage>
-typename TerraSarCalibrationImageFilter<TInputImage,TOutputImage>::DoubleVectorType
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetTimeUTC() const
-{
-  return this->GetFunctor().GetTimeUTC();
+  // Set up progress reporting
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  
+  // The acquisition time of the first line of OutputRegionForThread.
+  double invPRF = 1/m_PRF;
+  double currentAzimuthPosition = m_NoiseRecords.back().first = invPRF 
+    * (m_OriginalProductSize[1]- inputIt.GetIndex()[1] -1);
+
+  // Local variable to store the current noise record
+  NoiseRecordType currentNoiseRecord;
+   
+  // Look for the first noise record to be used (remember we sorted
+  // m_NoiseRecords by decreasing time)
+  NoiseRecordVectorType::const_iterator currentNoiseRecordIt = m_NoiseRecords.begin();
+  
+  // Iterate until we find it
+  while(currentNoiseRecordIt != m_NoiseRecords.end() && currentNoiseRecordIt->first > currentAzimuthPosition)
+    {
+    ++currentNoiseRecordIt;
+    }
+  
+  // Store current line index
+  typename OutputImageRegionType::IndexType::IndexValueType currentLine = inputIt.GetIndex()[1];
+ 
+  // Iterate on the input and output buffer
+  while( !inputIt.IsAtEnd() ) 
+    {
+    // Check if we changed line
+    if(currentLine != inputIt.GetIndex()[1])
+      {
+      // If so, update the current azimuth time
+      currentAzimuthPosition -= invPRF;
+
+      // Update line counter
+      currentLine = inputIt.GetIndex()[1];
+            
+      // And check if we changed of NoiseRecord
+      if(currentAzimuthPosition < currentNoiseRecordIt->first 
+	 && currentNoiseRecordIt != m_NoiseRecords.end())
+	{
+	// If so, update the functor
+	++currentNoiseRecordIt;
+	calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
+	}
+      }
+    // Apply the calibration functor
+    outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex() ) );
+    ++inputIt;
+    ++outputIt;
+    progress.CompletedPixel();  // potential exception thrown here
+    }
 }
 
 
-template <class TInputImage, class TOutputImage>
-void
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::SetPRF( double val )
-{
-  this->GetFunctor().SetPRF( val );
-  this->Modified();
-}
-
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetPRF() const
-{
-  return this->GetFunctor().GetPRF();
-}
-
-
-template <class TInputImage, class TOutputImage>
-double
-TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
-::GetInvPRF() const
-{
-  return this->GetFunctor().GetInvPRF();
-}
-
-/**PrintSelf method */
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
@@ -380,37 +271,13 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 {
   Superclass::PrintSelf(os, indent);
 
-  os << "Calibration Factor          : " << this->GetCalFactor()  << std::endl;
-  os << "Sensor local incident angle : " << this->GetLocalIncidentAngle() << std::endl;
-  os << "Noise minimal range validity: " << this->GetNoiseRangeValidityMin() << std::endl;
-  os << "Noise maximal range validity: " << this->GetNoiseRangeValidityMax() << std::endl;
-  os << "Noise reference range       : " << this->GetNoiseRangeValidityRef() << std::endl;
-  
-  if(this->GetUseFastCalibrationMethod())
-    {
-      os << "Noise polinomial coefficient: [   ";
-      for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList()[0].size(); ++i)
-       {
-         os << this->GetNoisePolynomialCoefficientsList()[0][i] << "   ";
-       }
-      os << "]" << std::endl;
-    }
-  else
-    {
-      os << "Pulse Repetition Frequency  : " << this->GetPRF() << std::endl;
-      os << "Noise acquisitions          : " << this->GetNoisePolynomialCoefficientsList().size() << std::endl;
-      for (unsigned int i=0; i<this->GetNoisePolynomialCoefficientsList().size(); ++i)
-       {
-         os << "Noise acquisition "<< i << ":" << std::endl;
-         os << "Noise TimeUTC           : " << this->GetTimeUTC()[i] << std::endl;
-         os << "Noise polinomial coefficient: [   ";
-         for (unsigned int j=0; j<this->GetNoisePolynomialCoefficientsList()[j].size(); ++j)
-           {
-             os << this->GetNoisePolynomialCoefficientsList()[i][j] << "   ";
-           }
-      os << "]" << std::endl;
-       }
-    }
+  os << indent << "Calibration Factor:           " << m_CalibrationFactor  << std::endl;
+  os << indent << "PRF:                          "<<m_PRF <<std::endl;
+  os << indent << "Original product size:        "<<m_OriginalProductSize << std::endl;
+  os << indent << "Sensor local incidence angle: " << m_LocalIncidentAngle << std::endl;
+  os << indent << "Fast calibration:             " << (m_UseFastCalibration ? "On" : "Off")<<std::endl;
+  os << indent << "Results in decibels:          " << (m_ResultsInDecibels ? "Yes" : "No") << std::endl;
+  os << indent << "Number of noise records:      " << m_NoiseRecords.size() <<std::endl;
 }
 
 

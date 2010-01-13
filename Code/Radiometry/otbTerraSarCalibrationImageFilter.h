@@ -22,129 +22,211 @@
 #ifndef __otbTerraSarCalibrationImageFilter_h
 #define __otbTerraSarCalibrationImageFilter_h
 
-
-#include "otbUnaryFunctorWithIndexImageFilter.h"
-#include "otbTerraSarFunctors.h"
+#include "itkImageToImageFilter.h"
+#include "otbTerraSarCalibrationFunctor.h"
 #include "itkMetaDataDictionary.h"
-//#include "itkUnaryFunctorImageFilter.h"
-//#include "itkConstNeighborhoodIterator.h"
-#include "otbMath.h"
 
 namespace otb
 {
-
-
 /** \class TerraSarCalibrationImageFilter
  *  \brief Calculates the calibration of TerraSar sensor images.
  *
- *  For details, please refer to Infoterra documentation : "Radiometric Calibration of TerraSAR-X Data".
- *  Using FastCalibration boolean allows to compute the result considering the first noise polygone
- *  coeffcients for each line or to use every polygones coefficient given.
- *  The code was made considering that the first acquisition point is the lower left one.
+ * Implementation of the calibration algorithm has been made following
+ * Infoterra documentation  "Radiometric Calibration of TerraSAR-X
+ * Data".
  *
+ * This filter computes the sigma naught (\f$ \sigma^{0} \f$) using the following formula:
+ * \f[\sigma^{0} = ( k_{s} \cdot |DN|^{2} - NEBN) \cdot sin(\theta_{loc}\f]
+ * 
+ * Where \f$ k_{s} \f$ is the calibration factor, \f$NEBN\f$ is the
+ * Noise Equivalent Beta Naugth and \f$ \theta_{loc} \f$ is the local
+ * incident angle.
+ *
+ * NEBN is interpolated for each range position according to the
+ * polynomial coefficients from the most recent noise record.
+ * 
+ * \f$ \theta_{loc} \f$ is the mean incident angle over the scene. For
+ * now, this filter does not support more accurate behaviour like
+ * incident angle interpolation from metadata or the Geocoded
+ * Incidence Angle mask optional 1B product (GIM).
+ *
+ * All parameters are imported from the input image metadata, even if
+ * one can set different values using the proper accessors.
+ *
+ * The UseFastCalibration flag alllows to derive a coarser yet faster
+ * calibration by neglecting the noise term.
+ * 
+ * Results can be obtained either in linear or logarithmic scale
+ * (decibels), using the ResultsInDecibels flag.
+ *
+ * When signal value is too small with respect to the noise term, it
+ * may happen that \f$\sigma_{0} \f$ becomes negative. In that case
+ * the value is replaced by a default value, which can be tuned by the
+ * user.
+ * 
+ * This filter works with either real or complex image. In the case of
+ * the complex images (SLC products for instance), modulus and phase
+ * are extracted, sigma naught is computed from the modulus and the
+ * phase is set back to the result.
+ *
+ * For implementation details, consider reading the code
+ * TerraSarCalibrationFunctor.
+ *
+ * \sa TerraSarCalibrationFunctor
+ * \sa TerraSarBrightnessImageFilter
+ * 
+ * \ingroup Streamed
+ * \ingroup Multithreaded 
  * \ingroup Radiometry
  */
 
 template<class TInputImage, class TOutputImage >
 class ITK_EXPORT TerraSarCalibrationImageFilter :
-  public UnaryFunctorWithIndexImageFilter<
-    TInputImage,
-    TOutputImage,
-    ITK_TYPENAME Functor::TerraSarCalibrationImageFunctor< ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
-                                                           ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
+    public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
-  /** Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-
-  /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage                                                                         InputImageType;
-  typedef TOutputImage                                                                        OutputImageType;
-  typedef typename InputImageType::InternalPixelType                                          InputInternalPixelType;
-  typedef typename OutputImageType::InternalPixelType                                         OutputInternalPixelType;
-  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType                     InputValueType;
-  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType                    OutputValueType;
-  typedef typename Functor::TerraSarCalibrationImageFunctor< InputValueType, OutputValueType> FunctorType;
-
   /** "typedef" for standard classes. */
-  typedef TerraSarCalibrationImageFilter                                                 Self;
-  typedef UnaryFunctorWithIndexImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
-  typedef itk::SmartPointer<Self>                                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                                       ConstPointer;
-  
+  typedef TerraSarCalibrationImageFilter                                   Self;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>                Superclass;
+  typedef itk::SmartPointer<Self>                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+
+  /** Extract input and output images dimensions.*/
+  itkStaticConstMacro( InputImageDimension, unsigned int, 
+		       TInputImage::ImageDimension);
+  itkStaticConstMacro( OutputImageDimension, unsigned int, 
+		       TOutputImage::ImageDimension);
+
+  /** "typedef" to simplify the variables definition 
+   * and the declaration. */
+  typedef TInputImage                                                      InputImageType;
+  typedef TOutputImage                                                     OutputImageType;
+  typedef typename InputImageType::RegionType                              InputImageRegionType;
+  typedef typename OutputImageType::RegionType                             OutputImageRegionType;
+  typedef typename InputImageType::InternalPixelType                       InputInternalPixelType;
+  typedef typename OutputImageType::InternalPixelType                      OutputInternalPixelType;
+  typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType  InputValueType;
+  typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType OutputValueType;
+
+  /** Calibration functor typedef */
+  typedef typename Functor::TerraSarCalibrationFunctor<InputValueType, 
+						       OutputValueType>    CalibrationFunctorType;  
+
+  /** typedef to access metadata */
+  typedef itk::MetaDataDictionary                                          MetaDataDictionaryType;
+  typedef typename InputImageType::SizeType                                SizeType;
+
+  /** Noise records typedefs */
+  typedef ossimplugins::ImageNoise                                         ImageNoiseType;
+  /** 
+   * This is used to store the noise record along with its
+   * acquisition time 
+   */
+  typedef std::pair<double,ImageNoiseType>                                 NoiseRecordType;
+  typedef std::vector<NoiseRecordType>                                     NoiseRecordVectorType;
+
   /** object factory method. */
   itkNewMacro(Self);
 
   /** return class name. */
-  // Use a with neighborhood to have access to the pixel coordinates
-  itkTypeMacro(TerraSarCalibrationImageFilter, UnaryFunctorWithIndexImageFilter);
-
-  typedef itk::MetaDataDictionary                       MetaDataDictionaryType;
-  typedef typename FunctorType::DoubleVectorType        DoubleVectorType;
-  typedef typename FunctorType::DoubleVectorVectorType  DoubleVectorVectorType;
-  typedef typename InputImageType::SizeType                      SizeType;
-
-//  typedef typename FunctorType::LIntVectorType          LIntVectorType;
+  itkTypeMacro(TerraSarCalibrationImageFilter,ImageToImageFilter);
 
   /** Accessors */
   /** Calibration Factor */
-  void SetCalFactor( double val );
-  double GetCalFactor() const;
-  /** Noise minimal range validity */
-  void SetNoiseRangeValidityMin( double val );
-  double GetNoiseRangeValidityMin() const;
+  itkSetMacro(CalibrationFactor,double);
+  itkGetMacro(CalibrationFactor,double);
 
-  /** Noise maximal range validity */
-  void SetNoiseRangeValidityMax( double val );
-  double GetNoiseRangeValidityMax() const;
-  /** Noise reference range validity */
-  void SetNoiseRangeValidityRef( double val );
-  double GetNoiseRangeValidityRef() const;
   /** Sensor local incident angle in degree */
-  void SetLocalIncidentAngle( double val );
-  double GetLocalIncidentAngle() const;
-  /** Sinus of the sensor local incident angle in degree */
-  double GetSinLocalIncidentAngle() const;
-  /** Vector of vector that contain noise polinomial coefficient */
-  void SetNoisePolynomialCoefficientsList( DoubleVectorVectorType vect );
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
-  /** Image size (setter is protected)*/
-  SizeType GetImageSize() const;
+  itkSetMacro(LocalIncidentAngle,double);
+  itkGetMacro(LocalIncidentAngle,double);
   
-  /** Fast Calibration Method. If set to trus, will consider only the first noise coefficient else,
-   *  will use all of them and applied it according to its acquisition UTC time and the coordinates
-   *  of the pixel in the image. */
-  void SetUseFastCalibrationMethod( bool b );
-  bool GetUseFastCalibrationMethod() const;
-  /** TimeUTC for each noise coefficient acquisition (in Julian day). */
-  void SetTimeUTC( DoubleVectorType vect );
-  DoubleVectorType GetTimeUTC() const;
+  /** If fast calibration is On, noise is ignored */
+  itkSetMacro(UseFastCalibration,bool);
+  itkGetMacro(UseFastCalibration,bool);
+  itkBooleanMacro(UseFastCalibration);
+
+  /** Activate if you wish results in decibels */
+  itkSetMacro(ResultsInDecibels,bool);
+  itkGetMacro(ResultsInDecibels,bool);
+  itkBooleanMacro(ResultsInDecibels);
+
   /** Pulse Repetition Frequency */
-  void SetPRF( double val );
-  double GetPRF() const;
-  /** Inverse Pulse Repetition Frequency */
-  double GetInvPRF() const;
+  itkSetMacro(PRF,double);
+  itkGetMacro(PRF,double);
+
+  /** Set the default value (replacing negative sigma */
+  itkSetMacro(DefaultValue,double);
+  itkGetMacro(DefaultValue,double);
+
+  /** The Calibration algorithm uses the original product size to
+   * compute the range and azimuth location. Hence, if the input image is
+   * an extract of the original product, this information must be set.
+   * If not set, the LargestPossibleRegion of the input image is
+   * used. Please note that this parameter has no influence on the output
+   * image regions. */
+  itkSetMacro(OriginalProductSize,SizeType);
+  itkGetConstReferenceMacro(OriginalProductSize,SizeType);
+  
+  /**
+   * Add a new noise record for calibration.
+   * \param utcAcquisitionTime Noise record time
+   * \param record The noise record
+   */
+  void AddNoiseRecord(double utcAcquisitionTime, const ImageNoiseType& record);
+
+  /**
+   * Clear all noise records 
+   */
+  void ClearNoiseRecords();
 
 protected:
   /** Constructor */
   TerraSarCalibrationImageFilter();
   /** Destructor */
-  virtual ~TerraSarCalibrationImageFilter() {};
-  /** Image Size setter*/
-  void SetImageSize( SizeType size );
-
+  virtual ~TerraSarCalibrationImageFilter();
+  
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
-  
+
+  /** Threaded generate Data */
+  virtual void ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,int threadId);
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-bool m_ParamLoaded;
+  TerraSarCalibrationImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  /** Method used to order noise records by increasing acquisition
+   * date */
+  static bool CompareNoiseRecords(const NoiseRecordType& record1, const NoiseRecordType& record2);
+
+  /** Calibration Factor */
+  double m_CalibrationFactor;
+
+  /** Sensor local incident angle in degree */
+  double m_LocalIncidentAngle;
+
+  /** Pulse Repetition Frequency */
+  double m_PRF;
+
+  /** Original product size */
+  SizeType m_OriginalProductSize;
+
+  /** Use fast calibration ? */
+  bool m_UseFastCalibration;
+
+  /** Results in decibels ? */
+  bool m_ResultsInDecibels;
+
+  /** Noise record vector */
+  NoiseRecordVectorType m_NoiseRecords;
+  
+  /** Default value (for negative sigma) */
+  bool m_DefaultValue;
+
 };
-
-
 
 } // end namespace otb
 
