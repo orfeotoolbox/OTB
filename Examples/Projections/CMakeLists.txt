@@ -53,6 +53,7 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
 SET(EXE_TESTS2 ${CXX_TEST_PATH}/otbProjectionsExamplesTests2)
 
 SET(TOL 0.0)
+SET(EPSILON_4 0.0001)
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTeOrthoRectificationExampleTest ${EXE_TESTS}
@@ -115,11 +116,11 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 IF(OTB_DATA_USE_LARGEINPUT)
 #TODO change the example by using a SPOT4 roamnia
 ADD_TEST(prTvEstimateRPCSensorModelExampleTest ${EXE_TESTS}
-  --compare-ascii ${EPSILON_4} 
+         --compare-ascii ${EPSILON_4} 
          ${BASELINE}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
          ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
-         EstimateRPCSensorModelExampleTest
-	 ${LARGEINPUT}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
+    EstimateRPCSensorModelExample
+	 ${INPUTLARGEDATA}/SPOT4/RIO_DE_JANEIRO/IMAG_01.DAT
 	 ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
 	 1199 1259 -22.76847 -43.168043 0.
 	 1497 727  -22.688931 -43.066686 0.

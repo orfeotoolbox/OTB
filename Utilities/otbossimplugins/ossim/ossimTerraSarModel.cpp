@@ -519,6 +519,8 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
   // Load the base class.
    bool result = ossimGeometricSarSensorModel::loadState(kwl, prefix);
 
+   std::cout<<kwl<<std::endl;
+
    if (result)
    {
       lookup = kwl.find(prefix,SR_GR_R0_KW);
@@ -558,6 +560,8 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          result = false;
       }
       
+      ////////////////////////////////////////////////////
+
       if (result && count)
       {
          _SrToGr_exponent.resize(count);
@@ -616,11 +620,7 @@ bool ossimplugins::ossimTerraSarModel::loadState (const ossimKeywordlist &kwl,
          }
 
       } // matches:  if (result && count)
-      else
-      {
-         result = false;
-      }
-
+  
       lookup = kwl.find(prefix, SC_RT_KW);
       if (lookup)
       {
