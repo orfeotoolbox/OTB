@@ -29,11 +29,11 @@ namespace otb {
 template < class TPoint >
 LeastSquareAffineTransformEstimator<TPoint>
 ::LeastSquareAffineTransformEstimator() : m_TiePointsContainer(), 
-					  m_RMSError(),
-					  m_RelativeResidual(),
-					  m_Matrix(),
-					  m_Offset(),
-					  m_AffineTransform()
+                                     m_RMSError(),
+                                     m_RelativeResidual(),
+                                     m_Matrix(),
+                                     m_Offset(),
+                                     m_AffineTransform()
 {
   // Build the affine transform object
   m_AffineTransform = AffineTransformType::New();
@@ -119,9 +119,9 @@ LeastSquareAffineTransformEstimator<TPoint>
 
       // Iterate on dimension (second loop)
       for(unsigned int dim2 = 0; dim2 < PointDimension; ++dim2)
-	{
-	matrixPerDim[dim1](pId,dim2) = static_cast<double>(m_TiePointsContainer[pId].first[dim2]);
-	}
+       {
+       matrixPerDim[dim1](pId,dim2) = static_cast<double>(m_TiePointsContainer[pId].first[dim2]);
+       }
       
       // Fill the last column
       matrixPerDim[dim1](pId,PointDimension) = 1.;
@@ -139,8 +139,8 @@ LeastSquareAffineTransformEstimator<TPoint>
     if(linearSystem.get_number_of_unknowns() > nbPoints*PointDimension)
       {
       itkExceptionMacro(<<"There are "<<linearSystem.get_number_of_unknowns()
-		   <<" unknowns in the linear systems but only "<<nbPoints
-		   <<" points are provided.");
+                 <<" unknowns in the linear systems but only "<<nbPoints
+                 <<" points are provided.");
       }
     otbMsgDebugMacro(<<"Number of unknowns: "<<linearSystem.get_number_of_unknowns());
     otbMsgDebugMacro(<<"Number of equations: "<<nbPoints);

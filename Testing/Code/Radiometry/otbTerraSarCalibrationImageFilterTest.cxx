@@ -31,7 +31,7 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   const bool   useFastCalibration = atoi(argv[3]);
   const bool   resultsInDbs = atoi(argv[4]);
 
-  typedef double					            PixelType;
+  typedef double                                               PixelType;
   typedef otb::Image<PixelType, 2>                                  ImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;

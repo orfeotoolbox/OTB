@@ -31,8 +31,8 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
   const bool   useMetadata    = atoi(argv[3]);
   const bool   resultsInDb    = atoi(argv[4]);
 
-  typedef std::complex<double>					   ComplexType;
-  typedef otb::Image<ComplexType, 2>	                           ImageType;
+  typedef std::complex<double>                                      ComplexType;
+  typedef otb::Image<ComplexType, 2>                                  ImageType;
   typedef otb::ImageFileReader<ImageType>                          ReaderType;
   typedef otb::ImageFileWriter<ImageType>                          WriterType;
   typedef otb::TerraSarBrightnessImageFilter<ImageType, ImageType> FilterType;

@@ -100,7 +100,7 @@ int main(int argc, char * argv[])
     typedef otb::Polygon<double>                                                   PolygonType;
     typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
     // Software Guide : EndCodeSnippet
-    typedef VectorDataType::DataNodeType 					   DataNodeType;
+    typedef VectorDataType::DataNodeType                                       DataNodeType;
     
     typedef otb::VectorDataProjectionFilter<VectorDataType,VectorDataType>         VectorDataFilterType;
 

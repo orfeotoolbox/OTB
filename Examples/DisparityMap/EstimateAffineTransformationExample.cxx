@@ -266,8 +266,8 @@ int main (int argc, char* argv[])
   ptContainer2 = ptSet2->GetPoints();
   if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
   {
- 	ptContainer1 = ptSet2->GetPoints();
-  	ptContainer2 = ptSet1->GetPoints();
+        ptContainer1 = ptSet2->GetPoints();
+         ptContainer2 = ptSet1->GetPoints();
   }
  
   PointsContainer::Pointer ptContainerRes =   PointsContainer::New();
@@ -277,8 +277,8 @@ int main (int argc, char* argv[])
   //Construct new point container (subset of input pointset)
   for (unsigned int id=0;id < ptContainer1->Size();++id)
   {
-  	ptContainerRes->InsertElement(id, pointsIterator->Value()); 
-	++pointsIterator;
+         ptContainerRes->InsertElement(id, pointsIterator->Value()); 
+       ++pointsIterator;
   }
 
   if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
@@ -287,7 +287,7 @@ int main (int argc, char* argv[])
   }
   else
   {
-  	ptSet2->SetPoints(ptContainerRes);
+         ptSet2->SetPoints(ptContainerRes);
   }
 
   std::cout << "SIFT points size" << std::endl;
