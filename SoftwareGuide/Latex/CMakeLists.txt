@@ -115,7 +115,7 @@ ENDFOREACH( exampletexname )
 
 IF(LATEX_COMPILER)
 
-  MESSAGE("HAVe latex compiler")
+  MESSAGE("Have latex compiler")
 
   IF (NOT UNIX)
     #SET(ITK_TEXINPUTS ${SoftwareGuide_SOURCE_DIR}/../Latex;${SoftwareGuide_SOURCE_DIR};${SoftwareGuide_SOURCE_DIR}/Latex;${SoftwareGuide_SOURCE_DIR}/Art;${SoftwareGuide_BINARY_DIR};${SoftwareGuide_BINARY_DIR}/Examples;${SoftwareGuide_BINARY_DIR}/Wrappings/Java;${SoftwareGuide_BINARY_DIR}/Art;${SoftwareGuide_BINARY_DIR}/Latex)
