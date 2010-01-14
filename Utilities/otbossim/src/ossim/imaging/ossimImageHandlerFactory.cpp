@@ -27,7 +27,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
-#include <ossim/imaging/ossimRadarSatTileSource.h>
+//#include <ossim/imaging/ossimRadarSatTileSource.h>
 // #include <ossim/imaging/ossimRadarSat2TileSource.h>
 // #include <ossim/imaging/ossimTerraSarTileSource.h>
 
@@ -142,18 +142,18 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    result = 0;
 
       // test if Radarsat
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "Radarsat"
-         << std::endl;
-   }
-   result = new ossimRadarSatTileSource;
-   if(result->open(copyFilename))
-   {
-      return result.release();
-   }
-   result = 0;
+//   if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "Radarsat"
+//         << std::endl;
+//   }
+//   result = new ossimRadarSatTileSource;
+//   if(result->open(copyFilename))
+//   {
+//      return result.release();
+//   }
+//   result = 0;
 
     // test if Radarsat2
 //    if(traceDebug())
@@ -515,19 +515,19 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    result = 0;
 
       // RadarSat
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat"
-         << std::endl;
-   }
-   result = new ossimRadarSatTileSource;
-   if(result->loadState(kwl, prefix))
-   {
-      return result.release();
-   }
-
-   result = 0;
+//   if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "trying RadarSat"
+//         << std::endl;
+//   }
+//   result = new ossimRadarSatTileSource;
+//   if(result->loadState(kwl, prefix))
+//   {
+//      return result.release();
+//   }
+//
+//   result = 0;
 
   // RadarSat2
 //    if(traceDebug())

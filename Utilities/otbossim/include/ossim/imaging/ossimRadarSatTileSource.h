@@ -7,6 +7,8 @@
 #include <ossim/imaging/RadarSat/Data/Data.h>
 #include <ossim/imaging/RadarSat/Leader/Leader.h>
 
+namespace ossimplugins
+{
 class ossimImageData;
 
 /**
@@ -109,5 +111,5 @@ private:
 
 	TYPE_DATA
 };
-
+}
 #endif

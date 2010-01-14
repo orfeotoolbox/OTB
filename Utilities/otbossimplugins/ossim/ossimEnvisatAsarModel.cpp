@@ -346,8 +346,8 @@ bool ossimEnvisatAsarModel::loadState (const ossimKeywordlist &kwl,
   InitPlatformPosition(kwl, prefix);
   InitRefPoint(kwl, prefix);
   InitSRGR(kwl, prefix);
-
 }
+
 std::ostream& ossimEnvisatAsarModel::print(std::ostream& out) const
 {
    static const char MODULE[] = "ossimplugins::ossimEnvisatAsarModel::print";

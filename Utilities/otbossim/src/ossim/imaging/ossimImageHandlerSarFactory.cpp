@@ -9,7 +9,9 @@
 #include <ossim/imaging/ossimImageHandlerSarFactory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/imaging/ossimRadarSatTileSource.h>
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/imaging/ossimImageHandler.h>
+//#include <ossim/imaging/ossimRadarSatTileSource.h>
 // #include <ossim/imaging/ossimRadarSat2TileSource.h>
 // #include <ossim/imaging/ossimTerraSarTileSource.h>
 //#include <ossim/imaging/ossimCosmoSkymedTileSource.h>
@@ -61,18 +63,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
    }
 
 	// Radarsat
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat"
-         << std::endl;
-   }
-   result = new ossimRadarSatTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//   if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "trying RadarSat"
+//         << std::endl;
+//   }
+//   result = new ossimRadarSatTileSource;
+//   if(result->open(copyFilename))
+//   {
+//      return result;
+//   }
+//   delete result;
 
    // TerraSar
 // 	if(traceDebug())
@@ -163,18 +165,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
    }
    ossimImageHandler* result = NULL;
 
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying RadarSat"
-         << std::endl;
-   }
-   result  = new ossimRadarSatTileSource();
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   delete result;
+//   if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "trying RadarSat"
+//         << std::endl;
+//   }
+//   result  = new ossimRadarSatTileSource();
+//   if(result->loadState(kwl, prefix))
+//   {
+//      return result;
+//   }
+//   delete result;
 
 // 	if(traceDebug())
 //    {
@@ -252,10 +254,10 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
 
 ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeName)const
 {
-   if(STATIC_TYPE_NAME(ossimRadarSatTileSource) == typeName)
-   {
-      return new ossimRadarSatTileSource();
-   }
+//   if(STATIC_TYPE_NAME(ossimRadarSatTileSource) == typeName)
+//   {
+//      return new ossimRadarSatTileSource();
+//   }
 // 	if(STATIC_TYPE_NAME(ossimTerraSarTileSource) == typeName)
 //    {
 //       return new ossimTerraSarTileSource();
@@ -281,10 +283,10 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeNa
 
 void ossimImageHandlerSarFactory::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
-   extensionList.push_back("001");	// RadarSat, ERS
+//   extensionList.push_back("001");	// RadarSat, ERS
 // 	extensionList.push_back("xml");	// TerraSar, RadarSat2
 	//extensionList.push_back("h5");	// CosmoSkymed
-	extensionList.push_back("n1");	// EnvisatAsar
+//	extensionList.push_back("n1");	// EnvisatAsar
 }
 
 ossimObject* ossimImageHandlerSarFactory::createObject(const ossimKeywordlist& kwl,
@@ -334,7 +336,7 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimKeywordlist& k
 
 void ossimImageHandlerSarFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
-	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatTileSource));
+//	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatTileSource));
 // 	typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarTileSource));
 //	typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource));
 	//typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource));
