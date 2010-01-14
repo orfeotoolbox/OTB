@@ -457,6 +457,13 @@ IkonosImageMetadataInterface
 
   VariableLengthVectorType outputValuesVariableLengthVector;
   unsigned int numBands = GetNumberOfBands(dict);
+  
+  /** Tests if the number of bands in metadata are the same as bandName size*/
+  if (numBands != bandName.size() )
+  {
+    itkExceptionMacro(<<"Invalid number of bands...");
+  }
+  
   outputValuesVariableLengthVector.SetSize(numBands);
   for(unsigned int i=0; i<numBands; ++i)
   {
