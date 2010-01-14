@@ -88,7 +88,7 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
+std::cout<<kwl<<std::endl;
   std::string key;
   ossimString separatorList;
   key = "azimuth_start_time";
@@ -678,8 +678,33 @@ TerraSarImageMetadataInterface::GetRadarFrequency( const MetaDataDictionaryType 
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-
+ 
   ossimString tempVal = kwl.find("radarFrequency");
+  double freq =tempVal.toDouble();
+
+  return freq;
+}
+
+
+double
+TerraSarImageMetadataInterface::GetPRF( const MetaDataDictionaryType & dict ) const
+{
+  if( !this->CanRead( dict ) )
+  {
+    itkExceptionMacro(<<"Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+
+  ossimString tempVal = kwl.find("sensor_params.prf");
   double freq = tempVal.toDouble();
 
   return freq;

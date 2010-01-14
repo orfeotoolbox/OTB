@@ -126,6 +126,9 @@ public:
 
    /** Get the radar frequency */
    double GetRadarFrequency( const MetaDataDictionaryType & ) const;
+ 
+   /** Get the PRF */
+   double GetPRF( const MetaDataDictionaryType & ) const;
    
    /** Get the incidence angles structure */
    ossimplugins::IncidenceAngles* GetIncidenceAngles( const MetaDataDictionaryType & ) const;
