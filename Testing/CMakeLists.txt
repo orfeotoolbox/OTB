@@ -15,15 +15,16 @@ IF(OTB_BINARY_DIR)
   ADD_SUBDIRECTORY(Utilities)
 ELSE(OTB_BINARY_DIR)
   # We are building as a stand-alone project.
+  CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
   SET(LIBRARY_OUTPUT_PATH ${OTBTesting_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
   SET(EXECUTABLE_OUTPUT_PATH ${OTBTesting_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
   MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
   SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
   # Configure Dart testing support.
-  SET(PROJECT_SOURCE_DIR "${OTBTesting_SOURCE_DIR}/..")
+  #SET(PROJECT_SOURCE_DIR "${OTBTesting_SOURCE_DIR}/..")
   INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
-  SET(PROJECT_SOURCE_DIR "${OTBTesting_SOURCE_DIR}")
+  #SET(PROJECT_SOURCE_DIR "${OTBTesting_SOURCE_DIR}")
   MARK_AS_ADVANCED(TCL_TCLSH)
   IF(BUILD_TESTING)
     ENABLE_TESTING()
