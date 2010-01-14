@@ -75,10 +75,15 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   double nebn = 0.;
 
   // For each degree
-  for(unsigned int degree = 0; degree <= polynomialDegree; ++degree)
+  std::vector<double>::const_iterator coefIt = coefficients.begin();
+  unsigned int degree = 0;
+  
+  while(coefIt != coefficients.end() && degree <= polynomialDegree)
     {
     // Cumulate polynomial
-    nebn += coefficients[degree] * vcl_pow(deltaTau,static_cast<double>(degree));
+    nebn += (*coefIt) * vcl_pow(deltaTau,static_cast<double>(degree));
+    ++degree;
+    ++coefIt;
     }
 
   // Do not forget to multiply by the calibration factor

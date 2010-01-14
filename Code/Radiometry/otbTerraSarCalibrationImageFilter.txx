@@ -230,6 +230,9 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
     {
     ++currentNoiseRecordIt;
     }
+
+  // Store the current noise record azimuth position
+  double currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
   
   // Store current line index
   typename OutputImageRegionType::IndexType::IndexValueType currentLine = inputIt.GetIndex()[1];
@@ -247,7 +250,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       currentLine = inputIt.GetIndex()[1];
             
       // And check if we changed of NoiseRecord
-      if(currentAzimuthPosition < currentNoiseRecordIt->first)
+      if(currentAzimuthPosition < currentNoiseRecordAzimuthPosition)
 	{
 	// Update the iterator
 	++currentNoiseRecordIt;
@@ -256,6 +259,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 	if(currentNoiseRecordIt != m_NoiseRecords.end())
 	  {
 	  // Update the functor noise record
+	  currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
 	  calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
 	  }
 	}
