@@ -23,7 +23,9 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the
+//  This basic example shows how compute shape attributes at the object level.
+//  The input image is firstly translate in a set of regions (of \doxygen{itk}{ShapeLabelObject})
+//  and some attributes values of each object are then save to an ASCII file. 
 //
 //  Software Guide : EndLatex
 
@@ -80,7 +82,7 @@ int main(int argc, char * argv[])
   
   //  Software Guide : BeginLatex
   //
-  // Here the ShapeLabelObject type
+  // Here the \doxygen{itk}{ShapeLabelObject} type
   // is chosen in order to read some attribute related to the shape
   // of the objects (by opposition to the content of the object, with
   // the \doxygen{itk}{StatisticsLabelObject).
