@@ -13,7 +13,7 @@
 // #include <ossim/imaging/ossimRadarSat2TileSource.h>
 // #include <ossim/imaging/ossimTerraSarTileSource.h>
 //#include <ossim/imaging/ossimCosmoSkymedTileSource.h>
-#include <ossim/imaging/ossimEnvisatAsarTileSource.h>
+//#include <ossim/imaging/ossimEnvisatAsarTileSource.h>
 // #include <ossim/imaging/ossimErsSarTileSource.h>
 
 
@@ -89,18 +89,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
 //    delete result;
 
    // Envisat ASAR
-   if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying EnvisatAsar"
-         << std::endl;
-   }
-   result = new ossimEnvisatAsarTileSource;
-   if(result->open(copyFilename))
-   {
-      return result;
-   }
-   delete result;
+//   if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "trying EnvisatAsar"
+//         << std::endl;
+//   }
+//   result = new ossimEnvisatAsarTileSource;
+//   if(result->open(copyFilename))
+//   {
+//      return result;
+//   }
+//   delete result;
 
    // Radarsat 2
 // 	if(traceDebug())
@@ -202,18 +202,18 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
 //    }
 //    delete result;
 
-	if(traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying EnvisatAsar"
-         << std::endl;
-   }
-   result  = new ossimEnvisatAsarTileSource();
-   if(result->loadState(kwl, prefix))
-   {
-      return result;
-   }
-   delete result;
+//	if(traceDebug())
+//   {
+//      ossimNotify(ossimNotifyLevel_DEBUG)
+//         << "trying EnvisatAsar"
+//         << std::endl;
+//   }
+//   result  = new ossimEnvisatAsarTileSource();
+//   if(result->loadState(kwl, prefix))
+//   {
+//      return result;
+//   }
+//   delete result;
 
 //    if(traceDebug())
 //    {
@@ -260,10 +260,10 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeNa
 //    {
 //       return new ossimTerraSarTileSource();
 //    }
-	if(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource) == typeName)
-   {
-      return new ossimEnvisatAsarTileSource();
-   }
+//	if(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource) == typeName)
+//   {
+//      return new ossimEnvisatAsarTileSource();
+//   }
 	/*if(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource) == typeName)
    {
       return new ossimCosmoSkymedTileSource();
@@ -336,7 +336,7 @@ void ossimImageHandlerSarFactory::getTypeNameList(std::vector<ossimString>& type
 {
 	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatTileSource));
 // 	typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarTileSource));
-	typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource));
+//	typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarTileSource));
 	//typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedTileSource));
 // 	typeList.push_back(STATIC_TYPE_NAME(ossimErsSarTileSource));
 // 	typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2TileSource));

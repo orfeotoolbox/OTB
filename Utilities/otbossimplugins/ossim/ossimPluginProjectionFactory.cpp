@@ -43,7 +43,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
-	result = model.get();
+	       result = model.get();
       }
       else
       {
@@ -78,6 +78,18 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       }
    }
 
+   if (!result)
+   {
+     ossimRefPtr<ossimEnvisatAsarModel> model = new ossimEnvisatAsarModel();
+     if (model->open(filename))
+     {
+       result = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
    return result.release();
 }
 
@@ -112,6 +124,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
      return new ossimErsSarModel;
    }
+   else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
+   {
+     return new ossimEnvisatAsarModel;
+   }
    return 0;
 }
 
@@ -144,6 +160,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       else if (type == "ossimErsSarModel")
       {
          result = new ossimErsSarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
+      else if (type == "ossimEnvisatAsarModel")
+      {
+         result = new ossimEnvisatAsarModel();
          if ( !result->loadState(kwl, prefix) )
          {
             result = 0;
