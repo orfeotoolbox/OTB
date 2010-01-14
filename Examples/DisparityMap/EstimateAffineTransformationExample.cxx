@@ -31,15 +31,14 @@
 // Software Guide : BeginLatex
 //
 // This example demonstrates the use of the
-// \doxygen{otb}{KeyPointSetsMatchingFilter} for disparity map
-// estimation. The idea here is to match SIFTs extracted from both the
+// \doxygen{otb}{KeyPointSetsMatchingFilter} for transformation 
+// estimation between 2 images. The idea here is to match SIFTs extracted from both the
 // fixed and the moving images. The use of SIFTs is demonstrated in
 // section \ref{sec:SIFTDetector}. The
-// \doxygen{itk}{DeformationFieldSource} will be used
-// to generate a deformation field by using
-// interpolation on the deformation values from the point set. More
-// advanced methods for deformation field interpolation are also
-// available.
+// \doxygen{otb}{LeastSquareAffineTransformEstimator} will be used
+// to generate a transformation field by using
+// mean square optimisation to estimate
+// an affine transfrom from the point set.
 //
 // The first step toward the use of these filters is to include the
 // appropriate header files.
@@ -50,7 +49,6 @@
 // Software Guide : BeginCodeSnippet
 
 #include "otbKeyPointSetsMatchingFilter.h"
-//#include "otbSiftFastImageFilter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
 // Disabling deprecation warning if on visual
@@ -64,18 +62,14 @@
 #pragma warning(pop)
 #endif
 
-#include "itkWarpImageFilter.h"
 
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
 #include "otbMacro.h"
-#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "itkPointSet.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 #include "otbLeastSquareAffineTransformEstimator.h"
 #include "itkResampleImageFilter.h"
 
@@ -235,15 +229,9 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  
-  bool useBackMatching = 0;
-
   filter1->SetInput( fixedReader->GetOutput() );
-  //filter1->SetScalesNumber(3);
   filter2->SetInput( movingReader->GetOutput() );
-  //filter2->SetScalesNumber(3);
-
-  // Software Guide : BeginCodeSnippet
+  
   filter1->SetOctavesNumber(octaves);
   filter1->SetScalesNumber(scales);
 
@@ -306,11 +294,22 @@ int main (int argc, char* argv[])
   std::cout << ptSet1->GetNumberOfPoints() << std::endl;
   std::cout << ptSet2->GetNumberOfPoints() << std::endl;
 
+  // Software Guide : BeginLatex
+  //
+  // We use a simple Euclidean distance to select
+  // matched points.
+  //
+  // Software Guide : EndLatex
 
+  // Software Guide : BeginCodeSnippet
+
+  //TODO use SIFT filters outputs or subset of pointset??? 
   //euclideanMatcher->SetInput1(ptSet1);
   //euclideanMatcher->SetInput2(ptSet2);
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
+  
+  bool useBackMatching = 0;
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
@@ -331,7 +330,7 @@ int main (int argc, char* argv[])
 
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-  std::cout << "Get landmark" << std::endl;
+  std::cout << "Get landmarkList" << std::endl;
   // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
@@ -348,9 +347,7 @@ int main (int argc, char* argv[])
   std::cout << "landmark list size " << landmarkList->Size() << std::endl;  
   for (LandmarkListType::Iterator it = landmarkList->Begin();
      it != landmarkList->End(); ++it)
-  {
-        //otbMsgDevMacro(<<"landmark1" << it.Get()->GetPoint1() );
-        //otbMsgDevMacro(<<"landmark2" << it.Get()->GetPoint2() );        
+  {       
         std::cout << "landmark1" << it.Get()->GetPoint1() << std::endl;   
         std::cout << "landmark2" << it.Get()->GetPoint2() << std::endl;        
         estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
@@ -427,6 +424,11 @@ int main (int argc, char* argv[])
 
   // Software Guide : EndCodeSnippet
 
+  //  Software Guide : BeginLatex
+  //
+  //  Write resampled image
+  //
+  //  Software Guide : EndLatex
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();
 
