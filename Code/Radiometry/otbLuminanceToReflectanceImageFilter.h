@@ -88,12 +88,7 @@ public:
            * m_IlluminationCorrectionCoefficient
            / m_SolarIllumination;
     
-    // Set a 1e-3 precision
-    itk::OStringStream oss;
-    oss.str("");
-    oss << std::fixed << std::setprecision(3);
-    oss<<temp;
-    outPixel = static_cast<TOutput>( atof(oss.str().c_str()) );
+    outPixel = static_cast<TOutput>( vcl_floor(temp*1000.)/1000.);
   
     return outPixel;
   }
