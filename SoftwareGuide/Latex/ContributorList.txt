@@ -24,4 +24,13 @@ Yannick Reynard
 Gwendoline Blanchet (CNES)
 Adamo Ferro
 Rik Bellens
+Jean-Guilhem Cailton (Ark\'emie)
+Guillaume Borrut (CS)
+Etienne Bougoin (CS)
+Tishampati Dhar
+Massimo Di Stefano
+Aik Song Chia (CRISP)
+Manuel Grizonnet (CNES)
+Stephane May (CNES)
+
 
