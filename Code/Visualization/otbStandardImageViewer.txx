@@ -231,37 +231,37 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   if(listSize>0)
     {
       if(listSize==1)
-	{
-	  typename HistogramCurveType::Pointer grayhistogram = HistogramCurveType::New();
-	  grayhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
-	  grayhistogram->SetHistogramColor(gray);
-	  grayhistogram->SetLabelColor(gray);
-	  m_CurveWidget->AddCurve(grayhistogram);
-	}
+       {
+         typename HistogramCurveType::Pointer grayhistogram = HistogramCurveType::New();
+         grayhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+         grayhistogram->SetHistogramColor(gray);
+         grayhistogram->SetLabelColor(gray);
+         m_CurveWidget->AddCurve(grayhistogram);
+       }
       else
-	{
-	  typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-	  rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
-	  rhistogram->SetHistogramColor(red);
-	  rhistogram->SetLabelColor(red);
-	  m_CurveWidget->AddCurve(rhistogram);
-	}
+       {
+         typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+         rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+         rhistogram->SetHistogramColor(red);
+         rhistogram->SetLabelColor(red);
+         m_CurveWidget->AddCurve(rhistogram);
+       }
       if(listSize>1)
-	{
-	  typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-	  ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
-	  ghistogram->SetHistogramColor(green);
-	  ghistogram->SetLabelColor(green);
-	  m_CurveWidget->AddCurve(ghistogram);
-	}	 
+       {
+         typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+         ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
+         ghistogram->SetHistogramColor(green);
+         ghistogram->SetLabelColor(green);
+         m_CurveWidget->AddCurve(ghistogram);
+       }        
       if(listSize>2)
-	{
-	  typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-	  bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
-	  bhistogram->SetHistogramColor(blue);
-	  bhistogram->SetLabelColor(blue);
-	  m_CurveWidget->AddCurve(bhistogram);
-	}
+       {
+         typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+         bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
+         bhistogram->SetHistogramColor(blue);
+         bhistogram->SetLabelColor(blue);
+         m_CurveWidget->AddCurve(bhistogram);
+       }
     }
 
   m_CurveWidget->SetXAxisLabel("Pixels");

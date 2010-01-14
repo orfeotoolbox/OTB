@@ -135,7 +135,7 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());	
+  filter->SetInput(reader->GetOutput());       
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

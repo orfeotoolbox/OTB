@@ -31,7 +31,7 @@ int otbTerraSarCalibrationImageComplexFilterTest(int argc, char * argv[])
   const bool   useFastCalibration = atoi(argv[3]);
   const bool   resultsInDbs = atoi(argv[4]);
 
-  typedef std::complex<double>					    ComplexType;
+  typedef std::complex<double>                                       ComplexType;
   typedef otb::Image<ComplexType, 2>                                ImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;

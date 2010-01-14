@@ -30,11 +30,11 @@ namespace otb {
 template < class TImage >
 GCPsToRPCSensorModelImageFilter<TImage>
 ::GCPsToRPCSensorModelImageFilter() : m_UseImageGCPs(true), 
-				      m_RMSGroundError(0.), 
-				      m_UseDEM(false),
-				      m_MeanElevation(0.), 
-				      m_DEMHandler(),
-				      m_GCPsContainer()
+                                  m_RMSGroundError(0.), 
+                                  m_UseDEM(false),
+                                  m_MeanElevation(0.), 
+                                  m_DEMHandler(),
+                                  m_GCPsContainer()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -161,7 +161,7 @@ GCPsToRPCSensorModelImageFilter< TImage >
     
       // Fill geo point
       geoPoint = ossimGpt(imagePtr->GetGCPX(i),imagePtr->GetGCPY(i),
-			  imagePtr->GetGCPZ(i));
+                       imagePtr->GetGCPZ(i));
     
       // Add the sensor point to the list
       sensorPoints.push_back(sensorPoint);

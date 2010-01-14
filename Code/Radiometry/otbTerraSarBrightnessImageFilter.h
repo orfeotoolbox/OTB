@@ -90,7 +90,7 @@ public:
   /** "typedef" for standard classes. */
   typedef TerraSarBrightnessImageFilter                                    Self;
   typedef itk::UnaryFunctorImageFilter< InputImageType, 
-					OutputImageType, FunctorType >     Superclass;
+                                   OutputImageType, FunctorType >     Superclass;
   typedef itk::SmartPointer<Self>                                          Pointer;
   typedef itk::SmartPointer<const Self>                                    ConstPointer;
 

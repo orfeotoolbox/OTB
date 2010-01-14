@@ -79,9 +79,9 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
       file<<"Noise Polynom "<<i<<" ( degree: "<<deg[i]<<")"<<std::endl;
       file<<"coefficients: ";
       for( unsigned int j=0; j<coeffs[i].size(); j++ )  
-	{
-	  file<<coeffs[i][j]<<"  ";
-	}
+       {
+         file<<coeffs[i][j]<<"  ";
+       }
       file<<std::endl;
       file<<"Min validity range: "<<mins[i]<<std::endl;
       file<<"Min validity range: "<<maxs[i]<<std::endl;

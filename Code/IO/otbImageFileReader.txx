@@ -367,21 +367,21 @@ ImageFileReader<TOutputImage>
       
       ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
       if (!handler)
-	{
-	  otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
-	}
+       {
+         otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
+       }
       
       else
-	{
-	  otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
-	  //     hasMetaData = handler->getImageGeometry(geom_kwl);
-	  ossimProjection* projection = handler->getImageGeometry()->getProjection();
-	  
-	  if (projection)
-	    {
-	      hasMetaData = projection->saveState(geom_kwl);
-	    }
-	}
+       {
+         otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
+         //     hasMetaData = handler->getImageGeometry(geom_kwl);
+         ossimProjection* projection = handler->getImageGeometry()->getProjection();
+         
+         if (projection)
+           {
+             hasMetaData = projection->saveState(geom_kwl);
+           }
+       }
       // Free memory
       delete handler;
     }

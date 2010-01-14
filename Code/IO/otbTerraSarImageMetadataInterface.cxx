@@ -486,12 +486,12 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList( const MetaDa
       polCoef.clear();
       // set <= condition because degree N means N+1 coeff
       for(unsigned int j=0; j<=polDegs.size(); j++)
- 	{ 
-	  oss.str("");
-	  oss << "noise[" << i << "]imageNoise.noiseEstimate.coefficient[" << j <<"]";
-	  ossimString tempVal = kwl.find(oss.str().c_str());
-	  polCoef.push_back( static_cast<double>(tempVal.toDouble()) );
-	}
+        { 
+         oss.str("");
+         oss << "noise[" << i << "]imageNoise.noiseEstimate.coefficient[" << j <<"]";
+         ossimString tempVal = kwl.find(oss.str().c_str());
+         polCoef.push_back( static_cast<double>(tempVal.toDouble()) );
+       }
       polCoefList.push_back(polCoef);
     }  
   
