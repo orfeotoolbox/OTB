@@ -165,6 +165,7 @@ ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
   --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
          ${TEMP}/prTvSensorModelRadarSat2.txt
+        --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
     otbSensorModel
          ${LARGEINPUT}/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
          ${TEMP}/prTvSensorModelRadarSat2.txt
