@@ -96,13 +96,8 @@ public:
     double temp, temp2;
     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
- 
-    // Set a 1e-3 precision
-    itk::OStringStream oss;
-    oss.str("");
-    oss << std::fixed << std::setprecision(3);
-    oss<<temp2;
-    outPixel = static_cast<TOutput>( atof(oss.str().c_str()) );
+
+    outPixel = static_cast<TOutput>( vcl_floor(temp2*1000.)/1000.);
 
     return outPixel;
   }
@@ -232,7 +227,7 @@ protected:
   void UpdateAtmosphericRadiativeTerms();
   /** Update Functors parameters */
   void UpdateFunctors();
-  
+
 private:
   AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
   CorrectionParametersPointerType      m_CorrectionParameters;
