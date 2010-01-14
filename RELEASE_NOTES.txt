@@ -2,7 +2,7 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
 -----------------------------------------
 
 * Applications
-  - Monteverdi, a new all-in one useer-friendly graphical tool 
+  - Monteverdi, a new all-in one user-friendly graphical tool 
     for remote sensing data processing released as a separate package (see README file).
 
 * Library

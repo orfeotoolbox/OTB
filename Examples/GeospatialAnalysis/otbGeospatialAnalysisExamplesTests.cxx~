@@ -29,6 +29,6 @@ void RegisterTests()
 }
 
 #undef main
-#define main OBIAImageToLabelToImageTest
+#define main GeospatialAnalysisPostGISCreateTableTest
 #include "PostGISCreateTable.cxx"
 

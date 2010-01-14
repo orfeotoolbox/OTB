@@ -168,7 +168,7 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage,TOutputImage>
 ::GenerateParameters()
 {
-  if(m_IsSetAtmosphericRadiativeTerms==false)
+  if(!m_IsSetAtmosphericRadiativeTerms)
     {
       this->UpdateAtmosphericRadiativeTerms();
     }
