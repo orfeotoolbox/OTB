@@ -10,8 +10,8 @@
 // $Id$
 
 #include <CivilDateTime.h>
-#include <JulianDate.h>
-#include <JSDDateTime.h>
+#include <ossim/otb/JulianDate.h>
+#include <ossim/otb/JSDDateTime.h>
 #include <GMSTDateTime.h>
 
 

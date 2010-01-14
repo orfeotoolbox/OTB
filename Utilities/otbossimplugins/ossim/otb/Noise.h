@@ -12,8 +12,8 @@
 #ifndef Noise_h
 #define Noise_h
 
-#include <JSDDateTime.h>
-#include <otb/ImageNoise.h>
+#include <ossim/otb/JSDDateTime.h>
+#include <ossim/otb/ImageNoise.h>
 #include <ossim/base/ossimConstants.h>
 
 class ossimKeywordlist;

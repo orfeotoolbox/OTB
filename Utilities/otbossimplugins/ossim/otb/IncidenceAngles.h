@@ -12,8 +12,8 @@
 #ifndef IncidenceAngles_h
 #define IncidenceAngles_h
 
-#include <JSDDateTime.h>
-#include <otb/InfoIncidenceAngle.h>
+#include <ossim/otb/JSDDateTime.h>
+#include <ossim/otb/InfoIncidenceAngle.h>
 #include <ossim/base/ossimConstants.h>
 
 class ossimKeywordlist;

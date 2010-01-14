@@ -30,7 +30,7 @@
 
 #include <complex>
 
-#include <otb/ImageNoise.h>
+#include <ossim/otb/ImageNoise.h>
 
 namespace otb
 {
