@@ -35,14 +35,14 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter() : m_CalibrationFactor(itk::NumericTraits<double>::Zero),
-				     m_LocalIncidentAngle(itk::NumericTraits<double>::Zero),
-				     m_PRF(1.),
-				     m_OriginalProductSize(),
-				     m_UseFastCalibration(false),
-				     m_ResultsInDecibels(false),
-				     m_NoiseRecords(),
-				     m_DefaultValue(0.00001)
-				     
+                                 m_LocalIncidentAngle(itk::NumericTraits<double>::Zero),
+                                 m_PRF(1.),
+                                 m_OriginalProductSize(),
+                                 m_UseFastCalibration(false),
+                                 m_ResultsInDecibels(false),
+                                 m_NoiseRecords(),
+                                 m_DefaultValue(0.00001)
+                                 
 {}
 
 template <class TInputImage, class TOutputImage>
@@ -128,15 +128,15 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       std::vector<double> noiseTimes = lImageMetadata->GetNoiseTimeUTCList(this->GetInput()->GetMetaDataDictionary());
 
       if(!m_UseFastCalibration && ( noiseTimes.empty() || nbNoiseRecords == 0))
-	{
-	itkExceptionMacro(<<"No noise records found. Consider using fast calibration.");
-	}
+       {
+       itkExceptionMacro(<<"No noise records found. Consider using fast calibration.");
+       }
       
       // For each noise record, add it
       for(unsigned int i = 0; i < nbNoiseRecords;++i)
-	{
-	this->AddNoiseRecord(noiseTimes[i],noiseRecords->get_imageNoise()[i]);
-	}
+       {
+       this->AddNoiseRecord(noiseTimes[i],noiseRecords->get_imageNoise()[i]);
+       }
       
       // Free memory
       delete noiseRecords;
@@ -251,18 +251,18 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
             
       // And check if we changed of NoiseRecord
       if(currentAzimuthPosition < currentNoiseRecordAzimuthPosition)
-	{
-	// Update the iterator
-	++currentNoiseRecordIt;
+       {
+       // Update the iterator
+       ++currentNoiseRecordIt;
 
-	// If we are not at the last record
-	if(currentNoiseRecordIt != m_NoiseRecords.end())
-	  {
-	  // Update the functor noise record
-	  currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
-	  calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
-	  }
-	}
+       // If we are not at the last record
+       if(currentNoiseRecordIt != m_NoiseRecords.end())
+         {
+         // Update the functor noise record
+         currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
+         calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
+         }
+       }
       }
     // Apply the calibration functor
     outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex() ) );

@@ -57,13 +57,13 @@ namespace otb
       
       /** Get parameter*/
       template<typename T> T GetParameter(const std::string & key) const {
-	
-	if(m_OTBConfig == NULL)
-	  {
-	  itkExceptionMacro(<<"Configuration file not found.");
-	  }
+       
+       if(m_OTBConfig == NULL)
+         {
+         itkExceptionMacro(<<"Configuration file not found.");
+         }
         
-	try
+       try
         {
           return m_OTBConfig->read<T>( key );
         }

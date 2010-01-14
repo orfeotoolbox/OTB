@@ -406,7 +406,7 @@ ImageMetadataInterfaceBase::GetBandName( const MetaDataDictionaryType & dict ) c
   ImageKeywordlist.convertToOSSIMKeywordlist(kwl);
   std::string key= "support_data.band_name";
   ossimString keywordString = kwl.find(key.c_str());
-  ossimString separatorList = " ";
+  ossimString separatorList = " /";
   std::vector<ossimString> keywordStrings = keywordString.split(separatorList);
   std::vector<std::string> outputValues;
   for (unsigned int i=0; i < keywordStrings.size(); ++i)

@@ -93,9 +93,9 @@ public:
 
   /** Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, 
-		       TInputImage::ImageDimension);
+                     TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, 
-		       TOutputImage::ImageDimension);
+                     TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition 
    * and the declaration. */
@@ -110,7 +110,7 @@ public:
 
   /** Calibration functor typedef */
   typedef typename Functor::TerraSarCalibrationFunctor<InputValueType, 
-						       OutputValueType>    CalibrationFunctorType;  
+                                                 OutputValueType>    CalibrationFunctorType;  
 
   /** typedef to access metadata */
   typedef itk::MetaDataDictionary                                          MetaDataDictionaryType;
