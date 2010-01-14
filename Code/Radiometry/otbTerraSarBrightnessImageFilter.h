@@ -126,6 +126,19 @@ public:
     return this->GetFunctor().GetResultsInDecibels();
   }
 
+  /** Set the default value (replacing negative beta) */
+  void SetDefaultValue(double value)
+    {
+      this->GetFunctor().SetResultsInDecibels(value);
+      this->Modified();
+    }
+  
+  double GetDefaultValue()
+    {
+      return this->GetFunctor().SetResultsInDecibels();
+    }
+
+
 protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};
@@ -138,6 +151,7 @@ protected:
 private:
   TerraSarBrightnessImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
 };
 
 } // end namespace otb

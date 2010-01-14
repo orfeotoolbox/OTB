@@ -33,6 +33,7 @@ TerraSarBrightnessFunctor<TInput, TOutput>
 {
   m_CalibrationFactor = itk::NumericTraits<double>::Zero;
   m_ResultsInDecibels = false;
+  m_DefaultValue = 0.00001; // Default value is 10^-5
 }
 
 
@@ -49,10 +50,14 @@ TerraSarBrightnessFunctor<TInput, TOutput>
   // Then apply the calibration factor
   double beta = m_CalibrationFactor*squareInPix;
 
+  if( beta<=0 )
+    beta = m_DefaultValue;
+    
+
   // Results in decibels case
   if(m_ResultsInDecibels)
     {
-    beta = 10 * vcl_log10(beta);
+      beta = 10 * vcl_log10(beta);
     }
 
   return static_cast<TOutput>(beta); 

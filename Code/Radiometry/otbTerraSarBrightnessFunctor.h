@@ -69,6 +69,18 @@ public:
     return m_ResultsInDecibels;
   }
  
+  /** Set Default value for null or negative pixel beta */
+  void SetDefaultValue(double db)
+    {
+      m_DefaultValue = db;
+    }
+  
+  /** Set Default value for null or negative pixel beta */
+  bool GetDefaultValue()
+  {
+    return m_DefaultValue;
+  }
+
  /** We assume that the input pixel is a scalar -> modulus image */
  inline TOutput operator() (const TInput & inPix);
  /** We assume that the input pixel is a complex -> complex image */
@@ -80,6 +92,9 @@ private:
 
   /** Shall we compute results in decibels ? */
   bool m_ResultsInDecibels;
+
+  /** Default value for null or negative pixel beta */
+  double m_DefaultValue;
 };
 
 }// end namespace functor
