@@ -8,22 +8,27 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
 * Library
   The library includes these additions
   * Support for TerraSarX, Quickbird and Spot5 calibration metadata
+  * Simplification of the interface to access image metadata
   * Support for Aeronet files
   * Various filters for Object Based Image Analysis based on LabelObjectMaps
   * Support for RPC sensor model estimation from a set of Ground Control Points
   * Support for affine transform least-square estimation from a set of tie points
   * Support for SVM cross-validation and parameters optimization
-  * Box and Whiskey filter to detect outlier on VectorImage
+  * Box and Whiskey filter to detect outliers on VectorImage
+  * Add several Euclidian distance classes
+  * Exhaustive exponential optimizer for learning
   * Enhanced SOM algorithm taking into account invalid missing values
   * Wavelet transform
-  * Filters for GIS database interaction
+  * Filters for GIS database interaction (postgis database)
   * ImageFileWriter now supports streaming natively
+  * Use of a configuration file to change some parameters without recompiling
   * Lots of bug fixes
 
 * System
   * Internal ITK updated to 3.16.0 + OTB Patches
   * Internal OSSIM updated to svn revision 15872 + OTB patches
-  * Home brewed metadata reader were moved to ossimplugins
+  * Home brewed metadata SAR reader were moved to ossimplugins
+  * Experimental support for internationalization
 
   
 
