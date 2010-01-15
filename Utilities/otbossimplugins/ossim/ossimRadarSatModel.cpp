@@ -429,10 +429,12 @@ bool ossimRadarSatModel::saveState(ossimKeywordlist& kwl,
 bool ossimRadarSatModel::loadState (const ossimKeywordlist &kwl,
                                                   const char *prefix)
 {
+
+  InitSRGR(kwl, prefix);
   InitSensorParams(kwl, prefix);
   InitPlatformPosition(kwl, prefix);
   InitRefPoint(kwl, prefix);
-  InitSRGR(kwl, prefix);
+
   return true;
 }
 
