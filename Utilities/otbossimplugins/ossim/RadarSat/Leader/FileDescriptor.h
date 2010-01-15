@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~FileDescriptor();
+  virtual ~FileDescriptor();
 
   /**
    * @brief This function writes the FileDescriptor in a stream

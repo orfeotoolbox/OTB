@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~DataSetSummary();
+  virtual ~DataSetSummary();
 
   /**
    * @brief This function write the DataSetSummary in a stream

@@ -34,7 +34,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~RadarSatRecord();
+  virtual ~RadarSatRecord();
 
   /**
    * @brief Copy constructor

@@ -37,7 +37,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~DataQuality();
+  virtual ~DataQuality();
 
   /**
    * @brief Copy constructor

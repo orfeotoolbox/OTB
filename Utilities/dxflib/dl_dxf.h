@@ -309,6 +309,7 @@ public:
         } else {
             return def;
         }
+      return def;
     }
     /**
      * Converts the given string into a string or returns the given 

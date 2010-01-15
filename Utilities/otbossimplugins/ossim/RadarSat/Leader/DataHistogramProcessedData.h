@@ -38,7 +38,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~DataHistogramProcessedData();
+  virtual ~DataHistogramProcessedData();
 
   /**
    * @brief Copy constructor
