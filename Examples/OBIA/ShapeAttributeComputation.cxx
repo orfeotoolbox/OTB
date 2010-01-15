@@ -85,7 +85,7 @@ int main(int argc, char * argv[])
   // Here the \doxygen{itk}{ShapeLabelObject} type
   // is chosen in order to read some attribute related to the shape
   // of the objects (by opposition to the content of the object, with
-  // the \doxygen{itk}{StatisticsLabelObject).
+  // the \doxygen{itk}{StatisticsLabelObject}.
   //
   // Software Guide : EndLatex
 
@@ -127,7 +127,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Then, we can read the attribute values we're interested in. The \doxygen{itk}{BinaryImageToShapeLabelMapFilter
+  // Then, we can read the attribute values we're interested in. The \doxygen{itk}{BinaryImageToShapeLabelMapFilter}
   // produce consecutive labels, so we can use a for loop and GetLabelObject() method to retrieve
   // the label objects. If the labels are not consecutive, the GetNthLabelObject() method must be
   // use instead of GetLabelObject(), or an iterator on the label
@@ -153,3 +153,4 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }       
+
