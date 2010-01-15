@@ -9,12 +9,12 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <JSDDateTime.h>
-#include <CivilDateTime.h>
-#include <JulianDate.h>
-#include <GMSTDateTime.h>
+#include <otb/JSDDateTime.h>
+#include <otb/CivilDateTime.h>
+#include <otb/JulianDate.h>
+#include <otb/GMSTDateTime.h>
 
-#include <Arithmetic.h>
+#include <otb/Arithmetic.h>
 
 #include <cmath>
 #include <cstring>

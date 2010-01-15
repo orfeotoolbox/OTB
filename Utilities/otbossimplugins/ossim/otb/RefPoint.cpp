@@ -9,8 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RefPoint.h>
-#include <Ephemeris.h>
+#include <otb/RefPoint.h>
+#include <otb/Ephemeris.h>
 #include <cstring>
 #include <ossim/base/ossimKeywordlist.h>
 

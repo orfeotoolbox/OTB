@@ -11,7 +11,7 @@
 
 #ifndef GMSTDateTime_h
 #define GMSTDateTime_h
-#include <JulianDate.h>
+#include <otb/JulianDate.h>
 
 namespace ossimplugins
 {

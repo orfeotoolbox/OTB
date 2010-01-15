@@ -12,7 +12,7 @@
 #ifndef Services_h
 #define Services_h
 
-#include <JSDDateTime.h>
+#include <otb/JSDDateTime.h>
 
 namespace ossimplugins
 {

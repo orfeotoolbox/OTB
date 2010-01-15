@@ -10,9 +10,9 @@
 // $Id$
 
 
-#include <PlatformPosition.h>
-#include <Ephemeris.h>
-#include <HermiteInterpolator.h>
+#include <otb/PlatformPosition.h>
+#include <otb/Ephemeris.h>
+#include <otb/HermiteInterpolator.h>
 #include <ossim/base/ossimKeywordlist.h>
 
 #include <iostream>

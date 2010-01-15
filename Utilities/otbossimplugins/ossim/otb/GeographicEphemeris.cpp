@@ -9,10 +9,10 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <GeographicEphemeris.h>
-#include <GalileanEphemeris.h>
+#include <otb/GeographicEphemeris.h>
+#include <otb/GalileanEphemeris.h>
 
-#include <GMSTDateTime.h>
+#include <otb/GMSTDateTime.h>
 
 #include <cmath>
 

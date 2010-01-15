@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <SensorParams.h>
+#include <otb/SensorParams.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimString.h>
 
