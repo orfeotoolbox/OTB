@@ -41,7 +41,7 @@
 #include "ossim/imaging/ossimImageHandlerRegistry.h"
 #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 // #include "ossim/projection/ossimTerraSarModel.h"
-#include "ossim/projection/ossimRadarSatModel.h"
+#include "ossimRadarSatModel.h"
 
 int ossimRadarSatSupport(int argc, char* argv[])
 {
@@ -357,7 +357,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
       /**************************************************************************/
       std::cout << "*********** OPTIMISATION **********" << std::endl;
 
-      ossimRadarSatModel * RDSmodel = (ossimRadarSatModel *) model;
+      ossimplugins::ossimRadarSatModel * RDSmodel = (ossimplugins::ossimRadarSatModel *) model;
       std::list<ossimGpt> listePtsSol;
       std::list<ossimDpt> listePtsImage;
 
@@ -575,7 +575,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         /**************************************************************************/
         std::cout << "*********** OPTIMISATION **********" << std::endl;
 
-        ossimRadarSatModel * RDSmodel = (ossimRadarSatModel *) model;
+        ossimplugins::ossimRadarSatModel * RDSmodel = (ossimplugins::ossimRadarSatModel *) model;
         std::list<ossimGpt> listePtsSol;
         std::list<ossimDpt> listePtsImage;
 
@@ -877,7 +877,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
       /**************************************************************************/
       std::cout << "*********** OPTIMISATION **********" << std::endl;
 
-      ossimRadarSatModel * RDSmodel = (ossimRadarSatModel *) model;
+      ossimplugins::ossimRadarSatModel * RDSmodel = (ossimplugins::ossimRadarSatModel *) model;
       std::list<ossimGpt> listePtsSol;
       std::list<ossimDpt> listePtsImage;
       // le point d'appui : le centre scène
