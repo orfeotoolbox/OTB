@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~MainProcessingParameters();
+  virtual ~MainProcessingParameters();
 
   /**
    * @brief This function writes the MainProcessingParameters in a stream

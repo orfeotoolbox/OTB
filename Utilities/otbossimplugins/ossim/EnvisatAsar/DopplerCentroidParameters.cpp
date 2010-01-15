@@ -90,7 +90,7 @@ std::istream& operator>>(std::istream& is, DopplerCentroidParameters& data)
 	buf3[3] = '\0';
 	char buf2[3];
 	buf2[2] = '\0';
-	char buf1[1];
+//	char buf1[1];  // Not used avoid warning
 
 	is.read(buf12,12);
 	data._zero_doppler_time = buf12;

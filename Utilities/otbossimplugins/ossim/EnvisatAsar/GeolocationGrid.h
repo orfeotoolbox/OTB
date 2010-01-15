@@ -32,7 +32,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~GeolocationGrid();
+  virtual ~GeolocationGrid();
 
   /**
    * @brief This function writes the GeolocationGrid in a stream

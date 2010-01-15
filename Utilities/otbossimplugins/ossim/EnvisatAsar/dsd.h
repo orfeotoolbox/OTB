@@ -32,7 +32,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~dsd();
+  virtual ~dsd();
 
   /**
    * @brief This function write the dsd in a stream

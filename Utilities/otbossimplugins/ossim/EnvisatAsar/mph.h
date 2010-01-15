@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~mph();
+  virtual ~mph();
 
   /**
    * @brief This function write the mph in a stream

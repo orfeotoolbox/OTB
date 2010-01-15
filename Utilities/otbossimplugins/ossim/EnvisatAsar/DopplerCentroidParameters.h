@@ -32,7 +32,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~DopplerCentroidParameters();
+  virtual ~DopplerCentroidParameters();
 
   /**
    * @brief This function writes the DopplerCentroidParameters in a stream

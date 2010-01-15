@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~AntennaElevationPatterns();
+  virtual ~AntennaElevationPatterns();
 
   /**
    * @brief This function writes the AntennaElevationPatterns in a stream
