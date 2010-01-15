@@ -29,8 +29,8 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageBase.h"
-#include <ossim/otb/Noise.h>
-#include <ossim/otb/IncidenceAngles.h>
+#include <otb/Noise.h>
+#include <otb/IncidenceAngles.h>
 #include <string>
 
 namespace otb
