@@ -12,7 +12,7 @@
 #ifndef IncidenceAngles_h
 #define IncidenceAngles_h
 
-#include <JSDDateTime.h>
+#include <otb/JSDDateTime.h>
 #include <otb/InfoIncidenceAngle.h>
 #include <ossim/base/ossimConstants.h>
 

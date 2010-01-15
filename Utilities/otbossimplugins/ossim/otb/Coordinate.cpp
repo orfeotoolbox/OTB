@@ -10,7 +10,7 @@
 // $Id$
 
 
-#include <Coordinate.h>
+#include <otb/Coordinate.h>
 
 namespace ossimplugins
 {

@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <IncidenceAngles.h>
+#include <otb/IncidenceAngles.h>
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNotify.h>

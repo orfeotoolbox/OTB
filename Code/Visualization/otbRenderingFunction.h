@@ -115,6 +115,10 @@ public:
   {
     itkExceptionMacro(<<"Subclasses should override this method");
   }
+  virtual ParametersType GetParameters() const
+  {
+    itkExceptionMacro(<<"Subclasses should override this method");
+  }
 
   virtual void SetChannelList(std::vector<unsigned int>& /*channels*/)
   {

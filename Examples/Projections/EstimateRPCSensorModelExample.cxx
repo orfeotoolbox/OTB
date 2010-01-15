@@ -37,7 +37,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-//#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
@@ -91,7 +90,7 @@ int main( int argc, char* argv[] )
   
   // Software Guide : BeginLatex
   // We retrieve the command line parameters and put them in the
-  // correct variables. Firstl, We determine the number of GCPs 
+  // correct variables. Firstly, We determine the number of GCPs 
   // set from the command line parameters and they are stored in:
   // \begin{itemize}
   // \item \doxygen{otb}{Point3DType} : Store the sensor point (3D ground point)
@@ -103,11 +102,12 @@ int main( int argc, char* argv[] )
   // \end{itemize}
   // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
+  
   unsigned int nbGCPs = (argc-3)/5;
   
   std::cout<<"Receiving "<<nbGCPs<<" from command line."<<std::endl;
   
+  // Software Guide : BeginCodeSnippet
   for(unsigned int gcpId = 0;gcpId<nbGCPs;++gcpId)
     {
     Point2DType sensorPoint;
@@ -123,6 +123,8 @@ int main( int argc, char* argv[] )
 
     rpcEstimator->AddGCP(sensorPoint,geoPoint);
     }
+  
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   // Note that the \doxygen{otb}{GCPsToRPCSensorModelImageFilter} needs 

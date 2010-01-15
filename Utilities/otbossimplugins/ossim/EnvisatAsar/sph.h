@@ -39,7 +39,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~sph();
+  virtual ~sph();
 
   /**
    * @brief This function write the sph in a stream

@@ -12,7 +12,7 @@
 #ifndef GalileanEphemeride_h
 #define GalileanEphemeride_h
 
-#include <Ephemeris.h>
+#include <otb/Ephemeris.h>
 
 namespace ossimplugins
 {

@@ -33,7 +33,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~SRGRConversionParameters();
+  virtual ~SRGRConversionParameters();
 
   /**
    * @brief This function writes the SRGRConversionParameters in a stream

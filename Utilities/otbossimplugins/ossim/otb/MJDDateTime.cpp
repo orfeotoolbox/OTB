@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <MJDDateTime.h>
+#include <otb/MJDDateTime.h>
 
 namespace ossimplugins
 {
