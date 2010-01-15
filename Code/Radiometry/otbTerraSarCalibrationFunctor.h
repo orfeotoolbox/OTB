@@ -98,20 +98,7 @@ public:
   { 
     return m_CalibrationFactor; 
   };
-
-  /** Set the local incidence angle */
-  void SetLocalIncidentAngle( double val )
-  {
-    m_LocalIncidentAngle = val;
-    m_SinLocalIncidentAngle = vcl_sin(m_LocalIncidentAngle*CONST_PI_180);
-  };
-  
-  /** Get the local incidence angle */
-  double GetLocalIncidentAngle() const 
-  { 
-    return m_LocalIncidentAngle; 
-  };
-  
+   
   /** Set the image size */
   void SetOriginalProductSize( SizeType size ) 
   { 
@@ -155,16 +142,16 @@ public:
   }
 
   /** Get the default value */
-  void GetDefaultValue(void)
+  double GetDefaultValue(void)
   {
     return m_DefaultValue;
   }
   
   /** Perform the calibration for one pixel (scalar -> modulus image) */
-  inline TOutput operator() (const TInput & inPix, IndexType index);
+  inline TOutput operator() (const TInput & inPix, const IndexType& index, double angle);
 
   /** Perform the calibration for one pixel (complex -> complex image) */
-  inline std::complex<TOutput> operator() (const std::complex<TInput> & inPix, IndexType index);
+  inline std::complex<TOutput> operator() (const std::complex<TInput> & inPix, const IndexType& index, double angle);
 
 private:
   /** Return the current range position */
@@ -181,12 +168,6 @@ private:
 
   /** Noise record vector */
   ImageNoiseType m_NoiseRecord;
-
-  /** Sensor local incident angle in degree */
-  double m_LocalIncidentAngle;
-  
-  /** sin of the LocalIncidentAngle */
-  double m_SinLocalIncidentAngle;
 
   /** Image Size */
   SizeType m_OriginalProductSize;

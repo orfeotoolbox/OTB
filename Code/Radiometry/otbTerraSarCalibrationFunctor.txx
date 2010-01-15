@@ -31,8 +31,6 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 {
   // Initialise values 
   m_CalibrationFactor = itk::NumericTraits<double>::Zero;
-  m_LocalIncidentAngle = itk::NumericTraits<double>::Zero;
-  m_SinLocalIncidentAngle = itk::NumericTraits<double>::Zero;
   m_OriginalProductSize.Fill(0);
   m_UseFastCalibration = false;
   m_ResultsInDecibels = false;
@@ -97,7 +95,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 template <class TInput, class TOutput>
 TOutput
 TerraSarCalibrationFunctor<TInput, TOutput>
-::operator()(const TInput & inPix, IndexType index)
+::operator()(const TInput & inPix, const IndexType& index, double angle)
 {
   // Formula: sigma = (Ks.|DN|²-NEBN) * sin Theta_local
 
@@ -110,7 +108,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   // If fast calibration is off, compute noise
   if(m_UseFastCalibration)
     {
-    sigma = beta0 * m_SinLocalIncidentAngle; 
+    sigma = beta0 * vcl_sin(angle); 
     }
   else
     {
@@ -121,7 +119,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
     double NEBN = this->ComputeNoiseEquivalentBetaNaught(currentRange);
     
     // Last, apply formula
-    sigma = (beta0 - NEBN) * m_SinLocalIncidentAngle;
+    sigma = (beta0 - NEBN) * vcl_sin(angle);
 
     // Handle negative sigma case
     if(sigma <=0)
@@ -143,14 +141,14 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 template <class TInput, class TOutput>
 std::complex<TOutput>
 TerraSarCalibrationFunctor<TInput, TOutput>
-::operator()(const std::complex<TInput> & inPix, IndexType index)
+::operator()(const std::complex<TInput> & inPix, const IndexType& index, double angle)
 {
   // First, extract modulus and phase
   double modulus = vcl_sqrt(inPix.real()*inPix.real() + inPix.imag()*inPix.imag());
   double phase   = vcl_atan2(inPix.imag(),inPix.real());
 
   // Then, calibrate the modulus
-  double sigma = this->operator()(modulus,index);
+  double sigma = this->operator()(modulus,index,angle);
   
   // Last, put back the phase
   std::complex<TOutput> out(std::polar(sigma,phase));

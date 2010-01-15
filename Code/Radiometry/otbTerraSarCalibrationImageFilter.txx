@@ -28,6 +28,10 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
+#include <vnl/algo/vnl_lsqr.h>
+#include <vnl/vnl_sparse_matrix_linear_system.h>
+#include <vnl/vnl_least_squares_function.h>
+
 namespace otb
 {
 /**
@@ -36,14 +40,17 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter() : m_CalibrationFactor(itk::NumericTraits<double>::Zero),
-                                 m_LocalIncidentAngle(itk::NumericTraits<double>::Zero),
-                                 m_PRF(1.),
-                                 m_OriginalProductSize(),
-                                 m_UseFastCalibration(false),
-                                 m_ResultsInDecibels(false),
-                                 m_NoiseRecords(),
-                                 m_DefaultValue(0.00001)
-                                 
+				     m_PRF(1.),
+				     m_OriginalProductSize(),
+				     m_UseFastCalibration(false),
+				     m_ResultsInDecibels(false),
+				     m_NoiseRecords(),
+				     m_DefaultValue(0.00001),
+				     m_IncidenceAngleRecords(),
+				     m_IncidenceAngleAx(0.),
+				     m_IncidenceAngleAy(0.),
+				     m_IncidenceAngleOffset(0.),
+				     m_ParametersUpToDate(false)
 {}
 
 template <class TInputImage, class TOutputImage>
@@ -57,6 +64,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::Modified()
+{
+  // Call Superclass implementation
+  Superclass::Modified();
+  m_ParametersUpToDate = false;
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::AddNoiseRecord(double utcAcquisitionTime, const ImageNoiseType& record)
 {
   // Create the pair
@@ -64,6 +81,9 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   
   // Add it to the list
   m_NoiseRecords.push_back(newRecord);
+
+  // Call modified method
+  this->Modified();
   }
 
 template <class TInputImage, class TOutputImage>
@@ -72,6 +92,32 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::ClearNoiseRecords()
 {
   m_NoiseRecords.clear();
+
+  // Call modified method
+  this->Modified();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::AddIncidenceAngleRecord(const IndexType& index, double angle)
+{
+  IncidenceAngleRecordType record(index,angle);
+  m_IncidenceAngleRecords.push_back(record);
+
+  // Call modified method
+  this->Modified();
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::ClearIncidenceAngleRecords()
+{
+  m_IncidenceAngleRecords.clear();
+
+  // Call modified method
+  this->Modified();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -87,6 +133,12 @@ void
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
+  // Check if we need to update parameters
+  if(m_ParametersUpToDate)
+    {
+    return;
+    }
+
   // Set the product original size
   if (m_OriginalProductSize[0] == 0 && m_OriginalProductSize[1] == 0)
     {
@@ -162,11 +214,29 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   }
   
   // Incident Angle
-  if (m_LocalIncidentAngle == itk::NumericTraits<double>::Zero) 
+  if (m_IncidenceAngleRecords.empty()) 
   {
     if (mdIsAvailable)
     {
-      m_LocalIncidentAngle =  lImageMetadata->GetMeanIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
+    // Retrieve center incidence angle
+    double centerAngle = lImageMetadata->GetCenterIncidenceAngle(this->GetInput()->GetMetaDataDictionary());
+    IndexType centerIndex = lImageMetadata->GetCenterIncidenceAngleIndex(this->GetInput()->GetMetaDataDictionary());
+    this->AddIncidenceAngleRecord(centerIndex,centerAngle);
+
+    // Retrieve corners incidence angle
+    std::vector<double> cangles = lImageMetadata->GetCornersIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
+    std::vector<IndexType> cindex = lImageMetadata->GetCornersIncidenceAnglesIndex(this->GetInput()->GetMetaDataDictionary());
+    
+    std::vector<double>::const_iterator angIt = cangles.begin();
+    typename std::vector<IndexType>::const_iterator indIt = cindex.begin();
+
+    // Add each corner angle record as well
+    while(angIt != cangles.end() && indIt != cindex.end())
+      {
+      this->AddIncidenceAngleRecord(*indIt,*angIt);
+      ++angIt;
+      ++indIt;
+      }
     }
     else
     {
@@ -176,6 +246,85 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Ensure that noise records are sorted by decreasing acquisition
   // date
   std::sort(m_NoiseRecords.begin(),m_NoiseRecords.end(), &Self::CompareNoiseRecords);
+
+  // Estimate angular plane parameters
+  this->EstimateAngularPlaneParameters();
+
+  // Mark parameters as up-to-date
+  m_ParametersUpToDate = true;
+}
+
+template <class TInputImage, class TOutputImage>
+void
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::EstimateAngularPlaneParameters()
+{
+  // Check if there are any incidence angle records
+  if(m_IncidenceAngleRecords.empty())
+    {
+    itkExceptionMacro(<<"No incidence angle records found, can not perform calibration!");
+    }
+
+  // If we do not have enough point to do the least square regression,
+  // set default value as a constant mean angle 
+  if(m_IncidenceAngleRecords.size() < 3)
+    {
+    m_IncidenceAngleAx = 0.;
+    m_IncidenceAngleAy = 0.;
+    m_IncidenceAngleOffset = 0.;
+
+    typename IncidenceAngleRecordVectorType::const_iterator
+      aIt = m_IncidenceAngleRecords.begin();
+    
+    // Compute the mean incidence angle
+    while(aIt != m_IncidenceAngleRecords.end())
+      {
+      m_IncidenceAngleOffset += aIt->second; 
+      ++aIt;
+      }
+    // Set the offset to the mean angle
+    m_IncidenceAngleOffset/=m_IncidenceAngleRecords.size();
+    m_IncidenceAngleOffset*= M_PI / 180.;
+    return;
+    }
+
+  // Perform the plane least square estimation
+  unsigned int nbRecords = m_IncidenceAngleRecords.size();
+  vnl_sparse_matrix<double> a(nbRecords,3);
+  vnl_vector<double> b(nbRecords), bestParams(3);
+
+  // Fill the linear system
+  for(unsigned int i = 0; i < nbRecords; ++i)
+    {
+    std::cout<<"Incidence record: "<<m_IncidenceAngleRecords.at(i).first<<" <-> "<<m_IncidenceAngleRecords.at(i).second<<std::endl;
+    a(i,0) = m_IncidenceAngleRecords.at(i).first[0];
+    a(i,1) = m_IncidenceAngleRecords.at(i).first[1];
+    a(i,2) = 1.;
+    b[i] = m_IncidenceAngleRecords.at(i).second * M_PI / 180.;
+    }
+
+  // Create the linear system
+  vnl_sparse_matrix_linear_system<double> linearSystem(a,b);
+  vnl_lsqr linearSystemSolver(linearSystem);
+  
+  // And solve it
+  linearSystemSolver.minimize(bestParams);
+  
+  m_IncidenceAngleAx     = bestParams[0];
+  m_IncidenceAngleAy     = bestParams[1];
+  m_IncidenceAngleOffset = bestParams[2];
+
+  std::cout<<"Parameters :" <<bestParams<<std::endl;
+}
+
+template <class TInputImage, class TOutputImage>
+double
+TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
+::ComputeIncidenceAngle(const IndexType& index) const
+{
+  // Apply the regression
+  double angle = m_IncidenceAngleAx * index[0] + m_IncidenceAngleAy * index[1] + m_IncidenceAngleOffset;
+  return angle;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -205,7 +354,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Set up the functor
   CalibrationFunctorType calibrationFunctor;
   calibrationFunctor.SetCalibrationFactor(m_CalibrationFactor);
-  calibrationFunctor.SetLocalIncidentAngle(m_LocalIncidentAngle);
   calibrationFunctor.SetUseFastCalibration(m_UseFastCalibration);
   calibrationFunctor.SetResultsInDecibels(m_ResultsInDecibels);
   calibrationFunctor.SetOriginalProductSize(m_OriginalProductSize);
@@ -272,7 +420,7 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
        }
       }
     // Apply the calibration functor
-    outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex() ) );
+    outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex(), this->ComputeIncidenceAngle(inputIt.GetIndex()) ) );
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
@@ -290,10 +438,11 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   os << indent << "Calibration Factor:           " << m_CalibrationFactor  << std::endl;
   os << indent << "PRF:                          "<<m_PRF <<std::endl;
   os << indent << "Original product size:        "<<m_OriginalProductSize << std::endl;
-  os << indent << "Sensor local incidence angle: " << m_LocalIncidentAngle << std::endl;
   os << indent << "Fast calibration:             " << (m_UseFastCalibration ? "On" : "Off")<<std::endl;
   os << indent << "Results in decibels:          " << (m_ResultsInDecibels ? "Yes" : "No") << std::endl;
   os << indent << "Number of noise records:      " << m_NoiseRecords.size() <<std::endl;
+  os << indent << "Number of angle records:      " << m_IncidenceAngleRecords.size() << std::endl;
+  os << indent << "Angle regression:             "<<m_IncidenceAngleAx<<"* col + "<<m_IncidenceAngleAx<<" * row +"<<m_IncidenceAngleOffset<<std::endl;
 }
 
 

@@ -45,8 +45,12 @@ namespace otb
  * NEBN is interpolated for each range position according to the
  * polynomial coefficients from the most recent noise record.
  * 
- * \f$ \theta_{loc} \f$ is the mean incident angle over the scene. For
- * now, this filter does not support more accurate behaviour like
+ * \f$ \theta_{loc} \f$ is estimated from the incidence angles from
+ * the metadata following a least-square regression.
+ * One can also add its own incident angle records using the
+ * appropriate add method.
+ *
+ * For  now, this filter does not support more accurate behaviour like
  * incident angle interpolation from metadata or the Geocoded
  * Incidence Angle mask optional 1B product (GIM).
  *
@@ -107,6 +111,11 @@ public:
   typedef typename OutputImageType::InternalPixelType                      OutputInternalPixelType;
   typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType  InputValueType;
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType OutputValueType;
+  typedef typename InputImageType::IndexType                               IndexType;
+
+  /** Incidence angle samples */
+  typedef std::pair<IndexType,double>                                      IncidenceAngleRecordType;
+  typedef std::vector<IncidenceAngleRecordType>                            IncidenceAngleRecordVectorType;
 
   /** Calibration functor typedef */
   typedef typename Functor::TerraSarCalibrationFunctor<InputValueType, 
@@ -135,10 +144,6 @@ public:
   /** Calibration Factor */
   itkSetMacro(CalibrationFactor,double);
   itkGetMacro(CalibrationFactor,double);
-
-  /** Sensor local incident angle in degree */
-  itkSetMacro(LocalIncidentAngle,double);
-  itkGetMacro(LocalIncidentAngle,double);
   
   /** If fast calibration is On, noise is ignored */
   itkSetMacro(UseFastCalibration,bool);
@@ -179,6 +184,17 @@ public:
    */
   void ClearNoiseRecords();
 
+  /** 
+   * Add an incidence angle record to estimate the local incidence.
+   * Angle has to be given in degrees.
+   */
+  void AddIncidenceAngleRecord(const IndexType& index, double angle);
+
+  /**
+   * Clear the incidence angle records.
+   */
+  void ClearIncidenceAngleRecords();
+
 protected:
   /** Constructor */
   TerraSarCalibrationImageFilter();
@@ -194,6 +210,10 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  /** Reimplement the Modified() method to handle the
+   *  ParametersUpToDate flag */
+  virtual void Modified();
+
 private:
   TerraSarCalibrationImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -202,11 +222,18 @@ private:
    * date */
   static bool CompareNoiseRecords(const NoiseRecordType& record1, const NoiseRecordType& record2);
 
+  /** Estimate angular plane. The angular is interpolated by a plane
+   * fitted by least squares to the angular corners. More Appropriate
+   * methods (using DEM for instance) could be implemented later */
+  void EstimateAngularPlaneParameters();
+  
+  /**
+   * Compute the incidence angle from the index
+   */
+  inline double ComputeIncidenceAngle(const IndexType& index) const;
+
   /** Calibration Factor */
   double m_CalibrationFactor;
-
-  /** Sensor local incident angle in degree */
-  double m_LocalIncidentAngle;
 
   /** Pulse Repetition Frequency */
   double m_PRF;
@@ -224,9 +251,21 @@ private:
   NoiseRecordVectorType m_NoiseRecords;
   
   /** Default value (for negative sigma) */
-  bool m_DefaultValue;
+  double m_DefaultValue;
+
+  /** Incidence angle records vector */
+  IncidenceAngleRecordVectorType m_IncidenceAngleRecords;
+
+  /** Incidence angle linear regression parameters */
+  double m_IncidenceAngleAx;
+  double m_IncidenceAngleAy;
+  double m_IncidenceAngleOffset;
+
+  /** True if parameters are up-to-date (avoid recomputing) */
+  bool m_ParametersUpToDate;
 
 };
+
 
 } // end namespace otb
 
