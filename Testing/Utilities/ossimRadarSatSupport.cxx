@@ -35,12 +35,15 @@
 
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/init/ossimInit.h"
-#include "ossim/imaging/ossimImageHandler.h"
-#include "ossim/projection/ossimProjection.h"
-#include "ossim/projection/ossimProjectionFactoryRegistry.h"
-#include "ossim/imaging/ossimImageHandlerRegistry.h"
-#include "ossim/imaging/ossimImageHandlerSarFactory.h"
+//#include "ossim/imaging/ossimImageHandler.h"
+//#include "ossim/projection/ossimProjection.h"
+//#include "ossim/projection/ossimProjectionFactoryRegistry.h"
+//#include "ossim/imaging/ossimImageHandlerRegistry.h"
+//#include "ossim/imaging/ossimImageHandlerSarFactory.h"
 // #include "ossim/projection/ossimTerraSarModel.h"
+#include "projection/ossimProjection.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
+#include "ossim/ossimPluginProjectionFactory.h"
 #include "ossimRadarSatModel.h"
 
 int ossimRadarSatSupport(int argc, char* argv[])
@@ -59,33 +62,32 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
       return EXIT_FAILURE;
     }
+    
+    char * filename = argv[1];
 
-    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-    /*
-     * Lecture du fichier passé en parametre
-     */
-    ossimImageHandler *handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1]));
-    /*
-     * Verification que la lecture est effectuée
-     */
-    if (!handler)
+    /** Don't use FactoryRegistry because of its default factory that can conflict
+     * with plugins factor (cf. TSX .tif image read as QB)*/
+    // test ossim plugin factory
+    ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(
+                                      ossimFilename(filename), 0);
+    
+    // if ossim plugins factory failed, then test ossim factory
+    if (!projection)
     {
-      std::cout << "Unable to open input image " << argv[1] << std::endl;
+      projection = ossimProjectionFactoryRegistry::instance()->createProjection(ossimFilename(filename), 0);
+      if (!projection)
+      {
+        std::cout<<"OSSIM Instanciate projection FAILED ! ";
+        return EXIT_FAILURE;
+      }
     }
-
-    /*
-     * Recuperation des métadonnées
-     */
+    
     ossimKeywordlist geom;
     std::cout << "Read ossim Keywordlist...";
 
     bool hasMetaData = false;
-    ossimProjection* projection = handler->getImageGeometry()->getProjection();
 
-    if (projection)
-    {
-      hasMetaData = projection->saveState(geom);
-    }
+    hasMetaData = projection->saveState(geom);
 
     if (!hasMetaData)
     {
@@ -100,14 +102,16 @@ int ossimRadarSatSupport(int argc, char* argv[])
     /*
      * Creation d'un modèle de projection à partir des métadonnées
      */
-    model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-
-    /*
-     * Verification de l'existence du modèle de projection
-     */
+    model = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom);
+    // if ossim plugins factory failed, then test ossim factory
     if (model == NULL)
     {
-      std::cout << "Invalid Model * == NULL !";
+      projection = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+      if (model == NULL)
+      {
+        std::cout << "Invalid Model * == NULL !";
+        return EXIT_FAILURE;
+      }
     }
 
     /* std::cout<<"Creating RefPtr of projection...";
