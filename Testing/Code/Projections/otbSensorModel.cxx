@@ -27,12 +27,11 @@
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 
-int otbSensorModel( int argc, char* argv[] )
+int otbSensorModel(int argc, char* argv[])
 {
-  if (argc!=3)
+  if (argc != 3)
   {
-    std::cout << argv[0] <<" <input filename> <output filename>"
-    << std::endl;
+    std::cout << argv[0] << " <input filename> <output filename>" << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -44,9 +43,9 @@ int otbSensorModel( int argc, char* argv[] )
   file.open(outFilename);
   file << std::setprecision(15);
 
-
-  typedef otb::VectorImage<double, 2> ImageType;
+  typedef otb::VectorImage<double, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
+
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
@@ -57,27 +56,27 @@ int otbSensorModel( int argc, char* argv[] )
   //** Truncate precision of meters_per_pixel */
   ossimKeywordlist geom_kwl;
   ossimString s;
-       double value;
-  reader->GetOutput()->GetImageKeywordlist().convertToOSSIMKeywordlist( geom_kwl);
-       
+  double value;
+  reader->GetOutput()->GetImageKeywordlist().convertToOSSIMKeywordlist(geom_kwl);
+
   file << std::setprecision(5);
-       
-       s = geom_kwl.find("meters_per_pixel_x");
-       if (s != "")
-       {
-              value = s.toDouble();
-              file << "truncate_meter_per_pixel_x " << value << std::endl;
-       }
-       
-       s = geom_kwl.find("meters_per_pixel_y");
-       if (s != "")
-       {
-              value = s.toDouble();
-              file << "truncate_meter_per_pixel_y " << value << std::endl;
-       }
-       
-       file << std::setprecision(15);
-       
+
+  s = geom_kwl.find("meters_per_pixel_x");
+  if (s != "")
+  {
+    value = s.toDouble();
+    file << "truncate_meter_per_pixel_x " << value << std::endl;
+  }
+
+  s = geom_kwl.find("meters_per_pixel_y");
+  if (s != "")
+  {
+    value = s.toDouble();
+    file << "truncate_meter_per_pixel_y " << value << std::endl;
+  }
+
+  file << std::setprecision(15);
+
   file << "\n*** TRANSFORM ***\n";
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
@@ -85,13 +84,13 @@ int otbSensorModel( int argc, char* argv[] )
   forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
   forwardSensorModel->SetAverageElevation(16.19688987731934);
 
-  itk::Point<double,2> imagePoint;
-  imagePoint[0]=10;
-  imagePoint[1]=10;
-//   imagePoint[0]=3069;
-//   imagePoint[1]=1218;
+  itk::Point<double, 2> imagePoint;
+  imagePoint[0] = 10;
+  imagePoint[1] = 10;
+  //   imagePoint[0]=3069;
+  //   imagePoint[1]=1218;
 
-  itk::Point<double,2> geoPoint;
+  itk::Point<double, 2> geoPoint;
   geoPoint = forwardSensorModel->TransformPoint(imagePoint);
 
   file << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
@@ -100,14 +99,12 @@ int otbSensorModel( int argc, char* argv[] )
   inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
   inverseSensorModel->SetAverageElevation(16.19688987731934);
 
-  itk::Point<double,2> reversedImagePoint;
+  itk::Point<double, 2> reversedImagePoint;
   reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
 
   file << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
   file.close();
-       
+
   return EXIT_SUCCESS;
 }
-
-

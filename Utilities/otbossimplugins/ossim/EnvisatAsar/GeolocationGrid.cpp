@@ -106,7 +106,7 @@ std::istream& operator>>(std::istream& is, GeolocationGrid& data)
 	buf3[3] = '\0';
 	char buf2[3];
 	buf2[2] = '\0';
-	char buf1[1];
+//	char buf1[1]; // not used avoid warning
 
 	is.read((char*)&(data._first_zero_doppler_time_day),4);
 	data.SwitchEndian(data._first_zero_doppler_time_day);

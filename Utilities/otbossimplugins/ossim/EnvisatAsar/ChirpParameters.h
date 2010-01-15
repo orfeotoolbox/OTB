@@ -32,7 +32,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~ChirpParameters();
+  virtual ~ChirpParameters();
 
   /**
    * @brief This function writes the ChirpParameters in a stream

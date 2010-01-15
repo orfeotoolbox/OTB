@@ -38,7 +38,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~EnvisatAsarRecord();
+  virtual ~EnvisatAsarRecord();
 
   /**
    * @brief Copy constructor

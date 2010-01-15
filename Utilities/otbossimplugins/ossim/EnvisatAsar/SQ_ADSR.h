@@ -32,7 +32,7 @@ public:
   /**
    * @brief Destructor
    */
-  ~SQ_ADSR();
+  virtual ~SQ_ADSR();
 
   /**
    * @brief This function write the SQ_ADSR in a stream

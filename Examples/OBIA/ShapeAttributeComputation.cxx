@@ -23,7 +23,9 @@
 
 //  Software Guide : BeginLatex
 //
-//  This example shows the
+//  This basic example shows how compute shape attributes at the object level.
+//  The input image is firstly translate in a set of regions (of \doxygen{itk}{ShapeLabelObject})
+//  and some attributes values of each object are then save to an ASCII file. 
 //
 //  Software Guide : EndLatex
 
@@ -39,9 +41,7 @@
 
 int main(int argc, char * argv[])
 {
-  const int dim                           = 2;
-  typedef unsigned long                   PixelType;
-  typedef itk::Image< PixelType, dim >    ImageType;
+  
   
   if( argc != 3)
     {
@@ -49,42 +49,95 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  // read the input image
-  typedef itk::ImageFileReader< ImageType > ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-  
-  // define the object type. Here the ShapeLabelObject type
-  // is chosen in order to read some attribute related to the shape
-  // of the objects (by opposition to the content of the object, with
-  // the StatisticsLabelObejct).
+  //  Software Guide : BeginLatex
+  //
+  // The image types are defined using pixel types and
+  // dimension. The input image is defined as an \doxygen{otb}{Image}.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  const int dim                           = 2;
+  typedef unsigned long                   PixelType;
+  typedef itk::Image< PixelType, dim >    ImageType;
   typedef unsigned long                           LabelType;
   typedef itk::ShapeLabelObject< LabelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType >        LabelMapType;
-
-  // convert the image in a collection of objects
   typedef itk::LabelImageToLabelMapFilter< ImageType, LabelMapType > ConverterType;
+  
+  // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  // Firstly, the image reader is instantiated.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  typedef itk::ImageFileReader< ImageType > ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName( argv[1] );
+  // Software Guide : EndCodeSnippet
+
+  
+  //  Software Guide : BeginLatex
+  //
+  // Here the \doxygen{itk}{ShapeLabelObject} type
+  // is chosen in order to read some attribute related to the shape
+  // of the objects (by opposition to the content of the object, with
+  // the \doxygen{itk}{StatisticsLabelObject}.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  typedef itk::ShapeLabelMapFilter< LabelMapType > ShapeFilterType;
+  // Software Guide : EndCodeSnippet
+  
+  
+  //  Software Guide : BeginLatex
+  //
+  // The input image is converted in a collection of objects
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   ConverterType::Pointer converter = ConverterType::New();
   converter->SetInput( reader->GetOutput() );
   converter->SetBackgroundValue( itk::NumericTraits<LabelType>::min() );
 
-  typedef itk::ShapeLabelMapFilter< LabelMapType > ShapeFilterType;
   ShapeFilterType::Pointer shape = ShapeFilterType::New();
 
   shape->SetInput( converter->GetOutput() );
-  // update the shape filter, so its output will be up to date
+  // Software Guide : EndCodeSnippet
+
+  
+  //  Software Guide : BeginLatex
+  //
+  // Update the shape filter, so its output will be up to date.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   shape->Update();
+  // Software Guide : EndCodeSnippet
 
   std::cout << "Nb. objects conv. " << converter->GetOutput()->GetNumberOfLabelObjects() << std::endl;
 
-    std::cout << "Nb. objects shape " << shape->GetOutput()->GetNumberOfLabelObjects() << std::endl;
-  // then we can read the attribute values we're interested in. The BinaryImageToShapeLabelMapFilter
+  std::cout << "Nb. objects shape " << shape->GetOutput()->GetNumberOfLabelObjects() << std::endl;
+
+  //  Software Guide : BeginLatex
+  //
+  // Then, we can read the attribute values we're interested in. The \doxygen{itk}{BinaryImageToShapeLabelMapFilter}
   // produce consecutive labels, so we can use a for loop and GetLabelObject() method to retrieve
   // the label objects. If the labels are not consecutive, the GetNthLabelObject() method must be
   // use instead of GetLabelObject(), or an iterator on the label
   // object container of the label map.
-    std::ofstream outfile( argv[2] );
-
+  // In this example, we print 2 shape attributes of each object to a text file (the size and the centroid coordinates).
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  std::ofstream outfile( argv[2] );
 
   LabelMapType::Pointer labelMap = shape->GetOutput();
   for( unsigned long label=1; label<=labelMap->GetNumberOfLabelObjects(); label++ )
@@ -96,5 +149,8 @@ int main(int argc, char * argv[])
     }
 
   outfile.close();
+  // Software Guide : EndCodeSnippet
+
   return EXIT_SUCCESS;
 }       
+

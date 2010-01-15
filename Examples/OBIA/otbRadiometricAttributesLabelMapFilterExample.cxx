@@ -17,9 +17,9 @@
 =========================================================================*/
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {/home/grizonnetm/OTB/Dev/OTB-Data/Examples/qb_RoadExtract2.tif}
+//    INPUTS: {qb_RoadExtract2.tif}
 //    OUTPUTS: {OBIARadiometricAttribute1.tif}
-//    STATS::Ndvi::Mean 0 0.3 16 16 200 1.0
+//    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -44,9 +44,9 @@
   //  \item NDWI2
   //  \item Intensity
   //  \item and original B, G, R and NIR channels
-  //  \end{itemize},
+  //  \end{itemize}
 //  Here we use the  \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
-//   
+//  Let's get to the source code explanation.  
 //
 //  Software Guide : EndLatex
 
@@ -115,7 +115,8 @@ int main(int argc, char * argv[])
   vreader->SetFileName(reffname);
     //  Software Guide : BeginLatex
   //
-  // Firstly, segment input image using the Mean Shift algorithm.
+  // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
+  // explanations).
   //
   //  Software Guide : EndLatex
   
@@ -134,11 +135,12 @@ int main(int argc, char * argv[])
   // types.
   //
   //  Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
+  
+  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());       
-// Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   //
   // The \doxygen{itk}{LabelImageToLabelMapFilter} type is instantiated using the output
   // of the \doxygen{otb}{MeanShiftImageFilter}. This filter produces a labeled image 
@@ -163,7 +165,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
-  // compute radiometric value on each label object.
+  // compute radiometric valuee on each label object.
   //
   //  Software Guide : EndLatex
   
@@ -208,7 +210,8 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // 
-  //  Then, Label object selected are transform in a Label Image using the \doxygen{itk}{LabelMapToLabelImageFilter}  
+  //  Then, Label objects selected are transform in a Label Image using the 
+  //  \doxygen{itk}{LabelMapToLabelImageFilter}.  
   // 
   //  Software Guide : EndLatex
 
@@ -234,3 +237,16 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
+  // the object selection based on radiometric attributes. 
+  // \begin{figure} \center
+  // \includegraphics[width=0.44\textwidth]{qb_RoadExtract2.eps}
+  // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
+  // \itkcaption[Object based extraction based on ]{From left to right : original image, vegetation mask resulting from processing.}
+  // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
