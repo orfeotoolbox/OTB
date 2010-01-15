@@ -88,7 +88,7 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
 
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
-std::cout<<kwl<<std::endl;
+
   std::string key;
   ossimString separatorList;
   key = "azimuth_start_time";
@@ -547,10 +547,10 @@ TerraSarImageMetadataInterface::GetNoiseTimeUTCList( const MetaDataDictionaryTyp
       myDate.setSec(sec);
       
       julianDay = myDate.getJulian();
-      // add the decimal second to the julian day (0.00001 <-> 0.864s)
-      julianDay += secDec*1e-5/0.864;
 
-
+      // add the decimal second to the julian day (1s <-> 1/24*60*60 = 1/86400 julienDay)
+      julianDay += secDec/86400;
+      
       timeList.push_back( julianDay );
     }  
 

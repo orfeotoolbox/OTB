@@ -65,6 +65,7 @@ int otbTerraSarImageMetadataInterface (int argc, char* argv[])
   file<<"GetProductionYear:       "<<lImageMetadata->GetProductionYear(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetCalibrationFactor:    "<<lImageMetadata->GetCalibrationFactor(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<"GetRadarFrequency:       "<<lImageMetadata->GetRadarFrequency(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
+  file<<"GetPRF:                  "<<lImageMetadata->GetPRF(reader->GetOutput()->GetMetaDataDictionary())<<std::endl;
   file<<std::endl;
   file<<"Noise attributs: "<<std::endl;
   UIntVectorType         deg    = lImageMetadata->GetNoisePolynomialDegrees(reader->GetOutput()->GetMetaDataDictionary());

@@ -214,25 +214,14 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Set up progress reporting
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   
-  
-  for(unsigned int i = 0; i < m_NoiseRecords.size();++i)
-    {
-      std::cout<<std::fixed<<std::setprecision(10)<<"t"<<i<<": "<<  m_NoiseRecords[i].first << std::endl;
-    }
-
   assert(!m_NoiseRecords.empty());
 
   // The acquisition time of the first line of OutputRegionForThread.
-  //double PRFJulian = m_PRF * (0.864 / 1e-5);
-  double invPRF = /*(0.864/1e-5) * */1/m_PRF;
+  // Adapt frequency to julien day (1s <-> 1/24*60*60 = 1/86400 julienDay)
+  double invPRF = (1./m_PRF*86400.);
   double currentAzimuthPosition = m_NoiseRecords.back().first + invPRF 
     * (m_OriginalProductSize[1]- inputIt.GetIndex()[1] -1);
    
-  std::cout<<"Product size: "<<m_OriginalProductSize<<std::endl;
-  std::cout<<"Start index: "<<inputIt.GetIndex()<<std::endl;
-  std::cout<<"Current position: "<<currentAzimuthPosition<<std::endl;
-  std::cout<<"PRF: "<<m_PRF<<std::endl;
-
 
   // Look for the first noise record to be used (remember we sorted
   // m_NoiseRecords by decreasing time)
@@ -252,7 +241,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Store the current noise record azimuth position
   double currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
   calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
-  std::cout<<nrIndex<<" degree: "<<currentNoiseRecordIt->second.get_polynomialDegree()<<std::endl;
 
   // Store current line index
   typename OutputImageRegionType::IndexType::IndexValueType currentLine = inputIt.GetIndex()[1];
@@ -274,15 +262,12 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
        {
        // Update the iterator
        ++currentNoiseRecordIt;
-       ++nrIndex;
-       std::cout<<"NrIndex increment"<<std::endl;
        // If we are not at the last record
        if(currentNoiseRecordIt != m_NoiseRecords.end())
          {
          // Update the functor noise record
          currentNoiseRecordAzimuthPosition = currentNoiseRecordIt->first;
          calibrationFunctor.SetNoiseRecord(currentNoiseRecordIt->second);
-	 std::cout<<nrIndex<<" degree: "<<currentNoiseRecordIt->second.get_polynomialDegree()<<std::endl;
          }
        }
       }
