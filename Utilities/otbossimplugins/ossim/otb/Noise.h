@@ -12,7 +12,7 @@
 #ifndef Noise_h
 #define Noise_h
 
-#include <JSDDateTime.h>
+#include <otb/JSDDateTime.h>
 #include <otb/ImageNoise.h>
 #include <ossim/base/ossimConstants.h>
 

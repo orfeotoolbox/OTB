@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <GeodesicCoordinate.h>
+#include <otb/GeodesicCoordinate.h>
 
 namespace ossimplugins
 {

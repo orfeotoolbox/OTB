@@ -12,7 +12,7 @@
 #ifndef PlatformPosition_h
 #define PlatformPosition_h
 
-#include <JSDDateTime.h>
+#include <otb/JSDDateTime.h>
 
 class ossimKeywordlist;
 

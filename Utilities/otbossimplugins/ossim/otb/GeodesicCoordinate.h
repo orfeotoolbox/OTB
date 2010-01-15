@@ -12,7 +12,7 @@
 #ifndef GeodesicCoordinate_h
 #define GeodesicCoordinate_h
 
-#include <Coordinate.h>
+#include <otb/Coordinate.h>
 
 namespace ossimplugins
 {

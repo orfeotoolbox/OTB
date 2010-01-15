@@ -12,7 +12,7 @@
 #ifndef SarSensor_h
 #define SarSensor_h
 
-#include <Sensor.h>
+#include <otb/Sensor.h>
 
 namespace ossimplugins
 {

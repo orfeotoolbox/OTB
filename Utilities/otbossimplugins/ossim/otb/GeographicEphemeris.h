@@ -12,7 +12,7 @@
 #ifndef GeographicEphemeride_h
 #define GeographicEphemeride_h
 
-#include <Ephemeris.h>
+#include <otb/Ephemeris.h>
 
 namespace ossimplugins
 {

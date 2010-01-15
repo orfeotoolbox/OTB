@@ -9,8 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <RectangularCoordinate.h>
-#include <GeodesicCoordinate.h>
+#include <otb/RectangularCoordinate.h>
+#include <otb/GeodesicCoordinate.h>
 
 #include <cmath>
 

@@ -12,7 +12,7 @@
 #ifndef RectangularCoordinate_h
 #define RectangularCoordinate_h
 
-#include <Coordinate.h>
+#include <otb/Coordinate.h>
 
 namespace ossimplugins
 {

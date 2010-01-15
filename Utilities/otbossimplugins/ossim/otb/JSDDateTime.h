@@ -11,8 +11,8 @@
 
 #ifndef JSDDateTime_h
 #define JSDDateTime_h
-#include <JulianDate.h>
-#include <MJDDateTime.h>
+#include <otb/JulianDate.h>
+#include <otb/MJDDateTime.h>
 
 namespace ossimplugins
 {
