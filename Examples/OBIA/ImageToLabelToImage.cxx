@@ -65,13 +65,14 @@ int main(int argc, char * argv[])
   const int dim                              = 2;
   typedef unsigned short                     PixelType;
   typedef otb::Image< PixelType, dim >       ImageType;
-  // Software Guide : EndCodeSnippet
+  
   typedef itk::LabelObject< PixelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType >   LabelMapType;
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  // The reader is instantiated and 
+  // As usual, the reader is instantiated and 
   // the input image is set. 
   //
   // Software Guide : EndLatex
@@ -91,7 +92,7 @@ int main(int argc, char * argv[])
   // \item \code{FullyConnected}: Set whether the connected 
   // components are defined strictly by face connectivity or by 
   // face+edge+vertex connectivity. Default is FullyConnectedOff.  
-  // \item InputForegroundValue/OutputBackgroundValue specify the
+  // \item \code{InputForegroundValue/OutputBackgroundValue}: specify the
   // pixel value of input/output of the foreground/background.   
   // the input image is set.
   // \end{itemize} 
@@ -109,7 +110,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Then the inverse process is .
+  // Then the inverse process is uses to recreate a image of labels.
   // The \doxygen{itk}{LabelMapToLabelImageFilter} converts a 
   // LabelMap to a labeled image. 
   //

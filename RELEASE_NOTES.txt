@@ -1,3 +1,32 @@
+OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
+-----------------------------------------
+
+* Applications
+  - Monteverdi, a new all-in one user-friendly graphical tool 
+    for remote sensing data processing released as a separate package (see README file).
+
+* Library
+  The library includes these additions
+  * Support for TerraSarX, Quickbird and Spot5 calibration metadata
+  * Support for Aeronet files
+  * Various filters for Object Based Image Analysis based on LabelObjectMaps
+  * Support for RPC sensor model estimation from a set of Ground Control Points
+  * Support for affine transform least-square estimation from a set of tie points
+  * Support for SVM cross-validation and parameters optimization
+  * Box and Whiskey filter to detect outlier on VectorImage
+  * Enhanced SOM algorithm taking into account invalid missing values
+  * Wavelet transform
+  * Filters for GIS database interaction
+  * ImageFileWriter now supports streaming natively
+  * Lots of bug fixes
+
+* System
+  * Internal ITK updated to 3.16.0 + OTB Patches
+  * Internal OSSIM updated to svn revision 15872 + OTB patches
+  * Home brewed metadata reader were moved to ossimplugins
+
+  
+
 OTB-v.3.0.0 - Changes since version 2.8.0 (2009/05/11)
 -----------------------------------------
 
