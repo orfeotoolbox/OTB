@@ -179,7 +179,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "altitude : " << world.height() << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.282566, lon = 1.204279" << std::endl;
-        std::cout << "		erreur lat =" << world.lat - 43.282566 << " , erreur lon =" << world.lon - 1.204279
+        std::cout << "    erreur lat =" << world.lat - 43.282566 << " , erreur lon =" << world.lon - 1.204279
             << std::endl;
 
         model->worldToLineSample(world, imageret);
@@ -220,7 +220,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.200920, lon = 1.067617" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.200920 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.200920 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 1.067617 << std::endl;
         std::cout << std::endl;
       }
@@ -252,7 +252,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.096737, lon = 0.700934" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.096737 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.096737 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 0.700934 << std::endl;
         std::cout << std::endl;
       }
@@ -284,7 +284,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.077911, lon = 0.967650" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.077911 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.077911 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 0.967650 << std::endl;
         std::cout << std::endl;
       }
@@ -315,7 +315,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.096737, lon = 0.700934" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.319109 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.319109 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 0.838037 << std::endl;
         std::cout << std::endl;
       }
@@ -347,13 +347,13 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.456994, lon = -0.087414" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.456994 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.456994 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - -0.087414 << std::endl;
         std::cout << std::endl;
       }
 
       /**************************************************************************/
-      /* test de la prise en compte de points d'appui									*/
+      /* test de la prise en compte de points d'appui                  */
       /**************************************************************************/
       std::cout << "*********** OPTIMISATION **********" << std::endl;
 
@@ -395,7 +395,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "altitude : " << world.height() << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.282566, lon = 1.204279" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.282566 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.282566 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 1.204279 << std::endl;
 
         model->worldToLineSample(world, imageret);
@@ -436,7 +436,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.200920, lon = 1.067617" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.200920 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.200920 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 1.067617 << std::endl;
         std::cout << std::endl;
       }
@@ -468,7 +468,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = 43.096737, lon = 0.700934" << std::endl;
-        std::cout << "		erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.096737 << " , erreur lon =" << world.lon
+        std::cout << "    erreur lat =" << world.lat * 360.0 / RDR_DEUXPI - 43.096737 << " , erreur lon =" << world.lon
             * 360.0 / RDR_DEUXPI - 0.700934 << std::endl;
         std::cout << std::endl;
       }
@@ -571,7 +571,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         }
 
         /**************************************************************************/
-        /* test de la prise en compte de points d'appui									*/
+        /* test de la prise en compte de points d'appui                  */
         /**************************************************************************/
         std::cout << "*********** OPTIMISATION **********" << std::endl;
 
@@ -714,7 +714,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "altitude : " << world.height() << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
 
         model->worldToLineSample(world, imageret);
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
@@ -729,7 +729,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "Loc directe par intersection du rayon de visee et MNT : " << std::endl;
         std::cout << " latitude = " << world.lat << " longitude = " << world.lon << " altitude : " << world.height()
             << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
       }
 
       /*
@@ -763,7 +763,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -798,7 +798,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -833,7 +833,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -868,12 +868,12 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
       /**************************************************************************/
-      /* test de la prise en compte de points d'appui									*/
+      /* test de la prise en compte de points d'appui                  */
       /**************************************************************************/
       std::cout << "*********** OPTIMISATION **********" << std::endl;
 
@@ -929,7 +929,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
         std::cout << "altitude : " << world.height() << std::endl;
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
 
         model->worldToLineSample(world, imageret);
         std::cout << "x = " << imageret.x << " y = " << imageret.y << std::endl;
@@ -972,7 +972,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -1007,7 +1007,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -1042,7 +1042,7 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
 
@@ -1077,74 +1077,74 @@ int ossimRadarSatSupport(int argc, char* argv[])
 
         std::cout << "Resultat attendu : " << std::endl;
         std::cout << "lat = " << lat << ", lon = " << lon << std::endl;
-        std::cout << "		erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
+        std::cout << "    erreur lat =" << world.lat - lat << " , erreur lon =" << world.lon - lon << std::endl;
         std::cout << std::endl;
       }
     }
     {
-      //		// ouvertures
-      //		hid_t fileID, group_ID, attr_ID1, attr_ID2, attr_ID3, attr_ID4, attr_ID5, attr_ID6, attr_ID7, dataset_ID, mem_type_id ;
-      //		herr_t status ;
-      //		fileID = H5Fopen("D:\\locSAR\\exemple_CSKS\\hdf5_test.h5", H5F_ACC_RDONLY, H5P_DEFAULT);
-      //		group_ID = H5Gopen(fileID, "/links/hard links"  ) ;
-      //		dataset_ID = H5Dopen(group_ID, "Eskimo"  ) ;
-      //		attr_ID1 = H5Aopen_name(dataset_ID , "IMAGE_TRANSPARENCY"  ) ;
-      //		attr_ID2 = H5Aopen_name(dataset_ID , "IMAGE_MINMAXRANGE"  ) ;
-      //		attr_ID3 = H5Aopen_name(dataset_ID , "CLASS"  ) ;
-      //		attr_ID4 = H5Aopen_name(dataset_ID , "IMAGE_VERSION"  ) ;
-      //		attr_ID5 = H5Aopen_name(dataset_ID , "ajoutVMN"  ) ;
-      //		attr_ID6 = H5Aopen_name(dataset_ID , "ajoutVMN_tabInt"  ) ;
-      //		attr_ID7 = H5Aopen_name(dataset_ID , "ajoutVMN_double"  ) ;
+      //    // ouvertures
+      //    hid_t fileID, group_ID, attr_ID1, attr_ID2, attr_ID3, attr_ID4, attr_ID5, attr_ID6, attr_ID7, dataset_ID, mem_type_id ;
+      //    herr_t status ;
+      //    fileID = H5Fopen("D:\\locSAR\\exemple_CSKS\\hdf5_test.h5", H5F_ACC_RDONLY, H5P_DEFAULT);
+      //    group_ID = H5Gopen(fileID, "/links/hard links"  ) ;
+      //    dataset_ID = H5Dopen(group_ID, "Eskimo"  ) ;
+      //    attr_ID1 = H5Aopen_name(dataset_ID , "IMAGE_TRANSPARENCY"  ) ;
+      //    attr_ID2 = H5Aopen_name(dataset_ID , "IMAGE_MINMAXRANGE"  ) ;
+      //    attr_ID3 = H5Aopen_name(dataset_ID , "CLASS"  ) ;
+      //    attr_ID4 = H5Aopen_name(dataset_ID , "IMAGE_VERSION"  ) ;
+      //    attr_ID5 = H5Aopen_name(dataset_ID , "ajoutVMN"  ) ;
+      //    attr_ID6 = H5Aopen_name(dataset_ID , "ajoutVMN_tabInt"  ) ;
+      //    attr_ID7 = H5Aopen_name(dataset_ID , "ajoutVMN_double"  ) ;
       //
-      //		// lectures
-      //		mem_type_id = H5Aget_type(attr_ID1) ;
-      //		unsigned int buffer1[1];
-      //		status = H5Aread(attr_ID1, mem_type_id, buffer1 ) ;
-      //		std::cout << buffer1[0] << std::endl ;
+      //    // lectures
+      //    mem_type_id = H5Aget_type(attr_ID1) ;
+      //    unsigned int buffer1[1];
+      //    status = H5Aread(attr_ID1, mem_type_id, buffer1 ) ;
+      //    std::cout << buffer1[0] << std::endl ;
       //
-      //		mem_type_id = H5Aget_type(attr_ID2) ;
-      //		unsigned char buffer2[2] ;
-      //		status = H5Aread(attr_ID2, mem_type_id, buffer2 ) ;
-      //		std::cout << (int) buffer2[0] << std::endl ;
-      //		std::cout << (int) buffer2[1] << std::endl ;
+      //    mem_type_id = H5Aget_type(attr_ID2) ;
+      //    unsigned char buffer2[2] ;
+      //    status = H5Aread(attr_ID2, mem_type_id, buffer2 ) ;
+      //    std::cout << (int) buffer2[0] << std::endl ;
+      //    std::cout << (int) buffer2[1] << std::endl ;
       //
-      //		mem_type_id = H5Aget_type(attr_ID3) ;
-      //		char buffer3[6] ;
-      //		status = H5Aread(attr_ID3, mem_type_id, buffer3 ) ;
-      //		char buffer4[10] ;
-      //		status = H5Aread(attr_ID3, mem_type_id, buffer4 ) ;
-      //		std::string classe(buffer4);
-      //		std::cout << classe << std::endl ;
+      //    mem_type_id = H5Aget_type(attr_ID3) ;
+      //    char buffer3[6] ;
+      //    status = H5Aread(attr_ID3, mem_type_id, buffer3 ) ;
+      //    char buffer4[10] ;
+      //    status = H5Aread(attr_ID3, mem_type_id, buffer4 ) ;
+      //    std::string classe(buffer4);
+      //    std::cout << classe << std::endl ;
       //
-      //		mem_type_id = H5Aget_type(attr_ID4) ;
-      //		float buffer5[1] ;
-      //		status = H5Aread(attr_ID4, mem_type_id, buffer5 ) ;
-      //		std::cout << buffer5[0] << std::endl ;
+      //    mem_type_id = H5Aget_type(attr_ID4) ;
+      //    float buffer5[1] ;
+      //    status = H5Aread(attr_ID4, mem_type_id, buffer5 ) ;
+      //    std::cout << buffer5[0] << std::endl ;
       //
       //mem_type_id = H5Aget_type(attr_ID5) ;
-      //		int buffer6[1] ;
-      //		status = H5Aread(attr_ID5, mem_type_id, buffer6 ) ;
+      //    int buffer6[1] ;
+      //    status = H5Aread(attr_ID5, mem_type_id, buffer6 ) ;
       //std::cout << buffer6[0] << std::endl ;
       //
       //mem_type_id = H5Aget_type(attr_ID6) ;
-      //		int buffer7[2] ;
-      //		status = H5Aread(attr_ID6, mem_type_id, buffer7 ) ;
+      //    int buffer7[2] ;
+      //    status = H5Aread(attr_ID6, mem_type_id, buffer7 ) ;
       //std::cout << buffer7[0] << std::endl ;
       //std::cout << buffer7[1] << std::endl ;
       //
       //mem_type_id = H5Aget_type(attr_ID7) ;
-      //		double buffer8[1] ;
-      //		status = H5Aread(attr_ID7, mem_type_id, buffer8 ) ;
+      //    double buffer8[1] ;
+      //    status = H5Aread(attr_ID7, mem_type_id, buffer8 ) ;
       //std::cout << buffer8[0] << std::endl ;
       //
-      //		// fermeture
-      //		status = H5Aclose(attr_ID1) ;
-      //		status = H5Aclose(attr_ID2) ;
-      //		status = H5Aclose(attr_ID3) ;
-      //		status = H5Aclose(attr_ID4) ;
-      //		status = H5Dclose(dataset_ID) ;
-      //		status = H5Gclose(group_ID) ;
-      //		status = H5Fclose(fileID) ;
+      //    // fermeture
+      //    status = H5Aclose(attr_ID1) ;
+      //    status = H5Aclose(attr_ID2) ;
+      //    status = H5Aclose(attr_ID3) ;
+      //    status = H5Aclose(attr_ID4) ;
+      //    status = H5Dclose(dataset_ID) ;
+      //    status = H5Gclose(group_ID) ;
+      //    status = H5Fclose(fileID) ;
     }
 
   }
