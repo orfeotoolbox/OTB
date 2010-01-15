@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <Equation.h>
+#include <otb/Equation.h>
 
 namespace ossimplugins
 {

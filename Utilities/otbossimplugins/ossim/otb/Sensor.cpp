@@ -9,9 +9,9 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <Sensor.h>
-#include <SensorParams.h>
-#include <PlatformPosition.h>
+#include <otb/Sensor.h>
+#include <otb/SensorParams.h>
+#include <otb/PlatformPosition.h>
 
 #include <cstring>
 

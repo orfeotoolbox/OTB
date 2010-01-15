@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <HermiteInterpolator.h>
+#include <otb/HermiteInterpolator.h>
 
 #include <string>
 

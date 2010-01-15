@@ -12,7 +12,7 @@
 #ifndef Ephemeride_h
 #define Ephemeride_h
 
-#include <JSDDateTime.h>
+#include <otb/JSDDateTime.h>
 
 class ossimKeywordlist;
 

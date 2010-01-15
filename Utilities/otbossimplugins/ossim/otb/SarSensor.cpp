@@ -9,16 +9,16 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <SarSensor.h>
-#include <JSDDateTime.h>
-#include <Ephemeris.h>
-#include <GeographicEphemeris.h>
-#include <Sensor.h>
-#include <SensorParams.h>
-#include <PlatformPosition.h>
-#include <Equation.h>
-#include <RectangularCoordinate.h>
-#include <GeodesicCoordinate.h>
+#include <otb/SarSensor.h>
+#include <otb/JSDDateTime.h>
+#include <otb/Ephemeris.h>
+#include <otb/GeographicEphemeris.h>
+#include <otb/Sensor.h>
+#include <otb/SensorParams.h>
+#include <otb/PlatformPosition.h>
+#include <otb/Equation.h>
+#include <otb/RectangularCoordinate.h>
+#include <otb/GeodesicCoordinate.h>
 #include <complex>
 
 namespace ossimplugins

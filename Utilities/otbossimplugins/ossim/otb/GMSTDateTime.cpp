@@ -9,8 +9,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <GMSTDateTime.h>
-#include <CivilDateTime.h>
+#include <otb/GMSTDateTime.h>
+#include <otb/CivilDateTime.h>
 
 namespace ossimplugins
 {

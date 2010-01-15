@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <Ephemeris.h>
+#include <otb/Ephemeris.h>
 #include <ossim/base/ossimDpt3d.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNotify.h>
