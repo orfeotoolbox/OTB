@@ -18,7 +18,7 @@ operating systems, compilers, and hardware platforms including
 MS-Windows, Linux on Intel-compatible hardware, Solaris and Mac
 OSX.  It is known to work with the following compilers:
 \begin{itemize}
-\item Cygwin, MinGW, Visual Studio 7 and 8 on MS-Windows%, .NET 2002, .NET 2003
+\item Cygwin, MinGW, Visual Studio 7, 8 and 9 on MS-Windows%, .NET 2002, .NET 2003
 \item GCC on Unix/Linux systems
 \end{itemize}
 
@@ -83,7 +83,7 @@ CMake can be downloaded at no cost from
   \url{http://www.cmake.org}
 \end{center}
 
-OTB requires at least CMake version 2.0. You can download binary
+OTB requires at least CMake version 2.6. You can download binary
 versions for most of the popular platforms including Windows, Solaris,
 IRIX, HP, Mac and Linux. Alternatively you can download the source
 code and build CMake on your system. Follow the instructions in the
@@ -222,8 +222,6 @@ recover all the information required to configure your new OTB project.
 
 \index{Hello World}
 
-\index{Hello World}
-
 Here is the content of the two files to write in your new project. These two
 files can be found in the \code{OTB/Examples/Installation} directory. The
 \code{CMakeLists.txt} file contains the following lines:
@@ -237,7 +235,7 @@ IF(OTB_FOUND)
   INCLUDE(${OTB_USE_FILE})
 ELSE(OTB_FOUND)
   MESSAGE(FATAL_ERROR
-      "Cannot build OTB project without OTB.  Please set OTB_DIR.")
+      "Cannot build OTB project without OTB. Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
 
 
