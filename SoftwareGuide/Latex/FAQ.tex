@@ -147,9 +147,10 @@ A simple \texttt{make} in your OTB binary directory will be enough to update the
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X)
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X, 4.4.X)
   \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
   \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
+  \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
   \item Windows with Microsoft Visual Express 2005
   \item Windows with Microsoft Visual Express 2008
   \item Cygwin (\url{http://www.cygwin.com})
@@ -247,11 +248,11 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-3.0.0.tgz
-      tar xvf OrfeoToolbox-3.0.0.tar
+      gunzip OrfeoToolbox-3.2.0.tgz
+      tar xvf OrfeoToolbox-3.2.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-3.0.0
+      ccmake ../OrfeoToolbox-3.2.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to ON within CMake
@@ -377,12 +378,12 @@ details on the bug characterization.
 The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
-\subsubsection{Linux Debian/Ubuntu}
-If you used the official gdal package version 1.4.0, the library is named
-\texttt{libgdal1.4.0.so} so you have to create a simlink named
-\texttt{libgdal.so}: \texttt{ln -s /usr/lib/libgdal1.4.0.so /usr/lib/libgdal.so}.
-This should be fixed in OTB 3.0.0 which is now smart enough to find the correct library.
-If it does not work for you, let us know!
+%\subsubsection{Linux Debian/Ubuntu}
+%If you used the official gdal package version 1.4.0, the library is named
+%\texttt{libgdal1.4.0.so} so you have to create a simlink named
+%\texttt{libgdal.so}: \texttt{ln -s /usr/lib/libgdal1.4.0.so /usr/lib/libgdal.so}.
+%This should be fixed in OTB 3.0.0 which is now smart enough to find the correct library.
+%If it does not work for you, let us know!
 
 \subsubsection{Cygwin}
 Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
@@ -462,7 +463,8 @@ on-line API documentation which is available at \url{http://www.orfeo-toolbox.or
 
 \subsection{I want to contribute to OTB, where to begin?}
 
-First, you can send an email to otb@cnes.fr or the the user mailing list to let us know what functionality
+First, you can send an email to otb@cnes.fr or the the user mailing list (otb-users@googlegroups.com) 
+to let us know what functionality
 you would like to introduce in OTB. If the functionality seems important for the
 OTB users, we will then discuss on how to retrieve your code,
 make the necessary adaptions, check with you that the results are correct and finally
@@ -537,7 +539,7 @@ You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
 
 And you will be able to see the result at
 
-\url{http://www.orfeo-toolbox.org/Dashboard/index.php?project=OTB}.
+\url{http://dash.orfeo-toolbox.org/Dashboard/index.php?project=OTB}.
 
 If you are interested in setting up a nightly test (automatically launched every night), please contact us and we will give you the details.
 
@@ -551,7 +553,7 @@ bugfixes.
 The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
 released in between. The 2.0.0 major version  was released in December 2007.
 The 2.2.0, 2.4.0 and 2.6.0 in June, July and November 2008 respectively. The
-2.8.0 came out in January 2009. The current one is 3.0.0.
+2.8.0 came out in January 2009 and the 3.0.0 in May 2009. The current one is 3.2.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -567,8 +569,8 @@ A bugfix version is released when significant bugs are identified and fixed.
 
 \subsection{When will the next version of OTB be available?}
 We plan to release major new OTB version once a year, that is, version
-2.0.0 was available at the end of 2007, version 3.0.0 way released
-in may 2009, and so on.
+2.0.0 was available at the end of 2007, version 3.0.0 was released
+in May 2009, and so on.
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,
