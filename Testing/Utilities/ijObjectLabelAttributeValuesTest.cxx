@@ -44,7 +44,7 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
   LabelMapType::Pointer labelMap = converter->GetOutput();
 
   typedef LabelMapType::LabelObjectType LabelObjectType;
-  //const LabelObjectType * ball = labelMap->GetLabelObject( 1 );
+  const LabelObjectType * ball = labelMap->GetLabelObject( 1 );
 
   assert( eq(3.0, ball->GetCentroid()[0]) );
   assert( eq(3.0, ball->GetCentroid()[1]) );
@@ -93,7 +93,7 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
 //   assert( eq(1.0, ball->GetBinaryPrincipalAxes()[2][2]) );
 
 
-  //const LabelObjectType * ellipsoid = labelMap->GetLabelObject( 2 );
+  const LabelObjectType * ellipsoid = labelMap->GetLabelObject( 2 );
 
   assert( eq(3.0, ellipsoid->GetCentroid()[0]) );
   assert( eq(3.0, ellipsoid->GetCentroid()[1]) );
@@ -143,7 +143,7 @@ int ijObjectLabelAttributeValuesTest(int argc, char * argv[])
 
 
 
-  //const LabelObjectType * disk = labelMap->GetLabelObject( 3 );
+  const LabelObjectType * disk = labelMap->GetLabelObject( 3 );
 
   assert( eq(3.0, disk->GetCentroid()[0]) );
   assert( eq(11.0, disk->GetCentroid()[1]) );

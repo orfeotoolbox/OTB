@@ -82,17 +82,17 @@ int main (int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  const char * fixedfname = argv[1];
-  const char * movingfname = argv[2];
-  const char * outputImageFilename = argv[3];
+  const char * fixedfname           = argv[1];
+  const char * movingfname          = argv[2];
+  const char * outputImageFilename  = argv[3];
   
-  const unsigned int octaves = atoi(argv[4]);
-  const unsigned int scales = atoi(argv[5]);
-  float threshold = atof(argv[6]);
-  float ratio = atof(argv[7]);
+  const unsigned int octaves        = atoi(argv[4]);
+  const unsigned int scales         = atoi(argv[5]);
+  float threshold                   = atof(argv[6]);
+  float ratio                       = atof(argv[7]);
   const double secondOrderThreshold = atof(argv[8]);
-  const bool useBackMatching = atoi(argv[9]);
-  const unsigned int Dimension = 2;
+  const bool useBackMatching        = atoi(argv[9]);
+  const unsigned int Dimension      = 2;
 
   // Software Guide : BeginLatex
   //
@@ -107,7 +107,7 @@ int main (int argc, char* argv[])
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<RealType,Dimension> ImageType;
+  typedef otb::Image<RealType,Dimension>        ImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
 
   // Software Guide : EndCodeSnippet
@@ -120,11 +120,11 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
+  typedef itk::VariableLengthVector<RealType>     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
 
   // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
+ // Software Guide : BeginLatex
   //
   // The filter for computing the SIFTs has a type defined as follows:
   //
@@ -160,14 +160,14 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef PointSetType::PointType PointType;
-  typedef std::pair<PointType,PointType> MatchType;
+  typedef PointSetType::PointType           PointType;
+  typedef std::pair<PointType,PointType>    MatchType;
   typedef std::vector<MatchType> MatchVectorType;
   typedef EuclideanDistanceMatchingFilterType::LandmarkListType
   LandmarkListType;
 
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
+  typedef PointSetType::PointsContainer    PointsContainerType;
+  typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
 
@@ -195,7 +195,7 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  ReaderType::Pointer fixedReader = ReaderType::New();
+  ReaderType::Pointer fixedReader  = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
   fixedReader->SetFileName(fixedfname);
@@ -244,55 +244,7 @@ int main (int argc, char* argv[])
   filter2->SetDoGThreshold(threshold);
   filter2->SetEdgeThreshold(ratio);
 // Software Guide : EndCodeSnippet
-/*
-  std::cout << "SIFT process fixed image" << std::endl;
-  filter1->Update();
-  std::cout << "SIFT process moving image" << std::endl;
-  filter2->Update();
 
-  //filter1->SetNumberOfThreads(1);
-  //filter2->SetNumberOfThreads(1);
-
-  //Take the minimum point set to compute euclidian diff (vector lengths must be equal)
-  PointSetType::Pointer ptSet1 = filter1->GetOutput();
-  PointSetType::Pointer ptSet2 = filter2->GetOutput();
-
-  typedef PointSetType::PointsContainer PointsContainer;
-  PointsContainer::Pointer              ptContainer1,ptContainer2;
-  
-  //Save point container to extract 2 points container with size = min (container1, container2)
-  //TODO simplify subset selection in this itk::PointSet
-  ptContainer1 = ptSet1->GetPoints();
-  ptContainer2 = ptSet2->GetPoints();
-  if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
-  {
-        ptContainer1 = ptSet2->GetPoints();
-         ptContainer2 = ptSet1->GetPoints();
-  }
- 
-  PointsContainer::Pointer ptContainerRes =   PointsContainer::New();
-  typedef PointsContainer::Iterator           PointsIterator;
-  PointsIterator     pointsIterator =         ptContainer2->Begin();
-
-  //Construct new point container (subset of input pointset)
-  for (unsigned int id=0;id < ptContainer1->Size();++id)
-  {
-         ptContainerRes->InsertElement(id, pointsIterator->Value()); 
-       ++pointsIterator;
-  }
-
-  if ( ptSet1->GetNumberOfPoints() > ptSet2->GetNumberOfPoints() )
-  {
-        ptSet1->SetPoints(ptContainerRes);
-  }
-  else
-  {
-         ptSet2->SetPoints(ptContainerRes);
-  }
-
-  std::cout << "SIFT points size" << std::endl;
-  std::cout << ptSet1->GetNumberOfPoints() << std::endl;
-  std::cout << ptSet2->GetNumberOfPoints() << std::endl;
 
   // Software Guide : BeginLatex
   //
@@ -303,14 +255,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  //TODO use SIFT filters outputs or subset of pointset??? 
-  //euclideanMatcher->SetInput1(ptSet1);
-  //euclideanMatcher->SetInput2(ptSet2);
-  */
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
-  
-  //bool useBackMatching = 0;
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
