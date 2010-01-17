@@ -75,10 +75,10 @@
 
 int main (int argc, char* argv[])
 {
-  if (argc!= 9)
+  if (argc!= 10)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold" << std::endl;
+    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold useBackMatching" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -91,7 +91,7 @@ int main (int argc, char* argv[])
   float threshold = atof(argv[6]);
   float ratio = atof(argv[7]);
   const double secondOrderThreshold = atof(argv[8]);
-
+  const bool useBackMatching = atoi(argv[9]);
   const unsigned int Dimension = 2;
 
   // Software Guide : BeginLatex
@@ -244,7 +244,7 @@ int main (int argc, char* argv[])
   filter2->SetDoGThreshold(threshold);
   filter2->SetEdgeThreshold(ratio);
 // Software Guide : EndCodeSnippet
-
+/*
   std::cout << "SIFT process fixed image" << std::endl;
   filter1->Update();
   std::cout << "SIFT process moving image" << std::endl;
@@ -259,7 +259,7 @@ int main (int argc, char* argv[])
 
   typedef PointSetType::PointsContainer PointsContainer;
   PointsContainer::Pointer              ptContainer1,ptContainer2;
-
+  
   //Save point container to extract 2 points container with size = min (container1, container2)
   //TODO simplify subset selection in this itk::PointSet
   ptContainer1 = ptSet1->GetPoints();
@@ -306,10 +306,11 @@ int main (int argc, char* argv[])
   //TODO use SIFT filters outputs or subset of pointset??? 
   //euclideanMatcher->SetInput1(ptSet1);
   //euclideanMatcher->SetInput2(ptSet2);
+  */
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
   
-  bool useBackMatching = 0;
+  //bool useBackMatching = 0;
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);

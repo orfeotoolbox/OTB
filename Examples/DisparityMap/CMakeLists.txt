@@ -47,13 +47,13 @@ ADD_TEST(dmTeSimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
 
 ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
    --compare-image ${TOL} 
-         ${BASELINE}/ROISpot5.png
-         ${TEMP}/otbEstimateAffineTransformationOutput.tif
+         ${BASELINE}/EstimateAffineTransformationOutput.png
+         ${TEMP}/AffineTransformationOutput.png
          EstimateAffineTransformationExampleTest
-	 ${INPUTDATA}/ROISpot5.png
-         ${INPUTDATA}/ROISpot5Warped.png
-         ${TEMP}/otbEstimateAffineTransformationOutput.tif
-	 2 3 0 0 0.5
+	 ${INPUTDATA}/QB_Suburb.png
+         ${INPUTDATA}/QB_Suburb13x17y.png
+         ${TEMP}/AffineTransformationOutput.png
+	 2 3 0 0 0.5 1
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
