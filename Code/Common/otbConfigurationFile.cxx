@@ -42,6 +42,7 @@ ConfigurationFile
 ConfigurationFile
 ::~ConfigurationFile()
 {
+  delete m_OTBConfig;
 }
 
 ConfigurationFile::Pointer
@@ -53,7 +54,7 @@ ConfigurationFile
     Instance = Self::New();
   }
   return Instance;
-};
+}
 
 
 void
