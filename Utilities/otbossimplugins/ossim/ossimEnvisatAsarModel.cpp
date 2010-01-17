@@ -351,13 +351,19 @@ bool ossimEnvisatAsarModel::loadState (const ossimKeywordlist &kwl,
 
 std::ostream& ossimEnvisatAsarModel::print(std::ostream& out) const
 {
-   static const char MODULE[] = "ossimplugins::ossimEnvisatAsarModel::print";
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
 
    out << setprecision(15) << setiosflags(ios::fixed)
        << "\nossimEnvisatAsarModel data members:\n"
-       << "Nothing for now...";
+       << "_pixel_spacing: " << _pixel_spacing << "\n"
+       << "_n_srgr: " << _n_srgr << "\n";
+
+   ossimGeometricSarSensorModel::print(out);
+
+   // Reset flags.
+   out.setf(f);
+
 
    return out;
 }
