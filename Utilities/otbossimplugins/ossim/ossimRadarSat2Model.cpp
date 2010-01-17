@@ -502,7 +502,8 @@ bool ossimRadarSat2Model::InitRefPoint(const ossimKeywordlist &kwl,
       date->set_second((int) floor(time)) ;
       date->set_decimal(time - floor(time)) ;
    }
-
+   delete date;//FIXME to confirm
+  
    if(_platformPosition != 0)
    {
       Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);

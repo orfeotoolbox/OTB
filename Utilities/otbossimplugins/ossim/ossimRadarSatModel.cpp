@@ -53,6 +53,16 @@ ossimRadarSatModel::ossimRadarSatModel():
 
 ossimRadarSatModel::~ossimRadarSatModel()
 {
+  if (_data != 0)
+  {
+    delete _data;
+  }
+
+  if (_leader != 0)
+  {
+    delete _leader;
+  }
+  
 }
 
 ossimObject* ossimRadarSatModel::dup() const
@@ -623,8 +633,11 @@ bool ossimRadarSatModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
     ephemeris[i] = eph;
 
     delete tmpEphemeris;
+    delete greenwich_mha;
 
   }
+
+  delete greenwich_mha_ref2000;
 
   /*
    * Antenna position interpolator creation

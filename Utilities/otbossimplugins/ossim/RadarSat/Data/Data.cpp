@@ -68,7 +68,7 @@ std::istream& operator>>(std::istream& is, Data& data)
 		else
 		{
 			if (header.get_rec_seq() == 1) { // ImageOptionsFileDescriptor
-				RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
+      				RadarSatRecord* record = factory.Instanciate(header.get_rec_seq());
 				if (record != NULL)
 				{
 					record->Read(is);
@@ -80,12 +80,13 @@ std::istream& operator>>(std::istream& is, Data& data)
 				{
 					char* buff = new char[header.get_length()-12];
 					is.read(buff, header.get_length()-12);
-					delete buff;
+					delete[] buff;
 				}
 			}
 			else if ((header.get_rec_seq() == 2)) { // First line ProcessedDataRecord
-				RadarSatRecord* record = factory.Instanciate(2);
+
 				lineLength = header.get_length() ;
+      				RadarSatRecord* record = factory.Instanciate(2);
 				if (record != NULL)
 				{
 					record->Read(is);
@@ -93,28 +94,31 @@ std::istream& operator>>(std::istream& is, Data& data)
 
 					char* buff = new char[header.get_length()-192];
 					is.read(buff, header.get_length()-192);	// Reads the rest of the line
+					delete[] buff;
 				}
 				else
 				{
 					char* buff = new char[header.get_length()-12];
 					is.read(buff, header.get_length()-12);
-					delete buff;
+					delete[] buff;
 				}
 			}
 			else if ((header.get_rec_seq() == (1+nbLin))) { // Last line ProcessedDataRecord
-				RadarSatRecord* record = factory.Instanciate(2);
+      				RadarSatRecord* record = factory.Instanciate(2);
 				if (record != NULL)
 				{
 					record->Read(is);
 					data._records[Data::LastProcessedDataRecordID] = record;
+
 					char* buff = new char[header.get_length()-192];
 					is.read(buff, header.get_length()-192);	// Reads the rest of the line
+					delete[] buff;
 				}
 				else
 				{
 					char* buff = new char[header.get_length()-12];
 					is.read(buff, header.get_length()-12);
-					delete buff;
+					delete[] buff;
 				}
 			}
 			else

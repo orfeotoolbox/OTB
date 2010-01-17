@@ -380,6 +380,7 @@ ImageFileReader<TOutputImage>
          if (projection)
            {
              hasMetaData = projection->saveState(geom_kwl);
+             delete projection;
            }
        }
       // Free memory

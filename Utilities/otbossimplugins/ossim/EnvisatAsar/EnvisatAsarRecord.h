@@ -97,6 +97,9 @@ protected:
         res[nb_octets-1-i] = buffer[i];
       }
       memcpy(&value,res,nb_octets);
+
+      free(buffer);
+      free(res);
     }
   }
 
