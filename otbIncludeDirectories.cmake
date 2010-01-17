@@ -111,6 +111,13 @@ IF(OTB_USE_MAPNIK)
 ENDIF(OTB_USE_MAPNIK)
 
 #-----------------------------------------------------------------------------
+# Include directories from the GETTEXT build tree.
+IF(OTB_USE_GETTEXT)
+  SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  	${GETTEXT_INCLUDE_DIR})
+ENDIF(OTB_USE_GETTEXT)
+
+#-----------------------------------------------------------------------------
 # Include directories from the PQXX build tree.
 IF(OTB_USE_PQXX)
   SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
@@ -349,6 +356,12 @@ IF(OTB_USE_MAPNIK)
   SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
   	${MAPNIK_INCLUDE_DIR} )
 ENDIF(OTB_USE_MAPNIK)
+
+#For Gettext header file
+IF(OTB_USE_GETTEXT)
+  SET(OTB_INCLUDE_ABSOLUE_DIRS ${OTB_INCLUDE_ABSOLUE_DIRS}
+  	${GETTEXT_INCLUDE_DIR} )
+ENDIF(OTB_USE_GETTEXT)
 
 # For OpentTreads  header file
 IF(OTB_USE_EXTERNAL_OPENTHREADS)
