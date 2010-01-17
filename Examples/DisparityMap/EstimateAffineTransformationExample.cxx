@@ -260,7 +260,7 @@ int main (int argc, char* argv[])
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
-  std::cout << "Update euclidian distance" << std::endl;
+  //std::cout << "Update euclidian distance" << std::endl;
   euclideanMatcher->Update();
 
   // Software Guide : EndCodeSnippet
@@ -277,7 +277,7 @@ int main (int argc, char* argv[])
 
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-  std::cout << "Get landmarkList" << std::endl;
+  //std::cout << "Get landmarkList" << std::endl;
   // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
@@ -295,8 +295,8 @@ int main (int argc, char* argv[])
   for (LandmarkListType::Iterator it = landmarkList->Begin();
      it != landmarkList->End(); ++it)
   {       
-        std::cout << "landmark1" << it.Get()->GetPoint1() << std::endl;   
-        std::cout << "landmark2" << it.Get()->GetPoint2() << std::endl;        
+        //std::cout << "landmark1" << it.Get()->GetPoint1() << std::endl;   
+        //std::cout << "landmark2" << it.Get()->GetPoint2() << std::endl;        
         estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
   }
 
@@ -356,6 +356,24 @@ int main (int argc, char* argv[])
   //
   //
   //  Software Guide : EndLatex
+
+  // Write the transformation to a file
+  std::ofstream ofs;
+  ofs.open("transfo.txt");
+
+  // Set floatfield to format properly
+  ofs.setf(std::ios::fixed, std::ios::floatfield);
+  ofs.precision(10);
+
+  ofs<<"Estimated affine matrix: "<<std::endl;
+  ofs<<estimator->GetMatrix()<<std::endl;
+  ofs<<"Estimated affine offset: "<<std::endl;
+  ofs<<estimator->GetOffset()<<std::endl;
+  ofs<<"RMS error: "<<std::endl;
+  ofs<<estimator->GetRMSError()<<std::endl;
+  ofs<<"Relative residual: "<<std::endl;
+  ofs<<estimator->GetRelativeResidual()<<std::endl;
+  ofs.close();
 
   // Software Guide : BeginCodeSnippet
   // Get the output transform 
