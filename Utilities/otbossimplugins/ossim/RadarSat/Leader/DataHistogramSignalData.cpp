@@ -71,11 +71,11 @@ std::istream& operator>>(std::istream& is, DataHistogramSignalData& data)
 
 DataHistogramSignalData::DataHistogramSignalData(const DataHistogramSignalData& rhs) :
 	RadarSatRecord(rhs),
-	_histogram(rhs._histogram),
-	_sar_chn(rhs._sar_chn),
 	_rec_seq(rhs._rec_seq),
+	_sar_chn(rhs._sar_chn),
 	_ntab(rhs._ntab),
-	_ltab(rhs._ltab)
+	_ltab(rhs._ltab),
+	_histogram(rhs._histogram)
 {
 
 }
