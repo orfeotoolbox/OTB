@@ -24,8 +24,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}, {ROISpot5Moving.png}
-//    OUTPUTS: {SIFTResampling.png}
+//    INPUTS: {QB_Suburb.png}, {QB_SuburbR10X13Y17.png}
+//    OUTPUTS: {AffineTransformationOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -75,10 +75,10 @@
 
 int main (int argc, char* argv[])
 {
-  if (argc!= 10)
+  if (argc!= 11)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold useBackMatching" << std::endl;
+    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold useBackMatching transfofname" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -92,6 +92,8 @@ int main (int argc, char* argv[])
   float ratio                       = atof(argv[7]);
   const double secondOrderThreshold = atof(argv[8]);
   const bool useBackMatching        = atoi(argv[9]);
+  const char * outputTransformationFilename  = argv[10];
+  
   const unsigned int Dimension      = 2;
 
   // Software Guide : BeginLatex
@@ -359,7 +361,7 @@ int main (int argc, char* argv[])
 
   // Write the transformation to a file
   std::ofstream ofs;
-  ofs.open("transfo.txt");
+  ofs.open(outputTransformationFilename);
 
   // Set floatfield to format properly
   ofs.setf(std::ios::fixed, std::ios::floatfield);
@@ -391,16 +393,37 @@ int main (int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  Write resampled image
+  //  Write resampled image to png
   //
   //  Software Guide : EndLatex
+    
+  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter< OutputImageType > WriterType;
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetInput( resampler->GetOutput() );
   writer->SetFileName( outputImageFilename );
   writer->Update();
-
+  // Software Guide : EndCodeSnippet
+  
+   // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:SIFTDME} shows the result of the resampled image using the
+  // estimated transformation based on SIFT points 
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.40\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.40\textwidth]{QB_SuburbR10X13Y17.eps}
+  // \includegraphics[width=0.40\textwidth]{AffineTransformationOutput.eps}
+  // \itkcaption[Estimation of affine transformation from SIFT ]{From left
+  // to right and top to bottom: fixed input image, moving image,
+  // resampled moving image.}
+  // \label{fig:SIFTDME}
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
+  
   return EXIT_SUCCESS;
 }
 

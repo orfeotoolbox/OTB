@@ -51,9 +51,10 @@ ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
          ${TEMP}/AffineTransformationOutput.png
          EstimateAffineTransformationExampleTest
 	 ${INPUTDATA}/QB_Suburb.png
-         ${INPUTDATA}/QB_Suburb13x17y.png
+         ${INPUTDATA}/QB_SuburbR10X13Y17.png
          ${TEMP}/AffineTransformationOutput.png
 	 2 3 0 0 0.5 1
+	 ${TEMP}/AffineTransformationTxtOutput.txt
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
