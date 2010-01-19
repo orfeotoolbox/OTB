@@ -26,6 +26,7 @@
 
 #include "otbImageKeywordlist.h"
 // #include "otbCoordinateToName.h"
+#include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
 {
@@ -300,6 +301,30 @@ ImageLayer<TImage,TOutputImage>
       oss << otbGetTextMacro("Location unknown") << std::endl;
     }
   }
+  
+  /** Metadatas typedef */
+  typedef typename ImageMetadataInterfaceBase          ImageMetadataInterfaceType;
+  typedef typename ImageMetadataInterfaceBase::Pointer ImageMetadataInterfacePointerType;
+  // Build the metadata interface
+  ImageMetadataInterfacePointerType lImageMetadata = ImageMetadataInterfaceType::New();
+
+  // Check availability
+  bool mdIsAvailable = lImageMetadata->CanRead(m_Image->GetMetaDataDictionary());
+  
+  if (mdIsAvailable)
+  {
+    double x_spacing = lImageMetadata->GetXPixelSpacing(m_Image->GetMetaDataDictionary());
+    double y_spacing = lImageMetadata->GetYPixelSpacing(m_Image->GetMetaDataDictionary());
+    oss<< "x res: " <<  x_spacing << std::endl;
+    oss<< "y res: " <<  y_spacing << std::endl;
+  }
+  else 
+  {
+    oss << otbGetTextMacro("Resolution unknown") << std::endl;
+  }
+  
+  
+  
   return oss.str();
 }
 

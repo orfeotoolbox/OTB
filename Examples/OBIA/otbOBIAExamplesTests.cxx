@@ -14,7 +14,6 @@
     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 // this file defines the otbMultiScaleTest for the test driver
 // and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
