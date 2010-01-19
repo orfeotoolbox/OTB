@@ -10,7 +10,7 @@ TARGET_LINK_LIBRARIES(ShapeAttributeComputation OTBCommon OTBIO ${OTB_IO_UTILITI
 ADD_EXECUTABLE(KeepNObjects KeepNObjects.cxx )
 TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
-ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample otbRadiometricAttributesLabelMapFilterExample.cxx )
+ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample RadiometricAttributesLabelMapFilterExample.cxx )
 TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(LabelMapToVectorData LabelMapToVectorData.cxx )
