@@ -201,14 +201,6 @@ public:
   /** Get the last wavelength for the spectral band definition */
   virtual VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(LastWavelengths, VariableLengthVectorType);
-
-  /** Get the x resolution  */
-  double GetXPixelSpacing( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(XPixelSpacing, double);
-  
-  /** Get the y resolution  */
-  double GetYPixelSpacing( const MetaDataDictionaryType & dict ) const;
-  otbMetadataGetMacro(YPixelSpacing, double);
   
   virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
 
