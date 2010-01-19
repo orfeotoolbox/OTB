@@ -41,7 +41,7 @@ void RegisterTests()
 
 #undef main
 #define main RadiometricAttributesLabelMapFilterExample
-#include "otbRadiometricAttributesLabelMapFilterExample.cxx"
+#include "RadiometricAttributesLabelMapFilterExample.cxx"
 
 #undef main
 #define main LabelMapToVectorDataTest
