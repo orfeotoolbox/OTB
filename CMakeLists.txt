@@ -67,7 +67,7 @@ ADD_DEFINITIONS(
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "3")
-SET(OTB_VERSION_MINOR "0")
+SET(OTB_VERSION_MINOR "2")
 SET(OTB_VERSION_PATCH "0")
 
 
@@ -75,8 +75,6 @@ SET(OTB_VERSION_PATCH "0")
 # enough to distinguish available features of the toolkit.
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
-
-# => Comment for OTB 3.0.0
 OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
