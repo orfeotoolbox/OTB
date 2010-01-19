@@ -136,8 +136,6 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  //typedef otb::SiftFastImageFilter<ImageType,PointSetType>
-  //ImageToSIFTKeyPointSetFilterType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>
   ImageToSIFTKeyPointSetFilterType;
 
@@ -299,14 +297,12 @@ int main (int argc, char* argv[])
   for (LandmarkListType::Iterator it = landmarkList->Begin();
      it != landmarkList->End(); ++it)
   {       
-        //std::cout << "landmark1" << it.Get()->GetPoint1() << std::endl;   
-        //std::cout << "landmark2" << it.Get()->GetPoint2() << std::endl;        
         estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
   }
 
   // Trigger computation
   estimator->Compute();
-  // meanSquarestimator->SetInput(euclideanMatcher->GetOutput());
+ 
 // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
