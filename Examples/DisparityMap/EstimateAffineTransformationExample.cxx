@@ -26,6 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {QB_SuburbR10X13Y17.png}
 //    OUTPUTS: {AffineTransformationOutput.png}
+//    2 3 0 0 0.5 1 AffineTransformationTxtOutput.txt
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
