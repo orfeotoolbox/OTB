@@ -140,7 +140,7 @@ int main (int argc, char* argv[])
   ImageToSIFTKeyPointSetFilterType;
 
   // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Although many choices for evaluating the distances during the
   // matching procedure exist, we choose here to use a simple
@@ -245,8 +245,7 @@ int main (int argc, char* argv[])
 
   filter2->SetDoGThreshold(threshold);
   filter2->SetEdgeThreshold(ratio);
-// Software Guide : EndCodeSnippet
-
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -262,7 +261,7 @@ int main (int argc, char* argv[])
 
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
-  //std::cout << "Update euclidian distance" << std::endl;
+
   euclideanMatcher->Update();
 
   // Software Guide : EndCodeSnippet
@@ -279,7 +278,7 @@ int main (int argc, char* argv[])
 
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-  //std::cout << "Get landmarkList" << std::endl;
+
   // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
@@ -287,11 +286,12 @@ int main (int argc, char* argv[])
   // Apply Mean square algorithm
   //
   // Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
+  // Software Guide : BeginCodeSnippet
+  
   typedef itk::Point<double,2>                                 MyPointType;
   typedef otb::LeastSquareAffineTransformEstimator<MyPointType> EstimatorType;
   
-  // instantiation
+  // instantiation of the estimator of the affine transformation
   EstimatorType::Pointer estimator = EstimatorType::New();
   std::cout << "landmark list size " << landmarkList->Size() << std::endl;  
   for (LandmarkListType::Iterator it = landmarkList->Begin();
@@ -303,7 +303,7 @@ int main (int argc, char* argv[])
   // Trigger computation
   estimator->Compute();
  
-// Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
   //
@@ -316,10 +316,7 @@ int main (int argc, char* argv[])
   //  the resulting transform to map the moving image into the fixed
   //  image space.  This is easily done with the
   //  \doxygen{itk}{ResampleImageFilter}. First, a ResampleImageFilter
-  //  type is instantiated using the image types. It is convenient to
-  //  use the fixed image type as the output type since it is likely
-  //  that the transformed moving image will be compared with the
-  //  fixed image.
+  //  type is instantiated using the image types. 
   //
   //  Software Guide : EndLatex
 
@@ -340,20 +337,13 @@ int main (int argc, char* argv[])
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   resampler->SetInput( movingReader->GetOutput() );
 
-  //typedef itk::ImageRegistrationMethod<
-  //ImageType,
-  //ImageType >    RegistrationType;
-  
-  //RegistrationType::Pointer   registration  = RegistrationType::New();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  The Transform that is produced as output need to be inversed to 
-  //  We apply here the resampling algorithm to the "fixed" image 
-  // to produce the moving image. Or apply to the moving image
-  //
+  //  The Transform that is produced as output do not need to be inversed because 
+  //  we apply here the resampling algorithm to the "moving" image 
+  // to produce the fixed image.
   //
   //  Software Guide : EndLatex
 
@@ -364,7 +354,7 @@ int main (int argc, char* argv[])
   // Set floatfield to format properly
   ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
-
+  ofs<<"Transformation"<<std::endl;
   ofs<<"Estimated affine matrix: "<<std::endl;
   ofs<<estimator->GetMatrix()<<std::endl;
   ofs<<"Estimated affine offset: "<<std::endl;
@@ -373,18 +363,16 @@ int main (int argc, char* argv[])
   ofs<<estimator->GetRMSError()<<std::endl;
   ofs<<"Relative residual: "<<std::endl;
   ofs<<estimator->GetRelativeResidual()<<std::endl;
-  ofs.close();
-
-  // Software Guide : BeginCodeSnippet
-  // Get the output transform 
-  typedef EstimatorType::AffineTransformType AffineTransformType;
-  AffineTransformType::Pointer transform = AffineTransformType::New();
-  transform->GetInverse( estimator->GetAffineTransform() );
   
-  resampler->SetTransform( transform );
-  resampler->SetSize( fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize() );
-  resampler->SetOutputOrigin( fixedReader->GetOutput()->GetOrigin() );
-  resampler->SetOutputSpacing( fixedReader->GetOutput()->GetSpacing() );
+  ofs.close();
+  // Software Guide : BeginCodeSnippet
+  
+  ImageType::Pointer fixedImage = fixedReader->GetOutput(); 
+
+  resampler->SetTransform( estimator->GetAffineTransform() );
+  resampler->SetSize( fixedImage->GetLargestPossibleRegion().GetSize() );
+  resampler->SetOutputOrigin( fixedImage->GetOrigin() );
+  resampler->SetOutputSpacing( fixedImage->GetSpacing() );
   resampler->SetDefaultPixelValue( 100 );
 
   // Software Guide : EndCodeSnippet
@@ -414,7 +402,7 @@ int main (int argc, char* argv[])
   // \includegraphics[width=0.40\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.40\textwidth]{QB_SuburbR10X13Y17.eps}
   // \includegraphics[width=0.40\textwidth]{AffineTransformationOutput.eps}
-  // \itkcaption[Estimation of affine transformation from SIFT ]{From left
+  // \itkcaption[Estimation of affine transformation using least square optimisation from SIFT points]{From left
   // to right and top to bottom: fixed input image, moving image,
   // resampled moving image.}
   // \label{fig:SIFTDME}

@@ -17,9 +17,9 @@
 =========================================================================*/
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
+//    INPUTS: {qb_RoadExtract.tif}
 //    OUTPUTS: {OBIARadiometricAttribute1.tif}
-//    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
+//    STATS::Ndvi::Mean 0 -0.3 16 16 100 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -243,7 +243,7 @@ int main(int argc, char * argv[])
   // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
   // the object selection based on radiometric attributes. 
   // \begin{figure} \center
-  // \includegraphics[width=0.44\textwidth]{qb_RoadExtract2.eps}
+  // \includegraphics[width=0.44\textwidth]{qb_RoadExtract.eps}
   // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
   // \itkcaption[Object based extraction based on ]{From left to right : original image, vegetation mask resulting from processing.}
   // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
