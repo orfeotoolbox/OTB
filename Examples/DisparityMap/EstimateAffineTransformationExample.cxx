@@ -25,8 +25,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {QB_SuburbR10X13Y17.png}
-//    OUTPUTS: {AffineTransformationOutput.png}
-//    2 3 0 0 0.5 1 AffineTransformationTxtOutput.txt
+//    OUTPUTS: {AffineTransformationOutput.png}, {AffineTransformationTxtOutput.txt}
+//    2 3 0 0 0.3 1 
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -79,21 +79,22 @@ int main (int argc, char* argv[])
   if (argc!= 11)
   {
     std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName resamplingImageFileName octaves scales threshold ratio secondOrderThreshold useBackMatching transfofname" << std::endl;
+    std::cerr<<" fixedFileName movingFileName resamplingImageFileName  transfofname octaves scales threshold ratio secondOrderThreshold useBackMatching" << std::endl;
     return EXIT_FAILURE;
   }
 
   const char * fixedfname           = argv[1];
   const char * movingfname          = argv[2];
   const char * outputImageFilename  = argv[3];
+  const char * outputTransformationFilename  = argv[4];
   
-  const unsigned int octaves        = atoi(argv[4]);
-  const unsigned int scales         = atoi(argv[5]);
-  float threshold                   = atof(argv[6]);
-  float ratio                       = atof(argv[7]);
-  const double secondOrderThreshold = atof(argv[8]);
-  const bool useBackMatching        = atoi(argv[9]);
-  const char * outputTransformationFilename  = argv[10];
+  const unsigned int octaves        = atoi(argv[5]);
+  const unsigned int scales         = atoi(argv[6]);
+  float threshold                   = atof(argv[7]);
+  float ratio                       = atof(argv[8]);
+  const double secondOrderThreshold = atof(argv[9]);
+  const bool useBackMatching        = atoi(argv[10]);
+  
   
   const unsigned int Dimension      = 2;
 
