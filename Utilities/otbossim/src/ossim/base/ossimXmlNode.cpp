@@ -1083,80 +1083,51 @@ bool ossimXmlNode::readTextContent(std::istream& in)
 
    theText = "";
    theCDataFlag = false;
-   char c = in.peek();
 
-   do
+   char buf[9];
+   buf[8]='\0';
+
+   std::streampos initialPos = in.tellg();
+
+   in.read(buf,9);
+   ossimString ostrBuf(buf);
+
+   if(ostrBuf == "<![CDATA[")
    {
-      if(c == '<')
-      {
-         in.ignore();
-
-         // we will check for comments or CDATA
-         if(in.peek()=='!')
-         {
-            char buf1[4];
-            buf1[3] = '\0';
-            in.read(buf1, 3);
-            if(ossimString(buf1) == "!--")
-            {
-               // special text read
-               theText += buf1;
-               bool done = false;
-               do
-               {
-                  if(in.peek() != '-')
-                  {
-                     in.ignore();
-                  }
-                  else
-                  {
-                     in.ignore();
-                     if(in.peek() == '-')
-                     {
-                        in.ignore();
-                        if(in.peek() == '>')
-                        {
-                           in.ignore();
-                           done = true;
-                           c = in.peek();
-                        }
-                     }
-                  }
-               }while(!done&&!in.fail());
-            }
-            else
-            {
-               
-               char buf2[6];
-               buf2[5] = '\0';
-               in.read(buf2, 5);
-               if(in.fail())
-               {
-                  return false;
-               }
-               if(ossimString(buf1)+ossimString(buf2) == "![CDATA[")
-               {
-                  if(readCDataContent(in))
-                  {
-                     theCDataFlag = true;
-                     return true;
-                  }
-               }
-            }
-         }
-         else
-         {
-            in.putback(c);
-            return true;
-         }
-      }
-      else
-      {
-         theText += (char)in.get();
-         c = in.peek();
-      }
-   }while(!in.fail());
-
+	   if(readCDataContent(in))
+		 {
+           theCDataFlag = true;
+           return true;
+	     }
+	   else
+	   {
+		 return false;
+	   }
+   }
+   else if(ostrBuf.substr(0,4) == "<!--")
+   {
+	   in.seekg(initialPos);
+	   char c = in.get();
+	   // Strip comment
+	   while(!in.fail() && c!='>')
+	   {
+		c = in.get();
+	   }
+   }
+   else if(ostrBuf.substr(0,1) ==  "<")
+   {
+	   in.seekg(initialPos);
+   }
+   else
+   {
+       in.seekg(initialPos);
+	   char c = in.peek();
+	   while(!in.fail() && c != '<')
+	   {
+		theText += (char)in.get();
+	    c = in.peek();
+	   }
+   }
    return !in.fail();
 }
 
