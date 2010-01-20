@@ -18,7 +18,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {MSLabeledOutput.tif}
+//    INPUTS: {MSLabeledOutput16bits.tif}
 //    OUTPUTS: {OBIAI2L2IOutput.tif}, {OBIAI2L2IInputPretty.tif}, {OBIAI2L2IOutputPretty.tif}
 //    1 1108 0
 //  Software Guide : EndCommandLineArgs
@@ -165,7 +165,7 @@ int main(int argc, char * argv[])
   //
   // \begin{figure}
   // \center
-  // %\includegraphics[width=0.44\textwidth]{MSLabeledOutput.eps}
+  // \includegraphics[width=0.44\textwidth]{MSLabeledOutput16bits.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IInputPretty.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IOutputPretty.eps}
   // \itkcaption[Image to Label Object Map]{transforming an
