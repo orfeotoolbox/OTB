@@ -18,8 +18,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.tif}
-//    STATS::Ndvi::Mean 0 -0.3 16 16 100 1.0
+//    OUTPUTS: {OBIARadiometricAttribute1.png}, {qb_ExtractRoad_Radiometry_pretty.tif}
+//    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -65,22 +65,23 @@
 
 int main(int argc, char * argv[])
 {
-  if(argc != 10)
+  if(argc != 11)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" reffname outfname attribute_name lowerThan tresh spatialRadius rangeRadius minregionsize scale"<<std::endl;
+      std::cerr<<"Usage: "<<argv[0]<<" reffname outfname outprettyfname attribute_name lowerThan tresh spatialRadius rangeRadius minregionsize scale"<<std::endl;
       return EXIT_FAILURE;
     }
 
   const char * reffname = argv[1];
   const char * outfname = argv[2];
-  const char * attr     = argv[3];
-  bool  lowerThan       = atoi(argv[4]);
-  double thresh         = atof(argv[5]);
+  const char * outprettyfname = argv[3];
+  const char * attr     = argv[4];
+  bool  lowerThan       = atoi(argv[5]);
+  double thresh         = atof(argv[6]);
   
-  const unsigned int spatialRadius          = atoi(argv[6]);
-  const double       rangeRadius            = atof(argv[7]);
-  const unsigned int minRegionSize          = atoi(argv[8]);
-  const double       scale                  = atoi(argv[9]);
+  const unsigned int spatialRadius          = atoi(argv[7]);
+  const double       rangeRadius            = atof(argv[8]);
+  const unsigned int minRegionSize          = atoi(argv[9]);
+  const double       scale                  = atoi(argv[10]);
 
   const unsigned int Dimension = 2;
 
@@ -108,6 +109,9 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
 
+  LabeledReaderType::Pointer lreader = LabeledReaderType::New();
+  lreader->SetFileName(reffname);
+  
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
     //  Software Guide : BeginLatex
@@ -232,6 +236,11 @@ int main(int argc, char * argv[])
   writer->Update();
   // Software Guide : EndCodeSnippet
 
+  WriterType::Pointer lwriter = WriterType::New();
+  lwriter->SetFileName(outprettyfname);
+  lwriter->SetInput(lreader->GetOutput());
+  lwriter->Update();
+  
   return EXIT_SUCCESS;
 }
 
@@ -240,9 +249,9 @@ int main(int argc, char * argv[])
   // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
   // the object selection based on radiometric attributes. 
   // \begin{figure} \center
-  // \includegraphics[width=0.44\textwidth]{qb_RoadExtract.eps}
+  // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_Radiometry_pretty.eps}
   // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
-  // \itkcaption[Object based extraction based on ]{From left to right: original image, vegetation mask resulting from processing.}
+  // \itkcaption[Object based extraction based on ]{Vegetation mask resulting from processing.}
   // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
   // \end{figure}
   //
