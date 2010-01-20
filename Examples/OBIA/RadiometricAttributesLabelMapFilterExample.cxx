@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.png}, {qb_ExtractRoad_Radiometry_pretty.tif}
+//    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.png}
 //    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -62,6 +62,8 @@
 #include "otbRadiometricAttributesLabelMapFilter.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
+#include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
 
 int main(int argc, char * argv[])
 {
@@ -91,10 +93,15 @@ int main(int argc, char * argv[])
   typedef otb::Image<LabelType,Dimension>                                LabeledImageType;
   typedef otb::Image<PixelType,Dimension>                                ImageType;
   typedef otb::VectorImage<PixelType,Dimension>                          VectorImageType;
+  typedef otb::VectorImage<unsigned char,Dimension>                      OutputVectorImageType;
   typedef otb::ImageFileReader<LabeledImageType>                         LabeledReaderType;
   typedef otb::ImageFileReader<ImageType>                                ReaderType;
   typedef otb::ImageFileReader<VectorImageType>                          VectorReaderType;
   typedef otb::ImageFileWriter<LabeledImageType>                         WriterType;
+  typedef otb::ImageFileWriter<OutputVectorImageType>                    VectorWriterType;
+  typedef otb::VectorRescaleIntensityImageFilter
+                   <VectorImageType, OutputVectorImageType> VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char,unsigned char> ChannelExtractorType;
   // Label map typedef 
   typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
   typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
@@ -104,7 +111,7 @@ int main(int argc, char * argv[])
   typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>          OpeningLabelMapFilterType;
   typedef itk::LabelMapToLabelImageFilter<LabelMapType,LabeledImageType> LabelMapToLabeledImageFilterType;
-
+  
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
@@ -236,10 +243,29 @@ int main(int argc, char * argv[])
   writer->Update();
   // Software Guide : EndCodeSnippet
 
-  WriterType::Pointer lwriter = WriterType::New();
-  lwriter->SetFileName(outprettyfname);
-  lwriter->SetInput(lreader->GetOutput());
-  lwriter->Update();
+  OutputVectorImageType::PixelType minimum,maximum;
+  minimum.SetSize(vreader->GetOutput()->GetNumberOfComponentsPerPixel());
+  maximum.SetSize(vreader->GetOutput()->GetNumberOfComponentsPerPixel());
+  minimum.Fill(0);
+  maximum.Fill(255);
+
+  VectorRescalerType::Pointer vr = VectorRescalerType::New();
+  vr->SetInput(vreader->GetOutput());
+  vr->SetOutputMinimum(minimum);
+  vr->SetOutputMaximum(maximum);
+  vr->SetClampThreshold(0.01);
+
+  ChannelExtractorType::Pointer selecter = ChannelExtractorType::New();
+  selecter->SetInput(vr->GetOutput());
+  selecter->SetExtractionRegion(vreader->GetOutput()->GetLargestPossibleRegion());
+  selecter->SetChannel(1);
+  selecter->SetChannel(2);
+  selecter->SetChannel(3);
+
+  VectorWriterType::Pointer vectWriter = VectorWriterType::New();
+  vectWriter->SetFileName(outprettyfname);
+  vectWriter->SetInput(selecter->GetOutput());
+  vectWriter->Update();
   
   return EXIT_SUCCESS;
 }
