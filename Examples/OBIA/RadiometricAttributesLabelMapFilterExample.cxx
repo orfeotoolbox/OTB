@@ -27,14 +27,11 @@
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
-//  After the \doxygen{otb}{RadiometricAttributesLabelMapFilter}  computes 
+//  Afterwards the \doxygen{otb}{RadiometricAttributesLabelMapFilter} computes 
 //  radiometric attributes for each object.
-//  Images are supposed to be standard 4-bands image (B,G,R,NIR). The
-//  index of each channel can be set via the Set***ChannelIndex()
-//  accessors.
 //  
 //  This filter internally applies the
-//  StatisticsAttributesLabelMapFilter to the following features: 
+//  \doxygen{otb}{StatisticsAttributesLabelMapFilter} to the following features: 
   //  \begin{itemize}
   //  \item GEMI
   //  \item NDVI
@@ -45,7 +42,7 @@
   //  \item Intensity
   //  \item and original B, G, R and NIR channels
   //  \end{itemize}
-//  Here we use the  \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
+//  Here we use the \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
 //  Let's get to the source code explanation.  
 //
 //  Software Guide : EndLatex
@@ -131,7 +128,7 @@ int main(int argc, char * argv[])
   
   //  Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the images
+  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the image
   // types.
   //
   //  Software Guide : EndLatex
@@ -144,7 +141,7 @@ int main(int argc, char * argv[])
   //
   // The \doxygen{itk}{LabelImageToLabelMapFilter} type is instantiated using the output
   // of the \doxygen{otb}{MeanShiftImageFilter}. This filter produces a labeled image 
-  // where each segmented region have a unique label.
+  // where each segmented region has a unique label.
   //
   //  Software Guide : EndLatex
   
@@ -165,7 +162,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
-  // compute radiometric valuee on each label object.
+  // compute radiometric value on each label object.
   //
   //  Software Guide : EndLatex
   
@@ -178,9 +175,9 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   // 
   // Then, we specify the red and the near infrared channels 
-  // By default, images are supposed to be standard 4-bands 
-  // image (B,G,R,NIR). The index of each channel can 
-  // be set via the Set***ChannelIndex() accessors.
+  // By default, images are supposed to be standard 4-band
+  // images (B,G,R,NIR). The index of each channel can 
+  // be set via the \code{Set***ChannelIndex()} accessors.
   //
   //  Software Guide : EndLatex
 
@@ -192,7 +189,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // 
-  // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will proceed the selection. 
+  // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will perform the selection. 
   // There are three parameters. \code{AttributeName} specifies the radiometric attribute, \code{Lambda} 
   // controls the thresholding of the input and \code{ReverseOrdering} make this filter to remove the 
   // object with an attribute value greater than \code{Lambda} instead.   
@@ -245,7 +242,7 @@ int main(int argc, char * argv[])
   // \begin{figure} \center
   // \includegraphics[width=0.44\textwidth]{qb_RoadExtract.eps}
   // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
-  // \itkcaption[Object based extraction based on ]{From left to right : original image, vegetation mask resulting from processing.}
+  // \itkcaption[Object based extraction based on ]{From left to right: original image, vegetation mask resulting from processing.}
   // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
   // \end{figure}
   //
