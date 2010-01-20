@@ -106,6 +106,9 @@ int main( int argc, char * argv[] )
   OutputVectorImageType> VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,unsigned char> ChannelExtractorType;
 
+  // The GenerateOutputInformation() information is required here so
+  // that the number of component per pixel is update and known to set
+  // up the maximum and minimum values for the rescaling filter
   multispectralReader->GenerateOutputInformation();
 
   OutputVectorImageType::PixelType minimum,maximum;
