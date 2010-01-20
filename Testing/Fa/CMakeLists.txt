@@ -214,6 +214,12 @@ ADD_TEST(FA-0000041-mean_shift2 ${CXX_TEST_PATH}/0000041-mean_shift
         ${TEMP}/labelled_image2.tif
         ${TEMP}/boundary_of_labelled_image2.tif
 	)
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(FA-00134-feature_extraction ${CXX_TEST_PATH}/00134-feature_extraction
+	${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/extracted_filter_134.tif
+	)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_USE_VISU_GUI)
 ADD_TEST(FA-0000132-jpg ${CXX_TEST_PATH}/0000132-jpg 
@@ -241,6 +247,9 @@ TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon)
 
 ADD_EXECUTABLE(0000041-mean_shift  0000041-mean_shift.cxx)
 TARGET_LINK_LIBRARIES(0000041-mean_shift OTBIO OTBCommon OTBBasicFilters)
+
+ADD_EXECUTABLE(00134-feature_extraction  00134-feature_extraction.cxx)
+TARGET_LINK_LIBRARIES(00134-feature_extraction OTBIO OTBCommon OTBBasicFilters OTBFeatureExtraction)
 
 IF(OTB_USE_VISU_GUI)
 ADD_EXECUTABLE(0000132-jpg 0000132-jpg.cxx )
