@@ -84,13 +84,13 @@ int main( int argc, char * argv[] )
 {
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef unsigned char OutputPixelType;
+  typedef double                                    PixelType;
+  typedef unsigned char                             OutputPixelType;
   typedef itk::CovariantVector<PixelType,Dimension> VectorPixelType;
-  typedef otb::Image<PixelType, Dimension> InternalImageType;
-  typedef otb::VectorImage<PixelType, Dimension> MultiSpectralImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::Image<VectorPixelType, Dimension > VectorImageType;
+  typedef otb::Image<PixelType, Dimension>          InternalImageType;
+  typedef otb::VectorImage<PixelType, Dimension>    MultiSpectralImageType;
+  typedef otb::Image<OutputPixelType, Dimension>    OutputImageType;
+  typedef otb::Image<VectorPixelType, Dimension >   VectorImageType;
 
   typedef otb::PolyLineParametricPathWithValue< double, Dimension >       PathType;
 
@@ -100,12 +100,15 @@ int main( int argc, char * argv[] )
   multispectralReader->SetFileName(argv[1]);
 
   // Create an 3 band image for the software guide
-  typedef otb::VectorImage<OutputPixelType, Dimension> OutputVectorImageType;
-  typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter<MultiSpectralImageType,
-  OutputVectorImageType> VectorRescalerType;
+  typedef otb::VectorImage<OutputPixelType, Dimension>             OutputVectorImageType;
+  typedef otb::ImageFileWriter<OutputVectorImageType>              VectorWriterType;
+  typedef otb::VectorRescaleIntensityImageFilter
+                   <MultiSpectralImageType, OutputVectorImageType> VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,unsigned char> ChannelExtractorType;
 
+  // The GenerateOutputInformation() information is required here so
+  // that the number of component per pixel is update and known to set
+  // up the maximum and minimum values for the rescaling filter
   multispectralReader->GenerateOutputInformation();
 
   OutputVectorImageType::PixelType minimum,maximum;
@@ -145,14 +148,18 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  The spectral angle is used to compute a grayscale image from the
-  //  multispectral original image using \doxygen{otb}{SpectralAngleDistanceImageFilter}. The spectral angle is illustrated on
-  // Figure~\ref{fig:RoadExtractionSpectralAngleDiagram}. Pixels corresponding to roads are in
-  //  darker color.
+  //  multispectral original image using
+  //  \doxygen{otb}{SpectralAngleDistanceImageFilter}. The spectral
+  //  angle is illustrated on
+  // Figure~\ref{fig:RoadExtractionSpectralAngleDiagram}. Pixels 
+  // corresponding to roads are in darker color.
   //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
-  // \itkcaption[Spectral Angle]{Illustration of the spectral angle for one pixel of a three-band image. One of the vector is the reference pixel and the other is the current pixel.}
+  // \itkcaption[Spectral Angle]{Illustration of the spectral angle
+  // for one pixel of a three-band image. One of the vector is the
+  // reference pixel and the other is the current pixel.}
   // \label{fig:RoadExtractionSpectralAngleDiagram}
   // \end{figure}
   //
@@ -427,16 +434,17 @@ int main( int argc, char * argv[] )
 
 
   // this small piece of code aims at producing a pretty RGB png result image.
-  typedef otb::MultiToMonoChannelExtractROI<OutputPixelType,PixelType> ChannelExtractionFilterType;
-  typedef itk::AddImageFilter<InternalImageType,InternalImageType,InternalImageType> AddFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<OutputPixelType,PixelType>                    ChannelExtractionFilterType;
+  typedef itk::AddImageFilter<InternalImageType,InternalImageType,InternalImageType>      AddFilterType;
   typedef itk::SubtractImageFilter<InternalImageType,InternalImageType,InternalImageType> SubtractFilterType;
-  typedef itk::ThresholdImageFilter<InternalImageType> ThresholdFilterType;
-  typedef itk::RGBPixel<OutputPixelType> RGBPixelType;
-  typedef otb::Image<RGBPixelType,Dimension> RGBImageType;
-  typedef itk::ComposeRGBImageFilter<InternalImageType,RGBImageType> ComposeRGBFilterType;
-  typedef otb::ImageFileWriter<RGBImageType> RGBWriterType;
-  typedef itk::BinaryBallStructuringElement<PixelType,Dimension> StructuringElementType;
-  typedef itk::GrayscaleDilateImageFilter<InternalImageType,InternalImageType,StructuringElementType> DilateFilterType;
+  typedef itk::ThresholdImageFilter<InternalImageType>                                    ThresholdFilterType;
+  typedef itk::RGBPixel<OutputPixelType>                                                  RGBPixelType;
+  typedef otb::Image<RGBPixelType,Dimension>                                              RGBImageType;
+  typedef itk::ComposeRGBImageFilter<InternalImageType,RGBImageType>                      ComposeRGBFilterType;
+  typedef otb::ImageFileWriter<RGBImageType>                                              RGBWriterType;
+  typedef itk::BinaryBallStructuringElement<PixelType,Dimension>                          StructuringElementType;
+  typedef itk::GrayscaleDilateImageFilter
+                             <InternalImageType,InternalImageType,StructuringElementType> DilateFilterType;
 
   StructuringElementType se;
   se.SetRadius(1);

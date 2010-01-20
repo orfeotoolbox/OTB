@@ -26,12 +26,12 @@ namespace otb
 {
 
 /** \class ImageFileWriter
- * \brief Ressource en ecriture pour ecrire une image depuis un fichier.
+ * \brief This class writes image file format (a variety of formats are supported)
  *
  * \sa ImageSeriesWriter
  * \sa ImageIOBase
  *
- * \ingroup IOFilters
+ * \ingroup IO
  *
  */
 

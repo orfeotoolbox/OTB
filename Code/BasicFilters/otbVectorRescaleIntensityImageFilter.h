@@ -86,9 +86,19 @@ public:
 
   bool operator!=( const VectorAffineTransform & other ) const
   {
-    if (m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
+    if (m_OutputMaximum.Size() == other.GetOutputMinimum().Size())
     {
-      for (unsigned int i = 0;i<m_OutputMaximum.Size();++i)
+      for (unsigned int i = 0; i < m_OutputMinimum.Size(); ++i)
+      {
+        if ( m_OutputMinimum[i] != other.GetOutputMinimum()[i] )
+        {
+          return true;
+        }
+      }
+    }
+    if (m_OutputMaximum.Size() == other.GetOutputMaximum().Size())
+    {
+      for (unsigned int i = 0; i < m_OutputMaximum.Size(); ++i)
       {
         if ( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
         {
@@ -96,19 +106,9 @@ public:
         }
       }
     }
-    if (m_OutputMaximum.Size()==other.GetOutputMaximum().Size())
+    if (m_InputMinimum.Size() == other.GetInputMinimum().Size())
     {
-      for (unsigned int i = 0;i<m_OutputMaximum.Size();++i)
-      {
-        if ( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
-        {
-          return true;
-        }
-      }
-    }
-    if (m_InputMinimum.Size()==other.GetInputMinimum().Size())
-    {
-      for (unsigned int i = 0;i<m_InputMinimum.Size();++i)
+      for (unsigned int i = 0; i < m_InputMinimum.Size(); ++i)
       {
         if ( m_InputMinimum[i] != other.GetInputMinimum()[i] )
         {
@@ -116,9 +116,9 @@ public:
         }
       }
     }
-    if (m_InputMaximum.Size()==other.GetInputMaximum().Size())
+    if (m_InputMaximum.Size() == other.GetInputMaximum().Size())
     {
-      for (unsigned int i = 0;i<m_InputMaximum.Size();++i)
+      for (unsigned int i = 0; i < m_InputMaximum.Size(); ++i)
       {
         if ( m_InputMaximum[i] != other.GetInputMaximum()[i] )
         {
@@ -141,7 +141,7 @@ public:
     result.SetSize(x.GetSize());
 
     // consistency checking
-    if (   result.GetSize()!=m_OutputMaximum.GetSize()
+    if (   result.GetSize() != m_OutputMinimum.GetSize()
            || result.GetSize() != m_OutputMaximum.GetSize()
            || result.GetSize() != m_InputMinimum.GetSize()
            || result.GetSize() != m_InputMaximum.GetSize())
@@ -177,8 +177,8 @@ public:
 private:
   TOutput m_OutputMaximum;
   TOutput m_OutputMinimum;
-  TInput m_InputMinimum;
-  TInput m_InputMaximum;
+  TInput  m_InputMinimum;
+  TInput  m_InputMaximum;
 };
 }  // end namespace functor
 
@@ -204,19 +204,18 @@ class ITK_EXPORT VectorRescaleIntensityImageFilter
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorRescaleIntensityImageFilter  Self;
+  typedef VectorRescaleIntensityImageFilter                                   Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
-  Functor::VectorAffineTransform<
-  typename TInputImage::PixelType,
-  typename TOutputImage::PixelType> >  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+         Functor::VectorAffineTransform< typename TInputImage::PixelType, 
+                                         typename TOutputImage::PixelType> >  Superclass;
+  typedef itk::SmartPointer<Self>                                             Pointer;
+  typedef itk::SmartPointer<const Self>                                       ConstPointer;
 
-  typedef typename TOutputImage::PixelType OutputPixelType;
-  typedef typename TInputImage::PixelType  InputPixelType;
-  typedef typename InputPixelType::ValueType      InputValueType;
-  typedef typename OutputPixelType::ValueType     OutputValueType;
-  typedef typename itk::NumericTraits<InputValueType>::RealType InputRealType;
+  typedef typename TOutputImage::PixelType                       OutputPixelType;
+  typedef typename TInputImage::PixelType                        InputPixelType;
+  typedef typename InputPixelType::ValueType                     InputValueType;
+  typedef typename OutputPixelType::ValueType                    OutputValueType;
+  typedef typename itk::NumericTraits<InputValueType>::RealType  InputRealType;
   typedef typename itk::NumericTraits<OutputValueType>::RealType OutputRealType;
 
   /** Method for creation through the object factory. */

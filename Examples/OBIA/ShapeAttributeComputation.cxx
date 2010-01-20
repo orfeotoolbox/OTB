@@ -24,8 +24,9 @@
 //  Software Guide : BeginLatex
 //
 //  This basic example shows how compute shape attributes at the object level.
-//  The input image is firstly translate in a set of regions (of \doxygen{itk}{ShapeLabelObject})
-//  and some attributes values of each object are then save to an ASCII file. 
+//  The input image is firstly converted into a set of regions (
+// \doxygen{itk}{ShapeLabelObject}), some attribute values of each
+//  object are computed and then saved to an ASCII file. 
 //
 //  Software Guide : EndLatex
 
@@ -52,18 +53,19 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // The image types are defined using pixel types and
-  // dimension. The input image is defined as an \doxygen{otb}{Image}.
+  // dimensions. The input image is defined as an \doxygen{otb}{Image}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const int dim                           = 2;
-  typedef unsigned long                   PixelType;
-  typedef itk::Image< PixelType, dim >    ImageType;
+  const int dim = 2;
+  typedef unsigned long                           PixelType;
+  typedef itk::Image< PixelType, dim >            ImageType;
   typedef unsigned long                           LabelType;
   typedef itk::ShapeLabelObject< LabelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType >        LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter< ImageType, LabelMapType > ConverterType;
+  typedef itk::LabelImageToLabelMapFilter
+                      < ImageType, LabelMapType > ConverterType;
   
   // Software Guide : EndCodeSnippet
   
@@ -83,8 +85,8 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Here the \doxygen{itk}{ShapeLabelObject} type
-  // is chosen in order to read some attribute related to the shape
-  // of the objects (by opposition to the content of the object, with
+  // is chosen in order to read some attributes related to the shape
+  // of the objects, by opposition to the content of the object, with
   // the \doxygen{itk}{StatisticsLabelObject}.
   //
   // Software Guide : EndLatex
@@ -128,11 +130,11 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Then, we can read the attribute values we're interested in. The \doxygen{itk}{BinaryImageToShapeLabelMapFilter}
-  // produce consecutive labels, so we can use a for loop and GetLabelObject() method to retrieve
-  // the label objects. If the labels are not consecutive, the GetNthLabelObject() method must be
-  // use instead of GetLabelObject(), or an iterator on the label
+  // produces consecutive labels, so we can use a for loop and \code{GetLabelObject()} method to retrieve
+  // the label objects. If the labels are not consecutive, the \code{GetNthLabelObject()} method must be
+  // use instead of \code{GetLabelObject()}, or an iterator on the label
   // object container of the label map.
-  // In this example, we print 2 shape attributes of each object to a text file (the size and the centroid coordinates).
+  // In this example, we write 2 shape attributes of each object to a text file (the size and the centroid coordinates).
   //
   // Software Guide : EndLatex
   
@@ -152,5 +154,4 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
-}       
-
+}

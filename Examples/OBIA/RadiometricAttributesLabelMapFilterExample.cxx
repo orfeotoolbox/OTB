@@ -17,8 +17,8 @@
 =========================================================================*/
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.tif}
+//    INPUTS: {qb_RoadExtract.tif}
+//    OUTPUTS: {OBIARadiometricAttribute1.png}, {qb_ExtractRoad_Radiometry_pretty.tif}
 //    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -27,14 +27,11 @@
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftImageFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
-//  After the \doxygen{otb}{RadiometricAttributesLabelMapFilter}  computes 
+//  Afterwards the \doxygen{otb}{RadiometricAttributesLabelMapFilter} computes 
 //  radiometric attributes for each object.
-//  Images are supposed to be standard 4-bands image (B,G,R,NIR). The
-//  index of each channel can be set via the Set***ChannelIndex()
-//  accessors.
 //  
 //  This filter internally applies the
-//  StatisticsAttributesLabelMapFilter to the following features: 
+//  \doxygen{otb}{StatisticsAttributesLabelMapFilter} to the following features: 
   //  \begin{itemize}
   //  \item GEMI
   //  \item NDVI
@@ -45,7 +42,7 @@
   //  \item Intensity
   //  \item and original B, G, R and NIR channels
   //  \end{itemize}
-//  Here we use the  \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
+//  Here we use the \doxygen{otb}{AttributesMapOpeningLabelMapFilter} to extract vegetated areas.
 //  Let's get to the source code explanation.  
 //
 //  Software Guide : EndLatex
@@ -68,22 +65,23 @@
 
 int main(int argc, char * argv[])
 {
-  if(argc != 10)
+  if(argc != 11)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" reffname outfname attribute_name lowerThan tresh spatialRadius rangeRadius minregionsize scale"<<std::endl;
+      std::cerr<<"Usage: "<<argv[0]<<" reffname outfname outprettyfname attribute_name lowerThan tresh spatialRadius rangeRadius minregionsize scale"<<std::endl;
       return EXIT_FAILURE;
     }
 
   const char * reffname = argv[1];
   const char * outfname = argv[2];
-  const char * attr     = argv[3];
-  bool  lowerThan       = atoi(argv[4]);
-  double thresh         = atof(argv[5]);
+  const char * outprettyfname = argv[3];
+  const char * attr     = argv[4];
+  bool  lowerThan       = atoi(argv[5]);
+  double thresh         = atof(argv[6]);
   
-  const unsigned int spatialRadius          = atoi(argv[6]);
-  const double       rangeRadius            = atof(argv[7]);
-  const unsigned int minRegionSize          = atoi(argv[8]);
-  const double       scale                  = atoi(argv[9]);
+  const unsigned int spatialRadius          = atoi(argv[7]);
+  const double       rangeRadius            = atof(argv[8]);
+  const unsigned int minRegionSize          = atoi(argv[9]);
+  const double       scale                  = atoi(argv[10]);
 
   const unsigned int Dimension = 2;
 
@@ -111,6 +109,9 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
 
+  LabeledReaderType::Pointer lreader = LabeledReaderType::New();
+  lreader->SetFileName(reffname);
+  
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
     //  Software Guide : BeginLatex
@@ -131,7 +132,7 @@ int main(int argc, char * argv[])
   
   //  Software Guide : BeginLatex
   //
-  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the images
+  // The \doxygen{otb}{MeanShiftImageFilter} type is instantiated using the image
   // types.
   //
   //  Software Guide : EndLatex
@@ -144,7 +145,7 @@ int main(int argc, char * argv[])
   //
   // The \doxygen{itk}{LabelImageToLabelMapFilter} type is instantiated using the output
   // of the \doxygen{otb}{MeanShiftImageFilter}. This filter produces a labeled image 
-  // where each segmented region have a unique label.
+  // where each segmented region has a unique label.
   //
   //  Software Guide : EndLatex
   
@@ -165,7 +166,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
-  // compute radiometric valuee on each label object.
+  // compute radiometric value on each label object.
   //
   //  Software Guide : EndLatex
   
@@ -178,9 +179,9 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   // 
   // Then, we specify the red and the near infrared channels 
-  // By default, images are supposed to be standard 4-bands 
-  // image (B,G,R,NIR). The index of each channel can 
-  // be set via the Set***ChannelIndex() accessors.
+  // By default, images are supposed to be standard 4-band
+  // images (B,G,R,NIR). The index of each channel can 
+  // be set via the \code{Set***ChannelIndex()} accessors.
   //
   //  Software Guide : EndLatex
 
@@ -192,7 +193,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   // 
-  // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will proceed the selection. 
+  // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will perform the selection. 
   // There are three parameters. \code{AttributeName} specifies the radiometric attribute, \code{Lambda} 
   // controls the thresholding of the input and \code{ReverseOrdering} make this filter to remove the 
   // object with an attribute value greater than \code{Lambda} instead.   
@@ -235,6 +236,11 @@ int main(int argc, char * argv[])
   writer->Update();
   // Software Guide : EndCodeSnippet
 
+  WriterType::Pointer lwriter = WriterType::New();
+  lwriter->SetFileName(outprettyfname);
+  lwriter->SetInput(lreader->GetOutput());
+  lwriter->Update();
+  
   return EXIT_SUCCESS;
 }
 
@@ -243,9 +249,9 @@ int main(int argc, char * argv[])
   // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
   // the object selection based on radiometric attributes. 
   // \begin{figure} \center
-  // \includegraphics[width=0.44\textwidth]{qb_RoadExtract2.eps}
+  // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_Radiometry_pretty.eps}
   // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
-  // \itkcaption[Object based extraction based on ]{From left to right : original image, vegetation mask resulting from processing.}
+  // \itkcaption[Object based extraction based on ]{Vegetation mask resulting from processing.}
   // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
   // \end{figure}
   //

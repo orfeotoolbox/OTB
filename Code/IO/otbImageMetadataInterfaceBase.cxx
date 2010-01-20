@@ -420,7 +420,6 @@ ImageMetadataInterfaceBase::GetBandName( const MetaDataDictionaryType & dict ) c
   return outputValues;
 }
 
-
 void
 ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 {

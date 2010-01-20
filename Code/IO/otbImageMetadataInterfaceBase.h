@@ -201,7 +201,7 @@ public:
   /** Get the last wavelength for the spectral band definition */
   virtual VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(LastWavelengths, VariableLengthVectorType);
-
+  
   virtual bool CanRead( const MetaDataDictionaryType & dict ) const =0;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;

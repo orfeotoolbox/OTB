@@ -26,6 +26,7 @@
 
 #include "otbImageKeywordlist.h"
 // #include "otbCoordinateToName.h"
+#include "otbImageMetadataInterfaceBase.h"
 
 namespace otb
 {

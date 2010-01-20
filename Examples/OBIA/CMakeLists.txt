@@ -10,7 +10,7 @@ TARGET_LINK_LIBRARIES(ShapeAttributeComputation OTBCommon OTBIO ${OTB_IO_UTILITI
 ADD_EXECUTABLE(KeepNObjects KeepNObjects.cxx )
 TARGET_LINK_LIBRARIES(KeepNObjects OTBCommon OTBIO ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
-ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample otbRadiometricAttributesLabelMapFilterExample.cxx )
+ADD_EXECUTABLE(RadiometricAttributesLabelMapFilterExample RadiometricAttributesLabelMapFilterExample.cxx )
 TARGET_LINK_LIBRARIES(RadiometricAttributesLabelMapFilterExample OTBCommon OTBIO OTBBasicFilters OTBSpatialReasoning  OTBFeatureExtraction OTBLearning ${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES})
 
 ADD_EXECUTABLE(LabelMapToVectorData LabelMapToVectorData.cxx )
@@ -39,8 +39,8 @@ ADD_TEST( trTeOBIAImageToLabelToImageTest ${EXE_TESTS}
         OBIAImageToLabelToImageTest
         ${INPUTDATA}/MSLabeledOutput.tif
         ${TEMP}/OBIAI2L2IOutput.tif
-	${TEMP}/OBIAI2L2IInPretty.tif
-	${TEMP}/OBIAI2L2IOutPretty.tif
+	${TEMP}/OBIAI2L2IInPretty.png
+	${TEMP}/OBIAI2L2IOutPretty.png
 	1 1108 0
         )
 
@@ -56,8 +56,9 @@ ADD_TEST(trTeOBIARadiometricAttributesLabelMapFilterTest ${EXE_TESTS}
 	--compare-image ${TOL}	${BASELINE}/OBIARadiometricAttributes.tif
 	                        ${TEMP}/OBIARadiometricAttributes.tif
 	RadiometricAttributesLabelMapFilterExample
-	${INPUTDATA}/qb_RoadExtract2.tif  
+	${INPUTDATA}/qb_RoadExtract.tif 
 	${TEMP}/OBIARadiometricAttributes.tif
+	${TEMP}/qb_RoadExtract_Radiometry_pretty.png
 	STATS::Ndvi::Mean
 	1
 	-0.3
