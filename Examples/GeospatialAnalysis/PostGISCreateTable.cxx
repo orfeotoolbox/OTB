@@ -18,7 +18,7 @@
 
 // Software Guide : BeginLatex
 //
-// This test uses a transactor to create a table. The transactor
+// This example uses a transactor to create a table. The transactor
 // needs to have a copy constructor, so the initialization is done
 // correctly for the class variables which are set before the transaction.
 // Let's look at the minimal code required to use this algorithm. First, the
@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
   
   // Software Guide : BeginLatex
   //
-  // Instanciation of the PQXX-based transactor 
+  // We use a PostGIS (PQXX-based) transactor 
   // for creating PostGIS tables.
   // Software Guide : EndLatex
 
@@ -51,7 +51,8 @@ int main(int argc, char * argv[])
   
   // Software Guide : BeginLatex
   //
-  // Set arguments of the transactor
+  // We set arguments of the transactor.
+  
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
