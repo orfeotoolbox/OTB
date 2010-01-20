@@ -86,15 +86,14 @@ int main(int argc, char * argv[])
   
   //  Software Guide : BeginLatex
   //
-  // Then the binary image is transform to a collection 
+  // Then the binary image is transformed to a collection 
   // of label objects. Arguments are:
   // \begin{itemize}
   // \item \code{FullyConnected}: Set whether the connected 
   // components are defined strictly by face connectivity or by 
   // face+edge+vertex connectivity. Default is FullyConnectedOff.  
-  // \item \code{InputForegroundValue/OutputBackgroundValue}: specify the
+  // \item \code{InputForegroundValue/OutputBackgroundValue}: Specify the
   // pixel value of input/output of the foreground/background.   
-  // the input image is set.
   // \end{itemize} 
   //
   // Software Guide : EndLatex
@@ -110,7 +109,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  // Then the inverse process is uses to recreate a image of labels.
+  // Then the inverse process is used to recreate a image of labels.
   // The \doxygen{itk}{LabelMapToLabelImageFilter} converts a 
   // LabelMap to a labeled image. 
   //
@@ -160,7 +159,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:ImageToLabel} shows effect of transforming an
+  // Figure~\ref{fig:ImageToLabel} shows the effect of transforming an
   // image into a label object map and back to an image
   //
   // \begin{figure}
@@ -168,7 +167,7 @@ int main(int argc, char * argv[])
   // %\includegraphics[width=0.44\textwidth]{MSLabeledOutput.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IInputPretty.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IOutputPretty.eps}
-  // \itkcaption[Image to Label Object Map]{transforming an
+  // \itkcaption[Image to Label Object Map]{Transforming an
   // image (left) into a label object map and back to an image (right).}
   // \label{fig:ImageToLabel}
   // \end{figure}
