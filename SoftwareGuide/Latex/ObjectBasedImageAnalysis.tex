@@ -1,9 +1,9 @@
 
 \chapter{Object-based Image Analysis }\label{sec:OBIA}
 
-Object-Based Image Analysis (OBIA) consists in analysing images at
+Object-Based Image Analysis (OBIA) focusses on analyzing images at
 the object level instead of working at the pixel level. This approach
-is particularly well adapted for high resolution images and allows
+is particularly well adapted for high resolution images and leads to
 more robust and less noisy results.
 
 OTB allows to implement OBIA by using ITK's Label Object framework
@@ -16,14 +16,14 @@ possibility to operate at the segment (or object level).
 A classical OBIA pipeline will use the following steps:
 
 \begin{enumerate}
-\item Image segmentation (the whole or only parts of it).
-\item Image to LabelObjectMap (a kind of \code{std::map<LabelObject>}) transformation.
-\item Eventual relabeling.
+\item Image segmentation (the whole or only parts of it);
+\item Image to LabelObjectMap (a kind of \code{std::map<LabelObject>}) transformation;
+\item Eventual relabeling;
 \item Attribute computation for the regions using the image before
   segmentation:
   \begin{enumerate}
-         \item Shape attributes.
-         \item Statistics attributes.
+         \item Shape attributes;
+         \item Statistics attributes;
          \item Attributes for radiometry, textures, etc.
   \end{enumerate}
 
@@ -31,7 +31,7 @@ A classical OBIA pipeline will use the following steps:
   \begin{enumerate}
          \item Remove/select objects under a condition (area less than
          X, NDVI higher than X, etc.)
-	 \item Keep N objects.
+	 \item Keep N objects;
 	 \item etc.
   \end{enumerate}
 \item LabelObjectMap to image transformation.
