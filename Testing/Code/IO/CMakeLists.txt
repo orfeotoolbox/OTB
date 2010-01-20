@@ -1759,35 +1759,35 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
 	)
 
 # CanRead OGR GML()
-ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         ${INPUTDATA}/adressPoint.gml)
 
 # CanRead OGR MapInfo()
-ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
 # CanRead OGR PostGIS()
 IF(OTB_USE_PQXX)
-ADD_TEST(otbOGRVectorDataIOTestCanRead ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
 ENDIF(OTB_USE_PQXX)
 
 # CanWrite OGR GML()
-ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOCanWrite ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         ${INPUTDATA}/adressPoint.gml)
 
 # CanWrite OGR MapInfo()
-ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOCanWrite ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         ${INPUTDATA}/LOCALITY_POLYGON.tab)
 
 # Canwrite OGR PostGIS()
 IF(OTB_USE_PQXX)
-ADD_TEST(otbOGRVectorDataIOCanWrite ${IO_TESTS15}
+ADD_TEST(ioTuOGRVectorDataIOCanWrite ${IO_TESTS15}
         otbOGRVectorDataIOCanWrite
         PG:"dbname='orfeotoolbox_test' host='localhost' port='5432' user='orfeotoolbox_test_user' password='Bidfeud0'")
 ENDIF(OTB_USE_PQXX)

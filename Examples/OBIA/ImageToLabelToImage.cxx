@@ -165,6 +165,7 @@ int main(int argc, char * argv[])
   //
   // \begin{figure}
   // \center
+  // %\includegraphics[width=0.44\textwidth]{MSLabeledOutput.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IInputPretty.eps}
   // \includegraphics[width=0.44\textwidth]{OBIAI2L2IOutputPretty.eps}
   // \itkcaption[Image to Label Object Map]{transforming an
