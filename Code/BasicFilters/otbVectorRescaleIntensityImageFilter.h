@@ -141,7 +141,7 @@ public:
     result.SetSize(x.GetSize());
 
     // consistency checking
-    if (   result.GetSize()!=m_OutputMaximum.GetSize()
+    if (   result.GetSize() != m_OutputMinimum.GetSize()
            || result.GetSize() != m_OutputMaximum.GetSize()
            || result.GetSize() != m_InputMinimum.GetSize()
            || result.GetSize() != m_InputMaximum.GetSize())
