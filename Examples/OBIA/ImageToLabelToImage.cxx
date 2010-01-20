@@ -124,7 +124,7 @@ int main(int argc, char * argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  The output can be passed to a writer.The invocation 
+  //  The output can be passed to a writer. The invocation 
   //  of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.
   //
@@ -158,6 +158,20 @@ int main(int argc, char * argv[])
   prettyWriter->SetInput( rescaler->GetOutput() );
   prettyWriter->Update();
 
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:ImageToLabel} shows effect of transforming an
+  // image into a label object map and back to an image
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{OBIAI2L2IInputPretty.eps}
+  // \includegraphics[width=0.44\textwidth]{OBIAI2L2IOutputPretty.eps}
+  // \itkcaption[Image to Label Object Map]{transforming an
+  // image (left) into a label object map and back to an image (right).}
+  // \label{fig:ImageToLabel}
+  // \end{figure}
+  //  Software Guide : EndLatex
+
   return 0;
 }
-

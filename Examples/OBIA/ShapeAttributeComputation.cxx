@@ -24,8 +24,9 @@
 //  Software Guide : BeginLatex
 //
 //  This basic example shows how compute shape attributes at the object level.
-//  The input image is firstly translate in a set of regions (of \doxygen{itk}{ShapeLabelObject})
-//  and some attributes values of each object are then save to an ASCII file. 
+//  The input image is firstly translated in a set of regions (of 
+// \doxygen{itk}{ShapeLabelObject}), some attributes values of each
+//  object are computed and then save to an ASCII file. 
 //
 //  Software Guide : EndLatex
 
@@ -57,13 +58,14 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const int dim                           = 2;
-  typedef unsigned long                   PixelType;
-  typedef itk::Image< PixelType, dim >    ImageType;
+  const int dim = 2;
+  typedef unsigned long                           PixelType;
+  typedef itk::Image< PixelType, dim >            ImageType;
   typedef unsigned long                           LabelType;
   typedef itk::ShapeLabelObject< LabelType, dim > LabelObjectType;
   typedef itk::LabelMap< LabelObjectType >        LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter< ImageType, LabelMapType > ConverterType;
+  typedef itk::LabelImageToLabelMapFilter
+                      < ImageType, LabelMapType > ConverterType;
   
   // Software Guide : EndCodeSnippet
   
@@ -152,5 +154,4 @@ int main(int argc, char * argv[])
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
-}       
-
+}
