@@ -59,6 +59,7 @@ public:
    * Update images in the list.
    */
   virtual void UpdateOutputInformation(void);
+  virtual void PropagateRequestedRegion(void) throw (itk::InvalidRequestedRegionError);
   virtual void UpdateOutputData(void);
 
 
