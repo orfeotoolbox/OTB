@@ -52,6 +52,13 @@ ADD_TEST(utTuOssimElevManagerTest ${UTILITIES_TESTS}
         ossimElevManagerTest
         )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(utTvOssimXmlDocumentTest ${UTILITIES_TESTS}
+        ossimXmlDocumentTest
+	${IMAGEDATA}/TERRASARX/TORONTO/TSX1_SAR__SSC/TSX1_SAR__SSC.xml
+        )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # -------            lib otbsvm   ------------------------------
 
 ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
@@ -433,6 +440,7 @@ SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
 ossimKeywordlistTest.cxx
 ossimElevManagerTest.cxx
+ossimXmlDocumentTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx

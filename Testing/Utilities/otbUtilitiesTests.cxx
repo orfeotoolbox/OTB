@@ -29,6 +29,7 @@ void RegisterTests()
 REGISTER_TEST(ossimIntegrationTest);
 REGISTER_TEST(ossimKeywordlistTest);
 REGISTER_TEST(ossimElevManagerTest);
+REGISTER_TEST(ossimXmlDocumentTest);
 REGISTER_TEST(svmGenericKernelFunctor);
 REGISTER_TEST(svmTest);
 REGISTER_TEST(svmGenericKernelTest);
