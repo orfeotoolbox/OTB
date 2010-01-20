@@ -30,13 +30,11 @@
 //
 // This class vectorizes a LabelObject to a VectorData.
 //
-// LabelMapToVectorDataFilter converts a LabelMap to a
-// VectorData where all the pixels get the attribute value of the label object they belong.
-// It uses the class otbLabelObjectToPolygonFunctor wich follows a finite states machine described in:
-//
-// "An algorithm for the rapid computation of boundaries of run-length
-// encoded regions", Francis K. H. Queck, in Pattern Recognition 33
-// (2000), p 1637-1649.
+// The \doxygen{otb}{LabelMapToVectorDataFilter} converts an \doxygen{itk}{LabelMap} to an
+// \doxygen{otb}{VectorData} where all the pixels get the attribute
+// value of the label object they belong to.
+// It uses the class \doxygen{otb}{LabelObjectToPolygonFunctor} wich
+// follows a finite state machine described in \cite{Francis2000}. 
 //
 //  Only polygon conversion is available yet.
 // Software Guide : EndLatex
@@ -50,8 +48,16 @@
 #include <iostream>
 
 #include "otbImage.h"
+
+// Software Guide : BeginLatex
+// 
+// These are the main header files which need to be included:
+//
+// Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
 #include "otbLabelMapToVectorDataFilter.h"
 #include "otbAttributesMapLabelObject.h"
+// Software Guide : EndCodeSnippet
 #include "itkLabelImageToLabelMapFilter.h"
 
 int main(int argc, char * argv[])
@@ -137,7 +143,7 @@ int main(int argc, char * argv[])
     //  Software Guide : BeginLatex
     //
     //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. This is
-    // the main filter which proceed the vectorization. 
+    // the main filter which performs the vectorization. 
     //  Software Guide : EndLatex
     
     // Software Guide : BeginCodeSnippet
@@ -163,7 +169,7 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
   //
   //  The invocation of the \code{Update()} method on the writer triggers the
-  //  execution of the pipeline.  As usualn, it is recommended to place update calls in a
+  //  execution of the pipeline.  As usual, it is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
   //  Software Guide : EndLatex
