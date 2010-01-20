@@ -170,8 +170,8 @@ ImageFileReader<TOutputImage>
     ImageRegionType region = output->GetBufferedRegion();
 
     // Adapte the image size with the region
-    std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels())
-                               * static_cast<std::streamoff>(region.GetNumberOfPixels());
+    std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
+		                     * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
