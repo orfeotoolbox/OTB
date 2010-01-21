@@ -92,11 +92,11 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef double RealType;
-  typedef itk::Vector<RealType, 1> VectorType;
+  typedef double                        RealType;
+  typedef itk::Vector<RealType, 1>      VectorType;
   typedef itk::PointSet <VectorType, 2> PointSetType;
-  typedef otb::Image<RealType, 2> ImageType;
-  typedef itk::Image<VectorType, 2> VectorImageType;
+  typedef otb::Image<RealType, 2>       ImageType;
+  typedef itk::Image<VectorType, 2>     VectorImageType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -144,10 +144,10 @@ int main( int argc, char* argv[] )
 
   ImageType::SizeType  size;
   size[0]  = static_cast<long int >(ceil(
-                                      (vcl_ceil(reader->GetMaxX())-vcl_floor(reader->GetMinX())+1) / resolution
+               (vcl_ceil(reader->GetMaxX())-vcl_floor(reader->GetMinX())+1) / resolution
                                     ))+1;
   size[1]  = static_cast<long int >(ceil(
-                                      (vcl_ceil(reader->GetMaxY())-vcl_floor(reader->GetMinY())+1) / resolution
+               (vcl_ceil(reader->GetMaxY())-vcl_floor(reader->GetMinY())+1) / resolution
                                     ))+1;
 
   ImageType::PointType origin;
@@ -249,10 +249,6 @@ int main( int argc, char* argv[] )
   writerUChar->SetFileName(argv[3]);
   writerUChar->Update();
 
-
-
-
-
   // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:LIDARTOIMAGEEXAMPLE} shows the output images with two sets of parameters
@@ -268,13 +264,6 @@ int main( int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-
-
-
-
-
-
   return EXIT_SUCCESS;
 
 }
-
