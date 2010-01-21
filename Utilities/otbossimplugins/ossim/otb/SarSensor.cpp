@@ -51,8 +51,10 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
 
   RectangularCoordinate cart;
 
+  double dopplerCentroid = _params->get_dopcen();
+
   // note : the Doppler frequency is set to zero
-  int etatLoc = localisationSAR(*geoEph, lambda, distance, 0.0, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
+  int etatLoc = localisationSAR(*geoEph, lambda, distance, dopplerCentroid, sensVisee, semiMajorAxis , semiMinorAxis , height, &cart);
 
   GeodesicCoordinate geo;
   cart.AsGeodesicCoordinates(semiMajorAxis , semiMinorAxis, &geo);
