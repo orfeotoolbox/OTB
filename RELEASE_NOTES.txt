@@ -2,8 +2,10 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
 -----------------------------------------
 
 * Applications
-  - Monteverdi, a new all-in one user-friendly graphical tool 
+  * Monteverdi, a new all-in one user-friendly graphical tool 
     for remote sensing data processing released as a separate package (see README file).
+    Windows binary package of Monteverdi is available and was installed on various operating system
+    including Windows 2000/XP/Vista/Seven. 
 
 * Library
   The library includes these additions
@@ -29,6 +31,8 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
   * Internal OSSIM updated to svn revision 15872 + OTB patches
   * Home brewed metadata SAR reader were moved to ossimplugins
   * Experimental support for internationalization
+  * Facilitate installation on Mac OSX platform (OTB is now able to compile on Mac OSX
+    by using external libraries like GDAL downloaded from Macports)
 
   
 
