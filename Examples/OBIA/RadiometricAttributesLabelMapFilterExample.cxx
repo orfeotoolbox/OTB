@@ -53,7 +53,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbMeanShiftImageFilter.h"
+#include "otbMeanShiftVectorImageFilter.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
@@ -61,7 +61,7 @@
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbRadiometricAttributesLabelMapFilter.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
-#include "itkLabelMapToLabelImageFilter.h"
+#include "itkLabelMapToBinaryImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
   typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,ImageType> StatisticsLabelMapFilterType;
   typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>          OpeningLabelMapFilterType;
-  typedef itk::LabelMapToLabelImageFilter<LabelMapType,LabeledImageType> LabelMapToLabeledImageFilterType;
+  typedef itk::LabelMapToBinaryImageFilter<LabelMapType,LabeledImageType> LabelMapToBinaryImageFilterType;
   
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
   
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
+  vreader->Update();
     //  Software Guide : BeginLatex
   //
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
@@ -130,7 +131,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::MeanShiftImageFilter<ImageType,ImageType, LabeledImageType> FilterType;
+  typedef otb::MeanShiftVectorImageFilter<VectorImageType,VectorImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
@@ -146,7 +147,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -226,8 +227,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  LabelMapToLabeledImageFilterType::Pointer labelMap2LabeledImage 
-                                          = LabelMapToLabeledImageFilterType::New();
+  LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage 
+                                          = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
   // Software Guide : EndCodeSnippet
 
@@ -253,7 +254,7 @@ int main(int argc, char * argv[])
   maximum.Fill(255);
 
   VectorRescalerType::Pointer vr = VectorRescalerType::New();
-  vr->SetInput(vreader->GetOutput());
+  vr->SetInput(filter->GetClusteredOutput());
   vr->SetOutputMinimum(minimum);
   vr->SetOutputMaximum(maximum);
   vr->SetClampThreshold(0.01);
