@@ -93,6 +93,7 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
 
   _sensor = new SensorParams();
 
+  /*
   if(strcmp(time_dir_pix.c_str(), "INCREASE") == 0)
   {
     _sensor->set_col_direction(1);
@@ -101,7 +102,12 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   {
     _sensor->set_col_direction(-1);
   }
+  */
+  // WARNING: _col_direction hard-coded to 1, as level 1.0 image is not flipped.
+  _sensor->set_col_direction(1);
 
+  // TODO: Have to verify whether the time direction indicator should be always positive
+  /*
   if(strcmp(time_dir_lin.c_str(), "INCREASE") == 0)
   {
     _sensor->set_lin_direction(1);
@@ -110,6 +116,8 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   {
     _sensor->set_lin_direction(-1);
   }
+  */
+  _sensor->set_lin_direction(1);
 
   _sensor->set_sightDirection(SensorParams::Right) ;
 
@@ -118,7 +126,7 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   double n_rnglok = atof(kwl.find(prefix,"n_rnglok"));
   _sensor->set_nRangeLook(n_rnglok);
 
-  _sensor->set_prf(fa);
+  _sensor->set_prf(fa/1000.); // For ALOS, the fa value in the leader file is in units of mHz
   _sensor->set_sf(fr);
   _sensor->set_rwl(wave_length);
 
@@ -381,6 +389,11 @@ bool ossimAlosPalsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, con
   const char* eph_sec_str = kwl.find(prefix,"eph_sec");
   double eph_sec = atof(eph_sec_str);
 
+  std::cout << "eph_year = " << eph_year_str << std::endl;
+  std::cout << "eph_month = " << eph_month_str << std::endl;
+  std::cout << eph_day_str << std::endl;
+  std::cout << eph_sec_str << std::endl;
+
   ref_civil_date.set_year(eph_year);
   ref_civil_date.set_month(eph_month);
   ref_civil_date.set_day(eph_day);
@@ -549,6 +562,9 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
   int sec = atoi(sec_str);
   double mili = atof(mili_str);
 
+  std::cout << "year/month/day = " << year << '/' << month << '/' << day << std::endl;
+  std::cout << "hour:min:sec = " << hour << ':' << min << ':' << sec << std::endl;
+  std::cout << "mili = " << mili << std::endl;
 
   CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili/1000.0);
 
@@ -569,7 +585,7 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
 
   //double distance = (rng_gate*1e-3 + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
   const char* slantRange = kwl.find(prefix, "slant_range_to_1st_data_sample");
-  double distance = atof(slantRange);
+  double distance = atof(slantRange) + static_cast<double>(sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf() * c/2.0;
 
   _refPoint->set_distance(distance);
 
