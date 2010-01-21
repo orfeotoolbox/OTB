@@ -126,9 +126,9 @@ int main( int argc, char * argv[] )
   ChannelExtractorType::Pointer selecter = ChannelExtractorType::New();
   selecter->SetInput(vr->GetOutput());
   selecter->SetExtractionRegion(multispectralReader->GetOutput()->GetLargestPossibleRegion());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   VectorWriterType::Pointer vectWriter = VectorWriterType::New();
   vectWriter->SetFileName(argv[3]);
