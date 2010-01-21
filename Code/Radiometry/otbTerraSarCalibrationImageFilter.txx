@@ -297,8 +297,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Fill the linear system
   for(unsigned int i = 0; i < nbRecords; ++i)
     {
-    std::cout<<"Incidence record: "<<m_IncidenceAngleRecords.at(i).first<<" <-> "
-             <<m_IncidenceAngleRecords.at(i).second<<std::endl;
     a(i,0) = m_IncidenceAngleRecords.at(i).first[0];
     a(i,1) = m_IncidenceAngleRecords.at(i).first[1];
     a(i,2) = 1.;
@@ -315,8 +313,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   m_IncidenceAngleAx     = bestParams[0];
   m_IncidenceAngleAy     = bestParams[1];
   m_IncidenceAngleOffset = bestParams[2];
-
-  std::cout<<"Parameters :" <<bestParams<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage>
