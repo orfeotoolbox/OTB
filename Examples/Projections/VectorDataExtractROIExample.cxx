@@ -115,7 +115,8 @@ int main( int argc, char* argv[] )
   region.SetOrigin(index);
 
   otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface
-      = otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
+            = otb::ImageMetadataInterfaceFactory::CreateIMI(
+                    imageReader->GetOutput()->GetMetaDataDictionary());
   region.SetRegionProjection(
             imageMetadataInterface->GetProjectionRef(
                     imageReader->GetOutput()->GetMetaDataDictionary()));

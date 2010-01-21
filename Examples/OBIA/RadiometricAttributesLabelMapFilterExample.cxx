@@ -69,7 +69,8 @@ int main(int argc, char * argv[])
 {
   if(argc != 11)
     {
-      std::cerr<<"Usage: "<<argv[0]<<" reffname outfname outprettyfname attribute_name lowerThan tresh spatialRadius rangeRadius minregionsize scale"<<std::endl;
+    std::cerr << "Usage: " << argv[0] << " reffname outfname outprettyfname attribute_name ";
+    std::cerr << "lowerThan tresh spatialRadius rangeRadius minregionsize scale" << std::endl;
       return EXIT_FAILURE;
     }
 
@@ -145,7 +146,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());       
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -178,7 +179,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
+  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter 
+                                       = RadiometricLabelMapFilterType::New();
   radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -224,7 +226,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  LabelMapToLabeledImageFilterType::Pointer labelMap2LabeledImage = LabelMapToLabeledImageFilterType::New();
+  LabelMapToLabeledImageFilterType::Pointer labelMap2LabeledImage 
+                                          = LabelMapToLabeledImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
   // Software Guide : EndCodeSnippet
 

@@ -54,7 +54,6 @@
 // Software Guide : EndCodeSnippet
 
 
-
 int main(int argc, char* argv[] )
 {
 
@@ -86,14 +85,14 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-  typedef otb::ImageFileReader<SOMMapType> SOMReaderType;
+  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
+  typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
 
 // Software Guide : EndCodeSnippet
 
-  typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
-  typedef otb::ImageFileReader< InputImageType  >  ReaderType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader< InputImageType >      ReaderType;
 
 //  Software Guide : BeginLatex
 //
@@ -127,7 +126,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-  typedef otb::Image<LabelPixelType, Dimension >  OutputImageType;
+  typedef otb::Image<LabelPixelType, Dimension>  OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
 // Software Guide : EndCodeSnippet
@@ -161,7 +160,8 @@ int main(int argc, char* argv[] )
 
   SampleType::Pointer sample = SampleType::New();
 
-  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),
+                      reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();
 
@@ -301,10 +301,3 @@ int main(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-

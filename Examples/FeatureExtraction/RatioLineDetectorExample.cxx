@@ -70,7 +70,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float  InternalPixelType;
+  typedef  float          InternalPixelType;
   typedef  unsigned char  OutputPixelType;
   // Software Guide : EndCodeSnippet
 
@@ -82,7 +82,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image< OutputPixelType,  2 >     OutputImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -93,7 +93,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineRatioDetectorImageFilter< InternalImageType, InternalImageType >  FilterType;
+  typedef otb::LineRatioDetectorImageFilter
+              < InternalImageType, InternalImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -259,7 +260,5 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
 
-
   return EXIT_SUCCESS;
 }
-
