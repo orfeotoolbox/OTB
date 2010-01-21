@@ -174,6 +174,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
     kwl.add(prefix, "pix_spacing", datasetSummary->get_pix_spacing(),true);
     kwl.add(prefix, "nlooks_az", datasetSummary->get_n_azilok(),true);
     kwl.add(prefix, "n_rnglok", datasetSummary->get_n_rnglok(),true);
+    kwl.add(prefix, "alt_dopcen[0]", datasetSummary->get_alt_dopcen()[0],true);
     //FIXME check if those data are available
 //     kwl.add(prefix, "zero_dop_range_time_f_pixel", datasetSummary->get_zero_dop_range_time_f_pixel(),true);
 //     kwl.add(prefix, "zero_dop_range_time_c_pixel", datasetSummary->get_zero_dop_range_time_c_pixel(),true);

@@ -86,6 +86,9 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   const char* ellip_min_str = kwl.find(prefix,"ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
+  const char* dopcen_str = kwl.find(prefix,"alt_dopcen[0]");
+  double dopcen = atof(dopcen_str);
+
   if(_sensor != NULL)
   {
     delete _sensor;
@@ -132,6 +135,8 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
 
   _sensor->set_semiMajorAxis(ellip_maj) ;
   _sensor->set_semiMinorAxis(ellip_min) ;
+
+  _sensor->set_dopcen(dopcen);
 
   return true;
 }
