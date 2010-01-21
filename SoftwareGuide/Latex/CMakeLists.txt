@@ -60,6 +60,19 @@ SET(TEX4HT_OPTIONS html,2,sections+)
 SET (HTML_OUTPUT "Html")
 
 #
+#copy release_notes from source tree
+#
+SET (RELEASE_NOTES_SRC RELEASE_NOTES.txt)
+#TODO transform the copy as a custom command
+   #ADD_CUSTOM_COMMAND(
+    #    PRE_BUILD
+     #   OUTPUT  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
+      #  COMMAND ${CMAKE_COMMAND} -E copy ${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}  ${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}
+       # COMMENT   "Copying the Release Notes"
+   #)
+EXEC_PROGRAM(${CMAKE_COMMAND} ARGS -E copy "\"${OTB_SOURCE_DIR}/${RELEASE_NOTES_SRC}\"" "\"${SoftwareGuide_SOURCE_DIR}/Latex/${RELEASE_NOTES_SRC}\"")
+   
+#
 # File that defines the path to .cxx examples in ITK sources
 #
 CONFIGURE_FILE(
@@ -97,6 +110,7 @@ SET( Tex_SRCS
   Watersheds.tex
   Fusion.tex
   Radiometry.tex
+  ReleaseNotes.tex
 )
 
 FOREACH( file ${Tex_SRCS})
@@ -112,6 +126,8 @@ ENDFOREACH( exampletexname )
 FOREACH( exampletexname ${JAVA_EXAMPLES_TEX_FILES})
   SET( ITK_EXAMPLES_TEX_SRCS ${ITK_EXAMPLES_TEX_SRCS} ${exampletexname})
 ENDFOREACH( exampletexname )
+
+
 
 IF(LATEX_COMPILER)
 
