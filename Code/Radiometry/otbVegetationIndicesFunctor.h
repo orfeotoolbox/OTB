@@ -44,7 +44,7 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-	
+  
   //operators != 
     bool operator!=( const RAndNIRIndexBase & ) const
    {
@@ -67,7 +67,7 @@ public:
     return this->Evaluate(r,nir);
   };
   /// Constructor
-  RAndNIRIndexBase() :  m_RedIndex(3), m_NIRIndex(4) {}
+  RAndNIRIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_NIRIndex(4) {}
   /// Desctructor
   virtual ~RAndNIRIndexBase() {};
 
@@ -95,7 +95,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2 & nir) const = 0;
-  static const double m_EpsilonToBeConsideredAsZero = 0.0000001;
+  const double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -135,7 +135,9 @@ public:
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_BlueIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1]));
+    return this->Evaluate(inputVector[m_RedIndex-1],
+                          static_cast<TInput2>(inputVector[m_BlueIndex-1]),
+                          static_cast<TInput3>(inputVector[m_NIRIndex-1]));
   }
   // Binary operator
   inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput2 &nir)
@@ -211,7 +213,9 @@ public:
   // Operator on vector pixel type
   inline TOutput operator()(const InputVectorType & inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_GreenIndex-1]), static_cast<TInput3>(inputVector[m_NIRIndex-1]));
+    return this->Evaluate(inputVector[m_RedIndex-1],
+                          static_cast<TInput2>(inputVector[m_GreenIndex-1]),
+                          static_cast<TInput3>(inputVector[m_NIRIndex-1]));
   }
 
   // Binary operator
@@ -1033,4 +1037,3 @@ private:
 } // namespace otb
 
 #endif
-
