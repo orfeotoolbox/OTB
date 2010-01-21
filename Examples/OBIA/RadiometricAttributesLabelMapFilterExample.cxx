@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
 //    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.png}
-//    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
+//    STATS::Ndvi::Mean 0 0.5 16 16 50 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -166,12 +166,7 @@ int main(int argc, char * argv[])
   
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
-  
-  StatisticsLabelMapFilterType::Pointer statisticsLabelMapFilter = StatisticsLabelMapFilterType::New();
-  statisticsLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
-  statisticsLabelMapFilter->SetInput2(reader->GetOutput());
-  
-  statisticsLabelMapFilter->Update();
+
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
@@ -182,7 +177,8 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter 
                                        = RadiometricLabelMapFilterType::New();
-  radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
+
+  radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
 
