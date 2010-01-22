@@ -131,7 +131,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::MeanShiftVectorImageFilter<VectorImageType,VectorImageType, LabeledImageType> FilterType;
+  typedef otb::MeanShiftVectorImageFilter
+                        <VectorImageType,VectorImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
