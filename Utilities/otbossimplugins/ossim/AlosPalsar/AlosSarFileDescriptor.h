@@ -17,8 +17,8 @@
 
 #include<iostream>
 #include <cstdlib>
-#include <AlosSarRecordHeader.h>
-#include <AlosSarRecord.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarRecord.h>
 
 namespace ossimplugins
 {

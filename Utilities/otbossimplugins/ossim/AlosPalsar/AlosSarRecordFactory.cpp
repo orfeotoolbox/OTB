@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarRecordFactory.h>
+#include <AlosPalsar/AlosSarRecordFactory.h>
 #include <ossim/base/ossimTrace.h>
 
 // Static trace for debugging

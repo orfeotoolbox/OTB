@@ -14,10 +14,10 @@
 #define AlosSarPlatformPositionData_h
 
 #include <iostream>
-#include <AlosSarRecord.h>
-#include <AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
 
-#include <AlosSarPositionVectorRecord.h>
+#include <AlosPalsar/AlosSarPositionVectorRecord.h>
 
 namespace ossimplugins
 {

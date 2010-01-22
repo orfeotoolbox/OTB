@@ -10,11 +10,11 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarData.h>
-#include <AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarData.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
 
-#include <AlosSarDataFileDescriptor.h>
-#include <AlosSarSignalData.h>
+#include <AlosPalsar/AlosSarDataFileDescriptor.h>
+#include <AlosPalsar/AlosSarSignalData.h>
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>

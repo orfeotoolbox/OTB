@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarSignalData.h>
+#include <AlosPalsar/AlosSarSignalData.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimEndian.h>
 

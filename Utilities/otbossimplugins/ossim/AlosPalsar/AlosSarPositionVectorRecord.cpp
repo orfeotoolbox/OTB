@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarPositionVectorRecord.h>
+#include <AlosPalsar/AlosSarPositionVectorRecord.h>
 
 namespace ossimplugins
 {

@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarDataSetSummary.h>
+#include <AlosPalsar/AlosSarDataSetSummary.h>
 
 namespace ossimplugins
 {

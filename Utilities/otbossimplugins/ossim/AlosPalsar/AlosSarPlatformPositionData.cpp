@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarPlatformPositionData.h>
+#include <AlosPalsar/AlosSarPlatformPositionData.h>
 
 namespace ossimplugins
 {

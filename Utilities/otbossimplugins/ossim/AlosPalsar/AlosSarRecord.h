@@ -14,7 +14,7 @@
 #define AlosSarRecord_h
 
 
-#include <AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
 #include <iostream>
 
 namespace ossimplugins

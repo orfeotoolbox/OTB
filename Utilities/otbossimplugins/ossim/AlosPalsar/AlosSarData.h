@@ -14,8 +14,8 @@
 #define AlosSarData_h
 
 #include <iostream>
-#include "AlosSarDataFileDescriptor.h"
-#include "AlosSarSignalData.h"
+#include "AlosPalsar/AlosSarDataFileDescriptor.h"
+#include "AlosPalsar/AlosSarSignalData.h"
 #include <map>
 
 class ossimKeywordlist;

@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarFileDescriptor.h>
+#include <AlosPalsar/AlosSarFileDescriptor.h>
 
 
 namespace ossimplugins

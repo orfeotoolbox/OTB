@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosSarRecord.h>
+#include <AlosPalsar/AlosSarRecord.h>
 
 namespace ossimplugins
 {

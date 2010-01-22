@@ -14,11 +14,11 @@
 #define AlosSarLeader_h
 
 #include <iostream>
-#include "AlosSarFileDescriptor.h"
-#include "AlosSarDataSetSummary.h"
-#include "AlosSarMapProjectionData.h"
-#include "AlosSarPlatformPositionData.h"
-#include "AlosSarFacilityData.h"
+#include "AlosPalsar/AlosSarFileDescriptor.h"
+#include "AlosPalsar/AlosSarDataSetSummary.h"
+#include "AlosPalsar/AlosSarMapProjectionData.h"
+#include "AlosPalsar/AlosSarPlatformPositionData.h"
+#include "AlosPalsar/AlosSarFacilityData.h"
 #include <map>
 
 class ossimKeywordlist;

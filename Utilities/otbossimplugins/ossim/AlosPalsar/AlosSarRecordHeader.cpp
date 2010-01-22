@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
 
 namespace ossimplugins
 {

@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarMapProjectionData.h>
+#include <AlosPalsar/AlosSarMapProjectionData.h>
 
 namespace ossimplugins
 {

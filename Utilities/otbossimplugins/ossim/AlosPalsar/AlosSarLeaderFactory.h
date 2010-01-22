@@ -14,7 +14,7 @@
 #define AlosSarLeaderFactory_h
 
 
-#include <AlosSarRecordFactory.h>
+#include <AlosPalsar/AlosSarRecordFactory.h>
 #include <map>
 
 namespace ossimplugins

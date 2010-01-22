@@ -14,8 +14,8 @@
 #define AlosSarRecordFactory_h
 
 
-#include <AlosSarRecordHeader.h>
-#include <AlosSarRecord.h>
+#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosSarRecord.h>
 #include <map>
 
 namespace ossimplugins

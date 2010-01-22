@@ -10,13 +10,12 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosSarLeaderFactory.h>
+#include <AlosPalsar/AlosSarLeaderFactory.h>
 
-#include <AlosSarDataSetSummary.h>
-#include <AlosSarFileDescriptor.h>
-//#include <AlosSarMapProjectionData.h>//
-#include <AlosSarPlatformPositionData.h>
-#include <AlosSarFacilityData.h>
+#include <AlosPalsar/AlosSarDataSetSummary.h>
+#include <AlosPalsar/AlosSarFileDescriptor.h>
+#include <AlosPalsar/AlosSarPlatformPositionData.h>
+#include <AlosPalsar/AlosSarFacilityData.h>
 
 namespace ossimplugins
 {
