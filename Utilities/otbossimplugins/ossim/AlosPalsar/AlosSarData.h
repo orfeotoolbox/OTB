@@ -14,8 +14,6 @@
 #define AlosSarData_h
 
 #include <iostream>
-#include "AlosPalsar/AlosSarDataFileDescriptor.h"
-#include "AlosPalsar/AlosSarSignalData.h"
 #include <map>
 
 class ossimKeywordlist;
@@ -23,11 +21,9 @@ class ossimKeywordlist;
 namespace ossimplugins
 {
 
-class AlosSarPlatformPositionData;
-class AlosSarMapProjectionData;
-class AlosSarDataSetSummary;
-class AlosSarFileDescriptor;
-class AlosSarFacilityData;
+class AlosSarRecord;
+class AlosSarDataFileDescriptor;
+class AlosSarSignalData;
 
 /**
  * @ingroup AlosSarDataFile
