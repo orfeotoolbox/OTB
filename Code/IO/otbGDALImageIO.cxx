@@ -67,7 +67,7 @@ GDALImageIO::GDALImageIO()
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
 
-  GDALAllRegister();
+//  GDALAllRegister();
 }
 
 GDALImageIO::~GDALImageIO()
@@ -106,7 +106,7 @@ bool GDALImageIO::CanReadFile(const char* file)
   lFileNameGdal = std::string(file);
 
   // Init GDAL parameters
-//  GDALAllRegister();
+  GDALAllRegister();
 
   // Open file with GDAL
   m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
@@ -117,7 +117,7 @@ bool GDALImageIO::CanReadFile(const char* file)
              "GDALOpen failed - %d\n%s\n",
              CPLGetLastErrorNo(), CPLGetLastErrorMsg() );
 
-//    GDALDestroyDriverManager();
+    GDALDestroyDriverManager();
     CPLDumpSharedList( NULL );
     itkDebugMacro(<<"No dataset ");
     otbMsgDevMacro(<<"Not CanReadFile GDAL");
@@ -127,7 +127,7 @@ bool GDALImageIO::CanReadFile(const char* file)
   {
     GDALClose(m_poDataset);
     m_poDataset = NULL;
-//    GDALDestroyDriverManager();
+    GDALDestroyDriverManager();
     CPLDumpSharedList( NULL );
 
     otbMsgDevMacro(<<"CanReadFile GDAL");
@@ -238,7 +238,7 @@ void GDALImageIO::InternalReadImageInformation()
   std::string lFileNameGdal = m_FileName;
 
   // Init GDAL parameters
-//  GDALAllRegister();
+  GDALAllRegister();
 
   // Get Dataset
   if (m_poDataset != NULL)
@@ -854,7 +854,7 @@ void GDALImageIO::InternalWriteImageInformation()
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
 
-  // GDALAllRegister();
+   GDALAllRegister();
 
 
   extGDAL = TypeConversion(m_FileName);
