@@ -41,12 +41,23 @@ RTTI_DEF1(ossimAlosPalsarModel, "ossimAlosPalsarModel", ossimGeometricSarSensorM
 
 ossimAlosPalsarModel::ossimAlosPalsarModel():
   thePixelSpacing(0),
-  theAlosSarLeader(NULL)
+  theAlosSarLeader(NULL),
+  theAlosSarData(NULL)
 {
 }
 
 ossimAlosPalsarModel::~ossimAlosPalsarModel()
 {
+  if(theAlosSarLeader != NULL)
+  {
+    delete theAlosSarLeader;
+    theAlosSarLeader = NULL;
+  }
+  if(theAlosSarData != NULL)
+  {
+    delete theAlosSarData;
+    theAlosSarData = NULL;
+  }
 }
 
 ossimString ossimAlosPalsarModel::getClassName() const
@@ -61,7 +72,8 @@ ossimObject* ossimAlosPalsarModel::dup() const
 
 double ossimAlosPalsarModel::getSlantRangeFromGeoreferenced(double col) const
 {
-  // TODO Add user warning and reference to ERS Model
+  std::cout << "WARNING: getSlantRangeFromGeoreferenced not implemented for AlosPalsar" << std::endl;
+  return 0.0;
 }
 
 bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const char *prefix)
