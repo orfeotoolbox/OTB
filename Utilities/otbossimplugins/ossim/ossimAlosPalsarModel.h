@@ -34,7 +34,9 @@ class AlosSarLeader;
 class AlosSarData;
 
 /**
- * @brief This class is able to direct localisation and indirect localisation using the AlosPalsar sensor model
+ * @brief This class is able to direct localisation and indirect
+ * localisation using the AlosPalsar sensor model. It support at least
+ * level 1.1 data (SLC).
  *
  */
 class ossimAlosPalsarModel : public ossimGeometricSarSensorModel

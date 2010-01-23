@@ -394,10 +394,6 @@ bool ossimAlosPalsarModel::InitPlatformPosition(const ossimKeywordlist &kwl, con
   const char* eph_sec_str = kwl.find(prefix,"eph_sec");
   double eph_sec = atof(eph_sec_str);
 
-  std::cout << "eph_year = " << eph_year_str << std::endl;
-  std::cout << "eph_month = " << eph_month_str << std::endl;
-  std::cout << eph_day_str << std::endl;
-  std::cout << eph_sec_str << std::endl;
 
   ref_civil_date.set_year(eph_year);
   ref_civil_date.set_month(eph_month);
@@ -567,9 +563,6 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
   int sec = atoi(sec_str);
   double mili = atof(mili_str);
 
-  std::cout << "year/month/day = " << year << '/' << month << '/' << day << std::endl;
-  std::cout << "hour:min:sec = " << hour << ':' << min << ':' << sec << std::endl;
-  std::cout << "mili = " << mili << std::endl;
 
   CivilDateTime date(year, month, day, hour * 3600 + min * 60 + sec, mili/1000.0);
 
@@ -586,9 +579,8 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
     return false;
   }
 
-  double c = 2.99792458e+8;
+  const double c = 2.99792458e+8;
 
-  //double distance = (rng_gate*1e-3 + ((double)sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
   const char* slantRange = kwl.find(prefix, "slant_range_to_1st_data_sample");
   double distance = atof(slantRange) + static_cast<double>(sc_pix)*_sensor->get_nRangeLook()/_sensor->get_sf() * c/2.0;
 

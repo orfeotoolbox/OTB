@@ -457,10 +457,12 @@ void GDALImageIO::InternalReadImageInformation()
 
   hDriver = m_poDataset->GetDriver();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey,
-                                        static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,
-                                        static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
+  std::string driverShortName =  static_cast<std::string>( GDALGetDriverShortName( hDriver ));
+  std::string driverLongName =  static_cast<std::string>( GDALGetDriverLongName( hDriver ));
+
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey, driverLongName );
+
 
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
