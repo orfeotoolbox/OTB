@@ -84,7 +84,7 @@ std::istream& operator>>(std::istream& is, AlosSarData& data)
   {
     record->Read(is);
     data._records[header.get_rec_seq()] = record;
-    std::cout << "Record sequence number = " << header.get_rec_seq() << std::endl;
+//    std::cout << "Record sequence number = " << header.get_rec_seq() << std::endl;
   }
   is.seekg(filePosition); // Rewind file pointer to start of record
   // Then, advance pointer to next record
@@ -149,9 +149,6 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
   {
     kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(),true);
     kwl.add(prefix, "num_pix_in_line", datafiledesc->get_num_pix_in_line(),true);
-    // FIXME debug
-    std::cout << std::endl << "num_lines = " << datafiledesc->get_num_lines() << std::endl;
-    std::cout << std::endl << "num_pix_in_line = " << datafiledesc->get_num_pix_in_line() << std::endl;
   }
   else
   {
@@ -164,9 +161,6 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
     kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(),true);
     // slant range to 1st data sample in metres
     kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(),true);
-    // FIXME debug
-    std::cout << std::endl << "pulse_repetition_frequency = " << signalData->get_pulse_repetition_frequency() << std::endl;
-    std::cout << std::endl << "slant_range_to_1st_data_sample = " << signalData->get_slant_range_to_1st_data_sample() << std::endl;
   }
   else
   {
