@@ -30,8 +30,8 @@ namespace ossimplugins
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
-class AlosSarLeader;
-class AlosSarData;
+class AlosPalsarLeader;
+class AlosPalsarData;
 
 /**
  * @brief This class is able to direct localisation and indirect
@@ -110,12 +110,12 @@ private:
   /**
    * @brief List of metadata contained in the Leader file
    */
-  AlosSarLeader *theAlosSarLeader;
+  AlosPalsarLeader *theAlosPalsarLeader;
 
   /**
    * @brief List of metadata contained in the Data file
    */
-  AlosSarData *theAlosSarData;
+  AlosPalsarData *theAlosPalsarData;
 
   virtual bool isAlosPalsarLeader(const ossimFilename& file) const;
   virtual ossimFilename findAlosPalsarLeader(const ossimFilename& file) const;

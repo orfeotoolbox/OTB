@@ -10,8 +10,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarData_h
-#define AlosSarData_h
+#ifndef AlosPalsarData_h
+#define AlosPalsarData_h
 
 #include <iostream>
 #include <map>
@@ -21,49 +21,49 @@ class ossimKeywordlist;
 namespace ossimplugins
 {
 
-class AlosSarRecord;
-class AlosSarDataFileDescriptor;
-class AlosSarSignalData;
+class AlosPalsarRecord;
+class AlosPalsarDataFileDescriptor;
+class AlosPalsarSignalData;
 
 /**
- * @ingroup AlosSarDataFile
- * @brief This class is able to read the Leader file of the AlosSar file structure
+ * @ingroup AlosPalsarDataFile
+ * @brief This class is able to read the Leader file of the AlosPalsar file structure
  */
-class AlosSarData
+class AlosPalsarData
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarData();
+  AlosPalsarData();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarData();
+  ~AlosPalsarData();
 
   /**
-   * @brief This function write the AlosSarData in a stream
+   * @brief This function write the AlosPalsarData in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarData& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarData& data);
 
   /**
-   * @brief This function read a AlosSarData from a stream
+   * @brief This function read a AlosPalsarData from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarData& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarData& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarData(const AlosSarData& rhs);
+  AlosPalsarData(const AlosPalsarData& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarData& operator=(const AlosSarData& rhs);
+  AlosPalsarData& operator=(const AlosPalsarData& rhs);
 
   /**
-   * @brief Remove all the previous records from the AlosSarData
+   * @brief Remove all the previous records from the AlosPalsarData
    */
   void ClearRecords();
 
@@ -78,16 +78,16 @@ public:
                          const char* prefix=0) const;
 
 
-  const AlosSarDataFileDescriptor * get_AlosSarDataFileDescriptor() const;
-  const AlosSarSignalData * get_AlosSarSignalData() const;
+  const AlosPalsarDataFileDescriptor * get_AlosPalsarDataFileDescriptor() const;
+  const AlosPalsarSignalData * get_AlosPalsarSignalData() const;
 
 protected:
-  typedef std::map<int, AlosSarRecord*> RecordType;
+  typedef std::map<int, AlosPalsarRecord*> RecordType;
   RecordType _records;
 
 
-  static const int AlosSarDataFileDescriptorID;
-  static const int AlosSarSignalDataID;
+  static const int AlosPalsarDataFileDescriptorID;
+  static const int AlosPalsarSignalDataID;
 private:
 
 };

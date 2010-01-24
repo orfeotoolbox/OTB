@@ -10,20 +10,20 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarMapProjectionData.h>
+#include <AlosPalsar/AlosPalsarMapProjectionData.h>
 
 namespace ossimplugins
 {
 
-AlosSarMapProjectionData::AlosSarMapProjectionData() : AlosSarRecord("map_proj_data_rec")
+AlosPalsarMapProjectionData::AlosPalsarMapProjectionData() : AlosPalsarRecord("map_proj_data_rec")
 {
 }
 
-AlosSarMapProjectionData::~AlosSarMapProjectionData()
+AlosPalsarMapProjectionData::~AlosPalsarMapProjectionData()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarMapProjectionData& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarMapProjectionData& data)
 {
   os<<"map_proj_des:"<<data._map_proj_des.c_str()<<std::endl;
 
@@ -69,7 +69,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarMapProjectionData& data)
 
 }
 
-std::istream& operator>>(std::istream& is, AlosSarMapProjectionData& data)
+std::istream& operator>>(std::istream& is, AlosPalsarMapProjectionData& data)
 {
   char buf16[17];
   buf16[16]='\0';
@@ -158,8 +158,8 @@ std::istream& operator>>(std::istream& is, AlosSarMapProjectionData& data)
 }
 
 
-AlosSarMapProjectionData::AlosSarMapProjectionData(const AlosSarMapProjectionData& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarMapProjectionData::AlosPalsarMapProjectionData(const AlosPalsarMapProjectionData& rhs):
+  AlosPalsarRecord(rhs),
   _map_proj_des(rhs._map_proj_des),
   _num_pix_in_line(rhs._num_pix_in_line),
   _num_lines(rhs._num_lines),
@@ -182,7 +182,7 @@ AlosSarMapProjectionData::AlosSarMapProjectionData(const AlosSarMapProjectionDat
   _last_line_first_pixel_lon(rhs._last_line_first_pixel_lon)
   {}
 
-AlosSarMapProjectionData& AlosSarMapProjectionData::operator=(const AlosSarMapProjectionData& rhs)
+AlosPalsarMapProjectionData& AlosPalsarMapProjectionData::operator=(const AlosPalsarMapProjectionData& rhs)
 {
   _map_proj_des = rhs._map_proj_des;
   _num_pix_in_line = rhs._num_pix_in_line;

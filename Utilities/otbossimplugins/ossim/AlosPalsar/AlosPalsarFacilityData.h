@@ -10,68 +10,68 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarFacilityData_h
-#define AlosSarFacilityData_h
+#ifndef AlosPalsarFacilityData_h
+#define AlosPalsarFacilityData_h
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSarFacilityDataRecord
+ * @ingroup AlosPalsarFacilityDataRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file
  */
-class AlosSarFacilityData : public AlosSarRecord
+class AlosPalsarFacilityData : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarFacilityData();
+  AlosPalsarFacilityData();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarFacilityData();
+  ~AlosPalsarFacilityData();
 
   /**
-   * @brief This function write the AlosSarFacilityData in a stream
+   * @brief This function write the AlosPalsarFacilityData in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarFacilityData& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarFacilityData& data);
 
   /**
-   * @brief This function read a AlosSarFacilityData from a stream
+   * @brief This function read a AlosPalsarFacilityData from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarFacilityData& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarFacilityData& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarFacilityData(const AlosSarFacilityData& rhs);
+  AlosPalsarFacilityData(const AlosPalsarFacilityData& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarFacilityData& operator=(const AlosSarFacilityData& rhs);
+  AlosPalsarFacilityData& operator=(const AlosPalsarFacilityData& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarFacilityData();
+    return new AlosPalsarFacilityData();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarFacilityData(*this);
+    return new AlosPalsarFacilityData(*this);
   };
 
   /**

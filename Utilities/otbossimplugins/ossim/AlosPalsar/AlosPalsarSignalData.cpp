@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarSignalData.h>
+#include <AlosPalsar/AlosPalsarSignalData.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimEndian.h>
 
@@ -18,15 +18,15 @@
 namespace ossimplugins
 {
 
-AlosSarSignalData::AlosSarSignalData() : AlosSarRecord("sar_sig_dat_rec")
+AlosPalsarSignalData::AlosPalsarSignalData() : AlosPalsarRecord("sar_sig_dat_rec")
 {
 }
 
-AlosSarSignalData::~AlosSarSignalData()
+AlosPalsarSignalData::~AlosPalsarSignalData()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarSignalData& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarSignalData& data)
 {
   os << "_pulse_repetition_frequency:"
      << data._pulse_repetition_frequency << std::endl;
@@ -36,7 +36,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarSignalData& data)
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarSignalData& data)
+std::istream& operator>>(std::istream& is, AlosPalsarSignalData& data)
 {
   ossim_uint16 tmpuint16;
   ossim_uint32 tmpuint32;
@@ -127,14 +127,14 @@ std::istream& operator>>(std::istream& is, AlosSarSignalData& data)
   return is;
 }
 
-AlosSarSignalData::AlosSarSignalData(const AlosSarSignalData& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarSignalData::AlosPalsarSignalData(const AlosPalsarSignalData& rhs):
+  AlosPalsarRecord(rhs),
   _pulse_repetition_frequency(rhs._pulse_repetition_frequency),
   _slant_range_to_1st_data_sample(rhs._slant_range_to_1st_data_sample)
 {
 }
 
-AlosSarSignalData& AlosSarSignalData::operator=(const AlosSarSignalData& rhs)
+AlosPalsarSignalData& AlosPalsarSignalData::operator=(const AlosPalsarSignalData& rhs)
 {
   _pulse_repetition_frequency = rhs._pulse_repetition_frequency;
   _slant_range_to_1st_data_sample = rhs._slant_range_to_1st_data_sample;

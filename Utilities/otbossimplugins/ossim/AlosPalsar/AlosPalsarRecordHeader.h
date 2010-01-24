@@ -10,8 +10,8 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarRecordHeader_h
-#define AlosSarRecordHeader_h
+#ifndef AlosPalsarRecordHeader_h
+#define AlosPalsarRecordHeader_h
 
 #include<iostream>
 #include<cstring>
@@ -20,40 +20,40 @@ namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSar
+ * @ingroup AlosPalsar
  * @brief This class is able to read a record header
  */
-class AlosSarRecordHeader
+class AlosPalsarRecordHeader
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarRecordHeader();
+  AlosPalsarRecordHeader();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarRecordHeader();
+  ~AlosPalsarRecordHeader();
 
   /**
    * @brief Copy constructor
    */
-  AlosSarRecordHeader(const AlosSarRecordHeader& rhs);
+  AlosPalsarRecordHeader(const AlosPalsarRecordHeader& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarRecordHeader& operator=(const AlosSarRecordHeader& rhs);
+  AlosPalsarRecordHeader& operator=(const AlosPalsarRecordHeader& rhs);
   /**
    * @brief This function write the RecordHeader in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarRecordHeader& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarRecordHeader& data);
 
   /**
    * @brief This function read a RecordHeader from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarRecordHeader& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarRecordHeader& data);
 
   /**
    * @brief Record sequence number

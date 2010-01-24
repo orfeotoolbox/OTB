@@ -20,8 +20,8 @@
 
 #include <ossim/base/ossimTrace.h>
 #include <otb/RefPoint.h>
-#include <AlosPalsar/AlosSarLeader.h>
-#include <AlosPalsar/AlosSarData.h>
+#include <AlosPalsar/AlosPalsarLeader.h>
+#include <AlosPalsar/AlosPalsarData.h>
 #include <otb/SensorParams.h>
 #include <otb/PlatformPosition.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -41,22 +41,22 @@ RTTI_DEF1(ossimAlosPalsarModel, "ossimAlosPalsarModel", ossimGeometricSarSensorM
 
 ossimAlosPalsarModel::ossimAlosPalsarModel():
   thePixelSpacing(0),
-  theAlosSarLeader(NULL),
-  theAlosSarData(NULL)
+  theAlosPalsarLeader(NULL),
+  theAlosPalsarData(NULL)
 {
 }
 
 ossimAlosPalsarModel::~ossimAlosPalsarModel()
 {
-  if(theAlosSarLeader != NULL)
+  if(theAlosPalsarLeader != NULL)
   {
-    delete theAlosSarLeader;
-    theAlosSarLeader = NULL;
+    delete theAlosPalsarLeader;
+    theAlosPalsarLeader = NULL;
   }
-  if(theAlosSarData != NULL)
+  if(theAlosPalsarData != NULL)
   {
-    delete theAlosSarData;
-    theAlosSarData = NULL;
+    delete theAlosPalsarData;
+    theAlosPalsarData = NULL;
   }
 }
 
@@ -171,14 +171,14 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
  /*
   * Creation of the class allowing to store Leader file metadata
   */
-  if(theAlosSarLeader != NULL)
+  if(theAlosPalsarLeader != NULL)
   {
-    delete theAlosSarLeader;
-    theAlosSarLeader = NULL;
+    delete theAlosPalsarLeader;
+    theAlosPalsarLeader = NULL;
   }
 
-  theAlosSarLeader = new AlosSarLeader();
-  theAlosSarData = new AlosSarData();
+  theAlosPalsarLeader = new AlosPalsarLeader();
+  theAlosPalsarData = new AlosPalsarData();
 
   if ( leaFilename.exists() )
   {
@@ -202,7 +202,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
        * Leader file data reading
        */
       std::ifstream leaderFile(leaFilename, ios::in|ios::binary);
-      leaderFile>>*theAlosSarLeader;
+      leaderFile>>*theAlosPalsarLeader;
       leaderFile.close();
 
       if(traceDebug())
@@ -226,7 +226,7 @@ bool ossimAlosPalsarModel::open(const ossimFilename& file)
          * Read header of data file for image size info
          */
         std::ifstream dataFile(datFilename, ios::in|ios::binary);
-        dataFile>>*theAlosSarData;
+        dataFile>>*theAlosPalsarData;
         dataFile.close();
 
         if (traceDebug())
@@ -274,22 +274,22 @@ bool ossimAlosPalsarModel::saveState(ossimKeywordlist& kwl,
 
   kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
 
-  if (theAlosSarLeader == NULL)
+  if (theAlosPalsarLeader == NULL)
   {
-    std::cout << "Error: AlosSarLeader is NULL" << std::endl;
+    std::cout << "Error: AlosPalsarLeader is NULL" << std::endl;
     return false;
   }
 
-  result = theAlosSarLeader->saveState(kwl);
+  result = theAlosPalsarLeader->saveState(kwl);
 
   if (result == true)
   {
-    if (theAlosSarData == NULL)
+    if (theAlosPalsarData == NULL)
     {
-      std::cout << "Error: AlosSarData is NULL" << std::endl;
+      std::cout << "Error: AlosPalsarData is NULL" << std::endl;
       return false;
     }
-    result = theAlosSarData->saveState(kwl);
+    result = theAlosPalsarData->saveState(kwl);
   }
 
   if (traceDebug())

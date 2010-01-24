@@ -10,12 +10,12 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarPositionVectorRecord_h
-#define AlosSarPositionVectorRecord_h
+#ifndef AlosPalsarPositionVectorRecord_h
+#define AlosPalsarPositionVectorRecord_h
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
@@ -24,37 +24,37 @@ namespace ossimplugins
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a position vector record
  */
-class AlosSarPositionVectorRecord
+class AlosPalsarPositionVectorRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarPositionVectorRecord();
+  AlosPalsarPositionVectorRecord();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarPositionVectorRecord();
+  ~AlosPalsarPositionVectorRecord();
 
   /**
    * @brief Copy constructor
    */
-  AlosSarPositionVectorRecord(const AlosSarPositionVectorRecord& rhs);
+  AlosPalsarPositionVectorRecord(const AlosPalsarPositionVectorRecord& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarPositionVectorRecord& operator=(const AlosSarPositionVectorRecord& rhs);
+  AlosPalsarPositionVectorRecord& operator=(const AlosPalsarPositionVectorRecord& rhs);
   /**
-   * @brief This function write the AlosSar PositionVectorRecord in a stream
+   * @brief This function write the AlosPalsar PositionVectorRecord in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarPositionVectorRecord& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarPositionVectorRecord& data);
 
   /**
-   * @brief This function read a AlosSar PositionVectorRecord from a stream
+   * @brief This function read a AlosPalsar PositionVectorRecord from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarPositionVectorRecord& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarPositionVectorRecord& data);
 
   /**
    * @brief Data point position (m)

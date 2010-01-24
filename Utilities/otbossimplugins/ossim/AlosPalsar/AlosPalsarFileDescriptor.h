@@ -10,69 +10,69 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarFileDescriptor_h
-#define AlosSarFileDescriptor_h
+#ifndef AlosPalsarFileDescriptor_h
+#define AlosPalsarFileDescriptor_h
 
-// TODO Rename to AlosSarLeaderFileDescriptor
+// TODO Rename to AlosPalsarLeaderFileDescriptor
 
 #include<iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup SARLeaderAlosSarFileDescriptorRecord
+ * @ingroup SARLeaderAlosPalsarFileDescriptorRecord
  * @brief This class is able to read the SAR leader file descriptor record of the leader file
  */
-class AlosSarFileDescriptor : public AlosSarRecord
+class AlosPalsarFileDescriptor : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarFileDescriptor();
+  AlosPalsarFileDescriptor();
   /**
    * @brief Destructor
    */
-  ~AlosSarFileDescriptor();
+  ~AlosPalsarFileDescriptor();
 
   /**
-   * @brief This function write the AlosSarFileDescriptor in a stream
+   * @brief This function write the AlosPalsarFileDescriptor in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarFileDescriptor& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarFileDescriptor& data);
 
   /**
-   * @brief This function read a AlosSarFileDescriptor from a stream
+   * @brief This function read a AlosPalsarFileDescriptor from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarFileDescriptor& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarFileDescriptor& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarFileDescriptor(const AlosSarFileDescriptor& rhs);
+  AlosPalsarFileDescriptor(const AlosPalsarFileDescriptor& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarFileDescriptor& operator=(const AlosSarFileDescriptor& rhs);
+  AlosPalsarFileDescriptor& operator=(const AlosPalsarFileDescriptor& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarFileDescriptor();
+    return new AlosPalsarFileDescriptor();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarFileDescriptor(*this);
+    return new AlosPalsarFileDescriptor(*this);
   };
 
   /**

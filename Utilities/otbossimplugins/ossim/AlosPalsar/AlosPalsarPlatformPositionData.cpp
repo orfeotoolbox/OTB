@@ -10,21 +10,21 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarPlatformPositionData.h>
+#include <AlosPalsar/AlosPalsarPlatformPositionData.h>
 
 namespace ossimplugins
 {
 
 
-AlosSarPlatformPositionData::AlosSarPlatformPositionData() : AlosSarRecord("pos_data_rec")
+AlosPalsarPlatformPositionData::AlosPalsarPlatformPositionData() : AlosPalsarRecord("pos_data_rec")
 {
 }
 
-AlosSarPlatformPositionData::~AlosSarPlatformPositionData()
+AlosPalsarPlatformPositionData::~AlosPalsarPlatformPositionData()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarPlatformPositionData& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarPlatformPositionData& data)
 {
   os<<"orbit_ele_desg:"<<data._orbit_ele_desg.c_str()<<std::endl;
 
@@ -71,7 +71,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarPlatformPositionData& da
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarPlatformPositionData& data)
+std::istream& operator>>(std::istream& is, AlosPalsarPlatformPositionData& data)
 {
   char buf[1207];
   buf[1206] = '\0';
@@ -158,8 +158,8 @@ std::istream& operator>>(std::istream& is, AlosSarPlatformPositionData& data)
   return is;
 }
 
-AlosSarPlatformPositionData::AlosSarPlatformPositionData(const AlosSarPlatformPositionData& rhs):
-  AlosSarRecord(rhs)
+AlosPalsarPlatformPositionData::AlosPalsarPlatformPositionData(const AlosPalsarPlatformPositionData& rhs):
+  AlosPalsarRecord(rhs)
 {
   _orbit_ele_desg = rhs._orbit_ele_desg;
 
@@ -205,7 +205,7 @@ AlosSarPlatformPositionData::AlosSarPlatformPositionData(const AlosSarPlatformPo
 
 }
 
-AlosSarPlatformPositionData& AlosSarPlatformPositionData::operator=(const AlosSarPlatformPositionData& rhs)
+AlosPalsarPlatformPositionData& AlosPalsarPlatformPositionData::operator=(const AlosPalsarPlatformPositionData& rhs)
 {
     _orbit_ele_desg = rhs._orbit_ele_desg;
 

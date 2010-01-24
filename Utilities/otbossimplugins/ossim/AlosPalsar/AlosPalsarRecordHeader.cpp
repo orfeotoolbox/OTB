@@ -10,21 +10,21 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
 
 namespace ossimplugins
 {
 
 
-AlosSarRecordHeader::AlosSarRecordHeader()
+AlosPalsarRecordHeader::AlosPalsarRecordHeader()
 {
 }
 
-AlosSarRecordHeader::~AlosSarRecordHeader()
+AlosPalsarRecordHeader::~AlosPalsarRecordHeader()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarRecordHeader& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarRecordHeader& data)
 {
   os<<"record_sequence_number:"<<data._rec_seq<<std::endl;
   os<<"first_record_sub-type:"<<(int)data._rec_sub1<<std::endl;
@@ -35,7 +35,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarRecordHeader& data)
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarRecordHeader& data)
+std::istream& operator>>(std::istream& is, AlosPalsarRecordHeader& data)
 {
   is.read((char*)&(data._rec_seq),4); // TODO Change dangerous C-style cast to static cast.
   data.SwitchEndian(data._rec_seq);
@@ -48,7 +48,7 @@ std::istream& operator>>(std::istream& is, AlosSarRecordHeader& data)
   return is;
 }
 
-AlosSarRecordHeader::AlosSarRecordHeader(const AlosSarRecordHeader& rhs):
+AlosPalsarRecordHeader::AlosPalsarRecordHeader(const AlosPalsarRecordHeader& rhs):
   _rec_seq(rhs._rec_seq),
   _rec_sub1(rhs._rec_sub1),
   _rec_type(rhs._rec_type),
@@ -57,7 +57,7 @@ AlosSarRecordHeader::AlosSarRecordHeader(const AlosSarRecordHeader& rhs):
 {
 }
 
-AlosSarRecordHeader& AlosSarRecordHeader::operator=(const AlosSarRecordHeader& rhs)
+AlosPalsarRecordHeader& AlosPalsarRecordHeader::operator=(const AlosPalsarRecordHeader& rhs)
 {
   _rec_seq=rhs._rec_seq;
   _rec_sub1=rhs._rec_sub1;
@@ -67,7 +67,7 @@ AlosSarRecordHeader& AlosSarRecordHeader::operator=(const AlosSarRecordHeader& r
   return *this;
 }
 
-void AlosSarRecordHeader::SwitchEndian(unsigned int& value)
+void AlosPalsarRecordHeader::SwitchEndian(unsigned int& value)
 {
   char buffer[4];
   char res[4];

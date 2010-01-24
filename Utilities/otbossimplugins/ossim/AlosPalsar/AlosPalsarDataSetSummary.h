@@ -10,68 +10,68 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarDataSetSummary_h
-#define AlosSarDataSetSummary_h
+#ifndef AlosPalsarDataSetSummary_h
+#define AlosPalsarDataSetSummary_h
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSarDataSetSummaryRecord
+ * @ingroup AlosPalsarDataSetSummaryRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file
  */
-class AlosSarDataSetSummary : public AlosSarRecord
+class AlosPalsarDataSetSummary : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarDataSetSummary();
+  AlosPalsarDataSetSummary();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarDataSetSummary();
+  ~AlosPalsarDataSetSummary();
 
   /**
-   * @brief This function write the AlosSarDataSetSummary in a stream
+   * @brief This function write the AlosPalsarDataSetSummary in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarDataSetSummary& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarDataSetSummary& data);
 
   /**
-   * @brief This function read a AlosSarDataSetSummary from a stream
+   * @brief This function read a AlosPalsarDataSetSummary from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarDataSetSummary& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarDataSetSummary& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarDataSetSummary(const AlosSarDataSetSummary& rhs);
+  AlosPalsarDataSetSummary(const AlosPalsarDataSetSummary& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarDataSetSummary& operator=(const AlosSarDataSetSummary& rhs);
+  AlosPalsarDataSetSummary& operator=(const AlosPalsarDataSetSummary& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarDataSetSummary();
+    return new AlosPalsarDataSetSummary();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarDataSetSummary(*this);
+    return new AlosPalsarDataSetSummary(*this);
   };
 
   /**

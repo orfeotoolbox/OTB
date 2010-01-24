@@ -10,14 +10,14 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarPlatformPositionData_h
-#define AlosSarPlatformPositionData_h
+#ifndef AlosPalsarPlatformPositionData_h
+#define AlosPalsarPlatformPositionData_h
 
 #include <iostream>
-#include <AlosPalsar/AlosSarRecord.h>
-#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
 
-#include <AlosPalsar/AlosSarPositionVectorRecord.h>
+#include <AlosPalsar/AlosPalsarPositionVectorRecord.h>
 
 namespace ossimplugins
 {
@@ -26,52 +26,52 @@ namespace ossimplugins
  * @ingroup PlatformPositionDataRecord
  * @brief This class is able to read a Platform position data record
  */
-class AlosSarPlatformPositionData : public AlosSarRecord
+class AlosPalsarPlatformPositionData : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarPlatformPositionData();
+  AlosPalsarPlatformPositionData();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarPlatformPositionData();
+  ~AlosPalsarPlatformPositionData();
 
   /**
    * @brief Copy constructor
    */
-  AlosSarPlatformPositionData(const AlosSarPlatformPositionData& rhs);
+  AlosPalsarPlatformPositionData(const AlosPalsarPlatformPositionData& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarPlatformPositionData& operator=(const AlosSarPlatformPositionData& rhs);
+  AlosPalsarPlatformPositionData& operator=(const AlosPalsarPlatformPositionData& rhs);
   /**
-   * @brief This function write the AlosSar PlatformPositionData in a stream
+   * @brief This function write the AlosPalsar PlatformPositionData in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarPlatformPositionData& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarPlatformPositionData& data);
 
   /**
-   * @brief This function read a AlosSar PlatformPositionData from a stream
+   * @brief This function read a AlosPalsar PlatformPositionData from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarPlatformPositionData& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarPlatformPositionData& data);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarPlatformPositionData();
+    return new AlosPalsarPlatformPositionData();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarPlatformPositionData(*this);
+    return new AlosPalsarPlatformPositionData(*this);
   };
 
   /**
@@ -212,7 +212,7 @@ public:
     /**
    * @brief Data point position/velocity
    */
-  const AlosSarPositionVectorRecord* get_pos_vect() const
+  const AlosPalsarPositionVectorRecord* get_pos_vect() const
   {
     return _pos_vect;
   };
@@ -289,7 +289,7 @@ protected:
     /**
    * @brief Data point position/velocity
    */
-  AlosSarPositionVectorRecord _pos_vect[64];
+  AlosPalsarPositionVectorRecord _pos_vect[64];
 
 private:
 };

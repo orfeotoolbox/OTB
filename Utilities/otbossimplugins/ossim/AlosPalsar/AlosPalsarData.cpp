@@ -10,38 +10,38 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarData.h>
-#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarData.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
 
-#include <AlosPalsar/AlosSarDataFileDescriptor.h>
-#include <AlosPalsar/AlosSarSignalData.h>
+#include <AlosPalsar/AlosPalsarDataFileDescriptor.h>
+#include <AlosPalsar/AlosPalsarSignalData.h>
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 
 // Static trace for debugging
-static ossimTrace traceDebug("ossimAlosSarData:debug");
+static ossimTrace traceDebug("ossimAlosPalsarData:debug");
 
 namespace ossimplugins
 {
 
-const int AlosSarData::AlosSarDataFileDescriptorID = 1;
-const int AlosSarData::AlosSarSignalDataID = 2;
+const int AlosPalsarData::AlosPalsarDataFileDescriptorID = 1;
+const int AlosPalsarData::AlosPalsarSignalDataID = 2;
 
-AlosSarData::AlosSarData()
+AlosPalsarData::AlosPalsarData()
 {
 
 }
 
-AlosSarData::~AlosSarData()
+AlosPalsarData::~AlosPalsarData()
 {
   ClearRecords();
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarData& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarData& data)
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = data._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = data._records.begin();
   while(it != data._records.end())
   {
     (*it).second->Write(os);
@@ -51,16 +51,16 @@ std::ostream& operator<<(std::ostream& os, const AlosSarData& data)
 
 }
 
-std::istream& operator>>(std::istream& is, AlosSarData& data)
+std::istream& operator>>(std::istream& is, AlosPalsarData& data)
 {
 
   data.ClearRecords();
 
-  AlosSarRecordHeader header;
+  AlosPalsarRecordHeader header;
 
   is>>header;
 
-  AlosSarRecord* record = new AlosSarDataFileDescriptor;
+  AlosPalsarRecord* record = new AlosPalsarDataFileDescriptor;
   if (record != NULL)
   {
     record->Read(is);
@@ -78,7 +78,7 @@ std::istream& operator>>(std::istream& is, AlosSarData& data)
   filePosition = is.tellg();
   is>>header;
 
-  record = new AlosSarSignalData;
+  record = new AlosPalsarSignalData;
 
   if (record != NULL)
   {
@@ -94,9 +94,9 @@ std::istream& operator>>(std::istream& is, AlosSarData& data)
 }
 
 
-AlosSarData::AlosSarData(const AlosSarData& rhs)
+AlosPalsarData::AlosPalsarData(const AlosPalsarData& rhs)
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = rhs._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -104,10 +104,10 @@ AlosSarData::AlosSarData(const AlosSarData& rhs)
   }
 }
 
-AlosSarData& AlosSarData::operator=(const AlosSarData& rhs)
+AlosPalsarData& AlosPalsarData::operator=(const AlosPalsarData& rhs)
 {
   ClearRecords();
-  std::map<int, AlosSarRecord*>::const_iterator it = rhs._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -117,9 +117,9 @@ AlosSarData& AlosSarData::operator=(const AlosSarData& rhs)
   return *this;
 }
 
-void AlosSarData::ClearRecords()
+void AlosPalsarData::ClearRecords()
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = _records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = _records.begin();
   while(it != _records.end())
   {
     delete (*it).second;
@@ -128,11 +128,11 @@ void AlosSarData::ClearRecords()
   _records.clear();
 }
 
-bool AlosSarData::saveState(ossimKeywordlist& kwl,
+bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
                              const char* prefix) const
 {
 
-  static const char MODULE[] = "AlosSarData::saveState";
+  static const char MODULE[] = "AlosPalsarData::saveState";
 
   if (traceDebug())
   {
@@ -144,7 +144,7 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  const AlosSarDataFileDescriptor *datafiledesc = get_AlosSarDataFileDescriptor();
+  const AlosPalsarDataFileDescriptor *datafiledesc = get_AlosPalsarDataFileDescriptor();
   if (datafiledesc != NULL)
   {
     kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(),true);
@@ -155,7 +155,7 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
     result = false;
   }
 
-  const AlosSarSignalData *signalData = get_AlosSarSignalData();
+  const AlosPalsarSignalData *signalData = get_AlosPalsarSignalData();
   if (datafiledesc != NULL)
   {
     kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(),true);
@@ -172,15 +172,15 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
 }
 
 
-const AlosSarDataFileDescriptor * AlosSarData::get_AlosSarDataFileDescriptor() const
+const AlosPalsarDataFileDescriptor * AlosPalsarData::get_AlosPalsarDataFileDescriptor() const
 {
-  return dynamic_cast<const AlosSarDataFileDescriptor*>(_records.find(AlosSarDataFileDescriptorID)->second);
+  return dynamic_cast<const AlosPalsarDataFileDescriptor*>(_records.find(AlosPalsarDataFileDescriptorID)->second);
 }
 
-const AlosSarSignalData * AlosSarData::get_AlosSarSignalData() const
+const AlosPalsarSignalData * AlosPalsarData::get_AlosPalsarSignalData() const
 {
-  // TODO: Check if _records[AlosSarSignalDataID] works
-  return dynamic_cast<const AlosSarSignalData*>(_records.find(AlosSarSignalDataID)->second);
+  // TODO: Check if _records[AlosPalsarSignalDataID] works
+  return dynamic_cast<const AlosPalsarSignalData*>(_records.find(AlosPalsarSignalDataID)->second);
 }
 
 }

@@ -10,20 +10,20 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarDataSetSummary.h>
+#include <AlosPalsar/AlosPalsarDataSetSummary.h>
 
 namespace ossimplugins
 {
 
-AlosSarDataSetSummary::AlosSarDataSetSummary() : AlosSarRecord("dataset_sum_rec")
+AlosPalsarDataSetSummary::AlosPalsarDataSetSummary() : AlosPalsarRecord("dataset_sum_rec")
 {
 }
 
-AlosSarDataSetSummary::~AlosSarDataSetSummary()
+AlosPalsarDataSetSummary::~AlosPalsarDataSetSummary()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarDataSetSummary& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarDataSetSummary& data)
 {
   os<<"seq_num:"<<data._seq_num<<std::endl;
 
@@ -198,7 +198,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarDataSetSummary& data)
 
 }
 
-std::istream& operator>>(std::istream& is, AlosSarDataSetSummary& data)
+std::istream& operator>>(std::istream& is, AlosPalsarDataSetSummary& data)
 {
   char buf16[17];
   buf16[16]='\0';
@@ -523,8 +523,8 @@ std::istream& operator>>(std::istream& is, AlosSarDataSetSummary& data)
 }
 
 
-AlosSarDataSetSummary::AlosSarDataSetSummary(const AlosSarDataSetSummary& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarDataSetSummary::AlosPalsarDataSetSummary(const AlosPalsarDataSetSummary& rhs):
+  AlosPalsarRecord(rhs),
   _seq_num(rhs._seq_num),
     _sar_chn(rhs._sar_chn),
   _scene_id(rhs._scene_id),
@@ -632,7 +632,7 @@ AlosSarDataSetSummary::AlosSarDataSetSummary(const AlosSarDataSetSummary& rhs):
   _crt_rate[2] = rhs._crt_rate[2];
 }
 
-AlosSarDataSetSummary& AlosSarDataSetSummary::operator=(const AlosSarDataSetSummary& rhs)
+AlosPalsarDataSetSummary& AlosPalsarDataSetSummary::operator=(const AlosPalsarDataSetSummary& rhs)
 {
   _seq_num = rhs._seq_num;
     _sar_chn = rhs._sar_chn;

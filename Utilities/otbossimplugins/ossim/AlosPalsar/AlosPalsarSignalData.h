@@ -10,68 +10,68 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarSignalData_h
-#define AlosSarSignalData_h
+#ifndef AlosPalsarSignalData_h
+#define AlosPalsarSignalData_h
 
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup SARDataAlosSarSignalDataRecord
+ * @ingroup SARDataAlosPalsarSignalDataRecord
  * @brief This class is able to read the header of the Signal Data Records of the image file
  */
-class AlosSarSignalData : public AlosSarRecord
+class AlosPalsarSignalData : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarSignalData();
+  AlosPalsarSignalData();
   /**
    * @brief Destructor
    */
-  ~AlosSarSignalData();
+  ~AlosPalsarSignalData();
 
   /**
-   * @brief This function writes AlosSarSignalData to a stream
+   * @brief This function writes AlosPalsarSignalData to a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarSignalData& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarSignalData& data);
 
   /**
-   * @brief This function reads to AlosSarSignalData from a stream
+   * @brief This function reads to AlosPalsarSignalData from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarSignalData& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarSignalData& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarSignalData(const AlosSarSignalData& rhs);
+  AlosPalsarSignalData(const AlosPalsarSignalData& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarSignalData& operator=(const AlosSarSignalData& rhs);
+  AlosPalsarSignalData& operator=(const AlosPalsarSignalData& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarSignalData();
+    return new AlosPalsarSignalData();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarSignalData(*this);
+    return new AlosPalsarSignalData(*this);
   };
 
   /**

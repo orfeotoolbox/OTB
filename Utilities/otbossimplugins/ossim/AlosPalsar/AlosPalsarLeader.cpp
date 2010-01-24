@@ -10,42 +10,42 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarLeader.h>
-#include <AlosPalsar/AlosSarLeaderFactory.h>
-#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarLeader.h>
+#include <AlosPalsar/AlosPalsarLeaderFactory.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
 
-#include <AlosPalsar/AlosSarFileDescriptor.h>
-#include <AlosPalsar/AlosSarDataSetSummary.h>
-#include <AlosPalsar/AlosSarFacilityData.h>
+#include <AlosPalsar/AlosPalsarFileDescriptor.h>
+#include <AlosPalsar/AlosPalsarDataSetSummary.h>
+#include <AlosPalsar/AlosPalsarFacilityData.h>
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 
 // Static trace for debugging
-static ossimTrace traceDebug("ossimAlosSarLeader:debug");
+static ossimTrace traceDebug("ossimAlosPalsarLeader:debug");
 
 namespace ossimplugins
 {
 
-const int AlosSarLeader::AlosSarFacilityDataID = 17;
-const int AlosSarLeader::AlosSarPlatformPositionDataID = 3;
-// const int AlosSarLeader::AlosSarMapProjectionDataID = 3; //
-const int AlosSarLeader::AlosSarDataSetSummaryID = 2;
-const int AlosSarLeader::AlosSarFileDescriptorID = 1;
+const int AlosPalsarLeader::AlosPalsarFacilityDataID = 17;
+const int AlosPalsarLeader::AlosPalsarPlatformPositionDataID = 3;
+// const int AlosPalsarLeader::AlosPalsarMapProjectionDataID = 3; //
+const int AlosPalsarLeader::AlosPalsarDataSetSummaryID = 2;
+const int AlosPalsarLeader::AlosPalsarFileDescriptorID = 1;
 
-AlosSarLeader::AlosSarLeader()
+AlosPalsarLeader::AlosPalsarLeader()
 {
 }
 
-AlosSarLeader::~AlosSarLeader()
+AlosPalsarLeader::~AlosPalsarLeader()
 {
   ClearRecords();
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarLeader& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarLeader& data)
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = data._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = data._records.begin();
   while(it != data._records.end())
   {
     (*it).second->Write(os);
@@ -55,13 +55,13 @@ std::ostream& operator<<(std::ostream& os, const AlosSarLeader& data)
 
 }
 
-std::istream& operator>>(std::istream& is, AlosSarLeader& data)
+std::istream& operator>>(std::istream& is, AlosPalsarLeader& data)
 {
-  AlosSarLeaderFactory factory;
+  AlosPalsarLeaderFactory factory;
 
   data.ClearRecords();
 
-  AlosSarRecordHeader header;
+  AlosPalsarRecordHeader header;
   bool eof = false;
   while(!eof)
   {
@@ -72,7 +72,7 @@ std::istream& operator>>(std::istream& is, AlosSarLeader& data)
     }
     else
     {
-      AlosSarRecord* record = factory.Instanciate(header.get_rec_seq());
+      AlosPalsarRecord* record = factory.Instanciate(header.get_rec_seq());
       if (record != NULL)
       {
         record->Read(is);
@@ -90,9 +90,9 @@ std::istream& operator>>(std::istream& is, AlosSarLeader& data)
 }
 
 
-AlosSarLeader::AlosSarLeader(const AlosSarLeader& rhs)
+AlosPalsarLeader::AlosPalsarLeader(const AlosPalsarLeader& rhs)
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = rhs._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -100,10 +100,10 @@ AlosSarLeader::AlosSarLeader(const AlosSarLeader& rhs)
   }
 }
 
-AlosSarLeader& AlosSarLeader::operator=(const AlosSarLeader& rhs)
+AlosPalsarLeader& AlosPalsarLeader::operator=(const AlosPalsarLeader& rhs)
 {
   ClearRecords();
-  std::map<int, AlosSarRecord*>::const_iterator it = rhs._records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
   while(it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
@@ -113,9 +113,9 @@ AlosSarLeader& AlosSarLeader::operator=(const AlosSarLeader& rhs)
   return *this;
 }
 
-void AlosSarLeader::ClearRecords()
+void AlosPalsarLeader::ClearRecords()
 {
-  std::map<int, AlosSarRecord*>::const_iterator it = _records.begin();
+  std::map<int, AlosPalsarRecord*>::const_iterator it = _records.begin();
   while(it != _records.end())
   {
     delete (*it).second;
@@ -124,11 +124,11 @@ void AlosSarLeader::ClearRecords()
   _records.clear();
 }
 
-bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
+bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
                              const char* prefix) const
 {
 
-  static const char MODULE[] = "AlosSarLeader::saveState";
+  static const char MODULE[] = "AlosPalsarLeader::saveState";
 
   if (traceDebug())
   {
@@ -143,7 +143,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  const AlosSarFileDescriptor *leaderfiledesc = get_AlosSarFileDescriptor();
+  const AlosPalsarFileDescriptor *leaderfiledesc = get_AlosPalsarFileDescriptor();
   if (leaderfiledesc != NULL)
   {
     kwl.add(prefix, "filename",leaderfiledesc->get_file_name().c_str(),true);
@@ -156,7 +156,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  const AlosSarDataSetSummary *datasetSummary = get_AlosSarDataSetSummary();
+  const AlosPalsarDataSetSummary *datasetSummary = get_AlosPalsarDataSetSummary();
   if ( (datasetSummary != NULL) && (result == true) )
   {
     kwl.add(prefix, "inp_sctim",(datasetSummary->get_inp_sctim()).c_str(),true);
@@ -185,7 +185,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   }
 
   // FIXME do not handle Alos map projection information for now...
-//   const AlosSarMapProjectionData *mapprojectiondata = get_AlosSarMapProjectionData();
+//   const AlosPalsarMapProjectionData *mapprojectiondata = get_AlosPalsarMapProjectionData();
 //   if ( (mapprojectiondata != NULL) && (result == true) )
 //   {
 //     kwl.add(prefix, "map_proj_des",(mapprojectiondata->get_map_proj_des()).c_str(),true);
@@ -205,7 +205,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
 //     result = false;
 //   }
 
-  const AlosSarPlatformPositionData *platformposition = get_AlosSarPlatformPositionData();
+  const AlosPalsarPlatformPositionData *platformposition = get_AlosPalsarPlatformPositionData();
   if ( (platformposition != NULL) && (result == true) )
   {
     kwl.add(prefix, "neph", platformposition->get_ndata(),true);
@@ -241,7 +241,7 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */
-  const AlosSarFacilityData *facilitydata = get_AlosSarFacilityData();
+  const AlosPalsarFacilityData *facilitydata = get_AlosPalsarFacilityData();
   if ( (facilitydata != NULL) && (result == true) )
   {
     kwl.add(prefix, "coef_ground_range_1",facilitydata->get_coef_ground_range_1(),true);
@@ -266,38 +266,38 @@ bool AlosSarLeader::saveState(ossimKeywordlist& kwl,
   return result;
 }
 
-const AlosSarFacilityData * AlosSarLeader::get_AlosSarFacilityData() const
+const AlosPalsarFacilityData * AlosPalsarLeader::get_AlosPalsarFacilityData() const
 {
-//   return const_cast<const AlosSarFacilityData*>(dynamic_cast<AlosSarFacilityData*>(_records[AlosSarFacilityDataID]));
-//   RecordType::const_iterator it = _records.find(AlosSarFacilityDataID)->second;
-//   return dynamic_cast<const AlosSarFacilityData*>(it.find(AlosSarFacilityDataID));
-  return dynamic_cast<const AlosSarFacilityData*>(_records.find(AlosSarFacilityDataID)->second);
+//   return const_cast<const AlosPalsarFacilityData*>(dynamic_cast<AlosPalsarFacilityData*>(_records[AlosPalsarFacilityDataID]));
+//   RecordType::const_iterator it = _records.find(AlosPalsarFacilityDataID)->second;
+//   return dynamic_cast<const AlosPalsarFacilityData*>(it.find(AlosPalsarFacilityDataID));
+  return dynamic_cast<const AlosPalsarFacilityData*>(_records.find(AlosPalsarFacilityDataID)->second);
 }
-const AlosSarPlatformPositionData * AlosSarLeader::get_AlosSarPlatformPositionData() const
+const AlosPalsarPlatformPositionData * AlosPalsarLeader::get_AlosPalsarPlatformPositionData() const
 {
-//   return (AlosSarPlatformPositionData*)_records[AlosSarPlatformPositionDataID];
-  return dynamic_cast<const AlosSarPlatformPositionData*>(_records.find(AlosSarPlatformPositionDataID)->second);
+//   return (AlosPalsarPlatformPositionData*)_records[AlosPalsarPlatformPositionDataID];
+  return dynamic_cast<const AlosPalsarPlatformPositionData*>(_records.find(AlosPalsarPlatformPositionDataID)->second);
 }
-/*const AlosSarMapProjectionData * AlosSarLeader::get_AlosSarMapProjectionData() const
+/*const AlosPalsarMapProjectionData * AlosPalsarLeader::get_AlosPalsarMapProjectionData() const
 {
-//   return (AlosSarMapProjectionData*)_records[AlosSarMapProjectionDataID];
-  return dynamic_cast<const AlosSarMapProjectionData*>(_records.find(AlosSarMapProjectionDataID)->second);
+//   return (AlosPalsarMapProjectionData*)_records[AlosPalsarMapProjectionDataID];
+  return dynamic_cast<const AlosPalsarMapProjectionData*>(_records.find(AlosPalsarMapProjectionDataID)->second);
 }
 
 */
 
 //no map projection data
 
-const AlosSarDataSetSummary * AlosSarLeader::get_AlosSarDataSetSummary() const
+const AlosPalsarDataSetSummary * AlosPalsarLeader::get_AlosPalsarDataSetSummary() const
 {
-//   return (AlosSarDataSetSummary*)_records[AlosSarDataSetSummaryID];
-  return dynamic_cast<const AlosSarDataSetSummary*>(_records.find(AlosSarDataSetSummaryID)->second);
+//   return (AlosPalsarDataSetSummary*)_records[AlosPalsarDataSetSummaryID];
+  return dynamic_cast<const AlosPalsarDataSetSummary*>(_records.find(AlosPalsarDataSetSummaryID)->second);
 }
 
-const AlosSarFileDescriptor * AlosSarLeader::get_AlosSarFileDescriptor() const
+const AlosPalsarFileDescriptor * AlosPalsarLeader::get_AlosPalsarFileDescriptor() const
 {
-//   return (AlosSarFileDescriptor*)_records[AlosSarFileDescriptorID];
-  return dynamic_cast<const AlosSarFileDescriptor*>(_records.find(AlosSarFileDescriptorID)->second);
+//   return (AlosPalsarFileDescriptor*)_records[AlosPalsarFileDescriptorID];
+  return dynamic_cast<const AlosPalsarFileDescriptor*>(_records.find(AlosPalsarFileDescriptorID)->second);
 }
 
 }

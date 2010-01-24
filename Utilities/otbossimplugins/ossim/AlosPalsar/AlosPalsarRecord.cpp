@@ -10,22 +10,22 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 #include <memory.h>
 
 namespace ossimplugins
 {
 
-AlosSarRecord::AlosSarRecord(std::string mnemonic):
+AlosPalsarRecord::AlosPalsarRecord(std::string mnemonic):
   _mnemonic(mnemonic)
 {
 }
 
-AlosSarRecord::~AlosSarRecord()
+AlosPalsarRecord::~AlosPalsarRecord()
 {
 }
 
-AlosSarRecord::AlosSarRecord(const AlosSarRecord& rhs):
+AlosPalsarRecord::AlosPalsarRecord(const AlosPalsarRecord& rhs):
   _mnemonic(rhs._mnemonic)
 {
 }

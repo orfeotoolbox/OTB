@@ -10,28 +10,28 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarDataFileDescriptor.h>
+#include <AlosPalsar/AlosPalsarDataFileDescriptor.h>
 
 
 namespace ossimplugins
 {
 
-AlosSarDataFileDescriptor::AlosSarDataFileDescriptor() : AlosSarRecord("sar_desc_rec")
+AlosPalsarDataFileDescriptor::AlosPalsarDataFileDescriptor() : AlosPalsarRecord("sar_desc_rec")
 {
 }
 
-AlosSarDataFileDescriptor::~AlosSarDataFileDescriptor()
+AlosPalsarDataFileDescriptor::~AlosPalsarDataFileDescriptor()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarDataFileDescriptor& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarDataFileDescriptor& data)
 {
   os<<"_num_lines:"<<data._num_lines<<std::endl;
   os<<"_num_pix_in_line:"<<data._num_pix_in_line<<std::endl;
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarDataFileDescriptor& data)
+std::istream& operator>>(std::istream& is, AlosPalsarDataFileDescriptor& data)
 {
   char buf6[7];
   buf6[6] = '\0';
@@ -64,14 +64,14 @@ std::istream& operator>>(std::istream& is, AlosSarDataFileDescriptor& data)
   return is;
 }
 
-AlosSarDataFileDescriptor::AlosSarDataFileDescriptor(const AlosSarDataFileDescriptor& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarDataFileDescriptor::AlosPalsarDataFileDescriptor(const AlosPalsarDataFileDescriptor& rhs):
+  AlosPalsarRecord(rhs),
   _num_pix_in_line(rhs._num_pix_in_line),
   _num_lines(rhs._num_lines)
 {
 }
 
-AlosSarDataFileDescriptor& AlosSarDataFileDescriptor::operator=(const AlosSarDataFileDescriptor& rhs)
+AlosPalsarDataFileDescriptor& AlosPalsarDataFileDescriptor::operator=(const AlosPalsarDataFileDescriptor& rhs)
 {
   _num_lines = rhs._num_lines;
   _num_pix_in_line = rhs._num_pix_in_line;

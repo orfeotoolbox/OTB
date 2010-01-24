@@ -10,20 +10,20 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarFacilityData.h>
+#include <AlosPalsar/AlosPalsarFacilityData.h>
 
 namespace ossimplugins
 {
 
-AlosSarFacilityData::AlosSarFacilityData() : AlosSarRecord("facility_data_rec")
+AlosPalsarFacilityData::AlosPalsarFacilityData() : AlosPalsarRecord("facility_data_rec")
 {
 }
 
-AlosSarFacilityData::~AlosSarFacilityData()
+AlosPalsarFacilityData::~AlosPalsarFacilityData()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarFacilityData& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarFacilityData& data)
 {
   os<<"last_release_qc_date:"<<data._last_release_qc_date.c_str()<<std::endl;
 
@@ -337,7 +337,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarFacilityData& data)
 
 }
 
-std::istream& operator>>(std::istream& is, AlosSarFacilityData& data)
+std::istream& operator>>(std::istream& is, AlosPalsarFacilityData& data)
 {
   char buf64[65];
   buf64[64] = '\0';
@@ -847,8 +847,8 @@ std::istream& operator>>(std::istream& is, AlosSarFacilityData& data)
 }
 
 
-AlosSarFacilityData::AlosSarFacilityData(const AlosSarFacilityData& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarFacilityData::AlosPalsarFacilityData(const AlosPalsarFacilityData& rhs):
+  AlosPalsarRecord(rhs),
   _last_release_qc_date(rhs._last_release_qc_date),
   _last_release_cal_date(rhs._last_release_cal_date),
   _qa_summary_flag(rhs._qa_summary_flag),
@@ -1005,7 +1005,7 @@ AlosSarFacilityData::AlosSarFacilityData(const AlosSarFacilityData& rhs):
   _range_time_origin_ant(rhs._range_time_origin_ant)
 {}
 
-AlosSarFacilityData& AlosSarFacilityData::operator=(const AlosSarFacilityData& rhs)
+AlosPalsarFacilityData& AlosPalsarFacilityData::operator=(const AlosPalsarFacilityData& rhs)
 {
   _last_release_qc_date = rhs._last_release_qc_date;
   _last_release_cal_date = rhs._last_release_cal_date;

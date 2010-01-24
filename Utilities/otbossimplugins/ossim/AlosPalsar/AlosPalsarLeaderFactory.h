@@ -10,31 +10,31 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarLeaderFactory_h
-#define AlosSarLeaderFactory_h
+#ifndef AlosPalsarLeaderFactory_h
+#define AlosPalsarLeaderFactory_h
 
 
-#include <AlosPalsar/AlosSarRecordFactory.h>
+#include <AlosPalsar/AlosPalsarRecordFactory.h>
 #include <map>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSarLeaderFile
+ * @ingroup AlosPalsarLeaderFile
  * @brief This class is a facory able to construct Record base classes
  */
-class AlosSarLeaderFactory : public AlosSarRecordFactory
+class AlosPalsarLeaderFactory : public AlosPalsarRecordFactory
 {
 public:
   /**
    * @brief Contstructor
    */
-  AlosSarLeaderFactory();
+  AlosPalsarLeaderFactory();
   /**
    * @brief Destructor
    */
-  ~AlosSarLeaderFactory();
+  ~AlosPalsarLeaderFactory();
 
 
 protected:

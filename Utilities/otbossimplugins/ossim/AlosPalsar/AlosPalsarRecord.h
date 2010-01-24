@@ -10,47 +10,47 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarRecord_h
-#define AlosSarRecord_h
+#ifndef AlosPalsarRecord_h
+#define AlosPalsarRecord_h
 
 
-#include <AlosPalsar/AlosSarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <iostream>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSar
+ * @ingroup AlosPalsar
  * @brief This class is the base class of all the record classes
  */
-class AlosSarRecord
+class AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    * @param mnemonic Name of the record
    */
-  AlosSarRecord(std::string mnemonic);
+  AlosPalsarRecord(std::string mnemonic);
   /**
    * @brief Destructor
    */
-  ~AlosSarRecord();
+  ~AlosPalsarRecord();
 
   /**
    * @brief Copy constructor
    */
-  AlosSarRecord(const AlosSarRecord& rhs);
+  AlosPalsarRecord(const AlosPalsarRecord& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual AlosSarRecord* Instanciate() =0;
+  virtual AlosPalsarRecord* Instanciate() =0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  virtual AlosSarRecord* Clone()=0;
+  virtual AlosPalsarRecord* Clone()=0;
 
   /**
    * @brief Read the class data from a stream

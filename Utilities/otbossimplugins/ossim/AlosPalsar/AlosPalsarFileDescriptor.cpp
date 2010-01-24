@@ -10,21 +10,21 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarFileDescriptor.h>
+#include <AlosPalsar/AlosPalsarFileDescriptor.h>
 
 
 namespace ossimplugins
 {
 
-AlosSarFileDescriptor::AlosSarFileDescriptor() : AlosSarRecord("sar_desc_rec")
+AlosPalsarFileDescriptor::AlosPalsarFileDescriptor() : AlosPalsarRecord("sar_desc_rec")
 {
 }
 
-AlosSarFileDescriptor::~AlosSarFileDescriptor()
+AlosPalsarFileDescriptor::~AlosPalsarFileDescriptor()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarFileDescriptor& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarFileDescriptor& data)
 {
   os<<"ascii_flag:"<<data._ascii_flag.c_str()<<std::endl;
   os<<"continuation_flag:"<<data._continuation_flag.c_str()<<std::endl;
@@ -98,7 +98,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarFileDescriptor& data)
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarFileDescriptor& data)
+std::istream& operator>>(std::istream& is, AlosPalsarFileDescriptor& data)
 {
   char buf2[3];
   buf2[2] = '\0';
@@ -293,8 +293,8 @@ std::istream& operator>>(std::istream& is, AlosSarFileDescriptor& data)
   return is;
 }
 
-AlosSarFileDescriptor::AlosSarFileDescriptor(const AlosSarFileDescriptor& rhs):
-  AlosSarRecord(rhs),
+AlosPalsarFileDescriptor::AlosPalsarFileDescriptor(const AlosPalsarFileDescriptor& rhs):
+  AlosPalsarRecord(rhs),
   _ascii_flag(rhs._ascii_flag),
         _continuation_flag(rhs._continuation_flag),
   _format_doc(rhs._format_doc),
@@ -368,7 +368,7 @@ AlosSarFileDescriptor::AlosSarFileDescriptor(const AlosSarFileDescriptor& rhs):
 {
 }
 
-AlosSarFileDescriptor& AlosSarFileDescriptor::operator=(const AlosSarFileDescriptor& rhs)
+AlosPalsarFileDescriptor& AlosPalsarFileDescriptor::operator=(const AlosPalsarFileDescriptor& rhs)
 {
   _ascii_flag = rhs._ascii_flag;
   _continuation_flag = rhs._continuation_flag;

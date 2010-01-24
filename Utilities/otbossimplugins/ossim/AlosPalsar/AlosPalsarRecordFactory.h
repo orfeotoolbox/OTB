@@ -10,51 +10,51 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarRecordFactory_h
-#define AlosSarRecordFactory_h
+#ifndef AlosPalsarRecordFactory_h
+#define AlosPalsarRecordFactory_h
 
 
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 #include <map>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSar
+ * @ingroup AlosPalsar
  * @brief This class is a facory able to construct Record base classes given the id of the record wanted
  */
-class AlosSarRecordFactory
+class AlosPalsarRecordFactory
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarRecordFactory();
+  AlosPalsarRecordFactory();
   /**
    * @brief Destructor
    */
-  ~AlosSarRecordFactory();
+  ~AlosPalsarRecordFactory();
 
   /**
    * @brief Add a new Record type available in this factory
    * @param record Record to add in the factory
    * @param id Id of the new avalaible Record
    */
-  void RegisterRecord(int id, AlosSarRecord * record);
+  void RegisterRecord(int id, AlosPalsarRecord * record);
 
   /**
    * @brief Instanciate a new Record
    * @param id Id of the Record we want to instanciate
    */
-  AlosSarRecord* Instanciate(int id) ;
+  AlosPalsarRecord* Instanciate(int id) ;
 protected:
 
   /**
    * @brief Contain all the available Records for the factory
    */
-  std::map<int, AlosSarRecord*> _availableRecords;
+  std::map<int, AlosPalsarRecord*> _availableRecords;
 
 private:
 };

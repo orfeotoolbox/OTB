@@ -10,68 +10,68 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#ifndef AlosSarMapProjectionData_h
-#define AlosSarMapProjectionData_h
+#ifndef AlosPalsarMapProjectionData_h
+#define AlosPalsarMapProjectionData_h
 
 #include <iostream>
 #include <cstdlib>
-#include <AlosPalsar/AlosSarRecordHeader.h>
-#include <AlosPalsar/AlosSarRecord.h>
+#include <AlosPalsar/AlosPalsarRecordHeader.h>
+#include <AlosPalsar/AlosPalsarRecord.h>
 
 namespace ossimplugins
 {
 
 /**
- * @ingroup AlosSarMapProjectionDataRecord
+ * @ingroup AlosPalsarMapProjectionDataRecord
  * @brief This class is able to read the SAR leader data set summary record of the leader file
  */
-class AlosSarMapProjectionData : public AlosSarRecord
+class AlosPalsarMapProjectionData : public AlosPalsarRecord
 {
 public:
   /**
    * @brief Constructor
    */
-  AlosSarMapProjectionData();
+  AlosPalsarMapProjectionData();
 
   /**
    * @brief Destructor
    */
-  ~AlosSarMapProjectionData();
+  ~AlosPalsarMapProjectionData();
 
   /**
-   * @brief This function write the AlosSarMapProjectionData in a stream
+   * @brief This function write the AlosPalsarMapProjectionData in a stream
    */
-  friend std::ostream& operator<<(std::ostream& os, const AlosSarMapProjectionData& data);
+  friend std::ostream& operator<<(std::ostream& os, const AlosPalsarMapProjectionData& data);
 
   /**
-   * @brief This function read a AlosSarMapProjectionData from a stream
+   * @brief This function read a AlosPalsarMapProjectionData from a stream
    */
-  friend std::istream& operator>>(std::istream& is, AlosSarMapProjectionData& data);
+  friend std::istream& operator>>(std::istream& is, AlosPalsarMapProjectionData& data);
 
   /**
    * @brief Copy constructor
    */
-  AlosSarMapProjectionData(const AlosSarMapProjectionData& rhs);
+  AlosPalsarMapProjectionData(const AlosPalsarMapProjectionData& rhs);
 
   /**
    * @brief Copy operator
    */
-  AlosSarMapProjectionData& operator=(const AlosSarMapProjectionData& rhs);
+  AlosPalsarMapProjectionData& operator=(const AlosPalsarMapProjectionData& rhs);
 
   /**
    * @brief This function is able to create a new instance of the class
    */
-  AlosSarRecord* Instanciate()
+  AlosPalsarRecord* Instanciate()
   {
-    return new AlosSarMapProjectionData();
+    return new AlosPalsarMapProjectionData();
   };
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  AlosSarRecord* Clone()
+  AlosPalsarRecord* Clone()
   {
-    return new AlosSarMapProjectionData(*this);
+    return new AlosPalsarMapProjectionData(*this);
   };
 
   /**

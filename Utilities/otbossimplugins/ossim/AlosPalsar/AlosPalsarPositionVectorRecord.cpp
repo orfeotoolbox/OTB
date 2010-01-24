@@ -10,21 +10,21 @@
 //----------------------------------------------------------------------------
 // $Id$
 
-#include <AlosPalsar/AlosSarPositionVectorRecord.h>
+#include <AlosPalsar/AlosPalsarPositionVectorRecord.h>
 
 namespace ossimplugins
 {
 
 
-AlosSarPositionVectorRecord::AlosSarPositionVectorRecord()
+AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord()
 {
 }
 
-AlosSarPositionVectorRecord::~AlosSarPositionVectorRecord()
+AlosPalsarPositionVectorRecord::~AlosPalsarPositionVectorRecord()
 {
 }
 
-std::ostream& operator<<(std::ostream& os, const AlosSarPositionVectorRecord& data)
+std::ostream& operator<<(std::ostream& os, const AlosPalsarPositionVectorRecord& data)
 {
   for (int i=0;i<3;i++)
   {
@@ -38,7 +38,7 @@ std::ostream& operator<<(std::ostream& os, const AlosSarPositionVectorRecord& da
   return os;
 }
 
-std::istream& operator>>(std::istream& is, AlosSarPositionVectorRecord& data)
+std::istream& operator>>(std::istream& is, AlosPalsarPositionVectorRecord& data)
 {
   char buf[23];
   buf[22] = '\0';
@@ -57,7 +57,7 @@ std::istream& operator>>(std::istream& is, AlosSarPositionVectorRecord& data)
   return is;
 }
 
-AlosSarPositionVectorRecord::AlosSarPositionVectorRecord(const AlosSarPositionVectorRecord& rhs)
+AlosPalsarPositionVectorRecord::AlosPalsarPositionVectorRecord(const AlosPalsarPositionVectorRecord& rhs)
 {
   for (int i=0;i<3;i++)
   {
@@ -70,7 +70,7 @@ AlosSarPositionVectorRecord::AlosSarPositionVectorRecord(const AlosSarPositionVe
   }
 }
 
-AlosSarPositionVectorRecord& AlosSarPositionVectorRecord::operator=(const AlosSarPositionVectorRecord& rhs)
+AlosPalsarPositionVectorRecord& AlosPalsarPositionVectorRecord::operator=(const AlosPalsarPositionVectorRecord& rhs)
 {
   for (int i=0;i<3;i++)
   {
