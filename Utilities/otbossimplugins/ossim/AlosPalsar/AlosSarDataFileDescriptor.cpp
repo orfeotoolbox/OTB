@@ -66,8 +66,8 @@ std::istream& operator>>(std::istream& is, AlosSarDataFileDescriptor& data)
 
 AlosSarDataFileDescriptor::AlosSarDataFileDescriptor(const AlosSarDataFileDescriptor& rhs):
   AlosSarRecord(rhs),
-  _num_lines(rhs._num_lines),
-  _num_pix_in_line(rhs._num_pix_in_line)
+  _num_pix_in_line(rhs._num_pix_in_line),
+  _num_lines(rhs._num_lines)
 {
 }
 

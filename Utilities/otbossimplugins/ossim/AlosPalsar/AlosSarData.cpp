@@ -141,8 +141,6 @@ bool AlosSarData::saveState(ossimKeywordlist& kwl,
 
   bool result = true;
 
-  char name[64];
-
   /*
    * Adding metadata necessary to the sensor model in the keywordlist
    */

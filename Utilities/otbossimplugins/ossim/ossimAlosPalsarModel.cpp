@@ -272,8 +272,6 @@ bool ossimAlosPalsarModel::saveState(ossimKeywordlist& kwl,
 
   bool result;
 
-  char name[64];
-
   kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimAlosPalsarModel", true);
 
   if (theAlosSarLeader == NULL)
@@ -663,6 +661,7 @@ bool ossimAlosPalsarModel::InitRefPoint(const ossimKeywordlist &kwl, const char 
 bool ossimAlosPalsarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
 {
   // TODO Add user warning and reference to ERS Model
+  return false;
 }
 
 bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
