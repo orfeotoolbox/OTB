@@ -22,7 +22,13 @@ ADD_CUSTOM_TARGET(SoftwareGuideWrapping  ALL echo)
 
 
 SET(OTB_JAVA_EXAMPLES_SRCS
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/HelloWorldOTB.java
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/Pipeline.java
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/FilteringPipeline.java
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/SmarterFilteringPipeline.java
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/ScalingPipeline.java
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/MultiSpectral.java
+  ${OTB-Wrapping_SOURCE_DIR}/Languages/Java/Tutorials/OrthoFusion.java
 )
 
 #
