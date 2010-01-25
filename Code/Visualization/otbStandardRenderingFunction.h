@@ -429,9 +429,9 @@ protected:
     }
   }
 
-private:
-  StandardRenderingFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+ /** Transfered min and max */
+  ExtremaVectorType m_TransferedMinimum;
+  ExtremaVectorType m_TransferedMaximum;
 
  /** Transfer function
   *  \note This member is declared mutable because some functors that
@@ -441,6 +441,11 @@ private:
   *  Evaluate() methods.
   */
   mutable TransferFunctionType m_TransferFunction;
+
+private:
+  StandardRenderingFunction(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** If true, values mapped by the transfert function are clamped to
@@ -450,10 +455,6 @@ private:
   /** Min and max (after pixel representation)*/
   ExtremaVectorType m_Minimum;
   ExtremaVectorType m_Maximum;
-
-  /** Transfered min and max */
-  ExtremaVectorType m_TransferedMinimum;
-  ExtremaVectorType m_TransferedMaximum;
 
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
