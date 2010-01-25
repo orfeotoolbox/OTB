@@ -1,13 +1,385 @@
-\section{OTB-Wrapping: bindings to Java and Python languages}
+\section{OTB-Wrapping: bindings to Java language}
+OTB-Wrapping is a project designed to allow classes from OTB 
+to be wrapped for use with languages like Python, and Java and TCl. 
+The project is based on CMake, GCC-XML. SWIG, CableSwig and finally OTB that must be already built.
+ The OTB-wrapping project is an extension of the project WrapITK \url{http://code.google.com/p/wrapitk/}. 
+It allows the Python, Java and Tcl users to have program written in their own language to use the classes and 
+the capabilities of OTB.
+Since OTB-Wrapping provides an interface to some c++ compiled code, execution times are very similar to c++ 
+pure programs in most of cases.
+Once the project compiled, one can use the wrapped classes to write programs in your favorite language.
+The OTB Tutorials were translated in Java and can use the OTB capabilities to show how to use the 
+Orfeo ToolBox easily. 
 
-This is an introduction to Wrappings concepts (mangling, template instatiation ...).
+\subsection{Mangling}
+You have probably notice that class names are quite barbaric. It is due to the mangling. 
+With the java versions less or equal to 1.6, no generic programming is allowed. That means that no templates can be used. 
+Then, to use a C++  class in Java, the class generated (called proxies) are templated with the available types and for each type a java proxy is generated. 
+The mangled types are concatenated and added in the end of the class.
+For instance, when one want to use the otb::Image with the pixel type float and the dimension 2 , the class generated will be otbImageF2. \\
 
-\section{Java tutorials}
+The table ~\ref{tab:basictypetomangle} summarize the mangling used for the basic types. 
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Type                  &  Mangle used  \\
+\hline
+float                 &  F         \\
+double                &  D         \\
+unsigned char         &  UC        \\
+unsgined short        &  US        \\
+unsgined long         &  UL        \\
+bool                  &  B         \\
+
+\hline 
+\end{tabular}
+\caption{Mangling of the basic types used.}\label{tab:basictypetomangle}
+\end{center}
+\end{table}
+
+In OTB, there are some types used in several classes like otb::Image and otb::VectorImage,  or otb::VectorData.
+Then those classes have their own mangling two. The table ~\ref{tab:typetomangle} shows some of the mangled classes. 
+
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+OTB Type                  &  Mangle used  \\
+\hline
+otb::Image                 &  I         \\
+otb::VectorImage           &  VI        \\
+otb::VectorData            &  VD        \\
+\hline 
+\end{tabular}
+\caption{Mangling of the usually types used.}\label{tab:typetomangle}
+\end{center}
+\end{table}
+
+
+The mangled name otbImageF2 means that we are dealing with the class otb::Image with 
+template arguments float and 2. So, otbImageF2 is equivalent to \verb|otb::Image<float,2>|. Another exemple 
+can be otbImageFileReaderIF2, knowing that I (~\ref{tab:typetomangle}) is the mangle for otb::Image, F is the mangle 
+for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and finally otbImageFileReaderIF2 is the mangle for
+ \verb|otb::ImageFileReader< otb::Image< float,2 > >|.
+
+\subsection{How to Use OTB-Wrapping in Java}
+
+\subsubsection{Import OTB classes}
+The OTB-Wrapping project provides some jar files that corresponds to the modules implemented in the directory Libraries.
+For instance, this directory contains the modules otbImages and otbLearning. The jar produced will be org.otb.otbimages and 
+org.otb.otblearning. Those jars can be used as usual in Java.
+
+To write an example that uses OTB classes, you have to import those jars in your program by adding the directive 
+\verb?import org.otb.otbio.*?. You can than access to all the classes in the module otbIO (cf section \ref{sec:tuto}).
+
+\subsubsection{Compile Java programs}
+The next step is to compile the java program. Note that the java compiler needs some options like 
+\begin{itemize}
+\item The class path  : specifies where to find user class files. The option is  -classpath .:path\_to\_the\_jar1:path\_to\_the\_jar2.
+\end{itemize}
+
+\subsubsection{Java programs execution}
+Now we can execute the java class compiled, it needs some options too.
+\begin{itemize}
+\item The class path  : specifies where to find user class files. The option is -classpath .:path\_to\_the\_jar1:path\_to\_the\_jar2...
+\item The java.library.path : A system proprety that specifies where the libraries are. The libraries are named moduleJava.\{ dll|so|nylib \}.
+\end{itemize}
+
+\begin{landscape}
+\subsection{Example}
+
+Here is a simple example written in c++, and its translation in Java. 
+
+\small
+\begin{table}[!htbp]
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+Example in c++                  &  Example translated in Java  \\
+\hline
+
+\verb$#include \"otbImage.h\"$            &       \verb$import org.otb.otbimage.*;$                                 \\
+\verb$#include \"otbImageFileReader.h\"$  &       \verb$import org.otb.otbio.*;$                                    \\
+\verb$#include \"otbImageFileWriter.h\"$  &                                                                        \\
+                                          &                                                                         \\
+\verb$void otbReaderWriterExample(Int argc, char * argv[] ){$ & \verb$public class otbReaderWriterExample {$        \\
+                                                              &  \verb$public static void main( String argv[] ) {$  \\
+//typedefs :                              &     //The typedefs step are not necessary since no generic programmation is allowed in Java.    \\
+														  
+typedef  otb::Image<float,2>   ImageType;             &           \\
+typedef  otb::ImageFileReader<ImageType> ReaderType;  &           \\
+typedef  otb::ImageFileWriter<ImageType> WriterType;  &            \\
+
+                       &                                           \\
+// Instanciation :     &                      // Instanciation :   \\
+
+ ReaderType::Pointer reader = ReaderType::New();    &    otbImageReaderIF2 reader = new otbImageReaderIF2(); \\ 
+ WriterType::Pointer writer = WriterType::New();    &      otbImageFileWriterIF2    writer  =  new otbImageFileWriterIF2(); \\
+ & \\
+ // Set the filenames                     & // Set the filenames \\
+ reader->SetFileName(argv[1]);            & reader.SetFileName(argv[0]); \\
+ writer->SetFileName(argv[2]);            & writer.SetFileName(argv[1]); \\
+
+ // Plug the pipeline                     & // Plug the pipeline  \\
+ 
+ writer->SetInput(reader->GetOutput());   &  writer.SetInput(reader.GetOutput());    \\ 
+ 
+ // Trigger the pipeline execution        &  // Trigger the pipeline  execution\\
+ writer->Update();                        &  writer.Update();\\
+
+ 
+\hline 
+\end{tabular}
+\caption{c++ code translation.}\label{tab:translatedexample}
+\end{center}
+\end{table}
+
+\end{landscape}
+
+\normalsize
+\section{Java tutorials}\label{sec:tuto}
+
+\subsection{Hello World}
+\input{HelloWorldOTBJava.tex}
+
+\subsection{Pipeline}
+\input{PipelineJava.tex}
 
 \subsection{Filtering pipeline}
-
 \input{FilteringPipelineJava.tex}
 
-\subsection{Python}
+\subsection{Smarter Filtering Pipeline}
+\input{SmarterFilteringPipelineJava.tex}
 
-Some python tutorials
+\subsection{Scaling Pipeline}
+\input{ScalingPipelineJava.tex}
+
+\subsection{MultiSpectral}
+\input{MultiSpectralJava.tex}
+
+\subsection{OrthoFusion}
+\input{OrthoFusionJava.tex}
+
+
+\section{Developper Guide}\label{sec:dev}
+
+\subsection{Add a new Library : Creating a new CMakeList.txt file}
+Each OTB-Wrapping sub-library (e.g. itkBase, or otbChangeDetection) 
+lives in a sub-directory of the OTB-Wrapping project (within the Libraries directory)
+ with a CMakeLists.txt file that describes how that library and its language support files 
+(e.g. Java template definitions) is to be created. 
+See SampleCMakeLists.txt in the Documentation directory for a description of each macro and option that
+can appear in such a file. What follows is the usual set of commands that will appear:
+
+
+\verb$WRAP_LIBRARY("otbMySpatialObjectExtensions")$ \\
+\verb$SET(WRAPPER_LIBRARY_DEPENDS itkSpatialObject itkBase)$ \\
+\verb$SET(WRAPPER_LIBRARY_LINK_LIBRARIES ITKCommon )$ \\
+\verb$AUTO_INCLUDE_MODULES()$ \\
+\verb$END_WRAP_LIBRARY()$ \\
+
+\begin{itemize}
+\item	\verb$WRAP_LIBRARY$  sets up the environment to wrap a set of classes into a 
+library with a given name. This macro is defined in TypedefMacros.cmake. 
+
+\item	\verb$WRAPPER_LIBRARY_DEPENDS$ stores the list of OTB-Wrapping libraries on which the current library depends 
+(e.g. which libraries like otbImages or otbChangeDetection, are going to be used in the current library). 
+
+\item	\verb$WRAPPER_LIBRARY_LINK_LIBRARIES$ stores a set of other libraries to add at link time. 
+These can be 3rd party libraries that you will use 
+(be sure to properly set \verb$LINK_DIRECTORIES$ in this case), 
+or more commonly, the OTB libraries that need to 
+be linked in, like OTBCommon, OTBIO, etc.
+
+\item	\verb$AUTO_INCLUDE_MODULES()$  edits the list of the heraders that have to 
+be included by scanning all the cmake files present in the modules. This macro is implemented in the 
+file TypedefMacros.cmake.
+
+\item \verb$END_WRAP_LIBRARY()$ is needed to check several things. First, it checks if all the dependecies 
+of the current library are wrapped. Secondly, it calls the right macro relative to the language selected in 
+order to creates rules to parse the CableSwig inputs and compile a wrapper library. 
+\end{itemize}
+
+\subsection{Add a new cmake file}
+A \verb$wrap_XXX.cmake$ file defines a group of classes and/or template instantiations to be wrapped. 
+Most of time, one such file is defined for each class wrapped, but this is not strictly necessary. 
+Within such a file, directives are issued to wrap classes and particular template instances.
+OTB-Wrapping define several macros and variables designed to:
+
+\begin{itemize}
+\item Make creation of wrappers easy. The syntax is simple enough to start quickly.
+\item Make the choice of template arguments explicit. It should be easy 
+  to understand the idea of the author of a wrapper by reading the file. 
+\item Support mostly transparently the dimensions and types chosen by the user.
+\end{itemize}
+
+\subsubsection{A simple Example : otb::StreamingShrinkImageFilter}
+This is the common case. Create a wrapper for a 
+simple image filter like 
+\verb$otb::StreamingShrinkImageFilter$. 
+
+Here is what should be the file 
+\verb$otbResampling/wrap_otbStreamingShrinkImageFilter.cmake$.
+
+\begin{verbatim}
+WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)
+ WRAP_IMAGE_FILTER_USIGN_INT(2)
+ WRAP_IMAGE_FILTER_SIGN_INT(2)
+ WRAP_IMAGE_FILTER_REAL(2)
+END_WRAP_CLASS()
+\end{verbatim}
+
+The file contains several macros useful to make the wrapping easy. It contains 
+a \verb$WRAP_CLASS$ - \verb$END_WRAP_CLASS$ wich contains itself some 
+\verb$WRAP_IMAGE_FILTER_*$ macros. 
+\verb$WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)$ begins the wrapping of the 
+\verb$otb::StreamingShrinkImageFilter$ templated class.
+The name of the class has to be fully qualified.  It can also contains two namespaces if it is 
+a functor for example. The name will be \verb$otb::Functor::LHMI$.
+
+The option \verb$POINTER$ indicates that the object of the class can be manipulated with a 
+\verb$SmartPointer$, and the  \verb$SmartPointer$ specialization for the wrapped class has to be created.
+
+Then several \verb$WRAP_IMAGE_FILTER_*$ macros are called. That are convenient macros to create
+wrapper for classes which take only image as template argument. For each type supported  
+a macro is defined. The argument 2 of the macros means that this class will be templtated with 
+two image types and they will be the same.
+
+
+\subsection{Predifined Macros}
+
+Those macro are defined and well documented in the file Typedef Macros.
+
+\begin{itemize}
+  
+\item \verb$WRAP_CLASS("fully_qualified::ClassName" [POINTER|POINTER_WITH_SUPERCLASS])$
+  causes a templated class to be wrapped. All namespaces must be 
+  included in the fully qualified name but no template is given 
+  at this point. All the wrap instructions are given between 
+  \verb$WRAP_CLASS(...)$ and \verb$END_WRAP_CLASS()$using various \verb$WRAP$ directives. 
+  This macro make an implicit call to the macro \verb$WRAP_INCLUDE(namespace::ClasseName.h)$ so the 
+  header of the wrapped class don't have to be manually added. To disable this behavior, 
+  set the variable \verb$WRAPPER_AUTO_INCLUDE_HEADERS$ to \verb$OFF$.
+  
+  The final optional parameter to \verb$WRAP_CLASS$ is \verb$POINTER$ or
+  \verb$POINTER_WITH_SUPERCLASS$. If no options are passed, then the class is wrapped
+  as-is. If \verb$POINTER$ is passed, then the class and the typedef'd 
+  \verb$class::Pointer$ type is wrapped.
+
+\item \verb$WRAP_INCLUDE("header.h")$. By default, 
+  \verb$otbStreamingShrinkImageFilter.h$ is included
+  when \verb$otb::StreamingShrinkImageFilter$ is wrapped, and this behavior is usually
+  enough. If it not enough, this macro can be used to include some specific files.
+  
+\item \verb$WRAP_TEMPLATE("mangled_suffix" "template parameters")$. When is sued between 
+  \verb$WRAP_CLASS$ and \verb$END_WRAP_CLASS$, this command causes a particular template 
+  instantiation of the current class to be wrapped. The parameter \verb$mangled_suffix$ is a suffix to
+  append to the class's name that uniquely identifies this particular template
+  instantiation, and "template parameters" are whatever should go between the \verb$< >$
+  template instantiation brackets. (Do not include the brackets.) if you are
+  wrapping a filter.
+
+\item \verb$WRAP_NON_TEMPLATE_CLASS("fully_qualified::ClassName" [POINTER|POINTER_WITH_SUPERCLASS])$.
+  Same as \verb$WRAP_CLASS$, but creates a wrapper
+  for a non-templated class. No \verb$END_WRAP_CLASS()$ is necessary after this macro
+  because there is no block of template instantiating commands to close.
+  
+\end{itemize}
+
+There are other several well documented macros defined in the file TypedefMacros.cmake.
+
+
+\subsubsection{OTB-Wrapping predefined variables}
+OTB-Wrapping defines some pairs of variables for each basic type the developer may have
+to manipulate: the c++ type, and its template parameter name. The name of the type
+is stored in variable \verb$ITKM_*$, and the c++ type in the variable \verb$ITKT_*$.
+
+For example, for \verb$unsigned char$, \verb$ITKM_UC$ and \verb$ITKT_UC$
+are defined, with \verb|${ITKM_UC} = "UC"|  and \verb|${ITKT_UC} = "unsigned char"|.
+
+The same thing is done for the defined classes. 
+For instance, to retrieve the mangling used for  \verb|otb::Image<float, 2>|, 
+it is stored in the variable  \verb|ITKM_IF2|.
+Note that I corresponds to otb::Image following ~\ref{tab:typetomangle}.
+The complete type will be stored in the variable \verb?ITKT_IF2?. 
+These variables are used to make easier the mechanism of 
+wrapping for the user (cf Section \ref{sec:dev})
+
+ \subsubsection{OTB-Wrapping predifined lists}
+The main task of the developer is to define which template parameters are valid for a given
+templated class, and interesting for the user. He also have to take care about
+instantiating some templated classes according to the options selected by the user.
+
+
+With OTB-Wrapping, the developer don't have to declare that a class is instantiated with the template parameters
+\verb$unsigned char$, \verb$unsigned short$, and \verb$unsigned long$, but rather declares that the
+templated classe can be instantiated with all the unsigned integer types choosed by the user.
+To do that, OTB-wrapping provides some already defined list which are grouping the types chosen by
+the user.
+
+\begin{itemize}
+  \item \verb$WRAP_ITK_DIMS$ contains all the dimensions selected by the user.
+
+  \item \verb$WRAP_ITK_USIGN_INT$ contains all unsigned integer types selected by the user.
+
+  \item \verb$WRAP_ITK_SIGN_INT$ contains all signed integer types selected by the user.
+
+  \item \verb$WRAP_ITK_INT$ contains all signed and unsigned integral types
+selected by the user.
+
+  \item \verb$WRAP_ITK_REAL$ contains all the real types selected by the user.
+
+  \item \verb$WRAP_ITK_SCALAR$ contains all the scalar types selected by the user.
+
+  \item \verb$WRAP_ITK_RGB$ contains all the \verb$RGB$ types selected by the user.
+
+  \item \verb$WRAP_ITK_VECTOR_REAL$ contains all the \verb$Vector$ types selected
+by the user.
+
+  \item \verb$WRAP_ITK_COV_VECTOR_REAL$ contains all the \verb$CovariantVector$ types selected
+by the user.
+
+  \item \verb$WRAP_ITK_VECTOR$ contains all the \verb$Vector$ and 
+\verb$CovariantVector$ types selected by the user.
+
+  \item \verb$WRAP_ITK_ALL_TYPES$ contains all the types selected by the user.
+
+  \item \verb$SMALLER_THAN_D$ contains all the types "smaller" than \verb$double$
+selected by the user. This variable is useful when a filter decrease the range
+of pixel value, like \verb$BinaryThresholdImageFilter$.
+
+  \item \verb$SMALLER_THAN_UL$ contains all the types "smaller" than \verb$unsigned long$
+selected by the user.
+
+  \item \verb$SMALLER_THAN_US$ contains all the types "smaller" than \verb$unsigned short$
+selected by the user.
+
+  \item \verb$SMALLER_THAN_SL$ contains all the types "smaller" than \verb$signed long$
+selected by the user.
+
+  \item \verb$SMALLER_THAN_SS$ contains all the types "smaller" than \verb$signed short$
+selected by the user.
+
+\end{itemize}
+
+\subsubsection{Macro MANGLE\_NAME}
+MANGLE\_NAME() is a macro used to make the mangling easier for the developper. 
+This macro aims at formatting the mangled name using a separator. The separator can be user-defined by
+setting the MANGLE\_SEPARATOR CMake value. This Macro takes as input a  list of types names.
+At the end of the macro, the MANGLED\_NAME variable will contain the proper mangling. 
+The macro was written to allow the user adding a separator to make the Java classes name more clear.
+It is written in the file OTB-WrappingTypes.cmake. 
+
+For instance, when one use the CMake macro  ADD\_TEMPLATE to add a template 
+for the types used to wrap a class, a correct way to do so is :
+
+\verb!ADD_TEMPLATE("${ITKM_IF2}${ITKM_IF2}" "${ITKT_IF2}, ${ITKM_IF2} ")!.
+
+With the MANGLE\_NAME Macro, it will be in two steps : 
+\begin{itemize}
+ \item\verb!MANGLE_NAME(${ITKM_IF2} ${ITKM_IF2} )!
+ \item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, ${ITKM_IF2}")!
+
+\end{itemize}
