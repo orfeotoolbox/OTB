@@ -131,6 +131,7 @@ void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
    }
 
    JSDDateTime azimuthTime = getTime(line) ;
+
    int etatLoc = sensor.ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
 
    if(traceDebug())
