@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkListSampleToHistogramListGenerator_h
-#define __itkListSampleToHistogramListGenerator_h
+#ifndef __otbListSampleToHistogramListGenerator_h
+#define __otbListSampleToHistogramListGenerator_h
 
 #include "itkObject.h"
 #include "itkListSampleBase.h"

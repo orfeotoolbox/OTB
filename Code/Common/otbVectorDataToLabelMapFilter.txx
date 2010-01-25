@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkBinaryImageToLabelMapFilter_txx
-#define __itkBinaryImageToLabelMapFilter_txx
+#ifndef __otbBinaryImageToLabelMapFilter_txx
+#define __otbBinaryImageToLabelMapFilter_txx
 
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkNumericTraits.h"
