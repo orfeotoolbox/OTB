@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkGISTableFunction_h
-#define __itkGISTableFunction_h
+#ifndef __otbGISTableFunction_h
+#define __otbGISTableFunction_h
 
 #include "itkFunctionBase.h"
 #include "otbGISTable.h"

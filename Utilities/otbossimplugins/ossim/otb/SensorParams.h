@@ -158,6 +158,15 @@ public:
       _semiMinorAxis = value;
    }
 
+   double get_dopcen() const
+   {
+     return _dopcen;
+   }
+
+   void set_dopcen(double value)
+   {
+     _dopcen = value;
+   }
    /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.
@@ -225,6 +234,11 @@ protected:
     * @brief Number of range looks
     */
    double _nRangeLook ;
+
+   /**
+    * @brief Doppler centroid
+    */
+   double _dopcen;
 
 private:
 };

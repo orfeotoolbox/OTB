@@ -13,6 +13,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(NOTOL 0.0)
 SET(EPSILON_4 0.0001)
+SET(EPSILON_6 0.000001)
 
 SET(PROJECTIONS_TESTS1 ${CXX_TEST_PATH}/otbProjectionsTests1)
 SET(PROJECTIONS_TESTS2 ${CXX_TEST_PATH}/otbProjectionsTests2)
@@ -144,7 +145,7 @@ ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --compare-ascii ${EPSILON_6}
          ${BASELINE_FILES}/prTvSensorModelAlosPalsar.txt
          ${TEMP}/prTvSensorModelAlosPalsar.txt
     otbSensorModel

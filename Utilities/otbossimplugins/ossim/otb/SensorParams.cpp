@@ -28,6 +28,7 @@ static const char SEMI_MAJOR_AXIS_KW[]   = "semi_major_axis";
 static const char SEMI_MINOR_AXIS_KW[]   = "semi_minor_axis";
 static const char NUM_AZIMUTH_LOOKS_KW[] = "number_azimuth_looks";
 static const char NUM_RANGE_LOOKS_KW[]   = "number_range_looks";
+static const char DOPCEN_KW[]            = "doppler_centroid";
 
 SensorParams::SensorParams():
    _prf(0.0),
@@ -39,7 +40,8 @@ SensorParams::SensorParams():
    _semiMajorAxis(6378137.0),
    _semiMinorAxis(6356752.3141),
    _nAzimuthLook(1),
-   _nRangeLook(1)
+   _nRangeLook(1),
+   _dopcen(0.0)
 {
 }
 
@@ -57,7 +59,8 @@ SensorParams::SensorParams(const SensorParams& rhs):
    _semiMajorAxis(rhs._semiMajorAxis),
    _semiMinorAxis(rhs._semiMinorAxis),
    _nAzimuthLook(rhs._nAzimuthLook),
-   _nRangeLook(rhs._nRangeLook)
+   _nRangeLook(rhs._nRangeLook),
+   _dopcen(rhs._dopcen)
 {
 }
 
@@ -75,6 +78,7 @@ SensorParams& SensorParams::operator=(const SensorParams& rhs)
    _nRangeLook = rhs._nRangeLook;
    _semiMajorAxis = rhs._semiMajorAxis;
    _semiMinorAxis = rhs._semiMinorAxis;
+   _dopcen = rhs._dopcen;
    return *this;
 }
 
@@ -97,7 +101,7 @@ bool SensorParams::saveState(ossimKeywordlist& kwl, const char* prefix) const
    kwl.add(pfx.c_str(), SEMI_MINOR_AXIS_KW, _semiMinorAxis);
    kwl.add(pfx.c_str(), NUM_AZIMUTH_LOOKS_KW, _nAzimuthLook);
    kwl.add(pfx.c_str(), NUM_RANGE_LOOKS_KW, _nRangeLook);
-
+   kwl.add(pfx.c_str(), DOPCEN_KW, _dopcen);
    return true;
 }
 
@@ -232,6 +236,16 @@ bool SensorParams::loadState(const ossimKeywordlist& kwl, const char* prefix)
       result = false;
    }
 
+   lookup = kwl.find(pfx.c_str(), DOPCEN_KW);
+   if (lookup)
+   {
+      s = lookup;
+      _dopcen = s.toDouble();
+   }
+   else
+   {
+      result = false;
+   }
    return result;
 }
 }

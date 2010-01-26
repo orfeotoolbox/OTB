@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkPostGISCreateTableTransactor_h
-#define __itkPostGISCreateTableTransactor_h
+#ifndef __otbPostGISCreateTableTransactor_h
+#define __otbPostGISCreateTableTransactor_h
 
 #include <pqxx/pqxx>
 #include <string>
