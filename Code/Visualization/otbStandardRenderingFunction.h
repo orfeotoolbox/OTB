@@ -29,6 +29,7 @@
 
 namespace otb
 {
+
 namespace Function
 {
 
@@ -189,7 +190,7 @@ public:
            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
            m_PixelRepresentationFunction.SetBlueChannelIndex(0);
          }
-         
+
          // Classic case
          if (this->GetListSample()->GetMeasurementVectorSize() == 3)
          {
@@ -197,7 +198,7 @@ public:
            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
            m_PixelRepresentationFunction.SetBlueChannelIndex(2);
          }
-          
+
         }
       }
       if(m_AutoMinMax)
@@ -209,7 +210,7 @@ public:
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
-       
+
        // Comment the condition cause if we change the channel list order
        // this condition doesn't allow us to recompute the histograms
        //if (this->GetHistogramList().IsNull())
@@ -310,12 +311,12 @@ public:
      //Clear the min and max vectors
      m_Minimum.clear();
      m_Maximum.clear();
-     
+
      if (parameters.Size() % 2 != 0)
      {
        itkExceptionMacro( << "Min And Max should be provided for every band to display" );
      }
-     
+
      for (unsigned int i=0; i< parameters.Size(); ++i)
      {
        m_Minimum.push_back(parameters[i]);
@@ -336,7 +337,7 @@ public:
      unsigned int nbBands = m_PixelRepresentationFunction.GetOutputSize();
      ParametersType         param;
      param.SetSize(2*nbBands);
-     
+
      // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
      for(unsigned int i = 0; i< nbBands; ++i)
      {
@@ -395,7 +396,7 @@ protected:
   /** Perform the computation for a single value (this is done in
    * order to have the same code for vector and scalar version)
    */
-  const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const
+  virtual const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const
   {
     if(input > max)
       {
@@ -441,16 +442,15 @@ protected:
   *  Evaluate() methods.
   */
   mutable TransferFunctionType m_TransferFunction;
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;
+
+  /** Update time */
+  itk::TimeStamp m_UTime;
+
 
 private:
   StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  PixelRepresentationFunctionType m_PixelRepresentationFunction;
-
-  /** If true, values mapped by the transfert function are clamped to
-      user defined min/max */
-//   bool m_UserDefinedTransferedMinMax;
 
   /** Min and max (after pixel representation)*/
   ExtremaVectorType m_Minimum;
@@ -467,9 +467,6 @@ private:
   double m_AutoMinMaxQuantile;
 
   bool m_DefaultChannelsAreSet;
-
-  /** Update time */
-  itk::TimeStamp m_UTime;
 
 };
 } // end namespace Functor

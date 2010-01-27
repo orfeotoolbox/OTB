@@ -20,7 +20,9 @@
 
 #include "itkDataObject.h"
 #include "ossim/base/ossimFilename.h"
-
+// The keyword "Try" is exported by OSSIM's headers but clashes with Boost
+// Spirit. It needs to be undefined.
+#undef Try
 
 namespace otb
 {

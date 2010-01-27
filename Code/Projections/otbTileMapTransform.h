@@ -21,7 +21,6 @@
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-// #include "projection/ossimTileMapTransform.h"
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
@@ -33,6 +32,9 @@
 #include "base/ossimString.h"
 #include "ossim/projection/ossimTileMapModel.h"
 #include "otbMapProjection.h"
+// The keyword "Try" is exported by OSSIM's headers but clashes with Boost
+// Spirit. It needs to be undefined.
+#undef Try
 
 namespace otb
 {
