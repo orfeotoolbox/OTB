@@ -93,43 +93,45 @@ Now we can execute the java class compiled, it needs some options too.
 
 Here is a simple example written in c++, and its translation in Java. 
 
-\small
+
 \begin{table}[!htbp]
 \begin{center}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|m{8.35cm}|m{9.75cm}|}
 \hline
 Example in c++                  &  Example translated in Java  \\
 \hline
 
-\verb$#include \"otbImage.h\"$            &       \verb$import org.otb.otbimage.*;$                                 \\
-\verb$#include \"otbImageFileReader.h\"$  &       \verb$import org.otb.otbio.*;$                                    \\
-\verb$#include \"otbImageFileWriter.h\"$  &                                                                        \\
-                                          &                                                                         \\
-\verb$void otbReaderWriterExample(Int argc, char * argv[] ){$ & \verb$public class otbReaderWriterExample {$        \\
-                                                              &  \verb$public static void main( String argv[] ) {$  \\
-//typedefs :                              &     //The typedefs step are not necessary since no generic programmation is allowed in Java.    \\
-														  
-typedef  otb::Image<float,2>   ImageType;             &           \\
-typedef  otb::ImageFileReader<ImageType> ReaderType;  &           \\
-typedef  otb::ImageFileWriter<ImageType> WriterType;  &            \\
+\verb$#include "otbImage.h"$                &       \verb$import org.otb.otbimage.*;$                                 \\
+\verb$#include "otbImageFileReader.h"$      &       \verb$import org.otb.otbio.*;$                                    \\
+\verb$#include "otbImageFileWriter.h"$      &                                                                        \\
+                                            &                                                                         \\
+\verb$void otbReaderWriter(Int argc,char * argv[]){$ & \verb$public class otbReaderWriter{$        \\
+                                                     &  \verb$public static void main(String argv[]){$  \\
+      
+ //typedefs :                              &     //The typedefs step are not necessary since no generic \\
+                                           &     //programmation is allowed in Java.    \\
+
+\verb$typedef otb::Image<float,2>  ImageT;$             &           \\
+\verb$typedef otb::ImageFileReader<ImageT> ReaderType;$  &           \\
+\verb$typedef otb::ImageFileWriter<ImageT> WriterType;$  &            \\
 
                        &                                           \\
 // Instanciation :     &                      // Instanciation :   \\
 
- ReaderType::Pointer reader = ReaderType::New();    &    otbImageReaderIF2 reader = new otbImageReaderIF2(); \\ 
- WriterType::Pointer writer = WriterType::New();    &      otbImageFileWriterIF2    writer  =  new otbImageFileWriterIF2(); \\
+\verb$ReaderType::Pointer reader = ReaderType::New();$    & \verb$otbImageReaderIF2 reader = new otbImageReaderIF2();$ \\ 
+\verb$WriterType::Pointer writer = WriterType::New();$    & \verb$otbImageFileWriterIF2 writer=new otbImageFileWriterIF2();$  \\
+
  & \\
- // Set the filenames                     & // Set the filenames \\
- reader->SetFileName(argv[1]);            & reader.SetFileName(argv[0]); \\
- writer->SetFileName(argv[2]);            & writer.SetFileName(argv[1]); \\
-
- // Plug the pipeline                     & // Plug the pipeline  \\
+ // Set the filenames                           & // Set the filenames \\
+\verb$reader->SetFileName(argv[1]);$            & \verb$reader.SetFileName(argv[0]);$ \\
+\verb$writer->SetFileName(argv[2]);$            & \verb$writer.SetFileName(argv[1]);$  \\
+&\\
+ // Plug the pipeline                           & // Plug the pipeline  \\
  
- writer->SetInput(reader->GetOutput());   &  writer.SetInput(reader.GetOutput());    \\ 
- 
- // Trigger the pipeline execution        &  // Trigger the pipeline  execution\\
- writer->Update();                        &  writer.Update();\\
-
+\verb$writer->SetInput(reader->GetOutput());$   &  \verb$writer.SetInput(reader.GetOutput());$    \\ 
+ &\\
+ // Trigger the pipeline execution              &  // Trigger the pipeline  execution\\
+\verb$writer->Update();$                        &  \verb$writer.Update();$  \\
  
 \hline 
 \end{tabular}
@@ -137,8 +139,8 @@ typedef  otb::ImageFileWriter<ImageType> WriterType;  &            \\
 \end{center}
 \end{table}
 
+
 \end{landscape}
-\normalsize
 
 \subsection{Use OTB-Wrapping}
 
@@ -333,7 +335,7 @@ Those macro are defined and well documented in the file Typedef Macros.
   template instantiation brackets. (Do not include the brackets.) if you are
   wrapping a filter.
 
-\item \verb$WRAP_NON_TEMPLATE_CLASS("fully_qualified::ClassName" [POINTER|POINTER_WITH_SUPERCLASS])$.
+\item \verb$WRAP_NON_TEMPLATE_CLASS("fully_qualified::ClassName"$\\\verb$[POINTER|POINTER_WITH_SUPERCLASS])$.
   Same as \verb$WRAP_CLASS$, but creates a wrapper
   for a non-templated class. No \verb$END_WRAP_CLASS()$ is necessary after this macro
   because there is no block of template instantiating commands to close.
@@ -435,10 +437,7 @@ With the MANGLE\_NAME Macro, it will be in two steps :
 \item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, ${ITKM_IF2}")!
 \end{itemize}
 
+\subsection{JavaDoc generation}
 
 
 
-
-
-
-\end{itemize}
