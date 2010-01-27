@@ -442,11 +442,14 @@ protected:
   */
   mutable TransferFunctionType m_TransferFunction;
 
+  PixelRepresentationFunctionType m_PixelRepresentationFunction;
+
+  /** Update time */
+  itk::TimeStamp m_UTime;
+
 private:
   StandardRenderingFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** If true, values mapped by the transfert function are clamped to
       user defined min/max */
@@ -467,10 +470,6 @@ private:
   double m_AutoMinMaxQuantile;
 
   bool m_DefaultChannelsAreSet;
-
-  /** Update time */
-  itk::TimeStamp m_UTime;
-
 };
 } // end namespace Functor
 } // end namespace otb
