@@ -670,12 +670,12 @@ bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
     char alosFileName[16];
 
     candidate.seekg(48);
-    if ( candidate.bad() or candidate.eof() )
+    if ( candidate.bad() || candidate.eof() )
     {
       return false;
     }
     candidate.read(alosFileName, 16);
-    if ( candidate.bad() or candidate.eof() )
+    if ( candidate.bad() || candidate.eof() )
     {
       return false;
     }
@@ -733,12 +733,12 @@ bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
   char alosFileName[16];
 
   candidate.seekg(48);
-  if ( candidate.bad() or candidate.eof() )
+  if ( candidate.bad() || candidate.eof() )
   {
     return false;
   }
   candidate.read(alosFileName, 16);
-  if ( candidate.bad() or candidate.eof() )
+  if ( candidate.bad() || candidate.eof() )
   {
     return false;
   }
