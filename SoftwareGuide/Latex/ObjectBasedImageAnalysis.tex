@@ -1,0 +1,56 @@
+
+\chapter{Object-based Image Analysis }\label{sec:OBIA}
+
+Object-Based Image Analysis (OBIA) focusses on analyzing images at
+the object level instead of working at the pixel level. This approach
+is particularly well adapted for high resolution images and leads to
+more robust and less noisy results.
+
+OTB allows to implement OBIA by using ITK's Label Object framework
+(\url{http://www.insight-journal.org/browse/publication/176}). This
+allows to represent a segmented image as a set of regions and not
+anymore as a set of pixels. Added to the compression rate achieved by
+this kind of description, the main advantage of this approach is the
+possibility to operate at the segment (or object level).
+
+A classical OBIA pipeline will use the following steps:
+
+\begin{enumerate}
+\item Image segmentation (the whole or only parts of it);
+\item Image to LabelObjectMap (a kind of \code{std::map<LabelObject>}) transformation;
+\item Eventual relabeling;
+\item Attribute computation for the regions using the image before
+  segmentation:
+  \begin{enumerate}
+         \item Shape attributes;
+         \item Statistics attributes;
+         \item Attributes for radiometry, textures, etc.
+  \end{enumerate}
+
+\item Object filtering
+  \begin{enumerate}
+         \item Remove/select objects under a condition (area less than
+         X, NDVI higher than X, etc.)
+	 \item Keep N objects;
+	 \item etc.
+  \end{enumerate}
+\item LabelObjectMap to image transformation.
+\end{enumerate}
+
+
+\section{From Images to Objects}\label{sec:FromImagesToObjects}
+\input{ImageToLabelToImage.tex}
+
+\section{Object Attributes}\label{sec:ObjectAttributes}
+\input{ShapeAttributeComputation.tex}
+
+%\section{Object Filtering}
+%\input{KeepNObjects.tex}
+
+\section{Object Filtering based on radiometric and statistics attributes}
+\input{RadiometricAttributesLabelMapFilterExample.tex}
+
+%\section{Objects vectorization}
+%\input{LabelMapVectorization.tex}
+
+%\section{Object-based classification}

@@ -21,7 +21,7 @@
 %  These set up the fonts for the documents.
 %
 %  The "times" package makes the default font the PostScript Times
-%  font, which makes for smaller PostScript and a font that more people 
+%  font, which makes for smaller PostScript and a font that more people
 %  like.
 %
 %  The "avant" package causes the AvantGarde font to be used for
@@ -33,15 +33,18 @@
 
 
 % Change the options here to get a different set of basic options, but only
-% if you have to.  
+% if you have to.
 %
 \LoadClass[\itk@paper,\itk@ptsize,twoside,titlepage,openright]{book}
 
 %\paperheight 9.50in
 %\paperwidth  7.25in
 
-\paperheight 9.375in
-\paperwidth  7.25in
+%\paperheight 9.375in
+%\paperwidth  7.25in
+
+\paperheight 9.25in
+\paperwidth 7.5in
 
 \topmargin 0.625in
 \setlength{\voffset}{-0.625in}
@@ -71,7 +74,7 @@
 % distribution.
 %
 % The "fancyhdr" package makes nicer page footers reasonable to
-% implement, and is used to put the chapter and section information in 
+% implement, and is used to put the chapter and section information in
 % the footers.
 %
 \RequirePackage{fancyhdr}\typeout{Using fancier footers than usual.}

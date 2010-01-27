@@ -1,13 +1,31 @@
 \chapter{Feature Extraction}
-\section{Introduction}
+
+% \section{Introduction}
+
 Under the term {\em Feature Extraction} we include several techniques
 aiming to detect or extract informations of low level of abstraction
 from images. These {\em features} can be objects : points, lines,
 etc. They can also be measures : moments, textures, etc.
 
+\section{Textures}
+\subsection{Haralick Descriptors}
+\input{TextureExample}
+
+\subsection{PanTex}
+\input{PanTexExample}
+
+\subsection{Structural Feature Set}
+\input{SFSExample}
 
 \section{Interest Points}
+\subsection{Harris detector}
 \input{HarrisExample}
+\subsection{SIFT detector}
+\label{sec:SIFTDetector}
+\input{SIFTFastExample}
+\subsection{SURF detector}
+\input{SURFExample}
+
 \section{Alignments}
 \label{sec:Alignments}
 \input{AlignmentsExample}
@@ -19,12 +37,31 @@ etc. They can also be measures : moments, textures, etc.
 \input{RatioLineDetectorExample}
 \input{CorrelationLineDetectorExample}
 \input{AssymmetricFusionOfLineDetectorExample}
+\input{ParallelLineDetectionExample}
+
 
 \subsection{Segment Extraction}
 \label{sec:SegmentExtraction}
+\subsubsection{Local Hough Transform}
 \input{LocalHoughExample}
 %\input{ExtractSegmentsByStepsExample}
 %\input{ExtractSegmentsExample}
+\subsubsection{Line Segment Detector}
+\label{sec:LSD}
+\input{LineSegmentDetectorExample}
+\subsection{Right Angle Detector}
+\label{sec:RightAngleDetector}
+\input{RightAngleDetectionExample}
+
+
+\section{Density Features}
+An interesting approach to feature extraction consists in computing
+the density of previously detected features as simple edges or
+interest points.
+\subsection{Edge Density}
+\input{EdgeDensityExample}
+\subsection{SIFT Density}
+\input{SIFTDensityExample}
 
 \section{Geometric Moments}
 
@@ -96,6 +133,11 @@ rotation. They have the following expressions:
 %\subsubsection{Flusser Moments for Paths}
 %\input{FlusserMomentPathExample}
 
+\section{Principal Component Analysis}
+Principal Component Analysis is a linear projection technique which
+can be used for dimensionality reduction.
+\input{InnerProductPCAExample}
+
 \section{Road extraction}
 \label{sec:RoadExtraction}
 
@@ -112,7 +154,10 @@ Road extraction is a critical feature for an efficient use of high resolution sa
 
 % \section{Seam carving}
 % \label{sec:SeamCarving}
-% 
+%
 % \input{SeamCarvingExample}
-% 
+%
 % \input{SeamCarvingOtherExample}
+
+\section{Cloud Detection}
+\input{CloudDetectionExample}

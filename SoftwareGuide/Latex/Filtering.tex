@@ -34,7 +34,12 @@ OTB.
 \input{ThresholdImageFilter.tex}
 \fi
 
+\subsection{Threshold to Point Set}
+\label{sec:ThresholdImageToPointSetFilter}
 
+\ifitkFullVersion
+\input{ThresholdToPointSetExample.tex}
+\fi
 
 
 %% \section{Casting and Intensity Mapping}
@@ -127,9 +132,8 @@ vectors and the image of magnitudes.
 \input{CannyEdgeDetectionImageFilter.tex}
 \fi
 
-\subsection{Ratio of Means Detector }
+\subsection{Ratio of Means Detector}
 \input{TouziEdgeDetectorExample}
-
 
 
 
@@ -222,7 +226,7 @@ operate on grayscale images.
 
 %% The typical effect of median filtration on a noisy digital image is a dramatic reduction in impulse noise spikes. The filter also tends to preserve brightness differences across signal steps, resulting in reduced blurring of regional boundaries. The filter also tends to preserve the positions of boundaries in an image.
 
-%% Figure \ref{fig:BinaryMedianImageFilterOutputMultipleIterations} below shows the effect of running the median filter with a 3x3 classical window size 
+%% Figure \ref{fig:BinaryMedianImageFilterOutputMultipleIterations} below shows the effect of running the median filter with a 3x3 classical window size
 %% 1, 10 and 50 times. There is a tradeoff in noise reduction and the sharpness of the image when the window size is increased\begin{figure}
 %%   \center
 %%   \includegraphics[width=0.44\textwidth]{BinaryMedianImageFilterOutput1.eps}
@@ -334,6 +338,12 @@ filters that approximate the convolution with a Gaussian
 \input{GradientAnisotropicDiffusionImageFilter.tex}
 \fi
 
+\subsubsection{Mean Shift filtering and clustering}
+\label{sec:MeanShift}
+
+\ifitkFullVersion
+\input{MeanShiftVectorImageFilterExample.tex}
+\fi
 
 
 %% \subsubsection{Curvature Anisotropic Diffusion}
@@ -413,13 +423,25 @@ filters that approximate the convolution with a Gaussian
 \label{sec:SpeckleFilters}
 \ifitkFullVersion
 \input{LeeImageFilter.tex}
+\input{FrostImageFilter.tex}
 \fi
 
 
 
+\subsection{Edge preserving Markov Random Field}
+
+The Markov Random Field framework for OTB is more detailled in \ref{sec:MarkovRandomFieldOTB} (p. \pageref{sec:MarkovRandomFieldOTB}).
+
+\index{Markov!Filtering}
+\index{Markov!Restauration}
+\ifitkFullVersion
+\input{MarkovRestaurationExample.tex}
+\fi
+
 \section{Distance Map}
 \label{sec:DistanceMap}
 
+\index{Distance map}
 \ifitkFullVersion
 \input{DanielssonDistanceMapImageFilter.tex}
 \fi

@@ -1,7 +1,7 @@
 \section{Introduction}
 \subsection{What is OTB?}
 OTB, the ORFEO Toolbox is a library of image processing algorithms developed by CNES in the
-frame of the ORFEO Accompaniment Program. 
+frame of the ORFEO Accompaniment Program.
 OTB is based on the medical image processing library ITK, \url{http://www.itk.org}, and offers
 particular functionalities for remote sensing image processing in
 general and for high spatial resolution images in particular.
@@ -10,16 +10,23 @@ OTB provides:
 \begin{itemize}
 \item image access: optimized read/write access for most of remote sensing
 image formats, meta-data access, simple visualization;
+\item sensor geometry: sensor models, cartographic projections;
+\item radiometry: atmospheric corrections, vegetation indices;
 \item filtering: blurring, denoising, enhancement;
+\item fusion: image pansharpening;
 \item feature extraction: interest points, alignments, lines;
 \item image segmentation: region growing, watershed, level sets;
-\item classification: K-means, SVM, Markov random fields; 
-\item change detection.  
+\item classification: K-means, SVM, Markov random fields;
+\item change detection.
+\item object based image analysis.
+\item geospatial analysis.
 \end{itemize}
 
 
 Many of these functionalities are provided by ITK and have been tested
 and documented for the use with remote sensing data.
+
+You can get more information on OTB on the web at \url{http://www.orfeo-toolbox.org}.
 
 \subsection{What is ORFEO?}
 ORFEO stands for Optical and Radar Federated Earth Observation.  In
@@ -31,7 +38,7 @@ France of PLEIADES the optic component.
 The PLEIADES optic component is composed of two "small satellites"
 (mass of one ton) offering a spatial resolution at nadir of 0.7 m and
 a field of view of 20 km. Their great agility enables a daily access
-all over the world, essentially for defence and civil security
+all over the world, essentially for defense and civil security
 applications, and a coverage capacity necessary for the cartography
 kind of applications at scales better than those accessible to SPOT
 family satellites. Moreover, PLEIADES will have stereoscopic
@@ -40,7 +47,7 @@ urban regions, and to bring more information when used with aerial
 photography.
 
 The ORFEO "targeted" acquisition capacities made it a system
-particularly adapted to defence or civil security missions, as well as
+particularly adapted to defense or civil security missions, as well as
 critical geophysical phenomena survey such as volcanic eruptions,
 which require a priority use of the system resources.
 
@@ -59,11 +66,11 @@ The creation of a preparatory program is needed because of :
 \begin{itemize}
   \item  the new capabilities and performances of the ORFEO systems (optical and radar high resolution, access capability, data quality, possibility to acquire simultaneously in optic and radar),
   \item the implied need of new methodological developments : new processing methods, or adaptation of existing methods,
-  \item the need to realise those new developments in very close cooperation with the final users, the integration of new products in their systems.
+  \item the need to realize those new developments in very close cooperation with the final users, the integration of new products in their systems.
 \end{itemize}
-  
 
-This program was initiated by CNES mid-2003 and will last until 2009.
+
+This program was initiated by CNES mid-2003 and will last until mid 2011.
 It consists in two parts, between which it is necessary to keep a strong interaction:
 \begin{itemize}
 \item A Methodological part,
@@ -71,7 +78,7 @@ It consists in two parts, between which it is necessary to keep a strong interac
 \end{itemize}
 
 
-This Accompaniment Program uses simulated data (acquired during airborne campaigns) and satellite images quite similar to Pleiades (as QuickBird and Ikonos), used in a communal way on a set of special sites. The validation of specified products and services will be realised with those simulated data
+This Accompaniment Program uses simulated data (acquired during airborne campaigns) and satellite images quite similar to Pleiades (as QuickBird and Ikonos), used in a communal way on a set of special sites. The validation of specified products and services will be realized with those simulated data
 
 Apart from the initial cooperation with Italy, the ORFEO Accompaniment
 Program enlarged to Belgium, with integration of Belgian experts in
@@ -91,7 +98,7 @@ needed for the evolution of OTB.
 
 \section{Licence}
 \subsection{Which is the OTB licence?}
-OTB is distributed under a free software licence:
+OTB is distributed under a free software licence:\\
 \url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html}.
 
 
@@ -108,49 +115,66 @@ OTB can be used internally ("in-house") without restriction, but only
 redistributed in other software that is under the CeCILL licence.
 
 \section{Getting OTB}
+
 \subsection{Who can download the OTB?}
-Anybody can download the OTB at no cost. 
+Anybody can download the OTB at no cost.
+
 \subsection{Where can I download the OTB?}
-Go to \url{http://otb.cnes.fr}
+Go to \url{http://www.orfeo-toolbox.org}
  and follow the "download OTB" link. You will have access to the OTB
 source code and to the Software User's Guide.
+
+\subsection{How to get the latest bleeding-edge version?}\label{sec:FAQMercurial}
+
+You can get the current development version, as our repository is public, using Mercurial (available at \url{http://www.selenic.com/mercurial}). Be aware that, even if the golden rule is {\em what is commited will compile}, this is not always the case. Changes are usually more than ten per day.
+
+The first time, you can get the source code using:
+\begin{verbatim}
+      hg clone http://hg.orfeo-toolbox.org/OTB
+\end{verbatim}
+
+Then you can build OTB as usual using this directory as the source (refer to build instructions).
+
+Later if you want to update your source, from the OTB source directory, just do:
+\begin{verbatim}
+      hg pull -u
+\end{verbatim}
+
+A simple \texttt{make} in your OTB binary directory will be enough to update the library (recompiling only the necessary stuff).
+
+
 \section{Installing OTB}
 \label{sec:FAQInstall}
-\subsection{Which platforms are supported}
+\subsection{Which platforms are supported?}
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
-  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X).
-  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003.
-  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005.  
-  \item Windows with MinGW. (mingw + msys at \url{http://www.mingw.org})
-  \item Cygwin. (\url{http://www.cygwin.com})
-\end{itemize}
-
-Support for the following platforms is planned:
-\begin{itemize}
-  \item Windows with Microsoft Visual Studio C++ 6.0.
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X, 4.2.X, 4.3.X, 4.4.X)
+  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003
+  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005
+  \item Windows with Microsoft Visual Studio C++ 9.0 .NET 2008
+  \item Windows with Microsoft Visual Express 2005
+  \item Windows with Microsoft Visual Express 2008
+  \item Cygwin (\url{http://www.cygwin.com})
+  \item MacOS (OSX 10.5, OSX 10.6)
+  \item Open Solaris
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
  OTB?}
 \begin{itemize}
-\item CMake (\url{http://www.cmake.org})
+\item CMake (\url{http://www.cmake.org}), minimum 2.6
 \item GDAL (\url{http://www.gdal.org})
-\item Fltk (\url{http://www.fltk.org})
+\item Optional (you may use the version included in OTB): Fltk (\url{http://www.fltk.org}) and ITK (\url{www.itk.org})
+\item Optional (OTB will compile and work but some minor functionalities will be missing): cURL (\url{http://curl.haxx.se/}), FFTW (\url{www.fftw.org}).
 \end{itemize}
-       
+
 \subsection{Main steps}
 In order to install OTB on your system follow these steps (in the
 given order):
 \begin{enumerate}
-  \item Install CMake.
-  \item Install GDAL.
-  \item Install Fltk using the CMake scripts. Do not use the
-  \texttt{configure} approach or the project files for Microsoft
-  Visual Studio shipped with Fltk.
-  \item Install ITK if you do not want to use the ITK version provided
-  with OTB. Use CMake for the configuration.
+  \item Install CMake (binary packages are available for most platforms).
+  \item Install GDAL (binary packages are available for most platforms, some are available on \url{http://www.orfeo-toolbox.org/packages}).
   \item Install OTB using CMake for the configuration.
 \end{enumerate}
 
@@ -160,18 +184,22 @@ whatever you want. Make sure that you have downloaded the source code for:
   \begin{itemize}
   \item CMake (\url{http://www.cmake.org})
   \item GDAL (\url{http://www.gdal.org})
-  \item Fltk (\url{http://www.fltk.org})
   \end{itemize}
 
 \subsubsection{Unix/Linux Platforms}
+
+\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you should use
+the official packages for CMake, GDAL and Fltk (including the development packages). Once you have installed these
+packages, you can skip to step 4.
+
 \begin{enumerate}
-    
-\item Install GDAL
+
+\item Install GDAL (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip gdal.1.3.2.tar.gz
-      tar xvf gdal.1.3.2.tar
-      cd gdal.1.3.2
+      gunzip gdal.1.5.2.tar.gz
+      tar xvf gdal.1.5.2.tar
+      cd gdal.1.5.2
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -181,14 +209,14 @@ It seems to be a bug in the GDAL install procedure: if you are installing it wit
 
 Actually, since this is the last step in the GDAL install procedure, when you get the error message, the GDAL libs and header files are already installed, so you can safely ignore the error.
 
-The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody. 
+The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody.
 
-\item Install CMake
+\item Install CMake (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip cmake-2.2.3.tar.gz
-      tar xvf cmake-2.2.3.tar
-      cd cmake-2.2.3
+      gunzip cmake-2.6.0.tar.gz
+      tar xvf cmake-2.6.0.tar
+      cd cmake-2.6.0
       ./configure --prefix=INSTALL_DIR
       make
       make install
@@ -197,15 +225,15 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk (optional) using CMake (do not use the configure script)
+\item Install Fltk (optional) using CMake (do not use the configure script) (or \textbf{use your distribution package})
   \begin{verbatim}
       cd INSTALL_DIR
-      bunzip2 fltk-1.1.7-source.tar.bz2 OR
-      gunzip fltk-1.1.7-source.tar.gz
-      tar xvf fltk-1.1.7-source.tar
+      bunzip2 fltk-1.1.9-source.tar.bz2 OR
+      gunzip fltk-1.1.9-source.tar.gz
+      tar xvf fltk-1.1.9-source.tar
       mkdir Fltk-binary
       cd Fltk-binary
-      ccmake ../fltk-1.1.7
+      ccmake ../fltk-1.1.9
       --> follow the CMake instructions, in particular:
           --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set BUILD_EXAMPLES to ON within CMake
@@ -216,128 +244,106 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
       INSTALL_DIR/Fltk-binary/bin work, in particular, the fractals
       example which makes use of the OpenGL library needed by OTB.
   \end{verbatim}
-      
+
+   You can also choose to use the FLTK version we included in the source of OTB, in this case, everything will be compile at the same time. To do that, you will have to set the option \texttt{OTB\_USE\_EXTERNAL\_FLTK} to \texttt{OFF}
 
 \item Install OTB
   \begin{verbatim}
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-1.2.0.tgz
-      tar xvf OrfeoToolbox-1.2.0.tar
+      gunzip OrfeoToolbox-3.2.0.tgz
+      tar xvf OrfeoToolbox-3.2.0.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-1.2.0
+      ccmake ../OrfeoToolbox-3.2.0
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
-	  --> set BUILD_SHARED_LIBS to OFF within CMake
+	  --> set BUILD_SHARED_LIBS to ON within CMake
 	  --> set BUILD_TESTING to OFF within CMake
 	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
 	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
 	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
 	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake OR
-	      if you do not have FLTK press 't' to change to advanced
-              mode and set OTB_USE_VISU to OFF 
+	      if you do not have FLTK, you can use the OTB internal FLTK setting  
+	      OTB_USE_EXTERNAL_ITK to OFF. If you don't have FLTK and don't want to use 
+	      the internal one, press 't' to change to advanced mode and set OTB_USE_VISU to OFF
 	  --> generate the configuration with 'g'
-       make
-       make install
+       make -j 2
   \end{verbatim}
-      
-  
+
+  If you want a faster compilation and don't want the compilation of the examples, you
+  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. Some platforms apparently
+  have more difficulties with shared libraries, if you experience any problem
+  with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the
+  built size might reach 1~GB.
+
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-3.0.0}
+  and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
+  the sources is important as most programs you will designed will need an access
+  to the \texttt{.txx} files during compilation. However, the binaries directory knows were
+  its sources are and you will need to point only to the \texttt{INSTALL\_DIR/OTB-Binary}
+  when the \texttt{cmake} for your program will ask you where the OTB is.
+
+  If you want to put OTB in a standard location, you can proceed with:
+
+  \begin{verbatim}
+      make install
+  \end{verbatim}
+
+  but \textbf{this is only optional}.
+
+
 \end{enumerate}
 
-\subsubsection{Microsoft Visual Studio C++ 7.1}
+\subsubsection{Microsoft Visual Studio (7.1 .NET 2003/8.0 .NET 2005/Express 2005/Express 2008)}
 \begin{enumerate}
 \item Install GDAL
 
-	MSVC++ 7.1 project files are needed to compile GDAL.
-	
-	These files can be downloaded at \url{http://vterrain.org/dist/gdal132_vc71.zip}.
-	
+	Get the binary package from \url{http://www.gdal.org/} and follow the instruction to install. If it fails, proceed to the installation from the source.
+
+
+        From source:
+
+	MSVC++ project files are needed to compile GDAL.
+
+	These files can be downloaded at \url{http://vterrain.org/dist/gdal151-vc71.zip}.
+
 	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
-	
+
 	Load the solution (.sln file) and build the gdal project.
-	
+
 	More details can be found at \url{http://vterrain.org/Distrib/gdal.html}.
 
-\item Install Fltk
+    Binary packages are also available from \url{http://www.orfeo-toolbox.org/packages}.
 
-	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
-	
-	Open the solution and build the fltk project.
+\item Install OTB with CMake (Example for release mode, with internal FLTK and ITK)
 
-\item Install OTB
+    First give the path where the source code is and where to build the binaries.
 
-	Use CMake on Windows to generate MSVC++ 7.1 project files from otb sources.
-	
-	Open the solution and build the otb project.
+    Then press the "Configure" button and choose the genrator for your project. For example, Visual Studio 9 2008.
 
-\end{enumerate}
+    Select the option "Advanced View".
 
-\subsubsection{Microsoft Visual Studio C++ 8.0}
-\begin{enumerate}
-\item Install GDAL
+    Then set the option \texttt{USE\_EXTERNAL\_FLTK} to \texttt{OFF}. (or uncheck the button).
 
-        Open a MS-DOS prompt.
-        
-        Run the VCVARS32.bat script that comes with the compiler (it can be found in 
-        Microsoft Visual Studio 8/VC/bin).
-        
-        Then, go to the GDAL root directory, and tape : 
-        \begin{verbatim}
-                nmake /f makefile.vc
-        \end{verbatim}
-        
-        Once the build is successful, tape this line to install GDAL :
-        \begin{verbatim}
-                nmake /f makefile.vc install
-        \end{verbatim}
-	
-        More details about this install can be found at \url{http://www.gdal.org/gdal_building.html}.
-                
-        
-\item Install Fltk
+    Select the value \texttt{Release} for the option \texttt{CMAKE\_CONFIGURATION\_TYPES}
 
-	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
-	
-	Open the solution and build the fltk project.
+    Press the "Configure" button and you will be asked to set the following variables :
 
-\item Install OTB
+        \texttt{GDAL\_INCLUDE\_DIR = "D:/ORFEO/OTB\_OUTILS/GDAL/include/"}\\
+        \texttt{GDAL\_LIBRARY\_DIR = "D:/ORFEO/OTB\_OUTILS/GDAL/lib/gdal.lib"}
 
-	Use CMake on Windows to generate MSVC++ 8.0 project files from otb sources.
-	
-	Open the solution and build the otb project.
+    Press the "Configure" button, and follow the last instructions if any.
+
+    Finaly, press "Generate".
+
+
+\item Compile OTB with Microsoft Visual Studio
+
+	When the MSVC++ project is generated, you can open the solution and build the otb project.
 
 \end{enumerate}
 
-\subsubsection{MinGW on Windows platform}
-\begin{enumerate}
-
-\item Download the lastest version of mingw and msys at \url{http://www.mingw.org} and install those 
-	two programs.
-
-	Then, launch MinGW : a promp appears (similar to Linux one).
-
-\item Install GDAL
-
-	To compile GDAL, at configure step, use these options :
-\begin{verbatim}
-	./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool 
-	--without-python --with-png=internal --with-libtiff=internal
-	--with-jpeg=internal
-\end{verbatim}
-	Then the usual make and make install.
-
-\item Install Fltk
-
-	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
-	
-	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
-
-\item Install OTB
-
-	Similar to fltk install.
-
-\end{enumerate}
 
 \subsubsection{Cygwin}
 \begin{enumerate}
@@ -354,9 +360,6 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
 \end{verbatim}
 	Then the usual make and make install.
 
-\item Install Fltk
-
-	See Linux part for details (same procedure).
 
 \item Install OTB
 
@@ -377,25 +380,44 @@ details on the bug characterization.
 The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
+%\subsubsection{Linux Debian/Ubuntu}
+%If you used the official gdal package version 1.4.0, the library is named
+%\texttt{libgdal1.4.0.so} so you have to create a simlink named
+%\texttt{libgdal.so}: \texttt{ln -s /usr/lib/libgdal1.4.0.so /usr/lib/libgdal.so}.
+%This should be fixed in OTB 3.0.0 which is now smart enough to find the correct library.
+%If it does not work for you, let us know!
+
 \subsubsection{Cygwin}
 Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
 
 Put OTB\_USE\_VISU to OFF to avoid these problems.
 
-Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
+Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to solve the problem.
 
 \subsubsection{MSVC++ 8.0}
 Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
 
-This problem can be resolved by downloading GDAL binaries for Windows
+This problem can be solved by downloading GDAL binaries for Windows
 at \url{http://vterrain.org/Distrib/gdal.html}.
+
+\subsubsection{Open Solaris}
+Apparently, there are some issues on Open Solaris with libLAS (library included
+in OTB to process LIDAR data). You will need to desactivate it: set the
+OTB\_USE\_LIBLAS option to OFF.
 
 \section{Using OTB}
 
+\subsection{Where to start ?}
+
+OTB presents a large set of features and it is not always easy to start using it.
+After the installation, you can proceed to the tutorials (in the Software Guide).
+This should give you a quick overview of the possibilities of OTB and will teach
+you how to build your own programs.
+
 \subsection{What is the image size limitation of OTB ?}
 
-The maximum physical space a user can allocate depends on his platform. Therefore, 
-image allocation in OTB is restricted by image dimension, size, pixel type and number 
+The maximum physical space a user can allocate depends on her platform. Therefore,
+image allocation in OTB is restricted by image dimension, size, pixel type and number
 of bands.
 
 Fortunately, thanks to the streaming mechanism implemented within
@@ -404,11 +426,12 @@ use of the \doxygen{otb}{StreamingImageFileWriter} at the end of the pipeline,
 or the \doxygen{itk}{StreamingImageFilter} at any point of the pipeline will
 seamlessly break the large, problematic data into small pieces whose
 allocation is possible. These pieces are processed one afther the
-other, so that there is not allocation problem anymore.
+other, so that there is not allocation problem anymore. We are often working with
+images of $25000 \times 25000$ pixels.
 
-For the streaming to work, all the filters in the pipeline must be streaming capable 
-(this is the case for most of the filter in OTB). The output image format also need to be 
-streamable (not png or jpeg, but tiff or ENVI, for instance).
+For the streaming to work, all the filters in the pipeline must be streaming capable
+(this is the case for most of the filters in OTB). The output image format also need to be
+streamable (not PNG or JPEG, but TIFF or ENVI, for instance).
 
 To tune the size of the streaming pieces, the OTB has
 two CMake variables. The first is named
@@ -432,21 +455,107 @@ on the set up and the use of OTB.
 \subsection{Which is the main source of documentation?}
 The main source of documentation is the OTB Software Guide which can
 be downloaded at
-\url{http://orfeo-toolbox.sourceforge.net/Docs/OTBSoftwareGuide.pdf}. It
-contains tenths of commented examples which should be a good starting
+\url{http://www.orfeo-toolbox.org/packages/OTBSoftwareGuide.pdf}. It
+contains tenths of commented examples and a tutorial which should be a good starting
 point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
-on-line API documentation which is available at \url{http://orfeo-toolbox.sourceforge.net/Doxygen}.
+on-line API documentation which is available at \url{http://www.orfeo-toolbox.org/doxygen}.
 
+\section{Contributing to OTB}\label{sec:contributing}
+
+\subsection{I want to contribute to OTB, where to begin?}
+
+First, you can send an email to otb@cnes.fr or the the user mailing list (otb-users@googlegroups.com) 
+to let us know what functionality
+you would like to introduce in OTB. If the functionality seems important for the
+OTB users, we will then discuss on how to retrieve your code,
+make the necessary adaptions, check with you that the results are correct and finally
+include it in the next release.
+
+You can also run the nightly tests so we have a wider range of plateforms to detect
+bugs earlier. Look at section \ref{sec:runningTheTests}.
+
+\subsection{What are the benefits of contributing to OTB?}
+
+Besides the satisfaction of contributing to an open source project, we will include
+the references to relevant papers in the software guide. Having algorithms
+published in the form of reproducible research helps science move faster and
+encourages people who needs your algorithms to use them.
+
+You will also benefit from the strengths of OTB: multiplatform, streaming and
+threading, etc.
+
+\subsection{What functionality can I contribute?}
+
+All functionalities which are useful for remote sensing data are of interest. As
+OTB is a library, it should be generic algorithms: change, detection, fusion,
+object detection, segmentation, interpolation, etc.
+
+More specific applications can be contributed to the OTB-Applications package.
+
+\section{Running the tests}\label{sec:runningTheTests}
+
+\subsection{What are the tests?}
+
+OTB is an ever changing library, it is quite active and have scores of changes per day from different people. It would be a headache to make sure that the brand new improvement that you introduced didn't break anything, if we didn't have automated tests. You also have to take into account differences in OS, compilers, options, versions of external libraries, etc.
+
+For each class, at minimum there is a test which tries to instantiate it and another one which uses the class. The output of each test (image, text file, binary file) is controlled against a baseline to make sure that the result hasn't changed.
+
+All these test are available in the directory \texttt{Testing} and are also good examples on how to use the different classes.
+
+\subsection{How to run the tests?}
+
+There is more than 1000 tests for OTB and about 100 for the OTB-Applications and it takes from 20 minutes to 3 hours to run all the test, mainly depending on your compilation options (Release mode does make a difference) and of course your hardware.
+
+To run the tests, you first have to make sure that you set the option \texttt{BUILD\_TESTING} to \texttt{ON} before building the library. If you want to modify it, just rerun ccmake, change the option, then make.
+
+For some of the tests, you also need the test data and the baselines (see \ref{sec:FAQTestData}).
+
+Once OTB is built with the tests, you just have to go to the binary directory where you built OTB and run \texttt{ctest -N} to have a list of all the tests. Just using \texttt{ctest} will run all the tests. To select a subset, you can do \texttt{ctest -R Kml} to run all tests related to kml files or \texttt{ctest -I 1,10} to run tests from 1 to 10.
+
+\subsection{How to get the test data?}\label{sec:FAQTestData}
+
+Tests data are also versioned using Mercurial (see \ref{sec:FAQMercurial}).
+
+You can get the base doing:
+\begin{verbatim}
+      hg clone http://hg.orfeo-toolbox.org/OTB-Data
+\end{verbatim}
+
+This is about 1~GB of data, so it will take a while, but you have to do it only once, as after, a simple
+\begin{verbatim}
+      hg pull -u
+\end{verbatim}
+will update you to the latest version of the repository.
+
+You can also easily synchronize the directory you retrieve between different computers on your network, so you don't have to get it several times from the main server. Check out Mercurial capabilities.
+
+\subsection{How to submit the results?}
+
+Once you know how to run the tests, you can also help us to detect the bugs or configuration problems specific to your configuration. As mentionned before, the possible combinations between OS, compiler, options, external libraries version is too big to be tested completely, but the more the better.
+
+You just have to launch ctest with the \texttt{-D Experimental} switch. Hence:
+\begin{verbatim}
+      ctest -D Experimental
+\end{verbatim}
+
+And you will be able to see the result at
+
+\url{http://dash.orfeo-toolbox.org/Dashboard/index.php?project=OTB}.
+
+If you are interested in setting up a nightly test (automatically launched every night), please contact us and we will give you the details.
 
 \section{OTB's Roadmap}
+
 \subsection{Which will be the next version of OTB?}
 OTB's version numbers have 3 digits. The first one is for major
 versions, the second one is for minor versions and the last one is for
 bugfixes.
 
-The first version was 1.0.0. The current one 1.4.0 was released in june 2007. 
-The next one will probably be 2.0.0.
+The first version was 1.0.0 in July 2006. Version 1.2.0, 1.4.0 and 1.6.0 were
+released in between. The 2.0.0 major version  was released in December 2007.
+The 2.2.0, 2.4.0 and 2.6.0 in June, July and November 2008 respectively. The
+2.8.0 came out in January 2009 and the 3.0.0 in May 2009. The current one is 3.2.0.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
@@ -462,8 +571,8 @@ A bugfix version is released when significant bugs are identified and fixed.
 
 \subsection{When will the next version of OTB be available?}
 We plan to release major new OTB version once a year, that is, version
-2.0.0 should be available end of 2007, version 3.0.0 should be released
-mid-2008, and so on.
+2.0.0 was available at the end of 2007, version 3.0.0 was released
+in May 2009, and so on.
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,
@@ -487,18 +596,18 @@ following:
       \item radiometric corrections,
       \item registration.
       \end{itemize}
-    \item{Version 3 (2008):}
+    \item{Version 3 (2009):}
       \begin{itemize}
       \item multi-scale and multi-resolution analysis,
       \item object detection and recognition,
       \item supervised learning.
       \end{itemize}
-    \item{Version 4 (2009):}
+    \item{Version 4 (2010):}
       \begin{itemize}
 	\item data fusion,
 	\item spatial reasoning.
       \end{itemize}
-    
+
 \end{itemize}
 
 %% \subsection{When will feature X or Y be included in OTB?}

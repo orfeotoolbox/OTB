@@ -1,4 +1,5 @@
 \chapter{Building Simple Applications with OTB}
+\label{chap:Tutorials}
 
 Well, that's it, you've just downloaded and installed OTB, lured by the promise
 that you will be able to do everything with it. That's true, you will be able
@@ -6,9 +7,9 @@ to do everything but - there is always a {\em but} - some effort is required.
 
 OTB uses the very powerful systems of generic programing, many classes are
 already available, some powerful tools are defined to help you with recurrent
-tasks, but it is not an easy world to enter. 
+tasks, but it is not an easy world to enter.
 
-These tutorial are designed to help you enter this world and grasp the logic
+These tutorials are designed to help you enter this world and grasp the logic
 behind OTB. Each of these tutorials should not take more than 10 minutes (typing
 included) and each is designed to highlight a specific point. You may not be
 concerned by the latest tutorials but it is strongly advised to go through the
@@ -24,7 +25,7 @@ Let's start by the typical {\em Hello world} program. We are going to compile
 this C++ program linking to your new OTB.
 
 First, create a new folder to put your new programs (all the examples from this
-tutorial) in and go into this folder. 
+tutorial) in and go into this folder.
 
 Since all programs using OTB are handled using the CMake system, we need to create a
 \code{CMakeLists.txt} that will be used by CMake to compile our program. An
@@ -37,6 +38,8 @@ Open the \code{CMakeLists.txt} file and write in the few lines:
 \begin{small}
 \begin{verbatim}
 PROJECT(Tutorials)
+
+cmake_minimum_required(VERSION 2.6)
 
 FIND_PACKAGE(OTB)
 IF(OTB_FOUND)
@@ -80,7 +83,7 @@ World !} printed.
 
 Ok, well done! You've just compiled and executed your first OTB program. Actually,
 using OTB for that is not very useful, and we doubt that you downloaded OTB only
-to do that. It's time to move on to a more advance level.
+to do that. It's time to move on to a more advanced level.
 
 
 \section{Pipeline basics: read and write}
@@ -111,18 +114,18 @@ Once this file is written you just have to run \code{make}. The
 \code{ccmake} call is not required anymore.
 
 Get one image from the \code{OTB/Examples/Data} directory in the OTB sources.
-For example get \code{QB\_Suburb.png}. 
+For example get \code{QB\_Suburb.png}.
 
 Now, run your new program as \code{Pipeline QB\_Suburb.png output.png}. You
 obtain the file \code{output.png} which is the same image as
 \code{QB\_Suburb.png}. When you triggered the \code{Update()} method, OTB opened
-the original image and wrote it back under another name. 
+the original image and wrote it back under another name.
 
 Well\ldots that's nice but a bit complicated for a copy program!
 
 Wait a minute! We didn't specify the file format anywhere! Let's try
 \code{Pipeline QB\_Suburb.png output.jpg}. And voila! The output image is a jpeg
-file. 
+file.
 
 That's starting to be a bit more interesting: this is not just a program to copy
 image files, but also to convert between image formats.
@@ -154,7 +157,7 @@ TARGET_LINK_LIBRARIES(FilteringPipeline OTBCommon OTBIO)
 
 Compile with \code{make} and execute as \code{FilteringPipeline QB\_Suburb.png
 output.png}.
- 
+
 You have the filtered version of your image in the \code{output.png} file.
 
 Now, you can practice a bit and try to replace the filter by one of the 150+
@@ -193,8 +196,34 @@ TARGET_LINK_LIBRARIES(ScalingPipeline OTBCommon OTBIO)
 
 As you should be getting used to it by now, compile with \code{make} and execute
 as \code{ScalingPipeline QB\_Suburb.png output.png}.
- 
+
 You have the filtered version of your image in the \code{output.png} file.
+
+\section{Working with multispectral or color images}
+
+So far, as you may have noticed, we have been working with grey level images,
+i.e. with only one spectral band. If you tried to process a color image with
+some of the previous examples you have probably obtained a deceiving grey
+result.
+
+Often, satellite images combine several spectral band to help the
+identification of materials: this is called multispectral imagery. In this
+tutorial, we are going to explore some of the mechanisms used by OTB to
+process multispectral images.
+
+Add the following lines in the \code{CMakeLists.txt} file:
+
+\begin{small}
+\begin{verbatim}
+ADD_EXECUTABLE(Multispectral Multispectral.cxx )
+TARGET_LINK_LIBRARIES(Multispectral OTBCommon OTBIO)
+\end{verbatim}
+\end{small}
+
+\input{Multispectral}
+
+Compile with \code{make} and execute as \code{./Multispectral qb\_RoadExtract.tif
+ qb\_blue.tif qb\_shiftscale.tif}.
 
 \section{Parsing command line arguments}
 \label{sec:TutorialParsing}
@@ -271,11 +300,11 @@ First you need to add the following lines in the \code{CMakeLists.txt} file:
 \begin{small}
 \begin{verbatim}
 ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
-TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu)
+TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisualization)
 \end{verbatim}
 \end{small}
 
-Notice that you have to link to 2 other OTB libraries: OTBGui and OTBVisu.
+Notice that you have to link to 2 other OTB libraries: OTBGui and OTBVisualization.
 
 \input{SimpleViewer}
 
@@ -286,16 +315,32 @@ pixels). For all multithreaded filters (filters which implement a
 \code{ThreadedGenerateData()} method), the image is splitted into piece and only
 the piece on display is processed.
 
+\section{Going from raw satellite images to useful products}
+
+Quite often, when you buy satellite images, you end up with several images. In the case of optical satellite, you often have a panchromatic spectral band with the highest spatial resolution and a multispectral product of the same area with a lower resolution. The resolution ratio is likely to be around 4.
+
+To get the best of the image processing algorithms, you want to combine these data to produce a new image with the highest spatial resolution and several spectral band. This step is called fusion and you can find more details about it in \ref{sec:Fusion}. However, the fusion suppose that your two images represents exactly the same area. There are different solutions to process your data to reach this situation. Here we are going to use the metadata available with the images to produce an orthorectification as detailled in \ref{sec:Ortho}.
+
+First you need to add the following lines in the \code{CMakeLists.txt} file:
+
+\begin{small}
+\begin{verbatim}
+ADD_EXECUTABLE(OrthoFusion  OrthoFusion.cxx)
+TARGET_LINK_LIBRARIES(OrthoFusion OTBProjections OTBCommon OTBIO)
+\end{verbatim}
+\end{small}
+
+\input{OrthoFusion}
 
 
 % \section{Multiband images}
 
 % \section{GUI}
-% 
+%
 % Basic GUI
-% 
+%
 % \section{Better GUI}
-% 
+%
 % Road extraction viewer
 
 

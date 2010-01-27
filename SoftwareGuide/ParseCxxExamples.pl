@@ -40,7 +40,7 @@ sub ParseCxxFile {
   my $outputfilename = shift;
 
   # truncate the initial part of the path
-  $inputfilename =~ /(Examples\/.*$)/;
+  $inputfilename =~ /((Examples|Languages)\/.*$)/;    # Languages added for wrapping files
   my $examplefilename = $1;
 
   print "Processing $inputfilename into $outputfilename  ... \n";

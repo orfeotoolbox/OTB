@@ -1,0 +1,35 @@
+\chapter{Reading and Writing Vector Data}
+\index{vector data}
+\label{sec:ReadingVectorData}
+
+As we have seen in the previous chapter, OTB has a great capability to
+read and process images. However, images are not the only type of data
+we will need to manipulate. Images are characterized by a regular
+sampling grid. For some data, such as Digital Elevation Models (DEM)
+or Lidar, this is too restrictive and we need other representations.
+
+Vector data are also used to represent cartographic objects,
+segmentation results, etc: basically, everything which can be seen as
+points, lines or polygons. OTB provides functionnalities for accessing
+this kind of data.
+
+\section{Reading DEM Files}
+\index{Digital elevation model}
+\label{sec:ReadDEM}
+\input{DEMToImageGenerator.tex}
+
+\section{Lidar data Files}
+\index{vector data!lidar}
+\label{sec:ReadLidar}
+\input{LidarReaderExample.tex}
+\input{LidarToImageExample.tex}
+
+\section{Reading and Writing Shapefiles and KML}
+\index{vector data!shapefile}
+\label{sec:ReadVectorData}
+\input{VectorDataIOExample.tex}
+
+\section{Reading DXF Files}
+\index{vector data!dxf}
+\label{sec:ReadDXF}
+\input{DXFReaderExample.tex}

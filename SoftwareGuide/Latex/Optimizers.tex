@@ -3,9 +3,25 @@
 \index{itk::Single\-Valued\-NonLinear\-Optimizer}
 
 
+% \begin{figure}
+% \center
+% \includegraphics[width=\textheight,angle=270]{OptimizersHierarchy.eps}
+% \itkcaption[Class diagram of the Optimizer hierarchy]{Class diagram of the
+% optimizers hierarchy.}
+% \label{fig:OptimizersHierarchy}
+% \end{figure}
+
+% \begin{sidewaysfigure}
+% \center
+% \includegraphics[width=\textheight]{OptimizersHierarchy.eps}
+% \itkcaption[Class diagram of the Optimizer hierarchy]{Class diagram of the
+% optimizers hierarchy.}
+% \label{fig:OptimizersHierarchy}
+% \end{sidewaysfigure}
+
 \begin{figure}
 \center
-\includegraphics[width=\textheight,angle=270]{OptimizersHierarchy.eps}
+\includegraphics[width=\textwidth]{OptimizersHierarchy.eps}
 \itkcaption[Class diagram of the Optimizer hierarchy]{Class diagram of the
 optimizers hierarchy.}
 \label{fig:OptimizersHierarchy}
@@ -77,14 +93,14 @@ The types of single valued optimizer currently available in OTB are:
 actually implemented in the \code{vxl/vnl} numerics toolkit.  The ITK class
 \doxygen{itk}{AmoebaOptimizer} is merely an adaptor class.
 
-\item \textbf{Conjugate Gradient}: Fletcher-Reeves form 
+\item \textbf{Conjugate Gradient}: Fletcher-Reeves form
 of the conjugate gradient with or without preconditioning
 (\doxygen{itk}{ConjugateGradientOptimizer}). It is also an adaptor to an optimizer in
 \code{vnl}.
 
 \item \textbf{Gradient Descent}: Advances parameters in the direction of the
 gradient where the step size is governed by a learning rate
-(\doxygen{itk}{GradientDescentOptimizer}). 
+(\doxygen{itk}{GradientDescentOptimizer}).
 
 \item \textbf{Quaternion Rigid Transform Gradient Descent}: A specialized
 version of GradientDescentOptimizer for QuaternionRigidTransform parameters,
@@ -107,7 +123,7 @@ found in~\cite{Styner2000}.
 
 \item \textbf{Regular Step Gradient Descent}: Advances parameters in the
 direction of the gradient where a bipartition scheme is used to compute
-the step size (\doxygen{itk}{RegularStepGradientDescentOptimizer}). 
+the step size (\doxygen{itk}{RegularStepGradientDescentOptimizer}).
 
 \item \textbf{Powell Optimizer}: Powell optimization method.  For an
 N-dimensional parameter space, each iteration minimizes(maximizes) the function
@@ -117,9 +133,9 @@ in~\cite{Press1992}.  (\doxygen{itk}{PowellOptimizer}).
 \item \textbf{SPSA Optimizer}: Simultaneous Perturbation Stochastic
 Approximation Method. This optimizer is described in
 \url{http://www.jhuapl.edu/SPSA} and in~\cite{Spall1998}.
-(\doxygen{itk}{SPSAOptimizer}). 
+(\doxygen{itk}{SPSAOptimizer}).
 
-\item \textbf{Versor Transform Optimizer}: A specialized version of the 
+\item \textbf{Versor Transform Optimizer}: A specialized version of the
 RegularStepGradientDescentOptimizer for VersorTransform
 parameters, where the current rotation is composed with the gradient rotation
 to produce the new rotation versor. It follows the definition of versor

@@ -1,0 +1,36 @@
+Jordi Inglada (CNES)
+Thomas Feuvrier (CS)
+Julien Michel (CS)
+Romain Garrigues (CS)
+Emmanuel Christophe (CNES then CRISP)
+Cyrille Valladeau (CS)
+Julien Radoux (UCL)
+Gr\'egoire Mercier (Telecom Bretagne)
+Vincent Poulain (CNES)
+Patrick Imbo (CS)
+Caroline Ruffel (CS)
+Miarintsoa Ramanantsimiavona
+Eric Bughin (CMLA)
+Guillaume Borrut (CS)
+Mathieu Deltorre (CS)
+Vincent Schut (Sarvision)
+David Dubois
+Jan Wegner
+Otmane Lahlou (CS)
+Michael Seymour (EADS)
+Julien Osman
+Christophe Lay
+Yannick Reynard
+Gwendoline Blanchet (CNES)
+Adamo Ferro
+Rik Bellens
+Jean-Guilhem Cailton (Ark\'emie)
+Guillaume Borrut (CS)
+Etienne Bougoin (CS)
+Tishampati Dhar
+Massimo Di Stefano
+Aik Song Chia (CRISP)
+Manuel Grizonnet (CNES)
+Stephane May (CNES)
+
+

@@ -1,4 +1,4 @@
-\chapter{Ortho-registration}
+\chapter{Orthorectification and Map Projection}\label{sec:Ortho}
 
 
 \begin{figure}[h]
@@ -9,29 +9,29 @@
        \draw[fill=red] (\x,\x) rectangle +(4,4);
      \node[fill=black!10, text width= 1.2cm] (InputSeries) at
        (3,-1) {Input Series};
-     
+
      \draw[->,thick] (9,5) --  +(3,0);
-     
+
      \draw[fill=black!30,rounded corners=2pt] (12.2,3) rectangle +(6,4);
      \node[text width= 0.7cm] (SensorModel) at (15,5) {Sensor Model};
-     
+
      \draw[fill=red!30] (1,-10) rectangle +(4,4);
      \node[fill=black!10, text width= 1.2cm] (DEM) at
        (5,-11) {DEM};
-     
+
      \draw[->,thick] (3,-5.5) --  ++(0,3) -- ++(12,0) -- ++(0,5);
-     
+
      \draw[->,thick] (18.5,5) --  +(3,0);
-     
+
      \foreach \x in {5,...,1}
        \draw[fill=blue,xshift=600pt] (\x,\x) rectangle +(4,4);
      \node[fill=black!10, text width= 2.8cm] (GeographicGeometry) at
        (28,-1) {Geographic Geometry};
 
-      
+
 
        \draw[->,thick] (25.5,8.5) --  +(0,3);
-       
+
      \draw[fill=black!30,rounded corners=2pt] (22,12) rectangle +(6.5,4);
      \node[text width= 0.7cm] (HomPoExtr) at (24,14) {Homologous
      Points};
@@ -44,23 +44,23 @@
 
      \draw[->,thick] (15,11.5) --  +(0,-4);
 
-     
+
       \draw[->,thick] (30,5) --  +(3,0);
-      
+
      \draw[fill=black!30,rounded corners=2pt] (33.2,3) rectangle +(6,4);
      \node[text width= 0.7cm] (MapProjection) at (36,5) {Map Projections};
-     
 
-     
+
+
      \draw[->,thick] (39.5,5) --  +(3,0);
-     
+
      \foreach \x in {5,...,1}
        \draw[fill=green,xshift=1200pt] (\x,\x) rectangle +(4,4);
      \node[fill=black!10, text width= 1.8cm] (CartographicGeometry) at
        (47,-1) {Cartographic Geometry};
-     
+
      %\draw[->,thick] (36,2) --  ++(0,-10) -- ++(-30,0);
-       
+
   \end{tikzpicture}
   \itkcaption[Image Ortho-registration Procedure]{Image Ortho-registration Procedure.}
 \label{fig:ImageOrtho-registrationProcedure}
@@ -106,7 +106,7 @@ from ground to image -- inverse model. This can be written as follows:
   \begin{array}{cc}
     Forward & \\
     X = f_x(l,c,h,\vec\theta) & Y = f_y(l,c,h,\vec\theta)\\
-     & \\ 
+     & \\
     Inverse & \\
     l = g_l(X,Y,h,\vec\theta) & c = g_c(X,Y,h,\vec\theta)
   \end{array}
@@ -126,7 +126,7 @@ sensor models is \doxygen{otb}{SensorModelBase} from which the classes
 As one may note from the model equations, the height of the ground, $h$,
 must be known. Usually, that means that a Digital Elevation Model,
 DEM, will be used.\\
-  
+
 
 \subsection{Types of Sensor Models}
 \label{sec:TypesofSensorModels}
@@ -189,6 +189,13 @@ access it when needed.
 \input{SensorModelExample.tex}
 \fi
 
+\subsection{Evaluating Sensor Model}
+\label{sec:EvaluatingSensorModels}
+
+If any appropriate sensor model is available in the image meta-data,
+OTB offers the possibility to estimate a sensor model from the image. 
+
+\input{EstimateRPCSensorModelExample.tex}
 
 
 \subsection{Limits of the Approach}
@@ -237,21 +244,21 @@ be applied. This approaches are presented in chapters
 %%     \draw[step=0.5, gray, very thin,rotate=-10] (5.5,0.5) grid
 %%     (15.5,10.5);
 
-    
+
 %%     \draw[fill=red!70] (1,-11) circle (0.2);
-    
+
 %%     \draw (1,-11) .. controls +(30:1cm) and +(60:1cm) .. (-10,7);
-    
+
 %%     \draw[fill=red!70] (-10,7) circle (0.2);
-    
+
 %%     \node (eq1) at (-12.2,-4) {$\scriptstyle{G_1(X_i,Y_i,h_i,\vec\theta_1)}$};
-    
+
 %%     \draw (1,-11) .. controls +(-30:1cm) and +(-60:1cm) .. (10,7);
-    
+
 %%     \draw[fill=red!70] (10,7) circle (0.2);
-    
+
 %%     \node (eq2) at (7.2,-3) {$\scriptstyle{G_2(X_i,Y_i,h_i,\vec\theta_2)}$};
-    
+
 %% \end{tikzpicture}
 %% \begin{itemize}
 %%       \item Everything is known.
@@ -273,7 +280,7 @@ be applied. This approaches are presented in chapters
 %% 	parameters are needed.
 %%       \end{itemize}
 %%   \end{itemize}
-  
+
 
 %% Homologous point extraction
 %% From manual to automatic procedures
@@ -293,7 +300,7 @@ be applied. This approaches are presented in chapters
 %% Salient points
 %% Similarity measures
 
-  
+
 \section{Map Projections}
 \ifitkFullVersion
 \label{sec:MapProjections}
@@ -320,14 +327,33 @@ order to hide the complexity of the approach, some type definitions
 for the more common projections are given in the file
 \code{otbMapProjections.h} file.
 
+Sometimes, you don't know at compile time what map projection you will need in
+your application. In this case, the \doxygen{otb}{GenericMapProjection}
+allow you to set the map projection at run-time by passing the WKT identification
+for the projection.
+
+\input{MapProjectionExample.tex}
+
 You will seldom use a map projection by itself, but rather in an
 ortho-rectification framework. An example is given in the next section.
 
 
 
 
-\section{Ortho-rectification with OTB}
+\section{Orthorectification with OTB}
 \ifitkFullVersion
 \label{sec:OrthorectificationwithOTB}
-\input{OrthoRectificationExample.tex}
 \fi
+\input{OrthoRectificationExample.tex}
+
+\section{Vector data projection manipulation}
+\ifitkFullVersion
+\label{sec:VectorDataProjection}
+\fi
+\input{VectorDataProjectionExample.tex}
+
+\section{Vector data area extraction}
+\ifitkFullVersion
+\label{sec:VectorDataProjection}
+\fi
+\input{VectorDataExtractROIExample.tex}

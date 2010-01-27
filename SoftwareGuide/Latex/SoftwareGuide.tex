@@ -13,7 +13,7 @@
 
 
 \usepackage[dvips]{graphicx}
-\usepackage{times}
+\usepackage{times,lscape,url}
 %\usepackage{mdwtab}
 
 
@@ -89,13 +89,13 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{The ORFEO Tool Box Software Guide\\ Fourth Edition\\ Updated
-  for OTB-1.6.0}
+\title{The ORFEO Tool Box Software Guide\\ Updated
+  for OTB-3.2}
 
 \author{OTB Development Team}
 
 \authoraddress{
-  \url{http://otb.cnes.fr}\\
+  \url{http://www.orfeo-toolbox.org}\\
   e-mail: \email{otb@cnes.fr}
 }
 
@@ -125,7 +125,7 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 \frontmatter
 
-\hyperbaseurl{http://otb.cnes.fr}
+\hyperbaseurl{http://www.orfeo-toolbox.org}
 
 
 
@@ -158,12 +158,12 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 
-%%\ifitkPrintedVersion 
+%%\ifitkPrintedVersion
 %% \input{Cover.tex}
 %%\fi
 
 \input{Abstract.tex}
-\input{Contributors.tex}
+
 
 
 
@@ -190,28 +190,29 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
+%
 % Begin technical content
-% 
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \mainmatter
 
-\part{Introduction}
+\part{Introduction}\label{part:introduction}
 
 \input{Introduction.tex}
 \input{Installation.tex}
 \input{SystemOverview.tex}
 
-\part{Tutorials}
+\part{Tutorials}\label{part:tutorials}
 
 \input{Tutorial.tex}
 
 
-\part{User's guide}
+\part{User's guide}\label{part:userguide}
 
 \input{DataRepresentation.tex}
 \input{ReadWrite.tex}
+\input{ReadWriteVectorData.tex}
 \input{Filtering.tex}
 \input{ImageRegistration.tex}
 \input{DisparityEstimation.tex}
@@ -219,26 +220,40 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \input{Radiometry.tex}
 \input{Fusion.tex}
 \input{FeatureExtraction.tex}
-\input{ImageSegmentation.tex}
 \input{MultiScaleAnalysis.tex}
-\input{ChangeDetection.tex}
+\input{ImageSegmentation.tex}
 \input{Classification.tex}
+\input{ObjectBasedImageAnalysis.tex}
+\input{ChangeDetection.tex}
+\input{GeospatialAnalysis.tex}
 \input{Visualization.tex}
-
+\input{Online.tex}
 
 %%% \input{Applications.tex}
 
 
 
-\part{Developper's guide}
+\part{Developper's guide}\label{part:developperguide}
 \input{Iterators.tex}
 \input{ImageAdaptors.tex}
+\input{StreamingAndThreading.tex}
 \input{WriteAFilter.tex}
 
-\part{Appendix}
+\part{Appendix}\label{part:appendix}
 \chapter{Frequently Asked Questions}
 \label{sec:FrequentlyAskedQuestions}
 \input{FAQ.tex}
+
+\chapter{Release Notes}
+\label{sec:ReleaseNotes}
+\input{ReleaseNotes.tex}
+
+%Comment generation of wrapping documentation for release 3.2
+\chapter{Wrappings to other languages}
+\input{Wrapping.tex}
+
+\input{Contributors.tex}
+
 \backmatter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -259,6 +274,8 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \InputIfFileExists{SoftwareGuide.ind}
+
+
 
 
 %%\ifitkPrintedVersion
