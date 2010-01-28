@@ -37,7 +37,7 @@ namespace otb
 namespace Functor
 {
 /**
- * \class TerraSarCalibrationImageFunctor
+ * \class TerraSarCalibrationFunctor
  *  \brief Compute sigma naught coefficient.
  * 
  * This functor is intended to be used by the

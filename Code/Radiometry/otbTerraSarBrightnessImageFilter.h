@@ -30,7 +30,7 @@
 
 namespace otb
 {
-/** \class TerraSarBrigthnessImageFilter
+/** \class TerraSarBrightnessImageFilter
  *  \brief Calculates the brightness of TerraSar sensor images.
  *
  * Implementation of the brightness algorithm has been made following

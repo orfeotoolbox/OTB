@@ -31,7 +31,7 @@ namespace otb
 namespace Functor
 {
 /**
- * \class TerraSarBrightnessImageFunctor
+ * \class TerraSarBrightnessFunctor
  *  \brief Compute beta naught coefficient.
  * 
  * This functor is intended to be used by the
