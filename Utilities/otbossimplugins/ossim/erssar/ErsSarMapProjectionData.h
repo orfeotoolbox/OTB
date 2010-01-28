@@ -80,7 +80,7 @@ public:
    */
   void Read(std::istream& is)
   {
-    is>>*this;
+    is >> *this;
   };
 
   /**
@@ -88,7 +88,7 @@ public:
    */
   void Write(std::ostream& os)
   {
-    os<<*this;
+    os << *this;
   };
 
   /**

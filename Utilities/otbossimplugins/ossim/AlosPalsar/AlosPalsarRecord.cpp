@@ -17,7 +17,7 @@ namespace ossimplugins
 {
 
 AlosPalsarRecord::AlosPalsarRecord(std::string mnemonic):
-  _mnemonic(mnemonic)
+    _mnemonic(mnemonic)
 {
 }
 
@@ -26,7 +26,7 @@ AlosPalsarRecord::~AlosPalsarRecord()
 }
 
 AlosPalsarRecord::AlosPalsarRecord(const AlosPalsarRecord& rhs):
-  _mnemonic(rhs._mnemonic)
+    _mnemonic(rhs._mnemonic)
 {
 }
 
