@@ -48,17 +48,7 @@ IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
   LIST(REMOVE_ITEM ossim_base_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/base/ossimFactoryBaseTemplate.cpp")
 
   # Removing sources not in use any more (switched to ossim plugins)
-  LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimRadarSat2Model.cpp")
-  LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimGeometricSarSensorModel.cpp")
-  LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimErsSarModel.cpp")
   LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimCosmoSkymedModel.cpp")
-  LIST(REMOVE_ITEM ossim_projection_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/projection/ossimTerraSarModel.cpp")
-  LIST(REMOVE_ITEM ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ErsSar/*")
-  LIST(REMOVE_ITEM ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/RadarSat2/*")
-  LIST(REMOVE_ITEM ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ossimRadarSat2TileSource.cpp")
-  LIST(REMOVE_ITEM ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/TerraSar/*")
-  LIST(REMOVE_ITEM ossim_imaging_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/src/ossim/imaging/ossimTerraSarTileSource.cpp")
-
   # Adjust the compiler flags to avoid problems with ossim code.
   IF(CMAKE_COMPILER_IS_GNUCXX)
     FOREACH(f      ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS}
