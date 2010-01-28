@@ -71,9 +71,13 @@ extern "C"
       ossimImageHandlerRegistry::instance()->
         registerFactory(ossimPluginReaderFactory::instance());
 
-      /** Register the projection factory. */
+      /**
+       * Register the projection factory.
+       * Note that this must be pushed to the front of the factory or bilinear
+       * projection will be picked up.
+       */
       ossimProjectionFactoryRegistry::instance()->
-         registerFactory(ossimPluginProjectionFactory::instance());
+         registerFactoryToFront(ossimPluginProjectionFactory::instance());
 
      setDescription(theDescription);
   }
