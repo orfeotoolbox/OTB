@@ -54,8 +54,15 @@ public:
  virtual ~TerraSarBrightnessFunctor() {};
  
  /** Accessors */
- void SetCalibrationFactor( double val ) { m_CalibrationFactor = val; };
- double GetCalibrationFactor() { return m_CalibrationFactor; };
+  void SetCalibrationFactor( double val ) 
+  { 
+    m_CalibrationFactor = val; 
+  }
+
+  double GetCalibrationFactor() 
+  {
+    return m_CalibrationFactor; 
+  }
 
   /** Set results in decibels */
   void SetResultsInDecibels(bool db)
