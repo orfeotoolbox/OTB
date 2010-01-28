@@ -227,12 +227,13 @@ lives in a sub-directory of the OTB-Wrapping project (within the Libraries direc
 See SampleCMakeLists.txt in the Documentation directory for a description of each macro and option that
 can appear in such a file. What follows is the usual set of commands that will appear:
 
-
+\small
 \verb$WRAP_LIBRARY("otbMySpatialObjectExtensions")$ \\
 \verb$SET(WRAPPER_LIBRARY_DEPENDS itkSpatialObject itkBase)$ \\
 \verb$SET(WRAPPER_LIBRARY_LINK_LIBRARIES ITKCommon )$ \\
 \verb$AUTO_INCLUDE_MODULES()$ \\
 \verb$END_WRAP_LIBRARY()$ \\
+\normalsize
 
 \begin{itemize}
 \item	\verb$WRAP_LIBRARY$  sets up the environment to wrap a set of classes into a 
@@ -277,6 +278,7 @@ simple image filter like
 Here is what should be the file 
 \verb$otbResampling/wrap_otbStreamingShrinkImageFilter.cmake$.
 
+\small
 \begin{verbatim}
 WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)
  WRAP_IMAGE_FILTER_USIGN_INT(2)
@@ -284,6 +286,7 @@ WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)
  WRAP_IMAGE_FILTER_REAL(2)
 END_WRAP_CLASS()
 \end{verbatim}
+\normalsize
 
 The file contains several macros useful to make the wrapping easy. It contains 
 a \verb$WRAP_CLASS$ - \verb$END_WRAP_CLASS$ wich contains itself some 
@@ -434,10 +437,57 @@ for the types used to wrap a class, a correct way to do so is :
 With the MANGLE\_NAME Macro, it will be in two steps : 
 \begin{itemize}
 \item\verb!MANGLE_NAME(${ITKM_IF2} ${ITKM_IF2} )!
-\item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, ${ITKM_IF2}")!
+\item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, \${ITKM_IF2}")!
 \end{itemize}
 
-\subsection{JavaDoc generation}
+\subsection{HTML JavaDoc generation}
 
+All the classes wrapped in Java language (in Python too) contains the comments 
+present in the c++ source code. The tags in the comments were translated to be 
+specific to the tool Javadoc (@param, @return, @see...). 
+In order to handle the Latex formulas present in the comments, the tool JavaDoc alone 
+does not convert the Tex formulas to PNG. The taglet LatexLet allows to use Latex within 
+JavaDoc comments. 
+
+\subsubsection{Generate JavaDoc documentation}
+
+First, download the taglet LatexLet 
+here~:\\ \url{http://users.informatik.uni-halle.de/~grau/LaTeXlet/index.html}. 
+Once the OTB-Wrapping project built, go to the directory Language/Java/Proxies/src/. 
+All the java classes generated are there.
+
+Then, to generate the javadoc HTML documentaion use the javadoc command with the following options : 
+
+\begin{verbatim}
+>javadoc -d DESTINATION 
+         -taglet latexlet.InlineBlockLaTeXlet 
+         -taglet latexlet.BlockLaTeXlet 
+         -taglet latexlet.InlineLaTeXlet 
+         -tagletpath PATH_TO_THE_LATEXLET_JAR   
+          {BIN_DIR}/Languages/Java/Proxies/src/org/*/*/*.java
+\end{verbatim}
+
+The options mean :
+\begin{itemize}
+\item -d DESTINTAION : Destination directory for output files
+\item -taglet *      : The fully qualified name of Taglet to register
+\item -tagletpath PATH\_TO\_THE\_LATEXLET\_JAR : Complete path to the taglet jar
+\item org/*/*/*.java : the sources files. 
+\end{itemize}
+
+
+\subsubsection{Generate JavaDoc while compilation}
+The method above shows how to generate the HTML javadoc documentation with 
+a command line after OTB-Wrapping was built. It is possible to include this step 
+in the compilation process. 
+For that, two cmake variables have to be edited in the project configuration step with cmake.
+\begin{itemize}
+\item  LATEXLET\_JAR : Path to the LatexLet taglet allowing to convert Tex formula to PNG. 
+       Not setting this field will result in the absence of formulas in the generated javadoc
+\item  WRAP\_ITK\_JAVADOC : by default on OFF. Put this variable to ON if to include the html javadoc generation 
+       in the compilation process.
+\end{itemize}
+
+The resulting documentation is located in BIN\_DIR/Languages/Doc/Javadoc.
 
 
