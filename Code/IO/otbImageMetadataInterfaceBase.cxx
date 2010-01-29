@@ -420,6 +420,42 @@ ImageMetadataInterfaceBase::GetBandName( const MetaDataDictionaryType & dict ) c
   return outputValues;
 }
 
+double
+ImageMetadataInterfaceBase::GetXPixelSpacing( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "pixel_spacing";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
+double
+ImageMetadataInterfaceBase::GetYPixelSpacing( const MetaDataDictionaryType & dict ) const
+{
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  ossimKeywordlist kwl;
+  imageKeywordlist.convertToOSSIMKeywordlist(kwl);
+  std::string key= "pixel_spacing";
+  ossimString keywordString = kwl.find(key.c_str());
+
+  return keywordString.toDouble();
+}
+
 void
 ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 {
