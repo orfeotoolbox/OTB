@@ -332,7 +332,7 @@ public:
   /**
    * Get Parameters Min and and max for each band
    */
-   virtual  ParametersType GetParameters()
+   virtual ParametersType GetParameters() const
    {
      unsigned int nbBands = m_PixelRepresentationFunction.GetOutputSize();
      ParametersType         param;
