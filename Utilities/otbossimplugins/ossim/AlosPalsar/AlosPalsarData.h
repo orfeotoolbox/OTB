@@ -75,7 +75,7 @@ public:
    * @return true on success, false on error.
    */
   virtual bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const;
+                         const char* prefix = 0) const;
 
 
   const AlosPalsarDataFileDescriptor * get_AlosPalsarDataFileDescriptor() const;

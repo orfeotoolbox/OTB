@@ -45,13 +45,13 @@ public:
   /**
    * @brief Destructor
    */
-   virtual ~ossimErsSarModel();
+  virtual ~ossimErsSarModel();
 
-   /**
-    * @brief Method to return the class name.
-    * @return The name of this class.
-    */
-   virtual ossimString getClassName() const;
+  /**
+   * @brief Method to return the class name.
+   * @return The name of this class.
+   */
+  virtual ossimString getClassName() const;
 
   /**
    * @brief Returns pointer to a new instance, copy of this.
@@ -71,29 +71,29 @@ public:
   */
   bool open(const ossimFilename& file);
 
- /**
-  * @brief Method to save object state to a keyword list.
-  * @param kwl Keyword list to save to.
-  * @param prefix added to keys when saved.
-  * @return true on success, false on error.
-  */
+  /**
+   * @brief Method to save object state to a keyword list.
+   * @param kwl Keyword list to save to.
+   * @param prefix added to keys when saved.
+   * @return true on success, false on error.
+   */
   virtual bool saveState(ossimKeywordlist& kwl,
-                         const char* prefix=0) const;
+                         const char* prefix = 0) const;
 
-   /**
-    * @brief Method to the load (recreate) the state of the object from a
-    * keyword list. Return true if ok or false on error.
-    * @return true if load OK, false on error
-    */
-   virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
+  /**
+   * @brief Method to the load (recreate) the state of the object from a
+   * keyword list. Return true if ok or false on error.
+   * @return true if load OK, false on error
+   */
+  virtual bool loadState(const ossimKeywordlist &kwl, const char *prefix = 0);
 
 protected:
   virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
   virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
   virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
-   /**
-   * @brief Initializes the Slant Range for each Ground Range data sets : theNumberSRGR,theSRGRCoeffset,_srgr_update,thePixelSpacing,_isProductGeoreferenced
-   */
+  /**
+  * @brief Initializes the Slant Range for each Ground Range data sets : theNumberSRGR,theSRGRCoeffset,_srgr_update,thePixelSpacing,_isProductGeoreferenced
+  */
   virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
 
 private:
@@ -118,7 +118,7 @@ private:
 
 
   virtual bool isErsLeader(const ossimFilename& file) const;
-        virtual ossimFilename findErsLeader(const ossimFilename& file) const;
+  virtual ossimFilename findErsLeader(const ossimFilename& file) const;
 
   TYPE_DATA
 

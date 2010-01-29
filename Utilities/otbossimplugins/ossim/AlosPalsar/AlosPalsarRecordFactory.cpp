@@ -31,10 +31,10 @@ AlosPalsarRecord* AlosPalsarRecordFactory::Instanciate(int id)
 {
   if (traceDebug())
   {
-    ossimNotify(ossimNotifyLevel_DEBUG)<< "Intanciate AlosPalsar record:" << id << "\n";
+    ossimNotify(ossimNotifyLevel_DEBUG) << "Intanciate AlosPalsar record:" << id << "\n";
   }
   AlosPalsarRecord* record = _availableRecords[id];
-  if(record == NULL)
+  if (record == NULL)
   {
     return NULL;
   }

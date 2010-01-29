@@ -45,22 +45,22 @@ public:
   /**
    * @brief This function is able to create a new instance of the class
    */
-  virtual AlosPalsarRecord* Instanciate() =0;
+  virtual AlosPalsarRecord* Instanciate() = 0;
 
   /**
    * @brief This function is able to create a new instance of the class initialised with the data of the calling instance
    */
-  virtual AlosPalsarRecord* Clone()=0;
+  virtual AlosPalsarRecord* Clone() = 0;
 
   /**
    * @brief Read the class data from a stream
    */
-  virtual void Read(std::istream& is) =0;
+  virtual void Read(std::istream& is) = 0;
 
   /**
    * @brief Write the class to a stream
    */
-  virtual void Write(std::ostream& os)=0;
+  virtual void Write(std::ostream& os) = 0;
 
   std::string get_mnemonic()
   {

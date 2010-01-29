@@ -25,7 +25,7 @@ ErsSarRecordFactory::~ErsSarRecordFactory()
 ErsSarRecord* ErsSarRecordFactory::Instanciate(int id)
 {
   ErsSarRecord* record = _availableRecords[id];
-  if(record == NULL)
+  if (record == NULL)
   {
     return NULL;
   }

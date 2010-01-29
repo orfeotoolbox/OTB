@@ -198,7 +198,7 @@ public:
            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
            m_PixelRepresentationFunction.SetBlueChannelIndex(2);
          }
-
+          
         }
       }
       if(m_AutoMinMax)
@@ -442,6 +442,7 @@ protected:
   *  Evaluate() methods.
   */
   mutable TransferFunctionType m_TransferFunction;
+
   PixelRepresentationFunctionType m_PixelRepresentationFunction;
 
   /** Update time */
@@ -467,7 +468,6 @@ private:
   double m_AutoMinMaxQuantile;
 
   bool m_DefaultChannelsAreSet;
-
 };
 } // end namespace Functor
 } // end namespace otb
