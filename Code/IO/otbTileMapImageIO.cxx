@@ -112,8 +112,9 @@ bool TileMapImageIO::CanReadFile(const char* file)
 
   std::string filename = file;
   std::string::size_type gmPos = filename.rfind(".otb");
+  
   if ( (gmPos != std::string::npos)
-       && (gmPos == filename.length() - 3) )
+       && (gmPos == filename.length() - 4) )
   {
     return true;
   }
