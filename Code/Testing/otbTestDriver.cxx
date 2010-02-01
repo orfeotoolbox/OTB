@@ -44,6 +44,7 @@
 // name and the path separator
 #include "itksys/SharedForward.h"
 #include "itksys/Process.h"
+#include "otbTestHelper.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 
@@ -331,6 +332,8 @@ int main(int ac, char* av[] )
   std::vector< char* > args;
   typedef std::pair< char *, char *> ComparePairType;
   std::vector< ComparePairType > compareList;
+
+  otb::TestHelper testHelper;
   
   // parse the command line
   int i = 1;
@@ -449,6 +452,8 @@ int main(int ac, char* av[] )
     return retCode;
     }
 
+  int cpt(1);
+
   // now compare the images
   try
     {
@@ -459,15 +464,16 @@ int main(int ac, char* av[] )
       std::cout << "testFilename: " << testFilename << "  baselineFilename: " << baselineFilename << std::endl;
       
       // Make a list of possible baselines
-      std::map<std::string,int> baselines = RegressionTestBaselines(baselineFilename);
+      std::map<std::string,int> baselines =  testHelper.RegressionTestbaselines(baselineFilename);
       std::map<std::string,int>::iterator baseline = baselines.begin();
       std::string bestBaseline;
       int bestBaselineStatus = itk::NumericTraits<int>::max();
       while (baseline != baselines.end())
         {
-        baseline->second = RegressionTestImage(testFilename,
-                                               (baseline->first).c_str(),
-                                               0);
+        baseline->second = testHelper.RegressionTestImage(cpt,
+							  testFilename,
+							  (baseline->first).c_str(),
+							  0);
         if (baseline->second < bestBaselineStatus)
           {
           bestBaseline = baseline->first;
@@ -482,10 +488,15 @@ int main(int ac, char* av[] )
       // if the best we can do still has errors, generate the error images
       if (bestBaselineStatus)
         {
-        baseline->second = RegressionTestImage(testFilename,
-                                               bestBaseline.c_str(),
-                                               1);
-        }
+        // baseline->second = RegressionTestImage(testFilename,
+//                                                bestBaseline.c_str(),
+//                                                1);
+
+	baseline->second = testHelper.RegressionTestImage(cpt,
+							  testFilename, 
+							  bestBaseline.c_str(),
+							  0);
+	}
       
       // output the matching baseline
       std::cout << "<DartMeasurement name=\"BaselineImageName\" type=\"text/string\">";

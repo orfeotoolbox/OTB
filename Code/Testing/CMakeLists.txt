@@ -40,7 +40,7 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_EXECUTABLE(otbTestDriver otbTestDriver.cxx) 
-TARGET_LINK_LIBRARIES(otbTestDriver OTBIO)
+TARGET_LINK_LIBRARIES(otbTestDriver OTBIO OTBTesting)
 SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver" 
     CACHE INTERNAL "otbTestDriver path to be used by subprojects")
 
