@@ -2,6 +2,10 @@
 # Sources of non-templated classes.
 FILE(GLOB OTBTesting_SRCS "*.cxx" )
 
+# Remove the otbTestDriver cause only an executable is nedded 
+ LIST(REMOVE_ITEM OTBTesting_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/otbTestDriver.cxx" )
+
+
 ADD_LIBRARY(OTBTesting ${OTBTesting_SRCS})
 #SET_TARGET_PROPERTIES(OTBTesting
 #    PROPERTIES
@@ -25,3 +29,28 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Testing
     COMPONENT Development)
 ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+
+
+# Compile otbTestDriver
+# Needed in the OTB-Wrapping project.
+# Has to be compiled even if the BUILD_TEST  are set to OFF
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET_SOURCE_FILES_PROPERTIES(otbTestDriver.cxx PROPERTIES COMPILE_FLAGS -w)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+ADD_EXECUTABLE(otbTestDriver otbTestDriver.cxx) 
+TARGET_LINK_LIBRARIES(otbTestDriver OTBIO)
+SET(ITK_TEST_DRIVER "${EXECUTABLE_OUTPUT_PATH}/otbTestDriver" 
+    CACHE INTERNAL "otbTestDriver path to be used by subprojects")
+
+IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+  FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+  FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+  INSTALL(FILES ${__files1} ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/IO
+    COMPONENT Development)
+  INSTALL(TARGETS otbTestDriver RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR_CM24} COMPONENT Development)
+ENDIF(NOT OTB_INSTALL_NO_DEVELOPMENT)
+
+
