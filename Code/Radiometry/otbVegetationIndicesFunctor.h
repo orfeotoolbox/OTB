@@ -95,7 +95,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2 & nir) const = 0;
-  const double m_EpsilonToBeConsideredAsZero;
+  double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
@@ -184,7 +184,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2& b, const TInput3 & nir) const = 0;
-  const double m_EpsilonToBeConsideredAsZero;
+  double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_RedIndex;
