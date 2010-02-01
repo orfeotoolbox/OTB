@@ -28,7 +28,7 @@
 #include "otbMetaDataKey.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
-#include "ossim/imaging/ossimImageHandlerSarFactory.h"
+// #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
@@ -363,7 +363,7 @@ ImageFileReader<TOutputImage>
   if (!hasMetaData)
     {
       // Add the radar factory
-      ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+      // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
       
       
       ossimImageHandler* handler = ossimImageHandlerRegistry::instance()

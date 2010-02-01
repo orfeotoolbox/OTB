@@ -80,7 +80,7 @@ public:
    */
   void Read(std::istream& is)
   {
-    is>>*this;
+    is >> *this;
   };
 
   /**
@@ -88,7 +88,7 @@ public:
    */
   void Write(std::ostream& os)
   {
-    os<<*this;
+    os << *this;
   };
 
   /**
@@ -102,10 +102,10 @@ public:
   /**
    * @brief Continuation flag
    */
-        std::string get_continuation_flag() const
-        {
-                return _continuation_flag;
-        };
+  std::string get_continuation_flag() const
+  {
+    return _continuation_flag;
+  };
 
 
   /**
@@ -125,14 +125,14 @@ public:
   /**
    * @brief Format doc revision
    */
-    std::string   get_design_rev() const
+  std::string   get_design_rev() const
   {
     return _design_rev;
   };
   /**
    * @brief Software identifier
    */
-    std::string   get_software_id() const
+  std::string   get_software_id() const
   {
     return _software_id;
   };
@@ -146,14 +146,14 @@ public:
   /**
    * @brief File name
    */
-    std::string   get_file_name() const
+  std::string   get_file_name() const
   {
     return _file_name;
   };
   /**
    * @brief Record sequence/location flag
    */
-    std::string   get_rec_seq() const
+  std::string   get_rec_seq() const
   {
     return _rec_seq;
   };
@@ -188,7 +188,7 @@ public:
   /**
    * @brief Record code length
    */
-    int   get_code_len() const
+  int   get_code_len() const
   {
     return _code_len;
   };
@@ -601,11 +601,11 @@ protected:
   /**
    * @brief Format doc revision
    */
-    std::string   _design_rev;
+  std::string   _design_rev;
   /**
    * @brief Software identifier
    */
-    std::string   _software_id;
+  std::string   _software_id;
   /**
    * @brief File number
    */
@@ -613,11 +613,11 @@ protected:
   /**
    * @brief File name
    */
-    std::string   _file_name;
+  std::string   _file_name;
   /**
    * @brief Record sequence/location flag
    */
-    std::string   _rec_seq;
+  std::string   _rec_seq;
   /**
    * @brief Sequence number location
    */
@@ -637,7 +637,7 @@ protected:
   /**
    * @brief Record code length
    */
-    int   _code_len;
+  int   _code_len;
   /**
    * @brief Record length/location flag
    */

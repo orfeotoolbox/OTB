@@ -1018,6 +1018,8 @@ std::string GDALImageIO::TypeConversion(std::string name)
     extGDAL="ENVI";
   else if ((extension=="img")||(extension=="IMG"))
     extGDAL="HFA";
+  else if(extension=="ntf")
+    extGDAL="NITF";
 //Pas PNG car BUG !!
 //  else if ((extension=="png")||(extension=="PNG"))
 //      extGDAL="PNG";

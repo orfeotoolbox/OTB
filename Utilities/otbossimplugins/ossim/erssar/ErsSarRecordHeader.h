@@ -66,7 +66,7 @@ public:
   /**
    * @brief First record sub-type code
    */
-    unsigned char   get_rec_sub1()
+  unsigned char   get_rec_sub1()
   {
     return _rec_sub1;
   };
@@ -74,7 +74,7 @@ public:
   /**
    * @brief Record type code
    */
-    unsigned char   get_rec_type()
+  unsigned char   get_rec_type()
   {
     return _rec_type;
   };
@@ -82,7 +82,7 @@ public:
   /**
    * @brief Second record sub-type code
    */
-    unsigned char   get_rec_sub2()
+  unsigned char   get_rec_sub2()
   {
     return _rec_sub2;
   };
@@ -90,7 +90,7 @@ public:
   /**
    * @brief Third record sub-type code
    */
-    unsigned char   get_rec_sub3()
+  unsigned char   get_rec_sub3()
   {
     return _rec_sub3;
   };
@@ -98,7 +98,7 @@ public:
   /**
    * @brief Length of this record (in bytes)
    */
-    unsigned int get_length()
+  unsigned int get_length()
   {
     return _length;
   };
@@ -116,23 +116,23 @@ protected:
   /**
    * @brief First record sub-type code
    */
-    unsigned char   _rec_sub1;
+  unsigned char   _rec_sub1;
   /**
    * @brief Record type code
    */
-    unsigned char   _rec_type;
+  unsigned char   _rec_type;
   /**
    * @brief Second record sub-type code
    */
-    unsigned char   _rec_sub2;
+  unsigned char   _rec_sub2;
   /**
    * @brief Third record sub-type code
    */
-    unsigned char   _rec_sub3;
+  unsigned char   _rec_sub3;
   /**
    * @brief Length of this record (in bytes)
    */
-    unsigned int  _length;
+  unsigned int  _length;
 private:
 
 

@@ -35,12 +35,12 @@ ErsSarLeaderFactory::~ErsSarLeaderFactory()
 
   while (i != _availableRecords.end())
   {
-     if ( (*i).second )
-     {
-        delete (*i).second;
-        (*i).second = 0;
-     }
-     ++i;
+    if ((*i).second)
+    {
+      delete(*i).second;
+      (*i).second = 0;
+    }
+    ++i;
   }
   _availableRecords.clear();
 }

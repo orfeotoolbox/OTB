@@ -42,7 +42,7 @@ AlosPalsarData::~AlosPalsarData()
 std::ostream& operator<<(std::ostream& os, const AlosPalsarData& data)
 {
   std::map<int, AlosPalsarRecord*>::const_iterator it = data._records.begin();
-  while(it != data._records.end())
+  while (it != data._records.end())
   {
     (*it).second->Write(os);
     ++it;
@@ -58,7 +58,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarData& data)
 
   AlosPalsarRecordHeader header;
 
-  is>>header;
+  is >> header;
 
   AlosPalsarRecord* record = new AlosPalsarDataFileDescriptor;
   if (record != NULL)
@@ -69,14 +69,14 @@ std::istream& operator>>(std::istream& is, AlosPalsarData& data)
   else
   {
     char* buff = new char[header.get_length()-12];
-    is.read(buff, header.get_length()-12);
+    is.read(buff, header.get_length() - 12);
     delete buff;
   }
 
   std::streampos filePosition;
 
   filePosition = is.tellg();
-  is>>header;
+  is >> header;
 
   record = new AlosPalsarSignalData;
 
@@ -97,7 +97,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarData& data)
 AlosPalsarData::AlosPalsarData(const AlosPalsarData& rhs)
 {
   std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
-  while(it != rhs._records.end())
+  while (it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
     ++it;
@@ -108,7 +108,7 @@ AlosPalsarData& AlosPalsarData::operator=(const AlosPalsarData& rhs)
 {
   ClearRecords();
   std::map<int, AlosPalsarRecord*>::const_iterator it = rhs._records.begin();
-  while(it != rhs._records.end())
+  while (it != rhs._records.end())
   {
     _records[(*it).first] = (*it).second->Clone();
     ++it;
@@ -120,23 +120,23 @@ AlosPalsarData& AlosPalsarData::operator=(const AlosPalsarData& rhs)
 void AlosPalsarData::ClearRecords()
 {
   std::map<int, AlosPalsarRecord*>::const_iterator it = _records.begin();
-  while(it != _records.end())
+  while (it != _records.end())
   {
-    delete (*it).second;
+    delete(*it).second;
     ++it;
   }
   _records.clear();
 }
 
 bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
-                             const char* prefix) const
+                               const char* prefix) const
 {
 
   static const char MODULE[] = "AlosPalsarData::saveState";
 
   if (traceDebug())
   {
-    ossimNotify(ossimNotifyLevel_DEBUG)<< MODULE << " entered...\n";
+    ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " entered...\n";
   }
 
   bool result = true;
@@ -147,8 +147,8 @@ bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
   const AlosPalsarDataFileDescriptor *datafiledesc = get_AlosPalsarDataFileDescriptor();
   if (datafiledesc != NULL)
   {
-    kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(),true);
-    kwl.add(prefix, "num_pix_in_line", datafiledesc->get_num_pix_in_line(),true);
+    kwl.add(prefix, "num_lines", datafiledesc->get_num_lines(), true);
+    kwl.add(prefix, "num_pix_in_line", datafiledesc->get_num_pix_in_line(), true);
   }
   else
   {
@@ -158,9 +158,9 @@ bool AlosPalsarData::saveState(ossimKeywordlist& kwl,
   const AlosPalsarSignalData *signalData = get_AlosPalsarSignalData();
   if (datafiledesc != NULL)
   {
-    kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(),true);
+    kwl.add(prefix, "pulse_repetition_frequency", signalData->get_pulse_repetition_frequency(), true);
     // slant range to 1st data sample in metres
-    kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(),true);
+    kwl.add(prefix, "slant_range_to_1st_data_sample", signalData->get_slant_range_to_1st_data_sample(), true);
   }
   else
   {
