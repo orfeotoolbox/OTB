@@ -142,6 +142,14 @@ public:
   std::vector<std::string> GetBandName(const MetaDataDictionaryType & dict ) const;
   otbMetadataGetMacro(BandName, std::vector<std::string>);
 
+  /** Get the x pixel spacing*/
+  double GetXPixelSpacing( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(XPixelSpacing, double);
+  
+  /** Get the y pixel spacing*/
+  double GetYPixelSpacing( const MetaDataDictionaryType & dict ) const;
+  otbMetadataGetMacro(YPixelSpacing, double);
+  
   /** Get the radiometric bias from the ossim metadata */
   virtual VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const =0;
   otbMetadataGetMacro(PhysicalBias, VariableLengthVectorType);

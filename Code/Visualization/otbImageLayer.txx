@@ -27,6 +27,8 @@
 #include "otbImageKeywordlist.h"
 // #include "otbCoordinateToName.h"
 #include "otbImageMetadataInterfaceBase.h"
+#include "itkMetaDataDictionary.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 namespace otb
 {
@@ -293,14 +295,15 @@ ImageLayer<TImage,TOutputImage>
       m_PlaceName = m_CoordinateToName->GetPlaceName();
       m_CountryName = m_CoordinateToName->GetCountryName();
 
-      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName;
-      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName;
+      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
+      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
     }
     else
     {
       oss << otbGetTextMacro("Location unknown") << std::endl;
     }
   }
+  
   return oss.str();
 }
 
