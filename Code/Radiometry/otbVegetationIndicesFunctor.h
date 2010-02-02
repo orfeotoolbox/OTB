@@ -185,7 +185,7 @@ protected:
   // compute the index value
   virtual TOutput Evaluate(const TInput1 & r, const TInput2& b, const TInput3 & nir) const = 0;
   double m_EpsilonToBeConsideredAsZero;
-
+  
 private:
   unsigned int m_RedIndex;
   unsigned int m_BlueIndex;
