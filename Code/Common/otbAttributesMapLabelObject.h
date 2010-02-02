@@ -60,7 +60,7 @@ public:
     m_AttributeName = name;
   }
   /// Get the the name of the attribute to retrieve
-  const char * GetAttributeName()
+  const char * GetAttributeName() const
   {
     return m_AttributeName.c_str();
   }
