@@ -52,7 +52,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributesMapOpeningLabelMapFilter,AttributeOpeningLabelMapFilter);
+  itkTypeMacro(AttributesMapOpeningLabelMapFilter,itk::AttributeOpeningLabelMapFilter);
 
   /** Set the name of the attribute to perform opening on */
   void SetAttributeName(const char * name)

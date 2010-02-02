@@ -303,11 +303,6 @@ ImageLayer<TImage,TOutputImage>
       oss << otbGetTextMacro("Location unknown") << std::endl;
     }
   }
-  itk::MetaDataDictionary dict = m_Image->GetMetaDataDictionary();
-  ImageMetadataInterfaceBase::Pointer lImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
-  
-  oss << otbGetTextMacro("X spacing ") << lImageMetadataInterface->GetXPixelSpacing(dict) << std::endl;
-  oss << otbGetTextMacro("Y spacing ") << lImageMetadataInterface->GetYPixelSpacing(dict) << std::endl;
   
   return oss.str();
 }
