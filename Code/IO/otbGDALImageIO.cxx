@@ -709,9 +709,7 @@ void GDALImageIO::Write(const void* buffer)
     m_FlagWriteImageInformation = false;
   }
 
-  std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
   const unsigned char *p = static_cast<const unsigned char *>(buffer);
-  std::streamoff cpt(0);
   if (p==NULL)
   {
     itkExceptionMacro(<<"GDAL : Bad alloc");
@@ -744,10 +742,12 @@ void GDALImageIO::Write(const void* buffer)
   }
 
   // Mise a jour du step
+  std::streamoff step = static_cast<std::streamoff>(m_NbBands);
   step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
   CPLErr lCrGdal;
 
+  std::streamoff cpt(0);
   for (unsigned int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
   {
     cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
