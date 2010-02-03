@@ -44,11 +44,20 @@ public:
   /** Standard class typedefs. */
   typedef ImageKeywordlist         Self;
 
-  virtual const char *GetNameOfClass() const
-  {return "ImageKeywordlist";}
+  //virtual const char *GetNameOfClass() const
+  //{return "ImageKeywordlist";}
 
   typedef std::map<ossimString, ossimString> KeywordlistMap;
 
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ImageKeywordlist, ImageKeywordlist);
+  
+  /** Get the internal map container */
+  const KeywordlistMap & GetKeywordlist() const
+  {
+    return m_Keywordlist;
+  }
+  
   void SetKeywordlist(const ossimKeywordlist& kwl)
   {
     m_Keywordlist = kwl.getMap();
@@ -63,7 +72,10 @@ public:
   {
     return m_Keywordlist.size();
   }
-
+  
+  /** Get the Data object descriptor corresponding to the given key */
+  const ossimString & GetMetadataByKey(const ossimString & key) const;
+  
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent=0) const;
