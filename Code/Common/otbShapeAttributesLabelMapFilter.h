@@ -21,135 +21,96 @@
 #ifndef __otbShapeAttributesLabelMapFilter_h
 #define __otbShapeAttributesLabelMapFilter_h
 
+#include "otbLabelMapFeaturesFunctorImageFilter.h"
 #include "itkLabelPerimeterEstimationCalculator.h"
-#include "otbLabelObjectToPolygonFunctor.h"
-#include "itkInPlaceLabelMapFilter.h"
-#include "itkMatrix.h"
-#include "itkVector.h"
 #include "otbImage.h"
 #include "otbPolygon.h"
+#include "otbLabelObjectToPolygonFunctor.h"
 #include "otbFlusserPathFunction.h"
-
-//#include "itkObjectFactory.h"
   
 namespace otb
 {
 
-/** \class ShapeAttributesLabelMapFilter
- * \brief This class is a fork of the itk::ShapeLabelMapFilter working with AttributesMapLabelObject.
- *
- * The keys of the attributes inserted into the attributes map follow
- * the following rule: "SHAPE:NameOfAttributes".
- *
- * With respect to the original itk filter, this filter also compute
- * the Flusser moments for each LabelObject.
- *
- * The flag ReducedAttributesSet allows to compute only non-redundant
- * statistics and statistics usefull for classification (not spatially
- * dependent statitistics). Reduced set contains only Flusser moments,
- * physical size, elongation, Feret diameter (if activated),
- * perimeter (if activated) and roundness (if activated).
- *
- * \sa itk::ShapeLabelMapFilter
- *
- * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
- */
-template<class TImage, class TLabelImage=Image< typename TImage::PixelType, TImage::ImageDimension > >
-class ITK_EXPORT ShapeAttributesLabelMapFilter :
-    public itk::InPlaceLabelMapFilter<TImage>
+namespace Functor
 {
-public:
-  /** Standard class typedefs. */
-  typedef ShapeAttributesLabelMapFilter                             Self;
-  typedef itk::InPlaceLabelMapFilter<TImage>                        Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+/** \class ShapeAttributesLabelObjectFunctor
+*   \brief Functor to compute shape attributes of one LabelObject.
+* 
+*   \sa ShapeAttributesLabelMapFilter
+*/
+template <class TLabelObject, class TLabelImage>
+class ShapeAttributesLabelObjectFunctor
+{
+ public:
+  /** Self typedef */
+  typedef ShapeAttributesLabelObjectFunctor   Self;
 
-  /** ImageDimension constants */
-  itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
+  /** LabelObject typedef */
+  typedef TLabelObject                        LabelObjectType;
+
+  /** Labeled image type */
+  typedef TLabelImage                         LabelImageType;
+
+  /** Flusser moments typedef */
+  typedef Polygon<double>                      PolygonType;
+  typedef Functor::LabelObjectToPolygonFunctor
+    <LabelObjectType,PolygonType>              PolygonFunctorType;
+  typedef FlusserPathFunction<PolygonType>     FlusserPathFunctionType;
   
-  /** Standard New method. */
-  itkNewMacro(Self);
-  
-  /** Runtime information support. */
-  itkTypeMacro(ShapeAttributesLabelMapFilter,InPlaceLabelMapFilter);
+  /** Perimeter calculator */
+  typedef itk::LabelPerimeterEstimationCalculator
+    < LabelImageType >                         PerimeterCalculatorType;
 
-  /** Some convenient typedefs. */
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer                               ImagePointer;
-  typedef typename ImageType::ConstPointer                          ImageConstPointer;
-  typedef typename ImageType::PixelType                             PixelType;
-  typedef typename ImageType::IndexType                             IndexType;
-  typedef typename ImageType::SizeType                              SizeType;
-  typedef typename ImageType::RegionType                            RegionType;
-  typedef typename ImageType::PointType                             PointType;
-  typedef typename ImageType::LabelObjectType                       LabelObjectType;
-  typedef typename itk::Matrix<double,
-          TImage::ImageDimension,TImage::ImageDimension>            MatrixType;
-  typedef typename itk::Vector<double,TImage::ImageDimension>       VectorType;
-  typedef TLabelImage LabelImageType;
-  typedef typename LabelImageType::Pointer                          LabelImagePointer;
-  typedef typename LabelImageType::ConstPointer                     LabelImageConstPointer;
-  typedef typename LabelImageType::PixelType                        LabelPixelType;
-  typedef itk::LabelPerimeterEstimationCalculator< LabelImageType > PerimeterCalculatorType;
-  
-  /// Flusser moments typedef
-  typedef Polygon<double>                                           PolygonType;
-  typedef Functor::LabelObjectToPolygonFunctor<LabelObjectType,
-                                          PolygonType>         PolygonFunctorType;
-  typedef FlusserPathFunction<PolygonType>                          FlusserPathFunctionType;
-  
-  /**
-   * Set/Get whether the maximum Feret diameter should be computed or not. The
-   * defaut value is false, because of the high computation time required.
-   */
-  itkSetMacro(ComputeFeretDiameter, bool);
-  itkGetConstReferenceMacro(ComputeFeretDiameter, bool);
-  itkBooleanMacro(ComputeFeretDiameter);
-
-  /**
-   * Set/Get whether the perimeter should be computed or not. The defaut value
-   * is false, because of the high computation time required.
-   */
-  itkSetMacro(ComputePerimeter, bool);
-  itkGetConstReferenceMacro(ComputePerimeter, bool);
-  itkBooleanMacro(ComputePerimeter);
-
-  /** Set/get the ReducedAttributesSet flag */
-  itkSetMacro(ReducedAttributeSet,bool);
-  itkGetMacro(ReducedAttributeSet,bool);
-  itkBooleanMacro(ReducedAttributeSet);
-
-  /** Set the label image */
-  void SetLabelImage( const TLabelImage *input )
-     {
-     m_LabelImage = input;
-     }
-
-protected:
   /** Constructor */
-  ShapeAttributesLabelMapFilter();
-  
+  ShapeAttributesLabelObjectFunctor();
+
   /** Destructor */
-  ~ShapeAttributesLabelMapFilter() {};
+  virtual ~ShapeAttributesLabelObjectFunctor() {}
+
+  /** The comparators */
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
+
+  /** Set the compute perimeter flag */
+  void SetComputePerimeter(bool flag);
+
+  /** Get the compute perimeter flag */
+  bool GetComputePerimeter() const;
+
+  /** Set the compute feret diameter flag */
+  void SetComputeFeretDiameter(bool flag);
   
-  /** Threaded GenerateData */
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject );
-  virtual void BeforeThreadedGenerateData();
-  virtual void AfterThreadedGenerateData();
+  /** Get the compute feret diameter flag */
+  bool GetComputeFeretDiameter() const;
+  
+  /** Set the compute reduced attributes set flag */
+  void SetReducedAttributeSet(bool flag);
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /** Get the compute reduced attributes set flag */
+  bool GetReducedAttributeSet() const;
 
-private:
-  ShapeAttributesLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  /** Set the label image (used only to compute 
+   *  the Feret diameter */
+  void SetLabelImage(const TLabelImage * image);
 
+  /** Get the label image */
+  const TLabelImage * GetLabelImage() const;
+
+  /** Set the perimeter calculator */
+  void SetPerimeterCalculator(const PerimeterCalculatorType * pc);
+
+  /** This is the functor implementation
+   *  Calling the functor on a label object 
+   *  will update its shape attributes */
+  inline void operator()(LabelObjectType * lo) const;
+
+ private:
   /** Convenience internal method */
   static long factorial( long n );
   
   /** Convenience internal method */
   static long doubleFactorial( long n );
-
+  
   /** Convenience internal method  */
   static double gammaN2p1( long n );
   
@@ -167,19 +128,122 @@ private:
 
   /** Du we compute the perimeter ? */
   bool m_ComputePerimeter;
-
-  /** The label image */
-  LabelImageConstPointer m_LabelImage;
-
-  /** The perimeter calculator */
-  typename PerimeterCalculatorType::Pointer m_PerimeterCalculator;
-
- /// Use only a reduced attribute set
+  
+  /** Compute only a reduced attribute set */
   bool m_ReducedAttributeSet;
 
-} ; // end of class
+  /** The perimeter calculator */
+  typename PerimeterCalculatorType::ConstPointer m_PerimeterCalculator;
 
-} // end namespace itk
+  /** The label image is used to compute the feret diameter */
+  typename LabelImageType::ConstPointer m_LabelImage;
+};
+
+} // End namespace Functor
+
+/** \class ShapeAttributesLabelMapFilter
+ * \brief This class is a fork of the itk::ShapeLabelMapFilter working with AttributesMapLabelObject.
+ *
+ * The keys of the attributes inserted into the attributes map follow
+ * the following rule: "SHAPE:NameOfAttributes".
+ *
+ * With respect to the original itk filter, this filter also compute
+ * the Flusser moments for each LabelObject.
+ *
+ * The flag ReducedAttributesSet allows to compute only non-redundant
+ * statistics and statistics usefull for classification (not spatially
+ * dependent statitistics). Reduced set contains only Flusser moments,
+ * physical size, elongation, Feret diameter (if activated),
+ * perimeter (if activated) and roundness (if activated).
+ *
+ * For the sake of speed optimization, the original label image must
+ * be giben to the filter. If not, the filter will convert the
+ * LabelObjectMap back to a LabelImage structure.
+ * 
+ * \sa itk::ShapeLabelMapFilter
+ *
+ * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
+ */
+template<class TImage, 
+	 class TLabelImage = Image< typename TImage::PixelType, 
+				    TImage::ImageDimension > >
+class ITK_EXPORT ShapeAttributesLabelMapFilter 
+  : public otb::LabelMapFeaturesFunctorImageFilter
+               <TImage,
+                typename Functor::ShapeAttributesLabelObjectFunctor
+                  <typename TImage::LabelObjectType, TLabelImage > >
+{
+public:
+  /** Template parameters typedefs */
+  typedef TImage                                        ImageType;
+  typedef typename ImageType::LabelObjectType           LabelObjectType;
+  typedef TLabelImage                                   LabelImageType;
+  typedef Functor::ShapeAttributesLabelObjectFunctor
+  <LabelObjectType,LabelImageType>                      FunctorType;
+  typedef typename FunctorType::PerimeterCalculatorType PerimeterCalculatorType;
+  
+  /** Standard class typedefs. */
+  typedef ShapeAttributesLabelMapFilter                 Self;
+  typedef LabelMapFeaturesFunctorImageFilter
+  <ImgaeType,FunctorType>                               Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
+
+  /** ImageDimension constants */
+  itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
+  
+  /** Standard New method. */
+  itkNewMacro(Self);
+  
+  /** Runtime information support. */
+  itkTypeMacro(ShapeAttributesLabelMapFilter,LabelMapFeaturesFunctorImageFilter);
+    
+  /**
+   * Set/Get whether the maximum Feret diameter should be computed or not. The
+   * defaut value is false, because of the high computation time required.
+   */
+  void SetComputeFeretDiameter(bool flag);
+  bool GetComputeFeretDiameter() const;
+  itkBooleanMacro(ComputeFeretDiameter);
+
+  /**
+   * Set/Get whether the perimeter should be computed or not. The defaut value
+   * is false, because of the high computation time required.
+   */
+  void SetComputePerimeter(bool flag);
+  bool GetComputePerimeter() const;
+  itkBooleanMacro(ComputePerimeter);
+
+  /** Set/get the ReducedAttributesSet flag */
+  void SetReducedAttributeSet(bool flag);
+  bool GetReducedAttributeSet() const;
+  itkBooleanMacro(ReducedAttributeSet);
+
+  /** Set/Get the label image (this is used only to compute the Feret
+   *  diameter) */
+  void SetLabelImage(const TLabelImage *);
+  const TLabelImage * GetLabelImage() const;
+  
+protected:
+  /** Constructor */
+  ShapeAttributesLabelMapFilter(){}
+  
+  /** Destructor */
+  virtual ~ShapeAttributesLabelMapFilter(){}
+  
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Things to to before threaded data generation */
+  virtual void BeforeThreadedGenerateData();
+
+private:
+  ShapeAttributesLabelMapFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+}; // end of class
+
+} // end namespace otb
   
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbShapeAttributesLabelMapFilter.txx"
