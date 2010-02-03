@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkRadiometricAttributesLabelMapFilter_h
-#define __itkRadiometricAttributesLabelMapFilter_h
+#ifndef __otbRadiometricAttributesLabelMapFilter_h
+#define __otbRadiometricAttributesLabelMapFilter_h
 
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkMatrix.h"

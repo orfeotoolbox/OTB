@@ -31,7 +31,7 @@ namespace otb
 namespace Functor
 {
 /**
- * \class TerraSarBrightnessImageFunctor
+ * \class TerraSarBrightnessFunctor
  *  \brief Compute beta naught coefficient.
  * 
  * This functor is intended to be used by the
@@ -54,8 +54,15 @@ public:
  virtual ~TerraSarBrightnessFunctor() {};
  
  /** Accessors */
- void SetCalibrationFactor( double val ) { m_CalibrationFactor = val; };
- double GetCalibrationFactor() { return m_CalibrationFactor; };
+  void SetCalibrationFactor( double val ) 
+  { 
+    m_CalibrationFactor = val; 
+  }
+
+  double GetCalibrationFactor() 
+  {
+    return m_CalibrationFactor; 
+  }
 
   /** Set results in decibels */
   void SetResultsInDecibels(bool db)

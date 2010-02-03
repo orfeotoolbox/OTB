@@ -45,7 +45,22 @@ operator=(const Self& p)
   m_Keywordlist = p.m_Keywordlist;
 }
 
+const ossimString & 
+ImageKeywordlist::
+GetMetadataByKey(const ossimString & key) const
+{
+  // Search for the key in the output map
+  KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
+  // If the key can not be found, throw an exception
+  if(it == m_Keywordlist.end())
+    {
+    itkExceptionMacro(<<"Keywordlist has no output with key "<<key);
+    }
+
+  // Then if everything is ok, return the ossinString
+  return it->second;
+}
 void
 ImageKeywordlist::
 convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const

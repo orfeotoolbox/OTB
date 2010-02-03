@@ -67,6 +67,7 @@ GDALImageIO::GDALImageIO()
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
 
+//  GDALAllRegister();
 }
 
 GDALImageIO::~GDALImageIO()
@@ -248,14 +249,15 @@ void GDALImageIO::InternalReadImageInformation()
   }
   m_poDataset = static_cast<GDALDataset *>( GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
   otbMsgDevMacro( <<"  GCPCount (original): " << m_poDataset->GetGCPCount());
+
   if (m_poDataset==NULL)
   {
     itkExceptionMacro(<<"Gdal dataset is null.");
     return;
   }
 
-  else
-  {
+//  else
+//  {
     // Get image dimensions
     m_width = m_poDataset->GetRasterXSize();
     m_height = m_poDataset->GetRasterYSize();
@@ -426,7 +428,7 @@ void GDALImageIO::InternalReadImageInformation()
         this->SetPixelType(VECTOR);
       }
     }
-  }
+    // }
 
   /*----------------------------------------------------------------------*/
   /*-------------------------- METADATA ----------------------------------*/
@@ -457,10 +459,12 @@ void GDALImageIO::InternalReadImageInformation()
 
   hDriver = m_poDataset->GetDriver();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey,
-                                        static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey,
-                                        static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
+  std::string driverShortName =  static_cast<std::string>( GDALGetDriverShortName( hDriver ));
+  std::string driverLongName =  static_cast<std::string>( GDALGetDriverLongName( hDriver ));
+
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverShortNameKey, driverShortName );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::DriverLongNameKey, driverLongName );
+
 
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
@@ -505,9 +509,17 @@ void GDALImageIO::InternalReadImageInformation()
   gcpCount = m_poDataset->GetGCPCount();
   if ( gcpCount > 0 )
   {
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey,
-                                          static_cast<std::string>( m_poDataset->GetGCPProjection() ) );
+    std::string gcpProjectionKey = static_cast<std::string>(  m_poDataset->GetGCPProjection() );
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
 
+ 
+    if (gcpProjectionKey.empty())
+    {
+      gcpCount = 0; //fix for uninitialized gcpCount in gdal (when
+		    //reading Palsar image)
+    }
+
+ 
     std::string key;
 
     itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey,gcpCount);
@@ -515,9 +527,10 @@ void GDALImageIO::InternalReadImageInformation()
 
     for ( unsigned int cpt = 0; cpt < gcpCount; cpt++ )
     {
+
       const GDAL_GCP  *psGCP;
       psGCP = m_poDataset->GetGCPs() + cpt;
-
+      
       OTB_GCP  pOtbGCP(psGCP);
 
       // Complete the key with the GCP number : GCP_i
@@ -875,7 +888,7 @@ void GDALImageIO::InternalWriteImageInformation()
   // Automatically set the Type to Binary for GDAL data
   this->SetFileTypeToBinary();
 
-  GDALAllRegister();
+   GDALAllRegister();
 
 
   extGDAL = TypeConversion(m_FileName);
@@ -1039,6 +1052,8 @@ std::string GDALImageIO::TypeConversion(std::string name)
     extGDAL="ENVI";
   else if ((extension=="img")||(extension=="IMG"))
     extGDAL="HFA";
+  else if(extension=="ntf")
+    extGDAL="NITF";
 //Pas PNG car BUG !!
 //  else if ((extension=="png")||(extension=="PNG"))
 //      extGDAL="PNG";

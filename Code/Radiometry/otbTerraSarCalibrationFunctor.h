@@ -37,7 +37,7 @@ namespace otb
 namespace Functor
 {
 /**
- * \class TerraSarCalibrationImageFunctor
+ * \class TerraSarCalibrationFunctor
  *  \brief Compute sigma naught coefficient.
  * 
  * This functor is intended to be used by the
@@ -91,49 +91,49 @@ public:
   { 
     m_CalibrationFactor =  val; 
     m_Brightness.SetCalibrationFactor(val); 
-  };
+  }
   
   /** Get the calibration factor */
   double GetCalibrationFactor() const 
   { 
     return m_CalibrationFactor; 
-  };
+  }
    
   /** Set the image size */
   void SetOriginalProductSize( SizeType size ) 
   { 
     m_OriginalProductSize = size; 
-  };
+  }
   
   /** Get the image size */
   const SizeType & GetOriginalProductSize() const 
   { 
     return m_OriginalProductSize; 
-  };
+  }
   
   /** Set the UseFastCalibration flag */
   void SetUseFastCalibration( bool b ) 
   { 
     m_UseFastCalibration = b; 
-  };
+  }
   
   /** Get the UseFastCalibration flag */
   bool GetUseFastCalibration() const 
   { 
     return m_UseFastCalibration; 
-  };
+  }
 
   /** Set the ResultsInDecibels flag */
   void SetResultsInDecibels( bool b ) 
   { 
     m_ResultsInDecibels = b; 
-  };
+  }
   
   /** Get the ResultsInDecibelsMethod flag */
   bool GetResultsInDecibels() const 
   { 
     return m_ResultsInDecibels; 
-  };
+  }
 
   /** Set the default value */
   void SetDefaultValue(double value)

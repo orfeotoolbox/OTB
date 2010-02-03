@@ -126,9 +126,9 @@ int main( int argc, char * argv[] )
   ChannelExtractorType::Pointer selecter = ChannelExtractorType::New();
   selecter->SetInput(vr->GetOutput());
   selecter->SetExtractionRegion(multispectralReader->GetOutput()->GetLargestPossibleRegion());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   VectorWriterType::Pointer vectWriter = VectorWriterType::New();
   vectWriter->SetFileName(argv[3]);
@@ -478,9 +478,9 @@ int main( int argc, char * argv[] )
   channelExtractor2->SetInput(vr->GetOutput());
   channelExtractor3->SetInput(vr->GetOutput());
 
-  channelExtractor1->SetChannel(1);
+  channelExtractor1->SetChannel(3);
   channelExtractor2->SetChannel(2);
-  channelExtractor3->SetChannel(3);
+  channelExtractor3->SetChannel(1);
 
   // Add the path to the red component
   addFilter->SetInput1(channelExtractor1->GetOutput());
@@ -533,7 +533,7 @@ int main( int argc, char * argv[] )
   // is a RGB composition showing the extracted path in red. Full processing took
   // about 3 seconds for each image.
   //
-  // \begin{figure}
+  // \begin{figure}[htbp]
   // \center
   // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty.eps}
   // \includegraphics[width=0.44\textwidth]{ExtractRoadByStepsExampleOutput.eps}
@@ -544,7 +544,7 @@ int main( int argc, char * argv[] )
   // \label{fig:ROADEXTRACTIONBYSTEPS}
   // \end{figure}
   //
-  // \begin{figure}
+  // \begin{figure}[htbp]
   // \center
   // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty2.eps}
   // \includegraphics[width=0.44\textwidth]{ExtractRoadByStepsExampleOutput2.eps}

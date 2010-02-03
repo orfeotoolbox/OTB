@@ -37,8 +37,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GenerateData()
 {
   GEMIFilterPointerType gemi = GEMIFilterType::New();
-  gemi->SetRedIndex(m_RedChannelIndex);
-  gemi->SetNIRIndex(m_NIRChannelIndex);
+  gemi->SetRedIndex(m_RedChannelIndex+1);
+  gemi->SetNIRIndex(m_NIRChannelIndex+1);
   gemi->SetInput(this->GetFeatureImage());
 
   StatisticsLabelMapFilterPointerType stats1 = StatisticsLabelMapFilterType::New();
@@ -48,8 +48,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   stats1->SetReducedAttributeSet(m_ReducedAttributeSet);
 
   NDVIFilterPointerType ndvi = NDVIFilterType::New();
-  ndvi->SetRedIndex(m_RedChannelIndex);
-  ndvi->SetNIRIndex(m_NIRChannelIndex);
+  ndvi->SetRedIndex(m_RedChannelIndex+1);
+  ndvi->SetNIRIndex(m_NIRChannelIndex+1);
   ndvi->SetInput(this->GetFeatureImage());
 
   StatisticsLabelMapFilterPointerType stats2 = StatisticsLabelMapFilterType::New();
@@ -59,8 +59,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   stats2->SetReducedAttributeSet(m_ReducedAttributeSet);
 
   IRFilterPointerType ir = IRFilterType::New();
-  ir->SetGreenIndex(m_GreenChannelIndex);
-  ir->SetRedIndex(m_RedChannelIndex);
+  ir->SetGreenIndex(m_GreenChannelIndex+1);
+  ir->SetRedIndex(m_RedChannelIndex+1);
   ir->SetInput(this->GetFeatureImage());
 
   StatisticsLabelMapFilterPointerType stats3 = StatisticsLabelMapFilterType::New();
@@ -70,8 +70,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   stats3->SetReducedAttributeSet(m_ReducedAttributeSet);
 
   ICFilterPointerType ic = ICFilterType::New();
-  ic->SetGreenIndex(m_GreenChannelIndex);
-  ic->SetRedIndex(m_RedChannelIndex);
+  ic->SetGreenIndex(m_GreenChannelIndex+1);
+  ic->SetRedIndex(m_RedChannelIndex+1);
   ic->SetInput(this->GetFeatureImage());
 
   StatisticsLabelMapFilterPointerType stats4 = StatisticsLabelMapFilterType::New();
@@ -81,8 +81,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   stats4->SetReducedAttributeSet(m_ReducedAttributeSet);
 
   IBFilterPointerType ib = IBFilterType::New();
-  ib->SetGreenIndex(m_GreenChannelIndex);
-  ib->SetRedIndex(m_RedChannelIndex);
+  ib->SetGreenIndex(m_GreenChannelIndex+1);
+  ib->SetRedIndex(m_RedChannelIndex+1);
   ib->SetInput(this->GetFeatureImage());
 
   StatisticsLabelMapFilterPointerType stats5 = StatisticsLabelMapFilterType::New();
@@ -92,8 +92,8 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   stats5->SetReducedAttributeSet(m_ReducedAttributeSet);
 
   NDWI2FilterPointerType ndwi2 = NDWI2FilterType::New();
-  ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex);
-  ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex);
+  ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex+1);
+  ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex+1);
   ndwi2->SetInput(this->GetFeatureImage());
   
   StatisticsLabelMapFilterPointerType stats6 = StatisticsLabelMapFilterType::New();

@@ -40,17 +40,17 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 ::TerraSarCalibrationImageFilter() : m_CalibrationFactor(itk::NumericTraits<double>::Zero),
-				     m_PRF(1.),
-				     m_OriginalProductSize(),
-				     m_UseFastCalibration(false),
-				     m_ResultsInDecibels(false),
-				     m_NoiseRecords(),
-				     m_DefaultValue(0.00001),
-				     m_IncidenceAngleRecords(),
-				     m_IncidenceAngleAx(0.),
-				     m_IncidenceAngleAy(0.),
-				     m_IncidenceAngleOffset(0.),
-				     m_ParametersUpToDate(false)
+                                 m_PRF(1.),
+                                 m_OriginalProductSize(),
+                                 m_UseFastCalibration(false),
+                                 m_ResultsInDecibels(false),
+                                 m_NoiseRecords(),
+                                 m_DefaultValue(0.00001),
+                                 m_IncidenceAngleRecords(),
+                                 m_IncidenceAngleAx(0.),
+                                 m_IncidenceAngleAy(0.),
+                                 m_IncidenceAngleOffset(0.),
+                                 m_ParametersUpToDate(false)
 {}
 
 template <class TInputImage, class TOutputImage>
@@ -225,7 +225,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
 
     // Retrieve corners incidence angle
     std::vector<double> cangles = lImageMetadata->GetCornersIncidenceAngles(this->GetInput()->GetMetaDataDictionary());
-    std::vector<IndexType> cindex = lImageMetadata->GetCornersIncidenceAnglesIndex(this->GetInput()->GetMetaDataDictionary());
+    std::vector<IndexType> cindex = lImageMetadata->GetCornersIncidenceAnglesIndex(
+                                                      this->GetInput()->GetMetaDataDictionary());
     
     std::vector<double>::const_iterator angIt = cangles.begin();
     typename std::vector<IndexType>::const_iterator indIt = cindex.begin();
@@ -283,8 +284,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
       ++aIt;
       }
     // Set the offset to the mean angle
-    m_IncidenceAngleOffset/=m_IncidenceAngleRecords.size();
-    m_IncidenceAngleOffset*= M_PI / 180.;
+    m_IncidenceAngleOffset /= m_IncidenceAngleRecords.size();
+    m_IncidenceAngleOffset *= M_PI / 180.;
     return;
     }
 
@@ -296,7 +297,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   // Fill the linear system
   for(unsigned int i = 0; i < nbRecords; ++i)
     {
-    std::cout<<"Incidence record: "<<m_IncidenceAngleRecords.at(i).first<<" <-> "<<m_IncidenceAngleRecords.at(i).second<<std::endl;
     a(i,0) = m_IncidenceAngleRecords.at(i).first[0];
     a(i,1) = m_IncidenceAngleRecords.at(i).first[1];
     a(i,2) = 1.;
@@ -313,8 +313,6 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   m_IncidenceAngleAx     = bestParams[0];
   m_IncidenceAngleAy     = bestParams[1];
   m_IncidenceAngleOffset = bestParams[2];
-
-  std::cout<<"Parameters :" <<bestParams<<std::endl;
 }
 
 template <class TInputImage, class TOutputImage>
@@ -420,7 +418,8 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
        }
       }
     // Apply the calibration functor
-    outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex(), this->ComputeIncidenceAngle(inputIt.GetIndex()) ) );
+    outputIt.Set( calibrationFunctor( inputIt.Get(), inputIt.GetIndex(),
+                                      this->ComputeIncidenceAngle(inputIt.GetIndex()) ) );
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
@@ -436,15 +435,16 @@ TerraSarCalibrationImageFilter<TInputImage,TOutputImage>
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Calibration Factor:           " << m_CalibrationFactor  << std::endl;
-  os << indent << "PRF:                          "<<m_PRF <<std::endl;
-  os << indent << "Original product size:        "<<m_OriginalProductSize << std::endl;
-  os << indent << "Fast calibration:             " << (m_UseFastCalibration ? "On" : "Off")<<std::endl;
+  os << indent << "PRF:                          " << m_PRF << std::endl;
+  os << indent << "Original product size:        " << m_OriginalProductSize << std::endl;
+  os << indent << "Fast calibration:             " << (m_UseFastCalibration ? "On" : "Off") << std::endl;
   os << indent << "Results in decibels:          " << (m_ResultsInDecibels ? "Yes" : "No") << std::endl;
   os << indent << "Number of noise records:      " << m_NoiseRecords.size() <<std::endl;
   os << indent << "Number of angle records:      " << m_IncidenceAngleRecords.size() << std::endl;
-  os << indent << "Angle regression:             "<<m_IncidenceAngleAx<<"* col + "<<m_IncidenceAngleAx<<" * row +"<<m_IncidenceAngleOffset<<std::endl;
+  os << indent << "Angle regression:             " << m_IncidenceAngleAx
+                                                   <<"* col + "<<m_IncidenceAngleAx
+                                                   <<" * row +"<<m_IncidenceAngleOffset<<std::endl;
 }
-
 
 
 } // namespace otb

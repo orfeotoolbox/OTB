@@ -25,7 +25,7 @@
 #include "vnl/vnl_vector.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
-#include "ossim/imaging/ossimImageHandlerSarFactory.h"
+// #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
@@ -99,7 +99,7 @@ ImageFileWriter<TInputImage>
   if(geom_kwl.getSize()>0)
     {
     otbMsgDevMacro(<<"Exporting keywordlist ...");
-    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+//    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
     ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
 
     if(!handler)

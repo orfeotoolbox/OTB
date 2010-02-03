@@ -20,6 +20,7 @@
 //#include <ossim/projection/ossimCosmoSkymedModel.h>
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
+#include "ossimAlosPalsarModel.h"
 
 namespace ossimplugins
 {
@@ -104,6 +105,19 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
      }
    }
 
+   if (!result)
+   {
+     ossimRefPtr<ossimAlosPalsarModel> model = new ossimAlosPalsarModel();
+     if (model->open(filename))
+     {
+       result = model.get();
+     }
+     else
+     {
+       model = 0;
+     }
+   }
+
    return result.release();
 }
 
@@ -143,6 +157,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
      return new ossimEnvisatAsarModel;
    }
    else if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
+   {
+     return new ossimRadarSatModel;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimAlosPalsarModel))
    {
      return new ossimRadarSatModel;
    }
@@ -199,6 +217,14 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
             result = 0;
          }
       }
+      else if (type == "ossimAlosPalsarModel")
+      {
+         result = new ossimAlosPalsarModel();
+         if ( !result->loadState(kwl, prefix) )
+         {
+            result = 0;
+         }
+      }
    }
 
    return result.release();
@@ -225,5 +251,6 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    //   result.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
 }
 }

@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
 //    OUTPUTS: {OBIARadiometricAttribute1.tif}, {qb_ExtractRoad_Radiometry_pretty.png}
-//    STATS::Ndvi::Mean 0 -0.3 16 16 10 1.0
+//    STATS::Ndvi::Mean 0 0.5 16 16 50 1.0
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -53,7 +53,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbMeanShiftImageFilter.h"
+#include "otbMeanShiftVectorImageFilter.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelMap.h"
@@ -61,7 +61,7 @@
 #include "otbStatisticsAttributesLabelMapFilter.h"
 #include "otbRadiometricAttributesLabelMapFilter.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
-#include "itkLabelMapToLabelImageFilter.h"
+#include "itkLabelMapToBinaryImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
@@ -111,7 +111,7 @@ int main(int argc, char * argv[])
   typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,ImageType> StatisticsLabelMapFilterType;
   typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>          OpeningLabelMapFilterType;
-  typedef itk::LabelMapToLabelImageFilter<LabelMapType,LabeledImageType> LabelMapToLabeledImageFilterType;
+  typedef itk::LabelMapToBinaryImageFilter<LabelMapType,LabeledImageType> LabelMapToBinaryImageFilterType;
   
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -122,6 +122,7 @@ int main(int argc, char * argv[])
   
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
+  vreader->Update();
     //  Software Guide : BeginLatex
   //
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
@@ -130,7 +131,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::MeanShiftImageFilter<ImageType,ImageType, LabeledImageType> FilterType;
+  typedef otb::MeanShiftVectorImageFilter
+                        <VectorImageType,VectorImageType, LabeledImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
@@ -146,7 +148,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -165,12 +167,7 @@ int main(int argc, char * argv[])
   
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
-  
-  StatisticsLabelMapFilterType::Pointer statisticsLabelMapFilter = StatisticsLabelMapFilterType::New();
-  statisticsLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
-  statisticsLabelMapFilter->SetInput2(reader->GetOutput());
-  
-  statisticsLabelMapFilter->Update();
+
   //  Software Guide : BeginLatex
   //
   // Instantiate the  \doxygen{otb}{RadiometricAttributesLabelMapFilter} to
@@ -181,7 +178,8 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter 
                                        = RadiometricLabelMapFilterType::New();
-  radiometricLabelMapFilter->SetInput1(statisticsLabelMapFilter->GetOutput());
+
+  radiometricLabelMapFilter->SetInput1(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetInput2(vreader->GetOutput());
   // Software Guide : EndCodeSnippet
 
@@ -226,8 +224,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  LabelMapToLabeledImageFilterType::Pointer labelMap2LabeledImage 
-                                          = LabelMapToLabeledImageFilterType::New();
+  LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage 
+                                          = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
   // Software Guide : EndCodeSnippet
 
@@ -253,7 +251,7 @@ int main(int argc, char * argv[])
   maximum.Fill(255);
 
   VectorRescalerType::Pointer vr = VectorRescalerType::New();
-  vr->SetInput(vreader->GetOutput());
+  vr->SetInput(filter->GetClusteredOutput());
   vr->SetOutputMinimum(minimum);
   vr->SetOutputMaximum(maximum);
   vr->SetClampThreshold(0.01);
@@ -261,9 +259,9 @@ int main(int argc, char * argv[])
   ChannelExtractorType::Pointer selecter = ChannelExtractorType::New();
   selecter->SetInput(vr->GetOutput());
   selecter->SetExtractionRegion(vreader->GetOutput()->GetLargestPossibleRegion());
-  selecter->SetChannel(1);
-  selecter->SetChannel(2);
   selecter->SetChannel(3);
+  selecter->SetChannel(2);
+  selecter->SetChannel(1);
 
   VectorWriterType::Pointer vectWriter = VectorWriterType::New();
   vectWriter->SetFileName(outprettyfname);

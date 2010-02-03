@@ -97,7 +97,7 @@ public:
     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
 
-    outPixel = static_cast<TOutput>( vcl_floor((temp2+0.0005)*1000.)/1000.);
+    outPixel = static_cast<TOutput>( temp2 );
 
     return outPixel;
   }

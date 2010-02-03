@@ -15,10 +15,11 @@
 // accomplish the translation. 
 //
 //*******************************************************************
-//  $Id: ossimOgcWktTranslator.cpp 14729 2009-06-16 18:14:59Z gpotts $
+//  $Id: ossimOgcWktTranslator.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
 
 #include <cstdio>
 #include <gdal.h>
+#include <geovalues.h>
 
 #include "ossimOgcWktTranslator.h"
 #include <ogr_spatialref.h>
@@ -51,6 +52,8 @@ ossimOgcWktTranslator::ossimOgcWktTranslator()
    initializeProjectionTable();
 }
 
+#define EPSG_CODE_MAX 32767
+#define USER_DEFINED  32767
 ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
                                                 const char *prefix)const
 {
@@ -72,6 +75,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    ossimString originLat  = kwl.find(prefix, ossimKeywordNames::ORIGIN_LATITUDE_KW);
    ossimString centralMeridian = kwl.find(prefix, ossimKeywordNames::CENTRAL_MERIDIAN_KW);
    ossimString scale = kwl.find(prefix, ossimKeywordNames::SCALE_FACTOR_KW);
+   ossimString pcsCode = kwl.find(prefix, ossimKeywordNames::PCS_CODE_KW);
 
    ossimDpt falseEastingNorthing;
    // Get the false easting northing.
@@ -143,9 +147,51 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    }
 
    oSRS.SetLinearUnits("Meter", 1.0);
-   
-   if(projType == "ossimUtmProjection")
+
+   int pcsCodeVal = (pcsCode.empty() == false) ? pcsCode.toInt() : EPSG_CODE_MAX;
+   if(pcsCodeVal < EPSG_CODE_MAX)
    {
+      // ESH 06/2008 -- HACK!!!
+      // If the PCS code is for a HARN state plane and the implied pcs code's units 
+      // is feet (us or intl), we find the equivalent code for units of meters.  
+      // We're doing this because ArcMap (9.2 and less) doesn't understand the 
+      // non-meters HARN codes.  However, the units are left unchanged in this 
+      // process, so the units can be different than the user-specified pcs code. 
+      // ArcMap 9.2 seems to understand the mixed definition just fine.
+      const ossimStatePlaneProjectionInfo* info =
+         ossimStatePlaneProjectionFactory::instance()->getInfo(pcsCodeVal);
+      if (info)
+      {
+         const ossimString& pcsCodeName = info->name();
+         if ( pcsCodeName.empty() == false )
+         {
+            if ( pcsCodeName.contains("HARN") == true && pcsCodeName.contains("_Feet") == true )
+            {
+               ossimString feetStr("_Feet");
+               ossimString newPcsCodeName( pcsCodeName.before(feetStr).c_str() );
+               if ( newPcsCodeName.empty() == false )
+               {
+                  info = ossimStatePlaneProjectionFactory::instance()->getInfo(newPcsCodeName);
+                  if ( info != NULL )
+                  {
+                     // pcs code for equivalent HARN/meters definition
+                     ossimString newPcsCode( ossimString::toString( info->code() ) );
+
+                     // Make sure the code can be used in the tiff file. 
+                     // It has to fit into an unsigned short.
+                     if ( info->code() < EPSG_CODE_MAX ) 
+                        pcsCodeVal = info->code();
+                  }
+               }
+            }
+         }
+      }
+
+      oSRS.importFromEPSG( pcsCodeVal );
+   }
+   else if(projType == "ossimUtmProjection")
+   {
+#if 0
       hemisphere = hemisphere.trim().upcase();
       
       if(hemisphere != "")
@@ -156,6 +202,134 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       {
          oSRS.SetUTM(zone.toLong(), true);
       }
+#else
+      // ESH 09/2008: Adapting code from ossimTiffWriter.cpp for 
+      // converting UTM zone,hemisphere to a PCS code.
+
+      short gcs = USER_DEFINED;
+
+      if (datumType == "WGE") gcs = GCS_WGS_84;
+      else if (datumType == "WGD") gcs = GCS_WGS_72;
+      else if (datumType == "NAR-C") gcs = GCS_NAD83;
+      else if (datumType == "NAR") gcs = GCS_NAD83;
+      else if (datumType == "NAS-C") gcs = GCS_NAD27;
+      else if (datumType == "NAS") gcs = GCS_NAD27;
+      else if (datumType == "ADI-M") gcs = GCS_Adindan;
+      else if (datumType == "ARF-M") gcs = GCS_Arc_1950;
+      else if (datumType == "ARS-M") gcs = GCS_Arc_1960;
+      else if (datumType == "EUR-7" || datumType == "EUR-M") gcs = GCS_ED50;
+      else if ((datumType == "OGB-7") ||
+               (datumType == "OGB-M") ||
+               (datumType == "OGB-A") ||
+               (datumType == "OGB-B") ||
+               (datumType == "OGB-C") ||
+               (datumType == "OGB-D")) gcs = GCS_OSGB_1936;
+      else if  (datumType == "TOY-M")  gcs = GCS_Tokyo;
+      else
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "DATUM = " << datumType << " tag not written " << std::endl
+               << "Please let us know so we can add it"          << std::endl;
+         }
+      }
+
+      int mapZone = zone.toInt();
+      hemisphere = hemisphere.trim().upcase();
+      bool bDoImportFromEPSG = false;
+
+      switch ( gcs )
+      {
+         case GCS_WGS_84:
+         {
+            if (hemisphere == "N") // Northern hemisphere.
+            {
+               pcsCodeVal = 32600 + mapZone;
+            }
+            else // Southern hemisphere.
+            {
+               pcsCodeVal = 32700 + mapZone;
+            }
+            bDoImportFromEPSG = true;
+            break;
+         }
+
+         case GCS_WGS_72:
+         {
+            if (hemisphere == "N") // Northern hemisphere.
+            {
+               pcsCodeVal = 32200 + mapZone;
+            }
+            else // Southern hemisphere.
+            {
+               pcsCodeVal = 32300 + mapZone;
+            }
+            bDoImportFromEPSG = true;
+            break;
+         }
+
+         case GCS_NAD27:
+         {
+            if (hemisphere == "N") // Northern hemisphere.
+            {
+               pcsCodeVal = 26700 + mapZone;
+            }
+            else // Southern hemisphere.
+            {
+               pcsCodeVal = 32000 + mapZone;
+            }
+            bDoImportFromEPSG = true;
+            break;
+         }
+
+         case GCS_NAD83:
+         {
+            if (hemisphere == "N") // Northern hemisphere.
+            {
+               pcsCodeVal = 26900 + mapZone;
+            }
+            else // Southern hemisphere.
+            {
+               pcsCodeVal = 32100 + mapZone;
+            }
+            bDoImportFromEPSG = true;
+            break;
+         }
+
+         default:
+         {
+            //***
+            // Use a projection code that does not imply a datum.
+            // See section "6.3.3.2 Projection Codes" for definition.
+            //***
+            if (mapZone > 0) // Northern hemisphere.
+            {
+               pcsCodeVal = 16000 + mapZone;
+            }
+            else if (mapZone < 0) // Southern hemisphere.
+            {
+               hemisphere = "S";
+               pcsCodeVal = 16100 + abs(mapZone);
+            }
+            break;
+         }
+      } // End of "switch ( gcs )"
+
+      if ( bDoImportFromEPSG == true )
+         oSRS.importFromEPSG( pcsCodeVal );
+      else
+      {
+         if(hemisphere != "")
+         {
+            oSRS.SetUTM(zone.toLong(), hemisphere != "S");
+         }
+         else
+         {
+            oSRS.SetUTM(zone.toLong(), true);
+         }
+      }
+#endif
    }
    else if(projType == "ossimLlxyProjection")
    {
@@ -326,44 +500,47 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
            << endl;
    }
    
-   datumType =  datumType.upcase();
-   
-   if(datumType == "WGE")
+   if(pcsCodeVal >= EPSG_CODE_MAX)
    {
-      oSRS.SetWellKnownGeogCS("WGS84");
+      datumType =  datumType.upcase();
+      
+      if(datumType == "WGE")
+      {
+         oSRS.SetWellKnownGeogCS("WGS84");
+      }
+      else if(datumType == "WGD")
+      {
+         oSRS.SetWellKnownGeogCS("WGS72");      
+      }
+      else if(datumType == "NAS-C") //1927
+      {
+         oSRS.SetWellKnownGeogCS("NAD27");      
+      }
+      else if(datumType == "NAS") //1927
+      {
+         oSRS.SetWellKnownGeogCS("NAD27");      
+      }
+      else if(datumType == "NAR-C") // 1983
+      {
+         oSRS.SetWellKnownGeogCS("NAD83");
+      }
+      else if(datumType == "NAR") // 1983
+      {
+         oSRS.SetWellKnownGeogCS("NAD83");
+      }
+      else if(datumType == "NTF")
+      {
+        oSRS.SetWellKnownGeogCS("EPSG:4275");
+      }
+      else
+      {
+         cerr << "ossimOgcWktTranslator::fromOssimKwl: Datum translation for "
+              << datumType
+              <<" not supported"
+              << endl;
+      }
    }
-   else if(datumType == "WGD")
-   {
-      oSRS.SetWellKnownGeogCS("WGS72");      
-   }
-   else if(datumType == "NAS-C") //1927
-   {
-      oSRS.SetWellKnownGeogCS("NAD27");      
-   }
-   else if(datumType == "NAS") //1927
-   {
-      oSRS.SetWellKnownGeogCS("NAD27");      
-   }
-   else if(datumType == "NAR-C") // 1983
-   {
-      oSRS.SetWellKnownGeogCS("NAD83");
-   }
-   else if(datumType == "NAR") // 1983
-   {
-      oSRS.SetWellKnownGeogCS("NAD83");
-   }
-   else if(datumType == "NTF")
-   {
-     oSRS.SetWellKnownGeogCS("EPSG:4275");
-   }
-   else
-   {
-      cerr << "ossimOgcWktTranslator::fromOssimKwl: Datum translation for "
-           << datumType
-           <<" not supported"
-           << endl;
-   }
-   
+
    char* exportString = NULL;
    oSRS.exportToWkt(&exportString);
    
@@ -443,7 +620,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
       ossim_units = "degrees";
    }
 
-      bool bModified = false;
+   bool bModified = false;
    if(ossimProj == "") // Not State Plane Projection
    {
       // Determine which other Projection System is represented.
@@ -726,7 +903,6 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
     kwl.add(prefix, ossimKeywordNames::DATUM_KW, oDatum, true);
 
      
-//   std::cout << "KWL ======= " << kwl << std::endl;
     OSRDestroySpatialReference( hSRS );
     
     return true;

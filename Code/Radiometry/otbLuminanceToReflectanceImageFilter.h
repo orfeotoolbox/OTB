@@ -88,7 +88,7 @@ public:
            * m_IlluminationCorrectionCoefficient
            / m_SolarIllumination;
     
-    outPixel = static_cast<TOutput>( vcl_floor((temp+0.0005)*1000.)/1000.);
+    outPixel = static_cast<TOutput>( temp );
   
     return outPixel;
   }

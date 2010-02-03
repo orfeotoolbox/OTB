@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __itkTransactorGISTableFunction_h
-#define __itkTransactorGISTableFunction_h
+#ifndef __otbTransactorGISTableFunction_h
+#define __otbTransactorGISTableFunction_h
 
 #include "otbGISTableFunction.h"
 

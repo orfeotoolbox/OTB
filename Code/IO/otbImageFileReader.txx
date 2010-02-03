@@ -28,7 +28,7 @@
 #include "otbMetaDataKey.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
-#include "ossim/imaging/ossimImageHandlerSarFactory.h"
+// #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
@@ -171,7 +171,7 @@ ImageFileReader<TOutputImage>
 
     // Adapte the image size with the region
     std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
-		                     * static_cast<std::streamoff>(region.GetNumberOfPixels());
+                                   * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
@@ -344,7 +344,8 @@ ImageFileReader<TOutputImage>
       But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource 
       thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory 
       because the default include factory contains ossimQuickbirdTiffTileSource. */
-  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
+  ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
+                    ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
 
   if (!projection)
     {
@@ -362,10 +363,11 @@ ImageFileReader<TOutputImage>
   if (!hasMetaData)
     {
       // Add the radar factory
-      ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+      // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
       
       
-      ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+      ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
+                         ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
       if (!handler)
        {
          otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");

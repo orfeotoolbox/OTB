@@ -144,10 +144,11 @@ int main(int argc, char * argv[])
   LabelMapType::Pointer labelMap = shape->GetOutput();
   for( unsigned long label=1; label<=labelMap->GetNumberOfLabelObjects(); label++ )
     {
-    // we don't need a SmartPointer of the label object here, because the reference is kept in
+    // we don't need a SmartPointer of the label object here, because the reference is kept
     // in the label map.
     const LabelObjectType * labelObject = labelMap->GetLabelObject( label );
-    outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t" << labelObject->GetCentroid() << std::endl;
+    outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t" 
+            << labelObject->GetCentroid() << std::endl;
     }
 
   outfile.close();
