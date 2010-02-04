@@ -81,7 +81,6 @@ int otbSVMPointSetModelEstimatorTrain( int argc, char* argv[] )
 
   estimator->SetInputPointSet( mPSet );
   estimator->SetTrainingPointSet( lPSet );
-  estimator->SetNumberOfClasses( 2 );
   estimator->ParametersOptimizationOff();
 
   estimator->Update();

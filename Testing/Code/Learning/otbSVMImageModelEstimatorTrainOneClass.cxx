@@ -58,7 +58,6 @@ int otbSVMImageModelEstimatorTrainOneClass( int argc, char* argv[] )
 
   svmEstimator->SetInputImage( inputReader->GetOutput() );
   svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-  svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
   svmEstimator->Update();
