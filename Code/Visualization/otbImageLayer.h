@@ -70,6 +70,8 @@ public:
   typedef itk::RGBAPixel<ScalarType>                                  RGBAPixelType;
   typedef typename ImageType::RegionType                              RegionType;
   typedef typename ImageType::IndexType                               IndexType;
+  typedef typename IndexType::IndexValueType                          IndexValueType;
+  
 
   typedef itk::Point<double,2>                                          PointType;
   typedef otb::GenericRSTransform<double> TransformType;
