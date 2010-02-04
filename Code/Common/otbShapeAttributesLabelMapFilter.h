@@ -185,7 +185,7 @@ public:
   /** Standard class typedefs. */
   typedef ShapeAttributesLabelMapFilter                 Self;
   typedef LabelMapFeaturesFunctorImageFilter
-  <ImgaeType,FunctorType>                               Superclass;
+  <ImageType,FunctorType>                               Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
 
