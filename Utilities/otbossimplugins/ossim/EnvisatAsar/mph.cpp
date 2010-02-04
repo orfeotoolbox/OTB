@@ -226,7 +226,7 @@ std::istream& operator>>(std::istream& is, mph& data)
 	char buf2[3];
 	buf2[2] = '\0';
 	char buf1[1];
-
+        buf1[0] = '\0';
 
 	is.read(buf8,8);
 	data._product_name = buf8;
