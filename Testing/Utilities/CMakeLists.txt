@@ -339,6 +339,7 @@ ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
 	openJpegDecoder
 	${TEMP}/testjpeg.j2k
 )
+SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 # -------            lib expat  ------------------------------
