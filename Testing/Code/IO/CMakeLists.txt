@@ -49,6 +49,10 @@ ENDIF(OTB_USE_LIBLAS)
 
 SET(IO_TESTS18    ${CXX_TEST_PATH}/otbIOTests18)
 
+IF(OTB_USE_CURL)
+  SET(IO_TESTS19    ${CXX_TEST_PATH}/otbIOTests19)
+ENDIF(OTB_USE_CURL)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2174,6 +2178,41 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS19 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IF(OTB_USE_CURL)
+
+ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
+        otbTileMapImageSourceNew )
+
+ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
+        --compare-image ${NOTOL}
+                ${BASELINE}/ioTileMapImageSourceToulouse.png
+                ${TEMP}/ioTileMapImageSourceToulouse.png
+        otbTileMapImageSource
+                43.6044
+                1.44295
+                http://tile.openstreetmap.org/
+		${TEMP}/ioTileMapImageSourceToulouse.png
+		256)
+
+ADD_TEST(ioTuTileMapFetcherNew ${IO_TESTS19}
+        otbTileMapFetcherNew )
+
+ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
+	otbTileMapFetcherTest
+		132122
+		95719
+		18
+		http://tile.openstreetmap.org/
+                #http://andy.sandbox.cloudmade.com/tiles/cycle/
+		${TEMP}/
+		2
+		${TEMP}/)
+
+ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
@@ -2347,6 +2386,15 @@ otbImageKeywordlist.cxx
 otbTerraSarImageMetadataInterface.cxx
 )
 
+IF(OTB_USE_CURL)
+SET(BasicIO_SRCS19
+otbIOTests19.cxx
+otbTileMapImageSourceNew.cxx
+otbTileMapImageSource.cxx
+otbTileMapFetcherNew.cxx
+otbTileMapFetcherTest.cxx
+)
+ENDIF(OTB_USE_CURL)
 
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
@@ -2381,6 +2429,10 @@ IF(OTB_USE_LIBLAS)
 ENDIF(OTB_USE_LIBLAS)
 
 OTB_ADD_EXECUTABLE(otbIOTests18 "${BasicIO_SRCS18}" "OTBIO;OTBTesting")
+
+IF(OTB_USE_CURL)
+  OTB_ADD_EXECUTABLE(otbIOTests19 "${BasicIO_SRCS19}" "OTBIO;OTBTesting")
+ENDIF(OTB_USE_CURL)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
