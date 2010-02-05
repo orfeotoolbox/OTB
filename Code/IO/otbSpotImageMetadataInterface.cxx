@@ -135,14 +135,23 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
  outputValuesVariableLengthVector.Fill(0);
  //In the case of SPOT, the bands are in a different order:
  // XS3, XS2. XS1, SWIR in the tif file.
- if(outputValues.size() != 4)
-       itkGenericExceptionMacro(<<"Invalid Solar Irradiance");
-       
-  outputValuesVariableLengthVector[0]=outputValues[2];
+ if(  outputValues.size() == 1 )
+  {
+      //this is a PAN image
+      outputValuesVariableLengthVector[0]=outputValues[0];
+  }
+  else if (  outputValues.size() != 4 )
+  {
+      outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
   outputValuesVariableLengthVector[3]=outputValues[3];
- 
+  }
+  else
+  {
+      itkExceptionMacro("Invalid Physical Gain");
+  }
+  
   return outputValuesVariableLengthVector;
 }
 
@@ -181,8 +190,7 @@ SpotImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) const
    return day.toInt();
    }
    
-
-
+   
 int
 SpotImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {
@@ -459,14 +467,23 @@ SpotImageMetadataInterface
   outputValuesVariableLengthVector.Fill(0);
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
-   if(  outputValues.size() != 4 )
-     itkExceptionMacro("Invalid Physical Bias");
 
-  outputValuesVariableLengthVector[0]=outputValues[2];
+  if(  outputValues.size() == 1 )
+  {
+      //this is a PAN image
+      outputValuesVariableLengthVector[0]=outputValues[0];
+  }
+  else if (  outputValues.size() != 4 )
+  {
+      outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
   outputValuesVariableLengthVector[3]=outputValues[3];
-
+  }
+  else
+  {
+      itkExceptionMacro("Invalid Physical Gain");
+  }
 
   return outputValuesVariableLengthVector;
 }
@@ -509,14 +526,22 @@ SpotImageMetadataInterface
   //In the case of SPOT, the bands are in a different order:
   // XS3, XS2. XS1, SWIR in the tif file.
 
-  if(  outputValues.size() != 4 )
-    itkExceptionMacro("Invalid Physical Gain");
-    
-  outputValuesVariableLengthVector[0]=outputValues[2];
+  if(  outputValues.size() == 1 )
+  {
+      //this is a PAN image
+      outputValuesVariableLengthVector[0]=outputValues[0];
+  }
+  else if (  outputValues.size() != 4 )
+  {
+      outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
   outputValuesVariableLengthVector[2]=outputValues[0];
   outputValuesVariableLengthVector[3]=outputValues[3];
-
+  }
+  else
+  {
+      itkExceptionMacro("Invalid Physical Gain");
+  }
 
   return outputValuesVariableLengthVector;
 }
@@ -680,6 +705,5 @@ SpotImageMetadataInterface
 
   return wavel;
 }
-
 
 } // end namespace otb
