@@ -68,6 +68,7 @@ IF(NOT OTB_INSTALL_NO_DEVELOPMENT)
   IF( NOT OTB_USE_CURL )
       LIST(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbTileMapImageIOFactory.h" )
       LIST(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbTileMapImageIO.h" )
+      LIST(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/otbTileMapFetcher.h" )
   ENDIF( NOT OTB_USE_CURL )
   
   

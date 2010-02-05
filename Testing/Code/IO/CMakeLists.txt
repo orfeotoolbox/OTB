@@ -2184,34 +2184,34 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 IF(OTB_USE_CURL)
 
-#ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
-#        otbTileMapImageSourceNew )
-#
-#ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
-#        --compare-image ${NOTOL}
-#                ${BASELINE}/ioTileMapImageSourceToulouse.png
-#                ${TEMP}/ioTileMapImageSourceToulouse.png
-#        otbTileMapImageSource
-#                43.6044
-#                1.44295
-#                http://tile.openstreetmap.org/
-#		${TEMP}/ioTileMapImageSourceToulouse.png
-#		256)
-#
-#ADD_TEST(ioTuTileMapFetcherNew ${IO_TESTS19}
-#        otbTileMapFetcherNew )
-#
-#ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
-#	otbTileMapFetcherTest
-#		132122
-#		95719
-#		18
-#		http://tile.openstreetmap.org/
-#                #http://andy.sandbox.cloudmade.com/tiles/cycle/
-#		${TEMP}/
-#		2
-#		${TEMP}/)
-#
+ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
+        otbTileMapImageSourceNew )
+
+ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
+        --compare-image ${NOTOL}
+                ${BASELINE}/ioTileMapImageSourceToulouse.png
+                ${TEMP}/ioTileMapImageSourceToulouse.png
+        otbTileMapImageSource
+                43.6044
+                1.44295
+                http://tile.openstreetmap.org/
+		${TEMP}/ioTileMapImageSourceToulouse.png
+		256)
+
+ADD_TEST(ioTuTileMapFetcherNew ${IO_TESTS19}
+        otbTileMapFetcherNew )
+
+ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
+	otbTileMapFetcherTest
+		132122
+		95719
+		18
+		http://tile.openstreetmap.org/
+                #http://andy.sandbox.cloudmade.com/tiles/cycle/
+		${TEMP}/
+		2
+		${TEMP}/)
+
 ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
@@ -2389,10 +2389,10 @@ otbTerraSarImageMetadataInterface.cxx
 IF(OTB_USE_CURL)
 SET(BasicIO_SRCS19
 otbIOTests19.cxx
-#otbTileMapImageSourceNew.cxx
-#otbTileMapImageSource.cxx
-#otbTileMapFetcherNew.cxx
-#otbTileMapFetcherTest.cxx
+otbTileMapImageSourceNew.cxx
+otbTileMapImageSource.cxx
+otbTileMapFetcherNew.cxx
+otbTileMapFetcherTest.cxx
 )
 ENDIF(OTB_USE_CURL)
 
