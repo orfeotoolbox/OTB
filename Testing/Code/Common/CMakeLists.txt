@@ -150,6 +150,17 @@ ADD_TEST(coTvExtractROI_QB ${COMMON_TESTS2}
   0 0 70 70 
   )
 
+
+ADD_TEST(coTvExtractROIQB ${COMMON_TESTS2}
+  --compare-image ${NOTOL}   
+  ${BASELINE}/coTvExtractROIQB.png
+  ${TEMP}/coTvExtractROIQB.png
+    otbExtractROI
+  ${INPUTDATA}/QB_Suburb.png
+  ${TEMP}/coTvExtractROIQB.png
+  0 0 70 70 
+  )
+
 # -------            otb::VectorDataExtractROI   ------------------------------
 ADD_TEST(coTuVectorDataExtractROINew ${COMMON_TESTS2}
 	otbVectorDataExtractROINew)

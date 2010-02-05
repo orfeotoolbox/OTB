@@ -59,6 +59,16 @@ ADD_TEST(utTvOssimXmlDocumentTest ${UTILITIES_TESTS}
         )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(utTvOssimTileMapModelTestToulouse ${UTILITIES_TESTS}
+	--compare-ascii ${NOTOL}
+		${BASELINE_FILES}/utOssimTileMapModelToulouse.txt
+		${TEMP}/utOssimTileMapModelToulouse.txt
+	ossimTileMapModelTest
+	43.6044
+	1.44295
+	${TEMP}/utOssimTileMapModelToulouse.txt
+	)
+
 # -------            lib otbsvm   ------------------------------
 
 ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
@@ -339,6 +349,7 @@ ADD_TEST(utTvOpenJpegDecoder ${UTILITIES_TESTS}
 	openJpegDecoder
 	${TEMP}/testjpeg.j2k
 )
+SET_TESTS_PROPERTIES(utTvOpenJpegDecoder PROPERTIES DEPENDS utTvOpenJpegEncoder)
 ENDIF(OTB_COMPILE_JPEG2000)
 
 # -------            lib expat  ------------------------------
@@ -441,6 +452,7 @@ ossimIntegrationTest.cxx
 ossimKeywordlistTest.cxx
 ossimElevManagerTest.cxx
 ossimXmlDocumentTest.cxx
+ossimTileMapModelTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx

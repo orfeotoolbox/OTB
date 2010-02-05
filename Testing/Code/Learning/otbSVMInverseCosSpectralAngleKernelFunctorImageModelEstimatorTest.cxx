@@ -61,7 +61,6 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageModelEstimatorTest( int argc,
 
   svmEstimator->SetInputImage( inputReader->GetOutput() );
   svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-  svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetSVMType(ONE_CLASS);
 
   otb::InverseCosSAMKernelFunctor myKernel;

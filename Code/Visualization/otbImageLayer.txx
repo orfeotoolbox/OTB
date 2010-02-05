@@ -27,6 +27,8 @@
 #include "otbImageKeywordlist.h"
 // #include "otbCoordinateToName.h"
 #include "otbImageMetadataInterfaceBase.h"
+#include "itkMetaDataDictionary.h"
+#include "otbImageMetadataInterfaceFactory.h"
 
 namespace otb
 {
@@ -277,7 +279,33 @@ ImageLayer<TImage,TOutputImage>
     if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
     {
       PointType point = this->GetPixelLocation(index);
+      // add the x and y spacing 
+      //Get the PIxel location of the first pixel
+      IndexType indexSrcX,indexSrcY ;
+      indexSrcX[0] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[0] - index[0])));   // x position
+      indexSrcX[1] = index[1];   // y position
+
+      indexSrcY[0] = index[0];   // x position
+      indexSrcY[1] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[1] - index[1])));   // y position
+      
+      PointType pointSrcX = this->GetPixelLocation(indexSrcX);
+      PointType pointSrcY = this->GetPixelLocation(indexSrcY);
+      
+      double R = 6371; // km
+      double deg2radCoef = CONST_PI/180;
+
+      double dX = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcX[1]*deg2radCoef) + 
+                  vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcX[1]*deg2radCoef) *
+                  vcl_cos((pointSrcX[0]-point[0])*deg2radCoef)) * R ) * 1000.;
+      double dY = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcY[1]*deg2radCoef) + 
+                  vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcY[1]*deg2radCoef) *
+                  vcl_cos((pointSrcY[0]-point[0])*deg2radCoef)) * R ) * 1000.;
+      // Get now the x and y spacing
+      oss<< setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX / (vcl_fabs(static_cast<double>(indexSrcX[0] - index[0]))) << std::endl;
+      oss<< setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY / (vcl_fabs(static_cast<double>(indexSrcY[1] - index[1]))) << std::endl;
+      
       oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
+      
       if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss<< "(precise location)" << std::endl;
       if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss<< "(estimated location)" << std::endl;
 
@@ -293,14 +321,15 @@ ImageLayer<TImage,TOutputImage>
       m_PlaceName = m_CoordinateToName->GetPlaceName();
       m_CountryName = m_CoordinateToName->GetCountryName();
 
-      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName;
-      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName;
+      if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
+      if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
     }
     else
     {
       oss << otbGetTextMacro("Location unknown") << std::endl;
     }
   }
+  
   return oss.str();
 }
 

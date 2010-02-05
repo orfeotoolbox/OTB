@@ -60,7 +60,6 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
 
   svmEstimator->SetInputImage( inputReader->GetOutput() );
   svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-  svmEstimator->SetNumberOfClasses( 2 );
   svmEstimator->SetParametersOptimization(optimization);
 
   svmEstimator->Update();

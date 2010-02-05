@@ -693,15 +693,15 @@ bool GDALImageIO::CanWriteFile( const char* name )
     return false;
   }
 
-  //Traitement particulier sur certain format o� l'on pr�f�re utiliser
-  // Format PNG -> lecture avec ITK (pas GDAL)
-  /*    itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
-      lCanWrite = lPNGImageIO->CanWriteFile(name);
-      if ( lCanWrite == true)
-      {
-      return false;
-    }
-  */
+  
+  
+  
+  
+  
+  
+  
+  
+  
   // Recuperation du type a partir du nom de fichier
   std::string extGDAL = TypeConversion(name);
   if (extGDAL=="NOT-FOUND")
@@ -722,9 +722,7 @@ void GDALImageIO::Write(const void* buffer)
     m_FlagWriteImageInformation = false;
   }
 
-  std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
   const unsigned char *p = static_cast<const unsigned char *>(buffer);
-  std::streamoff cpt(0);
   if (p==NULL)
   {
     itkExceptionMacro(<<"GDAL : Bad alloc");
@@ -736,8 +734,9 @@ void GDALImageIO::Write(const void* buffer)
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-  // Cas particuliers : on controle que si la r�gion � �crire est de la m�me dimension que l'image enti�re,
-  // on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
+  // Particular case: checking that the writen region is the same size
+  // of the entire image
+  // starting at offset 0 (when no streaming)
   if ( (lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
   {
     lFirstLine = 0;
@@ -756,12 +755,13 @@ void GDALImageIO::Write(const void* buffer)
   }
 
   // Mise a jour du step
+  std::streamoff step = static_cast<std::streamoff>(m_NbBands);
   step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
   CPLErr lCrGdal;
 
-
-  for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
+  std::streamoff cpt(0);
+  for (unsigned int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
   {
     cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
 
@@ -805,50 +805,84 @@ void GDALImageIO::InternalWriteImageInformation()
     itkExceptionMacro(<<"Dimensions are not defined.");
   }
 
-  if ( this->GetComponentType() == CHAR )
+  if((this->GetPixelType() == COMPLEX) && (m_NbBands/2 > 0))
   {
-    m_NbOctetPixel = 1;
-    m_PxType = GDT_Byte;
-  }
-  else if ( this->GetComponentType() == UCHAR )
-  {
-    m_NbOctetPixel = 1;
-    m_PxType = GDT_Byte;
-  }
-  else if ( this->GetComponentType() == USHORT )
-  {
-    m_NbOctetPixel = 2;
-    m_PxType = GDT_UInt16;
-  }
-  else if ( this->GetComponentType() == SHORT )
-  {
-    m_NbOctetPixel = 2;
-    m_PxType = GDT_Int16;
-  }
-  else if ( this->GetComponentType() == INT )
-  {
-    m_NbOctetPixel = 4;
-    m_PxType = GDT_Int32;
-  }
-  else if ( this->GetComponentType() == UINT )
-  {
-    m_NbOctetPixel = 4;
-    m_PxType = GDT_UInt32;
-  }
-  else if ( this->GetComponentType() == FLOAT )
-  {
-    m_NbOctetPixel = 4;
-    m_PxType = GDT_Float32;
-  }
-  else if ( this->GetComponentType() == DOUBLE )
-  {
-    m_NbOctetPixel = 8;
-    m_PxType = GDT_Float64;
+    m_NbBands /= 2;
+
+    if ( this->GetComponentType() == SHORT )
+    {
+      m_NbOctetPixel = 4;
+      m_PxType = GDT_CInt16;
+    }
+    else if ( this->GetComponentType() == INT )
+    {
+      m_NbOctetPixel = 8;
+      m_PxType = GDT_CInt32;
+    }
+    else if ( this->GetComponentType() == DOUBLE )
+    {
+      m_NbOctetPixel = 16;
+      m_PxType = GDT_CFloat64;
+    }
+    else if ( this->GetComponentType() == FLOAT )
+    {
+      m_NbOctetPixel = 8;
+      m_PxType = GDT_CFloat32;
+    }
+    else
+    {
+      this->SetComponentType(FLOAT);
+      m_NbOctetPixel = 8;
+      m_PxType = GDT_CFloat32;
+    }
   }
   else
   {
-    m_NbOctetPixel = 1;
-    m_PxType = GDT_Byte;
+    if ( this->GetComponentType() == CHAR )
+    {
+      m_NbOctetPixel = 1;
+      m_PxType = GDT_Byte;
+    }
+    else if ( this->GetComponentType() == UCHAR )
+    {
+      m_NbOctetPixel = 1;
+      m_PxType = GDT_Byte;
+    }
+    else if ( this->GetComponentType() == USHORT )
+    {
+      m_NbOctetPixel = 2;
+      m_PxType = GDT_UInt16;
+    }
+    else if ( this->GetComponentType() == SHORT )
+    {
+      m_NbOctetPixel = 2;
+      m_PxType = GDT_Int16;
+    }
+    else if ( this->GetComponentType() == INT )
+    {
+      m_NbOctetPixel = 4;
+      m_PxType = GDT_Int32;
+    }
+    else if ( this->GetComponentType() == UINT )
+    {
+      m_NbOctetPixel = 4;
+      m_PxType = GDT_UInt32;
+    }
+    else if ( this->GetComponentType() == FLOAT )
+    {
+      m_NbOctetPixel = 4;
+      m_PxType = GDT_Float32;
+    }
+    else if ( this->GetComponentType() == DOUBLE )
+    {
+      m_NbOctetPixel = 8;
+      m_PxType = GDT_Float64;
+    }
+    else
+    {
+      m_NbOctetPixel = 1;
+      m_PxType = GDT_Byte;
+    }
   }
 
   // Automatically set the Type to Binary for GDAL data
