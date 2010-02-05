@@ -282,11 +282,11 @@ ImageLayer<TImage,TOutputImage>
       // add the x and y spacing 
       //Get the PIxel location of the first pixel
       IndexType indexSrcX,indexSrcY ;
-      indexSrcX[0] = vcl_fabs(m_Image->GetLargestPossibleRegion().GetSize()[0] - index[0]);   // x position
+      indexSrcX[0] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[0] - index[0])));   // x position
       indexSrcX[1] = index[1];   // y position
 
       indexSrcY[0] = index[0];   // x position
-      indexSrcY[1] = vcl_fabs(m_Image->GetLargestPossibleRegion().GetSize()[1] - index[1]);   // y position
+      indexSrcY[1] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[1] - index[1])));   // y position
       
       PointType pointSrcX = this->GetPixelLocation(indexSrcX);
       PointType pointSrcY = this->GetPixelLocation(indexSrcY);
@@ -301,8 +301,8 @@ ImageLayer<TImage,TOutputImage>
                   vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcY[1]*deg2radCoef) *
                   vcl_cos((pointSrcY[0]-point[0])*deg2radCoef)) * R );
       // Get now the x and y spacing
-      oss<< setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX / (vcl_fabs(indexSrcX[0] - index[0])) << std::endl;
-      oss<< setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY / (vcl_fabs(indexSrcY[1] - index[1])) << std::endl;
+      oss<< setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX / (vcl_fabs(static_cast<double>(indexSrcX[0] - index[0]))) << std::endl;
+      oss<< setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY / (vcl_fabs(static_cast<double>(indexSrcY[1] - index[1]))) << std::endl;
       
       oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
       
