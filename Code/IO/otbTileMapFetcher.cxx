@@ -197,11 +197,13 @@ namespace otb
     std::string server = m_ServerName.substr(7,m_ServerName.size());  // Get online server name without "http://"
     unsigned int pos;
     
+    std::cout<<server<<std::endl;
+    
     // replace "/" by "_" in server name
     for(unsigned int i=0; i<server.size(); i++)
     {
-      pos = server.find("/");
-      server[pos] = '_';
+      if (server[i] = '/')
+        server[i] = '_'; 
     }
     
     std::ostringstream filename;
