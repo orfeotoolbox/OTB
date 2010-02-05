@@ -140,7 +140,7 @@ SpotImageMetadataInterface::GetSolarIrradiance( const MetaDataDictionaryType & d
       //this is a PAN image
       outputValuesVariableLengthVector[0]=outputValues[0];
   }
-  else if (  outputValues.size() != 4 )
+  else if (  outputValues.size() == 4 )
   {
       outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
@@ -241,7 +241,6 @@ SpotImageMetadataInterface::GetYear( const MetaDataDictionaryType & dict ) const
   {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
-
   ossimKeywordlist kwl;
   imageKeywordlist.convertToOSSIMKeywordlist(kwl);
 
@@ -473,7 +472,7 @@ SpotImageMetadataInterface
       //this is a PAN image
       outputValuesVariableLengthVector[0]=outputValues[0];
   }
-  else if (  outputValues.size() != 4 )
+  else if (  outputValues.size() == 4 )
   {
       outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
@@ -531,7 +530,7 @@ SpotImageMetadataInterface
       //this is a PAN image
       outputValuesVariableLengthVector[0]=outputValues[0];
   }
-  else if (  outputValues.size() != 4 )
+  else if (  outputValues.size() == 4 )
   {
       outputValuesVariableLengthVector[0]=outputValues[2];
   outputValuesVariableLengthVector[1]=outputValues[1];
