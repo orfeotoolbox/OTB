@@ -2,6 +2,7 @@
 // iostream is used for general output
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include "base/ossimString.h"
 #include "projection/ossimTileMapModel.h"
