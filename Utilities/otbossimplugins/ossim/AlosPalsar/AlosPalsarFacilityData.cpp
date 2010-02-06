@@ -794,7 +794,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarFacilityData& data)
   data._range_spread_loss_comp_flag = atoi(buf4);
 
   is.read(buf1, 1);
-  data._datation_flag = atoi(buf1);
+  data._datation_flag = atoi(buf1) != 0;
 
   is.read(buf7, 7);
   data._max_error_range_line_timing = atoi(buf7);
@@ -803,7 +803,7 @@ std::istream& operator>>(std::istream& is, AlosPalsarFacilityData& data)
   data._form_num_range_line_used = atoi(buf7);
 
   is.read(buf1, 1);
-  data._autom_look_scal_gain_flag = atoi(buf1);
+  data._autom_look_scal_gain_flag = atoi(buf1) != 0;
 
   is.read(buf4, 4);
   data._max_value_look_scalar_gain = atoi(buf4);
