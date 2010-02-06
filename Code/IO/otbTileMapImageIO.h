@@ -187,6 +187,7 @@ private:
   void BuildFileName(std::ostringstream& quad, std::ostringstream& filename);
   void GetFromNetGM(std::ostringstream& filename, double x, double y);
   void GetFromNetOSM(std::ostringstream& filename, double x, double y);
+  void GetFromNetNearMap(std::ostringstream& filename, double x, double y);
   void FillCacheFaults(void* buffer);
   int XYToQuadTree(double x, double y, std::ostringstream& quad);
   int XYToQuadTree2(double x, double y, std::ostringstream& quad);
