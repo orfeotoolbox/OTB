@@ -91,7 +91,6 @@ GDALImageIO::~GDALImageIO()
 }
 
 
-
 // Tell only if the file can be read with GDAL.
 bool GDALImageIO::CanReadFile(const char* file)
 {
@@ -516,7 +515,7 @@ void GDALImageIO::InternalReadImageInformation()
     if (gcpProjectionKey.empty())
     {
       gcpCount = 0; //fix for uninitialized gcpCount in gdal (when
-		    //reading Palsar image)
+                    //reading Palsar image)
     }
 
  
@@ -541,8 +540,6 @@ void GDALImageIO::InternalReadImageInformation()
       itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
 
     }
-
-
 
   }
 
@@ -647,7 +644,7 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.clear();
 
   /* -------------------------------------------------------------------- */
-  /* Color Table                */
+  /* Color Table                                                          */
   /* -------------------------------------------------------------------- */
 
   for (int iBand = 0; iBand <m_poDataset->GetRasterCount(); iBand++ )
@@ -655,7 +652,8 @@ void GDALImageIO::InternalReadImageInformation()
     GDALColorTableH  hTable;
     GDALRasterBandH  hBand;
     hBand=GDALGetRasterBand(m_poDataset,iBand+1);
-    if (GDALGetRasterColorInterpretation(hBand)==GCI_PaletteIndex&&(hTable=GDALGetRasterColorTable(hBand))!=NULL)
+    if ((GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex)
+        && (hTable = GDALGetRasterColorTable(hBand)) != NULL)
     {
       unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);
 
@@ -693,15 +691,6 @@ bool GDALImageIO::CanWriteFile( const char* name )
     return false;
   }
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
   // Recuperation du type a partir du nom de fichier
   std::string extGDAL = TypeConversion(name);
   if (extGDAL=="NOT-FOUND")
@@ -761,7 +750,7 @@ void GDALImageIO::Write(const void* buffer)
   CPLErr lCrGdal;
 
   std::streamoff cpt(0);
-  for (unsigned int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
+  for (int nbComponents = 0; nbComponents < m_NbBands; ++nbComponents)
   {
     cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
 
@@ -998,7 +987,6 @@ void GDALImageIO::InternalWriteImageInformation()
   /* -------------------------------------------------------------------- */
 
 
-
   double * geoTransform = new double[6];
   /// Reporting origin and spacing
   geoTransform[0]=m_Origin[0];
@@ -1013,7 +1001,6 @@ void GDALImageIO::InternalWriteImageInformation()
   delete [] geoTransform;
 
 
-
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
   /* -------------------------------------------------------------------- */
@@ -1024,7 +1011,7 @@ void GDALImageIO::InternalWriteImageInformation()
 
   for (unsigned int itkey=0; itkey<keys.size(); ++itkey)
   {
-    if (keys[itkey].compare(0,key.MetadataKey.length(),key.MetadataKey)==0)
+    if (keys[itkey].compare(0, key.MetadataKey.length(), key.MetadataKey) == 0)
     {
       itk::ExposeMetaData<std::string>(dict,keys[itkey],svalue);
       unsigned int equalityPos = svalue.find_first_of('=');
