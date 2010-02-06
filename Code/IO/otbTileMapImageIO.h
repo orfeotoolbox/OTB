@@ -64,8 +64,8 @@ public:
 
   /** Standard class typedefs. */
   typedef TileMapImageIO            Self;
-  typedef itk::ImageIOBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::ImageIOBase          Superclass;
+  typedef itk::SmartPointer<Self>   Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -118,9 +118,9 @@ public:
   virtual bool CanStreamRead()
   {
     return true;
-  };
+  }
 
-  /** Set the spacing and dimention information for the set filename. */
+  /** Set the spacing and dimension information for the set filename. */
   virtual void ReadImageInformation();
 
   /** Reads the data from disk into the memory buffer provided. */
@@ -136,22 +136,18 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-//THOMAS
   virtual bool CanStreamWrite()
   {
     return true;
-  };
+  }
 
-  /** Writes the spacing and dimentions of the image.
+  /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
   virtual void WriteImageInformation();
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
-
-  // JULIEN: NOT USED, NOT IMPLEMENTED
-  //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
 protected:
   /** Construtor.*/
@@ -170,8 +166,6 @@ protected:
   int m_height;
   /** Number of bands of the image*/
   int m_NbBands;
-  /** Buffer*/
-  //float **pafimas;
 
   /** Determines the level of compression for written files.
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
@@ -184,26 +178,26 @@ private:
 
   void InternalRead(double x, double y, void* buffer);
   void InternalWrite(double x, double y, const void* buffer);
-  void BuildFileName(std::ostringstream& quad, std::ostringstream& filename);
-  void GetFromNetGM(std::ostringstream& filename, double x, double y);
-  void GetFromNetOSM(std::ostringstream& filename, double x, double y);
-  void GetFromNetNearMap(std::ostringstream& filename, double x, double y);
-  void FillCacheFaults(void* buffer);
-  int XYToQuadTree(double x, double y, std::ostringstream& quad);
-  int XYToQuadTree2(double x, double y, std::ostringstream& quad);
+  void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const;
+  void GetFromNetGM(const std::ostringstream& filename, double x, double y) const;
+  void GetFromNetOSM(const std::ostringstream& filename, double x, double y) const;
+  void GetFromNetNearMap(const std::ostringstream& filename, double x, double y) const;
+  void FillCacheFaults(void* buffer) const;
+  int XYToQuadTree(double x, double y, std::ostringstream& quad) const;
+  int XYToQuadTree2(double x, double y, std::ostringstream& quad) const;
 
   /** Nombre d'octets par pixel */
-  int           m_NbOctetPixel;
+  int         m_NbOctetPixel;
 
   /** Resolution depth*/
-  int m_Depth;
-  bool useCache;
+  int         m_Depth;
+  bool        useCache;
   std::string m_CacheDirectory;
   std::string m_ServerName;
   std::string m_FileSuffix;
   std::string m_AddressMode;
 
-  bool m_FlagWriteImageInformation;
+  bool        m_FlagWriteImageInformation;
 
 };
 
