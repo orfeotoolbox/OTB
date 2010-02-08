@@ -192,6 +192,42 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
   return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1)); 
 }
 
+/** Set Input1 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+void 
+RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
+::SetInput1(const TImage * input)
+{
+  this->SetInput(input);
+}
+
+/** Get Input1 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+const TImage * 
+RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
+::GetInput1() const
+{
+  return this->GetInput();
+}
+
+/** Set Input2 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+void 
+RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
+::SetInput2(const TFeatureImage * input)
+{
+  this->SetFeatureImage(input);
+}
+
+/** Get Input2 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+const TFeatureImage * 
+RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
+::GetInput2() const
+{
+  return this->GetFeatureImage();
+}
+
 /** Set the reduced attribute set */
 template <class TImage, class TFeatureImage>
 void 

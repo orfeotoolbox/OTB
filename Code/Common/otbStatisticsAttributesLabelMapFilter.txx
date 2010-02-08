@@ -375,6 +375,43 @@ const typename StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
   return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1)); 
 }
 
+/** Set Input1 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+void 
+StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::SetInput1(const TImage * input)
+{
+  this->SetInput(input);
+}
+
+/** Get Input1 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+const TImage * 
+StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::GetInput1() const
+{
+  return this->GetInput();
+}
+
+/** Set Input2 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+void 
+StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::SetInput2(const TFeatureImage * input)
+{
+  this->SetFeatureImage(input);
+}
+
+/** Get Input2 (for backward compatibility) */
+template <class TImage, class TFeatureImage>
+const TFeatureImage * 
+StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::GetInput2() const
+{
+  return this->GetFeatureImage();
+}
+
+
 /** Set the name of the feature */
 template <class TImage, class TFeatureImage>
 

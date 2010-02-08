@@ -157,6 +157,18 @@ public:
   /** Get the feature image */
   const FeatureImageType * GetFeatureImage() const;
 
+  /** Set Input1 (for backward compatibility) */
+  void SetInput1(const TImage * input);
+
+  /** Get Input1 (for backward compatibility) */
+  const TImage * GetInput1() const;
+
+  /** Set Input2 (for backward compatibility) */
+  void SetInput2(const TFeatureImage * input);
+
+  /** Get Input2 (for backward compatibility) */
+  const TFeatureImage * GetInput2() const;
+
   /** Set the name of the feature */
   void SetFeatureName(const std::string & name);
 
