@@ -394,7 +394,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
 //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
     principalMoments[i] = pm(i,i);
     }
-  itk::Matrix<double,LabelObjectType::ImageDimension> principalAxes = eigen.V.transpose();
+  itk::Matrix<double,LabelObjectType::ImageDimension,LabelObjectType::ImageDimension> 
+    principalAxes = eigen.V.transpose();
 
   // Add a final reflection if needed for a proper rotation,
   // by multiplying the last row by the determinant
