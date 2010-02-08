@@ -461,6 +461,9 @@ void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::BeforeThreadedGenerateData()
 {
+  // First call superclass implementation
+  Superclass::BeforeThreadedGenerateData();
+
   // Set the feature image to the functor
   this->GetFunctor().SetFeatureImage(this->GetFeatureImage());
 }

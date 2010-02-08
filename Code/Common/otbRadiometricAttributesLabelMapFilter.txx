@@ -255,6 +255,9 @@ void
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::BeforeThreadedGenerateData()
 {
+  // First call superclass implementation
+  Superclass::BeforeThreadedGenerateData();
+
   // Clear any previous feature
   this->GetFunctor().ClearAllFeatures();
 
