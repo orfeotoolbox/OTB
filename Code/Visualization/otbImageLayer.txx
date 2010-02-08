@@ -291,15 +291,15 @@ ImageLayer<TImage,TOutputImage>
       PointType pointSrcX = this->GetPixelLocation(indexSrcX);
       PointType pointSrcY = this->GetPixelLocation(indexSrcY);
       
-      double R = 6371; // km
+      double R = 6371000; // m
       double deg2radCoef = CONST_PI/180;
 
       double dX = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcX[1]*deg2radCoef) + 
                   vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcX[1]*deg2radCoef) *
-                  vcl_cos((pointSrcX[0]-point[0])*deg2radCoef)) * R ) * 1000.;
+                  vcl_cos((pointSrcX[0]-point[0])*deg2radCoef)) * R );
       double dY = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcY[1]*deg2radCoef) + 
                   vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcY[1]*deg2radCoef) *
-                  vcl_cos((pointSrcY[0]-point[0])*deg2radCoef)) * R ) * 1000.;
+                  vcl_cos((pointSrcY[0]-point[0])*deg2radCoef)) * R );
       // Get now the x and y spacing
       oss<< setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX / (vcl_fabs(static_cast<double>(indexSrcX[0] - index[0]))) << std::endl;
       oss<< setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY / (vcl_fabs(static_cast<double>(indexSrcY[1] - index[1]))) << std::endl;

@@ -18,9 +18,7 @@
 #ifndef __otbRadiometricAttributesLabelMapFilter_h
 #define __otbRadiometricAttributesLabelMapFilter_h
 
-#include "itkInPlaceLabelMapFilter.h"
-#include "itkMatrix.h"
-#include "itkVector.h"
+#include "otbStatisticsAttributesLabelMapFilter.h"
 
 #include "otbVegetationIndicesFunctor.h"
 #include "otbSoilIndicesFunctor.h"
@@ -30,10 +28,98 @@
 #include "otbMultiChannelRAndGAndNIRVegetationIndexImageFilter.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-#include "otbStatisticsAttributesLabelMapFilter.h"
 
 namespace otb
 {
+namespace Functor
+{
+/** \class MulitStatsAttributesLabelObjectFunctor
+*   \brief Functor to compute multiple statistics attributes.
+* 
+* For one label object, this functors applies the
+* StatisticsAttributesLabelObjectFunctor
+* for a set of feature images along with their feature names.
+* 
+* As such, it allows to compute in one pass statistics related to
+* mulitple features. It is used in the
+* RadiometricAttributesLabelMapFilter.
+* 
+* Features can be added, removed or cleared via the appropriate
+* methods.
+* 
+*   \sa RadiometricAttributesLabelMapFilter
+*   \sa StatisticsAttributesLabelObjectFunctor
+*/
+template <class TLabelObject, class TFeatureImage>
+class MultiStatsAttributesLabelObjectFunctor
+{
+public:
+  // Self typedef
+  typedef MultiStatsAttributesLabelObjectFunctor         Self;
+
+  /// Typedef of the feature image type
+  typedef typename TFeatureImage::PixelType              FeatureType;
+
+  /// Typedef of the label object
+  typedef TLabelObject                                   LabelObjectType;
+
+  /// Feature image const pointer
+  typedef typename TFeatureImage::ConstPointer           FeatureImageConstPointer;  
+
+  /// Statistics functor
+  typedef StatisticsAttributesLabelObjectFunctor
+  <TLabelObject,TFeatureImage>                           StatsFunctorType;
+
+  /// Map to store the functors
+  typedef std::map<std::string,StatsFunctorType>         StatsFunctorsMapType;
+  
+  /** Constructor */
+  MultiStatsAttributesLabelObjectFunctor();
+
+  /** Destructor */
+  virtual ~MultiStatsAttributesLabelObjectFunctor();
+
+  /** The comparators */
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
+
+  /** This is the functor implementation
+   *  Calling the functor on a label object 
+   *  will update its statistics attributes */
+  inline void operator()(LabelObjectType * lo) const;
+
+  /** Add a feature with the given name */
+  void AddFeature(const std::string & name, const TFeatureImage * img);
+
+  /** Remove the feature with this name if it exists */
+  bool RemoveFeature(const std::string & name);
+
+  /** Get the feature image with this name */
+  const TFeatureImage * GetFeature(const std::string & name) const;
+  
+  /** Clear all the features */
+  void ClearAllFeatures();
+
+  /** Get the number of features */
+  unsigned int GetNumberOfFeatures() const;
+
+  /** Set the reduced attribute set */
+  void SetReducedAttributeSet(bool flag);
+
+  /** Get the reduced attribute set */
+  bool GetReducedAttributeSet() const;
+
+private:   
+  /// True to compute only a reduced attribute set
+  bool m_ReducedAttributeSet;
+
+  /// The Stat functors map
+  StatsFunctorsMapType m_StatsFunctorsMap;
+};
+} // End namespace Functor
+
+
+
 /** \class RadiometricAttributesLabelMapFilter
  *  \brief This filter computes radiometric attributes for each object.
  *
@@ -52,20 +138,36 @@ namespace otb
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.
  *
- * \sa StatisticsAttributesImageFilter AttributesMapLabelObject
+ * \sa MultiStatsAttributesLabelObjectFunctor AttributesMapLabelObject
  * \sa GEMI NDVI IR IC IB NDWI2
  * \sa VectorIntensityImageFilter
  *
  * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
  */
 template<class TImage, class TFeatureImage>
-class ITK_EXPORT RadiometricAttributesLabelMapFilter :
-    public itk::InPlaceLabelMapFilter<TImage>
+class ITK_EXPORT RadiometricAttributesLabelMapFilter 
+  : public LabelMapFeaturesFunctorImageFilter
+< TImage,
+  typename Functor::MultiStatsAttributesLabelObjectFunctor
+  < typename TImage::LabelObjectType, otb::Image<double,2> > >
 {
 public:
+  /** Some convenient typedefs. */
+  typedef TImage                                         ImageType;
+  typedef typename ImageType::LabelObjectType            LabelObjectType;
+  typedef TFeatureImage                                  FeatureImageType;
+  typedef typename FeatureImageType::InternalPixelType   FeatureInternalPixelType;
+  typedef double                                         InternalPrecisionType;
+  typedef Image<InternalPrecisionType,2>                 InternalImageType;
+
+  /** Functor typedef */
+  typedef Functor::MultiStatsAttributesLabelObjectFunctor
+  <LabelObjectType,InternalImageType>                    FunctorType;
+
   /** Standard class typedefs. */
   typedef RadiometricAttributesLabelMapFilter            Self;
-  typedef itk::InPlaceLabelMapFilter<TImage>             Superclass;
+  typedef LabelMapFeaturesFunctorImageFilter
+  <ImageType,FunctorType>                                Superclass;
   typedef itk::SmartPointer<Self>                        Pointer;
   typedef itk::SmartPointer<const Self>                  ConstPointer;
 
@@ -76,28 +178,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RadiometricAttributesLabelMapFilter,InPlaceLabelMapFilter);
-
-  /** Some convenient typedefs. */
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer                    ImagePointer;
-  typedef typename ImageType::ConstPointer               ImageConstPointer;
-  typedef typename ImageType::PixelType                  PixelType;
-  typedef typename ImageType::IndexType                  IndexType;
-  typedef typename ImageType::PointType                  PointType;
-  typedef typename ImageType::LabelObjectType            LabelObjectType;
-  typedef TFeatureImage                                  FeatureImageType;
-  typedef typename FeatureImageType::Pointer             FeatureImagePointer;
-  typedef typename FeatureImageType::ConstPointer        FeatureImageConstPointer;
-  typedef typename FeatureImageType::PixelType           FeatureImagePixelType;
-  typedef typename FeatureImageType::InternalPixelType   FeatureInternalPixelType;
-  typedef double                                         InternalPrecisionType;
-  typedef Image<InternalPrecisionType,2>                 InternalImageType;
-  
-  /// Internal statistics filter typedef
-  typedef StatisticsAttributesLabelMapFilter
-  <ImageType,InternalImageType>                          StatisticsLabelMapFilterType;
-  typedef typename StatisticsLabelMapFilterType::Pointer StatisticsLabelMapFilterPointerType;
+  itkTypeMacro(RadiometricAttributesLabelMapFilter,LabelMapFeaturesFunctorImageFilter);
 
   /// Fuctors typedef
   
@@ -154,30 +235,23 @@ public:
   typedef typename ChannelFilterType::Pointer            ChannelFilterPointerType;
   
 
-   /** Set the feature image */
-  void SetFeatureImage(TFeatureImage *input)
-     {
-     // Process object is not const-correct so the const casting is required.
-     this->SetNthInput( 1, const_cast<TFeatureImage *>(input) );
-     }
+  /** Set the feature image */
+  void SetFeatureImage(const TFeatureImage *input);
 
   /** Get the feature image */
-  FeatureImageType * GetFeatureImage()
-    {
-    return static_cast<FeatureImageType*>(const_cast<itk::DataObject *>(this->itk::ProcessObject::GetInput(1)));
-    }
+  const FeatureImageType * GetFeatureImage() const;
 
-   /** Set the input image */
-  void SetInput1(TImage *input)
-     {
-     this->SetInput( input );
-     }
+  /** Set Input1 (for backward compatibility) */
+  void SetInput1(const TImage * input);
 
-   /** Set the feature image */
-  void SetInput2(TFeatureImage *input)
-     {
-     this->SetFeatureImage( input );
-     }
+  /** Get Input1 (for backward compatibility) */
+  const TImage * GetInput1() const;
+
+  /** Set Input2 (for backward compatibility) */
+  void SetInput2(const TFeatureImage * input);
+
+  /** Get Input2 (for backward compatibility) */
+  const TFeatureImage * GetInput2() const;
 
   /** Set/Get the red channel index */
   itkSetMacro(RedChannelIndex,unsigned int);
@@ -195,9 +269,12 @@ public:
   itkSetMacro(NIRChannelIndex,unsigned int);
   itkGetMacro(NIRChannelIndex,unsigned int);
 
-  /** Set/get the ReducedAttributesSet flag */
-  itkSetMacro(ReducedAttributeSet,bool);
-  itkGetMacro(ReducedAttributeSet,bool);
+   /** Set the reduced attribute set */
+  void SetReducedAttributeSet(bool flag);
+
+  /** Get the reduced attribute set */
+  bool GetReducedAttributeSet() const;
+  
   itkBooleanMacro(ReducedAttributeSet);
 
 protected:
@@ -206,8 +283,8 @@ protected:
   /** Destructor */
   ~RadiometricAttributesLabelMapFilter() {};
 
-  /** GenerateData method */
-  virtual void GenerateData();
+  /** Before threaded data generation */
+  virtual void BeforeThreadedGenerateData();
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -227,10 +304,6 @@ private:
 
   /** The near infra-red channel index */
   unsigned int m_NIRChannelIndex;
-  
-  /// Use only a reduced attribute set
-  bool m_ReducedAttributeSet;
-
 } ; // end of class
 
 } // end namespace itk
