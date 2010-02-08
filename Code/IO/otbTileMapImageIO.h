@@ -29,19 +29,6 @@
 /* ITK Libraries */
 #include "itkImageIOBase.h"
 
-#include "otbMetaDataKey.h"
-
-
-/* GDAL Libraries */
-#include "gdal.h"
-#include "gdal_priv.h"
-#include "cpl_string.h"
-#include "cpl_conv.h"
-#include "ogr_spatialref.h"
-#include "ogr_srs_api.h"
-
-/* Curl Library*/
-#include <curl/curl.h>
 
 namespace otb
 {
@@ -55,8 +42,7 @@ namespace otb
    * \ingroup IOFilters
    *
  */
-class ITK_EXPORT TileMapImageIO : public itk::ImageIOBase,
-      public MetaDataKey
+class ITK_EXPORT TileMapImageIO : public itk::ImageIOBase
 {
 public:
 
@@ -87,12 +73,12 @@ public:
     if (_arg)
     {
       this->m_CacheDirectory = _arg;
-      this->useCache=true;
+      this->m_UseCache=true;
     }
     else
     {
       this->m_CacheDirectory = "";
-      this->useCache=false;
+      this->m_UseCache=false;
     }
     this->Modified();
   }
@@ -100,7 +86,7 @@ public:
   virtual void SetCacheDirectory (const std::string & _arg)
   {
     this->SetCacheDirectory( _arg.c_str() );
-    this->useCache=true;
+    this->m_UseCache=true;
   }
 
   itkSetMacro(Depth, int);
@@ -125,11 +111,6 @@ public:
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(void* buffer);
-
-  /** Reads 3D data from multiple files assuming one slice per file. */
-  virtual void ReadVolume(void* buffer);
-
-  /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
@@ -160,17 +141,12 @@ protected:
   void InternalReadImageInformation();
   /** Write all information on the image*/
   void InternalWriteImageInformation();
-  /** Dimension along Ox of the image*/
-  int m_width;
-  /** Dimension along Oy of the image*/
-  int m_height;
   /** Number of bands of the image*/
   int m_NbBands;
 
   /** Determines the level of compression for written files.
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
   int m_CompressionLevel;
-  const char* m_currentfile;
 
 private:
   TileMapImageIO(const Self&); //purposely not implemented
@@ -179,6 +155,7 @@ private:
   void InternalRead(double x, double y, void* buffer);
   void InternalWrite(double x, double y, const void* buffer);
   void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const;
+  void RetrieveTile(const std::ostringstream & filename, std::ostringstream & urlStream) const;
   void GetFromNetGM(const std::ostringstream& filename, double x, double y) const;
   void GetFromNetOSM(const std::ostringstream& filename, double x, double y) const;
   void GetFromNetNearMap(const std::ostringstream& filename, double x, double y) const;
@@ -186,12 +163,13 @@ private:
   int XYToQuadTree(double x, double y, std::ostringstream& quad) const;
   int XYToQuadTree2(double x, double y, std::ostringstream& quad) const;
 
-  /** Nombre d'octets par pixel */
+
+  /** Byte per pixel pixel */
   int         m_NbOctetPixel;
 
   /** Resolution depth*/
   int         m_Depth;
-  bool        useCache;
+  bool        m_UseCache;
   std::string m_CacheDirectory;
   std::string m_ServerName;
   std::string m_FileSuffix;
