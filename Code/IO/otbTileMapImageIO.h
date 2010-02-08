@@ -35,11 +35,8 @@ namespace otb
 
 /** \class TileMapImageIO
    *
-   * \brief ImageIO object for reading (not writing) TileMap images
+   * \brief ImageIO object for reading and writing TileMap images
    *
-   * The streaming read is implemented.
-   *
-   * \ingroup IOFilters
    *
  */
 class ITK_EXPORT TileMapImageIO : public itk::ImageIOBase
@@ -93,8 +90,6 @@ public:
   itkGetMacro(Depth, int);
 
   itkGetStringMacro(CacheDirectory);
-
-  /*-------- This part of the interface deals with reading data. ------ */
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
@@ -165,7 +160,7 @@ private:
 
 
   /** Byte per pixel pixel */
-  int         m_NbOctetPixel;
+  int         m_BytePerPixel;
 
   /** Resolution depth*/
   int         m_Depth;

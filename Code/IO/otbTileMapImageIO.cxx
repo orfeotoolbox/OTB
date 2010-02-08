@@ -69,7 +69,7 @@ TileMapImageIO::TileMapImageIO()
   //Resolution depth
   m_Depth = 8;
 
-  m_NbOctetPixel=1;
+  m_BytePerPixel=1;
 
   m_UseCache=false;
   m_ServerName="";
@@ -192,7 +192,6 @@ void TileMapImageIO::Read(void* buffer)
         }
       }//end of tile copy
 
-
     }
   }//end of full image copy
 
@@ -205,7 +204,8 @@ void TileMapImageIO::Read(void* buffer)
 /*
  * This method is responsible for filling the buffer with the tile information
  * either by getting it from the cache or by retrieving it from the internet
- * (using one of the GetFromNet**() method)
+ * (using one of the GetFromNet**() method).
+ * This method is NOT responsible for allocating the buffer.
  */
 void TileMapImageIO::InternalRead(double x, double y, void* buffer)
 {
@@ -328,7 +328,7 @@ void TileMapImageIO::RetrieveTile(const std::ostringstream & filename, std::ostr
   char browser[200];
   strcpy(browser, browserStream.str().data());
 
-  //Download the file
+  // Download the file
   if (curl)
   {
     curl_easy_setopt(curl, CURLOPT_USERAGENT, browser);
@@ -436,7 +436,6 @@ void TileMapImageIO::ReadImageInformation()
 
 bool TileMapImageIO::CanWriteFile( const char* name )
 {
-
   // First if filename is provided
   if (  name == NULL )
   {
@@ -453,7 +452,6 @@ bool TileMapImageIO::CanWriteFile( const char* name )
     return true;
   }
   return false;
-
 }
 
 void TileMapImageIO::WriteImageInformation(void)
