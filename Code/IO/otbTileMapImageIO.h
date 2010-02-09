@@ -171,6 +171,8 @@ private:
   std::string m_AddressMode;
 
   bool        m_FlagWriteImageInformation;
+  
+  bool        m_FileNameIsServerName;
 
 };
 

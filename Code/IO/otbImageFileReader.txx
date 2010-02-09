@@ -443,6 +443,15 @@ void
 ImageFileReader<TOutputImage>
 ::TestFileExistanceAndReadability()
 {
+   // Test if the file a server name
+    if  (this->m_FileName[0]=='h'
+         && this->m_FileName[1]=='t'
+         && this->m_FileName[2]=='t'
+         && this->m_FileName[3]=='p')
+    {
+      return;
+    }
+    
   // Test if the file exists.
   if ( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
   {

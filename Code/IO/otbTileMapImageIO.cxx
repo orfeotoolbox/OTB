@@ -76,6 +76,8 @@ TileMapImageIO::TileMapImageIO()
   m_CacheDirectory="";
   m_FileSuffix="jpg";
   m_AddressMode="0";
+  
+  m_FileNameIsServerName = false;
 
   this->AddSupportedWriteExtension(".otb");
   this->AddSupportedWriteExtension(".OTB");
@@ -91,7 +93,7 @@ TileMapImageIO::~TileMapImageIO()
 
 // Tell only if the file can be read with TileMap.
 bool TileMapImageIO::CanReadFile(const char* file)
-{
+{  
   // First check the extension
   if (  file == NULL )
   {
@@ -105,6 +107,17 @@ bool TileMapImageIO::CanReadFile(const char* file)
   if ( (gmPos != std::string::npos)
        && (gmPos == filename.length() - 4) )
   {
+    m_FileNameIsServerName = false;
+    return true;
+  }
+  // Filename is http server
+  else if (file[0]=='h'
+           || file[1]=='t'
+           || file[2]=='t'
+           || file[3]=='p'
+           || file[4]==':')
+  {
+    m_FileNameIsServerName = true;
     return true;
   }
   return false;
@@ -406,6 +419,15 @@ void TileMapImageIO::ReadImageInformation()
     itkExceptionMacro(<<"TileMap read : empty image file name file.");
   }
 
+  if (m_FileName[0]=='h'
+      || m_FileName[1]=='t'
+      || m_FileName[2]=='t'
+      || m_FileName[3]=='p'
+      || m_FileName[4]==':')
+  {
+    m_FileNameIsServerName = true;
+  }
+  
   m_Dimensions[0] = (1 << m_Depth)*256;
   m_Dimensions[1] = (1 << m_Depth)*256;
   otbMsgDevMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
@@ -418,20 +440,36 @@ void TileMapImageIO::ReadImageInformation()
   m_Spacing[1]=1;
   m_Origin[0] = 0;
   m_Origin[1] = 0;
-
-
-  std::ifstream file(m_FileName.c_str(), std::ifstream::in );
-  std::getline(file, m_ServerName);
-  if  (m_ServerName[0]!='h'
-       || m_ServerName[1]!='t'
-       || m_ServerName[2]!='t'
-       || m_ServerName[3]!='p')
+  
+  if (!m_FileNameIsServerName)
   {
-    itkExceptionMacro(<<"Can't read server name from file");
+    std::ifstream file(m_FileName.c_str(), std::ifstream::in );
+    std::getline(file, m_ServerName);
+    if  (m_ServerName[0]!='h'
+         || m_ServerName[1]!='t'
+         || m_ServerName[2]!='t'
+         || m_ServerName[3]!='p')
+    {
+      itkExceptionMacro(<<"Can't read server name from file");
+    }
+    std::getline(file, m_FileSuffix);
+    std::getline(file, m_AddressMode);
+    otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
   }
-  std::getline(file, m_FileSuffix);
-  std::getline(file, m_AddressMode);
-  otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
+  else
+  {
+    m_ServerName = m_FileName;
+    if  (m_ServerName[0]!='h'
+         || m_ServerName[1]!='t'
+         || m_ServerName[2]!='t'
+         || m_ServerName[3]!='p')
+    {
+      itkExceptionMacro(<<"Can't read server name from file");
+    }
+    m_FileSuffix = "png";
+    m_AddressMode = "1";
+    otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
+  }
 }
 
 bool TileMapImageIO::CanWriteFile( const char* name )

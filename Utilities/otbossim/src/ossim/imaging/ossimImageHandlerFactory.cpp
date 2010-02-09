@@ -79,7 +79,7 @@ ossimImageHandler* ossimImageHandlerFactory::open(
    // for all of our imagehandlers the filename must exist.
    // if we have any imagehandlers that require an encoded string and is contrlled in this factory then
    // we need to move this.
-   if(!copyFilename.exists()) return 0;
+   //if(!copyFilename.exists()) return 0;
 
    ossimString ext = copyFilename.ext().downcase();
    

@@ -2184,21 +2184,29 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS19 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+ADD_TEST(ioTvImageFileReaderServerNameHTTPTest ${IO_TESTS19}
+	otbImageFileReaderServerName
+	http://tile.openstreetmap.org/)
+
+ADD_TEST(ioTvImageFileReaderServerNameOTBTest ${IO_TESTS19}
+	otbImageFileReaderServerName
+	${OTB_DATA_ROOT}/Examples/osmfile.otb)
+
 IF(OTB_USE_CURL)
 
 ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
         otbTileMapImageSourceNew )
 
-ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
-        --compare-image ${NOTOL}
-                ${BASELINE}/ioTileMapImageSourceToulouse.png
-                ${TEMP}/ioTileMapImageSourceToulouse.png
-        otbTileMapImageSource
-                43.6044
-                1.44295
-                http://tile.openstreetmap.org/
-		${TEMP}/ioTileMapImageSourceToulouse.png
-		256)
+#ADD_TEST(ioTvTileMapImageSource ${IO_TESTS19}
+#        --compare-image ${NOTOL}
+#                ${BASELINE}/ioTileMapImageSourceToulouse.png
+#                ${TEMP}/ioTileMapImageSourceToulouse.png
+#        otbTileMapImageSource
+#                43.6044
+#                1.44295
+#                http://tile.openstreetmap.org
+#		${TEMP}/ioTileMapImageSourceToulouse.png
+#		256)
 
 ADD_TEST(ioTuTileMapFetcherNew ${IO_TESTS19}
         otbTileMapFetcherNew )
@@ -2392,6 +2400,7 @@ otbImageMetadataInterfaceTest2.cxx
 IF(OTB_USE_CURL)
 SET(BasicIO_SRCS19
 otbIOTests19.cxx
+otbImageFileReaderServerName.cxx
 otbTileMapImageSourceNew.cxx
 otbTileMapImageSource.cxx
 otbTileMapFetcherNew.cxx
