@@ -62,8 +62,6 @@ bool ossimTileMapTileSource::open()
 
   ossimString os = theImageFile.beforePos(4);
   
-  std::cout << os << std::endl;
-  
    if (traceDebug())
    {
       CLOG << " Entered..." << std::endl
