@@ -56,15 +56,11 @@ int main( int argc, char* argv[] )
   {
     std::cout << argv[0] <<" <input_filename> <output_filename>"
               << " <upper_left_corner_longitude> <upper_left_corner_latitude>"
-              << " <size_x> <sizee_y> <number_of_stream_divisions>"
+              << " <size_x> <size_y> <number_of_stream_divisions>"
               << std::endl;
 
     return EXIT_FAILURE;
   }
-
-
-
-
 
 // Software Guide : BeginLatex
 //
@@ -79,12 +75,13 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-  typedef otb::Image<unsigned int, 2>     ImageType;
+  typedef otb::Image<unsigned int, 2>      ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
-  ReaderType::Pointer                   reader=ReaderType::New();
+
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  ImageType::Pointer         inputImage= reader->GetOutput();
+  ImageType::Pointer inputImage = reader->GetOutput();
 
 // Software Guide : EndCodeSnippet
 
@@ -105,7 +102,7 @@ int main( int argc, char* argv[] )
   reader->GenerateOutputInformation();
 
   std::cout << "Original input imagine spacing: "<<
-            reader->GetOutput()->GetSpacing() << std::endl;;
+            reader->GetOutput()->GetSpacing() << std::endl;
 
 // Software Guide : EndCodeSnippet
 
@@ -150,7 +147,6 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-
   if (!model)
   {
     std::cerr << "Unable to create a model" << std::endl;
@@ -169,17 +165,13 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-
   ModelType::OutputPointType inputPoint;
   typedef itk::Point <double, 2>    PointType;
   PointType         outputPoint;
 
-
-
   ImageType::IndexType        currentIndex;
   ImageType::IndexType        currentIndexBis;
   ImageType::IndexType        pixelIndexBis;
-
 
 // Software Guide : EndCodeSnippet
 
@@ -194,7 +186,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
 
-  ImageType::Pointer                outputImage = ImageType::New();
+  ImageType::Pointer         outputImage = ImageType::New();
 
   ImageType::PixelType       pixelValue;
 
@@ -279,9 +271,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-  typedef otb::Image<unsigned char, 2>    CharImageType;
-  typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
+  typedef otb::Image<unsigned char, 2>        CharImageType;
+  typedef otb::ImageFileWriter<CharImageType> CharWriterType;
+  typedef otb::ImageFileWriter<ImageType>     WriterType;
   WriterType::Pointer                   extractorWriter=WriterType::New();
   CharWriterType::Pointer                   writer=CharWriterType::New();
   extractorWriter->SetFileName("image_temp.jpeg");
@@ -297,8 +289,8 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-  typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>
-  RescalerType;
+  typedef itk::RescaleIntensityImageFilter
+                       <ImageType,CharImageType> RescalerType;
   RescalerType::Pointer                   rescaler=RescalerType::New();
   rescaler->SetOutputMinimum(10);
   rescaler->SetOutputMaximum(255);
@@ -324,7 +316,7 @@ int main( int argc, char* argv[] )
   typedef itk::ImageRegionIteratorWithIndex<ImageType>  IteratorType;
 
   unsigned int NumberOfStreamDivisions;
-  if (atoi(argv[7])==0)
+  if (atoi(argv[7]) == 0)
   {
     NumberOfStreamDivisions=10;
   }
@@ -451,8 +443,6 @@ int main( int argc, char* argv[] )
     max_y=pixelIndexArray[1];
     min_y=pixelIndexArray[1];
 
-
-
     for (j=0;j<It;j++)
     {
       if (j%2==0 && pixelIndexArray[j]>max_x)
@@ -473,7 +463,6 @@ int main( int argc, char* argv[] )
       }
     }
 
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -493,7 +482,6 @@ int main( int argc, char* argv[] )
       extractStart[0]=0;
       extractStart[1]=0;
     }
-
     else
     {
       extractStart[0]=min_x-10;
@@ -568,4 +556,3 @@ int main( int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
