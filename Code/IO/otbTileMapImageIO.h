@@ -90,6 +90,9 @@ public:
   itkGetMacro(Depth, int);
 
   itkGetStringMacro(CacheDirectory);
+  
+  itkSetStringMacro(FileSuffix);
+  itkSetStringMacro(AddressMode);
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
