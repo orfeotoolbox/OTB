@@ -74,8 +74,8 @@ TileMapImageIO::TileMapImageIO()
   m_UseCache=false;
   m_ServerName="";
   m_CacheDirectory="";
-  m_FileSuffix="jpg";
-  m_AddressMode="0";
+  m_FileSuffix="png";
+  m_AddressMode="1";
   
   m_FileNameIsServerName = false;
 
@@ -465,8 +465,7 @@ void TileMapImageIO::ReadImageInformation()
     {
       itkExceptionMacro(<<"Can't read server name from file");
     }
-    m_FileSuffix = "png";
-    m_AddressMode = "1";
+    // File suffix and addres mode must be set with accessors
     otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
   }
 }
