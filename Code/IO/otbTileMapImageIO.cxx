@@ -289,7 +289,6 @@ void TileMapImageIO::InternalRead(double x, double y, void* buffer)
 
 }
 
-
 void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const
 {
 

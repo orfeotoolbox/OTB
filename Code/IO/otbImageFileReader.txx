@@ -43,12 +43,6 @@
 
 #ifdef OTB_USE_CURL
 #include "curl/curl.h"
-// This is a dummy function to prevent curl from writing data to disk
-// when testing http adresses
-size_t curlDummyWriteFunction(void*,size_t,size_t nmemb,void*)
-{
-  return nmemb;
-}
 #endif
 
 namespace otb
@@ -474,7 +468,7 @@ ImageFileReader<TOutputImage>
 	curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
 	curl_easy_setopt(curl, CURLOPT_URL,this->m_FileName.data());
 	// Set the dummy write function
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,&curlDummyWriteFunction);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,&Self::curlDummyWriteFunction);
 	curl_easy_setopt(curl, CURLOPT_MAXFILESIZE,1);
 
 	// Perform requet
@@ -608,6 +602,13 @@ ImageFileReader<TOutputImage>
   otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
   otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
   return( fic_trouve );
+}
+template <class TOutputImage>
+size_t
+ImageFileReader<TOutputImage>
+::curlDummyWriteFunction(void*,size_t,size_t nmemb,void*)
+{
+  return nmemb;
 }
 
 

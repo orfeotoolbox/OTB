@@ -91,6 +91,11 @@ private:
     */
   bool GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName );
 
+  // This is a dummy function to prevent curl from writing data to disk
+  // when testing http adresses
+  static size_t curlDummyWriteFunction(void*,size_t,size_t nmemb,void*);
+
+
   ImageFileReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
