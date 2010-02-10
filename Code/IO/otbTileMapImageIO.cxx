@@ -73,7 +73,7 @@ TileMapImageIO::TileMapImageIO()
 
   m_UseCache=false;
   m_ServerName="";
-  m_CacheDirectory="";
+  m_CacheDirectory=".";
   m_FileSuffix="png";
   m_AddressMode="1";
   
