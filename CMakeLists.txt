@@ -357,9 +357,6 @@ IF(OTB_USE_CURL)
                         "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
         ENDIF (NOT CURL_LIBRARY)
 
-        # Add compiler option
-        ADD_DEFINITIONS(-DOTB_USE_CURL)
-
         INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
 
 ENDIF(OTB_USE_CURL)
