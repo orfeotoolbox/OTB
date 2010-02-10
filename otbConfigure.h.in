@@ -66,9 +66,6 @@
 /* Use Visu/Gui configurations */
 #cmakedefine OTB_USE_VISU_GUI
 
-/** Add the use curl directive */
-#cmakedefine OTB_USE_CURL
-
 #cmakedefine OTB_I18N
 #define OTB_LANG @OTB_LANG@
 #define OTB_LANG_LOCATION @OTB_LANG_LOCATION@
