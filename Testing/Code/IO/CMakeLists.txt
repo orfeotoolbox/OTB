@@ -2222,6 +2222,23 @@ ADD_TEST(ioTvTileMapFetcherTest ${IO_TESTS19}
 		2
 		${TEMP}/)
 
+# We do not perform regression testing here because images on server might change
+ADD_TEST(ioTvTileMapImageIOFile ${IO_TESTS19}
+otbTileMapImageIOTest
+    ${OTB_DATA_ROOT}/Examples/osmfile.otb
+    ${TEMP}/ioTvTileMapImageIOFileOutput.png
+    ${TEMP}
+    1.4835345 43.55968261 13
+)
+
+ADD_TEST(ioTvTileMapImageIOWeb ${IO_TESTS19}
+otbTileMapImageIOTest
+    http://tile.openstreetmap.org/
+    ${TEMP}/ioTvTileMapImageIOWebOutput.png
+    ${TEMP}
+    1.4835345 43.55968261 13
+)
+
 ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
@@ -2405,6 +2422,7 @@ otbTileMapImageSourceNew.cxx
 otbTileMapImageSource.cxx
 otbTileMapFetcherNew.cxx
 otbTileMapFetcherTest.cxx
+otbTileMapImageIOTest.cxx
 )
 ENDIF(OTB_USE_CURL)
 
