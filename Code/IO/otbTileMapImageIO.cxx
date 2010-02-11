@@ -111,11 +111,7 @@ bool TileMapImageIO::CanReadFile(const char* file)
     return true;
   }
   // Filename is http server
-  else if (file[0]=='h'
-           || file[1]=='t'
-           || file[2]=='t'
-           || file[3]=='p'
-           || file[4]==':')
+  else if (filename.find("http://") == 0)
   {
     m_FileNameIsServerName = true;
     return true;
@@ -418,11 +414,7 @@ void TileMapImageIO::ReadImageInformation()
     itkExceptionMacro(<<"TileMap read : empty image file name file.");
   }
 
-  if (m_FileName[0]=='h'
-      || m_FileName[1]=='t'
-      || m_FileName[2]=='t'
-      || m_FileName[3]=='p'
-      || m_FileName[4]==':')
+  if (m_FileName.find("http://") == 0)
   {
     m_FileNameIsServerName = true;
   }
@@ -444,10 +436,7 @@ void TileMapImageIO::ReadImageInformation()
   {
     std::ifstream file(m_FileName.c_str(), std::ifstream::in );
     std::getline(file, m_ServerName);
-    if  (m_ServerName[0]!='h'
-         || m_ServerName[1]!='t'
-         || m_ServerName[2]!='t'
-         || m_ServerName[3]!='p')
+    if  (m_ServerName.find("http://") != 0)
     {
       itkExceptionMacro(<<"Can't read server name from file");
     }
@@ -474,10 +463,7 @@ void TileMapImageIO::ReadImageInformation()
   else
   {
     m_ServerName = m_FileName;
-    if  (m_ServerName[0]!='h'
-         || m_ServerName[1]!='t'
-         || m_ServerName[2]!='t'
-         || m_ServerName[3]!='p')
+    if  (m_ServerName.find("http://") != 0)
     {
       itkExceptionMacro(<<"Can't read server name from file");
     }
