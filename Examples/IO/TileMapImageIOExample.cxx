@@ -56,6 +56,7 @@
 #include "otbImageFileReader.h"
 #include "otbTileMapImageIO.h"
 #include "otbInverseSensorModel.h"
+#include "otbForwardSensorModel.h"
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "ossim/projection/ossimTileMapModel.h"
@@ -92,9 +93,9 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  char * inputFilename = argv[1];
-  char * outputFilename = argv[2];
-  char * cacheDirectory = argv[3];
+  std::string inputFilename = argv[1];
+  std::string outputFilename = argv[2];
+  std::string cacheDirectory = argv[3];
   double lon = atof(argv[4]);
   double lat = atof(argv[5]);
   int depth = atoi(argv[6]);
@@ -198,6 +199,68 @@ int main( int argc, char* argv[] )
   writer->Update();
   // Software Guide : EndCodeSnippet
 
+
+  // Software Guide : BeginLatex
+  //
+  // We also want to create the associated world file to be able to use this
+  // new image in a GIS system. For this, we need to compute the coordinates
+  // of the top left corner and the spacing in latitude and longitude.
+  //
+  // For that, we use the forward model to convert the corner coordinates into
+  // latitude and longitude.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  typedef otb::ForwardSensorModel<double>  ForwardModelType;
+  ForwardModelType::Pointer   modelForward = ForwardModelType::New();
+
+  modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
+  dynamic_cast<ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(depth);
+  if (!modelForward)
+  {
+    std::cerr << "Unable to create a forward model" << std::endl;
+    return 1;
+  }
+  double lonUL, latUL, lonSpacing, latSpacing;
+
+  tilePoint[0] = startX-sizeX/2;
+  tilePoint[1] = startY-sizeY/2;
+  lonLatPoint = modelForward->TransformPoint(tilePoint);
+  lonUL = lonLatPoint[0];
+  latUL = lonLatPoint[1];
+  tilePoint[0] = startX+sizeX/2;
+  tilePoint[1] = startY+sizeY/2;
+  lonLatPoint = modelForward->TransformPoint(tilePoint);
+  lonSpacing = (lonLatPoint[0] - lonUL)/(sizeX-1);
+  latSpacing = (lonLatPoint[1] - latUL)/(sizeY-1);
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Now that we have all the information, we can write the world file
+  // which has the wld extension. This is a simple text file containing
+  // the coordinates of the center of the top left pixel and the x and y
+  // spacing.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+  std::string worldFilename;
+  int i = outputFilename.find_last_of('.');
+  worldFilename = outputFilename.substr(0,i) + ".wld";
+
+  std::ofstream file;
+  file.open(worldFilename.c_str());
+  file << std::setprecision(15);
+  file << lonSpacing << std::endl;
+  file << 0.0 << std::endl;
+  file << 0.0 << std::endl;
+  file << latSpacing << std::endl;
+  file << lonUL << std::endl;
+  file << latUL << std::endl;
+  file.close();
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
