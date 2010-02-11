@@ -485,24 +485,6 @@ ImageFileReader<TOutputImage>
 	  e.SetDescription(msg.str().c_str());
 	  throw e;
 	  }
-	else
-	  {
-	  long httpResponse = 0;
-	  curl_easy_getinfo(curl,CURLINFO_RESPONSE_CODE,&httpResponse);
-
-	  if(httpResponse >= 400)
-	  {
-	  itk::ImageFileReaderException e(__FILE__, __LINE__);
-	  itk::OStringStream msg;
-	  msg <<"File name is an http address, but curl received an http error"
-	      << std::endl << "Filename = " << this->m_FileName
-	      << std::endl << "HTTP error code = "<<httpResponse
-	      << std::endl;
-	  e.SetDescription(msg.str().c_str());
-	  throw e;
-	  }
-	  }
-
 	return;
 	}
       }
