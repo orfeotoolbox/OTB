@@ -2248,6 +2248,15 @@ otbTileMapImageIOTest
     1.4835345 43.55968261 13
 )
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvTileMapWriter ${IO_TESTS19}
+    otbTileMapWriter
+       ${LARGEDATA}/SPOT5/TEHERAN/IMAGERY.TIF
+#       ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+       ${TEMP}
+)
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
@@ -2432,6 +2441,7 @@ otbTileMapImageSource.cxx
 otbTileMapFetcherNew.cxx
 otbTileMapFetcherTest.cxx
 otbTileMapImageIOTest.cxx
+otbTileMapWriter.cxx
 )
 ENDIF(OTB_USE_CURL)
 
