@@ -95,9 +95,6 @@ public:
   itkGetMacro(Depth, int);
 
   itkGetStringMacro(CacheDirectory);
-  
-  itkSetStringMacro(FileSuffix);
-  itkSetMacro(AddressMode, TileMapAdressingStyle::TileMapAdressingStyle);
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */

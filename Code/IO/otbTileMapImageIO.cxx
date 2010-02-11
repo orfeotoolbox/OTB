@@ -316,6 +316,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
 void TileMapImageIO::RetrieveTile(const std::ostringstream & filename, std::ostringstream & urlStream) const
 {
   FILE* output_file = fopen(filename.str().c_str(), "w");
+  
   if (output_file == NULL)
   {
     itkExceptionMacro(<<"TileMap read : bad file name.");
@@ -467,6 +468,25 @@ void TileMapImageIO::ReadImageInformation()
     {
       itkExceptionMacro(<<"Can't read server name from file");
     }
+    std::string osmServer = "http://tile.openstreetmap.org/";
+    std::string nmServer = "http://www.nearmap.com/maps/";
+    
+    if (m_ServerName == osmServer)
+    {
+      m_FileSuffix = "png";
+      m_AddressMode = TileMapAdressingStyle::OSM;
+    }
+    else if (m_ServerName == nmServer)
+    {
+      m_FileSuffix = "jpg";
+      m_AddressMode = TileMapAdressingStyle::NEARMAP;
+    }
+    else
+    {
+      m_FileSuffix = "jpg";
+      m_AddressMode = TileMapAdressingStyle::GM;
+    }
+    
     // File suffix and addres mode must be set with accessors
     otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
   }
