@@ -359,6 +359,7 @@ ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS2}
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
         ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
+
 ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
                                 ${TEMP}/ioStreamingImageFilterTestBSQ.png
@@ -366,6 +367,7 @@ ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS2}
          ${TEMP}/ioImageFileReaderPNG2BSQ.hd
          ${TEMP}/ioStreamingImageFilterTestBSQ.png
          )
+SET_TESTS_PROPERTIES(ioTvStreamingImageFilterBSQ2PNG PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
 
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
@@ -377,6 +379,8 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          0 # NumberOfStreamDivisions
          )
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterBSQWithoutStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
+
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -387,6 +391,8 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS2}
          1 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
+SET_TESTS_PROPERTIES(ioTvStreamingIFWriterBSQWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
+
 # ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingWithIFWriterBSQWithStreaming ${IO_TESTS2}
    --compare-image ${EPSILON_9}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
@@ -397,6 +403,7 @@ ADD_TEST(ioTvStreamingWithIFWriterBSQWithStreaming ${IO_TESTS2}
          0 # StreamingImageFileWriter
          10 # NumberOfStreamDivisions
          )
+SET_TESTS_PROPERTIES(ioTvStreamingWithIFWriterBSQWithStreaming PROPERTIES DEPENDS ioTvImageFileReaderPNG2BSQ)
 
 
 
@@ -466,6 +473,7 @@ ADD_TEST(ioTvImageFileReaderShortHDR2BSQ ${IO_TESTS3}
         otbShortRGBImageIOTest
         ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderShortHDR2BSQ PROPERTIES DEPENDS ioTvImageFileReaderShortRGB_BSQ2HDR)
 
 # --- Image I4
 ADD_TEST(ioTvImageFileReaderIntBSQ2HDR ${IO_TESTS3}
@@ -474,13 +482,14 @@ ADD_TEST(ioTvImageFileReaderIntBSQ2HDR ${IO_TESTS3}
         otbIntImageIOTest
         ${INPUTDATA}/poupees_I4.hd
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr )
+
 ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS3}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I4.hd
                                 ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd )
-
+SET_TESTS_PROPERTIES(ioTvImageFileReaderIntHDR2BSQ PROPERTIES DEPENDS ioTvImageFileReaderIntBSQ2HDR)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
