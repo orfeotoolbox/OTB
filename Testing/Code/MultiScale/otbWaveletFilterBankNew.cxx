@@ -27,8 +27,8 @@ int otbWaveletFilterBankNew(int argc, char * argv[])
   typedef otb::Image< PixelType, Dimension >  ImageType;
 
   /* Wavelet choice */
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
-  const otb::MotherWaveletOperatorEnum wvltID = otb::DB4;
+  //const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::DB4;
   typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension > WaveletOperator;
 
   typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::FORWARD >

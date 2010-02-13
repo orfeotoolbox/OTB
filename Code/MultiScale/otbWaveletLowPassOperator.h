@@ -34,7 +34,7 @@ namespace otb {
  * \sa WaveletOperatorBase
  * \sa WaveletGenerator
  */
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
             Wavelet::WaveletDirection TDirectionOfTransformation,
             class TPixel, unsigned int VDimension,
             class TAllocator = itk::NeighborhoodAllocator< TPixel > >

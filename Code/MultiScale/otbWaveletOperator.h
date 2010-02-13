@@ -23,7 +23,7 @@
 #include "itkExceptionObject.h"
 #include "itkNeighborhoodOperator.h"
 
-// This include is needed here to define MotherWaveletOperatorEnum...
+// This include is needed here to define Wavelet::Wavelet...
 #include "otbWaveletGenerator.h"
 
 #include "otbWaveletLowPassOperator.h"
@@ -46,7 +46,7 @@ namespace otb {
  * \sa WaveletLowPassOperator
  * \sa WaveletHighPassOperator
  */
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   Wavelet::WaveletDirection TDirectionOfTransformation,
   class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >

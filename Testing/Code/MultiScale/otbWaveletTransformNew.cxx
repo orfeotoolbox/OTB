@@ -28,7 +28,7 @@ int otbWaveletTransformNew(int argc, char * argv[])
   typedef otb::Image< PixelType, Dimension >  ImageType;
 
   /* Wavelet choice */
-  const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::SYMLET8;
 
   /* Forward Transformation */
   typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension > WaveletOperator;

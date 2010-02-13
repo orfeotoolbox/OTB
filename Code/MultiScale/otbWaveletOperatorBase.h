@@ -64,7 +64,7 @@ namespace Wavelet
  *
  * \ingroup Operators
  */
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletOperatorBase
@@ -78,7 +78,7 @@ public:
   itkTypeMacro(WaveletOperatorBase,NeighborhoodOperator);
 
   typedef typename Superclass::SizeType SizeType;
-  typedef MotherWaveletOperatorEnum MotherWaveletOperatorEnumType;
+  typedef Wavelet::Wavelet              MotherWaveletOperatorEnumType;
   itkStaticConstMacro( MotherWaveletOperator, MotherWaveletOperatorEnumType, TMotherWaveletOperator );
 
   /** Construction */

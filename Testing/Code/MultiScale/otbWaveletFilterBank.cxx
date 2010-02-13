@@ -44,8 +44,8 @@ int otbWaveletFilterBank( int argc, char * argv[] )
   reader->SetFileName( inputFileName );
 
   /* Wavelet choice */
-  //const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
-  const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
+  //const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::SYMLET8;
 
   /* Forward Transformation */
   typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension > WaveletOperator;

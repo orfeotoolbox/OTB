@@ -23,7 +23,7 @@
 int otbWaveletOperator(int argc, char * argv[])
 {
   const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
-  const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
 
   const int Dimension = 2;
   typedef double PixelType;
