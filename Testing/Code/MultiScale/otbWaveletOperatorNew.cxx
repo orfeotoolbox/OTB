@@ -22,7 +22,7 @@
 
 int otbWaveletOperatorNew(int argc, char * argv[])
 {
-  const otb::InverseOrForwardTransformationEnum directionID = otb::INVERSE;
+  const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::INVERSE;
   const otb::MotherWaveletOperatorEnum wvltID = otb::SPLINE_BIORTHOGONAL_4_4;
 
   const int Dimension = 2;

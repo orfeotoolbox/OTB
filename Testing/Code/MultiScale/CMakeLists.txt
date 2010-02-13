@@ -363,9 +363,6 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
 ADD_TEST(msTuWaveletOperatorNew ${MULTISCALE_TESTS4}
          otbWaveletOperatorNew )
 
-# Further tests ar skiped for the moment due to unexpected "Multiple Defined" errors...
-#IF(DESACTIVATED_FOR_NOW)
-
 ADD_TEST(msTuWaveletOperator ${MULTISCALE_TESTS4}
          otbWaveletOperator )
 
@@ -450,8 +447,19 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransform ${MULTISCALE_TESTS4}
           ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScale.tif
 )
 
-#ENDIF(DESACTIVATED_FOR_NOW)
+# ----- otbSubsampleImageFilter --------------------------------------
+ADD_TEST(msTuSubsampleImageFilterNew ${MULTISCALE_TESTS4}
+	otbSubsampleImageFilterNew)
 
+ADD_TEST(msTvSubsampleImageFilter ${MULTISCALE_TESTS4}
+	--compare-image ${NOTOL}
+		${TEMP}/msSubsampleImageFilterOversampled.tif
+		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+	otbSubsampleImageFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		${TEMP}/msSubsampleImageFilterOversampled.tif
+		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -506,6 +514,8 @@ otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx
 otbWaveletPacketInverseTransformNew.cxx
 otbWaveletPacketTransform.cxx
+otbSubsampleImageFilterNew.cxx
+otbSubsampleImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbMultiScaleTests1 "${BasicMultiScale_SRCS1}" "OTBMultiScale;OTBIO;OTBTesting")

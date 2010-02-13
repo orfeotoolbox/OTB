@@ -22,7 +22,7 @@
 
 int otbWaveletOperator(int argc, char * argv[])
 {
-  const otb::InverseOrForwardTransformationEnum directionID = otb::FORWARD;
+  const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
   const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
 
   const int Dimension = 2;

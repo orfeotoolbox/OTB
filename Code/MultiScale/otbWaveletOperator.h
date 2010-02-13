@@ -23,9 +23,6 @@
 #include "itkExceptionObject.h"
 #include "itkNeighborhoodOperator.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 // This include is needed here to define MotherWaveletOperatorEnum...
 #include "otbWaveletGenerator.h"
 
@@ -50,7 +47,7 @@ namespace otb {
  * \sa WaveletHighPassOperator
  */
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
-  InverseOrForwardTransformationEnum TDirectionOfTransformation,
+  Wavelet::WaveletDirection TDirectionOfTransformation,
   class TPixel, unsigned int VDimension,
   class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletOperator

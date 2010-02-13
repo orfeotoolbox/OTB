@@ -37,11 +37,11 @@ int otbWaveletPacketTransformNew(int argc, char * argv[])
   CostType::NumberOfAllowedDecompositions = 1;
   
   /* Forward Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension >
     WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::FORWARD >
     ForwardFilterBank;
-  typedef otb::WaveletPacketTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD, CostType >
+  typedef otb::WaveletPacketTransform< ImageType, ImageType, ForwardFilterBank, otb::Wavelet::FORWARD, CostType >
     FilterType;
   
   FilterType::Pointer filter = FilterType::New();

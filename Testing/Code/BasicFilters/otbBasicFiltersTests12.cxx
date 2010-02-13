@@ -27,12 +27,10 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbEdgeDetectorImageFilter);
-REGISTER_TEST(otbEdgeDetectorImageFilterNew);
-REGISTER_TEST(otbChangeLabelImageFilterNew);
-REGISTER_TEST(otbChangeLabelImageFilter);
-REGISTER_TEST(otbSubsampleImageFilterNew);
-REGISTER_TEST(otbSubsampleImageFilter);
-REGISTER_TEST(otbImageAndVectorImageOperationFilterNew);
- REGISTER_TEST(otbImageAndVectorImageOperationFilterTest);
+  REGISTER_TEST(otbEdgeDetectorImageFilter);
+  REGISTER_TEST(otbEdgeDetectorImageFilterNew);
+  REGISTER_TEST(otbChangeLabelImageFilterNew);
+  REGISTER_TEST(otbChangeLabelImageFilter);
+  REGISTER_TEST(otbImageAndVectorImageOperationFilterNew);
+  REGISTER_TEST(otbImageAndVectorImageOperationFilterTest);
 }

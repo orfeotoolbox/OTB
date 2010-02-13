@@ -26,7 +26,13 @@
 // This include is needed here to define MotherWaveletOperatorEnum...
 #include "otbWaveletGenerator.h"
 
-namespace otb {
+namespace otb
+{
+
+namespace Wavelet
+{
+  enum WaveletDirection{FORWARD, INVERSE};
+}
 
 /**
  * \class WaveletOperatorBase

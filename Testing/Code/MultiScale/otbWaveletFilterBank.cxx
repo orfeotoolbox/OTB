@@ -48,16 +48,16 @@ int otbWaveletFilterBank( int argc, char * argv[] )
   const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
   /* Forward Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension > WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension > WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::FORWARD >
     FilterType;
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput( reader->GetOutput() );
   filter->SetSubsampleImageFactor( decimFactor );
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > InvWaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, InvWaveletOperator, otb::INVERSE >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::INVERSE, PixelType, Dimension > InvWaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InvWaveletOperator, otb::Wavelet::INVERSE >
     InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
   for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); i++ )

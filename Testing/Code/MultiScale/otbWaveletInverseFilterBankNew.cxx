@@ -31,8 +31,8 @@ int otbWaveletInverseFilterBankNew(int argc, char * argv[])
   const otb::MotherWaveletOperatorEnum wvltID = otb::SYMLET8;
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension > WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::INVERSE >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::INVERSE, PixelType, Dimension > WaveletOperator;
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::INVERSE >
     FilterType;
   FilterType::Pointer filter = FilterType::New();
 

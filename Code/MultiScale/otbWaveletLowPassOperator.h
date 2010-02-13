@@ -20,9 +20,6 @@
 #ifndef __otbWaveletLowPassOperator_h
 #define __otbWaveletLowPassOperator_h
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 #include "otbWaveletOperatorBase.h"
 
 namespace otb {
@@ -38,7 +35,7 @@ namespace otb {
  * \sa WaveletGenerator
  */
 template < MotherWaveletOperatorEnum TMotherWaveletOperator,
-            InverseOrForwardTransformationEnum TDirectionOfTransformation,
+            Wavelet::WaveletDirection TDirectionOfTransformation,
             class TPixel, unsigned int VDimension,
             class TAllocator = itk::NeighborhoodAllocator< TPixel > >
 class ITK_EXPORT WaveletLowPassOperator
@@ -54,7 +51,7 @@ public:
   itkTypeMacro(WaveletLowPassOperator, WaveletOperatorBase);
 
   typedef typename Superclass::SizeType SizeType;
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
 protected:
@@ -80,10 +77,10 @@ protected:
     CoefficientVector coeff;
     switch ( DirectionOfTransformation )
     {
-      case FORWARD:
+      case Wavelet::FORWARD:
         this->m_WaveletGenerator->GetLowPassCoefficientVector( coeff );
         break;
-      case INVERSE:
+      case Wavelet::INVERSE:
         this->m_WaveletGenerator->GetHighPassCoefficientVector( coeff );
         Superclass::GenerateInverseLowPassFilterFromHighPassFilter( coeff );
         break;
