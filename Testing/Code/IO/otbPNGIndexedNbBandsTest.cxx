@@ -53,6 +53,7 @@ int otbPNGIndexedNbBandsTest(int argc, char* argv[])
   }
   else
   {
+        std::cout << "Read " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << " but the real number of bands is " << nbBands <<std::endl;
          return EXIT_FAILURE;
   } 
 }
