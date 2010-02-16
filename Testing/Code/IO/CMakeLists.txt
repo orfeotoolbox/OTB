@@ -451,12 +451,11 @@ ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS3}
 
 # FIXME Desactivated until http://bugs.orfeo-toolbox.org/view.php?id=103
 # is solved
-# ADD_TEST(ioTvCheckReadPNGIndexee ${IO_TESTS3}
-#   --compare-image ${EPSILON_9}        ${INPUTDATA}/sbuv_indexee.png
-#                                 ${TEMP}/ioImageFileReaderRGB_PNGIndexee2TIF.tif
-#         otbImageFileReaderRGBTest
-#         ${INPUTDATA}/sbuv_indexee.png
-#         ${TEMP}/ioImageFileReaderRGB_PNGIndexee2TIF.tif )
+#add a new test
+ ADD_TEST(ioTvCheckNbBandsPNGIndexee ${IO_TESTS3}
+         otbPNGIndexedNbBandsTest
+         ${INPUTDATA}/sbuv_indexee.png
+         4 )
 
 
 # --- Image I2
@@ -2290,6 +2289,7 @@ otbImageFileReaderTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbIntImageIOTest.cxx
 otbShortRGBImageIOTest.cxx
+otbPNGIndexedNbBandsTest.cxx
 )
 
 #SET(BasicIO_SRCS4
