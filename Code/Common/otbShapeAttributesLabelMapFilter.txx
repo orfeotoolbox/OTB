@@ -445,6 +445,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
   // Flusser moments
   PolygonFunctorType polygonFunctor;
   typename PolygonType::Pointer polygon = polygonFunctor(lo);
+  lo->SetPolygon(polygon);
   
   typename FlusserPathFunctionType::Pointer flusser = FlusserPathFunctionType::New();
   flusser->SetInputPath(polygon);
