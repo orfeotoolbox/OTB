@@ -20,6 +20,7 @@
 
 #include "itkLabelObject.h"
 #include "itkLabelMap.h"
+#include "otbPolygon.h"
 #include <map>
 
 namespace otb
@@ -129,6 +130,10 @@ public:
   typedef typename AttributesMapType::iterator       AttributesMapIteratorType;
   typedef typename AttributesMapType::const_iterator AttributesMapConstIteratorType;
 
+  // The polygon corresponding to the label object
+  typedef Polygon<double>                            PolygonType;
+  typedef typename PolygonType::Pointer              PolygonPointerType;
+
   /**
    * Set an attribute value.
    * If the key name already exists in the map, the value is overwritten.
@@ -188,9 +193,27 @@ public:
       m_Attributes = src->m_Attributes;
    }
 
+  /** Return the polygon (const version) */
+  const PolygonType * GetPolygon() const
+  {
+    return m_Polygon;
+  }
+
+  /** Return the polygon (non const version) */
+  PolygonType * GetPolygon()
+  {
+    return m_Polygon;
+  }
+
+  /** Set the polygon */
+  void SetPolygon(PolygonType* p)
+  {
+    m_Polygon = p;
+  }
+
 protected:
   /** Constructor */
-  AttributesMapLabelObject() : m_Attributes()
+  AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New())
     {}
   /** Destructor */
   virtual ~AttributesMapLabelObject() {}
@@ -212,6 +235,10 @@ private:
 
   /** The attributes map */
   AttributesMapType m_Attributes;
+
+  /** The polygon corresponding to the label object. Caution, this
+   *  will be empty by default */
+  PolygonPointerType m_Polygon;
 };
 
 } // end namespace otb
