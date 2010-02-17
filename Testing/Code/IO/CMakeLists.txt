@@ -149,6 +149,7 @@ ADD_TEST(ioTvImageFileReaderLUM2LUM ${IO_TESTS1}
         otbImageFileReaderTest
         ${TEMP}/ioImageFileReaderPNG2LUM.lum
         ${TEMP}/ioImageFileReaderLUM2LUM.lum )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderLUM2LUM PROPERTIES DEPENDS ioTvImageFileReaderPNG2LUM)
 
 ADD_TEST(ioTvImageFileWriterLUM2HDR ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/cthead1.png
@@ -156,6 +157,7 @@ ADD_TEST(ioTvImageFileWriterLUM2HDR ${IO_TESTS1}
         otbImageFileReaderTest
         ${TEMP}/ioImageFileReaderLUM2LUM.lum
         ${TEMP}/ioImageFileReaderLUM2HDR.hdr )
+SET_TESTS_PROPERTIES(ioTvImageFileWriterLUM2HDR PROPERTIES DEPENDS ioTvImageFileReaderLUM2LUM)
 
 # --- Image I2
 ADD_TEST(ioTvImageFileReaderShortLUM2HDR ${IO_TESTS1}
@@ -171,6 +173,7 @@ ADD_TEST(ioTvImageFileReaderShortHDR2LUM ${IO_TESTS1}
         otbShortImageIOTest
         ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderI2_HDR2LUM.lum )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderShortHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderShortLUM2HDR)
 
 ADD_TEST(ioTvImageFileReaderShortLUM2LUM ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
@@ -189,17 +192,17 @@ ADD_TEST(ioTuMWImageIOCanReadMW ${IO_TESTS1} otbMWImageIOTestCanRead
 
 ADD_TEST(ioTvImageFileReaderMW2TIFIMG ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                                ${TEMP}/ioImageFileReaderMW2TIF.tif
+                                ${TEMP}/ioImageFileReaderMW2TIFIMG.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-        ${TEMP}/ioImageFileReaderMW2TIF.tif )
+        ${TEMP}/ioImageFileReaderMW2TIFIMG.tif )
 
 ADD_TEST(ioTvImageFileReaderMW2TIFMW ${IO_TESTS1}
   --compare-image ${EPSILON_9}        ${BASELINE}/QB_Toulouse_Ortho_PAN.mw
-                                ${TEMP}/ioImageFileReaderMW2TIF.tif
+                                ${TEMP}/ioImageFileReaderMW2TIFMW.tif
         otbImageFileReaderTestFloat
         ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-        ${TEMP}/ioImageFileReaderMW2TIF.tif )
+        ${TEMP}/ioImageFileReaderMW2TIFMW.tif )
 
 
 # CanWrite()
@@ -243,12 +246,14 @@ ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS2}
         otbFloatImageIOTest
         ${INPUTDATA}/poupees_R4.lum
         ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr )
+        
 ADD_TEST(ioTvImageFileReaderFloatHDR2LUM ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R4.lum
                                 ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum
         otbFloatImageIOTest
         ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderFloatHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderFloatLUM2HDR)
 
 # --- Image DOUBLE
 ADD_TEST(ioTvImageFileReaderDoubleLUM2HDR ${IO_TESTS2}
@@ -257,13 +262,14 @@ ADD_TEST(ioTvImageFileReaderDoubleLUM2HDR ${IO_TESTS2}
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.lum
         ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr )
+        
 ADD_TEST(ioTvImageFileReaderDoubleHDR2LUM ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.lum
                                 ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum
         otbDoubleImageIOTest
         ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum )
-
+SET_TESTS_PROPERTIES(ioTvImageFileReaderDoubleHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderDoubleLUM2HDR)
 
 
 
@@ -344,13 +350,14 @@ ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
         otbDoubleImageIOTest
         ${INPUTDATA}/poupees_R8.hd
         ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
+        
 ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS2}
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_R8.hd
                                 ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
         otbDoubleImageIOTest
         ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd )
-
+SET_TESTS_PROPERTIES(ioTvImageFileReaderDoubleHDR2BSQ PROPERTIES DEPENDS ioTvImageFileReaderDoubleBSQ2HDR)
 
 # ---  STREAMING FILTER : BSQ  ---
 ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS2}
@@ -715,6 +722,7 @@ ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS7}
         otbImageFileReaderTest
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderENVI2PNG PROPERTIES DEPENDS ioTvImageFileWriterPNG2BSQ)
 
 ADD_TEST(ioTvImageFileReaderPDS2TIFF ${IO_TESTS7}
   --compare-image ${EPSILON_9}   ${INPUTDATA}/pdsImage.img
@@ -742,6 +750,7 @@ ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS7}
         otbImageFileReaderRGBTest
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ.hdr
         ${TEMP}/ioImageFileReaderRGB_PNG2BSQ_2.png )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderRGB_BSQ2PNG_2 PROPERTIES DEPENDS ioTvImageFileWriterRGB_PNG2BSQ)
 
 # WRITER GDAL
 ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS7}

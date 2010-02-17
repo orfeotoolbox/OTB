@@ -118,6 +118,7 @@ ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
 	 0.9
 	 10
 )
+SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentBright PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
 ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
    --compare-image ${NOTOL}
@@ -132,6 +133,7 @@ ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
 	 0.9
 	 10
 )
+SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentDark PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
