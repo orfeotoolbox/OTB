@@ -262,7 +262,7 @@ ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS2}
          ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
          ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
-
+SET_TESTS_PROPERTIES(coTvMultiChannelROI_3c_BSQ PROPERTIES DEPENDS coTvMultiChannelROI_5c_BSQ)
 
 ADD_TEST(coTvTestMultiExtractMultiUpdate ${COMMON_TESTS2}
 --compare-image  ${NOTOL}

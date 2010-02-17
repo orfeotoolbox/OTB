@@ -1739,7 +1739,7 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
         otbVectorDataFileWriter
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp
 	)
-
+SET_TESTS_PROPERTIES(ioTvVectorDataFileWriterTwice PROPERTIES DEPENDS ioTvVectorDataFileWriter)
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
         --compare-ogr  ${EPSILON_9}
