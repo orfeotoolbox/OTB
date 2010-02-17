@@ -46,7 +46,6 @@ DEMHandler
   ossimFilename ossimDEMDir;
   ossimDEMDir=ossimFilename(DEMDirectory);
 
-  ossimDirectory od(DEMDirectory);
   if (!m_ElevManager->loadElevationPath(ossimDEMDir))
   {
     m_Mutex.Unlock();
