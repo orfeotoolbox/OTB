@@ -444,6 +444,9 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
 
   // Flusser moments
   PolygonFunctorType polygonFunctor;
+  polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
+  polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
+  polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
   typename PolygonType::Pointer polygon = polygonFunctor(lo);
   lo->SetPolygon(polygon);
   
