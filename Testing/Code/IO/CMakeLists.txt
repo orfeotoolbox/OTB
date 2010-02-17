@@ -1288,19 +1288,19 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvImageMetadataWriterHFA.img
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvImageMetadataWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/temp.tif
+		      ${TEMP}/ioTvImageMetadataWriterTIF.tif
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/temp.tif
+	${TEMP}/ioTvImageMetadataWriterTIF.tif
         )
 
 
@@ -1328,19 +1328,19 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/temp.tif
+		      ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/temp.tif
+	${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
@@ -1366,10 +1366,10 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvPipelineMetadataHandling.img
         otbPipelineMetadataHandlingTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvPipelineMetadataHandling.img
         )
 
 # Commented out, since this test fails beceause of an ITK bug (added to our bugtracker for tracking)
