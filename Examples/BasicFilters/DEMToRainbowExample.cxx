@@ -29,6 +29,16 @@
 //  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 //  Software Guide : EndCommandLineArgs
 
+//  Software Guide : BeginCommandLineArgs
+//  OUTPUTS: {DEMToHotImageGenerator.png}
+//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm hot
+//  Software Guide : EndCommandLineArgs
+
+//  Software Guide : BeginCommandLineArgs
+//  OUTPUTS: {DEMToJetImageGenerator.png}
+//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm jet
+//  Software Guide : EndCommandLineArgs
+
 // Software Guide : BeginLatex
 //
 // In some situation, it is desirable to represent a gray level image in color for easier
@@ -49,11 +59,9 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "itkScalarToRGBColormapImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 #include "otbDEMToImageGenerator.h"
-
-
 
 
 int main(int argc, char * argv[])
@@ -61,18 +69,18 @@ int main(int argc, char * argv[])
 
   if (argc<9)
   {
-    std::cout << argv[0] <<" <output_filename> <Longitude Output Orign point>";
+    std::cout << argv[0] <<" <output_filename> <Longitude Output Origin point>";
     std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
     std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
     return EXIT_FAILURE;
   }
 
 
-  typedef double PixelType;
-  typedef unsigned char UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType> RGBPixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
-  typedef otb::Image<RGBPixelType, 2> RGBImageType;
+  typedef double                                      PixelType;
+  typedef unsigned char                               UCharPixelType;
+  typedef itk::RGBPixel<UCharPixelType>               RGBPixelType;
+  typedef otb::Image<PixelType, 2>                    ImageType;
+  typedef otb::Image<RGBPixelType, 2>                 RGBImageType;
   typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
@@ -110,20 +118,50 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
   //
-  // As in the previous example the \doxygen{itk}{UnaryFunctorImageFilter} is
+  // As in the previous example the \doxygen{itk}{ScalarToRGBColormapImageFilter} is
   // the filter in charge of calling the functor we specify to do the work for
   // each pixel. Here it is the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType> ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximum(4000);
-  colormapper->GetFunctor().SetMinimum(0);
 
+  typedef itk::ScalarToRGBColormapImageFilter<ImageType,RGBImageType> ColorMapFilterType;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  colormapper->UseInputImageExtremaForScalingOff();
+
+  if (argc == 9)
+  {
+    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+    ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+    colormap->SetMinimumInputValue(0);
+    colormap->SetMaximumInputValue(4000);
+    colormapper->SetColormap(colormap);
+  }
+
+  // Software Guide : EndCodeSnippet
+
+  else
+  {
+    if (argv[8] == "hot")
+    {
+      typedef itk::Functor::HotColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+      colormap->SetMinimumInputValue(0);
+      colormap->SetMaximumInputValue(4000);
+      colormapper->SetColormap(colormap);
+    }
+    else
+    {
+      typedef itk::Functor::JetColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+      colormap->SetMinimumInputValue(0);
+      colormap->SetMaximumInputValue(4000);
+      colormapper->SetColormap(colormap);
+    }
+  }
+
+  // Software Guide : BeginCodeSnippet
   colormapper->SetInput(demToImage->GetOutput());
   // Software Guide : EndCodeSnippet
 
@@ -155,8 +193,10 @@ int main(int argc, char * argv[])
   // \center
   // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
   // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToJetImageGenerator.eps}
   // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
-  // data (left) and the same area in color representation.}
+  // data (top-left) and the same area in color representation.}
   // \label{fig:RAINBOW_FILTER}
   // \end{figure}
   //  Software Guide : EndLatex
