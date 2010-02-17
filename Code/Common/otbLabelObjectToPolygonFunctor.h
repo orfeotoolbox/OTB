@@ -23,6 +23,10 @@
 //TODO change this include  have to define from what inherate this class
 #include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
 
+#include "itkVector.h"
+#include "itkPoint.h"
+#include "itkIndex.h"
+
 namespace otb
 {
 
@@ -61,12 +65,65 @@ public:
   typedef typename LineType::IndexType                IndexType;
   typedef TPolygon                                    PolygonType;
   typedef typename PolygonType::Pointer               PolygonPointerType;
+  typedef typename PolygonType::VertexType            VertexType;
+  typedef itk::Point<double,2>                        PointType;
+  typedef itk::Vector<double,2>                       SpacingType;
+  typedef itk::Index<2>                               RegionIndexType;
  
   /**
    * \param labelObject the label object to vectorize
    * \return The vectorized label object as a polygon.
    */
   inline PolygonType * operator()(const LabelObjectType * labelObject);
+  
+  /** Set the start index of the underlying image */
+  void SetStartIndex(const RegionIndexType & index)
+  {
+    m_StartIndex = index;
+  }
+  /** Get the start index */
+  const RegionIndexType & GetStartIndex() const
+  {
+    return m_StartIndex;
+  }
+  /** Set the origin of the underlying image */
+  void SetOrigin(const PointType & origin)
+  {
+    m_Origin = origin;
+  }
+  /** Get the origin */
+  const PointType & GetOrigin() const
+  {
+    return m_Origin;
+  }
+  /** Set the spacing of the underlying image */
+  void SetSpacing(const SpacingType & spacing)
+  {
+    m_Spacing = spacing;
+  }
+  /** Get the spacing */
+  const SpacingType & GetSpacing() const
+  {
+    return m_Spacing;
+  }
+
+  /** Constructor */
+  LabelObjectToPolygonFunctor() : m_Polygon(NULL),
+				  m_CurrentState(UP_LEFT),
+				  m_PositionFlag(LEFT_END),
+				  m_StartingPoint(),
+				  m_CurrentPoint(),
+				  m_CurrentRun(),
+				  m_CurrentLine(0),
+				  m_Solution(),
+				  m_LineOffset(0),
+				  m_StartIndex(),
+				  m_Origin(),
+				  m_Spacing(1.)
+  {}
+
+  /** Destructor */
+  virtual ~LabelObjectToPolygonFunctor(){}
   
 private:
   /// Internal structures
@@ -109,6 +166,9 @@ private:
   /// Walk right to update the finite states machine.
   inline void WalkRight(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state);
  
+  // Apply origin and spacing
+  VertexType IndexToPoint(const VertexType& index) const;
+
   PolygonPointerType m_Polygon;
 
   // Internal structure to store runs
@@ -136,6 +196,13 @@ private:
 
   /// The line offset from start of the region
   unsigned int          m_LineOffset;
+
+  // The following will be used for coordinate transform
+  RegionIndexType       m_StartIndex;
+  PointType             m_Origin;
+  SpacingType           m_Spacing;
+
+  
 
 }; // end class LabelObjectToPolygonFunctor
 

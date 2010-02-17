@@ -511,7 +511,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint[1]=line+m_LineOffset;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
       }
 
     // if the end point is not on line n, add an intermediate point
@@ -520,7 +520,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint[0] = endPoint[0]+1;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
       }
 
     if(m_CurrentPoint != endPoint)
@@ -528,7 +528,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint = endPoint;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
 
       }
   }
@@ -572,7 +572,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint[1]=line+m_LineOffset;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
       }
 
     // if the end point is not on line n, add an intermediate point
@@ -581,7 +581,7 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint[0] = endPoint[0]-1;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
       }
 
     if(m_CurrentPoint!=endPoint)
@@ -589,9 +589,26 @@ LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
       m_CurrentPoint = endPoint;
       newPoint = m_CurrentPoint;
       newPoint+=offset;
-      polygon->AddVertex(newPoint);
+      polygon->AddVertex(IndexToPoint(newPoint));
       }
   }
+
+
+// Apply origin and spacing
+template<class TLabelObject, class TPolygon>
+typename LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
+::VertexType 
+LabelObjectToPolygonFunctor<TLabelObject,TPolygon>
+::IndexToPoint(const VertexType& index) const
+{
+  VertexType resp;
+
+  // Apply origin and spacing
+  resp[0] = (index[0]-m_StartIndex[0])*m_Spacing[0]+m_Origin[0];
+  resp[1] = (index[1]-m_StartIndex[1])*m_Spacing[1]+m_Origin[1];
+
+  return resp;
+}
 
 } // end namespace Functor
 
