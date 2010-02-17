@@ -100,6 +100,7 @@ public:
   /** Standard class typedefs */
   typedef AttributesMapLabelObject                    Self;
   typedef itk::LabelObject< TLabel, VImageDimension > Superclass;
+  typedef typename Superclass::LabelObjectType        LabelObjectType;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
   typedef itk::WeakPointer <const Self>               ConstWeakPointer;
@@ -187,11 +188,18 @@ public:
   /**
   * This method is overloaded to add the copy of the attributes map.
   */
-  virtual void CopyAttributesFrom( const Self * src)
+  virtual void CopyAttributesFrom( const LabelObjectType * lo)
     {
-    Superclass::CopyAttributesFrom( src );
+    Superclass::CopyAttributesFrom( lo );
+
+    // copy the data of the current type if possible
+    const Self * src = dynamic_cast<const Self *>( lo );
+    if( src == NULL )
+      {
+      return;
+      }
       m_Attributes = src->m_Attributes;
-   }
+    }
 
   /** Return the polygon (const version) */
   const PolygonType * GetPolygon() const
