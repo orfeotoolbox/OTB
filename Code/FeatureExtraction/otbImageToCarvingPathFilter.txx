@@ -39,6 +39,7 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   m_Direction = 0;
   m_EnergyPerPix = 0.0;
 }
+
 /**
  * Main computation method.
  */
@@ -168,8 +169,6 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
     }
     it.NextSlice();
   }
-
-
 
 
   /** Follow the minima bottom-up or right-left
