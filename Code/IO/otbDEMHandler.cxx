@@ -23,6 +23,7 @@
 #include "base/ossimFilename.h"
 #include "base/ossimDirectory.h"
 #include "base/ossimGeoidEgm96.h"
+#include "base/ossimRefPtr.h" 
 
 namespace otb
 {
@@ -62,7 +63,7 @@ DEMHandler
   {
     otbMsgDevMacro( << "Opening geoid: " << geoidFile);
     ossimFilename geoid(geoidFile);
-    ossimGeoid* geoidPtr = new ossimGeoidEgm96(geoid);
+    ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
     {
        m_Mutex.Lock();
@@ -71,7 +72,7 @@ DEMHandler
     }
     else
     {
-      delete geoidPtr;
+      geoidPtr.release();
     }
   }
 }

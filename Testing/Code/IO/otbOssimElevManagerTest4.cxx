@@ -53,7 +53,7 @@ int otbOssimElevManagerTest4(int argc,char* argv[])
   
   ossimElevManager * elevManager = ossimElevManager::instance();
 
-  elevManager->openDirectory(srtmDir);
+  elevManager->loadElevationPath(srtmDir);
 
   for (int j=0; j<size[1]; ++j)
   {

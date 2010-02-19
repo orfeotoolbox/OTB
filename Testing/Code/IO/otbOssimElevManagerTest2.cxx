@@ -52,7 +52,7 @@ int otbOssimElevManagerTest2(int argc,char* argv[])
 
   ossimElevManager * elevManager = ossimElevManager::instance();
 
-  elevManager->openDirectory(srtmDir);
+  elevManager->loadElevationPath(srtmDir);
 
   std::ofstream file;
   file.open(outfname);
