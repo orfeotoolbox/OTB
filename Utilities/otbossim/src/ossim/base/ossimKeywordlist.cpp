@@ -107,7 +107,7 @@ void ossimKeywordlist::add(const ossimKeywordlist& kwl,
    // Check for null prefix.
    ossimString tmpPrefix;
    if (prefix) tmpPrefix = prefix;
-
+   
    regExp.compile(("^("+tmpPrefix+")").c_str());
 
    while(iter != kwl.theMap.end())
@@ -869,7 +869,7 @@ bool ossimKeywordlist::parseStream(std::istream& is,
    {
       return false;
    }
-
+   
    ossimString line;
 
    while(!is.eof() && is.good())
@@ -937,7 +937,7 @@ bool ossimKeywordlist::parseStream(std::istream& is,
                   theMap.insert(std::make_pair(key, value));
                }
             }
-
+            
          } // End of:  if(pos != line.npos)
 
       } // End of:  if(line != "")
@@ -1210,7 +1210,7 @@ void ossimKeywordlist::downcaseKeywords()
    {
       tempMap.insert(make_pair(ossimString::downcase(iter->first),
                                iter->second));
-
+                               
       ++iter;
    }
    theMap = tempMap;
@@ -1225,7 +1225,7 @@ void ossimKeywordlist::upcaseKeywords()
    {
       tempMap.insert(make_pair(ossimString::upcase(iter->first),
                                iter->second));
-
+                               
       ++iter;
    }
    theMap = tempMap;
