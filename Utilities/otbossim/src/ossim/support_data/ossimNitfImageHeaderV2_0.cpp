@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_0.cpp 15611 2009-10-08 18:50:33Z dburken $
+// $Id: ossimNitfImageHeaderV2_0.cpp 16314 2010-01-10 18:25:28Z dburken $
 
 
 #include <iomanip>
@@ -170,10 +170,16 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
    compressionType = compressionType.trim().upcase();
    ossimEndian endian;
    ossim_uint64 locationBefore = in.tellg();
-    if((compressionType == "NM")||
-       (compressionType == "M0")||
-       (compressionType == "M3")||
-       (compressionType == "M4"))
+
+   //---
+   // Note: "C4" added to skip over the image data mask subheader.
+   // See MIL-STD-2500A paragraph 5.5.1.5
+   //---
+   if((compressionType == "NM")||
+      (compressionType == "M0")||
+      (compressionType == "M3")||
+      (compressionType == "M4")||
+      (compressionType == "C4"))
    {
       in.read((char*)(&theBlockedImageDataOffset), 4);
       in.read((char*)(&theBlockMaskRecordLength),2);
@@ -213,7 +219,7 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
          ossim_uint32 totalNumber = 0;
          if((theImageMode[0] == 'S'))
          {
-             totalNumber = getNumberOfBlocksPerRow()*getNumberOfBlocksPerCol()*getNumberOfBands();
+            totalNumber = getNumberOfBlocksPerRow()*getNumberOfBlocksPerCol()*getNumberOfBands();
          }
          else
          {
@@ -261,31 +267,34 @@ void ossimNitfImageHeaderV2_0::parseStream(std::istream &in)
          delete [] blockRead;
       }
    }
-    theCompressionHeader = 0;
-    if((getCompressionCode() == "C4")||
-       (getCompressionCode() == "M4"))
-    {
-       ossimRefPtr<ossimNitfVqCompressionHeader> compressionHeader = new ossimNitfVqCompressionHeader;
-       compressionHeader->parseStream(in);
-       // do a check to see if the compression header is good
-       //
-       if(compressionHeader->getCompressionAlgorithmId()!= 1)
-       {
-          compressionHeader = 0;
-       }
-       theCompressionHeader = compressionHeader.get();
-    }
-    ossim_uint64 delta = (ossim_uint64)in.tellg() - locationBefore;
-    if(delta < theBlockedImageDataOffset)
-    {
-       in.ignore(theBlockedImageDataOffset-delta);
-    }
-    
-    //
-    // The stream should now be at the start of the data location so capture
-    // it.
-    //
-    theDataLocation = in.tellg();
+
+   theCompressionHeader = 0;
+   if((getCompressionCode() == "C4")||
+      (getCompressionCode() == "M4"))
+   {
+      ossimRefPtr<ossimNitfVqCompressionHeader> compressionHeader = new ossimNitfVqCompressionHeader;
+      compressionHeader->parseStream(in);
+      // do a check to see if the compression header is good
+      //
+      
+      if( compressionHeader->getCompressionAlgorithmId()!= 1 )
+      {
+         compressionHeader = 0;
+      }
+      theCompressionHeader = compressionHeader.get();
+   }
+
+   ossim_uint64 delta = (ossim_uint64)in.tellg() - locationBefore;
+   if(delta < theBlockedImageDataOffset)
+   {
+      in.ignore(theBlockedImageDataOffset-delta);
+   }
+   
+   //
+   // The stream should now be at the start of the data location so capture
+   // it.
+   //
+   theDataLocation = in.tellg();
 }
 
 void ossimNitfImageHeaderV2_0::writeStream(std::ostream &out)
@@ -511,7 +520,7 @@ std::ostream& ossimNitfImageHeaderV2_0::print(std::ostream& out,
 
    if(theCompressionHeader.valid())
    {
-      theCompressionHeader->print(out);
+      theCompressionHeader->print(out, prefix);
    }
 
    out << std::endl;

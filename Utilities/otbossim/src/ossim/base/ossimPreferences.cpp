@@ -34,6 +34,12 @@ ossimPreferences* ossimPreferences::theInstance = NULL;
 
 ossimPreferences::ossimPreferences()
 {
+   /*!
+    * If $(env_var_name) is found in the preferences file, 
+    * expand it in place.
+    */
+   theKWL.setExpandEnvVarsFlag( true );
+
    loadPreferences();
 }
 

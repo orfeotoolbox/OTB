@@ -10,7 +10,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimAdrgTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 
 #ifndef ossimAdrgTileSource_HEADER
 #define ossimAdrgTileSource_HEADER
@@ -46,7 +46,6 @@ public:
 
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString getClassName()const;
 
    /**
     *  @return Returns true on success, false on error.

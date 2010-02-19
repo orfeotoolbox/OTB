@@ -513,13 +513,13 @@ void UPS (char* mgrs,
    *
    *    UPSSET
    */
-  double feltr;       /* False easting for 2nd letter                      */
-  double fnltr;       /* False northing for 3rd letter                     */
-  double xltr;        /* Easting used to derive 2nd letter of MGRS         */
-  double yltr;        /* Northing used to derive 3rd letter of MGRS        */
-  long ltrlow;        /* 2nd letter range - low number                     */
-  long ltrhi;         /* 2nd letter range - high number                    */
-  long ltrhy;         /* 3rd letter range - high number (UPS)              */
+  double feltr=0.0;       /* False easting for 2nd letter                      */
+  double fnltr=0.0;       /* False northing for 3rd letter                     */
+  double xltr=0.0;        /* Easting used to derive 2nd letter of MGRS         */
+  double yltr=0.0;        /* Northing used to derive 3rd letter of MGRS        */
+  long ltrlow=0;        /* 2nd letter range - low number                     */
+  long ltrhi=0;         /* 2nd letter range - high number                    */
+  long ltrhy=0;         /* 3rd letter range - high number (UPS)              */
   if (iarea == UPS_NORTH)
   {
     ltrnum[0] = LETTER_Y;
@@ -680,25 +680,25 @@ void GRID_UPS (long   *Letters,
                double *Northing,
                long   *Error)
 { /* BEGIN GRID_UPS */
-  double feltr;               /* False easting for 2nd letter               */
-  double fnltr;               /* False northing for 3rd letter              */
-  double sleast;              /* Longitude east limit - UTM                 */
-  double slwest;              /* Longitude west limit -UTM                  */
-  double spnor;               /* North latitude limits based on 1st letter  */
-  double spsou;               /* South latitude limits based on 1st letter  */
-  double x;                   /* easting                                    */
-  double xltr;                /* easting for 100,000 meter grid square      */
-  double xnum;                /* easting part of MGRS                       */
-  double y;                   /* northing                                   */
-  double yltr;                /* northing for 100,000 meter grid square     */
-  double ynum;                /* northing part of MGRS                      */
-  long izone;                 /* Zone number                                */
-  long ltrhi;                 /* 2nd letter range - high number             */
-  long ltrhy;                 /* 3rd letter range - high number (UPS)       */
-  long ltrlow;                /* 2nd letter range - low number              */
-  long sign;
-  double sphi;
-  double slam;
+  double feltr=0.0;               /* False easting for 2nd letter               */
+  double fnltr=0.0;               /* False northing for 3rd letter              */
+  double sleast=0.0;              /* Longitude east limit - UTM                 */
+  double slwest=0.0;              /* Longitude west limit -UTM                  */
+  double spnor=0.0;               /* North latitude limits based on 1st letter  */
+  double spsou=0.0;               /* South latitude limits based on 1st letter  */
+  double x=0.0;                   /* easting                                    */
+  double xltr=0.0;                /* easting for 100,000 meter grid square      */
+  double xnum=0.0;                /* easting part of MGRS                       */
+  double y=0.0;                   /* northing                                   */
+  double yltr=0.0;                /* northing for 100,000 meter grid square     */
+  double ynum=0.0;                /* northing part of MGRS                      */
+  long izone=0;                 /* Zone number                                */
+  long ltrhi=0;                 /* 2nd letter range - high number             */
+  long ltrhy=0;                 /* 3rd letter range - high number (UPS)       */
+  long ltrlow=0;                /* 2nd letter range - low number              */
+  long sign=0;
+  double sphi=0.0;
+  double slam=0.0;
   if ((Letters[0] == LETTER_Y) || (Letters[0] == LETTER_Z))
   {
     spsou = MAX_UTM_LAT;

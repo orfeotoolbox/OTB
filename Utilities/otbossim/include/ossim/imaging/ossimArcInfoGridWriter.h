@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimArcInfoGridWriter.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimArcInfoGridWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
 #ifndef ossimArcInfoGridWriter_HEADER
 #define ossimArcInfoGridWriter_HEADER
 
@@ -42,7 +42,17 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
-   
+
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
+
 private:
    virtual bool writeFile();
 

@@ -13,7 +13,7 @@
 //              and image handlers (image readers)
 //
 //*************************************************************************
-// $Id: ossimImageSourceFactory.cpp 13324 2008-07-28 16:00:58Z gpotts $
+// $Id: ossimImageSourceFactory.cpp 15971 2009-11-20 02:42:07Z gpotts $
 
 #include <ossim/imaging/ossimImageSourceFactory.h>
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -22,6 +22,7 @@
 #include <ossim/imaging/ossimCacheTileSource.h>
 #include <ossim/imaging/ossimFeatherMosaic.h>
 #include <ossim/imaging/ossimHistogramRemapper.h>
+#include <ossim/imaging/ossimNullPixelFlip.h>
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimClosestToCenterCombiner.h>
 #include <ossim/imaging/ossimBlendMosaic.h>
@@ -133,6 +134,10 @@ ossimObject* ossimImageSourceFactory::createObject(const ossimString& name)const
       // "ossimNativeBandSelectorTileSource"
       //---
       return new ossimBandSelector;
+   }
+   else if(name ==  STATIC_TYPE_NAME(ossimNullPixelFlip))
+   {
+      return new ossimNullPixelFlip;
    }
    else if(name == STATIC_TYPE_NAME(ossimImageRenderer))
    {
@@ -472,6 +477,7 @@ void ossimImageSourceFactory::getTypeNameList(std::vector<ossimString>& typeList
    typeList.push_back(STATIC_TYPE_NAME(ossimCacheTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimBlendMosaic));
    typeList.push_back(STATIC_TYPE_NAME(ossimMaxMosaic));   
+   typeList.push_back(STATIC_TYPE_NAME(ossimNullPixelFlip));
    typeList.push_back(STATIC_TYPE_NAME(ossimColorNormalizedFusion));
    typeList.push_back(STATIC_TYPE_NAME(ossimLocalCorrelationFusion));
    typeList.push_back(STATIC_TYPE_NAME(ossimSFIMFusion));

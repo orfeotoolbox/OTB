@@ -8,14 +8,14 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageWriterFactoryRegistry.h 15898 2009-11-11 19:11:28Z dburken $
 
 #ifndef ossimImageWriterFactoryRegistry_HEADER
 #define ossimImageWriterFactoryRegistry_HEADER
 #include <ossim/base/ossimObjectFactory.h>
 
 #include <vector>
-
+#include <iosfwd>
 #include <ossim/base/ossimCommon.h>
 
 class ossimImageFileWriter;
@@ -56,6 +56,13 @@ public:
     * class name
     */
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const;
+
+   /**
+    * @brief Prints list of writers from getImageTypeList.
+    * @param  out Stream to print to.
+    * @return std::ostream&
+    */
+   std::ostream& printImageTypeList(std::ostream& out)const;
    
 protected:
    ossimImageWriterFactoryRegistry();

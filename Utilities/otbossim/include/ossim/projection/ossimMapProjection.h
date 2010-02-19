@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimMapProjection.h 16423 2010-01-27 18:29:07Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -101,6 +101,7 @@ public:
 
    virtual void setPcsCode(ossim_uint16 pcsCode);
    virtual ossim_uint16 getPcsCode()const;
+   virtual ossim_uint16 getGcsCode()const;
    
    /**
     *  Returns the projection name.
@@ -126,6 +127,7 @@ public:
    virtual const ossimGpt&   getUlGpt() const;
    virtual const ossimDatum* getDatum() const;
    const ossimEllipsoid&     getEllipsoid() const { return theEllipsoid; }
+   const ossimGpt& getOrigin() const;
    virtual bool isGeographic()const;
 
    /**
@@ -285,7 +287,17 @@ public:
    virtual bool isAffectedByElevation() const { return false; }
    
 protected:
+   
    virtual ~ossimMapProjection();
+
+   //---
+   // If theModelTransform is set this updates:
+   // theDegreesPerPixel
+   // theMetersPerPixel
+   // theUlEastingNorthing
+   // theUlGpt
+   //---
+   void updateFromTransform();
 
    /**
     * This method verifies that the projection parameters match the current
@@ -336,6 +348,9 @@ protected:
 
    /** Projection Coordinate System(PCS) code. */
    ossim_uint16      thePcsCode;
+
+   /** Projection Coordinate System(EPSG) code. */
+   ossim_uint16      theGcsCode;
 
    bool              theElevationLookupFlag;
 

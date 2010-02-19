@@ -9,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfProjectionFactory.cpp 16430 2010-01-27 20:14:02Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -472,14 +472,11 @@ ossimProjection* ossimNitfProjectionFactory::makeEuiDistant(
    tiePoint.latd(gpts[0].latd() - (scale.y/2.0));
    tiePoint.lond(gpts[0].lond() + (scale.x/2.0));
 
-   // Set the tie point...
-//    proj->setOrigin(tiePoint);
-   proj->setUlGpt(tiePoint);
+   // Set the tie points.
+   proj->setUlTiePoints(tiePoint);
 
+   // Set the scale.
    proj->setDecimalDegreesPerPixel(scale);
-   // Set the scale
-   // proj->setLatSpacing(scale.y);
-   // proj->setLonSpacing(scale.x);
 
    return proj;
 }

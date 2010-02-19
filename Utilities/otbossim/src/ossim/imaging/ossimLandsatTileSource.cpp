@@ -9,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimLandsatTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -409,11 +409,6 @@ ossimString ossimLandsatTileSource::getLongName() const
    return ossimString("Landsat reader");
 }
 
-ossimString  ossimLandsatTileSource::className() const
-{
-   return ossimString("ossimLandsatTileSource");
-}
- 
 double ossimLandsatTileSource::getNullPixelValue(ossim_uint32)const
 {
    return 0.0;

@@ -13,32 +13,17 @@
 //*******************************************************************
 //  $Id: ossimVirtualOverviewBuilder.cpp 14780 2009-06-25 19:32:32Z dburken $
 
-#include <algorithm> /* for std::fill */
-using namespace std;
-
-#include <tiffio.h>
-#include <xtiffio.h>
-
-#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimErrorCodes.h>
-#include <ossim/base/ossimErrorContext.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimDpt3d.h>
-#include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/parallel/ossimMpi.h>
-#include <ossim/support_data/ossimRpfToc.h>
-#include <ossim/support_data/ossimRpfTocEntry.h>
 #include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/imaging/ossimImageData.h>
-#include <ossim/imaging/ossimImageMetaData.h>
-#include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimCibCadrgTileSource.h>
-#include <ossim/imaging/ossimVirtualImageTiffWriter.h>
+#include <ossim/imaging/ossimVirtualImageWriter.h>
+#include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/imaging/ossimVirtualOverviewBuilder.h>
 
 const char* ossimVirtualOverviewBuilder::OUTPUT_FRAME_SIZE_KW =
@@ -63,16 +48,15 @@ static const char OSSIM_ID[] = "$Id: ossimVirtualOverviewBuilder.cpp 14780 2009-
 ossimVirtualOverviewBuilder::ossimVirtualOverviewBuilder()
    :
       ossimOverviewBuilderBase(),
-      theImageHandler(0),
-      theOutputFile(ossimFilename::NIL),
-      theOutputTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
-      theOutputFrameSize(OSSIM_DEFAULT_FRAME_WIDTH, OSSIM_DEFAULT_FRAME_HEIGHT),
-      theResamplerType(ossimFilterResampler::ossimFilterResampler_BOX),
-      theCopyAllFlag(false),
-      theCompressType(""),
-      theCompressQuality(0),
-      theProgressListener(0),
-      theWriterType(WRITER_TYPE_UNKNOWN)
+      m_ImageHandler(0),
+      m_OutputFile(ossimFilename::NIL),
+      m_OutputTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
+      m_OutputFrameSize(OSSIM_DEFAULT_FRAME_WIDTH, OSSIM_DEFAULT_FRAME_HEIGHT),
+      m_ResamplerType(ossimFilterResampler::ossimFilterResampler_BOX),
+      m_CopyAllFlag(false),
+      m_ProgressListener(0),
+      m_DirtyFrameList(0),
+      m_OutputWriter(0)
 {
    if (traceDebug())
    {
@@ -93,29 +77,27 @@ ossimVirtualOverviewBuilder::ossimVirtualOverviewBuilder()
    //---
    if ( theListenerList.empty() )
    {
-      theProgressListener = new ossimStdOutProgress( 0, true );
-      addListener(theProgressListener);
+      m_ProgressListener = new ossimStdOutProgress( 0, true );
+      addListener(m_ProgressListener);
    }
 
-   ossim::defaultTileSize(theOutputTileSize);
+   ossim::defaultTileSize(m_OutputTileSize);
 }
 
 ossimVirtualOverviewBuilder::~ossimVirtualOverviewBuilder()
 {
-   theImageHandler = 0;
-
-   if (theProgressListener)
+   if (m_ProgressListener)
    {
-      removeListener(theProgressListener);
-      delete theProgressListener;
-      theProgressListener = 0;
+      removeListener(m_ProgressListener);
+      delete m_ProgressListener;
+      m_ProgressListener = 0;
    }
 }
 
 void ossimVirtualOverviewBuilder::setResampleType(
    ossimFilterResampler::ossimFilterResamplerType resampleType )
 {
-   theResamplerType = resampleType;
+   m_ResamplerType = resampleType;
 }
 
 bool ossimVirtualOverviewBuilder::buildOverview(
@@ -130,8 +112,8 @@ bool ossimVirtualOverviewBuilder::buildOverview(
          << std::endl;
    }
 
-   theOutputFile  = overview_file;
-   theCopyAllFlag = copy_all;
+   m_OutputFile  = overview_file;
+   m_CopyAllFlag = copy_all;
 
    return execute();
 }
@@ -140,7 +122,7 @@ bool ossimVirtualOverviewBuilder::execute()
 {
    static const char MODULE[] = "ossimVirtualOverviewBuilder::execute";
 
-   if (theErrorStatus == ossimErrorCodes::OSSIM_ERROR)
+   if (getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " ERROR:"
@@ -149,47 +131,34 @@ bool ossimVirtualOverviewBuilder::execute()
       return false;
    }
 
-   if ( !theImageHandler.valid() )
+   if ( !m_ImageHandler.valid() )
    {
       return false;
    }
 
    // Let's initialize our helper class...
-   ossimRefPtr<ossimVirtualImageWriter> pWriter = 0;
-   switch( theWriterType )
-   {
-      case WRITER_TYPE_TIFF:
-         pWriter = new ossimVirtualImageTiffWriter( theOutputFile,
-                                                    theImageHandler.get(),
-                                                    true );
-         break;
+   ossimRefPtr<ossimVirtualImageWriter> pWriter = 
+      new ossimVirtualImageWriter( m_OutputFile,
+                                   m_ImageHandler.get(),
+                                   true );
 
-      case WRITER_TYPE_UNKNOWN:
-      default:
-         ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " ERROR:"
-            << "\nError The overview type has not been set to a known value..."
-            << std::endl;
-         return false;
-   }
-
-   // Configure the writer
-   pWriter->setOutputTileSize    ( theOutputTileSize );
-   pWriter->setOutputFrameSize   ( theOutputFrameSize );
-   pWriter->setResampleType      ( theResamplerType );
-   pWriter->setCompressionType   ( theCompressType );
-   pWriter->setCompressionQuality( theCompressQuality );
+   // Configure the virtual writer
+   pWriter->setOutputTileSize ( m_OutputTileSize );
+   pWriter->setOutputFrameSize( m_OutputFrameSize );
+   pWriter->setResampleType   ( m_ResamplerType );
+   pWriter->setFrameWriter    ( m_OutputWriter.get() );
 
    // The setCopyAllFlag() call forces the building of R0 in the virtual
    // image. Keep in ming that OSSIM does not count of number of decimation 
    // levels correctly when the virtual image is labeled as an overview in 
    // the header .ovr file but is loaded directly into OSSIM (i.e. not 
    // used as an overview but as a standalone image). 
-   pWriter->setCopyAllFlag( theCopyAllFlag );
+   pWriter->setCopyAllFlag( m_CopyAllFlag );
 
    // Set the RPF frames to update to the virtual writer.
-   ossimCibCadrgTileSource* pRpf = PTR_CAST( ossimCibCadrgTileSource, theImageHandler.get() );
-   int nFrames = (int)theDirtyFrameList.size();
+   ossimCibCadrgTileSource* pRpf = PTR_CAST( ossimCibCadrgTileSource, 
+                                             m_ImageHandler.get() );
+   int nFrames = (int)m_DirtyFrameList.size();
    if ( pRpf != NULL && nFrames > 0 )
    {
       int idx;
@@ -197,13 +166,13 @@ bool ossimVirtualOverviewBuilder::execute()
       {
          // Add the name of a frame to the dirty frame list of 
          // the virtual image writer.
-         pWriter->setDirtyFrame( theDirtyFrameList[idx] );
+         pWriter->setDirtyFrame( m_DirtyFrameList[idx] );
       }
    }
 
    // Check the output filename.  Disallow same file overview building.
-   theOutputFile = pWriter->getOutputFile();
-   if ( theImageHandler->getFilename() == theOutputFile )
+   m_OutputFile = pWriter->getOutputFile();
+   if ( m_ImageHandler->getFilename() == m_OutputFile )
    {
       ossimNotify(ossimNotifyLevel_WARN)
          << "Source image file and overview file cannot be the same!"
@@ -222,12 +191,12 @@ bool ossimVirtualOverviewBuilder::execute()
 
 bool ossimVirtualOverviewBuilder::getCopyAllFlag() const
 {
-   return theCopyAllFlag;
+   return m_CopyAllFlag;
 }
 
 void ossimVirtualOverviewBuilder::setCopyAllFlag( bool flag )
 {
-   theCopyAllFlag = flag;
+   m_CopyAllFlag = flag;
 }
 
 ossimObject* ossimVirtualOverviewBuilder::getObject()
@@ -242,22 +211,66 @@ const ossimObject* ossimVirtualOverviewBuilder::getObject() const
 
 ossimFilename ossimVirtualOverviewBuilder::getOutputFile() const
 {
-   return theOutputFile;
+   return m_OutputFile;
 }
 
 void ossimVirtualOverviewBuilder::setOutputFile( const ossimFilename& file )
 {
-   theOutputFile = file;
+   m_OutputFile = file;
 }
 
 void ossimVirtualOverviewBuilder::setOutputTileSize( const ossimIpt& tileSize )
 {
-   theOutputTileSize = tileSize;
+   m_OutputTileSize = tileSize;
 }
 
 void ossimVirtualOverviewBuilder::setOutputFrameSize( const ossimIpt& frameSize )
 {
-   theOutputFrameSize = frameSize;
+   m_OutputFrameSize = frameSize;
+}
+
+bool ossimVirtualOverviewBuilder::setOutputWriter( ossimImageFileWriter* outputWriter )
+{
+   static const char MODULE[] =
+   "ossimVirtualOverviewBuilder::setOutputWriter";
+
+   m_OutputWriter = outputWriter;
+
+   if ( !m_OutputWriter.valid() )
+   {
+      // Set the error...
+      setErrorStatus();
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " ERROR:"
+         << "\nNull image writer pointer passed to overview builder! Returning..."
+         << std::endl;
+      ossimSetError(getClassName(),
+         ossimErrorCodes::OSSIM_ERROR,
+         "%s File %s line %d\nNULL pointer passed to overview builder!",
+         MODULE,
+         __FILE__,
+         __LINE__);
+      return false;
+   }
+   else
+   if ( m_OutputWriter->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR )
+   {
+      // Set the error...
+      setErrorStatus();
+      ossimNotify(ossimNotifyLevel_WARN)
+         << MODULE << " ERROR:"
+         << "\nError detected in overview builder!  Returning..."
+         << std::endl;
+      ossimSetError(getClassName(),
+         ossimErrorCodes::OSSIM_ERROR,
+         "%s file %s line %d\nImageFileWriter error detected!",
+         MODULE,
+         __FILE__,
+         __LINE__);
+      return false;
+   }
+
+   return true;
 }
 
 bool ossimVirtualOverviewBuilder::setInputSource( ossimImageHandler* imageSource )
@@ -265,29 +278,29 @@ bool ossimVirtualOverviewBuilder::setInputSource( ossimImageHandler* imageSource
    static const char MODULE[] =
       "ossimVirtualOverviewBuilder::setInputSource";
 
-   theImageHandler = imageSource;
+   m_ImageHandler = imageSource;
 
-   if ( !theImageHandler.valid() )
+   if ( !m_ImageHandler.valid() )
    {
       // Set the error...
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      setErrorStatus();
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " ERROR:"
-         << "\nNull image handler pointer passed to constructor! Returning..."
+         << "\nNull image handler pointer passed to overview builder! Returning..."
          << std::endl;
       ossimSetError(getClassName(),
                     ossimErrorCodes::OSSIM_ERROR,
-                    "%s File %s line %d\nNULL pointer passed to constructor!",
+                    "%s File %s line %d\nNULL pointer passed to overview builder!",
                     MODULE,
                     __FILE__,
                     __LINE__);
       return false;
    }
-   else if (theImageHandler->getErrorStatus() ==
-            ossimErrorCodes::OSSIM_ERROR)
+   else
+   if ( m_ImageHandler->getErrorStatus() == ossimErrorCodes::OSSIM_ERROR )
    {
       // Set the error...
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      setErrorStatus();
       ossimNotify(ossimNotifyLevel_WARN)
          << MODULE << " ERROR:"
          << "\nError detected in image handler!  Returning..."
@@ -301,24 +314,18 @@ bool ossimVirtualOverviewBuilder::setInputSource( ossimImageHandler* imageSource
       return false;
    }
 
-   if (traceDebug())
+   const ossimImageHandler* pOverview = m_ImageHandler->getOverview();
+   if ( pOverview != 0 )
    {
-      CLOG << "DEBUG:"
-           << "\nTile Width:   " << theOutputTileSize.x
-           << "\nTile Height:  " << theOutputTileSize.y
-           << "\nFrame Width:  " << theOutputFrameSize.x
-           << "\nFrame Height: " << theOutputFrameSize.y
-           << "\nSource image is tiled:  "
-           << (theImageHandler->isImageTiled()?"true":"false")
-           << "\ntheImageHandler->getTileWidth():  "
-           << theImageHandler->getTileWidth()
-           << "\ntheImageHandler->getTileHeight():  "
-           << theImageHandler->getTileHeight()
-           << "\ntheImageHandler->getImageTileWidth():  "
-           << theImageHandler->getImageTileWidth()
-           << "\ntheImageHandler->getImageTileHeight():  "
-           << theImageHandler->getImageTileHeight()
-           << std::endl;
+      // If the overview is virtual, let's close it. It might be the same
+      // virtual image that we're trying to build or add on to, which would
+      // create confusion down in the virtual writer.
+      ossimVirtualImageHandler* pVirtual = 
+         PTR_CAST( ossimVirtualImageHandler, pOverview );
+      if ( pVirtual != 0 )
+      {
+         m_ImageHandler->closeOverview();
+      }
    }
 
    return true;
@@ -326,75 +333,35 @@ bool ossimVirtualOverviewBuilder::setInputSource( ossimImageHandler* imageSource
 
 bool ossimVirtualOverviewBuilder::setOverviewType( const ossimString& type )
 {
-   bool result = true;
-   if ( ossimVirtualImageTiffWriter::isOverviewTypeHandled(type) )
+   bool bResult = true;
+   if ( ossimVirtualImageWriter::isOverviewTypeHandled(type) )
    {
-      theWriterType = WRITER_TYPE_TIFF;
-      theResamplerType = ossimVirtualImageTiffWriter::getResamplerType(type);
+      m_ResamplerType = ossimVirtualImageWriter::getResamplerType(type);
    }
    else
    {
-      result = false;
+      bResult = false;
    }
 
-   return result;
+   return bResult;
 }
 
 ossimString ossimVirtualOverviewBuilder::getOverviewType() const
 {
-   static const char MODULE[] = "ossimVirtualOverviewBuilder::getOverviewType";
-
-   ossimString overviewType("unknown");
-
-   // Let's initialize our helper class...
-   switch( theWriterType )
-   {
-      case WRITER_TYPE_TIFF:
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE << " ERROR:"
-               << "\nError The tiff-based virtual overview type has not been implemented yet..."
-               << std::endl;
-         }
-         overviewType = ossimVirtualImageTiffWriter::getOverviewType( theResamplerType );
-         break;
-
-      case WRITER_TYPE_UNKNOWN:
-      default:
-         {
-            ossimNotify(ossimNotifyLevel_WARN)
-               << MODULE << " ERROR:"
-               << "\nError The overview type has not been set to a known value..."
-               << std::endl;
-         }
-         break;
-   }
-
-   return overviewType;
+   return ossimVirtualImageWriter::getOverviewType( m_ResamplerType );
 }
 
 void ossimVirtualOverviewBuilder::getTypeNameList(
-                                    std::vector<ossimString>& typeList )const
+                                    std::vector<ossimString>& typeList ) const
 {
-   ossimVirtualImageTiffWriter::getTypeNameList( typeList );
+   ossimVirtualImageWriter::getTypeNameList( typeList );
 }
 
 void ossimVirtualOverviewBuilder::setProperty( ossimRefPtr<ossimProperty> prop )
 {
-   if( prop->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW )
-   {
-      theCompressQuality = prop->valueToString().toInt32();
-   }
-   else 
-   if( prop->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW )
-   {
-      ossimString tempStr = prop->valueToString();
-      theCompressType = tempStr.downcase();
-   }
-   else
    if( prop->getName() == COPY_ALL_KW )
    {
-      theCopyAllFlag = prop->valueToString().toBool();
+      m_CopyAllFlag = prop->valueToString().toBool();
    }
    else 
    if( prop->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW )
@@ -418,10 +385,7 @@ void ossimVirtualOverviewBuilder::setProperty( ossimRefPtr<ossimProperty> prop )
 
 void ossimVirtualOverviewBuilder::getPropertyNames( std::vector<ossimString>& propNames )const
 {
-   propNames.push_back( ossimKeywordNames::COMPRESSION_QUALITY_KW );
-   propNames.push_back( ossimKeywordNames::COMPRESSION_TYPE_KW );
    propNames.push_back( COPY_ALL_KW );
-   propNames.push_back( ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW );
 }
 
 bool ossimVirtualOverviewBuilder::canConnectMyInputTo(
@@ -434,5 +398,5 @@ bool ossimVirtualOverviewBuilder::canConnectMyInputTo(
 void ossimVirtualOverviewBuilder::setDirtyFrame( const ossimString& name )
 {
    // Add the name of a frame to the dirty frame list.
-   theDirtyFrameList.push_back(name);
+   m_DirtyFrameList.push_back(name);
 }

@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimHistogram.cpp 16422 2010-01-27 18:25:17Z dburken $
 //
 
 #include <stdio.h>
@@ -1202,8 +1202,8 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type index = inputLine.find(":");
+      if(index != std::string::npos)
       {
          theFileType = inputLine.substr(index+1);
          theFileType = theFileType.trim();
@@ -1222,8 +1222,8 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type index = inputLine.find(":");
+      if(index != std::string::npos)
       {
          theVersion = inputLine.substr(index+1);
          theVersion = theVersion.trim();
@@ -1241,8 +1241,8 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Mapper Type") != string::npos)
    {
-      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type index = inputLine.find(":");
+      if(index != std::string::npos)
       {
          theMapperType = inputLine.substr(index+1);
          theMapperType = theMapperType.trim();
@@ -1260,8 +1260,8 @@ bool ossimHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
    getline(in, inputLine);  
    if(inputLine.find("Number of Bins") != string::npos)
    {
-      ossim_uint32 index = (ossim_uint32)inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type index = inputLine.find(":");
+      if(index != std::string::npos)
       {
          theNumberOfBins = inputLine.substr(index+1);
          theNumberOfBins = theNumberOfBins.trim();

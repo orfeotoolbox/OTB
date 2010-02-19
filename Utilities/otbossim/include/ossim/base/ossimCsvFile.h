@@ -66,7 +66,7 @@ public:
       };
    friend class Record;
    
-   ossimCsvFile();
+   ossimCsvFile(const ossimString& separatorList=",");
    ~ossimCsvFile();
    
    /**
@@ -98,6 +98,7 @@ protected:
    StringListType theFieldHeaderList;
    ossimRefPtr<ossimCsvFile::Record> theRecordBuffer;
    std::istream* theInputStream;
+   ossimString theSeparatorList;
    bool theOpenFlag;
 };
 #endif

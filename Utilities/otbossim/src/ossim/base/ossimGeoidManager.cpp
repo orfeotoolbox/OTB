@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.cpp 12319 2008-01-16 19:55:24Z gpotts $
+//  $Id: ossimGeoidManager.cpp 16139 2009-12-18 18:37:07Z gpotts $
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimGeoidManager.h>
@@ -40,6 +40,8 @@ ossimGeoidManager* ossimGeoidManager::theInstance = 0;
 //*****************************************************************************
 ossimGeoidManager::ossimGeoidManager()
 {
+   theInstance = this;
+   theIdentityGeoid = new ossimIdentityGeoid();
 }
 
 //*****************************************************************************
@@ -64,7 +66,9 @@ ossimGeoidManager::~ossimGeoidManager()
 ossimGeoidManager* ossimGeoidManager::instance()
 {
    if (!theInstance)
+   {
       theInstance = new ossimGeoidManager();
+   }
    
    return theInstance;
 }
@@ -129,7 +133,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
       ossimFilename f = lookup;
       if (f.isDir())
       {
-         ossimGeoid* geoid = new ossimGeoidNgs(f, geoidNgsByteOrder);
+         ossimRefPtr<ossimGeoid> geoid = new ossimGeoidNgs(f, geoidNgsByteOrder);
 
          if (geoid->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
          {
@@ -140,11 +144,10 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
                   << "\nAdded geoid dir:  " << f.c_str() << "\n";
             }
 
-            addGeoid(geoid);
+            addGeoid(geoid.get());
          }
          else
          {
-            delete geoid;
             geoid = 0;
          }
       }
@@ -166,7 +169,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
    bool addedGeoid1996Grid = false;
    if(geoidGrid1996.exists())
    {
-      ossimGeoid* geoid = new ossimGeoidEgm96(geoidGrid1996);
+      ossimRefPtr<ossimGeoid> geoid = new ossimGeoidEgm96(geoidGrid1996);
       if (geoid->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
       {
          if (traceDebug())
@@ -177,11 +180,10 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
                << "\n";
          }
          addedGeoid1996Grid = true;
-         addGeoid(geoid);
+         addGeoid(geoid.get());
       }
       else
       {
-         delete geoid;
          geoid = 0;
       }
    }
@@ -194,7 +196,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
          ossimFilename f = lookup;
          if (f.isDir() || f.isFile())
          {
-            ossimGeoid* geoid = new ossimGeoidEgm96(f);
+            ossimRefPtr<ossimGeoid> geoid = new ossimGeoidEgm96(f);
             
             if (geoid->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
             {
@@ -206,11 +208,10 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
                      << "\n";
                }
                
-               addGeoid(geoid);
+               addGeoid(geoid.get());
             }
             else
             {
-               delete geoid;
                geoid = 0;
             }
          }
@@ -262,11 +263,14 @@ double ossimGeoidManager::offsetFromEllipsoid(const ossimGpt& gpt) const
    return offset;
 }
 
-const ossimRefPtr<ossimGeoid> ossimGeoidManager::findGeoidByShortName(const ossimString& shortName,
-                                                                      bool caseSensitive)const
+ossimGeoid* ossimGeoidManager::findGeoidByShortName(const ossimString& shortName, bool caseSensitive)
 {
    ossim_uint32 idx=0;
    ossimString testString = shortName;
+   if(shortName == "identity")
+   {
+      return theIdentityGeoid.get();
+   }
    if(!caseSensitive)
    {
       testString  = testString.downcase();
@@ -277,14 +281,14 @@ const ossimRefPtr<ossimGeoid> ossimGeoidManager::findGeoidByShortName(const ossi
       {
          if(theGeoidList[idx]->getShortName().downcase() == testString)
          {
-            return theGeoidList[idx];
+            return theGeoidList[idx].get();
          }
       }
       else
       {
          if(theGeoidList[idx]->getShortName() == testString)
          {
-            return theGeoidList[idx];
+            return theGeoidList[idx].get();
          }
       }
    }

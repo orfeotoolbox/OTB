@@ -7,14 +7,18 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimNitfVqCompressionHeader.cpp 16035 2009-12-03 21:32:27Z dburken $
 
 #include <iostream>
+#include <iomanip>
 
 #include <ossim/support_data/ossimNitfVqCompressionHeader.h>
 #include <ossim/base/ossimEndian.h>
+#include <ossim/base/ossimString.h>
+
 RTTI_DEF1(ossimNitfVqCompressionHeader, "ossimNitfVqCompressionHeader", ossimNitfCompressionHeader);
 
+#if 0
 std::ostream& operator<<(std::ostream& out,
                          const ossimNitfVqCompressionOffsetTableData& data)
 {
@@ -26,6 +30,7 @@ std::ostream& operator<<(std::ostream& out,
 
    return out;
 }
+#endif
 
 
 ossimNitfVqCompressionOffsetTableData::ossimNitfVqCompressionOffsetTableData()
@@ -198,24 +203,52 @@ void ossimNitfVqCompressionHeader::parseStream(std::istream &in)
 
 std::ostream& ossimNitfVqCompressionHeader::print(std::ostream& out) const
 {
-   out << "VQ COMPRESSION HEADER" << std::endl
-       << "theNumberOfImageRows:                           " << theNumberOfImageRows << std::endl
-       << "theNumberOfImageCodesPerRow:                    " << theNumberOfImageCodesPerRow << std::endl
-       << "theImageCodeBitLength:                          " << (ossim_uint32)theImageCodeBitLength << std::endl
-       << "theCompressionAlgorithmId:                      " << theCompressionAlgorithmId << std::endl
-       << "theNumberOfCompressionLookupOffsetRecords:      " << theNumberOfCompressionLookupOffsetRecords << std::endl
-       << "theCompressionLookupTableOffsetRecordLength:    " << theCompressionLookupTableOffsetRecordLength;
+   return this->print(out, std::string(""));
+}
+
+std::ostream& ossimNitfVqCompressionHeader::print(
+   std::ostream& out, const std::string& prefix ) const
+{
+   std::string pfx = prefix;
+   pfx += "vq_header.";
+
+   out << setiosflags(std::ios::left)
+       << pfx << std::setw(24) << "image_rows:"
+       << theNumberOfImageRows << "\n"
+       << pfx << std::setw(24) << "codes_per_row:"
+       << theNumberOfImageCodesPerRow << "\n"
+       << pfx << std::setw(24) << "codebit_length:"
+       << (ossim_uint32)theImageCodeBitLength << "\n"
+       << pfx << std::setw(24) << "algorithm_id:"
+       << theCompressionAlgorithmId << "\n"
+       << pfx << std::setw(24)
+       << "offset_records:"
+       << theNumberOfCompressionLookupOffsetRecords << "\n"
+       << pfx << std::setw(24)
+       << "offset_record_length:"
+       << theCompressionLookupTableOffsetRecordLength << "\n";
 
    if(theTable.size() > 0)
    {
-      ossim_uint32 idx = 0;
-      out << std::endl;
-
-      for(idx = 0; idx < theTable.size()-1; ++idx)
+      for(ossim_uint32 idx = 0; idx < theTable.size()-1; ++idx)
       {
-         out << theTable[idx] << std::endl;
+         std::string tblPfx = pfx;
+         tblPfx += "table";
+         tblPfx += ossimString::toString(idx);
+         tblPfx += ".";
+
+         out << tblPfx << std::setw(24) << "id:"
+             << theTable[idx].theTableId << "\n"
+             << tblPfx << std::setw(24) << "lookup_records:"
+             << theTable[idx].theNumberOfCompressionLookupRecords << "\n"
+             << tblPfx << std::setw(24) << "values_per_lookup:"
+             << theTable[idx].theNumberOfValuesPerCompressionLookup << "\n"
+             << tblPfx << std::setw(24) << "lookup_bit_length:"
+             << theTable[idx].theCompressionLookupValueBitLength << "\n"
+             << tblPfx << std::setw(24) << "lookup_table_offset:"
+             << theTable[idx].theCompressionLookupTableOffset << "\n";
       }
-      out << theTable[idx];
+
    }
 
    return out;

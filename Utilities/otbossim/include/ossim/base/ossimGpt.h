@@ -13,7 +13,7 @@
 // Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 13238 2008-07-25 01:14:42Z gpotts $
+//  $Id: ossimGpt.h 15900 2009-11-12 00:31:35Z okramer $
 
 #ifndef gpt_HEADER
 #define gpt_HEADER
@@ -243,6 +243,14 @@ public:
     * Computes straight-line distance in meters between this and arg gpt:
     */
    double distanceTo(const ossimGpt& arg_gpt) const;
+
+   /**
+   * METHOD: azimuthTo(ossimGpt)
+   * Computes the great-circle starting azimuth (i.e., at this gpt) to the argument gpt in degrees.
+   * In other words, what direction we would need to start walking in to travel the shortest 
+   * distance to arg_gpt (assumes spherical earth)
+   */
+   double azimuthTo(const ossimGpt& arg_gpt) const;
 
    ossimDpt metersPerDegree() const;
    

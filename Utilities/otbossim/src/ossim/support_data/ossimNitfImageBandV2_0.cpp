@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageBandV2_0.cpp 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimNitfImageBandV2_0.cpp 16035 2009-12-03 21:32:27Z dburken $
 
 #include <sstream>
 #include <iostream>
@@ -117,11 +117,6 @@ std::ostream& ossimNitfImageBandV2_0::print(std::ostream& out,
 
    out << prefix << std::setw(24)
        << tmpStr << theBandNumberOfLutEntries << "\n";
-   
-   for(ossim_uint32 idx = 0; idx < theLookupTables.size(); ++idx)
-   {
-      out << *theLookupTables[idx] << std::endl;
-   }
    
    return out;
 }

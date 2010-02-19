@@ -8,13 +8,16 @@
 // Author: Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimImageWriterFactoryRegistry.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageWriterFactoryRegistry.cpp 15898 2009-11-11 19:11:28Z dburken $
 #include <algorithm>
+#include <iterator>
+#include <ostream>
 #include <ossim/imaging/ossimImageWriterFactory.h>
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimString.h>
 
 ossimImageWriterFactoryRegistry* ossimImageWriterFactoryRegistry::theInstance = NULL;
 
@@ -199,6 +202,19 @@ void ossimImageWriterFactoryRegistry::getImageTypeList(std::vector<ossimString>&
                       result.end());
       ++iter;
    }  
+}
+
+std::ostream& ossimImageWriterFactoryRegistry::printImageTypeList(
+   std::ostream& out)const
+{
+   std::vector<ossimString> outputType;
+   
+   this->getImageTypeList(outputType);
+   std::copy(outputType.begin(),
+             outputType.end(),
+             std::ostream_iterator<ossimString>(out, "\n"));
+   out << std::endl;
+   return out;
 }
 
 extern "C"

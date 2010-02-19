@@ -11,7 +11,7 @@
 // longitude to x / y" projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.cpp 11412 2007-07-27 13:56:11Z dburken $
+//  $Id: ossimLlxyProjection.cpp 16479 2010-02-02 19:22:00Z gpotts $
 
 #include <ossim/projection/ossimLlxyProjection.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -176,7 +176,10 @@ void ossimLlxyProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
 
    worldPt.latd(lat);
    worldPt.lond(lon);
-   worldPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(worldPt);
+   if(theElevationLookupFlag)
+   {
+      worldPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(worldPt);
+   }
 }
 
 std::ostream& ossimLlxyProjection::print(std::ostream& out) const

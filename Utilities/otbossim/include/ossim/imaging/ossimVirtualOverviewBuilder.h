@@ -29,12 +29,6 @@ class OSSIM_DLL ossimVirtualOverviewBuilder : public ossimOverviewBuilderBase
 {
 public:
 
-   enum WriterType
-   {
-      WRITER_TYPE_TIFF,
-      WRITER_TYPE_UNKNOWN
-   };
-
    /** default constructor */
    ossimVirtualOverviewBuilder();
 
@@ -45,10 +39,11 @@ public:
     * Supports BOX or NEAREST NEIGHBOR.  
     * When indexed you should probably use nearest neighbor
     */ 
-   void setResampleType( ossimFilterResampler::ossimFilterResamplerType resampleType );
+   void setResampleType( 
+      ossimFilterResampler::ossimFilterResamplerType resampleType );
 
    /**
-    *  Builds overview file and sets "theOutputFile" to that of
+    *  Builds overview file and sets "m_OutputFile" to that of
     *  the overview_file.
     *
     *  @param overview_file The overview file name to output.
@@ -62,7 +57,7 @@ public:
                        bool copy_all=false );
 
    /**
-    * Calls buildOverview.  This method uses "theOutputFile" for the file
+    * Calls buildOverview.  This method uses "m_OutputFile" for the file
     * name.
     *
     * If the copy_all flag is set the entire image will be copied.  This can
@@ -84,7 +79,7 @@ public:
    bool getCopyAllFlag() const;
 
    /**
-    * @brief Sets theCopyAllFlag.
+    * @brief Sets m_CopyAllFlag.
     * @param flag The flag. If true all data will be written to the
     * overview including R0.
     */
@@ -121,7 +116,16 @@ public:
     * @return True on successful initialization, false on error.
     */
    virtual bool setInputSource( ossimImageHandler* imageSource );
-   
+
+   /**
+    * @brief Sets an arbitrary format file writer to the virtual 
+    * overview builder.
+    *
+    * @param outputWriter The file writer of the builder.
+    * @return True on successful initialization, false on error.
+    */
+   virtual bool setOutputWriter( ossimImageFileWriter* outputWriter );
+
    /**
     * @brief Sets the output filename.
     * Satisfies pure virtual from ossimOverviewBuilderBase.
@@ -196,18 +200,16 @@ private:
    ossimVirtualOverviewBuilder( const ossimVirtualOverviewBuilder& source );
    ossimVirtualOverviewBuilder& operator=( const ossimVirtualOverviewBuilder& rhs ); 
 
-   ossimRefPtr<ossimImageHandler>                 theImageHandler;
-   bool                                           theOwnsImageHandlerFlag;
-   ossimFilename                                  theOutputFile;
-   ossimIpt                                       theOutputTileSize;
-   ossimIpt                                       theOutputFrameSize;
-   ossimFilterResampler::ossimFilterResamplerType theResamplerType;
-   bool                                           theCopyAllFlag;
-   ossimString                                    theCompressType;
-   ossim_int32                                    theCompressQuality;
-   ossimStdOutProgress*                           theProgressListener;
-   WriterType                                     theWriterType;
-   std::vector<ossimString>                       theDirtyFrameList;
+   ossimRefPtr<ossimImageHandler>                 m_ImageHandler;
+   bool                                           m_OwnsImageHandlerFlag;
+   ossimFilename                                  m_OutputFile;
+   ossimIpt                                       m_OutputTileSize;
+   ossimIpt                                       m_OutputFrameSize;
+   ossimFilterResampler::ossimFilterResamplerType m_ResamplerType;
+   bool                                           m_CopyAllFlag;
+   ossimStdOutProgress*                           m_ProgressListener;
+   std::vector<ossimString>                       m_DirtyFrameList;
+   ossimRefPtr<ossimImageFileWriter>              m_OutputWriter;
 
 TYPE_DATA   
 };

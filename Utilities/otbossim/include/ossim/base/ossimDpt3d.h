@@ -11,7 +11,7 @@
 // Contains class declaration for dpt3d
 // Used to represent a 3d double point containing an x, y and z data member.
 //*******************************************************************
-//  $Id: ossimDpt3d.h 14356 2009-04-20 19:59:03Z dburken $
+//  $Id: ossimDpt3d.h 16347 2010-01-13 23:12:09Z dburken $
 
 #ifndef ossimDpt3d_HEADER
 #define ossimDpt3d_HEADER
@@ -29,7 +29,8 @@ class ossimDpt;
 class OSSIMDLLEXPORT ossimDpt3d
 {
 public:
-   friend std::ostream & operator << (std::ostream &out, const ossimDpt3d &rhs);
+   friend OSSIMDLLEXPORT std::ostream & operator <<(std::ostream &out,
+                                                    const ossimDpt3d &rhs);
    
    ossimDpt3d(const double &aX=0, const double &aY=0, const double &aZ=0)
       :x(aX), y(aY), z(aZ) {}

@@ -9,7 +9,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimString.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimString.h 16308 2010-01-09 02:45:54Z eshirschorn $
 #ifndef ossimString_HEADER
 #define ossimString_HEADER 1
 
@@ -203,16 +203,16 @@ public:
    ossimString afterPos(std::string::size_type pos)const;
 
    /**
-    *  Substitudes searchKey string with replacementValue and returns a
-    *  string.  Will replace all occurrances found if "replaceAll" is true.
+    *  Substitutes searchKey string with replacementValue and returns a
+    *  string.  Will replace all occurrences found if "replaceAll" is true.
     */
    ossimString substitute(const ossimString &searchKey,
                           const ossimString &replacementValue,
                           bool replaceAll=false)const;
 
    /**
-    *  Substitudes searchKey string with replacementValue and returns a
-    *  reference to *this.  Will replace all occurrances found if
+    *  Substitutes searchKey string with replacementValue and returns a
+    *  reference to *this.  Will replace all occurrences found if
     *  "replaceAll" is true.  (like substitute only works on "this")
     */
    ossimString& gsub(const ossimString &searchKey,
@@ -220,6 +220,14 @@ public:
                      bool replaceAll=false);
 
    std::vector<ossimString> explode(const ossimString& delimeter) const;
+
+   /**
+    * If the variable "$(env_var_name)" is found in the string, where
+    * "env_var_name" is any system environment variable resolvable by
+    * the getenv() function, the variable is expanded in place and the 
+    * result returned.
+    */
+   ossimString expandEnvironmentVariable() const;
 
    /**
     * @param aString String to make an upcased copy of.
@@ -263,7 +271,7 @@ public:
    /**
     * METHOD: after(str, pos)
     * Returns string immediately after the token str. The search for str
-    * begins at pos.  Returns an emptry string if not found or pos out of
+    * begins at pos.  Returns an empty string if not found or pos out of
     * range.
     */
    ossimString after (const ossimString& str, std::string::size_type pos=0)const;
@@ -324,34 +332,22 @@ public:
     *
     * @param precision Decimal point precision of the output.
     * 
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed.
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used.
-    *
-    * @note The trimZeroFlag is ignored if the scientific flag is set so that
-    * "e-10" will not be trimmed to "e-1".
+    * @param fixed If true setiosflags(std::ios::fixed) will be called.
     */
    static ossimString toString(ossim_float32 aValue,
-                               int  precision    = 8 );
+                               ossim_int32 precision = 8,
+                               bool fixed = false);
    
    /**
     * @param aValue Value to convert to string.
     *
     * @param precision Decimal point precision of the output.
     *
-    * @param trimZeroFlag If true trailing '0's and any trailing '.' will
-    * be trimmed.
-    *
-    * @param scientific If true output will be in scientific notation else
-    * fixed is used.
-    *
-    * @note The trimZeroFlag is ignored if the scientific flag is set so that
-    * "e-10" will not be trimmed to "e-1".
+    * @param fixed If true setiosflags(std::ios::fixed) will be called. 
     */
    static ossimString toString(ossim_float64 aValue,
-                               int  precision    = 15);
+                               ossim_int32 precision = 15,
+                               bool fixed = false);
 
    static ossimString stripLeading(const ossimString &value,
                                    char characterToStrip);
@@ -400,9 +396,10 @@ public:
                                    const char *value="") const;
 
    ossimString urlEncode()const;
+
    /**
     * If OSSIM_ID_ENABLED returns the OSSIM_ID which currently is the
-    * expanded cvs $Id: ossimString.h 15766 2009-10-20 12:37:09Z gpotts $ macro; else, an empty string.
+    * expanded cvs $Id: ossimString.h 16308 2010-01-09 02:45:54Z eshirschorn $ macro; else, an empty string.
     */
    ossimString getOssimId() const;
 };

@@ -9,7 +9,7 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimAdrgTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <iostream>
 
@@ -660,11 +660,6 @@ ossimString ossimAdrgTileSource::getShortName()const
 ossimString ossimAdrgTileSource::getLongName()const
 {
    return ossimString("adrg reader");
-}
-
-ossimString ossimAdrgTileSource::getClassName()const
-{
-   return ossimString("ossimAdrgTileSource");
 }
 
 ossim_uint32 ossimAdrgTileSource::getNumberOfInputBands() const

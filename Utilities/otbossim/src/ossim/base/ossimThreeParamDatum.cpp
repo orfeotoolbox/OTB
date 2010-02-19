@@ -6,7 +6,7 @@
 //
 // Description:
 //*******************************************************************
-//  $Id: ossimThreeParamDatum.cpp 13136 2008-07-06 14:50:09Z dburken $
+//  $Id: ossimThreeParamDatum.cpp 16426 2010-01-27 20:09:49Z gpotts $
 
 #include <cmath>
 
@@ -20,9 +20,21 @@
 
 ossimGpt ossimThreeParamDatum::shiftToWgs84(const ossimGpt &aPt)const
 {
+   
+   if(ossim::almostEqual(param1(),  0.0)&&
+      ossim::almostEqual(param2(), 0.0)&&
+      ossim::almostEqual(param3(), 0.0))
+   {
+      return ossimGpt(aPt.latd(),
+                      aPt.lond(),
+                      aPt.latd(),
+                      ossimGpt().datum());
+   }
+      
    ossimEcefPoint p1 = aPt;
    ossimEcefPoint p2;
  
+   
    if(withinMolodenskyRange(aPt.latd()))
    {
       ossimWgs84Datum wgs84;
@@ -63,6 +75,15 @@ ossimGpt ossimThreeParamDatum::shiftToWgs84(const ossimGpt &aPt)const
 
 ossimGpt ossimThreeParamDatum::shiftFromWgs84(const ossimGpt &aPt)const
 {
+   if(ossim::almostEqual(param1(), 0.0)&&
+      ossim::almostEqual(param2(), 0.0)&&
+      ossim::almostEqual(param3(), 0.0))
+   {
+      return ossimGpt(aPt.latd(),
+                      aPt.lond(),
+                      aPt.latd(),
+                      this);
+   }
    ossimEcefPoint p1=aPt;
    ossimEcefPoint p2=aPt;
    

@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Mercator projection code.  
 //*******************************************************************
-//  $Id: ossimMercatorProjection.cpp 14215 2009-04-03 11:31:42Z gpotts $
+//  $Id: ossimMercatorProjection.cpp 16437 2010-01-28 12:09:44Z gpotts $
 
 #include <math.h>
 #include <ossim/projection/ossimMercatorProjection.h>
@@ -126,13 +126,28 @@ ossimGpt ossimMercatorProjection::inverse(const ossimDpt &eastingNorthing)const
 {
    double lat = 0.0;
    double lon = 0.0;
+
+   if(theSphericalFlag)
+   {
+      double shift = M_PI * 6378137.0;
+      lon = (eastingNorthing.x / shift) * 180.0;
+      lat = (eastingNorthing.y / shift) * 180.0;
+      
+      lat = 180 / M_PI * (2 * atan( exp( lat * M_PI / 180.0)) - M_PI / 2.0);   
+   }
+   else 
+   {
+      Convert_Mercator_To_Geodetic(eastingNorthing.x,
+                                   eastingNorthing.y,
+                                   &lat,
+                                   &lon);
+      lat = ossim::radiansToDegrees(lat);
+      lon = ossim::radiansToDegrees(lon);
+   }
+
    
-   Convert_Mercator_To_Geodetic(eastingNorthing.x,
-                                eastingNorthing.y,
-                                &lat,
-                                &lon);
    
-   return ossimGpt(lat*DEG_PER_RAD, lon*DEG_PER_RAD, 0.0, theDatum);  
+   return ossimGpt(lat, lon, 0.0, theDatum);  
 }
 
 ossimDpt ossimMercatorProjection::forward(const ossimGpt &latLon)const
@@ -148,11 +163,24 @@ ossimDpt ossimMercatorProjection::forward(const ossimGpt &latLon)const
          gpt.changeDatum(theDatum); // Shift to our datum.
       }
    }
-   
-   Convert_Geodetic_To_Mercator(gpt.latr(),
-                                gpt.lonr(),
-                                &easting,
-                                &northing);
+   if(theSphericalFlag)
+   {
+      double lat = latLon.latd();
+      double lon = latLon.lond();
+      double shift = M_PI * Merc_a;
+      easting = lon * shift / 180.0;
+      northing = log( tan((90 + lat) * M_PI / 360.0 )) / (M_PI / 180.0);
+      
+      northing = northing * shift / 180.0;
+   }
+   else 
+   {
+      Convert_Geodetic_To_Mercator(gpt.latr(),
+                                   gpt.lonr(),
+                                   &easting,
+                                   &northing);
+   }      
+
    
    return ossimDpt(easting, northing);
 }
@@ -236,6 +264,8 @@ long ossimMercatorProjection::Set_Mercator_Parameters(double a,
   double sin_olat; /* sin(Origin_Latitude), temp variable */
 //  double inv_f = 1 / f;
   long Error_Code = MERC_NO_ERROR;
+
+   theSphericalFlag = ossim::almostEqual(f, 0.0);
 
 //   if (a <= 0.0)
 //   { /* Semi-major axis must be greater than zero */
@@ -335,6 +365,7 @@ long ossimMercatorProjection::Convert_Geodetic_To_Mercator (double Latitude,
                                                             double *Easting,
                                                             double *Northing)const
 { /* BEGIN Convert_Geodetic_To_Mercator */
+   long Error_Code = MERC_NO_ERROR;
 /*
  * The function Convert_Geodetic_To_Mercator converts geodetic (latitude and
  * longitude) coordinates to Mercator projection (easting and northing)
@@ -354,7 +385,6 @@ long ossimMercatorProjection::Convert_Geodetic_To_Mercator (double Latitude,
   double tan_temp;
   double pow_temp;
 
-  long Error_Code = MERC_NO_ERROR;
 
 //   if ((Latitude < -MAX_LAT) || (Latitude > MAX_LAT))
 //   { /* Latitude out of range */
@@ -407,8 +437,17 @@ long ossimMercatorProjection::Convert_Mercator_To_Geodetic(double Easting,
   double dx;     /* Delta easting - Difference in easting (easting-FE)      */
   double dy;     /* Delta northing - Difference in northing (northing-FN)   */
   double xphi;   /* Isometric latitude                                      */
-  long Error_Code = MERC_NO_ERROR;
+   long Error_Code = MERC_NO_ERROR;
 
+#if 0
+   if(theSphericalFlag)
+   {
+      *Latitude = M_PI*.5 - 2.0 * atan(exp(-Easting / Merc_a));
+      *Longitude = Easting/Merc_a;
+      
+      return Error_Code;
+   }
+#endif
 //   if ((Easting < (Merc_False_Easting - Merc_Delta_Easting))
 //       || (Easting > (Merc_False_Easting + Merc_Delta_Easting)))
 //   { /* Easting out of range */

@@ -11,7 +11,7 @@
 //   (USM).
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimRpcModel.h 16174 2009-12-23 16:34:06Z dburken $
 
 #ifndef ossimRpcModel_HEADER
 #define ossimRpcModel_HEADER
@@ -83,15 +83,6 @@ public:
                       bool computeGsdFlag=true);
 
    void setMetersPerPixel(const ossimDpt& metersPerPixel);
-
-   /**
-    * This method computes the ground sample distance(gsd) and sets class
-    * attribute theGSD and theMeanGSD by doing a lineSampleHeightToWorld on
-    * three points and calculating the distance from them.
-    *
-    * @return Nothing but throws ossimException on error.
-    */
-   void computeGsd();
 
    /**
     * @brief Sets data member theBiasError, theRandError.

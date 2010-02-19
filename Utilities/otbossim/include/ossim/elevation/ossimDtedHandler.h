@@ -16,7 +16,7 @@
 //              Derived from ossimElevCellHandler.
 //<
 //*****************************************************************************
-// $Id: ossimDtedHandler.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDtedHandler.h 16120 2009-12-17 19:49:52Z gpotts $
 
 #ifndef ossimDtedHandler_HEADER
 #define ossimDtedHandler_HEADER
@@ -26,12 +26,21 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/elevation/ossimElevCellHandler.h>
-#include <OpenThreads/ReadWriteMutex>
-#include <OpenThreads/ReadWriteMutex>
+#include <OpenThreads/Mutex>
+#include <ossim/support_data/ossimDtedVol.h>
+#include <ossim/support_data/ossimDtedHdr.h>
+#include <ossim/support_data/ossimDtedUhl.h>
+#include <ossim/support_data/ossimDtedDsi.h>
+#include <ossim/support_data/ossimDtedAcc.h>
+#include <ossim/support_data/ossimDtedRecord.h>
 
 class OSSIM_DLL ossimDtedHandler : public ossimElevCellHandler
 {
 public:
+   ossimDtedHandler()
+   {
+      
+   }
    ossimDtedHandler(const ossimFilename& dted_file, bool memoryMapFlag=false);
    
 
@@ -43,6 +52,9 @@ public:
       NULL_POST                  = -32767 // Fixed by DTED specification.
    };
 
+   virtual bool open(const ossimFilename& file, bool memoryMapFlag=false);
+   virtual void close();
+   
    /*!
     * METHOD: getHeightAboveMSL
     * Height access methods.
@@ -68,20 +80,28 @@ public:
    ossimString  compilationDate() const;
 
    virtual bool isOpen()const;
-   /**
-    * Opens a stream to the dted cell.
-    *
-    * @return Returns true on success, false on error.
-    */
-   virtual bool open();
-
-   /**
-    * Closes the stream to the file.
-    */
-   virtual void close();
-
-   virtual void setMemoryMapFlag(bool flag);
    
+   
+   const ossimDtedVol& vol()const
+   {
+      return m_vol;
+   }
+   const ossimDtedHdr& hdr()const
+   {
+      return m_hdr;
+   }
+   const ossimDtedUhl& uhl()const
+   {
+      return m_uhl;
+   }
+   const ossimDtedDsi& dsi()const
+   {
+      return m_dsi;
+   }
+   const ossimDtedAcc& acc()const
+   {
+      return m_acc;
+   }
 protected:
    virtual ~ossimDtedHandler();
   // Disallow operator= and copy constrution...
@@ -100,29 +120,32 @@ protected:
    ossim_sint16 convertSignedMagnitude(ossim_uint16& s) const;
    virtual double getHeightAboveMSLFile(const ossimGpt&);
    virtual double getHeightAboveMSLMemory(const ossimGpt&);
-   void mapToMemory();
    
-   mutable OpenThreads::Mutex theFileStrMutex;
-   mutable std::ifstream theFileStr;
+   mutable OpenThreads::Mutex m_fileStrMutex;
+   mutable std::ifstream m_fileStr;
    
-   ossim_int32      theNumLonLines;  // east-west dir
-   ossim_int32      theNumLatPoints; // north-south
-   ossim_int32      theDtedRecordSizeInBytes;
-   ossimString      theEdition;
-   ossimString      theProductLevel;
-   ossimString      theCompilationDate;
-   ossim_int32      theOffsetToFirstDataRecord;
-   double           theLatSpacing;   // degrees
-   double           theLonSpacing;   // degrees
-   ossimDpt         theSwCornerPost; // cell origin;
+   ossim_int32      m_numLonLines;  // east-west dir
+   ossim_int32      m_numLatPoints; // north-south
+   ossim_int32      m_dtedRecordSizeInBytes;
+   ossimString      m_edition;
+   ossimString      m_productLevel;
+   ossimString      m_compilationDate;
+   ossim_int32      m_offsetToFirstDataRecord;
+   double           m_latSpacing;   // degrees
+   double           m_lonSpacing;   // degrees
+   ossimDpt         m_swCornerPost; // cell origin;
 
    // Indicates whether byte swapping is needed.
-   bool theSwapBytesFlag;
+   bool m_swapBytesFlag;
 
-   mutable OpenThreads::ReadWriteMutex theMemoryMapMutex;
-   mutable bool theMemoryMapFlag;
-   mutable std::vector<ossim_uint8> theMemoryMap;
+   mutable OpenThreads::Mutex m_memoryMapMutex;
+   mutable std::vector<ossim_uint8> m_memoryMap;
    
+   ossimDtedVol m_vol;
+   ossimDtedHdr m_hdr;
+   ossimDtedUhl m_uhl;
+   ossimDtedDsi m_dsi;
+   ossimDtedAcc m_acc;
    TYPE_DATA
 };
 
@@ -132,7 +155,7 @@ inline ossim_sint16 ossimDtedHandler::convertSignedMagnitude(ossim_uint16& s) co
    // DATA_SIGN_MASK  0x8000 = 1000 0000 0000 0000
    
    // First check to see if the bytes need swapped.
-   s = (theSwapBytesFlag ? ( ((s & 0x00ff) << 8) | ((s & 0xff00) >> 8) ) : s);
+   s = (m_swapBytesFlag ? ( ((s & 0x00ff) << 8) | ((s & 0xff00) >> 8) ) : s);
    
    // If the sign bit is set, mask it out then multiply by negative one.
    if (s & 0x8000)
@@ -145,63 +168,16 @@ inline ossim_sint16 ossimDtedHandler::convertSignedMagnitude(ossim_uint16& s) co
 
 inline bool ossimDtedHandler::isOpen()const
 {
-   if(theMemoryMapFlag)
-   {
-      OpenThreads::ScopedReadLock lock(theMemoryMapMutex);
-      return theMemoryMap.size()>0;
-   }
-   {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
-      return theFileStr.is_open();
-   }
-}
-
-inline bool ossimDtedHandler::open()
-{
-   if(theMemoryMapFlag)
-   {
-      theMemoryMapMutex.readLock();
-      if(theMemoryMap.size())
-      {
-         theMemoryMapMutex.readUnlock();
-         return true;
-      }
-      else
-      {
-         theMemoryMapMutex.readUnlock();
-         mapToMemory();
-         return (theMemoryMap.size()>0);
-      }
-   }
-   else
-   {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
-      if (theFileStr.is_open())
-      {
-         return true;
-      }
-      
-      theFileStr.open(theFilename.c_str(), std::ios::in | std::ios::binary);
-      
-      return theFileStr.is_open();
-   }
+   if(!m_memoryMap.empty()) return true;
    
-   return false;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_fileStrMutex);
+   return (m_fileStr.is_open());
 }
 
 inline void ossimDtedHandler::close()
 {
-   {  
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
-      if (theFileStr.is_open())
-      {
-         theFileStr.close();
-      }
-   }
-   {
-      OpenThreads::ScopedWriteLock lock(theMemoryMapMutex);
-      theMemoryMap.clear();
-   }
+   m_fileStr.close();
+   m_memoryMap.clear();
 }
 
 #endif

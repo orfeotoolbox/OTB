@@ -13,7 +13,7 @@
 // pure virtual methods that all elevation source factories must implement.
 //
 //**************************************************************************
-// $Id: ossimDtedFactory.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDtedFactory.cpp 16104 2009-12-17 18:09:59Z gpotts $
 
 #include <cstdlib> /* abs() */
 #include <sstream>
@@ -50,8 +50,6 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
          << "DEBUG ossimDtedFactory::getNewElevSource: Entered..."
          << std::endl;
    }
-   
-   ossimElevManager* mgr = ossimElevManager::instance();
    
    ossimRefPtr<ossimElevSource> dted_ptr;
    
@@ -115,7 +113,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
          << std::endl;
    }
    
-   if (dted_name.exists() && !(mgr->isCellOpen(dted_name)) )
+   if (dted_name.exists())
    {
       dted_ptr = new ossimDtedHandler(dted_name);
       if ( (!(dted_ptr->getErrorStatus())) &&
@@ -141,7 +139,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
          << std::endl;
    }
    
-   if (dted_name.exists() && !(mgr->isCellOpen(dted_name)) )
+   if (dted_name.exists() )
    {
       dted_ptr = new ossimDtedHandler(dted_name);
       if ( (!(dted_ptr->getErrorStatus())) &&
@@ -167,7 +165,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
          << std::endl;
    }
    
-   if (dted_name.exists() && !(mgr->isCellOpen(dted_name)) )
+   if (dted_name.exists() )
    {
       dted_ptr = new ossimDtedHandler(dted_name);
       if ( (!(dted_ptr->getErrorStatus())) &&

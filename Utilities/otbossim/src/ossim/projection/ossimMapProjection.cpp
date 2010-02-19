@@ -9,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimMapProjection.cpp 16428 2010-01-27 20:11:39Z dburken $
 
 #include <iostream>
 #include <cstdlib>
@@ -18,6 +18,7 @@
 
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
+#include <ossim/projection/ossimGcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -50,7 +51,10 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
     theUlEastingNorthing(0, 0),
     theFalseEastingNorthing(0, 0),
     thePcsCode(0),
+    theGcsCode(0),
     theElevationLookupFlag(false),
+    theModelTransform(),
+    theInverseModelTransform(),
     theModelTransformUnitType(OSSIM_UNIT_UNKNOWN)
 {
    theUlGpt = theOrigin;
@@ -69,6 +73,7 @@ ossimMapProjection::ossimMapProjection(const ossimMapProjection& src)
         theUlEastingNorthing(src.theUlEastingNorthing),
         theFalseEastingNorthing(src.theFalseEastingNorthing),
         thePcsCode(src.thePcsCode),
+        theGcsCode(src.theGcsCode),
         theElevationLookupFlag(false),
         theModelTransform(src.theModelTransform),
         theInverseModelTransform(src.theInverseModelTransform),
@@ -93,6 +98,11 @@ void ossimMapProjection::setPcsCode(ossim_uint16 pcsCode)
 ossim_uint16 ossimMapProjection::getPcsCode()const
 {
   return thePcsCode;
+}
+
+ossim_uint16 ossimMapProjection::getGcsCode()const
+{
+  return theGcsCode;
 }
 
 ossimString ossimMapProjection::getProjectionName() const
@@ -133,6 +143,11 @@ const ossimDpt& ossimMapProjection::getUlEastingNorthing() const
 const ossimGpt&   ossimMapProjection::getUlGpt() const
 {
    return theUlGpt;
+}
+
+const ossimGpt& ossimMapProjection::getOrigin() const
+{
+  return theOrigin;
 }
 
 const ossimDatum* ossimMapProjection::getDatum() const
@@ -200,63 +215,9 @@ void ossimMapProjection::update()
    // if the delta lat and lon per pixel is set then
    // check to see if the meters were set.
    //
-   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   if( hasModelTransform() )
    {
-      const NEWMAT::Matrix& m = theModelTransform.getData();
-      ossimDpt ls1(0, 0);
-      ossimDpt ls2(1, 0);
-      ossimDpt ls3(0, 1);
-      ossimGpt wpt1;
-      ossimGpt wpt2;
-      lineSampleToWorld(ls1, wpt1);
-      ossimDpt mpt1(m[0][0]*ls1.x + m[0][1]*ls1.y + m[0][3],
-                    m[1][0]*ls1.x + m[1][1]*ls1.y + m[1][3]);
-      ossimDpt mpt2(m[0][0]*ls2.x + m[0][1]*ls2.y + m[0][3],
-                    m[1][0]*ls2.x + m[1][1]*ls2.y + m[1][3]);
-      ossimDpt mpt3(m[0][0]*ls3.x + m[0][1]*ls3.y + m[0][3],
-                    m[1][0]*ls3.x + m[1][1]*ls3.y + m[1][3]);
-      double len = 1.0;
-      double len2 = 1.0;
-      switch(theModelTransformUnitType)
-      {
-         case OSSIM_DEGREES:
-         case OSSIM_MINUTES:
-         case OSSIM_SECONDS:
-         case OSSIM_RADIANS:
-         {
-            ossimUnitConversionTool ut;
-            len  = (mpt1-mpt2).length();
-            len2  = (mpt1-mpt3).length();
-			ut.setValue((len+len2)*.5, theModelTransformUnitType);
-			len = ut.getValue(OSSIM_DEGREES);
-            theDegreesPerPixel = ossimDpt(len, len);
-			theUlGpt = wpt1;
-            computeMetersPerPixel(theDegreesPerPixel.y,
-                                  theDegreesPerPixel.x,
-                                  theMetersPerPixel);
-         break;
-         }
-         default:
-         {
-            ossimUnitConversionTool ut;
-            len  = (mpt1-mpt2).length();
-            len2  = (mpt1-mpt3).length();
-            ut.setValue(mpt1.x, theModelTransformUnitType);
-            mpt1.x = ut.getValue(OSSIM_METERS);
-            ut.setValue(mpt1.y, theModelTransformUnitType);
-            mpt1.y = ut.getValue(OSSIM_METERS);
-			ut.setValue((len+len2)*.5, theModelTransformUnitType);
-			len = ut.getValue(OSSIM_METERS);
-            theMetersPerPixel = ossimDpt(len, len);
-            theUlEastingNorthing = mpt1;
-            computeDegreesPerPixel(theOrigin,
-                                   theMetersPerPixel,
-                                   theDegreesPerPixel.y,
-                                   theDegreesPerPixel.x);
-            break;
-         }
-      }
-      theUlGpt = wpt1;
+      updateFromTransform();
    }
    else if( theDegreesPerPixel.hasNans() == false )
    {
@@ -295,24 +256,103 @@ void ossimMapProjection::update()
    //---
    
    // See if this projection has a pcs code.
-   ossim_uint16 pcsCode = ossimPcsCodeProjectionFactory::instance()->
-      getPcsCodeFromProjection(this);
-   
-   if (pcsCode)
+   ossimString projType = getClassName();
+   if (projType == "ossimEquDistCylProjection" || projType == "ossimLlxyProjection")
    {
-      // If so store it.
-      thePcsCode = pcsCode;
-   }
-   else if (thePcsCode)
-   {
-      //---
-      // A code was stored previously.  Verify the projection parameters for
-      // the code.
-      //---
-      if ( verifyPcsCodeMatches() == false )
+      if (theGcsCode == 0)
       {
-         thePcsCode = 0;
+        ossim_uint16 gcsCode = ossimGcsCodeProjectionFactory::instance()->
+          getGcsCodeFromProjection(this);
+        {
+          if (gcsCode)
+          {
+            theGcsCode = gcsCode;
+          }
+        }
       }
+   }
+   else
+   {
+     if (thePcsCode)
+     {
+       //---
+       // A code was stored previously.  Verify the projection parameters for
+       // the code.
+       //---
+       if ( verifyPcsCodeMatches() == false )
+       {
+         thePcsCode = 0;
+       }
+     }
+
+     if (thePcsCode == 0)
+     {
+       thePcsCode = ossimPcsCodeProjectionFactory::instance()->
+         getPcsCodeFromProjection(this);
+     }
+   }
+}
+
+void ossimMapProjection::updateFromTransform()
+{
+   if ( hasModelTransform() )
+   {
+      const NEWMAT::Matrix& m = theModelTransform.getData();
+      ossimDpt ls1(0, 0);
+      ossimDpt ls2(1, 0);
+      ossimDpt ls3(0, 1);
+      ossimGpt wpt1;
+      ossimGpt wpt2;
+      lineSampleToWorld(ls1, wpt1);
+      ossimDpt mpt1(m[0][0]*ls1.x + m[0][1]*ls1.y + m[0][3],
+                    m[1][0]*ls1.x + m[1][1]*ls1.y + m[1][3]);
+      ossimDpt mpt2(m[0][0]*ls2.x + m[0][1]*ls2.y + m[0][3],
+                    m[1][0]*ls2.x + m[1][1]*ls2.y + m[1][3]);
+      ossimDpt mpt3(m[0][0]*ls3.x + m[0][1]*ls3.y + m[0][3],
+                    m[1][0]*ls3.x + m[1][1]*ls3.y + m[1][3]);
+      
+      double len = 1.0;
+      double len2 = 1.0;
+      switch(theModelTransformUnitType)
+      {
+         case OSSIM_DEGREES:
+         case OSSIM_MINUTES:
+         case OSSIM_SECONDS:
+         case OSSIM_RADIANS:
+         {
+            ossimUnitConversionTool ut;
+            len  = (mpt1-mpt2).length();
+            len2  = (mpt1-mpt3).length();
+            ut.setValue((len+len2)*.5, theModelTransformUnitType);
+            len = ut.getValue(OSSIM_DEGREES);
+            theDegreesPerPixel = ossimDpt(len, len);
+            theUlGpt = wpt1;
+            computeMetersPerPixel(theDegreesPerPixel.y,
+                                  theDegreesPerPixel.x,
+                                  theMetersPerPixel);
+            break;
+         }
+         default:
+         {
+            ossimUnitConversionTool ut;
+            len  = (mpt1-mpt2).length();
+            len2  = (mpt1-mpt3).length();
+            ut.setValue(mpt1.x, theModelTransformUnitType);
+            mpt1.x = ut.getValue(OSSIM_METERS);
+            ut.setValue(mpt1.y, theModelTransformUnitType);
+            mpt1.y = ut.getValue(OSSIM_METERS);
+            ut.setValue((len+len2)*.5, theModelTransformUnitType);
+            len = ut.getValue(OSSIM_METERS);
+            theMetersPerPixel = ossimDpt(len, len);
+            theUlEastingNorthing = mpt1;
+            computeDegreesPerPixel(theOrigin,
+                                   theMetersPerPixel,
+                                   theDegreesPerPixel.y,
+                                   theDegreesPerPixel.x);
+            break;
+         }
+      }
+      theUlGpt = wpt1;
    }
 }
 
@@ -372,6 +412,19 @@ void ossimMapProjection::applyScale(const ossimDpt& scale,
          // Set the tie to new point.
          setUlEastingNorthing(tie);
       }
+   }
+
+   if (theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      theModelTransform.getData()[0][0] =
+         theModelTransform.getData()[0][0]*scale.x;
+      theModelTransform.getData()[1][1] =
+         theModelTransform.getData()[1][1]*scale.y;
+
+      theInverseModelTransform = theModelTransform;
+      theInverseModelTransform.i();
+
+      updateFromTransform();
    }
 }
 
@@ -828,6 +881,29 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
               ossimKeywordNames::PCS_CODE_KW,
               thePcsCode,
               true);
+
+      if (theGcsCode == 0)
+      {
+        ossim_uint16 tmpEpsgCode = thePcsCode;
+        if (tmpEpsgCode < 64000)
+        {
+          ossimString tmpEpsgCodeStr = ossimString("EPSG:") + ossimString::toString(tmpEpsgCode);
+          kwl.add(prefix,
+            ossimKeywordNames::SRS_NAME_KW,
+            tmpEpsgCodeStr,
+            true);
+        }
+      }
+   }
+
+   if(theGcsCode != 0)
+   {
+      ossimString gcsCodeStr =
+         ossimString("EPSG:") + ossimString::toString(theGcsCode);
+      kwl.add(prefix,
+              ossimKeywordNames::SRS_NAME_KW,
+              gcsCodeStr,
+              true);
    }
    
    if(isGeographic())
@@ -941,7 +1017,18 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
    }
    else
    {
-      theDatum = ossimDatumFactory::instance()->wgs84();
+     if (theDatum == NULL)
+     {
+       theDatum = ossimDatumFactory::instance()->wgs84();
+     }
+     else
+     {
+       const ossimEllipsoid* ellipse = theDatum->ellipsoid();
+       if(ellipse)
+       {
+         theEllipsoid = *ellipse;
+       }
+     }
    }
    
    // Get the latitude of the origin.
@@ -1328,6 +1415,26 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
       }
    }
 
+   //---
+   // Final sanity check:
+   //---
+   if ( theOrigin.hasNans() )
+   {
+      if ( theModelTransformUnitType == OSSIM_DEGREES )
+      {
+         const NEWMAT::Matrix& m = theModelTransform.getData();
+         theOrigin.lon = m[0][3];
+         theOrigin.lat = m[1][3];
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << __FILE__ << ": " << __LINE__
+            << "\nossimMapProjection::loadState ERROR: Origin is not set!"
+            << std::endl;
+      }
+   }
+
    return true;
 }
 
@@ -1359,8 +1466,24 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
        << "\n" << ossimKeywordNames::FALSE_EASTING_NORTHING_KW << ": "
        << theFalseEastingNorthing.toString().c_str()
        << "\n" << ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW << ": "
-       << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS)
-       << std::endl;
+       << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS);
+
+   if(isGeographic())
+   {
+      out << "\n" << ossimKeywordNames::TIE_POINT_XY_KW << ": " 
+          << ossimDpt(theUlGpt).toString().c_str()
+          << "\n" << ossimKeywordNames::TIE_POINT_UNITS_KW << ": " 
+          << ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES)
+          << std::endl;
+   }
+   else
+   {
+      out << "\n" << ossimKeywordNames::TIE_POINT_XY_KW << ": " 
+          << theUlEastingNorthing.toString().c_str()
+          << "\n" << ossimKeywordNames::TIE_POINT_UNITS_KW << ": " 
+          << ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS)
+          << std::endl;
+   }
    
    return ossimProjection::print(out);
 }
@@ -1610,6 +1733,10 @@ bool ossimMapProjection::verifyPcsCodeMatches() const
          {
             result = true;
          }
+      }
+      else
+      {
+        result = true; //projection is not state plane
       }
    }
    return result;

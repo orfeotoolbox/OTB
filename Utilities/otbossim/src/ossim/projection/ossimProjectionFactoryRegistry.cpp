@@ -4,8 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 15766 2009-10-20 12:37:09Z gpotts $
-#include <algorithm>
+// $Id: ossimProjectionFactoryRegistry.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
@@ -13,11 +12,14 @@
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/projection/ossimNitfProjectionFactory.h>
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
+#include <ossim/projection/ossimGcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/projection/ossimSensorModelFactory.h>
 #include <ossim/projection/ossimMiscProjectionFactory.h>
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimObjectFactoryRegistry.h>
+#include <algorithm>
+#include <vector>
 
 ossimProjectionFactoryRegistry* ossimProjectionFactoryRegistry::m_instance = 0;
 
@@ -110,7 +112,7 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
          ossimString s1 = (*i).first;
          if ( s1.size() )
          {
-            vector<ossimString> v;
+            std::vector<ossimString> v;
             s1.split(v, ossimString("."));
             if ( v.size() )
             {
@@ -138,12 +140,13 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
 
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
-   registerFactory(ossimNitfProjectionFactory::instance());   
-   registerFactory(ossimSensorModelFactory::instance());
+   registerFactory(ossimNitfProjectionFactory::instance()); 
    registerFactory(ossimTiffProjectionFactory::instance());
+   registerFactory(ossimSensorModelFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimSrsProjectionFactory::instance());
    registerFactory(ossimPcsCodeProjectionFactory::instance());   
+   registerFactory(ossimGcsCodeProjectionFactory::instance());   
    registerFactory(ossimStatePlaneProjectionFactory::instance());
    registerFactory(ossimMiscProjectionFactory::instance());
 }

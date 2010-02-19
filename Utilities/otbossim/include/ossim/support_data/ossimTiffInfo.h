@@ -438,6 +438,18 @@ private:
                   std::vector<ossim_float64>& floats) const;
 
    /**
+    * @brief Gets the datum code matching gcs code from the keyword list as a
+    * string.
+    * @param gtiffPrefix Prefix for gtiffKwl.
+    * @param gtiffKwl The keyword list with all tiff keywords.
+    * @param datumCode The code to initialize.
+    * @return true on success, false on error.
+    */
+   bool getGcsDatumCode(const ossimString& gtiffPrefix,
+                        const ossimKeywordlist& gtiffKwl,
+                        ossimString& datumCode) const;
+
+   /**
     * @brief Gets the pcs code from the keyword list as a string.
     * @param gtiffPrefix Prefix for gtiffKwl.
     * @param gtiffKwl The keyword list with all tiff keywords.

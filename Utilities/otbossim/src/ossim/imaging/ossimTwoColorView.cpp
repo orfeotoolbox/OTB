@@ -272,8 +272,8 @@ void ossimTwoColorView::runAlgorithm(ossimImageData* newData, ossimImageData* ol
 void ossimTwoColorView::runNative8(ossimImageData* newData, ossimImageData* oldData)
 {
    // do the new band first
-   ossim_uint8 newNullPix = 0.0;
-   ossim_uint8 oldNullPix = 0.0;
+   ossim_uint8 newNullPix = 0;
+   ossim_uint8 oldNullPix = 0;
    const ossim_uint8* newBuf = 0;
    const ossim_uint8* oldBuf = 0;
    ossim_uint32 idx = 0;
@@ -385,8 +385,8 @@ void ossimTwoColorView::runNorm(ossimImageData* newData, ossimImageData* oldData
 {
    // do the new band first
    ossim_float32 tempValue=0.0;
-   ossim_uint8 newNullPix = 0.0;
-   ossim_uint8 oldNullPix = 0.0;
+   ossim_uint8 newNullPix = 0;
+   ossim_uint8 oldNullPix = 0;
    std::vector<ossim_float32> newDataBuffer;
    std::vector<ossim_float32> oldDataBuffer;
    

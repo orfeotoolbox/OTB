@@ -11,7 +11,7 @@
 // TileSource.
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimLandsatTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 
 #ifndef ossimLandsatTileSource_HEADER
 #define ossimLandsatTileSource_HEADER
@@ -32,8 +32,6 @@ public:
    virtual ossimString getShortName() const;
    
    virtual ossimString getLongName() const;
-
-   virtual ossimString  className() const;
 
    virtual bool open();
    

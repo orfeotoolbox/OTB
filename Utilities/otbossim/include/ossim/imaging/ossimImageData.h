@@ -9,11 +9,12 @@
 // Description: Container class for a tile of image data.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimImageData.h 16103 2009-12-16 22:06:29Z dburken $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
 #include <vector>
+#include <iosfwd> /* for ostream */
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimRectilinearDataObject.h>
@@ -142,7 +143,7 @@ public:
    virtual void setMaxPix(const ossim_float64* maxPixArray,
                           ossim_uint32 numberOfValues);
 
-   virtual const ossimIpt& getOrigin()const{return theOrigin;}
+   virtual const ossimIpt& getOrigin()const{return m_origin;}
 
    /**
     * If the minBands and maxBands are empty or not equal to the imageData's
@@ -286,6 +287,23 @@ public:
       ossim_uint32 bandNumber = 0) const;
   
    virtual void populateHistogram(ossimRefPtr<ossimMultiBandHistogram> histo);
+
+   /**
+    * @return true if alpha channel is initialized, false if not.
+    */
+   virtual bool hasAlpha() const;
+   
+   /**
+    * @return const ossim_uint8* to the alpha channel or null if the alpha
+    * channel was not computed.
+    */
+   virtual const ossim_uint8* getAlphaBuf() const;
+
+   /**
+    * @return ossim_uint8* to the alpha channel or null if the alpha channel
+    * was not computed.
+    */
+   virtual ossim_uint8* getAlphaBuf();
 
    /**
     * @return const void* to theDataBuffer
@@ -472,6 +490,19 @@ public:
     *  Initialize the data buffer.
     */
    virtual void initialize();
+
+   /**
+    * @brief Writes tile to stream.
+    *
+    * This will write the buffer to the stream assuming a contiguous buffer in
+    * BSQ format.  Currently does not support converting to BIP or BIL
+    * or byte swapping but probably should add at some point.
+    *
+    * @param os The output stream write to.
+    *
+    * @return true on success, false on error.
+    */
+   virtual bool write(std::ostream& os) const;
 
    /**
     * Copies entire tile to buf passed in.  Data put in buf is normalized.
@@ -694,6 +725,14 @@ public:
     * scalar type.
     */
    virtual void stretchMinMax();
+
+   /**
+    * @brief Computes the alpha channel.
+    *
+    * For each pixel if any band value is not null then alpha will be 255;
+    * else, 0.
+    */
+   virtual void computeAlphaChannel();
    
 protected:
 
@@ -706,6 +745,14 @@ protected:
     * scalar type.
     */
    template <class T> void stretchMinMax(T dummyTemplate);
+
+   /**
+    * @brief Templated compute alpha channel.
+    *
+    * For each pixel if any band value is not null then alpha will be 255;
+    * else, 0.
+    */
+   template <class T> void computeAlphaChannel(T dummyTemplate);   
 
    /**
     * Templated validate method.
@@ -932,11 +979,11 @@ protected:
       bool result = false;
       if(data)
       {
-         result = ((theSpatialExtents.size() ==
-                    data->theSpatialExtents.size())&&
-                   (theSpatialExtents[0] == data->theSpatialExtents[0])&&
-                   (theSpatialExtents[1] == data->theSpatialExtents[1])&&
-                   (theScalarType == data->theScalarType));
+         result = ((m_spatialExtents.size() ==
+                    data->m_spatialExtents.size())&&
+                   (m_spatialExtents[0] == data->m_spatialExtents[0])&&
+                   (m_spatialExtents[1] == data->m_spatialExtents[1])&&
+                   (m_scalarType == data->m_scalarType));
       }
       return result;
    }
@@ -944,19 +991,24 @@ protected:
    /**
     * Have a null pixel value per band.
     */
-   std::vector<ossim_float64> theNullPixelValue;
+   std::vector<ossim_float64> m_nullPixelValue;
 
    /**
     * Have a min pixel value per band.
     */
-   std::vector<ossim_float64> theMinPixelValue;
+   std::vector<ossim_float64> m_minPixelValue;
 
    /**
     * Have a max pixel value per band.
     */
-   std::vector<ossim_float64> theMaxPixelValue;
+   std::vector<ossim_float64> m_maxPixelValue;
+
+   /**
+    * Alpha channel:
+    */
+   std::vector<ossim_uint8> m_alpha;
    
-   ossimIpt       theOrigin;
+   ossimIpt       m_origin;
 
 private:
 
@@ -964,51 +1016,56 @@ private:
 TYPE_DATA
 };
 
+inline bool ossimImageData::hasAlpha() const
+{
+   return (m_alpha.size()?true:false);
+}
+
 inline ossimIrect ossimImageData::getImageRectangle() const
 {
-   ossimIpt lr(theOrigin.x + getWidth()  - 1,
-               theOrigin.y + getHeight() - 1);
+   ossimIpt lr(m_origin.x + getWidth()  - 1,
+               m_origin.y + getHeight() - 1);
    
-   return ossimIrect(theOrigin, lr);
+   return ossimIrect(m_origin, lr);
 }
 
 inline const ossim_float64* ossimImageData::getNullPix()const
 {
-   return ( theNullPixelValue.size() > 0 ? &theNullPixelValue.front() : 0 );
+   return ( m_nullPixelValue.size() > 0 ? &m_nullPixelValue.front() : 0 );
 }
 
 inline const ossim_float64* ossimImageData::getMinPix()const
 {
-   return ( theMinPixelValue.size() > 0 ? &theMinPixelValue.front() : 0 );
+   return ( m_minPixelValue.size() > 0 ? &m_minPixelValue.front() : 0 );
 }
 
 inline const ossim_float64* ossimImageData::getMaxPix()const
 {
-   return ( theMaxPixelValue.size() > 0 ? &theMaxPixelValue.front() : 0 );
+   return ( m_maxPixelValue.size() > 0 ? &m_maxPixelValue.front() : 0 );
 }
 
 inline ossim_float64 ossimImageData::getNullPix(ossim_uint32 band) const
 {
-   return ( band < theNullPixelValue.size() ? theNullPixelValue[band] :
+   return ( band < m_nullPixelValue.size() ? m_nullPixelValue[band] :
             ossim::defaultNull( getScalarType() ) );
 }
       
 inline ossim_float64 ossimImageData::getMinPix(ossim_uint32 band) const
 {
-   return ( band < theMinPixelValue.size() ? theMinPixelValue[band] :
+   return ( band < m_minPixelValue.size() ? m_minPixelValue[band] :
             ossim::defaultMin( getScalarType() ) );
 }
 
 inline ossim_float64 ossimImageData::getMaxPix(ossim_uint32 band) const
 {
-   return ( band < theMaxPixelValue.size() ? theMaxPixelValue[band] :
+   return ( band < m_maxPixelValue.size() ? m_maxPixelValue[band] :
             ossim::defaultMax( getScalarType() ) );
 }
 
 inline ossim_uint32 ossimImageData::getHashId()const
 {
-   const unsigned char *bufx = (unsigned char*)(&theOrigin.x);
-   const unsigned char *bufy = (unsigned char*)(&theOrigin.y);
+   const unsigned char *bufx = (unsigned char*)(&m_origin.x);
+   const unsigned char *bufy = (unsigned char*)(&m_origin.y);
    return (ossim_uint32)(bufx[0]*101 + bufx[1]*103 +
                          bufx[2]*107 + bufx[3]*109 +
                          bufy[0]*139 + bufy[1]*149 +

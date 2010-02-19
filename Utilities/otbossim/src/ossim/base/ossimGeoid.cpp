@@ -15,6 +15,7 @@
 #include <ossim/base/ossimGeoid.h>
 
 RTTI_DEF2(ossimGeoid, "ossimGeoid", ossimObject, ossimErrorStatusInterface)
+RTTI_DEF1(ossimIdentityGeoid, "ossimIdentityGeoid", ossimGeoid)
 
 ossimGeoid::ossimGeoid()
    :

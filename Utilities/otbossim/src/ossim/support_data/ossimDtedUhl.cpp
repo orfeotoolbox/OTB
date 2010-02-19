@@ -10,7 +10,7 @@
 //               (UHL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedUhl.cpp 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedUhl.cpp 16104 2009-12-17 18:09:59Z gpotts $
 
 #include <cstdlib>
 #include <iostream>
@@ -39,43 +39,46 @@ ossimDtedUhl::ossimDtedUhl(const ossimFilename& dted_file, ossim_int32 offset)
       theNumLonLines(),
       theNumLatPoints(),
       theMultipleAccuracy(),
-      theStartOffset(offset),
+      theStartOffset(0),
       theStopOffset(0)
 {
-   // Check to see that dted file exists.
-   if(!dted_file.exists())
+   if(!dted_file.empty())
    {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: The DTED file does not exist: " << dted_file << std::endl;
-      return;
-   }
-
-   // Check to see that the dted file is readable.
-   if(!dted_file.isReadable())
-   {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: The DTED file is not readable --> " << dted_file << std::endl;
-      return;
-   }
-
-   std::ifstream in(dted_file.c_str());
-   if(!in)
-   {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: Error opening the DTED file: " << dted_file << std::endl;
+      // Check to see that dted file exists.
+      if(!dted_file.exists())
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: The DTED file does not exist: " << dted_file << std::endl;
+         return;
+      }
       
-      return;
+      // Check to see that the dted file is readable.
+      if(!dted_file.isReadable())
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: The DTED file is not readable --> " << dted_file << std::endl;
+         return;
+      }
+      
+      std::ifstream in(dted_file.c_str());
+      if(!in)
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL ossimDtedUhl::ossimDtedUhl: Error opening the DTED file: " << dted_file << std::endl;
+         
+         return;
+      }
+      in.seekg(offset);
+      parse(in);
+      
+      in.close();
    }
-
-   parse(in);
-
-   in.close();
 }
 
 //**************************************************************************
 // CONSTRUCTOR
 //**************************************************************************
-ossimDtedUhl::ossimDtedUhl(std::istream& in, ossim_int32 offset)
+ossimDtedUhl::ossimDtedUhl(std::istream& in)
    :
       theRecSen(),
       theLonOrigin(),
@@ -87,7 +90,7 @@ ossimDtedUhl::ossimDtedUhl(std::istream& in, ossim_int32 offset)
       theNumLonLines(),
       theNumLatPoints(),
       theMultipleAccuracy(),
-      theStartOffset(offset),
+      theStartOffset(0),
       theStopOffset(0)
 {
    parse(in);
@@ -98,9 +101,9 @@ ossimDtedUhl::ossimDtedUhl(std::istream& in, ossim_int32 offset)
 //**************************************************************************
 void ossimDtedUhl::parse(std::istream& in)
 {
-   // Seek to the start of the record.
-   in.seekg(theStartOffset, std::ios::beg);
-   
+   clearErrorStatus();
+   theStartOffset = in.tellg();
+   theStopOffset  = theStartOffset;
    // Parse theRecSen
    in.read(theRecSen, FIELD1_SIZE);
    theRecSen[FIELD1_SIZE] = '\0';
@@ -109,6 +112,7 @@ void ossimDtedUhl::parse(std::istream& in)
    {
       // Not a user header label.
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;  
+      in.seekg(theStartOffset);
       return;
    }  
    
@@ -157,7 +161,7 @@ void ossimDtedUhl::parse(std::istream& in)
    theMultipleAccuracy[FIELD12_SIZE] = '\0';
 
    // Field 13 not parsed as it's unused.
-
+   in.ignore(FIELD13_SIZE);
    // Set the stop offset.
    theStopOffset = theStartOffset + UHL_LENGTH;
 }

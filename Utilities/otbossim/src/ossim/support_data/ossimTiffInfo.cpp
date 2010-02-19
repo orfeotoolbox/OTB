@@ -1065,6 +1065,7 @@ bool ossimTiffInfo::getImageGeometry(std::ifstream& inStr,
       if (useXfrm)
       {
          std::ostringstream out;
+         out << std::setprecision(15); // To avoid truncating.
          ossim_uint32 idx = 0;
          for(idx =0; idx < 16; ++idx)
          {
@@ -1204,6 +1205,15 @@ bool ossimTiffInfo::getImageGeometry(std::ifstream& inStr,
                      tmpDbl);
       }
       
+      if ( getGcsDatumCode(gtiffPrefix, gtiffKwl, tmpStr) )
+      {
+         geomKwl.add(geomPrefix.c_str(),
+                     ossimKeywordNames::DATUM_KW,
+                     tmpStr.c_str());
+      }
+
+      
+      
    } // matches: if ( gtiffKwl.parseStream(memStr) )
 
    if (traceDebug())
@@ -1311,31 +1321,45 @@ ossim_uint64 ossimTiffInfo::getArraySizeInBytes(ossim_uint64 length,
 
 ossim_uint16 ossimTiffInfo::getTypeByteSize(ossim_uint16 type) const
 {
+   ossim_uint16 result = 0;
+   
    switch (type)
    {
       case OTIFF_BYTE:
       case OTIFF_ASCII:
       case OTIFF_SBYTE:
       case OTIFF_UNDEFINED:
-         return 1;
+      {
+         result = 1;
+         break;
+      }
          
       case OTIFF_SHORT:
       case OTIFF_SSHORT:
-         return 2;
+      {
+         result = 2;
+         break;
+      }
          
       case OTIFF_LONG:
       case OTIFF_SLONG:
       case OTIFF_IFD:
-         return 4;
+      case OTIFF_FLOAT:
+      {
+         result = 4;
+         break;
+      }
          
       case OTIFF_RATIONAL:
       case OTIFF_SRATIONAL:
-      case OTIFF_FLOAT:
       case OTIFF_DOUBLE:
       case 16:             // TIFF_LONG8 defined in big tiff only.
       case 17:             // TIFF_SLONG8 defined in big tiff only.
       case 18:             // TIFF_IFD8 defined in big tiff only.
-         return 8;
+      {
+         result = 8;
+         break;
+      }
 
       default:
       {
@@ -1348,7 +1372,7 @@ ossim_uint16 ossimTiffInfo::getTypeByteSize(ossim_uint16 type) const
          break;
       }
    }
-   return 0;
+   return result;
 }
 
 void ossimTiffInfo::eatValue(std::ifstream& str, ossim_uint16 version) const
@@ -1719,11 +1743,28 @@ std::ostream& ossimTiffInfo::print(std::ostream& out,
 
       case OTIFFTAG_SAMPLEFORMAT: // tag 339
       {
-         if ( (count == 1) && (type == OTIFF_SHORT) )
+         out << prefix << "sample_format: ";
+         
+         if (count == 1)
          {
-            out << prefix << "sample_format: ";
+            printValue(out, type, valueArray);
+         }
+         else if (valueArray)
+         {
+            printArray(out, type, count, valueArray);
+         }
+         for (ossim_uint64 i = 0; i < count; ++i)
+         {
+            std::ostringstream s;
+            s << "sample_format_string";
+            if (count > 1)
+            {
+               s << i;
+            }
+            out << prefix << s.str() << ": ";
+            
             ossim_uint16 v;
-            getArrayValue(v, valueArray, 0);
+            getArrayValue(v, valueArray, i);
             switch (v)
             {
                case OSAMPLEFORMAT_UINT:
@@ -1878,6 +1919,20 @@ std::ostream& ossimTiffInfo::printValue(std::ostream& out,
       case OTIFF_SLONG:
       {
          ossim_sint32 v;
+         getArrayValue(v, valueArray, 0);
+         out << v << "\n";
+         break;
+      }
+      case OTIFF_FLOAT:
+      {
+         ossim_float32 v;
+         getArrayValue(v, valueArray, 0);
+         out << v << "\n";
+         break;
+      }
+      case OTIFF_DOUBLE:
+      {
+         ossim_float64 v;
          getArrayValue(v, valueArray, 0);
          out << v << "\n";
          break;
@@ -2051,7 +2106,8 @@ std::ostream& ossimTiffInfo::printGeoKeys(
 
             case OGEOGRAPHIC_TYPE_GEO_KEY:  // key 2048  Section 6.3.2.1 Codes
             {
-               out << prefix << "gcs_type: " << code << "\n";
+               out << prefix << ossimKeywordNames::GCS_CODE_KW << ": "
+                   << code << "\n";
                break;
             }
 
@@ -2903,6 +2959,56 @@ bool ossimTiffInfo::getFloats(const ossimString& line,
       result = true;
    }
 
+   return result;
+}
+
+bool ossimTiffInfo::getGcsDatumCode(const ossimString& gtiffPrefix,
+                                    const ossimKeywordlist& gtiffKwl,
+                                    ossimString& pcsCode) const
+{
+   bool result = false;
+
+   pcsCode.clear();
+   
+   const char* lookup =
+      gtiffKwl.find(gtiffPrefix.c_str(), ossimKeywordNames::GCS_CODE_KW);
+
+   if (lookup)
+   {
+      ossim_int32 code = ossimString(lookup).toInt32();
+
+      switch(code)
+      {
+         case 4267:
+         {
+            pcsCode = "NAS-C";
+            break;
+         }
+         case 4269:
+         {
+            pcsCode = "NAR-C";
+            break;
+         }
+         case 4322:
+         {
+            pcsCode = "WGD";
+            break;
+         }
+         case 4326:
+         {
+            pcsCode = "WGE";
+            break;
+         }
+         
+      } // matches: switch(code)
+      
+   } // matches: if (lookup)
+
+   if ( pcsCode.size() )
+   {
+      result = true;
+   }
+   
    return result;
 }
 

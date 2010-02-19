@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRpfToc.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimRpfToc.h 16308 2010-01-09 02:45:54Z eshirschorn $
 #ifndef osimRpfToc_HEADER
 #define osimRpfToc_HEADER
 
@@ -104,18 +104,18 @@ public:
                                            ossim_uint32 row,
                                            ossim_uint32 col)const;
 
+   /**
+    * @brief Method to get the root directory from the a.toc file name.
+    * @param dir This initializes dir.
+    */
+   void getRootDirectory(ossimFilename& dir) const;
+
 private:
    void deleteAll();
    void clearAll();
    void deleteTocEntryList();
    void buildTocEntryList(ossimRpfHeader* rpfHeader);
    void allocateTocEntryList(unsigned long numberOfEntries);
-
-   /**
-    * @brief Method to get the root directory from the a.toc file name.
-    * @param dir This initializes dir.
-    */
-   void getRootDirectory(ossimFilename& dir) const;
 
    /** @brief Walks through frames to find the first entry that exists... */
    void getFirstEntry(const ossimRpfTocEntry* rpfTocEntry,

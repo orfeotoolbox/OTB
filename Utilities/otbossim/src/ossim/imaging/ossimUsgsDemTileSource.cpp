@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 15837 2009-10-30 12:41:08Z dburken $
+// $Id: ossimUsgsDemTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <iostream>
 #include <fstream>
@@ -489,11 +489,6 @@ ossimString ossimUsgsDemTileSource::getShortName() const
 ossimString ossimUsgsDemTileSource::getLongName() const
 {
    return ossimString("usgs dem reader");
-}
-
-ossimString ossimUsgsDemTileSource::getClassName() const
-{
-   return ossimString("ossimUsgsDemTileSource");
 }
 
 ossim_uint32 ossimUsgsDemTileSource::getNumberOfInputBands() const

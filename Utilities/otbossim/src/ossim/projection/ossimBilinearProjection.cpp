@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimBilinearProjection.cpp 16478 2010-02-02 19:21:32Z gpotts $
 
 #include <sstream>
 using namespace std;
@@ -25,7 +25,7 @@ using namespace std;
 #include <ossim/base/ossimTieGptSet.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 16478 2010-02-02 19:21:32Z gpotts $";
 #endif
 
 // static const ossim_uint32 MINIMUM_NMBER_OF_POINTS = 4;
@@ -164,11 +164,6 @@ void ossimBilinearProjection::lineSampleHeightToWorld(
    if (ossim::isnan(heightAboveEllipsoid) == false)
    {
       worldPt.hgt = heightAboveEllipsoid;
-   }
-   else
-   {
-      worldPt.hgt =
-         ossimElevManager::instance()->getHeightAboveEllipsoid(worldPt);
    }
    if (theGeographicPt.size())
    {

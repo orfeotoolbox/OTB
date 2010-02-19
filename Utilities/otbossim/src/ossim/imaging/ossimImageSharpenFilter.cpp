@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSharpenFilter.cpp 15446 2009-09-21 17:35:42Z gpotts $
+// $Id: ossimImageSharpenFilter.cpp 15927 2009-11-16 17:30:08Z dburken $
 #include <cstdlib> /* for abs() */
 #include <ossim/imaging/ossimImageSharpenFilter.h>
 #include <ossim/base/ossimIrect.h>
@@ -99,9 +99,9 @@ void ossimImageSharpenFilter::buildConvolutionMatrix()
       
 #if 0
    // print the kernel
-   for (i = 0; i < width*width; ++i)
+   for (i = 0; i < theWidth*theWidth; ++i)
    {
-      if((i%width)==0)
+      if((i%theWidth)==0)
       {
          std::cout << std::endl;
       }
@@ -137,10 +137,11 @@ ossimString ossimImageSharpenFilter::getLongName() const
 
 void ossimImageSharpenFilter::setProperty(ossimRefPtr<ossimProperty> property)
 {
+   //std::cout << "ossimImageSharpenFilter::setProperty with name = " << property->getName() << std::endl;
    if(!property) return;
    if(property->getName() == KERNEL_WIDTH_KW)
    {
-      theWidth = property->valueToString().toDouble();
+      theWidth = property->valueToString().toUInt32();
       theWidth |=1;
       if(theWidth < 3) theWidth = 3;
       initialize();
@@ -148,7 +149,7 @@ void ossimImageSharpenFilter::setProperty(ossimRefPtr<ossimProperty> property)
    else if(property->getName() == KERNEL_SIGMA_KW)
    {
       theSigma = property->valueToString().toDouble();
-      if(theWidth < .1) theWidth = .5;
+      if(theSigma < .1) theSigma = .1;
       initialize();
    }
    else
@@ -162,7 +163,7 @@ ossimRefPtr<ossimProperty> ossimImageSharpenFilter::getProperty(const ossimStrin
    ossimRefPtr<ossimProperty> property = 0;
    if(name == KERNEL_WIDTH_KW)
    {
-      property = new ossimNumericProperty("Kernel width",
+      property = new ossimNumericProperty(name,
                                           ossimString::toString(theWidth),
                                           3.0,
                                           64.0);
@@ -171,7 +172,7 @@ ossimRefPtr<ossimProperty> ossimImageSharpenFilter::getProperty(const ossimStrin
    }
    else if(name == KERNEL_SIGMA_KW)
    {
-      property = new ossimNumericProperty("Kernel sigma",
+      property = new ossimNumericProperty(name,
                                           ossimString::toString(theSigma),
                                           .1,
                                           32);

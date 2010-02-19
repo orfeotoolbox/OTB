@@ -6,7 +6,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGeneralRasterWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $
 
 #include <cstdlib>
 #include <fstream>
@@ -796,6 +796,11 @@ void ossimGeneralRasterWriter::writeEnviHeader() const
    hdr->execute();
    
    if (traceDebug()) CLOG << " Exited..." << endl;
+}
+
+ossimString ossimGeneralRasterWriter::getExtension() const
+{
+   return getInterleaveString();
 }
 
 void ossimGeneralRasterWriter::getImageTypeList(std::vector<ossimString>& imageTypeList)const

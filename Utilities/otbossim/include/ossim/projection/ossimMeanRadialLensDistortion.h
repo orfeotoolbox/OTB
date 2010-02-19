@@ -9,7 +9,7 @@
 //
 // MeanRadialLensDistortion
 //*******************************************************************
-//  $Id: ossimMeanRadialLensDistortion.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMeanRadialLensDistortion.h 15929 2009-11-16 18:20:46Z gpotts $
 #ifndef ossimMeanRadialLensDistortion_HEADER
 #define ossimMeanRadialLensDistortion_HEADER
 #include <vector>
@@ -88,7 +88,6 @@ public:
    */
   double deltaR(double r)const;
 
-  virtual void distort(const ossimDpt& input, ossimDpt& output)const;
   virtual void undistort(const ossimDpt& input, ossimDpt& output)const;
   
   /*!

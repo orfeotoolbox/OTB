@@ -9,7 +9,7 @@
 // Contains class definition for JpegWriter.
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimJpegWriter.h 16597 2010-02-12 15:10:53Z dburken $
 #ifndef ossimJpegWriter_HEADER
 #define ossimJpegWriter_HEADER
 
@@ -86,6 +86,16 @@ public:
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
+
    bool hasImageType(const ossimString& imageType) const;
 
 protected:
@@ -97,7 +107,6 @@ private:
    virtual bool writeFile();
    
    ossim_int32 theQuality;
-   bool        theOverviewFlag;
    FILE*       theOutputFilePtr;
    
 TYPE_DATA

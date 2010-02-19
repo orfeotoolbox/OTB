@@ -10,7 +10,7 @@
 //               (DSI) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedDsi.h 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedDsi.h 16104 2009-12-17 18:09:59Z gpotts $
 
 #ifndef ossimDtedDsi_H
 #define ossimDtedDsi_H
@@ -25,8 +25,8 @@ class ossimProperty;
 class OSSIM_DLL ossimDtedDsi : public ossimErrorStatusInterface
 {
 public:
-   ossimDtedDsi(const ossimFilename& dted_file, ossim_int32 offset);
-   ossimDtedDsi(std::istream& in, ossim_int32 offset);
+   ossimDtedDsi(const ossimFilename& dted_file="", ossim_int32 offset=0);
+   ossimDtedDsi(std::istream& in);
 
    enum
    {

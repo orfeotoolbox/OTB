@@ -5,7 +5,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimJpegWriter.cpp 16597 2010-02-12 15:10:53Z dburken $
 
 #include <cstdlib>
 #include <cstdio>
@@ -319,32 +319,23 @@ bool ossimJpegWriter::writeFile()
 bool ossimJpegWriter::saveState(ossimKeywordlist& kwl,
                                 const char* prefix)const
 {
+   kwl.add( prefix,
+            ossimKeywordNames::COMPRESSION_QUALITY_KW,
+            theQuality,
+            true );
    return ossimImageFileWriter::saveState(kwl, prefix);
 }
 
 bool ossimJpegWriter::loadState(const ossimKeywordlist& kwl,
                                 const char* prefix)
 {
-   const char* value;
-   
-   value = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
-   if(value)
-   {
-      setFilename(value);
-   }
-   
-   value = kwl.find(prefix, ossimKeywordNames::COMPRESSION_QUALITY_KW);
+   const char* value =
+      kwl.find(prefix, ossimKeywordNames::COMPRESSION_QUALITY_KW);
    if(value)
    {
       setQuality(atoi(value));
    }
    
-   value = kwl.find(prefix, ossimKeywordNames::OVERVIEW_FILE_KW);
-   if(value)
-   {
-      theOverviewFlag = (atoi(value)) ? true : false;
-   }
-
    theOutputImageType = "jpeg";
    
    return ossimImageFileWriter::loadState(kwl, prefix);
@@ -419,6 +410,11 @@ void ossimJpegWriter::close()
 void ossimJpegWriter::getImageTypeList(std::vector<ossimString>& imageTypeList)const
 {
    imageTypeList.push_back(ossimString("jpeg"));
+}
+
+ossimString ossimJpegWriter::getExtension() const
+{
+   return ossimString("jpg");
 }
 
 bool ossimJpegWriter::hasImageType(const ossimString& imageType) const

@@ -11,7 +11,7 @@
 // Contains class definition for TiffOverviewBuilder
 // 
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffOverviewBuilder.cpp 15979 2009-11-21 19:23:03Z dburken $
 
 #include <algorithm> /* for std::fill */
 // #include <cstring>
@@ -55,7 +55,7 @@ static ossimTrace traceDebug("ossimTiffOverviewBuilder:degug");
 static const char COPY_ALL_KW[] = "copy_all_flag";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffOverviewBuilder.cpp 15979 2009-11-21 19:23:03Z dburken $";
 #endif
 
 
@@ -1129,12 +1129,14 @@ void ossimTiffOverviewBuilder::getTypeNameList(
 
 void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
 {
-   if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
+   if ( property.valid() )
    {
-      theJpegCompressQuality = property->valueToString().toInt32();
-   }
-   else if(property->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW)
-   {
+      if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
+      {
+         theJpegCompressQuality = property->valueToString().toInt32();
+      }
+      else if(property->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW)
+      {
       ossimString value = property->valueToString();
       value = value.downcase();
       if(value == "jpeg")
@@ -1158,23 +1160,24 @@ void ossimTiffOverviewBuilder::setProperty(ossimRefPtr<ossimProperty> property)
       {
          theTiffCompressType = COMPRESSION_NONE;
       }
-   }
-   else if(property->getName() == COPY_ALL_KW)
-   {
-      theCopyAllFlag = property->valueToString().toBool();
-   }
-   else if(property->getName() ==
-           ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW)
-   {
-     theOverviewStopDimension = property->valueToString().toUInt32();
-   }
-   else if(property->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW)
-   {
-      ossimIpt ipt;
-
-      ipt.toPoint(property->valueToString());
-
-      setOutputTileSize(ipt);
+      }
+      else if(property->getName() == COPY_ALL_KW)
+      {
+         theCopyAllFlag = property->valueToString().toBool();
+      }
+      else if(property->getName() ==
+              ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW)
+      {
+         theOverviewStopDimension = property->valueToString().toUInt32();
+      }
+      else if(property->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW)
+      {
+         ossimIpt ipt;
+         
+         ipt.toPoint(property->valueToString());
+         
+         setOutputTileSize(ipt);
+      }
    }
 }
 
@@ -1183,8 +1186,7 @@ void ossimTiffOverviewBuilder::getPropertyNames(std::vector<ossimString>& proper
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_QUALITY_KW);
    propertyNames.push_back(ossimKeywordNames::COMPRESSION_TYPE_KW);
    propertyNames.push_back(COPY_ALL_KW);
-   propertyNames.push_back(
-      ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW);
+   propertyNames.push_back(ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW);
 }
 
 bool ossimTiffOverviewBuilder::canConnectMyInputTo(

@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfVqCompressionHeader.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfVqCompressionHeader.h 16035 2009-12-03 21:32:27Z dburken $
 #ifndef ossimNitfVqCompressionHeader_HEADER
 #define ossimNitfVqCompressionHeader_HEADER
 
@@ -17,8 +17,7 @@
 class OSSIM_DLL ossimNitfVqCompressionOffsetTableData
 {
 public:
-   friend OSSIM_DLL std::ostream& operator<<(std::ostream& out,
-                              const ossimNitfVqCompressionOffsetTableData& data);
+
    ossimNitfVqCompressionOffsetTableData();
    ossimNitfVqCompressionOffsetTableData(const ossimNitfVqCompressionOffsetTableData& rhs);
    ~ossimNitfVqCompressionOffsetTableData();
@@ -40,7 +39,15 @@ class OSSIM_DLL ossimNitfVqCompressionHeader : public ossimNitfCompressionHeader
 public:
    ossimNitfVqCompressionHeader();
    virtual void parseStream(std::istream &in);
+
    virtual std::ostream& print(std::ostream& out) const;
+
+   /**
+    * @brief print method that outputs a key/value type format adding prefix
+    * to keys.
+    */
+   virtual std::ostream& print(std::ostream& out,
+                               const std::string& prefix) const;  
 
    virtual ossim_uint32 getBlockSizeInBytes()const;
    virtual ossim_uint32 getNumberOfImageRows()const;

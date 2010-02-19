@@ -10,7 +10,7 @@
 // normalizing unsigned 16 bit data.
 // 
 //*******************************************************************
-//  $Id: ossimNormalizedU16RemapTable.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimNormalizedU16RemapTable.h 16034 2009-12-03 14:49:25Z dburken $
 
 #ifndef ossimNormalizedU16RemapTable_HEADER
 #define ossimNormalizedU16RemapTable_HEADER
@@ -94,6 +94,8 @@ inline ossim_float64 ossimNormalizedU16RemapTable::normFromPix(
 inline ossim_int32 ossimNormalizedU16RemapTable::pixFromNorm(
    ossim_float64 normPix) const
 {
+   if(normPix <= 0.0) return 0;
+   
    // un-normalize...
    ossim_float64 p = normPix * getNormalizer();
 
@@ -103,6 +105,11 @@ inline ossim_int32 ossimNormalizedU16RemapTable::pixFromNorm(
    // Since going from double to int round...
    p = ossim::round<ossim_int32>(p);
        
+   if(p == 0.0)
+   {
+      p = 1.0;
+   }
+   
    return static_cast<ossim_int32>(p);
 }
 

@@ -8,7 +8,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimRectilinearDataObject.cpp 16052 2009-12-08 22:20:40Z dburken $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -17,20 +17,20 @@ RTTI_DEF1(ossimRectilinearDataObject, "ossimRectilinearDataObject", ossimDataObj
 
 ossimRectilinearDataObject::ossimRectilinearDataObject()
    : ossimDataObject(),
-     theNumberOfDataComponents(0),
-     theScalarType(),
-     theDataBuffer(),
-     theSpatialExtents()
+     m_numberOfDataComponents(0),
+     m_scalarType(),
+     m_dataBuffer(),
+     m_spatialExtents()
 {
 }
 
 ossimRectilinearDataObject::ossimRectilinearDataObject(
    const ossimRectilinearDataObject& rhs)
    : ossimDataObject(rhs),
-     theNumberOfDataComponents(rhs.theNumberOfDataComponents),
-     theScalarType(rhs.theScalarType),
-     theDataBuffer(rhs.theDataBuffer),
-     theSpatialExtents(rhs.theSpatialExtents)
+     m_numberOfDataComponents(rhs.m_numberOfDataComponents),
+     m_scalarType(rhs.m_scalarType),
+     m_dataBuffer(rhs.m_dataBuffer),
+     m_spatialExtents(rhs.m_spatialExtents)
 {
 }
 
@@ -41,10 +41,10 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossimScalarType   scalarType,
    ossimDataObjectStatus status)
    :ossimDataObject(owner, OSSIM_NULL),
-    theNumberOfDataComponents(numberOfDataComponents),
-    theScalarType(scalarType),
-    theDataBuffer(0),
-    theSpatialExtents(numberOfSpatialComponents)
+    m_numberOfDataComponents(numberOfDataComponents),
+    m_scalarType(scalarType),
+    m_dataBuffer(0),
+    m_spatialExtents(numberOfSpatialComponents)
 {
 }
 
@@ -55,12 +55,12 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossimScalarType   scalarType,
    ossimDataObjectStatus status)
    :ossimDataObject(owner, OSSIM_NULL),
-    theNumberOfDataComponents(numberOfDataComponents),
-    theScalarType(scalarType),
-    theDataBuffer(0),
-    theSpatialExtents(1)
+    m_numberOfDataComponents(numberOfDataComponents),
+    m_scalarType(scalarType),
+    m_dataBuffer(0),
+    m_spatialExtents(1)
 {
-   theSpatialExtents[0] = length;
+   m_spatialExtents[0] = length;
 }
 
 ossimRectilinearDataObject::ossimRectilinearDataObject(
@@ -71,13 +71,13 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossimScalarType   scalarType,
    ossimDataObjectStatus status)
    :ossimDataObject(owner, OSSIM_NULL),
-    theNumberOfDataComponents(numberOfDataComponents),
-    theScalarType(scalarType),
-    theDataBuffer(0),
-    theSpatialExtents(2)
+    m_numberOfDataComponents(numberOfDataComponents),
+    m_scalarType(scalarType),
+    m_dataBuffer(0),
+    m_spatialExtents(2)
 {
-   theSpatialExtents[0] = width;
-   theSpatialExtents[1] = height;
+   m_spatialExtents[0] = width;
+   m_spatialExtents[1] = height;
 }
 
 ossimRectilinearDataObject::ossimRectilinearDataObject(
@@ -89,14 +89,14 @@ ossimRectilinearDataObject::ossimRectilinearDataObject(
    ossimScalarType   scalarType,
    ossimDataObjectStatus status)
    :ossimDataObject(owner, OSSIM_NULL),
-    theNumberOfDataComponents(numberOfDataComponents),
-    theScalarType(scalarType),
-    theDataBuffer(0),
-    theSpatialExtents(3)
+    m_numberOfDataComponents(numberOfDataComponents),
+    m_scalarType(scalarType),
+    m_dataBuffer(0),
+    m_spatialExtents(3)
 {
-   theSpatialExtents[0] = width;
-   theSpatialExtents[1] = height;
-   theSpatialExtents[2] = depth;
+   m_spatialExtents[0] = width;
+   m_spatialExtents[1] = height;
+   m_spatialExtents[2] = depth;
 }
 
 ossimRectilinearDataObject::~ossimRectilinearDataObject()
@@ -106,16 +106,16 @@ ossimRectilinearDataObject::~ossimRectilinearDataObject()
 ossim_uint32 ossimRectilinearDataObject::computeSpatialProduct()const
 {
    ossim_uint32 spatialProduct = 0;
-   for(ossim_uint32 index = 0; index < theSpatialExtents.size(); ++index)
+   for(ossim_uint32 index = 0; index < m_spatialExtents.size(); ++index)
    {
-      spatialProduct *= theSpatialExtents[index];
+      spatialProduct *= m_spatialExtents[index];
    }
    return spatialProduct;
 }
 
 void ossimRectilinearDataObject::setNumberOfDataComponents(ossim_uint32 n)
 {
-   theNumberOfDataComponents = n;
+   m_numberOfDataComponents = n;
 }
 
 void ossimRectilinearDataObject::setSpatialExtents(ossim_uint32* extents,
@@ -123,37 +123,37 @@ void ossimRectilinearDataObject::setSpatialExtents(ossim_uint32* extents,
 {
    if (extents)
    {
-      theSpatialExtents.resize(size);
+      m_spatialExtents.resize(size);
       for(ossim_uint32 i =0; i < size; ++i)
       {
-         theSpatialExtents[i] = extents[i];
+         m_spatialExtents[i] = extents[i];
       }
    }
 }
 
 void ossimRectilinearDataObject::setScalarType(ossimScalarType type)
 {
-   theScalarType = type;
+   m_scalarType = type;
 }
 
 ossim_uint32 ossimRectilinearDataObject::getNumberOfDataComponents() const
 {
-   return theNumberOfDataComponents;
+   return m_numberOfDataComponents;
 }
 
 ossim_uint32 ossimRectilinearDataObject::getNumberOfSpatialComponents() const
 {
-   return (ossim_uint32)theSpatialExtents.size();
+   return (ossim_uint32)m_spatialExtents.size();
 }
 
 const ossim_uint32* ossimRectilinearDataObject::getSpatialExtents()const
 {
-   return &(theSpatialExtents.front());
+   return &(m_spatialExtents.front());
 }
 
 ossimScalarType ossimRectilinearDataObject::getScalarType() const
 {
-   return theScalarType;
+   return m_scalarType;
 }
 
 ossim_uint32 ossimRectilinearDataObject::getScalarSizeInBytes() const
@@ -163,18 +163,18 @@ ossim_uint32 ossimRectilinearDataObject::getScalarSizeInBytes() const
 
 void* ossimRectilinearDataObject::getBuf()
 {
-   if (theDataBuffer.size() > 0)
+   if (m_dataBuffer.size() > 0)
    {
-      return static_cast<void*>(&theDataBuffer.front());
+      return static_cast<void*>(&m_dataBuffer.front());
    }
    return NULL;
 }
 
 const void* ossimRectilinearDataObject::getBuf()const
 {
-   if (theDataBuffer.size() > 0)
+   if (m_dataBuffer.size() > 0)
    {
-      return static_cast<const void*>(&theDataBuffer.front());
+      return static_cast<const void*>(&m_dataBuffer.front());
    }
    return NULL;
 }
@@ -187,19 +187,19 @@ void ossimRectilinearDataObject::assign(const ossimRectilinearDataObject* data)
       {
          ossimDataObject::assign(data);
          
-         theNumberOfDataComponents    = data->theNumberOfDataComponents;
-         theScalarType                = data->theScalarType;
-         theDataBuffer                = data->theDataBuffer;
-         theSpatialExtents            = data->theSpatialExtents;
+         m_numberOfDataComponents    = data->m_numberOfDataComponents;
+         m_scalarType                = data->m_scalarType;
+         m_dataBuffer                = data->m_dataBuffer;
+         m_spatialExtents            = data->m_spatialExtents;
       }
    }
 }
 
 void ossimRectilinearDataObject::initialize()
 {
-   if (theDataBuffer.size() != getDataSizeInBytes())
+   if (m_dataBuffer.size() != getDataSizeInBytes())
    {
-      theDataBuffer.resize(getDataSizeInBytes());
+      m_dataBuffer.resize(getDataSizeInBytes());
       setDataObjectStatus(OSSIM_STATUS_UNKNOWN);
    }
 }
@@ -208,16 +208,16 @@ ossim_uint32 ossimRectilinearDataObject::getDataSizeInBytes()const
 {
    return (ossim_uint32)(getScalarSizeInBytes()*
                          computeSpatialProduct()*
-                         theNumberOfDataComponents);
+                         m_numberOfDataComponents);
 }
 
 std::ostream& ossimRectilinearDataObject::print(std::ostream& out) const
 {
    out << "ossimRectilinearDataObject::print:"
-       << "\ntheNumberOfDataComponents:     " << theNumberOfDataComponents
-       << "\ntheNumberOfSpatialComponents:  " << theSpatialExtents.size()
-       << "\ntheScalarType:                 "
-       << (ossimScalarTypeLut::instance()->getEntryString(theScalarType))
+       << "\nm_numberOfDataComponents:     " << m_numberOfDataComponents
+       << "\ntheNumberOfSpatialComponents:  " << m_spatialExtents.size()
+       << "\nm_scalarType:                 "
+       << (ossimScalarTypeLut::instance()->getEntryString(m_scalarType))
        << endl;
    
    return ossimDataObject::print(out);
@@ -232,10 +232,10 @@ const ossimRectilinearDataObject& ossimRectilinearDataObject::operator=(
       ossimDataObject::operator=(rhs);
 
       // ossimRectilinearDataObject (this) initialization:
-      theNumberOfDataComponents    = rhs.theNumberOfDataComponents;
-      theScalarType                = rhs.theScalarType;
-      theDataBuffer                = rhs.theDataBuffer;
-      theSpatialExtents            = rhs.theSpatialExtents;
+      m_numberOfDataComponents    = rhs.m_numberOfDataComponents;
+      m_scalarType                = rhs.m_scalarType;
+      m_dataBuffer                = rhs.m_dataBuffer;
+      m_spatialExtents            = rhs.m_spatialExtents;
    }
    return *this;
 }

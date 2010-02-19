@@ -5,7 +5,7 @@
 // AUTHOR: Garrett Potts (gpotts@imagelinks.com)
 //
 //*****************************************************************************
-//  $Id: ossimPolyLine.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimPolyLine.cpp 15927 2009-11-16 17:30:08Z dburken $
 //
 #include <ossim/base/ossimPolyLine.h>
 #include <ossim/base/ossimCommon.h>
@@ -549,7 +549,8 @@ bool ossimPolyLine::loadState(const ossimKeywordlist& kwl,
 
    theVertexList.clear();
    int vertexCount = ossimString(number_vertices).toLong();
-   ossimString x = 0.0, y =0.0;
+   ossimString x = "0.0";
+   ossimString y = "0.0";
    for(i = 0; i < vertexCount; ++i)
    {
       ossimString v = kwl.find(prefix, (ossimString("v")+ossimString::toString(i)).c_str());

@@ -11,7 +11,7 @@
 // This class parses a Space Imaging Ikonos meta data file.
 //
 //********************************************************************
-// $Id: ossimIkonosMetaData.cpp 15828 2009-10-28 13:11:31Z dburken $
+// $Id: ossimIkonosMetaData.cpp 16086 2009-12-11 23:38:49Z eshirschorn $
 
 #include <cstdio>
 #include <iostream>
@@ -353,79 +353,75 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
             << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
             << "\n\tAborting construction. Error encountered parsing "
             << "presumed meta-data file." << std::endl;
-
+      }
       delete [] filebuf;
       return false;
-    }
-  }
+   }
 
    sscanf(strptr, "%15c %s", dummy, name);
    theProductionDate = name;
 
-
-  //***
-  // Sensor Type:
-  //***
-  strptr = strstr(strptr, "\nSensor:");
-  if (!strptr)
-    {
+   //***
+   // Sensor Type:
+   //***
+   strptr = strstr(strptr, "\nSensor:");
+   if (!strptr)
+   {
       if(traceDebug())
- 	{ 
-	  ossimNotify(ossimNotifyLevel_FATAL)
+      { 
+         ossimNotify(ossimNotifyLevel_FATAL)
             << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
             << "\n\tAborting construction. Error encountered parsing "
             << "presumed meta-data file." << std::endl;
-	  
-	  delete [] filebuf;
-	  return false;
-	}
-    }
-  sscanf(strptr, "%8c %s", dummy, name);
-  theSensorID = name;
+      }
+      delete [] filebuf;
+      return false;
+   }
+
+   sscanf(strptr, "%8c %s", dummy, name);
+   theSensorID = name;
 
 
    //***
    // Nominal Azimuth:
    //***
-  strptr = strstr(strptr, "\nNominal Collection Azimuth:");
-  if (!strptr)
-  {
-    if(traceDebug())
-    {
-      ossimNotify(ossimNotifyLevel_FATAL)
-          << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
-          << "\n\tAborting construction. Error encountered parsing "
-          << "presumed meta-data file." << std::endl;
-
+   strptr = strstr(strptr, "\nNominal Collection Azimuth:");
+   if (!strptr)
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+            << "\n\tAborting construction. Error encountered parsing "
+            << "presumed meta-data file." << std::endl;
+      }
       delete [] filebuf;
       return false;
-    }
-  }
+   }
 
-  sscanf(strptr, "%28c %lf %s", dummy, &value, dummy);
-  theNominalCollectionAzimuth = value;
+   sscanf(strptr, "%28c %lf %s", dummy, &value, dummy);
+   theNominalCollectionAzimuth = value;
 
    //***
    // Nominal Elevation:
    //***
-  strptr = strstr(strptr, "\nNominal Collection Elevation:");
-  if (!strptr)
-  {
-    if(traceDebug())
-    {
-      ossimNotify(ossimNotifyLevel_FATAL)
-          << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
-          << "\n\tAborting construction. Error encountered parsing "
-          << "presumed meta-data file." << std::endl;
-
+   strptr = strstr(strptr, "\nNominal Collection Elevation:");
+   if (!strptr)
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
+            << "\n\tAborting construction. Error encountered parsing "
+            << "presumed meta-data file." << std::endl;
+      }
       delete [] filebuf;
       return false;
-    }
-  }
+   }
   
-  sscanf(strptr, "%31c %lf %s", dummy, &value, dummy);
-  theNominalCollectionElevation = value;
-  
+   sscanf(strptr, "%31c %lf %s", dummy, &value, dummy);
+   theNominalCollectionElevation = value;
+
    //***
    // Sun Azimuth:
    //***
@@ -438,11 +434,10 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
             << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
             << "\n\tAborting construction. Error encountered parsing "
             << "presumed meta-data file." << std::endl;
-
+      }
       delete [] filebuf;
       return false;
-    }
-  }
+   }
 
    sscanf(strptr, "%19c %lf %s", dummy, &value, dummy);
    theSunAzimuth = value;
@@ -459,36 +454,35 @@ bool ossimIkonosMetaData::parseMetaData(const ossimFilename& data_file)
             << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
             << "\n\tAborting construction. Error encountered parsing "
             << "presumed meta-data file." << std::endl;
-
+      }
       delete [] filebuf;
       return false;
-    }
-  }
+   }
 
    sscanf(strptr, "%21c %lf %s", dummy, &value, name);
    theSunElevation = value;
 
-  //---
-  // Acquisition date and time:
-  //---
-  strptr = strstr(filebuf, "\nAcquisition Date/Time:");
-  if (!strptr)
-  {
-    if(traceDebug())
-    {
+   //---
+   // Acquisition date and time:
+   //---
+   strptr = strstr(filebuf, "\nAcquisition Date/Time:");
+   if (!strptr)
+   {
+      if(traceDebug())
+      {
       ossimNotify(ossimNotifyLevel_FATAL)
           << "FATAL ossimIkonosRpcModel::parseMetaData(data_file): "
           << "\n\tAborting construction. Error encountered parsing "
           << "presumed meta-data file." << std::endl;
-
+      }
       delete [] filebuf;
       return false;
-    }
-  }
-  char name2[80];
-  sscanf(strptr, "%23c %s %s", dummy, name, name2);
-  theAcquisitionDate = name;
-  theAcquisitionTime = name2;
+   }
+
+   char name2[80];
+   sscanf(strptr, "%23c %s %s", dummy, name, name2);
+   theAcquisitionDate = name;
+   theAcquisitionTime = name2;
 
    delete [] filebuf;
    filebuf = 0;

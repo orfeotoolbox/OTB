@@ -1,51 +1,51 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
-//
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
-//
-// Author: Garrett Potts
-// 
-// Description: A brief description of the contents of the file.
-//
-//*************************************************************************
-// $Id: ossimMaskFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+  // Copyright (C) 2000 ImageLinks Inc. 
+  //
+  // License:  LGPL
+  // 
+  // See LICENSE.txt file in the top level directory for more details.
+  //
+  // Author: Garrett Potts
+  // 
+  // Description: A brief description of the contents of the file.
+  //
+  //*************************************************************************
+    // $Id: ossimMaskFilter.h 16180 2009-12-24 15:33:56Z dburken $
 #ifndef  ossimMaskFilter_HEADER
 #define  ossimMaskFilter_HEADER
 #include <ossim/imaging/ossimImageCombiner.h>
 
-/**
- * <pre>
- * class ossimMaskFilter
- *
- *    Requires 2 inputs.  The first input is assumed to be the image input
- *    and the second input is assumed to be the mask data.  It will only
- *    use one band of the mask and multi band masks are not supported.
- *
- *    the number of bands, min pix, max pix, null pix ...etc are mapped
- *    to the first input.
- *
- * Keywords:
- *      mask_type:
- *
- * keywords description
- *      mask_type  This keyword can have the following values:
- *                 select, invert, or weighted.
- *                  - select will use the input data and every where
- *                    the mask is greater than 0 it will copy the input to the output.
- *                  - invert will use the input data and every where the mask is 0 it
- *                    will copy the input to the output else it will place a null in
- *                    the output.
- *                  - weighted will normalize the mask between 0 and 1 and then multiply
- *                    the input by that normalized value and copy to the output.
- *
- * example of keywords:
- *
- *      mask_type: select
- *
- * </pre>
- */
+    /**
+     * <pre>
+     * class ossimMaskFilter
+     *
+     *    Requires 2 inputs.  The first input is assumed to be the image input
+     *    and the second input is assumed to be the mask data.  It will only
+     *    use one band of the mask and multi band masks are not supported.
+     *
+     *    the number of bands, min pix, max pix, null pix ...etc are mapped
+     *    to the first input.
+     *
+     * Keywords:
+     *      mask_type:
+     *
+     * keywords description
+     *      mask_type  This keyword can have the following values:
+     *                 select, invert, or weighted.
+     *                  - select will use the input data and every where
+     *                    the mask is greater than 0 it will copy the input to the output.
+     *                  - invert will use the input data and every where the mask is 0 it
+     *                    will copy the input to the output else it will place a null in
+     *                    the output.
+     *                  - weighted will normalize the mask between 0 and 1 and then multiply
+     *                    the input by that normalized value and copy to the output.
+     *
+     * example of keywords:
+     *
+     *      mask_type: select
+     *
+     * </pre>
+     */
 class OSSIMDLLEXPORT ossimMaskFilter : public ossimImageCombiner
 {
 public:
@@ -62,50 +62,60 @@ public:
     *      works as a multiplier of the input data.  The mask is normalized to be between 0 and 1
     *      and multiplies the input by that normalized value.
     */
-  enum ossimFileSelectionMaskType
-  {
-     OSSIM_MASK_TYPE_SELECT   = 1, /**< standard select if mask is true then keep */
-     OSSIM_MASK_TYPE_INVERT   = 2, /**< standard invert if mask is true the don't keep */
-     OSSIM_MASK_TYPE_WEIGHTED = 3  /**< weighted operation.  Normalize the mask and multiply the input */
-  };
+   enum ossimFileSelectionMaskType
+   {
+      OSSIM_MASK_TYPE_SELECT   = 1, /**< standard select if mask is true then keep */
+      OSSIM_MASK_TYPE_INVERT   = 2, /**< standard invert if mask is true the don't keep */
+      OSSIM_MASK_TYPE_WEIGHTED = 3  /**< weighted operation.  Normalize the mask and multiply the input */
+   };
 
    /**
     * Constructor.
     */
-  ossimMaskFilter(ossimObject* owner=NULL);
+   ossimMaskFilter(ossimObject* owner=NULL);
 
    /**
     * Constructs with two inputs
     */
-  ossimMaskFilter(ossimImageSource* imageSource,
-		  ossimImageSource* maskSource);
+   ossimMaskFilter(ossimImageSource* imageSource,
+                   ossimImageSource* maskSource);
 
    
    /**
     * Constructs with two inputs and an owner
     */
-  ossimMaskFilter(ossimObject* owner,
-		  ossimImageSource* imageSource,
-		  ossimImageSource* maskSource);
+   ossimMaskFilter(ossimObject* owner,
+                   ossimImageSource* imageSource,
+                   ossimImageSource* maskSource);
 
-
+  
    /**
     * Sets the mask type.
-    * \param type The mask algorithm type to be used.  see ossimFileSelectionMaskType
+    * @param type The mask algorithm type to be used.
+    * see ossimFileSelectionMaskType
     */
-   virtual void setMaskType(ossimFileSelectionMaskType type)
-      {
-         theMaskType = type;
-      }
+   virtual void setMaskType(ossimFileSelectionMaskType type);
+   
+   /**
+    * @brief Sets the mask type from string.
+    *
+    * Valid strings are:  "select", "invert" and "weighted".
+    * 
+    * @param type The mask algorithm type to be used.
+    */
+   virtual void setMaskType(const ossimString& type);
 
    /**
     * Returns the current mask algorithm used.
     * \return the current ossimFileSelectionMaskType used.
     */
-   virtual ossimFileSelectionMaskType getMaskType()const
-      {
-         return theMaskType;
-      }
+   virtual ossimFileSelectionMaskType getMaskType() const;
+
+   /**
+    * @brief Returns the current mask algorithm used as a string.
+    * @return the current ossimFileSelectionMaskType used.
+    */
+   virtual ossimString getMaskTypeString() const;
 
    /**
     * Returns the bounding rect in pixel space for this object.
@@ -121,7 +131,7 @@ public:
     *
     */
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& rect,
-                                   ossim_uint32 resLevel=0);
+                                               ossim_uint32 resLevel=0);
 
    virtual void initialize();
    virtual void getDecimationFactor(ossim_uint32 resLevel,
@@ -160,6 +170,16 @@ public:
    virtual ossimRefPtr<ossimImageData> executeMaskFilter(
       ossimRefPtr<ossimImageData> imageSourceData,
       ossimRefPtr<ossimImageData> maskSourceData);
+
+   /** @brief Interface to set the mask type. */
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+
+   /** @return "mask_type" property. */
+   virtual ossimRefPtr<ossimProperty> getProperty(
+      const ossimString& name)const;
+
+   /** @brief Adds "mask_type" to list. */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 protected:
    /**
@@ -197,25 +217,25 @@ protected:
 
    
    template <class inputT, class maskT>
-   ossimRefPtr<ossimImageData> executeMaskFilterSelection(
-      inputT dummyInput,
-      maskT  dummyMask,
-      ossimRefPtr<ossimImageData> imageSourceData,
-      ossimRefPtr<ossimImageData> maskSourceData);
+      ossimRefPtr<ossimImageData> executeMaskFilterSelection(
+         inputT dummyInput,
+         maskT  dummyMask,
+         ossimRefPtr<ossimImageData> imageSourceData,
+         ossimRefPtr<ossimImageData> maskSourceData);
    
    template <class inputT, class maskT>
-   ossimRefPtr<ossimImageData> executeMaskFilterInvertSelection(
-      inputT dummyInput,
-      maskT  dummyMask,
-      ossimRefPtr<ossimImageData> imageSourceData,
-      ossimRefPtr<ossimImageData> maskSourceData);
+      ossimRefPtr<ossimImageData> executeMaskFilterInvertSelection(
+         inputT dummyInput,
+         maskT  dummyMask,
+         ossimRefPtr<ossimImageData> imageSourceData,
+         ossimRefPtr<ossimImageData> maskSourceData);
    
    template <class inputT, class maskT>
-   ossimRefPtr<ossimImageData> executeMaskFilterWeighted(
-      inputT dummyInput,
-      maskT  dummyMask,
-      ossimRefPtr<ossimImageData> imageSourceData,
-      ossimRefPtr<ossimImageData> maskSourceData);
+      ossimRefPtr<ossimImageData> executeMaskFilterWeighted(
+         inputT dummyInput,
+         maskT  dummyMask,
+         ossimRefPtr<ossimImageData> imageSourceData,
+         ossimRefPtr<ossimImageData> maskSourceData);
 
    /**
     * Member variable that holds the algorithm type to run on the calls to getTile.
@@ -228,7 +248,7 @@ protected:
     */
    ossimRefPtr<ossimImageData> theTile;
    
-TYPE_DATA
+   TYPE_DATA
 };
 
 #endif

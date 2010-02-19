@@ -5,7 +5,7 @@
 // See LICENSE.txt file in the top level directory for more details.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimImageHandlerFactory.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -795,10 +795,13 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
    {
       return new ossimGeneralRasterTileSource();
    }
-
    if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
    {
       return new ossimTileMapTileSource();
+   }
+   if(STATIC_TYPE_NAME(ossimVirtualImageHandler) == typeName)
+   {
+      return new ossimVirtualImageHandler();
    }
 
    return (ossimObject*)0;
