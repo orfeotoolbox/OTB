@@ -140,9 +140,9 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
 
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
-   registerFactory(ossimNitfProjectionFactory::instance()); 
+   registerFactory(ossimNitfProjectionFactory::instance());
+   registerFactory(ossimSensorModelFactory::instance());//OTB: switch with Tiff to work on QB/Ikonos/SPOT5
    registerFactory(ossimTiffProjectionFactory::instance());
-   registerFactory(ossimSensorModelFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimSrsProjectionFactory::instance());
    registerFactory(ossimPcsCodeProjectionFactory::instance());   
