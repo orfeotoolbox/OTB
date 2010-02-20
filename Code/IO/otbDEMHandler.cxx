@@ -66,12 +66,15 @@ DEMHandler
     ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
     {
+       otbMsgDevMacro( << "Geoid successfully opened");
        m_Mutex.Lock();
        ossimGeoidManager::instance()->addGeoid(geoidPtr);
        m_Mutex.Unlock();
+       geoidPtr.release();
     }
     else
     {
+      otbMsgDevMacro( << "Failure opening geoid");
       geoidPtr.release();
     }
   }
@@ -101,6 +104,7 @@ DEMHandler
   ossimWorldPoint.lon=geoPoint[0];
   ossimWorldPoint.lat=geoPoint[1];
   m_Mutex.Lock();
+  otbMsgDevMacro( << "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
   height=m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
   m_Mutex.Unlock();
   return height;
