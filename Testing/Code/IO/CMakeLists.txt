@@ -238,6 +238,7 @@ ADD_TEST(ioTvImageFileReaderIntHDR2LUM ${IO_TESTS2}
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
 
 # --- Image FLOAT
 ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS2}
@@ -342,6 +343,7 @@ ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS2}
         otbFloatImageIOTest
         ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderFloatHDR2BSQ PROPERTIES DEPENDS ioTvImageFileReaderFloatBSQ2HDR)
 
 # --- Image DOUBLE
 ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
@@ -619,7 +621,7 @@ ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
         otbImageFileWriterStreamingONERAComplex
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
-
+SET_TESTS_PROPERTIES(ioTvONERAImageStreamWriter PROPERTIES DEPENDS ioTvONERAImageFileWriterComplex)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ONERAImageIO   ------------------------------
