@@ -172,7 +172,7 @@ protected:
   virtual void ReadMetaFile ();
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
-   * This allows specific (or global) initialisation in the GenerateData methods,
+   * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents ( void );

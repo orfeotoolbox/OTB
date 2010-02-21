@@ -103,7 +103,7 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  We define a reader for the image to be classified, an initialisation for the
+  //  We define a reader for the image to be classified, an initialization for the
   //  classification (which could be random) and a writer for the final
   //  classification.
   //

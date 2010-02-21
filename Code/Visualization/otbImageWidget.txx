@@ -187,7 +187,7 @@ void
 ImageWidget<TInputImage>
 ::draw()
 {
-  // perform checks from superclass and gl initialisation
+  // perform checks from superclass and gl initialization
   Superclass::draw();
 
   glDisable(GL_BLEND);

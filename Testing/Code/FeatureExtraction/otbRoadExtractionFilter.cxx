@@ -65,7 +65,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
   DrawPathFilterType::Pointer draw = DrawPathFilterType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  //Initialisation parameters
+  //Initialization parameters
   reader->SetFileName(inputFileName);
 
   roadExtraction->SetInput(reader->GetOutput());

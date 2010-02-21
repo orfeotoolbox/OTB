@@ -1134,7 +1134,7 @@ bool TestHelper::CompareLines(std::string strfileref, std::string strfiletest, i
           else
             etatCour = ETAT_CHAR;
 
-          // "reference" state initialisation.
+          // "reference" state initialization.
           if (i == 0)
             etatPrec = etatCour;
 

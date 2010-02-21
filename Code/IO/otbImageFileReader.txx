@@ -281,7 +281,7 @@ ImageFileReader<TOutputImage>
   //
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
   this->m_ImageIO->ReadImageInformation();
-  // Initialisation du nombre de Composante par pixel
+  // Initialization du nombre de Composante par pixel
 // THOMAS ceci n'est pas dans ITK !!
 //  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
 

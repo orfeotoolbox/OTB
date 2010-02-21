@@ -102,7 +102,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToHessianDeterminantImageFilter,ImageToImageFilter);
 
-  /* Initialisation of Input & Output Images*/
+  /* Initialization of Input & Output Images*/
   typedef TInputImage                         InputImageType;
   typedef typename InputImageType::Pointer    InputImagePointerType;
   typedef TOutputImage                        OutputImageType;

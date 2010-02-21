@@ -91,7 +91,7 @@ private:
  * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
  *
- * Here is the specialisation of the Wavelet::FORWARD transformation.
+ * Here is the specialization of the Wavelet::FORWARD transformation.
  *
  * \sa WaveletFilterBank
  * \sa WaveletPacketTransform
@@ -183,14 +183,14 @@ private:
 
   /**
    * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
-   * It yields also a stationnary decomposition.
+   * It yields also a stationary decomposition.
    * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2. This is its default value.
    */
   unsigned int m_SubsampleImageFactor;
 
   /**
-   * The list of filter is necessary to keep the papeline updated.
+   * The list of filter is necessary to keep the pipeline updated.
    */
   FilterListPointerType m_FilterList;
 }; // end of Forward class
@@ -211,10 +211,10 @@ private:
  * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
  *
- * Here is the specialisation of the Wavelet::INVERSE transformation.
+ * Here is the specialization of the Wavelet::INVERSE transformation.
  *
  * The filter should be implemented with TInputImage for input and output image
- * template. Transtyping to TOuputImage is performed by standart C++-style at pixel
+ * template. Transtyping to TOutputImage is performed by standard C++-style at pixel
  * level.
  *
  * \sa WaveletFilterBank

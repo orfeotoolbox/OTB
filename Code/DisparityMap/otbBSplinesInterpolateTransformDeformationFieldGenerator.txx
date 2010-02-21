@@ -67,7 +67,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
   typedef typename PointSetType::PointsContainer PointsContainerType;
 
-  // Initialisation of the splines interpolator
+  // Initialization of the splines interpolator
   typename SPlineInterpolatorListType::Pointer splineIntList = SPlineInterpolatorListType::New();
 
   for (unsigned int paramIndex = 0;paramIndex<this->GetTransform()->GetNumberOfParameters();++paramIndex)

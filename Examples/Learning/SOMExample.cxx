@@ -295,7 +295,7 @@ int main(int argc, char* argv[])
 //
 //  Software Guide : BeginLatex
 //
-//  Now comes the intialisation of the functors.
+//  Now comes the intialization of the functors.
 //
 //  Software Guide : EndLatex
 

@@ -298,7 +298,7 @@ TOutputImage>
   }
   //**** END TODO ****/
   m_Vcondopt = m_Vcondopt.GetInverse();
-  // Functor initialisation
+  // Functor initialization
   this->GetFunctor().SetVcondopt(m_Vcondopt);
   this->GetFunctor().SetBeta(cutBeta);
   this->GetFunctor().SetAlpha(m_Beta(0,0));

@@ -165,7 +165,7 @@ MorphologicalPyramidAnalysisFilter<TInputImage,TOutputImage,TMorphoFilter>
   // Size declaration
   typename InputImageType::SizeType size;
 
-  // local variables declarations and initialisations
+  // local variables declarations and initializations
   int i = 0;
   int sizeTmp;
   //--------------------------------------------------------//
