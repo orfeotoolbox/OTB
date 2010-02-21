@@ -120,7 +120,7 @@ protected:
    */
   virtual void GenerateOutputInformation();
 
-  /** Set output image to 0 brfore processing */
+  /** Set output image to 0 before processing */
   virtual void BeforeThreadedGenerateData ();
 
   /** Allows multithreading */
