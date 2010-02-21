@@ -62,10 +62,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::VectorData<double > InputVectorDataType;
   typedef otb::VectorData<double > OutputVectorDataType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -77,13 +75,11 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -96,13 +92,11 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::Image<unsigned short int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
   ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
-
   // Software Guide : EndCodeSnippet
 
 

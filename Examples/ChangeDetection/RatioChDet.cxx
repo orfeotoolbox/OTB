@@ -189,8 +189,6 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-
-
   filter->SetInput1( reader1->GetOutput() );
   filter->SetInput2( reader2->GetOutput() );
 

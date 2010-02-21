@@ -90,14 +90,12 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   const unsigned int Dimension = 2;
 
   typedef double InternalPixelType;
   typedef unsigned char LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -110,7 +108,6 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
 
@@ -122,7 +119,6 @@ int main(int argc, char* argv[] )
 
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename );
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -134,10 +130,8 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MarkovRandomFieldFilter
   <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -151,9 +145,7 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -167,9 +159,7 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFOptimizerMetropolis OptimizerType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -185,12 +175,10 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFEnergyPotts
   <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification
   <InputImageType, LabelledImageType>  EnergyFidelityType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -201,13 +189,11 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -226,7 +212,6 @@ int main(int argc, char* argv[] )
   }
 
   // Software Guide : BeginCodeSnippet
-
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2*nClass);
   EnergyFidelityType::ParametersType parameters;
@@ -240,7 +225,6 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-
   // Software Guide : EndCodeSnippet
 
 
@@ -252,7 +236,6 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   OptimizerType::ParametersType param(1);
   param.Fill(atof(argv[5]));
   optimizer->SetParameters(param);
@@ -266,7 +249,6 @@ int main(int argc, char* argv[] )
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -277,7 +259,6 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
@@ -289,7 +270,6 @@ int main(int argc, char* argv[] )
   rescaleFilter->SetInput( markovFilter->GetOutput() );
 
   writer->SetInput( rescaleFilter->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -299,9 +279,7 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

@@ -48,7 +48,6 @@
 
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
@@ -62,8 +61,6 @@
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -107,13 +104,11 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<RealType,Dimension>        ImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -123,10 +118,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::VariableLengthVector<RealType>     RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
-
   // Software Guide : EndCodeSnippet
  // Software Guide : BeginLatex
   //
@@ -135,10 +128,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>
   ImageToSIFTKeyPointSetFilterType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -149,7 +140,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
   EuclideanDistanceMatchingFilterType;
@@ -161,7 +151,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef PointSetType::PointType           PointType;
   typedef std::pair<PointType,PointType>    MatchType;
   typedef std::vector<MatchType> MatchVectorType;
@@ -172,7 +161,6 @@ int main (int argc, char* argv[])
   typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -183,9 +171,7 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader<ImageType> ReaderType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -196,7 +182,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer fixedReader  = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
@@ -204,7 +189,6 @@ int main (int argc, char* argv[])
   movingReader->SetFileName(movingfname);
   fixedReader->UpdateOutputInformation();
   movingReader->UpdateOutputInformation();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -214,14 +198,12 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
     ImageToSIFTKeyPointSetFilterType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
     ImageToSIFTKeyPointSetFilterType::New();
   EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher =
     EuclideanDistanceMatchingFilterType::New();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -230,7 +212,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   filter1->SetInput( fixedReader->GetOutput() );
   filter2->SetInput( movingReader->GetOutput() );
   
@@ -255,7 +236,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   euclideanMatcher->SetInput1(filter1->GetOutput());
   euclideanMatcher->SetInput2(filter2->GetOutput());
 
@@ -263,7 +243,6 @@ int main (int argc, char* argv[])
   euclideanMatcher->SetUseBackMatching(useBackMatching);
 
   euclideanMatcher->Update();
-
   // Software Guide : EndCodeSnippet
 
 
@@ -275,10 +254,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-
   // Software Guide : EndCodeSnippet
 
  // Software Guide : BeginLatex
@@ -336,7 +313,6 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   resampler->SetInput( movingReader->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -374,7 +350,6 @@ int main (int argc, char* argv[])
   resampler->SetOutputOrigin( fixedImage->GetOrigin() );
   resampler->SetOutputSpacing( fixedImage->GetSpacing() );
   resampler->SetDefaultPixelValue( 100 );
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

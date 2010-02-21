@@ -95,11 +95,9 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   lViewer->SetImage( lReader->GetOutput() );
 
   lViewer->Show();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -110,9 +108,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   Fl::run();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

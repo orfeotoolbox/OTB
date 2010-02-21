@@ -48,13 +48,11 @@
 
 
 // Software Guide : BeginCodeSnippet
-
 #include "itkPointSet.h"
 #include "otbImage.h"
 #include "otbPointSetFileReader.h"
 #include "itkBSplineScatteredDataPointSetToImageFilter.h"
 #include "otbImageFileWriter.h"
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

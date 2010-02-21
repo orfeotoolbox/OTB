@@ -71,9 +71,7 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "itkEuclideanDistance.h"
-
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -103,12 +101,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage< PixelType, Dimension > ImageType;
   typedef ImageType::PixelType                     VectorType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -119,9 +115,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef itk::Statistics::EuclideanDistance< VectorType > DistanceType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -135,9 +129,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::SOMMap< VectorType, DistanceType, Dimension > MapType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -150,9 +142,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader<ImageType> ReaderType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -164,9 +154,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef itk::Statistics::ListSample< VectorType > SampleListType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -178,7 +166,6 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::Functor::CzihoSOMLearningBehaviorFunctor
   LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor
@@ -186,7 +173,6 @@ int main(int argc, char* argv[])
   typedef otb::SOM< SampleListType, MapType,
   LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType >
   SOMType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -204,7 +190,6 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
   reader->Update();
@@ -226,8 +211,6 @@ int main(int argc, char* argv[])
     ++imgIter;
   }
   while ( imgIter != imgIterEnd );
-
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -237,10 +220,8 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SOMType::Pointer som = SOMType::New();
   som->SetListSample( sampleList );
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -251,12 +232,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SOMType::SizeType size;
   size[0]=sizeX;
   size[1]=sizeY;
   som->SetMapSize(size);
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -267,12 +246,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SOMType::SizeType radius;
   radius[0] = neighInitX;
   radius[1] = neighInitY;
   som->SetNeighborhoodSizeInit(radius);
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -285,12 +262,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   som->SetNumberOfIterations(nbIterations);
   som->SetBetaInit(betaInit);
   som->SetBetaEnd(betaEnd);
   som->SetMaxWeight(static_cast<PixelType>(initValue));
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -300,7 +275,6 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   LearningBehaviorFunctorType learningFunctor;
   learningFunctor.SetIterationThreshold( radius, nbIterations );
   som->SetBetaFunctor( learningFunctor );
@@ -308,7 +282,6 @@ int main(int argc, char* argv[])
   NeighborhoodBehaviorFunctorType neighborFunctor;
   som->SetNeighborhoodSizeFunctor( neighborFunctor );
   som->Update();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -392,13 +365,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> ActivationWriterType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -410,10 +380,8 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::SOMActivationBuilder< SampleListType, MapType,
   OutputImageType> SOMActivationBuilderType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -423,13 +391,11 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SOMActivationBuilderType::Pointer somAct
   = SOMActivationBuilderType::New();
   somAct->SetInput(som->GetOutput());
   somAct->SetListSample( sampleList );
   somAct->Update();
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -438,12 +404,10 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   if ( actMapFileName != NULL )
   {
     ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
     actWriter->SetFileName(actMapFileName);
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

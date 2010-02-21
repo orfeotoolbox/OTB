@@ -96,7 +96,6 @@ int main(int argc, char * argv[])
   typedef otb::DEMToOrthoImageGenerator<ImageType,UtmProjectionType>      DEMToOrthoImageGeneratorType;
 
   DEMToOrthoImageGeneratorType::Pointer object = DEMToOrthoImageGeneratorType::New();
-
   // Software Guide : EndCodeSnippet
 
 

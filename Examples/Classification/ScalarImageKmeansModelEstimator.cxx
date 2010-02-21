@@ -88,7 +88,6 @@ int main( int argc, char * argv [] )
 
 
   // Software Guide : BeginCodeSnippet
-
   // Create a List from the scalar image
   typedef itk::Statistics::ScalarImageToListAdaptor< ImageType >   AdaptorType;
 
@@ -141,7 +140,6 @@ int main( int argc, char * argv [] )
     std::cout << "cluster[" << i << "] " << std::endl;
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
   }
-
 // Software Guide : EndCodeSnippet
 
 

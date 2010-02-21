@@ -110,14 +110,10 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   ReaderType::Pointer      reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer    filter =     FilterType::New();
   DetectorType::Pointer  detector = DetectorType::New();
-
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -126,11 +122,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
-
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -140,11 +133,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   detector ->SetOctavesNumber(octaves);
   detector->SetScalesNumber(scales);
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -154,11 +144,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   filter->SetDetector(detector);
   filter->SetNeighborhoodRadius(radius);
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -167,11 +154,8 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -184,7 +168,6 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   reader->GenerateOutputInformation();
   writer->Update();
   // Software Guide : EndCodeSnippet

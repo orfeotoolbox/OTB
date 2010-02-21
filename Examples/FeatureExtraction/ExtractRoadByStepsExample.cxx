@@ -173,7 +173,6 @@ int main( int argc, char * argv[] )
   SAFilterType::Pointer saFilter = SAFilterType::New();
   saFilter->SetReferencePixel(pixelRef);
   saFilter->SetInput(multispectralReader->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -187,7 +186,6 @@ int main( int argc, char * argv[] )
   typedef itk::SqrtImageFilter<InternalImageType,InternalImageType> SqrtFilterType;
   SqrtFilterType::Pointer sqrtFilter = SqrtFilterType::New();
   sqrtFilter->SetInput(saFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -205,7 +203,6 @@ int main( int argc, char * argv[] )
   GradientFilterType::Pointer gradientFilter = GradientFilterType::New();
   gradientFilter->SetSigma(sigma);
   gradientFilter->SetInput(sqrtFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -223,7 +220,6 @@ int main( int argc, char * argv[] )
   NeighborhoodScalarProductType::Pointer scalarFilter
   = NeighborhoodScalarProductType::New();
   scalarFilter->SetInput(gradientFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -243,7 +239,6 @@ int main( int argc, char * argv[] )
   removeIsolatedByDirectionFilter->SetInput(scalarFilter->GetOutput());
   removeIsolatedByDirectionFilter
   ->SetInputDirection(scalarFilter->GetOutputDirection());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -261,7 +256,6 @@ int main( int argc, char * argv[] )
   = RemoveWrongDirectionType::New();
   removeWrongDirectionFilter->SetInput(removeIsolatedByDirectionFilter->GetOutput());
   removeWrongDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -279,7 +273,6 @@ int main( int argc, char * argv[] )
   nonMaxRemovalByDirectionFilter->SetInput(removeWrongDirectionFilter->GetOutput());
   nonMaxRemovalByDirectionFilter
   ->SetInputDirection(scalarFilter->GetOutputDirection());
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -366,14 +359,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::LikelihoodPathListFilter<PathType,
   InternalImageType> PathListToPathListWithValueType;
   PathListToPathListWithValueType::Pointer pathListConverter
   = PathListToPathListWithValueType::New();
   pathListConverter->SetInput(removeTortuousPathListFilter2->GetOutput());
   pathListConverter->SetInputImage(nonMaxRemovalByDirectionFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -383,13 +374,11 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   InternalImageType::Pointer output = InternalImageType::New();
   output->SetRegions(multispectralReader->GetOutput()
                      ->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
-
   // Software Guide : EndCodeSnippet
 
 
@@ -402,14 +391,12 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::DrawPathListFilter<InternalImageType, PathType,
   InternalImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
   drawPathListFilter->SetInput(output);
   drawPathListFilter->SetInputPath(pathListConverter->GetOutput());
   drawPathListFilter->SetUseInternalPathValue(true);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -421,7 +408,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
   InternalImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
@@ -429,7 +415,6 @@ int main( int argc, char * argv[] )
   rescaler->SetOutputMinimum(0);
   rescaler->SetInput(drawPathListFilter->GetOutput());
   rescaler->Update();
-
   // Software Guide : EndCodeSnippet
 
 

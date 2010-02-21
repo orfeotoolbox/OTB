@@ -94,12 +94,9 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef double                          PixelType;
   typedef std::vector<PixelType>          VectorType;
   typedef int                             LabelPixelType;
-
 // Software Guide : EndCodeSnippet
   const   unsigned int                   Dimension = 2;
 
@@ -117,7 +114,6 @@ int main(int argc, char* argv[] )
 
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -128,15 +124,12 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   ReaderType::Pointer reader = ReaderType::New();
 
 
   reader->SetFileName( imageFilename  );
 
   reader->Update();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -150,11 +143,8 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
   SampleType::Pointer sample = SampleType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -165,10 +155,7 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   sample->SetImage(reader->GetOutput());
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -180,12 +167,9 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::SVMModel< PixelType, LabelPixelType > ModelType;
 
   ModelType::Pointer model = ModelType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -197,9 +181,7 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   model->LoadModel( modelFilename );
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -211,12 +193,9 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -228,13 +207,11 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   int numberOfClasses = model->GetNumberOfClasses();
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
   classifier->SetSample(sample.GetPointer());
   classifier->Update();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -249,14 +226,10 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef ClassifierType::ClassLabelType              OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -267,9 +240,6 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef itk::Index<Dimension>         myIndexType;
   typedef itk::Size<Dimension>          mySizeType;
   typedef itk::ImageRegion<Dimension>        myRegionType;
@@ -288,7 +258,6 @@ int main(int argc, char* argv[] )
 
   outputImage->SetRegions( region );
   outputImage->Allocate();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -299,9 +268,6 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   ClassifierType::OutputType* membershipSample =
     classifier->GetOutput();
   ClassifierType::OutputType::ConstIterator m_iter =
@@ -314,8 +280,6 @@ int main(int argc, char* argv[] )
                              outputImage->GetBufferedRegion() );
 
   outIt.GoToBegin();
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -326,16 +290,12 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   while (m_iter != m_last && !outIt.IsAtEnd())
   {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter;
     ++outIt;
   }
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -347,8 +307,6 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::Image< unsigned char, Dimension >        FileImageType;
 
 
@@ -361,7 +319,6 @@ int main(int argc, char* argv[] )
   rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
 
   rescaler->SetInput( outputImage );
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -371,7 +328,6 @@ int main(int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileWriter< FileImageType >         WriterType;
 
   WriterType::Pointer writer = WriterType::New();

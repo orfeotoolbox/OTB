@@ -95,7 +95,6 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   const bool found = pointSet->GetPointData( dataId, & value );
   if ( found )
   {

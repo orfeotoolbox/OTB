@@ -120,7 +120,6 @@ int main(int argc, char * argv[])
   typedef PointsContainerType::Iterator PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -135,7 +134,6 @@ int main(int argc, char * argv[])
 
 
   filter->SetInput(reader->GetOutput());
-
 // Software Guide : EndCodeSnippet
 
 

@@ -110,7 +110,6 @@ public:
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-
   typedef typename TImageType::PixelType PixelType;
 
   itkGetMacro( Threshold, PixelType);
@@ -154,7 +153,6 @@ private:
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-
   typename GradientType::Pointer     m_GradientFilter;
   typename ThresholdType::Pointer    m_ThresholdFilter;
   typename RescalerType::Pointer     m_RescaleFilter;
@@ -235,7 +233,6 @@ GenerateData()
 //  Software Guide : EndLatex
 //
 //  Software Guide : BeginCodeSnippet
-
 template <class TImageType>
 void
 CompositeExampleImageFilter<TImageType>::

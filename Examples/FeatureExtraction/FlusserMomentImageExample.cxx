@@ -82,7 +82,6 @@ int main(int argc, char * argv[] )
   MomentType>   FlusserType;
 
   FlusserType::Pointer fmFunction =FlusserType::New();
-
   // Software Guide : EndCodeSnippet
 
 
@@ -94,8 +93,6 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   InputImageType::RegionType   region;
   InputImageType::SizeType     size;
   InputImageType::IndexType    start;
@@ -118,7 +115,6 @@ int main(int argc, char * argv[] )
   InputImageType::IndexType center;
   center[0]=start[0]+size[0]/2;
   center[1]=start[1]+size[1]/2;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -131,11 +127,8 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   fmFunction->SetInputImage( image );
   fmFunction->SetMomentNumber(mMomentNumber);
-
   // Software Guide : EndCodeSnippet
 
 
@@ -147,12 +140,10 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   MomentType Result = fmFunction->EvaluateAtIndex(center);
 
   std::cout << "The moment of order " << mMomentNumber <<
             " is equal to " << Result << std:: endl;
-
   // Software Guide : EndCodeSnippet
 
 

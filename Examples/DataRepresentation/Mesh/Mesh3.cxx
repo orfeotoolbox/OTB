@@ -159,7 +159,6 @@ int main(int, char *[])
   {
     mesh->SetCellData( cellId, static_cast<PixelType>( cellId * cellId ) );
   }
-
   // Software Guide : EndCodeSnippet
 
 

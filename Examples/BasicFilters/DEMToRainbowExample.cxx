@@ -125,7 +125,6 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::ScalarToRGBColormapImageFilter<ImageType,RGBImageType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
@@ -138,7 +137,6 @@ int main(int argc, char * argv[])
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
   }
-
   // Software Guide : EndCodeSnippet
 
   else

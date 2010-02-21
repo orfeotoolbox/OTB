@@ -29,8 +29,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
 // Software Guide : EndCodeSnippet
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"

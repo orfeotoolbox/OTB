@@ -236,7 +236,6 @@ int main( int argc, char * argv [] )
     std::cout << "cluster[" << i << "] ";
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
   }
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

@@ -91,7 +91,6 @@ int main(int argc, char * argv [] )
 
 
   // Software Guide : BeginCodeSnippet
-
   ImageType::ConstPointer image = reader->GetOutput();
 
 
@@ -125,9 +124,6 @@ int main(int argc, char * argv [] )
   image->TransformPhysicalPointToContinuousIndex( point, cindex );
 
   path->AddVertex( cindex );
-
-
-
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

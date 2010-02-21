@@ -272,7 +272,6 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::MeanImageFilter<
   FixedImageType, FixedImageType >  FixedFilterType;
 
@@ -300,7 +299,6 @@ int main( int argc, char *argv[] )
 
   fixedFilter->SetInput( fixedImageReader->GetOutput() );
   movingFilter->SetInput( movingImageReader->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

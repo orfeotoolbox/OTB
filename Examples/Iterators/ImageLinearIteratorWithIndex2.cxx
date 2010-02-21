@@ -160,8 +160,6 @@ int main( int argc, char *argv[] )
     image3D->SetPixel( index3D, static_cast< PixelType >( mean ) );
     it.NextLine();
   }
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

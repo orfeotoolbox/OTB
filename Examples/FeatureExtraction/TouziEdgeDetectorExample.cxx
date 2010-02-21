@@ -140,7 +140,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
   OutputImageType > RescalerType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -199,7 +198,6 @@ int main( int argc, char * argv[] )
   filter->SetInput( reader->GetOutput() );
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
 

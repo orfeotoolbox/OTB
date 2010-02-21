@@ -54,9 +54,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbMorphologicalPyramidSegmentationFilter.h"
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -66,7 +64,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbMorphologicalPyramidAnalysisFilter.h"
@@ -98,7 +95,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;
   typedef unsigned short OutputPixelType;
@@ -117,7 +113,6 @@ int main(int argc, char * argv[])
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
   InputImageType,OpeningClosingFilterType>
   PyramidFilterType;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -131,7 +126,6 @@ int main(int argc, char * argv[])
   typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,
   OutputImageType>
   SegmentationFilterType;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -153,7 +147,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
 
@@ -161,7 +154,6 @@ int main(int argc, char * argv[])
   pyramid->SetNumberOfLevels(numberOfLevels);
   pyramid->SetDecimationRatio(decimationRatio);
   pyramid->SetInput(reader->GetOutput());
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -178,8 +170,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
   segmentation->SetReferenceImage(reader->GetOutput());
   segmentation->SetBrighterDetails(pyramid->GetSupFilter());
@@ -187,7 +177,6 @@ int main(int argc, char * argv[])
   segmentation->SetSeedsQuantile(seedsQuantile);
   segmentation->SetConnectedThresholdQuantile(segmentationQuantile);
   segmentation->SetMinimumObjectSize(minObjectSize);
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -196,9 +185,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   segmentation->Update();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -209,7 +196,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   OutputListIteratorType it = segmentation->GetOutput()->Begin();
   WriterType::Pointer writer;
   int index = 1;
@@ -226,7 +212,6 @@ int main(int argc, char * argv[])
     ++index;
     ++it;
   }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

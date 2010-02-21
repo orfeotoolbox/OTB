@@ -100,10 +100,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   image->SetNumberOfComponentsPerPixel(4);
   image->Allocate();
-
   // Software Guide : EndCodeSnippet
 
 

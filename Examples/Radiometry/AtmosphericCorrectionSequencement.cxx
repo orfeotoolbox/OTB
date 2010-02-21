@@ -174,7 +174,6 @@ int main( int argc, char *argv[] )
 
   ImageToLuminanceImageFilterType::Pointer filterImageToLuminance
   = ImageToLuminanceImageFilterType::New();
-
 // Software Guide : EndCodeSnippet
   typedef ImageToLuminanceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);

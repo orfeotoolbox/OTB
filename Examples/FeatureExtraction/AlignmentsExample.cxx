@@ -159,8 +159,6 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::DrawPathFilter< InputImageType, PathType,
   OutputImageType >  DrawPathFilterType;
-
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   // We will now go through the list of detected paths and feed them
@@ -174,7 +172,6 @@ int main( int argc, char *argv[] )
   ListType* pathList = alignFilter->GetOutput();
 
   ListType::Iterator listIt = pathList->Begin();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

@@ -81,11 +81,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
   ExtractChannelType;
   ExtractChannelType::Pointer extractChannel = ExtractChannelType::New();
-
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //

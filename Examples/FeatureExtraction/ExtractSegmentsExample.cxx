@@ -136,7 +136,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
   OutputImageType > RescalerType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -199,9 +198,6 @@ int main( int argc, char * argv[] )
   extractor->SetLineValue(0.);
   rescaler->SetInput( extractor->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
-
-
-
   // Software Guide : EndCodeSnippet
 
 
@@ -215,7 +211,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   detector->SetLengthLine( atoi(argv[3]) );
   detector->SetWidthLine( atoi(argv[4]) );
 
@@ -247,7 +242,6 @@ int main( int argc, char * argv[] )
 
   extractor->SetFillGapsRadius( FillGapsRadius );
   extractor->SetFillGapsAngularBeam( FillGapsAngularBeam );
-
   // Software Guide : EndCodeSnippet
 
 
