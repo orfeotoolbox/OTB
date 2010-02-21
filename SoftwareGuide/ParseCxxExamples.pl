@@ -93,7 +93,7 @@ sub ParseCxxFile {
       $dumpinglatex = 0;
       $dumpingcode  = 1;
       print OUTFILE "\\small\n";
-      print OUTFILE "\\begin{verbatim}\n";
+      print OUTFILE "\\begin{lstlisting}\n";
       }
     elsif( /$endlatextag/ ) {
       $tagfound = 1;
@@ -102,7 +102,7 @@ sub ParseCxxFile {
     elsif( /$endcodesnippettag/ ) {
       $tagfound = 1;
       $dumpingcode = 0;
-      print OUTFILE "\\end{verbatim}\n";
+      print OUTFILE "\\end{lstlisting}\n";
       print OUTFILE "\\normalsize\n";
       }
     if( !$tagfound ) {
