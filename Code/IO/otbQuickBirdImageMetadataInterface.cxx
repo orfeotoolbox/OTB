@@ -721,5 +721,4 @@ QuickBirdImageMetadataInterface
 }
 
 
-
 } // end namespace otb

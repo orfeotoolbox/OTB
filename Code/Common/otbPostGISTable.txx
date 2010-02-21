@@ -283,7 +283,6 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 }
 
 
-
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 std::string
 PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>

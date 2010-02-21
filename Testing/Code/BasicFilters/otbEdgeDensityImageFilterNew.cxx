@@ -21,8 +21,6 @@
 #include "itkCannyEdgeDetectionImageFilter.h"
 
 
-
-
 int otbEdgeDensityImageFilterNew(int, char* [] )
 {
 

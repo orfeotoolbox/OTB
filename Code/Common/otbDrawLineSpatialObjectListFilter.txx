@@ -318,7 +318,6 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutput>
 }
 
 
-
 /**
  * Standard "PrintSelf" method
  */

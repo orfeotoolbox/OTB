@@ -40,7 +40,6 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 
-
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
@@ -97,7 +96,6 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 
-
 ///\return The geographic point corresponding to (0,0)
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType
@@ -111,9 +109,6 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 
   return otbOrigin;
 }
-
-
-
 
 
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>

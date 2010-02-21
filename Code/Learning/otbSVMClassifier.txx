@@ -48,7 +48,6 @@ SVMClassifier< TSample, TLabel >
 }
 
 
-
 template< class TSample, class TLabel >
 void
 SVMClassifier< TSample, TLabel >

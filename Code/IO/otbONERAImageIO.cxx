@@ -149,8 +149,6 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 }
 
 
-
-
 // Used to print information about this object
 void ONERAImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
@@ -301,8 +299,6 @@ void ONERAImageIO::ReadImageInformation()
 }
 
 
-
-
 void ONERAImageIO::InternalReadImageInformation()
 {
 
@@ -338,7 +334,6 @@ void ONERAImageIO::InternalReadImageInformation()
   {
     itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");
   }
-
 
 
   // Check magic_number
@@ -460,7 +455,6 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
   }
   return true;
 }
-
 
 
 bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
@@ -604,7 +598,6 @@ void ONERAImageIO::WriteImageInformation()
   otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
   otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
   otbMsgDebugMacro( <<"         Host byte order    : "<<this->GetByteOrderAsString(m_ByteOrder));
-
 
 
 }

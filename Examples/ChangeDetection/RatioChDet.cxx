@@ -23,7 +23,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MeanRatioImageFilter} for detecting changes
@@ -121,7 +120,6 @@ int main(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -204,7 +202,6 @@ int main(int argc, char* argv[] )
   filter->AddObserver(itk::ProgressEvent(), observer);
 
 
-
   try
   {
     writer->Update();
@@ -229,11 +226,8 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 
-
   return EXIT_SUCCESS;
 
 }
-
-
 
 

@@ -104,7 +104,6 @@ int main(int argc, char** argv )
   mReader->SetFileName(argv[2]);
 
 
-
   // Software Guide : BeginLatex
   //
   // To make the correlation estimation more robust, the first
@@ -194,7 +193,6 @@ int main(int argc, char** argv )
   // Software Guide : EndLatex
 
 
-
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType, MovingImageType> ChannelExtractionFilterType;
   ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
 
@@ -228,7 +226,6 @@ int main(int argc, char** argv )
   warper->SetInput( mReader->GetOutput() );
   warper->SetDeformationField( registrator->GetOutput() );
   warper->SetEdgePaddingValue( padValue );
-
 
 
   typedef itk::CastImageFilter< MovingImageType, OutputImageType > CastFilterType;

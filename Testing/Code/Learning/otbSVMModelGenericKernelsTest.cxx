@@ -28,7 +28,6 @@
 #include "otbSVMKernels.h"
 
 
-
 int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
 {
   typedef unsigned char                                   InputPixelType;

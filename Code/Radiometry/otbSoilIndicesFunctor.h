@@ -168,8 +168,6 @@ private:
 };
 
 
-
-
 /** \class IR
  *  \brief This functor computes the Red Index (IR)
  *

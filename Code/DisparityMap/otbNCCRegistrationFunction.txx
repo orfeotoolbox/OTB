@@ -273,8 +273,6 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
 }
 
 
-
-
 } // end namespace otbs
 
 #endif

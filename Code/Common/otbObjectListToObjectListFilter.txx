@@ -35,7 +35,6 @@ ObjectListToObjectListFilter<TInputList,TOutputList>
 }
 
 
-
 template <class TInputList, class TOutputList>
 void
 ObjectListToObjectListFilter<TInputList,TOutputList>

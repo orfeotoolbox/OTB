@@ -39,7 +39,6 @@ int main( int argc, char * argv[] )
 {
 
 
-
   if ( argc != 2)
   {
     std::cout <<" Usage : InputImage"<<std::endl;
@@ -133,8 +132,6 @@ int main( int argc, char * argv[] )
   // window. The zoom rate can be modified by using the mous wheel.
   //
   // Software Guide : EndLatex
-
-
 
 
   return EXIT_SUCCESS;

@@ -122,7 +122,6 @@ OGRVectorDataIO<TData>
   }
 
 
-
   std::string projectionRefWkt = data->GetProjectionRef();
 
 

@@ -283,7 +283,6 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 }
 
 
-
 /**
  * AddRightAngleToPointSet
  */

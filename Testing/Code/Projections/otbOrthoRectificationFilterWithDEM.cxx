@@ -47,7 +47,6 @@
 #include "init/ossimInit.h"
 
 
-
 int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);

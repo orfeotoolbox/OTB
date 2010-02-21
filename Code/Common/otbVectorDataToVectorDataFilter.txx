@@ -35,7 +35,6 @@ VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>
 }
 
 
-
 template <class TInputVectorData, class TOutputVectorData>
 void
 VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>

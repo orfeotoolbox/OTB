@@ -162,7 +162,6 @@ private :
   typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
 
 
-
 };
 
 }// End namespace otb

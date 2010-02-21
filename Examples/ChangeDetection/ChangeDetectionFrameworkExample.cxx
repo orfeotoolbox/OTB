@@ -261,7 +261,6 @@ int main(int argc, char* argv[] )
   filter->AddObserver(itk::ProgressEvent(), observer);
 
 
-
   try
   {
     writer->Update();

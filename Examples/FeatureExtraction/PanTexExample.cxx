@@ -35,7 +35,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the

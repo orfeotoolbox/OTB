@@ -40,4 +40,3 @@ int otbImageToPointSetFilterTest(int argc, char *argv[] )
 }
 
 
-

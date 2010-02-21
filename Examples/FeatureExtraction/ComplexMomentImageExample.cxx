@@ -84,7 +84,6 @@ int main(int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   // Next, we plug the input image into the complex moment fucntion
@@ -121,7 +120,6 @@ int main(int argc, char * argv[] )
   cmFunction->SetNeighborhoodRadius( 15 );
 
 
-
   //  Software Guide : BeginLatex
   // In order to get the value of the moment, we call the
   // \code{EvaluateAtIndex} method.
@@ -134,7 +132,6 @@ int main(int argc, char * argv[] )
   std::cout << "The moment of order (" << P << "," << Q <<
             ") is equal to " << Result << std:: endl;
   // Software Guide : EndCodeSnippet
-
 
 
   return EXIT_SUCCESS;

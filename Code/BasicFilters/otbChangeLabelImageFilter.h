@@ -36,7 +36,6 @@ namespace otb
  */
 
 
-
 namespace Functor {
   
 template< class TInput, class TOutput>
@@ -114,8 +113,6 @@ private:
 }
 
 
-
-
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ChangeLabelImageFilter :
     public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
@@ -188,29 +185,6 @@ private:
 #endif
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

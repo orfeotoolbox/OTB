@@ -129,7 +129,6 @@ namespace otb
 }
 
 
-
 /** Set built-in type.  Creates member Set"name"() (e.g., SetVisibility()); */
 #define otbSetObjectMemberMacro(object,name,type) \
   virtual void Set##name (const type _arg) \
@@ -287,9 +286,7 @@ namespace otb
 #define otbTestMenuItemCallback(view,menubar,button)
 
 
-
 #endif
-
 
 
 namespace otb

@@ -185,12 +185,10 @@ int main( int argc, char *argv[] )
   }
 
 
-
   writer->SetInput( trainingImage );
 
 
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

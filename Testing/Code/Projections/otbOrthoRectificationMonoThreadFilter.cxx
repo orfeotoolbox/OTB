@@ -37,7 +37,6 @@
 #include "init/ossimInit.h"
 
 
-
 int otbOrthoRectificationMonoThreadFilter( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);

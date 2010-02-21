@@ -684,8 +684,3 @@ SEMClassifier< TInputImage, TOutputImage >
 #endif
 
 
-
-
-
-
-

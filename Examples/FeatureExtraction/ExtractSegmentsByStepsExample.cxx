@@ -177,7 +177,6 @@ int main( int argc, char * argv[] )
   reader->SetFileName( argv[1] );
 
 
-
   //  Software Guide : BeginLatex
   //
   //  The image obtained with the reader is passed as input to the
@@ -262,7 +261,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
 
-
   writer->SetFileName( argv[2] );
   writer->Update();
 
@@ -271,7 +269,6 @@ int main( int argc, char * argv[] )
   // \code{GetOutputDirections()} method. \textbf{FIXME : implement
   // the method!!}
   //  Software Guide : EndLatex
-
 
 
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
@@ -289,7 +286,6 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

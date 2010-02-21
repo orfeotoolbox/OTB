@@ -212,7 +212,6 @@ int main ( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 
-
 //  Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter< OutputImageType,
     OutputImageType > RescalerType;
@@ -280,11 +279,5 @@ int main ( int argc, char * argv[] )
   }
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
 
 

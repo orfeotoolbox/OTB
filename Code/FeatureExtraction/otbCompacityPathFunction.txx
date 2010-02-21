@@ -35,7 +35,6 @@ CompacityPathFunction< TInputPath, TOutput >
 }
 
 
-
 template < class TInputPath, class TOutput>
 typename CompacityPathFunction<TInputPath,
 TOutput>::OutputType

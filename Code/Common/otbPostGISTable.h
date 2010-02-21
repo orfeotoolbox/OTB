@@ -43,7 +43,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(PostGISTable,GISTable);

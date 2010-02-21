@@ -24,7 +24,6 @@
 #include "base/ossimFilename.h"
 
 
-
 int otbOssimElevManagerTest4(int argc,char* argv[])
 {
 

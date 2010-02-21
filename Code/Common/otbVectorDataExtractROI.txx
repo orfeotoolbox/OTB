@@ -121,7 +121,6 @@ VectorDataExtractROI<TVectorData>
 }/*End GenerateData()*/
 
 
-
 template <class TVectorData>
 void
 VectorDataExtractROI<TVectorData>
@@ -428,7 +427,6 @@ VectorDataExtractROI<TVectorData>
 
   return region;
 }
-
 
 
 } // end namespace otb

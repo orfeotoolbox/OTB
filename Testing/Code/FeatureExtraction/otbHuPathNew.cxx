@@ -34,7 +34,6 @@ int otbHuPathNew( int argc, char * argv[] )
   FunctionType::Pointer function =FunctionType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

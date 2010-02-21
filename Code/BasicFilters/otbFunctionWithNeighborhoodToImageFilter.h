@@ -25,9 +25,6 @@
 #include "itkInPlaceImageFilter.h"
 
 
-
-
-
 namespace otb
 {
 

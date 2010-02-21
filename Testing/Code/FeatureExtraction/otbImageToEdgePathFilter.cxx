@@ -110,7 +110,6 @@ int otbImageToEdgePathFilter(int argc, char * argv[])
   */
 
 
-
   return EXIT_SUCCESS;
 }
 

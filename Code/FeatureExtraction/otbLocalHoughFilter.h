@@ -137,7 +137,6 @@ public:
   itkGetMacro(Threshold,float);
 
 
-
 protected:
   LocalHoughFilter();
   virtual ~LocalHoughFilter() {}

@@ -62,7 +62,6 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 }
 
 
-
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
     void
         VectorData<TPrecision,VDimension,TValuePrecision>
@@ -118,7 +117,6 @@ template<class TPrecision, unsigned int VDimension, class TValuePrecision>
   p.CastFrom( of );
   this->SetOrigin( p );
 }
-
 
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>

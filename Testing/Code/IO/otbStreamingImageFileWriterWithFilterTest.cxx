@@ -46,7 +46,6 @@ int otbStreamingImageFileWriterWithFilterTest (int argc, char* argv[])
   }
 
 
-
   typedef unsigned char                                    InputPixelType;
   typedef unsigned char                                    OutputPixelType;
   const   unsigned int                                  Dimension = 2;
@@ -84,7 +83,6 @@ int otbStreamingImageFileWriterWithFilterTest (int argc, char* argv[])
     writer->SetInput( reader->GetOutput() );
     writer->Update();
   }
-
 
 
   return EXIT_SUCCESS;

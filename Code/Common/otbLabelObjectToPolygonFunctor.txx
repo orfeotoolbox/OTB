@@ -23,7 +23,6 @@
 #include "otbLabelObjectToPolygonFunctor.h"
 
 
-
 namespace otb
 {
 namespace Functor

@@ -106,7 +106,6 @@ TerraSarImageMetadataInterface::GetDay( const MetaDataDictionaryType & dict ) co
 }
 
 
-
 int
 TerraSarImageMetadataInterface::GetMonth( const MetaDataDictionaryType & dict ) const
 {

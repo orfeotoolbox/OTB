@@ -82,7 +82,6 @@ public:
   typedef typename InputImageType::ConstPointer         ImageConstPointer;
 
 
-
   /** InputImageType typedef support. */
   typedef typename OutputImageType::PixelType            OutputPixelType;
   typedef typename OutputImageType::IndexType            OutputIndexType;
@@ -137,7 +136,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main Computation Method */
   void GenerateData();
-
 
 
 private:

@@ -81,8 +81,6 @@ public:
 };
 
 
-
-
 } // namespace Functor
 } // namespace otb
 

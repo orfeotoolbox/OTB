@@ -52,7 +52,6 @@ int otbCorrelChangeDetectionTest(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::CorrelationChangeDetector<
   InputImageType1,
@@ -95,7 +94,5 @@ int otbCorrelChangeDetectionTest(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

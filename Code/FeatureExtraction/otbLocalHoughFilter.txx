@@ -181,7 +181,6 @@ LocalHoughFilter<TInputImage>
         ROIfilter->SetSizeY(size[1]-y-1);
 
 
-
       // Extract the local region of the input image
       ROIfilter->SetInput( this->GetInput() );
 

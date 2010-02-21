@@ -118,7 +118,6 @@ int main(int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   // Next, we plug the input image into the complex moment function
@@ -130,7 +129,6 @@ int main(int argc, char * argv[] )
   fmFunction->SetInputImage( image );
   fmFunction->SetMomentNumber(mMomentNumber);
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -155,7 +153,6 @@ int main(int argc, char * argv[] )
   //  \end{itemize}
   //
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

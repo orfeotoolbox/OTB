@@ -23,7 +23,6 @@
 #include "otbImageFileWriter.h"
 
 
-
 int otbLineSegmentDetectorNew( int argc, char * argv[] )
 {
   

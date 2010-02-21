@@ -159,7 +159,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   // Software Guide : BeginCodeSnippet
   try
   {
@@ -174,10 +173,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
-
   return EXIT_SUCCESS;
 }
-
 
 

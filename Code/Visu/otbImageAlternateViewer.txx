@@ -800,8 +800,6 @@ ImageAlternateViewer<TPixel>
   }
 
 
-
-
   interpolation.Stop();
   total.Stop();
   return result;
@@ -1054,7 +1052,6 @@ ImageAlternateViewer<TPixel>
       }
     }
   }
-
 
 
   if (bufferRegionList[5].GetSize()[1]!=bufferRegionList[6].GetSize()[1]

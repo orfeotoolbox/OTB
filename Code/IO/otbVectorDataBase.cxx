@@ -19,7 +19,6 @@
 #include "otbVectorDataBase.h"
 
 
-
 namespace otb
 {
 

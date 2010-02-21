@@ -133,7 +133,6 @@ VectorDataToLabelMapFilter<TVectorData, TLabelMap >
     outputPtr->SetDirection( m_Direction );
 
 
-
     return;
   }
 /*

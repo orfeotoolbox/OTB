@@ -26,8 +26,6 @@
 #include <iostream>
 
 
-
-
 int otbRegionImageToRectangularPathListFilter(int argc, char * argv[])
 {
 

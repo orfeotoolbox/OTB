@@ -23,7 +23,6 @@
 #include "otbOGRIOHelper.h"
 
 
-
 namespace otb
 {
 

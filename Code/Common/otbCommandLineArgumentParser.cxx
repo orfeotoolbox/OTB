@@ -94,8 +94,6 @@ int CommandLineArgumentParseResult
 }
 
 
-
-
 void CommandLineArgumentParseResult
 ::Clear()
 {
@@ -324,8 +322,6 @@ bool CommandLineArgumentParser::TryParseCommandLine(int argc, char *argv[],
         //         ++i;
       }
     }
-
-
 
 
   }

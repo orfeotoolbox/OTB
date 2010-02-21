@@ -35,7 +35,6 @@ GISTableToGISTableFilter<TInputGISTable,TOutputGISTable>
 }
 
 
-
 template <class TInputGISTable, class TOutputGISTable>
 void
 GISTableToGISTableFilter<TInputGISTable,TOutputGISTable>

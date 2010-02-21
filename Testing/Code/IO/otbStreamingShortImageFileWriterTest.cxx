@@ -43,7 +43,6 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
   }
 
 
-
   typedef unsigned short                                   InputPixelType;
   typedef unsigned short                                   OutputPixelType;
   const   unsigned int                                  Dimension = 2;
@@ -75,8 +74,6 @@ int otbStreamingShortImageFileWriterTest (int argc, char* argv[])
     writer->SetInput( reader->GetOutput() );
     writer->Update();
   }
-
-
 
 
   return EXIT_SUCCESS;

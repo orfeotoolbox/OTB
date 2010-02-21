@@ -68,5 +68,3 @@ int otbISUMultiChannelRAndNIRIndexImageFilter(int argc, char * argv[])
 }
 
 
-
-

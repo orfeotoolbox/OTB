@@ -172,7 +172,6 @@ public:
   }
 
 
-
 protected:
   /**
    * Constructor.

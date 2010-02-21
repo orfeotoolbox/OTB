@@ -262,7 +262,6 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
           Sum[3][1] += static_cast<double>(bit.GetPixel(i));
 
 
-
       } // end of the loop on pixels of the filter
 
 

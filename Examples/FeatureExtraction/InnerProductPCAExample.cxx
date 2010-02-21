@@ -144,7 +144,6 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
 
-
   typedef otb::Image<PixelType,Dimension> MonoImageType;
   
   typedef otb::MultiToMonoChannelExtractROI< PixelType, PixelType >

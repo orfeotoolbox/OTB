@@ -117,7 +117,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 }// end PrintSelf
 
 
-
 /**
  * GenerateInputRequestedRegion method.
  */
@@ -149,7 +148,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   imgData = dynamic_cast<TClassifiedImage*>( output );
   imgData->SetRequestedRegionToLargestPossibleRegion();
 }
-
 
 
 /**
@@ -357,7 +355,6 @@ MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
   m_Sampler->SetEnergyFidelity(m_EnergyFidelity);
   m_Sampler->SetNumberOfClasses(m_NumberOfClasses);
 }
-
 
 
 /**

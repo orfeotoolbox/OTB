@@ -104,7 +104,6 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileWriter< CharImageType >  WriterType;
 
 
-
   typedef itk::RescaleIntensityImageFilter<RealImageType, CharImageType > RescaleFilter;
 
 

@@ -52,7 +52,6 @@ public:
   itkTypeMacro(PointSetToDensityImageFilter,itk::PointSetToImageFilter);
 
 
-
   /**   typedefs parameters support */
   typedef TInputPointSet                          PointSetType;
 

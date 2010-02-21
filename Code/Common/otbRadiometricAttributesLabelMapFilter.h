@@ -119,7 +119,6 @@ private:
 } // End namespace Functor
 
 
-
 /** \class RadiometricAttributesLabelMapFilter
  *  \brief This filter computes radiometric attributes for each object.
  *

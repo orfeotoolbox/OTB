@@ -41,6 +41,5 @@ int otbPostGISConnectionImplementationConnectToDB(int argc, char * argv[])
   connection->ConnectToDB();
 
 
-
   return EXIT_SUCCESS;
 }

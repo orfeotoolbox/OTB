@@ -156,7 +156,6 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
   OutputImageListType *   OutputImageList   = this->GetOutput();
 
 
-
   // typedefs of the filters
   typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> SubtractFilterType;
   typedef itk::AddImageFilter<InputImageType,InputImageType,InputImageType> AddFilterType;

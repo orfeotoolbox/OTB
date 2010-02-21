@@ -87,14 +87,11 @@ int main( int argc, char * argv[] )
   image->FillBuffer(itk::NumericTraits<PixelType>::Zero);
 
 
-
   // We create some lines
   typedef itk::PolyLineParametricPath< Dimension > PathType;
   typedef otb::ObjectList< PathType > PathListType;
 
   PathListType::Pointer lineList = PathListType::New();
-
-
 
 
   typedef PathType::ContinuousIndexType    ContinuousIndexType;

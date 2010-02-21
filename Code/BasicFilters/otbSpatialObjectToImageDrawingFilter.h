@@ -129,8 +129,6 @@ public:
   itkGetMacro(UseObjectValue,bool);
 
 
-
-
   typedef itk::SpatialObject<InputSpatialObjectType::ObjectDimension> SpatialObjectType;
   typedef typename SpatialObjectType::ChildrenListType* ChildrenType;
   typedef typename SpatialObjectType::ChildrenListType::iterator IteratorType;

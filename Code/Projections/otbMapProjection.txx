@@ -34,8 +34,6 @@ MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOu
 }
 
 
-
-
 template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::~MapProjection()
@@ -157,7 +155,6 @@ MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOu
 
   return outputPoint;
 }
-
 
 
 ///\return The geographic point corresponding to (0,0)
@@ -411,7 +408,6 @@ MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOu
 {
   std::cout << m_MapProjection->print(std::cout);
 }
-
 
 
 } // namespace otb

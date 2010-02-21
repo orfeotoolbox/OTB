@@ -82,7 +82,6 @@ int main( int argc, char *argv[] )
   }
 
 
-
   Image4DType::ConstPointer image4D = reader4D->GetOutput();
 
   Image3DType::Pointer image3D = Image3DType::New();

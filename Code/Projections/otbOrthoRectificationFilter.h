@@ -126,8 +126,6 @@ public :
   }
 
 
-
-
 protected:
   OrthoRectificationFilter();
   virtual ~OrthoRectificationFilter();

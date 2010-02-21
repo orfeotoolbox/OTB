@@ -21,7 +21,6 @@
 #endif
 
 
-
 #include "itkExceptionObject.h"
 #include <iostream>
 #include <fstream>

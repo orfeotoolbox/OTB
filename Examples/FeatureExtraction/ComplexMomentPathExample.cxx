@@ -93,7 +93,6 @@ int main(int argc, char * argv[] )
   ContinuousIndexType cindex;
 
 
-
   // Draw a square:
 
   path->Initialize();
@@ -110,7 +109,6 @@ int main(int argc, char * argv[] )
   cindex[0]=130;
   cindex[1]= 30;
   path->AddVertex(cindex);
-
 
 
   //  Software Guide : BeginLatex
@@ -142,7 +140,6 @@ int main(int argc, char * argv[] )
   std::cout << "The moment of order (" << P << "," << Q <<
             ") is equal to " << Result << std:: endl;
   // Software Guide : EndCodeSnippet
-
 
 
   return EXIT_SUCCESS;

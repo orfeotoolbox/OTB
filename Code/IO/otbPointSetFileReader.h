@@ -50,7 +50,6 @@ public:
   itkTypeMacro(PointSetFileReader, PointSetSource);
 
 
-
   /** Typedef */
   typedef TOutputPointSet PointSetType;
   typedef typename PointSetType::PointType PointType;

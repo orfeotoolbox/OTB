@@ -75,7 +75,3 @@ int otbWaveletFilterBank( int argc, char * argv[] )
 }
 
 
-
-
-
-

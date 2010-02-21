@@ -104,7 +104,6 @@ public:
   }
 
 
-
   typedef itk::ConstNeighborhoodIterator<TInputImage1>
   NeighborhoodIteratorType1;
   typedef itk::ConstNeighborhoodIterator<TInputImage2>

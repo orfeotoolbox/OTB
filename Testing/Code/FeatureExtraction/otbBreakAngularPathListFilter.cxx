@@ -65,7 +65,6 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   MatricePoints.push_back(ListPoints);
 
 
-
   const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathListFilterType;
@@ -161,7 +160,6 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 
   } //Enf for angle
   file.close();
-
 
 
   return EXIT_SUCCESS;

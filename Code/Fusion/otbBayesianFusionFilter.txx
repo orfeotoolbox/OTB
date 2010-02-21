@@ -24,7 +24,6 @@
 #include "otbBayesianFusionFilter.h"
 
 
-
 namespace otb
 {
 

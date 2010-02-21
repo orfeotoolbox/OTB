@@ -200,8 +200,3 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 }
 
 
-
-
-
-
-

@@ -49,7 +49,6 @@ int otbOssimElevManagerTest2(int argc,char* argv[])
   size = atoi(argv[6]);
 
 
-
   ossimElevManager * elevManager = ossimElevManager::instance();
 
   elevManager->loadElevationPath(srtmDir);

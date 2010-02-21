@@ -246,7 +246,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndCodeSnippet
 
 
-
   // Software Guide : BeginLatex
   //
   // The matched points will be stored into a landmark list.

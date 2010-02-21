@@ -32,7 +32,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the OTB's multi-class SVM
 // capabilities. The theory behind this kind of classification is out
@@ -70,12 +69,10 @@
 #include "itkImageRegionIterator.h"
 
 
-
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
 #include "otbImageFileReader.h"
-
 
 
 int main( int argc, char *argv[])
@@ -173,7 +170,6 @@ int main( int argc, char *argv[])
   svmEstimator->Update();
 
 //  Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex
@@ -391,8 +387,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 
-
-
 // Software Guide : BeginCodeSnippet
   typedef itk::RGBPixel<unsigned char>   RGBPixelType;
   typedef otb::Image<RGBPixelType, 2>    RGBImageType;
@@ -423,7 +417,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndCodeSnippet
 
 
-
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SVMCLASSMULTI} shows the result of the SVM classification.
 // \begin{figure}
@@ -435,8 +428,6 @@ int main( int argc, char *argv[])
 // \label{fig:SVMCLASSMULTI}
 // \end{figure}
 //  Software Guide : EndLatex
-
-
 
 
   return EXIT_SUCCESS;

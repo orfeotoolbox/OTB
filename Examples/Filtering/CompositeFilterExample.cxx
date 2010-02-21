@@ -250,7 +250,6 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
 //  Software Guide : EndCodeSnippet
 
 
-
 //  Software Guide : BeginLatex
 //
 //  It is important to note that in the above example, none of the internal

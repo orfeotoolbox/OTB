@@ -87,4 +87,3 @@ int otbWaveletTransform( int argc, char * argv[] )
 }
 
 
-

@@ -23,9 +23,6 @@
 #include <fstream>
 
 
-
-
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
@@ -57,11 +54,9 @@
 //  Software Guide : EndLatex
 
 
-
 #include "itkImageToListAdaptor.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
-
 
 
 int main(int argc, char* argv[] )
@@ -79,7 +74,6 @@ int main(int argc, char* argv[] )
   const char * imageFilename  = argv[1];
   const char * modelFilename  = argv[3];
   const char * outputFilename = argv[2];
-
 
 
 // Software Guide : BeginLatex
@@ -339,7 +333,6 @@ int main(int argc, char* argv[] )
 // Software Guide : EndCodeSnippet
 
 
-
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SVMCLASS} shows the result of the SVM classification.
 // \begin{figure}
@@ -354,10 +347,5 @@ int main(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-
 
 

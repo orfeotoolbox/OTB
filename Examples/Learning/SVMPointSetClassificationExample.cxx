@@ -32,8 +32,6 @@
 #include <cstdlib>
 
 
-
-
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
 // \doxygen{otb}{SVMClassifier} class for performing SVM
@@ -53,7 +51,6 @@
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
 //  Software Guide : EndCodeSnippet
-
 
 
 int main( int argc, char* argv[] )

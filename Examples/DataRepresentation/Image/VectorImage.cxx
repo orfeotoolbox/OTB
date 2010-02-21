@@ -55,7 +55,6 @@
 // Software Guide : EndCodeSnippet
 
 
-
 int main(int, char *[])
 {
   // Software Guide : BeginLatex

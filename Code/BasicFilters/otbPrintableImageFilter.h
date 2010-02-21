@@ -137,7 +137,6 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   typedef typename MaskImageType::PixelType               MaskPixelType;
 
 
-
   typedef otb::MultiChannelExtractROI<InputInternalPixelType,
                                       InputInternalPixelType>               ChannelExtractorType;
   typedef typename ChannelExtractorType::ChannelsType                       ChannelsType;

@@ -281,10 +281,7 @@ int otbHoughTransform2DLinesImageTest(int argc , char* argv[])
   std::cout << "Hough Transform Successful" << std::endl;
 
 
-
-
   return EXIT_SUCCESS;
 }
-
 
 

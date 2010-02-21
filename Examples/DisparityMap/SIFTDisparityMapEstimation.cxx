@@ -371,7 +371,6 @@ int main (int argc, char* argv[])
     sourcePoint[1] = point1[1];
 
 
-
     targetPoint[0] = point2[0];
     targetPoint[1] = point2[1];
 

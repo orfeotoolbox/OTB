@@ -142,7 +142,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  The option for normalizing across scale space can also be selected in this filter.
@@ -211,7 +210,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   // The image can also be saved into  a file, by using the ImageFileWriter.
   //
   typedef  float WritePixelType;
@@ -226,7 +224,6 @@ int main( int argc, char * argv[] )
   writer->SetFileName( argv[2] );
 
   writer->Update();
-
 
 
   //  Software Guide : BeginLatex

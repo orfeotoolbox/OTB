@@ -207,7 +207,6 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
 
-
   /************** pretty images for printing *********/
   typedef otb::Image< unsigned char, 2> OutputImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;

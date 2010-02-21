@@ -77,7 +77,6 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   spacing[1] = atof(argv[9]);
 
 
-
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
   vectorDataRendering->SetInput(0,projection0->GetOutput());
@@ -96,7 +95,6 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   writer->SetInput(vectorDataRendering->GetOutput());
   writer->SetFileName(argv[3]);
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

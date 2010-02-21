@@ -35,7 +35,6 @@ int otbCompacityPathNew( int argc, char * argv[] )
   FunctionType::Pointer function =FunctionType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

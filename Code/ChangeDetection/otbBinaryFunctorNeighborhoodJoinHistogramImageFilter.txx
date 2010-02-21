@@ -245,7 +245,6 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
     maxInput2 + (maxInput2 - minInput2 ) * m_UpperBoundIncreaseFactor;
 
 
-
   typedef itk::ImageRegionConstIteratorWithIndex<Input1ImageType>    Input1IteratorType;
   typedef itk::ImageRegionConstIteratorWithIndex<Input2ImageType>    Input2IteratorType;
 
@@ -282,7 +281,6 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   return histogram;
 
 }
-
 
 
 /**
@@ -365,8 +363,6 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
       progress.CompletedPixel();
     }
   }
-
-
 
 
 }

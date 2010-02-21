@@ -358,7 +358,6 @@ ImageMetadataInterfaceBase::GetSunAzimuth( const MetaDataDictionaryType & dict )
 }
 
 
-
 std::string
 ImageMetadataInterfaceBase::GetSensorID( const MetaDataDictionaryType & dict ) const
 {

@@ -141,8 +141,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
-
   //  Software Guide : BeginLatex
   //
   //  Below, we create the reader and writer using the New() method and
@@ -223,6 +221,5 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
 
 

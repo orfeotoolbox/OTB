@@ -166,7 +166,6 @@ AeronetFileReader
 }
 
 
-
 /**
  * Compute statistics method
  */

@@ -63,7 +63,6 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   complexWriter->Update();
 
 
-
   return EXIT_SUCCESS;
 }
 

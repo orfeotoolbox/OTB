@@ -103,7 +103,6 @@ PointSetToDensityImageFilter<  TInputPointSet ,  TOutputImage>
   outputPtr->SetRegions( region );
 
 
-
 }/** End of GenerateoutputInformation*/
 
 

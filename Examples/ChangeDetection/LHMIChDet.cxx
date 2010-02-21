@@ -51,7 +51,6 @@ int main(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::LHMIChangeDetector<
   InputImageType1,
@@ -90,7 +89,6 @@ int main(int argc, char* argv[] )
   filter->AddObserver(itk::ProgressEvent(), observer);
 
 
-
   try
   {
     writer->Update();
@@ -106,7 +104,5 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
-
 
 

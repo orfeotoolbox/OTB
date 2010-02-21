@@ -35,5 +35,3 @@ int otbMRFSamplerRandomMAPNew(int argc, char * argv[])
 }
 
 
-
-

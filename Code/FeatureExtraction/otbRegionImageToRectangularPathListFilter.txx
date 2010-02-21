@@ -399,7 +399,6 @@ RegionImageToRectangularPathListFilter<TInputImage,TOutputPath>
 }
 
 
-
 } // end namespace otb
 
 #endif

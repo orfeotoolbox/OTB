@@ -190,8 +190,6 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 }
 
 
-
-
 template<class TInputImage, class TInputImage2>
 void
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>

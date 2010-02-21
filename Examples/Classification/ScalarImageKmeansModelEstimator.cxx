@@ -86,7 +86,6 @@ int main( int argc, char * argv [] )
   }
 
 
-
   // Software Guide : BeginCodeSnippet
   // Create a List from the scalar image
   typedef itk::Statistics::ScalarImageToListAdaptor< ImageType >   AdaptorType;
@@ -94,7 +93,6 @@ int main( int argc, char * argv [] )
   AdaptorType::Pointer adaptor = AdaptorType::New();
 
   adaptor->SetImage(  reader->GetOutput() );
-
 
 
   // Define the Measurement vector type from the AdaptorType
@@ -111,7 +109,6 @@ int main( int argc, char * argv [] )
   treeGenerator->SetSample( adaptor );
   treeGenerator->SetBucketSize( 16 );
   treeGenerator->Update();
-
 
 
   typedef TreeGeneratorType::KdTreeType TreeType;
@@ -141,7 +138,6 @@ int main( int argc, char * argv [] )
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
   }
 // Software Guide : EndCodeSnippet
-
 
 
   return EXIT_SUCCESS;

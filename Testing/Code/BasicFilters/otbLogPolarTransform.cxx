@@ -78,6 +78,5 @@ int otbLogPolarTransform(int argc, char* argv[])
   file.close();
 
 
-
   return EXIT_SUCCESS;
 }

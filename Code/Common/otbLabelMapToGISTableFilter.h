@@ -141,7 +141,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-
    /** Remove table before insertion if true  */
   bool m_DropExistingGISTable;
 

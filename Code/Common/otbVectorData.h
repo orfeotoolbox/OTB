@@ -63,7 +63,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(VectorData,DataObject);
@@ -81,7 +80,6 @@ public:
   typedef typename DataNodeType::PointType PointType;
   typedef typename DataNodeType::LineType LineType;
   typedef typename DataNodeType::PolygonType PolygonType;
-
 
 
   typedef itk::Vector<double, 2> SpacingType;

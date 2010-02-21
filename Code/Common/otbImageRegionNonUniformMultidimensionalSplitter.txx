@@ -179,7 +179,6 @@ ImageRegionNonUniformMultidimensionalSplitter<VImageDimension>
 }
 
 
-
 /**
  *
  */

@@ -1323,5 +1323,3 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
 #endif
 
 
-
-

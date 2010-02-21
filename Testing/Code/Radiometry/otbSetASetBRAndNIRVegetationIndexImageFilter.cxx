@@ -56,7 +56,6 @@ void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 }
 
 
-
 int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;

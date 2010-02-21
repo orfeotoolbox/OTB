@@ -34,7 +34,6 @@ namespace otb
 {
 
 
-
 /*--- Shape ---*/
 
 /* Get in the subtree of root sh a shape that is not removed, NULL if all shapes are removed */
@@ -124,8 +123,6 @@ Shape::mw_get_next_sibling_shape(Shape *sh)
 }
 
 
-
-
 /*-- Shapes --*/
 
 
@@ -196,7 +193,6 @@ Shapes::mw_change_shapes(int inrow,int incol,float value)
 
   mw_alloc_shapes(inrow, incol, value);
 }
-
 
 
 /* Return the smallest shape containing the given pixel */
@@ -312,7 +308,6 @@ Shapes::flst_pixels()
 
   delete[] tabNbOfProperPixels;
 }
-
 
 
 const int Shapes::EAST   = 0;
@@ -616,7 +611,6 @@ Shapes::flst_shape_boundary(Shape *pShape)
 
   return(pBoundary);
 }
-
 
 
 }  // namespace otb

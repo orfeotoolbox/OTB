@@ -209,7 +209,6 @@ public:
   OutputImageType * GetSDOutput();
 
 
-
   virtual void GenerateOutputInformation();
   std::vector<FunctorType> m_FunctorList;
 

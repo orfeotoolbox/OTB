@@ -36,7 +36,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
@@ -105,7 +104,6 @@
 // \code{Evaluate} and \code{EvaluateAtIndex} methods for this purpose.
 //
 // Software Guide : EndLatex
-
 
 
 int main(int argc, char * argv[])

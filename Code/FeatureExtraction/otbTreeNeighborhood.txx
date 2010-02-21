@@ -125,6 +125,5 @@ Neighborhood::print_neighborhood()
 }
 
 
-
 }
 #endif

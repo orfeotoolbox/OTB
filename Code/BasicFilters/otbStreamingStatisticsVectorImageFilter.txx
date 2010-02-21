@@ -402,7 +402,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   tempMatrix.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
 
 
-
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, outputRegionForThread);
   it.GoToBegin();
   // do the work

@@ -40,4 +40,3 @@ int otbFlexibleDistanceWithMissingValueNew( int argc, char * argv[] )
 }
 
 
-

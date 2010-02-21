@@ -78,6 +78,5 @@ int otbStreamingImageFileWriterTest (int argc, char* argv[])
   }
 
 
-
   return EXIT_SUCCESS;
 }

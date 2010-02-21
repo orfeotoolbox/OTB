@@ -20,8 +20,6 @@
 #endif
 
 
-
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    INPUTS: {QB_Suburb13x17y.png}
@@ -68,7 +66,6 @@
 #include "itkCastImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSubtractImageFilter.h"
-
 
 
 class CommandIterationUpdate : public itk::Command
@@ -187,7 +184,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  Finally, the type of the interpolator is declared. The interpolator will
@@ -277,7 +273,6 @@ int main( int argc, char *argv[] )
 
   typedef itk::MeanImageFilter<
   MovingImageType, MovingImageType >  MovingFilterType;
-
 
 
   FixedFilterType::Pointer  fixedFilter  = FixedFilterType::New();
@@ -579,7 +574,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  A resampling filter is created and the moving image is connected as
@@ -591,7 +585,6 @@ int main( int argc, char *argv[] )
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   resampler->SetInput( movingImageReader->GetOutput() );
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -616,7 +609,6 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   resampler->SetTransform( registration->GetOutput()->Get() );
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -737,7 +729,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   // Software Guide : BeginLatex
   //
   //  Note that the use of subtraction as a method for comparing the images is
@@ -796,7 +787,6 @@ int main( int argc, char *argv[] )
   }
 
 
-
   //  Software Guide : BeginLatex
   //
   //  For the purpose of comparison, the difference between the fixed image and
@@ -824,7 +814,6 @@ int main( int argc, char *argv[] )
   }
 
 
-
   //  Software Guide : BeginLatex
   //
   //  The complete pipeline structure of the current example is presented in
@@ -846,8 +835,6 @@ int main( int argc, char *argv[] )
   //  difference image.
   //
   //  Software Guide : EndLatex
-
-
 
 
   //  oftware Guide : BegSinLatex

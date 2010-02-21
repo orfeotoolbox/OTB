@@ -23,8 +23,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
-
 //  Software Guide : BeginLatex
 //
 //  \label{DXFExample}This example illustrates how to read a DXF file and how to draw objects
@@ -64,7 +62,6 @@ int main(int argc, char * argv[])
 
   char * inputFilename = argv[1];
   char * outputFilename = argv[4];
-
 
 
 // Software Guide : BeginCodeSnippet
@@ -186,7 +183,6 @@ int main(int argc, char * argv[])
     spacing[1]=(maximum[1]-origin[1])/size[1];
     imageGenerator->SetSpacing(spacing);
 // Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex

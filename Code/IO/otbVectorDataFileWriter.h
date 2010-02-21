@@ -125,4 +125,3 @@ private:
 #endif // __otbVectorDataFileWriter_h
 
 
-

@@ -376,7 +376,6 @@ namespace otb
   }
 
 
-
   template <class TVectorData, class TImage>
       void
           VectorDataToImageFilter<TVectorData, TImage>
@@ -425,7 +424,6 @@ namespace otb
 
           point->move_to(dataNode->GetPoint()[0],dataNode->GetPoint()[1]);
 //           std::cout << dataNode->GetPoint()[0] << ", " << dataNode->GetPoint()[1] << std::endl;
-
 
 
           typedef boost::shared_ptr<mapnik::raster> raster_ptr;

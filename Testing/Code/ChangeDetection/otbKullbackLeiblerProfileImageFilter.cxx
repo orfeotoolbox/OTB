@@ -64,6 +64,5 @@ int otbKullbackLeiblerProfileImageFilter(int argc, char * argv[])
   writer->Update();
 
 
-
   return EXIT_SUCCESS;
 }

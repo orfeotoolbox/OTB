@@ -53,7 +53,6 @@ ROIdataConversion< TInputImage, TInputROIImage >
 }
 
 
-
 template < class TInputImage, class TInputROIImage >
 void
 ROIdataConversion< TInputImage, TInputROIImage >
@@ -122,7 +121,6 @@ ROIdataConversion< TInputImage, TInputROIImage >
 
   return count;
 }
-
 
 
 } // end of namespace otb

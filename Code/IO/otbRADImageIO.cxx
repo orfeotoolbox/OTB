@@ -494,7 +494,6 @@ bool RADImageIO::InternalReadHeaderInformation(const std::string & file_name, st
 }
 
 
-
 bool RADImageIO::CanWriteFile( const char* filename )
 {
   std::string lFileName(filename);
@@ -742,8 +741,6 @@ void RADImageIO::WriteImageInformation()
     m_HeaderFile << System::GetShortFileName(this->m_ChannelsFileName[i].c_str()) << std::endl;
   }
   m_HeaderFile.close();
-
-
 
 
   //Allocate  buffer of stream file

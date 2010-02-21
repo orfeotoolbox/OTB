@@ -112,7 +112,6 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
     minMax->Compute();
 
 
-
     for(LabelType label = minMax->GetMinimum(); label <=minMax->GetMaximum(); ++label)
       {
         if(labelMapFilter->GetOutput()->HasLabel(label) && label != labelMapFilter->GetOutput()->GetBackgroundValue())

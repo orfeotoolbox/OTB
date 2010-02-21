@@ -58,7 +58,6 @@ int otbSystemTest( int argc, char* argv[] )
   }
 
 
-
   return EXIT_SUCCESS;
 }
 

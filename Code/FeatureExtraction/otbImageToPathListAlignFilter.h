@@ -77,8 +77,6 @@ public:
   typedef typename RealImageType::IndexType                      RealImageTypeIndexType;
 
 
-
-
   /** Spacing (size of a pixel) of the output image. The
    * spacing is the geometric distance between image samples.
    * It is stored internally as double, but may be set from

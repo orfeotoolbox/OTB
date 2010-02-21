@@ -126,9 +126,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 
 
-
-
-
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();
   utmProjection->SetZone(48);
   utmProjection->SetHemisphere('N');

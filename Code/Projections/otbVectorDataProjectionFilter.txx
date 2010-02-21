@@ -112,7 +112,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 }
 
 
-
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData >
 void
@@ -173,7 +172,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
   p.CastFrom( of );
   this->SetOutputOrigin( p );
 }
-
 
 
 template <class TInputVectorData, class TOutputVectorData >
@@ -302,7 +300,6 @@ VectorDataProjectionFilter<TInputVectorData,TOutputVectorData>
 
 
   m_Transform = InternalTransformType::New();
-
 
 
   InputVectorDataPointer input = this->GetInput();

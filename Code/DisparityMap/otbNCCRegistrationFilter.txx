@@ -258,7 +258,6 @@ NCCRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
 }
 
 
-
 } // end namespace otb
 
 #endif

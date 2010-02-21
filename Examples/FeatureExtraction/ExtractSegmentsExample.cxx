@@ -266,7 +266,6 @@ int main( int argc, char * argv[] )
   writer->Update();
 
 
-
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
@@ -282,7 +281,6 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

@@ -59,7 +59,6 @@
 // Software Guide : EndCodeSnippet
 
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -103,8 +102,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
-
   //  Software Guide : BeginLatex
   //
   //  The Confidence connected filter type is instantiated using the input
@@ -121,8 +118,6 @@ int main( int argc, char *argv[] )
   ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter =
     ConfidenceConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
-
-
 
 
   //  Software Guide : BeginLatex
@@ -157,9 +152,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
-
-
   //  Software Guide : BeginLatex
   //
   //  The affinity map can be accessed through the type \code{FuzzySceneType}
@@ -169,9 +161,6 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef FuzzySegmentationFilterType::FuzzySceneType  FuzzySceneType;
   // Software Guide : EndCodeSnippet
-
-
-
 
 
   //  Software Guide : BeginLatex
@@ -297,7 +286,5 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

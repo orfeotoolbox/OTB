@@ -146,7 +146,6 @@ int otbFillGapsFilter( int argc, char * argv[] )
   writer->Update();
 
 
-
   return EXIT_SUCCESS;
 }
 

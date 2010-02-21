@@ -103,7 +103,6 @@ int main(int, char *[])
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  The \code{SetPointData()} and \code{GetPointData()} methods are not the
@@ -270,6 +269,5 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-
 
 

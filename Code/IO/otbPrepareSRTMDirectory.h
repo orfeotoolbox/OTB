@@ -23,7 +23,6 @@
 #include "base/ossimFilename.h"
 
 
-
 namespace otb
 {
 

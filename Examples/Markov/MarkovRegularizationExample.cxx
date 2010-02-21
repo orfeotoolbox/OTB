@@ -92,7 +92,6 @@ int main(int argc, char* argv[] )
   writer->SetFileName( outputFilename );
 
 
-
   typedef otb::MarkovRandomFieldFilter
   <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
 

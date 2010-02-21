@@ -78,7 +78,6 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   }
 
 
-
   // Copute extract and scaled extract region
   ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::IndexType index;

@@ -51,7 +51,6 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::JoinHistogramMIImageFilter<
   InputImageType1,
@@ -95,7 +94,5 @@ int otbJHMIChangeDetectionTest(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
-
 
 

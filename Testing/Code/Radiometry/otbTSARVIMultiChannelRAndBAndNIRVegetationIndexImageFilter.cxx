@@ -75,5 +75,3 @@ int otbTSARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter(int argc, char * 
 }
 
 
-
-

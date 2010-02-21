@@ -101,7 +101,6 @@ int main( int argc, char * argv[] )
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
 
 
-
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
@@ -169,13 +168,10 @@ int main( int argc, char * argv[] )
   LocalHoughOverlap[1] = LocalHoughOverlapY;
 
 
-
   localHough->SetRadius( LocalHoughRadius );
   localHough->SetOverlap( LocalHoughOverlap );
   localHough->SetNumberOfLines( LocalHoughNumberOfLines );
   localHough->SetThreshold( LocalHoughThreshold );
-
-
 
 
   //  Software Guide : BeginLatex
@@ -199,7 +195,6 @@ int main( int argc, char * argv[] )
 // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LOCAL_HOUGH}
   // shows the result of applying the \doxygen{otb}{LocalHoughImageFilter}.
@@ -211,7 +206,6 @@ int main( int argc, char * argv[] )
   // original image, extracted segments.}  \label{fig:LOCAL_HOUGH} \end{figure}
   //
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

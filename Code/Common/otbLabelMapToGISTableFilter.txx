@@ -175,7 +175,6 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
  }
 
 
-
 template<class TLabelMap , class TGISTable>
 void
 LabelMapToGISTableFilter< TLabelMap, TGISTable >
@@ -187,7 +186,6 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
   */
 }
-
 
 
 }// end namespace otb

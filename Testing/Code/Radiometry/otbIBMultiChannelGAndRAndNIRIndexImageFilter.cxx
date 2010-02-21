@@ -67,5 +67,3 @@ int otbIBMultiChannelGAndRAndNIRIndexImageFilter(int argc, char * argv[])
 }
 
 
-
-

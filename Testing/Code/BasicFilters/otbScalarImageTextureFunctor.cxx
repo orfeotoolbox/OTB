@@ -47,7 +47,6 @@ int otbScalarImageTextureFunctor(int argc, char * argv[])
   writer->SetFileName(outputfilename);
 
 
-
   typedef otb::Functor::ScalarImageTextureFunctor<IterType, InputImageType, InputPixelType>  FunctorType;
 
   typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;

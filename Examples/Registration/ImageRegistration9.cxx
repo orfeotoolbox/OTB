@@ -20,9 +20,6 @@
 #endif
 
 
-
-
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    INPUTS: {QB_SuburbR10X13Y17.png}
@@ -54,7 +51,6 @@
 
 
 #include "itkCenteredTransformInitializer.h"
-
 
 
 //  Software Guide : BeginLatex
@@ -235,7 +231,6 @@ int main( int argc, char *argv[] )
 
   typedef itk::MeanImageFilter<
   MovingImageType, MovingImageType >  MovingFilterType;
-
 
 
   FixedFilterType::Pointer  fixedFilter  = FixedFilterType::New();

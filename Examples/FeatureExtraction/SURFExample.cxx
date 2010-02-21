@@ -63,7 +63,6 @@ int main(int argc, char * argv[])
   const unsigned int scales = atoi(argv[4]);
 
 
-
   const unsigned int Dimension =2;
 
 // Software Guide : BeginLatex

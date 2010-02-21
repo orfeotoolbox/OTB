@@ -237,7 +237,6 @@ public:
   itkGetObjectMacro( Optimizer, OptimizerType);
 
 
-
   /** Set/Get the number of classes. */
   itkSetMacro(NumberOfClasses, unsigned int);
   itkGetMacro(NumberOfClasses, unsigned int);

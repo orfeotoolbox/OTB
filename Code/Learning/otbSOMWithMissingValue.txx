@@ -108,4 +108,3 @@ SOMWithMissingValue< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighbo
 #endif
 
 
-

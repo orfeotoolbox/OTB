@@ -530,6 +530,3 @@ template class WaveletGenerator< Wavelet::SYMLET8 >;
 //#endif
 
 
-
-
-

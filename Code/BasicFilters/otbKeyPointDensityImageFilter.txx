@@ -105,7 +105,6 @@ KeyPointDensityImageFilter< TInputImage , TOutputImage, TDetector >
 }
 
 
-
 /*----------------------------------------------------------------
   PrintSelf
   -----------------------------------------------------------------*/

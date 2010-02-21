@@ -65,7 +65,6 @@ ImageWidget<TInputImage>
 }
 
 
-
 template <class TInputImage>
 void
 ImageWidget<TInputImage>

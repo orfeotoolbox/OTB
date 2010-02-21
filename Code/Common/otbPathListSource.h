@@ -165,7 +165,6 @@ public:
 //   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
 
-
 protected:
   PathListSource() {};
   virtual ~PathListSource() {}

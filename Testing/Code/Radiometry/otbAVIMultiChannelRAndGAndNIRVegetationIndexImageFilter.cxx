@@ -73,5 +73,3 @@ int otbAVIMultiChannelRAndGAndNIRVegetationIndexImageFilter(int argc, char * arg
 }
 
 
-
-

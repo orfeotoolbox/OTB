@@ -30,6 +30,5 @@ int otbStreamingShrinkImageFilterNew( int argc, char * argv[] )
   ShrinkType::Pointer shrink = ShrinkType::New();
 
 
-
   return EXIT_SUCCESS;
 }

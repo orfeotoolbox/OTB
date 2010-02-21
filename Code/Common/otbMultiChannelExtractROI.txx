@@ -84,7 +84,6 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 }
 
 
-
 template<class TInputPixelType, class TOutputPixelType>
 void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
@@ -103,7 +102,6 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 }
 
 
-
 /**
  *
  */
@@ -118,7 +116,6 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
   m_ChannelsKind = 0;
   m_ChannelsWorks.clear();
 }
-
 
 
 /**

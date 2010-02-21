@@ -102,7 +102,6 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
     imageGenerator->SetInput(group);
 
 
-
     imageGenerator->Update();
 
     castFilter->SetOutputMinimum( 0 );

@@ -455,7 +455,6 @@ void LUMImageIO::WriteImageInformation()
 }
 
 
-
 int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
                                         std::string &   str_sens_code,
                                         int &           inbbits,

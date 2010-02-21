@@ -233,7 +233,6 @@ namespace otb
     };
 
 
-
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

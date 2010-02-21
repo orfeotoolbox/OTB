@@ -29,7 +29,6 @@
 #include "otbMath.h"
 
 
-
 namespace otb
 {
 namespace Functor

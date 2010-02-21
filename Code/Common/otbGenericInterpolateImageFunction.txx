@@ -290,7 +290,6 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   }
 
 
-
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension
   double xPixelValue = 0.0;
