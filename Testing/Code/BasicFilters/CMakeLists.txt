@@ -1593,6 +1593,7 @@ otbClosingOpeningMorphologicalFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbMeanFunctorImageTest.cxx
+otbTransformPointSetFilterTest.cxx
 )
 
 # A enrichir
