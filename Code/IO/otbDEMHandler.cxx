@@ -34,25 +34,17 @@ DEMHandler
 {
 }
 
-DEMHandler
-::~DEMHandler()
-{
-}
-
 void
 DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
-  m_Mutex.Lock();
   ossimFilename ossimDEMDir;
   ossimDEMDir=ossimFilename(DEMDirectory);
 
   if (!m_ElevManager->loadElevationPath(ossimDEMDir))
   {
-    m_Mutex.Unlock();
     itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
   }
-  m_Mutex.Unlock();
 }
 
 void
@@ -67,9 +59,7 @@ DEMHandler
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
     {
        otbMsgDevMacro( << "Geoid successfully opened");
-       m_Mutex.Lock();
        ossimGeoidManager::instance()->addGeoid(geoidPtr);
-       m_Mutex.Unlock();
        geoidPtr.release();
     }
     else
@@ -89,9 +79,7 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon=geoPoint[0];
   ossimWorldPoint.lat=geoPoint[1];
-  m_Mutex.Lock();
   height=m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
-  m_Mutex.Unlock();
   return height;
 }
 
@@ -103,10 +91,8 @@ DEMHandler
   ossimGpt ossimWorldPoint;
   ossimWorldPoint.lon=geoPoint[0];
   ossimWorldPoint.lat=geoPoint[1];
-  m_Mutex.Lock();
   otbMsgDevMacro( << "Geoid offset: " << ossimGeoidManager::instance()->offsetFromEllipsoid(ossimWorldPoint));
   height=m_ElevManager->getHeightAboveEllipsoid(ossimWorldPoint);
-  m_Mutex.Unlock();
   return height;
 }
 
