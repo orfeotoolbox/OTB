@@ -35,7 +35,8 @@ namespace otb
  *  points detected in the image.
  *
  * The density computed is a ratio of the number of keypoints over
- * the total number of pixels within a region.
+ * the total number of pixels within a region. 
+ * It uses the class \doxygen{otb}{PointSetToDensityImageFilter} to do so.
  *
  * This class use the key point detector specified in the 3rd argument
  * template to detect the keypoints. Then for every pixel, the density of the key points
