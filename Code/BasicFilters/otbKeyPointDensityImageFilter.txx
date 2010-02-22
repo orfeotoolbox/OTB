@@ -51,7 +51,7 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
  */
 
 /**
-* ThreadedGenerateData Performs the pixel-wise addition
+* GenerateData Performs the pixel-wise addition
 */
 template <class TInputImage , class TOutputImage, class TDetector>
 void
