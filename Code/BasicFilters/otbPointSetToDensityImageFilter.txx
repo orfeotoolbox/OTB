@@ -61,6 +61,8 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
+  typename OutputImageType::Pointer outPtr = this->GetOutput();
+
   PointSetDensityFunctionPointerType densityComputeFunction = PointSetDensityFunctionType::New();
   densityComputeFunction->SetPointSet(this->GetInput());
   densityComputeFunction->SetRadius(m_Radius);
@@ -68,15 +70,14 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
   /** Point*/
   InputType   pCenter;
   IndexType index;
-  itk::ImageRegionIterator<OutputImageType> itOut(this->GetOutput(),
+  itk::ImageRegionIterator<OutputImageType> itOut(outPtr,
       outputRegionForThread);
   itOut.GoToBegin();
 
   while (!itOut.IsAtEnd())
   {
     index = itOut.GetIndex();
-    pCenter[0] = index[0];
-    pCenter[1] = index[1];
+    outPtr->TransformIndexToPhysicalPoint(index, pCenter);
 
     itOut.Set(densityComputeFunction->Evaluate(pCenter));
     ++itOut;
