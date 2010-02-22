@@ -56,7 +56,7 @@ int otbCloudEstimatorDefaultFilter(int argc, char * argv[])
   CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  //Initialisation parameters
+  //Initialization parameters
   reader->SetFileName(inputFileName);
 
   cloudEstimator->SetInput(reader->GetOutput());

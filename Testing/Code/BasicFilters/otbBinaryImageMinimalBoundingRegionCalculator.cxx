@@ -76,6 +76,5 @@ int otbBinaryImageMinimalBoundingRegionCalculator(int argc, char* argv[])
   out.close();
 
 
-
   return EXIT_SUCCESS;
 }

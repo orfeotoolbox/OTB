@@ -613,7 +613,6 @@ StreamingImageFileWriter<TInputImage>
 }
 
 
-
 } // end namespace otb
 
 #endif

@@ -16,7 +16,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimInit.cpp 16425 2010-01-27 20:09:13Z gpotts $
 
 
 #include <ossim/init/ossimInit.h>
@@ -49,6 +49,7 @@
 #include <ossim/imaging/ossimImageWriterFactoryRegistry.h>
 #include <ossim/imaging/ossimImageMetaDataWriterRegistry.h>
 #include <ossim/projection/ossimProjectionViewControllerFactory.h>
+#include <ossim/base/ossimDatumFactoryRegistry.h>
 #include <ossim/base/ossimBaseObjectFactory.h>
 #include <ossim/base/ossimCustomEditorWindowRegistry.h>
 #include <ossim/base/ossimDirectory.h>
@@ -177,8 +178,8 @@ void ossimInit::initialize(ossimArgumentParser& parser)
 
    if(!theElevEnabledFlag)
    {
-      ossimElevManager::instance()->disableSource();
-      ossimElevManager::instance()->disableAutoLoad();
+//      ossimElevManager::instance()->disableSource();
+//      ossimElevManager::instance()->disableAutoLoad();
    }
    
    if (traceDebug())
@@ -559,6 +560,7 @@ void ossimInit::initializeDefaultFactories()
    // existed it will open and create a handler instead of a writer.
    //---
    ossimImageWriterFactoryRegistry::instance();
+   ossimDatumFactoryRegistry::instance();
    ossimImageMetaDataWriterRegistry::instance();
    ossimImageHandlerRegistry::instance();
    ossim2dTo2dTransformRegistry::instance();
@@ -756,7 +758,19 @@ void ossimInit::initializeElevation()
 	   }
    }
    ossimGeoidManager::instance()->loadState(KWL);
-   ossimElevManager::instance()->loadState(KWL);
+   
+   // lets do backward compatability here
+   //
+   ossimString regExpression =  ossimString("^(") + "elevation_source[0-9]+.)";
+   vector<ossimString> keys =
+   KWL.getSubstringKeyList( regExpression );
+   if(!keys.empty())
+   {
+      ossimNotify(ossimNotifyLevel_WARN) << "Please specify elevation_source keywords with the new prefix\n"
+                                         << "of elevation_manager.elevation_source....\n";
+      thePreferences->preferencesKWL().addPrefixToKeysThatMatch("elevation_manager.", regExpression);
+   }
+   ossimElevManager::instance()->loadState(KWL, "elevation_manager.");
    
    if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initializeElevation(): leaving..." << std::endl;
@@ -764,11 +778,11 @@ void ossimInit::initializeElevation()
 
 ossimString ossimInit::version() const
 {
-   ossimString versionString = "version ";
+   ossimString versionString;
 #ifdef OSSIM_VERSION
    versionString += OSSIM_VERSION;
 #else
-   versionString += "?.?.?";
+   versionString += "Version ?.?.?";
 #endif
    
    versionString += " ";

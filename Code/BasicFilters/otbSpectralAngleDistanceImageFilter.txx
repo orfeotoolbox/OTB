@@ -111,7 +111,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
       dist = vcl_acos(scalarProd/vcl_sqrt(normProd));
     }
     //------ This part was supressed since the filter must perform only the spectral angle computation ---
-    // Spectral angle normalisation
+    // Spectral angle normalization
     // dist = dist/(CONST_PI_2);
     //square ponderation
     // dist = vcl_sqrt(dist);

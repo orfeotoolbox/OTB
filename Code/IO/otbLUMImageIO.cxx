@@ -305,7 +305,7 @@ bool LUMImageIO::InternalReadHeaderInformation(std::fstream & file, const bool r
   otbSwappFileOrderToSystemOrderMacro(int,&NbCol,1);
   otbSwappFileOrderToSystemOrderMacro(int,&NbLig,1);
 
-  //Initialisation of image informations
+  //Initialization of image informations
   m_Dimensions[0] = NbCol;
   m_Dimensions[1] = NbLig;
   this->SetNumberOfComponents(1);
@@ -455,7 +455,6 @@ void LUMImageIO::WriteImageInformation()
 }
 
 
-
 int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
                                         std::string &   str_sens_code,
                                         int &           inbbits,
@@ -470,7 +469,7 @@ int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
   sens_code[0]='\0';
   cod_pix[0]='\0';
 
-  /* Initialisations diverses */
+  /* Initializations diverses */
   trouve = -1;
   taille = -1;
   int nbbits=-1;

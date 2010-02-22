@@ -28,8 +28,6 @@
 #endif
 
 
-
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {ConnectedThresholdOutput1.png}
@@ -374,7 +372,5 @@ int main( int argc, char *argv[])
 
   return EXIT_SUCCESS;
 }
-
-
 
 

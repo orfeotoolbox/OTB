@@ -116,7 +116,6 @@ public :
   itkGetConstReferenceMacro(SecondTransform,SecondTransformPointerType);
 
 
-
   /**  Method to transform a point. */
   virtual SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType  & ) const;
 

@@ -72,7 +72,6 @@
 #include "otbImageFileWriter.h"
 
 
-
 //  Software Guide : BeginLatex
 //
 //  The header file corresponding to this filter should be included first.

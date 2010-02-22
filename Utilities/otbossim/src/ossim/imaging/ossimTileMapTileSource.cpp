@@ -60,15 +60,18 @@ bool ossimTileMapTileSource::open()
 {
    static const char MODULE[] = "ossimTileMapTileSource::open";
 
+  ossimString os = theImageFile.beforePos(4);
+  
    if (traceDebug())
    {
       CLOG << " Entered..." << std::endl
            << " trying to open file " << theImageFile << std::endl;
    }
-   if(theImageFile.ext() == "otb")
-     {
+   if(os == "http" || theImageFile.ext() == "otb")
+   {
      return true;
-     }
+   }
+  
    return false;
 }
 

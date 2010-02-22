@@ -58,7 +58,6 @@ int otbImageToLuminanceImageFilter(int argc, char * argv[])
   }
 
 
-
   // Instantiating object
   ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();
   filter->SetAlpha(alpha);
@@ -66,7 +65,6 @@ int otbImageToLuminanceImageFilter(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

@@ -28,9 +28,6 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhoodInnerProduct.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 namespace otb {
 
 /** \class WaveletFilterBank
@@ -72,8 +69,8 @@ namespace otb {
  * \todo: At present version, there is not consideration on meta data information that can be transmited
  * from the input(s) to the output(s)...
  *
- * The two choice (FORWARD/INVERSE) yield specific implementation of the templates (header redeclaration
- * is given at bottom of otbWaveletFilterBank.h for the INVERSE case)
+ * The two choice (Wavelet::FORWARD/Wavelet::INVERSE) yield specific implementation of the templates (header redeclaration
+ * is given at bottom of otbWaveletFilterBank.h for the Wavelet::INVERSE case)
  *
  * \sa WaveletOperator
  *
@@ -81,7 +78,7 @@ namespace otb {
  */
 template < class TInputImage, class TOutputImage,
             class TWaveletOperator,
-            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+            Wavelet::WaveletDirection TDirectionOfTransformation >
 class ITK_EXPORT WaveletFilterBank
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -149,7 +146,7 @@ private:
  * \sa WaveletOperator
  */
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
-class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -184,8 +181,8 @@ public:
   typedef typename WaveletOperatorType::LowPassOperator  LowPassOperatorType;
   typedef typename WaveletOperatorType::HighPassOperator HighPassOperatorType;
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,FORWARD);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::FORWARD);
 
   /** Dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
@@ -330,7 +327,7 @@ private:
  * \sa WaveletOperator
  */
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
-class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+class ITK_EXPORT WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
   : public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -365,8 +362,8 @@ public:
   typedef typename WaveletOperatorType::LowPassOperator  LowPassOperatorType;
   typedef typename WaveletOperatorType::HighPassOperator HighPassOperatorType;
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,INVERSE);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::INVERSE);
 
   /** Dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
@@ -412,7 +409,7 @@ protected:
 
 
   /** BeforeThreadedGenerateData
-   * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the INVERSE mode
+   * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode
    */
   virtual void BeforeThreadedGenerateData ();
 

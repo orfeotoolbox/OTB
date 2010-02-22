@@ -248,7 +248,6 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
 }
 
 
-
 template <class TInputImage, class TOutputImage>
 void
 SFSTexturesImageFilter<TInputImage, TOutputImage>
@@ -325,7 +324,6 @@ SFSTexturesImageFilter<TInputImage,TOutputImage>
     throw e;
   }
 }
-
 
 
 template <class TInputImage, class TOutputImage>
@@ -437,7 +435,6 @@ SFSTexturesImageFilter<TInputImage, TOutputImage>
         this->SetFeatureStatus(static_cast<FeatureType>(id),status);
       }
     }
-
 
 
 /**

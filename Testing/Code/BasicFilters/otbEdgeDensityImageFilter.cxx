@@ -24,7 +24,6 @@
 #include "otbImageFileWriter.h"
 
 
-
 int otbEdgeDensityImageFilter(int argc, char* argv[] )
 {
 

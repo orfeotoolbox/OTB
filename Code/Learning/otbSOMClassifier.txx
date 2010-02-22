@@ -116,9 +116,3 @@ SOMClassifier< TSample, TSOMMap, TLabel >
 #endif
 
 
-
-
-
-
-
-

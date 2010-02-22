@@ -22,8 +22,8 @@
 
 int otbWaveletOperator(int argc, char * argv[])
 {
-  const otb::InverseOrForwardTransformationEnum directionID = otb::FORWARD;
-  const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
 
   const int Dimension = 2;
   typedef double PixelType;
@@ -46,7 +46,5 @@ int otbWaveletOperator(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-
 
 

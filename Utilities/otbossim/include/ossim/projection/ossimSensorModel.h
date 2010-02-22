@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimSensorModel.h 16308 2010-01-09 02:45:54Z eshirschorn $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
@@ -42,7 +42,7 @@
 #include <ossim/base/ossimAdjustableParameterInterface.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatap.h>
-
+#include <ossim/base/ossimException.h>
 class ossimKeywordlist;
 class ossimTieGptSet;
 
@@ -241,9 +241,23 @@ public:
     * @return true.
     */
    virtual bool isAffectedByElevation() const { return true; }
-   
+
+   /**
+    * This method computes the ground sample distance(gsd) and sets class
+    * attributes theGSD and theMeanGSD by doing a lineSampleHeightToWorld on
+    * three points and calculating the distance from them.
+    *
+    * @return Nothing but throws ossimException on error.
+    */
+#if defined(_WIN32)
+   void computeGsd() throw(...);
+#else
+   void computeGsd() throw(ossimException);
+#endif
+
 protected:
    virtual ~ossimSensorModel();
+
    
    /*!
     * METHOD: extrapolate()

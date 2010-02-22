@@ -16,6 +16,7 @@
 #include <iosfwd>
 
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimReferenced.h>
 
 class ossimFilename;
 class ossimKeywordlist;
@@ -26,15 +27,13 @@ class ossimKeywordlist;
  * This is the base class for all info objects.  The purpose of an Info object
  * is to dump whatever info is available for a given file name to user.
  */
-class OSSIM_DLL ossimInfoBase
+class OSSIM_DLL ossimInfoBase : public ossimReferenced
 {
 public:
    
    /** default constructor */
    ossimInfoBase();
 
-   /** virtual destructor */
-   virtual ~ossimInfoBase();
 
    /**
     * @brief open method.
@@ -74,6 +73,8 @@ public:
    bool getKeywordlist(ossimKeywordlist& kwl);
 
 protected:
+   /** virtual destructor */
+   virtual ~ossimInfoBase();
    
    bool theOverviewFlag; // If true overview information should be processed.
    

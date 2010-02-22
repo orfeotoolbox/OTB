@@ -68,4 +68,3 @@ int otbExtractROI_RGB( int argc, char * argv[] )
 }
 
 
-

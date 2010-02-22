@@ -29,7 +29,6 @@
 #include <algorithm>
 
 
-
 bool CMP(std::vector<float>  a ,std::vector<float>  b )
 {
   return lexicographical_compare(a.begin(),a.begin()+2 , b.begin(),b.begin()+2);

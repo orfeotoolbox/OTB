@@ -29,7 +29,6 @@
 #include "itkSpatialFunction.h"
 
 
-
 namespace otb
 {
 

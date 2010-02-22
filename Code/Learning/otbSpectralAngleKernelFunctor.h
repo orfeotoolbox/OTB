@@ -68,7 +68,6 @@ protected:
 } // end of namespace otb
 
 
-
 #endif
 
 

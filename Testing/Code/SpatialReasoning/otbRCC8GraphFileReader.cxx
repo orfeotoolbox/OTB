@@ -45,7 +45,6 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
   RCC8GraphType::Pointer graph = rcc8GraphReader->GetOutput();
 
 
-
   // Checking vertices
   VertexIteratorType vIt(graph);
   unsigned int count = 0;

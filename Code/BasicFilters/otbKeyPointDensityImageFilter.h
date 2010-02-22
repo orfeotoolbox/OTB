@@ -27,14 +27,24 @@
 #include "itkNumericTraits.h"
 
 
-/** \class KeyPointDensityImageFilter
- *  \brief
-
- *
- */
-
 namespace otb
 {
+
+/** \class KeyPointDensityImageFilter
+ *  \brief This class computes the density of the characteristic
+ *  points detected in the image.
+ *
+ * The density computed is a ratio of the number of keypoints over
+ * the total number of pixels within a region. 
+ * It uses the class \doxygen{otb}{PointSetToDensityImageFilter} to do so.
+ *
+ * This class use the key point detector specified in the 3rd argument
+ * template to detect the keypoints. Then for every pixel, the density of the key points
+ * within its neighborhood is computed.
+ * 
+ * The output is a map of key points density.
+ */
+
 template <class TInputImage, class TOutputImage , class TDetector>
 class ITK_EXPORT KeyPointDensityImageFilter
       : public itk::ImageToImageFilter<TInputImage, TOutputImage>

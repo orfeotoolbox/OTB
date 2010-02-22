@@ -23,7 +23,6 @@
 #include "vnl/vnl_math.h"
 
 
-
 namespace otb
 {
 

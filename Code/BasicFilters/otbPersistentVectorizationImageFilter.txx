@@ -63,7 +63,6 @@ PersistentVectorizationImageFilter<TInputImage, TOutputPath>
   this->GraftOutput(m_MinMaxFilter->GetOutput());
 
 
-
   for (PixelType label = m_MinMaxFilter->GetMinimum()+1; label<=m_MinMaxFilter->GetMaximum(); ++label)
   {
     ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();

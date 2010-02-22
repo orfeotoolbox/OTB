@@ -130,8 +130,6 @@ NOutputDimensions>
   }*/
 
 
-
-
 } // namespace otb
 
 #endif

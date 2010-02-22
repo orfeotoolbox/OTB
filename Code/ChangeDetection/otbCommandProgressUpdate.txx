@@ -59,7 +59,6 @@ void CommandProgressUpdate<TFilter>::Execute(const itk::Object * object, const i
 }
 
 
-
 } // end namespace otb
 
 

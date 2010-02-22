@@ -1,11 +1,13 @@
 //*******************************************************************
-//
-// License:  See top level LICENSE.txt file.
+///
+// License:  LGPL
 // 
-// Author: Garrett Potts (gpotts@imagelinks)
+// See LICENSE.txt file in the top level directory for more details.
+// 
+// Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPluginLibrary.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimPluginLibrary.cpp 16098 2009-12-15 15:13:16Z dburken $
 #include <ossim/plugin/ossimPluginLibrary.h>
 
 RTTI_DEF1(ossimPluginLibrary, "ossimPluginLibrary", ossimDynamicLibrary);
@@ -25,6 +27,7 @@ ossimPluginLibrary::ossimPluginLibrary(const ossimString& name)
 
 ossimPluginLibrary::~ossimPluginLibrary()
 {
+   finalize();
 }
 
 void ossimPluginLibrary::initialize()

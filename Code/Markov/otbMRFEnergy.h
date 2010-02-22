@@ -177,7 +177,6 @@ public:
   }
 
 
-
   void SetParameters( const ParametersType & parameters )
   {
     if ( parameters.Size() != m_NumberOfParameters )
@@ -219,7 +218,6 @@ public:
     }
     return result/insideNeighbors;
   }
-
 
 
 protected:

@@ -199,28 +199,35 @@ void  CLEARROW( ArrayOfBits MAP,
                int  	   XMAX,
 	       int 	   Y )
 {
-  register int start /*= (((Y)*(MAP.rowcount))+((XMIN)>>3))*/;
-  register int end   /*= (((Y)*(MAP.rowcount))+((XMAX)>>3))*/;
-  register int sbit  /*= ((XMIN)%8)*/;
-  register int ebit  /*= ((XMAX)%8)*/;
+   register int start /*= (((Y)*(MAP.rowcount))+((XMIN)>>3))*/;
+   register int end   /*= (((Y)*(MAP.rowcount))+((XMAX)>>3))*/;
+   register int sbit  /*= ((XMIN)%8)*/;
+   register int ebit  /*= ((XMAX)%8)*/;
 
-  if (XMIN < 0) XMIN=0;
-  start = (((Y)*(MAP.rowcount))+((XMIN)>>3));
-  if (XMAX > MAP.bounding.x) XMAX = MAP.bounding.x-1;
-  end = (((Y)*(MAP.rowcount))+((XMAX)>>3));
-  sbit = ((XMIN)%8);
-  ebit = ((XMAX)%8);
-  if ((0 > Y) || (Y > MAP.bounding.y) || (MAP.array == NULL) || (XMAX < XMIN)) return;
+   if (XMIN < 0) XMIN=0;
+   start = (((Y)*(MAP.rowcount))+((XMIN)>>3));
+   if (XMAX > MAP.bounding.x) XMAX = MAP.bounding.x-1;
+   end = (((Y)*(MAP.rowcount))+((XMAX)>>3));
+   sbit = ((XMIN)%8);
+   ebit = ((XMAX)%8);
+   if ((0 > Y) || (Y > MAP.bounding.y) || (MAP.array == NULL) || (XMAX < XMIN)) return;
 
-  if (start == end)
-    MAP.array[start] &= ~((RIGHTBITS(sbit))&LEFTBITS(ebit));
-  else
-    {
+   if (start == end)
+      MAP.array[start] &= ~((RIGHTBITS(sbit))&LEFTBITS(ebit));
+   else
+   {
       MAP.array[start] &= ~(RIGHTBITS(sbit));
       for(start++;start<end;start++)
-	MAP.array[start] &= ~LEFTBITS(7);
+      {
+         //---
+         // Fixes:  warning: overflow in implicit constant conversion (drb)
+         // ~LEFTBITS(7) == 0
+         //---
+         // MAP.array[start] &= ~LEFTBITS(7);
+         MAP.array[start] &= 0;
+      }
       MAP.array[start] &= ~LEFTBITS(ebit);
-    }
+   }
 }
 
 /*****************************************************************************

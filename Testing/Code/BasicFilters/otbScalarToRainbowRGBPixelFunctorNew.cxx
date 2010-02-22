@@ -25,7 +25,6 @@
 #endif
 
 
-
 #include "otbImage.h"
 
 #include "itkUnaryFunctorImageFilter.h"

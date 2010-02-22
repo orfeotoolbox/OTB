@@ -82,7 +82,6 @@ int main(int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::HarrisImageFilter<InputImageType,
   InputImageType>   HarrisFilterType;
-
   // Software Guide : EndCodeSnippet
   typedef itk::RescaleIntensityImageFilter
   < InputImageType, OutputImageType > RescalerType;
@@ -179,7 +178,6 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   harrisPoints->SetInput( 0,reader->GetOutput() );
   harrisPoints->SetSigmaD( SigmaD );
   harrisPoints->SetSigmaI( SigmaI );
@@ -203,7 +201,6 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef OutputPointSetType::PointsContainer ContainerType;
   ContainerType* pointsContainer = pointSet->GetPoints();
   typedef ContainerType::Iterator IteratorType;
@@ -217,8 +214,6 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   while ( itList != pointsContainer->End() )
   {
     typedef OutputPointSetType::PointType           OutputPointType;
@@ -226,10 +221,7 @@ int main(int argc, char *argv[] )
     std::cout << pCoordinate << std::endl;
     ++itList;
   }
-
   // Software Guide : EndCodeSnippet
-
-
 
 
   return EXIT_SUCCESS;

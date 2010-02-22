@@ -213,7 +213,6 @@ int main(int argc, char * argv [] )
   outputFileName = outputPrefix + "-Ixy.mhd";
   writer->SetFileName( outputFileName.c_str() );
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

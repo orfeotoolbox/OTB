@@ -41,6 +41,10 @@
 #include <itksys/SystemTools.hxx>
 #include <fstream>
 
+#ifdef OTB_USE_CURL
+#include "curl/curl.h"
+#endif
+
 namespace otb
 {
 
@@ -277,7 +281,7 @@ ImageFileReader<TOutputImage>
   //
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
   this->m_ImageIO->ReadImageInformation();
-  // Initialisation du nombre de Composante par pixel
+  // Initialization du nombre de Composante par pixel
 // THOMAS ceci n'est pas dans ITK !!
 //  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
 
@@ -443,6 +447,49 @@ void
 ImageFileReader<TOutputImage>
 ::TestFileExistanceAndReadability()
 {
+// Handle the curl case
+#ifdef OTB_USE_CURL
+  // Test if the file a server name
+    if  (this->m_FileName[0]=='h'
+         && this->m_FileName[1]=='t'
+         && this->m_FileName[2]=='t'
+         && this->m_FileName[3]=='p')
+      {
+      // Set up a curl request
+      CURL *curl;
+      CURLcode res;
+      curl = curl_easy_init();
+           
+      // Set up the browser
+      std::string browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+      
+      if (curl)
+	{
+	curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
+	curl_easy_setopt(curl, CURLOPT_URL,this->m_FileName.data());
+	// Set the dummy write function
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,&Self::curlDummyWriteFunction);
+	curl_easy_setopt(curl, CURLOPT_MAXFILESIZE,1);
+
+	// Perform requet
+	res = curl_easy_perform(curl);
+
+	if(res != 0 && res != 63) // 63 stands for filesize exceed
+	  {
+	  itk::ImageFileReaderException e(__FILE__, __LINE__);
+	  itk::OStringStream msg;
+	  msg <<"File name is an http address, but curl fails to connect to it "
+	      << std::endl << "Filename = " << this->m_FileName
+	      << std::endl << "Curl error code = "<<res
+	      << std::endl;
+	  e.SetDescription(msg.str().c_str());
+	  throw e;
+	  }
+	return;
+	}
+      }
+#endif
+    
   // Test if the file exists.
   if ( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
   {
@@ -537,6 +584,13 @@ ImageFileReader<TOutputImage>
   otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
   otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
   return( fic_trouve );
+}
+template <class TOutputImage>
+size_t
+ImageFileReader<TOutputImage>
+::curlDummyWriteFunction(void*,size_t,size_t nmemb,void*)
+{
+  return nmemb;
 }
 
 

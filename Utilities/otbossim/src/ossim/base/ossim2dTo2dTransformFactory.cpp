@@ -10,6 +10,8 @@
 // $Id$
 #include <ossim/base/ossim2dTo2dTransformFactory.h>
 #include <ossim/base/ossim2dBilinearTransform.h>
+#include <ossim/base/ossim2dTo2dShiftTransform.h>
+#include <ossim/base/ossim2dTo2dIdentityTransform.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -31,6 +33,14 @@ ossim2dTo2dTransform* ossim2dTo2dTransformFactory::createTransform(const ossimSt
    {
       result = new ossim2dBilinearTransform();
    }
+   else if(name == STATIC_TYPE_NAME(ossim2dTo2dShiftTransform))
+   {
+      result = new ossim2dTo2dShiftTransform();
+   }
+   else if(name == STATIC_TYPE_NAME(ossim2dTo2dIdentityTransform))
+   {
+      result = new ossim2dTo2dIdentityTransform();
+   }
    
    return result;
 }
@@ -51,4 +61,6 @@ ossim2dTo2dTransform* ossim2dTo2dTransformFactory::createTransform(const ossimKe
 void ossim2dTo2dTransformFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    typeList.push_back(STATIC_TYPE_NAME(ossim2dBilinearTransform));
+   typeList.push_back(STATIC_TYPE_NAME(ossim2dTo2dShiftTransform));
+   typeList.push_back(STATIC_TYPE_NAME(ossim2dTo2dIdentityTransform));
 }

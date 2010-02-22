@@ -205,7 +205,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  We print out here the Threshold value that was computed internally by the
@@ -217,7 +216,6 @@ int main( int argc, char * argv[] )
   int threshold = filter->GetThreshold();
   std::cout << "Threshold = " << threshold << std::endl;
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex

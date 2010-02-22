@@ -73,7 +73,16 @@ public:
     * loadState() method.
     */
    const ossimKeywordlist& preferencesKWL() const { return theKWL; }
-
+   
+   /*!
+    * METHOD: preferencesKWL()
+    * An alternative to utilizing findPreference(), for objects derived from
+    * ossimObject, is to access the preferences KWL with this method
+    * (typically during construction) and provide it to the object's
+    * loadState() method.
+    */
+   ossimKeywordlist& preferencesKWL()  { return theKWL; }
+   
    void addPreferences(const ossimKeywordlist& kwl,
                        const char* prefix=0,
                        bool stripPrefix=true);

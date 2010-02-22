@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimImageSourceSequencer.h 16081 2009-12-10 20:56:36Z eshirschorn $
 #ifndef ossimImageSourceSequencer_HEADER
 #define ossimImageSourceSequencer_HEADER
 #include <ossim/imaging/ossimImageSource.h>
@@ -152,7 +152,7 @@ protected:
    ossim_uint32 theNumberOfTilesVertical;
    ossim_uint32 theCurrentTileNumber;
 
-   void updateTileDimensions();
+   virtual void updateTileDimensions();
 
 TYPE_DATA
 };

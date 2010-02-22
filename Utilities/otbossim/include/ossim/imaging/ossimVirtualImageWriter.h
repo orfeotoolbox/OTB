@@ -15,15 +15,16 @@
 #ifndef ossimVirtualImageWriter_HEADER
 #define ossimVirtualImageWriter_HEADER
 
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimOutputSource.h>
 #include <ossim/base/ossimProcessInterface.h>
 #include <ossim/base/ossimConnectableObjectListener.h>
+#include <ossim/base/ossimStdOutProgress.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
-
-class ossimImageHandler;
-class ossimStdOutProgress;
+#include <ossim/imaging/ossimImageFileWriter.h>
+#include <ossim/imaging/ossimImageHandler.h>
 
 #define OSSIM_DEFAULT_FRAME_HEIGHT  ((ossim_int32)128)
 #define OSSIM_DEFAULT_FRAME_WIDTH   ((ossim_int32)128)
@@ -76,10 +77,68 @@ public:
    virtual ~ossimVirtualImageWriter();
 
    /**
+    * @brief Returns the overview type associated with the given 
+    * filter resampler type.
+    *
+    * Called from ossimVirtualImageBuilder.
+    * 
+    * Currently handled types are:
+    * "ossim_virtual_tiff_nearest" and "ossim_virtual_tiff_box"
+    *
+    * @param type a resampler filter type.
+    *
+    * @return the overview type.
+    */
+   static ossimString getOverviewType( 
+      ossimFilterResampler::ossimFilterResamplerType type );
+
+   /**
+    * @brief Returns the filter resampler type associated with the given 
+    * overview type.
+    *
+    * Called from ossimVirtualImageBuilder.
+    * 
+    * Currently handled types are:
+    * "ossim_virtual_tiff_nearest" and "ossim_virtual_tiff_box"
+    *
+    * @param type This should be the string representing the type.  This method
+    * will do nothing if type is not handled and return false.
+    *
+    * @return the filter resampler type.
+    */
+   static ossimFilterResampler::ossimFilterResamplerType 
+      getResamplerType( const ossimString& type );
+
+   /**
+    * @brief Identifies whether or not the overview type is handled by
+    * this writer.
+    *
+    * Called from ossimVirtualImageBuilder.
+    * 
+    * Currently handled types are:
+    * "ossim_virtual_tiff_nearest" and "ossim_virtual_tiff_box"
+    *
+    * @param type This should be the string representing the type.  This method
+    * will do nothing if type is not handled and return false.
+    *
+    * @return true if type is handled, false if not.
+    */
+   static bool isOverviewTypeHandled( const ossimString& type );
+
+   /**
+    * @brief Method to populate class supported types.
+    * Called from ossimVirtualImageBuilder.
+    * @param typeList List of ossimStrings to add to.
+    */
+   static void getTypeNameList( std::vector<ossimString>& typeList );
+
+   /**
     * Sets the output image tiling size if supported by the writer.  If not
     * supported this simply sets the sequencer(input) tile size.
     */
    virtual void setOutputTileSize( const ossimIpt& tileSize );
+
+   ossimIpt getOutputTileSize() const;
 
    /**
     * Number of pixels on a side of the output frames of the
@@ -89,11 +148,21 @@ public:
 
    virtual void initialize();
 
-   virtual void  setOutputImageType( ossim_int32 type );
-   virtual void  setOutputImageType( const ossimString& type );
-   virtual ossim_int32 getOutputImageType() const;
-   virtual ossimString getOutputImageTypeString() const;
-   
+   /**
+    * @brief Sets an arbitrary format image writer to output
+    * the frame files.
+    *
+    * @param pWriter The frame writer instance.
+    */
+   void setFrameWriter( ossimImageFileWriter* pWriter );
+
+   /**
+    * @brief Retrieves arbitrary format image writer.
+    *
+    * return Returns the frame writer instance.
+    */
+   ossimImageFileWriter* getFrameWriter( void ) const;
+
    virtual void setOutputFile( const ossimFilename& file );
    virtual const ossimFilename& getOutputFile()const;
 
@@ -112,20 +181,10 @@ public:
     * When indexed you should probably use nearest neighbor
     */ 
    void setResampleType( ossimFilterResampler::ossimFilterResamplerType t )
-   { theResampleType = t; }
+   { m_ResampleType = t; }
 
    ossimFilterResampler::ossimFilterResamplerType getResampleType() const 
-   { return theResampleType; }
-
-   /**
-    *  Sets the compression type to use when building virtual images.
-    */
-   virtual void setCompressionType( const ossimString& type ) = 0;
-
-   /**
-    *  Sets the compression quality.
-    */
-   virtual void setCompressionQuality( ossim_int32 quality ) = 0;
+   { return m_ResampleType; }
 
    /**
     * @brief Method to return the flag that identifies whether or not the
@@ -213,14 +272,14 @@ protected:
     *  image data to the output virtual image.
     *  @return true on success, false on error.
     */
-   virtual bool writeR0Partial() { return false; }
+   virtual bool writeR0Partial();
 
    /**
     *  Copy all of the full resolution image data to the output 
     *  virtual image.
     *  @return true on success, false on error.
     */
-   virtual bool writeR0Full() { return false; }
+   virtual bool writeR0Full();
 
    /**
     *  Write user-selected individual frames of the reduced resolution 
@@ -229,8 +288,7 @@ protected:
     *  @param resLevel The reduced resolution level to write.
     *  @return true on success, false on error.
     */
-   virtual bool writeRnPartial( ossim_uint32 resLevel )
-   { return false; }
+   virtual bool writeRnPartial( ossim_uint32 resLevel );
 
    /**
     *  Write all of the reduced resolution image data at the given 
@@ -239,24 +297,7 @@ protected:
     *  @param resLevel The reduced resolution level to write.
     *  @return true on success, false on error.
     */
-   virtual bool writeRnFull( ossim_uint32 resLevel )
-   { return false; }
-
-   /**
-    *  Set the metadata tags for the appropriate resLevel.
-    *  Level zero is the full resolution image.
-    *
-    *  @param outputRect The dimensions (zero based) of res set.
-    *  @param rrds_level The current reduced res level.
-    */
-   virtual bool setTags( ossim_int32 resLevel,
-                         const ossimIrect& outputRect ) const = 0;
-
-   /**
-    * @brief Method to initialize output file name from image handler.
-    * @return true on success, false on error.
-    */
-   virtual bool initializeOutputFilenamFromHandler() = 0;
+   virtual bool writeRnFull( ossim_uint32 resLevel );
 
    /**
     *  @brief Gets the zero based final reduced resolution data set.
@@ -274,6 +315,12 @@ protected:
     *  @return the starting reduced resolution data set 0 being full res.
     */
    virtual ossim_uint32 getStartingResLevel() const;
+
+   /**
+    *  @brief Method to initialize output file name from image handler.
+    *  @return true on success, false on error.
+    */
+   virtual bool initializeOutputFilenamFromHandler();
 
    /**
     *  Set the header info into a keywordlist after the output
@@ -371,38 +418,72 @@ protected:
    bool isFrameAlreadyDone( ossim_uint32 idx, ossim_uint32 resLevel,
                             ossim_int32 frameX, ossim_int32 frameY ) const;
 
-   ossimFilename                                  theOutputFile;
-   ossimFilename                                  theOutputFileTmp;
-   ossimFilename                                  theOutputSubdirectory;
-   ossimString                                    theVirtualWriterType;
-   ossimString                                    theOutputImageType;
-   ossimString                                    theMajorVersion;
-   ossimString                                    theMinorVersion;
-   ossim_uint16                                   theCompressType;
-   ossim_int32                                    theCompressQuality;
-   ossimIpt                                       theOutputTileSize;
-   ossimIpt                                       theOutputFrameSize;
-   ossimIpt                                       theInputFrameSize;
-   ossim_int32                                    theBytesPerPixel;
-   ossim_int32                                    theBitsPerSample;
-   ossim_int32                                    theSampleFormat;
-   ossim_int32                                    theTileSizeInBytes;
-   std::vector<ossim_uint8>                       theNullDataBuffer;
-   ossimStdOutProgress*                           theProgressListener;
-   bool                                           theCopyAllFlag;
-   bool                                           theLimitedScopeUpdateFlag;
-   bool                                           theOverviewFlag;
-   ossim_uint32                                   theCurrentEntry;
-   ossimMapProjection*                            theInputMapProjection;
-   std::vector<ossimFilename>                     theDirtyFrameList;
-   std::vector<InputFrameInfo*>                   theInputFrameInfoList;
-   std::vector<InputFrameInfo*>                   theInputFrameInfoQueue;
-   ossimFilterResampler::ossimFilterResamplerType theResampleType;
-   ossimRefPtr<ossimImageHandler>                 theImageHandler;
-   ossimRefPtr<ossimImageSourceSequencer>         theInputConnection;
-   ossimRefPtr<ossimImageGeometry>                theInputGeometry;
-   ossimRefPtr<ossimProjection>                   theInputProjection;
-   ossimIrect                                     theAreaOfInterest;
+   /**
+    *  Sets the output frame name to the frame writer.
+    *
+    *  @param resLevel The zero-based resolution level of the frame
+    *  @param row The zero-based row at which the frame is located
+    *  @param col The zero-based column at which the frame is located
+    *  @return true on success, false on error.
+    */
+   virtual bool setFrameName( int resLevel, int row, int col );
+
+   /**
+    *  Close the currently open image frame.
+    */
+   virtual void closeFrame();
+
+   /**
+    *  Renames the current frame from the temporary name
+    *  it carries during writing to the final name. I.e.
+    *  the .tmp at the end of the name is removed.
+    */
+   void renameFrame();
+
+   /**
+    *  Set writer parameters of the current frame for the given resLevel.
+    *
+    *  @param rrds_level The current reduced res level.
+    *  @param outputRect The dimensions (zero based) of res set.
+    */
+   virtual bool setFrameParameters( ossim_int32 resLevel,
+                                    const ossimIrect& outputRect );
+
+   ossimFilename                                  m_OutputFile;
+   ossimFilename                                  m_OutputFileTmp;
+   ossimFilename                                  m_OutputSubdirectory;
+   ossimString                                    m_VirtualWriterType;
+   ossimString                                    m_MajorVersion;
+   ossimString                                    m_MinorVersion;
+   ossim_uint16                                   m_CompressType;
+   ossim_int32                                    m_CompressQuality;
+   ossimIpt                                       m_OutputTileSize;
+   ossimIpt                                       m_OutputFrameSize;
+   ossimIpt                                       m_InputFrameSize;
+   ossim_int32                                    m_BytesPerPixel;
+   ossim_int32                                    m_BitsPerSample;
+   ossim_int32                                    m_TileSizeInBytes;
+   std::vector<ossim_uint8>                       m_NullDataBuffer;
+   bool                                           m_CopyAllFlag;
+   bool                                           m_LimitedScopeUpdateFlag;
+   bool                                           m_OverviewFlag;
+   ossim_uint32                                   m_CurrentEntry;
+   ossimStdOutProgress*                           m_ProgressListener;
+   std::vector<ossimFilename>                     m_DirtyFrameList;
+   std::vector<InputFrameInfo*>                   m_InputFrameInfoList;
+   std::vector<InputFrameInfo*>                   m_InputFrameInfoQueue;
+   ossimFilterResampler::ossimFilterResamplerType m_ResampleType;
+   ossimRefPtr<ossimImageHandler>                 m_ImageHandler;
+   ossimRefPtr<ossimImageSourceSequencer>         m_InputConnection;
+   ossimRefPtr<ossimImageGeometry>                m_InputGeometry;
+   ossimRefPtr<ossimProjection>                   m_InputProjection;
+   ossimRefPtr<ossimImageFileWriter>              m_FrameWriter;
+   ossimIrect                                     m_AreaOfInterest;
+   ossimFilename                                  m_CurrentFrameName;
+   ossimFilename                                  m_CurrentFrameNameTmp;
+   ossimString                                    m_FrameExt;
+   ossim_uint32                                   m_NumberVerticalFrames;
+   ossim_uint32                                   m_NumberHorizontalFrames;
 
 TYPE_DATA
 };

@@ -17,25 +17,28 @@
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIrect.h>
-#include <tiffio.h>
 
 class ossimImageData;
+
+// Helper struct for organizing frame handlers.
+struct FrameHandlerInfo
+{
+   ossimString ext;
+   ossimImageHandler* pHandler;
+};
 
 class OSSIMDLLEXPORT ossimVirtualImageHandler : public ossimImageHandler
 {
 public:
 
-   enum ReadMethod
-   {
-      UNKNOWN,
-      READ_RGBA_U8_TILE,
-      READ_RGBA_U8_STRIP,
-      READ_RGBA_U8A_STRIP,
-      READ_SCAN_LINE,
-      READ_TILE
-   };
-
-   ossimVirtualImageHandler();
+   /**
+    * Constructor for the virtual image handler.   
+    *
+    * @param srcResLevel The resolution level to access from the
+    * frame images. If not zero, this assumes that overviews are
+    * available to access.
+    */
+   ossimVirtualImageHandler( ossim_uint32 srcResLevel = 0 );
 	
    virtual ~ossimVirtualImageHandler();
 
@@ -43,7 +46,7 @@ public:
    virtual ossimString getShortName() const;
 
    /**
-    *  Returns true if the image_file can be opened and is a valid tiff file.
+    *  Returns true if the virtual image can be opened and is valid.
     */
   virtual bool open( const ossimFilename& image_file );
   virtual void close();
@@ -115,16 +118,6 @@ public:
    virtual ossimScalarType getOutputScalarType() const;
 
    /**
-    * Returns the width of the tiles within a frame file.
-    */
-   virtual ossim_uint32 getTileWidth() const;
-   
-   /**
-    * Returns the height of the tiles within a frame file.
-    */
-   virtual ossim_uint32 getTileHeight() const;
-
-   /**
     * Returns the width of the frame files.
     */
    virtual ossim_uint32 getFrameWidth() const;
@@ -135,14 +128,23 @@ public:
    virtual ossim_uint32 getFrameHeight() const;
 
    /**
+    * Returns the number of frames in the X-direction
+    * that were in the original source data.
+    */
+   virtual ossim_uint32 getNumberInputFramesX() const;
+   
+   /**
+    * Returns the number of frames in the Y-direction
+    * that were in the original source data.
+    */
+   virtual ossim_uint32 getNumberInputFramesY() const;
+
+   /**
     *  Returns true if the virtual image has a copy of the 
     *  highest resolution imagery from the source data.
     */
    bool hasR0() const;
-  
-   virtual double getMinPixelValue( ossim_uint32 band=0 )const;
-   virtual double getMaxPixelValue( ossim_uint32 band=0 )const;
-   
+
    virtual bool isValidRLevel( ossim_uint32 resLevel ) const;
 
    /**
@@ -167,6 +169,13 @@ public:
    
    virtual std::ostream& print( std::ostream& os ) const;
 
+   /**
+    * Method to the load (recreate) the state of an object from a keyword
+    * list.  Return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+
 protected:
 
    /**
@@ -181,12 +190,6 @@ protected:
                   ossim_uint32 resLevel );
 
    virtual bool initializeBuffers();
-
-   /**
-    * @brief validateMinNax Checks min and max to make sure they are not equal
-    * to the scalar type nan or double nan; sets to default min max if so.
-    */
-   void validateMinMax();
 
    /**
     *  Retrieves the virtual image header info from a keywordlist.
@@ -220,71 +223,74 @@ protected:
    /**
     * Grab the null, min, and max values from the input keywordlist.
     */
-   void loadMetaData( const ossimKeywordlist& kwl );
+   void loadMetaData( const ossimKeywordlist& kwl,
+                      const char* prefix );
 
    /**
-    *  Opens a tiff file for a single output frame for reading.
+    *  Opens an image frame file for reading.
     *
     *  @param resLevel The zero-based resolution level of the frame
     *  @param row The zero-based row at which the frame is located
     *  @param col The zero-based column at which the frame is located
-    *  @return true on success, false on error.
+    *  @return the image handler that was used to successfully
+    *  open the file.
     */
-   bool openTiff( int resLevel, int row, int col );
+   ossimImageHandler* openFrame( int resLevel, int row, int col );
 
    /**
-    *  Close the currently open tiff file.
-    *  @return true on success, false on error.
-    */
-   bool closeTiff();
-
-   /**
-    *  Calculates and returns the number of tiles in x,y that a
-    *  single frame of the virtual image contain.
+    *  Returns an instance of a FrameHandlerInfo containing an image handler 
+    *  and the respective file extension if the given file can be successfully 
+    *  opened. 
+    *  The list of frame handlers (m_FrameHandlerInfoList) is tried first, and 
+    *  if that fails all handler-types available in OSSIM are tried. If a new 
+    *  image handler is created, it is added to the internal list.
     *
-    *  @return the number of tiles in x,y directions.
+    *  @return a FrameHandlerInfo containing the image handler that was used 
+    *  to successfully open the file.
     */
-   ossimIpt getNumberOfTilesPerFrame() const;
+   FrameHandlerInfo* resolveFrameHandler( const ossimFilename& f );
 
-   ossim_uint8*                theBuffer;
-   ossim_uint32                theBufferSize;
-   ossimIrect                  theBufferRect;
-   ossim_uint8*                theNullBuffer;
-   ossim_uint16                theSampleFormatUnit;
-   double                      theMaxSampleValue;
-   double                      theMinSampleValue;
-   ossim_uint16                theBitsPerSample;
-   ossim_uint32                theBytesPerPixel;
-   ossimFilename               theImageSubdirectory;
-   ossimFilename               theCurrentFrameName;
-   ossimString                 theVirtualWriterType;
-   ossimString                 theMajorVersion;
-   ossimString                 theMinorVersion;
-   ossim_uint16                theCompressType;
-   ossim_int32                 theCompressQuality;
-   bool                        theOverviewFlag;
-   bool                        theOpenedFlag;
-   bool                        theR0isFullRes;
-   ossim_int16                 theEntryIndex;
-   ossim_uint16                theResLevelStart;
-   ossim_uint16                theResLevelEnd;
-   ossim_uint16                theSamplesPerPixel;
-   ossim_uint16                theNumberOfResLevels;
-   ossim_uint16                thePlanarConfig;
-   ossimScalarType             theScalarType;
-   vector<ossimIpt>            theNumberOfFrames;
-   ReadMethod                  theReadMethod;
-   ossim_int32                 theImageTileWidth;
-   ossim_int32                 theImageTileLength;
-   ossim_int32                 theImageFrameWidth;
-   ossim_int32                 theImageFrameLength;
-   ossim_int32                 theR0NumberOfLines;
-   ossim_int32                 theR0NumberOfSamples;
-   ossim_uint16                thePhotometric;
-   TIFF*                       theTif;
-   ossimRefPtr<ossimImageData> theTile;
-   vector<ossim_uint32>        theImageWidth;
-   vector<ossim_uint32>        theImageLength;
+   ossim_uint8*                    m_Buffer;
+   ossim_uint32                    m_BufferSize;
+   ossimIrect                      m_BufferRect;
+   ossim_uint8*                    m_NullBuffer;
+   ossim_uint16                    m_SampleFormatUnit;
+   ossim_uint16                    m_BitsPerSample;
+   ossim_uint32                    m_BytesPerPixel;
+   ossimFilename                   m_ImageSubdirectory;
+   ossimString                     m_VirtualWriterType;
+   ossimString                     m_MajorVersion;
+   ossimString                     m_MinorVersion;
+   ossim_uint16                    m_CompressType;
+   ossim_int32                     m_CompressQuality;
+   bool                            m_OverviewFlag;
+   bool                            m_OpenedFlag;
+   bool                            m_R0isFullRes;
+   ossim_int16                     m_EntryIndex;
+   ossim_uint16                    m_ResLevelStart;
+   ossim_uint16                    m_ResLevelEnd;
+   ossim_uint16                    m_SamplesPerPixel;
+   ossim_uint16                    m_NumberOfResLevels;
+   ossimInterleaveType             m_InterleaveType;
+   ossimScalarType                 m_ScalarType;
+   ossim_int32                     m_ImageFrameWidth;
+   ossim_int32                     m_ImageFrameLength;
+   ossim_int32                     m_R0NumberOfLines;
+   ossim_int32                     m_R0NumberOfSamples;
+   ossimRefPtr<ossimImageData>     m_Tile;
+   vector<ossim_uint32>            m_ImageWidth;
+   vector<ossim_uint32>            m_ImageLength;
+   ossimString                     m_CurrentFrameExt;
+   std::vector<FrameHandlerInfo*>  m_FrameHandlerInfoList;
+   ossim_uint32                    m_CurrentTileWidth;
+   ossim_uint32                    m_CurrentTileHeight;
+   ossim_int32                     m_CurrentResLevel;
+   ossim_int32                     m_CurrentRow;
+   ossim_int32                     m_CurrentCol;
+   ossimImageHandler*              m_CurrentImageHandler;
+   ossim_uint32                    m_SourceResLevel;
+   ossim_uint32                    m_NumberInputFramesX;
+   ossim_uint32                    m_NumberInputFramesY;
 
   TYPE_DATA
 };

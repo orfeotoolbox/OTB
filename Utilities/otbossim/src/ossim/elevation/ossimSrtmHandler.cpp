@@ -9,10 +9,9 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 14300 2009-04-14 17:27:00Z gpotts $
+// $Id: ossimSrtmHandler.cpp 16356 2010-01-14 21:30:03Z dburken $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
-#include <ossim/support_data/ossimSrtmSupportData.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -28,97 +27,67 @@ RTTI_DEF1(ossimSrtmHandler, "ossimSrtmHandler" , ossimElevCellHandler)
 #include <ossim/base/ossimTrace.h>
 static ossimTrace traceDebug ("ossimSrtmElevSource:debug");
 
-ossimSrtmHandler::ossimSrtmHandler(const ossimFilename& srtmFile)
+ossimSrtmHandler::ossimSrtmHandler()
    :
-      ossimElevCellHandler(srtmFile),
-      theFileStr(0),
-      theNumberOfLines(0),
-      theNumberOfSamples(0),
-      theSrtmRecordSizeInBytes(0),
-      theLatSpacing(0.0),
-      theLonSpacing(0.0),
-      theNwCornerPost(),
-      theSwapper(0)
+      ossimElevCellHandler(),
+      m_streamOpen(false),
+      m_numberOfLines(0),
+      m_numberOfSamples(0),
+      m_srtmRecordSizeInBytes(0),
+      m_latSpacing(0.0),
+      m_lonSpacing(0.0),
+      m_nwCornerPost(),
+      m_swapper(0)
 {
-   ossimSrtmSupportData sd;
-   if ( !sd.setFilename(srtmFile, false) )
-   {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      return;
-   }
-
-   theScalarType = sd.getScalarType();
-   // SRTM is stored in big endian.
-   if ( ossim::byteOrder() == OSSIM_LITTLE_ENDIAN)
-   {
-      theSwapper = new ossimEndian();
-   }
-
-   theNumberOfLines         = sd.getNumberOfLines();
-   theNumberOfSamples       = sd.getNumberOfSamples();
-   theSrtmRecordSizeInBytes = theNumberOfSamples * ossim::scalarSizeInBytes(theScalarType);
-   theLatSpacing            = sd.getLatitudeSpacing();
-   theLonSpacing            = sd.getLongitudeSpacing();
-   theNwCornerPost.lon      = sd.getSouthwestLongitude();
-   theNwCornerPost.lat      = sd.getSouthwestLatitude()+1.0;
-   theScalarType            = sd.getScalarType();
-   theGroundRect = ossimGrect(ossimGpt(theNwCornerPost.lat,
-                                       theNwCornerPost.lon,
-                                       0.0),
-                              ossimGpt(theNwCornerPost.lat-1.0,
-                                       theNwCornerPost.lon+1.0,
-                                       0.0));
-
-   //---
-   //  Determine the mean spacing:
-   //---
-   // double center_lat = (south_boundary + north_boundary)/2.0;
-   // theMeanSpacing = (theLatSpacing + theLonSpacing*cosd(center_lat))
-   //          * ossimGpt().metersPerDegree().x / 2.0;
-
-   //  Initialize the accuracy values:
-   // theAbsLE90 = (double) acc.absLE();
-   // theAbsCE90 = (double) acc.absCE();
-
-   // Set the base class null height value.
-   theNullHeightValue = -32768.0;
-
-   // theMinHeightAboveMSL;
-   // theMaxHeightAboveMSL;
 }
 
 ossimSrtmHandler::~ossimSrtmHandler()
 {
-   if (theSwapper)
+   if (m_swapper)
    {
-      delete theSwapper;
-      theSwapper = 0;
+      delete m_swapper;
+      m_swapper = 0;
    }
-
-   theFileStr = 0;
-//    if(theFileStr)
-//    {
-//       delete theFileStr;
-//       theFileStr = 0;
-//    }
-//   theFileStr.close();
+   close();
 }
 
 double ossimSrtmHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   switch(theScalarType)
+   if(!isOpen()) return ossim::nan();
+   if(!m_memoryMap.empty())
    {
-      case OSSIM_SINT16:
+      switch(m_scalarType)
       {
-         return getHeightAboveMSLTemplate((ossim_sint16)0, gpt);
+         case OSSIM_SINT16:
+         {
+            return getHeightAboveMSLMemoryTemplate((ossim_sint16)0, gpt);
+         }
+         case OSSIM_FLOAT32:
+         {
+            return getHeightAboveMSLMemoryTemplate((ossim_float32)0, gpt);
+         }
+         default:
+         {
+            break;
+         }
       }
-      case OSSIM_FLOAT32:
+   }
+   else
+   {
+      switch(m_scalarType)
       {
-         return getHeightAboveMSLTemplate((ossim_float32)0, gpt);
-      }
-      default:
-      {
-         break;
+         case OSSIM_SINT16:
+         {
+            return getHeightAboveMSLFileTemplate((ossim_sint16)0, gpt);
+         }
+         case OSSIM_FLOAT32:
+         {
+            return getHeightAboveMSLFileTemplate((ossim_float32)0, gpt);
+         }
+         default:
+         {
+            break;
+         }
       }
    }
 
@@ -126,12 +95,12 @@ double ossimSrtmHandler::getHeightAboveMSL(const ossimGpt& gpt)
 }
 
 template <class T>
-double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
+double ossimSrtmHandler::getHeightAboveMSLFileTemplate(T dummy,
                                                    const ossimGpt& gpt)
 {
    // Establish the grid indexes:
-   double xi = (gpt.lon - theNwCornerPost.lon) / theLonSpacing;
-   double yi = (theNwCornerPost.lat - gpt.lat) / theLatSpacing;
+   double xi = (gpt.lon - m_nwCornerPost.lon) / m_lonSpacing;
+   double yi = (m_nwCornerPost.lat - gpt.lat) / m_latSpacing;
 
    int x0 = static_cast<int>(xi);
    int y0 = static_cast<int>(yi);
@@ -150,17 +119,9 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
 
    // Do some error checking.
    if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (theNumberOfSamples  - 2.0) ||
-        y0 > (theNumberOfLines    - 2.0) )
+        x0 > (m_numberOfSamples  - 2.0) ||
+        y0 > (m_numberOfLines    - 2.0) )
    {
-//       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 1" << std::endl;
-      return ossim::nan();
-   }
-
-   // We need an open stream to file from here on out...
-   if (!open())
-   {
-//       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 2" << std::endl;
       return ossim::nan();
    }
 
@@ -174,41 +135,40 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
    //---
    // Grab the four points from the srtm cell needed.
    //---
-   std::streampos offset = y0 * theSrtmRecordSizeInBytes + x0 * sizeof(T);
+   std::streampos offset = y0 * m_srtmRecordSizeInBytes + x0 * sizeof(T);
 
-//   ossim_int64 currentG = theFileStr->tellg();
-   // lets a seek cur
-   // 
-   // Put the file pointer at the start of the first elevation post.
-   theFileStr->seekg(offset, std::ios::beg);
-      //theFileStr->seekg(offset-currentG, ios::cur);
-   // Get the first post.
-   theFileStr->read((char*)p, sizeof(T));
-   
-   // Get the second post.
-   theFileStr->read((char*)(p+1), sizeof(T));
-   
-   // Move over to the next column.
-   offset += theSrtmRecordSizeInBytes;
-
-//   currentG = theFileStr->tellg();
-//   theFileStr->seekg(offset-currentG, ios::cur);
-   
-   theFileStr->seekg(offset, std::ios::beg);
-   
-   // Get the third post.
-   theFileStr->read((char*)(p+2), sizeof(T));
-
-   // Get the fourth post.
-   theFileStr->read((char*)(p+3), sizeof(T));
-
-   if(theFileStr->fail())
    {
-      return ossim::nan();
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_fileStrMutex);
+
+      // lets a seek cur
+      // 
+      // Put the file pointer at the start of the first elevation post.
+      m_fileStr.seekg(offset, std::ios::beg);
+      // Get the first post.
+      m_fileStr.read((char*)p, sizeof(T));
+      
+      // Get the second post.
+      m_fileStr.read((char*)(p+1), sizeof(T));
+      
+      // Move over to the next column.
+      offset += m_srtmRecordSizeInBytes;
+      
+      m_fileStr.seekg(offset, std::ios::beg);
+      
+      // Get the third post.
+      m_fileStr.read((char*)(p+2), sizeof(T));
+      
+      // Get the fourth post.
+      m_fileStr.read((char*)(p+3), sizeof(T));
+      
+      if(m_fileStr.fail())
+      {
+         return ossim::nan();
+      }
    }
-   if (theSwapper)
+   if (m_swapper)
    {
-      theSwapper->swap((T*)p, 4);
+      m_swapper->swap((T*)p, 4);
    }
 
    p00 = p[0];
@@ -217,20 +177,12 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
    p11 = p[3];
    
    // Perform bilinear interpolation:
-//    double wx1 = xi  - x0;
-//    double wy1 = yi  - y0;
-//    double wx0 = 1.0 - wx1;
-//    double wy0 = 1.0 - wy1;
 
    double xt0 = xi - x0;
    double yt0 = yi - y0;
    double xt1 = 1-xt0;
    double yt1 = 1-yt0;
 
-//    double w00 = wx0*wy0;
-//    double w01 = wx0*wy1;
-//    double w10 = wx1*wy0;
-//    double w11 = wx1*wy1;
    double w00 = xt1*yt1;
    double w01 = xt0*yt1;
    double w10 = xt1*yt0;
@@ -270,8 +222,111 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
    return ossim::nan();
 }
 
+
+template <class T>
+double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T dummy,
+                                                         const ossimGpt& gpt)
+{
+   // Establish the grid indexes:
+   double xi = (gpt.lon - m_nwCornerPost.lon) / m_lonSpacing;
+   double yi = (m_nwCornerPost.lat - gpt.lat) / m_latSpacing;
+   
+   int x0 = static_cast<int>(xi);
+   int y0 = static_cast<int>(yi);
+   
+   // Check for right edge.
+   if (gpt.lon == theGroundRect.lr().lon)
+   {
+      --x0; // Move over one post to the left.
+   }
+   
+   // Check for bottom edge.
+   if (gpt.lat == theGroundRect.lr().lat)
+   {
+      --y0; // Move up one post.
+   }
+   
+   // Do some error checking.
+   if ( xi < 0.0 || yi < 0.0 ||
+       x0 > (m_numberOfSamples  - 2.0) ||
+       y0 > (m_numberOfLines    - 2.0) )
+   {
+      //       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 1" << std::endl;
+      return ossim::nan();
+   }
+   
+   ossim_uint64 offset = y0 * m_srtmRecordSizeInBytes + x0 * sizeof(T);
+   ossim_uint64 offset2 =offset+m_srtmRecordSizeInBytes;
+   T v00 = *(reinterpret_cast<T*> (&m_memoryMap[offset]));
+   T v01 = *(reinterpret_cast<T*> (&m_memoryMap[offset + sizeof(T)]));
+   T v10 = *(reinterpret_cast<T*> (&m_memoryMap[offset2]));
+   T v11 = *(reinterpret_cast<T*> (&m_memoryMap[offset2 + sizeof(T)]));
+   if (m_swapper)
+   {
+      m_swapper->swap(v00);
+      m_swapper->swap(v01);
+      m_swapper->swap(v10);
+      m_swapper->swap(v11);
+   }
+   double p00 = v00;
+   double p01 = v01;
+   double p10 = v10;
+   double p11 = v11;
+   
+   //---
+   // Grab the four points from the srtm cell needed.
+   //---
+   
+   double xt0 = xi - x0;
+   double yt0 = yi - y0;
+   double xt1 = 1-xt0;
+   double yt1 = 1-yt0;
+   
+   double w00 = xt1*yt1;
+   double w01 = xt0*yt1;
+   double w10 = xt1*yt0;
+   double w11 = xt0*yt0;
+   
+   //***
+   // Test for null posts and set the corresponding weights to 0:
+   //***
+   if (p00 == theNullHeightValue)
+      w00 = 0.0;
+   if (p01 == theNullHeightValue)
+      w01 = 0.0;
+   if (p10 == theNullHeightValue)
+      w10 = 0.0;
+   if (p11 == theNullHeightValue)
+      w11 = 0.0;
+   
+#if 0 /* Serious debug only... */
+   cout << "\np00:  " << p00
+   << "\np01:  " << p01
+   << "\np10:  " << p10
+   << "\np11:  " << p11
+   << "\nw00:  " << w00
+   << "\nw01:  " << w01
+   << "\nw10:  " << w10
+   << "\nw11:  " << w11
+   << endl;
+#endif
+   
+   double sum_weights = w00 + w01 + w10 + w11;
+   
+   if (sum_weights)
+   {
+      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
+   }
+   
+   return ossim::nan();
+}
+
 double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
 {
+   std::cout << "ossimSrtmHandler::getPostValue(const ossimIpt& gridPt):  NEED TO IMPLEMENT TO NEW INTERFACE\n";
+   
+   return theNullHeightValue;
+#if 0
    static const char MODULE[] = "ossimSrtmHandler::getPostValue";
    
    if(!theFileStr.valid()) return ossim::nan();
@@ -297,45 +352,135 @@ double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
    std::streampos offset = gridPt.y * theSrtmRecordSizeInBytes + gridPt.x * 2;
 
    // Put the file pointer at the start of the first elevation post.
-   theFileStr->seekg(offset, std::ios::beg);
+   m_fileStr.seekg(offset, std::ios::beg);
 
    ossim_sint16 p;
 
    // Get the post.
-   theFileStr->read((char*)&p, 2);
+   m_fileStr.read((char*)&p, 2);
    if (theSwapper)
    {
       theSwapper->swap(p);
    }
    return p;
+#endif
 }
 
 ossimIpt ossimSrtmHandler::getSizeOfElevCell() const
 {
-   return ossimIpt(theNumberOfSamples, theNumberOfLines);
+   return ossimIpt(m_numberOfSamples, m_numberOfLines);
 }
 
 const ossimSrtmHandler&
 ossimSrtmHandler::operator=(const ossimSrtmHandler& rhs)
 {
-   return rhs;
+   m_supportData = rhs.m_supportData;
+   m_streamOpen = rhs.m_streamOpen,
+   m_numberOfLines = rhs.m_numberOfLines;
+   m_numberOfSamples = rhs.m_numberOfSamples;
+   m_srtmRecordSizeInBytes = rhs.m_srtmRecordSizeInBytes;
+   m_latSpacing = rhs.m_latSpacing;
+   m_lonSpacing = rhs.m_lonSpacing;
+   m_nwCornerPost = rhs.m_nwCornerPost;
+   m_swapper = rhs.m_swapper?new ossimEndian:0;
+   m_scalarType = rhs.m_scalarType;
+   m_memoryMap = rhs.m_memoryMap;
+   
+   ossimElevCellHandler::operator = (rhs);
+   return *this;
 }
 
-ossimSrtmHandler::ossimSrtmHandler(const ossimSrtmHandler&)
+ossimSrtmHandler::ossimSrtmHandler(const ossimSrtmHandler& src)
+:ossimElevCellHandler(src),
+m_supportData(src.m_supportData),
+m_streamOpen(src.m_streamOpen),
+m_numberOfLines(src.m_numberOfLines),
+m_numberOfSamples(src.m_numberOfSamples),
+m_srtmRecordSizeInBytes(src.m_srtmRecordSizeInBytes),
+m_latSpacing(src.m_latSpacing),
+m_lonSpacing(src.m_lonSpacing),
+m_nwCornerPost(src.m_nwCornerPost),
+m_swapper(src.m_swapper?new ossimEndian:0),
+m_scalarType(src.m_scalarType),
+m_memoryMap(src.m_memoryMap)
 {
+   if(m_memoryMap.empty()&&src.isOpen())
+   {
+      m_fileStr.open(src.getFilename().c_str(),
+                     std::ios::binary|std::ios::in);
+   }
 }
 
 bool ossimSrtmHandler::isOpen()const
 {
-   return theFileStr.valid()?theFileStr->is_open():false;
+   if(!m_memoryMap.empty()) return true;
+   
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_fileStrMutex);
+   return m_streamOpen;
+   // return (m_fileStr.is_open());
 }
 
 
-bool ossimSrtmHandler::open()
+bool ossimSrtmHandler::open(const ossimFilename& file, bool memoryMapFlag)
 {
+   theFilename = file;
+   clearErrorStatus();
+   if (!m_supportData.setFilename(file, false) )
+   {
+      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      return false;
+   }
+   if(m_swapper) {delete m_swapper;m_swapper=0;}
+   m_scalarType = m_supportData.getScalarType();
+   // SRTM is stored in big endian.
+   if ( ossim::byteOrder() == OSSIM_LITTLE_ENDIAN)
+   {
+      m_swapper = new ossimEndian();
+   }
+   
+   m_numberOfLines         = m_supportData.getNumberOfLines();
+   m_numberOfSamples       = m_supportData.getNumberOfSamples();
+   m_srtmRecordSizeInBytes = m_numberOfSamples * ossim::scalarSizeInBytes(m_scalarType);
+   m_latSpacing            = m_supportData.getLatitudeSpacing();
+   m_lonSpacing            = m_supportData.getLongitudeSpacing();
+   m_nwCornerPost.lon      = m_supportData.getSouthwestLongitude();
+   m_nwCornerPost.lat      = m_supportData.getSouthwestLatitude()+1.0;
+   m_scalarType            = m_supportData.getScalarType();
+   theGroundRect = ossimGrect(ossimGpt(m_nwCornerPost.lat,
+                                       m_nwCornerPost.lon,
+                                       0.0),
+                              ossimGpt(m_nwCornerPost.lat-1.0,
+                                       m_nwCornerPost.lon+1.0,
+                                       0.0));
+   theMeanSpacing = (m_latSpacing*ossimGpt().metersPerDegree().y);
+   
+   // Set the base class null height value.
+   theNullHeightValue = -32768.0;
+
+   m_fileStr.clear();
+   m_fileStr.open(theFilename.c_str(), std::ios::in | std::ios::binary);
+   if(!m_fileStr)
+   {
+      return false;
+   }
+   
+   if(memoryMapFlag)
+   {
+      m_memoryMap.resize(theFilename.fileSize());
+      m_fileStr.read((char*)&m_memoryMap.front(), (streamsize)m_memoryMap.size());
+      m_fileStr.close();
+   }
+   
+   // Capture the stream state for non-const is_open on old compiler.
+   m_streamOpen = m_fileStr.is_open();
+   
+   return m_streamOpen;
+#if 0
+   // theMinHeightAboveMSL;
+   // theMaxHeightAboveMSL;
    if(theFileStr.valid())
    {
-      if(!theFileStr->fail())
+      if(!m_fileStr.fail())
       {
          return true;
       }
@@ -348,17 +493,15 @@ bool ossimSrtmHandler::open()
 
    if(theFileStr.valid())
    {
-      return (!theFileStr->fail());
+      return (!m_fileStr.fail());
    }
    return false;
+#endif
 }
 
 void ossimSrtmHandler::close()
 {
-   if(theFileStr.valid())
-   {
-      theFileStr->close();
-      theFileStr = 0;
-   }
-   
+   m_fileStr.close();
+   m_memoryMap.clear();
+   m_streamOpen = false;
 }

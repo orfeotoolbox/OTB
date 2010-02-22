@@ -99,7 +99,6 @@ class RadiometricNonWaterNonVegetationIndexFunctor
 };
 
 
-
   /** \class RadiometricNonWaterNonVegetationDetectionFunctor
    *  \brief This functor uses computes RadiometricNonWaterNonVegetationIndexFunctor
    *  \brief and appli a threshold to produce a binary image
@@ -150,7 +149,6 @@ protected:
 };
 
 } //end namespace functor
-
 
 
   /** \class UrbanAreaDetectionImageFilter
@@ -251,7 +249,6 @@ private:
   UrbanAreaExtrationFilterPointerType m_UrbanAreaExtractionFilter;
   MaskImageFilterPointerType          m_MaskImageFilter;
   MultiplyImageFilterPointerType      m_MultiplyFilter;
-
 
 
   /** Thresholds */

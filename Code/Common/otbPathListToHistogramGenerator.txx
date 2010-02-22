@@ -34,7 +34,6 @@ PathListToHistogramGenerator< TPath, TFunction >
 }
 
 
-
 template< class TPath,class TFunction >
 void
 PathListToHistogramGenerator< TPath, TFunction >
@@ -51,7 +50,6 @@ PathListToHistogramGenerator< TPath, TFunction >
 {
   return m_HistogramGenerator->GetOutput();
 }
-
 
 
 template< class TPath,class TFunction >
@@ -84,7 +82,6 @@ PathListToHistogramGenerator< TPath, TFunction >
 }
 
 
-
 template< class TPath,class TFunction >
 void
 PathListToHistogramGenerator< TPath, TFunction >
@@ -92,7 +89,6 @@ PathListToHistogramGenerator< TPath, TFunction >
 {
   m_HistogramGenerator->SetNumberOfBins( size );
 }
-
 
 
 template< class TPath,class TFunction >
@@ -140,7 +136,6 @@ PathListToHistogramGenerator< TPath, TFunction >
   os << "PathList = " << m_PathList << std::endl;
   os << "HistogramGenerator = " << m_HistogramGenerator << std::endl;
 }
-
 
 
 } // end of namespace otb

@@ -26,7 +26,6 @@
 #include "itkImageToImageFilter.h"
 
 
-
 namespace otb
 {
 

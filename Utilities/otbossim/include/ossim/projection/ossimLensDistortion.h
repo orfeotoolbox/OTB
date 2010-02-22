@@ -9,7 +9,7 @@
 //
 // ossimLensDistortion
 //*******************************************************************
-//  $Id: ossimLensDistortion.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLensDistortion.h 15929 2009-11-16 18:20:46Z gpotts $
 
 #ifndef ossimLensDistortion_HEADER
 #define ossimLensDistortion_HEADER
@@ -17,8 +17,8 @@
 class OSSIM_DLL ossimLensDistortion : public ossim2dTo2dTransform
 {
 public:
-   ossimLensDistortion(const ossimDpt& callibrartedCenter=ossimDpt(0,0))
-      :theCenter(callibrartedCenter)
+   ossimLensDistortion(const ossimDpt& callibratedCenter=ossimDpt(0,0))
+      :theCenter(callibratedCenter)
    {
    }
    void setCenter(const ossimDpt& center)
@@ -35,7 +35,7 @@ public:
    {
       undistort(input, output);
    }
-   virtual void distort(const ossimDpt& input, ossimDpt& output)const=0;
+   virtual void distort(const ossimDpt& input, ossimDpt& output)const;
    virtual void undistort(const ossimDpt& input, ossimDpt& output)const=0;
 
    virtual bool saveState(ossimKeywordlist& kwl,

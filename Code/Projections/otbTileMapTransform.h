@@ -112,6 +112,12 @@ public :
 
   virtual void PrintMap() const;
 
+  /** FIXME with a Mercator projection definition*/
+  virtual std::string GetWkt() const
+  {
+    return "";
+  }
+
 protected:
   TileMapTransform();
   virtual ~TileMapTransform();

@@ -9,10 +9,11 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.cpp 15801 2009-10-23 20:04:16Z gpotts $
+// $Id: ossimSrtmTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <ossim/imaging/ossimSrtmTileSource.h>
 #include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimStringProperty.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -132,6 +133,24 @@ bool ossimSrtmTileSource::loadState(const ossimKeywordlist& kwl,
    return false;
 }
 
+ossimRefPtr<ossimProperty> ossimSrtmTileSource::getProperty(
+   const ossimString& name)const
+{
+   if(name == "file_type")
+   {
+      return new ossimStringProperty(name, getShortName());
+   }
+   
+   return ossimImageHandler::getProperty(name);
+}
+
+void ossimSrtmTileSource::getPropertyNames(
+   std::vector<ossimString>& propertyNames)const
+{
+   ossimImageHandler::getPropertyNames(propertyNames);
+   propertyNames.push_back("file_type");
+}
+
 ossimString ossimSrtmTileSource::getShortName() const
 {
    return ossimString("SRTM");
@@ -140,10 +159,5 @@ ossimString ossimSrtmTileSource::getShortName() const
 ossimString ossimSrtmTileSource::getLongName() const
 {
    return ossimString("SRTM reader");
-}
-
-ossimString  ossimSrtmTileSource::className() const
-{
-   return ossimString("ossimSrtmTileSource");
 }
  

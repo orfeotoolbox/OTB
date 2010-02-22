@@ -73,9 +73,11 @@ TileMapImageIO::TileMapImageIO()
 
   m_UseCache=false;
   m_ServerName="";
-  m_CacheDirectory="";
-  m_FileSuffix="jpg";
-  m_AddressMode="0";
+  m_CacheDirectory=".";
+  m_FileSuffix="png";
+  m_AddressMode=TileMapAdressingStyle::OSM;
+  
+  m_FileNameIsServerName = false;
 
   this->AddSupportedWriteExtension(".otb");
   this->AddSupportedWriteExtension(".OTB");
@@ -91,7 +93,7 @@ TileMapImageIO::~TileMapImageIO()
 
 // Tell only if the file can be read with TileMap.
 bool TileMapImageIO::CanReadFile(const char* file)
-{
+{  
   // First check the extension
   if (  file == NULL )
   {
@@ -105,6 +107,13 @@ bool TileMapImageIO::CanReadFile(const char* file)
   if ( (gmPos != std::string::npos)
        && (gmPos == filename.length() - 4) )
   {
+    m_FileNameIsServerName = false;
+    return true;
+  }
+  // Filename is http server
+  else if (filename.find("http://") == 0)
+  {
+    m_FileNameIsServerName = true;
     return true;
   }
   return false;
@@ -223,15 +232,15 @@ void TileMapImageIO::InternalRead(double x, double y, void* buffer)
 
   itk::ImageIOBase::Pointer imageIO;
   //Open the file to fill the buffer
-  if (m_AddressMode[0] == '0')
+  if (m_AddressMode == TileMapAdressingStyle::GM)
   {
     imageIO = itk::JPEGImageIO::New();
   }
-  if (m_AddressMode[0] == '1')
+  if (m_AddressMode == TileMapAdressingStyle::OSM)
   {
     imageIO = itk::PNGImageIO::New();
   }
-  if (m_AddressMode[0] == '2')
+  if (m_AddressMode == TileMapAdressingStyle::NEARMAP)
   {
     imageIO = itk::JPEGImageIO::New();
   }
@@ -242,15 +251,15 @@ void TileMapImageIO::InternalRead(double x, double y, void* buffer)
   //If we cannot read the file: retrieve and read
   if ( lCanRead == false)
   {
-    if (m_AddressMode[0] == '0')
+    if (m_AddressMode == TileMapAdressingStyle::GM)
     {
       GetFromNetGM(filename, xorig, yorig);
     }
-    if (m_AddressMode[0] == '1')
+    if (m_AddressMode == TileMapAdressingStyle::OSM)
     {
       GetFromNetOSM(filename, xorig, yorig);
     }
-    if (m_AddressMode[0] == '2')
+    if (m_AddressMode == TileMapAdressingStyle::NEARMAP)
     {
       GetFromNetNearMap(filename, xorig, yorig);
     }
@@ -275,7 +284,6 @@ void TileMapImageIO::InternalRead(double x, double y, void* buffer)
 
 
 }
-
 
 void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const
 {
@@ -308,6 +316,7 @@ void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostrings
 void TileMapImageIO::RetrieveTile(const std::ostringstream & filename, std::ostringstream & urlStream) const
 {
   FILE* output_file = fopen(filename.str().c_str(), "w");
+  
   if (output_file == NULL)
   {
     itkExceptionMacro(<<"TileMap read : bad file name.");
@@ -406,6 +415,11 @@ void TileMapImageIO::ReadImageInformation()
     itkExceptionMacro(<<"TileMap read : empty image file name file.");
   }
 
+  if (m_FileName.find("http://") == 0)
+  {
+    m_FileNameIsServerName = true;
+  }
+  
   m_Dimensions[0] = (1 << m_Depth)*256;
   m_Dimensions[1] = (1 << m_Depth)*256;
   otbMsgDevMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
@@ -418,20 +432,64 @@ void TileMapImageIO::ReadImageInformation()
   m_Spacing[1]=1;
   m_Origin[0] = 0;
   m_Origin[1] = 0;
-
-
-  std::ifstream file(m_FileName.c_str(), std::ifstream::in );
-  std::getline(file, m_ServerName);
-  if  (m_ServerName[0]!='h'
-       || m_ServerName[1]!='t'
-       || m_ServerName[2]!='t'
-       || m_ServerName[3]!='p')
+  
+  if (!m_FileNameIsServerName)
   {
-    itkExceptionMacro(<<"Can't read server name from file");
+    std::ifstream file(m_FileName.c_str(), std::ifstream::in );
+    std::getline(file, m_ServerName);
+    if  (m_ServerName.find("http://") != 0)
+    {
+      itkExceptionMacro(<<"Can't read server name from file");
+    }
+    std::getline(file, m_FileSuffix);
+    std::string mode;
+    std::getline(file, mode);
+    switch (atoi(mode.c_str()))
+    {
+      case 0:
+        m_AddressMode = TileMapAdressingStyle::GM;
+        return;
+      case 1:
+        m_AddressMode = TileMapAdressingStyle::OSM;
+        return;
+      case 2:
+        m_AddressMode = TileMapAdressingStyle::NEARMAP;
+        return;
+      default:
+        itkExceptionMacro(<<"Addressing style unknown");
+    }
+
+    otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
   }
-  std::getline(file, m_FileSuffix);
-  std::getline(file, m_AddressMode);
-  otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
+  else
+  {
+    m_ServerName = m_FileName;
+    if  (m_ServerName.find("http://") != 0)
+    {
+      itkExceptionMacro(<<"Can't read server name from file");
+    }
+    std::string osmServer = "http://tile.openstreetmap.org/";
+    std::string nmServer = "http://www.nearmap.com/maps/";
+    
+    if (m_ServerName == osmServer)
+    {
+      m_FileSuffix = "png";
+      m_AddressMode = TileMapAdressingStyle::OSM;
+    }
+    else if (m_ServerName == nmServer)
+    {
+      m_FileSuffix = "jpg";
+      m_AddressMode = TileMapAdressingStyle::NEARMAP;
+    }
+    else
+    {
+      m_FileSuffix = "jpg";
+      m_AddressMode = TileMapAdressingStyle::GM;
+    }
+    
+    // File suffix and addres mode must be set with accessors
+    otbMsgDevMacro( << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode);
+  }
 }
 
 bool TileMapImageIO::CanWriteFile( const char* name )
@@ -585,11 +643,11 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   itk::ImageIOBase::Pointer imageIO;
   //Open the file to write the buffer
-  if (m_AddressMode[0] == '0')
+  if (m_AddressMode == TileMapAdressingStyle::GM)
   {
     imageIO = itk::JPEGImageIO::New();
   }
-  if (m_AddressMode[0] == '1')
+  if (m_AddressMode == TileMapAdressingStyle::OSM)
   {
     imageIO = itk::PNGImageIO::New();
   }

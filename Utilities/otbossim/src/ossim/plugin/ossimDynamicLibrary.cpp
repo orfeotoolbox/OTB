@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // LICENSE: LGPL
 //
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*********************************************************************
-// $Id: ossimDynamicLibrary.cpp 15003 2009-07-27 18:58:27Z gpotts $
+// $Id: ossimDynamicLibrary.cpp 16098 2009-12-15 15:13:16Z dburken $
 #include <ossim/plugin/ossimDynamicLibrary.h>
 #include <ossim/plugin/ossimSharedObjectBridge.h>
 #include <ossim/base/ossimTrace.h>
@@ -32,13 +31,13 @@ ossimDynamicLibrary::ossimDynamicLibrary(const ossimString& name)
 
 ossimDynamicLibrary::~ossimDynamicLibrary()
 {
+   unload();
 }
 
 bool ossimDynamicLibrary::load()
 {
    return load(theLibraryName);
 }
-
 
 bool ossimDynamicLibrary::load(const ossimString& name)
 {
@@ -92,7 +91,7 @@ void ossimDynamicLibrary::unload()
 #else
       dlclose(theLibrary);
 #endif
-      theLibrary = NULL;
+      theLibrary = 0;
    }
 }
 
@@ -107,5 +106,5 @@ void *ossimDynamicLibrary::getSymbol(const ossimString& name) const
 #endif
    }
 
-   return (void*)NULL;
+   return (void*)0;
 }

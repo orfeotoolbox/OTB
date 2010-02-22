@@ -47,7 +47,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 #include "otbLineSpatialObjectList.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -162,7 +161,6 @@ int main( int argc, char * argv[] )
   FillGapsType::Pointer    fillGaps= FillGapsType::New();
   DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -177,7 +175,6 @@ int main( int argc, char * argv[] )
 
 
   reader->SetFileName( argv[1] );
-
 
 
   //  Software Guide : BeginLatex
@@ -204,9 +201,6 @@ int main( int argc, char * argv[] )
   drawLineList->SetInputLineSpatialObjectList( fillGaps->GetOutput() );
 
   writer->SetInput( drawLineList->GetOutput() );
-
-
-
   // Software Guide : EndCodeSnippet
 
 
@@ -220,7 +214,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   detector->SetLengthLine( atoi(argv[3]) );
   detector->SetWidthLine( atoi(argv[4]) );
 
@@ -252,7 +245,6 @@ int main( int argc, char * argv[] )
 
   fillGaps->SetRadius( FillGapsRadius );
   fillGaps->SetAngularBeam( FillGapsAngularBeam );
-
   // Software Guide : EndCodeSnippet
 
 
@@ -269,7 +261,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
 
-
   writer->SetFileName( argv[2] );
   writer->Update();
 
@@ -278,7 +269,6 @@ int main( int argc, char * argv[] )
   // \code{GetOutputDirections()} method. \textbf{FIXME : implement
   // the method!!}
   //  Software Guide : EndLatex
-
 
 
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
@@ -296,7 +286,6 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

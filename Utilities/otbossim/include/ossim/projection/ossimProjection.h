@@ -7,7 +7,7 @@
 // Description: Base class for all projections (2D-to-3D transform)
 //
 //*******************************************************************
-//  $Id: ossimProjection.h 15798 2009-10-23 19:15:20Z gpotts $
+//  $Id: ossimProjection.h 16104 2009-12-17 18:09:59Z gpotts $
 #ifndef ossimProjection_HEADER
 #define ossimProjection_HEADER
 #include <iostream>
@@ -19,10 +19,9 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGeoPolygon.h>
-#include <ossim/elevation/ossimElevManager.h>
-
-class OSSIMDLLEXPORT ossimProjection : public ossimObject,
-   public ossimErrorStatusInterface
+#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimRefPtr.h>
+class OSSIMDLLEXPORT ossimProjection : public ossimObject, public ossimErrorStatusInterface
 {
 public:
    /*!

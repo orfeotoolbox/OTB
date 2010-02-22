@@ -9,7 +9,7 @@
 //              CADRG file.
 //
 //-----------------------------------------------------------------------
-//$Id: ossimCibCadrgTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//$Id: ossimCibCadrgTileSource.h 16308 2010-01-09 02:45:54Z eshirschorn $
 #ifndef ossimCibCadrgTileSource_HEADER
 #define ossimCibCadrgTileSource_HEADER 1
 #include <ossim/imaging/ossimImageHandler.h>
@@ -20,13 +20,13 @@ class ossimRpfTocEntry;
 class ossimRpfFrame;
 
 /**
- * Cib/Cadrg fromats are encoded the same except that the CIB is a grey
+ * CIB/CADRG formats are encoded the same except that the CIB is a grey
  * scale image and the CADRG is a color image.  Both are VQ compressed.
  * The images are encoded into an NITF format with embedded RPF headers.
  * It reads the embedded RPF tags from the NITF file and parses the data.
  * It allows for you to select which CIB/CADRG entry to render.  The handler
  * is opened by giving it the associated a.toc file.  This is a table of
- * contents file that describes all the entries found in the CIB/CADARD
+ * contents file that describes all the entries found in the CIB/CADRG
  * product.  You must set which entry you wish to render.  By default it
  * will render the first product it comes to.
  *
@@ -82,6 +82,16 @@ public:
    /**
     */
    virtual bool open();
+
+  /**
+    * Changes the way the open() routine functions slightly.
+    *
+    * @param bSkipEmptyCheck If true, the RPF file is opened even 
+    * if all the frame files are missing. By default this is 
+    * set to false.
+    */
+   void setSkipEmptyCheck( bool bSkipEmptyCheck = false );
+
    /**
     *  Returns a pointer to an ossimImageDataObject given a rectangluar
     *  region of interest.
@@ -593,8 +603,13 @@ protected:
    ossimCibCadrgProductType     theProductType;
    
    mutable ossimRpfFrame*       theWorkFrame;
-	
-	
+
+   /**
+    * If true during the call to open(), the RPF file is opened even 
+    * if all the frame files are missing. By default this is set to false.
+    */
+   bool                         theSkipEmptyCheck;
+
 	// data to use in property retrieval
 	
 TYPE_DATA

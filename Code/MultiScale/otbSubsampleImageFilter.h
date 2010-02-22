@@ -24,8 +24,8 @@
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
+//Just to get the forwad/inverse definitions
+#include "otbWaveletOperatorBase.h"
 
 namespace otb {
 
@@ -34,11 +34,11 @@ namespace otb {
  *
  * This class performs a simple resampling image filtering.
  *
- * The third template is a FORWARD/INVERSE InverseOrForwardTransformationEnum
- * enumeration type. With FORWARD, the output image is of the same size of the one of
- * the input image. But the output image contains only co-located subsample, the reset being 0.
- * When INVERSE is used, the input image is considered to as the sub-sampled. then, the output
- * image is larger. Inital pixel values are preserved but the output image is interleaved with
+ * The third template is a Wavelet::FORWARD/Wavelet::INVERSE Wavelet::WaveletDirection
+ * enumeration type. With Wavelet::FORWARD, the output image is of the same size of the one of
+ * the input image. But the output image contains only co-located subsample, the rest being 0.
+ * When Wavelet::INVERSE is used, the input image is considered as the sub-sampled. Then, the output
+ * image is larger. Initial pixel values are preserved but the output image is interleaved with
  * 0.
  *
  * \sa ResampleImageFilter
@@ -46,7 +46,7 @@ namespace otb {
  * \sa DecimateImageFilter
  */
 template < class TInputImage, class TOutputImage,
-            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+            Wavelet::WaveletDirection TDirectionOfTransformation >
 class ITK_EXPORT SubsampleImageFilter :
   public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
@@ -70,7 +70,7 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Direction definition */
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
   itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
 
   /** Image typedef support. */
@@ -120,7 +120,7 @@ protected:
    */
   virtual void GenerateOutputInformation();
 
-  /** Set output image to 0 brfore processing */
+  /** Set output image to 0 before processing */
   virtual void BeforeThreadedGenerateData ();
 
   /** Allows multithreading */
@@ -141,7 +141,6 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSubsampleImageFilter.txx"
 #endif
-
 
 
 #endif

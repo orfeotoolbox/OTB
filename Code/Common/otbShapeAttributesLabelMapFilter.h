@@ -43,16 +43,16 @@ class ShapeAttributesLabelObjectFunctor
 {
  public:
   /** Self typedef */
-  typedef ShapeAttributesLabelObjectFunctor   Self;
+  typedef ShapeAttributesLabelObjectFunctor    Self;
 
   /** LabelObject typedef */
-  typedef TLabelObject                        LabelObjectType;
+  typedef TLabelObject                         LabelObjectType;
 
   /** Labeled image type */
-  typedef TLabelImage                         LabelImageType;
+  typedef TLabelImage                          LabelImageType;
 
   /** Flusser moments typedef */
-  typedef Polygon<double>                      PolygonType;
+  typedef typename TLabelObject::PolygonType   PolygonType;
   typedef Functor::LabelObjectToPolygonFunctor
     <LabelObjectType,PolygonType>              PolygonFunctorType;
   typedef FlusserPathFunction<PolygonType>     FlusserPathFunctionType;

@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.h 15798 2009-10-23 19:15:20Z gpotts $
+// $Id: ossimRectilinearDataObject.h 16052 2009-12-08 22:20:40Z dburken $
 #ifndef ossimRectilinearDataObject_HEADER
 #define ossimRectilinearDataObject_HEADER
 #include <ossim/base/ossimDataObject.h>
@@ -136,10 +136,10 @@ public:
       const ossimRectilinearDataObject& rhs);
 
 protected:
-   ossim_uint32              theNumberOfDataComponents;
-   ossimScalarType           theScalarType;
-   std::vector<ossim_uint8>  theDataBuffer;
-   std::vector<ossim_uint32> theSpatialExtents;
+   ossim_uint32              m_numberOfDataComponents;
+   ossimScalarType           m_scalarType;
+   std::vector<ossim_uint8>  m_dataBuffer;
+   std::vector<ossim_uint32> m_spatialExtents;
    
 TYPE_DATA
 };

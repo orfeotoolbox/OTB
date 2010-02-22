@@ -158,7 +158,6 @@ int main( int , char * argv[] )
   std::cout << "Blue = "
             << itk::NumericTraits<PixelType::ValueType>::PrintType(blue)
             << std::endl;
-
   // Software Guide : EndCodeSnippet
 
   // Lets repeat that both \code{SetPixel()} and \code{GetPixel()} are

@@ -93,7 +93,6 @@ public:
   }
 
 
-
 protected:
   LabelizeNeighborhoodConnectedImageFilter();
   virtual ~LabelizeNeighborhoodConnectedImageFilter() {};

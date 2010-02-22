@@ -32,7 +32,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MeanDifferenceImageFilter} for detecting changes
@@ -66,7 +65,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 #include "otbCommandProgressUpdate.h"
-
 
 
 int main(int argc, char* argv[] )
@@ -247,7 +245,5 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
-
 
 

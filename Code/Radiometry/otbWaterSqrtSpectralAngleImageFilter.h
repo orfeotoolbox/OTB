@@ -60,7 +60,6 @@ public:
   typedef TOutputImage OutputImageType;
 
 
-
 protected:
   WaterSqrtSpectralAngleImageFilter() {};
   ~WaterSqrtSpectralAngleImageFilter() {};

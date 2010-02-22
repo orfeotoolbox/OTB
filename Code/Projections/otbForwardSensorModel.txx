@@ -115,8 +115,6 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
   }
 
 
-
-
   // "OutputPointType" storage.
   OutputPointType outputPoint;
   outputPoint[0]=ossimGPoint.lon;

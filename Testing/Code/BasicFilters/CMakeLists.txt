@@ -1554,20 +1554,6 @@ ADD_TEST(bfTvChangeLabelImageFilter ${BASICFILTERS_TESTS12}
   255   # upper  threshold
 )
 
-# ----- otbSubsampleImageFilter --------------------------------------
-ADD_TEST(bfTuSubsampleImageFilterNew ${BASICFILTERS_TESTS12}
-	otbSubsampleImageFilterNew)
-
-ADD_TEST(bfTvSubsampleImageFilter ${BASICFILTERS_TESTS12}
-	--compare-image ${NOTOL}
-		${TEMP}/bfSubsampleImageFilterOversampled.tif
-		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
-	otbSubsampleImageFilter
-		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-		${TEMP}/bfSubsampleImageFilterOversampled.tif
-		${TEMP}/bfSubsampleImageFilterOnePixelOutOf2.tif
-)
-
 # -----  otbImageAndVectorImageOperationFilter  --------------------------------------
 ADD_TEST(bfTuImageAndVectorImageOperationFilterNew ${BASICFILTERS_TESTS12}
 	otbImageAndVectorImageOperationFilterNew)
@@ -1808,8 +1794,6 @@ otbEdgeDetectorImageFilter.cxx
 otbEdgeDetectorImageFilterNew.cxx
 otbChangeLabelImageFilterNew.cxx
 otbChangeLabelImageFilter.cxx
-otbSubsampleImageFilterNew.cxx
-otbSubsampleImageFilter.cxx
 otbImageAndVectorImageOperationFilterNew.cxx
 otbImageAndVectorImageOperationFilterTest.cxx
 )

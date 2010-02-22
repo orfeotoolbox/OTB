@@ -29,14 +29,12 @@
 #include "otbTestHelper.h"
 
 
-
 typedef int (*MainFuncPointer)(int , char* [] );
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
 
 #define REGISTER_TEST(test) \
 extern int test(int, char* [] ); \
 StringToTestFunctionMap[#test] = test
-
 
 
 void RegisterTests();

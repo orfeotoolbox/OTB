@@ -11,7 +11,7 @@
 // This class is used to remap image data from one scalar type to another.
 //
 //*******************************************************************
-//  $Id: ossimScalarRemapper.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimScalarRemapper.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 
 #include <iostream>
 
@@ -193,6 +193,8 @@ ossimRefPtr<ossimImageData> ossimScalarRemapper::getTile(
          
          // Un-normalize and copy the buffer to the destination tile.
          theTile->copyNormalizedBufferToTile(theNormBuf);
+
+         break;
       }
       default:
       {
@@ -201,6 +203,8 @@ ossimRefPtr<ossimImageData> ossimScalarRemapper::getTile(
          
          // Un-normalize and copy the buffer to the destination tile.
          theTile->copyNormalizedBufferToTile(theNormBuf);
+
+         break;
       }
    }
    

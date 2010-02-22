@@ -145,7 +145,6 @@ int main(int argc, char* argv[] )
   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -155,12 +154,10 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFEnergyEdgeFidelity
   <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyGaussian
   <InputImageType, LabelledImageType>  EnergyFidelityType;
-
   // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginCodeSnippet
@@ -190,7 +187,6 @@ int main(int argc, char* argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-
   unsigned int nClass = 256;
 
 

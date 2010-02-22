@@ -29,7 +29,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{CorrelationChangeDetector} for detecting changes
@@ -228,7 +227,5 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
-
 
 

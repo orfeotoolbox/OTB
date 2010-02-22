@@ -41,7 +41,7 @@ int otbSubsampleImageFilter ( int argc, char * argv[] )
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( inputFileName );
 
-  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::INVERSE >
+  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::Wavelet::INVERSE >
     InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
   invFilter->SetInput( reader->GetOutput() );
@@ -55,7 +55,7 @@ int otbSubsampleImageFilter ( int argc, char * argv[] )
   writer1->SetInput( invFilter->GetOutput() );
   writer1->Update();
 
-  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::FORWARD >
+  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::Wavelet::FORWARD >
     ForwardFilterType;
   ForwardFilterType::Pointer filter = ForwardFilterType::New();
   filter->SetInput( invFilter->GetOutput() );

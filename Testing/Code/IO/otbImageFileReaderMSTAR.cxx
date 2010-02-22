@@ -27,7 +27,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 
-
 int otbImageFileReaderMSTAR(int argc, char* argv[])
 {
   typedef float InputPixelType;
@@ -100,7 +99,6 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
     outputIt.Set(  inputIt.Get()[0]  );
 //    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
   }
-
 
 
   typedef itk::RescaleIntensityImageFilter< InternalImageType,

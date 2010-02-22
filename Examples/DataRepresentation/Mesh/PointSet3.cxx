@@ -95,14 +95,12 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   const bool found = pointSet->GetPointData( dataId, & value );
   if ( found )
   {
     std::cout << "Pixel value = " << value << std::endl;
   }
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -271,6 +269,5 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-
 
 

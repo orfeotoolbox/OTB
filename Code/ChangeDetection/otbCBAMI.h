@@ -234,8 +234,6 @@ protected:
     return Eabcd_c - Eab_c*Ecd_c - Eac_c*Ebd_c - Ead_c*Ebc_c;
 
 
-
-
   }
 
   inline TOutput PhiMI(VectorType v1, VectorType v2)

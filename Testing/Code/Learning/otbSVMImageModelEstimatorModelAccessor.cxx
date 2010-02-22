@@ -32,7 +32,6 @@
 #include "otbImageFileReader.h"
 
 
-
 int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
 {
   const char* inputImageFileName = argv[1];
@@ -163,10 +162,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
   f.close();
 
 
-
   return EXIT_SUCCESS;
 }
-
-
 
 

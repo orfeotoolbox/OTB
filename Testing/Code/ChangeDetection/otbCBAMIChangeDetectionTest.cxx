@@ -52,7 +52,6 @@ int otbCBAMIChangeDetectionTest(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::CBAMIChangeDetector<
   InputImageType1,
@@ -93,7 +92,5 @@ int otbCBAMIChangeDetectionTest(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

@@ -80,8 +80,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // The image file reader and writer types are instantiated using the image
@@ -98,8 +96,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // Filenames should be provided for both the reader and the writer. In this
@@ -113,8 +109,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // Here we simply connect the output of the reader as input to the writer.
@@ -126,8 +120,6 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginCodeSnippet
   writer->SetInput( reader->GetOutput() );
 // Software Guide : EndCodeSnippet
-
-
 
 
 // Software Guide : BeginLatex
@@ -150,7 +142,6 @@ int main( int argc, char * argv [] )
     return EXIT_FAILURE;
   }
 // Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex

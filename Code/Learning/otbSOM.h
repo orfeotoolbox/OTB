@@ -159,9 +159,9 @@ private:
   ValueType m_MinWeight;
   /** Maximum intial neuron weights */
   ValueType m_MaxWeight;
-  /** Random initialisation bool */
+  /** Random initialization bool */
   bool m_RandomInit;
-  /** Seed for random initialisation */
+  /** Seed for random initialization */
   unsigned int m_Seed;
   /** The input list sample */
   ListSamplePointerType m_ListSample;

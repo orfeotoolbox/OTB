@@ -23,7 +23,7 @@ void ossimGeneralRasterElevFactory::setDirectory(const ossimFilename& directory)
 {
    ossimElevSourceFactory::setDirectory(directory);
    theGeneralRasterInfoList.clear();
-   ossimGeneralRasterElevHandler handler;
+   ossimRefPtr<ossimGeneralRasterElevHandler>  handler = new ossimGeneralRasterElevHandler;
   
    if(theDirectory.exists())
    {
@@ -44,10 +44,10 @@ void ossimGeneralRasterElevFactory::setDirectory(const ossimFilename& directory)
                ext = ext.downcase();
                if(ext == "ras")
                {
-                  if(handler.setFilename(file))
+                  if(handler->open(file))
                   {
                      foundOne = true;
-                     addInfo(handler.generalRasterInfo());
+                     addInfo(handler->generalRasterInfo());
                   }
                }
             } while(dir.getNext(file) &&

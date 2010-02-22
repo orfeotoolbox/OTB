@@ -50,6 +50,10 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbTutorialsExamplesTests)
 
 SET(TOL 0.0)
 
+ADD_TEST( trTeTutorialsHelloWorld ${EXE_TESTS}
+        TutorialsHelloWorldOTBTest
+        )
+
 ADD_TEST( trTeTutorialsPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsPipelineOutput.png
                                         ${TEMP}/TutorialsPipelineOutput.png

@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 15434 2009-09-16 20:38:18Z dburken $
+//  $Id: ossimApplanixEcefModel.cpp 16174 2009-12-23 16:34:06Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -15,18 +15,20 @@
 #include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <ossim/base/ossimMatrix4x4.h>
+#include <ossim/elevation/ossimElevManager.h>
 static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 15434 2009-09-16 20:38:18Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 16174 2009-12-23 16:34:06Z dburken $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -78,7 +80,18 @@ ossimApplanixEcefModel::ossimApplanixEcefModel(const ossimDrect& imageRect,
    theLensDistortion           = new ossimMeanRadialLensDistortion;
    initAdjustableParameters();
    updateModel();
-   computeGsd();
+
+   try
+   {
+      // Method throws ossimException.
+      computeGsd();
+   }
+   catch (const ossimException& e)
+   {
+      ossimNotify(ossimNotifyLevel_WARN)
+         << "ossimApplanixEcefModel Constructor caught Exception:\n"
+         << e.what() << std::endl;
+   }
    
    if (traceDebug())
    {
@@ -392,7 +405,7 @@ bool ossimApplanixEcefModel::saveState(ossimKeywordlist& kwl,
 }
 
 bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
-                                   const char* prefix)
+                                       const char* prefix)
 {
    if(traceDebug())
    {
@@ -720,7 +733,20 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
    {
       if(ossimString(compute_gsd_flag).toBool())
       {
-         computeGsd();
+         try
+         {
+            //---
+            // This will set theGSD and theMeanGSD. Method throws
+            // ossimException.
+            //---
+            computeGsd();
+         }
+         catch (const ossimException& e)
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimApplanixEcefModel::loadState Caught Exception:\n"
+               << e.what() << std::endl;
+         }
       }
    }
    
@@ -736,25 +762,6 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
                                           << "Ground:    " << ossimGpt(theEcefPlatformPosition) << std::endl;
    }
    return result;
-}
-
-void ossimApplanixEcefModel::computeGsd()
-{
-   ossimGpt right;
-   ossimGpt top;
-   ossimGpt centerGpt;
-   lineSampleToWorld(theRefImgPt, centerGpt);
-   lineSampleToWorld(theRefImgPt + ossimDpt(1.0, 0.0),
-                     right);
-   lineSampleToWorld(theRefImgPt + ossimDpt(0.0, -1.0),
-                     top);
-   
-   ossimEcefVector horizontal = ossimEcefPoint(centerGpt)-ossimEcefPoint(right);
-   ossimEcefVector vertical   = ossimEcefPoint(centerGpt)-ossimEcefPoint(top);
-   
-   theGSD.x = horizontal.length();
-   theGSD.y = vertical.length();
-   theMeanGSD = (theGSD.x+theGSD.y)*.5;
 }
 
 bool ossimApplanixEcefModel::setupOptimizer(const ossimString& init_file)

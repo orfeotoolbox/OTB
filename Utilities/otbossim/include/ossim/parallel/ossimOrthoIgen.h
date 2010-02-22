@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimOrthoIgen.h 16473 2010-02-01 19:52:59Z gpotts $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
@@ -30,23 +30,25 @@ public:
    public:
       ossimOrthoIgenFilename()
          :theFilename(""),
-         theEntry(-1)
+          theEntry(-1),
+          theSupplementaryDir(""),
+          theBands()
          {}
       ossimOrthoIgenFilename(const ossimFilename& file, bool decodeEntry);
       ossimOrthoIgenFilename(const ossimFilename& file, ossim_int32 entryNumber)
          :theFilename(file),
-         theEntry(entryNumber)
+          theEntry(entryNumber),
+          theSupplementaryDir(),
+          theBands()
       {
       }
       void setFilenameWithDecoding(const ossimFilename& file);
       void setFilenameAndEntry(const ossimFilename& file,
-                               ossim_int32 entry)
-      {
-         theFilename = file;
-         theEntry    = entry;
-      }
+                               ossim_int32 entry);
       ossimFilename theFilename;
-      ossim_int32  theEntry;
+      ossim_int32   theEntry;
+      ossimFilename theSupplementaryDir;
+      std::vector<ossim_uint32> theBands;
    };
    typedef std::map<ossimString,ossimString> PropertyMap;
    
@@ -83,6 +85,7 @@ public:
                  ossim_uint32 startIdx = 1);
    void clearFilenameList();
    void addFile(const ossimFilename& file, bool withDecoding=false);
+   void addFile(const ossimString& fileName, bool withDecoding=false);
    bool execute();
    void setDefaultValues();
 
@@ -114,9 +117,12 @@ protected:
    ossimDpt    theDeltaPerPixelOverride;
    ossimOrthoIgenProjectionType theProjectionType;
    ossimString                  theProjectionName;
+   ossimString                  theSrsName;
+   ossimString                  theSrsString;
    ossim_float64 theGeographicOriginOfLatitude;
    ossimString   theCombinerType;
    ossimString   theResamplerType;
+   ossimString   theWriterType;
    ossimFilename theTemplateView;
    ossimFilename theTilingTemplate;
    ossimFilename theTilingFilename;
@@ -138,6 +144,7 @@ protected:
    // ossimString   theSrsCode;
    bool          theStdoutFlag;
    PropertyMap   theWriterProperties;
+   
    
    std::vector<ossimOrthoIgenFilename> theFilenames;
    
@@ -173,6 +180,9 @@ protected:
    ossimRefPtr<ossimConnectableObject> setupAnnotation(
       ossimKeywordlist& kwl,
       ossimConnectableObject* input) const;
+
+   void addFiles(ossimString fileInfoStr, std::vector<ossimString> fileInfos,
+     bool withEncodedEntry);
 };
 
 #endif

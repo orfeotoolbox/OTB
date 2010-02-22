@@ -83,5 +83,3 @@ int otbPointSetSourceTest(int argc, char* argv[] )
 }
 
 
-
-

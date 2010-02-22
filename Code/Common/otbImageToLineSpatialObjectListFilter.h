@@ -85,7 +85,6 @@ public:
   LinesListType * GetOutput(void);
 
 
-
 protected:
   ImageToLineSpatialObjectListFilter();
   virtual ~ImageToLineSpatialObjectListFilter() {}
@@ -95,7 +94,6 @@ protected:
 private:
   ImageToLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
 
 
 };

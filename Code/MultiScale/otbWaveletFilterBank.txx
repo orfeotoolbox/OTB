@@ -38,11 +38,11 @@
 namespace otb {
 
 /**
- * Template Specialisation for the FORWARD case
+ * Template Specialization for the Wavelet::FORWARD case
  */
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::WaveletFilterBank ()
 {
   this->SetNumberOfRequiredInputs(1);
@@ -64,7 +64,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::GenerateOutputInformation ()
 {
   Superclass::GenerateOutputInformation();
@@ -94,7 +94,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::GenerateInputRequestedRegion ()
   throw ( itk::InvalidRequestedRegionError )
 {
@@ -138,7 +138,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::BeforeThreadedGenerateData ()
 {
   if ( m_SubsampleImageFactor > 1 )
@@ -179,7 +179,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
@@ -205,7 +205,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::AfterThreadedGenerateData ()
 {
   if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
@@ -216,7 +216,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
@@ -240,7 +240,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
     destRegion.SetSize( destSize );
 
 #if 0
-    // Contrairement a INVERSE, ici ca ne sera a rien apparemment...
+    // Contrairement a Wavelet::INVERSE, ici ca ne sera a rien apparemment...
 
     // Region Padding
     LowPassOperatorType lowPassOperator;
@@ -276,7 +276,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::CallCopyOutputRegionToInputRegion
 ( unsigned int direction,
   InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
@@ -312,7 +312,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::CallCopyInputRegionToOutputRegion
 ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
@@ -339,7 +339,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::CallCopyInputRegionToOutputRegion
 ( unsigned int direction,
   OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
@@ -375,7 +375,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::ThreadedGenerateData
 ( const OutputImageRegionType& outputRegionForThread, int threadId )
 {
@@ -492,7 +492,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD >
 ::ThreadedGenerateDataAtDimensionN
 ( unsigned int idx, unsigned int direction, itk::ProgressReporter & reporter,
   const OutputImageRegionType& outputRegionForThread, int threadId )
@@ -619,11 +619,11 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, FORWARD >
 }
 
 /**
- * Template Specialisation for the INVERSE case
+ * Template Specialization for the Wavelet::INVERSE case
  */
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::WaveletFilterBank ()
 {
   this->SetNumberOfRequiredInputs( 1 << InputImageDimension );
@@ -638,7 +638,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -676,7 +676,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::GenerateInputRequestedRegion ()
   throw ( itk::InvalidRequestedRegionError )
 {
@@ -723,7 +723,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::BeforeThreadedGenerateData ()
 {
   if ( InputImageDimension > 1 )
@@ -746,7 +746,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::AllocateInternalData
 ( const OutputImageRegionType& outputRegion )
 {
@@ -772,7 +772,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::AfterThreadedGenerateData ()
 {
   if ( m_SubsampleImageFactor > 1 && InputImageDimension > 1 )
@@ -783,7 +783,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::CallCopyOutputRegionToInputRegion
 ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
 {
@@ -847,7 +847,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::CallCopyInputRegionToOutputRegion
 ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
 {
@@ -874,7 +874,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::CallCopyOutputRegionToInputRegion
 ( unsigned int direction,
   InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
@@ -910,7 +910,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::CallCopyInputRegionToOutputRegion
 ( unsigned int direction,
   OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
@@ -946,7 +946,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::ThreadedGenerateData
 ( const OutputImageRegionType& outputRegionForThread, int threadId )
 {
@@ -1002,7 +1002,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
         outputImage = m_InternalImages[0][i/2];
       }
 
-      typedef otb::SubsampleImageFilter< InputImageType, OutputImageType, INVERSE > FilterType;
+      typedef otb::SubsampleImageFilter< InputImageType, OutputImageType, Wavelet::INVERSE > FilterType;
       typename FilterType::InputImageIndexType delta;
       delta.Fill(1);
       delta[ dir ] = this->GetSubsampleImageFactor();
@@ -1138,7 +1138,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
 void
-WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
+WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE >
 ::ThreadedGenerateDataAtDimensionN
 ( unsigned int direction,
   itk::ProgressReporter & reporter,
@@ -1190,7 +1190,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
         outputImage = m_InternalImages[direction][i/2];
       }
 
-      typedef otb::SubsampleImageFilter< OutputImageType, OutputImageType, INVERSE > FilterType;
+      typedef otb::SubsampleImageFilter< OutputImageType, OutputImageType, Wavelet::INVERSE > FilterType;
       typename FilterType::InputImageIndexType delta;
       delta.Fill(1);
       delta[ direction ] = this->GetSubsampleImageFactor();
@@ -1321,7 +1321,5 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, INVERSE >
 } // end of namespace
 
 #endif
-
-
 
 

@@ -63,5 +63,3 @@ int otbNDWIMultiChannelWaterIndexImageFilter(int argc, char * argv[])
 }
 
 
-
-

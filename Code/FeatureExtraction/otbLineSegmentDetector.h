@@ -232,7 +232,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-
 private:
   LineSegmentDetector(const Self&);  //purposely not implemented
   void operator=(const Self&);      //purposely not implemented
@@ -264,8 +263,6 @@ private:
 
   /** Output*/
   LineSpatialObjectListPointer      m_LineList;
-
-
 
 
 };

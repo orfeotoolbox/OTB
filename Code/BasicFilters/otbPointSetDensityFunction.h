@@ -53,7 +53,7 @@ public:
   typedef typename Superclass::InputType       InputType;
   typedef typename  PointSetType::Pointer      PointSetPointerType;
 
-  /** TOutput typedef suppoty*/
+  /** TOutput typedef support*/
   typedef TOutput                              OutputType;
 
   /** Set/Get the number of scales*/
@@ -85,4 +85,3 @@ private:
 #endif
 
 #endif
-

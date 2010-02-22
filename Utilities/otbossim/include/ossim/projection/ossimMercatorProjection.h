@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Mercator projection code.  
 //*******************************************************************
-//  $Id: ossimMercatorProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMercatorProjection.h 16427 2010-01-27 20:11:31Z gpotts $
 
 #ifndef ossimMercatorProjection_HEADER
 #define ossimMercatorProjection_HEADER
@@ -112,6 +112,7 @@ private:
    mutable double Merc_Delta_Northing;
    
 
+   bool theSphericalFlag;
 /*!
  * The function Set_Mercator_Parameters receives the ellipsoid parameters and
  * Mercator projcetion parameters as inputs, and sets the corresponding state 

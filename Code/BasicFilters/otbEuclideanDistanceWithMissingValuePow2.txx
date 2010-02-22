@@ -119,4 +119,3 @@ EuclideanDistanceWithMissingValuePow2< TVector >
 #endif
 
 
-

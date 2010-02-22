@@ -56,7 +56,6 @@ int otbPolygonListToRCC8GraphFilter(int argc, char* argv[])
   RCC8GraphFilterType::SegmentationRangesType ranges;
 
 
-
   // Reading input images
   for (int cpt=1;cpt<=nbImages;++cpt)
   {

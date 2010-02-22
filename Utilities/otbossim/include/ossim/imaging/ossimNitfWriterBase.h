@@ -105,6 +105,16 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl, const char* prefix=0);
 
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
+
 protected:
 
    /**

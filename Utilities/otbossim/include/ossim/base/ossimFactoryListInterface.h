@@ -10,7 +10,7 @@
 // $Id$
 #ifndef ossimFactoryListInterface_HEADER
 #define ossimFactoryListInterface_HEADER
-#include <OpenThreads/ReentrantMutex>
+#include <OpenThreads/Mutex>
 #include <OpenThreads/ScopedLock>
 #include <vector>
 #include <ossim/base/ossimRefPtr.h>
@@ -173,7 +173,7 @@ class ossimFactoryListInterface
          
          return false;
       }
-      mutable OpenThreads::ReentrantMutex m_factoryListMutex;
+      mutable OpenThreads::Mutex m_factoryListMutex;
       FactoryListType m_factoryList;
    };
 
@@ -204,7 +204,7 @@ template <class T, class NativeType>
 ossimObject* ossimFactoryListInterface<T, NativeType>::createObjectFromRegistry(const ossimKeywordlist& kwl,
                                                                                 const char* prefix)const
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_factoryListMutex);
+   // OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_factoryListMutex);
    ossimObject* result = 0;
    ossim_uint32 idx = 0;
    for(;((idx<m_factoryList.size())&&!result); ++idx)

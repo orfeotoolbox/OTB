@@ -331,8 +331,6 @@ inline OutputScalarType operator()(const NeighborhoodType &neigh)
 };
 
 
-
-
 } // namespace Functor
 } // namespace otb
 

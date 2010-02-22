@@ -13,6 +13,7 @@
 #include <ossim/base/ossimDatumFactoryInterface.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimString.h>
+#include <iostream>
 
 //ossimDatumFactoryRegistry* ossimDatumFactoryRegistry::theInstance = 0;
 
@@ -70,6 +71,7 @@ void ossimDatumFactoryRegistry::getList(std::vector<ossimString>& list) const
 ossimDatumFactoryRegistry::ossimDatumFactoryRegistry()
    : theFactoryList()
 {
+   registerFactory(ossimDatumFactory::instance());
 }
 
 ossimDatumFactoryRegistry::ossimDatumFactoryRegistry(

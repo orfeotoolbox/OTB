@@ -50,7 +50,6 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImportVectorImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
@@ -93,7 +92,6 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImportVectorImageFilter< ImageType >   ImportFilterType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -189,8 +187,6 @@ int main(int argc, char * argv[])
   const unsigned int numberOfPixels =  size[0] * size[1] * numberOfBands;
 
   PixelType * localBuffer = new PixelType[ numberOfPixels ];
-
-
   // Software Guide : EndCodeSnippet
 
   const double radius = 80.0;
@@ -224,7 +220,6 @@ int main(int argc, char * argv[])
       length++;
     }
   }
-
   // Software Guide : EndCodeSnippet
 
 

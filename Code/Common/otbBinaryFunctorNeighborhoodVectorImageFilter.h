@@ -103,7 +103,6 @@ public:
   }
 
 
-
   typedef itk::ConstNeighborhoodIterator<TInputImage1>
   NeighborhoodIteratorType1;
   typedef itk::ConstNeighborhoodIterator<TInputImage2>
@@ -152,7 +151,6 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbBinaryFunctorNeighborhoodVectorImageFilter.txx"
 #endif
-
 
 
 #endif

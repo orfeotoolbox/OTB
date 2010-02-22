@@ -48,7 +48,7 @@ OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>
   // Filters Typedefs (this class is actually a composite filter)
   typedef itk::GrayscaleMorphologicalOpeningImageFilter<InputImageType,OutputImageType, KernelType> OpenFilterType;
   typedef itk::GrayscaleMorphologicalClosingImageFilter<InputImageType,OutputImageType,KernelType> CloseFilterType;
-  // Filters initialisation
+  // Filters initialization
   typename OpenFilterType::Pointer opening = OpenFilterType::New();
   typename CloseFilterType::Pointer closing = CloseFilterType::New();
   // Set the kernel

@@ -29,8 +29,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
 // Software Guide : EndCodeSnippet
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
@@ -43,7 +41,6 @@
 #include "itkStatisticsLabelMapFilter.h"
 #include "itkStatisticsKeepNObjectsLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
-
 
 
 int main(int argc, char * argv[])

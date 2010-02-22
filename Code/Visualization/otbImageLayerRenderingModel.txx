@@ -79,7 +79,6 @@ ImageLayerRenderingModel<TOutputImage, TLayer>
 }
 
 
-
 template <class TOutputImage, class TLayer>
 void
 ImageLayerRenderingModel<TOutputImage, TLayer>

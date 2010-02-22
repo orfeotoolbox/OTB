@@ -25,7 +25,6 @@
 #endif
 
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -35,11 +34,11 @@
 
 int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
 {
-  typedef unsigned char PixelType;
-  typedef itk::RGBPixel<PixelType> RGBPixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
-  typedef otb::Image<RGBPixelType, 2> RGBImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef unsigned char                               PixelType;
+  typedef itk::RGBPixel<PixelType>                    RGBPixelType;
+  typedef otb::Image<PixelType, 2>                    ImageType;
+  typedef otb::Image<RGBPixelType, 2>                 RGBImageType;
+  typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -53,8 +52,8 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
   typedef itk::UnaryFunctorImageFilter<ImageType,
   RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximum(150);
-  colormapper->GetFunctor().SetMinimum(70);
+  colormapper->GetFunctor().SetMaximumInputValue(150);
+  colormapper->GetFunctor().SetMinimumInputValue(70);
 
   colormapper->SetInput(reader->GetOutput());
   writer->SetInput(colormapper->GetOutput());

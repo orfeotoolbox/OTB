@@ -7,7 +7,7 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
+SET(NOTOL 0.0)
 SET(EPSILON6 0.000001)
 SET(EPSILON8 0.00000001)
 
@@ -45,7 +45,7 @@ ADD_TEST(msTuMorphoPyrAnalysisFilterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidAnalysisFilterNew)
 
 ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS1}
-  --compare-n-images ${TOL} 5
+  --compare-n-images ${NOTOL} 5
 		   ${BASELINE}/msPyrAn_mire_log_an_2.png
 		   ${TEMP}/msPyrAn_mire_log_an_2.png
 		   ${BASELINE}/msPyrAn_mire_log_sf_2.png
@@ -69,7 +69,7 @@ ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidSynthesisFilterNew)
 
 ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS1}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
  		   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
  		   ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
          otbMorphologicalPyramidSynthesisFilter
@@ -106,7 +106,7 @@ ADD_TEST(msTuMorphoPyrSegmenterNew ${MULTISCALE_TESTS1}
          otbMorphologicalPyramidSegmenterNew)
 
 ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
          otbMorphologicalPyramidSegmenter
@@ -118,9 +118,10 @@ ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS1}
 	 0.9
 	 10
 )
+SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentBright PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
 ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
          otbMorphologicalPyramidSegmenter
@@ -132,6 +133,7 @@ ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS1}
 	 0.9
 	 10
 )
+SET_TESTS_PROPERTIES(msTvMorphoPyrSegmentDark PROPERTIES DEPENDS msTvMorphoPyrMRToMSConverter)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -143,7 +145,7 @@ ADD_TEST(msTuMorphoPyrSegmentationFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalPyramidSegmentationFilterNew)
 
 ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2}
-   --compare-n-images ${TOL} 4
+   --compare-n-images ${NOTOL} 4
 		   ${BASELINE}/msPyrSegmentation_IKO_Halles_2.tif
  		   ${TEMP}/msPyrSegmentation_IKO_Halles_2.tif
 		   ${BASELINE}/msPyrSegmentation_IKO_Halles_4.tif
@@ -169,7 +171,7 @@ ADD_TEST(msTuGeodesicMorphologyDecompositionImageFilterNew ${MULTISCALE_TESTS2}
          otbGeodesicMorphologyDecompositionImageFilterNew)
 
 ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2}
-   --compare-n-images ${TOL} 3
+   --compare-n-images ${NOTOL} 3
 		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
  		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
 		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
@@ -190,7 +192,7 @@ ADD_TEST(msTuGeodesicMorphologyLevelingFilterNew ${MULTISCALE_TESTS2}
          otbGeodesicMorphologyLevelingFilterNew)
 
 ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
 		   ${BASELINE}/msGeodesicMorphologyLevelingFilterOutput.tif
  		   ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
          otbGeodesicMorphologyLevelingFilter
@@ -206,7 +208,7 @@ ADD_TEST(msTuConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS2}
          otbConvexOrConcaveClassificationFilterNew)
 
 ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
 		   ${BASELINE}/msConvexOrConcaveClassificationFilterOutput.png
  		   ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
          otbConvexOrConcaveClassificationFilter
@@ -222,7 +224,7 @@ ADD_TEST(msTuMorphologicalOpeningProfileFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalOpeningProfileFilterNew)
 
 ADD_TEST(msTvMorphologicalOpeningProfileFilter ${MULTISCALE_TESTS2}
-   --compare-n-images ${TOL} 4
+   --compare-n-images ${NOTOL} 4
 		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput1.tif
  		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput1.tif
 		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif
@@ -246,7 +248,7 @@ ADD_TEST(msTuMorphologicalClosingProfileFilterNew ${MULTISCALE_TESTS2}
          otbMorphologicalClosingProfileFilterNew)
 
 ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2}
-   --compare-n-images ${TOL} 4
+   --compare-n-images ${NOTOL} 4
 		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput1.tif
  		   ${TEMP}/msMorphologicalClosingProfileFilterOutput1.tif
 		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif
@@ -274,7 +276,7 @@ ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3}
          otbProfileToProfileDerivativeFilterNew)
 
 ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3}
-   --compare-n-images ${TOL} 4
+   --compare-n-images ${NOTOL} 4
 		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput1.tif
  		   ${TEMP}/msProfileToProfileDerivativeFilterOutput1.tif
 		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif
@@ -298,7 +300,7 @@ ADD_TEST(msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew ${MULTISCALE_
          otbProfileDerivativeToMultiScaleCharacteristicsFilterNew)
 
 ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TESTS3}
-   --compare-n-images ${TOL} 2
+   --compare-n-images ${NOTOL} 2
 		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
  		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
 		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
@@ -317,7 +319,7 @@ ADD_TEST(msTuMultiScaleConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS
          otbMultiScaleConvexOrConcaveClassificationFilterNew)
 
 ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3}
-   --compare-image ${TOL}
+   --compare-image ${NOTOL}
 		   ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
  		   ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
          otbMultiScaleConvexOrConcaveClassificationFilter
@@ -335,7 +337,7 @@ ADD_TEST(msTuGeodesicMorphologyIterativeDecompositionImageFilterNew ${MULTISCALE
          otbGeodesicMorphologyIterativeDecompositionImageFilterNew)
 
 ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TESTS3}
-   --compare-n-images ${TOL} 6
+   --compare-n-images ${NOTOL} 6
 		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
  		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
 		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
@@ -362,9 +364,6 @@ ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TE
 
 ADD_TEST(msTuWaveletOperatorNew ${MULTISCALE_TESTS4}
          otbWaveletOperatorNew )
-
-# Further tests ar skiped for the moment due to unexpected "Multiple Defined" errors...
-#IF(DESACTIVATED_FOR_NOW)
 
 ADD_TEST(msTuWaveletOperator ${MULTISCALE_TESTS4}
          otbWaveletOperator )
@@ -414,7 +413,7 @@ ADD_TEST(msTvWaveletTransform ${MULTISCALE_TESTS4}
 )
 
 ADD_TEST(msTvWaveletMultiScaleTransform ${MULTISCALE_TESTS4}
-        --compare-image ${TOL}
+        --compare-image ${NOTOL}
 			  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
               ${TEMP}/ROI_IKO_PAN_LesHalles_WvltMultiScale.tif
          otbWaveletTransform
@@ -450,8 +449,19 @@ ADD_TEST(msTvWaveletPacketMultiScaleTransform ${MULTISCALE_TESTS4}
           ${TEMP}/ROI_IKO_PAN_LesHalles_WvltPacketMultiScale.tif
 )
 
-#ENDIF(DESACTIVATED_FOR_NOW)
+# ----- otbSubsampleImageFilter --------------------------------------
+ADD_TEST(msTuSubsampleImageFilterNew ${MULTISCALE_TESTS4}
+	otbSubsampleImageFilterNew)
 
+ADD_TEST(msTvSubsampleImageFilter ${MULTISCALE_TESTS4}
+	--compare-image ${NOTOL}
+		${TEMP}/msSubsampleImageFilterOversampled.tif
+		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+	otbSubsampleImageFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		${TEMP}/msSubsampleImageFilterOversampled.tif
+		${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -506,6 +516,8 @@ otbWaveletTransform.cxx
 otbWaveletPacketTransformNew.cxx
 otbWaveletPacketInverseTransformNew.cxx
 otbWaveletPacketTransform.cxx
+otbSubsampleImageFilterNew.cxx
+otbSubsampleImageFilter.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbMultiScaleTests1 "${BasicMultiScale_SRCS1}" "OTBMultiScale;OTBIO;OTBTesting")

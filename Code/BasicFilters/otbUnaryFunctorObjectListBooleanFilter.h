@@ -59,7 +59,6 @@ public:
   typedef typename TOutputList::ConstIterator OutputListIterator;
 
 
-
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
    * not necessarily have a reference count. So we cannot return a

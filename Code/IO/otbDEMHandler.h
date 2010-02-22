@@ -26,7 +26,6 @@
 
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkIndent.h"
-#include "itkSimpleFastMutexLock.h"
 
 class ossimElevManager;
 
@@ -74,18 +73,15 @@ public :
 
 protected:
   DEMHandler();
-  virtual ~DEMHandler();
+  virtual ~DEMHandler() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   ossimElevManager* m_ElevManager;
 
-  itk::SimpleFastMutexLock m_Mutex;
-
 };
 
 } // namespace otb
-
 
 
 #endif

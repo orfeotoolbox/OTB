@@ -32,8 +32,6 @@
 #include <cstdlib>
 
 
-
-
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
 // \doxygen{otb}{SVMClassifier} class for performing SVM
@@ -55,7 +53,6 @@
 //  Software Guide : EndCodeSnippet
 
 
-
 int main( int argc, char* argv[] )
 {
 // Software Guide : BeginLatex
@@ -70,12 +67,10 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef float                           InputPixelType;
 
   typedef std::vector<InputPixelType>     InputVectorType;
   typedef int                             LabelPixelType;
-
 // Software Guide : EndCodeSnippet
   const   unsigned int                              Dimension = 2;
 
@@ -90,7 +85,6 @@ int main( int argc, char* argv[] )
   typedef itk::PointSet< InputVectorType,  Dimension >    MeasurePointSetType;
 
   typedef itk::PointSet< LabelPixelType,  Dimension >     LabelPointSetType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -104,7 +98,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef MeasurePointSetType::PointType    MeasurePointType;
   typedef LabelPointSetType::PointType    LabelPointType;
 
@@ -114,7 +107,6 @@ int main( int argc, char* argv[] )
 
   MeasurePointSetType::Pointer tPSet = MeasurePointSetType::New();
   MeasurePointsContainer::Pointer tCont = MeasurePointsContainer::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -145,7 +137,6 @@ int main( int argc, char* argv[] )
     std::cout << "coords : " << x_coord << " " << y_coord << std::endl;
     tP[0] = x_coord;
     tP[1] = y_coord;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -156,12 +147,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     InputVectorType measure;
     measure.push_back(static_cast<InputPixelType>((x_coord*1.0-lowest)/range));
     measure.push_back(static_cast<InputPixelType>((y_coord*1.0-lowest)/range));
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -171,13 +159,10 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
     tCont->InsertElement( pointId , tP );
     tPSet->SetPointData( pointId, measure );
 
   }
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -187,9 +172,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   tPSet->SetPoints( tCont );
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -203,12 +186,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
   SampleType;
   SampleType::Pointer sample = SampleType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -219,9 +199,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   sample->SetPointSet( tPSet );
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -233,13 +211,10 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType,
   LabelPixelType > ModelType;
 
   ModelType::Pointer model = ModelType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -251,9 +226,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   model->LoadModel(argv[1]);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -265,13 +238,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -283,13 +252,11 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   int numberOfClasses = model->GetNumberOfClasses();
   classifier->SetNumberOfClasses(numberOfClasses);
   classifier->SetModel( model );
   classifier->SetSample(sample.GetPointer());
   classifier->Update();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -301,9 +268,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   ClassifierType::OutputType* membershipSample =
     classifier->GetOutput();
 
@@ -311,7 +275,6 @@ int main( int argc, char* argv[] )
     membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =
     membershipSample->End();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -322,13 +285,10 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   double error = 0.0;
   pointId = 0;
   while (m_iter != m_last)
   {
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -338,9 +298,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -350,7 +308,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     InputVectorType measure;
 
     tPSet->GetPointData(pointId, &measure);
@@ -374,7 +331,6 @@ int main( int argc, char* argv[] )
   }
 
   std::cout << "Error = " << error/pointId << " % " << std::endl;
-
 // Software Guide : EndCodeSnippet
 
 

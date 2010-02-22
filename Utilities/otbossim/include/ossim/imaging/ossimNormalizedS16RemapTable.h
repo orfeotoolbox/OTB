@@ -36,8 +36,10 @@ public:
 
    enum
    {
-      TABLE_ENTRIES  = 65536, // 2^16 32767-(-32768)+1
-      OFFSET_TO_ZERO = 32768  // Gets -32768 to zero.
+      TABLE_ENTRIES  = 65536,  // 2^16 32767-(-32768)+1
+      OFFSET_TO_ZERO = 32768,  // Gets -32768 to zero.
+      NULL_PIX       = -32768,
+      MIN_PIX        = -32767 
    };
 
    /**
@@ -49,6 +51,10 @@ public:
    /**
     * @brief Gets normalized value (between '0.0' and '1.0') from an
     * int which should in scalar range of a signed 16 bit.
+    *
+    * @note This table is specialized to map both -32768 and -32767 to 0 since
+    * dted data has a null of -32767.
+    * 
     * @return Value between 0.0 and 1.0.
     */
    virtual ossim_float64 operator[](ossim_int32 pix) const;
@@ -56,6 +62,10 @@ public:
    /**
     * @brief Gets normalized value (between '0.0' and '1.0') from an
     * int which should in scalar range of a signed 16 bit.
+    *
+    * @note This table is specialized to map both -32768 and -32767 to 0 since
+    * dted data has a null of -32767.
+    *
     * @return Value between 0.0 and 1.0.
     */
    virtual ossim_float64 normFromPix(ossim_int32 pix) const;
@@ -110,6 +120,8 @@ inline ossim_float64 ossimNormalizedS16RemapTable::normFromPix(
 inline ossim_int32 ossimNormalizedS16RemapTable::pixFromNorm(
    ossim_float64 normPix) const
 {
+   if(normPix <= 0.0) return NULL_PIX;
+   
    // Clamp between 0 and 1 on the way in.
    ossim_float64 p = (normPix<1.0) ? ( (normPix>0.0) ? normPix : 0.0) : 1.0;
 
@@ -121,6 +133,12 @@ inline ossim_int32 ossimNormalizedS16RemapTable::pixFromNorm(
    // 32767 which is the max pixel for this scalar type.
    //---
    p = ossim::round<ossim_int32>(p - OFFSET_TO_ZERO);
+
+   if (p == NULL_PIX)
+   {
+      // norm pixel came in just above zero so should be at least min.
+      p = MIN_PIX; 
+   }
 
    return static_cast<ossim_int32>(p);
 }

@@ -63,7 +63,6 @@
 #include "otbImageFileReader.h"
 
 
-
 int main( int argc, char* argv[] )
 {
 
@@ -153,7 +152,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-
   svmEstimator->Update();
 
 //  Software Guide : EndCodeSnippet
@@ -164,12 +162,9 @@ int main( int argc, char* argv[] )
 //
 //  Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-
   svmEstimator->SaveModel(outputModelFileName);
 
 //  Software Guide : EndCodeSnippet
-
-
 
 
   return EXIT_SUCCESS;

@@ -11,7 +11,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDtedTileSource.cpp 16283 2010-01-06 21:25:19Z dburken $
 
 #include <cstdlib>
 #include <iostream>
@@ -30,11 +30,6 @@ using namespace std;
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimImageData.h>
-#include <ossim/support_data/ossimDtedVol.h>
-#include <ossim/support_data/ossimDtedHdr.h>
-#include <ossim/support_data/ossimDtedUhl.h>
-#include <ossim/support_data/ossimDtedDsi.h>
-#include <ossim/support_data/ossimDtedAcc.h>
 #include <ossim/support_data/ossimDtedInfo.h>
 
 RTTI_DEF1(ossimDtedTileSource, "ossimDtedTileSource", ossimImageHandler)
@@ -75,7 +70,7 @@ ossimDtedTileSource::ossimDtedTileSource()
 
 ossimDtedTileSource::~ossimDtedTileSource()
 {
-   theFileStr.close();
+   close();
 }
 
 ossimString ossimDtedTileSource::getShortName()const
@@ -87,11 +82,6 @@ ossimString ossimDtedTileSource::getLongName()const
 {
    return ossimString("dted reader");
 }
-
-ossimString ossimDtedTileSource::getClassName()const
-{
-   return ossimString("ossimDtedTileSource");
-}   
 
 ossimRefPtr<ossimImageData> ossimDtedTileSource::getTile(
    const  ossimIrect& tile_rect, ossim_uint32 resLevel)
@@ -139,8 +129,8 @@ bool ossimDtedTileSource::getTile(ossimImageData* result,
       // on error.
       //---
       status = getOverviewTile(resLevel, result);
-      
-      if (!status) // Did not get an overview tile.
+
+      if ( !status )  // Did not get an overview tile.
       {  
          ossimIrect image_rect = getImageRectangle(resLevel);
 
@@ -249,6 +239,11 @@ bool ossimDtedTileSource::isOpen()const
    return theFileStr.is_open();
 }
 
+void ossimDtedTileSource::close()
+{
+   theFileStr.close();
+}
+
 bool ossimDtedTileSource::open()
 {
    static const char MODULE[] = "ossimDtedTileSource::open";
@@ -298,21 +293,19 @@ bool ossimDtedTileSource::open()
       theFileStr.close();
       return false;
    }
-                                 
-   // Attempt to parse.
-   ossimDtedVol vol(theFileStr, 0);
-   ossimDtedHdr hdr(theFileStr, vol.stopOffset());
-   ossimDtedUhl uhl(theFileStr, hdr.stopOffset());
-   ossimDtedDsi dsi(theFileStr, uhl.stopOffset());
-   ossimDtedAcc acc(theFileStr, dsi.stopOffset());
-
+   m_vol.parse(theFileStr);
+   m_hdr.parse(theFileStr);
+   m_uhl.parse(theFileStr);
+   m_dsi.parse(theFileStr);
+   m_acc.parse(theFileStr);
+   
    //***
    // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
    // are for magnetic tape only; hence, may or may not be there.
    //***
-   if (uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   if (m_uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
       if (traceDebug())
       {
@@ -327,11 +320,11 @@ bool ossimDtedTileSource::open()
    }
 
    // Get the cell specific info needed for later.
-   theNumberOfLines = uhl.numLatPoints();
-   theNumberOfSamps = uhl.numLonLines();
-   thePostSpacing.x = uhl.lonInterval();
-   thePostSpacing.y = uhl.latInterval();
-   theOffsetToFirstDataRecord = acc.stopOffset();
+   theNumberOfLines = m_uhl.numLatPoints();
+   theNumberOfSamps = m_uhl.numLonLines();
+   thePostSpacing.x = m_uhl.lonInterval();
+   thePostSpacing.y = m_uhl.latInterval();
+   theOffsetToFirstDataRecord = m_acc.stopOffset();
    theDataRecordSize = DATA_RECORD_OFFSET_TO_POST +
                        (theNumberOfLines * sizeof(ossim_sint16)) +
                        DATA_RECORD_CHECKSUM_SIZE;
@@ -424,20 +417,13 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
       return false;
    }
 
-   // Attempt to parse.
-   ossimDtedVol vol(theFileStr, (ossim_int32)0);
-   ossimDtedHdr hdr(theFileStr, vol.stopOffset());
-   ossimDtedUhl uhl(theFileStr, hdr.stopOffset());
-   ossimDtedDsi dsi(theFileStr, uhl.stopOffset());
-   ossimDtedAcc acc(theFileStr, dsi.stopOffset());
-
    //***
    // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
    // are for magnetic tape only; hence, may or may not be there.
    //***
-   if (uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   if (m_uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
    {
       if (traceDebug())
       {
@@ -471,8 +457,8 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
    // so the latitude must be shifted to the upper left for the purpose of
    // a tie point.
    //***
-   double lat = uhl.latOrigin() +
-                (uhl.latInterval() * (uhl.numLatPoints()-1.0));
+   double lat = m_uhl.latOrigin() +
+                (m_uhl.latInterval() * (m_uhl.numLatPoints()-1.0));
    
    // Add the tie point.
    ossimKeywordlist kwl;
@@ -499,18 +485,18 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
 
    kwl.add(prefix,
            ossimKeywordNames::TIE_POINT_LON_KW,
-           uhl.lonOrigin(),
+           m_uhl.lonOrigin(),
            true);
 
    // Add the pixel scale.
    kwl.add(prefix,
            ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-           uhl.latInterval(),
+           m_uhl.latInterval(),
            true);
    
    kwl.add(prefix,
            ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-           uhl.lonInterval(),
+           m_uhl.lonInterval(),
            true);
 
    //***
@@ -529,11 +515,11 @@ ossimImageGeometry* ossimDtedTileSource::getImageGeometry()
    // Add the number of lines and samples.
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_LINES_KW,
-           static_cast<int>(uhl.numLatPoints()));
+           static_cast<int>(m_uhl.numLatPoints()));
 
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_SAMPLES_KW,
-           static_cast<int>(uhl.numLonLines()));
+           static_cast<int>(m_uhl.numLonLines()));
 
    // Add the number of reduced resolution sets.
    kwl.add(prefix,

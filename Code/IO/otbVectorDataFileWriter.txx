@@ -206,7 +206,6 @@ VectorDataFileWriter<TInputVectorData>
 }
 
 
-
 } //namespace otb
 
 #endif

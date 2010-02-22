@@ -136,7 +136,6 @@ private:
   unsigned short littleushortval;  /* LittleEndian ushort value.*/
 
 
-
   int           m_NbOctetPixel;
 };
 

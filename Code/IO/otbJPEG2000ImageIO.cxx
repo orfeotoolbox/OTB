@@ -741,8 +741,6 @@ void JPEG2000ImageIO::Write(const void* /*buffer*/)
 //       {
 
 
-
-
 //       }
 }
 

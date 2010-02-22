@@ -37,4 +37,6 @@ void RegisterTests()
   REGISTER_TEST(otbWaveletPacketTransformNew);
   REGISTER_TEST(otbWaveletPacketInverseTransformNew);
   REGISTER_TEST(otbWaveletPacketTransform);
+  REGISTER_TEST(otbSubsampleImageFilterNew);
+  REGISTER_TEST(otbSubsampleImageFilter);
 }

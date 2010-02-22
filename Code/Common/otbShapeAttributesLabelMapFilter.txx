@@ -394,7 +394,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
 //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
     principalMoments[i] = pm(i,i);
     }
-  itk::Matrix<double,LabelObjectType::ImageDimension> principalAxes = eigen.V.transpose();
+  itk::Matrix<double,LabelObjectType::ImageDimension,LabelObjectType::ImageDimension> 
+    principalAxes = eigen.V.transpose();
 
   // Add a final reflection if needed for a proper rotation,
   // by multiplying the last row by the determinant
@@ -443,7 +444,11 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
 
   // Flusser moments
   PolygonFunctorType polygonFunctor;
+  polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
+  polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
+  polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
   typename PolygonType::Pointer polygon = polygonFunctor(lo);
+  lo->SetPolygon(polygon);
   
   typename FlusserPathFunctionType::Pointer flusser = FlusserPathFunctionType::New();
   flusser->SetInputPath(polygon);
@@ -771,8 +776,6 @@ ShapeAttributesLabelMapFilter<TImage, TLabelImage>
     }
 
 }
-
-
 
 
 template<class TImage, class TLabelImage>

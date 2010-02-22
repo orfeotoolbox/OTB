@@ -119,7 +119,6 @@ private :
 };
 
 
-
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

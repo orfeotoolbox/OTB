@@ -43,7 +43,7 @@ BreakAngularPathListFilter<TPath>
 
   typename PathType::VertexType pixel1, pixel2, pixel3;
 
-  // Initialisation
+  // Initialization
   PathPointerType newPath = PathType::New();
   newPath->Initialize();
 

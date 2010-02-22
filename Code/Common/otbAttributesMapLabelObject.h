@@ -20,6 +20,7 @@
 
 #include "itkLabelObject.h"
 #include "itkLabelMap.h"
+#include "otbPolygon.h"
 #include <map>
 
 namespace otb
@@ -99,6 +100,7 @@ public:
   /** Standard class typedefs */
   typedef AttributesMapLabelObject                    Self;
   typedef itk::LabelObject< TLabel, VImageDimension > Superclass;
+  typedef typename Superclass::LabelObjectType        LabelObjectType;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
   typedef itk::WeakPointer <const Self>               ConstWeakPointer;
@@ -128,6 +130,10 @@ public:
   typedef std::map<std::string,AttributesValueType>  AttributesMapType;
   typedef typename AttributesMapType::iterator       AttributesMapIteratorType;
   typedef typename AttributesMapType::const_iterator AttributesMapConstIteratorType;
+
+  // The polygon corresponding to the label object
+  typedef Polygon<double>                            PolygonType;
+  typedef typename PolygonType::Pointer              PolygonPointerType;
 
   /**
    * Set an attribute value.
@@ -182,15 +188,40 @@ public:
   /**
   * This method is overloaded to add the copy of the attributes map.
   */
-  virtual void CopyAttributesFrom( const Self * src)
+  virtual void CopyAttributesFrom( const LabelObjectType * lo)
     {
-    Superclass::CopyAttributesFrom( src );
+    Superclass::CopyAttributesFrom( lo );
+
+    // copy the data of the current type if possible
+    const Self * src = dynamic_cast<const Self *>( lo );
+    if( src == NULL )
+      {
+      return;
+      }
       m_Attributes = src->m_Attributes;
-   }
+    }
+
+  /** Return the polygon (const version) */
+  const PolygonType * GetPolygon() const
+  {
+    return m_Polygon;
+  }
+
+  /** Return the polygon (non const version) */
+  PolygonType * GetPolygon()
+  {
+    return m_Polygon;
+  }
+
+  /** Set the polygon */
+  void SetPolygon(PolygonType* p)
+  {
+    m_Polygon = p;
+  }
 
 protected:
   /** Constructor */
-  AttributesMapLabelObject() : m_Attributes()
+  AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New())
     {}
   /** Destructor */
   virtual ~AttributesMapLabelObject() {}
@@ -212,6 +243,10 @@ private:
 
   /** The attributes map */
   AttributesMapType m_Attributes;
+
+  /** The polygon corresponding to the label object. Caution, this
+   *  will be empty by default */
+  PolygonPointerType m_Polygon;
 };
 
 } // end namespace otb

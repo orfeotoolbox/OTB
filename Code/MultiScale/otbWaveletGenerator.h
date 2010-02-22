@@ -26,9 +26,12 @@
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
-namespace otb {
+namespace otb
+{
 
-typedef enum {
+namespace Wavelet
+{
+enum Wavelet{
   HAAR = 0,
   DAUBECHIES4 = 1, DB4 = 1,
   DAUBECHIES6 = 2, DB6 = 2,
@@ -39,7 +42,8 @@ typedef enum {
   SPLINE_BIORTHOGONAL_4_4, // 7
   SYMLET8, // 8
   TotalNumberOfDefinedMotherWavelets
-} MotherWaveletOperatorEnum;
+};
+}
 
 /** \class WaveletGenerator
  * \brief Wavelet coefficient definition
@@ -49,11 +53,11 @@ typedef enum {
  * Society for Industrial and Applied Mathematics, 1992.
  *
  * The class is templated with the wavelet ID from the
- * MotherWaveletOperatorEnum type. The members throw an
- * exception if the template specialisation is not defined
+ * Wavelet::Wavelet type. The members throw an
+ * exception if the template specialization is not defined
  * according to the wavelet ID.
  */
-template < MotherWaveletOperatorEnum TMotherWaveletOperator >
+template < Wavelet::Wavelet TMotherWaveletOperator >
 class ITK_EXPORT WaveletGenerator
   : public itk::LightObject
 {

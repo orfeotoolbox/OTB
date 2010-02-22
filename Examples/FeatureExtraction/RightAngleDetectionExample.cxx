@@ -120,7 +120,6 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::LineSegmentDetector<ImageType , PixelType>   LsdFilterType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -148,7 +147,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   LsdFilterType::Pointer         lsdFilter         = LsdFilterType::New();
   RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
-
   // Software Guide : EndCodeSnippet
   
   MinMaxFilterType::Pointer      minmaxCalculator  = MinMaxFilterType::New();
@@ -161,11 +159,9 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   lsdFilter->SetInput(reader->GetOutput());
   rightAngleFilter->SetInputImage(reader->GetOutput());
   rightAngleFilter->SetInput(lsdFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -175,7 +171,6 @@ int main( int argc, char * argv[] )
     //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   rightAngleFilter->SetThresholdAngle(angleThreshold);
   rightAngleFilter->SetThresholdDistance(distanceThreshold);
   

@@ -32,6 +32,5 @@ int otbVectorDataSourceNew(int argc, char * argv[])
   VectorDataSourceType::Pointer VectorData = VectorDataSourceType::New();
 
 
-
   return EXIT_SUCCESS;
 }

@@ -69,5 +69,3 @@ SpectralAngleKernelFunctor
 }
 
 
-
-

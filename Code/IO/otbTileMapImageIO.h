@@ -33,6 +33,11 @@
 namespace otb
 {
 
+  namespace TileMapAdressingStyle
+  {
+    enum TileMapAdressingStyle{GM, OSM, NEARMAP};
+  }
+
 /** \class TileMapImageIO
    *
    * \brief ImageIO object for reading and writing TileMap images
@@ -160,17 +165,19 @@ private:
 
 
   /** Byte per pixel pixel */
-  int         m_BytePerPixel;
+  int                                          m_BytePerPixel;
 
   /** Resolution depth*/
-  int         m_Depth;
-  bool        m_UseCache;
-  std::string m_CacheDirectory;
-  std::string m_ServerName;
-  std::string m_FileSuffix;
-  std::string m_AddressMode;
+  int                                          m_Depth;
+  bool                                         m_UseCache;
+  std::string                                  m_CacheDirectory;
+  std::string                                  m_ServerName;
+  std::string                                  m_FileSuffix;
+  TileMapAdressingStyle::TileMapAdressingStyle m_AddressMode;
 
-  bool        m_FlagWriteImageInformation;
+  bool                                         m_FlagWriteImageInformation;
+  
+  bool                                         m_FileNameIsServerName;
 
 };
 

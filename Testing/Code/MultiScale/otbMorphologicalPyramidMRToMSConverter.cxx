@@ -88,6 +88,5 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
   writer3->Update();
 
 
-
   return EXIT_SUCCESS;
 }

@@ -82,7 +82,6 @@ int main( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 
-
   // Software Guide : BeginCodeSnippet
   const char * inputFilename  = argv[1];
   const char * outputFilenameRGB = argv[2];

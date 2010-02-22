@@ -9,7 +9,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimEquDistCylProjection.cpp 16414 2010-01-26 18:10:18Z gpotts $
 
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -17,6 +17,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/elevation/ossimElevManager.h>
 
 static ossimTrace traceDebug("ossimEquDistCylProjection:debug");
 
@@ -119,6 +120,148 @@ void ossimEquDistCylProjection::setDefaults()
    Eqcy_Delta_Northing = 10007555.0;
    Eqcy_Max_Easting    = 20015110.0;
    Eqcy_Min_Easting    = -20015110.0;
+}
+
+void ossimEquDistCylProjection::lineSampleHeightToWorld(const ossimDpt &lineSample,
+                                                        const double&  hgtEllipsoid,
+                                                        ossimGpt&      gpt)const
+{
+   //
+   // make sure that the passed in lineSample is good and
+   // check to make sure our easting northing is good so
+   // we can compute the line sample.
+   //
+   //
+   if(lineSample.hasNans())
+   {
+      gpt.makeNan();
+      return;
+   }
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      ossimMapProjection::lineSampleHeightToWorld(lineSample, hgtEllipsoid, gpt);
+      return;
+   }
+   else
+   {
+      if(theUlEastingNorthing.hasNans())
+      {
+         gpt.makeNan();
+         return;
+      }
+      ossimDpt eastingNorthing;
+      
+      eastingNorthing = (theUlEastingNorthing);
+      
+      eastingNorthing.x += (lineSample.x*theMetersPerPixel.x);
+      
+      //
+      // Note:  the Northing is positive up.  In image space
+      // the positive axis is down so we must multiply by
+      // -1
+      //
+      eastingNorthing.y += (-lineSample.y*theMetersPerPixel.y);
+      
+      
+      //
+      // now invert the meters into a ground point.
+      //
+      gpt = inverse(eastingNorthing);
+      gpt.datum(theDatum);
+      
+      if(gpt.isLatNan() && gpt.isLonNan())
+      {
+         gpt.makeNan();
+      }
+      else
+      {
+         gpt.clampLat(-90, 90);
+         gpt.clampLon(-180, 180);
+         
+         // Finally assign the specified height:
+         gpt.hgt = hgtEllipsoid;
+      }
+   }
+   if(theElevationLookupFlag)
+   {
+      gpt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(gpt);
+   }
+}
+
+void ossimEquDistCylProjection::worldToLineSample(const ossimGpt &worldPoint,
+                                                  ossimDpt&       lineSample)const
+{
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      ossimMapProjection::worldToLineSample(worldPoint, lineSample);
+      
+      return;
+   }
+   else
+   {
+      // make sure our tie point is good and world point
+      // is good.
+      //
+      if(theUlEastingNorthing.isNan()||
+         worldPoint.isLatNan() || worldPoint.isLonNan())
+      {
+         lineSample.makeNan();
+         return;
+      }
+      // initialize line sample
+      //   lineSample = ossimDpt(0,0);
+      
+      // I am commenting this code out because I am going to
+      // move it to the ossimImageViewProjectionTransform.
+      //
+      // see if we have a datum set and if so
+      // shift the world to our datum.  If not then
+      // find the easting northing value for the world
+      // point.
+      if(theDatum)
+      {
+         ossimGpt gpt = worldPoint;
+         
+         gpt.changeDatum(theDatum);
+         
+         // lineSample is currently in easting northing
+         // and will need to be converted to line sample.
+         lineSample = forward(gpt);
+      }
+      else
+      {
+         // lineSample is currently in easting northing
+         // and will need to be converted to line sample.
+         lineSample = forward(worldPoint);
+      }
+      
+      // check the final result to make sure there were no
+      // problems.
+      //
+      if(!lineSample.isNan())
+      {
+         //       if(!isIdentityMatrix())
+         //       {
+         //          ossimDpt temp = lineSample;
+         
+         //          lineSample.x = theInverseTrans[0][0]*temp.x+
+         //                         theInverseTrans[0][1]*temp.y+
+         //                         theInverseTrans[0][2];
+         
+         //          lineSample.y = theInverseTrans[1][0]*temp.x+
+         //                         theInverseTrans[1][1]*temp.y+
+         //                         theInverseTrans[1][2];
+         //       }
+         //       else
+         {
+            lineSample.x = ((lineSample.x  - theUlEastingNorthing.x)/theMetersPerPixel.x);
+            
+            // We must remember that the Northing is negative since the positive
+            // axis for an image is assumed to go down since it's image space.
+            lineSample.y = (-(lineSample.y - theUlEastingNorthing.y)/theMetersPerPixel.y);
+         }
+      }
+   }
 }
 
 ossimGpt ossimEquDistCylProjection::inverse(const ossimDpt &eastingNorthing)const

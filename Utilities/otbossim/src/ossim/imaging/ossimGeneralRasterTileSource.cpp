@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimGeneralRasterTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -1145,11 +1145,6 @@ ossimString ossimGeneralRasterTileSource::getShortName()const
 ossimString ossimGeneralRasterTileSource::getLongName()const
 {
    return ossimString("general raster reader");
-}
-
-ossimString ossimGeneralRasterTileSource::getClassName()const
-{
-   return ossimString("ossimGeneralRasterTileSource");
 }
 
 ossim_uint32 ossimGeneralRasterTileSource::getNumberOfInputBands() const

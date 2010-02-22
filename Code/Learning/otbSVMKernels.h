@@ -158,7 +158,6 @@ public:
 };
 
 
-
 /** \class InvMultiQuadraticSAMKernelFunctor
   * \brief Undocumented
  */
@@ -297,7 +296,6 @@ public:
     }
 
   }
-
 
 
 };
@@ -557,7 +555,6 @@ public:
     }
 
 
-
     else
     {
       CustomLinearKernelFunctor customLinear;
@@ -572,9 +569,6 @@ public:
     return total;
   }
 };
-
-
-
 
 
 /** \class GroupingAdaptiveKernelFunctor

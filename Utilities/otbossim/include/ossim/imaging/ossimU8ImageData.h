@@ -19,7 +19,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU8ImageData.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimU8ImageData.h 16052 2009-12-08 22:20:40Z dburken $
 
 #ifndef ossimU8ImageData_HEADER
 #define ossimU8ImageData_HEADER
@@ -118,12 +118,6 @@ public:
    virtual double computeMeanSquaredError(double meanValue,
                                           ossim_uint32 bandNumber = 0);
   
-
-   /*!
-    *  Initializes data to null pixel values.
-    */
-   virtual void makeBlank();
-
    virtual void setValue(ossim_int32 x, ossim_int32 y, double color);
 
    /*!
@@ -159,16 +153,23 @@ public:
                                            double* buf);
    virtual void copyNormalizedBufferToTile(ossim_uint32 band,
                                            float* buf);
+
+   /** @return The first non-null index of the normalized remap table. */   
+   virtual ossim_float64 getMinNormalizedPix() const;
    
-   virtual ossim_float64 getMinNormalizedPix() const { return theRemapTable[1]; }
 protected:
    virtual ~ossimU8ImageData();
 
 private:
 
-   static const ossimNormalizedU8RemapTable theRemapTable;
+   static const ossimNormalizedU8RemapTable m_remapTable;
    
 TYPE_DATA
 };
+
+inline ossim_float64 ossimU8ImageData::getMinNormalizedPix() const
+{
+   return m_remapTable[1];
+}
 
 #endif

@@ -216,7 +216,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
 
-  // Variable Initialisation
+  // Variable Initialization
   PixelType tempPixel;
   tempPixel.SetSize(numberOfComponent);
   tempPixel.Fill(itk::NumericTraits<InternalPixelType>::Zero);
@@ -400,7 +400,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   pixelSumVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
   pixelSumVector.Fill(itk::NumericTraits<RealType>::Zero);
   tempMatrix.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
-
 
 
   itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, outputRegionForThread);

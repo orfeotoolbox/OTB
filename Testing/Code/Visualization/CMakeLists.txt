@@ -342,6 +342,10 @@ ADD_TEST(vrTuVerticalAsymptoteCurveNew ${VISUREFAC_TESTS1}
 otbVerticalAsymptoteCurveNew
 )
 
+#---------- otb::VerticalAsymptote --------
+ADD_TEST(vrTuVectorDataModelNew ${VISUREFAC_TESTS1}
+otbVectorDataModelNew
+)
 
 # Testing srcs
 SET(Visualization_SRCS1
@@ -390,6 +394,7 @@ otbStandardImageViewer.cxx
 otbPackedWidgetManagerNew.cxx
 otbSplittedWidgetManagerNew.cxx
 otbVerticalAsymptoteCurveNew.cxx
+otbVectorDataModelNew.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbVisualizationTests1 "${Visualization_SRCS1}" "OTBVisualization;OTBIO;OTBTesting")

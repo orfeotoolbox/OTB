@@ -37,7 +37,7 @@ namespace otb {
   * \class ImagerSeriesFileReader
   * \brief Reader class dedicated to image series reading
   *
-  * Actually, this class is mostly dedicated to read ENVI META FILE. Specialisations
+  * Actually, this class is mostly dedicated to read ENVI META FILE. Specializations
   * of the template are given relatively to the king of image (or vector image) used
   * in input and/or output.
   *
@@ -120,7 +120,7 @@ protected:
 
   /** AllocateListOfComponents
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
-   * This allows specific (or global) initialisation in the GenerateData methods,
+   * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents ( void );
@@ -222,7 +222,7 @@ protected:
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
-   * This allows specific (or global) initialisation in the GenerateData methods,
+   * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents ( void );
@@ -323,7 +323,7 @@ protected:
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
-   * This allows specific (or global) initialisation in the GenerateData methods,
+   * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents ( void );
@@ -428,7 +428,7 @@ protected:
 
   /**
    * Once MetaFile is read, allocation of lists are performed in SetFileName.
-   * This allows specific (or global) initialisation in the GenerateData methods,
+   * This allows specific (or global) initialization in the GenerateData methods,
    * that the user may invoke throught GenerateOutput() or GenerateOutput( idx ).
    */
   virtual void AllocateListOfComponents ( void );

@@ -354,7 +354,6 @@ protected:
   }
 
 
-
 private:
 
   IndexType m_Index;

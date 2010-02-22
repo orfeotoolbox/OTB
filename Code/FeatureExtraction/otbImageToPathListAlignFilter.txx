@@ -385,7 +385,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   iseglist = 0;
 
 
-
   /******************** first loop : the four sides ********************/
 
   for (side=0;side<4;side++)
@@ -584,7 +583,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 //  os << indent << "Path Value : " << m_PathValue << std::endl;
 //  os << indent << "Background Value : " << m_BackgroundValue << std::endl;
 }
-
 
 
 } // end namespace otb

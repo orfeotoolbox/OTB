@@ -150,7 +150,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-
   svmEstimator->Update();
 
 //  Software Guide : EndCodeSnippet

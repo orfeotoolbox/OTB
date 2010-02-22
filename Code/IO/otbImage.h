@@ -144,7 +144,6 @@ public:
   }
 
 
-
   /** Get the projection coordinate system of the image. */
   virtual std::string GetProjectionRef( void ) const;
 

@@ -23,8 +23,6 @@
 #include <fstream>
 
 
-
-
 namespace otb
 {
 /***********************      FilterFunctionValues **************************/

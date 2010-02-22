@@ -8,7 +8,7 @@
 // 
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevHandler.h 14298 2009-04-14 17:26:03Z gpotts $
+// $Id: ossimGeneralRasterElevHandler.h 16355 2010-01-14 21:15:25Z dburken $
 #ifndef ossimGeneralRasterElevHandler_HEADER
 #define ossimGeneralRasterElevHandler_HEADER
 #include <list>
@@ -22,13 +22,15 @@
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
-#include <OpenThreads/ReentrantMutex>
+#include <OpenThreads/Mutex>
+#include <OpenThreads/ScopedLock>
 class ossimProjection;
 /**
  * @class ossimGeneralRasterElevHandler Elevation source for an srtm file.
@@ -46,7 +48,7 @@ public:
          theScalarType(OSSIM_SCALAR_UNKNOWN),
          theBytesPerRawLine(0),
          theDatum(0),
-         theProjection(0)
+         theGeometry(0)
          {
          }
          GeneralRasterInfo(const  ossimGeneralRasterElevHandler::GeneralRasterInfo& src)
@@ -62,7 +64,7 @@ public:
          theScalarType(src.theScalarType),
          theBytesPerRawLine(src.theBytesPerRawLine),
          theDatum(src.theDatum),
-         theProjection(src.theProjection)
+         theGeometry(src.theGeometry)
          {
          }
          ossimFilename     theFilename;
@@ -77,7 +79,7 @@ public:
          ossimScalarType   theScalarType;
          ossim_uint32      theBytesPerRawLine;
          const ossimDatum* theDatum;
-         ossimRefPtr<ossimProjection> theProjection;  //add by simbla
+         ossimRefPtr<ossimImageGeometry> theGeometry;  //add by simbla
       };
    ossimGeneralRasterElevHandler(const ossimFilename& file="");
    ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo);
@@ -108,25 +110,20 @@ public:
     */
    virtual double getPostValue(const ossimIpt& gridPt) const;
 
-   virtual bool isOpen()const
-   {
-      return theInputStream.valid();
-   }
+   virtual bool isOpen()const;
+
    /**
     * Opens a stream to the srtm cell.
     *
     * @return Returns true on success, false on error.
     */
-   virtual bool open();
+   bool open(const ossimFilename& file, bool memoryMapFlag=false);
 
    /**
     * Closes the stream to the file.
     */
    virtual void close();
 
-   virtual bool setFilename(const ossimFilename& file);
-
-   
    /**
     * This method does not really fit the handler since this handle a
     * directory not a cell that could have holes in it.  So users looking for
@@ -148,14 +145,24 @@ public:
    
 private:
    template <class T>
-   double getHeightAboveMSLTemplate(T dummy,
+   double getHeightAboveMSLFileTemplate(T dummy,
                                     const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
                                     const ossimGpt& gpt);
-
+   template <class T>
+   double getHeightAboveMSLMemoryTemplate(T dummy,
+                                    const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+                                    const ossimGpt& gpt);
+   
+   virtual bool setFilename(const ossimFilename& file);
    
    ossimGeneralRasterElevHandler::GeneralRasterInfo theGeneralRasterInfo;
-   mutable ossimRefPtr<ossimIFStream> theInputStream;
-   OpenThreads::ReentrantMutex theFileAccessMutex;
+   mutable OpenThreads::Mutex m_inputStreamMutex;
+   std::ifstream m_inputStream;
+
+   /** @brief true if stream is open. */
+   bool          m_streamOpen;
+   
+   std::vector<char> m_memoryMap;
 TYPE_DATA
 };
 

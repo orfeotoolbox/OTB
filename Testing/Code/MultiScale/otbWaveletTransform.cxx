@@ -47,14 +47,14 @@ int otbWaveletTransform( int argc, char * argv[] )
   reader->SetFileName( inputFileName );
 
   /* Wavelet choice */
-  const otb::MotherWaveletOperatorEnum wvltID = otb::HAAR;
+  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
 
   /* Forward Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::FORWARD, PixelType, Dimension >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::FORWARD, PixelType, Dimension >
     WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::FORWARD >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::FORWARD >
     ForwardFilterBank;
-  typedef otb::WaveletTransform< ImageType, ImageType, ForwardFilterBank, otb::FORWARD >
+  typedef otb::WaveletTransform< ImageType, ImageType, ForwardFilterBank, otb::Wavelet::FORWARD >
     FilterType;
   
   FilterType::Pointer filter = FilterType::New();
@@ -64,11 +64,11 @@ int otbWaveletTransform( int argc, char * argv[] )
   filter->Update();
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::INVERSE, PixelType, Dimension >
+  typedef otb::WaveletOperator< wvltID, otb::Wavelet::INVERSE, PixelType, Dimension >
     InverseWaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::INVERSE >
+  typedef otb::WaveletFilterBank< ImageType, ImageType, InverseWaveletOperator, otb::Wavelet::INVERSE >
     InverseFilterBank;
-  typedef otb::WaveletTransform< ImageType, ImageType, InverseFilterBank, otb::INVERSE >
+  typedef otb::WaveletTransform< ImageType, ImageType, InverseFilterBank, otb::Wavelet::INVERSE >
     InvFilterType;
   
   InvFilterType::Pointer invFilter = InvFilterType::New();
@@ -85,6 +85,5 @@ int otbWaveletTransform( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
 
 

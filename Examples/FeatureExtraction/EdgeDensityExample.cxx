@@ -55,7 +55,6 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "itkCannyEdgeDetectionImageFilter.h"
 #include "otbBinaryImageDensityFunction.h"
 // Software Guide : EndCodeSnippet
@@ -117,7 +116,6 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>
                                                      CannyDetectorType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -130,7 +128,6 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType,
                      CountFunctionType> EdgeDensityFilterType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -144,8 +141,6 @@ int main(int argc, char* argv[] )
   EdgeDensityFilterType::Pointer    filter = EdgeDensityFilterType::New();
   CannyDetectorType::Pointer        cannyFilter = CannyDetectorType::New();
   WriterType::Pointer               writer = WriterType::New();
-
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -160,7 +155,6 @@ int main(int argc, char* argv[] )
   cannyFilter->SetLowerThreshold(lowerThreshold);
   cannyFilter->SetVariance(variance);
   cannyFilter->SetMaximumError(maximumError);
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -172,7 +166,6 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   filter->SetDetector(cannyFilter);
   filter->SetNeighborhoodRadius( radius );
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

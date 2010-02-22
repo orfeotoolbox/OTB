@@ -55,8 +55,6 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   typedef FilterFunctionValuesType::ValuesVectorType                                       ValuesVectorType;
 
 
-
-
   RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
   CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
   CorrectionParametersTo6SRadiativeTermsType::Pointer corrToRadia   = CorrectionParametersTo6SRadiativeTermsType::New();

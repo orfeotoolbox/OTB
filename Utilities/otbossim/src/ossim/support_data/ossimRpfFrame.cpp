@@ -10,7 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimRpfFrame.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 
 #include <istream>
 #include <ostream>
@@ -60,7 +60,8 @@ ossimRpfFrame::ossimRpfFrame()
     theImageDisplayParameterSubheader(NULL),
     theCompressionSection(NULL),
     theColorGrayscaleSubheader(NULL),
-    theColorConverterSubsection(NULL)
+    theColorConverterSubsection(NULL),
+    theNitfFile(NULL)
 {
 }
 
@@ -206,7 +207,8 @@ std::ostream& ossimRpfFrame::print(std::ostream& out,
    return out;
 }
 
-ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
+ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename,
+                                        bool minimalParse)
 {
    if(traceDebug())
    {
@@ -222,24 +224,21 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
    deleteAll();
 
 
-   ossimRefPtr<ossimNitfFile> nitfFile = new ossimNitfFile;
-   nitfFile->parseFile(filename);
+   theNitfFile = new ossimNitfFile;
+   theNitfFile->parseFile(filename);
    
    const ossimRefPtr<ossimNitfFileHeader> nitfFileHeader =
-      nitfFile->getHeader();
-      
+      theNitfFile.valid() ? theNitfFile->getHeader() : NULL;
+
    if(!nitfFileHeader)
    {
-      nitfFile = 0;
-      
+      theNitfFile = NULL;
+
       return ossimErrorCodes::OSSIM_ERROR;
    }
    ossimNitfTagInformation info;
    nitfFileHeader->getTag(info, "RPFHDR");
-      
-   // we no longer need access to the nitf header.  We got what we needed
-   nitfFile = 0;
-   
+
    theFilename = filename;
    if(info.getTagName() == "RPFHDR")
    {
@@ -261,25 +260,29 @@ ossimErrorCode ossimRpfFrame::parseFile(const ossimFilename& filename)
       if(!in.fail()&&theHeader)
       {
          result = populateAttributeSection(in);
-         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+
+         if ( minimalParse == false )
          {
-            populateCompressionSection(in);
-         }
-         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
-         {
-            result = populateCoverageSection(in);
-         }
-         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
-         {
-            result = populateImageSection(in);
-         }
-         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
-         {
-            result = populateColorGrayscaleSection(in);
-         }
-         if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
-         {
-            result = populateMasks(in);
+            if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+            {
+               populateCompressionSection(in);
+            }
+            if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+            {
+               result = populateCoverageSection(in);
+            }
+            if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+            {
+               result = populateImageSection(in);
+            }
+            if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+            {
+               result = populateColorGrayscaleSection(in);
+            }
+            if(!in.fail()&&(result == ossimErrorCodes::OSSIM_OK))
+            {
+               result = populateMasks(in);
+            }
          }
       }
       else
@@ -435,6 +438,10 @@ void ossimRpfFrame::deleteAll()
    {
       delete theColorConverterSubsection;
       theColorConverterSubsection = NULL;
+   }
+   if (theNitfFile.valid())
+   {
+      theNitfFile = NULL;
    }
 }
 

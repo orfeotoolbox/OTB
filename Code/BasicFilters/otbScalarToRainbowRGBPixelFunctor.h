@@ -20,7 +20,7 @@
 #define __otbScalarToRainbowRGBPixelFunctor_h
 
 #include "itkRGBPixel.h"
-#include "itkScalarToRGBPixelFunctor.h"
+#include "itkColormapFunctor.h"
 
 namespace otb
 {
@@ -110,7 +110,6 @@ namespace Functor
 };
 }
 
-
 namespace Functor
 {
 
@@ -121,42 +120,58 @@ namespace Functor
  *  Grayscale image is mapped to a color image where blue represents
  * small values and red represents big values.
  *
+ * This function is compatible with the colormap hierarchy presented in
+ * http://hdl.handle.net/1926/1452
+ *
  * \example BasicFilters/DEMToRainbowExample.cxx
  *
  */
-template< class TScalar >
-class ITK_EXPORT ScalarToRainbowRGBPixelFunctor :
-      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
+template< class TScalar , class TRGBPixel=itk::RGBPixel<unsigned char> >
+class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
+: public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+//      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
   ~ScalarToRainbowRGBPixelFunctor() {};
 
-  typedef unsigned char               RGBComponentType;
-  typedef itk::RGBPixel<RGBComponentType>  RGBPixelType;
-  typedef TScalar                     ScalarType;
-  typedef HSVToRGBFunctor<RGBPixelType>  HSVToRGBFunctorType;
+  typedef ScalarToRainbowRGBPixelFunctor                    Self;
+  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
+
+  /** Method for creation through the object factory. */
+  itkNewMacro( Self );
+
+  typedef TRGBPixel                            RGBPixelType;
+  typedef typename RGBPixelType::ComponentType RGBComponentType;
+  typedef TScalar                              ScalarType;
+  typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
+
 
   RGBPixelType operator()( const TScalar &) const;
 
-  /** Set the input maximum to be mapped to red */
+  /** Set the input maximum to be mapped to red
+   * \deprecated use SetMaximumInputValue() */
   void SetMaximum(ScalarType max)
   {
-    this->m_Maximum = max;
+    SetMaximumInputValue(max);
   }
 
-  /** Set the input minimum to be mapped to blue */
+  /** Set the input minimum to be mapped to blue
+   * \deprecated use SetMinimumInputValue() */
   void SetMinimum(ScalarType min)
   {
-    this->m_Minimum = min;
+    SetMinimumInputValue(min);
   }
 
 protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:
-  ScalarType m_Maximum;
-  ScalarType m_Minimum;
+  ScalarToRainbowRGBPixelFunctor(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
 

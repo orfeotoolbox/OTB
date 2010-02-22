@@ -101,7 +101,6 @@ public:
   itkGetConstMacro(SizeY,unsigned long);
 
 
-
 protected:
   ExtractROIBase();
   virtual ~ExtractROIBase() {};

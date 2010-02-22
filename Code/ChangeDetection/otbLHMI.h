@@ -134,7 +134,6 @@ public:
     }
 
 
-
     TOutput entropyX = itk::NumericTraits<TOutput>::Zero;
     TOutput entropyY = itk::NumericTraits<TOutput>::Zero;
     TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
@@ -179,7 +178,6 @@ public:
 
     return static_cast<TOutput>( jointEntropy/(entropyX + entropyY) );
   }
-
 
 
 };

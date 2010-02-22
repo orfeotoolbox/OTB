@@ -9,8 +9,9 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 13302 2008-07-25 19:10:39Z gpotts $
+//  $Id: ossimDatumFactory.cpp 16424 2010-01-27 19:47:10Z gpotts $
 
+#include <cstring> /* for strlen */
 #include <utility> /* for std::make_pair */
 
 #include <ossim/base/ossimDatumFactory.h>
@@ -287,40 +288,40 @@ void ossimDatumFactory::initializeDefaults()
                                   (ossimDatum*)new ossimWgs72Datum));
 
    ossim_uint32 idx = 0;     
-
-   for(idx = 0; idx < NUMBER_OF_THREE_PARAM_DATUMS; ++idx)
+   while( std::strlen(threeParamDatum[idx].theCode) )
    {
-      if( (threeParamDatum[idx].theCode != WGE) &&
-          (threeParamDatum[idx].theCode != WGD) )
+      if( (threeParamDatum[idx].theCode != ossimString(WGE)) &&
+         (threeParamDatum[idx].theCode != ossimString(WGD)) )
       {
          theDatumTable.insert(std::make_pair(threeParamDatum[idx].theCode,
                                              (ossimDatum*)new ossimThreeParamDatum(threeParamDatum[idx].theCode, threeParamDatum[idx].theName,
-                                                                 ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
-                                                                 threeParamDatum[idx].theSigmaX, threeParamDatum[idx].theSigmaY, threeParamDatum[idx].theSigmaZ, 
-                                                                 threeParamDatum[idx].theWestLongitude, threeParamDatum[idx].theEastLongitude, threeParamDatum[idx].theSouthLatitude, 
-                                                                 threeParamDatum[idx].theNorthLatitude, threeParamDatum[idx].theParam1, threeParamDatum[idx].theParam2, 
-                                                                 threeParamDatum[idx].theParam3)));
+                                                                                   ossimEllipsoidFactory::instance()->create(ossimString(threeParamDatum[idx].theEllipsoidCode)),
+                                                                                   threeParamDatum[idx].theSigmaX, threeParamDatum[idx].theSigmaY, threeParamDatum[idx].theSigmaZ, 
+                                                                                   threeParamDatum[idx].theWestLongitude, threeParamDatum[idx].theEastLongitude, threeParamDatum[idx].theSouthLatitude, 
+                                                                                   threeParamDatum[idx].theNorthLatitude, threeParamDatum[idx].theParam1, threeParamDatum[idx].theParam2, 
+                                                                                   threeParamDatum[idx].theParam3)));
       }
+      
+      ++idx;
    }
-   for(idx = 0; idx < NUMBER_OF_SEVEN_PARAM_DATUMS; ++idx)
+   idx = 0;
+   while( std::strlen(sevenParamDatum[idx].theCode) )
    {
-      if((threeParamDatum[idx].theCode != WGE)&&
-         (threeParamDatum[idx].theCode != WGD))
-      {
-         theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode,
-                                             (ossimDatum*)new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,
-                                                                 ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
-                                                                 sevenParamDatum[idx].theSigmaX, sevenParamDatum[idx].theSigmaY, sevenParamDatum[idx].theSigmaZ, 
-                                                                 sevenParamDatum[idx].theWestLongitude, sevenParamDatum[idx].theEastLongitude, sevenParamDatum[idx].theSouthLatitude, 
-                                                                 sevenParamDatum[idx].theNorthLatitude,
-                                                                 sevenParamDatum[idx].theParam1,
-                                                                 sevenParamDatum[idx].theParam2, 
-                                                                 sevenParamDatum[idx].theParam3,
-                                                                 sevenParamDatum[idx].theParam4, 
-                                                                 sevenParamDatum[idx].theParam5,
-                                                                 sevenParamDatum[idx].theParam6, 
-                                                                 sevenParamDatum[idx].theParam7)));
-      }
+      
+      theDatumTable.insert(std::make_pair(sevenParamDatum[idx].theCode,
+                                          (ossimDatum*)new ossimSevenParamDatum(sevenParamDatum[idx].theCode, sevenParamDatum[idx].theName,
+                                                                                ossimEllipsoidFactory::instance()->create(ossimString(sevenParamDatum[idx].theEllipsoidCode)),
+                                                                                sevenParamDatum[idx].theSigmaX, sevenParamDatum[idx].theSigmaY, sevenParamDatum[idx].theSigmaZ, 
+                                                                                sevenParamDatum[idx].theWestLongitude, sevenParamDatum[idx].theEastLongitude, sevenParamDatum[idx].theSouthLatitude, 
+                                                                                sevenParamDatum[idx].theNorthLatitude,
+                                                                                sevenParamDatum[idx].theParam1,
+                                                                                sevenParamDatum[idx].theParam2, 
+                                                                                sevenParamDatum[idx].theParam3,
+                                                                                sevenParamDatum[idx].theParam4, 
+                                                                                sevenParamDatum[idx].theParam5,
+                                                                                sevenParamDatum[idx].theParam6, 
+                                                                                sevenParamDatum[idx].theParam7)));
+      ++idx;
    }
    ossimFilename file = ossimPreferences::instance()->findPreference("datum_grids");
    

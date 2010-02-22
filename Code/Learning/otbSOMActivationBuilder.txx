@@ -52,7 +52,7 @@ SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
   InputMapType *  map = const_cast<InputMapType*>(this->GetInput());
   OutputImagePointerType output = this->GetOutput();
 
-  // output initialisation
+  // output initialization
   output->SetRegions(map->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(static_cast<typename OutputImageType::PixelType>(0));

@@ -9,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGpt.cpp 16101 2009-12-16 08:36:28Z okramer $
 
 #include <iostream>
 #include <sstream>
@@ -391,6 +391,35 @@ double ossimGpt::distanceTo(const ossimGpt& arg_pt) const
    ossimEcefPoint p2 (arg_pt);
 
    return (p1 - p2).magnitude();
+}
+
+//*****************************************************************************
+// METHOD: azimuthTo(ossimGpt)
+// Computes the great-circle starting azimuth (i.e., at this gpt) to the argument gpt in degrees.
+// In other words, what direction we would need to start walking in to travel the shortest 
+// distance to arg_gpt (assumes spherical earth). 
+// Taken from American Practical Navigator, a.k.a. Bowditch (NIMA 2002)
+//*****************************************************************************
+double ossimGpt::azimuthTo(const ossimGpt& gpt) const
+{
+   using namespace ossim; // for trig functions in degrees
+
+   //### NOT WORKING ###
+   //double dlo = fabs(lon - gpt.lon);
+   //if (lat * gpt.lat < 0)
+   //   dlo *= -1.0;
+
+   //double c = atand(sind(dlo)/((cosd(lat)*tand(gpt.lat)) - (sind(lat)*cosd(dlo))));
+   //return c;
+
+   // Use alternate local method (not great circle):
+   double mean_lat = 0.5*(lat + gpt.lat);
+   double dlon = cosd(mean_lat)*(gpt.lon - lon);
+   double dlat = gpt.lat - lat;
+   double theta = atan2d(dlon,dlat);
+   if (theta < 0)
+      theta += 360.0;
+   return theta;
 }
 
 //*****************************************************************************

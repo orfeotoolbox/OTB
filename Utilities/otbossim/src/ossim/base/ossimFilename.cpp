@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimFilename.cpp 16348 2010-01-13 23:21:38Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -24,6 +24,7 @@ using namespace std;
 #include <ossim/base/ossimEnvironmentUtility.h>
 
 #if defined(_WIN32)
+#  include <io.h>
 #  include <direct.h>
 #  include <sys/utime.h>
 #  include <windows.h>
@@ -69,54 +70,54 @@ typedef DWORD FIND_ATTR;
 class ossimFileHandle
 {
 public:
-    enum OpenMode
-    {
-        Read,
-        Write
-    };
-
-    ossimFileHandle(const ossimString& filename, OpenMode mode)
-    {
-        m_hFile = ::CreateFile
-                    (
-                       filename.c_str(),                      // name
-                       mode == Read ? GENERIC_READ    // access mask
-                       : GENERIC_WRITE,
-                       FILE_SHARE_READ |              // sharing mode
-                       FILE_SHARE_WRITE,              // (allow everything)
-                       NULL,                          // no secutity attr
-                       OPEN_EXISTING,                 // creation disposition
-                       0,                             // no flags
-                       NULL                           // no template file
-                       );
-
-        if ( m_hFile == INVALID_HANDLE_VALUE )
-        {
+   enum OpenMode
+   {
+      Read,
+      Write
+   };
+   
+   ossimFileHandle(const ossimString& filename, OpenMode mode)
+   {
+      m_hFile = ::CreateFile
+         (
+            filename.c_str(),              // name
+            mode == Read ? GENERIC_READ    // access mask
+            : GENERIC_WRITE,
+            FILE_SHARE_READ |              // sharing mode
+            FILE_SHARE_WRITE,              // (allow everything)
+            NULL,                          // no secutity attr
+            OPEN_EXISTING,                 // creation disposition
+            0,                             // no flags
+            NULL                           // no template file
+            );
+      
+      if ( m_hFile == INVALID_HANDLE_VALUE )
+      {
 //             wxLogSysError(_("Failed to open '%s' for %s"),
 //                           filename.c_str(),
 //                           mode == Read ? _("reading") : _("writing"));
-        }
-    }
-
-    ~ossimFileHandle()
-    {
-        if ( m_hFile != INVALID_HANDLE_VALUE )
-        {
-            if ( !::CloseHandle(m_hFile) )
-            {
+      }
+   }
+   
+   ~ossimFileHandle()
+   {
+      if ( m_hFile != INVALID_HANDLE_VALUE )
+      {
+         if ( !::CloseHandle(m_hFile) )
+         {
 //                 wxLogSysError(_("Failed to close file handle"));
-            }
-        }
-    }
-
-    // return true only if the file could be opened successfully
-    bool isOk() const { return m_hFile != INVALID_HANDLE_VALUE; }
-
-    // get the handle
-    operator HANDLE() const { return m_hFile; }
-
+         }
+      }
+   }
+   
+   // return true only if the file could be opened successfully
+   bool isOk() const { return m_hFile != INVALID_HANDLE_VALUE; }
+   
+   // get the handle
+   operator HANDLE() const { return m_hFile; }
+   
 private:
-    HANDLE m_hFile;
+   HANDLE m_hFile;
 };
 
 static void convertOssimToFileTime(FILETIME *ft, const ossimDate& dt)
@@ -252,6 +253,9 @@ bool ossimFilename::operator == (const char* rhs)const
 {
    return ossimString::operator ==(rhs);
 }
+
+const char ossimFilename::getPathSeparator() const
+{ return thePathSeparator; }
 
 void ossimFilename::convertBackToForwardSlashes()
 {
@@ -435,6 +439,12 @@ bool ossimFilename::touch()const
 
 ossimFilename ossimFilename::expand() const
 {
+   //---
+   // Note:  ossimEnvironmentUtility::getCurrentWorkingDir() is returning
+   // a blank string on windows with vs9.  This was resulting in seg faults
+   // in this method so added checks were added for size of returned result.
+   // (drb  20100113)
+   //---
    ossimFilename result = "";
    if ( size() )
    {
@@ -483,7 +493,7 @@ ossimFilename ossimFilename::expand() const
          }
          else if ( result.isRelative() )
          {
-            if ( (*(result.begin())) != '$' )
+            if ( result.size() && ((*(result.begin())) != '$') )
             {
                ossimFilename cwd = ossimEnvironmentUtility::instance()->
                getCurrentWorkingDir();
@@ -559,6 +569,15 @@ ossimFilename ossimFilename::expand() const
 #endif        
 
       } // matches: if ( needsExpansion() )
+
+      //---
+      // If we had a size before "expand()" and now we don't something went
+      // wrong...
+      //---
+      if (!result.size())
+      {
+         result = *this;
+      }
       
    } // matches: if ( size() )
    
@@ -567,13 +586,13 @@ ossimFilename ossimFilename::expand() const
 
 bool ossimFilename::exists() const
 {
+	bool result = false;
 #if defined(_WIN32)
-
-	struct _stat sbuf;
-	return( _stat(c_str(), &sbuf ) == 0);
+	result = (_access(c_str(), ossimFilename::OSSIM_EXIST) == 0);
 #else
-	return ((access(c_str(), ossimFilename::OSSIM_EXIST)) == 0);
+	result = ((access(c_str(), ossimFilename::OSSIM_EXIST)) == 0);
 #endif
+	return result;
 }
 
 bool ossimFilename::isFile() const
@@ -979,8 +998,8 @@ ossim_int64 ossimFilename::fileSize() const
    return 0;
 }
 
-bool ossimFilename::createDirectory(bool recurseFlag,
-                                  int perm)const
+bool ossimFilename::createDirectory( bool recurseFlag,
+                                     int perm ) const
 {
    if(exists()) return true;
 
@@ -997,19 +1016,42 @@ bool ossimFilename::createDirectory(bool recurseFlag,
       {
          ossimString current = result[0];
 
+// Reconstruct UNC paths under Windows.
+#if defined(_WIN32)
+         bool bGotUNC = false;
+         if ( current.length() == 0 && tempFile.length() > 2 )
+         {
+            const char* fstr = tempFile.c_str();
+            const char fstar0 = fstr[0];
+            const char fstar1 = fstr[1];
+            if ( fstar0=='\\' && fstar1=='\\' )
+            {
+               bGotUNC = true;
+               current = thePathSeparator;
+            }
+         }
+#endif
+
          for(ossim_uint32 i = 1; i < result.size(); ++i)
          {
             current += (thePathSeparator+result[i]);
+
+#if defined(_WIN32)
+            if ( bGotUNC == true && i==1 )
+            {
+               // The root of the UNC path is assumed to exist.
+               continue;
+            }
+#endif
 
             if(current != thePathSeparator)
             {
                if(!ossimFilename(current).exists())
                {
-
 #if defined(__BORLANDC__)
                   if ( _mkdir(current.c_str()) != 0 )
 #elif defined(_WIN32)
-                  if ( mkdir(current.c_str()) != 0 )
+                  if ( _mkdir(current.c_str()) != 0 )
 #else
                   if ( mkdir(current.c_str(), perm) != 0 )
 #endif
@@ -1025,9 +1067,8 @@ bool ossimFilename::createDirectory(bool recurseFlag,
    {
 #if defined (__BORLANDC__)
       if ( _mkdir(c_str()) != 0 )
-
 #elif defined(_WIN32)
-      if ( mkdir(c_str()) != 0 )
+      if ( _mkdir(c_str()) != 0 )
 #else
       if ( mkdir(c_str(), perm) != 0 )
 #endif

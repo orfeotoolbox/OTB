@@ -27,7 +27,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 14538 2009-05-18 13:31:58Z dburken $
+//  $Id: ossimSensorModel.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -43,6 +43,7 @@ RTTI_DEF3(ossimSensorModel, "ossimSensorModel", ossimProjection, ossimOptimizabl
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimDatumFactory.h>
 
@@ -1038,6 +1039,92 @@ ossimSensorModel::CovMatStatus ossimSensorModel::getObsCovMat(
    const ossimDpt& /* ipos */ , NEWMAT::SymmetricMatrix& /* Cov */ )
 {
    return ossimSensorModel::COV_INVALID;
+}
+
+#if defined(_WIN32)
+void ossimSensorModel::computeGsd() throw (...)
+#else
+void ossimSensorModel::computeGsd() throw (ossimException)
+#endif
+
+{
+   static const char MODULE[] = "ossimSensorModel::computeGsd";
+
+   if (theImageSize.hasNans())
+   {
+      std::string e = MODULE;
+      e += "Error image size has nans!";
+      throw ossimException(e);
+   }
+
+   //---
+   // Upper left:
+   // For the first point use lineSampleToWorld to get the height.
+   //---
+   ossimDpt upperLeftDpt(0.0, 0.0);
+   ossimGpt upperLeftGpt;
+   lineSampleToWorld(upperLeftDpt, upperLeftGpt);
+   if (upperLeftGpt.hasNans())
+   {
+      std::string e = MODULE;
+      e += "Error upperLeftGpt has nans!";
+      throw ossimException(e);
+   }
+
+   //---
+   // Upper right:
+   // Use lineSampleHeightToWorld using the upper left height since we want
+   // the horizontal distance.
+   //---
+   ossimDpt upperRightDpt(theImageSize.x-1, 0.0);
+   ossimGpt upperRightGpt;
+   lineSampleHeightToWorld(upperRightDpt,
+                           upperLeftGpt.hgt,
+                           upperRightGpt);
+   if (upperLeftGpt.hasNans())
+   {
+      std::string e = MODULE;
+      e += "Error upperRightGpt has nans!";
+      throw ossimException(e);
+   }
+
+   //---
+   // Lower left:
+   // Use lineSampleHeightToWorld using the upper left height since we want
+   // the horizontal distance.
+   //---
+   ossimDpt lowerLeftDpt(0.0, theImageSize.y-1);
+   ossimGpt lowerLeftGpt;
+   lineSampleHeightToWorld(lowerLeftDpt,
+                           upperLeftGpt.hgt,
+                           lowerLeftGpt);
+   if (upperLeftGpt.hasNans())
+   {
+      std::string e = MODULE;
+      e += "Error lowerLeftGpt has nans!";
+      throw ossimException(e);
+   }
+
+#if 0 /* Please leave for debug. (drb) */
+   ossimNotify(ossimNotifyLevel_DEBUG)
+      << "image size:    " << theImageSize
+      << "\nupperLeftGpt:  " << upperLeftGpt
+      << "\nupperRightGpt: " << upperRightGpt
+      << "\nlowerLeftGpt:  " << lowerLeftGpt
+      << "\n";
+#endif
+      
+   theGSD.x   = upperLeftGpt.distanceTo(upperRightGpt)/(theImageSize.x-1);
+   theGSD.y   = upperLeftGpt.distanceTo(lowerLeftGpt)/(theImageSize.y-1);
+   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimSensorModel::computGsd DEBUG:"
+         << "\ntheGSD:     " << theGSD
+         << "\ntheMeanGSD: " << theMeanGSD << std::endl;
+   }
 }
 
 //*****************************************************************************

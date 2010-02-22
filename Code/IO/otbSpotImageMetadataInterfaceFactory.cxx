@@ -62,5 +62,4 @@ SpotImageMetadataInterfaceFactory::GetDescription() const
 }
 
 
-
 } // end namespace otb

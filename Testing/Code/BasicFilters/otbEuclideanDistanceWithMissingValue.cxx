@@ -58,4 +58,3 @@ int otbEuclideanDistanceWithMissingValue( int argc, char * argv[] )
 }
 
 
-

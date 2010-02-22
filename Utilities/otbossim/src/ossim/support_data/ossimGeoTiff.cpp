@@ -9,7 +9,7 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.cpp 15868 2009-11-06 22:30:38Z dburken $
+// $Id: ossimGeoTiff.cpp 16546 2010-02-05 16:59:06Z dburken $
 
 #include <ossim/support_data/ossimGeoTiff.h>
 #include <ossim/base/ossimTrace.h>
@@ -29,6 +29,7 @@
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimPolynomProjection.h>
+#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimBilinearProjection.h>
 #include <ossim/base/ossimTieGptSet.h>
 #include <ossim/projection/ossimProjection.h>
@@ -51,7 +52,7 @@ static const ossimGeoTiffDatumLut DATUM_LUT;
 OpenThreads::Mutex ossimGeoTiff::theMutex;
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 15868 2009-11-06 22:30:38Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimGeoTiff.cpp 16546 2010-02-05 16:59:06Z dburken $";
 #endif
 
 //---
@@ -220,9 +221,11 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
                              bool imagineNad27Flag)
 {
    OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   
+
    const ossimMapProjection* mapProj = projectionInfo->getProjection();
+
    if(!mapProj) return false;
+
    GTIF* gtif = GTIFNew(tifPtr);
 
     // Get some things we need throughout.
@@ -236,6 +239,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
    const char* stdParallel2 = kwl.find(ossimKeywordNames::STD_PARALLEL_2_KW);
    const char* scaleFactor  = kwl.find(ossimKeywordNames::SCALE_FACTOR_KW);
 
+   bool gcsTypeSet = false;
 
    //---
    // Since using a pcs code is the easiest way to go, look for that first.
@@ -357,6 +361,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
                (datumCode == "OGB-C") ||
                (datumCode == "OGB-D")) gcs = GCS_OSGB_1936;
       else if (datumCode == "TOY-M") gcs = GCS_Tokyo;
+      else if(datumCode == "6055") gcs = 3785; // this is a special google datum so we will give it a gcs code of 3785
       else
       {
          if(traceDebug())
@@ -369,7 +374,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
 
       // ***
       // ERDAS Imagine < v8.7 has a NAD27 Conus Bug.  They are not using the
-      // proper GCS code.  They use user-defined fields and Geog cititaion tag to
+      // proper GCS code.  They use user-defined fields and Geog citation tag to
       // define.  Sucks!  It is an open issue at Leica.  This is a work around
       // flag for this issue.
       // ***
@@ -378,7 +383,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
          gcs = USER_DEFINED;
 
          std::ostringstream os;
-         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15868 $ $Date: 2009-11-07 06:30:38 +0800 (Sat, 07 Nov 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+         os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16546 $ $Date: 2010-02-06 00:59:06 +0800 (Sat, 06 Feb 2010) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
          GTIFKeySet(gtif,
                     GeogCitationGeoKey,
@@ -396,6 +401,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
       else
       {
          GTIFKeySet( gtif, GeographicTypeGeoKey, TYPE_SHORT, 1, gcs );
+         gcsTypeSet = true;
       }
 
       // Write the projection parameters.
@@ -445,13 +451,16 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
                     TYPE_SHORT,
                     1,
                     USER_DEFINED);
-         
-         // Set the geographic type to be user defined.
-         GTIFKeySet(gtif,
-                    GeographicTypeGeoKey,
-                    TYPE_SHORT,
-                    1,
-                    USER_DEFINED);
+
+         if ( !gcsTypeSet )
+         {
+            // Set the geographic type to be user defined.
+            GTIFKeySet(gtif,
+                       GeographicTypeGeoKey,
+                       TYPE_SHORT,
+                       1,
+                       USER_DEFINED);
+         }
          
          // Set the ProjectionGeoKey in place of the ProjectedCSTypeGeoKey.
          GTIFKeySet(gtif,
@@ -644,7 +653,7 @@ bool ossimGeoTiff::writeTags(TIFF* tifPtr,
                     ProjCoordTransGeoKey,
                     TYPE_SHORT,
                     1,
-                    (uint16)CT_TransverseMercator);
+                    (uint16)CT_Mercator);
          
          GTIFKeySet(gtif,
 		    ProjNatOriginLongGeoKey,
@@ -1035,6 +1044,7 @@ bool ossimGeoTiff::readTags(
    theAngularUnits    = theNormalizedDefinitions->UOMAngle;
    theProjGeoCode     = theNormalizedDefinitions->ProjCode;
    theLinearUnitsCode = theNormalizedDefinitions->UOMLength;
+   
 #if 0
    ossim_uint16 modelType;
    if(GTIFKeyGet(gtif, GTModelTypeGeoKey, &modelType, 0, 1))
@@ -1379,6 +1389,11 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          << std::endl;
    }
 
+   if(theGcsCode == 3785)
+   {
+      ossimRefPtr<ossimProjection> proj = ossimProjectionFactoryRegistry::instance()->createProjection(ossimString("EPSG:3785"));
+      proj->saveState(kwl, prefix);
+   }
    //---
    // Sanity check...
    // NOTE: It takes six doubles to make one tie point ie:
@@ -1525,6 +1540,15 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
               true);
       if(!modelTransformFlag)
       {
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::TIE_POINT_XY_KW,
+                 ossimDpt(convert2meters(x_tie_point),convert2meters(y_tie_point)).toString(),
+                 true);
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::TIE_POINT_UNITS_KW,
+                 "meters",
+                 true);
+#if 0
          // tie point
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::TIE_POINT_EASTING_KW,
@@ -1532,14 +1556,26 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::TIE_POINT_NORTHING_KW,
                  convert2meters(y_tie_point));
-         
+#endif
          // scale or gsd
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::PIXEL_SCALE_XY_KW,
+                 ossimDpt(convert2meters(getScale()[0]),
+                          convert2meters(getScale()[1])).toString(),
+                 true);
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+                 "meters",
+                 true);
+         
+#if 0
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::METERS_PER_PIXEL_X_KW,
                  convert2meters(getScale()[0]));
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
                  convert2meters(getScale()[1]));
+#endif
       }
       return true;
    }
@@ -1595,18 +1631,36 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
          {
             if(!modelTransformFlag)
             {
+//               kwl.add(copyPrefix.c_str(),
+//                       ossimKeywordNames::TIE_POINT_LON_KW,
+//                       x_tie_point);
+//               kwl.add(copyPrefix.c_str(),
+//                       ossimKeywordNames::TIE_POINT_LAT_KW,
+//                       y_tie_point);
+//               kwl.add(copyPrefix.c_str(),
+//                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
+//                       getScale()[0]);
+//               kwl.add(copyPrefix.c_str(),
+//                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
+//                       getScale()[1]);
                kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::TIE_POINT_LON_KW,
-                       x_tie_point);
+                       ossimKeywordNames::TIE_POINT_XY_KW,
+                       ossimDpt(x_tie_point,y_tie_point).toString(),
+                       true);
                kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::TIE_POINT_LAT_KW,
-                       y_tie_point);
+                       ossimKeywordNames::TIE_POINT_UNITS_KW,
+                       "degrees",
+                       true);
                kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-                       getScale()[0]);
+                       ossimKeywordNames::PIXEL_SCALE_XY_KW,
+                       ossimDpt(getScale()[0],
+                                getScale()[1]).toString(),
+                       true);
                kwl.add(copyPrefix.c_str(),
-                       ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-                       getScale()[1]);
+                       ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+                       "degrees",
+                       true);
+               
             }
             
             if(ossim::isnan(theOriginLat))
@@ -1651,21 +1705,45 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    {
       if(!modelTransformFlag)
       {
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::TIE_POINT_XY_KW,
+                 ossimDpt(convert2meters(x_tie_point),convert2meters(y_tie_point)).toString(),
+                 true);
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::TIE_POINT_UNITS_KW,
+                 "meters",
+                 true);
+         
+#if 0
          // tie point
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::TIE_POINT_EASTING_KW,
-                 convert2meters(x_tie_point));
+                 convert2meters(x_tie_point),
+                 true);
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::TIE_POINT_NORTHING_KW,
-                 convert2meters(y_tie_point));
-         
+                 convert2meters(y_tie_point),
+                 true);
+#endif
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::PIXEL_SCALE_XY_KW,
+                 ossimDpt(convert2meters(getScale()[0]),
+                          convert2meters(getScale()[1])).toString(),
+                 true);
+         kwl.add(copyPrefix.c_str(),
+                 ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+                 "meters",true);
+#if 0
          // scale or gsd
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::METERS_PER_PIXEL_X_KW,
-                 convert2meters(getScale()[0]));
+                 convert2meters(getScale()[0]),
+                 true);
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
-                 convert2meters(getScale()[1]));
+                 convert2meters(getScale()[1]),
+                 true);
+#endif
      }
       if(ossim::isnan(theOriginLat) == false)
       {
@@ -1674,29 +1752,12 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
                  ossimKeywordNames::ORIGIN_LATITUDE_KW,
                  theOriginLat);
       }
-#if 0
-      else if(ossim::isnan(theCenterLat) == false)
-      {
-         // origin
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::ORIGIN_LATITUDE_KW,
-                 theCenterLat);
-      }
-#endif
       if(ossim::isnan(theOriginLon) == false)
       {
          kwl.add(copyPrefix.c_str(),
                  ossimKeywordNames::CENTRAL_MERIDIAN_KW,
                  theOriginLon);
       }
-#if 0
-      else if(ossim::isnan(theCenterLon) == false)
-      {
-         kwl.add(copyPrefix.c_str(),
-                 ossimKeywordNames::CENTRAL_MERIDIAN_KW,
-                 theCenterLon);
-      }
-#endif
       // std paralles for conical projections
       kwl.add(copyPrefix.c_str(),
               ossimKeywordNames::STD_PARALLEL_1_KW,
@@ -1704,7 +1765,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
       kwl.add(copyPrefix.c_str(),
               ossimKeywordNames::STD_PARALLEL_2_KW,
               theStdPar2);
-
+      
       // false easting and northing.
       kwl.add(copyPrefix.c_str(),
               ossimKeywordNames::FALSE_EASTING_KW,
@@ -1789,6 +1850,7 @@ bool ossimGeoTiff::addImageGeometry(ossimKeywordlist& kwl,
    {
       std::vector<double> v = getModelTransformation();
       std::ostringstream out;
+      out << std::setprecision(15); // To avoid truncating.
       ossim_uint32 idx = 0;
       for(idx =0; idx < 16; ++idx)
       {
@@ -1941,7 +2003,7 @@ void ossimGeoTiff::setOssimDatumName()
    {
       ossimString name = DATUM_LUT.getEntryString(theDatumCode);
       
-      if (name.size())
+      if (!name.empty())
       {
          theDatumName = name;
       }
@@ -1955,7 +2017,6 @@ void ossimGeoTiff::setOssimDatumName()
          }
       }
    }
-   
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)

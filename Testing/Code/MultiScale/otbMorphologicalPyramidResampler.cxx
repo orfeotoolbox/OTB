@@ -72,6 +72,5 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
   writer2->Update();
 
 
-
   return EXIT_SUCCESS;
 }

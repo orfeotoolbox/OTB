@@ -10,7 +10,7 @@
 //               (VOL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedVol.h 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedVol.h 16104 2009-12-17 18:09:59Z gpotts $
 
 #ifndef ossimDtedVol_H
 #define ossimDtedVol_H
@@ -27,10 +27,9 @@ class ossimProperty;
 class OSSIM_DLL ossimDtedVol : public ossimErrorStatusInterface
 {
 public:
-   ossimDtedVol(const ossimFilename& dted_file,
-                ossim_int32 offset);
-   ossimDtedVol(std::istream& in,
-                ossim_int32 offset);
+   ossimDtedVol(const ossimFilename& dted_file="",
+                ossim_int32 offset=0);
+   ossimDtedVol(std::istream& in);
 
    enum
    {

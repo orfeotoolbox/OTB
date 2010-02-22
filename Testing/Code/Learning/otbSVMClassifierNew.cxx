@@ -43,8 +43,3 @@ int otbSVMClassifierNew(int argc, char* argv[] )
 }
 
 
-
-
-
-
-

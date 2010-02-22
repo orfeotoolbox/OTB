@@ -24,7 +24,7 @@
 
 namespace otb {
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -44,7 +44,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
 }
 
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -69,7 +69,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
   coeff = upSampledCoeff;
 }
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -89,7 +89,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
   coeff = newCoeff;
 }
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -120,7 +120,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
   }
 }
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -147,7 +147,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
   }
 }
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
@@ -174,7 +174,7 @@ WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >
   }
 }
 
-template < MotherWaveletOperatorEnum TMotherWaveletOperator,
+template < Wavelet::Wavelet TMotherWaveletOperator,
   class TPixel, unsigned int VDimension, class TAllocator >
 void
 WaveletOperatorBase< TMotherWaveletOperator, TPixel, VDimension, TAllocator >

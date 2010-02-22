@@ -9,8 +9,9 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimString.cpp 16377 2010-01-21 15:41:34Z gpotts $
 
+#include <cstdlib> /* for getenv() */
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -25,7 +26,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 16377 2010-01-21 15:41:34Z gpotts $";
 #endif
 
 ossimString ossimString::upcase(const ossimString& aString)
@@ -252,6 +253,58 @@ std::vector<ossimString> ossimString::explode(const ossimString& delimeter) cons
       tokenPtr = strtok(NULL, delimeter.chars());
    }
 
+   return result;
+}
+
+ossimString ossimString::expandEnvironmentVariable() const
+{
+   static const char MODULE[] = "ossimString::expandEnvironmentVariable()";
+
+   ossimString varStartStr( "$(" );
+   ossimString afterVarStartStr = after(varStartStr);
+   if ( afterVarStartStr.empty() == false )
+   {
+      // Save off the beginning of the original string that 
+      // comes before the environment variable.
+      ossimString beforeVarStartStr = before(varStartStr);
+
+      ossimString varEndStr( ")" );
+      ossimString envVarStr = afterVarStartStr.before(varEndStr);
+
+      // Find the value of the environment variable
+      char* lookup = getenv( envVarStr.c_str() );
+      if ( lookup )
+      {
+         // Place the environment variable value into an ossimString
+         ossimString replacementStr( lookup );
+
+         // Save off the end of the original string that 
+         // comes after the environment variable.
+         ossimString afterVarEndStr = afterVarStartStr.after(varEndStr);
+
+         ossimString evaluationStr = beforeVarStartStr;
+         evaluationStr += replacementStr;
+         evaluationStr += afterVarEndStr;
+
+         return evaluationStr;
+      }
+      else
+      {
+         if(traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+            << "In member function "
+            << MODULE 
+            << "\n\tERROR: Environment variable("
+            << envVarStr.c_str()
+            << ") not found!"
+            << std::endl;
+         }
+      }
+   }
+
+   // Return the original string
+   ossimString result(*this);
    return result;
 }
 
@@ -781,104 +834,47 @@ ossimString ossimString::toString(ossim_uint64 aValue)
 }
 
 ossimString ossimString::toString(ossim_float32 aValue,
-                                  int precision)
+                                  ossim_int32 precision,
+                                  bool fixed)
 {
    if ( ossim::isnan(aValue) )
    {
       return ossimString("nan");
    }
-   std::ostringstream s;
-   s << std::setprecision(precision)  << aValue;
-   
-   return    ossimString(s.str());
 
-#if 0
-   if ( ossim::isnan(aValue) )
+   std::ostringstream s;
+   s << std::setprecision(precision);
+   
+   if (fixed)
    {
-      return ossimString("nan");
+      s << setiosflags(std::ios::fixed); 
    }
    
-   std::ostringstream s;
-
-   if (!scientific)
-   {
-	   s << setiosflags(std::ios::fixed);
-   }
-   else
-   {
-	   s << setiosflags(std::ios::scientific);
-   }
-
-   s << std::setprecision(precision)  << aValue;
-   ossimString result(s.str());
-   if( !scientific && trimZeroFlag && result.contains(".") )
-   {
-      // Trim all zeroes front and back of the '.'.
-      result = result.trim('0');
-      if(result == ".")
-      {
-         result = "0";
-      }
-      else if(*(result.begin()+(result.size()-1)) == '.') // check for 123. now.
-      {
-         return ossimString(result.begin(),
-                            result.begin()+result.size()-1);
-      }
-
-   }
-   return result;
-#endif
+   s << aValue;
+   
+   return ossimString(s.str());
 }
 
 ossimString ossimString::toString(ossim_float64 aValue,
-                                  int precision)
+                                  ossim_int32 precision,
+                                  bool fixed)
 {
    if ( ossim::isnan(aValue) )
    {
       return ossimString("nan");
    }
-   std::ostringstream s;
-   s << std::setprecision(precision)  << aValue;
-   
-   return    ossimString(s.str());
-
-#if 0
-   if (aValue == ossim::nan())
-   {
-      return ossimString("nan");
-   }
    
    std::ostringstream s;
+   s << std::setprecision(precision);
    
-   if (!scientific)
+   if (fixed)
    {
-      s << setiosflags(std::ios::fixed);
+      s << setiosflags(std::ios::fixed); 
    }
-   else
-   {
-      s << setiosflags(std::ios::scientific);
-   }
-
-   s << std::setprecision(precision) << aValue;
-
-   ossimString result(s.str());
-
-   if( !scientific && trimZeroFlag && result.contains(".") )
-   {
-      // Trim all zeroes front and back of the '.'.
-      result = result.trim('0');
-      if(result == ".")
-      {
-         result = "0";
-      }
-      else if(*(result.begin()+(result.size()-1)) == '.') // check for 123. now.
-      {
-         return ossimString(result.begin(),
-                            result.begin()+result.size()-1);
-      }
-   }
-   return result;
-#endif
+   
+   s << aValue;
+   
+   return ossimString(s.str());
 }
 
 ossimString ossimString::before(const ossimString& str,

@@ -52,7 +52,6 @@ int otbLHMIChangeDetectionTest(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::LHMIChangeDetector<
   InputImageType1,
@@ -94,7 +93,5 @@ int otbLHMIChangeDetectionTest(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

@@ -15,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 14300 2009-04-14 17:27:00Z gpotts $
+// $Id: ossimElevSource.cpp 16104 2009-12-17 18:09:59Z gpotts $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -266,19 +266,6 @@ bool ossimElevSource::canConnectMyInputTo(ossim_int32 inputIndex,
 void ossimElevSource::initialize()
 {}
 
-ossimFilename ossimElevSource::getFilename() const
-{
-   return ossimFilename::NIL;
-}
-
-bool ossimElevSource::open()
-{
-   return true;
-}
-
-void ossimElevSource::close()
-{
-}
 
 bool ossimElevSource::getComputeStatisticsFlag() const
 {

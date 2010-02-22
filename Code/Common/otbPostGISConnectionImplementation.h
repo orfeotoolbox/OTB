@@ -43,7 +43,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(PostGISConnectionImplementation, GISConnectionImplementation);
@@ -106,7 +105,6 @@ private:
 
 };
 }// end namespace otb
-
 
 
 #endif

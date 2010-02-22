@@ -29,11 +29,11 @@
 namespace otb {
 
 /**
- * Template Specialisation for the FORWARD case
+ * Template Specialization for the Wavelet::FORWARD case
  */
 
 template < class TInputImage, class TOutputImage, class TFilter >
-WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
+WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD >
 ::WaveletTransform ()
   : m_NumberOfDecompositions(1), m_SubsampleImageFactor(2)
 {
@@ -47,7 +47,7 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
 
 template < class TInputImage, class TOutputImage, class TFilter >
 void
-WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
+WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD >
 ::GenerateData ()
 {
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
@@ -106,11 +106,11 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
 }
 
 /**
- * Template Specialisation for the INVERSE case
+ * Template Specialization for the Wavelet::INVERSE case
  */
 
 template < class TInputImage, class TOutputImage, class TFilter >
-WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
+WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::INVERSE >
 ::WaveletTransform ()
   : m_NumberOfDecompositions(1), m_SubsampleImageFactor(2)
 {
@@ -124,7 +124,7 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TFilter >
 void
-WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
+WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::INVERSE >
 ::GenerateOutputInformation ()
 {
   this->GetOutput()->CopyInformation( this->GetInput()->GetNthElement(0) );
@@ -154,7 +154,7 @@ WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
 
 template < class TInputImage, class TOutputImage, class TFilter >
 void
-WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
+WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::INVERSE >
 ::GenerateData ()
 {
   FilterPointerType filter = FilterType::New();

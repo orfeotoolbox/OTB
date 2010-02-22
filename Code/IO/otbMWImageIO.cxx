@@ -233,7 +233,7 @@ bool MWImageIO::InternalReadHeaderInformation(std::fstream & file, const bool re
   SetComponentType(FLOAT);
 
 
-  //Initialisation of image informations
+  //Initialization of image informations
   m_Dimensions[0] = NbCol;
   m_Dimensions[1] = NbLig;
   this->SetNumberOfComponents(1);

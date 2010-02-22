@@ -128,7 +128,7 @@ public:
   /** Get the sumbsampling rate */
   virtual unsigned int GetSubsamplingRate();
 
-  /** Filters Initialisation. */
+  /** Filters Initialization. */
   virtual void Init();
 
 protected:

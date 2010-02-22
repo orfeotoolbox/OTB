@@ -81,9 +81,7 @@ int main(int argc, char * argv[] )
   typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
 
   CMType::Pointer cmFunction =CMType::New();
-
   // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -94,12 +92,10 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   reader->Update();
   cmFunction->SetInputImage( reader->GetOutput() );
   cmFunction->SetQ(Q);
   cmFunction->SetP(P);
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -109,12 +105,9 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   InputImageType::IndexType center;
   center[0]=50;
   center[1]=50;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -127,7 +120,6 @@ int main(int argc, char * argv[] )
   cmFunction->SetNeighborhoodRadius( 15 );
 
 
-
   //  Software Guide : BeginLatex
   // In order to get the value of the moment, we call the
   // \code{EvaluateAtIndex} method.
@@ -135,14 +127,11 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ComplexType Result = cmFunction->EvaluateAtIndex(center);
 
   std::cout << "The moment of order (" << P << "," << Q <<
             ") is equal to " << Result << std:: endl;
-
   // Software Guide : EndCodeSnippet
-
 
 
   return EXIT_SUCCESS;

@@ -53,5 +53,3 @@ int main()
 //  Software Guide : EndLatex
 
 
-
-

@@ -224,8 +224,6 @@ public:
   typedef typename StatFilterType::ArrayPixelType ArrayPixelType;
 
 
-
-
   /** Type of DataObjects used for scalar outputs */
   typedef typename StatFilterType::RealPixelObjectType RealPixelObjectType;
   typedef typename StatFilterType::PixelObjectType PixelObjectType;

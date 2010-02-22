@@ -53,7 +53,6 @@
 //#include "init/ossimInit.h"
 
 
-
 int otbCreateProjectionWithOTB( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);

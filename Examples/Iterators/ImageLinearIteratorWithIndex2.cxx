@@ -82,7 +82,6 @@ int main( int argc, char *argv[] )
   }
 
 
-
   Image4DType::ConstPointer image4D = reader4D->GetOutput();
 
   Image3DType::Pointer image3D = Image3DType::New();
@@ -160,8 +159,6 @@ int main( int argc, char *argv[] )
     image3D->SetPixel( index3D, static_cast< PixelType >( mean ) );
     it.NextLine();
   }
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

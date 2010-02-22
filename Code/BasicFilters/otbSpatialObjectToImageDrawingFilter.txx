@@ -22,7 +22,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 
 
-
 namespace otb
 {
 
@@ -77,7 +76,6 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   this->itk::ProcessObject::SetNthInput(index,
                                         const_cast< TInputSpatialObject *>( object ) );
 }
-
 
 
 /** Get the input Spatial Object */
@@ -471,7 +469,6 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
     os << indent << "Using Object Value : OFF" << std::endl;
   }
 }
-
 
 
 } // end namespace otb

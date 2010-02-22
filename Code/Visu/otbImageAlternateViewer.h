@@ -173,7 +173,6 @@ protected:
   /*   virtual void RebuildOpenGlBuffer(void); */
 
 
-
   virtual void IncrementalOpenGlBufferUpdate(void);
 
   RegionType GetAdditionalBufferRegion(unsigned int i);

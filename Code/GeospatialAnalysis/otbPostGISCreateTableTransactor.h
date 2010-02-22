@@ -22,7 +22,6 @@
 #include <string>
 
 
-
 namespace otb
 {
 
@@ -89,7 +88,6 @@ protected:
 };
 
 } // end namespace otb
-
 
 
 #endif

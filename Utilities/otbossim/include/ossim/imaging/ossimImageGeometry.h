@@ -48,6 +48,7 @@ class OSSIM_DLL ossimImageGeometry : public ossimObject
 public:
    //! Default constructor defaults to unity transform with no projection.
    ossimImageGeometry();
+   virtual ~ossimImageGeometry();
    
    //! Copy constructor -- performs a deep copy. This is needed when an imageSource in the chain
    //! needs to modify the image geometry at that point in the chain. The image geometry to the 
@@ -201,8 +202,6 @@ public:
    virtual bool saveState(ossimKeywordlist& kwl, const char* prefix=0) const;
 
 protected:
-   //! Hidden destructor prevents unmanaged delete.
-   virtual ~ossimImageGeometry();
 
    //! When either the projection or the transform changes, this method recomputes the GSD.
    void computeGsd()const;

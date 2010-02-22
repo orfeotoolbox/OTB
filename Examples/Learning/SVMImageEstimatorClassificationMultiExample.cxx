@@ -32,7 +32,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the OTB's multi-class SVM
 // capabilities. The theory behind this kind of classification is out
@@ -70,12 +69,10 @@
 #include "itkImageRegionIterator.h"
 
 
-
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
 #include "otbImageFileReader.h"
-
 
 
 int main( int argc, char *argv[])
@@ -170,11 +167,9 @@ int main( int argc, char *argv[])
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-
   svmEstimator->Update();
 
 //  Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex
@@ -187,14 +182,11 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::Image< itk::FixedArray<InputPixelType,3>,
   Dimension >          ClassifyImageType;
 
 
   typedef otb::ImageFileReader< ClassifyImageType  >         ClassifyReaderType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -205,14 +197,11 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   ClassifyReaderType::Pointer cReader = ClassifyReaderType::New();
 
   cReader->SetFileName( inputImageFileName  );
 
   cReader->Update();
-
 // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
 //
@@ -225,8 +214,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef itk::Statistics::ImageToListAdaptor< ClassifyImageType > SampleType;
   SampleType::Pointer sample = SampleType::New();
 // Software Guide : EndCodeSnippet
@@ -239,9 +226,7 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   sample->SetImage(cReader->GetOutput());
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -255,14 +240,11 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef InputPixelType LabelPixelType;
 
   typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
   ModelType::Pointer model = svmEstimator->GetModel();
-
 // Software Guide : EndCodeSnippet
 
 
@@ -275,12 +257,9 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -311,9 +290,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef ClassifierType::ClassLabelType              OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
@@ -328,9 +304,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef itk::Index<Dimension>         myIndexType;
   typedef itk::Size<Dimension>          mySizeType;
   typedef itk::ImageRegion<Dimension>        myRegionType;
@@ -360,9 +333,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
-
   ClassifierType::OutputType* membershipSample =
     classifier->GetOutput();
   ClassifierType::OutputType::ConstIterator m_iter =
@@ -375,8 +345,6 @@ int main( int argc, char *argv[])
                              outputImage->GetBufferedRegion() );
 
   outIt.GoToBegin();
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -387,8 +355,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   while (m_iter != m_last && !outIt.IsAtEnd())
   {
     outIt.Set(m_iter.GetClassLabel());
@@ -421,10 +387,7 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 
-
-
 // Software Guide : BeginCodeSnippet
-
   typedef itk::RGBPixel<unsigned char>   RGBPixelType;
   typedef otb::Image<RGBPixelType, 2>    RGBImageType;
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
@@ -434,8 +397,6 @@ int main( int argc, char *argv[])
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput( outputImage );
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -445,7 +406,6 @@ int main( int argc, char *argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
@@ -455,7 +415,6 @@ int main( int argc, char *argv[])
 
   writerRescaled->Update();
 // Software Guide : EndCodeSnippet
-
 
 
 //  Software Guide : BeginLatex
@@ -469,8 +428,6 @@ int main( int argc, char *argv[])
 // \label{fig:SVMCLASSMULTI}
 // \end{figure}
 //  Software Guide : EndLatex
-
-
 
 
   return EXIT_SUCCESS;

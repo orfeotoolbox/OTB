@@ -10,7 +10,7 @@
 //
 // Contains class definition for ossimCcfTileSource.
 //*******************************************************************
-//  $Id: ossimCcfTileSource.cpp 15502 2009-09-29 17:59:04Z dburken $
+//  $Id: ossimCcfTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 
 #include <algorithm>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -840,11 +840,6 @@ ossimString ossimCcfTileSource::getShortName()const
 ossimString ossimCcfTileSource::getLongName()const
 {
    return ossimString("ccf reader");
-}
-
-ossimString ossimCcfTileSource::getClassName()const
-{
-   return ossimString("ossimCcfTileSource");
 }
 
 ossim_uint32 ossimCcfTileSource::getNumberOfInputBands() const

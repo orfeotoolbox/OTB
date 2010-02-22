@@ -74,6 +74,7 @@
  *
  */
 
+#include <ossim/base/ossimConstants.h> /* for OSSIM_DLL */
 
 /***************************************************************************/
 /*
@@ -104,9 +105,9 @@ extern "C" {
   #endif
 
 
-  long Set_OSSIM_MGRS_Parameters(double a,
-                           double f,
-                           char   *Ellipsoid_Code);
+   OSSIM_DLL long Set_OSSIM_MGRS_Parameters(double a,
+                                            double f,
+                                            char   *Ellipsoid_Code);
 /*
  * The function Set_MGRS_Parameters receives the ellipsoid parameters and sets
  * the corresponding state variables. If any errors occur, the error code(s)
@@ -118,9 +119,9 @@ extern "C" {
  */
 
 
-  void Get_OSSIM_MGRS_Parameters(double *a,
-                           double *f,
-                           char   *Ellipsoid_Code);
+  OSSIM_DLL void Get_OSSIM_MGRS_Parameters(double *a,
+                                           double *f,
+                                           char   *Ellipsoid_Code);
 /*
  * The function Get_MGRS_Parameters returns the current ellipsoid
  * parameters.
@@ -131,10 +132,10 @@ extern "C" {
  */
 
 
-  long Convert_Geodetic_To_OSSIM_MGRS (double Latitude,
-                                 double Longitude,
-                                 long   Precision,
-                                 char *MGRS);
+   OSSIM_DLL long Convert_Geodetic_To_OSSIM_MGRS (double Latitude,
+                                                  double Longitude,
+                                                  long   Precision,
+                                                  char *MGRS);
 /*
  * The function Convert_Geodetic_To_MGRS converts geodetic (latitude and
  * longitude) coordinates to an MGRS coordinate string, according to the 
@@ -149,9 +150,9 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_Geodetic (const char *MGRS,
-                                 double *Latitude,
-                                 double *Longitude);
+   OSSIM_DLL long Convert_OSSIM_MGRS_To_Geodetic (const char *MGRS,
+                                                  double *Latitude,
+                                                  double *Longitude);
 /*
  * This function converts an MGRS coordinate string to Geodetic (latitude
  * and longitude in radians) coordinates.  If any errors occur, the error 
@@ -164,12 +165,12 @@ extern "C" {
  */
 
 
-  long Convert_UTM_To_OSSIM_MGRS (long Zone,
-                            char Hemisphere,
-                            double Easting,
-                            double Northing,
-                            long Precision,
-                            char *MGRS);
+   OSSIM_DLL long Convert_UTM_To_OSSIM_MGRS (long Zone,
+                                             char Hemisphere,
+                                             double Easting,
+                                             double Northing,
+                                             long Precision,
+                                             char *MGRS);
 /*
  * The function Convert_UTM_To_MGRS converts UTM (zone, easting, and
  * northing) coordinates to an MGRS coordinate string, according to the 
@@ -185,11 +186,11 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_UTM (const char   *MGRS,
-                            long   *Zone,
-                            char   *Hemisphere,
-                            double *Easting,
-                            double *Northing); 
+  OSSIM_DLL long Convert_OSSIM_MGRS_To_UTM (const char   *MGRS,
+                                            long   *Zone,
+                                            char   *Hemisphere,
+                                            double *Easting,
+                                            double *Northing); 
 /*
  * The function Convert_MGRS_To_UTM converts an MGRS coordinate string
  * to UTM projection (zone, hemisphere, easting and northing) coordinates 
@@ -206,11 +207,11 @@ extern "C" {
 
 
 
-  long Convert_UPS_To_OSSIM_MGRS ( char   Hemisphere,
-                             double Easting,
-                             double Northing,
-                             long Precision,
-                             char *MGRS);
+   OSSIM_DLL long Convert_UPS_To_OSSIM_MGRS ( char   Hemisphere,
+                                              double Easting,
+                                              double Northing,
+                                              long Precision,
+                                              char *MGRS);
 
 /*
  *  The function Convert_UPS_To_MGRS converts UPS (hemisphere, easting, 
@@ -227,10 +228,10 @@ extern "C" {
  */
 
 
-  long Convert_OSSIM_MGRS_To_UPS ( const char   *MGRS,
-                             char   *Hemisphere,
-                             double *Easting,
-                             double *Northing);
+   OSSIM_DLL long Convert_OSSIM_MGRS_To_UPS ( const char   *MGRS,
+                                              char   *Hemisphere,
+                                              double *Easting,
+                                              double *Northing);
 /*
  *  The function Convert_MGRS_To_UPS converts an MGRS coordinate string
  *  to UPS (hemisphere, easting, and northing) coordinates, according 
@@ -242,7 +243,7 @@ extern "C" {
  *    Easting       : Easting/X in meters              (output)
  *    Northing      : Northing/Y in meters             (output)
  */
-
+   
 
 
   #ifdef __cplusplus

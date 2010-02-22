@@ -8,7 +8,7 @@
 //
 // Calls Geotrans Equidistant Cylinder projection code.  
 //*******************************************************************
-//  $Id: ossimEquDistCylProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimEquDistCylProjection.h 16414 2010-01-26 18:10:18Z gpotts $
 
 #ifndef ossimEquDistCylProjection_HEADER
 #define ossimEquDistCylProjection_HEADER
@@ -64,10 +64,15 @@ public:
    double getFalseEasting()const{return Eqcy_False_Easting;}
    double getFalseNorthing()const{return Eqcy_False_Northing;}
    
-    virtual bool isGeographic()const
-       {
-          return true;
-       }
+   virtual void lineSampleHeightToWorld(const ossimDpt& lineSampPt,
+                                        const double&   heightAboveEllipsoid,
+                                        ossimGpt&       worldPt) const;
+   virtual void     worldToLineSample(const ossimGpt &worldPoint,
+                                      ossimDpt&       lineSample)const;
+   virtual bool isGeographic()const
+   {
+      return true;
+   }
    void setDefaults();
 //   virtual void setMetersPerPixel(const ossimDpt& pt);
 

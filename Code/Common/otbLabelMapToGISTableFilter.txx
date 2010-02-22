@@ -1,13 +1,14 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkLabelMapToAttributeImageFilter.txx,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2005/08/23 15:09:03 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -174,7 +175,6 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
  }
 
 
-
 template<class TLabelMap , class TGISTable>
 void
 LabelMapToGISTableFilter< TLabelMap, TGISTable >
@@ -186,7 +186,6 @@ LabelMapToGISTableFilter< TLabelMap, TGISTable >
   os << indent << "BackgroundValue: "  << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(m_BackgroundValue) << std::endl;
   */
 }
-
 
 
 }// end namespace otb

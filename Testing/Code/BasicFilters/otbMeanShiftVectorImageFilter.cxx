@@ -58,7 +58,6 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
 
 
-
   reader->SetFileName(infname);
 
 

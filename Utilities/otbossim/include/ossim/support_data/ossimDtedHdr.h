@@ -10,7 +10,7 @@
 //               (HDR) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedHdr.h 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedHdr.h 16104 2009-12-17 18:09:59Z gpotts $
 
 #ifndef ossimDtedHdr_H
 #define ossimDtedHdr_H
@@ -25,8 +25,8 @@ class ossimProperty;
 class OSSIM_DLL ossimDtedHdr : public ossimErrorStatusInterface
 {
 public:
-   ossimDtedHdr(const ossimFilename& dted_file, ossim_int32 offset);
-   ossimDtedHdr(std::istream& in, ossim_int32 offset);
+   ossimDtedHdr(const ossimFilename& dted_file="", ossim_int32 offset=0);
+   ossimDtedHdr(std::istream& in);
 
    enum
    {

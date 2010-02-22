@@ -11,7 +11,7 @@
 // Remaps a tile based on mode and histogram clip points.
 //
 //*************************************************************************
-// $Id: ossimHistogramRemapper.cpp 15390 2009-09-09 13:15:31Z gpotts $
+// $Id: ossimHistogramRemapper.cpp 15986 2009-11-23 13:03:36Z gpotts $
 
 #include <cstdlib>
 #include <ossim/imaging/ossimHistogramRemapper.h>
@@ -42,7 +42,7 @@ static const char STRETCH_MODE_KW[] = "stretch_mode";
 static const char HISTOGRAM_FILENAME_KW[] = "histogram_filename";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 15390 2009-09-09 13:15:31Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimHistogramRemapper.cpp 15986 2009-11-23 13:03:36Z gpotts $";
 #endif
 
 ossimHistogramRemapper::ossimHistogramRemapper()
@@ -1351,8 +1351,13 @@ void ossimHistogramRemapper::buildLinearTableStdFromMean()
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {
       ossimRefPtr<ossimHistogram> h      = getHistogram(band);
-      ossim_float64 mean     = h->GetMean();
-      ossim_float64 stdDev   = h->GetStandardDev();
+      ossim_float64 mean = 0.0;
+      ossim_float64 stdDev = 0.0;
+      if(h.valid())
+      {
+         mean     = h->GetMean();
+         stdDev   = h->GetStandardDev();
+      }
       ossim_float64 lowClip  = mean - (stdDev * multiplier);
       ossim_float64 highClip = mean + (stdDev * multiplier);
 		

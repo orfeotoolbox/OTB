@@ -183,7 +183,6 @@ template <class TVectorData, class TImage>
     std::string m_VectorDataProjectionProj4;
 
 
-
 }; // end class
 } // end namespace otb
 

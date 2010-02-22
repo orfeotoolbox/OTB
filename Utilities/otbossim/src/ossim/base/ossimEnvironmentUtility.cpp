@@ -1,7 +1,7 @@
 #include <ossim/base/ossimEnvironmentUtility.h>
 #include <cstdlib>
 
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #define OSSIM_ENVIRONEMENT_UTILITY_UNIX 0
 #else
 #define OSSIM_ENVIRONEMENT_UTILITY_UNIX 1
@@ -11,8 +11,6 @@ ossimEnvironmentUtility* ossimEnvironmentUtility::theInstance=0;
 
 ossimEnvironmentUtility::ossimEnvironmentUtility()
 {
-   theInstance = this;
-
    ossimFilename dir = getUserOssimPluginDir();
    
    if(!dir.empty())
@@ -42,11 +40,11 @@ ossimEnvironmentUtility* ossimEnvironmentUtility::instance()
 ossimString ossimEnvironmentUtility::getEnvironmentVariable(const ossimString& variable)const
 {
    ossimString result;
-   char* lookup = getenv(variable.c_str());
+   char* lookup = std::getenv(variable.c_str());
    // getenv returns NULL if not found.
    if (lookup)
    {
-      result = lookup;
+      result = (const char*)lookup;
    }
    return result;
 }
@@ -193,11 +191,13 @@ ossimFilename ossimEnvironmentUtility::getInstalledOssimPreferences()const
 ossimFilename ossimEnvironmentUtility::getCurrentWorkingDir()const
 {
    ossimFilename result;
+
 #if OSSIM_ENVIRONEMENT_UTILITY_UNIX
-   result = this->getEnvironmentVariable("PWD");
+   result = getEnvironmentVariable("PWD");
 #else
-   result = this->getEnvironmentVariable("CD");
+   result = getEnvironmentVariable(ossimString("CD"));
 #endif
+
    return result;
 }
 
@@ -287,3 +287,15 @@ const ossimEnvironmentUtility::FilenameListType& ossimEnvironmentUtility::getDat
    return theDataSearchPath;
 }
 
+// Hidden copy constructor.
+ossimEnvironmentUtility::ossimEnvironmentUtility(
+   const ossimEnvironmentUtility& /* obj */)
+{
+}
+
+// Hidden operator=
+const ossimEnvironmentUtility& ossimEnvironmentUtility::operator=(
+   const ossimEnvironmentUtility& /* rhs */)
+{
+   return *this;
+}

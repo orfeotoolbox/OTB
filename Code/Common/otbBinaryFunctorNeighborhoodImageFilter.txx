@@ -250,8 +250,6 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
   }
 
 
-
-
 }
 
 } // end namespace otb

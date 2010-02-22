@@ -30,7 +30,6 @@ namespace otb
 {
 
 
-
 /** \class PathListToHistogramGenerator
  *  \brief This class generates an histogram from a list of path.
  *
@@ -124,7 +123,6 @@ private:
 
   PathListPointer     m_PathList;
   GeneratorPointer    m_HistogramGenerator;
-
 
 
 };

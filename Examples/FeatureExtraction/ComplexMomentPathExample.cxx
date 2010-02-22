@@ -73,7 +73,6 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   const   unsigned int      Dimension = 2;
 
   typedef itk::PolyLineParametricPath< Dimension > PathType;
@@ -82,7 +81,6 @@ int main(int argc, char * argv[] )
   typedef otb::ComplexMomentPathFunction<PathType,ComplexType>   CMType;
 
   CMType::Pointer cmFunction =CMType::New();
-
   // Software Guide : EndCodeSnippet
 
   PathType::Pointer path = PathType::New();
@@ -93,7 +91,6 @@ int main(int argc, char * argv[] )
   typedef PathType::ContinuousIndexType    ContinuousIndexType;
 
   ContinuousIndexType cindex;
-
 
 
   // Draw a square:
@@ -114,7 +111,6 @@ int main(int argc, char * argv[] )
   path->AddVertex(cindex);
 
 
-
   //  Software Guide : BeginLatex
   //
   // Next, we set the parameters of the plug the input path into the complex moment function
@@ -123,11 +119,9 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   cmFunction->SetInputPath( path );
   cmFunction->SetQ(Q);
   cmFunction->SetP(P);
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -141,14 +135,11 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ComplexType Result = cmFunction->Evaluate();
 
   std::cout << "The moment of order (" << P << "," << Q <<
             ") is equal to " << Result << std:: endl;
-
   // Software Guide : EndCodeSnippet
-
 
 
   return EXIT_SUCCESS;

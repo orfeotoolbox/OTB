@@ -25,7 +25,6 @@
 #include "itkVectorContainer.h"
 
 
-
 namespace otb
 {
   /** \class Rectangle

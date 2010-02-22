@@ -27,35 +27,35 @@ namespace otb
 namespace Functor
 {
 
-template <class TScalar>
-ScalarToRainbowRGBPixelFunctor<TScalar>
+template <class TScalar, class TRGBPixel>
+ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>
 ::ScalarToRainbowRGBPixelFunctor()
 {
-  m_Minimum = 0;
-  m_Maximum = itk::NumericTraits<ScalarType>::max();
+//  m_Minimum = 0;
+//  m_Maximum = itk::NumericTraits<ScalarType>::max();
 
 }
 
 
-template <class TScalar>
-typename ScalarToRainbowRGBPixelFunctor<TScalar>::RGBPixelType
-ScalarToRainbowRGBPixelFunctor<TScalar>
+template <class TScalar, class TRGBPixel>
+typename ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::RGBPixelType
+ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>
 ::operator()( const TScalar & v) const
 {
 
   double hinc, sinc, vinc;
-  hinc=0.6/(m_Maximum-m_Minimum);
+  hinc=0.6/(this->GetMaximumInputValue()-this->GetMinimumInputValue());
   sinc=0.0;
   vinc=0.0;
 
   double hue, sat, val;
 
-  hue = 0.6 - (v-m_Minimum)*hinc;
-  if (v < m_Minimum)
+  hue = 0.6 - (v-this->GetMinimumInputValue())*hinc;
+  if (v < this->GetMinimumInputValue())
   {
     hue=0.6;
   }
-  if (v > m_Maximum)
+  if (v > this->GetMaximumInputValue())
   {
     hue =0.0;
   }
@@ -63,13 +63,10 @@ ScalarToRainbowRGBPixelFunctor<TScalar>
   val = itk::NumericTraits<RGBComponentType>::max() + v*vinc;
 
   return m_HSVToRGBFunctor(hue, sat, val);
-
 }
 
 
-
 } // end namespace Functor
-
 } // end namespace otb
 
 

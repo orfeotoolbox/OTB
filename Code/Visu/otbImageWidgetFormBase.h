@@ -51,7 +51,6 @@ public:
   itkNewMacro(Self);
 
 
-
   typedef itk::FixedArray<float,4> ColorType;
   typedef itk::ImageRegion<2> RegionType;
 

@@ -44,7 +44,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-
   /** Runtime information */
   itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms,itk::ProcessObject);
   /** Creation througth the object factory */

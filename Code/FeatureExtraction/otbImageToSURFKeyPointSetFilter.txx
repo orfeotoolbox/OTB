@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) CS systèmes d'information. All rights reserved.
+  Copyright (c) CS Systemes d'information. All rights reserved.
   See CSCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -189,7 +189,6 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
                              (int)(6*sigmaDetected) ) ); // changer le sigma detected par keypoint[2]
 
 
-
           /*
             Computing the orientation of the key point detected
           */
@@ -221,7 +220,6 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
           descriptor.resize(64);
           //descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(),keyPoint[3],keyPoint[2]);
           descriptor = ComputeDescriptor(itNeighDescriptor.GetNeighborhood(),orientationDetected,sigmaDetected);
-
 
 
           /*Updating the pointset data with values of the descriptor*/
@@ -441,7 +439,6 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   TransformType::ParametersType  ParamVec(5);
   PointImageType pSrc , pDst;
   double angle = O * M_PI / 180;
-
 
 
   int i = 0,  col, raw  , Nbin, pas = 1;

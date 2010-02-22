@@ -4,8 +4,6 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  David Burken
-//
 // Description: NITF Info object.
 // 
 //----------------------------------------------------------------------------
@@ -15,9 +13,9 @@
 
 #include <iosfwd>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/support_data/ossimInfoBase.h>
-
-class ossimNitfFile;
+#include <ossim/support_data/ossimNitfFile.h>
 
 /**
  * @brief NITF info class.
@@ -53,7 +51,7 @@ public:
    virtual std::ostream& print(std::ostream& out) const;
 
 private:
-   ossimNitfFile* theNitfFile;
+   ossimRefPtr<ossimNitfFile> m_nitfFile;
 };
 
 #endif /* End of "#ifndef ossimNitfInfo_HEADER" */

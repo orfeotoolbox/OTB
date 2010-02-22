@@ -44,7 +44,6 @@ int main( int argc, char *argv[] )
   filter->SetMinimumRegionSize(minRegionSize);
 
 
-
   // sauvegarde de l'image filtrée,
   typedef otb::StreamingImageFileWriter<ImageType>  WriterType1;
   WriterType1::Pointer writer1=WriterType1::New();

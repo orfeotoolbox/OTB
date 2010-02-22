@@ -61,7 +61,7 @@ class ITK_EXPORT AddCarvingPathFilter : public itk::ImageAndPathToImageFilter<TI
 {
 public:
   /** Standard class typedefs. */
-  typedef AddCarvingPathFilter                                                        Self;
+  typedef AddCarvingPathFilter                                                  Self;
   typedef itk::ImageAndPathToImageFilter<TInputImage,TInputPath,TOutputImage>   Superclass;
   typedef itk::SmartPointer<Self>                                               Pointer;
   typedef itk::SmartPointer<const Self>                                         ConstPointer;
@@ -136,4 +136,3 @@ private:
 #endif
 
 #endif
-

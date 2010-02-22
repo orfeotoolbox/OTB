@@ -93,9 +93,6 @@ private:
 };
 
 
-
-
-
 /** \class NDBI
  *  \brief This functor computes the Normalized Difference Built Up Index (NDBI)
  *

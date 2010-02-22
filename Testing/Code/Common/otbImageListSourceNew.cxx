@@ -31,6 +31,5 @@ int otbImageListSourceNew(int argc, char * argv[])
   ImageListSourceType::Pointer imageList = ImageListSourceType::New();
 
 
-
   return EXIT_SUCCESS;
 }

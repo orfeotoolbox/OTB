@@ -162,6 +162,3 @@ class ITK_EXPORT SOMbasedImageFilter
 #endif
 
 
-
-
-

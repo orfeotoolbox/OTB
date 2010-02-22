@@ -87,7 +87,6 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::InnerProductPCAImageFilter<ImageType,ImageType> PCAFilterType;
   PCAFilterType::Pointer     pcafilter     = PCAFilterType::New();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -98,10 +97,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   pcafilter->SetNumberOfPrincipalComponentsRequired(
                                     numberOfPrincipalComponentsRequired);
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -111,10 +108,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   WriterType::Pointer     writer     = WriterType::New();
   writer->SetFileName(outputFilename);
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -124,12 +119,10 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
   
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -149,7 +142,6 @@ int main( int argc, char* argv[] )
   // \end{figure}
   //
   //  Software Guide : EndLatex
-
 
 
   typedef otb::Image<PixelType,Dimension> MonoImageType;

@@ -27,7 +27,6 @@
 #endif
 
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {ROI_QB_MUL_3.tif}
 //  OUTPUTS: {WatershedSegmentation1Output1.png}
@@ -38,7 +37,6 @@
 //  OUTPUTS: {WatershedSegmentation1Output2.png}
 //  2 10 0.001 0.15 0
 //  Software Guide : EndCommandLineArgs
-
 
 
 // Software Guide : BeginLatex

@@ -83,7 +83,6 @@ int main(int argc, char* argv[])
   writer->Update();
 
 
-
   /*** With 2 writers : OK */
   /*
   typedef otb::ImageFileWriter<ImageType>                             WriterMonoType;

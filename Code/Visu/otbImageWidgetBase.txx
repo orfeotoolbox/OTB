@@ -456,7 +456,6 @@ ImageWidgetBase<TPixel>
     }
 
 
-
   //otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
   if (m_OpenGlBuffer != NULL)
   {

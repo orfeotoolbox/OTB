@@ -34,7 +34,6 @@ int otbComplexMomentPathNew( int argc, char * argv[] )
   CMType::Pointer function = CMType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

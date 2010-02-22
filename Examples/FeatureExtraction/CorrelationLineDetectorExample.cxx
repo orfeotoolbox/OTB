@@ -131,7 +131,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
   OutputImageType > RescalerType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -190,7 +189,6 @@ int main( int argc, char * argv[] )
   filter->SetInput( reader->GetOutput() );
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
 
@@ -206,7 +204,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   filter->SetLengthLine( atoi(argv[4]) );
   filter->SetWidthLine( atoi(argv[5]) );
   // Software Guide : EndCodeSnippet
@@ -258,7 +255,6 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{LineCorrelationDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

@@ -10,7 +10,7 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.h 14246 2009-04-08 15:48:07Z dburken $
+// $Id: ossimDtedAcc.h 16104 2009-12-17 18:09:59Z gpotts $
 
 #ifndef ossimDtedAcc_H
 #define ossimDtedAcc_H
@@ -26,9 +26,8 @@ class ossimProperty;
 class OSSIM_DLL ossimDtedAcc : public ossimErrorStatusInterface
 {
 public:
-   ossimDtedAcc(const ossimFilename& dted_file, ossim_int32 offset);
-   ossimDtedAcc(std::istream& in, ossim_int32 offset);
-
+   ossimDtedAcc(const ossimFilename& dted_file="", ossim_int32 offset=0);
+   ossimDtedAcc(std::istream& in);
    enum
    {
       ACC_LENGTH = 2700,

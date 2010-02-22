@@ -128,7 +128,6 @@ std::string System::SetToLower( const std::string& str )
 }
 
 
-
 #if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
 /*=====================================================================

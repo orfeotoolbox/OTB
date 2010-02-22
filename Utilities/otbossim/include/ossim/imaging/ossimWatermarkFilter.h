@@ -12,12 +12,11 @@
 // Density is base on alpha weight.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimWatermarkFilter.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimWatermarkFilter.h 16276 2010-01-06 01:54:47Z gpotts $
 #ifndef ossimWatermarkFilter_HEADER
 #define ossimWatermarkFilter_HEADER
 
 #include <ossim/base/ossimConstants.h>
-#include <OpenThreads/ReentrantMutex>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimIrect.h>

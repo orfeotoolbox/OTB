@@ -37,7 +37,6 @@
 #include "itkLabelMap.h"
 #include "itkBinaryImageToLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -81,7 +80,6 @@ int main(int argc, char * argv[])
   typedef itk::ImageFileReader< ImageType > ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName( argv[1] );
-
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex

@@ -25,9 +25,6 @@
 #include "otbImageListToImageFilter.h"
 #include "otbObjectList.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 namespace otb {
 
 /** \class WaveletTransform
@@ -51,7 +48,7 @@ namespace otb {
  *
  */
 template < class TInputImage, class TOutputImage, class TFilter,
-            InverseOrForwardTransformationEnum TDirectionOfTransformation >
+            Wavelet::WaveletDirection TDirectionOfTransformation >
 class ITK_EXPORT WaveletTransform
   : public itk::ImageSource< TOutputImage >
 {
@@ -94,14 +91,14 @@ private:
  * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
  *
- * Here is the specialisation of the FORWARD transformation.
+ * Here is the specialization of the Wavelet::FORWARD transformation.
  *
  * \sa WaveletFilterBank
  * \sa WaveletPacketTransform
  *
  */
 template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, FORWARD >
+class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD >
   : public ImageToImageListFilter< TInputImage, TOutputImage >
 {
 public:
@@ -149,8 +146,8 @@ public:
     return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
   }
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,FORWARD);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::FORWARD);
 
   itkGetMacro(NumberOfDecompositions,unsigned int);
   itkSetMacro(NumberOfDecompositions,unsigned int);
@@ -186,14 +183,14 @@ private:
 
   /**
    * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
-   * It yields also a stationnary decomposition.
+   * It yields also a stationary decomposition.
    * For multiresolution decomposition, most of the time, m_SubsampleImageFactor is
    * to be set to 2. This is its default value.
    */
   unsigned int m_SubsampleImageFactor;
 
   /**
-   * The list of filter is necessary to keep the papeline updated.
+   * The list of filter is necessary to keep the pipeline updated.
    */
   FilterListPointerType m_FilterList;
 }; // end of Forward class
@@ -214,10 +211,10 @@ private:
  * GetFilter(0)->GetNumberOfOutputs() to know the length) and so on until
  * the high passed images of the highest decomposition.
  *
- * Here is the specialisation of the INVERSE transformation.
+ * Here is the specialization of the Wavelet::INVERSE transformation.
  *
  * The filter should be implemented with TInputImage for input and output image
- * template. Transtyping to TOuputImage is performed by standart C++-style at pixel
+ * template. Transtyping to TOutputImage is performed by standard C++-style at pixel
  * level.
  *
  * \sa WaveletFilterBank
@@ -225,7 +222,7 @@ private:
  *
  */
 template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, INVERSE >
+class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::INVERSE >
   : public ImageListToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -279,8 +276,8 @@ public:
     return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
   }
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,INVERSE);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::INVERSE);
 
   itkGetMacro(NumberOfDecompositions,unsigned int);
 
@@ -340,6 +337,5 @@ private:
 #endif
 
 #endif
-
 
 

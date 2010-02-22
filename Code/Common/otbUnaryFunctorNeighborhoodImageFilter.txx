@@ -65,7 +65,6 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage,TOutputImage,TFunction>
   inputRequestedRegion.PadByRadius( m_Radius );
 
 
-
   // crop the input requested region at the input's largest possible region
   if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
   {

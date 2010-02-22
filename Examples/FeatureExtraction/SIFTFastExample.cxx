@@ -102,7 +102,6 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
   typedef otb::SiftFastImageFilter<ImageType,PointSetType>
   ImageToFastSIFTKeyPointSetFilterType;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -111,10 +110,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -123,10 +120,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ImageToFastSIFTKeyPointSetFilterType::Pointer filter =
     ImageToFastSIFTKeyPointSetFilterType::New();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -137,11 +132,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   filter->SetInput(reader->GetOutput());
   filter->SetScalesNumber(scales);
   filter->Update();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -152,15 +145,12 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef unsigned char PixelType;
   typedef itk::RGBPixel<PixelType> RGBPixelType;
   typedef otb::Image<RGBPixelType, 2> OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -170,10 +160,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -186,7 +174,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
       outputImage->GetLargestPossibleRegion());
   itk::ImageRegionIterator<ImageType> iterInput(reader->GetOutput(),
@@ -203,7 +190,6 @@ int main(int argc, char * argv[])
 
     iterOutput.Set(rgbPixel);
   }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -214,13 +200,10 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   ImageType::OffsetType t = {{ 0, 1}};
   ImageType::OffsetType b = {{ 0,-1}};
   ImageType::OffsetType l = {{ 1, 0}};
   ImageType::OffsetType r = {{-1, 0}};
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -232,10 +215,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef PointSetType::PointsContainer PointsContainerType;
   typedef PointsContainerType::Iterator PointsIteratorType;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -244,9 +225,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -256,12 +235,10 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
   ImageType::PointType origin = reader->GetOutput()->GetOrigin();
   OutputImageType::SizeType size =
     outputImage->GetLargestPossibleRegion().GetSize();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -270,11 +247,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   while ( pIt != filter->GetOutput()->GetPoints()->End() )
   {
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -286,7 +260,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     ImageType::IndexType index;
 
     index[0] = static_cast<unsigned int>(vcl_floor(
@@ -298,7 +271,6 @@ int main(int argc, char * argv[])
                                            static_cast<double>(
                                              (pIt.Value()[1]-origin[1])/spacing[1] +0.5
                                            )));
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -307,12 +279,10 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     OutputImageType::PixelType keyPixel;
     keyPixel.SetRed(0);
     keyPixel.SetGreen(255);
     keyPixel.SetBlue(0);
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -323,7 +293,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     if (outputImage->GetLargestPossibleRegion().IsInside(index))
     {
       outputImage->SetPixel(index,keyPixel);
@@ -351,13 +320,10 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImageFilename);
   writer->SetInput(outputImage);
   writer->Update();
-
 // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

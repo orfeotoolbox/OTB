@@ -156,4 +156,3 @@ private:
 #endif // __otbVectorDataFileReader_h
 
 
-

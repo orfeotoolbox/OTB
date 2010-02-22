@@ -7,7 +7,6 @@
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageSource.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -18,31 +17,30 @@
 RTTI_DEF1(ossimGeneralRasterElevHandler, "ossimGeneralRasterElevHandler", ossimElevCellHandler);
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimFilename& file)
-   :ossimElevCellHandler(file.c_str())
+   :ossimElevCellHandler(file.c_str()),
+    m_streamOpen(false)
 {
-
-   if(file != "")
+   if(!open(file))
    {
-      if(!setFilename(file))
-      {
-         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      }
+      setErrorStatus();
    }
 }
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler& src)
    :ossimElevCellHandler(src),
-    theGeneralRasterInfo(src.theGeneralRasterInfo)
+    theGeneralRasterInfo(src.theGeneralRasterInfo),
+    m_streamOpen(false), // ????
+    m_memoryMap(src.m_memoryMap)
 {
-   open();
 }
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo)
+   : m_streamOpen(false)
 {
 
    close();
    theGeneralRasterInfo = generalRasterInfo;
-   if(!open())
+   if(!open(theGeneralRasterInfo.theFilename))
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
    }
@@ -66,74 +64,138 @@ ossimGeneralRasterElevHandler::~ossimGeneralRasterElevHandler()
 
 double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileAccessMutex);
-   if(!theInputStream.valid())
-   {
-      return ossim::nan();
-   }
-
    ossim_float64 result = theGeneralRasterInfo.theNullHeightValue;
-   switch(theGeneralRasterInfo.theScalarType)
+
+   if(m_memoryMap.empty())
    {
-      case OSSIM_SINT8:
+      switch(theGeneralRasterInfo.theScalarType)
       {
-         result = getHeightAboveMSLTemplate((ossim_sint8)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
+         case OSSIM_SINT8:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_sint8)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT8:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_uint8)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_SINT16:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_sint16)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT16:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_uint16)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_SINT32:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_sint32)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT32:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_uint32)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_FLOAT32:
+         {
+            result =  getHeightAboveMSLFileTemplate((ossim_float32)0,
+                                                    theGeneralRasterInfo,
+                                                    gpt);
+            break;
+         }
+         case OSSIM_FLOAT64:
+         {
+            result = getHeightAboveMSLFileTemplate((ossim_float64)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         default:
+         {
+            break;
+         }
       }
-      case OSSIM_UINT8:
+   }
+   else
+   {
+      switch(theGeneralRasterInfo.theScalarType)
       {
-         result = getHeightAboveMSLTemplate((ossim_uint8)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         result = getHeightAboveMSLTemplate((ossim_sint16)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      case OSSIM_UINT16:
-      {
-         result = getHeightAboveMSLTemplate((ossim_uint16)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         result = getHeightAboveMSLTemplate((ossim_sint32)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         result = getHeightAboveMSLTemplate((ossim_uint32)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      case OSSIM_FLOAT32:
-      {
-         result =  getHeightAboveMSLTemplate((ossim_float32)0,
-                                             theGeneralRasterInfo,
-                                             gpt);
-         break;
-      }
-      case OSSIM_FLOAT64:
-      {
-         result = getHeightAboveMSLTemplate((ossim_float64)0,
-                                            theGeneralRasterInfo,
-                                            gpt);
-         break;
-      }
-      default:
-      {
-         break;
+         case OSSIM_SINT8:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_sint8)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT8:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_uint8)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_SINT16:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_sint16)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT16:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_uint16)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_SINT32:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_sint32)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_UINT32:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_uint32)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         case OSSIM_FLOAT32:
+         {
+            result =  getHeightAboveMSLMemoryTemplate((ossim_float32)0,
+                                                    theGeneralRasterInfo,
+                                                    gpt);
+            break;
+         }
+         case OSSIM_FLOAT64:
+         {
+            result = getHeightAboveMSLMemoryTemplate((ossim_float64)0,
+                                                   theGeneralRasterInfo,
+                                                   gpt);
+            break;
+         }
+         default:
+         {
+            break;
+         }
       }
       
    }
@@ -151,14 +213,42 @@ double ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& gridPt) const
    return ossim::nan();
 }
 
+bool ossimGeneralRasterElevHandler::isOpen()const
+{
+   if(!m_memoryMap.empty()) return true;
+   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_inputStreamMutex);
 
-bool ossimGeneralRasterElevHandler::open()
+   //---
+   // Change to use flag as is_open is non-const on some old compilers.
+   return m_streamOpen;
+   // return (m_inputStream.is_open());
+}
+
+bool ossimGeneralRasterElevHandler::open(const ossimFilename& file, bool memoryMapFlag)
 {
    close();
-   theInputStream = ossimStreamFactoryRegistry::instance()->createNewIFStream(theGeneralRasterInfo.theFilename,
-                                                                              ios::in | ios::binary);
+   if(!setFilename(file)) return false;
+   m_inputStream.clear();
+   m_inputStream.open(theGeneralRasterInfo.theFilename,
+                      ios::in | ios::binary);
 
-   return theInputStream.valid();
+   if(memoryMapFlag)
+   {
+      if(!m_inputStream.bad())
+      {
+         m_memoryMap.resize(theGeneralRasterInfo.theFilename.fileSize());
+         if(!m_memoryMap.empty())
+         {
+           m_inputStream.read((char*)(&m_memoryMap.front()), (streamsize)m_memoryMap.size());
+         }
+      }
+      m_inputStream.close();
+   }
+
+   // Capture the stream state for non-const is_open on old compiler.
+   m_streamOpen = m_inputStream.is_open();
+   
+   return m_streamOpen;
 }
 
 /**
@@ -166,11 +256,9 @@ bool ossimGeneralRasterElevHandler::open()
  */
 void ossimGeneralRasterElevHandler::close()
 {
-   if(theInputStream.valid())
-   {
-      theInputStream->close();
-   }
-   theInputStream = 0;
+   m_inputStream.close();
+   m_memoryMap.clear();
+   m_streamOpen = false;
 }
 
 bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
@@ -179,6 +267,7 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
    {
       return false;
    }
+   theFilename = file;
    ossimFilename hdrFile  = file;
    ossimFilename geomFile = file;
    theGeneralRasterInfo.theFilename = file;
@@ -229,9 +318,13 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
       theGeneralRasterInfo.theBytesPerRawLine = generalInfo.bytesPerRawLine();
 
 	  //add  by simbla
-      theGeneralRasterInfo.theProjection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      theGeneralRasterInfo.theGeometry = new ossimImageGeometry;
+      if(!theGeneralRasterInfo.theGeometry->loadState(kwl))
+      {
+         theGeneralRasterInfo.theGeometry = 0;
+      }
       
-      if(!theGeneralRasterInfo.theProjection.valid())
+      if(!theGeneralRasterInfo.theGeometry.valid())
       {
          return false;
       }
@@ -241,16 +334,16 @@ bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
       ossimGpt lrGpt;
       ossimGpt llGpt;
       theGeneralRasterInfo.theDatum = defaultDatum.datum();
-      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ul(), ulGpt);
-      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ur(), urGpt);
-      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.lr(), lrGpt);
-      theGeneralRasterInfo.theProjection->lineSampleToWorld(theGeneralRasterInfo.theImageRect.ll(), llGpt);
+      theGeneralRasterInfo.theGeometry->localToWorld(theGeneralRasterInfo.theImageRect.ul(), ulGpt);
+      theGeneralRasterInfo.theGeometry->localToWorld(theGeneralRasterInfo.theImageRect.ur(), urGpt);
+      theGeneralRasterInfo.theGeometry->localToWorld(theGeneralRasterInfo.theImageRect.lr(), lrGpt);
+      theGeneralRasterInfo.theGeometry->localToWorld(theGeneralRasterInfo.theImageRect.ll(), llGpt);
       
       ulGpt.changeDatum(theGeneralRasterInfo.theDatum);
       urGpt.changeDatum(theGeneralRasterInfo.theDatum);
       lrGpt.changeDatum(theGeneralRasterInfo.theDatum);
       llGpt.changeDatum(theGeneralRasterInfo.theDatum);
-      theMeanSpacing = theGeneralRasterInfo.theProjection->getMetersPerPixel().y;
+      theMeanSpacing = theGeneralRasterInfo.theGeometry->getMetersPerPixel().y;
       theGroundRect = ossimGrect(ulGpt, urGpt, lrGpt, llGpt);
       theGeneralRasterInfo.theWgs84GroundRect = ossimDrect(ulGpt, urGpt, lrGpt, llGpt, OSSIM_RIGHT_HANDED);
       theNullHeightValue = theGeneralRasterInfo.theNullHeightValue;
@@ -335,26 +428,11 @@ void ossimGeneralRasterElevHandler::initializeList(const ossimFilename& file)
 }
 #endif
 template <class T>
-double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
-   T dummy,
-   const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
-   const ossimGpt& gpt)
+double ossimGeneralRasterElevHandler::getHeightAboveMSLFileTemplate(
+                                                                T dummy,
+                                                                const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+                                                                const ossimGpt& gpt)
 {
-   if(!theInputStream.valid())
-   {
-      return ossim::nan();
-   }
-//    if(theFileStr->fail())
-//    {
-//       theFileStr->clear();
-//       theFileStr->seekg(0);
-//    }
-//    if(theFileStr.fail())
-   if(theInputStream->fail())
-   {
-      theInputStream->clear();
-      theInputStream->seekg(0);
-   }
    ossimEndian endian;
    
    ossimGpt shiftedPoint = gpt;
@@ -365,14 +443,14 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    }
    
    ossimDpt pt;
-   info.theProjection->worldToLineSample(shiftedPoint,pt);
+   info.theGeometry->worldToLocal(shiftedPoint,pt);
    double xi = pt.x;
    double yi = pt.y;
    
    xi -= info.theUl.x;
    yi -= info.theUl.y;
    
-  //modifed by simbla  2008 7.17
+   //modifed by simbla  2008 7.17
    //double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
    //double yi = (info.theUlGpt.latd() -
    //             shiftedPoint.latd())/info.thePostSpacing.y;
@@ -380,7 +458,7 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    
    ossim_sint64 x0 = static_cast<ossim_sint64>(xi);
    ossim_sint64 y0 = static_cast<ossim_sint64>(yi);
-
+   
    double xt0 = xi - x0;
    double yt0 = yi - y0;
    double xt1 = 1-xt0;
@@ -393,12 +471,12 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    
    
    if ( xi < 0 || yi < 0 ||
-        x0 > (info.theWidth  - 1.0) ||
-        y0 > (info.theHeight  - 1.0) )
+       x0 > (info.theWidth  - 1.0) ||
+       y0 > (info.theHeight  - 1.0) )
    {
       return ossim::nan();
    }
-
+   
    if(x0 == (info.theWidth  - 1.0))
    {
       --x0;
@@ -412,26 +490,33 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    ossim_uint64 bytesPerLine  = info.theBytesPerRawLine;
    
    std::streampos offset = y0*bytesPerLine + x0*sizeof(T);
-
-   theInputStream->seekg(offset, ios::beg);
-   theInputStream->read((char*)p, sizeof(T));
    
-   // Get the second post.
-   theInputStream->read((char*)(p+1), sizeof(T));
-   
-//   offset += (bytesPerLine-2*sizeof(T));
-
-   theInputStream->ignore(bytesPerLine-2*sizeof(T));
-   // Get the third post.
-   theInputStream->read((char*)(p+2), sizeof(T));
-   
-   // Get the fourth post.
-   theInputStream->read((char*)(p+3), sizeof(T));
-   
-   if(theInputStream->fail())
    {
-      theInputStream->clear();
-      return ossim::nan();
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_inputStreamMutex);
+      if(m_inputStream.fail())
+      {
+         m_inputStream.clear();
+      }
+      m_inputStream.seekg(offset, ios::beg);
+      m_inputStream.read((char*)p, sizeof(T));
+      
+      // Get the second post.
+      m_inputStream.read((char*)(p+1), sizeof(T));
+      
+      //   offset += (bytesPerLine-2*sizeof(T));
+      
+      m_inputStream.ignore(bytesPerLine-2*sizeof(T));
+      // Get the third post.
+      m_inputStream.read((char*)(p+2), sizeof(T));
+      
+      // Get the fourth post.
+      m_inputStream.read((char*)(p+3), sizeof(T));
+      
+      if(m_inputStream.fail())
+      {
+         m_inputStream.clear();
+         return ossim::nan();
+      }
    }
    if(endian.getSystemEndianType() != info.theByteOrder)
    {
@@ -441,7 +526,7 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    double p01 = p[1];
    double p10 = p[2];
    double p11 = p[3];
-
+   
    if (p00 == info.theNullHeightValue)
       w00 = 0.0;
    if (p01 == info.theNullHeightValue)
@@ -453,23 +538,131 @@ double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
    
 #if 0 /* Serious debug only... */
    cout << "\np00:  " << p00
-        << "\np01:  " << p01
-        << "\np10:  " << p10
-        << "\np11:  " << p11
-        << "\nw00:  " << w00
-        << "\nw01:  " << w01
-        << "\nw10:  " << w10
-        << "\nw11:  " << w11
-        << endl;
+   << "\np01:  " << p01
+   << "\np10:  " << p10
+   << "\np11:  " << p11
+   << "\nw00:  " << w00
+   << "\nw01:  " << w01
+   << "\nw10:  " << w10
+   << "\nw11:  " << w11
+   << endl;
 #endif
-
+   
    double sum_weights = w00 + w01 + w10 + w11;
-
+   
    if (sum_weights)
    {
       return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
    }
+   
+   return ossim::nan();
+}
 
+template <class T>
+double ossimGeneralRasterElevHandler::getHeightAboveMSLMemoryTemplate(
+                                                                T dummy,
+                                                                const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+                                                                const ossimGpt& gpt)
+{
+   ossimEndian endian;
+   
+   ossimGpt shiftedPoint = gpt;
+   shiftedPoint.changeDatum(info.theDatum);
+   if(!info.theWgs84GroundRect.pointWithin(shiftedPoint))
+   {
+      return ossim::nan();
+   }
+   
+   ossimDpt pt;
+   info.theGeometry->worldToLocal(shiftedPoint,pt);
+   double xi = pt.x;
+   double yi = pt.y;
+   
+   xi -= info.theUl.x;
+   yi -= info.theUl.y;
+   
+   //modifed by simbla  2008 7.17
+   //double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
+   //double yi = (info.theUlGpt.latd() -
+   //             shiftedPoint.latd())/info.thePostSpacing.y;
+   
+   
+   ossim_sint64 x0 = static_cast<ossim_sint64>(xi);
+   ossim_sint64 y0 = static_cast<ossim_sint64>(yi);
+   
+   double xt0 = xi - x0;
+   double yt0 = yi - y0;
+   double xt1 = 1-xt0;
+   double yt1 = 1-yt0;
+   
+   double w00 = xt1*yt1;
+   double w01 = xt0*yt1;
+   double w10 = xt1*yt0;
+   double w11 = xt0*yt0;
+   if ( xi < 0 || yi < 0 ||
+       x0 > (info.theWidth  - 1.0) ||
+       y0 > (info.theHeight  - 1.0) )
+   {
+      return ossim::nan();
+   }
+   
+   if(x0 == (info.theWidth  - 1.0))
+   {
+      --x0;
+   }
+   if(y0 == (info.theHeight  - 1.0))
+   {
+      --y0;
+   }
+   ossim_uint64 bytesPerLine  = info.theBytesPerRawLine;
+   
+   ossim_uint64 offset = y0*bytesPerLine + x0*sizeof(T);
+   ossim_uint64 offset2 = offset+bytesPerLine;
+   
+   T v00 = *(reinterpret_cast<T*> (&m_memoryMap[offset]));
+   T v01 = *(reinterpret_cast<T*> (&m_memoryMap[offset + sizeof(T)]));
+   T v10 = *(reinterpret_cast<T*> (&m_memoryMap[offset2]));
+   T v11 = *(reinterpret_cast<T*> (&m_memoryMap[offset2 + sizeof(T)]));
+   if(endian.getSystemEndianType() != info.theByteOrder)
+   {
+      endian.swap(v00);
+      endian.swap(v01);
+      endian.swap(v10);
+      endian.swap(v11);
+   }
+   double p00 = v00;
+   double p01 = v01;
+   double p10 = v10;
+   double p11 = v11;
+   
+   if (p00 == info.theNullHeightValue)
+      w00 = 0.0;
+   if (p01 == info.theNullHeightValue)
+      w01 = 0.0;
+   if (p10 == info.theNullHeightValue)
+      w10 = 0.0;
+   if (p11 == info.theNullHeightValue)
+      w11 = 0.0;
+   
+#if 0 /* Serious debug only... */
+   cout << "\np00:  " << p00
+   << "\np01:  " << p01
+   << "\np10:  " << p10
+   << "\np11:  " << p11
+   << "\nw00:  " << w00
+   << "\nw01:  " << w01
+   << "\nw10:  " << w10
+   << "\nw11:  " << w11
+   << endl;
+#endif
+   
+   double sum_weights = w00 + w01 + w10 + w11;
+   
+   if (sum_weights)
+   {
+      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
+   }
+   
    return ossim::nan();
 }
 #if 0

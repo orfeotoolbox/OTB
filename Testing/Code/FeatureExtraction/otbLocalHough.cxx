@@ -85,9 +85,6 @@ int otbLocalHough( int argc, char* argv[] )
   outfile.close();
 
 
-
-
-
   return EXIT_SUCCESS;
 }
 

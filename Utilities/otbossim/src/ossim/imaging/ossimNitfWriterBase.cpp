@@ -344,4 +344,7 @@ void ossimNitfWriterBase::setComplexityLevel(std::streamoff endPosition,
    }
 }
 
-
+ossimString ossimNitfWriterBase::getExtension() const
+{
+   return ossimString("ntf");
+}

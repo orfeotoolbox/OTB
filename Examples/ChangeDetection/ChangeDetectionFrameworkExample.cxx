@@ -150,7 +150,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 };
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -223,7 +222,6 @@ int main(int argc, char* argv[] )
   InputImageType1,
   InputImageType2,
   ChangeImageType  >       FilterType;
-
   // Software Guide : EndCodeSnippet
 
   ReaderType1::Pointer reader1 = ReaderType1::New();
@@ -255,14 +253,12 @@ int main(int argc, char* argv[] )
 
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
   typedef otb::CommandProgressUpdate<FilterType> CommandType;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
-
 
 
   try

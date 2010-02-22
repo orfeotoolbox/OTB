@@ -62,7 +62,6 @@ PersistentLineSegmentDetector<TInputImage, TPrecision>
     }
 
 
-
 }
 
 template<class TInputImage, class TPrecision>
@@ -319,10 +318,6 @@ ImageToLineSegmentVectorData<TInputImage, TPrecision>
 
   return vlines;
 }
-
-
-
-
 
 
 }// end namespace otb

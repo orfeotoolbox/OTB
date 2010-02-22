@@ -28,9 +28,6 @@
 
 #include "otbWaveletPacketDecompositionCosts.h"
 
-// This include is needed to define InverseOrForwardTransformationEnum only...
-#include "otbGenericMapProjection.h"
-
 namespace otb {
 
 /** \class WaveletPacketTransform
@@ -40,10 +37,10 @@ namespace otb {
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely,
- * it takes an image list but yield a single list on the INVERSE transformation.
+ * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
+ * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
+ * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
@@ -57,7 +54,7 @@ namespace otb {
  * \sa WaveletTransform
  */
 template < class TInputImage, class TOutputImage, class TFilter,
-            InverseOrForwardTransformationEnum TDirectionOfTransformation,
+            Wavelet::WaveletDirection TDirectionOfTransformation,
             class TCost = FullyDecomposedWaveletPacketCost< TInputImage > >
 class ITK_EXPORT WaveletPacketTransform
   : public itk::ImageSource< TOutputImage >
@@ -92,10 +89,10 @@ private:
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely,
- * it takes an image list but yield a single list on the INVERSE transformation.
+ * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
+ * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
+ * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
@@ -111,7 +108,7 @@ private:
  * \sa WaveletTransform
  */
 template < class TInputImage, class TOutputImage, class TFilter, class TCost >
-class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter, FORWARD, TCost >
+class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCost >
   : public ImageToImageListFilter< TInputImage, TOutputImage >
 {
 public:
@@ -153,8 +150,8 @@ public:
   typedef typename CostType::Pointer CostPointerType;
   itkGetObjectMacro(Cost,CostType);
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,FORWARD);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::FORWARD);
 
   /** Get the recursive description of the packet decomposition */
   const std::vector<bool> & GetWaveletPacketRule () const {
@@ -222,10 +219,10 @@ private:
  * by using a (templated) elementary wavelet transform and (templated)
  * cost criteria to stop the decomposition.
  *
- * It yields a list of images on the FORWARD decomposition. Conversely,
- * it takes an image list but yield a single list on the INVERSE transformation.
+ * It yields a list of images on the Wavelet::FORWARD decomposition. Conversely,
+ * it takes an image list but yield a single list on the Wavelet::INVERSE transformation.
  * Hence, the Forward vs Inverse transformation has been splitted into two classes
- * (templated with otb::FORWARD and otb::INVERSE). The Forward class comes from
+ * (templated with otb::Wavelet::FORWARD and otb::Wavelet::INVERSE). The Forward class comes from
  * \doxygen{otb}{ImageToImageListFilter} while the latter comes from a
  * \doxygen{otb}{ImageListToImageFilter}. Thse two classes have specific declaration
  * and implementation.
@@ -241,7 +238,7 @@ private:
  */
 template < class TInputImage, class TOutputImage, class TFilter >
 class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter,
-                                          INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
+                                          Wavelet::INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
   : public ImageListToImageFilter< TInputImage, TOutputImage >
 {
 public:
@@ -284,8 +281,8 @@ public:
 
   itkGetObjectMacro(FilterList,FilterListType);
 
-  typedef InverseOrForwardTransformationEnum DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,INVERSE);
+  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::INVERSE);
 
   /** Get/Set the decomposition rule */
   const std::vector<bool> & GetWaveletPacketRule () const {

@@ -181,7 +181,6 @@ VectorDataFileReader<TOutputVectorData>
 }
 
 
-
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>

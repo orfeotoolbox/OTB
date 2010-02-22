@@ -139,8 +139,6 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   OutputGraphPointerType graph = this->GetOutput();
 
 
-
-
   // invert value vector
   RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
                            OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ

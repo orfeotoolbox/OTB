@@ -200,7 +200,6 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
 
-
   // Software Guide : BeginCodeSnippet
   try
   {
@@ -306,7 +305,6 @@ int main( int argc, char *argv[] )
   vectWriterp->SetInput(rp->GetOutput());
 
 
-
   try
   {
     vectWriterms->Update();
@@ -324,8 +322,6 @@ int main( int argc, char *argv[] )
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
   }
-
-
 
 
   //  Software Guide : BeginLatex

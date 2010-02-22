@@ -142,7 +142,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   unsigned int piece = 0;
   RegionType streamingRegion;
 
@@ -171,7 +170,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     reader->GetOutput()->SetRequestedRegion(streamingRegion);
     reader->GetOutput()->PropagateRequestedRegion();
     reader->GetOutput()->UpdateOutputData();
@@ -183,7 +181,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     IteratorType it(reader->GetOutput(),streamingRegion);
     it.GoToBegin();
 
@@ -192,7 +189,6 @@ int main(int argc, char * argv[])
       std::cout << it.Get() << std::endl;
       ++it;
     }
-
 // Software Guide : EndCodeSnippet
   }
   return EXIT_SUCCESS;

@@ -11,7 +11,7 @@
 //
 // Contains class declaration of ossimDtedElevationImageSource.
 //
-// $Id: ossimDtedElevationImageSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDtedElevationImageSource.cpp 16599 2010-02-12 19:44:23Z gpotts $
 //----------------------------------------------------------------------------
 
 #include <vector>
@@ -88,7 +88,7 @@ ossimRefPtr<ossimImageData> ossimDtedElevationImageSource::getBlock(
    view->setDecimalDegreesPerPixel(postSpacing);
 
    // Set the tie point to be the upper left of the requested rect.
-   view->setUlGpt(rect.ul());
+   view->setUlTiePoints(rect.ul());
 
    // Convert the ground rectangle to the view's image space.
    ossimIrect tileRect;

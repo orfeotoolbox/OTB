@@ -46,6 +46,8 @@ public:
   ossimTileMapModel(const ossimKeywordlist& geom_kwl);
   ossimTileMapModel(const ossimTileMapModel& rhs);
   
+  virtual ~ossimTileMapModel();
+
   enum ProjectionType
   {
     UNKNOWN_PROJECTION = 0,
@@ -139,7 +141,7 @@ public:
   
 protected:
   
-  virtual ~ossimTileMapModel();
+
   
   /*!
    * Initializes the model given a fast format header.

@@ -134,15 +134,11 @@ int main( int argc, char * argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-
   filter->SetStartX( atoi( argv[3] ) );
   filter->SetStartY( atoi( argv[4] ) );
   filter->SetSizeX( atoi( argv[5] ) );
   filter->SetSizeY( atoi( argv[6] ) );
-
   // Software Guide : EndCodeSnippet
-
-
 
 
   //  Software Guide : BeginLatex
@@ -225,6 +221,5 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
 
 

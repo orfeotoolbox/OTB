@@ -79,7 +79,6 @@ protected :
 };
 
 
-
 namespace Functor
 {
 /** \class KullbackLeiblerDistance

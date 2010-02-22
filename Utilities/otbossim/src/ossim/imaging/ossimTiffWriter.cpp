@@ -5,7 +5,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $
 
 #include <algorithm>
 #include <sstream>
@@ -54,7 +54,7 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $";
 #endif
 
 ossimTiffWriter::ossimTiffWriter()
@@ -614,7 +614,7 @@ Call setFilename method.\n",
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 15766 $ $Date: 2009-10-20 20:37:09 +0800 (Tue, 20 Oct 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 16081 $ $Date: 2009-12-11 04:56:36 +0800 (Fri, 11 Dec 2009) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -2166,6 +2166,11 @@ void ossimTiffWriter::getImageTypeList(std::vector<ossimString>& imageTypeList)c
    imageTypeList.push_back(ossimString("tiff_strip_band_separate"));
    imageTypeList.push_back(ossimString("tiff_tiled"));
    imageTypeList.push_back(ossimString("tiff_tiled_band_separate"));
+}
+
+ossimString ossimTiffWriter::getExtension() const
+{
+   return ossimString("tif");
 }
 
 bool ossimTiffWriter::hasImageType(const ossimString& imageType) const

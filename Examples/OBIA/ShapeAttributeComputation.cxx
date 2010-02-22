@@ -35,7 +35,6 @@
 #include "itkLabelMap.h"
 #include "itkLabelImageToLabelMapFilter.h"
 #include "itkShapeLabelMapFilter.h"
-
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include <fstream>

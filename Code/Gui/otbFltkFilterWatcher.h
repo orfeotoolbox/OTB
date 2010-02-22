@@ -77,7 +77,6 @@ protected:
   }
 
 
-
 private:
 
   Fl_Window * m_Window;
