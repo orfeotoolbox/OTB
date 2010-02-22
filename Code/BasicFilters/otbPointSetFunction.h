@@ -45,7 +45,7 @@ public:
 
   /** PointSet Type typedef Support*/
   typedef TPointSet                            PointSetType;
-  typedef typename  PointSetType::Pointer      PointSetPointerType;
+  typedef typename  PointSetType::ConstPointer PointSetPointerType;
 
   /** TOutput typedef suppoty*/
   typedef TOutput           OutputType;
@@ -53,7 +53,13 @@ public:
   /** Set the input image (reimplemented since we need to set the detector input) */
   itkGetConstObjectMacro(PointSet,PointSetType);
 
-  void SetPointSet( PointSetType* PointSet)
+  void SetPointSet(PointSetType * PointSet)
+  {
+    m_PointSet = PointSet;
+  }
+
+  /** SetPointSet() to maintain the const correctness of the pointset*/
+  void SetPointSet(PointSetPointerType PointSet)
   {
     m_PointSet = PointSet;
   }

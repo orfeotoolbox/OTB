@@ -27,14 +27,14 @@
 #include "itkNumericTraits.h"
 
 
+namespace otb
+{
+
 /** \class KeyPointDensityImageFilter
  *  \brief
-
  *
  */
 
-namespace otb
-{
 template <class TInputImage, class TOutputImage , class TDetector>
 class ITK_EXPORT KeyPointDensityImageFilter
       : public itk::ImageToImageFilter<TInputImage, TOutputImage>
