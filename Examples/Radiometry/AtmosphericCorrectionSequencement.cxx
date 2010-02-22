@@ -471,10 +471,10 @@ int main( int argc, char *argv[] )
   // With :
   // \begin{itemize}
   // \item $\rho_{TOA}$ is the reflectance at the top of the atmosphere;
-  // \item $\rho_{S}^{unif}$ is the ground reflectance under asumption
+  // \item $\rho_{S}^{unif}$ is the ground reflectance under assumption
   // of a lambertian surface and an uniform environment;
   // \item $\rho_{atm}$ is the intrinsic atmospheric reflectance;
-  // \item $t_{g}^{all gas}$ is the soherical albedo of the atmosphere;
+  // \item $t_{g}^{all gas}$ is the spherical albedo of the atmosphere;
   // \item $T(\mu_{S})$ is the downward transmittance;
   // \item $T(\mu_{V})$ is the upward transmittance.
   // \end{itemize}
@@ -504,7 +504,7 @@ int main( int argc, char *argv[] )
   // \end{equation}
   // With :
   // \begin{itemize}
-  // \item $\rho_{S}^{unif}$ is the ground reflectance under asumption of an homogeneous environment;
+  // \item $\rho_{S}^{unif}$ is the ground reflectance under assumption of an homogeneous environment;
   // \item $T(\mu_{V})$ is the upward transmittance;
   // \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
   // \item $exp(-\delta/\mu_{V})$ is the upward direct transmittance;
