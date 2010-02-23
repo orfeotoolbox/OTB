@@ -84,6 +84,5 @@ int otbDataNodeTest(int argc, char * argv[])
   otbControlConditionTestMacro(folder->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");
 
 
-
   return EXIT_SUCCESS;
 }

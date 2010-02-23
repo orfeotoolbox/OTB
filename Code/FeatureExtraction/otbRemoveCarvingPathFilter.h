@@ -127,7 +127,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OutputImagePixelType m_Value;
-  unsigned int m_Direction;
+  unsigned int         m_Direction;
 };
 
 } // end namespace otb
@@ -137,4 +137,3 @@ private:
 #endif
 
 #endif
-

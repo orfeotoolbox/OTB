@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimSrtmHandler.h 16356 2010-01-14 21:30:03Z dburken $
 #ifndef ossimSrtmHandler_HEADER
 #define ossimSrtmHandler_HEADER
 
@@ -18,6 +18,7 @@
 
 #include <ossim/base/ossimString.h>
 #include <ossim/elevation/ossimElevCellHandler.h>
+#include <ossim/support_data/ossimSrtmSupportData.h>
 
 class ossimEndian;
 
@@ -29,7 +30,9 @@ class OSSIMDLLEXPORT ossimSrtmHandler : public ossimElevCellHandler
 public:
 
    /** Constructor that takes a file name. */
-   ossimSrtmHandler(const ossimFilename& srtmFile);
+   ossimSrtmHandler();
+   const ossimSrtmHandler& operator=(const ossimSrtmHandler& rhs);
+   ossimSrtmHandler(const ossimSrtmHandler&);
 
 
    enum
@@ -64,7 +67,7 @@ public:
     *
     * @return Returns true on success, false on error.
     */
-   virtual bool open();
+   virtual bool open(const ossimFilename& file, bool memoryMapFlag=false);
 
    /**
     * Closes the stream to the file.
@@ -74,26 +77,31 @@ public:
 protected:
    /** destructor */
    virtual ~ossimSrtmHandler();
-   // Disallow operator= and copy constrution...
-   const ossimSrtmHandler& operator=(const ossimSrtmHandler& rhs);
-   ossimSrtmHandler(const ossimSrtmHandler&);
+   ossimSrtmSupportData m_supportData;
+   mutable OpenThreads::Mutex m_fileStrMutex;
+   std::ifstream m_fileStr;
 
-   mutable ossimRefPtr<ossimIFStream> theFileStr;
-//   mutable std::istream* theFileStr;
-//   mutable ifstream theFileStr;
-   ossim_int32      theNumberOfLines;
-   ossim_int32      theNumberOfSamples;
-   ossim_int32      theSrtmRecordSizeInBytes;
-   double           theLatSpacing;   // degrees
-   double           theLonSpacing;   // degrees
-   ossimDpt         theNwCornerPost; // cell origin;
-   ossimEndian*     theSwapper;
-   ossimScalarType theScalarType;
+   /** @brief true if stream is open. */
+   bool          m_streamOpen;
+   
+   ossim_int32      m_numberOfLines;
+   ossim_int32      m_numberOfSamples;
+   ossim_int32      m_srtmRecordSizeInBytes;
+   double           m_latSpacing;   // degrees
+   double           m_lonSpacing;   // degrees
+   ossimDpt         m_nwCornerPost; // cell origin;
+   ossimEndian*     m_swapper;
+   ossimScalarType m_scalarType;
+   
+   mutable std::vector<ossim_int8> m_memoryMap;
    
    template <class T>
-   double getHeightAboveMSLTemplate(T dummy,
+   double getHeightAboveMSLFileTemplate(T dummy,
                                     const ossimGpt& gpt);
-TYPE_DATA
+   template <class T>
+   double getHeightAboveMSLMemoryTemplate(T dummy,
+                                          const ossimGpt& gpt);
+   TYPE_DATA
 };
 
 #endif /* End of "#ifndef ossimSrtmHandler_HEADER" */

@@ -27,6 +27,5 @@ int otbInverseLogPolarTransformNew(int argc, char* argv[])
   InverseLogPolarTransformType::Pointer transform = InverseLogPolarTransformType::New();
 
 
-
   return EXIT_SUCCESS;
 }

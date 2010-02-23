@@ -153,7 +153,6 @@ public:
   }
 
 
-
   /** This method is available to allow implementation of
    * preprocessing.
    */

@@ -13,9 +13,10 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimRpcModel.cpp 16174 2009-12-23 16:34:06Z dburken $
 
 #include <ossim/projection/ossimRpcModel.h>
+#include <ossim/elevation/ossimElevManager.h>
 
 RTTI_DEF1(ossimRpcModel, "ossimRpcModel", ossimSensorModel);
 
@@ -218,7 +219,7 @@ void ossimRpcModel::setAttributes(ossim_float64 sampleOffset,
          if (traceDebug())
          {
             ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimNitfRpcModel::ossimNitfRpcModel Caught Exception:\n"
+               << "ossimRpcModel::setAttributes Caught Exception:\n"
                << e.what() << std::endl;
          }
       }
@@ -229,61 +230,6 @@ void ossimRpcModel::setMetersPerPixel(const ossimDpt& metersPerPixel)
 {
    theGSD = metersPerPixel;
    theMeanGSD = (theGSD.x+theGSD.y)*.5;
-}
-
-void ossimRpcModel::computeGsd()
-{
-   //---
-   // Get the reference ground point. Note that we will NOT use theRefImgPt
-   // as this can be set from tags and such that are not accurate.
-   //---
-   ossimGpt centerGpt;
-   lineSampleHeightToWorld(theRefImgPt,
-                           theHgtOffset,
-                           centerGpt);
-   if (centerGpt.hasNans())
-   {
-      std::string e = "ossimRpcModel::computeGSD error centerGpt has nans!";
-      throw ossimException(e);
-   }
-
-   // Get the ground point to the right of the reference point.
-   ossimGpt rightGpt;
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                           theHgtOffset,
-                           rightGpt);
-   if (rightGpt.hasNans())
-   {
-      std::string e = "ossimRpcModel::computeGSD error rightGpt has nans!";
-      throw ossimException(e);
-   }
-
-   // Get the ground point one up from the reference point.
-   ossimGpt topGpt;
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                           theHgtOffset,
-                           topGpt);
-   if (topGpt.hasNans())
-   {
-      std::string e = "ossimRpcModel::computeGSD error topGpt has nans!";
-      throw ossimException(e);
-   }
-
-   ossimEcefPoint rightPt = rightGpt;
-   ossimEcefPoint topPt   = topGpt;
-   ossimEcefPoint origin  = centerGpt;
-      
-   theGSD.x   = (rightPt-origin).magnitude();
-   theGSD.y   = (topPt-origin).magnitude();
-   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossimRpcModel::computGsd DEBUG:"
-         << "\ntheGSD: " << theGSD
-         << "\ntheMeanGSD: " << theMeanGSD << std::endl;
-   }
 }
 
 void ossimRpcModel::setPositionError(const ossim_float64& biasError,

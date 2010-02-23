@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimElevCellHandler.h 16143 2009-12-19 03:09:01Z okramer $
 
 
 #ifndef ossimElevCellHandler_HEADER
@@ -81,6 +81,8 @@ public:
 
    bool canConnectMyInputTo(ossim_int32 inputIndex,
                             const ossimConnectableObject* object)const;
+   virtual void close(){}
+   virtual bool open(const ossimFilename&, bool=false){return false;}
       
 protected:
    ossimElevCellHandler ();

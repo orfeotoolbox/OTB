@@ -8,7 +8,7 @@
 // Description: Common file for global Keywors.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.h 15464 2009-09-23 19:30:35Z okramer $
+// $Id: ossimKeywordNames.h 16038 2009-12-04 15:15:15Z dburken $
 
 #ifndef ossimKeywordNames_HEADER
 #define ossimKeywordNames_HEADER
@@ -72,6 +72,7 @@ public:
    static const char* FILENAME_KW;
    static const char* FILEPATH_KW;
    static const char* FILL_FLAG_KW;
+   static const char* GCS_CODE_KW;
    static const char* GEOM_FILE_KW;
    static const char* HEMISPHERE_KW;
    static const char* HORIZONTAL_SIZE_KW;
@@ -126,6 +127,7 @@ public:
    static const char* OVERVIEW_COMPRESSION_QUALITY_KW;
    static const char* OVERVIEW_COMPRESSION_TYPE_KW;
    static const char* OVERVIEW_FILE_KW;
+   static const char* OVERVIEW_STOP_DIMENSION_KW;
    static const char* PCS_CODE_KW;
    static const char* PEN_COLOR_KW;
    static const char* PHOTOMETRIC_KW;
@@ -154,6 +156,7 @@ public:
    static const char* SCALE_FACTOR_X_KW;
    static const char* SCALE_FACTOR_Y_KW;
    static const char* SENSOR_ID_KW;
+   static const char* SRS_NAME_KW;
    static const char* STD_PARALLEL_1_KW;
    static const char* STD_PARALLEL_2_KW;
    static const char* THICKNESS_KW;

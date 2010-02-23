@@ -8,7 +8,7 @@
 // Description: Common file for global Keywords.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.cpp 15464 2009-09-23 19:30:35Z okramer $
+// $Id: ossimKeywordNames.cpp 16038 2009-12-04 15:15:15Z dburken $
 
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -62,6 +62,7 @@ const char* ossimKeywordNames::FEATURE_NAME_KW = "feature_name";
 const char* ossimKeywordNames::FILENAME_KW = "filename";
 const char* ossimKeywordNames::FILEPATH_KW = "filepath";
 const char* ossimKeywordNames::FILL_FLAG_KW = "fill_flag";
+const char* ossimKeywordNames::GCS_CODE_KW = "gcs_code";
 const char* ossimKeywordNames::GEOM_FILE_KW = "geom_file";
 const char* ossimKeywordNames::HEMISPHERE_KW = "hemisphere";
 const char* ossimKeywordNames::HORIZONTAL_SIZE_KW = "horizontal_size";
@@ -116,6 +117,7 @@ const char* ossimKeywordNames::OUTPUT_TILE_SIZE_KW = "output_tile_size";
 const char* ossimKeywordNames::OVERVIEW_COMPRESSION_QUALITY_KW = "overview_compression_quality";
 const char* ossimKeywordNames::OVERVIEW_COMPRESSION_TYPE_KW = "overview_compression_type";
 const char* ossimKeywordNames::OVERVIEW_FILE_KW  = "overview_file";
+const char* ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW = "overview_stop_dimension";
 const char* ossimKeywordNames::PCS_CODE_KW = "pcs_code";
 const char* ossimKeywordNames::PEN_COLOR_KW = "pen_color";
 const char* ossimKeywordNames::PHOTOMETRIC_KW    = "photometric";
@@ -145,6 +147,7 @@ const char* ossimKeywordNames::SCALE_FACTOR_Y_KW = "scale_factor_y";
 const char* ossimKeywordNames::SCALE_X_KW = "scale_x";
 const char* ossimKeywordNames::SCALE_Y_KW = "scale_y";
 const char* ossimKeywordNames::SENSOR_ID_KW = "sensor";
+const char* ossimKeywordNames::SRS_NAME_KW = "srs_name";
 const char* ossimKeywordNames::STD_PARALLEL_1_KW = "std_parallel_1";
 const char* ossimKeywordNames::STD_PARALLEL_2_KW = "std_parallel_2";
 const char* ossimKeywordNames::THICKNESS_KW = "thickness";

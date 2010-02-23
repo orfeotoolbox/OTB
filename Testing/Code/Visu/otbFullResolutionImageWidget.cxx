@@ -81,6 +81,5 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
   window.remove(widget.GetPointer());
 
 
-
   return EXIT_SUCCESS;
 }

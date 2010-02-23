@@ -71,7 +71,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
   typedef unsigned short LabelPixelType;
@@ -84,7 +83,6 @@ int main(int argc, char * argv[])
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<RGBImageType> WriterType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -95,11 +93,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
   LabelImageType>
   SegmenterType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -133,7 +129,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SegmenterType::Pointer segmenter = SegmenterType::New();
   segmenter->SetDetailsImage(reader->GetOutput());
   segmenter->SetOriginalImage(reader2->GetOutput());
@@ -175,14 +170,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
-
   colormapper->SetInput(segmenter->GetOutput());
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(colormapper->GetOutput());
   writer->SetFileName(outputFilename1);
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -202,7 +194,6 @@ int main(int argc, char * argv[])
 // \end{figure}
   //
   // Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

@@ -238,6 +238,7 @@ ADD_TEST(ioTvImageFileReaderIntHDR2LUM ${IO_TESTS2}
         otbIntImageIOTest
         ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
         ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
 
 # --- Image FLOAT
 ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS2}
@@ -342,6 +343,7 @@ ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS2}
         otbFloatImageIOTest
         ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
         ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd )
+SET_TESTS_PROPERTIES(ioTvImageFileReaderFloatHDR2BSQ PROPERTIES DEPENDS ioTvImageFileReaderFloatBSQ2HDR)
 
 # --- Image DOUBLE
 ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS2}
@@ -619,7 +621,7 @@ ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS6}
         otbImageFileWriterStreamingONERAComplex
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
-
+SET_TESTS_PROPERTIES(ioTvONERAImageStreamWriter PROPERTIES DEPENDS ioTvONERAImageFileWriterComplex)
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
 # -------            otb::ONERAImageIO   ------------------------------
@@ -1288,19 +1290,19 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS10}
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvImageMetadataWriterHFA.img
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvImageMetadataWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/temp.tif
+		      ${TEMP}/ioTvImageMetadataWriterTIF.tif
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/temp.tif
+	${TEMP}/ioTvImageMetadataWriterTIF.tif
         )
 
 
@@ -1328,19 +1330,19 @@ ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS11}
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvImageMetadataStreamingWriterHFA.img
         )
 
 ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/spot5SubWithGcps.tif
-		      ${TEMP}/temp.tif
+		      ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         otbImageMetadataStreamingFileWriterTest
         ${INPUTDATA}/spot5SubWithGcps.tif
-	${TEMP}/temp.tif
+	${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
         )
 
 # Commented because gdal does not seems to write the metadata the same way in both formats
@@ -1366,10 +1368,10 @@ ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS11}
 ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS11}
    --compare-metadata ${EPSILON_9}
 		      ${INPUTDATA}/HFAGeoreferenced.img
-		      ${TEMP}/temp.img
+		      ${TEMP}/ioTvPipelineMetadataHandling.img
         otbPipelineMetadataHandlingTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	${TEMP}/temp.img
+	${TEMP}/ioTvPipelineMetadataHandling.img
         )
 
 # Commented out, since this test fails beceause of an ITK bug (added to our bugtracker for tracking)
@@ -1739,7 +1741,7 @@ ADD_TEST(ioTvVectorDataFileWriterTwice ${IO_TESTS15}
         otbVectorDataFileWriter
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp
 	)
-
+SET_TESTS_PROPERTIES(ioTvVectorDataFileWriterTwice PROPERTIES DEPENDS ioTvVectorDataFileWriter)
 
 ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
         --compare-ogr  ${EPSILON_9}

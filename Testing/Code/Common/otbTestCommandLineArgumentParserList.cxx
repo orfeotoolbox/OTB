@@ -63,7 +63,6 @@ int otbTestCommandLineArgumentParserList( int argc, char * argv[] )
   std::cout << std::endl;
 
 
-
   return EXIT_SUCCESS;
 }
 

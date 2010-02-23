@@ -17,7 +17,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU16ImageData.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimU16ImageData.cpp 16052 2009-12-08 22:20:40Z dburken $
 
 #include <ossim/imaging/ossimU16ImageData.h>
 #include <ossim/base/ossimSource.h>
@@ -28,13 +28,13 @@
 
 RTTI_DEF1(ossimU16ImageData, "ossimU16ImageData", ossimImageData)
 
-const ossimNormalizedU16RemapTable ossimU16ImageData::theRemapTable;
+const ossimNormalizedU16RemapTable ossimU16ImageData::m_remapTable;
    
 ossimU16ImageData::ossimU16ImageData()
    :
       ossimImageData()
 {
-   theScalarType = OSSIM_UINT16;
+   m_scalarType = OSSIM_UINT16;
 }
 
 ossimU16ImageData::ossimU16ImageData(ossimSource* source,
@@ -109,7 +109,7 @@ void ossimU16ImageData::getNormalizedFloat(ossim_uint32 offset,
    {
       const ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
       result =
-         static_cast<float>(theRemapTable.normFromPix(sourceBuf[offset]));
+         static_cast<float>(m_remapTable.normFromPix(sourceBuf[offset]));
    }
 }
 
@@ -121,7 +121,7 @@ void ossimU16ImageData::setNormalizedFloat(ossim_uint32 offset,
    {
       ossim_uint16* sourceBuf = getUshortBuf(bandNumber);
       sourceBuf[offset]
-         = static_cast<ossim_uint16>(theRemapTable.pixFromNorm(inputValue));
+         = static_cast<ossim_uint16>(m_remapTable.pixFromNorm(inputValue));
    }
 }
 
@@ -148,14 +148,14 @@ ossimU16ImageData::convertToNormalizedFloat(ossimImageData* result)const
    
    if(size > 0)
    {
-      for(ossim_uint32 bandCount = 0; bandCount < theNumberOfDataComponents; ++bandCount)
+      for(ossim_uint32 bandCount = 0; bandCount < m_numberOfDataComponents; ++bandCount)
       {
          const ossim_uint16* sourceBuf = getUshortBuf(bandCount);
          float* resultBuf = static_cast<float*>(result->getBuf(bandCount));
          for(ossim_uint32 counter = 0; counter <  size; ++counter)
          {
             resultBuf[counter]
-               = static_cast<float>(theRemapTable.
+               = static_cast<float>(m_remapTable.
                                     normFromPix(sourceBuf[counter]));
          }
       }
@@ -185,13 +185,13 @@ void ossimU16ImageData::convertToNormalizedDouble(ossimImageData* result)const
    
    if(size > 0)
    {
-      for(ossim_uint32 bandCount = 0; bandCount < theNumberOfDataComponents; ++bandCount)
+      for(ossim_uint32 bandCount = 0; bandCount < m_numberOfDataComponents; ++bandCount)
       {
          const ossim_uint16* sourceBuf = getUshortBuf(bandCount);
          double* resultBuf = static_cast<double*>(result->getBuf(bandCount));
          for(ossim_uint32 counter = 0; counter <  size; ++counter)
          {
-            resultBuf[counter] = theRemapTable.normFromPix(sourceBuf[counter]);
+            resultBuf[counter] = m_remapTable.normFromPix(sourceBuf[counter]);
          }
       }
    }
@@ -216,7 +216,7 @@ void ossimU16ImageData::unnormalizeInput(ossimImageData* normalizedInput)
    {
       if(scalarType == OSSIM_NORMALIZED_FLOAT)
       {
-         for(bandCount = 0; bandCount < theNumberOfDataComponents; ++bandCount)
+         for(bandCount = 0; bandCount < m_numberOfDataComponents; ++bandCount)
          {
             float* sourceBuf =
                static_cast<float*>(normalizedInput->getBuf(bandCount));
@@ -224,14 +224,14 @@ void ossimU16ImageData::unnormalizeInput(ossimImageData* normalizedInput)
             for(counter = 0; counter <  size; ++counter)
             {
                resultBuf[counter]
-                  = static_cast<ossim_uint16>(theRemapTable.
+                  = static_cast<ossim_uint16>(m_remapTable.
                                           pixFromNorm(sourceBuf[counter]));
             }
          }
       }
       else // Double
       {
-         for(bandCount = 0; bandCount < theNumberOfDataComponents; ++bandCount)
+         for(bandCount = 0; bandCount < m_numberOfDataComponents; ++bandCount)
          {
             double* sourceBuf =
                static_cast<double*>(normalizedInput->getBuf(bandCount));
@@ -239,7 +239,7 @@ void ossimU16ImageData::unnormalizeInput(ossimImageData* normalizedInput)
             for(counter = 0; counter <  size; ++counter)
             {
                resultBuf[counter]
-                  = static_cast<ossim_uint16>(theRemapTable.
+                  = static_cast<ossim_uint16>(m_remapTable.
                                           pixFromNorm(sourceBuf[counter]));
             }
          }
@@ -306,23 +306,6 @@ double ossimU16ImageData::computeAverageBandValue(ossim_uint32 bandNumber)
    return result;
 }
 
-void ossimU16ImageData::makeBlank()
-{
-   void* s = getBuf();
-
-   if (s == NULL) return; // nothing to do...
-   
-   ossim_uint32 size_in_pixels = getSizePerBand();
-   
-   for(ossim_uint32 band =0; band < getNumberOfBands(); ++band)
-   {
-      ossim_uint16* p = getUshortBuf(band);
-      for (ossim_uint32 i=0; i<size_in_pixels; i++) p[i] = 0;
-   }
-
-   setDataObjectStatus(OSSIM_EMPTY);
-}
-
 void ossimU16ImageData::setValue(long x, long y, double color)
 {
    if(getBuf() != NULL && isWithin(x, y))
@@ -331,12 +314,12 @@ void ossimU16ImageData::setValue(long x, long y, double color)
       // Compute the offset into the buffer for (x,y).  This should always
       // come out positive.
       //***
-      ossim_uint32 ux = static_cast<ossim_uint32>(x - theOrigin.x);
-      ossim_uint32 uy = static_cast<ossim_uint32>(y - theOrigin.y);
+      ossim_uint32 ux = static_cast<ossim_uint32>(x - m_origin.x);
+      ossim_uint32 uy = static_cast<ossim_uint32>(y - m_origin.y);
 
-      ossim_uint32 offset = uy * theSpatialExtents[0] + ux;
+      ossim_uint32 offset = uy * m_spatialExtents[0] + ux;
       
-      for(ossim_uint32 band = 0; band < theNumberOfDataComponents; band++)
+      for(ossim_uint32 band = 0; band < m_numberOfDataComponents; band++)
       {
          ossim_uint16* buf = getUshortBuf(band)+offset;
          *buf = (ossim_uint16)color;
@@ -383,7 +366,7 @@ void ossimU16ImageData::copyTileToNormalizedBuffer(double* buf) const
 
          for(ossim_uint32 index = 0; index < size; index++)
          {
-            d[index] = theRemapTable.
+            d[index] = m_remapTable.
                        normFromPix(static_cast<ossim_int32>(s[index]));
          }
       }
@@ -413,7 +396,7 @@ void ossimU16ImageData::copyTileToNormalizedBuffer(ossim_uint32 band,
       
       for(ossim_uint32 index = 0; index < size; index++)
       {
-         *d = theRemapTable.
+         *d = m_remapTable.
               normFromPix(static_cast<ossim_int32>(*s));
       }
    }
@@ -442,7 +425,7 @@ void ossimU16ImageData::copyNormalizedBufferToTile(double* buf)
 
          for(ossim_uint32 index = 0; index <  size; index++)
          {
-            d[index] = theRemapTable.pixFromNorm(s[index]);
+            d[index] = m_remapTable.pixFromNorm(s[index]);
          }
       }
    }
@@ -470,7 +453,7 @@ void ossimU16ImageData::copyNormalizedBufferToTile(ossim_uint32 band,
       
       for(ossim_uint32 index = 0; index <  size; index++)
       {
-         *d = theRemapTable.pixFromNorm(*s);
+         *d = m_remapTable.pixFromNorm(*s);
          ++d;
          ++s;
       }
@@ -500,7 +483,7 @@ void ossimU16ImageData::copyTileToNormalizedBuffer(float* buf) const
 
          for(ossim_uint32 index = 0; index < size; index++)
          {
-            d[index] = theRemapTable.
+            d[index] = m_remapTable.
                        normFromPix(static_cast<ossim_int32>(s[index]));
          }
       }
@@ -530,7 +513,7 @@ void ossimU16ImageData::copyTileToNormalizedBuffer(ossim_uint32 band,
       
       for(ossim_uint32 index = 0; index < size; index++)
       {
-         *d = theRemapTable.
+         *d = m_remapTable.
               normFromPix(static_cast<ossim_int32>(*s));
       }
    }
@@ -559,7 +542,7 @@ void ossimU16ImageData::copyNormalizedBufferToTile(float* buf)
 
          for(ossim_uint32 index = 0; index <  size; index++)
          {
-            d[index] = theRemapTable.pixFromNorm(s[index]);
+            d[index] = m_remapTable.pixFromNorm(s[index]);
          }
       }
    }
@@ -587,7 +570,7 @@ void ossimU16ImageData::copyNormalizedBufferToTile(ossim_uint32 band,
       
       for(ossim_uint32 index = 0; index <  size; index++)
       {
-         *d = theRemapTable.pixFromNorm(*s);
+         *d = m_remapTable.pixFromNorm(*s);
          ++d;
          ++s;
       }

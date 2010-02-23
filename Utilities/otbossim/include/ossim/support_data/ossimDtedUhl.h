@@ -10,7 +10,7 @@
 //               (UHL) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedUhl.h 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedUhl.h 16104 2009-12-17 18:09:59Z gpotts $
 #ifndef ossimDtedUhl_H
 #define ossimDtedUhl_H
 #include <iosfwd>
@@ -24,8 +24,8 @@ class ossimProperty;
 class OSSIM_DLL ossimDtedUhl : public ossimErrorStatusInterface
 {
 public:
-   ossimDtedUhl(const ossimFilename& dted_file, ossim_int32 offset);
-   ossimDtedUhl(std::istream& in, ossim_int32 offset);
+   ossimDtedUhl(const ossimFilename& dted_file="", ossim_int32 offset=0);
+   ossimDtedUhl(std::istream& in);
 
    enum
    {

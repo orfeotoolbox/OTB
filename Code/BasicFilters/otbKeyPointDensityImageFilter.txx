@@ -9,7 +9,7 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-  Copyright (c) CS systèmes d'information. All rights reserved.
+  Copyright (c) CS Systemes d'information. All rights reserved.
   See CSCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even
@@ -51,7 +51,7 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector >
  */
 
 /**
-* ThreadedGenerateData Performs the pixel-wise addition
+* GenerateData Performs the pixel-wise addition
 */
 template <class TInputImage , class TOutputImage, class TDetector>
 void
@@ -103,7 +103,6 @@ KeyPointDensityImageFilter< TInputImage , TOutputImage, TDetector >
 {
   return m_Detector;
 }
-
 
 
 /*----------------------------------------------------------------

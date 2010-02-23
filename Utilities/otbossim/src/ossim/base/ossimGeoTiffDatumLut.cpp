@@ -11,7 +11,7 @@
 //
 // Contains class definition for ossimGeoTiffDatumLut.
 //*******************************************************************
-//  $Id: ossimGeoTiffDatumLut.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeoTiffDatumLut.cpp 16472 2010-02-01 19:52:27Z gpotts $
 
 #include <ossim/base/ossimGeoTiffDatumLut.h>
 #include <ossim/base/ossimString.h>
@@ -104,6 +104,10 @@ ossimGeoTiffDatumLut::ossimGeoTiffDatumLut()
    //---
    theTable[23].theKey   = GCS_Clark_1866;
    theTable[23].theValue = "NAS-C";
+   theTable[23].theKey   = 3785;
+   theTable[23].theValue = "6055";
+   theTable[23].theKey   = 900913;
+   theTable[23].theValue = "6055";
 }
 
 ossimGeoTiffDatumLut::~ossimGeoTiffDatumLut()

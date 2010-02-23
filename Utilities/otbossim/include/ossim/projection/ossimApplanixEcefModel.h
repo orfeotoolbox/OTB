@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.h 13562 2008-09-10 14:56:31Z gpotts $
+//  $Id: ossimApplanixEcefModel.h 16174 2009-12-23 16:34:06Z dburken $
 #ifndef ossimApplanixEcefModel_HEADER
 #define ossimApplanixEcefModel_HEADER
 #include <ossim/projection/ossimFcsiModel.h>
@@ -70,7 +70,6 @@ public:
    virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
 
 protected:
-   void computeGsd();
    
    NEWMAT::Matrix theCompositeMatrix;
    NEWMAT::Matrix theCompositeMatrixInverse;

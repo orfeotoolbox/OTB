@@ -443,6 +443,19 @@ bool ossimImageGeometry::loadState(const ossimKeywordlist& kwl,
          m_gsd.toPoint(gsd);
       }
    }
+   else
+   {
+      //---
+      // Old geometry file with no type keyword:
+      //---
+      ossimProjection* projection = 
+         ossimProjectionFactoryRegistry::instance()->
+         createProjection(kwl, prefix);
+      if (projection)
+      {
+         setProjection(projection);
+      } 
+   }
 
    return true;
 }
@@ -480,7 +493,8 @@ bool ossimImageGeometry::saveState(ossimKeywordlist& kwl, const char* prefix) co
          kwl.add(prefix, "decimations", resultPoints, true);
       }
    }
-   kwl.add(prefix, "gsd", m_gsd.toString(), true);
+   ossimDpt mpp = getMetersPerPixel();
+   kwl.add(prefix, "gsd", mpp.toString(), true);
    
    return good_save;
 }

@@ -175,10 +175,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
 
-
-
-
-
   try
   {
     // Software Guide : BeginCodeSnippet
@@ -206,6 +202,5 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
 
 

@@ -90,7 +90,6 @@ int main(int argc, char * argv[])
 
   typedef otb::VectorDataFileReader<VectorDataType>
   VectorDataFileReaderType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -99,11 +98,9 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
   reader->SetFileName(argv[1]);
   reader->Update();
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -114,10 +111,8 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef VectorDataType::DataTreeType      DataTreeType;
   typedef itk::PreOrderTreeIterator<DataTreeType>    TreeIteratorType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -129,7 +124,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::Polygon<double> PolygonType;
   typedef PolygonType::VertexListConstIteratorType PolygonIteratorType;
   typedef otb::ObjectList<PolygonType> PolygonListType;
@@ -137,7 +131,6 @@ int main(int argc, char * argv[])
   typedef PolygonListType::Iterator PolygonListIteratorType;
 
   PolygonListType::Pointer polygonList = PolygonListType::New();
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -146,11 +139,9 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   TreeIteratorType it(reader->GetOutput()->GetDataTree());
 
   it.GoToBegin();
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -161,7 +152,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   while (!it.IsAtEnd())
   {
     if (it.Get()->IsPolygonFeature())
@@ -170,7 +160,6 @@ int main(int argc, char * argv[])
     }
     ++it;
   }
-
 // Software Guide : EndCodeSnippet
 
   polygonList->PushBack(PolygonType::New());
@@ -185,11 +174,9 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   VectorDataType::Pointer outVectorData = VectorDataType::New();
 
   typedef VectorDataType::DataNodeType               DataNodeType;
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -200,7 +187,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   DataNodeType::Pointer document = DataNodeType::New();
   document->SetNodeType(otb::DOCUMENT);
   document->SetNodeId("polygon");
@@ -208,7 +194,6 @@ int main(int argc, char * argv[])
   folder->SetNodeType(otb::FOLDER);
   DataNodeType::Pointer multiPolygon = DataNodeType::New();
   multiPolygon->SetNodeType(otb::FEATURE_MULTIPOLYGON);
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -217,14 +202,12 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   DataTreeType::Pointer tree = outVectorData->GetDataTree();
   DataNodeType::Pointer root = tree->GetRoot()->Get();
 
   tree->Add(document,root);
   tree->Add(folder,document);
   tree->Add(multiPolygon,folder);
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -234,7 +217,6 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   for (PolygonListType::Iterator it = polygonList->Begin();
        it != polygonList->End(); ++it)
   {
@@ -242,7 +224,6 @@ int main(int argc, char * argv[])
     newPolygon->SetPolygonExteriorRing(it.Get());
     tree->Add(newPolygon,multiPolygon);
   }
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
   //
@@ -252,14 +233,12 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(outVectorData);
   writer->SetFileName(argv[2]);
   writer->Update();
-
 // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

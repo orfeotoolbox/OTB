@@ -187,7 +187,6 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
 
-
   // We instantiate reader and writer types
   //
   typedef  otb::ImageFileReader< InputImageType > ReaderType;
@@ -392,7 +391,5 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

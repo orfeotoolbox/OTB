@@ -48,7 +48,6 @@
 
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbSiftFastImageFilter.h"
 // Disabling deprecation warning if on visual
@@ -63,7 +62,6 @@
 #endif
 
 #include "itkWarpImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -94,13 +92,11 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<RealType,Dimension> ImageType;
   typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
   //
@@ -110,10 +106,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
   //
@@ -122,10 +116,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::SiftFastImageFilter<ImageType,PointSetType>
   ImageToSIFTKeyPointSetFilterType;
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
   //
@@ -136,7 +128,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
   EuclideanDistanceMatchingFilterType;
@@ -148,7 +139,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef PointSetType::PointType PointType;
   typedef std::pair<PointType,PointType> MatchType;
   typedef std::vector<MatchType> MatchVectorType;
@@ -159,7 +149,6 @@ int main (int argc, char* argv[])
   typedef PointsContainerType::Iterator PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -170,9 +159,7 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader<ImageType> ReaderType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -183,7 +170,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
@@ -191,7 +177,6 @@ int main (int argc, char* argv[])
   movingReader->SetFileName(argv[2]);
   fixedReader->UpdateOutputInformation();
   movingReader->UpdateOutputInformation();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -201,14 +186,12 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
     ImageToSIFTKeyPointSetFilterType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
     ImageToSIFTKeyPointSetFilterType::New();
   EuclideanDistanceMatchingFilterType::Pointer euclideanMatcher =
     EuclideanDistanceMatchingFilterType::New();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -217,7 +200,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   double secondOrderThreshold = 0.5;
   bool useBackMatching = 0;
 
@@ -234,7 +216,6 @@ int main (int argc, char* argv[])
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
   euclideanMatcher->Update();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -243,10 +224,8 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-
   // Software Guide : EndCodeSnippet
   MatchVectorType trueSecondOrder;
 
@@ -327,7 +306,6 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef   itk::Vector< RealType, Dimension >    VectorType;
   typedef   otb::Image< VectorType,  Dimension >   DeformationFieldType;
 
@@ -336,7 +314,6 @@ int main (int argc, char* argv[])
   >  DeformationSourceType;
 
   DeformationSourceType::Pointer deformer = DeformationSourceType::New();
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -351,8 +328,6 @@ int main (int argc, char* argv[])
   deformer->SetOutputSpacing( fixedImage->GetSpacing() );
   deformer->SetOutputOrigin(  fixedImage->GetOrigin() );
   deformer->SetOutputRegion(  fixedImage->GetLargestPossibleRegion() );
-
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -374,7 +349,6 @@ int main (int argc, char* argv[])
 
   LandmarkPointType sourcePoint;
   LandmarkPointType targetPoint;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
   //
@@ -397,7 +371,6 @@ int main (int argc, char* argv[])
     sourcePoint[1] = point1[1];
 
 
-
     targetPoint[0] = point2[0];
     targetPoint[1] = point2[1];
 
@@ -406,7 +379,6 @@ int main (int argc, char* argv[])
 
     ++pointId;
   }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
   //
@@ -423,7 +395,6 @@ int main (int argc, char* argv[])
     deformer->GetOutput();
 
   deformer->Update();
-
   // Software Guide : EndCodeSnippet
 
 

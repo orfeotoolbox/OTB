@@ -149,7 +149,6 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -206,7 +205,6 @@ int main(int argc, char * argv[])
   // \end{figure}
   //
   //  Software Guide : EndLatex
-
 
 
   /************** pretty images for printing *********/

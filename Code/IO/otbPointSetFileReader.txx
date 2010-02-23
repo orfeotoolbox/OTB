@@ -47,7 +47,6 @@ PointSetFileReader<TOutputPointSet>
 }
 
 
-
 template <class TOutputPointSet>
 void
 PointSetFileReader<TOutputPointSet>
@@ -188,7 +187,6 @@ void PointSetFileReader<TOutputPointSet>
 
   ifs.close();
 }
-
 
 
 template <class TOutputPointSet>

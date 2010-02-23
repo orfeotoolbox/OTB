@@ -8,7 +8,7 @@
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimKeywordlist.h 16542 2010-02-05 13:26:37Z gpotts $
 
 #ifndef ossimKeywordlist_HEADER
 #define ossimKeywordlist_HEADER
@@ -28,22 +28,25 @@ static const char DEFAULT_DELIMITER = ':';
 class ossimFilename;
 
 
-class OSSIMDLLEXPORT ossimKeywordlist : public ossimErrorStatusInterface,
+class OSSIM_DLL ossimKeywordlist : public ossimErrorStatusInterface,
    public ossimReferenced
 {
 public:
 
    typedef std::map<ossimString, ossimString> KeywordMap;
 
-   ossimKeywordlist(char delimiter = DEFAULT_DELIMITER);
+   ossimKeywordlist(char delimiter = DEFAULT_DELIMITER,
+                    bool expandEnvVars = false);
 
-   ossimKeywordlist(const char*     file,
-               char            delimiter = DEFAULT_DELIMITER,
-               bool            ignoreBinaryChars = false);
+   ossimKeywordlist(const char* file,
+                    char        delimiter = DEFAULT_DELIMITER,
+                    bool        ignoreBinaryChars = false,
+                    bool        expandEnvVars = false );
 
    ossimKeywordlist(const ossimFilename& fileName,
-               char            delimiter = DEFAULT_DELIMITER,
-               bool            ignoreBinaryChars = false);
+                    char                 delimiter = DEFAULT_DELIMITER,
+                    bool                 ignoreBinaryChars = false,
+                    bool                 expandEnvVars = false);
 
    ~ossimKeywordlist();
 
@@ -63,9 +66,20 @@ public:
     *  Method to change default delimiter.  Handy when parsing
     *  files similar to a ossimKeywordlist.  (DEFAULT = ':')
     */
-   void change_delimiter(char del) { theDelimiter = del; }
+   void change_delimiter(char del);
 
    ossimString delimiter_str() const;
+
+   /*!
+    * If set to true, then strings found having the format
+    * "$(env_var_name)" are expanded in place.
+    */
+   void setExpandEnvVarsFlag( bool flag );
+   /*!
+    * Returns the flag that determines whether or not
+    * environment variables are expanded.
+    */
+   bool getExpandEnvVarsFlag( void ) const;
 
    void add(const char* prefix,
             const ossimKeywordlist& kwl,
@@ -259,16 +273,21 @@ public:
 
    /**
     * Methods to dump the ossimKeywordlist to a file on disk.
+    *
+    * @param file Name of output file.
+    * @param comment Optional string that will be written to line 1
+    * as a C++-style comment. A "//" is prepended to the input string.
+    *
     * @return true on success, false on error.
     */
-   bool write(const char* file) const;
+   virtual bool write(const char* file, const char* comment = 0) const;
 
-   ossimString toString()const;
-   void toString(ossimString& result)const;
+   virtual ossimString toString()const;
+   virtual void toString(ossimString& result)const;
 
-   void writeToStream(std::ostream &out)const;
+   virtual void writeToStream(std::ostream &out)const;
 
-   std::ostream& print(std::ostream& os) const;
+   virtual std::ostream& print(std::ostream& os) const;
    OSSIMDLLEXPORT friend std::ostream& operator<<(std::ostream& os,
                                                   const ossimKeywordlist& kwl);
    bool operator ==(ossimKeywordlist& kwl)const;
@@ -290,8 +309,8 @@ public:
 
    void addList( const ossimKeywordlist &src, bool overwrite = true );
 
-   bool parseStream(std::istream& is,
-                    bool ignoreBinaryChars = false);
+   virtual bool parseStream(std::istream& is,
+                            bool ignoreBinaryChars = false);
 
    /*!
     *  Will return a list of keys that contain the string passed in.
@@ -331,13 +350,16 @@ public:
     *  source1.source10.
     *
     */
-   std::vector<ossimString> getSubstringKeyList(
-      const ossimString& regularExpression)const;
+   std::vector<ossimString> getSubstringKeyList(const ossimString& regularExpression)const;
+   void getSubstringKeyList(std::vector<ossimString>& result,
+                            const ossimString& regularExpression)const;
 
    ossim_uint32 getNumberOfSubstringKeys(
       const ossimString& regularExpression)const;
 
    void addPrefixToAll(const ossimString& prefix);
+   void addPrefixToKeysThatMatch(const ossimString& prefix,
+                                 const ossimString& regularExpression);
    void stripPrefixFromAll(const ossimString& regularExpression);
 
    /*!
@@ -349,7 +371,7 @@ public:
    ossimKeywordlist::KeywordMap& getMap();
    void downcaseKeywords();
    void upcaseKeywords();
-private:
+protected:
 
    /*!
     *  Method to parse files to initialize the list.  Method will error on
@@ -367,8 +389,10 @@ private:
    KeywordMap::iterator getMapEntry(const ossimString& key);
    KeywordMap::iterator getMapEntry(const char* key);
 
-   KeywordMap               theMap;
-   char                     theDelimiter;
+   KeywordMap               m_map;
+   char                     m_delimiter;
+   char                     m_lineContinuationCharacter;
+   bool                     m_expandEnvVars;
 };
 
 #endif /* #ifndef ossimKeywordlist_HEADER */

@@ -37,7 +37,6 @@ int otbMatrixTransposeMatrixImageFilterNew( int argc, char * argv[] )
   MatrixTransposeMatrixImageFilterType::Pointer filter = MatrixTransposeMatrixImageFilterType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

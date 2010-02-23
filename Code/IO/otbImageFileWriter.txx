@@ -65,7 +65,6 @@ ImageFileWriter<TInputImage>
 }
 
 
-
 //---------------------------------------------------------
 template <class TInputImage>
 void
@@ -236,7 +235,6 @@ ImageFileWriter<TInputImage>
                                             m_BufferMemorySize,
                                             m_BufferNumberOfLinesDivisions);
 }
-
 
 
 //---------------------------------------------------------

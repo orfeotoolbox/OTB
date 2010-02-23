@@ -102,7 +102,6 @@ int TestHelper::RegressionTestAsciiFile(const char * testAsciiFileName, const ch
   }
 
 
-
   //fill up a vector of string, in which each element is one line of the file
   std::vector<std::string> listLineFileRef;
   std::vector<std::string> listLineFileTest;
@@ -1134,7 +1133,7 @@ bool TestHelper::CompareLines(std::string strfileref, std::string strfiletest, i
           else
             etatCour = ETAT_CHAR;
 
-          // "reference" state initialisation.
+          // "reference" state initialization.
           if (i == 0)
             etatPrec = etatCour;
 

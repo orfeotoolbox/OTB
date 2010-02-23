@@ -12,7 +12,7 @@
 // JpegTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimJpegTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 
 #ifndef ossimJpegTileSource_HEADER
 #define ossimJpegTileSource_HEADER
@@ -36,7 +36,6 @@ public:
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString getClassName()    const;
 
    /**
     *  Returns a pointer to a tile given an origin representing the upper

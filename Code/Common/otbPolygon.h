@@ -60,7 +60,6 @@ public:
   typedef typename Superclass::VertexListConstIteratorType   VertexListConstIteratorType;
 
 
-
   itkSetMacro(Epsilon,double);
   itkGetMacro(Epsilon,double);
 
@@ -113,7 +112,6 @@ public:
    * \return True if the two segments are touching without crossing.
    */
   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
-
 
 
   /**

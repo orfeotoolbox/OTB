@@ -54,7 +54,7 @@ enum Wavelet{
  *
  * The class is templated with the wavelet ID from the
  * Wavelet::Wavelet type. The members throw an
- * exception if the template specialisation is not defined
+ * exception if the template specialization is not defined
  * according to the wavelet ID.
  */
 template < Wavelet::Wavelet TMotherWaveletOperator >

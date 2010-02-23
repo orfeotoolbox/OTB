@@ -92,4 +92,3 @@ int otbWaveletPacketTransform( int argc, char * argv[] )
 }
 
 
-

@@ -29,6 +29,5 @@ int otbWindowedSincInterpolateImageGaussianFunctionNew(int argc, char * argv[])
   InterpolatorType::Pointer    interp    = InterpolatorType::New();
 
 
-
   return EXIT_SUCCESS;
 }

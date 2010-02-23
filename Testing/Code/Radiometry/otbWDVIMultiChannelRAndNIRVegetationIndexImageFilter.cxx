@@ -66,5 +66,3 @@ int otbWDVIMultiChannelRAndNIRVegetationIndexImageFilter(int argc, char * argv[]
 }
 
 
-
-

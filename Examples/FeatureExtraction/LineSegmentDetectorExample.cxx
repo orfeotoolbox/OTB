@@ -70,7 +70,6 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 // Software Guide : EndCodeSnippet
@@ -92,7 +91,6 @@ int main( int argc, char * argv[] )
 
   
   LsdFilterType::Pointer  lsdFilter = LsdFilterType::New();
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -104,13 +102,9 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::DrawLineSpatialObjectListFilter< ImageType,
                                        ImageType > DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
-
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -120,11 +114,9 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileWriter<ImageType>        WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -133,13 +125,11 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   lsdFilter->SetInput(reader->GetOutput());
   writer->SetInput(drawLineFilter->GetOutput());
 
   drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(lsdFilter->GetOutput());
-
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -151,10 +141,8 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   reader->GenerateOutputInformation();
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

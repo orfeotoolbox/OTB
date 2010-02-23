@@ -126,10 +126,7 @@ int main( int argc, char ** argv )
     ++color;
 
 
-
-
     }
-
 
 
   writer->SetInput( drawPathFilter->GetOutput() );
@@ -146,7 +143,6 @@ int main( int argc, char ** argv )
   viewer.Show();
   Fl::run();
 */
-
 
 
   return EXIT_SUCCESS;

@@ -5,7 +5,7 @@
 //   Contains implementation of class ossimMapProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimSrsProjectionFactory.cpp 13459 2008-08-20 12:48:50Z gpotts $
+//  $Id: ossimSrsProjectionFactory.cpp 16422 2010-01-27 18:25:17Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -13,7 +13,9 @@
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
+#include <ossim/projection/ossimMercatorProjection.h>
 #include <ossim/projection/ossimOrthoGraphicProjection.h>
+#include <ossim/base/ossimDatumFactoryRegistry.h>
 
 ossimSrsProjectionFactory* ossimSrsProjectionFactory::theInstance = 0;
 
@@ -122,6 +124,24 @@ ossimProjection* ossimSrsProjectionFactory::createProjection(const ossimString &
          case 4326:
          {
             return new ossimEquDistCylProjection;
+         }
+         case 900913: // global mercator projection
+         case 3785:
+         {
+            const ossimDatum* datum = ossimDatumFactoryRegistry::instance()->
+               create( ossimString("6055") );
+            if(datum)
+            {
+               ossimMercatorProjection* merc = new ossimMercatorProjection();
+               ossimGpt origin(0.0,0.0,0.0, datum);
+               merc->setFalseEasting(0.0);
+               merc->setFalseNorthing(0.0);
+               merc->setOrigin(origin);
+               merc->update();
+               
+               return merc;
+            }
+            break;
          }
          default:
          {

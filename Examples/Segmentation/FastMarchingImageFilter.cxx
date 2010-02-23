@@ -214,7 +214,6 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   //  Software Guide : BeginLatex
   //
   //  The type of the BinaryThresholdImageFilter filter is
@@ -761,7 +760,5 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-
 
 

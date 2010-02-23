@@ -29,6 +29,7 @@
 #include "projection/ossimProjection.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/ossimPluginProjectionFactory.h"
+#include "base/ossimFilename.h" 
 
 int otbImageKeywordlist(int argc, char* argv[])
 {

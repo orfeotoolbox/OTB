@@ -216,4 +216,3 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 #endif
 
 
-

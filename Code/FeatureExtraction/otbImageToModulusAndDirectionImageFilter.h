@@ -65,7 +65,6 @@ public:
   typedef TOutputImageDirection         OutputImageDirectionType;
 
 
-
   typedef typename InputImageType::Pointer        InputImagePointer;
   typedef typename InputImageType::ConstPointer   InputImageConstPointer;
   typedef typename InputImageType::RegionType     InputImageRegionType;

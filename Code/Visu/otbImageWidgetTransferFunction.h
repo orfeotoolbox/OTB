@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class ImageWidgetTransferFunction
- *  \brief <b>DEPRECATED</b>: Base class for visualisation transfer functions.
+ *  \brief <b>DEPRECATED</b>: Base class for visualization transfer functions.
  *
  *  \deprecated use the new Visualization framework instead.
  * \sa StandardImageViewer

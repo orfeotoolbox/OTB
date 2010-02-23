@@ -7,17 +7,14 @@
 // Description:  Interface class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.cpp 15366 2009-09-04 13:30:04Z dburken $
+// $Id: ossimOverviewBuilderBase.cpp 15980 2009-11-21 19:24:00Z dburken $
 
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/base/ossimIpt.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/imaging/ossimImageHandler.h>
 
-const char* ossimOverviewBuilderBase::OVERVIEW_STOP_DIMENSION_KW =
-   "overview_stop_dimension";
-
-// Property keywords.
 RTTI_DEF3(ossimOverviewBuilderBase,
           "ossimOverviewBuilderBase",
           ossimSource,
@@ -90,7 +87,7 @@ ossim_uint32 ossimOverviewBuilderBase::getDefaultStopDimension() const
    
      // Get the stop dimension from ossim preferences.
    const char* lookup = ossimPreferences::instance()->
-      findPreference(OVERVIEW_STOP_DIMENSION_KW);
+      findPreference(ossimKeywordNames::OVERVIEW_STOP_DIMENSION_KW);
    if (lookup)
    {
       result = ossimString(lookup).toUInt32();

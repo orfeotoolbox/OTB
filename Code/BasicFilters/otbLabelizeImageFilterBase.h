@@ -126,7 +126,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-
 }; // end class LabelizeImageFilterBase
 
 } // end namespace otb

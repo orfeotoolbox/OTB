@@ -2,8 +2,6 @@
 #define __otbBasicApplicationView_h
 
 
-
-
 #include "otbBasicApplicationViewGUI.h"
 
 #include "otbListenerBase.h"

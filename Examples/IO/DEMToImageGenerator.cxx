@@ -90,7 +90,6 @@ int main(int argc, char * argv[])
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
 
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
-
   // Software Guide : EndCodeSnippet
 
 

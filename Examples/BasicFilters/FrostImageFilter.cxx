@@ -95,7 +95,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
 
-
   typedef otb::ImageFileReader< InputImageType >  ReaderType;
 
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;

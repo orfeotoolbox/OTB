@@ -141,7 +141,6 @@ protected:
   virtual void  GenerateData();
 
 
-
   /** Check local extremum for 8 neighbors (current)
    *
    *  \param currentScale
@@ -149,7 +148,6 @@ protected:
    *  \return true if the Central pixel is extremum
    */
   virtual bool IsLocalExtremum(const NeighborhoodType& neigh);
-
 
 
   /** Check local extremum for 8 neighbors (Previous or Scale)

@@ -142,4 +142,3 @@ WaveletForwardTransform< TInputImage, TOutputImage, TFilter >
 #endif
 
 
-

@@ -120,13 +120,6 @@ protected:
 };
 
 
-
-
-
-
-
-
-
 /** \class SRWI
  *  \brief This functor computes the Simple Ratio Water Index (SRWI)
  *  \brief For MODIS bands 860 & 1240
@@ -422,7 +415,6 @@ private:
 };
 
 
-
 /** \class WaterSqrtSpectarlAngleFunctor
  *  \brief This functor uses a spectral angle with a particular reference pixel.
  *
@@ -513,7 +505,6 @@ protected:
   int m_RedChannel;
   int m_NIRChannel;
 };
-
 
 
 } // namespace Functor

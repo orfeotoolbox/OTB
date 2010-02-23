@@ -31,7 +31,6 @@
 //  Software Guide : EndCommandLineArgs
 
 
-
 // Software Guide : BeginLatex
 //
 // \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}

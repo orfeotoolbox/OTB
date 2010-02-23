@@ -61,7 +61,6 @@ PixelDescriptionView<TInputPixelDescription>
 }
 
 
-
 template < class TInputPixelDescription >
 void
 PixelDescriptionView<TInputPixelDescription>

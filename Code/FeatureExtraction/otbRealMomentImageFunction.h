@@ -62,8 +62,6 @@ public:
   typedef OutputType                                RealType;
 
 
-
-
 protected:
   RealMomentImageFunction() {};
   ~RealMomentImageFunction() {};

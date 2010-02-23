@@ -4,8 +4,6 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  David Burken
-//
 // Description: NITF Info object.
 // 
 //----------------------------------------------------------------------------
@@ -14,27 +12,26 @@
 #include <iostream>
 
 #include <ossim/support_data/ossimNitfInfo.h>
-#include <ossim/support_data/ossimNitfFile.h>
 
 ossimNitfInfo::ossimNitfInfo()
-   : theNitfFile(0)
+   : m_nitfFile(0)
 {
 }
 
 ossimNitfInfo::~ossimNitfInfo()
 {
-   theNitfFile = 0;
+   m_nitfFile = 0;
 }
 
 bool ossimNitfInfo::open(const ossimFilename& file)
 {
-   theNitfFile = new ossimNitfFile();
+   m_nitfFile = new ossimNitfFile();
 
-   bool result = theNitfFile->parseFile(file);
+   bool result = m_nitfFile->parseFile(file);
 
    if (result == false)
    {
-      theNitfFile = 0;
+      m_nitfFile = 0;
    }
 
    return result;
@@ -42,10 +39,10 @@ bool ossimNitfInfo::open(const ossimFilename& file)
 
 std::ostream& ossimNitfInfo::print(std::ostream& out) const
 {
-   if (theNitfFile)
+   if ( m_nitfFile.valid() )
    {
       std::string prefix;
-      theNitfFile->print(out, prefix, getProcessOverviewFlag());
+      m_nitfFile->print(out, prefix, getProcessOverviewFlag());
    }
    return out;
 }

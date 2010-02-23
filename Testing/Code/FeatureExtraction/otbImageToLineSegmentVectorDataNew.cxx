@@ -20,7 +20,6 @@
 #include "otbImageToLineSegmentVectorData.h"
 
 
-
 int otbImageToLineSegmentVectorDataNew( int argc, char * argv[] )
 {
   

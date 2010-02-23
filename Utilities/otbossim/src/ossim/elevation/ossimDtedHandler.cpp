@@ -9,17 +9,11 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimDtedHandler.cpp 16341 2010-01-13 18:22:27Z gpotts $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
 #include <ossim/elevation/ossimDtedHandler.h>
-#include <ossim/support_data/ossimDtedVol.h>
-#include <ossim/support_data/ossimDtedHdr.h>
-#include <ossim/support_data/ossimDtedUhl.h>
-#include <ossim/support_data/ossimDtedDsi.h>
-#include <ossim/support_data/ossimDtedAcc.h>
-#include <ossim/support_data/ossimDtedRecord.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotify.h>
@@ -41,19 +35,18 @@ static const char ENABLE_STATS_KW[] = "elevation.compute_statistics.enabled";
 ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMapFlag)
    :
       ossimElevCellHandler(dted_file),
-      theFileStr(),
-      theNumLonLines(0),
-      theNumLatPoints(0),
-      theDtedRecordSizeInBytes(0),
-      theEdition(),
-      theProductLevel(),
-      theCompilationDate(),
-      theOffsetToFirstDataRecord(0),
-      theLatSpacing(0.0),
-      theLonSpacing(0.0),
-      theSwCornerPost(),
-      theSwapBytesFlag(false),
-      theMemoryMapFlag(memoryMapFlag)
+      m_fileStr(),
+      m_numLonLines(0),
+      m_numLatPoints(0),
+      m_dtedRecordSizeInBytes(0),
+      m_edition(),
+      m_productLevel(),
+      m_compilationDate(),
+      m_offsetToFirstDataRecord(0),
+      m_latSpacing(0.0),
+      m_lonSpacing(0.0),
+      m_swCornerPost(),
+      m_swapBytesFlag(false)
 {
    static const char MODULE[] = "ossimDtedHandler (Filename) Constructor";
    if (traceExec())
@@ -62,10 +55,11 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMa
          << "DEBUG " << MODULE <<": entering..." << std::endl;
    }
    
+   m_swapBytesFlag = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
    //---
    //  Open the dted file for reading.
    //---
-   if (!open())
+   if (!open(dted_file, memoryMapFlag))
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
       
@@ -91,97 +85,6 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMa
    }
 
    // DTED is stored in big endian.
-   theSwapBytesFlag = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
-
-   // the file was mapped to memory
-   if(memoryMapFlag)
-   {
-      theFileStr.open(theFilename.c_str(), 
-                      std::ios::in | std::ios::binary);
-   }
-   else
-   {
-      theFileStr.seekg(0);
-   }
-
-   // Attempt to parse.
-   ossimDtedVol vol(theFileStr, 0);
-   ossimDtedHdr hdr(theFileStr, vol.stopOffset());
-   ossimDtedUhl uhl(theFileStr, hdr.stopOffset());
-   ossimDtedDsi dsi(theFileStr, uhl.stopOffset());
-   ossimDtedAcc acc(theFileStr, dsi.stopOffset());
-
-   if(memoryMapFlag)
-   {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
-      theFileStr.close();
-   }
-   //***
-   // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
-   // are for magnetic tape only; hence, may or may not be there.
-   //***
-   if (uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
-       acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG " << MODULE << ": "
-            << "\nError parsing file:  " << dted_file.c_str()
-            << "\nPossibly not a dted file."
-            << std::endl;
-      }
-      
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      close();
-      return;
-   }
-   
-   theNumLonLines  = uhl.numLonLines();
-   theNumLatPoints = uhl.numLatPoints();
-   theLatSpacing   = uhl.latInterval();
-   theLonSpacing   = uhl.lonInterval();
-   theDtedRecordSizeInBytes = theNumLatPoints*2+ossimDtedRecord::DATA_LENGTH;
-
-   theEdition  = dsi.edition();
-   theProductLevel = dsi.productLevel();
-   theCompilationDate = dsi.compilationDate();
-
-   theOffsetToFirstDataRecord = acc.stopOffset();
-   
-   //***
-   //  initialize the bounding rectangle:
-   //***
-   double south_boundary = uhl.latOrigin();
-   double west_boundary  = uhl.lonOrigin();
-   double north_boundary = south_boundary + theLatSpacing*(theNumLatPoints-1);
-   double east_boundary  = west_boundary  + theLonSpacing*(theNumLonLines-1);
-
-   // For ossimElevCellHandler::pointHasCoverage method.
-   theGroundRect = ossimGrect(ossimGpt(north_boundary, west_boundary, 0.0),
-                              ossimGpt(south_boundary, east_boundary, 0.0));
-
-   theSwCornerPost.lat = south_boundary;
-   theSwCornerPost.lon = west_boundary;
-
-   //***
-   //  Determine the mean spacing:
-   //***
-   double center_lat = (south_boundary + north_boundary)/2.0;
-   theMeanSpacing = (theLatSpacing + theLonSpacing*ossim::cosd(center_lat))
-                    * ossimGpt().metersPerDegree().x / 2.0;
-
-   //  Initialize the accuracy values:
-   theAbsLE90 = acc.absLE();
-   theAbsCE90 = acc.absCE();
-
-   // Set the base class null height value.
-   theNullHeightValue = -32767.0;
-
-   // Get the statistics.
-   gatherStatistics();
-   
    if (traceExec())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -191,42 +94,129 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file, bool memoryMa
 
 ossimDtedHandler::~ossimDtedHandler()
 {
-   theFileStr.close();
-   theMemoryMap.clear();
+   close();
 }
 
 double ossimDtedHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   if(!theMemoryMapFlag)
+   if(m_fileStr.is_open())
    {
       return getHeightAboveMSLFile(gpt);
    }
-   // will map to memory if needed
-   //
-   //mapToMemory();
-   return getHeightAboveMSLMemory(gpt);
+   else if(m_memoryMap.size())
+   {
+      return getHeightAboveMSLMemory(gpt);
+   }
+   
+   return ossim::nan();
 }
 
-void ossimDtedHandler::mapToMemory()
+bool ossimDtedHandler::open(const ossimFilename& file, bool memoryMapFlag)
 {
+   static const char* MODULE = "ossimDtedHandler::open";
+   close();
+   theFilename = file;
+   m_fileStr.clear();
+
+   m_fileStr.open(file.c_str(), 
+                  std::ios::in | std::ios::binary);
+   if(!m_fileStr.good())
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
-      theFileStr.close();
+      return false;
    }
-   OpenThreads::ScopedWriteLock lock(theMemoryMapMutex);
-   if(theMemoryMap.size()) return;
-   std::ifstream in(theFilename.c_str(), 
-                    std::ios::in|std::ios::binary);
-   theMemoryMap.resize(theFilename.fileSize());
-   in.read((char*)(&theMemoryMap.front()), (std::streamsize)theMemoryMap.size());
-   in.close();
+   m_numLonLines = 0;
+   m_numLatPoints = 0;
+   m_dtedRecordSizeInBytes = 0;
+   
+   // Attempt to parse.
+   m_vol.parse(m_fileStr);
+   m_hdr.parse(m_fileStr);
+   m_uhl.parse(m_fileStr);
+   m_dsi.parse(m_fileStr);
+   m_acc.parse(m_fileStr);
+
+   //***
+   // Check for errors.  Must have uhl, dsi and acc records.  vol and hdr
+   // are for magnetic tape only; hence, may or may not be there.
+   //***
+   if (m_uhl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_dsi.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR ||
+       m_acc.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG " << MODULE << ": "
+         << "\nError parsing file:  " << file.c_str()
+         << "\nPossibly not a dted file."
+         << std::endl;
+      }
+      
+      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      close();
+      return false;
+   }
+   if(memoryMapFlag)
+   {
+      m_fileStr.seekg(0);
+      m_fileStr.clear();
+      m_memoryMap.resize(theFilename.fileSize());
+      m_fileStr.read((char*)(&m_memoryMap.front()), (std::streamsize)m_memoryMap.size());
+      m_fileStr.close();
+   }
+   
+   m_numLonLines  = m_uhl.numLonLines();
+   m_numLatPoints = m_uhl.numLatPoints();
+   m_latSpacing   = m_uhl.latInterval();
+   m_lonSpacing   = m_uhl.lonInterval();
+   m_dtedRecordSizeInBytes = m_numLatPoints*2+ossimDtedRecord::DATA_LENGTH;
+   
+   m_edition  = m_dsi.edition();
+   m_productLevel = m_dsi.productLevel();
+   m_compilationDate = m_dsi.compilationDate();
+   
+   m_offsetToFirstDataRecord = m_acc.stopOffset();
+   
+   //***
+   //  initialize the bounding rectangle:
+   //***
+   double south_boundary = m_uhl.latOrigin();
+   double west_boundary  = m_uhl.lonOrigin();
+   double north_boundary = south_boundary + m_latSpacing*(m_numLatPoints-1);
+   double east_boundary  = west_boundary  + m_lonSpacing*(m_numLonLines-1);
+   
+   // For ossimElevCellHandler::pointHasCoverage method.
+   theGroundRect = ossimGrect(ossimGpt(north_boundary, west_boundary, 0.0),
+                              ossimGpt(south_boundary, east_boundary, 0.0));
+   
+   m_swCornerPost.lat = south_boundary;
+   m_swCornerPost.lon = west_boundary;
+   
+   //***
+   //  Determine the mean spacing:
+   //***
+   double center_lat = (south_boundary + north_boundary)/2.0;
+   theMeanSpacing = (m_latSpacing + m_lonSpacing*ossim::cosd(center_lat))
+                     * ossimGpt().metersPerDegree().x / 2.0;
+   
+   //  Initialize the accuracy values:
+   theAbsLE90 = m_acc.absLE();
+   theAbsCE90 = m_acc.absCE();
+   
+   // Set the base class null height value.
+   theNullHeightValue = -32767.0;
+   
+   // Get the statistics.
+   gatherStatistics();
+
+   return true;
 }
 
 double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
 {
    // Establish the grid indexes:
-   double xi = (gpt.lon - theSwCornerPost.lon) / theLonSpacing;
-   double yi = (gpt.lat - theSwCornerPost.lat) / theLatSpacing;
+   double xi = (gpt.lon - m_swCornerPost.lon) / m_lonSpacing;
+   double yi = (gpt.lat - m_swCornerPost.lat) / m_latSpacing;
 
    // Check for right edge.
    int x0 = static_cast<int>(xi);
@@ -246,14 +236,8 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
 
    // Do some error checking.
    if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (theNumLonLines  - 2.0) ||
-        y0 > (theNumLatPoints - 2.0) )
-   {
-      return ossim::nan();
-   }
-
-   // We need an open stream to file from here on out...
-   if (!open())
+        x0 > (m_numLonLines  - 2.0) ||
+        y0 > (m_numLatPoints - 2.0) )
    {
       return ossim::nan();
    }
@@ -267,38 +251,38 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
    // Grab the four points from the dted cell needed.  These are big endian,
    // signed magnitude shorts so they must be interpreted accordingly.
    //***
-   int offset = theOffsetToFirstDataRecord + x0 * theDtedRecordSizeInBytes +
+   int offset = m_offsetToFirstDataRecord + x0 * m_dtedRecordSizeInBytes +
                 y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
 
    {
-      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theFileStrMutex);
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(m_fileStrMutex);
       // Put the file pointer at the start of the first elevation post.
-      theFileStr.seekg(offset, std::ios::beg);
+      m_fileStr.seekg(offset, std::ios::beg);
       
       ossim_sint16 ss;
       ossim_uint16 us;
       
       // Get the first post.
-      theFileStr.read((char*)&us, POST_SIZE);
+      m_fileStr.read((char*)&us, POST_SIZE);
       ss = convertSignedMagnitude(us);
       p00 = ss;
       
       // Get the second post.
-      theFileStr.read((char*)&us, POST_SIZE);
+      m_fileStr.read((char*)&us, POST_SIZE);
       ss = convertSignedMagnitude(us);
       p01 = ss;
       
       // Move over to the next column.
-      offset += theDtedRecordSizeInBytes;
-      theFileStr.seekg(offset, std::ios::beg);
+      offset += m_dtedRecordSizeInBytes;
+      m_fileStr.seekg(offset, std::ios::beg);
       
       // Get the third post.
-      theFileStr.read((char*)&us, POST_SIZE);
+      m_fileStr.read((char*)&us, POST_SIZE);
       ss = convertSignedMagnitude(us);
       p10 = ss;
       
       // Get the fourth post.
-      theFileStr.read((char*)&us, POST_SIZE);
+      m_fileStr.read((char*)&us, POST_SIZE);
       ss = convertSignedMagnitude(us);
       p11 = ss;
    }
@@ -350,10 +334,10 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
 
 double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
 {
-   ossim_uint8* buf = &theMemoryMap.front();
+   ossim_uint8* buf = &m_memoryMap.front();
    // Establish the grid indexes:
-   double xi = (gpt.lon - theSwCornerPost.lon) / theLonSpacing;
-   double yi = (gpt.lat - theSwCornerPost.lat) / theLatSpacing;
+   double xi = (gpt.lon - m_swCornerPost.lon) / m_lonSpacing;
+   double yi = (gpt.lat - m_swCornerPost.lat) / m_latSpacing;
 
    // Check for right edge.
    int x0 = static_cast<int>(xi);
@@ -361,22 +345,22 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
 
    // Check for right edge.
 //    if (gpt.lon == theGroundRect.lr().lon)
-   if(x0 == (theNumLonLines-1))
+   if(x0 == (m_numLonLines-1))
    {
       --x0; // Move over one post.
    }
    
    // Check for top edge.
 //    if (gpt.lat == theGroundRect.ul().lat)
-   if(y0 == (theNumLatPoints-1))
+   if(y0 == (m_numLatPoints-1))
    {
       --y0; // Move down one post.
    }
 
    // Do some error checking.
    if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (theNumLonLines  - 2.0) ||
-        y0 > (theNumLatPoints - 2.0) )
+        x0 > (m_numLonLines  - 2.0) ||
+        y0 > (m_numLatPoints - 2.0) )
    {
       return ossim::nan();
    }
@@ -390,10 +374,9 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
    // Grab the four points from the dted cell needed.  These are big endian,
    // signed magnitude shorts so they must be interpreted accordingly.
    //***
-   ossim_uint64 offset = theOffsetToFirstDataRecord + x0 * theDtedRecordSizeInBytes +
+   ossim_uint64 offset = m_offsetToFirstDataRecord + x0 * m_dtedRecordSizeInBytes +
                          y0 * 2 + DATA_RECORD_OFFSET_TO_POST;
    {
-      OpenThreads::ScopedReadLock lock(theMemoryMapMutex);
       ossim_uint16 us;
       
       memcpy(&us, buf+offset, POST_SIZE); 
@@ -402,7 +385,7 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
       p01 = convertSignedMagnitude(us);
       
       // Move over to the next column.
-      offset += theDtedRecordSizeInBytes;
+      offset += m_dtedRecordSizeInBytes;
       memcpy(&us, buf+offset, POST_SIZE); 
       p10 = convertSignedMagnitude(us);
       memcpy(&us, buf+offset+POST_SIZE, POST_SIZE); 
@@ -460,8 +443,8 @@ double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
    
    // Do some error checking.
    if ( gridPt.x < 0.0 || gridPt.y < 0.0 ||
-        gridPt.x > (theNumLonLines  - 1) ||
-        gridPt.y > (theNumLatPoints - 1) )
+        gridPt.x > (m_numLonLines  - 1) ||
+        gridPt.y > (m_numLatPoints - 1) )
    {
       if(traceDebug())
       {
@@ -473,21 +456,20 @@ double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
 
    if (!isOpen())
    {
-      const_cast<ossimDtedHandler*>(this)->open();
       return ossim::nan();
    }
 
    int offset =
-      theOffsetToFirstDataRecord + gridPt.x * theDtedRecordSizeInBytes +
+      m_offsetToFirstDataRecord + gridPt.x * m_dtedRecordSizeInBytes +
       gridPt.y * 2 + DATA_RECORD_OFFSET_TO_POST;
-
+   
    // Put the file pointer at the start of the first elevation post.
-   theFileStr.seekg(offset, std::ios::beg);
+   m_fileStr.seekg(offset, std::ios::beg);
 
    ossim_uint16 us;
 
    // Get the post.
-   theFileStr.read((char*)&us, POST_SIZE);
+   m_fileStr.read((char*)&us, POST_SIZE);
    
    return double(convertSignedMagnitude(us));
 }
@@ -527,7 +509,7 @@ void ossimDtedHandler::gatherStatistics()
       theMinHeightAboveMSL = atoi(min_str);
       theMaxHeightAboveMSL = atoi(max_str);
    }
-   else if (theComputeStatsFlag)  // Scan the cell and gather the statistics...
+   else if (theComputeStatsFlag&&!m_memoryMap.size())  // Scan the cell and gather the statistics...
    {
       if(traceDebug())
       {
@@ -541,7 +523,7 @@ void ossimDtedHandler::gatherStatistics()
       theMaxHeightAboveMSL = -32767;
       
       // Put the file pointer at the start of the first elevation post.
-      theFileStr.seekg(theOffsetToFirstDataRecord, std::ios::beg);
+      m_fileStr.seekg(m_offsetToFirstDataRecord, std::ios::beg);
       
       //---
       // Loop through all records and scan for lowest min and highest max.
@@ -549,15 +531,15 @@ void ossimDtedHandler::gatherStatistics()
       // There are eight bytes in front of the post and four checksum bytes at
       // the end so ignore them.
       //---
-      for (ossim_int32 i=0; i<theNumLonLines; ++i)  // longitude direction
+      for (ossim_int32 i=0; i<m_numLonLines; ++i)  // longitude direction
       {
-         theFileStr.seekg(DATA_RECORD_OFFSET_TO_POST, std::ios::cur);
+         m_fileStr.seekg(DATA_RECORD_OFFSET_TO_POST, std::ios::cur);
          
-         for (ossim_int32 j=0; j<theNumLatPoints; ++j) // latitude direction
+         for (ossim_int32 j=0; j<m_numLatPoints; ++j) // latitude direction
          {
             ossim_uint16 us;
             ossim_sint16 ss;
-            theFileStr.read((char*)&us, POST_SIZE);
+            m_fileStr.read((char*)&us, POST_SIZE);
             ss = convertSignedMagnitude(us);
             if (ss < theMinHeightAboveMSL && ss != NULL_POST)
             {
@@ -569,7 +551,7 @@ void ossimDtedHandler::gatherStatistics()
             }
          }
          
-         theFileStr.seekg(DATA_RECORD_CHECKSUM_SIZE, std::ios::cur);
+         m_fileStr.seekg(DATA_RECORD_CHECKSUM_SIZE, std::ios::cur);
       }
       
       // Add the stats to the keyword list.
@@ -592,39 +574,22 @@ void ossimDtedHandler::gatherStatistics()
 
 ossimIpt ossimDtedHandler::getSizeOfElevCell() const
 {
-   return ossimIpt(theNumLonLines, theNumLatPoints);
+   return ossimIpt(m_numLonLines, m_numLatPoints);
 }
 
 ossimString  ossimDtedHandler::edition() const
 {
-   return theEdition;
+   return m_edition;
 }
 
 ossimString  ossimDtedHandler::productLevel() const
 {
-   return theProductLevel;
+   return m_productLevel;
 }
 
 ossimString  ossimDtedHandler::compilationDate() const
 {
-   return theCompilationDate;
-}
-
-void ossimDtedHandler::setMemoryMapFlag(bool flag)
-{
-   theMemoryMapFlag = flag;
-   if(!flag)
-   {
-      theMemoryMap.clear();
-   }
-   
-   
-   else
-   {
-      if(!theMemoryMap.size())
-      {
-      }
-   }
+   return m_compilationDate;
 }
 
 const ossimDtedHandler& ossimDtedHandler::operator=(

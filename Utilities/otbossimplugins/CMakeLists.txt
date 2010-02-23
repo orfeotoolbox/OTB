@@ -1,8 +1,8 @@
 PROJECT(ossimplugins)
 
 SET(ossimplugins_VERSION_MAJOR "1")
-SET(ossimplugins_VERSION_MINOR "7")
-SET(ossimplugins_VERSION_PATCH "15")
+SET(ossimplugins_VERSION_MINOR "8")
+SET(ossimplugins_VERSION_PATCH "3dev")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} 
 ${CMAKE_CURRENT_SOURCE_DIR}/ossim 

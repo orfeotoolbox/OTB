@@ -36,8 +36,6 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 }
 
 
-
-
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GenericMapProjection()
@@ -47,8 +45,6 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
     delete m_MapProjection;
   }
 }
-
-
 
 
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -79,7 +75,6 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 
   return this->m_MapProjection;
 }
-
 
 
 template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -212,7 +207,6 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 {
   std::cout << m_MapProjection->print(std::cout);
 }
-
 
 
 } // namespace otb

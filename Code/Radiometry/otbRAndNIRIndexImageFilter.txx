@@ -67,7 +67,6 @@ RAndNIRIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
 }
 
 
-
 /**
  * ThreadedGenerateData Performs the pixel-wise addition
  */

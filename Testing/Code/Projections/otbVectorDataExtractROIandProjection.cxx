@@ -45,8 +45,6 @@ int otbVectorDataExtractROIandProjection(int argc, char * argv[])
   projection->SetOutputProjectionRef(projectionRefWkt);
 
 
-
-
   //Convert the vector data into an image
   typedef otb::Image<unsigned int,2> ImageType;
 

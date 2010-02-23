@@ -10,7 +10,7 @@
 // Contains class declaration for ossimBandSelector.
 // 
 //*******************************************************************
-//  $Id: ossimBandSelector.cpp 14193 2009-03-30 11:38:10Z gpotts $
+//  $Id: ossimBandSelector.cpp 16488 2010-02-02 22:33:41Z gpotts $
 
 #include <iostream>
 #include <algorithm>
@@ -375,7 +375,8 @@ bool ossimBandSelector::outputBandsWithinInputRange() const
          {
             ossimNotify(ossimNotifyLevel_WARN)
                << "ossimBandSelector::outputBandsWithinInputRange() ERROR:"
-               << "Output band great than highest input band."
+               << "Output band great than highest input band. "
+               << theOutputBandList[i] << " > " << HIGHEST_BAND << "."
                << std::endl;
             return false;
          }

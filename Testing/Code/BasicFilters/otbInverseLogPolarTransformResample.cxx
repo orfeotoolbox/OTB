@@ -66,7 +66,6 @@ int otbInverseLogPolarTransformResample(int argc, char* argv[])
   transform->SetParameters(params);
 
 
-
   // ImageType::SpacingType spacing;
   //     spacing.Fill(1.0);
 

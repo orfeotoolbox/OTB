@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 15798 2009-10-23 19:15:20Z gpotts $
+//  $Id: ossimImageFileWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -70,6 +70,25 @@ public:
     * their types.
     */
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const=0;
+
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
+
+   /**
+    * Examples of writers that always generate internal
+    * overviews are ossim_kakadu_jp2 and ossim_kakadu_nitf_j2k.
+    *
+    * @return true if the output of the writer will have
+    * internal overviews. The default is false. 
+    */
+   virtual bool getOutputHasInternalOverviews( void ) const;
 
    /**
     * bool hasImageType(const ossimString& imageType) const

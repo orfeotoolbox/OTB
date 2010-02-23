@@ -92,7 +92,6 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const cha
   std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
 
 
-
   return EXIT_SUCCESS;
 }
 

@@ -52,7 +52,6 @@ int main(int argc, char* argv[] )
   OutputImageType > RescalerType;
 
 
-
   // Declare the type for the filter
   typedef otb::JoinHistogramMIImageFilter<
   InputImageType1,
@@ -88,7 +87,6 @@ int main(int argc, char* argv[] )
   filter->SetRadius( atoi(argv[3]) );
 
 
-
   rescaler->SetInput( filter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
 
@@ -97,7 +95,6 @@ int main(int argc, char* argv[] )
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
-
 
 
   try
@@ -115,7 +112,5 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-
-
 
 

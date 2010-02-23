@@ -11,7 +11,7 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimNitfTileSource.h 16314 2010-01-10 18:25:28Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
@@ -63,7 +63,6 @@ public:
    
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString getClassName() const;
 
    /**
     *  Returns true if the image_file can be opened and is a valid nitf file.
@@ -446,8 +445,24 @@ protected:
    
    ossim_uint32 getPartialReadSize(const ossimIpt& blockOrigin)const;
    bool isVqCompressed(const ossimString& compressionCode)const;
-   void vqUncompress(ossimRefPtr<ossimImageData> destination,
-                     ossim_uint8* source);
+
+   /**
+    * @brief Uncompresses Vector Quantization unmasked image data.
+    * IC field = C4
+    * @param destination tile to stuff.
+    * @param source Pointer to compressed data.
+    */
+   void vqUncompressC4(ossimRefPtr<ossimImageData> destination,
+                       ossim_uint8* source);
+   
+   /**
+    * @brief Uncompresses Vector Quantization masked image data.
+    * IC field = M4
+    * @param destination tile to stuff.
+    * @param source Pointer to compressed data.
+    */
+   void vqUncompressM4(ossimRefPtr<ossimImageData> destination,
+                       ossim_uint8* source);
 
    void lutUncompress(ossimRefPtr<ossimImageData> destination,
                      ossim_uint8* source);

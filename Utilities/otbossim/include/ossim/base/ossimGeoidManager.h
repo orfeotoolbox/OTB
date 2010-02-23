@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.h 12319 2008-01-16 19:55:24Z gpotts $
+//  $Id: ossimGeoidManager.h 16139 2009-12-18 18:37:07Z gpotts $
 
 #ifndef ossimGeoidManager_HEADER
 #define ossimGeoidManager_HEADER
@@ -67,8 +67,7 @@ public:
     */
    virtual void addGeoid(ossimRefPtr<ossimGeoid> geoid, bool toFrontFlag=false);
 
-   const ossimRefPtr<ossimGeoid> findGeoidByShortName(const ossimString& shortName,
-                                                      bool caseSensitive=true)const;
+   ossimGeoid* findGeoidByShortName(const ossimString& shortName, bool caseSensitive=true);
 private:
    /**
     *  Private constructor.  Use "instance" method.
@@ -77,6 +76,10 @@ private:
 
    static ossimGeoidManager* theInstance;
    mutable std::vector< ossimRefPtr<ossimGeoid> > theGeoidList;
+   
+   // will use this as a identity if one wants but don't want it part of the internal list
+   //
+   ossimRefPtr<ossimGeoid> theIdentityGeoid;
    
    TYPE_DATA
 };

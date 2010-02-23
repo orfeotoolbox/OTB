@@ -51,10 +51,8 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbCloudDetectionFunctor.h"
 #include "otbCloudDetectionFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "itkExceptionObject.h"
@@ -88,10 +86,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef double         InputPixelType;
   typedef double         OutputPixelType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -108,7 +104,6 @@ int main( int argc, char * argv[] )
   typedef otb::VectorImage<InputPixelType,Dimension>   VectorImageType;
   typedef VectorImageType::PixelType                   VectorPixelType;
   typedef otb::Image<OutputPixelType,Dimension>        OutputImageType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -119,10 +114,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-
   typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,
                                        OutputPixelType>   FunctorType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -134,10 +127,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
     typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
                                    FunctorType> CloudDetectionFilterType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -150,10 +141,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -164,12 +153,10 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   CloudDetectionFilterType::Pointer cloudDetection =
                                     CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();
-
   // Software Guide : EndCodeSnippet
 
   reader->SetFileName(argv[1]);
@@ -185,7 +172,6 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
@@ -194,7 +180,6 @@ int main( int argc, char * argv[] )
   referencePixel[2] = (atof(argv[7]));
   referencePixel[3] = (atof(argv[8]));
   cloudDetection->SetReferencePixel(referencePixel);
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -206,9 +191,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   cloudDetection->SetVariance(atof(argv[9]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -219,18 +202,14 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   cloudDetection->SetMinThreshold(atof(argv[10]));
   cloudDetection->SetMaxThreshold(atof(argv[11]));
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginCodeSnippet
-
   writer->SetFileName(argv[2]);
   writer->SetInput(cloudDetection->GetOutput());
   writer->Update();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

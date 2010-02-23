@@ -26,12 +26,14 @@
 #include "otbPointSetDensityFunction.h"
 #include "itkPoint.h"
 
-/** \class PointSetToDensityImageFilter
- *
- */
 
 namespace otb
 {
+
+/** \class PointSetToDensityImageFilter
+ *  \brief Draw the density of a point set on an image
+ */
+
 template <class TInputPointSet , class TOutputImage>
 class ITK_EXPORT PointSetToDensityImageFilter
       : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage >
@@ -49,9 +51,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetToDensityImageFilter,itk::PointSetToImageFilter);
-
-
+  itkTypeMacro(PointSetToDensityImageFilter, itk::PointSetToImageFilter);
 
   /**   typedefs parameters support */
   typedef TInputPointSet                          PointSetType;
@@ -59,6 +59,7 @@ public:
   typedef TOutputImage                            OutputImageType;
   typedef typename  OutputImageType::PixelType    PixelType;
   typedef typename  OutputImageType::IndexType    IndexType;
+  typedef typename  OutputImageType::RegionType   OutputImageRegionType;
 
   /**   typedef filter support*/
   typedef otb::PointSetDensityFunction<PointSetType , PixelType>   PointSetDensityFunctionType;
@@ -70,11 +71,6 @@ public:
   itkGetMacro(Radius, unsigned int);
   itkSetMacro(Radius, unsigned int);
 
-  /** PointSet Set/Get*/
-  //     itkSetObjectMacro(PointSet,PointSetType);
-  //itkGetObjectMacro(PointSet,PointSetType);
-
-
 protected:
 
   /**
@@ -84,15 +80,23 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~PointSetToDensityImageFilter();
+  virtual ~PointSetToDensityImageFilter() {};
   /**
    * Standard PrintSelf method.
    */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /**
+   * Call the ImageSource::GenerateData which handle multithreading
+   */
+  virtual void GenerateData();
+
   /**
    * Main computation method.
    */
-  virtual void  GenerateData();
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            int threadId );
+
   /**
   * Main computation method.
   */
@@ -104,7 +108,7 @@ private:
   PointSetToDensityImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int m_Radius;
+  unsigned int                   m_Radius;
   typename PointSetType::Pointer m_PointSet;
 };
 }
@@ -113,5 +117,3 @@ private:
 #endif
 
 #endif
-
-

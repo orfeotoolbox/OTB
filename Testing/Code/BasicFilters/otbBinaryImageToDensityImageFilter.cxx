@@ -23,7 +23,6 @@
 #include "otbBinaryImageToDensityImageFilter.h"
 
 
-
 int otbBinaryImageToDensityImageFilter(int argc , char* argv[] )
 {
 

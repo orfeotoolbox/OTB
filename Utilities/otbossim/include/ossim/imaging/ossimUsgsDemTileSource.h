@@ -11,7 +11,7 @@
 // is intended to be an image handler for USGS dem files.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimUsgsDemTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 
 #ifndef ossimUsgsDemTileSource_HEADER
 #define ossimUsgsDemTileSource_HEADER
@@ -30,7 +30,6 @@ public:
 
    virtual ossimString getShortName() const;
    virtual ossimString getLongName()  const;
-   virtual ossimString getClassName() const;
 
    /**
     *  Returns true if the "theImageFile can be opened.

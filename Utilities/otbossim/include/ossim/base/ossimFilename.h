@@ -9,7 +9,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 14886 2009-07-15 15:40:50Z gpotts $
+// $Id: ossimFilename.h 16308 2010-01-09 02:45:54Z eshirschorn $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -229,7 +229,12 @@ public:
     */
    bool needsExpansion() const;
    
-   protected:
+   /**
+    * @brief Returns the path separator.
+    */
+   const char getPathSeparator() const;
+
+protected:
 	   void convertToNative();
    /*!
     * since windows uses \ for path separation

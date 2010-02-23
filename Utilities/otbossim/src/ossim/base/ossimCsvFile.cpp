@@ -99,8 +99,9 @@ const ossimString& ossimCsvFile::Record::operator [](ossim_uint32 idx)const
    return theDummyValue;
 }
 
-ossimCsvFile::ossimCsvFile()
+ossimCsvFile::ossimCsvFile(const ossimString& separatorList)
 :theInputStream(0),
+theSeparatorList(separatorList),
  theOpenFlag(false)
 {
 }
@@ -117,7 +118,6 @@ bool ossimCsvFile::readCsvLine(std::istream& inStream,
    bool done = false;
    char c;
    const char quote = '\"';
-   const char comma = ',';
    bool inQuotedString = false;
    bool inDoubleQuote    = false;
    ossimString currentToken;
@@ -160,8 +160,8 @@ bool ossimCsvFile::readCsvLine(std::istream& inStream,
                }
             }
          }
-         // if we are at a comma then check to see if we are inside a quoted string
-         else if(c == comma) 
+         // if we are at a separator then check to see if we are inside a quoted string
+         else if(theSeparatorList.contains(c)) 
          {
             // ignore token separator if quoted
             if(inQuotedString||inDoubleQuote)
@@ -174,6 +174,7 @@ bool ossimCsvFile::readCsvLine(std::istream& inStream,
                currentToken = currentToken.trim();
                tokens.push_back(currentToken);
                currentToken = "";
+               inStream >> csvSkipWhiteSpace;
             }
          }
          else

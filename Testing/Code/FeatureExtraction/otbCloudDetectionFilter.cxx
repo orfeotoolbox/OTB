@@ -58,7 +58,7 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  //Initialisation parameters
+  //Initialization parameters
   reader->SetFileName(inputFileName);
 
   cloudDetection->SetInput(reader->GetOutput());

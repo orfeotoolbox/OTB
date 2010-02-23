@@ -186,7 +186,6 @@ protected:
 //   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
 
-
 private:
   VectorDataToLabelMapFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

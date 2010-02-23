@@ -8,7 +8,7 @@
 //               (ACC) of a DTED Level 1 file.
 //
 //********************************************************************
-// $Id: ossimDtedAcc.cpp 14248 2009-04-08 19:38:11Z dburken $
+// $Id: ossimDtedAcc.cpp 16104 2009-12-17 18:09:59Z gpotts $
 
 #include <cstdlib>
 #include <iostream>
@@ -27,33 +27,43 @@
 ossimDtedAcc::ossimDtedAcc(const ossimFilename& dted_file,
                            ossim_int32 offset)
 {
-   clearFields();
-   theStartOffset = offset;
-   // Check to see that dted file exists. 
-   if(!dted_file.exists())
+   if(!dted_file.empty())
    {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: The DTED file does not exist: " << dted_file << std::endl;
-      return;
+      theStartOffset = offset;
+      // Check to see that dted file exists. 
+      if(!dted_file.exists())
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: The DTED file does not exist: " << dted_file << std::endl;
+         return;
+      }
+      
+      // Check to see that the dted file is readable.
+      if(!dted_file.isReadable())
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: The DTED file is not readable: " << dted_file << std::endl;
+         return;
+      }
+      
+      // Open the dted file for reading.
+      std::ifstream in(dted_file.c_str());
+      if(!in)
+      {
+         theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: Can't open the DTED file: " << dted_file << std::endl;
+         return;
+      }
+      in.seekg(offset);
+      parse(in);
    }
-
-   // Check to see that the dted file is readable.
-   if(!dted_file.isReadable())
+   else
    {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: The DTED file is not readable: " << dted_file << std::endl;
-      return;
+      clearFields();
    }
-   
-   // Open the dted file for reading.
-   std::ifstream in(dted_file.c_str());
-   if(!in)
-   {
-      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-      ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedAcc::ossimDtedAcc: Can't open the DTED file: " << dted_file << std::endl;
-      return;
-   }
-   
+}
+ossimDtedAcc::ossimDtedAcc(std::istream& in)
+{
    parse(in);
 }
 
@@ -81,24 +91,14 @@ void ossimDtedAcc::clearFields()
    theStopOffset = 0;
 }
 //**************************************************************************
-// CONSTRUCTOR
-//**************************************************************************
-ossimDtedAcc::ossimDtedAcc(std::istream& in,
-                           ossim_int32 offset)
-{
-	clearFields();
-	theStartOffset = offset;
-   parse(in);
-}
-
-//**************************************************************************
 // ossimDtedAcc::parse()
 //**************************************************************************
 void ossimDtedAcc::parse(std::istream& in)
 {
-   // Seek to the start of the record.
-   in.seekg(theStartOffset, std::ios::beg);
-   
+   clearErrorStatus();
+	clearFields();
+	theStartOffset = in.tellg();
+   theStopOffset  = theStartOffset;
    // Parse theRecSen
    in.read(theRecSen, FIELD1_SIZE);
    theRecSen[FIELD1_SIZE] = '\0';
@@ -106,6 +106,7 @@ void ossimDtedAcc::parse(std::istream& in)
    if(!(strncmp(theRecSen, "ACC", 3) == 0))
    {
       theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+      in.seekg(theStartOffset);
       return;
    }
    
@@ -173,6 +174,7 @@ void ossimDtedAcc::parse(std::istream& in)
    in.read(theField17, FIELD17_SIZE);
    theField17[FIELD17_SIZE] = '\0';
 
+   in.ignore(FIELD18_SIZE);
    // Set the stop offset.
    theStopOffset = theStartOffset + ACC_LENGTH;
 }

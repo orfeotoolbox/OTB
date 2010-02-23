@@ -247,14 +247,12 @@ ImageViewerBase<TPixel,TLabel>
     }
 
 
-
     otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
     m_Shrink->SetShrinkFactor(m_ShrinkFactor);
     typedef otb::FltkFilterWatcher WatcherType;
     WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
     m_Shrink->Update();
   }
-
 
 
   // Create full windows
@@ -584,7 +582,6 @@ ImageViewerBase<TPixel,TLabel>
   m_FullWidget->SetFormListOverlay(new_list);
   m_ZoomWidget->SetFormListOverlay(new_list);
 }
-
 
 
 /// Update the display

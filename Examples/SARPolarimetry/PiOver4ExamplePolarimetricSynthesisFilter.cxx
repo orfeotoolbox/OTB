@@ -33,9 +33,7 @@
 
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbPolarimetricSynthesisFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 int main( int argc, char* argv[] )
@@ -62,7 +60,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   typedef std::complex <double>                   InputPixelType;
   typedef double                              OutputPixelType;
   const   unsigned int                            Dimension = 2;
@@ -71,7 +68,6 @@ int main( int argc, char* argv[] )
   typedef otb::Image< OutputPixelType, Dimension >  OutputImageType;
 
   typedef otb::ImageFileWriter< OutputImageType >   WriterType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -83,9 +79,7 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -96,9 +90,7 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileReader< InputImageType  >   ReaderType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -110,9 +102,7 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
-
 // Software Guide : EndCodeSnippet
 
 
@@ -124,7 +114,6 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader_HH = ReaderType::New();
   ReaderType::Pointer reader_HV = ReaderType::New();
   ReaderType::Pointer reader_VH = ReaderType::New();
@@ -137,7 +126,6 @@ int main( int argc, char* argv[] )
   reader_VH->SetFileName( argv[3] );
   reader_VV->SetFileName( argv[4] );
   writer->SetFileName( argv[5] );
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -154,12 +142,10 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   polarimetricSynthesis->SetInputHH( reader_HH->GetOutput() );
   polarimetricSynthesis->SetInputHV( reader_HV->GetOutput() );
   polarimetricSynthesis->SetInputVH( reader_VH->GetOutput() );
   polarimetricSynthesis->SetInputVV( reader_VV->GetOutput() );
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -180,12 +166,10 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   polarimetricSynthesis->SetPsiI( 45. );
   polarimetricSynthesis->SetKhiI(  0. );
   polarimetricSynthesis->SetPsiR(  0. );
   polarimetricSynthesis->SetKhiR(  0. );
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -198,9 +182,7 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   polarimetricSynthesis->Update();
-
 // Software Guide : EndCodeSnippet
 
   writer->SetInput( polarimetricSynthesis->GetOutput() );

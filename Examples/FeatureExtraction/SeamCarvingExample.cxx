@@ -60,18 +60,17 @@
 int main(int argc, char * argv[])
 {
 
-  typedef float InputPixelType;
+  typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType, Dimension > ImageType;
+  typedef otb::Image< InputPixelType, Dimension >  ImageType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef itk::PolyLineParametricPath<Dimension>   PathType;
 
-  typedef otb::ImageFileReader< ImageType > ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
-  typedef itk::RescaleIntensityImageFilter
-  <ImageType, OutputImageType> RescalerType;
+  typedef otb::ImageFileReader< ImageType >                            ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >                      WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -250,4 +249,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

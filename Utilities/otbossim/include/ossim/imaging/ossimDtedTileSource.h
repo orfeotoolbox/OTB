@@ -13,7 +13,7 @@
 // handler for DTED files.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimDtedTileSource.h 16235 2009-12-31 20:30:14Z gpotts $
 
 #ifndef ossimDtedTileSource_HEADER
 #define ossimDtedTileSource_HEADER
@@ -21,6 +21,11 @@
 #include <fstream>
 
 #include <ossim/imaging/ossimImageHandler.h>
+#include <ossim/support_data/ossimDtedVol.h>
+#include <ossim/support_data/ossimDtedHdr.h>
+#include <ossim/support_data/ossimDtedUhl.h>
+#include <ossim/support_data/ossimDtedDsi.h>
+#include <ossim/support_data/ossimDtedAcc.h>
 
 class ossimImageData;
 
@@ -40,12 +45,12 @@ public:
    
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString getClassName()const;
 
    /**
     *  Returns true if "theImageFile" can be opened and is a valid adrg file.
     */
    virtual bool open();
+   virtual void close();
 
    virtual ossimRefPtr<ossimImageData> getTile(const  ossimIrect& tile_rect,
                                                ossim_uint32 resLevel=0);
@@ -204,6 +209,11 @@ protected:
    ossim_sint16               theMaxHeight;
    ossimDpt                   thePostSpacing;
    
+   ossimDtedVol m_vol;
+   ossimDtedHdr m_hdr;
+   ossimDtedUhl m_uhl;
+   ossimDtedDsi m_dsi;
+   ossimDtedAcc m_acc;
    /**
     *  DTED data is always stored as BIG_ENDIAN.  This flag indicates that
     *  byte swapping is needed (LITTLE_ENDIAN machine).

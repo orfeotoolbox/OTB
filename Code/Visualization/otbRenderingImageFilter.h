@@ -160,7 +160,6 @@ public:
   }
 
 
-
   /**
    * Get the rendering function
    * \return The rendering function.

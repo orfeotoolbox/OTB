@@ -55,8 +55,6 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   projection->SetOutputProjectionRef(projectionRefWkt);
 
 
-
-
   //Convert the vector data into an image
   typedef itk::RGBAPixel< unsigned char > PixelType;
   typedef otb::Image<PixelType,2> ImageType;

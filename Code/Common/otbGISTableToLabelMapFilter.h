@@ -76,7 +76,6 @@ public:
                LabelMapSource);
 
 
-
   /** Image size typedef. */
   typedef itk::Size<TGISTable::Dimension> SizeType;
   //typedef typename IndexType::Pointer                                 IndexPointerType;

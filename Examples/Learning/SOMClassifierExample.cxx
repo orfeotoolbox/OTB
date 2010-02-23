@@ -88,7 +88,6 @@ int main(int argc, char* argv[] )
   typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
   typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
-
 // Software Guide : EndCodeSnippet
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
@@ -109,12 +108,9 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef itk::Statistics::ListSample< PixelType> SampleType;
   typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType>
   ClassifierType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -125,10 +121,8 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::Image<LabelPixelType, Dimension>  OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -146,7 +140,6 @@ int main(int argc, char* argv[] )
   SOMReaderType::Pointer somreader = SOMReaderType::New();
   somreader->SetFileName(mapFilename);
   somreader->Update();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -157,7 +150,6 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   SampleType::Pointer sample = SampleType::New();
 
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),
@@ -170,7 +162,6 @@ int main(int argc, char* argv[] )
     sample->PushBack(it.Get());
     ++it;
   }
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -183,12 +174,10 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ClassifierType::Pointer classifier = ClassifierType::New();
   classifier->SetSample(sample.GetPointer());
   classifier->SetMap(somreader->GetOutput());
   classifier->Update();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -200,11 +189,9 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   OutputImageType::Pointer outputImage = OutputImageType::New();
   outputImage->SetRegions( reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -214,9 +201,7 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ClassifierType::OutputType* membershipSample = classifier->GetOutput();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -227,11 +212,8 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   ClassifierType::OutputType::ConstIterator m_iter =  membershipSample->Begin();
   ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -242,11 +224,9 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
 
   OutputIteratorType  outIt(outputImage,outputImage->GetLargestPossibleRegion());
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -257,8 +237,6 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
@@ -267,7 +245,6 @@ int main(int argc, char* argv[] )
     ++m_iter;
     ++outIt;
   }
-
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -277,13 +254,10 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(outputImage);
   writer->Update();
-
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SOMMAPCLASS} shows the result of the SOM classification.

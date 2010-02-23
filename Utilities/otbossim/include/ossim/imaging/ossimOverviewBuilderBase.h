@@ -9,7 +9,7 @@
 // Description:  Base class for overview builders.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimOverviewBuilderBase.h 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimOverviewBuilderBase.h 16081 2009-12-10 20:56:36Z eshirschorn $
 #ifndef ossimOverviewBuilderBase_HEADER
 #define ossimOverviewBuilderBase_HEADER
 
@@ -21,6 +21,7 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimString.h>
 
+class ossimImageFileWriter;
 class ossimImageHandler;
 class ossimFilename;
 
@@ -37,11 +38,22 @@ public:
    ossimOverviewBuilderBase();
 
    /**
+    * @brief Sets an optional file writer to the builder.
+    * Currently used by the virtual overview builder.
+    * 
+    * @param outputWriter The file writer of the builder.
+    * 
+    * @return True on successful initialization, false on error.
+    */
+   virtual bool setOutputWriter(ossimImageFileWriter* outputWriter)
+   { return false; }
+
+   /**
     * @brief Sets the input to the builder. (pure virtual)
     * 
     * @param imageSource The input to the builder.
     * 
-    * @return True on successful initializion, false on error.
+    * @return True on successful initialization, false on error.
     */
    virtual bool setInputSource(ossimImageHandler* imageSource) = 0;
 
@@ -118,8 +130,6 @@ public:
     */
    virtual bool execute()=0;
 
-   static const char* OVERVIEW_STOP_DIMENSION_KW;
- 
 protected:
    /** virtual destructor */
    virtual ~ossimOverviewBuilderBase();

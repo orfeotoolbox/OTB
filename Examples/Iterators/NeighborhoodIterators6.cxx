@@ -202,7 +202,6 @@ int main( int argc, char *argv[] )
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // Figure~\ref{fig:NeighborhoodExample6} shows the results of the algorithm

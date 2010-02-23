@@ -12,7 +12,7 @@
 // Contains class definition for TiffTileSource.
 //
 //*******************************************************************
-//  $Id: ossimTiffTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimTiffTileSource.cpp 16435 2010-01-27 23:15:51Z dburken $
 
 #include <cstdlib> /* for abs(int) */
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -600,7 +600,19 @@ bool ossimTiffTileSource::open()
 
       if (theSampleFormatUnit == SAMPLEFORMAT_INT)
       {
-         theScalarType = OSSIM_SSHORT16;
+         if (theMinSampleValue == 0) //  && (theMaxSampleValue > 36535) )
+         {
+            //---
+            // This is a hack for RadarSat data which is has tag 339 set to
+            // signed sixteen bit data with a min sample value of 0 and
+            // sometimes a max sample value greater than 36535.
+            //---
+            theScalarType = OSSIM_UINT16;
+         }
+         else
+         {
+            theScalarType = OSSIM_SINT16;
+         }
       }
       else if (theSampleFormatUnit == SAMPLEFORMAT_UINT)
       {
@@ -612,12 +624,12 @@ bool ossimTiffTileSource::open()
          }
          else
          {
-            theScalarType = OSSIM_USHORT16; 
+            theScalarType = OSSIM_UINT16; 
          }
       }
       else
       {
-         theScalarType = OSSIM_USHORT16; // Default to unsigned...
+         theScalarType = OSSIM_UINT16; // Default to unsigned...
       }
    }
    else if ( (theBitsPerSample == 32) &&
@@ -636,18 +648,18 @@ bool ossimTiffTileSource::open()
             theSampleFormatUnit == SAMPLEFORMAT_IEEEFP)
    {
       theBytesPerPixel = 4;
-      theScalarType = OSSIM_FLOAT;
+      theScalarType = OSSIM_FLOAT32;
    }
    else if(theBitsPerSample == 64 &&
 	   theSampleFormatUnit == SAMPLEFORMAT_IEEEFP)
-     {
-       theBytesPerPixel = 8;
-       theScalarType = OSSIM_DOUBLE;
-     }
+   {
+      theBytesPerPixel = 8;
+      theScalarType = OSSIM_FLOAT64;
+   }
    else if (theBitsPerSample <= 8)
    {
       theBytesPerPixel = 1;
-      theScalarType = OSSIM_UCHAR;
+      theScalarType = OSSIM_UINT8;
    }
    else
    {
@@ -801,38 +813,6 @@ ossim_uint32 ossimTiffTileSource::getNumberOfDecimationLevels() const
 ossimScalarType ossimTiffTileSource::getOutputScalarType() const
 {
    return theScalarType;
-}
-
-//*******************************************************************
-// Public method:
-//*******************************************************************
-ossim_uint32 ossimTiffTileSource::getTileWidth() const
-{
-   if(isOpen())
-   {
-      if(theCurrentDirectory < theImageTileWidth.size())
-      {
-         return theImageTileWidth[theCurrentDirectory];
-      }
-   }
-   
-   return 0;
-}
-
-//*******************************************************************
-// Public method:
-//*******************************************************************
-ossim_uint32 ossimTiffTileSource::getTileHeight() const
-{
-   if(isOpen())
-   {
-      if(theCurrentDirectory < theImageTileLength.size())
-      {
-         return theImageTileLength[theCurrentDirectory];
-      }
-   }
-   
-   return 0;
 }
 
 bool ossimTiffTileSource::loadTile(const ossimIrect& tile_rect,
@@ -1689,12 +1669,52 @@ ossim_uint32 ossimTiffTileSource::getNumberOfDirectories() const
 
 ossim_uint32 ossimTiffTileSource::getImageTileWidth() const
 {
-   return theImageTileWidth[theCurrentDirectory];
+   ossim_uint32 result = 0;
+   if(isOpen())
+   {
+      if(theCurrentDirectory < theImageTileWidth.size())
+      {
+         result = theImageTileWidth[theCurrentDirectory];
+      }
+   }   
+   return result;
 }
 
 ossim_uint32 ossimTiffTileSource::getImageTileHeight() const
 {
-   return theImageTileLength[theCurrentDirectory];
+   ossim_uint32 result = 0;
+   if(isOpen())
+   {
+      if(theCurrentDirectory < theImageTileLength.size())
+      {
+         result = theImageTileLength[theCurrentDirectory];
+      }
+   }
+   return result;
+}
+
+ossim_uint32 ossimTiffTileSource::getTileWidth() const
+{
+   ossim_uint32 result = getImageTileWidth();
+   if (!result)
+   {
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = tileSize.x;
+   }
+   return result;
+}
+
+ossim_uint32 ossimTiffTileSource::getTileHeight() const
+{
+   ossim_uint32 result = getImageTileHeight();
+   if (!result)
+   {
+      ossimIpt tileSize;
+      ossim::defaultTileSize(tileSize);
+      result = tileSize.y;
+   }
+   return result;
 }
 
 void ossimTiffTileSource::setApplyColorPaletteFlag(bool flag)

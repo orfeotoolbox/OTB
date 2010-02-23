@@ -33,6 +33,5 @@ int otbDrawPathListFilterNew(int argc, char * argv[])
   DrawPathListFilterType::Pointer object = DrawPathListFilterType::New();
 
 
-
   return EXIT_SUCCESS;
 }

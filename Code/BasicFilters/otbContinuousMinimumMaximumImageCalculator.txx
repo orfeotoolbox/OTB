@@ -201,8 +201,6 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
   m_ContinuousIndexOfMinimum[1] = m_IndexOfMinimum[1] + vOffset;
 
 
-
-
 }
 
 /*
@@ -277,7 +275,6 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 }
 
 
-
 template<class TInputImage>
 void
 ContinuousMinimumMaximumImageCalculator<TInputImage>
@@ -286,7 +283,6 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
   m_Region = region;
   m_RegionSetByUser = true;
 }
-
 
 
 template<class TInputImage>

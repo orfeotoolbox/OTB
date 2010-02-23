@@ -78,7 +78,7 @@ int otbOssimElevManagerTest(int argc,char* argv[])
 
   ossimElevManager * elevManager = ossimElevManager::instance();
 
-  elevManager->openDirectory(srtmDir);
+  elevManager->loadElevationPath(srtmDir);
 
   IteratorType it(image,image->GetLargestPossibleRegion());
 
@@ -107,7 +107,6 @@ int otbOssimElevManagerTest(int argc,char* argv[])
   writer->SetInput(image);
   writer->SetFileName(outfname);
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

@@ -10,13 +10,16 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimMaskFilter.cpp 13312 2008-07-27 01:26:52Z gpotts $
+// $Id: ossimMaskFilter.cpp 16180 2009-12-24 15:33:56Z dburken $
 
 #include <ossim/imaging/ossimMaskFilter.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/base/ossimNotifyContext.h>
+
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimProperty.h>
+#include <ossim/base/ossimStringProperty.h>
 
 static const char * MASK_FILTER_MASK_TYPE_KW = "mask_type";
 
@@ -597,6 +600,63 @@ ossimRefPtr<ossimImageData> ossimMaskFilter::executeMaskFilterWeighted(inputT du
    return theTile;
 }
 
+void ossimMaskFilter::setMaskType(ossimFileSelectionMaskType type)
+{
+   theMaskType = type;
+}
+
+void ossimMaskFilter::setMaskType(const ossimString& type)
+{
+   if(type != "")
+   {
+      ossimString maskType = type;
+      maskType.downcase();
+
+      if(maskType == "select")
+      {
+         theMaskType = OSSIM_MASK_TYPE_SELECT;
+      }
+      else if(maskType == "invert")
+      {
+         theMaskType = OSSIM_MASK_TYPE_INVERT;
+      }
+      else if(maskType == "weighted")
+      {
+         theMaskType = OSSIM_MASK_TYPE_WEIGHTED;
+      }
+   }
+}
+
+ossimMaskFilter::ossimFileSelectionMaskType ossimMaskFilter::getMaskType()const
+{
+   return theMaskType;
+}
+
+ossimString ossimMaskFilter::getMaskTypeString() const
+{
+   ossimString maskType;
+   
+   switch(theMaskType)
+   {
+      case OSSIM_MASK_TYPE_SELECT:
+      {
+         maskType = "select";
+         break;
+      }
+      case OSSIM_MASK_TYPE_INVERT:
+      {
+         maskType = "invert";
+         break;
+      }
+      case OSSIM_MASK_TYPE_WEIGHTED:
+      {
+         maskType = "weighted";
+         break;
+      }
+   }
+
+   return maskType;
+}
 
 ossimIrect ossimMaskFilter::getBoundingRect(ossim_uint32 resLevel)const
 {
@@ -620,23 +680,10 @@ bool ossimMaskFilter::loadState(const ossimKeywordlist& kwl,
    theOutputListIsFixedFlag = false;
    setNumberOfInputs(2);
 
-   ossimString selectionType = kwl.find(prefix, MASK_FILTER_MASK_TYPE_KW);
-
-   selectionType = selectionType.upcase();
-   if(selectionType != "")
+   const char* lookup = kwl.find(prefix, MASK_FILTER_MASK_TYPE_KW);
+   if (lookup)
    {
-      if(selectionType == "SELECT")
-      {
-         theMaskType = OSSIM_MASK_TYPE_SELECT;
-      }
-      else if(selectionType == "INVERT")
-      {
-         theMaskType = OSSIM_MASK_TYPE_INVERT;
-      }
-      else if(selectionType == "WEIGHTED")
-      {
-         theMaskType = OSSIM_MASK_TYPE_WEIGHTED;
-      }
+      setMaskType(ossimString(lookup));
    }
 
    return result;
@@ -645,34 +692,60 @@ bool ossimMaskFilter::loadState(const ossimKeywordlist& kwl,
 bool ossimMaskFilter::saveState(ossimKeywordlist& kwl,
                                 const char* prefix)const
 {
-   ossimString maskType;
-
-   switch(theMaskType)
-   {
-   case OSSIM_MASK_TYPE_SELECT:
-   {
-      maskType = "select";
-      break;
-   }
-   case OSSIM_MASK_TYPE_INVERT:
-   {
-      maskType = "invert";
-      break;
-   }
-   case OSSIM_MASK_TYPE_WEIGHTED:
-   {
-      maskType = "weighted";
-      break;
-   }
-   }
-   
    kwl.add(prefix,
            MASK_FILTER_MASK_TYPE_KW,
-           maskType.c_str(),
+           getMaskTypeString().c_str(),
            true);
    
    return ossimImageCombiner::saveState(kwl, prefix);
 }
+
+void ossimMaskFilter::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   if( property.valid() )
+   {
+      if(property->getName() == MASK_FILTER_MASK_TYPE_KW)
+      {
+         setMaskType(property->valueToString());
+      }
+      else
+      {
+         ossimImageCombiner::setProperty(property);
+      }
+   }
+}
+
+ossimRefPtr<ossimProperty> ossimMaskFilter::getProperty(
+   const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+   
+   if(name == MASK_FILTER_MASK_TYPE_KW)
+   {
+      std::vector<ossimString> constraintList;
+      constraintList.push_back(ossimString("select"));
+      constraintList.push_back(ossimString("invert"));
+      constraintList.push_back(ossimString("weighted"));
+      
+      result = new ossimStringProperty(MASK_FILTER_MASK_TYPE_KW,
+                                       getMaskTypeString(),
+                                       false,
+                                       constraintList);
+   }
+   else
+   {
+      result = ossimImageCombiner::getProperty(name);
+   }
+   return result;
+}
+
+void ossimMaskFilter::getPropertyNames(
+   std::vector<ossimString>& propertyNames)const
+{
+   ossimImageCombiner::getPropertyNames(propertyNames);
+   propertyNames.push_back(MASK_FILTER_MASK_TYPE_KW);
+}
+
 void ossimMaskFilter::getDecimationFactor(ossim_uint32 resLevel,
                                           ossimDpt& result)const
 {

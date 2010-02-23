@@ -29,7 +29,6 @@ namespace otb
 {
 
 
-
 /** \class OGRIOHelper
  *  \brief This class IO OGR
  *
@@ -91,7 +90,6 @@ public:
   /** Number of layer in the Tree*/
   unsigned int m_Kept;
 }; // end class OGRIOHelper
-
 
 
 } // end namespace otb

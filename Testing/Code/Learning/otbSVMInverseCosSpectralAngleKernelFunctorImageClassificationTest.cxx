@@ -72,7 +72,6 @@ int otbSVMInverseCosSpectralAngleKernelFunctorImageClassificationTest( int argc,
   svmEstimator->SetKernelType( GENERIC );
 
 
-
   svmEstimator->Update();
 
   otbGenericMsgDebugMacro(<<"Saving model");

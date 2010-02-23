@@ -7,7 +7,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimCibCadrgTileSource.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
 #include <algorithm>
 using namespace std;
 
@@ -31,7 +31,6 @@ using namespace std;
 #include <ossim/support_data/ossimRpfToc.h>
 #include <ossim/support_data/ossimRpfTocEntry.h>
 #include <ossim/support_data/ossimRpfCompressionSection.h>
-#include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimVirtualImageHandler.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
@@ -42,7 +41,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 16308 2010-01-09 02:45:54Z eshirschorn $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -61,7 +60,8 @@ ossimCibCadrgTileSource::ossimCibCadrgTileSource()
     theEntryToRender(0),
     theEntryNumberToRender(1),
     theTileSize(128, 128),
-    theProductType(OSSIM_PRODUCT_TYPE_UNKNOWN)
+    theProductType(OSSIM_PRODUCT_TYPE_UNKNOWN),
+    theSkipEmptyCheck(false)
 {
    if (traceDebug())
    {
@@ -250,6 +250,11 @@ bool ossimCibCadrgTileSource::open()
    }
 
    return result;
+}
+
+void ossimCibCadrgTileSource::setSkipEmptyCheck( bool bSkipEmptyCheck )
+{
+   theSkipEmptyCheck = bSkipEmptyCheck;
 }
 
 ossimRefPtr<ossimImageData> ossimCibCadrgTileSource::getTile(
@@ -932,8 +937,13 @@ vector<ossim_int32> ossimCibCadrgTileSource::getProductEntryList(const ossimStri
 
          if(entry)
          {
+            // If the "skip empty check" is true, we don't check to see if the
+            // actual frame images exist. Otherwise the check is carried out,
+            // which is the default situation.
+            bool bIsEmpty = (theSkipEmptyCheck==false) ? entry->isEmpty() : false;
+
             // if the entry is not empty then add it to the list.
-            if( entry->isEmpty() == false )
+            if( bIsEmpty == false )
             {
                ossimString scale = entry->getBoundaryInformation().getScale();
                scale = scale.trim().upcase();

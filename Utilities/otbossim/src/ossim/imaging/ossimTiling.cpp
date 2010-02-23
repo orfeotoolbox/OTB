@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.cpp 13711 2008-10-14 16:49:38Z gpotts $
+// $Id: ossimTiling.cpp 16598 2010-02-12 19:38:23Z gpotts $
 
 #include <sstream>
 #include <iomanip>
@@ -233,7 +233,7 @@ bool ossimTiling::next(ossimRefPtr<ossimMapProjection>& resultProjection,
 
          if(theMapProjection->isGeographic())
          {
-            theMapProjection->setUlGpt(ossimGpt(origin.lat,
+            theMapProjection->setUlTiePoints(ossimGpt(origin.lat,
                                                 origin.lon,
                                                 0.0,
                                                 theMapProjection->origin().datum()));
@@ -241,7 +241,7 @@ bool ossimTiling::next(ossimRefPtr<ossimMapProjection>& resultProjection,
          }
          else
          {
-            theMapProjection->setUlEastingNorthing(ossimDpt(origin.x,
+            theMapProjection->setUlTiePoints(ossimDpt(origin.x,
                                                             origin.y));
             theMapProjection->setMetersPerPixel(deltaPerPixel);
          }

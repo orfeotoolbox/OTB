@@ -24,7 +24,6 @@
 #include "itkWin32Header.h"
 
 
-
 #ifdef _WIN
 #define OTB_FILE_SEPARATOR '\\'
 #else

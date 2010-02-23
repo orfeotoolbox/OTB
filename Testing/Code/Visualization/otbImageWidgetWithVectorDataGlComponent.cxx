@@ -150,6 +150,5 @@ int otbImageWidgetWithVectorDataGlComponent( int argc, char * argv[] )
   Fl::check();
 
 
-
   return EXIT_SUCCESS;
 }

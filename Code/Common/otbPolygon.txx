@@ -419,8 +419,6 @@ Polygon<TValue>
 }
 
 
-
-
 /**
  * Area computation (for non convex polygons as well)
  */

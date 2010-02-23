@@ -37,7 +37,7 @@ int otbPointSetDensityFunctionTest(int argc, char* argv[] )
   typedef otb::PointSetDensityFunction <PointSetType,PixelType>    FunctionType;
 
 
-  /**Instancitation ofa Smart Pointer*/
+  /**Instantiation of a Smart Pointer*/
   PointSetType::Pointer pointSet = PointSetType::New();
   FunctionType::Pointer     filter = FunctionType::New();
   std::ofstream outfile(outfname);
@@ -62,7 +62,7 @@ int otbPointSetDensityFunctionTest(int argc, char* argv[] )
   filter->SetPointSet(pointSet);
   filter->SetRadius(2);
 
-  /**Point we serach around*/
+  /**Point we search around*/
   pDst[0] = 14.9;
   pDst[1] = 24;
   outfile << "Density computed for the point : " << pDst << " is "<< filter->Evaluate(pDst) << std::endl;

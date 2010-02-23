@@ -59,8 +59,6 @@ PathFunction<TInputPath, TOutput>
 }
 
 
-
-
 } // end namespace otb
 
 #endif

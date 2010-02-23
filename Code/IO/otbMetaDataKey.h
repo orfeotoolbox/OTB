@@ -119,7 +119,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-
 };
 
 /** \class OTB_GCP

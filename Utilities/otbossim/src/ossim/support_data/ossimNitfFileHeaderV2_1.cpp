@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimNitfFileHeaderV2_1.cpp 16447 2010-01-29 21:49:32Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -691,7 +691,7 @@ ossim_int64 ossimNitfFileHeaderV2_1::getFileSize()const
 {
    ossimString temp = theFileLength;
 
-   if(temp = "999999999999")
+   if(temp == "999999999999")
    {
       return -1;
    }

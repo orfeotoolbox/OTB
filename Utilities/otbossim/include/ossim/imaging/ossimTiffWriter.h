@@ -9,7 +9,7 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimTiffWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
@@ -133,6 +133,15 @@ public:
     */
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
 
    bool hasImageType(const ossimString& imageType) const;
    

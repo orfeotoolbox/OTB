@@ -1,23 +1,24 @@
 //*******************************************************************
-// Copyright (C) 2003 Storage Area Networks, Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
-// Author:  Kenneth Melero (kmelero@sanz.com)
+// Author:  Kenneth Melero
 //
 //*******************************************************************
-//  $Id: ossimGeomFileWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGeomFileWriter.cpp 16293 2010-01-07 16:19:47Z dburken $
 
-#include <ossim/imaging/ossimGeomFileWriter.h>
+#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordlist.h>
-#include <ossim/projection/ossimMapProjection.h>
-#include <ossim/projection/ossimMapProjectionInfo.h>
-#include <ossim/projection/ossimProjectionFactoryRegistry.h>
-#include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/imaging/ossimImageData.h>
+#include <ossim/base/ossimUnitTypeLut.h>
+#include <ossim/imaging/ossimGeomFileWriter.h>
+#include <ossim/imaging/ossimImageGeometry.h>
 #include <ossim/imaging/ossimImageSource.h>
+#include <ossim/projection/ossimMapProjection.h>
+#include <ossim/projection/ossimProjection.h>
 
 RTTI_DEF1(ossimGeomFileWriter,
           "ossimGeomFileWriter",
@@ -37,45 +38,65 @@ ossimGeomFileWriter::~ossimGeomFileWriter()
 
 bool ossimGeomFileWriter::writeFile()
 {
-   if(!theInputConnection) return false;
-   ossimRefPtr<ossimImageGeometry> geom = theInputConnection->getImageGeometry();
-   if(geom.valid())
+   bool status = false;
+   if(theInputConnection)
    {
-      ossimKeywordlist kwl;
-      geom->saveState(kwl);
-      return kwl.write(theFilename.c_str());
-   }
-   return false;
-#if 0
-   // Get the geometry from the input.
-   const ossimMapProjection* mapProj = 0;
-   const ossimImageGeometry* inputGeom = theInputConnection->getImageGeometry();
-   if (inputGeom)
-      mapProj = PTR_CAST(ossimMapProjection, inputGeom->getProjection());
-
-   if (!mapProj)
-   {
-      if (traceDebug())
+      ossimRefPtr<ossimImageGeometry> geom = theInputConnection->getImageGeometry();
+      if(geom.valid())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimGeomFileWriter::writeFile DEBUG:"
-            << "\nNot a map projection!"
-            << endl;
-      }
-      return false;
-   }
+         // Save the state to keyword list.
+         ossimKeywordlist kwl;
+         geom->saveState(kwl);
 
-   // Create the projection info.
-   ossimRefPtr<ossimMapProjectionInfo> projectionInfo
-      = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
+         const ossimMapProjection* mapProj =
+            PTR_CAST(ossimMapProjection, geom->getProjection());
+
+         if (mapProj)
+         {
+            const char* prefix = "projection.";
+            
+            ossimDpt tiePoint;
+            if (mapProj->isGeographic())
+            {
+               // Get the ground tie point.
+               ossimGpt gpt;
+               mapProj->lineSampleToWorld(theAreaOfInterest.ul(), gpt);
+               tiePoint = gpt;
+               
+               // Set the units to degrees.
+               kwl.add(prefix,
+                       ossimKeywordNames::TIE_POINT_UNITS_KW,
+                       ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
+                       true);
+            }
+            else
+            {
+               // Get the easting northing tie point.
+               mapProj->lineSampleToEastingNorthing(theAreaOfInterest.ul(), tiePoint);
+               
+               
+               // Set the units to meters.
+               kwl.add(prefix,
+                       ossimKeywordNames::TIE_POINT_UNITS_KW,
+                       ossimUnitTypeLut::instance()->getEntryString(OSSIM_METERS),
+                       true);
+            }
+            
+            // Write the tie to keyword list.
+            kwl.add(prefix,
+                    ossimKeywordNames::TIE_POINT_XY_KW,
+                    ossimDpt(tiePoint).toString().c_str(),
+                    true);
+            
+         } // matches: if (mapProj)
+         
+         status = kwl.write(theFilename.c_str());
+         
+      } // matches: if(geom.valid())
+
+   } // matches: if(theInputConnection)
    
-   // Set the tie points.
-   ossimKeywordlist kwl;
-   projectionInfo->getGeom(kwl);
-
-   // Write it to disk.
-   return kwl.write(theFilename.c_str());
-#endif
+   return status;
 }
 
 void ossimGeomFileWriter::getMetadatatypeList(std::vector<ossimString>& metadatatypeList) const

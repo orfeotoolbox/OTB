@@ -49,7 +49,6 @@
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbImportImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
@@ -76,7 +75,6 @@ int main(int argc, char * argv[])
   typedef unsigned char   PixelType;
   const unsigned int Dimension = 2;
   typedef otb::Image< PixelType, Dimension > ImageType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -214,7 +212,6 @@ int main(int argc, char * argv[])
       *it++ = ( d2 < radius2 ) ? 255 : 0;
     }
   }
-
   // Software Guide : EndCodeSnippet
 
 

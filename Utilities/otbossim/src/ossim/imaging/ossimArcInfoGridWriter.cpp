@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimArcInfoGridWriter.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimArcInfoGridWriter.cpp 16081 2009-12-10 20:56:36Z eshirschorn $
 
 #include <cstring>
 #include <cstdio>
@@ -362,4 +362,9 @@ bool ossimArcInfoGridWriter::writeBinaryAigStats()
    }
 
    return false;
+}
+
+ossimString ossimArcInfoGridWriter::getExtension() const
+{
+   return ossimString("aig");
 }

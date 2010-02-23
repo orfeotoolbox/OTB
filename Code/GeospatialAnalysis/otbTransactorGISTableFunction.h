@@ -93,5 +93,4 @@ private:
 } // end namespace otb
 
 
-
 #endif

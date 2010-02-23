@@ -20,14 +20,10 @@
 #endif
 
 
-
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {RamsesROISmall.png}, {ADS40RoiSmall.png}
 //    OUTPUTS: {ImageRegistration2Output.png}, {ImageRegistration2CheckerboardBefore.png}, {ImageRegistration2CheckerboardAfter.png}
 //  Software Guide : EndCommandLineArgs
-
-
 
 
 // Software Guide : BeginLatex
@@ -251,7 +247,6 @@ int main( int argc, char *argv[] )
   metric->SetFixedImageStandardDeviation(  0.4 );
   metric->SetMovingImageStandardDeviation( 0.4 );
   // Software Guide : EndCodeSnippet
-
 
 
   typedef otb::ImageFileReader< FixedImageType  > FixedImageReaderType;

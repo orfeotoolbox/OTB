@@ -48,5 +48,3 @@ int otbWaveletOperator(int argc, char * argv[])
 }
 
 
-
-

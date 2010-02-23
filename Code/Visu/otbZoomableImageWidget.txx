@@ -168,7 +168,5 @@ ZoomableImageWidget<TPixel>
 }
 
 
-
-
 } // end namespace otb
 #endif

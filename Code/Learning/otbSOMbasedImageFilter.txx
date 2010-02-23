@@ -111,5 +111,3 @@ SOMbasedImageFilter< TInputImage, TOutputImage, TDistanceMetric, TMap >
 #endif
 
 
-
-

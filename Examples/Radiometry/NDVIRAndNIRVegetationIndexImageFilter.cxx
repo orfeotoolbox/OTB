@@ -157,7 +157,6 @@ int main( int argc, char *argv[] )
   readerR->SetFileName( argv[1] );
   readerNIR->SetFileName( argv[2] );
   writer->SetFileName( argv[3]  );
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

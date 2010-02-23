@@ -35,7 +35,6 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
@@ -87,8 +86,6 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
     typedef otb::PanTexTextureImageFilter<ImageType, ImageType> PanTexType;
-
-
   // Software Guide : EndCodeSnippet
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;

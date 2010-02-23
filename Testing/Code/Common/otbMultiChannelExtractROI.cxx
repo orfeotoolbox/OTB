@@ -26,7 +26,6 @@
 #include "otbImage.h"
 
 
-
 template < typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/ >
 int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
@@ -125,7 +124,6 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
   std::cout << " Nb canaux dans l'image de sortie : "<<extractROIFilter->GetOutput()->GetNumberOfComponentsPerPixel() <<std::endl;
 
 
-
   return EXIT_SUCCESS;
 }
 
@@ -194,11 +192,5 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
   return EXIT_FAILURE;
 
 }
-
-
-
-
-
-
 
 

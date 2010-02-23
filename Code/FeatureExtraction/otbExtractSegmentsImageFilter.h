@@ -90,7 +90,6 @@ public:
   const float GetPixelSuppressionAngularBeam( void );
 
 
-
   /** Set/Get the radius used to define the region of local hough filter. */
   void SetLocalHoughRadius( SizeType Radius );
   const SizeType GetLocalHoughRadius( void );
@@ -109,7 +108,6 @@ public:
   const float GetLocalHoughVariance( void );
 
 
-
   /** Set/Get the radius between two segments in the fill gaps filter. */
   void SetFillGapsRadius( float Radius );
   const float GetFillGapsRadius( void );
@@ -117,7 +115,6 @@ public:
   /** Set/Get Angular Beam between two segments in the fill gaps filter. */
   void SetFillGapsAngularBeam( float AngularBeam );
   const float GetFillGapsAngularBeam( void );
-
 
 
   /** Set/Get the image input of this filter.  */

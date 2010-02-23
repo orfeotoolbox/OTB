@@ -8,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimJpegTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
 #if defined(__BORLANDC__)
 #include <iostream>
 using std::size_t;
@@ -641,11 +641,6 @@ ossimString ossimJpegTileSource::getShortName()const
 ossimString ossimJpegTileSource::getLongName()const
 {
    return ossimString("jpg reader");
-}
-
-ossimString  ossimJpegTileSource::getClassName()const
-{
-   return ossimString("ossimJpegTileSource");
 }
 
 ossim_uint32 ossimJpegTileSource::getNumberOfInputBands() const

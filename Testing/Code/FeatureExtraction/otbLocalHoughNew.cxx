@@ -42,7 +42,6 @@ int otbLocalHoughNew( int argc, char* argv[] )
   FilterType::Pointer filter = FilterType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

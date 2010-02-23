@@ -76,5 +76,4 @@ protected:
 } // end namespace otb
 
 
-
 #endif

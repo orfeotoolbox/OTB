@@ -58,12 +58,12 @@ class ITK_EXPORT ImageToCarvingPathFilter
 {
 public:
   /** standards typedefs */
-  typedef ImageToCarvingPathFilter                 Self;
+  typedef ImageToCarvingPathFilter                    Self;
   typedef ImageToPathFilter<TInputImage, TOutputPath> Superclass;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
 
-  /// Creation througth the object factory
+  /// Creation through the object factory
   itkNewMacro(Self);
   /// Runtime information
   itkTypeMacro(ImageToCarvingPathFilter,ImageToPathFilter);
@@ -75,7 +75,6 @@ public:
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
   typedef typename InputImageType::PixelType     PixelType;
-
 
 
   /** Set and Get foreground value */
@@ -100,9 +99,9 @@ private:
   ImageToCarvingPathFilter(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
 
-  PixelType m_ForegroundValue;
+  PixelType    m_ForegroundValue;
   unsigned int m_Direction;
-  double m_EnergyPerPix;
+  double       m_EnergyPerPix;
 };
 
 } // end namespace otb

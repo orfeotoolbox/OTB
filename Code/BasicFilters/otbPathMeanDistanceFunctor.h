@@ -97,7 +97,6 @@ public:
   }
 
 
-
 private:
   double m_Threshold;
 };

@@ -220,9 +220,6 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
 }
 
-
-
 } // end namespace otb
 
 #endif
-

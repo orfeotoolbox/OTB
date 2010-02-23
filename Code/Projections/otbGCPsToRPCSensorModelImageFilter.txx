@@ -233,5 +233,3 @@ GCPsToRPCSensorModelImageFilter< TImage >
 #endif
 
 
-
-

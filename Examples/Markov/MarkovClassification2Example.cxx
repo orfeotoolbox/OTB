@@ -106,17 +106,13 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
 //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-
   // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::MRFOptimizerICM OptimizerType;
-
   // Software Guide : EndCodeSnippet
 
   typedef otb::MRFEnergyPotts

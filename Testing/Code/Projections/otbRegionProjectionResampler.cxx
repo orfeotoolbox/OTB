@@ -54,7 +54,6 @@
 #include "init/ossimInit.h"
 
 
-
 int otbRegionProjectionResampler( int argc, char* argv[] )
 {
   ossimInit::instance()->initialize(argc, argv);

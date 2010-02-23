@@ -38,7 +38,7 @@
 namespace otb {
 
 /**
- * Template Specialisation for the Wavelet::FORWARD case
+ * Template Specialization for the Wavelet::FORWARD case
  */
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
@@ -619,7 +619,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD
 }
 
 /**
- * Template Specialisation for the Wavelet::INVERSE case
+ * Template Specialization for the Wavelet::INVERSE case
  */
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
@@ -1321,7 +1321,5 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
 } // end of namespace
 
 #endif
-
-
 
 

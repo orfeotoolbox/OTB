@@ -104,7 +104,6 @@ public:
   };
 
 
-
   inline TOutput operator() (const TInputMultiSpectral & ms, const TInputMultiSpectralInterp & msi, const TInputPanchro & p)
   {
     TOutput obs;
@@ -214,7 +213,6 @@ public:
   typedef TInputMultiSpectralInterpImage InputMultiSpectralInterpImageType;
   typedef TInputPanchroImage             InputPanchroImageType;
   typedef TOutputImage                   OutputImageType;
-
 
 
   /** "typedef" for standard classes. */

@@ -8,7 +8,7 @@ class OSSIM_DLL ossimEnvironmentUtility
 public:
    typedef std::vector<ossimFilename> FilenameListType;
    
-   ossimEnvironmentUtility();
+   
    static ossimEnvironmentUtility* instance();
 
    ossimString getEnvironmentVariable(const ossimString& variable)const;
@@ -44,11 +44,16 @@ public:
    ossimEnvironmentUtility::FilenameListType& getDataSearchPath();
    const ossimEnvironmentUtility::FilenameListType& getDataSearchPath()const;
    
-protected:
+private:
    static ossimEnvironmentUtility* theInstance;
 
    ossimEnvironmentUtility::FilenameListType thePluginSearchPath;
    ossimEnvironmentUtility::FilenameListType theDataSearchPath;
+
+   ossimEnvironmentUtility();
+   ossimEnvironmentUtility(const ossimEnvironmentUtility& obj);
+   const ossimEnvironmentUtility& operator=
+      (const ossimEnvironmentUtility& rhs);
 };
 
 

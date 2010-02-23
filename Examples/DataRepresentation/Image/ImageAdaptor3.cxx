@@ -153,7 +153,6 @@ int main( int argc, char *argv[] )
 //  Software Guide : EndLatex
 
 
-
 // Software Guide : BeginCodeSnippet
   typedef itk::ImageAdaptor<  VectorImageType,
   VectorPixelAccessor > ImageAdaptorType;
@@ -228,9 +227,7 @@ int main( int argc, char *argv[] )
   writer->Update();
 
 
-
   return EXIT_SUCCESS;
 }
-
 
 

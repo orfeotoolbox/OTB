@@ -71,7 +71,6 @@ public:
   virtual  PointSetType* GetOutput(void);
 
 
-
 protected:
   LineSpatialObjectListToPointSetFilter();
   virtual ~LineSpatialObjectListToPointSetFilter() {}
@@ -83,7 +82,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   
-
 
 
 };

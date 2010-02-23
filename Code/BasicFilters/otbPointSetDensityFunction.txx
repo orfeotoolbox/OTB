@@ -52,27 +52,31 @@ PointSetDensityFunction< TPointSet,   TOutput>
   index[1] = static_cast<long int>(input[1]);
 
   int accu = 0;
-  double surface = CONST_PI*vcl_pow(2.,static_cast<double>(m_Radius));
+  double surface = CONST_PI*m_Radius*m_Radius;
 
   if (this->GetPointSet()->GetNumberOfPoints() != 0)
   {
-    typedef typename TPointSet::PointsContainer::ConstIterator     iteratorType;
+    typedef typename TPointSet::PointsContainer::ConstIterator iteratorType;
     iteratorType it = this->GetPointSet()->GetPoints()->Begin();
 
     while ( it != this->GetPointSet()->GetPoints()->End())
     {
-      float distX2 =( index[0]-it.Value()[0])*( index[0]-it.Value()[0]);
-      float distY2 =( index[1]-it.Value()[1])*( index[1]-it.Value()[1]);
-      float dist = vcl_sqrt(distX2 + distY2);
+      float distX = index[0]-it.Value()[0];
+      float distY = index[1]-it.Value()[1];
+      float distsq = distX*distX + distY*distY;
 
-      if (dist <= m_Radius)
+      if (distsq <= m_Radius*m_Radius)
+      {
         accu++;
+      }
 
       ++it;
     }
   }
   else
+  {
     return 0.;
+  }
 
   return static_cast<float>(accu/surface);
 }

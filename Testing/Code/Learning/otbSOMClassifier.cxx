@@ -114,8 +114,3 @@ int otbSOMClassifier(int argc, char* argv[] )
 }
 
 
-
-
-
-
-

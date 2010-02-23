@@ -61,7 +61,6 @@ int main( int argc, char * argv [] )
   const char * inputImageFileName = argv[1];
 
 
-
 // Software Guide : BeginLatex
 //
 // First we define the pixel type and dimension of the image that we intend to
@@ -83,8 +82,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // With the \code{ImageType} we instantiate the type of the
@@ -102,8 +99,6 @@ int main( int argc, char * argv [] )
 
   const unsigned int numberOfInitialClasses = atoi( argv[4] );
 // Software Guide : EndCodeSnippet
-
-
 
 
 // Software Guide : BeginLatex
@@ -189,8 +184,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // We are now ready for triggering the execution of the pipeline. This is done
@@ -215,8 +208,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // At this point the classification is done, the labeled image is saved in a
@@ -236,7 +227,6 @@ int main( int argc, char * argv [] )
     std::cout << "cluster[" << i << "] ";
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
   }
-
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

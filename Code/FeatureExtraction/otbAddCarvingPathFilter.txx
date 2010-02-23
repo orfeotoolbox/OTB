@@ -135,7 +135,9 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
           }
         }
 
-        if ( (flag==true) || ((index[dir0] != indexToAdd[dir0]) && (index[dir0] < static_cast<IndexValueType>(inputSize[dir0]))))
+        if ( (flag==true)
+            || ((index[dir0] != indexToAdd[dir0])
+                && (index[dir0] < static_cast<IndexValueType>(inputSize[dir0]))))
         {
           outputIterator.Set(inputIterator.Get());
           ++inputIterator;
@@ -143,11 +145,24 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
         else
         {
           flag = true;
-          OutputImagePixelType newValue;
-          newValue = (--inputIterator).Get();
-          newValue += (++inputIterator).Get();
-          newValue /= 2;
-//           newValue = 0; //TODO just for test
+          OutputImagePixelType newValue = itk::NumericTraits<OutputImagePixelType>::Zero;
+          int n = 0;
+          InputIteratorType tmpIterator = inputIterator;
+          --tmpIterator;
+          if (!tmpIterator.IsAtReverseEndOfLine())
+          {
+            newValue = tmpIterator.Get();
+            ++n;
+          }
+          tmpIterator = inputIterator;
+          ++tmpIterator;
+          if (!tmpIterator.IsAtEndOfLine())
+          {
+            newValue += tmpIterator.Get();
+            ++n;
+          }
+          assert(n != 0);
+          newValue /= n;
           outputIterator.Set(newValue);
         }
         ++outputIterator;
@@ -156,7 +171,8 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 
       if ((outputIterator.GetIndex())[dir0] != (inputIterator.GetIndex())[dir0]+1)
       {
-        itkExceptionMacro(<< "Error 2: "<< (outputIterator.GetIndex())[dir0] <<  " , " << (inputIterator.GetIndex())[dir0]);
+        itkExceptionMacro(<< "Error 2: "<< (outputIterator.GetIndex())[dir0] <<  " , "
+                                        << (inputIterator.GetIndex())[dir0]);
       }
       inputIterator.NextLine();
       outputIterator.NextLine();
@@ -180,7 +196,6 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   Superclass::PrintSelf(os, indent);
   os << indent << "Path Value: " << m_Value << std::endl;
 }
-
 
 
 template <class TInputImage, class TInputPath,class TOutputImage>
@@ -263,4 +278,3 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 } // end namespace otb
 
 #endif
-

@@ -45,7 +45,6 @@
 #include "otbMacro.h"
 
 
-
 namespace otb
 {
 
@@ -87,8 +86,6 @@ MSTARImageIO::~MSTARImageIO()
     phdr = NULL;
   }
 }
-
-
 
 
 bool MSTARImageIO::CanReadFile( const char* filename )
@@ -216,13 +213,10 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 // free(phdr);
 
 
-
   fclose(MSTARfp);
   otbMsgDevMacro(<< "Can read MSTAR");
   return bool(true);
 }
-
-
 
 
 bool MSTARImageIO::CanWriteFile( const char * filename )
@@ -245,7 +239,6 @@ bool MSTARImageIO::CanWriteFile( const char * filename )
   return formatFound;
 
 }
-
 
 
 void MSTARImageIO::Read(void* buffer)
@@ -329,7 +322,6 @@ void MSTARImageIO::Read(void* buffer)
   }
 
 
-
   unsigned long step = this->GetNumberOfComponents() * (unsigned long)(m_NbOctetPixel);;
   float * p = static_cast<float *>(buffer);
 
@@ -406,14 +398,12 @@ void MSTARImageIO::Read(void* buffer)
     CHIPdata = (float *) malloc(bytesPerImage);
 
 
-
     if (CHIPdata == (float *) NULL)
     {
       fclose(MSTARfp);
       itkExceptionMacro("Error: Unable to malloc CHIP memory!\n");
 
     }
-
 
 
     switch (byteorder)
@@ -439,8 +429,6 @@ void MSTARImageIO::Read(void* buffer)
     //n = fwrite(CHIPdata, sizeof(float), totchunks, RAWfp);
 
 
-
-
     // Recopie dans le buffer
 
     for (int ci=0; ci<nchunks; ++ci)
@@ -448,7 +436,6 @@ void MSTARImageIO::Read(void* buffer)
       p[ci*2]=CHIPdata[ci]; //magnitude
       p[ci*2+1]=CHIPdata[nchunks+ci]; //phase
     }
-
 
 
     /* Cleanup: Close file..free memory */
@@ -552,7 +539,6 @@ void MSTARImageIO::Read(void* buffer)
     free(FSCENEdata);
 
 
-
     break; /* End of FSCENE_IMAGE case */
 
   } /* End of 'mstartype' switch */
@@ -560,9 +546,6 @@ void MSTARImageIO::Read(void* buffer)
 
   /* Cleanup: close files */
   fclose(MSTARfp);
-
-
-
 
 
   delete [] value;
@@ -722,7 +705,6 @@ int MSTARImageIO::CheckByteOrder(void)
 
   return(b[0] ? LSB_FIRST : MSB_FIRST);
 }
-
 
 
 } // end namespace otb

@@ -466,7 +466,6 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string & file_name, st
 }
 
 
-
 bool BSQImageIO::CanWriteFile( const char* filename )
 {
   std::string lFileName(filename);

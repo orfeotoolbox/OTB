@@ -36,7 +36,6 @@ PanTexTextureImageFilter<TInputImage,TOutputImage>
 }
 
 
-
 /**
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */

@@ -349,7 +349,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 // }
 
 
-
 } // namespace otb
 
 #endif

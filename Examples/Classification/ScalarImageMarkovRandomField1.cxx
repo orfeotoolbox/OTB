@@ -106,7 +106,6 @@ int main( int argc, char * argv [] )
   }
 
 
-
 // Software Guide : BeginLatex
 //
 // First we define the pixel type and dimension of the image that we intend to
@@ -128,7 +127,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // As a second step we define the pixel type and dimension of the image of
@@ -147,7 +145,6 @@ int main( int argc, char * argv [] )
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
   labelReader->SetFileName( inputLabelImageFileName );
 // Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex
@@ -194,7 +191,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // We set now some of the parameters for the MRF filter. In particular, the
@@ -211,7 +207,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
 // Software Guide : BeginLatex
 //
 // The smoothing factor represents the tradeoff between fidelity to the
@@ -226,8 +221,6 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetSmoothingFactor( smoothingFactor );
 // Software Guide : EndCodeSnippet
-
-
 
 
 // Software Guide : BeginLatex
@@ -248,7 +241,6 @@ int main( int argc, char * argv [] )
   SupervisedClassifierType::Pointer classifier =
     SupervisedClassifierType::New();
 // Software Guide : EndCodeSnippet
-
 
 
 // Software Guide : BeginLatex
@@ -378,8 +370,6 @@ int main( int argc, char * argv [] )
 // Software Guide : EndCodeSnippet
 
 
-
-
 // Software Guide : BeginLatex
 //
 // Finally, the classifier class is connected to the Markov Random Fields filter.
@@ -389,8 +379,6 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginCodeSnippet
   mrfFilter->SetClassifier( classifier );
 // Software Guide : EndCodeSnippet
-
-
 
 
 // Software Guide : BeginLatex
@@ -426,8 +414,6 @@ int main( int argc, char * argv [] )
 
   writer->SetFileName( outputImageFileName );
 // Software Guide : EndCodeSnippet
-
-
 
 
 // Software Guide : BeginLatex

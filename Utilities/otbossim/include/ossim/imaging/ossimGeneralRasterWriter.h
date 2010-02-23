@@ -10,7 +10,7 @@
 // Contains class declaration for ossimGeneralRasterWriter.
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimGeneralRasterWriter.h 16081 2009-12-10 20:56:36Z eshirschorn $
 
 #ifndef ossimGeneralRasterWriter_HEADER
 #define ossimGeneralRasterWriter_HEADER
@@ -41,7 +41,17 @@ public:
     * @param imageTypeList stl::vector<ossimString> list to append to.
     */ 
    virtual void getImageTypeList(std::vector<ossimString>& imageTypeList)const;
-   
+
+   /**
+    * Returns a 3-letter extension from the image type descriptor 
+    * (theOutputImageType) that can be used for image file extensions.
+    *
+    * @param imageType string representing image type.
+    *
+    * @return the 3-letter string extension.
+    */
+   virtual ossimString getExtension() const;
+
    virtual void set_rr_level(ossim_uint32 rr) { theRlevel = rr; }
    virtual bool isOpen()const;      
    virtual bool open();

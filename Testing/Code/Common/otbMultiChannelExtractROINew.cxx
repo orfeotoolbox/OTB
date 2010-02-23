@@ -35,7 +35,6 @@ int otbMultiChannelExtractROINew ( int argc, char * argv[] )
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

@@ -9,7 +9,7 @@
 // Description:  Contains class definition for ossimNitfTileSource.
 // 
 //*******************************************************************
-//  $Id: ossimNitfTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimNitfTileSource.cpp 16314 2010-01-10 18:25:28Z dburken $
 #include <jerror.h>
 
 #include <algorithm> /* for std::fill */
@@ -45,7 +45,7 @@
 RTTI_DEF1_INST(ossimNitfTileSource, "ossimNitfTileSource", ossimImageHandler)
 
 #ifdef OSSIM_ID_ENABLED
-   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
+   static const char OSSIM_ID[] = "$Id: ossimNitfTileSource.cpp 16314 2010-01-10 18:25:28Z dburken $";
 #endif
    
 //---
@@ -465,7 +465,7 @@ bool ossimNitfTileSource::canUncompress(const ossimNitfImageHeader* hdr) const
    if (hdr)
    {
       ossimString code = hdr->getCompressionCode();
-      
+
       if (code == "C3") // jpeg
       {
          if (hdr->getBitsPerPixelPerBand() == 8)
@@ -710,17 +710,12 @@ void ossimNitfTileSource::initializeBandCount()
    }
    else 
    {
-      theNumberOfInputBands = 1;
-      theNumberOfOutputBands = 3;
-//       const ossimRefPtr<ossimNitfCompressionHeader> header = hdr->getCompressionHeader();
-
-//       ossimNitfVqCompressionHeader* header = PTR_CAST(ossimNitfVqCompressionHeader,
-//                                                       header.get());
-
-//       if(header)
-//       {
-         
-//       }
+      ossimRefPtr<ossimNitfImageBand> bandInfo = hdr->getBandInformation(0);
+      if ( bandInfo.valid() )
+      {
+         theNumberOfInputBands = 1;
+         theNumberOfOutputBands = bandInfo->getNumberOfLuts();
+      }
    }
    
    theOutputBandList.resize(theNumberOfOutputBands);
@@ -1442,10 +1437,16 @@ bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
                   theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
                   return false;
                }
-               else if(isVqCompressed(hdr->getCompressionCode()))
+               else if(hdr->getCompressionCode() == "C4")
                {
-                  vqUncompress(theCacheTile,
-                               (ossim_uint8*)&(theCompressedBuf.front()));
+                  vqUncompressC4(theCacheTile,
+                                 (ossim_uint8*)&(theCompressedBuf.front()));
+               }
+
+               else if(hdr->getCompressionCode() == "M4")
+               {
+                  vqUncompressM4(theCacheTile,
+                                 (ossim_uint8*)&(theCompressedBuf.front()));
                }
                else if(hdr->getRepresentation().upcase().contains("LUT"))
                {
@@ -1485,7 +1486,11 @@ bool ossimNitfTileSource::loadBlock(ossim_uint32 x, ossim_uint32 y)
                    theCacheTile->getBuf(),
                    theCacheTile->getSize());
    }
-   convertTransparentToNull(theCacheTile);
+
+   if ( !isVqCompressed(hdr->getCompressionCode()) )
+   {
+      convertTransparentToNull(theCacheTile);
+   }
 
    // Set the origin of the cache tile.
    theCacheTile->validate();
@@ -1587,6 +1592,7 @@ void ossimNitfTileSource::convertTransparentToNull(ossimRefPtr<ossimImageData> t
    ossim_uint32 blockNumber = getBlockNumber(tempOrigin);
    ossim_uint32 numberOfBands = tile->getNumberOfBands();
    ossim_uint32 band = 0;
+
    if(hdr->hasPadPixelMaskRecords())
    {
       if(hdr->hasTransparentCode())
@@ -2165,11 +2171,6 @@ ossimString ossimNitfTileSource::getLongName()const
    return ossimString("nitf reader");
 }
 
-ossimString ossimNitfTileSource::getClassName()const
-{
-   return ossimString("ossimNitfTileSource");
-}
-
 ossim_uint32 ossimNitfTileSource::getCurrentEntry() const
 {
    return theCurrentEntry;
@@ -2536,63 +2537,174 @@ void ossimNitfTileSource::lutUncompress(ossimRefPtr<ossimImageData> destination,
    }
 }
 
-void ossimNitfTileSource::vqUncompress(ossimRefPtr<ossimImageData> destination, ossim_uint8* source)
+void ossimNitfTileSource::vqUncompressC4(
+   ossimRefPtr<ossimImageData> destination, ossim_uint8* source)
 {
    const ossimNitfImageHeader* hdr = getCurrentImageHeader();
    if (!hdr||!destination)
    {
       return;
    }
-   if((destination->getNumberOfBands()<3)||
-      (!destination->getBuf())||
-      (destination->getScalarType()!=OSSIM_UINT8))
+
+   const ossim_uint32 BANDS = destination->getNumberOfBands();
+
+   if( (BANDS!=3) || (!destination->getBuf()) ||
+       (destination->getScalarType()!=OSSIM_UINT8) || !theLut.valid() ||
+       (theLut->getNumberOfBands() != BANDS) )
    {
       return;
    }
-   ossimNitfVqCompressionHeader* compressionHeader = PTR_CAST(ossimNitfVqCompressionHeader,
-                                                              hdr->getCompressionHeader().get());
+   
+   ossimNitfVqCompressionHeader* compressionHeader =
+      PTR_CAST(ossimNitfVqCompressionHeader,
+               hdr->getCompressionHeader().get());
 
    if(!compressionHeader)
    {
       return;
    }
-   const std::vector<ossimNitfVqCompressionOffsetTableData>& table = compressionHeader->getTable();
+   
+   const std::vector<ossimNitfVqCompressionOffsetTableData>& table =
+      compressionHeader->getTable();
+
    ossimRefPtr<ossimNitfImageBand> bandInfo = hdr->getBandInformation(0);
-
-//    if(!bandInfo.valid()) return;
-
-//    if(!theLut.valid()) return;
-//    if(theLut->getNumberOfBands() != 3) return;
-   std::vector<ossimRefPtr<ossimNitfImageLut> > luts(destination->getNumberOfBands());
-
-   if(bandInfo->getNumberOfLuts() == 1)
+   
+   if(!bandInfo.valid()) return;
+   
+   std::vector<ossimRefPtr<ossimNitfImageLut> > luts(BANDS);
+   std::vector<ossim_uint8*> tempRows(BANDS);
+   
+   ossim_uint32 band;
+   for (band =0; band<BANDS; ++band)
    {
-      luts[0] = bandInfo->getLut(0);
-      luts[1] = bandInfo->getLut(0);
-      luts[2] = bandInfo->getLut(0);
-   }
-   else
-   {
-      luts[0] = bandInfo->getLut(0);
-      luts[1] = bandInfo->getLut(1);
-      luts[2] = bandInfo->getLut(2);
+      luts[band] = bandInfo->getLut(band);
+      if ( luts[band].valid() )
+      {
+         tempRows[band] = (ossim_uint8*)destination->getBuf(band);
+      }
+      else
+      {
+         return;
+      }
    }
 
-   if(!luts[0].valid()||
-      !luts[1].valid()||
-      !luts[2].valid())
+   ossimPackedBits bits(source, compressionHeader->getImageCodeBitLength());
+
+
+   const ossim_uint32 ROWS = static_cast<ossim_uint32>(table.size());
+   const ossim_uint32 COLS =
+      static_cast<ossim_uint32>(table[0].
+                                theNumberOfValuesPerCompressionLookup);
+   const ossim_uint32 COMPRESSION_HEIGHT =
+      compressionHeader->getNumberOfImageRows();
+   const ossim_uint32 COMPRESSION_WIDTH  =
+      compressionHeader->getNumberOfImageCodesPerRow();
+   ossim_uint32 DEST_WIDTH  = destination->getWidth();
+   
+   ossim_uint32 compressionIdx = 0;
+   ossim_uint32 uncompressIdx  = 0;
+   ossim_uint32 uncompressYidx = 0;
+   ossim_uint8  lutValue = 0;
+   ossim_uint8* data     = 0;
+   ossim_uint32 codeWord = 0;
+   
+   for(ossim_uint32 compressionYidx = 0;
+       compressionYidx < COMPRESSION_HEIGHT;
+       ++compressionYidx)
+   {
+      uncompressYidx = compressionYidx * ROWS * DEST_WIDTH;
+      
+      for(ossim_uint32 compressionXidx = 0;
+          compressionXidx < COMPRESSION_WIDTH;
+          ++compressionXidx)
+      {
+         uncompressIdx = uncompressYidx + COLS * compressionXidx;
+
+         codeWord = bits.getValueAsUint32(compressionIdx++);
+         codeWord *= COLS;
+
+         for(ossim_uint32 rowIdx = 0; rowIdx < ROWS; ++rowIdx)
+         {
+            data = &(table[rowIdx].theData[codeWord]);
+            
+            for(ossim_uint32 colIdx = 0; colIdx < COLS; ++colIdx)
+            {
+               lutValue = (*data)&0xff;
+
+               for (band = 0; band < BANDS; ++band)
+               {
+                  ossim_uint8 p = (*theLut.get())[lutValue][band];
+                  tempRows[band][uncompressIdx+colIdx] = p;
+               }
+               ++data;
+               
+            } // column loop
+
+            uncompressIdx += DEST_WIDTH;
+            
+         } // row loop
+
+      } // x compression loop
+      
+   } // y compression loop
+}
+
+void ossimNitfTileSource::vqUncompressM4(
+   ossimRefPtr<ossimImageData> destination, ossim_uint8* source)
+{
+   const ossimNitfImageHeader* hdr = getCurrentImageHeader();
+   if (!hdr||!destination)
    {
       return;
    }
-   ossim_uint8* tempRows[3];
-   tempRows[0] = (ossim_uint8*)destination->getBuf(0);
-   tempRows[1] = (ossim_uint8*)destination->getBuf(1);
-   tempRows[2] = (ossim_uint8*)destination->getBuf(2);
+
+   const ossim_uint32 BANDS = destination->getNumberOfBands();
+
+   if(( (BANDS != 1)&&(BANDS!=3) ) ||
+      (!destination->getBuf())||
+      (destination->getScalarType()!=OSSIM_UINT8))
+   {
+      return;
+   }
    
+   ossimNitfVqCompressionHeader* compressionHeader =
+      PTR_CAST(ossimNitfVqCompressionHeader,
+               hdr->getCompressionHeader().get());
+
+   if(!compressionHeader)
+   {
+      return;
+   }
+
+   const std::vector<ossimNitfVqCompressionOffsetTableData>& table =
+      compressionHeader->getTable();
+
+   ossimRefPtr<ossimNitfImageBand> bandInfo = hdr->getBandInformation(0);
+   
+   if(!bandInfo.valid()) return;
+   
+   std::vector<ossimRefPtr<ossimNitfImageLut> > luts(BANDS);
+   std::vector<ossim_uint8*> tempRows(BANDS);
+
+   ossim_uint32 band;
+   for (band =0; band<BANDS; ++band)
+   {
+      luts[band] = bandInfo->getLut(band);
+      if ( luts[band].valid() )
+      {
+         tempRows[band] = (ossim_uint8*)destination->getBuf(band);
+      }
+      else
+      {
+         return;
+      }
+   }
+
+   const ossim_uint8 NI = 216; // null index (transparency index).
+   const ossim_uint8 NP = 0;   // null pixel
+
    ossim_uint32 destWidth  = destination->getWidth();
    ossimPackedBits bits(source, compressionHeader->getImageCodeBitLength());
-//    ossimPackedBits bits(source,
-//                             12); // vq is 12 bits
 
    ossim_uint32 compressionYidx   = 0;
    ossim_uint32 compressionXidx   = 0;
@@ -2608,35 +2720,88 @@ void ossimNitfTileSource::vqUncompress(ossimRefPtr<ossimImageData> destination, 
       cols = table[0].theNumberOfValuesPerCompressionLookup;
    }
    ossim_uint32 compressionHeight = compressionHeader->getNumberOfImageRows();
-   ossim_uint32 compressionWidth  = compressionHeader->getNumberOfImageCodesPerRow();
+   ossim_uint32 compressionWidth  =
+      compressionHeader->getNumberOfImageCodesPerRow();
    ossim_uint8 lutValue = 0;
    ossim_uint8* data=0;
-   
-   for(compressionYidx = 0; compressionYidx < compressionHeight; ++compressionYidx)
+
+   for(compressionYidx = 0;
+       compressionYidx < compressionHeight;
+       ++compressionYidx)
    {
       uncompressYidx = compressionYidx*rows*destWidth;
-      for(compressionXidx = 0; compressionXidx < compressionWidth; ++compressionXidx)
+
+      for(compressionXidx = 0;
+          compressionXidx < compressionWidth;
+          ++compressionXidx)
       {
          uncompressIdx = uncompressYidx + cols*compressionXidx;
          ossim_uint32 codeWord = bits.getValueAsUint32(compressionIdx);
          
+         bool transparent = false;
+         if (codeWord == 4095)
+         {
+            //---
+            // Check to see if the whole kernel is transparent.  If no, the
+            // null index '216' could be used for valid pixels.
+            //
+            // For more see docs:
+            // MIL-PRF-89041A 3.13.1.2 Transparent pixels
+            // MIL-STD-2411
+            //---
+            codeWord *= cols;
+            transparent = true;
+            for(rowIdx = 0; rowIdx < rows; ++rowIdx)
+            {
+               data = &table[rowIdx].theData[codeWord];
+               
+               for(colIdx = 0; colIdx < cols; ++colIdx)
+               {
+                  lutValue = (*data)&0xff;
+                  if (lutValue != NI)
+                  {
+                     // Not a kernel full of transparent pixels.
+                     transparent = false;
+                     break;
+                  }
+                  ++data;
+               }
+               if (!transparent)
+               {
+                  break;
+               }
+               uncompressIdx += destWidth;
+            }
+         }
+
+         // Reset everyone for loop to copy pixel data from lut.
+         uncompressIdx = uncompressYidx + cols*compressionXidx;
+         codeWord = bits.getValueAsUint32(compressionIdx);
          codeWord *= cols;
+
          for(rowIdx = 0; rowIdx < rows; ++rowIdx)
          {
             data = &table[rowIdx].theData[codeWord];
+            
             for(colIdx = 0; colIdx < cols; ++colIdx)
             {
                lutValue = (*data)&0xff;
-               tempRows[0][uncompressIdx+colIdx] = (*theLut)[lutValue][0];
-               tempRows[1][uncompressIdx+colIdx] = (*theLut)[lutValue][1];
-               tempRows[2][uncompressIdx+colIdx] = (*theLut)[lutValue][2];
+               
+               for (band = 0; band < BANDS; ++band)
+               {
+                  ossim_uint8 p = luts[band]->getValue(lutValue);
+                  tempRows[band][uncompressIdx+colIdx] = (!transparent?p:NP);
+               }
                ++data;
             }
+
             uncompressIdx += destWidth;
          }
          ++compressionIdx;
-      }
-   }
+         
+      } // x loop
+      
+   } // y loop
 }
 
 bool ossimNitfTileSource::scanForJpegBlockOffsets()

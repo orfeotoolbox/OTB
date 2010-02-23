@@ -126,7 +126,7 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginLatex
 //
-//  Then, it follows, classical initialisations of the pipeline.
+//  Then, it follows, classical initializations of the pipeline.
 //
 //  Software Guide : EndLatex
 
@@ -159,7 +159,7 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginLatex
 //
-//  By default, \doxygen{otb}{SEMClassifier} performs initialisation of
+//  By default, \doxygen{otb}{SEMClassifier} performs initialization of
 // \code{ModelComponentBase} by as many instanciation of
 // \subdoxygen{otb}{Statistics}{GaussianModelComponent} as the number of
 // classes to estimate in the mixture. Nevertheless, the user may add specific
@@ -210,7 +210,6 @@ int main ( int argc, char * argv[] )
 // \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
 //
 // Software Guide : EndLatex
-
 
 
 //  Software Guide : BeginCodeSnippet
@@ -280,11 +279,5 @@ int main ( int argc, char * argv[] )
   }
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
 
 

@@ -10,7 +10,6 @@
 #include "otbGaussianModelComponent.h"
 
 
-
 namespace otb
 {
 

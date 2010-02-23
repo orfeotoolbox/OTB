@@ -65,5 +65,3 @@ int otbNDBIMultiChannelTM4AndTM5IndexImageFilter(int argc, char * argv[])
 }
 
 
-
-

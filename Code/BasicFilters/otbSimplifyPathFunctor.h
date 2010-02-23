@@ -101,7 +101,6 @@ public:
   }
 
 
-
 private:
   double m_Tolerance;
 

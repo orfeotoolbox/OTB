@@ -38,4 +38,3 @@ REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
 }
 
 
-

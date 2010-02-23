@@ -74,7 +74,6 @@ int otbDisparityMapEstimationMethod(int argc, char* argv[])
   std::cout<<"min: "<<(int)mm->GetMinimum()<<" max: "<<(int)mm->GetMaximum()<<std::endl;
 
 
-
   PointSetSourceType::Pointer pointSetSource = PointSetSourceType::New();
   pointSetSource->SetLowerThreshold(mm->GetMaximum());
   pointSetSource->SetUpperThreshold(mm->GetMaximum());

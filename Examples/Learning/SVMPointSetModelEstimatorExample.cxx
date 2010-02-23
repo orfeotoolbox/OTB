@@ -77,7 +77,6 @@ int main( int argc, char* argv[] )
 
   FeaturePointSetType::Pointer fPSet = FeaturePointSetType::New();
   LabelPointSetType::Pointer   lPSet = LabelPointSetType::New();
-
 // Software Guide : EndCodeSnippet
 
 
@@ -135,7 +134,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     fP[0] = x_coord;
     fP[1] = y_coord;
 
@@ -151,11 +149,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     VectorType feature;
     feature.push_back(static_cast<PixelType>((x_coord*1.0-lowest)/range));
     feature.push_back(static_cast<PixelType>((y_coord*1.0-lowest)/range));
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -165,14 +161,12 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
     LabelPixelType label;
 
     if (x_coord < y_coord)
       label= -1;
     else
       label = 1;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -182,8 +176,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
     fCont->InsertElement( pointId , fP );
     fPSet->SetPointData( pointId, feature );
 
@@ -193,7 +185,6 @@ int main( int argc, char* argv[] )
 
 
   }
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -203,7 +194,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   fPSet->SetPoints( fCont );
   lPSet->SetPoints( lCont );
 // Software Guide : EndCodeSnippet
@@ -218,7 +208,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::SVMPointSetModelEstimator< FeaturePointSetType,
   LabelPointSetType >   EstimatorType;
 
@@ -236,11 +225,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   estimator->SetInputPointSet( fPSet );
   estimator->SetTrainingPointSet( lPSet );
   estimator->SetNumberOfClasses( 2 );
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -251,7 +238,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   estimator->Update();
 // Software Guide : EndCodeSnippet
 
@@ -262,7 +248,6 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   estimator->SaveModel("svm_model.svm");
 // Software Guide : EndCodeSnippet
 

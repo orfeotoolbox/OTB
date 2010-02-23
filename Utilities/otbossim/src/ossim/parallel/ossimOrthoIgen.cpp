@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.cpp 15849 2009-11-04 15:19:35Z dburken $
+// $Id: ossimOrthoIgen.cpp 16471 2010-02-01 19:52:02Z gpotts $
 
 // In Windows, standard output is ASCII by default. 
 // Let's include the following in case we have
@@ -19,6 +19,7 @@
 #include <ossim/base/ossimObjectFactoryRegistry.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimUnitConversionTool.h>
+#include <ossim/imaging/ossimBandSelector.h>
 #include <ossim/imaging/ossimGeoAnnotationSource.h>
 #include <ossim/imaging/ossimImageChain.h>
 #include <ossim/imaging/ossimImageHandler.h>
@@ -33,6 +34,9 @@
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+#include <ossim/projection/ossimPcsCodeProjectionFactory.h>
+#include <ossim/projection/ossimGcsCodeProjectionFactory.h>
+#include <ossim/projection/ossimStatePlaneProjectionFactory.h>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/imaging/ossimEastingNorthingCutter.h>
 
@@ -53,22 +57,135 @@ ossimOrthoIgen::ossimOrthoIgenFilename::ossimOrthoIgenFilename(const ossimFilena
    }
 }
 
+void ossimOrthoIgen::ossimOrthoIgenFilename::setFilenameAndEntry(const ossimFilename& file,
+                                                                 ossim_int32 entry)
+{
+   theEntry = entry;
+   ossimFilename::size_type idx = file.rfind("|", file.length());
+   ossimString actualFile = file;
+   ossimString bands(""); 
+   ossimString supDir("");
+   bool hasOvrFile = false;
+
+   ossimFilename tmpOvrFile = ossimString(actualFile.split("|")[actualFile.split("|").size()-1]).trim();
+   if (tmpOvrFile.contains(".ovr") || tmpOvrFile.isDir())
+   {
+    supDir = tmpOvrFile;
+    hasOvrFile = true;
+   }
+
+   if(idx != ossimFilename::npos)
+   {
+    if (hasOvrFile)
+    {
+      actualFile = ossimString(file.begin(), 
+        file.begin()+idx);
+    }
+   }
+
+   if (actualFile.contains("|"))
+   {
+    std::vector<ossimString> fileInfos = actualFile.split("|");
+    if (fileInfos.size() > 1)
+    {
+      actualFile = fileInfos[0].trim();
+      bands = fileInfos[1].trim();
+    }
+   }
+
+   if (bands != "")
+   {
+    std::vector<ossimString> bandsStr = bands.split(",");
+    for (unsigned int i = 0; i < bandsStr.size(); i++)
+    {
+      theBands.push_back(bandsStr[i].toUInt32()-1);
+    }
+   }
+
+   if (!supDir.empty())
+   {
+      ossimFilename tempFullPath( supDir );
+
+      ossimFilename drivePart;
+      ossimFilename pathPart;
+      ossimString filePart;
+      ossimString extPart;
+
+      tempFullPath.split( drivePart, pathPart, filePart, extPart );
+      theSupplementaryDir = drivePart.dirCat(pathPart);
+   }
+
+   theFilename = actualFile;
+}
+
 void ossimOrthoIgen::ossimOrthoIgenFilename::setFilenameWithDecoding(const ossimFilename& file)
 {
    ossimFilename::size_type idx = file.rfind("|", file.length());
    ossimString actualFile = file;
-   ossimString entry("-1");       
+   ossimString entry("-1"); 
+   ossimString bands(""); 
+   ossimString supDir("");
+   bool hasOvrFile = false;
+
+   ossimFilename tmpOvrFile = ossimString(actualFile.split("|")[actualFile.split("|").size()-1]).trim();
+   if (tmpOvrFile.contains(".ovr") || tmpOvrFile.isDir())
+   {
+     supDir = tmpOvrFile;
+     hasOvrFile = true;
+   }
+
    if(idx != ossimFilename::npos)
    {
-      actualFile = ossimString(file.begin(), file.begin()+idx);
-      entry      = ossimString(file.begin()+idx+1,
-                               file.end());
-      entry = entry.trim();
-      actualFile = actualFile.trim();
+     if (hasOvrFile)
+     {
+       actualFile = ossimString(file.begin(), 
+         file.begin()+idx);
+     }
    }
+
+   std::vector<ossimString> fileInfos = actualFile.split("|");
+   actualFile = fileInfos[0].trim();
+
+   if (fileInfos.size() > 2)
+   {
+     entry = fileInfos[1].trim();
+     bands = fileInfos[2].trim();
+   }
+
+   if (fileInfos.size() == 2)
+   {
+     entry = fileInfos[1].trim();
+     if (entry.contains(","))//means bands
+     {
+       bands = entry;
+       entry = "-1";
+     }
+   } 
 
    theFilename = ossimFilename(actualFile);
    theEntry    = entry.toInt32();
+
+   if (!bands.empty())
+   {
+     std::vector<ossimString> bandsStr = bands.split(",");
+     for (unsigned int i = 0; i < bandsStr.size(); i++)
+     {
+       theBands.push_back(bandsStr[i].toUInt32()-1);
+     }
+   }
+   
+   if (!supDir.empty())
+   {
+      ossimFilename tempFullPath( supDir );
+
+      ossimFilename drivePart;
+      ossimFilename pathPart;
+      ossimString filePart;
+      ossimString extPart;
+
+      tempFullPath.split( drivePart, pathPart, filePart, extPart );
+      theSupplementaryDir = drivePart.dirCat(pathPart);
+   }
 }
 
 ossimOrthoIgen::ossimOrthoIgen()
@@ -79,9 +196,11 @@ ossimOrthoIgen::ossimOrthoIgen()
    theDeltaPerPixelOverride(ossim::nan(), ossim::nan()),
    theProjectionType(OSSIM_INPUT_PROJECTION),
    theProjectionName(""),
+   theSrsName(""),
    theGeographicOriginOfLatitude(0.0),
    theCombinerType("ossimImageMosaic"),
    theResamplerType("nearest neighbor"),
+   theWriterType(""),
    theTemplateView(""),
    theTilingTemplate(""),
    theTilingFilename(""),
@@ -125,6 +244,8 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
 
    argumentParser.getApplicationUsage()->addCommandLineOption("--geo","Defaults to a geographic image chain with GSD = to the input.  Origin of latitude is on the equator.");
    argumentParser.getApplicationUsage()->addCommandLineOption("--input-proj","Makes the view equal to the input.  If more than one file then the first is taken");
+   argumentParser.getApplicationUsage()->addCommandLineOption("--srs","specify an output reference frame/projection. Example: --srs EPSG:4326");
+   argumentParser.getApplicationUsage()->addCommandLineOption("--wkt","specify an output reference frame/projection that is in a wkt format.  Must have the ossimgdal_plugin compiled");
    
    argumentParser.getApplicationUsage()->addCommandLineOption("--geo-scaled","Takes a latitude as an argument for purpose of scaling.  Specifies that no spec file was defined.  Defaults to a scaled geographic image chain with GSD = to the input.");
    
@@ -145,6 +266,9 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
    argumentParser.getApplicationUsage()->addCommandLineOption("--supplementary-directory","Specify the supplementary directory path where overviews are located");
 
    argumentParser.getApplicationUsage()->addCommandLineOption("--scale-to-8-bit","Scales output to eight bits if not already.");
+
+   argumentParser.getApplicationUsage()->addCommandLineOption("-w or --writer","Specifies the output writer.  Default uses output file extension to determine writer.");
+    
    argumentParser.getApplicationUsage()->addCommandLineOption("--writer-prop","Passes a name=value pair to the writer for setting it's property.  Any number of these can appear on the line.");
 
 #if 0 /* TODO */
@@ -152,6 +276,7 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
 #endif
    
    argumentParser.getApplicationUsage()->addCommandLineOption("--stdout","Output the image to standard out.  This will return an error if writer does not support writing to standard out.  Callers should combine this with the --ossim-logfile option to ensure output image stream does not get corrupted.  You must still pass an output file so the writer type can be determined like \"dummy.png\".");
+
 }
 
 void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
@@ -194,6 +319,13 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
       theThumbnailRes  = tempString;
       theThumbnailFlag = true;
    }
+
+   if(argumentParser.read("-w", stringParam)   ||
+      argumentParser.read("--writer", stringParam))
+   {
+      theWriterType = tempString;
+   }
+
    theWriterProperties.clear();
    
    while(argumentParser.read("--writer-prop", stringParam))
@@ -334,6 +466,15 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theProjectionType = OSSIM_INPUT_PROJECTION;
    }
+   else if (argumentParser.read("--srs", stringParam))
+   {
+      theSrsString=tempString;
+      theSrsName = tempString;
+      if (theSrsName.contains(":"))
+      {
+         theSrsName = theSrsName.split(":")[1].trim();
+      }
+   }
 
    if(argumentParser.read("--view-template", stringParam))
    {
@@ -397,9 +538,16 @@ void ossimOrthoIgen::addFiles(ossimArgumentParser& argumentParser,
    ossim_uint32 idx = startIdx;
    while(argumentParser.argv()[idx])
    {
-      addFile(ossimFilename(argumentParser.argv()[idx]), withDecoding);
-//      theFilenames.push_back(ossimFilename(argumentParser.argv()[idx]));
-      ++idx;
+     ossimString fileName = argumentParser.argv()[idx];
+     if (fileName.contains(".src"))
+     {
+       addFile(fileName, withDecoding);
+     }
+     else
+     {
+       addFile(ossimFilename(fileName), withDecoding);
+     }
+     ++idx;
    }
 }
 
@@ -505,6 +653,145 @@ void ossimOrthoIgen::addFile(const ossimFilename& file,
    }   
 
    theFilenames.push_back(filename);
+}
+
+void ossimOrthoIgen::addFile(const ossimString& fileName,
+                             bool withEncodedEntry)
+{
+  ossimFilename f = fileName;
+  std::ifstream in((f).c_str() );
+  
+  std::string line;
+ 
+  // Iterate through the lines of file.
+  std::vector<ossimString> fileInfos;
+  while(in.good())
+  {
+    // Read in a line.
+    std::getline(in, line);
+    ossimString tmpStr = ossimString(line);
+    if (tmpStr.contains(".file:")  ||
+        tmpStr.contains(".entry:") ||
+        tmpStr.contains(".rgb:") || 
+        tmpStr.contains(".ovr:") || 
+        tmpStr.contains(".file :")  ||
+        tmpStr.contains(".entry :") ||
+        tmpStr.contains(".rgb :") || 
+        tmpStr.contains(".ovr :"))
+    {
+      fileInfos.push_back(tmpStr);
+      continue;
+    }
+    else // go to next file or blank line found
+    {
+      addFiles(tmpStr, fileInfos, withEncodedEntry);
+      fileInfos.clear();//after parsing the vector, clear it and get it ready for next set of input
+    }
+  }
+  if (fileInfos.size() > 0) // end of the file, process last set of input
+  {
+    addFiles("", fileInfos, withEncodedEntry);
+    fileInfos.clear();
+  }
+  in.close();
+}
+
+void ossimOrthoIgen::addFiles(ossimString fileInfoStr, 
+                              std::vector<ossimString> fileInfos,
+                              bool withEncodedEntry)
+{
+  if (fileInfos.size() > 0)
+  {
+    if (fileInfos[0].contains(".file:"))
+    {
+      fileInfoStr = fileInfos[0].after(".file:").trim();
+    }
+    else if (fileInfos[0].contains(".file :"))
+    {
+      fileInfoStr = fileInfos[0].after(".file :").trim();
+    }
+  }
+
+  bool hasEntry = false;
+  for (unsigned int i = 1; i < fileInfos.size(); i++)
+  {
+    ossimString temp = fileInfos[i];
+    if (temp.contains(".entry:"))
+    {
+      temp = temp.after(".entry:").trim();
+      if (!temp.empty())
+      {
+        hasEntry = true;
+      }
+      else
+      {
+        hasEntry = false;
+      }
+    }
+    else if (temp.contains(".entry :"))
+    {
+      temp = temp.after(".entry :").trim();
+      if (!temp.empty())
+      {
+        hasEntry = true;
+      }
+      else
+      {
+        hasEntry = false;
+      }
+    }
+
+    if (temp.contains(".rgb:"))
+    {
+      temp = temp.after(".rgb:").trim();
+    }
+    else if (temp.contains(".rgb :"))
+    {
+      temp = temp.after(".rgb :").trim();
+    }
+    if (temp.contains(".ovr:"))
+    {
+      temp = temp.after(".ovr:").trim();
+    }
+    else if (temp.contains(".ovr :"))
+    {
+      temp = temp.after(".ovr :").trim();
+    }
+    fileInfoStr = fileInfoStr + "|" + temp;
+  }
+
+  if (fileInfos.size() > 0)
+  {
+    withEncodedEntry = hasEntry;
+  }
+  else
+  {
+    withEncodedEntry = true; //will be handled by setFilenameWithDecoding() function
+  }
+
+  if (!fileInfoStr.empty())
+  {
+    ossimFilename file = fileInfoStr;
+    ossimOrthoIgenFilename filename;
+    if(withEncodedEntry)
+    {
+      filename.setFilenameWithDecoding(file);
+    }
+    else
+    {
+      filename.setFilenameAndEntry(file, -1);
+    }
+
+    if (traceDebug())
+    {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+        << "ossimOrthoIgen::addFile DEBUG:"
+        << "\nAdded file: " << filename.theFilename
+        << std::endl;
+    }   
+
+    theFilenames.push_back(filename);
+  }
 }
 
 void ossimOrthoIgen::setDefaultValues()
@@ -707,15 +994,8 @@ void ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
          ossimHistogramRemapper* histRemapper = 0;
          if(handler.valid())
          {
-            if ( theSupplementaryDirectory.empty() == false )
-            {
-               handler->setSupplementaryDirectory( theSupplementaryDirectory );
-               ossimFilename overviewFilename = handler->getFilenameWithThisExtension(ossimString(".ovr"));
-               handler->openOverview( overviewFilename );
-            }
-
             std::vector<ossim_uint32> entryList;
-            if(theFilenames[idx].theEntry >-1)
+            if(theFilenames[idx].theEntry > -1 )
             {
                entryList.push_back(theFilenames[idx].theEntry);
             }
@@ -727,51 +1007,92 @@ void ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
             ossim_uint32 entryIdx = 0;
             for(entryIdx = 0; entryIdx < entryList.size(); ++entryIdx)
             {
-               ossimImageHandler* h = (ossimImageHandler*)handler->dup();
-               h->setCurrentEntry(entryList[entryIdx]);
-               if ( theSupplementaryDirectory.empty() == false )
-               {
-                  h->setSupplementaryDirectory( theSupplementaryDirectory );
-                  ossimFilename overviewFilename = h->getFilenameWithThisExtension(ossimString(".ovr"));
-                  h->openOverview( overviewFilename );
-               }
+              ossimImageHandler* h = (ossimImageHandler*)handler->dup();
+              if ( theSupplementaryDirectory.empty() == false )
+              {
+                h->setSupplementaryDirectory( theSupplementaryDirectory );
+              }
+              else if (theFilenames[idx].theSupplementaryDir.empty() == false)
+              {
+                h->setSupplementaryDirectory(theFilenames[idx].theSupplementaryDir);
+              }
 
-               ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
-               tempChain->addLast(h);
-               if( ( (ossim::isnan(theHighPercentClip) == false)  &&
-                     (ossim::isnan(theLowPercentClip) == false) ) ||
-                   theUseAutoMinMaxFlag )
-               {
-                  ossimFilename inputHisto = handler->createDefaultHistogramFilename();
-                  if(inputHisto.exists())
+              h->setCurrentEntry(entryList[entryIdx]);
+              if ( h->getOverview() == 0 )
+              {
+                 ossimFilename overviewFilename = h->getFilenameWithThisExtension(ossimString(".ovr"));
+                 h->openOverview( overviewFilename );
+              }
+
+              ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
+              tempChain->addLast(h);
+
+              // Capture the end of the chain.
+              ossimImageSource* source = h;
+
+              if (theFilenames[idx].theBands.size() > 0 &&
+                (h->getNumberOfOutputBands() > 1))
+              {
+                ossim_uint32 bands = h->getNumberOfOutputBands();
+                bool validBand = true;
+                for (ossim_uint32 i = 0; i < theFilenames[idx].theBands.size(); ++i)
+                {
+                  if (theFilenames[idx].theBands[i] >= bands)
                   {
-                     histRemapper = new ossimHistogramRemapper;
-                     tempChain->insertRight(histRemapper, h);
-                     histRemapper->openHistogram(inputHisto);
-                     if((ossim::isnan(theHighPercentClip) == false) &&
-                        (ossim::isnan(theLowPercentClip) == false) )
-                     {
-                        histRemapper->setHighNormalizedClipPoint(1.0-theHighPercentClip);
-                        histRemapper->setLowNormalizedClipPoint(theLowPercentClip);
-                     }
-                     else
-                     {
-                        histRemapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX, true);
-                     }
+                    validBand = false;
+                    ossimNotify(ossimNotifyLevel_FATAL)
+                      << " ERROR:" << "\nBand list range error!"
+                      << "\nHighest available band:  " << bands
+                      << std::endl;
+                  }
+                }
+
+                if (validBand)
+                {
+                  ossimRefPtr<ossimBandSelector> bs = new ossimBandSelector();
+                  tempChain->insertRight(bs.get(), source);
+                  source = bs.get();
+                  bs->setOutputBandList(theFilenames[idx].theBands);
+
+                  // Capture the end of the chain.
+                  source = bs.get();
+                }
+              }
+
+              if( ( (ossim::isnan(theHighPercentClip) == false)  &&
+                (ossim::isnan(theLowPercentClip) == false) ) ||
+                theUseAutoMinMaxFlag )
+              {
+                ossimFilename inputHisto = handler->createDefaultHistogramFilename();
+                if(inputHisto.exists())
+                {
+                  histRemapper = new ossimHistogramRemapper;
+                  tempChain->insertRight(histRemapper, source);
+                  histRemapper->openHistogram(inputHisto);
+                  if((ossim::isnan(theHighPercentClip) == false) &&
+                    (ossim::isnan(theLowPercentClip) == false) )
+                  {
+                    histRemapper->setHighNormalizedClipPoint(1.0-theHighPercentClip);
+                    histRemapper->setLowNormalizedClipPoint(theLowPercentClip);
                   }
                   else
                   {
-                     ossimNotify(ossimNotifyLevel_WARN)
-                        <<"Histogram file " << inputHisto
-                        << " not found!"
-                        << std::endl;
+                    histRemapper->setStretchMode(ossimHistogramRemapper::LINEAR_AUTO_MIN_MAX, true);
                   }
-               }
-               tempChain->makeUniqueIds();
-               tempChain->saveState(kwl, (ossimString("object1.object")+ossimString::toString(chainIdx)+".").c_str());
-               rootChain->add(tempChain);
-               ++chainIdx;
-               mosaicObject->connectMyInputTo(tempChain);
+                }
+                else
+                {
+                  ossimNotify(ossimNotifyLevel_WARN)
+                    <<"Histogram file " << inputHisto
+                    << " not found!"
+                    << std::endl;
+                }
+              }
+              tempChain->makeUniqueIds();
+              tempChain->saveState(kwl, (ossimString("object1.object")+ossimString::toString(chainIdx)+".").c_str());
+              rootChain->add(tempChain);
+              ++chainIdx;
+              mosaicObject->connectMyInputTo(tempChain);
             }
          }
          else if(input == "NULL_FILE")
@@ -1011,71 +1332,110 @@ ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupCutter(
 void ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl,
                                  ossimConnectableObject* input)
 {
-   ossimFilename outputFilename = theFilenames[theFilenames.size()-1].theFilename;
-   ossimImageFileWriter* writer = 0;
-   if(theTilingFilename!="")
+   ossimFilename outputFilename = ossimFilename::NIL;
+   ossimRefPtr<ossimImageFileWriter> writer = 0;
+   
+   if (theWriterType.size())
    {
-      if(!outputFilename.isDir())
+       // User selected writer with -w or --writer option.
+      writer = ossimImageWriterFactoryRegistry::instance()->
+         createWriter(theWriterType);
+   }
+   else if ( theWriterTemplate.size() && theWriterTemplate.exists() )
+   {
+      // User sent us a writer template.
+      ossimKeywordlist kwlTemp;
+      kwlTemp.addFile(theWriterTemplate);
+
+      // Try first with no prefix.
+      writer = ossimImageWriterFactoryRegistry::instance()->
+         createWriter(kwlTemp);
+
+      if ( !writer.valid() )
       {
-         outputFilename = outputFilename.path();
+         writer = ossimImageWriterFactoryRegistry::instance()->
+            createWriter(kwlTemp, "object2.");
       }
-      outputFilename = outputFilename.dirCat(theTilingFilename);
+   }
+   else if ( theTilingFilename == "%SRTM%")
+   {
+      ossimKeywordlist kwlWriter;
+      
+      kwlWriter.add("type",
+                    "ossimGeneralRasterWriter",
+                    true);
+      kwlWriter.add("byte_order",
+                    "big_endian");
+      writer = ossimImageWriterFactoryRegistry::instance()->
+         createWriter(kwlWriter);
+      outputFilename = outputFilename.path();
    }
 
-   ossimRefPtr<ossimImageFileWriter> outputObj = 0;
-   if((theWriterTemplate == "")||
-      (!theWriterTemplate.exists()))
+   //---
+   // Set the output file name if not already set.
+   // NOTE: Could be outputing to stdout in which case outputFilename does not
+   // make sense.  Leaving here though to not break code downstream. (drb)
+   //---
+   if ( outputFilename == ossimFilename::NIL )
    {
-      if(theTilingFilename == "%SRTM%")
+      if (theFilenames.size())
       {
-         ossimKeywordlist kwlWriter;
-         
-         kwlWriter.add("type",
-                       "ossimGeneralRasterWriter",
-                       true);
-         kwlWriter.add("byte_order",
-                       "big_endian");
-         outputObj = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlWriter);
-         outputFilename = outputFilename.path();
-      }
-      else if(outputFilename.ext() != "")
-      {
-         ossimFilename ext = outputFilename.ext();
-         outputObj = ossimImageWriterFactoryRegistry::instance()->createWriterFromExtension(ext);
-         if(!outputObj.valid())
-         {
-            outputObj = new ossimTiffWriter;
-            writer = (ossimImageFileWriter*)outputObj.get();
-            outputFilename.setExtension("tif");
-         }
+         outputFilename = theFilenames[theFilenames.size()-1].theFilename;
       }
       else
       {
-         // just do a default just so we can set the keywords for now
-         //
-         outputObj = new ossimTiffWriter;
+         throw(ossimException(std::string("Writer output filename not set.")));
       }
-      if(outputObj.valid())
-      {
-         writer = (ossimImageFileWriter*)outputObj.get();
-         writer->setFilename(outputFilename);
+   }
 
-         if(theScaleToEightBitFlag)
-         {
-            writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
-         }
-         
-         writer->connectMyInputTo(0, input);
-         
-         ossimPropertyInterface* propInterface = (ossimPropertyInterface*)writer;
-         PropertyMap::iterator iter = theWriterProperties.begin();
-         while(iter != theWriterProperties.end())
-         {
-            propInterface->setProperty(iter->first, iter->second);
-            ++iter;
-         }
-         writer->saveState(kwl, "object2.");
+   //---
+   // Final check for writer.
+   //---
+   if ( !writer.valid() )
+   {
+      // Derive writer from the extension.
+      ossimFilename ext = outputFilename.ext();
+
+      if ( ext.size() )
+      {
+         writer = ossimImageWriterFactoryRegistry::instance()->
+            createWriterFromExtension(ext);
       }
+
+      //---
+      // Lastly default to tiff.  Perhaps throw exception here instead. (drb)
+      //---
+      if( !writer.valid() )
+      {
+            writer = new ossimTiffWriter;
+            outputFilename.setExtension("tif");
+      }
+   }
+
+   //---
+   // Set writer filename, connect and add to writer to keyword list.
+   //---
+   if ( writer.valid() )
+   {
+      writer->setFilename(outputFilename);
+      
+      if(theScaleToEightBitFlag)
+      {
+         writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
+      }
+      
+      writer->connectMyInputTo(0, input);
+      
+      ossimPropertyInterface* propInterface =
+         (ossimPropertyInterface*)writer.get();
+      PropertyMap::iterator iter = theWriterProperties.begin();
+      while(iter != theWriterProperties.end())
+      {
+         propInterface->setProperty(iter->first, iter->second);
+         ++iter;
+      }
+      writer->saveState(kwl, "object2.");
+   
       kwl.add("object2.",
               ossimKeywordNames::FILENAME_KW,
               outputFilename.c_str(),
@@ -1091,45 +1451,7 @@ void ossimOrthoIgen::setupWriter(ossimKeywordlist& kwl,
    }
    else
    {
-      ossimKeywordlist kwlTemp;
-
-      kwlTemp.addFile(theWriterTemplate);
-      outputObj = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemp);
-      writer = dynamic_cast<ossimImageFileWriter*>(outputObj.get());
-      if(!outputObj.valid())
-      {
-         outputObj = ossimImageWriterFactoryRegistry::instance()->createWriter(kwlTemp, "object2.");
-      }
-      if(outputObj.valid())
-      {
-         outputObj->setFilename(outputFilename);
-
-         if(theScaleToEightBitFlag&&writer)
-         {
-            writer->setScaleToEightBitFlag(theScaleToEightBitFlag);
-         }
-         ossimPropertyInterface* propInterface = (ossimPropertyInterface*)writer;
-         
-         if(propInterface)
-         {
-            PropertyMap::iterator iter = theWriterProperties.begin();
-            while(iter != theWriterProperties.end())
-            {
-               propInterface->setProperty(iter->first, iter->second);
-               ++iter;
-            }
-         }
-         outputObj->connectMyInputTo(0, input);
-         outputObj->saveState(kwl, "object2.");
-         kwl.add("object2.",
-                 ossimKeywordNames::FILENAME_KW,
-                 outputFilename.c_str(),
-                 true);
-      }
-      else
-      {
-         throw(ossimException(std::string("Unable to create writer.")));
-      }
+      throw(ossimException(std::string("Unable to create writer.")));
    }
 }
 
@@ -1207,16 +1529,38 @@ void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
       if ( theSupplementaryDirectory.empty() == false )
       {
          handler->setSupplementaryDirectory( theSupplementaryDirectory );
+      }
+      else if (theFilenames[0].theSupplementaryDir.empty() == false )
+      {
+         handler->setSupplementaryDirectory( theFilenames[0].theSupplementaryDir );
+      }
+
+      if(theFilenames[0].theEntry > -1)
+      {
+         handler->setCurrentEntry(theFilenames[0].theEntry);
+      }
+      else
+      {
+         std::vector<ossim_uint32> entryList;
+         handler->getEntryList(entryList);
+         if ( entryList.size() > 0 )
+         {
+            handler->setCurrentEntry(entryList[0]);
+         }
+      }
+
+      if ( handler->getOverview() == 0 )
+      {
          ossimFilename overviewFilename = handler->getFilenameWithThisExtension(ossimString(".ovr"));
          handler->openOverview( overviewFilename );
       }
 
-      const ossimProjection* inputProj = 0;
-      const ossimImageGeometry* inputGeom = handler->getImageGeometry();
-      if (inputGeom)
+      ossimRefPtr<ossimProjection> inputProj = 0;
+      ossimRefPtr<ossimImageGeometry> inputGeom = handler->getImageGeometry();
+      if (inputGeom.valid())
          inputProj = inputGeom->getProjection();
 
-      if(inputProj && (theProjectionType !=OSSIM_UNKNOWN_PROJECTION))
+      if(inputProj.valid() && (theProjectionType !=OSSIM_UNKNOWN_PROJECTION))
       {
          // Get the input resolution.
          ossimDpt metersPerPixel = inputProj->getMetersPerPixel();
@@ -1254,7 +1598,7 @@ void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
          }
          else if ((theProjectionType == OSSIM_UTM_PROJECTION) ||
                  ((theProjectionType == OSSIM_INPUT_PROJECTION) &&
-                  !PTR_CAST(ossimMapProjection, inputProj)))
+                  !dynamic_cast<ossimMapProjection*>(inputProj.get())))
             
          {
             // Default to UTM.
@@ -1281,6 +1625,68 @@ void ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
 //             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
             // Save the state to keyword list.
             outputProjection->saveState(kwl, "product.projection.");
+         }
+         else if (theSrsName.empty() == false)
+         {
+            bool isGeo = false;
+            inputProj = ossimProjectionFactoryRegistry::instance()->createProjection(theSrsString);
+            if(!inputProj)
+            {
+               int codeInt = theSrsName.toInt();
+               if (((codeInt >= 2759) && (codeInt <= 3760)) ||    //harn state plane
+                   ((codeInt >= 26729) && (codeInt <= 26803)) ||
+                   ((codeInt >= 26929) && (codeInt <= 26998)) || 
+                   ((codeInt >= 32001) && (codeInt <= 32060)) || 
+                   ((codeInt >= 32100) && (codeInt <= 32161))) // handled by state plane factory.
+               {
+                  kwl.add(ossimKeywordNames::PCS_CODE_KW, theSrsName, true);
+                  inputProj = ossimStatePlaneProjectionFactory::instance()->createProjection(kwl);
+               }
+               else
+               {
+                  kwl.add(ossimKeywordNames::PCS_CODE_KW, theSrsName, true);
+                  inputProj = ossimPcsCodeProjectionFactory::instance()->createProjection(kwl);
+               }
+               if (inputProj == NULL)//try gcs code
+               {
+                  kwl.add(ossimKeywordNames::GCS_CODE_KW, theSrsName, true);
+                  inputProj = ossimGcsCodeProjectionFactory::instance()->createProjection(kwl);
+                  isGeo = true;
+               }
+            }
+            else 
+            {
+               ossimMapProjection* mapProj = dynamic_cast<ossimMapProjection*>(inputProj.get());
+               if(mapProj)
+               {
+                  isGeo = mapProj->isGeographic();
+               }
+            }
+
+            if (inputProj.valid())
+            {
+               ossimRefPtr<ossimMapProjection> outputProjection = dynamic_cast<ossimMapProjection*>(inputProj.get());
+               if (isGeo)
+               {
+                  ossimGpt gpt(theGeographicOriginOfLatitude, 0.0);
+                  
+                  // Set the origin.
+                  outputProjection->setOrigin(gpt);
+                  // Set the resolution.
+                  outputProjection->setDecimalDegreesPerPixel
+                  (ossimDpt(ossimUnitConversionTool(gsd.x, gsdUnits).getValue(OSSIM_DEGREES),
+                            ossimUnitConversionTool(gsd.y, gsdUnits).getValue(OSSIM_DEGREES)));
+               }
+               else
+               {
+                  outputProjection->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
+                                                                                       gsdUnits).getValue(OSSIM_METERS),
+                                                               ossimUnitConversionTool(gsd.y,
+                                                                                       gsdUnits).getValue(OSSIM_METERS)));
+               }
+               theProjectionName = outputProjection->getProjectionName();
+               outputProjection->saveState(kwl, "product.projection.");
+            }
          }
          else // input is a map projection so just use that if we are type INPUT
          {

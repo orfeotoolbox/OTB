@@ -126,7 +126,6 @@ protected:
   void Initialize( unsigned int num);
 
 
-
 private:
 
   /** Defines the number of vertices (ie total number of segmentation regions)*/

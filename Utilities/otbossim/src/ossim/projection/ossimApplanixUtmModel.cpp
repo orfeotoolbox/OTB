@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixUtmModel.cpp 13665 2008-10-02 19:58:00Z gpotts $
+//  $Id: ossimApplanixUtmModel.cpp 16104 2009-12-17 18:09:59Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -20,12 +20,13 @@
 #include <ossim/projection/ossimUtmProjection.h>
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <ossim/base/ossimMatrix4x4.h>
+#include <ossim/elevation/ossimElevManager.h>
 static ossimTrace traceDebug("ossimApplanixUtmModel:debug");
 
 RTTI_DEF1(ossimApplanixUtmModel, "ossimApplanixUtmModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 13665 2008-10-02 19:58:00Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 16104 2009-12-17 18:09:59Z gpotts $";
 #endif
 
 ossimApplanixUtmModel::ossimApplanixUtmModel()

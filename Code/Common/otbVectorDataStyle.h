@@ -80,5 +80,4 @@ class ITK_EXPORT VectorDataStyle : public itk::LightObject
 } // end namespace otb
 
 
-
 #endif

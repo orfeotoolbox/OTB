@@ -112,7 +112,6 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   ImageType::PixelType   pixelValue = image->GetPixel( pixelIndex );
-
   // Software Guide : EndCodeSnippet
 
 

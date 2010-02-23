@@ -136,7 +136,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter< InternalImageType,
   OutputImageType > RescalerType;
-
   // Software Guide : EndCodeSnippet
 
 
@@ -199,9 +198,6 @@ int main( int argc, char * argv[] )
   extractor->SetLineValue(0.);
   rescaler->SetInput( extractor->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
-
-
-
   // Software Guide : EndCodeSnippet
 
 
@@ -215,7 +211,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   detector->SetLengthLine( atoi(argv[3]) );
   detector->SetWidthLine( atoi(argv[4]) );
 
@@ -247,7 +242,6 @@ int main( int argc, char * argv[] )
 
   extractor->SetFillGapsRadius( FillGapsRadius );
   extractor->SetFillGapsAngularBeam( FillGapsAngularBeam );
-
   // Software Guide : EndCodeSnippet
 
 
@@ -272,7 +266,6 @@ int main( int argc, char * argv[] )
   writer->Update();
 
 
-
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
@@ -288,7 +281,6 @@ int main( int argc, char * argv[] )
   //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

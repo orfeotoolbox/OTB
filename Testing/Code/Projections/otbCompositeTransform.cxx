@@ -84,11 +84,6 @@ int otbCompositeTransform( int argc, char* argv[] )
   file << std::endl << std::endl;
 
 
-
-
-
-
-
   file.close();
   return EXIT_SUCCESS;
 }

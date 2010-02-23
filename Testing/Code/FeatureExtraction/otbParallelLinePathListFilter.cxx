@@ -33,8 +33,6 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
   PathListType::Pointer parallelList = PathListType::New();
 
 
-
-
   typedef PathType::ContinuousIndexType    ContinuousIndexType;
   ContinuousIndexType cindex;
 
@@ -79,7 +77,6 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
   lineList->PushBack( aLine );
 
 
-
   // Parallel lines are detected.
 
   typedef otb::ParallelLinePathListFilter<PathType> ParallelLinePathType;
@@ -89,7 +86,6 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
   parallelLinePathListFilter->SetCommonDistanceThreshold(10);
   parallelLinePathListFilter->SetInput(lineList);
   parallelLinePathListFilter->Update();
-
 
 
   PathListType::Pointer pathList = parallelLinePathListFilter->GetOutput();
@@ -123,8 +119,6 @@ int otbParallelLinePathListFilter(int argc, char * argv[])
     ++listIt;
     ++parListIt;
   }
-
-
 
 
   return EXIT_SUCCESS;

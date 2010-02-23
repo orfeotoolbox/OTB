@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 15251 2009-08-25 13:13:01Z gpotts $
+// $Id: ossimXmlNode.cpp 16387 2010-01-21 18:46:21Z gpotts $
 
 #include <iostream>
 #include <stack>
@@ -28,7 +28,7 @@ static std::istream& xmlskipws(std::istream& in)
 {
    int c = in.peek();
    while( !in.fail() &&
-          ( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') ) )
+         ( (c == ' ') || (c == '\t') || (c == '\n')|| (c == '\r') ) )
    {
       in.ignore(1);
       c = in.peek();
@@ -38,16 +38,16 @@ static std::istream& xmlskipws(std::istream& in)
 }
 
 ossimXmlNode::ossimXmlNode(istream& xml_stream, ossimXmlNode* parent)
-   :
-   theParentNode (parent),
-   theCDataFlag(false)
+:
+theParentNode (parent),
+theCDataFlag(false)
 {
    read(xml_stream);
 }
 
 ossimXmlNode::ossimXmlNode()
-   :theParentNode(0),
-    theCDataFlag(false)
+:theParentNode(0),
+theCDataFlag(false)
 {
 }
 
@@ -147,7 +147,7 @@ bool ossimXmlNode::read(std::istream& in)
    }
    streampos file_pos = in.tellg();
    ossimString endTag;
-
+   
    
    if(!readTag(in, theTag))
    {
@@ -161,8 +161,8 @@ bool ossimXmlNode::read(std::istream& in)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "theTag = " << theTag << "\n";
    }
-//    std::cout << "theTag = " << theTag << std::endl;
-
+   //    std::cout << "theTag = " << theTag << std::endl;
+   
    if((!in.fail())&&readEndTag(in, endTag))
    {
       if((endTag == "")||
@@ -193,7 +193,7 @@ bool ossimXmlNode::read(std::istream& in)
    // skip white space characters
    //
    in >> xmlskipws;
-
+   
    if(!in.fail()&&readEndTag(in, endTag))
    {
       if((endTag == "")||
@@ -227,7 +227,7 @@ bool ossimXmlNode::read(std::istream& in)
       }
       return false;
    }
-
+   
    in.ignore(1);
    c = in.peek();
    // now do the text portion
@@ -242,8 +242,8 @@ bool ossimXmlNode::read(std::istream& in)
    }
    in >> xmlskipws;
    c = in.peek();
-
-    if(c != '<')
+   
+   if(c != '<')
    {
       setErrorStatus();
       if(traceDebug())
@@ -278,7 +278,7 @@ bool ossimXmlNode::read(std::istream& in)
    // now if it's not an endtag then it must be a tag starting the new child node
    //
    bool done = false;
-
+   
    ossimRefPtr<ossimXmlNode> childNode;
    do
    {
@@ -298,7 +298,7 @@ bool ossimXmlNode::read(std::istream& in)
          return false;
       }
       in >> xmlskipws;
-
+      
       c = in.peek();
       if(c != '<')
       {
@@ -332,7 +332,7 @@ bool ossimXmlNode::read(std::istream& in)
          }
       }
    }while((!done)&&(!in.bad()));
-
+   
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n";
@@ -364,12 +364,12 @@ void ossimXmlNode::findChildNodes(const ossimString& xpath,
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: ossimXmlNode::findChildNodes\n"
-         << "Only relative XPaths can be searched from a node. "
-         << "Returning null list...\n";
+      << "WARNING: ossimXmlNode::findChildNodes\n"
+      << "Only relative XPaths can be searched from a node. "
+      << "Returning null list...\n";
       return;
    }
-
+   
    //***
    // Read the desired tag from the relative xpath
    //***
@@ -403,7 +403,7 @@ void ossimXmlNode::findChildNodes(const ossimString& xpath,
             (*child_iter)->findChildNodes(sub_xpath, result);
          }
       }
-
+      
       //***
       // Proceed to next child:
       //***
@@ -428,12 +428,12 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: ossimXmlNode::findChildNodes\n"
-         << "Only relative XPaths can be searched from a node. "
-         << "Returning null list...\n";
+      << "WARNING: ossimXmlNode::findChildNodes\n"
+      << "Only relative XPaths can be searched from a node. "
+      << "Returning null list...\n";
       return 0;
    }
-
+   
    //
    // Read the desired tag from the relative xpath
    //
@@ -441,7 +441,7 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
    if (rel_xpath.contains(XPATH_DELIM))
       desired_tag = rel_xpath.before(XPATH_DELIM);
    ossimString sub_xpath (rel_xpath.after(XPATH_DELIM));
-
+   
    ossimRefPtr<ossimXmlNode> result = 0;
    
    //
@@ -467,13 +467,13 @@ const ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& x
             result = (*child_iter)->findFirstNode(sub_xpath);
          }
       }
-
+      
       //
       // Proceed to next child:
       //
       ++child_iter;
    }
-
+   
    return result;
 }
 
@@ -494,12 +494,12 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       ossimNotify(ossimNotifyLevel_WARN)
-         << "WARNING: ossimXmlNode::findChildNodes\n"
-         << "Only relative XPaths can be searched from a node. "
-         << "Returning null list...\n";
+      << "WARNING: ossimXmlNode::findChildNodes\n"
+      << "Only relative XPaths can be searched from a node. "
+      << "Returning null list...\n";
       return 0;
    }
-
+   
    //
    // Read the desired tag from the relative xpath
    //
@@ -507,7 +507,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
    if (rel_xpath.contains(XPATH_DELIM))
       desired_tag = rel_xpath.before(XPATH_DELIM);
    ossimString sub_xpath (rel_xpath.after(XPATH_DELIM));
-
+   
    ossimRefPtr<ossimXmlNode> result = 0;
    
    //
@@ -533,13 +533,13 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::findFirstNode(const ossimString& xpath)
             result = (*child_iter)->findFirstNode(sub_xpath);
          }
       }
-
+      
       //
       // Proceed to next child:
       //
       ++child_iter;
    }
-
+   
    return result;
 }
 
@@ -554,7 +554,7 @@ ossimRefPtr<ossimXmlAttribute> ossimXmlNode::findAttribute(const ossimString& na
          return theAttributes[idx];
       }
    }
-
+   
    return 0;
 }
 
@@ -569,7 +569,7 @@ const ossimRefPtr<ossimXmlAttribute> ossimXmlNode::findAttribute(const ossimStri
          return theAttributes[idx];
       }
    }
-
+   
    return 0;
 }
 
@@ -611,7 +611,7 @@ const ossimXmlNode::AttributeListType& ossimXmlNode::getAttributes() const
 bool ossimXmlNode::getAttributeValue(ossimString& value, const ossimString& name)const
 {
    ossimRefPtr<ossimXmlAttribute> attribute = findAttribute(name);
-
+   
    if(attribute.valid())
    {
       value = attribute->getValue();
@@ -628,7 +628,7 @@ bool ossimXmlNode::getChildTextValue(ossimString& value,
    {
       value = node->getText();
    }
-
+   
    return node.valid();
 }
 
@@ -678,21 +678,21 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
    // Dump the tag opening:
    //
    os << "\n" << indent << "<" << xml_node->theTag;
-
+   
    //
    // Dump any attributes:
    //
    if (xml_node->theAttributes.size())
    {
       ossimXmlNode::AttributeListType::const_iterator attr =
-         xml_node->theAttributes.begin();
+      xml_node->theAttributes.begin();
       while (attr != xml_node->theAttributes.end())
       {
          os << attr->get();
          attr++;
       }
    }
-
+   
    if((xml_node->theChildNodes.size() == 0)&&
       (xml_node->theText == ""))
    {
@@ -701,7 +701,7 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
    else
    {
       os << ">";
-
+      
       if(xml_node->cdataFlag())
       {
          os << "<![CDATA[" <<xml_node->theText <<  "]]>";
@@ -726,13 +726,13 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
          }
          os << "\n" << indent;
       }
-   
+      
       //
       // Dump the tag closing:
       // 
       os << "</" << xml_node->theTag << ">";
    }
-
+   
    return os;
 }
 
@@ -748,8 +748,8 @@ void ossimXmlNode::addAttribute(const ossimString& name,
 }
 
 bool  ossimXmlNode::setAttribute(const ossimString& name,
-                                const ossimString& value,
-                                bool addIfNotPresentFlag)
+                                 const ossimString& value,
+                                 bool addIfNotPresentFlag)
 {
    bool result = false;
    ossimRefPtr<ossimXmlAttribute> attribute = findAttribute(name);
@@ -766,7 +766,7 @@ bool  ossimXmlNode::setAttribute(const ossimString& name,
          result = true;
       }
    }
-
+   
    return result;
 }
 
@@ -787,11 +787,11 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addNode(const ossimString& relPath,
        XPATH_DELIM[static_cast<std::string::size_type>(0)])
    {
       ossimNotify(ossimNotifyLevel_WARN) << "WARNING: ossimXmlNode::findChildNodes\n"
-                                         << "Only relative XPaths can be searched from a node. "
-                                         << "Returning null list...\n";
+      << "Only relative XPaths can be searched from a node. "
+      << "Returning null list...\n";
       return 0;
    }
-
+   
    //
    // Read the desired tag from the relative xpath
    //
@@ -803,7 +803,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addNode(const ossimString& relPath,
    ossimString subPath (relXpath.after(XPATH_DELIM));
    
    ossimRefPtr<ossimXmlNode> node = findFirstNode(desiredTag);
-
+   
    if(!node.valid())
    {
       if(subPath.empty())
@@ -819,18 +819,18 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addNode(const ossimString& relPath,
    {
       return node->addNode(subPath, text);
    }
-
+   
    return node;
 }
 
 ossimRefPtr<ossimXmlNode> ossimXmlNode::addOrSetNode(const ossimString& relPath,
                                                      const ossimString& text)
 {
-
+   
    ossimRefPtr<ossimXmlNode> result = addNode(relPath, text);
-
+   
    result->setText(text);
-
+   
    return result;
 }
 
@@ -852,7 +852,7 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::addChildNode(const ossimString& tagName,
    node->theTag = tagName;
    node->theText = text;
    theChildNodes.push_back(node);
-
+   
    return node;
 }
 
@@ -865,9 +865,9 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(ossimRefPtr<ossimXmlNode> no
       if(node == iter->get())
       {
          ossimRefPtr<ossimXmlNode> temp = *iter;
-
+         
          theChildNodes.erase(iter);
-
+         
          return temp;
       }
       ++iter;
@@ -884,9 +884,9 @@ ossimRefPtr<ossimXmlNode> ossimXmlNode::removeChild(const ossimString& tag)
       if(tag == iter->get()->theTag)
       {
          ossimRefPtr<ossimXmlNode> temp = *iter;
-
+         
          theChildNodes.erase(iter);
-
+         
          return temp;
       }
       ++iter;
@@ -950,7 +950,7 @@ void ossimXmlNode::toKwl(ossimKeywordlist& kwl,
    ossimRefPtr<ossimXmlAttribute> nameAtt  = findAttribute("name");
    ossimRefPtr<ossimXmlAttribute> valueAtt = findAttribute("value");
    ossimRefPtr<ossimXmlAttribute> typeAtt  = findAttribute("type");
-
+   
    ossimString name;
    ossimString value;
    ossimString type;
@@ -972,7 +972,7 @@ void ossimXmlNode::toKwl(ossimKeywordlist& kwl,
       type = typeAtt->getValue();
    }
    ossimString copyPrefix = prefix;
-
+   
    if(name != "")
    {
       copyPrefix += (name+".");
@@ -994,7 +994,7 @@ void ossimXmlNode::toKwl(ossimKeywordlist& kwl,
    else
    {
       ossim_uint32 idx=0;
-
+      
       for(idx = 0; idx < theChildNodes.size();++idx)
       {
          theChildNodes[idx]->toKwl(kwl,
@@ -1011,21 +1011,21 @@ bool ossimXmlNode::readTag(std::istream& in,
       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::readTag: entered ......\n";
    }
    in >> xmlskipws;
-
+   
    tag = "";
    int c = in.peek();
-
+   
    // bool validTag = false;
    //    while(!validTag)
    {
       while( (c != ' ')&&
-             (c != '\n')&&
-             (c != '\t')&&
-             (c != '\r')&&
-             (c != '<')&&
-             (c != '>')&&
-             (c != '/')&&
-             (!in.fail()))
+            (c != '\n')&&
+            (c != '\t')&&
+            (c != '\r')&&
+            (c != '<')&&
+            (c != '>')&&
+            (c != '/')&&
+            (!in.fail()))
       {
          tag += (char)c;
          in.ignore(1);
@@ -1137,7 +1137,7 @@ bool ossimXmlNode::readEndTag(std::istream& in,
    bool result = false;
    char c = in.peek();
    endTag = "";
-
+   
    if(theTag == "--")// this is a comment tag
    {
       skipCommentTag(in);
@@ -1169,6 +1169,6 @@ bool ossimXmlNode::readEndTag(std::istream& in,
       in.ignore(1);
    }
    if(in.fail()) result = false;
-
+   
    return result;
 }

@@ -159,8 +159,3 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 }
 
 
-
-
-
-
-

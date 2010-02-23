@@ -119,7 +119,6 @@ private:
 } // End namespace Functor
 
 
-
 /** \class RadiometricAttributesLabelMapFilter
  *  \brief This filter computes radiometric attributes for each object.
  *
@@ -133,7 +132,9 @@ private:
  *
  * The feature name is constructed as:
  * 'STATS' + '::' + RadiometricFeatureName + '::' + StatisticName
- * For example, accessing the mean of NDVI on a LabelObject with the attribute: 'STATS::Ndvi::Mean'    
+ * For example, accessing the mean of NDVI on a LabelObject with the
+ * attribute: 'STATS::Ndvi::Mean'
+ * is done by writing labelObject->GetAttribute("STATS::Ndvi::Mean")
  *
  * The ReducedAttributesSet flag allows to tell the internal
  * statistics filter to compute only the main attributes.

@@ -37,8 +37,8 @@ int otbDEMHandlerTest(int argc, char * argv[])
 
   // Instantiating object
   DEMHandlerType::Pointer demHandler = DEMHandlerType::New();
-  demHandler->OpenDEMDirectory(srtm_directory);
   demHandler->OpenGeoidFile(geoidFile);
+  demHandler->OpenDEMDirectory(srtm_directory);
 
   typedef otb::UtmInverseProjection                      utmProjection;
   typedef utmProjection::InputPointType          InputPoint;

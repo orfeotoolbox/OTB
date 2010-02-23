@@ -42,7 +42,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(GISConnectionImplementation,itk::DataObject);
@@ -74,7 +73,6 @@ public:
   virtual void PerformTransaction(const TransactorType& theTransaction) const {} ;
 
 
-
 protected:
   /** Constructor */
   GISConnectionImplementation(){};
@@ -94,10 +92,8 @@ private:
   std::string m_Options;
 
 
-
 };
 }// end namespace otb
-
 
 
 #endif

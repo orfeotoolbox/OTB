@@ -12,7 +12,7 @@
 // Image handler class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmTileSource.h 15800 2009-10-23 20:03:45Z gpotts $
+// $Id: ossimSrtmTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 #ifndef ossimSrtmTileSource_HEADER
 #define ossimSrtmTileSource_HEADER
 
@@ -26,10 +26,7 @@ public:
    ossimSrtmTileSource();
 
    virtual ossimString getShortName() const;
-   
-   virtual ossimString getLongName() const;
-
-   virtual ossimString  className() const;
+   virtual ossimString getLongName()  const;
 
    virtual bool open();
    
@@ -52,6 +49,20 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
+
+   /**
+    * @brief Gets a property.
+    * @param The name of the property to get.
+    * @return The property if found.
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(
+      const ossimString& name)const;
+
+   /**
+    * @brief Adds property names to array.
+    * @param propertyNames Array to populate with property names.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
 
 protected:
    virtual ~ossimSrtmTileSource();

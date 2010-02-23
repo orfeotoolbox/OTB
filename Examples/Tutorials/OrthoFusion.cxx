@@ -30,8 +30,6 @@
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -68,7 +66,6 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   if (argc!=12)
   {
     std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
@@ -121,14 +118,11 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::UtmInverseProjection utmMapProjectionType;
   utmMapProjectionType::Pointer utmMapProjection =
     utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[4]));
   utmMapProjection->SetHemisphere(*(argv[5]));
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -218,7 +212,6 @@ int main( int argc, char* argv[] )
   orthoRectifXS->SetSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(origin);
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -228,15 +221,11 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
   <DoubleImageType,DoubleVectorImageType,VectorImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXSVector->GetOutput());
-
-
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -248,7 +237,6 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   writer->SetInput(fusion->GetOutput());
 
   writer->SetTilingStreamDivisions();

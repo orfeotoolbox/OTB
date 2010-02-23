@@ -35,75 +35,45 @@ ossimInfoFactory* ossimInfoFactory::instance()
 
 ossimInfoBase* ossimInfoFactory::create(const ossimFilename& file) const
 {
-   ossimInfoBase* result = 0;
+   ossimRefPtr<ossimInfoBase> result = 0;
 
    result = new ossimJ2kInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
 
    result = new ossimNitfInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
 
    result = new ossimTiffInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
 
    result = new ossimDemInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
 
    result = new ossimDtedInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
    
    result = new ossimCcfInfo();
    if ( result->open(file) )
    {
-      return result;
-   }
-   else
-   {
-      delete result;
-      result = 0;
+      return result.release();
    }
    
-   return result;
+   return 0;
 }
 
 ossimInfoFactory::ossimInfoFactory()

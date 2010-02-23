@@ -378,7 +378,6 @@ LineSegmentDetector<TInputImage, TPrecision>
   if( NFA > 0. ) return NFA;
 
 
-
   /*Try to improve the width of the rectangle*/
   CopyRectangle(r ,rec );
   for(n=0; n<5; ++n)
@@ -846,7 +845,6 @@ LineSegmentDetector<TInputImage, TPrecision>
     }
   rectangle->SetWidth(rec[4]);
   rectangle->SetOrientation(rec[5]);
-
 
 
   /** Get The Bounding Region*/

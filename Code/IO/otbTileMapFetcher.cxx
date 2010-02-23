@@ -579,5 +579,3 @@ namespace otb
 }
 
 
-
-

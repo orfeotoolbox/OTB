@@ -7,7 +7,7 @@
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimFixedTileCache.cpp 13485 2008-08-22 17:06:20Z gpotts $
+// $Id: ossimFixedTileCache.cpp 16276 2010-01-06 01:54:47Z gpotts $
 #include <ossim/imaging/ossimFixedTileCache.h>
 #include <algorithm>
 
@@ -42,28 +42,32 @@ ossimFixedTileCache::~ossimFixedTileCache()
 
 void ossimFixedTileCache::setRect(const ossimIrect& rect)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   ossim::defaultTileSize(theTileSize);
-   theTileBoundaryRect      = rect;
-   theTileBoundaryRect.stretchToTileBoundary(theTileSize);
-   theBoundaryWidthHeight.x = theTileBoundaryRect.width();
-   theBoundaryWidthHeight.y = theTileBoundaryRect.height();
-   theTilesHorizontal       = theBoundaryWidthHeight.x/theTileSize.x;
-   theTilesVertical         = theBoundaryWidthHeight.y/theTileSize.y;
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+      ossim::defaultTileSize(theTileSize);
+      theTileBoundaryRect      = rect;
+      theTileBoundaryRect.stretchToTileBoundary(theTileSize);
+      theBoundaryWidthHeight.x = theTileBoundaryRect.width();
+      theBoundaryWidthHeight.y = theTileBoundaryRect.height();
+      theTilesHorizontal       = theBoundaryWidthHeight.x/theTileSize.x;
+      theTilesVertical         = theBoundaryWidthHeight.y/theTileSize.y;
+   }
    flush();
 }
 
 void ossimFixedTileCache::setRect(const ossimIrect& rect,
                                   const ossimIpt& tileSize)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
-   theTileBoundaryRect      = rect;
-   theTileSize              = tileSize;
-   theTileBoundaryRect.stretchToTileBoundary(theTileSize);
-   theBoundaryWidthHeight.x = theTileBoundaryRect.width();
-   theBoundaryWidthHeight.y = theTileBoundaryRect.height();
-   theTilesHorizontal       = theBoundaryWidthHeight.x/theTileSize.x;
-   theTilesVertical         = theBoundaryWidthHeight.y/theTileSize.y;
+   {
+      OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
+      theTileBoundaryRect      = rect;
+      theTileSize              = tileSize;
+      theTileBoundaryRect.stretchToTileBoundary(theTileSize);
+      theBoundaryWidthHeight.x = theTileBoundaryRect.width();
+      theBoundaryWidthHeight.y = theTileBoundaryRect.height();
+      theTilesHorizontal       = theBoundaryWidthHeight.x/theTileSize.x;
+      theTilesVertical         = theBoundaryWidthHeight.y/theTileSize.y;
+   }
    flush();
 }
 
@@ -275,7 +279,6 @@ ossimRefPtr<ossimImageData> ossimFixedTileCache::removeTile()
 
 void ossimFixedTileCache::adjustLru(ossim_int32 id)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       std::list<ossim_int32>::iterator iter = std::find(theLruQueue.begin(), theLruQueue.end(), id);
@@ -291,7 +294,6 @@ void ossimFixedTileCache::adjustLru(ossim_int32 id)
 
 void ossimFixedTileCache::eraseFromLru(ossim_int32 id)
 {
-   OpenThreads::ScopedLock<OpenThreads::Mutex> lock(theMutex);
    if(theUseLruFlag)
    {
       

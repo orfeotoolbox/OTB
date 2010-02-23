@@ -7,7 +7,7 @@
 // Description:  ossimCacheTileSource
 // 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.cpp 13822 2008-10-31 17:15:43Z dburken $
+//  $Id: ossimCacheTileSource.cpp 16276 2010-01-06 01:54:47Z gpotts $
 
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotify.h>
@@ -257,13 +257,11 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
 
 ossim_uint32 ossimCacheTileSource::getTileWidth() const
 {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    return theFixedTileSize.x;
 }
 
 ossim_uint32 ossimCacheTileSource::getTileHeight() const
 {
-	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    return theFixedTileSize.y;  
 }
 
@@ -314,7 +312,6 @@ ossimRefPtr<ossimProperty> ossimCacheTileSource::getProperty(
    const ossimString& name)const
 {
    // Lock for the length of this method.
-	OpenThreads::ScopedLock<OpenThreads::Mutex> scopeLock(theMutex);
    
    if (name == TILE_SIZE_XY_KW)
    {

@@ -27,7 +27,6 @@ class OSSIMDLLEXPORT ossimGeoid : public ossimObject,
 {
 public:
    ossimGeoid();
-   virtual ~ossimGeoid();
 
    virtual bool open(const ossimFilename& dir, ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN) = 0;
 
@@ -38,6 +37,29 @@ public:
    virtual double offsetFromEllipsoid(const ossimGpt& gpt) const = 0;
 
 protected:
+   virtual ~ossimGeoid();
+   
+   TYPE_DATA
+};
+
+/**
+ * Identity geoid.
+ */
+class OSSIM_DLL ossimIdentityGeoid : public ossimGeoid
+{
+public:
+   virtual ossimString getShortName()const
+   {
+      return "identity";
+   }
+   virtual bool open(const ossimFilename& /*dir*/, ossimByteOrder)
+   {
+      return false; // can't be opened 
+   }
+   virtual double offsetFromEllipsoid(const ossimGpt& /*gpt*/) const
+   {
+      return 0.0;
+   }
    
    TYPE_DATA
 };

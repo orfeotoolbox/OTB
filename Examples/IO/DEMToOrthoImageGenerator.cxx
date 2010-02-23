@@ -96,7 +96,6 @@ int main(int argc, char * argv[])
   typedef otb::DEMToOrthoImageGenerator<ImageType,UtmProjectionType>      DEMToOrthoImageGeneratorType;
 
   DEMToOrthoImageGeneratorType::Pointer object = DEMToOrthoImageGeneratorType::New();
-
   // Software Guide : EndCodeSnippet
 
 
@@ -125,9 +124,6 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   object->SetDEMDirectoryPath(folderPath);
 // Software Guide : EndCodeSnippet
-
-
-
 
 
   UtmProjectionType::Pointer utmProjection = UtmProjectionType::New();

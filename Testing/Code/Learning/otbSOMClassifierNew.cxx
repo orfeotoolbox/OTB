@@ -46,8 +46,3 @@ int otbSOMClassifierNew(int argc, char* argv[] )
 }
 
 
-
-
-
-
-

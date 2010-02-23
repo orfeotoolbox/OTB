@@ -36,9 +36,7 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbMorphologicalPyramidAnalysisFilter.h"
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -48,10 +46,8 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileReader.h"
@@ -81,7 +77,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
@@ -104,11 +99,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef itk::BinaryBallStructuringElement<InputPixelType,
   Dimension> StructuringElementType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -123,11 +115,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
   InputImageType,StructuringElementType>
   OpeningClosingFilterType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -139,12 +129,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
   OutputImageType,OpeningClosingFilterType>
   PyramidFilterType;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -156,7 +143,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef PyramidFilterType::OutputImageListType::Iterator
   ImageListIterator;
 // Software Guide : EndCodeSnippet
@@ -169,10 +155,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -194,7 +178,6 @@ int main(int argc, char * argv[])
   pyramid->SetDecimationRatio(decimationRatio);
   pyramid->SetInput(reader->GetOutput());
   pyramid->Update();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -221,14 +204,11 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
-
   ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
   ImageListIterator itSupFilter = pyramid->GetSupFilter()->Begin();
   ImageListIterator itInfFilter = pyramid->GetInfFilter()->Begin();
   ImageListIterator itInfDeci = pyramid->GetSupDeci()->Begin();
   ImageListIterator itSupDeci =  pyramid->GetInfDeci()->Begin();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -239,7 +219,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   WriterType::Pointer writer =  WriterType::New();
 
   int i=1;
@@ -275,7 +254,6 @@ int main(int argc, char * argv[])
     ++itSupDeci;
     ++i;
   }
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -347,7 +325,6 @@ int main(int argc, char * argv[])
 // \end{figure}
 //
 // Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

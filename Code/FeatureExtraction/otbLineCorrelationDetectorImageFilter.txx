@@ -166,8 +166,6 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
 }
 
 
-
-
 /**
  * Standard "PrintSelf" method
  */

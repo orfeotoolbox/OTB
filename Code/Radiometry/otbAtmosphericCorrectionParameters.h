@@ -120,8 +120,6 @@ private:
 };
 
 
-
-
 /** \class AtmosphericCorrectionParameters
  *  \brief This class contains all atmospheric correction parameters.
  *

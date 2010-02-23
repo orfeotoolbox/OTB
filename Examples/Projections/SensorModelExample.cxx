@@ -42,10 +42,7 @@
 
 
 // Software Guide : BeginCodeSnippet
-
-
 #include "otbInverseSensorModel.h"
-
 // Software Guide : EndCodeSnippet
 
 int main( int argc, char* argv[] )
@@ -74,7 +71,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::Image<unsigned int, 2>      ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
 
@@ -82,7 +78,6 @@ int main( int argc, char* argv[] )
   reader->SetFileName(argv[1]);
 
   ImageType::Pointer inputImage = reader->GetOutput();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -98,12 +93,10 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   reader->GenerateOutputInformation();
 
   std::cout << "Original input imagine spacing: "<<
             reader->GetOutput()->GetSpacing() << std::endl;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -117,10 +110,8 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::InverseSensorModel<double>  ModelType;
   ModelType::Pointer   model= ModelType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -132,9 +123,7 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -146,13 +135,11 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   if (!model)
   {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;
   }
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -164,7 +151,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   ModelType::OutputPointType inputPoint;
   typedef itk::Point <double, 2>    PointType;
   PointType         outputPoint;
@@ -172,7 +158,6 @@ int main( int argc, char* argv[] )
   ImageType::IndexType        currentIndex;
   ImageType::IndexType        currentIndexBis;
   ImageType::IndexType        pixelIndexBis;
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -185,7 +170,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   ImageType::Pointer         outputImage = ImageType::New();
 
   ImageType::PixelType       pixelValue;
@@ -197,7 +181,6 @@ int main( int argc, char* argv[] )
   ImageType::SizeType         size;
   size[0]=atoi(argv[5]);
   size[1]=atoi(argv[6]);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -214,7 +197,7 @@ int main( int argc, char* argv[] )
 
   ImageType::PointType       origin;
   origin[0]=strtod(argv[3], NULL);         //longitude
-  origin[1]=strtod(argv[4], NULL);         //lattitude
+  origin[1]=strtod(argv[4], NULL);         //latitude
 
   ImageType::RegionType       region;
 
@@ -225,7 +208,6 @@ int main( int argc, char* argv[] )
   outputImage->SetRegions(region);
   outputImage->SetSpacing(spacing);
   outputImage->Allocate();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -237,10 +219,8 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   typedef itk::ExtractImageFilter<ImageType,ImageType>   ExtractType;
   ExtractType::Pointer        extract=ExtractType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -253,12 +233,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef itk::LinearInterpolateImageFunction<ImageType, double>
   InterpolatorType;
   InterpolatorType::Pointer  interpolator=InterpolatorType::New();
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -270,7 +247,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
   typedef otb::Image<unsigned char, 2>        CharImageType;
   typedef otb::ImageFileWriter<CharImageType> CharWriterType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
@@ -278,7 +254,6 @@ int main( int argc, char* argv[] )
   CharWriterType::Pointer                   writer=CharWriterType::New();
   extractorWriter->SetFileName("image_temp.jpeg");
   extractorWriter->SetInput(extract->GetOutput());
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -288,14 +263,11 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
   typedef itk::RescaleIntensityImageFilter
                        <ImageType,CharImageType> RescalerType;
   RescalerType::Pointer                   rescaler=RescalerType::New();
   rescaler->SetOutputMinimum(10);
   rescaler->SetOutputMaximum(255);
-
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -312,7 +284,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
   typedef itk::ImageRegionIteratorWithIndex<ImageType>  IteratorType;
 
   unsigned int NumberOfStreamDivisions;
@@ -332,7 +303,6 @@ int main( int argc, char* argv[] )
   ImageType::IndexType       iterationRegionStart;
   ImageType::SizeType         iteratorRegionSize;
   ImageType::RegionType       iteratorRegion;
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -340,7 +310,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
   for (count=0;count<NumberOfStreamDivisions;count++)
   {
     iteratorRegionSize[0]=atoi(argv[5]);
@@ -366,11 +335,9 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
     unsigned int pixelIndexArrayDimension= iteratorRegionSize[0]*iteratorRegionSize[1]*2;
     int *pixelIndexArray=new int[pixelIndexArrayDimension];
     int *currentIndexArray=new int[pixelIndexArrayDimension];
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -379,7 +346,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
     IteratorType outputIt(outputImage, iteratorRegion);
 
     It=0;
@@ -392,7 +358,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
       currentIndex=outputIt.GetIndex();
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -401,10 +366,7 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
       outputImage->TransformIndexToPhysicalPoint(currentIndex, outputPoint);
-
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -416,7 +378,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
       inputPoint = model->TransformPoint(outputPoint);
 
       pixelIndexArray[It]=static_cast<int>(inputPoint[0]);
@@ -427,7 +388,6 @@ int main( int argc, char* argv[] )
 
       It=It+2;
     }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -437,7 +397,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
     max_x=pixelIndexArray[0];
     min_x=pixelIndexArray[0];
     max_y=pixelIndexArray[1];
@@ -462,7 +421,6 @@ int main( int argc, char* argv[] )
         min_y=pixelIndexArray[j];
       }
     }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -472,7 +430,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
     ImageType::RegionType              extractRegion;
 
     ImageType::IndexType          extractStart;
@@ -498,7 +455,6 @@ int main( int argc, char* argv[] )
     extract->SetExtractionRegion(extractRegion);
     extract->SetInput(reader->GetOutput());
     extractorWriter->Update();
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -508,7 +464,6 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
     interpolator->SetInputImage(extract->GetOutput());
 
     for ( k=0; k<It/2; k++)
@@ -533,7 +488,6 @@ int main( int argc, char* argv[] )
     delete currentIndexArray;
 
   }
-
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -542,15 +496,12 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-
-
   writer->SetFileName(argv[2]);
 
   rescaler->SetInput(outputImage);
 
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-
 // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;

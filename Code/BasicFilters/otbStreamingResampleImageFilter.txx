@@ -186,7 +186,6 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 }
 
 
-
 template<class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
 void
 StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>

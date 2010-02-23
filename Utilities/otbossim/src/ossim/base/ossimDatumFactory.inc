@@ -4,7 +4,7 @@
 // Author:  Garrett Potts
 //
 //**************************************************************************
-// $Id: ossimDatumFactory.inc 12169 2007-12-11 14:30:47Z gpotts $
+// $Id: ossimDatumFactory.inc 16414 2010-01-26 18:10:18Z gpotts $
 
 struct ossimSevenParamDatumType
 {
@@ -275,10 +275,13 @@ static ossimThreeParamDatumType threeParamDatum[] = {
 {"WGD", "World Geodetic System 1972", "WD", 0, 0, 0, -180.0, 180.0, -90, 90, 0, 0, 0},
 {"WGE", "World Geodetic System 1984", "WE", 0, 0, 0, -180.0, 180.0, -90, 90, 0, 0, 0},
 {"YAC", "YACARE, Uruguay", "IN", -1, -1, -1, -65, -47, -40, -25, -155, 171, 37},
-{"ZAN", "ZANDERIJ, Suriname", "IN", 5, 5, 8, -76, -47, -10, 20, -265, 120, -358}
+{"ZAN", "ZANDERIJ, Suriname", "IN", 5, 5, 8, -76, -47, -10, 20, -265, 120, -358},
+{"6055", "Popular Visualisation", "7059", 0, 0, 0, -180.0, 180.0, -85, 85, 0, 0, 0},
+{"", "", "", 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0}
 };
 
 static ossimSevenParamDatumType sevenParamDatum[] = {
 {"EUR-7", "EUROPEAN 1950, Mean (7 Param)", "IN", 0, 0, 0, -180, 180, -90, 90, -102, -102, -129, 2.00228e-06, -8.92057e-07, 1.86653e-06, 2.4664e-06},
-{"OGB-7", "ORDNANCE GB 1936, Mean (7 Para)", "AA", 0, 0, 0, -180, 180, -90, 90, 446, -99, 544, -4.58149e-06, -1.26536e-06, -2.10894e-06, -2.08927e-05}
+{"OGB-7", "ORDNANCE GB 1936, Mean (7 Para)", "AA", 0, 0, 0, -180, 180, -90, 90, 446, -99, 544, -4.58149e-06, -1.26536e-06, -2.10894e-06, -2.08927e-05},
+{"", "", "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };

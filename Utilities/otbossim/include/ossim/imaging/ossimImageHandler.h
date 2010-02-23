@@ -12,7 +12,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimImageHandler.h 16281 2010-01-06 21:23:04Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -87,6 +87,12 @@ public:
     */
    virtual void closeOverview();
    
+   /**
+    *  @return the image handler of the overview, if it has been
+    *  successfully opened.
+    */
+   virtual const ossimImageHandler* getOverview() const;
+
    /**
     *  @return true if getNumberOfReducedResSets > 1, false if not.
     *  @see getNumberOfReducedResSets()
@@ -471,7 +477,43 @@ public:
    virtual double getMinPixelValue(ossim_uint32 band=0)const;
    virtual double getMaxPixelValue(ossim_uint32 band=0)const;
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
-   
+
+   /**
+    * @brief convenience method to set min pixel value.
+    *
+    * Added for overview readers so that the image handler that owns the
+    * overview reader can pass on it's min value.
+    *
+    * @param band Zero based band to set.
+    *
+    * @param pix Min pixel value.
+    */
+   virtual void setMinPixelValue(ossim_uint32 band, const ossim_float64& pix);
+
+   /**
+    * @brief convenience method to set max pixel value.
+    *
+    * Added for overview readers so that the image handler that owns the
+    * overview reader can pass on it's max value.
+    *
+    * @param band Zero based band to set.
+    *
+    * @param pix Max pixel value.
+    */
+   virtual void setMaxPixelValue(ossim_uint32 band, const ossim_float64& pix);
+
+   /**
+    * @brief convenience method to set null pixel value.
+    *
+    * Added for overview readers so that the image handler that owns the
+    * overview reader can pass on it's max value.
+    *
+    * @param band Zero based band to set.
+    *
+    * @param pix Null pixel value.
+    */
+   virtual void setNullPixelValue(ossim_uint32 band, const ossim_float64& pix);
+    
    /**
     * @return The current entry number.
     *

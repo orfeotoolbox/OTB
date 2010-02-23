@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 15611 2009-10-08 18:50:33Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 16314 2010-01-10 18:25:28Z dburken $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -187,11 +187,17 @@ void ossimNitfImageHeaderV2_1::parseStream(std::istream &in)
    ossimString compressionType = theCompression;
    compressionType = compressionType.trim().upcase();
    ossimEndian endian;
+
+   //---
+   // Note: "C4" added to skip over the image data mask subheader.
+   // See MIL-STD-2500C paragraph 5.4.3.2
+   //---
    if((compressionType == "NM")||
       (compressionType == "M1")||
       (compressionType == "M3")||
       (compressionType == "M4")||
-      (compressionType == "M5"))
+      (compressionType == "M5")||
+      (compressionType == "C4"))
    {
       ossim_uint64 locationBefore = in.tellg();
       in.read((char*)(&theBlockedImageDataOffset), 4);

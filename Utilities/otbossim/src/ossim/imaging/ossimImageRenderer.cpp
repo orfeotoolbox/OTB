@@ -7,7 +7,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+//  $Id: ossimImageRenderer.cpp 16600 2010-02-12 19:45:20Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -32,7 +32,6 @@ using namespace std;
 #include <ossim/imaging/ossimDiscrete3x3HatFilter.h>
 #include <ossim/imaging/ossimDiscreteNearestNeighbor.h>
 #include <ossim/imaging/ossimFilterResampler.h>
-#include <ossim/imaging/ossimResampler.h>
 #include <ossim/projection/ossimImageViewTransform.h>
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -41,7 +40,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 15833 2009-10-29 01:41:53Z eshirschorn $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 16600 2010-02-12 19:45:20Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -1556,11 +1555,16 @@ void ossimImageRenderer::checkIVT()
    {
       ossimImageGeometry* myOutGeom = new ossimImageGeometry;
 
-      // If the input geometry sports a map projection instead of a 3D projector, use the same
-      // map projection for the view:
+      //---
+      // If the input geometry sports a map projection instead of a 3D
+      // projector, use the same map projection for the view.
+      // 
+      // Note: Don't use map projections with model transforms as they don't
+      // allow for changing resolution.
+      //---
       const ossimProjection*  inputProj = inputGeom->getProjection();
       const ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, inputProj);
-      if (mapProj)
+      if (mapProj && !mapProj->hasModelTransform() )
       {
          // Legacy code dies hard -- should have a copy-projection method defined:
          ossimKeywordlist kwl;
@@ -1580,7 +1584,7 @@ void ossimImageRenderer::checkIVT()
          meters.y = GSD;
          if(inputProj)
          {
-            myMapProj->setUlGpt(inputProj->origin());
+            myMapProj->setUlTiePoints(inputProj->origin());
             myMapProj->setOrigin(inputProj->origin());
          }
          myMapProj->setMetersPerPixel(meters);

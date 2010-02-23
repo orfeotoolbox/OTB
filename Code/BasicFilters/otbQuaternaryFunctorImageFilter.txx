@@ -69,7 +69,6 @@ QuaternaryFunctorImageFilter<TInputImage1,TInputImage2,TInputImage3,TInputImage4
 }
 
 
-
 /**
  * Connect one of the operands for pixel-wise addition
  */

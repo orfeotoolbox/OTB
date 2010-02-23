@@ -20,7 +20,6 @@
 #endif
 
 
-
 // iostream is used for general output
 // #include <iostream>
 // #include <iterator>
@@ -49,10 +48,8 @@
 
 
 // Software Guide : BeginCodeSnippet
-
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
-
 // Software Guide : EndCodeSnippet
 
 int main( int argc, char* argv[] )
@@ -78,9 +75,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef otb::Image<int, 2>     ImageType;
   typedef otb::VectorImage<int, 2>     VectorImageType;
   typedef otb::ImageFileReader<VectorImageType>  ReaderType;
@@ -92,8 +86,6 @@ int main( int argc, char* argv[] )
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -108,9 +100,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
-
-
   typedef otb::UtmInverseProjection utmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
   utmMapProjectionType> OrthoRectifFilterType;
@@ -118,7 +107,6 @@ int main( int argc, char* argv[] )
 
   OrthoRectifFilterType::Pointer  orthoRectifFilter =
     OrthoRectifFilterType::New();
-
 // Software Guide : EndCodeSnippet
 
 
@@ -136,7 +124,6 @@ int main( int argc, char* argv[] )
   utmMapProjection->SetZone(atoi(argv[3]));
   utmMapProjection->SetHemisphere(*(argv[4]));
   orthoRectifFilter->SetMapProjection(utmMapProjection);
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -152,7 +139,6 @@ int main( int argc, char* argv[] )
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(reader->GetOutput());
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -164,7 +150,6 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   ImageType::IndexType start;
   start[0]=0;
   start[1]=0;
@@ -184,8 +169,6 @@ int main( int argc, char* argv[] )
   origin[0]=strtod(argv[5], NULL);
   origin[1]=strtod(argv[6], NULL);
   orthoRectifFilter->SetOutputOrigin(origin);
-
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -198,11 +181,9 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
   writer->SetInput(perBandFilter->GetOutput());
 
   writer->SetTilingStreamDivisions();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -220,10 +201,7 @@ int main( int argc, char* argv[] )
 
 
 // Software Guide : BeginCodeSnippet
-
-
   writer->Update();
-
 // Software Guide : EndCodeSnippet
 
 

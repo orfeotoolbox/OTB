@@ -35,7 +35,6 @@ OrientationPathFunction< TInputPath, TOutput >
 }
 
 
-
 template < class TInputPath, class TOutput>
 typename OrientationPathFunction<TInputPath,
 TOutput>::OutputType

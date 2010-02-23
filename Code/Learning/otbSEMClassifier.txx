@@ -399,7 +399,7 @@ SEMClassifier< TInputImage, TOutputImage >
 
   if ( !m_ComponentDeclared )
   {
-    otbMsgDebugMacro( << "default mixture initialisation with " << m_NbClasses
+    otbMsgDebugMacro( << "default mixture initialization with " << m_NbClasses
                       << " Gaussian components" );
     typedef otb::Statistics::GaussianModelComponent< ClassSampleType > GaussianType;
 
@@ -594,7 +594,7 @@ void
 SEMClassifier< TInputImage, TOutputImage >
 ::GetMaximumAposterioriLabels ()
 {
-  // Class results initialisation
+  // Class results initialization
   m_Output = OutputType::New();
   m_Output->SetSample( this->GetSampleList() );
   m_Output->Resize( this->GetSampleList()->Size() );
@@ -682,10 +682,5 @@ SEMClassifier< TInputImage, TOutputImage >
 } // end of namesapce otb
 
 #endif
-
-
-
-
-
 
 

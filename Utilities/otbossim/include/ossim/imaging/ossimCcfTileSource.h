@@ -17,7 +17,7 @@
 // would make the chunk 24 x 8 chips.
 //
 //*******************************************************************
-//  $Id: ossimCcfTileSource.h 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimCcfTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
 
 #ifndef ossimCcfTileSource_HEADER
 #define ossimCcfTileSource_HEADER
@@ -37,7 +37,6 @@ public:
    
    virtual ossimString getShortName()const;
    virtual ossimString getLongName()const;
-   virtual ossimString getClassName()const;
 
    /**
     *  @return Returns true on success, false on error.

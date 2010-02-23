@@ -39,7 +39,6 @@ InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 
-
 template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions>::OutputPointType
 InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
@@ -81,7 +80,6 @@ InverseSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
   this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" call "lineSampleHeightToWorld" method for take in care elevation information.
 
   OutputPointType outputPoint;
-
 
 
   outputPoint[0]=ossimDPoint.x;

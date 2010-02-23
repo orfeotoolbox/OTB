@@ -19,7 +19,112 @@
 //*****************************************************************************
 #ifndef ossimElevManager_HEADER
 #define ossimElevManager_HEADER
+#include <vector>
+#include <ossim/base/ossimConstants.h>
+#include <ossim/elevation/ossimElevSource.h>
+#include <ossim/elevation/ossimElevationDatabase.h>
 
+class OSSIM_DLL ossimElevManager : public ossimElevSource
+{
+public: 
+   typedef std::vector<ossimRefPtr<ossimElevationDatabase> > ElevationDatabaseListType;
+   virtual ~ossimElevManager();
+   
+   /**
+    * METHOD: instance()
+    * Implements singelton pattern
+    */
+   static ossimElevManager* instance();
+   
+   virtual double getHeightAboveEllipsoid(const ossimGpt& gpt);
+   virtual double getHeightAboveMSL(const ossimGpt& gpt);
+   virtual double getAccuracyLE90(const ossimGpt& /*gpt*/) const
+   {
+      std::cout << "ossimElevManager::getAccuracyLE90(): NOT IMPLEMENTED!!!\n";
+      return 0.0;
+   }
+   virtual double getAccuracyCE90(const ossimGpt& /*gpt*/) const
+   {
+      return 0.0;
+      std::cout << "ossimElevManager::getAccuracyLE90(): NOT IMPLEMENTED!!!\n";
+   }
+   virtual bool pointHasCoverage(const ossimGpt& /*gpt*/) const
+   {
+      std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED!!!\n";
+      return false;
+   }
+   virtual double getMeanSpacingMeters() const
+   {
+      std::cout << "ossimElevManager::pointHasCoverage(): NOT IMPLEMENTED AND SHOULD NOT BE USED AT THIS LEVEL!!!\n";
+      return 1.0;
+   }
+   ossim_uint32 getNumberOfElevationDatabases()const
+   {
+      return (ossim_uint32)m_elevationDatabaseList.size();
+   }
+   ossimElevationDatabase* getElevationDatabase(ossim_uint32 idx)
+   {
+      return m_elevationDatabaseList[idx].get();
+   }
+   const ossimElevationDatabase* getElevationDatabase(ossim_uint32 idx)const
+   {
+      return m_elevationDatabaseList[idx].get();
+   }
+   ElevationDatabaseListType& getElevationDatabaseList()
+   {
+      return m_elevationDatabaseList;
+   }
+   const ElevationDatabaseListType& getElevationDatabaseList()const
+   {
+      return m_elevationDatabaseList;
+   }
+   void addDatabase(ossimElevationDatabase* database);
+   bool loadElevationPath(const ossimFilename& path);
+   
+   void setDefaultHeightAboveEllipsoid(double meters) {m_defaultHeightAboveEllipsoid=meters;}
+   void setElevationOffset(double meters) {m_elevationOffset=meters;}
+   double getElevationOffset() const { return m_elevationOffset; }
+   
+   void getOpenCellList(std::vector<ossimFilename>& list) const;
+
+   void setUseGeoidIfNullFlag(bool flag)
+   {
+      m_useGeoidIfNullFlag = flag;
+   }
+   
+   bool getUseGeoidIfNullFlag()const
+   {
+      return m_useGeoidIfNullFlag;
+   }
+   
+   /**
+    * Method to save the state of an object to a keyword list.
+    * Return true if ok or false on error.
+    */
+   virtual bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=0) const;
+   
+   /**
+    * Method to the load (recreate) the state of an object from a keyword
+    * list.  Return true if ok or false on error.
+    */
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+   
+protected:
+   ossimElevManager();
+   void loadStandardElevationPaths();
+   
+   static ossimElevManager* m_instance;
+   ElevationDatabaseListType m_elevationDatabaseList;
+   ossim_float64 m_defaultHeightAboveEllipsoid;
+   ossim_float64 m_elevationOffset;
+   
+   // if an elevation is returned that's null for ellipsoid then use the geoid manager to calculate a shift
+   //
+   bool          m_useGeoidIfNullFlag;  
+};
+#if 0
 #include <vector>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/elevation/ossimElevSource.h>
@@ -63,7 +168,6 @@ public:
     * Method to load new elevation data given ground rectangle:
     */
    void loadElevData(const ossimDrect& ground_rect);
-
    /**
     * METHODS: accuracyLE90(), accuracyCE90()
     * Returns the vertical and horizontal accuracy (90% confidence) in the
@@ -91,7 +195,7 @@ public:
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
-   
+
    /**
     * @brief This method adds an ossimElevSource to the list.
     * A mutex lock/unlock is placed around its code to prevent
@@ -258,6 +362,8 @@ public:
     */
    bool isGeneralRaster(const ossimFilename& file)const;
 
+   void setDefaultHeightAboveEllipsoid(double meters) {theDefaultHeightAboveEllipsoid=meters;}
+
 protected:
 
    /**
@@ -271,8 +377,7 @@ protected:
     * @return ossimElevSource wrapped in a ossimRefPtr.  The pointer will be
     * null if no coverage is found so callers should check.
     */
-   ossimRefPtr<ossimElevSource> getElevSourceForPoint(
-      const ossimGpt& gpt) const;
+   ossimRefPtr<ossimElevSource> getElevSourceForPoint(const ossimGpt& gpt) const;
    
    typedef std::vector<ossimRefPtr<ossimElevSourceFactory> >::iterator ossimElevSourceFactoryIterator;
    typedef std::vector<ossimRefPtr<ossimElevSourceFactory> >::const_iterator ossimElevSourceFactoryConstIterator;
@@ -395,9 +500,12 @@ protected:
    bool                theAutoLoadFlag;
    bool                theAutoSortFlag;
    ossimFilename       theDefaultElevationPath;
-   //mutable OpenThreads::ReentrantMutex theMutex;
    std::vector<ossimFilename>  TheElevationSearchPaths;
+   bool theIdentityGeoidFlag;
+   double theDefaultHeightAboveEllipsoid;
+
 TYPE_DATA
 };
+#endif
 
 #endif

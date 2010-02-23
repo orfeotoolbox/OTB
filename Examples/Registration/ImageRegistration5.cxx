@@ -20,9 +20,6 @@
 #endif
 
 
-
-
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    INPUTS: {QB_SuburbRotated10.png}
@@ -213,13 +210,11 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::MeanImageFilter<
   FixedImageType, FixedImageType >  FixedFilterType;
 
   typedef itk::MeanImageFilter<
   MovingImageType, MovingImageType >  MovingFilterType;
-
 
 
   FixedFilterType::Pointer  fixedFilter  = FixedFilterType::New();
@@ -241,7 +236,6 @@ int main( int argc, char *argv[] )
 
   fixedFilter->SetInput( fixedImageReader->GetOutput() );
   movingFilter->SetInput( movingImageReader->GetOutput() );
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -577,7 +571,6 @@ int main( int argc, char *argv[] )
   }
 
 
-
   typedef itk::Image< float, Dimension > DifferenceImageType;
 
   typedef itk::SubtractImageFilter<
@@ -641,9 +634,6 @@ int main( int argc, char *argv[] )
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
   }
-
-
-
 
 
   //  Software Guide : BeginLatex

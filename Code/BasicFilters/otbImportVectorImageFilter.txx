@@ -278,7 +278,6 @@ ImportVectorImageFilter<TOutputImage>
 }
 
 
-
 } // end namespace otb
 
 #endif

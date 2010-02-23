@@ -10,7 +10,7 @@
 //              rpf file.
 //
 //********************************************************************
-// $Id: ossimRpfFrame.h 14241 2009-04-07 19:59:23Z dburken $
+// $Id: ossimRpfFrame.h 16308 2010-01-09 02:45:54Z eshirschorn $
 
 #ifndef ossimRpfFrame_HEADER
 #define ossimRpfFrame_HEADER
@@ -18,8 +18,10 @@
 #include <iosfwd>
 #include <vector>
 
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimErrorContext.h>
+#include <ossim/support_data/ossimNitfFile.h>
 #include <ossim/support_data/ossimRpfColorGrayscaleTable.h>
 #include <ossim/support_data/ossimRpfConstants.h>
 
@@ -33,7 +35,7 @@ class ossimRpfCompressionSection;
 class ossimRpfColorGrayscaleSubheader;
 class ossimRpfColorConverterSubsection;
 
-class ossimRpfFrame
+class OSSIM_DLL ossimRpfFrame
 {
 public:
    friend std::ostream& operator <<(std::ostream& out,
@@ -53,7 +55,8 @@ public:
    std::ostream& print(std::ostream& out,
                        const std::string& prefix=std::string()) const;  
 
-   ossimErrorCode parseFile(const ossimFilename& filename);
+   ossimErrorCode parseFile(const ossimFilename& filename,
+                            bool minimalParse = false);
    const ossimRpfHeader* getRpfHeader()const{return theHeader;}
 
    bool hasSubframeMaskTable()const;
@@ -81,6 +84,15 @@ public:
    {
       return theColorConverterSubsection;
    }
+   const ossimRpfAttributes* getAttributes()const
+   {
+      return theAttributes;
+   }
+   const ossimNitfFile* getNitfFile()const
+   {
+      return theNitfFile.get();
+   }
+
 private:
    void clearFields();
    void deleteAll();
@@ -149,6 +161,10 @@ private:
     */
    vector<ossimRpfColorGrayscaleTable>     theColorGrayscaleTable;
 
+   /*!
+    * 
+    */
+   ossimRefPtr<ossimNitfFile>              theNitfFile;
 
    /*!
     * We have a 3-D array.  For the most part the numberof spectral groups
@@ -173,6 +189,7 @@ private:
     * [spatial data section] to the first byte of the subframe table.
     */
    vector< vector< vector< ossim_uint32> > > theSubframeTransparencyMaskTable;
+
 };
 
 #endif

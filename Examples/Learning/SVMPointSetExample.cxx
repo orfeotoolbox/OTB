@@ -31,7 +31,6 @@
 #include "otbSVMClassifier.h"
 
 
-
 int main( int argc, char* argv[] )
 {
 
@@ -232,7 +231,6 @@ int main( int argc, char* argv[] )
   }
 
   std::cout << "Error = " << error/pointId << std::endl;
-
 
 
   return EXIT_SUCCESS;

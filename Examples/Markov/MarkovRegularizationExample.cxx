@@ -92,7 +92,6 @@ int main(int argc, char* argv[] )
   writer->SetFileName( outputFilename );
 
 
-
   typedef otb::MarkovRandomFieldFilter
   <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
 
@@ -134,7 +133,6 @@ int main(int argc, char* argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::LabelStatisticsImageFilter
   <LabelledImageType, LabelledImageType> LabelledStatType;
   LabelledStatType::Pointer labelledStat = LabelledStatType::New();
@@ -143,7 +141,6 @@ int main(int argc, char* argv[] )
   labelledStat->Update();
 
   unsigned int nClass = labelledStat->GetNumberOfLabels();
-
   // Software Guide : EndCodeSnippet
 
   optimizer->SetParameters(atoi(argv[6]));

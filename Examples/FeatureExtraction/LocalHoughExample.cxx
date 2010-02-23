@@ -34,7 +34,6 @@
 #include "otbLocalHoughFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 #include "otbLineSpatialObjectList.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
@@ -88,7 +87,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
   typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
   OutputImageType >  DrawLineListType;
@@ -101,7 +99,6 @@ int main( int argc, char * argv[] )
 
   rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
   rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
-
 
 
   //  Software Guide : BeginLatex
@@ -140,8 +137,6 @@ int main( int argc, char * argv[] )
   LocalHoughType::Pointer    localHough= LocalHoughType::New();
 
   DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
-
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -173,13 +168,10 @@ int main( int argc, char * argv[] )
   LocalHoughOverlap[1] = LocalHoughOverlapY;
 
 
-
   localHough->SetRadius( LocalHoughRadius );
   localHough->SetOverlap( LocalHoughOverlap );
   localHough->SetNumberOfLines( LocalHoughNumberOfLines );
   localHough->SetThreshold( LocalHoughThreshold );
-
-
 
 
   //  Software Guide : BeginLatex
@@ -192,7 +184,6 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   localHough->SetInput( reader->GetOutput() );
 
 
@@ -201,10 +192,7 @@ int main( int argc, char * argv[] )
   writer->SetFileName( argv[2] );
   writer->SetInput( drawLineList->GetOutput() );
   writer->Update();
-
-
 // Software Guide : EndCodeSnippet
-
 
 
   //  Software Guide : BeginLatex
@@ -218,7 +206,6 @@ int main( int argc, char * argv[] )
   // original image, extracted segments.}  \label{fig:LOCAL_HOUGH} \end{figure}
   //
   //  Software Guide : EndLatex
-
 
 
   return EXIT_SUCCESS;

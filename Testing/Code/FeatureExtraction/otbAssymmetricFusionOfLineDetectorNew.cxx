@@ -50,7 +50,6 @@ int otbAssymmetricFusionOfLineDetectorNew( int argc, char * argv[] )
   FilterType::Pointer FilterAssSymSum = FilterType::New();
 
 
-
   return EXIT_SUCCESS;
 }
 

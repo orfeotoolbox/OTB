@@ -140,7 +140,6 @@ PostGISCreateTableTransactor::ResultType PostGISCreateTableTransactor::GetResult
 }
 
 
-
 void PostGISCreateTableTransactor::CreateGISTIndex (pqxx::nontransaction &T)
 {
   /*

@@ -53,7 +53,7 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   m_UsePadFirstInput = false;
   m_UsePadSecondInput = false;
 
-  // Number of component initialisation
+  // Number of component initialization
   m_NumberOfComponents1 = 0;
   m_NumberOfComponents2 = 0;
 }
@@ -188,8 +188,6 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   initMatrix.Fill(itk::NumericTraits<RealType>::Zero);
   this->GetResultOutput()->Set( initMatrix );
 }
-
-
 
 
 template<class TInputImage, class TInputImage2>
