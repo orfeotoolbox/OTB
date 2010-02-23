@@ -30,13 +30,7 @@ template <class TInputPointSet, class TOutputPointSet>
 PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
 ::PointSetToPointSetFilter()
 {
-  this->ProcessObjectType::SetNumberOfRequiredInputs(1);
-
-  OutputPointSetPointer output
-  = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
-
-  ProcessObjectType::SetNumberOfRequiredOutputs(1);
-  ProcessObjectType::SetNthOutput(0, output.GetPointer());
+  this->SetNumberOfRequiredInputs(1);
 
 }
 
