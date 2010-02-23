@@ -46,6 +46,7 @@ PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
   // is required here.
   this->ProcessObjectType::SetNthInput(idx,
                                        const_cast< InputPointSetType * >(input) );
+  this->GetInput()->ReleaseDataFlagOff();
 }
 
 /**
@@ -60,6 +61,7 @@ PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
   // is required here.
   this->ProcessObjectType::SetNthInput(0,
                                        const_cast< InputPointSetType * >(input) );
+  this->GetInput()->ReleaseDataFlagOff();
 }
 
 /**
