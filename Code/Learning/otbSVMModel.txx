@@ -469,6 +469,54 @@ SVMModel<TValue,TLabel>::EvaluateHyperplanesDistances(const MeasurementType & me
   return (distances);
 }
 
+
+template <class TValue, class TLabel>
+typename SVMModel<TValue,TLabel>::ProbabilitiesVectorType
+SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) const
+{
+  // Check if model is up-to-date
+  if(!m_ModelUpToDate)
+    {
+    itkExceptionMacro(<<"Model is not up-to-date, can not predict probabilities");
+    }
+
+  if (svm_check_probability_model(m_Model)==0)
+    {
+    throw itk::ExceptionObject(__FILE__, __LINE__,
+                               "Model does not support probabiliy estimates",ITK_LOCATION);
+    }
+
+  // Get number of classes
+  int nr_class=svm_get_nr_class(m_Model);
+
+  // Allocate nodes (/TODO if performances problems are related to too
+  // many allocations, a cache approach can be set)
+  struct svm_node * x = new struct svm_node[measure.size()+1];
+
+  int valueIndex = 0;
+
+  // Fill the node
+  for(typename MeasurementType::const_iterator mIt = measure.begin();mIt!=measure.end();++mIt,++valueIndex)
+    {
+    x[valueIndex].index=valueIndex+1;
+    x[valueIndex].value=(*mIt);
+    }
+
+  // terminate node
+  x[measure.size()].index = -1;
+  x[measure.size()].value = 0;
+
+  // Intialize distances vector
+  ProbabilitiesVectorType distances(m_Model->nr_class);
+  svm_predict_probability(m_Model,x, const_cast<typename ProbabilitiesVectorType::ValueType*>(distances.GetDataPointer()) );
+
+  // Free allocated memory
+  delete [] x;
+
+  return distances;
+}
+
+
 template <class TValue,class TLabel>
 void
 SVMModel<TValue,TLabel>::SetModel(struct svm_model* aModel)
