@@ -235,7 +235,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
      
      // Populate the svm nodes
      for(typename MeasurementType::const_iterator eIt = measure.begin();
-        eIt!=measure.end() && elementIndex < elements ;++eIt,++elementIndex)
+        eIt!=measure.end() && elementIndex < elements; ++eIt,++elementIndex)
        {
        m_Problem.x[sampleIndex][elementIndex].index = elementIndex+1;
        m_Problem.x[sampleIndex][elementIndex].value = (*eIt);
@@ -252,7 +252,9 @@ SVMModel<TValue,TLabel>::BuildProblem()
     }
   
   // Compute the kernel gamma from maxElementIndex if necessary
-  if (this->GetKernelGamma() == 0 && this->GetParameters().kernel_type != COMPOSED && this->GetParameters().kernel_type != GENERIC)
+  if (this->GetKernelGamma() == 0
+      && this->GetParameters().kernel_type != COMPOSED
+      && this->GetParameters().kernel_type != GENERIC)
     this->SetKernelGamma(1.0/static_cast<double>(maxElementIndex));
 
   // problem is up-to-date
@@ -483,7 +485,7 @@ SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) 
   if (svm_check_probability_model(m_Model)==0)
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
-                               "Model does not support probabiliy estimates",ITK_LOCATION);
+                               "Model does not support probability estimates",ITK_LOCATION);
     }
 
   // Get number of classes
@@ -508,7 +510,8 @@ SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) 
 
   // Intialize distances vector
   ProbabilitiesVectorType distances(m_Model->nr_class);
-  svm_predict_probability(m_Model,x, const_cast<typename ProbabilitiesVectorType::ValueType*>(distances.GetDataPointer()) );
+  double* distancesData = const_cast<typename ProbabilitiesVectorType::ValueType*>(distances.GetDataPointer());
+  svm_predict_probability(m_Model,x,distancesData);
 
   // Free allocated memory
   delete [] x;

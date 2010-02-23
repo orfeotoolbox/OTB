@@ -336,7 +336,7 @@ public:
   int * GetLabels()
   {
     return m_Model->label;
-  };
+  }
 
   /** Get the number of SV per classes */
   int * GetNumberOfSVPerClasse()
