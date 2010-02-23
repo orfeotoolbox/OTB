@@ -39,7 +39,7 @@ class ITK_EXPORT PointSetToPointSetFilter : public PointSetSource<TOutputPointSe
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetToPointSetFilter            Self;
+  typedef PointSetToPointSetFilter         Self;
   typedef PointSetSource<TOutputPointSet>  Superclass;
   typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
@@ -65,9 +65,6 @@ public:
   /** Get the input image of this process object.  */
   InputPointSetType * GetInput(unsigned int idx);
   InputPointSetType * GetInput();
-
-  /** Prepare the output */
-  void GenerateOutputInformation(void);
 
 protected:
   PointSetToPointSetFilter();

@@ -77,7 +77,7 @@ PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
 ::GetInput(unsigned int idx)
 {
 
-  return dynamic_cast<const InputPointSetType*>
+  return static_cast<InputPointSetType*>
          (this->ProcessObjectType::GetInput(idx));
 }
 
@@ -92,7 +92,7 @@ PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
   if (this->GetNumberOfInputs() < 1)
     return 0;
 
-  return dynamic_cast<const InputPointSetType*>
+  return static_cast<InputPointSetType*>
          (this->ProcessObjectType::GetInput(0));
 }
 

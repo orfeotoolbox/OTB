@@ -19,9 +19,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <otbTransformPointSetFilter.h>
-#include <itkPointSet.h>
-#include <itkAffineTransform.h>
+#include "otbTransformPointSetFilter.h"
+#include "itkPointSet.h"
+#include "itkAffineTransform.h"
 
 int otbTransformPointSetFilterTest(int, char* [] )
 {
@@ -92,7 +92,7 @@ int otbTransformPointSetFilterTest(int, char* [] )
                                 TransformType  >       FilterType;
             
 
-  // Create a Filter                                
+  // Create a Filter
   FilterType::Pointer filter = FilterType::New();
   
   // Create an  Transform 
@@ -137,7 +137,3 @@ int otbTransformPointSetFilterTest(int, char* [] )
   return EXIT_SUCCESS;
 
 }
-
-
-
-

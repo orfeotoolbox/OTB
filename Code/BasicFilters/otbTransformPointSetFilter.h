@@ -44,10 +44,10 @@ class ITK_EXPORT TransformPointSetFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformPointSetFilter                      Self;
+  typedef TransformPointSetFilter                                  Self;
   typedef PointSetToPointSetFilter<TInputPointSet,TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
   
   typedef TInputPointSet                       InputPointSetType;
   typedef TOutputPointSet                      OutputPointSetType;

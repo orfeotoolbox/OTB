@@ -124,6 +124,9 @@ ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
   )
 
 
+ADD_TEST(bfTvTransformPointSetFilter ${BASICFILTERS_TESTS1}
+  otbTransformPointSetFilterTest)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
