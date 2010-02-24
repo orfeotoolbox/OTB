@@ -504,19 +504,32 @@ SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) 
     x[valueIndex].value=(*mIt);
     }
 
-  // terminate node
+  // Termination node
   x[measure.size()].index = -1;
   x[measure.size()].value = 0;
 
-  // Intialize distances vector
-  ProbabilitiesVectorType distances(m_Model->nr_class);
-  double* distancesData = const_cast<typename ProbabilitiesVectorType::ValueType*>(distances.GetDataPointer());
-  svm_predict_probability(m_Model,x,distancesData);
+  double* dec_values = new double [nr_class];
+  svm_predict_probability(m_Model,x,dec_values);
+
+  // Reorder values in increasing class label
+  int* labels = m_Model->label;
+  std::vector<int> orderedLabels(nr_class);
+  std::copy( labels, labels + nr_class, orderedLabels.begin() );
+  std::sort( orderedLabels.begin(), orderedLabels.end() );
+
+  ProbabilitiesVectorType probabilities(nr_class);
+  for ( int i = 0; i < nr_class; i++ )
+    {
+    // svm_predict_probability is such that "dec_values[i]" corresponds to label "labels[i]"
+    std::vector<int>::iterator it = std::find(orderedLabels.begin(), orderedLabels.end(), labels[i]);
+    probabilities[it - orderedLabels.begin()] = dec_values[i];
+    }
 
   // Free allocated memory
   delete [] x;
+  delete [] dec_values;
 
-  return distances;
+  return probabilities;
 }
 
 
