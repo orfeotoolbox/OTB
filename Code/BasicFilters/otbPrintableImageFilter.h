@@ -34,7 +34,8 @@ namespace Functor
 {
 /**
  * \class MaskFunctor
- * \brief Output is a InputPixel if MaskPixel is m_Background a defined other value (m_ObjkeectColor) else.
+ * \brief Output is a InputPixel if MaskPixel is m_Background and a
+ * defined other value (m_ObjectColor) otherwise.
  */
 
 template<class TInputPixel, class TMaskPixel, class TOutputPixel>
@@ -257,4 +258,3 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
 #endif
 
 #endif
-

@@ -104,7 +104,7 @@ private:
   void operator=( const Self & );
 }; // end of class
   
-/** \class FilterBank
+/** \class WaveletFilterBank
  * \brief Template specialization of FilterBank for forward transformaiton
  *
  * This implementation performs a low-pass / high-pass wavelet transformation
@@ -285,7 +285,7 @@ private:
 }; // end of class
   
 
-/** \class FilterBank
+/** \class WaveletFilterBank
  * \brief Template specialization of FilterBank for inverse transformation
  *
  * This implementation performs a low-pass / high-pass wavelet transformation

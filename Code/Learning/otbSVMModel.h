@@ -80,6 +80,7 @@ public:
   typedef std::vector<struct svm_node *>       CacheVectorType;
 
   /** Distances vector */
+  typedef itk::VariableLengthVector<double>    ProbabilitiesVectorType;
   typedef itk::VariableLengthVector<double>    DistancesVectorType;
 
   typedef struct svm_node *                    NodeCacheType;
@@ -335,7 +336,7 @@ public:
   int * GetLabels()
   {
     return m_Model->label;
-  };
+  }
 
   /** Get the number of SV per classes */
   int * GetNumberOfSVPerClasse()
@@ -378,6 +379,14 @@ public:
 * this method, please consider using the GetCopy() method to clone the
 * model.)**/
   DistancesVectorType EvaluateHyperplanesDistances(const MeasurementType & measure) const;
+
+  /** Evaluate probabilities of each class. Returns a probability vector ordered
+   * by increasing class label value
+   * (Please note that due to caching this method is not thread safe.
+   * If you want to run multiple concurrent instances of
+   * this method, please consider using the GetCopy() method to clone the
+   * model.)**/
+  ProbabilitiesVectorType EvaluateProbabilities(const MeasurementType & measure) const;
 
   /** Add a new sample to the list */
   void AddSample(const MeasurementType & measure, const LabelType & label);

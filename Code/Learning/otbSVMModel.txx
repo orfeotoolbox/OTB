@@ -235,7 +235,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
      
      // Populate the svm nodes
      for(typename MeasurementType::const_iterator eIt = measure.begin();
-        eIt!=measure.end() && elementIndex < elements ;++eIt,++elementIndex)
+        eIt!=measure.end() && elementIndex < elements; ++eIt,++elementIndex)
        {
        m_Problem.x[sampleIndex][elementIndex].index = elementIndex+1;
        m_Problem.x[sampleIndex][elementIndex].value = (*eIt);
@@ -252,7 +252,9 @@ SVMModel<TValue,TLabel>::BuildProblem()
     }
   
   // Compute the kernel gamma from maxElementIndex if necessary
-  if (this->GetKernelGamma() == 0 && this->GetParameters().kernel_type != COMPOSED && this->GetParameters().kernel_type != GENERIC)
+  if (this->GetKernelGamma() == 0
+      && this->GetParameters().kernel_type != COMPOSED
+      && this->GetParameters().kernel_type != GENERIC)
     this->SetKernelGamma(1.0/static_cast<double>(maxElementIndex));
 
   // problem is up-to-date
@@ -468,6 +470,68 @@ SVMModel<TValue,TLabel>::EvaluateHyperplanesDistances(const MeasurementType & me
   
   return (distances);
 }
+
+
+template <class TValue, class TLabel>
+typename SVMModel<TValue,TLabel>::ProbabilitiesVectorType
+SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) const
+{
+  // Check if model is up-to-date
+  if(!m_ModelUpToDate)
+    {
+    itkExceptionMacro(<<"Model is not up-to-date, can not predict probabilities");
+    }
+
+  if (svm_check_probability_model(m_Model)==0)
+    {
+    throw itk::ExceptionObject(__FILE__, __LINE__,
+                               "Model does not support probability estimates",ITK_LOCATION);
+    }
+
+  // Get number of classes
+  int nr_class=svm_get_nr_class(m_Model);
+
+  // Allocate nodes (/TODO if performances problems are related to too
+  // many allocations, a cache approach can be set)
+  struct svm_node * x = new struct svm_node[measure.size()+1];
+
+  int valueIndex = 0;
+
+  // Fill the node
+  for(typename MeasurementType::const_iterator mIt = measure.begin();mIt!=measure.end();++mIt,++valueIndex)
+    {
+    x[valueIndex].index=valueIndex+1;
+    x[valueIndex].value=(*mIt);
+    }
+
+  // Termination node
+  x[measure.size()].index = -1;
+  x[measure.size()].value = 0;
+
+  double* dec_values = new double [nr_class];
+  svm_predict_probability(m_Model,x,dec_values);
+
+  // Reorder values in increasing class label
+  int* labels = m_Model->label;
+  std::vector<int> orderedLabels(nr_class);
+  std::copy( labels, labels + nr_class, orderedLabels.begin() );
+  std::sort( orderedLabels.begin(), orderedLabels.end() );
+
+  ProbabilitiesVectorType probabilities(nr_class);
+  for ( int i = 0; i < nr_class; i++ )
+    {
+    // svm_predict_probability is such that "dec_values[i]" corresponds to label "labels[i]"
+    std::vector<int>::iterator it = std::find(orderedLabels.begin(), orderedLabels.end(), labels[i]);
+    probabilities[it - orderedLabels.begin()] = dec_values[i];
+    }
+
+  // Free allocated memory
+  delete [] x;
+  delete [] dec_values;
+
+  return probabilities;
+}
+
 
 template <class TValue,class TLabel>
 void
