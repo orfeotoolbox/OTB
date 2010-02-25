@@ -40,7 +40,6 @@ void
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId)
 {
-  otbMsgDevMacro(<< "Processing thread: " << threadId);
   this->m_PointsContainerPerThread[threadId] = PointsContainerType::New();
   InputImageConstPointer  inputPtr = this->GetInput();
 
