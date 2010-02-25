@@ -286,6 +286,9 @@ public:
   /** Set training image for the starting point. This is not compulsory:
    * if the starting image is not specified, a random image will be used
    * instead.
+   * One important restriction: in the case of classification, the training
+   * image should contain values corresponding to the class number (consecutive
+   * integers).
   */
   virtual void SetTrainingInput( const TrainingImageType * trainingImage);
   const TrainingImageType* GetTrainingInput(void);
