@@ -230,7 +230,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginLatex
 //
 // We get the information about image size and spacing before drawing
-// the cosses.
+// the crosses.
 //
 // Software Guide : EndLatex
 

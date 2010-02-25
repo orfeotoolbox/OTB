@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbTransformPointSetFilter_h
-#define __otbTransformPointSetFilter_h
+#ifndef __otbPointSetExtractROI_h
+#define __otbPointSetExtractROI_h
 
 #include "otbPointSetToPointSetFilter.h"
 #include "itkTransform.h"
@@ -24,26 +24,24 @@
 namespace otb
 {
 
-/** \class TransformPointSetFilter
+/** \class PointSetExtractROI
  * \brief 
  *
- * TransformPointSetFilter applies a transform to all the points
+ * PointSetExtractROI applies a transform to all the points
  * of a PointSet.
  *
  * The additional content of the PointSet is passed untouched.
  * 
- * PointSets that have added information like normal vector on the points, will
- * have to take care of transforming this data by other means.
  * 
  * \ingroup PointSetFilters
  */
-template <class TInputPointSet, class TOutputPointSet, class TTransform>
-class ITK_EXPORT TransformPointSetFilter :
+template <class TInputPointSet, class TOutputPointSet>
+class ITK_EXPORT PointSetExtractROI :
     public PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformPointSetFilter                                  Self;
+  typedef PointSetExtractROI                                       Self;
   typedef PointSetToPointSetFilter<TInputPointSet,TOutputPointSet> Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
@@ -56,42 +54,44 @@ public:
   /** Type for representing coordinates. */
   typedef typename TInputPointSet::CoordRepType  CoordRepType;
 
-  /** Type of the transform. */
-  typedef TTransform  TransformType;
-
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformPointSetFilter,PointSetToPointSetFilter);
+  itkTypeMacro(PointSetExtractROI,PointSetToPointSetFilter);
 
-  /** Set transform. */
-  itkSetObjectMacro(Transform, TransformType); 
-
-  /** Get transform. */
-  itkGetObjectMacro(Transform,TransformType);
+  /** Set/Get Start methods */
+  itkSetMacro(StartX,unsigned long);
+  itkSetMacro(StartY,unsigned long);
+  /** Set/Get Size methods */
+  itkSetMacro(SizeX,unsigned long);
+  itkSetMacro(SizeY,unsigned long);
 
 protected:
-  TransformPointSetFilter();
-  ~TransformPointSetFilter() {};
+  PointSetExtractROI();
+  ~PointSetExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
   /** Generate Requested Data */
   virtual void GenerateData( void );
 
-  /** Transform to apply to all the PointSet points. */
-  typename TransformType::Pointer   m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter&); //purposely not implemented
-  void operator=(const TransformPointSetFilter&); //purposely not implemented
+  PointSetExtractROI(const PointSetExtractROI&); //purposely not implemented
+  void operator=(const PointSetExtractROI&); //purposely not implemented
   
+  /** X/Y coordinates of the first point of the region to extract. */
+  unsigned long m_StartX;
+  unsigned long m_StartY;
+  /** Size in X/Y of the region to extract. */
+  unsigned long m_SizeX;
+  unsigned long m_SizeY;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransformPointSetFilter.txx"
+#include "otbPointSetExtractROI.txx"
 #endif
 
 #endif
