@@ -416,9 +416,9 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
   double elongation = 0;
   if( principalMoments[0] != 0 )
     {
-//    elongation = principalMoments[LabelObjectType::ImageDimension-1] /
-//    principalMoments[0];
-    elongation = vcl_sqrt(vcl_abs(principalMoments[LabelObjectType::ImageDimension-1])/ (vcl_abs(principalMoments[0])) );
+    double maxAbsPrincipalMoments = std::max(vcl_abs(principalMoments[0]),vcl_abs(principalMoments[LabelObjectType::ImageDimension-1]));
+    double minAbsPrincipalMoments = std::min(vcl_abs(principalMoments[0]),vcl_abs(principalMoments[LabelObjectType::ImageDimension-1]));
+    elongation = vcl_sqrt( maxAbsPrincipalMoments / minAbsPrincipalMoments );
     }
 
   double physicalSize = size * sizePerPixel;
