@@ -1,7 +1,7 @@
 \section{OTB-Wrapping: bindings to Java language}
 OTB-Wrapping is a project designed to allow classes from OTB 
 to be wrapped for use with languages like Python, and Java and TCl. 
-The project is based on CMake, GCC-XML. SWIG, CableSwig and finally OTB that must be already built.
+The project is based on CMake. SWIG, CableSwig and finally OTB that must be already built.
  The OTB-wrapping project is an extension of the project WrapITK \url{http://code.google.com/p/wrapitk/}. 
 It allows the Python, Java and Tcl users to have program written in their own language to use the classes and 
 the capabilities of OTB.
@@ -64,11 +64,12 @@ can be otbImageFileReaderIF2, knowing that I (~\ref{tab:typetomangle}) is the ma
 for the type float then IF2 is the mangle for \verb|otb::Image<float,2>|, and finally otbImageFileReaderIF2 is the mangle for
  \verb|otb::ImageFileReader< otb::Image< float,2 > >|.
 
+
 \subsection{How to Use OTB-Wrapping in Java}
 
 \subsubsection{Import OTB classes}
-The OTB-Wrapping project provides some jar files that corresponds to the modules implemented in the directory Libraries.
-For instance, this directory contains the modules otbImages and otbLearning. The jar produced will be org.otb.otbimages and 
+The OTB-Wrapping project provides some jar files that corresponds to the modules implemented in the directory Libraries. Each OTB-wrapping 
+module is automatically wrapped to a separate java package. For instance, the directory Libraries contains the modules otbImages and otbLearning. The jars produced will be org.otb.otbimages and 
 org.otb.otblearning. Those jars can be used as usual in Java.
 
 To write an example that uses OTB classes, you have to import those jars in your program by adding the directive 
@@ -92,43 +93,45 @@ Now we can execute the java class compiled, it needs some options too.
 
 Here is a simple example written in c++, and its translation in Java. 
 
-\small
+
 \begin{table}[!htbp]
 \begin{center}
-\begin{tabular}{|c|c|}
+\begin{tabular}{|m{8.35cm}|m{9.75cm}|}
 \hline
 Example in c++                  &  Example translated in Java  \\
 \hline
 
-\verb$#include \"otbImage.h\"$            &       \verb$import org.otb.otbimage.*;$                                 \\
-\verb$#include \"otbImageFileReader.h\"$  &       \verb$import org.otb.otbio.*;$                                    \\
-\verb$#include \"otbImageFileWriter.h\"$  &                                                                        \\
-                                          &                                                                         \\
-\verb$void otbReaderWriterExample(Int argc, char * argv[] ){$ & \verb$public class otbReaderWriterExample {$        \\
-                                                              &  \verb$public static void main( String argv[] ) {$  \\
-//typedefs :                              &     //The typedefs step are not necessary since no generic programmation is allowed in Java.    \\
-														  
-typedef  otb::Image<float,2>   ImageType;             &           \\
-typedef  otb::ImageFileReader<ImageType> ReaderType;  &           \\
-typedef  otb::ImageFileWriter<ImageType> WriterType;  &            \\
+\verb$#include "otbImage.h"$                &       \verb$import org.otb.otbimage.*;$                                 \\
+\verb$#include "otbImageFileReader.h"$      &       \verb$import org.otb.otbio.*;$                                    \\
+\verb$#include "otbImageFileWriter.h"$      &                                                                        \\
+                                            &                                                                         \\
+\verb$void otbReaderWriter(Int argc,char * argv[]){$ & \verb$public class otbReaderWriter{$        \\
+                                                     &  \verb$public static void main(String argv[]){$  \\
+      
+ //typedefs :                              &     //The typedefs step are not necessary since no generic \\
+                                           &     //programmation is allowed in Java.    \\
+
+\verb$typedef otb::Image<float,2>  ImageT;$             &           \\
+\verb$typedef otb::ImageFileReader<ImageT> ReaderType;$  &           \\
+\verb$typedef otb::ImageFileWriter<ImageT> WriterType;$  &            \\
 
                        &                                           \\
 // Instanciation :     &                      // Instanciation :   \\
 
- ReaderType::Pointer reader = ReaderType::New();    &    otbImageReaderIF2 reader = new otbImageReaderIF2(); \\ 
- WriterType::Pointer writer = WriterType::New();    &      otbImageFileWriterIF2    writer  =  new otbImageFileWriterIF2(); \\
+\verb$ReaderType::Pointer reader = ReaderType::New();$    & \verb$otbImageReaderIF2 reader = new otbImageReaderIF2();$ \\ 
+\verb$WriterType::Pointer writer = WriterType::New();$    & \verb$otbImageFileWriterIF2 writer=new otbImageFileWriterIF2();$  \\
+
  & \\
- // Set the filenames                     & // Set the filenames \\
- reader->SetFileName(argv[1]);            & reader.SetFileName(argv[0]); \\
- writer->SetFileName(argv[2]);            & writer.SetFileName(argv[1]); \\
-
- // Plug the pipeline                     & // Plug the pipeline  \\
+ // Set the filenames                           & // Set the filenames \\
+\verb$reader->SetFileName(argv[1]);$            & \verb$reader.SetFileName(argv[0]);$ \\
+\verb$writer->SetFileName(argv[2]);$            & \verb$writer.SetFileName(argv[1]);$  \\
+&\\
+ // Plug the pipeline                           & // Plug the pipeline  \\
  
- writer->SetInput(reader->GetOutput());   &  writer.SetInput(reader.GetOutput());    \\ 
- 
- // Trigger the pipeline execution        &  // Trigger the pipeline  execution\\
- writer->Update();                        &  writer.Update();\\
-
+\verb$writer->SetInput(reader->GetOutput());$   &  \verb$writer.SetInput(reader.GetOutput());$    \\ 
+ &\\
+ // Trigger the pipeline execution              &  // Trigger the pipeline  execution\\
+\verb$writer->Update();$                        &  \verb$writer.Update();$  \\
  
 \hline 
 \end{tabular}
@@ -136,7 +139,58 @@ typedef  otb::ImageFileWriter<ImageType> WriterType;  &            \\
 \end{center}
 \end{table}
 
+
 \end{landscape}
+
+\subsection{Use OTB-Wrapping}
+
+\subsubsection{Download sources}
+The source code for the project OTB-Wrapping is available here: \url{http://hg/orfeo-toolbox.org/OTB-Wrapping}. 
+
+\subsubsection{Required Tools}
+OTB-Wrapping required the release 3.2 of the Orfeo Toolbox or greater. This project required some tools and 
+and libraries : 
+\begin{itemize}
+\item CMake (\verb!>2.6!) to configure the compilation system.
+\item CableSwig (\verb!>0.1.0!) for parsing and automatic instanciation of c++ templates. The source code is available 
+  here
+\item SWIG  (\verb!>1.3.40!) for language binding
+\item Target Language developement libraries (JRE for Java, Python 2.5 for Python).
+\end{itemize}
+
+\subsubsection{Compile OTB-Wrapping sources}
+First, this project needs OTB, CableSwig and SWIG to be built. Once, this step done, create a 
+directory where the project will be compiled (Don't compile in the sources directory).
+The compilation can be done successfully following those steps :
+
+\begin{itemize}
+\item Run cmake (ccmake under Linux and macosX or cmake.exe under Windows) and specify the path to the sources.
+\item Edit the paths for OTB, CableSwig and SWIG binary directories.
+\item Turn the option WRAP\_ITK\_(JAVA | PYTHON | Tcl  )  to ON to choose your target language.
+\item Choose the modules you want to wrap.
+\item Configure the project and generate the solution.
+\item Compile using make in the binary directory (if Linux or macosX), or open the solution (.sln) and generate the solution.
+\end{itemize}
+
+Once the compilation completed successfully, the directory lib will contains several jars which are Java archives 
+and the libraries corresponding to the modules. Those are the useful to use OTB capabilities in Java language.
+
+\subsubsection{Download binaries}
+The binaries are available here :
+
+\subsubsection{Use OTB-Wrapping with Eclipse}
+OTB-Wrapping produces Java archives and libraries that can be used with Eclipse. You can then create your Java project and use the OTB wrapped classes. 
+Eclipse gives the possibility to add external jars. 
+After creating a new project, 
+\begin{itemize}
+\item run the project configuration (Run then Run Configurations) to add the externals OTB-Wrapping Jars. In the Classpath section, add external jars 
+  by searching the jars produced. (They are generally in directory lib).
+\item add the path to the OTB-Wrapping libraries to  the environment variable PATH. Go to the tab Environment (always in Run Configurations setup), 
+  \emph{Select} the environment variable PATH, and add the complete path to the location of the libraries.
+\end{itemize}
+
+You can know write Java classes, main and import the OTB wrapped classes like shown in section \ref{sec:tuto}.
+
 
 \normalsize
 \section{Java tutorials}\label{sec:tuto}
@@ -173,12 +227,13 @@ lives in a sub-directory of the OTB-Wrapping project (within the Libraries direc
 See SampleCMakeLists.txt in the Documentation directory for a description of each macro and option that
 can appear in such a file. What follows is the usual set of commands that will appear:
 
-
+\small
 \verb$WRAP_LIBRARY("otbMySpatialObjectExtensions")$ \\
 \verb$SET(WRAPPER_LIBRARY_DEPENDS itkSpatialObject itkBase)$ \\
 \verb$SET(WRAPPER_LIBRARY_LINK_LIBRARIES ITKCommon )$ \\
 \verb$AUTO_INCLUDE_MODULES()$ \\
 \verb$END_WRAP_LIBRARY()$ \\
+\normalsize
 
 \begin{itemize}
 \item	\verb$WRAP_LIBRARY$  sets up the environment to wrap a set of classes into a 
@@ -223,6 +278,7 @@ simple image filter like
 Here is what should be the file 
 \verb$otbResampling/wrap_otbStreamingShrinkImageFilter.cmake$.
 
+\small
 \begin{verbatim}
 WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)
  WRAP_IMAGE_FILTER_USIGN_INT(2)
@@ -230,6 +286,7 @@ WRAP_CLASS("otb::StreamingShrinkImageFilter" POINTER)
  WRAP_IMAGE_FILTER_REAL(2)
 END_WRAP_CLASS()
 \end{verbatim}
+\normalsize
 
 The file contains several macros useful to make the wrapping easy. It contains 
 a \verb$WRAP_CLASS$ - \verb$END_WRAP_CLASS$ wich contains itself some 
@@ -281,7 +338,7 @@ Those macro are defined and well documented in the file Typedef Macros.
   template instantiation brackets. (Do not include the brackets.) if you are
   wrapping a filter.
 
-\item \verb$WRAP_NON_TEMPLATE_CLASS("fully_qualified::ClassName" [POINTER|POINTER_WITH_SUPERCLASS])$.
+\item \verb$WRAP_NON_TEMPLATE_CLASS("fully_qualified::ClassName"$\\\verb$[POINTER|POINTER_WITH_SUPERCLASS])$.
   Same as \verb$WRAP_CLASS$, but creates a wrapper
   for a non-templated class. No \verb$END_WRAP_CLASS()$ is necessary after this macro
   because there is no block of template instantiating commands to close.
@@ -379,7 +436,58 @@ for the types used to wrap a class, a correct way to do so is :
 
 With the MANGLE\_NAME Macro, it will be in two steps : 
 \begin{itemize}
- \item\verb!MANGLE_NAME(${ITKM_IF2} ${ITKM_IF2} )!
- \item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, ${ITKM_IF2}")!
-
+\item\verb!MANGLE_NAME(${ITKM_IF2} ${ITKM_IF2} )!
+\item\verb!ADD_TEMPLATE("${MANGLED_NAME}" "${ITKT_IF2}, \${ITKM_IF2}")!
 \end{itemize}
+
+\subsection{HTML JavaDoc generation}
+
+All the classes wrapped in Java language (in Python too) contains the comments 
+present in the c++ source code. The tags in the comments were translated to be 
+specific to the tool Javadoc (@param, @return, @see...). 
+In order to handle the Latex formulas present in the comments, the tool JavaDoc alone 
+does not convert the Tex formulas to PNG. The taglet LatexLet allows to use Latex within 
+JavaDoc comments. 
+
+\subsubsection{Generate JavaDoc documentation}
+
+First, download the taglet LatexLet 
+here~:\\ \url{http://users.informatik.uni-halle.de/~grau/LaTeXlet/index.html}. 
+Once the OTB-Wrapping project built, go to the directory Language/Java/Proxies/src/. 
+All the java classes generated are there.
+
+Then, to generate the javadoc HTML documentaion use the javadoc command with the following options : 
+
+\begin{verbatim}
+>javadoc -d DESTINATION 
+         -taglet latexlet.InlineBlockLaTeXlet 
+         -taglet latexlet.BlockLaTeXlet 
+         -taglet latexlet.InlineLaTeXlet 
+         -tagletpath PATH_TO_THE_LATEXLET_JAR   
+          {BIN_DIR}/Languages/Java/Proxies/src/org/*/*/*.java
+\end{verbatim}
+
+The options mean :
+\begin{itemize}
+\item -d DESTINTAION : Destination directory for output files
+\item -taglet *      : The fully qualified name of Taglet to register
+\item -tagletpath PATH\_TO\_THE\_LATEXLET\_JAR : Complete path to the taglet jar
+\item org/*/*/*.java : the sources files. 
+\end{itemize}
+
+
+\subsubsection{Generate JavaDoc while compilation}
+The method above shows how to generate the HTML javadoc documentation with 
+a command line after OTB-Wrapping was built. It is possible to include this step 
+in the compilation process. 
+For that, two cmake variables have to be edited in the project configuration step with cmake.
+\begin{itemize}
+\item  LATEXLET\_JAR : Path to the LatexLet taglet allowing to convert Tex formula to PNG. 
+       Not setting this field will result in the absence of formulas in the generated javadoc
+\item  WRAP\_ITK\_JAVADOC : by default on OFF. Put this variable to ON if to include the html javadoc generation 
+       in the compilation process.
+\end{itemize}
+
+The resulting documentation is located in BIN\_DIR/Languages/Doc/Javadoc.
+
+
