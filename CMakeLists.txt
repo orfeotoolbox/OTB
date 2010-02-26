@@ -289,8 +289,13 @@ IF(OTB_USE_VISU_GUI)
         #OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
         
         FIND_PACKAGE(FLTK)
-        CMAKE_DEPENDENT_OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON
-                         "FLTK_FOUND" OFF)
+
+	# If an external fltk is found, do not provide the internal fltk choice
+	IF(NOT FLTK_FOUND)
+          OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." OFF)
+	ELSE(NOT FLTK_FOUND)
+	  SET(OTB_USE_EXTERNAL_FLTK ON)
+	ENDIF(NOT FLTK_FOUND)
                          
 #        IF(FLTK_FOUND)
 #           SET(OTB_USE_EXTERNAL_FLTK ON)

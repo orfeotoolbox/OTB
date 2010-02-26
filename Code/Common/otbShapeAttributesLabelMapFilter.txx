@@ -198,7 +198,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
   maxs.Fill( itk::NumericTraits< long >::NonpositiveMin() );
   unsigned long sizeOnBorder = 0;
   double physicalSizeOnBorder = 0;
-  itk::Matrix<double,LabelObjectType::ImageDimension> centralMoments;
+  itk::Matrix<double,LabelObjectType::ImageDimension,LabelObjectType::ImageDimension> centralMoments;
   centralMoments.Fill( 0 );
 
   typename LabelObjectType::LineContainerType::const_iterator lit;
@@ -303,27 +303,31 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
         physicalSizeOnBorder += sizePerPixelPerDimension[i] * length;
         }
       }
-    
+
+
+    /*
     // moments computation
     // ****************************************************************
     // that commented code is the basic implementation. The next peace of code
     // give the same result in a much efficient way, by using expended formulae
     // allowed by the binary case instead of loops.
     // ****************************************************************
-    //     long endIdx0 = idx[0] + length;
-    //     for( typename LabelObjectType::IndexType iidx = idx; iidx[0]<endIdx0; iidx[0]++)
-    //       {
-    //       typename LabelObjectType::CentroidType pP;
-    //       m_LabelImage->TransformIndexToPhysicalPoint(iidx, pP);
-    //
-    //       for(unsigned int i=0; i<LabelObjectType::ImageDimension; i++)
-    //         {
-    //         for(unsigned int j=0; j<LabelObjectType::ImageDimension; j++)
-    //           {
-    //           centralMoments[i][j] += pP[i] * pP[j];
-    //           }
-    //         }
-    //       }
+         long endIdx0 = idx[0] + length;
+         for( typename LabelObjectType::IndexType iidx = idx; iidx[0]<endIdx0; iidx[0]++)
+           {
+           typename TLabelImage::PointType pP;
+           m_LabelImage->TransformIndexToPhysicalPoint(iidx, pP);
+
+           for(unsigned int i=0; i<LabelObjectType::ImageDimension; i++)
+             {
+             for(unsigned int j=0; j<LabelObjectType::ImageDimension; j++)
+               {
+               centralMoments[i][j] += pP[i] * pP[j];
+               }
+             }
+           }
+    */
+
     // get the physical position and the spacing - they are used several times later
     typename TLabelImage::PointType physicalPosition;
     m_LabelImage->TransformIndexToPhysicalPoint( idx, physicalPosition );
@@ -354,6 +358,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
       centralMoments[i][0] += cm;
       centralMoments[0][i] += cm;
       }
+
     }
 
   // final computation
@@ -385,6 +390,8 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
       }
     }
 
+
+
   // Compute principal moments and axes
   itk::Vector<double,LabelObjectType::ImageDimension> principalMoments;
   vnl_symmetric_eigensystem<double> eigen( centralMoments.GetVnlMatrix() );
@@ -414,11 +421,9 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
     }
 
   double elongation = 0;
-  if( principalMoments[0] != 0 )
+  if( principalMoments[LabelObjectType::ImageDimension-2] != 0 )
     {
-//    elongation = principalMoments[LabelObjectType::ImageDimension-1] /
-//    principalMoments[0];
-    elongation = vcl_sqrt(vcl_abs(principalMoments[LabelObjectType::ImageDimension-1])/ (vcl_abs(principalMoments[0])) );
+    elongation = vcl_sqrt(principalMoments[LabelObjectType::ImageDimension-1] / principalMoments[LabelObjectType::ImageDimension-2]);
     }
 
   double physicalSize = size * sizePerPixel;
@@ -438,34 +443,73 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
     ellipsoidSize[i] = 2.0 * equivalentRadius * vcl_sqrt( principalMoments[i] / edet );
     }
 
-  itk::OStringStream oss;
+  // Flusser moments (only make sense when ImageDimension == 2)
+  if (LabelObjectType::ImageDimension == 2)
+    {
+    // complex centered moments
+    std::complex<double> c11,c20,c12,c21,c22,c30,c31,c40;
+    c11 = c20 = c12 = c21 = c22 = c30 = c31 = c40 = std::complex<double>(0,0);
+    for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
+      {
+      const typename LabelObjectType::IndexType & idx = lit->GetIndex();
+      unsigned long length = lit->GetLength();
+
+      //
+      long endIdx0 = idx[0] + length;
+      for( typename LabelObjectType::IndexType iidx = idx; iidx[0]<endIdx0; iidx[0]++ )
+        {
+        typename TLabelImage::PointType cPP;
+        m_LabelImage->TransformIndexToPhysicalPoint(iidx, cPP);
+        cPP -= physicalCentroid.GetVectorFromOrigin();
+        std::complex<double> xpiy(cPP[0],  cPP[1]); // x + i y
+        std::complex<double> xmiy(cPP[0], -cPP[1]); // x - i y
+
+        c11 += xpiy * xmiy;
+        c20 += xpiy * xpiy;
+        c12 += xpiy * xmiy * xmiy;
+        c21 += xpiy * xpiy * xmiy;
+        c30 += xpiy * xpiy * xpiy;
+        c22 += xpiy * xpiy * xmiy * xmiy;
+        c31 += xpiy * xpiy * xpiy * xmiy;
+        c40 += xpiy * xpiy * xpiy * xpiy;
+        }
+      }
+
+    // normalize
+    c11 /= physicalSize * physicalSize;
+    c20 /= physicalSize * physicalSize;
+    c12 /= vcl_pow(physicalSize, 5.0/2);
+    c21 /= vcl_pow(physicalSize, 5.0/2);
+    c30 /= vcl_pow(physicalSize, 5.0/2);
+    c22 /= vcl_pow(physicalSize, 3);
+    c31 /= vcl_pow(physicalSize, 3);
+    c40 /= vcl_pow(physicalSize, 3);
+
+
+    lo->SetAttribute( "SHAPE::Flusser01" , c11.real() );
+    lo->SetAttribute( "SHAPE::Flusser02" , (c21 * c12).real() );
+    lo->SetAttribute( "SHAPE::Flusser03" , (c20 * vcl_pow(c12,2)).real() );
+    lo->SetAttribute( "SHAPE::Flusser04" , (c20 * vcl_pow(c12,2)).imag() );
+    lo->SetAttribute( "SHAPE::Flusser05" , (c30 * vcl_pow(c12,3)).real() );
+    lo->SetAttribute( "SHAPE::Flusser06" , (c30 * vcl_pow(c12,3)).imag() );
+    lo->SetAttribute( "SHAPE::Flusser07" , c22.real() );
+    lo->SetAttribute( "SHAPE::Flusser08" , (c31 * vcl_pow(c12,2)).real() );
+    lo->SetAttribute( "SHAPE::Flusser09" , (c31 * vcl_pow(c12,2)).imag() );
+    lo->SetAttribute( "SHAPE::Flusser10" , (c40 * vcl_pow(c12,4)).real() );
+    lo->SetAttribute( "SHAPE::Flusser11" , (c40 * vcl_pow(c12,4)).imag() );
+    }
+
+
+
 
   // Set the attributes
-
-  // Flusser moments
   PolygonFunctorType polygonFunctor;
   polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
   polygonFunctor.SetOrigin(m_LabelImage->GetOrigin());
   polygonFunctor.SetSpacing(m_LabelImage->GetSpacing());
   typename PolygonType::Pointer polygon = polygonFunctor(lo);
   lo->SetPolygon(polygon);
-  
-  typename FlusserPathFunctionType::Pointer flusser = FlusserPathFunctionType::New();
-  flusser->SetInputPath(polygon);
 
-  for(short moment = 1;moment<=11;++moment)
-    {
-    flusser->SetMomentNumber(moment);
-    oss.str("");
-    oss<<"SHAPE::Flusser";
-    if(moment<10)
-      {
-      oss<<"0";
-      }
-    oss<<moment;
-    lo->SetAttribute(oss.str().c_str(),flusser->Evaluate());
-    }
-  
   // Physical size
   lo->SetAttribute("SHAPE::PhysicalSize", physicalSize );
   
@@ -563,6 +607,7 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
   if(!m_ReducedAttributeSet)
     {
     lo->SetAttribute("SHAPE::Size", size );
+    itk::OStringStream oss;
     for(unsigned int dim = 0;dim < LabelObjectType::ImageDimension;++dim)
       {
       oss.str("");
