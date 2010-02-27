@@ -35,8 +35,8 @@
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToJetImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm jet
+//  OUTPUTS: {DEMToReliefImageGenerator.png}
+//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm relief
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -62,7 +62,7 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 #include "otbDEMToImageGenerator.h"
-
+#include "otbReliefColormapFunctor.h"
 
 int main(int argc, char * argv[])
 {
@@ -141,7 +141,7 @@ int main(int argc, char * argv[])
 
   else
   {
-    if (strcmp(argv[8],"hot") == 0)
+    if (strcmp(argv[9],"hot") == 0)
     {
       typedef itk::Functor::HotColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
@@ -151,7 +151,7 @@ int main(int argc, char * argv[])
     }
     else
     {
-      typedef itk::Functor::JetColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+      typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
@@ -192,7 +192,7 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
   // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
   // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToJetImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
   // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
   // data (top-left) and the same area in color representation.}
   // \label{fig:RAINBOW_FILTER}
