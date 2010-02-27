@@ -35,11 +35,8 @@ template <class TNeighIter, class TInputImage, class TOutput>
 class ScalarImageTextureFunctor
 {
 public:
-  ScalarImageTextureFunctor()
-  {
-    m_FeatureIndex=0;
-  };
-  ~ScalarImageTextureFunctor() { };
+  ScalarImageTextureFunctor(): m_FeatureIndex(0) {};
+  ~ScalarImageTextureFunctor() {};
 
   void SetFeatureIndex(int i)
   {
@@ -87,6 +84,9 @@ public:
 
   }
 private:
+  ScalarImageTextureFunctor(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   int m_FeatureIndex;
 
 };
