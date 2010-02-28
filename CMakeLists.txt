@@ -120,7 +120,6 @@ ELSE(WIN32)
 ENDIF(WIN32)
 #-----------------------------------------------------------------------------
 
-# Case for release 2.2.1
 # Use the openjpeg library.
 OPTION(OTB_USE_JPEG2000 "Use to support jpeg2000 image file format." ON)
 
