@@ -35,6 +35,9 @@ template <class TNeighIter, class TInputImage, class TOutput>
 class ScalarImageTextureFunctor
 {
 public:
+
+  typedef ScalarImageTextureFunctor  Self;
+
   ScalarImageTextureFunctor(): m_FeatureIndex(0) {};
   ~ScalarImageTextureFunctor() {};
 
