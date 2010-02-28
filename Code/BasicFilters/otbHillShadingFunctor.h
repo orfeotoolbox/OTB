@@ -51,7 +51,7 @@ public:
   }
   ~HillShadingFunctor() {}
 
-  inline TOutput operator()(const TNeighIter & it)
+  inline TOutput operator()(const TNeighIter & it) const
   {
     const typename IteratorType::OffsetType LEFT   ={{-1,0}};
     const typename IteratorType::OffsetType RIGHT  ={{1,0}};

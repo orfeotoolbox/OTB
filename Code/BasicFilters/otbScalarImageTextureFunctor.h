@@ -53,7 +53,7 @@ public:
   typedef TInputImage InputImageType;
   typedef typename itk::Statistics::ScalarImageTextureCalculator< InputImageType> TextureCalcType;
 
-  inline TOutput operator()(const TNeighIter & it)
+  inline TOutput operator()(const TNeighIter & it) const
   {
     unsigned int neighborhoodSize = it.Size();
 
