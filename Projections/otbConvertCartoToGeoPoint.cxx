@@ -31,15 +31,12 @@ See OTBCopyright.txt for details.
 
 #include "otbCommandLineArgumentParser.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbMapProjections.h"
-#include "otbOrthoRectificationFilter.h"
 #include "otbImage.h"
 #include "otbMacro.h"
 
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
-#include "itkTransform.h"
 
 #include "init/ossimInit.h"
 
@@ -63,8 +60,8 @@ int generic_main_carto_geo(TMapProjection* mapProjection, otb::CommandLineArgume
 
     if (!parseResult->IsOptionPresent("--OTBTesting"))
     {
-      std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<  geoPoint[0] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")" << std::endl;
+      std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << ", " <<  geoPoint[0] << ")" << std::endl;
     }
     else
     {
