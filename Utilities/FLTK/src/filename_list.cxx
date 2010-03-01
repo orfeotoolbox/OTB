@@ -61,9 +61,6 @@ int fl_filename_list(const char *d, dirent ***list,
 #elif defined(__hpux) || defined(__CYGWIN__) || defined(sun)
   // HP-UX, Cygwin define the comparison function like this:
   int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
- #elif defined(HAVE_SCANDIR_POSIX)
-  // POSIX (2008) defines the comparison function like this:
-  int n = scandir(d, list, 0, (int(*)(const dirent **, const dirent **))sort);
 #elif defined(__osf__)
   // OSF, DU 4.0x
   int n = scandir(d, list, 0, (int(*)(dirent **, dirent **))sort);
@@ -74,7 +71,7 @@ int fl_filename_list(const char *d, dirent ***list,
   // The vast majority of UNIX systems want the sort function to have this
   // prototype, most likely so that it can be passed to qsort without any
   // changes:
-  int n = scandir(d, list, 0, (int(*)(const dirent**,const dirent**))sort);
+  int n = scandir(d, list, 0, (int(*)(const void*,const void*))sort);
 #else
   // This version is when we define our own scandir (WIN32 and perhaps
   // some Unix systems) and apparently on IRIX:
