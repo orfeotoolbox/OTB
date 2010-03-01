@@ -1796,6 +1796,24 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
             ${TEMP}/ioTvVectorDataFileGeoReaderWriterOutput2.shp
 	)
 
+ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
+        --compare-ogr  ${EPSILON_9}
+            ${BASELINE_FILES}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
+            ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
+        otbVectorDataFileGeoReaderWriter
+            ${INPUTDATA}/ToulouseRoad-examples.shp
+            ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
+	)
+
+ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
+        --compare-ogr  ${EPSILON_9}
+            ${BASELINE_FILES}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
+            ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
+        otbVectorDataFileGeoReaderWriter
+            ${INPUTDATA}/Capitole-Shadows.kml
+            ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
+	)
+
 # CanRead OGR GML()
 ADD_TEST(ioTuOGRVectorDataIOTestCanRead ${IO_TESTS15}
         otbOGRVectorDataIOTestCanRead
