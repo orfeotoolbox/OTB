@@ -35,11 +35,11 @@ template <class TNeighIter, class TInputImage, class TOutput>
 class ScalarImageTextureFunctor
 {
 public:
-  ScalarImageTextureFunctor()
-  {
-    m_FeatureIndex=0;
-  };
-  ~ScalarImageTextureFunctor() { };
+
+  typedef ScalarImageTextureFunctor  Self;
+
+  ScalarImageTextureFunctor(): m_FeatureIndex(0) {};
+  ~ScalarImageTextureFunctor() {};
 
   void SetFeatureIndex(int i)
   {
@@ -53,7 +53,7 @@ public:
   typedef TInputImage InputImageType;
   typedef typename itk::Statistics::ScalarImageTextureCalculator< InputImageType> TextureCalcType;
 
-  inline TOutput operator()(const TNeighIter & it)
+  inline TOutput operator()(const TNeighIter & it) const
   {
     unsigned int neighborhoodSize = it.Size();
 
@@ -87,6 +87,9 @@ public:
 
   }
 private:
+  ScalarImageTextureFunctor(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   int m_FeatureIndex;
 
 };

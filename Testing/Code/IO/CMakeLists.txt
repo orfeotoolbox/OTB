@@ -1724,6 +1724,21 @@ ADD_TEST(ioTlSHPVectorDataFileReader3 ${IO_TESTS15}
 )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTvKMLVectorDataFileReader ${IO_TESTS15}
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvKMLVectorDataFileReader.txt
+                        ${TEMP}/ioTvKMLVectorDataFileReader.txt
+        otbVectorDataFileReader
+	${INPUTDATA}/lines.kml
+	${TEMP}/ioTvKMLVectorDataFileReader.txt
+)
+
+ADD_TEST(ioTvKMLVectorDataFileReader2 ${IO_TESTS15}
+        --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/ioTvKMLVectorDataFileReader2.txt
+                        ${TEMP}/ioTvKMLVectorDataFileReader2.txt
+        otbVectorDataFileReader
+	${INPUTDATA}/multigeometry.kml
+	${TEMP}/ioTvKMLVectorDataFileReader2.txt
+)
 
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15}
         otbVectorDataFileWriterNew )

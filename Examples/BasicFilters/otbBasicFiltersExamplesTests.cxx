@@ -6,12 +6,13 @@
   Version:   $Revision$
 
 
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
 
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
@@ -33,6 +34,7 @@ void RegisterTests()
   REGISTER_TEST(PrintableImageFilterExample2Test);
   REGISTER_TEST(IndexedToRGBExampleTest);
   REGISTER_TEST(MeanShiftVectorImageFilterExampleTest);
+  REGISTER_TEST(HillShadingExampleTest);
 }
 
 #undef main
@@ -68,3 +70,6 @@ void RegisterTests()
 #define main MeanShiftVectorImageFilterExampleTest
 #include "MeanShiftVectorImageFilterExample.cxx"
 
+#undef main
+#define main HillShadingExampleTest
+#include "HillShadingExample.cxx"
