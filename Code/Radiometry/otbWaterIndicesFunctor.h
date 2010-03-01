@@ -415,7 +415,7 @@ private:
 };
 
 
-/** \class WaterSqrtSpectarlAngleFunctor
+/** \class WaterSqrtSpectralAngleFunctor
  *  \brief This functor uses a spectral angle with a particular reference pixel.
  *
  *
