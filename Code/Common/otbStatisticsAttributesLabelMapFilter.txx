@@ -153,8 +153,13 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
   double variance = ( sum2 - ( vcl_pow( sum, 2 ) / totalFreq ) ) / ( totalFreq - 1 );
   double sigma = vcl_sqrt( variance );
   double mean2 = mean * mean;
-  double skewness = ( ( sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
-  double kurtosis = ( ( sum4 - 4.0 * mean * sum3 + 6.0 * mean2 * sum2) / totalFreq - 3.0 * mean2 * mean2 ) / ( variance * variance ) - 3.0;
+  double skewness = 0;
+  double kurtosis = 0;
+  if (variance != 0)
+	{
+	skewness = ( ( sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
+    kurtosis = ( ( sum4 - 4.0 * mean * sum3 + 6.0 * mean2 * sum2) / totalFreq - 3.0 * mean2 * mean2 ) / ( variance * variance ) - 3.0;
+    }
 
   double elongation = 0;
   if( sum != 0 )
