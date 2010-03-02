@@ -107,10 +107,10 @@ public:
   //ConnectionPointerType GetConstConnection() const;
   
   /** Add an alpha numeric column to the table */
-//   const std::string AddVarCharColumn(unsigned int size) ;
+//   const std::string AddVarCharColumn(unsigned int size);
   
   /** Insert Alpha Numeric Data in the Car char column */
-//   void AddStrDataToVarCharColumn(std::string data) ;
+//   void AddStrDataToVarCharColumn(std::string data);
 protected:
 
   /** Constructor */

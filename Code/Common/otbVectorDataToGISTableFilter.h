@@ -112,7 +112,7 @@ protected:
   /** VectorDataToGISTAbleFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
 
   /** Single-threaded version of GenerateData.  */
@@ -131,7 +131,7 @@ private:
   InputGISConnectionPointerType m_InputGISConnection;
   /** GIS table name */
   std::string m_GISTableName;
-} ; // end of class
+}; // end of class
 
 } // end namespace otb
 

@@ -300,8 +300,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 
@@ -363,8 +363,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 
@@ -898,8 +898,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 
@@ -934,8 +934,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
       }
       else
       {
-        destIndex[i] = srcIndex[i] ;
-        destSize[i] = srcSize[i] ;
+        destIndex[i] = srcIndex[i];
+        destSize[i] = srcSize[i];
       }
     }
 
@@ -979,7 +979,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
   typedef typename FaceListType::iterator FaceListIterator;
 
   // Faces iterations
-  typename NeighborhoodIteratorType::RadiusType radiusMax ;
+  typename NeighborhoodIteratorType::RadiusType radiusMax;
   for ( unsigned int idx = 0; idx < OutputImageDimension; idx++ )
   {
     radiusMax[idx] = lowPassOperator.GetRadius(idx);

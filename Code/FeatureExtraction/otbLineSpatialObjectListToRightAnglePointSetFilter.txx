@@ -117,7 +117,7 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
               
                 /** Compute the distance between the two segments and the right angle formed by this segments*/
                 double dist1 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListTest);
-                double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur) ;
+                double dist2 = this->ComputeDistanceFromPointToSegment(RightAngleCoordinate,*itLinesListCur);
               
                 /** Use Pythagore to compute the distance between the two segments*/
                 double SegmentDistance = vcl_sqrt(dist1*dist1 + dist2*dist2);
@@ -157,8 +157,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
   double X2 = (*itPointsDst).GetPosition()[0];  //xq2
   double Y2 = (*itPointsDst).GetPosition()[1];  //yq2
   
-  double dist1 = vcl_sqrt((X1-rAngle[0])*(X1-rAngle[0]) + (Y1-rAngle[1])*(Y1-rAngle[1])) ;
-  double dist2 = vcl_sqrt((X2-rAngle[0])*(X2-rAngle[0]) + (Y2-rAngle[1])*(Y2-rAngle[1])) ;
+  double dist1 = vcl_sqrt((X1-rAngle[0])*(X1-rAngle[0]) + (Y1-rAngle[1])*(Y1-rAngle[1]));
+  double dist2 = vcl_sqrt((X2-rAngle[0])*(X2-rAngle[0]) + (Y2-rAngle[1])*(Y2-rAngle[1]));
 
   return std::min(dist1,dist2);
 }
@@ -197,12 +197,12 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage,TLinesList ,TPointSet>
 
   //Compute the orientation
   double dx = Xp1 - Xp2;
-  double dy = Yp1 - Yp2 ;
+  double dy = Yp1 - Yp2;
   double orientation = vcl_atan2(dy,dx);
   if(orientation < 0)
     orientation += CONST_PI;
 
-  return orientation ;
+  return orientation;
 }
 
 

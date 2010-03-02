@@ -87,13 +87,13 @@ public:
    * GetLowPassCoefficientVector
    * By default (without template specification) it does nothing usable
    */
-  void GetLowPassCoefficientVector ( CoefficientVector & coeff ) const ;
+  void GetLowPassCoefficientVector ( CoefficientVector & coeff ) const;
 
   /**
    * GetHighPassCoefficientVector
    * By default (without template specification) it does nothing usable
    */
-  void GetHighPassCoefficientVector ( CoefficientVector & coeff ) const ;
+  void GetHighPassCoefficientVector ( CoefficientVector & coeff ) const;
 
 protected:
   WaveletGenerator() {}

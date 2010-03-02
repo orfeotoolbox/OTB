@@ -305,7 +305,7 @@ private:
 
   /** The near infra-red channel index */
   unsigned int m_NIRChannelIndex;
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   

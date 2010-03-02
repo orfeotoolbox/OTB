@@ -138,7 +138,7 @@ CumulantsForEdgeworth< TInput >
     fMu3 = 0.0;
     fMu4 = 4.0;
     fDataAvailable = false;
-    return ;
+    return;
   }
 
   double sigma = sqrt( fMu2 );

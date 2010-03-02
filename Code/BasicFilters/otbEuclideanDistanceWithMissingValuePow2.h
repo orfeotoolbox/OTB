@@ -51,7 +51,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValuePow2 :
     /** Standard "Self" typedef. */
     typedef EuclideanDistanceWithMissingValuePow2 Self;
     typedef itk::Statistics::EuclideanDistance< TVector > Superclass;
-    typedef itk::SmartPointer< Self > Pointer ;
+    typedef itk::SmartPointer< Self > Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
     typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
@@ -59,20 +59,20 @@ class ITK_EXPORT EuclideanDistanceWithMissingValuePow2 :
     itkTypeMacro(EuclideanDistanceWithMissingValuePow2, EuclideanDistance);
 
     /** Method for creation through the object factory. */
-    itkNewMacro(Self) ;
+    itkNewMacro(Self);
 
     /** Type of the component of a vector */
-    typedef typename TVector::ValueType ValueType ;
+    typedef typename TVector::ValueType ValueType;
 
     /** Gets the distance between the origin and x */
-    double Evaluate(const TVector &x) const ;
+    double Evaluate(const TVector &x) const;
 
     /** Gets the distance between x1 and x2 */
-    double Evaluate(const TVector &x1, const TVector &x2) const ;
+    double Evaluate(const TVector &x1, const TVector &x2) const;
 
     /** Gets the cooridnate distance between a and b. NOTE: a and b
     * should be type of component */
-    double Evaluate(const ValueType &a, const ValueType &b) const ;
+    double Evaluate(const ValueType &a, const ValueType &b) const;
 
     /** Returns true if the distance between x and the origin is less
     * than radius */
@@ -80,7 +80,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValuePow2 :
       return Superclass::IsWithinRange( x, radius ); }
 
     /** Check if a value is NaN or not */
-    static bool IsMissingValue ( const ValueType & v) ;
+    static bool IsMissingValue ( const ValueType & v);
 
     /** Set a value to Nan */
     static void SetToMissingValue ( ValueType & v );
@@ -88,7 +88,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValuePow2 :
   protected:
     EuclideanDistanceWithMissingValuePow2() {}
     virtual ~EuclideanDistanceWithMissingValuePow2() {}
-} ; // end of class
+}; // end of class
 
 } // end namespace statistics
 

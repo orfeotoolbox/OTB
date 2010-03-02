@@ -82,7 +82,7 @@ namespace otb
       /** Destructor */
       ~ConfigurationFile();
       /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const ;
+      void PrintSelf(std::ostream& os, itk::Indent indent) const;
     private:
       /** The instance singleton */
       static Pointer Instance;

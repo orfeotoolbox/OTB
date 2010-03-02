@@ -43,7 +43,7 @@ void PostGISConnectionImplementation::ConnectToDB()
 {
   std::stringstream connstring;
 
-  connstring << "host=" << m_Host << " dbname=" << m_DBName << " user=" << m_User ;
+  connstring << "host=" << m_Host << " dbname=" << m_DBName << " user=" << m_User;
 
   if(m_Password!="")
     connstring << " password=" << m_Password;
