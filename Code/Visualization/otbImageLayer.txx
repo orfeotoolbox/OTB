@@ -18,7 +18,7 @@
 #ifndef __otbImageLayer_txx
 #define __otbImageLayer_txx
 
-#include "itkImageRegionConstIterator.h"
+#include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
 #include "otbMacro.h"
 #include "otbI18n.h"
 #include "itkTimeProbe.h"
@@ -37,7 +37,7 @@ template <class TImage, class TOutputImage>
 ImageLayer<TImage,TOutputImage>
 ::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false), m_RenderingFunction(),
                  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
-                 m_ExtractFilter(), m_ScaledExtractFilter()
+                 m_ExtractFilter(), m_ScaledExtractFilter(), m_MaxListSampleSize(2000)
 {
  // Rendering filters
   m_QuicklookRenderingFilter = RenderingFilterType::New();
@@ -214,7 +214,7 @@ ImageLayer<TImage,TOutputImage>
       histogramSource->Update();
 
       // Iterate on the image
-      itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
+      itk::ImageRandomNonRepeatingConstIteratorWithIndex<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
 
       // declare a list to store the samples
       m_ListSample->Clear();
@@ -224,7 +224,7 @@ ImageLayer<TImage,TOutputImage>
 
       // Fill the samples list
       it.GoToBegin();
-      while(!it.IsAtEnd())
+      while(!it.IsAtEnd() && m_ListSample->Size() < m_MaxListSampleSize)
       {
         SampleType sample(sampleSize);
         VisualizationPixelTraits::Convert( it.Get(), sample );
