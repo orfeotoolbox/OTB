@@ -27,7 +27,7 @@ namespace otb
 {
 
 // #define EPSILON_VALUE_CBAMI 0.01
-#define epsilon 0.01
+
 
 namespace Functor
 {
@@ -47,7 +47,7 @@ public:
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {
-    //const double epsilon = 0.01;
+    double epsilon = 0.01;
     VectorType vecA;
     VectorType vecB;
 
