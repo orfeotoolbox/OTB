@@ -209,22 +209,22 @@ template<class TData>
     OGRDataSource::DestroyDataSource(m_DataSource);
     }
 
-  // Erase the dataSource if already exist //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
+  // Erase the dataSource if already exist
+  //TODO investigate the possibility of giving the option OVERWRITE=YES to the CreateDataSource method
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-      if (poDS != NULL)
+  if (poDS != NULL)
+    {
+    //Erase the data if possible
+    if (poDS->GetDriver()->TestCapability(ODrCDeleteDataSource))
       {
-        //Erase the data if possible
-        if ( poDS->GetDriver()->TestCapability(ODrCDeleteDataSource) )
-        {
-          //Delete datasource
-          poDS->GetDriver()->DeleteDataSource(this->m_FileName.c_str());
-        }
+      //Delete datasource
+      poDS->GetDriver()->DeleteDataSource(this->m_FileName.c_str());
       }
-     OGRDataSource::DestroyDataSource(poDS);
-     
-    
+    }
+  OGRDataSource::DestroyDataSource(poDS);
+
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-     m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(),papszOptions);
+  m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), papszOptions);
 
 
   // check the created data source
@@ -318,6 +318,8 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
       driverOGR="GML";
     else if (extension=="GPX")
       driverOGR="GPX";
+    else if (extension=="KML")
+      driverOGR="KML";
     else
       driverOGR="NOT-FOUND";
   }

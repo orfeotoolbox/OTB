@@ -47,8 +47,8 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    typename OGRVectorDataIOFactory<TData>::Pointer SHPFactory = OGRVectorDataIOFactory<TData>::New();
-    itk::ObjectFactoryBase::RegisterFactory(SHPFactory);
+    typename OGRVectorDataIOFactory<TData>::Pointer OGRFactory = OGRVectorDataIOFactory<TData>::New();
+    itk::ObjectFactoryBase::RegisterFactory(OGRFactory);
   }
 
 protected:
