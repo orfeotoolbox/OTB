@@ -86,17 +86,18 @@ LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, 
 
   double R12 = 0.0;
   double R13 = 0.0;
-
-  if (( M1 != 0. ) && (M2 != 0. ))
+  
+  double epsilon = 0.0000000001;
+  if (( vcl_abs(M1) > epsilon ) && (vcl_abs(M2) > epsilon ))
     R12 = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
-  else if (( M1 != 0. ) || (M2 != 0. ))
+  else if (( vcl_abs(M1) > epsilon ) || (vcl_abs(M2) > epsilon ))
     R12 = 1.0;
   else R12 = 0.;
 
 
-  if (( M1 != 0. ) && (M3 != 0. ))
+  if (( vcl_abs(M1) > epsilon ) && (vcl_abs(M3) > epsilon ))
     R13 = static_cast<double>( 1 - MIN( (M1/M3), (M3/M1) ) );
-  else if (( M1 != 0. ) || (M3 != 0. ))
+  else if (( vcl_abs(M1) > epsilon ) || (vcl_abs(M3) > epsilon ))
     R13 = 1.0;
   else R13 = 0.;
 
