@@ -33,7 +33,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class MulitStatsAttributesLabelObjectFunctor
+/** \class MultiStatsAttributesLabelObjectFunctor
 *   \brief Functor to compute multiple statistics attributes.
 * 
 * For one label object, this functors applies the

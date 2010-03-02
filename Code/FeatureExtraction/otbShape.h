@@ -20,7 +20,7 @@
 
 #include "itkPolyLineParametricPath.h"
 
-/** \class Shape
+/** Shape
  *   Internal Input/Output for the following FLST (Fast Level Set Transform)
  *   structures
  *     Point_plane
@@ -36,7 +36,7 @@ namespace otb
 
 /** \class Point_plane
  *
- *  Point in the plane
+ *  \brief Point in the plane
  */
 class Point_plane
 {
@@ -57,9 +57,9 @@ private:
 
 };
 
-/** \class shape
+/** \class Shape
  *
- *  A shape  : a connected component of a level set, with filled holes
+ *  \biref A shape  : a connected component of a level set, with filled holes
  */
 class Shape
 {
@@ -111,7 +111,7 @@ private:
 
 /** \class Shapes
  *
- * A set of shapes (complete representation of an image)
+ * \brief A set of shapes (complete representation of an image)
  */
 
 class Shapes
