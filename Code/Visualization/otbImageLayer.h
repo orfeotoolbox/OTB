@@ -254,7 +254,11 @@ private:
 
   /** General info about the image*/
   std::string m_PlaceName;//FIXME the call should be done by a more general method outside of the layer
-  std::string m_CountryName;//which would also handle the dependance to curl
+  std::string m_CountryName;//which would also handle the dependance
+			    //to curl
+
+  /** Max list sample size */
+  unsigned int m_MaxListSampleSize;
 
 }; // end class
 } // end namespace otb
