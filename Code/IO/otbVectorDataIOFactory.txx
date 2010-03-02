@@ -92,7 +92,7 @@ VectorDataIOFactory<TData>
     if ( firstTime )
     {
       itk::ObjectFactoryBase::RegisterFactory( OGRVectorDataIOFactory<TData>::New() );
-//      itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory<TData>::New() );
+      itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory<TData>::New() );
       firstTime = false;
     }
   }
