@@ -51,6 +51,36 @@ public:
   }
   ~HillShadingFunctor() {}
 
+  double GetXRes() const
+  {
+    return m_XRes;
+  }
+
+  double GetYRes() const
+  {
+    return m_YRes;
+  }
+
+  void SetXRes(double res)
+  {
+    m_XRes = vcl_abs(res);
+  }
+
+  void SetYRes(double res)
+  {
+    m_YRes = vcl_abs(res);
+  }
+
+  double GetScale() const
+  {
+    return m_Scale;
+  }
+
+  void SetScale(double scale)
+  {
+    m_Scale = scale;
+  }
+
   inline TOutput operator()(const TNeighIter & it) const
   {
     const typename IteratorType::OffsetType LEFT   ={{-1,0}};
@@ -83,12 +113,13 @@ private:
   HillShadingFunctor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  double m_AzimuthLight;
-  double m_ElevationLight;
-  double m_XRes;
-  double m_YRes;
+  double m_AzimuthLight; // in radian
+  double m_ElevationLight; // in radian
+  double m_XRes; // assumed to be positive provided in m
+  double m_YRes; // assumed to be positive provided in m
   double m_Scale;
 
+  // precomputed parameters to avoid the sin() cos() call for each pixel
   double m_SinElev;
   double m_CosElev;
   double m_SinAz;
