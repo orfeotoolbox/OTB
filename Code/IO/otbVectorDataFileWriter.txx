@@ -32,7 +32,8 @@ namespace otb
  */
 template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
-::VectorDataFileWriter() :      m_FileName(""),
+::VectorDataFileWriter() :
+    m_FileName(""),
     m_VectorDataIO(0),
     m_UserSpecifiedVectorDataIO(false)
 {
