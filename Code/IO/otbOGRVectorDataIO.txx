@@ -318,8 +318,8 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
       driverOGR="GML";
     else if (extension=="GPX")
       driverOGR="GPX";
-    else if (extension=="KML")
-      driverOGR="KML";
+//    else if (extension=="KML")
+//      driverOGR="KML";
     else
       driverOGR="NOT-FOUND";
   }
