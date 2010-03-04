@@ -147,7 +147,13 @@ ImageView<TViewerModel>
       m_ExtractRegionGlComponent->SetVisible(false);
       }
     }
-
+  else
+    {
+    // Else, there is nothing to display
+    // Ensure to reset buffer
+    m_ScrollWidget->ClearBuffer();
+    }
+    
     // Redraw
     m_ScrollWidget->redraw();
 }
@@ -180,9 +186,16 @@ ImageView<TViewerModel>
       {
       m_ScaledExtractRegionGlComponent->SetVisible(false);
       }
-    // redraw the widget
-    m_FullWidget->redraw();
     }
+  else
+    {
+    // Else, there is nothing to display
+    // Ensure to reset buffer
+    m_FullWidget->ClearBuffer();
+    }
+
+  // redraw the widget
+    m_FullWidget->redraw();
  }
 
 template < class TViewerModel >
@@ -201,11 +214,16 @@ ImageView<TViewerModel>
     label+=(" - ");
     label+=m_Model->GetName();
     m_ZoomWidget->label(label.c_str());
-
-    m_ZoomWidget->redraw();
     }
+  else
+    {
+    // Else, there is nothing to display
+    // Ensure to reset buffer
+    m_ZoomWidget->ClearBuffer();
+    }
+   
+  m_ZoomWidget->redraw();
 }
-
 
 }
 #endif
