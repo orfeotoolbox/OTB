@@ -59,6 +59,7 @@
 #include "itkMultiplyImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "otbWorldFile.h"
 
 namespace otb {
 namespace Functor {
@@ -219,6 +220,17 @@ int main(int argc, char * argv[])
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
   }
+
+  otb::WorldFile::Pointer worldFile = otb::WorldFile::New();
+  worldFile->SetLonOrigin(origin[0]);
+  worldFile->SetLatOrigin(origin[1]);
+  worldFile->SetLonSpacing(spacing[0]);
+  worldFile->SetLatSpacing(spacing[1]);
+
+  worldFile->SetImageFilename(argv[1]);
+  worldFile->Update();
+  worldFile->SetImageFilename(argv[2]);
+  worldFile->Update();
 
   // Software Guide : BeginLatex
   //
