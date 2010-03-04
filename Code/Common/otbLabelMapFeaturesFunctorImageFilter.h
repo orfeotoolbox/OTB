@@ -115,7 +115,7 @@ private:
   /** The functor */
   FunctorType m_Functor;
 
-} ; // end of class
+}; // end of class
 
 } // end namespace otb
 

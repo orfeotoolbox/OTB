@@ -50,7 +50,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
     typedef EuclideanDistanceWithMissingValue Self;
     typedef otb::Statistics::EuclideanDistanceWithMissingValuePow2< TVector >
       Superclass;
-    typedef itk::SmartPointer< Self > Pointer ;
+    typedef itk::SmartPointer< Self > Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
 
     typedef typename Superclass::MeasurementVectorSizeType
@@ -60,10 +60,10 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
     itkTypeMacro(EuclideanDistanceWithMissingValue, EuclideanDistance);
 
     /** Method for creation through the object factory. */
-    itkNewMacro(Self) ;
+    itkNewMacro(Self);
 
     /** Type of the component of a vector */
-    typedef typename TVector::ValueType ValueType ;
+    typedef typename TVector::ValueType ValueType;
 
     /** Gets the distance between the origin and x */
     double Evaluate(const TVector &x) const {
@@ -86,7 +86,7 @@ class ITK_EXPORT EuclideanDistanceWithMissingValue :
   protected:
     EuclideanDistanceWithMissingValue() {}
     virtual ~EuclideanDistanceWithMissingValue() {}
-} ; // end of class
+}; // end of class
 
 } // end namespace statistics
 

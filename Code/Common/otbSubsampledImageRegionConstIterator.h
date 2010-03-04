@@ -97,7 +97,7 @@ public:
   typedef typename Superclass::IndexValueType IndexValueType;
 
   /** Default constructor. Needed since we provide a cast constructor. */
-  SubsampledImageRegionConstIterator() ;
+  SubsampledImageRegionConstIterator();
 
   /** Constructor establishes an iterator to walk a particular image and a
    * particular region of that image. */
@@ -164,7 +164,7 @@ public:
   /** Set the index.
    * It is moved to the next available (usable) index.
    * \sa GetIndex */
-  void SetIndex(const IndexType &ind) ;
+  void SetIndex(const IndexType &ind);
 
   /** Get the Index. */
   IndexType GetIndex() const

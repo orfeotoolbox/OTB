@@ -220,7 +220,7 @@ private:
   VerticalAsymptotePointerType  m_RightAsymptote;
   
   // Flags
-  bool m_ModifyLeft ;
+  bool m_ModifyLeft;
   bool m_ModifyRight;
   
   //Channel we're dealing handling

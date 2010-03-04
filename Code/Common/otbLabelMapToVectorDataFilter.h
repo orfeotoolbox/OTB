@@ -98,7 +98,7 @@ protected:
   /** LabelMapToAttributeImageFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** LabelMapToAttributeImageFilter will produce the entire output. */
   //void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
@@ -112,7 +112,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
 

@@ -70,7 +70,7 @@ public:
 
   virtual void ConnectToDB(){};
 
-  virtual void PerformTransaction(const TransactorType& theTransaction) const {} ;
+  virtual void PerformTransaction(const TransactorType& theTransaction) const {};
 
 
 protected:

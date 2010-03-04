@@ -38,18 +38,18 @@ EuclideanDistanceWithMissingValuePow2< TVector >
     itkExceptionMacro( << "Vector lengths must be equal." );
   }
 
-  double temp, distance = itk::NumericTraits< double >::Zero ;
+  double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for(unsigned int i = 0 ; i < x1.Size(); i++ )
+  for(unsigned int i = 0; i < x1.Size(); i++ )
   {
     if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
     {
-      temp = x1[i] - x2[i] ;
-      distance += temp * temp ;
+      temp = x1[i] - x2[i];
+      distance += temp * temp;
     }
   }
 
-  return distance ;
+  return distance;
 }
 
 template< class TVector >
@@ -66,18 +66,18 @@ EuclideanDistanceWithMissingValuePow2< TVector >
   itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize,
     "EuclideanDistance::Evaluate Origin and input vector have different lengths");
 
-  double temp, distance = itk::NumericTraits< double >::Zero ;
+  double temp, distance = itk::NumericTraits< double >::Zero;
 
-  for(unsigned int i = 0 ; i < measurementVectorSize ; i++ )
+  for(unsigned int i = 0; i < measurementVectorSize; i++ )
   {
     if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
     {
-      temp = this->GetOrigin()[i] - x[i] ;
-      distance += temp * temp ;
+      temp = this->GetOrigin()[i] - x[i];
+      distance += temp * temp;
     }
   }
 
-  return distance ;
+  return distance;
 }
 
 template< class TVector >
@@ -89,8 +89,8 @@ EuclideanDistanceWithMissingValuePow2< TVector >
   if ( IsMissingValue( a ) || IsMissingValue( b ) )
     return 0.0;
 
-  double temp = a - b ;
-  return temp * temp ;
+  double temp = a - b;
+  return temp * temp;
 }
 
 template< class TVector >

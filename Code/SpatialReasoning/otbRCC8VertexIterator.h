@@ -23,7 +23,7 @@
 namespace otb
 {
 /**
- * \class VertexIterator
+ * \class RCC8VertexIterator
  * \brief Iterates on the graph vertices
  */
 template <class TGraph>

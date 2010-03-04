@@ -281,7 +281,7 @@ ImageLayer<TImage,TOutputImage>
       PointType point = this->GetPixelLocation(index);
       // add the x and y spacing 
       //Get the PIxel location of the first pixel
-      IndexType indexSrcX,indexSrcY ;
+      IndexType indexSrcX,indexSrcY;
       indexSrcX[0] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[0] - index[0])));   // x position
       indexSrcX[1] = index[1];   // y position
 

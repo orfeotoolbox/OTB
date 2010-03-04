@@ -33,7 +33,7 @@
 
 namespace otb
 {
-  /** \class TileMapFectcher
+  /** \class TileMapFetcher
    * \brief Get tiles from servers like Open street map.
    *
    */

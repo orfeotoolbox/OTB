@@ -31,7 +31,7 @@ OGRVectorDataIOFactory<TData>::OGRVectorDataIOFactory()
 {
   this->RegisterOverride("otbVectorDataIOBase",
                          "otbOGRVectorDataIO",
-                         "SHP Vectordata IO",
+                         "OGR Vectordata IO",
                          1,
                          itk::CreateObjectFunction<OGRVectorDataIO<TData> >::New());
 }
@@ -49,7 +49,7 @@ template<class TData>
 const char*
 OGRVectorDataIOFactory<TData>::GetDescription() const
 {
-  return "SHP VectorDataIO Factory, allows the loading of ESRI shapefile vector data into OTB";
+  return "OGR VectorDataIO Factory, allows the loading of ogr supported vector data into OTB";
 }
 
 } // end namespace otb

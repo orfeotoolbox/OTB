@@ -1487,6 +1487,7 @@ ADD_TEST(bfTvItkImagePCAShapeModelEstimatorTest ${BASICFILTERS_TESTS11}
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
     ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
 )
+SET_TESTS_PROPERTIES(bfTvItkImagePCAShapeModelEstimatorTest PROPERTIES DEPENDS bfTvInnerProductPCAImageFilterAllsOutputs)
 
 # -------  otb::ListSampleToVariableDimensionHistogramGenerator ----------------------------
 

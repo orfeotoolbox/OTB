@@ -132,7 +132,7 @@ protected:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const  ;
+  virtual void PrintSelf(std::ostream &os, itk::Indent i) const;
 
   typedef WaveletGenerator< TMotherWaveletOperator > WaveletGeneratorType;
   typedef typename WaveletGeneratorType::Pointer WaveletGeneratorPointerType;
@@ -148,7 +148,7 @@ protected:
    * Perform the "a-trou" algorithm for shift-invariant transformation.
    * It transforms the filter \f$ H(z) \f$ into \f$ H(z^2) \f$.
    */
-  void UpSamplingCoefficients ( CoefficientVector & coeff ) ;
+  void UpSamplingCoefficients ( CoefficientVector & coeff );
   
   /**
    * Performs filter reversion, ie. \f$ H(z^{-1}) \f$.

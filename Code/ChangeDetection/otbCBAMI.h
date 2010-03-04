@@ -27,7 +27,7 @@ namespace otb
 {
 
 // #define EPSILON_VALUE_CBAMI 0.01
-#define epsilon 0.01
+
 
 namespace Functor
 {
@@ -37,17 +37,17 @@ class CBAMI
 {
 public:
 
-  typedef typename std::vector<TOutput> VectorType;
-  typedef typename VectorType::iterator IteratorType;
-  typedef typename std::vector<VectorType> VectorOfVectorType;
+  typedef typename std::vector<TOutput>         VectorType;
+  typedef typename VectorType::iterator         IteratorType;
+  typedef typename std::vector<VectorType>      VectorOfVectorType;
   typedef typename VectorOfVectorType::iterator VecOfVecIteratorType;
 
   CBAMI() {};
   virtual ~CBAMI() {};
   inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB)
+                             const TInput2 & itB) const
   {
-    //const double epsilon = 0.01;
+    double epsilon = 0.01;
     VectorType vecA;
     VectorType vecB;
 
@@ -67,7 +67,7 @@ public:
 
 protected:
 
-  inline void normalizeInPlace(VectorType vx)
+  inline void normalizeInPlace(VectorType vx) const
   {
 
     TOutput Ex = 0.0;
@@ -76,7 +76,7 @@ protected:
 
     for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
-      Ex  += static_cast<TOutput>(*itx);
+      Ex += static_cast<TOutput>(*itx);
     }
 
     Ex /= (vx.size());
@@ -85,7 +85,7 @@ protected:
 
     for ( itx = vx.begin(); itx < vx.end(); ++itx)
     {
-      Vx  += static_cast<TOutput>(vcl_pow(static_cast<double>((*itx)-Ex),2));
+      Vx += static_cast<TOutput>(vcl_pow(static_cast<double>((*itx)-Ex),2));
     }
 
     Vx /= (vx.size());
@@ -97,7 +97,7 @@ protected:
 
 
   }
-  inline TOutput Exyc(VectorType vx, VectorType vy)
+  inline TOutput Exyc(VectorType vx, VectorType vy) const
   {
 
     TOutput Exy = 0.0;
@@ -111,7 +111,7 @@ protected:
     {
       //Ex  += (*itx);
       //Ey  += (*ity);
-      Exy  += (*itx)*(*ity);
+      Exy += (*itx)*(*ity);
 
     }
 
@@ -122,7 +122,7 @@ protected:
     return Exy-Ex*Ey;
   }
 
-  inline TOutput Exyztc(VectorType vx, VectorType vy, VectorType vz, VectorType vt)
+  inline TOutput Exyztc(VectorType vx, VectorType vy, VectorType vz, VectorType vt) const
   {
 
     TOutput Exyzt = 0.0;
@@ -206,14 +206,14 @@ protected:
     return result;
   }
 
-  inline TOutput Rxy(VectorType va, VectorType vb)
+  inline TOutput Rxy(VectorType va, VectorType vb) const
   {
 
     return Exyc(va, vb);
 
   }
 
-  inline TOutput Qxijkl(VectorType va, VectorType vb, VectorType vc, VectorType vd)
+  inline TOutput Qxijkl(VectorType va, VectorType vb, VectorType vc, VectorType vd) const
   {
 //    IteratorType ita;
 //    IteratorType itb;
@@ -236,7 +236,7 @@ protected:
 
   }
 
-  inline TOutput PhiMI(VectorType v1, VectorType v2)
+  inline TOutput PhiMI(VectorType v1, VectorType v2) const
   {
 
 

@@ -229,7 +229,7 @@ void
       //Use our own value for the background
       output->SetBackgroundValue( itk::NumericTraits<OutputLabelMapPixelType>::max() );
       //Set the value of the first label
-      m_lab = itk::NumericTraits<LabelType>::Zero ;
+      m_lab = itk::NumericTraits<LabelType>::Zero;
 //       otbGenericMsgDebugMacro(<<"input " <<  idx);
 
       //The projection information
@@ -312,12 +312,12 @@ VectorDataToLabelMapFilter< TVectorData, TLabelMap >
         std::cout << "spacing " << this->GetOutput()->GetSpacing()<< std::endl;
         // For each position in the bounding region of the polygon
 
-        for (double i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0) ;i+=this->GetOutput()->GetSpacing()[0])
+        for (double i = polygonExtRingBoundReg.GetOrigin(0);i < polygonExtRingBoundReg.GetOrigin(0) + polygonExtRingBoundReg.GetSize(0);i+=this->GetOutput()->GetSpacing()[0])
         {
-          vertex[0] = static_cast<VertexValueType>(i) ;
-          for (double j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1) ;j+=this->GetOutput()->GetSpacing()[1])
+          vertex[0] = static_cast<VertexValueType>(i);
+          for (double j = polygonExtRingBoundReg.GetOrigin(1);j<polygonExtRingBoundReg.GetOrigin(1) + polygonExtRingBoundReg.GetSize(1);j+=this->GetOutput()->GetSpacing()[1])
           {
-            vertex[1] = static_cast<VertexValueType>(j) ;
+            vertex[1] = static_cast<VertexValueType>(j);
 
             if (correctPolygonExtRing->IsInside(vertex) || correctPolygonExtRing->IsOnEdge (vertex))
             {

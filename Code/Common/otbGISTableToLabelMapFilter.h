@@ -111,7 +111,7 @@ protected:
   /** GISTableToLabelMapFilter needs the entire input be
    * available. Thus, it needs to provide an implementation of
    * GenerateInputRequestedRegion(). */
-  void GenerateInputRequestedRegion() ;
+  void GenerateInputRequestedRegion();
 
   /** Single-threaded version of GenerateData.  This filter delegates
    * to the OGR driver. */
@@ -129,7 +129,7 @@ private:
 
   SizeType            m_Size;
   IndexType           m_StartIndex;
-} ; // end of class
+}; // end of class
 
 } // end namespace otb
 

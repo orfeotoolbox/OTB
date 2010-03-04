@@ -90,15 +90,15 @@ ImageLayerGenerator<TImageLayer>
   typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
 
   // Shannon (finner generation could be added later)
-  unsigned int wrequested = static_cast<unsigned int>(wscreen*m_ScreenRatio);
-  unsigned int hrequested = static_cast<unsigned int>(hscreen*m_ScreenRatio);
+  unsigned int wrequested = static_cast<unsigned int>(1.5 * wscreen*m_ScreenRatio);
+  unsigned int hrequested = static_cast<unsigned int>(1.5 * hscreen*m_ScreenRatio);
 
   // Compute ratio in both directions
   unsigned int wratio = m_Image->GetLargestPossibleRegion().GetSize()[0]/wrequested;
   unsigned int hratio = m_Image->GetLargestPossibleRegion().GetSize()[1]/hrequested;
 
   // find max ratio
-  unsigned int ratio = std::min(wratio,hratio);
+  unsigned int ratio = std::max(wratio,hratio);
 
   // Ensure a non null ratio
   if(ratio == 0)

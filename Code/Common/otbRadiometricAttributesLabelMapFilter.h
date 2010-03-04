@@ -33,7 +33,7 @@ namespace otb
 {
 namespace Functor
 {
-/** \class MulitStatsAttributesLabelObjectFunctor
+/** \class MultiStatsAttributesLabelObjectFunctor
 *   \brief Functor to compute multiple statistics attributes.
 * 
 * For one label object, this functors applies the
@@ -305,7 +305,7 @@ private:
 
   /** The near infra-red channel index */
   unsigned int m_NIRChannelIndex;
-} ; // end of class
+}; // end of class
 
 } // end namespace itk
   

@@ -179,7 +179,7 @@ AeronetFileReader
   mean = 0.;
   stddev = 0.;
   if ( vec.size() <= 0 ) return;
-  for(unsigned int i=0 ; i <vec.size() ; i++)
+  for(unsigned int i=0; i <vec.size(); i++)
   {
         sum += vec[i];
         sumOfSquares += vec[i] * vec[i];
@@ -321,7 +321,7 @@ AeronetFileReader
   VectorDouble tau_day;
   VectorDouble angst;
   VectorDouble solarZenithAngle;
-  for(unsigned int idCurrentLine=0 ; idCurrentLine < tabStr.size() ; idCurrentLine++)
+  for(unsigned int idCurrentLine=0; idCurrentLine < tabStr.size(); idCurrentLine++)
   {
        VectorString current_line2 = tabStr[idCurrentLine];
        ossimLocalTm currentDate = ParseDate(current_line2[col_date],current_line2[col_time]);

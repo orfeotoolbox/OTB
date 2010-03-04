@@ -139,6 +139,16 @@ int main(int argc, char * argv[])
 
   demToImage->SetOutputSpacing(spacing);
 
+  //Compute the resolution (Vincenty formula)
+  double lon1 = origin[0];
+  double lon2 = origin[0]+size[0]*spacing[0];
+  double lat1 = origin[1];
+  double lat2 = origin[1]+size[1]*spacing[1];
+  double R = 6371; // km
+  double d = vcl_acos(vcl_sin(lat1)*vcl_sin(lat2) +
+                    vcl_cos(lat1)*vcl_cos(lat2) * vcl_cos(lon2-lon1)) * R;
+  double res = d / vcl_sqrt(2.0);
+
   // Software Guide : BeginLatex
   //
   // After generating the dem image as in the DEMToImageGenerator example, you can declare
@@ -157,6 +167,9 @@ int main(int argc, char * argv[])
   hillShading->SetRadius(1);
   hillShading->SetInput(demToImage->GetOutput());
   // Software Guide : EndCodeSnippet
+
+  hillShading->GetFunctor().SetXRes(res);
+  hillShading->GetFunctor().SetYRes(res);
 
 
   typedef itk::RescaleIntensityImageFilter<ImageType, ScalarImageType> RescalerType;
