@@ -154,7 +154,7 @@ int main(int argc, char * argv[])
   //
   // After generating the dem image as in the DEMToImageGenerator example, you can declare
   // the hill shading mechanism. The hill shading is implemented as a functor doing some
-  // operations in its neighorhood. This functor is used in the
+  // operations in its neighborhood. This functor is used in the
   // \doxygen{otb}{UnaryFunctorNeighborhoodImageFilter} that will be in charge of processing
   // the whole image.
   //
