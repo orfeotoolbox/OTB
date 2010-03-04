@@ -162,7 +162,7 @@ ADD_TEST(bfTeHillShadingExampleTest ${EXE_TESTS}
 	HillShadingExampleTest
 	    ${TEMP}/HillShadingExample.png
     	${TEMP}/HillShadingColorExample.png
-        6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
+        6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
 )
 
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
