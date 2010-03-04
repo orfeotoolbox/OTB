@@ -57,8 +57,8 @@
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
 #include "itkMultiplyImageFilter.h"
+#include "itkShiftScaleImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "otbWorldFile.h"
 
 namespace otb {
@@ -173,10 +173,9 @@ int main(int argc, char * argv[])
   hillShading->GetFunctor().SetYRes(res);
 
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, ScalarImageType> RescalerType;
+  typedef itk::ShiftScaleImageFilter<ImageType, ScalarImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(255);
+  rescaler->SetScale(255.0);
   rescaler->SetInput(hillShading->GetOutput());
 
   writer->SetInput(rescaler->GetOutput());
