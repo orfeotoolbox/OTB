@@ -60,6 +60,7 @@
 #include "otbExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "ossim/projection/ossimTileMapModel.h"
+#include "otbWorldFile.h"
 // Software Guide : EndCodeSnippet
 
 int main( int argc, char* argv[] )
@@ -246,20 +247,13 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::string worldFilename;
-  int i = outputFilename.find_last_of('.');
-  worldFilename = outputFilename.substr(0,i) + ".wld";
-
-  std::ofstream file;
-  file.open(worldFilename.c_str());
-  file << std::setprecision(15);
-  file << lonSpacing << std::endl;
-  file << 0.0 << std::endl;
-  file << 0.0 << std::endl;
-  file << latSpacing << std::endl;
-  file << lonUL << std::endl;
-  file << latUL << std::endl;
-  file.close();
+  otb::WorldFile::Pointer worldFile = otb::WorldFile::New();
+  worldFile->SetImageFilename(outputFilename);
+  worldFile->SetLonOrigin(lonUL);
+  worldFile->SetLatOrigin(latUL);
+  worldFile->SetLonSpacing(lonSpacing);
+  worldFile->SetLatSpacing(latSpacing);
+  worldFile->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
