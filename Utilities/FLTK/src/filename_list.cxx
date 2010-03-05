@@ -35,6 +35,9 @@
 //#include <config.h>
 #include "fltk-config.h"
 
+#if !defined(__GLIBC_PREREQ)
+#   define  __GLIBC_PREREQ(a,b) 0
+#endif
 
 extern "C" {
 #ifndef HAVE_SCANDIR
