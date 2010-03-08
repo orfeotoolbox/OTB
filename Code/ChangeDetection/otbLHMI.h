@@ -28,9 +28,6 @@
 namespace otb
 {
 
-
-#define epsilon 0.01
-
 namespace Functor
 {
 
@@ -67,8 +64,6 @@ public:
   inline TOutput operator()( const TInput1 & itA,
                              const TInput2 & itB)
   {
-
-
     HistogramType::Pointer histogram;
 
     /** The histogram size. */
