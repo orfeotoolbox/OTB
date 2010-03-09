@@ -2347,13 +2347,15 @@ bool ossimSpotDimapSupportData::parsePart4(
   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
   //---
-  // Fetch the mission index (Spot 4 or 5):
+  // Fetch the mission index (Spot 1, 4 or 5):
   //---
   xml_nodes.clear();
   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION_INDEX";
   xmlDocument->findNodes(xpath, xml_nodes);
   if (xml_nodes.size() != 0)
   {
+    if (xml_nodes[0]->getText() == "1")
+      theSensorID = "Spot 1";
     if (xml_nodes[0]->getText() == "4")
       theSensorID = "Spot 4";
     if (xml_nodes[0]->getText() == "5")
@@ -2592,7 +2594,13 @@ bool ossimSpotDimapSupportData::initSceneSource(
 
    //---
    // Fetch viewing angle:
+   /*
+    * From the SPOT Dimap documentation (Dimap Generic 1.0), VIEWING_ANGLE
+    * (the scene instrumental viewing angle) is ONLY available for SPOT5 data.
+    * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
+    * */
    //---
+   if(this->theSensorID == 5) {
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
    xmlDocument->findNodes(xpath, xml_nodes);
@@ -2608,6 +2616,9 @@ bool ossimSpotDimapSupportData::initSceneSource(
       return false;
    }
    theViewingAngle = xml_nodes[0]->getText().toDouble();
+   } else {
+       theViewingAngle = -1.0;
+   }
 
    //---
    // Fetch Step Count:
