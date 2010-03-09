@@ -130,13 +130,14 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 SET(EXE_TESTS1  ${CXX_TEST_PATH}/otbIOExamplesTests1)
 SET(EXE_TESTS2  ${CXX_TEST_PATH}/otbIOExamplesTests2)
 
-SET(TOL 0.0)
+SET(NOTOL 0.0)
+SET(EPSILON_5 0.00001)
 SET(HIGHTOL 5000.0)
 
 # ------- ExtractROITest----------
 
 ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
-	--compare-n-images ${TOL} 2
+	--compare-n-images ${NOTOL} 2
 	${BASELINE}/ROI_IMAGERY_RGB.png
 	${TEMP}/ROI_IMAGERY_RGB.png
 
@@ -150,7 +151,7 @@ ADD_TEST(ioTeExtractROITest ${EXE_TESTS1}
 )
 
 ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
---compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
+--compare-image ${EPSILON_5}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
         DEMToImageGeneratorTest
          ${TEMP}/DEMToImageGenerator.tif
@@ -167,7 +168,7 @@ ADD_TEST(ioTeDEMToImageGeneratorTest ${EXE_TESTS1}
 IF(OTB_USE_LIBLAS)
 IF(ITK_USE_REVIEW)
 ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS1}
---compare-image ${TOL}  ${BASELINE}/lidar-image-4.hdr
+--compare-image ${NOTOL}  ${BASELINE}/lidar-image-4.hdr
                         ${TEMP}/lidar-image-4.hdr
          LidarToImageExampleTest
          ${DATA}/TO_core_last_zoom.las
@@ -178,7 +179,7 @@ ADD_TEST(ioTeLidarToImageExampleTest ${EXE_TESTS1}
          4
          )
 ADD_TEST(ioTeLidarToImageExample2Test ${EXE_TESTS1}
---compare-image ${TOL}  ${BASELINE}/lidar-image-8.hdr
+--compare-image ${NOTOL}  ${BASELINE}/lidar-image-8.hdr
                         ${TEMP}/lidar-image-8.hdr
          LidarToImageExampleTest
          ${DATA}/TO_core_last_zoom.las
