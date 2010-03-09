@@ -30,6 +30,7 @@
 #include "kml/dom/kml22.h"
 #include "kml/base/file.h"
 #include "kml/dom/kml_cast.h"
+#include "kml/engine/kml_file.h"
 
 #include "projection/ossimProjection.h"
 #include "projection/ossimMapProjection.h"
@@ -575,7 +576,17 @@ template<class TData>
   std::string xml = kmldom::SerializePretty(kml);
 
   // Write it
-  kmlbase::File::WriteStringToFile(xml,this->m_FileName);
+//  kmlbase::File::WriteStringToFile(xml,this->m_FileName);
+
+  kmlengine::KmlFilePtr kml_file = kmlengine::KmlFile::CreateFromString(xml);
+
+  std::string output;
+  kml_file->SerializeToString(&output);
+
+  std::ofstream fout;
+  fout.open(this->m_FileName.c_str());
+  fout << output;
+  fout.close();
 
   // Eventually print it
   //std::cout << xml;
