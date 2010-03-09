@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 16356 2010-01-14 21:30:03Z dburken $
+// $Id$
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/base/ossimCommon.h>
@@ -105,17 +105,18 @@ double ossimSrtmHandler::getHeightAboveMSLFileTemplate(T dummy,
    int x0 = static_cast<int>(xi);
    int y0 = static_cast<int>(yi);
 
-   // Check for right edge.
-   if (gpt.lon == theGroundRect.lr().lon)
+   if(x0 == (m_numberOfSamples-1))
    {
-      --x0; // Move over one post to the left.
+      --x0; // Move over one post.
    }
    
-   // Check for bottom edge.
-   if (gpt.lat == theGroundRect.lr().lat)
+   // Check for top edge.
+   //    if (gpt.lat == theGroundRect.ul().lat)
+   if(y0 == (m_numberOfLines-1))
    {
-      --y0; // Move up one post.
+      --y0; // Move down one post.
    }
+
 
    // Do some error checking.
    if ( xi < 0.0 || yi < 0.0 ||
@@ -234,18 +235,30 @@ double ossimSrtmHandler::getHeightAboveMSLMemoryTemplate(T dummy,
    int x0 = static_cast<int>(xi);
    int y0 = static_cast<int>(yi);
    
+   if(x0 == (m_numberOfSamples-1))
+   {
+      --x0; // Move over one post.
+   }
+   
+   // Check for top edge.
+   //    if (gpt.lat == theGroundRect.ul().lat)
+   if(y0 == (m_numberOfLines-1))
+   {
+      --y0; // Move down one post.
+   }
+#if 0
    // Check for right edge.
-   if (gpt.lon == theGroundRect.lr().lon)
+   if (ossim::almostEqual(gpt.lon,theGroundRect.lr().lon))
    {
       --x0; // Move over one post to the left.
    }
    
    // Check for bottom edge.
-   if (gpt.lat == theGroundRect.lr().lat)
+   if (ossim::almostEqual(gpt.lat,theGroundRect.lr().lat))
    {
       --y0; // Move up one post.
    }
-   
+#endif
    // Do some error checking.
    if ( xi < 0.0 || yi < 0.0 ||
        x0 > (m_numberOfSamples  - 2.0) ||
@@ -437,7 +450,7 @@ bool ossimSrtmHandler::open(const ossimFilename& file, bool memoryMapFlag)
    {
       m_swapper = new ossimEndian();
    }
-   
+   m_streamOpen = false;
    m_numberOfLines         = m_supportData.getNumberOfLines();
    m_numberOfSamples       = m_supportData.getNumberOfSamples();
    m_srtmRecordSizeInBytes = m_numberOfSamples * ossim::scalarSizeInBytes(m_scalarType);
@@ -470,9 +483,8 @@ bool ossimSrtmHandler::open(const ossimFilename& file, bool memoryMapFlag)
       m_fileStr.read((char*)&m_memoryMap.front(), (streamsize)m_memoryMap.size());
       m_fileStr.close();
    }
-   
+   m_streamOpen = true;
    // Capture the stream state for non-const is_open on old compiler.
-   m_streamOpen = m_fileStr.is_open();
    
    return m_streamOpen;
 #if 0

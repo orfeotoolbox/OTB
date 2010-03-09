@@ -14,6 +14,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance on  pixel image diff
 SET(NOTOL 0.0)
+SET(EPSILON_5 0.00001)
 SET(EPSILON_9 0.000000001)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
@@ -1424,7 +1425,7 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS12}
 ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS12} otbDEMToImageGeneratorNew )
 
 ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToImageGenerator.tif
+--compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator.tif
                         ${TEMP}/ioTvDEMToImageGenerator.tif
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
@@ -1439,7 +1440,7 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS12}
 
 #Big extend
 ADD_TEST(ioTvDEMToImageGeneratorTest2 ${IO_TESTS12}
---compare-image ${EPSILON_9}  ${BASELINE}/ioTvDEMToImageGenerator2.tif
+--compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator2.tif
                         ${TEMP}/ioTvDEMToImageGenerator2.tif
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
