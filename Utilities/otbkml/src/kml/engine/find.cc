@@ -36,9 +36,9 @@ namespace kmlengine {
 
 // The ElementFinder adds every complex element of the given type to the
 // given vector.
-class ElementFinder : public Serializer {
+class ElementTypeFinder : public Serializer {
  public:
-  ElementFinder(KmlDomType type_id, ElementVector* element_vector)
+  ElementTypeFinder(KmlDomType type_id, ElementVector* element_vector)
     : type_id_(type_id), element_vector_(element_vector) {
   }
 
@@ -46,7 +46,7 @@ class ElementFinder : public Serializer {
   // in ElementFinder.  As such only complex elements are found.
   virtual void SaveElement(const ElementPtr& element) {
     // If this element is of the desired type save a pointer.
-    if (type_id_ == element->Type()) {
+    if (element->IsA(type_id_)) {
       element_vector_->push_back(element);
     }
     // Call Serializer to recurse.
@@ -58,6 +58,32 @@ class ElementFinder : public Serializer {
   ElementVector* element_vector_;
 };
 
+class AllElementFinder : public Serializer {
+ public:
+  AllElementFinder(bool recurse, ElementVector* element_vector)
+    : recurse_(recurse), count_(0), element_vector_(element_vector) {
+  }
+
+  virtual void SaveElement(const ElementPtr& element) {
+    ++count_;
+    if (element_vector_) {
+      element_vector_->push_back(element);
+    }
+    if (recurse_) {
+      Serializer::SaveElement(element);
+    }
+  }
+
+  int get_count() const {
+    return count_;
+  }
+
+ private:
+  bool recurse_;
+  int count_;
+  ElementVector* element_vector_;
+};
+
 // Append all elements of the given type id in the hierarchy
 // root at element.
 void GetElementsById(const ElementPtr& element, KmlDomType type_id,
@@ -65,9 +91,19 @@ void GetElementsById(const ElementPtr& element, KmlDomType type_id,
   if (!element || !element_vector) {
     return;
   }
-  // The ElementFinder derivation of Serializer does all the work.
-  ElementFinder element_finder(type_id, element_vector);
-  element->Serialize(element_finder);
+  // The ElementTypeFinder derivation of Serializer does all the work.
+  ElementTypeFinder element_type_finder(type_id, element_vector);
+  element->Serialize(element_type_finder);
+}
+
+int GetChildElements(const ElementPtr& element, bool recurse,
+                     ElementVector* element_vector) {
+  if (!element) {
+    return 0;
+  }
+  AllElementFinder all_element_finder(recurse, element_vector);
+  element->Serialize(all_element_finder);
+  return all_element_finder.get_count();
 }
 
 }  // end namespace kmlengine

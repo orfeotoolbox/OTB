@@ -27,7 +27,6 @@
 #define KML_REGIONATOR_FEATURE_LIST_REGION_HANDLER_H__
 
 #include <map>
-#include <string>
 #include "kml/dom.h"
 #include "kml/convenience/feature_list.h"
 #include "kml/engine.h"
@@ -59,11 +58,11 @@ class FeatureListRegionHandler : public RegionHandler {
   // RegionHandler::SaveKml()
   // This is called by the Regionator to save the completed KML file.  We
   // simply write the file out into the file system into the current directory.
-  virtual void SaveKml(const kmldom::KmlPtr& kml, const std::string& filename);
+  virtual void SaveKml(const kmldom::KmlPtr& kml, const string& filename);
 
  private:
   kmlconvenience::FeatureList feature_list_;
-  std::map<std::string, kmldom::FolderPtr> feature_map_;
+  std::map<string, kmldom::FolderPtr> feature_map_;
 };
 
 }  // end namespace kmlregionator

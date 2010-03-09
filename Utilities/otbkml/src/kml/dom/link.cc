@@ -24,9 +24,12 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+#include <cstring>
 #include "kml/dom/link.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -41,12 +44,12 @@ BasicLink::~BasicLink() {
 static const char *kCdataOpen = "<![CDATA[";
 
 static bool SetStringInsideCdata(ElementPtr element,
-                                 const std::string& char_data,
-                                 std::string* val) {
+                                 const string& char_data,
+                                 string* val) {
   if (!element) {
     return false;
   }
-  std::string::size_type offset = strlen(kCdataOpen);
+  string::size_type offset = strlen(kCdataOpen);
   if (char_data.compare(0, offset, kCdataOpen, offset) == 0) {
     *val = char_data.substr(offset, char_data.size() - offset - 3);
     return true;
@@ -73,6 +76,10 @@ void BasicLink::Serialize(Serializer& serializer) const {
   if (has_href()) {
     serializer.SaveFieldById(Type_href, get_href());
   }
+}
+
+void BasicLink::Accept(Visitor* visitor) {
+  visitor->VisitBasicLink(BasicLinkPtr(this));
 }
 
 // Construct with defaults as per KML standard.
@@ -127,9 +134,7 @@ void AbstractLink::AddElement(const ElementPtr& element) {
 }
 
 void AbstractLink::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  AbstractLink::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   BasicLink::Serialize(serializer);
   if (has_refreshmode()) {
     serializer.SaveEnum(Type_refreshMode, get_refreshmode());
@@ -152,34 +157,43 @@ void AbstractLink::Serialize(Serializer& serializer) const {
   if (has_httpquery()) {
     serializer.SaveFieldById(Type_httpQuery, get_httpquery());
   }
-  Element::SerializeUnknown(serializer);
-  serializer.End();
 }
 
 Link::Link() {}
 
 Link::~Link() {}
 
+void Link::Accept(Visitor* visitor) {
+  visitor->VisitLink(LinkPtr(this));
+}
+
 Icon::Icon() {}
 
 Icon::~Icon() {}
 
+void Icon::Accept(Visitor* visitor) {
+  visitor->VisitIcon(IconPtr(this));
+}
+
 Url::Url() {}
 
 Url::~Url() {}
+
+void Url::Accept(Visitor* visitor) {
+  visitor->VisitUrl(UrlPtr(this));
+}
 
 IconStyleIcon::IconStyleIcon() {}
 
 IconStyleIcon::~IconStyleIcon() {}
 
 void IconStyleIcon::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  BasicLink::GetAttributes(&attributes);
-  // IconStyleIcon is still called Icon.
-  serializer.BeginById(Type_Icon, attributes);
+  ElementSerializer element_serializer(*this, serializer);
   BasicLink::Serialize(serializer);
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void IconStyleIcon::Accept(Visitor* visitor) {
+  visitor->VisitIconStyleIcon(IconStyleIconPtr(this));
 }
 
 }  // end namespace kmldom

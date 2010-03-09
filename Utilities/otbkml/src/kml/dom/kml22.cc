@@ -39,16 +39,16 @@ static XsdElement kKml22Elements[] = {
   // The "casual" name in the comment is the corresponding name
   // used in the code.google.com/apis/kml KML 2.2 Reference.
   { "AbstractColorStyleGroup", XSD_COMPLEX_TYPE },  // "ColorStyle"
-  { "AbstractContainerGroup", XSD_COMPLEX_TYPE },  // "Container"
-  { "AbstractFeatureGroup", XSD_COMPLEX_TYPE },  // "Feature"
-  { "AbstractGeometryGroup", XSD_COMPLEX_TYPE },   // "Geometry"
+  { "Container", XSD_COMPLEX_TYPE },  // "Container"
+  { "Feature", XSD_COMPLEX_TYPE },  // "Feature"
+  { "Geometry", XSD_COMPLEX_TYPE },   // "Geometry"
   { "AbstractLatLonBox", XSD_COMPLEX_TYPE },  // (Not in Kml ref).
   { "AbstractObjectGroup", XSD_COMPLEX_TYPE },  // "Object"
   { "AbstractOverlayGroup", XSD_COMPLEX_TYPE },  // "Overlay"
-  { "AbstractStyleSelectorGroup", XSD_COMPLEX_TYPE },  // "StyleSelector"
+  { "StyleSelector", XSD_COMPLEX_TYPE },  // "StyleSelector"
   { "AbstractSubStyleGroup", XSD_COMPLEX_TYPE },  // "SubStyle"
-  { "AbstractTimePrimitiveGroup", XSD_COMPLEX_TYPE },  // "TimePrimitive"
-  { "AbstractViewGroup", XSD_COMPLEX_TYPE },  // "AbstractView"
+  { "TimePrimitive", XSD_COMPLEX_TYPE },  // "TimePrimitive"
+  { "AbstractView", XSD_COMPLEX_TYPE },  // "AbstractView"
   { "BasicLink", XSD_COMPLEX_TYPE },  // (Not in KML ref).
   { "vec2Type", XSD_COMPLEX_TYPE },  // "vec2"
 
@@ -152,6 +152,7 @@ static XsdElement kKml22Elements[] = {
   { "maxLength", XSD_SIMPLE_TYPE },
   { "maxLodPixels", XSD_SIMPLE_TYPE },
   { "maxSessionLength", XSD_SIMPLE_TYPE },
+  { "maxSnippetLines", XSD_SIMPLE_TYPE },
   { "maxWidth", XSD_SIMPLE_TYPE },
   { "message", XSD_SIMPLE_TYPE },
   { "minAltitude", XSD_SIMPLE_TYPE },
@@ -178,6 +179,7 @@ static XsdElement kKml22Elements[] = {
   { "screenXY", XSD_COMPLEX_TYPE },
   { "shape", XSD_SIMPLE_TYPE },
   { "size", XSD_COMPLEX_TYPE },
+  { "snippet", XSD_SIMPLE_TYPE },
   { "sourceHref", XSD_SIMPLE_TYPE },
   { "south", XSD_SIMPLE_TYPE },
   { "state", XSD_SIMPLE_TYPE },
@@ -203,6 +205,66 @@ static XsdElement kKml22Elements[] = {
   { "y", XSD_SIMPLE_TYPE },
   { "z", XSD_SIMPLE_TYPE },
 
+  // Atom complex elements
+  { "atom:author", XSD_COMPLEX_TYPE },
+  { "atom:category", XSD_COMPLEX_TYPE },
+  { "atom:content", XSD_COMPLEX_TYPE },
+  { "atom:entry", XSD_COMPLEX_TYPE },
+  { "atom:feed", XSD_COMPLEX_TYPE },
+  { "atom:link", XSD_COMPLEX_TYPE },
+
+  // Atom simple elements
+  { "atom:email", XSD_SIMPLE_TYPE },
+  { "atom:id", XSD_SIMPLE_TYPE },
+  { "atom:label", XSD_SIMPLE_TYPE },
+  { "atom:name", XSD_SIMPLE_TYPE },
+  { "atom:scheme", XSD_SIMPLE_TYPE },
+  { "atom:summary", XSD_SIMPLE_TYPE },
+  { "atom:term", XSD_SIMPLE_TYPE },
+  { "atom:title", XSD_SIMPLE_TYPE },
+  { "atom:updated", XSD_SIMPLE_TYPE },
+  { "atom:uri", XSD_SIMPLE_TYPE },
+
+  // xAL complex elements
+  { "xal:AddressDetails", XSD_COMPLEX_TYPE },
+  { "xal:AdministrativeArea", XSD_COMPLEX_TYPE },
+  { "xal:Country", XSD_COMPLEX_TYPE },
+  { "xal:Locality", XSD_COMPLEX_TYPE },
+  { "xal:PostalCode", XSD_COMPLEX_TYPE },
+  { "xal:SubAdministrativeArea", XSD_COMPLEX_TYPE },
+  { "xal:Thoroughfare", XSD_COMPLEX_TYPE },
+
+  // xAL simple elements
+  { "xal:AdministrativeAreaName", XSD_SIMPLE_TYPE },
+  { "xal:CountryNameCode", XSD_SIMPLE_TYPE },
+  { "xal:LocalityName", XSD_SIMPLE_TYPE },
+  { "xal:PostalCodeNumber", XSD_SIMPLE_TYPE },
+  { "xal:SubAdministrativeAreaName", XSD_SIMPLE_TYPE },
+  { "xal:ThoroughfareName", XSD_SIMPLE_TYPE },
+  { "xal:ThoroughfareNumber", XSD_SIMPLE_TYPE },
+
+  // Google extension abstract substitution group elements
+  { "gx:AbstractTourPrimitiveGroup", XSD_COMPLEX_TYPE },  // "gx:TourPrimitive"
+
+  // Google extension complex elements
+  { "gx:AnimatedUpdate", XSD_COMPLEX_TYPE },
+  { "gx:FlyTo", XSD_COMPLEX_TYPE },
+  { "gx:LatLonQuad", XSD_COMPLEX_TYPE },
+  { "gx:Playlist", XSD_COMPLEX_TYPE },
+  { "gx:SoundCue", XSD_COMPLEX_TYPE },
+  { "gx:TimeSpan", XSD_COMPLEX_TYPE },
+  { "gx:TimeStamp", XSD_COMPLEX_TYPE },
+  { "gx:Tour", XSD_COMPLEX_TYPE },
+  { "gx:TourControl", XSD_COMPLEX_TYPE },
+  { "gx:Wait", XSD_COMPLEX_TYPE },
+
+  // Google extension simple elements
+  { "gx:altitudeMode", XSD_SIMPLE_TYPE },
+  { "gx:balloonVisibility", XSD_SIMPLE_TYPE },
+  { "gx:duration", XSD_SIMPLE_TYPE },
+  { "gx:flyToMode", XSD_SIMPLE_TYPE },
+  { "gx:playMode", XSD_SIMPLE_TYPE },
+
   { "</Unknown>", XSD_UNKNOWN }  // Mark the end appropriately.
 };
 
@@ -216,7 +278,7 @@ static const char* kGridOriginEnums[] = { "lowerLeft", "upperLeft", NULL };
 static const char* kItemIconStateEnums[] =
   { "open", "closed", "error", "fetching0", "fetching1", "fetching2", NULL };
 static const char* kListItemTypeEnums[] =
-  { "radioFolder", "check", "checkHideChildren", "checkOffOnly", NULL };
+  { "check", "radioFolder", "checkOffOnly", "checkHideChildren", NULL };
 static const char* kRefreshModeEnums[] =
   { "onChange", "onInterval", "onExpire", NULL };
 static const char* kShapeEnums[] = { "rectangle", "cylinder", "sphere", NULL };
@@ -225,18 +287,27 @@ static const char* kUnitsEnums[] =
   { "fraction", "pixels", "insetPixels", NULL };
 static const char* kViewRefreshModeEnums[] =
   { "never", "onRequest", "onStop", "onRegion", NULL };
+static const char* kGxAltitudeModeEnums[] =
+  { "clampToSeaFloor", "relativeToSeaFloor", NULL };
+static const char* kGxFlyToViewEnums[] =
+  { "bounce", "smooth", NULL };
+static const char* kGxPlayModeEnums[] =
+  { "pause", NULL };
 static XsdSimpleTypeEnum kKml22Enums[] = {
   { Type_altitudeMode, kAltitudeModeEnums },
   { Type_colorMode, kColorModeEnums },
   { Type_displayMode, kDisplayModeEnums },
   { Type_gridOrigin, kGridOriginEnums },
-  { Type_key, kStyleStateEnums },
+  { Type_state, kItemIconStateEnums },
   { Type_listItemType, kListItemTypeEnums },
   { Type_refreshMode, kRefreshModeEnums },
   { Type_shape, kShapeEnums },
-  { Type_state, kItemIconStateEnums },
+  { Type_key, kStyleStateEnums },
   { Type_units, kUnitsEnums },
-  { Type_viewRefreshMode, kViewRefreshModeEnums }
+  { Type_viewRefreshMode, kViewRefreshModeEnums },
+  { Type_GxAltitudeMode, kGxAltitudeModeEnums },
+  { Type_GxFlyToMode, kGxFlyToViewEnums },
+  { Type_GxPlayMode, kGxPlayModeEnums }
 };
 
 }  // namespace kmldom

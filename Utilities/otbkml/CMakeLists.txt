@@ -2,8 +2,8 @@
 
 PROJECT(libkml)
 
-SET(libkml_VERSION_MAJOR "0")
-SET(libkml_VERSION_MINOR "4")
+SET(libkml_VERSION_MAJOR "1")
+SET(libkml_VERSION_MINOR "2")
 SET(libkml_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -19,7 +19,7 @@ IF(NOT OTB_USE_EXTERNAL_BOOST)
 ELSE(NOT OTB_USE_EXTERNAL_BOOST)
   INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 ENDIF(NOT OTB_USE_EXTERNAL_BOOST)
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.1/include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include)
 
 SET(libkmlbase_la_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src/kml/base)
 INCLUDE_DIRECTORIES(${libkmlbase_la_SOURCES_DIR})
@@ -28,6 +28,14 @@ SET(libkmlbase_la_SOURCES
 	${libkmlbase_la_SOURCES_DIR}/referent.cc
 	${libkmlbase_la_SOURCES_DIR}/string_util.cc
 	${libkmlbase_la_SOURCES_DIR}/time_util.cc
+  ${libkmlbase_la_SOURCES_DIR}/attributes.cc
+  ${libkmlbase_la_SOURCES_DIR}/uri_parser.cc
+  ${libkmlbase_la_SOURCES_DIR}/expat_parser.cc
+  ${libkmlbase_la_SOURCES_DIR}/math_util.cc
+  ${libkmlbase_la_SOURCES_DIR}/zip_file.cc
+  ${libkmlbase_la_SOURCES_DIR}/date_time.cc
+  ${libkmlbase_la_SOURCES_DIR}/xml_namespaces.cc
+  ${libkmlbase_la_SOURCES_DIR}/expat_handler_ns.cc
 )
 IF(UNIX)
         SET(libkmlbase_la_SOURCES ${libkmlbase_la_SOURCES}
@@ -92,6 +100,11 @@ SET(libkmldom_la_SOURCES
 	${libkmldom_la_SOURCES_DIR}/serializer.cc
 	${libkmldom_la_SOURCES_DIR}/xml_serializer.cc
 	${libkmldom_la_SOURCES_DIR}/xsd.cc
+  ${libkmldom_la_SOURCES_DIR}/gx_tour.cc
+  ${libkmldom_la_SOURCES_DIR}/gx_timeprimitive.cc
+  ${libkmldom_la_SOURCES_DIR}/xal.cc
+  ${libkmldom_la_SOURCES_DIR}/kml_handler_ns.cc
+  ${libkmldom_la_SOURCES_DIR}/atom.cc
 )
 
 SET(libkmlengine_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/engine")
@@ -114,6 +127,11 @@ SET(libkmlengine_la_SOURCES
 	${libkmlengine_la_SOURCES_DIR}/merge.cc
 	${libkmlengine_la_SOURCES_DIR}/style_merger.cc
 	${libkmlengine_la_SOURCES_DIR}/style_resolver.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_uri.cc
+  ${libkmlengine_la_SOURCES_DIR}/find_xml_namespaces.cc
+  ${libkmlengine_la_SOURCES_DIR}/id_mapper.cc
+  ${libkmlengine_la_SOURCES_DIR}/kml_file.cc
+  ${libkmlengine_la_SOURCES_DIR}/feature_view.cc
 )
 
 SET(libkmlregionator_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/kml/regionator")
@@ -134,6 +152,7 @@ SET(libzlib_la_SOURCES
 	${libzlib_la_SOURCES_DIR}/unzip.c
 	${libzlib_la_SOURCES_DIR}/ioapi.c
 	${libzlib_la_SOURCES_DIR}/zip.c
+  ${libzlib_la_SOURCES_DIR}/iomem_simple.c
 )
 
 # Only for Windows Visual Studio and Mac OSX
@@ -180,7 +199,7 @@ IF(APPLE)
 ENDIF(APPLE)
 
 
-SET(liburiparser_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.1/lib")
+SET(liburiparser_la_SOURCES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/lib")
 INCLUDE_DIRECTORIES(${liburiparser_la_SOURCES_DIR})
 SET( liburiparser_la_SOURCES
 	${liburiparser_la_SOURCES_DIR}/UriCommon.c

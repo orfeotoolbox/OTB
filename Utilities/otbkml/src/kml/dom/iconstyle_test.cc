@@ -32,78 +32,54 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class IconStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(IconStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class IconStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     iconstyle_ = KmlFactory::GetFactory()->CreateIconStyle();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestParse();
-
- private:
   IconStylePtr iconstyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(IconStyleTest);
-
-void IconStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == iconstyle_->IsA(Type_IconStyle));
-  CPPUNIT_ASSERT(Type_IconStyle == iconstyle_->Type());
-  CPPUNIT_ASSERT(true == iconstyle_->IsA(Type_ColorStyle));
+TEST_F(IconStyleTest, TestType) {
+  ASSERT_TRUE(iconstyle_->IsA(Type_IconStyle));
+  ASSERT_EQ(Type_IconStyle, iconstyle_->Type());
+  ASSERT_TRUE(iconstyle_->IsA(Type_ColorStyle));
 }
 
 // Verify proper defaults:
-void IconStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == iconstyle_->has_scale());
-  CPPUNIT_ASSERT(1.0 == iconstyle_->get_scale());
-  CPPUNIT_ASSERT(false == iconstyle_->has_heading());
-  CPPUNIT_ASSERT(0.0 == iconstyle_->get_heading());
-  CPPUNIT_ASSERT(false == iconstyle_->has_icon());
-  CPPUNIT_ASSERT(NULL == iconstyle_->get_icon());
-  CPPUNIT_ASSERT(false == iconstyle_->has_hotspot());
-  CPPUNIT_ASSERT(NULL == iconstyle_->get_hotspot());
+TEST_F(IconStyleTest, TestDefaults) {
+  ASSERT_FALSE(iconstyle_->has_scale());
+  ASSERT_DOUBLE_EQ(1.0, iconstyle_->get_scale());
+  ASSERT_FALSE(iconstyle_->has_heading());
+  ASSERT_DOUBLE_EQ(0.0, iconstyle_->get_heading());
+  ASSERT_FALSE(iconstyle_->has_icon());
+  ASSERT_TRUE(NULL == iconstyle_->get_icon());
+  ASSERT_FALSE(iconstyle_->has_hotspot());
+  ASSERT_TRUE(NULL == iconstyle_->get_hotspot());
 }
 
 // Verify setting default makes has_xxx() true:
-void IconStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(IconStyleTest, TestSetToDefaultValues) {
   iconstyle_->set_scale(iconstyle_->get_scale());
-  CPPUNIT_ASSERT(true == iconstyle_->has_scale());
+  ASSERT_TRUE(iconstyle_->has_scale());
   iconstyle_->set_heading(iconstyle_->get_heading());
-  CPPUNIT_ASSERT(true == iconstyle_->has_heading());
+  ASSERT_TRUE(iconstyle_->has_heading());
   iconstyle_->set_icon(NULL);
-  CPPUNIT_ASSERT(false == iconstyle_->get_icon());
+  ASSERT_FALSE(iconstyle_->get_icon());
   iconstyle_->set_hotspot(NULL);
   // Note: setting to default sets pointer to NULL, so has_hotspot is false.
   // This is different to field behaviour where has_xxx is to equivalent to
   // "field has been set outside of ctor" and is true.
-  CPPUNIT_ASSERT(false == iconstyle_->has_hotspot());
+  ASSERT_FALSE(iconstyle_->has_hotspot());
 }
 
 // Verify set, get, has, clear:
-void IconStyleTest::TestSetGetHasClear() {
+TEST_F(IconStyleTest, TestSetGetHasClear) {
   // Non-default values:
   double scale = 1.0;
   double heading = 2.0;
@@ -117,44 +93,43 @@ void IconStyleTest::TestSetGetHasClear() {
   iconstyle_->set_hotspot(hotspot);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == iconstyle_->has_scale());
-  CPPUNIT_ASSERT(scale == iconstyle_->get_scale());
-  CPPUNIT_ASSERT(true == iconstyle_->has_heading());
-  CPPUNIT_ASSERT(heading == iconstyle_->get_heading());
-  CPPUNIT_ASSERT(true == iconstyle_->has_icon());
-  CPPUNIT_ASSERT(icon == iconstyle_->get_icon());
-  CPPUNIT_ASSERT(true == iconstyle_->has_hotspot());
-  CPPUNIT_ASSERT(hotspot == iconstyle_->get_hotspot());
+  ASSERT_TRUE(iconstyle_->has_scale());
+  ASSERT_DOUBLE_EQ(scale, iconstyle_->get_scale());
+  ASSERT_TRUE(iconstyle_->has_heading());
+  ASSERT_DOUBLE_EQ(heading, iconstyle_->get_heading());
+  ASSERT_TRUE(iconstyle_->has_icon());
+  ASSERT_EQ(icon, iconstyle_->get_icon());
+  ASSERT_TRUE(iconstyle_->has_hotspot());
+  ASSERT_EQ(hotspot, iconstyle_->get_hotspot());
 
   // Clear all fields:
   iconstyle_->clear_scale();
   iconstyle_->clear_heading();
   iconstyle_->clear_icon();
   iconstyle_->clear_hotspot();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 // Verify parse
-void IconStyleTest::TestParse() {
-  CPPUNIT_ASSERT(false == iconstyle_->has_icon());
+TEST_F(IconStyleTest, TestParse) {
+  ASSERT_FALSE(iconstyle_->has_icon());
   const char* kIconStyleIcon =
     "<IconStyle>"
     "<Icon><href>image.jpg</href></Icon>"
     "</IconStyle>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kIconStyleIcon, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const IconStylePtr iconstyle = AsIconStyle(root);
-  CPPUNIT_ASSERT(iconstyle->has_icon());
+  ASSERT_TRUE(iconstyle->has_icon());
   // Verify that this is IconStyle's brand of Icon (not Type_Icon).
-  CPPUNIT_ASSERT_EQUAL(Type_IconStyleIcon, iconstyle->get_icon()->Type());
-  CPPUNIT_ASSERT_EQUAL(std::string("image.jpg"),
-                       iconstyle->get_icon()->get_href());
+  ASSERT_EQ(Type_IconStyleIcon, iconstyle->get_icon()->Type());
+  ASSERT_EQ(string("image.jpg"), iconstyle->get_icon()->get_href());
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -66,10 +66,14 @@ void fill_fopen_filefunc OF((zlib_filefunc_def* pzlib_filefunc_def));
 #define ZCLOSE(filefunc,filestream) ((*((filefunc).zclose_file))((filefunc).opaque,filestream))
 #define ZERROR(filefunc,filestream) ((*((filefunc).zerror_file))((filefunc).opaque,filestream))
 
+/*
+ * This declaration is from the proposed iomem_simple package found at
+ * http://code.trak.dk. See iomem_simple.c
+ */
+extern void* ZEXPORT mem_simple_create_file(zlib_filefunc_def* pzlib_filefunc_def, void* buffer, size_t buflen);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

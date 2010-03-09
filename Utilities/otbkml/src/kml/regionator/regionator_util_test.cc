@@ -28,46 +28,21 @@
 #include "kml/regionator/regionator_util.h"
 #include "kml/engine.h"
 #include "kml/convenience/convenience.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlregionator {
 
 // This class is the unit test fixture for the KmlHandler class.
-class RegionatorUtilTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(RegionatorUtilTest);
-  CPPUNIT_TEST(TestCloneLatLonAltBox);
-  CPPUNIT_TEST(TestCloneLod);
-  CPPUNIT_TEST(TestCloneRegion);
-  CPPUNIT_TEST(TestCreateChildRegion);
-  CPPUNIT_TEST(TestCreateLineStringBox);
-  CPPUNIT_TEST(TestCreateRegionNetworkLink);
-  CPPUNIT_TEST(TestCreateRegionDocument);
-  CPPUNIT_TEST(TestGetCenter);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class RegionatorUtilTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     factory_ = kmldom::KmlFactory::GetFactory();
   }
-  void tearDown() {
-    // factory_ is a singleton.
-  }
 
- protected:
-  void TestCloneLatLonAltBox();
-  void TestCloneLod();
-  void TestCloneRegion();
-  void TestCreateChildRegion();
-  void TestCreateLineStringBox();
-  void TestCreateRegionNetworkLink();
-  void TestCreateRegionDocument();
-  void TestGetCenter();
-
- private:
   kmldom::KmlFactory* factory_;
   void AssertEqualAbstractLatLonBox(const kmldom::AbstractLatLonBoxPtr& a,
                                     const kmldom::AbstractLatLonBoxPtr& b)
-                                      const;
+                                    const;
   void AssertEqualLatLonAltBox(const kmldom::LatLonAltBoxPtr& a,
                                const kmldom::LatLonAltBoxPtr& b,
                                bool alt_fields_only) const;
@@ -80,32 +55,30 @@ class RegionatorUtilTest : public CPPUNIT_NS::TestFixture {
                                double minlodpixels, double maxlodpixels) const;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RegionatorUtilTest);
-
 void RegionatorUtilTest::AssertEqualAbstractLatLonBox(
     const kmldom::AbstractLatLonBoxPtr& a,
     const kmldom::AbstractLatLonBoxPtr& b) const {
   // NOTE: id= and targetid= are not cloned.
-  CPPUNIT_ASSERT_EQUAL(a->has_north(), b->has_north());
-  CPPUNIT_ASSERT_EQUAL(a->has_south(), b->has_south());
-  CPPUNIT_ASSERT_EQUAL(a->has_east(), b->has_east());
-  CPPUNIT_ASSERT_EQUAL(a->has_west(), b->has_west());
-  CPPUNIT_ASSERT_EQUAL(a->get_north(), b->get_north());
-  CPPUNIT_ASSERT_EQUAL(a->get_south(), b->get_south());
-  CPPUNIT_ASSERT_EQUAL(a->get_east(), b->get_east());
-  CPPUNIT_ASSERT_EQUAL(a->get_west(), b->get_west());
+  ASSERT_EQ(a->has_north(), b->has_north());
+  ASSERT_EQ(a->has_south(), b->has_south());
+  ASSERT_EQ(a->has_east(), b->has_east());
+  ASSERT_EQ(a->has_west(), b->has_west());
+  ASSERT_EQ(a->get_north(), b->get_north());
+  ASSERT_EQ(a->get_south(), b->get_south());
+  ASSERT_EQ(a->get_east(), b->get_east());
+  ASSERT_EQ(a->get_west(), b->get_west());
 }
 
 void RegionatorUtilTest::AssertEqualLatLonAltBox(
     const kmldom::LatLonAltBoxPtr& a,
     const kmldom::LatLonAltBoxPtr& b,
     bool alt_fields_only) const {
-  CPPUNIT_ASSERT_EQUAL(a->has_minaltitude(), b->has_minaltitude());
-  CPPUNIT_ASSERT_EQUAL(a->has_maxaltitude(), b->has_maxaltitude());
-  CPPUNIT_ASSERT_EQUAL(a->has_altitudemode(), b->has_altitudemode());
-  CPPUNIT_ASSERT_EQUAL(a->get_minaltitude(), b->get_minaltitude());
-  CPPUNIT_ASSERT_EQUAL(a->get_maxaltitude(), b->get_maxaltitude());
-  CPPUNIT_ASSERT_EQUAL(a->get_altitudemode(), b->get_altitudemode());
+  ASSERT_EQ(a->has_minaltitude(), b->has_minaltitude());
+  ASSERT_EQ(a->has_maxaltitude(), b->has_maxaltitude());
+  ASSERT_EQ(a->has_altitudemode(), b->has_altitudemode());
+  ASSERT_EQ(a->get_minaltitude(), b->get_minaltitude());
+  ASSERT_EQ(a->get_maxaltitude(), b->get_maxaltitude());
+  ASSERT_EQ(a->get_altitudemode(), b->get_altitudemode());
   if (alt_fields_only) {
     return;
   }
@@ -115,21 +88,21 @@ void RegionatorUtilTest::AssertEqualLatLonAltBox(
 void RegionatorUtilTest::AssertEqualLod(const kmldom::LodPtr& a,
                                         const kmldom::LodPtr& b) const {
   // NOTE: id= and targetid= are not cloned.
-  CPPUNIT_ASSERT_EQUAL(a->has_minlodpixels(), b->has_minlodpixels());
-  CPPUNIT_ASSERT_EQUAL(a->has_maxlodpixels(), b->has_maxlodpixels());
-  CPPUNIT_ASSERT_EQUAL(a->has_minfadeextent(), b->has_minfadeextent());
-  CPPUNIT_ASSERT_EQUAL(a->has_maxfadeextent(), b->has_maxfadeextent());
-  CPPUNIT_ASSERT_EQUAL(a->get_minlodpixels(), b->get_minlodpixels());
-  CPPUNIT_ASSERT_EQUAL(a->get_maxlodpixels(), b->get_maxlodpixels());
-  CPPUNIT_ASSERT_EQUAL(a->get_minfadeextent(), b->get_minfadeextent());
-  CPPUNIT_ASSERT_EQUAL(a->get_maxfadeextent(), b->get_maxfadeextent());
+  ASSERT_EQ(a->has_minlodpixels(), b->has_minlodpixels());
+  ASSERT_EQ(a->has_maxlodpixels(), b->has_maxlodpixels());
+  ASSERT_EQ(a->has_minfadeextent(), b->has_minfadeextent());
+  ASSERT_EQ(a->has_maxfadeextent(), b->has_maxfadeextent());
+  ASSERT_EQ(a->get_minlodpixels(), b->get_minlodpixels());
+  ASSERT_EQ(a->get_maxlodpixels(), b->get_maxlodpixels());
+  ASSERT_EQ(a->get_minfadeextent(), b->get_minfadeextent());
+  ASSERT_EQ(a->get_maxfadeextent(), b->get_maxfadeextent());
 }
 
 void RegionatorUtilTest::AssertEqualRegion(const kmldom::RegionPtr& a,
                                            const kmldom::RegionPtr& b) const {
   // NOTE: id= and targetid= are not cloned.
-  CPPUNIT_ASSERT_EQUAL(a->has_latlonaltbox(), b->has_latlonaltbox());
-  CPPUNIT_ASSERT_EQUAL(a->has_lod(), b->has_lod());
+  ASSERT_EQ(a->has_latlonaltbox(), b->has_latlonaltbox());
+  ASSERT_EQ(a->has_lod(), b->has_lod());
   if (a->has_latlonaltbox()) {
     AssertEqualLatLonAltBox(a->get_latlonaltbox(), b->get_latlonaltbox(),
                             false);
@@ -140,7 +113,7 @@ void RegionatorUtilTest::AssertEqualRegion(const kmldom::RegionPtr& a,
 }
 
 // This tests the CloneLatLonAltBox() function.
-void RegionatorUtilTest::TestCloneLatLonAltBox() {
+TEST_F(RegionatorUtilTest, TestCloneLatLonAltBox) {
   kmldom::LatLonAltBoxPtr llab = factory_->CreateLatLonAltBox();
   kmldom::LatLonAltBoxPtr clone = CloneLatLonAltBox(llab);
   // Verify cloning of a default LatLonAltBox.
@@ -163,7 +136,7 @@ void RegionatorUtilTest::TestCloneLatLonAltBox() {
 }
 
 // This tests the CloneLod() function.
-void RegionatorUtilTest::TestCloneLod() {
+TEST_F(RegionatorUtilTest, TestCloneLod) {
   // Verify clone of an empty Lod.
   kmldom::LodPtr lod = factory_->CreateLod();
   kmldom::LodPtr clone = CloneLod(lod);
@@ -179,7 +152,7 @@ void RegionatorUtilTest::TestCloneLod() {
 }
 
 // This tests the CloneRegion() function.
-void RegionatorUtilTest::TestCloneRegion() {
+TEST_F(RegionatorUtilTest, TestCloneRegion) {
   // Verify clone of an empty Region.
   kmldom::RegionPtr region = factory_->CreateRegion();
   kmldom::RegionPtr clone = CloneRegion(region);
@@ -193,7 +166,7 @@ void RegionatorUtilTest::TestCloneRegion() {
 }
 
 // This tests the CreateChildRegion() function.
-void RegionatorUtilTest::TestCreateChildRegion() {
+TEST_F(RegionatorUtilTest, TestCreateChildRegion) {
   kmldom::LatLonAltBoxPtr llab = factory_->CreateLatLonAltBox();
   const double north(38.98);
   const double south(-71.98);
@@ -224,53 +197,52 @@ void RegionatorUtilTest::TestCreateChildRegion() {
   AssertEqualLod(se->get_lod(), parent->get_lod());
   AssertEqualLod(sw->get_lod(), parent->get_lod());
   // XXX Verify same alt stuff
-  CPPUNIT_ASSERT_EQUAL(north, ne->get_latlonaltbox()->get_north());
+  ASSERT_EQ(north, ne->get_latlonaltbox()->get_north());
   // Verify n,s,e,w is proper for each child.
-  CPPUNIT_ASSERT_EQUAL(north, ne->get_latlonaltbox()->get_north());
-  CPPUNIT_ASSERT_EQUAL(mid_lat, ne->get_latlonaltbox()->get_south());
-  CPPUNIT_ASSERT_EQUAL(east, ne->get_latlonaltbox()->get_east());
-  CPPUNIT_ASSERT_EQUAL(mid_lon, ne->get_latlonaltbox()->get_west());
-  CPPUNIT_ASSERT_EQUAL(north, nw->get_latlonaltbox()->get_north());
-  CPPUNIT_ASSERT_EQUAL(mid_lat, nw->get_latlonaltbox()->get_south());
-  CPPUNIT_ASSERT_EQUAL(south, se->get_latlonaltbox()->get_south());
-  CPPUNIT_ASSERT_EQUAL(mid_lat, se->get_latlonaltbox()->get_north());
-  CPPUNIT_ASSERT_EQUAL(south, sw->get_latlonaltbox()->get_south());
-  CPPUNIT_ASSERT_EQUAL(mid_lat, sw->get_latlonaltbox()->get_north());
+  ASSERT_EQ(north, ne->get_latlonaltbox()->get_north());
+  ASSERT_EQ(mid_lat, ne->get_latlonaltbox()->get_south());
+  ASSERT_EQ(east, ne->get_latlonaltbox()->get_east());
+  ASSERT_EQ(mid_lon, ne->get_latlonaltbox()->get_west());
+  ASSERT_EQ(north, nw->get_latlonaltbox()->get_north());
+  ASSERT_EQ(mid_lat, nw->get_latlonaltbox()->get_south());
+  ASSERT_EQ(south, se->get_latlonaltbox()->get_south());
+  ASSERT_EQ(mid_lat, se->get_latlonaltbox()->get_north());
+  ASSERT_EQ(south, sw->get_latlonaltbox()->get_south());
+  ASSERT_EQ(mid_lat, sw->get_latlonaltbox()->get_north());
 }
 
 // This tests the CreateLineStringBox() function.
-void RegionatorUtilTest::TestCreateLineStringBox() {
-  const std::string name("my linestring box");
+TEST_F(RegionatorUtilTest, TestCreateLineStringBox) {
+  const string name("my linestring box");
   kmldom::RegionPtr region = factory_->CreateRegion();
   kmldom::PlacemarkPtr placemark = CreateLineStringBox(name, region);
 }
 
 // This tests the CreateRegionNetworkLink() utility function.
-void RegionatorUtilTest::TestCreateRegionNetworkLink() {
+TEST_F(RegionatorUtilTest, TestCreateRegionNetworkLink) {
   double north(.12121212);
   double south(.0454545454);
   double east(-.0878787);
   double west(-.9898981234);
   double minlodpixels(256);
   double maxlodpixels(-1);
-  std::string href("child.kml");
+  string href("child.kml");
   kmldom::NetworkLinkPtr networklink = CreateRegionNetworkLink(
       kmlconvenience::CreateRegion2d(north, south, east, west, minlodpixels,
-                                     maxlodpixels),
-      href);
-  CPPUNIT_ASSERT(networklink->has_region());
+                                     maxlodpixels),href);
+  ASSERT_TRUE(networklink->has_region());
   const kmldom::RegionPtr& region= networklink->get_region();
-  // XXX assert
-  CPPUNIT_ASSERT(networklink->has_link());
+  // TODO assert
+  ASSERT_TRUE(networklink->has_link());
   const kmldom::LinkPtr& link = networklink->get_link();
-  CPPUNIT_ASSERT_EQUAL(href, link->get_href());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(kmldom::VIEWREFRESHMODE_ONREGION),
-                       link->get_viewrefreshmode());
-  CPPUNIT_ASSERT_EQUAL(north, region->get_latlonaltbox()->get_north());
+  ASSERT_EQ(href, link->get_href());
+  ASSERT_EQ(static_cast<int>(kmldom::VIEWREFRESHMODE_ONREGION),
+            link->get_viewrefreshmode());
+  ASSERT_EQ(north, region->get_latlonaltbox()->get_north());
 }
 
 // This tests the CreateRegionDocument() utility function.
-void RegionatorUtilTest::TestCreateRegionDocument() {
+TEST_F(RegionatorUtilTest, TestCreateRegionDocument) {
   double north(.12121212);
   double south(.0454545454);
   double east(-.0878787);
@@ -281,33 +253,60 @@ void RegionatorUtilTest::TestCreateRegionDocument() {
       kmlconvenience::CreateRegion2d(north, south, east, west, minlodpixels,
                                      maxlodpixels));
   // XXX assert region values
-  CPPUNIT_ASSERT_EQUAL(north,
-                       document->get_region()->get_latlonaltbox()->get_north());
+  ASSERT_EQ(north, document->get_region()->get_latlonaltbox()->get_north());
 }
 
 // This tests the GetCenter() function.
-void RegionatorUtilTest::TestGetCenter() {
+TEST_F(RegionatorUtilTest, TestGetCenter) {
   // NULL output pointer(s) should not crash.
   kmldom::LatLonBoxPtr llb = factory_->CreateLatLonBox();
   kmlengine::GetCenter(llb, NULL, NULL);
   double lat, lon;
   kmlengine::GetCenter(llb, &lat, NULL);
   // Missing lon pointer still saves a result for lat.
-  CPPUNIT_ASSERT_EQUAL(0.0, lat);
+  ASSERT_EQ(0.0, lat);
   kmlengine::GetCenter(llb, NULL, &lon);
   // Missing lat pointer still saves a result for lon.
-  CPPUNIT_ASSERT_EQUAL(0.0, lat);
+  ASSERT_EQ(0.0, lat);
   // A default LatLonBox is well defined thus so is its center.
   kmlengine::GetCenter(llb, &lat, &lon);
-  CPPUNIT_ASSERT_EQUAL(0.0, lat);
-  CPPUNIT_ASSERT_EQUAL(0.0, lon);
+  ASSERT_EQ(0.0, lat);
+  ASSERT_EQ(0.0, lon);
   // A default LatLonAltBox is well defined thus so is its center.
   kmldom::LatLonAltBoxPtr llab = factory_->CreateLatLonAltBox();
   kmlengine::GetCenter(llab, &lat, &lon);
-  CPPUNIT_ASSERT_EQUAL(0.0, lat);
-  CPPUNIT_ASSERT_EQUAL(0.0, lon);
+  ASSERT_EQ(0.0, lat);
+  ASSERT_EQ(0.0, lon);
+}
+
+TEST_F(RegionatorUtilTest, TestCreateAlignedAbstractLatLonBox) {
+  kmldom::LatLonAltBoxPtr target = factory_->CreateLatLonAltBox();
+  target->set_north(1);
+  target->set_south(-1);
+  target->set_east(1);
+  target->set_west(-1);
+  kmldom::LatLonAltBoxPtr aligned = factory_->CreateLatLonAltBox();
+  ASSERT_TRUE(CreateAlignedAbstractLatLonBox(target, aligned));
+  ASSERT_EQ(180, aligned->get_north());
+  ASSERT_EQ(-180, aligned->get_south());
+  ASSERT_EQ(180, aligned->get_east());
+  ASSERT_EQ(-180, aligned->get_west());
+
+  target->set_north(37.786807);  // Lincoln Park 3
+  target->set_south(37.781563);  // Lincoln Park 7
+  target->set_east(-122.494135);  // Lincoln Park 18
+  target->set_west(-122.504031);  // Lincoln Park 5
+  aligned = factory_->CreateLatLonAltBox();
+  ASSERT_TRUE(CreateAlignedAbstractLatLonBox(target, aligned));
+  ASSERT_EQ(37.79296875, aligned->get_north());
+  ASSERT_EQ(37.7490234375, aligned->get_south());
+  ASSERT_EQ(-122.4755859375, aligned->get_east());
+  ASSERT_EQ(-122.51953125, aligned->get_west());
 }
 
 }  // end namespace kmlregionator
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

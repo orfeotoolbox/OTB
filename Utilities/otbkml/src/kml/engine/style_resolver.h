@@ -38,9 +38,33 @@ namespace kmlengine {
 // shared StyleSelector(s) of the given Feature within the given KmlFile for
 // the given style state (<key>).  All SubStyle simple and complex children
 // set in inline/shared StyleSelectors are also set in the created Style.
+// This folows an internal maximum number of nested styleUrls.
 kmldom::StylePtr CreateResolvedStyle(const kmldom::FeaturePtr& feature,
                                      const KmlFilePtr& kml_file,
                                      kmldom::StyleStateEnum style_state);
+
+// This class provides the full set of style resolution possibilities.
+class StyleResolver {
+ public:
+  // This creates a <Style> representing the fully resolved style of the
+  // given state.  The styleurl and styleselector are typically those from
+  // Feature or Pair and the SharedStyleMap, base_url and KmlCache are
+  // typically from a KmlFile.  This method is well behaved with any or all
+  // arguments NULL or empty.
+  static kmldom::StylePtr CreateResolvedStyle(
+      const string& styleurl,
+      const kmldom::StyleSelectorPtr& styleselector,
+      const SharedStyleMap& shared_style_map,
+      const string& base_url,
+      KmlCache* kml_cache,
+      kmldom::StyleStateEnum style_state); 
+
+  // This method resolves the style selector for the given styleurl assuming
+  // it references a style selector in the given SharedStyleMap.  The resulting
+  // StyleSelector has all id= attributes cleared.
+  static kmldom::StyleSelectorPtr CreateResolvedStyleSelector(
+      const string& styleurl, const SharedStyleMap& shared_style_map);
+};
 
 }  // end namespace kmlengine
 

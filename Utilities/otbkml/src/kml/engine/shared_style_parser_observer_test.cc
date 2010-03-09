@@ -28,22 +28,13 @@
 #include "kml/engine/shared_style_parser_observer.h"
 #include "boost/scoped_ptr.hpp"
 #include "kml/dom/kml_factory.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlengine {
 
-class SharedStyleParserObserverTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(SharedStyleParserObserverTest);
-  CPPUNIT_TEST(TestAddChildSharedStyle);
-  CPPUNIT_TEST(TestAddChildInlineStyle);
-  CPPUNIT_TEST(TestAddChildDetectsDupeId);
-  CPPUNIT_TEST(TestNewElement);
-  CPPUNIT_TEST(TestDestructor);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class SharedStyleParserObserverTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     // Make some elements used in most tests.
     kmldom::KmlFactory* factory = kmldom::KmlFactory::GetFactory();
     document_ = factory->CreateDocument();
@@ -58,141 +49,108 @@ class SharedStyleParserObserverTest : public CPPUNIT_NS::TestFixture {
     stylemap0_ = factory->CreateStyleMap();
     stylemap0_->set_id(kStyleMap0Id_);
     style_no_id_ = factory->CreateStyle();
+    // Create a non-strict SharedStyleParserObserver.
     shared_style_parser_observer_.reset(
-        new SharedStyleParserObserver(&shared_style_map_));
+        new SharedStyleParserObserver(&shared_style_map_, false));
   }
 
-  // Called after each test.
-  void tearDown() {
-    // All dynamic objects are managed by smart pointers.
-  }
-
- protected:
-  void TestAddChildSharedStyle();
-  void TestAddChildInlineStyle();
-  void TestAddChildDetectsDupeId();
-  void TestNewElement();
-  void TestDestructor();
-
- private:
   kmldom::DocumentPtr document_;
   kmldom::FolderPtr folder_;
-  std::string kStyle0Id_;
+  string kStyle0Id_;
   kmldom::StylePtr style0_;
-  std::string kStyle1Id_;
+  string kStyle1Id_;
   kmldom::StylePtr style1_;
   kmldom::StylePtr style_no_id_;
-  std::string kStyleMap0Id_;
+  string kStyleMap0Id_;
   kmldom::StyleMapPtr stylemap0_;
   SharedStyleMap shared_style_map_;
   boost::scoped_ptr<SharedStyleParserObserver> shared_style_parser_observer_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SharedStyleParserObserverTest);
-
 // Verify that AddChild() accepts shared StyleSelectors.
-void SharedStyleParserObserverTest::TestAddChildSharedStyle() {
+TEST_F(SharedStyleParserObserverTest, TestAddChildSharedStyle) {
   // Verify that AddChild() does not detect a dupe.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(document_, style0_));
   // Verify that there is only one entry in the map.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), shared_style_map_.size());
+  ASSERT_EQ(static_cast<size_t>(1), shared_style_map_.size());
 
   // Verify that the id maps to the Style.
   kmldom::StyleSelectorPtr object = shared_style_map_[kStyle0Id_];
-  CPPUNIT_ASSERT_EQUAL(kStyle0Id_, object->get_id());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Style, object->Type());
+  ASSERT_EQ(kStyle0Id_, object->get_id());
+  ASSERT_EQ(kmldom::Type_Style, object->Type());
 
   // Verify that AddChild() does not detect a dupe.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               stylemap0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(document_, stylemap0_));
   // Verify that there are now 2 entries in the map.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), shared_style_map_.size());
+  ASSERT_EQ(static_cast<size_t>(2), shared_style_map_.size());
   // Verify that the id maps to the StyleMap
   object = shared_style_map_[kStyleMap0Id_];
-  CPPUNIT_ASSERT_EQUAL(kStyleMap0Id_, object->get_id());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_StyleMap, object->Type());
+  ASSERT_EQ(kStyleMap0Id_, object->get_id());
+  ASSERT_EQ(kmldom::Type_StyleMap, object->Type());
 }
 
 // Verify that AddChild() does _not_ accept inline StyleSelectors.
-void SharedStyleParserObserverTest::TestAddChildInlineStyle() {
+TEST_F(SharedStyleParserObserverTest, TestAddChildInlineStyle) {
   // Verify that AddChild() does not detect a dupe.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(folder_,
-                                                               style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(folder_, style0_));
   // Verify that AddChild() does not detect a dupe even when passed the same
   // parent-child again.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(folder_,
-                                                               style0_));
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(folder_,
-                                                               stylemap0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(folder_, style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(folder_, stylemap0_));
   // Verify that none of the above added anything to the map because although
   // these were both StyleSelectors with ids neither was a child of Document.
-  CPPUNIT_ASSERT(shared_style_map_.empty());
+  ASSERT_TRUE(shared_style_map_.empty());
 }
 
 // Verify that NewElement() exists and alwyas returns true.
-void SharedStyleParserObserverTest::TestNewElement() {
+TEST_F(SharedStyleParserObserverTest, TestNewElement) {
   // Verify that NewElement() accepts StyleSelectors.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(style0_));
   // Verify that a 2nd call succeeds given that NewElement is a nop
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(style0_));
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(style1_));
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(stylemap0_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(style1_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(stylemap0_));
   // Style with no id accepted fine:
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(style_no_id_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(style_no_id_));
   // Document, Folder both fine...
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(folder_));
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->NewElement(document_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(folder_));
+  ASSERT_TRUE(shared_style_parser_observer_->NewElement(document_));
 }
 
-// Verify that AddChild() properly detects a duplicate Object id.
-void SharedStyleParserObserverTest::TestAddChildDetectsDupeId() {
+// Verify that AddChild() properly detects a duplicate Object id when
+// strict_parse is true.
+TEST_F(SharedStyleParserObserverTest, TestAddChildDetectsDupeId) {
+  boost::scoped_ptr<SharedStyleParserObserver> shared_style_parser_observer(
+      new SharedStyleParserObserver(&shared_style_map_, true));
   // Pass a parent-child that will be added to the map.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               style0_));
+  ASSERT_TRUE(shared_style_parser_observer->AddChild(document_, style0_));
   // Verify that AddChild() detected the dupe.
-  CPPUNIT_ASSERT_EQUAL(false,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               style0_));
+  ASSERT_FALSE(shared_style_parser_observer->AddChild(document_, style0_));
   // Verify that the map was not affected.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), shared_style_map_.size());
+  ASSERT_EQ(static_cast<size_t>(1), shared_style_map_.size());
   kmldom::ObjectPtr object = shared_style_map_[kStyle0Id_];
-  CPPUNIT_ASSERT_EQUAL(kStyle0Id_, object->get_id());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Style, object->Type());
+  ASSERT_EQ(kStyle0Id_, object->get_id());
+  ASSERT_EQ(kmldom::Type_Style, object->Type());
 }
 
 // Verify that the destructor does not effect the map.
-void SharedStyleParserObserverTest::TestDestructor() {
+TEST_F(SharedStyleParserObserverTest, TestDestructor) {
   // Use AddChild() to put some entries in the map.
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               style0_));
-  CPPUNIT_ASSERT_EQUAL(true,
-                       shared_style_parser_observer_->AddChild(document_,
-                                                               style1_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(document_, style0_));
+  ASSERT_TRUE(shared_style_parser_observer_->AddChild(document_, style1_));
 
   // Verify that deleting the observer does not affect the map.
   shared_style_parser_observer_.reset();
 
   // Verify that the object map has exactly the 2 expected mappings.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), shared_style_map_.size());
-  CPPUNIT_ASSERT_EQUAL(kStyle0Id_, shared_style_map_[kStyle0Id_]->get_id());
-  CPPUNIT_ASSERT_EQUAL(kStyle1Id_, shared_style_map_[kStyle1Id_]->get_id());
+  ASSERT_EQ(static_cast<size_t>(2), shared_style_map_.size());
+  ASSERT_EQ(kStyle0Id_, shared_style_map_[kStyle0Id_]->get_id());
+  ASSERT_EQ(kStyle1Id_, shared_style_map_[kStyle1Id_]->get_id());
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

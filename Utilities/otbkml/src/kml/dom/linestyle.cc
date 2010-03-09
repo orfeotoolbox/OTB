@@ -24,9 +24,11 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/linestyle.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -38,6 +40,9 @@ LineStyle::~LineStyle() {
 }
 
 void LineStyle::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_width:
       has_width_ = element->SetDouble(&width_);
@@ -49,14 +54,15 @@ void LineStyle::AddElement(const ElementPtr& element) {
 }
 
 void LineStyle::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   ColorStyle::Serialize(serializer);
   if (has_width()) {
     serializer.SaveFieldById(Type_width, get_width());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void LineStyle::Accept(Visitor* visitor) {
+  visitor->VisitLineStyle(LineStylePtr(this));
 }
 
 }  // end namespace kmldom

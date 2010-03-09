@@ -27,8 +27,13 @@
 
 #include "kml/engine/get_link_parents.h"
 #include "kml/base/file.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 #include "kml/engine/engine_types.h"
+
+// The following define is a convenience for testing inside Google.
+#ifdef GOOGLE_INTERNAL
+#include "kml/base/google_internal_test.h"
+#endif
 
 #ifndef DATADIR
 #error *** DATADIR must be defined! ***
@@ -36,51 +41,44 @@
 
 namespace kmlengine {
 
-class GetLinkParentsTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(GetLinkParentsTest);
-  CPPUNIT_TEST(TestNull);
-  CPPUNIT_TEST(TestAll);
-  CPPUNIT_TEST_SUITE_END();
-
- protected:
-  void TestNull();
-  void TestAll();
+class GetLinkParentsTest : public testing::Test {
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(GetLinkParentsTest);
-
 // Verify that GetLinks() returns false if given no output vector or bad kml.
-void GetLinkParentsTest::TestNull() {
-  const std::string nothing;
-  CPPUNIT_ASSERT(!GetLinkParents(nothing, NULL));
+TEST_F(GetLinkParentsTest, TestNull) {
+  const string nothing;
+  ASSERT_FALSE(GetLinkParents(nothing, NULL));
   ElementVector will_remain_empty;
-  CPPUNIT_ASSERT(!GetLinkParents("parse will fail", &will_remain_empty));
-  CPPUNIT_ASSERT(will_remain_empty.empty());
+  ASSERT_FALSE(GetLinkParents("parse will fail", &will_remain_empty));
+  ASSERT_TRUE(will_remain_empty.empty());
 }
 
 // Verify that GetParentLinks finds all kinds of parents of links in a KML file.
-void GetLinkParentsTest::TestAll() {
-  const std::string kAllLinks = std::string(DATADIR) + "/links/alllinks.kml";
-  std::string kml;
-  CPPUNIT_ASSERT(kmlbase::File::ReadFileToString(kAllLinks, &kml));
+TEST_F(GetLinkParentsTest, TestAll) {
+  const string kAllLinks = string(DATADIR) + "/links/alllinks.kml";
+  string kml;
+  ASSERT_TRUE(kmlbase::File::ReadFileToString(kAllLinks, &kml));
   ElementVector link_parents;
-  CPPUNIT_ASSERT(GetLinkParents(kml, &link_parents));
+  ASSERT_TRUE(GetLinkParents(kml, &link_parents));
   // This is obviously exactly matched to the content of alllinks.kml.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(7), link_parents.size());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_IconStyle, link_parents[0]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_ItemIcon, link_parents[1]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_NetworkLink, link_parents[2]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_GroundOverlay, link_parents[3]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_ScreenOverlay, link_parents[4]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_PhotoOverlay, link_parents[5]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Model, link_parents[6]->Type());
+  ASSERT_EQ(static_cast<size_t>(7), link_parents.size());
+  ASSERT_EQ(kmldom::Type_IconStyle, link_parents[0]->Type());
+  ASSERT_EQ(kmldom::Type_ItemIcon, link_parents[1]->Type());
+  ASSERT_EQ(kmldom::Type_NetworkLink, link_parents[2]->Type());
+  ASSERT_EQ(kmldom::Type_GroundOverlay, link_parents[3]->Type());
+  ASSERT_EQ(kmldom::Type_ScreenOverlay, link_parents[4]->Type());
+  ASSERT_EQ(kmldom::Type_PhotoOverlay, link_parents[5]->Type());
+  ASSERT_EQ(kmldom::Type_Model, link_parents[6]->Type());
 #if 0
   // TODO: handle styleUrl(?) and SchemaData
-  CPPUNIT_ASSERT_EQUAL(std::string("style.kml#style"), href_vector[6]->Type());
-  CPPUNIT_ASSERT_EQUAL(std::string("#myschema"), href_vector[7]);
+  ASSERT_EQ(string("style.kml#style"), href_vector[6]->Type());
+  ASSERT_EQ(string("#myschema"), href_vector[7]);
 #endif
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

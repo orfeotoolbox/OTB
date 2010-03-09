@@ -23,26 +23,25 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// This file contains the KmzCache class declaration.
+// This file contains the internal KmzCache class declaration.
 
 #ifndef KML_ENGINE_KMZ_CACHE_H__
 #define KML_ENGINE_KMZ_CACHE_H__
 
 #include <map>
-#include <string>
 #include "boost/scoped_ptr.hpp"
 #include "kml/base/memory_file.h"
 #include "kml/base/net_cache.h"
-#include "kml/engine/kml_uri.h"
 #include "kml/engine/kmz_file.h"
 
 namespace kmlengine {
 
+class KmlUri;
+
 // This class is a cache of network-fetched KmzFile's.  The NetFetcher
 // is supplied by the caller to implement application-specific networking.
-// See kmlbase::NetCache for more information.  The intended usage is for
-// a given application to create one KmzCache through which all KML-related
-// fetches occur.
+// See kmlbase::NetCache for more information.
+// NOTE: Applications should generally use KmlCache.
 class KmzCache : public kmlbase::NetCache<KmzFile> {
   typedef kmlbase::NetCache<kmlbase::MemoryFile> MemoryFileCache;
  public:
@@ -54,29 +53,17 @@ class KmzCache : public kmlbase::NetCache<KmzFile> {
     memory_file_cache_.reset(new MemoryFileCache(net_fetcher_, max_size));
   }
 
-  // This is the main public method to fetch a "KML URL" through the cache.
-  // A "KML URL" is anything that may appear in a <href> especially including
-  // file references into a KMZ such as: "http://foo.com/goo.kmz/images/z.jpg".
-  // The engine::KmzSplit method is used to detect and save the two parts
-  // of a "KML URL" if it is this variety of KMZ file access.  If the
-  // KmzCache has no entry for the given KMZ file it is fetched using the
-  // NetFetcher provided in the constructuro.  If the KmzCache does have
-  // this KMZ cached then this simply accesses the internal KmzFile for this
-  // KMZ and reads the content.  This returns true if the KMZ was fetched
-  // properly and/or the file within the KMZ was found and read properly.
-  // Finally, if the URL is not to or through a KMZ the file is fetched
-  // and cached in the internal MemoryFileCache.
-  bool FetchUrl(const std::string& kml_url, std::string* content);
+  // This is the main KML Engine internal method to perform a KMZ-aware fetch.
+  // KmlUri encodes the fetch base and target.
+  bool DoFetch(KmlUri* kml_uri, string* content);
 
-  // If the given "KML URL" is to a KMZ file within the cache then the content
-  // for this file within the KMZ is saved to the supplied buffer if such is
-  // supplied.  The return status indicates whether or not a KMZ file for
-  // this URL is the cache and if that KMZ has the given file.  See the
-  // the discussion in KmzSplit above.  In most circumstances application
-  // code should use FetchUrl(), but this method is well behaved as described.
-  bool FetchFromCache(const std::string& fetchable_url,
-                      const std::string& path_in_kmz,
-                      std::string* content) const;
+  // This is basically an internal helper method to perform a simple lookup
+  // of a file within a KMZ.  If the KmlUri describes a KMZ file in the cache
+  // and the target is exists within that KMZ then the content is saved to
+  // the supplied buffer and true is returned.  If the KmlUri is not KMZ
+  // related or if the target is not within the KMZ or if no content buffer
+  // is supplied false is returned.
+  bool FetchFromCache(KmlUri* kml_uri, string* content) const;
 
  private:
   boost::scoped_ptr<MemoryFileCache> memory_file_cache_;

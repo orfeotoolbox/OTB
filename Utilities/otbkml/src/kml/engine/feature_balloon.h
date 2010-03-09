@@ -38,7 +38,6 @@
 #ifndef KML_ENGINE_FEATURE_BALLOON_H__
 #define KML_ENGINE_FEATURE_BALLOON_H__
 
-#include <string>
 #include "kml/dom/feature.h"
 #include "kml/engine/kml_file.h"
 
@@ -47,7 +46,7 @@ namespace kmlengine {
 // Composite the markup for a Feature's "description balloon" and return it as
 // an HTML-formatted string. It is the responsibility of the caller to ensure
 // that feature exists within kml_file.
-std::string CreateBalloonText(const KmlFilePtr& kml_file,
+string CreateBalloonText(const KmlFilePtr& kml_file,
                               const kmldom::FeaturePtr& feature);
 
 }  // end namespace kmlengine

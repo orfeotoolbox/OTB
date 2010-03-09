@@ -26,68 +26,58 @@
 // This file contains the unit tests for the Bbox class.
 
 #include "kml/engine/bbox.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlengine {
 
-class BboxTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(BboxTest);
-  CPPUNIT_TEST(TestDefault);
-  CPPUNIT_TEST(TestCopy);
-  CPPUNIT_TEST(TestBasic);
-  CPPUNIT_TEST(TestConstructor);
-  CPPUNIT_TEST(TestMultiple);
-  CPPUNIT_TEST_SUITE_END();
-
+class BboxTest : public testing::Test {
  protected:
-  void TestDefault();
-  void TestCopy();
-  void TestBasic();
-  void TestConstructor();
-  void TestMultiple();
-
- private:
   void VerifyBounds(const Bbox& bbox, double north, double south, double east,
                     double west);
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(BboxTest);
-
 // Verify the state of a default Bbox.
-void BboxTest::TestDefault() {
+TEST_F(BboxTest, TestDefault) {
   Bbox default_bbox;
-  CPPUNIT_ASSERT_EQUAL(kMinLat, default_bbox.get_north());
-  CPPUNIT_ASSERT_EQUAL(kMaxLat, default_bbox.get_south());
-  CPPUNIT_ASSERT_EQUAL(kMinLon, default_bbox.get_east());
-  CPPUNIT_ASSERT_EQUAL(kMaxLon, default_bbox.get_west());
+  ASSERT_EQ(kMinLat, default_bbox.get_north());
+  ASSERT_EQ(kMaxLat, default_bbox.get_south());
+  ASSERT_EQ(kMinLon, default_bbox.get_east());
+  ASSERT_EQ(kMaxLon, default_bbox.get_west());
+  ASSERT_EQ(0, default_bbox.GetCenterLat());
+  ASSERT_EQ(0, default_bbox.GetCenterLon());
 }
-
 
 void BboxTest::VerifyBounds(const Bbox& bbox, double north, double south,
                             double east, double west) {
-
   // Verify the getters.
-  CPPUNIT_ASSERT_EQUAL(north, bbox.get_north());
-  CPPUNIT_ASSERT_EQUAL(south, bbox.get_south());
-  CPPUNIT_ASSERT_EQUAL(east, bbox.get_east());
-  CPPUNIT_ASSERT_EQUAL(west, bbox.get_west());
+  ASSERT_EQ(north, bbox.get_north());
+  ASSERT_EQ(south, bbox.get_south());
+  ASSERT_EQ(east, bbox.get_east());
+  ASSERT_EQ(west, bbox.get_west());
+
+  const double kWantLat((north + south)/2.0);
+  const double kWantLon((east + west)/2.0);
 
   // Verify GetCenter().
   double mid_lat, mid_lon;
   bbox.GetCenter(&mid_lat, &mid_lon);
-  CPPUNIT_ASSERT_EQUAL((north + south)/2.0, mid_lat);
-  CPPUNIT_ASSERT_EQUAL((east + west)/2.0, mid_lon);
+  ASSERT_EQ(kWantLat, mid_lat);
+  ASSERT_EQ(kWantLon, mid_lon);
+
+  // Verify GetCenterLat,Lon().
+  ASSERT_EQ(kWantLat, bbox.GetCenterLat());
+  ASSERT_EQ(kWantLon, bbox.GetCenterLon());
 
   // Verify Contains().
-  CPPUNIT_ASSERT(bbox.Contains(mid_lat, mid_lon));
-  CPPUNIT_ASSERT(bbox.Contains(north, east));
-  CPPUNIT_ASSERT(bbox.Contains(south, east));
-  CPPUNIT_ASSERT(bbox.Contains(south, west));
-  CPPUNIT_ASSERT(bbox.Contains(north, west));
+  ASSERT_TRUE(bbox.Contains(mid_lat, mid_lon));
+  ASSERT_TRUE(bbox.Contains(north, east));
+  ASSERT_TRUE(bbox.Contains(south, east));
+  ASSERT_TRUE(bbox.Contains(south, west));
+  ASSERT_TRUE(bbox.Contains(north, west));
 }
 
 // Verify copy construction and assignment.
-void BboxTest::TestCopy() {
+TEST_F(BboxTest, TestCopy) {
   const double kNorth = 2;
   const double kSouth = 1;
   const double kEast = 4;
@@ -106,7 +96,7 @@ void BboxTest::TestCopy() {
 }
 
 // Verify some basic usage.
-void BboxTest::TestBasic() {
+TEST_F(BboxTest, TestBasic) {
   const double kNorth = 45.45;
   const double kSouth = -12.12;
   const double kEast = 123.123;
@@ -122,7 +112,7 @@ void BboxTest::TestBasic() {
 }
 
 // Verify the constructor.
-void BboxTest::TestConstructor() {
+TEST_F(BboxTest, TestConstructor) {
   const double kNorth = 89.123;
   const double kSouth = -2.222;
   const double kEast = -88.888;
@@ -132,7 +122,7 @@ void BboxTest::TestConstructor() {
 }
 
 // Verify bounding box of multiple points.
-void BboxTest::TestMultiple() {
+TEST_F(BboxTest, TestMultiple) {
   const struct {
     double lat, lon;
   } kPoints[] = {
@@ -166,24 +156,78 @@ void BboxTest::TestMultiple() {
     bbox.ExpandLatLon(kPoints[i].lat, kPoints[i].lon);
   }
 
-  CPPUNIT_ASSERT_EQUAL(kNorthExpected, bbox.get_north());
-  CPPUNIT_ASSERT_EQUAL(kSouthExpected, bbox.get_south());
-  CPPUNIT_ASSERT_EQUAL(kEastExpected, bbox.get_east());
-  CPPUNIT_ASSERT_EQUAL(kWestExpected, bbox.get_west());
+  ASSERT_EQ(kNorthExpected, bbox.get_north());
+  ASSERT_EQ(kSouthExpected, bbox.get_south());
+  ASSERT_EQ(kEastExpected, bbox.get_east());
+  ASSERT_EQ(kWestExpected, bbox.get_west());
 
+  const double kLatExpected = (kNorthExpected + kSouthExpected)/2.0;
+  const double kLonExpected = (kEastExpected + kWestExpected)/2.0;
   double mid_lat, mid_lon;
   bbox.GetCenter(&mid_lat, &mid_lon);
-  CPPUNIT_ASSERT_EQUAL((kNorthExpected + kSouthExpected)/2.0, mid_lat);
-  CPPUNIT_ASSERT_EQUAL((kEastExpected + kWestExpected)/2.0, mid_lon);
+  ASSERT_EQ(kLatExpected, mid_lat);
+  ASSERT_EQ(kLonExpected, mid_lon);
+  ASSERT_EQ(kLatExpected, bbox.GetCenterLat());
+  ASSERT_EQ(kLonExpected, bbox.GetCenterLon());
 
   for (size_t i = 0; i < sizeof(kPoints)/sizeof(kPoints[0]); ++i) {
-    CPPUNIT_ASSERT(bbox.Contains(kPoints[i].lat, kPoints[i].lon));
+    ASSERT_TRUE(bbox.Contains(kPoints[i].lat, kPoints[i].lon));
   }
 
   VerifyBounds(bbox, kNorthExpected, kSouthExpected, kEastExpected,
                kWestExpected);
 }
 
+TEST_F(BboxTest, TestExpandFromBbox) {
+  const double kNorth = 89.123;
+  const double kSouth = -2.222;
+  const double kEast = -88.888;
+  const double kWest = -154.6789;
+  Bbox bbox(kNorth, kSouth, kEast, kWest);
+  Bbox another_bbox;
+  another_bbox.ExpandFromBbox(bbox);
+  VerifyBounds(another_bbox, kNorth, kSouth, kEast, kWest);
+}
+
+TEST_F(BboxTest, TestSetNSEW) {
+  Bbox b;
+  b.set_north(37.786807);
+  ASSERT_EQ(37.786807, b.get_north());
+  b.set_south(37.781563);
+  ASSERT_EQ(37.781563, b.get_south());
+  b.set_east(-122.494135);
+  ASSERT_EQ(-122.494135, b.get_east());
+  b.set_west(-122.504031);
+  ASSERT_EQ(-122.504031, b.get_west());
+}
+
+TEST_F(BboxTest, TestAlignBbox) {
+  Bbox b;
+  b.set_north(37.786807);  // Lincoln Park 3
+  b.set_south(37.781563);  // Lincoln Park 7
+  b.set_east(-122.494135);  // Lincoln Park 18
+  b.set_west(-122.504031);  // Lincoln Park 5
+  Bbox qt(180, -180, 180, -180);
+  b.AlignBbox(&qt, 24);
+  ASSERT_EQ(37.79296875, qt.get_north());
+  ASSERT_EQ(37.7490234375, qt.get_south());
+  ASSERT_EQ(-122.4755859375, qt.get_east());
+  ASSERT_EQ(-122.51953125, qt.get_west());
+}
+
+TEST_F(BboxTest, TestContainedByBox) {
+  Bbox r(180, -180, 180, -180);
+  Bbox a(1,-1,1,-1);
+  ASSERT_TRUE(a.ContainedByBox(180, -180, 180, -180));
+  ASSERT_TRUE(a.ContainedByBbox(r));
+  Bbox b(1000,-1,1,-1);
+  ASSERT_FALSE(b.ContainedByBox(180, -180, 180, -180));
+  ASSERT_FALSE(b.ContainedByBbox(r));
+}
+
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -28,13 +28,12 @@
 // derived from RegionHandler.
 
 #include "kml/regionator/regionator_util.h"
-#include <string>
-#include "kml/dom.h"
 #include "kml/engine.h"
 
 namespace kmlregionator {
 
-using std::string;
+static const int kAlignRegionMaxDepth = 24;
+
 using kmldom::AbstractLatLonBoxPtr;
 using kmldom::CoordinatesPtr;
 using kmldom::DocumentPtr;
@@ -48,6 +47,7 @@ using kmldom::NetworkLinkPtr;
 using kmldom::PlacemarkPtr;
 using kmldom::PointPtr;
 using kmldom::RegionPtr;
+using kmlengine::Bbox;
 
 // This creates a new LatLonAltBox setting all fields set in the original.
 LatLonAltBoxPtr CloneLatLonAltBox(const LatLonAltBoxPtr& orig) {
@@ -63,6 +63,24 @@ LodPtr CloneLod(const LodPtr& orig) {
 // original Region.
 RegionPtr CloneRegion(const RegionPtr& orig) {
   return AsRegion(kmlengine::Clone(orig));
+}
+
+bool CreateAlignedAbstractLatLonBox(const AbstractLatLonBoxPtr& llb,
+                                    AbstractLatLonBoxPtr aligned_llb) {
+  if (!llb || !aligned_llb) {
+    return false;
+  }
+  Bbox qt(180,-180,180,-180);
+  Bbox r(llb->get_north(), llb->get_south(), llb->get_east(), llb->get_west());
+  if (!r.ContainedByBbox(qt)) {
+    return false;
+  }
+  r.AlignBbox(&qt, 24);
+  aligned_llb->set_north(qt.get_north());
+  aligned_llb->set_south(qt.get_south());
+  aligned_llb->set_east(qt.get_east());
+  aligned_llb->set_west(qt.get_west());
+  return true;
 }
 
 // This creates a new child Region of the given quadrant of the parent.

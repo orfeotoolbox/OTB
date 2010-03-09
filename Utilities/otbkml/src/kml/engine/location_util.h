@@ -35,23 +35,59 @@
 
 namespace kmlengine {
 
+class Bbox;
+
 // This returns the latitude half way between the north and south and
 // the longitude half way between the east and west of the given LatLonBox
 // or LatLonAltBox.
 void GetCenter(const kmldom::AbstractLatLonBoxPtr& allb,
                double* lat, double* lon);
 
+// This returns the n,s,e,w bounds of the given list of coordinates.  This
+// returns true if the coordinates are not empty.  A NULL bbox is ignored.
+bool GetCoordinatesBounds(const kmldom::CoordinatesPtr& coordinates,
+                          Bbox* bbox);
+
+// This returns the n,s,e,w bounds of the given Feature.  If the Feature is
+// a Container this is the bounds of all Features within that Container
+// recursively.  This returns true if the coordinates are not empty.
+// A NULL bbox is ignored.
+bool GetFeatureBounds(const kmldom::FeaturePtr& placemark, Bbox* bbox);
+
 // Return the location of the Feature.
 bool GetFeatureLatLon(const kmldom::FeaturePtr& placemark,
                       double* lat, double* lon);
+
+// This returns the bounding box of any Geometry including: Point, LineString,
+// LinearRing, Polygon, Model, and MultiGeometry.  If the Geometry has no
+// location (empty or missing <coordinates>, for example) false is returned.
+// A NULL bbox is ignored and does not affect the return value.
+bool GetGeometryBounds(const kmldom::GeometryPtr& geometry, Bbox* bbox);
+
+// Return the location of the Geometry.
+bool GetGeometryLatLon(const kmldom::GeometryPtr& geometry,
+                      double* lat, double* lon);
+
+// This returns the bounds of the coordinates child of the given element.
+// CP can be one of LineString, LinearRing or Point.
+template<class CP>
+bool GetCoordinatesParentBounds(const CP& cp, Bbox* bbox) {
+  return cp && cp->has_coordinates() &&
+      GetCoordinatesBounds(cp->get_coordinates(), bbox);
+}
+
+// Return the bounds of the Model.
+bool GetModelBounds(const kmldom::ModelPtr& model, Bbox* bbox);
+
+// Return the location of the Model.
+bool GetModelLatLon(const kmldom::ModelPtr& model, double* lat, double* lon);
 
 // Return the location of the Placemark.
 bool GetPlacemarkLatLon(const kmldom::PlacemarkPtr& placemark,
                         double* lat, double* lon);
 
 // Return the location of the Point.
-bool GetPointLatLon(const kmldom::PointPtr& point,
-                    double* lat, double* lon);
+bool GetPointLatLon(const kmldom::PointPtr& point, double* lat, double* lon);
 
 }  // end namespace kmlengine
 

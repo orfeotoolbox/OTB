@@ -26,72 +26,58 @@
 // This file contains the unit tests for the internal Qid class.
 
 #include "kml/regionator/regionator_qid.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlregionator {
 
 // This class is the unit test fixture for the KmlHandler class.
-class RegionatorQidTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(RegionatorQidTest);
-  CPPUNIT_TEST(TestRoot);
-  CPPUNIT_TEST(TestCreateChild);
-  CPPUNIT_TEST(TestCreateChildVarious);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class RegionatorQidTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     root_ = Qid::CreateRoot();
   }
-  void tearDown() {
-    // Nothing to tear down.
-  }
 
- protected:
-  void TestRoot();
-  void TestCreateChild();
-  void TestCreateChildVarious();
-
- private:
   Qid root_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RegionatorQidTest);
-
 // This tests the CreateRoot(), depth(), and str() methods of class Qid.
-void RegionatorQidTest::TestRoot() {
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), root_.depth());
-  CPPUNIT_ASSERT_EQUAL(std::string("q0"), root_.str());
+TEST_F(RegionatorQidTest, TestRoot) {
+  ASSERT_EQ(static_cast<size_t>(1), root_.depth());
+  ASSERT_EQ(string("q0"), root_.str());
 }
 
 // This tests the CreateChild() method of class Qid.
-void RegionatorQidTest::TestCreateChild() {
+TEST_F(RegionatorQidTest, TestCreateChild) {
   Qid nw = root_.CreateChild(NW);
   Qid ne = root_.CreateChild(NE);
   Qid sw = root_.CreateChild(SW);
   Qid se = root_.CreateChild(SE);
-  CPPUNIT_ASSERT_EQUAL(std::string("q00"), nw.str());
-  CPPUNIT_ASSERT_EQUAL(std::string("q01"), ne.str());
-  CPPUNIT_ASSERT_EQUAL(std::string("q02"), sw.str());
-  CPPUNIT_ASSERT_EQUAL(std::string("q03"), se.str());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), nw.depth());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), ne.depth());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), sw.depth());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), se.depth());
+  ASSERT_EQ(string("q00"), nw.str());
+  ASSERT_EQ(string("q01"), ne.str());
+  ASSERT_EQ(string("q02"), sw.str());
+  ASSERT_EQ(string("q03"), se.str());
+  ASSERT_EQ(static_cast<size_t>(2), nw.depth());
+  ASSERT_EQ(static_cast<size_t>(2), ne.depth());
+  ASSERT_EQ(static_cast<size_t>(2), sw.depth());
+  ASSERT_EQ(static_cast<size_t>(2), se.depth());
 }
 
 // This tests a few more normal usage scenarios.
-void RegionatorQidTest::TestCreateChildVarious() {
+TEST_F(RegionatorQidTest, TestCreateChildVarious) {
   Qid q0123("q0123");
   Qid q0123_nw = q0123.CreateChild(NW);
-  CPPUNIT_ASSERT_EQUAL(std::string("q01230"), q0123_nw.str());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), q0123_nw.depth());
+  ASSERT_EQ(string("q01230"), q0123_nw.str());
+  ASSERT_EQ(static_cast<size_t>(5), q0123_nw.depth());
 
   Qid deep("q01233211231231231231");
   Qid deep_ne = deep.CreateChild(NE);
-  CPPUNIT_ASSERT_EQUAL(std::string("q012332112312312312311"), deep_ne.str());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(21), deep_ne.depth());
+  ASSERT_EQ(string("q012332112312312312311"), deep_ne.str());
+  ASSERT_EQ(static_cast<size_t>(21), deep_ne.depth());
 }
 
 }  // end namespace kmlregionator
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -29,7 +29,6 @@
 #ifndef KML_ENGINE_GET_LINK_PARENTS_H__
 #define KML_ENGINE_GET_LINK_PARENTS_H__
 
-#include <string>
 #include <vector>
 #include "kml/dom.h"
 #include "kml/engine/engine_types.h"
@@ -65,7 +64,7 @@ class GetLinkParentsParserObserver : public kmldom::ParserObserver {
 // vector.  This returns false if a NULL vector pointer is supplied or if the
 // parse of the kml fails.  See the IsLinkParent() and IsIconParent()
 // functions for the definition of "Element with link child".
-bool GetLinkParents(const std::string& kml, ElementVector* link_parent_vector);
+bool GetLinkParents(const string& kml, ElementVector* link_parent_vector);
 
 }  // end namespace kmlengine
 

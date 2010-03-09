@@ -27,13 +27,11 @@
 // and the ElementFinder class.
 
 #include "kml/engine/find.h"
-#include <string>
-#include "kml/dom/attributes.h"
 #include "kml/dom/kml_funcs.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 using kmldom::CoordinatesPtr;
 using kmldom::FolderPtr;
@@ -44,19 +42,9 @@ using kmldom::PointPtr;
 
 namespace kmlengine {
 
-class ElementFinderTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ElementFinderTest);
-  CPPUNIT_TEST(TestNullGetElementsById);
-  CPPUNIT_TEST(TestBasicGetElementsById);
-  CPPUNIT_TEST_SUITE_END();
-
+class ElementFinderTest : public testing::Test {
  protected:
-  void TestNullGetElementsById();
-  void TestBasicGetElementsById();
-
- public:
-  // Called before each test.
-  void setUp() {
+  virtual void SetUp() {
     coordinates_ = KmlFactory::GetFactory()->CreateCoordinates();
     folder0_ = KmlFactory::GetFactory()->CreateFolder();
     folder1_ = KmlFactory::GetFactory()->CreateFolder();
@@ -68,12 +56,6 @@ class ElementFinderTest : public CPPUNIT_NS::TestFixture {
     point1_ = KmlFactory::GetFactory()->CreatePoint();
   }
 
-  // Called after each test.
-  void tearDown() {
-    // Smart pointers free everything.
-  }
-
- private:
   CoordinatesPtr coordinates_;
   FolderPtr folder0_;
   FolderPtr folder1_;
@@ -85,19 +67,17 @@ class ElementFinderTest : public CPPUNIT_NS::TestFixture {
   PointPtr point1_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ElementFinderTest);
-
 // Verify that GetElementsById() is well behaved when
 // presented with NULL pointers.
-void ElementFinderTest::TestNullGetElementsById() {
+TEST_F(ElementFinderTest, TestNullGetElementsById) {
   GetElementsById(NULL, kmldom::Type_Folder, NULL);
 }
 
 // Verify a normal usage of GetElementsById().
-void ElementFinderTest::TestBasicGetElementsById() {
+TEST_F(ElementFinderTest, TestBasicGetElementsById) {
   // Put a variety of elements in a hierarchy.
-  const std::string kId0("id0");
-  const std::string kId1("id1");
+  const string kId0("id0");
+  const string kId1("id1");
   point0_->set_coordinates(coordinates_);
   placemark0_->set_geometry(point0_);
   placemark0_->set_id(kId0);
@@ -114,28 +94,73 @@ void ElementFinderTest::TestBasicGetElementsById() {
   GetElementsById(folder0_, kmldom::Type_Placemark, &placemarks);
 
   // Verify we got just what we asked for and in depth-first order.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), placemarks.size());
-  CPPUNIT_ASSERT_EQUAL(kId0, AsPlacemark(placemarks[0])->get_id());
-  CPPUNIT_ASSERT(AsPlacemark(placemarks[1]));
-  CPPUNIT_ASSERT_EQUAL(kId1, AsPlacemark(placemarks[2])->get_id());
+  ASSERT_EQ(static_cast<size_t>(3), placemarks.size());
+  ASSERT_EQ(kId0, AsPlacemark(placemarks[0])->get_id());
+  ASSERT_TRUE(AsPlacemark(placemarks[1]));
+  ASSERT_EQ(kId1, AsPlacemark(placemarks[2])->get_id());
 
   // Ask for all the Points.
   ElementVector points;
   GetElementsById(folder0_, kmldom::Type_Point, &points);
 
   // Verify we got the 2 Points in depth-first order.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), points.size());
+  ASSERT_EQ(static_cast<size_t>(2), points.size());
   PointPtr point = AsPoint(points[0]);
-  CPPUNIT_ASSERT(point->has_coordinates());
-  CPPUNIT_ASSERT(AsPoint(points[1]));
+  ASSERT_TRUE(point->has_coordinates());
+  ASSERT_TRUE(AsPoint(points[1]));
 
   // Verify that no elements are found if there are none
   // of this type in the element hierarchy.
   ElementVector no_documents;
   GetElementsById(folder0_, kmldom::Type_Document, &no_documents);
-  CPPUNIT_ASSERT(no_documents.empty());
+  ASSERT_TRUE(no_documents.empty());
+
+  // As for all Overlays.
+  ElementVector overlays;
+  GetElementsById(folder0_, kmldom::Type_Overlay, &overlays);
+  ASSERT_EQ(static_cast<size_t>(1), overlays.size());
+  GroundOverlayPtr groundoverlay = AsGroundOverlay(overlays[0]);
+
+  // As for all Features.
+  ElementVector features;
+  GetElementsById(folder0_, kmldom::Type_Feature, &features);
+  ASSERT_EQ(static_cast<size_t>(5), features.size());
+
+  // As for all Objects.
+  ElementVector objects;
+  GetElementsById(folder0_, kmldom::Type_Object, &objects);
+  ASSERT_EQ(static_cast<size_t>(7), objects.size());
+}
+
+// Verify a normal usage of GetChildElements().
+TEST_F(ElementFinderTest, TestBasicGetChildElements) {
+  // Put a variety of elements in a hierarchy.
+  const string kId0("id0");
+  const string kId1("id1");
+  point0_->set_coordinates(coordinates_);
+  placemark0_->set_geometry(point0_);
+  placemark0_->set_id(kId0);
+  placemark1_->set_id(kId1);
+  placemark1_->set_geometry(point1_);
+  folder0_->add_feature(placemark0_);
+  folder1_->add_feature(placemark2_);
+  folder0_->add_feature(folder1_);
+  folder0_->add_feature(placemark1_);
+  folder0_->add_feature(groundoverlay_);
+
+  ElementVector all_elements;
+  ASSERT_EQ(8, GetChildElements(folder0_, true, &all_elements));
+  ASSERT_EQ(static_cast<size_t>(8), all_elements.size());
+  ASSERT_EQ(8, GetChildElements(folder0_, true, NULL));
+
+  ElementVector folder0_children;
+  GetChildElements(folder0_, false, &folder0_children);
+  ASSERT_EQ(static_cast<size_t>(4), folder0_children.size());
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -58,10 +58,59 @@ class Bbox {
   Bbox(double north, double south, double east, double west)
      : north_(north), south_(south), east_(east), west_(west) {}
 
+  // This aligns this Bbox within the quadtree specified down to the maximum
+  // level specified.
+  void AlignBbox(Bbox* qt, unsigned int max_depth) {
+    if (!qt) {
+      return;
+    }
+    double lat = qt->GetCenterLat();
+    double lon = qt->GetCenterLon();
+    if (ContainedByBox(qt->get_north(), lat, qt->get_east(), lon)) {
+      qt->set_south(lat);
+      qt->set_west(lon);
+    } else if (ContainedByBox(qt->get_north(), lat, lon, qt->get_west())) {
+      qt->set_south(lat);
+      qt->set_east(lon);
+    } else if (ContainedByBox(lat, qt->get_south(), qt->get_east(), lon)) {
+      qt->set_north(lat);
+      qt->set_west(lon);
+    } else if (ContainedByBox(lat, qt->get_south(), lon, qt->get_west())) {
+      qt->set_north(lat);
+      qt->set_east(lon);
+    } else {
+      return;  // target not contained by any child quadrant of qt.
+    }
+    // Fall through from above and recurse.
+    if (max_depth > 0) {
+      AlignBbox(qt, max_depth - 1);
+    }
+  }
+
+  // This returns true if this Bbox is contained by the given Bbox.
+  bool ContainedByBbox(const Bbox& b) const {
+    return ContainedByBox(b.get_north(), b.get_south(), b.get_east(),
+                          b.get_west());
+  }
+
+  // This returns true of this Bbox is contained with the given bounds.
+  bool ContainedByBox(double north, double south,
+                      double east, double west) const {
+    return north >= north_ && south <= south_ && east >= east_ && west <= west_;
+  }
+
   // This returns true if the bbox contains the given latitude,longitude.
   bool Contains(double latitude, double longitude) const {
     return north_ >= latitude && south_ <= latitude &&
            east_ >= longitude && west_ <= longitude;
+  }
+
+  // This expands this Bbox to contain the given Bbox.
+  void ExpandFromBbox(const Bbox& bbox) {
+    ExpandLatitude(bbox.get_north());
+    ExpandLatitude(bbox.get_south());
+    ExpandLongitude(bbox.get_east());
+    ExpandLongitude(bbox.get_west());
   }
 
   // This expands the bounding box to include the given latitude.
@@ -106,11 +155,32 @@ class Bbox {
   // This returns the center of the bounding box.
   void GetCenter(double* latitude, double* longitude) const {
     if (latitude) {
-      *latitude = (north_ + south_)/2.0;
+      *latitude = GetCenterLat();
     }
     if (longitude) {
-      *longitude = (east_ + west_)/2.0;
+      *longitude = GetCenterLon();
     }
+  }
+
+  double GetCenterLat() const {
+    return (north_ + south_)/2.0;
+  }
+
+  double GetCenterLon() const {
+    return (east_ + west_)/2.0;
+  }
+
+  void set_north(double n) {
+    north_ = n;
+  }
+  void set_south(double s) {
+    south_ = s;
+  }
+  void set_east(double e) {
+    east_ = e;
+  }
+  void set_west(double w) {
+    west_ = w;
   }
 
  private:

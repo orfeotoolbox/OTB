@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -58,7 +38,7 @@ using kmldom::KmlFactory;
 using kmldom::PlacemarkPtr;
 using kmldom::PointPtr;
 
-int kmlcreatekml(int argc, char* argv[]) {
+int kmlcreatekml(int argc, char** argv) {
   // Get the factory singleton to create KML elements.
   KmlFactory* factory = KmlFactory::GetFactory();
 
@@ -85,5 +65,5 @@ int kmlcreatekml(int argc, char* argv[]) {
 
   // Print to stdout
   std::cout << xml;
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

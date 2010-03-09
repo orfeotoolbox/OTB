@@ -31,66 +31,42 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/serializer.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
+
+using kmlbase::Vec3;
 
 namespace kmldom {
 
-class PlacemarkTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(PlacemarkTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST(TestSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class PlacemarkTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     placemark_ = KmlFactory::GetFactory()->CreatePlacemark();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestParse();
-  void TestSerialize();
-
- private:
   PlacemarkPtr placemark_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(PlacemarkTest);
-
-void PlacemarkTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_Placemark, placemark_->Type());
-  CPPUNIT_ASSERT(true == placemark_->IsA(Type_Placemark));
-  CPPUNIT_ASSERT(true == placemark_->IsA(Type_Feature));
-  CPPUNIT_ASSERT(true == placemark_->IsA(Type_Object));
+TEST_F(PlacemarkTest, TestType) {
+  ASSERT_EQ(Type_Placemark, placemark_->Type());
+  ASSERT_TRUE(placemark_->IsA(Type_Placemark));
+  ASSERT_TRUE(placemark_->IsA(Type_Feature));
+  ASSERT_TRUE(placemark_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void PlacemarkTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == placemark_->has_geometry());
-  CPPUNIT_ASSERT(NULL == placemark_->get_geometry());
+TEST_F(PlacemarkTest, TestDefaults) {
+  ASSERT_FALSE(placemark_->has_geometry());
+  ASSERT_TRUE(NULL == placemark_->get_geometry());
 }
 
 // Verify setting default makes has_xxx() true:
-void PlacemarkTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(PlacemarkTest, TestSetToDefaultValues) {
   placemark_->set_geometry(NULL);  // should not crash
-  CPPUNIT_ASSERT(false == placemark_->has_geometry());  // ptr is null
+  ASSERT_FALSE(placemark_->has_geometry());  // ptr is null
 }
 
 // Verify set, get, has, clear:
-void PlacemarkTest::TestSetGetHasClear() {
+TEST_F(PlacemarkTest, TestSetGetHasClear) {
   // Non-default values:
   PointPtr point = KmlFactory::GetFactory()->CreatePoint();
 
@@ -98,64 +74,61 @@ void PlacemarkTest::TestSetGetHasClear() {
   placemark_->set_geometry(point);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(placemark_->has_geometry());
-  CPPUNIT_ASSERT_EQUAL(Type_Point, placemark_->get_geometry()->Type());
+  ASSERT_TRUE(placemark_->has_geometry());
+  ASSERT_EQ(Type_Point, placemark_->get_geometry()->Type());
 
   // Set geometry to model.  This frees point.
   ModelPtr model= KmlFactory::GetFactory()->CreateModel();
   placemark_->set_geometry(model);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(placemark_->has_geometry());
-  CPPUNIT_ASSERT_EQUAL(Type_Model, placemark_->get_geometry()->Type());
+  ASSERT_TRUE(placemark_->has_geometry());
+  ASSERT_EQ(Type_Model, placemark_->get_geometry()->Type());
 
   // Clear all fields:
   placemark_->clear_geometry();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
-void PlacemarkTest::TestParse() {
-  std::string kName = "My Favorite Place";
-  std::string kSnippet = "Left panel stuff about my favorite place...";
-  std::string kPlacemark =
+TEST_F(PlacemarkTest, TestParse) {
+  string kName = "My Favorite Place";
+  string kSnippet = "Left panel stuff about my favorite place...";
+  string kPlacemark =
     "<Placemark>"
     "<name>" + kName + "</name>"
     "<Snippet>" + kSnippet + "</Snippet>"
     "<Point><coordinates>1.1,2.2,3.3</coordinates></Point>"
     "</Placemark>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kPlacemark, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const PlacemarkPtr placemark = AsPlacemark(root);
-  CPPUNIT_ASSERT(placemark);
-  CPPUNIT_ASSERT(false == placemark->has_id());
-  CPPUNIT_ASSERT(false == placemark->has_targetid());
-  CPPUNIT_ASSERT(placemark->has_name());
-  CPPUNIT_ASSERT_EQUAL(kName, placemark->get_name());
-  CPPUNIT_ASSERT(false == placemark->has_visibility());
-  CPPUNIT_ASSERT(false == placemark->has_open());
-  CPPUNIT_ASSERT(false == placemark->has_address());
-  CPPUNIT_ASSERT(placemark->has_snippet());
-  CPPUNIT_ASSERT(placemark->get_snippet()->has_text());
-  CPPUNIT_ASSERT_EQUAL(kSnippet, placemark->get_snippet()->get_text());
-  CPPUNIT_ASSERT(false == placemark->has_description());
-  CPPUNIT_ASSERT(false == placemark->has_abstractview());
-  CPPUNIT_ASSERT(false == placemark->has_timeprimitive());
-  CPPUNIT_ASSERT(false == placemark->has_styleurl());
-  CPPUNIT_ASSERT(false == placemark->has_styleselector());
-  CPPUNIT_ASSERT(false == placemark->has_region());
-  CPPUNIT_ASSERT(false == placemark->has_extendeddata());
+  ASSERT_TRUE(placemark);
+  ASSERT_FALSE(placemark->has_id());
+  ASSERT_FALSE(placemark->has_targetid());
+  ASSERT_TRUE(placemark->has_name());
+  ASSERT_EQ(kName, placemark->get_name());
+  ASSERT_FALSE(placemark->has_visibility());
+  ASSERT_FALSE(placemark->has_open());
+  ASSERT_FALSE(placemark->has_address());
+  ASSERT_TRUE(placemark->has_snippet());
+  ASSERT_TRUE(placemark->get_snippet()->has_text());
+  ASSERT_EQ(kSnippet, placemark->get_snippet()->get_text());
+  ASSERT_FALSE(placemark->has_description());
+  ASSERT_FALSE(placemark->has_abstractview());
+  ASSERT_FALSE(placemark->has_timeprimitive());
+  ASSERT_FALSE(placemark->has_styleurl());
+  ASSERT_FALSE(placemark->has_styleselector());
+  ASSERT_FALSE(placemark->has_region());
+  ASSERT_FALSE(placemark->has_extendeddata());
   const PointPtr point = AsPoint(placemark->get_geometry());
   Vec3 vec3 = point->get_coordinates()->get_coordinates_array_at(0);
-  CPPUNIT_ASSERT_EQUAL(1.1, vec3.get_longitude());
-  CPPUNIT_ASSERT_EQUAL(2.2, vec3.get_latitude());
-  CPPUNIT_ASSERT_EQUAL(3.3, vec3.get_altitude());
+  ASSERT_DOUBLE_EQ(1.1, vec3.get_longitude());
+  ASSERT_DOUBLE_EQ(2.2, vec3.get_latitude());
+  ASSERT_DOUBLE_EQ(3.3, vec3.get_altitude());
 }
 
-void PlacemarkTest::TestSerialize() {
+TEST_F(PlacemarkTest, TestSerialize) {
   placemark_->set_name("name");
   placemark_->set_visibility(true);
   placemark_->set_description("description");
@@ -163,7 +136,7 @@ void PlacemarkTest::TestSerialize() {
   placemark_->set_region(KmlFactory::GetFactory()->CreateRegion());
   placemark_->set_geometry(KmlFactory::GetFactory()->CreatePoint());
 
-  std::string expected(
+  string expected(
     "<Placemark>"
     "<name>name</name>"
     "<visibility>1</visibility>"
@@ -173,9 +146,12 @@ void PlacemarkTest::TestSerialize() {
     "<Point/>"
     "</Placemark>"
   );
-  CPPUNIT_ASSERT_EQUAL(expected, SerializeRaw(placemark_));
+  ASSERT_EQ(expected, SerializeRaw(placemark_));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

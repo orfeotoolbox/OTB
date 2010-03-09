@@ -1,46 +1,43 @@
+uriparser = uriparser-0.7.5
+
 AM_CPPFLAGS = -I$(top_srcdir)/third_party/zlib-1.2.3/contrib \
-	      -I$(top_srcdir)/third_party/uriparser-0.7.1/include
+	      -I$(top_srcdir)/third_party/$(uriparser)/include \
+	      -I$(top_srcdir)/third_party/googletest-r108 \
+	      -I$(top_srcdir)/third_party/googletest-r108/include
 
 lib_LTLIBRARIES = libminizip.la liburiparser.la
+noinst_LTLIBRARIES = libgtest.la
 
 libminizip_la_SOURCES = \
 	zlib-1.2.3/contrib/minizip/unzip.c \
 	zlib-1.2.3/contrib/minizip/ioapi.c \
+	zlib-1.2.3/contrib/minizip/iomem_simple.c \
 	zlib-1.2.3/contrib/minizip/zip.c
 libminizip_la_LDFLAGS = -lz
 
 liburiparser_la_SOURCES = \
-	uriparser-0.7.1/lib/UriCommon.c \
-	uriparser-0.7.1/lib/UriCommon.h \
-	uriparser-0.7.1/lib/UriCompare.c \
-	uriparser-0.7.1/lib/UriEscape.c \
-	uriparser-0.7.1/lib/UriFile.c \
-	uriparser-0.7.1/lib/UriIp4.c \
-	uriparser-0.7.1/lib/UriIp4Base.c \
-	uriparser-0.7.1/lib/UriIp4Base.h \
-	uriparser-0.7.1/lib/UriNormalize.c \
-	uriparser-0.7.1/lib/UriNormalizeBase.c \
-	uriparser-0.7.1/lib/UriNormalizeBase.h \
-	uriparser-0.7.1/lib/UriParse.c \
-	uriparser-0.7.1/lib/UriParseBase.c \
-	uriparser-0.7.1/lib/UriParseBase.h \
-	uriparser-0.7.1/lib/UriQuery.c \
-	uriparser-0.7.1/lib/UriRecompose.c \
-	uriparser-0.7.1/lib/UriResolve.c \
-	uriparser-0.7.1/lib/UriShorten.c
-uriparser = uriparser-0.7.1
-uriparserinc = $(includedir)/kml/third_party/$(boost)/include
-liburiparserincludedir = $(uriparserinc)
-liburiparserinclude_HEADERS = \
-	$(uriparser)/include/uriparser/Uri.h \
-	$(uriparser)/include/uriparser/UriBase.h \
-	$(uriparser)/include/uriparser/UriDefsAnsi.h \
-	$(uriparser)/include/uriparser/UriDefsConfig.h \
-	$(uriparser)/include/uriparser/UriDefsUnicode.h \
-	$(uriparser)/include/uriparser/UriIp4.h
+	$(uriparser)/lib/UriCommon.c \
+	$(uriparser)/lib/UriCommon.h \
+	$(uriparser)/lib/UriCompare.c \
+	$(uriparser)/lib/UriEscape.c \
+	$(uriparser)/lib/UriFile.c \
+	$(uriparser)/lib/UriIp4.c \
+	$(uriparser)/lib/UriIp4Base.c \
+	$(uriparser)/lib/UriIp4Base.h \
+	$(uriparser)/lib/UriNormalize.c \
+	$(uriparser)/lib/UriNormalizeBase.c \
+	$(uriparser)/lib/UriNormalizeBase.h \
+	$(uriparser)/lib/UriParse.c \
+	$(uriparser)/lib/UriParseBase.c \
+	$(uriparser)/lib/UriParseBase.h \
+	$(uriparser)/lib/UriQuery.c \
+	$(uriparser)/lib/UriRecompose.c \
+	$(uriparser)/lib/UriResolve.c \
+	$(uriparser)/lib/UriShorten.c
 liburiparser_la_LDFLAGS = -version-info 1:5:0
 
-boost = boost_1_34_1/boost
+boost_root = boost_1_34_1
+boost = $(boost_root)/boost
 boostinc = $(includedir)/kml/third_party/$(boost)
 libboostincludedir = $(boostinc)
 libboostinclude_HEADERS = \
@@ -80,7 +77,26 @@ libboostconfigplatforminclude_HEADERS = \
 	$(boost)/config/platform/linux.hpp \
 	$(boost)/config/platform/macos.hpp
 
+googletest = googletest-r108
+libgtest_la_SOURCES = \
+	$(googletest)/src/gtest.cc \
+	$(googletest)/src/gtest-death-test.cc \
+	$(googletest)/src/gtest-filepath.cc \
+	$(googletest)/src/gtest-internal-inl.h \
+	$(googletest)/src/gtest-port.cc \
+	$(googletest)/src/gtest-test-part.cc \
+	$(googletest)/src/gtest-typed-test.cc
+
 EXTRA_DIST = \
+	expat.win32/expat.h \
+	expat.win32/expat_external.h \
+	expat.win32/libexpat.dll \
+	expat.win32/libexpat.lib \
+	expat.win32/libexpatMT.lib \
+	expat.win32/libexpatw.dll \
+	expat.win32/libexpatw.lib \
+	expat.win32/libexpatwMT.lib \
+	$(boost_root)/LICENSE_1_0.txt \
 	$(boost)/README \
 	$(boost)/config/abi_prefix.hpp \
 	$(boost)/config/abi_suffix.hpp \
@@ -127,6 +143,31 @@ EXTRA_DIST = \
 	$(boost)/config/stdlib/sgi.hpp \
 	$(boost)/config/stdlib/stlport.hpp \
 	$(boost)/config/stdlib/vacpp.hpp \
+	$(googletest).win32/debug/gtest.lib \
+	$(googletest).win32/release/gtest.lib \
+	$(googletest)/include/gtest/gtest.h \
+	$(googletest)/include/gtest/gtest-death-test.h \
+	$(googletest)/include/gtest/gtest-message.h \
+	$(googletest)/include/gtest/gtest-spi.h \
+	$(googletest)/include/gtest/gtest_pred_impl.h \
+	$(googletest)/include/gtest/gtest_prod.h \
+	$(googletest)/include/gtest/gtest-test-part.h \
+	$(googletest)/include/gtest/gtest-typed-test.h \
+	$(googletest)/include/gtest/internal/gtest-death-test-internal.h \
+	$(googletest)/include/gtest/internal/gtest-filepath.h \
+	$(googletest)/include/gtest/internal/gtest-internal.h \
+	$(googletest)/include/gtest/internal/gtest-port.h \
+	$(googletest)/include/gtest/internal/gtest-string.h \
+	$(googletest)/include/gtest/internal/gtest-type-util.h \
+	$(uriparser)/COPYING \
+	$(uriparser).win32/debug/uriparser.lib \
+	$(uriparser).win32/release/uriparser.lib \
+	$(uriparser)/include/uriparser/Uri.h \
+	$(uriparser)/include/uriparser/UriBase.h \
+	$(uriparser)/include/uriparser/UriDefsAnsi.h \
+	$(uriparser)/include/uriparser/UriDefsConfig.h \
+	$(uriparser)/include/uriparser/UriDefsUnicode.h \
+	$(uriparser)/include/uriparser/UriIp4.h \
 	zlib-1.2.3/zconf.h \
 	zlib-1.2.3/zlib.h \
 	zlib-1.2.3/contrib/minizip/crypt.h \

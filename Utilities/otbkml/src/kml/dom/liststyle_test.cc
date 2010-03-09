@@ -27,175 +27,166 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
+
+using kmlbase::Color32;
 
 namespace kmldom {
 
-class ItemIconTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ItemIconTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class ItemIconTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     itemicon_ = KmlFactory::GetFactory()->CreateItemIcon();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   ItemIconPtr itemicon_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ItemIconTest);
-
-void ItemIconTest::TestType() {
-  CPPUNIT_ASSERT(true == itemicon_->IsA(Type_ItemIcon));
-  CPPUNIT_ASSERT(true == itemicon_->IsA(Type_Object));
+TEST_F(ItemIconTest, TestType) {
+  ASSERT_TRUE(itemicon_->IsA(Type_ItemIcon));
+  ASSERT_TRUE(itemicon_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void ItemIconTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == itemicon_->has_state());
-  CPPUNIT_ASSERT(ITEMICONSTATE_OPEN == itemicon_->get_state());
-  CPPUNIT_ASSERT(false == itemicon_->has_href());
-  CPPUNIT_ASSERT("" == itemicon_->get_href());
+TEST_F(ItemIconTest, TestDefaults) {
+  ASSERT_FALSE(itemicon_->has_state());
+  ASSERT_EQ(static_cast<size_t>(1), itemicon_->get_state_array_size());
+  ASSERT_EQ(ITEMICONSTATE_OPEN, itemicon_->get_state_array_at(0));
+  ASSERT_FALSE(itemicon_->has_href());
+  ASSERT_EQ(string(""), itemicon_->get_href());
 }
 
 // Verify setting default makes has_xxx() true:
-void ItemIconTest::TestSetToDefaultValues() {
-  TestDefaults();
-  itemicon_->set_state(itemicon_->get_state());
-  CPPUNIT_ASSERT(true == itemicon_->has_state());
+TEST_F(ItemIconTest, TestSetToDefaultValues) {
+  itemicon_->add_state(itemicon_->get_state_array_at(0));
+  ASSERT_TRUE(itemicon_->has_state());
   itemicon_->set_href(itemicon_->get_href());
-  CPPUNIT_ASSERT(true == itemicon_->has_href());
+  ASSERT_TRUE(itemicon_->has_href());
 }
 
 // Verify set, get, has, clear:
-void ItemIconTest::TestSetGetHasClear() {
+TEST_F(ItemIconTest, TestSetGetHasClear) {
   // Non-default values:
   ItemIconStateEnum state = ITEMICONSTATE_ERROR;
-  std::string href("http://example.com/foo.jpg");
+  string href("http://example.com/foo.jpg");
 
   // Set all fields:
-  itemicon_->set_state(state);
+  itemicon_->clear_state();
+  itemicon_->add_state(state);
   itemicon_->set_href(href);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == itemicon_->has_state());
-  CPPUNIT_ASSERT(state == itemicon_->get_state());
-  CPPUNIT_ASSERT(true == itemicon_->has_href());
-  CPPUNIT_ASSERT(href == itemicon_->get_href());
+  ASSERT_TRUE(itemicon_->has_state());
+  ASSERT_EQ(state, itemicon_->get_state_array_at(0));
+  ASSERT_TRUE(itemicon_->has_href());
+  ASSERT_EQ(href, itemicon_->get_href());
 
   // Clear all fields:
   itemicon_->clear_state();
   itemicon_->clear_href();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
+TEST_F(ItemIconTest, TestStateArrays) {
+  ItemIconStateEnum iis_open= ITEMICONSTATE_OPEN;
+  ItemIconStateEnum iis_error = ITEMICONSTATE_ERROR;
+  ItemIconStateEnum iis_fetching0 = ITEMICONSTATE_FETCHING0;
 
-class ListStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ListStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestLists);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
+  // Verify the default constructed state.
+  ASSERT_FALSE(itemicon_->has_state());
+  ASSERT_EQ(static_cast<size_t>(1), itemicon_->get_state_array_size());
+  ASSERT_EQ(iis_open, itemicon_->get_state_array_at(0));
 
- public:
-  // Called before all tests.
-  void setUp() {
+  // Clear <state> array.
+  itemicon_->clear_state();
+  ASSERT_FALSE(itemicon_->has_state());
+  ASSERT_EQ(static_cast<size_t>(0), itemicon_->get_state_array_size());
+
+  // Add an explict error enum.
+  itemicon_->add_state(iis_error);
+  ASSERT_TRUE(itemicon_->has_state());
+  ASSERT_EQ(static_cast<size_t>(1), itemicon_->get_state_array_size());
+  ASSERT_EQ(iis_error, itemicon_->get_state_array_at(0));
+
+  // Add a fetching0 to the open.
+  itemicon_->add_state(iis_fetching0);
+  ASSERT_TRUE(itemicon_->has_state());
+  ASSERT_EQ(static_cast<size_t>(2), itemicon_->get_state_array_size());
+  ASSERT_EQ(iis_error, itemicon_->get_state_array_at(0));
+  ASSERT_EQ(iis_fetching0, itemicon_->get_state_array_at(1));
+}
+
+class ListStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     liststyle_ = KmlFactory::GetFactory()->CreateListStyle();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestLists();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   ListStylePtr liststyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ListStyleTest);
-
-void ListStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == liststyle_->IsA(Type_ListStyle));
-  CPPUNIT_ASSERT(Type_ListStyle == liststyle_->Type());
-  CPPUNIT_ASSERT(true == liststyle_->IsA(Type_SubStyle));
+TEST_F(ListStyleTest, TestType) {
+  ASSERT_TRUE(liststyle_->IsA(Type_ListStyle));
+  ASSERT_EQ(Type_ListStyle, liststyle_->Type());
+  ASSERT_TRUE(liststyle_->IsA(Type_SubStyle));
 }
 
-void ListStyleTest::TestLists() {
-  CPPUNIT_ASSERT(0 == liststyle_->get_itemicon_array_size());
+TEST_F(ListStyleTest, TestLists) {
+  ASSERT_EQ(static_cast<size_t>(0), liststyle_->get_itemicon_array_size());
   liststyle_->add_itemicon(KmlFactory::GetFactory()->CreateItemIcon());
   liststyle_->add_itemicon(KmlFactory::GetFactory()->CreateItemIcon());
-  CPPUNIT_ASSERT(2 == liststyle_->get_itemicon_array_size());
-  CPPUNIT_ASSERT(Type_ItemIcon == liststyle_->get_itemicon_array_at(0)->Type());
-  CPPUNIT_ASSERT(Type_ItemIcon == liststyle_->get_itemicon_array_at(1)->Type());
+  ASSERT_EQ(static_cast<size_t>(2), liststyle_->get_itemicon_array_size());
+  ASSERT_EQ(Type_ItemIcon, liststyle_->get_itemicon_array_at(0)->Type());
+  ASSERT_EQ(Type_ItemIcon, liststyle_->get_itemicon_array_at(1)->Type());
 }
 
 // Verify proper defaults:
-void ListStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == liststyle_->has_listitemtype());
-  CPPUNIT_ASSERT(LISTITEMTYPE_CHECK == liststyle_->get_listitemtype());
-  CPPUNIT_ASSERT(false == liststyle_->has_bgcolor());
-  CPPUNIT_ASSERT("ffffffff" == liststyle_->get_bgcolor());
+TEST_F(ListStyleTest, TestDefaults) {
+  ASSERT_FALSE(liststyle_->has_listitemtype());
+  ASSERT_EQ(LISTITEMTYPE_CHECK, liststyle_->get_listitemtype());
+  ASSERT_FALSE(liststyle_->has_bgcolor());
+  ASSERT_TRUE(Color32(0xffffffff) == liststyle_->get_bgcolor());
+  ASSERT_EQ(2, liststyle_->get_maxsnippetlines());
 }
 
 // Verify setting default makes has_xxx() true:
-void ListStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(ListStyleTest, TestSetToDefaultValues) {
   liststyle_->set_listitemtype(liststyle_->get_listitemtype());
-  CPPUNIT_ASSERT(true == liststyle_->has_listitemtype());
+  ASSERT_TRUE(liststyle_->has_listitemtype());
   liststyle_->set_bgcolor(liststyle_->get_bgcolor());
-  CPPUNIT_ASSERT(true == liststyle_->has_bgcolor());
+  ASSERT_TRUE(liststyle_->has_bgcolor());
+  liststyle_->set_maxsnippetlines(liststyle_->get_maxsnippetlines());
+  ASSERT_TRUE(liststyle_->has_maxsnippetlines());
 }
 
 // Verify set, get, has, clear:
-void ListStyleTest::TestSetGetHasClear() {
+TEST_F(ListStyleTest, TestSetGetHasClear) {
   // Non-default values:
   ListItemTypeEnum listitemtype = LISTITEMTYPE_CHECKHIDECHILDREN;
-  std::string bgcolor("00112233");
+  Color32 bgcolor(Color32(0x00112233));
+  int maxsnippetlines(3);
 
   // Set all fields:
   liststyle_->set_listitemtype(listitemtype);
   liststyle_->set_bgcolor(bgcolor);
+  liststyle_->set_maxsnippetlines(maxsnippetlines);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == liststyle_->has_listitemtype());
-  CPPUNIT_ASSERT(listitemtype == liststyle_->get_listitemtype());
-  CPPUNIT_ASSERT(true == liststyle_->has_bgcolor());
-  CPPUNIT_ASSERT(bgcolor == liststyle_->get_bgcolor());
+  ASSERT_TRUE(liststyle_->has_listitemtype());
+  ASSERT_EQ(listitemtype, liststyle_->get_listitemtype());
+  ASSERT_TRUE(liststyle_->has_bgcolor());
+  ASSERT_TRUE(bgcolor == liststyle_->get_bgcolor());
+  ASSERT_TRUE(liststyle_->has_maxsnippetlines());
+  ASSERT_EQ(maxsnippetlines, liststyle_->get_maxsnippetlines());
 
   // Clear all fields:
   liststyle_->clear_listitemtype();
   liststyle_->clear_bgcolor();
-
-  // Verify now in default state:
-  TestDefaults();
+  liststyle_->clear_maxsnippetlines();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

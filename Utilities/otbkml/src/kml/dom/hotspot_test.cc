@@ -30,69 +30,55 @@
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_funcs.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class HotSpotTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(HotSpotTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST(TestSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class HotSpotTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     hotspot_ = KmlFactory::GetFactory()->CreateHotSpot();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestParse();
-  void TestSerialize();
-
- private:
   HotSpotPtr hotspot_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(HotSpotTest);
-
-void HotSpotTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_hotSpot, hotspot_->Type());
-  CPPUNIT_ASSERT(true == hotspot_->IsA(Type_hotSpot));
-  CPPUNIT_ASSERT(true == hotspot_->IsA(Type_Vec2));
+TEST_F(HotSpotTest, TestType) {
+  ASSERT_EQ(Type_hotSpot, hotspot_->Type());
+  ASSERT_TRUE(hotspot_->IsA(Type_hotSpot));
+  ASSERT_TRUE(hotspot_->IsA(Type_Vec2));
 }
 
-void HotSpotTest::TestParse() {
-  std::string errors;
+TEST_F(HotSpotTest, TestParse) {
+  string errors;
   ElementPtr root = Parse(
     "<hotSpot x=\"32\" y=\"1\" xunits=\"pixels\" yunits=\"pixels\"/>",
     &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
 #if 0
   const HotSpot* hotspot = AsHotSpot(root);
-  CPPUNIT_ASSERT(hotspot);
-  CPPUNIT_ASSERT_EQUAL(32., hotspot->x());
-  CPPUNIT_ASSERT_EQUAL(1., hotspot->y());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(UNITS_PIXELS), hotspot->xunits());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(UNITS_PIXELS), hotspot->yunits());
+  ASSERT_TRUE(hotspot);
+  ASSERT_EQ(32., hotspot->x());
+  ASSERT_EQ(1., hotspot->y());
+  ASSERT_EQ(static_cast<int>(UNITS_PIXELS), hotspot->xunits());
+  ASSERT_EQ(static_cast<int>(UNITS_PIXELS), hotspot->yunits());
 #endif
 }
 
-void HotSpotTest::TestSerialize() {
+TEST_F(HotSpotTest, TestSerialize) {
   hotspot_->set_x(32);
   hotspot_->set_y(1);
   hotspot_->set_xunits(UNITS_PIXELS);
   hotspot_->set_yunits(UNITS_PIXELS);
-  std::string expected =
+  string expected =
     "<hotSpot x=\"32\" xunits=\"pixels\" y=\"1\" yunits=\"pixels\"/>";
-  CPPUNIT_ASSERT_EQUAL(expected, SerializeRaw(hotspot_));
+  ASSERT_EQ(expected, SerializeRaw(hotspot_));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

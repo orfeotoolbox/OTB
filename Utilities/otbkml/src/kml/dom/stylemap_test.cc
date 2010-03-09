@@ -26,72 +26,50 @@
 #include "kml/dom/stylemap.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class PairTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(PairTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class PairTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     pair_ = KmlFactory::GetFactory()->CreatePair();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   PairPtr pair_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(PairTest);
-
-void PairTest::TestType() {
-  CPPUNIT_ASSERT(Type_Pair == pair_->Type());
-  CPPUNIT_ASSERT(true == pair_->IsA(Type_Pair));
-  CPPUNIT_ASSERT(true == pair_->IsA(Type_Object));
+TEST_F(PairTest, TestType) {
+  ASSERT_EQ(Type_Pair, pair_->Type());
+  ASSERT_TRUE(pair_->IsA(Type_Pair));
+  ASSERT_TRUE(pair_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void PairTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == pair_->has_key());
-  CPPUNIT_ASSERT(STYLESTATE_NORMAL == pair_->get_key());
-  CPPUNIT_ASSERT(false == pair_->has_styleurl());
-  CPPUNIT_ASSERT("" == pair_->get_styleurl());
-  CPPUNIT_ASSERT(false == pair_->has_styleselector());
-  CPPUNIT_ASSERT(NULL == pair_->get_styleselector());
+TEST_F(PairTest, TestDefaults) {
+  ASSERT_FALSE(pair_->has_key());
+  ASSERT_EQ(STYLESTATE_NORMAL, pair_->get_key());
+  ASSERT_FALSE(pair_->has_styleurl());
+  ASSERT_EQ(string(""), pair_->get_styleurl());
+  ASSERT_FALSE(pair_->has_styleselector());
+  ASSERT_TRUE(NULL == pair_->get_styleselector());
 }
 
 // Verify setting default makes has_xxx() true:
-void PairTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(PairTest, TestSetToDefaultValues) {
   pair_->set_key(pair_->get_key());
-  CPPUNIT_ASSERT(true == pair_->has_key());
+  ASSERT_TRUE(pair_->has_key());
   pair_->set_styleurl(pair_->get_styleurl());
-  CPPUNIT_ASSERT(true == pair_->has_styleurl());
+  ASSERT_TRUE(pair_->has_styleurl());
   pair_->set_styleselector(NULL);
-  CPPUNIT_ASSERT(false == pair_->has_styleselector()); // ptr is null
+  ASSERT_FALSE(pair_->has_styleselector()); // ptr is null
 }
 
 // Verify set, get, has, clear:
-void PairTest::TestSetGetHasClear() {
+TEST_F(PairTest, TestSetGetHasClear) {
   // Non-default values:
   StyleStateEnum key = STYLESTATE_HIGHLIGHT;
-  std::string styleurl("#url");
+  string styleurl("#url");
   StylePtr styleselector(KmlFactory::GetFactory()->CreateStyle());
 
   // Set all fields:
@@ -100,64 +78,47 @@ void PairTest::TestSetGetHasClear() {
   pair_->set_styleselector(styleselector);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == pair_->has_key());
-  CPPUNIT_ASSERT(key == pair_->get_key());
-  CPPUNIT_ASSERT(true == pair_->has_styleurl());
-  CPPUNIT_ASSERT(styleurl == pair_->get_styleurl());
-  CPPUNIT_ASSERT(true == pair_->has_styleselector());
-  CPPUNIT_ASSERT(styleselector== pair_->get_styleselector());
+  ASSERT_TRUE(pair_->has_key());
+  ASSERT_EQ(key, pair_->get_key());
+  ASSERT_TRUE(pair_->has_styleurl());
+  ASSERT_EQ(styleurl, pair_->get_styleurl());
+  ASSERT_TRUE(pair_->has_styleselector());
+  ASSERT_EQ(styleselector, pair_->get_styleselector());
 
   // Clear all fields:
   pair_->clear_key();
   pair_->clear_styleurl();
   pair_->clear_styleselector();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
-class StyleMapTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(StyleMapTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestLists);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class StyleMapTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     stylemap_ = KmlFactory::GetFactory()->CreateStyleMap();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestLists();
-
- private:
   StyleMapPtr stylemap_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(StyleMapTest);
-
-void StyleMapTest::TestType() {
-  CPPUNIT_ASSERT(true == stylemap_->IsA(Type_StyleMap));
-  CPPUNIT_ASSERT(Type_StyleMap == stylemap_->Type());
-  CPPUNIT_ASSERT(true == stylemap_->IsA(Type_StyleSelector));
-  CPPUNIT_ASSERT(true == stylemap_->IsA(Type_Object));
+TEST_F(StyleMapTest, TestType) {
+  ASSERT_EQ(Type_StyleMap, stylemap_->Type());
+  ASSERT_TRUE(stylemap_->IsA(Type_StyleMap));
+  ASSERT_TRUE(stylemap_->IsA(Type_StyleSelector));
+  ASSERT_TRUE(stylemap_->IsA(Type_Object));
 }
 
-void StyleMapTest::TestLists() {
-  CPPUNIT_ASSERT(0 == stylemap_->get_pair_array_size());
+TEST_F(StyleMapTest, TestLists) {
+  ASSERT_EQ(static_cast<size_t>(0), stylemap_->get_pair_array_size());
   stylemap_->add_pair(KmlFactory::GetFactory()->CreatePair());
   stylemap_->add_pair(KmlFactory::GetFactory()->CreatePair());
-  CPPUNIT_ASSERT(2 == stylemap_->get_pair_array_size());
-  CPPUNIT_ASSERT(Type_Pair == stylemap_->get_pair_array_at(0)->Type());
-  CPPUNIT_ASSERT(Type_Pair == stylemap_->get_pair_array_at(1)->Type());
+  ASSERT_EQ(static_cast<size_t>(2), stylemap_->get_pair_array_size());
+  ASSERT_EQ(Type_Pair, stylemap_->get_pair_array_at(0)->Type());
+  ASSERT_EQ(Type_Pair, stylemap_->get_pair_array_at(1)->Type());
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

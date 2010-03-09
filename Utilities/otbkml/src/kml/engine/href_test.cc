@@ -26,118 +26,91 @@
 // This file contains the unit tests for the Href class.
 
 #include "kml/engine/href.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlengine {
 
-class HrefTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(HrefTest);
-  CPPUNIT_TEST(TestBasicAbsolute);
-  CPPUNIT_TEST(TestSchemeSetGetHasClear);
-  CPPUNIT_TEST(TestNetLocSetGetHasClear);
-  CPPUNIT_TEST(TestPathSetGetHasClear);
-  CPPUNIT_TEST(TestFragmentSetGetHasClear);
-  CPPUNIT_TEST(TestFragmentSimple);
-  CPPUNIT_TEST(TestRelativeWithFragment);
-  CPPUNIT_TEST(TestTestHrefs);
-  CPPUNIT_TEST(TestIsFragmentOnly);
-  CPPUNIT_TEST(TestIsRelativePath);
-  CPPUNIT_TEST_SUITE_END();
-
+class HrefTest : public testing::Test {
  protected:
-  void TestBasicAbsolute();
-  void TestSchemeSetGetHasClear();
-  void TestNetLocSetGetHasClear();
-  void TestPathSetGetHasClear();
-  void TestFragmentSetGetHasClear();
-  void TestFragmentSimple();
-  void TestRelativeWithFragment();
-  void TestTestHrefs();
-  void TestIsFragmentOnly();
-  void TestIsRelativePath();
-
- private:
-  void VerifyString(const char* want, const std::string& got);
+  void VerifyString(const char* want, const string& got);
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(HrefTest);
-
 // Verify usage for a basic absolute href.
-void HrefTest::TestBasicAbsolute() {
-  const std::string kHttp("http");
-  const std::string kFooCom("foo.com");
-  const std::string kIndexKml("index.kml");
+TEST_F(HrefTest, TestBasicAbsolute) {
+  const string kHttp("http");
+  const string kFooCom("foo.com");
+  const string kIndexKml("index.kml");
   Href href(kHttp + "://" + kFooCom + "/" + kIndexKml);
-  CPPUNIT_ASSERT(!href.IsRelative());
-  CPPUNIT_ASSERT(!href.has_fragment());
-  CPPUNIT_ASSERT_EQUAL(kHttp, href.get_scheme());
-  CPPUNIT_ASSERT_EQUAL(kFooCom, href.get_net_loc());
-  CPPUNIT_ASSERT_EQUAL(kIndexKml, href.get_path());
+  ASSERT_FALSE(href.IsRelative());
+  ASSERT_FALSE(href.has_fragment());
+  ASSERT_EQ(kHttp, href.get_scheme());
+  ASSERT_EQ(kFooCom, href.get_net_loc());
+  ASSERT_EQ(kIndexKml, href.get_path());
 }
 
 // Verify basic usage of the get,set,has,clear_scheme methods.
-void HrefTest::TestSchemeSetGetHasClear() {
-  const std::string kScheme("http");
+TEST_F(HrefTest, TestSchemeSetGetHasClear) {
+  const string kScheme("http");
   Href href;
   href.set_scheme(kScheme);
-  CPPUNIT_ASSERT(href.has_scheme());
-  CPPUNIT_ASSERT_EQUAL(kScheme, href.get_scheme());
+  ASSERT_TRUE(href.has_scheme());
+  ASSERT_EQ(kScheme, href.get_scheme());
   href.clear_scheme();
-  CPPUNIT_ASSERT(!href.has_scheme());
+  ASSERT_FALSE(href.has_scheme());
 }
 
 // Verify basic usage of the get,set,has,clear_net_loc methods.
-void HrefTest::TestNetLocSetGetHasClear() {
-  const std::string kNetLoc("www.google.com");
+TEST_F(HrefTest, TestNetLocSetGetHasClear) {
+  const string kNetLoc("www.google.com");
   Href href;
   href.set_net_loc(kNetLoc);
-  CPPUNIT_ASSERT(href.has_net_loc());
-  CPPUNIT_ASSERT_EQUAL(kNetLoc, href.get_net_loc());
+  ASSERT_TRUE(href.has_net_loc());
+  ASSERT_EQ(kNetLoc, href.get_net_loc());
   href.clear_net_loc();
-  CPPUNIT_ASSERT(!href.has_net_loc());
+  ASSERT_FALSE(href.has_net_loc());
 }
 
 // Verify basic usage of the get,set,has,clear_path methods.
-void HrefTest::TestPathSetGetHasClear() {
-  const std::string kPath("a/b/c/d/cool.kml");
+TEST_F(HrefTest, TestPathSetGetHasClear) {
+  const string kPath("a/b/c/d/cool.kml");
   Href href;
   href.set_path(kPath);
-  CPPUNIT_ASSERT(href.has_path());
-  CPPUNIT_ASSERT_EQUAL(kPath, href.get_path());
+  ASSERT_TRUE(href.has_path());
+  ASSERT_EQ(kPath, href.get_path());
   href.clear_path();
-  CPPUNIT_ASSERT(!href.has_path());
+  ASSERT_FALSE(href.has_path());
 }
 
 // Verify basic usage of the get,set,has,clear_fragment methods.
-void HrefTest::TestFragmentSetGetHasClear() {
-  const std::string kFragment("the-fragment");
+TEST_F(HrefTest, TestFragmentSetGetHasClear) {
+  const string kFragment("the-fragment");
   Href href;
   href.set_fragment(kFragment);
-  CPPUNIT_ASSERT(href.has_fragment());
-  CPPUNIT_ASSERT_EQUAL(kFragment, href.get_fragment());
+  ASSERT_TRUE(href.has_fragment());
+  ASSERT_EQ(kFragment, href.get_fragment());
   href.clear_fragment();
-  CPPUNIT_ASSERT(!href.has_fragment());
+  ASSERT_FALSE(href.has_fragment());
 }
 
-void HrefTest::TestFragmentSimple() {
-  const std::string kId("hi");
+TEST_F(HrefTest, TestFragmentSimple) {
+  const string kId("hi");
   Href href("#" + kId);
-  CPPUNIT_ASSERT(!href.has_scheme());
-  CPPUNIT_ASSERT(!href.has_path());
-  CPPUNIT_ASSERT(href.has_fragment());
-  CPPUNIT_ASSERT_EQUAL(kId, href.get_fragment());
+  ASSERT_FALSE(href.has_scheme());
+  ASSERT_FALSE(href.has_path());
+  ASSERT_TRUE(href.has_fragment());
+  ASSERT_EQ(kId, href.get_fragment());
 }
 
-void HrefTest::TestRelativeWithFragment() {
-  const std::string kPath("style.kml");
-  const std::string kId("shared-style");
+TEST_F(HrefTest, TestRelativeWithFragment) {
+  const string kPath("style.kml");
+  const string kId("shared-style");
   Href href(kPath + "#" + kId);
-  CPPUNIT_ASSERT(href.IsRelative());
-  CPPUNIT_ASSERT(!href.has_scheme());
-  CPPUNIT_ASSERT(href.has_path());
-  CPPUNIT_ASSERT(href.has_fragment());
-  CPPUNIT_ASSERT_EQUAL(kId, href.get_fragment());
-  CPPUNIT_ASSERT_EQUAL(kPath, href.get_path());
+  ASSERT_TRUE(href.IsRelative());
+  ASSERT_FALSE(href.has_scheme());
+  ASSERT_TRUE(href.has_path());
+  ASSERT_TRUE(href.has_fragment());
+  ASSERT_EQ(kId, href.get_fragment());
+  ASSERT_EQ(kPath, href.get_path());
 }
 
 static struct {
@@ -174,22 +147,22 @@ static struct {
   }
 };
 
-// This is a helper function to convert the want string to a std::string
+// This is a helper function to convert the want string to a string
 // and compare to got.  If want is NULL then got is expected to be empty.
-void HrefTest::VerifyString(const char* want, const std::string& got) {
+void HrefTest::VerifyString(const char* want, const string& got) {
   if (want) {
-    CPPUNIT_ASSERT_EQUAL(std::string(want), got);
+    ASSERT_EQ(string(want), got);
   } else {
-    CPPUNIT_ASSERT(got.empty());
+    ASSERT_TRUE(got.empty());
   }
 }
 
 // Verify all hrefs in the kTestHrefs table.
-void HrefTest::TestTestHrefs() {
+TEST_F(HrefTest, TestTestHrefs) {
   size_t count = sizeof(kTestHrefs)/sizeof(kTestHrefs[0]);
   for (size_t i = 0; i < count; ++i) {
     Href href(kTestHrefs[i].href);
-    CPPUNIT_ASSERT_EQUAL(kTestHrefs[i].is_relative, href.IsRelative());
+    ASSERT_EQ(kTestHrefs[i].is_relative, href.IsRelative());
     VerifyString(kTestHrefs[i].scheme, href.get_scheme());
     VerifyString(kTestHrefs[i].net_loc, href.get_net_loc());
     VerifyString(kTestHrefs[i].path, href.get_path());
@@ -197,26 +170,29 @@ void HrefTest::TestTestHrefs() {
   }
 }
 
-void HrefTest::TestIsFragmentOnly() {
-  const std::string kJustAFragment("#hi-there");
+TEST_F(HrefTest, TestIsFragmentOnly) {
+  const string kJustAFragment("#hi-there");
   Href a(kJustAFragment);
-  CPPUNIT_ASSERT(a.IsFragmentOnly());
+  ASSERT_TRUE(a.IsFragmentOnly());
 
-  const std::string kPathAndFragment("style.kml#shared-style-id");
+  const string kPathAndFragment("style.kml#shared-style-id");
   Href b(kPathAndFragment);
-  CPPUNIT_ASSERT(!b.IsFragmentOnly());
+  ASSERT_FALSE(b.IsFragmentOnly());
 }
 
-void HrefTest::TestIsRelativePath() {
-  const std::string kJustAFragment("#hi-there");
+TEST_F(HrefTest, TestIsRelativePath) {
+  const string kJustAFragment("#hi-there");
   Href a(kJustAFragment);
-  CPPUNIT_ASSERT(!a.IsRelativePath());
+  ASSERT_FALSE(a.IsRelativePath());
 
-  const std::string kPathAndFragment("style.kml#shared-style-id");
+  const string kPathAndFragment("style.kml#shared-style-id");
   Href b(kPathAndFragment);
-  CPPUNIT_ASSERT(b.IsRelativePath());
+  ASSERT_TRUE(b.IsRelativePath());
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

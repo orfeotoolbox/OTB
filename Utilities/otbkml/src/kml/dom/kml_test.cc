@@ -26,81 +26,64 @@
 #include "kml/dom/kml.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class KmlTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(KmlTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestHint);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class KmlTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     kml_ = KmlFactory::GetFactory()->CreateKml();
   }
-  void tearDown() {
-  }
 
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetGetHasClear();
-  void TestHint();
-
- private:
   KmlPtr kml_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(KmlTest);
-
-void KmlTest::TestType() {
-  CPPUNIT_ASSERT(Type_kml == kml_->Type());
-  CPPUNIT_ASSERT(true == kml_->IsA(Type_kml));
+TEST_F(KmlTest, TestType) {
+  ASSERT_EQ(Type_kml, kml_->Type());
+  ASSERT_TRUE(kml_->IsA(Type_kml));
 }
 
 // Verify proper defaults:
-void KmlTest::TestDefaults() {
-  CPPUNIT_ASSERT(NULL == kml_->get_networklinkcontrol());
-  CPPUNIT_ASSERT(false == kml_->has_networklinkcontrol());
-  CPPUNIT_ASSERT(NULL == kml_->get_feature());
-  CPPUNIT_ASSERT(false == kml_->has_feature());
+TEST_F(KmlTest, TestDefaults) {
+  ASSERT_TRUE(NULL == kml_->get_networklinkcontrol());
+  ASSERT_FALSE(kml_->has_networklinkcontrol());
+  ASSERT_TRUE(NULL == kml_->get_feature());
+  ASSERT_FALSE(kml_->has_feature());
 }
 
 // Verify set, get, has, clear:
-void KmlTest::TestSetGetHasClear() {
+TEST_F(KmlTest, TestSetGetHasClear) {
   NetworkLinkControl* nlc =
       KmlFactory::GetFactory()->CreateNetworkLinkControl();
   kml_->set_networklinkcontrol(nlc);
-  CPPUNIT_ASSERT(nlc == kml_->get_networklinkcontrol());
-  CPPUNIT_ASSERT(true == kml_->has_networklinkcontrol());
+  ASSERT_EQ(nlc, kml_->get_networklinkcontrol());
+  ASSERT_TRUE(kml_->has_networklinkcontrol());
   kml_->clear_networklinkcontrol();
-  TestDefaults();
 
   Placemark* placemark = KmlFactory::GetFactory()->CreatePlacemark();
   kml_->set_feature(placemark);
-  CPPUNIT_ASSERT(placemark == kml_->get_feature());
-  CPPUNIT_ASSERT(true == kml_->has_feature());
+  ASSERT_EQ(placemark, kml_->get_feature());
+  ASSERT_TRUE(kml_->has_feature());
   kml_->clear_feature();
-  TestDefaults();
 }
 
 // Verify hint= attr:
-void KmlTest::TestHint() {
-  CPPUNIT_ASSERT(false == kml_->has_hint());
-  CPPUNIT_ASSERT("" == kml_->get_hint());
-  std::string hint("target=sky");
+TEST_F(KmlTest, TestHint) {
+  ASSERT_FALSE(kml_->has_hint());
+  ASSERT_EQ(string(""), kml_->get_hint());
+  string hint("target=sky");
   kml_->set_hint(hint);
-  CPPUNIT_ASSERT(true == kml_->has_hint());
-  CPPUNIT_ASSERT(hint == kml_->get_hint());
+  ASSERT_TRUE(kml_->has_hint());
+  ASSERT_EQ(hint, kml_->get_hint());
   kml_->clear_hint();
-  CPPUNIT_ASSERT(false == kml_->has_hint());
-  CPPUNIT_ASSERT("" == kml_->get_hint());
+  ASSERT_FALSE(kml_->has_hint());
+  ASSERT_EQ(string(""), kml_->get_hint());
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

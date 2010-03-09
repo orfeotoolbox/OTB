@@ -24,10 +24,12 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/document.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -45,19 +47,26 @@ void Document::AddElement(const ElementPtr& element) {
   }
 }
 
+// Due to Document being the only Feature with a StyleSelectorArray we have to
+// take some matters into our own hands here and reach up into Feature and
+// Container to serialize in XSD order.
 void Document::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Container::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
-  for (size_t i = 0; i < schema_array_.size(); ++i) {
-    serializer.SaveElement(get_schema_array_at(i));
-  }
-  for (size_t i = 0; i < styleselector_array_.size(); ++i) {
-    serializer.SaveElement(get_styleselector_array_at(i));
-  }
-  Container::Serialize(serializer);
-  SerializeUnknown(serializer);
-  serializer.End();
+  ElementSerializer element_serializer(*this, serializer);
+  Feature::SerializeBeforeStyleSelector(serializer);
+  serializer.SaveElementGroupArray(styleselector_array_, Type_StyleSelector);
+  Feature::SerializeAfterStyleSelector(serializer);
+  serializer.SaveElementArray(schema_array_);
+  Container::SerializeFeatureArray(serializer);
+}
+
+void Document::Accept(Visitor* visitor) {
+  visitor->VisitDocument(DocumentPtr(this));
+}
+
+void Document::AcceptChildren(VisitorDriver* driver) {
+  Container::AcceptChildren(driver);
+  Element::AcceptRepeated<SchemaPtr>(&schema_array_, driver);
+  Element::AcceptRepeated<StyleSelectorPtr>(&styleselector_array_, driver);
 }
 
 }  // end namespace kmldom

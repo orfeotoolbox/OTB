@@ -28,11 +28,15 @@
 #ifndef KML_BASE_NET_CACHE_TEST_UTIL_H__
 #define KML_BASE_NET_CACHE_TEST_UTIL_H__
 
-#include <string>
 #include "boost/scoped_ptr.hpp"
 #include "kml/base/file.h"
 #include "kml/base/net_cache.h"
 #include "kml/base/uri_parser.h"
+
+// The following define is a convenience for testing inside Google.
+#ifdef GOOGLE_INTERNAL
+#include "kml/base/google_internal_test.h"
+#endif
 
 #ifndef DATADIR
 #error *** DATADIR must be defined! ***
@@ -44,10 +48,10 @@ namespace kmlbase {
 // and host are ignored.
 class TestDataNetFetcher : public NetFetcher {
  public:
-  bool FetchUrl(const std::string& url, std::string* data) const {
+  bool FetchUrl(const string& url, string* data) const {
     boost::scoped_ptr<UriParser> uri_parser(
         UriParser::CreateFromParse(url.c_str()));
-    std::string path;
+    string path;
     // If the URI parse succeeds, and a data buffer was provided, and the
     // URI has a path, and the file system read succeeds return true.
     return uri_parser.get() && data && uri_parser->GetPath(&path) &&

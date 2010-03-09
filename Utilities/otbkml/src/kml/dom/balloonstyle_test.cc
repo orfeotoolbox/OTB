@@ -26,77 +26,57 @@
 #include "kml/dom/balloonstyle.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
+
+using kmlbase::Color32;
 
 namespace kmldom {
 
-class BalloonStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(BalloonStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class BalloonStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     balloonstyle_ = KmlFactory::GetFactory()->CreateBalloonStyle();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   BalloonStylePtr balloonstyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(BalloonStyleTest);
-
-void BalloonStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == balloonstyle_->IsA(Type_BalloonStyle));
-  CPPUNIT_ASSERT(Type_BalloonStyle == balloonstyle_->Type());
-  CPPUNIT_ASSERT(true == balloonstyle_->IsA(Type_SubStyle));
+TEST_F(BalloonStyleTest, TestType) {
+  ASSERT_TRUE(balloonstyle_->IsA(Type_BalloonStyle));
+  ASSERT_TRUE(Type_BalloonStyle == balloonstyle_->Type());
+  ASSERT_TRUE(balloonstyle_->IsA(Type_SubStyle));
 }
 
 // Verify proper defaults:
-void BalloonStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == balloonstyle_->has_bgcolor());
-  CPPUNIT_ASSERT("ffffffff" == balloonstyle_->get_bgcolor());
-  CPPUNIT_ASSERT(false == balloonstyle_->has_textcolor());
-  CPPUNIT_ASSERT("ff000000" == balloonstyle_->get_textcolor());
-  CPPUNIT_ASSERT(false == balloonstyle_->has_text());
-  CPPUNIT_ASSERT("" == balloonstyle_->get_text());
-  CPPUNIT_ASSERT(false == balloonstyle_->has_displaymode());
-  CPPUNIT_ASSERT(DISPLAYMODE_DEFAULT == balloonstyle_->get_displaymode());
+TEST_F(BalloonStyleTest, TestDefaults) {
+  ASSERT_FALSE(balloonstyle_->has_bgcolor());
+  ASSERT_TRUE(Color32(0xffffffff) == balloonstyle_->get_bgcolor());
+  ASSERT_FALSE(balloonstyle_->has_textcolor());
+  ASSERT_TRUE(Color32(0xff000000) == balloonstyle_->get_textcolor());
+  ASSERT_FALSE(balloonstyle_->has_text());
+  ASSERT_EQ(string(""), balloonstyle_->get_text());
+  ASSERT_FALSE(balloonstyle_->has_displaymode());
+  ASSERT_TRUE(DISPLAYMODE_DEFAULT == balloonstyle_->get_displaymode());
 }
 
 // Verify setting default makes has_xxx() true:
-void BalloonStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(BalloonStyleTest, TestSetToDefaultValues) {
   balloonstyle_->set_bgcolor(balloonstyle_->get_bgcolor());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_bgcolor());
+  ASSERT_TRUE(balloonstyle_->has_bgcolor());
   balloonstyle_->set_textcolor(balloonstyle_->get_textcolor());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_textcolor());
+  ASSERT_TRUE(balloonstyle_->has_textcolor());
   balloonstyle_->set_text(balloonstyle_->get_text());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_text());
+  ASSERT_TRUE(balloonstyle_->has_text());
   balloonstyle_->set_displaymode(balloonstyle_->get_displaymode());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_displaymode());
+  ASSERT_TRUE(balloonstyle_->has_displaymode());
 }
 
 // Verify set, get, has, clear:
-void BalloonStyleTest::TestSetGetHasClear() {
+TEST_F(BalloonStyleTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string bgcolor("00112233");
-  std::string textcolor("33221100");
-  std::string text("amidoinitrite?");
+  Color32 bgcolor = Color32(0x00112233);
+  Color32 textcolor = Color32(0x33221100);
+  string text("amidoinitrite?");
   DisplayModeEnum displaymode = DISPLAYMODE_HIDE;
 
   // Set all fields:
@@ -106,14 +86,14 @@ void BalloonStyleTest::TestSetGetHasClear() {
   balloonstyle_->set_displaymode(displaymode);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == balloonstyle_->has_bgcolor());
-  CPPUNIT_ASSERT(bgcolor == balloonstyle_->get_bgcolor());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_textcolor());
-  CPPUNIT_ASSERT(textcolor == balloonstyle_->get_textcolor());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_text());
-  CPPUNIT_ASSERT(text == balloonstyle_->get_text());
-  CPPUNIT_ASSERT(true == balloonstyle_->has_displaymode());
-  CPPUNIT_ASSERT(displaymode == balloonstyle_->get_displaymode());
+  ASSERT_TRUE(balloonstyle_->has_bgcolor());
+  ASSERT_TRUE(bgcolor == balloonstyle_->get_bgcolor());
+  ASSERT_TRUE(balloonstyle_->has_textcolor());
+  ASSERT_TRUE(textcolor == balloonstyle_->get_textcolor());
+  ASSERT_TRUE(balloonstyle_->has_text());
+  ASSERT_TRUE(text == balloonstyle_->get_text());
+  ASSERT_TRUE(balloonstyle_->has_displaymode());
+  ASSERT_TRUE(displaymode == balloonstyle_->get_displaymode());
 
   // Clear all fields:
   balloonstyle_->clear_bgcolor();
@@ -121,10 +101,11 @@ void BalloonStyleTest::TestSetGetHasClear() {
   balloonstyle_->clear_text();
   balloonstyle_->clear_displaymode();
 
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

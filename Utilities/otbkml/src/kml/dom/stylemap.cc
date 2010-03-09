@@ -24,10 +24,12 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/stylemap.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -60,10 +62,8 @@ void Pair::AddElement(const ElementPtr& element) {
 }
 
 void Pair::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Object::GetAttributes(&attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Object::Serialize(serializer);
-  serializer.BeginById(Type(), attributes);
   if (has_key()) {
     serializer.SaveEnum(Type_key, get_key());
   }
@@ -71,10 +71,19 @@ void Pair::Serialize(Serializer& serializer) const {
     serializer.SaveFieldById(Type_styleUrl, get_styleurl());
   }
   if (has_styleselector()) {
-    serializer.SaveElement(get_styleselector());
+    serializer.SaveElementGroup(get_styleselector(), Type_StyleSelector);
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Pair::Accept(Visitor* visitor) {
+  visitor->VisitPair(PairPtr(this));
+}
+
+void Pair::AcceptChildren(VisitorDriver* driver) {
+  Object::AcceptChildren(driver);
+  if (has_styleselector()) {
+    driver->Visit(get_styleselector());
+  }
 }
 
 // <StyleMap>
@@ -94,15 +103,18 @@ void StyleMap::AddElement(const ElementPtr& element) {
 }
 
 void StyleMap::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  StyleSelector::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   StyleSelector::Serialize(serializer);
-  for (size_t i = 0; i < get_pair_array_size(); ++i) {
-    serializer.SaveElement(get_pair_array_at(i));
-  }
-  SerializeUnknown(serializer);
-  serializer.End();
+  serializer.SaveElementArray(pair_array_);
+}
+
+void StyleMap::Accept(Visitor* visitor) {
+  visitor->VisitStyleMap(StyleMapPtr(this));
+}
+
+void StyleMap::AcceptChildren(VisitorDriver* driver) {
+  StyleSelector::AcceptChildren(driver);
+  Element::AcceptRepeated<PairPtr>(&pair_array_, driver);
 }
 
 }  // end namespace kmldom

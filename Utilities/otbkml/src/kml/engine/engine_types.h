@@ -39,13 +39,15 @@ typedef std::vector<kmldom::ElementPtr> ElementVector;
 
 // The SharedStyleParserObserver class uses this data structure to map the XML
 // id to a kmldom::StyleSelectorPtr.
-// TODO: use a hashmap such as std::tr1::unordered_map
-typedef std::map<std::string, kmldom::StyleSelectorPtr> SharedStyleMap;
+typedef std::map<string, kmldom::StyleSelectorPtr> SharedStyleMap;
 
 // The ObjectIdParserObserver class uses this data structure to map the XML
 // id to a kmldom::ObjectPtr.
-// TODO: use a hashmap such as std::tr1::unordered_map
-typedef std::map<std::string, kmldom::ObjectPtr> ObjectIdMap;
+typedef std::map<string, kmldom::ObjectPtr> ObjectIdMap;
+
+// The SchemaParserObserver class uses this data structure to map the <Schema>
+// name= to a kmldom::SchemaPtr.
+typedef std::map<string, kmldom::SchemaPtr> SchemaNameMap;
 
 }  // end namespace kmlengine
 

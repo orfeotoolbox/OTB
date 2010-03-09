@@ -1,6 +1,0 @@
-
-These assume CURL 7.17.1 built and installed with all defaults:
-
-  /usr/local/include/curl/curl.h
-  /usr/local/lib/libcurl*
-

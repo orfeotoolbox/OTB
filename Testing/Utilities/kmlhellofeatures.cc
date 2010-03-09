@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without 
@@ -65,17 +45,17 @@ static const FeaturePtr GetRootFeature(const ElementPtr& root) {
   return kmldom::AsFeature(root);
 }
 
-int kmlhellofeatures(int argc, char* argv[]) {
+int kmlhellofeatures(int argc, char** argv) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmlfile" << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   // Read it.
   std::string kml;
   if (!kmlbase::File::ReadFileToString(argv[1], &kml)) {
     cout << argv[1] << " read failed" << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   // Parse it.
@@ -83,7 +63,7 @@ int kmlhellofeatures(int argc, char* argv[]) {
   ElementPtr root = kmldom::Parse(kml, &errors);
   if (!root) {
     cout << errors;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   // Print it.
@@ -93,5 +73,5 @@ int kmlhellofeatures(int argc, char* argv[]) {
   } else {
     cout << "No root feature" << endl;
   }
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

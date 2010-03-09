@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without 
@@ -62,17 +42,17 @@ using kmlengine::KmlFilePtr;
 using std::cout;
 using std::endl;
 
-int kmlprettykml(int argc, char* argv[]) {
+int kmlprettykml(int argc, char** argv) {
   if (argc != 3) {
-    cout << "usage: " << argv[0] << " kmlfile    out txtfile" << endl;
-    return EXIT_FAILURE;
+    cout << "usage: " << argv[0] << " kmlfile kmloutput" << endl;
+    return 1;
   }
 
   // Read the file content.
   std::string file_data;
   if (!kmlbase::File::ReadFileToString(argv[1], &file_data)) {
     cout << argv[1] << " read failed" << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   // Parse it.
@@ -80,16 +60,17 @@ int kmlprettykml(int argc, char* argv[]) {
   KmlFilePtr kml_file = KmlFile::CreateFromParse(file_data, &errors);
   if (!kml_file) {
     cout << errors;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   // Serialize it and output to stdout.
   std::string output;
   kml_file->SerializeToString(&output);
+
   std::ofstream fout;
   fout.open(argv[2]);
   fout << output;
   fout.close();
 
-  return EXIT_SUCCESS;
+  return 0;
 }

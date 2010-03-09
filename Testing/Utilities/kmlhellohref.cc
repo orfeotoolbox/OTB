@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without 
@@ -230,12 +210,12 @@ static void HandleFile(const char* kmlfile) {
   }
 }
 
-int kmlhellohref(int argc, char* argv[]) {
+int kmlhellohref(int argc, char** argv) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " file.kml" << endl;
     return EXIT_FAILURE;
   }
   const char* kmlfile = argv[1];
   HandleFile(kmlfile);
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

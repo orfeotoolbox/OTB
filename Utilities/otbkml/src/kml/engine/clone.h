@@ -34,7 +34,6 @@ namespace kmlengine {
 
 // This returns a "deep" clone of the given element.  All child elements and
 // fields are copied.
-// TODO: move this to a engine/kml_funcs.h for public export.
 kmldom::ElementPtr Clone(const kmldom::ElementPtr& element);
 
 }  // end namespace kmlengine

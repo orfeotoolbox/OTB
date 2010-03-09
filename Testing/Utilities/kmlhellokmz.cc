@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without 
@@ -58,24 +38,24 @@ using std::cout;
 using std::endl;
 using kmlengine::KmzFile;
 
-int kmlhellokmz(int argc, char* argv[]) {
+int kmlhellokmz(int argc, char** argv) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmzfile" << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   boost::scoped_ptr<KmzFile> kmz_file(KmzFile::OpenFromFile(argv[1]));
   if (!kmz_file) {
     cout << "error: " << argv[1] << " is not a valid kmz file" << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   std::string kml;
   if (!kmz_file->ReadKml(&kml)) {
     cout << "error: no data read from " << argv[1] << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
 
   std::cout << kml << endl;
-  return EXIT_SUCCESS;
+  return 0;
 }

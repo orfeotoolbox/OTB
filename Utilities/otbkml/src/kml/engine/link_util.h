@@ -29,15 +29,30 @@
 #define KML_ENGINE_LINK_UTIL_H__
 
 #include "kml/dom.h"
+#include "kml/engine.h"
 
 namespace kmlengine {
+
+// This function fetches and parses the KML referenced by this NetworkLink.
+// The NetworkLink must be within the KmlFile and the KmlFile must point to
+// a KmlCache (such as a KmlFile created by KmlCache).
+// If the fetch or parse fail a NULL KmlFilePtr is returned.
+KmlFilePtr FetchLink(const KmlFilePtr& kml_file,
+                     const kmldom::NetworkLinkPtr& networklink);
+
+// This function fetches the Overlay's Icon image data.  The KmlFile must have
+// a KmlCache (see KmlCache).  If the fetch fails false is returned.
+bool FetchIcon(const KmlFilePtr& kml_file,
+               const kmldom::OverlayPtr& overlay,
+               string* data);
+
 
 // This function template gets the content of the <href> child of <Link>,
 // <Icon>, <ItemIcon> and <IconStyle>'s <Icon>.  This returns true if both
 // arguments are non-NULL and if the has_href() test passes for the parent,
 // else false is returned.  (It is safe to pass all or some NULL arguments).
 template<typename HP>
-bool GetHref(const HP& href_parent, std::string* href) {
+bool GetHref(const HP& href_parent, string* href) {
   if (href && href_parent && href_parent->has_href()) {
     *href = href_parent->get_href();
     return true;
@@ -48,14 +63,14 @@ bool GetHref(const HP& href_parent, std::string* href) {
 // This function template gets the content of the <href> of the <Link> child
 // of <NetworkLink> and <Model>.  See GetHref() for info about the return.
 template<typename LP>
-bool GetLinkParentHref(const LP& link_parent, std::string* href) {
+bool GetLinkParentHref(const LP& link_parent, string* href) {
   return GetHref(link_parent->get_link(), href);
 }
 
 // This function template gets the content of the <href> of the <Icon> child
 // of any Overlay, or of <IconStyle>.  See GetHref() for info about the return.
 template<typename IP>
-bool GetIconParentHref(const IP& icon_parent, std::string* href) {
+bool GetIconParentHref(const IP& icon_parent, string* href) {
   return GetHref(icon_parent->get_icon(), href);
 }
 

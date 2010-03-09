@@ -24,31 +24,43 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/kml.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
+#include "kml/base/xml_namespaces.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
 
+using kmlbase::Attributes;
+
 namespace kmldom {
 
-Kml::Kml() : has_hint_(false) {}
+Kml::Kml()
+  : has_hint_(false) {
+  set_xmlns(kmlbase::XMLNS_KML22);
+}
 
 Kml::~Kml() {}
 
 static const char kHint[] = "hint";
 
-void Kml::ParseAttributes(const Attributes& attributes) {
-  has_hint_ = attributes.GetString(kHint, &hint_);
-  Element::ParseAttributes(attributes);
+void Kml::ParseAttributes(Attributes* attributes) {
+  if (!attributes) {
+    return;
+  }
+  has_hint_ = attributes->CutValue(kHint, &hint_);
+  AddUnknownAttributes(attributes);
 }
 
-void Kml::GetAttributes(Attributes* attributes) const {
-  Element::GetAttributes(attributes);
+void Kml::SerializeAttributes(Attributes* attributes) const {
+  Element::SerializeAttributes(attributes);
   if (has_hint_) {
-    attributes->SetString(kHint, hint_);
+    attributes->SetValue(kHint, hint_);
   }
 }
 
 void Kml::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   if (element->IsA(Type_Feature)) {
     set_feature(AsFeature(element));
   } else if (element->Type() == Type_NetworkLinkControl) {
@@ -59,17 +71,27 @@ void Kml::AddElement(const ElementPtr& element) {
 }
 
 void Kml::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   if (has_networklinkcontrol()) {
     serializer.SaveElement(get_networklinkcontrol());
   }
   if (has_feature()) {
-    serializer.SaveElement(get_feature());
+    serializer.SaveElementGroup(get_feature(), Type_Feature);
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Kml::Accept(Visitor* visitor) {
+  visitor->VisitKml(KmlPtr(this));
+}
+
+void Kml::AcceptChildren(VisitorDriver* driver) {
+  Element::AcceptChildren(driver);
+  if (has_networklinkcontrol()) {
+    driver->Visit(get_networklinkcontrol());
+  }
+  if (has_feature()) {
+    driver->Visit(get_feature());
+  }
 }
 
 }  // end namespace kmldom

@@ -26,7 +26,7 @@
 #ifndef KML_BASE_FILE_H__
 #define KML_BASE_FILE_H__
 
-#include <string>
+#include "kml/base/util.h"
 
 namespace kmlbase {
 
@@ -35,31 +35,39 @@ class File {
 
   // Reads a file into a string. Returns false if given a bad file descriptor
   // or if the file could not be opened. output is unmodified on failure.
-  static bool ReadFileToString(const std::string& filename,
-                               std::string* output);
+  static bool ReadFileToString(const string& filename,
+                               string* output);
 
   // Writes a string into a file. Returns false if the target file could
   // not be created and opened for writing.
-  static bool WriteStringToFile(const std::string& data,
-                                const std::string& filename);
+  static bool WriteStringToFile(const string& data,
+                                const string& filename);
 
   // Returns true if the file exists.
-  static bool Exists(const std::string& full_path);
+  static bool Exists(const string& full_path);
 
   // Deletes a file. If the file does not exist, returns false. Returns true
   // if the file was deleted.
-  static bool Delete(const std::string& filepath);
+  static bool Delete(const string& filepath);
 
   // Creates a unique file in the system temporary directory. Returns the
   // full path of the new file in 'path'.
   // Returns true if the function succeeds. 'path' is unmodified on failure.
-  static bool CreateNewTempFile(std::string* full_filepath);
+  static bool CreateNewTempFile(string* full_filepath);
 
   // Join two file paths. If the first does not end in the platform-specific
   // path separator, it is appended before the second string is joined. Returns
   // the joined string. If either of the strings is empty, the other string is
-  // returned unmodified.
-  static std::string JoinPaths(const std::string& p1, const std::string& p2);
+  // returned unmodified. This should NOT be used with URL paths, which are
+  // not platform-specific.
+  static string JoinPaths(const string& p1, const string& p2);
+
+  // Splits a path to a filename into its base directory and filename
+  // components. E.g. /tom/dick/harry.txt is "/tom/dick" and "harry.txt".
+  // Either of the string pointers may be NULL.
+  static void SplitFilePath(const string& filepath,
+                            string* base_directory,
+                            string* filename);
 };
 
 }  // end namespace kmlbase

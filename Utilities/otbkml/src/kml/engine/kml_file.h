@@ -28,76 +28,66 @@
 #ifndef KML_ENGINE_KML_FILE_H__
 #define KML_ENGINE_KML_FILE_H__
 
-#include <string>
 #include <vector>
+#include "boost/scoped_ptr.hpp"
+#include "kml/base/attributes.h"
 #include "kml/base/referent.h"
+#include "kml/base/xml_namespaces.h"
+#include "kml/base/util.h"
+#include "kml/base/xml_file.h"
 #include "kml/dom.h"
 #include "kml/engine/engine_types.h"
-#include "kml/engine/kmz_file.h"
 #include "kml/engine/get_link_parents.h"
 #include "kml/engine/object_id_parser_observer.h"
 #include "kml/engine/shared_style_parser_observer.h"
-#include "kml/base/util.h"
 
 namespace kmlengine {
 
 class KmlCache;
 
-const char kDefaultXmlns[] = "http://www.opengis.net/kml/2.2";
-const char kDefaultEncoding[] = "utf-8";
-
 // The KmlFile class represents the instance of a KML file from a given URL.
-class KmlFile : public kmlbase::Referent {
+// A KmlFile manages an XML id domain and includes an internal map of all
+// id'ed Objects, shared styles, and name'ed Schemas and a list of all links.
+// KmlFile is a fundamental component of the KML Engine and is central in the
+// use of shared style resolution.
+class KmlFile : public kmlbase::XmlFile {
  public:
   // This creates a KmlFile from a memory buffer of either KML or KMZ data.
-  // In the case of Kmz the KmzFile module's ReadKml() is used to read the
+  // In the case of KMZ the KmzFile module's ReadKml() is used to read the
   // KML data from the KMZ archive.  On any parse errors NULL is returned
   // and a human readable error message is saved in the supplied string.
   // The caller is responsible for deleting the KmlFile this creates.
-  static KmlFile* CreateFromParse(const std::string& kml_or_kmz_data,
-                                  std::string *errors);
+  static KmlFile* CreateFromParse(const string& kml_or_kmz_data,
+                                  string *errors);
 
   // This method is for use with NetCache CacheItem.
-  static KmlFile* CreateFromString(const std::string& kml_or_kmz_data) {
+  static KmlFile* CreateFromString(const string& kml_or_kmz_data) {
     // Internal KML fetch/parse (styleUrl, etc) errors are quietly ignored.
     return CreateFromParse(kml_or_kmz_data, NULL);
   }
 
   // This method is for use with KmlCache.  The purpose is to keep set_url()
   // and set_kml_cache() private and at creation-time.
-  static KmlFile* CreateFromStringWithUrl(const std::string& kml_data,
-                                          const std::string& url,
-                                          KmlCache* kml_cache) {
-    if (KmlFile* kml_file = CreateFromString(kml_data)) {
-      kml_file->set_url(url);
-      kml_file->set_kml_cache(kml_cache);
-      return kml_file;
-    }
-    return NULL;
+  static KmlFile* CreateFromStringWithUrl(const string& kml_data,
+                                          const string& url,
+                                          KmlCache* kml_cache);
+
+  // This creates a KmlFile from the given element hierarchy.  This variant of
+  // CreateFromImport fails on id duplicates.
+  static KmlFile* CreateFromImport(const kmldom::ElementPtr& element);
+
+  // This creates a KmlFile from the given element hierarchy.  This variant of
+  // CreateFromImport employs a "last one wins" strategy for id duplicates.
+  static KmlFile* CreateFromImportLax(const kmldom::ElementPtr& element);
+
+  // This returns the root element of this KML file.
+  const kmldom::ElementPtr get_root() const {
+    return kmldom::AsElement(XmlFile::get_root());
   }
 
-  // This permits use creation of an empty KmlFile.
-  static KmlFile* Create() {
-    return new KmlFile;
-  }
-
-  // This parses the KML in the given input buffer.  The encoding from the XML
-  // header is saved if such exists.  The default XML namespace and any
-  // namespace prefix definitions found in the root element are also saved.
-  // The root element of the parse is returned.  All Objects with ids are
-  // saved in a map for use with GetObjectById.  Any use of this method
-  // clears the internal state of the instance of this class.  If an errors
-  // string is supplied any parse errors are stored there.  On any parse
-  // error including duplicate id a NULL is returned.
-  // TODO: deprecate.  Use CreateFromParse.
-  const kmldom::ElementPtr& ParseFromString(const std::string& kml,
-                                            std::string* errors);
-
-  // This returns the root element of this KML file.  The initial state of
-  // this is NULL.  A parse failure also sets this to NULL>
-  // TODO: get_root()
-  const kmldom::ElementPtr& root() const {
-    return root_;
+  // Deprecated.  Use get_root().
+  const kmldom::ElementPtr root() const {
+    return get_root();
   }
 
   // This serializes the KML from the root.  The xmlns() value is added to
@@ -107,31 +97,33 @@ class KmlFile : public kmlbase::Referent {
   //    <kml xmlns="XMLNS" xmlns:PREFIX1="XMLNS1" xmlns:PREFIX2="XMLNS2"...>
   //    ...
   //    </kml>
-  bool SerializeToString(std::string* xml_output) const;
+  bool SerializeToString(string* xml_output) const;
 
   // This returns the XML header including the encoding:
   // The default is this: "<?version="1.0" encoding="utf-8"?>
-  const std::string CreateXmlHeader() const;
+  const string CreateXmlHeader() const;
 
   // These methods access the XML encoding of the XML file.
   // TODO: set should be create time only.
-  void set_encoding(const std::string& encoding) {
+  void set_encoding(const string& encoding) {
     encoding_ = encoding;
   }
-  const std::string& get_encoding() const {
+  const string& get_encoding() const {
     return encoding_;
   }
 
   // This returns the Object Element with the given id.  A NULL Object is
   // returned if no Object with this id exists in the KML file.
-  kmldom::ObjectPtr GetObjectById(std::string id) const;
+  kmldom::ObjectPtr GetObjectById(const string& id) const;
 
   // This returns the shared StyleSelector Element with the given id.  NULL is
   // returned if no StyleSelector with this id exists as a shared style
   // selector in the KML file.
-  kmldom::StyleSelectorPtr GetSharedStyleById(std::string id) const;
+  kmldom::StyleSelectorPtr GetSharedStyleById(const string& id) const;
 
-  // TODO: set/get the default xmlns and prefix-namespace mappings
+  const SharedStyleMap& get_shared_style_map() const {
+    return shared_style_map_;
+  }
 
   // This returns the all Elements that may have link children.  See
   // GetLinkParents() for more information.
@@ -139,43 +131,48 @@ class KmlFile : public kmlbase::Referent {
     return link_parent_vector_;
   }
 
-  // This is the URL from which this KmlFile was fetched.  This may be empty
-  // if this KmlFile was not created using CreateFromStringWithUrl().
-  const std::string& get_url() const {
-    return url_;
-  }
-
-  // This is the KmlCache which created this KmlFile.  This may NULL if this
+  // This is the KmlCache which created this KmlFile.  This may be NULL if this
   // KmlFile was not created using CreateFromStringWithUrl().
   KmlCache* get_kml_cache() const {
     return kml_cache_;
   }
 
+  // Duplicate id attributes are illegal and should cause the parse to fail.
+  // However, Google Earth never enforced this in its KML ingest and thus the
+  // web has a lot of invalid KML. We attempt to parse this by default. A
+  // client may use set_strict_parse(true) to override this, which will
+  // instruct the ObjectIdParserObserver to fail on duplicate ids.
+  void set_strict_parse(bool val) {
+    strict_parse_ = val;
+  }
+
  private:
   // Constructor is private.  Use static Create methods.
   KmlFile();
+
+  // This is an internal helper function for the public CreateFromImport*()
+  // methods.
+  static KmlFile* CreateFromImportInternal(const kmldom::ElementPtr& element,
+                                           bool disallow_duplicate_ids);
+
+  // This is an internal method used in the static Create methods.
+  bool ParseFromString(const string& kml, string* errors);
+
   // Only static Create methods can set the KmlCache.
   void set_kml_cache(KmlCache* kml_cache) {
     kml_cache_ = kml_cache;
   }
-  // Only static Create methods can set the URL.
-  void set_url(const std::string& url) {
-    url_ = url;
-  }
   // These are helper functions for CreateFromParse().
-  bool _CreateFromParse(const std::string& kml_or_kmz_data,
-                        std::string* errors);
-  bool OpenAndParseKmz(const std::string& kmz_data, std::string* errors);
-  void Clear();
-  std::string encoding_;
-  std::string default_xmlns_;
-  std::string url_;
-  kmldom::ElementPtr root_;
+  bool _CreateFromParse(const string& kml_or_kmz_data,
+                        string* errors);
+  bool OpenAndParseKmz(const string& kmz_data, string* errors);
+  string encoding_;
+  // TODO: use XmlElement's id map.
   ObjectIdMap object_id_map_;
   SharedStyleMap shared_style_map_;
   ElementVector link_parent_vector_;
-  KmzFilePtr kmz_file_;
   KmlCache* kml_cache_;
+  bool strict_parse_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(KmlFile);
 };
 

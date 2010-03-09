@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,193 +13,240 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // The file contains the implementation of the KmzFile class methods.
 
 #include "kml/engine/kmz_file.h"
 #include <cstring>
+#include <set>
+#include "boost/scoped_ptr.hpp"
 #include "kml/base/file.h"
-#include "minizip/unzip.h"
-#include "minizip/zip.h"
+#include "kml/base/string_util.h"
+#include "kml/base/zip_file.h"
+#include "kml/engine/get_links.h"
+#include "kml/engine/href.h"
+#include "kml/engine/kml_uri.h"
 
-using kmlbase::TempFilePtr;
+using kmlbase::File;
+using kmlbase::StringVector;
+using kmlbase::ZipFile;
 
 namespace kmlengine {
 
-// We use this Pimpl-type idiom to keep the requirement for minizip headers
-// confined to this file.
-// TODO: push more zip-specific stuff from KmzFile into a broader ZipFile.
-class ZlibImpl {
- public:
-  ZlibImpl(unzFile unzfile) : unzfile_(unzfile) {}
-  ~ZlibImpl() {
-    if (unzfile_) {
-      unzClose(unzfile_);
-    }
-  }
-  unzFile get_unzfile() { return unzfile_; }
- private:
-  unzFile unzfile_;
-  LIBKML_DISALLOW_EVIL_CONSTRUCTORS(ZlibImpl);
-};
+// This is the default name for writing a KML file to a new archive. The
+// default file for reading is simply the first file in the table of contents
+// that ends with ".kml".
+const char kDefaultKmlFilename[] = "doc.kml";
 
-const char kDefaultKmlFile[] = "doc.kml";
+KmzFile::KmzFile(ZipFile* zip_file) : zip_file_(zip_file) {}
 
-KmzFile::KmzFile(ZlibImpl* zlibimpl, const TempFilePtr& tempfile)
-    : zlibimpl_(zlibimpl), tempfile_(tempfile) {}
-
-KmzFile::~KmzFile() {
-  delete zlibimpl_;
-}
+KmzFile::~KmzFile() {}
 
 // Static.
 KmzFile* KmzFile::OpenFromFile(const char* kmz_filename) {
-  if (!kmlbase::File::Exists(kmz_filename)) {
-    return NULL;
+  if (ZipFile* zipfile = ZipFile::OpenFromFile(kmz_filename)) {
+    return new KmzFile(zipfile);
   }
-  std::string data;
-  if (!kmlbase::File::ReadFileToString(kmz_filename, &data)) {
-    return NULL;
-  }
-  return OpenFromString(data);
+  return NULL;
 }
 
 // Static.
-KmzFile* KmzFile::OpenFromString(const std::string& kmz_data) {
-  if (!IsKmz(kmz_data)) {
-    return NULL;
+KmzFile* KmzFile::OpenFromString(const string& kmz_data) {
+  if (ZipFile* zipfile = ZipFile::OpenFromString(kmz_data)) {
+    return new KmzFile(zipfile);
   }
-  // Minizip is file-based. The TempFile util class manages the creation and
-  // deletion of the temporary files we use. 
-  TempFilePtr tempfile = kmlbase::TempFile::CreateTempFile();
-  if (!tempfile) {
-    return NULL;
-  }
-  if (!kmlbase::File::WriteStringToFile(kmz_data, tempfile->name())) {
-    return NULL;
-  }
-  unzFile unzfile = unzOpen(tempfile->name().c_str());
-  if (!unzfile) {
-    return NULL;
-  }
-  // unzfile_ is now a minizip file handle to the tempfile we created. It is
-  // passed to the constructor of the KmzFile class.
-  if (unzGoToFirstFile(unzfile) != UNZ_OK) {
-    unzClose(unzfile);
-    return NULL;
-  }
-  // If we got this far, it's safe to construct the KmzFile object.
-  return new KmzFile(new ZlibImpl(unzfile), tempfile);
+  return NULL;
 }
 
 // Static.
-bool KmzFile::IsKmz(const std::string& kmz_data) {
-  return kmz_data.substr(0, 4) == "PK\003\004" ? true : false;
+bool KmzFile::IsKmz(const string& kmz_data) {
+  return ZipFile::IsZipData(kmz_data);
 }
 
-bool KmzFile::ReadKml(std::string* output) const {
+
+void KmzFile::set_max_uncompressed_file_size(unsigned int i) {
+  zip_file_->set_max_uncompressed_file_size(i);
+}
+
+unsigned int KmzFile::get_max_uncompressed_file_size() {
+  return zip_file_->get_max_uncompressed_file_size();
+}
+
+
+bool KmzFile::ReadKmlAndGetPath(string* output,
+                                string* kml_name) const {
   if (!output) {
     return false;
   }
-  // A doc.kml at the root level is the default KML file.
-  if (ReadOne(kDefaultKmlFile, output)) {
-    return true;
-  }
-  // If no doc.kml, then we read the first KML file.
-  unz_file_info file_info;
-  do {
-    static char buf[1024];
-    if (unzGetCurrentFileInfo(zlibimpl_->get_unzfile(), &file_info, buf, sizeof(buf),
-                              0, 0, 0, 0) == UNZ_OK) {
-      if (strlen(buf) >= 4 && strcmp(buf + strlen(buf)-4, ".kml") == 0 &&
-          ReadCurrentFile(output)) {
-        return true;
-      }
-    }
-  } while (unzGoToNextFile(zlibimpl_->get_unzfile()) == UNZ_OK);
-  return false;
-}
-
-bool KmzFile::ReadFile(const char* subfile, std::string* output) const {
-  return ReadOne(subfile, output);  // ReadOne performs NULL checks.
-}
-
-bool KmzFile::List(std::vector<std::string>* subfiles) {
-  if (!subfiles || !zlibimpl_->get_unzfile()) {
+  string default_kml;
+  if (!zip_file_->FindFirstOf(".kml", &default_kml)) {
     return false;
   }
-  unz_file_info finfo;
-  do {
-    static char buf[1024];
-    if (unzGetCurrentFileInfo(zlibimpl_->get_unzfile(), &finfo, buf, sizeof(buf),
-                              0, 0, 0, 0) == UNZ_OK) {
-      subfiles->push_back(buf);
-    }
-  } while (unzGoToNextFile(zlibimpl_->get_unzfile()) == UNZ_OK);
+  if (!zip_file_->GetEntry(default_kml, output)) {
+    return false;
+  }
+  if (kml_name) {
+    *kml_name = default_kml;
+  }
+  return true;
+}
+
+bool KmzFile::ReadKml(string* output) const {
+  return ReadKmlAndGetPath(output, NULL);
+}
+
+bool KmzFile::ReadFile(const char* path_in_kmz, string* output) const {
+  return zip_file_->GetEntry(path_in_kmz, output);
+}
+
+bool KmzFile::List(std::vector<string>* subfiles) {
+  return zip_file_->GetToc(subfiles);
+}
+
+bool KmzFile::SaveToString(string* kmz_bytes) {
+  if (!kmz_bytes) {
+    return false;
+  }
+  *kmz_bytes = zip_file_->get_data();
   return true;
 }
 
 // Static.
-bool KmzFile::WriteKmz(const char* kmz_filepath, const std::string& kml) {
-  zipFile zipfile_ = zipOpen(kmz_filepath, 0);
-  if (!zipfile_) {
+KmzFile* KmzFile::Create(const char* kmz_filepath) {
+  ZipFile* zipfile = ZipFile::Create(kmz_filepath);
+  if (!zipfile) {
+    return NULL;
+  }
+  return new KmzFile(zipfile);
+}
+
+bool KmzFile::AddFile(const string& data, const string& path_in_kmz) {
+  return zip_file_->AddEntry(data, path_in_kmz);
+}
+
+// TODO: the implementation of this function really belongs in base/zip_file.
+size_t KmzFile::AddFileList(const string& base_url,
+                            const StringVector& file_paths) {
+  size_t error_count = 0;
+  // We remember all stored resources so we can eliminate duplicates.
+  std::set<string> stored_hrefs;
+
+  StringVector::const_iterator itr;
+  for (itr = file_paths.begin(); itr != file_paths.end(); ++itr) {
+    // Drop the fragment if any to get the stem of the filename.
+    Href href(*itr);
+    if (href.has_fragment()) {
+      href.clear_fragment();
+    }
+
+    // Normalize the href.
+    string normalized_href;
+    if (!NormalizeHref(href.get_path(), &normalized_href)) {
+      error_count++;
+      continue;
+    }
+
+    // If the normalized_href points above the base_url, we consider it
+    // invalid.
+    if (normalized_href.substr(0, 2) == "..") {
+      error_count++;
+      continue;
+    }
+
+    // Detect duplicate resources and skip if found.
+    if (stored_hrefs.find(normalized_href) != stored_hrefs.end()) {
+      continue;  // Not an error.
+    }
+    stored_hrefs.insert(normalized_href);
+
+    // Try to read the file pointed to by base_url and the normalized href.
+    string relative_path = File::JoinPaths(base_url, normalized_href);
+    string file_data;
+    if (!kmlbase::File::ReadFileToString(relative_path, &file_data)) {
+      error_count++;
+      continue;
+    }
+
+    // Add the file to the KMZ archive.
+    if (!AddFile(file_data, normalized_href)) {
+      error_count++;
+      continue;
+    }
+  }
+  return error_count;
+}
+
+// Static.
+bool KmzFile::WriteKmz(const char* kmz_filepath, const string& kml) {
+  boost::scoped_ptr<KmzFile> kmz(KmzFile::Create(kmz_filepath));
+  if (!kmz.get()) {
     return false;
   }
-  zipOpenNewFileInZip(zipfile_, kDefaultKmlFile, 0, 0, 0, 0, 0, 0, Z_DEFLATED,
-                      Z_DEFAULT_COMPRESSION);
-  zipWriteInFileInZip(zipfile_, (void* const)kml.data(), kml.size());
-  zipCloseFileInZip(zipfile_);
-  zipClose(zipfile_, 0);
+  if (!kmz->AddFile(kml, kDefaultKmlFilename)) {
+    return false;
+  }
   return kmlbase::File::Exists(kmz_filepath);
 }
 
-// Private.
-bool KmzFile::ReadCurrentFile(std::string* output) const {
-  if (zlibimpl_->get_unzfile() == NULL) {
+// Static.
+bool KmzFile::CreateFromKmlFilepath(const string& kml_filepath,
+                                    const string& kmz_filepath) {
+  if (kmz_filepath.empty() || kml_filepath.empty()) {
     return false;
   }
-  if (unzOpenCurrentFile(zlibimpl_->get_unzfile()) != UNZ_OK) {
+  string kml_data;
+  if (!kmlbase::File::ReadFileToString(kml_filepath, &kml_data)) {
     return false;
   }
-  unz_file_info finfo;
-  if (unzGetCurrentFileInfo(zlibimpl_->get_unzfile(),
-                            &finfo, 0, 0, 0, 0, 0, 0) != UNZ_OK) {
-    unzCloseCurrentFile(zlibimpl_->get_unzfile());
-    return false;
-  }
-  int nbytes = finfo.uncompressed_size;
-  char* filedata = new char[nbytes];
-  if (unzReadCurrentFile(zlibimpl_->get_unzfile(), filedata, nbytes) == nbytes) {
-    output->assign(filedata, nbytes);
-    unzCloseCurrentFile(zlibimpl_->get_unzfile());
-    delete [] filedata;
-    return true;
-  }
-  unzCloseCurrentFile(zlibimpl_->get_unzfile());
-  delete [] filedata;
-  return false;
+
+  string base_dir;
+  kmlbase::File::SplitFilePath(kml_filepath, &base_dir, NULL);
+
+  KmlFilePtr kml_file =
+    KmlFile::CreateFromStringWithUrl(kml_data, base_dir, NULL);
+
+  return CreateFromKmlFile(kml_file, kmz_filepath);
 }
 
-// Private.
-bool KmzFile::ReadOne(const char* subfile, std::string* output) const {
-  if (output == NULL || zlibimpl_->get_unzfile() == NULL) {
+// Static.
+bool KmzFile::CreateFromElement(const kmldom::ElementPtr& element,
+                                const string& base_url,
+                                const string& kmz_filepath) {
+  if (kmz_filepath.empty()) {
     return false;
   }
-  if (unzLocateFile(zlibimpl_->get_unzfile(), subfile, 0) == UNZ_OK
-      && ReadCurrentFile(output)) {
-    unzCloseCurrentFile(zlibimpl_->get_unzfile());
-    return true;
+  KmzFilePtr kmz_file = Create(kmz_filepath.c_str());
+  if (!kmz_file) {
+    return false;
   }
-  return false;
+  const string kml_data = kmldom::SerializePretty(element);
+  // First add the KML file. This is the file opened by default by a client
+  // from a KMZ archive.
+  kmz_file->AddFile(kml_data, kDefaultKmlFilename);
+
+  // Next gather the local references and add them.
+  StringVector file_paths;
+  if (GetRelativeLinks(kml_data, &file_paths)) {
+    kmz_file->AddFileList(base_url, file_paths);
+  }
+
+  return kmlbase::File::Exists(kmz_filepath);
+}
+
+// Static.
+bool KmzFile::CreateFromKmlFile(const KmlFilePtr& kml_file,
+                                const string& kmz_filepath) {
+  return KmzFile::CreateFromElement(
+      kml_file->get_root(), kml_file->get_url(), kmz_filepath);
 }
 
 }  // end namespace kmlengine

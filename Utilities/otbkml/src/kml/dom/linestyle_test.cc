@@ -27,61 +27,39 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class LineStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LineStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class LineStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     linestyle_ = KmlFactory::GetFactory()->CreateLineStyle();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   LineStylePtr linestyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LineStyleTest);
-
-void LineStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == linestyle_->IsA(Type_LineStyle));
-  CPPUNIT_ASSERT(Type_LineStyle == linestyle_->Type());
-  CPPUNIT_ASSERT(true == linestyle_->IsA(Type_ColorStyle));
+TEST_F(LineStyleTest, TestType) {
+  ASSERT_TRUE(linestyle_->IsA(Type_LineStyle));
+  ASSERT_EQ(Type_LineStyle, linestyle_->Type());
+  ASSERT_TRUE(linestyle_->IsA(Type_ColorStyle));
 }
 
 // Verify proper defaults:
-void LineStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == linestyle_->has_width());
-  CPPUNIT_ASSERT(1.0 == linestyle_->get_width());
+TEST_F(LineStyleTest, TestDefaults) {
+  ASSERT_FALSE(linestyle_->has_width());
+  ASSERT_DOUBLE_EQ(1.0, linestyle_->get_width());
 }
 
 // Verify setting default makes has_xxx() true:
-void LineStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(LineStyleTest, TestSetToDefaultValues) {
   linestyle_->set_width(linestyle_->get_width());
-  CPPUNIT_ASSERT(true == linestyle_->has_width());
+  ASSERT_TRUE(linestyle_->has_width());
 }
 
 // Verify set, get, has, clear:
-void LineStyleTest::TestSetGetHasClear() {
+TEST_F(LineStyleTest, TestSetGetHasClear) {
   // Non-default values:
   double width = 0.0;
 
@@ -89,16 +67,16 @@ void LineStyleTest::TestSetGetHasClear() {
   linestyle_->set_width(width);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == linestyle_->has_width());
-  CPPUNIT_ASSERT(width == linestyle_->get_width());
+  ASSERT_TRUE(linestyle_->has_width());
+  ASSERT_DOUBLE_EQ(width, linestyle_->get_width());
 
   // Clear all fields:
   linestyle_->clear_width();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

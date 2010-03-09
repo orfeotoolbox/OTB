@@ -25,44 +25,39 @@
 
 #include "kml/base/tempfile.h"
 #include "kml/base/file.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlbase {
 
-class TempFileTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(TempFileTest);
-  CPPUNIT_TEST(TestTempFile);
-  CPPUNIT_TEST_SUITE_END();
-
- protected:
-  void TestTempFile();
+class TempFileTest : public testing::Test {
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(TempFileTest);
-
-void TempFileTest::TestTempFile() {
-  std::string tempfile_name;  // To check successful deletion of tempfile.
+TEST_F(TempFileTest, TestTempFile) {
+  string tempfile_name;  // To check successful deletion of tempfile.
   {
     TempFilePtr tempfile = TempFile::CreateTempFile();
     // The tempfile was created successfully.
-    CPPUNIT_ASSERT(tempfile != 0);
+    ASSERT_TRUE(tempfile != 0);
     // The tempfile has a name.
-    CPPUNIT_ASSERT(!tempfile->name().empty());
+    ASSERT_FALSE(tempfile->name().empty());
     tempfile_name = tempfile->name();
     // The tempfile is accessible.
-    CPPUNIT_ASSERT(File::Exists(tempfile_name));
+    ASSERT_TRUE(File::Exists(tempfile_name));
     // We can write and read data.
-    const std::string s_written("some data");
+    const string s_written("some data");
     File::WriteStringToFile(s_written, tempfile_name);
-    std::string s_read;
+    string s_read;
     File::ReadFileToString(tempfile_name, &s_read);
-    CPPUNIT_ASSERT_EQUAL(s_written, s_read);
+    ASSERT_EQ(s_written, s_read);
   }
   // Use of intrusive_ptr means TempFile's dtor is called at the end of the
   // block, which deletes the tempfile.
-  CPPUNIT_ASSERT(!File::Exists(tempfile_name));
+  ASSERT_FALSE(File::Exists(tempfile_name));
 }
 
 }  // end namespace kmlbase
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

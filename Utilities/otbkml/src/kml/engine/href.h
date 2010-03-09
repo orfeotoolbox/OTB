@@ -32,7 +32,7 @@
 #ifndef KML_ENGINE_HREF_H__
 #define KML_ENGINE_HREF_H__
 
-#include <string>
+#include "kml/base/util.h"
 
 namespace kmlengine {
 
@@ -46,7 +46,7 @@ class Href {
  public:
   Href() {}
   // Construct from the contents of <href>
-  Href(const std::string& href) {
+  Href(const string& href) {
     Parse(href);
   }
 
@@ -62,52 +62,52 @@ class Href {
     return has_fragment() && !has_scheme() && !has_net_loc() && !has_path();
   }
 
-  const std::string& get_scheme() const {
+  const string& get_scheme() const {
     return scheme_;
   }
   bool has_scheme() const {
     return !scheme_.empty();
   }
-  void set_scheme(const std::string& scheme) {
+  void set_scheme(const string& scheme) {
     scheme_ = scheme;
   }
   void clear_scheme() {
     scheme_.clear();
   }
 
-  const std::string& get_net_loc() const {
+  const string& get_net_loc() const {
     return net_loc_;
   }
   bool has_net_loc() const {
     return !net_loc_.empty();
   }
-  void set_net_loc(const std::string& net_loc) {
+  void set_net_loc(const string& net_loc) {
     net_loc_ = net_loc;
   }
   void clear_net_loc() {
     net_loc_.clear();
   }
 
-  const std::string& get_path() const {
+  const string& get_path() const {
     return path_;
   }
   bool has_path() const {
     return !path_.empty();
   }
-  void set_path(const std::string& path) {
+  void set_path(const string& path) {
     path_ = path;
   }
   void clear_path() {
     path_.clear();
   }
 
-  const std::string& get_fragment() const {
+  const string& get_fragment() const {
     return fragment_;
   }
   bool has_fragment() const {
     return !fragment_.empty();
   }
-  void set_fragment(const std::string& fragment) {
+  void set_fragment(const string& fragment) {
     fragment_ = fragment;
   }
   void clear_fragment() {
@@ -115,18 +115,18 @@ class Href {
   }
 
  private:
-  void Parse(const std::string& href);
-  size_t ParseScheme(const std::string& href);
-  size_t ParseNetLoc(const std::string& href);
+  void Parse(const string& href);
+  size_t ParseScheme(const string& href);
+  size_t ParseNetLoc(const string& href);
 
   // These names match RFC 1808:
   // <scheme>://<net_loc>/<path>;<params>?<query>#<fragment>
   // Note: params is unused in a KML URL.
-  std::string scheme_;
-  std::string net_loc_;
-  std::string path_;
-  std::string query_;
-  std::string fragment_;
+  string scheme_;
+  string net_loc_;
+  string path_;
+  string query_;
+  string fragment_;
 };
 
 }  // end namespace kmlengine

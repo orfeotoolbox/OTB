@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file contains the implementation of the abstract element Geometry
@@ -30,25 +30,22 @@
 #include "kml/dom/geometry.h"
 #include <ctype.h>
 #include <stdlib.h>
-#include <string>
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
+#include "kml/base/xml_namespaces.h"
 #include "kml/dom/element.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/serializer.h"
 
+using kmlbase::Attributes;
+using kmlbase::Vec3;
+
 namespace kmldom {
 
-void Vec3::Serialize(Serializer& serializer) const {
-  serializer.Indent();
-  serializer.SaveContent(ToString(get_longitude()) + "," +
-                         ToString(get_latitude()) + "," +
-                         ToString(get_altitude()) + "\n",
-                         false);  // No coordinates list needs CDATA.
+Coordinates::Coordinates() {
+  set_xmlns(kmlbase::XMLNS_KML22);
 }
-
-Coordinates::Coordinates() {}
 
 Coordinates::~Coordinates() {}
 
@@ -87,6 +84,14 @@ bool Coordinates::ParseVec3(const char* cstr, char** nextp, Vec3* vec) {
   bool done = false;
   char* endp = const_cast<char*>(cstr);
 
+  // Ignore any commas at the start of our scan. This will cause this:
+  // <coordinates>1,2,3,4,5</coordinates> to be treated as:
+  // <coordinates>1,2,3 4,5</coordinates>, which is how Google Earth treats
+  // the misuse of commas as separators.
+  if (*endp == ',') {
+    ++endp;
+  }
+
   // Longitude first.  strtod() eats leading whitespace.
   vec->set(0, strtod(endp, &endp));
   if (endp) {
@@ -111,15 +116,14 @@ bool Coordinates::ParseVec3(const char* cstr, char** nextp, Vec3* vec) {
     while (isspace(*endp)) {  // Eat whitespace between double and comma.
       ++endp;
     }
-    double altitude = 0.0;
     if (*endp == ',') {
-      altitude = strtod(endp+1, &endp);
+      // Note that this sets altitude only if an altitude is supplied.
+      vec->set(2, strtod(endp+1, &endp));
     }
-    vec->set(2, altitude);
   }
   if (nextp) {
     while (isspace(*endp)) {  // Eat the remaining whitespace before return.
-      *endp++;
+      ++endp;
     }
     *nextp = endp;
   }
@@ -128,7 +132,7 @@ bool Coordinates::ParseVec3(const char* cstr, char** nextp, Vec3* vec) {
 
 // The char_data is everything between <coordinates> elements including
 // leading and trailing whitespace.
-void Coordinates::Parse(const std::string& char_data) {
+void Coordinates::Parse(const string& char_data) {
   const char* cstr = char_data.c_str();
   const char* endp = cstr + char_data.size();
   char* next = const_cast<char*>(cstr);
@@ -146,12 +150,18 @@ void Coordinates::AddElement(const ElementPtr& element) {
 }
 
 void Coordinates::Serialize(Serializer& serializer) const {
-  Attributes attributes;  // dummy
-  serializer.BeginById(Type(), attributes);
+  Attributes dummy;
+  serializer.BeginById(Type(), dummy);
+  serializer.BeginElementArray(Type(), coordinates_array_.size());
   for (size_t i = 0; i < coordinates_array_.size(); ++i) {
-    coordinates_array_[i].Serialize(serializer);
+    serializer.SaveVec3(coordinates_array_[i]);
   }
+  serializer.EndElementArray(Type_coordinates);
   serializer.End();
+}
+
+void Coordinates::Accept(Visitor* visitor) {
+  visitor->VisitCoordinates(CoordinatesPtr(this));
 }
 
 Geometry::Geometry() {}
@@ -160,7 +170,9 @@ Geometry::~Geometry() {}
 
 AltitudeGeometryCommon::AltitudeGeometryCommon()
   : altitudemode_(ALTITUDEMODE_CLAMPTOGROUND),
-    has_altitudemode_(false) {
+    has_altitudemode_(false),
+    gx_altitudemode_(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR),
+    has_gx_altitudemode_(false) {
 }
 
 AltitudeGeometryCommon::~AltitudeGeometryCommon() {
@@ -170,11 +182,16 @@ void AltitudeGeometryCommon::AddElement(const ElementPtr& element) {
   if (!element) {
     return;
   }
-  if (element->Type() == Type_altitudeMode) {
-     has_altitudemode_ = element->SetEnum(&altitudemode_);
-     return;
+  switch (element->Type()) {
+    case Type_altitudeMode:
+      has_altitudemode_ = element->SetEnum(&altitudemode_);
+      return;
+    case Type_GxAltitudeMode:
+      has_gx_altitudemode_ = element->SetEnum(&gx_altitudemode_);
+      return;
+    default:
+      Geometry::AddElement(element);
   }
-  Geometry::AddElement(element);
 }
 
 ExtrudeGeometryCommon::ExtrudeGeometryCommon()
@@ -208,14 +225,20 @@ void CoordinatesGeometryCommon::AddElement(const ElementPtr& element) {
   }
 }
 
+
+void CoordinatesGeometryCommon::AcceptChildren(VisitorDriver* driver) {
+  ExtrudeGeometryCommon::AcceptChildren(driver);
+  if (has_coordinates()) {
+    driver->Visit(get_coordinates());
+  }
+}
+
 Point::Point() {}
 
 Point::~Point() {}
 
 void Point::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Geometry::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Geometry::Serialize(serializer);
   if (has_extrude()) {
     serializer.SaveFieldById(Type_extrude, get_extrude());
@@ -223,11 +246,16 @@ void Point::Serialize(Serializer& serializer) const {
   if (has_altitudemode()) {
     serializer.SaveEnum(Type_altitudeMode, get_altitudemode());
   }
+  if (has_gx_altitudemode()) {
+    serializer.SaveEnum(Type_GxAltitudeMode, get_gx_altitudemode());
+  }
   if (has_coordinates()) {
     serializer.SaveElement(get_coordinates());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Point::Accept(Visitor* visitor) {
+  visitor->VisitPoint(PointPtr(this));
 }
 
 LineCommon::LineCommon()
@@ -249,9 +277,7 @@ void LineCommon::AddElement(const ElementPtr& element) {
 }
 
 void LineCommon::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Geometry::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Geometry::Serialize(serializer);
   if (has_extrude()) {
     serializer.SaveFieldById(Type_extrude, get_extrude());
@@ -262,20 +288,29 @@ void LineCommon::Serialize(Serializer& serializer) const {
   if (has_altitudemode()) {
     serializer.SaveEnum(Type_altitudeMode, get_altitudemode());
   }
+  if (has_gx_altitudemode()) {
+    serializer.SaveEnum(Type_GxAltitudeMode, get_gx_altitudemode());
+  }
   if (has_coordinates()) {
     serializer.SaveElement(get_coordinates());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
 }
 
 LineString::LineString() {}
 
 LineString::~LineString() {}
 
+void LineString::Accept(Visitor* visitor) {
+  visitor->VisitLineString(LineStringPtr(this));
+}
+
 LinearRing::LinearRing() {}
 
 LinearRing::~LinearRing() {}
+
+void LinearRing::Accept(Visitor* visitor) {
+  visitor->VisitLinearRing(LinearRingPtr(this));
+}
 
 BoundaryCommon::BoundaryCommon() {}
 
@@ -290,22 +325,35 @@ void BoundaryCommon::AddElement(const ElementPtr& element) {
 }
 
 void BoundaryCommon::Serialize(Serializer& serializer) const {
-  Attributes attributes;  // None.
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   if (has_linearring()) {
     serializer.SaveElement(get_linearring());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+
+void BoundaryCommon::AcceptChildren(VisitorDriver* driver) {
+  Element::AcceptChildren(driver);
+  if (has_linearring()) {
+    driver->Visit(get_linearring());
+  }
 }
 
 OuterBoundaryIs::OuterBoundaryIs() {}
 
 OuterBoundaryIs::~OuterBoundaryIs() {}
 
+void OuterBoundaryIs::Accept(Visitor* visitor) {
+  visitor->VisitOuterBoundaryIs(OuterBoundaryIsPtr(this));
+}
+
 InnerBoundaryIs::InnerBoundaryIs() {}
 
 InnerBoundaryIs::~InnerBoundaryIs() {}
+
+void InnerBoundaryIs::Accept(Visitor* visitor) {
+  visitor->VisitInnerBoundaryIs(InnerBoundaryIsPtr(this));
+}
 
 Polygon::Polygon()
   : tessellate_(false),
@@ -334,9 +382,7 @@ void Polygon::AddElement(const ElementPtr& element) {
 }
 
 void Polygon::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Geometry::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Geometry::Serialize(serializer);
   if (has_extrude()) {
     serializer.SaveFieldById(Type_extrude, get_extrude());
@@ -347,14 +393,25 @@ void Polygon::Serialize(Serializer& serializer) const {
   if (has_altitudemode()) {
     serializer.SaveEnum(Type_altitudeMode, get_altitudemode());
   }
+  if (has_gx_altitudemode()) {
+    serializer.SaveEnum(Type_GxAltitudeMode, get_gx_altitudemode());
+  }
   if (has_outerboundaryis()) {
     serializer.SaveElement(get_outerboundaryis());
   }
-  for (size_t i = 0; i < innerboundaryis_array_.size(); ++i) {
-    serializer.SaveElement(innerboundaryis_array_[i]);
+  serializer.SaveElementArray(innerboundaryis_array_);
+}
+
+void Polygon::Accept(Visitor* visitor) {
+  visitor->VisitPolygon(PolygonPtr(this));
+}
+
+void Polygon::AcceptChildren(VisitorDriver* driver) {
+  ExtrudeGeometryCommon::AcceptChildren(driver);
+  if (has_outerboundaryis()) {
+    driver->Visit(get_outerboundaryis());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+  Element::AcceptRepeated<InnerBoundaryIsPtr>(&innerboundaryis_array_, driver);
 }
 
 MultiGeometry::MultiGeometry() {}
@@ -377,15 +434,18 @@ void MultiGeometry::AddElement(const ElementPtr& element) {
 }
 
 void MultiGeometry::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Geometry::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Geometry::Serialize(serializer);
-  for (size_t i = 0; i < geometry_array_.size(); ++i) {
-    serializer.SaveElement(geometry_array_[i]);
-  }
-  SerializeUnknown(serializer);
-  serializer.End();
+  serializer.SaveElementGroupArray(geometry_array_, Type_Geometry);
+}
+
+void MultiGeometry::Accept(Visitor* visitor) {
+  visitor->VisitMultiGeometry(MultiGeometryPtr(this));
+}
+
+void MultiGeometry::AcceptChildren(VisitorDriver* driver) {
+  Geometry::AcceptChildren(driver);
+  Element::AcceptRepeated<GeometryPtr>(&geometry_array_, driver);
 }
 
 }  // end namespace kmldom

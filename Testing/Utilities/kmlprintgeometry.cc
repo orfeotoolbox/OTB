@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without 
@@ -128,7 +108,7 @@ static const FeaturePtr GetRootFeature(const ElementPtr& root) {
   return kmldom::AsFeature(root);
 }
 
-int kmlprintgeometry(int argc, char* argv[]) {
+int kmlprintgeometry(int argc, char** argv) {
   std::string kml;
   kmlbase::File::ReadFileToString(argv[1], &kml);
   std::string errors;
@@ -136,8 +116,8 @@ int kmlprintgeometry(int argc, char* argv[]) {
   if (!errors.empty()) {
     cout << argv[1] << ": parse error" << endl;
     cout << errors << endl;
-    return EXIT_FAILURE;
+    return 1;
   }
-  return EXIT_SUCCESS;
+  return 0;
 }
 

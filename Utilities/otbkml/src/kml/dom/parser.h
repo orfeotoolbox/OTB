@@ -28,7 +28,6 @@
 #ifndef KML_DOM_PARSER_H__
 #define KML_DOM_PARSER_H__
 
-#include <string>
 #include <vector>
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/parser_observer.h"
@@ -49,7 +48,7 @@ namespace kmldom {
 //   parser.AddObserver(...);
 //   parser.AddObserver(...);
 //   ...
-//   std::string errors;
+//   string errors;
 //   ElementPtr root = parser.Parse(kml, &errors);
 class Parser {
  public:
@@ -58,7 +57,15 @@ class Parser {
   // any errors NULL is returned and if error's is non-NULL a human readable
   // diagnostic is stored there.  If there are no parse errors the root
   // element is returned.  Note that any ParseObserver can terminate the parse.
-  ElementPtr Parse(const std::string& kml, std::string *errors);
+  ElementPtr Parse(const string& kml, string *errors);
+
+  // As Parse(), but invokes the underlying XML parser's namespace-aware mode.
+  ElementPtr ParseNS(const string& kml, string *errors);
+
+  // As Parse(), but invokes the underlying XML parser's namespace-aware mode
+  // with special recognition of the Atom namespace.  See kml_funcs.h.
+  ElementPtr ParseAtom(const string& atom, string *errors);
+
   // This method registers the given ParserObserver-based class.  Each
   // NewElement() and AddChild() method is called in the order added.
   void AddObserver(ParserObserver* parser_observer);

@@ -24,12 +24,18 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/object.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
+#include "kml/base/xml_namespaces.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
 Object::Object()
-  : has_id_(false), has_targetid_(false) {}
+  : has_id_(false),
+     has_targetid_(false) {
+  set_xmlns(kmlbase::XMLNS_KML22);
+}
 
 Object::~Object() {}
 
@@ -44,22 +50,26 @@ void Object::AddElement(const ElementPtr& element) {
   Element::AddElement(element);
 }
 
-void Object::ParseAttributes(const Attributes& attributes) {
-  has_id_ = attributes.GetString(kId, &id_);
-  has_targetid_ = attributes.GetString(kTargetId, &targetid_);
-  Element::ParseAttributes(attributes);
+void Object::ParseAttributes(Attributes* attributes) {
+  if (!attributes) {
+    return;
+  }
+  has_id_ = attributes->CutValue(kId, &id_);
+  has_targetid_ = attributes->CutValue(kTargetId, &targetid_);
+  AddUnknownAttributes(attributes);
 }
 
-void Object::GetAttributes(Attributes* attributes) const {
-  Element::GetAttributes(attributes);
+void Object::SerializeAttributes(Attributes* attributes) const {
+  Element::SerializeAttributes(attributes);
   // If the id or targetId have been explictly set via API calls, we overwrite
-  // the values stored in the attibutes object.
+  // the values stored in the attributes object.
   if (has_id_) {
-    attributes->SetString(kId, id_);
+    attributes->SetValue(kId, id_);
   }
   if (has_targetid_) {
-    attributes->SetString(kTargetId, targetid_);
+    attributes->SetValue(kTargetId, targetid_);
   }
 }
+
 
 }  // namespace kmldom

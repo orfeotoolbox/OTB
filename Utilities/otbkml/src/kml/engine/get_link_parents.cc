@@ -55,7 +55,7 @@ bool IsLinkParent(const ElementPtr& element) {
   }
 }
 
-bool GetLinkParents(const std::string& kml,
+bool GetLinkParents(const string& kml,
                     ElementVector* link_parent_vector) {
   if (!link_parent_vector) {
     return false;

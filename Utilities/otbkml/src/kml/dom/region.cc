@@ -27,23 +27,29 @@
 // and Region elements.
 
 #include "kml/dom/region.h"
-#include <stdlib.h>
+#include "kml/base/attributes.h"
 #include "kml/dom/abstractlatlonbox.h"
-#include "kml/dom/attributes.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
 LatLonAltBox::LatLonAltBox()
   : minaltitude_(0.0), has_minaltitude_(false),
     maxaltitude_(0.0), has_maxaltitude_(false),
-    altitudemode_(ALTITUDEMODE_CLAMPTOGROUND), has_altitudemode_(false)
+    altitudemode_(ALTITUDEMODE_CLAMPTOGROUND), has_altitudemode_(false),
+    gx_altitudemode_(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR),
+    has_gx_altitudemode_(false)
 {}
 
 LatLonAltBox::~LatLonAltBox() {}
 
 void LatLonAltBox::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_minAltitude:
       has_minaltitude_ = element->SetDouble(&minaltitude_);
@@ -54,6 +60,9 @@ void LatLonAltBox::AddElement(const ElementPtr& element) {
     case Type_altitudeMode:
       has_altitudemode_ = element->SetEnum(&altitudemode_);
       break;
+    case Type_GxAltitudeMode:
+      has_gx_altitudemode_ = element->SetEnum(&gx_altitudemode_);
+      break;
     default:
       AbstractLatLonBox::AddElement(element);
       break;
@@ -61,9 +70,7 @@ void LatLonAltBox::AddElement(const ElementPtr& element) {
 }
 
 void LatLonAltBox::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  AbstractLatLonBox::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   AbstractLatLonBox::Serialize(serializer);
   if (has_minaltitude()) {
     serializer.SaveFieldById(Type_minAltitude, get_minaltitude());
@@ -74,8 +81,13 @@ void LatLonAltBox::Serialize(Serializer& serializer) const {
   if (has_altitudemode()) {
     serializer.SaveEnum(Type_altitudeMode, get_altitudemode());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+  if (has_gx_altitudemode()) {
+    serializer.SaveEnum(Type_GxAltitudeMode, get_gx_altitudemode());
+  }
+}
+
+void LatLonAltBox::Accept(Visitor* visitor) {
+  visitor->VisitLatLonAltBox(LatLonAltBoxPtr(this));
 }
 
 Lod::Lod()
@@ -88,6 +100,9 @@ Lod::Lod()
 Lod::~Lod() {}
 
 void Lod::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_minLodPixels:
       has_minlodpixels_ = element->SetDouble(&minlodpixels_);
@@ -108,9 +123,7 @@ void Lod::AddElement(const ElementPtr& element) {
 }
 
 void Lod::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Object::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Object::Serialize(serializer);
   if (has_minlodpixels()) {
     serializer.SaveFieldById(Type_minLodPixels, get_minlodpixels());
@@ -124,8 +137,10 @@ void Lod::Serialize(Serializer& serializer) const {
   if (has_maxfadeextent()) {
     serializer.SaveFieldById(Type_maxFadeExtent, get_maxfadeextent());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Lod::Accept(Visitor* visitor) {
+  visitor->VisitLod(LodPtr(this));
 }
 
 Region::Region() {
@@ -135,6 +150,9 @@ Region::~Region() {
 }
 
 void Region::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_LatLonAltBox:
       set_latlonaltbox(AsLatLonAltBox(element));
@@ -148,9 +166,7 @@ void Region::AddElement(const ElementPtr& element) {
 }
 
 void Region::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Object::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Object::Serialize(serializer);
   if (has_latlonaltbox()) {
     serializer.SaveElement(get_latlonaltbox());
@@ -158,8 +174,20 @@ void Region::Serialize(Serializer& serializer) const {
   if (has_lod()) {
     serializer.SaveElement(get_lod());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Region::Accept(Visitor* visitor) {
+  visitor->VisitRegion(RegionPtr(this));
+}
+
+void Region::AcceptChildren(VisitorDriver* driver) {
+  Object::AcceptChildren(driver);
+  if (has_latlonaltbox()) {
+    driver->Visit(get_latlonaltbox());
+  }
+  if (has_lod()) {
+    driver->Visit(get_lod());
+  }
 }
 
 }  // end namespace kmldom

@@ -24,8 +24,10 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/folder.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -36,12 +38,12 @@ Folder::~Folder() {
 }
 
 void Folder::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Container::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   Container::Serialize(serializer);
-  Element::SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Folder::Accept(Visitor* visitor) {
+  visitor->VisitFolder(FolderPtr(this));
 }
 
 }  // end namespace kmldom

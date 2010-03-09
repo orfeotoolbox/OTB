@@ -26,78 +26,51 @@
 // This file contains the unit test for the NetworkLink element.
 
 #include "kml/dom/networklink.h"
-#include <string>
 #include "kml/dom/kml_funcs.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_factory.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class NetworkLinkTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(NetworkLinkTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestParseUrl);
-  CPPUNIT_TEST(TestSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class NetworkLinkTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     networklink_ = KmlFactory::GetFactory()->CreateNetworkLink();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestParseUrl();
-  void TestSerialize();
-
- private:
   NetworkLinkPtr networklink_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(NetworkLinkTest);
-
-void NetworkLinkTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_NetworkLink, networklink_->Type());
-  CPPUNIT_ASSERT(networklink_->IsA(Type_NetworkLink));
-  CPPUNIT_ASSERT(networklink_->IsA(Type_Feature));
-  CPPUNIT_ASSERT(networklink_->IsA(Type_Object));
+TEST_F(NetworkLinkTest, TestType) {
+  ASSERT_EQ(Type_NetworkLink, networklink_->Type());
+  ASSERT_TRUE(networklink_->IsA(Type_NetworkLink));
+  ASSERT_TRUE(networklink_->IsA(Type_Feature));
+  ASSERT_TRUE(networklink_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void NetworkLinkTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == networklink_->has_refreshvisibility());
-  CPPUNIT_ASSERT(false == networklink_->get_refreshvisibility());
-  CPPUNIT_ASSERT(false == networklink_->has_flytoview());
-  CPPUNIT_ASSERT(false == networklink_->get_flytoview());
-  CPPUNIT_ASSERT(false == networklink_->has_link());
-  CPPUNIT_ASSERT(NULL == networklink_->get_link());
+TEST_F(NetworkLinkTest, TestDefaults) {
+  ASSERT_FALSE(networklink_->has_refreshvisibility());
+  ASSERT_FALSE(networklink_->get_refreshvisibility());
+  ASSERT_FALSE(networklink_->has_flytoview());
+  ASSERT_FALSE(networklink_->get_flytoview());
+  ASSERT_FALSE(networklink_->has_link());
+  ASSERT_TRUE(NULL == networklink_->get_link());
 }
 
 // Verify setting default makes has_xxx() true:
-void NetworkLinkTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(NetworkLinkTest, TestSetToDefaultValues) {
   networklink_->set_refreshvisibility(networklink_->get_refreshvisibility());
-  CPPUNIT_ASSERT(networklink_->has_refreshvisibility());
+  ASSERT_TRUE(networklink_->has_refreshvisibility());
   networklink_->set_flytoview(networklink_->get_flytoview());
-  CPPUNIT_ASSERT(networklink_->has_flytoview());
+  ASSERT_TRUE(networklink_->has_flytoview());
   networklink_->set_link(NULL);
-  CPPUNIT_ASSERT(false == networklink_->has_link());  // ptr still null
+  ASSERT_FALSE(networklink_->has_link());  // ptr still null
 }
 
 // Verify set, get, has, clear:
-void NetworkLinkTest::TestSetGetHasClear() {
+TEST_F(NetworkLinkTest, TestSetGetHasClear) {
   // Non-default values:
   bool refreshvisibility = true;
   bool flytoview = true;
@@ -109,67 +82,63 @@ void NetworkLinkTest::TestSetGetHasClear() {
   networklink_->set_link(link);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(networklink_->has_refreshvisibility());
-  CPPUNIT_ASSERT_EQUAL(refreshvisibility,
-                       networklink_->get_refreshvisibility());
-  CPPUNIT_ASSERT(networklink_->has_flytoview());
-  CPPUNIT_ASSERT_EQUAL(flytoview, networklink_->get_flytoview());
-  CPPUNIT_ASSERT(networklink_->has_link());
-  CPPUNIT_ASSERT(link == networklink_->get_link());
+  ASSERT_TRUE(networklink_->has_refreshvisibility());
+  ASSERT_EQ(refreshvisibility, networklink_->get_refreshvisibility());
+  ASSERT_TRUE(networklink_->has_flytoview());
+  ASSERT_EQ(flytoview, networklink_->get_flytoview());
+  ASSERT_TRUE(networklink_->has_link());
+  ASSERT_TRUE(link == networklink_->get_link());
 
   // Clear all fields:
   networklink_->clear_refreshvisibility();
   networklink_->clear_flytoview();
   networklink_->clear_link();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 // NetworkLink accepts Url as Link.
-void NetworkLinkTest::TestParseUrl() {
-  const std::string kHref("foo.kml");
-  const std::string kNetworkLinkUrl("<NetworkLink><Url><href>");
-  const std::string kUrlNetworkLink("</href></Url></NetworkLink>");
-  std::string errors;
+TEST_F(NetworkLinkTest, TestParseUrl) {
+  const string kHref("foo.kml");
+  const string kNetworkLinkUrl("<NetworkLink><Url><href>");
+  const string kUrlNetworkLink("</href></Url></NetworkLink>");
+  string errors;
   ElementPtr root = Parse(kNetworkLinkUrl + kHref + kUrlNetworkLink, &errors);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(errors.empty());
   const NetworkLinkPtr networklink = AsNetworkLink(root);
-  CPPUNIT_ASSERT(networklink);
+  ASSERT_TRUE(networklink);
   // Verify that the Url was set as the Link.
-  CPPUNIT_ASSERT(networklink->has_link());
-  CPPUNIT_ASSERT_EQUAL(Type_Url, networklink->get_link()->Type());
-  CPPUNIT_ASSERT(networklink->get_link()->has_href());
-  CPPUNIT_ASSERT_EQUAL(kHref, networklink->get_link()->get_href());
+  ASSERT_TRUE(networklink->has_link());
+  ASSERT_EQ(Type_Url, networklink->get_link()->Type());
+  ASSERT_TRUE(networklink->get_link()->has_href());
+  ASSERT_EQ(kHref, networklink->get_link()->get_href());
 }
 
-void NetworkLinkTest::TestSerialize() {
-  const std::string expect_empty("<NetworkLink/>");
-  CPPUNIT_ASSERT_EQUAL(expect_empty, SerializeRaw(networklink_));
+TEST_F(NetworkLinkTest, TestSerialize) {
+  const string expect_empty("<NetworkLink/>");
+  ASSERT_EQ(expect_empty, SerializeRaw(networklink_));
   KmlFactory* factory = KmlFactory::GetFactory();
   networklink_->set_link(factory->CreateLink());
-  const std::string expect_link("<NetworkLink><Link/></NetworkLink>");
-  CPPUNIT_ASSERT_EQUAL(expect_link, SerializeRaw(networklink_));
+  const string expect_link("<NetworkLink><Link/></NetworkLink>");
+  ASSERT_EQ(expect_link, SerializeRaw(networklink_));
   networklink_->set_refreshvisibility(false);
   networklink_->set_flytoview(false);
-  const std::string expect_all_false(
+  const string expect_all_false(
     "<NetworkLink>"
     "<refreshVisibility>0</refreshVisibility>"
     "<flyToView>0</flyToView>"
     "<Link/>"
     "</NetworkLink>");
-  CPPUNIT_ASSERT_EQUAL(expect_all_false, SerializeRaw(networklink_));
+  ASSERT_EQ(expect_all_false, SerializeRaw(networklink_));
   networklink_->set_refreshvisibility(true);
   networklink_->set_flytoview(true);
-  const std::string expect_all_true(
+  const string expect_all_true(
     "<NetworkLink>"
     "<refreshVisibility>1</refreshVisibility>"
     "<flyToView>1</flyToView>"
     "<Link/>"
     "</NetworkLink>");
-  CPPUNIT_ASSERT_EQUAL(expect_all_true, SerializeRaw(networklink_));
+  ASSERT_EQ(expect_all_true, SerializeRaw(networklink_));
   networklink_->set_name("networklink");
-  const std::string expect_feature(
+  const string expect_feature(
     "<NetworkLink>"
     "<name>networklink</name>"
     "<refreshVisibility>1</refreshVisibility>"
@@ -178,6 +147,20 @@ void NetworkLinkTest::TestSerialize() {
     "</NetworkLink>");
 }
 
+TEST_F(NetworkLinkTest, TestSerializeWithId) {
+  const string kId("networklink-id");
+  networklink_->set_id(kId);
+  ASSERT_EQ(string("<NetworkLink id=\"" + kId + "\"/>"),
+            SerializeRaw(networklink_));
+  networklink_->clear_id();
+  networklink_->set_targetid(kId);
+  ASSERT_EQ(string("<NetworkLink targetId=\"" + kId + "\"/>"),
+            SerializeRaw(networklink_));
+}
+
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

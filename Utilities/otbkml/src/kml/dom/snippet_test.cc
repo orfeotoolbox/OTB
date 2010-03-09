@@ -26,283 +26,220 @@
 // This file contains the unit tests for the Snippet and linkSnippet elements.
 
 #include "kml/dom/snippet.h"
-#include <string>
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_funcs.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
 // This tests <Snippet>.
-class SnippetTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(SnippetTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestBasicParse);
-  CPPUNIT_TEST(TestParseMaxLines);
-  CPPUNIT_TEST(TestSerializeCdata);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class SnippetTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     snippet_ = KmlFactory::GetFactory()->CreateSnippet();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestBasicParse();
-  void TestParseMaxLines();
-  void TestSerializeCdata();
-
- private:
   SnippetPtr snippet_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SnippetTest);
-
-void SnippetTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_Snippet, snippet_->Type());
-  CPPUNIT_ASSERT(snippet_->IsA(Type_Snippet));
+TEST_F(SnippetTest, TestType) {
+  ASSERT_EQ(Type_Snippet, snippet_->Type());
+  ASSERT_TRUE(snippet_->IsA(Type_Snippet));
 }
 
 // Verify proper defaults:
-void SnippetTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == snippet_->has_text());
-  CPPUNIT_ASSERT(snippet_->get_text().empty());
-  CPPUNIT_ASSERT(false == snippet_->has_maxlines());
-  CPPUNIT_ASSERT(2 == snippet_->get_maxlines());
+TEST_F(SnippetTest, TestDefaults) {
+  ASSERT_FALSE(snippet_->has_text());
+  ASSERT_TRUE(snippet_->get_text().empty());
+  ASSERT_FALSE(snippet_->has_maxlines());
+  ASSERT_EQ(2, snippet_->get_maxlines());
 }
 
 // Verify setting default makes has_xxx() true:
-void SnippetTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(SnippetTest, TestSetToDefaultValues) {
   snippet_->set_text(snippet_->get_text());
-  CPPUNIT_ASSERT(snippet_->has_text());
+  ASSERT_TRUE(snippet_->has_text());
   snippet_->set_maxlines(snippet_->get_maxlines());
-  CPPUNIT_ASSERT(snippet_->has_maxlines());
+  ASSERT_TRUE(snippet_->has_maxlines());
 }
 
 // Verify set, get, has, clear:
-void SnippetTest::TestSetGetHasClear() {
+TEST_F(SnippetTest, TestSetGetHasClear) {
   // Non-default values:
-  const std::string kText = "snippet body";
-  const unsigned int kMaxlines = 10;
+  const string kText = "snippet body";
+  const int kMaxlines = 10;
 
   // Set all fields:
   snippet_->set_text(kText);
   snippet_->set_maxlines(kMaxlines);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(snippet_->has_text());
-  CPPUNIT_ASSERT(kText == snippet_->get_text());
-  CPPUNIT_ASSERT(snippet_->has_maxlines());
-  CPPUNIT_ASSERT(kMaxlines == snippet_->get_maxlines());
+  ASSERT_TRUE(snippet_->has_text());
+  ASSERT_TRUE(kText == snippet_->get_text());
+  ASSERT_TRUE(snippet_->has_maxlines());
+  ASSERT_TRUE(kMaxlines == snippet_->get_maxlines());
 
   // Clear all fields:
   snippet_->clear_text();
   snippet_->clear_maxlines();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 // This tests parsing of Snippet with no maxLines attribute.
-void SnippetTest::TestBasicParse() {
-  const std::string kText = "left panel only please";
-  const std::string kSnippet = "<Snippet>" + kText + "</Snippet>";
-  const std::string kPlacemark = "<Placemark>" + kSnippet + "</Placemark>";
-  std::string errors;
+TEST_F(SnippetTest, TestBasicParse) {
+  const string kText = "left panel only please";
+  const string kSnippet = "<Snippet>" + kText + "</Snippet>";
+  const string kPlacemark = "<Placemark>" + kSnippet + "</Placemark>";
+  string errors;
   ElementPtr root = Parse(kPlacemark, &errors);
-  CPPUNIT_ASSERT(root);
+  ASSERT_TRUE(root);
   const PlacemarkPtr placemark = AsPlacemark(root);
-  CPPUNIT_ASSERT(placemark);
-  CPPUNIT_ASSERT(placemark->has_snippet());
-  CPPUNIT_ASSERT(false == placemark->get_snippet()->has_maxlines());
-  CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(2),  // The default.
-                       placemark->get_snippet()->get_maxlines());
-  CPPUNIT_ASSERT(placemark->get_snippet()->has_text());
-  CPPUNIT_ASSERT_EQUAL(kText, placemark->get_snippet()->get_text());
+  ASSERT_TRUE(placemark);
+  ASSERT_TRUE(placemark->has_snippet());
+  ASSERT_FALSE(placemark->get_snippet()->has_maxlines());
+  ASSERT_EQ(2, placemark->get_snippet()->get_maxlines());  // The default.
+  ASSERT_TRUE(placemark->get_snippet()->has_text());
+  ASSERT_EQ(kText, placemark->get_snippet()->get_text());
 }
 
 // This tests parsing of Snippet with a maxLines attribute.
-void SnippetTest::TestParseMaxLines() {
-  const std::string kText =
+TEST_F(SnippetTest, TestParseMaxLines) {
+  const string kText =
       "left panel only please"
       "left panel only please"
       "left panel only please"
       "left panel only please"
       "left panel only please";
-  const std::string kSnippet = "<Snippet maxLines=\"5\">" + kText +
+  const string kSnippet = "<Snippet maxLines=\"5\">" + kText +
     "</Snippet>";
-  const std::string kFolder = "<Folder>" + kSnippet + "</Folder>";
-  std::string errors;
+  const string kFolder = "<Folder>" + kSnippet + "</Folder>";
+  string errors;
   ElementPtr root = Parse(kFolder, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const FolderPtr folder = AsFolder(root);
-  CPPUNIT_ASSERT(folder->has_snippet());
+  ASSERT_TRUE(folder->has_snippet());
   const SnippetPtr snippet = folder->get_snippet();
-  CPPUNIT_ASSERT(snippet);
-  CPPUNIT_ASSERT(snippet->has_maxlines());
-  CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(5), snippet->get_maxlines());
+  ASSERT_TRUE(snippet);
+  ASSERT_TRUE(snippet->has_maxlines());
+  ASSERT_EQ(5, snippet->get_maxlines());
 }
 
-void SnippetTest::TestSerializeCdata() {
+TEST_F(SnippetTest, TestSerializeCdata) {
   snippet_->set_text("&");
-  CPPUNIT_ASSERT_EQUAL(std::string("<Snippet><![CDATA[&]]></Snippet>"),
+  ASSERT_EQ(string("<Snippet><![CDATA[&]]></Snippet>"),
                        SerializeRaw(snippet_));
 
   snippet_->set_text("a");
-  CPPUNIT_ASSERT_EQUAL(std::string("<Snippet>a</Snippet>"),
+  ASSERT_EQ(string("<Snippet>a</Snippet>"),
                        SerializeRaw(snippet_));
 }
 
 // This tests <linkSnippet>.
-class LinkSnippetTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LinkSnippetTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestBasicParse);
-  CPPUNIT_TEST(TestParseMaxLines);
-  CPPUNIT_TEST(TestSerializeCdata);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class LinkSnippetTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     linksnippet_ = KmlFactory::GetFactory()->CreateLinkSnippet();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestBasicParse();
-  void TestParseMaxLines();
-  void TestSerializeCdata();
-
- private:
   LinkSnippetPtr linksnippet_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LinkSnippetTest);
-
-void LinkSnippetTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_linkSnippet, linksnippet_->Type());
-  CPPUNIT_ASSERT(linksnippet_->IsA(Type_linkSnippet));
+TEST_F(LinkSnippetTest, TestType) {
+  ASSERT_EQ(Type_linkSnippet, linksnippet_->Type());
+  ASSERT_TRUE(linksnippet_->IsA(Type_linkSnippet));
 }
 
 // Verify proper defaults:
-void LinkSnippetTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == linksnippet_->has_text());
-  CPPUNIT_ASSERT(linksnippet_->get_text().empty());
-  CPPUNIT_ASSERT(false == linksnippet_->has_maxlines());
-  CPPUNIT_ASSERT(2 == linksnippet_->get_maxlines());
+TEST_F(LinkSnippetTest, TestDefaults) {
+  ASSERT_FALSE(linksnippet_->has_text());
+  ASSERT_TRUE(linksnippet_->get_text().empty());
+  ASSERT_FALSE(linksnippet_->has_maxlines());
+  ASSERT_EQ(2, linksnippet_->get_maxlines());
 }
 
 // Verify setting default makes has_xxx() true:
-void LinkSnippetTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(LinkSnippetTest, TestSetToDefaultValues) {
   linksnippet_->set_text(linksnippet_->get_text());
-  CPPUNIT_ASSERT(linksnippet_->has_text());
+  ASSERT_TRUE(linksnippet_->has_text());
   linksnippet_->set_maxlines(linksnippet_->get_maxlines());
-  CPPUNIT_ASSERT(linksnippet_->has_maxlines());
+  ASSERT_TRUE(linksnippet_->has_maxlines());
 }
 
 // Verify set, get, has, clear:
-void LinkSnippetTest::TestSetGetHasClear() {
+TEST_F(LinkSnippetTest, TestSetGetHasClear) {
   // Non-default values:
-  const std::string kText = "snippet body";
-  const unsigned int kMaxlines = 11;
+  const string kText = "snippet body";
+  const int kMaxlines = 11;
 
   // Set all fields:
   linksnippet_->set_text(kText);
   linksnippet_->set_maxlines(kMaxlines);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(linksnippet_->has_text());
-  CPPUNIT_ASSERT(kText == linksnippet_->get_text());
-  CPPUNIT_ASSERT(linksnippet_->has_maxlines());
-  CPPUNIT_ASSERT(kMaxlines == linksnippet_->get_maxlines());
+  ASSERT_TRUE(linksnippet_->has_text());
+  ASSERT_TRUE(kText == linksnippet_->get_text());
+  ASSERT_TRUE(linksnippet_->has_maxlines());
+  ASSERT_TRUE(kMaxlines == linksnippet_->get_maxlines());
 
   // Clear all fields:
   linksnippet_->clear_text();
   linksnippet_->clear_maxlines();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 // This tests parsing of linkSnippet with no maxLines attribute.
-void LinkSnippetTest::TestBasicParse() {
-  const std::string kText = "change my left panel";
-  const std::string kLinkSnippet = "<linkSnippet>" + kText + "</linkSnippet>";
-  const std::string kNetworkLinkControl = "<NetworkLinkControl>" +
+TEST_F(LinkSnippetTest, TestBasicParse) {
+  const string kText = "change my left panel";
+  const string kLinkSnippet = "<linkSnippet>" + kText + "</linkSnippet>";
+  const string kNetworkLinkControl = "<NetworkLinkControl>" +
     kLinkSnippet + "</NetworkLinkControl>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kNetworkLinkControl, &errors);
-  CPPUNIT_ASSERT(root);
+  ASSERT_TRUE(root);
   const NetworkLinkControlPtr networklinkcontrol = AsNetworkLinkControl(root);
-  CPPUNIT_ASSERT(networklinkcontrol->has_linksnippet());
+  ASSERT_TRUE(networklinkcontrol->has_linksnippet());
   const LinkSnippetPtr linksnippet = networklinkcontrol->get_linksnippet();
-  CPPUNIT_ASSERT(false == linksnippet->has_maxlines());
-  CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(2),
-                       linksnippet->get_maxlines());
-  CPPUNIT_ASSERT(linksnippet->has_text());
-  CPPUNIT_ASSERT_EQUAL(kText, linksnippet->get_text());
+  ASSERT_FALSE(linksnippet->has_maxlines());
+  ASSERT_EQ(2, linksnippet->get_maxlines());
+  ASSERT_TRUE(linksnippet->has_text());
+  ASSERT_EQ(kText, linksnippet->get_text());
 }
 
 // This tests parsing of linkSnippet with a maxLines attribute.
-void LinkSnippetTest::TestParseMaxLines() {
-  const std::string kText =
+TEST_F(LinkSnippetTest, TestParseMaxLines) {
+  const string kText =
       "left panel only please"
       "left panel only please"
       "left panel only please";
-  const std::string kLinkSnippet = "<linkSnippet maxLines=\"7\">" + kText +
+  const string kLinkSnippet = "<linkSnippet maxLines=\"7\">" + kText +
     "</linkSnippet>";
-  const std::string kNetworkLinkControl = "<NetworkLinkControl>" +
+  const string kNetworkLinkControl = "<NetworkLinkControl>" +
     kLinkSnippet + "</NetworkLinkControl>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kNetworkLinkControl, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const NetworkLinkControlPtr networklinkcontrol = AsNetworkLinkControl(root);
-  CPPUNIT_ASSERT(networklinkcontrol->has_linksnippet());
+  ASSERT_TRUE(networklinkcontrol->has_linksnippet());
   const LinkSnippetPtr linksnippet = networklinkcontrol->get_linksnippet();
-  CPPUNIT_ASSERT(linksnippet);
-  CPPUNIT_ASSERT(linksnippet->has_maxlines());
-  CPPUNIT_ASSERT_EQUAL(static_cast<unsigned int>(7),
-                       linksnippet->get_maxlines());
+  ASSERT_TRUE(linksnippet);
+  ASSERT_TRUE(linksnippet->has_maxlines());
+  ASSERT_EQ(7, linksnippet->get_maxlines());
 }
 
-void LinkSnippetTest::TestSerializeCdata() {
+TEST_F(LinkSnippetTest, TestSerializeCdata) {
   linksnippet_->set_text("&");
-  CPPUNIT_ASSERT_EQUAL(std::string("<linkSnippet><![CDATA[&]]></linkSnippet>"),
+  ASSERT_EQ(string("<linkSnippet><![CDATA[&]]></linkSnippet>"),
                        SerializeRaw(linksnippet_));
 
   linksnippet_->set_text("a");
-  CPPUNIT_ASSERT_EQUAL(std::string("<linkSnippet>a</linkSnippet>"),
+  ASSERT_EQ(string("<linkSnippet>a</linkSnippet>"),
                        SerializeRaw(linksnippet_));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

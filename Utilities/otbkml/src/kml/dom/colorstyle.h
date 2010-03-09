@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file contains the declaration of the ColorStyle element.
@@ -29,11 +29,14 @@
 #define KML_DOM_COLORSTYLE_H__
 
 #include "kml/dom/substyle.h"
+#include "kml/base/color32.h"
 #include "kml/dom/kml22.h"
 #include "kml/base/util.h"
 
 namespace kmldom {
 
+// OGC KML 2.2 Standard: 12.7 kml:AbstractColorStyleGroup
+// OGC KML 2.2 XSD: <element name="AbstractColorStyleGroup"...
 class ColorStyle : public SubStyle {
  public:
   virtual ~ColorStyle();
@@ -43,20 +46,18 @@ class ColorStyle : public SubStyle {
   }
 
   // <color>
-  // TODO: Color color(uchar a, uchar b, uchar g, uchar r)
-  // all initialized to 255
-  std::string get_color() const {
+  const kmlbase::Color32& get_color() const {
     return color_;
   }
   bool has_color() const {
     return has_color_;
   }
-  void set_color(const std::string& color) {
+  void set_color(const kmlbase::Color32& color) {
     color_ = color;
     has_color_ = true;
   }
   void clear_color() {
-    color_ = "ffffffff";
+    color_ = kmlbase::Color32(0xffffffff);
     has_color_ = false;
   }
 
@@ -83,7 +84,7 @@ class ColorStyle : public SubStyle {
   virtual void Serialize(Serializer& serializer) const;
 
  private:
-  std::string color_;
+  kmlbase::Color32 color_;
   bool has_color_;
   int colormode_;
   bool has_colormode_;

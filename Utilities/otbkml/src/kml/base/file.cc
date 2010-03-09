@@ -37,7 +37,7 @@ namespace kmlbase {
   const char kSeparator = '/';
 #endif  
 
-bool File::ReadFileToString(const std::string& filename, std::string* output) {
+bool File::ReadFileToString(const string& filename, string* output) {
   if (filename.empty() || !output) {
     return false;
   }
@@ -56,8 +56,8 @@ bool File::ReadFileToString(const std::string& filename, std::string* output) {
   return true;
 }
 
-bool File::WriteStringToFile(const std::string& data,
-                             const std::string& filename) {
+bool File::WriteStringToFile(const string& data,
+                             const string& filename) {
   if (filename.empty()) {
     return false;
   }
@@ -66,20 +66,38 @@ bool File::WriteStringToFile(const std::string& data,
   if (!output_file.is_open() || !output_file.good()) {
     return false;
   }
-  output_file.write(data.c_str(), data.length());
+  output_file.write(data.c_str(), static_cast<std::streamsize>(data.length()));
   output_file.close();
   return true;
 }
 
-std::string File::JoinPaths(const std::string& p1, const std::string& p2) {
+string File::JoinPaths(const string& p1, const string& p2) {
   if (p1.empty()) return p2;
   if (p2.empty()) return p1;
-  std::string temp_str(p1);
+  string temp_str(p1);
   if (p1[p1.length()-1] != kSeparator) {
     temp_str += kSeparator;
     return (temp_str + p2);
   } else {
     return (p1 + p2);
+  }
+}
+
+void File::SplitFilePath(const string& filepath,
+                         string* base_directory,
+                         string* filename) {
+  size_t found = filepath.find_last_of("/\\");
+  if (base_directory) {
+    if (found == string::npos) {
+      *base_directory = ".";
+    } else if (found == 0) {
+      *base_directory = filepath.substr(0, found + 1);
+    } else {
+      *base_directory = filepath.substr(0, found);
+    }
+  }
+  if (filename) {
+    *filename = filepath.substr(found+1);
   }
 }
 

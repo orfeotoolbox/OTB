@@ -24,15 +24,14 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/engine/href.h"
-#include <string>
 
 namespace kmlengine {
 
 // private
-size_t Href::ParseScheme(const std::string& href) {
+size_t Href::ParseScheme(const string& href) {
   // Look for <scheme>://...
   size_t css = href.find("://");
-  if (css == std::string::npos || css == 0) {
+  if (css == string::npos || css == 0) {
     return 0;
   }
   scheme_ = href.substr(0, css);
@@ -40,10 +39,10 @@ size_t Href::ParseScheme(const std::string& href) {
 }
 
 // private
-size_t Href::ParseNetLoc(const std::string& href) {
+size_t Href::ParseNetLoc(const string& href) {
   // Look for ...://<net_loc>/...
   size_t slash = href.find('/');
-  if (slash == std::string::npos) {
+  if (slash == string::npos) {
     return 0;
   }
   net_loc_ = href.substr(0, slash);
@@ -51,7 +50,7 @@ size_t Href::ParseNetLoc(const std::string& href) {
 }
 
 // private
-void Href::Parse(const std::string& href) {
+void Href::Parse(const string& href) {
   size_t net_loc_start = ParseScheme(href);
   size_t path_start;
   if (net_loc_start > 0) {
@@ -61,7 +60,7 @@ void Href::Parse(const std::string& href) {
   }
   size_t path_end = href.size();
   size_t pound = href.find_first_of('#');
-  if (pound != std::string::npos) {
+  if (pound != string::npos) {
     fragment_ = href.substr(pound + 1);
     path_end = pound;
   }

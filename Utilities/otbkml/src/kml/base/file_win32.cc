@@ -37,23 +37,25 @@
 
 namespace kmlbase {
 
-// Internal to the win32 file class. We need a conversion from std::string to
+// Internal to the win32 file class. We need a conversion from string to
 // LPCWSTR.
-static std::wstring Str2Wstr(const std::string& str) {
+static std::wstring Str2Wstr(const string& str) {
   std::wstring wstr(str.length(), L'');
   std::copy(str.begin(), str.end(), wstr.begin());
   return wstr;
 }
 
 // Internal to the win32 file class. We need a conversion from std::wstring to
-// std::string.
-std::string Wstr2Str(const std::wstring& wstr) {
-std::string str(wstr.length(), ' ');
-std::copy(wstr.begin(), wstr.end(), str.begin());
-return str;
+// string.
+string Wstr2Str(const std::wstring& wstr) {
+  size_t s = wstr.size();
+  string str(static_cast<int>(s+1), 0);
+  WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(s), &str[0],
+                      static_cast<int>(s), NULL, NULL);
+  return str;
 }
 
-bool File::Exists(const std::string& full_path) {
+bool File::Exists(const string& full_path) {
   if (full_path.empty()) {
     return false;
   }
@@ -63,7 +65,7 @@ bool File::Exists(const std::string& full_path) {
     ((attrs & FILE_ATTRIBUTE_DIRECTORY) == 0);
 }
 
-bool File::Delete(const std::string& filepath) {
+bool File::Delete(const string& filepath) {
   if (filepath.empty()) {
     return false;
   }
@@ -79,7 +81,7 @@ UINT uRetVal;
 TCHAR szTempName[BUFSIZE];
 
 // http://msdn.microsoft.com/en-us/library/aa363875(VS.85).aspx
-bool File::CreateNewTempFile(std::string* path) {
+bool File::CreateNewTempFile(string* path) {
   if (!path) {
     return false;
   }
@@ -93,7 +95,7 @@ bool File::CreateNewTempFile(std::string* path) {
   if (uRetVal == 0) {
     return false;
   }
-  std::string str = Wstr2Str(szTempName);
+  string str = Wstr2Str(szTempName);
   path->assign(str.c_str(), strlen(str.c_str()));
   return true;
 }

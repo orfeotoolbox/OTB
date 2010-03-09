@@ -49,6 +49,16 @@
 extern "C" {
 #endif
 
+/* This define is local to libkml and is not a part of the regular zlib
+ * library. It sets a maximum upper limit on the uncompressed size we'll
+ * allow minizip to handle. The PKZIP specification here:
+ * https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html
+ * defines the uncompressed size field to be 4 bytes wide. In unzip.c minizip
+ * uses an unsigned long, but iomem_simple.c uses a signed long. Hence, we
+ * use the maximum size of a 32-bit signed long integer.
+ */
+#define ZIP_MAX_UNCOMPRESSED_SIZE 2147483647
+
 #ifndef _ZLIB_H
 #include "zlib.h"
 #endif
@@ -119,7 +129,7 @@ typedef struct unz_file_info_s
     tm_unz tmu_date;
 } unz_file_info;
 
-extern int ZEXPORT unzStringFileNameCompare OF ((const char* fileName1,
+extern int ZEXPORT libkml_unzStringFileNameCompare OF ((const char* fileName1,
                                                  const char* fileName2,
                                                  int iCaseSensitivity));
 /*
@@ -132,7 +142,7 @@ extern int ZEXPORT unzStringFileNameCompare OF ((const char* fileName1,
 */
 
 
-extern unzFile ZEXPORT unzOpen OF((const char *path));
+extern unzFile ZEXPORT libkml_unzOpen OF((const char *path));
 /*
   Open a Zip file. path contain the full pathname (by example,
      on a Windows XP computer "c:\\zlib\\zlib113.zip" or on an Unix computer
@@ -143,21 +153,21 @@ extern unzFile ZEXPORT unzOpen OF((const char *path));
        of this unzip package.
 */
 
-extern unzFile ZEXPORT unzOpen2 OF((const char *path,
+extern unzFile ZEXPORT libkml_unzOpen2 OF((const char *path,
                                     zlib_filefunc_def* pzlib_filefunc_def));
 /*
-   Open a Zip file, like unzOpen, but provide a set of file low level API
+   Open a Zip file, like libkml_unzOpen, but provide a set of file low level API
       for read/write the zip file (see ioapi.h)
 */
 
-extern int ZEXPORT unzClose OF((unzFile file));
+extern int ZEXPORT libkml_unzClose OF((unzFile file));
 /*
   Close a ZipFile opened with unzipOpen.
-  If there is files inside the .Zip opened with unzOpenCurrentFile (see later),
+  If there is files inside the .Zip opened with libkml_unzOpenCurrentFile (see later),
     these files MUST be closed with unzipCloseCurrentFile before call unzipClose.
   return UNZ_OK if there is no problem. */
 
-extern int ZEXPORT unzGetGlobalInfo OF((unzFile file,
+extern int ZEXPORT libkml_unzGetGlobalInfo OF((unzFile file,
                                         unz_global_info *pglobal_info));
 /*
   Write info about the ZipFile in the *pglobal_info structure.
@@ -165,7 +175,7 @@ extern int ZEXPORT unzGetGlobalInfo OF((unzFile file,
   return UNZ_OK if there is no problem. */
 
 
-extern int ZEXPORT unzGetGlobalComment OF((unzFile file,
+extern int ZEXPORT libkml_unzGetGlobalComment OF((unzFile file,
                                            char *szComment,
                                            uLong uSizeBuf));
 /*
@@ -178,25 +188,25 @@ extern int ZEXPORT unzGetGlobalComment OF((unzFile file,
 /***************************************************************************/
 /* Unzip package allow you browse the directory of the zipfile */
 
-extern int ZEXPORT unzGoToFirstFile OF((unzFile file));
+extern int ZEXPORT libkml_unzGoToFirstFile OF((unzFile file));
 /*
   Set the current file of the zipfile to the first file.
   return UNZ_OK if there is no problem
 */
 
-extern int ZEXPORT unzGoToNextFile OF((unzFile file));
+extern int ZEXPORT libkml_unzGoToNextFile OF((unzFile file));
 /*
   Set the current file of the zipfile to the next file.
   return UNZ_OK if there is no problem
   return UNZ_END_OF_LIST_OF_FILE if the actual file was the latest.
 */
 
-extern int ZEXPORT unzLocateFile OF((unzFile file,
+extern int ZEXPORT libkml_unzLocateFile OF((unzFile file,
                      const char *szFileName,
                      int iCaseSensitivity));
 /*
   Try locate the file szFileName in the zipfile.
-  For the iCaseSensitivity signification, see unzStringFileNameCompare
+  For the iCaseSensitivity signification, see libkml_unzStringFileNameCompare
 
   return value :
   UNZ_OK if the file is found. It becomes the current file.
@@ -213,17 +223,17 @@ typedef struct unz_file_pos_s
     uLong num_of_file;            /* # of file */
 } unz_file_pos;
 
-extern int ZEXPORT unzGetFilePos(
+extern int ZEXPORT libkml_unzGetFilePos(
     unzFile file,
     unz_file_pos* file_pos);
 
-extern int ZEXPORT unzGoToFilePos(
+extern int ZEXPORT libkml_unzGoToFilePos(
     unzFile file,
     unz_file_pos* file_pos);
 
 /* ****************************************** */
 
-extern int ZEXPORT unzGetCurrentFileInfo OF((unzFile file,
+extern int ZEXPORT libkml_unzGetCurrentFileInfo OF((unzFile file,
                          unz_file_info *pfile_info,
                          char *szFileName,
                          uLong fileNameBufferSize,
@@ -249,13 +259,13 @@ extern int ZEXPORT unzGetCurrentFileInfo OF((unzFile file,
    from it, and close it (you can close it before reading all the file)
    */
 
-extern int ZEXPORT unzOpenCurrentFile OF((unzFile file));
+extern int ZEXPORT libkml_unzOpenCurrentFile OF((unzFile file));
 /*
   Open for reading data the current file in the zipfile.
   If there is no error, the return value is UNZ_OK.
 */
 
-extern int ZEXPORT unzOpenCurrentFilePassword OF((unzFile file,
+extern int ZEXPORT libkml_unzOpenCurrentFilePassword OF((unzFile file,
                                                   const char* password));
 /*
   Open for reading data the current file in the zipfile.
@@ -263,12 +273,12 @@ extern int ZEXPORT unzOpenCurrentFilePassword OF((unzFile file,
   If there is no error, the return value is UNZ_OK.
 */
 
-extern int ZEXPORT unzOpenCurrentFile2 OF((unzFile file,
+extern int ZEXPORT libkml_unzOpenCurrentFile2 OF((unzFile file,
                                            int* method,
                                            int* level,
                                            int raw));
 /*
-  Same than unzOpenCurrentFile, but open for read raw the file (not uncompress)
+  Same than libkml_unzOpenCurrentFile, but open for read raw the file (not uncompress)
     if raw==1
   *method will receive method of compression, *level will receive level of
      compression
@@ -276,13 +286,13 @@ extern int ZEXPORT unzOpenCurrentFile2 OF((unzFile file,
          but you CANNOT set method parameter as NULL
 */
 
-extern int ZEXPORT unzOpenCurrentFile3 OF((unzFile file,
+extern int ZEXPORT libkml_unzOpenCurrentFile3 OF((unzFile file,
                                            int* method,
                                            int* level,
                                            int raw,
                                            const char* password));
 /*
-  Same than unzOpenCurrentFile, but open for read raw the file (not uncompress)
+  Same than libkml_unzOpenCurrentFile, but open for read raw the file (not uncompress)
     if raw==1
   *method will receive method of compression, *level will receive level of
      compression
@@ -291,17 +301,17 @@ extern int ZEXPORT unzOpenCurrentFile3 OF((unzFile file,
 */
 
 
-extern int ZEXPORT unzCloseCurrentFile OF((unzFile file));
+extern int ZEXPORT libkml_unzCloseCurrentFile OF((unzFile file));
 /*
-  Close the file in zip opened with unzOpenCurrentFile
+  Close the file in zip opened with libkml_unzOpenCurrentFile
   Return UNZ_CRCERROR if all the file was read but the CRC is not good
 */
 
-extern int ZEXPORT unzReadCurrentFile OF((unzFile file,
+extern int ZEXPORT libkml_unzReadCurrentFile OF((unzFile file,
                       voidp buf,
                       unsigned len));
 /*
-  Read bytes from the current file (opened by unzOpenCurrentFile)
+  Read bytes from the current file (opened by libkml_unzOpenCurrentFile)
   buf contain buffer where data must be copied
   len the size of buf.
 
@@ -311,21 +321,21 @@ extern int ZEXPORT unzReadCurrentFile OF((unzFile file,
     (UNZ_ERRNO for IO error, or zLib error for uncompress error)
 */
 
-extern z_off_t ZEXPORT unztell OF((unzFile file));
+extern z_off_t ZEXPORT libkml_unztell OF((unzFile file));
 /*
   Give the current position in uncompressed data
 */
 
-extern int ZEXPORT unzeof OF((unzFile file));
+extern int ZEXPORT libkml_unzeof OF((unzFile file));
 /*
   return 1 if the end of file was reached, 0 elsewhere
 */
 
-extern int ZEXPORT unzGetLocalExtrafield OF((unzFile file,
+extern int ZEXPORT libkml_unzGetLocalExtrafield OF((unzFile file,
                                              voidp buf,
                                              unsigned len));
 /*
-  Read extra field from the current file (opened by unzOpenCurrentFile)
+  Read extra field from the current file (opened by libkml_unzOpenCurrentFile)
   This is the local-header version of the extra field (sometimes, there is
     more info in the local-header version than in the central-header)
 
@@ -340,11 +350,16 @@ extern int ZEXPORT unzGetLocalExtrafield OF((unzFile file,
 /***************************************************************************/
 
 /* Get the current file offset */
-extern uLong ZEXPORT unzGetOffset (unzFile file);
+extern uLong ZEXPORT libkml_unzGetOffset (unzFile file);
 
 /* Set the current file offset */
-extern int ZEXPORT unzSetOffset (unzFile file, uLong pos);
+extern int ZEXPORT libkml_unzSetOffset (unzFile file, uLong pos);
 
+/* These declarations are from the proposed iomem_simple package at
+ * http://code.trak.dk. See iomem_simple.c in this directory.
+ */
+extern unzFile ZEXPORT unzAttach  OF((voidpf stream, zlib_filefunc_def*));
+extern voidpf  ZEXPORT unzDetach  OF((unzFile*));
 
 
 #ifdef __cplusplus

@@ -24,71 +24,48 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/vec2.h"
-#include "kml/base/unit_test.h"
+#include "boost/scoped_ptr.hpp"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class Vec2Test : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(Vec2Test);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
-    vec2_ = new TestVec2();
-  }
-
-  // Called after all tests.
-  void tearDown() {
-    delete vec2_;
-  }
-
-
+class Vec2Test : public testing::Test {
  protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
+  virtual void SetUp() {
+    vec2_.reset(new TestVec2());
+  }
 
- private:
   // Vec2 is abstract, hence its constructor is protected.
   class TestVec2 : public Vec2 {};
-  TestVec2* vec2_;
+  boost::scoped_ptr<TestVec2> vec2_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(Vec2Test);
-
-void Vec2Test::TestType() {
-  CPPUNIT_ASSERT(true == vec2_->IsA(Type_Vec2));
+TEST_F(Vec2Test, TestType) {
+  ASSERT_TRUE(vec2_->IsA(Type_Vec2));
 }
 
 // Verify proper defaults:
-void Vec2Test::TestDefaults() {
-  CPPUNIT_ASSERT(1.0 == vec2_->get_x());
-  CPPUNIT_ASSERT(1.0 == vec2_->get_y());
-  CPPUNIT_ASSERT(UNITS_FRACTION == vec2_->get_xunits());
-  CPPUNIT_ASSERT(UNITS_FRACTION == vec2_->get_yunits());
+TEST_F(Vec2Test, TestDefaults) {
+  ASSERT_DOUBLE_EQ(1.0, vec2_->get_x());
+  ASSERT_DOUBLE_EQ(1.0, vec2_->get_y());
+  ASSERT_EQ(UNITS_FRACTION, vec2_->get_xunits());
+  ASSERT_EQ(UNITS_FRACTION, vec2_->get_yunits());
 }
 
 // Verify setting default makes has_xxx() true:
-void Vec2Test::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(Vec2Test, TestSetToDefaultValues) {
   vec2_->set_x(vec2_->get_x());
-  CPPUNIT_ASSERT(true == vec2_->has_x());
+  ASSERT_TRUE(vec2_->has_x());
   vec2_->set_y(vec2_->get_y());
-  CPPUNIT_ASSERT(true == vec2_->has_y());
+  ASSERT_TRUE(vec2_->has_y());
   vec2_->set_xunits(vec2_->get_xunits());
-  CPPUNIT_ASSERT(true == vec2_->has_xunits());
+  ASSERT_TRUE(vec2_->has_xunits());
   vec2_->set_yunits(vec2_->get_yunits());
-  CPPUNIT_ASSERT(true == vec2_->has_yunits());
+  ASSERT_TRUE(vec2_->has_yunits());
 }
 
 // Verify set, get, has, clear:
-void Vec2Test::TestSetGetHasClear() {
+TEST_F(Vec2Test, TestSetGetHasClear) {
   // Non-default values:
   double x = 0.1;
   double y = 0.2;
@@ -102,26 +79,26 @@ void Vec2Test::TestSetGetHasClear() {
   vec2_->set_yunits(yunits);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == vec2_->has_x());
-  CPPUNIT_ASSERT(x = vec2_->get_x());
-  CPPUNIT_ASSERT(true == vec2_->has_y());
-  CPPUNIT_ASSERT(y = vec2_->get_y());
-  CPPUNIT_ASSERT(true == vec2_->has_xunits());
-  CPPUNIT_ASSERT(xunits == vec2_->get_xunits());
-  CPPUNIT_ASSERT(true == vec2_->has_yunits());
-  CPPUNIT_ASSERT(yunits == vec2_->get_yunits());
+  ASSERT_TRUE(vec2_->has_x());
+  ASSERT_DOUBLE_EQ(x, vec2_->get_x());
+  ASSERT_TRUE(vec2_->has_y());
+  ASSERT_DOUBLE_EQ(y, vec2_->get_y());
+  ASSERT_TRUE(vec2_->has_xunits());
+  ASSERT_EQ(xunits, vec2_->get_xunits());
+  ASSERT_TRUE(vec2_->has_yunits());
+  ASSERT_EQ(yunits, vec2_->get_yunits());
 
   // Clear all fields:
   vec2_->clear_x();
   vec2_->clear_y();
   vec2_->clear_xunits();
   vec2_->clear_yunits();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
 

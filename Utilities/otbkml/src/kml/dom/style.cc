@@ -24,10 +24,12 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/style.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -65,9 +67,7 @@ void Style::AddElement(const ElementPtr& element) {
 }
 
 void Style::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  StyleSelector::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   StyleSelector::Serialize(serializer);
   if (has_iconstyle()) {
     serializer.SaveElement(get_iconstyle());
@@ -87,8 +87,32 @@ void Style::Serialize(Serializer& serializer) const {
   if (has_liststyle()) {
     serializer.SaveElement(get_liststyle());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Style::Accept(Visitor* visitor) {
+  visitor->VisitStyle(StylePtr(this));
+}
+
+void Style::AcceptChildren(VisitorDriver* driver) {
+  StyleSelector::AcceptChildren(driver);
+  if (has_iconstyle()) {
+    driver->Visit(get_iconstyle());
+  }
+  if (has_labelstyle()) {
+    driver->Visit(get_labelstyle());
+  }
+  if (has_linestyle()) {
+    driver->Visit(get_linestyle());
+  }
+  if (has_polystyle()) {
+    driver->Visit(get_polystyle());
+  }
+  if (has_balloonstyle()) {
+    driver->Visit(get_balloonstyle());
+  }
+  if (has_liststyle()) {
+    driver->Visit(get_liststyle());
+  }
 }
 
 }  // end namespace kmldom

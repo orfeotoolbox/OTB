@@ -26,9 +26,9 @@
 #ifndef KML_BASE_MEMORY_FILE_H__
 #define KML_BASE_MEMORY_FILE_H__
 
-#include <string>
 #include "boost/intrusive_ptr.hpp"
 #include "kml/base/referent.h"
+#include "kml/base/util.h"
 
 namespace kmlbase {
 
@@ -36,20 +36,20 @@ namespace kmlbase {
 // cached in memory.  The intended usage is as follows:
 //   NetCache<YourNetFetcher, MemoryFile> memory_file_net_cache;
 //   MemoryFile memory_file = memory_file_net_cache.Fetch(url);
-//   const std::string& file_content = memory_file.get_content();
+//   const string& file_content = memory_file.get_content();
 class MemoryFile : public Referent {
  public:
-   static MemoryFile* CreateFromString(const std::string& data) {
+   static MemoryFile* CreateFromString(const string& data) {
      return new MemoryFile(data);
    }
 
-   const std::string& get_content() const {
+   const string& get_content() const {
      return content_;
    }
 
  private:
-  MemoryFile(const std::string& content) : content_(content) {}
-  std::string content_;
+  MemoryFile(const string& content) : content_(content) {}
+  string content_;
 };
 
 typedef boost::intrusive_ptr<MemoryFile> MemoryFilePtr;

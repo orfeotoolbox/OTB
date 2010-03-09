@@ -26,15 +26,17 @@
 // This file contains the implementation of the CreateResolvedStyle() function.
 
 #include "kml/engine/style_resolver.h"
-#include "kml/engine/style_merger.h"
 #include "kml/dom.h"
-#include "kml/engine/href.h"
-#include "kml/engine/kml_cache.h"
+#include "kml/engine/id_mapper.h"
 #include "kml/engine/kml_file.h"
-#include "kml/engine/merge.h"
+#include "kml/engine/style_merger.h"
 
 using kmldom::FeaturePtr;
+using kmldom::KmlFactory;
+using kmldom::PairPtr;
 using kmldom::StylePtr;
+using kmldom::StyleMapPtr;
+using kmldom::StyleSelectorPtr;
 
 namespace kmlengine {
 
@@ -44,13 +46,47 @@ namespace kmlengine {
 StylePtr CreateResolvedStyle(const FeaturePtr& feature,
                              const KmlFilePtr& kml_file,
                              kmldom::StyleStateEnum style_state) {
-  if (!feature) {
-    return NULL;
-  }
-  StyleMerger style_merger(kml_file, style_state);
-  style_merger.MergeStyle(feature->get_styleurl(),
-                          feature->get_styleselector());
+  return StyleResolver::CreateResolvedStyle(feature->get_styleurl(),
+                                            feature->get_styleselector(),
+                                            kml_file->get_shared_style_map(),
+                                            kml_file->get_url(),
+                                            kml_file->get_kml_cache(),
+                                            style_state);
+}
+
+// static
+StylePtr StyleResolver::CreateResolvedStyle(
+    const string& styleurl,
+    const StyleSelectorPtr& styleselector,
+    const SharedStyleMap& shared_style_map,
+    const string& base_url,
+    KmlCache* kml_cache,
+    kmldom::StyleStateEnum style_state) {
+  StyleMerger style_merger(shared_style_map, kml_cache, base_url, style_state);
+  style_merger.MergeStyle(styleurl, styleselector);
+  // This always returns the thus-far resolved <Style> even if the nesting
+  // level was reached.
   return style_merger.GetResolvedStyle();
+}
+
+// static
+kmldom::StyleSelectorPtr StyleResolver::CreateResolvedStyleSelector(
+    const string& styleurl, const SharedStyleMap& shared_style_map) {
+  const string empty;
+  StyleMapPtr stylemap = KmlFactory::GetFactory()->CreateStyleMap();
+  PairPtr normal = KmlFactory::GetFactory()->CreatePair();
+  normal->set_key(kmldom::STYLESTATE_NORMAL);
+  StylePtr style = CreateResolvedStyle(styleurl, NULL, shared_style_map, empty,
+                                       NULL, kmldom::STYLESTATE_NORMAL);
+  normal->set_styleselector(AsStyleSelector(ClearIds(style)));
+  stylemap->add_pair(normal);
+  PairPtr highlight = KmlFactory::GetFactory()->CreatePair();
+  highlight->set_key(kmldom::STYLESTATE_HIGHLIGHT);
+  style = CreateResolvedStyle(styleurl, NULL, shared_style_map, empty,
+                              NULL, kmldom::STYLESTATE_HIGHLIGHT);
+  highlight->set_styleselector(AsStyleSelector(ClearIds(style)));
+  stylemap->add_pair(highlight);
+  return stylemap;
 }
 
 }  // endnamespace kmlengine

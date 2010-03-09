@@ -33,17 +33,30 @@
 // 4a) call AddChild() for each ParserObserver.
 
 #include "kml/dom/kml_handler.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/parser_observer.h"
 #include "kml/dom/xsd.h"
+
+using kmlbase::Attributes;
+
+// The maximum nesting depth we permit. Depths beyond this are treated as
+// errors. Override it with a -DLIBKML_MAX_NESTING_DEPTH preprocessor
+// instruction.
+// TODO: some flags-like solution would be preferable.
+static const unsigned int kMaxNestingDepth = 100;
+#ifdef LIBKML_MAX_NESTING_DEPTH
+kMaxNestingDepth = LIBKML_MAX_NESTING_DEPTH;
+#endif
 
 namespace kmldom {
 
 KmlHandler::KmlHandler(parser_observer_vector_t& observers)
   : kml_factory_(*KmlFactory::GetFactory()),
     skip_depth_(0),
+    in_description_(0),
+    nesting_depth_(0),
     observers_(observers) {
 }
 
@@ -52,13 +65,27 @@ KmlHandler::~KmlHandler() {
   // the reference and potentially freeing the associated storage.
 }
 
-void KmlHandler::StartElement(const char *name, const char **attrs) {
+void KmlHandler::StartElement(const string& name,
+                              const kmlbase::StringVector& attrs) {
+  // Check that we're not nested beyond the max permissible depth.
+  if (++nesting_depth_ > kMaxNestingDepth) {
+    XML_StopParser(get_parser(), XML_TRUE);
+    return;
+  }
   // 3 possibilities:
   // 1) complex element: create an Element.
   // 2) simple element: create a Field
   // 3) unknown element: save XML as a string inside the parent element.
   // No matter what an Element is pushed onto the stack and we always gather
   // character data.
+
+  // See the comment towards the end of this function about permitting "raw"
+  // HTML inside <description> elements. This check will catch an instance
+  // of a <description> inside a <description> and permit us to handle it
+  // correctly as unknown text.
+  if (in_description_ > 0 && name.length() == 11 && name == "description") {
+    in_description_++;
+  }
 
   if (skip_depth_ > 0) {
     // We're already inside an unknown element. Stringify the next element and
@@ -71,7 +98,7 @@ void KmlHandler::StartElement(const char *name, const char **attrs) {
 
   // Push a string onto the stack we'll use to manage the gathering of
   // character data.
-  std::string element_char_data;
+  string element_char_data;
   char_data_.push(element_char_data);
 
   ElementPtr element;
@@ -91,11 +118,10 @@ void KmlHandler::StartElement(const char *name, const char **attrs) {
     }
 
     // We parse attributes only if StartElement received any.
-    if (attrs && *attrs) {
-      Attributes attributes(attrs);
-      element->ParseAttributes(attributes);
+    if (!attrs.empty()) {
+      // Element::ParseAttributes takes ownership of the created Attributes.
+      element->ParseAttributes(Attributes::Create(attrs));
     }
-
   } else if (xsd_type == XSD_SIMPLE_TYPE) {
     element = kml_factory_.CreateFieldById(type_id);
   }
@@ -116,6 +142,17 @@ void KmlHandler::StartElement(const char *name, const char **attrs) {
   }
   // This is a known element.  Push onto parse stack and gather content.
   stack_.push(element);
+
+  // We need to permit parsing of un-CDATA'd markup inside <description>
+  // elements. We bump the skip counter here as if we'd encountered an unknown
+  // element, but only after we've allowed the description ElementPtr to be
+  // pushed onto the stack. In EndElement we'll check for the closing of
+  // description and decrement the skip counter before anything else happens.
+  if (element->Type() == Type_description) {
+    skip_depth_++;
+    in_description_++;
+  }
+
   // Call the NewElement() method of each ParserObserver.  The whole parse
   // terminates if and when any observer's NewElement() returns false.
   if (!CallNewElementObservers(observers_, element)) {
@@ -134,7 +171,16 @@ bool KmlHandler::CallNewElementObservers(
   return true;
 }
 
-void KmlHandler::EndElement(const char *name) {
+void KmlHandler::EndElement(const string& name) {
+  --nesting_depth_;
+  // See the comment towards the end of StartElement about handling "raw" HTML
+  // inside <description> elements. Here we are checking to see if (1) we're
+  // inside a closing </description> element and (2) if we're at the end of any
+  // possible series of nested description elements.
+  if (name.length() == 11 && name == "description" && --in_description_ == 0) {
+    skip_depth_--;
+  }
+
   if (skip_depth_ > 0) {
     // We're inside an unknown element. Build the closing tag, decrement
     // the skip counter and then check if we're back to known KML.
@@ -160,7 +206,7 @@ void KmlHandler::EndElement(const char *name) {
   // The top of the stack is the begin of the element ending here.
   ElementPtr child = stack_.top();
 
-  std::string child_char_data_ = char_data_.top();
+  string child_char_data_ = char_data_.top();
   char_data_.pop();
 
   child->set_char_data(child_char_data_);
@@ -180,11 +226,24 @@ void KmlHandler::EndElement(const char *name) {
     // or 3) unknown is passed onwards to its parent and possibly ultimately
     // to the unknown element list in Element.
     stack_.pop();
-    stack_.top()->AddElement(child);
+    if (CallEndElementObservers(observers_, stack_.top(), child)) {
+      stack_.top()->AddElement(child);
+    }
     if (!CallAddChildObservers(observers_, stack_.top(), child)) {
       XML_StopParser(get_parser(), XML_TRUE);
     }
   }
+}
+
+bool KmlHandler::CallEndElementObservers(
+    const parser_observer_vector_t& observers, const ElementPtr& parent,
+    const ElementPtr& child) {
+  for (size_t i = 0; i < observers_.size(); ++i) {
+    if (!observers_[i]->EndElement(parent, child)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 // private
@@ -206,8 +265,8 @@ bool KmlHandler::CallAddChildObservers(
 // <Placemark><Point>foo<coordinates/>bar</Point></Placemark> becomes:
 // <Placemark><Point><coordinates/></Point></Placemark>
 // <X><Point>foo<coordinates/>bar</Point></P> remains as-is.
-void KmlHandler::CharData(const XML_Char *s, int len) {
-  char_data_.top().append(s, len);
+void KmlHandler::CharData(const string& s) {
+  char_data_.top().append(s);
 }
 
 // As with STL pop() methods this is (potentially) destructive.  If the
@@ -225,27 +284,28 @@ ElementPtr KmlHandler::PopRoot() {
 }
 
 // Private.
-void KmlHandler::InsertUnknownStartElement(const char *name,
-                                           const char **atts) {
-  std::string& top = char_data_.top();
+void KmlHandler::InsertUnknownStartElement(const string& name,
+                                       const kmlbase::StringVector& atts) {
+  string& top = char_data_.top();
   top.append("<");
   top.append(name);
-  while (*atts) {
+  for (size_t i = 0; i < atts.size(); i += 2)  {
     top.append(" ");
-    top.append(*atts++);
+    top.append(atts.at(i));
     top.append("=\"");
-    top.append(*atts++);
+    top.append(atts.at(i+1));
     top.append("\"");
   }
   top.append(">");
 }
 
 // Private.
-void KmlHandler::InsertUnknownEndElement(const char *name) {
-  std::string& top = char_data_.top();
+void KmlHandler::InsertUnknownEndElement(const string& name) {
+  string& top = char_data_.top();
   top.append("</");
   top.append(name);
   top.append(">");
 }
 
 }  // end namespace kmldom
+

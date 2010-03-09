@@ -24,7 +24,6 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/engine/kmz_file.h"
-#include <string>
 #include <vector>
 
 namespace kmlconvenience {
@@ -33,6 +32,6 @@ namespace kmlconvenience {
 // This returns false if there is no KML in the KmzFile.  If a missing_files
 // vector is supplied the names of all missing files are saved there.
 bool KmzCheckLinks(const kmlengine::KmzFile& kmzfile,
-                   std::vector<std::string>* missing_files);
+                   std::vector<string>* missing_files);
 
 }  // end namespace kmlconvenience

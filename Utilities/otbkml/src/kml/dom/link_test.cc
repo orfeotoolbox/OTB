@@ -27,108 +27,86 @@
 // and IconStyle Icon elements.
 
 #include "kml/dom/link.h"
-#include <string>
 #include "kml/dom/kml22.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_funcs.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
-#include "kml/base/unit_test.h"
+#include "kml/dom/serializer.h"
+#include "gtest/gtest.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
-class LinkTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LinkTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST(TestAcceptCdataInHref);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class LinkTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     link_ = KmlFactory::GetFactory()->CreateLink();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestParse();
-  void TestAcceptCdataInHref();
-
- private:
   LinkPtr link_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LinkTest);
-
-void LinkTest::TestType() {
-  CPPUNIT_ASSERT(Type_Link == link_->Type());
-  CPPUNIT_ASSERT(true == link_->IsA(Type_Link));
-  CPPUNIT_ASSERT(true == link_->IsA(Type_BasicLink));
-  CPPUNIT_ASSERT(true == link_->IsA(Type_Object));
+TEST_F(LinkTest, TestType) {
+  ASSERT_TRUE(Type_Link == link_->Type());
+  ASSERT_TRUE(link_->IsA(Type_Link));
+  ASSERT_TRUE(link_->IsA(Type_BasicLink));
+  ASSERT_TRUE(link_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void LinkTest::TestDefaults() {
-  CPPUNIT_ASSERT("" == link_->get_href());
-  CPPUNIT_ASSERT(false == link_->has_href());
-  CPPUNIT_ASSERT(REFRESHMODE_ONCHANGE == link_->get_refreshmode());
-  CPPUNIT_ASSERT(false == link_->has_refreshmode());
-  CPPUNIT_ASSERT(4.0 == link_->get_refreshinterval());
-  CPPUNIT_ASSERT(false == link_->has_refreshinterval());
-  CPPUNIT_ASSERT(VIEWREFRESHMODE_NEVER == link_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(false == link_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(4.0 == link_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(false == link_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(1.0 == link_->get_viewboundscale());
-  CPPUNIT_ASSERT(false == link_->has_viewboundscale());
-  CPPUNIT_ASSERT("" == link_->get_viewformat());
-  CPPUNIT_ASSERT(false == link_->has_viewformat());
-  CPPUNIT_ASSERT("" == link_->get_httpquery());
-  CPPUNIT_ASSERT(false == link_->has_httpquery());
+TEST_F(LinkTest, TestDefaults) {
+  ASSERT_EQ(string(""), link_->get_href());
+  ASSERT_FALSE(link_->has_href());
+  ASSERT_EQ(REFRESHMODE_ONCHANGE, link_->get_refreshmode());
+  ASSERT_FALSE(link_->has_refreshmode());
+  ASSERT_DOUBLE_EQ(4.0, link_->get_refreshinterval());
+  ASSERT_FALSE(link_->has_refreshinterval());
+  ASSERT_EQ(VIEWREFRESHMODE_NEVER, link_->get_viewrefreshmode());
+  ASSERT_FALSE(link_->has_viewrefreshmode());
+  ASSERT_DOUBLE_EQ(4.0, link_->get_viewrefreshtime());
+  ASSERT_FALSE(link_->has_viewrefreshtime());
+  ASSERT_DOUBLE_EQ(1.0, link_->get_viewboundscale());
+  ASSERT_FALSE(link_->has_viewboundscale());
+  ASSERT_EQ("", link_->get_viewformat());
+  ASSERT_FALSE(link_->has_viewformat());
+  ASSERT_EQ("", link_->get_httpquery());
+  ASSERT_FALSE(link_->has_httpquery());
 }
 
 // Verify setting default makes has_xxx() true:
-void LinkTest::TestSetToDefaultValues() {
+TEST_F(LinkTest, TestSetToDefaultValues) {
   // Verify default state:
-  TestDefaults();
   link_->set_href(link_->get_href());
-  CPPUNIT_ASSERT(true == link_->has_href());
+  ASSERT_TRUE(link_->has_href());
   link_->set_refreshmode(link_->get_refreshmode());
-  CPPUNIT_ASSERT(true == link_->has_refreshmode());
+  ASSERT_TRUE(link_->has_refreshmode());
   link_->set_refreshinterval(link_->get_refreshinterval());
-  CPPUNIT_ASSERT(true == link_->has_refreshinterval());
+  ASSERT_TRUE(link_->has_refreshinterval());
   link_->set_viewrefreshmode(link_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(true == link_->has_viewrefreshmode());
+  ASSERT_TRUE(link_->has_viewrefreshmode());
   link_->set_viewrefreshtime(link_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(true == link_->has_viewrefreshtime());
+  ASSERT_TRUE(link_->has_viewrefreshtime());
   link_->set_viewboundscale(link_->get_viewboundscale());
-  CPPUNIT_ASSERT(true == link_->has_viewboundscale());
+  ASSERT_TRUE(link_->has_viewboundscale());
   link_->set_viewformat(link_->get_viewformat());
-  CPPUNIT_ASSERT(true == link_->has_viewformat());
+  ASSERT_TRUE(link_->has_viewformat());
   link_->set_httpquery(link_->get_httpquery());
-  CPPUNIT_ASSERT(true == link_->has_httpquery());
+  ASSERT_TRUE(link_->has_httpquery());
 }
 
 // Verify set, get, has, clear:
-void LinkTest::TestSetGetHasClear() {
+TEST_F(LinkTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string href("href");
+  string href("href");
   RefreshModeEnum refreshmode = REFRESHMODE_ONINTERVAL;
   double refreshinterval = 1.0;
   ViewRefreshModeEnum viewrefreshmode = VIEWREFRESHMODE_ONREQUEST;
   double viewrefreshtime = 1.0;
   double viewboundscale = 0.5;
-  std::string viewformat("viewformat");
-  std::string httpquery("httpquery");
+  string viewformat("viewformat");
+  string httpquery("httpquery");
 
   // Set all fields:
   link_->set_href(href);
@@ -141,23 +119,23 @@ void LinkTest::TestSetGetHasClear() {
   link_->set_httpquery(httpquery);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == link_->has_href());
-  CPPUNIT_ASSERT(true == link_->has_refreshmode());
-  CPPUNIT_ASSERT(true == link_->has_refreshinterval());
-  CPPUNIT_ASSERT(true == link_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(true == link_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(true == link_->has_viewboundscale());
-  CPPUNIT_ASSERT(true == link_->has_viewformat());
-  CPPUNIT_ASSERT(true == link_->has_httpquery());
+  ASSERT_TRUE(link_->has_href());
+  ASSERT_TRUE(link_->has_refreshmode());
+  ASSERT_TRUE(link_->has_refreshinterval());
+  ASSERT_TRUE(link_->has_viewrefreshmode());
+  ASSERT_TRUE(link_->has_viewrefreshtime());
+  ASSERT_TRUE(link_->has_viewboundscale());
+  ASSERT_TRUE(link_->has_viewformat());
+  ASSERT_TRUE(link_->has_httpquery());
 
-  CPPUNIT_ASSERT(href == link_->get_href());
-  CPPUNIT_ASSERT(refreshmode == link_->get_refreshmode());
-  CPPUNIT_ASSERT(refreshinterval == link_->get_refreshinterval());
-  CPPUNIT_ASSERT(viewrefreshmode == link_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(viewrefreshtime == link_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(viewboundscale == link_->get_viewboundscale());
-  CPPUNIT_ASSERT(viewformat == link_->get_viewformat());
-  CPPUNIT_ASSERT(httpquery == link_->get_httpquery());
+  ASSERT_EQ(href, link_->get_href());
+  ASSERT_EQ(refreshmode, link_->get_refreshmode());
+  ASSERT_EQ(refreshinterval, link_->get_refreshinterval());
+  ASSERT_EQ(viewrefreshmode, link_->get_viewrefreshmode());
+  ASSERT_EQ(viewrefreshtime, link_->get_viewrefreshtime());
+  ASSERT_EQ(viewboundscale, link_->get_viewboundscale());
+  ASSERT_EQ(viewformat, link_->get_viewformat());
+  ASSERT_EQ(httpquery, link_->get_httpquery());
 
   // Clear all fields:
   link_->clear_href();
@@ -168,129 +146,106 @@ void LinkTest::TestSetGetHasClear() {
   link_->clear_viewboundscale();
   link_->clear_viewformat();
   link_->clear_httpquery();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 
-void LinkTest::TestParse() {
-  const std::string kContent = "foo.kml";
-  const std::string kHref = "<href>" + kContent + "</href>";
-  const std::string kLink = "<Link>" + kHref + "</Link>";
-  std::string errors;
+TEST_F(LinkTest, TestParse) {
+  const string kContent = "foo.kml";
+  const string kHref = "<href>" + kContent + "</href>";
+  const string kLink = "<Link>" + kHref + "</Link>";
+  string errors;
   ElementPtr root = Parse(kLink, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const LinkPtr link = AsLink(root);
-  CPPUNIT_ASSERT(link);
-  CPPUNIT_ASSERT(link->has_href());
-  CPPUNIT_ASSERT(kContent == link->get_href());
+  ASSERT_TRUE(link);
+  ASSERT_TRUE(link->has_href());
+  ASSERT_EQ(kContent, link->get_href());
 }
 
-void LinkTest::TestAcceptCdataInHref() {
-  const std::string kContent = "abl?output=kml&ab_cl=erth&fname=p7_8_9.kmz";
-  const std::string kCdata = "<![CDATA[" + kContent + "]]>";
-  const std::string kHref = "<href>" + kCdata + "</href>";
-  const std::string kLink = "<Link>" + kHref + "</Link>";
-  std::string errors;
+TEST_F(LinkTest, TestAcceptCdataInHref) {
+  const string kContent = "abl?output=kml&ab_cl=erth&fname=p7_8_9.kmz";
+  const string kCdata = "<![CDATA[" + kContent + "]]>";
+  const string kHref = "<href>" + kCdata + "</href>";
+  const string kLink = "<Link>" + kHref + "</Link>";
+  string errors;
   ElementPtr root = Parse(kLink, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const LinkPtr link = AsLink(root);
-  CPPUNIT_ASSERT(link);
-  CPPUNIT_ASSERT(link->has_href());
-  CPPUNIT_ASSERT(kContent == link->get_href());
+  ASSERT_TRUE(link);
+  ASSERT_TRUE(link->has_href());
+  ASSERT_TRUE(kContent == link->get_href());
 }
 
-class UrlTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(UrlTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class UrlTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     url_ = KmlFactory::GetFactory()->CreateUrl();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   UrlPtr url_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(UrlTest);
-
-void UrlTest::TestType() {
-  CPPUNIT_ASSERT(Type_Url == url_->Type());
-  CPPUNIT_ASSERT(true == url_->IsA(Type_Url));
-  CPPUNIT_ASSERT(true == url_->IsA(Type_BasicLink));
-  CPPUNIT_ASSERT(true == url_->IsA(Type_Object));
+TEST_F(UrlTest, TestType) {
+  ASSERT_EQ(Type_Url, url_->Type());
+  ASSERT_TRUE(url_->IsA(Type_Url));
+  ASSERT_TRUE(url_->IsA(Type_BasicLink));
+  ASSERT_TRUE(url_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void UrlTest::TestDefaults() {
-  CPPUNIT_ASSERT("" == url_->get_href());
-  CPPUNIT_ASSERT(false == url_->has_href());
-  CPPUNIT_ASSERT(REFRESHMODE_ONCHANGE == url_->get_refreshmode());
-  CPPUNIT_ASSERT(false == url_->has_refreshmode());
-  CPPUNIT_ASSERT(4.0 == url_->get_refreshinterval());
-  CPPUNIT_ASSERT(false == url_->has_refreshinterval());
-  CPPUNIT_ASSERT(VIEWREFRESHMODE_NEVER == url_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(false == url_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(4.0 == url_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(false == url_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(1.0 == url_->get_viewboundscale());
-  CPPUNIT_ASSERT(false == url_->has_viewboundscale());
-  CPPUNIT_ASSERT("" == url_->get_viewformat());
-  CPPUNIT_ASSERT(false == url_->has_viewformat());
-  CPPUNIT_ASSERT("" == url_->get_httpquery());
-  CPPUNIT_ASSERT(false == url_->has_httpquery());
+TEST_F(UrlTest, TestDefaults) {
+  ASSERT_EQ("", url_->get_href());
+  ASSERT_FALSE(url_->has_href());
+  ASSERT_EQ(REFRESHMODE_ONCHANGE, url_->get_refreshmode());
+  ASSERT_FALSE(url_->has_refreshmode());
+  ASSERT_DOUBLE_EQ(4.0, url_->get_refreshinterval());
+  ASSERT_FALSE(url_->has_refreshinterval());
+  ASSERT_TRUE(VIEWREFRESHMODE_NEVER == url_->get_viewrefreshmode());
+  ASSERT_FALSE(url_->has_viewrefreshmode());
+  ASSERT_DOUBLE_EQ(4.0, url_->get_viewrefreshtime());
+  ASSERT_FALSE(url_->has_viewrefreshtime());
+  ASSERT_DOUBLE_EQ(1.0, url_->get_viewboundscale());
+  ASSERT_FALSE(url_->has_viewboundscale());
+  ASSERT_EQ(string(""), url_->get_viewformat());
+  ASSERT_FALSE(url_->has_viewformat());
+  ASSERT_EQ(string(""), url_->get_httpquery());
+  ASSERT_FALSE(url_->has_httpquery());
 }
 
 // Verify setting default makes has_xxx() true:
-void UrlTest::TestSetToDefaultValues() {
+TEST_F(UrlTest, TestSetToDefaultValues) {
   // Verify default state:
-  TestDefaults();
   url_->set_href(url_->get_href());
-  CPPUNIT_ASSERT(true == url_->has_href());
+  ASSERT_TRUE(url_->has_href());
   url_->set_refreshmode(url_->get_refreshmode());
-  CPPUNIT_ASSERT(true == url_->has_refreshmode());
+  ASSERT_TRUE(url_->has_refreshmode());
   url_->set_refreshinterval(url_->get_refreshinterval());
-  CPPUNIT_ASSERT(true == url_->has_refreshinterval());
+  ASSERT_TRUE(url_->has_refreshinterval());
   url_->set_viewrefreshmode(url_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(true == url_->has_viewrefreshmode());
+  ASSERT_TRUE(url_->has_viewrefreshmode());
   url_->set_viewrefreshtime(url_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(true == url_->has_viewrefreshtime());
+  ASSERT_TRUE(url_->has_viewrefreshtime());
   url_->set_viewboundscale(url_->get_viewboundscale());
-  CPPUNIT_ASSERT(true == url_->has_viewboundscale());
+  ASSERT_TRUE(url_->has_viewboundscale());
   url_->set_viewformat(url_->get_viewformat());
-  CPPUNIT_ASSERT(true == url_->has_viewformat());
+  ASSERT_TRUE(url_->has_viewformat());
   url_->set_httpquery(url_->get_httpquery());
-  CPPUNIT_ASSERT(true == url_->has_httpquery());
+  ASSERT_TRUE(url_->has_httpquery());
 }
 
 // Verify set, get, has, clear:
-void UrlTest::TestSetGetHasClear() {
+TEST_F(UrlTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string href("href");
+  string href("href");
   RefreshModeEnum refreshmode = REFRESHMODE_ONINTERVAL;
   double refreshinterval = 1.0;
   ViewRefreshModeEnum viewrefreshmode = VIEWREFRESHMODE_ONREQUEST;
   double viewrefreshtime = 1.0;
   double viewboundscale = 0.5;
-  std::string viewformat("viewformat");
-  std::string httpquery("httpquery");
+  string viewformat("viewformat");
+  string httpquery("httpquery");
 
   // Set all fields:
   url_->set_href(href);
@@ -303,23 +258,23 @@ void UrlTest::TestSetGetHasClear() {
   url_->set_httpquery(httpquery);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == url_->has_href());
-  CPPUNIT_ASSERT(true == url_->has_refreshmode());
-  CPPUNIT_ASSERT(true == url_->has_refreshinterval());
-  CPPUNIT_ASSERT(true == url_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(true == url_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(true == url_->has_viewboundscale());
-  CPPUNIT_ASSERT(true == url_->has_viewformat());
-  CPPUNIT_ASSERT(true == url_->has_httpquery());
+  ASSERT_TRUE(url_->has_href());
+  ASSERT_TRUE(url_->has_refreshmode());
+  ASSERT_TRUE(url_->has_refreshinterval());
+  ASSERT_TRUE(url_->has_viewrefreshmode());
+  ASSERT_TRUE(url_->has_viewrefreshtime());
+  ASSERT_TRUE(url_->has_viewboundscale());
+  ASSERT_TRUE(url_->has_viewformat());
+  ASSERT_TRUE(url_->has_httpquery());
 
-  CPPUNIT_ASSERT(href == url_->get_href());
-  CPPUNIT_ASSERT(refreshmode == url_->get_refreshmode());
-  CPPUNIT_ASSERT(refreshinterval == url_->get_refreshinterval());
-  CPPUNIT_ASSERT(viewrefreshmode == url_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(viewrefreshtime == url_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(viewboundscale == url_->get_viewboundscale());
-  CPPUNIT_ASSERT(viewformat == url_->get_viewformat());
-  CPPUNIT_ASSERT(httpquery == url_->get_httpquery());
+  ASSERT_EQ(href, url_->get_href());
+  ASSERT_EQ(refreshmode, url_->get_refreshmode());
+  ASSERT_EQ(refreshinterval, url_->get_refreshinterval());
+  ASSERT_EQ(viewrefreshmode, url_->get_viewrefreshmode());
+  ASSERT_EQ(viewrefreshtime, url_->get_viewrefreshtime());
+  ASSERT_EQ(viewboundscale, url_->get_viewboundscale());
+  ASSERT_EQ(viewformat, url_->get_viewformat());
+  ASSERT_EQ(httpquery, url_->get_httpquery());
 
   // Clear all fields:
   url_->clear_href();
@@ -330,99 +285,76 @@ void UrlTest::TestSetGetHasClear() {
   url_->clear_viewboundscale();
   url_->clear_viewformat();
   url_->clear_httpquery();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
-class IconTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(IconTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class IconTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     icon_ = KmlFactory::GetFactory()->CreateIcon();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   IconPtr icon_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(IconTest);
-
-void IconTest::TestType() {
-  CPPUNIT_ASSERT(Type_Icon == icon_->Type());
-  CPPUNIT_ASSERT(true == icon_->IsA(Type_Icon));
-  CPPUNIT_ASSERT(true == icon_->IsA(Type_BasicLink));
-  CPPUNIT_ASSERT(true == icon_->IsA(Type_Object));
+TEST_F(IconTest, TestType) {
+  ASSERT_EQ(Type_Icon, icon_->Type());
+  ASSERT_TRUE(icon_->IsA(Type_Icon));
+  ASSERT_TRUE(icon_->IsA(Type_BasicLink));
+  ASSERT_TRUE(icon_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void IconTest::TestDefaults() {
-  CPPUNIT_ASSERT("" == icon_->get_href());
-  CPPUNIT_ASSERT(false == icon_->has_href());
-  CPPUNIT_ASSERT(REFRESHMODE_ONCHANGE == icon_->get_refreshmode());
-  CPPUNIT_ASSERT(false == icon_->has_refreshmode());
-  CPPUNIT_ASSERT(4.0 == icon_->get_refreshinterval());
-  CPPUNIT_ASSERT(false == icon_->has_refreshinterval());
-  CPPUNIT_ASSERT(VIEWREFRESHMODE_NEVER == icon_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(false == icon_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(4.0 == icon_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(false == icon_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(1.0 == icon_->get_viewboundscale());
-  CPPUNIT_ASSERT(false == icon_->has_viewboundscale());
-  CPPUNIT_ASSERT("" == icon_->get_viewformat());
-  CPPUNIT_ASSERT(false == icon_->has_viewformat());
-  CPPUNIT_ASSERT("" == icon_->get_httpquery());
-  CPPUNIT_ASSERT(false == icon_->has_httpquery());
+TEST_F(IconTest, TestDefaults) {
+  ASSERT_EQ(string(""), icon_->get_href());
+  ASSERT_FALSE(icon_->has_href());
+  ASSERT_EQ(REFRESHMODE_ONCHANGE, icon_->get_refreshmode());
+  ASSERT_FALSE(icon_->has_refreshmode());
+  ASSERT_DOUBLE_EQ(4.0, icon_->get_refreshinterval());
+  ASSERT_FALSE(icon_->has_refreshinterval());
+  ASSERT_EQ(VIEWREFRESHMODE_NEVER, icon_->get_viewrefreshmode());
+  ASSERT_FALSE(icon_->has_viewrefreshmode());
+  ASSERT_DOUBLE_EQ(4.0, icon_->get_viewrefreshtime());
+  ASSERT_FALSE(icon_->has_viewrefreshtime());
+  ASSERT_DOUBLE_EQ(1.0, icon_->get_viewboundscale());
+  ASSERT_FALSE(icon_->has_viewboundscale());
+  ASSERT_EQ(string(""), icon_->get_viewformat());
+  ASSERT_FALSE(icon_->has_viewformat());
+  ASSERT_EQ(string(""), icon_->get_httpquery());
+  ASSERT_FALSE(icon_->has_httpquery());
 }
 
 // Verify setting default makes has_xxx() true:
-void IconTest::TestSetToDefaultValues() {
+TEST_F(IconTest, TestSetToDefaultValues) {
   // Verify default state:
-  TestDefaults();
   icon_->set_href(icon_->get_href());
-  CPPUNIT_ASSERT(true == icon_->has_href());
+  ASSERT_TRUE(icon_->has_href());
   icon_->set_refreshmode(icon_->get_refreshmode());
-  CPPUNIT_ASSERT(true == icon_->has_refreshmode());
+  ASSERT_TRUE(icon_->has_refreshmode());
   icon_->set_refreshinterval(icon_->get_refreshinterval());
-  CPPUNIT_ASSERT(true == icon_->has_refreshinterval());
+  ASSERT_TRUE(icon_->has_refreshinterval());
   icon_->set_viewrefreshmode(icon_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(true == icon_->has_viewrefreshmode());
+  ASSERT_TRUE(icon_->has_viewrefreshmode());
   icon_->set_viewrefreshtime(icon_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(true == icon_->has_viewrefreshtime());
+  ASSERT_TRUE(icon_->has_viewrefreshtime());
   icon_->set_viewboundscale(icon_->get_viewboundscale());
-  CPPUNIT_ASSERT(true == icon_->has_viewboundscale());
+  ASSERT_TRUE(icon_->has_viewboundscale());
   icon_->set_viewformat(icon_->get_viewformat());
-  CPPUNIT_ASSERT(true == icon_->has_viewformat());
+  ASSERT_TRUE(icon_->has_viewformat());
   icon_->set_httpquery(icon_->get_httpquery());
-  CPPUNIT_ASSERT(true == icon_->has_httpquery());
+  ASSERT_TRUE(icon_->has_httpquery());
 }
 
 // Verify set, get, has, clear:
-void IconTest::TestSetGetHasClear() {
+TEST_F(IconTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string href("href");
+  string href("href");
   RefreshModeEnum refreshmode = REFRESHMODE_ONINTERVAL;
   double refreshinterval = 1.0;
   ViewRefreshModeEnum viewrefreshmode = VIEWREFRESHMODE_ONREQUEST;
   double viewrefreshtime = 1.0;
   double viewboundscale = 0.5;
-  std::string viewformat("viewformat");
-  std::string httpquery("httpquery");
+  string viewformat("viewformat");
+  string httpquery("httpquery");
 
   // Set all fields:
   icon_->set_href(href);
@@ -435,23 +367,23 @@ void IconTest::TestSetGetHasClear() {
   icon_->set_httpquery(httpquery);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == icon_->has_href());
-  CPPUNIT_ASSERT(true == icon_->has_refreshmode());
-  CPPUNIT_ASSERT(true == icon_->has_refreshinterval());
-  CPPUNIT_ASSERT(true == icon_->has_viewrefreshmode());
-  CPPUNIT_ASSERT(true == icon_->has_viewrefreshtime());
-  CPPUNIT_ASSERT(true == icon_->has_viewboundscale());
-  CPPUNIT_ASSERT(true == icon_->has_viewformat());
-  CPPUNIT_ASSERT(true == icon_->has_httpquery());
+  ASSERT_TRUE(icon_->has_href());
+  ASSERT_TRUE(icon_->has_refreshmode());
+  ASSERT_TRUE(icon_->has_refreshinterval());
+  ASSERT_TRUE(icon_->has_viewrefreshmode());
+  ASSERT_TRUE(icon_->has_viewrefreshtime());
+  ASSERT_TRUE(icon_->has_viewboundscale());
+  ASSERT_TRUE(icon_->has_viewformat());
+  ASSERT_TRUE(icon_->has_httpquery());
 
-  CPPUNIT_ASSERT(href == icon_->get_href());
-  CPPUNIT_ASSERT(refreshmode == icon_->get_refreshmode());
-  CPPUNIT_ASSERT(refreshinterval == icon_->get_refreshinterval());
-  CPPUNIT_ASSERT(viewrefreshmode == icon_->get_viewrefreshmode());
-  CPPUNIT_ASSERT(viewrefreshtime == icon_->get_viewrefreshtime());
-  CPPUNIT_ASSERT(viewboundscale == icon_->get_viewboundscale());
-  CPPUNIT_ASSERT(viewformat == icon_->get_viewformat());
-  CPPUNIT_ASSERT(httpquery == icon_->get_httpquery());
+  ASSERT_EQ(href, icon_->get_href());
+  ASSERT_EQ(refreshmode, icon_->get_refreshmode());
+  ASSERT_EQ(refreshinterval, icon_->get_refreshinterval());
+  ASSERT_EQ(viewrefreshmode, icon_->get_viewrefreshmode());
+  ASSERT_EQ(viewrefreshtime, icon_->get_viewrefreshtime());
+  ASSERT_EQ(viewboundscale, icon_->get_viewboundscale());
+  ASSERT_EQ(viewformat, icon_->get_viewformat());
+  ASSERT_EQ(httpquery, icon_->get_httpquery());
 
   // Clear all fields:
   icon_->clear_href();
@@ -462,91 +394,93 @@ void IconTest::TestSetGetHasClear() {
   icon_->clear_viewboundscale();
   icon_->clear_viewformat();
   icon_->clear_httpquery();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
-class IconStyleIconTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(IconStyleIconTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class IconStyleIconTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     iconstyleicon_ = KmlFactory::GetFactory()->CreateIconStyleIcon();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestSerialize();
-
- private:
   IconStyleIconPtr iconstyleicon_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(IconStyleIconTest);
-
-void IconStyleIconTest::TestType() {
-  CPPUNIT_ASSERT(Type_IconStyleIcon == iconstyleicon_->Type());
-  CPPUNIT_ASSERT(true == iconstyleicon_->IsA(Type_IconStyleIcon));
-  CPPUNIT_ASSERT(true == iconstyleicon_->IsA(Type_BasicLink));
-  CPPUNIT_ASSERT(true == iconstyleicon_->IsA(Type_Object));
+TEST_F(IconStyleIconTest, TestType) {
+  ASSERT_EQ(Type_IconStyleIcon, iconstyleicon_->Type());
+  ASSERT_TRUE(iconstyleicon_->IsA(Type_IconStyleIcon));
+  ASSERT_TRUE(iconstyleicon_->IsA(Type_BasicLink));
+  ASSERT_TRUE(iconstyleicon_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void IconStyleIconTest::TestDefaults() {
-  CPPUNIT_ASSERT("" == iconstyleicon_->get_href());
-  CPPUNIT_ASSERT(false == iconstyleicon_->has_href());
+TEST_F(IconStyleIconTest, TestDefaults) {
+  ASSERT_EQ(string(""), iconstyleicon_->get_href());
+  ASSERT_FALSE(iconstyleicon_->has_href());
 }
 
 // Verify setting default makes has_xxx() true:
-void IconStyleIconTest::TestSetToDefaultValues() {
+TEST_F(IconStyleIconTest, TestSetToDefaultValues) {
   // Verify default state:
-  TestDefaults();
   iconstyleicon_->set_href(iconstyleicon_->get_href());
-  CPPUNIT_ASSERT(true == iconstyleicon_->has_href());
+  ASSERT_TRUE(iconstyleicon_->has_href());
 }
 
 // Verify set, get, has, clear:
-void IconStyleIconTest::TestSetGetHasClear() {
+TEST_F(IconStyleIconTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string href("href");
+  string href("href");
 
   // Set all fields:
   iconstyleicon_->set_href(href);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == iconstyleicon_->has_href());
+  ASSERT_TRUE(iconstyleicon_->has_href());
 
-  CPPUNIT_ASSERT(href == iconstyleicon_->get_href());
+  ASSERT_EQ(href, iconstyleicon_->get_href());
 
   // Clear all fields:
   iconstyleicon_->clear_href();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 // Verify the Serialize method.
-void IconStyleIconTest::TestSerialize() {
+TEST_F(IconStyleIconTest, TestSerialize) {
+  // Create a very special Serializer to assert that IconStyleIcon's Serialize
+  // method is advertising itself as Type_IconStyleIcon.
+  class VerifySerializer : public kmldom::Serializer {
+   public:
+    virtual void BeginById(int type_id, const Attributes& attributes) {
+     ASSERT_EQ(Type_IconStyleIcon, type_id);
+    }
+  } test_serializer;
+  // Serialize is public only on Element.
+  ElementPtr e(iconstyleicon_);
+  e->Serialize(test_serializer);
+}
+
+TEST_F(IconStyleIconTest, TestXmlSerialize) {
   // This is a special case in KML.
   // Verify that IconStyleIcon is serialized as "<Icon>".
-  std::string xml_output = SerializeRaw(iconstyleicon_);
+  string xml_output = SerializeRaw(iconstyleicon_);
   // The following presumes the serializer does _not_ handle nil elements.
-  CPPUNIT_ASSERT_EQUAL(0, xml_output.compare("<Icon/>"));
+  ASSERT_EQ(0, xml_output.compare("<Icon/>"));
+}
+
+TEST_F(IconStyleIconTest, TestParseSerializeUnknown) {
+  // <Icon> here is BasicLink which has no <refreshMode>.  However this should
+  // be preserved as unknown xml.
+  const string kIcon(
+      "<Icon>"
+      "<href>http://example.com/xyz.png</href>"
+      "<refreshMode>onExpire</refreshMode>"
+      "</Icon>");
+  ElementPtr element(Parse(kIcon, NULL));
+  ASSERT_TRUE(element);
+  ASSERT_EQ(kIcon, SerializeRaw(element));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

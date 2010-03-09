@@ -25,7 +25,7 @@
 
 // This file contains the unit tests for LatLonAltBox, Lod, and Region.
 
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 #include "kml/dom/element.h"
 #include "kml/dom/kml_funcs.h"
 #include "kml/dom/kml_cast.h"
@@ -35,102 +35,87 @@
 
 namespace kmldom {
 
-class LatLonAltBoxTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LatLonAltBoxTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestParseAltitudeMode);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class LatLonAltBoxTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     latlonaltbox_ = KmlFactory::GetFactory()->CreateLatLonAltBox();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestParseAltitudeMode();
-
- private:
   LatLonAltBoxPtr latlonaltbox_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LatLonAltBoxTest);
-
-void LatLonAltBoxTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_LatLonAltBox, latlonaltbox_->Type());
-  CPPUNIT_ASSERT(true == latlonaltbox_->IsA(Type_LatLonAltBox));
-  CPPUNIT_ASSERT(true == latlonaltbox_->IsA(Type_AbstractLatLonBox));
-  CPPUNIT_ASSERT(true == latlonaltbox_->IsA(Type_Object));
+TEST_F(LatLonAltBoxTest, TestType) {
+  ASSERT_EQ(Type_LatLonAltBox, latlonaltbox_->Type());
+  ASSERT_TRUE(latlonaltbox_->IsA(Type_LatLonAltBox));
+  ASSERT_TRUE(latlonaltbox_->IsA(Type_AbstractLatLonBox));
+  ASSERT_TRUE(latlonaltbox_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void LatLonAltBoxTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_minaltitude());
-  CPPUNIT_ASSERT(0.0 == latlonaltbox_->get_minaltitude());
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_maxaltitude());
-  CPPUNIT_ASSERT(0.0 == latlonaltbox_->get_maxaltitude());
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_altitudemode());
-  CPPUNIT_ASSERT(ALTITUDEMODE_CLAMPTOGROUND ==
-                 latlonaltbox_->get_altitudemode());
+TEST_F(LatLonAltBoxTest, TestDefaults) {
+  ASSERT_FALSE(latlonaltbox_->has_minaltitude());
+  ASSERT_DOUBLE_EQ(0.0, latlonaltbox_->get_minaltitude());
+  ASSERT_FALSE(latlonaltbox_->has_maxaltitude());
+  ASSERT_DOUBLE_EQ(0.0, latlonaltbox_->get_maxaltitude());
+  ASSERT_FALSE(latlonaltbox_->has_altitudemode());
+  ASSERT_TRUE(ALTITUDEMODE_CLAMPTOGROUND ==
+              latlonaltbox_->get_altitudemode());
+  ASSERT_FALSE(latlonaltbox_->has_gx_altitudemode());
+  ASSERT_TRUE(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR ==
+              latlonaltbox_->get_gx_altitudemode());
 }
 
 // Verify setting default makes has_xxx() true:
-void LatLonAltBoxTest::TestSetToDefaultValues() {
+TEST_F(LatLonAltBoxTest, TestSetToDefaultValues) {
   // Verify the latlonaltbox_->is in default state:
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_minaltitude());
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_maxaltitude());
-  CPPUNIT_ASSERT(false == latlonaltbox_->has_altitudemode());
+  ASSERT_FALSE(latlonaltbox_->has_minaltitude());
+  ASSERT_FALSE(latlonaltbox_->has_maxaltitude());
+  ASSERT_FALSE(latlonaltbox_->has_altitudemode());
+  ASSERT_FALSE(latlonaltbox_->has_gx_altitudemode());
   latlonaltbox_->set_minaltitude(latlonaltbox_->get_minaltitude());
   latlonaltbox_->set_maxaltitude(latlonaltbox_->get_maxaltitude());
   latlonaltbox_->set_altitudemode(latlonaltbox_->get_altitudemode());
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_minaltitude());
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_maxaltitude());
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_altitudemode());
+  latlonaltbox_->set_gx_altitudemode(latlonaltbox_->get_gx_altitudemode());
+  ASSERT_TRUE(latlonaltbox_->has_minaltitude());
+  ASSERT_TRUE(latlonaltbox_->has_maxaltitude());
+  ASSERT_TRUE(latlonaltbox_->has_altitudemode());
+  ASSERT_TRUE(latlonaltbox_->has_gx_altitudemode());
 }
 
 // Verify set, get, has, clear:
-void LatLonAltBoxTest::TestSetGetHasClear() {
+TEST_F(LatLonAltBoxTest, TestSetGetHasClear) {
   // Non-default values:
   const double minaltitude = 10101.5678;
   const double maxaltitude = 54321.1234566;
   const int altitudemode = ALTITUDEMODE_ABSOLUTE;
+  const int gx_altitudemode = GX_ALTITUDEMODE_RELATIVETOSEAFLOOR;
 
   // Set all fields:
   latlonaltbox_->set_minaltitude(minaltitude);
   latlonaltbox_->set_maxaltitude(maxaltitude);
   latlonaltbox_->set_altitudemode(altitudemode);
+  latlonaltbox_->set_gx_altitudemode(gx_altitudemode);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_minaltitude());
-  CPPUNIT_ASSERT(minaltitude == latlonaltbox_->get_minaltitude());
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_maxaltitude());
-  CPPUNIT_ASSERT(maxaltitude == latlonaltbox_->get_maxaltitude());
-  CPPUNIT_ASSERT(true == latlonaltbox_->has_altitudemode());
-  CPPUNIT_ASSERT(altitudemode == latlonaltbox_->get_altitudemode());
+  ASSERT_TRUE(latlonaltbox_->has_minaltitude());
+  ASSERT_TRUE(minaltitude == latlonaltbox_->get_minaltitude());
+  ASSERT_TRUE(latlonaltbox_->has_maxaltitude());
+  ASSERT_TRUE(maxaltitude == latlonaltbox_->get_maxaltitude());
+  ASSERT_TRUE(latlonaltbox_->has_altitudemode());
+  ASSERT_TRUE(altitudemode == latlonaltbox_->get_altitudemode());
+  ASSERT_TRUE(latlonaltbox_->has_gx_altitudemode());
+  ASSERT_TRUE(gx_altitudemode == latlonaltbox_->get_gx_altitudemode());
 
   // Clear all fields:
   latlonaltbox_->clear_minaltitude();
   latlonaltbox_->clear_maxaltitude();
   latlonaltbox_->clear_altitudemode();
-
-  // Verify now in default state:
-  TestDefaults();
+  latlonaltbox_->clear_gx_altitudemode();
 }
 
 // Verify parse behavior of <altitudeMode> in <LatLonAltBox>
-void LatLonAltBoxTest::TestParseAltitudeMode() {
-  std::string kLatLonAltBoxAbsolute =
+TEST_F(LatLonAltBoxTest, TestParseAltitudeMode) {
+  string kLatLonAltBoxAbsolute =
     "<LatLonAltBox>"
     "<north>2.5</north>"
     "<south>1.25</south>"
@@ -140,131 +125,131 @@ void LatLonAltBoxTest::TestParseAltitudeMode() {
     "<maxAltitude>202.202</maxAltitude>"
     "<altitudeMode>absolute</altitudeMode>"
     "</LatLonAltBox>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kLatLonAltBoxAbsolute, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const LatLonAltBoxPtr llab_absolute = AsLatLonAltBox(root);
-  CPPUNIT_ASSERT(llab_absolute);
+  ASSERT_TRUE(llab_absolute);
 
   // Verify the proper values in the object model:
-  CPPUNIT_ASSERT(llab_absolute->has_north());
-  CPPUNIT_ASSERT_EQUAL(2.5, llab_absolute->get_north());
-  CPPUNIT_ASSERT(llab_absolute->has_south());
-  CPPUNIT_ASSERT_EQUAL(1.25, llab_absolute->get_south());
-  CPPUNIT_ASSERT(llab_absolute->has_east());
-  CPPUNIT_ASSERT_EQUAL(1.25, llab_absolute->get_east());
-  CPPUNIT_ASSERT(llab_absolute->has_west());
-  CPPUNIT_ASSERT_EQUAL(0., llab_absolute->get_west());
-  CPPUNIT_ASSERT(llab_absolute->has_minaltitude());
-  CPPUNIT_ASSERT_EQUAL(101.101, llab_absolute->get_minaltitude());
-  CPPUNIT_ASSERT(llab_absolute->has_maxaltitude());
-  CPPUNIT_ASSERT_EQUAL(202.202, llab_absolute->get_maxaltitude());
-  CPPUNIT_ASSERT(llab_absolute->has_altitudemode());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(ALTITUDEMODE_ABSOLUTE),
-                       llab_absolute->get_altitudemode());
+  ASSERT_TRUE(llab_absolute->has_north());
+  ASSERT_DOUBLE_EQ(2.5, llab_absolute->get_north());
+  ASSERT_TRUE(llab_absolute->has_south());
+  ASSERT_DOUBLE_EQ(1.25, llab_absolute->get_south());
+  ASSERT_TRUE(llab_absolute->has_east());
+  ASSERT_DOUBLE_EQ(1.25, llab_absolute->get_east());
+  ASSERT_TRUE(llab_absolute->has_west());
+  ASSERT_DOUBLE_EQ(0., llab_absolute->get_west());
+  ASSERT_TRUE(llab_absolute->has_minaltitude());
+  ASSERT_DOUBLE_EQ(101.101, llab_absolute->get_minaltitude());
+  ASSERT_TRUE(llab_absolute->has_maxaltitude());
+  ASSERT_DOUBLE_EQ(202.202, llab_absolute->get_maxaltitude());
+  ASSERT_TRUE(llab_absolute->has_altitudemode());
+  ASSERT_EQ(static_cast<int>(ALTITUDEMODE_ABSOLUTE),
+            llab_absolute->get_altitudemode());
 
-  std::string kLatLonAltBoxClampToGround =
+  string kLatLonAltBoxClampToGround =
     "<LatLonAltBox>"
     "<altitudeMode>clampToGround</altitudeMode>"
     "</LatLonAltBox>";
   root = Parse(kLatLonAltBoxClampToGround, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const LatLonAltBoxPtr llab_clamptoground = AsLatLonAltBox(root);
-  CPPUNIT_ASSERT(llab_clamptoground);
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_north());
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_south());
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_east());
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_west());
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_minaltitude());
-  CPPUNIT_ASSERT(false == llab_clamptoground->has_maxaltitude());
-  CPPUNIT_ASSERT(llab_clamptoground->has_altitudemode());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(ALTITUDEMODE_CLAMPTOGROUND),
-                       llab_clamptoground->get_altitudemode());
+  ASSERT_TRUE(llab_clamptoground);
+  ASSERT_FALSE(llab_clamptoground->has_north());
+  ASSERT_FALSE(llab_clamptoground->has_south());
+  ASSERT_FALSE(llab_clamptoground->has_east());
+  ASSERT_FALSE(llab_clamptoground->has_west());
+  ASSERT_FALSE(llab_clamptoground->has_minaltitude());
+  ASSERT_FALSE(llab_clamptoground->has_maxaltitude());
+  ASSERT_TRUE(llab_clamptoground->has_altitudemode());
+  ASSERT_FALSE(llab_clamptoground->has_gx_altitudemode());
+  ASSERT_EQ(static_cast<int>(ALTITUDEMODE_CLAMPTOGROUND),
+            llab_clamptoground->get_gx_altitudemode());
 
-  std::string kLatLonAltBoxRelativeToGround =
+  string kLatLonAltBoxRelativeToGround =
     "<LatLonAltBox>"
     "<altitudeMode>relativeToGround</altitudeMode>"
     "</LatLonAltBox>";
   root = Parse(kLatLonAltBoxRelativeToGround, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const LatLonAltBoxPtr llab_relativetoground = AsLatLonAltBox(root);
-  CPPUNIT_ASSERT(llab_relativetoground);
-  CPPUNIT_ASSERT(llab_relativetoground->has_altitudemode());
-  CPPUNIT_ASSERT(llab_relativetoground->has_altitudemode());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(ALTITUDEMODE_RELATIVETOGROUND),
-                       llab_relativetoground->get_altitudemode());
+  ASSERT_TRUE(llab_relativetoground);
+  ASSERT_TRUE(llab_relativetoground->has_altitudemode());
+  ASSERT_FALSE(llab_relativetoground->has_gx_altitudemode());
+  ASSERT_EQ(static_cast<int>(ALTITUDEMODE_RELATIVETOGROUND),
+            llab_relativetoground->get_altitudemode());
+
+  string kLatLonAltBoxRelativeToSeaFloor =
+    "<LatLonAltBox>"
+    "<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>"
+    "</LatLonAltBox>";
+  root = Parse(kLatLonAltBoxRelativeToSeaFloor, &errors);
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
+  const LatLonAltBoxPtr llab_relativetoseafloor = AsLatLonAltBox(root);
+  ASSERT_TRUE(llab_relativetoseafloor);
+  ASSERT_FALSE(llab_relativetoseafloor->has_north());
+  ASSERT_FALSE(llab_relativetoseafloor->has_south());
+  ASSERT_FALSE(llab_relativetoseafloor->has_east());
+  ASSERT_FALSE(llab_relativetoseafloor->has_west());
+  ASSERT_FALSE(llab_relativetoseafloor->has_minaltitude());
+  ASSERT_FALSE(llab_relativetoseafloor->has_maxaltitude());
+  ASSERT_FALSE(llab_relativetoseafloor->has_altitudemode());
+  ASSERT_TRUE(llab_relativetoseafloor->has_gx_altitudemode());
+  ASSERT_EQ(static_cast<int>(GX_ALTITUDEMODE_RELATIVETOSEAFLOOR),
+            llab_relativetoseafloor->get_gx_altitudemode());
 }
 
-class LodTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LodTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class LodTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     lod_ = KmlFactory::GetFactory()->CreateLod();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   LodPtr lod_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LodTest);
-
-void LodTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_Lod, lod_->Type());
-  CPPUNIT_ASSERT(true == lod_->IsA(Type_Lod));
-  CPPUNIT_ASSERT(true == lod_->IsA(Type_Object));
+TEST_F(LodTest, TestType) {
+  ASSERT_EQ(Type_Lod, lod_->Type());
+  ASSERT_TRUE(lod_->IsA(Type_Lod));
+  ASSERT_TRUE(lod_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void LodTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == lod_->has_minlodpixels());
-  CPPUNIT_ASSERT(0.0 == lod_->get_minlodpixels());
-  CPPUNIT_ASSERT(false == lod_->has_maxlodpixels());
-  CPPUNIT_ASSERT(-1.0 == lod_->get_maxlodpixels());
-  CPPUNIT_ASSERT(false == lod_->has_minfadeextent());
-  CPPUNIT_ASSERT(0.0 == lod_->get_minfadeextent());
-  CPPUNIT_ASSERT(false == lod_->has_maxfadeextent());
-  CPPUNIT_ASSERT(0.0 == lod_->get_maxfadeextent());
+TEST_F(LodTest, TestDefaults) {
+  ASSERT_FALSE(lod_->has_minlodpixels());
+  ASSERT_DOUBLE_EQ(0.0, lod_->get_minlodpixels());
+  ASSERT_FALSE(lod_->has_maxlodpixels());
+  ASSERT_TRUE(-1.0 == lod_->get_maxlodpixels());
+  ASSERT_FALSE(lod_->has_minfadeextent());
+  ASSERT_DOUBLE_EQ(0.0, lod_->get_minfadeextent());
+  ASSERT_FALSE(lod_->has_maxfadeextent());
+  ASSERT_DOUBLE_EQ(0.0, lod_->get_maxfadeextent());
 }
 
 // Verify setting default makes has_xxx() true:
-void LodTest::TestSetToDefaultValues() {
+TEST_F(LodTest, TestSetToDefaultValues) {
   // Verify the lod is in default state:
-  CPPUNIT_ASSERT(false == lod_->has_minlodpixels());
-  CPPUNIT_ASSERT(false == lod_->has_maxlodpixels());
-  CPPUNIT_ASSERT(false == lod_->has_minfadeextent());
-  CPPUNIT_ASSERT(false == lod_->has_maxfadeextent());
+  ASSERT_FALSE(lod_->has_minlodpixels());
+  ASSERT_FALSE(lod_->has_maxlodpixels());
+  ASSERT_FALSE(lod_->has_minfadeextent());
+  ASSERT_FALSE(lod_->has_maxfadeextent());
   lod_->set_minlodpixels(lod_->get_minlodpixels());
   lod_->set_maxlodpixels(lod_->get_maxlodpixels());
   lod_->set_minfadeextent(lod_->get_minfadeextent());
   lod_->set_maxfadeextent(lod_->get_maxfadeextent());
-  CPPUNIT_ASSERT(true == lod_->has_minlodpixels());
-  CPPUNIT_ASSERT(true == lod_->has_maxlodpixels());
-  CPPUNIT_ASSERT(true == lod_->has_minfadeextent());
-  CPPUNIT_ASSERT(true == lod_->has_maxfadeextent());
+  ASSERT_TRUE(lod_->has_minlodpixels());
+  ASSERT_TRUE(lod_->has_maxlodpixels());
+  ASSERT_TRUE(lod_->has_minfadeextent());
+  ASSERT_TRUE(lod_->has_maxfadeextent());
 }
 
 // Verify set, get, has, clear:
-void LodTest::TestSetGetHasClear() {
+TEST_F(LodTest, TestSetGetHasClear) {
   const double minlodpixels = 128;
   const double maxlodpixels = 1024;
   const double minfadeextent = 127;
@@ -277,71 +262,45 @@ void LodTest::TestSetGetHasClear() {
   lod_->set_maxfadeextent(maxfadeextent);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == lod_->has_minlodpixels());
-  CPPUNIT_ASSERT(minlodpixels == lod_->get_minlodpixels());
-  CPPUNIT_ASSERT(true == lod_->has_maxlodpixels());
-  CPPUNIT_ASSERT(maxlodpixels == lod_->get_maxlodpixels());
-  CPPUNIT_ASSERT(true == lod_->has_minfadeextent());
-  CPPUNIT_ASSERT(minfadeextent == lod_->get_minfadeextent());
-  CPPUNIT_ASSERT(true == lod_->has_maxfadeextent());
-  CPPUNIT_ASSERT(maxfadeextent == lod_->get_maxfadeextent());
+  ASSERT_TRUE(lod_->has_minlodpixels());
+  ASSERT_DOUBLE_EQ(minlodpixels, lod_->get_minlodpixels());
+  ASSERT_TRUE(lod_->has_maxlodpixels());
+  ASSERT_DOUBLE_EQ(maxlodpixels, lod_->get_maxlodpixels());
+  ASSERT_TRUE(lod_->has_minfadeextent());
+  ASSERT_DOUBLE_EQ(minfadeextent, lod_->get_minfadeextent());
+  ASSERT_TRUE(lod_->has_maxfadeextent());
+  ASSERT_DOUBLE_EQ(maxfadeextent, lod_->get_maxfadeextent());
 
   // Clear all fields:
   lod_->clear_minlodpixels();
   lod_->clear_maxlodpixels();
   lod_->clear_minfadeextent();
   lod_->clear_maxfadeextent();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
-class RegionTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(RegionTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetParent);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST(TestSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
+class RegionTest : public testing::Test {
  protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetParent();
-  void TestParse();
-  void TestSerialize();
-
- public:
-  // Called before each test.
-  void setUp() {
+  virtual void SetUp() {
     region_ = KmlFactory::GetFactory()->CreateRegion();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- private:
   RegionPtr region_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(RegionTest);
-
-void RegionTest::TestType() {
-  CPPUNIT_ASSERT_EQUAL(Type_Region, region_->Type());
-  CPPUNIT_ASSERT(true == region_->IsA(Type_Region));
-  CPPUNIT_ASSERT(true == region_->IsA(Type_Object));
+TEST_F(RegionTest, TestType) {
+  ASSERT_EQ(Type_Region, region_->Type());
+  ASSERT_TRUE(region_->IsA(Type_Region));
+  ASSERT_TRUE(region_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void RegionTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == region_->has_latlonaltbox());
-  CPPUNIT_ASSERT(false == region_->has_lod());
+TEST_F(RegionTest, TestDefaults) {
+  ASSERT_FALSE(region_->has_latlonaltbox());
+  ASSERT_FALSE(region_->has_lod());
 }
 
-void RegionTest::TestParse() {
-  std::string kRegion =
+TEST_F(RegionTest, TestParse) {
+  string kRegion =
     "<Region id=\"region123\">"
     "<LatLonAltBox>"
     "<minAltitude>101.101</minAltitude>"
@@ -352,25 +311,25 @@ void RegionTest::TestParse() {
     "<minLodPixels>128</minLodPixels>"
     "</Lod>"
     "</Region>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kRegion, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const RegionPtr region = AsRegion(root);
-  CPPUNIT_ASSERT(region);
-  CPPUNIT_ASSERT_EQUAL(std::string("region123"), region->get_id());
-  CPPUNIT_ASSERT(region->has_latlonaltbox());
-  CPPUNIT_ASSERT_EQUAL(101.101, region->get_latlonaltbox()->get_minaltitude());
-  CPPUNIT_ASSERT_EQUAL(202.202, region->get_latlonaltbox()->get_maxaltitude());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(ALTITUDEMODE_ABSOLUTE),
-                       region->get_latlonaltbox()->get_altitudemode());
-  CPPUNIT_ASSERT(region->has_lod());
-  CPPUNIT_ASSERT_EQUAL(128., region->get_lod()->get_minlodpixels());
+  ASSERT_TRUE(region);
+  ASSERT_EQ(string("region123"), region->get_id());
+  ASSERT_TRUE(region->has_latlonaltbox());
+  ASSERT_DOUBLE_EQ(101.101, region->get_latlonaltbox()->get_minaltitude());
+  ASSERT_DOUBLE_EQ(202.202, region->get_latlonaltbox()->get_maxaltitude());
+  ASSERT_EQ(static_cast<int>(ALTITUDEMODE_ABSOLUTE),
+            region->get_latlonaltbox()->get_altitudemode());
+  ASSERT_TRUE(region->has_lod());
+  ASSERT_EQ(128, region->get_lod()->get_minlodpixels());
 }
 
 // Verify that 2 Regions can't take the same Lod, LatLonAltBox.
 // (This tests the internal set_parent() method.)
-void RegionTest::TestSetParent() {
+TEST_F(RegionTest, TestSetParent) {
   KmlFactory* factory = KmlFactory::GetFactory();
   LodPtr lod = factory->CreateLod();
   LatLonAltBoxPtr latlonaltbox = factory->CreateLatLonAltBox();
@@ -379,36 +338,39 @@ void RegionTest::TestSetParent() {
   RegionPtr region2 = factory->CreateRegion();
   region2->set_lod(lod);
   region2->set_latlonaltbox(latlonaltbox);
-  CPPUNIT_ASSERT(region_->has_lod());
-  CPPUNIT_ASSERT(region_->has_latlonaltbox());
+  ASSERT_TRUE(region_->has_lod());
+  ASSERT_TRUE(region_->has_latlonaltbox());
   // The 2nd Region should not have taken the children.
-  CPPUNIT_ASSERT(false == region2->has_lod());
-  CPPUNIT_ASSERT(false == region2->has_latlonaltbox());
+  ASSERT_FALSE(region2->has_lod());
+  ASSERT_FALSE(region2->has_latlonaltbox());
   // Delete of region_ deletes the Lod and LatLonAltBox created here.
 }
 
-void RegionTest::TestSerialize() {
-  std::string expecting_default ="<Region/>";
-  CPPUNIT_ASSERT_EQUAL(expecting_default, SerializeRaw(region_));
+TEST_F(RegionTest, TestSerialize) {
+  string expecting_default ="<Region/>";
+  ASSERT_EQ(expecting_default, SerializeRaw(region_));
   region_->set_lod(KmlFactory::GetFactory()->CreateLod());
   region_->set_latlonaltbox(KmlFactory::GetFactory()->CreateLatLonAltBox());
   region_->set_id("abc");
-  std::string expecting_both_children =
+  string expecting_both_children =
     "<Region id=\"abc\">"
     "<LatLonAltBox/>"
     "<Lod/>"
     "</Region>";
-  CPPUNIT_ASSERT_EQUAL(expecting_both_children, SerializeRaw(region_));
+  ASSERT_EQ(expecting_both_children, SerializeRaw(region_));
   region_->clear_id();  // Clears id attribute.
   region_->clear_lod();  // Deletes Lod.
-  std::string expecting_llab =
+  string expecting_llab =
     "<Region>"
     "<LatLonAltBox/>"
     "</Region>";
-  CPPUNIT_ASSERT_EQUAL(expecting_llab, SerializeRaw(region_));
+  ASSERT_EQ(expecting_llab, SerializeRaw(region_));
   // Delete of region_ deletes LatLonAltBox.
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

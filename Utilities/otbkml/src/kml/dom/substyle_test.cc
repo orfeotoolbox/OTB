@@ -24,32 +24,30 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/substyle.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class SubStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(SubStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST_SUITE_END();
-
+class SubStyleTest : public testing::Test {
  protected:
-  void TestType();
+  virtual void SetUp() {
+    substyle_.reset(new TestSubStyle());
+  }
 
- private:
   // SubStyle is abstract, hence its constructor is protected.
   class TestSubStyle : public SubStyle {};
-  TestSubStyle substyle_;
+  boost::scoped_ptr<TestSubStyle> substyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SubStyleTest);
-
-void SubStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == substyle_.IsA(Type_SubStyle));
-  CPPUNIT_ASSERT(true == substyle_.IsA(Type_Object));
+TEST_F(SubStyleTest, TestType) {
+  ASSERT_TRUE(substyle_->IsA(Type_SubStyle));
+  ASSERT_TRUE(substyle_->IsA(Type_Object));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
 

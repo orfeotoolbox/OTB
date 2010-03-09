@@ -27,7 +27,6 @@
 #define KML_ENGINE_KML_CACHE_H__
 
 #include "kml/base/net_cache.h"
-#include <string>
 #include "boost/scoped_ptr.hpp"
 #include "kml/engine/kml_file.h"
 #include "kml/engine/kmz_cache.h"
@@ -44,13 +43,19 @@ typedef kmlbase::NetCache<KmlFile> KmlFileNetCache;
 //   };
 //   YourNetFetcher your_net_fetcher;
 //   KmlCache kml_cache(&your_net_fetcher, cache_size);
-//   KmlFilePtr k0 = kml_cache.FetchKml("http://host.com/file.kml");
-//   KmlFilePtr k1 = kml_cache.FetchKml("http://host.com/file.kmz");
-//   KmlFilePtr k2 = kml_cache.FetchKml("http://host.com/file.kmz/foo.kml");
-//   std::string data;
-//   bool status = kml_cache.FetchData("http://host.com/image.jpg", &data);
+//   KmlFilePtr k0 = kml_cache.FetchKmlAbsolute("http://host.com/file.kml");
+//   KmlFilePtr k1 = kml_cache.FetchKmlAbsolute("http://host.com/file.kmz");
+//   KmlFilePtr k2 =
+//        kml_cache.FetchKmlAbsolute("http://host.com/file.kmz/foo.kml");
+//   KmlFilePtr k3 =
+//        kml_cache.FetchKmlRelative("http://host.com/file.kmz/doc.kml",
+//                                   "link.kml");
+//   string data;
+//   bool status = kml_cache.FetchDataRelative("http://host.com/overlay.kml",
+//                                             "image.jpg", &data);
 //   bool status =
-//       kml_cache.FetchData("http://host.com/file.kmz/image.jpg", &data);
+//       kml_cache.FetchDataRelative("http://host.com/file.kmz/doc.kml"
+//                                   "image.jpg", &data);
 // As the "cache" name suggests subsequent fetches for a given URL will
 // potentially hit the cache.
 class KmlCache {
@@ -58,20 +63,30 @@ class KmlCache {
   KmlCache(kmlbase::NetFetcher* net_fetcher, size_t max_size);
 
   // Any caller expecting to fetch and parse KML data should use this method.
-  // Use this for a resolved URL from a NetworkLink/Link/href, styleUrl, or
+  // Use this with the raw content of a NetworkLink/Link/href, styleUrl, or
   // schemaUrl.  A given parse of a local or remote StyleSelector or Schema
   // referenced by a styleUrl/schemaUrl is thus cached.  The returned KmlFile
   // is marked with a pointer back to this cache such that other internal
   // KML Engine algorithms can fetch (and cache) shared styles and schemas.
-  KmlFilePtr FetchKml(const std::string& kml_url);
+  // The base_url is typically that of the file containing the target_href.
+  KmlFilePtr FetchKmlRelative(const string& base_url,
+                              const string& target_href);
+
+  // This method is used to fetch a remote KML or KMZ file with an absolute URL.
+  // If the fetch or parse fails NULL is returned.
+  KmlFilePtr FetchKmlAbsolute(const string& kml_url);
 
   // Any caller expecting to fetch data which _may_ be within a KMZ should use
-  // this method.  If the data is within a remote KMZ file it is first fetched
-  // and cached such that subsequent access to this or other files within that
-  // KMZ file are out of the locally cached KMZ file.  Such content includes
-  // Model/Link/href (COLLADA geometry) and images for icons, overlays or
-  // model textures.
-  bool FetchData(const std::string& data_url, std::string* content);
+  // this method.  If the data is within a remote KMZ file that KMZ file is
+  // first fetched and cached such that subsequent access to this or other files
+  // within that KMZ file are out of the locally cached KMZ file.  Such content
+  // includes Model/Link/href (COLLADA geometry) and images for icons, overlays
+  // or model textures.  The target_href here typically is the content of an
+  // Overlay Icon's href, or Model's Link href.  The base_url is typically that
+  // of the file containing the target_href.
+  bool FetchDataRelative(const string& base_url,
+                         const string& target_href,
+                         string* content);
 
  private:
   boost::scoped_ptr<KmzCache> kmz_file_cache_;

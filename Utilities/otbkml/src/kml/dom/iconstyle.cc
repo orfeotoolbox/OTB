@@ -26,10 +26,12 @@
 // This file contains the implementation of the IconStyle element.
 
 #include "kml/dom/iconstyle.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -46,6 +48,9 @@ IconStyle::IconStyle() :
 IconStyle::~IconStyle() {}
 
 void IconStyle::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_scale:
       has_scale_ = element->SetDouble(&scale_);
@@ -66,9 +71,7 @@ void IconStyle::AddElement(const ElementPtr& element) {
 }
 
 void IconStyle::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  ColorStyle::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   ColorStyle::Serialize(serializer);
   if (has_scale()) {
     serializer.SaveFieldById(Type_scale, get_scale());
@@ -82,8 +85,20 @@ void IconStyle::Serialize(Serializer& serializer) const {
   if (has_hotspot()) {
     serializer.SaveElement(get_hotspot());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void IconStyle::Accept(Visitor* visitor) {
+  visitor->VisitIconStyle(IconStylePtr(this));
+}
+
+void IconStyle::AcceptChildren(VisitorDriver* driver) {
+  ColorStyle::AcceptChildren(driver);
+  if (has_icon()) {
+    driver->Visit(get_icon());
+  }
+  if (has_hotspot()) {
+    driver->Visit(get_hotspot());
+  }
 }
 
 }  // end namespace kmldom

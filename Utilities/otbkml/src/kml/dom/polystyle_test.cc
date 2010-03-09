@@ -27,65 +27,43 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class PolyStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(PolyStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class PolyStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     polystyle_ = KmlFactory::GetFactory()->CreatePolyStyle();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   PolyStylePtr polystyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(PolyStyleTest);
-
-void PolyStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == polystyle_->IsA(Type_PolyStyle));
-  CPPUNIT_ASSERT(Type_PolyStyle == polystyle_->Type());
-  CPPUNIT_ASSERT(true == polystyle_->IsA(Type_ColorStyle));
+TEST_F(PolyStyleTest, TestType) {
+  ASSERT_EQ(Type_PolyStyle, polystyle_->Type());
+  ASSERT_TRUE(polystyle_->IsA(Type_PolyStyle));
+  ASSERT_TRUE(polystyle_->IsA(Type_ColorStyle));
 }
 
 // Verify proper defaults:
-void PolyStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == polystyle_->has_fill());
-  CPPUNIT_ASSERT(true == polystyle_->get_fill());
-  CPPUNIT_ASSERT(false == polystyle_->has_outline());
-  CPPUNIT_ASSERT(true == polystyle_->get_outline());
+TEST_F(PolyStyleTest, TestDefaults) {
+  ASSERT_FALSE(polystyle_->has_fill());
+  ASSERT_TRUE(polystyle_->get_fill());
+  ASSERT_FALSE(polystyle_->has_outline());
+  ASSERT_TRUE(polystyle_->get_outline());
 }
 
 // Verify setting default makes has_xxx() true:
-void PolyStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(PolyStyleTest, TestSetToDefaultValues) {
   polystyle_->set_fill(polystyle_->get_fill());
-  CPPUNIT_ASSERT(true == polystyle_->has_fill());
+  ASSERT_TRUE(polystyle_->has_fill());
   polystyle_->set_outline(polystyle_->get_outline());
-  CPPUNIT_ASSERT(true == polystyle_->has_outline());
+  ASSERT_TRUE(polystyle_->has_outline());
 }
 
 // Verify set, get, has, clear:
-void PolyStyleTest::TestSetGetHasClear() {
+TEST_F(PolyStyleTest, TestSetGetHasClear) {
   // Non-default values:
   bool fill = false;
   bool outline = false;
@@ -95,19 +73,19 @@ void PolyStyleTest::TestSetGetHasClear() {
   polystyle_->set_outline(outline);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == polystyle_->has_fill());
-  CPPUNIT_ASSERT(fill == polystyle_->get_fill());
-  CPPUNIT_ASSERT(true == polystyle_->has_outline());
-  CPPUNIT_ASSERT(outline == polystyle_->get_outline());
+  ASSERT_TRUE(polystyle_->has_fill());
+  ASSERT_TRUE(fill == polystyle_->get_fill());
+  ASSERT_TRUE(polystyle_->has_outline());
+  ASSERT_TRUE(outline == polystyle_->get_outline());
 
   // Clear all fields:
   polystyle_->clear_fill();
   polystyle_->clear_outline();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

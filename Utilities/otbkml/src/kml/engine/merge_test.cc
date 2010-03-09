@@ -27,58 +27,28 @@
 // functions.
 
 #include "kml/engine/merge.h"
-#include <string>
-#include "kml/dom/attributes.h"
 #include "kml/dom/kml_funcs.h"
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
+using kmlbase::Vec3;
 using kmldom::CoordinatesPtr;
 using kmldom::FolderPtr;
 using kmldom::LineStringPtr;
+using kmldom::IconStylePtr;
+using kmldom::IconStyleIconPtr;
 using kmldom::KmlFactory;
 using kmldom::PlacemarkPtr;
 using kmldom::PointPtr;
 using kmldom::StylePtr;
-using kmldom::Vec3;
 
 namespace kmlengine {
 
-class MergeTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(MergeTest);
-  CPPUNIT_TEST(TestMergeFieldsNull);
-  CPPUNIT_TEST(TestMergeFieldsSame);
-  CPPUNIT_TEST(TestSimpleMergeFields);
-  CPPUNIT_TEST(TestMergeFieldsMany);
-  CPPUNIT_TEST(TestDontMergeComplexChildren);
-  CPPUNIT_TEST(TestMergeElementsNull);
-  CPPUNIT_TEST(TestMergeIconStyle);
-  CPPUNIT_TEST(TestMergeFullStyle);
-  CPPUNIT_TEST(TestMergePointPlacemark);
-  CPPUNIT_TEST(TestMergeSubstitutionGroup);
-  CPPUNIT_TEST(TestMergeFieldsSerialize);
-  CPPUNIT_TEST_SUITE_END();
-
+class MergeTest : public testing::Test {
  protected:
-  void TestMergeFieldsNull();
-  void TestMergeFieldsNullSame();
-  void TestMergeFieldsSame();
-  void TestSimpleMergeFields();
-  void TestMergeFieldsMany();
-  void TestDontMergeComplexChildren();
-  void TestMergeElementsNull();
-  void TestMergeChildren();
-  void TestMergeIconStyle();
-  void TestMergeFullStyle();
-  void TestMergePointPlacemark();
-  void TestMergeSubstitutionGroup();
-  void TestMergeFieldsSerialize();
-
- public:
-  // Called before each test.
-  void setUp() {
+  virtual void SetUp() {
     factory_ = KmlFactory::GetFactory();
     linestring_ = factory_->CreateLineString();
     source_placemark_ = factory_->CreatePlacemark();
@@ -88,25 +58,19 @@ class MergeTest : public CPPUNIT_NS::TestFixture {
     target_style_ = factory_->CreateStyle();
   }
 
-  // Called after each test.
-  void tearDown() {
-    // Nothing to tear down, all fields are values.
-  }
-
- private:
   StylePtr SetSubStyles(StylePtr style, double icon_style_scale,
-                        const std::string& label_style_color,
+                        const string& label_style_color,
                         double line_style_width, bool poly_style_fill,
-                        const std::string& balloon_style_text,
+                        const string& balloon_style_text,
                         kmldom::ListItemTypeEnum liststyle_style_listitemtype);
   void VerifySubStyles(StylePtr style, double icon_style_scale,
-                       const std::string& label_style_color,
+                       const string& label_style_color,
                        double line_style_width, bool poly_style_fill,
-                       const std::string& balloon_style_text,
+                       const string& balloon_style_text,
                        kmldom::ListItemTypeEnum liststyle_style_listitemtype);
-  void SetPointPlacemark(PlacemarkPtr placemark, const std::string& name,
+  void SetPointPlacemark(PlacemarkPtr placemark, const string& name,
                          double lat, double lon);
-  void VerifyPointPlacemark(PlacemarkPtr placemark, const std::string& name,
+  void VerifyPointPlacemark(PlacemarkPtr placemark, const string& name,
                             double lat, double lon);
   KmlFactory *factory_;
   LineStringPtr linestring_;
@@ -117,10 +81,8 @@ class MergeTest : public CPPUNIT_NS::TestFixture {
   PointPtr point_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(MergeTest);
-
 // Verify MergeFields() does not crash on NULL args.
-void MergeTest::TestMergeFieldsNull() {
+TEST_F(MergeTest, TestMergeFieldsNull) {
   MergeFields(source_placemark_, NULL);
   MergeFields(NULL, target_placemark_);
   MergeFields(NULL, NULL);
@@ -128,98 +90,113 @@ void MergeTest::TestMergeFieldsNull() {
 
 // Verify MergeFields does not crash or harm source if source and target
 // are the same element.
-void MergeTest::TestMergeFieldsSame() {
+TEST_F(MergeTest, TestMergeFieldsSame) {
   // Verify that passing the same element for source and target does not crash.
   MergeFields(source_placemark_, source_placemark_);
-  const std::string kDescription("description");
+  const string kDescription("description");
   source_placemark_->set_description(kDescription);
   MergeFields(source_placemark_, source_placemark_);
   // Placemark is still sane. Placemark had a description before and still
   // does and had no other fields and still does.
-  CPPUNIT_ASSERT_EQUAL(kDescription, source_placemark_->get_description());
-  CPPUNIT_ASSERT(!source_placemark_->has_name());
-  CPPUNIT_ASSERT(!source_placemark_->has_region());
-  CPPUNIT_ASSERT(!source_placemark_->has_geometry());
+  ASSERT_EQ(kDescription, source_placemark_->get_description());
+  ASSERT_FALSE(source_placemark_->has_name());
+  ASSERT_FALSE(source_placemark_->has_region());
+  ASSERT_FALSE(source_placemark_->has_geometry());
   MergeFields(point_, point_);
   // Point is still sane. Point had no coordinates before and none after.
-  CPPUNIT_ASSERT(!point_->has_coordinates());
+  ASSERT_FALSE(point_->has_coordinates());
 }
 
 // Verify normal usage of MergeFields().
-void MergeTest::TestSimpleMergeFields() {
+TEST_F(MergeTest, TestSimpleMergeFields) {
   // Set one field in the source.
-  const std::string kSourceName("source name");
+  const string kSourceName("source name");
   source_placemark_->set_name(kSourceName);
   // Merge fields in source to target.
   MergeFields(source_placemark_, target_placemark_);
   // Verify target now has the expected value for the given field.
-  CPPUNIT_ASSERT_EQUAL(kSourceName, target_placemark_->get_name());
+  ASSERT_EQ(kSourceName, target_placemark_->get_name());
 
   // Set the target's value for the given field.
-  const std::string kTargetName("target name");
+  const string kTargetName("target name");
   target_placemark_->set_name(kTargetName);
   // Verify that the source still has the expected value.
-  CPPUNIT_ASSERT_EQUAL(kSourceName, source_placemark_->get_name());
+  ASSERT_EQ(kSourceName, source_placemark_->get_name());
   // Merge source to target.
   MergeFields(source_placemark_, target_placemark_);
   // Verify that target now has the expected value.
-  CPPUNIT_ASSERT_EQUAL(kSourceName, target_placemark_->get_name());
+  ASSERT_EQ(kSourceName, target_placemark_->get_name());
 }
 
 // Verify that several fields are properly set in the target.
-void MergeTest::TestMergeFieldsMany() {
-  const std::string kName("name");
+TEST_F(MergeTest, TestMergeFieldsMany) {
+  const string kName("name");
   const bool kVisibility(false);
   const bool kOpen(false);
-  const std::string kDescription("name");
+  const string kDescription("name");
   source_placemark_->set_name(kName);
   source_placemark_->set_description(kDescription);
   source_placemark_->set_visibility(kVisibility);
   source_placemark_->set_open(kOpen);
   MergeFields(source_placemark_, target_placemark_);
-  CPPUNIT_ASSERT(target_placemark_->has_name());
-  CPPUNIT_ASSERT_EQUAL(kName, target_placemark_->get_name());
-  CPPUNIT_ASSERT(target_placemark_->has_description());
-  CPPUNIT_ASSERT_EQUAL(kDescription, target_placemark_->get_description());
-  CPPUNIT_ASSERT(target_placemark_->has_visibility());
-  CPPUNIT_ASSERT_EQUAL(kVisibility, target_placemark_->get_visibility());
-  CPPUNIT_ASSERT(target_placemark_->has_open());
-  CPPUNIT_ASSERT_EQUAL(kOpen, target_placemark_->get_open());
+  ASSERT_TRUE(target_placemark_->has_name());
+  ASSERT_EQ(kName, target_placemark_->get_name());
+  ASSERT_TRUE(target_placemark_->has_description());
+  ASSERT_EQ(kDescription, target_placemark_->get_description());
+  ASSERT_TRUE(target_placemark_->has_visibility());
+  ASSERT_EQ(kVisibility, target_placemark_->get_visibility());
+  ASSERT_TRUE(target_placemark_->has_open());
+  ASSERT_EQ(kOpen, target_placemark_->get_open());
 }
 
 // Verify that MergeFields() does not effect complex children.
-void MergeTest::TestDontMergeComplexChildren() {
+TEST_F(MergeTest, TestDontMergeComplexChildren) {
   // Give the source element a complex child.
   source_placemark_->set_geometry(point_);
   // Give the target a different type for the same complex child.
   target_placemark_->set_geometry(linestring_);
   // Set some simple element children in the source.
-  const std::string kName("hi there");
+  const string kName("hi there");
   source_placemark_->set_name(kName);
   source_placemark_->set_visibility(false);
   // Merge fields from source to target.
   MergeFields(source_placemark_, target_placemark_);
   // Verify simple fields were copied.
-  CPPUNIT_ASSERT_EQUAL(kName, target_placemark_->get_name());
-  CPPUNIT_ASSERT_EQUAL(false, target_placemark_->get_visibility());
+  ASSERT_EQ(kName, target_placemark_->get_name());
+  ASSERT_FALSE(target_placemark_->get_visibility());
   // Verify complex child of target was not touched.
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_LineString,
+  ASSERT_EQ(kmldom::Type_LineString,
                        target_placemark_->get_geometry()->Type());
 }
 
 // Verify MergeElements() does not crash on NULL args.
-void MergeTest::TestMergeElementsNull() {
+TEST_F(MergeTest, TestMergeElementsNull) {
   MergeElements(source_placemark_, NULL);
   MergeElements(NULL, target_placemark_);
   MergeElements(NULL, NULL);
 }
+
+TEST_F(MergeTest, TestBasicMergeIconStyle) {
+  const string kHref("icon.png");
+  IconStylePtr source = KmlFactory::GetFactory()->CreateIconStyle();
+  IconStyleIconPtr icon = KmlFactory::GetFactory()->CreateIconStyleIcon();
+  icon->set_href(kHref);
+  source->set_icon(icon);
+
+  IconStylePtr target = KmlFactory::GetFactory()->CreateIconStyle();
+  MergeElements(source, target);
+  ASSERT_TRUE(target->has_icon());
+  ASSERT_TRUE(target->get_icon()->has_href());
+  ASSERT_EQ(kHref, target->get_icon()->get_href());
+}
+
 // This verifies that an element hierarchy is properly merged from
 // target to source.  The test of IconStyle/Icon in particular excercises
 // some special handling of this element.
-void MergeTest::TestMergeIconStyle() {
+TEST_F(MergeTest, TestMergeIconStyle) {
   const double kScale(1.3);
   const double kHeading(123);
-  const std::string kHref("cool.jpeg");
+  const string kHref("cool.jpeg");
 
   // This is what we are merging in:
   // <Style>
@@ -262,32 +239,26 @@ void MergeTest::TestMergeIconStyle() {
   //      </Icon>
   //   </IconStyle>
   // </Style>
-  CPPUNIT_ASSERT(target_style_->has_iconstyle());
-  CPPUNIT_ASSERT_EQUAL(kScale, source_style_->get_iconstyle()->get_scale());
-  CPPUNIT_ASSERT_EQUAL(kScale, target_style_->get_iconstyle()->get_scale());
-  CPPUNIT_ASSERT_EQUAL(kHeading, target_style_->get_iconstyle()->get_heading());
-  CPPUNIT_ASSERT(source_style_->get_iconstyle()->has_icon());
-  // TODO: IconStyleIcon's Serialize lies and calls itself Icon
-  //       Fix it to not lie and make XmlSerialize handle the matter.
-  // CPPUNIT_ASSERT(target_style_->get_iconstyle()->has_icon());
-  // CPPUNIT_ASSERT(source->get_iconstyle()->get_icon()->has_href());
-  // CPPUNIT_ASSERT(target_style_->get_iconstyle()->get_icon()->has_href());
-  // CPPUNIT_ASSERT_EQUAL(kHref,
-  //                      source->get_iconstyle()->get_icon()->get_href());
-  // CPPUNIT_ASSERT_EQUAL(
-  //     kHref, target_style_->get_iconstyle()->get_icon()->get_href());
-  // NOTE that an XML Serialization of dest _will_ have Icon in IconStyle
-  // due to the unkonwn element handling.
+  ASSERT_TRUE(target_style_->has_iconstyle());
+  ASSERT_EQ(kScale, source_style_->get_iconstyle()->get_scale());
+  ASSERT_EQ(kScale, target_style_->get_iconstyle()->get_scale());
+  ASSERT_EQ(kHeading, target_style_->get_iconstyle()->get_heading());
+  ASSERT_TRUE(source_style_->get_iconstyle()->has_icon());
+  ASSERT_TRUE(target_style_->get_iconstyle()->has_icon());
+  ASSERT_TRUE(source_style_->get_iconstyle()->get_icon()->has_href());
+  ASSERT_TRUE(target_style_->get_iconstyle()->get_icon()->has_href());
+  ASSERT_EQ(kHref, source_style_->get_iconstyle()->get_icon()->get_href());
+  ASSERT_EQ(kHref, target_style_->get_iconstyle()->get_icon()->get_href());
 }
 
 // This is a utility function to create each substyle and set the given
 // field to the given value.
 StylePtr MergeTest::SetSubStyles(StylePtr style,
                                  double icon_style_scale,
-                                 const std::string& label_style_color,
+                                 const string& label_style_color,
                                  double line_style_width,
                                  bool poly_style_fill,
-                                 const std::string& balloon_style_text,
+                                 const string& balloon_style_text,
                                  kmldom::ListItemTypeEnum
                                      list_style_listitemtype) {
   // <IconStyle><scale>
@@ -326,44 +297,45 @@ StylePtr MergeTest::SetSubStyles(StylePtr style,
 // This is a utility function to verify the given SubStyle fields.
 void MergeTest::VerifySubStyles(StylePtr style,
                                 double icon_style_scale,
-                                const std::string& label_style_color,
+                                const string& label_style_color,
                                 double line_style_width,
                                 bool poly_style_fill,
-                                const std::string& balloon_style_text,
+                                const string& balloon_style_text,
                                 kmldom::ListItemTypeEnum
                                     list_style_listitemtype) {
-  CPPUNIT_ASSERT(style->has_iconstyle());
-  CPPUNIT_ASSERT(style->get_iconstyle()->has_scale());
-  CPPUNIT_ASSERT_EQUAL(icon_style_scale, style->get_iconstyle()->get_scale());
-  CPPUNIT_ASSERT(style->has_labelstyle());
-  CPPUNIT_ASSERT(style->get_labelstyle()->has_color());
-  CPPUNIT_ASSERT_EQUAL(label_style_color, style->get_labelstyle()->get_color());
-  CPPUNIT_ASSERT(style->has_linestyle());
-  CPPUNIT_ASSERT(style->get_linestyle()->has_width());
-  CPPUNIT_ASSERT_EQUAL(line_style_width, style->get_linestyle()->get_width());
-  CPPUNIT_ASSERT(style->has_polystyle());
-  CPPUNIT_ASSERT(style->get_polystyle()->has_fill());
-  CPPUNIT_ASSERT_EQUAL(poly_style_fill, style->get_polystyle()->get_fill());
-  CPPUNIT_ASSERT(style->has_balloonstyle());
-  CPPUNIT_ASSERT(style->get_balloonstyle()->has_text());
-  CPPUNIT_ASSERT_EQUAL(balloon_style_text,
+  ASSERT_TRUE(style->has_iconstyle());
+  ASSERT_TRUE(style->get_iconstyle()->has_scale());
+  ASSERT_EQ(icon_style_scale, style->get_iconstyle()->get_scale());
+  ASSERT_TRUE(style->has_labelstyle());
+  ASSERT_TRUE(style->get_labelstyle()->has_color());
+  ASSERT_EQ(label_style_color,
+                       style->get_labelstyle()->get_color().to_string_abgr());
+  ASSERT_TRUE(style->has_linestyle());
+  ASSERT_TRUE(style->get_linestyle()->has_width());
+  ASSERT_EQ(line_style_width, style->get_linestyle()->get_width());
+  ASSERT_TRUE(style->has_polystyle());
+  ASSERT_TRUE(style->get_polystyle()->has_fill());
+  ASSERT_EQ(poly_style_fill, style->get_polystyle()->get_fill());
+  ASSERT_TRUE(style->has_balloonstyle());
+  ASSERT_TRUE(style->get_balloonstyle()->has_text());
+  ASSERT_EQ(balloon_style_text,
                        style->get_balloonstyle()->get_text());
-  CPPUNIT_ASSERT(style->has_liststyle());
-  CPPUNIT_ASSERT(style->get_liststyle()->has_listitemtype());
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(list_style_listitemtype),
+  ASSERT_TRUE(style->has_liststyle());
+  ASSERT_TRUE(style->get_liststyle()->has_listitemtype());
+  ASSERT_EQ(static_cast<int>(list_style_listitemtype),
                        style->get_liststyle()->get_listitemtype());
 }
 
 // This verifies that all SubStyles are merged from a source to target Style.
 // Note that most field types are represented in this test: double, string,
 // bool and enum.
-void MergeTest::TestMergeFullStyle() {
+TEST_F(MergeTest, TestMergeFullStyle) {
   // Create a Style with the following SubStyle fields.
   const double kScale(2.2);
-  const std::string kColor("ff112233");
+  const string kColor("ff112233");
   const double kWidth(3.3);
   const bool kFill(false);
-  const std::string kText("This is a <b>bold $[name]</b>");
+  const string kText("This is a <b>bold $[name]</b>");
   const kmldom::ListItemTypeEnum
       kListItemType(kmldom::LISTITEMTYPE_CHECKHIDECHILDREN);
   SetSubStyles(source_style_, kScale, kColor, kWidth, kFill, kText,
@@ -391,7 +363,7 @@ void MergeTest::TestMergeFullStyle() {
 
 // This is a utility method to create a Placemark with a Point.
 void MergeTest::SetPointPlacemark(PlacemarkPtr placemark,
-                                  const std::string& name,
+                                  const string& name,
                                   double lat, double lon) {
   placemark->set_name(name);
   PointPtr point = factory_->CreatePoint();
@@ -403,26 +375,25 @@ void MergeTest::SetPointPlacemark(PlacemarkPtr placemark,
 
 // This is a utility method to verify the given fields in a Point Placemark.
 void MergeTest::VerifyPointPlacemark(PlacemarkPtr placemark,
-                                     const std::string& name,
+                                     const string& name,
                                      double lat, double lon) {
-  CPPUNIT_ASSERT(placemark->has_name());
-  CPPUNIT_ASSERT_EQUAL(name, placemark->get_name());
-  CPPUNIT_ASSERT(placemark->has_geometry());
+  ASSERT_TRUE(placemark->has_name());
+  ASSERT_EQ(name, placemark->get_name());
+  ASSERT_TRUE(placemark->has_geometry());
   PointPtr point = kmldom::AsPoint(placemark->get_geometry());
-  CPPUNIT_ASSERT(point);
-  CPPUNIT_ASSERT(point->has_coordinates());
+  ASSERT_TRUE(point);
+  ASSERT_TRUE(point->has_coordinates());
   CoordinatesPtr coordinates = point->get_coordinates();
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+  ASSERT_EQ(static_cast<size_t>(1),
                        coordinates->get_coordinates_array_size());
   Vec3 vec3 = coordinates->get_coordinates_array_at(0);
-  // TODO: Merge <coordinates> is special...
-  // CPPUNIT_ASSERT_EQUAL(lat, vec3.get_latitude());
-  // CPPUNIT_ASSERT_EQUAL(lon, vec3.get_longitude());
+  ASSERT_EQ(lat, vec3.get_latitude());
+  ASSERT_EQ(lon, vec3.get_longitude());
 }
 
 // This verifies the merge of a Placemark Point element hierarchy.
-void MergeTest::TestMergePointPlacemark() {
-  const std::string kName("source");
+TEST_F(MergeTest, TestMergePointPlacemark) {
+  const string kName("source");
   const double kLat(1.1);
   const double kLon(-1.1);
   SetPointPlacemark(source_placemark_, kName, kLat, kLon);
@@ -438,24 +409,41 @@ void MergeTest::TestMergePointPlacemark() {
 // This verifies that a group match causes a replacement in the target.
 // In this case a LineString replaces the Point because both are in
 // single-value substitution group: Placemark's Geometry.
-void MergeTest::TestMergeSubstitutionGroup() {
+TEST_F(MergeTest, TestMergeSubstitutionGroup) {
   target_placemark_->set_geometry(point_);
   source_placemark_->set_geometry(linestring_);
   MergeElements(source_placemark_, target_placemark_);
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_LineString,
+  ASSERT_EQ(kmldom::Type_LineString,
                        target_placemark_->get_geometry()->Type());
 }
 
 // This verifies that the merge does not introduce any extraneous elements.
-void MergeTest::TestMergeFieldsSerialize() {
+TEST_F(MergeTest, TestMergeFieldsSerialize) {
   kmldom::ListStylePtr liststyle = factory_->CreateListStyle();
   liststyle->set_listitemtype(kmldom::LISTITEMTYPE_CHECKHIDECHILDREN);
   source_style_->set_liststyle(liststyle);
   MergeElements(source_style_, target_style_);
-  CPPUNIT_ASSERT_EQUAL(kmldom::SerializeRaw(target_style_),
+  ASSERT_EQ(kmldom::SerializeRaw(target_style_),
                        kmldom::SerializeRaw(source_style_));
+}
+
+// An early version of MergeElements did not properly preserve the state of
+// previously set attributes.
+TEST_F(MergeTest, TestMergeAttributes) {
+  const string kId("style-id");
+  const string kTargetId("style-target-id");
+  source_style_->set_targetid(kTargetId);
+  target_style_->set_id(kId);
+  MergeElements(source_style_, target_style_);
+  ASSERT_TRUE(target_style_->has_id());
+  ASSERT_EQ(kId, target_style_->get_id());
+  ASSERT_TRUE(target_style_->has_targetid());
+  ASSERT_EQ(kTargetId, target_style_->get_targetid());
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

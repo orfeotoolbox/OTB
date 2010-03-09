@@ -26,6 +26,7 @@
 // This file contains the implementation of the KML URI resolution functions.
 
 #include "kml/engine/kml_uri.h"
+#include "kml/engine/kml_uri_internal.h"
 #include "boost/scoped_ptr.hpp"
 #include "kml/base/uri_parser.h"
 
@@ -33,23 +34,97 @@ using kmlbase::UriParser;
 
 namespace kmlengine {
 
+KmlUri::KmlUri(const string& base, const string& target)
+  : is_kmz_(false),
+    base_(base),
+    target_(target),
+    target_uri_(kmlbase::UriParser::CreateFromParse(target.c_str())) {
+}
+
+// This is required to keep the point of instatiation of the scoped_ptr
+// template arg where the full class definition (of UriParser) is known.
+KmlUri::~KmlUri() {
+}
+
+// static
+KmlUri* KmlUri::CreateRelative(const string& base,
+                               const string& target) {
+  KmlUri* kml_uri = new KmlUri(base, target);
+  // To create a valid KmlUri the base must be absolute, the target must be
+  // valid and the resolution must succeed.  If any of these are false then
+  // NULL is returned.  The returned KmlUri object must be managed by the
+  // caller; boost::scoped_ptr is recommended.
+  // TODO: streamline UriParser::CreateFromParse, ResolveUri, GetFetchableUri,
+  // and KmzSplit, possibly push all of KmlUri into kmlbase::UriParser.
+  string fetchable_url;
+  if (kml_uri->target_uri_.get() &&
+      ResolveUri(base, target, &kml_uri->url_) &&
+      GetFetchableUri(kml_uri->url_, &fetchable_url)) {
+    kml_uri->is_kmz_ = KmzSplit(fetchable_url,
+                                &kml_uri->kmz_url_,
+                                &kml_uri->path_in_kmz_);
+    return kml_uri;
+  }
+  // KmlCache NULL or base or target invalid.
+  delete kml_uri;
+  return NULL;
+}
+
+
 // Note that this is implemented in terms of the 3rd party uriparser library
 // which is fully encapsulated here.
-// TODO: provide KML-specific (KMZ mostly) URI resolution using this.
-bool ResolveUri(const std::string& base, const std::string& relative,
-                std::string* result) {
+bool ResolveUri(const string& base, const string& relative,
+                string* result) {
   boost::scoped_ptr<UriParser> uri_parser(
       UriParser::CreateResolvedUri(base.c_str(), relative.c_str()));
   return uri_parser.get() && uri_parser->ToString(result);
+}
+
+bool NormalizeUri(const string& uri, string* result) {
+  boost::scoped_ptr<UriParser> uri_parser(
+      UriParser::CreateFromParse(uri.c_str()));
+  return uri_parser.get() && uri_parser->Normalize() &&
+         uri_parser->ToString(result);
+}
+
+bool NormalizeHref(const string& href, string* result) {
+  if (!result) {
+    return false;
+  }
+  // Convert to URI.
+  string uri;
+  if (!FilenameToUri(href, &uri)) {
+    return false;
+  }
+  // Normalize.
+  string normalized_uri;
+  if (!NormalizeUri(uri, &normalized_uri)) {
+    return false;
+  }
+  // Then convert back to href.
+  string normalized_href;
+  if (!UriToFilename(normalized_uri, &normalized_href)) {
+    return false;
+  }
+  *result = normalized_href;
+  return true;
+}
+
+bool UriToFilename(const string& uri, string* output) {
+  return UriParser::UriToFilename(uri, output);
+}
+
+bool FilenameToUri(const string& filename, string* output) {
+  return UriParser::FilenameToUri(filename, output);
 }
 
 // TODO: provide a query splitter.
 // Note that RFC 3986 does not define the structure of a query.  However,
 // the uriparser library does implement a name-value pair splitter and
 // assembler which can be front-ended in a future libkml function.
-bool SplitUri(const std::string& uri, std::string* scheme, std::string* host,
-              std::string* port, std::string* path, std::string* query,
-              std::string* fragment) {
+bool SplitUri(const string& uri, string* scheme, string* host,
+              string* port, string* path, string* query,
+              string* fragment) {
   boost::scoped_ptr<UriParser> uri_parser(
       UriParser::CreateFromParse(uri.c_str()));
   if (!uri_parser.get()) {
@@ -65,7 +140,7 @@ bool SplitUri(const std::string& uri, std::string* scheme, std::string* host,
   return true;
 }
 
-bool SplitUriPath(const std::string& uri, std::string* path) {
+bool SplitUriPath(const string& uri, string* path) {
   boost::scoped_ptr<UriParser> uri_parser(
       UriParser::CreateFromParse(uri.c_str()));
   if (!uri_parser.get()) {
@@ -74,7 +149,7 @@ bool SplitUriPath(const std::string& uri, std::string* path) {
   return uri_parser->GetPath(path);
 }
 
-bool SplitUriFragment(const std::string& uri, std::string* fragment) {
+bool SplitUriFragment(const string& uri, string* fragment) {
   boost::scoped_ptr<UriParser> uri_parser(
       UriParser::CreateFromParse(uri.c_str()));
   if (!uri_parser.get()) {
@@ -83,7 +158,7 @@ bool SplitUriFragment(const std::string& uri, std::string* fragment) {
   return uri_parser->GetFragment(fragment);
 }
 
-bool GetFetchableUri(const std::string& uri, std::string* fetchable_uri) {
+bool GetFetchableUri(const string& uri, string* fetchable_uri) {
   boost::scoped_ptr<UriParser> uri_parser(
       UriParser::CreateFromParse(uri.c_str()));
   if (!uri_parser.get()) {
@@ -93,14 +168,14 @@ bool GetFetchableUri(const std::string& uri, std::string* fetchable_uri) {
   if (!fetchable_uri) {
     return true;  // uri parsed fine, just not interested in output.
   }
-  std::string scheme;
+  string scheme;
   uri_parser->GetScheme(&scheme);
-  std::string host;
+  string host;
   uri_parser->GetHost(&host);
 
   if (!scheme.empty() && !host.empty()) {
     fetchable_uri->append(scheme).append("://",3).append(host);
-    std::string port;
+    string port;
     uri_parser->GetPort(&port);
     if (!port.empty()) {
       fetchable_uri->append(":",1).append(port);
@@ -108,7 +183,7 @@ bool GetFetchableUri(const std::string& uri, std::string* fetchable_uri) {
     fetchable_uri->append("/",1);
   }
 
-  std::string path;
+  string path;
   uri_parser->GetPath(&path);
   if (!path.empty()) {
     fetchable_uri->append(path);
@@ -116,10 +191,10 @@ bool GetFetchableUri(const std::string& uri, std::string* fetchable_uri) {
   return true;
 }
 
-bool KmzSplit(const std::string& kml_url, std::string* kmz_url,
-              std::string* kmz_path) {
+bool KmzSplit(const string& kml_url, string* kmz_url,
+              string* kmz_path) {
   size_t kmz = kml_url.find(".kmz");
-  if (kmz == std::string::npos) {
+  if (kmz == string::npos) {
     return false;
   }
   if (kmz_url) {
@@ -131,16 +206,16 @@ bool KmzSplit(const std::string& kml_url, std::string* kmz_url,
   return true;
 }
 
-bool ResolveModelTargetHref(const std::string& base_url,
-                            const std::string& geometry_href,
-                            const std::string& target_href,
-                            std::string* result) {
+bool ResolveModelTargetHref(const string& base_url,
+                            const string& geometry_href,
+                            const string& target_href,
+                            string* result) {
   if (!result) {
     return false;
   }
 
   // First resolve the geometry href against the base URI.
-  std::string geometry_url;
+  string geometry_url;
   if (!ResolveUri(base_url, geometry_href, &geometry_url)) {
     return false;  // Failed to resolve geometry URL.
   }

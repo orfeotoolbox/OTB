@@ -26,9 +26,8 @@
 // TODO: file comment.
 
 #include "kml/engine/entity_mapper.h"
-#include <string>
 #include "boost/scoped_ptr.hpp"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 using kmldom::DocumentPtr;
 using kmldom::PlacemarkPtr;
@@ -37,33 +36,13 @@ using kmldom::KmlFactory;
 
 namespace kmlengine {
 
-class EntitiesTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(EntitiesTest);
-  CPPUNIT_TEST(TestGetEntityFields);
-  CPPUNIT_TEST(TestCreateExpandedEntities);
-  CPPUNIT_TEST_SUITE_END();
-
+class EntitiesTest : public testing::Test {
  protected:
-  void TestGetEntityFields();
-  void TestCreateExpandedEntities();
-
- public:
-  // Called before each test.
-  void setUp() {
-  }
-
-  // Called after each test.
-  void tearDown() {
-  }
-
- private:
   KmlFilePtr kml_file_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(EntitiesTest);
-
 // A hunk of KML that uses all possible entities.
-const static std::string kEntityKml(
+const static string kEntityKml(
   "<Document>\n"
   "  <Schema name=\"TrailHeadType\" id=\"TrailHeadTypeId\">\n"
   "    <SimpleField type=\"string\" name=\"TrailHeadName\">\n"
@@ -101,8 +80,8 @@ const static std::string kEntityKml(
 // A table mapping all entities contained in the above KML document with their
 // expected replacement strings.
 const static struct {
-  std::string entity;
-  std::string replacement;
+  string entity;
+  string replacement;
 } kEntityMap[] = {
   {"id", "foo"},
   {"targetId", "bar"},
@@ -120,13 +99,13 @@ const static struct {
   {"holeYardage", "234"},
 };
 
-void EntitiesTest::TestGetEntityFields() {
-  std::string errs;
+TEST_F(EntitiesTest, TestGetEntityFields) {
+  string errs;
   kml_file_ = KmlFile::CreateFromParse(kEntityKml, NULL);
-  CPPUNIT_ASSERT(kml_file_);
-  CPPUNIT_ASSERT(errs.empty());
+  ASSERT_TRUE(kml_file_);
+  ASSERT_TRUE(errs.empty());
 
-  DocumentPtr doc = kmldom::AsDocument(kml_file_->root());
+  DocumentPtr doc = kmldom::AsDocument(kml_file_->get_root());
   PlacemarkPtr p = kmldom::AsPlacemark(doc->get_feature_array_at(0));
 
   kmlbase::StringMap entity_map;
@@ -135,22 +114,22 @@ void EntitiesTest::TestGetEntityFields() {
 
   // Verify that the correct number of entities were extracted from the KML.
   const size_t kSizeEntityMap = sizeof(kEntityMap)/sizeof(kEntityMap[0]);
-  CPPUNIT_ASSERT_EQUAL(kSizeEntityMap, entity_map.size());
+  ASSERT_EQ(kSizeEntityMap, entity_map.size());
 
   // Verify that the entity map was populated as expected.
   for (size_t i = 0; i < kSizeEntityMap; ++i) {
     // The entity exists within the map.
-    CPPUNIT_ASSERT(entity_map.find(kEntityMap[i].entity) != entity_map.end());
+    ASSERT_TRUE(entity_map.find(kEntityMap[i].entity) != entity_map.end());
     // The entity has the expected replacement text.
-    CPPUNIT_ASSERT_EQUAL(kEntityMap[i].replacement,
+    ASSERT_EQ(kEntityMap[i].replacement,
                          entity_map[kEntityMap[i].entity]);
   }
 }
 
 // A table mapping entities to their expected replacements.
 const static struct {
-  std::string raw_text;
-  std::string expanded_text;
+  string raw_text;
+  string expanded_text;
 } kReplacments[] = {
   {
     "abcdef",
@@ -182,9 +161,9 @@ const static struct {
   },
 };
 
-void EntitiesTest::TestCreateExpandedEntities() {
+TEST_F(EntitiesTest, TestCreateExpandedEntities) {
   kml_file_ = KmlFile::CreateFromParse(kEntityKml, NULL);
-  DocumentPtr doc = kmldom::AsDocument(kml_file_->root());
+  DocumentPtr doc = kmldom::AsDocument(kml_file_->get_root());
   PlacemarkPtr p = kmldom::AsPlacemark(doc->get_feature_array_at(0));
 
   kmlbase::StringMap entity_map;
@@ -194,7 +173,7 @@ void EntitiesTest::TestCreateExpandedEntities() {
   // Verify that CreateExpandedEntities handles various kinds of entity
   // references, spacing, multiple references.
   for (size_t i = 0; i < sizeof(kReplacments)/sizeof(kReplacments[0]); ++i) {
-    CPPUNIT_ASSERT_EQUAL(
+    ASSERT_EQ(
         kReplacments[i].expanded_text,
         CreateExpandedEntities(kReplacments[i].raw_text, entity_map));
   }
@@ -202,4 +181,7 @@ void EntitiesTest::TestCreateExpandedEntities() {
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

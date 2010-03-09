@@ -26,12 +26,15 @@
 #include "kml/engine/get_links.h"
 #include "kml/dom/parser.h"
 #include "kml/dom/parser_observer.h"
+// TODO: deprecate use of kmlengine::Href. kml_url.h and/or kmlbase::UriParser
+// should be used instead.
+#include "kml/engine/href.h"
 
 using kmldom::Parser;
 
 namespace kmlengine {
 
-bool GetLinks(const std::string& kml, href_vector_t* href_vector) {
+bool GetLinks(const string& kml, href_vector_t* href_vector) {
   if (!href_vector) {
     return false;
   }
@@ -39,6 +42,25 @@ bool GetLinks(const std::string& kml, href_vector_t* href_vector) {
   Parser parser;
   parser.AddObserver(&get_links);
   return parser.Parse(kml, NULL) != NULL;
+}
+
+bool GetRelativeLinks(const string& kml, href_vector_t* href_vector) {
+  if (!href_vector) {
+    return false;
+  }
+  href_vector_t all_hrefs;
+  if (!GetLinks(kml, &all_hrefs)) {
+    return false;
+  }
+
+  href_vector_t::const_iterator itr;
+  for (itr = all_hrefs.begin(); itr != all_hrefs.end(); ++ itr) {
+    Href href(*itr);
+    if (href.IsRelativePath()) {
+      href_vector->push_back(*itr);
+    }
+  }
+  return true;
 }
 
 }  // end namespace kmlengine

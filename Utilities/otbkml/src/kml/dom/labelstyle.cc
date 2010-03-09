@@ -24,9 +24,11 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/labelstyle.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -39,6 +41,9 @@ LabelStyle::~LabelStyle() {
 }
 
 void LabelStyle::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_scale:
       has_scale_ = element->SetDouble(&scale_);
@@ -50,14 +55,15 @@ void LabelStyle::AddElement(const ElementPtr& element) {
 }
 
 void LabelStyle::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   ColorStyle::Serialize(serializer);
   if (has_scale()) {
     serializer.SaveFieldById(Type_scale, get_scale());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void LabelStyle::Accept(Visitor* visitor) {
+  visitor->VisitLabelStyle(LabelStylePtr(this));
 }
 
 }  // end namespace kmldom

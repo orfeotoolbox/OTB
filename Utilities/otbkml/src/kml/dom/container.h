@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef KML_DOM_CONTAINER_H__
@@ -34,7 +34,10 @@
 namespace kmldom {
 
 class Serializer;
+class VisitorDriver;
 
+// OGC KML 2.2 Standard: 9.6 kml:AbstractContainerGroup
+// OGC KML 2.2 XSD: <element name="AbstractContainerGroup"...
 class Container : public Feature {
  public:
   virtual ~Container();
@@ -45,7 +48,7 @@ class Container : public Feature {
 
   void add_feature(const FeaturePtr& feature);
 
-  const size_t get_feature_array_size() const {
+  size_t get_feature_array_size() const {
     return feature_array_.size();
   }
 
@@ -53,10 +56,19 @@ class Container : public Feature {
     return feature_array_[index];
   }
 
+  // If a Feature with the given id exists in this Container remove it from
+  // the container and return it.  If no such Feature exists NULL is returned.
+  // Note: This method is a special mostly for use with Update/Delete.
+  FeaturePtr DeleteFeatureById(const string& id);
+
+  // Visitor API methods, see visitor.h.
+  virtual void AcceptChildren(VisitorDriver* driver);
+
  protected:
   // Container is abstract.
   Container();
   virtual void AddElement(const ElementPtr& element);
+  void SerializeFeatureArray(Serializer& serializer) const;
   virtual void Serialize(Serializer& serializer) const;
 
  private:

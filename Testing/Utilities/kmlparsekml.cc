@@ -1,23 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-    Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-    See OTBCopyright.txt for details.
-
-    Some parts of this code are derived from kml library examples. See KMLCopyright.txt
-    for details.
-
-    This software is distributed WITHOUT ANY WARRANTY; without even
-    the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-    PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
-
 // Copyright 2008, Google Inc. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -51,7 +31,7 @@
 #include <string>
 #include "kml/dom.h"  // The KML DOM header.
 
-int kmlparsekml(int argc, char * argv[]) {
+int kmlparsekml(int argc, char** argv) {
   // Parse KML from a memory buffer.
   std::string errors;
   kmldom::ElementPtr element = kmldom::Parse(
@@ -65,5 +45,5 @@ int kmlparsekml(int argc, char * argv[]) {
   std::cout << "The Placemark name is: " << placemark->get_name()
     << std::endl;
 
-  return EXIT_SUCCESS;
+  return 0;
 }

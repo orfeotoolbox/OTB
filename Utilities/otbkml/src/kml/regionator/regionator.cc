@@ -28,11 +28,11 @@
 
 #include "kml/regionator/regionator.h"
 #include <sstream>
-#include <string>
 #include "kml/base/file.h"
+#include "kml/base/util.h"
 #include "kml/dom.h"
-#include "kml/regionator/regionator_util.h"
 #include "kml/regionator/regionator_qid.h"
+#include "kml/regionator/regionator_util.h"
 
 using kmldom::DocumentPtr;
 using kmldom::ElementPtr;
@@ -56,7 +56,7 @@ Regionator::~Regionator() {
 // This provides the relative path name to the KML file for the given Region.
 // This is the name baked into the NetworkLink/Link/href to the .kml for the
 // give Region.
-std::string Regionator::RegionFilename(const RegionPtr& region) {
+string Regionator::RegionFilename(const RegionPtr& region) {
   Qid qid(region->get_id());
   std::stringstream str;
   str << qid_map_[qid.str()];
@@ -101,7 +101,7 @@ bool Regionator::_Regionate(const RegionPtr& region) {
 
   // Create a NetworkLink to the KML file for each child region with data.
   for (size_t i = 0; i < children.size(); ++i) {
-    std::string href = RegionFilename(children[i]);
+    string href = RegionFilename(children[i]);
     document->add_feature(CreateRegionNetworkLink(children[i], href));
   }
 
@@ -116,7 +116,7 @@ bool Regionator::_Regionate(const RegionPtr& region) {
   // feature.  Hand the completed KML file to the RegionHandler for it to save.
   KmlPtr kml = kmldom::KmlFactory::GetFactory()->CreateKml();
   kml->set_feature(document);
-  std::string filename(RegionFilename(region));
+  string filename(RegionFilename(region));
   if (output_directory_) {
     filename = kmlbase::File::JoinPaths(output_directory_, filename);
   }
@@ -131,6 +131,23 @@ bool Regionator::Regionate(const char* output_directory) {
   output_directory_ = const_cast<char*>(output_directory);
   _Regionate(root_region_);
   return true;
+}
+
+// static
+bool Regionator::RegionateAligned(RegionHandler& rhandler,
+                                  const RegionPtr& region,
+                                  const char* output_directory) {
+  kmldom::LatLonAltBoxPtr llab = CloneLatLonAltBox(region->get_latlonaltbox());
+  if (!CreateAlignedAbstractLatLonBox(region->get_latlonaltbox(), llab)) {
+    return false;
+  }
+  kmldom::RegionPtr aligned_region =
+      kmldom::KmlFactory::GetFactory()->CreateRegion();
+  aligned_region->set_latlonaltbox(llab);
+  aligned_region->set_lod(CloneLod(region->get_lod()));
+  boost::scoped_ptr<Regionator> regionator(new Regionator(rhandler,
+                                                          aligned_region));
+  return regionator->Regionate(output_directory);
 }
 
 }  // end namespace kmlregionator

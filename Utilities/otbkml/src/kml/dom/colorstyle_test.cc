@@ -24,59 +24,43 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/colorstyle.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class ColorStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ColorStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
+class ColorStyleTest : public testing::Test {
  protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   // ColorStyle is abstract, hence its constructor is protected.
   class TestColorStyle : public ColorStyle {
   };
   TestColorStyle colorstyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ColorStyleTest);
-
-void ColorStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == colorstyle_.IsA(Type_ColorStyle));
-  CPPUNIT_ASSERT(true == colorstyle_.IsA(Type_Object));
+TEST_F(ColorStyleTest, TestType) {
+  ASSERT_TRUE(colorstyle_.IsA(Type_ColorStyle));
+  ASSERT_TRUE(colorstyle_.IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void ColorStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT("ffffffff" == colorstyle_.get_color());
-  CPPUNIT_ASSERT(false == colorstyle_.has_color());
-  CPPUNIT_ASSERT(COLORMODE_NORMAL == colorstyle_.get_colormode());
-  CPPUNIT_ASSERT(false == colorstyle_.has_colormode());
+TEST_F(ColorStyleTest, TestDefaults) {
+  ASSERT_TRUE("ffffffff" == colorstyle_.get_color().to_string_abgr());
+  ASSERT_FALSE(colorstyle_.has_color());
+  ASSERT_TRUE(COLORMODE_NORMAL == colorstyle_.get_colormode());
+  ASSERT_FALSE(colorstyle_.has_colormode());
 }
 
 // Verify setting default makes has_xxx() true:
-void ColorStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(ColorStyleTest, TestSetToDefaultValues) {
   colorstyle_.set_color(colorstyle_.get_color());
-  CPPUNIT_ASSERT(true == colorstyle_.has_color());
+  ASSERT_TRUE(colorstyle_.has_color());
   colorstyle_.set_colormode(colorstyle_.get_colormode());
-  CPPUNIT_ASSERT(true == colorstyle_.has_colormode());
+  ASSERT_TRUE(colorstyle_.has_colormode());
 }
 
 // Verify set, get, has, clear:
-void ColorStyleTest::TestSetGetHasClear() {
+TEST_F(ColorStyleTest, TestSetGetHasClear) {
   // Non-default values:
-  std::string color("00112233");
+  string color("00112233");
   ColorModeEnum colormode = COLORMODE_RANDOM;
 
   // Set all fields:
@@ -84,19 +68,20 @@ void ColorStyleTest::TestSetGetHasClear() {
   colorstyle_.set_colormode(colormode);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == colorstyle_.has_color());
-  CPPUNIT_ASSERT(color == colorstyle_.get_color());
-  CPPUNIT_ASSERT(true == colorstyle_.has_colormode());
-  CPPUNIT_ASSERT(colormode == colorstyle_.get_colormode());
+  ASSERT_TRUE(colorstyle_.has_color());
+  ASSERT_EQ(color, colorstyle_.get_color().to_string_abgr());
+  ASSERT_TRUE(colorstyle_.has_colormode());
+  ASSERT_TRUE(colormode == colorstyle_.get_colormode());
 
   // Clear all fields:
   colorstyle_.clear_color();
   colorstyle_.clear_colormode();
 
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

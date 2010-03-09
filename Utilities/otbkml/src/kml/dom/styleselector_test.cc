@@ -24,32 +24,31 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/styleselector.h"
-#include "kml/base/unit_test.h"
+#include "boost/scoped_ptr.hpp"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class StyleSelectorTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(StyleSelectorTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST_SUITE_END();
-
+class StyleSelectorTest : public testing::Test {
  protected:
-  void TestType();
+  virtual void SetUp() {
+    styleselector_.reset(new TestStyleSelector());
+  }
 
- private:
   // StyleSelector is abstract, hence its constructor is protected.
   class TestStyleSelector : public StyleSelector {};
-  TestStyleSelector styleselector_;
+  boost::scoped_ptr<TestStyleSelector> styleselector_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(StyleSelectorTest);
-
-void StyleSelectorTest::TestType() {
-  CPPUNIT_ASSERT(true == styleselector_.IsA(Type_StyleSelector));
-  CPPUNIT_ASSERT(true == styleselector_.IsA(Type_Object));
+TEST_F(StyleSelectorTest, TestType) {
+  ASSERT_TRUE(styleselector_->IsA(Type_StyleSelector));
+  ASSERT_TRUE(styleselector_->IsA(Type_Object));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
 

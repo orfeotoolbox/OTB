@@ -29,7 +29,6 @@
 #ifndef KML_DOM_KML_FUNCS_H__
 #define KML_DOM_KML_FUNCS_H__
 
-#include <string>
 #include "kml/dom/element.h"
 #include "kml/dom/kml_ptr.h"
 
@@ -38,20 +37,30 @@ namespace kmldom {
 // Parse the KML in the given memory buffer.  On success this returns an
 // Element* to the root of the KML.  On failure 0 is returned and a human
 // readable error string is stored to errors if such is supplied.
-ElementPtr Parse(const std::string& xml, std::string* errors);
+ElementPtr Parse(const string& xml, string* errors);
+
+// As Parse(), but invokes the underlying XML parser's namespace-aware mode.
+ElementPtr ParseNS(const string& xml, string* errors);
+
+// As Parse(), but invokes the underlying XML parser's namespace-aware mode
+// such that both prefixed and non-prefixed Atom is recognized as the root.
+// Use this to parse "<feed xmlns='http://www.w3.org/2005/Atom'>...", or
+// "<atom:feed xmlns:atom='http://www.w3.org/2005/Atom'>...".  The Atom
+// namespace MUST be supplied.
+ElementPtr ParseAtom(const string& atom, string* errors);
 
 // This is a simplified interface for the benefit of SWIG.
-ElementPtr ParseKml(const std::string& xml);
+ElementPtr ParseKml(const string& xml);
 
 // This function is the public API for generating "pretty" XML for the KML
 // hierarchy rooted at the given Element.  "pretty" is 2 space indent for
 // each level of XML depth.
-std::string SerializePretty(const ElementPtr& root);
+string SerializePretty(const ElementPtr& root);
 
 // This function is the public API for generating "raw" XML for the KML
 // hierarchy rooted at the given Element.  "raw" is no indentation white space
 // and no newlines.
-std::string SerializeRaw(const ElementPtr& root);
+string SerializeRaw(const ElementPtr& root);
 
 }  // end namespace kmldom
 

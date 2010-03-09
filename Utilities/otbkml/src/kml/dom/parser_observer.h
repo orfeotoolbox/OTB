@@ -44,12 +44,19 @@ class ParserObserver {
   }
 
   // Called after this element is created by the parser.
-  virtual bool NewElement(const ElementPtr& /*element*/) {
+  virtual bool NewElement(const ElementPtr& element) {
     return true;  // Default implementation is a NOP: parse continues.
   }
 
+  // Called after child is fully constructed before it is added to the parent.
+  // A derived class can return false to inhibit adding the child to the parent.
+  // Returning true permits the parser to add this child to the parent.
+  virtual bool EndElement(const ElementPtr& parent, const ElementPtr& child) {
+    return true;
+  }
+
   // Called after the given child has been set to the given parent.
-  virtual bool AddChild(const ElementPtr& /*parent*/, const ElementPtr& /*child*/) {
+  virtual bool AddChild(const ElementPtr& parent, const ElementPtr& child) {
     return true;  // Default implementation is a NOP: parse continues.
   }
 };

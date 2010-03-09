@@ -39,7 +39,7 @@ using kmldom::StylePtr;
 
 namespace kmlengine {
 
-std::string CreateBalloonText(const KmlFilePtr& kml_file,
+string CreateBalloonText(const KmlFilePtr& kml_file,
                               const FeaturePtr& feature) {
   // First we merge the feature's styles so we have access to the BalloonStyle.
   // TODO: clarify if a highl;ight state can be used to define the balloon
@@ -62,7 +62,7 @@ std::string CreateBalloonText(const KmlFilePtr& kml_file,
   }
 
   // Otherwise, build a default description balloon for the feature.
-  std::string text;
+  string text;
 
   // The feature's name, if given, appears at the top of the balloon as an
   // <h3> header with two consecutive line breaks.

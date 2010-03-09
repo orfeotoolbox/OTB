@@ -38,29 +38,36 @@ namespace kmlengine {
 
 // The ObjectIdParserObserver is a kmldom::ParserObserver which gathers all
 // all Objects with id's into the given map.  An Object whose id is already
-// in the map causes NewElement() to return false.  When used with
-// kmldom::Parse::AddObserver() this immediately terminates the parse.
+// in the map causes NewElement() to return false if strict parsing is enabled.
+// Duplicate id attributes are illegal and _should_ cause the parse to fail.
+// However, Google Earth never enforced this in its KML ingest and thus the
+// web has a lot of invalid KML. Clients who want to successfully parse unknown
+// KML from the wider web should attempt to parse this by default.
 class ObjectIdParserObserver : public kmldom::ParserObserver {
  public:
-  ObjectIdParserObserver(ObjectIdMap* object_id_map)
-    : object_id_map_(object_id_map) {}  // TODO: NULL check, or use reference
+  ObjectIdParserObserver(ObjectIdMap* object_id_map, bool strict_parsing)
+    : object_id_map_(object_id_map),
+      strict_parse_(strict_parsing) {}  // TODO: NULL check, or use reference
 
   virtual ~ObjectIdParserObserver() {}
 
   // This is ParserObserver::NewElement().  If the Element is an Object with an
-  // id and a mapping for this id already exists return false, else add this
-  // id to Object mapping to the object_id_map and return true.
+  // id and a mapping for this id already exists and strict parsing has been
+  // enabled, return false. Else add this id to Object mapping to the
+  // object_id_map and return true.
   virtual bool NewElement(const kmldom::ElementPtr& element) {
     if (kmldom::ObjectPtr object = kmldom::AsObject(element)) {
       if (object->has_id()) {
-        if (object_id_map_->find(object->get_id()) != object_id_map_->end()) {
+        if (object_id_map_->find(object->get_id()) != object_id_map_->end()
+            && strict_parse_) {
           // TODO: create an error message
           return false;  // Duplicate id, fail parse.
         }
-        (*object_id_map_)[object->get_id()] = object;
+        (*object_id_map_)[object->get_id()] = object;  // Last one wins.
       }
     }
-    return true;  // Not a duplicate id, keep parsing.
+    // Not a duplicate id, or strict parsing not enabled, keep parsing.
+    return true;  
   }
 
   // The default implementation of Parser::AddChild() is essentially a nop.
@@ -69,6 +76,7 @@ class ObjectIdParserObserver : public kmldom::ParserObserver {
   // An ObjectIdParserObserver only exists for a short time and operates
   // on a persistent ObjectIdMap.
   ObjectIdMap* object_id_map_;
+  bool strict_parse_;
 };
 
 }  // end namespace kmlengine

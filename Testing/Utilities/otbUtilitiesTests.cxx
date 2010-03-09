@@ -67,6 +67,14 @@ REGISTER_TEST(kmlhellohref);
 REGISTER_TEST(kmlhellokmz);
 REGISTER_TEST(kmlhelloregion);
 REGISTER_TEST(kmlprettykml);
+REGISTER_TEST(kmlchecklinks);
+REGISTER_TEST(kmlcirclegen);
+REGISTER_TEST(kmlcountkml);
+REGISTER_TEST(kmlparsens);
+REGISTER_TEST(kmlsharedstyles);
+REGISTER_TEST(kmlsimplifylines);
+REGISTER_TEST(kmlsortplacemarks);
+
 REGISTER_TEST(SiftFast);
 REGISTER_TEST(ijObjectLabelAttributeValuesTest);
 }

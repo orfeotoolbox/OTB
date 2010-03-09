@@ -27,34 +27,23 @@
 // TODO: a real unit test!
 
 #include "kml/regionator/feature_list_region_handler.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 #include "kml/convenience/feature_list.h"
 
 namespace kmlregionator {
 
 // This class is the unit test fixture for the KmlHandler class.
-class FeatureListRegionHandlerTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(FeatureListRegionHandlerTest);
-  CPPUNIT_TEST(TestBasic);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
-  }
-  void tearDown() {
-  }
-
- protected:
-  void TestBasic();
+class FeatureListRegionHandlerTest : public testing::Test {
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(FeatureListRegionHandlerTest);
-
-void FeatureListRegionHandlerTest::TestBasic() {
+TEST_F(FeatureListRegionHandlerTest, TestBasic) {
   kmlconvenience::FeatureList feature_list;
   FeatureListRegionHandler feature_list_region_handler(&feature_list);
 }
 
 }  // end namespace kmlregionator
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

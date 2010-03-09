@@ -27,61 +27,39 @@
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kml_ptr.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class LabelStyleTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LabelStyleTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before all tests.
-  void setUp() {
+class LabelStyleTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     labelstyle_ = KmlFactory::GetFactory()->CreateLabelStyle();
   }
 
-  // Called after all tests.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   LabelStylePtr labelstyle_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LabelStyleTest);
-
-void LabelStyleTest::TestType() {
-  CPPUNIT_ASSERT(true == labelstyle_->IsA(Type_LabelStyle));
-  CPPUNIT_ASSERT(Type_LabelStyle == labelstyle_->Type());
-  CPPUNIT_ASSERT(true == labelstyle_->IsA(Type_ColorStyle));
+TEST_F(LabelStyleTest, TestType) {
+  ASSERT_TRUE(labelstyle_->IsA(Type_LabelStyle));
+  ASSERT_EQ(Type_LabelStyle, labelstyle_->Type());
+  ASSERT_TRUE(labelstyle_->IsA(Type_ColorStyle));
 }
 
 // Verify proper defaults:
-void LabelStyleTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == labelstyle_->has_scale());
-  CPPUNIT_ASSERT(1.0 == labelstyle_->get_scale());
+TEST_F(LabelStyleTest, TestDefaults) {
+  ASSERT_FALSE(labelstyle_->has_scale());
+  ASSERT_DOUBLE_EQ(1.0, labelstyle_->get_scale());
 }
 
 // Verify setting default makes has_xxx() true:
-void LabelStyleTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(LabelStyleTest, TestSetToDefaultValues) {
   labelstyle_->set_scale(labelstyle_->get_scale());
-  CPPUNIT_ASSERT(true == labelstyle_->has_scale());
+  ASSERT_TRUE(labelstyle_->has_scale());
 }
 
 // Verify set, get, has, clear:
-void LabelStyleTest::TestSetGetHasClear() {
+TEST_F(LabelStyleTest, TestSetGetHasClear) {
   // Non-default values:
   double scale = 0.0;
 
@@ -89,16 +67,16 @@ void LabelStyleTest::TestSetGetHasClear() {
   labelstyle_->set_scale(scale);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(true == labelstyle_->has_scale());
-  CPPUNIT_ASSERT(scale == labelstyle_->get_scale());
+  ASSERT_TRUE(labelstyle_->has_scale());
+  ASSERT_DOUBLE_EQ(scale, labelstyle_->get_scale());
 
   // Clear all fields:
   labelstyle_->clear_scale();
-
-  // Verify now in default state:
-  TestDefaults();
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -26,9 +26,12 @@
 // This file contains the implementation of the BalloonStyle element.
 
 #include "kml/dom/balloonstyle.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
+using kmlbase::Color32;
 
 namespace kmldom {
 
@@ -46,12 +49,15 @@ BalloonStyle::~BalloonStyle() {
 }
 
 void BalloonStyle::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_bgColor:
-      has_bgcolor_ = element->SetString(&bgcolor_);
+      set_bgcolor(Color32(element->get_char_data()));
       break;
     case Type_textColor:
-      has_textcolor_ = element->SetString(&textcolor_);
+      set_textcolor(Color32(element->get_char_data()));
       break;
     case Type_text:
       has_text_ = element->SetString(&text_);
@@ -66,14 +72,13 @@ void BalloonStyle::AddElement(const ElementPtr& element) {
 }
 
 void BalloonStyle::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   SubStyle::Serialize(serializer);
   if (has_bgcolor()) {
-    serializer.SaveFieldById(Type_bgColor, get_bgcolor());
+    serializer.SaveColor(Type_bgColor, get_bgcolor());
   }
   if (has_textcolor()) {
-    serializer.SaveFieldById(Type_textColor, get_textcolor());
+    serializer.SaveColor(Type_textColor, get_textcolor());
   }
   if (has_text()) {
     serializer.SaveFieldById(Type_text, get_text());
@@ -81,8 +86,10 @@ void BalloonStyle::Serialize(Serializer& serializer) const {
   if (has_displaymode()) {
     serializer.SaveEnum(Type_displayMode, get_displaymode());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void BalloonStyle::Accept(Visitor* visitor) {
+  visitor->VisitBalloonStyle(BalloonStylePtr(this));
 }
 
 }  // end namespace kmldom

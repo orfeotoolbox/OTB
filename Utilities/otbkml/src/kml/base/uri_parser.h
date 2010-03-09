@@ -23,20 +23,19 @@
 // OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// This file contains the internal UriParser class which front-ends the
-// third_party/uriparser in a C++ API.  See kml/engine/kml_uri.h for the
-// public API to URI handling.
+// This file contains the declaration of the internal UriParser class that
+// front-ends the third_party/uriparser in a C++ API.  See kml/engine/kml_uri.h
+// for the public API to URI handling.
 
 #ifndef KML_BASE_URI_PARSER_H__
 #define KML_BASE_URI_PARSER_H__
 
-#include <string.h>  // memset()
-#include <string>
-#include "boost/scoped_ptr.hpp"
 #include "kml/base/util.h"
-#include "uriparser/Uri.h"
+#include "boost/scoped_ptr.hpp"
 
 namespace kmlbase {
+
+class UriParserPrivate;
 
 // This class is a memory-safe wrapper to uriparser's UriUriA.
 class UriParser {
@@ -46,176 +45,114 @@ class UriParser {
   // to these static methods.
 
   // This creates a UriParser from a URI in string form.
-  static UriParser* CreateFromParse(const char* str) {
-    UriParser* uri_parser = new UriParser;
-    if (uri_parser->Parse(str)) {
-      return uri_parser;
-    }
-    delete uri_parser;
-    return NULL;
-  }
+  static UriParser* CreateFromParse(const char* str);
 
   // This creates a UriParser representing the resolution of the given
   // relative URI against the given base URI.
-  static UriParser* CreateResolvedUri(const char* base, const char* relative) {
-    boost::scoped_ptr<UriParser> base_uri(CreateFromParse(base));
-    boost::scoped_ptr<UriParser> relative_uri(CreateFromParse(relative));
-    if (!base_uri.get() || !relative_uri.get()) {
-      return NULL;
-    }
-    UriParser* resolved_uri = new UriParser;
-    if (resolved_uri->Resolve(*base_uri.get(), *relative_uri.get())) {
-      return resolved_uri;
-    }
-    delete resolved_uri;
-    return NULL;
-  }
+  static UriParser* CreateResolvedUri(const char* base, const char* relative);
 
   // The intended usage is to create a UriParser from a static method.
-  UriParser() {
-     // Initialize the UriUriA struct this class wraps to a sane state.
-     memset((void *)&uri_, 0, sizeof(UriUriA));
-  }
+  UriParser();
 
   // The destructor must perform uriparser-specific operations to release
   // resources.  It is highly recommdended that a UriParser* be managed
   // with boost::scoped_ptr or equivalent (as is done in CreateResolveUri).
-  ~UriParser() {
-    uriFreeUriMembersA(&uri_);
-  }
+  ~UriParser();
 
   // This parses the given URI string into the UriParser object and obliterates
   // any previous URI parsed into this object.  If the parse succeeds true is
   // returned, else false is returned.  This method is intended for use mainly
   // with the CreateFromParse() static method.
-  bool Parse(const char* str) {
-    UriParserStateA state;
-    state.uri = &uri_;
-    if (uriParseUriA(&state, str) != URI_SUCCESS) {
-      uriFreeUriMembersA(&uri_);
-      return false;
-    }
-    return true;
-  }
+  bool Parse(const char* str);
 
   // UriParser (and the underlying uriparser library) does not automatically
   // normalize any URI.  (Normalize resolves the ..'s in a path, for example).
   // This method may be used at any time to normalize the URI.  RFC 3986
   // requires a fetching client to normalize a URI before fetching it.
-  bool Normalize() {
-    return uriNormalizeSyntaxA(&uri_) == URI_SUCCESS;
-  }
+  bool Normalize();
 
   // This resolves the URI represented by the UriParser relative against the
   // URI represented by the UriParser base.  This method is intended for use
   // mainly with the CreateResolvedUri() static method.
-  bool Resolve(const UriParser& base, const UriParser& relative) {
-    return uriAddBaseUriA(&uri_, relative.get_uri(), base.get_uri())
-      == URI_SUCCESS;
-  }
+  bool Resolve(const UriParser& base, const UriParser& relative);
 
   // This method saves the URI in string form into the given string.  This
   // returns false if a NULL string argument is supplied or on any internal
   // errors in saving to this string.  True is returned on success.
-  bool ToString(std::string* output) const {
-    if (!output) {
-      return false;
-    }
-    int chars_required;
-    if (uriToStringCharsRequiredA(&uri_, &chars_required) != URI_SUCCESS) {
-      return false;
-    }
-    char* dest_str = (char*)malloc(chars_required+1);
-    if (!dest_str) {
-      return false;
-    }
-    int chars_written;
-    if (uriToStringA(dest_str, &uri_, chars_required+1, &chars_written)
-        != URI_SUCCESS) {
-      free(dest_str);
-      return false;
-    }
-    *output = dest_str;
-    free(dest_str);
-    return true;
-  }
+  bool ToString(string* output) const;
+
+  // Converts a URI to its corresponding filename. The implementation
+  // is platform-independent and handles either UNIX- or Windows-style path
+  // names transparently. Returns false if output is NULL or on any internal
+  // error in converting the uri.
+  static bool UriToFilename(const string& uri, string* output);
+
+  // Converts a UNIX URI to its corresponding UNIX filename. Returns false if
+  // output is NULL or on any internal error in converting the uri.
+  // For example, calling this function on "file:///home/libkml/foo.bar" will
+  // output "/home/libkml/foo.bar".
+  // Clients should use UriToFilename in preference to this to have the path
+  // name style handled automatically.
+  static bool UriToUnixFilename(const string& uri, string* output);
+
+  // Converts a Windows URI to its corresponding Windows filename. Returns
+  // false if output is NULL or on any internal error in converting the uri.
+  // For example, calling this function on "file:///C:/home/libkml/foo.bar"
+  // will output "C:\\home\\libkml\\foo.bar".
+  // Clients should use UriToFilename in preference to this to have the path
+  // name style handled automatically.
+  static bool UriToWindowsFilename(const string& uri, string* output);
+
+  // Converts a filename to its corresponding URI. The implementation is
+  // platform-independent and handles either UNIX- or Windows-style path names
+  // transparently. Returns false if output is NULL or on any internal
+  // error in converting the uri.
+  static bool FilenameToUri(const string& filename, string* output);
+
+  // Converts a UNIX filename to its corresponding URI. Returns false if
+  // output is NULL or on any internal error in converting the filename.
+  // For example, calling this function on "/home/libkml/foo.bar" will output
+  // "file:///home/libkml/foo.bar".
+  // Clients should use FilenameToUri in preference to this to have the path
+  // name style handled automatically.
+  static bool UnixFilenameToUri(const string& filename,
+                                string* output);
+
+  // Converts a Windows filename to its corresponding URI. Returns false if
+  // output is NULL or on any internal error in converting the filename.
+  // For example, calling this function on "C:\\home\\libkml\\foo.bar" will
+  // output "file:///C:/home/libkml/foo.bar".
+  // Clients should use FilenameToUri in preference to this to have the path
+  // name style handled automatically.
+  static bool WindowsFilenameToUri(const string& filename,
+                                   string* output);
 
   // This returns the scheme of the URI if one exists.
-  bool GetScheme(std::string* scheme) const {
-    return GetUriComponent(uri_.scheme, scheme);
-  }
+  bool GetScheme(string* scheme) const;
 
   // This returns the host of the URI if one exists.
-  bool GetHost(std::string* host) const {
-    return GetUriComponent(uri_.hostText, host);
-  }
+  bool GetHost(string* host) const;
 
   // This returns the port of the URI if one exists.
-  bool GetPort(std::string* port) const {
-    return GetUriComponent(uri_.portText, port);
-  }
+  bool GetPort(string* port) const;
 
   // This returns the query of the URI if one exists.
-  bool GetQuery(std::string* query) const {
-    return GetUriComponent(uri_.query, query);
-  }
+  bool GetQuery(string* query) const;
 
   // This method returns the fragment portion of the URI into the given
   // string if such is supplied.  If no string is supplied or if there is no
   // fragment in this URI false is returned.  The fragment returned does not
   // include the '#' found in the corresponding URI.
-  bool GetFragment(std::string* fragment) const {
-    return GetUriComponent(uri_.fragment, fragment);
-  }
+  bool GetFragment(string* fragment) const;
 
   // This method returns true if the uri has a path.  If an output string
   // pointer is supplied the path is saved there.
-  bool GetPath(std::string* path) const {
-    if (!uri_.pathHead || !uri_.pathTail) {
-      return false;
-    }
-    if (path) {
-      path->clear();
-      UriPathSegmentA* segment = uri_.pathHead;
-      while (segment) {
-        UriTextRangeA* text_range = &segment->text;
-        if (!text_range || !text_range->first || !text_range->afterLast) {
-          return false;  // Something is corrupt.
-        }
-        path->append(text_range->first,
-                     text_range->afterLast - text_range->first);
-        segment = segment->next;
-        if (segment) {  // If there's a next segment append a separator.
-          path->append("/");
-        }
-      }
-    }
-    return true;
-  }
+  bool GetPath(string* path) const;
 
  private:
-  // Only this class can reach into the uriparser-specific internals of a
-  // UriParser.
-  UriUriA* get_uri() const {
-    return const_cast<UriUriA*>(&uri_);
-  }
-
-  // This helper function detects the existence of the given component and
-  // converts it to a string if one is supplied.  If this component does not
-  // exist false is returned.  If the component does exist true is returned.
-  bool GetUriComponent(const UriTextRangeA& text_range, std::string* output)
-      const {
-    if (!text_range.first || !text_range.afterLast) {
-      return false;
-    }
-    if (output) {
-      output->assign(text_range.first, text_range.afterLast - text_range.first);
-    }
-    return true;
-  }
-
-  // The main role of this class is to front-end this C type in uriparser.
-  UriUriA uri_;
+  // UriParserPrivate hides the internals of the underlying third party
+  // uriparser types from clients of this header.
+  boost::scoped_ptr<UriParserPrivate> uri_parser_private_;
 
   // No copy construction or assignment please.
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(UriParser);
@@ -224,3 +161,4 @@ class UriParser {
 }  // end namespace kmlbase
 
 #endif  // KML_BASE_URI_PARSER_H__
+

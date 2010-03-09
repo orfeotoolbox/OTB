@@ -43,6 +43,12 @@ KmlFactory* KmlFactory::GetFactory() {
 ElementPtr KmlFactory::CreateElementById(KmlDomType id) const {
   switch (id) {
   case Type_Alias: return CreateAlias();
+  case Type_AtomAuthor: return CreateAtomAuthor();
+  case Type_AtomCategory: return CreateAtomCategory();
+  case Type_AtomContent: return CreateAtomContent();
+  case Type_AtomEntry: return CreateAtomEntry();
+  case Type_AtomFeed: return CreateAtomFeed();
+  case Type_AtomLink: return CreateAtomLink();
   case Type_BalloonStyle: return CreateBalloonStyle();
   case Type_Camera: return CreateCamera();
   case Type_Change: return CreateChange();
@@ -69,6 +75,7 @@ ElementPtr KmlFactory::CreateElementById(KmlDomType id) const {
   case Type_Location: return CreateLocation();
   case Type_Lod: return CreateLod();
   case Type_LookAt: return CreateLookAt();
+  case Type_Metadata: return CreateMetadata();
   case Type_Model: return CreateModel();
   case Type_MultiGeometry: return CreateMultiGeometry();
   case Type_NetworkLink: return CreateNetworkLink();
@@ -106,6 +113,25 @@ ElementPtr KmlFactory::CreateElementById(KmlDomType id) const {
   case Type_rotationXY: return CreateRotationXY();
   case Type_screenXY: return CreateScreenXY();
   case Type_size: return CreateSize();
+  case Type_XalAddressDetails: return CreateXalAddressDetails();
+  case Type_XalAdministrativeArea: return CreateXalAdministrativeArea();
+  case Type_XalCountry: return CreateXalCountry();
+  case Type_XalLocality: return CreateXalLocality();
+  case Type_XalPostalCode: return CreateXalPostalCode();
+  case Type_XalSubAdministrativeArea: return CreateXalSubAdministrativeArea();
+  case Type_XalThoroughfare: return CreateXalThoroughfare();
+
+  case Type_GxAnimatedUpdate: return CreateGxAnimatedUpdate();
+  case Type_GxFlyTo: return CreateGxFlyTo();
+  case Type_GxLatLonQuad: return CreateGxLatLonQuad();
+  case Type_GxPlaylist: return CreateGxPlaylist();
+  case Type_GxSoundCue: return CreateGxSoundCue();
+  case Type_GxTimeSpan: return CreateGxTimeSpan();
+  case Type_GxTimeStamp: return CreateGxTimeStamp();
+  case Type_GxTour: return CreateGxTour();
+  case Type_GxTourControl: return CreateGxTourControl();
+  case Type_GxWait: return CreateGxWait();
+
   default: return NULL;
   }
 }
@@ -116,6 +142,30 @@ Field* KmlFactory::CreateFieldById(KmlDomType type_id) const {
 
 Alias* KmlFactory::CreateAlias() const {
   return new Alias();
+}
+
+AtomAuthor* KmlFactory::CreateAtomAuthor() const {
+  return new AtomAuthor();
+}
+
+AtomCategory* KmlFactory::CreateAtomCategory() const {
+  return new AtomCategory();
+}
+
+AtomContent* KmlFactory::CreateAtomContent() const {
+  return new AtomContent();
+}
+
+AtomEntry* KmlFactory::CreateAtomEntry() const {
+  return new AtomEntry();
+}
+
+AtomFeed* KmlFactory::CreateAtomFeed() const {
+  return new AtomFeed();
+}
+
+AtomLink* KmlFactory::CreateAtomLink() const {
+  return new AtomLink();
 }
 
 BalloonStyle* KmlFactory::CreateBalloonStyle() const {
@@ -236,6 +286,10 @@ Lod* KmlFactory::CreateLod() const {
 
 LookAt* KmlFactory::CreateLookAt() const {
   return new LookAt();
+}
+
+Metadata* KmlFactory::CreateMetadata() const {
+  return new Metadata();
 }
 
 Model* KmlFactory::CreateModel() const {
@@ -368,6 +422,74 @@ TimeStamp* KmlFactory::CreateTimeStamp() const {
 
 ViewVolume* KmlFactory::CreateViewVolume() const {
   return new ViewVolume();
+}
+
+XalAddressDetails* KmlFactory::CreateXalAddressDetails() const {
+  return new XalAddressDetails();
+}
+
+XalAdministrativeArea* KmlFactory::CreateXalAdministrativeArea() const {
+  return new XalAdministrativeArea();
+}
+
+XalCountry* KmlFactory::CreateXalCountry() const {
+  return new XalCountry();
+}
+
+XalLocality* KmlFactory::CreateXalLocality() const {
+  return new XalLocality();
+}
+
+XalPostalCode* KmlFactory::CreateXalPostalCode() const {
+  return new XalPostalCode();
+}
+
+XalSubAdministrativeArea* KmlFactory::CreateXalSubAdministrativeArea() const {
+  return new XalSubAdministrativeArea();
+}
+
+XalThoroughfare* KmlFactory::CreateXalThoroughfare() const {
+  return new XalThoroughfare();
+}
+
+GxAnimatedUpdate* KmlFactory::CreateGxAnimatedUpdate() const {
+  return new GxAnimatedUpdate();
+}
+
+GxFlyTo* KmlFactory::CreateGxFlyTo() const {
+  return new GxFlyTo();
+}
+
+GxLatLonQuad* KmlFactory::CreateGxLatLonQuad() const {
+  return new GxLatLonQuad();
+}
+
+GxPlaylist* KmlFactory::CreateGxPlaylist() const {
+  return new GxPlaylist();
+}
+
+GxSoundCue* KmlFactory::CreateGxSoundCue() const {
+  return new GxSoundCue();
+}
+
+GxTimeSpan* KmlFactory::CreateGxTimeSpan() const {
+  return new GxTimeSpan();
+}
+
+GxTimeStamp* KmlFactory::CreateGxTimeStamp() const {
+  return new GxTimeStamp();
+}
+
+GxTour* KmlFactory::CreateGxTour() const {
+  return new GxTour();
+}
+
+GxTourControl* KmlFactory::CreateGxTourControl() const {
+  return new GxTourControl();
+}
+
+GxWait* KmlFactory::CreateGxWait() const {
+  return new GxWait();
 }
 
 }  // namespace kmldom

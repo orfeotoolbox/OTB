@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file contains the declarations of the SimpleData, SchemaData,
@@ -29,7 +29,6 @@
 #ifndef KML_DOM_EXTENDEDDATA_H__
 #define KML_DOM_EXTENDEDDATA_H__
 
-#include <string>
 #include <vector>
 #include "kml/dom/element.h"
 #include "kml/dom/kml22.h"
@@ -37,21 +36,24 @@
 #include "kml/dom/object.h"
 #include "kml/base/util.h"
 
+namespace kmlbase {
+class Attributes;
+}
+
 namespace kmldom {
 
+class Visitor;
+class VisitorDriver;
+
 // <SimpleData>
-class SimpleData : public Element {
+class SimpleData : public BasicElement<Type_SimpleData> {
  public:
   virtual ~SimpleData();
-  virtual KmlDomType Type() const { return Type_SimpleData; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_SimpleData;
-  }
 
   // name=
-  const std::string& get_name() const { return name_; }
+  const string& get_name() const { return name_; }
   bool has_name() const { return has_name_; }
-  void set_name(const std::string& value) {
+  void set_name(const string& value) {
     name_ = value;
     has_name_ = true;
   }
@@ -61,9 +63,9 @@ class SimpleData : public Element {
   }
 
   // char data
-  const std::string& get_text() const { return text_; }
+  const string& get_text() const { return text_; }
   bool has_text() const { return has_text_; }
-  void set_text(const std::string& value) {
+  void set_text(const string& value) {
     text_ = value;
     has_text_ = true;
   }
@@ -72,18 +74,21 @@ class SimpleData : public Element {
     has_text_ = false;
   }
 
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+
  private:
   friend class KmlFactory;
   SimpleData();
   friend class KmlHandler;
-  virtual void ParseAttributes(const Attributes& attributes);
+  virtual void ParseAttributes(kmlbase::Attributes* attributes);
   virtual void AddElement(const ElementPtr& child);
   friend class Serializer;
   virtual void Serialize(Serializer& serializer) const;
-  virtual void GetAttributes(Attributes* attributes) const;
-  std::string name_;
+  virtual void SerializeAttributes(kmlbase::Attributes* attributes) const;
+  string name_;
   bool has_name_;
-  std::string text_;
+  string text_;
   bool has_text_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(SimpleData);
 };
@@ -92,15 +97,16 @@ class SimpleData : public Element {
 class SchemaData : public Object {
  public:
   virtual ~SchemaData();
-  virtual KmlDomType Type() const { return Type_SchemaData; }
+  virtual KmlDomType Type() const { return ElementType(); }
   virtual bool IsA(KmlDomType type) const {
-    return type == Type_SchemaData || Object::IsA(type);
+    return type == ElementType() || Object::IsA(type);
   }
+  static KmlDomType ElementType() { return Type_SchemaData; }
 
   // schemaUrl=
-  const std::string& get_schemaurl() const { return schemaurl_; }
+  const string& get_schemaurl() const { return schemaurl_; }
   bool has_schemaurl() const { return has_schemaurl_; }
-  void set_schemaurl(const std::string& value) {
+  void set_schemaurl(const string& value) {
     schemaurl_ = value;
     has_schemaurl_ = true;
   }
@@ -113,7 +119,7 @@ class SchemaData : public Object {
     AddComplexChild(simpledata, &simpledata_array_);
   }
 
-  const size_t get_simpledata_array_size() const {
+  size_t get_simpledata_array_size() const {
     return simpledata_array_.size();
   }
 
@@ -121,17 +127,21 @@ class SchemaData : public Object {
     return simpledata_array_[index];
   }
 
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
+
  private:
   friend class KmlFactory;
   SchemaData();
   friend class KmlHandler;
   virtual void AddElement(const ElementPtr& element);
-  virtual void ParseAttributes(const Attributes& attributes);
+  virtual void ParseAttributes(kmlbase::Attributes* attributes);
   friend class ExtendedData;
   friend class Serializer;
   virtual void Serialize(Serializer& serializer) const;
-  virtual void GetAttributes(Attributes* attributes) const;
-  std::string schemaurl_;
+  virtual void SerializeAttributes(kmlbase::Attributes* attributes) const;
+  string schemaurl_;
   bool has_schemaurl_;
   std::vector<SimpleDataPtr> simpledata_array_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(SchemaData);
@@ -141,15 +151,16 @@ class SchemaData : public Object {
 class Data : public Object {
  public:
   virtual ~Data();
-  virtual KmlDomType Type() const { return Type_Data; }
+  virtual KmlDomType Type() const { return ElementType(); }
   virtual bool IsA(KmlDomType type) const {
-    return type == Type_Data || Object::IsA(type);
+    return type == ElementType() || Object::IsA(type);
   }
+  static KmlDomType ElementType() { return Type_Data; }
 
   // name=
-  const std::string& get_name() const { return name_; }
+  const string& get_name() const { return name_; }
   bool has_name() const { return has_name_; }
-  void set_name(const std::string& value) {
+  void set_name(const string& value) {
     name_ = value;
     has_name_ = true;
   }
@@ -159,9 +170,9 @@ class Data : public Object {
   }
 
   // <displayname>
-  const std::string& get_displayname() const { return displayname_; }
+  const string& get_displayname() const { return displayname_; }
   bool has_displayname() const { return has_displayname_; }
-  void set_displayname(const std::string& value) {
+  void set_displayname(const string& value) {
     displayname_ = value;
     has_displayname_ = true;
   }
@@ -171,9 +182,9 @@ class Data : public Object {
   }
 
   // <value>
-  const std::string& get_value() const { return value_; }
+  const string& get_value() const { return value_; }
   bool has_value() const { return has_value_; }
-  void set_value(const std::string& value) {
+  void set_value(const string& value) {
     value_ = value;
     has_value_ = true;
   }
@@ -182,40 +193,39 @@ class Data : public Object {
     has_value_ = false;
   }
 
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+
  private:
   friend class KmlFactory;
   Data();
   friend class KmlHandler;
   virtual void AddElement(const ElementPtr& element);
-  virtual void ParseAttributes(const Attributes& attributes);
+  virtual void ParseAttributes(kmlbase::Attributes* attributes);
   friend class ExtendedData;
   friend class Serializer;
   virtual void Serialize(Serializer& serializer) const;
-  virtual void GetAttributes(Attributes* attributes) const;
-  std::string name_;
+  virtual void SerializeAttributes(kmlbase::Attributes* attributes) const;
+  string name_;
   bool has_name_;
-  std::string displayname_;
+  string displayname_;
   bool has_displayname_;
-  std::string value_;
+  string value_;
   bool has_value_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(Data);
 };
 
 // <ExtendedData>
-class ExtendedData : public Element {
+class ExtendedData : public BasicElement<Type_ExtendedData> {
  public:
   virtual ~ExtendedData();
-  virtual KmlDomType Type() const { return Type_ExtendedData; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_ExtendedData;
-  }
 
   // <Data>.
   void add_data(const DataPtr& data) {
     AddComplexChild(data, &data_array_);
   }
 
-  const size_t get_data_array_size() const {
+  size_t get_data_array_size() const {
     return data_array_.size();
   }
 
@@ -228,13 +238,17 @@ class ExtendedData : public Element {
     AddComplexChild(schemadata, &schemadata_array_);
   }
 
-  const size_t get_schemadata_array_size() const {
+  size_t get_schemadata_array_size() const {
     return schemadata_array_.size();
   }
 
   const SchemaDataPtr& get_schemadata_array_at(size_t index) const {
     return schemadata_array_[index];
   }
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
 
  private:
   friend class KmlFactory;
@@ -246,6 +260,23 @@ class ExtendedData : public Element {
   std::vector<DataPtr> data_array_;
   std::vector<SchemaDataPtr> schemadata_array_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(ExtendedData);
+};
+
+// <Metadata>
+// This element is deprecated in OGC KML 2.2.  New KML should use
+// <ExtendedData>.
+class Metadata : public BasicElement<Type_Metadata> {
+ public:
+  virtual ~Metadata();
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+
+ private:
+  friend class KmlFactory;
+  Metadata();
+  friend class Serializer;
+  virtual void Serialize(Serializer& serializer) const;
 };
 
 }  // end namespace kmldom

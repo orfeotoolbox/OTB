@@ -24,11 +24,12 @@
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "kml/dom/polystyle.h"
-#include <stdlib.h>  // for strtod
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
 #include "kml/dom/element.h"
 #include "kml/dom/serializer.h"
 #include "kml/dom/xsd.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -40,6 +41,9 @@ PolyStyle::~PolyStyle() {
 }
 
 void PolyStyle::AddElement(const ElementPtr& element) {
+  if (!element) {
+    return;
+  }
   switch (element->Type()) {
     case Type_fill:
       has_fill_ = element->SetBool(&fill_);
@@ -54,8 +58,7 @@ void PolyStyle::AddElement(const ElementPtr& element) {
 }
 
 void PolyStyle::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   ColorStyle::Serialize(serializer);
   if (has_fill()) {
     serializer.SaveFieldById(Type_fill, get_fill());
@@ -63,8 +66,10 @@ void PolyStyle::Serialize(Serializer& serializer) const {
   if (has_outline()) {
     serializer.SaveFieldById(Type_outline, get_outline());
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void PolyStyle::Accept(Visitor* visitor) {
+  visitor->VisitPolyStyle(PolyStylePtr(this));
 }
 
 }  // end namespace kmldom

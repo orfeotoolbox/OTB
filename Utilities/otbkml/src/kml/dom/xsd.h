@@ -31,8 +31,8 @@
 #ifndef KML_XSD_XSD_H__
 #define KML_XSD_XSD_H__
 
-#include <string>
 #include <map>
+#include "kml/base/util.h"
 
 namespace kmldom {
 
@@ -74,7 +74,7 @@ struct XsdSimpleTypeEnum {
   const char** enum_value_list;  // Value of value attribute.
 };
 
-typedef std::map<std::string,int> tag_id_map_t;
+typedef std::map<string,int> tag_id_map_t;
 
 // This a 0.1 C++ version of the information in the KML XSD.
 // At present it is just the list of elements.  Each element has a name,
@@ -84,14 +84,14 @@ class Xsd {
   static Xsd* GetSchema();
 
   // Essentially the API to the global <element>'s
-  int ElementId(std::string name) const;
+  int ElementId(const string& name) const;
   XsdType ElementType(int id) const;
-  std::string ElementName(int id) const;
+  string ElementName(int id) const;
 
   // Return the id of the given enum string for the given enum element.
-  int EnumId(int type_id, std::string enum_value) const;
+  int EnumId(int type_id, string enum_value) const;
   // Return the enum string for the given enum id for the given enum element.
-  std::string EnumValue(int type_id, int enum_id) const;
+  string EnumValue(int type_id, int enum_id) const;
 
  private:
   Xsd();

@@ -33,7 +33,6 @@
 #include <fstream>
 #include <list>
 #include <sstream>
-#include <string>
 #include "kml/dom.h"
 #include "kml/convenience/convenience.h"
 #include "kml/engine.h"
@@ -52,14 +51,14 @@ namespace kmlconvenience {
 static const char* kFeatureScoreName = "kml.FeatureScore";
 
 int GetFeatureScore(FeaturePtr feature) {
-  std::string score;
+  string score;
   if (GetExtendedDataValue(feature, kFeatureScoreName, &score)) {
     return atoi(score.c_str());
   }
   return 0;
 }
 
-void SetFeatureScore(const std::string& score, FeaturePtr feature) {
+void SetFeatureScore(const string& score, FeaturePtr feature) {
   SetExtendedDataValue(kFeatureScoreName, score, feature);
 }
 

@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file contains the declaration of the abstract Feature element.
@@ -29,6 +29,7 @@
 #define KML_DOM_FEATURE_H__
 
 #include "kml/dom/abstractview.h"
+#include "kml/dom/atom.h"
 #include "kml/dom/extendeddata.h"
 #include "kml/dom/kml22.h"
 #include "kml/dom/kml_ptr.h"
@@ -37,10 +38,15 @@
 #include "kml/dom/snippet.h"
 #include "kml/dom/styleselector.h"
 #include "kml/dom/timeprimitive.h"
+#include "kml/dom/xal.h"
 #include "kml/base/util.h"
 
 namespace kmldom {
 
+class VisitorDriver;
+
+// OGC KML 2.2 Standard: 9.1 kml:AbstractFeatureGroup
+// OGC KML 2.2 XSD: <element name="AbstractFeatureGroup"...
 class Feature : public Object {
  public:
   virtual ~Feature();
@@ -50,9 +56,9 @@ class Feature : public Object {
   }
 
   // <name>
-  const std::string& get_name() const { return name_; }
+  const string& get_name() const { return name_; }
   bool has_name() const { return has_name_; }
-  void set_name(const std::string& value) {
+  void set_name(const string& value) {
     name_ = value;
     has_name_ = true;
   }
@@ -85,10 +91,30 @@ class Feature : public Object {
     has_open_ = false;
   }
 
+  // <atom:author>
+  const AtomAuthorPtr& get_atomauthor() const { return atomauthor_; }
+  bool has_atomauthor() const { return atomauthor_ != NULL; }
+  void set_atomauthor(const AtomAuthorPtr& atomauthor) {
+    SetComplexChild(atomauthor, &atomauthor_);
+  }
+  void clear_atomauthor() {
+    set_atomauthor(NULL);
+  }
+
+  // <atom:link>
+  const AtomLinkPtr& get_atomlink() const { return atomlink_; }
+  bool has_atomlink() const { return atomlink_ != NULL; }
+  void set_atomlink(const AtomLinkPtr& atomlink) {
+    SetComplexChild(atomlink, &atomlink_);
+  }
+  void clear_atomlink() {
+    set_atomlink(NULL);
+  }
+
   // <address>
-  const std::string& get_address() const { return address_; }
+  const string& get_address() const { return address_; }
   bool has_address() const { return has_address_; }
-  void set_address(const std::string& value) {
+  void set_address(const string& value) {
     address_ = value;
     has_address_ = true;
   }
@@ -97,10 +123,22 @@ class Feature : public Object {
     has_address_ = false;
   }
 
+  // <xal:AddressDetails>
+  const XalAddressDetailsPtr& get_xaladdressdetails() const {
+    return xaladdressdetails_;
+  }
+  bool has_xaladdressdetails() const { return xaladdressdetails_ != NULL; }
+  void set_xaladdressdetails(const XalAddressDetailsPtr& xaladdressdetails) {
+    SetComplexChild(xaladdressdetails, &xaladdressdetails_);
+  }
+  void clear_xaladdressdetails() {
+    set_xaladdressdetails(NULL);
+  }
+
   // <phoneNumber>
-  const std::string& get_phonenumber() const { return phonenumber_; }
+  const string& get_phonenumber() const { return phonenumber_; }
   bool has_phonenumber() const { return has_phonenumber_; }
-  void set_phonenumber(const std::string& value) {
+  void set_phonenumber(const string& value) {
     phonenumber_ = value;
     has_phonenumber_ = true;
   }
@@ -109,8 +147,9 @@ class Feature : public Object {
     has_phonenumber_ = false;
   }
 
+  // TODO: "little" <snippet> (presently preserved as a misplaced child)
   // <Snippet>
-  const SnippetPtr get_snippet() const { return snippet_; }
+  const SnippetPtr& get_snippet() const { return snippet_; }
   bool has_snippet() const { return snippet_ != NULL; }
   void set_snippet(const SnippetPtr& snippet) {
     SetComplexChild(snippet, &snippet_);
@@ -120,9 +159,9 @@ class Feature : public Object {
   }
 
   // <description>
-  const std::string& get_description() const { return description_; }
+  const string& get_description() const { return description_; }
   bool has_description() const { return has_description_; }
-  void set_description(const std::string& value) {
+  void set_description(const string& value) {
     description_ = value;
     has_description_ = true;
   }
@@ -132,7 +171,7 @@ class Feature : public Object {
   }
 
   // AbstractView
-  const AbstractViewPtr get_abstractview() const { return abstractview_; }
+  const AbstractViewPtr& get_abstractview() const { return abstractview_; }
   bool has_abstractview() const { return abstractview_ != NULL; }
   void set_abstractview(const AbstractViewPtr& abstractview) {
     SetComplexChild(abstractview, &abstractview_);
@@ -142,7 +181,7 @@ class Feature : public Object {
   }
 
   // TimePrimitive
-  const TimePrimitivePtr get_timeprimitive() const { return timeprimitive_; }
+  const TimePrimitivePtr& get_timeprimitive() const { return timeprimitive_; }
   bool has_timeprimitive() const { return timeprimitive_ != NULL; }
   void set_timeprimitive(const TimePrimitivePtr& timeprimitive) {
     SetComplexChild(timeprimitive, &timeprimitive_);
@@ -152,10 +191,10 @@ class Feature : public Object {
   }
 
   // <styleUrl>
-  const std::string& get_styleurl() const { return styleurl_; }
-  std::string& styleurl() { return styleurl_; }
+  const string& get_styleurl() const { return styleurl_; }
+  string& styleurl() { return styleurl_; }
   bool has_styleurl() const { return has_styleurl_; }
-  void set_styleurl(const std::string& value) {
+  void set_styleurl(const string& value) {
     styleurl_ = value;
     has_styleurl_ = true;
   }
@@ -165,7 +204,7 @@ class Feature : public Object {
   }
 
   // StyleSelector
-  const StyleSelectorPtr get_styleselector() const { return styleselector_; }
+  const StyleSelectorPtr& get_styleselector() const { return styleselector_; }
   bool has_styleselector() const { return styleselector_ != NULL; }
   void set_styleselector(const StyleSelectorPtr& styleselector) {
     SetComplexChild(styleselector, &styleselector_);
@@ -175,7 +214,7 @@ class Feature : public Object {
   }
 
   // <Region>
-  const RegionPtr get_region() const { return region_; }
+  const RegionPtr& get_region() const { return region_; }
   bool has_region() const { return region_ != NULL; }
   void set_region(const RegionPtr& region) {
     SetComplexChild(region, &region_);
@@ -184,8 +223,9 @@ class Feature : public Object {
     set_region(NULL);
   }
 
+  // TODO: <Metadata> (presently preserved as a misplaced child)
   // <ExtendedData>
-  const ExtendedDataPtr get_extendeddata() const { return extendeddata_; }
+  const ExtendedDataPtr& get_extendeddata() const { return extendeddata_; }
   bool has_extendeddata() const { return extendeddata_ != NULL; }
   void set_extendeddata(const ExtendedDataPtr& extendeddata) {
     SetComplexChild(extendeddata, &extendeddata_);
@@ -194,33 +234,57 @@ class Feature : public Object {
     set_extendeddata(NULL);
   }
 
+  // From kml:AbstractFeatureSimpleExtensionGroup.
+
+  // <gx:balloonVisibility>
+  bool get_gx_balloonvisibility() const { return gx_balloonvisibility_; }
+  bool has_gx_balloonvisibility() const { return has_gx_balloonvisibility_; }
+  void set_gx_balloonvisibility(bool value) {
+    gx_balloonvisibility_ = value;
+    has_gx_balloonvisibility_ = true;
+  }
+  void clear_gx_balloonvisibility() {
+    gx_balloonvisibility_ = false;
+    has_gx_balloonvisibility_ = false;
+  }
+
+  // Visitor API methods, see visitor.h.
+  virtual void AcceptChildren(VisitorDriver* driver);
+
  protected:
   // Feature is abstract.
   Feature();
   virtual void AddElement(const ElementPtr& element);
+  void SerializeBeforeStyleSelector(Serializer& serialize) const;
+  void SerializeAfterStyleSelector(Serializer& serialize) const;
   virtual void Serialize(Serializer& serialize) const;
 
  private:
-  std::string name_;
+  string name_;
   bool has_name_;
   bool visibility_;
   bool has_visibility_;
   bool open_;
   bool has_open_;
-  std::string address_;
+  AtomAuthorPtr atomauthor_;
+  AtomLinkPtr atomlink_;
+  string address_;
   bool has_address_;
-  std::string phonenumber_;
+  XalAddressDetailsPtr xaladdressdetails_;
+  string phonenumber_;
   bool has_phonenumber_;
   SnippetPtr snippet_;
-  std::string description_;
+  string description_;
   bool has_description_;
   AbstractViewPtr abstractview_;
   TimePrimitivePtr timeprimitive_;
-  std::string styleurl_;
+  string styleurl_;
   bool has_styleurl_;
   StyleSelectorPtr styleselector_;
   RegionPtr region_;
   ExtendedDataPtr extendeddata_;
+  bool gx_balloonvisibility_;
+  bool has_gx_balloonvisibility_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(Feature);
 };
 

@@ -31,35 +31,27 @@
 
 #include "kml/base/time_util.h"
 #include <time.h>
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmlbase {
 
-class TimeUtilTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(TimeUtilTest);
-  CPPUNIT_TEST(TestGetMicroTime);
-  CPPUNIT_TEST_SUITE_END();
-
- protected:
-  void TestGetMicroTime();
+class TimeUtilTest : public testing::Test {
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(TimeUtilTest);
-
 // This verifies the GetMicroTime() function.
-void TimeUtilTest::TestGetMicroTime() {
+TEST_F(TimeUtilTest, TestGetMicroTime) {
   // Get the posix time (second resolution).
   time_t now = time(NULL);
   // Get the micro time (microsecond resolution).
   double later = GetMicroTime();
   // Assert that time has passed.
-  CPPUNIT_ASSERT(later > static_cast<double>(now));
+  ASSERT_PRED_FORMAT2(testing::DoubleLE, static_cast<double>(now), later);
   // Snapshot the microtime in rapid succession.
   double even_later = GetMicroTime();
   double later_still = GetMicroTime();
   // Verify that time does not go backwards.
-  CPPUNIT_ASSERT(even_later > later);
-  CPPUNIT_ASSERT(later_still >= even_later);
+  ASSERT_PRED_FORMAT2(testing::DoubleLE, later, even_later);
+  ASSERT_PRED_FORMAT2(testing::DoubleLE, even_later, later_still);
 
   // Here are some values 2.16 GHz MacBook Pro running Mac OS X 10.5.3.
   //  now         1215742903
@@ -78,4 +70,7 @@ void TimeUtilTest::TestGetMicroTime() {
 
 }  // end namespace kmlbase
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

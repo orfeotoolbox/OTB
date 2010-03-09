@@ -26,7 +26,7 @@
 // This file contains the unit tests for the FeatureList class.
 
 #include "kml/convenience/feature_list.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 #include "kml/dom.h"
 #include "kml/convenience/convenience.h"
 #include "kml/engine/bbox.h"
@@ -70,35 +70,12 @@ static const struct {
   { 46.6914,9.3952 }
 };
 
-class FeatureListTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(FeatureListTest);
-  CPPUNIT_TEST(TestDefault);
-  CPPUNIT_TEST(TestSave);
-  CPPUNIT_TEST(TestNull);
-  CPPUNIT_TEST(TestPushBack);
-  CPPUNIT_TEST(TestRegionSplitAll);
-  CPPUNIT_TEST(TestRegionSplitSome);
-  CPPUNIT_TEST(TestRegionSplitIncrementally);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class FeatureListTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     CreateFeatureList();
   }
 
-  void tearDown() {
-  }
-
- protected:
-  void TestDefault();
-  void TestSave();
-  void TestNull();
-  void TestPushBack();
-  void TestRegionSplitAll();
-  void TestRegionSplitSome();
-  void TestRegionSplitIncrementally();
-
- private:
   void CreateFeatureList();
   int CountPointsInBbox(const Bbox& bbox) const;
   static RegionPtr CreateRegionFromBbox(const Bbox& bbox, double minlodpixels,
@@ -108,8 +85,6 @@ class FeatureListTest : public CPPUNIT_NS::TestFixture {
   FeatureList input_;
   FeatureList output_;
 };
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FeatureListTest);
 
 // This is an internal utility to count the number of points in the kPoints
 // array contained by the given bounding box.
@@ -134,7 +109,7 @@ void FeatureListTest::CreateFeatureList() {
   }
   // This is an internal assertion to verify the FeatureList was created
   // properly.
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, input_.Size());
+  ASSERT_EQ(initial_input_point_count_, input_.Size());
   for (size_t i = 0; i < initial_input_point_count_; ++i) {
     initial_input_bbox_.ExpandLatLon(kPoints[i].lat, kPoints[i].lon);
   }
@@ -142,52 +117,52 @@ void FeatureListTest::CreateFeatureList() {
 
 // This verifies that the two FeatureLists within the test fixture are in
 // the expected state.
-void FeatureListTest::TestDefault() {
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, input_.Size());
-  CPPUNIT_ASSERT_EQUAL(kSize0, output_.Size());
+TEST_F(FeatureListTest, TestDefault) {
+  ASSERT_EQ(initial_input_point_count_, input_.Size());
+  ASSERT_EQ(kSize0, output_.Size());
 }
 
 // This verifies the Save method including preservation of order.
-void FeatureListTest::TestSave() {
+TEST_F(FeatureListTest, TestSave) {
   // Create a Folder and save out to it.
   FolderPtr folder = KmlFactory::GetFactory()->CreateFolder();
   input_.Save(folder);
 
   // Verify the state of the input_ FeatureList was not changed.
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, input_.Size());
+  ASSERT_EQ(initial_input_point_count_, input_.Size());
 
   // Verify everything was saved.
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_,
-                       folder->get_feature_array_size());
+  ASSERT_EQ(initial_input_point_count_,
+            folder->get_feature_array_size());
   for (size_t i = 0; i < initial_input_point_count_; ++i) {
     // Verify that these are all Placemarks
     PlacemarkPtr placemark =
         kmldom::AsPlacemark(folder->get_feature_array_at(i));
-    CPPUNIT_ASSERT(placemark);
+    ASSERT_TRUE(placemark);
 
     // Verify that each is a proper Point Placemark with lat and lon.
     double lat, lon;
-    CPPUNIT_ASSERT(kmlengine::GetPlacemarkLatLon(placemark, &lat, &lon));
+    ASSERT_TRUE(kmlengine::GetPlacemarkLatLon(placemark, &lat, &lon));
 
     // Verify that the order from the input_ FeatureList is preserved.
-    CPPUNIT_ASSERT_EQUAL(lat, kPoints[i].lat);
-    CPPUNIT_ASSERT_EQUAL(lon, kPoints[i].lon);
+    ASSERT_EQ(lat, kPoints[i].lat);
+    ASSERT_EQ(lon, kPoints[i].lon);
   }
 }
 
 // This verifies that the BboxSplit and RegionSplit methods are well behaved
 // when given a NULL output FeatureList.
-void FeatureListTest::TestNull() {
+TEST_F(FeatureListTest, TestNull) {
   Bbox bbox;
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.BboxSplit(bbox, 0, NULL));
+  ASSERT_EQ(kSize0, input_.BboxSplit(bbox, 0, NULL));
   RegionPtr region;
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.RegionSplit(region, 0, NULL));
+  ASSERT_EQ(kSize0, input_.RegionSplit(region, 0, NULL));
   input_.PushBack(NULL);
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, input_.Size());
+  ASSERT_EQ(initial_input_point_count_, input_.Size());
 }
 
 // This verifies the PushBack() method.
-void FeatureListTest::TestPushBack() {
+TEST_F(FeatureListTest, TestPushBack) {
   // Create a point and a bounding box that contains it.
   const double kLat = 12.34;
   const double kLon = -65.43;
@@ -200,23 +175,23 @@ void FeatureListTest::TestPushBack() {
   // more robust in the face of any changes to kPoints.
   input_.BboxSplit(bbox, 0, NULL);
   // Verify no points remain within this bounding box.
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.BboxSplit(bbox, 0, NULL));
+  ASSERT_EQ(kSize0, input_.BboxSplit(bbox, 0, NULL));
 
   size_t previous_size = input_.Size();
 
   // Add the new point.
   input_.PushBack(kmlconvenience::CreatePointPlacemark("hi", kLat, kLon));
-  CPPUNIT_ASSERT_EQUAL(previous_size + 1, input_.Size());
+  ASSERT_EQ(previous_size + 1, input_.Size());
 
   // Split on the point's bounding box and verify exactly it was split out.
-  CPPUNIT_ASSERT_EQUAL(kSize1, input_.BboxSplit(bbox, 0, &output_));
+  ASSERT_EQ(kSize1, input_.BboxSplit(bbox, 0, &output_));
 
   // Verify the input is back to its previous size.
-  CPPUNIT_ASSERT_EQUAL(previous_size, input_.Size());
+  ASSERT_EQ(previous_size, input_.Size());
   // Verify that splitting on this bbox again results in no output
   // and no change in size.
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.BboxSplit(bbox, 0, &output_));
-  CPPUNIT_ASSERT_EQUAL(previous_size, input_.Size());
+  ASSERT_EQ(kSize0, input_.BboxSplit(bbox, 0, &output_));
+  ASSERT_EQ(previous_size, input_.Size());
 }
 
 // This is an internal utility to create a KML Region from a Bbox.
@@ -230,63 +205,65 @@ RegionPtr FeatureListTest::CreateRegionFromBbox(const Bbox& bbox,
 
 // This verifies that splitting on the bounding box for the FeatureList removes
 // all features from the FeatureList.
-void FeatureListTest::TestRegionSplitAll() {
-  CPPUNIT_ASSERT_EQUAL(static_cast<int>(initial_input_point_count_),
-                       CountPointsInBbox(initial_input_bbox_));
+TEST_F(FeatureListTest, TestRegionSplitAll) {
+  ASSERT_EQ(static_cast<int>(initial_input_point_count_),
+            CountPointsInBbox(initial_input_bbox_));
   RegionPtr region = CreateRegionFromBbox(initial_input_bbox_, 128, -1);
   input_.RegionSplit(region, 0, &output_);
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, output_.Size());
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.Size());
+  ASSERT_EQ(initial_input_point_count_, output_.Size());
+  ASSERT_EQ(kSize0, input_.Size());
 }
 
 // This verifies that splitting a bounded number of items from the FeatureList
 // behaves properly.
-void FeatureListTest::TestRegionSplitSome() {
+TEST_F(FeatureListTest, TestRegionSplitSome) {
   RegionPtr region = CreateRegionFromBbox(initial_input_bbox_, 128, -1);
   size_t split_count = initial_input_point_count_/4;
-  CPPUNIT_ASSERT(split_count);
+  ASSERT_TRUE(split_count);
   input_.RegionSplit(region, split_count, &output_);
-  CPPUNIT_ASSERT_EQUAL(split_count, output_.Size());
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_ - split_count, input_.Size());
+  ASSERT_EQ(split_count, output_.Size());
+  ASSERT_EQ(initial_input_point_count_ - split_count, input_.Size());
 }
 
 // This verifies that successive RegionSplit() calls on several Regions
 // covering the extent of the FeatureList's bounding box splits out all
 // proper features properly.
-void FeatureListTest::TestRegionSplitIncrementally() {
+TEST_F(FeatureListTest, TestRegionSplitIncrementally) {
   double mid_lat, mid_lon;
   initial_input_bbox_.GetCenter(&mid_lat, &mid_lon);
   Bbox ne_bbox(initial_input_bbox_.get_north(), mid_lat,
                initial_input_bbox_.get_east(), mid_lon);
   size_t ne_point_count = CountPointsInBbox(ne_bbox);
   RegionPtr ne_region = CreateRegionFromBbox(ne_bbox, 128, -1);
-  CPPUNIT_ASSERT_EQUAL(ne_point_count,
-                       input_.RegionSplit(ne_region, 0, &output_));
-  CPPUNIT_ASSERT_EQUAL(ne_point_count, output_.Size());
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_ - ne_point_count,
-                       input_.Size());
+  ASSERT_EQ(ne_point_count,
+            input_.RegionSplit(ne_region, 0, &output_));
+  ASSERT_EQ(ne_point_count, output_.Size());
+  ASSERT_EQ(initial_input_point_count_ - ne_point_count,
+            input_.Size());
 
   Bbox nw_bbox(initial_input_bbox_.get_north(), mid_lat,
                mid_lon, initial_input_bbox_.get_west());
   size_t nw_point_count = CountPointsInBbox(nw_bbox);
   RegionPtr nw_region = CreateRegionFromBbox(nw_bbox, 128, -1);
-  CPPUNIT_ASSERT_EQUAL(nw_point_count,
-                       input_.RegionSplit(nw_region, 0, &output_));
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_ - ne_point_count -
-                       nw_point_count,
-                       input_.Size());
+  ASSERT_EQ(nw_point_count,
+            input_.RegionSplit(nw_region, 0, &output_));
+  ASSERT_EQ(initial_input_point_count_ - ne_point_count - nw_point_count,
+            input_.Size());
 
   Bbox south_bbox(mid_lat, initial_input_bbox_.get_south(),
                   initial_input_bbox_.get_east(),
                   initial_input_bbox_.get_west());
   size_t south_point_count = CountPointsInBbox(south_bbox);
   RegionPtr south_region = CreateRegionFromBbox(south_bbox, 128, -1);
-  CPPUNIT_ASSERT_EQUAL(south_point_count,
-                       input_.RegionSplit(south_region, 0, &output_));
-  CPPUNIT_ASSERT_EQUAL(kSize0, input_.Size());
-  CPPUNIT_ASSERT_EQUAL(initial_input_point_count_, output_.Size());
+  ASSERT_EQ(south_point_count,
+            input_.RegionSplit(south_region, 0, &output_));
+  ASSERT_EQ(kSize0, input_.Size());
+  ASSERT_EQ(initial_input_point_count_, output_.Size());
 }
 
 }  // namespace kmlconvenience
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

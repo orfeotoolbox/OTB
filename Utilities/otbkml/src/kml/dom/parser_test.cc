@@ -27,35 +27,17 @@
 // various internals of the KmlHandler class.
 
 #include "kml/dom/kml_funcs.h"
-#include <string>
 #include "kml/dom/element.h"
 #include "kml/dom/kml.h"
 #include "kml/dom/kml_cast.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class ParserTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ParserTest);
-  CPPUNIT_TEST(TestValidKml);
-  CPPUNIT_TEST(TestJunkInput);
-  CPPUNIT_TEST(TestFullyUnknownXml);
-  CPPUNIT_TEST(TestPartlyValidKml);
-  CPPUNIT_TEST_SUITE_END();
-
- protected:
-  void TestValidKml();
-  void TestJunkInput();
-  void TestFullyUnknownXml();
-  void TestPartlyValidKml();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION(ParserTest);
-
 // Verify proper behavior for good KML.  The XML is valid and all elements
 // are known and contained by proper parents.
-void ParserTest::TestValidKml() {
-  std::string errors;
+TEST(ParserTest, TestValidKml) {
+  string errors;
   ElementPtr root = Parse("<kml>"
                           "<Placemark>"
                           "<name>a good Placemark</name>"
@@ -66,84 +48,84 @@ void ParserTest::TestValidKml() {
                           "</kml>",
                           &errors);
   // KML is valid so there are no errors and the root is <kml>.
-  CPPUNIT_ASSERT(errors.empty());
-  CPPUNIT_ASSERT(root);
+  ASSERT_TRUE(errors.empty());
+  ASSERT_TRUE(root);
 
   const KmlPtr kml = AsKml(root);
-  CPPUNIT_ASSERT(kml);
+  ASSERT_TRUE(kml);
 
   errors.clear();
   // Assigning to root releases storage allocated in Parse above.
   root = Parse(" <kml/>", &errors);  // Note leading space.
-  CPPUNIT_ASSERT(errors.empty());
-  CPPUNIT_ASSERT(root);
+  ASSERT_TRUE(errors.empty());
+  ASSERT_TRUE(root);
 
-  CPPUNIT_ASSERT(AsKml(root));
+  ASSERT_TRUE(AsKml(root));
 
   // ElementPtr root going out of scope releases storage allocated in 2nd
   // Parse.
 }
 
-void ParserTest::TestJunkInput() {
+TEST(ParserTest, TestJunkInput) {
   // Parse a garbage string.
-  std::string errors;
+  string errors;
   ElementPtr root = Parse("This is not even xml", &errors);
   // Since the parse failed there will be an error string and NULL is returned.
-  CPPUNIT_ASSERT(!errors.empty());
-  CPPUNIT_ASSERT(!root);
+  ASSERT_FALSE(errors.empty());
+  ASSERT_FALSE(root);
 
   // An unescaped ampersand is a basic XML parse error.
   root = Parse("<Document><name>&</name></Document>", &errors);
-  CPPUNIT_ASSERT(!errors.empty());
-  CPPUNIT_ASSERT(!root);
+  ASSERT_FALSE(errors.empty());
+  ASSERT_FALSE(root);
 }
 
-void ParserTest::TestFullyUnknownXml() {
+TEST(ParserTest, TestFullyUnknownXml) {
   // Parse perfectly valid, but fully unknown XML.  "Fully unknown" means
   // the root element is not known.  When Parse returns NULL an error string
   // is set.  The error string is considered human readable and not
   // examined further by this test.
-  std::string errors;
+  string errors;
   ElementPtr root;
 
   // These test some subtle variations of the inner workings of expat.
   root = Parse("<gml/>", &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 
   errors.clear();
   root = Parse("<gml></gml>", &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 
   errors.clear();
   root = Parse("<gml/>\n", &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 
   errors.clear();
   root = Parse("<gml></gml>\n", &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 
   errors.clear();
   root = Parse("<gml><this>is not<kml/></this>is also not</gml>", &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 
   errors.clear();
   root = Parse("<gml>"
                "<Placemark><name>still not kml</name></Placemark>"
                "</gml>",
                &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
 }
 
-void ParserTest::TestPartlyValidKml() {
+TEST(ParserTest, TestPartlyValidKml) {
   // This pushes several elements onto the stack within the parser to
   // excercise the destructor which frees them all.
-  std::string errors;
+  string errors;
   ElementPtr root = Parse("<kml>"
                           "<Folder>"
                           "<Document>"
@@ -154,10 +136,64 @@ void ParserTest::TestPartlyValidKml() {
                           "<Point>"
                           "<coordinates>",
                           &errors);
-  CPPUNIT_ASSERT(!root);
-  CPPUNIT_ASSERT(!errors.empty());
+  ASSERT_FALSE(root);
+  ASSERT_FALSE(errors.empty());
+}
+
+TEST(ParserTest, TestKmlWithUnknownEmptyFields) {
+  // Note that the unknown element handling logic still engages expat handlers
+  // hence nil elements (<c/>) are turned into <c></c>.  Note also the newline
+  // added by the unknown element handler.
+  const string kUnknownXml("<a>b<c></c></a>\n");
+  const string kKml(
+      string("<kml>") + kUnknownXml + "</kml>");
+  ElementPtr root = Parse(kKml, NULL);
+  ASSERT_TRUE(root);
+  ASSERT_EQ(static_cast<size_t>(1), root->get_unknown_elements_array_size());
+  ASSERT_EQ(kUnknownXml, root->get_unknown_elements_array_at(0));
+}
+
+TEST(ParserTest, TestParseAtomOnJunk) {
+  ASSERT_FALSE(ParseAtom("junk", NULL));
+}
+
+TEST(ParserTest, TestBasicParseAtomError) {
+  string errors;
+  ElementPtr root = ParseAtom("<feed xmlns='http://www.w3.org/2005/Atom'>",
+                              &errors);
+  ASSERT_FALSE(root.get());
+  ASSERT_FALSE(errors.empty());
+}
+
+TEST(ParserTest, TestBasicParseAtom) {
+  string errors;
+  ElementPtr root = ParseAtom("<feed xmlns='http://www.w3.org/2005/Atom'/>",
+                              &errors);
+  ASSERT_TRUE(errors.empty());
+  ASSERT_TRUE(root.get());
+  ASSERT_TRUE(AsAtomFeed(root));
+  ASSERT_EQ(kmlbase::XMLNS_ATOM, root->get_xmlns());
+}
+
+TEST(ParserTest, TestBasicParseAtomWithKml) {
+  ElementPtr root = ParseAtom(
+    "<atom:content xmlns:atom='http://www.w3.org/2005/Atom'>"
+    " xmlns='http://www.opengis.net/kml/2.2'>"
+    "<Placemark id='pm0'/>"
+    "</atom:content>", NULL);
+  ASSERT_TRUE(root.get());
+  kmldom::AtomContentPtr content = kmldom::AsAtomContent(root);
+  ASSERT_TRUE(content.get());
+  ASSERT_EQ(static_cast<size_t>(1),
+            content->get_misplaced_elements_array_size());
+  kmldom::PlacemarkPtr placemark =
+      kmldom::AsPlacemark(content->get_misplaced_elements_array_at(0));
+  ASSERT_EQ(string("pm0"), placemark->get_id());
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

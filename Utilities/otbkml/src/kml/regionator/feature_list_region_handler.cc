@@ -25,7 +25,6 @@
 
 #include "kml/regionator/feature_list_region_handler.h"
 #include <map>
-#include <string>
 #include "kml/base/file.h"
 #include "kml/dom.h"
 #include "kml/engine.h"
@@ -69,8 +68,8 @@ FeaturePtr FeatureListRegionHandler::GetFeature(const RegionPtr& region) {
 }
   
 void FeatureListRegionHandler::SaveKml(const KmlPtr& kml,
-                                       const std::string& filename) {
-  std::string kml_data(kmldom::SerializePretty(kml));
+                                       const string& filename) {
+  string kml_data(kmldom::SerializePretty(kml));
   kmlbase::File::WriteStringToFile(kml_data, filename);
 }
 

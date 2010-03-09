@@ -1,9 +1,9 @@
 // Copyright 2008, Google Inc. All rights reserved.
 //
-// Redistribution and use in source and binary forms, with or without 
+// Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 //
-//  1. Redistributions of source code must retain the above copyright notice, 
+//  1. Redistributions of source code must retain the above copyright notice,
 //     this list of conditions and the following disclaimer.
 //  2. Redistributions in binary form must reproduce the above copyright notice,
 //     this list of conditions and the following disclaimer in the documentation
@@ -13,14 +13,14 @@
 //     specific prior written permission.
 //
 // THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
-// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF 
+// WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
-// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
 // SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
 // PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
 // OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
-// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+// OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 // ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // This file contains the declaration of the NetworkLinkControl element.
@@ -40,12 +40,18 @@
 
 namespace kmldom {
 
+class Visitor;
+class VisitorDriver;
+
 // UpdateOperation
 // An internal class from which <Create>, <Delete> and <Change> derive. The
 // KML XSD uses a choice here which is not readily modeled in C++.
 class UpdateOperation : public Element {
  public:
   virtual ~UpdateOperation();
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
 
  protected:
   // UpdateOperation is abstract.
@@ -59,23 +65,26 @@ class UpdateOperation : public Element {
 class Create : public UpdateOperation {
  public:
   virtual ~Create();
-  virtual KmlDomType Type() const { return Type_Create; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_Create;
-  }
+  virtual KmlDomType Type() const { return ElementType(); }
+  virtual bool IsA(KmlDomType type) const { return type == ElementType(); }
+  static KmlDomType ElementType() { return Type_Create; }
 
   // Create targets containers.
   void add_container(const ContainerPtr& container) {
     AddComplexChild(container, &container_array_);
   }
 
-  const size_t get_container_array_size() const {
+  size_t get_container_array_size() const {
     return container_array_.size();
   }
 
   const ContainerPtr& get_container_array_at(size_t index) const {
     return container_array_[index];
   }
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
 
  private:
   friend class KmlFactory;
@@ -92,23 +101,26 @@ class Create : public UpdateOperation {
 class Delete : public UpdateOperation {
  public:
   virtual ~Delete();
-  virtual KmlDomType Type() const { return Type_Delete; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_Delete || Element::IsA(type);
-  }
+  virtual KmlDomType Type() const { return ElementType(); }
+  virtual bool IsA(KmlDomType type) const { return type == ElementType(); }
+  static KmlDomType ElementType() { return Type_Delete; }
 
   // Delete targets Features.
   void add_feature(const FeaturePtr& feature) {
     AddComplexChild(feature, &feature_array_);
   }
 
-  const size_t get_feature_array_size() const {
+  size_t get_feature_array_size() const {
     return feature_array_.size();
   }
 
   const FeaturePtr& get_feature_array_at(size_t index) const {
     return feature_array_[index];
   }
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
 
  private:
   friend class KmlFactory;
@@ -125,23 +137,26 @@ class Delete : public UpdateOperation {
 class Change : public UpdateOperation {
  public:
   virtual ~Change();
-  virtual KmlDomType Type() const { return Type_Change; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_Change || Element::IsA(type);
-  }
+  virtual KmlDomType Type() const { return ElementType(); }
+  virtual bool IsA(KmlDomType type) const { return type == ElementType(); }
+  static KmlDomType ElementType() { return Type_Change; }
 
   // Change targets Objects.
   void add_object(const ObjectPtr& object) {
     AddComplexChild(object, &object_array_);
   }
 
-  const size_t get_object_array_size() const {
+  size_t get_object_array_size() const {
     return object_array_.size();
   }
 
   const ObjectPtr& get_object_array_at(size_t index) const {
     return object_array_[index];
   }
+
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
 
  private:
   friend class KmlFactory;
@@ -155,18 +170,14 @@ class Change : public UpdateOperation {
 };
 
 // <Update>
-class Update : public Element {
+class Update : public BasicElement<Type_Update> {
  public:
   virtual ~Update();
-  virtual KmlDomType Type() const { return Type_Update; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_Update || Element::IsA(type);
-  }
 
   // <targetHref>
-  const std::string& get_targethref() const { return targethref_; }
+  const string& get_targethref() const { return targethref_; }
   bool has_targethref() const { return has_targethref_; }
-  void set_targethref(const std::string& targethref) {
+  void set_targethref(const string& targethref) {
     targethref_ = targethref;
     has_targethref_ = true;
   }
@@ -180,7 +191,7 @@ class Update : public Element {
     AddComplexChild(updateoperation, &updateoperation_array_);
   }
 
-  const size_t get_updateoperation_array_size() const {
+  size_t get_updateoperation_array_size() const {
     return updateoperation_array_.size();
   }
 
@@ -189,6 +200,10 @@ class Update : public Element {
     return updateoperation_array_[index];
   }
 
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
+
  private:
   friend class KmlFactory;
   Update();
@@ -196,20 +211,16 @@ class Update : public Element {
   virtual void AddElement(const ElementPtr& element);
   friend class Serializer;
   virtual void Serialize(Serializer& serializer) const;
-  std::string targethref_;
+  string targethref_;
   bool has_targethref_;
   std::vector<UpdateOperationPtr> updateoperation_array_;
   LIBKML_DISALLOW_EVIL_CONSTRUCTORS(Update);
 };
 
 // <NetworkLinkControl>
-class NetworkLinkControl : public Element {
+class NetworkLinkControl : public BasicElement<Type_NetworkLinkControl> {
  public:
   virtual ~NetworkLinkControl();
-  virtual KmlDomType Type() const { return Type_NetworkLinkControl; }
-  virtual bool IsA(KmlDomType type) const {
-    return type == Type_NetworkLinkControl || Element::IsA(type);
-  }
 
   // <minRefreshPeriod>
   double get_minrefreshperiod() const { return minrefreshperiod_; }
@@ -236,9 +247,9 @@ class NetworkLinkControl : public Element {
   }
 
   // <cookie>
-  const std::string& get_cookie() const { return cookie_; }
+  const string& get_cookie() const { return cookie_; }
   bool has_cookie() const { return has_cookie_; }
-  void set_cookie(const std::string& cookie) {
+  void set_cookie(const string& cookie) {
     cookie_ = cookie;
     has_cookie_ = true;
   }
@@ -248,9 +259,9 @@ class NetworkLinkControl : public Element {
   }
 
   // <message>
-  const std::string& get_message() const { return message_; }
+  const string& get_message() const { return message_; }
   bool has_message() const { return has_message_; }
-  void set_message(const std::string& message) {
+  void set_message(const string& message) {
     message_ = message;
     has_message_ = true;
   }
@@ -260,9 +271,9 @@ class NetworkLinkControl : public Element {
   }
 
   // <linkName>
-  const std::string& get_linkname() const { return linkname_; }
+  const string& get_linkname() const { return linkname_; }
   bool has_linkname() const { return has_linkname_; }
-  void set_linkname(const std::string& linkname) {
+  void set_linkname(const string& linkname) {
     linkname_ = linkname;
     has_linkname_ = true;
   }
@@ -272,9 +283,9 @@ class NetworkLinkControl : public Element {
   }
 
   // <linkDescription>
-  const std::string& get_linkdescription() const { return linkdescription_; }
+  const string& get_linkdescription() const { return linkdescription_; }
   bool has_linkdescription() const { return has_linkdescription_; }
-  void set_linkdescription(const std::string& linkdescription) {
+  void set_linkdescription(const string& linkdescription) {
     linkdescription_ = linkdescription;
     has_linkdescription_ = true;
   }
@@ -294,9 +305,9 @@ class NetworkLinkControl : public Element {
   }
 
   // <expires>
-  const std::string& get_expires() const { return expires_; }
+  const string& get_expires() const { return expires_; }
   bool has_expires() const { return has_expires_; }
-  void set_expires(const std::string& expires) {
+  void set_expires(const string& expires) {
     expires_ = expires;
     has_expires_ = true;
   }
@@ -325,6 +336,10 @@ class NetworkLinkControl : public Element {
     set_abstractview(NULL);
   }
 
+  // Visitor API methods, see visitor.h.
+  virtual void Accept(Visitor* visitor);
+  virtual void AcceptChildren(VisitorDriver* driver);
+
  private:
   friend class KmlFactory;
   NetworkLinkControl();
@@ -336,16 +351,16 @@ class NetworkLinkControl : public Element {
   bool has_minrefreshperiod_;
   double maxsessionlength_;
   bool has_maxsessionlength_;
-  std::string cookie_;
+  string cookie_;
   bool has_cookie_;
-  std::string message_;
+  string message_;
   bool has_message_;
-  std::string linkname_;
+  string linkname_;
   bool has_linkname_;
-  std::string linkdescription_;
+  string linkdescription_;
   bool has_linkdescription_;
   LinkSnippetPtr linksnippet_;
-  std::string expires_;
+  string expires_;
   bool has_expires_;
   UpdatePtr update_;
   AbstractViewPtr abstractview_;

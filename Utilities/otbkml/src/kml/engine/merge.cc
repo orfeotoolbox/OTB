@@ -27,14 +27,15 @@
 // MergeElement() functions and their internal helper classes and functions.
 
 #include "kml/engine/merge.h"
-#include <string>
 #include <vector>
 #include "kml/dom.h"
 #include "kml/dom/serializer.h"
 #include "kml/engine/clone.h"
 #include "kml/engine/engine_types.h"
+#include "kml/engine/find.h"
 
-using kmldom::Attributes;
+using kmlbase::Attributes;
+using kmldom::CoordinatesPtr;
 using kmldom::ElementPtr;
 using kmldom::KmlDomType;
 using kmldom::KmlFactory;
@@ -54,44 +55,52 @@ class FieldMerger : public Serializer {
 
   // Set the attributes in the target.
   virtual void BeginById(int type_id, const Attributes& attributes) {
-    target_->ParseAttributes(attributes);
+    // ParseAttributes reflects the state of the passed attributes, so we
+    // preserve the state of the element's attributes here ourselves and into
+    // our private copy of the state merge the passed attributes and then
+    // pass the result to ParseAttributes which sets/clears each attribute to
+    // exactly reflect the state we create here.
+    Attributes target_attributes;
+    target_->SerializeAttributes(&target_attributes);
+    target_attributes.MergeAttributes(attributes);
+    target_->ParseAttributes(target_attributes.Clone());
+    // Merge on <coordinates> is consistent with setting any other simple
+    // element: replace the content.  Since <coordinates> is not implemented
+    // as a simple element and since the only "set" operations on <coordinates>
+    // are add (append) we must first clear the <coordinates>.
+    if (CoordinatesPtr coordinates = AsCoordinates(target_)) {
+      coordinates->Clear();
+    }
   }
 
   // The default implementation recurses on complex children.  FieldMerger is
-  // only interested in the immediate simple children of the serialized element   // so its implementation is empty to prevent recursing on complex children.
+  // only interested in the immediate simple children of the serialized element
+  // so its implementation is empty to prevent recursing on complex children.
   virtual void SaveElement(const ElementPtr& element) {
   }
 
+  // Save a lon,lat,alt tuple as appears within <coordinates>.
+  virtual void SaveVec3(const kmlbase::Vec3& vec3) {
+    if (CoordinatesPtr coordinates = AsCoordinates(target_)) {
+      coordinates->add_vec3(vec3);
+    }
+  }
+
   // This sets the given field in the target.
-  virtual void SaveStringFieldById(int type_id, std::string value) {
+  virtual void SaveStringFieldById(int type_id, string value) {
     KmlDomType id = static_cast<KmlDomType>(type_id);
     ElementPtr field = KmlFactory::GetFactory()->CreateFieldById(id);
     field->set_char_data(value);
     target_->AddElement(field);
   }
 
+  // Serializer::SaveColor() is called to save all Color32 values.
+  virtual void SaveColor(int type_id, const kmlbase::Color32& color) {
+    SaveFieldById(type_id, color.to_string_abgr());
+  }
+
  private:
   ElementPtr target_;
-};
-
-// This class is a special "Serializer" which gathers a list of pointers to
-// the complex element children of a given parent element.  This is
-// non-destructive with respect to all elements in involved.
-class ComplexElementGetter : public Serializer {
- public:
-  ComplexElementGetter(ElementVector* element_vector)
-    : element_vector_(element_vector) {}
-
-  virtual ~ComplexElementGetter() {}
-
-  // This is the only method of interest for this use of Serialize.
-  // The parent's Serialize calls SaveElement on each complex child.
-  virtual void SaveElement(const ElementPtr& element) {
-    element_vector_->push_back(element);
-    // Do not call Serializer::SaveElement() to not recurse.
-  }
- private:
-  ElementVector* element_vector_;
 };
 
 // This is the implementation of the public API function to merge the
@@ -107,14 +116,6 @@ void MergeFields(const ElementPtr& source, ElementPtr target) {
   source->Serialize(field_merger);
 }
 
-// This is an internal helper function which uses the ComplexElementGetter
-// to gather the complex element children of element.
-static void GetComplexElements(const ElementPtr& element,
-                               ElementVector* element_vector) {
-  ComplexElementGetter complex_element_lister(element_vector);
-  element->Serialize(complex_element_lister);
-}
-
 // This function sets all target simple element ("fields") and all complex
 // element children to values found in the source.  This form of merge
 // behavior is central to "style merging".
@@ -126,9 +127,9 @@ void MergeElements(const ElementPtr& source, ElementPtr target) {
   // Get the pointers to the immediate complex element children of the source
   // and target element.
   ElementVector source_children;
-  GetComplexElements(source, &source_children);
+  GetChildElements(source, false, &source_children);
   ElementVector target_children;
-  GetComplexElements(target, &target_children);
+  GetChildElements(target, false, &target_children);
 
   // Iterate through the source children looking for a match in the target.
   // TODO: walk through both lists taking advantage of both being in

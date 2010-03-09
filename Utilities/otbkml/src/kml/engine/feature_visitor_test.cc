@@ -29,7 +29,7 @@
 #include "kml/engine/feature_visitor.h"
 #include <vector>
 #include "kml/dom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 using kmldom::DocumentPtr;
 using kmldom::FeaturePtr;
@@ -41,19 +41,9 @@ using kmldom::PointPtr;
 
 namespace kmlengine {
 
-class FeatureVisitorTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(FeatureVisitorTest);
-  CPPUNIT_TEST(TestGetRootFeature);
-  CPPUNIT_TEST(TestVisitFeatureHierarchy);
-  CPPUNIT_TEST_SUITE_END();
-
+class FeatureVisitorTest : public testing::Test {
  protected:
-  void TestGetRootFeature();
-  void TestVisitFeatureHierarchy();
-
- public:
-  // Called before each test.
-  void setUp() {
+  virtual void SetUp() {
     factory_ = KmlFactory::GetFactory();
     document_ = factory_->CreateDocument();
     folder_ = factory_->CreateFolder();
@@ -62,12 +52,6 @@ class FeatureVisitorTest : public CPPUNIT_NS::TestFixture {
     point_ = factory_->CreatePoint();
   }
 
-  // Called after each test.
-  void tearDown() {
-    // Nothing to tear down, all fields are values.
-  }
-
- private:
   KmlFactory* factory_;
   DocumentPtr document_;
   FolderPtr folder_;
@@ -75,8 +59,6 @@ class FeatureVisitorTest : public CPPUNIT_NS::TestFixture {
   PlacemarkPtr placemark_;
   PointPtr point_;
 };
-
-CPPUNIT_TEST_SUITE_REGISTRATION(FeatureVisitorTest);
 
 typedef std::vector<FeaturePtr> feature_vector_t;
 
@@ -93,24 +75,24 @@ class TestFeatureVisitor : public FeatureVisitor {
   feature_vector_t* feature_vector_;
 };
 
-void FeatureVisitorTest::TestGetRootFeature() {
+TEST_F(FeatureVisitorTest, TestGetRootFeature) {
   // Verify NULL is properly returned for non-kml and non-Feature args.
-  CPPUNIT_ASSERT(!GetRootFeature(NULL));
-  CPPUNIT_ASSERT(!GetRootFeature(point_));
+  ASSERT_FALSE(GetRootFeature(NULL));
+  ASSERT_FALSE(GetRootFeature(point_));
 
   // Verify NULL is returned for an empty kml element.
-  CPPUNIT_ASSERT(!GetRootFeature(kml_));
+  ASSERT_FALSE(GetRootFeature(kml_));
 
   // Verify the Placemark is found as the root feature.
   kml_->set_feature(placemark_);
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Placemark, GetRootFeature(kml_)->Type());
+  ASSERT_EQ(kmldom::Type_Placemark, GetRootFeature(kml_)->Type());
 
   // Verify the Document is found as the root feature.
   kml_->set_feature(document_);
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Document, GetRootFeature(kml_)->Type());
+  ASSERT_EQ(kmldom::Type_Document, GetRootFeature(kml_)->Type());
 }
 
-void FeatureVisitorTest::TestVisitFeatureHierarchy() {
+TEST_F(FeatureVisitorTest, TestVisitFeatureHierarchy) {
   // Create a Feature hierachy with both Features, non-Feature complex elements
   // and simple elements.
   placemark_->set_geometry(point_);  // Yes, this is not a Feature.
@@ -133,22 +115,25 @@ void FeatureVisitorTest::TestVisitFeatureHierarchy() {
   VisitFeatureHierarchy(document_, test_feature_visitor);
 
   // Verify all Features were visited in the expected order.
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), feature_vector.size());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Document, feature_vector[0]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Folder, feature_vector[1]->Type());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Placemark, feature_vector[2]->Type());
+  ASSERT_EQ(static_cast<size_t>(3), feature_vector.size());
+  ASSERT_EQ(kmldom::Type_Document, feature_vector[0]->Type());
+  ASSERT_EQ(kmldom::Type_Folder, feature_vector[1]->Type());
+  ASSERT_EQ(kmldom::Type_Placemark, feature_vector[2]->Type());
 
   // Verify that nothing is properly found when passed NULL.
   feature_vector.clear();
   VisitFeatureHierarchy(NULL, test_feature_visitor);
-  CPPUNIT_ASSERT(feature_vector.empty());
+  ASSERT_TRUE(feature_vector.empty());
 
   // Verify that only 1 Feature is found when passed a non-Container.
   VisitFeatureHierarchy(placemark_, test_feature_visitor);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), feature_vector.size());
-  CPPUNIT_ASSERT_EQUAL(kmldom::Type_Placemark, feature_vector[0]->Type());
+  ASSERT_EQ(static_cast<size_t>(1), feature_vector.size());
+  ASSERT_EQ(kmldom::Type_Placemark, feature_vector[0]->Type());
 }
 
 }  // end namespace kmlengine
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -26,10 +26,8 @@
 #include "kml/base/time_util.h"
 #include <cstddef>  // NULL
 #ifdef WIN32
-#include <windows.h>
-// OTB Modifications (bug reported on libkml google issues
-//#include <winsock2.h>
-#include <winsock.h>
+#include <winsock2.h>  // This header MUST come before windows.h. See
+#include <windows.h>   // http://code.google.com/p/libkml/issues/detail?id=31
 #include <time.h>
 #else
 #include <sys/time.h>

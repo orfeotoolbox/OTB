@@ -1,8 +1,0 @@
-<Style>
-  <ListStyle>
-    <listItemType>radioFolder</listItemType>
-    <ItemIcon>
-      <href>http://maps.google.com/mapfiles/kml/shapes/rail.png</href>
-    </ItemIcon>
-  </ListStyle>
-</Style>

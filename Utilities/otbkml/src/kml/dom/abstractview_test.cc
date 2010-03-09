@@ -26,89 +26,77 @@
 // This file contains the unit tests for the LookAt and Camera elements.
 
 #include "kml/dom/abstractview.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
+#include "kml/dom/kml_cast.h"
 #include "kml/dom/kml_factory.h"
-#include "kml/dom/kml_ptr.h"
+#include "kml/dom/kml_funcs.h"
 
 namespace kmldom {
 
-class LookAtTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(LookAtTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class LookAtTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     lookat_ = KmlFactory::GetFactory()->CreateLookAt();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   LookAtPtr lookat_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(LookAtTest);
-
-void LookAtTest::TestType() {
-  CPPUNIT_ASSERT(Type_LookAt == lookat_->Type());
-  CPPUNIT_ASSERT(true == lookat_->IsA(Type_LookAt));
-  CPPUNIT_ASSERT(true == lookat_->IsA(Type_AbstractView));
-  CPPUNIT_ASSERT(true == lookat_->IsA(Type_Object));
+TEST_F(LookAtTest, TestType) {
+  ASSERT_EQ(Type_LookAt, lookat_->Type());
+  ASSERT_TRUE(lookat_->IsA(Type_LookAt));
+  ASSERT_TRUE(lookat_->IsA(Type_AbstractView));
+  ASSERT_TRUE(lookat_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void LookAtTest::TestDefaults() {
-  CPPUNIT_ASSERT(0.0 == lookat_->get_longitude());
-  CPPUNIT_ASSERT(false == lookat_->has_longitude());
-  CPPUNIT_ASSERT(0.0 == lookat_->get_latitude());
-  CPPUNIT_ASSERT(false == lookat_->has_latitude());
-  CPPUNIT_ASSERT(0.0 == lookat_->get_altitude());
-  CPPUNIT_ASSERT(false == lookat_->has_altitude());
-  CPPUNIT_ASSERT(0.0 == lookat_->get_heading());
-  CPPUNIT_ASSERT(false == lookat_->has_heading());
-  CPPUNIT_ASSERT(0.0 == lookat_->get_tilt());
-  CPPUNIT_ASSERT(false == lookat_->has_tilt());
-  CPPUNIT_ASSERT(0.0 == lookat_->get_range());
-  CPPUNIT_ASSERT(false == lookat_->has_range());
-  CPPUNIT_ASSERT(ALTITUDEMODE_CLAMPTOGROUND == lookat_->get_altitudemode());
-  CPPUNIT_ASSERT(false == lookat_->has_altitudemode());
+TEST_F(LookAtTest, TestDefaults) {
+  ASSERT_TRUE(NULL == lookat_->get_gx_timeprimitive());
+  ASSERT_FALSE(lookat_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_longitude());
+  ASSERT_FALSE(lookat_->has_longitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_latitude());
+  ASSERT_FALSE(lookat_->has_latitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_altitude());
+  ASSERT_FALSE(lookat_->has_altitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_heading());
+  ASSERT_FALSE(lookat_->has_heading());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_tilt());
+  ASSERT_FALSE(lookat_->has_tilt());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_range());
+  ASSERT_FALSE(lookat_->has_range());
+  ASSERT_EQ(ALTITUDEMODE_CLAMPTOGROUND, lookat_->get_altitudemode());
+  ASSERT_FALSE(lookat_->has_altitudemode());
+  ASSERT_EQ(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR, lookat_->get_gx_altitudemode());
+  ASSERT_FALSE(lookat_->has_gx_altitudemode());
 }
 
 // Verify setting default makes has_xxx() true:
-void LookAtTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(LookAtTest, TestSetToDefaultValues) {
+  lookat_->set_gx_timeprimitive(lookat_->get_gx_timeprimitive());
+  ASSERT_FALSE(lookat_->has_gx_timeprimitive());
   lookat_->set_longitude(lookat_->get_longitude());
-  CPPUNIT_ASSERT(true == lookat_->has_longitude());
+  ASSERT_TRUE(lookat_->has_longitude());
   lookat_->set_latitude(lookat_->get_latitude());
-  CPPUNIT_ASSERT(true == lookat_->has_latitude());
+  ASSERT_TRUE(lookat_->has_latitude());
   lookat_->set_altitude(lookat_->get_altitude());
-  CPPUNIT_ASSERT(true == lookat_->has_altitude());
+  ASSERT_TRUE(lookat_->has_altitude());
   lookat_->set_heading(lookat_->get_heading());
-  CPPUNIT_ASSERT(true == lookat_->has_heading());
+  ASSERT_TRUE(lookat_->has_heading());
   lookat_->set_tilt(lookat_->get_tilt());
-  CPPUNIT_ASSERT(true == lookat_->has_tilt());
+  ASSERT_TRUE(lookat_->has_tilt());
   lookat_->set_range(lookat_->get_range());
-  CPPUNIT_ASSERT(true == lookat_->has_range());
+  ASSERT_TRUE(lookat_->has_range());
   lookat_->set_altitudemode(lookat_->get_altitudemode());
-  CPPUNIT_ASSERT(true == lookat_->has_altitudemode());
+  ASSERT_TRUE(lookat_->has_altitudemode());
+  lookat_->set_gx_altitudemode(lookat_->get_gx_altitudemode());
+  ASSERT_TRUE(lookat_->has_gx_altitudemode());
 }
 
 // Verify set, get, has, clear:
-void LookAtTest::TestSetGetHasClear() {
+TEST_F(LookAtTest, TestSetGetHasClear) {
   // Non-default values:
+  GxTimeSpanPtr gx_timespan = KmlFactory::GetFactory()->CreateGxTimeSpan();
   double longitude = 1.0;
   double latitude = 2.0;
   double altitude = 3.0;
@@ -116,8 +104,10 @@ void LookAtTest::TestSetGetHasClear() {
   double tilt = 5.0;
   double range = 6.0;
   AltitudeModeEnum altitudemode = ALTITUDEMODE_ABSOLUTE;
+  GxAltitudeModeEnum gx_altitudemode = GX_ALTITUDEMODE_RELATIVETOSEAFLOOR;
 
   // Set all fields:
+  lookat_->set_gx_timeprimitive(gx_timespan);
   lookat_->set_longitude(longitude);
   lookat_->set_latitude(latitude);
   lookat_->set_altitude(altitude);
@@ -125,24 +115,30 @@ void LookAtTest::TestSetGetHasClear() {
   lookat_->set_tilt(tilt);
   lookat_->set_range(range);
   lookat_->set_altitudemode(altitudemode);
+  lookat_->set_gx_altitudemode(gx_altitudemode);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(longitude == lookat_->get_longitude());
-  CPPUNIT_ASSERT(true == lookat_->has_longitude());
-  CPPUNIT_ASSERT(latitude == lookat_->get_latitude());
-  CPPUNIT_ASSERT(true == lookat_->has_latitude());
-  CPPUNIT_ASSERT(altitude == lookat_->get_altitude());
-  CPPUNIT_ASSERT(true == lookat_->has_altitude());
-  CPPUNIT_ASSERT(heading == lookat_->get_heading());
-  CPPUNIT_ASSERT(true == lookat_->has_heading());
-  CPPUNIT_ASSERT(tilt == lookat_->get_tilt());
-  CPPUNIT_ASSERT(true == lookat_->has_tilt());
-  CPPUNIT_ASSERT(range == lookat_->get_range());
-  CPPUNIT_ASSERT(true == lookat_->has_range());
-  CPPUNIT_ASSERT(altitudemode == lookat_->get_altitudemode());
-  CPPUNIT_ASSERT(true == lookat_->has_altitudemode());
+  ASSERT_EQ(gx_timespan, lookat_->get_gx_timeprimitive());
+  ASSERT_TRUE(lookat_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(longitude, lookat_->get_longitude());
+  ASSERT_TRUE(lookat_->has_longitude());
+  ASSERT_DOUBLE_EQ(latitude, lookat_->get_latitude());
+  ASSERT_TRUE(lookat_->has_latitude());
+  ASSERT_DOUBLE_EQ(altitude, lookat_->get_altitude());
+  ASSERT_TRUE(lookat_->has_altitude());
+  ASSERT_DOUBLE_EQ(heading, lookat_->get_heading());
+  ASSERT_TRUE(lookat_->has_heading());
+  ASSERT_DOUBLE_EQ(tilt, lookat_->get_tilt());
+  ASSERT_TRUE(lookat_->has_tilt());
+  ASSERT_DOUBLE_EQ(range, lookat_->get_range());
+  ASSERT_TRUE(lookat_->has_range());
+  ASSERT_DOUBLE_EQ(altitudemode, lookat_->get_altitudemode());
+  ASSERT_TRUE(lookat_->has_altitudemode());
+  ASSERT_DOUBLE_EQ(gx_altitudemode, lookat_->get_gx_altitudemode());
+  ASSERT_TRUE(lookat_->has_gx_altitudemode());
 
   // Clear all fields:
+  lookat_->clear_gx_timeprimitive();
   lookat_->clear_longitude();
   lookat_->clear_latitude();
   lookat_->clear_altitude();
@@ -150,88 +146,93 @@ void LookAtTest::TestSetGetHasClear() {
   lookat_->clear_tilt();
   lookat_->clear_range();
   lookat_->clear_altitudemode();
+  lookat_->clear_gx_altitudemode();
 
-  // Verify now in default state:
-  TestDefaults();
+  // Verify default state:
+  ASSERT_TRUE(NULL == lookat_->get_gx_timeprimitive());
+  ASSERT_FALSE(lookat_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_longitude());
+  ASSERT_FALSE(lookat_->has_longitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_latitude());
+  ASSERT_FALSE(lookat_->has_latitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_altitude());
+  ASSERT_FALSE(lookat_->has_altitude());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_heading());
+  ASSERT_FALSE(lookat_->has_heading());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_tilt());
+  ASSERT_FALSE(lookat_->has_tilt());
+  ASSERT_DOUBLE_EQ(0.0, lookat_->get_range());
+  ASSERT_FALSE(lookat_->has_range());
+  ASSERT_EQ(ALTITUDEMODE_CLAMPTOGROUND, lookat_->get_altitudemode());
+  ASSERT_FALSE(lookat_->has_altitudemode());
+  ASSERT_EQ(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR, lookat_->get_gx_altitudemode());
+  ASSERT_FALSE(lookat_->has_gx_altitudemode());
 }
 
-class CameraTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(CameraTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  // Called before each test.
-  void setUp() {
+class CameraTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     camera_ = KmlFactory::GetFactory()->CreateCamera();
   }
 
-  // Called after each test.
-  void tearDown() {
-  }
-
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   CameraPtr camera_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(CameraTest);
-
-void CameraTest::TestType() {
-  CPPUNIT_ASSERT(Type_Camera == camera_->Type());
-  CPPUNIT_ASSERT(true == camera_->IsA(Type_Camera));
-  CPPUNIT_ASSERT(true == camera_->IsA(Type_AbstractView));
-  CPPUNIT_ASSERT(true == camera_->IsA(Type_Object));
+TEST_F(CameraTest, TestType) {
+  ASSERT_EQ(Type_Camera, camera_->Type());
+  ASSERT_TRUE(camera_->IsA(Type_Camera));
+  ASSERT_TRUE(camera_->IsA(Type_AbstractView));
+  ASSERT_TRUE(camera_->IsA(Type_Object));
 }
 
 // Verify proper defaults:
-void CameraTest::TestDefaults() {
-  CPPUNIT_ASSERT(0.0 == camera_->get_longitude());
-  CPPUNIT_ASSERT(false == camera_->has_longitude());
-  CPPUNIT_ASSERT(0.0 == camera_->get_latitude());
-  CPPUNIT_ASSERT(false == camera_->has_latitude());
-  CPPUNIT_ASSERT(0.0 == camera_->get_altitude());
-  CPPUNIT_ASSERT(false == camera_->has_altitude());
-  CPPUNIT_ASSERT(0.0 == camera_->get_heading());
-  CPPUNIT_ASSERT(false == camera_->has_heading());
-  CPPUNIT_ASSERT(0.0 == camera_->get_tilt());
-  CPPUNIT_ASSERT(false == camera_->has_tilt());
-  CPPUNIT_ASSERT(0.0 == camera_->get_roll());
-  CPPUNIT_ASSERT(false == camera_->has_roll());
-  CPPUNIT_ASSERT(ALTITUDEMODE_CLAMPTOGROUND == camera_->get_altitudemode());
-  CPPUNIT_ASSERT(false == camera_->has_altitudemode());
+TEST_F(CameraTest, TestDefaults) {
+  ASSERT_TRUE(NULL == camera_->get_gx_timeprimitive());
+  ASSERT_FALSE(camera_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_longitude());
+  ASSERT_FALSE(camera_->has_longitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_latitude());
+  ASSERT_FALSE(camera_->has_latitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_altitude());
+  ASSERT_FALSE(camera_->has_altitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_heading());
+  ASSERT_FALSE(camera_->has_heading());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_tilt());
+  ASSERT_FALSE(camera_->has_tilt());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_roll());
+  ASSERT_FALSE(camera_->has_roll());
+  ASSERT_EQ(ALTITUDEMODE_CLAMPTOGROUND, camera_->get_altitudemode());
+  ASSERT_FALSE(camera_->has_altitudemode());
+  ASSERT_EQ(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR, camera_->get_gx_altitudemode());
+  ASSERT_FALSE(camera_->has_gx_altitudemode());
 }
 
 // Verify setting default makes has_xxx() true:
-void CameraTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(CameraTest, TestSetToDefaultValues) {
+  camera_->set_gx_timeprimitive(camera_->get_gx_timeprimitive());
+  ASSERT_FALSE(camera_->has_gx_timeprimitive());
   camera_->set_longitude(camera_->get_longitude());
-  CPPUNIT_ASSERT(true == camera_->has_longitude());
+  ASSERT_TRUE(camera_->has_longitude());
   camera_->set_latitude(camera_->get_latitude());
-  CPPUNIT_ASSERT(true == camera_->has_latitude());
+  ASSERT_TRUE(camera_->has_latitude());
   camera_->set_altitude(camera_->get_altitude());
-  CPPUNIT_ASSERT(true == camera_->has_altitude());
+  ASSERT_TRUE(camera_->has_altitude());
   camera_->set_heading(camera_->get_heading());
-  CPPUNIT_ASSERT(true == camera_->has_heading());
+  ASSERT_TRUE(camera_->has_heading());
   camera_->set_tilt(camera_->get_tilt());
-  CPPUNIT_ASSERT(true == camera_->has_tilt());
+  ASSERT_TRUE(camera_->has_tilt());
   camera_->set_roll(camera_->get_roll());
-  CPPUNIT_ASSERT(true == camera_->has_roll());
+  ASSERT_TRUE(camera_->has_roll());
   camera_->set_altitudemode(camera_->get_altitudemode());
-  CPPUNIT_ASSERT(true == camera_->has_altitudemode());
+  ASSERT_TRUE(camera_->has_altitudemode());
+  camera_->set_gx_altitudemode(camera_->get_gx_altitudemode());
+  ASSERT_TRUE(camera_->has_gx_altitudemode());
 }
 
 // Verify set, get, has, clear:
-void CameraTest::TestSetGetHasClear() {
+TEST_F(CameraTest, TestSetGetHasClear) {
   // Non-default values:
+  GxTimeStampPtr gx_timestamp = KmlFactory::GetFactory()->CreateGxTimeStamp();
   double longitude = 1.0;
   double latitude = 2.0;
   double altitude = 3.0;
@@ -239,8 +240,10 @@ void CameraTest::TestSetGetHasClear() {
   double tilt = 5.0;
   double roll = 6.0;
   AltitudeModeEnum altitudemode = ALTITUDEMODE_ABSOLUTE;
+  GxAltitudeModeEnum gx_altitudemode = GX_ALTITUDEMODE_RELATIVETOSEAFLOOR;
 
   // Set all fields:
+  camera_->set_gx_timeprimitive(gx_timestamp);
   camera_->set_longitude(longitude);
   camera_->set_latitude(latitude);
   camera_->set_altitude(altitude);
@@ -248,24 +251,30 @@ void CameraTest::TestSetGetHasClear() {
   camera_->set_tilt(tilt);
   camera_->set_roll(roll);
   camera_->set_altitudemode(altitudemode);
+  camera_->set_gx_altitudemode(gx_altitudemode);
 
   // Verify getter and has_xxx():
-  CPPUNIT_ASSERT(longitude == camera_->get_longitude());
-  CPPUNIT_ASSERT(true == camera_->has_longitude());
-  CPPUNIT_ASSERT(latitude == camera_->get_latitude());
-  CPPUNIT_ASSERT(true == camera_->has_latitude());
-  CPPUNIT_ASSERT(altitude == camera_->get_altitude());
-  CPPUNIT_ASSERT(true == camera_->has_altitude());
-  CPPUNIT_ASSERT(heading == camera_->get_heading());
-  CPPUNIT_ASSERT(true == camera_->has_heading());
-  CPPUNIT_ASSERT(tilt == camera_->get_tilt());
-  CPPUNIT_ASSERT(true == camera_->has_tilt());
-  CPPUNIT_ASSERT(roll == camera_->get_roll());
-  CPPUNIT_ASSERT(true == camera_->has_roll());
-  CPPUNIT_ASSERT(altitudemode == camera_->get_altitudemode());
-  CPPUNIT_ASSERT(true == camera_->has_altitudemode());
+  ASSERT_EQ(gx_timestamp, camera_->get_gx_timeprimitive());
+  ASSERT_TRUE(camera_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(longitude, camera_->get_longitude());
+  ASSERT_TRUE(camera_->has_longitude());
+  ASSERT_DOUBLE_EQ(latitude, camera_->get_latitude());
+  ASSERT_TRUE(camera_->has_latitude());
+  ASSERT_DOUBLE_EQ(altitude, camera_->get_altitude());
+  ASSERT_TRUE(camera_->has_altitude());
+  ASSERT_DOUBLE_EQ(heading, camera_->get_heading());
+  ASSERT_TRUE(camera_->has_heading());
+  ASSERT_DOUBLE_EQ(tilt, camera_->get_tilt());
+  ASSERT_TRUE(camera_->has_tilt());
+  ASSERT_DOUBLE_EQ(roll, camera_->get_roll());
+  ASSERT_TRUE(camera_->has_roll());
+  ASSERT_DOUBLE_EQ(altitudemode, camera_->get_altitudemode());
+  ASSERT_TRUE(camera_->has_altitudemode());
+  ASSERT_DOUBLE_EQ(gx_altitudemode, camera_->get_gx_altitudemode());
+  ASSERT_TRUE(camera_->has_gx_altitudemode());
 
   // Clear all fields:
+  camera_->clear_gx_timeprimitive();
   camera_->clear_longitude();
   camera_->clear_latitude();
   camera_->clear_altitude();
@@ -273,11 +282,97 @@ void CameraTest::TestSetGetHasClear() {
   camera_->clear_tilt();
   camera_->clear_roll();
   camera_->clear_altitudemode();
+  camera_->clear_gx_altitudemode();
 
-  // Verify now in default state:
-  TestDefaults();
+  // Verify default state.
+  ASSERT_TRUE(NULL == camera_->get_gx_timeprimitive());
+  ASSERT_FALSE(camera_->has_gx_timeprimitive());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_longitude());
+  ASSERT_FALSE(camera_->has_longitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_latitude());
+  ASSERT_FALSE(camera_->has_latitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_altitude());
+  ASSERT_FALSE(camera_->has_altitude());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_heading());
+  ASSERT_FALSE(camera_->has_heading());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_tilt());
+  ASSERT_FALSE(camera_->has_tilt());
+  ASSERT_DOUBLE_EQ(0.0, camera_->get_roll());
+  ASSERT_FALSE(camera_->has_roll());
+  ASSERT_EQ(ALTITUDEMODE_CLAMPTOGROUND, camera_->get_altitudemode());
+  ASSERT_FALSE(camera_->has_altitudemode());
+  ASSERT_EQ(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR, camera_->get_gx_altitudemode());
+  ASSERT_FALSE(camera_->has_gx_altitudemode());
+}
+
+TEST(AbstractViewTest, TestParseSerializeGxAltitudeMode) {
+  KmlFactory* factory = KmlFactory::GetFactory();
+  CameraPtr camera = factory->CreateCamera();
+  ASSERT_TRUE(camera);
+  camera->set_latitude(37.0);
+  camera->set_longitude(-122.0);
+  camera->set_gx_altitudemode(GX_ALTITUDEMODE_RELATIVETOSEAFLOOR);
+  const string kCameraExpected =
+    "<Camera>"
+    "<longitude>-122</longitude>"
+    "<latitude>37</latitude>"
+    "<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>"
+    "</Camera>";
+  ASSERT_EQ(kCameraExpected, SerializeRaw(camera));
+  ASSERT_EQ(kCameraExpected, SerializeRaw(Parse(kCameraExpected, NULL)));
+
+  LookAtPtr lookat = factory->CreateLookAt();
+  ASSERT_TRUE(lookat);
+  lookat->set_latitude(37.0);
+  lookat->set_longitude(-122.0);
+  lookat->set_gx_altitudemode(GX_ALTITUDEMODE_CLAMPTOSEAFLOOR);
+  const string kLookAtExpected =
+    "<LookAt>"
+    "<longitude>-122</longitude>"
+    "<latitude>37</latitude>"
+    "<gx:altitudeMode>clampToSeaFloor</gx:altitudeMode>"
+    "</LookAt>";
+  ASSERT_EQ(kLookAtExpected, SerializeRaw(lookat));
+  ASSERT_EQ(kLookAtExpected, SerializeRaw(Parse(kLookAtExpected, NULL)));
+}
+
+TEST(AbstractViewTest, TestGxTimePrimitives) {
+  KmlFactory* factory = KmlFactory::GetFactory();
+
+  CameraPtr camera = factory->CreateCamera();
+  ASSERT_TRUE(camera);
+  camera->set_latitude(37.0);
+  camera->set_longitude(-122.0);
+  GxTimeSpanPtr gx_timespan = factory->CreateGxTimeSpan();
+  camera->set_gx_timeprimitive(gx_timespan);
+  const string kCameraExpected =
+    "<Camera>"
+    "<gx:TimeSpan/>"
+    "<longitude>-122</longitude>"
+    "<latitude>37</latitude>"
+    "</Camera>";
+  ASSERT_EQ(kCameraExpected, SerializeRaw(camera));
+  ASSERT_EQ(kCameraExpected, SerializeRaw(Parse(kCameraExpected, NULL)));
+
+  LookAtPtr lookat = factory->CreateLookAt();
+  ASSERT_TRUE(lookat);
+  lookat->set_latitude(37.0);
+  lookat->set_longitude(-122.0);
+  GxTimeStampPtr gx_timestamp = factory->CreateGxTimeStamp();
+  lookat->set_gx_timeprimitive(gx_timestamp);
+  const string kLookAtExpected =
+    "<LookAt>"
+    "<gx:TimeStamp/>"
+    "<longitude>-122</longitude>"
+    "<latitude>37</latitude>"
+    "</LookAt>";
+  ASSERT_EQ(kLookAtExpected, SerializeRaw(lookat));
+  ASSERT_EQ(kLookAtExpected, SerializeRaw(Parse(kLookAtExpected, NULL)));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

@@ -27,10 +27,13 @@
 // children.
 
 #include "kml/dom/networklinkcontrol.h"
-#include "kml/dom/attributes.h"
+#include "kml/base/attributes.h"
+#include "kml/base/xml_namespaces.h"
 #include "kml/dom/abstractview.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/dom/serializer.h"
+
+using kmlbase::Attributes;
 
 namespace kmldom {
 
@@ -39,8 +42,14 @@ UpdateOperation::UpdateOperation() {}
 
 UpdateOperation::~UpdateOperation() {}
 
+void UpdateOperation::Accept(Visitor* visitor) {
+  visitor->VisitUpdateOperation(UpdateOperationPtr(this));
+}
+
 // <Create>
-Create::Create() {}
+Create::Create() {
+  set_xmlns(kmlbase::XMLNS_KML22);
+}
 
 Create::~Create() {}
 
@@ -56,17 +65,23 @@ void Create::AddElement(const ElementPtr& element) {
 }
 
 void Create::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
-  for (size_t i = 0; i < container_array_.size(); ++i) {
-    serializer.SaveElement(get_container_array_at(i));
-  }
-  SerializeUnknown(serializer);
-  serializer.End();
+  ElementSerializer element_serializer(*this, serializer);
+  serializer.SaveElementGroupArray(container_array_, Type_Container);
+}
+
+void Create::Accept(Visitor* visitor) {
+  visitor->VisitCreate(CreatePtr(this));
+}
+
+void Create::AcceptChildren(VisitorDriver* driver) {
+  UpdateOperation::AcceptChildren(driver);
+  Element::AcceptRepeated<ContainerPtr>(&container_array_, driver);
 }
 
 // <Delete>
-Delete::Delete() {}
+Delete::Delete() {
+  set_xmlns(kmlbase::XMLNS_KML22);
+}
 
 Delete::~Delete() {}
 
@@ -82,17 +97,23 @@ void Delete::AddElement(const ElementPtr& element) {
 }
 
 void Delete::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
-  for (size_t i = 0; i < feature_array_.size(); ++i) {
-    serializer.SaveElement(get_feature_array_at(i));
-  }
-  SerializeUnknown(serializer);
-  serializer.End();
+  ElementSerializer element_serializer(*this, serializer);
+  serializer.SaveElementGroupArray(feature_array_, Type_Feature);
+}
+
+void Delete::Accept(Visitor* visitor) {
+  visitor->VisitDelete(DeletePtr(this));
+}
+
+void Delete::AcceptChildren(VisitorDriver* driver) {
+  UpdateOperation::AcceptChildren(driver);
+  Element::AcceptRepeated<FeaturePtr>(&feature_array_, driver);
 }
 
 // <Change>
-Change::Change() {}
+Change::Change() {
+  set_xmlns(kmlbase::XMLNS_KML22);
+}
 
 Change::~Change() {}
 
@@ -108,18 +129,23 @@ void Change::AddElement(const ElementPtr& element) {
 }
 
 void Change::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
-  for (size_t i = 0; i < object_array_.size(); ++i) {
-    serializer.SaveElement(get_object_array_at(i));
-  }
-  SerializeUnknown(serializer);
-  serializer.End();
+  ElementSerializer element_serializer(*this, serializer);
+  serializer.SaveElementGroupArray(object_array_, Type_Object);
+}
+
+void Change::Accept(Visitor* visitor) {
+  visitor->VisitChange(ChangePtr(this));
+}
+
+void Change::AcceptChildren(VisitorDriver* driver) {
+  UpdateOperation::AcceptChildren(driver);
+  Element::AcceptRepeated<ObjectPtr>(&object_array_, driver);
 }
 
 // <Update>
 Update::Update()
-  : has_targethref_(false) {
+    : has_targethref_(false) {
+  set_xmlns(kmlbase::XMLNS_KML22);
 }
 
 Update::~Update() {}
@@ -148,16 +174,22 @@ void Update::AddElement(const ElementPtr& element) {
 }
 
 void Update::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   if (has_targethref()) {
     serializer.SaveFieldById(Type_targetHref, get_targethref());
   }
   for (size_t i = 0; i < updateoperation_array_.size(); ++i) {
     serializer.SaveElement(get_updateoperation_array_at(i));
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void Update::Accept(Visitor* visitor) {
+  visitor->VisitUpdate(UpdatePtr(this));
+}
+
+void Update::AcceptChildren(VisitorDriver* driver) {
+  Element::AcceptChildren(driver);
+  Element::AcceptRepeated<UpdateOperationPtr>(&updateoperation_array_, driver);
 }
 
 // <NetworkLinkControl>
@@ -174,6 +206,7 @@ NetworkLinkControl::NetworkLinkControl()
     has_expires_(false),
     update_(NULL),
     abstractview_(NULL) {
+  set_xmlns(kmlbase::XMLNS_KML22);
 }
 
 NetworkLinkControl::~NetworkLinkControl() {}
@@ -221,9 +254,7 @@ void NetworkLinkControl::AddElement(const ElementPtr& element) {
 }
 
 void NetworkLinkControl::Serialize(Serializer& serializer) const {
-  Attributes attributes;
-  Element::GetAttributes(&attributes);
-  serializer.BeginById(Type(), attributes);
+  ElementSerializer element_serializer(*this, serializer);
   if (has_minrefreshperiod_) {
     serializer.SaveFieldById(Type_minRefreshPeriod, minrefreshperiod_);
   }
@@ -252,10 +283,25 @@ void NetworkLinkControl::Serialize(Serializer& serializer) const {
     serializer.SaveElement(get_update());
   }
   if (abstractview_) {
-    serializer.SaveElement(get_abstractview());
+    serializer.SaveElementGroup(get_abstractview(), Type_AbstractView);
   }
-  SerializeUnknown(serializer);
-  serializer.End();
+}
+
+void NetworkLinkControl::Accept(Visitor* visitor) {
+  visitor->VisitNetworkLinkControl(NetworkLinkControlPtr(this));
+}
+
+void NetworkLinkControl::AcceptChildren(VisitorDriver* driver) {
+  Element::AcceptChildren(driver);
+  if (has_linksnippet()) {
+    driver->Visit(get_linksnippet());
+  }
+  if (has_update()) {
+    driver->Visit(get_update());
+  }
+  if (has_abstractview()) {
+    driver->Visit(get_abstractview());
+  }
 }
 
 }  // end namespace kmldom

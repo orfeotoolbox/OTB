@@ -29,6 +29,7 @@
 #include "kml/dom.h"
 #include "kml/dom/kml22.h"
 #include "kml/base/file.h"
+#include "kml/dom/kml_cast.h"
 
 #include "projection/ossimProjection.h"
 #include "projection/ossimMapProjection.h"

@@ -26,259 +26,181 @@
 // This file contains the unit tests for the SimpleData, SchemaData, Datai
 // and ExtendedData elements.
 
-#include <string>
 #include "kml/dom/extendeddata.h"
 #include "kml/dom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
 // <SimpleData>
-class SimpleDataTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(SimpleDataTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST(TestSerializeCdata);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class SimpleDataTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     simpledata_ = KmlFactory::GetFactory()->CreateSimpleData();
   }
-  void tearDown() {
-  }
 
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-  void TestSerializeCdata();
-
- private:
   SimpleDataPtr simpledata_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SimpleDataTest);
-
-void SimpleDataTest::TestType() {
-  CPPUNIT_ASSERT(Type_SimpleData == simpledata_->Type());
-  CPPUNIT_ASSERT(true == simpledata_->IsA(Type_SimpleData));
+TEST_F(SimpleDataTest, TestType) {
+  ASSERT_TRUE(Type_SimpleData == simpledata_->Type());
+  ASSERT_TRUE(simpledata_->IsA(Type_SimpleData));
 }
 
-void SimpleDataTest::TestDefaults() {
-  CPPUNIT_ASSERT("" == simpledata_->get_name());
-  CPPUNIT_ASSERT(false == simpledata_->has_name());
-  CPPUNIT_ASSERT("" == simpledata_->get_text());
-  CPPUNIT_ASSERT(false == simpledata_->has_text());
+TEST_F(SimpleDataTest, TestDefaults) {
+  ASSERT_EQ(string(""), simpledata_->get_name());
+  ASSERT_FALSE(simpledata_->has_name());
+  ASSERT_EQ(string(""), simpledata_->get_text());
+  ASSERT_FALSE(simpledata_->has_text());
 }
 
-void SimpleDataTest::TestSetToDefaultValues() {
-  TestDefaults();
+TEST_F(SimpleDataTest, TestSetToDefaultValues) {
   simpledata_->set_name(simpledata_->get_name());
-  CPPUNIT_ASSERT(true == simpledata_->has_name());
+  ASSERT_TRUE(simpledata_->has_name());
   simpledata_->set_text(simpledata_->get_text());
-  CPPUNIT_ASSERT(true == simpledata_->has_text());
+  ASSERT_TRUE(simpledata_->has_text());
 }
 
-void SimpleDataTest::TestSetGetHasClear() {
-  std::string name("tom");
+TEST_F(SimpleDataTest, TestSetGetHasClear) {
+  string name("tom");
   simpledata_->set_name(name);
-  CPPUNIT_ASSERT(true == simpledata_->has_name());
-  CPPUNIT_ASSERT(name == simpledata_->get_name());
+  ASSERT_TRUE(simpledata_->has_name());
+  ASSERT_TRUE(name == simpledata_->get_name());
   simpledata_->clear_name();
 
-  std::string text("dick");
+  string text("dick");
   simpledata_->set_text(text);
-  CPPUNIT_ASSERT(true == simpledata_->has_text());
-  CPPUNIT_ASSERT(text == simpledata_->get_text());
+  ASSERT_TRUE(simpledata_->has_text());
+  ASSERT_TRUE(text == simpledata_->get_text());
   simpledata_->clear_text();
 
-  TestDefaults();
 }
 
-void SimpleDataTest::TestSerializeCdata() {
+TEST_F(SimpleDataTest, TestSerializeCdata) {
   simpledata_->set_text("&");
-  CPPUNIT_ASSERT_EQUAL(std::string("<SimpleData><![CDATA[&]]></SimpleData>"),
+  ASSERT_EQ(string("<SimpleData><![CDATA[&]]></SimpleData>"),
                        SerializeRaw(simpledata_));
 
   simpledata_->set_text("a");
-  CPPUNIT_ASSERT_EQUAL(std::string("<SimpleData>a</SimpleData>"),
+  ASSERT_EQ(string("<SimpleData>a</SimpleData>"),
                        SerializeRaw(simpledata_));
 }
 
 
 // <SchemaData>
-class SchemaDataTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(SchemaDataTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestSchemaUrl);
-  CPPUNIT_TEST(TestLists);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class SchemaDataTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     schemadata_ = KmlFactory::GetFactory()->CreateSchemaData();
   }
-  void tearDown() {
-    // schemadata_'s destructor releases underlying SchemaData storage.
-  }
 
- protected:
-  void TestType();
-  void TestSchemaUrl();
-  void TestLists();
-
- private:
   SchemaDataPtr schemadata_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SchemaDataTest);
-
-void SchemaDataTest::TestType() {
-  CPPUNIT_ASSERT(Type_SchemaData == schemadata_->Type());
-  CPPUNIT_ASSERT(true == schemadata_->IsA(Type_SchemaData));
+TEST_F(SchemaDataTest, TestType) {
+  ASSERT_TRUE(Type_SchemaData == schemadata_->Type());
+  ASSERT_TRUE(schemadata_->IsA(Type_SchemaData));
 }
 
-void SchemaDataTest::TestSchemaUrl() {
-  CPPUNIT_ASSERT(false == schemadata_->has_schemaurl());
-  CPPUNIT_ASSERT("" == schemadata_->get_schemaurl());
-  std::string schemaurl("#icanhasurl");
+TEST_F(SchemaDataTest, TestSchemaUrl) {
+  ASSERT_FALSE(schemadata_->has_schemaurl());
+  ASSERT_EQ(string(""), schemadata_->get_schemaurl());
+  string schemaurl("#icanhasurl");
   schemadata_->set_schemaurl(schemaurl);
-  CPPUNIT_ASSERT(true == schemadata_->has_schemaurl());
-  CPPUNIT_ASSERT(schemaurl == schemadata_->get_schemaurl());
+  ASSERT_TRUE(schemadata_->has_schemaurl());
+  ASSERT_TRUE(schemaurl == schemadata_->get_schemaurl());
   schemadata_->clear_schemaurl();
-  CPPUNIT_ASSERT(false == schemadata_->has_schemaurl());
-  CPPUNIT_ASSERT("" == schemadata_->get_schemaurl());
+  ASSERT_FALSE(schemadata_->has_schemaurl());
+  ASSERT_EQ(string(""), schemadata_->get_schemaurl());
 }
 
-void SchemaDataTest::TestLists() {
+TEST_F(SchemaDataTest, TestLists) {
   // Vector is empty.
-  CPPUNIT_ASSERT(0 == schemadata_->get_simpledata_array_size());
+  ASSERT_EQ(static_cast<size_t>(0), schemadata_->get_simpledata_array_size());
   // Add three <SimpleData> elements:
   schemadata_->add_simpledata(KmlFactory::GetFactory()->CreateSimpleData());
   schemadata_->add_simpledata(KmlFactory::GetFactory()->CreateSimpleData());
   schemadata_->add_simpledata(KmlFactory::GetFactory()->CreateSimpleData());
   // We have three items in the array:
-  CPPUNIT_ASSERT(3 == schemadata_->get_simpledata_array_size());
+  ASSERT_EQ(static_cast<size_t>(3), schemadata_->get_simpledata_array_size());
   for (size_t i = 0; i < schemadata_->get_simpledata_array_size(); ++i) {
-    CPPUNIT_ASSERT(
-        Type_SimpleData == schemadata_->get_simpledata_array_at(i)->Type());
+    ASSERT_EQ(Type_SimpleData,schemadata_->get_simpledata_array_at(i)->Type());
   }
 }
 
 // <Data>
-class DataTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(DataTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestDefaults);
-  CPPUNIT_TEST(TestSetToDefaultValues);
-  CPPUNIT_TEST(TestSetGetHasClear);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class DataTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     data_ = KmlFactory::GetFactory()->CreateData();
   }
-  void tearDown() {
-    // data_'s destructor releases underlying Data storage.
-  }
 
- protected:
-  void TestType();
-  void TestDefaults();
-  void TestSetToDefaultValues();
-  void TestSetGetHasClear();
-
- private:
   DataPtr data_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DataTest);
-
-void DataTest::TestType() {
-  CPPUNIT_ASSERT(Type_Data == data_->Type());
-  CPPUNIT_ASSERT(true == data_->IsA(Type_Data));
+TEST_F(DataTest, TestType) {
+  ASSERT_TRUE(Type_Data == data_->Type());
+  ASSERT_TRUE(data_->IsA(Type_Data));
 }
 
-void DataTest::TestDefaults() {
-  CPPUNIT_ASSERT(false == data_->has_name());
-  CPPUNIT_ASSERT("" == data_->get_name());
-  CPPUNIT_ASSERT(false == data_->has_displayname());
-  CPPUNIT_ASSERT("" == data_->get_displayname());
-  CPPUNIT_ASSERT(false == data_->has_value());
-  CPPUNIT_ASSERT("" == data_->get_value());
+TEST_F(DataTest, TestDefaults) {
+  ASSERT_FALSE(data_->has_name());
+  ASSERT_EQ(string(""), data_->get_name());
+  ASSERT_FALSE(data_->has_displayname());
+  ASSERT_EQ(string(""), data_->get_displayname());
+  ASSERT_FALSE(data_->has_value());
+  ASSERT_EQ(string(""), data_->get_value());
 }
 
-void DataTest::TestSetToDefaultValues() {
+TEST_F(DataTest, TestSetToDefaultValues) {
   data_->set_name(data_->get_name());
-  CPPUNIT_ASSERT(true == data_->has_name());
+  ASSERT_TRUE(data_->has_name());
   data_->set_displayname(data_->get_displayname());
-  CPPUNIT_ASSERT(true == data_->has_displayname());
+  ASSERT_TRUE(data_->has_displayname());
   data_->set_value(data_->get_value());
-  CPPUNIT_ASSERT(true == data_->has_value());
+  ASSERT_TRUE(data_->has_value());
 }
 
-void DataTest::TestSetGetHasClear() {
-  std::string name("tom");
+TEST_F(DataTest, TestSetGetHasClear) {
+  string name("tom");
   data_->set_name(name);
-  CPPUNIT_ASSERT(true == data_->has_name());
-  CPPUNIT_ASSERT(name == data_->get_name());
+  ASSERT_TRUE(data_->has_name());
+  ASSERT_TRUE(name == data_->get_name());
   data_->clear_name();
 
-  std::string displayname("dick");
+  string displayname("dick");
   data_->set_displayname(displayname);
-  CPPUNIT_ASSERT(true == data_->has_displayname());
-  CPPUNIT_ASSERT(displayname == data_->get_displayname());
+  ASSERT_TRUE(data_->has_displayname());
+  ASSERT_TRUE(displayname == data_->get_displayname());
   data_->clear_displayname();
 
-  std::string value("harry");
+  string value("harry");
   data_->set_value(value);
-  CPPUNIT_ASSERT(true == data_->has_value());
-  CPPUNIT_ASSERT(value == data_->get_value());
+  ASSERT_TRUE(data_->has_value());
+  ASSERT_TRUE(value == data_->get_value());
   data_->clear_value();
 
-  TestDefaults();
 }
 
 // <ExtendedData>
-class ExtendedDataTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(ExtendedDataTest);
-  CPPUNIT_TEST(TestType);
-  CPPUNIT_TEST(TestLists);
-  CPPUNIT_TEST(TestParse);
-  CPPUNIT_TEST_SUITE_END();
-
- public:
-  void setUp() {
+class ExtendedDataTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
     extendeddata_ = KmlFactory::GetFactory()->CreateExtendedData();
   }
-  void tearDown() {
-    // extendeddata_'s destructor releases underlying ExtendedData storage.
-  }
 
- protected:
-  void TestType();
-  void TestLists();
-  void TestParse();
-
- private:
   ExtendedDataPtr extendeddata_;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ExtendedDataTest);
-
-void ExtendedDataTest::TestType() {
-  CPPUNIT_ASSERT(Type_ExtendedData == extendeddata_->Type());
-  CPPUNIT_ASSERT(true == extendeddata_->IsA(Type_ExtendedData));
+TEST_F(ExtendedDataTest, TestType) {
+  ASSERT_TRUE(Type_ExtendedData == extendeddata_->Type());
+  ASSERT_TRUE(extendeddata_->IsA(Type_ExtendedData));
 }
 
-void ExtendedDataTest::TestLists() {
+TEST_F(ExtendedDataTest, TestLists) {
   // Vectors are empty.
-  CPPUNIT_ASSERT(0 == extendeddata_->get_data_array_size());
-  CPPUNIT_ASSERT(0 == extendeddata_->get_schemadata_array_size());
+  ASSERT_EQ(static_cast<size_t>(0), extendeddata_->get_data_array_size());
+  ASSERT_EQ(static_cast<size_t>(0), extendeddata_->get_schemadata_array_size());
   // Add three <Data> and three <SchemaData> elements:
   extendeddata_->add_data(
       KmlFactory::GetFactory()->CreateData());
@@ -293,22 +215,22 @@ void ExtendedDataTest::TestLists() {
   extendeddata_->add_schemadata(
       KmlFactory::GetFactory()->CreateSchemaData());
   // We have six items in the array:
-  CPPUNIT_ASSERT(3 == extendeddata_->get_data_array_size());
-  CPPUNIT_ASSERT(3 == extendeddata_->get_schemadata_array_size());
+  ASSERT_EQ(static_cast<size_t>(3), extendeddata_->get_data_array_size());
+  ASSERT_EQ(static_cast<size_t>(3), extendeddata_->get_schemadata_array_size());
   // Assert elements can be read from vector.
-  CPPUNIT_ASSERT_EQUAL(Type_Data, extendeddata_->get_data_array_at(0)->Type());
-  CPPUNIT_ASSERT_EQUAL(Type_SchemaData,
+  ASSERT_EQ(Type_Data, extendeddata_->get_data_array_at(0)->Type());
+  ASSERT_EQ(Type_SchemaData,
                        extendeddata_->get_schemadata_array_at(0)->Type());
 }
 
-void ExtendedDataTest::TestParse() {
-  const std::string schemaurl("http://example.com/index.kml#schemaId");
-  const std::string d_name("myCoolDataName");
-  const std::string displayname("my cool displayName");
-  const std::string value("my cool value");
-  const std::string sd_name("myCoolSimpleDataName");
-  const std::string chardata("some char data");
-  const std::string kml =
+TEST_F(ExtendedDataTest, TestParse) {
+  const string schemaurl("http://example.com/index.kml#schemaId");
+  const string d_name("myCoolDataName");
+  const string displayname("my cool displayName");
+  const string value("my cool value");
+  const string sd_name("myCoolSimpleDataName");
+  const string chardata("some char data");
+  const string kml =
     "<ExtendedData>"
     "<Data name=\"" + d_name + "\">"
     "<displayName>" + displayname + "</displayName>"
@@ -318,39 +240,68 @@ void ExtendedDataTest::TestParse() {
     "<SimpleData name=\"" + sd_name + "\">" + chardata + "</SimpleData>"
     "</SchemaData>"
     "</ExtendedData>";
-  std::string errors;
+  string errors;
   ElementPtr root = Parse(kml, &errors);
-  CPPUNIT_ASSERT(root);
-  CPPUNIT_ASSERT(errors.empty());
+  ASSERT_TRUE(root);
+  ASSERT_TRUE(errors.empty());
   const ExtendedDataPtr extendeddata = AsExtendedData(root);
-  CPPUNIT_ASSERT(extendeddata);
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+  ASSERT_TRUE(extendeddata);
+  ASSERT_EQ(static_cast<size_t>(1),
                        extendeddata->get_data_array_size());
-  CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+  ASSERT_EQ(static_cast<size_t>(1),
                        extendeddata->get_schemadata_array_size());
   const DataPtr data = AsData(extendeddata->get_data_array_at(0));
-  CPPUNIT_ASSERT(data);
-  CPPUNIT_ASSERT(data->has_name());
-  CPPUNIT_ASSERT_EQUAL(d_name, data->get_name());
-  CPPUNIT_ASSERT(data->has_displayname());
-  CPPUNIT_ASSERT_EQUAL(displayname, data->get_displayname());
-  CPPUNIT_ASSERT(data->has_value());
-  CPPUNIT_ASSERT_EQUAL(value, data->get_value());
+  ASSERT_TRUE(data);
+  ASSERT_TRUE(data->has_name());
+  ASSERT_EQ(d_name, data->get_name());
+  ASSERT_TRUE(data->has_displayname());
+  ASSERT_EQ(displayname, data->get_displayname());
+  ASSERT_TRUE(data->has_value());
+  ASSERT_EQ(value, data->get_value());
   const SchemaDataPtr schemadata = AsSchemaData(
       extendeddata->get_schemadata_array_at(0));
-  CPPUNIT_ASSERT(schemadata);
-  CPPUNIT_ASSERT(schemadata->has_schemaurl());
-  CPPUNIT_ASSERT_EQUAL(schemaurl, schemadata->get_schemaurl());
-  CPPUNIT_ASSERT(1 == schemadata->get_simpledata_array_size());
+  ASSERT_TRUE(schemadata);
+  ASSERT_TRUE(schemadata->has_schemaurl());
+  ASSERT_EQ(schemaurl, schemadata->get_schemaurl());
+  ASSERT_EQ(static_cast<size_t>(1), schemadata->get_simpledata_array_size());
   const SimpleDataPtr simpledata = AsSimpleData(
       schemadata->get_simpledata_array_at(0));
-  CPPUNIT_ASSERT(simpledata);
-  CPPUNIT_ASSERT(simpledata->has_name());
-  CPPUNIT_ASSERT(simpledata->has_text());
-  CPPUNIT_ASSERT_EQUAL(sd_name, simpledata->get_name());
-  CPPUNIT_ASSERT_EQUAL(chardata, simpledata->get_text());
+  ASSERT_TRUE(simpledata);
+  ASSERT_TRUE(simpledata->has_name());
+  ASSERT_TRUE(simpledata->has_text());
+  ASSERT_EQ(sd_name, simpledata->get_name());
+  ASSERT_EQ(chardata, simpledata->get_text());
+}
+
+// <Metadata>
+class MetadataTest : public testing::Test {
+ protected:
+  virtual void SetUp() {
+    metadata_ = KmlFactory::GetFactory()->CreateMetadata();
+  }
+
+  MetadataPtr metadata_;
+};
+
+TEST_F(MetadataTest, TestType) {
+  ASSERT_TRUE(Type_Metadata == metadata_->Type());
+  ASSERT_TRUE(metadata_->IsA(Type_Metadata));
+}
+
+TEST_F(MetadataTest, TestParseSerialize) {
+  const string kMetadata(
+    "<Metadata>"
+    "<extra><special>stuff</special></extra>\n"  // TODO: remove this newline...
+    "</Metadata>");
+
+  metadata_ = AsMetadata(Parse(kMetadata, NULL));
+  ASSERT_TRUE(metadata_);
+  ASSERT_EQ(kMetadata, SerializeRaw(metadata_));
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

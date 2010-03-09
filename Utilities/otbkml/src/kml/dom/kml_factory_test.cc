@@ -25,22 +25,11 @@
 
 #include "kml/dom/kml_factory.h"
 #include "kml/dom/kmldom.h"
-#include "kml/base/unit_test.h"
+#include "gtest/gtest.h"
 
 namespace kmldom {
 
-class KmlFactoryTest : public CPPUNIT_NS::TestFixture {
-  CPPUNIT_TEST_SUITE(KmlFactoryTest);
-  CPPUNIT_TEST(TestFactory);
-  CPPUNIT_TEST_SUITE_END();
-
- protected:
-  void TestFactory();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION(KmlFactoryTest);
-
-void KmlFactoryTest::TestFactory() {
+TEST(KmlFactoryTest, TestFactory) {
   KmlFactory* factory(KmlFactory::GetFactory());
 
   // CreateElementById returns an ElementPtr which automatically
@@ -53,203 +42,269 @@ void KmlFactoryTest::TestFactory() {
   // CreateElementById() new's a Element and returns an ElementPtr
   // dereferenced here to access Type().  When this expression
   // goes out of scope ElementPtr's destructor delete's the Element.
-  CPPUNIT_ASSERT(Type_kml == factory->CreateElementById(id)->Type());
+  ASSERT_EQ(Type_kml, factory->CreateElementById(id)->Type());
 
   ElementPtr e;
   e = factory->CreateFieldById(id);
-  CPPUNIT_ASSERT(Type_kml == e->Type());
+  ASSERT_EQ(Type_kml, e->Type());
 
   // Verify all factory methods return correct type.
   e = factory->CreateAlias();
-  CPPUNIT_ASSERT(Type_Alias == e->Type());
+  ASSERT_EQ(Type_Alias, e->Type());
+
+  e = factory->CreateAtomAuthor();
+  ASSERT_EQ(Type_AtomAuthor, e->Type());
+
+  e = factory->CreateAtomCategory();
+  ASSERT_EQ(Type_AtomCategory, e->Type());
+
+  e = factory->CreateAtomContent();
+  ASSERT_EQ(Type_AtomContent, e->Type());
+
+  e = factory->CreateAtomEntry();
+  ASSERT_EQ(Type_AtomEntry, e->Type());
+
+  e = factory->CreateAtomFeed();
+  ASSERT_EQ(Type_AtomFeed, e->Type());
+
+  e = factory->CreateAtomLink();
+  ASSERT_EQ(Type_AtomLink, e->Type());
 
   e = factory->CreateBalloonStyle();
-  CPPUNIT_ASSERT(Type_BalloonStyle == e->Type());
+  ASSERT_EQ(Type_BalloonStyle, e->Type());
 
   e = factory->CreateCamera();
-  CPPUNIT_ASSERT(Type_Camera == e->Type());
+  ASSERT_EQ(Type_Camera, e->Type());
 
   e = factory->CreateChange();
-  CPPUNIT_ASSERT(Type_Change == e->Type());
+  ASSERT_EQ(Type_Change, e->Type());
 
   e = factory->CreateCreate();
-  CPPUNIT_ASSERT(Type_Create == e->Type());
+  ASSERT_EQ(Type_Create, e->Type());
 
   e = factory->CreateCoordinates();
-  CPPUNIT_ASSERT(Type_coordinates == e->Type());
+  ASSERT_EQ(Type_coordinates, e->Type());
 
   e = factory->CreateData();
-  CPPUNIT_ASSERT(Type_Data == e->Type());
+  ASSERT_EQ(Type_Data, e->Type());
 
   e = factory->CreateDelete();
-  CPPUNIT_ASSERT(Type_Delete == e->Type());
+  ASSERT_EQ(Type_Delete, e->Type());
 
   e = factory->CreateDocument();
-  CPPUNIT_ASSERT(Type_Document == e->Type());
+  ASSERT_EQ(Type_Document, e->Type());
 
   e = factory->CreateExtendedData();
-  CPPUNIT_ASSERT(Type_ExtendedData == e->Type());
+  ASSERT_EQ(Type_ExtendedData, e->Type());
 
   e = factory->CreateFolder();
-  CPPUNIT_ASSERT(Type_Folder == e->Type());
+  ASSERT_EQ(Type_Folder, e->Type());
 
   e = factory->CreateGroundOverlay();
-  CPPUNIT_ASSERT(Type_GroundOverlay == e->Type());
+  ASSERT_EQ(Type_GroundOverlay, e->Type());
 
   e = factory->CreateHotSpot();
-  CPPUNIT_ASSERT(Type_hotSpot == e->Type());
+  ASSERT_EQ(Type_hotSpot, e->Type());
 
   e = factory->CreateIcon();
-  CPPUNIT_ASSERT(Type_Icon == e->Type());
+  ASSERT_EQ(Type_Icon, e->Type());
 
   e = factory->CreateIconStyle();
-  CPPUNIT_ASSERT(Type_IconStyle == e->Type());
+  ASSERT_EQ(Type_IconStyle, e->Type());
 
   e = factory->CreateIconStyleIcon();
-  CPPUNIT_ASSERT(Type_IconStyleIcon == e->Type());
+  ASSERT_EQ(Type_IconStyleIcon, e->Type());
 
   e = factory->CreateImagePyramid();
-  CPPUNIT_ASSERT(Type_ImagePyramid == e->Type());
+  ASSERT_EQ(Type_ImagePyramid, e->Type());
 
   e = factory->CreateItemIcon();
-  CPPUNIT_ASSERT(Type_ItemIcon == e->Type());
+  ASSERT_EQ(Type_ItemIcon, e->Type());
 
   e = factory->CreateKml();
-  CPPUNIT_ASSERT(Type_kml == e->Type());
+  ASSERT_EQ(Type_kml, e->Type());
 
   e = factory->CreateLabelStyle();
-  CPPUNIT_ASSERT(Type_LabelStyle == e->Type());
+  ASSERT_EQ(Type_LabelStyle, e->Type());
 
   e = factory->CreateLatLonBox();
-  CPPUNIT_ASSERT(Type_LatLonBox == e->Type());
+  ASSERT_EQ(Type_LatLonBox, e->Type());
 
   e = factory->CreateLatLonAltBox();
-  CPPUNIT_ASSERT(Type_LatLonAltBox == e->Type());
+  ASSERT_EQ(Type_LatLonAltBox, e->Type());
 
   e = factory->CreateLinearRing();
-  CPPUNIT_ASSERT(Type_LinearRing == e->Type());
+  ASSERT_EQ(Type_LinearRing, e->Type());
 
   e = factory->CreateLineString();
-  CPPUNIT_ASSERT(Type_LineString == e->Type());
+  ASSERT_EQ(Type_LineString, e->Type());
 
   e = factory->CreateLineStyle();
-  CPPUNIT_ASSERT(Type_LineStyle == e->Type());
+  ASSERT_EQ(Type_LineStyle, e->Type());
 
   e = factory->CreateLink();
-  CPPUNIT_ASSERT(Type_Link == e->Type());
+  ASSERT_EQ(Type_Link, e->Type());
 
   e = factory->CreateLinkSnippet();
-  CPPUNIT_ASSERT(Type_linkSnippet == e->Type());
+  ASSERT_EQ(Type_linkSnippet, e->Type());
 
   e = factory->CreateListStyle();
-  CPPUNIT_ASSERT(Type_ListStyle == e->Type());
+  ASSERT_EQ(Type_ListStyle, e->Type());
 
   e = factory->CreateLocation();
-  CPPUNIT_ASSERT(Type_Location == e->Type());
+  ASSERT_EQ(Type_Location, e->Type());
 
   e = factory->CreateLod();
-  CPPUNIT_ASSERT(Type_Lod == e->Type());
+  ASSERT_EQ(Type_Lod, e->Type());
 
   e = factory->CreateLookAt();
-  CPPUNIT_ASSERT(Type_LookAt == e->Type());
+  ASSERT_EQ(Type_LookAt, e->Type());
+
+  e = factory->CreateMetadata();
+  ASSERT_EQ(Type_Metadata, e->Type());
 
   e = factory->CreateModel();
-  CPPUNIT_ASSERT(Type_Model == e->Type());
+  ASSERT_EQ(Type_Model, e->Type());
 
   e = factory->CreateMultiGeometry();
-  CPPUNIT_ASSERT(Type_MultiGeometry == e->Type());
+  ASSERT_EQ(Type_MultiGeometry, e->Type());
 
   e = factory->CreateNetworkLink();
-  CPPUNIT_ASSERT(Type_NetworkLink == e->Type());
+  ASSERT_EQ(Type_NetworkLink, e->Type());
 
   e = factory->CreateNetworkLinkControl();
-  CPPUNIT_ASSERT(Type_NetworkLinkControl == e->Type());
+  ASSERT_EQ(Type_NetworkLinkControl, e->Type());
 
   e = factory->CreateOrientation();
-  CPPUNIT_ASSERT(Type_Orientation == e->Type());
+  ASSERT_EQ(Type_Orientation, e->Type());
 
   e = factory->CreateOuterBoundaryIs();
-  CPPUNIT_ASSERT(Type_outerBoundaryIs == e->Type());
+  ASSERT_EQ(Type_outerBoundaryIs, e->Type());
 
   e = factory->CreateOverlayXY();
-  CPPUNIT_ASSERT(Type_overlayXY == e->Type());
+  ASSERT_EQ(Type_overlayXY, e->Type());
 
   e = factory->CreatePair();
-  CPPUNIT_ASSERT(Type_Pair == e->Type());
+  ASSERT_EQ(Type_Pair, e->Type());
 
   e = factory->CreatePhotoOverlay();
-  CPPUNIT_ASSERT(Type_PhotoOverlay == e->Type());
+  ASSERT_EQ(Type_PhotoOverlay, e->Type());
 
   e = factory->CreatePlacemark();
-  CPPUNIT_ASSERT(Type_Placemark == e->Type());
+  ASSERT_EQ(Type_Placemark, e->Type());
 
   e = factory->CreatePolygon();
-  CPPUNIT_ASSERT(Type_Polygon == e->Type());
+  ASSERT_EQ(Type_Polygon, e->Type());
 
   e = factory->CreatePoint();
-  CPPUNIT_ASSERT(Type_Point == e->Type());
+  ASSERT_EQ(Type_Point, e->Type());
 
   e = factory->CreatePolyStyle();
-  CPPUNIT_ASSERT(Type_PolyStyle == e->Type());
+  ASSERT_EQ(Type_PolyStyle, e->Type());
 
   e = factory->CreateRegion();
-  CPPUNIT_ASSERT(Type_Region == e->Type());
+  ASSERT_EQ(Type_Region, e->Type());
 
   e = factory->CreateResourceMap();
-  CPPUNIT_ASSERT(Type_ResourceMap == e->Type());
+  ASSERT_EQ(Type_ResourceMap, e->Type());
 
   e = factory->CreateRotationXY();
-  CPPUNIT_ASSERT(Type_rotationXY == e->Type());
+  ASSERT_EQ(Type_rotationXY, e->Type());
 
   e = factory->CreateScale();
-  CPPUNIT_ASSERT(Type_Scale == e->Type());
+  ASSERT_EQ(Type_Scale, e->Type());
 
   e = factory->CreateSchema();
-  CPPUNIT_ASSERT(Type_Schema == e->Type());
+  ASSERT_EQ(Type_Schema, e->Type());
 
   e = factory->CreateSchemaData();
-  CPPUNIT_ASSERT(Type_SchemaData == e->Type());
+  ASSERT_EQ(Type_SchemaData, e->Type());
 
   e = factory->CreateScreenOverlay();
-  CPPUNIT_ASSERT(Type_ScreenOverlay == e->Type());
+  ASSERT_EQ(Type_ScreenOverlay, e->Type());
 
   e = factory->CreateScreenXY();
-  CPPUNIT_ASSERT(Type_screenXY == e->Type());
+  ASSERT_EQ(Type_screenXY, e->Type());
 
   e = factory->CreateSimpleData();
-  CPPUNIT_ASSERT(Type_SimpleData == e->Type());
+  ASSERT_EQ(Type_SimpleData, e->Type());
 
   e = factory->CreateSimpleField();
-  CPPUNIT_ASSERT(Type_SimpleField == e->Type());
+  ASSERT_EQ(Type_SimpleField, e->Type());
 
   e = factory->CreateSize();
-  CPPUNIT_ASSERT(Type_size == e->Type());
+  ASSERT_EQ(Type_size, e->Type());
 
   e = factory->CreateSnippet();
-  CPPUNIT_ASSERT(Type_Snippet == e->Type());
+  ASSERT_EQ(Type_Snippet, e->Type());
 
   e = factory->CreateStyle();
-  CPPUNIT_ASSERT(Type_Style == e->Type());
+  ASSERT_EQ(Type_Style, e->Type());
 
   e = factory->CreateStyleMap();
-  CPPUNIT_ASSERT(Type_StyleMap == e->Type());
+  ASSERT_EQ(Type_StyleMap, e->Type());
 
   e = factory->CreateTimeSpan();
-  CPPUNIT_ASSERT(Type_TimeSpan == e->Type());
+  ASSERT_EQ(Type_TimeSpan, e->Type());
 
   e = factory->CreateTimeStamp();
-  CPPUNIT_ASSERT(Type_TimeStamp == e->Type());
+  ASSERT_EQ(Type_TimeStamp, e->Type());
 
   e = factory->CreateViewVolume();
-  CPPUNIT_ASSERT(Type_ViewVolume == e->Type());
+  ASSERT_EQ(Type_ViewVolume, e->Type());
 
   e = factory->CreateUpdate();
-  CPPUNIT_ASSERT(Type_Update == e->Type());
+  ASSERT_EQ(Type_Update, e->Type());
 
   e = factory->CreateUrl();
-  CPPUNIT_ASSERT(Type_Url == e->Type());
+  ASSERT_EQ(Type_Url, e->Type());
+
+  e = factory->CreateXalAddressDetails();
+  ASSERT_EQ(Type_XalAddressDetails, e->Type());
+
+  e = factory->CreateXalAdministrativeArea();
+  ASSERT_EQ(Type_XalAdministrativeArea, e->Type());
+
+  e = factory->CreateXalCountry();
+  ASSERT_EQ(Type_XalCountry, e->Type());
+
+  e = factory->CreateXalSubAdministrativeArea();
+  ASSERT_EQ(Type_XalSubAdministrativeArea, e->Type());
+
+  e = factory->CreateGxAnimatedUpdate();
+  ASSERT_EQ(Type_GxAnimatedUpdate, e->Type());
+
+  e = factory->CreateGxFlyTo();
+  ASSERT_EQ(Type_GxFlyTo, e->Type());
+
+  e = factory->CreateGxLatLonQuad();
+  ASSERT_EQ(Type_GxLatLonQuad, e->Type());
+
+  e = factory->CreateGxPlaylist();
+  ASSERT_EQ(Type_GxPlaylist, e->Type());
+
+  e = factory->CreateGxSoundCue();
+  ASSERT_EQ(Type_GxSoundCue, e->Type());
+
+  e = factory->CreateGxTimeSpan();
+  ASSERT_EQ(Type_GxTimeSpan, e->Type());
+
+  e = factory->CreateGxTimeStamp();
+  ASSERT_EQ(Type_GxTimeStamp, e->Type());
+
+  e = factory->CreateGxTour();
+  ASSERT_EQ(Type_GxTour, e->Type());
+
+  e = factory->CreateGxTourControl();
+  ASSERT_EQ(Type_GxTourControl, e->Type());
+
+  e = factory->CreateGxWait();
+  ASSERT_EQ(Type_GxWait, e->Type());
 }
 
 }  // end namespace kmldom
 
-TEST_MAIN
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}

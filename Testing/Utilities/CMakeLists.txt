@@ -476,6 +476,13 @@ kmlprettykml.cc
 kmlprintgeometry.cc
 kmlhellofeatures.cc
 kmlprint.cc
+kmlchecklinks.cc
+kmlcirclegen.cc
+kmlcountkml.cc
+kmlparsens.cc
+kmlsharedstyles.cc
+kmlsimplifylines.cc
+kmlsortplacemarks.cc
 siftfast.cpp
 ijObjectLabelAttributeValuesTest.cxx
 )

@@ -29,7 +29,6 @@
 #ifndef KML_ENGINE_ENTITY_MAPPER_H__
 #define KML_ENGINE_ENTITY_MAPPER_H__
 
-#include <string>
 #include "kml/dom.h"
 #include "kml/base/string_util.h"
 #include "kml/engine/engine_types.h"
@@ -71,7 +70,7 @@ class EntityMapper {
   void GatherSimpleDataFields(const kmldom::SimpleDataPtr& simpledata);
   const KmlFilePtr kml_file_;
   kmlbase::StringMap* entity_map_;
-  std::string schemadata_prefix_;
+  string schemadata_prefix_;
 };
 
 // Walks through the given string, replacing all keys in StringMap
@@ -79,7 +78,7 @@ class EntityMapper {
 // $[xxx] entity format before searching the string. Returns a new string with
 // the replaced entities. The entity_map is typically built with the
 // EntityMapper class declared in this file.
-std::string CreateExpandedEntities(const std::string & in,
+string CreateExpandedEntities(const string & in,
                                    const kmlbase::StringMap& entity_map);
 
 }  // end namespace kmlengine

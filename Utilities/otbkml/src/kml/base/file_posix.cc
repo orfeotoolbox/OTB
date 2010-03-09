@@ -44,7 +44,7 @@ static bool StatFile(const char* path, struct stat* stat_data) {
   return true;
 }
 
-bool File::Exists(const std::string& full_path) {
+bool File::Exists(const string& full_path) {
   struct stat stat_data;
   if (!StatFile(full_path.c_str(), &stat_data)) {
     return false;
@@ -52,11 +52,11 @@ bool File::Exists(const std::string& full_path) {
   return S_ISREG(stat_data.st_mode);
 }
 
-bool File::Delete(const std::string& filepath) {
+bool File::Delete(const string& filepath) {
   return unlink(filepath.c_str()) == 0;
 }
 
-bool File::CreateNewTempFile(std::string* path) {
+bool File::CreateNewTempFile(string* path) {
   if (!path) {
     return false;
   }
