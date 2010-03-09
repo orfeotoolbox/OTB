@@ -18,11 +18,14 @@
 
 #include "otbCoordinateToName.h"
 #include "otbMacro.h"
+#include <sstream>
 
 #ifdef OTB_USE_CURL
 #include "tinyxml.h"
 #include <curl/curl.h>
 #endif
+
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -36,7 +39,18 @@ CoordinateToName::CoordinateToName():
 {
   m_PlaceName = "";
   m_CountryName = "";
-  m_TempFileName = "out-SignayriUt1.xml";
+
+  //Avoid collision between different instance of the class
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
+  RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
+  randomGen->SetSeed(reinterpret_cast<long int>(this));//make sure the seed is unique for this class
+  int randomNum = randomGen->GetIntegerVariate();
+
+  std::stringstream filename;
+  filename << "tmp-coordinateToName-SignayriUt1-";
+  filename << randomNum;
+  filename << ".xml";
+  m_TempFileName = filename.str();
 
   m_Threader = itk::MultiThreader::New();
 
