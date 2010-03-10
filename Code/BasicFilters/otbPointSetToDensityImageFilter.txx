@@ -68,7 +68,7 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
   densityComputeFunction->SetRadius(m_Radius);
 
   /** Point*/
-  InputType   pCenter;
+  InputType pCenter;
   IndexType index;
   itk::ImageRegionIterator<OutputImageType> itOut(outPtr,
       outputRegionForThread);

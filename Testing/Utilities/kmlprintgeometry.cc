@@ -108,7 +108,7 @@ static const FeaturePtr GetRootFeature(const ElementPtr& root) {
   return kmldom::AsFeature(root);
 }
 
-int kmlprintgeometry(int argc, char** argv) {
+int kmlprintgeometry(int argc, char* argv[]) {
   std::string kml;
   kmlbase::File::ReadFileToString(argv[1], &kml);
   std::string errors;

@@ -38,7 +38,7 @@ using kmldom::KmlFactory;
 using kmldom::PlacemarkPtr;
 using kmldom::PointPtr;
 
-int kmlcreatekml(int argc, char** argv) {
+int kmlcreatekml(int argc, char* argv[]) {
   // Get the factory singleton to create KML elements.
   KmlFactory* factory = KmlFactory::GetFactory();
 

@@ -38,7 +38,7 @@ using std::cout;
 using std::endl;
 using kmlengine::KmzFile;
 
-int kmlhellokmz(int argc, char** argv) {
+int kmlhellokmz(int argc, char* argv[]) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmzfile" << endl;
     return 1;

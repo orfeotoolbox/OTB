@@ -75,7 +75,7 @@ class ElementCounter : public kmldom::ParserObserver {
   element_count_map_t element_count_map_;
 };
 
-int kmlcountkml(int argc, char** argv) {
+int kmlcountkml(int argc, char* argv[]) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmlfile" << endl;
     return 1;

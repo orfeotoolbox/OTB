@@ -146,7 +146,7 @@ static bool WriteFile(const LineStringPtr& linestring, const char* outfile) {
   return true;
 }
 
-int kmlsimplifylines(int argc, char** argv) {
+int kmlsimplifylines(int argc, char* argv[]) {
   if (argc != 3 && argc != 4) {
     cerr << "usage: " << argv[0] <<
       " input.kml output.kml [tolerance in meters]" <<

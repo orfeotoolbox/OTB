@@ -124,7 +124,7 @@ void SwapOverlays() {
 }
 
 
-int kmlhelloregion(int argc, char** argv) {
+int kmlhelloregion(int argc, char* argv[]) {
   SwapOverlays();
   return EXIT_SUCCESS;
 }

@@ -228,7 +228,7 @@ static void CreateGeometry(bool verbose) {
   }
 }
 
-int kmlhellogeometry(int argc, char** argv) {
+int kmlhellogeometry(int argc, char* argv[]) {
   // Silent by default.
   bool verbose = argc == 2 && argv[1][0] == '-' && argv[1][1] == 'v';
   CreateGeometry(verbose);

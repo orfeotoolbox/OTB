@@ -83,7 +83,7 @@ static int DoTwoPoints(double lat1, double lng1, double lat2, double lng2) {
   return PrintPlacemarkCircle(lr);
 }
 
-int kmlcirclegen(int argc, char** argv) {
+int kmlcirclegen(int argc, char* argv[]) {
   if (argc !=4 && argc !=5 ) {
     cerr << "Supply either a central point (lat, lng in decimal degrees) " <<
       "and a radius (in meters) OR a central point and a point on " <<

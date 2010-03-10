@@ -78,7 +78,7 @@ void HelloKml(bool verbose) {
   // All storage is freed by smart pointers as they go out of scope.
 }
 
-int kmlhelloworld(int argc, char** argv) {
+int kmlhelloworld(int argc, char* argv[]) {
   HelloKml(argc == 2 && argv[1][0] == '-' && argv[1][1] == 'v');
   return 0;
 }

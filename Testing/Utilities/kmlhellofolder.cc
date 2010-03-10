@@ -57,7 +57,7 @@ PlacemarkPtr CreatePlacemark(kmldom::KmlFactory* factory,
 
 static const unsigned int kHowManyPoints = 1001;
 
-int kmlhellofolder(int argc, char** argv) {
+int kmlhellofolder(int argc, char* argv[]) {
   KmlFactory* factory(KmlFactory::GetFactory());
 
   // Create a Folder, fill it with Placemarks.

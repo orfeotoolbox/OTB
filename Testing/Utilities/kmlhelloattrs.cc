@@ -83,7 +83,7 @@ void CheckId() {
   cout << parsed_kml << endl;
 }
 
-int kmlhelloattrs(int argc, char** argv) {
+int kmlhelloattrs(int argc, char* argv[]) {
   CheckId();
   CheckHotSpot();
   return 0;  // All is well if we got this far.

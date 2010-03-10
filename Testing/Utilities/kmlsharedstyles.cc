@@ -38,7 +38,7 @@ using kmldom::PlacemarkPtr;
 using kmldom::StylePtr;
 using kmldom::StyleMapPtr;
 
-int kmlsharedstyles(int argc, char** argv) {
+int kmlsharedstyles(int argc, char* argv[]) {
   KmlFactory* kml_factory = KmlFactory::GetFactory();
 
   DocumentPtr document = kml_factory->CreateDocument();

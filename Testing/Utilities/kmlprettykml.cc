@@ -42,7 +42,7 @@ using kmlengine::KmlFilePtr;
 using std::cout;
 using std::endl;
 
-int kmlprettykml(int argc, char** argv) {
+int kmlprettykml(int argc, char* argv[]) {
   if (argc != 3) {
     cout << "usage: " << argv[0] << " kmlfile kmloutput" << endl;
     return 1;

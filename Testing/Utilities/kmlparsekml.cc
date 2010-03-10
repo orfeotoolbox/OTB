@@ -31,7 +31,7 @@
 #include <string>
 #include "kml/dom.h"  // The KML DOM header.
 
-int kmlparsekml(int argc, char** argv) {
+int kmlparsekml(int argc, char* argv[]) {
   // Parse KML from a memory buffer.
   std::string errors;
   kmldom::ElementPtr element = kmldom::Parse(

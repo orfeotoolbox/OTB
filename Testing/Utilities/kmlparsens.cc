@@ -39,7 +39,7 @@ using kmlengine::KmlFilePtr;
 using std::cout;
 using std::endl;
 
-int kmlparsens(int argc, char** argv) {
+int kmlparsens(int argc, char* argv[]) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmlfile" << endl;
     return 1;

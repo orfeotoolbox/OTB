@@ -45,7 +45,7 @@ static const FeaturePtr GetRootFeature(const ElementPtr& root) {
   return kmldom::AsFeature(root);
 }
 
-int kmlhellofeatures(int argc, char** argv) {
+int kmlhellofeatures(int argc, char* argv[]) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " kmlfile" << endl;
     return 1;

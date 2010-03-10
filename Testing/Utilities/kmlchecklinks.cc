@@ -72,7 +72,7 @@ class PrintLinks : public kmldom::ParserObserver {
   }
 };
 
-int kmlchecklinks(int argc, char** argv) {
+int kmlchecklinks(int argc, char* argv[]) {
   if (argc != 2) {
     cout << "usage: " << argv[0] << " input.kml" << endl;
     return 1;

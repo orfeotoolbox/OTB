@@ -139,7 +139,7 @@ void CheckLinkFactory() {
   assert(114 == changed_kml.find("</Link>"));
 }
 
-int kmlhelloenum(int argc, char** argv) {
+int kmlhelloenum(int argc, char* argv[]) {
   CheckParseLookAt();
   CheckParseLink();
   CheckSerializeLookAt();
