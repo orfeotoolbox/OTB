@@ -2600,7 +2600,7 @@ bool ossimSpotDimapSupportData::initSceneSource(
     * WORKAROUND: if SPOT1 or SPOT4 data, then set VIEWING_ANGLE to -1.0
     * */
    //---
-   if(this->theSensorID == 5) {
+   if(this->theSensorID == "Spot 5") {
    xml_nodes.clear();
    xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/VIEWING_ANGLE";
    xmlDocument->findNodes(xpath, xml_nodes);
