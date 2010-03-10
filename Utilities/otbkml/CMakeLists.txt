@@ -127,10 +127,8 @@ SET(libkmlengine_la_SOURCES
 	${libkmlengine_la_SOURCES_DIR}/merge.cc
 	${libkmlengine_la_SOURCES_DIR}/style_merger.cc
 	${libkmlengine_la_SOURCES_DIR}/style_resolver.cc
-  ${libkmlengine_la_SOURCES_DIR}/kml_uri.cc
   ${libkmlengine_la_SOURCES_DIR}/find_xml_namespaces.cc
   ${libkmlengine_la_SOURCES_DIR}/id_mapper.cc
-  ${libkmlengine_la_SOURCES_DIR}/kml_file.cc
   ${libkmlengine_la_SOURCES_DIR}/feature_view.cc
 )
 
