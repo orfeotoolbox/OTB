@@ -892,7 +892,7 @@ bool ossimGeoTiff::writeJp2GeotiffBox(const ossimFilename& tmpFile,
       if(mapProj)
       {
          ossimRefPtr<ossimMapProjectionInfo> projectionInfo
-            = new ossimMapProjectionInfo(mapProj, rect);
+	   = new ossimMapProjectionInfo(mapProj, ossimDrect(rect));
          ossimGeoTiff::writeTags(tiff, projectionInfo, false);
       }
 
