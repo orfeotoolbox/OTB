@@ -85,36 +85,6 @@ ImageFileWriter<TInputImage>
   //TODO: Force ImageIO desctructor. Should be fixed once GDALImageIO
   //will be refactored.
   this->SetImageIO(NULL);
-
-
-  // Write the image keyword list if any
-  ossimKeywordlist geom_kwl;
-  ImageKeywordlist otb_kwl;
-
-  itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
-  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-  otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
-
-  if(geom_kwl.getSize()>0)
-    {
-    otbMsgDevMacro(<<"Exporting keywordlist ...");
-//    ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->GetFileName()));
-
-    if(!handler)
-      {
-      otbMsgDevMacro(<<"OSSIM Open Image FAILED !");
-      }
-    else
-      {
-        //FIXME find out exactly what we are trying to do here
-        //there is no meaning to blindly save the kwl if we didn't update it in the pipeline
-//       handler->setImageGeometry(geom_kwl);
-//       handler->getImageGeometry()->getProjection()->loadState(geom_kwl);
-//       handler->saveImageGeometry();
-      handler->close();
-      }
-    }
 }
 
 /**
