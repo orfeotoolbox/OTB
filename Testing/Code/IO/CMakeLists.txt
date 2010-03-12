@@ -2233,6 +2233,12 @@ ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
 
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS18}
+	otbOssimJpegFileRessourceLeakTest
+	${INPUTDATA}/poupees.jpg
+	1200
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS19 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2475,6 +2481,7 @@ otbIkonosImageMetadataInterfaceNew.cxx
 otbTerraSarImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
+otbOssimJpegFileRessourceLeakTest.cxx
 )
 
 IF(OTB_USE_CURL)
