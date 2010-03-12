@@ -40,6 +40,8 @@
 
 #include "base/ossimFilename.h"
 
+#include "itkTimeProbe.h"
+
 namespace otb
 {
 
@@ -160,8 +162,14 @@ void TileMapImageIO::Read(void* buffer)
   int nTilesY = (int) ceil(totLines/256.)+1;
   unsigned char * bufferTile = new unsigned char[256*256*nComponents];
 
+  std::cout<<"TileMapIO: reading region "<<this->GetIORegion()<<std::endl;
+  std::cout<<"TileMapIO: number of tiles: "<<nTilesX<<" x "<<nTilesY<<std::endl;
+
   //Read all the required tiles
   //FIXME assume RGB image
+  itk::TimeProbe probeOverall;
+  probeOverall.Start();
+
   for (int numTileY=0; numTileY<nTilesY; numTileY++)
   {
     for (int numTileX=0; numTileX<nTilesX; numTileX++)
@@ -169,9 +177,17 @@ void TileMapImageIO::Read(void* buffer)
       double xTile = (firstSample+256*numTileX)/((1 << m_Depth)*256.);
       double yTile = (firstLine+256*numTileY)/((1 << m_Depth)*256.);
       //Retrieve the tile
+      itk::TimeProbe probeFetch;
+      probeFetch.Start();
       InternalRead(xTile, yTile, bufferTile);
+      probeFetch.Stop();
+
+      std::cout<<"Tile "<<xTile<<", "<<yTile<<" fetched in "<< probeFetch.GetMeanTime()<<" seconds"<<std::endl;
 
       //Copy the tile in the output buffer
+
+      itk::TimeProbe probeCopy;
+       probeCopy.Start();
       for (int tileJ=0; tileJ<256; tileJ++)
       {
         long int yImageOffset=(long int) (256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ);
@@ -199,10 +215,16 @@ void TileMapImageIO::Read(void* buffer)
 
 
         }
-      }//end of tile copy
 
+      }//end of tile copy
+      probeCopy.Stop();
+      std::cout<<"Tile "<<xTile<<", "<<yTile<<" copied to output in "<< probeCopy.GetMeanTime()<<" seconds"<<std::endl;
     }
   }//end of full image copy
+
+  probeOverall.Stop();
+  std::cout<<"Overall region processing took "<<probeOverall.GetMeanTime()<<" seconds."<<std::endl;
+
 
   delete[] bufferTile;
 
