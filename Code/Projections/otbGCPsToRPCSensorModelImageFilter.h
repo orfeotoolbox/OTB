@@ -150,6 +150,8 @@ protected:
   /** Actual estimation of the sensor model takes place in the
    * GenerateOutputInformation() method */
   virtual void GenerateOutputInformation();
+  
+  virtual void ThreadedGenerateData(const typename TImage::RegionType&, int) {}
 
 private:
   GCPsToRPCSensorModelImageFilter ( const Self & ); // purposely not implemented

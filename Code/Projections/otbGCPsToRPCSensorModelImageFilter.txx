@@ -130,6 +130,9 @@ void
 GCPsToRPCSensorModelImageFilter< TImage >
 ::GenerateOutputInformation()
 {
+  // First, call the superclass implementation
+  Superclass::GenerateOutputInformation();
+
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
