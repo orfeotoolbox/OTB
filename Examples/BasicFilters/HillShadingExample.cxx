@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
 
   if (argc != 10)
   {
-    std::cout << argv[0] <<" <output_filename> <output_filename> ";
+    std::cout << argv[0] <<" <output_filename> <output_color_filename> ";
     std::cout << " <Longitude Output Origin point> <Latitude Output Origin point>";
     std::cout << " <X Output Size> <Y Output size>";
     std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
