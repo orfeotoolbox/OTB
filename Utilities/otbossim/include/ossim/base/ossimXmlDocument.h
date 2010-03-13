@@ -10,7 +10,7 @@
 // parsing and accessing of an XML document file.
 // 
 //*****************************************************************************
-// $Id: ossimXmlDocument.h 12521 2008-02-28 20:09:25Z gpotts $
+// $Id: ossimXmlDocument.h 16817 2010-03-07 17:25:44Z dburken $
 #ifndef ossimXmlDocument_HEADER
 #define ossimXmlDocument_HEADER
 
@@ -32,7 +32,7 @@ public:
    {
       return new ossimXmlDocument(*this);
    }
-   ~ossimXmlDocument();
+   virtual ~ossimXmlDocument();
 
    bool write(const ossimFilename& file);
    bool openFile(const ossimFilename& filename);

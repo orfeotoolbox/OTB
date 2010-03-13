@@ -13,6 +13,26 @@ void ossimElevationDatabase::getOpenCellList(std::vector<ossimFilename>& list) c
    
 }
 
+double ossimElevationDatabase::getOffsetFromEllipsoid(const ossimGpt& gpt)const
+{
+   double result = 0.0;
+   if(m_geoid.valid())
+   {
+      result = m_geoid->offsetFromEllipsoid(gpt);
+   }
+   else 
+   {
+      result = ossimGeoidManager::instance()->offsetFromEllipsoid(gpt);
+   }
+   
+   if(ossim::isnan(result))
+   {
+      result = 0.0;
+   }
+   
+   return result;
+}
+
 bool ossimElevationDatabase::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
    m_connectionString = kwl.find(prefix, "connection_string");

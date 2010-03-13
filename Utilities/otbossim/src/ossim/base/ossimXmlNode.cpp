@@ -9,7 +9,7 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 16387 2010-01-21 18:46:21Z gpotts $
+// $Id: ossimXmlNode.cpp 16742 2010-02-28 16:05:43Z dburken $
 
 #include <iostream>
 #include <stack>
@@ -121,7 +121,8 @@ bool ossimXmlNode::read(std::istream& in)
 {
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: entered ......" << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::read: entered ......" << std::endl;
    }
    char c;
    in >> xmlskipws;
@@ -129,7 +130,8 @@ bool ossimXmlNode::read(std::istream& in)
    {
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
@@ -141,19 +143,20 @@ bool ossimXmlNode::read(std::istream& in)
    {
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
    streampos file_pos = in.tellg();
    ossimString endTag;
    
-   
    if(!readTag(in, theTag))
    {
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
@@ -161,7 +164,6 @@ bool ossimXmlNode::read(std::istream& in)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "theTag = " << theTag << "\n";
    }
-   //    std::cout << "theTag = " << theTag << std::endl;
    
    if((!in.fail())&&readEndTag(in, endTag))
    {
@@ -170,7 +172,8 @@ bool ossimXmlNode::read(std::istream& in)
       {
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return true;
       }
@@ -179,7 +182,8 @@ bool ossimXmlNode::read(std::istream& in)
          setErrorStatus();
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return false;
       }
@@ -201,7 +205,8 @@ bool ossimXmlNode::read(std::istream& in)
       {
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return true;
       }
@@ -210,7 +215,8 @@ bool ossimXmlNode::read(std::istream& in)
          setErrorStatus();
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return false;
       }
@@ -223,20 +229,22 @@ bool ossimXmlNode::read(std::istream& in)
       setErrorStatus();
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
    
    in.ignore(1);
    c = in.peek();
+   
    // now do the text portion
-   //
    if(!readTextContent(in))
    {
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
@@ -248,7 +256,8 @@ bool ossimXmlNode::read(std::istream& in)
       setErrorStatus();
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
       }
       return false;
    }
@@ -260,7 +269,8 @@ bool ossimXmlNode::read(std::istream& in)
       {
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return true;
       }
@@ -269,16 +279,18 @@ bool ossimXmlNode::read(std::istream& in)
          setErrorStatus();
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return false;
       }
    }
    c = in.peek();
-   // now if it's not an endtag then it must be a tag starting the new child node
-   //
-   bool done = false;
-   
+
+   //---
+   // now if it's not an endtag then it must be a tag starting the new child
+   // node
+   //---
    ossimRefPtr<ossimXmlNode> childNode;
    do
    {
@@ -293,7 +305,8 @@ bool ossimXmlNode::read(std::istream& in)
          setErrorStatus();
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return false;
       }
@@ -305,7 +318,8 @@ bool ossimXmlNode::read(std::istream& in)
          setErrorStatus();
          if(traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
          }
          return false;
       }
@@ -317,7 +331,8 @@ bool ossimXmlNode::read(std::istream& in)
          {
             if(traceDebug())
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
             }
             return true;
          }
@@ -326,16 +341,18 @@ bool ossimXmlNode::read(std::istream& in)
             setErrorStatus();
             if(traceDebug())
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  << "ossimXmlNode::read: leaving ......\n"<<__LINE__ << "\n";
             }
             return false;
          }
       }
-   }while((!done)&&(!in.bad()));
+   }while( !in.fail() );
    
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::read: leaving ......\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::read: leaving ......\n";
    }
    return true;
 }
@@ -1008,7 +1025,8 @@ bool ossimXmlNode::readTag(std::istream& in,
 {
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimXmlNode::readTag: entered ......\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::readTag: entered ......\n";
    }
    in >> xmlskipws;
    
@@ -1037,71 +1055,90 @@ bool ossimXmlNode::readTag(std::istream& in,
          }
       }
    }
+   
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::readTag: leaving ......\n";
+   }
+  
    return ((tag != "")&&(!in.fail()));
 }
 
 bool ossimXmlNode::readCDataContent(std::istream& in)
 {
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::readCDataContent: entered ..." << std::endl;
+   }   
+   
+   // Ignore up to "]]>"
+   
+   bool result = false;
+
    char c;
+
    while(!in.fail())
    {
       c = in.get();
-      if(c == ']')
-      {
-         if(in.peek() == ']')
-         {
-            in.ignore();
-            if(in.peek() == '>')
-            {
-               in.ignore();
-               in >> xmlskipws;
-               return true;
-            }
-            else
-            {
-               in.putback(']');
-               theText += c;
-            }
-         }
-         else
-         {
-            theText += c;
-         }
-      }
-      else
+      if ( c != ']' )
       {
          theText += c;
       }
+      else // at "]"
+      {
+         c = in.get();
+         if( c == ']' ) // at "]]"
+         {
+            c = in.get();
+            if( c == '>' )
+            {
+               //in >> xmlskipws;
+               result = true;
+               break;
+            }
+         }
+      }
+   }
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "theText: " << theText
+         << "\nexit status: " << (result?"true":"false")
+         << "\nossimXmlNode::readCDataContent: leaving ..." << std::endl;
    }
    
-   return false;
+   return result;
 }
 
+#if 0
 bool ossimXmlNode::readTextContent(std::istream& in)
 {
    in >> xmlskipws;
-
+   
    theText = "";
    theCDataFlag = false;
-
+   
    char buf[9];
    buf[8]='\0';
-
+   
    std::streampos initialPos = in.tellg();
-
+   
    in.read(buf,9);
    ossimString ostrBuf(buf);
-
+   
    if(ostrBuf == "<![CDATA[")
    {
 	   if(readCDataContent(in))
-		 {
-           theCDataFlag = true;
-           return true;
-	     }
+      {
+         theCDataFlag = true;
+         return true;
+      }
 	   else
 	   {
-		 return false;
+         return false;
 	   }
    }
    else if(ostrBuf.substr(0,4) == "<!--")
@@ -1109,9 +1146,21 @@ bool ossimXmlNode::readTextContent(std::istream& in)
 	   in.seekg(initialPos);
 	   char c = in.get();
 	   // Strip comment
-	   while(!in.fail() && c!='>')
+	   while(!in.fail()) // continue until we see a --> pattern
 	   {
-		c = in.get();
+         c = in.get();
+         if(c == '-')
+         {
+            c = in.get();
+            if(c == '-')
+            {
+               c = in.get();
+               if(c == '>')
+               {
+                  break;
+               }
+            }
+         }
 	   }
    }
    else if(ostrBuf.substr(0,1) ==  "<")
@@ -1120,15 +1169,223 @@ bool ossimXmlNode::readTextContent(std::istream& in)
    }
    else
    {
-       in.seekg(initialPos);
+      in.seekg(initialPos);
 	   char c = in.peek();
 	   while(!in.fail() && c != '<')
 	   {
-		theText += (char)in.get();
-	    c = in.peek();
+         theText += (char)in.get();
+         c = in.peek();
 	   }
    }
    return !in.fail();
+}
+#endif
+#if 0
+bool ossimXmlNode::readTextContent(std::istream& in)
+{
+   in >> xmlskipws;
+   
+   theText = "";
+   theCDataFlag = false;
+   char c = in.peek();
+   
+   do
+   {
+      if(c == '<')
+      {
+         in.ignore();
+         
+         // we will check for comments or CDATA
+         if(in.peek()=='!')
+         {
+            char buf1[4];
+            buf1[3] = '\0';
+            in.read(buf1, 3);
+            if(ossimString(buf1) == "!--")
+            {
+               // special text read
+               theText += buf1;
+               bool done = false;
+               do
+               {
+                  if(in.peek() != '-')
+                  {
+                     in.ignore();
+                  }
+                  else
+                  {
+                     in.ignore();
+                     if(in.peek() == '-')
+                     {
+                        in.ignore();
+                        if(in.peek() == '>')
+                        {
+                           in.ignore();
+                           done = true;
+                           c = in.peek();
+                        }
+                     }
+                  }
+               }while(!done&&!in.fail());
+            }
+            else
+            {
+               
+               char buf2[6];
+               buf2[5] = '\0';
+               in.read(buf2, 5);
+               if(in.fail())
+               {
+                  return false;
+               }
+               if(ossimString(buf1)+ossimString(buf2) == "![CDATA[")
+               {
+                  if(readCDataContent(in))
+                  {
+                     theCDataFlag = true;
+                     return true;
+                  }
+               }
+            }
+         }
+         else
+         {
+            in.putback(c);
+            return true;
+         }
+      }
+      else
+      {
+         theText += (char)in.get();
+         c = in.peek();
+      }
+   }while(!in.fail());
+   
+   return !in.fail();
+}
+#endif
+
+bool ossimXmlNode::readTextContent(std::istream& in)
+{
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimXmlNode::readTextContent: entered ..." << std::endl;
+   }
+   
+   //---
+   // Parse the text string.  Do it with no peeks, ignores, or putbacks as
+   // those seem to have issues on Windows (vs9).
+   //---
+   bool result = false;
+
+   theText = "";
+   theCDataFlag = false;
+   
+   in >> xmlskipws;
+
+   if ( !in.fail() )
+   {
+      std::streampos initialPos = in.tellg();
+
+      char c = in.get();
+      
+      if ( c != '<' )
+      {
+         do // Get the text up to the next '<'.
+         {
+            theText += c;
+            c = in.get();
+         } while ( (c != '<') && !in.fail() );
+         
+         in.unget(); // Put '<' back.
+         result = !in.fail();
+      }
+      else // At "<" see if comment
+      {
+         c = in.get();
+
+         if ( c != '!' )
+         {
+            in.seekg(initialPos);
+            result = !in.fail();
+         }
+         else // at "<!"
+         {
+            c = in.get();
+            if ( c == '-' )
+            {
+               // Comment section: <!-- some comment -->
+               c = in.get();
+               if ( c == '-' ) // at "<!--"
+               {
+                  // Strip comment
+                  while( !in.fail() ) // continue until we see a --> pattern
+                  {
+                     c = in.get();
+                     if(c == '-')
+                     {
+                        c = in.get();
+                        if(c == '-')
+                        {
+                           c = in.get();
+                           if(c == '>')
+                           {
+                              result = !in.fail();
+                              break;
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+            else if ( c == '[' ) // at "<!["
+            {
+               // CDATA section: <![CDATA[something-here]]>
+               c = in.get();
+               if ( c == 'C') // at "<![C:"
+               {
+                  c = in.get();
+                  if ( c == 'D' )// at "<![CD"
+                  {
+                     c = in.get();
+                     if ( c == 'A' ) // at "<![CDA"
+                     {
+                        c = in.get();
+                        if ( c == 'T' ) // at "<![CDAT"
+                        {
+                           c = in.get();
+                           if ( c == 'A' ) // at "<![CDATA"
+                           {
+                              c = in.get();
+                              if ( c == '[' ) // at "<!CDATA["
+                              {
+                                 if (readCDataContent(in))
+                                 {
+                                    theCDataFlag = true;
+                                    result = true;
+                                 }
+                              }
+                           }
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "theText: " << theText
+         << "\ntheCDataFlag: " << (theCDataFlag?"true":"false")
+         << "\nexit status: " << (result?"true":"false")
+         << "\nossimXmlNode::readTextContent: leaving ..." << std::endl;
+   }
+   
+   return result;
 }
 
 bool ossimXmlNode::readEndTag(std::istream& in,

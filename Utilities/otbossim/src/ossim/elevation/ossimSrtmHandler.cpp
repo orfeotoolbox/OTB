@@ -9,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id$
+// $Id: ossimSrtmHandler.cpp 16826 2010-03-08 18:47:32Z gpotts $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/base/ossimCommon.h>

@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimNitfRpcModel.cpp 15766 2009-10-20 12:37:09Z gpotts $
+//  $Id: ossimNitfRpcModel.cpp 16643 2010-02-22 21:32:43Z dburken $
 
 #include <ossim/projection/ossimNitfRpcModel.h>
 
@@ -177,11 +177,9 @@ bool ossimNitfRpcModel::parseImageHeader(const ossimNitfImageHeader* ih)
    // Search for the STDID Tag to fetch mission (satellite) name:
    getSensorID(ih);
    
-   
    //***
    // Assign other data members:
    //***
-   thePolyType = B; // This may not be true for early RPC imagery
    theRefImgPt.line = theImageSize.line/2.0;
    theRefImgPt.samp = theImageSize.samp/2.0;
    theRefGndPt.lat  = theLatOffset;

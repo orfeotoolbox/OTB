@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 15833 2009-10-29 01:41:53Z eshirschorn $
+// $Id: ossimImageChain.cpp 16816 2010-03-07 17:23:23Z dburken $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -862,28 +862,25 @@ ossimRefPtr<ossimImageData> ossimImageChain::getTile(
 {
    if((theImageChainList.size() > 0)&&(isSourceEnabled()))
    {
-         ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                         theImageChainList[0].get());
-
-         if(interface)
-         {
-            // make sure we initialize in reverse order.
-            // some source may depend on the initialization of
-            // its inputs
-            return interface->getTile(tileRect, resLevel);
-         }
+      ossimImageSource* interface = PTR_CAST(ossimImageSource,
+                                             theImageChainList[0].get());
       
+      if(interface)
+      {
+         // make sure we initialize in reverse order.
+         // some source may depend on the initialization of
+         // its inputs
+         return interface->getTile(tileRect, resLevel);
+      }  
    }
    else
    {
       if(getInput(0))
       {
-         ossimImageSource* interface = PTR_CAST(ossimImageSource,
-                                                         getInput(0));
+         ossimImageSource* interface = PTR_CAST(ossimImageSource, getInput(0));
          if(interface)
          {
-            return interface->getTile(tileRect,
-                                      resLevel);
+            return interface->getTile(tileRect, resLevel);
          }
       }
    }

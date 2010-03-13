@@ -24,9 +24,11 @@ double ossimDtedElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 double ossimDtedElevationDatabase::getHeightAboveEllipsoid(const ossimGpt& gpt)
 {
    double h = getHeightAboveMSL(gpt);
-   if((h != ossim::nan())&&m_geoid.valid())
+   if(h != ossim::nan())
    {
-      h += m_geoid->offsetFromEllipsoid(gpt);
+      double offset = getOffsetFromEllipsoid(gpt);
+      
+      h += offset;
    }
    
    return h;

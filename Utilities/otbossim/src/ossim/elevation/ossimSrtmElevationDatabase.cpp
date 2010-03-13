@@ -36,9 +36,9 @@ double ossimSrtmElevationDatabase::getHeightAboveMSL(const ossimGpt& gpt)
 double ossimSrtmElevationDatabase::getHeightAboveEllipsoid(const ossimGpt& gpt)
 {
    double h = getHeightAboveMSL(gpt);
-   if((h != ossim::nan())&&m_geoid.valid())
+   if(h != ossim::nan())
    {
-      h += m_geoid->offsetFromEllipsoid(gpt);
+      h += getOffsetFromEllipsoid(gpt);
    }
    
    return h;
@@ -107,7 +107,7 @@ bool ossimSrtmElevationDatabase::openSrtmDirectory(const ossimFilename& dir)
                ossimNotify(ossimNotifyLevel_DEBUG) << "ossimSrtmElevationDatabase::open: Found file " << f << "\n";
                if(!m_geoid.valid())
                {
-                  ossimNotify(ossimNotifyLevel_DEBUG) << "ossimSrtmElevationDatabase::open: Unable to load goeid grid 1996 for DTED database\n";
+                  ossimNotify(ossimNotifyLevel_DEBUG) << "ossimSrtmElevationDatabase::open: Unable to load goeid grid 1996 for SRTM database\n";
                }
             }
             return true;

@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 16348 2010-01-13 23:21:38Z dburken $
+// $Id: ossimFilename.cpp 16815 2010-03-07 17:22:13Z dburken $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -29,12 +29,12 @@ using namespace std;
 #  include <sys/utime.h>
 #  include <windows.h>
 #else
-#include <sys/types.h>
-#include <utime.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <dirent.h>
-#include <fcntl.h>
+#  include <sys/types.h>
+#  include <utime.h>
+#  include <sys/stat.h>
+#  include <unistd.h>
+#  include <dirent.h>
+#  include <fcntl.h>
 #endif
 
 #include <sys/stat.h>
@@ -45,7 +45,6 @@ using namespace std;
 #  include <stdlib.h>
 #  include <io.h>
 #endif
-#include <stdio.h>
 
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimRegExp.h>
@@ -77,38 +76,38 @@ public:
    };
    
    ossimFileHandle(const ossimString& filename, OpenMode mode)
-   {
-      m_hFile = ::CreateFile
-         (
-            filename.c_str(),              // name
-            mode == Read ? GENERIC_READ    // access mask
-            : GENERIC_WRITE,
-            FILE_SHARE_READ |              // sharing mode
-            FILE_SHARE_WRITE,              // (allow everything)
-            NULL,                          // no secutity attr
-            OPEN_EXISTING,                 // creation disposition
-            0,                             // no flags
-            NULL                           // no template file
-            );
-      
-      if ( m_hFile == INVALID_HANDLE_VALUE )
       {
+         m_hFile = ::CreateFile
+            (
+               filename.c_str(),              // name
+               mode == Read ? GENERIC_READ    // access mask
+               : GENERIC_WRITE,
+               FILE_SHARE_READ |              // sharing mode
+               FILE_SHARE_WRITE,              // (allow everything)
+               NULL,                          // no secutity attr
+               OPEN_EXISTING,                 // creation disposition
+               0,                             // no flags
+               NULL                           // no template file
+               );
+      
+         if ( m_hFile == INVALID_HANDLE_VALUE )
+         {
 //             wxLogSysError(_("Failed to open '%s' for %s"),
 //                           filename.c_str(),
 //                           mode == Read ? _("reading") : _("writing"));
-      }
-   }
-   
-   ~ossimFileHandle()
-   {
-      if ( m_hFile != INVALID_HANDLE_VALUE )
-      {
-         if ( !::CloseHandle(m_hFile) )
-         {
-//                 wxLogSysError(_("Failed to close file handle"));
          }
       }
-   }
+   
+   ~ossimFileHandle()
+      {
+         if ( m_hFile != INVALID_HANDLE_VALUE )
+         {
+            if ( !::CloseHandle(m_hFile) )
+            {
+//                 wxLogSysError(_("Failed to close file handle"));
+            }
+         }
+      }
    
    // return true only if the file could be opened successfully
    bool isOk() const { return m_hFile != INVALID_HANDLE_VALUE; }
@@ -122,48 +121,48 @@ private:
 
 static void convertOssimToFileTime(FILETIME *ft, const ossimDate& dt)
 {
-    SYSTEMTIME st;
-    st.wDay = dt.getDay();
-    st.wMonth = (WORD)(dt.getMonth());
-    st.wYear = (WORD)dt.getYear();
-    st.wHour = dt.getHour();
-    st.wMinute = dt.getMin();
-    st.wSecond = dt.getSec();
+   SYSTEMTIME st;
+   st.wDay = dt.getDay();
+   st.wMonth = (WORD)(dt.getMonth());
+   st.wYear = (WORD)dt.getYear();
+   st.wHour = dt.getHour();
+   st.wMinute = dt.getMin();
+   st.wSecond = dt.getSec();
 //     st.wMilliseconds = dt.GetMillisecond();
 
-    FILETIME ftLocal;
-    if ( !::SystemTimeToFileTime(&st, &ftLocal) )
-    {
+   FILETIME ftLocal;
+   if ( !::SystemTimeToFileTime(&st, &ftLocal) )
+   {
 //         wxLogLastError(_T("SystemTimeToFileTime"));
-    }
+   }
 
-    if ( !::LocalFileTimeToFileTime(&ftLocal, ft) )
-    {
+   if ( !::LocalFileTimeToFileTime(&ftLocal, ft) )
+   {
 //         wxLogLastError(_T("LocalFileTimeToFileTime"));
-    }
+   }
 }
 
 static void convertFileTimeToOssim(ossimLocalTm &dt, const FILETIME &ft)
 {
-    FILETIME ftcopy = ft;
-    FILETIME ftLocal;
-    if ( !::FileTimeToLocalFileTime(&ftcopy, &ftLocal) )
-    {
+   FILETIME ftcopy = ft;
+   FILETIME ftLocal;
+   if ( !::FileTimeToLocalFileTime(&ftcopy, &ftLocal) )
+   {
 //         wxLogLastError(_T("FileTimeToLocalFileTime"));
-    }
+   }
 
-    SYSTEMTIME st;
-    if ( !::FileTimeToSystemTime(&ftLocal, &st) )
-    {
+   SYSTEMTIME st;
+   if ( !::FileTimeToSystemTime(&ftLocal, &st) )
+   {
 //         wxLogLastError(_T("FileTimeToSystemTime"));
-    }
+   }
 
-    dt.setDay(st.wDay);
-    dt.setMonth(st.wMonth);
-    dt.setYear(st.wYear);
-    dt.setHour(st.wHour);
-    dt.setMin(st.wMinute);
-    dt.setSec(st.wSecond);
+   dt.setDay(st.wDay);
+   dt.setMonth(st.wMonth);
+   dt.setYear(st.wYear);
+   dt.setHour(st.wHour);
+   dt.setMin(st.wMinute);
+   dt.setSec(st.wSecond);
     
 //     dt->Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
 //             st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
@@ -171,11 +170,11 @@ static void convertFileTimeToOssim(ossimLocalTm &dt, const FILETIME &ft)
 
 static inline bool IsFindDataOk(FIND_DATA fd)
 {
-        return fd != INVALID_HANDLE_VALUE;
+   return fd != INVALID_HANDLE_VALUE;
 }
 
 static inline FIND_DATA FindFirst(const ossimString& spec,
-                                      FIND_STRUCT *finddata)
+                                  FIND_STRUCT *finddata)
 {
    return ::FindFirstFile(spec.c_str(), finddata);
 }
@@ -186,20 +185,20 @@ static bool ossimGetDirectoryTimes(const ossimString& dirname,
                                    FILETIME *ftMod)
 {
 
-    FIND_STRUCT fs;
-    FIND_DATA fd = FindFirst(dirname, &fs);
-    if ( !IsFindDataOk(fd) )
-    {
-        return false;
-    }
+   FIND_STRUCT fs;
+   FIND_DATA fd = FindFirst(dirname, &fs);
+   if ( !IsFindDataOk(fd) )
+   {
+      return false;
+   }
 
-    *ftAccess = fs.ftLastAccessTime;
-    *ftCreate = fs.ftCreationTime;
-    *ftMod = fs.ftLastWriteTime;
+   *ftAccess = fs.ftLastAccessTime;
+   *ftCreate = fs.ftCreationTime;
+   *ftMod = fs.ftLastWriteTime;
 
-    FindClose(fd);
+   FindClose(fd);
 
-    return true;
+   return true;
 }
 #endif
 
@@ -217,31 +216,24 @@ ossimFilename::ossimFilename(const ossimFilename& src)
 ossimFilename::ossimFilename(const ossimString& src)
    : ossimString(src)
 {
-	convertToNative();
+   convertToNative();
 }
 
 ossimFilename::ossimFilename(const char* src)
    : ossimString(src)
 {
-	convertToNative();
+   convertToNative();
 }
 
 template <class Iter> ossimFilename::ossimFilename(Iter s, Iter e)
    : ossimString(s, e)
 {
-	convertToNative();
+   convertToNative();
 }
 
 bool ossimFilename::operator == (const ossimFilename& rhs)const
 {
-//    ossimFilename tempLeft = *this;
-//    ossimFilename tempRight = rhs;
-
-//    tempLeft.convertBackToForwardSlashes();
-//    tempRight.convertBackToForwardSlashes();
-
    return ossimString::operator==(rhs);
-//   return (*this==ossimString(rhs));
 }
 
 bool ossimFilename::operator == (const ossimString& rhs)const
@@ -253,9 +245,6 @@ bool ossimFilename::operator == (const char* rhs)const
 {
    return ossimString::operator ==(rhs);
 }
-
-const char ossimFilename::getPathSeparator() const
-{ return thePathSeparator; }
 
 void ossimFilename::convertBackToForwardSlashes()
 {
@@ -284,7 +273,6 @@ void ossimFilename::convertForwardToBackSlashes()
       ++currentChar;
    }
 }
-
 
 bool ossimFilename::setTimes(ossimLocalTm* accessTime,
                              ossimLocalTm* modTime,
@@ -325,22 +313,22 @@ bool ossimFilename::setTimes(ossimLocalTm* accessTime,
       }
    }
 #else
-    if ( !accessTime && !modTime )
-    {
-        // can't modify the creation time anyhow, don't try
-        return true;
-    }
-    utimbuf utm;
-    utm.actime = accessTime ? accessTime->getTicks() : modTime->getTicks();
-    utm.modtime = modTime ? modTime->getTicks() : accessTime->getTicks();
-    if ( utime(expand().c_str(), &utm) == 0 )
-    {
-        return true;
-    }
+   if ( !accessTime && !modTime )
+   {
+      // can't modify the creation time anyhow, don't try
+      return true;
+   }
+   utimbuf utm;
+   utm.actime = accessTime ? accessTime->getTicks() : modTime->getTicks();
+   utm.modtime = modTime ? modTime->getTicks() : accessTime->getTicks();
+   if ( utime(expand().c_str(), &utm) == 0 )
+   {
+      return true;
+   }
     
 #endif
 
-    return false;
+   return false;
 }
 
 bool ossimFilename::getTimes(ossimLocalTm *accessTime,
@@ -350,74 +338,74 @@ bool ossimFilename::getTimes(ossimLocalTm *accessTime,
    if(!expand().exists()) return false;
    
 #if defined(_WIN32)
-    // we must use different methods for the files and directories under
-    // Windows as CreateFile(GENERIC_READ) doesn't work for the directories and
-    // CreateFile(FILE_FLAG_BACKUP_SEMANTICS) works -- but only under NT and
-    // not 9x
-    bool ok;
-    FILETIME ftAccess, ftCreate, ftWrite;
-    if ( isDir() )
-    {
-       ok = ossimGetDirectoryTimes(expand().c_str(),
+   // we must use different methods for the files and directories under
+   // Windows as CreateFile(GENERIC_READ) doesn't work for the directories and
+   // CreateFile(FILE_FLAG_BACKUP_SEMANTICS) works -- but only under NT and
+   // not 9x
+   bool ok;
+   FILETIME ftAccess, ftCreate, ftWrite;
+   if ( isDir() )
+   {
+      ok = ossimGetDirectoryTimes(expand().c_str(),
                                   &ftAccess, &ftCreate, &ftWrite);
-       ok = false;
-    }
-    else // file
-    {
-       ossimFileHandle fh(expand().c_str(), ossimFileHandle::Read);
-        if ( fh.isOk() )
-        {
-            ok = ::GetFileTime(fh,
-                               createTime ? &ftCreate : NULL,
-                               accessTime ? &ftAccess : NULL,
-                               modTime ? &ftWrite : NULL) != 0;
-        }
-        else
-        {
-            ok = false;
-        }
-    }
+      ok = false;
+   }
+   else // file
+   {
+      ossimFileHandle fh(expand().c_str(), ossimFileHandle::Read);
+      if ( fh.isOk() )
+      {
+         ok = ::GetFileTime(fh,
+                            createTime ? &ftCreate : NULL,
+                            accessTime ? &ftAccess : NULL,
+                            modTime ? &ftWrite : NULL) != 0;
+      }
+      else
+      {
+         ok = false;
+      }
+   }
 
-    if ( ok )
-    {
-        if ( createTime )
-        {
-            convertFileTimeToOssim(*createTime, ftCreate);
-        }
-        if ( accessTime )
-        {
-            convertFileTimeToOssim(*accessTime, ftAccess);
-        }
-        if ( modTime )
-        {
-            convertFileTimeToOssim(*modTime, ftWrite);
-        }
+   if ( ok )
+   {
+      if ( createTime )
+      {
+         convertFileTimeToOssim(*createTime, ftCreate);
+      }
+      if ( accessTime )
+      {
+         convertFileTimeToOssim(*accessTime, ftAccess);
+      }
+      if ( modTime )
+      {
+         convertFileTimeToOssim(*modTime, ftWrite);
+      }
         
-        return true;
-    }
+      return true;
+   }
 #else
-    struct stat sbuf;
-    stat(c_str(), &sbuf);
-    if ( stat( expand().c_str(), &sbuf) == 0 )
-    {
-        if ( accessTime )
-        {
-           *accessTime = ossimLocalTm(sbuf.st_atime);
-        }
-        if ( modTime )
-        {
-           *modTime = ossimLocalTm(sbuf.st_mtime);
-        }
-        if ( createTime )
-        {
-            *createTime = ossimLocalTm(sbuf.st_ctime);
-        }
-        return true;
-    }
+   struct stat sbuf;
+   stat(c_str(), &sbuf);
+   if ( stat( expand().c_str(), &sbuf) == 0 )
+   {
+      if ( accessTime )
+      {
+         *accessTime = ossimLocalTm(sbuf.st_atime);
+      }
+      if ( modTime )
+      {
+         *modTime = ossimLocalTm(sbuf.st_mtime);
+      }
+      if ( createTime )
+      {
+         *createTime = ossimLocalTm(sbuf.st_ctime);
+      }
+      return true;
+   }
 #endif // platforms
 
 
-    return false;
+   return false;
 }
 
 bool ossimFilename::touch()const
@@ -496,7 +484,7 @@ ossimFilename ossimFilename::expand() const
             if ( result.size() && ((*(result.begin())) != '$') )
             {
                ossimFilename cwd = ossimEnvironmentUtility::instance()->
-               getCurrentWorkingDir();
+                  getCurrentWorkingDir();
                result = cwd.dirCat(result);
             }
          }
@@ -532,7 +520,7 @@ ossimFilename ossimFilename::expand() const
                         getEnvironmentVariable(ossimString(tempPtr+startIdx,
                                                            tempPtr+scanIdx)));
 #if defined(_WIN32) // do windows style replacment
- //                    value.convertBackToForwardSlashes();
+                     //                    value.convertBackToForwardSlashes();
 #endif
                      finalResult += value;
                      // reset start idx indicator to not set so we are ready for next pattern
@@ -565,7 +553,7 @@ ossimFilename ossimFilename::expand() const
          } // matches:  if ( result.needsExpansion() )
 
 #if defined(_WIN32)
- //        result.convertForwardToBackSlashes();
+         //        result.convertForwardToBackSlashes();
 #endif        
 
       } // matches: if ( needsExpansion() )
@@ -586,28 +574,28 @@ ossimFilename ossimFilename::expand() const
 
 bool ossimFilename::exists() const
 {
-	bool result = false;
+   bool result = false;
 #if defined(_WIN32)
-	result = (_access(c_str(), ossimFilename::OSSIM_EXIST) == 0);
+   result = (_access(c_str(), ossimFilename::OSSIM_EXIST) == 0);
 #else
-	result = ((access(c_str(), ossimFilename::OSSIM_EXIST)) == 0);
+   result = ((access(c_str(), ossimFilename::OSSIM_EXIST)) == 0);
 #endif
-	return result;
+   return result;
 }
 
 bool ossimFilename::isFile() const
 {
 #if defined(_WIN32)
 
-	struct _stat sbuf;
-	if ( _stat(c_str(), &sbuf ) == -1)
-		return false;
-	return (_S_IFMT & sbuf.st_mode ? true : false);
+   struct _stat sbuf;
+   if ( _stat(c_str(), &sbuf ) == -1)
+      return false;
+   return (_S_IFMT & sbuf.st_mode ? true : false);
 #else
-	struct stat sbuf;
+   struct stat sbuf;
 
-	stat(c_str(), &sbuf);
-	return ((sbuf.st_mode & S_IFMT) == S_IFREG);
+   stat(c_str(), &sbuf);
+   return ((sbuf.st_mode & S_IFMT) == S_IFREG);
 #endif
 }
 
@@ -708,18 +696,18 @@ ossimFilename ossimFilename::path() const
    ossimFilename file = *this;
    //file.convertBackToForwardSlashes();
 
-    // finds the last occurrence of the given string; in this case '/';
-    size_type pos = file.rfind(thePathSeparator);
+   // finds the last occurrence of the given string; in this case '/';
+   size_type pos = file.rfind(thePathSeparator);
 
-    if (pos == 0)
-       return ossimFilename(ossimFilename(thePathSeparator));
-    if (pos == npos)
-    {
-       // We got to the end of the file and did not find a path separator.
-       return ossimFilename::NIL;
-    }
+   if (pos == 0)
+      return ossimFilename(ossimFilename(thePathSeparator));
+   if (pos == npos)
+   {
+      // We got to the end of the file and did not find a path separator.
+      return ossimFilename::NIL;
+   }
 
-    return ossimFilename(file.substr(0, pos));
+   return ossimFilename(file.substr(0, pos));
 }
 
 ossimFilename ossimFilename::drive()const
@@ -1051,13 +1039,13 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 #if defined(__BORLANDC__)
                   if ( _mkdir(current.c_str()) != 0 )
 #elif defined(_WIN32)
-                  if ( _mkdir(current.c_str()) != 0 )
+                     if ( _mkdir(current.c_str()) != 0 )
 #else
-                  if ( mkdir(current.c_str(), perm) != 0 )
+                        if ( mkdir(current.c_str(), perm) != 0 )
 #endif
-                  {
-                     return false;
-                  }
+                        {
+                           return false;
+                        }
                }
             }
          }
@@ -1068,17 +1056,17 @@ bool ossimFilename::createDirectory( bool recurseFlag,
 #if defined (__BORLANDC__)
       if ( _mkdir(c_str()) != 0 )
 #elif defined(_WIN32)
-      if ( _mkdir(c_str()) != 0 )
+         if ( _mkdir(c_str()) != 0 )
 #else
-      if ( mkdir(c_str(), perm) != 0 )
+            if ( mkdir(c_str(), perm) != 0 )
 #endif
-      {
-         return false;
-      }
-      else
-      {
-         return true;
-      }
+            {
+               return false;
+            }
+            else
+            {
+               return true;
+            }
    }
    return true;
 }
@@ -1087,7 +1075,7 @@ bool ossimFilename::remove(const ossimFilename& pathname)
 {
    bool result = true;
 #if defined(__VISUALC__)  || defined(__BORLANDC__) || defined(__WATCOMC__) || \
-    defined(__GNUWIN32__) || defined(_MSC_VER)
+   defined(__GNUWIN32__) || defined(_MSC_VER)
    
    if(::remove(pathname.c_str()) != 0)
    {
@@ -1139,7 +1127,7 @@ bool ossimFilename::wildcardRemove(const ossimFilename& pathname)
    for(idx = 0; idx < fileListToRemove.size(); ++idx)
    {
 #if defined(__VISUALC__)  || defined(__BORLANDC__) || defined(__WATCOMC__) || \
-    defined(__GNUWIN32__) || defined(_MSC_VER)
+   defined(__GNUWIN32__) || defined(_MSC_VER)
       
       if(remove(fileListToRemove[idx].c_str()) != 0)
       {
@@ -1193,9 +1181,9 @@ bool ossimFilename::copyFileTo(const ossimFilename& outputFile) const
    if (is.fail())
    {
       ossimNotify(ossimNotifyLevel_WARN)
-            << "WARNING: "
-            << "ossimFilename::copyFileTo WARNING:"
-            << "\nCannot open: " << this->c_str() << std::endl;
+         << "WARNING: "
+         << "ossimFilename::copyFileTo WARNING:"
+         << "\nCannot open: " << this->c_str() << std::endl;
       return false;
    }
 
@@ -1203,9 +1191,9 @@ bool ossimFilename::copyFileTo(const ossimFilename& outputFile) const
    if (os.fail())
    {
       ossimNotify(ossimNotifyLevel_WARN)
-            << "WARNING: "
-            << "ossimFilename::copyFileTo WARNING:"
-            << "\nCannot open: " << outputFile.c_str() << std::endl;
+         << "WARNING: "
+         << "ossimFilename::copyFileTo WARNING:"
+         << "\nCannot open: " << outputFile.c_str() << std::endl;
       return false;
    }
 
@@ -1283,9 +1271,9 @@ bool ossimFilename::needsExpansion() const
 void ossimFilename::convertToNative()
 {
 #if defined(_WIN32)
-    convertForwardToBackSlashes();
+   convertForwardToBackSlashes();
 #else
-	convertBackToForwardSlashes();
+   convertBackToForwardSlashes();
 #endif
 	
 }

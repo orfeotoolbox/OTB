@@ -12,7 +12,7 @@
 // JpegTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.h 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimJpegTileSource.h 16860 2010-03-11 15:28:09Z gpotts $
 
 #ifndef ossimJpegTileSource_HEADER
 #define ossimJpegTileSource_HEADER
@@ -143,6 +143,7 @@ public:
     *  Returns true if the image_file can be opened and is a valid tiff file.
     */
    bool open(const ossimFilename& jpeg_file);
+   virtual void close();
 
    /**
     * @brief Gets a property for matching name.

@@ -13,8 +13,9 @@
 
 #include <ossim/imaging/ossimSingleImageChain.h>
 
-#include <ossim/imaging/ossimCacheTileSource.h>
+#include <ossim/base/ossimFilename.h>
 #include <ossim/imaging/ossimBandSelector.h>
+#include <ossim/imaging/ossimCacheTileSource.h>
 #include <ossim/imaging/ossimHistogramRemapper.h>
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimImageHandlerRegistry.h>
@@ -24,7 +25,6 @@
 ossimSingleImageChain::ossimSingleImageChain()
    :
    ossimImageChain(),
-   m_file(ossimFilename::NIL),
    m_handler(0),
    m_bandSelector(0),
    m_histogramRemapper(0),
@@ -51,7 +51,6 @@ void ossimSingleImageChain::reset()
       result = deleteLast();
    } while (result);
 
-   m_file = ossimFilename::NIL;
    m_handler = 0;
    m_bandSelector = 0;
    m_histogramRemapper = 0;
@@ -73,6 +72,16 @@ void ossimSingleImageChain::close()
          m_handler = 0;
       }
    }
+}
+
+ossimFilename ossimSingleImageChain::getFilename() const
+{
+   ossimFilename result;
+   if (m_handler)
+   {
+      result = m_handler->getFilename();
+   }
+   return result;
 }
 
 bool ossimSingleImageChain::open(const ossimFilename& file)
@@ -387,4 +396,13 @@ void ossimSingleImageChain::setBandSelection(
    {
       m_histogramRemapper->initialize();
    }
+}
+ossimScalarType ossimSingleImageChain::getImageHandlerScalarType() const
+{
+   ossimScalarType result = OSSIM_SCALAR_UNKNOWN;
+   if (m_handler)
+   {
+      result = m_handler->getOutputScalarType();
+   }
+   return result;
 }

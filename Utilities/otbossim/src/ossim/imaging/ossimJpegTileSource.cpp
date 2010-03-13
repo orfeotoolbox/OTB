@@ -8,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 16075 2009-12-10 15:46:43Z gpotts $
+//  $Id: ossimJpegTileSource.cpp 16860 2010-03-11 15:28:09Z gpotts $
 #if defined(__BORLANDC__)
 #include <iostream>
 using std::size_t;
@@ -433,6 +433,11 @@ bool ossimJpegTileSource::loadState(const ossimKeywordlist& kwl,
    }
 
    return false;
+}
+
+void ossimJpegTileSource::close()
+{
+   destroy();
 }
 
 

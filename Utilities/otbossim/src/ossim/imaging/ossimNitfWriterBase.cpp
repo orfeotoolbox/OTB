@@ -67,21 +67,11 @@ void ossimNitfWriterBase::setProperty(ossimRefPtr<ossimProperty> property)
 
       if (name == ENABLE_RPCB_KW)
       {
-         ossimBooleanProperty* boolProperty = PTR_CAST(ossimBooleanProperty,
-                                                       property.get());
-         if (boolProperty)
-         {
-            theEnableRpcbTagFlag = boolProperty->getBoolean();
-         }
+         theEnableRpcbTagFlag = property->valueToString().toBool();
       }
       else if (name == ENABLE_BLOCKA_KW)
       {
-         ossimBooleanProperty* boolProperty = PTR_CAST(ossimBooleanProperty,
-                                                       property.get());
-         if (boolProperty)
-         {
-            theEnableBlockaTagFlag = boolProperty->getBoolean();
-         }
+         theEnableBlockaTagFlag = property->valueToString().toBool();
       }
       else
       {

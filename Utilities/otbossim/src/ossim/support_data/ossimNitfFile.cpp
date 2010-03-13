@@ -9,7 +9,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 15766 2009-10-20 12:37:09Z gpotts $
+// $Id: ossimNitfFile.cpp 16859 2010-03-11 03:12:51Z dburken $
 
 #include <fstream>
 #include <iostream>
@@ -65,6 +65,21 @@ std::ostream& ossimNitfFile::print(std::ostream& out,
                if ( !ossim::isnan(imag) )
                {
                   if ( imag < 1.0)
+                  {
+                     printIt = false;
+                  }
+               }
+
+               //---
+               // Now see if it's a cloud mask image.  Do not print
+               // cloud mask images if the printOverviews is false.
+               //---
+               if ( printIt )
+               {
+                  if ( (ih->getCategory().trim(ossimString(" ")) ==
+                        "CLOUD") &&
+                       (ih->getRepresentation().trim(ossimString(" ")) ==
+                        "NODISPLY") )
                   {
                      printIt = false;
                   }

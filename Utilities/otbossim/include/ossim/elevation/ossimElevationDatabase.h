@@ -90,6 +90,19 @@ public:
    {
       return m_meanSpacing;
    }
+   virtual void setGeoid(ossimGeoid* geoid)
+   {
+      m_geoid = geoid;
+   }
+   ossimGeoid* getGeoid()
+   {
+      return m_geoid.get();
+   }
+   const ossimGeoid* getGeoid()const
+   {
+      return m_geoid.get();
+   }
+   
    /**
     * Open a connection to a database.  In most cases this will be a pointer
     * to a directory like in a Dted directory reader.  
@@ -122,6 +135,8 @@ protected:
    {
       m_geoid = 0;
    }
+   virtual double getOffsetFromEllipsoid(const ossimGpt& gpt)const;
+
    virtual void remove(ossim_uint64 id)
    {
       CellMap::iterator iter = m_cacheMap.find(id);

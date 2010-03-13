@@ -17,7 +17,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimInit.h 11959 2007-10-31 19:22:56Z gpotts $
+// $Id: ossimInit.h 16636 2010-02-22 19:02:00Z dburken $
 #ifndef ossimInit_HEADER
 #define ossimInit_HEADER
 
@@ -82,6 +82,16 @@ public:
    void initializeElevation();
 
    /**
+    * @brief Initializes log file from preferences keyword lookup
+    * of "ossim.log.file" if log file has not already been set and
+    * keyword is set in preferences.
+    *
+    * So this should be called after parse options as the --ossim-logfile
+    * should override any preferences setting.
+    */
+   void initializeLogFile();
+
+   /**
     * @return The version in the form of:
     * "version major.minor.release (yyyymmdd)"
     * where
@@ -104,13 +114,6 @@ protected:
    /** Hidden from use assignment operator. */
    void operator=(const ossimInit& rhs) const;
    
-   /*!
-    * METHOD: parseOptions()
-    * Parses the command line as passed in initialize. The options string is
-    * modified:
-    */
-   void parseOptions(int& argc, char** argv);
-
    void parseOptions(ossimArgumentParser& parser);
 
    void parseNotifyOption(ossimArgumentParser& parser);
@@ -122,8 +125,6 @@ protected:
    void removeOption(int&   argc, 
                      char** argv,
                      int    argToRemove);
-
-   
    
    static ossimInit*  theInstance;
    bool               theInitializedFlag;  

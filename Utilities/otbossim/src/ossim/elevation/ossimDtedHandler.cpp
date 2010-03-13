@@ -9,7 +9,7 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 16341 2010-01-13 18:22:27Z gpotts $
+// $Id: ossimDtedHandler.cpp 16826 2010-03-08 18:47:32Z gpotts $
 
 #include <cstdlib>
 #include <cstring> /* for memcpy */
@@ -222,14 +222,14 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
    int x0 = static_cast<int>(xi);
    int y0 = static_cast<int>(yi);
 
-   // Check for right edge.
-   if (gpt.lon == theGroundRect.lr().lon)
+   if(x0 == (m_numLonLines-1))
    {
       --x0; // Move over one post.
    }
    
    // Check for top edge.
-   if (gpt.lat == theGroundRect.ul().lat)
+   //    if (gpt.lat == theGroundRect.ul().lat)
+   if(y0 == (m_numLatPoints-1))
    {
       --y0; // Move down one post.
    }

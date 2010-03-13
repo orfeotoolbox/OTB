@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 16308 2010-01-09 02:45:54Z eshirschorn $
+// $Id: ossimProjectionFactoryRegistry.cpp 16617 2010-02-20 15:53:28Z dburken $
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
@@ -141,7 +141,7 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
    registerFactory(ossimNitfProjectionFactory::instance());
-   registerFactory(ossimSensorModelFactory::instance());//OTB: switch with Tiff to work on QB/Ikonos/SPOT5
+   registerFactory(ossimSensorModelFactory::instance());
    registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimSrsProjectionFactory::instance());

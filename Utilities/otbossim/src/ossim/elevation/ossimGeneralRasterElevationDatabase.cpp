@@ -20,9 +20,9 @@ double ossimGeneralRasterElevationDatabase::getHeightAboveMSL(const ossimGpt& gp
 double ossimGeneralRasterElevationDatabase::getHeightAboveEllipsoid(const ossimGpt& gpt)
 {
    double h = getHeightAboveMSL(gpt);
-   if((h != ossim::nan())&&m_geoid.valid())
+   if(h != ossim::nan())
    {
-      h += m_geoid->offsetFromEllipsoid(gpt);
+      h += getOffsetFromEllipsoid(gpt);
    }
    
    return h;

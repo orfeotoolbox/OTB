@@ -7,7 +7,7 @@
 //
 // Contains class declaration for ossimNotify
 //-------------------------------------------------------------------
-//  $Id: ossimNotify.h 14789 2009-06-29 16:48:14Z dburken $
+//  $Id: ossimNotify.h 16636 2010-02-22 19:02:00Z dburken $
 #ifndef ossimNotify_HEADER
 #define ossimNotify_HEADER
 #include <iostream>
@@ -66,6 +66,10 @@ OSSIMDLLEXPORT std::ostream& ossimNotify(ossimNotifyLevel level = ossimNotifyLev
  *
  */
 OSSIMDLLEXPORT void ossimSetLogFilename(const ossimFilename& filename);
+
+/** @brief Returns the log filename if set. */
+/* OSSIMDLLEXPORT const char* ossimGetLogFilename(); */
+OSSIMDLLEXPORT void ossimGetLogFilename(ossimFilename& logFile);
 
 
 /**

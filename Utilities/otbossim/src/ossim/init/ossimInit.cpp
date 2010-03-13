@@ -16,7 +16,7 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 16425 2010-01-27 20:09:13Z gpotts $
+// $Id: ossimInit.cpp 16636 2010-02-22 19:02:00Z dburken $
 
 
 #include <ossim/init/ossimInit.h>
@@ -110,42 +110,11 @@ void ossimInit::addOptions(ossimArgumentParser& parser)
  *****************************************************************************/
 void ossimInit::initialize(int& argc, char** argv)
 {
-   if(theInitializedFlag)
+   if( !theInitializedFlag )
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "DEBUG ossimInit::initialize(argc, argv): Already initialized, returning......"
-            << std::endl;
-      }
-      return;
+      ossimArgumentParser argumentParser(&argc, argv);
+      theInstance->initialize(argumentParser);
    }
-   theInstance->theAppName  = argv[0];
-
-   
-   theInstance->thePreferences = ossimPreferences::instance();
-
-   // Parse the command line:
-   theInstance->parseOptions(argc, argv);
-
-   theInstance->initializeDefaultFactories();
-   theInstance->initializeElevation();
-   if(thePluginLoaderEnabledFlag)
-   {
-      theInstance->initializePlugins();
-   }
-
-   if (traceDebug())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "ossim preferences file: "
-         << theInstance->thePreferences->getPreferencesFilename()
-         << "\nVersion: " << version()
-         << "\nossimInit::initialize(argc, argv) leaving..."
-         << std::endl;
-   }
-
-   theInitializedFlag = true;
 }
 
 void ossimInit::initialize(ossimArgumentParser& parser)
@@ -171,6 +140,8 @@ void ossimInit::initialize(ossimArgumentParser& parser)
 
    theInstance->initializeDefaultFactories();
    theInstance->initializeElevation();
+   theInstance->initializeLogFile();
+   
    if(thePluginLoaderEnabledFlag)
    {
       theInstance->initializePlugins();
@@ -211,6 +182,7 @@ void ossimInit::initialize()
    theInstance->thePreferences = ossimPreferences::instance();
    theInstance->initializeDefaultFactories();
    theInstance->initializeElevation();
+   theInstance->initializeLogFile();
 
    //---
    // To do:
@@ -299,7 +271,6 @@ void ossimInit::loadPlugins(const ossimFilename& plugin)
          ossimSharedPluginRegistry::instance()->registerPlugin(plugin);
       }
    }
-   
 }
 
 void ossimInit::parseOptions(ossimArgumentParser& parser)
@@ -379,107 +350,6 @@ void ossimInit::parseOptions(ossimArgumentParser& parser)
    {
       thePluginLoaderEnabledFlag = false;
    }
-}
-
-
-/*!****************************************************************************
- * METHOD: ossimInit::parseOptions()
- *  
- *  Parses the command line options.
- *  
- *****************************************************************************/
-void ossimInit::parseOptions(int& argc, char** argv)
-{
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::parseOptions(argc, argv): entering..." << std::endl;
-
-   int currArgc = 1;
-   while (currArgc < argc)
-   {
-      if(argv[currArgc][0] == '-')
-      {
-         switch (argv[currArgc][1])
-         {
-         case 'P':
-         {
-            /*!
-             * OPTION_SYNTAX: -P<pref_filename>
-             * This option permits replacing the default preferences file
-             * with a different, user-specified keyword preference file:
-             */
-            ossimFilename pref_file = (&argv[currArgc][2]);
-            thePreferences->loadPreferences(pref_file);
-            removeOption (argc, argv, currArgc--);
-            break;
-         }
-
-         case 'K':
-         {
-            /*!
-             * OPTION SYNTAX: -K<keyword>[=<value>]
-             * This option used to add a keyword to the already loaded
-             * preferences KWL:
-             */
-            ossimString option = (&argv[currArgc][2]);
-            if (option.contains("=") )
-            {
-               ossimString delimiter = "=";
-               ossimString key (option.before(delimiter));
-               ossimString value = option.after(delimiter);
-               thePreferences->addPreference(key.c_str(), value.c_str());
-            }
-            else
-            {
-               ossimString key (option);
-               thePreferences->addPreference(key, "");
-               
-            }
-            removeOption (argc, argv, currArgc--);
-            break;
-         }
-   
-         case 'T':
-         {
-            /*!
-             * OPTION SYNTAX: -T<trace_tag>
-             * Turns on the trace flag for all trace objects matching
-             * the trace_tag:
-             */
-            ossimString tag = (&argv[currArgc][2]);
-            if (tag.empty())
-            {
-               // Someone did -T "some_tag" instead of -T"some_tag"
-               removeOption (argc, argv, currArgc);
-               tag = argv[currArgc];
-            }
-            ossimTraceManager::instance()->setTracePattern(tag);
-            removeOption (argc, argv, currArgc--);
-            break;
-         }
-
-         case 'S':
-         {
-            /*!
-             * OPTION SYNTAX: -S<sesion_filename>
-             * This option is specified for autoloading session KWL files:
-             */
-            ossimFilename session_file = (&argv[currArgc][2]);
-            thePreferences->loadPreferences(session_file);
-            removeOption (argc, argv, currArgc--);
-            break;
-         }
-
-         default:
-            // option unrecognized, skip
-            break;
-          }
-      }
-
-      currArgc++;
-   }
-   
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::parseOptions(argc, argv): leaving..." << std::endl;
 }
 
 void ossimInit::parseNotifyOption(ossimArgumentParser& parser)
@@ -751,14 +621,14 @@ void ossimInit::initializeElevation()
 		    ossimGeoidManager::instance()->addGeoid(geoidPtr);
 		 }
 	   }
-	   ossimFilename elevation = appPath.dirCat("elevation");
-	   if(elevation.exists())
-	   {
-		   ossimElevManager::instance()->loadElevationPath(elevation);
-	   }
    }
    ossimGeoidManager::instance()->loadState(KWL);
    
+   ossimFilename elevation = appPath.dirCat("elevation");
+   if(elevation.exists())
+   {
+      ossimElevManager::instance()->loadElevationPath(elevation);
+   }
    // lets do backward compatability here
    //
    ossimString regExpression =  ossimString("^(") + "elevation_source[0-9]+.)";
@@ -774,6 +644,27 @@ void ossimInit::initializeElevation()
    
    if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initializeElevation(): leaving..." << std::endl;
+}
+
+void ossimInit::initializeLogFile()
+{
+   //---
+   // Do not set if already as --ossim-logfile take precidence over preferences
+   // file.
+   //---
+   ossimFilename logFile;
+   ossimGetLogFilename(logFile);
+
+   if ( (logFile.size() == 0) && thePreferences )
+   {
+      const char* lookup =
+         thePreferences->preferencesKWL().find("ossim.log.file");
+      if (lookup)
+      {
+         logFile = lookup;
+         ossimSetLogFilename(logFile);
+      }
+   }
 }
 
 ossimString ossimInit::version() const

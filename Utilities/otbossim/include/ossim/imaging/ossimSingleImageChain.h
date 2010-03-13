@@ -18,11 +18,10 @@
 #include <ossim/base/ossimConstants.h> /* OSSIM_DLL */
 #include <ossim/imaging/ossimImageChain.h>
 
-#include <ossim/base/ossimFilename.h>
-
 // Forward class declarations:
 class ossimBandSelector;
 class ossimCacheTileSource;
+class ossimFilename;
 class ossimHistogramRemapper;
 class ossimImageHandler;
 class ossimImageRenderer;
@@ -69,6 +68,9 @@ public:
 
    /** @brief close method to delete the image handler. */
    void close();
+
+   /** @return The filename of the image. */
+   ossimFilename getFilename() const;
 
    /**
     * @brief Create a rendered image chain.
@@ -220,10 +222,19 @@ public:
     */
    void setBandSelection(const std::vector<ossim_uint32>& bandList);
 
-private:
+   /**
+    * @brief Convenience method to return the scalar type of the image handler.
+    * 
+    * @return Scalar type of the image handler.
+    *
+    * This can return OSSIM_SCALAR_UNKNOWN if the image handler has not been
+    * set yet.  Also, this is NOT the same as calling getOutputScalarType
+    * which could have a different scalar type than the image if the
+    * m_remapToEightBitFlag has been set.
+    */
+   ossimScalarType getImageHandlerScalarType() const;
 
-   /** The image file name. */
-   ossimFilename m_file;
+private:
 
    /**  Pointers to links in chain. */
    ossimImageHandler*      m_handler;
