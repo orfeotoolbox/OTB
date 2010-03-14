@@ -124,18 +124,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimString& name)const
 {
-//    if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
-//    {
-//      return new ossimRadarSatModel;
-//    }
-//    else if (name == STATIC_TYPE_NAME(ossimEnvisatAsarModel))
-//    {
-//      return new ossimEnvisatAsarModel;
-//    }
-//   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
-//    {
-//      return new ossimTerraSarModel;
-//    }
    //   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
    //    {
    //      return new ossimCosmoSkymedModel;
