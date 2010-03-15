@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMbasedImageFilter__txx
-#define __otbSOMbasedImageFilter__txx
+#ifndef __otbSOMbasedImageFilter_txx
+#define __otbSOMbasedImageFilter_txx
 
 #include "otbSOMbasedImageFilter.txx"
 

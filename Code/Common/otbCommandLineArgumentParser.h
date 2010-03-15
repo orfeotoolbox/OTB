@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbCommandLineArgumentParser_h_
-#define __otbCommandLineArgumentParser_h_
+#ifndef __otbCommandLineArgumentParser_h
+#define __otbCommandLineArgumentParser_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )

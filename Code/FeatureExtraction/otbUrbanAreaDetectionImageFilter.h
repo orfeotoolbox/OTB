@@ -16,8 +16,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbRadiometricNonWaterNonVegetationDetectionImageFilter_h
-#define __otbRadiometricNonWaterNonVegetationDetectionImageFilter_h
+#ifndef __otbUrbanAreaDetectionImageFilter_h
+#define __otbUrbanAreaDetectionImageFitler_h
 
 #include "otbMath.h"
 #include "otbImage.h"

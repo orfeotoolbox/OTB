@@ -17,6 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbKeyPointDensityImageFilter_txx
+#define __otbKeyPointDensityImageFilter_txx
 
 #include "otbKeyPointDensityImageFilter.h"
 #include "itkImageRegionIterator.h"
@@ -118,3 +120,4 @@ KeyPointDensityImageFilter< TInputImage ,  TOutputImage, TDetector >
 }
 
 }/** end namesapce otb*/
+#endif

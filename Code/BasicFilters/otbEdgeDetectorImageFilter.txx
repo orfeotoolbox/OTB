@@ -17,6 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbEdgeDetectorImageFilter_txx
+#define __otbEdgeDetectorImageFilter_txx
 
 #include "otbEdgeDetectorImageFilter.h"
 
@@ -79,3 +81,4 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
 }
 
 }/** end namesapce otb*/
+#endif

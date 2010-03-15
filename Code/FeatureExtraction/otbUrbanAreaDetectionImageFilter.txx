@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUrbanAreaDetectionFilter_txx
-#define __otbUrbanAreaDetectionFilter_txx
+#ifndef __otbUrbanAreaDetectionImageFilter_txx
+#define __otbUrbanAreaDetectionImageFilter_txx
 
 #include "otbUrbanAreaDetectionImageFilter.h"
 #include "itkProgressAccumulator.h"

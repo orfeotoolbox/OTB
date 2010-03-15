@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbBoxAndWhiskerImageFilter__txx
-#define __otbBoxAndWhiskerImageFilter__txx
+#ifndef __otbBoxAndWhiskerImageFilter_txx
+#define __otbBoxAndWhiskerImageFilter_txx
 
 #include <vector>
 #include <algorithm>

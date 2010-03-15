@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPixelDescription_h
-#define __otbPixelDescription_h
+#ifndef __otbPixelDescriptionView_h
+#define __otbPixelDescriptionView_h
 
 #include "otbImageWidget.h"
 #include "otbImageLayerRenderingModelListener.h"

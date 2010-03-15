@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbSOMbasedImageFilter__h
-#define __otbSOMbasedImageFilter__h
+#ifndef __otbSOMbasedImageFilter_h
+#define __otbSOMbasedImageFilter_h
 
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"

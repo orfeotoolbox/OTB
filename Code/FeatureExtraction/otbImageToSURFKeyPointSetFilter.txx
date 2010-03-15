@@ -17,6 +17,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbImageToSURFKeyPointSetFilter_txx
+#define __otbImageToSURFKeyPointSetFilter_txx
 
 #include "otbImageToSURFKeyPointSetFilter.h"
 #include "itkCenteredRigid2DTransform.h"
@@ -536,3 +538,4 @@ ImageToSURFKeyPointSetFilter< TInputImage, TOutputPointSet>
   os << indent << "Number of Key Points  " << m_NumberOfPoints  << std::endl;
 }
 }
+#endif

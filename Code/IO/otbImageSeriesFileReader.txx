@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReader__txx
-#define __otbImageSeriesFileReader__txx
+#ifndef __otbImageSeriesFileReader_txx
+#define __otbImageSeriesFileReader_txx
 #include "otbImageSeriesFileReader.h"
 
 namespace otb {
@@ -28,7 +28,7 @@ template < class TImage, class TInternalImage >
 ImageSeriesFileReader< TImage, TInternalImage >
 ::ImageSeriesFileReader ()
 {
-   m_ExtractorList = ExtractSelectionListType::New();
+  m_ExtractorList = ExtractSelectionListType::New();
 }
 
 template < class TImage, class TInternalImage >

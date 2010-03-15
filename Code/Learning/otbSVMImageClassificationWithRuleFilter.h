@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbSVMImageClassificationWithRuleFilter__h
-#define __otbSVMImageClassificationWithRuleFilter__h
+#ifndef __otbSVMImageClassificationWithRuleFilter_h
+#define __otbSVMImageClassificationWithRuleFilter_h
 
 #include "otbSVMImageClassificationFilter.h"
 #include "otbVectorImage.h"

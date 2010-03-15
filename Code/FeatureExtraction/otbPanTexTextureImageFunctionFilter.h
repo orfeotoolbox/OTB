@@ -15,8 +15,8 @@
   PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPanTexTextureImageFunction_h
-#define __otbPanTexTextureImageFunction_h
+#ifndef __otbPanTexTextureImageFunctionFilter_h
+#define __otbPanTexTextureImageFunctionFilter_h
 
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"

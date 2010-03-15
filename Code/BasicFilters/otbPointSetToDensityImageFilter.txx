@@ -58,6 +58,9 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
     const   OutputImageRegionType&     outputRegionForThread,
     int   threadId)
 {
+//  sleep(threadId);
+//  std::cerr << threadId << " -> " << outputRegionForThread.GetIndex() << std::endl;
+
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 

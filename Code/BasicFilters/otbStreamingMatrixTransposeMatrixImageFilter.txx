@@ -18,8 +18,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMatrixTransposeMatrixImageFilter_txx
-#define __otbMatrixTransposeMatrixImageFilter_txx
+#ifndef __otbStreamingMatrixTransposeMatrixImageFilter_txx
+#define __otbStreamingMatrixTransposeMatrixImageFilter_txx
 
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 

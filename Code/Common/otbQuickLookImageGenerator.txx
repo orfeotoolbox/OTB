@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbQuickLookImageGenerator_txx
+#define __otbQuickLookImageGenerator_txx
+
 #include "otbQuickLookImageGenerator.h"
 
 namespace otb
@@ -86,3 +89,4 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
   
 
 } // End namespace otb
+#endif

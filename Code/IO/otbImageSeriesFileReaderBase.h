@@ -18,8 +18,8 @@
 
 =========================================================================*/
 
-#ifndef __otbImageSeriesFileReaderBase__h
-#define __otbImageSeriesFileReaderBase__h
+#ifndef __otbImageSeriesFileReaderBase_h
+#define __otbImageSeriesFileReaderBase_h
 
 #include <iostream>
 #include <fstream>
