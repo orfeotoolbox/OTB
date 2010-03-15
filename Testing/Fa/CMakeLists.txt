@@ -93,6 +93,8 @@ ADD_TEST(FA-00006-io_Poupees_R8_Double2UCharBis ${COMMON_TESTS}
          otbMultiToMonoChannelExtractROI
          -double ${TEMP}/FA-00006-io_Poupees_1canal_r8.hdr
          -uchar ${TEMP}/FA-00006-io_Poupees_1canal_oct_bis.hdr )
+SET_TESTS_PROPERTIES(FA-00006-io_Poupees_R8_Double2UCharBis PROPERTIES DEPENDS FA-00006-io_Poupees_OCT_UChar2Double)
+
 
 # ------   RADARSAT   ------------
 IF(OTB_DATA_USE_LARGEINPUT)
