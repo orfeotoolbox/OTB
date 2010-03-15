@@ -18,27 +18,29 @@
 #ifndef __otbDEMToOrthoImageGenerator_h
 #define __otbDEMToOrthoImageGenerator_h
 
+#include <iostream>
+#include <stdio.h>
+
 #include "itkIndent.h"
 #include "otbDEMToImageGenerator.h"
 #include "otbImage.h"
-#include <iostream>
-#include <stdio.h>
-//#include "elevation/ossimElevManager.h"
 #include "otbDEMHandler.h"
-#include "base/ossimFilename.h"
 #include "itkImageRegionIteratorWithIndex.h"
-#include "itkIndent.h"
 
 
 namespace otb
 {
 /** \class DEMToOrthoImageGenerator
  *
- * \brief Class for Reading a DEM data
+ * \brief Class to generate an image from DEM data
  *
- * This class is based on ossimElevManager. It takes in input the UL and LR map coordinates and the spacing.
+ * This class is based on ossimElevManager. It takes in input the upper left easting
+ * and northing in a given map projection, the spacing and the output image size.
  * Handle DTED and SRTM formats.
+ *
  * \ingroup Images
+ *
+ * \example IO/DEMToOrthoImageGenerator.cxx
  *
  */
 template <class TDEMImage, class TMapProjection>
@@ -109,11 +111,11 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId);
 
-  DEMHandlerPointerType m_DEMHandler;
-  PointType m_OutputOrigin;
-  SpacingType  m_OutputSpacing;
-  SizeType m_OutputSize;
-  PixelType m_DefaultUnknownValue;
+  DEMHandlerPointerType    m_DEMHandler;
+  PointType                m_OutputOrigin;
+  SpacingType              m_OutputSpacing;
+  SizeType                 m_OutputSize;
+  PixelType                m_DefaultUnknownValue;
   MapProjectionPointerType m_MapProjection;
 
 private:
