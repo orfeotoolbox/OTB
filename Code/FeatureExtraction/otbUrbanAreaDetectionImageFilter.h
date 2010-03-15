@@ -17,7 +17,7 @@
 
 =========================================================================*/
 #ifndef __otbUrbanAreaDetectionImageFilter_h
-#define __otbUrbanAreaDetectionImageFitler_h
+#define __otbUrbanAreaDetectionImageFilter_h
 
 #include "otbMath.h"
 #include "otbImage.h"
