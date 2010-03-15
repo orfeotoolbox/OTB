@@ -32,7 +32,7 @@ int otbLabelObjectToPolygonFunctorNew(int argc, char * argv[])
   // Instantiation
   //FunctorPointerType myFunctor = FunctorType::New();
 
-  FunctorType myFunctor ;
+  FunctorType myFunctor;
 
   return EXIT_SUCCESS;
 }

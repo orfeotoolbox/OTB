@@ -109,17 +109,17 @@ public:
 
   /** Constructor */
   LabelObjectToPolygonFunctor() : m_Polygon(NULL),
-				  m_CurrentState(UP_LEFT),
-				  m_PositionFlag(LEFT_END),
-				  m_StartingPoint(),
-				  m_CurrentPoint(),
-				  m_CurrentRun(),
-				  m_CurrentLine(0),
-				  m_Solution(),
-				  m_LineOffset(0),
-				  m_StartIndex(),
-				  m_Origin(),
-				  m_Spacing(1.)
+          m_CurrentState(UP_LEFT),
+          m_PositionFlag(LEFT_END),
+          m_StartingPoint(),
+          m_CurrentPoint(),
+          m_CurrentRun(),
+          m_CurrentLine(0),
+          m_Solution(),
+          m_LineOffset(0),
+          m_StartIndex(),
+          m_Origin(),
+          m_Spacing(1.)
   {}
 
   /** Destructor */

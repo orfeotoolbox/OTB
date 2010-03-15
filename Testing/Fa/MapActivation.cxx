@@ -49,7 +49,7 @@ int main(int argc, char* argv[] )
 
   if (argc < 12)
     {
-      std::cout << "Usage : " << argv[0] << " inputTabImage size radius NumberOfIterations BetaInit BetaEnd MaxWeight  MinWeight som actMap som" << std::endl ;
+      std::cout << "Usage : " << argv[0] << " inputTabImage size radius NumberOfIterations BetaInit BetaEnd MaxWeight  MinWeight som actMap som" << std::endl;
 
       return EXIT_FAILURE;
     }
@@ -64,20 +64,20 @@ int main(int argc, char* argv[] )
 
   typedef itk::ImageRegionIterator< ListImageType > IteratorType;
   IteratorType It1( tabreadImage, tabreadImage->GetLargestPossibleRegion() );
-  const int nblines= 591 ; //const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
+  const int nblines= 591; //const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
 
   const int nbcolonnes= 9; //(const int)tabreadImage->GetLargestPossibleRegion().GetSize()[0];
 
   double vectTab[nblines][nbcolonnes];
   std::cout<<"lignes = "<<nblines<<" colonnes = "<<nbcolonnes<<std::endl;
-  for ( It1.GoToBegin(); !It1.IsAtEnd() ;++It1)
+  for ( It1.GoToBegin(); !It1.IsAtEnd();++It1)
     {
       vectTab[It1.GetIndex()[1]][It1.GetIndex()[0]]=It1.Get();
     }
 
-  typedef itk::VariableLengthVector< double > MeasurementVectorType ;
-  typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType ;
-  SampleType::Pointer liste = SampleType::New() ;
+  typedef itk::VariableLengthVector< double > MeasurementVectorType;
+  typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType;
+  SampleType::Pointer liste = SampleType::New();
 
   for(int j=0;j<nblines;j++)
     {
@@ -145,11 +145,11 @@ int main(int argc, char* argv[] )
   somreader->SetFileName(argv[11]/*"som.mhd"*/);
   somreader->Update();
 
-  ClassifierType::Pointer classifier = ClassifierType::New() ;
+  ClassifierType::Pointer classifier = ClassifierType::New();
 
   classifier->SetSample(liste);
   classifier->SetMap(somreader->GetOutput());
-  classifier->Update() ;
+  classifier->Update();
 
   ClassifierType::OutputType* membershipSample = classifier->GetOutput();
   //   std::cout<<"liste: "<<membershipSample->GetMeasurementVectorSize()<< " " << membershipSample->GetMeasurementVector(1)<<std::endl;
@@ -173,7 +173,7 @@ int main(int argc, char* argv[] )
 //  " class sample: "<< membershipSample->GetClassSample(m_iter.GetClassLabel())<<
 //  std::endl;
       //count[m_iter.GetClassLabel()]++;
-      ++m_iter ;
+      ++m_iter;
     }
 
   /*for(int i=0;i<16;i++)
@@ -181,10 +181,10 @@ int main(int argc, char* argv[] )
     std::cout<<" classe: "<< i <<" nb elements= "<<count[i]<<std::endl;
     }*/
 
-  int nbclass = membershipSample->GetNumberOfClasses() ;
+  int nbclass = membershipSample->GetNumberOfClasses();
   std::cout<< " nb of classes= "<< nbclass << std::endl;
 
-  for (int i=0 ; i< nbclass ; i++)
+  for (int i=0; i< nbclass; i++)
     {
       if(membershipSample->GetInternalClassLabel(i)!=-1)
     {

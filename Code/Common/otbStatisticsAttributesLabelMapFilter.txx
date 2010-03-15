@@ -34,8 +34,8 @@ namespace Functor
 template <class TLabelObject, class TFeatureImage>
 StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 ::StatisticsAttributesLabelObjectFunctor() : m_FeatureName("Default"),
-					     m_FeatureImage(),
-					     m_ReducedAttributeSet(true)
+               m_FeatureImage(),
+               m_ReducedAttributeSet(true)
 {}
 
 /** Destructor */
@@ -158,8 +158,8 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 
   const double epsilon = 1E-10;
   if ( vcl_abs(variance) > epsilon )
-	{
-	skewness = ( ( sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
+  {
+  skewness = ( ( sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
     kurtosis = ( ( sum4 - 4.0 * mean * sum3 + 6.0 * mean2 * sum2) / totalFreq - 3.0 * mean2 * mean2 ) / ( variance * variance ) - 3.0;
     }
 

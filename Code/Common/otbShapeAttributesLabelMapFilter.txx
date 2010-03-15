@@ -39,10 +39,10 @@ namespace Functor {
 template <class TLabelObject, class TLabelImage>
 ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
 ::ShapeAttributesLabelObjectFunctor() : m_ComputeFeretDiameter(false),
-					m_ComputePerimeter(false),
-					m_ReducedAttributeSet(true),
-					m_PerimeterCalculator(NULL),
-					m_LabelImage(NULL)
+          m_ComputePerimeter(false),
+          m_ReducedAttributeSet(true),
+          m_PerimeterCalculator(NULL),
+          m_LabelImage(NULL)
 {}
 
 /** The comparator (!=) */
@@ -391,7 +391,6 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
     }
 
 
-
   // Compute principal moments and axes
   itk::Vector<double,LabelObjectType::ImageDimension> principalMoments;
   vnl_symmetric_eigensystem<double> eigen( centralMoments.GetVnlMatrix() );
@@ -498,7 +497,6 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
     lo->SetAttribute( "SHAPE::Flusser10" , (c40 * vcl_pow(c12,4)).real() );
     lo->SetAttribute( "SHAPE::Flusser11" , (c40 * vcl_pow(c12,4)).imag() );
     }
-
 
 
 

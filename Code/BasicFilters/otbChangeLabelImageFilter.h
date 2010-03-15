@@ -187,7 +187,6 @@ private:
 #endif
 
 
-
 #ifndef __otbChangeLabelImageFilter_h
 #define __otbChangeLabelImageFilter_h
 

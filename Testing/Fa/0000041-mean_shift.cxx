@@ -12,7 +12,7 @@ int main( int argc, char *argv[] )
 
   if (argc < 9)
   {
-    std::cout << "Usage : inputImage rangeRadius spatialRadius minRegionSize outfilenamefiltered outfilenamesegmented outfilenamelabeled outfilenameboundary" << std::endl ;
+    std::cout << "Usage : inputImage rangeRadius spatialRadius minRegionSize outfilenamefiltered outfilenamesegmented outfilenamelabeled outfilenameboundary" << std::endl;
 
     return EXIT_FAILURE;
   }

@@ -41,15 +41,15 @@ ImageList<TImage>
 
       // Check that the requested region lies within the largest possible region
       if ( ! it.Get()->VerifyRequestedRegion() )
-	{
-	// invalid requested region, throw an exception
-	itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-	e.SetLocation(ITK_LOCATION);
-	e.SetDataObject(it.Get());
-	e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-	
-	throw e;
-	}
+  {
+  // invalid requested region, throw an exception
+  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+  e.SetLocation(ITK_LOCATION);
+  e.SetDataObject(it.Get());
+  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
+  
+  throw e;
+  }
 
       it.Get()->GetSource()->UpdateOutputData(it.Get());
       }

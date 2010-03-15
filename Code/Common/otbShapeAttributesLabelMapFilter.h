@@ -165,8 +165,8 @@ class ShapeAttributesLabelObjectFunctor
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
 template<class TImage, 
-	 class TLabelImage = Image< typename TImage::PixelType, 
-				    TImage::ImageDimension > >
+   class TLabelImage = Image< typename TImage::PixelType, 
+            TImage::ImageDimension > >
 class ITK_EXPORT ShapeAttributesLabelMapFilter 
   : public otb::LabelMapFeaturesFunctorImageFilter
                <TImage,

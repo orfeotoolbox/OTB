@@ -29,7 +29,7 @@ namespace Functor
 template <class TLabelObject, class TFeatureImage>
 MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 ::MultiStatsAttributesLabelObjectFunctor() : m_ReducedAttributeSet(true),
-					    m_StatsFunctorsMap()
+              m_StatsFunctorsMap()
 {}
 
 /** Destructor */
@@ -165,9 +165,9 @@ MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 template <class TImage, class TFeatureImage>
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::RadiometricAttributesLabelMapFilter() : m_RedChannelIndex(2), 
-					  m_GreenChannelIndex(1), 
-					  m_BlueChannelIndex(0), 
-					  m_NIRChannelIndex(3)
+            m_GreenChannelIndex(1), 
+            m_BlueChannelIndex(0), 
+            m_NIRChannelIndex(3)
 {
   this->SetNumberOfRequiredInputs(2);
 }

@@ -44,10 +44,10 @@ public:
   // Matrix typedef
   typedef typename itk::Matrix<double,
                                TFeatureImage::ImageDimension,
-			       TFeatureImage::ImageDimension> MatrixType;
+             TFeatureImage::ImageDimension> MatrixType;
   // Vector typedef
   typedef typename itk::Vector<double,
-			TFeatureImage::ImageDimension>        VectorType;
+      TFeatureImage::ImageDimension>        VectorType;
 
   /// Typedef of the feature image type
   typedef typename TFeatureImage::PixelType            FeatureType;
