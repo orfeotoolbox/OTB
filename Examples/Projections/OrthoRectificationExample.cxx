@@ -19,12 +19,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
-// iostream is used for general output
-// #include <iostream>
-// #include <iterator>
-// #include <stdlib.h>
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"

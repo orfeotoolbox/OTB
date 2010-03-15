@@ -16,17 +16,11 @@
 
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
-#include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimEcefRay.h>
-#include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimMatrix3x3.h>
 #include <iostream>
 
-class ossimFfL7;
-class ossimString;
 class ossimMapProjection;
 
 //******************************************************************************
@@ -41,12 +35,10 @@ public:
    * CONSTRUCTORS:
    */
   ossimTileMapModel();
-  ossimTileMapModel(const ossimFfL7& head);
-  ossimTileMapModel(const ossimFilename& init_file);
   ossimTileMapModel(const ossimKeywordlist& geom_kwl);
   ossimTileMapModel(const ossimTileMapModel& rhs);
   
-  virtual ~ossimTileMapModel();
+  virtual ~ossimTileMapModel(){};
 
   enum ProjectionType
   {
@@ -55,19 +47,6 @@ public:
     UTM_ORBIT,
     SOM_MAP,
     SOM_ORBIT
-  };
-  
-  enum AdjustParamIndex
-  {
-    INTRACK_OFFSET = 0,
-    CRTRACK_OFFSET,
-    LINE_GSD_CORR,
-    SAMP_GSD_CORR,
-    ROLL_OFFSET,
-    YAW_OFFSET,
-    YAW_RATE,
-    MAP_ROTATION,
-    NUM_ADJUSTABLE_PARAMS // not an index
   };
   
   /*!
@@ -119,37 +98,16 @@ public:
     return qDepth;
   }
   
-  /*!
-   * Given an image point, returns a ray originating at some arbitrarily high
-   * point (ideally at the sensor position) and pointing towards the target.
-   */
-  virtual void imagingRay(const ossimDpt& image_point,
-                          ossimEcefRay&   image_ray) const;
-  
-  /*!
-   * Following a change to the adjustable parameter set, this virtual
-   * is called to permit instances to compute derived quantities after
-   * parameter change.
-   */
-  virtual void updateModel();
   
   /*!
    * ossimOptimizableProjection
    */
-  inline virtual bool useForward()const {return false;} //!image to ground faster
-  virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
+  inline virtual bool useForward()const {return true;} //!image to ground faster
+
   
 protected:
   
 
-  
-  /*!
-   * Initializes the model given a fast format header.
-   */
-  void initFromHeader(const ossimFfL7& head);
-  
-  virtual void initAdjustableParameters();
-  void initMapProjection();
   
   //***
   // Image constant parameters:
@@ -164,20 +122,20 @@ protected:
   int              theWrsRowNumber;
   double           theMeridianalAngle;
   double           thePositionError;
-  
+ 
   ProjectionType       theProjectionType;
   ossimRefPtr<ossimMapProjection>  theMapProjection;
-  
+ 
   double           theMapAzimAngle;
   double           theMapAzimCos;
   double           theMapAzimSin;
   double           theMap2IcRotAngle;
   double           theMap2IcRotCos;
   double           theMap2IcRotSin;
-  
-  //***
-  // Adjustable parameters:
-  //***
+ // 
+ // //***
+ // // Adjustable parameters:
+ // //***
   double           theIntrackOffset;
   double           theCrtrackOffset;
   double           theLineGsdCorr;
@@ -186,15 +144,16 @@ protected:
   double           theYawOffset;
   double           theYawRate;
   double           theMapRotation;
-  
-  //***
-  // Quantities derived from the adjustable parameters:
-  //***
+ // 
+ // //***
+ // // Quantities derived from the adjustable parameters:
+ // //***
   NEWMAT::Matrix   theRollRotMat;
-  
+
+  unsigned int qDepth;  
   TYPE_DATA
   
-  unsigned int qDepth;
+
 };
 
 #endif
