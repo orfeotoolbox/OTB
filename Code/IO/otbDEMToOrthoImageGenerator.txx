@@ -20,7 +20,6 @@
 
 #include "otbDEMToOrthoImageGenerator.h"
 #include "otbMacro.h"
-// #include <iomanip>
 #include "itkProgressReporter.h"
 
 namespace otb
@@ -32,13 +31,13 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::DEMToOrthoImageGenerator()
 {
   m_DEMHandler = DEMHandlerType::New();
-  m_OutputSpacing[0]=0.0001;
-  m_OutputSpacing[1]=-0.0001;
-  m_OutputSize[0]=1;
-  m_OutputSize[1]=1;
-  m_OutputOrigin[0]=0;
-  m_OutputOrigin[1]=0;
-  m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
+  m_OutputSpacing[0] = 0.0001;
+  m_OutputSpacing[1] = -0.0001;
+  m_OutputSize[0] = 1;
+  m_OutputSize[1] = 1;
+  m_OutputOrigin[0] = 0;
+  m_OutputOrigin[1] = 0;
+  m_DefaultUnknownValue = static_cast<PixelType> (-32768); // Value defined in the norm for points strm doesn't have information.
   m_MapProjection = NULL;
 }
 
@@ -51,8 +50,8 @@ void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   output = this->GetOutput(0);
 
   IndexType start;
-  start[0]=0;
-  start[1]=0;
+  start[0] = 0;
+  start[1] = 0;
 
   // Specify region parameters
   OutputImageRegionType largestPossibleRegion;
