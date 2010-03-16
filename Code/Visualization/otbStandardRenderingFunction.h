@@ -33,7 +33,7 @@ namespace otb
 namespace Function
 {
 
-/** \class Identiy
+/** \class Identity
 * \brief Default math functor parameter for rendering function.
 *  \ingroup Visualization
  */
