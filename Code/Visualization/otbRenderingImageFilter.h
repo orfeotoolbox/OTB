@@ -50,20 +50,15 @@ class RenderingFunctor
 {
 public:
   /** Rendering function typedef */
-  typedef otb::Function::RenderingFunction<TPixel,TRGBPixel>          RenderingFunctionType;
+  typedef otb::Function::RenderingFunction<TPixel,TRGBPixel>       RenderingFunctionType;
   /** Rendering function pointer typedef */
-  typedef typename RenderingFunctionType::Pointer                              RenderingFunctionPointerType;
+  typedef typename RenderingFunctionType::Pointer                  RenderingFunctionPointerType;
   /** Default rendering function typedef */
-//   typedef otb::Function::StandardRenderingFunction<TPixel,TRGBPixel> DefaultRenderingFunctionType;
-  /** Scalar pixel typedef */
-// //   typedef TPixel                                                      ScalarPixelType;
-  /** Vector pixel typedef */
-// //   typedef itk::VariableLengthVector<TPixel>                           VectorPixelType;
-  typedef TPixel                            PixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarPixelType;
-  typedef itk::VariableLengthVector<ScalarPixelType>       VectorPixelType;
-  typedef itk::RGBPixel<ScalarPixelType> RGBPixelType;
-  typedef itk::RGBAPixel<ScalarPixelType> RGBAPixelType;
+  typedef TPixel                                                   PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType        ScalarPixelType;
+  typedef itk::VariableLengthVector<ScalarPixelType>               VectorPixelType;
+  typedef itk::RGBPixel<ScalarPixelType>                           RGBPixelType;
+  typedef itk::RGBAPixel<ScalarPixelType>                          RGBAPixelType;
 
   /** Pixel operator */
   inline TRGBPixel operator()(const PixelType & pixel) const
@@ -120,7 +115,7 @@ private:
 *   \sa RenderingFunction
 *
 */
-template <class TInputImage,class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
+template <class TInputImage, class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
 class RenderingImageFilter
   : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
                                         Functor::RenderingFunctor
@@ -235,5 +230,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

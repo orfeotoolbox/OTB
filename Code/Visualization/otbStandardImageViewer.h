@@ -49,10 +49,12 @@
 namespace otb
 {
 /** \class StandardImageViewer
-*   \brief This class implements a standard visualization tool to be
-*   plugged at the end of a pipeline.
-*
-*  \ingroup Visualization
+ *   \brief This class implements a standard visualization tool to be
+ *   plugged at the end of a pipeline.
+ *
+ *  \ingroup Visualization
+ *
+ *   \example Tutorials/SimpleViewer.cxx
  */
 
 template <class TImage, class TVectorData = VectorData<double> , class TWidgetManager = otb::PackedWidgetManager>
@@ -77,7 +79,8 @@ public:
   typedef typename ImageType::Pointer               ImagePointerType;
   typedef typename ImageType::PixelType             PixelType;
   typedef typename ImageType::InternalPixelType     InternalPixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
+  typedef typename itk::NumericTraits<PixelType>
+                                      ::ValueType   ScalarType;
 
 
   /** VectorData typedef */

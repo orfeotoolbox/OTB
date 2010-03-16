@@ -85,12 +85,12 @@ public:
 
   typedef itk::VariableLengthVector<ScalarType>                       SampleType;
   typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
-  typedef typename ListSampleType::Pointer                       ListSamplePointerType;
+  typedef typename ListSampleType::Pointer                            ListSamplePointerType;
 
-  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer                    DFContainerType;
   typedef itk::Statistics::Histogram<
                   typename itk::NumericTraits<ScalarType>::RealType,1,
-                  DFContainerType> HistogramType;
+                  DFContainerType>                                    HistogramType;
   typedef typename HistogramType::Pointer                             HistogramPointerType;
   typedef ObjectList<HistogramType>                                   HistogramListType;
   typedef typename HistogramListType::Pointer                         HistogramListPointerType;
@@ -234,7 +234,7 @@ private:
 
   /** List sample used to compute the histogram by the rendering function*/
   ListSamplePointerType m_ListSample;
-  bool m_ListSampleProvided;//To remember if the list sample was provided manually by the user
+  bool                  m_ListSampleProvided;//To remember if the list sample was provided manually by the user
 
   /** Rendering function */
   RenderingFunctionPointerType m_RenderingFunction;
@@ -249,7 +249,7 @@ private:
   ExtractFilterPointerType    m_ScaledExtractFilter;
 
   /** Coordinate transform */
-  TransformType::Pointer m_Transform;
+  TransformType::Pointer    m_Transform;
   CoordinateToName::Pointer m_CoordinateToName;
 
   /** General info about the image*/
