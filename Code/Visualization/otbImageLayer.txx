@@ -25,7 +25,6 @@
 #include "otbStandardRenderingFunction.h"
 
 #include "otbImageKeywordlist.h"
-// #include "otbCoordinateToName.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "itkMetaDataDictionary.h"
 #include "otbImageMetadataInterfaceFactory.h"

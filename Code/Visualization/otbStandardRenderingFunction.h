@@ -64,6 +64,13 @@ public:
  * renders it with R, G and B channels all equals.
  * If it is a VectorImage, the function renders
  * the selected channels.
+ *
+ * In general, three main steps occur for the production of the final RGB output
+ * - channel selection, by default using the ChannelSelectorFunctor;
+ * - transfer function, by default an identity function;
+ * - clamping of the value between 0 and 255, if necessary using the min/max
+ * retrieved from the histogram.
+ *
  *  \ingroup Visualization
  */
 template <class TPixel, class TRGBPixel,

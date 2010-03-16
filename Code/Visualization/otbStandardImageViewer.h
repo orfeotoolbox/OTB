@@ -43,7 +43,6 @@
 #include "otbVectorDataExtractROI.h"
 #include "otbRemoteSensingRegion.h"
 
-//#include "otbImageWidgetPackedManager.h"
 #include "otbPackedWidgetManager.h"
 
 namespace otb
@@ -59,7 +58,7 @@ namespace otb
 
 template <class TImage, class TVectorData = VectorData<double> , class TWidgetManager = otb::PackedWidgetManager>
 class StandardImageViewer
-  : public itk::Object//, public ImageWidgetPackedManager
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -149,7 +148,7 @@ public:
 
   /** VectorData overlay */
   typedef VectorDataProjectionFilter
-  <VectorDataType,VectorDataType>                    VectorDataProjectionFilterType;
+    <VectorDataType,VectorDataType>                  VectorDataProjectionFilterType;
   typedef VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
   typedef typename VectorDataExtractROIType::RegionType RemoteSensingRegionType;
   typedef VectorDataGlComponent<VectorDataType>      VectorDataGlComponentType;

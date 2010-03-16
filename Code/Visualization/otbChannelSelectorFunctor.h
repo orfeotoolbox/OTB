@@ -103,11 +103,9 @@ namespace otb
           outPixel.SetSize(m_ChannelList.size());
           for (unsigned int i=0; i<m_ChannelList.size(); ++i)
           {
-// REVIEW: Not sure that assert is the best choice here. Exception
-// would be better.
-// REPLY: ideally, the verification should be done outside and only
-// once for the image, not for every pixel, when we reach this point
-// the m_ChannelList MUST be valid
+            // assert as the verification should be done outside and only
+            // once for the image, not for every pixel, when we reach this point
+            // the m_ChannelList MUST be valid
             assert(m_ChannelList[i] < inPixel.Size());
             outPixel[i] = inPixel[m_ChannelList[i]];
           }

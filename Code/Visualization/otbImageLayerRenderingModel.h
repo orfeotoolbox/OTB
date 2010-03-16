@@ -41,7 +41,7 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = otb::Image<itk::RGBAPixel<unsigned char>,2 >,
+template <class TOutputImage,
           class TLayer = otb::ImageLayerBase<TOutputImage>  >
 class ImageLayerRenderingModel
   : public MVCModel<ListenerBase>, public LayerBasedModel< TLayer >
@@ -49,7 +49,7 @@ class ImageLayerRenderingModel
 public:
   /** Standard class typedefs */
   typedef ImageLayerRenderingModel                         Self;
-  typedef LayerBasedModel<TLayer> Superclass;
+  typedef LayerBasedModel<TLayer>                          Superclass;
   typedef itk::SmartPointer<Self>                          Pointer;
   typedef itk::SmartPointer<const Self>                    ConstPointer;
 
@@ -75,8 +75,7 @@ public:
   typedef typename LayerListType::ConstIterator LayerIteratorType;
 
   /** Listener typedef */
-//  typedef ImageLayerRenderingModelListener          ListenerType;
-  typedef ListenerBase ListenerType;
+  typedef ListenerBase                          ListenerType;
 
   /** Blending filter typedef */
   typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;

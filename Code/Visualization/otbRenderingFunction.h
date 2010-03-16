@@ -26,7 +26,6 @@
 #include "otbChannelSelectorFunctor.h"
 #include "itkHistogram.h"
 #include "otbObjectList.h"
-// #include "otbRenderingImageFilter.h"
 #include "otbVisualizationPixelTraits.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
@@ -38,7 +37,6 @@ namespace otb
 
 namespace Function
 {
-
 
 /** \class RenderingFunction
  * \brief Base class for rendering functions.
@@ -71,14 +69,14 @@ public:
   typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
 
 
-  typedef itk::VariableLengthVector<ScalarType>                       SampleType;
-  typedef itk::Statistics::ListSample<SampleType>                     ListSampleType;
-  typedef typename ListSampleType::Pointer                       ListSamplePointerType;
+  typedef itk::VariableLengthVector<ScalarType>             SampleType;
+  typedef itk::Statistics::ListSample<SampleType>           ListSampleType;
+  typedef typename ListSampleType::Pointer                  ListSamplePointerType;
 
-  typedef itk::Statistics::DenseFrequencyContainer                   DFContainerType;
+  typedef itk::Statistics::DenseFrequencyContainer          DFContainerType;
 
   typedef otb::ListSampleToHistogramListGenerator
-      <ListSampleType,ScalarType,DFContainerType>                     HistogramFilterType;
+      <ListSampleType,ScalarType,DFContainerType>           HistogramFilterType;
   typedef itk::Statistics::Histogram<
                   RealScalarType,1,DFContainerType>         HistogramType;
   typedef typename HistogramType::Pointer                   HistogramPointerType;

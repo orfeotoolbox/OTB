@@ -19,11 +19,6 @@
 #define __otbImageLayerGenerator_txx
 
 #include "otbImageLayerGenerator.h"
-
-
-#include "otbRenderingFunction.h"
-//FIXME just for the enum declaration, might need to move that
-
 #include <FL/Fl.H>
 
 namespace otb
@@ -89,7 +84,7 @@ ImageLayerGenerator<TImageLayer>
   // Get the image largest possible region
   typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
 
-  // Shannon (finner generation could be added later)
+  // Shannon (finer generation could be added later)
   unsigned int wrequested = static_cast<unsigned int>(1.5 * wscreen*m_ScreenRatio);
   unsigned int hrequested = static_cast<unsigned int>(1.5 * hscreen*m_ScreenRatio);
 
