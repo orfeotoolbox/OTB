@@ -2,23 +2,18 @@ PROJECT(ossimplugins)
 
 SET(ossimplugins_VERSION_MAJOR "1")
 SET(ossimplugins_VERSION_MINOR "8")
-SET(ossimplugins_VERSION_PATCH "3dev")
+SET(ossimplugins_VERSION_PATCH "4")
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} 
-${CMAKE_CURRENT_SOURCE_DIR}/ossim 
-#${CMAKE_CURRENT_SOURCE_DIR}/ossim/otb
-${OTB_SOURCE_DIR}/Utilities/otbossim/include
-${OTB_BINARY_DIR}/Utilities/otbossim/include
-# ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection
-# ${CMAKE_CURRENT_SOURCE_DIR}/../otbossim/include/ossim/projection/otb
+  ${CMAKE_CURRENT_SOURCE_DIR}/ossim 
+  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+  ${OTB_BINARY_DIR}/Utilities/otbossim/include
 )
-#these two last directory are to be removed when the SAR plugin will have migrated
 
 SET(ossimplugins_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 FILE(GLOB_RECURSE ossimplugins_gdal_SRCS "${ossimplugins_SOURCES_DIR}/gdal/*.cpp")
 FILE(GLOB_RECURSE ossimplugins_ossim_SRCS "${ossimplugins_SOURCES_DIR}/ossim/*.cpp")
-
 
 SET(ossimplugins_SOURCES
   ${ossimplugins_gdal_SRCS}

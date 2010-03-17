@@ -307,9 +307,9 @@ INSTALL(FILES ${__files5}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/kml/regionator
     COMPONENT Development)
 
-FILE(GLOB __files6 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.1/include/uriparser/*.h")
+FILE(GLOB __files6 "${CMAKE_CURRENT_SOURCE_DIR}/third_party/uriparser-0.7.5/include/uriparser/*.h")
 INSTALL(FILES ${__files6}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/uriparser-0.7.1/include/uriparser
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbkml/third_party/uriparser-0.7.5/include/uriparser
     COMPONENT Development)
 
 IF(NOT OTB_USE_EXTERNAL_BOOST)

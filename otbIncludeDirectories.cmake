@@ -60,8 +60,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbkml
   ${OTB_SOURCE_DIR}/Utilities/otbkml/src
   ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party
-#  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3
-#  ${OTB_SOURCE_DIR}/Utilities/otbkml/third_party/zlib-1.2.3/contrib
   ${OTB_SOURCE_DIR}/Utilities/otbliblas/include
   ${OTB_SOURCE_DIR}/Utilities/otbedison/segm
   ${OTB_SOURCE_DIR}/Utilities/otbedison/prompt
@@ -317,8 +315,6 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbkml/src
   Utilities/otbkml/third_party
   Utilities/otbkml/third_party/boost_1_34_1
-# Utilities/otbkml/third_party/zlib-1.2.3
-# Utilities/otbkml/third_party/zlib-1.2.3/contrib
   Utilities/otbliblas/include
   Utilities/otbedison
   Utilities/otbsiftfast
