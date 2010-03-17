@@ -37,7 +37,9 @@ DEMToImageGenerator<TDEMImage>
   m_OutputSize[1] = 1;
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
-  m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
+
+  // Value defined in the norm for points strm doesn't have information.
+  m_DefaultUnknownValue = static_cast<PixelType>(-32768);
 }
 
 // DEM folder specification method
@@ -97,7 +99,7 @@ DEMToImageGenerator<TDEMImage>
 
 //       otbMsgDevMacro(<< "PhyPoint : (" << phyPoint[0] << "," << phyPoint[1] << ")");
 
-    height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
+    height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
 //       otbMsgDevMacro(<< "height" << height);
     // MNT sets a default value (-32768) at point where it doesn't have altitude information.
     // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).

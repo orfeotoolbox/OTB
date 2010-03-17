@@ -44,7 +44,7 @@ namespace otb
  **/
 
 
-template <InverseOrForwardTransformationEnum transform,
+template <InverseOrForwardTransformationEnum TTransformDirection,
 class TScalarType = double,
 unsigned int NInputDimensions=2,
 unsigned int NOutputDimensions=2>
@@ -54,15 +54,14 @@ class ITK_EXPORT TileMapTransform: public itk::Transform<TScalarType,       // D
 {
 public :
   /** Standard class typedefs. */
+  typedef TileMapTransform                          Self;
   typedef itk::Transform< TScalarType,
-  NInputDimensions,
-  NOutputDimensions >       Superclass;
-  typedef TileMapTransform                              Self;
+            NInputDimensions,  NOutputDimensions >  Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef ossimTileMapModel  OssimTileMapTransformType;
+  typedef ossimTileMapModel                         OssimTileMapTransformType;
   typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
   typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
 
@@ -74,7 +73,7 @@ public :
 
   typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,transform);
+  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TTransformDirection);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
@@ -82,40 +81,16 @@ public :
 
   void SetLevel(unsigned char level);
 
-//           virtual void SetEllipsoid ();
-//           void SetEllipsoid (const ossimEllipsoid &ellipsoid);
-//           void SetEllipsoid(std::string code);
-//           void SetEllipsoid(const double &major_axis, const double &minor_axis);
 
   OutputPointType TransformPoint(const InputPointType &point) const;
   virtual InputPointType Origin();
-//           virtual double GetFalseNorthing() const;
-//           virtual double GetFalseEasting() const;
-//           virtual double GetStandardParallel1() const;
-//           virtual double GetStandardParallel2() const;
-//           virtual std::string GetProjectionName() const;
-//           virtual bool IsGeographic() const;
-//           virtual double GetA() const;
-//           virtual double GetB() const;
-//           virtual double GetF() const;
-//           virtual OutputPointType GetMetersPerPixel() const;
-//           virtual OutputPointType GetDecimalDegreesPerPixel() const;
-//           virtual void SetAB(double a, double b);
-//           virtual void SetOrigin(const InputPointType &origin);
-//           virtual void SetMetersPerPixel(const OutputPointType &point);
-//           virtual void SetDecimalDegreesPerPixel(const OutputPointType &point);
-//           virtual void ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon);
-//           virtual void ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
-//           virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
-//       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
-//           void SetFalseEasting(double falseEasting);
 
   virtual void PrintMap() const;
 
   /** FIXME with a Mercator projection definition*/
   virtual std::string GetWkt() const
   {
-    return "";
+    return "TileMapTransform";
   }
 
 protected:

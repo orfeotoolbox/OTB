@@ -30,37 +30,7 @@ template<class TDEMImage, class TMapProjection>
 DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::DEMToOrthoImageGenerator()
 {
-  m_DEMHandler = DEMHandlerType::New();
-  m_OutputSpacing[0] = 0.0001;
-  m_OutputSpacing[1] = -0.0001;
-  m_OutputSize[0] = 1;
-  m_OutputSize[1] = 1;
-  m_OutputOrigin[0] = 0;
-  m_OutputOrigin[1] = 0;
-  m_DefaultUnknownValue = static_cast<PixelType> (-32768); // Value defined in the norm for points strm doesn't have information.
   m_MapProjection = NULL;
-}
-
-// GenerateOutputInformation method
-template <class TDEMImage, class TMapProjection>
-void DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
-::GenerateOutputInformation()
-{
-  DEMImageType *output;
-  output = this->GetOutput(0);
-
-  IndexType start;
-  start[0] = 0;
-  start[1] = 0;
-
-  // Specify region parameters
-  OutputImageRegionType largestPossibleRegion;
-  largestPossibleRegion.SetSize( m_OutputSize );
-  largestPossibleRegion.SetIndex( start );
-
-  output->SetLargestPossibleRegion( largestPossibleRegion );
-  output->SetSpacing(m_OutputSpacing);
-  output->SetOrigin(m_OutputOrigin);
 }
 
 template <class TDEMImage, class TMapProjection>
@@ -115,7 +85,7 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 
 //     otbMsgDevMacro(<< "GeoPoint: (" << geoPoint[0] << "," << geoPoint[1] << ")");
 
-    height=m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
+    height = this-> m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
 //     otbMsgDevMacro(<< "height: " << height);
     // MNT sets a default value (-32768) at point where it doesn't have altitude information.
     // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
@@ -127,7 +97,7 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
     else
     {
       // Back to the MNT default value
-      DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
+      DEMImage->SetPixel(currentindex, this->m_DefaultUnknownValue);
     }
     progress.CompletedPixel();
   }
@@ -139,10 +109,7 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-
-  os << indent << "Output Spacing:"<< m_OutputSpacing[0] << ","<< m_OutputSpacing[1] << std::endl;
-  os << indent << "Output Origin:"<< m_OutputOrigin[0] << ","<< m_OutputOrigin[1] << std::endl;
-  os << indent << "Output Size:"<< m_OutputSize[0] << ","<< m_OutputSize[1] << std::endl;
+  os << indent << "Map projection:" <<  m_MapProjection-> GetWkt() << std::endl;
 }
 
 } // namespace otb
