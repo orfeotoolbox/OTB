@@ -100,18 +100,17 @@ void ossimTileMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
                                                 const double&   height,
                                                 ossimGpt&       gpt) const
 {
-   if(!image_point.hasNans())
-   {
-
-   gpt.lon = image_point.samp/(pow(2.,static_cast<double>(qDepth))*256)*360.0-180.0;
-   double y = image_point.line/(pow(2.,static_cast<double>(qDepth))*256);
-   double ex = exp(4*M_PI*(y-0.5));
-   gpt.lat = -180.0/M_PI*asin((ex-1)/(ex+1));
-   }
-   else
-   {
-      gpt.makeNan();
-   }
+  if(!image_point.hasNans())
+  {
+    gpt.lon = image_point.samp/((1 << qDepth) *256)*360.0-180.0;
+    double y = image_point.line/((1 << qDepth)*256);
+    double ex = exp(4*M_PI*(y-0.5));
+    gpt.lat = -180.0/M_PI*asin((ex-1)/(ex+1));
+  }
+  else
+  {
+    gpt.makeNan();
+  }
   return;
 }
 

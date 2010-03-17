@@ -80,22 +80,6 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(DEMToOrthoImageGenerator,ImageSource);
 
-  /** Set/Get the Output Origin coordinates. */
-  itkSetMacro(OutputOrigin,PointType);
-  itkGetConstReferenceMacro(OutputOrigin,PointType);
-
-  /** Set/Get the Output Size. */
-  itkSetMacro(OutputSize,SizeType);
-  itkGetConstReferenceMacro(OutputSize,SizeType);
-
-  /** Set/Get the Output Spacing. */
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetConstReferenceMacro(OutputSpacing,SpacingType);
-
-  /** Set/Get the Default Unknown Value. */
-  itkSetMacro(DefaultUnknownValue,PixelType);
-  itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
-
   /** Set/Get the projection*/
   itkSetMacro(MapProjection, MapProjectionPointerType);
   itkGetMacro(MapProjection, MapProjectionPointerType);
@@ -105,17 +89,12 @@ protected:
   virtual ~DEMToOrthoImageGenerator(){};
 
   void PrintSelf(std::ostream& os, Indent indent) const;
-  virtual void GenerateOutputInformation();
+//  virtual void GenerateOutputInformation();
 //   void AllocateOutputs();
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId);
 
-  DEMHandlerPointerType    m_DEMHandler;
-  PointType                m_OutputOrigin;
-  SpacingType              m_OutputSpacing;
-  SizeType                 m_OutputSize;
-  PixelType                m_DefaultUnknownValue;
   MapProjectionPointerType m_MapProjection;
 
 private:

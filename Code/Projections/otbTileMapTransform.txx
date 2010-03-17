@@ -24,25 +24,28 @@
 namespace otb
 {
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::TileMapTransform() : Superclass(SpaceDimension,ParametersDimension)
 {
   m_TileMapTransform =  new OssimTileMapTransformType();
 }
 
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::~TileMapTransform()
 {
   delete m_TileMapTransform;
 }
 
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::TransformPoint(const InputPointType & point) const
 {
   OutputPointType outputPoint;
@@ -77,7 +80,8 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
     ossimDpt ossimDPoint;
 //         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
     m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
-//     otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_TileMapTransform->print(std::cout));
+//     otbGenericMsgDebugMacro(<< "Forward : ========================= \n"
+//                             << m_TileMapTransform->print(std::cout));
     outputPoint[0]=ossimDPoint.x;
     outputPoint[1]=ossimDPoint.y;
 
@@ -97,9 +101,10 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 
 
 ///\return The geographic point corresponding to (0,0)
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType
-TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType
+TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::Origin()
 {
   ossimGpt ossimOrigin=m_TileMapTransform->origin();
@@ -111,16 +116,18 @@ TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 }
 
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
-TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintMap() const
 {
   std::cout << m_TileMapTransform->print(std::cout);
 }
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetLevel(unsigned char level)
 {
   m_TileMapTransform->setDepth(level);

@@ -61,28 +61,6 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbWorldFile.h"
 
-namespace otb {
-namespace Functor {
-
-template< class TInput1, class TInput2=TInput1, class TOutput=TInput1>
-class MultRGB
-{
-public:
-  MultRGB() {}
-  ~MultRGB() {}
-
-  inline TOutput operator()( const TInput1 & A, const TInput2 & B) const
-  {
-    TOutput out;
-    out.SetRed(A.GetRed() * B);
-    out.SetGreen(A.GetGreen() * B);
-    out.SetBlue(A.GetBlue() * B);
-    return out;
-  }
-};
-}
-}
-
 int main(int argc, char * argv[])
 {
 
@@ -195,7 +173,7 @@ int main(int argc, char * argv[])
 
 
   typedef itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType,
-    otb::Functor::MultRGB<RGBPixelType, PixelType, RGBPixelType> > MultiplyFilterType;
+    otb::Functor::HillShadeModulationFunctor<RGBPixelType, PixelType, RGBPixelType> > MultiplyFilterType;
 
   MultiplyFilterType::Pointer multiply = MultiplyFilterType::New();
   multiply->SetInput1(colormapper->GetOutput());

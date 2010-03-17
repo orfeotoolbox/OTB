@@ -180,77 +180,90 @@ public:
 
   virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
   {
-    if ((this->GetMTime() > m_UTime)
-       || (this->GetPixelRepresentationFunction().GetMTime() > m_UTime))
+    if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction().GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
-    {
-      if ((this->GetListSample()).IsNotNull())
       {
+      if ((this->GetListSample()).IsNotNull())
+        {
         //the size of the Vector was unknow at construction time for the
         //m_PixelRepresentationFunction, now, we may get a better default
         if (m_PixelRepresentationFunction.IsUsingDefaultParameters())
-        {
-         // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
-         if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
-         {
-           m_PixelRepresentationFunction.SetRedChannelIndex(2);
-           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-           m_PixelRepresentationFunction.SetBlueChannelIndex(0);
-         }
+          {
+          // Case of image with 4 bands or more : Display in the B,G,R ,NIR channel order
+          if (this->GetListSample()->GetMeasurementVectorSize() >= 4)
+            {
+            m_PixelRepresentationFunction.SetRedChannelIndex(2);
+            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+            m_PixelRepresentationFunction.SetBlueChannelIndex(0);
+            }
 
-         // Classic case
-         if (this->GetListSample()->GetMeasurementVectorSize() == 3)
-         {
-           m_PixelRepresentationFunction.SetRedChannelIndex(0);
-           m_PixelRepresentationFunction.SetGreenChannelIndex(1);
-           m_PixelRepresentationFunction.SetBlueChannelIndex(2);
-         }
-          
+          // Classic case
+          if (this->GetListSample()->GetMeasurementVectorSize() == 3)
+            {
+            m_PixelRepresentationFunction.SetRedChannelIndex(0);
+            m_PixelRepresentationFunction.SetGreenChannelIndex(1);
+            m_PixelRepresentationFunction.SetBlueChannelIndex(2);
+            }
+
+          }
         }
-      }
-      if(m_AutoMinMax)
-      {
+      unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
+      if (m_AutoMinMax)
+        {
         //FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
-        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
 
         otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
 
-       // Comment the condition cause if we change the channel list order
-       // this condition doesn't allow us to recompute the histograms
-       //if (this->GetHistogramList().IsNull())
-       //{
-          this->RenderHistogram();
-         //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
-         //          <<"provided to the rendering function with SetHistogramList()" );
-       //}
-        for(unsigned int comp = 0; comp < nbComps;++comp)
-        {
+        // Comment the condition cause if we change the channel list order
+        // this condition doesn't allow us to recompute the histograms
+        //if (this->GetHistogramList().IsNull())
+        //{
+        this->RenderHistogram();
+        //         itkExceptionMacro( << "To Compute min/max automatically, Histogram should be "
+        //          <<"provided to the rendering function with SetHistogramList()" );
+        //}
+        for (unsigned int comp = 0; comp < nbComps; ++comp)
+          {
           // Compute quantiles
-          m_Minimum.push_back(static_cast<ScalarType>(
-              this->GetHistogramList()->GetNthElement(comp)->Quantile(0,m_AutoMinMaxQuantile)));
-          m_Maximum.push_back(static_cast<ScalarType>(
-              this->GetHistogramList()->GetNthElement(comp)->Quantile(0,1-m_AutoMinMaxQuantile)));
+          m_Minimum.push_back(
+                              static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0,
+                                                                                                               m_AutoMinMaxQuantile)));
+          m_Maximum.push_back(static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0, 1
+              - m_AutoMinMaxQuantile)));
           otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
               <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
               <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
+          }
+
         }
 
-      }
-      else
-      {
-        unsigned int nbComps = m_PixelRepresentationFunction.GetOutputSize();
-        if (m_Minimum.empty())
+      //Check if the rescaling should be applied
+      //if all data are already coded on unsigned char
+      //and at least one band has enough dynamic
+      //no rescaling should be applied
+      bool allMinMaxWithinDynamic = true;
+      bool enoughDynamic = false;
+      for (unsigned int comp = 0; comp < nbComps; ++comp)
         {
-          m_Minimum.resize(nbComps,0);
+        if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false; //take margin for rounding errors
+        if (m_Maximum[comp] > 256) allMinMaxWithinDynamic = false;
+        if ((m_Maximum[comp] - m_Minimum[comp]) > 10) enoughDynamic = true;
         }
-        if (m_Maximum.empty())
+      if (allMinMaxWithinDynamic && enoughDynamic)
         {
-          m_Maximum.resize(nbComps,255);
+        this->AutoMinMaxOff();
         }
-      }
+
+      if (!m_AutoMinMax)
+        {
+        m_Minimum.clear();
+        m_Maximum.clear();
+        m_Minimum.resize(nbComps, 0);
+        m_Maximum.resize(nbComps, 255);
+        }
 
       typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
       typename ExtremaVectorType::const_iterator maxIt = this->m_Maximum.begin();
@@ -258,18 +271,18 @@ public:
       m_TransferedMinimum.clear();
       m_TransferedMaximum.clear();
 
-      while(minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
-      {
+      while (minIt != this->m_Minimum.end() && maxIt != this->m_Maximum.end())
+        {
         const double v1 = this->m_TransferFunction(*minIt);
         const double v2 = this->m_TransferFunction(*maxIt);
-        m_TransferedMinimum.push_back(static_cast<ScalarType>(std::min(v1,v2)));
-        m_TransferedMaximum.push_back(static_cast<ScalarType>(std::max(v1,v2)));
+        m_TransferedMinimum.push_back(static_cast<ScalarType> (std::min(v1, v2)));
+        m_TransferedMaximum.push_back(static_cast<ScalarType> (std::max(v1, v2)));
         ++minIt;
         ++maxIt;
-      }
+        }
 
       m_UTime.Modified();
-    }
+      }
   }
 
   const std::string Describe(const PixelType & spixel) const
@@ -405,20 +418,21 @@ protected:
    */
   virtual const OutputValueType ClampRescale(RealScalarType input, RealScalarType min, RealScalarType max) const
   {
-    if(input > max)
+    if (input > max)
       {
       return 255;
       }
-    else if(input < min)
+    else if (input < min)
       {
       return 0;
       }
     else
       {
-      return static_cast<OutputValueType>(vcl_floor(
-                                     255.*(static_cast<double>(input)-static_cast<double>(min))
-                                                    /(static_cast<double>(max)-static_cast<double>(min))
-                                                    +0.5));
+      return static_cast<OutputValueType> (vcl_floor(
+                         255. * (static_cast<double> (input) - static_cast<double> (min))
+                             / (static_cast<double> (max) - static_cast<double> (min))
+                                            + 0.5));
+
       }
   }
 
