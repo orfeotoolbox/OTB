@@ -563,11 +563,10 @@ void TileMapImageIO::Write(const void* buffer)
   int nComponents = this->GetNumberOfComponents();
 
   otbMsgDevMacro( << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples);
-  otbMsgDevMacro( << "TileMapImageIO::Write: Index" << firstLine << ", "<< firstSample);
-  otbMsgDevMacro( << "TileMapImageIO::Write: Origin" << originLine << ", "<< originSample);
+  otbMsgDevMacro( << "TileMapImageIO::Write: Index " << firstLine << ", "<< firstSample);
+  otbMsgDevMacro( << "TileMapImageIO::Write: Origin " << originLine << ", "<< originSample);
 
-  otbMsgDevMacro( <<" TileMapImageIO::Read()  ");
-  otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+  otbMsgDevMacro( <<" Image size  : " << m_Dimensions[0]<<","<<m_Dimensions[1]);
   otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
   otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
@@ -576,20 +575,15 @@ void TileMapImageIO::Write(const void* buffer)
   otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
   otbMsgDevMacro( <<" sizeof(std::ios::beg) : "<<sizeof(std::ios::beg));
   otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
-  //otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
-  //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
   otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
-  /*    double x = (originSample+firstSample)/((1 << m_Depth)*256.);
-      double y = (originLine+firstLine)/((1 << m_Depth)*256.);
-      otbMsgDevMacro(<< x );
-      otbMsgDevMacro(<< y );
-  */
 
-  int nTilesX = (int) ceil(totSamples/256.)+1;
-  int nTilesY = (int) ceil(totLines/256.)+1;
+  //Using integer division:
+  int nTilesX = (originSample + totSamples -1)/256 - originSample/256 +1;
+  int nTilesY = (originLine + totLines -1)/256 - originLine/256 +1;
+  otbMsgDevMacro( << "Number of tile to process " << nTilesX << "x" << nTilesY);
+
   unsigned char * bufferTile = new unsigned char[256*256*nComponents];
-
 
   //Read all the required tiles
   for (int numTileY=0; numTileY<nTilesY; numTileY++)
@@ -646,9 +640,7 @@ void TileMapImageIO::Write(const void* buffer)
 
   delete[] bufferTile;
 
-
   otbMsgDevMacro( << "TileMapImageIO::Write() completed");
-
 }
 
 
