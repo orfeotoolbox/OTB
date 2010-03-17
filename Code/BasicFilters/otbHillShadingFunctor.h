@@ -24,6 +24,33 @@ namespace otb
 {
 namespace Functor
 {
+/** \class HillShadeModulationFunctor
+ *  \brief Modulate an image with hill shading
+ *
+ *  Take an image (RGB) as input and the result of the hillshading
+ *  (another image with the value between 0 and 1) and modulate
+ *  the first image by the value of the hill shading.
+ *
+ *  \ingroup Functor
+ *  \example BasicFilters/HillShadingExample.cxx
+*/
+template< class TInput1, class TInput2=TInput1, class TOutput=TInput1>
+class HillShadeModulationFunctor
+{
+public:
+  HillShadeModulationFunctor() {}
+  ~HillShadeModulationFunctor() {}
+
+  inline TOutput operator()( const TInput1 & A, const TInput2 & B) const
+  {
+    TOutput out;
+    out.SetRed(A.GetRed() * B);
+    out.SetGreen(A.GetGreen() * B);
+    out.SetBlue(A.GetBlue() * B);
+    return out;
+  }
+};
+
 /** \class HillShadingFunctor
  *  \brief Unary neighborhood functor to compute the lambertian of a surface
  *
@@ -32,14 +59,15 @@ namespace Functor
  *  representation of relief. The output is a value between 0 and 1.
  *
  *  \ingroup Functor
+ *  \example BasicFilters/HillShadingExample.cxx
 */
 template <class TNeighIter, class TInputImage, class TOutput>
 class HillShadingFunctor
 {
 public:
 
-  typedef HillShadingFunctor Self;
-  typedef TNeighIter         IteratorType;
+  typedef HillShadingFunctor               Self;
+  typedef TNeighIter                       IteratorType;
   typedef typename IteratorType::PixelType PixelType;
 
   HillShadingFunctor(): m_AzimuthLight(30.0/180.0*CONST_PI), m_ElevationLight(45.0/180.0*CONST_PI),
