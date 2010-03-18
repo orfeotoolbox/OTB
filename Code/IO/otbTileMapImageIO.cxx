@@ -173,32 +173,21 @@ void TileMapImageIO::Read(void* buffer)
       // Generate Tile filename
       this->GenerateTileInfo(xTile, yTile, numTileX, numTileY);
 
-      //std::cout << "Info : ";
-      //std::cout << "\n   numX : " << m_ListTiles.back().numTileX;
-      //std::cout << "\n   numY : " << m_ListTiles.back().numTileY;
-      //std::cout << "\n   oriX : " << m_ListTiles.back().x;
-      //std::cout << "\n   oriY : " << m_ListTiles.back().y;
-      //std::cout << "\n   name : " << m_ListTiles.back().filename << std::endl;      
-
       // Try to read tile from cache
       if(!this->CanReadFromCache(m_ListTiles.back().filename))
       {
-        //std::cout << "Cannot read tile, generate curl handle" << std::endl;
         // Generate curl handle for this tile
         this->GenerateCURLHandle(m_ListTiles.back());
       }
     }
   }
   
-  //std::cout << "Start to fetch tile" << std::endl;
   // Fetch tiles from net
   this->FetchTiles();
-  
-  //std::cout << "Start to cleanup data" << std::endl;
+
   // Cleanup datas use to download tiles
   this->Cleanup();
   
-  //std::cout << "Start to generate output buffer" << std::endl;
   // Generate buffer
   this->GenerateBuffer(p);
 
@@ -267,9 +256,7 @@ void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
 {
   // Generate URL
   this->GenerateURL(tileInfo.x, tileInfo.y);
-  
-  //std::cout << "URL generate : " << m_ListURLs.back() << std::endl;
-  
+    
   // Initialize curl handle
   CURL * lEasyHandle;
   lEasyHandle = curl_easy_init();
@@ -279,7 +266,6 @@ void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
     itkExceptionMacro( <<"Tile Map IO : Curl easy handle init error.");
   }
   
-  //std::cout << "Openning file : " << tileInfo.filename << std::endl;
   // Create file
   FILE* lOutputFile = fopen(tileInfo.filename.c_str(), "w");
   
@@ -301,8 +287,6 @@ void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
   
   // Add hanle to vector
   m_ListCurlHandles.push_back(lEasyHandle);
-  
-  //std::cout << "Handle added" << std::endl;
 }
 
 /*
@@ -360,6 +344,7 @@ void TileMapImageIO::FetchTiles()
 {
   // Configure multi handle - set the maximum connections
   curl_multi_setopt(m_MultiHandle, CURLMOPT_MAXCONNECTS, 10);
+  curl_multi_setopt(m_MultiHandle, CURLMOPT_PIPELINING, 0);
   
     // Perform
  int lStillRunning;
@@ -424,9 +409,6 @@ void TileMapImageIO::FetchTiles()
   {
     itkExceptionMacro( <<"TileMapImageIO : Error occurs while perform Multi handle");
   }
-
-  //std::cout << "Tiles fecthed with success" << std::endl;
-
 }
 
 /*
@@ -434,7 +416,6 @@ void TileMapImageIO::FetchTiles()
  */
 void TileMapImageIO::Cleanup()
 {
-  //std::cout << "Closing files" << std::endl;
   // Close files
   for (int currentFile=0; currentFile<m_ListFiles.size(); currentFile++)
   {
@@ -442,7 +423,6 @@ void TileMapImageIO::Cleanup()
   }
   m_ListFiles.clear();
   
-  //std::cout << "Cleanup easy handles" << std::endl;
   // Cleanup easy handles
   for (int currentHandle=0; currentHandle<m_ListCurlHandles.size(); currentHandle++)
   {
@@ -452,8 +432,6 @@ void TileMapImageIO::Cleanup()
   
   // Cleanup multi handle
   curl_multi_cleanup(m_MultiHandle);
-  
-  //std::cout << "Clear url list" << std::endl;
   
   // Cleanup url vector
   m_ListURLs.clear();
@@ -474,11 +452,6 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   {
     unsigned char * bufferTile = new unsigned char[256*256*nComponents];
  
-    //std::cout << "Generate buffer at :";
-    //std::cout << "\n  x : " << m_ListTiles[currentTile].x;
-    //std::cout << "\n  y : " << m_ListTiles[currentTile].x;
-    //std::cout << "\n  name : " << m_ListTiles[currentTile].filename;
-         
     // Read tile from cache
     this->ReadTile(m_ListTiles[currentTile].filename, bufferTile);
     
@@ -545,13 +518,11 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
   
   if ( lCanRead == true)
   {
-    //std::cout << "We can read tile named : " << filename << std::endl;
     imageIO->SetFileName(filename.c_str());
     imageIO->Read(buffer);
   }
   else
   {
-    //std::cout << "We cannot read tile named: " << filename << " Generating cache fault ..." << std::endl;
     if (bufferCacheFault == NULL)
     {
       bufferCacheFault = new unsigned char[256*256*3];
