@@ -499,7 +499,6 @@ ShapeAttributesLabelObjectFunctor<TLabelObject,TLabelImage>
     }
 
 
-
   // Set the attributes
   PolygonFunctorType polygonFunctor;
   polygonFunctor.SetStartIndex(m_LabelImage->GetLargestPossibleRegion().GetIndex());
