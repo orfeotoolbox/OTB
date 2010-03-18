@@ -55,18 +55,7 @@ public:
   /** Standard class typedefs. */
   typedef TileMapImageIO            Self;
   typedef itk::ImageIOBase          Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  
-  /** Struct to save filename & tile associates */
-  typedef struct _tileNameAndCoord
-  {
-    int numTileX;
-    int numTileY;
-    double x;
-    double y;
-    std::string filename;
-  } TileNameAndCoordType;
-  
+  typedef itk::SmartPointer<Self>   Pointer;  
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -162,6 +151,16 @@ protected:
   int m_CompressionLevel;
 
 private:
+  /** Struct to save filename & tile associates */
+  typedef struct _tileNameAndCoord
+  {
+    int numTileX;
+    int numTileY;
+    double x;
+    double y;
+    std::string filename;
+  } TileNameAndCoordType;
+
   TileMapImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

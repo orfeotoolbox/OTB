@@ -148,6 +148,7 @@ void TileMapImageIO::Read(void* buffer)
 
   // Initialize curl multi handle
   m_MultiHandle = curl_multi_init();
+  
   if (!m_MultiHandle)
   {
     itkExceptionMacro( << "Tile Map IO : Curl mutli handle init error.");
@@ -357,6 +358,9 @@ void TileMapImageIO::GenerateURL(double x, double y)
  */
 void TileMapImageIO::FetchTiles()
 {
+  // Configure multi handle - set the maximum connections
+  curl_multi_setopt(m_MultiHandle, CURLMOPT_MAXCONNECTS, 10);
+  
     // Perform
  int lStillRunning;
 
