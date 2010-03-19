@@ -97,6 +97,7 @@ SubsampleImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
+      // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / m_SubsampleFactor[i];
       destSize[i] = srcSize[i] / m_SubsampleFactor[i];
     }
