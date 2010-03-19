@@ -132,7 +132,7 @@ public:
 
   void ReinitializeSeed(int seed)
     {
-    m_Generator->Initialize ( seed );
+    m_Generator->SetSeed ( seed );
     }
 };
 
