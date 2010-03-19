@@ -227,22 +227,18 @@ bool TileMapImageIO::CanReadFromCache(std::string filename)
 {
   itk::ImageIOBase::Pointer imageIO;
   //Open the file to fill the buffer
-  if (m_AddressMode == TileMapAdressingStyle::GM)
-  {
-    imageIO = itk::JPEGImageIO::New();
-  }
-  else if (m_AddressMode == TileMapAdressingStyle::OSM)
-  {
+  if (m_FileSuffix == "png")
+    {
     imageIO = itk::PNGImageIO::New();
-  }
-  else if (m_AddressMode == TileMapAdressingStyle::NEARMAP)
-  {
+    }
+  else if (m_FileSuffix == "jpg")
+    {
     imageIO = itk::JPEGImageIO::New();
-  }
+    }
   else
-  {
+    {
     itkExceptionMacro( << "TileMapImageIO : Bad addressing Style");
-  }
+    }
   bool lCanRead(false);
   lCanRead = imageIO->CanReadFile(filename.c_str());
   
@@ -327,6 +323,15 @@ void TileMapImageIO::GenerateURL(double x, double y)
     urlStream << "&z=";
     urlStream << m_Depth;
     urlStream << "&nml=Vert&s=Ga";
+  }
+  // Local addressing
+  else if (m_AddressMode == TileMapAdressingStyle::LOCAL)
+  {
+    std::ostringstream quad, filename;
+    XYToQuadTree2(x, y, quad);
+    BuildFileName(quad, filename, false);
+    urlStream << m_ServerName;
+    urlStream << filename.str();
   }
   else
   {
@@ -494,25 +499,22 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
  */ 
 void TileMapImageIO::ReadTile(std::string filename, void * buffer)
 {
+  otbMsgDevMacro(<< "Retrieving " << filename);
   unsigned char * bufferCacheFault = NULL;
   itk::ImageIOBase::Pointer imageIO; 
 
-  if (m_AddressMode == TileMapAdressingStyle::GM)
-  {
-    imageIO = itk::JPEGImageIO::New();
-  }
-  else if (m_AddressMode == TileMapAdressingStyle::OSM)
-  {
+  if (m_FileSuffix == "png")
+    {
     imageIO = itk::PNGImageIO::New();
-  }
-  else if (m_AddressMode == TileMapAdressingStyle::NEARMAP)
-  {
+    }
+  else if (m_FileSuffix == "jpg")
+    {
     imageIO = itk::JPEGImageIO::New();
-  }
+    }
   else
-  {
+    {
     itkExceptionMacro( << "TileMapImageIO : Bad addressing Style");
-  }
+    }
   bool lCanRead(false);
   lCanRead = imageIO->CanReadFile(filename.c_str());
   
@@ -532,13 +534,15 @@ void TileMapImageIO::ReadTile(std::string filename, void * buffer)
   }
 }
 
-void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const
+void TileMapImageIO::BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache) const
 {
 
   int quadsize=quad.str().size();
   std::ostringstream directory;
-  directory << m_CacheDirectory;
-
+  if (inCache)
+    {
+    directory << m_CacheDirectory;
+    }
   //build directory name
   int i=0;
   while ((i<8) && (i<quadsize))
@@ -580,8 +584,8 @@ void TileMapImageIO::ReadImageInformation()
   this->SetFileTypeToBinary();
   SetComponentType(UCHAR);
   // Default Spacing
-  m_Spacing[0]=1;
-  m_Spacing[1]=1;
+  m_Spacing[0] = 1;
+  m_Spacing[1] = 1;
   m_Origin[0] = 0;
   m_Origin[1] = 0;
   
@@ -606,6 +610,9 @@ void TileMapImageIO::ReadImageInformation()
         return;
       case 2:
         m_AddressMode = TileMapAdressingStyle::NEARMAP;
+        return;
+      case 3:
+        m_AddressMode = TileMapAdressingStyle::LOCAL;
         return;
       default:
         itkExceptionMacro(<<"Addressing style unknown");

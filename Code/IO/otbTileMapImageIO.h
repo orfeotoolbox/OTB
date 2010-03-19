@@ -37,7 +37,7 @@ namespace otb
 
   namespace TileMapAdressingStyle
   {
-    enum TileMapAdressingStyle{GM, OSM, NEARMAP};
+    enum TileMapAdressingStyle{GM=0, OSM=1, NEARMAP=2, LOCAL=3};
   }
 
 /** \class TileMapImageIO
@@ -165,7 +165,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   void InternalWrite(double x, double y, const void* buffer);
-  void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename) const;
+  void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache=true) const;
   void FillCacheFaults(void* buffer) const;
   int XYToQuadTree(double x, double y, std::ostringstream& quad) const;
   int XYToQuadTree2(double x, double y, std::ostringstream& quad) const;
