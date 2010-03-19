@@ -328,6 +328,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD
 
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
+      // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
       destSize[i] = srcSize[i] / GetSubsampleImageFactor();
     }
@@ -358,6 +359,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD
     {
       if ( i == direction )
       {
+        // TODO: This seems not right in odd index cases
         destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
         destSize[i] = srcSize[i] / GetSubsampleImageFactor();
       }
@@ -633,7 +635,9 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
   m_UpSampleFilterFactor = 0;
   m_SubsampleImageFactor = 1;
 
-  //this->SetNumberOfThreads(1);
+  // TODO: For now, we force the number threads to 1 because there is a bug with multithreading in INVERSE transform
+  // Resulting in discontinuities in the reconstructed images
+  this->SetNumberOfThreads(1);
 }
 
 template < class TInputImage, class TOutputImage, class TWaveletOperator >
@@ -799,6 +803,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
 
     for ( unsigned int i = 0; i < InputImageDimension; i++ )
     {
+    // TODO: This seems not right in odd index cases
       destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
       destSize[i] = srcSize[i] / GetSubsampleImageFactor();
     }
@@ -893,6 +898,7 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
     {
       if ( i == direction )
       {
+        // TODO: This seems not right in odd index cases
         destIndex[i] = srcIndex[i] / GetSubsampleImageFactor();
         destSize[i] = srcSize[i] / GetSubsampleImageFactor();
       }
@@ -1236,6 +1242,8 @@ WaveletFilterBank< TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE
       itk::ImageRegionIterator< OutputImageType > out ( outputImage,
         overSampledLowPass->GetOutput()->GetRequestedRegion() );
 
+      // TODO: This might be the cause of the multithreading bug : we use a neighborhood iterator on cropped data
+      // Are we sure that we have cropped enough data to access the neighborhood ?
       NeighborhoodIteratorType lowIter ( lowPassOperator.GetRadius(),
         overSampledLowPass->GetOutput(), overSampledLowPass->GetOutput()->GetRequestedRegion() );
       itk::PeriodicBoundaryCondition< OutputImageType > boundaryCondition;
