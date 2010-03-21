@@ -254,15 +254,21 @@ public:
         if (allMinMaxWithinDynamic && enoughDynamic)
           {
           this->AutoMinMaxOff();
+          m_Minimum.clear();
+          m_Maximum.clear();
           }
-      }
+        }
 
       if (!m_AutoMinMax)
         {
-        m_Minimum.clear();
-        m_Maximum.clear();
-        m_Minimum.resize(nbComps, 0);
-        m_Maximum.resize(nbComps, 255);
+        if (m_Minimum.empty())
+          {
+          m_Minimum.resize(nbComps, 0);
+          }
+        if (m_Maximum.empty())
+          {
+          m_Maximum.resize(nbComps, 255);
+          }
         }
 
       typename ExtremaVectorType::const_iterator minIt = this->m_Minimum.begin();
