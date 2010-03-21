@@ -22,7 +22,7 @@
 
 
 #include "otbImageFileReader.h"
-#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "itkRGBPixel.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -37,7 +37,7 @@ int otbPNGIndexedNbBandsTest(int argc, char* argv[])
   typedef itk::RGBPixel<unsigned char>                    InputPixelType;
   const   unsigned int                                    Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage< InputPixelType,  Dimension >  InputImageType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
 
@@ -49,7 +49,7 @@ int otbPNGIndexedNbBandsTest(int argc, char* argv[])
 
   if ( reader->GetOutput()->GetNumberOfComponentsPerPixel() == nbBands )
   {
-         return EXIT_SUCCESS;      
+         return EXIT_SUCCESS;
   }
   else
   {

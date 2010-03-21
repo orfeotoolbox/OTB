@@ -712,6 +712,7 @@ void GDALImageIO::InternalReadImageInformation()
   {
     m_NbBands *= 4;
     this->SetNumberOfComponents(m_NbBands);
+    this->SetPixelType(VECTOR);
   }
 }
 
