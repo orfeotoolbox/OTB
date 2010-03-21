@@ -145,6 +145,7 @@ protected:
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
   int m_CompressionLevel;
   const char* m_currentfile;
+  bool m_IsIndexed;
 
 private:
   GDALImageIO(const Self&); //purposely not implemented

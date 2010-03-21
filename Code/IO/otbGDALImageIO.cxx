@@ -59,6 +59,7 @@ GDALImageIO::GDALImageIO()
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
+  m_IsIndexed   = false;
   m_currentfile = NULL;
   m_poBands     = NULL;
   m_hDriver     = NULL;
@@ -66,6 +67,7 @@ GDALImageIO::GDALImageIO()
 
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
+
 
 //  GDALAllRegister();
 }
@@ -192,6 +194,30 @@ void GDALImageIO::Read(void* buffer)
       memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
       cpt += static_cast<std::streamoff>(m_NbOctetPixel);
     }
+  }
+  else if (m_IsIndexed)
+  {
+    step = step * static_cast<std::streamoff>(m_NbOctetPixel);
+
+
+    lCrGdal = m_poBands[0]->RasterIO( GF_Read,lFirstColumn,lFirstLine,lNbColumns, lNbLines, value , lNbColumns, lNbLines, m_PxType,0, 0 );
+    if (lCrGdal == CE_Failure)
+    {
+      itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
+    }
+    // Recopie dans le buffer
+    cpt = 0;
+    for ( std::streamoff  i=0; i < lBufferSize; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+    {
+      GDALColorEntry color;
+      m_poBands[0]->GetColorTable()->GetColorEntryAsRGB(value[i], &color);
+      p[cpt] = color.c1;
+      p[cpt+1] = color.c2;
+      p[cpt+2] = color.c3;
+      p[cpt+3] = color.c4;
+      cpt += step;
+    }
+
   }
   else
   {
@@ -655,6 +681,8 @@ void GDALImageIO::InternalReadImageInformation()
     if ((GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex)
         && (hTable = GDALGetRasterColorTable(hBand)) != NULL)
     {
+      m_IsIndexed = true;
+
       unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ColorTableNameKey,
@@ -679,6 +707,11 @@ void GDALImageIO::InternalReadImageInformation()
 
       }
     }
+  }
+  if (m_IsIndexed)
+  {
+    m_NbBands *= 4;
+    this->SetNumberOfComponents(m_NbBands);
   }
 }
 
