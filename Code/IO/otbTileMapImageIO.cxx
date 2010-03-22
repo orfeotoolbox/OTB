@@ -80,6 +80,8 @@ TileMapImageIO::TileMapImageIO()
 
   // Initialize browser
   m_Browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+  // Set maximum of connections to 10
+  m_MaxConnect = 10;
 
   this->AddSupportedWriteExtension(".otb");
   this->AddSupportedWriteExtension(".OTB");
@@ -348,7 +350,7 @@ void TileMapImageIO::GenerateURL(double x, double y)
 void TileMapImageIO::FetchTiles()
 {
   // Configure multi handle - set the maximum connections
-  curl_multi_setopt(m_MultiHandle, CURLMOPT_MAXCONNECTS, 10);
+  curl_multi_setopt(m_MultiHandle, CURLMOPT_MAXCONNECTS, m_MaxConnect);
   curl_multi_setopt(m_MultiHandle, CURLMOPT_PIPELINING, 0);
   
     // Perform

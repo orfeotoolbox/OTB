@@ -67,6 +67,12 @@ public:
    *  0-9; 0 = none, 9 = maximum. */
   itkSetMacro(CompressionLevel, int);
   itkGetMacro(CompressionLevel, int);
+  
+  
+  /** Set/Get the maximum number of connections */
+  itkSetMacro(MaxConnect, int);
+  itkGetMacro(MaxConnect, int);
+
 
   virtual void SetCacheDirectory (const char* _arg)
   {
@@ -187,6 +193,7 @@ private:
   std::vector<std::string>          m_ListURLs;
   std::vector<TileNameAndCoordType> m_ListTiles;
   std::string                       m_Browser;
+  int                               m_MaxConnect;
 
   /** Byte per pixel pixel */
   int                                          m_BytePerPixel;
