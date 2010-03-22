@@ -6521,7 +6521,7 @@ msgstr "Geometrie/GCP vers modele capteur"
 
 #: Code/Application/Monteverdi.cxx:164
 msgid "File/Tile Map Import"
-msgstr ""
+msgstr "Importer une carte"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:166
 msgid "File/Quit"
@@ -6923,6 +6923,30 @@ msgstr ""
 msgid "These are my pointset outputs"
 msgstr ""
 
+#: Application/CharterTool.cxx:82
+msgid "File/Import raster"
+msgstr "Fichier/Importer une image"
+
+#: Application/CharterTool.cxx:83
+msgid "File/Viewer"
+msgstr "Fichier/Visualiser une image"
+
+#: Application/CharterTool.cxx:84
+msgid "File/Export to kmz"
+msgstr "Fichier/Exporter en kmz"
+
+#: Application/CharterTool.cxx:86
+msgid "Geometry process/GCP to sensor model"
+msgstr "Geometrie/GCP vers modele de capteur"
+
+#: Application/CharterTool.cxx:87
+msgid "Geometry process/Orthorectification"
+msgstr "Geometrie/Orthorectification"
+
+#: Application/CharterTool.cxx:89
+msgid "Extraction/Extract ROI from dataset"
+msgstr "Extraction/Extraire une region"
+
 #, fuzzy
 #~ msgid "Reflectance TOC"
 #~ msgstr "Sauver image reflectance TOC"
@@ -6957,3 +6981,5 @@ msgstr ""
 #, fuzzy
 #~ msgid "Input Image"
 #~ msgstr "Image en Entree"
+
+
