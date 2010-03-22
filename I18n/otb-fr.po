@@ -6521,7 +6521,7 @@ msgstr "Geometrie/GCP vers modele capteur"
 
 #: Code/Application/Monteverdi.cxx:164
 msgid "File/Tile Map Import"
-msgstr "Importer une carte"
+msgstr "Fichier/Importer une carte"
 
 #: Code/Application/otbMonteverdiViewGUI.cxx:166
 msgid "File/Quit"
