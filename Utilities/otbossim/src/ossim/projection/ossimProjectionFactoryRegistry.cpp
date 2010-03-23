@@ -140,8 +140,8 @@ ossimProjection* ossimProjectionFactoryRegistry::createProjection(
 
 void ossimProjectionFactoryRegistry::initializeDefaults()
 {
-   registerFactory(ossimNitfProjectionFactory::instance());
    registerFactory(ossimSensorModelFactory::instance());
+   registerFactory(ossimNitfProjectionFactory::instance());
    registerFactory(ossimTiffProjectionFactory::instance());
    registerFactory(ossimMapProjectionFactory::instance());
    registerFactory(ossimSrsProjectionFactory::instance());
