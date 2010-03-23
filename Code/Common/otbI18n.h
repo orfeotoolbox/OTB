@@ -34,7 +34,15 @@
 #define otbI18nMacro() \
   typedef otb::ConfigurationFile        ConfigurationType;\
   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
-  std::string lang = conf->GetParameter<std::string>("OTB_LANG");\
+  std::string lang;\
+  try\
+    {\
+    lang = conf->GetParameter<std::string>("OTB_LANG");\
+    }\
+  catch(...)\
+    {\
+    lang = QUOTEME(OTB_LANG);\
+    }\
   setlocale( LC_MESSAGES, lang.c_str() );\
   bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
   textdomain( "otb" );\
