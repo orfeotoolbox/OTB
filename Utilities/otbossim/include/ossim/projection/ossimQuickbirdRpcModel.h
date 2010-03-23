@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.h 11720 2007-09-12 14:59:30Z gpotts $
+//  $Id: ossimQuickbirdRpcModel.h 16878 2010-03-18 00:10:32Z gpotts $
 #ifndef ossimQuickbirdRpcModel_HEADER
 #define ossimQuickbirdRpcModel_HEADER
 
@@ -45,7 +45,18 @@ public:
 
    virtual bool parseFile(const ossimFilename& file);
    
-   
+   void setSupportData(ossimQuickbirdMetaData* supportData)
+   {
+      theSupportData = supportData;
+   }
+   ossimQuickbirdMetaData* getSupportData()
+   {
+      return theSupportData.get();
+   }
+   const ossimQuickbirdMetaData* getSupportData()const
+   {
+      return theSupportData.get();
+   }
 protected:
    //void finishConstruction();
    void parseMetaData(const ossimFilename& metadata);
@@ -59,7 +70,7 @@ protected:
     return theSupportData;
   }
 */
-   ossimQuickbirdMetaData* theSupportData;
+   ossimRefPtr<ossimQuickbirdMetaData> theSupportData;
 
 TYPE_DATA
 };

@@ -92,12 +92,13 @@ public:
 
    bool parseEPHData(const ossimFilename& data_file);
 
-   ossimString getSatID()
-   {
-		return theSatID;
-   }
+   /** @return theSatID */
+   ossimString getSatID() const;
 
-   bool getEndOfLine( char * fileBuf, ossimString lineBeginning, char * format, ossimString & name );
+   bool getEndOfLine( char * fileBuf,
+                      ossimString lineBeginning,
+                      const char * format,
+                      ossimString & name );
 
  
 

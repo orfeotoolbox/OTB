@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.cpp 12105 2007-12-02 17:01:48Z dburken $
+//  $Id: ossimQuickbirdRpcModel.cpp 16891 2010-03-19 20:00:57Z dburken $
 
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
 #include <ossim/base/ossimException.h>
@@ -51,11 +51,7 @@ ossimQuickbirdRpcModel::ossimQuickbirdRpcModel(const ossimQuickbirdRpcModel& rhs
 
 ossimQuickbirdRpcModel::~ossimQuickbirdRpcModel()
 {
-   if (theSupportData)
-   {
-      delete theSupportData;
-      theSupportData = 0;
-   }
+   theSupportData = 0;
 }
 
 ossimObject* ossimQuickbirdRpcModel::dup() const
@@ -122,10 +118,8 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
          return false;
       }
    }
-   else
-   {
-       theSensorID = theSupportData->getSatID();
-   }
+   
+   theSensorID = theSupportData->getSatID();
 
    if(!hdr.open(rpcFile))
    {
@@ -398,11 +392,8 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
          return false;
       }
    }
-   else
-   {
-       theSensorID = theSupportData->getSatID();
-   }
 
+   theSensorID = theSupportData->getSatID();
 
    if(!hdr.open(rpcFile))
    {
@@ -552,7 +543,7 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
 bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
                                        const char* prefix) const
 {
- if(theSupportData)
+ if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->saveState(kwl, supportPrefix);
@@ -564,7 +555,7 @@ bool ossimQuickbirdRpcModel::saveState(ossimKeywordlist& kwl,
 bool ossimQuickbirdRpcModel::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
- if(theSupportData)
+ if(theSupportData.valid())
    {
       ossimString supportPrefix = ossimString(prefix) + "support_data.";
       theSupportData->loadState(kwl, supportPrefix);
