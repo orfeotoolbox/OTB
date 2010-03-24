@@ -77,10 +77,12 @@ ImageFileWriter<TInputImage>
 
   // Update the meta data
   nonConstInput->UpdateOutputInformation();
+  if(this->GetImageIO() == NULL)
+    {
+    this->SetImageIO(ImageIOFactory::CreateImageIO(this->GetFileName(), itk::ImageIOFactory::WriteMode));
+    this->SetNumberOfStreamDivisions(static_cast<unsigned int> (CalculateNumberOfStreamDivisions()));
+    }
 
-  this->SetImageIO( ImageIOFactory::CreateImageIO( this->GetFileName(),
-                        itk::ImageIOFactory::WriteMode ) );
-  this->SetNumberOfStreamDivisions( static_cast<unsigned int>( CalculateNumberOfStreamDivisions() ) );
   this->Superclass::Write();
   //TODO: Force ImageIO desctructor. Should be fixed once GDALImageIO
   //will be refactored.

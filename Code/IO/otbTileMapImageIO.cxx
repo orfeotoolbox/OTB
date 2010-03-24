@@ -88,6 +88,11 @@ TileMapImageIO::TileMapImageIO()
 
   this->AddSupportedReadExtension(".otb");
   this->AddSupportedReadExtension(".OTB");
+
+  m_TileMapSplitter = SplitterType::New();
+
+  this->UseStreamedWritingOn();
+  this->UseStreamedReadingOn();
 }
 
 TileMapImageIO::~TileMapImageIO()
@@ -921,6 +926,35 @@ int TileMapImageIO::XYToQuadTree2(double x, double y, std::ostringstream& quad) 
   }
 
   return 0;
+}
+
+unsigned int
+TileMapImageIO::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
+                                                             const ImageIORegion &pasteRegion) const
+{
+  typedef itk::ImageRegion<2> RegionType;
+  RegionType tileMapRegion;
+  RegionType::IndexType index;
+  index[0] = this->GetOrigin(0);
+  index[1] = this->GetOrigin(1);
+  itk::ImageIORegionAdaptor<2>::Convert(pasteRegion, tileMapRegion, index);
+  return m_TileMapSplitter->GetNumberOfSplits(tileMapRegion, numberOfRequestedSplits);
+}
+
+itk::ImageIORegion
+TileMapImageIO::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
+                                                               unsigned int numberOfActualSplits,
+                                                               const ImageIORegion &pasteRegion) const
+{
+  typedef itk::ImageRegion<2> RegionType;
+  RegionType tileMapRegion;
+  RegionType::IndexType index;
+  index[0] = this->GetOrigin(0);
+  index[1] = this->GetOrigin(1);
+  itk::ImageIORegionAdaptor<2>::Convert(pasteRegion, tileMapRegion, index);
+  ImageIORegion returnRegion;
+  itk::ImageIORegionAdaptor<2>::Convert(m_TileMapSplitter->GetSplit(ithPiece, numberOfActualSplits, tileMapRegion), returnRegion, index);
+  return returnRegion;
 }
 
 /** RGB buffer filling when the tile is not found */

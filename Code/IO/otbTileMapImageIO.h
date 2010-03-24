@@ -28,6 +28,7 @@
 
 /* ITK Libraries */
 #include "itkImageIOBase.h"
+#include "otbImageRegionTileMapSplitter.h"
 
 /* Curl Library*/
 #include <curl/curl.h>
@@ -62,6 +63,8 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileMapImageIO, itk::ImageIOBase);
+
+  typedef itk::ImageIORegion ImageIORegion;
 
   /** Set/Get the level of compression for the output images.
    *  0-9; 0 = none, 9 = maximum. */
@@ -140,6 +143,7 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
+
 protected:
   /** Construtor.*/
   TileMapImageIO();
@@ -151,6 +155,14 @@ protected:
   void InternalReadImageInformation();
   /** Write all information on the image*/
   void InternalWriteImageInformation();
+
+  virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
+                                                                       const ImageIORegion &pasteRegion) const;
+
+  virtual ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
+                                                               unsigned int numberOfActualSplits,
+                                                               const ImageIORegion &pasteRegion) const;
+
   /** Number of bands of the image*/
   int m_NbBands;
 
@@ -212,6 +224,9 @@ private:
   
   bool                                         m_FileNameIsServerName;
 
+
+  typedef otb::ImageRegionTileMapSplitter<2> SplitterType;
+  SplitterType::Pointer m_TileMapSplitter;
 };
 
 } // end namespace otb
