@@ -796,14 +796,18 @@ void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
 
   itk::ImageIOBase::Pointer imageIO;
   //Open the file to write the buffer
-  if (m_AddressMode == TileMapAdressingStyle::GM)
-  {
-    imageIO = itk::JPEGImageIO::New();
-  }
-  if (m_AddressMode == TileMapAdressingStyle::OSM)
-  {
+  if (m_FileSuffix == "png")
+    {
     imageIO = itk::PNGImageIO::New();
-  }
+    }
+  else if (m_FileSuffix == "jpg")
+    {
+    imageIO = itk::JPEGImageIO::New();
+    }
+  else
+    {
+    itkExceptionMacro( << "TileMapImageIO : Bad addressing Style");
+    }
 
   bool lCanWrite(false);
   lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
