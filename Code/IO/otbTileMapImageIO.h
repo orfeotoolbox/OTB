@@ -98,11 +98,13 @@ public:
     this->SetCacheDirectory( _arg.c_str() );
     this->m_UseCache=true;
   }
+  itkGetStringMacro(CacheDirectory);
 
   itkSetMacro(Depth, int);
   itkGetMacro(Depth, int);
 
-  itkGetStringMacro(CacheDirectory);
+  itkGetStringMacro(FileSuffix);
+  itkSetStringMacro(FileSuffix);
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
