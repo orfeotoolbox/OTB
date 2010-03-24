@@ -98,7 +98,7 @@ public:
   virtual void Write(const void* buffer);
 
 protected:
-  /** Construtor.*/
+  /** Constructor.*/
   JPEG2000ImageIO();
   /** Destructor.*/
   virtual ~JPEG2000ImageIO();

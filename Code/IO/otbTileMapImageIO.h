@@ -145,7 +145,7 @@ public:
 
 
 protected:
-  /** Construtor.*/
+  /** Constructor.*/
   TileMapImageIO();
   /** Destructor.*/
   virtual ~TileMapImageIO();

@@ -98,7 +98,7 @@ public:
   virtual void Write(VectorDataConstPointerType data, char ** papszOptions = NULL);
 
 protected:
-  /** Construtor.*/
+  /** Constructor.*/
   KMLVectorDataIO();
   /** Destructor.*/
   virtual ~KMLVectorDataIO();

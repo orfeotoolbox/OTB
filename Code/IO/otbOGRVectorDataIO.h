@@ -102,7 +102,7 @@ public:
   virtual void Write(VectorDataConstPointerType data,  char ** papszOptions = NULL);
 
 protected:
-  /** Construtor.*/
+  /** Constructor.*/
   OGRVectorDataIO();
   /** Destructor.*/
   virtual ~OGRVectorDataIO();

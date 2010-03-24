@@ -122,7 +122,7 @@ public:
   //void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
 protected:
-  /** Construtor.*/
+  /** Constructor.*/
   GDALImageIO();
   /** Destructor.*/
   virtual ~GDALImageIO();
