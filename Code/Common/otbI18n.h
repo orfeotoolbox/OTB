@@ -32,6 +32,7 @@
 
 #if defined(OTB_I18N)
 #define otbI18nMacro() \
+{\
   typedef otb::ConfigurationFile        ConfigurationType;\
   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
   std::string lang;\
@@ -47,7 +48,8 @@
   bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
   textdomain( "otb" );\
   std::cout << "Language: " << lang << std::endl;\
-  std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;
+  std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;\
+}
 #else
 #define otbI18nMacro()\
 std::cout << "No internationalization" << std::endl;
