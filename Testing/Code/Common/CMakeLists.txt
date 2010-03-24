@@ -723,11 +723,7 @@ ADD_TEST(coTvImageRegionTileMapSplitter ${COMMON_TESTS8}
         ${BASELINE_FILES}/coImageRegionTileMapSplitter.txt
                 ${TEMP}/coImageRegionTileMapSplitter.txt
     otbImageRegionTileMapSplitter
-    45 45      # Index
-    1000 1500  # Size
-    10         # Nb split
-    2          # Number of slipt
-    ${TEMP}/coImageRegionTileMapSplitter.txt
+        ${TEMP}/coImageRegionTileMapSplitter.txt
 )
 
 # -------------  otb::ImageOfVectorsToMonoChannelExtractROI ----------------------------

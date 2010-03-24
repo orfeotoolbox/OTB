@@ -73,10 +73,10 @@ class ITK_EXPORT ImageRegionTileMapSplitter: public itk::ImageRegionSplitter<VIm
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionTileMapSplitter              Self;
-  typedef itk::ImageRegionSplitter<VImageDimension>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageRegionTileMapSplitter                Self;
+  typedef itk::ImageRegionSplitter<VImageDimension> Superclass;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -94,12 +94,12 @@ public:
   }
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef itk::Index<VImageDimension>  IndexType;
-  typedef typename IndexType::IndexValueType  IndexValueType;
+  typedef itk::Index<VImageDimension>        IndexType;
+  typedef typename IndexType::IndexValueType IndexValueType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef itk::Size<VImageDimension>  SizeType;
-  typedef typename SizeType::SizeValueType  SizeValueType;
+  typedef itk::Size<VImageDimension>       SizeType;
+  typedef typename SizeType::SizeValueType SizeValueType;
 
   /** Region typedef support.   */
   typedef itk::ImageRegion<VImageDimension> RegionType;
@@ -120,7 +120,7 @@ public:
                               const RegionType &region);
 
 protected:
-  ImageRegionTileMapSplitter() {}
+  ImageRegionTileMapSplitter(): m_AlignStep(256){}
   virtual ~ImageRegionTileMapSplitter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -128,6 +128,8 @@ private:
   ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter&); //purposely not implemented
   void operator=(const ImageRegionTileMapSplitter&); //purposely not implemented
 
+  unsigned int m_SplitsPerDimension[VImageDimension];
+  unsigned int m_AlignStep;
 };
 
 
@@ -138,4 +140,3 @@ private:
 #endif
 
 #endif
-
