@@ -628,7 +628,12 @@ IF(GETTEXT_FOUND)
 
   IF(GETTEXT_LIBRARY)
       SET(OTB_I18N 1)
+      MESSAGE(STATUS
+              "Gettext found, configuring internationalization")
       SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
+      IF(NOT OTB_LANG)
+        SET(OTB_LANG "en_EN.UTF-8" CACHE STRING "OTB internationalization (Experimental)")
+      ENDIF(NOT OTB_LANG)
       SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
       ADD_SUBDIRECTORY(I18n)
       FIND_PATH(GETTEXT_INCLUDE_DIR
