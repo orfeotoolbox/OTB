@@ -33,9 +33,10 @@ ConfigurationFile
   {
     m_OTBConfig = new ConfigFile(OTBBinDir + "/otb.conf");
   }
-  catch (ConfigFile::file_not_found& e)
+//  catch (ConfigFile::file_not_found& e)
+  catch (...)
   {
-    otbMsgDebugMacro(<< "Error - File '" << e.filename << "' not found.");
+    otbMsgDevMacro(<< "Error - File '" << e.filename << "' not found.");
   }
 }
 

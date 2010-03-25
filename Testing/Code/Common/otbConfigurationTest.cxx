@@ -32,8 +32,16 @@ int otbConfigurationTest(int argc, char * argv[])
 //   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
   ConfigurationType::Pointer conf = ConfigurationType::GetInstance();
 //   conf->Load();
-  std::string lang = conf->GetParameter<std::string>("OTB_LANG");
-  
+  std::string lang;
+  try
+  {
+    lang = conf->GetParameter<std::string> ("OTB_LANG");
+  }
+  catch (...)
+  {
+    std::cout << "Can't get parameter " << lang << std::endl;
+    return EXIT_FAILURE;
+  }
   std::cout << conf << std::endl;
   
   if( lang.compare("fr_FR.UTF-8") != 0  && lang.compare("en_EN.UTF-8") !=0 )
