@@ -86,6 +86,17 @@ PrintableImageFilter<TInputImage, TMaskImage>
   return static_cast<MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
+template <class TInputImage, class TMaskImage>
+void
+PrintableImageFilter<TInputImage, TMaskImage>
+::GenerateOutputInformation()
+{
+  // Call to the superclass implementation
+  Superclass::GenerateOutputInformation();
+
+  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+  outputPtr->SetNumberOfComponentsPerPixel(3);
+}
 
 template <class TInputImage, class TMaskImage>
 void

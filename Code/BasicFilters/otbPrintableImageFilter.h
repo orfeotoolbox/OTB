@@ -118,7 +118,7 @@ template <class TInputImage , class TMaskImage = otb::Image<unsigned char, 2> >
 class ITK_EXPORT PrintableImageFilter :
 public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
 {
-  public:
+public:
   typedef PrintableImageFilter                            Self;
   typedef itk::ImageToImageFilter
   <TInputImage, otb::VectorImage<unsigned char,2> >       Superclass;
@@ -222,14 +222,24 @@ public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
   }
   itkGetMacro(BackgroundMaskValue, MaskPixelType);
 
-  protected:
+  /** PrintableImageFilter can produce an image which is a different
+   * resolution than its input image.  As such, PrintableImageFilter
+   * needs to provide an implementation for
+   * GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below.
+   *
+   * \sa ProcessObject::GenerateOutputInformaton()  */
+  virtual void GenerateOutputInformation();
+
+protected:
 
   PrintableImageFilter();
 
   void BeforeGenerateData();
   void GenerateData();
 
-  private:
+private:
 
   PrintableImageFilter(Self&);   // intentionally not implemented
   void operator=(const Self&);          // intentionally not implemented
