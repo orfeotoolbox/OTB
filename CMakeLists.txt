@@ -632,7 +632,7 @@ IF(GETTEXT_FOUND)
               "Gettext found, configuring internationalization")
       SET(OTB_LANG $ENV{LANG} CACHE STRING "OTB internationalization (Experimental)")#might want to get the Locale from the system here
       IF(NOT OTB_LANG)
-        SET(OTB_LANG "en_EN.UTF-8" CACHE STRING "OTB internationalization (Experimental)")
+        SET(OTB_LANG "en_EN.UTF-8" CACHE STRING "OTB internationalization (Experimental)" FORCE)
       ENDIF(NOT OTB_LANG)
       SET(OTB_LANG_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/I18n)
       ADD_SUBDIRECTORY(I18n)
