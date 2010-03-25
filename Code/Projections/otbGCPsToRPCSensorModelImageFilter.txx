@@ -102,16 +102,16 @@ GCPsToRPCSensorModelImageFilter< TImage >
   
   // Check wether we are using a DEM or not
   if(m_UseDEM)
-    {
+  {
     // If so, use it to get the elevation
-    groundPointWithElevation[2] = this->GetHeightAboveMSL(groundPoint);
-    }
+    groundPointWithElevation[2] = m_DEMHandler->GetHeightAboveMSL(groundPoint);
+  }
   else
-    {
+  {
     // Use the MeanElevation value
     groundPointWithElevation[2] = m_MeanElevation;
-    }
-
+  }
+  
   // Call the 3D version of the method
   this->AddGCP(sensorPoint,groundPointWithElevation);
 }
