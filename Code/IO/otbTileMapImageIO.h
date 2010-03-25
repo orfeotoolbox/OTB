@@ -172,7 +172,7 @@ protected:
 
 private:
   /** Struct to save filename & tile associates */
-  typedef struct _tileNameAndCoord
+  typedef struct
   {
     int numTileX;
     int numTileY;
