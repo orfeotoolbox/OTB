@@ -23,7 +23,7 @@
 #include "otbTileMapTransform.h"
 #include "otbOrthoRectificationFilter.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkPoint.h"
 #include "otbImageRegionTileMapSplitter.h"
 #include "otbTileMapImageIO.h"
@@ -34,10 +34,11 @@
 
 int otbTileMapWriter(int argc, char *argv[])
 {
-  if (argc != 3)
+  if (argc != 4)
   {
     std::cerr << "Usage: " << argv[0]
-              << "<image> <output directory>" << std::endl;
+              << "<image> <SRTM directory> <output directory>" << std::endl;
+    return EXIT_FAILURE;
 
   }
 
@@ -61,31 +62,23 @@ int otbTileMapWriter(int argc, char *argv[])
   typedef otb::TileMapTransform<otb::INVERSE> MapProjectionType;
   typedef otb::OrthoRectificationFilter
             <ImageType, DoubleImageType,MapProjectionType> OrthoRectifFilterType;
-  typedef otb::StreamingImageFileWriter<CharVectorImageType>  WriterType;
+  typedef otb::ImageFileWriter<CharVectorImageType>  WriterType;
   
-//   OrthoRectifFilterType::Pointer  orthoRectifPAN =
-//       OrthoRectifFilterType::New();
   
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   mapProjection->SetLevel(depth);
-//   orthoRectifPAN->SetMapProjection(mapProjection);
   
   ImageType::IndexType start;
   start[0]=0;
   start[1]=0;
-//   orthoRectifPAN->SetOutputStartIndex(start);
                                     
   ImageType::SizeType size;
   size[0]=2000;
   size[1]=2000;
-//   orthoRectifPAN->SetSize(size);
                                     
   ImageType::SpacingType spacing;
   spacing[0]=1;
   spacing[1]=1;
-//   orthoRectifPAN->SetOutputSpacing(spacing);
-                                    
-//   orthoRectifPAN->SetInput(reader->GetOutput());
   
   typedef itk::Point <double, 2> PointType;
   PointType lonLatUL;
@@ -132,36 +125,32 @@ int otbTileMapWriter(int argc, char *argv[])
   orthoRectifXS->SetSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(pointULexact);
-  orthoRectifXS->SetDEMDirectory("/home/christop/data/SRTM");
-  
+  orthoRectifXS->SetDEMDirectory(argv[2]);
+
   typedef otb::PrintableImageFilter<DoubleVectorImageType> PrintableImageFilterType;
   PrintableImageFilterType::Pointer printable = PrintableImageFilterType::New();
   printable->SetInput(orthoRectifXSVector->GetOutput());
-  printable->SetChannel(3);
+  printable->SetChannel(1);
   printable->SetChannel(2);
-  printable->SetChannel(1); 
-  
-  
+  printable->SetChannel(3);
+
+
   typedef otb::ImageRegionTileMapSplitter<2> SplitterType;
   SplitterType::Pointer splitter = SplitterType::New();
   
   typedef otb::TileMapImageIO ImageIOType;
   ImageIOType::Pointer tileMapIO = ImageIOType::New();
   tileMapIO->SetDepth(depth);
-  tileMapIO->SetCacheDirectory(argv[2]);
-  
+  tileMapIO->SetCacheDirectory(argv[3]);
+  tileMapIO->SetFileSuffix("jpg");
   
   WriterType::Pointer        writer=WriterType::New();
-   writer->SetFileName("test.otb");
-   writer->SetImageIO(tileMapIO);
+  writer->SetFileName("test.otb");
+  writer->SetImageIO(tileMapIO);
   writer->SetNumberOfThreads(1);
   writer->SetInput(printable->GetOutput());
-//   writer->SetRegionSplitter(splitter);
-// // // //   writer->SetNumberOfStreamDivisions(2);
+
   writer->Update(); 
   
-  std::cout << printable->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
-  
-  
-  return 0;
+  return EXIT_SUCCESS;
 }
