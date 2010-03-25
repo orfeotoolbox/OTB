@@ -80,8 +80,8 @@ public:
   void SetLastChannel(unsigned int id);
   itkGetConstMacro(LastChannel,unsigned int);
 
-  /** ExtractImageFilter can produce an image which is a different
-   * resolution than its input image.  As such, ExtractImageFilter
+  /** MultiChannelExtractROI can produce an image which is a different
+   * resolution than its input image.  As such, MultiChannelExtractROI
    * needs to provide an implementation for
    * GenerateOutputInformation() in order to inform the pipeline
    * execution model.  The original documentation of this method is
