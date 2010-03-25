@@ -429,14 +429,14 @@ void TileMapImageIO::FetchTiles()
 void TileMapImageIO::Cleanup()
 {
   // Close files
-  for (int currentFile=0; currentFile<m_ListFiles.size(); currentFile++)
+  for (unsigned int currentFile=0; currentFile<m_ListFiles.size(); currentFile++)
   {
     fclose(m_ListFiles[currentFile]);
   }
   m_ListFiles.clear();
   
   // Cleanup easy handles
-  for (int currentHandle=0; currentHandle<m_ListCurlHandles.size(); currentHandle++)
+  for (unsigned int currentHandle=0; currentHandle<m_ListCurlHandles.size(); currentHandle++)
   {
     curl_easy_cleanup(m_ListCurlHandles[currentHandle]);
   }
@@ -460,7 +460,7 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   int firstSample = this->GetIORegion().GetIndex()[0];
   int nComponents = this->GetNumberOfComponents();
 
-  for (int currentTile=0; currentTile<m_ListTiles.size(); currentTile++)
+  for (unsigned int currentTile=0; currentTile<m_ListTiles.size(); currentTile++)
   {
     unsigned char * bufferTile = new unsigned char[256*256*nComponents];
  
