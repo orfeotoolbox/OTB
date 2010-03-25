@@ -27,7 +27,7 @@ int otbStreamingInnerProductVectorImageFilterNew( int argc, char* argv[] )
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
 
-  // Instanciation object
+  // Instantiation object
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;

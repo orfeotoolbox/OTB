@@ -32,7 +32,7 @@ int otbEdgeDetectorImageFilter(int argc, char* argv[] )
   typedef itk::SobelEdgeDetectionImageFilter<ImageType , ImageType>               SobelDetectionType;
   typedef otb::EdgeDetectorImageFilter<ImageType, ImageType, SobelDetectionType>  DetectorType;
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
   ReaderType::Pointer         reader      = ReaderType::New();
   WriterType::Pointer         writer      = WriterType::New();
   DetectorType::Pointer       detector    = DetectorType::New();

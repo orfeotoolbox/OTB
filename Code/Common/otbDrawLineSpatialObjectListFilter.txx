@@ -140,7 +140,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
          )
         {
 
-          /** Instanciation of the line iterator with begin and ending index*/
+          /** Instantiation of the line iterator with begin and ending index*/
           LineIteratorFilter   itLine(output,indexBeginLine ,indexEndLine  );
       
           /** Iteration over the line and writing white lines */

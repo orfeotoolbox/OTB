@@ -40,7 +40,7 @@ int otbBinaryImageToDensityImageFilter(int argc , char* argv[] )
   typedef otb::BinaryImageToDensityImageFilter<InputImageType,InputImageType ,CountFunctionType >  FilterType;
 
   
-  /** Instancitation of a Smart Pointer*/
+  /** Instantiation of a Smart Pointer*/
   FilterType::Pointer         filter = FilterType::New();
   ReaderType::Pointer         reader = ReaderType::New();
   WriterType::Pointer         writer = WriterType::New();

@@ -61,7 +61,7 @@ int otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii(int argc, char * ar
   ReaderType::Pointer reader = ReaderType::New();
   ImageToFastSIFTKeyPointSetFilterType::Pointer filter = ImageToFastSIFTKeyPointSetFilterType::New();
 
-  //Instanciation of std::vector for lexicographiacal sorting
+  //Instantiation of std::vector for lexicographiacal sorting
   ImageDataType  imageData;
 
   reader->SetFileName(infname);

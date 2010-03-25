@@ -49,7 +49,7 @@ int otbKeyPointDensityImageFilterTest(int argc, char* argv[] )
   typedef otb::KeyPointDensityImageFilter< ImageType, ImageType, DetectorType>   FilterType;
 
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
   FilterType::Pointer    filter =     FilterType::New();
   DetectorType::Pointer  detector = DetectorType::New();
   ReaderType::Pointer      reader = ReaderType::New();

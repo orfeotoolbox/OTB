@@ -48,7 +48,7 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
 
   typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
   FunctionType::Pointer    filter = FunctionType::New();
   DetectorType::Pointer    detector = DetectorType::New();
   ReaderType::Pointer      reader = ReaderType::New();

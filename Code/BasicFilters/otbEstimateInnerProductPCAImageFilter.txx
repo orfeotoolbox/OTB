@@ -67,7 +67,7 @@ void
 EstimateInnerProductPCAImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  // Instanciation object
+  // Instantiation object
   StreamingInnerProductPointer streamingInnerProduct = StreamingInnerProductType::New();
   streamingInnerProduct->SetInput(const_cast<InputImageType*>(this->GetInput()));
   streamingInnerProduct->SetCenterData(m_CenterData);

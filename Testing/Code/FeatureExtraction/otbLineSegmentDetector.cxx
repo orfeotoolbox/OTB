@@ -43,7 +43,7 @@ int otbLineSegmentDetector( int argc, char * argv[] )
   typedef itk::LineIterator<InputImageType>                          LineIteratorFilter;
 
 
-  /** Instanciation of smart pointer*/
+  /** Instantiation of smart pointer*/
   lsdFilterType::Pointer  lsdFilter = lsdFilterType::New();
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
   ReaderType::Pointer reader = ReaderType::New();

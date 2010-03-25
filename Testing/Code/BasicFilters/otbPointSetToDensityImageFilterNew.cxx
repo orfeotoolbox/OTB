@@ -34,7 +34,7 @@ int otbPointSetToDensityImageFilterNew(int, char* [] )
   typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
   typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
 
   FunctionType::Pointer    filter = FunctionType::New();
 

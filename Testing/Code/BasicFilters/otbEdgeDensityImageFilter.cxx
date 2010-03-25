@@ -51,7 +51,7 @@ int otbEdgeDensityImageFilter(int argc, char* argv[] )
 
   typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType  ,CountFunctionType> EdgeDensityFilterType;
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
   EdgeDensityFilterType::Pointer    filter =      EdgeDensityFilterType::New();
   ReaderType::Pointer               reader =      ReaderType::New();
   CannyDetectorType::Pointer        CannyFilter = CannyDetectorType::New();

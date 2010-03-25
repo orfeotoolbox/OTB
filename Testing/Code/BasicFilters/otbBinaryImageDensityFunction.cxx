@@ -35,7 +35,7 @@ int otbBinaryImageDensityFunction(int argc, char* argv[] )
   typedef otb::ImageFileReader<InputImageType>                     ReaderType;
   typedef otb::BinaryImageDensityFunction<InputImageType>          FunctionType;
 
-  /**Instancitation ofa Smart Pointer*/
+  /**Instantiation ofa Smart Pointer*/
   FunctionType::Pointer       filter = FunctionType::New();
   ReaderType::Pointer         reader = ReaderType::New();
   

@@ -34,7 +34,7 @@ int otbBinaryImageDensityFunctionNew(int, char* [] )
 
   typedef otb::BinaryImageDensityFunction<InputImageType>          FunctionType;
 
-  /**Instancitation of a Smart Pointer*/
+  /**Instantiation of a Smart Pointer*/
   FunctionType::Pointer     filter = FunctionType::New();
 
   return EXIT_SUCCESS;

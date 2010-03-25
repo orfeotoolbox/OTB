@@ -41,7 +41,7 @@ int otbVectorDataExtractROI( int argc, char * argv[] )
 
   typedef   otb::RemoteSensingRegion<Type>                           TypedRegion;
 
-  /** Instanciation of pointer objects*/
+  /** Instantiation of pointer objects*/
   FilterType::Pointer               filter = FilterType::New();
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
   VectorDataWriterType::Pointer     writer = VectorDataWriterType::New();

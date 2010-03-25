@@ -37,7 +37,7 @@ int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
   ReaderType::Pointer     reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
 
-  // Instanciation object
+  // Instantiation object
   FilterType::Pointer filter = FilterType::New();
 
   filter->GetStreamer()->SetNumberOfStreamDivisions(10);

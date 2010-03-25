@@ -35,7 +35,7 @@ int otbEdgeDensityImageFilterNew(int, char* [] )
 
   typedef otb::EdgeDensityImageFilter<ImageType , ImageType , CannyDetectorType  ,CountFunctionType> EdgeDensityFilterType;
 
-  /**Instancitation of an object*/
+  /**Instantiation of an object*/
   EdgeDensityFilterType::Pointer    filter =      EdgeDensityFilterType::New();
 
   return EXIT_SUCCESS;
