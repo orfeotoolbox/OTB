@@ -104,7 +104,11 @@ GCPsToRPCSensorModelImageFilter< TImage >
   if(m_UseDEM)
   {
     // If so, use it to get the elevation
-    groundPointWithElevation[2] = m_DEMHandler->GetHeightAboveMSL(groundPoint);
+    double height = m_DEMHandler->GetHeightAboveMSL(groundPoint);
+    // To avoid nan value
+    if (height != height)
+      height = 0;
+    groundPointWithElevation[2] = height;
   }
   else
   {
