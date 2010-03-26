@@ -135,6 +135,9 @@ public:
    * ground points.*/
   void AddGCP(const Point2DType& sensorPoint, const Point2DType & groundPoint);
 
+  /** Remove a GCP given by it's coordinates */
+  void RemoveGCP(unsigned int id);
+
   /** Clear all GCPs */
   void ClearGCPs();
 

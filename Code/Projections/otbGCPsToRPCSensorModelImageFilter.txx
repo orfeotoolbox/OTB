@@ -116,6 +116,19 @@ GCPsToRPCSensorModelImageFilter< TImage >
   this->AddGCP(sensorPoint,groundPointWithElevation);
 }
 
+template< class TImage >
+void
+GCPsToRPCSensorModelImageFilter< TImage >
+::RemoveGCP(unsigned int id)
+{
+  if (id < m_GCPsContainer.size())
+  {
+    m_GCPsContainer.erase(m_GCPsContainer.begin() + id);
+  }
+  
+  this->Modified();
+}
+
 template < class TImage >
 void
 GCPsToRPCSensorModelImageFilter< TImage >
