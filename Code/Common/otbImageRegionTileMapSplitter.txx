@@ -49,13 +49,13 @@ ImageRegionTileMapSplitter<VImageDimension>
     unsigned int stepPerPiece = 1;
     if (remainingToDo < maxPieces)
       {
-      stepPerPiece = static_cast<int> (vcl_floor(static_cast<double> (maxPieces) / remainingToDo));
+      stepPerPiece = static_cast<unsigned int> (vcl_floor(static_cast<double> (maxPieces) / remainingToDo));
       if ((remainingToDo-1)*(stepPerPiece+1) < maxPieces )
         {
         stepPerPiece += 1;
         }
       }
-    unsigned int maxPieceUsed = static_cast<int> (vcl_ceil(static_cast<double> (maxPieces / (double) stepPerPiece)));
+    unsigned int maxPieceUsed = static_cast<unsigned int> (vcl_ceil(static_cast<double> (maxPieces) / stepPerPiece));
     m_SplitsPerDimension[j - 1] = maxPieceUsed;
 //    otbMsgDevMacro("*** maxPieces stepPerPiece maxPieceUsed " << maxPieces
 //                      << " " << stepPerPiece << " " << maxPieceUsed);
@@ -99,8 +99,8 @@ ImageRegionTileMapSplitter<VImageDimension>
     unsigned int slicePos = (i % (stackSize * m_SplitsPerDimension[j])) / stackSize;
     stackSize *= m_SplitsPerDimension[j];
 
-    unsigned int generalSplitSize = vcl_ceil(static_cast<double> (regionSize[j]) / (m_SplitsPerDimension[j]
-        * m_AlignStep)) * m_AlignStep;//FIXME check
+    unsigned int generalSplitSize = static_cast<unsigned int> (vcl_ceil(static_cast<double> (regionSize[j]) / (m_SplitsPerDimension[j]
+        * m_AlignStep))) * m_AlignStep;
     if (slicePos == 0)
       {
       splitIndex[j] = regionIndex[j];
