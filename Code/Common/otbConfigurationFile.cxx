@@ -36,7 +36,8 @@ ConfigurationFile
 //  catch (ConfigFile::file_not_found& e)
   catch (...)
   {
-    otbMsgDevMacro(<< "Error - File '" << e.filename << "' not found.");
+//    otbMsgDevMacro(<< "Error - File '" << e.filename << "' not found.");
+    otbMsgDevMacro(<< "Error - File not found.");
   }
 }
 
