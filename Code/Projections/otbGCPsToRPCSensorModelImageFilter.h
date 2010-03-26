@@ -124,6 +124,12 @@ public:
   /** Get the residual ground error */
   itkGetConstReferenceMacro(RMSGroundError,double);
   
+  /** Get the Error container */
+  ErrorsContainerType & GetErrorsContainer();
+  
+  /** Get the mean error */
+  itkGetConstReferenceMacro(MeanError,double);
+  
   /** Get the GCPsContainer
    * \return The GCPs container */
   GCPsContainerType & GetGCPsContainer();

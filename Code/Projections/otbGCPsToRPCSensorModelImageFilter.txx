@@ -70,6 +70,16 @@ GCPsToRPCSensorModelImageFilter< TImage >
 }
 
 template < class TImage >
+typename GCPsToRPCSensorModelImageFilter< TImage >
+::ErrorsContainerType &
+GCPsToRPCSensorModelImageFilter< TImage >
+::GetErrorsContainer()
+{
+  // return the GCPs container
+  return m_ErrorsContainer;
+}
+
+template < class TImage >
 void
 GCPsToRPCSensorModelImageFilter< TImage >
 ::SetGCPsContainer(const GCPsContainerType & container)
