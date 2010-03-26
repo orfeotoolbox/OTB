@@ -20,9 +20,6 @@
 
 #include "otbGISTableToLabelMapFilter.h"
 #include "itkNumericTraits.h"
-//#include "itkProgressReporter.h"
-//#include "itkImageRegionConstIteratorWithIndex.h"
-//#include "otbGISTable.h"
 
 namespace otb {
 
@@ -146,11 +143,11 @@ GISTableToLabelMapFilter<TGISTable, TLabelMap>
 {
   // Allocate the output
   this->AllocateOutputs();
-  const InputGISTableType * input = this->GetInput();
+
 //   std::cout << input->GetConnection()->GetDBName()<< std::endl;
 //   std::cout << input->GetTableName() << std::endl;
   m_GISTableToVectorDataFilter->SetInput(this->GetInput());
-  //With set background to numericTrait::max() //TODO use the alue setted by the user
+  //With set background to numericTrait::max() //TODO use the value set by the user
   m_BackgroundValue = itk::NumericTraits<OutputLabelMapPixelType>::max();
   m_VectorDataToLabelMapFilter->SetBackgroundValue( this->GetBackgroundValue() );
   

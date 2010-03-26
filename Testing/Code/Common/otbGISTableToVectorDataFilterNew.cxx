@@ -16,30 +16,19 @@
 
 =========================================================================*/
 
-//#include "otbVectorDataFileReader.h"
-//#include "otbImageFileWriter.h"
 #include "otbVectorData.h"
-//#include "otbVectorDataProjectionFilter.h"
-//#include "otbVectorDataExtractROI.h"
 #include <fstream>
 #include <iostream>
 
-//#include "itkRGBAPixel.h"
-//#include "otbImage.h"
 #include "otbGISTableToVectorDataFilter.h"
-//#include "itkAttributeLabelObject.h"
 #include "otbPostGISConnectionImplementation.h"
 
 int otbGISTableToVectorDataFilterNew(int argc, char * argv[])
 {
   
-  const int dim = 2;
   typedef unsigned char PType;
-
   typedef otb::VectorData<> VectorDataType;
-  
   typedef otb::PostGISConnectionImplementation GISConnectionType;
-
   typedef otb::GISTable<GISConnectionType, double, 2> GISTableType;
 
   //Instantiation

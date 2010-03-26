@@ -33,23 +33,17 @@ unsigned int
 ImageRegionTileMapSplitter<VImageDimension>
 ::GetNumberOfSplits(const RegionType &region, unsigned int requestedNumber)
 {
-  int splitAxis;
   const SizeType &regionSize = region.GetSize();
   const IndexType &regionIndex = region.GetIndex();
 
   // requested number of splits per dimension
   unsigned int numPieces = 1;
 
-  // split on the outermost dimension available
-  splitAxis = VImageDimension - 1;
-
   // determine the actual number of pieces that will be generated
   for (unsigned int j = VImageDimension; j > 0; --j)
     {
 //    otbMsgDevMacro(<< "*** Dimension: " << j-1);
-    SizeValueType range = regionSize[j - 1];
     unsigned long int remainingToDo = vcl_ceil((double) requestedNumber / numPieces);
-//    unsigned long int remainingToDo = requestedNumber - numPieces;
     unsigned int maxPieces = (regionIndex[j - 1] + regionSize[j - 1] - 1) / m_AlignStep - regionIndex[j - 1]
         / m_AlignStep + 1;
     unsigned int stepPerPiece = 1;
@@ -80,7 +74,6 @@ itk::ImageRegion<VImageDimension>
 ImageRegionTileMapSplitter<VImageDimension>
 ::GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType &region)
 {
-  int splitAxis;
   RegionType splitRegion;
   IndexType splitIndex, regionIndex;
   SizeType splitSize, regionSize;
@@ -134,8 +127,6 @@ ImageRegionTileMapSplitter<VImageDimension>
   // set the split region ivars
   splitRegion.SetIndex(splitIndex);
   splitRegion.SetSize(splitSize);
-
-  itkDebugMacro("  Split Piece: " << splitRegion );
 
   return splitRegion;
 }

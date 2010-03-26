@@ -207,9 +207,6 @@ void TileMapImageIO::Read(void* buffer)
 void TileMapImageIO::GenerateTileInfo(double x, double y, int numTileX, int numTileY)
 {
   std::ostringstream quad2;
-  double xorig=x;
-  double yorig=y;
-
   XYToQuadTree2(x, y, quad2);
 
   std::ostringstream filename;
