@@ -38,6 +38,9 @@
 #include "projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
+#include "otbTileMapImageIO.h" //FIXME find a better way
+#include "projection/ossimTileMapModel.h"
+
 #include <itksys/SystemTools.hxx>
 #include <fstream>
 
@@ -385,7 +388,15 @@ ImageFileReader<TOutputImage>
          
          if (projection)
            {
-             hasMetaData = projection->saveState(geom_kwl);
+           if (projection->getClassName() == "ossimTileMapModel")
+             {
+             //FIXME find a better way to do that
+             //we need to pass the depth information which in on the IO to the projection
+             //to be handle throught the kwl
+             typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
+             dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
+             }
+           hasMetaData = projection->saveState(geom_kwl);
 //             delete projection; //FIXME find out where this should occur
            }
        }
@@ -396,9 +407,9 @@ ImageFileReader<TOutputImage>
   if (!hasMetaData)
     {
     otbMsgDevMacro( <<"OSSIM MetaData not present ! ");
-  }
+    }
   else
-  {
+    {
     otbMsgDevMacro( <<"OSSIM MetaData present ! ");
     otbMsgDevMacro( << geom_kwl);
 
@@ -414,7 +425,7 @@ ImageFileReader<TOutputImage>
     itk::EncapsulateMetaData< ImageKeywordlist >(dict,
         MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
  
-  }
+    }
  
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());

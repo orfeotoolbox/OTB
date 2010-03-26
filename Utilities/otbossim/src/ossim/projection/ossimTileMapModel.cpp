@@ -19,6 +19,7 @@ RTTI_DEF1(ossimTileMapModel, "ossimTileMapModel", ossimSensorModel);
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <stdio.h>
+#include <cstdlib>
 
 //***
 // Define Trace flags for use within this file:
@@ -102,8 +103,8 @@ void ossimTileMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 {
   if(!image_point.hasNans())
   {
-    gpt.lon = image_point.samp/((1 << qDepth) *256)*360.0-180.0;
-    double y = image_point.line/((1 << qDepth)*256);
+    gpt.lon = static_cast<double>(image_point.samp)/(1 << qDepth)/256 *360.0-180.0;
+    double y = static_cast<double>(image_point.line)/(1 << qDepth)/256;
     double ex = exp(4*M_PI*(y-0.5));
     gpt.lat = -180.0/M_PI*asin((ex-1)/(ex+1));
   }
@@ -176,6 +177,8 @@ bool ossimTileMapModel::saveState(ossimKeywordlist& kwl,
 
    kwl.add(prefix, ossimKeywordNames::TYPE_KW, TYPE_NAME(this));
 
+   kwl.add(prefix, "depth", qDepth);
+
    //***
    // Hand off to base class for common stuff:
    //***
@@ -218,6 +221,9 @@ bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
        theErrorStatus = 1;
        return false;
      }
+
+   value = kwl.find(prefix, "depth");
+   qDepth = atoi(value);
 
    //***
    // Pass on to the base-class for parsing first:
