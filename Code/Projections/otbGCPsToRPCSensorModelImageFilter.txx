@@ -34,7 +34,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
                                   m_UseDEM(false),
                                   m_MeanElevation(0.), 
                                   m_DEMHandler(),
-                                  m_GCPsContainer()
+                                  m_GCPsContainer(),
+                                  m_RpcProjection()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -42,6 +43,9 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   // Clear the GCPs container
   this->ClearGCPs();
+  
+  // Create projection
+  m_RpcProjection = new ossimRpcProjection();
 
   /** Create the DEM handler */
   m_DEMHandler = DEMHandler::New();
@@ -142,6 +146,87 @@ GCPsToRPCSensorModelImageFilter< TImage >
   this->Modified();
 }
 
+
+/** Transform point */
+template < class TImage >
+void
+GCPsToRPCSensorModelImageFilter< TImage >
+::TransformPoint(const Point2DType sensorPoint, Point3DType & groundPoint, double height)
+{
+  ossimDpt spoint(sensorPoint[0], sensorPoint[1]);
+  ossimGpt gpoint;
+  
+  gpoint.hgt = height;
+  
+  if( m_Projection != NULL )
+  {
+    m_Projection->lineSampleToWorld(spoint, gpoint);
+    
+    groundPoint[0] = gpoint.lon;
+    groundPoint[1] = gpoint.lat;
+    groundPoint[2] = gpoint.hgt;
+  }
+  else
+  {
+    groundPoint[0] = 0.;
+    groundPoint[1] = 0.;
+    groundPoint[2] = 0.;
+  }
+}
+
+template < class TImage >
+void
+GCPsToRPCSensorModelImageFilter< TImage >
+::ComputeErrors()
+{
+  ContinuousIndexType idFix, idOut;
+  Continuous3DIndexType idOut3D, idTrans3D;
+
+  Point2DType sensorPoint;
+  Point3DType groundPoint;
+
+  double sum = 0.;
+  m_MeanError = 0.;
+
+  // Clear Error container
+  m_ErrorsContainer.clear();
+
+  for (unsigned int i=0; i<m_GCPsContainer.size(); i++)
+  {
+    // GCP value   
+    sensorPoint = m_GCPsContainer[i].first;
+    groundPoint = m_GCPsContainer[i].second;
+  
+    // Comute Transform
+    Point3DType groundPointTemp;
+    this->TransformPoint(sensorPoint, groundPointTemp, groundPoint[2]);
+    
+    // Compute Euclidian distance
+    idFix[0] = sensorPoint[0];
+    idFix[1] = sensorPoint[1];
+    
+    idOut3D[0] = groundPoint[0];
+    idOut3D[1] = groundPoint[1];
+    idOut3D[2] = groundPoint[2];    
+
+    idTrans3D[0] = groundPointTemp[0];
+    idTrans3D[1] = groundPointTemp[1];
+    idTrans3D[2] = groundPointTemp[2];
+  
+    double distance = idOut3D.EuclideanDistanceTo(idTrans3D);
+    double error = vcl_sqrt(distance);
+    
+    // Add error to the container
+    m_ErrorsContainer.push_back(error);
+    
+    // Compute mean error
+    sum += distance;
+  }
+  
+  sum = vcl_sqrt(sum);
+  m_MeanError = sum / static_cast<double>(m_ErrorsContainer.size());
+}
+
 template< class TImage >
 void
 GCPsToRPCSensorModelImageFilter< TImage >
@@ -223,6 +308,16 @@ GCPsToRPCSensorModelImageFilter< TImage >
   // Export the sensor model in an ossimKeywordlist
   ossimKeywordlist geom_kwl;
   rpcModel->saveState(geom_kwl);
+  
+  // Compute projection
+  ossimRefPtr< ossimRpcProjection > objp = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
+  ossimKeywordlist kwl;
+  objp->saveState(kwl);
+  m_RpcProjection->loadState(kwl);
+  m_Projection = m_RpcProjection.get();
+  
+  // Compute errors
+  this->ComputeErrors();
 
   // Build an otb::ImageKeywordList
   ImageKeywordlist otb_kwl;

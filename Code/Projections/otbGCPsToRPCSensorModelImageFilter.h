@@ -21,6 +21,9 @@
 #include "itkInPlaceImageFilter.h"
 #include "otbDEMHandler.h"
 
+#include "projection/ossimRpcProjection.h"
+#include "projection/ossimProjection.h"
+
 namespace otb {
 
 /** \class GCPsToRPCSensorModelImageFilter
@@ -71,20 +74,24 @@ class ITK_EXPORT GCPsToRPCSensorModelImageFilter :
 {
 public:
   /** Standard class typedefs. */
-  typedef GCPsToRPCSensorModelImageFilter    Self;
-  typedef itk::InPlaceImageFilter< TImage >  Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef GCPsToRPCSensorModelImageFilter     Self;
+  typedef itk::InPlaceImageFilter< TImage >   Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** GCPs typedefs */
-  typedef itk::Point<double,2>               Point2DType;
-  typedef itk::Point<double,3>               Point3DType;
-  typedef std::pair<Point2DType,Point3DType> GCPType;
-  typedef std::vector<GCPType>               GCPsContainerType;
+  typedef itk::Point<double,2>                Point2DType;
+  typedef itk::Point<double,3>                Point3DType;
+  typedef std::pair<Point2DType,Point3DType>  GCPType;
+  typedef std::vector<GCPType>                GCPsContainerType;
+  typedef std::vector<double>                 ErrorsContainerType;
+
+  typedef itk::ContinuousIndex<>              ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 3>     Continuous3DIndexType;
 
   /** DEM typedef */
-  typedef otb::DEMHandler                    DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer   DEMHandlerPointerType;
+  typedef otb::DEMHandler                     DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer    DEMHandlerPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -140,6 +147,9 @@ public:
 
   /** Clear all GCPs */
   void ClearGCPs();
+  
+  /** Transform point */
+  void TransformPoint(const Point2DType sensorPoint, Point3DType & groundPoint, double height=0.);
 
 protected:
   /** Constructor */
@@ -160,24 +170,39 @@ private:
   GCPsToRPCSensorModelImageFilter ( const Self & ); // purposely not implemented
   void operator= ( const Self & ); // purposely not implemented
 
+  /** Transform all GCPs and compute the error and mean error */
+  void ComputeErrors();
+
   /** True to use GCPs from image metadata as well */
-  bool   m_UseImageGCPs;
+  bool                            m_UseImageGCPs;
 
   /** The residual ground error */
-  double m_RMSGroundError;
+  double                          m_RMSGroundError;
+  
+  /** The GCP error list */
+  ErrorsContainerType             m_ErrorsContainer;
+  
+  /** The mean error */
+  double                          m_MeanError;
 
   /** True if a DEM should be used */
-  bool m_UseDEM;
+  bool                            m_UseDEM;
 
   /** If no DEM is used, a MeanElevation 
    * over the image is used instead */
-  double m_MeanElevation;
+  double                          m_MeanElevation;
 
   /** The DEMHandler */
-  DEMHandlerPointerType m_DEMHandler;
+  DEMHandlerPointerType           m_DEMHandler;
 
   /** Container of GCPs */
-  GCPsContainerType m_GCPsContainer;
+  GCPsContainerType               m_GCPsContainer;
+  
+  /** RPC Projection */
+  ossimRefPtr<ossimRpcProjection> m_RpcProjection;
+  
+  /** Projection */
+  ossimRefPtr<ossimProjection>    m_Projection;
 
 }; // end of class
 
