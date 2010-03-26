@@ -636,6 +636,7 @@ void TileMapImageIO::ReadImageInformation()
     }
     std::string osmServer = "http://tile.openstreetmap.org/";
     std::string nmServer = "http://www.nearmap.com/maps/";
+    std::string otbServer1 = "http://tile.orfeo-toolbox.org/hillShade/";
     
     if (m_ServerName == osmServer)
     {
@@ -646,6 +647,11 @@ void TileMapImageIO::ReadImageInformation()
     {
       m_FileSuffix = "jpg";
       m_AddressMode = TileMapAdressingStyle::NEARMAP;
+    }
+    else if (m_ServerName == otbServer1)
+    {
+      m_FileSuffix = "jpg";
+      m_AddressMode = TileMapAdressingStyle::LOCAL;
     }
     else
     {
