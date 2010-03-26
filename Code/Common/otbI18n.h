@@ -31,6 +31,27 @@
 #define QUOTEME(x) _QUOTEME(x)
 
 #if defined(OTB_I18N)
+// Don't use the setlocale() method for windows, it works another way.
+#if defined(_WIN32)
+#define otbI18nMacro() \
+{\
+  typedef otb::ConfigurationFile        ConfigurationType;\
+  ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
+  std::string lang;\
+  try\
+    {\
+    lang = conf->GetParameter<std::string>("OTB_LANG");\
+    }\
+  catch(...)\
+    {\
+    lang = QUOTEME(OTB_LANG);\
+    }\
+  bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
+  textdomain( "otb" );\
+  std::cout << "Language: " << lang << std::endl;\
+  std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;\
+}
+#else
 #define otbI18nMacro() \
 {\
   typedef otb::ConfigurationFile        ConfigurationType;\
@@ -50,6 +71,7 @@
   std::cout << "Language: " << lang << std::endl;\
   std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;\
 }
+#endif
 #else
 #define otbI18nMacro()\
 std::cout << "No internationalization" << std::endl;
