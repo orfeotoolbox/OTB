@@ -79,8 +79,8 @@ public :
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
-  void SetLevel(unsigned char level);
-
+  void SetLevel(unsigned int level);
+  unsigned int GetLevel() const;
 
   OutputPointType TransformPoint(const InputPointType &point) const;
   virtual InputPointType Origin();

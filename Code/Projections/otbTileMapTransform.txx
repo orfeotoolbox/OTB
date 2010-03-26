@@ -128,9 +128,17 @@ TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDime
 template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
 unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
-::SetLevel(unsigned char level)
+::SetLevel(unsigned int level)
 {
   m_TileMapTransform->setDepth(level);
+}
+
+template<InverseOrForwardTransformationEnum TTransformDirection, class TScalarType,
+unsigned int NInputDimensions, unsigned int NOutputDimensions>
+unsigned int TileMapTransform<TTransformDirection, TScalarType, NInputDimensions, NOutputDimensions>
+::GetLevel() const
+{
+  return m_TileMapTransform->getDepth();
 }
 
 } // namespace otb
