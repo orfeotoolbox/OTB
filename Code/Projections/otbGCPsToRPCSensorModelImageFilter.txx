@@ -371,6 +371,8 @@ GCPsToRPCSensorModelImageFilter< TImage >
   ImageKeywordlist otb_kwl;
   otb_kwl.SetKeywordlist(geom_kwl);
 
+  m_Keywordlist = otb_kwl;
+
   // Encapsulate it
   itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData< ImageKeywordlist >( dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl );

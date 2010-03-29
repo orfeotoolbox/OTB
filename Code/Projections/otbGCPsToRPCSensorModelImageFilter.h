@@ -138,6 +138,9 @@ public:
 
   /** Set the GCP container */
   void SetGCPsContainer(const GCPsContainerType & container);
+  
+  /** Get Keywordlist */
+  itkGetConstReferenceMacro(Keywordlist, ImageKeywordlist);
 
   /** Add a GCP to the GCPContainer. This version of the AddGCP method
    * accepts a 3D ground point and does not use DEM or MeanElevation
@@ -211,6 +214,9 @@ private:
   
   /** Projection */
   ossimRefPtr<ossimProjection>    m_Projection;
+  
+  /** Keywordlist */
+  ImageKeywordlist                m_Keywordlist;
 
 }; // end of class
 
