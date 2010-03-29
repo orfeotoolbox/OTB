@@ -29,13 +29,16 @@ namespace otb {
 
 template < class TImage >
 GCPsToRPCSensorModelImageFilter<TImage>
-::GCPsToRPCSensorModelImageFilter() : m_UseImageGCPs(true), 
-                                  m_RMSGroundError(0.), 
+::GCPsToRPCSensorModelImageFilter() : m_UseImageGCPs(false), 
+                                  m_RMSGroundError(0.),
+                                  m_ErrorsContainer(),
+                                  m_MeanError(0.),
                                   m_UseDEM(false),
                                   m_MeanElevation(0.), 
                                   m_DEMHandler(),
                                   m_GCPsContainer(),
-                                  m_RpcProjection()
+                                  m_RpcProjection(),
+                                  m_Projection()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -156,6 +159,71 @@ GCPsToRPCSensorModelImageFilter< TImage >
   this->Modified();
 }
 
+template < class TImage >
+void
+GCPsToRPCSensorModelImageFilter< TImage >
+::SetUseImageGCPs(bool use)
+{
+  // Set the internal value
+  m_UseImageGCPs = use;
+
+  this->LoadImageGCPs();
+}
+
+template < class TImage >
+void
+GCPsToRPCSensorModelImageFilter< TImage >
+::LoadImageGCPs()
+{
+  // First, retrieve the image pointer
+  typename TImage::Pointer imagePtr = this->GetOutput();
+
+  // Iterate on the image GCPs
+  for( unsigned int i=0; i<imagePtr->GetGCPCount(); i++ )
+  {
+    // Store row/col in an index
+    typename TImage::IndexType index;
+    index[0] = static_cast<long int>(imagePtr->GetGCPCol(i));
+    index[1] = static_cast<long int>(imagePtr->GetGCPRow(i));
+    
+    // Transform to physical point
+    Point2DType sensorPoint;
+    imagePtr->TransformIndexToPhysicalPoint(index,sensorPoint);
+    
+    // Sensor and Ground points
+    Point3DType groundPoint;
+    
+    groundPoint[0] = imagePtr->GetGCPX(i);
+    groundPoint[1] = imagePtr->GetGCPY(i);
+    groundPoint[2] = imagePtr->GetGCPZ(i);
+ 
+    // Search image GCPs and remove them from container
+    bool found = false;
+    
+    unsigned int currentGCP = 0;
+    
+    while( (currentGCP < m_GCPsContainer.size()) && !found)
+    {
+      if((m_GCPsContainer[currentGCP].first == sensorPoint)
+         && (m_GCPsContainer[currentGCP].second == groundPoint))
+      {
+        // If we don't use image GCPs, erase the GCP
+        if (!m_UseImageGCPs)
+          m_GCPsContainer.erase(m_GCPsContainer.begin() + currentGCP);
+        
+        found = true;
+      }
+      
+      currentGCP++;
+    }
+    
+    // If we use image GCPs, add it to the container
+    if (m_UseImageGCPs && !found)
+      this->AddGCP(sensorPoint, groundPoint);
+  }
+  
+  this->Modified();
+}
 
 /** Transform point */
 template < class TImage >
@@ -255,36 +323,6 @@ GCPsToRPCSensorModelImageFilter< TImage >
   // Temporary points variable
   ossimDpt sensorPoint;
   ossimGpt geoPoint;
-  
-  // Handle the UseImageGCPs case
-  if(m_UseImageGCPs)
-    {
-    // Iterate on the image GCPs
-    for( unsigned int i=0; i<imagePtr->GetGCPCount(); i++ )
-      {
-      // Store row/col in an index
-      typename TImage::IndexType index;
-      index[0] = static_cast<long int>(imagePtr->GetGCPCol(i));
-      index[1] = static_cast<long int>(imagePtr->GetGCPRow(i));
-
-      // Transform to physical point
-      Point2DType physPoint;
-      imagePtr->TransformIndexToPhysicalPoint(index,physPoint);
-    
-      // Fill sensor point
-      sensorPoint = ossimDpt(physPoint[0],physPoint[1]);
-    
-      // Fill geo point
-      geoPoint = ossimGpt(imagePtr->GetGCPX(i),imagePtr->GetGCPY(i),
-                       imagePtr->GetGCPZ(i));
-    
-      // Add the sensor point to the list
-      sensorPoints.push_back(sensorPoint);
-      
-      // Add the geo point to the list 
-      geoPoints.push_back(geoPoint);
-      }
-    }
 
   // Retrieve the additional GCPs
   typename GCPsContainerType::const_iterator gcpIt;

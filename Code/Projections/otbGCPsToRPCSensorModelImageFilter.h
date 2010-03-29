@@ -104,9 +104,11 @@ public:
                       TImage::ImageDimension);
 
   /** Set/Get/toogle the UseImageGCPs flag */
-  itkSetMacro(UseImageGCPs,bool);
-  itkGetMacro(UseImageGCPs,bool);
-  itkBooleanMacro(UseImageGCPs);
+//  itkSetMacro(UseImageGCPs,bool);
+// itkGetMacro(UseImageGCPs,bool);
+//  itkBooleanMacro(UseImageGCPs);
+  void SetUseImageGCPs(bool use);
+  void LoadImageGCPs();
 
   /** Set/Get/toogle the UseDEM flag */
   itkSetMacro(UseDEM,bool);
