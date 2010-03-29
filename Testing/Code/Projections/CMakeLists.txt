@@ -546,6 +546,13 @@ ADD_TEST(prTvGeocentricTransform ${PROJECTIONS_TESTS3}
         ${TEMP}/prTvGeocentricTransform.txt
 )
 
+ADD_TEST(prTvTileMapTransform ${PROJECTIONS_TESTS3}
+         --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvTileMapTransform.txt
+        ${TEMP}/prTvTileMapTransform.txt
+        otbTileMapTransform
+        ${TEMP}/prTvTileMapTransform.txt
+)
+
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(prTvVectorDataExtractROIandProjection ${PROJECTIONS_TESTS3}
    otbVectorDataExtractROIandProjection
@@ -596,6 +603,7 @@ otbVectorDataProjectionFilterFromMapToGeo.cxx
 otbVectorDataProjectionFilterFromMapToImage.cxx
 otbGeocentricTransformNew.cxx
 otbGeocentricTransform.cxx
+otbTileMapTransform.cxx
 otbVectorDataExtractROIandProjection.cxx
 )
 
