@@ -275,7 +275,7 @@ GCPsToRPCSensorModelImageFilter< TImage >
     sensorPoint = m_GCPsContainer[i].first;
     groundPoint = m_GCPsContainer[i].second;
   
-    // Comute Transform
+    // Compute Transform
     Point3DType groundPointTemp;
     this->TransformPoint(sensorPoint, groundPointTemp, groundPoint[2]);
     
