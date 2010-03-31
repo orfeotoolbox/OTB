@@ -132,6 +132,10 @@ void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,this->curlHandlerWriteMemoryCallback);
     curl_easy_setopt(curl, CURLOPT_FILE, (void *)&chunk);
     */
+    
+    // Set 5s timeout
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
+    
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
     res = curl_easy_perform(curl);
 

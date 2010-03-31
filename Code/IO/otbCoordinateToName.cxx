@@ -122,7 +122,6 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
   FILE* output_file = fopen(m_TempFileName.c_str(),"w");
   curl = curl_easy_init();
 
-
   char url[256];
   strcpy(url,urlStream.str().data());
 
@@ -131,6 +130,9 @@ void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
   {
     std::vector<char> chunk;
     curl_easy_setopt(curl, CURLOPT_URL, url);
+    
+    // Set 5s timeout
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
 
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
     res = curl_easy_perform(curl);
