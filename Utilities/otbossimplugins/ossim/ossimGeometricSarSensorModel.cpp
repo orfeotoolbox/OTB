@@ -116,22 +116,24 @@ void ossimGeometricSarSensorModel::lineSampleHeightToWorld(
    SarSensor sensor(_sensor,_platformPosition);
    double lon, lat;
    // const double CLUM        = 2.99792458e+8 ;
-
+   
    // optimization
    double col = image_point.x - (image_point.x * _optimizationFactorX + _optimizationBiasX) ;
    double line = image_point.y - (image_point.y * _optimizationFactorY + _optimizationBiasY) ;
 
-   // Slant range computation, depending on the product type
-   double slantRange;
-   if (_isProductGeoreferenced) {
-      slantRange = getSlantRangeFromGeoreferenced(col) ;
-   }
-   else {
-      slantRange = getSlantRange(col) ;
-   }
-
    JSDDateTime azimuthTime = getTime(line) ;
 
+   // Slant range computation, depending on the product type
+   double slantRange;
+   if (_isProductGeoreferenced)
+   {
+      slantRange = getSlantRangeFromGeoreferenced(col) ;
+   }
+   else
+   {
+      slantRange = getSlantRange(col) ;
+   }
+   
    int etatLoc = sensor.ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
 
    if(traceDebug())

@@ -222,7 +222,7 @@ bool ossimRadarSat2ProductDoc::initPlatformPosition(
             ephemeris[i] = eph;
             ++nbrData;
 
-   } // matches:  for (int i = 0 ; i < nbrData; ++i)
+         } // matches:  for (int i = 0 ; i < nbrData; ++i)
 
          if (result)
          {
@@ -292,7 +292,7 @@ bool ossimRadarSat2ProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
       double prf;
       if ( getNominalPrf(xdoc, prf) )
       {
-//          sp->set_prf(prf * sp->get_nAzimuthLook() );
+         //sp->set_prf(prf * sp->get_nAzimuthLook() );
          sp->set_prf(prf);
       }
       else
@@ -323,7 +323,7 @@ bool ossimRadarSat2ProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
       }
 
       // Get columns direction (1=increasing, -1=decreasing).
-      if ( getPixelTimeOrdering(xdoc, s) )
+      if ( getLineTimeOrdering(xdoc, s) )
       {
          if (s.downcase() == "increasing")
          {
@@ -340,7 +340,7 @@ bool ossimRadarSat2ProductDoc::initSensorParams(const ossimXmlDocument* xdoc,
       }
 
       // Get lines direction (1=increasing, -1=decreasing).
-      if ( getLineTimeOrdering(xdoc, s) )
+      if ( getPixelTimeOrdering(xdoc, s) )
       {
          if (s.downcase() == "increasing")
          {
@@ -884,6 +884,23 @@ bool ossimRadarSat2ProductDoc::getImageId(const ossimXmlDocument* xdoc,
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimRadarSat2ProductDoc::getImageFile(const ossimXmlDocument* xdoc,
+                                            ossimString& s) const
+{
+   bool result = false;
+   ossimString fileName;
+   
+   ossimString path = "/product/imageAttributes/fullResolutionImageData";
+   
+   if ( ossim::getPath(path, xdoc, fileName) )
+   {
+      result = true;
+      s = fileName;
+   }
+   
+   return result;
+}
+
 bool ossimRadarSat2ProductDoc::getAcquisitionType(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -940,7 +957,7 @@ bool ossimRadarSat2ProductDoc::getPulseRepetitionFrequency(
    const ossimXmlDocument* xdoc, std::vector<ossimString>& v) const
 {
    ossimString path =
-         "/product/sourceAttributes/radarParameters/pulseRepetitionFrequency";
+      "/product/sourceAttributes/radarParameters/pulseRepetitionFrequency";
    return ossim::getPath(path, xdoc, v);
 }
 
@@ -1096,6 +1113,30 @@ bool ossimRadarSat2ProductDoc::getPixelTimeOrdering(
    return ossim::getPath(path, xdoc, s);
 }
 
+bool ossimRadarSat2ProductDoc::getIncidenceAngleNearRange(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/product/imageGenerationParameters/sarProcessingInformation/incidenceAngleNearRange";
+   return ossim::getPath(path, xdoc, s);
+}
+
+bool ossimRadarSat2ProductDoc::getIncidenceAngleFarRange(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/product/imageGenerationParameters/sarProcessingInformation/incidenceAngleFarRange ";
+   return ossim::getPath(path, xdoc, s);
+}
+
+bool ossimRadarSat2ProductDoc::getSatelliteHeight(
+   const ossimXmlDocument* xdoc, ossimString& s) const
+{
+   ossimString path =
+      "/product/imageGenerationParameters/sarProcessingInformation/satelliteHeight";
+   return ossim::getPath(path, xdoc, s);
+}
+
 bool ossimRadarSat2ProductDoc::getGeodeticTerrainHeight(
    const ossimXmlDocument* xdoc, ossimString& s) const
 {
@@ -1103,4 +1144,5 @@ bool ossimRadarSat2ProductDoc::getGeodeticTerrainHeight(
       "/product/imageAttributes/geographicInformation/referenceEllipsoidParameters/geodeticTerrainHeight";
    return ossim::getPath(path, xdoc, s);
 }
-}
+
+} // matches: namespace ossimplugins

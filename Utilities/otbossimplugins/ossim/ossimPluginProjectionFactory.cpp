@@ -33,25 +33,25 @@ ossimPluginProjectionFactory* ossimPluginProjectionFactory::instance()
 
    return factoryInstance;
 }
-
+   
 ossimProjection* ossimPluginProjectionFactory::createProjection(
    const ossimFilename& filename, ossim_uint32 /*entryIdx*/)const
 {
-  ossimRefPtr<ossimProjection> result = 0;
+   ossimRefPtr<ossimProjection> result = 0;
 
    if ( !result )
    {
       ossimRefPtr<ossimRadarSat2Model> model = new ossimRadarSat2Model();
       if ( model->open(filename) )
       {
-	       result = model.get();
+         result = model.get();
       }
       else
       {
          model = 0;
       }
    }
-
+   
    if ( !result )
    {
       ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
