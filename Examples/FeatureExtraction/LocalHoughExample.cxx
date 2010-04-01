@@ -41,17 +41,18 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 7 )
-  {
+  if (argc != 7)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImageFile  LocalHoughRadius LocalHoughOverlap LocalHoughNumberOfLines LocalHoughThreshold" << std::endl;
+    std::cerr <<
+    " outputImageFile  LocalHoughRadius LocalHoughOverlap LocalHoughNumberOfLines LocalHoughThreshold"
+              << std::endl;
 
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -62,8 +63,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float  InternalPixelType;
-  typedef  unsigned char  OutputPixelType;
+  typedef  float         InternalPixelType;
+  typedef  unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -73,12 +74,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image<InternalPixelType,  2> InternalImageType;
+  typedef otb::Image<OutputPixelType,  2>   OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::LineSpatialObjectList   LinesListType;
-
+  typedef otb::LineSpatialObjectList LinesListType;
 
   //  Software Guide : BeginLatex
   //
@@ -87,19 +87,19 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
-  typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
-  OutputImageType >  DrawLineListType;
+  typedef otb::LocalHoughFilter<InternalImageType> LocalHoughType;
+  typedef otb::DrawLineSpatialObjectListFilter<InternalImageType,
+                                               OutputImageType>
+  DrawLineListType;
   // Software Guide : EndCodeSnippet
 
-  typedef itk::RescaleIntensityImageFilter< InternalImageType,
-  OutputImageType > RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InternalImageType,
+                                           OutputImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
-
+  rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
 
   //  Software Guide : BeginLatex
   //
@@ -109,7 +109,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InternalImageType >  ReaderType;
+  typedef otb::ImageFileReader<InternalImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -120,9 +120,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -134,9 +133,9 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
 
-  LocalHoughType::Pointer    localHough= LocalHoughType::New();
+  LocalHoughType::Pointer localHough = LocalHoughType::New();
 
-  DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
+  DrawLineListType::Pointer drawLineList = DrawLineListType::New();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -149,15 +148,14 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
+  reader->SetFileName(argv[1]);
 
-  reader->SetFileName( argv[1] );
-
-  unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[3]));
-  unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[3]));
-  unsigned int  LocalHoughOverlapX((unsigned int)::atoi(argv[4]));
-  unsigned int  LocalHoughOverlapY((unsigned int)::atoi(argv[4]));
-  unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[5]));
-  float  LocalHoughThreshold((float)::atoi(argv[6]));
+  unsigned int LocalHoughRadiusX((unsigned int) ::atoi(argv[3]));
+  unsigned int LocalHoughRadiusY((unsigned int) ::atoi(argv[3]));
+  unsigned int LocalHoughOverlapX((unsigned int) ::atoi(argv[4]));
+  unsigned int LocalHoughOverlapY((unsigned int) ::atoi(argv[4]));
+  unsigned int LocalHoughNumberOfLines((unsigned int) ::atoi(argv[5]));
+  float        LocalHoughThreshold((float) ::atoi(argv[6]));
 
   LocalHoughType::SizeType LocalHoughRadius;
   LocalHoughRadius[0] = LocalHoughRadiusX;
@@ -167,12 +165,10 @@ int main( int argc, char * argv[] )
   LocalHoughOverlap[0] = LocalHoughOverlapX;
   LocalHoughOverlap[1] = LocalHoughOverlapY;
 
-
-  localHough->SetRadius( LocalHoughRadius );
-  localHough->SetOverlap( LocalHoughOverlap );
-  localHough->SetNumberOfLines( LocalHoughNumberOfLines );
-  localHough->SetThreshold( LocalHoughThreshold );
-
+  localHough->SetRadius(LocalHoughRadius);
+  localHough->SetOverlap(LocalHoughOverlap);
+  localHough->SetNumberOfLines(LocalHoughNumberOfLines);
+  localHough->SetThreshold(LocalHoughThreshold);
 
   //  Software Guide : BeginLatex
   //
@@ -184,16 +180,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  localHough->SetInput( reader->GetOutput() );
+  localHough->SetInput(reader->GetOutput());
 
-
-  drawLineList->SetInput( reader->GetOutput() );
-  drawLineList->SetInputLineSpatialObjectList( localHough->GetOutput() );
-  writer->SetFileName( argv[2] );
-  writer->SetInput( drawLineList->GetOutput() );
+  drawLineList->SetInput(reader->GetOutput());
+  drawLineList->SetInputLineSpatialObjectList(localHough->GetOutput());
+  writer->SetFileName(argv[2]);
+  writer->SetInput(drawLineList->GetOutput());
   writer->Update();
 // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LOCAL_HOUGH}
@@ -207,7 +201,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

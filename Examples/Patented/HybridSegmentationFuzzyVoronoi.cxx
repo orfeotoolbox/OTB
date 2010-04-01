@@ -41,12 +41,10 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkSimpleFuzzyConnectednessScalarImageFilter.h"
 #include "itkVoronoiSegmentationImageFilter.h"
 // Software Guide : EndCodeSnippet
-
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -54,19 +52,20 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 
-
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 9 )
-  {
+  if (argc < 9)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX seedY " << std::endl;
-    std::cerr << " estimateMean estimateVariance (used by FuzzySegmentation) " << std::endl;
-    std::cerr << " meanTolerance standardDeviationTolerance (used by VoronoiSegmentation) " << std::endl;
+    std::cerr <<
+    " estimateMean estimateVariance (used by FuzzySegmentation) " << std::endl;
+    std::cerr <<
+    " meanTolerance standardDeviationTolerance (used by VoronoiSegmentation) "
+              << std::endl;
     return 1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -76,11 +75,10 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float     InputPixelType;
-  const    unsigned int      Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
+  typedef  float InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -97,10 +95,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char      BinaryPixelType;
-  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef unsigned char                          BinaryPixelType;
+  typedef otb::Image<BinaryPixelType, Dimension> BinaryImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -111,11 +108,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   itk::SimpleFuzzyConnectednessScalarImageFilter<
-  InputImageType,
-  BinaryImageType
-  >  FuzzySegmentationFilterType;
+    InputImageType,
+    BinaryImageType
+    >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -133,7 +129,6 @@ int main( int argc, char *argv[] )
     FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  In the next step of the hybrid segmentation method, the prior generated
@@ -148,10 +143,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef unsigned char                          OutputPixelType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -164,15 +158,14 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef  itk::VoronoiSegmentationImageFilter<
-  InputImageType,
-  OutputImageType,
-  BinaryImageType>
+    InputImageType,
+    OutputImageType,
+    BinaryImageType>
   VoronoiSegmentationFilterType;
 
   VoronoiSegmentationFilterType::Pointer voronoisegmenter =
     VoronoiSegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -186,18 +179,16 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // We instantiate reader and writer types
   //
-  typedef  otb::ImageFileReader< InputImageType > ReaderType;
-  typedef  otb::ImageFileWriter<  OutputImageType  > WriterType;
+  typedef  otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef  otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
-
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
 
   //  Software Guide : BeginLatex
   //
@@ -209,21 +200,19 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  fuzzysegmenter->SetInput( reader->GetOutput() );
+  fuzzysegmenter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   InputImageType::IndexType index;
 
   index[0] = atoi(argv[3]);
   index[1] = atoi(argv[4]);
 
-  const float  mean              = atof(argv[5]);
-  const float  variance          = atof(argv[6]);
+  const float mean              = atof(argv[5]);
+  const float variance          = atof(argv[6]);
 
-  const float  meanTolerance     = atof( argv[7] );
-  const float  stdTolerance      = atof( argv[8] );
-
+  const float meanTolerance     = atof(argv[7]);
+  const float stdTolerance      = atof(argv[8]);
 
   //  Software Guide : BeginLatex
   //
@@ -245,12 +234,11 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  fuzzysegmenter->SetObjectSeed( index );
-  fuzzysegmenter->SetMean( mean );
-  fuzzysegmenter->SetVariance( variance );
-  fuzzysegmenter->SetThreshold( 0.5 );
+  fuzzysegmenter->SetObjectSeed(index);
+  fuzzysegmenter->SetMean(mean);
+  fuzzysegmenter->SetVariance(variance);
+  fuzzysegmenter->SetThreshold(0.5);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -263,7 +251,6 @@ int main( int argc, char *argv[] )
   fuzzysegmenter->Update();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The input to the Voronoi diagram classification filter is obtained from
@@ -275,10 +262,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  voronoisegmenter->SetInput( reader->GetOutput() );
-  voronoisegmenter->TakeAPrior( fuzzysegmenter->GetOutput() );
+  voronoisegmenter->SetInput(reader->GetOutput());
+  voronoisegmenter->TakeAPrior(fuzzysegmenter->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -296,10 +282,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  voronoisegmenter->SetMeanPercentError( meanTolerance );
-  voronoisegmenter->SetSTDPercentError(  stdTolerance );
+  voronoisegmenter->SetMeanPercentError(meanTolerance);
+  voronoisegmenter->SetSTDPercentError(stdTolerance);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -310,11 +295,9 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  voronoisegmenter->SetMinRegion( 5 );
+  voronoisegmenter->SetMinRegion(5);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -327,7 +310,6 @@ int main( int argc, char *argv[] )
   voronoisegmenter->Update();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The output of the Voronoi diagram classification is an image mask with
@@ -339,16 +321,15 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RescaleIntensityImageFilter< OutputImageType,OutputImageType >
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType>
   ScalerFilterType;
   ScalerFilterType::Pointer scaler = ScalerFilterType::New();
 
-  scaler->SetOutputMinimum(   0 );
-  scaler->SetOutputMaximum( 255 );
+  scaler->SetOutputMinimum(0);
+  scaler->SetOutputMaximum(255);
 
-  scaler->SetInput( voronoisegmenter->GetOutput() );
+  scaler->SetInput(voronoisegmenter->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -359,10 +340,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  writer->SetInput( scaler->GetOutput() );
+  writer->SetInput(scaler->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -391,5 +371,3 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

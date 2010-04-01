@@ -48,8 +48,7 @@
 #include "itkRGBPixel.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int , char * argv[] )
+int main(int, char * argv[])
 {
   // Software Guide : BeginLatex
   //
@@ -62,9 +61,8 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RGBPixel< unsigned char >    PixelType;
+  typedef itk::RGBPixel<unsigned char> PixelType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -73,9 +71,8 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< PixelType, 2 >   ImageType;
+  typedef otb::Image<PixelType, 2> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -88,13 +85,12 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  const char * filename = argv[1];
-  reader->SetFileName( filename );
+  const char *        filename = argv[1];
+  reader->SetFileName(filename);
   reader->Update();
 
   ImageType::Pointer image = reader->GetOutput();
@@ -103,7 +99,6 @@ int main( int , char * argv[] )
 
   pixelIndex[0] = 25;
   pixelIndex[1] = 35;
-
 
   // Software Guide : BeginLatex
   //
@@ -118,7 +113,7 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PixelType onePixel = image->GetPixel( pixelIndex );
+  PixelType onePixel = image->GetPixel(pixelIndex);
 
   PixelType::ValueType red   = onePixel.GetRed();
   PixelType::ValueType green = onePixel.GetGreen();
@@ -168,4 +163,3 @@ int main( int , char * argv[] )
 
   return EXIT_SUCCESS;
 }
-

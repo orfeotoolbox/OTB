@@ -33,15 +33,15 @@
 #include "itkGradientMagnitudeImageFilter.h"
 #include "otbStandardImageViewer.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 // Software Guide : EndCodeSnippet
 
   if (argc != 2)
-  {
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile " << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -51,11 +51,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef double PixelType;
+  typedef double                   PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader=ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(argv[1]);
   // Software Guide : EndCodeSnippet
@@ -69,7 +69,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter
-  <ImageType,ImageType> FilterType;
+  <ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -85,7 +85,6 @@ int main( int argc, char * argv[] )
   typedef otb::StandardImageViewer<ImageType> ViewerType;
   ViewerType::Pointer viewer = ViewerType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -135,5 +134,3 @@ int main( int argc, char * argv[] )
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

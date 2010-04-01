@@ -46,5 +46,3 @@ void RegisterTests()
 #undef main
 #define main MarkovRegularizationExampleTest
 #include "MarkovRegularizationExample.cxx"
-
-

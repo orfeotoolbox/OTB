@@ -31,4 +31,3 @@ void RegisterTests()
 #undef main
 #define main PiOver4ExamplePolarimetricSynthesisFilter
 #include "PiOver4ExamplePolarimetricSynthesisFilter.cxx"
-

@@ -34,7 +34,6 @@
 //    OUTPUTS: {pretty_QB_Toulouse_Ortho_XS.png}
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // Here we are illustrating the use of the
@@ -87,17 +86,19 @@
 #include "itkRescaleIntensityImageFilter.h"
 
 // Software Guide : BeginCodeSnippet
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 // Software Guide : EndCodeSnippet
 
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputPanchromatiqueImage inputMultiSpectralImage outputImage outputImagePrinted panchroPrinted msPrinted" << std::endl;
+    std::cerr <<
+    " inputPanchromatiqueImage inputMultiSpectralImage outputImage outputImagePrinted panchroPrinted msPrinted"
+              << std::endl;
     return 1;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -109,15 +110,14 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image<double, 2>     ImageType;
-  typedef otb::VectorImage<double, 2>     VectorImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileReader<VectorImageType>  ReaderVectorType;
-  typedef otb::VectorImage<unsigned short int, 2>     VectorIntImageType;
+  typedef otb::Image<double, 2>                   ImageType;
+  typedef otb::VectorImage<double, 2>             VectorImageType;
+  typedef otb::ImageFileReader<ImageType>         ReaderType;
+  typedef otb::ImageFileReader<VectorImageType>   ReaderVectorType;
+  typedef otb::VectorImage<unsigned short int, 2> VectorIntImageType;
 
-
-  ReaderVectorType::Pointer       readerXS=ReaderVectorType::New();
-  ReaderType::Pointer       readerPAN=ReaderType::New();
+  ReaderVectorType::Pointer readerXS = ReaderVectorType::New();
+  ReaderType::Pointer       readerPAN = ReaderType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <ImageType,VectorImageType,VectorIntImageType> FusionFilterType;
+  <ImageType, VectorImageType, VectorIntImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(readerPAN->GetOutput());
   fusion->SetXsInput(readerXS->GetOutput());
@@ -153,20 +153,20 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::StreamingImageFileWriter<VectorIntImageType>  WriterType;
-  WriterType::Pointer        writer=WriterType::New();
+  typedef otb::StreamingImageFileWriter<VectorIntImageType> WriterType;
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(fusion->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
 
-
   typedef otb::PrintableImageFilter<VectorIntImageType> PrintableImageType;
   PrintableImageType::Pointer printable = PrintableImageType::New();
 
-
-  typedef otb::VectorImage<unsigned char, 2>     VectorCharImageType;
-  typedef otb::StreamingImageFileWriter<VectorCharImageType>  PNGWriterType;
+  typedef otb::VectorImage<unsigned char,
+                           2>
+                                                             VectorCharImageType;
+  typedef otb::StreamingImageFileWriter<VectorCharImageType> PNGWriterType;
   PNGWriterType::Pointer pngwriter = PNGWriterType::New();
 
   printable->SetInput(fusion->GetOutput());
@@ -187,19 +187,18 @@ int main( int argc, char* argv[] )
   pngwriter->SetInput(printable2->GetOutput());
   pngwriter->Update();
 
-  typedef otb::Image<unsigned char, 2>     CharImageType;
-  typedef itk::RescaleIntensityImageFilter <ImageType,CharImageType> RescalerType;
+  typedef otb::Image<unsigned char,
+                     2>                                    CharImageType;
+  typedef itk::RescaleIntensityImageFilter <ImageType,
+                                            CharImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
-  typedef otb::StreamingImageFileWriter<CharImageType>  PNGWriterType2;
+  typedef otb::StreamingImageFileWriter<CharImageType> PNGWriterType2;
   PNGWriterType2::Pointer pngwriter2 = PNGWriterType2::New();
   rescaler->SetInput(readerPAN->GetOutput());
   pngwriter2->SetFileName(argv[5]);
   pngwriter2->SetInput(rescaler->GetOutput());
   pngwriter2->Update();
 
-
   return EXIT_SUCCESS;
 
 }
-
-

@@ -51,7 +51,6 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 //  Software Guide : BeginLatex
 //
 //  A pixel accessor for image thresholding requires that the accessor
@@ -60,24 +59,23 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 class ThresholdingPixelAccessor
 {
 public:
-  typedef unsigned char      InternalType;
-  typedef unsigned char      ExternalType;
+  typedef unsigned char InternalType;
+  typedef unsigned char ExternalType;
 
-  ExternalType Get( const InternalType & input ) const
+  ExternalType Get(const InternalType& input) const
   {
     return (input > m_Threshold) ? 1 : 0;
   }
-  void SetThreshold( const InternalType threshold )
+  void SetThreshold(const InternalType threshold)
   {
     m_Threshold = threshold;
   }
 
-  void operator=( const ThresholdingPixelAccessor & vpa )
+  void operator =(const ThresholdingPixelAccessor& vpa)
   {
     m_Threshold = vpa.m_Threshold;
   }
@@ -85,7 +83,6 @@ private:
   InternalType m_Threshold;
 };
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -96,23 +93,21 @@ private:
 //
 //  Software Guide : EndLatex
 
-
 //-------------------------
 //
 //   Main code
 //
 //-------------------------
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor4   inputFileName outputBinaryFileName ";
     std::cerr << " thresholdValue" << std::endl;
     return -1;
-  }
-
+    }
 
 //  Software Guide : BeginLatex
 //
@@ -122,13 +117,11 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef ThresholdingPixelAccessor::InternalType     PixelType;
-  const   unsigned int   Dimension = 2;
-  typedef otb::Image< PixelType,  Dimension >   ImageType;
+  typedef ThresholdingPixelAccessor::InternalType PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<PixelType,  Dimension> ImageType;
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -138,14 +131,12 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef itk::ImageAdaptor<  ImageType,
-  ThresholdingPixelAccessor > ImageAdaptorType;
+  typedef itk::ImageAdaptor<ImageType,
+                            ThresholdingPixelAccessor> ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -155,13 +146,11 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  ThresholdingPixelAccessor  accessor;
-  accessor.SetThreshold( atoi( argv[3] ) );
-  adaptor->SetPixelAccessor( accessor );
+  ThresholdingPixelAccessor accessor;
+  accessor.SetThreshold(atoi(argv[3]));
+  adaptor->SetPixelAccessor(accessor);
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -170,34 +159,30 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >   ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   reader->Update();
 
-  adaptor->SetImage( reader->GetOutput() );
+  adaptor->SetImage(reader->GetOutput());
 //  Software Guide : EndCodeSnippet
 
-
-  typedef itk::RescaleIntensityImageFilter< ImageAdaptorType,
-  ImageType > RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ImageAdaptorType,
+                                           ImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
-  typedef otb::ImageFileWriter< ImageType >   WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
+  writer->SetFileName(argv[2]);
 
-  writer->SetFileName( argv[2] );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
 
-  rescaler->SetOutputMinimum(  0  );
-  rescaler->SetOutputMaximum( 255 );
-
-  rescaler->SetInput( adaptor );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(adaptor);
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
-
 
 //  Software Guide : BeginLatex
 //
@@ -224,8 +209,5 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

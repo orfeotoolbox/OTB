@@ -102,7 +102,7 @@
 #include "itkNormalVariateGenerator.h"
 // Software Guide : EndCodeSnippet
 
-int main( int,  char *[])
+int main(int,  char *[])
 {
   // Software Guide : BeginLatex
   //
@@ -119,19 +119,21 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Vector< double, 1 > MeasurementVectorType;
-  typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType;
+  typedef itk::Vector<double,
+                      1>
+                                                             MeasurementVectorType;
+  typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer sample = SampleType::New();
-  sample->SetMeasurementVectorSize( 1 ); // length of measurement vectors
+  sample->SetMeasurementVectorSize(1);   // length of measurement vectors
   // in the sample.
 
-  typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
-  std::vector< ClassSampleType::Pointer > classSamples;
-  for ( unsigned int i = 0; i < 2; ++i )
-  {
-    classSamples.push_back( ClassSampleType::New() );
-    classSamples[i]->SetSample( sample );
-  }
+  typedef itk::Statistics::Subsample<SampleType> ClassSampleType;
+  std::vector<ClassSampleType::Pointer> classSamples;
+  for (unsigned int i = 0; i < 2; ++i)
+    {
+    classSamples.push_back(ClassSampleType::New());
+    classSamples[i]->SetSample(sample);
+    }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -157,30 +159,30 @@ int main( int,  char *[])
   typedef itk::Statistics::NormalVariateGenerator NormalGeneratorType;
   NormalGeneratorType::Pointer normalGenerator = NormalGeneratorType::New();
 
-  normalGenerator->Initialize( 101 );
+  normalGenerator->Initialize(101);
 
-  MeasurementVectorType mv;
-  double mean = 100;
-  double standardDeviation = 30;
+  MeasurementVectorType          mv;
+  double                         mean = 100;
+  double                         standardDeviation = 30;
   SampleType::InstanceIdentifier id = 0UL;
-  for ( unsigned int i = 0; i < 100; ++i )
-  {
-    mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
-    sample->PushBack( mv );
-    classSamples[0]->AddInstance( id );
+  for (unsigned int i = 0; i < 100; ++i)
+    {
+    mv.Fill((normalGenerator->GetVariate() * standardDeviation) + mean);
+    sample->PushBack(mv);
+    classSamples[0]->AddInstance(id);
     ++id;
-  }
+    }
 
-  normalGenerator->Initialize( 3024 );
+  normalGenerator->Initialize(3024);
   mean = 200;
   standardDeviation = 30;
-  for ( unsigned int i = 0; i < 100; ++i )
-  {
-    mv.Fill( (normalGenerator->GetVariate() * standardDeviation ) + mean);
-    sample->PushBack( mv );
-    classSamples[1]->AddInstance( id );
+  for (unsigned int i = 0; i < 100; ++i)
+    {
+    mv.Fill((normalGenerator->GetVariate() * standardDeviation) + mean);
+    sample->PushBack(mv);
+    classSamples[1]->AddInstance(id);
     ++id;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -194,24 +196,24 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::MeanCalculator< ClassSampleType > MeanEstimatorType;
-  typedef itk::Statistics::CovarianceCalculator< ClassSampleType >
+  typedef itk::Statistics::MeanCalculator<ClassSampleType> MeanEstimatorType;
+  typedef itk::Statistics::CovarianceCalculator<ClassSampleType>
   CovarianceEstimatorType;
 
-  std::vector< MeanEstimatorType::Pointer > meanEstimators;
-  std::vector< CovarianceEstimatorType::Pointer > covarianceEstimators;
+  std::vector<MeanEstimatorType::Pointer>       meanEstimators;
+  std::vector<CovarianceEstimatorType::Pointer> covarianceEstimators;
 
-  for ( unsigned int i = 0; i < 2; ++i )
-  {
-    meanEstimators.push_back( MeanEstimatorType::New() );
-    meanEstimators[i]->SetInputSample( classSamples[i] );
+  for (unsigned int i = 0; i < 2; ++i)
+    {
+    meanEstimators.push_back(MeanEstimatorType::New());
+    meanEstimators[i]->SetInputSample(classSamples[i]);
     meanEstimators[i]->Update();
 
-    covarianceEstimators.push_back( CovarianceEstimatorType::New() );
-    covarianceEstimators[i]->SetInputSample( classSamples[i] );
-    covarianceEstimators[i]->SetMean( meanEstimators[i]->GetOutput() );
+    covarianceEstimators.push_back(CovarianceEstimatorType::New());
+    covarianceEstimators[i]->SetInputSample(classSamples[i]);
+    covarianceEstimators[i]->SetMean(meanEstimators[i]->GetOutput());
     covarianceEstimators[i]->Update();
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -221,14 +223,14 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for ( unsigned int i = 0; i < 2; ++i )
-  {
+  for (unsigned int i = 0; i < 2; ++i)
+    {
     std::cout << "class[" << i << "] " << std::endl;
     std::cout << "    estimated mean : "
               << *(meanEstimators[i]->GetOutput())
               << "    covariance matrix : "
               << *(covarianceEstimators[i]->GetOutput()) << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -260,27 +262,27 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::GaussianDensityFunction< MeasurementVectorType >
-  MembershipFunctionType;
+  typedef itk::Statistics::GaussianDensityFunction
+                <MeasurementVectorType> MembershipFunctionType;
   typedef itk::MaximumRatioDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
   DecisionRuleType::APrioriVectorType aPrioris;
-  aPrioris.push_back( classSamples[0]->GetTotalFrequency()
-                      / sample->GetTotalFrequency() );
-  aPrioris.push_back( classSamples[1]->GetTotalFrequency()
-                      / sample->GetTotalFrequency() );
-  decisionRule->SetAPriori( aPrioris );
+  aPrioris.push_back(classSamples[0]->GetTotalFrequency()
+                     / sample->GetTotalFrequency());
+  aPrioris.push_back(classSamples[1]->GetTotalFrequency()
+                     / sample->GetTotalFrequency());
+  decisionRule->SetAPriori(aPrioris);
 
-  typedef itk::Statistics::SampleClassifier< SampleType > ClassifierType;
+  typedef itk::Statistics::SampleClassifier<SampleType> ClassifierType;
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetDecisionRule( (itk::DecisionRuleBase::Pointer) decisionRule);
-  classifier->SetSample( sample );
-  classifier->SetNumberOfClasses( 2 );
+  classifier->SetDecisionRule((itk::DecisionRuleBase::Pointer) decisionRule);
+  classifier->SetSample(sample);
+  classifier->SetNumberOfClasses(2);
 
-  std::vector< unsigned int > classLabels;
-  classLabels.resize( 2 );
+  std::vector<unsigned int> classLabels;
+  classLabels.resize(2);
   classLabels[0] = 100;
   classLabels[1] = 200;
   classifier->SetMembershipFunctionClassLabels(classLabels);
@@ -302,15 +304,15 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::vector< MembershipFunctionType::Pointer > membershipFunctions;
-  for ( unsigned int i = 0; i < 2; i++ )
-  {
+  std::vector<MembershipFunctionType::Pointer> membershipFunctions;
+  for (unsigned int i = 0; i < 2; i++)
+    {
     membershipFunctions.push_back(MembershipFunctionType::New());
-    membershipFunctions[i]->SetMean( meanEstimators[i]->GetOutput() );
+    membershipFunctions[i]->SetMean(meanEstimators[i]->GetOutput());
     membershipFunctions[i]->
-    SetCovariance( covarianceEstimators[i]->GetOutput() );
+    SetCovariance(covarianceEstimators[i]->GetOutput());
     classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
-  }
+    }
 
   classifier->Update();
   // Software Guide : EndCodeSnippet
@@ -323,18 +325,17 @@ int main( int,  char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ClassifierType::OutputType* membershipSample = classifier->GetOutput();
+  ClassifierType::OutputType* membershipSample =
+    classifier->GetOutput();
   ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
 
-  while ( iter != membershipSample->End() )
-  {
+  while (iter != membershipSample->End())
+    {
     std::cout << "measurement vector = " << iter.GetMeasurementVector()
               << "class label = " << iter.GetClassLabel() << std::endl;
     ++iter;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }
-
-

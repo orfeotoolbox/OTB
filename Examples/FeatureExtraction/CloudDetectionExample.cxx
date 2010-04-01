@@ -23,13 +23,11 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {CloudsOnReunion.tif}
 //  OUTPUTS: {CloudDetectionOutput.tif} , {pretty_CloudsOnReunion.png} , {pretty_CloudDetectionOutput.png}
 //  553 467 734 581 0.4 0.6 1.0
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -64,18 +62,20 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
   if (argc != 12)
-  {
-    std::cerr << "Usage: "<< argv[0];
-    std::cerr << "inputFileName outputFileName printableInputFileName printableOutputFileName";
-    std::cerr << "firstPixelComponent secondPixelComponent thirdPixelComponent fourthPixelComponent ";
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr <<
+    "inputFileName outputFileName printableInputFileName printableOutputFileName";
+    std::cerr <<
+    "firstPixelComponent secondPixelComponent thirdPixelComponent fourthPixelComponent ";
     std::cerr << "variance ";
-    std::cerr << "minThreshold maxThreshold "<<std::endl;
+    std::cerr << "minThreshold maxThreshold " << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const unsigned int Dimension = 2;
   // Software Guide : BeginLatex
@@ -86,8 +86,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef double         InputPixelType;
-  typedef double         OutputPixelType;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -101,9 +101,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<InputPixelType,Dimension>   VectorImageType;
-  typedef VectorImageType::PixelType                   VectorPixelType;
-  typedef otb::Image<OutputPixelType,Dimension>        OutputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
+  typedef VectorImageType::PixelType                  VectorPixelType;
+  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -115,7 +115,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,
-                                       OutputPixelType>   FunctorType;
+                                              OutputPixelType>   FunctorType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -127,8 +127,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-    typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
-                                   FunctorType> CloudDetectionFilterType;
+  typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
+                                    FunctorType> CloudDetectionFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -153,9 +153,9 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
   CloudDetectionFilterType::Pointer cloudDetection =
-                                    CloudDetectionFilterType::New();
+    CloudDetectionFilterType::New();
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -225,46 +225,56 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
+  // Pretty image creation for printing
+  typedef otb::Image<unsigned char,
+                     Dimension>
+  OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char,
+                           Dimension>
+  InputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>
+  WriterPrettyOutputType;
+  typedef otb::ImageFileWriter<InputPrettyImageType>
+  WriterPrettyInputType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType,
+                                           OutputPrettyImageType>
+  RescalerOutputType;
+  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
+                                                 InputPrettyImageType>
+  RescalerInputType;
+  typedef otb::MultiChannelExtractROI<InputPixelType,
+                                      InputPixelType>
+  ChannelExtractorType;
 
- // Pretty image creation for printing
-  typedef otb::Image<unsigned char, Dimension>                                           OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>                                     InputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                    WriterPrettyOutputType;
-  typedef otb::ImageFileWriter<InputPrettyImageType>                                     WriterPrettyInputType;
-  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>      RescalerOutputType;
-  typedef otb::VectorRescaleIntensityImageFilter< VectorImageType, InputPrettyImageType> RescalerInputType;
-  typedef otb::MultiChannelExtractROI<InputPixelType, InputPixelType>                    ChannelExtractorType;
-
-  ChannelExtractorType::Pointer selecter           = ChannelExtractorType::New();
+  ChannelExtractorType::Pointer  selecter           = ChannelExtractorType::New();
   RescalerInputType::Pointer     inputRescaler     = RescalerInputType::New();
   WriterPrettyInputType::Pointer prettyInputWriter = WriterPrettyInputType::New();
-  selecter->SetInput( reader->GetOutput());
+  selecter->SetInput(reader->GetOutput());
   selecter->SetChannel(3);
   selecter->SetChannel(2);
   selecter->SetChannel(1);
-  inputRescaler->SetInput( selecter->GetOutput() );
+  inputRescaler->SetInput(selecter->GetOutput());
   VectorPixelType minimum, maximum;
-  minimum.SetSize( 3 );
-  maximum.SetSize( 3 );
+  minimum.SetSize(3);
+  maximum.SetSize(3);
   minimum.Fill(0);
   maximum.Fill(255);
   inputRescaler->SetOutputMinimum(minimum);
   inputRescaler->SetOutputMaximum(maximum);
-  prettyInputWriter->SetFileName( argv[3] );
-  prettyInputWriter->SetInput( inputRescaler->GetOutput() );
-
+  prettyInputWriter->SetFileName(argv[3]);
+  prettyInputWriter->SetInput(inputRescaler->GetOutput());
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
-  outputRescaler->SetInput( cloudDetection->GetOutput() );
+  WriterPrettyOutputType::Pointer prettyOutputWriter =
+    WriterPrettyOutputType::New();
+  outputRescaler->SetInput(cloudDetection->GetOutput());
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);
-  prettyOutputWriter->SetFileName( argv[4] );
-  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
+  prettyOutputWriter->SetFileName(argv[4]);
+  prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
   prettyInputWriter->Update();
   prettyOutputWriter->Update();
 
   return EXIT_SUCCESS;
 }
-

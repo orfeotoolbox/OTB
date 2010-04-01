@@ -31,16 +31,16 @@
 #include "otbPlaceNameToLonLat.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc!=2)
-  {
-    std::cout << argv[0] <<" <place name> "
+  if (argc != 2)
+    {
+    std::cout << argv[0] << " <place name> "
               << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -70,7 +70,6 @@ int main( int argc, char* argv[] )
   std::cout << "Latitude: " << lat << std::endl;
   std::cout << "Longitude: " << lon << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //

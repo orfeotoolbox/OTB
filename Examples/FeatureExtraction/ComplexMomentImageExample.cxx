@@ -25,7 +25,6 @@
 
 #include "otbImageFileReader.h"
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
 //    2 2
@@ -43,26 +42,25 @@
 #include "otbComplexMomentImageFunction.h"
 // Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc != 4 )
-  {
+  if (argc != 4)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " p q" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
 
-  unsigned int P((unsigned char)::atoi(argv[2]));
-  unsigned int Q((unsigned char)::atoi(argv[3]));
+  unsigned int P((unsigned char) ::atoi(argv[2]));
+  unsigned int Q((unsigned char) ::atoi(argv[3]));
 
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
 
-  typedef unsigned char     InputPixelType;
-  const   unsigned int      Dimension = 2;
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-
-  typedef otb::ImageFileReader< InputImageType  >    ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -77,12 +75,12 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef std::complex<float>                             ComplexType;
-  typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
+  typedef std::complex<float>
+                                                                       ComplexType;
+  typedef otb::ComplexMomentImageFunction<InputImageType, ComplexType> CMType;
 
-  CMType::Pointer cmFunction =CMType::New();
+  CMType::Pointer cmFunction = CMType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -93,7 +91,7 @@ int main(int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   reader->Update();
-  cmFunction->SetInputImage( reader->GetOutput() );
+  cmFunction->SetInputImage(reader->GetOutput());
   cmFunction->SetQ(Q);
   cmFunction->SetP(P);
   // Software Guide : EndCodeSnippet
@@ -106,8 +104,8 @@ int main(int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   InputImageType::IndexType center;
-  center[0]=50;
-  center[1]=50;
+  center[0] = 50;
+  center[1] = 50;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -116,9 +114,7 @@ int main(int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
-  cmFunction->SetNeighborhoodRadius( 15 );
-
+  cmFunction->SetNeighborhoodRadius(15);
 
   //  Software Guide : BeginLatex
   // In order to get the value of the moment, we call the
@@ -130,10 +126,8 @@ int main(int argc, char * argv[] )
   ComplexType Result = cmFunction->EvaluateAtIndex(center);
 
   std::cout << "The moment of order (" << P << "," << Q <<
-            ") is equal to " << Result << std:: endl;
+  ") is equal to " << Result << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   return EXIT_SUCCESS;
 }
-

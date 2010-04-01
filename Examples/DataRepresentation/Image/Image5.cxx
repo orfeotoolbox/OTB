@@ -45,7 +45,6 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbImportImageFilter.h"
@@ -56,12 +55,12 @@
 
 int main(int argc, char * argv[])
 {
-  if ( argc < 2 )
-  {
+  if (argc < 2)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  outputImageFile" << std::endl;
     return 1;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -72,11 +71,10 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   //
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char   PixelType;
+  typedef unsigned char PixelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image< PixelType, Dimension > ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -88,9 +86,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImportImageFilter< ImageType >   ImportFilterType;
+  typedef otb::ImportImageFilter<ImageType> ImportFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -106,7 +103,6 @@ int main(int argc, char * argv[])
   ImportFilterType::Pointer importFilter = ImportFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // This filter requires the user to specify the size of the image to be
@@ -121,21 +117,20 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
   //
   // Software Guide : BeginCodeSnippet
-  ImportFilterType::SizeType  size;
+  ImportFilterType::SizeType size;
 
   size[0]  = 200;  // size along X
   size[1]  = 200;  // size along Y
 
   ImportFilterType::IndexType start;
-  start.Fill( 0 );
+  start.Fill(0);
 
   ImportFilterType::RegionType region;
-  region.SetIndex( start );
-  region.SetSize(  size  );
+  region.SetIndex(start);
+  region.SetSize(size);
 
-  importFilter->SetRegion( region );
+  importFilter->SetRegion(region);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -145,13 +140,12 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  double origin[ Dimension ];
+  double origin[Dimension];
   origin[0] = 0.0;    // X coordinate
   origin[1] = 0.0;    // Y coordinate
 
-  importFilter->SetOrigin( origin );
+  importFilter->SetOrigin(origin);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -160,13 +154,12 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  double spacing[ Dimension ];
+  double spacing[Dimension];
   spacing[0] = 1.0;    // along X direction
   spacing[1] = 1.0;    // along Y direction
 
-  importFilter->SetSpacing( spacing );
+  importFilter->SetSpacing(spacing);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -181,7 +174,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   // MODIFIED
   const unsigned int numberOfPixels =  size[0] * size[1];
-  PixelType * localBuffer = new PixelType[ numberOfPixels ];
+  PixelType *        localBuffer = new PixelType[numberOfPixels];
   // Software Guide : EndCodeSnippet
 
   const double radius = 80.0;
@@ -200,20 +193,21 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   const double radius2 = radius * radius;
-  PixelType * it = localBuffer;
+  PixelType *  it = localBuffer;
 
-  for (unsigned int y=0; y < size[1]; y++)
-  {
-    const double dy = static_cast<double>( y ) - static_cast<double>(size[1])/2.0;
-    for (unsigned int x=0; x < size[0]; x++)
+  for (unsigned int y = 0; y < size[1]; y++)
     {
-      const double dx = static_cast<double>( x ) - static_cast<double>(size[0])/2.0;
-      const double d2 = dx*dx + dy*dy;
-      *it++ = ( d2 < radius2 ) ? 255 : 0;
+    const double dy = static_cast<double>(y) - static_cast<double>(size[1]) /
+                      2.0;
+    for (unsigned int x = 0; x < size[0]; x++)
+      {
+      const double dx = static_cast<double>(x) - static_cast<double>(size[0]) /
+                        2.0;
+      const double d2 = dx * dx + dy * dy;
+      *it++ = (d2 < radius2) ? 255 : 0;
+      }
     }
-  }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -237,10 +231,9 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   const bool importImageFilterWillOwnTheBuffer = true;
-  importFilter->SetImportPointer( localBuffer, numberOfPixels,
-                                  importImageFilterWillOwnTheBuffer );
+  importFilter->SetImportPointer(localBuffer, numberOfPixels,
+                                 importImageFilterWillOwnTheBuffer);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -249,27 +242,25 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
 
-  typedef otb::ImageFileWriter< ImageType > WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[1] );
+  writer->SetFileName(argv[1]);
 
   // Software Guide : BeginCodeSnippet
-  writer->SetInput(  dynamic_cast<ImageType*>(importFilter->GetOutput())  );
+  writer->SetInput(dynamic_cast<ImageType*>(importFilter->GetOutput()));
   // Software Guide : EndCodeSnippet
 
-
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & exp )
-  {
+    }
+  catch (itk::ExceptionObject& exp)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << exp << std::endl;
     return -1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -281,4 +272,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

@@ -34,20 +34,20 @@ namespace otb
  *
  */
 class MsgReporter
-      : public MsgReporterGUI , public itk::Object
+  : public MsgReporterGUI, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef MsgReporter    Self;
-  typedef itk::Object                 Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef MsgReporter                   Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MsgReporter,Object);
+  itkTypeMacro(MsgReporter, Object);
 
   /** Get the unique instance of the model */
   static Pointer GetInstance();
@@ -58,20 +58,20 @@ public:
   virtual void Hide();
 
   /** Set the title of the window */
-  virtual void SetTitle(const std::string & title);
+  virtual void SetTitle(const std::string& title);
   /** Send a new message in the edit area */
-  virtual void SendMsg(const std::string & msg);
+  virtual void SendMsg(const std::string& msg);
   /** Send an error message in the edit area */
-  virtual void SendError(const std::string & msg);
+  virtual void SendError(const std::string& msg);
 
 protected:
   // Constructor and destructor
   MsgReporter();
-  ~MsgReporter() {};
+  ~MsgReporter() {}
 
 private:
   MsgReporter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The instance singleton */
   static Pointer m_Instance;

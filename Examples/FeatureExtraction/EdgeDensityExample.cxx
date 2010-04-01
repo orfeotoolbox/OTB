@@ -59,27 +59,25 @@
 #include "otbBinaryImageDensityFunction.h"
 // Software Guide : EndCodeSnippet
 
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  const  char *     infname       = argv[1];
-  const  char *     outfname      = argv[2];
-  const  char *     prettyfilename      = argv[3];
-  
+  const char * infname       = argv[1];
+  const char * outfname      = argv[2];
+  const char * prettyfilename      = argv[3];
+
   const unsigned int radius       = atoi(argv[4]);
 
-
   /*--*/
-    
-  const   unsigned int        Dimension = 2;
-  typedef float               PixelType;
+
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
   /** Variables for the canny detector*/
-  const PixelType    upperThreshold   = static_cast<PixelType>(atof(argv[5]));
-  const PixelType    lowerThreshold   = static_cast<PixelType>(atof(argv[6]));
+  const PixelType upperThreshold   = static_cast<PixelType>(atof(argv[5]));
+  const PixelType lowerThreshold   = static_cast<PixelType>(atof(argv[6]));
   const double    variance         = atof(argv[7]);
   const double    maximumError     = atof(argv[8]);
-
 
   // Software Guide : BeginLatex
   //
@@ -89,9 +87,9 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< PixelType, Dimension >    ImageType;
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileWriter<ImageType>  WriterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -104,7 +102,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
-    // Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
   // These {\em non null pixels} will be the result of an edge
@@ -115,7 +113,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>
-                                                     CannyDetectorType;
+  CannyDetectorType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -127,7 +125,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType,
-                     CountFunctionType> EdgeDensityFilterType;
+                                      CountFunctionType> EdgeDensityFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -137,10 +135,10 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer               reader = ReaderType::New();
-  EdgeDensityFilterType::Pointer    filter = EdgeDensityFilterType::New();
-  CannyDetectorType::Pointer        cannyFilter = CannyDetectorType::New();
-  WriterType::Pointer               writer = WriterType::New();
+  ReaderType::Pointer            reader = ReaderType::New();
+  EdgeDensityFilterType::Pointer filter = EdgeDensityFilterType::New();
+  CannyDetectorType::Pointer     cannyFilter = CannyDetectorType::New();
+  WriterType::Pointer            writer = WriterType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -165,7 +163,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   filter->SetDetector(cannyFilter);
-  filter->SetNeighborhoodRadius( radius );
+  filter->SetNeighborhoodRadius(radius);
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -176,11 +174,10 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  
+
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
-  
-  
+
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
@@ -203,27 +200,24 @@ int main(int argc, char* argv[] )
 
   /************* Image for printing **************/
 
-  typedef otb::Image< unsigned char, 2 > OutputImageType;
+  typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >
-    RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
+  RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
 
-  rescaler->SetInput( filter->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
 
-  typedef otb::ImageFileWriter< OutputImageType > OutputWriterType;
+  typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
   OutputWriterType::Pointer outwriter = OutputWriterType::New();
 
-  outwriter->SetFileName( prettyfilename );
-  outwriter->SetInput( rescaler->GetOutput() );
+  outwriter->SetFileName(prettyfilename);
+  outwriter->SetInput(rescaler->GetOutput());
   outwriter->Update();
-  
-  
-  
+
   return EXIT_SUCCESS;
 }
-

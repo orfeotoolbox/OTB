@@ -61,12 +61,12 @@
 int main(int argc, char * argv[])
 {
 
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " lowerThreshold upperThreshold" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
   typedef unsigned char PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension>    ImageType;
   typedef itk::PointSet<PixelType, Dimension> PointSetType;
   // Software Guide : EndCodeSnippet
 
@@ -90,11 +90,11 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType > ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
 
   const char * filenamereader = argv[1];
-  reader->SetFileName( filenamereader );
+  reader->SetFileName(filenamereader);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -121,11 +121,11 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ThresholdImageToPointSetFilter
-  < ImageType, PointSetType > FilterThresholdType;
+  <ImageType, PointSetType> FilterThresholdType;
   FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
-  filterThreshold->SetLowerThreshold( lowerThreshold );
-  filterThreshold->SetUpperThreshold( upperThreshold );
-  filterThreshold->SetInput(0, reader->GetOutput() );
+  filterThreshold->SetLowerThreshold(lowerThreshold);
+  filterThreshold->SetUpperThreshold(upperThreshold);
+  filterThreshold->SetInput(0, reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -167,13 +167,12 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  while ( itList != pointsContainer->End() )
-  {
+  while (itList != pointsContainer->End())
+    {
     std::cout << itList.Value() << std::endl;
     ++itList;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }
-

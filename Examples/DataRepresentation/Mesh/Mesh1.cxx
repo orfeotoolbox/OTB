@@ -71,9 +71,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   float   PixelType;
+  typedef   float PixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -91,9 +90,8 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef itk::Mesh< PixelType, Dimension >   MeshType;
+  typedef itk::Mesh<PixelType, Dimension> MeshType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -109,9 +107,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  MeshType::Pointer  mesh = MeshType::New();
+  MeshType::Pointer mesh = MeshType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -131,16 +128,15 @@ int main(int, char *[])
   MeshType::PointType p2;
   MeshType::PointType p3;
 
-  p0[0]= -1.0;
-  p0[1]= -1.0; // first  point ( -1, -1 )
-  p1[0]=  1.0;
-  p1[1]= -1.0; // second point (  1, -1 )
-  p2[0]=  1.0;
-  p2[1]=  1.0; // third  point (  1,  1 )
-  p3[0]= -1.0;
-  p3[1]=  1.0; // fourth point ( -1,  1 )
+  p0[0] = -1.0;
+  p0[1] = -1.0; // first  point ( -1, -1 )
+  p1[0] =  1.0;
+  p1[1] = -1.0; // second point (  1, -1 )
+  p2[0] =  1.0;
+  p2[1] =  1.0; // third  point (  1,  1 )
+  p3[0] = -1.0;
+  p3[1] =  1.0; // fourth point ( -1,  1 )
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -154,12 +150,11 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  mesh->SetPoint( 0, p0 );
-  mesh->SetPoint( 1, p1 );
-  mesh->SetPoint( 2, p2 );
-  mesh->SetPoint( 3, p3 );
+  mesh->SetPoint(0, p0);
+  mesh->SetPoint(1, p1);
+  mesh->SetPoint(2, p2);
+  mesh->SetPoint(3, p3);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -174,7 +169,6 @@ int main(int, char *[])
   std::cout << "Points = " << mesh->GetNumberOfPoints() << std::endl;
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The points can now be efficiently accessed using the Iterator to the
@@ -188,9 +182,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef MeshType::PointsContainer::Iterator     PointsIterator;
+  typedef MeshType::PointsContainer::Iterator PointsIterator;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -203,9 +196,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointsIterator  pointIterator = mesh->GetPoints()->Begin();
+  PointsIterator pointIterator = mesh->GetPoints()->Begin();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -224,14 +216,13 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointsIterator end = mesh->GetPoints()->End();
-  while ( pointIterator != end )
-  {
+  while (pointIterator != end)
+    {
     MeshType::PointType p = pointIterator.Value();  // access the point
     std::cout << p << std::endl;                    // print the point
     ++pointIterator;                                // advance to next point
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }
-

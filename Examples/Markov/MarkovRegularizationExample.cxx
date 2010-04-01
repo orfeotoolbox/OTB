@@ -30,7 +30,6 @@
 //    0.2 20 1.0 1
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{MarkovRandomFieldFilter}.
@@ -60,26 +59,27 @@
 #include "otbMRFOptimizerMetropolis.h"
 #include "otbMRFSamplerRandom.h"
 
-
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc != 8 )
-  {
+  if (argc != 8)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature " << std::endl;
+    std::cerr <<
+    " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature "
+              << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-  }
+    }
 
   const unsigned int Dimension = 2;
 
-  typedef unsigned char LabelledPixelType;
-  typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
+  typedef unsigned char                            LabelledPixelType;
+  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
 
-  typedef otb::ImageFileReader< LabelledImageType >  ReaderType;
-  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::ImageFileReader<LabelledImageType> ReaderType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -88,14 +88,14 @@ int main(int argc, char* argv[] )
   const char * outputFilename = argv[2];
   const char * outputScaledFilename = argv[3];
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename );
-
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   typedef otb::MarkovRandomFieldFilter
-  <LabelledImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
-  typedef otb::MRFSamplerRandom< LabelledImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandom<LabelledImageType,
+                                LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
 
@@ -104,24 +104,21 @@ int main(int argc, char* argv[] )
   typedef otb::MRFEnergyPotts
   <LabelledImageType, LabelledImageType>  EnergyFidelityType;
 
-
   MarkovRandomFieldFilterType::Pointer markovFilter
-  = MarkovRandomFieldFilterType::New();
+    = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization
-  = EnergyRegularizationType::New();
+    = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer sampler = SamplerType::New();
+  OptimizerType::Pointer      optimizer = OptimizerType::New();
+  SamplerType::Pointer        sampler = SamplerType::New();
 
-
-  if ((bool)(atoi(argv[7])) == true)
-  {
+  if ((bool) (atoi(argv[7])) == true)
+    {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-  }
-
+    }
 
   // Software Guide : BeginLatex
   //
@@ -130,7 +127,6 @@ int main(int argc, char* argv[] )
   // \code{GetNumberOfLabels()}.
   //
   // Software Guide : EndLatex
-
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LabelStatisticsImageFilter
@@ -158,22 +154,21 @@ int main(int argc, char* argv[] )
   markovFilter->SetTrainingInput(reader->GetOutput());
   markovFilter->SetInput(reader->GetOutput());
 
-
-  writer->SetInput( markovFilter->GetOutput() );
+  writer->SetInput(markovFilter->GetOutput());
 
   writer->Update();
 
   typedef itk::RescaleIntensityImageFilter
-  < LabelledImageType, LabelledImageType > RescaleType;
+  <LabelledImageType, LabelledImageType> RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
-  rescaleFilter->SetInput( markovFilter->GetOutput() );
+  rescaleFilter->SetInput(markovFilter->GetOutput());
 
-  writer->SetFileName( outputScaledFilename );
+  writer->SetFileName(outputScaledFilename);
 
-  writer->SetInput( rescaleFilter->GetOutput() );
+  writer->SetInput(rescaleFilter->GetOutput());
 
   writer->Update();
 
@@ -198,4 +193,3 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-

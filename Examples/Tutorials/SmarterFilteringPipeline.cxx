@@ -22,7 +22,6 @@
 //    -d 1.5 -i 2 -a 0.1
 //  Software Guide : EndCommandLineArgs
 
-
 //  Software Guide : BeginLatex
 //
 //
@@ -78,7 +77,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbHarrisImageFilter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 // Software Guide : EndCodeSnippet
 
@@ -91,7 +90,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -133,11 +132,20 @@ int main( int argc, char * argv[] )
     parser->AddInputImage();
     parser->AddOutputImage();
     parser->AddOption("--SigmaD",
-                      "Set the sigmaD parameter. Default is 1.0.","-d",1,false);
+                      "Set the sigmaD parameter. Default is 1.0.",
+                      "-d",
+                      1,
+                      false);
     parser->AddOption("--SigmaI",
-                      "Set the sigmaI parameter. Default is 1.0.","-i",1,false);
+                      "Set the sigmaI parameter. Default is 1.0.",
+                      "-i",
+                      1,
+                      false);
     parser->AddOption("--Alpha",
-                      "Set the alpha parameter. Default is 1.0.","-a",1,false);
+                      "Set the alpha parameter. Default is 1.0.",
+                      "-a",
+                      1,
+                      false);
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -150,30 +158,29 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
+    ParserResultType::Pointer parseResult = ParserResultType::New();
 
     try
-    {
-      parser->ParseCommandLine(argc,argv,parseResult);
-    }
+      {
+      parser->ParseCommandLine(argc, argv, parseResult);
+      }
 
-    catch ( itk::ExceptionObject & err )
-    {
+    catch (itk::ExceptionObject& err)
+      {
       std::string descriptionException = err.GetDescription();
       if (descriptionException.find("ParseCommandLine(): Help Parser")
           != std::string::npos)
-      {
+        {
         return EXIT_SUCCESS;
-      }
+        }
       if (descriptionException.find("ParseCommandLine(): Version Parser")
           != std::string::npos)
-      {
+        {
         return EXIT_SUCCESS;
-      }
+        }
       return EXIT_FAILURE;
-    }
+      }
     // Software Guide : EndCodeSnippet
-
 
     //  Software Guide : BeginLatex
     //
@@ -183,17 +190,17 @@ int main( int argc, char * argv[] )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    typedef double PixelType;
+    typedef double                   PixelType;
     typedef otb::Image<PixelType, 2> ImageType;
 
-    typedef unsigned char OutputPixelType;
+    typedef unsigned char                  OutputPixelType;
     typedef otb::Image<OutputPixelType, 2> OutputImageType;
 
     typedef otb::ImageFileReader<ImageType> ReaderType;
-    ReaderType::Pointer reader=ReaderType::New();
+    ReaderType::Pointer reader = ReaderType::New();
 
     typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-    WriterType::Pointer writer=WriterType::New();
+    WriterType::Pointer writer = WriterType::New();
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -219,7 +226,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     typedef otb::HarrisImageFilter
-    <ImageType,ImageType> FilterType;
+    <ImageType, ImageType> FilterType;
     FilterType::Pointer filter = FilterType::New();
     // Software Guide : EndCodeSnippet
 
@@ -232,14 +239,14 @@ int main( int argc, char * argv[] )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    if (parseResult->IsOptionPresent("--SigmaD"))
-      filter->SetSigmaD(parseResult->GetParameterDouble("--SigmaD"));
+    if (parseResult->IsOptionPresent("--SigmaD")) filter->SetSigmaD(
+        parseResult->GetParameterDouble("--SigmaD"));
 
-    if (parseResult->IsOptionPresent("--SigmaI"))
-      filter->SetSigmaI(parseResult->GetParameterDouble("--SigmaI"));
+    if (parseResult->IsOptionPresent("--SigmaI")) filter->SetSigmaI(
+        parseResult->GetParameterDouble("--SigmaI"));
 
-    if (parseResult->IsOptionPresent("--Alpha"))
-      filter->SetAlpha(parseResult->GetParameterDouble("--Alpha"));
+    if (parseResult->IsOptionPresent("--Alpha")) filter->SetAlpha(
+        parseResult->GetParameterDouble("--Alpha"));
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -250,7 +257,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter
-    <ImageType,OutputImageType> RescalerType;
+    <ImageType, OutputImageType> RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
 
     rescaler->SetOutputMinimum(0);
@@ -279,7 +286,7 @@ int main( int argc, char * argv[] )
     // Software Guide : BeginCodeSnippet
     writer->Update();
 
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -289,24 +296,22 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  catch ( itk::ExceptionObject & err )
-  {
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "Following otbException catch :" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
-  catch ( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
+    }
+  catch (std::bad_alloc& err)
+    {
+    std::cout << "Exception bad_alloc : " << (char*) err.what() << std::endl;
     return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown Exception found !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

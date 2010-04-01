@@ -35,15 +35,13 @@
 #include "otbImageViewer.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-
-  if ( argc != 2)
-  {
-    std::cout <<" Usage : InputImage"<<std::endl;
-  }
-
+  if (argc != 2)
+    {
+    std::cout << " Usage : InputImage" << std::endl;
+    }
 
   const char * inputFilename  = argv[1];
 
@@ -57,10 +55,10 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Siftware Guide : BeginCodeSnippet
-  typedef int PixelType;
-  typedef otb::VectorImage< PixelType, 2 > ImageType;
-  typedef otb::ImageFileReader< ImageType > ReaderType;
-  typedef otb::ImageViewer< PixelType >    ViewerType;
+  typedef int                             PixelType;
+  typedef otb::VectorImage<PixelType, 2>  ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageViewer<PixelType>     ViewerType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -70,8 +68,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ViewerType::Pointer  lViewer = ViewerType::New();
-  ReaderType::Pointer       lReader = ReaderType::New();
+  ViewerType::Pointer lViewer = ViewerType::New();
+  ReaderType::Pointer lReader = ReaderType::New();
   lReader->SetFileName(inputFilename);
   lReader->Update();
   // Software Guide : EndCodeSnippet
@@ -83,7 +81,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  lViewer->SetLabel( "My Image" );
+  lViewer->SetLabel("My Image");
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -94,7 +92,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  lViewer->SetImage( lReader->GetOutput() );
+  lViewer->SetImage(lReader->GetOutput());
 
   lViewer->Show();
   // Software Guide : EndCodeSnippet
@@ -133,8 +131,5 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

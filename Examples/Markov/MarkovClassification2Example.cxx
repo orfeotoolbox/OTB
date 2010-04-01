@@ -29,7 +29,6 @@
 //    1.0 5 1
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // Using a similar structure as the previous program and the same energy
@@ -47,13 +46,11 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 // Software Guide : BeginLatex
 //
 // First, we need to include header specific to these class:
 //
 // Software Guide : EndLatex
-
 
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
@@ -64,27 +61,27 @@
 // Software Guide : EndCodeSnippet
 //#include "otbMRFSamplerRandom.h"
 
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc != 6 )
-  {
+  if (argc != 6)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage output lambda iterations" << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-  }
+    }
 
   const unsigned int Dimension = 2;
 
-  typedef double InternalPixelType;
-  typedef unsigned char LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
+  typedef double                                   InternalPixelType;
+  typedef unsigned char                            LabelledPixelType;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
+  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
 
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>    ReaderType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -92,12 +89,11 @@ int main(int argc, char* argv[] )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   typedef otb::MarkovRandomFieldFilter
-  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
-
+  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
   //  Software Guide : BeginLatex
   //
@@ -106,10 +102,10 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandomMAP<InputImageType,
+                                   LabelledImageType> SamplerType;
 //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-  // Software Guide : EndCodeSnippet
-
+// Software Guide : EndCodeSnippet
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MRFOptimizerICM OptimizerType;
@@ -120,33 +116,34 @@ int main(int argc, char* argv[] )
   typedef otb::MRFEnergyGaussianClassification
   <InputImageType, LabelledImageType>  EnergyFidelityType;
 
-  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter =
+    MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer energyRegularization =
+    EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer sampler = SamplerType::New();
+  OptimizerType::Pointer      optimizer = OptimizerType::New();
+  SamplerType::Pointer        sampler = SamplerType::New();
 
-  if ((bool)(atoi(argv[5])) == true)
-  {
+  if ((bool) (atoi(argv[5])) == true)
+    {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     markovFilter->InitializeSeed(1);
-  }
+    }
 
   unsigned int nClass = 4;
-  energyFidelity->SetNumberOfParameters(2*nClass);
+  energyFidelity->SetNumberOfParameters(2 * nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
-  parameters[0]=10.0; //Class 0 mean
-  parameters[1]=10.0; //Class 0 stdev
-  parameters[2]=80.0;//Class 1 mean
-  parameters[3]=10.0; //Class 1 stdev
-  parameters[4]=150.0; //Class 2 mean
-  parameters[5]=10.0; //Class 2 stdev
-  parameters[6]=220.0;//Class 3 mean
-  parameters[7]=10.0; //Class 3 stde
+  parameters[0] = 10.0; //Class 0 mean
+  parameters[1] = 10.0; //Class 0 stdev
+  parameters[2] = 80.0; //Class 1 mean
+  parameters[3] = 10.0; //Class 1 stdev
+  parameters[4] = 150.0; //Class 2 mean
+  parameters[5] = 10.0; //Class 2 stdev
+  parameters[6] = 220.0; //Class 3 mean
+  parameters[7] = 10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-
 
   // Software Guide : BeginLatex
   //
@@ -169,14 +166,14 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-  < LabelledImageType, LabelledImageType > RescaleType;
+  <LabelledImageType, LabelledImageType> RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
-  rescaleFilter->SetInput( markovFilter->GetOutput() );
+  rescaleFilter->SetInput(markovFilter->GetOutput());
 
-  writer->SetInput( rescaleFilter->GetOutput() );
+  writer->SetInput(rescaleFilter->GetOutput());
 
   writer->Update();
 
@@ -209,4 +206,3 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-

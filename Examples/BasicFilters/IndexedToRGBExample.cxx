@@ -55,18 +55,18 @@
 
 int main(int argc, char * argv[])
 {
-  if ( argc != 4 )
-  {
+  if (argc != 4)
+    {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
     std::cerr << " <outputRGBImageFile> <outputScaledImageFile>" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   const char * inputFilename  = argv[1];
   const char * outputRGBFilename = argv[2];
   const char * outputScaledFilename = argv[3];
 
-  typedef otb::Image<unsigned long, 2> ImageType;
-  typedef otb::Image<itk::RGBPixel<unsigned char>,2> RGBImageType;
+  typedef otb::Image<unsigned long, 2>                ImageType;
+  typedef otb::Image<itk::RGBPixel<unsigned char>, 2> RGBImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -82,8 +82,10 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>  ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
+                                                            ColorMapFunctorType;
+  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType,
+                                       ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(reader->GetOutput());
@@ -96,10 +98,10 @@ int main(int argc, char * argv[])
 
   writer->Update();
 
-
   //The following is just to produce the input image for the software guide
-  typedef otb::Image<unsigned char, 2> OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  typedef otb::Image<unsigned char, 2>                      OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 
@@ -125,4 +127,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

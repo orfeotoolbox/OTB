@@ -29,7 +29,6 @@
 //    337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // The easiest way to use the road extraction filter provided by OTB is to use the composite
@@ -64,19 +63,21 @@
 #include "itkGrayscaleDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
   if (argc != 14)
-  {
-    std::cerr << "Usage: "<< argv[0];
-    std:: cerr <<" inputFileName outputFileName firstPixelComponent secondPixelComponent ";
-    std::cerr <<"thirdPixelComponent fourthPixelComponent amplitudeThrehsold tolerance ";
-    std::cerr <<"angularThreshold firstMeanDistanceThreshold secondMeanDistanceThreshold ";
-    std::cerr<<"distanceThreshold"<<std::endl;
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr <<
+    " inputFileName outputFileName firstPixelComponent secondPixelComponent ";
+    std::cerr <<
+    "thirdPixelComponent fourthPixelComponent amplitudeThrehsold tolerance ";
+    std::cerr <<
+    "angularThreshold firstMeanDistanceThreshold secondMeanDistanceThreshold ";
+    std::cerr << "distanceThreshold" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const unsigned int Dimension = 2;
   // Software Guide : BeginLatex
@@ -104,9 +105,9 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::VectorImage<InputPixelType,Dimension> InputVectorImageType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
+  typedef otb::Image<InputPixelType, Dimension>       InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
 
   // Software Guide : EndCodeSnippet
 
@@ -121,7 +122,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginCodeSnippet
 
-  typedef otb::PolyLineParametricPathWithValue<InputPixelType,Dimension> PathType;
+  typedef otb::PolyLineParametricPathWithValue<InputPixelType,
+                                               Dimension> PathType;
 
   // Software Guide : EndCodeSnippet
 
@@ -135,7 +137,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::RoadExtractionFilter<InputVectorImageType,
-  PathType> RoadExtractionFilterType;
+                                    PathType> RoadExtractionFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -149,7 +151,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef otb::DrawPathListFilter<InputImageType, PathType,
-  InputImageType> DrawPathFilterType;
+                                  InputImageType> DrawPathFilterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -164,22 +166,22 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   typedef itk::RescaleIntensityImageFilter<InputImageType,
-  OutputImageType> RescalerType;
+                                           OutputImageType> RescalerType;
 
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-  //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter} is instantiated in order //  to write the output image to a file.
+  //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter}
+  //  is instantiated in order to write the output image to a file.
   //
   //  Software Guide : EndLatex
-
 
   // Software Guide : BeginCodeSnippet
 
   typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType>      WriterType;
 
   // Software Guide : EndCodeSnippet
 
@@ -192,12 +194,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
   RoadExtractionFilterType::Pointer roadExtractionFilter
-  = RoadExtractionFilterType::New();
+    = RoadExtractionFilterType::New();
   DrawPathFilterType::Pointer drawingFilter = DrawPathFilterType::New();
-  RescalerType::Pointer rescaleFilter = RescalerType::New();
-  WriterType::Pointer writer = WriterType::New();
+  RescalerType::Pointer       rescaleFilter = RescalerType::New();
+  WriterType::Pointer         writer = WriterType::New();
 
   // Software Guide : EndCodeSnippet
 
@@ -216,10 +218,10 @@ int main( int argc, char * argv[] )
 
   InputVectorImageType::PixelType ReferencePixel;
   ReferencePixel.SetSize(4);
-  ReferencePixel.SetElement(0,::atof(argv[3]));
-  ReferencePixel.SetElement(1,::atof(argv[4]));
-  ReferencePixel.SetElement(2,::atof(argv[5]));
-  ReferencePixel.SetElement(3,::atof(argv[6]));
+  ReferencePixel.SetElement(0, ::atof(argv[3]));
+  ReferencePixel.SetElement(1, ::atof(argv[4]));
+  ReferencePixel.SetElement(2, ::atof(argv[5]));
+  ReferencePixel.SetElement(3, ::atof(argv[6]));
   roadExtractionFilter->SetReferencePixel(ReferencePixel);
 
   // Software Guide : EndCodeSnippet
@@ -353,8 +355,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  rescaleFilter->SetOutputMinimum(itk::NumericTraits< OutputPixelType >::min());
-  rescaleFilter->SetOutputMaximum(itk::NumericTraits< OutputPixelType >::max());
+  rescaleFilter->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaleFilter->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -369,7 +371,6 @@ int main( int argc, char * argv[] )
   drawingFilter->SetInput(blackBackground);
   drawingFilter->SetInputPath(roadExtractionFilter->GetOutput());
   rescaleFilter->SetInput(drawingFilter->GetOutput());
-
 
   // Software Guide : EndCodeSnippet
 
@@ -387,9 +388,15 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
   // output image enhancement
-  typedef itk::BinaryBallStructuringElement<OutputPixelType,Dimension> StructuringElementType;
-  typedef itk::GrayscaleDilateImageFilter<OutputImageType,OutputImageType,StructuringElementType> DilateFilterType;
-  typedef itk::InvertIntensityImageFilter<OutputImageType,OutputImageType> InvertFilterType;
+  typedef itk::BinaryBallStructuringElement<OutputPixelType,
+                                            Dimension>
+  StructuringElementType;
+  typedef itk::GrayscaleDilateImageFilter<OutputImageType, OutputImageType,
+                                          StructuringElementType>
+  DilateFilterType;
+  typedef itk::InvertIntensityImageFilter<OutputImageType,
+                                          OutputImageType>
+  InvertFilterType;
 
   StructuringElementType se;
   se.SetRadius(1);
@@ -424,7 +431,5 @@ int main( int argc, char * argv[] )
   //
   // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

@@ -51,7 +51,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -69,16 +68,16 @@
 // Software Guide : EndCodeSnippet
 #include "itkRescaleIntensityImageFilter.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile  outputImageFile  sigma [RescaledOutputImageFile] " << std::endl;
+    std::cerr << argv[0] <<
+    "  inputImageFile  outputImageFile  sigma [RescaledOutputImageFile] " <<
+    std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -87,10 +86,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  typedef    float InputPixelType;
+  typedef    float OutputPixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -99,13 +97,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   //  Software Guide : BeginLatex
   //
@@ -118,13 +114,11 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::LaplacianRecursiveGaussianImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -141,7 +135,6 @@ int main( int argc, char * argv[] )
   FilterType::Pointer laplacian = FilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The option for normalizing across scale space can also be selected in this filter.
@@ -151,9 +144,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  laplacian->SetNormalizeAcrossScale( false );
+  laplacian->SetNormalizeAcrossScale(false);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -163,9 +155,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  laplacian->SetInput( reader->GetOutput() );
+  laplacian->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -181,12 +172,11 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  const double sigma = atof( argv[3] );
+  const double sigma = atof(argv[3]);
 
   // Software Guide : BeginCodeSnippet
-  laplacian->SetSigma( sigma );
+  laplacian->SetSigma(sigma);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -198,33 +188,31 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     laplacian->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   // The image can also be saved into  a file, by using the ImageFileWriter.
   //
-  typedef  float WritePixelType;
-  typedef otb::Image< WritePixelType, 2 >    WriteImageType;
+  typedef  float                        WritePixelType;
+  typedef otb::Image<WritePixelType, 2> WriteImageType;
 
-  typedef otb::ImageFileWriter< WriteImageType >  WriterType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetInput( laplacian->GetOutput() );
+  writer->SetInput(laplacian->GetOutput());
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -246,26 +234,24 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Rescale float outputs to png for inclusion in the Software guide
   //
   if (argc > 4)
-  {
-    typedef unsigned char    CharPixelType;
-    typedef otb::Image<CharPixelType, 2>    CharImageType;
-    typedef itk::RescaleIntensityImageFilter< OutputImageType, CharImageType>
+    {
+    typedef unsigned char                CharPixelType;
+    typedef otb::Image<CharPixelType, 2> CharImageType;
+    typedef itk::RescaleIntensityImageFilter<OutputImageType, CharImageType>
     RescaleFilterType;
     RescaleFilterType::Pointer rescale = RescaleFilterType::New();
-    rescale->SetInput( laplacian->GetOutput() );
-    rescale->SetOutputMinimum(   0 );
-    rescale->SetOutputMaximum( 255 );
-    typedef otb::ImageFileWriter< CharImageType >  CharWriterType;
+    rescale->SetInput(laplacian->GetOutput());
+    rescale->SetOutputMinimum(0);
+    rescale->SetOutputMaximum(255);
+    typedef otb::ImageFileWriter<CharImageType> CharWriterType;
     CharWriterType::Pointer charWriter = CharWriterType::New();
-    charWriter->SetFileName( argv[4] );
-    charWriter->SetInput( rescale->GetOutput() );
+    charWriter->SetFileName(argv[4]);
+    charWriter->SetInput(rescale->GetOutput());
     charWriter->Update();
-  }
+    }
 
   return EXIT_SUCCESS;
 }
-

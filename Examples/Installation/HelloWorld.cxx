@@ -30,7 +30,7 @@
 
 int main()
 {
-  typedef otb::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image<unsigned short, 2> ImageType;
 
   ImageType::Pointer image = ImageType::New();
 
@@ -51,5 +51,3 @@ int main()
 //  Section~\ref{sec:ImageSection}.
 //
 //  Software Guide : EndLatex
-
-

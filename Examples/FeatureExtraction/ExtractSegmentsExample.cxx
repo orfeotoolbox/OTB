@@ -48,12 +48,12 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 12 )
-  {
-    for (int i=0; i<argc; i++)
+  if (argc != 12)
+    {
+    for (int i = 0; i < argc; i++)
       std::cerr << argv[i] << std::endl;
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";
@@ -63,8 +63,7 @@ int main( int argc, char * argv[] )
     std::cerr << " FillGapsRadius FillGapsAngularBeam" << std::endl;
 
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -75,8 +74,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float          InternalPixelType;
-  typedef  unsigned char  OutputPixelType;
+  typedef  float         InternalPixelType;
+  typedef  unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -86,10 +85,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image<InternalPixelType,  2> InternalImageType;
+  typedef otb::Image<OutputPixelType,  2>   OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -98,10 +96,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineRatioDetectorImageFilter< InternalImageType, InternalImageType >  DetectorType;
-  typedef otb::ExtractSegmentsImageFilter< InternalImageType, InternalImageType >   ExtractorType;
+  typedef otb::LineRatioDetectorImageFilter<InternalImageType,
+                                            InternalImageType> DetectorType;
+  typedef otb::ExtractSegmentsImageFilter<InternalImageType,
+                                          InternalImageType>   ExtractorType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -111,7 +110,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InternalImageType >  ReaderType;
+  typedef otb::ImageFileReader<InternalImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -122,7 +121,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -134,10 +133,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RescaleIntensityImageFilter< InternalImageType,
-  OutputImageType > RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InternalImageType,
+                                           OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -147,8 +145,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer reader = ReaderType::New();
-  DetectorType::Pointer detector = DetectorType::New();
+  ReaderType::Pointer    reader = ReaderType::New();
+  DetectorType::Pointer  detector = DetectorType::New();
   ExtractorType::Pointer extractor = ExtractorType::New();
   // Software Guide : EndCodeSnippet
 
@@ -160,11 +158,10 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   RescalerType::Pointer rescaler = RescalerType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer   writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -176,10 +173,9 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+  rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -192,14 +188,13 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  detector->SetInput( reader->GetOutput() );
-  extractor->SetInputImage( detector->GetOutput() );
-  extractor->SetInputImageDirection( detector->GetOutputDirection() );
+  detector->SetInput(reader->GetOutput());
+  extractor->SetInputImage(detector->GetOutput());
+  extractor->SetInputImageDirection(detector->GetOutputDirection());
   extractor->SetLineValue(0.);
-  rescaler->SetInput( extractor->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(extractor->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -211,39 +206,36 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  detector->SetLengthLine( atoi(argv[3]) );
-  detector->SetWidthLine( atoi(argv[4]) );
+  detector->SetLengthLine(atoi(argv[3]));
+  detector->SetWidthLine(atoi(argv[4]));
 
+  unsigned int PixelSuppressionRadiusX((unsigned int) ::atoi(argv[5]));
+  float        PixelSuppressionAngularBeam((float) ::atof(argv[6]));
 
-  unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[5]));
-  float        PixelSuppressionAngularBeam((float)::atof(argv[6]));
+  unsigned int LocalHoughRadiusX((unsigned int) ::atoi(argv[7]));
+  unsigned int LocalHoughRadiusY((unsigned int) ::atoi(argv[8]));
+  unsigned int LocalHoughNumberOfLines((unsigned int) ::atoi(argv[9]));
 
-  unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[7]));
-  unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[8]));
-  unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[9]));
-
-  float  FillGapsRadius((float)::atoi(argv[10]));
-  float  FillGapsAngularBeam((float)::atof(argv[11]));
-
+  float FillGapsRadius((float) ::atoi(argv[10]));
+  float FillGapsAngularBeam((float) ::atof(argv[11]));
 
   ExtractorType::SizeType PixelSuppressionRadius;
   PixelSuppressionRadius[0] = PixelSuppressionRadiusX;
   PixelSuppressionRadius[1] = PixelSuppressionRadiusX;
 
-  extractor->SetPixelSuppressionRadius( PixelSuppressionRadius );
-  extractor->SetPixelSuppressionAngularBeam( PixelSuppressionAngularBeam );
+  extractor->SetPixelSuppressionRadius(PixelSuppressionRadius);
+  extractor->SetPixelSuppressionAngularBeam(PixelSuppressionAngularBeam);
 
   ExtractorType::SizeType LocalHoughRadius;
   LocalHoughRadius[0] = LocalHoughRadiusX;
   LocalHoughRadius[1] = LocalHoughRadiusY;
 
-  extractor->SetLocalHoughRadius( LocalHoughRadius );
-  extractor->SetLocalHoughNumberOfLines( LocalHoughNumberOfLines );
+  extractor->SetLocalHoughRadius(LocalHoughRadius);
+  extractor->SetLocalHoughNumberOfLines(LocalHoughNumberOfLines);
 
-  extractor->SetFillGapsRadius( FillGapsRadius );
-  extractor->SetFillGapsAngularBeam( FillGapsAngularBeam );
+  extractor->SetFillGapsRadius(FillGapsRadius);
+  extractor->SetFillGapsAngularBeam(FillGapsAngularBeam);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // \textbf{FIXME: set the methods}
@@ -261,10 +253,8 @@ int main( int argc, char * argv[] )
   extractor->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
-
 
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
@@ -282,7 +272,5 @@ int main( int argc, char * argv[] )
   //  \end{itemize}
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

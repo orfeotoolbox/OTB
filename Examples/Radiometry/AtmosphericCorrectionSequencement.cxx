@@ -85,16 +85,18 @@
 #include "otbImageFileWriter.h"
 #include <string>
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc != 19 )
-  {
+  if (argc != 19)
+    {
     std::cerr << "Missing Parameters " << std::endl;
-    std::cerr << "Usage: " << argv[0]<< std::endl;
-    std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt SolarZenithalAngle day month SolarAzimuthalAngle ViewingZenithalAngle ViewingAzimuthalAngle AtmosphericPresure WaterVaporAmount OzoneAmount AerosolModel AerosolOpticalThickness WindowRadiusForAdjacencyCorrection PixelSpacing"<< std::endl;
+    std::cerr << "Usage: " << argv[0] << std::endl;
+    std::cerr <<
+    " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt SolarZenithalAngle day month SolarAzimuthalAngle ViewingZenithalAngle ViewingAzimuthalAngle AtmosphericPresure WaterVaporAmount OzoneAmount AerosolModel AerosolOpticalThickness WindowRadiusForAdjacencyCorrection PixelSpacing"
+              << std::endl;
     std::cerr << std::endl;
     return 1;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -106,14 +108,14 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const unsigned int                                    Dimension = 2;
-  typedef double                                        PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>         ImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
-  typedef otb::ImageFileReader<ImageType>   ReaderType;
-  typedef otb::ImageFileWriter<ImageType>   WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   ReaderType::Pointer reader  = ReaderType::New();
 
   // Software Guide : BeginLatex
@@ -129,22 +131,23 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   reader->SetFileName(argv[1]);
   try
-  {
+    {
     reader->GenerateOutputInformation();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+  unsigned int nbOfComponent =
+    reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   //-------------------------------
   // Software Guide : BeginLatex
@@ -169,11 +172,11 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageToLuminanceImageFilter<ImageType,ImageType>
+  typedef otb::ImageToLuminanceImageFilter<ImageType, ImageType>
   ImageToLuminanceImageFilterType;
 
   ImageToLuminanceImageFilterType::Pointer filterImageToLuminance
-  = ImageToLuminanceImageFilterType::New();
+    = ImageToLuminanceImageFilterType::New();
 // Software Guide : EndCodeSnippet
   typedef ImageToLuminanceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);
@@ -183,13 +186,13 @@ int main( int argc, char *argv[] )
   std::ifstream fin;
   fin.open(argv[3]);
   double dalpha(0.), dbeta(0.);
-  for ( unsigned int i=0; i < nbOfComponent; i++)
-  {
+  for (unsigned int i = 0; i < nbOfComponent; i++)
+    {
     fin >> dalpha;
     fin >> dbeta;
     alpha[i] = dalpha;
     beta[i] = dbeta;
-  }
+    }
   fin.close();
 
   // Software Guide : BeginLatex
@@ -230,10 +233,10 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LuminanceToReflectanceImageFilter<ImageType,ImageType>
+  typedef otb::LuminanceToReflectanceImageFilter<ImageType, ImageType>
   LuminanceToReflectanceImageFilterType;
   LuminanceToReflectanceImageFilterType::Pointer filterLuminanceToReflectance
-  = LuminanceToReflectanceImageFilterType::New();
+    = LuminanceToReflectanceImageFilterType::New();
 // Software Guide : EndCodeSnippet
 
   typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
@@ -243,11 +246,11 @@ int main( int argc, char *argv[] )
 
   fin.open(argv[4]);
   double dsolarIllumination(0.);
-  for ( unsigned int i=0; i < nbOfComponent; i++)
-  {
+  for (unsigned int i = 0; i < nbOfComponent; i++)
+    {
     fin >> dsolarIllumination;
     solarIllumination[i] = dsolarIllumination;
-  }
+    }
   fin.close();
 
   // Software Guide : BeginLatex
@@ -266,23 +269,23 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
 //-------------------------------
-  // Software Guide : BeginLatex
-  //
-  // At this step of the chain, radiometric informations are nedeed. Those informations
-  // will be computed from different parameters stored in a
-  // \doxygen{otb}{AtmosphericCorrectionParameters} class intance.
-  // This {\em container} will be given to an
-  // \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
-  // class instance which will call a 6S routine that will compute the needed
-  // radiometric informations and store them in a
-  // \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
-  // For this,
-  // \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
-  // \doxygen{otb}{AtmosphericCorrectionParameters} and
-  // \doxygen{otb}{AtmosphericRadiativeTerms}
-  // types are defined and instancied.
-  //
-  // Software Guide : EndLatex
+// Software Guide : BeginLatex
+//
+// At this step of the chain, radiometric informations are nedeed. Those informations
+// will be computed from different parameters stored in a
+// \doxygen{otb}{AtmosphericCorrectionParameters} class intance.
+// This {\em container} will be given to an
+// \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
+// class instance which will call a 6S routine that will compute the needed
+// radiometric informations and store them in a
+// \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
+// For this,
+// \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
+// \doxygen{otb}{AtmosphericCorrectionParameters} and
+// \doxygen{otb}{AtmosphericRadiativeTerms}
+// types are defined and instancied.
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -301,42 +304,47 @@ int main( int argc, char *argv[] )
   typedef FilterFunctionValuesType::ValuesVectorType
   ValuesVectorType;
 
-
-  AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
-  AtmosphericRadiativeTermsType::Pointer  dataAtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
+  AtmosphericCorrectionParametersType::Pointer
+    dataAtmosphericCorrectionParameters =
+    AtmosphericCorrectionParametersType::New();
+  AtmosphericRadiativeTermsType::Pointer dataAtmosphericRadiativeTerms =
+    AtmosphericRadiativeTermsType::New();
 
   float minSpectralValue(0.);
   float maxSpectralValue(0.);
   float userStep(0.);
   float value(0.);
 
-  unsigned int nbBands(0);
-  unsigned int nbValuesPerBand(0);
-  std::string sString;
+  unsigned int     nbBands(0);
+  unsigned int     nbValuesPerBand(0);
+  std::string      sString;
   ValuesVectorType vector;
 
   fin.open(argv[5]);
   fin >> nbBands;
-  for (unsigned int i=0; i<nbBands; i++)
-  {
+  for (unsigned int i = 0; i < nbBands; i++)
+    {
     vector.clear();
     fin >> sString;
     fin >> minSpectralValue;
     fin >> maxSpectralValue;
     fin >> userStep;
     fin >> nbValuesPerBand;
-    for ( unsigned int j=0; j < nbValuesPerBand; j++)
-    {
+    for (unsigned int j = 0; j < nbValuesPerBand; j++)
+      {
       fin >> value;
       vector.push_back(value);
-    }
-    FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
+      }
+    FilterFunctionValuesType::Pointer functionValues =
+      FilterFunctionValuesType::New();
     functionValues->SetFilterFunctionValues(vector);
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
-    functionValues->SetUserStep( userStep );
-    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
-  }
+    functionValues->SetUserStep(userStep);
+    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(
+      i,
+      functionValues);
+    }
 
   fin.close();
 
@@ -364,7 +372,6 @@ int main( int argc, char *argv[] )
   // \end{itemize}
   //
   // Software Guide : EndLatex
-
 
   // Set parameters
   // Software Guide : BeginCodeSnippet
@@ -413,11 +420,11 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer
-  filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
+    filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
     AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
 
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(
-    dataAtmosphericCorrectionParameters );
+    dataAtmosphericCorrectionParameters);
 
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->Update();
   // Software Guide : EndCodeSnippet
@@ -438,18 +445,19 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
 //-------------------------------
-  // Software Guide : BeginLatex
-  // Atmospheric corrections can now start.
-  // First, an instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
-  // Software Guide : EndLatex
+// Software Guide : BeginLatex
+// Atmospheric corrections can now start.
+// First, an instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
-  ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+                                                          ImageType>
+  ReflectanceToSurfaceReflectanceImageFilterType;
 
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer
-  filterReflectanceToSurfaceReflectanceImageFilter
-  = ReflectanceToSurfaceReflectanceImageFilterType::New();
+    filterReflectanceToSurfaceReflectanceImageFilter
+    = ReflectanceToSurfaceReflectanceImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -485,53 +493,53 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   filterReflectanceToSurfaceReflectanceImageFilter->
   SetAtmosphericRadiativeTerms(
-    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput() );
+    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
   // Software Guide : EndCodeSnippet
 
-
 //-------------------------------
-  // Software Guide : BeginLatex
-  // Next (and last step) is the neighborhood correction.
-  // For this, the SurfaceAdjencyEffect6SCorrectionSchemeFilter class is used.
-  // The previous surface reflectance inversion is performed under the assumption of a
-  // homogeneous ground environment. The following step allows to correct the adjacency
-  // effect on the radiometry of pixels. The method is based on the decomposition of
-  // the observed signal as the summation of the own  contribution of the target pixel and
-  // of the contribution of neighbored pixels moderated by their distance to the target pixel.
-  // A simplified relation may be :
-  // \begin{equation}
-  // \rho{S} = \frac{ \rho_{S}^{unif}.T(\mu_{V}) - <\rho{S}>.t_{d}(\mu_{V}) }{ exp(-\delta/\mu_{V}) }
-  // \end{equation}
-  // With :
-  // \begin{itemize}
-  // \item $\rho_{S}^{unif}$ is the ground reflectance under assumption of an homogeneous environment;
-  // \item $T(\mu_{V})$ is the upward transmittance;
-  // \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
-  // \item $exp(-\delta/\mu_{V})$ is the upward direct transmittance;
-  // \item $\rho_{S}$ is the environment contribution to the pixel target reflectance in the total
-  // observed signal.
-  // \begin{equation}
-  // \rho{S} = \sum{j}\sum{i}f(r(i,j))\times \rho_{S}^{unif}(i,j)
-  // \end{equation}
-  // where,
-  // \begin{itemize}
-  // \item r(i,j) is the distance between the pixel(i,j) and the central pixel of the window in $km$;
-  // \item f(r) is the global environment function.
-  // \begin{equation}
-  // f(r) = \frac{t_{d}^{R}(\mu_{V}).f_{R}(r)+t_{d}^{A}(\mu_{V}).f_{A}(r)}{ t_{d}(\mu_{V}) }
-  // \end{equation}
-  // \end{itemize}
-  // \end{itemize}
-  // The neighborhood consideration window size is given by the window radius.
-  // An instance of \doxygen{otb}{SurfaceAdjencyEffect6SCorrectionSchemeFilter} is created.
-  // Software Guide : EndLatex
+// Software Guide : BeginLatex
+// Next (and last step) is the neighborhood correction.
+// For this, the SurfaceAdjencyEffect6SCorrectionSchemeFilter class is used.
+// The previous surface reflectance inversion is performed under the assumption of a
+// homogeneous ground environment. The following step allows to correct the adjacency
+// effect on the radiometry of pixels. The method is based on the decomposition of
+// the observed signal as the summation of the own  contribution of the target pixel and
+// of the contribution of neighbored pixels moderated by their distance to the target pixel.
+// A simplified relation may be :
+// \begin{equation}
+// \rho{S} = \frac{ \rho_{S}^{unif}.T(\mu_{V}) - <\rho{S}>.t_{d}(\mu_{V}) }{ exp(-\delta/\mu_{V}) }
+// \end{equation}
+// With :
+// \begin{itemize}
+// \item $\rho_{S}^{unif}$ is the ground reflectance under assumption of an homogeneous environment;
+// \item $T(\mu_{V})$ is the upward transmittance;
+// \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
+// \item $exp(-\delta/\mu_{V})$ is the upward direct transmittance;
+// \item $\rho_{S}$ is the environment contribution to the pixel target reflectance in the total
+// observed signal.
+// \begin{equation}
+// \rho{S} = \sum{j}\sum{i}f(r(i,j))\times \rho_{S}^{unif}(i,j)
+// \end{equation}
+// where,
+// \begin{itemize}
+// \item r(i,j) is the distance between the pixel(i,j) and the central pixel of the window in $km$;
+// \item f(r) is the global environment function.
+// \begin{equation}
+// f(r) = \frac{t_{d}^{R}(\mu_{V}).f_{R}(r)+t_{d}^{A}(\mu_{V}).f_{A}(r)}{ t_{d}(\mu_{V}) }
+// \end{equation}
+// \end{itemize}
+// \end{itemize}
+// The neighborhood consideration window size is given by the window radius.
+// An instance of \doxygen{otb}{SurfaceAdjencyEffect6SCorrectionSchemeFilter} is created.
+// Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType,
-  ImageType>  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
+                                                            ImageType>
+  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
   SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter
-  = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter
+    = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
   //  Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -545,21 +553,25 @@ int main( int argc, char *argv[] )
   // \end{itemize}
   //
   // Software Guide : EndLatex
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[17]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
-
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->
+  SetAtmosphericRadiativeTerms(
+    filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+    dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv
+                                                                           [17]));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->
+  SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
 
 //-------------------------------
   WriterType::Pointer writer = WriterType::New();
 //  Software Guide : BeginLatex
-  //
-  // At this step, each filter of the chain is instancied and every one has its
-  // input paramters set. A name can be given to the output image and each filter
-  //  can linked to other to create the final processing chain.
-  //
-  //  Software Guide : EndLatex
+//
+// At this step, each filter of the chain is instancied and every one has its
+// input paramters set. A name can be given to the output image and each filter
+//  can linked to other to create the final processing chain.
+//
+//  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   writer->SetFileName(argv[2]);
@@ -576,29 +588,28 @@ int main( int argc, char *argv[] )
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
-  //
-  //  The invocation of the \code{Update()} method on the writer triggers the
-  //  execution of the pipeline.  It is recommended to place this call in a
-  //  \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
+//
+//  The invocation of the \code{Update()} method on the writer triggers the
+//  execution of the pipeline.  It is recommended to place this call in a
+//  \code{try/catch} block in case errors occur and exceptions are thrown.
+//
+//  Software Guide : EndLatex
+// Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }
-

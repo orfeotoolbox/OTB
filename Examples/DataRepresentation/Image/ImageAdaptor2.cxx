@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates how to use the \doxygen{itk}{ImageAdaptor}
@@ -41,7 +40,6 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 //  Software Guide : BeginLatex
 //
 //  As with the previous example, the bulk of the effort in creating the image
@@ -53,21 +51,19 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 class RedChannelPixelAccessor
 {
 public:
-  typedef itk::RGBPixel<float>   InternalType;
-  typedef               float    ExternalType;
+  typedef itk::RGBPixel<float> InternalType;
+  typedef               float  ExternalType;
 
-  static ExternalType Get( const InternalType & input )
+  static ExternalType Get(const InternalType& input)
   {
-    return static_cast<ExternalType>( input.GetRed() );
+    return static_cast<ExternalType>(input.GetRed());
   }
 };
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -76,22 +72,21 @@ public:
 //
 //  Software Guide : EndLatex
 
-
 //-------------------------
 //
 //   Main code
 //
 //-------------------------
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << "ImageAdaptor2   inputRGBFileName outputRedChannelFileName" << std::endl;
+    std::cerr << "ImageAdaptor2   inputRGBFileName outputRedChannelFileName" <<
+    std::endl;
     return -1;
-  }
-
+    }
 
 //  Software Guide : BeginLatex
 //
@@ -104,18 +99,16 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef RedChannelPixelAccessor::InternalType  InputPixelType;
-  const   unsigned int   Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >   ImageType;
+  typedef RedChannelPixelAccessor::InternalType InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
 
-  typedef itk::ImageAdaptor<  ImageType,
-  RedChannelPixelAccessor > ImageAdaptorType;
+  typedef itk::ImageAdaptor<ImageType,
+                            RedChannelPixelAccessor> ImageAdaptorType;
 
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -124,19 +117,17 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >   ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
 // Software Guide : EndCodeSnippet
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   reader->Update();
 
 // Software Guide : BeginCodeSnippet
-  adaptor->SetImage( reader->GetOutput() );
+  adaptor->SetImage(reader->GetOutput());
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -148,21 +139,18 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image< unsigned char, Dimension >   OutputImageType;
-  typedef itk::RescaleIntensityImageFilter< ImageAdaptorType,
-  OutputImageType
-  >   RescalerType;
+  typedef otb::Image<unsigned char, Dimension> OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageAdaptorType,
+                                           OutputImageType
+                                           >   RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
-  typedef otb::ImageFileWriter< OutputImageType >   WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
-
+  writer->SetFileName(argv[2]);
 
 //  Software Guide : BeginLatex
 //
@@ -172,13 +160,12 @@ int main( int argc, char *argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  rescaler->SetOutputMinimum(  0  );
-  rescaler->SetOutputMaximum( 255 );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
 
-  rescaler->SetInput( adaptor );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(adaptor);
+  writer->SetInput(rescaler->GetOutput());
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -190,16 +177,15 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excp )
-  {
+    }
+  catch (itk::ExceptionObject& excp)
+    {
     std::cerr << "Exception caught " << excp << std::endl;
     return 1;
-  }
+    }
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -214,21 +200,19 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
   class GreenChannelPixelAccessor
   {
-  public:
-    typedef itk::RGBPixel<float>   InternalType;
-    typedef               float    ExternalType;
+public:
+    typedef itk::RGBPixel<float> InternalType;
+    typedef               float  ExternalType;
 
-    static ExternalType Get( const InternalType & input )
+    static ExternalType Get(const InternalType& input)
     {
-      return static_cast<ExternalType>( input.GetGreen() );
+      return static_cast<ExternalType>(input.GetGreen());
     }
   };
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -243,19 +227,16 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   class BlueChannelPixelAccessor
   {
-  public:
-    typedef itk::RGBPixel<float>   InternalType;
-    typedef               float    ExternalType;
+public:
+    typedef itk::RGBPixel<float> InternalType;
+    typedef               float  ExternalType;
 
-    static ExternalType Get( const InternalType & input )
+    static ExternalType Get(const InternalType& input)
     {
-      return static_cast<ExternalType>( input.GetBlue() );
+      return static_cast<ExternalType>(input.GetBlue());
     }
   };
 // Software Guide : EndCodeSnippet
 
-
   return EXIT_SUCCESS;
 }
-
-

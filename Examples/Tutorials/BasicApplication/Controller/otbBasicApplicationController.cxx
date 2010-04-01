@@ -1,3 +1,21 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include "otbBasicApplicationController.h"
 #include "otbMsgReporter.h"
 #include "otbFltkFilterWatcher.h"
@@ -7,8 +25,8 @@ namespace otb
 {
 
 BasicApplicationController
-::BasicApplicationController(): m_View(), m_WidgetsController(),
-m_ResizingHandler(), m_ChangeRegionHandler()
+::BasicApplicationController() : m_View(), m_WidgetsController(),
+  m_ResizingHandler(), m_ChangeRegionHandler()
 {
   // Build the widgets controller
   m_WidgetsController         = WidgetsControllerType::New();
@@ -20,7 +38,6 @@ m_ResizingHandler(), m_ChangeRegionHandler()
   // Register the model to the action handlers
   m_ResizingHandler->SetModel(m_Model->GetVisualizationModel());
   m_ChangeRegionHandler->SetModel(m_Model->GetVisualizationModel());
-
 
   // Add the action handlers to the widgets controller
   m_WidgetsController->AddActionHandler(m_ResizingHandler);
@@ -42,13 +59,13 @@ void BasicApplicationController::SetView(BasicApplicationView * view)
 
 void
 BasicApplicationController
-::OpenImage( const char * filename )
+::OpenImage(const char * filename)
 {
   try
     {
     m_Model->OpenImage(filename);
     }
-  catch(itk::ExceptionObject & err)
+  catch (itk::ExceptionObject& err)
     {
     MsgReporter::GetInstance()->SendError(err.GetDescription());
     }

@@ -37,7 +37,6 @@
 #include "otbImageList.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "itkExceptionObject.h"
 
 #include "otbImageFileReader.h"
@@ -59,10 +58,10 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef otb::Image< InputPixelType, Dimension > InputImageType;
-  typedef otb::ImageFileReader< InputImageType > ReaderType;
-  typedef otb::ImageFileWriter< InputImageType > WriterType;
+  typedef unsigned char                         InputPixelType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<InputImageType>  WriterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -75,7 +74,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageList< InputImageType > ImageListType;
+  typedef otb::ImageList<InputImageType> ImageListType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -125,7 +124,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  // Getting the image from the list and writing it to file
+// Getting the image from the list and writing it to file
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(imageList->Back());
@@ -147,7 +146,6 @@ int main(int argc, char * argv[])
 // \subdoxygen{otb}{ImageListToImageListFilter} is provided in order
 // to implement filter which operate on image lists and produce image lists.
 // Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

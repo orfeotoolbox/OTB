@@ -53,18 +53,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
   // Verify the number of parameters on the command line.
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile startX startY sizeX sizeY"
               << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -76,15 +76,15 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
-  typedef unsigned char PixelType;
-  typedef otb::Image< PixelType, Dimension >  ImageType;
+  typedef unsigned char                    PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef itk::ImageRegionConstIterator< ImageType > ConstIteratorType;
-  typedef itk::ImageRegionIterator< ImageType>       IteratorType;
+  typedef itk::ImageRegionConstIterator<ImageType> ConstIteratorType;
+  typedef itk::ImageRegionIterator<ImageType>      IteratorType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< ImageType > ReaderType;
-  typedef otb::ImageFileWriter< ImageType > WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
 // Software Guide : BeginLatex
 //
@@ -100,16 +100,15 @@ int main( int argc, char *argv[] )
   ImageType::RegionType::IndexType inputStart;
   ImageType::RegionType::SizeType  size;
 
-  inputStart[0] = ::atoi( argv[3] );
-  inputStart[1] = ::atoi( argv[4] );
+  inputStart[0] = ::atoi(argv[3]);
+  inputStart[1] = ::atoi(argv[4]);
 
-  size[0]  = ::atoi( argv[5] );
-  size[1]  = ::atoi( argv[6] );
+  size[0]  = ::atoi(argv[5]);
+  size[1]  = ::atoi(argv[6]);
 
-  inputRegion.SetSize( size );
-  inputRegion.SetIndex( inputStart );
+  inputRegion.SetSize(size);
+  inputRegion.SetIndex(inputStart);
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -127,32 +126,32 @@ int main( int argc, char *argv[] )
   outputStart[0] = 0;
   outputStart[1] = 0;
 
-  outputRegion.SetSize( size );
-  outputRegion.SetIndex( outputStart );
+  outputRegion.SetSize(size);
+  outputRegion.SetIndex(outputStart);
 // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   try
-  {
+    {
     reader->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-  }
+    }
 
   // Check that the region is contained within the input image.
-  if ( ! reader->GetOutput()->GetRequestedRegion().IsInside( inputRegion ) )
-  {
+  if (!reader->GetOutput()->GetRequestedRegion().IsInside(inputRegion))
+    {
     std::cerr << "Error" << std::endl;
-    std::cerr << "The region " << inputRegion << "is not contained within the input image region "
+    std::cerr << "The region " << inputRegion <<
+    "is not contained within the input image region "
               << reader->GetOutput()->GetRequestedRegion() << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -170,21 +169,20 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   ImageType::Pointer outputImage = ImageType::New();
-  outputImage->SetRegions( outputRegion );
+  outputImage->SetRegions(outputRegion);
   const ImageType::SpacingType& spacing = reader->GetOutput()->GetSpacing();
-  const ImageType::PointType& inputOrigin = reader->GetOutput()->GetOrigin();
-  double   outputOrigin[ Dimension ];
+  const ImageType::PointType&   inputOrigin = reader->GetOutput()->GetOrigin();
+  double                        outputOrigin[Dimension];
 
-  for (unsigned int i=0; i< Dimension; i++)
-  {
+  for (unsigned int i = 0; i < Dimension; i++)
+    {
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
-  }
+    }
 
-  outputImage->SetSpacing( spacing );
-  outputImage->SetOrigin(  outputOrigin );
+  outputImage->SetSpacing(spacing);
+  outputImage->SetOrigin(outputOrigin);
   outputImage->Allocate();
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -199,16 +197,15 @@ int main( int argc, char *argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  ConstIteratorType inputIt(   reader->GetOutput(), inputRegion  );
-  IteratorType      outputIt(  outputImage,         outputRegion );
+  ConstIteratorType inputIt(reader->GetOutput(), inputRegion);
+  IteratorType      outputIt(outputImage,         outputRegion);
 
-  for ( inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();
-        ++inputIt, ++outputIt)
-  {
-    outputIt.Set(  inputIt.Get()  );
-  }
+  for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();
+       ++inputIt, ++outputIt)
+    {
+    outputIt.Set(inputIt.Get());
+    }
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -222,19 +219,19 @@ int main( int argc, char *argv[] )
 // Software Guide : EndLatex
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( outputImage );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(outputImage);
 
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -268,5 +265,3 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

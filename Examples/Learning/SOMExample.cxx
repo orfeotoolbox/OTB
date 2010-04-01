@@ -82,14 +82,14 @@ int main(int argc, char* argv[])
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];
   const char * actMapFileName = argv[3];
-  unsigned int sizeX = atoi( argv[4] );
-  unsigned int sizeY = atoi( argv[5] );
-  unsigned int neighInitX = atoi( argv[6] );
-  unsigned int neighInitY= atoi( argv[7] );
-  unsigned int nbIterations = atoi( argv[8] );
-  double betaInit = atof( argv[9] );
-  double betaEnd= atof( argv[10] );
-  double initValue = atof( argv[11] );
+  unsigned int sizeX = atoi(argv[4]);
+  unsigned int sizeY = atoi(argv[5]);
+  unsigned int neighInitX = atoi(argv[6]);
+  unsigned int neighInitY = atoi(argv[7]);
+  unsigned int nbIterations = atoi(argv[8]);
+  double       betaInit = atof(argv[9]);
+  double       betaEnd = atof(argv[10]);
+  double       initValue = atof(argv[11]);
 
 //  Software Guide : BeginLatex
 //
@@ -102,9 +102,9 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef ImageType::PixelType                     VectorType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef ImageType::PixelType                   VectorType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance< VectorType > DistanceType;
+  typedef itk::Statistics::EuclideanDistance<VectorType> DistanceType;
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SOMMap< VectorType, DistanceType, Dimension > MapType;
+  typedef otb::SOMMap<VectorType, DistanceType, Dimension> MapType;
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -154,7 +154,7 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::ListSample< VectorType > SampleListType;
+  typedef itk::Statistics::ListSample<VectorType> SampleListType;
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -170,8 +170,8 @@ int main(int argc, char* argv[])
   LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor
   NeighborhoodBehaviorFunctorType;
-  typedef otb::SOM< SampleListType, MapType,
-  LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType >
+  typedef otb::SOM<SampleListType, MapType,
+                   LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType>
   SOMType;
 // Software Guide : EndCodeSnippet
 //
@@ -195,22 +195,24 @@ int main(int argc, char* argv[])
   reader->Update();
 
   SampleListType::Pointer sampleList = SampleListType::New();
-  sampleList->SetMeasurementVectorSize( reader->GetOutput()->GetVectorLength() );
+  sampleList->SetMeasurementVectorSize(reader->GetOutput()->GetVectorLength());
 
-  itk::ImageRegionIterator< ImageType > imgIter ( reader->GetOutput(),
-      reader->GetOutput()->GetBufferedRegion() );
+  itk::ImageRegionIterator<ImageType> imgIter (reader->GetOutput(),
+                                               reader->GetOutput()->
+                                               GetBufferedRegion());
   imgIter.GoToBegin();
 
-  itk::ImageRegionIterator< ImageType > imgIterEnd ( reader->GetOutput(),
-      reader->GetOutput()->GetBufferedRegion() );
+  itk::ImageRegionIterator<ImageType> imgIterEnd (reader->GetOutput(),
+                                                  reader->GetOutput()->
+                                                  GetBufferedRegion());
   imgIterEnd.GoToEnd();
 
   do
-  {
-    sampleList->PushBack( imgIter.Get() );
+    {
+    sampleList->PushBack(imgIter.Get());
     ++imgIter;
-  }
-  while ( imgIter != imgIterEnd );
+    }
+  while (imgIter != imgIterEnd);
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -221,7 +223,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   SOMType::Pointer som = SOMType::New();
-  som->SetListSample( sampleList );
+  som->SetListSample(sampleList);
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -233,8 +235,8 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   SOMType::SizeType size;
-  size[0]=sizeX;
-  size[1]=sizeY;
+  size[0] = sizeX;
+  size[1] = sizeY;
   som->SetMapSize(size);
 // Software Guide : EndCodeSnippet
 //
@@ -276,11 +278,11 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   LearningBehaviorFunctorType learningFunctor;
-  learningFunctor.SetIterationThreshold( radius, nbIterations );
-  som->SetBetaFunctor( learningFunctor );
+  learningFunctor.SetIterationThreshold(radius, nbIterations);
+  som->SetBetaFunctor(learningFunctor);
 
   NeighborhoodBehaviorFunctorType neighborFunctor;
-  som->SetNeighborhoodSizeFunctor( neighborFunctor );
+  som->SetNeighborhoodSizeFunctor(neighborFunctor);
   som->Update();
 // Software Guide : EndCodeSnippet
 //
@@ -295,23 +297,29 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
   //Just for visualization purposes, we zoom the image, and pass it to the printable image filter
-  typedef otb::Image<PixelType,2> SingleImageType;
-  typedef itk::ExpandImageFilter< SingleImageType, SingleImageType >    ExpandType;
-  typedef otb::PerBandVectorImageFilter<MapType,MapType,ExpandType>     VectorExpandType;
-  typedef itk::NearestNeighborInterpolateImageFunction< SingleImageType,
-  double >        InterpolatorType;
-  typedef otb::PrintableImageFilter<MapType>                            PrintableFilterType;
-  typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType>    PrintableWriterType;
+  typedef otb::Image<PixelType,
+                     2>                             SingleImageType;
+  typedef itk::ExpandImageFilter<SingleImageType,
+                                 SingleImageType>   ExpandType;
+  typedef otb::PerBandVectorImageFilter<MapType, MapType,
+                                        ExpandType> VectorExpandType;
+  typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType,
+                                                       double>
+  InterpolatorType;
+  typedef otb::PrintableImageFilter<MapType>
+  PrintableFilterType;
+  typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType>
+  PrintableWriterType;
 
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   VectorExpandType::Pointer expand       = VectorExpandType::New();
   ExpandType::Pointer       scalarExpand = ExpandType::New();
 
-  scalarExpand->SetExpandFactors( 40 );
-  scalarExpand->SetInterpolator( interpolator );
+  scalarExpand->SetExpandFactors(40);
+  scalarExpand->SetInterpolator(interpolator);
   scalarExpand->SetEdgePaddingValue(255);
 
-  expand->SetFilter( scalarExpand );
+  expand->SetFilter(scalarExpand);
 
   expand->SetInput(som->GetOutput());
 
@@ -330,7 +338,6 @@ int main(int argc, char* argv[])
   printWriter->SetFileName(outputFileName);
 
   printWriter->Update();
-
 
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SOMMAP} shows the result of the SOM learning. Since
@@ -354,7 +361,6 @@ int main(int argc, char* argv[])
 // \end{figure}
 //  Software Guide : EndLatex
 
-
 //  Software Guide : BeginLatex
 //
 // We can now compute the activation map for the input image. The
@@ -367,8 +373,8 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> ActivationWriterType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>  ActivationWriterType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -380,8 +386,8 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SOMActivationBuilder< SampleListType, MapType,
-  OutputImageType> SOMActivationBuilderType;
+  typedef otb::SOMActivationBuilder<SampleListType, MapType,
+                                    OutputImageType> SOMActivationBuilderType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -392,9 +398,9 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
   SOMActivationBuilderType::Pointer somAct
-  = SOMActivationBuilderType::New();
+    = SOMActivationBuilderType::New();
   somAct->SetInput(som->GetOutput());
-  somAct->SetListSample( sampleList );
+  somAct->SetListSample(sampleList);
   somAct->Update();
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -404,8 +410,8 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  if ( actMapFileName != NULL )
-  {
+  if (actMapFileName != NULL)
+    {
     ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
     actWriter->SetFileName(actMapFileName);
 // Software Guide : EndCodeSnippet
@@ -417,25 +423,28 @@ int main(int argc, char* argv[])
 //  Software Guide : EndLatex
 
     //Just for visualization purposes, we zoom the image.
-    typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
-    typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
+    typedef itk::ExpandImageFilter<OutputImageType,
+                                   OutputImageType> ExpandType2;
+    typedef itk::NearestNeighborInterpolateImageFunction<OutputImageType,
+                                                         double>
+                                                    InterpolatorType2;
 
     InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
-    ExpandType2::Pointer expand2 = ExpandType2::New();
+    ExpandType2::Pointer       expand2 = ExpandType2::New();
     expand2->SetInput(somAct->GetOutput());
-    expand2->SetExpandFactors( 20 );
-    expand2->SetInterpolator( interpolator2 );
+    expand2->SetExpandFactors(20);
+    expand2->SetInterpolator(interpolator2);
     expand2->SetEdgePaddingValue(255);
     expand2->UpdateOutputInformation();
 
     actWriter->SetInput(expand2->GetOutput());
     actWriter->Update();
-  }
+    }
   else
-  {
+    {
     std::cerr << "The activation map file name is null" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 

@@ -29,7 +29,6 @@
 //    OUTPUTS: {svm_image_model.svn}
 //  Software Guide : EndCommandLineArgs
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
 // \doxygen{otb}{SVMImageModelEstimator} class. This class allows the
@@ -50,7 +49,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -62,10 +60,8 @@
 
 #include "otbImageFileReader.h"
 
-
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-
 
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
@@ -80,12 +76,12 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  typedef unsigned char      InputPixelType;
-  const   unsigned int       Dimension = 2;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
+  typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -95,8 +91,8 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  typedef otb::SVMImageModelEstimator< InputImageType,
-  TrainingImageType >   EstimatorType;
+  typedef otb::SVMImageModelEstimator<InputImageType,
+                                      TrainingImageType>   EstimatorType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -106,10 +102,10 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType > InputReaderType;
-  typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
+  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
+  typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
-  InputReaderType::Pointer inputReader = InputReaderType::New();
+  InputReaderType::Pointer    inputReader = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
 //  Software Guide : EndCodeSnippet
@@ -123,8 +119,8 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 //  Software Guide : BeginCodeSnippet
-  inputReader->SetFileName( inputImageFileName );
-  trainingReader->SetFileName( trainingImageFileName );
+  inputReader->SetFileName(inputImageFileName);
+  trainingReader->SetFileName(trainingImageFileName);
 
   inputReader->Update();
   trainingReader->Update();
@@ -139,9 +135,9 @@ int main( int argc, char* argv[] )
 //  Software Guide : BeginCodeSnippet
   EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
-  svmEstimator->SetInputImage( inputReader->GetOutput() );
-  svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-  svmEstimator->SetNumberOfClasses( 2 );
+  svmEstimator->SetInputImage(inputReader->GetOutput());
+  svmEstimator->SetTrainingImage(trainingReader->GetOutput());
+  svmEstimator->SetNumberOfClasses(2);
 
 //  Software Guide : EndCodeSnippet
 
@@ -166,8 +162,5 @@ int main( int argc, char* argv[] )
 
 //  Software Guide : EndCodeSnippet
 
-
   return EXIT_SUCCESS;
 }
-
-

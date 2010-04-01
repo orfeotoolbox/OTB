@@ -46,17 +46,16 @@
 #include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   // Verify the number of parameters in the command line
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputRGBImageFile  outputRGBImageFile " << std::endl;
+    std::cerr << argv[0] << " inputRGBImageFile  outputRGBImageFile " <<
+    std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   // Software Guide : BeginLatex
   //
@@ -69,10 +68,9 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RGBPixel< unsigned char >   PixelType;
-  typedef otb::Image< PixelType, 2 >       ImageType;
+  typedef itk::RGBPixel<unsigned char> PixelType;
+  typedef otb::Image<PixelType, 2>     ImageType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -85,17 +83,15 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
-  typedef otb::ImageFileWriter< ImageType >  WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-
 
   //  Software Guide : BeginLatex
   //
@@ -105,14 +101,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
 
-
   ImageType::Pointer image = reader->GetOutput();
-  writer->SetInput( image );
-
+  writer->SetInput(image);
 
   //  Software Guide : BeginLatex
   //
@@ -134,8 +128,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

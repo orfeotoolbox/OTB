@@ -84,31 +84,31 @@
 #include "otbKullbackLeiblerDistanceImageFilter.h"
 //  Software Guide : EndCodeSnippet
 
-
 int main(int argc, char * argv[])
 {
   try
-  {
-    if (argc != 5)
     {
-      std::cerr<<"Change detection through a Kullback-Leibler measure (which is a distance between local distributions)\n";
-      std::cerr<<"Kullback-Leibler measure is optimized by a Edgeworth series expansion\n";
+    if (argc != 5)
+      {
+      std::cerr <<
+      "Change detection through a Kullback-Leibler measure (which is a distance between local distributions)\n";
+      std::cerr <<
+      "Kullback-Leibler measure is optimized by a Edgeworth series expansion\n";
       std::cerr << argv[0] << " imgAv imgAp imgResu winSize\n";
       return 1;
-    }
+      }
 
     char * fileName1 = argv[1];
     char * fileName2 = argv[2];
     char * fileNameOut = argv[3];
-    int winSize = atoi(argv[4]);
-
+    int    winSize = atoi(argv[4]);
 
     const unsigned int Dimension = 2;
-    typedef double PixelType;
+    typedef double        PixelType;
     typedef unsigned char OutputPixelType;
 
-    typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+    typedef otb::Image<PixelType, Dimension>       ImageType;
+    typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
     //  Software Guide : BeginLatex
     //
@@ -123,7 +123,8 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginCodeSnippet
     typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,
-    ImageType,ImageType> FilterType;
+                                                    ImageType,
+                                                    ImageType> FilterType;
     //  Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -133,14 +134,14 @@ int main(int argc, char * argv[])
     //
     //  Software Guide : EndLatex
 
-    typedef otb::ImageFileReader<ImageType> ReaderType;
+    typedef otb::ImageFileReader<ImageType>       ReaderType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
     ReaderType::Pointer reader1 = ReaderType::New();
-    reader1->SetFileName( fileName1 );
+    reader1->SetFileName(fileName1);
 
     ReaderType::Pointer reader2 = ReaderType::New();
-    reader2->SetFileName( fileName2 );
+    reader2->SetFileName(fileName2);
 
     //  Software Guide : BeginLatex
     //
@@ -151,7 +152,7 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginCodeSnippet
     FilterType::Pointer filter = FilterType::New();
-    filter->SetRadius( (winSize-1)/2 );
+    filter->SetRadius((winSize - 1) / 2);
     //  Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -161,12 +162,12 @@ int main(int argc, char * argv[])
     //  Software Guide : EndLatex
 
     //  Software Guide : BeginCodeSnippet
-    filter->SetInput1( reader1->GetOutput() );
-    filter->SetInput2( reader2->GetOutput() );
+    filter->SetInput1(reader1->GetOutput());
+    filter->SetInput2(reader2->GetOutput());
     //  Software Guide : EndCodeSnippet
 
-
-    typedef itk::RescaleIntensityImageFilter<ImageType,OutputImageType> RescaleFilterType;
+    typedef itk::RescaleIntensityImageFilter<ImageType,
+                                             OutputImageType> RescaleFilterType;
     RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
     rescaler->SetInput(filter->GetOutput());
@@ -178,20 +179,20 @@ int main(int argc, char * argv[])
     writer->SetInput(rescaler->GetOutput());
     writer->Update();
 
-  }
+    }
 
-  catch ( itk::ExceptionObject & err )
-  {
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception thrown !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   // Figure \ref{fig:RESKLDCHDET} shows the result of the change
@@ -208,4 +209,3 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {msPyrMRToMS_IKO_Halles_4_2_sf_full.tif}, {ROI_IKO_PAN_LesHalles.tif}
 //    OUTPUTS: {outputPyrSegmented.tif}
@@ -53,12 +52,12 @@
 int main(int argc, char * argv[])
 {
 
-  const char* inputFilename = argv[1];
-  const char* originalFilename = argv[2];
-  const char* outputFilename1 = argv[3];
-  const bool segmentDark = atoi(argv[4]);
-  const float seedsQuantile = atof(argv[5]);
-  const float segmentationQuantile = atof(argv[6]);
+  const char*        inputFilename = argv[1];
+  const char*        originalFilename = argv[2];
+  const char*        outputFilename1 = argv[3];
+  const bool         segmentDark = atoi(argv[4]);
+  const float        seedsQuantile = atof(argv[5]);
+  const float        segmentationQuantile = atof(argv[6]);
   const unsigned int minObjectSize = atoi(argv[7]);
 
 // Software Guide : BeginLatex
@@ -72,17 +71,16 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef unsigned short LabelPixelType;
-  typedef itk::RGBPixel<unsigned char>   RGBPixelType;
+  typedef double                       InputPixelType;
+  typedef unsigned short               LabelPixelType;
+  typedef itk::RGBPixel<unsigned char> RGBPixelType;
 
-
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-  typedef otb::Image<RGBPixelType, 2>    RGBImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<LabelPixelType, Dimension> LabelImageType;
+  typedef otb::Image<RGBPixelType, 2>           RGBImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileWriter<RGBImageType>   WriterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -94,7 +92,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
-  LabelImageType>
+                                               LabelImageType>
   SegmenterType;
 // Software Guide : EndCodeSnippet
 
@@ -137,28 +135,29 @@ int main(int argc, char * argv[])
   segmenter->SetConnectedThresholdQuantile(segmentationQuantile);
   segmenter->SetMinimumObjectSize(minObjectSize);
 // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
-  // The output of the segmenter is an image of integer
-  // labels, where a label denotes membership of a pixel in a particular
-  // segmented region. This value is usually coded using 16 bits.
-  // This format is not practical for visualization, so
-  // for the purposes of this example, we will convert it to RGB pixels.  RGB
-  // images have the advantage that they can be saved as a simple png file
-  // and viewed using any standard image viewer software.  The
-  // \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
-  // function object designed to hash a scalar value into an
-  // \doxygen{itk}{RGBPixel}. Plugging this functor into the
-  // \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
-  // converts scalar images to RGB images.
-  //
-  // Software Guide : EndLatex
+// Software Guide : BeginLatex
+//
+// The output of the segmenter is an image of integer
+// labels, where a label denotes membership of a pixel in a particular
+// segmented region. This value is usually coded using 16 bits.
+// This format is not practical for visualization, so
+// for the purposes of this example, we will convert it to RGB pixels.  RGB
+// images have the advantage that they can be saved as a simple png file
+// and viewed using any standard image viewer software.  The
+// \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
+// function object designed to hash a scalar value into an
+// \doxygen{itk}{RGBPixel}. Plugging this functor into the
+// \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
+// converts scalar images to RGB images.
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+                                       RGBImageType,
+                                       ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -192,9 +191,8 @@ int main(int argc, char * argv[])
 // details and result of the sementation.}
 // \label{fig:PYR_SEGDET}
 // \end{figure}
-  //
-  // Software Guide : EndLatex
-
+//
+// Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

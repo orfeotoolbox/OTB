@@ -63,18 +63,17 @@
 #include "otbWorldFile.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc!=7)
-  {
-    std::cout << argv[0] <<" <inputFilename> <outputFilename> "
+  if (argc != 7)
+    {
+    std::cout << argv[0] << " <inputFilename> <outputFilename> "
               << "<cacheDirectory> <lon> <lat> <depth>"
               << std::endl;
 
     return EXIT_FAILURE;
-  }
-
+    }
 
   // Software Guide : BeginLatex
   //
@@ -97,9 +96,9 @@ int main( int argc, char* argv[] )
   std::string inputFilename = argv[1];
   std::string outputFilename = argv[2];
   std::string cacheDirectory = argv[3];
-  double lon = atof(argv[4]);
-  double lat = atof(argv[5]);
-  int depth = atoi(argv[6]);
+  double      lon = atof(argv[4]);
+  double      lat = atof(argv[5]);
+  int         depth = atoi(argv[6]);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -116,7 +115,7 @@ int main( int argc, char* argv[] )
   typedef otb::TileMapImageIO             ImageIOType;
 
   ImageIOType::Pointer tileIO = ImageIOType::New();
-  ReaderType::Pointer readerTile = ReaderType::New();
+  ReaderType::Pointer  readerTile = ReaderType::New();
   tileIO->SetDepth(depth);
   tileIO->SetCacheDirectory(cacheDirectory);
   readerTile->SetImageIO(tileIO);
@@ -138,25 +137,24 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::InverseSensorModel<double>  ModelType;
-  ModelType::Pointer   model= ModelType::New();
+  typedef otb::InverseSensorModel<double> ModelType;
+  ModelType::Pointer model = ModelType::New();
 
   model->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
   dynamic_cast<ossimTileMapModel*>(model->GetOssimModel())->setDepth(depth);
   if (!model)
-  {
+    {
     std::cerr << "Unable to create a model" << std::endl;
     return 1;
-  }
-
+    }
 
   typedef itk::Point <double, 2> PointType;
   PointType lonLatPoint;
-  lonLatPoint[0]=lon;
-  lonLatPoint[1]=lat;
+  lonLatPoint[0] = lon;
+  lonLatPoint[1] = lat;
 
   PointType tilePoint;
-  tilePoint=model->TransformPoint(lonLatPoint);
+  tilePoint = model->TransformPoint(lonLatPoint);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -167,20 +165,20 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  long int startX=static_cast<long int>(tilePoint[0]);
-  long int startY=static_cast<long int>(tilePoint[1]);
+  long int startX = static_cast<long int>(tilePoint[0]);
+  long int startY = static_cast<long int>(tilePoint[1]);
   long int sizeX = 500;
   long int sizeY = 500;
 
-  std::cerr << startX <<", "<< startY << std::endl;
-  std::cerr << sizeX <<", "<< sizeY << std::endl;
+  std::cerr << startX << ", " << startY << std::endl;
+  std::cerr << sizeX << ", " << sizeY << std::endl;
 
-  typedef otb::ExtractROI< RGBPixelType,  RGBPixelType >  ExtractROIFilterType;
+  typedef otb::ExtractROI<RGBPixelType,  RGBPixelType> ExtractROIFilterType;
   ExtractROIFilterType::Pointer extractROIOsmFilter = ExtractROIFilterType::New();
-  extractROIOsmFilter->SetStartX(startX-sizeX/2);
-  extractROIOsmFilter->SetStartY(startY-sizeY/2);
-  extractROIOsmFilter->SetSizeX( sizeX );
-  extractROIOsmFilter->SetSizeY( sizeY );
+  extractROIOsmFilter->SetStartX(startX - sizeX / 2);
+  extractROIOsmFilter->SetStartY(startY - sizeY / 2);
+  extractROIOsmFilter->SetSizeX(sizeX);
+  extractROIOsmFilter->SetSizeY(sizeY);
 
   extractROIOsmFilter->SetInput(readerTile->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -200,7 +198,6 @@ int main( int argc, char* argv[] )
   writer->Update();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // We also want to create the associated world file to be able to use this
@@ -213,28 +210,29 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ForwardSensorModel<double>  ForwardModelType;
-  ForwardModelType::Pointer   modelForward = ForwardModelType::New();
+  typedef otb::ForwardSensorModel<double> ForwardModelType;
+  ForwardModelType::Pointer modelForward = ForwardModelType::New();
 
   modelForward->SetImageGeometry(readerTile->GetOutput()->GetImageKeywordlist());
-  dynamic_cast<ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(depth);
+  dynamic_cast<ossimTileMapModel*>(modelForward->GetOssimModel())->setDepth(
+    depth);
   if (!modelForward)
-  {
+    {
     std::cerr << "Unable to create a forward model" << std::endl;
     return 1;
-  }
+    }
   double lonUL, latUL, lonSpacing, latSpacing;
 
-  tilePoint[0] = startX-sizeX/2;
-  tilePoint[1] = startY-sizeY/2;
+  tilePoint[0] = startX - sizeX / 2;
+  tilePoint[1] = startY - sizeY / 2;
   lonLatPoint = modelForward->TransformPoint(tilePoint);
   lonUL = lonLatPoint[0];
   latUL = lonLatPoint[1];
-  tilePoint[0] = startX+sizeX/2;
-  tilePoint[1] = startY+sizeY/2;
+  tilePoint[0] = startX + sizeX / 2;
+  tilePoint[1] = startY + sizeY / 2;
   lonLatPoint = modelForward->TransformPoint(tilePoint);
-  lonSpacing = (lonLatPoint[0] - lonUL)/(sizeX-1);
-  latSpacing = (lonLatPoint[1] - latUL)/(sizeY-1);
+  lonSpacing = (lonLatPoint[0] - lonUL) / (sizeX - 1);
+  latSpacing = (lonLatPoint[1] - latUL) / (sizeY - 1);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex

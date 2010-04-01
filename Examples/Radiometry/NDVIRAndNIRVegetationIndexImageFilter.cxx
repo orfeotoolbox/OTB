@@ -23,12 +23,10 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {NDVI_2.hdr} , {NDVI_3.hdr}
 //  OUTPUTS: {NDVIRAndNIRVegetationIndex.tif} , {pretty_Red.png} , {pretty_NIR.png} , {pretty_NDVIRAndNIRVegetationIndex.png}
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -72,22 +70,23 @@
 #include "otbRAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 6 )
-  {
+  if (argc < 6)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput" << std::endl;
+    std::cerr <<
+    " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput"
+              << std::endl;
     return 1;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -97,12 +96,12 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const unsigned int                              Dimension = 2;
-  typedef double                                  InputPixelType;
-  typedef float                                   OutputPixelType;
-  typedef otb::Image<InputPixelType,Dimension>    InputRImageType;
-  typedef otb::Image<InputPixelType,Dimension>    InputNIRImageType;
-  typedef otb::Image<OutputPixelType,Dimension>   OutputImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                 InputPixelType;
+  typedef float                                  OutputPixelType;
+  typedef otb::Image<InputPixelType, Dimension>  InputRImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputNIRImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
@@ -120,9 +119,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Functor::NDVI< InputPixelType,
-  InputPixelType,
-  OutputPixelType>   FunctorType;
+  typedef otb::Functor::NDVI<InputPixelType,
+                             InputPixelType,
+                             OutputPixelType>   FunctorType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -134,18 +133,18 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::RAndNIRIndexImageFilter<InputRImageType,
-  InputNIRImageType,
-  OutputImageType,
-  FunctorType>
+                                       InputNIRImageType,
+                                       OutputImageType,
+                                       FunctorType>
   RAndNIRIndexImageFilterType;
   // Software Guide : EndCodeSnippet
 
-
   // Instantiating object
-  RAndNIRIndexImageFilterType::Pointer filter    = RAndNIRIndexImageFilterType::New();
-  RReaderType::Pointer                 readerR   = RReaderType::New();
-  NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
-  WriterType::Pointer                  writer    = WriterType::New();
+  RAndNIRIndexImageFilterType::Pointer filter    =
+    RAndNIRIndexImageFilterType::New();
+  RReaderType::Pointer   readerR   = RReaderType::New();
+  NIRReaderType::Pointer readerNIR = NIRReaderType::New();
+  WriterType::Pointer    writer    = WriterType::New();
 
   //  Software Guide : BeginLatex
   //
@@ -154,9 +153,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  readerR->SetFileName( argv[1] );
-  readerNIR->SetFileName( argv[2] );
-  writer->SetFileName( argv[3]  );
+  readerR->SetFileName(argv[1]);
+  readerNIR->SetFileName(argv[2]);
+  writer->SetFileName(argv[3]);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -168,12 +167,11 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInputR( readerR->GetOutput() );
-  filter->SetInputNIR( readerNIR->GetOutput() );
+  filter->SetInputR(readerR->GetOutput());
+  filter->SetInputNIR(readerNIR->GetOutput());
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -185,71 +183,75 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, Dimension>                                        OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                 WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>   RescalerType;
-  typedef itk::RescaleIntensityImageFilter< InputRImageType, OutputPrettyImageType>   RescalerRType;
-  typedef itk::RescaleIntensityImageFilter< InputNIRImageType, OutputPrettyImageType> RescalerNIRType;
-
+  typedef otb::Image<unsigned char,
+                     Dimension>
+                                                                  OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>
+                                                                  WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType,
+                                           OutputPrettyImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InputRImageType,
+                                           OutputPrettyImageType> RescalerRType;
+  typedef itk::RescaleIntensityImageFilter<InputNIRImageType,
+                                           OutputPrettyImageType>
+                                                                  RescalerNIRType;
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
-  rescaler->SetInput( filter->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  prettyWriter->SetFileName( argv[6] );
-  prettyWriter->SetInput( rescaler->GetOutput() );
+  prettyWriter->SetFileName(argv[6]);
+  prettyWriter->SetInput(rescaler->GetOutput());
 
-  RescalerRType::Pointer     rescalerR      = RescalerRType::New();
-  RescalerNIRType::Pointer     rescalerNIR  = RescalerNIRType::New();
+  RescalerRType::Pointer    rescalerR      = RescalerRType::New();
+  RescalerNIRType::Pointer  rescalerNIR  = RescalerNIRType::New();
   WriterPrettyType::Pointer prettyWriterR   = WriterPrettyType::New();
   WriterPrettyType::Pointer prettyWriterNIR = WriterPrettyType::New();
-  rescalerR->SetInput( readerR->GetOutput() );
+  rescalerR->SetInput(readerR->GetOutput());
   rescalerR->SetOutputMinimum(0);
   rescalerR->SetOutputMaximum(255);
-  prettyWriterR->SetFileName( argv[4] );
-  prettyWriterR->SetInput( rescalerR->GetOutput() );
+  prettyWriterR->SetFileName(argv[4]);
+  prettyWriterR->SetInput(rescalerR->GetOutput());
 
-  rescalerNIR->SetInput( readerNIR->GetOutput() );
+  rescalerNIR->SetInput(readerNIR->GetOutput());
   rescalerNIR->SetOutputMinimum(0);
   rescalerNIR->SetOutputMaximum(255);
-  prettyWriterNIR->SetFileName( argv[5] );
-  prettyWriterNIR->SetInput( rescalerNIR->GetOutput() );
-
+  prettyWriterNIR->SetFileName(argv[5]);
+  prettyWriterNIR->SetInput(rescalerNIR->GetOutput());
 
   try
-  {
+    {
     prettyWriter->Update();
     prettyWriterNIR->Update();
     prettyWriterR->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   // Software Guide : BeginLatex
   //
@@ -270,4 +272,3 @@ int main( int argc, char *argv[] )
 
   return EXIT_SUCCESS;
 }
-

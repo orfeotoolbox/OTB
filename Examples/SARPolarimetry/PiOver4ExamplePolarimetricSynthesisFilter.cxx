@@ -31,26 +31,25 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbPolarimetricSynthesisFilter.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc!=6)
-  {
+  if (argc != 6)
+    {
     std::cout << argv[0]
-              <<" <input_filename_HH_channel>"
-              <<" <input_filename_HV_channel>"
-              <<" <input_filename_VH_channel>"
-              <<" <input_filename_VV_channel>"
-              <<" <output_filename>"
+              << " <input_filename_HH_channel>"
+              << " <input_filename_HV_channel>"
+              << " <input_filename_VH_channel>"
+              << " <input_filename_VV_channel>"
+              << " <output_filename>"
               << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -58,16 +57,15 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef std::complex <double>                   InputPixelType;
-  typedef double                              OutputPixelType;
-  const   unsigned int                            Dimension = 2;
+  typedef std::complex <double> InputPixelType;
+  typedef double                OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >  OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileWriter< OutputImageType >   WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -77,9 +75,10 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
+  typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType,
+                                           InputImageType, InputImageType,
+                                           OutputImageType> FilterType;
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -90,9 +89,8 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType  >   ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -102,9 +100,8 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -121,11 +118,11 @@ int main( int argc, char* argv[] )
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer polarimetricSynthesis = FilterType::New();
 
-  reader_HH->SetFileName( argv[1] );
-  reader_HV->SetFileName( argv[2] );
-  reader_VH->SetFileName( argv[3] );
-  reader_VV->SetFileName( argv[4] );
-  writer->SetFileName( argv[5] );
+  reader_HH->SetFileName(argv[1]);
+  reader_HV->SetFileName(argv[2]);
+  reader_VH->SetFileName(argv[3]);
+  reader_VV->SetFileName(argv[4]);
+  writer->SetFileName(argv[5]);
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -142,10 +139,10 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  polarimetricSynthesis->SetInputHH( reader_HH->GetOutput() );
-  polarimetricSynthesis->SetInputHV( reader_HV->GetOutput() );
-  polarimetricSynthesis->SetInputVH( reader_VH->GetOutput() );
-  polarimetricSynthesis->SetInputVV( reader_VV->GetOutput() );
+  polarimetricSynthesis->SetInputHH(reader_HH->GetOutput());
+  polarimetricSynthesis->SetInputHV(reader_HV->GetOutput());
+  polarimetricSynthesis->SetInputVH(reader_VH->GetOutput());
+  polarimetricSynthesis->SetInputVV(reader_VV->GetOutput());
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -166,10 +163,10 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  polarimetricSynthesis->SetPsiI( 45. );
-  polarimetricSynthesis->SetKhiI(  0. );
-  polarimetricSynthesis->SetPsiR(  0. );
-  polarimetricSynthesis->SetKhiR(  0. );
+  polarimetricSynthesis->SetPsiI(45.);
+  polarimetricSynthesis->SetKhiI(0.);
+  polarimetricSynthesis->SetPsiR(0.);
+  polarimetricSynthesis->SetKhiR(0.);
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -185,11 +182,10 @@ int main( int argc, char* argv[] )
   polarimetricSynthesis->Update();
 // Software Guide : EndCodeSnippet
 
-  writer->SetInput( polarimetricSynthesis->GetOutput() );
+  writer->SetInput(polarimetricSynthesis->GetOutput());
 
   writer->Update();
 
   return EXIT_SUCCESS;
 
 }
-

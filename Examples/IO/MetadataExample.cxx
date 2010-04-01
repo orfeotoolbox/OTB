@@ -38,7 +38,6 @@
 //
 //  SoftwareGuide: EndLatex
 
-
 #include "itkExceptionObject.h"
 #include <iostream>
 #include <fstream>
@@ -46,7 +45,6 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-
 
 int main(int argc, char* argv[])
 {
@@ -65,13 +63,12 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-  typedef unsigned char                            InputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >      InputImageType;
-
-  typedef otb::ImageFileReader< InputImageType >        ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 //  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
 //
@@ -81,11 +78,10 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer     reader = ReaderType::New();
   InputImageType::Pointer image = InputImageType::New();
 
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
   reader->Update();
 
   image = reader->GetOutput();
@@ -100,7 +96,6 @@ int main(int argc, char* argv[])
 //  SoftwareGuide: EndLatex
 
 //  SoftwareGuide: BeginCodeSnippet
-
 
   std::ofstream file;
 
@@ -124,7 +119,6 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-
   file << "Spacing " << image->GetSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
 
@@ -145,17 +139,20 @@ int main(int argc, char* argv[])
 
 //  SoftwareGuide: BeginCodeSnippet
 
-  for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++ )
-  {
+  for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++)
+    {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
-    file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
-    file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
-    file << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) << std::endl;
+    file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) <<
+    std::endl;
+    file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) <<
+    std::endl;
+    file << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) <<
+    std::endl;
     file << "GCP[" << GCPnum << "] X " << image->GetGCPX(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
     file << "----------------" << std::endl;
-  }
+    }
 
 //  SoftwareGuide: EndCodeSnippet
 //  SoftwareGuide: BeginLatex
@@ -170,39 +167,39 @@ int main(int argc, char* argv[])
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " " <<i<<" -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " " << i << " -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " UL[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetUpperRightCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " UR[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetLowerLeftCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " LL[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetLowerRightCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " LR[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   file.close();
@@ -210,4 +207,3 @@ int main(int argc, char* argv[])
   //  SoftwareGuide: EndCodeSnippet
   return EXIT_SUCCESS;
 }
-

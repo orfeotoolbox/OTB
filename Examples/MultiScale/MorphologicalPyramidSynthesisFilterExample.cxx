@@ -50,7 +50,6 @@
 #include "itkBinaryBallStructuringElement.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
@@ -58,17 +57,17 @@
 int main(int argc, char * argv[])
 {
 
-  if ( argc != 5)
-  {
+  if (argc != 5)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  const char * inputFilename = argv[1];
-  const char * outputFilename = argv[2];
+  const char *       inputFilename = argv[1];
+  const char *       outputFilename = argv[2];
   const unsigned int numberOfLevels = atoi(argv[3]);
-  const float decimationRatio = atof(argv[4]);
+  const float        decimationRatio = atof(argv[4]);
 
 // Software Guide : BeginLatex
 //
@@ -82,10 +81,10 @@ int main(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
 
@@ -100,7 +99,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension>
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension>
   StructuringElementType;
 // Software Guide : EndCodeSnippet
 
@@ -117,7 +116,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-  InputImageType,StructuringElementType>
+                                                 InputImageType,
+                                                 StructuringElementType>
   OpeningClosingFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -131,7 +131,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-  OutputImageType,OpeningClosingFilterType>
+                                                  OutputImageType,
+                                                  OpeningClosingFilterType>
   PyramidAnalysisFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -145,7 +146,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,
-  OutputImageType>
+                                                   OutputImageType>
   PyramidSynthesisFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -207,7 +208,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
+  PyramidSynthesisFilterType::Pointer pyramidSynthesis =
+    PyramidSynthesisFilterType::New();
   pyramidSynthesis->SetInput(pyramidAnalysis->GetOutput()->Back());
   pyramidSynthesis->SetSupFilter(pyramidAnalysis->GetSupFilter());
   pyramidSynthesis->SetSupDeci(pyramidAnalysis->GetSupDeci());
@@ -260,7 +262,6 @@ int main(int argc, char * argv[])
 // instance, denoise the image by removing pixels at the finer scales, etc.
 //
 // Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

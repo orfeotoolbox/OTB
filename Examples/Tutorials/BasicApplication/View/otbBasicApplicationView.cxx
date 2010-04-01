@@ -1,3 +1,21 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include "otbBasicApplicationView.h"
 
 #include "otbMsgReporter.h"
@@ -8,7 +26,8 @@
 namespace otb
 {
 
-BasicApplicationView::BasicApplicationView(): m_Controller(), m_Model(), m_ImageView()
+BasicApplicationView::BasicApplicationView() : m_Controller(), m_Model(),
+  m_ImageView()
 {
   m_Model = BasicApplicationModel::GetInstance();
   m_Model->RegisterListener(this);
@@ -16,7 +35,6 @@ BasicApplicationView::BasicApplicationView(): m_Controller(), m_Model(), m_Image
   // Build the visualization part
   m_ImageView = ImageViewType::New();
   m_ImageView->SetModel(m_Model->GetVisualizationModel());
-
 
 }
 
@@ -29,39 +47,41 @@ BasicApplicationView::~BasicApplicationView()
 
 void BasicApplicationView::Build()
 {
-  if(!m_Controller)
+  if (!m_Controller)
     {
-    itkExceptionMacro(<<"Controller is not set, can not build view.");
+    itkExceptionMacro(<< "Controller is not set, can not build view.");
     }
 
-  if(!m_WidgetsController)
+  if (!m_WidgetsController)
     {
-    itkExceptionMacro(<<"Widgets controller is not set, can not build view.");
+    itkExceptionMacro(<< "Widgets controller is not set, can not build view.");
     }
   // Build the fltk code
   BasicApplicationViewGUI::Build();
 
   // Register controllers
-   m_ImageView->SetController(m_WidgetsController);
+  m_ImageView->SetController(m_WidgetsController);
 
-   // Remove registered visualization components from the interface
-   gImageViewer->add(m_ImageView->GetFullWidget());
-   gScroll->add(m_ImageView->GetScrollWidget());
+  // Remove registered visualization components from the interface
+  gImageViewer->add(m_ImageView->GetFullWidget());
+  gScroll->add(m_ImageView->GetScrollWidget());
 
-   gImageViewer->resizable(m_ImageView->GetFullWidget());
-   gScroll->resizable(m_ImageView->GetScrollWidget());
+  gImageViewer->resizable(m_ImageView->GetFullWidget());
+  gScroll->resizable(m_ImageView->GetScrollWidget());
 
-   m_ImageView->GetFullWidget()->resize(gImageViewer->x(),gImageViewer->y(),gImageViewer->w(),gImageViewer->h());
-   m_ImageView->GetScrollWidget()->resize(gScroll->x(),gScroll->y(),gScroll->w(),gScroll->h());
+  m_ImageView->GetFullWidget()->resize(gImageViewer->x(),
+                                       gImageViewer->y(),
+                                       gImageViewer->w(), gImageViewer->h());
+  m_ImageView->GetScrollWidget()->resize(gScroll->x(), gScroll->y(), gScroll->w(
+                                           ), gScroll->h());
 
-   // Show and refresh the interface
-    this->wMainWindow->show();
+  // Show and refresh the interface
+  this->wMainWindow->show();
 
-    m_ImageView->GetFullWidget()->show();
-    m_ImageView->GetScrollWidget()->show();
+  m_ImageView->GetFullWidget()->show();
+  m_ImageView->GetScrollWidget()->show();
 
-
-    this->RefreshInterface();
+  this->RefreshInterface();
 }
 void BasicApplicationView::Notify()
 {
@@ -89,14 +109,14 @@ void BasicApplicationView::Exit()
 
 void BasicApplicationView::OpenImage()
 {
-  const char * cfname = fl_file_chooser("Select an Input Image", "*.*",".");
+  const char * cfname = fl_file_chooser("Select an Input Image", "*.*", ".");
   Fl::check();
   wMainWindow->redraw();
-  if (cfname == NULL || strlen(cfname)<1)
-  {
+  if (cfname == NULL || strlen(cfname) < 1)
+    {
     return;
-  }
-  m_Controller->OpenImage( cfname );
+    }
+  m_Controller->OpenImage(cfname);
 }
 
-}// end namespace
+} // end namespace

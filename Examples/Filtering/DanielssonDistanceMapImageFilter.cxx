@@ -58,18 +58,17 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputDistanceMapImageFile ";
     std::cerr << " outputVoronoiMapImageFilter ";
     std::cerr << " outputVectorMapImageFilter ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -83,12 +82,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  unsigned char   InputPixelType;
-  typedef  unsigned short  OutputPixelType;
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef  unsigned char                 InputPixelType;
+  typedef  unsigned short                OutputPixelType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -104,27 +102,25 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DanielssonDistanceMapImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   typedef itk::RescaleIntensityImageFilter<
-  OutputImageType, OutputImageType > RescalerType;
+    OutputImageType, OutputImageType> RescalerType;
   RescalerType::Pointer scaler = RescalerType::New();
 
   //
   // Reader and Writer types are instantiated.
   //
-  typedef otb::ImageFileReader< InputImageType  >  ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
-
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
 
   //  Software Guide : BeginLatex
   //
@@ -137,15 +133,13 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
-  scaler->SetInput( filter->GetOutput() );
-  writer->SetInput( scaler->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  scaler->SetInput(filter->GetOutput());
+  writer->SetInput(scaler->GetOutput());
   // Software Guide : EndCodeSnippet
 
-
-  scaler->SetOutputMaximum( 65535L );
-  scaler->SetOutputMinimum(     0L );
-
+  scaler->SetOutputMaximum(65535L);
+  scaler->SetOutputMinimum(0L);
 
   //  Software Guide : BeginLatex
   //
@@ -159,7 +153,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   filter->InputIsBinaryOn();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -186,10 +179,8 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   writer->Update();
   const char * voronoiMapFileName = argv[3];
-
 
   //  Software Guide : BeginLatex
   //
@@ -202,11 +193,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  scaler->SetInput( filter->GetVoronoiMap() );
-  writer->SetFileName( voronoiMapFileName );
+  scaler->SetInput(filter->GetVoronoiMap());
+  writer->SetFileName(voronoiMapFileName);
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -218,9 +208,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef FilterType::VectorImageType   OffsetImageType;
+  typedef FilterType::VectorImageType OffsetImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -230,10 +219,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OffsetImageType >  WriterOffsetType;
+  typedef otb::ImageFileWriter<OffsetImageType> WriterOffsetType;
   WriterOffsetType::Pointer offsetWriter = WriterOffsetType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -243,12 +231,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  offsetWriter->SetInput(  filter->GetVectorDistanceMap()  );
+  offsetWriter->SetInput(filter->GetVectorDistanceMap());
   // Software Guide : EndCodeSnippet
 
-
-  offsetWriter->SetFileName( argv[4]  );
-
+  offsetWriter->SetFileName(argv[4]);
 
   //  Software Guide : BeginLatex
   //
@@ -260,16 +246,15 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     offsetWriter->Update();
-  }
-  catch ( itk::ExceptionObject exp )
-  {
+    }
+  catch (itk::ExceptionObject exp)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr <<     exp    << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -280,4 +265,3 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
