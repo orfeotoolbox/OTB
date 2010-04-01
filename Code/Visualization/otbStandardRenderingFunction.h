@@ -244,12 +244,12 @@ public:
         //and at least one band has enough dynamic
         //no rescaling should be applied
         bool allMinMaxWithinDynamic = true;
-        bool enoughDynamic = true;//FIXME desactivated
+        bool enoughDynamic = false;//FIXME desactivated
         for (unsigned int comp = 0; comp < nbComps; ++comp)
           {
           if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false; //take margin for rounding errors
           if (m_Maximum[comp] > 256) allMinMaxWithinDynamic = false;
-//          if ((m_Maximum[comp] - m_Minimum[comp]) > 10) enoughDynamic = true;
+          if (((m_Maximum[comp] - m_Minimum[comp]) > 1) || (m_Maximum[comp] == m_Minimum[comp])) enoughDynamic = true;
           }
         if (allMinMaxWithinDynamic && enoughDynamic)
           {
