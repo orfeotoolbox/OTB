@@ -244,7 +244,7 @@ public:
         //and at least one band has enough dynamic
         //no rescaling should be applied
         bool allMinMaxWithinDynamic = true;
-        bool enoughDynamic = false;//FIXME desactivated
+        bool enoughDynamic = false;
         for (unsigned int comp = 0; comp < nbComps; ++comp)
           {
           if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false; //take margin for rounding errors
