@@ -26,7 +26,7 @@
 //  This basic example shows how compute shape attributes at the object level.
 //  The input image is firstly converted into a set of regions (
 // \doxygen{itk}{ShapeLabelObject}), some attribute values of each
-//  object are computed and then saved to an ASCII file. 
+//  object are computed and then saved to an ASCII file.
 //
 //  Software Guide : EndLatex
 
@@ -41,11 +41,11 @@
 
 int main(int argc, char * argv[])
 {
-  
-  
-  if( argc != 3)
+
+  if (argc != 3)
     {
-    std::cerr << "usage: " << argv[0] << " input outputcentroidlist" << std::endl;
+    std::cerr << "usage: " << argv[0] << " input outputcentroidlist" <<
+    std::endl;
     return EXIT_FAILURE;
     }
 
@@ -58,16 +58,16 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   const int dim = 2;
-  typedef unsigned long                           PixelType;
-  typedef itk::Image< PixelType, dim >            ImageType;
-  typedef unsigned long                           LabelType;
-  typedef itk::ShapeLabelObject< LabelType, dim > LabelObjectType;
-  typedef itk::LabelMap< LabelObjectType >        LabelMapType;
+  typedef unsigned long                         PixelType;
+  typedef itk::Image<PixelType, dim>            ImageType;
+  typedef unsigned long                         LabelType;
+  typedef itk::ShapeLabelObject<LabelType, dim> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>        LabelMapType;
   typedef itk::LabelImageToLabelMapFilter
-                      < ImageType, LabelMapType > ConverterType;
-  
+  <ImageType, LabelMapType> ConverterType;
+
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
   // Firstly, the image reader is instantiated.
@@ -75,12 +75,11 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileReader< ImageType > ReaderType;
+  typedef itk::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   // Software Guide : EndCodeSnippet
 
-  
   //  Software Guide : BeginLatex
   //
   // Here the \doxygen{itk}{ShapeLabelObject} type
@@ -91,10 +90,9 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ShapeLabelMapFilter< LabelMapType > ShapeFilterType;
+  typedef itk::ShapeLabelMapFilter<LabelMapType> ShapeFilterType;
   // Software Guide : EndCodeSnippet
-  
-  
+
   //  Software Guide : BeginLatex
   //
   // The input image is converted in a collection of objects
@@ -103,15 +101,14 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   ConverterType::Pointer converter = ConverterType::New();
-  converter->SetInput( reader->GetOutput() );
-  converter->SetBackgroundValue( itk::NumericTraits<LabelType>::min() );
+  converter->SetInput(reader->GetOutput());
+  converter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
 
   ShapeFilterType::Pointer shape = ShapeFilterType::New();
 
-  shape->SetInput( converter->GetOutput() );
+  shape->SetInput(converter->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  
   //  Software Guide : BeginLatex
   //
   // Update the shape filter, so its output will be up to date.
@@ -122,9 +119,11 @@ int main(int argc, char * argv[])
   shape->Update();
   // Software Guide : EndCodeSnippet
 
-  std::cout << "Nb. objects conv. " << converter->GetOutput()->GetNumberOfLabelObjects() << std::endl;
+  std::cout << "Nb. objects conv. " <<
+  converter->GetOutput()->GetNumberOfLabelObjects() << std::endl;
 
-  std::cout << "Nb. objects shape " << shape->GetOutput()->GetNumberOfLabelObjects() << std::endl;
+  std::cout << "Nb. objects shape " <<
+  shape->GetOutput()->GetNumberOfLabelObjects() << std::endl;
 
   //  Software Guide : BeginLatex
   //
@@ -136,17 +135,19 @@ int main(int argc, char * argv[])
   // In this example, we write 2 shape attributes of each object to a text file (the size and the centroid coordinates).
   //
   // Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
-  std::ofstream outfile( argv[2] );
+  std::ofstream outfile(argv[2]);
 
   LabelMapType::Pointer labelMap = shape->GetOutput();
-  for( unsigned long label=1; label<=labelMap->GetNumberOfLabelObjects(); label++ )
+  for (unsigned long label = 1;
+       label <= labelMap->GetNumberOfLabelObjects();
+       label++)
     {
     // we don't need a SmartPointer of the label object here, because the reference is kept
     // in the label map.
-    const LabelObjectType * labelObject = labelMap->GetLabelObject( label );
-    outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t" 
+    const LabelObjectType * labelObject = labelMap->GetLabelObject(label);
+    outfile << label << "\t" << labelObject->GetPhysicalSize() << "\t"
             << labelObject->GetCentroid() << std::endl;
     }
 

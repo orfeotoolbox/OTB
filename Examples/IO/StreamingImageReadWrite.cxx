@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginLatex
 //
 //  As we have seen, the reading of images is managed by the class \doxygen{otb}{ImageFileReader}
@@ -66,17 +65,15 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   // Verify the number of parameters in the command line
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -86,11 +83,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char      PixelType;
-  const   unsigned int        Dimension = 2;
-  typedef otb::Image< PixelType, Dimension >    ImageType;
+  typedef unsigned char PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -103,11 +99,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
-  typedef itk::RescaleIntensityImageFilter< ImageType, ImageType> RescalerType;
-  typedef otb::StreamingImageFileWriter< ImageType >  WriterType;
+  typedef otb::ImageFileReader<ImageType>                        ReaderType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
+  typedef otb::StreamingImageFileWriter<ImageType>               WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -122,17 +117,15 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer   writer = WriterType::New();
   // Software Guide : EndCodeSnippet
-
 
   // Here we recover the file names from the command line arguments
   //
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-
 
   //  Software Guide : BeginLatex
   //
@@ -148,12 +141,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  writer->SetFileName( outputFilename );
+  writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -163,8 +155,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( reader->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(reader->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -174,19 +166,18 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   try
-  {
+    {
     // Software Guide : BeginCodeSnippet
     writer->Update();
     // Software Guide : EndCodeSnippet
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -199,8 +190,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

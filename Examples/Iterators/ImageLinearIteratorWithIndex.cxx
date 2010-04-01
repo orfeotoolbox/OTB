@@ -103,18 +103,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
   // Verify the number of parameters on the command line.
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile"
               << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -126,31 +126,31 @@ int main( int argc, char *argv[] )
 
   const unsigned int Dimension = 2;
 
-  typedef itk::RGBPixel< unsigned char > RGBPixelType;
-  typedef otb::Image< RGBPixelType, Dimension >  ImageType;
+  typedef itk::RGBPixel<unsigned char>        RGBPixelType;
+  typedef otb::Image<RGBPixelType, Dimension> ImageType;
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::ImageLinearIteratorWithIndex< ImageType >       IteratorType;
-  typedef itk::ImageLinearConstIteratorWithIndex< ImageType >  ConstIteratorType;
+  typedef itk::ImageLinearIteratorWithIndex<ImageType>      IteratorType;
+  typedef itk::ImageLinearConstIteratorWithIndex<ImageType> ConstIteratorType;
 // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< ImageType > ReaderType;
-  typedef otb::ImageFileWriter< ImageType > WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ImageType::ConstPointer inputImage;
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  ReaderType::Pointer     reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
   try
-  {
+    {
     reader->Update();
     inputImage = reader->GetOutput();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught a !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -161,8 +161,8 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   ImageType::Pointer outputImage = ImageType::New();
-  outputImage->SetRegions( inputImage->GetRequestedRegion() );
-  outputImage->CopyInformation( inputImage );
+  outputImage->SetRegions(inputImage->GetRequestedRegion());
+  outputImage->CopyInformation(inputImage);
   outputImage->Allocate();
 // Software Guide : EndCodeSnippet
 
@@ -176,8 +176,8 @@ int main( int argc, char *argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  ConstIteratorType inputIt( inputImage, inputImage->GetRequestedRegion() );
-  IteratorType outputIt( outputImage, inputImage->GetRequestedRegion() );
+  ConstIteratorType inputIt(inputImage, inputImage->GetRequestedRegion());
+  IteratorType      outputIt(outputImage, inputImage->GetRequestedRegion());
 
   inputIt.SetDirection(0);
   outputIt.SetDirection(0);
@@ -191,34 +191,34 @@ int main( int argc, char *argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  for ( inputIt.GoToBegin(),  outputIt.GoToBegin(); ! inputIt.IsAtEnd();
-        outputIt.NextLine(),  inputIt.NextLine())
-  {
+  for (inputIt.GoToBegin(),  outputIt.GoToBegin(); !inputIt.IsAtEnd();
+       outputIt.NextLine(),  inputIt.NextLine())
+    {
     inputIt.GoToBeginOfLine();
     outputIt.GoToEndOfLine();
     --outputIt;
-    while ( ! inputIt.IsAtEndOfLine() )
-    {
-      outputIt.Set( inputIt.Get() );
+    while (!inputIt.IsAtEndOfLine())
+      {
+      outputIt.Set(inputIt.Get());
       ++inputIt;
       --outputIt;
+      }
     }
-  }
 // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->SetInput(outputImage);
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
 // Software Guide : BeginLatex
 //

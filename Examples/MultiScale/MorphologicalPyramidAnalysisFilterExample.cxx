@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {suburb2.jpeg}
 //    OUTPUTS: {suburb2_an_1.jpeg}, {suburb2_an_2.jpeg},  {suburb2_an_3.jpeg}, {suburb2_an_4.jpeg}
@@ -58,16 +57,16 @@
 int main(int argc, char * argv[])
 {
 
-  if ( argc != 24)
-  {
+  if (argc != 24)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImagePrefix iterations decimationRatio" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  const char * inputFilename = argv[1];
+  const char *       inputFilename = argv[1];
   const unsigned int numberOfLevels = atoi(argv[22]);
-  const float decimationRatio = atof(argv[23]);
+  const float        decimationRatio = atof(argv[23]);
 
 // Software Guide : BeginLatex
 //
@@ -81,10 +80,10 @@ int main(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
 
@@ -100,7 +99,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef itk::BinaryBallStructuringElement<InputPixelType,
-  Dimension> StructuringElementType;
+                                            Dimension> StructuringElementType;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -116,7 +115,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
-  InputImageType,StructuringElementType>
+                                                 InputImageType,
+                                                 StructuringElementType>
   OpeningClosingFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -130,7 +130,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
-  OutputImageType,OpeningClosingFilterType>
+                                                  OutputImageType,
+                                                  OpeningClosingFilterType>
   PyramidFilterType;
 // Software Guide : EndCodeSnippet
 
@@ -221,30 +222,30 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer =  WriterType::New();
 
-  int i=1;
+  int i = 1;
 
   // Writing the results images
-  std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
-  while (itAnalyse!=pyramid->GetOutput()->End())
-  {
+  std::cout << (itAnalyse != (pyramid->GetOutput()->End())) << std::endl;
+  while (itAnalyse != pyramid->GetOutput()->End())
+    {
     writer->SetInput(itAnalyse.Get());
-    writer->SetFileName(argv[0*4+i+1]);
+    writer->SetFileName(argv[0 * 4 + i + 1]);
     writer->Update();
 
     writer->SetInput(itSupFilter.Get());
-    writer->SetFileName(argv[1*4+i+1]);
+    writer->SetFileName(argv[1 * 4 + i + 1]);
     writer->Update();
 
     writer->SetInput(itInfFilter.Get());
-    writer->SetFileName(argv[2*4+i+1]);
+    writer->SetFileName(argv[2 * 4 + i + 1]);
     writer->Update();
 
     writer->SetInput(itInfDeci.Get());
-    writer->SetFileName(argv[3*4+i+1]);
+    writer->SetFileName(argv[3 * 4 + i + 1]);
     writer->Update();
 
     writer->SetInput(itSupDeci.Get());
-    writer->SetFileName(argv[4*4+i+1]);
+    writer->SetFileName(argv[4 * 4 + i + 1]);
     writer->Update();
 
     ++itAnalyse;
@@ -253,7 +254,7 @@ int main(int argc, char * argv[])
     ++itInfDeci;
     ++itSupDeci;
     ++i;
-  }
+    }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -325,7 +326,6 @@ int main(int argc, char * argv[])
 // \end{figure}
 //
 // Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

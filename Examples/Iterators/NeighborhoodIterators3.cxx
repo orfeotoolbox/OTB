@@ -61,44 +61,44 @@
 #include "itkNeighborhoodAlgorithm.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile direction"
               << std::endl;
     return -1;
-  }
+    }
 
-  typedef float PixelType;
-  typedef otb::Image< PixelType, 2 >  ImageType;
-  typedef otb::ImageFileReader< ImageType > ReaderType;
+  typedef float                           PixelType;
+  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef itk::ConstNeighborhoodIterator< ImageType > NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator< ImageType>        IteratorType;
+  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
+  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   try
-  {
+    {
     reader->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
   output->Allocate();
 
   itk::SobelOperator<PixelType, 2> sobelOperator;
-  sobelOperator.SetDirection( ::atoi(argv[3]) );
+  sobelOperator.SetDirection(::atoi(argv[3]));
   sobelOperator.CreateDirectional();
 
   itk::NeighborhoodInnerProduct<ImageType> innerProduct;
@@ -115,9 +115,9 @@ int main( int argc, char * argv[] )
 
 // Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodAlgorithm
-  ::ImageBoundaryFacesCalculator< ImageType > FaceCalculatorType;
+  ::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
 
-  FaceCalculatorType faceCalculator;
+  FaceCalculatorType               faceCalculator;
   FaceCalculatorType::FaceListType faceList;
 // Software Guide : EndCodeSnippet
 
@@ -170,22 +170,21 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  IteratorType out;
+  IteratorType             out;
   NeighborhoodIteratorType it;
 
-  for ( fit=faceList.begin(); fit != faceList.end(); ++fit)
-  {
-    it = NeighborhoodIteratorType( sobelOperator.GetRadius(),
-                                   reader->GetOutput(), *fit );
-    out = IteratorType( output, *fit );
-
-    for (it.GoToBegin(), out.GoToBegin(); ! it.IsAtEnd(); ++it, ++out)
+  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
     {
-      out.Set( innerProduct(it, sobelOperator) );
-    }
-  }
-// Software Guide : EndCodeSnippet
+    it = NeighborhoodIteratorType(sobelOperator.GetRadius(),
+                                  reader->GetOutput(), *fit);
+    out = IteratorType(output, *fit);
 
+    for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
+      {
+      out.Set(innerProduct(it, sobelOperator));
+      }
+    }
+// Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
 //
@@ -199,32 +198,32 @@ int main( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-  typedef unsigned char WritePixelType;
-  typedef otb::Image< WritePixelType, 2 > WriteImageType;
-  typedef otb::ImageFileWriter< WriteImageType > WriterType;
+  typedef unsigned char                        WritePixelType;
+  typedef otb::Image<WritePixelType, 2>        WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<
-  ImageType, WriteImageType > RescaleFilterType;
+    ImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
   rescaler->SetInput(output);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( rescaler->GetOutput() );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(rescaler->GetOutput());
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

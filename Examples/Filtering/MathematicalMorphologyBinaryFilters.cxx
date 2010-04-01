@@ -48,7 +48,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
@@ -57,18 +56,16 @@
 
 #include "itkBinaryThresholdImageFilter.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 6 )
-  {
+  if (argc < 6)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  ";
     std::cerr << " outputImageFileErosion  outputImageFileDilation";
     std::cerr << " lowerThreshold upperThreshold " << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -80,19 +77,18 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
-  typedef unsigned char   InputPixelType;
-  typedef unsigned char   OutputPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< InputImageType  >  ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-
-  typedef itk::BinaryThresholdImageFilter< InputImageType, InputImageType >  ThresholdFilterType;
-
+  typedef itk::BinaryThresholdImageFilter<InputImageType,
+                                          InputImageType> ThresholdFilterType;
 
   //  Software Guide : BeginLatex
   //
@@ -114,8 +110,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryBallStructuringElement<
-  InputPixelType,
-  Dimension  >             StructuringElementType;
+    InputPixelType,
+    Dimension>             StructuringElementType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -125,19 +121,17 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   typedef itk::BinaryErodeImageFilter<
-  InputImageType,
-  OutputImageType,
-  StructuringElementType >  ErodeFilterType;
+    InputImageType,
+    OutputImageType,
+    StructuringElementType>  ErodeFilterType;
 
   typedef itk::BinaryDilateImageFilter<
-  InputImageType,
-  OutputImageType,
-  StructuringElementType >  DilateFilterType;
+    InputImageType,
+    OutputImageType,
+    StructuringElementType>  DilateFilterType;
   // Software Guide : EndCodeSnippet
-
 
   // Creation of Reader and Writer filters
   ReaderType::Pointer reader = ReaderType::New();
@@ -187,22 +181,20 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  StructuringElementType  structuringElement;
+  StructuringElementType structuringElement;
 
-  structuringElement.SetRadius( 1 );  // 3x3 structuring element
+  structuringElement.SetRadius(1);    // 3x3 structuring element
 
   structuringElement.CreateStructuringElement();
 
-  binaryErode->SetKernel(  structuringElement );
-  binaryDilate->SetKernel( structuringElement );
+  binaryErode->SetKernel(structuringElement);
+  binaryDilate->SetKernel(structuringElement);
   // Software Guide : EndCodeSnippet
 
+  reader->SetFileName(argv[1]);
 
-  reader->SetFileName( argv[1] );
-
-  writerErosion->SetFileName(  argv[2] );
-  writerDilation->SetFileName( argv[3] );
-
+  writerErosion->SetFileName(argv[2]);
+  writerDilation->SetFileName(argv[3]);
 
   //  Software Guide : BeginLatex
   //
@@ -211,28 +203,26 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  const InputPixelType lowerThreshold = atoi( argv[4] );
-  const InputPixelType upperThreshold = atoi( argv[5] );
+  const InputPixelType lowerThreshold = atoi(argv[4]);
+  const InputPixelType upperThreshold = atoi(argv[5]);
 
   // Software Guide : BeginCodeSnippet
-  thresholder->SetInput( reader->GetOutput() );
+  thresholder->SetInput(reader->GetOutput());
 
   InputPixelType background =   0;
   InputPixelType foreground = 255;
 
-  thresholder->SetOutsideValue( background );
-  thresholder->SetInsideValue(  foreground );
+  thresholder->SetOutsideValue(background);
+  thresholder->SetInsideValue(foreground);
 
-  thresholder->SetLowerThreshold( lowerThreshold );
-  thresholder->SetUpperThreshold( upperThreshold );
+  thresholder->SetLowerThreshold(lowerThreshold);
+  thresholder->SetUpperThreshold(upperThreshold);
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginCodeSnippet
-  binaryErode->SetInput( thresholder->GetOutput() );
-  binaryDilate->SetInput( thresholder->GetOutput() );
+  binaryErode->SetInput(thresholder->GetOutput());
+  binaryDilate->SetInput(thresholder->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -250,10 +240,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  binaryErode->SetErodeValue( foreground );
-  binaryDilate->SetDilateValue( foreground );
+  binaryErode->SetErodeValue(foreground);
+  binaryDilate->SetDilateValue(foreground);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -265,13 +254,12 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  writerDilation->SetInput( binaryDilate->GetOutput() );
+  writerDilation->SetInput(binaryDilate->GetOutput());
   writerDilation->Update();
   // Software Guide : EndCodeSnippet
 
-  writerErosion->SetInput( binaryErode->GetOutput() );
+  writerErosion->SetInput(binaryErode->GetOutput());
   writerErosion->Update();
 
   //  Software Guide : BeginLatex
@@ -292,7 +280,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

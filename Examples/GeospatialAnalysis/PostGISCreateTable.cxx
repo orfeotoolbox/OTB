@@ -36,36 +36,36 @@
 
 int main(int argc, char * argv[])
 {
-  
+
   // Software Guide : BeginLatex
   //
-  // We use a PostGIS (PQXX-based) transactor 
+  // We use a PostGIS (PQXX-based) transactor
   // for creating PostGIS tables.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef otb::PostGISCreateTableTransactor TransactorType;
-  
+
   TransactorType myTransactor;
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   //
   // We set arguments of the transactor.
-  
+
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   unsigned short dimension = 2;
-  myTransactor.SetDimension( dimension );
+  myTransactor.SetDimension(dimension);
 
   std::string name = "mytable";
-  myTransactor.SetTableName( name );
+  myTransactor.SetTableName(name);
 
   int srid = -1;
-  myTransactor.SetSRID( srid );
+  myTransactor.SetSRID(srid);
 
-  myTransactor.SetRemoveExistingTable( true );
+  myTransactor.SetRemoveExistingTable(true);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -83,13 +83,13 @@ int main(int argc, char * argv[])
   const std::string userPassword = argv[4];
 
   typedef otb::PostGISConnectionImplementation GISConnectionType;
-  
+
   GISConnectionType::Pointer connection = GISConnectionType::New();
-  
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-  connection->SetPassword( userPassword );
+
+  connection->SetHost(hostName);
+  connection->SetDBName(dbName);
+  connection->SetUser(userName);
+  connection->SetPassword(userPassword);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -101,8 +101,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   connection->ConnectToDB();
-  
-  connection->PerformTransaction( myTransactor );
+
+  connection->PerformTransaction(myTransactor);
   // Software Guide : EndCodeSnippet
   return EXIT_SUCCESS;
 }

@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
 //    OUTPUTS: {QB_Toulouse_Ortho_PAN_rescaled.png}, {QB_Toulouse_Ortho_PAN_casted.png}
@@ -44,20 +43,21 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkCastImageFilter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 4 )
-  {
+  if (argc != 4)
+    {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
-    std::cerr << " <outputRescaledImageFile> <outputCastedImageFile>" << std::endl;
+    std::cerr << " <outputRescaledImageFile> <outputCastedImageFile>" <<
+    std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  typedef  unsigned short InputPixelType;
-  typedef  unsigned char  OutputPixelType;
-  typedef otb::Image<InputPixelType,2> InputImageType;
-  typedef otb::Image<OutputPixelType,2> OutputImageType;
+  typedef  unsigned short                InputPixelType;
+  typedef  unsigned char                 OutputPixelType;
+  typedef otb::Image<InputPixelType, 2>  InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -70,11 +70,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType,
+                                           OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();

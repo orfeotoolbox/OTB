@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the details of the seam carving operation.
@@ -42,7 +41,6 @@
 //    50
 //  Software Guide : EndCommandLineArgs
 
-
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 #include "otbImageFileReader.h"
@@ -56,7 +54,6 @@
 
 #include "itkImageDuplicator.h"
 
-
 int main(int argc, char * argv[])
 {
 
@@ -64,23 +61,26 @@ int main(int argc, char * argv[])
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType, Dimension >  ImageType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::PolyLineParametricPath<Dimension>   PathType;
+  typedef otb::Image<InputPixelType, Dimension>  ImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
 
-  typedef otb::ImageFileReader< ImageType >                            ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >                      WriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  typedef otb::ImageFileReader<ImageType>
+                                                            ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>
+                                                            WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescalerType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
+  WriterType::Pointer   writer = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
   const char * filenamereader = argv[1];
-  reader->SetFileName( filenamereader );
+  reader->SetFileName(filenamereader);
 
   const char * filenamewriter = argv[2];
-  writer->SetFileName( filenamewriter );
+  writer->SetFileName(filenamewriter);
 
   int iteration = atoi(argv[3]);
 
@@ -92,7 +92,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::GradientMagnitudeImageFilter< ImageType, ImageType> GradientType;
+  typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> GradientType;
   GradientType::Pointer gradient = GradientType::New();
   // Software Guide : EndCodeSnippet
 
@@ -133,7 +133,7 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageDuplicator< ImageType > duplicatorType;
+  typedef itk::ImageDuplicator<ImageType> duplicatorType;
   duplicatorType::Pointer duplicator = duplicatorType::New();
   // Software Guide : EndCodeSnippet
 
@@ -151,12 +151,11 @@ int main(int argc, char * argv[])
 
   double energyVert, energyHor;
 
-  for (int i=0; i<iteration; i++)
-  {
+  for (int i = 0; i < iteration; i++)
+    {
 
-    gradient->SetInput( duplicator->GetOutput() );
+    gradient->SetInput(duplicator->GetOutput());
     // Software Guide : EndCodeSnippet
-
 
     //  Software Guide : BeginLatex
     //
@@ -168,17 +167,16 @@ int main(int argc, char * argv[])
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    carvingFilterVert->SetInput( gradient->GetOutput() );
+    carvingFilterVert->SetInput(gradient->GetOutput());
     carvingFilterVert->SetDirection(0);
     carvingFilterVert->UpdateLargestPossibleRegion();
     energyVert = carvingFilterVert->GetEnergyPerPix();
 
-    carvingFilterHor->SetInput( gradient->GetOutput() );
+    carvingFilterHor->SetInput(gradient->GetOutput());
     carvingFilterHor->SetDirection(1);
     carvingFilterHor->UpdateLargestPossibleRegion();
     energyHor = carvingFilterHor->GetEnergyPerPix();
     // Software Guide : EndCodeSnippet
-
 
     //  Software Guide : BeginLatex
     //
@@ -188,19 +186,19 @@ int main(int argc, char * argv[])
 
     // Software Guide : BeginCodeSnippet
     if (energyVert < energyHor)
-    {
-      removeCarvingPath->SetInput( duplicator->GetOutput() );
-      removeCarvingPath->SetInputPath( carvingFilterVert->GetOutput() );
+      {
+      removeCarvingPath->SetInput(duplicator->GetOutput());
+      removeCarvingPath->SetInputPath(carvingFilterVert->GetOutput());
       removeCarvingPath->SetDirection(0);
       removeCarvingPath->UpdateLargestPossibleRegion();
-    }
+      }
     else
-    {
-      removeCarvingPath->SetInput( duplicator->GetOutput() );
-      removeCarvingPath->SetInputPath( carvingFilterHor->GetOutput() );
+      {
+      removeCarvingPath->SetInput(duplicator->GetOutput());
+      removeCarvingPath->SetInputPath(carvingFilterHor->GetOutput());
       removeCarvingPath->SetDirection(1);
       removeCarvingPath->UpdateLargestPossibleRegion();
-    }
+      }
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -213,7 +211,7 @@ int main(int argc, char * argv[])
     duplicator->SetInputImage(removeCarvingPath->GetOutput());
     duplicator->Update();
 
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -223,8 +221,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( duplicator->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(duplicator->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
 
@@ -245,7 +243,6 @@ int main(int argc, char * argv[])
   // \end{figure}
   //
   // Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

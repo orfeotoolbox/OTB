@@ -36,5 +36,3 @@ void RegisterTests()
 #undef main
 #define main PanSharpeningExampleTest
 #include "PanSharpeningExample.cxx"
-
-

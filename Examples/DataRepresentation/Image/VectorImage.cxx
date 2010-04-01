@@ -54,7 +54,6 @@
 #include "otbVectorImage.h"
 // Software Guide : EndCodeSnippet
 
-
 int main(int, char *[])
 {
   // Software Guide : BeginLatex
@@ -69,8 +68,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char                 PixelType;
-  typedef otb::VectorImage< PixelType, 2 >    ImageType;
+  typedef unsigned char                  PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
   // Software Guide : EndCodeSnippet
 
   // Then the image object can be created
@@ -87,11 +86,11 @@ int main(int, char *[])
   start[1] =   0;  // first index on Y
 
   ImageType::RegionType region;
-  region.SetSize( size );
-  region.SetIndex( start );
+  region.SetSize(size);
+  region.SetIndex(start);
 
   // Pixel data is allocated
-  image->SetRegions( region );
+  image->SetRegions(region);
 
   // Software Guide : BeginLatex
   // Since the pixel dimensionality is choosen at runtime, one has to
@@ -103,12 +102,10 @@ int main(int, char *[])
   image->Allocate();
   // Software Guide : EndCodeSnippet
 
-
   ImageType::IndexType pixelIndex;
 
   pixelIndex[0] = 27;   // x position
   pixelIndex[1] = 29;   // y position
-
 
   // Software Guide : BeginLatex
   //
@@ -121,15 +118,14 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ImageType::PixelType   pixelValue;
-  pixelValue.Reserve( 4 );
+  ImageType::PixelType pixelValue;
+  pixelValue.Reserve(4);
 
   pixelValue[0] =  1;   // Blue component
   pixelValue[1] =  6;   // Green component
   pixelValue[2] =  100; // Red component
   pixelValue[3] =  100; // NIR component
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -139,7 +135,7 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  image->SetPixel(   pixelIndex,   pixelValue  );
+  image->SetPixel(pixelIndex,   pixelValue);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -149,7 +145,7 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ImageType::PixelType value = image->GetPixel( pixelIndex );
+  ImageType::PixelType value = image->GetPixel(pixelIndex);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -161,7 +157,5 @@ int main(int, char *[])
   //
   // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

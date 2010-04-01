@@ -61,5 +61,3 @@ void RegisterTests()
 #undef main
 #define main TutorialsOrthoFusionTest
 #include "OrthoFusion.cxx"
-
-

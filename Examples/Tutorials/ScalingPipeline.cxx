@@ -21,7 +21,6 @@
 //    OUTPUTS: {TutorialsScalingPipelineOutput.png}
 //  Software Guide : EndCommandLineArgs
 
-
 //  Software Guide : BeginLatex
 //
 //  This example illustrates the use of the
@@ -41,7 +40,7 @@
 #include "itkCannyEdgeDetectionImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 // Software Guide : EndCodeSnippet
 
@@ -53,10 +52,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef double PixelType;
+  typedef double                   PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
-  typedef unsigned char OutputPixelType;
+  typedef unsigned char                  OutputPixelType;
   typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
 
@@ -72,13 +71,12 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader=ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
 
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer writer=WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -93,7 +91,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::CannyEdgeDetectionImageFilter
-  <ImageType,ImageType> FilterType;
+  <ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -116,13 +114,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter
-  <ImageType,OutputImageType> RescalerType;
+  <ImageType, OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -149,5 +146,3 @@ int main( int argc, char * argv[] )
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

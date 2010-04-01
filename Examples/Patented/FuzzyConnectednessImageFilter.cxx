@@ -37,12 +37,10 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkSimpleFuzzyConnectednessScalarImageFilter.h"
 #include "otbImage.h"
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -58,22 +56,19 @@
 #include "itkConfidenceConnectedImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage outputImage outputAffinityMap " << std::endl;
     std::cerr << " seedX seedY multiplier " << std::endl;
     return 1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -83,9 +78,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float            InputPixelType;
-  const    unsigned int     Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
+  typedef  float InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -97,10 +92,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   unsigned char   BinaryPixelType;
-  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef   unsigned char                        BinaryPixelType;
+  typedef otb::Image<BinaryPixelType, Dimension> BinaryImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -111,14 +105,13 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ConfidenceConnectedImageFilter<
-  InputImageType,
-  BinaryImageType
-  >  ConfidenceConnectedFilterType;
+    InputImageType,
+    BinaryImageType
+    >  ConfidenceConnectedFilterType;
 
   ConfidenceConnectedFilterType::Pointer confidenceConnectedFilter =
     ConfidenceConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -129,11 +122,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::SimpleFuzzyConnectednessScalarImageFilter<
-  InputImageType,
-  BinaryImageType
-  >  FuzzySegmentationFilterType;
+    InputImageType,
+    BinaryImageType
+    >  FuzzySegmentationFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -151,7 +143,6 @@ int main( int argc, char *argv[] )
     FuzzySegmentationFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The affinity map can be accessed through the type \code{FuzzySceneType}
@@ -159,35 +150,33 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef FuzzySegmentationFilterType::FuzzySceneType  FuzzySceneType;
+  typedef FuzzySegmentationFilterType::FuzzySceneType FuzzySceneType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
   // We instantiate reader and writer types
   //
   //  Software Guide : EndLatex
-  typedef  otb::ImageFileReader< InputImageType  >    ReaderType;
-  typedef  otb::ImageFileWriter< BinaryImageType >    WriterType;
-  typedef  otb::ImageFileWriter< FuzzySceneType  >    FuzzyWriterType;
+  typedef  otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef  otb::ImageFileWriter<BinaryImageType> WriterType;
+  typedef  otb::ImageFileWriter<FuzzySceneType>  FuzzyWriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   FuzzyWriterType::Pointer fwriter = FuzzyWriterType::New();
 
-  reader->SetFileName(  argv[1] );
-  writer->SetFileName(  argv[2] );
-  fwriter->SetFileName( argv[3] );
-
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
+  fwriter->SetFileName(argv[3]);
 
   InputImageType::IndexType index;
 
   index[0] = atoi(argv[4]);
   index[1] = atoi(argv[5]);
 
-  const double varianceMultiplier = atof( argv[6] );
+  const double varianceMultiplier = atof(argv[6]);
 
   //  Software Guide : BeginLatex
   //
@@ -198,20 +187,18 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  confidenceConnectedFilter->SetInput( reader->GetOutput()  );
-  confidenceConnectedFilter->SetMultiplier( varianceMultiplier );
-  confidenceConnectedFilter->SetNumberOfIterations( 2 );
-  confidenceConnectedFilter->AddSeed( index );
+  confidenceConnectedFilter->SetInput(reader->GetOutput());
+  confidenceConnectedFilter->SetMultiplier(varianceMultiplier);
+  confidenceConnectedFilter->SetNumberOfIterations(2);
+  confidenceConnectedFilter->AddSeed(index);
 
   confidenceConnectedFilter->Update();
   // Software Guide : EndCodeSnippet
 
-
   WriterType::Pointer confidenceWriter = WriterType::New();
-  confidenceWriter->SetInput( confidenceConnectedFilter->GetOutput() );
+  confidenceWriter->SetInput(confidenceConnectedFilter->GetOutput());
   confidenceWriter->SetFileName("confidenceConnectedPreprocessing.png");
   confidenceWriter->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -223,15 +210,14 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  fuzzysegmenter->SetInput( reader->GetOutput() );
+  fuzzysegmenter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
-  const double  meanEstimation      = confidenceConnectedFilter->GetMean();
-  const double  varianceEstimation  = confidenceConnectedFilter->GetVariance();
+  const double meanEstimation      = confidenceConnectedFilter->GetMean();
+  const double varianceEstimation  = confidenceConnectedFilter->GetVariance();
 
   std::cout << "Mean     estimation = " << meanEstimation     << std::endl;
   std::cout << "Variance estimation = " << varianceEstimation << std::endl;
-
 
   //  Software Guide : BeginLatex
   //
@@ -253,12 +239,11 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  fuzzysegmenter->SetObjectSeed( index );
-  fuzzysegmenter->SetMean( meanEstimation );
-  fuzzysegmenter->SetVariance( varianceEstimation );
-  fuzzysegmenter->SetThreshold( 0.5 );
+  fuzzysegmenter->SetObjectSeed(index);
+  fuzzysegmenter->SetMean(meanEstimation);
+  fuzzysegmenter->SetVariance(varianceEstimation);
+  fuzzysegmenter->SetThreshold(0.5);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -271,20 +256,15 @@ int main( int argc, char *argv[] )
   fuzzysegmenter->Update();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginCodeSnippet
-  writer->SetInput( fuzzysegmenter->GetOutput() );
+  writer->SetInput(fuzzysegmenter->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginCodeSnippet
-  fwriter->SetInput( fuzzysegmenter->GetFuzzyScene() );
+  fwriter->SetInput(fuzzysegmenter->GetFuzzyScene());
   fwriter->Update();
   // Software Guide : EndCodeSnippet
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -53,7 +53,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 // Software Guide : EndCodeSnippet
@@ -66,8 +66,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
+  typedef otb::VectorImage<PixelType, Dimension>  ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -77,8 +77,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType>
-  ClassificationFilterType;
+  typedef otb::SVMImageClassificationFilter
+               <ImageType, LabeledImageType>  ClassificationFilterType;
   typedef ClassificationFilterType::ModelType ModelType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -90,7 +90,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex

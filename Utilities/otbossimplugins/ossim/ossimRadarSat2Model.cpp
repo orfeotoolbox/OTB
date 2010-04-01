@@ -88,20 +88,34 @@ ossimObject* ossimRadarSat2Model::dup() const
 double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
 {
    if (_n_srgr==0) return(-1) ;
-
+   
    double relativeGroundRange, slantRange = 0.0 ;
-
+   
    // in the case of Georeferenced images, _refPoint->get_distance()
    // contains the ground range
    relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
-
+   //relativeGroundRange = 1 + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* theGSD.x;
+   //relativeGroundRange = (8.78400000e+03)*theGSD.x;
+   
+   if ( traceDebug() )
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "_refPoint->get_distance(): " << _refPoint->get_distance()
+         << "\n_sensor->get_col_direction() " << _sensor->get_col_direction()
+         << "\n(col-_refPoint->get_pix_col()) "
+         << (col-_refPoint->get_pix_col())
+         << "\n_refPoint->get_pix_col() : " << _refPoint->get_pix_col()
+         << "\n relativeGroundRange : " << relativeGroundRange << endl;
+   }
+   
    int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
    /**
     * @todo : could be improved (date choice)
     */
-
-   for (int i=0 ; i<static_cast<int>(_SrGr_coeffs[numSet].size()); i++)
+   
+   for (int i=0 ; i < static_cast<int>(_SrGr_coeffs[numSet].size()); i++)
    {
+      
       slantRange += _SrGr_coeffs[numSet][i]*pow(relativeGroundRange,i) ;
    }
 
@@ -259,6 +273,15 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
       lineSampleToWorld(theImageClipRect.ur(), ur);
       lineSampleToWorld(theImageClipRect.lr(), lr);
       lineSampleToWorld(theImageClipRect.ll(), ll);
+
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "theImageClipRect : " << theImageClipRect
+            << "ul, ur, lr, ll " << ul << ", " << ur
+            << ", " << lr << " , " << ll << endl;
+      }
+      
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
    }
 
@@ -877,7 +900,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
       double time = (double) date.get_second() + date.get_decimal();
       time += theImageSize.y / _sensor->get_prf() ;
       date.set_second((int) floor(time)) ;
-      date.set_decimal(time - floor(time)) ;
+      date.set_decimal(time - floor(time));
    }
 
    if (traceDebug())
@@ -905,16 +928,23 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
    delete ephemeris;
    ephemeris = 0;
 
-   if ( !rsDoc.getSlantRangeNearEdge(xdoc, s) )
+   double distance = 1;
+
+   // Only set distance to 
+   if (!_isProductGeoreferenced)
    {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << "getSlantRangeNearEdge error! exiting\n";
-      }
-      return false;
+	   if ( !rsDoc.getSlantRangeNearEdge(xdoc, s) )
+	   {
+		   if (traceDebug())
+		   {
+			   ossimNotify(ossimNotifyLevel_DEBUG)
+    
+				   << MODULE << "getSlantRangeNearEdge error! exiting\n";
+		   }      
+		   return false;
+	   }
+	   distance = s.toDouble();
    }
-   double distance = s.toDouble();
 
    //---
    // in the case of Georeferenced images, the ground range is stored in
@@ -933,6 +963,7 @@ bool ossimRadarSat2Model::initRefPoint(const ossimXmlDocument* xdoc,
          distance += theImageSize.x * theGSD.x;
       }
    }
+
 
    _refPoint->set_distance(distance);
 

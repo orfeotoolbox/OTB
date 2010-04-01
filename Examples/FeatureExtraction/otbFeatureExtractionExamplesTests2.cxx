@@ -32,7 +32,7 @@ void RegisterTests()
   //REGISTER_TEST(ImageToSIFTKeyPointSetFilterTest);
   REGISTER_TEST(ScaleInvariantFeatureImageFilterTest);
   REGISTER_TEST(CloudDetectionExampleTest);
-  REGISTER_TEST( RightAngleDetectionExample);
+  REGISTER_TEST(RightAngleDetectionExample);
 }
 
 #undef main

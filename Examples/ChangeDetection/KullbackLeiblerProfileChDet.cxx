@@ -57,25 +57,27 @@
 int main(int argc, char * argv[])
 {
   try
-  {
-    if (argc != 9)
     {
-      std::cerr<<"Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
-      std::cerr << argv[0] << " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
+    if (argc != 9)
+      {
+      std::cerr <<
+      "Detection de changements par mesure de Kullback-Leibler, optimisee par un developpement de Edgeworth\n";
+      std::cerr << argv[0] <<
+      " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
       return 1;
-    }
+      }
 
-    char * fileName1 = argv[1];
-    char * fileName2 = argv[2];
-    char * fileNameOut = argv[3];
-    int winSizeMin = atoi(argv[4]);
-    int winSizeMax = atoi(argv[5]);
+    char *       fileName1 = argv[1];
+    char *       fileName2 = argv[2];
+    char *       fileNameOut = argv[3];
+    int          winSizeMin = atoi(argv[4]);
+    int          winSizeMax = atoi(argv[5]);
     unsigned int ri = atoi(argv[6]);
     unsigned int gi = atoi(argv[7]);
     unsigned int bi = atoi(argv[8]);
 
     const unsigned int Dimension = 2;
-    typedef double PixelType;
+    typedef double        PixelType;
     typedef unsigned char OutPixelType;
 
     //  Software Guide : BeginLatex
@@ -88,23 +90,32 @@ int main(int argc, char * argv[])
     //  Software Guide : EndLatex
 
     //  Software Guide : BeginCodeSnippet
-    typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+    typedef otb::Image<PixelType, Dimension>       ImageType;
+    typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
     typedef otb::KullbackLeiblerProfileImageFilter<ImageType,
-    ImageType,VectorImageType> FilterType;
+                                                   ImageType,
+                                                   VectorImageType> FilterType;
     //  Software Guide : EndCodeSnippet
 
-    typedef otb::VectorImage<OutPixelType,Dimension> OutVectorImageType;
-    typedef otb::ImageFileReader<ImageType> ReaderType;
-    typedef otb::ImageFileWriter<OutVectorImageType> WriterType;
-    typedef otb::MultiChannelExtractROI<PixelType,PixelType> ChannelSelecterType;
-    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,OutVectorImageType> RescalerType;
+    typedef otb::VectorImage<OutPixelType,
+                             Dimension>
+    OutVectorImageType;
+    typedef otb::ImageFileReader<ImageType>
+    ReaderType;
+    typedef otb::ImageFileWriter<OutVectorImageType>
+    WriterType;
+    typedef otb::MultiChannelExtractROI<PixelType,
+                                        PixelType>
+    ChannelSelecterType;
+    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
+                                                   OutVectorImageType>
+    RescalerType;
 
     ReaderType::Pointer reader1 = ReaderType::New();
-    reader1->SetFileName( fileName1 );
+    reader1->SetFileName(fileName1);
 
     ReaderType::Pointer reader2 = ReaderType::New();
-    reader2->SetFileName( fileName2 );
+    reader2->SetFileName(fileName2);
 
     //  Software Guide : BeginLatex
     //
@@ -122,9 +133,9 @@ int main(int argc, char * argv[])
     //
     //  Software Guide : BeginCodeSnippet
     FilterType::Pointer filter = FilterType::New();
-    filter->SetRadius( (winSizeMin-1)/2,(winSizeMax-1)/2 );
-    filter->SetInput1( reader1->GetOutput() );
-    filter->SetInput2( reader2->GetOutput() );
+    filter->SetRadius((winSizeMin - 1) / 2, (winSizeMax - 1) / 2);
+    filter->SetInput1(reader1->GetOutput());
+    filter->SetInput2(reader2->GetOutput());
     //  Software Guide : EndCodeSnippet
 
     ChannelSelecterType::Pointer channelSelecter = ChannelSelecterType::New();
@@ -135,7 +146,7 @@ int main(int argc, char * argv[])
 
     RescalerType::Pointer rescaler = RescalerType::New();
     rescaler->SetInput(channelSelecter->GetOutput());
-    OutVectorImageType::PixelType min,max;
+    OutVectorImageType::PixelType min, max;
     min.SetSize(3);
     max.SetSize(3);
     min.Fill(0);
@@ -163,19 +174,19 @@ int main(int argc, char * argv[])
     // \end{figure}
     //
     //  Software Guide : EndLatex
-  }
+    }
 
-  catch ( itk::ExceptionObject & err )
-  {
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception thrown !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   return EXIT_SUCCESS;
 }

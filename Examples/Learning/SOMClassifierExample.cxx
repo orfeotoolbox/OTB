@@ -53,24 +53,23 @@
 #include "otbSOMClassifier.h"
 // Software Guide : EndCodeSnippet
 
-
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
   if (argc != 4)
-  {
+    {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
               << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * imageFilename  = argv[1];
   const char * mapFilename  = argv[2];
   const char * outputFilename = argv[3];
 
-  typedef double                              InputPixelType;
-  typedef unsigned char                       LabelPixelType;
-  const   unsigned int                   Dimension = 2;
+  typedef double        InputPixelType;
+  typedef unsigned char LabelPixelType;
+  const unsigned int Dimension = 2;
 
   typedef itk::VariableLengthVector<InputPixelType> PixelType;
 
@@ -91,7 +90,7 @@ int main(int argc, char* argv[] )
 // Software Guide : EndCodeSnippet
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader< InputImageType >      ReaderType;
+  typedef otb::ImageFileReader<InputImageType>        ReaderType;
 
 //  Software Guide : BeginLatex
 //
@@ -108,8 +107,8 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::ListSample< PixelType> SampleType;
-  typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType>
+  typedef itk::Statistics::ListSample<PixelType> SampleType;
+  typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType>
   ClassifierType;
 // Software Guide : EndCodeSnippet
 //
@@ -121,8 +120,8 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image<LabelPixelType, Dimension>  OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+  typedef otb::Image<LabelPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -134,7 +133,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( imageFilename  );
+  reader->SetFileName(imageFilename);
   reader->Update();
 
   SOMReaderType::Pointer somreader = SOMReaderType::New();
@@ -153,15 +152,16 @@ int main(int argc, char* argv[] )
   SampleType::Pointer sample = SampleType::New();
 
   itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),
-                      reader->GetOutput()->GetLargestPossibleRegion());
+                                              reader->GetOutput()->
+                                              GetLargestPossibleRegion());
 
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-  {
+    {
     sample->PushBack(it.Get());
     ++it;
-  }
+    }
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -190,7 +190,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   OutputImageType::Pointer outputImage = OutputImageType::New();
-  outputImage->SetRegions( reader->GetOutput()->GetLargestPossibleRegion());
+  outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
 // Software Guide : EndCodeSnippet
 //
@@ -224,9 +224,9 @@ int main(int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
 
-  OutputIteratorType  outIt(outputImage,outputImage->GetLargestPossibleRegion());
+  OutputIteratorType outIt(outputImage, outputImage->GetLargestPossibleRegion());
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -240,11 +240,11 @@ int main(int argc, char* argv[] )
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
-  {
+    {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter;
     ++outIt;
-  }
+    }
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -271,7 +271,6 @@ int main(int argc, char* argv[] )
 // \label{fig:SOMMAPCLASS}
 // \end{figure}
 //  Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

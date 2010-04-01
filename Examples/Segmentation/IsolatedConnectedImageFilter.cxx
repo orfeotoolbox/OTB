@@ -26,7 +26,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {ConnectedThresholdOutput1.png}
 //  110 38 50 100
@@ -65,25 +64,22 @@
 #include "itkIsolatedConnectedImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImage.h"
 #include "itkCastImageFilter.h"
 #include "itkCurvatureFlowImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage  outputImage seedX1 seedY1";
     std::cerr << " lowerThreshold seedX2 seedY2" << std::endl;
     return 1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -93,37 +89,33 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   float           InternalPixelType;
-  const     unsigned int    Dimension = 2;
-  typedef otb::Image< InternalPixelType, Dimension >  InternalImageType;
+  typedef   float InternalPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InternalPixelType, Dimension> InternalImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::CastImageFilter< InternalImageType, OutputImageType >
+  typedef unsigned char                          OutputPixelType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef itk::CastImageFilter<InternalImageType, OutputImageType>
   CastingFilterType;
 
   CastingFilterType::Pointer caster = CastingFilterType::New();
 
-
   // We instantiate reader and writer types
   //
-  typedef  otb::ImageFileReader< InternalImageType > ReaderType;
-  typedef  otb::ImageFileWriter<  OutputImageType  > WriterType;
+  typedef  otb::ImageFileReader<InternalImageType> ReaderType;
+  typedef  otb::ImageFileWriter<OutputImageType>   WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
 
-
-  typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >
+  typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>
   CurvatureFlowImageFilterType;
   CurvatureFlowImageFilterType::Pointer smoothing =
     CurvatureFlowImageFilterType::New();
-
 
   //  Software Guide : BeginLatex
   //
@@ -132,10 +124,10 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::IsolatedConnectedImageFilter<InternalImageType, InternalImageType>
+  typedef itk::IsolatedConnectedImageFilter<InternalImageType,
+                                            InternalImageType>
   ConnectedFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -147,7 +139,6 @@ int main( int argc, char *argv[] )
   ConnectedFilterType::Pointer isolatedConnected = ConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  Now it is time to connect the pipeline.
@@ -155,16 +146,14 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  smoothing->SetInput( reader->GetOutput() );
-  isolatedConnected->SetInput( smoothing->GetOutput() );
-  caster->SetInput( isolatedConnected->GetOutput() );
-  writer->SetInput( caster->GetOutput() );
+  smoothing->SetInput(reader->GetOutput());
+  isolatedConnected->SetInput(smoothing->GetOutput());
+  caster->SetInput(isolatedConnected->GetOutput());
+  writer->SetInput(caster->GetOutput());
   // Software Guide : EndCodeSnippet
 
-
-  smoothing->SetNumberOfIterations( 5 );
-  smoothing->SetTimeStep( 0.125 );
-
+  smoothing->SetNumberOfIterations(5);
+  smoothing->SetTimeStep(0.125);
 
   //  Software Guide : BeginLatex
   //
@@ -178,26 +167,23 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
+  InternalImageType::IndexType indexSeed1;
 
-  InternalImageType::IndexType  indexSeed1;
+  indexSeed1[0] = atoi(argv[3]);
+  indexSeed1[1] = atoi(argv[4]);
 
-  indexSeed1[0] = atoi( argv[3] );
-  indexSeed1[1] = atoi( argv[4] );
+  const InternalPixelType lowerThreshold = atof(argv[5]);
 
-  const InternalPixelType lowerThreshold = atof( argv[5] );
+  InternalImageType::IndexType indexSeed2;
 
-  InternalImageType::IndexType  indexSeed2;
-
-  indexSeed2[0] = atoi( argv[6] );
-  indexSeed2[1] = atoi( argv[7] );
-
+  indexSeed2[0] = atoi(argv[6]);
+  indexSeed2[1] = atoi(argv[7]);
 
   // Software Guide : BeginCodeSnippet
-  isolatedConnected->SetLower(  lowerThreshold  );
-  isolatedConnected->SetSeed1( indexSeed1 );
-  isolatedConnected->SetSeed2( indexSeed2 );
+  isolatedConnected->SetLower(lowerThreshold);
+  isolatedConnected->SetSeed1(indexSeed1);
+  isolatedConnected->SetSeed2(indexSeed2);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -209,11 +195,9 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  isolatedConnected->SetReplaceValue( 255 );
+  isolatedConnected->SetReplaceValue(255);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -224,16 +208,15 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -248,7 +231,6 @@ int main( int argc, char *argv[] )
   std::cout << "Isolated Value Found = ";
   std::cout << isolatedConnected->GetIsolatedValue()  << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -300,8 +282,5 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

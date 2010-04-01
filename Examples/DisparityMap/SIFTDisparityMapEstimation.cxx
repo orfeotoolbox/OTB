@@ -46,7 +46,6 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbSiftFastImageFilter.h"
@@ -72,14 +71,14 @@
 #include "itkPointSet.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-  if (argc!= 4)
-  {
-    std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<"fixedFileName movingFileName fieldOutName" << std::endl;
+  if (argc != 4)
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << "fixedFileName movingFileName fieldOutName" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const unsigned int Dimension = 2;
 
@@ -95,37 +94,37 @@ int main (int argc, char* argv[])
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<RealType,Dimension> ImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<RealType, Dimension>        ImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-  //
-  // The SIFTs obtained for the matching will be stored in vector
-  // form inside a point set. So we need the following types:
-  //
-  // Software Guide : EndLatex
+//
+// The SIFTs obtained for the matching will be stored in vector
+// form inside a point set. So we need the following types:
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
+  typedef itk::VariableLengthVector<RealType>      RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-  //
-  // The filter for computing the SIFTs has a type defined as follows:
-  //
-  // Software Guide : EndLatex
+//
+// The filter for computing the SIFTs has a type defined as follows:
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::SiftFastImageFilter<ImageType,PointSetType>
+  typedef otb::SiftFastImageFilter<ImageType, PointSetType>
   ImageToSIFTKeyPointSetFilterType;
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-  //
-  // Although many choices for evaluating the distances during the
-  // matching procedure exist, we choose here to use a simple
-  // Euclidean distance. We can then define the type for the matching filter.
-  //
-  // Software Guide : EndLatex
+//
+// Although many choices for evaluating the distances during the
+// matching procedure exist, we choose here to use a simple
+// Euclidean distance. We can then define the type for the matching filter.
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistance<RealVectorType> DistanceType;
@@ -139,18 +138,17 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointType PointType;
-  typedef std::pair<PointType,PointType> MatchType;
-  typedef std::vector<MatchType> MatchVectorType;
+  typedef PointSetType::PointType         PointType;
+  typedef std::pair<PointType, PointType> MatchType;
+  typedef std::vector<MatchType>          MatchVectorType;
   typedef EuclideanDistanceMatchingFilterType::LandmarkListType
   LandmarkListType;
 
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
+  typedef PointSetType::PointsContainer    PointsContainerType;
+  typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -201,11 +199,11 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   double secondOrderThreshold = 0.5;
-  bool useBackMatching = 0;
+  bool   useBackMatching = 0;
 
-  filter1->SetInput(0, fixedReader->GetOutput() );
+  filter1->SetInput(0, fixedReader->GetOutput());
   filter1->SetScalesNumber(3);
-  filter2->SetInput(0, movingReader->GetOutput() );
+  filter2->SetInput(0, movingReader->GetOutput());
   filter2->SetScalesNumber(3);
 
   filter1->SetNumberOfThreads(1);
@@ -230,13 +228,13 @@ int main (int argc, char* argv[])
   MatchVectorType trueSecondOrder;
 
   for (LandmarkListType::Iterator it = landmarkList->Begin();
-       it != landmarkList->End();++it)
-  {
+       it != landmarkList->End(); ++it)
+    {
     PointType point1 = it.Get()->GetPoint1();
     PointType point2 = it.Get()->GetPoint2();
 
-    trueSecondOrder.push_back(MatchType(point1,point2));
-  }
+    trueSecondOrder.push_back(MatchType(point1, point2));
+    }
 
   // Displaying the matches
   typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
@@ -255,18 +253,21 @@ int main (int argc, char* argv[])
   printable2->SetOutputMaximum(255);
   printable2->Update();
 
-
-  typedef otb::Image<itk::RGBPixel<unsigned char>,2> RGBImageType;
+  typedef otb::Image<itk::RGBPixel<unsigned char>, 2> RGBImageType;
 
   RGBImageType::Pointer rgbimage1 = RGBImageType::New();
   rgbimage1->SetRegions(printable1->GetOutput()->GetLargestPossibleRegion());
   rgbimage1->Allocate();
-  itk::ImageRegionIterator<RGBImageType> outIt1(rgbimage1,rgbimage1->GetLargestPossibleRegion());
-  itk::ImageRegionIterator<OutputImageType> inIt1(printable1->GetOutput(),printable1->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<RGBImageType> outIt1(
+    rgbimage1,
+    rgbimage1->
+    GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType> inIt1(
+    printable1->GetOutput(), printable1->GetOutput()->GetLargestPossibleRegion());
   outIt1.GoToBegin();
   inIt1.GoToBegin();
   while (!inIt1.IsAtEnd() && !outIt1.IsAtEnd())
-  {
+    {
     itk::RGBPixel<unsigned char> pixel;
     pixel.SetRed(inIt1.Get());
     pixel.SetGreen(inIt1.Get());
@@ -274,19 +275,20 @@ int main (int argc, char* argv[])
     outIt1.Set(pixel);
     ++inIt1;
     ++outIt1;
-  }
+    }
 
   RGBImageType::Pointer rgbimage2 = RGBImageType::New();
   rgbimage2->SetRegions(printable2->GetOutput()->GetLargestPossibleRegion());
   rgbimage2->Allocate();
   itk::ImageRegionIterator<RGBImageType>
-  outIt2(rgbimage2,rgbimage2->GetLargestPossibleRegion());
+  outIt2(rgbimage2, rgbimage2->GetLargestPossibleRegion());
   itk::ImageRegionIterator<OutputImageType>
-  inIt2(printable2->GetOutput(),printable2->GetOutput()->GetLargestPossibleRegion());
+  inIt2(printable2->GetOutput(),
+        printable2->GetOutput()->GetLargestPossibleRegion());
   outIt2.GoToBegin();
   inIt2.GoToBegin();
   while (!inIt2.IsAtEnd() && !outIt2.IsAtEnd())
-  {
+    {
     itk::RGBPixel<unsigned char> pixel;
     pixel.SetRed(inIt2.Get());
     pixel.SetGreen(inIt2.Get());
@@ -294,8 +296,7 @@ int main (int argc, char* argv[])
     outIt2.Set(pixel);
     ++inIt2;
     ++outIt2;
-  }
-
+    }
 
   // Software Guide : BeginLatex
   //
@@ -306,12 +307,12 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   itk::Vector< RealType, Dimension >    VectorType;
-  typedef   otb::Image< VectorType,  Dimension >   DeformationFieldType;
+  typedef   itk::Vector<RealType, Dimension>   VectorType;
+  typedef   otb::Image<VectorType,  Dimension> DeformationFieldType;
 
   typedef itk::DeformationFieldSource<
-  DeformationFieldType
-  >  DeformationSourceType;
+    DeformationFieldType
+    >  DeformationSourceType;
 
   DeformationSourceType::Pointer deformer = DeformationSourceType::New();
   // Software Guide : EndCodeSnippet
@@ -324,10 +325,9 @@ int main (int argc, char* argv[])
   // Software Guide : BeginCodeSnippet
   ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
 
-
-  deformer->SetOutputSpacing( fixedImage->GetSpacing() );
-  deformer->SetOutputOrigin(  fixedImage->GetOrigin() );
-  deformer->SetOutputRegion(  fixedImage->GetLargestPossibleRegion() );
+  deformer->SetOutputSpacing(fixedImage->GetSpacing());
+  deformer->SetOutputOrigin(fixedImage->GetOrigin());
+  deformer->SetOutputRegion(fixedImage->GetLargestPossibleRegion());
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -337,10 +337,10 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   typedef DeformationSourceType::LandmarkContainerPointer
-  LandmarkContainerPointer;
+                                                   LandmarkContainerPointer;
   typedef DeformationSourceType::LandmarkContainer
-  LandmarkContainerType;
-  typedef DeformationSourceType::LandmarkPointType   LandmarkPointType;
+                                                   LandmarkContainerType;
+  typedef DeformationSourceType::LandmarkPointType LandmarkPointType;
 
   LandmarkContainerType::Pointer sourceLandmarks =
     LandmarkContainerType::New();
@@ -351,43 +351,41 @@ int main (int argc, char* argv[])
   LandmarkPointType targetPoint;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-  //
-  // We can now iterate through the list of matched points and store
-  // them in the intermediate landmark sets.
-  //
-  // Software Guide : EndLatex
+//
+// We can now iterate through the list of matched points and store
+// them in the intermediate landmark sets.
+//
+// Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   unsigned int pointId = 0;
 
-
   for (LandmarkListType::Iterator it = landmarkList->Begin();
        it != landmarkList->End(); ++it)
-  {
+    {
     PointType point1 = it.Get()->GetPoint1();
     PointType point2 = it.Get()->GetPoint2();
 
     sourcePoint[0] = point1[0];
     sourcePoint[1] = point1[1];
 
-
     targetPoint[0] = point2[0];
     targetPoint[1] = point2[1];
 
-    sourceLandmarks->InsertElement( pointId, sourcePoint );
-    targetLandmarks->InsertElement( pointId, targetPoint );
+    sourceLandmarks->InsertElement(pointId, sourcePoint);
+    targetLandmarks->InsertElement(pointId, targetPoint);
 
     ++pointId;
-  }
+    }
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-  //
-  // We pass the landmarks to the deformer and we run it.
-  //
-  // Software Guide : EndLatex
+//
+// We pass the landmarks to the deformer and we run it.
+//
+// Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
-  deformer->SetSourceLandmarks( sourceLandmarks.GetPointer() );
-  deformer->SetTargetLandmarks( targetLandmarks.GetPointer() );
+  deformer->SetSourceLandmarks(sourceLandmarks.GetPointer());
+  deformer->SetTargetLandmarks(targetLandmarks.GetPointer());
 
   deformer->UpdateLargestPossibleRegion();
 
@@ -397,40 +395,41 @@ int main (int argc, char* argv[])
   deformer->Update();
   // Software Guide : EndCodeSnippet
 
-
   ImageType::Pointer outdf = ImageType::New();
   outdf->SetRegions(fixedReader->GetOutput()->GetLargestPossibleRegion());
   outdf->Allocate();
 
-  itk::ImageRegionIterator<ImageType> outIt(outdf,outdf->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<ImageType> outIt(outdf,
+                                            outdf->GetLargestPossibleRegion());
 
-  itk::ImageRegionIterator<DeformationFieldType> inIt(deformer->GetOutput(),deformer->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<DeformationFieldType> inIt(
+    deformer->GetOutput(), deformer->GetOutput()->GetLargestPossibleRegion());
   outIt.GoToBegin();
   inIt.GoToBegin();
 
   while (!inIt.IsAtEnd() && !outIt.IsAtEnd())
-  {
+    {
     std::cout << inIt.Get() << std::endl;
 
     outIt.Set(inIt.Get()[1]);
 
     ++inIt;
     ++outIt;
-  }
+    }
 
-  typedef itk::RescaleIntensityImageFilter< ImageType,
-  OutputImageType> RescaleType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescaleType;
 
   RescaleType::Pointer rescaler = RescaleType::New();
-  rescaler->SetInput( outdf );
+  rescaler->SetInput(outdf);
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
 
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetInput( rescaler->GetOutput() );
-  writer->SetFileName( argv[3] );
+  writer->SetInput(rescaler->GetOutput());
+  writer->SetFileName(argv[3]);
   writer->Update();
 
   // Software Guide : BeginLatex
@@ -452,7 +451,5 @@ int main (int argc, char* argv[])
   //
   // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

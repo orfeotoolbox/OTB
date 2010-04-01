@@ -49,7 +49,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -67,17 +66,15 @@
 #include "itkGradientAnisotropicDiffusionImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 6 )
-  {
+  if (argc < 6)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile ";
     std::cerr << "numberOfIterations  timeStep  conductance" << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -88,16 +85,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  typedef    float InputPixelType;
+  typedef    float OutputPixelType;
 
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   //  Software Guide : BeginLatex
   //
@@ -113,14 +108,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientAnisotropicDiffusionImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -130,16 +123,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
+  const unsigned int numberOfIterations = atoi(argv[3]);
 
-  const unsigned int numberOfIterations = atoi( argv[3] );
+  const double timeStep = atof(argv[4]);
 
-  const double       timeStep = atof( argv[4] );
-
-  const double       conductance = atof( argv[5] );
-
+  const double conductance = atof(argv[5]);
 
   //  Software Guide : BeginLatex
   //
@@ -160,13 +151,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetNumberOfIterations( numberOfIterations );
-  filter->SetTimeStep( timeStep );
-  filter->SetConductanceParameter( conductance );
+  filter->SetNumberOfIterations(numberOfIterations);
+  filter->SetTimeStep(timeStep);
+  filter->SetConductanceParameter(conductance);
 
   filter->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -176,29 +166,26 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   //
   //  The output of the filter is rescaled here and then sent to a writer.
   //
-  typedef unsigned char WritePixelType;
-  typedef otb::Image< WritePixelType, 2 > WriteImageType;
+  typedef unsigned char                 WritePixelType;
+  typedef otb::Image<WritePixelType, 2> WriteImageType;
   typedef itk::RescaleIntensityImageFilter<
-  OutputImageType, WriteImageType > RescaleFilterType;
+    OutputImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
 
-  typedef otb::ImageFileWriter< WriteImageType >  WriterType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
-
-  rescaler->SetInput( filter->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -227,7 +214,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

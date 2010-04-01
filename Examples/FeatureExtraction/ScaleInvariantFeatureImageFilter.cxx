@@ -57,15 +57,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "itkPointSetToImageFilter.h"
 #include "itkImageFileWriter.h"
 
-int main( int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  if ( argc < 6 )
-  {
+  if (argc < 6)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile   outputImageFile  " \
               << "scaleFactor  angle  cropFactor rotateMiddle" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const unsigned int Dimension = 2;
 
@@ -83,21 +83,26 @@ int main( int argc, char *argv[])
   // mode is s (synthetic)
 
   double test_scale = atof(argv[6]);
-  float test_rotate = atof(argv[7])* M_PI * 2.0 / 360.0;
+  float  test_rotate = atof(argv[7]) * M_PI * 2.0 / 360.0;
   double test_crop = atof(argv[8]);
-  int rotate_middle= atoi(argv[9]);
-  int mode = 's';
+  int    rotate_middle = atoi(argv[9]);
+  int    mode = 's';
 
-  typedef float PixelType;
-  typedef itk::Image<PixelType, Dimension> FixedImageType;
-  typedef itk::ScaleInvariantFeatureImageFilter<FixedImageType, Dimension> SiftFilterType;
-  typedef itk::Image<unsigned char, Dimension> OutputImageType;
+  typedef float
+                                                           PixelType;
+  typedef itk::Image<PixelType,
+                     Dimension>                            FixedImageType;
+  typedef itk::ScaleInvariantFeatureImageFilter<FixedImageType,
+                                                Dimension> SiftFilterType;
+  typedef itk::Image<unsigned char,
+                     Dimension>                            OutputImageType;
 
   typedef itk::ImageSource<FixedImageType> ImageSourceType;
 
   ImageSourceType::Pointer fixedImageReader, fixedImageReader2;
 
-  typedef itk::PointSetToImageFilter<SiftFilterType::PointSetType, OutputImageType> PointSetFilterType;
+  typedef itk::PointSetToImageFilter<SiftFilterType::PointSetType,
+                                     OutputImageType> PointSetFilterType;
 
   std::cerr << "Dimension = " << Dimension << "\n";
   std::cerr << "Test Scale = " << test_scale << "\n";
@@ -107,29 +112,29 @@ int main( int argc, char *argv[])
   std::cerr << "ImageFile1 = " << inputImage1 << "\n";
   std::cerr << "SIFT Feature\n" << std::endl;
 
-  typedef itk::ImageFileReader< FixedImageType  > FixedImageReaderType;
+  typedef itk::ImageFileReader<FixedImageType> FixedImageReaderType;
   FixedImageReaderType::Pointer tmpImageReader  = FixedImageReaderType::New();
   tmpImageReader  = FixedImageReaderType::New();
 
-  tmpImageReader->SetFileName(  inputImage1 );
-  fixedImageReader=tmpImageReader;
+  tmpImageReader->SetFileName(inputImage1);
+  fixedImageReader = tmpImageReader;
   fixedImageReader->Update();
 
-  typedef itk::ScalableAffineTransform< double, Dimension > ScaleType;
+  typedef itk::ScalableAffineTransform<double, Dimension> ScaleType;
 #ifdef CROP
   ScaleType::Pointer no_transform = ScaleType::New();
   no_transform->SetIdentity();
 
-  SiftFilterType::ResampleFilterType::Pointer cropper = SiftFilterType::ResampleFilterType::New();
+  SiftFilterType::ResampleFilterType::Pointer cropper =
+    SiftFilterType::ResampleFilterType::New();
   cropper->SetInput(fixedImageReader->GetOutput());
   FixedImageType::SizeType cropsize =
     fixedImageReader->GetOutput()->GetLargestPossibleRegion().GetSize();
   for (unsigned int k = 0; k < Dimension; ++k)
-  {
-    if (k < 4)
-      cropsize[k] = (int) (cropsize[k] * test_crop);
-  }
-  cropper->SetSize( cropsize );
+    {
+    if (k < 4) cropsize[k] = (int) (cropsize[k] * test_crop);
+    }
+  cropper->SetSize(cropsize);
   cropper->SetOutputSpacing(fixedImageReader->GetOutput()->GetSpacing());
   cropper->SetTransform(no_transform);
   cropper->Update();
@@ -139,8 +144,8 @@ int main( int argc, char *argv[])
 #endif
 
   SiftFilterType::PointSetTypePointer keypoints1, keypoints2;
-  PointSetFilterType::Pointer pointSet1 = PointSetFilterType::New();
-  PointSetFilterType::Pointer pointSet2 = PointSetFilterType::New();
+  PointSetFilterType::Pointer         pointSet1 = PointSetFilterType::New();
+  PointSetFilterType::Pointer         pointSet2 = PointSetFilterType::New();
 
   SiftFilterType siftFilter1, siftFilter2;
 
@@ -161,12 +166,12 @@ int main( int argc, char *argv[])
   writer->SetInput(pointSet1->GetOutput());
   writer->Update();
 
-  typedef itk::ScalableAffineTransform< double, Dimension > TestTransformType;
+  typedef itk::ScalableAffineTransform<double, Dimension> TestTransformType;
   TestTransformType::Pointer inv_test_transform;
 
   // Synthetic test image
-  if (mode=='s')
-  {
+  if (mode == 's')
+    {
     std::cerr << std::endl << "Synthetic image mode\n";
     TestTransformType::Pointer test_transform = TestTransformType::New();
 
@@ -175,61 +180,62 @@ int main( int argc, char *argv[])
     TestTransformType::InputPointType translate_vector;
 
     test_transform->SetIdentity();
-    test_transform->Scale( 1.0 / test_scale);
+    test_transform->Scale(1.0 / test_scale);
     if (rotate_middle)
-    {
+      {
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
         fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-        translate_vector[k] = size[k]/2.0;
-      test_transform->SetCenter( translate_vector);
-    }
+        translate_vector[k] = size[k] / 2.0;
+      test_transform->SetCenter(translate_vector);
+      }
     else
-    {
+      {
       std::cerr << "Rotation centred at origin." << std::endl;
-    }
+      }
 #if 0
     if (rotate_middle)
-    {
+      {
       std::cerr << "Rotation centred at middle of image." << std::endl;
       /* Cycle through each dimension and shift by half*/
       FixedImageType::SizeType size =
         fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
-        translate_vector[k] = size[k]/2.0;
-      test_transform->Translate( translate_vector);
-    }
+        translate_vector[k] = size[k] / 2.0;
+      test_transform->Translate(translate_vector);
+      }
     else
-    {
+      {
       std::cerr << "Rotation centred at origin." << std::endl;
-    }
+      }
 #endif
 
-    test_transform->Rotate(0,1,test_rotate);
+    test_transform->Rotate(0, 1, test_rotate);
 #if 0
     if (rotate_middle)
-    {
+      {
       /* Cycle through each dimension and shift back*/
       for (unsigned int k = 0; k < Dimension; ++k)
         translate_vector[k] = -translate_vector[k];
-      test_transform->Translate( translate_vector);
-    }
+      test_transform->Translate(translate_vector);
+      }
 #endif
 
     test_transform->GetInverse(inv_test_transform);
 
-    {
+      {
       FixedImageType::Pointer scaledImage;
 
-      SiftFilterType::ResampleFilterType::Pointer scaler = SiftFilterType::ResampleFilterType::New();
+      SiftFilterType::ResampleFilterType::Pointer scaler =
+        SiftFilterType::ResampleFilterType::New();
       scaler->SetInput(fixedImage);
       FixedImageType::SizeType size =
         fixedImage->GetLargestPossibleRegion().GetSize();
       for (unsigned int k = 0; k < Dimension; ++k)
         size[k] = (unsigned int) floor(size[k] * test_scale);
-      scaler->SetSize( size );
+      scaler->SetSize(size);
       scaler->SetOutputSpacing(fixedImage->GetSpacing());
       scaler->SetTransform(test_transform);
       scaler->Update();
@@ -250,14 +256,16 @@ int main( int argc, char *argv[])
       writer2->SetFileName(outputImageKeys2);
       writer2->SetInput(pointSet2->GetOutput());
       writer2->Update();
-    }
+      }
 
     std::cerr << "Test Image Scale: " << test_scale << std::endl;
     std::cerr << "Test Image Rotate: " << test_rotate << std::endl;
     std::cerr << std::endl << "Matching Keypoints\n";
 
     siftFilter2.MatchKeypointsPos(keypoints1, keypoints2, inv_test_transform);
-    siftFilter2.MatchKeypointsFeatures(keypoints1, keypoints2, inv_test_transform);
-  }
+    siftFilter2.MatchKeypointsFeatures(keypoints1,
+                                       keypoints2,
+                                       inv_test_transform);
+    }
   return EXIT_SUCCESS;
 }

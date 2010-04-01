@@ -1,4 +1,3 @@
-
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -30,7 +29,6 @@
 //    10.0 30 1.0 1
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // The Markov Random Field framework can be used to apply an edge preserving
@@ -61,7 +59,6 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 // Software Guide : BeginLatex
 //
 // The first step toward the use of this filter is the inclusion of the proper
@@ -76,35 +73,34 @@
 #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
 
-
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc != 8 )
-  {
+  if (argc != 8)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage inputInitialization output lambda iterations optimizerTemperature" << std::endl;
+    std::cerr <<
+    " inputImage inputInitialization output lambda iterations optimizerTemperature"
+              << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-  }
-
+    }
 
 //  Software Guide : BeginLatex
-  //
-  //  We declare the usual types:
-  //
-  //  Software Guide : EndLatex
+//
+//  We declare the usual types:
+//
+//  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
-  typedef double InternalPixelType;
-  typedef unsigned char LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
+  typedef double                                   InternalPixelType;
+  typedef unsigned char                            LabelledPixelType;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
+  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -114,23 +110,22 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileReader< LabelledImageType >  ReaderLabelledType;
-  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>    ReaderType;
+  typedef otb::ImageFileReader<LabelledImageType> ReaderLabelledType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer         reader = ReaderType::New();
   ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer         writer = WriterType::New();
 
   const char * inputFilename  = argv[1];
   const char * labelledFilename  = argv[2];
   const char * outputFilename = argv[3];
 
-  reader->SetFileName( inputFilename );
-  reader2->SetFileName( labelledFilename );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  reader2->SetFileName(labelledFilename);
+  writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -140,9 +135,9 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
-  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
-  typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
   // Software Guide : EndCodeSnippet
@@ -161,22 +156,24 @@ int main(int argc, char* argv[] )
   // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginCodeSnippet
-  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter =
+    MarkovRandomFieldFilterType::New();
 
-  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  EnergyRegularizationType::Pointer energyRegularization =
+    EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
 
   OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer sampler = SamplerType::New();
+  SamplerType::Pointer   sampler = SamplerType::New();
   // Software Guide : EndCodeSnippet
 
-  if ((bool)(atoi(argv[7])) == true)
-  {
+  if ((bool) (atoi(argv[7])) == true)
+    {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -185,10 +182,8 @@ int main(int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   unsigned int nClass = 256;
-
 
   optimizer->SetSingleParameter(atof(argv[6]));
   markovFilter->SetNumberOfClasses(nClass);
@@ -214,7 +209,6 @@ int main(int argc, char* argv[] )
   markovFilter->SetTrainingInput(reader2->GetOutput());
 // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // And we plug the pipeline:
@@ -225,14 +219,14 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-  < LabelledImageType, LabelledImageType > RescaleType;
+  <LabelledImageType, LabelledImageType> RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
-  rescaleFilter->SetInput( markovFilter->GetOutput() );
+  rescaleFilter->SetInput(markovFilter->GetOutput());
 
-  writer->SetInput( rescaleFilter->GetOutput() );
+  writer->SetInput(rescaleFilter->GetOutput());
 
   writer->Update();
   // Software Guide : EndCodeSnippet
@@ -258,4 +252,3 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-

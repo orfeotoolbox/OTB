@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  OUTPUTS: {DEMToRainbowImageGenerator.png}
 //  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
@@ -54,7 +53,6 @@
 //
 // Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -67,14 +65,15 @@
 int main(int argc, char * argv[])
 {
 
-  if (argc<9)
-  {
-    std::cout << argv[0] <<" <output_filename> <Longitude Output Origin point>";
-    std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
+  if (argc < 9)
+    {
+    std::cout << argv[0] <<
+    " <output_filename> <Longitude Output Origin point>";
+    std::cout <<
+    " <Latitude Output Origin point> <X Output Size> <Y Output size>";
     std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   typedef double                                      PixelType;
   typedef unsigned char                               UCharPixelType;
@@ -86,15 +85,14 @@ int main(int argc, char * argv[])
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[1]);
 
-
-  typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
+  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType        SizeType;
-  typedef DEMToImageGeneratorType::SpacingType     SpacingType;
-  typedef DEMToImageGeneratorType::DEMHandlerType  DEMHandlerType;
-  typedef DEMHandlerType::PointType                PointType;
+  typedef DEMToImageGeneratorType::SizeType       SizeType;
+  typedef DEMToImageGeneratorType::SpacingType    SpacingType;
+  typedef DEMToImageGeneratorType::DEMHandlerType DEMHandlerType;
+  typedef DEMHandlerType::PointType               PointType;
 
   demToImage->SetDEMDirectoryPath(argv[8]);
 
@@ -125,62 +123,67 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType,RGBImageType> ColorMapFilterType;
+  typedef itk::ScalarToRGBColormapImageFilter<ImageType,
+                                              RGBImageType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   if (argc == 9)
-  {
-    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+    {
+    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType,
+                                                         RGBPixelType>
+    ColorMapFunctorType;
     ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
     colormap->SetMinimumInputValue(0);
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   else
-  {
-    if (strcmp(argv[9],"hot") == 0)
     {
-      typedef itk::Functor::HotColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+    if (strcmp(argv[9], "hot") == 0)
+      {
+      typedef itk::Functor::HotColormapFunctor<PixelType,
+                                               RGBPixelType>
+      ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
-    }
+      }
     else
-    {
-      typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+      {
+      typedef otb::Functor::ReliefColormapFunctor<PixelType,
+                                                  RGBPixelType>
+      ColorMapFunctorType;
       ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
+      }
     }
-  }
 
   // Software Guide : BeginCodeSnippet
   colormapper->SetInput(demToImage->GetOutput());
   // Software Guide : EndCodeSnippet
 
-
   writer->SetInput(colormapper->GetOutput());
 
-
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -188,16 +191,16 @@ int main(int argc, char * argv[])
   // a gray level image.
   //
 // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
-  // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
-  // data (top-left) and the same area in color representation.}
-  // \label{fig:RAINBOW_FILTER}
-  // \end{figure}
-  //  Software Guide : EndLatex
+// \center
+// \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
+// \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
+// \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
+// \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
+// \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
+// data (top-left) and the same area in color representation.}
+// \label{fig:RAINBOW_FILTER}
+// \end{figure}
+//  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

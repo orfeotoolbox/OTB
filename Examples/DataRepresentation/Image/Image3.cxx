@@ -36,13 +36,12 @@
 //
 // Software Guide : EndLatex
 
-
 #include "otbImage.h"
 
 int main(int, char *[])
 {
   // First the image type should be declared
-  typedef otb::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image<unsigned short, 2> ImageType;
 
   // Then the image object can be created
   ImageType::Pointer image = ImageType::New();
@@ -58,17 +57,16 @@ int main(int, char *[])
   start[1] =   0;  // first index on Y
 
   ImageType::RegionType region;
-  region.SetSize( size );
-  region.SetIndex( start );
+  region.SetSize(size);
+  region.SetIndex(start);
 
   // Pixel data is allocated
-  image->SetRegions( region );
+  image->SetRegions(region);
   image->Allocate();
 
   // The image buffer is initialized to a particular value
-  ImageType::PixelType  initialValue = 0;
-  image->FillBuffer( initialValue );
-
+  ImageType::PixelType initialValue = 0;
+  image->FillBuffer(initialValue);
 
   // Software Guide : BeginLatex
   //
@@ -99,7 +97,6 @@ int main(int, char *[])
   pixelIndex[1] = 29;   // y position
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // Having defined a pixel position with an index, it is then possible to
@@ -111,9 +108,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ImageType::PixelType   pixelValue = image->GetPixel( pixelIndex );
+  ImageType::PixelType pixelValue = image->GetPixel(pixelIndex);
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -124,9 +120,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  image->SetPixel(   pixelIndex,   pixelValue+1  );
+  image->SetPixel(pixelIndex,   pixelValue + 1);
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -140,8 +135,6 @@ int main(int, char *[])
   //
   // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 
 }
-

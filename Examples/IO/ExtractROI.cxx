@@ -51,7 +51,6 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -59,20 +58,20 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImage.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
   // R\'ecuperation de arguments
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY" << std::endl;
+    std::cerr << argv[0] <<
+    "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
 //  Software Guide : BeginLatex
 //
@@ -81,16 +80,15 @@ int main( int argc, char * argv[] )
 //
 //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   const char * inputFilename  = argv[1];
   const char * outputFilenameRGB = argv[2];
   const char * outputFilenameMIR = argv[3];
 
-  unsigned int  startX((unsigned int)::atoi(argv[4]));
-  unsigned int  startY((unsigned int)::atoi(argv[5]));
-  unsigned int  sizeX((unsigned int)::atoi(argv[6]));
-  unsigned int  sizeY((unsigned int)::atoi(argv[7]));
+  unsigned int startX((unsigned int) ::atoi(argv[4]));
+  unsigned int startY((unsigned int) ::atoi(argv[5]));
+  unsigned int sizeX((unsigned int) ::atoi(argv[6]));
+  unsigned int sizeY((unsigned int) ::atoi(argv[7]));
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -100,10 +98,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   unsigned char  InputPixelType;
-  typedef   unsigned char  OutputPixelType;
+  typedef   unsigned char InputPixelType;
+  typedef   unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -116,8 +113,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MultiChannelExtractROI< InputPixelType,
-  OutputPixelType >  ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<InputPixelType,
+                                      OutputPixelType>  ExtractROIFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -130,10 +127,10 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-  extractROIFilter->SetStartX( startX );
-  extractROIFilter->SetStartY( startY );
-  extractROIFilter->SetSizeX( sizeX );
-  extractROIFilter->SetSizeY( sizeY );
+  extractROIFilter->SetStartX(startX);
+  extractROIFilter->SetStartY(startY);
+  extractROIFilter->SetSizeX(sizeX);
+  extractROIFilter->SetSizeY(sizeY);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -146,8 +143,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  extractROIFilter->SetFirstChannel( 1 );
-  extractROIFilter->SetLastChannel( 3 );
+  extractROIFilter->SetFirstChannel(1);
+  extractROIFilter->SetLastChannel(3);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -157,8 +154,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ExtractROIFilterType::InputImageType >       ReaderType;
-  typedef otb::ImageFileWriter< ExtractROIFilterType::InputImageType >      WriterType;
+  typedef otb::ImageFileReader<ExtractROIFilterType::InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<ExtractROIFilterType::InputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -173,9 +170,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
-  writer->SetFileName( outputFilenameRGB );
+  writer->SetFileName(outputFilenameRGB);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -185,9 +182,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  extractROIFilter->SetInput( reader->GetOutput() );
+  extractROIFilter->SetInput(reader->GetOutput());
 
-  writer->SetInput( extractROIFilter->GetOutput() );
+  writer->SetInput(extractROIFilter->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -200,7 +197,6 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -222,16 +218,18 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MultiToMonoChannelExtractROI< InputPixelType,
-  OutputPixelType >  ExtractROIMonoFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<InputPixelType,
+                                            OutputPixelType>
+  ExtractROIMonoFilterType;
   // Software Guide : EndCodeSnippet
 
-  ExtractROIMonoFilterType::Pointer extractROIMonoFilter = ExtractROIMonoFilterType::New();
+  ExtractROIMonoFilterType::Pointer extractROIMonoFilter =
+    ExtractROIMonoFilterType::New();
 
-  extractROIMonoFilter->SetStartX( startX );
-  extractROIMonoFilter->SetStartY( startY );
-  extractROIMonoFilter->SetSizeX( sizeX );
-  extractROIMonoFilter->SetSizeY( sizeY );
+  extractROIMonoFilter->SetStartX(startX);
+  extractROIMonoFilter->SetStartY(startY);
+  extractROIMonoFilter->SetSizeX(sizeX);
+  extractROIMonoFilter->SetSizeY(sizeY);
 
   //  Software Guide : BeginLatex
   //
@@ -240,20 +238,22 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  extractROIMonoFilter->SetChannel( 4 );
+  extractROIMonoFilter->SetChannel(4);
   // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< ExtractROIMonoFilterType::InputImageType >       monoReaderType;
-  typedef otb::ImageFileWriter< ExtractROIMonoFilterType::OutputImageType >      monoWriterType;
+  typedef otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>
+  monoReaderType;
+  typedef otb::ImageFileWriter<ExtractROIMonoFilterType::OutputImageType>
+  monoWriterType;
   monoReaderType::Pointer monoReader = monoReaderType::New();
   monoWriterType::Pointer monoWriter = monoWriterType::New();
 
-  monoReader->SetFileName( inputFilename  );
+  monoReader->SetFileName(inputFilename);
   monoReader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
-  monoWriter->SetFileName( outputFilenameMIR );
-  extractROIMonoFilter->SetInput( monoReader->GetOutput() );
+  monoWriter->SetFileName(outputFilenameMIR);
+  extractROIMonoFilter->SetInput(monoReader->GetOutput());
 
-  monoWriter->SetInput( extractROIMonoFilter->GetOutput() );
+  monoWriter->SetInput(extractROIMonoFilter->GetOutput());
   monoWriter->Update();
 
   //  Software Guide : BeginLatex
@@ -281,9 +281,6 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 
-
 }
-

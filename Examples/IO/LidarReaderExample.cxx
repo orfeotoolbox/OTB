@@ -20,7 +20,6 @@
 //    INPUTS: {srs.las}
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // This example describes how to read a lidar data file and to display the basic
@@ -46,7 +45,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet <double, 2> PointSetType;
+  typedef itk::PointSet <double, 2>             PointSetType;
   typedef otb::PointSetFileReader<PointSetType> PointSetFileReaderType;
   PointSetFileReaderType::Pointer reader = PointSetFileReaderType::New();
 
@@ -71,7 +70,6 @@ int main(int argc, char * argv[])
   std::cout << "Data points: " << reader->GetNumberOfPoints() << std::endl;
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
 //
 // We can also loop on the point to see each point with its coordinates and
@@ -84,18 +82,17 @@ int main(int argc, char * argv[])
 
   unsigned long nPoints = data->GetNumberOfPoints();
 
-  for (unsigned long i=0; i < nPoints; ++i)
-  {
+  for (unsigned long i = 0; i < nPoints; ++i)
+    {
     PointSetType::PointType point;
-    data->GetPoint(i,&point);
+    data->GetPoint(i, &point);
     std::cout << point << " : ";
-    PointSetType::PixelType value = itk::NumericTraits<PointSetType::PixelType>::Zero;
-    data->GetPointData(i,&value);
+    PointSetType::PixelType value =
+      itk::NumericTraits<PointSetType::PixelType>::Zero;
+    data->GetPointData(i, &value);
     std::cout << value << std::endl;
-  }
+    }
 
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

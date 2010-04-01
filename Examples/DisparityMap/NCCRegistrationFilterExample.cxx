@@ -23,13 +23,11 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {StereoFixed.png}, {StereoMoving.png}
 //    OUTPUTS: {deformationFieldOutput-horizontal.png}, {deformationFieldOutput-vertical.png}, {resampledOutput2.png}
 //    5 1.0 2
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -57,28 +55,28 @@
 
 #include <iostream>
 
-
-int main(int argc, char** argv )
+int main(int argc, char** argv)
 {
 
-  if (argc!= 9)
-  {
-    std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<" fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
-    std::cerr<<"explorationSize bluringSigma nbIterations ";
+  if (argc != 9)
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr <<
+    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
+    std::cerr << "explorationSize bluringSigma nbIterations ";
 
     return EXIT_FAILURE;
-  }
+    }
 
   const unsigned int ImageDimension = 2;
 
-  typedef double                                PixelType;
-  typedef itk::Vector<double,ImageDimension>    DeformationPixelType;
+  typedef double                              PixelType;
+  typedef itk::Vector<double, ImageDimension> DeformationPixelType;
 
-  typedef double                   CoordinateRepresentationType;
+  typedef double CoordinateRepresentationType;
 
-  typedef unsigned char                         OutputPixelType;
-  typedef otb::Image<OutputPixelType,ImageDimension> OutputImageType;
+  typedef unsigned char                               OutputPixelType;
+  typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
 
   // Software Guide : BeginLatex
   //
@@ -89,20 +87,19 @@ int main(int argc, char** argv )
 
   //Allocate Images
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image<PixelType,ImageDimension>         MovingImageType;
-  typedef otb::Image<PixelType,ImageDimension>         FixedImageType;
+  typedef otb::Image<PixelType, ImageDimension> MovingImageType;
+  typedef otb::Image<PixelType, ImageDimension> FixedImageType;
   typedef otb::Image<DeformationPixelType,
-  ImageDimension>         DeformationFieldType;
+                     ImageDimension>         DeformationFieldType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< FixedImageType > FixedReaderType;
+  typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
   fReader->SetFileName(argv[1]);
 
-  typedef otb::ImageFileReader< MovingImageType > MovingReaderType;
+  typedef otb::ImageFileReader<MovingImageType> MovingReaderType;
   MovingReaderType::Pointer mReader = MovingReaderType::New();
   mReader->SetFileName(argv[2]);
-
 
   // Software Guide : BeginLatex
   //
@@ -114,20 +111,19 @@ int main(int argc, char** argv )
 
   //Blur input images
   // Software Guide : BeginCodeSnippet
-  typedef itk::RecursiveGaussianImageFilter< FixedImageType,
-  FixedImageType > FixedBlurType;
+  typedef itk::RecursiveGaussianImageFilter<FixedImageType,
+                                            FixedImageType> FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
-  fBlur->SetInput( fReader->GetOutput() );
-  fBlur->SetSigma( atof(argv[7]) );
+  fBlur->SetInput(fReader->GetOutput());
+  fBlur->SetSigma(atof(argv[7]));
 
-
-  typedef itk::RecursiveGaussianImageFilter< MovingImageType,
-  MovingImageType > MovingBlurType;
+  typedef itk::RecursiveGaussianImageFilter<MovingImageType,
+                                            MovingImageType> MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
-  mBlur->SetInput( mReader->GetOutput() );
-  mBlur->SetSigma(atof(argv[7]) );
+  mBlur->SetInput(mReader->GetOutput());
+  mBlur->SetSigma(atof(argv[7]));
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -138,15 +134,15 @@ int main(int argc, char** argv )
 
   //Create the filter
   // Software Guide : BeginCodeSnippet
-  typedef otb::NCCRegistrationFilter< FixedImageType,
-  MovingImageType,
-  DeformationFieldType >
+  typedef otb::NCCRegistrationFilter<FixedImageType,
+                                     MovingImageType,
+                                     DeformationFieldType>
   RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
-  registrator->SetMovingImage( mBlur->GetOutput() );
-  registrator->SetFixedImage( fBlur->GetOutput() );
+  registrator->SetMovingImage(mBlur->GetOutput());
+  registrator->SetFixedImage(fBlur->GetOutput());
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -165,7 +161,7 @@ int main(int argc, char** argv )
   radius[0] = atoi(argv[6]);
   radius[1] = atoi(argv[6]);
 
-  registrator->SetNCCRadius( radius );
+  registrator->SetNCCRadius(radius);
 // Software Guide : EndCodeSnippet
 
   std::cout << "NCC radius " << registrator->GetNCCRadius() << std::endl;
@@ -177,9 +173,9 @@ int main(int argc, char** argv )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  registrator->SetNumberOfIterations( atoi(argv[8]) );
+  registrator->SetNumberOfIterations(atoi(argv[8]));
 // Software Guide : EndCodeSnippet
-  // registrator->GetDeformationField();
+// registrator->GetDeformationField();
 
   // Software Guide : BeginLatex
   //
@@ -192,51 +188,53 @@ int main(int argc, char** argv )
   //
   // Software Guide : EndLatex
 
-
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType, MovingImageType> ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DeformationFieldType,
+                                                     MovingImageType>
+  ChannelExtractionFilterType;
+  ChannelExtractionFilterType::Pointer channelExtractor =
+    ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(registrator->GetOutput());
   channelExtractor->SetChannel(1);
 
-  typedef itk::RescaleIntensityImageFilter<MovingImageType, OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<MovingImageType,
+                                           OutputImageType> RescalerType;
   RescalerType::Pointer fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
 
-  typedef otb::StreamingImageFileWriter< OutputImageType > DFWriterType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> DFWriterType;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
-  dfWriter->SetInput( fieldRescaler->GetOutput() );
+  dfWriter->SetInput(fieldRescaler->GetOutput());
   dfWriter->Update();
-
 
   channelExtractor->SetChannel(2);
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DeformationFieldType> WarperType;
+  typedef itk::WarpImageFilter<MovingImageType, MovingImageType,
+                               DeformationFieldType> WarperType;
   WarperType::Pointer warper = WarperType::New();
 
   MovingImageType::PixelType padValue = 4.0;
 
-  warper->SetInput( mReader->GetOutput() );
-  warper->SetDeformationField( registrator->GetOutput() );
-  warper->SetEdgePaddingValue( padValue );
+  warper->SetInput(mReader->GetOutput());
+  warper->SetDeformationField(registrator->GetOutput());
+  warper->SetEdgePaddingValue(padValue);
 
+  typedef itk::CastImageFilter<MovingImageType, OutputImageType> CastFilterType;
+  CastFilterType::Pointer caster =  CastFilterType::New();
+  caster->SetInput(warper->GetOutput());
 
-  typedef itk::CastImageFilter< MovingImageType, OutputImageType > CastFilterType;
-  CastFilterType::Pointer  caster =  CastFilterType::New();
-  caster->SetInput( warper->GetOutput() );
-
-  typedef otb::StreamingImageFileWriter< OutputImageType > WriterType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[5]);
-  writer->SetInput( caster->GetOutput() );
+  writer->SetInput(caster->GetOutput());
   writer->Update();
 
   // Software Guide : BeginLatex
@@ -261,4 +259,3 @@ int main(int argc, char** argv )
   return EXIT_SUCCESS;
 
 }
-

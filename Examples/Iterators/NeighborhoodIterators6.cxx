@@ -67,32 +67,33 @@
 //
 // Software Guide : EndLatex
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " outputImageFile startX startY"
               << std::endl;
     return -1;
-  }
+    }
 
-  typedef float PixelType;
-  typedef otb::Image< PixelType, 2 > ImageType;
-  typedef itk::NeighborhoodIterator< ImageType > NeighborhoodIteratorType;
+  typedef float                                PixelType;
+  typedef otb::Image<PixelType, 2>             ImageType;
+  typedef itk::NeighborhoodIterator<ImageType> NeighborhoodIteratorType;
 
-  typedef itk::FastMarchingImageFilter<ImageType, ImageType>  FastMarchingFilterType;
+  typedef itk::FastMarchingImageFilter<ImageType,
+                                       ImageType> FastMarchingFilterType;
 
   FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
 
-  typedef FastMarchingFilterType::NodeContainer  NodeContainer;
-  typedef FastMarchingFilterType::NodeType       NodeType;
+  typedef FastMarchingFilterType::NodeContainer NodeContainer;
+  typedef FastMarchingFilterType::NodeType      NodeType;
 
   NodeContainer::Pointer seeds = NodeContainer::New();
 
-  ImageType::IndexType  seedPosition;
+  ImageType::IndexType seedPosition;
 
   seedPosition[0] = 128;
   seedPosition[1] = 128;
@@ -100,22 +101,22 @@ int main( int argc, char *argv[] )
 
   NodeType node;
 
-  const double seedValue = - initialDistance;
+  const double seedValue = -initialDistance;
 
   ImageType::SizeType size = {{256, 256}};
 
-  node.SetValue( seedValue );
-  node.SetIndex( seedPosition );
+  node.SetValue(seedValue);
+  node.SetIndex(seedPosition);
   seeds->Initialize();
-  seeds->InsertElement( 0, node );
+  seeds->InsertElement(0, node);
 
-  fastMarching->SetTrialPoints(  seeds  );
-  fastMarching->SetSpeedConstant( 1.0 );
+  fastMarching->SetTrialPoints(seeds);
+  fastMarching->SetSpeedConstant(1.0);
 
   itk::AddImageFilter<ImageType, ImageType, ImageType>::Pointer adder
-  = itk::AddImageFilter<ImageType, ImageType, ImageType>::New();
+    = itk::AddImageFilter<ImageType, ImageType, ImageType>::New();
   itk::RandomImageSource<ImageType>::Pointer noise
-  = itk::RandomImageSource<ImageType>::New();
+    = itk::RandomImageSource<ImageType>::New();
 
   noise->SetSize(size.m_Size);
   noise->SetMin(-.7);
@@ -125,18 +126,18 @@ int main( int argc, char *argv[] )
   adder->SetInput2(fastMarching->GetOutput());
 
   try
-  {
-    fastMarching->SetOutputSize( size );
+    {
+    fastMarching->SetOutputSize(size);
     fastMarching->Update();
 
     adder->Update();
 
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
 
   ImageType::Pointer input = adder->GetOutput();
 
@@ -179,8 +180,8 @@ int main( int argc, char *argv[] )
 
 // Software Guide : BeginCodeSnippet
   bool flag = true;
-  while ( flag == true )
-  {
+  while (flag == true)
+    {
     NeighborhoodIteratorType::OffsetType nextMove;
     nextMove.Fill(0);
 
@@ -188,19 +189,18 @@ int main( int argc, char *argv[] )
 
     PixelType min = it.GetCenterPixel();
     for (unsigned i = 0; i < it.Size(); i++)
-    {
-      if ( it.GetPixel(i) < min )
       {
+      if (it.GetPixel(i) < min)
+        {
         min = it.GetPixel(i);
         nextMove = it.GetOffset(i);
         flag = true;
+        }
       }
-    }
-    it.SetCenterPixel( 255.0 );
+    it.SetCenterPixel(255.0);
     it += nextMove;
-  }
+    }
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -222,31 +222,31 @@ int main( int argc, char *argv[] )
 //
 // Software Guide : EndLatex
 
-  typedef unsigned char WritePixelType;
-  typedef otb::Image< WritePixelType, 2 > WriteImageType;
-  typedef otb::ImageFileWriter< WriteImageType > WriterType;
+  typedef unsigned char                        WritePixelType;
+  typedef otb::Image<WritePixelType, 2>        WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
-  typedef itk::RescaleIntensityImageFilter< ImageType,
-  WriteImageType > RescaleFilterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
-  rescaler->SetInput( input );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput(input);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[1] );
-  writer->SetInput( rescaler->GetOutput() );
+  writer->SetFileName(argv[1]);
+  writer->SetInput(rescaler->GetOutput());
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
   return EXIT_SUCCESS;
 }

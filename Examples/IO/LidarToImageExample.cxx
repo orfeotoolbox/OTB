@@ -31,7 +31,6 @@
 //    1.0 5 8
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // This example describes how to convert a point set obtained from lidar data
@@ -45,7 +44,6 @@
 // The first step toward the use of these filters is to include the proper header files.
 //
 // Software Guide : EndLatex
-
 
 // Software Guide : BeginCodeSnippet
 #include "itkPointSet.h"
@@ -67,19 +65,19 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-
-  if (argc!=7)
-  {
-    std::cout << argv[0] <<" <input_lidar_filename> <output_image_filename(double)>"
+  if (argc != 7)
+    {
+    std::cout << argv[0] <<
+    " <input_lidar_filename> <output_image_filename(double)>"
               << " <output_image_filename(unsigned char)>"
               << " <output_resolution> <spline_order>"
               << " <number_of_levels>"
               << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -123,8 +121,8 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   double resolution = atof(argv[4]);
-  int splineOrder = atoi(argv[5]);
-  int level = atoi(argv[6]);
+  int    splineOrder = atoi(argv[5]);
+  int    level = atoi(argv[6]);
   // Software Guide : EndCodeSnippet
 
   std::cout << "*** Data area *** " << std::endl;
@@ -140,13 +138,17 @@ int main( int argc, char* argv[] )
   start[0] =  0;
   start[1] =  0;
 
-  ImageType::SizeType  size;
-  size[0]  = static_cast<long int >(ceil(
-               (vcl_ceil(reader->GetMaxX())-vcl_floor(reader->GetMinX())+1) / resolution
-                                    ))+1;
-  size[1]  = static_cast<long int >(ceil(
-               (vcl_ceil(reader->GetMaxY())-vcl_floor(reader->GetMinY())+1) / resolution
-                                    ))+1;
+  ImageType::SizeType size;
+  size[0]  = static_cast<long int>(ceil(
+                                     (vcl_ceil(reader->GetMaxX()) -
+                                      vcl_floor(reader->GetMinX()) +
+                                      1) / resolution
+                                     )) + 1;
+  size[1]  = static_cast<long int>(ceil(
+                                     (vcl_ceil(reader->GetMaxY()) -
+                                      vcl_floor(reader->GetMinY()) +
+                                      1) / resolution
+                                     )) + 1;
 
   ImageType::PointType origin;
   origin[0] = reader->GetMinX();
@@ -173,21 +175,20 @@ int main( int argc, char* argv[] )
 
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetSplineOrder( splineOrder );
+  filter->SetSplineOrder(splineOrder);
   FilterType::ArrayType ncps;
-  ncps.Fill( 6 );
-  filter->SetNumberOfControlPoints( ncps );
-  filter->SetNumberOfLevels( level );
+  ncps.Fill(6);
+  filter->SetNumberOfControlPoints(ncps);
+  filter->SetNumberOfLevels(level);
 
-  filter->SetOrigin( origin );
-  filter->SetSpacing( spacing );
-  filter->SetSize( size );
+  filter->SetOrigin(origin);
+  filter->SetSpacing(spacing);
+  filter->SetSize(size);
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
   filter->Update();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -204,20 +205,19 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<RealType, 2> RealImageType;
   RealImageType::Pointer image = RealImageType::New();
-  ImageType::RegionType region;
-  region.SetSize( size );
-  region.SetIndex( start );
-  image->SetRegions( region );
+  ImageType::RegionType  region;
+  region.SetSize(size);
+  region.SetIndex(start);
+  image->SetRegions(region);
   image->Allocate();
   itk::ImageRegionIteratorWithIndex<RealImageType>
-  Itt( image, image->GetLargestPossibleRegion() );
+  Itt(image, image->GetLargestPossibleRegion());
 
-  for ( Itt.GoToBegin(); !Itt.IsAtEnd(); ++Itt )
-  {
-    Itt.Set( filter->GetOutput()->GetPixel( Itt.GetIndex() )[0] );
-  }
+  for (Itt.GoToBegin(); !Itt.IsAtEnd(); ++Itt)
+    {
+    Itt.Set(filter->GetOutput()->GetPixel(Itt.GetIndex())[0]);
+    }
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -228,14 +228,14 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( image );
-  writer->SetFileName( argv[2] );
+  writer->SetInput(image);
+  writer->SetFileName(argv[2]);
   writer->Update();
   // Software Guide : EndCodeSnippet
 
   typedef otb::Image<unsigned char, 2> UCharImageType;
   typedef itk::RescaleIntensityImageFilter<ImageType,
-  UCharImageType> RescalerType;
+                                           UCharImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(image);
   rescaler->SetOutputMaximum(255);

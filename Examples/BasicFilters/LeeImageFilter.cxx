@@ -51,15 +51,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 5 )
-  {
+  if (argc != 5)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile radius NbLooks" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -68,7 +68,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  unsigned char  PixelType;
+  typedef  unsigned char PixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -78,10 +78,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< PixelType,  2 >   InputImageType;
-  typedef otb::Image< PixelType,  2 >   OutputImageType;
+  typedef otb::Image<PixelType,  2> InputImageType;
+  typedef otb::Image<PixelType,  2> OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -90,9 +89,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LeeImageFilter< InputImageType, OutputImageType >  FilterType;
+  typedef otb::LeeImageFilter<InputImageType, OutputImageType> FilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -102,7 +100,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -113,9 +111,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -130,9 +127,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( filter->GetOutput() );
-  reader->SetFileName( argv[1] );
-
+  writer->SetInput(filter->GetOutput());
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -145,9 +141,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -164,13 +159,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   FilterType::SizeType Radius;
-  Radius[0]= atoi(argv[3]);
-  Radius[1]= atoi(argv[3]);
+  Radius[0] = atoi(argv[3]);
+  Radius[1] = atoi(argv[3]);
 
-  filter->SetRadius( Radius );
-  filter->SetNbLooks( atoi(argv[4]) );
+  filter->SetRadius(Radius);
+  filter->SetNbLooks(atoi(argv[4]));
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -185,10 +179,8 @@ int main( int argc, char * argv[] )
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LEE_FILTER} shows the result of applying the Lee
@@ -209,7 +201,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

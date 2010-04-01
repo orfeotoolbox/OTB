@@ -48,26 +48,26 @@
 int main(int argc, char * argv[])
 {
   typedef double PixelType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
-  std::string inName            = argv[1];
-  std::string outNameLength     = argv[2];
-  std::string outNameWidth      = argv[3];
-  std::string outNameWMean      = argv[4];
-  std::string outNameRatio      = argv[5];
-  std::string outNameSD         = argv[6];
-  std::string outNamePsi         = argv[7];
-  std::string lengthprettyfname     = argv[8];
-  std::string widthprettyfname      = argv[9];
-  std::string wmeanprettyfname      = argv[10];
-  std::string ratioprettyfname      = argv[11];
-  std::string sdprettyfname         = argv[12];
-  std::string psiprettyfname         = argv[13];
-  PixelType spectThresh         = atof(argv[14]);
+  std::string  inName            = argv[1];
+  std::string  outNameLength     = argv[2];
+  std::string  outNameWidth      = argv[3];
+  std::string  outNameWMean      = argv[4];
+  std::string  outNameRatio      = argv[5];
+  std::string  outNameSD         = argv[6];
+  std::string  outNamePsi         = argv[7];
+  std::string  lengthprettyfname     = argv[8];
+  std::string  widthprettyfname      = argv[9];
+  std::string  wmeanprettyfname      = argv[10];
+  std::string  ratioprettyfname      = argv[11];
+  std::string  sdprettyfname         = argv[12];
+  std::string  psiprettyfname         = argv[13];
+  PixelType    spectThresh         = atof(argv[14]);
   unsigned int spatialThresh    = atoi(argv[15]);
   unsigned int dirNb            = atoi(argv[16]);
   unsigned int maxConsideration = atoi(argv[17]);
-  double alpha                  = atof(argv[18]);
+  double       alpha                  = atof(argv[18]);
 
 // Software Guide : BeginLatex
 //
@@ -77,9 +77,9 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image<PixelType,Dimension>                   ImageType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                   WriterType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileWriter<ImageType>  WriterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -101,13 +101,13 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   SFSFilterType::Pointer filter    = SFSFilterType::New();
-  ReaderType::Pointer reader       = ReaderType::New();
-  WriterType::Pointer writerLength = WriterType::New();
-  WriterType::Pointer writerWidth  = WriterType::New();
-  WriterType::Pointer writerWMean  = WriterType::New();
-  WriterType::Pointer writerRatio  = WriterType::New();
-  WriterType::Pointer writerSD     = WriterType::New();
-  WriterType::Pointer writerPsi    = WriterType::New();
+  ReaderType::Pointer    reader       = ReaderType::New();
+  WriterType::Pointer    writerLength = WriterType::New();
+  WriterType::Pointer    writerWidth  = WriterType::New();
+  WriterType::Pointer    writerWMean  = WriterType::New();
+  WriterType::Pointer    writerRatio  = WriterType::New();
+  WriterType::Pointer    writerSD     = WriterType::New();
+  WriterType::Pointer    writerPsi    = WriterType::New();
 // Software Guide : EndCodeSnippet
 
   reader->SetFileName(inName);
@@ -116,17 +116,17 @@ int main(int argc, char * argv[])
 //
 // The SFS filter has several parameters which have to be
 // selected. They are:
-  // \begin{enumerate}
-  // \item a spectral threshold to decide if 2 neighboring pixels are
+// \begin{enumerate}
+// \item a spectral threshold to decide if 2 neighboring pixels are
 // connected;
-  //\item a spatial threshold defining the maximum length for an
+//\item a spatial threshold defining the maximum length for an
 // extracted line;
-  //\item the number of directions which will be analyzed (the first
+//\item the number of directions which will be analyzed (the first
 // one is to the right and they are equally distributed between 0 and
 // $2\pi$);
-  // \item the $\alpha$ parameter fort the $\omega-mean$ feature;
-  // \item the RatioMax parameter fort the $\omega-mean$ feature.
-  // \end{enumerate}
+// \item the $\alpha$ parameter fort the $\omega-mean$ feature;
+// \item the RatioMax parameter fort the $\omega-mean$ feature.
+// \end{enumerate}
 //
 // Software Guide : EndLatex
 
@@ -157,34 +157,33 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
-
+  filter->SetInput(reader->GetOutput());
 
   writerLength->SetFileName(outNameLength);
-  writerLength->SetInput( filter->GetLengthOutput() );
+  writerLength->SetInput(filter->GetLengthOutput());
   writerLength->Update();
 
   writerWidth->SetFileName(outNameWidth);
-  writerWidth->SetInput( filter->GetWidthOutput() );
+  writerWidth->SetInput(filter->GetWidthOutput());
   writerWidth->Update();
 
   writerWMean->SetFileName(outNameWMean);
-  writerWMean->SetInput( filter->GetWMeanOutput() );
+  writerWMean->SetInput(filter->GetWMeanOutput());
   writerWMean->Update();
 
   writerRatio->SetFileName(outNameRatio);
-  writerRatio->SetInput( filter->GetRatioOutput() );
+  writerRatio->SetInput(filter->GetRatioOutput());
   writerRatio->Update();
 
   writerSD->SetFileName(outNameSD);
-  writerSD->SetInput( filter->GetSDOutput() );
+  writerSD->SetInput(filter->GetSDOutput());
   writerSD->Update();
 
   writerPsi->SetFileName(outNamePsi);
-  writerPsi->SetInput( filter->GetPSIOutput() );
+  writerPsi->SetInput(filter->GetPSIOutput());
   writerPsi->Update();
   // Software Guide : EndCodeSnippet
-    //  Software Guide : BeginLatex
+  //  Software Guide : BeginLatex
   // Figure~\ref{fig:SFS_FILTER} shows the result of applying
   // the SFS computation to an image
   // \begin{figure}
@@ -206,42 +205,44 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
 
-
   /************** pretty images for printing *********/
-  typedef otb::Image< unsigned char, 2> OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
-  typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
+  typedef otb::Image<unsigned char,
+                     2>                                     OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescalerType;
+  typedef otb::ImageFileWriter<OutputImageType>
+                                                            OutputWriterType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
 
   OutputWriterType::Pointer outWriter = OutputWriterType::New();
-  outWriter->SetInput( rescaler->GetOutput() );
+  outWriter->SetInput(rescaler->GetOutput());
 
-  rescaler->SetInput( filter->GetLengthOutput() );
-  outWriter->SetFileName( lengthprettyfname );
+  rescaler->SetInput(filter->GetLengthOutput());
+  outWriter->SetFileName(lengthprettyfname);
   outWriter->Update();
 
-  rescaler->SetInput( filter->GetWidthOutput() );
-  outWriter->SetFileName( widthprettyfname );
+  rescaler->SetInput(filter->GetWidthOutput());
+  outWriter->SetFileName(widthprettyfname);
   outWriter->Update();
 
-  rescaler->SetInput( filter->GetWMeanOutput() );
-  outWriter->SetFileName( wmeanprettyfname );
+  rescaler->SetInput(filter->GetWMeanOutput());
+  outWriter->SetFileName(wmeanprettyfname);
   outWriter->Update();
 
-  rescaler->SetInput( filter->GetRatioOutput() );
-  outWriter->SetFileName( ratioprettyfname );
+  rescaler->SetInput(filter->GetRatioOutput());
+  outWriter->SetFileName(ratioprettyfname);
   outWriter->Update();
 
-  rescaler->SetInput( filter->GetSDOutput() );
-  outWriter->SetFileName( sdprettyfname );
+  rescaler->SetInput(filter->GetSDOutput());
+  outWriter->SetFileName(sdprettyfname);
   outWriter->Update();
 
-  rescaler->SetInput( filter->GetPSIOutput() );
-  outWriter->SetFileName( psiprettyfname );
+  rescaler->SetInput(filter->GetPSIOutput());
+  outWriter->SetFileName(psiprettyfname);
   outWriter->Update();
-  
+
   return EXIT_SUCCESS;
 }

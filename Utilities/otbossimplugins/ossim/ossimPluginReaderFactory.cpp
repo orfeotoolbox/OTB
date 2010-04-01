@@ -12,6 +12,7 @@
 // $Id$
 
 #include <ossimPluginReaderFactory.h>
+#include <ossimRadarSat2TiffReader.h>
 #include <ossimTerraSarTiffReader.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
@@ -53,14 +54,30 @@ ossimImageHandler* ossimPluginReaderFactory::open(
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimPluginReaderFactory::open(filename) DEBUG: entered..."
-         << "\ntrying ossimTerraSarTiffReader"
+         << "\ntrying ossimRadarSat2TiffReader"
          << std::endl;
    }
 
-   ossimRefPtr<ossimImageHandler> reader = new ossimTerraSarTiffReader();
+   ossimRefPtr<ossimImageHandler> reader = new ossimRadarSat2TiffReader();
    if(reader->open(fileName) == false)
    {
       reader = 0;
+   }
+
+   if ( !reader.valid() )
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "\ntrying ossimTerraSarTiffReader"
+            << std::endl;
+      }
+      
+      reader = new ossimTerraSarTiffReader();
+      if(reader->open(fileName) == false)
+      {
+         reader = 0;
+      }
    }
 
    if(traceDebug())
@@ -80,14 +97,30 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: entered..."
-         << "Trying ossimTerraSarTiffReader"
+         << "Trying ossimRadarSat2TiffReader"
          << std::endl;
    }
 
-   ossimRefPtr<ossimImageHandler> reader = new ossimTerraSarTiffReader;
+   ossimRefPtr<ossimImageHandler> reader = new ossimRadarSat2TiffReader;
    if(reader->loadState(kwl, prefix) == false)
    {
       reader = 0;
+   }
+
+   if ( !reader.valid() )
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: entered..."
+            << "Trying ossimTerraSarTiffReader"
+            << std::endl;
+      }
+      reader = new ossimTerraSarTiffReader;
+      if(reader->loadState(kwl, prefix) == false)
+      {
+         reader = 0;
+      }
    }
 
    if(traceDebug())
@@ -96,7 +129,7 @@ ossimImageHandler* ossimPluginReaderFactory::open(const ossimKeywordlist& kwl,
          << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: leaving..."
          << std::endl;
    }
-
+   
    return reader.release();
 }
 
@@ -104,7 +137,11 @@ ossimObject* ossimPluginReaderFactory::createObject(
    const ossimString& typeName)const
 {
    ossimRefPtr<ossimObject> result = 0;
-   if(typeName == "ossimTerraSarTiffReader")
+   if(typeName == "ossimRadarSat2TiffReader")
+   {
+      result = new ossimRadarSat2TiffReader;
+   }
+   else if(typeName == "ossimTerraSarTiffReader")
    {
       result = new ossimTerraSarTiffReader;
    }
@@ -120,6 +157,7 @@ ossimObject* ossimPluginReaderFactory::createObject(
 void ossimPluginReaderFactory::getTypeNameList(
    std::vector<ossimString>& typeList)const
 {
+   typeList.push_back(ossimString("ossimRadarSat2TiffReader"));
    typeList.push_back(ossimString("ossimTerraSarTiffReader"));
 }
 

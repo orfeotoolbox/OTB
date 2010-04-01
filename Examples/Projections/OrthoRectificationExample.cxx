@@ -40,22 +40,22 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc!=11)
-  {
-    std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
+  if (argc != 11)
+    {
+    std::cout << argv[0] <<
+    " <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>"
               << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
 // Software Guide : BeginLatex
 //
@@ -67,16 +67,14 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image<int, 2>     ImageType;
-  typedef otb::VectorImage<int, 2>     VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
+  typedef otb::Image<int, 2>                             ImageType;
+  typedef otb::VectorImage<int, 2>                       VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>          ReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
 
-
-  ReaderType::Pointer       reader=ReaderType::New();
-  WriterType::Pointer        writer=WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -92,17 +90,15 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
   typedef otb::UtmInverseProjection utmMapProjectionType;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
-  utmMapProjectionType> OrthoRectifFilterType;
+                                        utmMapProjectionType>
+  OrthoRectifFilterType;
 
-
-  OrthoRectifFilterType::Pointer  orthoRectifFilter =
+  OrthoRectifFilterType::Pointer orthoRectifFilter =
     OrthoRectifFilterType::New();
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -129,8 +125,10 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-  VectorImageType, OrthoRectifFilterType> PerBandFilterType;
-  PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
+                                        VectorImageType,
+                                        OrthoRectifFilterType>
+  PerBandFilterType;
+  PerBandFilterType::Pointer perBandFilter = PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
   perBandFilter->SetInput(reader->GetOutput());
 // Software Guide : EndCodeSnippet
@@ -142,26 +140,25 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
   ImageType::IndexType start;
-  start[0]=0;
-  start[1]=0;
+  start[0] = 0;
+  start[1] = 0;
   orthoRectifFilter->SetOutputStartIndex(start);
 
   ImageType::SizeType size;
-  size[0]=atoi(argv[7]);
-  size[1]=atoi(argv[8]);
+  size[0] = atoi(argv[7]);
+  size[1] = atoi(argv[8]);
   orthoRectifFilter->SetSize(size);
 
   ImageType::SpacingType spacing;
-  spacing[0]=atof(argv[9]);
-  spacing[1]=atof(argv[10]);
+  spacing[0] = atof(argv[9]);
+  spacing[1] = atof(argv[10]);
   orthoRectifFilter->SetOutputSpacing(spacing);
 
   ImageType::PointType origin;
-  origin[0]=strtod(argv[5], NULL);
-  origin[1]=strtod(argv[6], NULL);
+  origin[0] = strtod(argv[5], NULL);
+  origin[1] = strtod(argv[6], NULL);
   orthoRectifFilter->SetOutputOrigin(origin);
 // Software Guide : EndCodeSnippet
 
@@ -172,7 +169,6 @@ int main( int argc, char* argv[] )
 // for the writing step.
 //
 // Software Guide : EndLatex
-
 
 // Software Guide : BeginCodeSnippet
   writer->SetInput(perBandFilter->GetOutput());
@@ -193,11 +189,9 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
   writer->Update();
 // Software Guide : EndCodeSnippet
-
 
   return EXIT_SUCCESS;
 

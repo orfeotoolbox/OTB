@@ -34,11 +34,10 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-
 int main(int argc, char * argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char *       infname = argv[1];
+  const char *       outfname = argv[2];
   const unsigned int nbClasses = atoi(argv[3]);
 
 // Software Guide : BeginLatex
@@ -49,7 +48,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 // Software Guide : EndCodeSnippet
@@ -62,8 +61,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
+  typedef otb::VectorImage<PixelType, Dimension>  ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -73,7 +72,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::KMeansImageClassificationFilter<ImageType,LabeledImageType>
+  typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType>
   ClassificationFilterType;
   typedef ClassificationFilterType::KMeansParametersType KMeansParametersType;
 // Software Guide : EndCodeSnippet
@@ -86,7 +85,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -115,26 +114,27 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  const unsigned int sampleSize = ClassificationFilterType::MaxSampleDimension;
-  const unsigned int parameterSize = nbClasses * sampleSize;
+  const unsigned int sampleSize =
+    ClassificationFilterType::MaxSampleDimension;
+  const unsigned int   parameterSize = nbClasses * sampleSize;
   KMeansParametersType parameters;
 
   parameters.SetSize(parameterSize);
   parameters.Fill(0);
 
-  for (unsigned int i = 0; i<nbClasses;++i)
-  {
-    for (unsigned int j = 0; j <
-         reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
+  for (unsigned int i = 0; i < nbClasses; ++i)
     {
-      parameters[i*sampleSize+j]=
-        atof(argv[4+i*
+    for (unsigned int j = 0; j <
+         reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++j)
+      {
+      parameters[i * sampleSize + j] =
+        atof(argv[4 + i *
                   reader->GetOutput()->GetNumberOfComponentsPerPixel()
-                  +j]);
+                  + j]);
+      }
     }
-  }
 
-  std::cout<<"Parameters: "<<parameters<<std::endl;
+  std::cout << "Parameters: " << parameters << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //

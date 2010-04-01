@@ -26,7 +26,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
 //  OUTPUTS: {BayesianFusion_0.9999.tif} , {pretty_BayesianFusion_0.9999.png} , {pretty_multiSpect_0.9999.png} , {pretty_multiSpectInterp_0.9999.png} , {pretty_panchro_0.9999.png}
@@ -38,7 +37,6 @@
 //  OUTPUTS: {BayesianFusion_0.5.tif} , {pretty_BayesianFusion_0.5.png} , {pretty_multiSpect_0.5.png} , {pretty_multiSpectInterp_0.5.png} , {pretty_panchro_0.5.png}
 //  0.5
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -78,7 +76,6 @@
 #include "otbBayesianFusionFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "itkCastImageFilter.h"
@@ -89,15 +86,18 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 10 )
-  {
+  if (argc < 10)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputMultiSpectralImage inputMultiSpectralInterpolatedImage inputPanchromatiqueImage outputImage outputImagePrinted msPrinted msiPrinted panchroPrinted lambda" << std::endl;
+    std::cerr << " inputMultiSpectralImage inputMultiSpectralInterpolatedImage "
+              << "inputPanchromatiqueImage outputImage outputImagePrinted "
+              << "msPrinted msiPrinted panchroPrinted lambda"
+              << std::endl;
     return 1;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -108,32 +108,30 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef double                                            InternalPixelType;
-  const   unsigned int                                      Dimension = 2;
-  typedef otb::Image< InternalPixelType, Dimension >        PanchroImageType;
-  typedef otb::VectorImage< InternalPixelType, Dimension >  MultiSpecImageType;
+  typedef double InternalPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InternalPixelType, Dimension>       PanchroImageType;
+  typedef otb::VectorImage<InternalPixelType, Dimension> MultiSpecImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef double                                         OutputPixelType;
-  typedef otb::VectorImage< OutputPixelType, Dimension > OutputImageType;
-
+  typedef double                                       OutputPixelType;
+  typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
   // We instantiate reader and writer types
   //
-  typedef  otb::ImageFileReader< MultiSpecImageType > ReaderVectorType;
-  typedef  otb::ImageFileReader< PanchroImageType >   ReaderType;
-  typedef  otb::ImageFileWriter< OutputImageType  >   WriterType;
+  typedef  otb::ImageFileReader<MultiSpecImageType> ReaderVectorType;
+  typedef  otb::ImageFileReader<PanchroImageType>   ReaderType;
+  typedef  otb::ImageFileWriter<OutputImageType>    WriterType;
 
   ReaderVectorType::Pointer multiSpectReader       = ReaderVectorType::New();
   ReaderVectorType::Pointer multiSpectInterpReader = ReaderVectorType::New();
-  ReaderType::Pointer panchroReader                = ReaderType::New();
-  WriterType::Pointer writer                       = WriterType::New();
+  ReaderType::Pointer       panchroReader                = ReaderType::New();
+  WriterType::Pointer       writer                       = WriterType::New();
 
-  multiSpectReader->SetFileName(       argv[1] );
-  multiSpectInterpReader->SetFileName( argv[2] );
-  panchroReader->SetFileName(          argv[3] );
-  writer->SetFileName(                 argv[4] );
-
+  multiSpectReader->SetFileName(argv[1]);
+  multiSpectInterpReader->SetFileName(argv[2]);
+  panchroReader->SetFileName(argv[3]);
+  writer->SetFileName(argv[4]);
 
   //  Software Guide : BeginLatex
   //
@@ -143,12 +141,12 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::BayesianFusionFilter< MultiSpecImageType,
-  MultiSpecImageType,
-  PanchroImageType,
-  OutputImageType     >    BayesianFusionFilterType;
+  typedef otb::BayesianFusionFilter<MultiSpecImageType,
+                                    MultiSpecImageType,
+                                    PanchroImageType,
+                                    OutputImageType>
+  BayesianFusionFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -158,9 +156,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  BayesianFusionFilterType::Pointer bayesianFilter = BayesianFusionFilterType::New();
+  BayesianFusionFilterType::Pointer bayesianFilter =
+    BayesianFusionFilterType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -170,13 +168,12 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  bayesianFilter->SetMultiSpect(       multiSpectReader->GetOutput() );
-  bayesianFilter->SetMultiSpectInterp( multiSpectInterpReader->GetOutput() );
-  bayesianFilter->SetPanchro(          panchroReader->GetOutput() );
+  bayesianFilter->SetMultiSpect(multiSpectReader->GetOutput());
+  bayesianFilter->SetMultiSpectInterp(multiSpectInterpReader->GetOutput());
+  bayesianFilter->SetPanchro(panchroReader->GetOutput());
 
-  writer->SetInput( bayesianFilter->GetOutput() );
+  writer->SetInput(bayesianFilter->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //  The BayesianFusionFilter requires defining one parameter : $\lambda$.
@@ -187,9 +184,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  bayesianFilter->SetLambda( atof(argv[9]) );
+  bayesianFilter->SetLambda(atof(argv[9]));
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -199,32 +195,38 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
-
   // Create an 3 band images for the software guide
-  typedef unsigned char                                                            OutputPixelType2;
-  typedef otb::VectorImage<OutputPixelType2, Dimension>                            OutputVectorImageType;
-  typedef otb::ImageFileWriter<OutputVectorImageType>                              VectorWriterType;
+  typedef unsigned char                                 OutputPixelType2;
+  typedef otb::VectorImage<OutputPixelType2, Dimension> OutputVectorImageType;
+  typedef otb::ImageFileWriter<OutputVectorImageType>   VectorWriterType;
   typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType,
-  OutputVectorImageType>            VectorRescalerType;
+                                                 OutputVectorImageType>
+  VectorRescalerType;
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
-  OutputVectorImageType>            VectorRescalerBayesianType;
-  typedef otb::Image< OutputPixelType2, Dimension >                                PanchroOutputImageType;
-  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;
-  typedef otb::MultiChannelExtractROI<OutputPixelType2,OutputPixelType2>           ChannelExtractorType;
-  typedef otb::ImageFileWriter<PanchroOutputImageType>                             WriterType2;
+                                                 OutputVectorImageType>
+  VectorRescalerBayesianType;
+  typedef otb::Image<OutputPixelType2,
+                     Dimension>
+                                                                PanchroOutputImageType;
+  typedef otb::ImageToVectorImageCastFilter<PanchroImageType,
+                                            MultiSpecImageType> CasterType;
+  typedef otb::MultiChannelExtractROI<OutputPixelType2,
+                                      OutputPixelType2>
+                                                                ChannelExtractorType;
+  typedef otb::ImageFileWriter<PanchroOutputImageType>
+                                                                WriterType2;
 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();
@@ -232,7 +234,7 @@ int main( int argc, char *argv[] )
   CasterType::Pointer cast = CasterType::New();
   cast->SetInput(panchroReader->GetOutput());
 
-  OutputVectorImageType::PixelType minimum,maximum;
+  OutputVectorImageType::PixelType minimum, maximum;
   minimum.SetSize(multiSpectReader->GetOutput()->GetNumberOfComponentsPerPixel());
   maximum.SetSize(multiSpectReader->GetOutput()->GetNumberOfComponentsPerPixel());
   minimum.Fill(0);
@@ -289,7 +291,6 @@ int main( int argc, char *argv[] )
   selecterf->SetChannel(3);
   selecterf->SetChannel(4);
 
-
   VectorWriterType::Pointer vectWriterms  = VectorWriterType::New();
   VectorWriterType::Pointer vectWritermsi = VectorWriterType::New();
   VectorWriterType::Pointer vectWriterf   = VectorWriterType::New();
@@ -304,25 +305,23 @@ int main( int argc, char *argv[] )
   vectWriterp->SetFileName(argv[8]);
   vectWriterp->SetInput(rp->GetOutput());
 
-
   try
-  {
+    {
     vectWriterms->Update();
     vectWritermsi->Update();
     vectWriterf->Update();
     vectWriterp->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -352,7 +351,6 @@ int main( int argc, char *argv[] )
   //
   //
   //  Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
 }

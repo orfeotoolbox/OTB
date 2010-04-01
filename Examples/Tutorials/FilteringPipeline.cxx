@@ -21,7 +21,6 @@
 //    OUTPUTS: {TutorialsFilteringPipelineOutput.png}
 //  Software Guide : EndCommandLineArgs
 
-
 //  Software Guide : BeginLatex
 //
 //
@@ -40,7 +39,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 // Software Guide : EndCodeSnippet
 
@@ -75,7 +74,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter
-  <ImageType,ImageType> FilterType;
+  <ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -103,5 +102,3 @@ int main( int argc, char * argv[] )
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

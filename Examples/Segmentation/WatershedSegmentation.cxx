@@ -26,7 +26,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {ROI_QB_MUL_3.tif}
 //  OUTPUTS: {WatershedSegmentation1Output1.png}
@@ -37,7 +36,6 @@
 //  OUTPUTS: {WatershedSegmentation1Output2.png}
 //  2 10 0.001 0.15 0
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -77,15 +75,17 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkScalarToRGBPixelFunctor.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if (argc < 8 )
-  {
+  if (argc < 8)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage outputImage conductanceTerm diffusionIterations lowerThreshold outputScaleLevel gradientMode " << std::endl;
+    std::cerr <<
+    " inputImage outputImage conductanceTerm diffusionIterations lowerThreshold outputScaleLevel gradientMode "
+              << std::endl;
     return 1;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -122,8 +122,10 @@ int main( int argc, char *argv[] )
   typedef itk::VectorCastImageFilter<RGBImageType, VectorImageType>
   CastFilterType;
   typedef itk::VectorGradientAnisotropicDiffusionImageFilter<VectorImageType,
-  VectorImageType>  DiffusionFilterType;
-  typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType,float,ScalarImageType>
+                                                             VectorImageType>
+  DiffusionFilterType;
+  typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType, float,
+                                                  ScalarImageType>
   GradientMagnitudeFilterType;
   typedef itk::WatershedImageFilter<ScalarImageType> WatershedFilterType;
   // Software Guide : EndCodeSnippet
@@ -151,8 +153,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   DiffusionFilterType::Pointer diffusion = DiffusionFilterType::New();
-  diffusion->SetNumberOfIterations( atoi(argv[4]) );
-  diffusion->SetConductanceParameter( atof(argv[3]) );
+  diffusion->SetNumberOfIterations(atoi(argv[4]));
+  diffusion->SetConductanceParameter(atof(argv[3]));
   diffusion->SetTimeStep(0.125);
   // Software Guide : EndCodeSnippet
 
@@ -166,10 +168,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   GradientMagnitudeFilterType::Pointer
-  gradient = GradientMagnitudeFilterType::New();
+    gradient = GradientMagnitudeFilterType::New();
   gradient->SetUsePrincipleComponents(atoi(argv[7]));
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -182,8 +183,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   WatershedFilterType::Pointer watershed = WatershedFilterType::New();
-  watershed->SetLevel( atof(argv[6]) );
-  watershed->SetThreshold( atof(argv[5]) );
+  watershed->SetLevel(atof(argv[6]));
+  watershed->SetThreshold(atof(argv[5]));
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -206,10 +207,10 @@ int main( int argc, char *argv[] )
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<LabeledImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+                                       RGBImageType,
+                                       ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   // Software Guide : EndCodeSnippet
-
 
   FileWriterType::Pointer writer = FileWriterType::New();
   writer->SetFileName(argv[2]);
@@ -231,13 +232,13 @@ int main( int argc, char *argv[] )
   // Software Guide : EndCodeSnippet
 
   try
-  {
+    {
     writer->Update();
-  }
-  catch (itk::ExceptionObject &e)
-  {
+    }
+  catch (itk::ExceptionObject& e)
+    {
     std::cerr << e << std::endl;
-  }
+    }
 
   return EXIT_SUCCESS;
 }
@@ -280,4 +281,3 @@ int main( int argc, char *argv[] )
 // input.
 //
 // Software Guide : EndLatex
-

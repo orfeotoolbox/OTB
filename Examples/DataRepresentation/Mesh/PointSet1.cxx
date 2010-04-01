@@ -68,9 +68,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet< unsigned short, 2 > PointSetType;
+  typedef itk::PointSet<unsigned short, 2> PointSetType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -90,9 +89,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointSetType::Pointer  pointsSet = PointSetType::New();
+  PointSetType::Pointer pointsSet = PointSetType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -110,9 +108,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointType     PointType;
+  typedef PointSetType::PointType PointType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -136,17 +133,14 @@ int main(int, char *[])
   p0[1] = -1.0;     //  y coordinate
   // Software Guide : EndCodeSnippet
 
-
   PointType p1;
 
   p1[0] =  1.0; // Point 1 = { 1,-1 }
   p1[1] = -1.0;
 
-
   PointType p2; // Point 2 = { 1,1 }
   p2[0] =  1.0;
   p2[1] =  1.0;
-
 
   //  Software Guide : BeginLatex
   //
@@ -161,11 +155,10 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pointsSet->SetPoint( 0, p0 );
-  pointsSet->SetPoint( 1, p1 );
-  pointsSet->SetPoint( 2, p2 );
+  pointsSet->SetPoint(0, p0);
+  pointsSet->SetPoint(1, p1);
+  pointsSet->SetPoint(2, p2);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -182,7 +175,6 @@ int main(int, char *[])
   std::cout << numberOfPoints << std::endl;
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   // Points can be read from the PointSet by using the \code{GetPoint()} method
@@ -198,14 +190,13 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointType pp;
-  bool pointExists =  pointsSet->GetPoint( 1, & pp );
+  bool      pointExists =  pointsSet->GetPoint(1, &pp);
 
-  if ( pointExists )
-  {
+  if (pointExists)
+    {
     std::cout << "Point is = " << pp << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -219,5 +210,3 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-
-

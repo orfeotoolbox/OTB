@@ -35,7 +35,7 @@
 #include "otbImageFileReader.h"
 // Software Guide : EndCodeSnippet
 
-int main( int , char * argv[])
+int main(int, char * argv[])
 {
   // Software Guide : BeginLatex
   //
@@ -45,12 +45,11 @@ int main( int , char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned char          PixelType;
-  const unsigned int             Dimension = 2;
+  typedef unsigned char PixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< PixelType, Dimension >   ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -71,9 +70,8 @@ int main( int , char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -92,7 +90,6 @@ int main( int , char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // The minimum information required by the reader is the filename
@@ -109,9 +106,8 @@ int main( int , char * argv[])
 
   // Software Guide : BeginCodeSnippet
   const char * filename = argv[1];
-  reader->SetFileName( filename );
+  reader->SetFileName(filename);
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -133,7 +129,6 @@ int main( int , char * argv[])
   // Software Guide : BeginCodeSnippet
   reader->Update();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -161,4 +156,3 @@ int main( int , char * argv[])
 
   return EXIT_SUCCESS;
 }
-

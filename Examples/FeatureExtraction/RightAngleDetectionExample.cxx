@@ -54,24 +54,23 @@
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  const   char * infname   = argv[1];
-  const   char * outfname  = argv[2];
-  const   char * inprettyfname = argv[3];
-  const   char * outprettyfname  = argv[4];
-  double angleThreshold          = atof(argv[5]);
-  double distanceThreshold       = atof(argv[6]);
+  const char * infname   = argv[1];
+  const char * outfname  = argv[2];
+  const char * inprettyfname = argv[3];
+  const char * outprettyfname  = argv[4];
+  double       angleThreshold          = atof(argv[5]);
+  double       distanceThreshold       = atof(argv[6]);
 
-  
-  const unsigned int           Dimension = 2;
-  typedef float                PixelType;
-  
-  typedef otb::Image<PixelType ,Dimension>   ImageType;
-  typedef otb::ImageFileReader<ImageType>    ReaderType;
-  typedef otb::ImageFileWriter<ImageType>    WriterType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  ReaderType::Pointer            reader            = ReaderType::New();
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileWriter<ImageType>  WriterType;
+
+  ReaderType::Pointer reader            = ReaderType::New();
   reader->SetFileName(infname);
   WriterType::Pointer writer = WriterType::New();
 
@@ -86,7 +85,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSpatialObjectList         LinesListType;
+  typedef otb::LineSpatialObjectList LinesListType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -98,8 +97,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef LinesListType::LineType            LineType;
-  typedef std::vector<LineType*>             LineVectorType;
+  typedef LinesListType::LineType LineType;
+  typedef std::vector<LineType*>  LineVectorType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -109,7 +108,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet<LineVectorType, Dimension>     PointSetType;
+  typedef itk::PointSet<LineVectorType, Dimension> PointSetType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -119,7 +118,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSegmentDetector<ImageType , PixelType>   LsdFilterType;
+  typedef otb::LineSegmentDetector<ImageType, PixelType> LsdFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -129,14 +128,15 @@ int main( int argc, char * argv[] )
   // output pointset type containing the detected right angles.
   //
   // Software Guide : EndLatex
-  
-  typedef itk::MinimumMaximumImageCalculator<ImageType>  MinMaxFilterType;
-  
+
+  typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxFilterType;
+
   // Software Guide : BeginCodeSnippet
   typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType,
-    LinesListType, PointSetType>
-    RightAngleFilterType;
-  
+                                                               LinesListType,
+                                                               PointSetType>
+  RightAngleFilterType;
+
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -145,12 +145,12 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  LsdFilterType::Pointer         lsdFilter         = LsdFilterType::New();
-  RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
+  LsdFilterType::Pointer        lsdFilter         = LsdFilterType::New();
+  RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
   // Software Guide : EndCodeSnippet
-  
-  MinMaxFilterType::Pointer      minmaxCalculator  = MinMaxFilterType::New();
-  
+
+  MinMaxFilterType::Pointer minmaxCalculator  = MinMaxFilterType::New();
+
   // Software Guide : BeginLatex
   //
   // We plug the pipeline. The right angle detector has 2 inputs: the
@@ -168,12 +168,12 @@ int main( int argc, char * argv[] )
   // You can choose how far the right angle segments can be, and the tolerance
   // to consider an angle between two segments as an right one.
   //
-    //
+  //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
   rightAngleFilter->SetThresholdAngle(angleThreshold);
   rightAngleFilter->SetThresholdDistance(distanceThreshold);
-  
+
   rightAngleFilter->Update();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -184,7 +184,7 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointSetType::Pointer          segmentOrtho      = PointSetType::New();
+  PointSetType::Pointer segmentOrtho      = PointSetType::New();
   segmentOrtho = rightAngleFilter->GetOutput();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -196,41 +196,41 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointSetType::PointType   pRight;
-  LineVectorType            outputVectorLines;
-  LinesListType::Pointer    outputLinesList = LinesListType::New();
-  
-  for (unsigned int i = 0; i<segmentOrtho->GetNumberOfPoints(); i++)
+  PointSetType::PointType pRight;
+  LineVectorType          outputVectorLines;
+  LinesListType::Pointer  outputLinesList = LinesListType::New();
+
+  for (unsigned int i = 0; i < segmentOrtho->GetNumberOfPoints(); i++)
     {
-      // Software Guide : EndCodeSnippet
-      // Software Guide : BeginLatex
-      //
-      // Even if we do not use it in this example, we show here how to get
-      // the coordinates of the right angle.
-      //
-      // Software Guide : EndLatex
+    // Software Guide : EndCodeSnippet
+    // Software Guide : BeginLatex
+    //
+    // Even if we do not use it in this example, we show here how to get
+    // the coordinates of the right angle.
+    //
+    // Software Guide : EndLatex
 
-      // Software Guide : BeginCodeSnippet
-      segmentOrtho->GetPoint(i, &pRight);
-      // Software Guide : EndCodeSnippet
-      // Software Guide : BeginLatex
-      //
-      // The lines associated to a given angle are obtained using the
-      // \code{GetPointData} method of the pointset. Then they are stored
-      // into the list of lines.
-      //
-      // Software Guide : EndLatex
+    // Software Guide : BeginCodeSnippet
+    segmentOrtho->GetPoint(i, &pRight);
+    // Software Guide : EndCodeSnippet
+    // Software Guide : BeginLatex
+    //
+    // The lines associated to a given angle are obtained using the
+    // \code{GetPointData} method of the pointset. Then they are stored
+    // into the list of lines.
+    //
+    // Software Guide : EndLatex
 
-      // Software Guide : BeginCodeSnippet
-      segmentOrtho->GetPointData(i, &outputVectorLines);
-      outputLinesList->push_back(outputVectorLines[0]);
-      outputLinesList->push_back(outputVectorLines[1]);
+    // Software Guide : BeginCodeSnippet
+    segmentOrtho->GetPointData(i, &outputVectorLines);
+    outputLinesList->push_back(outputVectorLines[0]);
+    outputLinesList->push_back(outputVectorLines[1]);
     }
   // Software Guide : EndCodeSnippet
 
   minmaxCalculator->SetImage(reader->GetOutput());
   minmaxCalculator->ComputeMaximum();
-    
+
   // Software Guide : BeginLatex
   //
   // We will use the \doxygen{otb}{DrawLineSpatialObjectListFilter} to
@@ -239,17 +239,17 @@ int main( int argc, char * argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::DrawLineSpatialObjectListFilter< ImageType,
-    ImageType > DrawLineListType;
+  typedef otb::DrawLineSpatialObjectListFilter<ImageType,
+                                               ImageType> DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
 
   drawLineFilter->SetInput(reader->GetOutput());
   drawLineFilter->SetInputLineSpatialObjectList(outputLinesList);
   drawLineFilter->SetValue(minmaxCalculator->GetMaximum());
-  
+
   writer->SetInput(drawLineFilter->GetOutput());
   writer->SetFileName(outfname);
-    
+
   reader->GenerateOutputInformation();
   writer->Update();
   // Software Guide : EndCodeSnippet
@@ -268,29 +268,30 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   /************** images for printing *********/
-  typedef unsigned char       OutputPixelType;
+  typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<OutputPixelType ,Dimension>   OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>    OutputWriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  typedef otb::Image<OutputPixelType,
+                     Dimension>                             OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>
+                                                            OutputWriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescalerType;
 
-  RescalerType::Pointer rescaler = RescalerType::New();
+  RescalerType::Pointer     rescaler = RescalerType::New();
   OutputWriterType::Pointer outwriter = OutputWriterType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  outwriter->SetInput( rescaler->GetOutput() );
+  outwriter->SetInput(rescaler->GetOutput());
 
-  rescaler->SetInput( reader->GetOutput() );
-  outwriter->SetFileName( inprettyfname );
+  rescaler->SetInput(reader->GetOutput());
+  outwriter->SetFileName(inprettyfname);
   outwriter->Update();
-  
-  rescaler->SetInput( drawLineFilter->GetOutput() );
-  outwriter->SetFileName( outprettyfname );
+
+  rescaler->SetInput(drawLineFilter->GetOutput());
+  outwriter->SetFileName(outprettyfname);
   outwriter->Update();
-  
+
   return EXIT_SUCCESS;
 }
-

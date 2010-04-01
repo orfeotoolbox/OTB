@@ -48,7 +48,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -67,16 +66,16 @@
 // Software Guide : EndCodeSnippet
 #include "itkRescaleIntensityImageFilter.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile  outputImageFile  sigma [RescaledOutputImageFile] " << std::endl;
+    std::cerr << argv[0] <<
+    "  inputImageFile  outputImageFile  sigma [RescaledOutputImageFile] " <<
+    std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -85,10 +84,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  typedef    float InputPixelType;
+  typedef    float OutputPixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -97,13 +95,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   //  Software Guide : BeginLatex
   //
@@ -116,13 +112,11 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -160,13 +154,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterX1->SetDirection( 0 );   // 0 --> X direction
-  filterY1->SetDirection( 1 );   // 1 --> Y direction
+  filterX1->SetDirection(0);     // 0 --> X direction
+  filterY1->SetDirection(1);     // 1 --> Y direction
 
-  filterX2->SetDirection( 0 );   // 0 --> X direction
-  filterY2->SetDirection( 1 );   // 1 --> Y direction
+  filterX2->SetDirection(0);     // 0 --> X direction
+  filterY2->SetDirection(1);     // 1 --> Y direction
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -185,13 +178,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterX1->SetOrder( FilterType::ZeroOrder );
-  filterY1->SetOrder( FilterType::SecondOrder );
+  filterX1->SetOrder(FilterType::ZeroOrder);
+  filterY1->SetOrder(FilterType::SecondOrder);
 
-  filterX2->SetOrder( FilterType::SecondOrder );
-  filterY2->SetOrder( FilterType::ZeroOrder );
+  filterX2->SetOrder(FilterType::SecondOrder);
+  filterY2->SetOrder(FilterType::ZeroOrder);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -226,12 +218,11 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   const bool normalizeAcrossScale = false;
-  filterX1->SetNormalizeAcrossScale( normalizeAcrossScale );
-  filterY1->SetNormalizeAcrossScale( normalizeAcrossScale );
-  filterX2->SetNormalizeAcrossScale( normalizeAcrossScale );
-  filterY2->SetNormalizeAcrossScale( normalizeAcrossScale );
+  filterX1->SetNormalizeAcrossScale(normalizeAcrossScale);
+  filterY1->SetNormalizeAcrossScale(normalizeAcrossScale);
+  filterX2->SetNormalizeAcrossScale(normalizeAcrossScale);
+  filterY2->SetNormalizeAcrossScale(normalizeAcrossScale);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -248,13 +239,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filterX1->SetInput( reader->GetOutput() );
-  filterY1->SetInput( filterX1->GetOutput() );
+  filterX1->SetInput(reader->GetOutput());
+  filterY1->SetInput(filterX1->GetOutput());
 
-  filterY2->SetInput( reader->GetOutput() );
-  filterX2->SetInput( filterY2->GetOutput() );
+  filterY2->SetInput(reader->GetOutput());
+  filterX2->SetInput(filterY2->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -270,15 +260,14 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  const double sigma = atof( argv[3] );
+  const double sigma = atof(argv[3]);
 
   // Software Guide : BeginCodeSnippet
-  filterX1->SetSigma( sigma );
-  filterY1->SetSigma( sigma );
-  filterX2->SetSigma( sigma );
-  filterY2->SetSigma( sigma );
+  filterX1->SetSigma(sigma);
+  filterY1->SetSigma(sigma);
+  filterX2->SetSigma(sigma);
+  filterY2->SetSigma(sigma);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -291,16 +280,15 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::AddImageFilter<
-  OutputImageType,
-  OutputImageType,
-  OutputImageType > AddFilterType;
+    OutputImageType,
+    OutputImageType,
+    OutputImageType> AddFilterType;
 
   AddFilterType::Pointer addFilter = AddFilterType::New();
 
-  addFilter->SetInput1( filterY1->GetOutput() );
-  addFilter->SetInput2( filterX2->GetOutput() );
+  addFilter->SetInput1(filterY1->GetOutput());
+  addFilter->SetInput2(filterX2->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -311,17 +299,16 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     addFilter->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -333,19 +320,18 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef  float WritePixelType;
 
-  typedef otb::Image< WritePixelType, 2 >    WriteImageType;
+  typedef otb::Image<WritePixelType, 2> WriteImageType;
 
-  typedef otb::ImageFileWriter< WriteImageType >  WriterType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetInput( addFilter->GetOutput() );
+  writer->SetInput(addFilter->GetOutput());
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -367,27 +353,24 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Rescale float outputs to png for inclusion in the Software guide
   //
   if (argc > 4)
-  {
-    typedef unsigned char    CharPixelType;
-    typedef otb::Image<CharPixelType, 2>    CharImageType;
-    typedef itk::RescaleIntensityImageFilter< OutputImageType, CharImageType>
+    {
+    typedef unsigned char                CharPixelType;
+    typedef otb::Image<CharPixelType, 2> CharImageType;
+    typedef itk::RescaleIntensityImageFilter<OutputImageType, CharImageType>
     RescaleFilterType;
     RescaleFilterType::Pointer rescale = RescaleFilterType::New();
-    rescale->SetInput( addFilter->GetOutput() );
-    rescale->SetOutputMinimum(   0 );
-    rescale->SetOutputMaximum( 255 );
-    typedef otb::ImageFileWriter< CharImageType >  CharWriterType;
+    rescale->SetInput(addFilter->GetOutput());
+    rescale->SetOutputMinimum(0);
+    rescale->SetOutputMaximum(255);
+    typedef otb::ImageFileWriter<CharImageType> CharWriterType;
     CharWriterType::Pointer charWriter = CharWriterType::New();
-    charWriter->SetFileName( argv[4] );
-    charWriter->SetInput( rescale->GetOutput() );
+    charWriter->SetFileName(argv[4]);
+    charWriter->SetInput(rescale->GetOutput());
     charWriter->Update();
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }
-

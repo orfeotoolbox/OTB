@@ -47,15 +47,15 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 5)
-  {
+  if (argc != 5)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputEdgesImageFile length width" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -66,8 +66,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float  InternalPixelType;
-  typedef  unsigned char  OutputPixelType;
+  typedef  float         InternalPixelType;
+  typedef  unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -77,10 +77,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image<InternalPixelType,  2> InternalImageType;
+  typedef otb::Image<OutputPixelType,  2>   OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -89,10 +88,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InternalImageType,
-  InternalImageType >  FilterType;
+  typedef otb::AssymmetricFusionOfLineDetectorImageFilter<InternalImageType,
+                                                          InternalImageType>
+  FilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -102,7 +101,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InternalImageType >  ReaderType;
+  typedef otb::ImageFileReader<InternalImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -113,7 +112,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -125,10 +124,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::RescaleIntensityImageFilter< InternalImageType,
-  OutputImageType > RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InternalImageType,
+                                           OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -150,11 +148,10 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   RescalerType::Pointer rescaler = RescalerType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer   writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -166,10 +163,9 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+  rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -182,11 +178,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
-  rescaler->SetInput( filter->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  rescaler->SetInput(filter->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -200,10 +195,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetLengthLine( atoi(argv[3]) );
-  filter->SetWidthLine( atoi(argv[4]) );
+  filter->SetLengthLine(atoi(argv[3]));
+  filter->SetWidthLine(atoi(argv[4]));
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -218,8 +212,7 @@ int main( int argc, char * argv[] )
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
 
   //  Software Guide : BeginLatex
@@ -234,7 +227,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
