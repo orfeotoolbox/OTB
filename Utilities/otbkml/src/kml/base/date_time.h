@@ -36,6 +36,10 @@
 time_t timegm(struct tm* tm);
 char* strptime(const char* buf, const char* format, struct tm* tm);
 #endif
+#ifdef sun
+time_t timegm(struct tm* tm);
+char* strptime(const char* buf, const char* format, struct tm* tm);
+#endif
 
 namespace kmlbase {
 
