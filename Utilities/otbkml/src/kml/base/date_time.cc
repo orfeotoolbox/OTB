@@ -41,6 +41,17 @@ char* strptime(const char* buf, const char* format, struct tm* tm) {
   return NULL;
 }
 #endif
+#ifdef sun
+time_t timegm(struct tm* tm) {
+  // Not yet implemented on this platform.
+  time_t not_implemented;
+  return not_implemented;
+}
+char* strptime(const char* buf, const char* format, struct tm* tm) {
+  // Not yet implemented on this platform.
+  return NULL;
+}
+#endif
 
 namespace kmlbase {
 
