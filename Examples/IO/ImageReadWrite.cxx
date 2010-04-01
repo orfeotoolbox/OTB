@@ -59,20 +59,17 @@
 #include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImage.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   // Verify the number of parameters in the command line
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -98,11 +95,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned short      PixelType;
-  const   unsigned int        Dimension = 2;
-  typedef otb::Image< PixelType, Dimension >    ImageType;
+  typedef unsigned short PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -121,10 +117,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
-  typedef otb::ImageFileWriter< ImageType >  WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -143,12 +138,10 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-
   // Here we recover the file names from the command line arguments
   //
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-
 
   //  Software Guide : BeginLatex
   //
@@ -163,10 +156,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -177,9 +169,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  writer->SetInput( reader->GetOutput() );
+  writer->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -193,20 +184,18 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -232,5 +221,3 @@ int main( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

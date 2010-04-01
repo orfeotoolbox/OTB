@@ -42,15 +42,14 @@
 #include "otbLineSegmentDetector.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  const   char * infname  = argv[1];
-  const   char * outfname  = argv[2];
-  
-  typedef unsigned char   InputPixelType;
-  typedef double   PrecisionType;
-  const   unsigned int    Dimension = 2;
-  
+  const char * infname  = argv[1];
+  const char * outfname  = argv[2];
+
+  typedef unsigned char InputPixelType;
+  typedef double        PrecisionType;
+  const unsigned int Dimension = 2;
 
 // Software Guide : BeginLatex
 //
@@ -60,7 +59,7 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InputPixelType,  Dimension >    ImageType;
+  typedef otb::Image<InputPixelType,  Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -84,13 +83,11 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-    
+
   typedef otb::LineSegmentDetector<ImageType,
-                                                 PrecisionType> LsdFilterType;
+                                   PrecisionType> LsdFilterType;
 
-
-  
-  LsdFilterType::Pointer  lsdFilter = LsdFilterType::New();
+  LsdFilterType::Pointer lsdFilter = LsdFilterType::New();
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
@@ -102,8 +99,8 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::DrawLineSpatialObjectListFilter< ImageType,
-                                       ImageType > DrawLineListType;
+  typedef otb::DrawLineSpatialObjectListFilter<ImageType,
+                                               ImageType> DrawLineListType;
   DrawLineListType::Pointer drawLineFilter =   DrawLineListType::New();
   // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -114,7 +111,7 @@ int main( int argc, char * argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   // Software Guide : EndCodeSnippet
@@ -159,7 +156,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  
   return EXIT_SUCCESS;
 }
-

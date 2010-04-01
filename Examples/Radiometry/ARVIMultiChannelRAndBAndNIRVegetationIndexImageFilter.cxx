@@ -23,13 +23,11 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {VegetationIndex.hd}
 //  OUTPUTS: {ARVIMultiChannelRAndBAndNIRVegetationIndex.tif} , {pretty_VegetationIndex.png} , {pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png}
 //  1 3 2 0.6
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -91,7 +89,6 @@
 #include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -102,16 +99,17 @@
 #include "otbMultiChannelExtractROI.h"
 #include "itkThresholdImageFilter.h"
 
-
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 8 )
-  {
+  if (argc < 8)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
+    std::cerr <<
+    " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama"
+              << std::endl;
     return 1;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -122,11 +120,11 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  const unsigned int                                  Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double                                      InputPixelType;
   typedef float                                       OutputPixelType;
-  typedef otb::VectorImage<InputPixelType ,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension>       OutputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
   // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
@@ -143,12 +141,11 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  otb::Functor::ARVI< InputPixelType,
-  InputPixelType,
-  InputPixelType,
-  OutputPixelType >        FunctorType;
+  typedef  otb::Functor::ARVI<InputPixelType,
+                              InputPixelType,
+                              InputPixelType,
+                              OutputPixelType>        FunctorType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -162,12 +159,12 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndBAndNIRIndexImageFilter
   <InputImageType,
-  OutputImageType,
-  FunctorType      >
+   OutputImageType,
+   FunctorType>
   MultiChannelRAndBAndNIRIndexImageFilterType;
 
   MultiChannelRAndBAndNIRIndexImageFilterType::Pointer
-  filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
+    filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -180,8 +177,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -217,52 +214,65 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
-  //
-  //  The invocation of the \code{Update()} method on the writer triggers the
-  //  execution of the pipeline.  It is recommended to place update calls in a
-  //  \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  //  Software Guide : EndLatex
+//
+//  The invocation of the \code{Update()} method on the writer triggers the
+//  execution of the pipeline.  It is recommended to place update calls in a
+//  \code{try/catch} block in case errors occur and exceptions are thrown.
+//
+//  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-  catch ( ... )
-  {
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, Dimension>                                                  OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>                                            OutputVectorPrettyImageType;
-  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>                                     WriterVectorPrettyType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                           WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter< OutputImageType, OutputPrettyImageType>             RescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter< InputImageType ,OutputVectorPrettyImageType > VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char , unsigned char>                            ChannelExtractorType;
+  typedef otb::Image<unsigned char,
+                     Dimension>
+  OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char,
+                           Dimension>
+  OutputVectorPrettyImageType;
+  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>
+  WriterVectorPrettyType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>
+  WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType,
+                                           OutputPrettyImageType>
+  RescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<InputImageType,
+                                                 OutputVectorPrettyImageType>
+  VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char,
+                                      unsigned char>
+  ChannelExtractorType;
 
+  VectorRescalerType::Pointer vectRescaler         =
+    VectorRescalerType::New();
+  ChannelExtractorType::Pointer selecter           =
+    ChannelExtractorType::New();
+  WriterVectorPrettyType::Pointer vectPrettyWriter =
+    WriterVectorPrettyType::New();
 
-  VectorRescalerType::Pointer vectRescaler         = VectorRescalerType::New();
-  ChannelExtractorType::Pointer selecter           = ChannelExtractorType::New();
-  WriterVectorPrettyType::Pointer vectPrettyWriter = WriterVectorPrettyType::New();
-
-  OutputVectorPrettyImageType::PixelType minimum,maximum;
+  OutputVectorPrettyImageType::PixelType minimum, maximum;
   minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   maximum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   minimum.Fill(0);
@@ -270,48 +280,47 @@ int main( int argc, char *argv[] )
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
   vectRescaler->SetClampThreshold(0.01);
-  vectRescaler->SetInput( reader->GetOutput() );
+  vectRescaler->SetInput(reader->GetOutput());
 
   selecter->SetInput(vectRescaler->GetOutput());
   selecter->SetChannel(1);
   selecter->SetChannel(2);
   selecter->SetChannel(3);
 
-  vectPrettyWriter->SetFileName( argv[3] );
-  vectPrettyWriter->SetInput( selecter->GetOutput() );
+  vectPrettyWriter->SetFileName(argv[3]);
+  vectPrettyWriter->SetInput(selecter->GetOutput());
 
-
-  typedef itk::ThresholdImageFilter< OutputImageType >   ThresholderType;
+  typedef itk::ThresholdImageFilter<OutputImageType> ThresholderType;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
-  thresholder->SetInput(  filter->GetOutput() );
-  thresholder->SetOutsideValue( 1.0 );
-  thresholder->ThresholdOutside( 0.0, 1.0 );
+  thresholder->SetInput(filter->GetOutput());
+  thresholder->SetOutsideValue(1.0);
+  thresholder->ThresholdOutside(0.0, 1.0);
   thresholder->Update();
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
-  rescaler->SetInput( thresholder->GetOutput() );
+  rescaler->SetInput(thresholder->GetOutput());
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  prettyWriter->SetFileName( argv[4] );
-  prettyWriter->SetInput( rescaler->GetOutput() );
+  prettyWriter->SetFileName(argv[4]);
+  prettyWriter->SetInput(rescaler->GetOutput());
 
   try
-  {
+    {
     prettyWriter->Update();
     vectPrettyWriter->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 
@@ -333,4 +342,3 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
 }
-

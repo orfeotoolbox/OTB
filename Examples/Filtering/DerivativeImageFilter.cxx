@@ -40,12 +40,10 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
-
 
 //  Software Guide : BeginLatex
 //
@@ -55,22 +53,20 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkDerivativeImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 6 )
-  {
+  if (argc < 6)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile   outputImageFile  normalizedOutputImageFile ";
+    std::cerr << argv[0] <<
+    "  inputImageFile   outputImageFile  normalizedOutputImageFile ";
     std::cerr << " derivativeOrder direction" << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -82,24 +78,23 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   float  InputPixelType;
-  typedef   float  OutputPixelType;
+  typedef   float InputPixelType;
+  typedef   float OutputPixelType;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef otb::ImageFileReader< InputImageType  >  ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
 
   //  Software Guide : BeginLatex
   //
@@ -114,11 +109,10 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::DerivativeImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -132,10 +126,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetOrder(     atoi( argv[4] ) );
-  filter->SetDirection( atoi( argv[5] ) );
+  filter->SetOrder(atoi(argv[4]));
+  filter->SetDirection(atoi(argv[5]));
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -149,13 +142,11 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -175,27 +166,25 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
-  typedef otb::Image< unsigned char, Dimension >  WriteImageType;
+  typedef otb::Image<unsigned char, Dimension> WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-  OutputImageType,
-  WriteImageType >    NormalizeFilterType;
+    OutputImageType,
+    WriteImageType>    NormalizeFilterType;
 
-  typedef otb::ImageFileWriter< WriteImageType >       NormalizedWriterType;
+  typedef otb::ImageFileWriter<WriteImageType> NormalizedWriterType;
 
-  NormalizeFilterType::Pointer normalizer = NormalizeFilterType::New();
+  NormalizeFilterType::Pointer  normalizer = NormalizeFilterType::New();
   NormalizedWriterType::Pointer normalizedWriter = NormalizedWriterType::New();
 
-  normalizer->SetInput( filter->GetOutput() );
-  normalizedWriter->SetInput( normalizer->GetOutput() );
+  normalizer->SetInput(filter->GetOutput());
+  normalizedWriter->SetInput(normalizer->GetOutput());
 
-  normalizer->SetOutputMinimum(   0 );
-  normalizer->SetOutputMaximum( 255 );
+  normalizer->SetOutputMinimum(0);
+  normalizer->SetOutputMaximum(255);
 
-  normalizedWriter->SetFileName( argv[3] );
+  normalizedWriter->SetFileName(argv[3]);
   normalizedWriter->Update();
 
   return EXIT_SUCCESS;
 }
-

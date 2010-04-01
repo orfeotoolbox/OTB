@@ -23,16 +23,16 @@
 
 #include "otbCoordinateToName.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc!=4)
-  {
-    std::cout << argv[0] <<" <lon> <lat> <outputfile>"
+  if (argc != 4)
+    {
+    std::cout << argv[0] << " <lon> <lat> <outputfile>"
               << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   const char * outFileName = argv[3];
 

@@ -27,7 +27,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {QB_Suburb.png}
 //  OUTPUTS: {ConnectedThresholdOutput1.png}
@@ -43,7 +42,6 @@
 //  OUTPUTS: {ConnectedThresholdOutput3.png}
 //  169 146 220 255
 //  Software Guide : EndCommandLineArgs
-
 
 // Software Guide : BeginLatex
 //
@@ -75,15 +73,12 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkConnectedThresholdImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImage.h"
 #include "itkCastImageFilter.h"
-
 
 //  Software Guide : BeginLatex
 //
@@ -99,21 +94,20 @@
 #include "itkCurvatureFlowImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
-int main( int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  if ( argc < 7 )
-  {
+  if (argc < 7)
+    {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage  outputImage seedX seedY lowerThreshold upperThreshold" << std::endl;
+    std::cerr <<
+    " inputImage  outputImage seedX seedY lowerThreshold upperThreshold" <<
+    std::endl;
     return 1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -124,29 +118,27 @@ int main( int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef   float           InternalPixelType;
-  const     unsigned int    Dimension = 2;
-  typedef otb::Image< InternalPixelType, Dimension >  InternalImageType;
+  typedef   float InternalPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InternalPixelType, Dimension> InternalImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::CastImageFilter< InternalImageType, OutputImageType >
+  typedef unsigned char                          OutputPixelType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef itk::CastImageFilter<InternalImageType, OutputImageType>
   CastingFilterType;
   CastingFilterType::Pointer caster = CastingFilterType::New();
 
   // We instantiate reader and writer types
   //
-  typedef  otb::ImageFileReader< InternalImageType > ReaderType;
-  typedef  otb::ImageFileWriter<  OutputImageType  > WriterType;
+  typedef  otb::ImageFileReader<InternalImageType> ReaderType;
+  typedef  otb::ImageFileWriter<OutputImageType>   WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
-
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
 
   //  Software Guide : BeginLatex
   //
@@ -157,10 +149,9 @@ int main( int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::CurvatureFlowImageFilter< InternalImageType, InternalImageType >
+  typedef itk::CurvatureFlowImageFilter<InternalImageType, InternalImageType>
   CurvatureFlowImageFilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -174,7 +165,6 @@ int main( int argc, char *argv[])
     CurvatureFlowImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  We now declare the type of the region growing filter. In this case it is
@@ -183,8 +173,9 @@ int main( int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ConnectedThresholdImageFilter< InternalImageType,
-  InternalImageType > ConnectedFilterType;
+  typedef itk::ConnectedThresholdImageFilter<InternalImageType,
+                                             InternalImageType>
+  ConnectedFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -198,7 +189,6 @@ int main( int argc, char *argv[])
   ConnectedFilterType::Pointer connectedThreshold = ConnectedFilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  Now it is time to connect a simple, linear pipeline. A file reader is
@@ -210,12 +200,11 @@ int main( int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  smoothing->SetInput( reader->GetOutput() );
-  connectedThreshold->SetInput( smoothing->GetOutput() );
-  caster->SetInput( connectedThreshold->GetOutput() );
-  writer->SetInput( caster->GetOutput() );
+  smoothing->SetInput(reader->GetOutput());
+  connectedThreshold->SetInput(smoothing->GetOutput());
+  caster->SetInput(connectedThreshold->GetOutput());
+  writer->SetInput(caster->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -227,10 +216,9 @@ int main( int argc, char *argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  smoothing->SetNumberOfIterations( 5 );
-  smoothing->SetTimeStep( 0.125 );
+  smoothing->SetNumberOfIterations(5);
+  smoothing->SetTimeStep(0.125);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -246,14 +234,13 @@ int main( int argc, char *argv[])
   //
   //  Software Guide : EndLatex
 
-  const InternalPixelType lowerThreshold = atof( argv[5] );
-  const InternalPixelType upperThreshold = atof( argv[6] );
+  const InternalPixelType lowerThreshold = atof(argv[5]);
+  const InternalPixelType upperThreshold = atof(argv[6]);
 
   // Software Guide : BeginCodeSnippet
-  connectedThreshold->SetLower(  lowerThreshold  );
-  connectedThreshold->SetUpper(  upperThreshold  );
+  connectedThreshold->SetLower(lowerThreshold);
+  connectedThreshold->SetUpper(upperThreshold);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -267,9 +254,8 @@ int main( int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   connectedThreshold->SetReplaceValue(
-    itk::NumericTraits<OutputPixelType>::max() );
+    itk::NumericTraits<OutputPixelType>::max());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -283,16 +269,14 @@ int main( int argc, char *argv[])
   //
   //  Software Guide : EndLatex
 
-  InternalImageType::IndexType  index;
+  InternalImageType::IndexType index;
 
-  index[0] = atoi( argv[3] );
-  index[1] = atoi( argv[4] );
-
+  index[0] = atoi(argv[3]);
+  index[1] = atoi(argv[4]);
 
   // Software Guide : BeginCodeSnippet
-  connectedThreshold->SetSeed( index );
+  connectedThreshold->SetSeed(index);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -304,16 +288,15 @@ int main( int argc, char *argv[])
 
   // Software Guide : BeginCodeSnippet
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & excep )
-  {
+    }
+  catch (itk::ExceptionObject& excep)
+    {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -369,8 +352,5 @@ int main( int argc, char *argv[])
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

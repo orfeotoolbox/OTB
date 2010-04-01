@@ -27,7 +27,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 #include <iostream>
 
 //  Software Guide : BeginLatex
@@ -42,7 +41,6 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -53,19 +51,19 @@
 #include "otbStreamingImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
-
 int main(int argc, char** argv)
 {
-  if (argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Usage: " << argv[0];
     std::cerr << "outputImage image1 image2 ... " << std::endl;
-  }
+    }
 
-  const unsigned int NbImages = argc-2;
+  const unsigned int NbImages = argc - 2;
 
-  std::cout << "Concat of " << NbImages << " images into a multi-band image " <<
-            std::endl;
+  std::cout << "Concat of " << NbImages <<
+  " images into a multi-band image " <<
+  std::endl;
 
 //  Software Guide : BeginLatex
 //
@@ -74,14 +72,13 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
   typedef unsigned short int PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< PixelType, Dimension > InputImageType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
 
-  typedef otb::ImageFileReader< InputImageType > ImageReaderType;
+  typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -93,9 +90,8 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::ObjectList< ImageReaderType > ReaderListType;
+  typedef otb::ObjectList<ImageReaderType> ReaderListType;
 
   ReaderListType::Pointer readerList = ReaderListType::New();
 
@@ -110,9 +106,8 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageList< InputImageType > ImageListType;
+  typedef otb::ImageList<InputImageType> ImageListType;
 
   ImageListType::Pointer imageList = ImageListType::New();
 
@@ -125,24 +120,23 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  for (unsigned int i = 0; i<NbImages; i++)
-  {
+  for (unsigned int i = 0; i < NbImages; i++)
+    {
 
     ImageReaderType::Pointer imageReader = ImageReaderType::New();
 
-    imageReader->SetFileName( argv[i+2]  );
+    imageReader->SetFileName(argv[i + 2]);
 
-    std::cout << "Adding image " << argv[i+2] << std::endl;
+    std::cout << "Adding image " << argv[i + 2] << std::endl;
 
     imageReader->UpdateOutputInformation();
 
-    imageList->PushBack( imageReader->GetOutput() );
+    imageList->PushBack(imageReader->GetOutput());
 
-    readerList->PushBack( imageReader );
+    readerList->PushBack(imageReader);
 
-  }
+    }
 
 // Software Guide : EndCodeSnippet
 
@@ -155,11 +149,10 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage< PixelType, Dimension > VectorImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 
-  typedef otb::ImageListToVectorImageFilter< ImageListType, VectorImageType >
+  typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType>
   ImageListToVectorImageFilterType;
 
   ImageListToVectorImageFilterType::Pointer iL2VI =
@@ -176,15 +169,14 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  iL2VI->SetInput( imageList );
+  iL2VI->SetInput(imageList);
 
-  typedef otb::StreamingImageFileWriter< VectorImageType > ImageWriterType;
+  typedef otb::StreamingImageFileWriter<VectorImageType> ImageWriterType;
 
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
 
-  imageWriter->SetFileName( argv[1] );
+  imageWriter->SetFileName(argv[1]);
 
 // Software Guide : EndCodeSnippet
 
@@ -196,21 +188,19 @@ int main(int argc, char** argv)
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 
   unsigned long size = (10000 * 10000 * sizeof(PixelType)) / NbImages;
 
-  std::cout<<"Streaming size: "<<size<<std::endl;
+  std::cout << "Streaming size: " << size << std::endl;
 
   imageWriter->SetBufferMemorySize(size);
 
-  imageWriter->SetInput( iL2VI->GetOutput() );
+  imageWriter->SetInput(iL2VI->GetOutput());
 
   imageWriter->Update();
 
 // Software Guide : EndCodeSnippet
-
 
   return EXIT_SUCCESS;
 }

@@ -49,7 +49,6 @@ void RegisterTests()
 #define main DEMToRainbowExampleTest
 #include "DEMToRainbowExample.cxx"
 
-
 #undef main
 #define main ScalingFilterExampleTest
 #include "ScalingFilterExample.cxx"

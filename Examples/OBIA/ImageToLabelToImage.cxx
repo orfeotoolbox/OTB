@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {MSLabeledOutput.tif}
 //    OUTPUTS: {OBIAI2L2IOutput.tif}, {OBIAI2L2IInputPretty.png}, {OBIAI2L2IOutputPretty.png}
@@ -43,13 +42,13 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 int main(int argc, char * argv[])
 {
 
-  if( argc != 8 )
+  if (argc != 8)
     {
-    std::cerr << "usage: " << argv[0] << " input output inPretty outPretty conn fg bg" << std::endl;
+    std::cerr << "usage: " << argv[0] <<
+    " input output inPretty outPretty conn fg bg" << std::endl;
     exit(1);
     }
 
@@ -62,97 +61,100 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   const int dim                              = 2;
-  typedef unsigned short                     PixelType;
-  typedef otb::Image< PixelType, dim >       ImageType;
-  
-  typedef itk::LabelObject< PixelType, dim > LabelObjectType;
-  typedef itk::LabelMap< LabelObjectType >   LabelMapType;
+  typedef unsigned short             PixelType;
+  typedef otb::Image<PixelType, dim> ImageType;
+
+  typedef itk::LabelObject<PixelType, dim> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>   LabelMapType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  // As usual, the reader is instantiated and 
-  // the input image is set. 
+  // As usual, the reader is instantiated and
+  // the input image is set.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileReader< ImageType > ReaderType;
+  typedef itk::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   // Software Guide : EndCodeSnippet
-  
+
   //  Software Guide : BeginLatex
   //
-  // Then the binary image is transformed to a collection 
+  // Then the binary image is transformed to a collection
   // of label objects. Arguments are:
   // \begin{itemize}
-  // \item \code{FullyConnected}: Set whether the connected 
-  // components are defined strictly by face connectivity or by 
-  // face+edge+vertex connectivity. Default is FullyConnectedOff.  
+  // \item \code{FullyConnected}: Set whether the connected
+  // components are defined strictly by face connectivity or by
+  // face+edge+vertex connectivity. Default is FullyConnectedOff.
   // \item \code{InputForegroundValue/OutputBackgroundValue}: Specify the
-  // pixel value of input/output of the foreground/background.   
-  // \end{itemize} 
+  // pixel value of input/output of the foreground/background.
+  // \end{itemize}
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::BinaryImageToLabelMapFilter< ImageType, LabelMapType> I2LType;
+  typedef itk::BinaryImageToLabelMapFilter<ImageType, LabelMapType> I2LType;
   I2LType::Pointer i2l = I2LType::New();
-  i2l->SetInput( reader->GetOutput() );
-  i2l->SetFullyConnected( atoi(argv[5]) );
-  i2l->SetInputForegroundValue( atoi(argv[6]) );
-  i2l->SetOutputBackgroundValue( atoi(argv[7]) );
+  i2l->SetInput(reader->GetOutput());
+  i2l->SetFullyConnected(atoi(argv[5]));
+  i2l->SetInputForegroundValue(atoi(argv[6]));
+  i2l->SetOutputBackgroundValue(atoi(argv[7]));
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
   // Then the inverse process is used to recreate a image of labels.
-  // The \doxygen{itk}{LabelMapToLabelImageFilter} converts a 
-  // LabelMap to a labeled image. 
+  // The \doxygen{itk}{LabelMapToLabelImageFilter} converts a
+  // LabelMap to a labeled image.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::LabelMapToLabelImageFilter< LabelMapType, ImageType> L2IType;
+  typedef itk::LabelMapToLabelImageFilter<LabelMapType, ImageType> L2IType;
   L2IType::Pointer l2i = L2IType::New();
-  l2i->SetInput( i2l->GetOutput() );
+  l2i->SetInput(i2l->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  The output can be passed to a writer. The invocation 
+  //  The output can be passed to a writer. The invocation
   //  of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.
   //
   //  Software Guide : EndLatex
-  
+
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileWriter< ImageType > WriterType;
+  typedef itk::ImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( l2i->GetOutput() );
-  writer->SetFileName( argv[2] );
+  writer->SetInput(l2i->GetOutput());
+  writer->SetFileName(argv[2]);
   writer->Update();
   // Software Guide : EndCodeSnippet
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, dim>                                      OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                         WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType> RescalerType;
-
+  typedef otb::Image<unsigned char,
+                     dim>
+                                                                  OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>
+                                                                  WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputPrettyImageType> RescalerType;
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
-  rescaler->SetInput( reader->GetOutput() );
+  rescaler->SetInput(reader->GetOutput());
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
-  prettyWriter->SetFileName( argv[3] );
-  prettyWriter->SetInput( rescaler->GetOutput() );
+  prettyWriter->SetFileName(argv[3]);
+  prettyWriter->SetInput(rescaler->GetOutput());
   prettyWriter->Update();
 
-  rescaler->SetInput( l2i->GetOutput() );
-  prettyWriter->SetFileName( argv[4] );
-  prettyWriter->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(l2i->GetOutput());
+  prettyWriter->SetFileName(argv[4]);
+  prettyWriter->SetInput(rescaler->GetOutput());
   prettyWriter->Update();
 
   // Software Guide : BeginLatex

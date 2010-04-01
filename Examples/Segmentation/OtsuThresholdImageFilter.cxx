@@ -46,15 +46,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputImageFile ";
     std::cerr << " insideValue    outsideValue   "  << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -64,10 +64,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  unsigned char  InputPixelType;
-  typedef  unsigned char  OutputPixelType;
+  typedef  unsigned char InputPixelType;
+  typedef  unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -77,10 +76,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -91,9 +89,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::OtsuThresholdImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -105,9 +102,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -116,11 +112,9 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< InputImageType >  WriterType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -135,9 +129,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( filter->GetOutput() );
-  reader->SetFileName( argv[1] );
-
+  writer->SetInput(filter->GetOutput());
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -150,9 +143,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -169,14 +161,13 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  const OutputPixelType outsideValue = atoi( argv[3] );
-  const OutputPixelType insideValue  = atoi( argv[4] );
+  const OutputPixelType outsideValue = atoi(argv[3]);
+  const OutputPixelType insideValue  = atoi(argv[4]);
 
   // Software Guide : BeginCodeSnippet
-  filter->SetOutsideValue( outsideValue );
-  filter->SetInsideValue(  insideValue  );
+  filter->SetOutsideValue(outsideValue);
+  filter->SetInsideValue(insideValue);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -187,9 +178,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetNumberOfHistogramBins( 128 );
+  filter->SetNumberOfHistogramBins(128);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -204,7 +194,6 @@ int main( int argc, char * argv[] )
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  We print out here the Threshold value that was computed internally by the
@@ -216,7 +205,6 @@ int main( int argc, char * argv[] )
   int threshold = filter->GetThreshold();
   std::cout << "Threshold = " << threshold << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -241,9 +229,8 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-

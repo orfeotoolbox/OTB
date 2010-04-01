@@ -32,12 +32,11 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "itkPointSet.h"
 
 int main(int, char *[])
 {
-  typedef itk::PointSet< unsigned short, 2 > PointSetType;
+  typedef itk::PointSet<unsigned short, 2> PointSetType;
 
   //  Software Guide : BeginLatex
   //
@@ -50,7 +49,7 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointsContainer      PointsContainer;
+  typedef PointSetType::PointsContainer PointsContainer;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -76,11 +75,9 @@ int main(int, char *[])
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   PointsContainer::Pointer points = PointsContainer::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -90,7 +87,7 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointType   PointType;
+  typedef PointSetType::PointType PointType;
   PointType p0;
   PointType p1;
   p0[0] = -1.0;
@@ -98,7 +95,6 @@ int main(int, char *[])
   p1[0] =  1.0;
   p1[1] = 0.0;  // Point 1 = { 1,0 }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -115,12 +111,11 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   unsigned int pointId = 0;
-  points->InsertElement( pointId++ , p0 );
-  points->InsertElement( pointId++ , p1 );
+  points->InsertElement(pointId++, p0);
+  points->InsertElement(pointId++, p1);
   // Software Guide : EndCodeSnippet
 
-  PointSetType::Pointer  pointSet = PointSetType::New();
-
+  PointSetType::Pointer pointSet = PointSetType::New();
 
   //  Software Guide : BeginLatex
   //
@@ -133,9 +128,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  pointSet->SetPoints( points );
+  pointSet->SetPoints(points);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -149,11 +143,9 @@ int main(int, char *[])
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  PointsContainer::Pointer  points2 = pointSet->GetPoints();
+  PointsContainer::Pointer points2 = pointSet->GetPoints();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -170,9 +162,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointsContainer::Iterator     PointsIterator;
+  typedef PointsContainer::Iterator PointsIterator;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -185,9 +176,8 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointsIterator  pointIterator = points->Begin();
+  PointsIterator pointIterator = points->Begin();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -206,14 +196,13 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   PointsIterator end = points->End();
-  while ( pointIterator != end )
-  {
+  while (pointIterator != end)
+    {
     PointType p = pointIterator.Value();   // access the point
     std::cout << p << std::endl;           // print the point
     ++pointIterator;                       // advance to next point
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -233,7 +222,6 @@ int main(int, char *[])
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   std::cout << pointSet->GetNumberOfPoints() << std::endl;
   std::cout << pointSet->GetPoints()->Size() << std::endl;
@@ -241,5 +229,3 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-
-

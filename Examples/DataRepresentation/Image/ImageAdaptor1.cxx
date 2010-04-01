@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 // Software Guide : BeginLatex
 //
 //This example illustrates how the \doxygen{itk}{ImageAdaptor} can be used to cast
@@ -40,10 +39,8 @@
 #include "itkImageAdaptor.h"
 // Software Guide : EndCodeSnippet
 
-
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbImageFileReader.h"
-
 
 //  Software Guide : BeginLatex
 //
@@ -60,7 +57,6 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 class CastPixelAccessor
 {
@@ -68,18 +64,17 @@ public:
   typedef unsigned char InternalType;
   typedef float         ExternalType;
 
-  static void Set(InternalType & output, const ExternalType & input)
+  static void Set(InternalType& output, const ExternalType& input)
   {
-    output = static_cast<InternalType>( input );
+    output = static_cast<InternalType>(input);
   }
 
-  static ExternalType Get( const InternalType & input )
+  static ExternalType Get(const InternalType& input)
   {
-    return static_cast<ExternalType>( input );
+    return static_cast<ExternalType>(input);
   }
 };
 // Software Guide : EndCodeSnippet
-
 
 //-------------------------
 //
@@ -87,15 +82,14 @@ public:
 //
 //-------------------------
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 2 )
-  {
+  if (argc < 2)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << "ImageAdaptor1   inputFileName" << std::endl;
     return -1;
-  }
-
+    }
 
 //  Software Guide : BeginLatex
 //
@@ -106,13 +100,12 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef unsigned char  InputPixelType;
-  const   unsigned int   Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >   ImageType;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
 
-  typedef itk::ImageAdaptor< ImageType, CastPixelAccessor > ImageAdaptorType;
+  typedef itk::ImageAdaptor<ImageType, CastPixelAccessor> ImageAdaptorType;
   ImageAdaptorType::Pointer adaptor = ImageAdaptorType::New();
 // Software Guide : EndCodeSnippet
 
@@ -123,16 +116,13 @@ int main( int argc, char *argv[] )
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >   ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
 // Software Guide : EndCodeSnippet
 
-
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   reader->Update();
-
 
 //  Software Guide : BeginLatex
 //
@@ -141,11 +131,9 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  adaptor->SetImage( reader->GetOutput() );
+  adaptor->SetImage(reader->GetOutput());
 // Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -155,24 +143,21 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
-  typedef itk::ImageRegionIteratorWithIndex< ImageAdaptorType >  IteratorType;
-  IteratorType  it( adaptor, adaptor->GetBufferedRegion() );
+  typedef itk::ImageRegionIteratorWithIndex<ImageAdaptorType> IteratorType;
+  IteratorType it(adaptor, adaptor->GetBufferedRegion());
 
   double sum = 0.0;
   it.GoToBegin();
-  while ( !it.IsAtEnd() )
-  {
+  while (!it.IsAtEnd())
+    {
     float value = it.Get();
     sum += value;
     ++it;
-  }
+    }
 // Software Guide : EndCodeSnippet
 
-
   std::cout << "Sum of pixels is: " << sum << std::endl;
-
 
 //  Software Guide : BeginLatex
 //
@@ -184,8 +169,5 @@ int main( int argc, char *argv[] )
 //
 //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

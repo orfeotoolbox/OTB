@@ -46,30 +46,30 @@
 #include "otbHarrisImageToPointSetFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc != 6 )
-  {
+  if (argc != 6)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputHarrisImageFile sigmaD sigmaI alpha" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  double SigmaD((double)::atof(argv[3]));
-  double SigmaI((double)::atof(argv[4]));
-  double Alpha((double)::atof(argv[5]));
+  double SigmaD((double) ::atof(argv[3]));
+  double SigmaI((double) ::atof(argv[4]));
+  double Alpha((double) ::atof(argv[5]));
 
-  typedef float                                   InputPixelType;
-  const   unsigned int                                  Dimension = 2;
-  typedef unsigned char                             OutputPixelType;
+  typedef float InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef unsigned char OutputPixelType;
 
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >    ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   //  Software Guide : BeginLatex
   //
@@ -81,23 +81,22 @@ int main(int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::HarrisImageFilter<InputImageType,
-  InputImageType>   HarrisFilterType;
+                                 InputImageType>   HarrisFilterType;
   // Software Guide : EndCodeSnippet
   typedef itk::RescaleIntensityImageFilter
-  < InputImageType, OutputImageType > RescalerType;
+  <InputImageType, OutputImageType> RescalerType;
 
-  typedef otb::ImageFileWriter< OutputImageType >    WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-
-  ReaderType::Pointer reader   = ReaderType::New();
-  WriterType::Pointer writer   = WriterType::New();
+  ReaderType::Pointer       reader   = ReaderType::New();
+  WriterType::Pointer       writer   = WriterType::New();
   HarrisFilterType::Pointer harris = HarrisFilterType::New();
-  RescalerType::Pointer rescaler = RescalerType::New();
+  RescalerType::Pointer     rescaler = RescalerType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  harris->SetInput( reader->GetOutput() );
+  harris->SetInput(reader->GetOutput());
 
   //  Software Guide : BeginLatex
   //
@@ -118,16 +117,16 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  harris->SetSigmaD( SigmaD );
-  harris->SetSigmaI( SigmaI );
-  harris->SetAlpha( Alpha );
+  harris->SetSigmaD(SigmaD);
+  harris->SetSigmaI(SigmaI);
+  harris->SetAlpha(Alpha);
   // Software Guide : EndCodeSnippet
 
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+  rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
 
-  rescaler->SetInput( harris->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(harris->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
 
   //  Software Guide : BeginLatex
@@ -154,7 +153,7 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::HarrisImageToPointSetFilter<InputImageType>   FunctionType;
+  typedef otb::HarrisImageToPointSetFilter<InputImageType> FunctionType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -162,11 +161,10 @@ int main(int argc, char *argv[] )
   //  We declare now the filter and a pointer to the output point set.
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef FunctionType::OutputPointSetType   OutputPointSetType;
+  typedef FunctionType::OutputPointSetType OutputPointSetType;
 
-
-  FunctionType::Pointer        harrisPoints    = FunctionType::New();
-  OutputPointSetType::Pointer  pointSet = OutputPointSetType::New();
+  FunctionType::Pointer       harrisPoints    = FunctionType::New();
+  OutputPointSetType::Pointer pointSet = OutputPointSetType::New();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -178,16 +176,15 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  harrisPoints->SetInput( 0,reader->GetOutput() );
-  harrisPoints->SetSigmaD( SigmaD );
-  harrisPoints->SetSigmaI( SigmaI );
-  harrisPoints->SetAlpha( Alpha );
-  harrisPoints->SetLowerThreshold( 10 );
+  harrisPoints->SetInput(0, reader->GetOutput());
+  harrisPoints->SetSigmaD(SigmaD);
+  harrisPoints->SetSigmaI(SigmaI);
+  harrisPoints->SetAlpha(Alpha);
+  harrisPoints->SetLowerThreshold(10);
   pointSet = harrisPoints->GetOutput();
   // Software Guide : EndCodeSnippet
 
   harrisPoints->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -214,16 +211,14 @@ int main(int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  while ( itList != pointsContainer->End() )
-  {
-    typedef OutputPointSetType::PointType           OutputPointType;
+  while (itList != pointsContainer->End())
+    {
+    typedef OutputPointSetType::PointType OutputPointType;
     OutputPointType pCoordinate = (itList.Value());
     std::cout << pCoordinate << std::endl;
     ++itList;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   return EXIT_SUCCESS;
 }
-

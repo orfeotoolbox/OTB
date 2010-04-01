@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {MSLabeledOutput.tif}
 //    OUTPUTS: {OBIAShapeAttribute1.txt}
@@ -42,56 +41,60 @@
 #include "itkStatisticsKeepNObjectsLabelMapFilter.h"
 #include "itkLabelMapToLabelImageFilter.h"
 
-
 int main(int argc, char * argv[])
 {
 
-  if( argc != 8 )
+  if (argc != 8)
     {
-    std::cerr << "usage: " << argv[0] << " input input output background nb reverseOrdering attribute" << std::endl;
+    std::cerr << "usage: " << argv[0] <<
+    " input input output background nb reverseOrdering attribute" << std::endl;
     // std::cerr << "  : " << std::endl;
     exit(1);
     }
 
   const int dim = 3;
 
-  typedef unsigned char PixelType;
-  typedef itk::Image< PixelType, dim > IType;
+  typedef unsigned char              PixelType;
+  typedef itk::Image<PixelType, dim> IType;
 
-  typedef itk::ImageFileReader< IType > ReaderType;
+  typedef itk::ImageFileReader<IType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-  
+  reader->SetFileName(argv[1]);
+
   ReaderType::Pointer reader2 = ReaderType::New();
-  reader2->SetFileName( argv[2] );
+  reader2->SetFileName(argv[2]);
 
-  typedef itk::StatisticsLabelObject<PixelType, dim> LabelObjectType;
-  typedef  itk::LabelMap< LabelObjectType > LabelMapType;
-    typedef  itk::LabelImageToLabelMapFilter< IType, LabelMapType > LabelizerType;
+  typedef itk::StatisticsLabelObject<PixelType, dim>            LabelObjectType;
+  typedef  itk::LabelMap<LabelObjectType>                       LabelMapType;
+  typedef  itk::LabelImageToLabelMapFilter<IType, LabelMapType> LabelizerType;
 
-    typedef itk::StatisticsLabelMapFilter< LabelMapType, IType > LabelObjectValuatorType;
-  typedef  LabelObjectType::AttributeType AttributeType;
-  typedef  itk::StatisticsKeepNObjectsLabelMapFilter< LabelMapType > KeepNObjectsType;
-  typedef  itk::LabelMapToLabelImageFilter< LabelMapType, IType > BinarizerType;
+  typedef itk::StatisticsLabelMapFilter<LabelMapType,
+                                        IType>    LabelObjectValuatorType;
+  typedef  LabelObjectType::AttributeType
+                                                  AttributeType;
+  typedef  itk::StatisticsKeepNObjectsLabelMapFilter<LabelMapType>
+                                                  KeepNObjectsType;
+  typedef  itk::LabelMapToLabelImageFilter<LabelMapType,
+                                           IType> BinarizerType;
 
-     LabelizerType::Pointer labelizer = LabelizerType::New();
-  labelizer->SetInput( reader->GetOutput() );
-  labelizer->SetBackgroundValue( atoi(argv[4]) );
-  
+  LabelizerType::Pointer labelizer = LabelizerType::New();
+  labelizer->SetInput(reader->GetOutput());
+  labelizer->SetBackgroundValue(atoi(argv[4]));
+
   LabelObjectValuatorType::Pointer valuator = LabelObjectValuatorType::New();
-  valuator->SetInput( labelizer->GetOutput() );
-  valuator->SetFeatureImage( reader2->GetOutput() );
-  valuator->SetLabelImage( reader->GetOutput() );
-  valuator->SetComputeHistogram( false );
-  
+  valuator->SetInput(labelizer->GetOutput());
+  valuator->SetFeatureImage(reader2->GetOutput());
+  valuator->SetLabelImage(reader->GetOutput());
+  valuator->SetComputeHistogram(false);
+
   KeepNObjectsType::Pointer opening = KeepNObjectsType::New();
-  opening->SetInput( valuator->GetOutput() );
-  opening->SetNumberOfObjects( atoi(argv[5]) );
-  opening->SetReverseOrdering( atoi(argv[6]) );
-  opening->SetAttribute( argv[7] );
-  
-   BinarizerType::Pointer binarizer = BinarizerType::New();
-  binarizer->SetInput( opening->GetOutput() );
+  opening->SetInput(valuator->GetOutput());
+  opening->SetNumberOfObjects(atoi(argv[5]));
+  opening->SetReverseOrdering(atoi(argv[6]));
+  opening->SetAttribute(argv[7]);
+
+  BinarizerType::Pointer binarizer = BinarizerType::New();
+  binarizer->SetInput(opening->GetOutput());
 
   /*
   typedef itk::LabelStatisticsKeepNObjectsImageFilter< IType, IType > LabelOpeningType;
@@ -104,11 +107,10 @@ int main(int argc, char * argv[])
   opening->SetAttribute( argv[7] );
   itk::SimpleFilterWatcher watcher(opening, "filter");
 */
-  typedef itk::ImageFileWriter< IType > WriterType;
+  typedef itk::ImageFileWriter<IType> WriterType;
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( binarizer->GetOutput() );
-  writer->SetFileName( argv[3] );
+  writer->SetInput(binarizer->GetOutput());
+  writer->SetFileName(argv[3]);
   writer->Update();
   return 0;
 }
-

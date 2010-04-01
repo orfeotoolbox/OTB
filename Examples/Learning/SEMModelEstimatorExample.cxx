@@ -68,18 +68,18 @@
 #include "otbSEMClassifier.h"
 //  Software Guide : EndCodeSnippet
 
-int main ( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   try
-  {
-
-    if ( argc != 6 )
     {
+
+    if (argc != 6)
+      {
       std::cerr << "Unsupervised Image Segmentation with SEM approach\n";
       std::cerr << argv[0] << " imageIn imgClassif num_of_class ";
       std::cerr << "nbIteration size_of_the_neighborhood\n";
       return EXIT_FAILURE;
-    }
+      }
 
 // Software Guide : BeginLatex
 //
@@ -93,23 +93,23 @@ int main ( int argc, char * argv[] )
 //  Software Guide : BeginCodeSnippet
     typedef double PixelType;
 
-    typedef otb::VectorImage< PixelType, 2 > ImageType;
-    typedef otb::ImageFileReader< ImageType > ReaderType;
+    typedef otb::VectorImage<PixelType, 2>  ImageType;
+    typedef otb::ImageFileReader<ImageType> ReaderType;
 
-    typedef itk::Image< unsigned char, 2 > OutputImageType;
-    typedef otb::ImageFileWriter< OutputImageType > WriterType;
+    typedef itk::Image<unsigned char, 2>          OutputImageType;
+    typedef otb::ImageFileWriter<OutputImageType> WriterType;
 //  Software Guide : EndCodeSnippet
 
     char * fileNameIn = argv[1];
     char * fileNameImgInit = NULL;
     char * fileNameOut = argv[2];
-    int numberOfClasses = atoi( argv[3] );
-    int numberOfIteration = atoi( argv[4] );
-    int neighborhood = atoi( argv[5] );
+    int    numberOfClasses = atoi(argv[3]);
+    int    numberOfIteration = atoi(argv[4]);
+    int    neighborhood = atoi(argv[5]);
     double terminationThreshold = 1e-5;
 
     ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName( fileNameIn );
+    reader->SetFileName(fileNameIn);
     reader->Update();
 
 //  Software Guide : BeginLatex
@@ -120,7 +120,7 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    typedef otb::SEMClassifier< ImageType, OutputImageType > ClassifType;
+    typedef otb::SEMClassifier<ImageType, OutputImageType> ClassifType;
     ClassifType::Pointer classifier = ClassifType::New();
 //  Software Guide : EndCodeSnippet
 
@@ -131,11 +131,11 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    classifier->SetNumberOfClasses( numberOfClasses );
-    classifier->SetMaximumIteration( numberOfIteration );
-    classifier->SetNeighborhood( neighborhood );
-    classifier->SetTerminationThreshold( terminationThreshold );
-    classifier->SetSample( reader->GetOutput() );
+    classifier->SetNumberOfClasses(numberOfClasses);
+    classifier->SetMaximumIteration(numberOfIteration);
+    classifier->SetNeighborhood(neighborhood);
+    classifier->SetTerminationThreshold(terminationThreshold);
+    classifier->SetSample(reader->GetOutput());
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -147,14 +147,14 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    if ( fileNameImgInit != NULL )
-    {
-      typedef otb::ImageFileReader< OutputImageType > ImgInitReaderType;
+    if (fileNameImgInit != NULL)
+      {
+      typedef otb::ImageFileReader<OutputImageType> ImgInitReaderType;
       ImgInitReaderType::Pointer segReader = ImgInitReaderType::New();
-      segReader->SetFileName( fileNameImgInit );
+      segReader->SetFileName(fileNameImgInit);
       segReader->Update();
-      classifier->SetClassLabels( segReader->GetOutput() );
-    }
+      classifier->SetClassLabels(segReader->GetOutput());
+      }
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -171,11 +171,11 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginCodeSnippet
     typedef ClassifType::ClassSampleType ClassSampleType;
-    typedef otb::Statistics::GaussianModelComponent< ClassSampleType >
+    typedef otb::Statistics::GaussianModelComponent<ClassSampleType>
     GaussianType;
 
-    for ( int i = 0; i < numberOfClasses; i++ )
-      classifier->AddComponent( i, GaussianType::New() );
+    for (int i = 0; i < numberOfClasses; i++)
+      classifier->AddComponent(i, GaussianType::New());
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -186,17 +186,17 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginCodeSnippet
     try
-    {
+      {
       classifier->Update();
-    }
+      }
 //  Software Guide : EndCodeSnippet
 
-    catch ( itk::ExceptionObject & err )
-    {
+    catch (itk::ExceptionObject& err)
+      {
       std::cerr << "ExceptionObject caught in " << argv[0] << "!\n";
       std::cerr << err << std::endl;
       return -1;
-    }
+      }
 
 //  Software Guide : BeginLatex
 //
@@ -211,20 +211,19 @@ int main ( int argc, char * argv[] )
 //
 // Software Guide : EndLatex
 
-
 //  Software Guide : BeginCodeSnippet
-    typedef itk::RescaleIntensityImageFilter< OutputImageType,
-    OutputImageType > RescalerType;
+    typedef itk::RescaleIntensityImageFilter<OutputImageType,
+                                             OutputImageType> RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
 
-    rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
-    rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
+    rescaler->SetOutputMinimum(itk::NumericTraits<unsigned char>::min());
+    rescaler->SetOutputMaximum(itk::NumericTraits<unsigned char>::max());
 
-    rescaler->SetInput( classifier->GetOutputImage() );
+    rescaler->SetInput(classifier->GetOutputImage());
 
     WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName( fileNameOut );
-    writer->SetInput( rescaler->GetOutput() );
+    writer->SetFileName(fileNameOut);
+    writer->SetInput(rescaler->GetOutput());
     writer->Update();
 //  Software Guide : EndCodeSnippet
 
@@ -247,10 +246,9 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginCodeSnippet
     std::cerr << "Program terminated with a ";
-    if ( classifier->GetTerminationCode() == ClassifType::CONVERGED )
-      std::cerr << "converged ";
-    else
-      std::cerr << "not-converged ";
+    if (classifier->GetTerminationCode() ==
+        ClassifType::CONVERGED) std::cerr << "converged ";
+    else std::cerr << "not-converged ";
     std::cerr << "code...\n";
 //  Software Guide : EndCodeSnippet
 
@@ -263,21 +261,19 @@ int main ( int argc, char * argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-    classifier->Print( std::cerr );
+    classifier->Print(std::cerr);
 //  Software Guide : EndCodeSnippet
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cerr << "Exception itk::ExceptionObject thrown !\n";
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-  }
-  catch ( ... )
-  {
+    }
+  catch (...)
+    {
     std::cerr << "Unknown exception thrown !\n";
     return EXIT_FAILURE;
-  }
+    }
   return EXIT_SUCCESS;
 }
-
-

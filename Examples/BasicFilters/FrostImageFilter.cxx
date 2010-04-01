@@ -68,21 +68,20 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 5 )
-  {
+  if (argc != 5)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile radius deramp" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  typedef  unsigned char  PixelType;
+  typedef  unsigned char PixelType;
 
-  typedef otb::Image< PixelType,  2 >   InputImageType;
-  typedef otb::Image< PixelType,  2 >   OutputImageType;
-
+  typedef otb::Image<PixelType,  2> InputImageType;
+  typedef otb::Image<PixelType,  2> OutputImageType;
 
   //  Software Guide : BeginLatex
   //
@@ -91,22 +90,19 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::FrostImageFilter< InputImageType, OutputImageType >  FilterType;
+  typedef otb::FrostImageFilter<InputImageType, OutputImageType> FilterType;
   // Software Guide : EndCodeSnippet
 
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
 
-
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( filter->GetOutput() );
-  reader->SetFileName( argv[1] );
-
+  writer->SetInput(filter->GetOutput());
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -119,9 +115,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -137,13 +132,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   FilterType::SizeType Radius;
-  Radius[0]= atoi(argv[3]);
-  Radius[1]= atoi(argv[3]);
+  Radius[0] = atoi(argv[3]);
+  Radius[1] = atoi(argv[3]);
 
-  filter->SetRadius( Radius );
-  filter->SetDeramp( atof(argv[4]) );
+  filter->SetRadius(Radius);
+  filter->SetDeramp(atof(argv[4]));
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -158,10 +152,8 @@ int main( int argc, char * argv[] )
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:FROST_FILTER} shows the result of applying the Frost
@@ -182,7 +174,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

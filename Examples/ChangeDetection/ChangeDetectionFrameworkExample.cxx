@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the Change Detector framework implemented
@@ -71,28 +70,27 @@
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class MyChangeDetector
 {
 public:
   // The constructor and destructor.
-  MyChangeDetector() {};
-  ~MyChangeDetector() {};
+  MyChangeDetector() {}
+  ~MyChangeDetector() {}
   // Change detection operation
-  inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB)
+  inline TOutput operator ()(const TInput1& itA,
+                             const TInput2& itB)
   {
 
     TOutput result = 0.0;
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
-      result += static_cast<TOutput>(itA.GetPixel(pos)-itB.GetPixel(pos));
+      result += static_cast<TOutput>(itA.GetPixel(pos) - itB.GetPixel(pos));
 
-
-    }
-    return static_cast<TOutput>( result/itA.Size() );
+      }
+    return static_cast<TOutput>(result / itA.Size());
   }
 };
 // Software Guide : EndCodeSnippet
@@ -118,25 +116,27 @@ public:
 // Software Guide : BeginCodeSnippet
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT MyChangeDetectorImageFilter :
-      public otb::BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-      MyChangeDetector<
+  public otb::BinaryFunctorNeighborhoodImageFilter<
+    TInputImage1, TInputImage2, TOutputImage,
+    MyChangeDetector<
       typename itk::ConstNeighborhoodIterator<TInputImage1>,
       typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType>   >
+      typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef MyChangeDetectorImageFilter  Self;
+  typedef MyChangeDetectorImageFilter Self;
+
   typedef typename otb::BinaryFunctorNeighborhoodImageFilter<
-  TInputImage1,TInputImage2,TOutputImage,
-  MyChangeDetector<
-  typename itk::ConstNeighborhoodIterator<TInputImage1>,
-  typename itk::ConstNeighborhoodIterator<TInputImage2>,
-  typename TOutputImage::PixelType>
-  >  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    TInputImage1, TInputImage2, TOutputImage,
+    MyChangeDetector<
+      typename itk::ConstNeighborhoodIterator<TInputImage1>,
+      typename itk::ConstNeighborhoodIterator<TInputImage2>,
+      typename TOutputImage::PixelType>
+    >  Superclass;
+
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -146,8 +146,8 @@ protected:
   virtual ~MyChangeDetectorImageFilter() {}
 
 private:
-  MyChangeDetectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MyChangeDetectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 // Software Guide : EndCodeSnippet
@@ -163,15 +163,16 @@ private:
 //
 // SoftwareGuide : EndLatex
 
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
+    std::cerr << argv[0] <<
+    " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
     return -1;
-  }
+    }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -184,14 +185,13 @@ int main(int argc, char* argv[] )
   //
   // SoftwareGuide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
-  typedef float InternalPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType1;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType2;
-  typedef otb::Image<InternalPixelType, Dimension>  ChangeImageType;
-  typedef otb::Image<OutputPixelType, Dimension>    OutputImageType;
+  typedef float                                    InternalPixelType;
+  typedef unsigned char                            OutputPixelType;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
+  typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
+  typedef otb::Image<OutputPixelType, Dimension>   OutputImageType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -203,13 +203,12 @@ int main(int argc, char* argv[] )
   // SoftwareGuide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType1 >  ReaderType1;
-  typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
-  typedef itk::RescaleIntensityImageFilter< ChangeImageType,
-  OutputImageType > RescalerType;
+  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
+  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef itk::RescaleIntensityImageFilter<ChangeImageType,
+                                           OutputImageType> RescalerType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -219,14 +218,14 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef MyChangeDetectorImageFilter<
-  InputImageType1,
-  InputImageType2,
-  ChangeImageType  >       FilterType;
+    InputImageType1,
+    InputImageType2,
+    ChangeImageType>       FilterType;
   // Software Guide : EndCodeSnippet
 
-  ReaderType1::Pointer reader1 = ReaderType1::New();
-  ReaderType2::Pointer reader2 = ReaderType2::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType1::Pointer  reader1 = ReaderType1::New();
+  ReaderType2::Pointer  reader2 = ReaderType2::New();
+  WriterType::Pointer   writer = WriterType::New();
   FilterType::Pointer   filter = FilterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
@@ -241,18 +240,18 @@ int main(int argc, char* argv[] )
   // SoftwareGuide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  reader1->SetFileName( inputFilename1  );
-  reader2->SetFileName( inputFilename2  );
-  writer->SetFileName( outputFilename );
-  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+  reader1->SetFileName(inputFilename1);
+  reader2->SetFileName(inputFilename2);
+  writer->SetFileName(outputFilename);
+  rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
+  rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
 
-  filter->SetInput1( reader1->GetOutput() );
-  filter->SetInput2( reader2->GetOutput() );
-  filter->SetRadius( atoi(argv[3]) );
+  filter->SetInput1(reader1->GetOutput());
+  filter->SetInput2(reader2->GetOutput());
+  filter->SetRadius(atoi(argv[3]));
 
-  rescaler->SetInput( filter->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   // Software Guide : EndCodeSnippet
 
   typedef otb::CommandProgressUpdate<FilterType> CommandType;
@@ -260,17 +259,16 @@ int main(int argc, char* argv[] )
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
 
-
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -278,8 +276,6 @@ int main(int argc, char* argv[] )
   //
   // SoftwareGuide : EndLatex
 
-
   return EXIT_SUCCESS;
 
 }
-

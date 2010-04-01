@@ -54,12 +54,12 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 12 )
-  {
-    for (int i=0; i<argc; i++)
+  if (argc != 12)
+    {
+    for (int i = 0; i < argc; i++)
       std::cerr << argv[i] << std::endl;
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputSegmentsImageFile length width ";
@@ -69,8 +69,7 @@ int main( int argc, char * argv[] )
     std::cerr << " FillGapsRadius FillGapsAngularBeam" << std::endl;
 
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -81,8 +80,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  float  InternalPixelType;
-  typedef  unsigned char  OutputPixelType;
+  typedef  float         InternalPixelType;
+  typedef  unsigned char OutputPixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -92,12 +91,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image<InternalPixelType,  2> InternalImageType;
+  typedef otb::Image<OutputPixelType,  2>   OutputImageType;
   // Software Guide : EndCodeSnippet
 
-  typedef otb::LineSpatialObjectList   LinesListType;
-
+  typedef otb::LineSpatialObjectList LinesListType;
 
   //  Software Guide : BeginLatex
   //
@@ -106,18 +104,22 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineRatioDetectorImageFilter< InternalImageType,
-  InternalImageType >  DetectorType;
-  typedef otb::PixelSuppressionByDirectionImageFilter< InternalImageType,
-  InternalImageType >   PixelSuppressionType;
-  typedef otb::LocalHoughFilter< InternalImageType >        LocalHoughType;
-  typedef otb::FillGapsFilter             FillGapsType;
-  typedef otb::DrawLineSpatialObjectListFilter< InternalImageType,
-  OutputImageType >  DrawLineListType;
+  typedef otb::LineRatioDetectorImageFilter<InternalImageType,
+                                            InternalImageType>  DetectorType;
+
+  typedef otb::PixelSuppressionByDirectionImageFilter<InternalImageType,
+                                                      InternalImageType>
+                                                       PixelSuppressionType;
+
+  typedef otb::LocalHoughFilter<InternalImageType> LocalHoughType;
+  typedef otb::FillGapsFilter                      FillGapsType;
+
+  typedef otb::DrawLineSpatialObjectListFilter<InternalImageType,
+                                               OutputImageType>
+                                                           DrawLineListType;
 
   typedef itk::RescaleIntensityImageFilter<InternalImageType> RescalerType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -127,7 +129,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InternalImageType >  ReaderType;
+  typedef otb::ImageFileReader<InternalImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -138,12 +140,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-
 
   //  Software Guide : BeginLatex
   //
@@ -153,14 +154,14 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
   DetectorType::Pointer detector = DetectorType::New();
 
-  PixelSuppressionType::Pointer  pixelSuppression= PixelSuppressionType::New();
-  LocalHoughType::Pointer    localHough= LocalHoughType::New();
-  FillGapsType::Pointer    fillGaps= FillGapsType::New();
-  DrawLineListType::Pointer    drawLineList= DrawLineListType::New();
-  RescalerType::Pointer rescaler = RescalerType::New();
+  PixelSuppressionType::Pointer pixelSuppression = PixelSuppressionType::New();
+  LocalHoughType::Pointer       localHough = LocalHoughType::New();
+  FillGapsType::Pointer         fillGaps = FillGapsType::New();
+  DrawLineListType::Pointer     drawLineList = DrawLineListType::New();
+  RescalerType::Pointer         rescaler = RescalerType::New();
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -173,9 +174,7 @@ int main( int argc, char * argv[] )
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
-
-  reader->SetFileName( argv[1] );
-
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -187,22 +186,21 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  detector->SetInput( reader->GetOutput() );
-  pixelSuppression->SetInputImage( detector->GetOutput() );
-  pixelSuppression->SetInputImageDirection( detector->GetOutputDirection() );
+  detector->SetInput(reader->GetOutput());
+  pixelSuppression->SetInputImage(detector->GetOutput());
+  pixelSuppression->SetInputImageDirection(detector->GetOutputDirection());
 
-  rescaler->SetInput(pixelSuppression->GetOutput() );
+  rescaler->SetInput(pixelSuppression->GetOutput());
 
-  localHough->SetInput( rescaler->GetOutput() );
+  localHough->SetInput(rescaler->GetOutput());
 
-  fillGaps->SetInput ( localHough->GetOutput() );
+  fillGaps->SetInput (localHough->GetOutput());
 
-  drawLineList->SetInput( reader->GetOutput() );
-  drawLineList->SetInputLineSpatialObjectList( fillGaps->GetOutput() );
+  drawLineList->SetInput(reader->GetOutput());
+  drawLineList->SetInputLineSpatialObjectList(fillGaps->GetOutput());
 
-  writer->SetInput( drawLineList->GetOutput() );
+  writer->SetInput(drawLineList->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -214,39 +212,36 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  detector->SetLengthLine( atoi(argv[3]) );
-  detector->SetWidthLine( atoi(argv[4]) );
+  detector->SetLengthLine(atoi(argv[3]));
+  detector->SetWidthLine(atoi(argv[4]));
 
+  unsigned int PixelSuppressionRadiusX((unsigned int) ::atoi(argv[5]));
+  float        PixelSuppressionAngularBeam((float) ::atof(argv[6]));
 
-  unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[5]));
-  float        PixelSuppressionAngularBeam((float)::atof(argv[6]));
+  unsigned int LocalHoughRadiusX((unsigned int) ::atoi(argv[7]));
+  unsigned int LocalHoughRadiusY((unsigned int) ::atoi(argv[8]));
+  unsigned int LocalHoughNumberOfLines((unsigned int) ::atoi(argv[9]));
 
-  unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[7]));
-  unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[8]));
-  unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[9]));
-
-  float  FillGapsRadius((float)::atoi(argv[10]));
-  float  FillGapsAngularBeam((float)::atof(argv[11]));
-
+  float FillGapsRadius((float) ::atoi(argv[10]));
+  float FillGapsAngularBeam((float) ::atof(argv[11]));
 
   PixelSuppressionType::SizeType PixelSuppressionRadius;
   PixelSuppressionRadius[0] = PixelSuppressionRadiusX;
   PixelSuppressionRadius[1] = PixelSuppressionRadiusX;
 
-  pixelSuppression->SetRadius( PixelSuppressionRadius );
-  pixelSuppression->SetAngularBeam( PixelSuppressionAngularBeam );
+  pixelSuppression->SetRadius(PixelSuppressionRadius);
+  pixelSuppression->SetAngularBeam(PixelSuppressionAngularBeam);
 
   PixelSuppressionType::SizeType LocalHoughRadius;
   LocalHoughRadius[0] = LocalHoughRadiusX;
   LocalHoughRadius[1] = LocalHoughRadiusY;
 
-  localHough->SetRadius( LocalHoughRadius );
-  localHough->SetNumberOfLines( LocalHoughNumberOfLines );
+  localHough->SetRadius(LocalHoughRadius);
+  localHough->SetNumberOfLines(LocalHoughNumberOfLines);
 
-  fillGaps->SetRadius( FillGapsRadius );
-  fillGaps->SetAngularBeam( FillGapsAngularBeam );
+  fillGaps->SetRadius(FillGapsRadius);
+  fillGaps->SetAngularBeam(FillGapsAngularBeam);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // \textbf{FIXME: set the methods}
@@ -260,8 +255,7 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
 
   //  Software Guide : BeginLatex
@@ -269,7 +263,6 @@ int main( int argc, char * argv[] )
   // \code{GetOutputDirections()} method. \textbf{FIXME : implement
   // the method!!}
   //  Software Guide : EndLatex
-
 
   //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
@@ -287,7 +280,5 @@ int main( int argc, char * argv[] )
   //  \end{itemize}
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

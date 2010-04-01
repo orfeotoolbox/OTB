@@ -26,7 +26,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 // Software Guide : BeginCommandLineArgs
 // INPUTS:  {ROISpot5.png}
 // OUTPUTS: {CannyEdgeDetectorImageFilterOutput.png}
@@ -44,13 +43,11 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkCastImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-
 
 //  Software Guide : BeginLatex
 //
@@ -60,36 +57,34 @@
 //
 //  Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "itkCannyEdgeDetectionImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
 int main(int argc, char* argv[])
 {
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImage outputImage [variance]" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  float variance = 2.0;
+  float        variance = 2.0;
 
-  if ( argc > 3 )
-  {
-    variance = atof( argv[3] );
-  }
+  if (argc > 3)
+    {
+    variance = atof(argv[3]);
+    }
 
-  typedef unsigned char    CharPixelType;  //  IO
-  typedef double           RealPixelType;  //  Operations
-  const   unsigned int     Dimension = 2;
+  typedef unsigned char CharPixelType;     //  IO
+  typedef double        RealPixelType;     //  Operations
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<CharPixelType, Dimension>    CharImageType;
-  typedef otb::Image<RealPixelType, Dimension>    RealImageType;
+  typedef otb::Image<CharPixelType, Dimension> CharImageType;
+  typedef otb::Image<RealPixelType, Dimension> RealImageType;
 
   //  Software Guide : BeginLatex
   //
@@ -99,13 +94,12 @@ int main(int argc, char* argv[])
   //
   //  Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< RealImageType >  ReaderType;
+  typedef otb::ImageFileReader<RealImageType> ReaderType;
   // Software Guide : EndCodeSnippet
-  typedef otb::ImageFileWriter< CharImageType >  WriterType;
+  typedef otb::ImageFileWriter<CharImageType> WriterType;
 
-
-  typedef itk::RescaleIntensityImageFilter<RealImageType, CharImageType > RescaleFilter;
-
+  typedef itk::RescaleIntensityImageFilter<RealImageType,
+                                           CharImageType> RescaleFilter;
 
   //  Software Guide : BeginLatex
   //
@@ -115,8 +109,8 @@ int main(int argc, char* argv[])
   //
   //  Software Guide : EndLatex
 
-
-  typedef itk::CannyEdgeDetectionImageFilter<RealImageType, RealImageType> CannyFilter;
+  typedef itk::CannyEdgeDetectionImageFilter<RealImageType,
+                                             RealImageType> CannyFilter;
 
   //Setting the IO
 
@@ -129,28 +123,28 @@ int main(int argc, char* argv[])
 
   CannyFilter::Pointer cannyFilter = CannyFilter::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   //The output of an edge filter is 0 or 1
-  rescale->SetOutputMinimum(   0 );
-  rescale->SetOutputMaximum( 255 );
+  rescale->SetOutputMinimum(0);
+  rescale->SetOutputMaximum(255);
 
-  cannyFilter->SetInput( reader->GetOutput() );
-  cannyFilter->SetVariance( variance );
-  rescale->SetInput( cannyFilter->GetOutput() );
-  writer->SetInput( rescale->GetOutput() );
+  cannyFilter->SetInput(reader->GetOutput());
+  cannyFilter->SetVariance(variance);
+  rescale->SetInput(cannyFilter->GetOutput());
+  writer->SetInput(rescale->GetOutput());
 
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //

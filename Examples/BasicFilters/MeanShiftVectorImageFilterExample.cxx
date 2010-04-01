@@ -67,10 +67,14 @@
 int main(int argc, char * argv[])
 {
   if (argc != 12)
-  {
-    std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname filteredPretty clusteredPretty spatialRadius rangeRadius minregionsize scale"<<std::endl;
+    {
+    std::cerr << "Usage: " << argv[0] 
+              << " infname filteredfname clusteredfname labeledclusteredfname "
+              << "clusterboundariesfname filteredPretty clusteredPretty "
+              << "spatialRadius rangeRadius minregionsize scale"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char *       infname                = argv[1];
   const char *       filteredfname          = argv[2];
@@ -87,17 +91,18 @@ int main(int argc, char * argv[])
   //  Software Guide : BeginLatex
 //
 //  We start by the classical \code{typedef}s needed for reading and
-//  writing the images. The EDISON \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html} code upon which OTB's
-//  implementation is based, uses float pixel precision, so we choose
-//  to work with a float pixel type.
+//  writing the images. The EDISON 
+//  \url{http://www.caip.rutgers.edu/riul/research/code/EDISON/index.html} 
+//  code upon which OTB's implementation is based, uses float pixel
+//  precision, so we choose to work with a float pixel type.
 //
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef float PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef float                                    PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>   ImageType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 // Software Guide : EndCodeSnippet
 
@@ -109,9 +114,11 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
-  typedef FilterType::LabeledOutputType LabeledImageType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
+  typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType> FilterType;
+  typedef FilterType::LabeledOutputType
+  LabeledImageType;
+  typedef otb::StreamingImageFileWriter<LabeledImageType>
+  LabeledWriterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -123,10 +130,10 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer1 = WriterType::New();
-  WriterType::Pointer writer2 = WriterType::New();
+  FilterType::Pointer        filter = FilterType::New();
+  ReaderType::Pointer        reader = ReaderType::New();
+  WriterType::Pointer        writer1 = WriterType::New();
+  WriterType::Pointer        writer2 = WriterType::New();
   LabeledWriterType::Pointer writer3 = LabeledWriterType::New();
   LabeledWriterType::Pointer writer4 = LabeledWriterType::New();
   // Software Guide : EndCodeSnippet
@@ -183,13 +190,11 @@ int main(int argc, char * argv[])
   writer3->SetInput(filter->GetLabeledClusteredOutput());
   writer4->SetInput(filter->GetClusterBoundariesOutput());
 
-
   writer1->Update();
   writer2->Update();
   writer3->Update();
   writer4->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:MeanShiftVectorImageFilter} shows the result of applying the mean shift
@@ -199,35 +204,34 @@ int main(int argc, char * argv[])
   // \includegraphics[width=0.40\textwidth]{ROI_QB_MUL_1.eps}
   // \includegraphics[width=0.40\textwidth]{MSFilteredOutput-pretty.eps}
   // \includegraphics[width=0.40\textwidth]{MSClusteredOutput-pretty.eps}
-  // \itkcaption[Mean Shift]{From top to bottom and left to right: Original image, image filtered by
+  // \itkcaption[Mean Shift]{From top to bottom and left to right:
+  // Original image, image filtered by
   // mean shift and mean shift clustering.}
   // \label{fig:MeanShiftVectorImageFilter}
   // \end{figure}
   // Software Guide : EndLatex
 
-  typedef otb::PrintableImageFilter< ImageType >   PrintableFilterType;
+  typedef otb::PrintableImageFilter<ImageType> PrintableFilterType;
   PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
   printableImageFilter->SetChannel(1);
   printableImageFilter->SetChannel(2);
   printableImageFilter->SetChannel(3);
 
-  typedef PrintableFilterType::OutputImageType OutputImageType;
-  typedef otb::StreamingImageFileWriter< OutputImageType >
-  PrettyWriterType;
+  typedef PrintableFilterType::OutputImageType           OutputImageType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> PrettyWriterType;
+
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 
-  printableImageFilter->SetInput( filter->GetOutput() );
-  prettyWriter->SetFileName( filteredPretty );
-  prettyWriter->SetInput( printableImageFilter->GetOutput() );
+  printableImageFilter->SetInput(filter->GetOutput());
+  prettyWriter->SetFileName(filteredPretty);
+  prettyWriter->SetInput(printableImageFilter->GetOutput());
   prettyWriter->Update();
 
-  printableImageFilter->SetInput( filter->GetClusteredOutput() );
-  prettyWriter->SetFileName( clusteredPretty );
-  prettyWriter->SetInput( printableImageFilter->GetOutput() );
+  printableImageFilter->SetInput(filter->GetClusteredOutput());
+  prettyWriter->SetFileName(clusteredPretty);
+  prettyWriter->SetInput(printableImageFilter->GetOutput());
   prettyWriter->Update();
-
 
   return EXIT_SUCCESS;
 }
-

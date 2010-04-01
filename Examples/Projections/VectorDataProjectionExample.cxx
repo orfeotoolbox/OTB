@@ -44,15 +44,17 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if (argc < 4  )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image name> <output vector filename> "  << std::endl;
+  if (argc < 4)
+    {
+    std::cout << argv[0] <<
+    " <input vector filename> <input image name> <output vector filename> "  <<
+    std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -62,8 +64,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData<double > InputVectorDataType;
-  typedef otb::VectorData<double > OutputVectorDataType;
+  typedef otb::VectorData<double> InputVectorDataType;
+  typedef otb::VectorData<double> OutputVectorDataType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -75,7 +77,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
+  typedef otb::VectorDataFileReader<InputVectorDataType>
+  VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
@@ -93,12 +96,11 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Image<unsigned short int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  typedef otb::ImageFileReader<ImageType>   ImageReaderType;
   ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -111,7 +113,8 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorDataProjectionFilter<InputVectorDataType,
-  OutputVectorDataType> VectorDataFilterType;
+                                          OutputVectorDataType>
+  VectorDataFilterType;
   VectorDataFilterType::Pointer vectorDataProjection =
     VectorDataFilterType::New();
   // Software Guide : EndCodeSnippet
@@ -127,7 +130,6 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   vectorDataProjection->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //

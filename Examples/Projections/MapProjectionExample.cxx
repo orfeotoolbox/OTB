@@ -51,14 +51,14 @@
 #include "otbGenericMapProjection.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-  if (argc < 2  )
-  {
-    std::cout << argv[0] <<" <outputfile> "  << std::endl;
+  if (argc < 2)
+    {
+    std::cout << argv[0] << " <outputfile> "  << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   // Software Guide : BeginLatex
   //
@@ -71,11 +71,10 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   const char * outFileName = argv[1];
 
-  itk::Point<double,2> point;
-  point[0]=1.4835345;
-  point[1]=43.55968261;
+  itk::Point<double, 2> point;
+  point[0] = 1.4835345;
+  point[1] = 43.55968261;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -99,10 +98,9 @@ int main( int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   otb::UtmForwardProjection::Pointer utmProjection
-  = otb::UtmForwardProjection::New();
+    = otb::UtmForwardProjection::New();
   utmProjection->SetZone(31);
   utmProjection->SetHemisphere('N');
   // Software Guide : EndCodeSnippet
@@ -113,7 +111,6 @@ int main( int argc, char* argv[] )
   // new projection.
   //
   // Software Guide : EndLatex
-
 
   // Software Guide : BeginCodeSnippet
   file << "Forward UTM projection: " << std::endl;
@@ -130,14 +127,13 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   otb::Lambert93ForwardProjection::Pointer lambertProjection
-  = otb::Lambert93ForwardProjection::New();
+    = otb::Lambert93ForwardProjection::New();
 
   file << "Forward Lambert93 projection: " << std::endl;
   file << point << " -> ";
   file << lambertProjection->TransformPoint(point);
   file << std::endl << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -157,16 +153,16 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::string projectionRefWkt ="PROJCS[\"UTM Zone 31, Northern Hemisphere\","
-     "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,"
-     "AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],"
-     "AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
-     "UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],"
-     "AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],"
-     "AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],"
-     "PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],"
-     "PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],"
-     "PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
+  std::string projectionRefWkt = "PROJCS[\"UTM Zone 31, Northern Hemisphere\","
+                                 "GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,"
+                                 "AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],"
+                                 "AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],"
+                                 "UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],"
+                                 "AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],"
+                                 "AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],"
+                                 "PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],"
+                                 "PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],"
+                                 "PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -184,7 +180,7 @@ int main( int argc, char* argv[] )
 
   file << "Forward generic projection: " << std::endl;
   file << point << " -> ";
-  file << genericMapProjection ->TransformPoint(point);
+  file << genericMapProjection->TransformPoint(point);
   file << std::endl << std::endl;
   // Software Guide : EndCodeSnippet
 
@@ -197,7 +193,6 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   file.close();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //

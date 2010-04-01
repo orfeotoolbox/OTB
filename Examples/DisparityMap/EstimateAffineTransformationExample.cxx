@@ -26,13 +26,13 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}, {QB_SuburbR10X13Y17.png}
 //    OUTPUTS: {AffineTransformationOutput.png}, {AffineTransformationTxtOutput.txt}
-//    2 3 0 0 0.3 1 
+//    2 3 0 0 0.3 1
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example demonstrates the use of the
-// \doxygen{otb}{KeyPointSetsMatchingFilter} for transformation 
+// \doxygen{otb}{KeyPointSetsMatchingFilter} for transformation
 // estimation between 2 images. The idea here is to match SIFTs extracted from both the
 // fixed and the moving images. The use of SIFTs is demonstrated in
 // section \ref{sec:SIFTDetector}. The
@@ -45,7 +45,6 @@
 // appropriate header files.
 //
 // Software Guide : EndLatex
-
 
 // Software Guide : BeginCodeSnippet
 #include "otbKeyPointSetsMatchingFilter.h"
@@ -71,28 +70,29 @@
 #include "otbLeastSquareAffineTransformEstimator.h"
 #include "itkResampleImageFilter.h"
 
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-  if (argc!= 11)
-  {
-    std::cerr <<"Usage: "<<argv[0];
-    std::cerr<<" fixedFileName movingFileName resamplingImageFileName  transfofname octaves scales threshold ratio secondOrderThreshold useBackMatching" << std::endl;
+  if (argc != 11)
+    {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr <<
+    " fixedFileName movingFileName resamplingImageFileName  transfofname octaves scales threshold ratio secondOrderThreshold useBackMatching"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * fixedfname           = argv[1];
   const char * movingfname          = argv[2];
   const char * outputImageFilename  = argv[3];
   const char * outputTransformationFilename  = argv[4];
-  
+
   const unsigned int octaves        = atoi(argv[5]);
   const unsigned int scales         = atoi(argv[6]);
-  float threshold                   = atof(argv[7]);
-  float ratio                       = atof(argv[8]);
-  const double secondOrderThreshold = atof(argv[9]);
-  const bool useBackMatching        = atoi(argv[10]);
-  
-  
+  float              threshold                   = atof(argv[7]);
+  float              ratio                       = atof(argv[8]);
+  const double       secondOrderThreshold = atof(argv[9]);
+  const bool         useBackMatching        = atoi(argv[10]);
+
   const unsigned int Dimension      = 2;
 
   // Software Guide : BeginLatex
@@ -107,8 +107,8 @@ int main (int argc, char* argv[])
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<RealType,Dimension>        ImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<RealType, Dimension>        ImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -118,17 +118,17 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::VariableLengthVector<RealType>     RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
+  typedef itk::VariableLengthVector<RealType>      RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
   // Software Guide : EndCodeSnippet
- // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // The filter for computing the SIFTs has a type defined as follows:
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType>
   ImageToSIFTKeyPointSetFilterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -151,9 +151,9 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PointSetType::PointType           PointType;
-  typedef std::pair<PointType,PointType>    MatchType;
-  typedef std::vector<MatchType> MatchVectorType;
+  typedef PointSetType::PointType         PointType;
+  typedef std::pair<PointType, PointType> MatchType;
+  typedef std::vector<MatchType>          MatchVectorType;
   typedef EuclideanDistanceMatchingFilterType::LandmarkListType
   LandmarkListType;
 
@@ -162,7 +162,6 @@ int main (int argc, char* argv[])
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -212,9 +211,9 @@ int main (int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter1->SetInput( fixedReader->GetOutput() );
-  filter2->SetInput( movingReader->GetOutput() );
-  
+  filter1->SetInput(fixedReader->GetOutput());
+  filter2->SetInput(movingReader->GetOutput());
+
   filter1->SetOctavesNumber(octaves);
   filter1->SetScalesNumber(scales);
 
@@ -245,7 +244,6 @@ int main (int argc, char* argv[])
   euclideanMatcher->Update();
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // The matched points will be stored into a landmark list.
@@ -257,49 +255,49 @@ int main (int argc, char* argv[])
   landmarkList = euclideanMatcher->GetOutput();
   // Software Guide : EndCodeSnippet
 
- // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Apply Mean square algorithm
   //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-  
-  typedef itk::Point<double,2>                                 MyPointType;
+
+  typedef itk::Point<double, 2>                                 MyPointType;
   typedef otb::LeastSquareAffineTransformEstimator<MyPointType> EstimatorType;
-  
+
   // instantiation of the estimator of the affine transformation
   EstimatorType::Pointer estimator = EstimatorType::New();
-  std::cout << "landmark list size " << landmarkList->Size() << std::endl;  
+  std::cout << "landmark list size " << landmarkList->Size() << std::endl;
   for (LandmarkListType::Iterator it = landmarkList->Begin();
-     it != landmarkList->End(); ++it)
-  {       
-        estimator->AddTiePoints(it.Get()->GetPoint1(),it.Get()->GetPoint2());
-  }
+       it != landmarkList->End(); ++it)
+    {
+    estimator->AddTiePoints(it.Get()->GetPoint1(), it.Get()->GetPoint2());
+    }
 
   // Trigger computation
   estimator->Compute();
- 
+
   // Software Guide : EndCodeSnippet
 
- // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
   //
   // Resample the initial image with the transformation evaluated
   //
   // Software Guide : EndLatex
 //  Software Guide : BeginLatex
-  //
-  //  It is common, as the last step of a registration task, to use
-  //  the resulting transform to map the moving image into the fixed
-  //  image space.  This is easily done with the
-  //  \doxygen{itk}{ResampleImageFilter}. First, a ResampleImageFilter
-  //  type is instantiated using the image types. 
-  //
-  //  Software Guide : EndLatex
+//
+//  It is common, as the last step of a registration task, to use
+//  the resulting transform to map the moving image into the fixed
+//  image space.  This is easily done with the
+//  \doxygen{itk}{ResampleImageFilter}. First, a ResampleImageFilter
+//  type is instantiated using the image types.
+//
+//  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef itk::ResampleImageFilter<
-  ImageType,
-  OutputImageType >    ResampleFilterType;
+    ImageType,
+    OutputImageType>    ResampleFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -311,13 +309,13 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  resampler->SetInput( movingReader->GetOutput() );
+  resampler->SetInput(movingReader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  The Transform that is produced as output do not need to be inversed because 
-  //  we apply here the resampling algorithm to the "moving" image 
+  //  The Transform that is produced as output do not need to be inversed because
+  //  we apply here the resampling algorithm to the "moving" image
   // to produce the fixed image.
   //
   //  Software Guide : EndLatex
@@ -329,26 +327,26 @@ int main (int argc, char* argv[])
   // Set floatfield to format properly
   ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
-  ofs<<"Transformation"<<std::endl;
-  ofs<<"Estimated affine matrix: "<<std::endl;
-  ofs<<estimator->GetMatrix()<<std::endl;
-  ofs<<"Estimated affine offset: "<<std::endl;
-  ofs<<estimator->GetOffset()<<std::endl;
-  ofs<<"RMS error: "<<std::endl;
-  ofs<<estimator->GetRMSError()<<std::endl;
-  ofs<<"Relative residual: "<<std::endl;
-  ofs<<estimator->GetRelativeResidual()<<std::endl;
-  
+  ofs << "Transformation" << std::endl;
+  ofs << "Estimated affine matrix: " << std::endl;
+  ofs << estimator->GetMatrix() << std::endl;
+  ofs << "Estimated affine offset: " << std::endl;
+  ofs << estimator->GetOffset() << std::endl;
+  ofs << "RMS error: " << std::endl;
+  ofs << estimator->GetRMSError() << std::endl;
+  ofs << "Relative residual: " << std::endl;
+  ofs << estimator->GetRelativeResidual() << std::endl;
+
   ofs.close();
   // Software Guide : BeginCodeSnippet
-  
-  ImageType::Pointer fixedImage = fixedReader->GetOutput(); 
 
-  resampler->SetTransform( estimator->GetAffineTransform() );
-  resampler->SetSize( fixedImage->GetLargestPossibleRegion().GetSize() );
-  resampler->SetOutputOrigin( fixedImage->GetOrigin() );
-  resampler->SetOutputSpacing( fixedImage->GetSpacing() );
-  resampler->SetDefaultPixelValue( 100 );
+  ImageType::Pointer fixedImage = fixedReader->GetOutput();
+
+  resampler->SetTransform(estimator->GetAffineTransform());
+  resampler->SetSize(fixedImage->GetLargestPossibleRegion().GetSize());
+  resampler->SetOutputOrigin(fixedImage->GetOrigin());
+  resampler->SetOutputSpacing(fixedImage->GetSpacing());
+  resampler->SetDefaultPixelValue(100);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -356,20 +354,20 @@ int main (int argc, char* argv[])
   //  Write resampled image to png
   //
   //  Software Guide : EndLatex
-    
+
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetInput( resampler->GetOutput() );
-  writer->SetFileName( outputImageFilename );
+  writer->SetInput(resampler->GetOutput());
+  writer->SetFileName(outputImageFilename);
   writer->Update();
   // Software Guide : EndCodeSnippet
-  
-   // Software Guide : BeginLatex
+
+  // Software Guide : BeginLatex
   //
   // Figure~\ref{fig:SIFTDME} shows the result of the resampled image using the
-  // estimated transformation based on SIFT points 
+  // estimated transformation based on SIFT points
   //
   // \begin{figure}
   // \center
@@ -383,7 +381,6 @@ int main (int argc, char* argv[])
   // \end{figure}
   //
   // Software Guide : EndLatex
-  
+
   return EXIT_SUCCESS;
 }
-

@@ -142,10 +142,12 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Vector< double, 1 > MeasurementVectorType;
-  typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType;
+  typedef itk::Vector<double,
+                      1>
+                                                             MeasurementVectorType;
+  typedef itk::Statistics::ListSample<MeasurementVectorType> SampleType;
   SampleType::Pointer sample = SampleType::New();
-  sample->SetMeasurementVectorSize( 1 );
+  sample->SetMeasurementVectorSize(1);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -179,27 +181,26 @@ int main()
   typedef itk::Statistics::NormalVariateGenerator NormalGeneratorType;
   NormalGeneratorType::Pointer normalGenerator = NormalGeneratorType::New();
 
-  normalGenerator->Initialize( 101 );
+  normalGenerator->Initialize(101);
 
   MeasurementVectorType mv;
-  double mean = 100;
-  double standardDeviation = 30;
-  for ( unsigned int i = 0; i < 100; ++i )
-  {
-    mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
-    sample->PushBack( mv );
-  }
+  double                mean = 100;
+  double                standardDeviation = 30;
+  for (unsigned int i = 0; i < 100; ++i)
+    {
+    mv[0] = (normalGenerator->GetVariate() * standardDeviation) + mean;
+    sample->PushBack(mv);
+    }
 
-  normalGenerator->Initialize( 3024 );
+  normalGenerator->Initialize(3024);
   mean = 200;
   standardDeviation = 30;
-  for ( unsigned int i = 0; i < 100; ++i )
-  {
-    mv[0] = ( normalGenerator->GetVariate() * standardDeviation ) + mean;
-    sample->PushBack( mv );
-  }
+  for (unsigned int i = 0; i < 100; ++i)
+    {
+    mv[0] = (normalGenerator->GetVariate() * standardDeviation) + mean;
+    sample->PushBack(mv);
+    }
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -209,15 +210,14 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::WeightedCentroidKdTreeGenerator< SampleType >
+  typedef itk::Statistics::WeightedCentroidKdTreeGenerator<SampleType>
   TreeGeneratorType;
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
 
-  treeGenerator->SetSample( sample );
-  treeGenerator->SetBucketSize( 16 );
+  treeGenerator->SetSample(sample);
+  treeGenerator->SetBucketSize(16);
   treeGenerator->Update();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -247,7 +247,7 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef TreeGeneratorType::KdTreeType TreeType;
+  typedef TreeGeneratorType::KdTreeType                         TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType> EstimatorType;
   EstimatorType::Pointer estimator = EstimatorType::New();
 
@@ -255,21 +255,20 @@ int main()
   initialMeans[0] = 0.0;
   initialMeans[1] = 0.0;
 
-  estimator->SetParameters( initialMeans );
-  estimator->SetKdTree( treeGenerator->GetOutput() );
-  estimator->SetMaximumIteration( 200 );
+  estimator->SetParameters(initialMeans);
+  estimator->SetKdTree(treeGenerator->GetOutput());
+  estimator->SetMaximumIteration(200);
   estimator->SetCentroidPositionChangesThreshold(0.0);
   estimator->StartOptimization();
 
   EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
 
-  for ( unsigned int i = 0; i < 2; ++i )
-  {
+  for (unsigned int i = 0; i < 2; ++i)
+    {
     std::cout << "cluster[" << i << "] " << std::endl;
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -300,24 +299,24 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Statistics::EuclideanDistance< MeasurementVectorType >
-  MembershipFunctionType;
+  typedef itk::Statistics::EuclideanDistance
+           <MeasurementVectorType> MembershipFunctionType;
   typedef itk::MinimumDecisionRule DecisionRuleType;
   DecisionRuleType::Pointer decisionRule = DecisionRuleType::New();
 
-  typedef itk::Statistics::SampleClassifier< SampleType > ClassifierType;
+  typedef itk::Statistics::SampleClassifier<SampleType> ClassifierType;
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-  classifier->SetDecisionRule( (itk::DecisionRuleBase::Pointer) decisionRule);
-  classifier->SetSample( sample );
-  classifier->SetNumberOfClasses( 2 );
+  classifier->SetDecisionRule((itk::DecisionRuleBase::Pointer) decisionRule);
+  classifier->SetSample(sample);
+  classifier->SetNumberOfClasses(2);
 
-  std::vector< unsigned int > classLabels;
-  classLabels.resize( 2 );
+  std::vector<unsigned int> classLabels;
+  classLabels.resize(2);
   classLabels[0] = 100;
   classLabels[1] = 200;
 
-  classifier->SetMembershipFunctionClassLabels( classLabels );
+  classifier->SetMembershipFunctionClassLabels(classLabels);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -336,19 +335,21 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  std::vector< MembershipFunctionType::Pointer > membershipFunctions;
-  MembershipFunctionType::OriginType origin( sample->GetMeasurementVectorSize() );
+  std::vector<MembershipFunctionType::Pointer> membershipFunctions;
+
+  MembershipFunctionType::OriginType origin(
+                       sample->GetMeasurementVectorSize());
   int index = 0;
-  for ( unsigned int i = 0; i < 2; i++ )
-  {
-    membershipFunctions.push_back( MembershipFunctionType::New() );
-    for ( unsigned int j = 0; j < sample->GetMeasurementVectorSize(); j++ )
+  for (unsigned int i = 0; i < 2; i++)
     {
+    membershipFunctions.push_back(MembershipFunctionType::New());
+    for (unsigned int j = 0; j < sample->GetMeasurementVectorSize(); j++)
+      {
       origin[j] = estimatedMeans[index++];
+      }
+    membershipFunctions[i]->SetOrigin(origin);
+    classifier->AddMembershipFunction(membershipFunctions[i].GetPointer());
     }
-    membershipFunctions[i]->SetOrigin( origin );
-    classifier->AddMembershipFunction( membershipFunctions[i].GetPointer() );
-  }
 
   classifier->Update();
   // Software Guide : EndCodeSnippet
@@ -361,19 +362,18 @@ int main()
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ClassifierType::OutputType* membershipSample = classifier->GetOutput();
+  ClassifierType::OutputType* membershipSample =
+    classifier->GetOutput();
   ClassifierType::OutputType::ConstIterator iter = membershipSample->Begin();
 
-  while ( iter != membershipSample->End() )
-  {
+  while (iter != membershipSample->End())
+    {
     std::cout << "measurement vector = " << iter.GetMeasurementVector()
               << "class label = " << iter.GetClassLabel()
               << std::endl;
     ++iter;
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }
-
-

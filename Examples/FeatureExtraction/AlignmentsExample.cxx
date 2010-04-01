@@ -68,42 +68,41 @@
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 
-
 #include "otbImageFileReader.h"
 
 #include <stdio.h>
 #include <iostream>
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if (argc!=4)
-  {
+  if (argc != 4)
+    {
 
-    std::cout << "Usage : " << argv[0] << " inputImage outputImage epsilon" << std::endl;
+    std::cout << "Usage : " << argv[0] << " inputImage outputImage epsilon" <<
+    std::endl;
     return EXIT_FAILURE;
 
-  }
+    }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
+  typedef unsigned short InputPixelType;
+  typedef unsigned short OutputPixelType;
 
-  typedef unsigned short                                   InputPixelType;
-  typedef unsigned short                             OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  const   unsigned int                                  Dimension = 2;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename  );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   reader->Update();
 
@@ -116,8 +115,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::PolyLineParametricPath< Dimension >      PathType;
-  typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::ImageToPathListAlignFilter<InputImageType, PathType>
   ListAlignFilterType;
   // Software Guide : EndCodeSnippet
 
@@ -130,7 +129,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   ListAlignFilterType::Pointer alignFilter = ListAlignFilterType::New();
 
-  alignFilter->SetInput( reader->GetOutput() );
+  alignFilter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -142,7 +141,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  alignFilter->SetEps( atoi(argv[3]) );
+  alignFilter->SetEps(atoi(argv[3]));
   // Software Guide : EndCodeSnippet
 
   alignFilter->Update();
@@ -157,8 +156,8 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::DrawPathFilter< InputImageType, PathType,
-  OutputImageType >  DrawPathFilterType;
+  typedef otb::DrawPathFilter<InputImageType, PathType,
+                              OutputImageType>  DrawPathFilterType;
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   // We will now go through the list of detected paths and feed them
@@ -167,7 +166,6 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef ListAlignFilterType::OutputPathListType ListType;
-
 
   ListType* pathList = alignFilter->GetOutput();
 
@@ -192,23 +190,23 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  while ( listIt != pathList->End())
-  {
+  while (listIt != pathList->End())
+    {
 
     DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
-    drawPathFilter->SetImageInput( backgroundImage );
-    drawPathFilter->SetInputPath( listIt.Get() );
+    drawPathFilter->SetImageInput(backgroundImage);
+    drawPathFilter->SetInputPath(listIt.Get());
 
-    drawPathFilter->SetValue( itk::NumericTraits<OutputPixelType>::max() );
+    drawPathFilter->SetValue(itk::NumericTraits<OutputPixelType>::max());
     drawPathFilter->Update();
 
     backgroundImage = drawPathFilter->GetOutput();
 
     ++listIt;
 
-  }
+    }
 
-  writer->SetInput( backgroundImage );
+  writer->SetInput(backgroundImage);
   // Software Guide : EndCodeSnippet
 
   writer->Update();
@@ -227,8 +225,5 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-

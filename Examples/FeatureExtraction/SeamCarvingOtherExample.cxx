@@ -23,7 +23,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the \doxygen{otb}{AddCarvingPathFilter},
@@ -41,7 +40,6 @@
 //    OUTPUTS: {SeamCarvingOtherExampleOutput.png}
 //    50
 //  Software Guide : EndCommandLineArgs
-
 
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
@@ -65,9 +63,9 @@ int main(int argc, char * argv[])
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType, Dimension >  ImageType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef itk::PolyLineParametricPath<Dimension>   PathType;
+  typedef otb::Image<InputPixelType, Dimension>  ImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   // Software Guide : BeginLatex
   //
@@ -81,19 +79,22 @@ int main(int argc, char * argv[])
   PathListType::Pointer pathList = PathListType::New();
   // Software Guide : EndCodeSnippet
 
-  typedef otb::ImageFileReader< ImageType >                            ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >                      WriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  typedef otb::ImageFileReader<ImageType>
+                                                            ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>
+                                                            WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputImageType> RescalerType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
+  WriterType::Pointer   writer = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
   const char * filenamereader = argv[1];
-  reader->SetFileName( filenamereader );
+  reader->SetFileName(filenamereader);
 
   const char * filenamewriter = argv[2];
-  writer->SetFileName( filenamewriter );
+  writer->SetFileName(filenamewriter);
 
   int iteration = atoi(argv[3]);
 
@@ -104,7 +105,7 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::GradientMagnitudeImageFilter< ImageType, ImageType> GradientType;
+  typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> GradientType;
   GradientType::Pointer gradient = GradientType::New();
 
   typedef otb::ImageToCarvingPathFilter<ImageType, PathType> CarvingFilterType;
@@ -116,20 +117,20 @@ int main(int argc, char * argv[])
 
   typedef otb::RemoveCarvingPathFilter
   <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
-  RemoveCarvingPathFilterType::Pointer removeCarvingPath = RemoveCarvingPathFilterType::New();
+  RemoveCarvingPathFilterType::Pointer removeCarvingPath =
+    RemoveCarvingPathFilterType::New();
 
   typedef otb::AddCarvingPathFilter
   <ImageType, PathType, ImageType> AddCarvingPathFilterType;
-  AddCarvingPathFilterType::Pointer addCarvingPath = AddCarvingPathFilterType::New();
+  AddCarvingPathFilterType::Pointer addCarvingPath =
+    AddCarvingPathFilterType::New();
 
-
-  typedef itk::ImageDuplicator< ImageType > duplicatorType;
+  typedef itk::ImageDuplicator<ImageType> duplicatorType;
   duplicatorType::Pointer duplicator = duplicatorType::New();
   reader->Update();
   duplicator->SetInputImage(reader->GetOutput());
   duplicator->Update();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -141,30 +142,27 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for (int i=0; i<iteration; i++)
-  {
+  for (int i = 0; i < iteration; i++)
+    {
 
-    gradient->SetInput( duplicator->GetOutput() );
+    gradient->SetInput(duplicator->GetOutput());
 
-    carvingFilter->SetInput( gradient->GetOutput() );
-    carvingFilter->SetDirection(i%2);
+    carvingFilter->SetInput(gradient->GetOutput());
+    carvingFilter->SetDirection(i % 2);
 
-    removeCarvingPath->SetInput( duplicator->GetOutput() );
-    removeCarvingPath->SetInputPath( carvingFilter->GetOutput() );
-    removeCarvingPath->SetDirection(i%2);
+    removeCarvingPath->SetInput(duplicator->GetOutput());
+    removeCarvingPath->SetInputPath(carvingFilter->GetOutput());
+    removeCarvingPath->SetDirection(i % 2);
     removeCarvingPath->UpdateLargestPossibleRegion();
-
 
     pathList->PushBack(carvingFilter->GetOutput());
     carvingFilter->GetOutput()->DisconnectPipeline();
 
-
     duplicator->SetInputImage(removeCarvingPath->GetOutput());
     duplicator->Update();
 
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -175,21 +173,21 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  for (int i=iteration-1; i>=0; i--)
-  {
+  for (int i = iteration - 1; i >= 0; i--)
+    {
 
-    addCarvingPath->SetInput( duplicator->GetOutput() );
-    addCarvingPath->SetInputPath(  pathList->GetNthElement(i) );
-    addCarvingPath->SetDirection(i%2);
+    addCarvingPath->SetInput(duplicator->GetOutput());
+    addCarvingPath->SetInputPath(pathList->GetNthElement(i));
+    addCarvingPath->SetDirection(i % 2);
     addCarvingPath->UpdateLargestPossibleRegion();
 
-    drawPathFilter->SetInput( addCarvingPath->GetOutput() );
-    drawPathFilter->SetInputPath( pathList->GetNthElement(i) );
+    drawPathFilter->SetInput(addCarvingPath->GetOutput());
+    drawPathFilter->SetInputPath(pathList->GetNthElement(i));
     drawPathFilter->UpdateLargestPossibleRegion();
 
     duplicator->SetInputImage(drawPathFilter->GetOutput());
     duplicator->Update();
-  }
+    }
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -199,8 +197,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( duplicator->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(duplicator->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
 

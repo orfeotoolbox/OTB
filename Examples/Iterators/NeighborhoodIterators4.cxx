@@ -66,37 +66,37 @@
 #include "itkGaussianOperator.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0]
               << " inputImageFile outputImageFile sigma"
               << std::endl;
     return -1;
-  }
+    }
 
-  typedef float PixelType;
-  typedef otb::Image< PixelType, 2 >  ImageType;
-  typedef otb::ImageFileReader< ImageType > ReaderType;
+  typedef float                           PixelType;
+  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef itk::ConstNeighborhoodIterator< ImageType > NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator< ImageType>        IteratorType;
+  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
+  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   try
-  {
+    {
     reader->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
@@ -105,15 +105,14 @@ int main( int argc, char *argv[] )
   itk::NeighborhoodInnerProduct<ImageType> innerProduct;
 
   typedef itk::NeighborhoodAlgorithm
-  ::ImageBoundaryFacesCalculator< ImageType > FaceCalculatorType;
+  ::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
 
-  FaceCalculatorType faceCalculator;
-  FaceCalculatorType::FaceListType faceList;
+  FaceCalculatorType                         faceCalculator;
+  FaceCalculatorType::FaceListType           faceList;
   FaceCalculatorType::FaceListType::iterator fit;
 
-  IteratorType out;
+  IteratorType             out;
   NeighborhoodIteratorType it;
-
 
 // Software Guide : BeginLatex
 // The Gaussian operator, like the Sobel operator, is instantiated with a pixel
@@ -122,8 +121,8 @@ int main( int argc, char *argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  itk::GaussianOperator< PixelType, 2 > gaussianOperator;
-  gaussianOperator.SetVariance( ::atof(argv[3]) * ::atof(argv[3]) );
+  itk::GaussianOperator<PixelType, 2> gaussianOperator;
+  gaussianOperator.SetVariance(::atof(argv[3]) * ::atof(argv[3]));
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -146,36 +145,35 @@ int main( int argc, char *argv[] )
 // Software Guide : BeginCodeSnippet
   ImageType::Pointer input = reader->GetOutput();
   for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
-  {
+    {
     gaussianOperator.SetDirection(i);
     gaussianOperator.CreateDirectional();
 
     faceList = faceCalculator(input, output->GetRequestedRegion(),
                               gaussianOperator.GetRadius());
 
-    for ( fit=faceList.begin(); fit != faceList.end(); ++fit )
-    {
-      it = NeighborhoodIteratorType( gaussianOperator.GetRadius(),
-                                     input, *fit );
-
-      out = IteratorType( output, *fit );
-
-      for (it.GoToBegin(), out.GoToBegin(); ! it.IsAtEnd(); ++it, ++out)
+    for (fit = faceList.begin(); fit != faceList.end(); ++fit)
       {
-        out.Set( innerProduct(it, gaussianOperator) );
+      it = NeighborhoodIteratorType(gaussianOperator.GetRadius(),
+                                    input, *fit);
+
+      out = IteratorType(output, *fit);
+
+      for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
+        {
+        out.Set(innerProduct(it, gaussianOperator));
+        }
       }
-    }
 
     // Swap the input and output buffers
     if (i != ImageType::ImageDimension - 1)
-    {
+      {
       ImageType::Pointer tmp = input;
       input = output;
       output = tmp;
+      }
     }
-  }
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -201,32 +199,32 @@ int main( int argc, char *argv[] )
 //
 // Software Guide : EndLatex
 
-  typedef unsigned char WritePixelType;
-  typedef otb::Image< WritePixelType, 2 > WriteImageType;
-  typedef otb::ImageFileWriter< WriteImageType > WriterType;
+  typedef unsigned char                        WritePixelType;
+  typedef otb::Image<WritePixelType, 2>        WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<
-  ImageType, WriteImageType > RescaleFilterType;
+    ImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
   rescaler->SetInput(output);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( rescaler->GetOutput() );
+  writer->SetFileName(argv[2]);
+  writer->SetInput(rescaler->GetOutput());
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

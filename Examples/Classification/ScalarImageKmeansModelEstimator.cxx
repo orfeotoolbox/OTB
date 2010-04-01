@@ -38,7 +38,6 @@
 //
 // Software Guide : EndLatex
 
-
 #include "itkKdTree.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 #include "itkWeightedCentroidKdTreeGenerator.h"
@@ -52,96 +51,89 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int main( int argc, char * argv [] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc < 2 )
-  {
+  if (argc < 2)
+    {
     std::cerr << "Missing command line arguments" << std::endl;
     std::cerr << "Usage :  " << argv[0] << "  inputImageFileName " << std::endl;
     return -1;
-  }
+    }
 
+  typedef unsigned char PixelType;
+  const unsigned int Dimension = 2;
 
-  typedef unsigned char       PixelType;
-  const unsigned int          Dimension = 2;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::Image<PixelType, Dimension > ImageType;
-
-  typedef otb::ImageFileReader< ImageType > ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   try
-  {
+    {
     reader->Update();
-  }
-  catch ( itk::ExceptionObject & excp )
-  {
-    std::cerr << "Problem encoutered while reading image file : " << argv[1] << std::endl;
+    }
+  catch (itk::ExceptionObject& excp)
+    {
+    std::cerr << "Problem encoutered while reading image file : " << argv[1] <<
+    std::endl;
     std::cerr << excp << std::endl;
     return -1;
-  }
-
+    }
 
   // Software Guide : BeginCodeSnippet
   // Create a List from the scalar image
-  typedef itk::Statistics::ScalarImageToListAdaptor< ImageType >   AdaptorType;
+  typedef itk::Statistics::ScalarImageToListAdaptor<ImageType> AdaptorType;
 
   AdaptorType::Pointer adaptor = AdaptorType::New();
 
-  adaptor->SetImage(  reader->GetOutput() );
-
+  adaptor->SetImage(reader->GetOutput());
 
   // Define the Measurement vector type from the AdaptorType
-  typedef AdaptorType::MeasurementVectorType  MeasurementVectorType;
-
+  typedef AdaptorType::MeasurementVectorType MeasurementVectorType;
 
   // Create the K-d tree structure
   typedef itk::Statistics::WeightedCentroidKdTreeGenerator<
-  AdaptorType >
+    AdaptorType>
   TreeGeneratorType;
 
   TreeGeneratorType::Pointer treeGenerator = TreeGeneratorType::New();
 
-  treeGenerator->SetSample( adaptor );
-  treeGenerator->SetBucketSize( 16 );
+  treeGenerator->SetSample(adaptor);
+  treeGenerator->SetBucketSize(16);
   treeGenerator->Update();
 
-
-  typedef TreeGeneratorType::KdTreeType TreeType;
+  typedef TreeGeneratorType::KdTreeType                         TreeType;
   typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType> EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 
   const unsigned int numberOfClasses = 4;
 
-  EstimatorType::ParametersType initialMeans( numberOfClasses );
+  EstimatorType::ParametersType initialMeans(numberOfClasses);
   initialMeans[0] = 25.0;
   initialMeans[1] = 125.0;
   initialMeans[2] = 250.0;
 
-  estimator->SetParameters( initialMeans );
+  estimator->SetParameters(initialMeans);
 
-  estimator->SetKdTree( treeGenerator->GetOutput() );
-  estimator->SetMaximumIteration( 200 );
+  estimator->SetKdTree(treeGenerator->GetOutput());
+  estimator->SetMaximumIteration(200);
   estimator->SetCentroidPositionChangesThreshold(0.0);
   estimator->StartOptimization();
 
   EstimatorType::ParametersType estimatedMeans = estimator->GetParameters();
 
-  for ( unsigned int i = 0; i < numberOfClasses; ++i )
-  {
+  for (unsigned int i = 0; i < numberOfClasses; ++i)
+    {
     std::cout << "cluster[" << i << "] " << std::endl;
     std::cout << "    estimated mean : " << estimatedMeans[i] << std::endl;
-  }
+    }
 // Software Guide : EndCodeSnippet
-
 
   return EXIT_SUCCESS;
 
 }
-
-

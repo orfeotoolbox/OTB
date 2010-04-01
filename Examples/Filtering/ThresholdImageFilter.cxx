@@ -113,15 +113,16 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImageFile1 outputImageFile2 outputImageFile3" << std::endl;
+    std::cerr << " outputImageFile1 outputImageFile2 outputImageFile3" <<
+    std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -133,7 +134,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef  unsigned char  PixelType;
+  typedef  unsigned char PixelType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -143,9 +144,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< PixelType,  2 >   ImageType;
+  typedef otb::Image<PixelType,  2> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -154,9 +154,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ThresholdImageFilter< ImageType >  FilterType;
+  typedef itk::ThresholdImageFilter<ImageType> FilterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -166,7 +165,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< ImageType >  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -177,9 +176,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter< ImageType >  WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -194,9 +192,8 @@ int main( int argc, char * argv[] )
   // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetInput( filter->GetOutput() );
-  reader->SetFileName( argv[1] );
-
+  writer->SetInput(filter->GetOutput());
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -209,9 +206,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -225,9 +221,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetOutsideValue( 0 );
+  filter->SetOutsideValue(0);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -238,7 +233,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->ThresholdBelow( 40 );
+  filter->ThresholdBelow(40);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -254,10 +249,8 @@ int main( int argc, char * argv[] )
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -269,13 +262,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->ThresholdAbove( 100 );
-  filter->SetOutsideValue( 255 );
+  filter->ThresholdAbove(100);
+  filter->SetOutsideValue(255);
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[3] );
+  writer->SetFileName(argv[3]);
   writer->Update();
 
   //  Software Guide : BeginLatex
@@ -287,15 +279,13 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->ThresholdOutside( 40,100 );
-  filter->SetOutsideValue( 0 );
+  filter->ThresholdOutside(40, 100);
+  filter->SetOutsideValue(0);
   filter->Update();
   // Software Guide : EndCodeSnippet
 
-
-  writer->SetFileName( argv[4] );
+  writer->SetFileName(argv[4]);
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   //
@@ -314,7 +304,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

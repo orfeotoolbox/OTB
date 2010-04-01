@@ -65,7 +65,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -84,16 +83,15 @@
 #include "itkGradientMagnitudeRecursiveGaussianImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc < 4 )
-  {
+  if (argc < 4)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile   outputImageFile   sigma" << std::endl;
+    std::cerr << argv[0] << "  inputImageFile   outputImageFile   sigma" <<
+    std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -103,10 +101,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef    float    InputPixelType;
-  typedef    float    OutputPixelType;
+  typedef    float InputPixelType;
+  typedef    float OutputPixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -115,13 +112,11 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< InputPixelType,  2 >   InputImageType;
-  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
   // Software Guide : EndCodeSnippet
 
-
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   //  Software Guide : BeginLatex
   //
@@ -134,13 +129,11 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<
-  InputImageType, OutputImageType >  FilterType;
+    InputImageType, OutputImageType>  FilterType;
   // Software Guide : EndCodeSnippet
 
-
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
-
+  reader->SetFileName(argv[1]);
 
   //  Software Guide : BeginLatex
   //
@@ -156,7 +149,6 @@ int main( int argc, char * argv[] )
   FilterType::Pointer filter = FilterType::New();
   // Software Guide : EndCodeSnippet
 
-
   //  Software Guide : BeginLatex
   //
   //  The input image can be obtained from the output of another filter. Here,
@@ -165,9 +157,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -177,13 +168,11 @@ int main( int argc, char * argv[] )
   //  \index{SetSigma()!itk::Gradient\-Magnitude\-Recursive\-Gaussian\-Image\-Filter}
   //
   //  Software Guide : EndLatex
-  const double sigma = atof( argv[3] );
-
+  const double sigma = atof(argv[3]);
 
   // Software Guide : BeginCodeSnippet
-  filter->SetSigma( sigma );
+  filter->SetSigma(sigma);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -193,11 +182,9 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   filter->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -208,31 +195,28 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
-  typedef  unsigned char  WritePixelType;
-  typedef otb::Image< WritePixelType, 2 >    WriteImageType;
+  typedef  unsigned char                WritePixelType;
+  typedef otb::Image<WritePixelType, 2> WriteImageType;
 
   typedef itk::RescaleIntensityImageFilter<
-  OutputImageType, WriteImageType > RescaleFilterType;
+    OutputImageType, WriteImageType> RescaleFilterType;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
-  rescaler->SetOutputMinimum(   0 );
-  rescaler->SetOutputMaximum( 255 );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
 
-  typedef otb::ImageFileWriter< WriteImageType >  WriterType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( argv[2] );
-
+  writer->SetFileName(argv[2]);
 
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( filter->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   writer->Update();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -258,7 +242,5 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

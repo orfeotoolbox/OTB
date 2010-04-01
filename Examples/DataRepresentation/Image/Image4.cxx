@@ -63,13 +63,12 @@
 //
 // Software Guide : EndLatex
 
-
 #include "otbImage.h"
 #include "itkPoint.h"
 
 int main(int, char *[])
 {
-  typedef otb::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image<unsigned short, 2> ImageType;
 
   ImageType::Pointer image = ImageType::New();
 
@@ -83,13 +82,13 @@ int main(int, char *[])
   start[1] =   0;  // first index on Y
 
   ImageType::RegionType region;
-  region.SetSize( size );
-  region.SetIndex( start );
+  region.SetSize(size);
+  region.SetIndex(start);
 
-  image->SetRegions( region );
+  image->SetRegions(region);
   image->Allocate();
 
-  image->FillBuffer( 0 );
+  image->FillBuffer(0);
 
   // Software Guide : BeginLatex
   //
@@ -113,7 +112,6 @@ int main(int, char *[])
   spacing[1] = 0.70; // spacing along Y
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // The array can be assigned to the image using
@@ -124,9 +122,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  image->SetSpacing( spacing );
+  image->SetSpacing(spacing);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -144,7 +141,6 @@ int main(int, char *[])
   std::cout << "Spacing = ";
   std::cout << sp[0] << ", " << sp[1] << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -172,10 +168,8 @@ int main(int, char *[])
   origin[0] = 0.0;  // coordinates of the
   origin[1] = 0.0;  // first pixel in 2-D
 
-
-  image->SetOrigin( origin );
+  image->SetOrigin(origin);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -194,7 +188,6 @@ int main(int, char *[])
   std::cout << orgn[0] << ", " << orgn[1] << std::endl;
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // Once the spacing and origin of the image have been initialized, the image
@@ -211,9 +204,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Point< double, ImageType::ImageDimension > PointType;
+  typedef itk::Point<double, ImageType::ImageDimension> PointType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -237,7 +229,6 @@ int main(int, char *[])
   point[1] = 7.21;    // y coordinate
   // Software Guide : EndCodeSnippet
 
-
   // Software Guide : BeginLatex
   //
   // The image will map the point to an index using the values of the
@@ -251,7 +242,6 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   ImageType::IndexType pixelIndex;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -271,18 +261,17 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  bool isInside = image->TransformPhysicalPointToIndex( point, pixelIndex );
+  bool isInside = image->TransformPhysicalPointToIndex(point, pixelIndex);
 
-  if ( isInside )
-  {
-    ImageType::PixelType pixelValue = image->GetPixel( pixelIndex );
+  if (isInside)
+    {
+    ImageType::PixelType pixelValue = image->GetPixel(pixelIndex);
 
     pixelValue += 5;
 
-    image->SetPixel( pixelIndex, pixelValue );
-  }
+    image->SetPixel(pixelIndex, pixelValue);
+    }
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -294,4 +283,3 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-

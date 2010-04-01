@@ -32,7 +32,6 @@
 #include "otbVectorImage.h"
 // Software Guide : EndCodeSnippet
 
-
 //  Software Guide : BeginLatex
 //
 // We also include some other header which will be useful later. Note that we
@@ -49,8 +48,7 @@
 #include "itkShiftScaleImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
   // Software Guide : EndCodeSnippet
 
@@ -63,7 +61,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned short int PixelType;
+  typedef unsigned short int             PixelType;
   typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
@@ -129,7 +127,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image<PixelType, 2> ImageType;
+  typedef otb::Image<PixelType, 2>                 ImageType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
 
@@ -213,5 +211,3 @@ int main( int argc, char * argv[] )
   return EXIT_SUCCESS;
 }
 // Software Guide : EndCodeSnippet
-
-

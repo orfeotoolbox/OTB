@@ -36,7 +36,6 @@
 //
 //  Software Guide : EndLatex
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -49,37 +48,37 @@
 
 #include "otbImageFileReader.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc != 4 )
-  {
+  if (argc != 4)
+    {
     std::cerr << "Usage : " << argv[0] << " inputImage mask modelFile\n";
     return EXIT_FAILURE;
-  }
+    }
 
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];
 
-  typedef unsigned char      InputPixelType;
-  const   unsigned int       Dimension = 2;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
+  typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
 
-  typedef otb::SVMImageModelEstimator< InputImageType,
-  TrainingImageType >   EstimatorType;
+  typedef otb::SVMImageModelEstimator<InputImageType,
+                                      TrainingImageType>   EstimatorType;
 
-  typedef otb::ImageFileReader< InputImageType > InputReaderType;
-  typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
+  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
+  typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
-  InputReaderType::Pointer inputReader = InputReaderType::New();
+  InputReaderType::Pointer    inputReader = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
-  inputReader->SetFileName( inputImageFileName );
-  trainingReader->SetFileName( trainingImageFileName );
+  inputReader->SetFileName(inputImageFileName);
+  trainingReader->SetFileName(trainingImageFileName);
 
   inputReader->Update();
   trainingReader->Update();
@@ -95,10 +94,10 @@ int main( int argc, char* argv[] )
 //  Software Guide : BeginCodeSnippet
   EstimatorType::Pointer svmEstimator = EstimatorType::New();
 
-  svmEstimator->SetSVMType( C_SVC );
-  svmEstimator->SetInputImage( inputReader->GetOutput() );
-  svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
-  svmEstimator->SetNumberOfClasses( 4 );
+  svmEstimator->SetSVMType(C_SVC);
+  svmEstimator->SetInputImage(inputReader->GetOutput());
+  svmEstimator->SetTrainingImage(trainingReader->GetOutput());
+  svmEstimator->SetNumberOfClasses(4);
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -123,11 +122,11 @@ int main( int argc, char* argv[] )
 
 //  Software Guide : BeginCodeSnippet
   otb::MixturePolyRBFKernelFunctor myKernel;
-  myKernel.SetValue( "Mixture", 0.5 );
-  myKernel.SetValue( "GammaPoly", 1.0 );
-  myKernel.SetValue( "CoefPoly", 0.0 );
-  myKernel.SetValue( "DegreePoly", 1 );
-  myKernel.SetValue( "GammaRBF", 1.5 );
+  myKernel.SetValue("Mixture", 0.5);
+  myKernel.SetValue("GammaPoly", 1.0);
+  myKernel.SetValue("CoefPoly", 0.0);
+  myKernel.SetValue("DegreePoly", 1);
+  myKernel.SetValue("GammaRBF", 1.5);
   myKernel.Update();
 //  Software Guide : EndCodeSnippet
 
@@ -139,8 +138,8 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-  svmEstimator->SetKernelFunctor( &myKernel );
-  svmEstimator->SetKernelType( GENERIC );
+  svmEstimator->SetKernelFunctor(&myKernel);
+  svmEstimator->SetKernelType(GENERIC);
 //  Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -172,5 +171,3 @@ int main( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

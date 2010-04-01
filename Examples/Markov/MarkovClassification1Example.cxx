@@ -29,7 +29,6 @@
 //    1.0 20 1.0 1
 //  Software Guide : EndCommandLineArgs
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the details of the \doxygen{otb}{MarkovRandomFieldFilter}.
@@ -51,7 +50,6 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 // Software Guide : BeginLatex
 //
 // The first step toward the use of this filter is the inclusion of the proper
@@ -66,19 +64,18 @@
 #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
 
-
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc != 7 )
-  {
-    std::cerr << "Missing Parameters "<< argc << std::endl;
+  if (argc != 7)
+    {
+    std::cerr << "Missing Parameters " << argc << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage output lambda iterations optimizerTemperature" << std::endl;
+    std::cerr << " inputImage output lambda iterations optimizerTemperature" <<
+    std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-  }
-
+    }
 
   //  Software Guide : BeginLatex
   //
@@ -92,12 +89,11 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
-  typedef double InternalPixelType;
-  typedef unsigned char LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
+  typedef double                                   InternalPixelType;
+  typedef unsigned char                            LabelledPixelType;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
+  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -108,8 +104,8 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType >  ReaderType;
-  typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType>    ReaderType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -117,8 +113,8 @@ int main(int argc, char* argv[] )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -131,7 +127,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
-  <InputImageType,LabelledImageType> MarkovRandomFieldFilterType;
+  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -145,7 +141,7 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType> SamplerType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -189,11 +185,13 @@ int main(int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter =
+    MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer energyRegularization =
+    EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer sampler = SamplerType::New();
+  OptimizerType::Pointer      optimizer = OptimizerType::New();
+  SamplerType::Pointer        sampler = SamplerType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -203,30 +201,29 @@ int main(int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-  if ((bool)(atoi(argv[6])) == true)
-  {
+  if ((bool) (atoi(argv[6])) == true)
+    {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-  }
+    }
 
   // Software Guide : BeginCodeSnippet
   unsigned int nClass = 4;
-  energyFidelity->SetNumberOfParameters(2*nClass);
+  energyFidelity->SetNumberOfParameters(2 * nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
-  parameters[0]=10.0; //Class 0 mean
-  parameters[1]=10.0; //Class 0 stdev
-  parameters[2]=80.0;//Class 1 mean
-  parameters[3]=10.0; //Class 1 stdev
-  parameters[4]=150.0; //Class 2 mean
-  parameters[5]=10.0; //Class 2 stdev
-  parameters[6]=220.0;//Class 3 mean
-  parameters[7]=10.0; //Class 3 stde
+  parameters[0] = 10.0; //Class 0 mean
+  parameters[1] = 10.0; //Class 0 stdev
+  parameters[2] = 80.0; //Class 1 mean
+  parameters[3] = 10.0; //Class 1 stdev
+  parameters[4] = 150.0; //Class 2 mean
+  parameters[5] = 10.0; //Class 2 stdev
+  parameters[6] = 220.0; //Class 3 mean
+  parameters[7] = 10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -262,14 +259,14 @@ int main(int argc, char* argv[] )
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
-  < LabelledImageType, LabelledImageType > RescaleType;
+  <LabelledImageType, LabelledImageType> RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
-  rescaleFilter->SetInput( markovFilter->GetOutput() );
+  rescaleFilter->SetInput(markovFilter->GetOutput());
 
-  writer->SetInput( rescaleFilter->GetOutput() );
+  writer->SetInput(rescaleFilter->GetOutput());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -305,4 +302,3 @@ int main(int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-

@@ -68,32 +68,32 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  if ( argc != 6 )
-  {
+  if (argc != 6)
+    {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
-    std::cerr << " <outputImageFile> <RedBand> <GreenBand> <BlueBand>" << std::endl;
+    std::cerr << " <outputImageFile> <RedBand> <GreenBand> <BlueBand>" <<
+    std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  int redChannelNumber = atoi(argv[3]);
-  int greenChannelNumber = atoi(argv[4]);
-  int blueChannelNumber = atoi(argv[5]);
+  int          redChannelNumber = atoi(argv[3]);
+  int          greenChannelNumber = atoi(argv[4]);
+  int          blueChannelNumber = atoi(argv[5]);
 
   typedef double InputPixelType;
-  const   unsigned int Dimension = 2;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType, Dimension >        InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
 
-  typedef otb::ImageFileReader< InputImageType >         ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
 
   //  Software Guide : BeginLatex
   //
@@ -103,10 +103,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::PrintableImageFilter< InputImageType >   PrintableFilterType;
+  typedef otb::PrintableImageFilter<InputImageType> PrintableFilterType;
   PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
-  printableImageFilter->SetInput( reader->GetOutput() );
+  printableImageFilter->SetInput(reader->GetOutput());
   printableImageFilter->SetChannel(redChannelNumber);
   printableImageFilter->SetChannel(greenChannelNumber);
   printableImageFilter->SetChannel(blueChannelNumber);
@@ -120,17 +120,15 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef PrintableFilterType::OutputImageType OutputImageType;
-  typedef otb::StreamingImageFileWriter< OutputImageType >         WriterType;
+  typedef PrintableFilterType::OutputImageType           OutputImageType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
   // Software Guide : EndCodeSnippet
 
-
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( outputFilename );
-  writer->SetInput( printableImageFilter->GetOutput() );
+  writer->SetFileName(outputFilename);
+  writer->SetInput(printableImageFilter->GetOutput());
 
   writer->Update();
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:PRINTABLE_FILTER} illustrates different color compositions for a SPOT 5 image.
@@ -138,7 +136,9 @@ int main( int argc, char * argv[] )
   // \center
   // \includegraphics[width=0.44\textwidth]{PrintableExampleOutput1.eps}
   // \includegraphics[width=0.44\textwidth]{PrintableExampleOutput2.eps}
-  // \itkcaption[Scaling images]{On the left, a classic SPOT5 combination: XS3 in red, XS2 in green and XS1 in blue. On the right another composition: XS3 in red, XS4 in green and XS2 in blue.}
+  // \itkcaption[Scaling images]{On the left, a classic SPOT5
+  // combination: XS3 in red, XS2 in green and XS1 in blue. On the
+  // right another composition: XS3 in red, XS4 in green and XS2 in blue.}
   // \label{fig:PRINTABLE_FILTER}
   // \end{figure}
   //

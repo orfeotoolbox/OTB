@@ -22,7 +22,6 @@
 //    3
 //  Software Guide : EndCommandLineArgs
 
-
 //  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MeanRatioImageFilter} for detecting changes
@@ -61,15 +60,16 @@
 #include "itkShiftScaleImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
-int main(int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
-  if ( argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
+    std::cerr << argv[0] <<
+    " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
     return -1;
-  }
+    }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -81,12 +81,12 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef float InternalPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType1;
-  typedef otb::Image<InternalPixelType, Dimension>  InputImageType2;
-  typedef otb::Image<InternalPixelType, Dimension>  ChangeImageType;
-  typedef otb::Image<OutputPixelType, Dimension>  OutputImageType;
+  typedef float                                    InternalPixelType;
+  typedef unsigned char                            OutputPixelType;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
+  typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
+  typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
+  typedef otb::Image<OutputPixelType, Dimension>   OutputImageType;
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -100,9 +100,9 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileReader< InputImageType1 >  ReaderType1;
-  typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
-  typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader<InputImageType1>          ReaderType1;
+  typedef otb::ImageFileReader<InputImageType2>          ReaderType2;
+  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 
   //  Software Guide : EndCodeSnippet
 
@@ -116,9 +116,8 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef itk::ShiftScaleImageFilter< ChangeImageType,
-  OutputImageType > RescalerType;
-
+  typedef itk::ShiftScaleImageFilter<ChangeImageType,
+                                     OutputImageType> RescalerType;
 
   //  Software Guide : EndCodeSnippet
 
@@ -132,9 +131,9 @@ int main(int argc, char* argv[] )
 
   //  Software Guide : BeginCodeSnippet
   typedef otb::MeanRatioImageFilter<
-  InputImageType1,
-  InputImageType2,
-  ChangeImageType  >       FilterType;
+    InputImageType1,
+    InputImageType2,
+    ChangeImageType>       FilterType;
 
   //  Software Guide : EndCodeSnippet
 
@@ -145,9 +144,9 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  ReaderType1::Pointer reader1 = ReaderType1::New();
-  ReaderType2::Pointer reader2 = ReaderType2::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType1::Pointer  reader1 = ReaderType1::New();
+  ReaderType2::Pointer  reader2 = ReaderType2::New();
+  WriterType::Pointer   writer = WriterType::New();
   FilterType::Pointer   filter = FilterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
   //  Software Guide : EndCodeSnippet
@@ -162,11 +161,11 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  reader1->SetFileName( inputFilename1  );
-  reader2->SetFileName( inputFilename2  );
-  writer->SetFileName( outputFilename );
-  float scale = itk::NumericTraits< OutputPixelType >::max();
-  rescaler->SetScale( scale );
+  reader1->SetFileName(inputFilename1);
+  reader2->SetFileName(inputFilename2);
+  writer->SetFileName(outputFilename);
+  float scale = itk::NumericTraits<OutputPixelType>::max();
+  rescaler->SetScale(scale);
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -177,7 +176,7 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  filter->SetRadius( atoi(argv[4]) );
+  filter->SetRadius(atoi(argv[4]));
   //  Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -187,31 +186,28 @@ int main(int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  filter->SetInput1( reader1->GetOutput() );
-  filter->SetInput2( reader2->GetOutput() );
+  filter->SetInput1(reader1->GetOutput());
+  filter->SetInput2(reader2->GetOutput());
 
-
-  rescaler->SetInput( filter->GetOutput() );
-  writer->SetInput( rescaler->GetOutput() );
+  rescaler->SetInput(filter->GetOutput());
+  writer->SetInput(rescaler->GetOutput());
   //  Software Guide : EndCodeSnippet
-
 
   typedef otb::CommandProgressUpdate<FilterType> CommandType;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
 
-
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
+    }
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-  }
+    }
 
 //  Software Guide : BeginLatex
 // Figure \ref{fig:RESRATCHDET} shows the result of the change
@@ -225,9 +221,6 @@ int main(int argc, char* argv[] )
 // \end{figure}
 //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 
 }
-
-

@@ -73,7 +73,7 @@ namespace otb
 
 template <class TImageType>
 class ITK_EXPORT CompositeExampleImageFilter :
-      public itk::ImageToImageFilter<TImageType, TImageType>
+  public itk::ImageToImageFilter<TImageType, TImageType>
 {
 public:
 //  Software Guide : EndCodeSnippet
@@ -86,10 +86,10 @@ public:
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-  typedef CompositeExampleImageFilter               Self;
-  typedef itk::ImageToImageFilter<TImageType,TImageType> Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef CompositeExampleImageFilter                     Self;
+  typedef itk::ImageToImageFilter<TImageType, TImageType> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 //  Software Guide : EndCodeSnippet
 
   /** Method for creation through object factory */
@@ -99,7 +99,7 @@ public:
   itkTypeMacro(CompositeExampleImageFilter, itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 //  Software Guide : BeginLatex
 //
@@ -112,8 +112,8 @@ public:
 //  Software Guide : BeginCodeSnippet
   typedef typename TImageType::PixelType PixelType;
 
-  itkGetMacro( Threshold, PixelType);
-  itkSetMacro( Threshold, PixelType);
+  itkGetMacro(Threshold, PixelType);
+  itkSetMacro(Threshold, PixelType);
 
 //  Software Guide : EndCodeSnippet
 
@@ -131,10 +131,10 @@ protected:
 //  Software Guide : BeginCodeSnippet
 protected:
 
-  typedef itk::ThresholdImageFilter< TImageType > ThresholdType;
-  typedef itk::GradientMagnitudeImageFilter< TImageType, TImageType >
+  typedef itk::ThresholdImageFilter<TImageType> ThresholdType;
+  typedef itk::GradientMagnitudeImageFilter<TImageType, TImageType>
   GradientType;
-  typedef itk::RescaleIntensityImageFilter< TImageType, TImageType >
+  typedef itk::RescaleIntensityImageFilter<TImageType, TImageType>
   RescalerType;
 //  Software Guide : EndCodeSnippet
 
@@ -142,8 +142,8 @@ protected:
 
 private:
 
-  CompositeExampleImageFilter(Self&);   // intentionally not implemented
-  void operator=(const Self&);          // intentionally not implemented
+  CompositeExampleImageFilter(Self &);   // intentionally not implemented
+  void operator =(const Self&);          // intentionally not implemented
 
 //  Software Guide : BeginLatex
 //
@@ -153,16 +153,15 @@ private:
 //  Software Guide : EndLatex
 
 //  Software Guide : BeginCodeSnippet
-  typename GradientType::Pointer     m_GradientFilter;
-  typename ThresholdType::Pointer    m_ThresholdFilter;
-  typename RescalerType::Pointer     m_RescaleFilter;
+  typename GradientType::Pointer  m_GradientFilter;
+  typename ThresholdType::Pointer m_ThresholdFilter;
+  typename RescalerType::Pointer  m_RescaleFilter;
 
   PixelType m_Threshold;
 };
 
 } /* namespace otb */
 //  Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -183,8 +182,8 @@ CompositeExampleImageFilter<TImageType>
   m_ThresholdFilter = ThresholdType::New();
   m_RescaleFilter = RescalerType::New();
 
-  m_ThresholdFilter->SetInput( m_GradientFilter->GetOutput() );
-  m_RescaleFilter->SetInput( m_ThresholdFilter->GetOutput() );
+  m_ThresholdFilter->SetInput(m_GradientFilter->GetOutput());
+  m_RescaleFilter->SetInput(m_ThresholdFilter->GetOutput());
 
   m_Threshold = 1;
 
@@ -193,7 +192,6 @@ CompositeExampleImageFilter<TImageType>
   m_RescaleFilter->SetOutputMaximum(itk::NumericTraits<PixelType>::max());
 }
 //  Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -214,13 +212,13 @@ void
 CompositeExampleImageFilter<TImageType>::
 GenerateData()
 {
-  m_GradientFilter->SetInput( this->GetInput() );
+  m_GradientFilter->SetInput(this->GetInput());
 
-  m_ThresholdFilter->ThresholdBelow( this->m_Threshold );
+  m_ThresholdFilter->ThresholdBelow(this->m_Threshold);
 
-  m_RescaleFilter->GraftOutput( this->GetOutput() );
+  m_RescaleFilter->GraftOutput(this->GetOutput());
   m_RescaleFilter->Update();
-  this->GraftOutput( m_RescaleFilter->GetOutput() );
+  this->GraftOutput(m_RescaleFilter->GetOutput());
 }
 //  Software Guide : EndCodeSnippet
 
@@ -236,9 +234,9 @@ GenerateData()
 template <class TImageType>
 void
 CompositeExampleImageFilter<TImageType>::
-PrintSelf( std::ostream& os, itk::Indent indent ) const
+PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os
   << indent << "Threshold:" << this->m_Threshold
@@ -248,7 +246,6 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
 } /* end namespace otb */
 
 //  Software Guide : EndCodeSnippet
-
 
 //  Software Guide : BeginLatex
 //
@@ -264,18 +261,18 @@ PrintSelf( std::ostream& os, itk::Indent indent ) const
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-  if ( argc < 3 )
-  {
+  if (argc < 3)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  typedef otb::Image<short, 2>                        ImageType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
-  typedef otb::ImageFileWriter<ImageType>             WriterType;
+  typedef otb::Image<short, 2>            ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::CompositeExampleImageFilter<ImageType> FilterType;
 
@@ -283,20 +280,20 @@ int main( int argc, char* argv[] )
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer filter = FilterType::New();
 
-  reader->SetFileName( argv[1] );
-  filter->SetInput( reader->GetOutput() );
-  filter->SetThreshold( 20 );
-  writer->SetInput( filter->GetOutput() );
-  writer->SetFileName( argv[2] );
+  reader->SetFileName(argv[1]);
+  filter->SetInput(reader->GetOutput());
+  filter->SetThreshold(20);
+  writer->SetInput(filter->GetOutput());
+  writer->SetFileName(argv[2]);
 
   try
-  {
+    {
     writer->Update();
-  }
-  catch ( itk::ExceptionObject e )
-  {
+    }
+  catch (itk::ExceptionObject e)
+    {
     std::cerr << "Error: " << e << std::endl;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

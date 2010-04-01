@@ -25,7 +25,6 @@
 
 #include "otbImageFileReader.h"
 
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROISpot5.png}
 //    2
@@ -43,26 +42,25 @@
 #include "otbHuImageFunction.h"
 // Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  if ( argc != 3 )
-  {
+  if (argc != 3)
+    {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " moment_number" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
 
-  unsigned int mMomentNumber((unsigned char)::atoi(argv[2]));
+  unsigned int mMomentNumber((unsigned char) ::atoi(argv[2]));
 
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef unsigned char     InputPixelType;
-  const   unsigned int      Dimension = 2;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-
-  typedef otb::ImageFileReader< InputImageType  >    ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -77,13 +75,12 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef float                             MomentType;
+  typedef float MomentType;
   typedef otb::HuImageFunction<InputImageType,
-  MomentType>   HuType;
+                               MomentType>   HuType;
 
-  HuType::Pointer hmFunction =HuType::New();
+  HuType::Pointer hmFunction = HuType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // We can choose the region and the pixel of the image which will
@@ -93,30 +90,28 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  InputImageType::RegionType   region;
-  InputImageType::SizeType     size;
-  InputImageType::IndexType    start;
+  InputImageType::RegionType region;
+  InputImageType::SizeType   size;
+  InputImageType::IndexType  start;
 
   start[0] = 0;
   start[1] = 0;
   size[0] = 50;
   size[1] = 50;
 
-
   reader->Update();
   InputImageType::Pointer image = reader->GetOutput();
 
-  region.SetIndex( start );
-  region.SetSize( size );
+  region.SetIndex(start);
+  region.SetSize(size);
 
   image->SetRegions(region);
   image->Update();
 
   InputImageType::IndexType center;
-  center[0]=start[0]+size[0]/2;
-  center[1]=start[1]+size[1]/2;
+  center[0] = start[0] + size[0] / 2;
+  center[1] = start[1] + size[1] / 2;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -126,10 +121,9 @@ int main(int argc, char * argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  hmFunction->SetInputImage( image );
+  hmFunction->SetInputImage(image);
   hmFunction->SetMomentNumber(mMomentNumber);
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   // In order to get the value of the moment, we call the
@@ -141,9 +135,8 @@ int main(int argc, char * argv[] )
   MomentType Result = hmFunction->EvaluateAtIndex(center);
 
   std::cout << "The moment of order " << mMomentNumber <<
-            " is equal to " << Result << std:: endl;
+  " is equal to " << Result << std::endl;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -154,7 +147,5 @@ int main(int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-

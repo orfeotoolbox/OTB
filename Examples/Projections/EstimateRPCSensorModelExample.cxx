@@ -25,15 +25,15 @@
 // The following example illustrates the application of estimation
 // of a sensor model to an image (limited to a RPC sensor model for now).
 
-// The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} estimates an RPC 
-// sensor model from a list of user defined GCPs. Internally, it uses 
-// an ossimRpcSolver, which performs the estimation using the well 
+// The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} estimates an RPC
+// sensor model from a list of user defined GCPs. Internally, it uses
+// an ossimRpcSolver, which performs the estimation using the well
 // known least-square method.
 
 // Let's look at the minimal code required to use this
 // algorithm. First, the following header defining the
 // \doxygen{otb}{GCPsToRPCSensorModelImageFilter} class must be
-// included. 
+// included.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -42,16 +42,18 @@
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-  if(argc < 3 )
+  if (argc < 3)
     {
-    std::cerr<<"Usage: "<<argv[0]<<" infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz"<<std::endl;
+    std::cerr << "Usage: " << argv[0] <<
+    " infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz" <<
+    std::endl;
     return EXIT_FAILURE;
     }
-  else if((argc-3)%5 != 0)
+  else if ((argc - 3) % 5 != 0)
     {
-    std::cerr<<"Inconsistent GCPs description!"<<std::endl;
+    std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -66,11 +68,14 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image<float, 2>                            ImageType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
-  typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
-  typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
+  typedef otb::Image<float, 2>            ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+
+  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType>
+                                              GCPsToSensorModelFilterType;
+
+  typedef GCPsToSensorModelFilterType::Point2DType Point2DType;
+  typedef GCPsToSensorModelFilterType::Point3DType Point3DType;
   // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
@@ -84,13 +89,14 @@ int main( int argc, char* argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
+  GCPsToSensorModelFilterType::Pointer rpcEstimator =
+    GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
   // We retrieve the command line parameters and put them in the
-  // correct variables. Firstly, We determine the number of GCPs 
+  // correct variables. Firstly, We determine the number of GCPs
   // set from the command line parameters and they are stored in:
   // \begin{itemize}
   // \item \doxygen{otb}{Point3DType} : Store the sensor point (3D ground point)
@@ -102,47 +108,47 @@ int main( int argc, char* argv[] )
   // \end{itemize}
   // Software Guide : EndLatex
 
-  
-  unsigned int nbGCPs = (argc-3)/5;
-  
-  std::cout<<"Receiving "<<nbGCPs<<" from command line."<<std::endl;
-  
+  unsigned int nbGCPs = (argc - 3) / 5;
+
+  std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
+
   // Software Guide : BeginCodeSnippet
-  for(unsigned int gcpId = 0;gcpId<nbGCPs;++gcpId)
+  for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[3+gcpId*5]);
-    sensorPoint[1] = atof(argv[4+gcpId*5]);
+    sensorPoint[0] = atof(argv[3 + gcpId * 5]);
+    sensorPoint[1] = atof(argv[4 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[5+5*gcpId]);
-    geoPoint[1] = atof(argv[6+5*gcpId]);
-    geoPoint[2] = atof(argv[7+5*gcpId]);
-    
-    std::cout<<"Adding GCP sensor: "<<sensorPoint<<" <-> geo: "<<geoPoint<<std::endl;
+    geoPoint[0] = atof(argv[5 + 5 * gcpId]);
+    geoPoint[1] = atof(argv[6 + 5 * gcpId]);
+    geoPoint[2] = atof(argv[7 + 5 * gcpId]);
 
-    rpcEstimator->AddGCP(sensorPoint,geoPoint);
+    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " <<
+    geoPoint << std::endl;
+
+    rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
-  
+
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  // Note that the \doxygen{otb}{GCPsToRPCSensorModelImageFilter} needs 
-  // at least 16 GCPs to estimate a proper RPC sensor model,  
-  // although no warning will be reported to the user if 
+  // Note that the \doxygen{otb}{GCPsToRPCSensorModelImageFilter} needs
+  // at least 16 GCPs to estimate a proper RPC sensor model,
+  // although no warning will be reported to the user if
   // the number of GCPs is lower than 16.
   // Actual estimation of the sensor model takes place in the
-  // \code{GenerateOutputInformation()} method.   
+  // \code{GenerateOutputInformation()} method.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   rpcEstimator->GetOutput()->UpdateOutputInformation();
   // Software Guide : EndCodeSnippet
-  
+
   // Software Guide : BeginLatex
-  // The result of the RPC model estimation and the residual ground 
-  // error is then save in a txt file. Note that This filter does 
-  // not modify the image buffer, but only the metadata.   
+  // The result of the RPC model estimation and the residual ground
+  // error is then save in a txt file. Note that This filter does
+  // not modify the image buffer, but only the metadata.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
@@ -153,16 +159,16 @@ int main( int argc, char* argv[] )
   ofs.setf(ios::fixed, ios::floatfield);
   ofs.precision(10);
 
-  ofs<<(ImageType::Pointer)rpcEstimator->GetOutput()<<std::endl;
-  ofs<<"Residual ground error: "<<rpcEstimator->GetRMSGroundError()<<std::endl;
+  ofs << (ImageType::Pointer) rpcEstimator->GetOutput() << std::endl;
+  ofs << "Residual ground error: " << rpcEstimator->GetRMSGroundError() <<
+  std::endl;
   ofs.close();
   // Software Guide : EndCodeSnippet
-  
 
   // Software Guide : BeginLatex
   // The output image can be now given to the \doxygen{otb}{orthorectificationFilter}.
   // Note that this filter allows also to import GCPs from the image
-  // metadata, if any. 
+  // metadata, if any.
   // Software Guide : EndLatex
 
   return EXIT_SUCCESS;

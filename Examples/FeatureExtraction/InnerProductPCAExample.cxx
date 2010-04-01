@@ -44,14 +44,13 @@
 #include "otbInnerProductPCAImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;
-  const char * inputFileName = argv[1];
-  const char * outputFilename = argv[2];
+  const char *       inputFileName = argv[1];
+  const char *       outputFilename = argv[2];
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[6]));
-
 
   // Software Guide : BeginLatex
   //
@@ -63,9 +62,9 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader< ImageType >     ReaderType;
-  typedef otb::ImageFileWriter< ImageType >     WriterType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>        ReaderType;
+  typedef otb::ImageFileWriter<ImageType>        WriterType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -74,7 +73,7 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer     reader     = ReaderType::New();
+  ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -85,8 +84,8 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::InnerProductPCAImageFilter<ImageType,ImageType> PCAFilterType;
-  PCAFilterType::Pointer     pcafilter     = PCAFilterType::New();
+  typedef otb::InnerProductPCAImageFilter<ImageType, ImageType> PCAFilterType;
+  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -98,7 +97,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   pcafilter->SetNumberOfPrincipalComponentsRequired(
-                                    numberOfPrincipalComponentsRequired);
+    numberOfPrincipalComponentsRequired);
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -108,7 +107,7 @@ int main( int argc, char* argv[] )
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  WriterType::Pointer     writer     = WriterType::New();
+  WriterType::Pointer writer     = WriterType::New();
   writer->SetFileName(outputFilename);
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
@@ -121,7 +120,7 @@ int main( int argc, char* argv[] )
   // Software Guide : BeginCodeSnippet
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
-  
+
   writer->Update();
   // Software Guide : EndCodeSnippet
 
@@ -143,34 +142,35 @@ int main( int argc, char* argv[] )
   //
   //  Software Guide : EndLatex
 
+  typedef otb::Image<PixelType, Dimension> MonoImageType;
 
-  typedef otb::Image<PixelType,Dimension> MonoImageType;
-  
-  typedef otb::MultiToMonoChannelExtractROI< PixelType, PixelType >
-                                                    ExtractROIFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
+  ExtractROIFilterType;
 
-  typedef otb::Image<unsigned char, 2> OutputImageType;
-  typedef otb::ImageFileWriter< OutputImageType >  WriterType2;
-  typedef itk::RescaleIntensityImageFilter< MonoImageType, OutputImageType> RescalerType;
-  
-  for(unsigned int cpt=0; cpt < numberOfPrincipalComponentsRequired; cpt++)
-  {
+  typedef otb::Image<unsigned char,
+                     2>                                     OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>
+                                                            WriterType2;
+  typedef itk::RescaleIntensityImageFilter<MonoImageType,
+                                           OutputImageType> RescalerType;
+
+  for (unsigned int cpt = 0; cpt < numberOfPrincipalComponentsRequired; cpt++)
+    {
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-    RescalerType::Pointer rescaler = RescalerType::New();
-    
-    WriterType2::Pointer     writer2     = WriterType2::New();
-    extractROIFilter->SetInput(pcafilter->GetOutput());
-    extractROIFilter->SetChannel(cpt+1);
+    RescalerType::Pointer         rescaler = RescalerType::New();
 
-    rescaler->SetInput( extractROIFilter->GetOutput());
+    WriterType2::Pointer writer2     = WriterType2::New();
+    extractROIFilter->SetInput(pcafilter->GetOutput());
+    extractROIFilter->SetChannel(cpt + 1);
+
+    rescaler->SetInput(extractROIFilter->GetOutput());
     rescaler->SetOutputMinimum(0);
     rescaler->SetOutputMaximum(255);
-    
-    writer2->SetInput(rescaler->GetOutput());
-    writer2->SetFileName(argv[cpt+3]);
-    writer2->Update();
-  }
 
+    writer2->SetInput(rescaler->GetOutput());
+    writer2->SetFileName(argv[cpt + 3]);
+    writer2->Update();
+    }
 
   return EXIT_SUCCESS;
 }

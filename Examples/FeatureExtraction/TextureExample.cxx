@@ -35,7 +35,6 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
@@ -105,18 +104,17 @@
 //
 // Software Guide : EndLatex
 
-
 int main(int argc, char * argv[])
 {
   // Parse command line parameters
-  if ( argc != 7 )
-  {
+  if (argc != 7)
+    {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
     std::cerr << " <outputImage> <outputRescaled> ";
     std::cerr << " <radius> <xOffset> <yOffset> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char* infname   = argv[1];
   const char* outfname  = argv[2];
@@ -126,10 +124,9 @@ int main(int argc, char * argv[])
   const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[5]));
   const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
 
-
   typedef double PixelType;
   const int Dimension = 2;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
   // Software Guide : BeginLatex
 //
@@ -141,7 +138,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::Functor::ContrastTextureFunctor<PixelType, PixelType>
-                                                                FunctorType;
+  FunctorType;
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
 //
@@ -153,9 +150,11 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType,
-                                          ImageType, FunctorType> FilterType;
+                                                             ImageType,
+                                                             FunctorType>
+  FilterType;
   // Software Guide : EndCodeSnippet
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
@@ -164,7 +163,7 @@ int main(int argc, char * argv[])
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-    // Software Guide : BeginLatex
+  // Software Guide : BeginLatex
 //
 // We can now instatiate the filter.
 //
@@ -189,7 +188,7 @@ int main(int argc, char * argv[])
 // dimensions of the image.
 //
 // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
+// Software Guide : BeginCodeSnippet
   textureFilter->SetRadius(radius);
 
   typedef ImageType::OffsetType OffsetType;
@@ -205,7 +204,7 @@ int main(int argc, char * argv[])
 // the \code{Update} method of the writer.
 //
 // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
+// Software Guide : BeginCodeSnippet
   textureFilter->SetInput(reader->GetOutput());
   writer->SetInput(textureFilter->GetOutput());
 
@@ -227,19 +226,25 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex
 
- // Pretty image creation for printing
+  // Pretty image creation for printing
 
-  typedef otb::Image<unsigned char, Dimension>                                           OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                    WriterPrettyOutputType;
-  typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>      RescalerOutputType;
+  typedef otb::Image<unsigned char,
+                     Dimension>
+  OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>
+  WriterPrettyOutputType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+                                           OutputPrettyImageType>
+  RescalerOutputType;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
-  outputRescaler->SetInput( textureFilter->GetOutput() );
+  WriterPrettyOutputType::Pointer prettyOutputWriter =
+    WriterPrettyOutputType::New();
+  outputRescaler->SetInput(textureFilter->GetOutput());
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);
-  prettyOutputWriter->SetFileName( outprettyfname );
-  prettyOutputWriter->SetInput( outputRescaler->GetOutput() );
+  prettyOutputWriter->SetFileName(outprettyfname);
+  prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
   prettyOutputWriter->Update();
   return EXIT_SUCCESS;

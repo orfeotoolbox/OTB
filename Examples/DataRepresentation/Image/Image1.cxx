@@ -35,11 +35,9 @@
 //
 // Software Guide : EndLatex
 
-
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 // Software Guide : EndCodeSnippet
-
 
 int main(int, char *[])
 {
@@ -54,9 +52,8 @@ int main(int, char *[])
   // Software Guide : EndLatex
   //
   // Software Guide : BeginCodeSnippet
-  typedef otb::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image<unsigned short, 2> ImageType;
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -72,7 +69,6 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   ImageType::Pointer image = ImageType::New();
   // Software Guide : EndCodeSnippet
-
 
   // Software Guide : BeginLatex
   //
@@ -131,7 +127,7 @@ int main(int, char *[])
   // Software Guide : EndLatex
   //
   // Software Guide : BeginCodeSnippet
-  ImageType::SizeType  size;
+  ImageType::SizeType size;
 
   size[0]  = 200;  // size along X
   size[1]  = 200;  // size along Y
@@ -152,8 +148,8 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   ImageType::RegionType region;
 
-  region.SetSize( size );
-  region.SetIndex( start );
+  region.SetSize(size);
+  region.SetIndex(start);
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -174,10 +170,9 @@ int main(int, char *[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  image->SetRegions( region );
+  image->SetRegions(region);
   image->Allocate();
   // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }
-

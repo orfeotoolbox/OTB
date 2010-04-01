@@ -46,7 +46,6 @@
 #include "itkPointSet.h"
 // Software Guide : EndCodeSnippet
 
-
 int main(int, char *[])
 {
   //  Software Guide : BeginLatex
@@ -68,9 +67,8 @@ int main(int, char *[])
 
   // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef itk::Vector< float, Dimension >    PixelType;
+  typedef itk::Vector<float, Dimension> PixelType;
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -80,10 +78,9 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet< PixelType, Dimension > PointSetType;
-  PointSetType::Pointer  pointSet = PointSetType::New();
+  typedef itk::PointSet<PixelType, Dimension> PointSetType;
+  PointSetType::Pointer pointSet = PointSetType::New();
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -98,25 +95,24 @@ int main(int, char *[])
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  PointSetType::PixelType   tangent;
-  PointSetType::PointType   point;
+  PointSetType::PixelType tangent;
+  PointSetType::PointType point;
 
   unsigned int pointId =  0;
   const double radius = 300.0;
 
-  for (unsigned int i=0; i<360; i++)
-  {
+  for (unsigned int i = 0; i < 360; i++)
+    {
     const double angle = i * atan(1.0) / 45.0;
-    point[0] = radius * sin( angle );
-    point[1] = radius * cos( angle );
+    point[0] = radius * sin(angle);
+    point[1] = radius * cos(angle);
     tangent[0] =  cos(angle);
     tangent[1] = -sin(angle);
-    pointSet->SetPoint( pointId, point );
-    pointSet->SetPointData( pointId, tangent );
+    pointSet->SetPoint(pointId, point);
+    pointSet->SetPointData(pointId, tangent);
     pointId++;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -130,24 +126,22 @@ int main(int, char *[])
   //
   //  Software Guide : EndLatex
 
-
   // Software Guide : BeginCodeSnippet
   typedef  PointSetType::PointDataContainer::ConstIterator PointDataIterator;
   PointDataIterator pixelIterator = pointSet->GetPointData()->Begin();
   PointDataIterator pixelEnd      = pointSet->GetPointData()->End();
 
-  typedef  PointSetType::PointsContainer::Iterator     PointIterator;
+  typedef  PointSetType::PointsContainer::Iterator PointIterator;
   PointIterator pointIterator = pointSet->GetPoints()->Begin();
   PointIterator pointEnd      = pointSet->GetPoints()->End();
 
-  while ( pixelIterator != pixelEnd  && pointIterator != pointEnd )
-  {
+  while (pixelIterator != pixelEnd  && pointIterator != pointEnd)
+    {
     pointIterator.Value() = pointIterator.Value() + pixelIterator.Value();
     ++pixelIterator;
     ++pointIterator;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -159,7 +153,6 @@ int main(int, char *[])
   //  \index{const-correctness}
   //
   //  Software Guide : EndLatex
-
 
   //  Software Guide : BeginLatex
   //
@@ -178,13 +171,12 @@ int main(int, char *[])
   // Software Guide : BeginCodeSnippet
   pointIterator = pointSet->GetPoints()->Begin();
   pointEnd      = pointSet->GetPoints()->End();
-  while ( pointIterator != pointEnd )
-  {
+  while (pointIterator != pointEnd)
+    {
     std::cout << pointIterator.Value() << std::endl;
     ++pointIterator;
-  }
+    }
   // Software Guide : EndCodeSnippet
-
 
   //  Software Guide : BeginLatex
   //
@@ -198,5 +190,3 @@ int main(int, char *[])
 
   return EXIT_SUCCESS;
 }
-
-

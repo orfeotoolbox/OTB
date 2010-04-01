@@ -44,24 +44,22 @@
 #include "otbStreamingTraits.h"
 // Software Guide : EndCodeSnippet
 
-
 int main(int argc, char * argv[])
 {
 
-  if ( argc != 3 )
-  {
+  if (argc != 3)
+    {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile nbLinesForStreaming " << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-
-  const char * infname = argv[1];
+  const char *       infname = argv[1];
   const unsigned int nbLinesForStreaming = atoi(argv[2]);
 
   typedef float PixelType;
 
-  typedef otb::VectorImage<PixelType,2> ImageType;
+  typedef otb::VectorImage<PixelType, 2>  ImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
 
 //  Software Guide : BeginLatex
@@ -77,7 +75,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   typedef otb::StreamingTraits<ImageType> StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<2>  SplitterType;
+  typedef itk::ImageRegionSplitter<2>     SplitterType;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -108,7 +106,6 @@ int main(int argc, char * argv[])
 
   reader->SetFileName(infname);
 
-
   reader->GenerateOutputInformation();
 
   RegionType largestRegion = reader->GetOutput()->GetLargestPossibleRegion();
@@ -124,16 +121,16 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   SplitterType::Pointer splitter = SplitterType::New();
-  unsigned int numberOfStreamDivisions =
+  unsigned int          numberOfStreamDivisions =
     StreamingTraitsType::CalculateNumberOfStreamDivisions(
       reader->GetOutput(),
       largestRegion,
       splitter,
       otb::SET_BUFFER_NUMBER_OF_LINES,
-      0,0,nbLinesForStreaming);
+      0, 0, nbLinesForStreaming);
 // Software Guide : EndCodeSnippet
-  std::cout<<"The images will be streamed into "<<numberOfStreamDivisions<<" parts."<<std::endl;
-
+  std::cout << "The images will be streamed into " <<
+  numberOfStreamDivisions << " parts." << std::endl;
 
 //  Software Guide : BeginLatex
 //
@@ -143,13 +140,12 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
   unsigned int piece = 0;
-  RegionType streamingRegion;
-
+  RegionType   streamingRegion;
 
   for (piece = 0;
        piece < numberOfStreamDivisions;
        piece++)
-  {
+    {
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -159,9 +155,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
     streamingRegion =
-      splitter->GetSplit(piece,numberOfStreamDivisions,largestRegion);
+      splitter->GetSplit(piece, numberOfStreamDivisions, largestRegion);
 
-    std::cout<<"Processing region: "<<streamingRegion<<std::endl;
+    std::cout << "Processing region: " << streamingRegion << std::endl;
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
 //
@@ -181,15 +177,15 @@ int main(int argc, char * argv[])
 //  Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-    IteratorType it(reader->GetOutput(),streamingRegion);
+    IteratorType it(reader->GetOutput(), streamingRegion);
     it.GoToBegin();
 
     while (!it.IsAtEnd())
-    {
+      {
       std::cout << it.Get() << std::endl;
       ++it;
-    }
+      }
 // Software Guide : EndCodeSnippet
-  }
+    }
   return EXIT_SUCCESS;
 }

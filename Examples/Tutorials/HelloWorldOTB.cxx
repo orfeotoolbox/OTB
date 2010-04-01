@@ -28,9 +28,9 @@
 #include "otbImage.h"
 #include <iostream>
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
-  typedef otb::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image<unsigned short, 2> ImageType;
 
   ImageType::Pointer image = ImageType::New();
 
@@ -50,5 +50,3 @@ int main( int argc, char * argv[] )
 //  information).
 //
 //  Software Guide : EndLatex
-
-

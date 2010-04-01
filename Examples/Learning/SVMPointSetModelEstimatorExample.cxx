@@ -25,7 +25,6 @@
 #include <iostream>
 #include <cstdlib>
 
-
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
@@ -40,8 +39,7 @@
 #include "otbSVMPointSetModelEstimator.h"
 // Software Guide : EndCodeSnippet
 
-
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
 
 // Software Guide : BeginLatex
@@ -56,11 +54,11 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef float                      PixelType;
-  typedef std::vector<PixelType>     VectorType;
-  typedef int                        LabelPixelType;
+  typedef float                  PixelType;
+  typedef std::vector<PixelType> VectorType;
+  typedef int                    LabelPixelType;
 // Software Guide : EndCodeSnippet
-  const   unsigned int                              Dimension = 2;
+  const unsigned int Dimension = 2;
 
 // Software Guide : BeginLatex
 //
@@ -70,15 +68,13 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef itk::PointSet< VectorType,  Dimension >      FeaturePointSetType;
+  typedef itk::PointSet<VectorType,  Dimension> FeaturePointSetType;
 
-  typedef itk::PointSet< LabelPixelType,  Dimension >  LabelPointSetType;
-
+  typedef itk::PointSet<LabelPixelType,  Dimension> LabelPointSetType;
 
   FeaturePointSetType::Pointer fPSet = FeaturePointSetType::New();
   LabelPointSetType::Pointer   lPSet = LabelPointSetType::New();
 // Software Guide : EndCodeSnippet
-
 
 // Software Guide : BeginLatex
 //
@@ -90,14 +86,14 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef FeaturePointSetType::PointType    FeaturePointType;
-  typedef LabelPointSetType::PointType      LabelPointType;
+  typedef FeaturePointSetType::PointType FeaturePointType;
+  typedef LabelPointSetType::PointType   LabelPointType;
 
-  typedef FeaturePointSetType::PointsContainer    FeaturePointsContainer;
-  typedef LabelPointSetType::PointsContainer      LabelPointsContainer;
+  typedef FeaturePointSetType::PointsContainer FeaturePointsContainer;
+  typedef LabelPointSetType::PointsContainer   LabelPointsContainer;
 
   FeaturePointsContainer::Pointer fCont = FeaturePointsContainer::New();
-  LabelPointsContainer::Pointer lCont = LabelPointsContainer::New();
+  LabelPointsContainer::Pointer   lCont = LabelPointsContainer::New();
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -116,14 +112,14 @@ int main( int argc, char* argv[] )
   int lowest = 0;
   int range = 1000;
 
-  for (unsigned int pointId = 0; pointId<500; pointId++)
-  {
+  for (unsigned int pointId = 0; pointId < 500; pointId++)
+    {
 
     FeaturePointType fP;
-    LabelPointType lP;
+    LabelPointType   lP;
 
-    int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
-    int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
+    int x_coord = lowest + static_cast<int>(range * (rand() / (RAND_MAX + 1.0)));
+    int y_coord = lowest + static_cast<int>(range * (rand() / (RAND_MAX + 1.0)));
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -150,8 +146,8 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
     VectorType feature;
-    feature.push_back(static_cast<PixelType>((x_coord*1.0-lowest)/range));
-    feature.push_back(static_cast<PixelType>((y_coord*1.0-lowest)/range));
+    feature.push_back(static_cast<PixelType>((x_coord * 1.0 - lowest) / range));
+    feature.push_back(static_cast<PixelType>((y_coord * 1.0 - lowest) / range));
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -163,10 +159,8 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
     LabelPixelType label;
 
-    if (x_coord < y_coord)
-      label= -1;
-    else
-      label = 1;
+    if (x_coord < y_coord) label = -1;
+    else label = 1;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -176,15 +170,13 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-    fCont->InsertElement( pointId , fP );
-    fPSet->SetPointData( pointId, feature );
+    fCont->InsertElement(pointId, fP);
+    fPSet->SetPointData(pointId, feature);
 
+    lCont->InsertElement(pointId, lP);
+    lPSet->SetPointData(pointId, label);
 
-    lCont->InsertElement( pointId , lP );
-    lPSet->SetPointData( pointId, label );
-
-
-  }
+    }
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -194,8 +186,8 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  fPSet->SetPoints( fCont );
-  lPSet->SetPoints( lCont );
+  fPSet->SetPoints(fCont);
+  lPSet->SetPoints(lCont);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -208,9 +200,8 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  typedef otb::SVMPointSetModelEstimator< FeaturePointSetType,
-  LabelPointSetType >   EstimatorType;
-
+  typedef otb::SVMPointSetModelEstimator<FeaturePointSetType,
+                                         LabelPointSetType>   EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 // Software Guide : EndCodeSnippet
@@ -225,9 +216,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-  estimator->SetInputPointSet( fPSet );
-  estimator->SetTrainingPointSet( lPSet );
-  estimator->SetNumberOfClasses( 2 );
+  estimator->SetInputPointSet(fPSet);
+  estimator->SetTrainingPointSet(lPSet);
+  estimator->SetNumberOfClasses(2);
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -270,8 +261,5 @@ int main( int argc, char* argv[] )
 //
 // Software Guide : EndLatex
 
-
   return EXIT_SUCCESS;
 }
-
-
