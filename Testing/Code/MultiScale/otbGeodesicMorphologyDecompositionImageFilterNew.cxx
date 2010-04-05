@@ -21,9 +21,12 @@
 
 int otbGeodesicMorphologyDecompositionImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
-  typedef itk::BinaryBallStructuringElement<double,2> StructuringElementType;
-  typedef otb::GeodesicMorphologyDecompositionImageFilter<ImageType,ImageType,StructuringElementType> GeodesicMorphologyDecompositionImageFilterType;
+  typedef otb::Image<double, 2> ImageType;
+  typedef itk::BinaryBallStructuringElement<double,
+                                            2>                                                  StructuringElementType;
+  typedef otb::GeodesicMorphologyDecompositionImageFilter<ImageType, ImageType,
+                                                          StructuringElementType>
+  GeodesicMorphologyDecompositionImageFilterType;
 
   // Instantiating object
   GeodesicMorphologyDecompositionImageFilterType::Pointer filter = GeodesicMorphologyDecompositionImageFilterType::New();

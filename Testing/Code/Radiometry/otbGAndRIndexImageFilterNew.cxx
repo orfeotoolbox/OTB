@@ -28,12 +28,12 @@
 int otbGAndRIndexImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> InputGImageType;
-  typedef itk::Image<PixelType,Dimension> InputRImageType;
-  typedef itk::Image<PixelType,Dimension> OutputImageType;
+  typedef unsigned char                    PixelType;
+  typedef otb::Image<PixelType, Dimension> InputGImageType;
+  typedef itk::Image<PixelType, Dimension> InputRImageType;
+  typedef itk::Image<PixelType, Dimension> OutputImageType;
 
-  typedef otb::GAndRIndexImageFilter<InputGImageType,InputRImageType,OutputImageType>  GAndRIndexImageFilterType;
+  typedef otb::GAndRIndexImageFilter<InputGImageType, InputRImageType, OutputImageType> GAndRIndexImageFilterType;
 
   // Instantiating object
   GAndRIndexImageFilterType::Pointer object = GAndRIndexImageFilterType::New();

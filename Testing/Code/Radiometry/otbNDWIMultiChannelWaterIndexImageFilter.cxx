@@ -24,25 +24,24 @@
 #include "otbImageFileWriter.h"
 #include "otbWaterIndicesFunctor.h"
 
-
 int otbNDWIMultiChannelWaterIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<double ,Dimension>    InputImageType;
-  typedef otb::Image<double,Dimension>           OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
-  typedef otb::Functor::NDWI < InputImageType::InternalPixelType,
+  typedef otb::VectorImage<double, Dimension>   InputImageType;
+  typedef otb::Image<double, Dimension>         OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::Functor::NDWI <InputImageType::InternalPixelType,
                               InputImageType::InternalPixelType,
-                              OutputImageType::PixelType > FunctorType;
+                              OutputImageType::PixelType> FunctorType;
 
-  typedef itk::UnaryFunctorImageFilter<InputImageType,OutputImageType,FunctorType>
-                                                             UnaryFunctorImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType>
+  UnaryFunctorImageFilterType;
 
   // Instantiating object
   UnaryFunctorImageFilterType::Pointer filter = UnaryFunctorImageFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                  reader = ReaderType::New();
+  WriterType::Pointer                  writer = WriterType::New();
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -50,16 +49,14 @@ int otbNDWIMultiChannelWaterIndexImageFilter(int argc, char * argv[])
   unsigned int nirChannel(::atoi(argv[3]));
   unsigned int mirChannel(::atoi(argv[4]));
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename  );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
   filter->GetFunctor().SetNIRIndex(nirChannel);
   filter->GetFunctor().SetMIRIndex(mirChannel);
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-
-

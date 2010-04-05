@@ -25,17 +25,16 @@
 int otbPerBandVectorImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
+  typedef unsigned char                              PixelType;
+  typedef otb::Image<PixelType, Dimension>           ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>     VectorImageType;
+  typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
   PerBandVectorImageFilterType;
 
   // Instantiating object
   PerBandVectorImageFilterType::Pointer object = PerBandVectorImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

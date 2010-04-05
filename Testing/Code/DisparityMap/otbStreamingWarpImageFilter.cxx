@@ -24,11 +24,11 @@
 
 int otbStreamingWarpImageFilter(int argc, char* argv[])
 {
-  if (argc!=5)
-  {
-    std::cout<<"usage: "<<argv[0]<<"infname deffname outfname radius"<<std::endl;
+  if (argc != 5)
+    {
+    std::cout << "usage: " << argv[0] << "infname deffname outfname radius" << std::endl;
     return EXIT_SUCCESS;
-  }
+    }
 
   // Input parameters
   const char * infname = argv[1];
@@ -37,25 +37,25 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   const double maxdef = atoi(argv[4]);
 
   // Images definition
-  const unsigned int Dimension=2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::Vector<PixelType,2> DeformationValueType;
-  typedef otb::Image<DeformationValueType,Dimension> DeformationFieldType;
+  const unsigned int Dimension = 2;
+  typedef double                                      PixelType;
+  typedef otb::Image<PixelType, Dimension>            ImageType;
+  typedef itk::Vector<PixelType, 2>                   DeformationValueType;
+  typedef otb::Image<DeformationValueType, Dimension> DeformationFieldType;
 
   // Warper
-  typedef otb::StreamingWarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
+  typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DeformationFieldType> ImageWarperType;
 
   // Reader/Writer
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType>            ReaderType;
   typedef otb::ImageFileReader<DeformationFieldType> DeformationReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType>   WriterType;
 
   // Objects creation
   DeformationReaderType::Pointer deformationReader = DeformationReaderType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  ImageWarperType::Pointer warper = ImageWarperType::New();
+  ReaderType::Pointer            reader = ReaderType::New();
+  WriterType::Pointer            writer = WriterType::New();
+  ImageWarperType::Pointer       warper = ImageWarperType::New();
 
   // Reading
   reader->SetFileName(infname);

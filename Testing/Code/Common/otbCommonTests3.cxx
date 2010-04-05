@@ -26,8 +26,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbMultiToMonoChannelExtractROI );
-  REGISTER_TEST(otbMultiToMonoChannelExtractROINew );
+  REGISTER_TEST(otbMultiToMonoChannelExtractROI);
+  REGISTER_TEST(otbMultiToMonoChannelExtractROINew);
   REGISTER_TEST(otbPointSetSourceTest);
   REGISTER_TEST(otbDrawLineSpatialObjectNew);
   REGISTER_TEST(otbDrawLineSpatialObject);

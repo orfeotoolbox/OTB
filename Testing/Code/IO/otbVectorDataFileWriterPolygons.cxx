@@ -24,16 +24,16 @@
 int otbVectorDataFileWriterPolygons(int argc, char * argv[])
 {
 
-  typedef otb::VectorData<double,2> VectorDataType;
-  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef otb::VectorData<double, 2>                VectorDataType;
+  typedef VectorDataType::DataNodeType              DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-  typedef DataNodeType::PointType PointType;
-  typedef DataNodeType::LineType LineType;
-  typedef DataNodeType::PolygonType PolygonType;
-  typedef LineType::VertexType VertexType;
+  typedef DataNodeType::PointType                   PointType;
+  typedef DataNodeType::LineType                    LineType;
+  typedef DataNodeType::PolygonType                 PolygonType;
+  typedef LineType::VertexType                      VertexType;
 
   //Instantiation
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer     writer = WriterType::New();
   VectorDataType::Pointer data = VectorDataType::New();
 
   DataNodeType::Pointer document = DataNodeType::New();
@@ -60,9 +60,8 @@ int otbVectorDataFileWriterPolygons(int argc, char * argv[])
   p3.Fill(0);
 
   VertexType p2;
-  p2[0]=0;
-  p2[1]=10;
-
+  p2[0] = 0;
+  p2[1] = 10;
 
   PolygonType::Pointer poly = PolygonType::New();
   poly->AddVertex(p1);
@@ -70,20 +69,20 @@ int otbVectorDataFileWriterPolygons(int argc, char * argv[])
   poly->AddVertex(p3);
   polygon1->SetLine(poly);
 
-  polygon2=polygon1;
-  polygon3=polygon1;
-  polygon4=polygon1;
-  polygon5=polygon1;
+  polygon2 = polygon1;
+  polygon3 = polygon1;
+  polygon4 = polygon1;
+  polygon5 = polygon1;
 
   DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document,root);
-  data->GetDataTree()->Add(folder,document);
-  data->GetDataTree()->Add(polygon1,folder);
-  data->GetDataTree()->Add(polygon2,folder);
-  data->GetDataTree()->Add(polygon3,folder);
-  data->GetDataTree()->Add(polygon4,folder);
-  data->GetDataTree()->Add(polygon5,folder);
+  data->GetDataTree()->Add(document, root);
+  data->GetDataTree()->Add(folder, document);
+  data->GetDataTree()->Add(polygon1, folder);
+  data->GetDataTree()->Add(polygon2, folder);
+  data->GetDataTree()->Add(polygon3, folder);
+  data->GetDataTree()->Add(polygon4, folder);
+  data->GetDataTree()->Add(polygon5, folder);
 
   writer->SetFileName(argv[1]);
   writer->SetInput(data);

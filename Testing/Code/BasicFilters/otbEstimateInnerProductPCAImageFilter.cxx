@@ -21,26 +21,26 @@
 
 #include "otbVectorImage.h"
 
-int otbEstimateInnerProductPCAImageFilter( int argc, char* argv[] )
+int otbEstimateInnerProductPCAImageFilter(int argc, char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;
-  const char * inputFileName = argv[1];
-  const char * outputFilename = argv[2];
+  const char *       inputFileName = argv[1];
+  const char *       outputFilename = argv[2];
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[3]));
-  const bool centerdata = atoi(argv[4]);
+  const bool         centerdata = atoi(argv[4]);
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader< ImageType >                     ReaderType;
-  typedef otb::ImageFileWriter< ImageType >                     WriterType;
-  typedef otb::EstimateInnerProductPCAImageFilter<ImageType,ImageType> PCAFilterType;
+  typedef otb::VectorImage<PixelType, Dimension>                        ImageType;
+  typedef otb::ImageFileReader<ImageType>                               ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                               WriterType;
+  typedef otb::EstimateInnerProductPCAImageFilter<ImageType, ImageType> PCAFilterType;
 
-  ReaderType::Pointer     reader     = ReaderType::New();
+  ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
-  WriterType::Pointer     writer     = WriterType::New();
+  WriterType::Pointer writer     = WriterType::New();
   writer->SetFileName(outputFilename);
 
-  PCAFilterType::Pointer     pcafilter     = PCAFilterType::New();
+  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
 
   // Compute Inner Product raw
   pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);

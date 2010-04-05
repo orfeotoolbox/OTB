@@ -22,14 +22,14 @@
 
 int otbTerraSarCalibrationImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double, 2>                                                   ImageType;
-  typedef otb::Image<std::complex<double>, 2>                                     ComplexImageType; 
+  typedef otb::Image<double, 2>               ImageType;
+  typedef otb::Image<std::complex<double>, 2> ComplexImageType;
 
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType>               FilterType;
   typedef otb::TerraSarCalibrationImageFilter<ComplexImageType, ComplexImageType> ComplexFilterType;
-  
-  FilterType::Pointer filter = FilterType::New();
+
+  FilterType::Pointer        filter = FilterType::New();
   ComplexFilterType::Pointer complexFilter = ComplexFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }

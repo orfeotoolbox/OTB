@@ -21,11 +21,11 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-int otbBlendingImageFilter( int argc, char * argv[] )
+int otbBlendingImageFilter(int argc, char * argv[])
 {
   typedef unsigned char                            ValueType;
   typedef itk::RGBPixel<ValueType>                 PixelType;
-  typedef otb::Image<PixelType,2>                  ImageType;
+  typedef otb::Image<PixelType, 2>                 ImageType;
   typedef otb::BlendingImageFilter<ImageType>      BlendingFilterType;
   typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;

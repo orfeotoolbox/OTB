@@ -21,14 +21,14 @@
 
 int otbKMeansImageClassificationFilterNew(int argc, char * argv[])
 {
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
+  typedef otb::VectorImage<PixelType, Dimension>  ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
 
-  typedef otb::KMeansImageClassificationFilter<ImageType,LabeledImageType> ClassificationFilterType;
+  typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer object = ClassificationFilterType::New();

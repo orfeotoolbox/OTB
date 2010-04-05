@@ -39,27 +39,27 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   const char * itkcosfname = argv[4];
   const char * profname = argv[5];
 
-  typedef otb::Image<double,2>                             ImageType;
-  typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
-  typedef InterpolatorType::ContinuousIndexType            ContinuousIndexType;
-  typedef otb::ImageFileReader<ImageType>                  ReaderType;
+  typedef otb::Image<double, 2>                           ImageType;
+  typedef otb::ProlateInterpolateImageFunction<ImageType> InterpolatorType;
+  typedef InterpolatorType::ContinuousIndexType           ContinuousIndexType;
+  typedef otb::ImageFileReader<ImageType>                 ReaderType;
 
   unsigned int i = 7;
 
   std::vector<ContinuousIndexType> indicesList;
-  while (i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
-  {
+  while (i < static_cast<unsigned int>(argc) && (i + 1) < static_cast<unsigned int>(argc))
+    {
     ContinuousIndexType idx;
-    idx[0]=atof(argv[i]);
-    idx[1]=atof(argv[i+1]);
+    idx[0] = atof(argv[i]);
+    idx[1] = atof(argv[i + 1]);
     indicesList.push_back(idx);
 
-    i+=2;
-  }
+    i += 2;
+    }
 
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer       reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
   prolate->SetInputImage(reader->GetOutput());
@@ -69,21 +69,20 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   std::ofstream file;
   file.open(outfname);
 
-
-  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
-  {
-    file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
-  }
+  for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
+    {
+    file << (*it) << " -> " << prolate->EvaluateAtContinuousIndex((*it)) << std::endl;
+    }
   file.close();
 
   /**********************************************************/
   //typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   //typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef itk::ResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
-  WriterType::Pointer prowriter     = WriterType::New();
+  typedef otb::ImageFileWriter<ImageType>                        WriterType;
+  typedef itk::ResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
+  WriterType::Pointer                       prowriter     = WriterType::New();
   StreamingResampleImageFilterType::Pointer proresampler = StreamingResampleImageFilterType::New();
-  InterpolatorType::Pointer        pro     = InterpolatorType::New();
+  InterpolatorType::Pointer                 pro     = InterpolatorType::New();
   // Resampler connected to input image
   proresampler->SetInput(reader->GetOutput());
   pro->SetInputImage(reader->GetOutput());
@@ -92,8 +91,8 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
   proresampler->SetInterpolator(pro);
   StreamingResampleImageFilterType::SizeType size;
-  size[0]=512;
-  size[1]=512;
+  size[0] = 512;
+  size[1] = 512;
   double tutu = 1;
   proresampler->SetSize(size);
   proresampler->SetOutputSpacing(tutu);
@@ -107,12 +106,12 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   typedef itk::Function::CosineWindowFunction<1, double, double>              itkCosType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType, 1, itkCosType> itkCosInterpolatorType;
 
-  WriterType::Pointer itkcoswriter  = WriterType::New();
-  WriterType::Pointer coswriter = WriterType::New();
+  WriterType::Pointer                       itkcoswriter  = WriterType::New();
+  WriterType::Pointer                       coswriter = WriterType::New();
   StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();
   StreamingResampleImageFilterType::Pointer itkcosresampler = StreamingResampleImageFilterType::New();
-  CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
-  itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
+  CosInterpolatorType::Pointer              cos     = CosInterpolatorType::New();
+  itkCosInterpolatorType::Pointer           itkcos  = itkCosInterpolatorType::New();
   cosresampler->SetSize(size);
   cosresampler->SetOutputSpacing(tutu);
   itkcosresampler->SetSize(size);
@@ -130,7 +129,6 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   itkcoswriter->SetFileName(itkcosfname);
   coswriter->Update();
   itkcoswriter->Update();
-
 
   return EXIT_SUCCESS;
 }

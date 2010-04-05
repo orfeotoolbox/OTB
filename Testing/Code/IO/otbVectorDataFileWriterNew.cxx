@@ -21,8 +21,8 @@
 
 int otbVectorDataFileWriterNew(int argc, char * argv[])
 {
-  typedef otb::VectorData<double,2> VectorDataType;
-  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef otb::VectorData<double, 2>                VectorDataType;
+  typedef VectorDataType::DataNodeType              DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
   //Instantiation

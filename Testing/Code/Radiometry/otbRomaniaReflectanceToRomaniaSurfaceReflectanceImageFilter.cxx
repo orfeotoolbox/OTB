@@ -24,33 +24,35 @@
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
-#include<fstream>
-#include<iostream>
-
+#include <fstream>
+#include <iostream>
 
 int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char * argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
-  const char * paramFile = argv[3];
+  const char *              inputFileName  = argv[1];
+  const char *              outputFileName = argv[2];
+  const char *              paramFile = argv[3];
   std::vector<const char *> wavelenghFiles;
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType, OutputImageType> ReflectanceToSurfaceReflectanceImageFilterType;
-  typedef otb::AtmosphericRadiativeTerms::DataVectorType                                   DataVectorType;
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms                CorrectionParametersTo6SRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters                                             CorrectionParametersType;
-  typedef otb::AtmosphericRadiativeTerms                                                   RadiativeTermsType;
-  typedef otb::FilterFunctionValues                                                        FilterFunctionValuesType;
-  typedef CorrectionParametersType::AerosolModelType                                       AerosolModelType;
-  typedef FilterFunctionValuesType::WavelenghtSpectralBandType                             ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType                                       ValuesVectorType;
+  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
+                                                          OutputImageType>
+                                                         ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
+  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+  CorrectionParametersTo6SRadiativeTermsType;
+  typedef otb::AtmosphericCorrectionParameters                 CorrectionParametersType;
+  typedef otb::AtmosphericRadiativeTerms                       RadiativeTermsType;
+  typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
+  typedef CorrectionParametersType::AerosolModelType           AerosolModelType;
+  typedef FilterFunctionValuesType::WavelenghtSpectralBandType ValueType;
+  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType;
 
   RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
   CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
@@ -64,41 +66,41 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
 
   reader->UpdateOutputInformation();
   unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-  for (unsigned int i=0; i<nbChannel; i++)
-  {
-    wavelenghFiles.push_back( argv[i+4] );
-  }
+  for (unsigned int i = 0; i < nbChannel; i++)
+    {
+    wavelenghFiles.push_back(argv[i + 4]);
+    }
 
   ValueType val = 0.0025;
 
   // Correction parameters initialization
-  double solarZenithalAngle(0.);
-  double solarAzimutalAngle(0.);
-  double viewingZenithalAngle(0.);
-  double viewingAzimutalAngle(0.);
+  double       solarZenithalAngle(0.);
+  double       solarAzimutalAngle(0.);
+  double       viewingZenithalAngle(0.);
+  double       viewingAzimutalAngle(0.);
   unsigned int month(0);
   unsigned int day(0);
-  double atmosphericPressure(0.);
-  double waterVaporAmount(0.);
-  double ozoneAmount(0.);
-  double aerosolOptical(0.);
+  double       atmosphericPressure(0.);
+  double       waterVaporAmount(0.);
+  double       ozoneAmount(0.);
+  double       aerosolOptical(0.);
 
   std::ifstream fin;
   fin.open(paramFile);
   //Read input file parameters
-  fin >> solarZenithalAngle;//asol;
-  fin >> solarAzimutalAngle;//phi0;
-  fin >> viewingZenithalAngle;//avis;
-  fin >> viewingAzimutalAngle;//phiv;
-  fin >> month;//month;
-  fin >> day;//jday;
-  fin >> atmosphericPressure;//pressure;
-  fin >> waterVaporAmount;//uw;
-  fin >> ozoneAmount;//uo3;
+  fin >> solarZenithalAngle; //asol;
+  fin >> solarAzimutalAngle; //phi0;
+  fin >> viewingZenithalAngle; //avis;
+  fin >> viewingAzimutalAngle; //phiv;
+  fin >> month; //month;
+  fin >> day; //jday;
+  fin >> atmosphericPressure; //pressure;
+  fin >> waterVaporAmount; //uw;
+  fin >> ozoneAmount; //uo3;
   unsigned int aer(0);
-  fin >> aer;//iaer;
+  fin >> aer; //iaer;
   AerosolModelType aerosolModel = static_cast<AerosolModelType>(aer);
-  fin >> aerosolOptical;//taer55;
+  fin >> aerosolOptical; //taer55;
   fin.close();
   // Set atmospheric parameters
   param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
@@ -113,10 +115,9 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   param->SetAerosolModel(aerosolModel);
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
-
   ValuesVectorType vect;
-  for (unsigned int j=0; j<nbChannel; j++)
-  {
+  for (unsigned int j = 0; j < nbChannel; j++)
+    {
     functionValues = FilterFunctionValuesType::New();
     vect.clear();
 
@@ -128,34 +129,33 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
     std::ifstream fin;
     //Read input file parameters
     fin.open(wavelenghFiles[j]);
-    fin >> minSpectralValue;//wlinf;
-    fin >> maxSpectralValue;//wlsup;
+    fin >> minSpectralValue; //wlinf;
+    fin >> maxSpectralValue; //wlsup;
 
     while (fin.good())
-    {
+      {
       fin >> value;
       vect.push_back(value);
-    }
+      }
     fin.close();
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
-    functionValues->SetUserStep( val );
+    functionValues->SetUserStep(val);
 
     param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
-  }
+    }
 
-  corrToRadia->SetInput( param );
+  corrToRadia->SetInput(param);
   corrToRadia->Update();
 
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
-  filter->SetAtmosphericRadiativeTerms( corrToRadia->GetOutput() );
+  filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

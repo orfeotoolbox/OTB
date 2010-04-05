@@ -26,9 +26,9 @@ int otbPersistentVectorizationFilterNew(int argc, char * argv[])
   const unsigned int ImageDimension = 2;
   typedef unsigned short LabelType;
 
-  typedef otb::Image<LabelType, ImageDimension> ImageType;
-  typedef otb::Polygon <LabelType> PolygonType;
-  typedef otb::PersistentVectorizationImageFilter<ImageType,PolygonType> FilterType;
+  typedef otb::Image<LabelType, ImageDimension>                           ImageType;
+  typedef otb::Polygon <LabelType>                                        PolygonType;
+  typedef otb::PersistentVectorizationImageFilter<ImageType, PolygonType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

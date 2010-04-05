@@ -21,17 +21,15 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-
 int otbSFSTexturesImageFilterNew(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension>                ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                 PixelType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
   //typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

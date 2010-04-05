@@ -17,13 +17,13 @@
 =========================================================================*/
 #include "otbCurves2DWidget.h"
 
-int otbCurves2DWidgetNew( int argc, char * argv[] )
+int otbCurves2DWidgetNew(int argc, char * argv[])
 {
   typedef otb::Curves2DWidget WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
 
-  std::cout<<widget<<std::endl;
+  std::cout << widget << std::endl;
 
   return EXIT_SUCCESS;
 }

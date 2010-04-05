@@ -28,37 +28,37 @@ template <class TInput, class TOutput>
 class UnaryFunctorWithIndexImageFilterFunctorTest
 {
 public:
-  UnaryFunctorWithIndexImageFilterFunctorTest() {};
-  ~UnaryFunctorWithIndexImageFilterFunctorTest() {};
+  UnaryFunctorWithIndexImageFilterFunctorTest() {}
+  ~UnaryFunctorWithIndexImageFilterFunctorTest() {}
 
   typedef itk::Index<2> IndexType;
 
-  inline TOutput operator() (const TInput & inPix, IndexType index)
+  inline TOutput operator ()(const TInput& inPix, IndexType index)
   {
-    return(static_cast<TOutput>(inPix));
+    return (static_cast<TOutput>(inPix));
   }
 };
 }
-
 
 int otbUnaryFunctorWithIndexImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
 
-  typedef double                             InputPixelType;
-  typedef otb::VectorImage<InputPixelType,2> ImageType;
-  typedef ImageType::PixelType               PixelType;
-  typedef otb::ImageFileReader<ImageType>    ReaderType;
-  typedef otb::ImageFileWriter<ImageType>    WriterType;
+  typedef double                              InputPixelType;
+  typedef otb::VectorImage<InputPixelType, 2> ImageType;
+  typedef ImageType::PixelType                PixelType;
+  typedef otb::ImageFileReader<ImageType>     ReaderType;
+  typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  typedef Functor::UnaryFunctorWithIndexImageFilterFunctorTest<PixelType, PixelType>  FunctorType;
-  typedef otb::UnaryFunctorWithIndexImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorWithIndexImageFilterType;
+  typedef Functor::UnaryFunctorWithIndexImageFilterFunctorTest<PixelType, PixelType> FunctorType;
+  typedef otb::UnaryFunctorWithIndexImageFilter<ImageType, ImageType,
+                                                FunctorType>   UnaryFunctorWithIndexImageFilterType;
 
   // Instantiating object
   UnaryFunctorWithIndexImageFilterType::Pointer object = UnaryFunctorWithIndexImageFilterType::New();
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                           reader  = ReaderType::New();
+  WriterType::Pointer                           writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
 
@@ -66,7 +66,6 @@ int otbUnaryFunctorWithIndexImageFilter(int argc, char * argv[])
   writer->SetInput(object->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

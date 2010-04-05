@@ -23,12 +23,11 @@
 int otbBreakAngularPathListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef itk::PolyLineParametricPath<Dimension>    PathType;
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathListFilterType;
 
   // Instantiating object
   BreakAngularPathListFilterType::Pointer object = BreakAngularPathListFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

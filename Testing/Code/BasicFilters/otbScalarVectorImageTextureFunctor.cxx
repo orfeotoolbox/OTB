@@ -25,33 +25,34 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 
-
 int otbScalarVectorImageTextureFunctor(int argc, char * argv[])
 {
   typedef double InputPixelType;
   const char * inputfilename(argv[1]);
   const char * outputfilename(argv[2]);
-  const int radius(atoi(argv[3]));
+  const int    radius(atoi(argv[3]));
 //  const int indexfeature(atoi(argv[4]));
 
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<InputPixelType,Dimension> OutputVectorImageType;
-  typedef OutputVectorImageType::PixelType OutputVectorImagePixelType;
+  typedef otb::Image<InputPixelType, Dimension>       InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> OutputVectorImageType;
+  typedef OutputVectorImageType::PixelType            OutputVectorImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator<InputImageType>   IterType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType>       IterType;
+  typedef otb::ImageFileReader<InputImageType>                 ReaderType;
   typedef otb::StreamingImageFileWriter<OutputVectorImageType> WriterType;
 
-  typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType, OutputVectorImagePixelType>  FunctorType;
+  typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType,
+                                                        OutputVectorImagePixelType> FunctorType;
 
   typedef FunctorType::IndexSelectFeaturesType ListIndexType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, OutputVectorImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, OutputVectorImageType,
+                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer                              writer = WriterType::New();
+  ReaderType::Pointer                              reader = ReaderType::New();
 
   ListIndexType listIndexFeature;
   listIndexFeature.push_back(0);
@@ -65,7 +66,6 @@ int otbScalarVectorImageTextureFunctor(int argc, char * argv[])
   reader->SetFileName(inputfilename);
 
   writer->SetFileName(outputfilename);
-
 
   writer->Update();
 

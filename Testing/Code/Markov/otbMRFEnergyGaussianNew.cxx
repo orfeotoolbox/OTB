@@ -22,15 +22,13 @@
 #include "otbMRFEnergyGaussian.h"
 #include "otbImage.h"
 
-
 int otbMRFEnergyGaussianNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType, 2>                   ImageType;
-  typedef otb::MRFEnergyGaussian< ImageType, ImageType> MRFEnergyGaussianType;
+  typedef double                                       PixelType;
+  typedef otb::Image<PixelType, 2>                     ImageType;
+  typedef otb::MRFEnergyGaussian<ImageType, ImageType> MRFEnergyGaussianType;
 
   MRFEnergyGaussianType::Pointer object = MRFEnergyGaussianType::New();
 
   return EXIT_SUCCESS;
 }
-

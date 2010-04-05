@@ -26,17 +26,14 @@
 #include "otbVectorImage.h"
 #include "otbImageAndVectorImageOperationFilter.h"
 
-
-int otbImageAndVectorImageOperationFilterNew( int argc, char * argv[] )
+int otbImageAndVectorImageOperationFilterNew(int argc, char * argv[])
 {
-  typedef double                         PixelType;
-  typedef otb::Image<PixelType, 2>       ScalarImageType;
-  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+  typedef double                                                                                     PixelType;
+  typedef otb::Image<PixelType, 2>                                                                   ScalarImageType;
+  typedef otb::VectorImage<PixelType, 2>                                                             VectorImageType;
   typedef otb::ImageAndVectorImageOperationFilter<ScalarImageType, VectorImageType, VectorImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

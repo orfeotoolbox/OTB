@@ -25,7 +25,7 @@ class ReadTables : public pqxx::transactor<pqxx::nontransaction>
 public:
   ReadTables() : pqxx::transactor<pqxx::nontransaction>("ReadTables") {}
 
-  void operator()(argument_type &T)
+  void operator ()(argument_type& T)
   {
     m_Result = T.exec("SELECT * FROM pg_tables");
   }
@@ -33,12 +33,12 @@ public:
   void on_commit()
   {
     for (pqxx::result::const_iterator c = m_Result.begin(); c != m_Result.end(); ++c)
-    {
+      {
       std::string N;
       c[0].to(N);
 
       std::cout << '\t' << c.num() << '\t' << N << std::endl;
-    }
+      }
   }
 };
 
@@ -55,14 +55,14 @@ int otbPostGISConnectionImplementationPerformTransaction(int argc, char * argv[]
   //Instantiation
   GISConnectionType::Pointer connection = GISConnectionType::New();
 
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-  connection->SetPassword( userPassword );
+  connection->SetHost(hostName);
+  connection->SetDBName(dbName);
+  connection->SetUser(userName);
+  connection->SetPassword(userPassword);
 
   connection->ConnectToDB();
 
-  connection->GetConnection()->perform( ReadTables() );
+  connection->GetConnection()->perform(ReadTables());
 
   return EXIT_SUCCESS;
 }

@@ -27,13 +27,12 @@
 int otbRADImageIOTestCanRead(int argc, char* argv[])
 {
   otb::RADImageIO::Pointer lRADImageIO = otb::RADImageIO::New();
-  bool lCanRead = lRADImageIO->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::RADImageIO : impossible to read file: "<<argv[1]<<"."<<std::endl;
+  bool                     lCanRead = lRADImageIO->CanReadFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::RADImageIO : impossible to read file: " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }

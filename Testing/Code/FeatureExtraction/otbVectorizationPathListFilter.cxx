@@ -34,23 +34,23 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   const double thresh = atof(argv[5]);
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
-  typedef otb::DrawPathListFilter<OutputImageType,PathType,OutputImageType> DrawFilterType;
-  typedef otb::VectorizationPathListFilter<ImageType,ImageType,PathType> VectorizationPathListFilterType;
-  typedef VectorizationPathListFilterType::OutputPathListType PathListType;
-  typedef PathListType::ConstIterator PathListIteratorType;
-  typedef PathType::VertexListType VertexListType;
-  typedef VertexListType::ConstIterator VertexIteratorType;
+  typedef double                                                              PixelType;
+  typedef unsigned char                                                       OutputPixelType;
+  typedef otb::Image<PixelType, Dimension>                                    ImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                              OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef otb::ImageFileReader<ImageType>                                     ReaderType;
+  typedef itk::PolyLineParametricPath<Dimension>                              PathType;
+  typedef otb::DrawPathListFilter<OutputImageType, PathType, OutputImageType> DrawFilterType;
+  typedef otb::VectorizationPathListFilter<ImageType, ImageType, PathType>    VectorizationPathListFilterType;
+  typedef VectorizationPathListFilterType::OutputPathListType                 PathListType;
+  typedef PathListType::ConstIterator                                         PathListIteratorType;
+  typedef PathType::VertexListType                                            VertexListType;
+  typedef VertexListType::ConstIterator                                       VertexIteratorType;
   // Instantiating objects
   VectorizationPathListFilterType::Pointer filter = VectorizationPathListFilterType::New();
-  ReaderType::Pointer modReader = ReaderType::New();
-  ReaderType::Pointer dirReader = ReaderType::New();
+  ReaderType::Pointer                      modReader = ReaderType::New();
+  ReaderType::Pointer                      dirReader = ReaderType::New();
 
   modReader->SetFileName(modfname);
   dirReader->SetFileName(dirfname);
@@ -61,29 +61,29 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   filter->Update();
 
   PathListType::Pointer pathList = filter->GetOutput();
-  PathListIteratorType pathListIt = pathList->Begin();
+  PathListIteratorType  pathListIt = pathList->Begin();
 
   std::ofstream file;
   file.open(outfname);
   unsigned int counter = 0;
 
-  while (pathListIt!=pathList->End())
-  {
-    file<<"Path "<<counter<<": ";
-    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-         vIt!=pathListIt.Get()->GetVertexList()->End();
-         ++vIt)
+  while (pathListIt != pathList->End())
     {
-      if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
+    file << "Path " << counter << ": ";
+    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+         vIt != pathListIt.Get()->GetVertexList()->End();
+         ++vIt)
       {
-        file<<", ";
+      if (vIt != pathListIt.Get()->GetVertexList()->Begin())
+        {
+        file << ", ";
+        }
+      file << vIt.Value();
       }
-      file<<vIt.Value();
-    }
-    file<<std::endl;
+    file << std::endl;
     ++pathListIt;
     ++counter;
-  }
+    }
   file.close();
 
   OutputImageType::Pointer output = OutputImageType::New();
@@ -100,7 +100,6 @@ int otbVectorizationPathListFilter(int argc, char * argv[])
   writer->SetFileName(outImagefname);
   writer->SetInput(drawer->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

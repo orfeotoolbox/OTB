@@ -22,22 +22,20 @@
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
-
-int otbPointSetToDensityImageFilterNew(int, char* [] )
+int otbPointSetToDensityImageFilterNew(int, char*[])
 {
 
-  const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  typedef otb::Image<PixelType , Dimension>                        ImageType;
-  typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
-  typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
+  typedef itk::VariableLengthVector<PixelType>                        RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                    PointSetType;
+  typedef otb::PointSetToDensityImageFilter <PointSetType, ImageType> FunctionType;
 
   /**Instantiation of an object*/
 
-  FunctionType::Pointer    filter = FunctionType::New();
+  FunctionType::Pointer filter = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-

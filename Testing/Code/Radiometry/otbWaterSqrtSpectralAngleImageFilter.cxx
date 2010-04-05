@@ -23,25 +23,22 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbWaterSqrtSpectralAngleImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<double ,Dimension> InputImageType;
-  typedef otb::Image<double,Dimension> OutputImageType;
+  typedef otb::VectorImage<double, Dimension> InputImageType;
+  typedef otb::Image<double, Dimension>       OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-
-  typedef otb::WaterSqrtSpectralAngleImageFilter<InputImageType,OutputImageType>
+  typedef otb::WaterSqrtSpectralAngleImageFilter<InputImageType, OutputImageType>
   WaterSqrtSpectralAngleImageFilterType;
-
 
   // Instantiating objects
   WaterSqrtSpectralAngleImageFilterType::Pointer filter = WaterSqrtSpectralAngleImageFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                            reader = ReaderType::New();
+  WriterType::Pointer                            writer = WriterType::New();
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -51,18 +48,17 @@ int otbWaterSqrtSpectralAngleImageFilter(int argc, char * argv[])
   unsigned int redChannel(::atoi(argv[5]));
   unsigned int nirChannel(::atoi(argv[6]));
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename  );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   filter->GetFunctor().SetBlueChannel(blueChannel);
   filter->GetFunctor().SetGreenChannel(greenChannel);
   filter->GetFunctor().SetRedChannel(redChannel);
   filter->GetFunctor().SetNIRChannel(nirChannel);
 
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 

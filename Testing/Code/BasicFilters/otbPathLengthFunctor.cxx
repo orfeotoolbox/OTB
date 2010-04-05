@@ -32,28 +32,28 @@
 #include "otbPathLengthFunctor.h"
 #include "otbUnaryFunctorObjectListBooleanFilter.h"
 
-int otbPathLengthFunctor( int argc, char * argv[] )
+int otbPathLengthFunctor(int argc, char * argv[])
 {
 
-  if (argc !=3 )
-  {
+  if (argc != 3)
+    {
     std::cout << "Usage: " << argv[0];
     std::cout << " inputImage outputFile" << std::endl;
     return 1;
-  }
+    }
 
   typedef unsigned char  InputPixelType;
-  typedef unsigned short LabelPixelType;//FIXME doesn't seem to work with long int (64 bits problem ?)
+  typedef unsigned short LabelPixelType; //FIXME doesn't seem to work with long int (64 bits problem ?)
 
-  typedef otb::Image<InputPixelType,2> InputImageType;
-  typedef otb::Image<LabelPixelType,2> LabelImageType;
+  typedef otb::Image<InputPixelType, 2> InputImageType;
+  typedef otb::Image<LabelPixelType, 2> LabelImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  typedef itk::ConnectedComponentImageFilter<InputImageType,LabelImageType> ConnectedComponentsFilterType;
-  ConnectedComponentsFilterType::Pointer  connectedComponentsFilter = ConnectedComponentsFilterType::New();
+  typedef itk::ConnectedComponentImageFilter<InputImageType, LabelImageType> ConnectedComponentsFilterType;
+  ConnectedComponentsFilterType::Pointer connectedComponentsFilter = ConnectedComponentsFilterType::New();
 
 //   connectedComponentsFilter->SetInput(reader->GetOutput());
   connectedComponentsFilter->SetInput(reader->GetOutput());
@@ -61,14 +61,14 @@ int otbPathLengthFunctor( int argc, char * argv[] )
 
   std::cout << "# regions: " << connectedComponentsFilter->GetObjectCount() << std::endl;
 
-  typedef otb::Polygon<double>                                     PolygonType;
-  typedef otb::ObjectList<PolygonType>                             PolygonListType;
-  typedef otb::ImageToEdgePathFilter<LabelImageType,PolygonType> PolygonFilterType;
+  typedef otb::Polygon<double>                                    PolygonType;
+  typedef otb::ObjectList<PolygonType>                            PolygonListType;
+  typedef otb::ImageToEdgePathFilter<LabelImageType, PolygonType> PolygonFilterType;
 
   PolygonListType::Pointer polygonList = PolygonListType::New();
 
-  for (LabelPixelType label = 1; label<=connectedComponentsFilter->GetObjectCount();++label)
-  {
+  for (LabelPixelType label = 1; label <= connectedComponentsFilter->GetObjectCount(); ++label)
+    {
     std::cerr << ".";
     PolygonFilterType::Pointer polygonFilter = PolygonFilterType::New();
     polygonFilter->SetInput(connectedComponentsFilter->GetOutput());
@@ -76,40 +76,41 @@ int otbPathLengthFunctor( int argc, char * argv[] )
     polygonFilter->Update();
 
     polygonList->PushBack(polygonFilter->GetOutput());
-  }
+    }
 
-  typedef otb::PathLengthFunctor<PolygonType::Pointer> LengthFunctorType;
-  typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType,PolygonListType,LengthFunctorType> PathLengthFilterType;
+  typedef otb::PathLengthFunctor<PolygonType::Pointer>
+                                                                      LengthFunctorType;
+  typedef otb::UnaryFunctorObjectListBooleanFilter<PolygonListType, PolygonListType,
+                                                   LengthFunctorType> PathLengthFilterType;
   PathLengthFilterType::Pointer pathLengthFilter = PathLengthFilterType::New();
   pathLengthFilter->SetInput(polygonList);
   pathLengthFilter->GetFunctor().SetThreshold(500);
   pathLengthFilter->Update();
 
-  const char * outfile = argv[2];
+  const char *  outfile = argv[2];
   std::ofstream file;
   file.open(outfile);
 
-  typedef PolygonType::VertexListType VertexListType;
+  typedef PolygonType::VertexListType   VertexListType;
   typedef VertexListType::ConstIterator IteratorType;
 
   typedef  PolygonListType::ConstIterator PolygonListIteratorType;
 
   for (PolygonListIteratorType pIt = pathLengthFilter->GetOutput()->Begin();
-       pIt!=pathLengthFilter->GetOutput()->End();
+       pIt != pathLengthFilter->GetOutput()->End();
        ++pIt)
-  {
-    file<< "--- New Polygon ---" << std::endl;
-    PolygonType::Pointer polygon=pIt.Get();
-    IteratorType it;
-    for (it=polygon->GetVertexList()->Begin();it!=polygon->GetVertexList()->End();++it)
     {
-      file<<it.Value()<<std::endl;
+    file << "--- New Polygon ---" << std::endl;
+    PolygonType::Pointer polygon = pIt.Get();
+    IteratorType         it;
+    for (it = polygon->GetVertexList()->Begin(); it != polygon->GetVertexList()->End(); ++it)
+      {
+      file << it.Value() << std::endl;
 
+      }
     }
-  }
 
   file.close();
 
   return EXIT_SUCCESS;
 }
-

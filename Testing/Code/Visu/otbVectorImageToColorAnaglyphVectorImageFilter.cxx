@@ -27,10 +27,14 @@ int otbVectorImageToColorAnaglyphVectorImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::VectorImageToColorAnaglyphVectorImageFilter<VectorImageType,VectorImageType,VectorImageType> FilterType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+  typedef otb::VectorImage<PixelType,
+                           Dimension>                                       VectorImageType;
+  typedef otb::VectorImageToColorAnaglyphVectorImageFilter<VectorImageType, VectorImageType,
+                                                           VectorImageType> FilterType;
+  typedef otb::ImageFileReader<VectorImageType>
+                                                                            ReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType>
+                                                                            WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

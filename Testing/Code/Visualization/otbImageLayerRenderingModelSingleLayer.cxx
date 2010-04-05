@@ -24,7 +24,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageLayer.h"
 
-int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
+int otbImageLayerRenderingModelSingleLayer(int argc, char * argv[])
 {
   // params
   const char * infname = argv[1];
@@ -33,15 +33,15 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   const char * sextoutfname = argv[4];
 
   // typedefs
-  typedef itk::RGBAPixel<unsigned char>               RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>                 OutputImageType;
-  typedef otb::VectorImage<double,2>                 ImageType;
-  typedef otb::ImageLayer<ImageType,OutputImageType> LayerType;
-  typedef otb::ImageFileReader<ImageType>            ReaderType;
-  typedef otb::ImageLayerGenerator<LayerType>        LayerGeneratorType;
-  typedef otb::ImageLayerRenderingModel<OutputImageType>     ModelType;
-  typedef otb::ImageFileWriter<OutputImageType>      WriterType;
-  typedef LayerGeneratorType::ResampleFilterType     ResampleFilterType;
+  typedef itk::RGBAPixel<unsigned char>                  RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>                    OutputImageType;
+  typedef otb::VectorImage<double, 2>                    ImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>    LayerType;
+  typedef otb::ImageFileReader<ImageType>                ReaderType;
+  typedef otb::ImageLayerGenerator<LayerType>            LayerGeneratorType;
+  typedef otb::ImageLayerRenderingModel<OutputImageType> ModelType;
+  typedef otb::ImageFileWriter<OutputImageType>          WriterType;
+  typedef LayerGeneratorType::ResampleFilterType         ResampleFilterType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();
@@ -70,34 +70,33 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
 
   // Layer manipulation test
   ModelType::LayerType::Pointer layer = model->GetLayer(0);
-  std::string layerName = layer->GetName();
+  std::string                   layerName = layer->GetName();
   ModelType::LayerType::Pointer layerByName = model->GetLayerByName(layerName);
   if (layer != layerByName)
-  {
+    {
     return EXIT_FAILURE;
-  }
-
+    }
 
   // Copute extract and scaled extract region
-  ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
+  ImageType::RegionType            lregion = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::IndexType index;
   ImageType::RegionType::SizeType  size;
 
-  size[0]=100;
-  size[1]=100;
+  size[0] = 100;
+  size[1] = 100;
 
-  index[0] = lregion.GetSize()[0]/4;
-  index[1] = lregion.GetSize()[1]/4;
+  index[0] = lregion.GetSize()[0] / 4;
+  index[1] = lregion.GetSize()[1] / 4;
 
   ImageType::RegionType extractRegion;
   extractRegion.SetSize(size);
   extractRegion.SetIndex(index);
 
-  size[0]=25;
-  size[1]=25;
+  size[0] = 25;
+  size[1] = 25;
 
-  index[0] = 3 * lregion.GetSize()[0]/8;
-  index[1] = 3 * lregion.GetSize()[1]/8;
+  index[0] = 3 * lregion.GetSize()[0] / 8;
+  index[1] = 3 * lregion.GetSize()[1] / 8;
 
   ImageType::RegionType sextractRegion;
   sextractRegion.SetSize(size);
@@ -116,21 +115,21 @@ int otbImageLayerRenderingModelSingleLayer( int argc, char * argv[] )
   writer->SetFileName(qloutfname);
   writer->Update();
 
-  std::cout<<"Quicklook saved."<<std::endl;
+  std::cout << "Quicklook saved." << std::endl;
 
   writer = WriterType::New();
   writer->SetInput(model->GetRasterizedExtract());
   writer->SetFileName(extoutfname);
   writer->Update();
 
-  std::cout<<"Extract saved."<<std::endl;
+  std::cout << "Extract saved." << std::endl;
 
   writer = WriterType::New();
   writer->SetInput(model->GetRasterizedScaledExtract());
   writer->SetFileName(sextoutfname);
   writer->Update();
 
-  std::cout<<"Scaled extract saved."<<std::endl;
+  std::cout << "Scaled extract saved." << std::endl;
 
   // Layer manipulation test
   model->DeleteLayerByName(layerName);

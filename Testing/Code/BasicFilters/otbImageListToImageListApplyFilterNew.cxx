@@ -25,17 +25,16 @@
 int otbImageListToImageListApplyFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension>  ImageType;
-  typedef otb::ImageList<ImageType> ImageListType;
-  typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
+  typedef unsigned char                              PixelType;
+  typedef otb::Image<PixelType, Dimension>           ImageType;
+  typedef otb::ImageList<ImageType>                  ImageListType;
+  typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
-  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
+  typedef otb::ImageListToImageListApplyFilter<ImageListType, ImageListType, MeanFilterType>
   ImageListToImageListApplyFilterType;
 
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer object = ImageListToImageListApplyFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

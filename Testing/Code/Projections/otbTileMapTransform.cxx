@@ -21,7 +21,7 @@
 int otbTileMapTransform(int argc, char* argv[])
 {
 
-  const char * outFileName = argv[1];
+  const char *  outFileName = argv[1];
   std::ofstream file;
   file.open(outFileName);
 
@@ -31,16 +31,16 @@ int otbTileMapTransform(int argc, char* argv[])
 
   file << std::setprecision(15);
   file << "Forward projection: level " << projection->GetLevel() << std::endl;
-  itk::Point<double,2> point;
-  point[0] = 0;//lon
-  point[1] = 0;//lat
+  itk::Point<double, 2> point;
+  point[0] = 0; //lon
+  point[1] = 0; //lat
 
   file << point << " -> ";
   file << projection->TransformPoint(point);
   file << std::endl << std::endl;
 
-  point[0] = 1.48;//lon
-  point[1] = 43.55;//lat
+  point[0] = 1.48; //lon
+  point[1] = 43.55; //lat
 
   file << point << " -> ";
   file << projection->TransformPoint(point);
@@ -52,8 +52,8 @@ int otbTileMapTransform(int argc, char* argv[])
 
   file << "Inverse projection: level " << inverseProjection->GetLevel() << std::endl;
 
-  point[0] = 132149;//X
-  point[1] = 95774;//Y
+  point[0] = 132149; //X
+  point[1] = 95774; //Y
 
   file << point << " -> ";
   file << inverseProjection->TransformPoint(point);

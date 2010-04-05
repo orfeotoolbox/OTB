@@ -24,7 +24,7 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbImageIOFactoryNew(int argc, char* argv [])
+int otbImageIOFactoryNew(int argc, char* argv[])
 {
   otb::ImageIOFactory * lImageIOFactory;
   lImageIOFactory = NULL;

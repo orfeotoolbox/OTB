@@ -20,15 +20,15 @@
 #include "otbImageViewer.h"
 #include "otbMacro.h"
 
-int otbImageViewer( int argc, char * argv[] )
+int otbImageViewer(int argc, char * argv[])
 {
   char * filename = argv[1];
 
   // Parse command line parameters
-  typedef double PixelType;
-  typedef otb::ImageViewer<PixelType>  ImageViewerType;
-  typedef ImageViewerType::ImageType ImageType;
-  typedef ImageViewerType::ViewModelType ViewModelType;
+  typedef double                          PixelType;
+  typedef otb::ImageViewer<PixelType>     ImageViewerType;
+  typedef ImageViewerType::ImageType      ImageType;
+  typedef ImageViewerType::ViewModelType  ViewModelType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   ViewModelType mode = static_cast<ViewModelType>(atoi(argv[2]));
@@ -50,8 +50,5 @@ int otbImageViewer( int argc, char * argv[] )
   Fl::check();
   // Fl::run();
 
-
   return EXIT_SUCCESS;
 }
-
-

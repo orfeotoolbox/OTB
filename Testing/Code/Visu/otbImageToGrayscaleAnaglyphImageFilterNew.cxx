@@ -26,9 +26,9 @@ int otbImageToGrayscaleAnaglyphImageFilterNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::ImageToGrayscaleAnaglyphImageFilter<ImageType,ImageType,VectorImageType> FilterType;
+  typedef otb::Image<PixelType, Dimension>                                                ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                                          VectorImageType;
+  typedef otb::ImageToGrayscaleAnaglyphImageFilter<ImageType, ImageType, VectorImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();

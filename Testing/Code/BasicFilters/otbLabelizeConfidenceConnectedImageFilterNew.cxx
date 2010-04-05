@@ -22,13 +22,13 @@
 #include "otbLabelizeConfidenceConnectedImageFilter.h"
 #include "otbImage.h"
 
-int otbLabelizeConfidenceConnectedImageFilterNew( int argc, char * argv[] )
+int otbLabelizeConfidenceConnectedImageFilterNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::LabelizeConfidenceConnectedImageFilter

@@ -24,19 +24,17 @@
 #include "itkImage.h"
 #include "itkPointSet.h"
 
-int otbImageToPointSetFilterTest(int argc, char *argv[] )
+int otbImageToPointSetFilterTest(int argc, char *argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef unsigned char  PixelType;
+  typedef unsigned char PixelType;
 
-  typedef itk::Image< PixelType, Dimension  >           ImageType;
-  typedef itk::PointSet<PixelType, Dimension>           PointSetType;
-  typedef otb::ImageToPointSetFilter<ImageType,PointSetType> FunctionType;
+  typedef itk::Image<PixelType, Dimension>                    ImageType;
+  typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
+  typedef otb::ImageToPointSetFilter<ImageType, PointSetType> FunctionType;
 
   //FunctionType::Pointer function = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-
-

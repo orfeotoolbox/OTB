@@ -31,15 +31,15 @@
 int otbVectorDataToImageFilter(int argc, char * argv[])
 {
 
-  if (argc < 3  )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image filename>"  << std::endl;
+  if (argc < 3)
+    {
+    std::cout << argv[0] << " <input vector filename> <input image filename>"  << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   //Read the vector data
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
@@ -50,32 +50,32 @@ int otbVectorDataToImageFilter(int argc, char * argv[])
   ProjectionFilterType::Pointer projection = ProjectionFilterType::New();
   projection->SetInput(reader->GetOutput());
 
-  std::string projectionRefWkt ="PROJCS[\"UTM Zone 31, Northern Hemisphere\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
+  std::string projectionRefWkt =
+    "PROJCS[\"UTM Zone 31, Northern Hemisphere\",GEOGCS[\"WGS 84\",DATUM[\"WGS_1984\",SPHEROID[\"WGS 84\",6378137,298.257223563,AUTHORITY[\"EPSG\",\"7030\"]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[\"EPSG\",\"6326\"]],PRIMEM[\"Greenwich\",0,AUTHORITY[\"EPSG\",\"8901\"]],UNIT[\"degree\",0.0174532925199433,AUTHORITY[\"EPSG\",\"9108\"]],AXIS[\"Lat\",NORTH],AXIS[\"Long\",EAST],AUTHORITY[\"EPSG\",\"4326\"]],PROJECTION[\"Transverse_Mercator\"],PARAMETER[\"latitude_of_origin\",0],PARAMETER[\"central_meridian\",3],PARAMETER[\"scale_factor\",0.9996],PARAMETER[\"false_easting\",500000],PARAMETER[\"false_northing\",0],UNIT[\"Meter\",1]]";
 
   projection->SetOutputProjectionRef(projectionRefWkt);
 
-
   //Convert the vector data into an image
-  typedef itk::RGBAPixel< unsigned char > PixelType;
-  typedef otb::Image<PixelType,2> ImageType;
+  typedef itk::RGBAPixel<unsigned char> PixelType;
+  typedef otb::Image<PixelType, 2>      ImageType;
 
   ImageType::SizeType size;
   size[0] = 500;
   size[1] = 500;
 
   ImageType::PointType origin;
-  origin[0] = 374149.980555821;//UL easting
-  origin[1] = 4829183.99443839;//UL northing
+  origin[0] = 374149.980555821; //UL easting
+  origin[1] = 4829183.99443839; //UL northing
 
   ImageType::SpacingType spacing;
   spacing[0] = 0.6;
   spacing[1] = -0.6;
 
   typedef otb::RemoteSensingRegion<double> RegionType;
-  RegionType region;
+  RegionType           region;
   RegionType::SizeType sizeInUnit;
-  sizeInUnit[0] = size[0]*spacing[0];
-  sizeInUnit[1] = size[1]*spacing[1];
+  sizeInUnit[0] = size[0] * spacing[0];
+  sizeInUnit[1] = size[1] * spacing[1];
   region.SetSize(sizeInUnit);
   region.SetOrigin(origin);
   region.SetRegionProjection(projectionRefWkt);

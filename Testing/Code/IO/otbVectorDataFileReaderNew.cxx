@@ -21,10 +21,9 @@
 
 int otbVectorDataFileReaderNew(int argc, char * argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer object = VectorDataFileReaderType::New();
-
 
   return EXIT_SUCCESS;
 }

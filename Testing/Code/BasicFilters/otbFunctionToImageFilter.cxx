@@ -25,12 +25,12 @@
 int otbFunctionToImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> InputImageType;
-  typedef otb::Image<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  typedef itk::VarianceImageFunction<InputImageType> FunctionType;
+  typedef double                                                                    PixelType;
+  typedef otb::Image<PixelType, Dimension>                                          InputImageType;
+  typedef otb::Image<PixelType, Dimension>                                          OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
+  typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
+  typedef itk::VarianceImageFunction<InputImageType>                                FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
 
   // Instantiating object
@@ -40,14 +40,13 @@ int otbFunctionToImageFilter(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
   FunctionType::Pointer function = FunctionType::New();
   function->SetNeighborhoodRadius(atoi(argv[3]));
   function->SetInputImage(reader->GetOutput());
 
   filter->SetFunction(function);
-
 
   writer->SetInput(filter->GetOutput());
   writer->SetNumberOfStreamDivisions(2);

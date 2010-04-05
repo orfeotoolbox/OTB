@@ -24,21 +24,20 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbCloudEstimatorDefaultFilter(int argc, char * argv[])
 {
   const unsigned int Dimension                                                   = 2;
-  typedef double                                                                 PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                                  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>                                        ImageType;
-  typedef VectorImageType::PixelType                                             VectorPixelType;
-  typedef otb::CloudEstimatorFilter<VectorImageType,ImageType >                  CloudEstimatorFilterType;
-  typedef otb::ImageFileReader<VectorImageType>                                  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                        WriterType;
+  typedef double                                                PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                VectorImageType;
+  typedef otb::Image<PixelType, Dimension>                      ImageType;
+  typedef VectorImageType::PixelType                            VectorPixelType;
+  typedef otb::CloudEstimatorFilter<VectorImageType, ImageType> CloudEstimatorFilterType;
+  typedef otb::ImageFileReader<VectorImageType>                 ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                       WriterType;
 
   //Parameters
-  const char * inputFileName(argv[1]);
-  const char * outputFileName(argv[2]);
+  const char *    inputFileName(argv[1]);
+  const char *    outputFileName(argv[2]);
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
@@ -48,13 +47,12 @@ int otbCloudEstimatorDefaultFilter(int argc, char * argv[])
   referencePixel[2] = (atof(argv[5]));
   referencePixel[3] = (atof(argv[6]));
 
-
   // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
 
   // Using SpectralAngle Filter, the default functor
   CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer               writer = WriterType::New();
 
   //Initialization parameters
   reader->SetFileName(inputFileName);
@@ -65,7 +63,6 @@ int otbCloudEstimatorDefaultFilter(int argc, char * argv[])
   writer->SetFileName(outputFileName);
   writer->SetInput(cloudEstimator->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

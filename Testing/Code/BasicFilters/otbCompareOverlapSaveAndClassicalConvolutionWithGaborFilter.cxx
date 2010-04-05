@@ -8,7 +8,6 @@
 
 #include <math.h>
 
-
 #include <iostream>
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -19,44 +18,45 @@
 #include "itkConstantBoundaryCondition.h"
 #include "itkTimeProbe.h"
 
-int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char *argv[])
+int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *argv[])
 {
-  if (argc!=12)
-  {
-    std::cerr<<"Usage: "<<argv[0]<<" infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi"<<std::endl;
+  if (argc != 12)
+    {
+    std::cerr << "Usage: " << argv[0] << " infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi" <<
+    std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
-  const char * infname =  argv[1];
-  const char * outfname1 = argv[2];
-  const char * outfname2 = argv[3];
+  const char *       infname =  argv[1];
+  const char *       outfname1 = argv[2];
+  const char *       outfname2 = argv[3];
   const unsigned int xradius = atoi(argv[4]);
   const unsigned int yradius = atoi(argv[5]);
-  const double a = atof(argv[6]);
-  const double b = atof(argv[7]);
-  const double theta = atof(argv[8]);
-  const double u0 = atof(argv[9]);
-  const double v0 = atof(argv[10]);
-  const double phi = atof(argv[11]);
+  const double       a = atof(argv[6]);
+  const double       b = atof(argv[7]);
+  const double       theta = atof(argv[8]);
+  const double       u0 = atof(argv[9]);
+  const double       v0 = atof(argv[10]);
+  const double       phi = atof(argv[11]);
 
-  typedef double PrecisionType;
+  typedef double                                   PrecisionType;
   typedef otb::GaborFilterGenerator<PrecisionType> GaborGeneratorType;
-  typedef GaborGeneratorType::RadiusType  RadiusType;
-  typedef GaborGeneratorType::ArrayType   ArrayType;
+  typedef GaborGeneratorType::RadiusType           RadiusType;
+  typedef GaborGeneratorType::ArrayType            ArrayType;
 
-  typedef otb::Image<PrecisionType,2>     ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  typedef otb::OverlapSaveConvolutionImageFilter<ImageType,ImageType> OSConvolutionFilterType;
+  typedef otb::Image<PrecisionType, 2>                                 ImageType;
+  typedef otb::ImageFileReader<ImageType>                              ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType>                     WriterType;
+  typedef otb::OverlapSaveConvolutionImageFilter<ImageType, ImageType> OSConvolutionFilterType;
   // Setting the same boundary conditions than the one used in the overlap save convolution filter
-  typedef itk::ConstantBoundaryCondition<ImageType> BoundaryConditionType;
-  typedef otb::ConvolutionImageFilter<ImageType,ImageType,BoundaryConditionType> ConvolutionFilterType;
+  typedef itk::ConstantBoundaryCondition<ImageType>                                BoundaryConditionType;
+  typedef otb::ConvolutionImageFilter<ImageType, ImageType, BoundaryConditionType> ConvolutionFilterType;
 
   // Gabor filter generation
   GaborGeneratorType::Pointer gabor = GaborGeneratorType::New();
-  RadiusType radius;
-  radius[0]=xradius;
-  radius[1]=yradius;
+  RadiusType                  radius;
+  radius[0] = xradius;
+  radius[1] = yradius;
   gabor->SetRadius(radius);
   gabor->SetA(a);
   gabor->SetB(b);
@@ -69,7 +69,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  itk::TimeProbe probe1,probe2;
+  itk::TimeProbe probe1, probe2;
 
   ConvolutionFilterType::Pointer convolution = ConvolutionFilterType::New();
   convolution->SetRadius(radius);
@@ -84,7 +84,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char 
   writer1->Update();
   probe1.Stop();
 
-  std::cout<<"Classical convolution algorithm took "<<probe1.GetMeanTime()<<" seconds."<<std::endl;
+  std::cout << "Classical convolution algorithm took " << probe1.GetMeanTime() << " seconds." << std::endl;
 
   OSConvolutionFilterType::Pointer osconvolution = OSConvolutionFilterType::New();
   osconvolution->SetRadius(radius);
@@ -99,8 +99,7 @@ int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter( int argc, char 
   writer2->Update();
   probe2.Stop();
 
-  std::cout<<"Overlap-save convolution algorithm took "<<probe2.GetMeanTime()<<" seconds."<<std::endl;
-
+  std::cout << "Overlap-save convolution algorithm took " << probe2.GetMeanTime() << " seconds." << std::endl;
 
   return EXIT_SUCCESS;
 }

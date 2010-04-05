@@ -24,14 +24,13 @@
 int otbDrawPathListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef unsigned char                                           PixelType;
+  typedef otb::Image<PixelType, Dimension>                        ImageType;
+  typedef itk::PolyLineParametricPath<Dimension>                  PathType;
   typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathListFilterType;
 
   // Instantiating object
   DrawPathListFilterType::Pointer object = DrawPathListFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

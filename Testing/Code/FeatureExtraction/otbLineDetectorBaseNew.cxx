@@ -25,22 +25,18 @@
 
 #include "otbLineDetectorImageFilterBase.h"
 
-
-int otbLineDetectorBaseNew( int argc, char* argv[] )
+int otbLineDetectorBaseNew(int argc, char* argv[])
 {
-  typedef unsigned char                            InputPixelType;
-  typedef double                    OutputPixelType;
-  const   unsigned int                             Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension > InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::LineDetectorImageFilterBase< InputImageType, OutputImageType>   FilterType;
+  typedef otb::LineDetectorImageFilterBase<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer FilterLine = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

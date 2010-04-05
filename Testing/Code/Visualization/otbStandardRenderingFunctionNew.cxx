@@ -18,12 +18,12 @@
 #include "otbStandardRenderingFunction.h"
 #include "itkRGBPixel.h"
 
-int otbStandardRenderingFunctionNew( int argc, char * argv[] )
+int otbStandardRenderingFunctionNew(int argc, char * argv[])
 {
   typedef double                       PixelType;
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef otb::Function::StandardRenderingFunction
-    <PixelType,RGBPixelType> StandardRenderingFunctionType;
+  <PixelType, RGBPixelType> StandardRenderingFunctionType;
   StandardRenderingFunctionType::Pointer function = StandardRenderingFunctionType::New();
 
   return EXIT_SUCCESS;

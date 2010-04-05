@@ -25,15 +25,13 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
 
-int otbOrientationPathNew( int argc, char * argv[] )
+int otbOrientationPathNew(int argc, char * argv[])
 {
-  const   unsigned int                               Dimension = 2;
-  typedef itk::PolyLineParametricPath< Dimension >   PathType;
-  typedef otb::OrientationPathFunction<PathType>     FunctionType;
+  const unsigned int Dimension = 2;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::OrientationPathFunction<PathType> FunctionType;
 
-  FunctionType::Pointer function =FunctionType::New();
-
+  FunctionType::Pointer function = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-

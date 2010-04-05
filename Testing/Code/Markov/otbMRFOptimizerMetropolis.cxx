@@ -34,16 +34,15 @@ int otbMRFOptimizerMetropolis(int argc, char * argv[])
   MRFOptimizerType::ParametersType param(1);
   param.Fill(10.);
   object->SetParameters(param);
-  object->InitializeSeed(0);// USED TO OVERPASS RANDOM CALCULATION
+  object->InitializeSeed(0); // USED TO OVERPASS RANDOM CALCULATION
 
   std::ofstream file;
   file.open(outputFile);
 
-  file<<"Compute(0)                                       : "<<object->Compute(0.)<<std::endl;
-  file<<"Compute(-1.)                                     : "<<object->Compute(-1.)<<std::endl;
+  file << "Compute(0)                                       : " << object->Compute(0.) << std::endl;
+  file << "Compute(-1.)                                     : " << object->Compute(-1.) << std::endl;
 
   file.close();
 
   return EXIT_SUCCESS;
 }
-

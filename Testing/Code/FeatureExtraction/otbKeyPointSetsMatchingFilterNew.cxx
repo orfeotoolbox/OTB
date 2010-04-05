@@ -22,10 +22,10 @@
 int otbKeyPointSetsMatchingFilterNew(int argc, char * argv[])
 {
   typedef float RealType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
+  typedef itk::VariableLengthVector<RealType>           RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>      PointSetType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType> EuclideanDistanceMatchingFilterType;
 
   // Instantiating object

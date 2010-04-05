@@ -23,9 +23,9 @@
 int otbMeanShiftVectorImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef short PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType> FilterType;
+  typedef short                                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                ImageType;
+  typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();

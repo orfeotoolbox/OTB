@@ -30,26 +30,21 @@ int otbPostGISCreateTableTransactorAccessors(int argc, char * argv[])
 
   unsigned short dimension = 2;
 
-  myTransactor.SetDimension( dimension );
+  myTransactor.SetDimension(dimension);
 
-  if( dimension != myTransactor.GetDimension() )
-    return EXIT_FAILURE;
+  if (dimension != myTransactor.GetDimension()) return EXIT_FAILURE;
 
   std::string name = "mytable";
 
-  myTransactor.SetTableName( name );
+  myTransactor.SetTableName(name);
 
-  if( name != myTransactor.GetTableName() )
-    return EXIT_FAILURE;
-
+  if (name != myTransactor.GetTableName()) return EXIT_FAILURE;
 
   int srid = -1;
 
-  myTransactor.SetSRID( srid );
+  myTransactor.SetSRID(srid);
 
-  if( srid != myTransactor.GetSRID() )
-    return EXIT_FAILURE;
-
+  if (srid != myTransactor.GetSRID()) return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
 }

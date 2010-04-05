@@ -28,50 +28,46 @@
 #include "itkRandomImageSource.h"
 #include "itkMeanImageFilter.h"
 
-
-int otbFrostFilter( int argc, char * argv[] )
+int otbFrostFilter(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
-  unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-  double        Deramp ((double)::atof(argv[5]));
+  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
+  unsigned int RadiusY((unsigned int) ::atoi(argv[4]));
+  double       Deramp ((double) ::atof(argv[5]));
 
-  typedef double                                   InputPixelType;
-  typedef double                                OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::FrostImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::SizeType Radius;
-  Radius[0]= RadiusX;
-  Radius[1]= RadiusY;
+  Radius[0] = RadiusX;
+  Radius[1] = RadiusY;
 
   FilterType::Pointer filterFrost = FilterType::New();
 
-  filterFrost->SetRadius( Radius );
-  filterFrost->SetDeramp( Deramp );
+  filterFrost->SetRadius(Radius);
+  filterFrost->SetDeramp(Deramp);
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  filterFrost->SetInput( reader->GetOutput() );
-  writer->SetInput( filterFrost->GetOutput() );
+  filterFrost->SetInput(reader->GetOutput());
+  writer->SetInput(filterFrost->GetOutput());
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

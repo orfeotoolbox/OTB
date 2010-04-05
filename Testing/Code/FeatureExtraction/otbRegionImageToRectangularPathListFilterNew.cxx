@@ -22,18 +22,17 @@
 
 int otbRegionImageToRectangularPathListFilterNew(int argc, char * argv[])
 {
-  typedef unsigned short                                InputPixelType;
-  const   unsigned int                                        Dimension = 2;
+  typedef unsigned short InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  
-  typedef otb::PolyLineParametricPathWithValue< double, Dimension >   PathType;
-  typedef otb::RegionImageToRectangularPathListFilter<InputImageType,PathType>
-                                                       RectangleListFilterType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+
+  typedef otb::PolyLineParametricPathWithValue<double, Dimension> PathType;
+  typedef otb::RegionImageToRectangularPathListFilter<InputImageType, PathType>
+  RectangleListFilterType;
 
   RectangleListFilterType::Pointer rectangleFilter =
-                                                RectangleListFilterType::New();
-
+    RectangleListFilterType::New();
 
   return EXIT_SUCCESS;
 }

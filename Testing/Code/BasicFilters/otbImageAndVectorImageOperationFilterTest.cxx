@@ -28,15 +28,14 @@
 #include "otbImageFileWriter.h"
 #include "otbImageAndVectorImageOperationFilter.h"
 
-
-int otbImageAndVectorImageOperationFilterTest( int argc, char * argv[] )
+int otbImageAndVectorImageOperationFilterTest(int argc, char * argv[])
 {
-  const  char *     infname       = argv[1];
-  const  char *     invectfname   = argv[2];
-  const  char *     outfnameAdd   = argv[3];
-  const  char *     outfnameSub   = argv[4];
-  const  char *     outfnameMul   = argv[5];
-  const  char *     outfnameDiv   = argv[6];
+  const char * infname       = argv[1];
+  const char * invectfname   = argv[2];
+  const char * outfnameAdd   = argv[3];
+  const char * outfnameSub   = argv[4];
+  const char * outfnameMul   = argv[5];
+  const char * outfnameDiv   = argv[6];
 
   typedef double                                PixelType;
   typedef otb::Image<PixelType, 2>              ScalarImageType;
@@ -44,7 +43,7 @@ int otbImageAndVectorImageOperationFilterTest( int argc, char * argv[] )
   typedef otb::ImageFileReader<ScalarImageType> ReaderType;
   typedef otb::ImageFileReader<VectorImageType> VectorReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
-  
+
   typedef otb::ImageAndVectorImageOperationFilter<ScalarImageType, VectorImageType, VectorImageType> FilterType;
 
   ReaderType::Pointer       reader       = ReaderType::New();
@@ -60,28 +59,26 @@ int otbImageAndVectorImageOperationFilterTest( int argc, char * argv[] )
 
   filter->SetInput(reader->GetOutput());
   filter->SetVectorInput(vectorReader->GetOutput());
- 
+
   filter->UseAddition();
-  writerAdd->SetInput( filter->GetOutput() );
+  writerAdd->SetInput(filter->GetOutput());
   writerAdd->SetFileName(outfnameAdd);
   writerAdd->Update();
 
   filter->UseSubstraction();
-  writerSub->SetInput( filter->GetOutput() );
+  writerSub->SetInput(filter->GetOutput());
   writerSub->SetFileName(outfnameSub);
   writerSub->Update();
 
   filter->UseMultiplication();
-  writerMul->SetInput( filter->GetOutput() );
+  writerMul->SetInput(filter->GetOutput());
   writerMul->SetFileName(outfnameMul);
   writerMul->Update();
 
   filter->UseDivision();
-  writerDiv->SetInput( filter->GetOutput() );
+  writerDiv->SetInput(filter->GetOutput());
   writerDiv->SetFileName(outfnameDiv);
   writerDiv->Update();
 
   return EXIT_SUCCESS;
 }
-
-

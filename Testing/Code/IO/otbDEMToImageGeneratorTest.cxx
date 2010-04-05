@@ -24,23 +24,25 @@
 
 int otbDEMToImageGeneratorTest(int argc, char * argv[])
 {
-  if (argc<9)
-  {
-    std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+  if (argc < 9)
+    {
+    std::cout << argv[0] <<
+    " folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   char * folderPath = argv[1];
   char * outputName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef otb::Image<double, Dimension>           ImageType;
+  typedef otb::Image<double, Dimension>            ImageType;
   typedef otb::DEMToImageGenerator<ImageType>      DEMToImageGeneratorType;
   typedef DEMToImageGeneratorType::DEMHandlerType  DEMHandlerType;
   typedef DEMHandlerType::PointType                PointType;
   typedef DEMToImageGeneratorType::SizeType        SizeType;
   typedef DEMToImageGeneratorType::SpacingType     SpacingType;
-  typedef otb::StreamingImageFileWriter<ImageType>          WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
 
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
@@ -64,11 +66,10 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   object->SetOutputSpacing(spacing);
   otb::StandardFilterWatcher watcher(object, "DEM to image generator");
 
-  writer->SetFileName( outputName );
-  writer->SetInput( object->GetOutput() );
+  writer->SetFileName(outputName);
+  writer->SetInput(object->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

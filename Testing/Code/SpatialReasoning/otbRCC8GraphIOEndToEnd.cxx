@@ -26,9 +26,9 @@ int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
 {
   char * inputFilename = argv[1];
   char * outputFilename = argv[2];
-  typedef otb::Polygon<> PathType;
-  typedef otb::RCC8VertexBase<PathType> VertexType;
-  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::Polygon<>                          PathType;
+  typedef otb::RCC8VertexBase<PathType>           VertexType;
+  typedef otb::RCC8Graph<VertexType>              RCC8GraphType;
   typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
 

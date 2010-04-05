@@ -31,48 +31,45 @@
 
 int otbImageFileReaderERS(int argc, char* argv[])
 {
-  if (argc<3)
-  {
-    std::cout << argv[0] <<"<inputImage> <outputImage>"  << std::endl;
+  if (argc < 3)
+    {
+    std::cout << argv[0] << "<inputImage> <outputImage>"  << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef float                       InputPixelType;
-  typedef short                            OutputPixelType;
-  const   unsigned int                     Dimension = 2;
+  typedef float InputPixelType;
+  typedef short OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();
 
-  complexReader->SetFileName( inputFilename  );
+  complexReader->SetFileName(inputFilename);
 
-  typedef otb::MultiChannelExtractROI< InputPixelType,
-  OutputPixelType >  ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<InputPixelType,
+                                      OutputPixelType>  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-  extractROIFilter->SetStartX( 10 );
-  extractROIFilter->SetStartY( 10 );
-  extractROIFilter->SetSizeX( 100 );
-  extractROIFilter->SetSizeY( 100 );
-  extractROIFilter->SetInput( complexReader->GetOutput() );
+  extractROIFilter->SetStartX(10);
+  extractROIFilter->SetStartY(10);
+  extractROIFilter->SetSizeX(100);
+  extractROIFilter->SetSizeY(100);
+  extractROIFilter->SetInput(complexReader->GetOutput());
 
   WriterType::Pointer writer = WriterType::New();
 
-  writer->SetFileName( outputFilename );
-  writer->SetInput( extractROIFilter->GetOutput() );
+  writer->SetFileName(outputFilename);
+  writer->SetInput(extractROIFilter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
-

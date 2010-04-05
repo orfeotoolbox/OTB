@@ -31,27 +31,27 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeConfidenceConnectedImageFilter( int argc, char * argv[] )
+int otbLabelizeConfidenceConnectedImageFilter(int argc, char * argv[])
 {
   // Arguments
   char* inputImageName = argv[1];
   char* outputImageName = argv[2];
 
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
+  typedef unsigned char                InputPixelType;
+  typedef unsigned char                OutputPixelType;
   typedef itk::RGBPixel<unsigned char> ColorPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType, Dimension > InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef otb::Image<ColorPixelType, Dimension> RGBImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
 
-  InputPixelType lowerThreshold( (InputPixelType)::atoi(argv[3]) );
-  InputPixelType upperThreshold( (InputPixelType)::atoi(argv[4]) );
+  InputPixelType lowerThreshold((InputPixelType) ::atoi(argv[3]));
+  InputPixelType upperThreshold((InputPixelType) ::atoi(argv[4]));
 
-  double multiplier = (double)( atof(argv[5]) );
-  unsigned int numberOfIterations = (unsigned int)(atoi(argv[6]));
-  unsigned int initialRadius = (unsigned int)(atoi(argv[7]));
+  double       multiplier = (double) (atof(argv[5]));
+  unsigned int numberOfIterations = (unsigned int) (atoi(argv[6]));
+  unsigned int initialRadius = (unsigned int) (atoi(argv[7]));
 
   // Reader
   typedef otb::ImageFileReader<InputImageType> ReaderType;
@@ -80,7 +80,7 @@ int otbLabelizeConfidenceConnectedImageFilter( int argc, char * argv[] )
   rescaler->SetOutputMaximum(255);
 
   // Label to RGB image
-  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType> FunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType>                   FunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType, FunctorType> ColorLabelFilterType;
   ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
 

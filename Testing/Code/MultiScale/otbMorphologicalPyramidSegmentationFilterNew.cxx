@@ -22,18 +22,17 @@
 int otbMorphologicalPyramidSegmentationFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
+  typedef unsigned char  InputPixelType;
   typedef unsigned short OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,OutputImageType>
+  typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType, OutputImageType>
   SegmentationFilterType;
 
   // Instantiation
   SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

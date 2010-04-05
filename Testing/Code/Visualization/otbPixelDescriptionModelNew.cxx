@@ -19,9 +19,9 @@
 #include "otbImage.h"
 #include "otbImageLayer.h"
 
-int otbPixelDescriptionModelNew( int argc, char * argv[] )
+int otbPixelDescriptionModelNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                  ImageType;
+  typedef otb::Image<double, 2>                 ImageType;
   typedef otb::PixelDescriptionModel<ImageType> ModelType;
 
   // Instantiation

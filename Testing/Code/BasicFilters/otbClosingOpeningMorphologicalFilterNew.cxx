@@ -24,17 +24,16 @@
 int otbClosingOpeningMorphologicalFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::ClosingOpeningMorphologicalFilter<InputImageType,OutputImageType,
-  StructuringElementType> ClosingOpeningFilterType;
+  typedef unsigned char                                                InputPixelType;
+  typedef unsigned char                                                OutputPixelType;
+  typedef otb::Image<InputPixelType, Dimension>                        InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                       OutputImageType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::ClosingOpeningMorphologicalFilter<InputImageType, OutputImageType,
+                                                 StructuringElementType> ClosingOpeningFilterType;
 
   // instantiating the opening closing filter
   ClosingOpeningFilterType::Pointer openingClosing = ClosingOpeningFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

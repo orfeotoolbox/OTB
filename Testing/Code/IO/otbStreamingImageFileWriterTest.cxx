@@ -29,54 +29,53 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbStreamingImageFileWriterTest (int argc, char* argv[])
+int otbStreamingImageFileWriterTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  int   iStreaming(::atoi(argv[3]));
-  bool streaming = (bool)(iStreaming);
-  int NumberOfStreamDivisions(::atoi(argv[4]));
+  int          iStreaming(::atoi(argv[3]));
+  bool         streaming = (bool) (iStreaming);
+  int          NumberOfStreamDivisions(::atoi(argv[4]));
 
-  typedef unsigned char                                    InputPixelType;
-  typedef unsigned char                                    OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::StreamingImageFileWriter< OutputImageType> StreamingWriterType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>           ReaderType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> StreamingWriterType;
+  typedef otb::ImageFileWriter<OutputImageType>          WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
 
-  if ( streaming == true )
-  {
-    std::cout << "Streaming writing test"<<std::endl;
-    StreamingWriterType::Pointer writer = StreamingWriterType::New();
-    writer->SetFileName( outputFilename );
-    writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
-    writer->SetInput( reader->GetOutput() );
-    writer->Update();
-  }
-  else
-  {
-    std::cout << "Writing test"<<std::endl;
-    WriterType::Pointer writer = WriterType::New();
-    if(NumberOfStreamDivisions > 1)
+  if (streaming == true)
     {
-        std::cout << "Streaming testing of otb::ImageFileWriter "<<std::endl;
-        std::cout << "NumberOfStreamDivisions: "<<NumberOfStreamDivisions<<std::endl;
-        writer->SetNumberOfStreamDivisions( NumberOfStreamDivisions );
-    }
-
-    writer->SetFileName( outputFilename );
-    writer->SetInput( reader->GetOutput() );
+    std::cout << "Streaming writing test" << std::endl;
+    StreamingWriterType::Pointer writer = StreamingWriterType::New();
+    writer->SetFileName(outputFilename);
+    writer->SetNumberOfStreamDivisions(NumberOfStreamDivisions);
+    writer->SetInput(reader->GetOutput());
     writer->Update();
-  }
+    }
+  else
+    {
+    std::cout << "Writing test" << std::endl;
+    WriterType::Pointer writer = WriterType::New();
+    if (NumberOfStreamDivisions > 1)
+      {
+      std::cout << "Streaming testing of otb::ImageFileWriter " << std::endl;
+      std::cout << "NumberOfStreamDivisions: " << NumberOfStreamDivisions << std::endl;
+      writer->SetNumberOfStreamDivisions(NumberOfStreamDivisions);
+      }
 
+    writer->SetFileName(outputFilename);
+    writer->SetInput(reader->GetOutput());
+    writer->Update();
+    }
 
   return EXIT_SUCCESS;
 }

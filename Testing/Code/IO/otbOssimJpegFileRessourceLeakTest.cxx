@@ -25,23 +25,23 @@
 
 int otbOssimJpegFileRessourceLeakTest(int argc, char * argv[])
 {
-  if(argc != 3)
+  if (argc != 3)
     {
-    std::cerr<<"Usage:"<<std::endl;
-    std::cerr<<argv[0]<<" infname nbReading"<<std::endl;
+    std::cerr << "Usage:" << std::endl;
+    std::cerr << argv[0] << " infname nbReading" << std::endl;
     return 1;
     }
 
-  const char * infname = argv[1];
+  const char *       infname = argv[1];
   const unsigned int nbReading = atoi(argv[2]);
 
-  for(unsigned int i = 0; i < nbReading; ++i)
+  for (unsigned int i = 0; i < nbReading; ++i)
     {
     // Create the handler
     ossimImageHandler * handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(infname));
-    if(!handler)
+    if (!handler)
       {
-      std::cerr<<"Failed to open image "<<i<<" times."<<std::endl;
+      std::cerr << "Failed to open image " << i << " times." << std::endl;
       return 1;
       }
     handler->close();

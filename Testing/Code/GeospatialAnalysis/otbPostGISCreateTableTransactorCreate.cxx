@@ -34,35 +34,34 @@ int otbPostGISCreateTableTransactorCreate(int argc, char * argv[])
   TransactorType myTransactor;
 
   unsigned short dimension = 2;
-  myTransactor.SetDimension( dimension );
+  myTransactor.SetDimension(dimension);
 
   std::string name = "mytable";
-  myTransactor.SetTableName( name );
+  myTransactor.SetTableName(name);
 
   int srid = -1;
-  myTransactor.SetSRID( srid );
+  myTransactor.SetSRID(srid);
 
-  myTransactor.SetRemoveExistingTable( true );
+  myTransactor.SetRemoveExistingTable(true);
 
   const std::string hostName = argv[1];
   const std::string dbName = argv[2];
   const std::string userName = argv[3];
   const std::string userPassword = argv[4];
 
-
   typedef otb::PostGISConnectionImplementation GISConnectionType;
 
   //Instantiation
   GISConnectionType::Pointer connection = GISConnectionType::New();
 
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-  connection->SetPassword( userPassword );
+  connection->SetHost(hostName);
+  connection->SetDBName(dbName);
+  connection->SetUser(userName);
+  connection->SetPassword(userPassword);
 
   connection->ConnectToDB();
 
-  connection->PerformTransaction( myTransactor );
+  connection->PerformTransaction(myTransactor);
 
   return EXIT_SUCCESS;
 }

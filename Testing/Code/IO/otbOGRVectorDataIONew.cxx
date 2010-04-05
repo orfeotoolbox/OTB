@@ -21,7 +21,7 @@
 
 int otbOGRVectorDataIONew(int argc, char * argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                    VectorDataType;
   typedef otb::OGRVectorDataIO<VectorDataType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
 

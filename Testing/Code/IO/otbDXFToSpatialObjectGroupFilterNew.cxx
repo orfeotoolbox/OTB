@@ -23,12 +23,11 @@
 int otbDXFToSpatialObjectGroupFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef itk::GroupSpatialObject<Dimension> GroupType;
+  typedef itk::GroupSpatialObject<Dimension>            GroupType;
   typedef otb::DXFToSpatialObjectGroupFilter<GroupType> DXFToSpatialObjectGroupFilterType;
 
   // Instantiating object
   DXFToSpatialObjectGroupFilterType::Pointer object = DXFToSpatialObjectGroupFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

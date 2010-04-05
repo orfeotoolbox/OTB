@@ -18,9 +18,9 @@
 #include "otbStandardImageViewer.h"
 #include "otbImage.h"
 
-int otbStandardImageViewerNew( int argc, char * argv[] )
+int otbStandardImageViewerNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
+  typedef otb::Image<double, 2>               ImageType;
   typedef otb::StandardImageViewer<ImageType> ViewerType;
 
   ViewerType::Pointer layer = ViewerType::New();

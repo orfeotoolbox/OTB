@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbVectorDataModel.h"
 
-int otbVectorDataModelNew( int argc, char * argv[] )
+int otbVectorDataModelNew(int argc, char * argv[])
 {
   typedef otb::VectorDataModel ModelType;
 

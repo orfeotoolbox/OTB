@@ -18,25 +18,22 @@
 
 =========================================================================*/
 
-
 #include <iostream>
 #include <cstdlib>
 #include "itkVariableLengthVector.h"
 #include "otbFlexibleDistanceWithMissingValue.h"
 
-int otbFlexibleDistanceWithMissingValueNew( int argc, char * argv[] )
+int otbFlexibleDistanceWithMissingValueNew(int argc, char * argv[])
 {
 
-  typedef itk::VariableLengthVector< double > VectorType;
-  typedef otb::Statistics::FlexibleDistanceWithMissingValue< VectorType > DistanceType;
+  typedef itk::VariableLengthVector<double>                             VectorType;
+  typedef otb::Statistics::FlexibleDistanceWithMissingValue<VectorType> DistanceType;
 
   float a = 1.0;
   float b = 0.1;
-  DistanceType::SetAlphaBeta(a,b);
+  DistanceType::SetAlphaBeta(a, b);
 
   DistanceType::Pointer dist = DistanceType::New();
 
   return EXIT_SUCCESS;
 }
-
-

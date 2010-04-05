@@ -25,42 +25,38 @@
 #include "otbImageFileWriter.h"
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
-
-int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
+int otbPointSetToDensityImageFilterTest(int argc, char* argv[])
 {
 
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char *       infname = argv[1];
+  const char *       outfname = argv[2];
   const unsigned int scales = atoi(argv[3]);
   const unsigned int octaves = atoi(argv[4]);
   const unsigned int radius = atoi(argv[5]);
 
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType;
+  typedef otb::Image<PixelType, Dimension>                           ImageType;
+  typedef otb::ImageFileReader<ImageType>                            ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                            WriterType;
+  typedef itk::VariableLengthVector<PixelType>                       RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> DetectorType;
 
-  typedef otb::Image<PixelType , Dimension>                        ImageType;
-  typedef otb::ImageFileReader<ImageType>                          ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                          WriterType;
-  typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>    DetectorType;
-
-  typedef otb::PointSetToDensityImageFilter <PointSetType,ImageType>    FunctionType;
+  typedef otb::PointSetToDensityImageFilter <PointSetType, ImageType> FunctionType;
 
   /**Instantiation of an object*/
-  FunctionType::Pointer    filter = FunctionType::New();
-  DetectorType::Pointer    detector = DetectorType::New();
-  ReaderType::Pointer      reader = ReaderType::New();
+  FunctionType::Pointer filter = FunctionType::New();
+  DetectorType::Pointer detector = DetectorType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
 
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-
   detector->SetInput(reader->GetOutput());
-  detector ->SetOctavesNumber(octaves);
+  detector->SetOctavesNumber(octaves);
   detector->SetScalesNumber(scales);
-
 
   /** PointSetImageToDensity ImageFilter*/
   filter->SetInput(detector->GetOutput());
@@ -77,4 +73,3 @@ int otbPointSetToDensityImageFilterTest(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

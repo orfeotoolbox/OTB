@@ -20,12 +20,10 @@
 #include "otbImageWidgetPolygonForm.h"
 #include <FL/Fl.H>
 
-
-int otbImageWidgetPolygonFormNew( int argc, char * argv[] )
+int otbImageWidgetPolygonFormNew(int argc, char * argv[])
 {
-  typedef otb::ImageWidgetPolygonForm<>               PolyFormType;
+  typedef otb::ImageWidgetPolygonForm<> PolyFormType;
   PolyFormType::Pointer polyForm = PolyFormType::New();
-
 
   return EXIT_SUCCESS;
 }

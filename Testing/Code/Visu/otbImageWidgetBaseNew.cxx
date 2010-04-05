@@ -17,13 +17,12 @@
 =========================================================================*/
 #include "otbImageWidgetBase.h"
 
-int otbImageWidgetBaseNew( int argc, char * argv[] )
+int otbImageWidgetBaseNew(int argc, char * argv[])
 {
-  typedef float PixelType;
+  typedef float                           PixelType;
   typedef otb::ImageWidgetBase<PixelType> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -22,8 +22,8 @@
 
 int otbProlateInterpolateImageFunctionNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
-  typedef otb::ProlateInterpolateImageFunction<ImageType>    ProlateInterpolatorType;
+  typedef otb::Image<double, 2>                           ImageType;
+  typedef otb::ProlateInterpolateImageFunction<ImageType> ProlateInterpolatorType;
 
   // Instantiating object
   ProlateInterpolatorType::Pointer prolate = ProlateInterpolatorType::New();

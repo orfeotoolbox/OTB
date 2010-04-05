@@ -27,12 +27,12 @@ int otbMRFEnergyPotts(int argc, char * argv[])
 {
   const char * outputFile = argv[1];
 
-  typedef double PixelType;
-  typedef int    PixelType2;
-  typedef otb::Image<PixelType, 2>                   ImageType;
-  typedef otb::Image<PixelType2, 2>                  LabelType;
+  typedef double                    PixelType;
+  typedef int                       PixelType2;
+  typedef otb::Image<PixelType, 2>  ImageType;
+  typedef otb::Image<PixelType2, 2> LabelType;
 
-  typedef otb::MRFEnergyPotts< ImageType, LabelType> MRFEnergyPottsType;
+  typedef otb::MRFEnergyPotts<ImageType, LabelType>  MRFEnergyPottsType;
   typedef MRFEnergyPottsType::InputImagePixelType    InputImagePixelType;
   typedef MRFEnergyPottsType::LabelledImagePixelType LabelledImagePixelType;
 
@@ -44,13 +44,15 @@ int otbMRFEnergyPotts(int argc, char * argv[])
   std::ofstream file;
   file.open(outputFile);
 
-  file<<"GetValue(const InputImagePixelType = 10, const LabelledImagePixelType = 5): "<< object->GetValue(inPix, inLab)<<std::endl;
+  file << "GetValue(const InputImagePixelType = 10, const LabelledImagePixelType = 5): " << object->GetValue(inPix,
+                                                                                                             inLab) <<
+  std::endl;
   inPix = 5;
-  file<<"GetValue(const InputImagePixelType = 5, const LabelledImagePixelType = 5) : "<< object->GetValue(inPix, inLab)<<std::endl;
+  file << "GetValue(const InputImagePixelType = 5, const LabelledImagePixelType = 5) : " << object->GetValue(inPix,
+                                                                                                             inLab) <<
+  std::endl;
 
   file.close();
 
-
   return EXIT_SUCCESS;
 }
-

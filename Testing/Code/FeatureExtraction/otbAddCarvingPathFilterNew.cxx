@@ -26,18 +26,17 @@
 
 int otbAddCarvingPathFilterNew(int argc, char* argv[])
 {
-  typedef double                                          PixelType;
-  const   unsigned int                                    Dimension = 2;
+  typedef double PixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< PixelType, Dimension >        InputImageType;
-  typedef otb::Image< PixelType, Dimension >        OutputImageType;
+  typedef otb::Image<PixelType, Dimension>       InputImageType;
+  typedef otb::Image<PixelType, Dimension>       OutputImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   typedef otb::AddCarvingPathFilter<InputImageType, PathType,
-  OutputImageType>   AddCarvingPathFilterType;
+                                    OutputImageType>   AddCarvingPathFilterType;
 
   AddCarvingPathFilterType::Pointer addCarvingPathFilter = AddCarvingPathFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -24,18 +24,15 @@
 
 int otbObjectListToObjectListFilterNew(int argc, char * argv[])
 {
-  typedef otb::PolyLineParametricPathWithValue<std::complex<int>,2> InputObjectType;
-  typedef otb::Polygon<unsigned char> OutputObjectType;
+  typedef otb::PolyLineParametricPathWithValue<std::complex<int>, 2> InputObjectType;
+  typedef otb::Polygon<unsigned char>                                OutputObjectType;
 
-  typedef otb::ObjectList<InputObjectType> InputListType;
+  typedef otb::ObjectList<InputObjectType>  InputListType;
   typedef otb::ObjectList<OutputObjectType> OutputListType;
 
-  typedef otb::ObjectListToObjectListFilter<InputListType,OutputListType> ObjectListFilterType;
+  typedef otb::ObjectListToObjectListFilter<InputListType, OutputListType> ObjectListFilterType;
 
   ObjectListFilterType::Pointer objectList = ObjectListFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

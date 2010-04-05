@@ -21,7 +21,7 @@
 
 int otbKMLVectorDataIONew(int argc, char * argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                    VectorDataType;
   typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
 

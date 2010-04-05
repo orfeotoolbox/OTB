@@ -24,25 +24,23 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbSqrtSpectralAngleImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<double ,Dimension> InputImageType;
-  typedef otb::Image<double,Dimension> OutputImageType;
+  typedef otb::VectorImage<double, Dimension> InputImageType;
+  typedef otb::Image<double, Dimension>       OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::Functor::SqrtSpectralAngleFunctor<InputImageType::PixelType,OutputImageType::PixelType> FunctorType;
+  typedef otb::Functor::SqrtSpectralAngleFunctor<InputImageType::PixelType, OutputImageType::PixelType> FunctorType;
 
-  typedef itk::UnaryFunctorImageFilter<InputImageType,OutputImageType,FunctorType> SqrtSpectralAngleImageFilterType;
-
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> SqrtSpectralAngleImageFilterType;
 
   // Instantiating objects
   SqrtSpectralAngleImageFilterType::Pointer filter = SqrtSpectralAngleImageFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                       reader = ReaderType::New();
+  WriterType::Pointer                       writer = WriterType::New();
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -51,10 +49,8 @@ int otbSqrtSpectralAngleImageFilter(int argc, char * argv[])
   unsigned int redValue(::atoi(argv[5]));
   unsigned int nirValue(::atoi(argv[6]));
 
-
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename  );
-
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   InputImageType::PixelType referencePixel;
   referencePixel.SetSize(4);
@@ -65,10 +61,9 @@ int otbSqrtSpectralAngleImageFilter(int argc, char * argv[])
 
   filter->GetFunctor().SetReferencePixel(referencePixel);
 
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 

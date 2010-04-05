@@ -43,15 +43,15 @@
 
 #include "init/ossimInit.h"
 
-int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
+int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if (argc!=2)
-  {
-    std::cout << argv[0] <<" <input filename>" << std::endl;
+  if (argc != 2)
+    {
+    std::cout << argv[0] << " <input filename>" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -59,9 +59,9 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
   typedef otb::ForwardSensorModel<double> ForwardModelType;
 
   //Allocate pointer
-  InverseModelType::Pointer               inverse_model= InverseModelType::New();
-  ForwardModelType::Pointer               forward_model= ForwardModelType::New();
-  ReaderType::Pointer                  reader=ReaderType::New();
+  InverseModelType::Pointer inverse_model = InverseModelType::New();
+  ForwardModelType::Pointer forward_model = ForwardModelType::New();
+  ReaderType::Pointer       reader = ReaderType::New();
 
   // Set parameters ...
   reader->SetFileName(argv[1]);
@@ -71,11 +71,10 @@ int otbCreateInverseForwardSensorModel( int argc, char* argv[] )
   ImageType::Pointer inputImage = reader->GetOutput();
 
   //Leve une exception si le model n'est pas créé
-  otbGenericMsgDebugMacro(<< "Inverse model creation..." );
+  otbGenericMsgDebugMacro(<< "Inverse model creation...");
   inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  otbGenericMsgDebugMacro(<< "Foreward model creation..." );
+  otbGenericMsgDebugMacro(<< "Foreward model creation...");
   forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-
 
   return EXIT_SUCCESS;
 }

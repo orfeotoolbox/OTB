@@ -26,28 +26,28 @@
 #include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbModulusAndDirectionImageToImageFilter.h"
 
-int otbModulusAndDirectionImageFiltersNew( int argc, char* argv[] )
+int otbModulusAndDirectionImageFiltersNew(int argc, char* argv[])
 {
-  typedef unsigned char                              InputPixelType;
-  typedef double                      OutputPixelType;
-  const   unsigned int                               Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >   InputImageDirectionType;
-  typedef otb::Image< OutputPixelType, Dimension >   OutputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >   OutputImageDirectionType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> InputImageDirectionType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
-  typedef otb::ImageToModulusAndDirectionImageFilter< InputImageType, OutputImageType>   FilterType;
-  typedef otb::ImageToModulusAndDirectionImageFilter< InputImageType, OutputImageType, OutputImageDirectionType>   Filter2Type;
+  typedef otb::ImageToModulusAndDirectionImageFilter<InputImageType,
+                                                     OutputImageType>          FilterType;
+  typedef otb::ImageToModulusAndDirectionImageFilter<InputImageType, OutputImageType,
+                                                     OutputImageDirectionType> Filter2Type;
 
-  FilterType::Pointer Filter = FilterType::New();
+  FilterType::Pointer  Filter = FilterType::New();
   Filter2Type::Pointer Filter2 = Filter2Type::New();
 
-  typedef otb::ModulusAndDirectionImageToImageFilter< InputImageType, InputImageDirectionType, OutputImageType>   Filter3Type;
+  typedef otb::ModulusAndDirectionImageToImageFilter<InputImageType, InputImageDirectionType,
+                                                     OutputImageType> Filter3Type;
   Filter3Type::Pointer Filter3 = Filter3Type::New();
-
 
   return EXIT_SUCCESS;
 }
-
-

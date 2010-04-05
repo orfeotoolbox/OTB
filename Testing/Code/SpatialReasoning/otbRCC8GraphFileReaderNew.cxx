@@ -23,9 +23,9 @@
 
 int otbRCC8GraphFileReaderNew(int argc, char* argv[])
 {
-  typedef otb::Polygon<> PathType;
-  typedef otb::RCC8VertexBase<PathType> VertexType;
-  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::Polygon<>                          PathType;
+  typedef otb::RCC8VertexBase<PathType>           VertexType;
+  typedef otb::RCC8Graph<VertexType>              RCC8GraphType;
   typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
 
   // Instantiation

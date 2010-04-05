@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -28,26 +27,21 @@
 
 #include "otbSVMImageModelEstimator.h"
 
-
-int otbSVMImageModelEstimatorNew( int argc, char* argv[] )
+int otbSVMImageModelEstimatorNew(int argc, char* argv[])
 {
-  typedef double                               InputPixelType;
-  const   unsigned int                              Dimension = 2;
+  typedef double InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
+  typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
 
-  typedef std::vector<double>   VectorType;
+  typedef std::vector<double> VectorType;
 
-  typedef otb::SVMImageModelEstimator< InputImageType,
-  TrainingImageType >   EstimatorType;
-
+  typedef otb::SVMImageModelEstimator<InputImageType,
+                                      TrainingImageType>   EstimatorType;
 
   EstimatorType::Pointer svmModel = EstimatorType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

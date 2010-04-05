@@ -29,11 +29,11 @@ int otbVectorImageToAmplitudeImageFilter(int argc, char * argv[])
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType,ImageType> FilterType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
+  typedef otb::Image<PixelType, Dimension>                                   ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                             VectorImageType;
+  typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType> FilterType;
+  typedef otb::ImageFileReader<VectorImageType>                              ReaderType;
+  typedef otb::StreamingImageFileWriter<ImageType>                           WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

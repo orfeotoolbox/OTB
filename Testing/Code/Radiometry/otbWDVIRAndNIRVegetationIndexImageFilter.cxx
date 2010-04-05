@@ -23,53 +23,49 @@
 #include "otbImageFileWriter.h"
 #include "otbVegetationIndicesFunctor.h"
 
-
 int otbWDVIRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
-  const unsigned int                      Dimension = 2;
-  typedef double                          PixelType;
-  typedef otb::Image<PixelType,Dimension> InputRImageType;
-  typedef otb::Image<PixelType,Dimension> InputNIRImageType;
-  typedef otb::Image<double,Dimension>    OutputImageType;
+  const unsigned int Dimension = 2;
+  typedef double                           PixelType;
+  typedef otb::Image<PixelType, Dimension> InputRImageType;
+  typedef otb::Image<PixelType, Dimension> InputNIRImageType;
+  typedef otb::Image<double, Dimension>    OutputImageType;
 
-  typedef otb::ImageFileReader<InputRImageType>    RReaderType;
-  typedef otb::ImageFileReader<InputNIRImageType>  NIRReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>    WriterType;
+  typedef otb::ImageFileReader<InputRImageType>   RReaderType;
+  typedef otb::ImageFileReader<InputNIRImageType> NIRReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
-  typedef otb::Functor::WDVI< InputRImageType::PixelType,
-                                InputNIRImageType::PixelType,
-                                OutputImageType::PixelType > FunctorType;
+  typedef otb::Functor::WDVI<InputRImageType::PixelType,
+                             InputNIRImageType::PixelType,
+                             OutputImageType::PixelType> FunctorType;
 
-  typedef otb::RAndNIRIndexImageFilter< InputRImageType,
-                                        InputNIRImageType,
-                                        OutputImageType,
-                                        FunctorType > RAndNIRIndexImageFilterType;
+  typedef otb::RAndNIRIndexImageFilter<InputRImageType,
+                                       InputNIRImageType,
+                                       OutputImageType,
+                                       FunctorType> RAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndNIRIndexImageFilterType::Pointer filter = RAndNIRIndexImageFilterType::New();
-  RReaderType::Pointer readerR = RReaderType::New();
-  NIRReaderType::Pointer readerNIR = NIRReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-
+  RReaderType::Pointer                 readerR = RReaderType::New();
+  NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
+  WriterType::Pointer                  writer = WriterType::New();
 
   const char * inputFilenameR  = argv[1];
   const char * inputFilenameNIR  = argv[2];
   const char * outputFilename = argv[3];
 
-  double  s(::atof(argv[4]));
+  double s(::atof(argv[4]));
 
-  readerR->SetFileName( inputFilenameR );
-  readerNIR->SetFileName( inputFilenameNIR );
-  writer->SetFileName( outputFilename  );
-  filter->SetInputR( readerR->GetOutput() );
-  filter->SetInputNIR( readerNIR->GetOutput() );
+  readerR->SetFileName(inputFilenameR);
+  readerNIR->SetFileName(inputFilenameNIR);
+  writer->SetFileName(outputFilename);
+  filter->SetInputR(readerR->GetOutput());
+  filter->SetInputNIR(readerNIR->GetOutput());
 
   filter->GetFunctor().SetS(s);
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
-

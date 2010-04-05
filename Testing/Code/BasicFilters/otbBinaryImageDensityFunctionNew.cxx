@@ -25,18 +25,17 @@
 #include "otbBinaryImageDensityFunction.h"
 #include "otbImage.h"
 
-int otbBinaryImageDensityFunctionNew(int, char* [] )
+int otbBinaryImageDensityFunctionNew(int, char*[])
 {
 
-  const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType;
-  typedef otb::Image<PixelType, Dimension>                         InputImageType;
+  const unsigned int Dimension = 2;
+  typedef float                            PixelType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
 
-  typedef otb::BinaryImageDensityFunction<InputImageType>          FunctionType;
+  typedef otb::BinaryImageDensityFunction<InputImageType> FunctionType;
 
   /**Instantiation of a Smart Pointer*/
-  FunctionType::Pointer     filter = FunctionType::New();
+  FunctionType::Pointer filter = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-

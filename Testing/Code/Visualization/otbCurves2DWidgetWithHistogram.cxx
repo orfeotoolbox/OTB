@@ -26,11 +26,11 @@
 
 #include "otbHistogramCurve.h"
 
-int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
+int otbCurves2DWidgetWithHistogram(int argc, char * argv[])
 {
   const char * infname = argv[1];
-  const bool run = atoi(argv[2]);
-  
+  const bool   run = atoi(argv[2]);
+
   // typedefs
   typedef otb::Curves2DWidget    WidgetType;
   typedef WidgetType::PointType  PointType;
@@ -42,25 +42,25 @@ int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
   typedef VectorImageType::PixelType                   VectorPixelType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToHistogramListGenerator
-    <ListSampleType,PixelType>                         HistogramGeneratorType;
-  typedef otb::ImageFileReader<VectorImageType>        ReaderType;
-  typedef HistogramGeneratorType::HistogramType        HistogramType;
+  <ListSampleType, PixelType>                         HistogramGeneratorType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef HistogramGeneratorType::HistogramType HistogramType;
 
   // Histogram Widget
-  typedef otb::HistogramCurve<HistogramType>           HistogramCurveType;
+  typedef otb::HistogramCurve<HistogramType> HistogramCurveType;
 
   // Instantiation
   ReaderType::Pointer             reader    = ReaderType::New();
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-  ListSampleType::Pointer ls                = ListSampleType::New();
+  ListSampleType::Pointer         ls                = ListSampleType::New();
 
   // histogram generation
   reader->SetFileName(infname);
   reader->Update();
 
-  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
     ls->PushBack(it.Get());
     }
@@ -68,28 +68,28 @@ int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
   generator->SetListSample(ls);
   generator->SetNumberOfBins(255);
   generator->Update();
-  
-   // Create a widget
+
+  // Create a widget
   WidgetType::Pointer widget = WidgetType::New();
-  
-  HistogramCurveType::ColorType red,green,blue;
+
+  HistogramCurveType::ColorType red, green, blue;
   red.Fill(0);
-  red[0]=1.;
-  red[3]=0.5;
+  red[0] = 1.;
+  red[3] = 0.5;
 
   green.Fill(0);
-  green[1]=1.;
-  green[3]=0.5;
+  green[1] = 1.;
+  green[3] = 0.5;
 
   blue.Fill(0);
-  blue[2]=1.;
-  blue[3]=0.5;
+  blue[2] = 1.;
+  blue[3] = 0.5;
 
   HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
   rhistogram->SetHistogram(generator->GetOutput()->GetNthElement(0));
   rhistogram->SetHistogramColor(red);
   rhistogram->SetLabelColor(red);
-  
+
   HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
   ghistogram->SetHistogram(generator->GetOutput()->GetNthElement(1));
   ghistogram->SetHistogramColor(green);
@@ -105,16 +105,16 @@ int otbCurves2DWidgetWithHistogram( int argc, char * argv[] )
   widget->AddCurve(bhistogram);
 
   // Resize it
-  Fl_Window window(500,500);
+  Fl_Window window(500, 500);
   window.add(widget);
   window.resizable(widget);
   window.show();
   widget->show();
-  widget->resize(0,0,500,500);
+  widget->resize(0, 0, 500, 500);
   // Show it
   widget->show();
   // Refresh display
-  if(run)
+  if (run)
     {
     Fl::run();
     }

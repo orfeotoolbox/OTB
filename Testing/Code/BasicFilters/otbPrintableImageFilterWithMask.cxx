@@ -25,41 +25,38 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilterWithMask( int argc, char * argv[] )
+int otbPrintableImageFilterWithMask(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * masktFilename  = argv[2];
   const char * outputFilename = argv[3];
 
+  typedef double InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef double    InputPixelType;
-  const   unsigned int Dimension = 2;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::PrintableImageFilter<InputImageType>    FilterType;
+  typedef FilterType::OutputImageType                  OutputImageType;
+  typedef OutputImageType::PixelType                   OutputPixelType;
+  typedef FilterType::MaskImageType                    MaskImageType;
+  typedef FilterType::MaskPixelType                    MaskPixelType;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension > InputImageType;
-  typedef otb::PrintableImageFilter< InputImageType>     FilterType;
-  typedef FilterType::OutputImageType                    OutputImageType;
-  typedef OutputImageType::PixelType                     OutputPixelType;
-  typedef FilterType::MaskImageType                      MaskImageType;
-  typedef FilterType::MaskPixelType                      MaskPixelType;
-
-  typedef otb::ImageFileReader< InputImageType >            InputReaderType;
-  typedef otb::ImageFileReader< MaskImageType >             MaskReaderType;
-  typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
-
+  typedef otb::ImageFileReader<InputImageType>           InputReaderType;
+  typedef otb::ImageFileReader<MaskImageType>            MaskReaderType;
+  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
 
   FilterType::Pointer      printableImageFilter = FilterType::New();
   InputReaderType::Pointer inputReader          = InputReaderType::New();
   MaskReaderType::Pointer  maskReader           = MaskReaderType::New();
   WriterType::Pointer      writer               = WriterType::New();
 
-  inputReader->SetFileName( inputFilename );
-  maskReader->SetFileName( masktFilename );
+  inputReader->SetFileName(inputFilename);
+  maskReader->SetFileName(masktFilename);
   maskReader->GenerateOutputInformation();
-  writer->SetFileName( outputFilename );
+  writer->SetFileName(outputFilename);
 
-  printableImageFilter->SetInput( inputReader->GetOutput() );
-  printableImageFilter->SetInputMask( maskReader->GetOutput() );
-  
+  printableImageFilter->SetInput(inputReader->GetOutput());
+  printableImageFilter->SetInputMask(maskReader->GetOutput());
 
   FilterType::ChannelsType chList;
   chList.push_back(3);
@@ -72,16 +69,12 @@ int otbPrintableImageFilterWithMask( int argc, char * argv[] )
   objectColor[0] = 0;
   objectColor[1] = 255;
   objectColor[2] = 0;
-  printableImageFilter->SetObjectColor( objectColor );
+  printableImageFilter->SetObjectColor(objectColor);
   printableImageFilter->SetBackgroundMaskValue(static_cast<MaskPixelType>(atof(argv[4])));
- 
 
-  writer->SetInput( printableImageFilter->GetOutput() );
+  writer->SetInput(printableImageFilter->GetOutput());
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

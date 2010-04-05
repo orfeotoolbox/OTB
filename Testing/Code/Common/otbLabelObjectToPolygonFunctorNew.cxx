@@ -23,11 +23,11 @@
 int otbLabelObjectToPolygonFunctorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-  typedef otb::Polygon<double>                                   PolygonType;
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
+  typedef unsigned short LabelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
+  typedef otb::Polygon<double>                                                    PolygonType;
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
   //typedef FunctorType::Pointer FunctorPointerType;
   // Instantiation
   //FunctorPointerType myFunctor = FunctorType::New();

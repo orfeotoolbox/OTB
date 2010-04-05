@@ -19,20 +19,17 @@
 #include "otbImage.h"
 #include "otbImageToLineSegmentVectorData.h"
 
-
-int otbImageToLineSegmentVectorDataNew( int argc, char * argv[] )
+int otbImageToLineSegmentVectorDataNew(int argc, char * argv[])
 {
-  
-  typedef float                                              InputPixelType;
-  const   unsigned int                                       Dimension = 2;
-  
+
+  typedef float InputPixelType;
+  const unsigned int Dimension = 2;
+
   /** Typedefs */
-  typedef otb::Image< InputPixelType,  Dimension >           ImageType;
+  typedef otb::Image<InputPixelType,  Dimension>       ImageType;
   typedef otb::ImageToLineSegmentVectorData<ImageType> PersistentLSDFilterType;
 
-  
- PersistentLSDFilterType::Pointer  lsdFilter = PersistentLSDFilterType::New();
-  
+  PersistentLSDFilterType::Pointer lsdFilter = PersistentLSDFilterType::New();
+
   return EXIT_SUCCESS;
 }
-

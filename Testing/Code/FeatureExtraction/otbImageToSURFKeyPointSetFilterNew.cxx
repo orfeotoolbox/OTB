@@ -22,20 +22,18 @@
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
-
 int otbImageToSURFKeyPointSetFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::VariableLengthVector<PixelType> RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
-  typedef otb::ImageToSURFKeyPointSetFilter<ImageType,PointSetType> FilterType;
+  typedef otb::Image<PixelType, Dimension>                           ImageType;
+  typedef itk::VariableLengthVector<PixelType>                       RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSURFKeyPointSetFilter<ImageType, PointSetType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -20,12 +20,11 @@
 
 int otbInverseLogPolarTransformNew(int argc, char* argv[])
 {
-  typedef double PrecisionType;
+  typedef double                                       PrecisionType;
   typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
 
   // Instantiation
   InverseLogPolarTransformType::Pointer transform = InverseLogPolarTransformType::New();
-
 
   return EXIT_SUCCESS;
 }

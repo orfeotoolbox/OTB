@@ -25,24 +25,26 @@
 
 int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
 {
-  if (argc<9)
-  {
-    std::cout << argv[0] <<" DEM folder path , output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, Zone, Hemisphere"  << std::endl;
+  if (argc < 9)
+    {
+    std::cout << argv[0] <<
+    " DEM folder path , output filename , Easting Output Orign point , Northing Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, Zone, Hemisphere"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   char * folderPath = argv[1];
   char * outputName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef otb::Image<double, Dimension>                                       ImageType;
-  typedef otb::UtmInverseProjection                                           MapProjectionType;
+  typedef otb::Image<double, Dimension>                               ImageType;
+  typedef otb::UtmInverseProjection                                   MapProjectionType;
   typedef otb::DEMToOrthoImageGenerator<ImageType, MapProjectionType> DEMToImageGeneratorType;
-  typedef DEMToImageGeneratorType::DEMHandlerType                             DEMHandlerType;
-  typedef DEMHandlerType::PointType                                           PointType;
-  typedef DEMToImageGeneratorType::SizeType                                   SizeType;
-  typedef DEMToImageGeneratorType::SpacingType                                SpacingType;
-  typedef otb::StreamingImageFileWriter<ImageType>                                     WriterType;
+  typedef DEMToImageGeneratorType::DEMHandlerType                     DEMHandlerType;
+  typedef DEMHandlerType::PointType                                   PointType;
+  typedef DEMToImageGeneratorType::SizeType                           SizeType;
+  typedef DEMToImageGeneratorType::SpacingType                        SpacingType;
+  typedef otb::StreamingImageFileWriter<ImageType>                    WriterType;
 
   // Instantiating object
   MapProjectionType::Pointer       mapProj = MapProjectionType::New();
@@ -60,7 +62,7 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   SpacingType spacing;
   spacing[0] = ::atof(argv[7]);
   spacing[1] = ::atof(argv[8]);
-  std::cout<<atoi(argv[9])<<std::endl;
+  std::cout << atoi(argv[9]) << std::endl;
 
   mapProj->SetZone(::atoi(argv[9]));
   mapProj->SetHemisphere(argv[10][0]);
@@ -72,8 +74,8 @@ int otbDEMToOrthoImageGeneratorTest(int argc, char * argv[])
   object->SetMapProjection(mapProj);
   otb::StandardFilterWatcher watcher(object, "DEM to ortho image generator");
 
-  writer->SetFileName( outputName );
-  writer->SetInput( object->GetOutput() );
+  writer->SetFileName(outputName);
+  writer->SetInput(object->GetOutput());
 
   writer->Update();
 

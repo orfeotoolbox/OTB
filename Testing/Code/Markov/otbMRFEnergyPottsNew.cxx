@@ -22,15 +22,13 @@
 #include "otbMRFEnergyPotts.h"
 #include "otbImage.h"
 
-
 int otbMRFEnergyPottsNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType, 2>                   ImageType;
-  typedef otb::MRFEnergyPotts< ImageType, ImageType> MRFEnergyPottsType;
+  typedef double                                    PixelType;
+  typedef otb::Image<PixelType, 2>                  ImageType;
+  typedef otb::MRFEnergyPotts<ImageType, ImageType> MRFEnergyPottsType;
 
   MRFEnergyPottsType::Pointer object = MRFEnergyPottsType::New();
 
   return EXIT_SUCCESS;
 }
-

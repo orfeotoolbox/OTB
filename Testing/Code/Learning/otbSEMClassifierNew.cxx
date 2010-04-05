@@ -30,23 +30,19 @@
 
 #include <iostream>
 
-
-int otbSEMClassifierNew( int argc, char* argv[] )
+int otbSEMClassifierNew(int argc, char* argv[])
 {
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, 2 > ImageType;
-  typedef itk::Image< unsigned char, 2 > OutputImageType;
-  typedef otb::SEMClassifier< ImageType, OutputImageType > ClassifType;
-  typedef itk::Statistics::ListSample< ImageType::PixelType > SampleType;
-  typedef itk::Statistics::Subsample< SampleType > ClassSampleType;
+  typedef double                                            PixelType;
+  typedef otb::VectorImage<PixelType, 2>                    ImageType;
+  typedef itk::Image<unsigned char, 2>                      OutputImageType;
+  typedef otb::SEMClassifier<ImageType, OutputImageType>    ClassifType;
+  typedef itk::Statistics::ListSample<ImageType::PixelType> SampleType;
+  typedef itk::Statistics::Subsample<SampleType>            ClassSampleType;
 
-  typedef otb::Statistics::ModelComponentBase< ClassSampleType > ComponentType;
+  typedef otb::Statistics::ModelComponentBase<ClassSampleType> ComponentType;
 
-  ClassifType::Pointer classifier = ClassifType::New();
+  ClassifType::Pointer   classifier = ClassifType::New();
   ComponentType::Pointer component = ComponentType::New();
-
 
   return EXIT_SUCCESS;
 }
-
-

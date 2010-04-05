@@ -20,14 +20,13 @@
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbVectorImage.h"
 
-
 int otbImageToLuminanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
 
-  typedef otb::ImageToLuminanceImageFilter<InputImageType,InputImageType> ImageToLuminanceImageFilterType;
+  typedef otb::ImageToLuminanceImageFilter<InputImageType, InputImageType> ImageToLuminanceImageFilterType;
 
   // Instantiating object
   ImageToLuminanceImageFilterType::Pointer filter = ImageToLuminanceImageFilterType::New();

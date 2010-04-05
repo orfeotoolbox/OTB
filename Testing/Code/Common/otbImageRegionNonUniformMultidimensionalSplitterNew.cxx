@@ -17,14 +17,12 @@
 =========================================================================*/
 #include "otbImageRegionNonUniformMultidimensionalSplitter.h"
 
-int otbImageRegionNonUniformMultidimensionalSplitterNew( int argc, char * argv[] )
+int otbImageRegionNonUniformMultidimensionalSplitterNew(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef otb::ImageRegionNonUniformMultidimensionalSplitter< Dimension >  FilterType;
+  typedef otb::ImageRegionNonUniformMultidimensionalSplitter<Dimension> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

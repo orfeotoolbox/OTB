@@ -24,18 +24,16 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilterNew( int argc, char * argv[] )
+int otbPrintableImageFilterNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
-  const   unsigned int  Dimension = 2;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >  InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::PrintableImageFilter< InputImageType>   FilterType;
+  typedef otb::PrintableImageFilter<InputImageType> FilterType;
 
   FilterType::Pointer printableImage = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-

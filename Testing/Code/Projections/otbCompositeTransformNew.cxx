@@ -27,15 +27,13 @@
 #include "otbMapProjections.h"
 #include "otbInverseSensorModel.h"
 
-int otbCompositeTransformNew( int argc, char* argv[] )
+int otbCompositeTransformNew(int argc, char* argv[])
 {
-  typedef otb::UtmInverseProjection MapProjectionType;
-  typedef otb::InverseSensorModel<double>   SensorModelType;
+  typedef otb::UtmInverseProjection       MapProjectionType;
+  typedef otb::InverseSensorModel<double> SensorModelType;
 
-  typedef otb::CompositeTransform< MapProjectionType,SensorModelType> CompositeTransformType;
+  typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
 
   return EXIT_SUCCESS;
 }
-
-

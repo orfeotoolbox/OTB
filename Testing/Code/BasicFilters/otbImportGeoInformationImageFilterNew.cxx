@@ -23,13 +23,12 @@
 int otbImportGeoInformationImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImportGeoInformationImageFilter<ImageType,ImageType> ImportGeoInformationImageFilterType;
+  typedef unsigned char                                              PixelType;
+  typedef otb::Image<PixelType, Dimension>                           ImageType;
+  typedef otb::ImportGeoInformationImageFilter<ImageType, ImageType> ImportGeoInformationImageFilterType;
 
   // Instantiating object
   ImportGeoInformationImageFilterType::Pointer object = ImportGeoInformationImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

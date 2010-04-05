@@ -22,36 +22,34 @@
 
 int otbKMLVectorDataIOTestFileReader(int argc, char* argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                    VectorDataType;
   typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
-  typedef VectorDataType::Pointer VectorDataPointerType;
-
+  typedef VectorDataType::Pointer              VectorDataPointerType;
 
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
-  VectorDataPointerType data = VectorDataType::New();
-
+  VectorDataPointerType        data = VectorDataType::New();
 
   bool lCanRead = object->CanReadFile(argv[1]);
-  if (lCanRead==false)
-  {
+  if (lCanRead == false)
+    {
     return EXIT_FAILURE;
-  }
+    }
 
   object->SetFileName(argv[1]);
   object->Read(data);
 
   VectorDataType::ConstPointer constData = static_cast<const VectorDataType *>(data);
 
-  if (argc>2)
-  {
-    bool lCanWrite = object->CanWriteFile(argv[2]);
-    if (lCanWrite==false)
+  if (argc > 2)
     {
+    bool lCanWrite = object->CanWriteFile(argv[2]);
+    if (lCanWrite == false)
+      {
       return EXIT_FAILURE;
-    }
+      }
     object->SetFileName(argv[2]);
     object->Write(constData);
-  }
+    }
 
   return EXIT_SUCCESS;
 }

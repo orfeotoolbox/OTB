@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -25,7 +24,7 @@
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
-int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
+int otbSimpleRcsPanSharpeningFusionImageFilter(int argc, char * argv[])
 {
   const char * panchro = argv[1];
   const char * multispect = argv[2];
@@ -34,28 +33,27 @@ int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-
-  typedef otb::VectorImage<PixelType,Dimension>  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>        PanchroImageType;
-  typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
-  typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>  VectorImageWriterType;
+  typedef otb::VectorImage<PixelType, Dimension>         VectorImageType;
+  typedef otb::Image<PixelType, Dimension>               PanchroImageType;
+  typedef otb::ImageFileReader<VectorImageType>          VectorReaderType;
+  typedef otb::ImageFileReader<PanchroImageType>         ImageReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType> VectorImageWriterType;
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
   <PanchroImageType, VectorImageType,  VectorImageType> FilterType;
 
-  VectorReaderType::Pointer multiSpectReader = VectorReaderType::New();
-  ImageReaderType::Pointer  panchroReader = ImageReaderType::New();
-  FilterType::Pointer       filter = FilterType::New();
-  VectorImageWriterType::Pointer  writer = VectorImageWriterType::New();
+  VectorReaderType::Pointer      multiSpectReader = VectorReaderType::New();
+  ImageReaderType::Pointer       panchroReader = ImageReaderType::New();
+  FilterType::Pointer            filter = FilterType::New();
+  VectorImageWriterType::Pointer writer = VectorImageWriterType::New();
 
   multiSpectReader->SetFileName(multispect);
   panchroReader->SetFileName(panchro);
 
   PanchroImageType::SizeType radius;
-  radius[0]=3;
-  radius[1]=3;
-  itk::Array< double > filterCoeffs;
-  filterCoeffs.SetSize((2*radius[0]+1)*(2*radius[1]+1));
+  radius[0] = 3;
+  radius[1] = 3;
+  itk::Array<double> filterCoeffs;
+  filterCoeffs.SetSize((2 * radius[0] + 1) * (2 * radius[1] + 1));
 
   //       double filterTmp[] = {
   //         0.00390625, 0.0078125, 0.0117188, 0.015625, 0.0117188, 0.0078125, 0.00390625,
@@ -74,12 +72,9 @@ int otbSimpleRcsPanSharpeningFusionImageFilter( int argc, char * argv[] )
   filter->SetPanInput(panchroReader->GetOutput());
   filter->SetRadius(radius);
   filter->SetFilter(filterCoeffs);
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->SetFileName(output);
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

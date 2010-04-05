@@ -34,15 +34,15 @@ int otbOpeningClosingMorphologicalFilter(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,OutputImageType,
-  StructuringElementType> OpeningClosingFilterType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, OutputImageType,
+                                                 StructuringElementType> OpeningClosingFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -63,7 +63,6 @@ int otbOpeningClosingMorphologicalFilter(int argc, char * argv[])
   writer->SetFileName(outputFilename);
   writer->SetInput(openingClosing->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

@@ -16,20 +16,18 @@
 
 =========================================================================*/
 
-
 // this file defines the otbCommonTest for the test driver
 // and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-REGISTER_TEST(otbROIdataConversionNew);
-REGISTER_TEST(otbROIdataConversion);
-REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
-REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
+  REGISTER_TEST(otbROIdataConversionNew);
+  REGISTER_TEST(otbROIdataConversion);
+  REGISTER_TEST(otbSVMCrossValidationCostFunctionNew);
+  REGISTER_TEST(otbExhaustiveExponentialOptimizerNew);
 }

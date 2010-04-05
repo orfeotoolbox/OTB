@@ -20,7 +20,7 @@
 
 int otbVectorDataGlComponentNew(int argc, char * argv[])
 {
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2>                 VectorDataType;
   typedef otb::VectorDataGlComponent<VectorDataType> VectorDataGlComponentType;
 
   // Instantiation

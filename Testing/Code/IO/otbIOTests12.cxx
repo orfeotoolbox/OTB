@@ -22,21 +22,19 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
-
 
 void RegisterTests()
 {
-REGISTER_TEST(otbDEMHandlerNew);
-REGISTER_TEST(otbDEMHandlerTest);
-REGISTER_TEST(otbDEMToImageGeneratorNew);
-REGISTER_TEST(otbDEMToImageGeneratorTest);
-REGISTER_TEST(otbOssimElevManagerTest);
-REGISTER_TEST(otbOssimElevManagerTest2);
-REGISTER_TEST(otbOssimElevManagerTest4);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
-REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
-REGISTER_TEST(otbPrepareSRTMDirectoryNew);
-REGISTER_TEST(otbPrepareSRTMDirectoryTest);
+  REGISTER_TEST(otbDEMHandlerNew);
+  REGISTER_TEST(otbDEMHandlerTest);
+  REGISTER_TEST(otbDEMToImageGeneratorNew);
+  REGISTER_TEST(otbDEMToImageGeneratorTest);
+  REGISTER_TEST(otbOssimElevManagerTest);
+  REGISTER_TEST(otbOssimElevManagerTest2);
+  REGISTER_TEST(otbOssimElevManagerTest4);
+  REGISTER_TEST(otbDEMToOrthoImageGeneratorNew);
+  REGISTER_TEST(otbDEMToOrthoImageGeneratorTest);
+  REGISTER_TEST(otbPrepareSRTMDirectoryNew);
+  REGISTER_TEST(otbPrepareSRTMDirectoryTest);
 }

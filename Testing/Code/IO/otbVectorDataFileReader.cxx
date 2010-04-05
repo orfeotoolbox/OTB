@@ -26,12 +26,12 @@
 
 int otbVectorDataFileReader(int argc, char * argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
-  typedef otb::DataNode<double,2,double> DataNodeType;
-  typedef DataNodeType::Pointer DataNodePointerType;
+  typedef otb::DataNode<double, 2, double>        DataNodeType;
+  typedef DataNodeType::Pointer                   DataNodePointerType;
   typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
 
   typedef itk::DataObject dataobjectType;
@@ -41,7 +41,7 @@ int otbVectorDataFileReader(int argc, char * argv[])
   reader->Update();
 
   VectorDataType::Pointer data = reader->GetOutput();
-  DataTreeType::Pointer dataTree = DataTreeType::New();
+  DataTreeType::Pointer   dataTree = DataTreeType::New();
   dataTree = data->GetDataTree();
 
   std::ofstream fout (argv[2]);
@@ -50,17 +50,17 @@ int otbVectorDataFileReader(int argc, char * argv[])
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-  {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool goesOn = true;
-    while (itParent.HasParent() && goesOn )
     {
-      fout<<indent;
+    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
+    bool                                    goesOn = true;
+    while (itParent.HasParent() && goesOn)
+      {
+      fout << indent;
       goesOn = itParent.GoToParent();
-    }
-    fout<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
+      }
+    fout << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
     ++it;
-  }
+    }
   /*added PrintSelf*/
 
   fout.close();

@@ -20,33 +20,32 @@
 #include "otbUnaryFunctorWithIndexImageFilter.h"
 #include "otbImage.h"
 
-
 namespace Functor
 {
 template <class TInput, class TOutput>
 class UnaryFunctorWithIndexImageFilterFunctorNewTest
 {
 public:
-  UnaryFunctorWithIndexImageFilterFunctorNewTest() {};
-  ~UnaryFunctorWithIndexImageFilterFunctorNewTest() {};
+  UnaryFunctorWithIndexImageFilterFunctorNewTest() {}
+  ~UnaryFunctorWithIndexImageFilterFunctorNewTest() {}
 
   typedef itk::Index<2> IndexType;
 
-  inline TOutput operator() (const TInput & inPix, IndexType index)
+  inline TOutput operator ()(const TInput& inPix, IndexType index)
   {
-    return(static_cast<TOutput>(inPix));
+    return (static_cast<TOutput>(inPix));
   }
 };
 }
 
-
 int otbUnaryFunctorWithIndexImageFilterNew(int argc, char * argv[])
 {
-  typedef double                        InputPixelType;
-  typedef otb::Image<InputPixelType, 2> ImageType;
-  typedef ImageType::PixelType          PixelType;
-  typedef Functor::UnaryFunctorWithIndexImageFilterFunctorNewTest<PixelType, PixelType>  FunctorType;
-  typedef otb::UnaryFunctorWithIndexImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorWithIndexImageFilterType;
+  typedef double                                                                        InputPixelType;
+  typedef otb::Image<InputPixelType, 2>                                                 ImageType;
+  typedef ImageType::PixelType                                                          PixelType;
+  typedef Functor::UnaryFunctorWithIndexImageFilterFunctorNewTest<PixelType, PixelType> FunctorType;
+  typedef otb::UnaryFunctorWithIndexImageFilter<ImageType, ImageType,
+                                                FunctorType>      UnaryFunctorWithIndexImageFilterType;
 
   // Instantiating object
   UnaryFunctorWithIndexImageFilterType::Pointer object = UnaryFunctorWithIndexImageFilterType::New();

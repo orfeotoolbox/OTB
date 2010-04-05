@@ -25,18 +25,21 @@
 int otbGeodesicMorphologyDecompositionImageFilter(int argc, char * argv[])
 {
 
-  const char * infname = argv[1];
-  const char * convexfname = argv[2];
-  const char * concavefname = argv[3];
-  const char * levelingfname = argv[4];
+  const char *       infname = argv[1];
+  const char *       convexfname = argv[2];
+  const char *       concavefname = argv[3];
+  const char *       levelingfname = argv[4];
   const unsigned int sesize = atoi(argv[5]);
 
-  typedef otb::Image<double,2> ImageType;
-  typedef itk::BinaryBallStructuringElement<double,2> StructuringElementType;
-  typedef StructuringElementType::RadiusType RadiusType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::Image<double, 2> ImageType;
+  typedef itk::BinaryBallStructuringElement<double,
+                                            2>                                                  StructuringElementType;
+  typedef StructuringElementType::RadiusType       RadiusType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  typedef otb::GeodesicMorphologyDecompositionImageFilter<ImageType,ImageType,StructuringElementType> GeodesicMorphologyDecompositionImageFilterType;
+  typedef otb::GeodesicMorphologyDecompositionImageFilter<ImageType, ImageType,
+                                                          StructuringElementType>
+  GeodesicMorphologyDecompositionImageFilterType;
 
   // Instantiating object
   GeodesicMorphologyDecompositionImageFilterType::Pointer filter = GeodesicMorphologyDecompositionImageFilterType::New();

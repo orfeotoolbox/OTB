@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbVectorImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -35,25 +34,24 @@ int otbVectorImageFileReaderWriterTest(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double                                    InputPixelType;
-  typedef double                                    OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  writer->SetInput( reader->GetOutput() );
+  writer->SetInput(reader->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

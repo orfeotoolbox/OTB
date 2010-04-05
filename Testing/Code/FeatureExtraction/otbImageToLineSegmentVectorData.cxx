@@ -22,35 +22,33 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
 
-int otbImageToLineSegmentVectorData( int argc, char * argv[] )
+int otbImageToLineSegmentVectorData(int argc, char * argv[])
 {
-  
-  typedef float                                              InputPixelType;
-  const   unsigned int                                       Dimension = 2;
-  
+
+  typedef float InputPixelType;
+  const unsigned int Dimension = 2;
+
   /** Typedefs */
-  typedef otb::Image< InputPixelType,  Dimension >     ImageType;
-  typedef otb::ImageFileReader<ImageType>              ReaderType;
- 
+  typedef otb::Image<InputPixelType,  Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>        ReaderType;
+
   typedef otb::ImageToLineSegmentVectorData<ImageType> ImToLSDFilterType;
   typedef ImToLSDFilterType::VectorDataType            VectorDataType;
   typedef otb::VectorDataFileWriter<VectorDataType>    WriterType;
 
-  ImToLSDFilterType::Pointer  lsdFilter = ImToLSDFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ImToLSDFilterType::Pointer lsdFilter = ImToLSDFilterType::New();
+  ReaderType::Pointer        reader = ReaderType::New();
+  WriterType::Pointer        writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
-  lsdFilter->SetInput( reader->GetOutput() );
-  lsdFilter->SetThreadDistanceThreshold( 10. );
+  lsdFilter->SetInput(reader->GetOutput());
+  lsdFilter->SetThreadDistanceThreshold(10.);
   lsdFilter->Update();
 
   writer->SetFileName(argv[2]);
-  writer->SetInput( lsdFilter->GetOutputVectorData() );
+  writer->SetInput(lsdFilter->GetOutputVectorData());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
-

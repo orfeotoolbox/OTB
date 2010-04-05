@@ -22,19 +22,16 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-REGISTER_TEST(otbTerraSarBrightnessFunctor);
-REGISTER_TEST(otbTerraSarCalibrationFunctor);
-REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
-REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
-REGISTER_TEST(otbTerraSarCalibrationImageComplexFilterTest);
-REGISTER_TEST(otbTerraSarBrightnessImageFilterNew);
-REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
-REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
+  REGISTER_TEST(otbTerraSarBrightnessFunctor);
+  REGISTER_TEST(otbTerraSarCalibrationFunctor);
+  REGISTER_TEST(otbTerraSarCalibrationImageFilterNew);
+  REGISTER_TEST(otbTerraSarCalibrationImageFilterTest);
+  REGISTER_TEST(otbTerraSarCalibrationImageComplexFilterTest);
+  REGISTER_TEST(otbTerraSarBrightnessImageFilterNew);
+  REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
+  REGISTER_TEST(otbTerraSarBrightnessImageComplexFilterTest);
 }
-
-

@@ -23,12 +23,12 @@
 
 int otbCompareAsciiTests3(int argc, char * argv[])
 {
-  if ( argc != 3 )
-  {
+  if (argc != 3)
+    {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " referenceFile testFile" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   std::ofstream fileRef;
   fileRef.open(argv[1]);
@@ -37,7 +37,6 @@ int otbCompareAsciiTests3(int argc, char * argv[])
   fileRef << "3\n";
   fileRef << "2\n";
   fileRef.close();
-
 
   std::ofstream fileTest;
   fileTest.open(argv[2]);

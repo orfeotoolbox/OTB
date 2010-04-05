@@ -20,18 +20,16 @@
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 
-
 int otbLuminanceToReflectanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
 
-  typedef otb::LuminanceToReflectanceImageFilter<InputImageType,InputImageType> LuminanceToReflectanceImageFilterType;
+  typedef otb::LuminanceToReflectanceImageFilter<InputImageType, InputImageType> LuminanceToReflectanceImageFilterType;
 
   // Instantiating object
   LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -24,11 +24,11 @@
 
 int otbImageFittingPolygonListFilterNew(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
-  typedef otb::Polygon<double>           PolygonType;
-  typedef otb::Image<double,Dimension>   ImageType;
+  const unsigned int Dimension = 2;
+  typedef otb::Polygon<double>          PolygonType;
+  typedef otb::Image<double, Dimension> ImageType;
 
-  typedef otb::ImageFittingPolygonListFilter<PolygonType,ImageType> FittingPolygonType;
+  typedef otb::ImageFittingPolygonListFilter<PolygonType, ImageType> FittingPolygonType;
 
   // Instantiating object
   FittingPolygonType::Pointer fittingPolygon = FittingPolygonType::New();

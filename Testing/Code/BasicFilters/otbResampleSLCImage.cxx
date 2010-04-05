@@ -33,19 +33,19 @@ int otbResampleSLCImage(int argc, char * argv[])
   typedef std::complex<double> OutputPixelType;
 //   typedef double InterpolatorPrecisionType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::Image<InputPixelType, Dimension>          InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>         OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>           ReaderType;
   typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  typedef itk::TranslationTransform<double, Dimension> TransformType;
+  typedef itk::TranslationTransform<double, Dimension>   TransformType;
 //   typedef otb::StreamingResampleImageFilter<InputImageType,OutputImageType,InterpolatorPrecisionType> StreamingResampleImageFilterType;
-  typedef itk::ResampleImageFilter< InputImageType,OutputImageType >    ResampleFilterType;
+  typedef itk::ResampleImageFilter<InputImageType, OutputImageType> ResampleFilterType;
 
   // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer         reader = ReaderType::New();
+  WriterType::Pointer         writer = WriterType::New();
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-  TransformType::Pointer transform = TransformType::New();
+  TransformType::Pointer      transform = TransformType::New();
 
   // Input Image
   reader->SetFileName(inputFilename);
@@ -55,8 +55,8 @@ int otbResampleSLCImage(int argc, char * argv[])
 
   // Size of output resampler result
   ResampleFilterType::SizeType size;
-  size[0]=200;
-  size[1]=200;
+  size[0] = 200;
+  size[1] = 200;
   resampler->SetSize(size);
 
   // Transformation creation
@@ -74,7 +74,6 @@ int otbResampleSLCImage(int argc, char * argv[])
   writer->SetFileName(outputFilename);
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

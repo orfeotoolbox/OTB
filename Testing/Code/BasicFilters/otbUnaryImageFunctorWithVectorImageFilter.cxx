@@ -30,28 +30,27 @@ int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
   const char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                           InputImageType;
-  typedef InputImageType::InternalPixelType                               InternalPixelType;
-  typedef itk::Functor::Cast<InternalPixelType,InternalPixelType>          FunctorType;
-  typedef otb::VectorImage<PixelType,Dimension>                           OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
+  typedef double                                                   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                   InputImageType;
+  typedef InputImageType::InternalPixelType                        InternalPixelType;
+  typedef itk::Functor::Cast<InternalPixelType, InternalPixelType> FunctorType;
+  typedef otb::VectorImage<PixelType, Dimension>                   OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                     ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                    WriterType;
   typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
-  InputImageType,
-  FunctorType    >    UnaryImageFunctorWithVectorImageFilterType;
+                                                      InputImageType,
+                                                      FunctorType>    UnaryImageFunctorWithVectorImageFilterType;
 
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                                 reader  = ReaderType::New();
+  WriterType::Pointer                                 writer = WriterType::New();
 
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

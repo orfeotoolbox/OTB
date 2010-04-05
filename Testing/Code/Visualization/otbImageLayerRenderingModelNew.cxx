@@ -19,10 +19,10 @@
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 
-int otbImageLayerRenderingModelNew( int argc, char * argv[] )
+int otbImageLayerRenderingModelNew(int argc, char * argv[])
 {
-  typedef itk::RGBPixel<unsigned char>     RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>       ImageType;
+  typedef itk::RGBPixel<unsigned char>             RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>              ImageType;
   typedef otb::ImageLayerRenderingModel<ImageType> ModelType;
 
   // Instantiation

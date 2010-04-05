@@ -17,51 +17,47 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
-
 int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])
 {
-  const unsigned int                                  Dimension = 2;
-  typedef double                                      PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>       InputVectorImageType;
-  typedef otb::Image<unsigned char,Dimension>         OutputImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputVectorImageType;
+  typedef otb::Image<unsigned char, Dimension>   OutputImageType;
 
-  typedef otb::Image<double,Dimension>                SingleImageType;
+  typedef otb::Image<double, Dimension> SingleImageType;
 
+  typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
 
-  typedef otb::ImageFileReader<InputVectorImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::ImageFileWriter<OutputImageType>       WriterType;
-
-  typedef otb::UrbanAreaDetectionImageFilter< InputVectorImageType,
-                                              OutputImageType > UrbanAreaDetectionFilterType;
+  typedef otb::UrbanAreaDetectionImageFilter<InputVectorImageType,
+                                             OutputImageType> UrbanAreaDetectionFilterType;
 
   // Instantiating objects
   UrbanAreaDetectionFilterType::Pointer filter = UrbanAreaDetectionFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                   reader = ReaderType::New();
+  WriterType::Pointer                   writer = WriterType::New();
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  reader->SetFileName( inputFilename );
-  writer->SetFileName( outputFilename  );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  filter->SetInput( reader->GetOutput() );
-  filter->SetRedIndex( ::atoi(argv[3]));
-  filter->SetGreenIndex( ::atoi(argv[4]));
-  filter->SetNIRIndex( ::atoi(argv[5]));
-  filter->SetThresholdValue( ::atof(argv[6]));
-  filter->SetThresholdDensity( ::atof(argv[7]));
+  filter->SetInput(reader->GetOutput());
+  filter->SetRedIndex(::atoi(argv[3]));
+  filter->SetGreenIndex(::atoi(argv[4]));
+  filter->SetNIRIndex(::atoi(argv[5]));
+  filter->SetThresholdValue(::atof(argv[6]));
+  filter->SetThresholdDensity(::atof(argv[7]));
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-

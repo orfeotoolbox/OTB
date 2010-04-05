@@ -26,10 +26,9 @@ int otbMorphologicalPyramidMRToMSConverterNew(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
-
+  typedef otb::Image<InputPixelType, Dimension>                                       InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                                      OutputImageType;
+  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType, OutputImageType> MRToMSConverterType;
 
   // Instantiation
   MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();

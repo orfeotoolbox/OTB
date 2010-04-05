@@ -22,14 +22,13 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbPanTexTextureImageFilter(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  const unsigned int Dimension = 2;
+  typedef double                                              PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>              ImageType;
+  typedef otb::ImageFileReader<ImageType>                     ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                     WriterType;
   typedef otb::PanTexTextureImageFilter<ImageType, ImageType> PanTexType;
 
   // Instantiating object
@@ -39,10 +38,10 @@ int otbPanTexTextureImageFilter(int argc, char * argv[])
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-  panTex->SetInput( reader->GetOutput() );
-  writer->SetInput( panTex->GetOutput() );
+  panTex->SetInput(reader->GetOutput());
+  writer->SetInput(panTex->GetOutput());
 
   writer->Update();
- 
+
   return EXIT_SUCCESS;
 }

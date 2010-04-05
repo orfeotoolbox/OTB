@@ -23,23 +23,22 @@
 #include "otbPerBandVectorImageFilter.h"
 #include "otbImage.h"
 
-
-int otbImageViewerWithMultiBandFilter( int argc, char * argv[] )
+int otbImageViewerWithMultiBandFilter(int argc, char * argv[])
 {
   char * filename = argv[1];
 
   // Parse command line parameters
-  typedef double PixelType;
-  typedef otb::ImageViewer<PixelType>  ImageViewerType;
-  typedef ImageViewerType::ImageType VectorImageType;
-  typedef ImageViewerType::SingleImageType ImageType;
-  typedef itk::SobelEdgeDetectionImageFilter<ImageType,ImageType> FilterType;
-  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,FilterType>
+  typedef double                                                   PixelType;
+  typedef otb::ImageViewer<PixelType>                              ImageViewerType;
+  typedef ImageViewerType::ImageType                               VectorImageType;
+  typedef ImageViewerType::SingleImageType                         ImageType;
+  typedef itk::SobelEdgeDetectionImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, FilterType>
   PerBandFilterType;
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
   // instantiation
-  ImageViewerType::Pointer viewer = ImageViewerType::New();
+  ImageViewerType::Pointer   viewer = ImageViewerType::New();
   PerBandFilterType::Pointer filter = PerBandFilterType::New();
 
   // check for input images
@@ -49,8 +48,8 @@ int otbImageViewerWithMultiBandFilter( int argc, char * argv[] )
   filter->SetInput(reader->GetOutput());
   filter->UpdateOutputInformation();
 
-  std::cout<<"Main - number of bands: "<<filter->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
-  std::cout<<"Main - largest region: "<<filter->GetOutput()->GetLargestPossibleRegion()<<std::endl;
+  std::cout << "Main - number of bands: " << filter->GetOutput()->GetNumberOfComponentsPerPixel() << std::endl;
+  std::cout << "Main - largest region: " << filter->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   viewer->SetImage(filter->GetOutput());
 
@@ -60,5 +59,3 @@ int otbImageViewerWithMultiBandFilter( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

@@ -21,22 +21,21 @@
 #include "otbImage.h"
 #include "itkConstantBoundaryCondition.h"
 
-
 namespace Function
 {
-template< class TInput=double, class TOutput=double >
+template<class TInput = double, class TOutput = double>
 class SameFunction
 {
 public:
   void SetRadius(unsigned int rad)
   {
     m_Radius = rad;
-  };
+  }
   unsigned int GetRadius() const
   {
     return m_Radius;
-  };
-  inline TOutput operator()( const TInput & A ) const
+  }
+  inline TOutput operator ()(const TInput& A) const
   {
     return static_cast<TOutput>(A);
   }
@@ -45,18 +44,18 @@ public:
 
 }
 
-
 int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
 {
 
-  typedef double                                                   InputPixelType;
+  typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension>                     ImageType;
-  typedef Function::SameFunction<InputPixelType,InputPixelType >   FunctionType;
-  typedef itk::ConstantBoundaryCondition< ImageType >              BoundaryConditionType;
-  typedef double                                                   CoordRepType;
+  typedef otb::Image<InputPixelType, Dimension>                  ImageType;
+  typedef Function::SameFunction<InputPixelType, InputPixelType> FunctionType;
+  typedef itk::ConstantBoundaryCondition<ImageType>              BoundaryConditionType;
+  typedef double                                                 CoordRepType;
 
-  typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType, CoordRepType> GenericFunctionType;
+  typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType,
+                                               CoordRepType> GenericFunctionType;
 
   // Instantiating object
   GenericFunctionType::Pointer generic = GenericFunctionType::New();

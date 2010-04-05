@@ -18,7 +18,7 @@
 #include "otbImageWidgetController.h"
 #include "otbImageWidgetActionHandler.h"
 
-int otbImageWidgetController( int argc, char * argv[] )
+int otbImageWidgetController(int argc, char * argv[])
 {
   // Typedefs
   typedef otb::ImageWidgetController    ControllerType;
@@ -44,13 +44,13 @@ int otbImageWidgetController( int argc, char * argv[] )
   controller->RemoveActionHandler(2);
 
   // Simulate an event from a widget
-  controller->HandleWidgetEvent("default",10);
+  controller->HandleWidgetEvent("default", 10);
 
   // Simulate a resize from a widget
-  controller->HandleWidgetResize("default",0,0);
+  controller->HandleWidgetResize("default", 0, 0);
 
   // Simulate a move from a widget
-  controller->HandleWidgetMove("default",0,0);
+  controller->HandleWidgetMove("default", 0, 0);
 
   return EXIT_SUCCESS;
 }

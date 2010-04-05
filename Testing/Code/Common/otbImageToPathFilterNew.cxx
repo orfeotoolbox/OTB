@@ -23,16 +23,13 @@
 int otbImageToPathFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef itk::PolyLineParametricPath< Dimension >       PathType;
+  typedef unsigned char                          PixelType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
 
-  typedef otb::ImageToPathFilter<ImageType,PathType> ImageToPathFilterType;
+  typedef otb::ImageToPathFilter<ImageType, PathType> ImageToPathFilterType;
 
   ImageToPathFilterType::Pointer pathFilter = ImageToPathFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

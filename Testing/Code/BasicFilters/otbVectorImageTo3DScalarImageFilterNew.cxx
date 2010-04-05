@@ -27,10 +27,10 @@ int otbVectorImageTo3DScalarImageFilterNew(int argc, char * argv[])
 
   typedef double PixelType;
 
-  typedef otb::VectorImage<PixelType,BiDimension> VectorImageType;
-  typedef otb::Image<PixelType,TriDimension> ImageType;
+  typedef otb::VectorImage<PixelType, BiDimension> VectorImageType;
+  typedef otb::Image<PixelType, TriDimension>      ImageType;
 
-  typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType,ImageType> FilterType;
+  typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();

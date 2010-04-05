@@ -20,10 +20,10 @@
 
 int otbConvexOrConcaveClassificationFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> InputImageType;
-  typedef otb::Image<unsigned char,2> OutputImageType;
+  typedef otb::Image<double, 2>        InputImageType;
+  typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef otb::ConvexOrConcaveClassificationFilter<InputImageType,OutputImageType> ClassificationFilterType;
+  typedef otb::ConvexOrConcaveClassificationFilter<InputImageType, OutputImageType> ClassificationFilterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

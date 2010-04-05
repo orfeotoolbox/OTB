@@ -27,18 +27,18 @@ int otbConvexOrConcaveClassificationFilter(int argc, char * argv[])
   const char * outfname = argv[3];
   const double sigma = atof(argv[4]);
 
-  typedef otb::Image<double,2> InputImageType;
-  typedef otb::Image<unsigned char,2> OutputImageType;
+  typedef otb::Image<double, 2>        InputImageType;
+  typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ConvexOrConcaveClassificationFilter<InputImageType,OutputImageType> ClassificationFilterType;
+  typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
+  typedef otb::StreamingImageFileWriter<OutputImageType>                            WriterType;
+  typedef otb::ConvexOrConcaveClassificationFilter<InputImageType, OutputImageType> ClassificationFilterType;
 
   // Instantiating objects
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  ReaderType::Pointer levelingReader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
+  ReaderType::Pointer               levelingReader = ReaderType::New();
+  WriterType::Pointer               writer = WriterType::New();
 
   reader->SetFileName(infname);
   levelingReader->SetFileName(levelingfname);

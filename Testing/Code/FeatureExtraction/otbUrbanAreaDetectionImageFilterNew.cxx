@@ -20,21 +20,19 @@
 #include "otbVectorImage.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
-
 int otbUrbanAreaDetectionImageFilterNew(int argc, char * argv[])
 {
 
-  const unsigned int                                  Dimension = 2;
-  typedef double                                      PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>       InputVectorImageType;
-  typedef otb::Image<unsigned char,Dimension>                OutputImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputVectorImageType;
+  typedef otb::Image<unsigned char, Dimension>   OutputImageType;
 
-  typedef otb::UrbanAreaDetectionImageFilter< InputVectorImageType,
-                                              OutputImageType > UrbanAreaDetectionFilterType;
+  typedef otb::UrbanAreaDetectionImageFilter<InputVectorImageType,
+                                             OutputImageType> UrbanAreaDetectionFilterType;
 
   // Instantiating objects
   UrbanAreaDetectionFilterType::Pointer filter = UrbanAreaDetectionFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

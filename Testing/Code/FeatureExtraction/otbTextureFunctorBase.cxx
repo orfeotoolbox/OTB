@@ -24,26 +24,24 @@
 #include "otbImageFileWriter.h"
 #include "otbTextureFunctorBase.h"
 
-
 template <class TScalarInput, class TScalarOutput>
 class ITK_EXPORT TextureFunctorTest :
-public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
+  public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
 {
 public:
   TextureFunctorTest()
-    {};
-  ~TextureFunctorTest(){};
+       {};
+  ~TextureFunctorTest(){}
 
-  typedef itk::Neighborhood<TScalarInput, 2>    NeighborhoodType;
-  
-  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  typedef itk::Neighborhood<TScalarInput, 2> NeighborhoodType;
+
+  virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     double out = neigh.GetCenterValue();
-    
+
     return out;
   }
 };
-
 
 int otbTextureFunctorBase(int argc, char * argv[])
 {
@@ -52,20 +50,21 @@ int otbTextureFunctorBase(int argc, char * argv[])
 
   typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::VectorImage<InputPixelType,Dimension> ImageType;
-  typedef ImageType::PixelType PixelType;
-  typedef ImageType::OffsetType OffsetType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::VectorImage<InputPixelType, Dimension> ImageType;
+  typedef ImageType::PixelType                        PixelType;
+  typedef ImageType::OffsetType                       OffsetType;
+  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef otb::ImageFileWriter<ImageType>             WriterType;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef TextureFunctorTest<InputPixelType, InputPixelType>  FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef itk::ConstNeighborhoodIterator<ImageType>          IterType;
+  typedef TextureFunctorTest<InputPixelType, InputPixelType> FunctorType;
+  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType,
+                                                             FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                              reader  = ReaderType::New();
+  WriterType::Pointer                              writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
 
@@ -79,7 +78,6 @@ int otbTextureFunctorBase(int argc, char * argv[])
   writer->SetInput(object->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

@@ -27,12 +27,12 @@
 int otbGDALImageIOTestCanWrite(int argc, char* argv[])
 {
   otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
-  bool lCanWrite = lGDALImageIO->CanWriteFile(argv[1]);
-  if ( lCanWrite == false)
-  {
-    std::cerr << "Erreur otb::GDALImageIO : impossible d'ecrire l'image "<<argv[1]<<"."<<std::endl;
+  bool                      lCanWrite = lGDALImageIO->CanWriteFile(argv[1]);
+  if (lCanWrite == false)
+    {
+    std::cerr << "Erreur otb::GDALImageIO : impossible d'ecrire l'image " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

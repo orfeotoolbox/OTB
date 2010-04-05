@@ -39,7 +39,6 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
 
-
 #include "itkExceptionObject.h"
 #include "itkExtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -52,33 +51,32 @@
 // without this all the important factories are not created.
 //#include "init/ossimInit.h"
 
-
-int otbCreateProjectionWithOTB( int argc, char* argv[] )
+int otbCreateProjectionWithOTB(int argc, char* argv[])
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if (argc!=2)
-  {
-    std::cout << argv[0] <<" <input filename> " << std::endl;
+  if (argc != 2)
+    {
+    std::cout << argv[0] << " <input filename> " << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   typedef otb::Image<unsigned int, 2>     ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  ReaderType::Pointer                   reader=ReaderType::New();
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   //Read meta data (ossimKeywordlist)
   reader->GenerateOutputInformation();
 
-  otbGenericMsgDebugMacro(<< "Read ossim Keywordlist..." );
+  otbGenericMsgDebugMacro(<< "Read ossim Keywordlist...");
   otb::ImageKeywordlist otb_image_keywordlist = reader->GetOutput()->GetImageKeywordlist();
 
   ossimKeywordlist geom;
   otb_image_keywordlist.convertToOSSIMKeywordlist(geom);
 
-  otbGenericMsgDebugMacro(<< "ossim Keywordlist:"<<geom );
+  otbGenericMsgDebugMacro(<< "ossim Keywordlist:" << geom);
 
   /*
     typedef otb::InverseSensorModel<double>  ModelType;
@@ -91,25 +89,23 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
     return 1;
     }
   */
-  ossimGpt ossimGPoint(0,0);
-  ossimDpt ossimDPoint;
+  ossimGpt          ossimGPoint(0, 0);
+  ossimDpt          ossimDPoint;
   ossimProjection * model = NULL;
-  otbGenericMsgDebugMacro(<< "Creating projection..." );
+  otbGenericMsgDebugMacro(<< "Creating projection...");
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if ( model == NULL)
-  {
-    itkGenericExceptionMacro(<<"Invalid Model * == NULL !");
-  }
+  if (model == NULL)
+    {
+    itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
+    }
 
-  otbGenericMsgDebugMacro(<< "Creating RefPtr of projection..." );
+  otbGenericMsgDebugMacro(<< "Creating RefPtr of projection...");
   ossimRefPtr<ossimProjection> ptrmodel = model;
-  if ( ptrmodel.valid() == false )
-  {
-    itkGenericExceptionMacro(<<"Invalid Model pointer .valid() == false !");
-  }
-
+  if (ptrmodel.valid() == false)
+    {
+    itkGenericExceptionMacro(<< "Invalid Model pointer .valid() == false !");
+    }
 
   return EXIT_SUCCESS;
 
 }
-

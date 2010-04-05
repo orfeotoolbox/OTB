@@ -23,13 +23,12 @@
 int otbConcatenateVectorImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::ConcatenateVectorImageFilter<ImageType,ImageType,ImageType> FilterType;
+  typedef unsigned char                                                      PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                             ImageType;
+  typedef otb::ConcatenateVectorImageFilter<ImageType, ImageType, ImageType> FilterType;
 
   // Instantiating adaptor object
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

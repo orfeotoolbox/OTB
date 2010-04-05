@@ -18,28 +18,24 @@
 
 =========================================================================*/
 
-
 #include <iostream>
 #include <cstdlib>
 #include "itkVariableLengthVector.h"
 #include "otbEuclideanDistanceWithMissingValue.h"
 
-int otbEuclideanDistanceWithMissingValue( int argc, char * argv[] )
+int otbEuclideanDistanceWithMissingValue(int argc, char * argv[])
 {
 
-  typedef itk::VariableLengthVector< double > VectorType;
-  typedef otb::Statistics::EuclideanDistanceWithMissingValue< VectorType > DistanceType;
+  typedef itk::VariableLengthVector<double>                              VectorType;
+  typedef otb::Statistics::EuclideanDistanceWithMissingValue<VectorType> DistanceType;
 
   DistanceType::Pointer dist = DistanceType::New();
 
-  if ( dist->IsMissingValue( 0.0 ) )
-    return EXIT_FAILURE;
+  if (dist->IsMissingValue(0.0)) return EXIT_FAILURE;
 
-  if ( dist->IsMissingValue( 1.0 ) )
-    return EXIT_FAILURE;
+  if (dist->IsMissingValue(1.0)) return EXIT_FAILURE;
 
-  if ( dist->IsMissingValue( -1.0 ) )
-    return EXIT_FAILURE;
+  if (dist->IsMissingValue(-1.0)) return EXIT_FAILURE;
 
   /*
     std::cerr << "Is O Nan ?? -> " << dist->IsMissingValue( 0.0 ) << "\n";
@@ -50,11 +46,8 @@ int otbEuclideanDistanceWithMissingValue( int argc, char * argv[] )
   double x = 0.0;
 
   dist->SetToMissingValue(x);
-  if ( !dist->IsMissingValue( x ) )
-    return EXIT_FAILURE;
+  if (!dist->IsMissingValue(x)) return EXIT_FAILURE;
   // std::cerr << "Is x (=" << x << ") Nan ?? -> " << dist->IsMissingValue( x ) << "\n";
 
   return EXIT_SUCCESS;
 }
-
-

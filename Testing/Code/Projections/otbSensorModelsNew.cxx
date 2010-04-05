@@ -27,7 +27,7 @@
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 
-int otbSensorModelsNew( int argc, char* argv[] )
+int otbSensorModelsNew(int argc, char* argv[])
 {
   typedef otb::SensorModelBase<double> SensorModelBaseType;
   SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
@@ -38,8 +38,5 @@ int otbSensorModelsNew( int argc, char* argv[] )
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer lForwardSensorModel = ForwardSensorModelType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

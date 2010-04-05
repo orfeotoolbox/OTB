@@ -31,31 +31,30 @@ int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  typedef double                                          InputPixelType;
-  typedef std::complex<InputPixelType>                    OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef double                       InputPixelType;
+  typedef std::complex<InputPixelType> OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::VnlFFTRealToComplexConjugateImageFilter<InputPixelType,Dimension> FourierImageFilterType;
+  typedef itk::VnlFFTRealToComplexConjugateImageFilter<InputPixelType, Dimension> FourierImageFilterType;
 
-  typedef otb::Image< InputPixelType, Dimension >         InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   FourierImageFilterType::Pointer FourierTransform = FourierImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  FourierTransform->SetInput( reader->GetOutput() );
-  writer->SetInput( FourierTransform->GetOutput() );
+  FourierTransform->SetInput(reader->GetOutput());
+  writer->SetInput(FourierTransform->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

@@ -23,15 +23,14 @@
 int otbImageToImageListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageToImageListFilter<InputImageType,OutputImageType> ImageToImageListFilterType;
+  typedef unsigned char                                                InputPixelType;
+  typedef unsigned char                                                OutputPixelType;
+  typedef otb::Image<InputPixelType, Dimension>                        InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                       OutputImageType;
+  typedef otb::ImageToImageListFilter<InputImageType, OutputImageType> ImageToImageListFilterType;
 
   // Instantiating ImageListSource object
   ImageToImageListFilterType::Pointer imageList = ImageToImageListFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

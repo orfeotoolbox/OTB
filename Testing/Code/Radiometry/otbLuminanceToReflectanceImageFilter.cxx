@@ -23,34 +23,33 @@
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-
 int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
   const double angle = static_cast<double>(atof(argv[3]));
-  double flux = 0.;
-  int day = 1;
-  int month = 1;
+  double       flux = 0.;
+  int          day = 1;
+  int          month = 1;
 
-  if (argc==9)
-  {
+  if (argc == 9)
+    {
     flux = static_cast<double>(atof(argv[8]));
-  }
+    }
   else
-  {
+    {
     day = atoi(argv[8]);
     month = atoi(argv[9]);
-  }
+    }
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::LuminanceToReflectanceImageFilter<InputImageType,OutputImageType> LuminanceToReflectanceImageFilterType;
-  typedef LuminanceToReflectanceImageFilterType::VectorType VectorType;
+  typedef double                                                                  PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                                  InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                                  OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                                   WriterType;
+  typedef otb::LuminanceToReflectanceImageFilter<InputImageType, OutputImageType> LuminanceToReflectanceImageFilterType;
+  typedef LuminanceToReflectanceImageFilterType::VectorType                       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -67,26 +66,24 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
   solarIllumination[2] = static_cast<double>(atof(argv[6]));
   solarIllumination[3] = static_cast<double>(atof(argv[7]));
 
-
   // Instantiating object
   LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
 
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
-  if (argc==9)
-  {
+  if (argc == 9)
+    {
     filter->SetFluxNormalizationCoefficient(flux);
-  }
+    }
   else
-  {
+    {
     filter->SetDay(day);
     filter->SetMonth(month);
-  }
+    }
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

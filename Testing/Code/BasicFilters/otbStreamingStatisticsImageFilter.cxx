@@ -32,8 +32,8 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::Image<PixelType, Dimension>               ImageType;
+  typedef otb::ImageFileReader<ImageType>                ReaderType;
   typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
   //typedef itk::StatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
   // Instantiating object
@@ -49,16 +49,15 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
 
   std::ofstream file;
   file.open(outfname);
-  file<<"Minimum: "<<filter->GetMinimum()<<std::endl;
-  file<<"Maximum: "<<filter->GetMaximum()<<std::endl;
-  file<<std::fixed;
+  file << "Minimum: " << filter->GetMinimum() << std::endl;
+  file << "Maximum: " << filter->GetMaximum() << std::endl;
+  file << std::fixed;
   file.precision(5);
-  file<<"Sum: "<<filter->GetSum()<<std::endl;
-  file<<"Mean: "<<filter->GetMean()<<std::endl;
-  file<<"Sigma: "<<filter->GetSigma()<<std::endl;
-  file<<"Variance: "<<filter->GetVariance()<<std::endl;
+  file << "Sum: " << filter->GetSum() << std::endl;
+  file << "Mean: " << filter->GetMean() << std::endl;
+  file << "Sigma: " << filter->GetSigma() << std::endl;
+  file << "Variance: " << filter->GetVariance() << std::endl;
   file.close();
-
 
   return EXIT_SUCCESS;
 }

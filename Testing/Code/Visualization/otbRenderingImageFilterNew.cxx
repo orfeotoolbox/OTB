@@ -19,15 +19,15 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int otbRenderingImageFilterNew( int argc, char * argv[] )
+int otbRenderingImageFilterNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType,2>       ImageType;
-  typedef otb::VectorImage<PixelType,2> VectorImageType;
-  typedef otb::RenderingImageFilter<ImageType> RenderingFilterType;
+  typedef double                                     PixelType;
+  typedef otb::Image<PixelType, 2>                   ImageType;
+  typedef otb::VectorImage<PixelType, 2>             VectorImageType;
+  typedef otb::RenderingImageFilter<ImageType>       RenderingFilterType;
   typedef otb::RenderingImageFilter<VectorImageType> VectorRenderingFilterType;
 
-  RenderingFilterType::Pointer rendering = RenderingFilterType::New();
+  RenderingFilterType::Pointer       rendering = RenderingFilterType::New();
   VectorRenderingFilterType::Pointer vrendering = VectorRenderingFilterType::New();
   return EXIT_SUCCESS;
 }

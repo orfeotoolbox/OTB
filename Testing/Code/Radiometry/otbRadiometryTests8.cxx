@@ -22,7 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
@@ -38,5 +37,3 @@ void RegisterTests()
   REGISTER_TEST(otbAeronetExtractData);
   REGISTER_TEST(otbAeronetExtractDataBadData);
 }
-
-

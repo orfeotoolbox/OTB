@@ -26,19 +26,17 @@
 #include "otbBinaryImageToDensityImageFilter.h"
 #include "otbImage.h"
 
-int otbBinaryImageToDensityImageFilterNew(int, char* [] )
+int otbBinaryImageToDensityImageFilterNew(int, char*[])
 {
 
-  const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType;
-  typedef otb::Image<PixelType, Dimension>                         InputImageType;
-  typedef otb::BinaryImageDensityFunction<InputImageType>          CountFunctionType;
-  typedef otb::BinaryImageToDensityImageFilter<InputImageType,InputImageType ,CountFunctionType >  FilterType;
-  
+  const unsigned int Dimension = 2;
+  typedef float                                                                                   PixelType;
+  typedef otb::Image<PixelType, Dimension>                                                        InputImageType;
+  typedef otb::BinaryImageDensityFunction<InputImageType>                                         CountFunctionType;
+  typedef otb::BinaryImageToDensityImageFilter<InputImageType, InputImageType, CountFunctionType> FilterType;
 
   /**Instantiation of a Smart Pointer*/
-  FilterType::Pointer     filter = FilterType::New();
+  FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-

@@ -24,18 +24,14 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int otbROIdataConversionNew( int argc, char* argv[] )
+int otbROIdataConversionNew(int argc, char* argv[])
 {
-  typedef double                                                 PixelType;
-  const   unsigned int                                           Dimension = 2;
-  typedef otb::VectorImage< PixelType,  Dimension >              InputImageType;
+  typedef double PixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::VectorImage<PixelType,  Dimension>                InputImageType;
   typedef otb::ROIdataConversion<InputImageType, InputImageType> ConvertorType;
-
 
   ConvertorType::Pointer convertor = ConvertorType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

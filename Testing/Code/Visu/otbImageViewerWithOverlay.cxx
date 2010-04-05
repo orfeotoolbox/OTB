@@ -22,28 +22,27 @@
 #include "itkBinaryThresholdImageFilter.h"
 #include "otbChangeLabelImageFilter.h"
 
-int otbImageViewerWithOverlay( int argc, char * argv[] )
+int otbImageViewerWithOverlay(int argc, char * argv[])
 {
-  char * filename = argv[1];
-  double upperThresh = atof(argv[2]);
+  char *        filename = argv[1];
+  double        upperThresh = atof(argv[2]);
   unsigned char opacity = atoi(argv[3]);
 
-
   // Parse command line parameters
-  typedef double PixelType;
-  typedef otb::ImageViewer<PixelType>  ImageViewerType;
-  typedef ImageViewerType::SingleImageType ImageType;
-  typedef ImageViewerType::ViewModelType ViewModelType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef ImageViewerType::OverlayImageType OverlayImageType;
-  typedef otb::Image<unsigned short,2> LabeledImageType;
-  typedef itk::BinaryThresholdImageFilter<ImageType,LabeledImageType> ThresholdFilterType;
-  typedef otb::ChangeLabelImageFilter<LabeledImageType,OverlayImageType> ChangeLabelFilterType;
-  typedef OverlayImageType::PixelType OverlayPixelType;
+  typedef double                                                          PixelType;
+  typedef otb::ImageViewer<PixelType>                                     ImageViewerType;
+  typedef ImageViewerType::SingleImageType                                ImageType;
+  typedef ImageViewerType::ViewModelType                                  ViewModelType;
+  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
+  typedef ImageViewerType::OverlayImageType                               OverlayImageType;
+  typedef otb::Image<unsigned short, 2>                                   LabeledImageType;
+  typedef itk::BinaryThresholdImageFilter<ImageType, LabeledImageType>    ThresholdFilterType;
+  typedef otb::ChangeLabelImageFilter<LabeledImageType, OverlayImageType> ChangeLabelFilterType;
+  typedef OverlayImageType::PixelType                                     OverlayPixelType;
 
   // instantiation
-  ImageViewerType::Pointer viewer = ImageViewerType::New();
-  ThresholdFilterType::Pointer thresh = ThresholdFilterType::New();
+  ImageViewerType::Pointer       viewer = ImageViewerType::New();
+  ThresholdFilterType::Pointer   thresh = ThresholdFilterType::New();
   ChangeLabelFilterType::Pointer chLabel = ChangeLabelFilterType::New();
 
   // check for input images
@@ -59,21 +58,20 @@ int otbImageViewerWithOverlay( int argc, char * argv[] )
 
   chLabel->SetInput(thresh->GetOutput());
 
-  OverlayPixelType insideValue,outsideValue;
+  OverlayPixelType insideValue, outsideValue;
 
   insideValue.SetSize(3);
   insideValue.Fill(0);
-  insideValue[0]=255;
+  insideValue[0] = 255;
 
   outsideValue.SetSize(3);
   outsideValue.Fill(0);
-  outsideValue[2]=255;
+  outsideValue[2] = 255;
 
   chLabel->SetNumberOfComponentsPerPixel(3);
-  chLabel->SetChange(0,outsideValue);
-  chLabel->SetChange(1,insideValue);
+  chLabel->SetChange(0, outsideValue);
+  chLabel->SetChange(1, insideValue);
   chLabel->GetOutput()->UpdateOutputInformation();
-
 
   viewer->SetImage(reader->GetOutput());
   viewer->SetImageOverlay(chLabel->GetOutput());
@@ -92,5 +90,3 @@ int otbImageViewerWithOverlay( int argc, char * argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

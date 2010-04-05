@@ -22,8 +22,8 @@
 
 int otbBSplineDecompositionImageFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
-  typedef otb::BSplineDecompositionImageFilter<ImageType,ImageType> BSplineDecompositionImageFilterType;
+  typedef otb::Image<double, 2>                                      ImageType;
+  typedef otb::BSplineDecompositionImageFilter<ImageType, ImageType> BSplineDecompositionImageFilterType;
 
   // Instantiating object
   BSplineDecompositionImageFilterType::Pointer filter = BSplineDecompositionImageFilterType::New();

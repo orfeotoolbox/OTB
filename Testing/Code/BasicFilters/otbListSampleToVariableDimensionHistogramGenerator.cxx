@@ -28,20 +28,20 @@ int otbListSampleToVariableDimensionHistogramGenerator(int argc, char * argv[])
   typedef VectorImageType::PixelType                   VectorPixelType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToVariableDimensionHistogramGenerator
-    <ListSampleType,PixelType>                         HistogramGeneratorType;
-  typedef otb::ImageFileReader<VectorImageType>        ReaderType;
+  <ListSampleType, PixelType>                         HistogramGeneratorType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
   // Instantiation
   ReaderType::Pointer             reader    = ReaderType::New();
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-  ListSampleType::Pointer ls = ListSampleType::New();
+  ListSampleType::Pointer         ls = ListSampleType::New();
 
   reader->SetFileName(argv[1]);
   reader->Update();
 
-  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
     ls->PushBack(it.Get());
     }
@@ -58,16 +58,16 @@ int otbListSampleToVariableDimensionHistogramGenerator(int argc, char * argv[])
 
   std::ofstream ofs;
   ofs.open(argv[2]);
-  for(unsigned int comp = 0; comp<reader->GetOutput()->GetNumberOfComponentsPerPixel();++comp)
+  for (unsigned int comp = 0; comp < reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++comp)
     {
-    ofs<<"Channel: "<<comp<<" histogram: "<<std::endl;
-    for(unsigned int bin = 0; bin < static_cast<unsigned int>(nbBins[comp]);++bin)
+    ofs << "Channel: " << comp << " histogram: " << std::endl;
+    for (unsigned int bin = 0; bin < static_cast<unsigned int>(nbBins[comp]); ++bin)
       {
-      ofs<<generator->GetOutput()->GetFrequency(bin,comp)<<"\t";
+      ofs << generator->GetOutput()->GetFrequency(bin, comp) << "\t";
       }
-    ofs<<std::endl;
+    ofs << std::endl;
     }
-  
+
   ofs.close();
 
   return EXIT_SUCCESS;

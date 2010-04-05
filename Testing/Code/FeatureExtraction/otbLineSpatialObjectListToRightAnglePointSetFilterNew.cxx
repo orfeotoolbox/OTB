@@ -16,29 +16,26 @@
 
 =========================================================================*/
 
-
 #include "otbLineSpatialObjectListToRightAnglePointSetFilter.h"
 #include "otbImage.h"
 #include "otbLineSpatialObjectList.h"
 #include "itkPointSet.h"
 
-int otbLineSpatialObjectListToRightAnglePointSetFilterNew( int argc, char * argv[] )
+int otbLineSpatialObjectListToRightAnglePointSetFilterNew(int argc, char * argv[])
 {
-  const unsigned int                                                Dimension = 2;
-  typedef float                                                     PixelType;
-  
-  /** Typedefs */
-  typedef otb::Image<PixelType ,Dimension >                           ImageType;
-  typedef otb::LineSpatialObjectList                                  LinesListType;
-  typedef LinesListType::LineType                                     LineType;
-  typedef std::vector<LineType *>                                       VectorLines;
-  typedef itk::PointSet<VectorLines , Dimension>                      PointSetType;
-  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType ,LinesListType,
-                                                               PointSetType >    RightAngleFilterType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  
-  RightAngleFilterType::Pointer  rightAngleFilter  = RightAngleFilterType::New();
-  
+  /** Typedefs */
+  typedef otb::Image<PixelType, Dimension>      ImageType;
+  typedef otb::LineSpatialObjectList            LinesListType;
+  typedef LinesListType::LineType               LineType;
+  typedef std::vector<LineType *>               VectorLines;
+  typedef itk::PointSet<VectorLines, Dimension> PointSetType;
+  typedef otb::LineSpatialObjectListToRightAnglePointSetFilter<ImageType, LinesListType,
+                                                               PointSetType>    RightAngleFilterType;
+
+  RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
+
   return EXIT_SUCCESS;
 }
-

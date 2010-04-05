@@ -31,23 +31,22 @@
 int otbVectorDataToImageFilterWorld(int argc, char * argv[])
 {
 
-  if (argc < 10 )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image filename>"
-    << " <output vector filename> "
-    << " <sizeX> <sizeY> "
-    << " <origin lon> <origin lat> "
-    << " <spacing lon> <spacing lat> "  << std::endl;
+  if (argc < 10)
+    {
+    std::cout << argv[0] << " <input vector filename> <input image filename>"
+              << " <output vector filename> "
+              << " <sizeX> <sizeY> "
+              << " <origin lon> <origin lat> "
+              << " <spacing lon> <spacing lat> "  << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   //Read the vector data
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
 
   //Reproject the vector data in the proper projection
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
-
 
   VectorDataFileReaderType::Pointer reader0 = VectorDataFileReaderType::New();
   reader0->SetFileName(argv[1]);
@@ -59,10 +58,9 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   ProjectionFilterType::Pointer projection1 = ProjectionFilterType::New();
   projection1->SetInput(reader1->GetOutput());
 
-
   //Convert the vector data into an image
-  typedef itk::RGBAPixel< unsigned char > PixelType;
-  typedef otb::Image<PixelType,2> ImageType;
+  typedef itk::RGBAPixel<unsigned char> PixelType;
+  typedef otb::Image<PixelType, 2>      ImageType;
 
   ImageType::SizeType size;
   size[0] = atoi(argv[4]);
@@ -76,11 +74,10 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   spacing[0] = atof(argv[8]);
   spacing[1] = atof(argv[9]);
 
-
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
-  vectorDataRendering->SetInput(0,projection0->GetOutput());
-  vectorDataRendering->SetInput(1,projection1->GetOutput());
+  vectorDataRendering->SetInput(0, projection0->GetOutput());
+  vectorDataRendering->SetInput(1, projection1->GetOutput());
 
   vectorDataRendering->SetSize(size);
   vectorDataRendering->SetOrigin(origin);
@@ -95,7 +92,6 @@ int otbVectorDataToImageFilterWorld(int argc, char * argv[])
   writer->SetInput(vectorDataRendering->GetOutput());
   writer->SetFileName(argv[3]);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

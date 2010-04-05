@@ -20,29 +20,23 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
-
 
 #include <iostream>
 
 #include "otbLocalHoughFilter.h"
 
-
-int otbLocalHoughNew( int argc, char* argv[] )
+int otbLocalHoughNew(int argc, char* argv[])
 {
-  typedef unsigned char                                  InputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
 
-  typedef otb::LocalHoughFilter< InputImageType >   FilterType;
+  typedef otb::LocalHoughFilter<InputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

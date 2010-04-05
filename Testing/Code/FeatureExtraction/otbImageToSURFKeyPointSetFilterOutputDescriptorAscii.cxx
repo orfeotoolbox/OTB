@@ -32,11 +32,11 @@
 int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[])
 {
 
-  if (argc < 5 )
-  {
+  if (argc < 5)
+    {
     std::cout << " Usage : otbSURFTest imageName FileOutName Octave[int] Level[int]" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char * infname = argv[1];
   const char * outfname = argv[2];
@@ -44,24 +44,23 @@ int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[]
   const unsigned int octaves = atoi(argv[3]);
   const unsigned int scales = atoi(argv[4]);
 
-
   typedef float RealType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<RealType,Dimension> ImageType;
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
-  typedef otb::ImageToSURFKeyPointSetFilter<ImageType,PointSetType> ImageToSURFKeyPointSetFilterType;
+  typedef otb::Image<RealType, Dimension>                            ImageType;
+  typedef itk::VariableLengthVector<RealType>                        RealVectorType;
+  typedef otb::ImageFileReader<ImageType>                            ReaderType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSURFKeyPointSetFilter<ImageType, PointSetType> ImageToSURFKeyPointSetFilterType;
 
   // PointSet iterator types
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
+  typedef PointSetType::PointsContainer    PointsContainerType;
+  typedef PointsContainerType::Iterator    PointsIteratorType;
   typedef PointSetType::PointDataContainer PointDataContainerType;
   typedef PointDataContainerType::Iterator PointDataIteratorType;
 
   // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                       reader = ReaderType::New();
   ImageToSURFKeyPointSetFilterType::Pointer filter = ImageToSURFKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
@@ -70,28 +69,28 @@ int otbImageToSURFKeyPointSetFilterOutputDescriptorAscii(int argc, char * argv[]
   filter->SetScalesNumber(scales);
   filter->Update();
 
-  PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
+  PointsIteratorType    pIt = filter->GetOutput()->GetPoints()->Begin();
   PointDataIteratorType pDataIt = filter->GetOutput()->GetPointData()->Begin();
 
   std::ofstream outfile(outfname);
 
-  outfile << "Number of octaves: "<<octaves << std::endl;
-  outfile << "Number of scales: "<<scales << std::endl;
+  outfile << "Number of octaves: " << octaves << std::endl;
+  outfile << "Number of scales: " << scales << std::endl;
   outfile << "Number of SURF key points: " << filter->GetNumberOfPoints() << std::endl;
 
-  while ( pIt!=filter->GetOutput()->GetPoints()->End() )
-  {
-    outfile << "[";
-    unsigned int lIterDesc=0;
-    while (lIterDesc < pDataIt.Value().Size())
+  while (pIt != filter->GetOutput()->GetPoints()->End())
     {
-      outfile  <<std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
+    outfile << "[";
+    unsigned int lIterDesc = 0;
+    while (lIterDesc < pDataIt.Value().Size())
+      {
+      outfile << std::setprecision(3) << pDataIt.Value()[lIterDesc] << " ";
       lIterDesc++;
-    }
+      }
     outfile << "]" << std::endl;
     ++pIt;
     ++pDataIt;
-  }
+    }
 
   outfile.close();
 

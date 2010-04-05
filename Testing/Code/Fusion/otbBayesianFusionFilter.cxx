@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -25,7 +24,7 @@
 
 #include "otbBayesianFusionFilter.h"
 
-int otbBayesianFusionFilter( int argc, char * argv[] )
+int otbBayesianFusionFilter(int argc, char * argv[])
 {
   const char * multispect = argv[1];
   const char * multispectinterp = argv[2];
@@ -35,19 +34,25 @@ int otbBayesianFusionFilter( int argc, char * argv[] )
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-
-  typedef otb::VectorImage<PixelType,Dimension>  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>        PanchroImageType;
-  typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
-  typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType>  VectorImageWriterType;
+  typedef otb::VectorImage<PixelType,
+                           Dimension>
+                                                                                                         VectorImageType;
+  typedef otb::Image<PixelType,
+                     Dimension>
+                                                                                                         PanchroImageType;
+  typedef otb::ImageFileReader<VectorImageType>
+                                                                                                         VectorReaderType;
+  typedef otb::ImageFileReader<PanchroImageType>
+                                                                                                         ImageReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType>
+                                                                                                         VectorImageWriterType;
   typedef otb::BayesianFusionFilter<VectorImageType, VectorImageType, PanchroImageType, VectorImageType> FilterType;
 
-  VectorReaderType::Pointer multiSpectReader = VectorReaderType::New();
-  VectorReaderType::Pointer multiSpectInterpReader = VectorReaderType::New();
-  ImageReaderType::Pointer  panchroReader = ImageReaderType::New();
-  FilterType::Pointer       filter = FilterType::New();
-  VectorImageWriterType::Pointer  writer = VectorImageWriterType::New();
+  VectorReaderType::Pointer      multiSpectReader = VectorReaderType::New();
+  VectorReaderType::Pointer      multiSpectInterpReader = VectorReaderType::New();
+  ImageReaderType::Pointer       panchroReader = ImageReaderType::New();
+  FilterType::Pointer            filter = FilterType::New();
+  VectorImageWriterType::Pointer writer = VectorImageWriterType::New();
 
   multiSpectReader->SetFileName(multispect);
   multiSpectInterpReader->SetFileName(multispectinterp);
@@ -56,12 +61,9 @@ int otbBayesianFusionFilter( int argc, char * argv[] )
   filter->SetMultiSpect(multiSpectReader->GetOutput());
   filter->SetMultiSpectInterp(multiSpectInterpReader->GetOutput());
   filter->SetPanchro(panchroReader->GetOutput());
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->SetFileName(output);
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -25,36 +25,35 @@
 #include "itkOffset.h"
 //#include "otbTextureFunctorBase.h"
 
-template <class TInputScalarType, class TOutputScalarType>//IterInput1, class TIterInput2, class TOutput>
+template <class TInputScalarType, class TOutputScalarType> //IterInput1, class TIterInput2, class TOutput>
 class TextureFunctorTest
 {
 public:
   TextureFunctorTest()
   {
     m_Offset.Fill(1);
-  };
-  ~TextureFunctorTest() {};
+  }
+  ~TextureFunctorTest() {}
 
-  typedef itk::Offset<> OffsetType;
-  typedef itk::Neighborhood<TInputScalarType, 2>    NeighborhoodType;
-  
-  void SetOffset(OffsetType off){ m_Offset=off; };
+  typedef itk::Offset<>                          OffsetType;
+  typedef itk::Neighborhood<TInputScalarType, 2> NeighborhoodType;
 
-  inline TOutputScalarType operator()(const NeighborhoodType &neigh)
-    {
-      return static_cast<TOutputScalarType>(neigh.GetCenterValue());
-    }
+  void SetOffset(OffsetType off){ m_Offset = off; }
 
- private:
+  inline TOutputScalarType operator ()(const NeighborhoodType& neigh)
+  {
+    return static_cast<TOutputScalarType>(neigh.GetCenterValue());
+  }
+
+private:
   OffsetType m_Offset;
 };
-
 
 int otbFunctionWithNeighborhoodToImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension>           ImageType;
+  typedef double                                    PixelType;
+  typedef otb::Image<PixelType, Dimension>          ImageType;
   typedef itk::VariableLengthVector<double>         VectorType;
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
 

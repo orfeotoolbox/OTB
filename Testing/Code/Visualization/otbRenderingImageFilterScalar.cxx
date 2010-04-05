@@ -21,14 +21,14 @@
 #include "otbStreamingImageFileWriter.h"
 #include "itkRGBPixel.h"
 
-int otbRenderingImageFilterScalar( int argc, char * argv[] )
+int otbRenderingImageFilterScalar(int argc, char * argv[])
 {
-  typedef double                                            PixelType;
-  typedef otb::Image<PixelType,2>                           ImageType;
-  typedef otb::Image<itk::RGBPixel<unsigned char>, 2>       RGBImageType;
-  typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
+  typedef double                                                     PixelType;
+  typedef otb::Image<PixelType, 2>                                   ImageType;
+  typedef otb::Image<itk::RGBPixel<unsigned char>, 2>                RGBImageType;
+  typedef otb::RenderingImageFilter<ImageType, RGBImageType>         RenderingFilterType;
+  typedef otb::ImageFileReader<ImageType>                            ReaderType;
+  typedef otb::StreamingImageFileWriter<RGBImageType>                WriterType;
   typedef RenderingFilterType::RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation
@@ -40,8 +40,8 @@ int otbRenderingImageFilterScalar( int argc, char * argv[] )
 //   PixelType min = atof(argv[3]);
 //   PixelType max = atof(argv[4]);
   ParametersType parameters(2);
-  parameters[0] = atof(argv[3]);//min
-  parameters[1] = atof(argv[4]);//max
+  parameters[0] = atof(argv[3]); //min
+  parameters[1] = atof(argv[4]); //max
 
   // reading input image
   reader->SetFileName(argv[1]);
@@ -54,7 +54,6 @@ int otbRenderingImageFilterScalar( int argc, char * argv[] )
   writer->SetFileName(argv[2]);
   writer->SetInput(rendering->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

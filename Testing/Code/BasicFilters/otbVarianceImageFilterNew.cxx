@@ -23,8 +23,8 @@ int otbVarianceImageFilterNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VarianceImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::Image<PixelType, Dimension>               ImageType;
+  typedef otb::VarianceImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();

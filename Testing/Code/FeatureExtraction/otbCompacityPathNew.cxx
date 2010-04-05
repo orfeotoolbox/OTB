@@ -26,15 +26,13 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
 
-int otbCompacityPathNew( int argc, char * argv[] )
+int otbCompacityPathNew(int argc, char * argv[])
 {
-  const   unsigned int                               Dimension = 2;
-  typedef itk::PolyLineParametricPath< Dimension >   PathType;
-  typedef otb::CompacityPathFunction<PathType>     FunctionType;
+  const unsigned int Dimension = 2;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::CompacityPathFunction<PathType>   FunctionType;
 
-  FunctionType::Pointer function =FunctionType::New();
-
+  FunctionType::Pointer function = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-

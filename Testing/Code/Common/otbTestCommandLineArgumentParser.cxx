@@ -21,36 +21,32 @@
 #include "itkExceptionObject.h"
 #include "otbCommandLineArgumentParser.h"
 
-int otbTestCommandLineArgumentParser( int argc, char * argv[] )
+int otbTestCommandLineArgumentParser(int argc, char * argv[])
 {
   // Parse command line parameters
   typedef otb::CommandLineArgumentParser ParserType;
   ParserType::Pointer parser = ParserType::New();
 
-  parser->AddOption("-image","Nom d'une image","-i",1,true);
-  parser->AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
-  parser->AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","-dede",2,false);
+  parser->AddOption("-image", "Nom d'une image", "-i", 1, true);
+  parser->AddOption("-entier", "Une Valeur entiere (obligatoire)", "-e");
+  parser->AddOption("-deuxentiers", "Deux Valeurs entieres non obligatoire", "-dede", 2, false);
   parser->AddOption("-double", "Valeur réelle double", "-d");
 
   typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
+  ParserResultType::Pointer parseResult = ParserResultType::New();
 
-  parser->ParseCommandLine(argc,argv,parseResult);
+  parser->ParseCommandLine(argc, argv, parseResult);
 
-
-  std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
+  std::cout << "Image : " << parseResult->GetParameterString("-image") << std::endl;
 
   unsigned int lEntier = parseResult->GetParameterUInt("-entier");
-  std::cout << "Entier : "<<lEntier<<std::endl;
-  if ( parseResult->IsOptionPresent("-deuxentiers"))
-  {
-    std::cout << "Entier : "<<lEntier<<std::endl;
-  }
+  std::cout << "Entier : " << lEntier << std::endl;
+  if (parseResult->IsOptionPresent("-deuxentiers"))
+    {
+    std::cout << "Entier : " << lEntier << std::endl;
+    }
   double lDouble = parseResult->GetParameterDouble("-double");
-  std::cout << "Double : "<<lDouble<<std::endl;
-
+  std::cout << "Double : " << lDouble << std::endl;
 
   return EXIT_SUCCESS;
 }
-
-

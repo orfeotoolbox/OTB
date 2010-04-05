@@ -23,34 +23,33 @@
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-
 int otbImageToReflectanceImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
   const double angle = static_cast<double>(atof(argv[3]));
-  double flux = 0.;
-  int day = 1;
-  int month = 1;
+  double       flux = 0.;
+  int          day = 1;
+  int          month = 1;
 
-  if (argc==17)
-  {
+  if (argc == 17)
+    {
     flux = static_cast<double>(atof(argv[16]));
-  }
+    }
   else
-  {
+    {
     day = atoi(argv[16]);
     month = atoi(argv[17]);
-  }
+    }
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ImageToReflectanceImageFilter<InputImageType,OutputImageType> ImageToReflectanceImageFilterType;
-  typedef ImageToReflectanceImageFilterType::VectorType VectorType;
+  typedef double                                                              PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                              InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                              OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                                ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef otb::ImageToReflectanceImageFilter<InputImageType, OutputImageType> ImageToReflectanceImageFilterType;
+  typedef ImageToReflectanceImageFilterType::VectorType                       VectorType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -67,13 +66,12 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
   beta.Fill(0);
   solarIllumination.Fill(0);
 
-  for (unsigned int i=0; i<nbOfComponent; i++)
-  {
-    alpha[i] = static_cast<double>(atof(argv[i+4]));
-    beta[i] = static_cast<double>(atof(argv[i+8]));
-    solarIllumination[i] = static_cast<double>(atof(argv[i+12]));
-  }
-
+  for (unsigned int i = 0; i < nbOfComponent; i++)
+    {
+    alpha[i] = static_cast<double>(atof(argv[i + 4]));
+    beta[i] = static_cast<double>(atof(argv[i + 8]));
+    solarIllumination[i] = static_cast<double>(atof(argv[i + 12]));
+    }
 
   // Instantiating object
   ImageToReflectanceImageFilterType::Pointer filter = ImageToReflectanceImageFilterType::New();
@@ -83,20 +81,19 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
 
-  if (argc==17)
-  {
+  if (argc == 17)
+    {
     filter->SetFluxNormalizationCoefficient(flux);
-  }
+    }
   else
-  {
+    {
     filter->SetDay(day);
     filter->SetMonth(month);
-  }
+    }
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

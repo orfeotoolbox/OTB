@@ -23,8 +23,8 @@
 int otbFunctionToImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef double                                PixelType;
+  typedef otb::Image<PixelType, Dimension>      ImageType;
   typedef itk::VarianceImageFunction<ImageType> FunctionType;
 
   typedef otb::FunctionToImageFilter<ImageType, ImageType, FunctionType> FilterType;

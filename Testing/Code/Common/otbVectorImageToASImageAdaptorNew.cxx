@@ -29,6 +29,5 @@ int otbVectorImageToASImageAdaptorNew(int argc, char * argv[])
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }

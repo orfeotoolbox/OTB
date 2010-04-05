@@ -22,20 +22,19 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-REGISTER_TEST(otbAlignImageToPath);
-REGISTER_TEST(otbDrawPathDessinCarre);
-REGISTER_TEST(otbDrawPathAlign);
-REGISTER_TEST(otbComplexMomentImage);
-REGISTER_TEST(otbHuImage);
-REGISTER_TEST(otbFlusserImage);
-REGISTER_TEST(otbComplexMomentPathNew);
-REGISTER_TEST(otbComplexMomentPath);
-REGISTER_TEST(otbComplexMomentPathFloat);
-REGISTER_TEST(otbHuPathNew);
-REGISTER_TEST(otbHuPath);
+  REGISTER_TEST(otbAlignImageToPath);
+  REGISTER_TEST(otbDrawPathDessinCarre);
+  REGISTER_TEST(otbDrawPathAlign);
+  REGISTER_TEST(otbComplexMomentImage);
+  REGISTER_TEST(otbHuImage);
+  REGISTER_TEST(otbFlusserImage);
+  REGISTER_TEST(otbComplexMomentPathNew);
+  REGISTER_TEST(otbComplexMomentPath);
+  REGISTER_TEST(otbComplexMomentPathFloat);
+  REGISTER_TEST(otbHuPathNew);
+  REGISTER_TEST(otbHuPath);
 }

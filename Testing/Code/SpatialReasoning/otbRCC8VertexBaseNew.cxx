@@ -21,11 +21,11 @@
 
 int otbRCC8VertexBaseNew(int argc, char* argv[])
 {
-  typedef otb::Polygon<>  PathType;
+  typedef otb::Polygon<>                PathType;
   typedef otb::RCC8VertexBase<PathType> RCC8VertexType;
 
   // Instantiation
-  RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
+  RCC8VertexType::Pointer rcc8Vertex = RCC8VertexType::New();
 
   return EXIT_SUCCESS;
 }

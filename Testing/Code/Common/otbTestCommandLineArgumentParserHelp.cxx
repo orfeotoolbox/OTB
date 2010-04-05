@@ -22,31 +22,28 @@
 #include "otbCommandLineArgumentParser.h"
 
 // Test de sortie en erreur
-int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
+int otbTestCommandLineArgumentParserHelp(int argc, char * argv[])
 {
   try
-  {
+    {
     // Parse command line parameters
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
-    parser->AddOption("-image","Nom d'une image","-i",1,true);
+    parser->AddOption("-image", "Nom d'une image", "-i", 1, true);
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
+    ParserResultType::Pointer parseResult = ParserResultType::New();
 
-    parser->ParseCommandLine(argc,argv,parseResult);
+    parser->ParseCommandLine(argc, argv, parseResult);
 
-
-    std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
-  }
-  catch (CommandLineArgumentParserHelpException & err)
-  {
-    std::cerr<<err;
+    std::cout << "Image : " << parseResult->GetParameterString("-image") << std::endl;
+    }
+  catch (CommandLineArgumentParserHelpException& err)
+    {
+    std::cerr << err;
     return EXIT_SUCCESS;
-  }
+    }
 
   return EXIT_FAILURE;
 }
-
-

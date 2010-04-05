@@ -22,13 +22,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 //Use only if OTB_USE_LIBLAS is on
 void RegisterTests()
 {
-REGISTER_TEST(otbPointSetFileReaderNew);
-REGISTER_TEST(otbPointSetFileReader);
-REGISTER_TEST(otbPointSetFileReader2);
+  REGISTER_TEST(otbPointSetFileReaderNew);
+  REGISTER_TEST(otbPointSetFileReader);
+  REGISTER_TEST(otbPointSetFileReader2);
 }

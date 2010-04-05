@@ -21,17 +21,17 @@
 #include "otbImageLayerGenerator.h"
 #include "otbImageLayer.h"
 
-int otbPixelDescriptionModelSingleLayer( int argc, char * argv[] )
+int otbPixelDescriptionModelSingleLayer(int argc, char * argv[])
 {
   // params
   const char * infname = argv[1];
 
-  typedef otb::VectorImage<double,2>                    ImageType;
-  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
-  typedef otb::ImageLayer<ImageType, OutputImageType>   LayerType;
-  typedef otb::ImageFileReader<ImageType>               ReaderType;
-  typedef otb::ImageLayerGenerator<LayerType>           LayerGeneratorType;
-  typedef otb::PixelDescriptionModel<OutputImageType>   ModelType;
+  typedef otb::VectorImage<double, 2>                  ImageType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2> OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>  LayerType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
+  typedef otb::ImageLayerGenerator<LayerType>          LayerGeneratorType;
+  typedef otb::PixelDescriptionModel<OutputImageType>  ModelType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();
@@ -39,7 +39,7 @@ int otbPixelDescriptionModelSingleLayer( int argc, char * argv[] )
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
-  
+
   // Generate the layer
   LayerGeneratorType::Pointer generator = LayerGeneratorType::New();
   generator->SetImage(reader->GetOutput());
@@ -49,16 +49,16 @@ int otbPixelDescriptionModelSingleLayer( int argc, char * argv[] )
   model->AddLayer(generator->GetLayer());
 
   // Compute extract and scaled extract region
-  ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
+  ImageType::RegionType            lregion = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::IndexType index;
 
-  index[0] = lregion.GetSize()[0]/4;
-  index[1] = lregion.GetSize()[1]/4;
+  index[0] = lregion.GetSize()[0] / 4;
+  index[1] = lregion.GetSize()[1] / 4;
 
   model->UpdatePixelDescription(index);
 
-  std::cout<<"Pixel description: "<<std::endl;
-  std::cout<<model->GetPixelDescription()<<std::endl;
+  std::cout << "Pixel description: " << std::endl;
+  std::cout << model->GetPixelDescription() << std::endl;
 
   return EXIT_SUCCESS;
 }

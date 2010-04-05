@@ -24,41 +24,40 @@
 int otbSimplePointCountStrategyTest(int argc, char * argv[])
 {
 
-  const unsigned int             Dimension =2;
-  typedef float                  RealType;
+  const unsigned int Dimension = 2;
+  typedef float RealType;
 
-  typedef otb::Image<RealType,Dimension>                ImageType;
-  typedef ImageType::PointType                          PointType;
-  typedef itk::VariableLengthVector<RealType>           RealVectorType;
+  typedef otb::Image<RealType, Dimension>     ImageType;
+  typedef ImageType::PointType                PointType;
+  typedef itk::VariableLengthVector<RealType> RealVectorType;
 
-  typedef itk::PointSet<RealVectorType,Dimension>       PointSetType;
-  typedef PointSetType::PointsContainer                 PointsContainerType;
-  typedef ImageType::IndexType IndexType;
+  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
+  typedef PointSetType::PointsContainer            PointsContainerType;
+  typedef ImageType::IndexType                     IndexType;
 
-  typedef otb::Count<PointSetType, unsigned int ,IndexType>  counterType;
+  typedef otb::Count<PointSetType, unsigned int, IndexType> counterType;
 
   /*pointSet de test*/
-  PointSetType::Pointer pointset =  PointSetType::New();
-  PointsContainerType::ElementIdentifier         count = 0;
-  PointSetType::PointType Point;
+  PointSetType::Pointer                  pointset =  PointSetType::New();
+  PointsContainerType::ElementIdentifier count = 0;
+  PointSetType::PointType                Point;
   Point[0] = 12.14;
   Point[1] = 14.14;
 
-  for (int  i = 0; i < 10; i++)
-  {
+  for (int i = 0; i < 10; i++)
+    {
     pointset->SetPoint(count, Point);
     count++;
-  }/** Fin creation pointset de test */
+    } /** Fin creation pointset de test */
 
   /*Test du filtre*/
   IndexType index;
   index[0] = 12;
   index[1] = 14;
   unsigned int rad = 2;
-  counterType comptemoica;
+  counterType  comptemoica;
 
-  std::cout <<"Le resultat retourne est " <<comptemoica(pointset,rad,index)<< std::endl;
-
+  std::cout << "Le resultat retourne est " << comptemoica(pointset, rad, index) << std::endl;
 
   return EXIT_SUCCESS;
 

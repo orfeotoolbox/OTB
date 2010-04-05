@@ -17,14 +17,12 @@
 =========================================================================*/
 #include "otbImageRegionTileMapSplitter.h"
 
-int otbImageRegionTileMapSplitterNew( int argc, char * argv[] )
+int otbImageRegionTileMapSplitterNew(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef otb::ImageRegionTileMapSplitter< Dimension >  FilterType;
+  typedef otb::ImageRegionTileMapSplitter<Dimension> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

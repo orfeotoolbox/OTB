@@ -27,15 +27,14 @@ int otbImageListToVectorImageFilterNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::ImageList<ImageType> ImageListType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::ImageList<ImageType>              ImageListType;
 
-  typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> ImageListToVectorImageFilterType;
+  typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> ImageListToVectorImageFilterType;
 
   // Instantiating object
   ImageListToVectorImageFilterType::Pointer object = ImageListToVectorImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

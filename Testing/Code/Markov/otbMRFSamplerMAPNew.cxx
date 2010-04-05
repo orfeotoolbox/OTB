@@ -24,15 +24,13 @@
 #include "otbMRFSamplerMAP.h"
 #include "otbImage.h"
 
-
 int otbMRFSamplerMAPNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType, 2>               ImageType;
-  typedef otb::MRFSamplerMAP< ImageType, ImageType> MRFSamplerType;
+  typedef double                                   PixelType;
+  typedef otb::Image<PixelType, 2>                 ImageType;
+  typedef otb::MRFSamplerMAP<ImageType, ImageType> MRFSamplerType;
 
   MRFSamplerType::Pointer object = MRFSamplerType::New();
 
   return EXIT_SUCCESS;
 }
-

@@ -29,17 +29,16 @@ template <class TIter, class TOutput>
 class UnaryFunctorNeighborhoodImageFilterTest
 {
 public:
-  UnaryFunctorNeighborhoodImageFilterTest() {};
-  ~UnaryFunctorNeighborhoodImageFilterTest() {};
+  UnaryFunctorNeighborhoodImageFilterTest() {}
+  ~UnaryFunctorNeighborhoodImageFilterTest() {}
 
-  inline TOutput operator() (const TIter & it)
+  inline TOutput operator ()(const TIter& it)
   {
-    return(static_cast<TOutput>(it.GetCenterPixel()));
+    return (static_cast<TOutput>(it.GetCenterPixel()));
 
   }
 };
 }
-
 
 int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
 {
@@ -48,19 +47,20 @@ int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
 
   typedef unsigned char InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef ImageType::PixelType PixelType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
+  typedef ImageType::PixelType                  PixelType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodImageFilterTest<IterType, PixelType>  FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef itk::ConstNeighborhoodIterator<ImageType>                             IterType;
+  typedef Functor::UnaryFunctorNeighborhoodImageFilterTest<IterType, PixelType> FunctorType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType,
+                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                              reader  = ReaderType::New();
+  WriterType::Pointer                              writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
 
@@ -69,7 +69,6 @@ int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
   writer->SetInput(object->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

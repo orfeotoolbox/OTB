@@ -21,13 +21,13 @@
 
 int otbListSampleToVariableDimensionHistogramGeneratorNew(int argc, char * argv[])
 {
- 
+
   typedef double                                       PixelType;
   typedef otb::VectorImage<PixelType>                  VectorImageType;
   typedef VectorImageType::PixelType                   VectorPixelType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToVariableDimensionHistogramGenerator
-    <ListSampleType,PixelType>                         HistogramGeneratorType;
+  <ListSampleType, PixelType>                         HistogramGeneratorType;
 
   // Instantiation
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();

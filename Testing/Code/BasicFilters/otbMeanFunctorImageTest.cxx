@@ -30,13 +30,13 @@ int otbMeanFunctorImageTest(int argc, char * argv[])
   const char * outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
+  typedef unsigned char                          PixelType;
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
+  typedef otb::ImageFileWriter<ImageType>        WriterType;
 
-  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType >
+  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType>
   MeanFunctorType;
 
   typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType, MeanFunctorType> MeanFilterType;

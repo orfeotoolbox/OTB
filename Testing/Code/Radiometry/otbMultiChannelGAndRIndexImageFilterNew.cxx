@@ -24,9 +24,9 @@
 int otbMultiChannelGAndRIndexImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
-  typedef otb::Image<float,Dimension> OutputImageType;
-  typedef otb::MultiChannelGAndRIndexImageFilter<InputImageType,OutputImageType> MultiChannelGAndRIndexImageFilterType;
+  typedef otb::VectorImage<unsigned char, Dimension>                              InputImageType;
+  typedef otb::Image<float, Dimension>                                            OutputImageType;
+  typedef otb::MultiChannelGAndRIndexImageFilter<InputImageType, OutputImageType> MultiChannelGAndRIndexImageFilterType;
 
   // Instantiating object
   MultiChannelGAndRIndexImageFilterType::Pointer object = MultiChannelGAndRIndexImageFilterType::New();

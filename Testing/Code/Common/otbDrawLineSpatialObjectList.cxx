@@ -33,35 +33,33 @@
 
 #include "otbDrawLineSpatialObjectListFilter.h"
 
-
-int otbDrawLineSpatialObjectList( int argc, char* argv[] )
+int otbDrawLineSpatialObjectList(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double                                    InputPixelType;
-  typedef unsigned char                               OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef double        InputPixelType;
+  typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::DrawLineSpatialObjectListFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  typedef otb::LineSpatialObjectList      LinesListType;
-  typedef LinesListType::LineType  LineType;
+  typedef otb::LineSpatialObjectList LinesListType;
+  typedef LinesListType::LineType    LineType;
   LinesListType::Pointer list = LinesListType::New();
 
   LineType::PointListType pointList;
@@ -74,14 +72,14 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
   Vx = 35.;
   Vy = 29.;
 
-  point.SetPosition(Ux,Uy);
+  point.SetPosition(Ux, Uy);
   pointList.push_back(point);
-  point.SetPosition(Vx,Vy);
+  point.SetPosition(Vx, Vy);
   pointList.push_back(point);
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
-  line->SetPoints( pointList );
+  line->SetPoints(pointList);
   line->ComputeBoundingBox();
 
   list->push_back(line);
@@ -94,15 +92,14 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
   Vx = 8.;
   Vy = 46.;
 
-  point.SetPosition(Ux,Uy);
+  point.SetPosition(Ux, Uy);
   pointList.push_back(point);
-  point.SetPosition(Vx,Vy);
+  point.SetPosition(Vx, Vy);
   pointList.push_back(point);
-
 
   LineType::Pointer line2 = LineType::New();
   line2->SetId(0);
-  line2->SetPoints( pointList );
+  line2->SetPoints(pointList);
   line2->ComputeBoundingBox();
 
   list->push_back(line2);
@@ -115,14 +112,14 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
   Vx = 22.;
   Vy = 38.;
 
-  point.SetPosition(Ux,Uy);
+  point.SetPosition(Ux, Uy);
   pointList.push_back(point);
-  point.SetPosition(Vx,Vy);
+  point.SetPosition(Vx, Vy);
   pointList.push_back(point);
 
   LineType::Pointer line3 = LineType::New();
   line3->SetId(0);
-  line3->SetPoints( pointList );
+  line3->SetPoints(pointList);
   line3->ComputeBoundingBox();
 
   list->push_back(line3);
@@ -134,13 +131,10 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
 
   filter->SetInputLineSpatialObjectList(list);
 
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -24,16 +24,15 @@
 int otbLabelMapSourceNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-  
-  typedef itk::LabelMap<LabelObjectType> InputLabelMapType;
+  typedef unsigned short LabelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+
+  typedef itk::LabelMap<LabelObjectType>         InputLabelMapType;
   typedef otb::LabelMapSource<InputLabelMapType> LabelMapSourceType;
 
   // Instantiating LabelMapSource object
   LabelMapSourceType::Pointer LabelMap = LabelMapSourceType::New();
-
 
   return EXIT_SUCCESS;
 }

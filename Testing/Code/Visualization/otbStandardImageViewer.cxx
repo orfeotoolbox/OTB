@@ -22,47 +22,47 @@
 #include "otbVectorDataFileReader.h"
 #include "itkTimeProbe.h"
 
-int otbStandardImageViewer( int argc, char * argv[] )
+int otbStandardImageViewer(int argc, char * argv[])
 {
   bool run = atoi(argv[2]);
 
-  typedef otb::VectorImage<double,2> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StandardImageViewer<ImageType> ViewerType;
-  typedef otb::VectorData<double>             VectorDataType;
+  typedef otb::VectorImage<double, 2>               ImageType;
+  typedef otb::ImageFileReader<ImageType>           ReaderType;
+  typedef otb::StandardImageViewer<ImageType>       ViewerType;
+  typedef otb::VectorData<double>                   VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
 
   VectorDataFileReaderType::Pointer vreader = VectorDataFileReaderType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  ViewerType::Pointer viewer = ViewerType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
+  ViewerType::Pointer               viewer = ViewerType::New();
   VectorDataFileReaderType::Pointer vdreader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   viewer->SetImage(reader->GetOutput());
 
-  if(argc>3)
+  if (argc > 3)
     {
-    std::cout<<"Adding a vector layer from file "<<argv[3]<<std::endl;
+    std::cout << "Adding a vector layer from file " << argv[3] << std::endl;
     itk::TimeProbe chrono;
     chrono.Start();
     vdreader->SetFileName(argv[3]);
     vdreader->Update();
     chrono.Stop();
-    std::cout<<"VectorData loaded in "<<chrono.GetMeanTime()<<" s."<<std::endl;
+    std::cout << "VectorData loaded in " << chrono.GetMeanTime() << " s." << std::endl;
     viewer->SetVectorData(vdreader->GetOutput());
     }
 
-  if(argc>4)
+  if (argc > 4)
     {
-    std::cout<<"Reprojecting using DEM "<<argv[4]<<std::endl;
+    std::cout << "Reprojecting using DEM " << argv[4] << std::endl;
     viewer->SetDEMDirectory(argv[4]);
     }
 
   viewer->SetLabel("Testing standard viewer");
 
   viewer->Update();
-  
-  if(run)
+
+  if (run)
     {
     Fl::run();
     }

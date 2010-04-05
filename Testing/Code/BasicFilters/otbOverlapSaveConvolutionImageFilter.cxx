@@ -24,21 +24,20 @@
 #include "otbImageFileWriter.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
-
-int otbOverlapSaveConvolutionImageFilter( int argc, char * argv[] )
+int otbOverlapSaveConvolutionImageFilter(int argc, char * argv[])
 {
   const char * inputFileName = argv[1];
   const char * outputFileName = argv[2];
 
-  typedef double      InputPixelType;
-  typedef double      OutputPixelType;
-  const unsigned int  Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >                      PanchroImageType;
-  typedef otb::Image< OutputPixelType, Dimension >                      OutputImageType;
-  typedef otb::ImageFileReader< PanchroImageType >                     ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >                      WriterType;
-  typedef otb::OverlapSaveConvolutionImageFilter< PanchroImageType,OutputImageType > ConvFilterType;
+  typedef otb::Image<InputPixelType,  Dimension>                                    PanchroImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                                    OutputImageType;
+  typedef otb::ImageFileReader<PanchroImageType>                                    ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                                     WriterType;
+  typedef otb::OverlapSaveConvolutionImageFilter<PanchroImageType, OutputImageType> ConvFilterType;
 
   ReaderType::Pointer     reader     = ReaderType::New();
   WriterType::Pointer     writer     = WriterType::New();
@@ -48,18 +47,18 @@ int otbOverlapSaveConvolutionImageFilter( int argc, char * argv[] )
   writer->SetFileName(outputFileName);
 
   ConvFilterType::InputSizeType radius;
-  radius[0]=3;
-  radius[1]=3;
+  radius[0] = 3;
+  radius[1] = 3;
   ConvFilterType::ArrayType filterCoeffs;
-  filterCoeffs.SetSize((2*radius[0]+1)*(2*radius[1]+1));
+  filterCoeffs.SetSize((2 * radius[0] + 1) * (2 * radius[1] + 1));
   filterCoeffs.Fill(1);
 
   convFilter->SetRadius(radius);
   convFilter->SetFilter(filterCoeffs);
   convFilter->NormalizeFilterOn();
 
-  convFilter->SetInput( reader->GetOutput() );
-  writer->SetInput( convFilter->GetOutput() );
+  convFilter->SetInput(reader->GetOutput());
+  writer->SetInput(convFilter->GetOutput());
 
   writer->Update();
 

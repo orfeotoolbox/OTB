@@ -20,13 +20,12 @@
 #include "otbDEMCaracteristicsExtractor.h"
 #include "otbImage.h"
 
-
 int otbDEMCaracteristicsExtractorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType, Dimension> InputImageType;
-  typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
+  typedef double                                                          PixelType;
+  typedef otb::Image<PixelType, Dimension>                                InputImageType;
+  typedef otb::DEMCaracteristicsExtractor<InputImageType, InputImageType> DEMCaracteristicsExtractorType;
 
   DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
 

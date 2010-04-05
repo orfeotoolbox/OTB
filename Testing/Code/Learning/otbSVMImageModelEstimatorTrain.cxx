@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -30,44 +29,40 @@
 
 #include "otbImageFileReader.h"
 
-
-int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
+int otbSVMImageModelEstimatorTrain(int argc, char* argv[])
 {
   const char* inputImageFileName = argv[1];
   const char* trainingImageFileName = argv[2];
   const char* outputModelFileName = argv[3];
   const bool  optimization        = atoi(argv[4]);
 
-
-  typedef double                                           InputPixelType;
-  const   unsigned int                                     Dimension = 2;
-  typedef otb::VectorImage< InputPixelType,  Dimension >   InputImageType;
-  typedef otb::Image< int,  Dimension >                    TrainingImageType;
-  typedef std::vector<double>                              VectorType;
-  typedef otb::SVMImageModelEstimator< InputImageType,
-  TrainingImageType > EstimatorType;
-  typedef otb::ImageFileReader< InputImageType >           InputReaderType;
-  typedef otb::ImageFileReader< TrainingImageType >        TrainingReaderType;
+  typedef double InputPixelType;
+  const unsigned int Dimension = 2;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<int,  Dimension>                  TrainingImageType;
+  typedef std::vector<double>                          VectorType;
+  typedef otb::SVMImageModelEstimator<InputImageType,
+                                      TrainingImageType> EstimatorType;
+  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
+  typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
   InputReaderType::Pointer    inputReader    = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
   EstimatorType::Pointer      svmEstimator   = EstimatorType::New();
 
-  inputReader->SetFileName( inputImageFileName );
-  trainingReader->SetFileName( trainingImageFileName );
+  inputReader->SetFileName(inputImageFileName);
+  trainingReader->SetFileName(trainingImageFileName);
   inputReader->Update();
   trainingReader->Update();
 
-  svmEstimator->SetInputImage( inputReader->GetOutput() );
-  svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
+  svmEstimator->SetInputImage(inputReader->GetOutput());
+  svmEstimator->SetTrainingImage(trainingReader->GetOutput());
   svmEstimator->SetParametersOptimization(optimization);
 
   svmEstimator->Update();
 
-  otbGenericMsgDebugMacro(<<"Saving model");
+  otbGenericMsgDebugMacro(<< "Saving model");
   svmEstimator->GetModel()->SaveModel(outputModelFileName);
 
   return EXIT_SUCCESS;
 }
-
-

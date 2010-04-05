@@ -23,15 +23,14 @@
 int otbVectorRescaleIntensityImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::VectorRescaleIntensityImageFilter<InputImageType,OutputImageType> VectorRescaleIntensityImageFilterType;
+  typedef double                                                                  InputPixelType;
+  typedef unsigned char                                                           OutputPixelType;
+  typedef otb::VectorImage<InputPixelType, Dimension>                             InputImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension>                            OutputImageType;
+  typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> VectorRescaleIntensityImageFilterType;
 
   // Instantiating object
   VectorRescaleIntensityImageFilterType::Pointer object = VectorRescaleIntensityImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

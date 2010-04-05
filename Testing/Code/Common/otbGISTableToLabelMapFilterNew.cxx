@@ -26,12 +26,12 @@ int otbGISTableToLabelMapFilterNew(int argc, char * argv[])
   const int Dimension = 2;
   typedef double PType;
 
-  typedef otb::PostGISConnectionImplementation BdConnection;
+  typedef otb::PostGISConnectionImplementation          BdConnection;
   typedef otb::GISTable<BdConnection, PType, Dimension> GISTableType;
 
-  typedef itk::AttributeLabelObject< unsigned long, Dimension, double > LabelObjectType;
+  typedef itk::AttributeLabelObject<unsigned long, Dimension, double> LabelObjectType;
 
-  typedef itk::LabelMap< LabelObjectType > LabelMapType;
+  typedef itk::LabelMap<LabelObjectType> LabelMapType;
 
   typedef otb::GISTableToLabelMapFilter<GISTableType, LabelMapType> GISTableToLabelMapFilterType;
 
@@ -39,5 +39,3 @@ int otbGISTableToLabelMapFilterNew(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-

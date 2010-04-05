@@ -27,12 +27,12 @@
 int otbBSQImageIOTestCanRead(int argc, char* argv[])
 {
   otb::BSQImageIO::Pointer lBSQImageIO = otb::BSQImageIO::New();
-  bool lCanRead = lBSQImageIO->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::BSQImageIO : impossible d'ouvrir l'image BSQ "<<argv[1]<<"."<<std::endl;
+  bool                     lCanRead = lBSQImageIO->CanReadFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::BSQImageIO : impossible d'ouvrir l'image BSQ " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

@@ -29,16 +29,16 @@
 #include "projection/ossimProjection.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/ossimPluginProjectionFactory.h"
-#include "base/ossimFilename.h" 
+#include "base/ossimFilename.h"
 
 int otbImageKeywordlist(int argc, char* argv[])
 {
   if (argc != 4)
-  {
+    {
     std::cout << argv[0] << " <input filename> <output filename> <output filename2>" << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   char * filename = argv[1];
   char * outFilename = argv[2];
@@ -51,25 +51,25 @@ int otbImageKeywordlist(int argc, char* argv[])
   file2.open(outFilename2);
   file2 << std::setprecision(15);
 
-  bool hasMetaData = false;
+  bool             hasMetaData = false;
   ossimKeywordlist geom_kwl, geom_kwl2, geom_kwl3;
 
   /** Don't use FactoryRegistry because of its default factory that can conflict
    * with plugins factor (cf. TSX .tif image read as QB)*/
   // test ossim plugin factory
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(
-      ossimFilename(filename), 0);
+    ossimFilename(filename), 0);
 
   // if ossim plugins factory failed, then test ossim factory
   if (!projection)
-  {
+    {
     projection = ossimProjectionFactoryRegistry::instance()->createProjection(ossimFilename(filename), 0);
     if (!projection)
-    {
-      itkGenericExceptionMacro( <<"OSSIM Instanciate projection FAILED ! ");
+      {
+      itkGenericExceptionMacro(<< "OSSIM Instanciate projection FAILED ! ");
       return EXIT_FAILURE;
+      }
     }
-  }
 
   hasMetaData = projection->saveState(geom_kwl);
   otb::ImageKeywordlist otb_kwl;
@@ -89,7 +89,7 @@ int otbImageKeywordlist(int argc, char* argv[])
 
   /** Search keyword in meter_per_pixel to truncate precision */
   ossimString s;
-  double valueX, valueY;
+  double      valueX, valueY;
 
   otb_kwl.convertToOSSIMKeywordlist(geom_kwl2);
 
@@ -98,30 +98,30 @@ int otbImageKeywordlist(int argc, char* argv[])
 
   s = geom_kwl2.find("meters_per_pixel_x");
   if (s != "")
-  {
+    {
     valueX = s.toDouble();
     file << "truncate_meter_per_pixel_x " << valueX << std::endl;
-  }
+    }
   s = geom_kwl2.find("meters_per_pixel_y");
   if (s != "")
-  {
+    {
     valueY = s.toDouble();
     file << "truncate_meter_per_pixel_y " << valueY << std::endl;
-  }
+    }
 
   otb_kwl2.convertToOSSIMKeywordlist(geom_kwl3);
   s = geom_kwl3.find("meters_per_pixel_x");
   if (s != "")
-  {
+    {
     valueX = s.toDouble();
     file2 << "truncate_meter_per_pixel_x " << valueX << std::endl;
-  }
+    }
   s = geom_kwl3.find("meters_per_pixel_y");
   if (s != "")
-  {
+    {
     valueY = s.toDouble();
     file2 << "truncate_meter_per_pixel_y " << valueY << std::endl;
-  }
+    }
 
   file.close();
   file2.close();

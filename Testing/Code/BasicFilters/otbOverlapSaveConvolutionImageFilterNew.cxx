@@ -22,19 +22,17 @@
 #include "otbImage.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
-
-int otbOverlapSaveConvolutionImageFilterNew( int argc, char * argv[] )
+int otbOverlapSaveConvolutionImageFilterNew(int argc, char * argv[])
 {
-  typedef double        InputPixelType;
-  typedef double     OutputPixelType;
-  const   unsigned int  Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >                  InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >                  OutputImageType;
-  typedef otb::OverlapSaveConvolutionImageFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::Image<InputPixelType,  Dimension>                                  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                                  OutputImageType;
+  typedef otb::OverlapSaveConvolutionImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer conv = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-

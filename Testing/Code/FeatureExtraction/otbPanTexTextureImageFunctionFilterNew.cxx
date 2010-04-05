@@ -22,13 +22,13 @@
 
 int otbPanTexTextureImageFunctionFilterNew(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  const unsigned int Dimension = 2;
+  typedef double                                                      PixelType;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
   typedef otb::PanTexTextureImageFunctionFilter<ImageType, ImageType> PanTexType;
 
   // Instantiating object
   PanTexType::Pointer object = PanTexType::New();
-  
+
   return EXIT_SUCCESS;
 }

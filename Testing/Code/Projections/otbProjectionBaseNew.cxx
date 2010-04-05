@@ -26,15 +26,13 @@
 #include "otbMapProjections.h"
 #include "otbMapToMapProjection.h"
 
-int otbProjectionBaseNew( int argc, char* argv[] )
+int otbProjectionBaseNew(int argc, char* argv[])
 {
-  otb::AlbersInverseProjection::Pointer lAlbersProjection = otb::AlbersInverseProjection::New();
+  otb::AlbersInverseProjection::Pointer      lAlbersProjection = otb::AlbersInverseProjection::New();
   otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
-  typedef otb::MapToMapProjection<otb::AlbersInverseProjection,otb::AzimEquDistForwardProjection> MapToMapProjectionType;
+  typedef otb::MapToMapProjection<otb::AlbersInverseProjection,
+                                  otb::AzimEquDistForwardProjection> MapToMapProjectionType;
   MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
-
 
   return EXIT_SUCCESS;
 }
-
-

@@ -27,6 +27,5 @@ int otbLineSpatialObjectNew(int argc, char * argv[])
   // Instantiating object
   LineSpatialObjectType::Pointer object = LineSpatialObjectType::New();
 
-
   return EXIT_SUCCESS;
 }

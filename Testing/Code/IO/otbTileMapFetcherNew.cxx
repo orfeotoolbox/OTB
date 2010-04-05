@@ -23,7 +23,7 @@ int otbTileMapFetcherNew(int argc, char * argv[])
 {
   typedef otb::TileMapFetcher         TileMapFetcherType;
   typedef TileMapFetcherType::Pointer TileMapFetcherPointerType;
-  
+
   TileMapFetcherPointerType tmf = TileMapFetcherType::New();
 
   return EXIT_SUCCESS;

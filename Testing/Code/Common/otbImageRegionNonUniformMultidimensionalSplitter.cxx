@@ -18,13 +18,13 @@
 #include "otbImageRegionNonUniformMultidimensionalSplitter.h"
 #include <fstream>
 
-int otbImageRegionNonUniformMultidimensionalSplitter( int argc, char * argv[] )
+int otbImageRegionNonUniformMultidimensionalSplitter(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef otb::ImageRegionNonUniformMultidimensionalSplitter< Dimension >  FilterType;
-  typedef FilterType::IndexType IndexType;
-  typedef FilterType::SizeType SizeType;
-  typedef FilterType::RegionType RegionType;
+  typedef otb::ImageRegionNonUniformMultidimensionalSplitter<Dimension> FilterType;
+  typedef FilterType::IndexType                                         IndexType;
+  typedef FilterType::SizeType                                          SizeType;
+  typedef FilterType::RegionType                                        RegionType;
 
   IndexType index;
   index[0] = atoi(argv[1]);
@@ -36,7 +36,6 @@ int otbImageRegionNonUniformMultidimensionalSplitter( int argc, char * argv[] )
   unsigned int nbAsked(atoi(argv[6]));
   const char * outfname(argv[7]);
 
-
   RegionType region;
 
   region.SetSize(size);
@@ -44,22 +43,19 @@ int otbImageRegionNonUniformMultidimensionalSplitter( int argc, char * argv[] )
 
   FilterType::Pointer filter = FilterType::New();
 
-  unsigned int nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  
-  RegionType region2 = filter->GetSplit(nbAsked,nb,region);
+  unsigned int nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+
+  RegionType region2 = filter->GetSplit(nbAsked, nb, region);
 
   std::ofstream outfile(outfname);
 
-
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "    "<<region2<<std::endl;
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "    " << region2 << std::endl;
 
   outfile.close();
 
   return EXIT_SUCCESS;
 }
-
-

@@ -20,8 +20,8 @@
 
 int otbGeodesicMorphologyLevelingFilterNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
-  typedef otb::GeodesicMorphologyLevelingFilter<ImageType,ImageType,ImageType> FilterType;
+  typedef otb::Image<double, 2>                                                  ImageType;
+  typedef otb::GeodesicMorphologyLevelingFilter<ImageType, ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

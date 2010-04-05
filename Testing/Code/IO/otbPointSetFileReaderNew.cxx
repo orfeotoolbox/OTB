@@ -21,10 +21,9 @@
 
 int otbPointSetFileReaderNew(int argc, char * argv[])
 {
-  typedef itk::PointSet <double, 2> PointSetType;
+  typedef itk::PointSet <double, 2>             PointSetType;
   typedef otb::PointSetFileReader<PointSetType> PointSetFileReaderType;
   PointSetFileReaderType::Pointer object = PointSetFileReaderType::New();
-
 
   return EXIT_SUCCESS;
 }

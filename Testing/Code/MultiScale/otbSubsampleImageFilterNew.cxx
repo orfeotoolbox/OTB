@@ -27,16 +27,15 @@
 
 #include "otbSubsampleImageFilter.h"
 
-int otbSubsampleImageFilterNew ( int argc, char * argv[] )
+int otbSubsampleImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image< PixelType, Dimension >  ImageType;
-  typedef otb::SubsampleImageFilter< ImageType, ImageType, otb::Wavelet::FORWARD >
-    FilterType;
+  typedef double                           PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::SubsampleImageFilter<ImageType, ImageType, otb::Wavelet::FORWARD>
+  FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-

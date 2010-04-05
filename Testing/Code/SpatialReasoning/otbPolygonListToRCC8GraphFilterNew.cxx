@@ -25,11 +25,11 @@
 int otbPolygonListToRCC8GraphFilterNew(int argc, char* argv[])
 {
   // typedefs
-  typedef otb::Polygon<> PolygonType;
-  typedef otb::ObjectList<PolygonType> PolygonListType;
+  typedef otb::Polygon<>                   PolygonType;
+  typedef otb::ObjectList<PolygonType>     PolygonListType;
   typedef otb::RCC8VertexBase<PolygonType> VertexType;
-  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-  typedef otb::PolygonListToRCC8GraphFilter<PolygonListType,RCC8GraphType>
+  typedef otb::RCC8Graph<VertexType>       RCC8GraphType;
+  typedef otb::PolygonListToRCC8GraphFilter<PolygonListType, RCC8GraphType>
   RCC8GraphFilterType;
 
   // Instantiation

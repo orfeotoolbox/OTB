@@ -26,11 +26,11 @@
 template<class TInputRImage, class TInputNIRImage, class TOutputImage, class TFunction>
 void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
-  typedef otb::ImageFileReader<TInputRImage> RReaderType;
+  typedef otb::ImageFileReader<TInputRImage>   RReaderType;
   typedef otb::ImageFileReader<TInputNIRImage> NIRReaderType;
-  typedef otb::ImageFileWriter<TOutputImage> WriterType;
+  typedef otb::ImageFileWriter<TOutputImage>   WriterType;
 
-  typedef otb::RAndNIRIndexImageFilter<TInputRImage,TInputNIRImage,TOutputImage,TFunction>
+  typedef otb::RAndNIRIndexImageFilter<TInputRImage, TInputNIRImage, TOutputImage, TFunction>
   RAndNIRIndexImageFilterType;
 
   // Instantiating object
@@ -38,39 +38,39 @@ void generic_SetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
   typename RReaderType::Pointer readerR = RReaderType::New();
   typename NIRReaderType::Pointer readerNIR = NIRReaderType::New();
   typename WriterType::Pointer writer = WriterType::New();
-  double a(::atof(argv[1]));
-  double b(::atof(argv[2]));
+  double       a(::atof(argv[1]));
+  double       b(::atof(argv[2]));
   const char * inputFilenameR  = argv[3];
   const char * inputFilenameNIR  = argv[4];
   const char * outputFilename = argv[5];
 
-  readerR->SetFileName( inputFilenameR );
-  readerNIR->SetFileName( inputFilenameNIR );
-  writer->SetFileName( outputFilename  );
-  filter->SetInputR( readerR->GetOutput() );
-  filter->SetInputNIR( readerNIR->GetOutput() );
+  readerR->SetFileName(inputFilenameR);
+  readerNIR->SetFileName(inputFilenameNIR);
+  writer->SetFileName(outputFilename);
+  filter->SetInputR(readerR->GetOutput());
+  filter->SetInputNIR(readerNIR->GetOutput());
   filter->GetFunctor().SetA(a);
   filter->GetFunctor().SetB(b);
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 }
-
 
 int otbSetASetBRAndNIRVegetationIndexImageFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> InputRImageType;
-  typedef otb::Image<PixelType,Dimension> InputNIRImageType;
-  typedef otb::Image<double,Dimension> OutputImageType;
+  typedef unsigned char                    PixelType;
+  typedef otb::Image<PixelType, Dimension> InputRImageType;
+  typedef otb::Image<PixelType, Dimension> InputNIRImageType;
+  typedef otb::Image<double, Dimension>    OutputImageType;
 
   std::string strArgv(argv[1]);
   argc--;
   argv++;
-  if ( strArgv == "PVI" ) generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
-    otb::Functor::PVI<     InputRImageType::PixelType,
-    InputNIRImageType::PixelType,
-    OutputImageType::PixelType> >
-    (argc,argv);
+  if (strArgv == "PVI")
+    generic_SetASetBRAndNIRVegetationIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType,
+                                                      otb::Functor::PVI<InputRImageType::PixelType,
+                                                                        InputNIRImageType::PixelType,
+                                                                        OutputImageType::PixelType> >
+      (argc, argv);
   return EXIT_SUCCESS;
 }

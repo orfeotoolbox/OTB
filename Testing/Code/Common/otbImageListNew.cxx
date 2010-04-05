@@ -24,13 +24,12 @@ int otbImageListNew(int argc, char * argv[])
 {
 
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::ImageList<InputImageType> ImageListType;
+  typedef unsigned char                         InputPixelType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageList<InputImageType>        ImageListType;
 
   // Instantiating ImageList object
   ImageListType::Pointer imageList = ImageListType::New();
-
 
   return EXIT_SUCCESS;
 }

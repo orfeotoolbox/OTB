@@ -23,14 +23,12 @@ int otbCloudDetectionFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension                                  = 2;
   typedef double                                                PixelType;
-  typedef otb::Image<PixelType,Dimension>                       ImageType;
-  typedef otb::VectorImage<PixelType,Dimension>                 VectorImageType;
-  typedef otb::CloudDetectionFilter<VectorImageType,ImageType > CloudDetectionFilterType;
-
+  typedef otb::Image<PixelType, Dimension>                      ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                VectorImageType;
+  typedef otb::CloudDetectionFilter<VectorImageType, ImageType> CloudDetectionFilterType;
 
   // Instantiating object
   CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

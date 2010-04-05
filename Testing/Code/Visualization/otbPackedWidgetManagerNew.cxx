@@ -17,10 +17,10 @@
 =========================================================================*/
 #include "otbPackedWidgetManager.h"
 
-int otbPackedWidgetManagerNew( int argc, char * argv[] )
+int otbPackedWidgetManagerNew(int argc, char * argv[])
 {
 
-  typedef otb::PackedWidgetManager         PackedWidgetManagerType;
+  typedef otb::PackedWidgetManager PackedWidgetManagerType;
 
   PackedWidgetManagerType::Pointer WidgetManager = PackedWidgetManagerType::New();
 

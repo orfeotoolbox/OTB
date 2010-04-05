@@ -20,16 +20,16 @@
 #include "otbImageViewer.h"
 #include "otbMacro.h"
 
-int otbDoubleImageViewerWithLink( int argc, char * argv[] )
+int otbDoubleImageViewerWithLink(int argc, char * argv[])
 {
   char * filename1 = argv[1];
   char * filename2 = argv[2];
 
   // Parse command line parameters
-  typedef double PixelType;
-  typedef otb::ImageViewer<PixelType>  ImageViewerType;
-  typedef ImageViewerType::OffsetType OffsetType;
-  typedef ImageViewerType::ImageType ImageType;
+  typedef double                          PixelType;
+  typedef otb::ImageViewer<PixelType>     ImageViewerType;
+  typedef ImageViewerType::OffsetType     OffsetType;
+  typedef ImageViewerType::ImageType      ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // instantiation
@@ -62,12 +62,10 @@ int otbDoubleImageViewerWithLink( int argc, char * argv[] )
   // CASE 3: Link with Offset
   OffsetType offset;
   offset.Fill(50);
-  viewer2->Link(viewer1,offset);
+  viewer2->Link(viewer1, offset);
   viewer1->Show();
   viewer2->Show();
   Fl::check();
 
   return EXIT_SUCCESS;
 }
-
-

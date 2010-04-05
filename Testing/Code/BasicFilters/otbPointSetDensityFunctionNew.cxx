@@ -22,20 +22,18 @@
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 
-
-int otbPointSetDensityFunctionNew(int, char* [] )
+int otbPointSetDensityFunctionNew(int, char*[])
 {
 
-  const   unsigned int                                             Dimension = 2;
-  typedef float                                                    PixelType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  typedef itk::VariableLengthVector<PixelType>                     RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension>                  PointSetType;
-  typedef otb::PointSetDensityFunction <PointSetType,PixelType>    FunctionType;
+  typedef itk::VariableLengthVector<PixelType>                   RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>               PointSetType;
+  typedef otb::PointSetDensityFunction <PointSetType, PixelType> FunctionType;
 
   /**Instantiation of a Smart Pointer*/
-  FunctionType::Pointer     filter = FunctionType::New();
+  FunctionType::Pointer filter = FunctionType::New();
 
   return EXIT_SUCCESS;
 }
-

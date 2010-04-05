@@ -20,12 +20,12 @@
 #include "itkRGBPixel.h"
 #include "otbImageView.h"
 
-int otbImageViewNew( int argc, char * argv[] )
+int otbImageViewNew(int argc, char * argv[])
 {
-  typedef itk::RGBPixel<unsigned char>     RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>       ImageType;
+  typedef itk::RGBPixel<unsigned char>             RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>              ImageType;
   typedef otb::ImageLayerRenderingModel<ImageType> ModelType;
-  typedef otb::ImageView<ModelType>        ViewType;
+  typedef otb::ImageView<ModelType>                ViewType;
 
   // Instantiation
   ViewType::Pointer model = ViewType::New();

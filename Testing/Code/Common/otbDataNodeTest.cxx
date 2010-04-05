@@ -23,9 +23,9 @@
 
 int otbDataNodeTest(int argc, char * argv[])
 {
-  typedef otb::DataNode<double,2> DataNodeType;
-  typedef DataNodeType::PointType PointType;
-  typedef DataNodeType::LineType LineType;
+  typedef otb::DataNode<double, 2>  DataNodeType;
+  typedef DataNodeType::PointType   PointType;
+  typedef DataNodeType::LineType    LineType;
   typedef DataNodeType::PolygonType PolygonType;
 
   DataNodeType::Pointer root = DataNodeType::New();
@@ -52,7 +52,7 @@ int otbDataNodeTest(int argc, char * argv[])
   PointType p;
   p.Fill(5);
 
-  point->SetPoint(p);;
+  point->SetPoint(p);
 
   LineType::Pointer l = LineType::New();
   line->SetLine(l);
@@ -60,29 +60,26 @@ int otbDataNodeTest(int argc, char * argv[])
   PolygonType::Pointer pol = PolygonType::New();
   polygon->SetPolygonExteriorRing(pol);
 
+  otbControlConditionTestMacro(!root->IsRoot(), "Wrong IsRoot() method return.");
+  otbControlConditionTestMacro(root->IsDocument(), "Wrong IsDocument() method return.");
+  otbControlConditionTestMacro(root->IsFolder(), "Wrong IsFolder() method return.");
+  otbControlConditionTestMacro(root->IsPointFeature(), "Wrong IsPointFeature() method return.");
+  otbControlConditionTestMacro(root->IsLineFeature(), "Wrong IsLineFeature() method return.");
+  otbControlConditionTestMacro(root->IsPolygonFeature(), "Wrong IsPolygonFeature() method return.");
 
-  otbControlConditionTestMacro(!root->IsRoot(),"Wrong IsRoot() method return.");
-  otbControlConditionTestMacro(root->IsDocument(),"Wrong IsDocument() method return.");
-  otbControlConditionTestMacro(root->IsFolder(),"Wrong IsFolder() method return.");
-  otbControlConditionTestMacro(root->IsPointFeature(),"Wrong IsPointFeature() method return.");
-  otbControlConditionTestMacro(root->IsLineFeature(),"Wrong IsLineFeature() method return.");
-  otbControlConditionTestMacro(root->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");
+  otbControlConditionTestMacro(document->IsRoot(), "Wrong IsRoot() method return.");
+  otbControlConditionTestMacro(!document->IsDocument(), "Wrong IsDocument() method return.");
+  otbControlConditionTestMacro(document->IsFolder(), "Wrong IsFolder() method return.");
+  otbControlConditionTestMacro(document->IsPointFeature(), "Wrong IsPointFeature() method return.");
+  otbControlConditionTestMacro(document->IsLineFeature(), "Wrong IsLineFeature() method return.");
+  otbControlConditionTestMacro(document->IsPolygonFeature(), "Wrong IsPolygonFeature() method return.");
 
-
-  otbControlConditionTestMacro(document->IsRoot(),"Wrong IsRoot() method return.");
-  otbControlConditionTestMacro(!document->IsDocument(),"Wrong IsDocument() method return.");
-  otbControlConditionTestMacro(document->IsFolder(),"Wrong IsFolder() method return.");
-  otbControlConditionTestMacro(document->IsPointFeature(),"Wrong IsPointFeature() method return.");
-  otbControlConditionTestMacro(document->IsLineFeature(),"Wrong IsLineFeature() method return.");
-  otbControlConditionTestMacro(document->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");
-
-  otbControlConditionTestMacro(folder->IsRoot(),"Wrong IsRoot() method return.");
-  otbControlConditionTestMacro(folder->IsDocument(),"Wrong IsDocument() method return.");
-  otbControlConditionTestMacro(!folder->IsFolder(),"Wrong IsFolder() method return.");
-  otbControlConditionTestMacro(folder->IsPointFeature(),"Wrong IsPointFeature() method return.");
-  otbControlConditionTestMacro(folder->IsLineFeature(),"Wrong IsLineFeature() method return.");
-  otbControlConditionTestMacro(folder->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");
-
+  otbControlConditionTestMacro(folder->IsRoot(), "Wrong IsRoot() method return.");
+  otbControlConditionTestMacro(folder->IsDocument(), "Wrong IsDocument() method return.");
+  otbControlConditionTestMacro(!folder->IsFolder(), "Wrong IsFolder() method return.");
+  otbControlConditionTestMacro(folder->IsPointFeature(), "Wrong IsPointFeature() method return.");
+  otbControlConditionTestMacro(folder->IsLineFeature(), "Wrong IsLineFeature() method return.");
+  otbControlConditionTestMacro(folder->IsPolygonFeature(), "Wrong IsPolygonFeature() method return.");
 
   return EXIT_SUCCESS;
 }

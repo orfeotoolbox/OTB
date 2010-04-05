@@ -20,23 +20,23 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int otbImageLayerGeneratorScalar( int argc, char * argv[] )
+int otbImageLayerGeneratorScalar(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
-  typedef otb::ImageLayer<ImageType, OutputImageType> LayerType;
-  typedef otb::ImageLayerGenerator<LayerType> GeneratorType;
+  typedef otb::Image<double, 2>                        ImageType;
+  typedef otb::ImageFileReader<ImageType>              ReaderType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2> OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>  LayerType;
+  typedef otb::ImageLayerGenerator<LayerType>          GeneratorType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
-  
+
   // Generator
   GeneratorType::Pointer generator = GeneratorType::New();
   generator->SetImage(reader->GetOutput());
   generator->SetGenerateQuicklook(atoi(argv[2]));
-  std::cout<<"Advised quicklook susbsampling rate: "<<generator->GetOptimalSubSamplingRate()<<std::endl;
+  std::cout << "Advised quicklook susbsampling rate: " << generator->GetOptimalSubSamplingRate() << std::endl;
   generator->GenerateLayer();
 
   return EXIT_SUCCESS;

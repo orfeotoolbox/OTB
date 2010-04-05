@@ -26,23 +26,20 @@
 #include "itkListSample.h"
 #include "otbVectorImage.h"
 
-int otbSOMClassifierNew(int argc, char* argv[] )
+int otbSOMClassifierNew(int argc, char* argv[])
 {
-  typedef double                         InputPixelType;
-  typedef int                            LabelPixelType;
-  const   unsigned int               Dimension = 2;
+  typedef double InputPixelType;
+  typedef int    LabelPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::VariableLengthVector<InputPixelType> PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-  typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
-  typedef itk::Statistics::ListSample< PixelType > SampleType;
-  typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType> ClassifierType;
+  typedef itk::VariableLengthVector<InputPixelType>                  PixelType;
+  typedef itk::Statistics::EuclideanDistance<PixelType>              DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension>            SOMMapType;
+  typedef otb::VectorImage<InputPixelType, Dimension>                InputImageType;
+  typedef itk::Statistics::ListSample<PixelType>                     SampleType;
+  typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType> ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

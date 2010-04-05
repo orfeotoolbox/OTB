@@ -24,7 +24,6 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageSliceConstIteratorWithIndex.h"
 
-
 int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
 {
   const unsigned int BiDimension  = 2;
@@ -35,13 +34,13 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
 
   typedef unsigned char PixelType;
 
-  typedef otb::VectorImage<PixelType,BiDimension> VectorImageType;
-  typedef otb::Image<PixelType,TriDimension> ImageType;
-  typedef otb::Image<PixelType,BiDimension> OutImageType;
+  typedef otb::VectorImage<PixelType, BiDimension> VectorImageType;
+  typedef otb::Image<PixelType, TriDimension>      ImageType;
+  typedef otb::Image<PixelType, BiDimension>       OutImageType;
 
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutImageType> WriterType;
-  typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType,ImageType> FilterType;
+  typedef otb::ImageFileReader<VectorImageType>                             ReaderType;
+  typedef otb::ImageFileWriter<OutImageType>                                WriterType;
+  typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -57,28 +56,27 @@ int otbVectorImageTo3DScalarImageFilter(int argc, char * argv[])
   outImage->Allocate();
   outImage->FillBuffer(0);
 
-  typedef itk::ImageRegionIterator<OutImageType> OutIteratorType;
+  typedef itk::ImageRegionIterator<OutImageType>           OutIteratorType;
   typedef itk::ImageSliceConstIteratorWithIndex<ImageType> InIteratorType;
 
-  OutIteratorType outIt(outImage,outImage->GetLargestPossibleRegion());
-  InIteratorType inIt(filter->GetOutput(),filter->GetOutput()->GetLargestPossibleRegion());
+  OutIteratorType outIt(outImage, outImage->GetLargestPossibleRegion());
+  InIteratorType  inIt(filter->GetOutput(), filter->GetOutput()->GetLargestPossibleRegion());
   inIt.SetFirstDirection(0);
   inIt.SetSecondDirection(1);
 
   outIt.GoToBegin();
 
-  while (!outIt.IsAtEnd()&&!inIt.IsAtEndOfSlice())
-  {
+  while (!outIt.IsAtEnd() && !inIt.IsAtEndOfSlice())
+    {
     outIt.Set(inIt.Get());
     ++inIt;
     ++outIt;
-  }
+    }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   writer->SetInput(outImage);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

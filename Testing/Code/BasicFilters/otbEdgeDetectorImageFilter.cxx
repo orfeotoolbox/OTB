@@ -21,16 +21,15 @@
 #include "otbImageFileWriter.h"
 #include "itkSobelEdgeDetectionImageFilter.h"
 
-
-int otbEdgeDetectorImageFilter(int argc, char* argv[] )
+int otbEdgeDetectorImageFilter(int argc, char* argv[])
 {
-  typedef double                                                                  PixelType;
-  typedef otb::Image< PixelType, 2 >                                              ImageType;
-  typedef otb::ImageFileReader<ImageType>                                         ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                         WriterType;
+  typedef double                          PixelType;
+  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef itk::SobelEdgeDetectionImageFilter<ImageType , ImageType>               SobelDetectionType;
-  typedef otb::EdgeDetectorImageFilter<ImageType, ImageType, SobelDetectionType>  DetectorType;
+  typedef itk::SobelEdgeDetectionImageFilter<ImageType, ImageType>               SobelDetectionType;
+  typedef otb::EdgeDetectorImageFilter<ImageType, ImageType, SobelDetectionType> DetectorType;
 
   /**Instantiation of an object*/
   ReaderType::Pointer         reader      = ReaderType::New();
@@ -40,7 +39,7 @@ int otbEdgeDetectorImageFilter(int argc, char* argv[] )
 
   reader->SetFileName(argv[1]);
   detector->SetInput(reader->GetOutput());
-  
+
   detector->SetLowerThreshold(static_cast<PixelType>(atof(argv[3])));
   detector->SetUpperThreshold(static_cast<PixelType>(atof(argv[4])));
 
@@ -50,4 +49,3 @@ int otbEdgeDetectorImageFilter(int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-

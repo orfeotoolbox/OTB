@@ -25,48 +25,47 @@
 #include "otbChannelSelectorFunctor.h"
 #include "itkExpNegativeImageFilter.h"
 
-int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[] )
+int otbRenderingImageFilterVectorWithExpNegativeTransfer(int argc, char * argv[])
 {
-  typedef double                                            PixelType;
-  typedef otb::VectorImage<PixelType,2>                     ImageType;
-  typedef ImageType::PixelType                              VectorPixelType;
-  typedef otb::Image<itk::RGBPixel<unsigned char>, 2>       RGBImageType;
-  typedef otb::RenderingImageFilter<ImageType,RGBImageType> RenderingFilterType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::StreamingImageFileWriter<RGBImageType>       WriterType;
-  typedef otb::Function::ChannelSelectorFunctor<VectorPixelType>      PixelRepresentationFunctionType;
-  typedef itk::Function::ExpNegative<PixelType,PixelType>   ExpNegativeFunctionType;
+  typedef double                                                 PixelType;
+  typedef otb::VectorImage<PixelType, 2>                         ImageType;
+  typedef ImageType::PixelType                                   VectorPixelType;
+  typedef otb::Image<itk::RGBPixel<unsigned char>, 2>            RGBImageType;
+  typedef otb::RenderingImageFilter<ImageType, RGBImageType>     RenderingFilterType;
+  typedef otb::ImageFileReader<ImageType>                        ReaderType;
+  typedef otb::StreamingImageFileWriter<RGBImageType>            WriterType;
+  typedef otb::Function::ChannelSelectorFunctor<VectorPixelType> PixelRepresentationFunctionType;
+  typedef itk::Function::ExpNegative<PixelType, PixelType>       ExpNegativeFunctionType;
   typedef otb::Function::StandardRenderingFunction<
     VectorPixelType,
     itk::RGBPixel<unsigned char>,
     PixelRepresentationFunctionType,
-    ExpNegativeFunctionType >                               RenderingFunctionType;
-  typedef RenderingFunctionType::ParametersType             ParametersType;
+    ExpNegativeFunctionType>                               RenderingFunctionType;
+  typedef RenderingFunctionType::ParametersType ParametersType;
 
   // Instantiation
-  ReaderType::Pointer          reader    = ReaderType::New();
-  RenderingFilterType::Pointer rendering = RenderingFilterType::New();
-  WriterType::Pointer          writer    = WriterType::New();
+  ReaderType::Pointer            reader    = ReaderType::New();
+  RenderingFilterType::Pointer   rendering = RenderingFilterType::New();
+  WriterType::Pointer            writer    = WriterType::New();
   RenderingFunctionType::Pointer function = RenderingFunctionType::New();
-
 
   // reading input image
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
-  unsigned int nbComponents = 3;//To be displayed
+  unsigned int nbComponents = 3; //To be displayed
 
-    // min & max
-  ParametersType parameters(2*nbComponents);
+  // min & max
+  ParametersType parameters(2 * nbComponents);
 
   unsigned int channelRed = atoi(argv[3]);
   unsigned int channelGreen = atoi(argv[4]);
   unsigned int channelBlue = atoi(argv[5]);
-  for(unsigned int i = 0; i<parameters.Size();++i)
-  {
-    parameters[i]=atof(argv[7+i]);
+  for (unsigned int i = 0; i < parameters.Size(); ++i)
+    {
+    parameters[i] = atof(argv[7 + i]);
     ++i;
-    parameters[i]=atof(argv[7+i]);
-  }
+    parameters[i] = atof(argv[7 + i]);
+    }
 
   // rendering
   rendering->SetInput(reader->GetOutput());
@@ -81,7 +80,6 @@ int otbRenderingImageFilterVectorWithExpNegativeTransfer( int argc, char * argv[
   writer->SetFileName(argv[2]);
   writer->SetInput(rendering->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

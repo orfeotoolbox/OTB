@@ -26,22 +26,18 @@
 
 #include "otbLineRatioDetectorImageFilter.h"
 
-
-int otbLineRatioDetectorNew( int argc, char* argv[] )
+int otbLineRatioDetectorNew(int argc, char* argv[])
 {
-  typedef unsigned char                            InputPixelType;
-  typedef double                    OutputPixelType;
-  const   unsigned int                             Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension > InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType>   FilterType;
+  typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer FilterLineRatio = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

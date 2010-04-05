@@ -39,7 +39,6 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
 
-
 #include "itkExceptionObject.h"
 #include "itkExtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -52,48 +51,44 @@
 // without this all the important factories are not created.
 //#include "init/ossimInit.h"
 
-
-int otbCreateProjectionWithOSSIM( int argc, char* argv[] )
+int otbCreateProjectionWithOSSIM(int argc, char* argv[])
 {
   ossimInit::instance()->initialize(argc, argv);
 
-  if (argc!=2)
-  {
-    std::cout << argv[0] <<" <input filename> " << std::endl;
+  if (argc != 2)
+    {
+    std::cout << argv[0] << " <input filename> " << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
-
-  otbGenericMsgDebugMacro(<< "Creating handler..." );
+  otbGenericMsgDebugMacro(<< "Creating handler...");
   ossimImageHandler *handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1]));
   if (!handler)
-  {
-    itkGenericExceptionMacro(<<"Unable to open input image "<<argv[1]);
-  }
+    {
+    itkGenericExceptionMacro(<< "Unable to open input image " << argv[1]);
+    }
 
   ossimKeywordlist geom;
-  otbGenericMsgDebugMacro(<< "Read ossim Keywordlist..." );
+  otbGenericMsgDebugMacro(<< "Read ossim Keywordlist...");
   handler->getImageGeometry()->getProjection()->saveState(geom);
-  ossimGpt ossimGPoint(0,0);
+  ossimGpt ossimGPoint(0, 0);
   ossimDpt ossimDPoint;
-  otbGenericMsgDebugMacro(<< "Creating projection..." );
+  otbGenericMsgDebugMacro(<< "Creating projection...");
   ossimProjection * model = NULL;
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if ( model == NULL)
-  {
-    itkGenericExceptionMacro(<<"Invalid Model * == NULL !");
-  }
+  if (model == NULL)
+    {
+    itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
+    }
 
-  otbGenericMsgDebugMacro(<< "Creating RefPtr of projection..." );
+  otbGenericMsgDebugMacro(<< "Creating RefPtr of projection...");
   ossimRefPtr<ossimProjection> ptrmodel = model;
-  if ( ptrmodel.valid() == false )
-  {
-    itkGenericExceptionMacro(<<"Invalid Model pointer .valid() == false !");
-  }
-
+  if (ptrmodel.valid() == false)
+    {
+    itkGenericExceptionMacro(<< "Invalid Model pointer .valid() == false !");
+    }
 
   return EXIT_SUCCESS;
 
 }
-

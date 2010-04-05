@@ -22,16 +22,15 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-REGISTER_TEST(otbImageFileReaderServerName);
-REGISTER_TEST(otbTileMapImageSourceNew);
-REGISTER_TEST(otbTileMapImageSource);
-REGISTER_TEST(otbTileMapFetcherNew);
-REGISTER_TEST(otbTileMapFetcherTest);
-REGISTER_TEST(otbTileMapImageIOTest);
-REGISTER_TEST(otbTileMapWriter);
+  REGISTER_TEST(otbImageFileReaderServerName);
+  REGISTER_TEST(otbTileMapImageSourceNew);
+  REGISTER_TEST(otbTileMapImageSource);
+  REGISTER_TEST(otbTileMapFetcherNew);
+  REGISTER_TEST(otbTileMapFetcherTest);
+  REGISTER_TEST(otbTileMapImageIOTest);
+  REGISTER_TEST(otbTileMapWriter);
 }

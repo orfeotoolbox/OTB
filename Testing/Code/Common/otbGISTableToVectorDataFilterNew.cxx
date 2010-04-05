@@ -25,20 +25,20 @@
 
 int otbGISTableToVectorDataFilterNew(int argc, char * argv[])
 {
-  
-  typedef unsigned char PType;
-  typedef otb::VectorData<> VectorDataType;
-  typedef otb::PostGISConnectionImplementation GISConnectionType;
+
+  typedef unsigned char                               PType;
+  typedef otb::VectorData<>                           VectorDataType;
+  typedef otb::PostGISConnectionImplementation        GISConnectionType;
   typedef otb::GISTable<GISConnectionType, double, 2> GISTableType;
 
   //Instantiation
   GISTableType::Pointer data = GISTableType::New();
 
-  typedef otb::GISTableToVectorDataFilter< GISTableType , VectorDataType > GISTableToVectorDataFilter;
+  typedef otb::GISTableToVectorDataFilter<GISTableType, VectorDataType> GISTableToVectorDataFilter;
 
   GISTableToVectorDataFilter::Pointer MyFilter = GISTableToVectorDataFilter::New();
-  
+
   //data->itkGetObjectMacro ( )
-  
+
   return EXIT_SUCCESS;
 }

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbImageWidgetActionHandler.h"
 
-int otbImageWidgetActionHandlerNew( int argc, char * argv[] )
+int otbImageWidgetActionHandlerNew(int argc, char * argv[])
 {
   typedef otb::ImageWidgetActionHandler HandlerType;
   HandlerType::Pointer handler = HandlerType::New();

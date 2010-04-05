@@ -27,15 +27,14 @@
 int otbVectorDataFileGeoReaderWriter(int argc, char * argv[])
 {
 
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2>                VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
-
 
   //Instantiation
   VectorDataReaderType::Pointer vectorDataReader = VectorDataReaderType::New();
   VectorDataWriterType::Pointer vectorDataWriter = VectorDataWriterType::New();
-  VectorDataType::Pointer data = VectorDataType::New();
+  VectorDataType::Pointer       data = VectorDataType::New();
 
   vectorDataReader->SetFileName(argv[1]);
 
@@ -43,10 +42,10 @@ int otbVectorDataFileGeoReaderWriter(int argc, char * argv[])
 //       vectorData->SetSpacing(m_Reader->GetOutput()->GetSpacing());
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(vectorDataReader->GetOutput()->GetMetaDataDictionary(), otb::MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::ExposeMetaData<std::string>(
+    vectorDataReader->GetOutput()->GetMetaDataDictionary(), otb::MetaDataKey::ProjectionRefKey, projectionRef);
 //    vectorData->SetProjectionRef(projectionRef);
   std::cout << projectionRef << std::endl;
-
 
   vectorDataWriter->SetFileName(argv[2]);
   vectorDataWriter->SetInput(vectorDataReader->GetOutput());

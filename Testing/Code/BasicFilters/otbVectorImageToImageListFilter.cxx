@@ -27,22 +27,21 @@
 int otbVectorImageToImageListFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  char * infname   = argv[1];
-  char * outfname1 = argv[2];
-  char * outfname2 = argv[3];
-  char * outfname3 = argv[4];
+  char *             infname   = argv[1];
+  char *             outfname1 = argv[2];
+  char *             outfname2 = argv[3];
+  char *             outfname3 = argv[4];
 
-
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::ImageList<ImageType> ImageListType;
+  typedef unsigned char                          PixelType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::ImageList<ImageType>              ImageListType;
 
   // IO
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
-  typedef otb::VectorImageToImageListFilter<VectorImageType,ImageListType> VectorImageToImageListFilterType;
+  typedef otb::VectorImageToImageListFilter<VectorImageType, ImageListType> VectorImageToImageListFilterType;
 
   // Instantiating object
   VectorImageToImageListFilterType::Pointer filter = VectorImageToImageListFilterType::New();
@@ -68,7 +67,6 @@ int otbVectorImageToImageListFilter(int argc, char * argv[])
   writer->SetFileName(outfname3);
   writer->SetInput(filter->GetOutput()->GetNthElement(2));
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

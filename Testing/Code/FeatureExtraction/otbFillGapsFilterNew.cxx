@@ -23,12 +23,10 @@
 #include "itkExceptionObject.h"
 #include "otbFillGapsFilter.h"
 
-int otbFillGapsFilterNew( int argc, char * argv[] )
+int otbFillGapsFilterNew(int argc, char * argv[])
 {
   typedef otb::FillGapsFilter FillGapsFilterType;
   FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-

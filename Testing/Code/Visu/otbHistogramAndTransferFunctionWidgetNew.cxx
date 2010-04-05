@@ -22,12 +22,12 @@
 int otbHistogramAndTransferFunctionWidgetNew(int argc, char * argv[])
 {
   typedef unsigned char PixelType;
-  const unsigned int Dimension =2;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  const unsigned int Dimension = 2;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
-  typedef GeneratorType::HistogramType HistogramType;
+  typedef GeneratorType::HistogramType                                HistogramType;
 
-  typedef otb::HistogramAndTransferFunctionWidget<HistogramType,PixelType> WidgetType;
+  typedef otb::HistogramAndTransferFunctionWidget<HistogramType, PixelType> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
 

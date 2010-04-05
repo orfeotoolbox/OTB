@@ -22,20 +22,17 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
-int otbLineSegmentDetectorNew( int argc, char * argv[] )
+int otbLineSegmentDetectorNew(int argc, char * argv[])
 {
-  
-  typedef float                                                     InputPixelType;
-  const   unsigned int                                              Dimension = 2;
-  
-  /** Typedefs */
-  typedef otb::Image< InputPixelType,  Dimension >                  InputImageType;
-  typedef otb::LineSegmentDetector<InputImageType , InputPixelType> lsdFilterType;
 
-  
-  lsdFilterType::Pointer  lsdFilter = lsdFilterType::New();
-  
+  typedef float InputPixelType;
+  const unsigned int Dimension = 2;
+
+  /** Typedefs */
+  typedef otb::Image<InputPixelType,  Dimension>                   InputImageType;
+  typedef otb::LineSegmentDetector<InputImageType, InputPixelType> lsdFilterType;
+
+  lsdFilterType::Pointer lsdFilter = lsdFilterType::New();
+
   return EXIT_SUCCESS;
 }
-

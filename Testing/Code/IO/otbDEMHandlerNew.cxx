@@ -23,12 +23,11 @@
 int otbDEMHandlerNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::Image<unsigned char,Dimension> ImageType;
+  typedef otb::Image<unsigned char, Dimension> ImageType;
   typedef otb::DEMHandler                      DEMHandlerType;
 
   // Instantiating object
   DEMHandlerType::Pointer object = DEMHandlerType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -22,10 +22,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
 {
-REGISTER_TEST(otbTextureImageFunction);
+  REGISTER_TEST(otbTextureImageFunction);
 }
