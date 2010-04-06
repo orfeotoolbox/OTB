@@ -163,11 +163,6 @@ FILE(GLOB ossim_matrix_HDRS "include/ossim/matrix/*.h")
 FILE(GLOB ossim_parallel_HDRS "include/ossim/parallel/*.h")
 FILE(GLOB ossim_plugin_HDRS "include/ossim/plugin/*.h")
 FILE(GLOB ossim_projection_HDRS "include/ossim/projection/*.h")
-FILE(GLOB ossim_projection_sarmodel_HDRS "include/ossim/projection/SARModel/*.h")
-FILE(GLOB ossim_projection_sarmodel_DateTime_HDRS "include/ossim/projection/SARModel/DateTime/*.h")
-FILE(GLOB ossim_projection_sarmodel_Coordinates_HDRS "include/ossim/projection/SARModel/Coordinates/*.h")
-FILE(GLOB ossim_projection_sarmodel_Ephemeris_HDRS "include/ossim/projection/SARModel/Ephemeris/*.h")
-FILE(GLOB ossim_projection_sarmodel_Interpolator_HDRS "include/ossim/projection/SARModel/Interpolator/*.h")
 FILE(GLOB ossim_support_data_HDRS "include/ossim/support_data/*.h")
 FILE(GLOB ossim_vec_HDRS "include/ossim/vec/*.h")
 FILE(GLOB ossim_vpfutil_HDRS "include/ossim/vpfutil/*.h")
@@ -203,21 +198,6 @@ INSTALL(FILES ${ossim_plugin_HDRS}
     COMPONENT Development)
 INSTALL(FILES ${ossim_projection_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection
-    COMPONENT Development)
-INSTALL(FILES ${ossim_projection_sarmodel_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection/SARModel
-    COMPONENT Development)
-INSTALL(FILES ${ossim_projection_sarmodel_DateTime_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection/SARModel/DateTime
-    COMPONENT Development)
-INSTALL(FILES ${ossim_projection_sarmodel_Coordinates_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection/SARModel/Coordinates
-    COMPONENT Development)
-INSTALL(FILES ${ossim_projection_sarmodel_Ephemeris_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection/SARModel/Ephemeris
-    COMPONENT Development)
-INSTALL(FILES ${ossim_projection_sarmodel_Interpolator_HDRS}
-    DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/projection/SARModel/Interpolator
     COMPONENT Development)
 INSTALL(FILES ${ossim_support_data_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR_CM24}/Utilities/otbossim/include/ossim/support_data
