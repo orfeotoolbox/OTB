@@ -19,26 +19,12 @@
 #define __otbPointSetDensityFunction_txx
 
 #include "otbPointSetDensityFunction.h"
-#include "otbImage.h"
 #include "otbMath.h"
-
 
 namespace otb
 {
-
 /**
- * Constructor
- */
-template <class TPointSet, class  TOutput >
-PointSetDensityFunction< TPointSet,   TOutput>
-::PointSetDensityFunction()
-{
-  m_Radius = 1;
-}
-
-
-/**
- *
+ * Evaluate
  */
 template <class TPointSet, class  TOutput >
 typename PointSetDensityFunction< TPointSet,   TOutput>
@@ -46,11 +32,6 @@ typename PointSetDensityFunction< TPointSet,   TOutput>
 PointSetDensityFunction< TPointSet,   TOutput>
 ::Evaluate(const  InputType& input ) const
 {
-
-  typename otb::Image<OutputType,2>::IndexType  index;
-  index[0] = static_cast<long int>(input[0]);
-  index[1] = static_cast<long int>(input[1]);
-
   int accu = 0;
   double surface = CONST_PI*m_Radius*m_Radius;
 
@@ -61,8 +42,8 @@ PointSetDensityFunction< TPointSet,   TOutput>
 
     while ( it != this->GetPointSet()->GetPoints()->End())
     {
-      float distX = index[0]-it.Value()[0];
-      float distY = index[1]-it.Value()[1];
+      float distX = input[0]-it.Value()[0];
+      float distY = input[1]-it.Value()[1];
       float distsq = distX*distX + distY*distY;
 
       if (distsq <= m_Radius*m_Radius)
@@ -81,9 +62,8 @@ PointSetDensityFunction< TPointSet,   TOutput>
   return static_cast<float>(accu/surface);
 }
 
-
 /**
- *
+ * PrintSelf
  */
 template <class TPointSet, class  TOutput >
 void
@@ -92,7 +72,6 @@ PointSetDensityFunction< TPointSet,   TOutput>
 {
   this->Superclass::PrintSelf(os,indent);
 }
-
 
 } // end namespace otb
 
