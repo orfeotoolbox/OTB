@@ -1263,7 +1263,21 @@ ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
 	 otbPointSetDensityFunctionTest
 	 ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
 	 )
+	 
+# -------    otbPointSetDensityGaussianFunction   ----------------------------
+ADD_TEST(bfTuPointSetDensityGaussianFunctionNew ${BASICFILTERS_TESTS11}
+     otbPointSetDensityGaussianFunctionNew
+     )
 
+
+ADD_TEST(bfTvPointSetDensityGaussianFunctionTest ${BASICFILTERS_TESTS11}
+--compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+        ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+     otbPointSetDensityGaussianFunctionTest
+     ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+     )
+     
 #------------ otbPointSetToDensityImageFilter ---------------------
 
 ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1772,6 +1786,8 @@ otbExtractROIResample.cxx
 #otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
+otbPointSetDensityGaussianFunctionNew.cxx
+otbPointSetDensityGaussianFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
 otbPointSetToDensityImageFilterTest.cxx
 otbKeyPointDensityImageFilterNew.cxx

@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbPointSetDensityFunction_txx
-#define __otbPointSetDensityFunction_txx
+#ifndef __otbPointSetDensityGaussianFunction_txx
+#define __otbPointSetDensityGaussianFunction_txx
 
-#include "otbPointSetDensityFunction.h"
+#include "otbPointSetDensityGaussianFunction.h"
 #include "otbMath.h"
 
 namespace otb
@@ -27,13 +27,13 @@ namespace otb
  * Evaluate
  */
 template <class TPointSet, class  TOutput >
-typename PointSetDensityFunction< TPointSet,   TOutput>
+typename PointSetDensityGaussianFunction< TPointSet,   TOutput>
 ::OutputType
-PointSetDensityFunction< TPointSet,   TOutput>
+PointSetDensityGaussianFunction< TPointSet,   TOutput>
 ::Evaluate(const  InputType& input ) const
 {
-  int accu = 0;
-  double surface = CONST_PI*m_Radius*m_Radius;
+  double accu = 0;
+  double radiussq = m_Radius*m_Radius;
 
   if (this->GetPointSet()->GetNumberOfPoints() != 0)
   {
@@ -46,16 +46,14 @@ PointSetDensityFunction< TPointSet,   TOutput>
       float distY = input[1]-it.Value()[1];
       float distsq = distX*distX + distY*distY;
 
-      if (distsq <= m_Radius*m_Radius)
-      {
-        accu++;
-      }
+      accu += vcl_exp(-distsq/radiussq/2);
 
       ++it;
     }
+    accu /= vcl_sqrt(2*CONST_PI*radiussq);
   }
 
-  return static_cast<float>(accu/surface);
+  return accu;
 }
 
 /**
@@ -63,7 +61,7 @@ PointSetDensityFunction< TPointSet,   TOutput>
  */
 template <class TPointSet, class  TOutput >
 void
-PointSetDensityFunction< TPointSet,   TOutput>
+PointSetDensityGaussianFunction< TPointSet,   TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
