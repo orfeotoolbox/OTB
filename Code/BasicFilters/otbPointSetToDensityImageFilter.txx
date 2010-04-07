@@ -29,8 +29,8 @@ namespace otb
 /**---------------------------------------------------------
  * Constructor
  ----------------------------------------------------------*/
-template <class TInputPointSet, class TOutputImage>
-PointSetToDensityImageFilter<  TInputPointSet ,  TOutputImage  >
+template <class TInputPointSet, class TOutputImage, class TDensityFunction>
+PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::PointSetToDensityImageFilter()
 {
   m_Radius = 1;
@@ -39,9 +39,9 @@ PointSetToDensityImageFilter<  TInputPointSet ,  TOutputImage  >
 /*-------------------------------------------------------
  * GenerateData
  --------------------------------------------------------*/
-template <class TInputPointSet , class TOutputImage>
+template <class TInputPointSet , class TOutputImage, class TDensityFunction>
 void
-PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
+PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::GenerateData(void)
 {
   //Call the GenerateData() from itk::ImageSource which allow threading
@@ -51,9 +51,9 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
 /*-------------------------------------------------------
  * ThreadedGenerateData
  --------------------------------------------------------*/
-template <class TInputPointSet, class TOutputImage>
+template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 void
-PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
+PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::ThreadedGenerateData(
     const   OutputImageRegionType&     outputRegionForThread,
     int   threadId)
@@ -91,9 +91,9 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
 /*----------------------------------------------------------------
   GenerateOutputInformation
   -----------------------------------------------------------------*/
-template <class TInputPointSet, class TOutputImage>
+template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 void
-PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
+PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::GenerateOutputInformation(void)
 {
   //Superclass::GenerateOutputInformation();
@@ -120,9 +120,9 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
 /*----------------------------------------------------------------
   PrintSelf
   -----------------------------------------------------------------*/
-template <class TInputPointSet, class TOutputImage>
+template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 void
-PointSetToDensityImageFilter<TInputPointSet, TOutputImage>
+PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
