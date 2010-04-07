@@ -51,8 +51,8 @@ public:
   typedef typename PointsContainerType::Pointer        PointsContainerPointer;
   typedef typename OutputPointSetType::PointType       PointType;
 
-  itkSetMacro(NumberOfPoints, int)
-  itkGetMacro(NumberOfPoints, int)
+  itkSetMacro(NumberOfPoints, unsigned int)
+  itkGetMacro(NumberOfPoints, unsigned int)
 
   itkSetMacro(MinPoint, PointType)
   itkGetMacro(MinPoint, PointType)
