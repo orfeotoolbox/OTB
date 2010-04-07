@@ -126,6 +126,9 @@ ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
 
 ADD_TEST(bfTvTransformPointSetFilter ${BASICFILTERS_TESTS1}
   otbTransformPointSetFilterTest)
+  
+ADD_TEST(bfTvRandomPointSetSource ${BASICFILTERS_TESTS1}
+  otbRandomPointSetSourceTest)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1612,6 +1615,7 @@ otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbMeanFunctorImageTest.cxx
 otbTransformPointSetFilterTest.cxx
+otbRandomPointSetSourceTest.cxx
 )
 
 # A enrichir
