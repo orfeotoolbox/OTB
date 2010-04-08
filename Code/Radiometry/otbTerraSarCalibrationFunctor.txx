@@ -59,31 +59,16 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 ::ComputeNoiseEquivalentBetaNaught(double range) const
 {
   // Formula: NEBN = Ks * SUM( coef_i * (tau - tau_ref)^i)
-  
-  // Retrieve the polynomial degree
-  unsigned int polynomialDegree = m_NoiseRecord.get_polynomialDegree();
 
   // Compute tau - tau_ref
-  double deltaTau = range - m_NoiseRecord.get_referencePoint();
+  const double deltaTau = range - m_NoiseRecord.get_referencePoint();
 
   // Get polynomial coefficients
   std::vector<double>  coefficients = m_NoiseRecord.get_polynomialCoefficients();
 
-  // Initialize nebn value
-  double nebn = 0.;
-
-  // For each degree
-  std::vector<double>::const_iterator coefIt = coefficients.begin();
-  unsigned int degree = 0;
+  // Evaluate 
+  double nebn = Horner (coefficients, deltaTau);
   
-  while(coefIt != coefficients.end() && degree <= polynomialDegree)
-    {
-    // Cumulate polynomial
-    nebn += (*coefIt) * vcl_pow(deltaTau,static_cast<double>(degree));
-    ++degree;
-    ++coefIt;
-    }
-
   // Do not forget to multiply by the calibration factor
   nebn*=m_CalibrationFactor;
 
@@ -91,6 +76,22 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   return nebn;
 }
 
+template <class TInput, class TOutput>
+double TerraSarCalibrationFunctor<TInput, TOutput>
+::Horner(std::vector<double> & coefficients, const double nebn) const
+{
+  std::vector<double>::const_reverse_iterator coefIt = coefficients.rbegin();
+  double res = *(coefIt);
+  ++coefIt;
+
+  while(coefIt != coefficients.rend())
+    {
+    // Cumulate polynomial
+    res= res*nebn + (*coefIt);
+    ++coefIt;
+    }
+ return res;
+}
 
 template <class TInput, class TOutput>
 TOutput
