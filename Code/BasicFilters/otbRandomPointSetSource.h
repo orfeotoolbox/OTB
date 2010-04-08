@@ -25,6 +25,19 @@
 namespace otb
 {
 
+/** \class PointSetSource
+ *  \brief This class generate a random point set
+ *
+ * A point set with a specific number of points is generated as an output
+ * of this filter. The point are N dimensional, depending on the specified template.
+ *
+ * The coordinate value of the point is uniformly distributed and the maximum and
+ * minimum value for the range in each dimension is provided by the
+ * \code SetMinPoint \endcode and \code SetMaxPoint \endcode methods.
+ *
+ * \ingroup DataSources
+ */
+
 template <class TOutputPointSet>
 class ITK_EXPORT RandomPointSetSource
       : public PointSetSource<TOutputPointSet>
