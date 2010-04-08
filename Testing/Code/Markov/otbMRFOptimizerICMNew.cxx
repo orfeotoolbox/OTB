@@ -24,10 +24,9 @@
 
 int otbMRFOptimizerICMNew(int argc, char * argv[])
 {
-  typedef otb::MRFOptimizerICM         MRFOptimizerType;
+  typedef otb::MRFOptimizerICM MRFOptimizerType;
 
   MRFOptimizerType::Pointer object = MRFOptimizerType::New();
 
   return EXIT_SUCCESS;
 }
-

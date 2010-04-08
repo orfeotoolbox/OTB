@@ -23,15 +23,13 @@
 
 int otbVectorDataToLabelMapFilterNew(int argc, char * argv[])
 {
-  typedef unsigned short                         LabelType;
+  typedef unsigned short LabelType;
   const unsigned int Dimension = 2;
-  typedef otb::VectorData<double,Dimension> VectorDataType;
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType> OutputLabelMapType;
-  
-  typedef otb::VectorDataToLabelMapFilter< VectorDataType , OutputLabelMapType > VectorDataToLabelMapFilterType;
+  typedef otb::VectorData<double, Dimension>                          VectorDataType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                              OutputLabelMapType;
 
-  
+  typedef otb::VectorDataToLabelMapFilter<VectorDataType, OutputLabelMapType> VectorDataToLabelMapFilterType;
 
   //Instantiation
   VectorDataToLabelMapFilterType::Pointer MyFilter = VectorDataToLabelMapFilterType::New();

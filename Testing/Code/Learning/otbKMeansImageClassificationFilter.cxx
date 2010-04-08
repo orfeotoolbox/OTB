@@ -23,21 +23,20 @@
 
 int otbKMeansImageClassificationFilter(int argc, char * argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char *       infname = argv[1];
+  const char *       outfname = argv[2];
   const unsigned int nbClasses = atoi(argv[3]);
 
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
-  typedef otb::KMeansImageClassificationFilter<ImageType,LabeledImageType> ClassificationFilterType;
-  typedef ClassificationFilterType::KMeansParametersType KMeansParametersType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
-
+  typedef otb::VectorImage<PixelType, Dimension>                            ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension>                           LabeledImageType;
+  typedef otb::KMeansImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+  typedef ClassificationFilterType::KMeansParametersType                    KMeansParametersType;
+  typedef otb::ImageFileReader<ImageType>                                   ReaderType;
+  typedef otb::StreamingImageFileWriter<LabeledImageType>                   WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
@@ -46,22 +45,22 @@ int otbKMeansImageClassificationFilter(int argc, char * argv[])
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
 
-  const unsigned int sampleSize = ClassificationFilterType::MaxSampleDimension;
-  const unsigned int parameterSize = nbClasses * sampleSize;
+  const unsigned int   sampleSize = ClassificationFilterType::MaxSampleDimension;
+  const unsigned int   parameterSize = nbClasses * sampleSize;
   KMeansParametersType parameters;
 
   parameters.SetSize(parameterSize);
   parameters.Fill(0);
 
-  for (unsigned int i = 0; i<nbClasses;++i)
-  {
-    for (unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel();++j)
+  for (unsigned int i = 0; i < nbClasses; ++i)
     {
-      parameters[i*sampleSize+j]=atof(argv[4+i*reader->GetOutput()->GetNumberOfComponentsPerPixel()+j]);
+    for (unsigned int j = 0; j < reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++j)
+      {
+      parameters[i * sampleSize + j] = atof(argv[4 + i * reader->GetOutput()->GetNumberOfComponentsPerPixel() + j]);
+      }
     }
-  }
 
-  std::cout<<"Parameters: "<<parameters<<std::endl;
+  std::cout << "Parameters: " << parameters << std::endl;
 
   filter->SetCentroids(parameters);
   filter->SetInput(reader->GetOutput());

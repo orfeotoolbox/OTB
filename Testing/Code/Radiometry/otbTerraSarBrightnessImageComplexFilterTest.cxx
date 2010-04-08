@@ -23,7 +23,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
@@ -31,8 +30,8 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
   const bool   useMetadata    = atoi(argv[3]);
   const bool   resultsInDb    = atoi(argv[4]);
 
-  typedef std::complex<double>                                      ComplexType;
-  typedef otb::Image<ComplexType, 2>                                  ImageType;
+  typedef std::complex<double>                                     ComplexType;
+  typedef otb::Image<ComplexType, 2>                               ImageType;
   typedef otb::ImageFileReader<ImageType>                          ReaderType;
   typedef otb::ImageFileWriter<ImageType>                          WriterType;
   typedef otb::TerraSarBrightnessImageFilter<ImageType, ImageType> FilterType;
@@ -42,7 +41,6 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
   WriterType::Pointer    writer    = WriterType::New();
   FilterType::Pointer    filter    = FilterType::New();
   ExtractorType::Pointer extractor = ExtractorType::New();
-  
 
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
@@ -50,25 +48,25 @@ int otbTerraSarBrightnessImageComplexFilterTest(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->SetResultsInDecibels(resultsInDb);
 
-  if( useMetadata )
+  if (useMetadata)
     {
-      // Generate an extract from the large input
-      ImageType::RegionType region;
-      ImageType::IndexType id;
-      id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
-      ImageType::SizeType size;
-      size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
-      region.SetIndex(id);
-      region.SetSize(size);
-      extractor->SetExtractionRegion(region);
-  
-      extractor->SetInput(filter->GetOutput());
-      writer->SetInput(extractor->GetOutput());
+    // Generate an extract from the large input
+    ImageType::RegionType region;
+    ImageType::IndexType  id;
+    id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
+    ImageType::SizeType size;
+    size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
+    region.SetIndex(id);
+    region.SetSize(size);
+    extractor->SetExtractionRegion(region);
+
+    extractor->SetInput(filter->GetOutput());
+    writer->SetInput(extractor->GetOutput());
     }
   else
     {
-      filter->SetCalibrationFactor( 10 );
-      writer->SetInput(filter->GetOutput());
+    filter->SetCalibrationFactor(10);
+    writer->SetInput(filter->GetOutput());
     }
 
   writer->Update();

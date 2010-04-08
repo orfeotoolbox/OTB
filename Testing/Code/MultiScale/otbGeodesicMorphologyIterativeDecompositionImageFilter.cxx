@@ -27,9 +27,9 @@
 
 int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv[])
 {
-  const char * inputFilename = argv[1];
-  const char * outputFilenamePrefix = argv[2];
-  const char * outputFilenameSuffix = argv[3];
+  const char *       inputFilename = argv[1];
+  const char *       outputFilenamePrefix = argv[2];
+  const char *       outputFilenameSuffix = argv[3];
   const unsigned int numberOfLevels = atoi(argv[4]);
   const unsigned int step = atoi(argv[5]);
   const unsigned int initValue = atoi(argv[6]);
@@ -37,13 +37,16 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ImageFileWriter<InputImageType> WriterType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<InputImageType>  WriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,StructuringElementType> DecompositionImageFilterType;
-  typedef DecompositionImageFilterType::OutputImageListType::Iterator ImageListIterator;
+  typedef itk::BinaryBallStructuringElement<InputPixelType,
+                                            Dimension>                                     StructuringElementType;
+  typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,
+                                                                   StructuringElementType> DecompositionImageFilterType;
+  typedef DecompositionImageFilterType::OutputImageListType::Iterator
+                                                                                           ImageListIterator;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -57,7 +60,6 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
   decomposition->SetInput(reader->GetOutput());
   decomposition->Update();
 
-
   // Retrieving iterators on the results images
   ImageListIterator itAnalyse = decomposition->GetOutput()->Begin();
   ImageListIterator itConvexMap = decomposition->GetConvexOutput()->Begin();
@@ -65,27 +67,27 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
 
   WriterType::Pointer writer;
 
-  int i=1;
+  int                i = 1;
   itk::OStringStream oss;
   // Writing the results images
-  while ((itAnalyse!=decomposition->GetOutput()->End())
-         &&(itConvexMap!=decomposition->GetConvexOutput()->End())
-         &&(itConcaveMap!=decomposition->GetConcaveOutput()->End())
-        )
-  {
-    oss<<outputFilenamePrefix<<"_leveling_"<<i<<"."<<outputFilenameSuffix;
+  while ((itAnalyse != decomposition->GetOutput()->End())
+         && (itConvexMap != decomposition->GetConvexOutput()->End())
+         && (itConcaveMap != decomposition->GetConcaveOutput()->End())
+         )
+    {
+    oss << outputFilenamePrefix << "_leveling_" << i << "." << outputFilenameSuffix;
     writer =  WriterType::New();
     writer->SetInput(itAnalyse.Get());
     writer->SetFileName(oss.str().c_str());
     writer->Update();
     oss.str("");
-    oss<<outputFilenamePrefix<<"_convMap_"<<i<<"."<<outputFilenameSuffix;
+    oss << outputFilenamePrefix << "_convMap_" << i << "." << outputFilenameSuffix;
     writer =  WriterType::New();
     writer->SetInput(itConvexMap.Get());
     writer->SetFileName(oss.str().c_str());
     writer->Update();
     oss.str("");
-    oss<<outputFilenamePrefix<<"_concMap_"<<i<<"."<<outputFilenameSuffix;
+    oss << outputFilenamePrefix << "_concMap_" << i << "." << outputFilenameSuffix;
     writer =  WriterType::New();
     writer->SetInput(itConcaveMap.Get());
     writer->SetFileName(oss.str().c_str());
@@ -95,6 +97,6 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int argc, char * argv
     ++itConvexMap;
     ++itConcaveMap;
     ++i;
-  }
+    }
   return EXIT_SUCCESS;
 }

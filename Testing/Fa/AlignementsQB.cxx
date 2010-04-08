@@ -27,12 +27,11 @@
 #include "otbDrawPathFilter.h"
 //#include "otbColorImageViewer.h"
 
-
 #include <stdio.h>
 
-int main( int argc, char ** argv )
+int main(int argc, char ** argv)
 {
-  if(argc!=3)
+  if (argc != 3)
     {
 
     std::cout << "Usage : " << argv[0] << " inputImage outputImage" << std::endl;
@@ -43,63 +42,59 @@ int main( int argc, char ** argv )
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-  typedef unsigned char                                   InputPixelType;
-  typedef unsigned char                             OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  const   unsigned int                                  Dimension = 2;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
-
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename  );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   reader->Update();
 
   std::cout << "Lecture terminee" << std::endl;
 
-  typedef otb::ExtractROI<InputPixelType,InputPixelType> ROIFilterType;
+  typedef otb::ExtractROI<InputPixelType, InputPixelType> ROIFilterType;
 
   ROIFilterType::Pointer roiFilter = ROIFilterType::New();
 
-  roiFilter->SetInput( reader->GetOutput() );
-  roiFilter->SetStartX( 10 );
-  roiFilter->SetStartY( 0 );
-  roiFilter->SetSizeX( 256 );
-  roiFilter->SetSizeY( 256 );
-
+  roiFilter->SetInput(reader->GetOutput());
+  roiFilter->SetStartX(10);
+  roiFilter->SetStartY(0);
+  roiFilter->SetSizeX(256);
+  roiFilter->SetSizeY(256);
 
   roiFilter->Update();
 
   std::cout << "Extraction ROI" << std::endl;
 
-  typedef itk::PolyLineParametricPath< Dimension >      PathType;
-  typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
+  typedef itk::PolyLineParametricPath<Dimension>                    PathType;
+  typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> ListAlignFilterType;
 
   ListAlignFilterType::Pointer alignFilter = ListAlignFilterType::New();
 
-  alignFilter->SetInput( roiFilter->GetOutput() );
+  alignFilter->SetInput(roiFilter->GetOutput());
 
   alignFilter->Update();
 
   std::cout << "Alignements termines" << std::endl;
 
-
   typedef ROIFilterType::OutputImageType BackgroundImageType;
 
-  typedef otb::DrawPathFilter< BackgroundImageType, PathType, OutputImageType >  DrawPathFilterType;
+  typedef otb::DrawPathFilter<BackgroundImageType, PathType, OutputImageType> DrawPathFilterType;
 
   DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
 
   typedef ListAlignFilterType::OutputPathListType ListType;
-
 
   ListType* listePaths = alignFilter->GetOutput();
 
@@ -111,10 +106,10 @@ int main( int argc, char ** argv )
 
   unsigned int color = 0;
 
-  while( listIt != listePaths->End())
+  while (listIt != listePaths->End())
     {
 
-    drawPathFilter->SetImageInput( backgroundImage );
+    drawPathFilter->SetImageInput(backgroundImage);
     drawPathFilter->SetInputPath(listIt.Get());
     //drawPathFilter->SetPathValue( color );
 
@@ -125,14 +120,11 @@ int main( int argc, char ** argv )
     ++listIt;
     ++color;
 
-
     }
 
-
-  writer->SetInput( drawPathFilter->GetOutput() );
+  writer->SetInput(drawPathFilter->GetOutput());
 
   writer->Update();
-
 
 /*  typedef otb::ColorImageViewer<unsigned char,double>    ViewerType;
   ViewerType                      viewer;
@@ -144,8 +136,5 @@ int main( int argc, char ** argv )
   Fl::run();
 */
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -25,16 +25,15 @@
 #include "otbSVMKernels.h"
 #include "otbSVMModel.h"
 
-
-int otbSVMModelCopyGenericKernelTest( int argc, char* argv[] )
+int otbSVMModelCopyGenericKernelTest(int argc, char* argv[])
 {
-  typedef unsigned char                                   InputPixelType;
-  typedef unsigned char                                   LabelPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char LabelPixelType;
 
-  typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
+  typedef otb::SVMModel<InputPixelType, LabelPixelType> ModelType;
 
   // Create the model to be copied
-  ModelType::Pointer svmModel = ModelType::New();
+  ModelType::Pointer    svmModel = ModelType::New();
   otb::RBFKernelFunctor lFunctor;
   svmModel->SetKernelFunctor(&lFunctor);
   svmModel->LoadModel(argv[1]);
@@ -46,5 +45,3 @@ int otbSVMModelCopyGenericKernelTest( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

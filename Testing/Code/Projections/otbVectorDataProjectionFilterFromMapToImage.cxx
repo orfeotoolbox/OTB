@@ -27,17 +27,16 @@
 int otbVectorDataProjectionFilterFromMapToImage(int argc, char * argv[])
 {
 
-  if (argc < 4  )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image filename>"
+  if (argc < 4)
+    {
+    std::cout << argv[0] << " <input vector filename> <input image filename>"
               << " <output vector filename> "  << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
-  typedef otb::VectorData<double > InputVectorDataType;
-  typedef otb::VectorData<double > OutputVectorDataType;
-
+  typedef otb::VectorData<double> InputVectorDataType;
+  typedef otb::VectorData<double> OutputVectorDataType;
 
   typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
@@ -45,15 +44,13 @@ int otbVectorDataProjectionFilterFromMapToImage(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-
   typedef otb::Image<unsigned short int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType>   ImageReaderType;
   ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
-
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
 
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
 
@@ -63,13 +60,11 @@ int otbVectorDataProjectionFilterFromMapToImage(int argc, char * argv[])
   vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
 
-
   typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

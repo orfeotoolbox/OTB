@@ -24,26 +24,21 @@
 #include "itkImage.h"
 #include <iostream>
 
-
 #include "otbAssociativeSymmetricalSumImageFilter.h"
 
-
-int otbAssociativeSymmetricalSumNew( int argc, char* argv[] )
+int otbAssociativeSymmetricalSumNew(int argc, char* argv[])
 {
-  typedef double                         InputPixelType;
-  typedef double                      OutputPixelType;
-  const   unsigned int                               Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType1;
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType2;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType1;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType2;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::AssociativeSymmetricalSumImageFilter< InputImageType1, InputImageType2, OutputImageType >   FilterType;
+  typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

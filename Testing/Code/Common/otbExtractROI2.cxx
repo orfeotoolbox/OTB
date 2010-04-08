@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -24,56 +23,53 @@
 
 #include "otbExtractROI.h"
 
-int otbExtractROI2( int argc, char * argv[] )
+int otbExtractROI2(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
-  unsigned int  startX((unsigned int)::atoi(argv[3]));
-  unsigned int  startY((unsigned int)::atoi(argv[4]));
-  unsigned int  sizeX((unsigned int)::atoi(argv[5]));
-  unsigned int  sizeY((unsigned int)::atoi(argv[6]));
+  unsigned int startX((unsigned int) ::atoi(argv[3]));
+  unsigned int startY((unsigned int) ::atoi(argv[4]));
+  unsigned int sizeX((unsigned int) ::atoi(argv[5]));
+  unsigned int sizeY((unsigned int) ::atoi(argv[6]));
 
-  typedef unsigned char                                    InputPixelType;
-  typedef unsigned char                                    OutputPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
-  typedef otb::ExtractROI< InputPixelType,
-  OutputPixelType >   FilterType;
+  typedef otb::ExtractROI<InputPixelType,
+                          OutputPixelType>   FilterType;
 
-  typedef FilterType::InputImageType        InputImageType;
-  typedef FilterType::OutputImageType       OutputImageType;
+  typedef FilterType::InputImageType  InputImageType;
+  typedef FilterType::OutputImageType OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::Image<InputPixelType,2> ImageType;
+  typedef otb::Image<InputPixelType, 2> ImageType;
   ImageType::IndexType start;
 
   start[0] =   startX;
   start[1] =   startY;
-  ImageType::SizeType  size;
+  ImageType::SizeType size;
 
   size[0]  = sizeX;
   size[1]  = sizeY;
   ImageType::RegionType region;
 
-  region.SetSize( size );
-  region.SetIndex( start );
+  region.SetSize(size);
+  region.SetIndex(start);
 
   filter->SetExtractionRegion(region);
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  filter->SetInput( reader->GetOutput() );
-  writer->SetInput( filter->GetOutput() );
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
-
-

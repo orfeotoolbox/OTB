@@ -25,17 +25,16 @@
 int otbPeriodicSOMNew(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef float ComponentType;
-  typedef itk::VariableLengthVector<ComponentType> PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
+  typedef float                                           ComponentType;
+  typedef itk::VariableLengthVector<ComponentType>        PixelType;
+  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
   //     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
-  typedef itk::Statistics::ListSample<PixelType> ListSampleType;
-  typedef otb::PeriodicSOM<ListSampleType,SOMMapType> SOMType;
+  typedef itk::Statistics::ListSample<PixelType>       ListSampleType;
+  typedef otb::PeriodicSOM<ListSampleType, SOMMapType> SOMType;
 
   // Instantiation
   SOMType::Pointer som = SOMType::New();
-
 
   return EXIT_SUCCESS;
 }

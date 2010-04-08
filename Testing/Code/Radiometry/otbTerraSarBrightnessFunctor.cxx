@@ -23,32 +23,31 @@
 
 int otbTerraSarBrightnessFunctor(int argc, char * argv[])
 {
-  char *outFilename = argv[5];
+  char * outFilename = argv[5];
   double calFact =  atof(argv[4]);
 
   typedef double                   ScalarType;
   typedef std::complex<ScalarType> ComplexType;
 
-  typedef otb::Functor::TerraSarBrightnessFunctor<ScalarType, ScalarType>   FunctorType;
+  typedef otb::Functor::TerraSarBrightnessFunctor<ScalarType, ScalarType> FunctorType;
 
   FunctorType funct;
   funct.SetCalibrationFactor(calFact);
   funct.SetResultsInDecibels(false);
 
-  ScalarType inPix = static_cast<ScalarType>(atof(argv[1]));
+  ScalarType  inPix = static_cast<ScalarType>(atof(argv[1]));
   ComplexType inCplxPix(static_cast<ScalarType>(atof(argv[2])), static_cast<ScalarType>(atof(argv[3])));
-  
 
   std::ofstream file;
   file.open(outFilename);
 
   file << std::fixed << std::setprecision(10);
 
-  file << "Scalar pixel : " << inPix << " -> " << funct.operator()(inPix) << std::endl;
+  file << "Scalar pixel : " << inPix << " -> " << funct.operator ()(inPix) << std::endl;
 
-  file << "Complex pixel : " << inCplxPix << " -> " << funct.operator()(inCplxPix) << std::endl;
+  file << "Complex pixel : " << inCplxPix << " -> " << funct.operator ()(inCplxPix) << std::endl;
 
   file.close();
-  
+
   return EXIT_SUCCESS;
 }

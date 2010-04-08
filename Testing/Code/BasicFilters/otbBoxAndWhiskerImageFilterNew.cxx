@@ -24,16 +24,14 @@
 #include "otbVectorImage.h"
 #include "otbBoxAndWhiskerImageFilter.h"
 
-int otbBoxAndWhiskerImageFilterNew ( int argc, char * argv[] )
+int otbBoxAndWhiskerImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
-  typedef otb::BoxAndWhiskerImageFilter< ImageType > FilterType;
+  typedef double                                   PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>   ImageType;
+  typedef otb::BoxAndWhiskerImageFilter<ImageType> FilterType;
 
-       FilterType::Pointer filter = FilterType::New();
-  
+  FilterType::Pointer filter = FilterType::New();
+
   return EXIT_SUCCESS;
 }
-
-

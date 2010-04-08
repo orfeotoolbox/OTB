@@ -30,15 +30,14 @@ int otbLogPolarTransformResample(int argc, char* argv[])
   char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PrecisionType;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::LogPolarTransform<PrecisionType> LogPolarTransformType;
-  typedef itk::LinearInterpolateImageFunction<ImageType,PrecisionType> InterpolatorType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef itk::ResampleImageFilter<ImageType,ImageType,PrecisionType> ResampleFilterType;
-
+  typedef double                                                        PrecisionType;
+  typedef double                                                        PixelType;
+  typedef otb::Image<PixelType, Dimension>                              ImageType;
+  typedef otb::LogPolarTransform<PrecisionType>                         LogPolarTransformType;
+  typedef itk::LinearInterpolateImageFunction<ImageType, PrecisionType> InterpolatorType;
+  typedef otb::ImageFileReader<ImageType>                               ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                               WriterType;
+  typedef itk::ResampleImageFilter<ImageType, ImageType, PrecisionType> ResampleFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
@@ -47,21 +46,23 @@ int otbLogPolarTransformResample(int argc, char* argv[])
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   interpolator->SetInputImage(reader->GetOutput());
 
-  std::cout<<interpolator<<std::endl;
+  std::cout << interpolator << std::endl;
   LogPolarTransformType::Pointer transform = LogPolarTransformType::New();
 
   LogPolarTransformType::ParametersType params(4);
   // Center the transform
-  params[0]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]);
-  params[1]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]);
-  params[2]=360./1024;
-  params[3]=vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]),2)
-                             +vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]),2))/2)/512;
+  params[0] = 0.5 * static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]);
+  params[1] = 0.5 * static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]);
+  params[2] = 360. / 1024;
+  params[3] =
+    vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]), 2)
+                     + vcl_pow(static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[
+                                                     1]), 2)) / 2) / 512;
   transform->SetParameters(params);
 
   ImageType::SizeType size;
-  size[0]=1024;
-  size[1]=512;
+  size[0] = 1024;
+  size[1] = 512;
 
   ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   resampler->SetInput(reader->GetOutput());
@@ -74,7 +75,6 @@ int otbLogPolarTransformResample(int argc, char* argv[])
   writer->SetFileName(outputFileName);
   writer->SetInput(resampler->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

@@ -38,69 +38,62 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 
-
-int otbLocalHoughDraw( int argc, char* argv[] )
+int otbLocalHoughDraw(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
-  unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-  unsigned int  NumberOfLines((unsigned int)::atoi(argv[5]));
+  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
+  unsigned int RadiusY((unsigned int) ::atoi(argv[4]));
+  unsigned int NumberOfLines((unsigned int) ::atoi(argv[5]));
 
-  typedef unsigned char                                  InputPixelType;
-  typedef unsigned char                               OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::LocalHoughFilter< InputImageType >   FilterType;
+  typedef otb::LocalHoughFilter<InputImageType> FilterType;
   //typedef otb::ImageToLineSpatialObjectListFilter< InputImageType >   FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::RescaleIntensityImageFilter<InputImageType> RescalerType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
+  WriterType::Pointer   writer = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
   reader->Update();
 
-  writer->SetFileName( outputFilename );
+  writer->SetFileName(outputFilename);
 
   FilterType::SizeType Radius;
   Radius[0] = RadiusX;
   Radius[1] = RadiusY;
 
-
-  filter->SetRadius( Radius );
-  filter->SetNumberOfLines( NumberOfLines );
+  filter->SetRadius(Radius);
+  filter->SetNumberOfLines(NumberOfLines);
 
   rescaler->SetInput(reader->GetOutput());
-  filter->SetInput( rescaler->GetOutput() );
+  filter->SetInput(rescaler->GetOutput());
   filter->Update();
 
-
-  typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   DrawFilterType;
+  typedef otb::DrawLineSpatialObjectListFilter<InputImageType, OutputImageType> DrawFilterType;
 
   DrawFilterType::Pointer drawfilter = DrawFilterType::New();
 
-
   drawfilter->SetInputLineSpatialObjectList(filter->GetOutput());
 
-  drawfilter->SetInput( reader->GetOutput() );
-  writer->SetInput( drawfilter->GetOutput() );
+  drawfilter->SetInput(reader->GetOutput());
+  writer->SetInput(drawfilter->GetOutput());
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

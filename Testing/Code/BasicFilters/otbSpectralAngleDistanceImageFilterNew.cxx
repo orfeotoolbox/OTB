@@ -23,14 +23,13 @@
 int otbSpectralAngleDistanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::Image<PixelType,Dimension> OutputImageType;
-  typedef otb::SpectralAngleDistanceImageFilter<InputImageType,OutputImageType> DistanceFilterType;
+  typedef double                                                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                                 InputImageType;
+  typedef otb::Image<PixelType, Dimension>                                       OutputImageType;
+  typedef otb::SpectralAngleDistanceImageFilter<InputImageType, OutputImageType> DistanceFilterType;
 
   // Instantiating object
   DistanceFilterType::Pointer object = DistanceFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

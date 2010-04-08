@@ -24,7 +24,6 @@
 
 #include "otbSystem.h"
 
-
 int otbTestMultiExtractMultiUpdate(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
@@ -39,24 +38,23 @@ int otbTestMultiExtractMultiUpdate(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-
   ExtractInternVectorType::Pointer extractInternVector = ExtractInternVectorType::New();
   //readerMS->UpdateOutputInformation();
 
-  extractInternVector->SetInput( reader->GetOutput() );
-  extractInternVector->SetStartX( atoi(argv[3]) );
-  extractInternVector->SetStartY( atoi(argv[4]) );
-  extractInternVector->SetSizeX( atoi(argv[5]) );
-  extractInternVector->SetSizeY( atoi(argv[6]) );
+  extractInternVector->SetInput(reader->GetOutput());
+  extractInternVector->SetStartX(atoi(argv[3]));
+  extractInternVector->SetStartY(atoi(argv[4]));
+  extractInternVector->SetSizeX(atoi(argv[5]));
+  extractInternVector->SetSizeY(atoi(argv[6]));
 
-  extractInternVector->SetFirstChannel( atoi(argv[7] ));
-  extractInternVector->SetLastChannel( atoi(argv[8]) );
+  extractInternVector->SetFirstChannel(atoi(argv[7]));
+  extractInternVector->SetLastChannel(atoi(argv[8]));
 
   extractInternVector->Update();
   extractInternVector->Update();
   extractInternVector->Update();
 
-  writer->SetInput( extractInternVector->GetOutput() );
+  writer->SetInput(extractInternVector->GetOutput());
 
   writer->Update();
 

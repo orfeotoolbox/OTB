@@ -17,13 +17,12 @@
 =========================================================================*/
 #include "otbFullResolutionImageWidget.h"
 
-int otbFullResolutionImageWidgetNew( int argc, char * argv[] )
+int otbFullResolutionImageWidgetNew(int argc, char * argv[])
 {
-  typedef float PixelType;
+  typedef float                                     PixelType;
   typedef otb::FullResolutionImageWidget<PixelType> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
-
 
   return EXIT_SUCCESS;
 }

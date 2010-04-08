@@ -25,10 +25,12 @@
 int otbMeanShiftVectorImageFilter(int argc, char * argv[])
 {
   if (argc != 12)
-  {
-    std::cerr<<"Usage: "<<argv[0]<<" infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"<<std::endl;
+    {
+    std::cerr << "Usage: " << argv[0] <<
+    " infname filteredfname clusteredfname labeledclusteredfname clusterboundariesfname spatialRadius rangeRadius minregionsize scale streamed threaded"
+              << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   const char *       infname                = argv[1];
   const char *       filteredfname          = argv[2];
@@ -43,12 +45,12 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   bool               threaded               = atoi(argv[11]);
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                 ImageType;
+  typedef float                                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                ImageType;
   typedef otb::ImageFileReader<ImageType>                       ReaderType;
   typedef otb::StreamingImageFileWriter<ImageType>              StreamingWriterType;
   typedef otb::ImageFileWriter<ImageType>                       WriterType;
-  typedef otb::MeanShiftVectorImageFilter<ImageType,ImageType>  FilterType;
+  typedef otb::MeanShiftVectorImageFilter<ImageType, ImageType> FilterType;
   typedef FilterType::LabeledOutputType                         LabeledImageType;
   typedef otb::StreamingImageFileWriter<LabeledImageType>       LabeledStreamingWriterType;
   typedef otb::ImageFileWriter<LabeledImageType>                LabeledWriterType;
@@ -57,9 +59,7 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   FilterType::Pointer filter = FilterType::New();
   ReaderType::Pointer reader = ReaderType::New();
 
-
   reader->SetFileName(infname);
-
 
   filter->SetSpatialRadius(spatialRadius);
   filter->SetRangeRadius(rangeRadius);
@@ -67,17 +67,17 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
   filter->SetScale(scale);
 
   if (!threaded)
-  {
+    {
     filter->SetNumberOfThreads(1);
-  }
+    }
 
   filter->SetInput(reader->GetOutput());
 
   if (streamed)
-  {
+    {
 
-    StreamingWriterType::Pointer writer1 = StreamingWriterType::New();
-    StreamingWriterType::Pointer writer2 = StreamingWriterType::New();
+    StreamingWriterType::Pointer        writer1 = StreamingWriterType::New();
+    StreamingWriterType::Pointer        writer2 = StreamingWriterType::New();
     LabeledStreamingWriterType::Pointer writer3 = LabeledStreamingWriterType::New();
     LabeledStreamingWriterType::Pointer writer4 = LabeledStreamingWriterType::New();
     writer1->SetFileName(filteredfname);
@@ -93,13 +93,13 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
     writer3->Update();
     writer4->Update();
 
-  }
+    }
 
   else
-  {
+    {
 
-    WriterType::Pointer writer1 = WriterType::New();
-    WriterType::Pointer writer2 = WriterType::New();
+    WriterType::Pointer        writer1 = WriterType::New();
+    WriterType::Pointer        writer2 = WriterType::New();
     LabeledWriterType::Pointer writer3 = LabeledWriterType::New();
     LabeledWriterType::Pointer writer4 = LabeledWriterType::New();
     writer1->SetFileName(filteredfname);
@@ -115,7 +115,7 @@ int otbMeanShiftVectorImageFilter(int argc, char * argv[])
     writer3->Update();
     writer4->Update();
 
-  }
+    }
 
   return EXIT_SUCCESS;
 }

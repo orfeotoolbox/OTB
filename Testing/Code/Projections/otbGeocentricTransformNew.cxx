@@ -23,12 +23,11 @@
 #include "otbImage.h"
 #include "otbGeocentricTransform.h"
 
-int otbGeocentricTransformNew( int argc, char* argv[] )
+int otbGeocentricTransformNew(int argc, char* argv[])
 {
 
   typedef otb::GeocentricTransform<otb::FORWARD> ProjectionType;
   ProjectionType::Pointer projection = ProjectionType::New();
-
 
   return EXIT_SUCCESS;
 

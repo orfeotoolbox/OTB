@@ -23,9 +23,9 @@
 
 int otbRCC8GraphFileWriterNew(int argc, char* argv[])
 {
-  typedef otb::Polygon<>  PathType;
-  typedef otb::RCC8VertexBase<PathType> VertexType;
-  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+  typedef otb::Polygon<>                          PathType;
+  typedef otb::RCC8VertexBase<PathType>           VertexType;
+  typedef otb::RCC8Graph<VertexType>              RCC8GraphType;
   typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
 
   // Instantiation
@@ -33,4 +33,3 @@ int otbRCC8GraphFileWriterNew(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-

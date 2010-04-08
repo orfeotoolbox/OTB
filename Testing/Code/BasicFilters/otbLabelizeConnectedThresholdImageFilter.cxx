@@ -30,27 +30,26 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeConnectedThresholdImageFilter( int argc, char * argv[] )
+int otbLabelizeConnectedThresholdImageFilter(int argc, char * argv[])
 {
   // Arguments
   char* inputImageName = argv[1];
   char* outputImageName = argv[2];
 
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
+  typedef unsigned char                InputPixelType;
+  typedef unsigned char                OutputPixelType;
   typedef itk::RGBPixel<unsigned char> ColorPixelType;
 
   const unsigned int Dimension = 2;
 
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
 
-  typedef otb::Image< InputPixelType, Dimension > InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-  typedef otb::Image<ColorPixelType, Dimension> RGBImageType;
-
-  InputPixelType lowerThreshold( (InputPixelType)::atoi(argv[3]) );
-  InputPixelType upperThreshold( (InputPixelType)::atoi(argv[4]) );
-  InputPixelType deltaLower( (InputPixelType)::atoi(argv[5]) );
-  InputPixelType deltaUpper( (InputPixelType)::atoi(argv[6]) );
+  InputPixelType lowerThreshold((InputPixelType) ::atoi(argv[3]));
+  InputPixelType upperThreshold((InputPixelType) ::atoi(argv[4]));
+  InputPixelType deltaLower((InputPixelType) ::atoi(argv[5]));
+  InputPixelType deltaUpper((InputPixelType) ::atoi(argv[6]));
 
   // Reader
   typedef otb::ImageFileReader<InputImageType> ReaderType;
@@ -72,10 +71,9 @@ int otbLabelizeConnectedThresholdImageFilter( int argc, char * argv[] )
   filter->SetUpperThresholdDelta(deltaUpper);
 
   // Label to RGB image
-  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType> FunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType>                   FunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType, FunctorType> ColorLabelFilterType;
   ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
-
 
   filter->SetInput(reader->GetOutput());
   labelToRGB->SetInput(filter->GetOutput());

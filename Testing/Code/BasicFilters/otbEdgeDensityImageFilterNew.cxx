@@ -20,24 +20,22 @@
 #include "otbBinaryImageDensityFunction.h"
 #include "itkCannyEdgeDetectionImageFilter.h"
 
-
-int otbEdgeDensityImageFilterNew(int, char* [] )
+int otbEdgeDensityImageFilterNew(int, char*[])
 {
 
-  const   unsigned int                                      Dimension = 2;
-  typedef float                                             PixelType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  typedef otb::Image< PixelType, Dimension >                                      ImageType;
-  typedef ImageType::IndexType                                                    IndexType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef ImageType::IndexType             IndexType;
 
-  typedef otb::BinaryImageDensityFunction<ImageType>                              CountFunctionType;
-  typedef itk::CannyEdgeDetectionImageFilter<ImageType , ImageType>               CannyDetectorType;
+  typedef otb::BinaryImageDensityFunction<ImageType>               CountFunctionType;
+  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> CannyDetectorType;
 
-  typedef otb::EdgeDensityImageFilter<ImageType , ImageType , CannyDetectorType  ,CountFunctionType> EdgeDensityFilterType;
+  typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType, CountFunctionType> EdgeDensityFilterType;
 
   /**Instantiation of an object*/
-  EdgeDensityFilterType::Pointer    filter =      EdgeDensityFilterType::New();
+  EdgeDensityFilterType::Pointer filter =      EdgeDensityFilterType::New();
 
   return EXIT_SUCCESS;
 }
-

@@ -20,12 +20,12 @@
 #include "otbImage.h"
 #include "itkRGBPixel.h"
 
-int otbLayerBasedModelNew( int argc, char * argv[] )
+int otbLayerBasedModelNew(int argc, char * argv[])
 {
-  typedef itk::RGBPixel<unsigned char>     RGBPixelType;
-  typedef otb::Image<RGBPixelType,2>       ImageType;
-  typedef otb::ImageLayerBase<ImageType>   LayerType;
-  typedef otb::LayerBasedModel<LayerType>  ModelType;
+  typedef itk::RGBPixel<unsigned char>    RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>     ImageType;
+  typedef otb::ImageLayerBase<ImageType>  LayerType;
+  typedef otb::LayerBasedModel<LayerType> ModelType;
 
   // Instantiation
   ModelType::Pointer model = ModelType::New();

@@ -30,12 +30,12 @@ int otbPerBandVectorImageFilterWithMeanFilter(int argc, char * argv[])
   const char * outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
+  typedef double                                     PixelType;
+  typedef otb::Image<PixelType, Dimension>           ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>     VectorImageType;
+  typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType,VectorImageType,MeanFilterType>
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
   PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
@@ -54,7 +54,6 @@ int otbPerBandVectorImageFilterWithMeanFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

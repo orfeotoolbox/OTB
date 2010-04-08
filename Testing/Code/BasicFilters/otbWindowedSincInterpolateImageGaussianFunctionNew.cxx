@@ -22,12 +22,11 @@
 
 int otbWindowedSincInterpolateImageGaussianFunctionNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                                              ImageType;
-  typedef otb::WindowedSincInterpolateImageGaussianFunction<ImageType>      InterpolatorType;
+  typedef otb::Image<double, 2>                                        ImageType;
+  typedef otb::WindowedSincInterpolateImageGaussianFunction<ImageType> InterpolatorType;
 
   // Instantiating objects
-  InterpolatorType::Pointer    interp    = InterpolatorType::New();
-
+  InterpolatorType::Pointer interp    = InterpolatorType::New();
 
   return EXIT_SUCCESS;
 }

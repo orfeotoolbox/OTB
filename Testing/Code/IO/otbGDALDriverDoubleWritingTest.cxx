@@ -29,13 +29,13 @@ int otbGDALDriverDoubleWritingTest(int argc, char * argv[])
   const char * outfname3 = argv[5];
   const char * outfname4 = argv[6];
 
-  typedef otb::VectorImage<double,2>ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::VectorImage<double, 2>              ImageType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
+  typedef otb::ImageFileWriter<ImageType>          WriterType;
   typedef otb::StreamingImageFileWriter<ImageType> StreamingWriterType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer          reader = ReaderType::New();
+  WriterType::Pointer          writer = WriterType::New();
   StreamingWriterType::Pointer streamingWriter = StreamingWriterType::New();
 
   reader->SetFileName(infname1);

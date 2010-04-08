@@ -26,22 +26,18 @@
 
 #include "otbDrawLineSpatialObjectFilter.h"
 
-
-int otbDrawLineSpatialObjectNew( int argc, char* argv[] )
+int otbDrawLineSpatialObjectNew(int argc, char* argv[])
 {
-  typedef double                         InputPixelType;
-  typedef double                      OutputPixelType;
-  const   unsigned int                               Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >   OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::DrawLineSpatialObjectFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::DrawLineSpatialObjectFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

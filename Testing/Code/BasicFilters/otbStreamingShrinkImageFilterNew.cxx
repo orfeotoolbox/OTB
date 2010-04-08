@@ -18,17 +18,15 @@
 #include "otbVectorImage.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-
-int otbStreamingShrinkImageFilterNew( int argc, char * argv[] )
+int otbStreamingShrinkImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef unsigned char PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
+  typedef unsigned char                                         PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                ImageType;
+  typedef otb::StreamingShrinkImageFilter<ImageType, ImageType> ShrinkType;
 
   ShrinkType::Pointer shrink = ShrinkType::New();
-
 
   return EXIT_SUCCESS;
 }

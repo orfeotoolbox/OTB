@@ -20,12 +20,11 @@
 #include "otbImage.h"
 #include "otbMapProjections.h"
 
-int otbMapProjection( int argc, char* argv[] )
+int otbMapProjection(int argc, char* argv[])
 {
-  const char * outFileName = argv[1];
+  const char *  outFileName = argv[1];
   std::ofstream file;
   file.open(outFileName);
-
 
   /** Test the output of the projection in Wkt format*/
   otb::UtmInverseProjection::Pointer lUtmProjection = otb::UtmInverseProjection::New();
@@ -45,7 +44,6 @@ int otbMapProjection( int argc, char* argv[] )
 
   otb::Lambert93ForwardProjection::Pointer lLambert93_2 = otb::Lambert93ForwardProjection::New();
   file << lLambert93_2->GetWkt() << std::endl << std::endl;
-
 
   otb::MercatorInverseProjection::Pointer lMercatorProjection = otb::MercatorInverseProjection::New();
   file << lMercatorProjection->GetWkt() << std::endl << std::endl;

@@ -22,16 +22,12 @@
 int otbVectorDataProjectionFilterNew(int argc, char * argv[])
 {
 
+  typedef otb::VectorData<double> InputVectorDataType;
+  typedef otb::VectorData<double> OutputVectorDataType;
 
-  typedef otb::VectorData<double > InputVectorDataType;
-  typedef otb::VectorData<double > OutputVectorDataType;
-
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
 
   VectorDataFilterType::Pointer vectorData = VectorDataFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

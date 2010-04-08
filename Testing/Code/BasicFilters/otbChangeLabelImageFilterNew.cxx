@@ -26,13 +26,12 @@ int otbChangeLabelImageFilterNew(int argc, char * argv[])
 {
   const unsigned int ImageDimension = 2;
 
-  typedef otb::Image<unsigned int, ImageDimension> InputImageType;
+  typedef otb::Image<unsigned int, ImageDimension>       InputImageType;
   typedef otb::VectorImage<unsigned int, ImageDimension> OutputImageType;
 
-  typedef otb::ChangeLabelImageFilter<InputImageType, OutputImageType>   FilterType;
+  typedef otb::ChangeLabelImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 

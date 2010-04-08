@@ -40,19 +40,18 @@ int otbQuickLookImageGenerator(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFileName );
-  
+  reader->SetFileName(inputFileName);
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
   filter->SetSampleRatio(atoi(argv[3]));
   filter->SetVariance(atof(argv[4]));
   filter->SetMaximumError(atof(argv[5]));
   filter->SetMaximumKernelWidth(atoi(argv[6]));
   filter->UseImageSpacing(atoi(argv[7]));
-  
-  writer->SetInput( filter->GetOutput() );
-  writer->SetFileName( outputFileName );
- 
+
+  writer->SetInput(filter->GetOutput());
+  writer->SetFileName(outputFileName);
+
   writer->Update();
 
   return EXIT_SUCCESS;

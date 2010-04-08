@@ -28,38 +28,38 @@
 #include "itkExceptionObject.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPath( int argc, char * argv[] )
+int otbComplexMomentPath(int argc, char * argv[])
 {
-  unsigned int  p((unsigned int)::atoi(argv[1]));
-  unsigned int  q((unsigned int)::atoi(argv[2]));
+  unsigned int p((unsigned int) ::atoi(argv[1]));
+  unsigned int q((unsigned int) ::atoi(argv[2]));
   const char * outputFilename  = argv[3];
 
-  const   unsigned int      Dimension = 2;
+  const unsigned int Dimension = 2;
 
-  typedef itk::PolyLineParametricPath< Dimension >          PathType;
-  typedef otb::ComplexMomentPathFunction< PathType >              CMType;
-  typedef CMType::ComplexType                                     ComplexType;
+  typedef itk::PolyLineParametricPath<Dimension>   PathType;
+  typedef otb::ComplexMomentPathFunction<PathType> CMType;
+  typedef CMType::ComplexType                      ComplexType;
 
   // Dessiner un carr�:
   PathType::ContinuousIndexType cindex;
-  PathType::Pointer pathElt = PathType::New();
+  PathType::Pointer             pathElt = PathType::New();
 
   pathElt->Initialize();
 
-  cindex[0]=30;
-  cindex[1]=30;
+  cindex[0] = 30;
+  cindex[1] = 30;
   pathElt->AddVertex(cindex);
-  cindex[0]= 30;
-  cindex[1]=130;
+  cindex[0] = 30;
+  cindex[1] = 130;
   pathElt->AddVertex(cindex);
-  cindex[0]=130;
-  cindex[1]=130;
+  cindex[0] = 130;
+  cindex[1] = 130;
   pathElt->AddVertex(cindex);
-  cindex[0]=130;
-  cindex[1]= 30;
+  cindex[0] = 130;
+  cindex[1] = 30;
   pathElt->AddVertex(cindex);
 
-  CMType::Pointer function =CMType::New();
+  CMType::Pointer function = CMType::New();
 
   function->SetQ(q);
   function->SetP(p);
@@ -68,10 +68,9 @@ int otbComplexMomentPath( int argc, char * argv[] )
 
   std::ofstream outputStream(outputFilename);
 
-  Result = function->Evaluate( *pathElt);
-  outputStream << std::setprecision(10) << "function->Evaluate(Path)"<< Result << std::endl;
+  Result = function->Evaluate(*pathElt);
+  outputStream << std::setprecision(10) << "function->Evaluate(Path)" << Result << std::endl;
   outputStream.close();
 
   return EXIT_SUCCESS;
 }
-

@@ -22,7 +22,7 @@
 
 int otbPipeline(int argc, char * argv[])
 {
-  typedef otb::Image<unsigned char, 2> ImageType;
+  typedef otb::Image<unsigned char, 2>    ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
@@ -34,5 +34,3 @@ int otbPipeline(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-

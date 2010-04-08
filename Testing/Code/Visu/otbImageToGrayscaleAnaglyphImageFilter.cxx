@@ -28,11 +28,11 @@ int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-  typedef otb::ImageToGrayscaleAnaglyphImageFilter<ImageType,ImageType,VectorImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
+  typedef otb::Image<PixelType, Dimension>                                                ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                                          VectorImageType;
+  typedef otb::ImageToGrayscaleAnaglyphImageFilter<ImageType, ImageType, VectorImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType>                                                 ReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType>                                  WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -48,7 +48,6 @@ int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
   filter->SetInput2(reader2->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

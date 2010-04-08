@@ -21,11 +21,11 @@
 int otbImageOfVectorsToMonoChannelExtractROINew(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef unsigned char ScalarPixelType;
-  typedef itk::Vector<double,Dimension>    VectorPixelType;
+  typedef unsigned char                  ScalarPixelType;
+  typedef itk::Vector<double, Dimension> VectorPixelType;
 
-  typedef otb::Image<ScalarPixelType,Dimension> ScalarImageType;
-  typedef otb::Image<VectorPixelType,Dimension> VectorImageType;
+  typedef otb::Image<ScalarPixelType, Dimension>                                       ScalarImageType;
+  typedef otb::Image<VectorPixelType, Dimension>                                       VectorImageType;
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<VectorImageType, ScalarImageType> FilterType;
 
   // Instantiating object

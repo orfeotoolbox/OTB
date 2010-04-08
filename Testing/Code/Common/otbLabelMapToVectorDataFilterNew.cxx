@@ -26,16 +26,14 @@ int otbLabelMapToVectorDataFilterNew(int argc, char * argv[])
   typedef unsigned char PType;
 
   typedef otb::VectorData<> VectorDataType;
-  
-  typedef itk::AttributeLabelObject< unsigned long, dim, double > LabelObjectType;
 
-  typedef itk::LabelMap< LabelObjectType > LabelMapType;
+  typedef itk::AttributeLabelObject<unsigned long, dim, double> LabelObjectType;
 
-  typedef otb::LabelMapToVectorDataFilter< LabelMapType , VectorDataType > LabelMapToVectorDataFilterType;
+  typedef itk::LabelMap<LabelObjectType> LabelMapType;
+
+  typedef otb::LabelMapToVectorDataFilter<LabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
   LabelMapToVectorDataFilterType::Pointer MyFilter = LabelMapToVectorDataFilterType::New();
-  
+
   return EXIT_SUCCESS;
 }
-
-

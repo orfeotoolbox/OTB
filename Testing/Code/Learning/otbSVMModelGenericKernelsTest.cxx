@@ -27,13 +27,12 @@
 #include "otbSVMModel.h"
 #include "otbSVMKernels.h"
 
-
-int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
+int otbSVMModelGenericKernelsTest(int argc, char* argv[])
 {
-  typedef unsigned char                                   InputPixelType;
-  typedef unsigned char                                   LabelPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char LabelPixelType;
 
-  typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
+  typedef otb::SVMModel<InputPixelType, LabelPixelType> ModelType;
 
   ModelType::Pointer svmModel = ModelType::New();
 
@@ -67,17 +66,17 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->param.kernel_type = 5;
   model->nr_class = 2;
   model->l = 5;
-  model->sv_coef = new double*[model->nr_class-1];
+  model->sv_coef = new double*[model->nr_class - 1];
 
-  for (int i=0; i<model->nr_class-1; i++)
+  for (int i = 0; i < model->nr_class - 1; i++)
     model->sv_coef[i] = new double[model->l];
-  model->SV = new svm_node*[model->l];
-  for (int n = 0; n<model->l; ++n)
-  {
-    model->SV[n]=new svm_node[1];
+  model->SV = new svm_node *[model->l];
+  for (int n = 0; n < model->l; ++n)
+    {
+    model->SV[n] = new svm_node[1];
     model->SV[n]->index = -1;
     model->SV[n]->value = 0.;
-  }
+    }
 
   model->sv_coef[0][0] = 0.125641;
   model->sv_coef[0][1] = 1;
@@ -97,11 +96,11 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
   model->param.degree = 2;
 
   struct svm_node *p =  new struct svm_node[20];
-  for (unsigned int n = 0;n<20;++n)
-  {
+  for (unsigned int n = 0; n < 20; ++n)
+    {
     p[n].index = -1;
     p[n].value = 0.;
-  }
+    }
   model->SV[0] = &p[0];
   model->SV[1] = &p[4];
   model->SV[2] = &p[8];
@@ -192,5 +191,3 @@ int otbSVMModelGenericKernelsTest( int argc, char* argv[] )
 
   return EXIT_SUCCESS;
 }
-
-

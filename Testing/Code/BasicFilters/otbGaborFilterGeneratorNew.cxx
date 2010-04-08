@@ -20,7 +20,7 @@
 
 int otbGaborFilterGeneratorNew(int argc, char * argv[])
 {
-  typedef double PrecisionType;
+  typedef double                                   PrecisionType;
   typedef otb::GaborFilterGenerator<PrecisionType> GaborGeneratorType;
 
   // Instantiating object

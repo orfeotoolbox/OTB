@@ -22,29 +22,28 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-int otbImageLayerScalar( int argc, char * argv[] )
+int otbImageLayerScalar(int argc, char * argv[])
 {
 
-  const char * infname      = argv[1];
-  const char * qloutfname   = argv[2];
-  const char * extoutfname  = argv[3];
-  const char * sextoutfname = argv[4];
+  const char *       infname      = argv[1];
+  const char *       qloutfname   = argv[2];
+  const char *       extoutfname  = argv[3];
+  const char *       sextoutfname = argv[4];
   const unsigned int ssrate = atoi(argv[5]);
-  const double min          = atof(argv[6]);
-  const double max          = atof(argv[7]);
+  const double       min          = atof(argv[6]);
+  const double       max          = atof(argv[7]);
 
-
-  typedef otb::Image<double,2>                                              ImageType;
-  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2 > OutputImageType;
-  typedef otb::ImageLayer<ImageType, OutputImageType> LayerType;
+  typedef otb::Image<double, 2>                                             ImageType;
+  typedef otb::Image<itk::RGBAPixel<unsigned char>, 2>                      OutputImageType;
+  typedef otb::ImageLayer<ImageType, OutputImageType>                       LayerType;
   typedef OutputImageType::PixelType                                        OutputPixelType;
   typedef otb::ImageFileReader<ImageType>                                   ReaderType;
-  typedef otb::StreamingShrinkImageFilter<ImageType,ImageType>              ShrinkFilterType;
+  typedef otb::StreamingShrinkImageFilter<ImageType, ImageType>             ShrinkFilterType;
   typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
-  typedef otb::Function::StandardRenderingFunction<double,OutputPixelType>  RenderingFunctionType;
+  typedef otb::Function::StandardRenderingFunction<double, OutputPixelType> RenderingFunctionType;
   typedef RenderingFunctionType::ParametersType                             ParametersType;
   // Instantiation
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer       reader = ReaderType::New();
   ShrinkFilterType::Pointer shrinker = ShrinkFilterType::New();
 
   // Input iamge
@@ -76,15 +75,15 @@ int otbImageLayerScalar( int argc, char * argv[] )
   function->SetParameters(parameters);
   layer->SetRenderingFunction(function);
 
-  ImageType::RegionType lregion = reader->GetOutput()->GetLargestPossibleRegion();
+  ImageType::RegionType            lregion = reader->GetOutput()->GetLargestPossibleRegion();
   ImageType::RegionType::IndexType index;
   ImageType::RegionType::SizeType  size;
 
-  size[0]=100;
-  size[1]=100;
+  size[0] = 100;
+  size[1] = 100;
 
-  index[0] = lregion.GetSize()[0]/4;
-  index[1] = lregion.GetSize()[1]/4;
+  index[0] = lregion.GetSize()[0] / 4;
+  index[1] = lregion.GetSize()[1] / 4;
 
   ImageType::RegionType extractRegion;
   extractRegion.SetSize(size);
@@ -92,11 +91,11 @@ int otbImageLayerScalar( int argc, char * argv[] )
 
   layer->SetExtractRegion(extractRegion);
 
-  size[0]=25;
-  size[1]=25;
+  size[0] = 25;
+  size[1] = 25;
 
-  index[0] = 3 * lregion.GetSize()[0]/8;
-  index[1] = 3 * lregion.GetSize()[1]/8;
+  index[0] = 3 * lregion.GetSize()[0] / 8;
+  index[1] = 3 * lregion.GetSize()[1] / 8;
 
   ImageType::RegionType sextractRegion;
   sextractRegion.SetSize(size);
@@ -108,7 +107,7 @@ int otbImageLayerScalar( int argc, char * argv[] )
   layer->Render();
 
   // Report a pixel
-  std::cout<<"Reporting index: "<<index<<" -> "<<layer->GetPixelDescription(index)<<std::endl;
+  std::cout << "Reporting index: " << index << " -> " << layer->GetPixelDescription(index) << std::endl;
 
   // Write the image views
   WriterType::Pointer writer = WriterType::New();

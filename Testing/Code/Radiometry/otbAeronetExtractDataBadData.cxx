@@ -32,12 +32,12 @@ int otbAeronetExtractDataBadData(int argc, char * argv[])
   reader->SetEpsilon(atof(argv[7]));
 
   try
-  {
+    {
     reader->Update();
-  }
-  catch ( itk::ExceptionObject e )
-  {
-      return EXIT_SUCCESS;
-  }
+    }
+  catch (itk::ExceptionObject e)
+    {
+    return EXIT_SUCCESS;
+    }
   return EXIT_FAILURE;
 }

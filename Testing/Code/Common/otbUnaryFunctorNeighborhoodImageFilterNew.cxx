@@ -20,34 +20,33 @@
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "otbImage.h"
 
-
 namespace Functor
 {
 template <class TIter, class TOutput>
 class UnaryFunctorNeighborhoodImageFilterFunctorNewTest
 {
 public:
-  UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
-  ~UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
+  UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {}
+  ~UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {}
 
-  inline TOutput operator() (const TIter & it)
+  inline TOutput operator ()(const TIter& it)
   {
-    return(static_cast<TOutput>(it.GetCenterPixel()));
+    return (static_cast<TOutput>(it.GetCenterPixel()));
 
   }
 };
 }
 
-
 int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef ImageType::PixelType PixelType;
-  typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef otb::Image<InputPixelType, Dimension>                                           ImageType;
+  typedef ImageType::PixelType                                                            PixelType;
+  typedef itk::ConstNeighborhoodIterator<ImageType>                                       IterType;
+  typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType> FunctorType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType,
+                                                   FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

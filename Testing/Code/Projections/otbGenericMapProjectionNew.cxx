@@ -25,15 +25,11 @@
 
 #include "otbGenericMapProjection.h"
 
-
-int otbGenericMapProjectionNew( int argc, char* argv[] )
+int otbGenericMapProjectionNew(int argc, char* argv[])
 {
 
   typedef otb::GenericMapProjection<otb::FORWARD> MapProjectionType;
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

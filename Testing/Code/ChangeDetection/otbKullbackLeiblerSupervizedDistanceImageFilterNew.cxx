@@ -19,16 +19,18 @@
 #include "otbImage.h"
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
-
 int otbKullbackLeiblerSupervizedDistanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double        PixelType;
   typedef unsigned char TrainingPixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::Image< TrainingPixelType, Dimension > TrainingImageType;
-  typedef otb::KullbackLeiblerSupervizedDistanceImageFilter<ImageType,ImageType,TrainingImageType,ImageType> FilterType;
+  typedef otb::Image<PixelType,
+                     Dimension>                                        ImageType;
+  typedef otb::Image<TrainingPixelType,
+                     Dimension>                                        TrainingImageType;
+  typedef otb::KullbackLeiblerSupervizedDistanceImageFilter<ImageType, ImageType, TrainingImageType,
+                                                            ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 

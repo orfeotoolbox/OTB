@@ -27,12 +27,12 @@
 int otbBSQImageIOTestCanWrite(int argc, char* argv[])
 {
   otb::BSQImageIO::Pointer lBSQImageIO = otb::BSQImageIO::New();
-  bool lCanRead = lBSQImageIO->CanWriteFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image BSQ."<<std::endl;
+  bool                     lCanRead = lBSQImageIO->CanWriteFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::L'image " << argv[1] << " n'est pas une image BSQ." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

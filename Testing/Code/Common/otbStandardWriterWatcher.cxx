@@ -26,17 +26,17 @@
 
 int otbStandardWriterWatcher(int argc, char * argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char *       infname = argv[1];
+  const char *       outfname = argv[2];
   const unsigned int nbsd = atoi(argv[3]);
 
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef unsigned char                                           PixelType;
+  typedef otb::Image<PixelType, Dimension>                        ImageType;
+  typedef otb::ImageFileReader<ImageType>                         ReaderType;
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
-  typedef otb::StreamingImageFileWriter<ImageType> StreamingWriterType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::StreamingImageFileWriter<ImageType>                StreamingWriterType;
+  typedef otb::ImageFileWriter<ImageType>                         WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);

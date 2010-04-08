@@ -27,17 +27,17 @@
 int otbRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> InputRImageType;
-  typedef otb::Image<PixelType,Dimension> InputBImageType;
-  typedef otb::Image<PixelType,Dimension> InputNIRImageType;
-  typedef otb::Image<PixelType,Dimension> OutputImageType;
+  typedef unsigned char                    PixelType;
+  typedef otb::Image<PixelType, Dimension> InputRImageType;
+  typedef otb::Image<PixelType, Dimension> InputBImageType;
+  typedef otb::Image<PixelType, Dimension> InputNIRImageType;
+  typedef otb::Image<PixelType, Dimension> OutputImageType;
 
-  typedef otb::RAndBAndNIRIndexImageFilter<InputRImageType,InputBImageType,InputNIRImageType,OutputImageType>  RAndBAndNIRIndexImageFilterType;
+  typedef otb::RAndBAndNIRIndexImageFilter<InputRImageType, InputBImageType, InputNIRImageType,
+                                           OutputImageType> RAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
   RAndBAndNIRIndexImageFilterType::Pointer object = RAndBAndNIRIndexImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

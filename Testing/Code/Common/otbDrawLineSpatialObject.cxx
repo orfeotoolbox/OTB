@@ -32,64 +32,59 @@
 
 #include "otbDrawLineSpatialObjectFilter.h"
 
-
-int otbDrawLineSpatialObject( int argc, char* argv[] )
+int otbDrawLineSpatialObject(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
   // two points to represent a straight line
-  double Ux((double)::atof(argv[3]));
-  double Uy((double)::atof(argv[4]));
-  double Vx((double)::atof(argv[5]));
-  double Vy((double)::atof(argv[6]));
+  double Ux((double) ::atof(argv[3]));
+  double Uy((double) ::atof(argv[4]));
+  double Vx((double) ::atof(argv[5]));
+  double Vy((double) ::atof(argv[6]));
 
+  typedef double        InputPixelType;
+  typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef double                                    InputPixelType;
-  typedef unsigned char                               OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
-
-  typedef otb::DrawLineSpatialObjectFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::DrawLineSpatialObjectFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+
+  writer->SetFileName(outputFilename);
 
   // Definition of the line
-  typedef itk::LineSpatialObject<2>  LineType;
+  typedef itk::LineSpatialObject<2> LineType;
   LineType::PointListType list;
   LineType::LinePointType point;
 
-  point.SetPosition(Ux,Uy);
+  point.SetPosition(Ux, Uy);
   list.push_back(point);
-  point.SetPosition(Vx,Vy);
+  point.SetPosition(Vx, Vy);
   list.push_back(point);
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
-  line->SetPoints( list );
+  line->SetPoints(list);
   line->ComputeBoundingBox();
 
-  filter->SetValue( static_cast<OutputPixelType>(245) );
-  filter->SetInputLine( line );
-  filter->SetInput( reader->GetOutput() );
-  
-  writer->SetInput( filter->GetOutput() );
+  filter->SetValue(static_cast<OutputPixelType>(245));
+  filter->SetInputLine(line);
+  filter->SetInput(reader->GetOutput());
+
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-
-

@@ -25,22 +25,18 @@
 
 #include "otbLineCorrelationDetectorImageFilter.h"
 
-
-int otbLineCorrelationDetectorNew( int argc, char* argv[] )
+int otbLineCorrelationDetectorNew(int argc, char* argv[])
 {
-  typedef unsigned char                             InputPixelType;
-  typedef double                     OutputPixelType;
-  const   unsigned int                              Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >  OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType>   FilterType;
+  typedef otb::LineCorrelationDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer FilterLineCorr = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

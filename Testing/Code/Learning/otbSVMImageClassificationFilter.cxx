@@ -27,16 +27,16 @@ int otbSVMImageClassificationFilter(int argc, char * argv[])
   const char * modelfname = argv[2];
   const char * outfname = argv[3];
 
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
-  typedef otb::SVMImageClassificationFilter<ImageType,LabeledImageType> ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType ModelType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<LabeledImageType> WriterType;
+  typedef otb::VectorImage<PixelType, Dimension>                         ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension>                        LabeledImageType;
+  typedef otb::SVMImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
+  typedef ClassificationFilterType::ModelType                            ModelType;
+  typedef otb::ImageFileReader<ImageType>                                ReaderType;
+  typedef otb::StreamingImageFileWriter<LabeledImageType>                WriterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

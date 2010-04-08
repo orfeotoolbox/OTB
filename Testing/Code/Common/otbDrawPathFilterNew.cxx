@@ -25,13 +25,12 @@
 int otbDrawPathFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef unsigned char                                       PixelType;
+  typedef otb::Image<PixelType, Dimension>                    ImageType;
+  typedef itk::PolyLineParametricPath<Dimension>              PathType;
   typedef otb::DrawPathFilter<ImageType, PathType, ImageType> DrawPathFilterType;
 
   DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

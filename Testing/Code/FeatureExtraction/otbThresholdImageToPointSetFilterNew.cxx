@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 
 #include "otbThresholdImageToPointSetFilter.h"
@@ -29,20 +28,16 @@
 
 #include <iostream>
 
-
-int otbThresholdImageToPointSetFilterNew( int argc, char* argv[] )
+int otbThresholdImageToPointSetFilterNew(int argc, char* argv[])
 {
-  const   unsigned int                          Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef unsigned char                       PixelType;
   typedef otb::Image<PixelType, Dimension>    ImageType;
   typedef itk::PointSet<PixelType, Dimension> PointSetType;
 
-  typedef otb::ThresholdImageToPointSetFilter< ImageType, PointSetType > FilterThresholdType;
-
+  typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType> FilterThresholdType;
 
   FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
 
   return EXIT_SUCCESS;
 }
-
-

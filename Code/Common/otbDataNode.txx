@@ -451,7 +451,7 @@ bool
 DataNode<TPrecision,VDimension,TValuePrecision>
 ::IsMultiPolygonFeature() const
 {
-  return m_NodeType = FEATURE_MULTIPOLYGON;
+  return m_NodeType == FEATURE_MULTIPOLYGON;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>

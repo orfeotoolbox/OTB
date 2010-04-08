@@ -30,11 +30,11 @@ int otbImageToHessianDeterminantImageFilter(int argc, char * argv[])
   const double sigma    = atof(argv[3]);
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageToHessianDeterminantImageFilter<ImageType,ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef double                                                          PixelType;
+  typedef otb::Image<PixelType, Dimension>                                ImageType;
+  typedef otb::ImageToHessianDeterminantImageFilter<ImageType, ImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                 WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -49,7 +49,6 @@ int otbImageToHessianDeterminantImageFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

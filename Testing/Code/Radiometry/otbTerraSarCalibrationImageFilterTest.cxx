@@ -31,16 +31,16 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   const bool   useFastCalibration = atoi(argv[3]);
   const bool   resultsInDbs = atoi(argv[4]);
 
-  typedef double                                               PixelType;
+  typedef double                                                    PixelType;
   typedef otb::Image<PixelType, 2>                                  ImageType;
   typedef otb::ImageFileReader<ImageType>                           ReaderType;
   typedef otb::ImageFileWriter<ImageType>                           WriterType;
   typedef otb::TerraSarCalibrationImageFilter<ImageType, ImageType> FilterType;
   typedef itk::ExtractImageFilter<ImageType, ImageType>             ExtractorType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  FilterType::Pointer filter = FilterType::New();
+  ReaderType::Pointer    reader = ReaderType::New();
+  WriterType::Pointer    writer = WriterType::New();
+  FilterType::Pointer    filter = FilterType::New();
   ExtractorType::Pointer extractor = ExtractorType::New();
 
   reader->SetFileName(inputFileName);
@@ -51,12 +51,12 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->SetUseFastCalibration(useFastCalibration);
   filter->SetResultsInDecibels(resultsInDbs);
-     
-  if(argc == 9)
+
+  if (argc == 9)
     {
     ImageType::RegionType region;
-    ImageType::IndexType id;
-    id[0] =atoi(argv[5]);   
+    ImageType::IndexType  id;
+    id[0] = atoi(argv[5]);
     id[1] = atoi(argv[6]);
     ImageType::SizeType size;
     size[0] = atoi(argv[7]);
@@ -71,8 +71,8 @@ int otbTerraSarCalibrationImageFilterTest(int argc, char * argv[])
     {
     writer->SetInput(filter->GetOutput());
     }
-  
+
   writer->Update();
-  
+
   return EXIT_SUCCESS;
 }

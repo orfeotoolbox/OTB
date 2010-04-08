@@ -20,14 +20,14 @@
 
 #include "otbPointSetFunction.h"
 #include "itkPoint.h"
-#include "itkProcessObject.h"
 
 namespace otb
 {
 
 /**
  * \class PointSetDensityFunction
- * \brief Calculate the density in the neighborhood of a pixel
+ * \brief Calculate the density in the neighborhood of a pixel using a simple cut off method
+ *
  *
  * \ingroup PointSetFunctions
  */
@@ -64,7 +64,7 @@ public:
   virtual OutputType Evaluate(const InputType& input ) const;
 
 protected:
-  PointSetDensityFunction();
+  PointSetDensityFunction(): m_Radius(1) {};
   virtual ~PointSetDensityFunction() {};
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

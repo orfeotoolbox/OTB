@@ -32,45 +32,44 @@
 
 int otbLabelMapToGISTableFilter(int argc, char * argv[])
 {
-  
-  if ( argc != 6 )
-  {
+
+  if (argc != 6)
+    {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputLabelImageFile dbName tableName userName userPassword" << std::endl;
     return EXIT_FAILURE;
-  }
-  
-  const char * infname = argv[1];
+    }
+
+  const char *      infname = argv[1];
   const std::string dbName = argv[2];
   const std::string tableName = argv[3];
   const std::string userName = argv[4];
   const std::string userPassword = argv[5];
- 
+
   // Labeled image type
   const unsigned int Dimension                 = 2;
   typedef unsigned short                         LabelType;
-  typedef otb::Image<LabelType,Dimension>        LabeledImageType;
+  typedef otb::Image<LabelType, Dimension>       LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
-  
+
   // Label map typedef
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                            LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType,LabelMapType> LabelMapFilterType;
-  typedef otb::Polygon<double>                                   PolygonType;
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  
-  typedef otb::PostGISConnectionImplementation BdConnection;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         LabelMapFilterType;
+  typedef otb::Polygon<double>                                                    PolygonType;
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
+
+  typedef otb::PostGISConnectionImplementation          BdConnection;
   typedef otb::PostGISConnectionImplementation::Pointer BdConnectionPointer;
-  
+
   BdConnectionPointer myConnection = BdConnection::New();
-  myConnection->SetHost( "localhost" );
-  myConnection->SetDBName( dbName );
-  myConnection->SetUser( userName );
-  myConnection->SetPassword( userPassword );
-  
+  myConnection->SetHost("localhost");
+  myConnection->SetDBName(dbName);
+  myConnection->SetUser(userName);
+  myConnection->SetPassword(userPassword);
+
   typedef otb::PostGISTable<BdConnection, double, 2> PostGISTableType;
-  
-  
+
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   lreader->SetFileName(infname);
 
@@ -79,20 +78,18 @@ int otbLabelMapToGISTableFilter(int argc, char * argv[])
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   labelMapFilter->Update();
 
-   
-  typedef otb::LabelMapToGISTableFilter< LabelMapType , PostGISTableType > LabelMapToGISTableFilterType;
+  typedef otb::LabelMapToGISTableFilter<LabelMapType, PostGISTableType> LabelMapToGISTableFilterType;
 
   LabelMapToGISTableFilterType::Pointer myFilter = LabelMapToGISTableFilterType::New();
-    
+
   myFilter->SetInput(labelMapFilter->GetOutput());
-  
-    
+
   myFilter->SetInputGISConnection(myConnection);
   myFilter->SetGISTableName(tableName);
   myFilter->SetDropExistingGISTable (true);
-  
+
   myFilter->Update();
-    
+
   return EXIT_SUCCESS;
-  
+
 }

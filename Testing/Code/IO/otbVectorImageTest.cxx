@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 #include <iostream>
 #include <fstream>
@@ -29,7 +28,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-
 int otbVectorImageTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
@@ -37,23 +35,22 @@ int otbVectorImageTest(int argc, char* argv[])
   const char * outputAsciiFilename  = argv[2];
   //  unsigned int  GCPnum((unsigned int)::atoi(argv[2]));
 
-  typedef unsigned char                                    InputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  const unsigned int Dimension = 2;
 
   std::ofstream file;
 
   file.open(outputAsciiFilename);
 
-  typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
 
   InputImageType::Pointer image = InputImageType::New();
 
-  typedef otb::ImageFileReader< InputImageType >         ReaderType;
-
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
   image = reader->GetOutput();
@@ -75,8 +72,8 @@ int otbVectorImageTest(int argc, char* argv[])
   unsigned int GCPCount = image->GetGCPCount();
   file << "GCP Count " << image->GetGCPCount() << std::endl;
 
-  for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++ )
-  {
+  for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++)
+    {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
@@ -85,49 +82,47 @@ int otbVectorImageTest(int argc, char* argv[])
     file << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
     file << "----------------" << std::endl;
-  }
+    }
 
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " " <<i<<" -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " " << i << " -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " UL[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetUpperRightCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " UR[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetLowerLeftCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " LL[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   tab = image->GetLowerRightCorner();
-  for (unsigned int i = 0; i < tab.size(); i++ )
-  {
-    file << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
-  }
+  for (unsigned int i = 0; i < tab.size(); i++)
+    {
+    file << " LR[" << i << "] -> " << tab[i] << std::endl;
+    }
   tab.clear();
 
   file.close();
 
-
   return EXIT_SUCCESS;
 }
-

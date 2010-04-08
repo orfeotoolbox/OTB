@@ -23,15 +23,14 @@
 int otbWaveletOperator(int argc, char * argv[])
 {
   const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
-  const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
+  const otb::Wavelet::Wavelet          wvltID = otb::Wavelet::HAAR;
 
   const int Dimension = 2;
   typedef double PixelType;
 
-
-  typedef otb::WaveletOperator< wvltID, directionID, PixelType, Dimension >
-    WaveletOperator;
-  typedef WaveletOperator::LowPassOperator LowPassOperatorType;
+  typedef otb::WaveletOperator<wvltID, directionID, PixelType, Dimension>
+  WaveletOperator;
+  typedef WaveletOperator::LowPassOperator  LowPassOperatorType;
   typedef WaveletOperator::HighPassOperator HighPassOperatorType;
 
   LowPassOperatorType h_filter;
@@ -46,5 +45,3 @@ int otbWaveletOperator(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
-
-

@@ -27,30 +27,29 @@
 
 int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
 {
-  const char * inputFilename = argv[1];
-  const char * outputFilename1 = argv[2];
-  const char * outputFilename2 = argv[3];
-  const char * outputFilename3 = argv[4];
+  const char *       inputFilename = argv[1];
+  const char *       outputFilename1 = argv[2];
+  const char *       outputFilename2 = argv[3];
+  const char *       outputFilename3 = argv[4];
   const unsigned int numberOfLevels = atoi(argv[5]);
-  const float decimationRatio = atof(argv[6]);
+  const float        decimationRatio = atof(argv[6]);
 
   const unsigned int Dimension = 2;
   typedef double InputPixelType;
   typedef double OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, InputImageType, StructuringElementType>
   OpeningClosingFilterType;
-  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,InputImageType,OpeningClosingFilterType>
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType, InputImageType, OpeningClosingFilterType>
   PyramidAnalysisFilterType;
-  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
-
+  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType, OutputImageType> MRToMSConverterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -86,7 +85,6 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
   writer3->SetFileName(outputFilename3);
   writer3->SetInput(mrtoms->GetOutput()->Back());
   writer3->Update();
-
 
   return EXIT_SUCCESS;
 }

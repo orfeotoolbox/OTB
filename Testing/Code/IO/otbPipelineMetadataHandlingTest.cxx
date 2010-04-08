@@ -33,26 +33,26 @@ int otbPipelineMetadataHandlingTest(int argc, char* argv[])
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef double                                    InputPixelType;
-  typedef double                                    OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
-  typedef itk::DiscreteGaussianImageFilter<InputImageType,OutputImageType> FilterType;
+  typedef otb::ImageFileReader<InputImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
+  typedef itk::DiscreteGaussianImageFilter<InputImageType, OutputImageType> FilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer filter = FilterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
   filter->SetInput(reader->GetOutput());
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

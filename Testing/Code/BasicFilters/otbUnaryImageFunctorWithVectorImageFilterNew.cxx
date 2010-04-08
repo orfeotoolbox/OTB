@@ -25,13 +25,13 @@
 int otbUnaryImageFunctorWithVectorImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                          InputImageType;
-  typedef InputImageType::InternalPixelType                              InternalPixelType;
-  typedef itk::Functor::Cos<InternalPixelType,InternalPixelType>         FunctorType;
+  typedef double                                                  PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                  InputImageType;
+  typedef InputImageType::InternalPixelType                       InternalPixelType;
+  typedef itk::Functor::Cos<InternalPixelType, InternalPixelType> FunctorType;
   typedef otb::UnaryImageFunctorWithVectorImageFilter<InputImageType,
-  InputImageType,
-  FunctorType     >  UnaryImageFunctorWithVectorImageFilterType;
+                                                      InputImageType,
+                                                      FunctorType>  UnaryImageFunctorWithVectorImageFilterType;
 
   // Instantiating object
   UnaryImageFunctorWithVectorImageFilterType::Pointer filter = UnaryImageFunctorWithVectorImageFilterType::New();

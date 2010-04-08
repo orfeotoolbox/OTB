@@ -22,20 +22,20 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 
-
 int otbScalarImageTextureFunctorNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
-  typedef itk::ConstNeighborhoodIterator<InputImageType>   IterType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType> IterType;
   //typedef itk::Statistics::ScalarImageTextureCalculator< InputImageType > TextureCalcType;
   //typedef TextureCalcType::FeatureValueVectorPointer TextureCalcType;
 
-  typedef otb::Functor::ScalarImageTextureFunctor<IterType, InputImageType, InputPixelType>  FunctorType;
+  typedef otb::Functor::ScalarImageTextureFunctor<IterType, InputImageType, InputPixelType> FunctorType;
 
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputImageType,
+                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

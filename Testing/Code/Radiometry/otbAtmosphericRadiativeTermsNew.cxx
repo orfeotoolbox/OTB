@@ -25,7 +25,7 @@
 
 int otbAtmosphericRadiativeTermsNew(int argc, char * argv[])
 {
-  typedef otb::AtmosphericRadiativeTerms  AtmosphericRadiativeTermsType;
+  typedef otb::AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
 
   // Instantiating object
   AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();

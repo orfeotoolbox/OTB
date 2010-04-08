@@ -21,17 +21,16 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-
 int otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<unsigned char,Dimension> InputImageType;
-  typedef otb::Image<float,Dimension> OutputImageType;
-  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType,OutputImageType> MultiChannelRAndBAndNIRIndexImageFilterType;
+  typedef otb::VectorImage<unsigned char, Dimension> InputImageType;
+  typedef otb::Image<float, Dimension>               OutputImageType;
+  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType,
+                                                       OutputImageType> MultiChannelRAndBAndNIRIndexImageFilterType;
 
   // Instantiating object
   MultiChannelRAndBAndNIRIndexImageFilterType::Pointer object = MultiChannelRAndBAndNIRIndexImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

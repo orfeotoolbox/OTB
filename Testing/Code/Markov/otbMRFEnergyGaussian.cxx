@@ -25,12 +25,12 @@
 
 int otbMRFEnergyGaussian(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef int    PixelType2;
-  typedef otb::Image<PixelType, 2>                   ImageType;
-  typedef otb::Image<PixelType2, 2>                  LabelType;
+  typedef double                    PixelType;
+  typedef int                       PixelType2;
+  typedef otb::Image<PixelType, 2>  ImageType;
+  typedef otb::Image<PixelType2, 2> LabelType;
 
-  typedef otb::MRFEnergyGaussian< ImageType, LabelType> MRFEnergyGaussianType;
+  typedef otb::MRFEnergyGaussian<ImageType, LabelType>  MRFEnergyGaussianType;
   typedef MRFEnergyGaussianType::InputImagePixelType    InputImagePixelType;
   typedef MRFEnergyGaussianType::LabelledImagePixelType LabelledImagePixelType;
 
@@ -39,26 +39,24 @@ int otbMRFEnergyGaussian(int argc, char * argv[])
   InputImagePixelType    inPix = 10;
   LabelledImagePixelType inLab = 5;
 
-  if ( object->GetSingleValue(inPix, inLab) != 25 )
-  {
+  if (object->GetSingleValue(inPix, inLab) != 25)
+    {
     return EXIT_FAILURE;
-  }
+    }
 
   inPix = 5;
   inLab = 10;
-  if ( object->GetSingleValue(inPix, inLab) != 25 )
-  {
+  if (object->GetSingleValue(inPix, inLab) != 25)
+    {
     return EXIT_FAILURE;
-  }
+    }
 
   inPix = 0;
   inLab = 0;
-  if ( object->GetSingleValue(inPix, inLab) != 0 )
-  {
+  if (object->GetSingleValue(inPix, inLab) != 0)
+    {
     return EXIT_FAILURE;
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }
-

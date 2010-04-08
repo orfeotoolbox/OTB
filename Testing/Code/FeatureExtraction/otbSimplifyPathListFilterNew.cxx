@@ -23,13 +23,12 @@
 
 int otbSimplifyPathListFilterNew(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
-  typedef otb::SimplifyPathListFilter<PathType> SimplifyPathListFilterType;
+  typedef otb::SimplifyPathListFilter<PathType>  SimplifyPathListFilterType;
 
   // Instantiating object
   SimplifyPathListFilterType::Pointer object = SimplifyPathListFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

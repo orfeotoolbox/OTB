@@ -24,23 +24,23 @@
 int otbHistogramAndTransferFunctionWidget(int argc, char * argv[])
 {
   typedef unsigned char PixelType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
   const char * infname = argv[1];
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
+  typedef otb::ImageFileReader<ImageType>                             ReaderType;
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
-  typedef GeneratorType::HistogramType HistogramType;
+  typedef GeneratorType::HistogramType                                HistogramType;
 
-  typedef otb::HistogramAndTransferFunctionWidget<HistogramType,PixelType> WidgetType;
-  typedef otb::ImageWidgetAffineTransferFunction<PixelType> TransferFunctionType;
+  typedef otb::HistogramAndTransferFunctionWidget<HistogramType, PixelType> WidgetType;
+  typedef otb::ImageWidgetAffineTransferFunction<PixelType>                 TransferFunctionType;
 
   TransferFunctionType::Pointer function = TransferFunctionType::New();
   function->SetLowerBound(50);
   function->SetUpperBound(200);
 
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer    reader = ReaderType::New();
   GeneratorType::Pointer generator  = GeneratorType::New();
 
   reader->SetFileName(infname);
@@ -49,13 +49,13 @@ int otbHistogramAndTransferFunctionWidget(int argc, char * argv[])
   generator->SetInput(reader->GetOutput());
   generator->SetNumberOfBins(255);
   generator->Compute();
-  std::cout<<generator->GetOutput()->GetSize()<<std::endl;
+  std::cout << generator->GetOutput()->GetSize() << std::endl;
 
-  Fl_Window window(300,200);
+  Fl_Window           window(300, 200);
   WidgetType::Pointer widget = WidgetType::New();
   widget->SetHistogram(generator->GetOutput());
   widget->SetTransferFunction(function);
-  widget->resize(0,0,300,200);
+  widget->resize(0, 0, 300, 200);
   window.resizable(widget.GetPointer());
   window.end();
   window.show();

@@ -23,14 +23,14 @@
 int otbStatisticsAttributesLabelMapFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  typedef double                         PixelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef otb::Image<PixelType,Dimension>                                ImageType;
-  typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType,ImageType> StatisticsLabelMapFilterType;
-  
+  typedef unsigned short LabelType;
+  typedef double         PixelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>      LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                   LabelMapType;
+  typedef otb::Image<PixelType, Dimension>                                 ImageType;
+  typedef otb::StatisticsAttributesLabelMapFilter<LabelMapType, ImageType> StatisticsLabelMapFilterType;
+
   // Instantiation
   StatisticsLabelMapFilterType::Pointer StatisticsAttributesLabelMapFilter = StatisticsLabelMapFilterType::New();
 

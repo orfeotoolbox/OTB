@@ -24,14 +24,14 @@
 int otbMorphologicalPyramidAnalysisFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef unsigned char                                                InputPixelType;
+  typedef unsigned char                                                OutputPixelType;
+  typedef otb::Image<InputPixelType, Dimension>                        InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>                       OutputImageType;
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, InputImageType, StructuringElementType>
   OpeningClosingFilterType;
-  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType, OutputImageType, OpeningClosingFilterType>
   PyramidFilterType;
   // Instantiation
   PyramidFilterType::Pointer pyramid = PyramidFilterType::New();

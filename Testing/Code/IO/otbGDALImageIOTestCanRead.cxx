@@ -27,13 +27,12 @@
 int otbGDALImageIOTestCanRead(int argc, char* argv[])
 {
   otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
-  bool lCanRead = lGDALImageIO->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::GDALImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
+  bool                      lCanRead = lGDALImageIO->CanReadFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::GDALImageIO : impossible d'ouvrir l'image " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }

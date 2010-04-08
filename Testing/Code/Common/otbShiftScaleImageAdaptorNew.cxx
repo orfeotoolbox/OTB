@@ -16,21 +16,17 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbVectorImage.h"
 #include "otbShiftScaleImageAdaptor.h"
 
-int otbShiftScaleImageAdaptorNew( int argc, char * argv[] )
+int otbShiftScaleImageAdaptorNew(int argc, char * argv[])
 {
-  typedef double                                                     InputPixelType;
-  typedef otb::VectorImage<InputPixelType, 2>                        ImageType;
-  typedef otb::ShiftScaleImageAdaptor< ImageType, InputPixelType > FilterType;
+  typedef double                                                 InputPixelType;
+  typedef otb::VectorImage<InputPixelType, 2>                    ImageType;
+  typedef otb::ShiftScaleImageAdaptor<ImageType, InputPixelType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

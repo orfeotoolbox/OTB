@@ -25,15 +25,11 @@
 
 #include "otbGenericRSTransform.h"
 
-
-int otbGenericRSTransformNew( int argc, char* argv[] )
+int otbGenericRSTransformNew(int argc, char* argv[])
 {
 
   typedef otb::GenericRSTransform<> TransformType;
   TransformType::Pointer transform = TransformType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

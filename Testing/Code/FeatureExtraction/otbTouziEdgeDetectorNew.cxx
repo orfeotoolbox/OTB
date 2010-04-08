@@ -26,23 +26,18 @@
 
 #include "otbTouziEdgeDetectorImageFilter.h"
 
-
-int otbTouziEdgeDetectorNew( int argc, char* argv[] )
+int otbTouziEdgeDetectorNew(int argc, char* argv[])
 {
-  typedef unsigned char                                   InputPixelType;
-  typedef double                                 OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::TouziEdgeDetectorImageFilter< InputImageType,OutputImageType >   FilterType;
-
+  typedef otb::TouziEdgeDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer filterTouzi = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

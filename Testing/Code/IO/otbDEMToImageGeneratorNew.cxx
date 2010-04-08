@@ -23,12 +23,11 @@
 int otbDEMToImageGeneratorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::Image<unsigned char,Dimension>     ImageType;
-  typedef otb::DEMToImageGenerator<ImageType>     DEMToImageGeneratorType;
+  typedef otb::Image<unsigned char, Dimension> ImageType;
+  typedef otb::DEMToImageGenerator<ImageType>  DEMToImageGeneratorType;
 
   // Instantiating object
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
-
 
   return EXIT_SUCCESS;
 }

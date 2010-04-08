@@ -20,11 +20,11 @@
 int otbAttributesMapLabelObjectNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  
-  typedef unsigned short                         LabelType;
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double> LabelObjectType;
-  typedef LabelObjectType::Pointer                            LabelObjectPointerType;
-  
+
+  typedef unsigned short                                              LabelType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef LabelObjectType::Pointer                                    LabelObjectPointerType;
+
   // Instantiation
   LabelObjectPointerType myAttMapLabelObject = LabelObjectType::New();
 

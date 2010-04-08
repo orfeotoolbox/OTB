@@ -22,14 +22,14 @@
 
 int otbSOMImageClassificationFilterNew(int argc, char * argv[])
 {
-  const unsigned int     Dimension = 2;
+  const unsigned int Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::Image<LabeledPixelType,Dimension> LabeledImageType;
-  typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
-  typedef otb::SOMImageClassificationFilter<ImageType,LabeledImageType,SOMMapType> ClassificationFilterType;
+  typedef otb::VectorImage<PixelType, Dimension>                                     ImageType;
+  typedef otb::Image<LabeledPixelType, Dimension>                                    LabeledImageType;
+  typedef otb::SOMMap<ImageType::PixelType>                                          SOMMapType;
+  typedef otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();

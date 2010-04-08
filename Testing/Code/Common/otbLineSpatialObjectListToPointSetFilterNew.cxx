@@ -26,20 +26,16 @@
 
 #include "otbLineSpatialObjectListToPointSetFilter.h"
 
-
-int otbLineSpatialObjectListToPointSetFilterNew( int argc, char* argv[] )
+int otbLineSpatialObjectListToPointSetFilterNew(int argc, char* argv[])
 {
-  typedef float                                                      InputPixelType;
-  typedef otb::LineSpatialObjectList                                 LinesListType;
-  typedef itk::PointSet<InputPixelType>                              PointSetType;
+  typedef float                         InputPixelType;
+  typedef otb::LineSpatialObjectList    LinesListType;
+  typedef itk::PointSet<InputPixelType> PointSetType;
 
   typedef otb::LineSpatialObjectListToPointSetFilter<LinesListType,
                                                      PointSetType>   FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -17,7 +17,7 @@
 =========================================================================*/
 #include "otbImageWidgetController.h"
 
-int otbImageWidgetControllerNew( int argc, char * argv[] )
+int otbImageWidgetControllerNew(int argc, char * argv[])
 {
   typedef otb::ImageWidgetController ControllerType;
   ControllerType::Pointer controller = ControllerType::New();

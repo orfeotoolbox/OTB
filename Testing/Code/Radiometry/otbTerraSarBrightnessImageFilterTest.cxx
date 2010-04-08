@@ -23,7 +23,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
@@ -41,7 +40,6 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
   WriterType::Pointer    writer    = WriterType::New();
   FilterType::Pointer    filter    = FilterType::New();
   ExtractorType::Pointer extractor = ExtractorType::New();
-  
 
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
@@ -49,25 +47,25 @@ int otbTerraSarBrightnessImageFilterTest(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->SetResultsInDecibels(resultsInDb);
 
-  if( useMetadata )
+  if (useMetadata)
     {
-      // Generate an extract from the large input
-      ImageType::RegionType region;
-      ImageType::IndexType id;
-      id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
-      ImageType::SizeType size;
-      size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
-      region.SetIndex(id);
-      region.SetSize(size);
-      extractor->SetExtractionRegion(region);
-  
-      extractor->SetInput(filter->GetOutput());
-      writer->SetInput(extractor->GetOutput());
+    // Generate an extract from the large input
+    ImageType::RegionType region;
+    ImageType::IndexType  id;
+    id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
+    ImageType::SizeType size;
+    size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
+    region.SetIndex(id);
+    region.SetSize(size);
+    extractor->SetExtractionRegion(region);
+
+    extractor->SetInput(filter->GetOutput());
+    writer->SetInput(extractor->GetOutput());
     }
   else
     {
-      filter->SetCalibrationFactor( 10 );
-      writer->SetInput(filter->GetOutput());
+    filter->SetCalibrationFactor(10);
+    writer->SetInput(filter->GetOutput());
     }
 
   writer->Update();

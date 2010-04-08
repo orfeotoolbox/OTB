@@ -28,43 +28,42 @@
 int otbRCC8Graph(int argc, char* argv[])
 {
   const unsigned int nbVertices = 2;
-  typedef otb::Polygon<>  PathType;
-  typedef PathType::VertexType PointType;
-  typedef otb::RCC8VertexBase<PathType> VertexType;
-  typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-  typedef RCC8GraphType::EdgeType EdgeType;
-  typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
-  typedef otb::RCC8EdgeIterator<RCC8GraphType>   EdgeIteratorType;
-  typedef otb::RCC8InEdgeIterator<RCC8GraphType> InEdgeIteratorType;
+  typedef otb::Polygon<>                          PathType;
+  typedef PathType::VertexType                    PointType;
+  typedef otb::RCC8VertexBase<PathType>           VertexType;
+  typedef otb::RCC8Graph<VertexType>              RCC8GraphType;
+  typedef RCC8GraphType::EdgeType                 EdgeType;
+  typedef otb::RCC8VertexIterator<RCC8GraphType>  VertexIteratorType;
+  typedef otb::RCC8EdgeIterator<RCC8GraphType>    EdgeIteratorType;
+  typedef otb::RCC8InEdgeIterator<RCC8GraphType>  InEdgeIteratorType;
   typedef otb::RCC8OutEdgeIterator<RCC8GraphType> OutEdgeIteratorType;
 
   // Instantiation
   RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
   // Setting the number of vertices
-  rcc8Graph->SetNumberOfVertices(nbVertices-1);
+  rcc8Graph->SetNumberOfVertices(nbVertices - 1);
   // Call to the build method
   rcc8Graph->Build();
 
+  PointType p1, p2, p3, p4, p5, p6;
 
-  PointType p1,p2,p3,p4,p5,p6;
-
-  p1[0]= 0;
-  p1[1]= 0;
-  p2[0]= 10;
-  p2[1]= 10;
-  p3[0]= 10;
-  p3[1]= 0;
-  p4[0]= 20;
-  p4[1]= 20;
-  p5[0]= 20;
-  p5[1]= 10;
-  p6[0]= 10;
-  p6[1]= 20;
+  p1[0] = 0;
+  p1[1] = 0;
+  p2[0] = 10;
+  p2[1] = 10;
+  p3[0] = 10;
+  p3[1] = 0;
+  p4[0] = 20;
+  p4[1] = 20;
+  p5[0] = 20;
+  p5[1] = 10;
+  p6[0] = 10;
+  p6[1] = 20;
 
   unsigned int vertex1SegLevel = 0;
   unsigned int vertex2SegLevel = 10;
-  bool vertex1SegType = true;
-  bool vertex2SegType = false;
+  bool         vertex1SegType = true;
+  bool         vertex2SegType = false;
 
   PathType::Pointer path1 = PathType::New();
   path1->AddVertex(p1);
@@ -86,74 +85,70 @@ int otbRCC8Graph(int argc, char* argv[])
   vertex2->SetSegmentationType(vertex2SegType);
   vertex2->SetPath(path2);
 
+  rcc8Graph->SetVertex(0, vertex1);
+  rcc8Graph->SetVertex(1, vertex2);
 
-  rcc8Graph->SetVertex(0,vertex1);
-  rcc8Graph->SetVertex(1,vertex2);
-
-  otbControlConditionTestMacro(rcc8Graph->GetNumberOfVertices()!=nbVertices,
+  otbControlConditionTestMacro(rcc8Graph->GetNumberOfVertices() != nbVertices,
                                "rcc8Graph->GetNumberOfVertices()!=nbVertices");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationLevel()!=vertex1SegLevel,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationLevel() != vertex1SegLevel,
                                "rcc8Graph->GetVertex(0)->GetSegmentationLevel()!=vertex1SegLevel");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationType()!=vertex1SegType,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetSegmentationType() != vertex1SegType,
                                "rcc8Graph->GetVertex(0)->GetSegmentationType()!=vertex1SegType");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p1,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0) != p1,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p1");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p2,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1) != p2,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p2");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p3,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2) != p3,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p3");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationLevel()!=vertex2SegLevel,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationLevel() != vertex2SegLevel,
                                "rcc8Graph->GetVertex(1)->GetSegmentationLevel()!=vertex2SegLevel");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationType()!=vertex2SegType,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetSegmentationType() != vertex2SegType,
                                "rcc8Graph->GetVertex(1)->GetObjectLabelInImgage()!=vertex2SegType");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0)!=p4,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0) != p4,
                                "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(0)!=p4");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1)!=p5,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1) != p5,
                                "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(1)!=p5");
-  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6,
+  otbControlConditionTestMacro(rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2) != p6,
                                "rcc8Graph->GetVertex(1)->GetPath()->GetVertexList()->GetElement(2)!=p6");
-
 
   VertexIteratorType v(rcc8Graph);
   v.GoToBegin();
-  otbControlConditionTestMacro(v.Get()->GetSegmentationLevel()!=vertex1SegLevel,
+  otbControlConditionTestMacro(v.Get()->GetSegmentationLevel() != vertex1SegLevel,
                                "v.Get()->GetSegmentationLevel()!=vertex1SegLevel");
-  otbControlConditionTestMacro(v.Get()->GetSegmentationType()!=vertex1SegType,
+  otbControlConditionTestMacro(v.Get()->GetSegmentationType() != vertex1SegType,
                                "v.Get()->GetSegmentationType()!=vertex1SegType");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p1,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0) != p1,
                                "v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p1");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p2,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1) != p2,
                                "v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p2");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p3,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2) != p3,
                                "v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p3");
   ++v;
-  otbControlConditionTestMacro(v.Get()->GetSegmentationLevel()!=vertex2SegLevel,
+  otbControlConditionTestMacro(v.Get()->GetSegmentationLevel() != vertex2SegLevel,
                                "v.Get()->GetSegmentationLevel()!=vertex2SegLevel");
-  otbControlConditionTestMacro(v.Get()->GetSegmentationType()!=vertex2SegType,
+  otbControlConditionTestMacro(v.Get()->GetSegmentationType() != vertex2SegType,
                                "v.Get()->GetObjectLabelInImgage()!=vertex2SegType");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0)!=p4,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(0) != p4,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(0)!=p4");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1)!=p5,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(1) != p5,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(1)!=p5");
-  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2)!=p6,
+  otbControlConditionTestMacro(v.Get()->GetPath()->GetVertexList()->GetElement(2) != p6,
                                "rcc8Graph->GetVertex(0)->GetPath()->GetVertexList()->GetElement(2)!=p6");
 
-
   // Testing the edge iterator
-  rcc8Graph->AddEdge(0,1,otb::OTB_RCC8_NTPPI);
+  rcc8Graph->AddEdge(0, 1, otb::OTB_RCC8_NTPPI);
 
-  otbControlConditionTestMacro(rcc8Graph->GetNumberOfEdges()!=1,
+  otbControlConditionTestMacro(rcc8Graph->GetNumberOfEdges() != 1,
                                "rcc8Graph->GetNumberOfEdges()!=1");
 
   EdgeIteratorType e(rcc8Graph);
   e.GoToBegin();
-  otbControlConditionTestMacro(e.GetValue()!=otb::OTB_RCC8_NTPPI,
+  otbControlConditionTestMacro(e.GetValue() != otb::OTB_RCC8_NTPPI,
                                "e.GetValue()!=otb::OTB_RCC8_NTPPI");
-  otbControlConditionTestMacro(e.GetSourceIndex()!=0,
+  otbControlConditionTestMacro(e.GetSourceIndex() != 0,
                                "e.GetSourceIndex()!=0");
-  otbControlConditionTestMacro(e.GetTargetIndex()!=1,
+  otbControlConditionTestMacro(e.GetTargetIndex() != 1,
                                "e.GetTargetIndex()!=1");
-
 
   return EXIT_SUCCESS;
 }

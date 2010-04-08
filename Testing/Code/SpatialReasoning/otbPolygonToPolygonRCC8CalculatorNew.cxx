@@ -21,12 +21,11 @@
 
 int otbPolygonToPolygonRCC8CalculatorNew(int argc, char* argv[])
 {
-  typedef otb::Polygon<> PolygonType;
+  typedef otb::Polygon<>                                   PolygonType;
   typedef otb::PolygonToPolygonRCC8Calculator<PolygonType> CalculatorType;
 
   //Instantiation
   CalculatorType::Pointer calc = CalculatorType::New();
-
 
   return EXIT_SUCCESS;
 }

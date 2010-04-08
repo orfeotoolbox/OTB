@@ -21,12 +21,12 @@
 
 int otbRCC8VertexWithCompacityNew(int argc, char* argv[])
 {
-  typedef otb::Polygon<> PathType;
-  typedef float PrecisionType;
-  typedef otb::RCC8VertexWithCompacity<PathType,PrecisionType> RCC8VertexType;
+  typedef otb::Polygon<>                                        PathType;
+  typedef float                                                 PrecisionType;
+  typedef otb::RCC8VertexWithCompacity<PathType, PrecisionType> RCC8VertexType;
 
   // Instantiation
-  RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
+  RCC8VertexType::Pointer rcc8Vertex = RCC8VertexType::New();
 
   return EXIT_SUCCESS;
 }

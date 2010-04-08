@@ -23,12 +23,11 @@
 int otbSpatialObjectSourceNew(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef itk::GroupSpatialObject<Dimension> SpatialObjectType;
+  typedef itk::GroupSpatialObject<Dimension>          SpatialObjectType;
   typedef otb::SpatialObjectSource<SpatialObjectType> SpatialObjectSourceType;
 
   // Instantiation
   SpatialObjectSourceType::Pointer source = SpatialObjectSourceType::New();
-
 
   return EXIT_SUCCESS;
 }

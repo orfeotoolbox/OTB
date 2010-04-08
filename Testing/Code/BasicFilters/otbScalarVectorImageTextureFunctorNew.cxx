@@ -23,22 +23,22 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodImageFilter.h"
 
-
 int otbScalarVectorImageTextureFunctorNew(int argc, char * argv[])
 {
   typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<InputPixelType,Dimension> InputVectorImageType;
-  typedef InputVectorImageType::PixelType VectorImagePixelType;
+  typedef otb::Image<InputPixelType, Dimension>       InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
+  typedef InputVectorImageType::PixelType             VectorImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator<InputImageType>   IterType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType> IterType;
   //typedef itk::Statistics::ScalarImageTextureCalculator< InputImageType > TextureCalcType;
   //typedef TextureCalcType::FeatureValueVectorPointer TextureCalcType;
 
-  typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType, VectorImagePixelType>  FunctorType;
+  typedef otb::Functor::ScalarVectorImageTextureFunctor<IterType, InputImageType, VectorImagePixelType> FunctorType;
 
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputVectorImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
+  typedef otb::UnaryFunctorNeighborhoodImageFilter<InputImageType, InputVectorImageType,
+                                                   FunctorType> UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();

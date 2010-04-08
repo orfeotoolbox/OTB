@@ -20,16 +20,13 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include <iostream>
 
 #include "otbExhaustiveExponentialOptimizer.h"
 
-int otbExhaustiveExponentialOptimizerNew( int argc, char* argv[] )
+int otbExhaustiveExponentialOptimizerNew(int argc, char* argv[])
 {
   otb::ExhaustiveExponentialOptimizer::Pointer opt = otb::ExhaustiveExponentialOptimizer::New();
 
   return EXIT_SUCCESS;
 }
-
-

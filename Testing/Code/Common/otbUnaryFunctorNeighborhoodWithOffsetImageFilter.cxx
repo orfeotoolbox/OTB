@@ -29,8 +29,8 @@ template <class TInput, class TOutput>
 class UnaryFunctorNeighborhoodWithOffseImageFilterTest
 {
 public:
-  UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
-  ~UnaryFunctorNeighborhoodWithOffseImageFilterTest() {};
+  UnaryFunctorNeighborhoodWithOffseImageFilterTest() {}
+  ~UnaryFunctorNeighborhoodWithOffseImageFilterTest() {}
 
   typedef TInput                                      InputScalarType;
   typedef TOutput                                     OutputScalarType;
@@ -42,20 +42,20 @@ public:
 
   void SetOffset(OffsetType off)
   {
-    m_Offset=off;
-  };
+    m_Offset = off;
+  }
   OffsetType GetOffset()
   {
     return m_Offset;
-  };
-
-  inline OutputScalarType operator() (const NeighborhoodType & neigh)
-  {
-    return(static_cast<OutputScalarType>(neigh.GetCenterValue()));
   }
-  inline OutputVectorType operator() (const NeighborhoodVectorType & neigh)
+
+  inline OutputScalarType operator ()(const NeighborhoodType& neigh)
   {
-    return(static_cast<OutputVectorType>(neigh.GetCenterValue()));
+    return (static_cast<OutputScalarType>(neigh.GetCenterValue()));
+  }
+  inline OutputVectorType operator ()(const NeighborhoodVectorType& neigh)
+  {
+    return (static_cast<OutputVectorType>(neigh.GetCenterValue()));
 
   }
 private:
@@ -63,27 +63,27 @@ private:
 };
 }
 
-
 int otbUnaryFunctorNeighborhoodWithOffsetImageFilter(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
 
-  typedef double                                     InputPixelType;
-  const int                                          Dimension = 2;
-  typedef otb::VectorImage<InputPixelType,Dimension> ImageType;
-  typedef ImageType::OffsetType                      OffsetType;
-  typedef ImageType::PixelType                       PixelType;
-  typedef otb::ImageFileReader<ImageType>            ReaderType;
-  typedef otb::ImageFileWriter<ImageType>            WriterType;
-  typedef itk::ConstNeighborhoodIterator<ImageType>  IterType;;
-  typedef Functor::UnaryFunctorNeighborhoodWithOffseImageFilterTest<InputPixelType, InputPixelType>  FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType, FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
+  typedef double InputPixelType;
+  const int Dimension = 2;
+  typedef otb::VectorImage<InputPixelType, Dimension>                                               ImageType;
+  typedef ImageType::OffsetType                                                                     OffsetType;
+  typedef ImageType::PixelType                                                                      PixelType;
+  typedef otb::ImageFileReader<ImageType>                                                           ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                                           WriterType;
+  typedef itk::ConstNeighborhoodIterator<ImageType>                                                 IterType;
+  typedef Functor::UnaryFunctorNeighborhoodWithOffseImageFilterTest<InputPixelType, InputPixelType> FunctorType;
+  typedef otb::UnaryFunctorNeighborhoodWithOffsetImageFilter<ImageType, ImageType,
+                                                             FunctorType>     UnaryFunctorNeighborhoodImageFilterType;
 
   // Instantiating object
   UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                              reader  = ReaderType::New();
+  WriterType::Pointer                              writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
 
@@ -97,7 +97,6 @@ int otbUnaryFunctorNeighborhoodWithOffsetImageFilter(int argc, char * argv[])
   writer->SetInput(object->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

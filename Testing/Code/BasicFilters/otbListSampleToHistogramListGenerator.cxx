@@ -28,25 +28,25 @@ int otbListSampleToHistogramListGenerator(int argc, char * argv[])
   typedef VectorImageType::PixelType                   VectorPixelType;
   typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
   typedef otb::ListSampleToHistogramListGenerator
-    <ListSampleType,PixelType>                         HistogramGeneratorType;
-  typedef otb::ImageFileReader<VectorImageType>        ReaderType;
+  <ListSampleType, PixelType>                         HistogramGeneratorType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
   // Instantiation
   ReaderType::Pointer             reader    = ReaderType::New();
   HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
-  ListSampleType::Pointer ls = ListSampleType::New();
+  ListSampleType::Pointer         ls = ListSampleType::New();
 
   reader->SetFileName(argv[1]);
   reader->Update();
 
-  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<VectorImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
     ls->PushBack(it.Get());
     }
 
-  float mscale = atof(argv[4]);
+  float        mscale = atof(argv[4]);
   unsigned int nbBins = atoi(argv[3]);
 
   generator->SetListSample(ls);
@@ -56,16 +56,16 @@ int otbListSampleToHistogramListGenerator(int argc, char * argv[])
 
   std::ofstream ofs;
   ofs.open(argv[2]);
-  for(unsigned int comp = 0; comp<reader->GetOutput()->GetNumberOfComponentsPerPixel();++comp)
+  for (unsigned int comp = 0; comp < reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++comp)
     {
-    ofs<<"Channel: "<<comp<<" histogram: "<<std::endl;
-    for(unsigned int bin = 0; bin <nbBins;++bin)
+    ofs << "Channel: " << comp << " histogram: " << std::endl;
+    for (unsigned int bin = 0; bin < nbBins; ++bin)
       {
-      ofs<<generator->GetOutput()->GetNthElement(comp)->GetFrequency(bin)<<"\t";
+      ofs << generator->GetOutput()->GetNthElement(comp)->GetFrequency(bin) << "\t";
       }
-    ofs<<std::endl;
+    ofs << std::endl;
     }
-  
+
   ofs.close();
 
   return EXIT_SUCCESS;

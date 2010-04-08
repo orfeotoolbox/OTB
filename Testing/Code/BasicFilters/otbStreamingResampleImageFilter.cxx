@@ -29,22 +29,23 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
   const char* outputFilename = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
+  typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;
-  typedef double InterpolatorPrecisionType;
+  typedef double        InterpolatorPrecisionType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<OutputImageType> WriterType;
-  typedef itk::TranslationTransform<InputPixelType,Dimension> TransformType;
-  typedef otb::StreamingResampleImageFilter<InputImageType,OutputImageType,InterpolatorPrecisionType> StreamingResampleImageFilterType;
+  typedef otb::Image<InputPixelType, Dimension>                InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>               OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                 ReaderType;
+  typedef otb::StreamingImageFileWriter<OutputImageType>       WriterType;
+  typedef itk::TranslationTransform<InputPixelType, Dimension> TransformType;
+  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
+                                            InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer                       reader = ReaderType::New();
+  WriterType::Pointer                       writer = WriterType::New();
   StreamingResampleImageFilterType::Pointer resampler = StreamingResampleImageFilterType::New();
-  TransformType::Pointer transform = TransformType::New();
+  TransformType::Pointer                    transform = TransformType::New();
 
   // Input Image
   reader->SetFileName(inputFilename);
@@ -54,8 +55,8 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
 
   // Size of output resampler result
   StreamingResampleImageFilterType::SizeType size;
-  size[0]=600;
-  size[1]=600;
+  size[0] = 600;
+  size[1] = 600;
   resampler->SetSize(size);
 
   // Transformation creation
@@ -73,7 +74,6 @@ int otbStreamingResampleImageFilter(int argc, char * argv[])
   writer->SetFileName(outputFilename);
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

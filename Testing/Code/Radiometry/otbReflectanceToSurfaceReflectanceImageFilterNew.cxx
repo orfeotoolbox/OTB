@@ -20,14 +20,15 @@
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbVectorImage.h"
 
-
 int otbReflectanceToSurfaceReflectanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
 
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,InputImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
+                                                          InputImageType>
+  ReflectanceToSurfaceReflectanceImageFilterType;
 
   // Instantiating object
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();

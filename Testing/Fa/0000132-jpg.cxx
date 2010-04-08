@@ -22,7 +22,7 @@
 //Code adapted from submission from Jordi INGLADA
 // http://bugs.orfeo-toolbox.org/view.php?id=132
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
   if (argc < 1)
     {
@@ -31,11 +31,11 @@ int main( int argc, char *argv[] )
     }
 
   char * filename = argv[1];
-  
-  typedef double                              PixelType;
-  typedef otb::VectorImage< PixelType >       ImageType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  
+
+  typedef double                          PixelType;
+  typedef otb::VectorImage<PixelType>     ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+
   // check for input images
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);

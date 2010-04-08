@@ -23,9 +23,9 @@
 int otbRemoveIsolatedByDirectionFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::RemoveIsolatedByDirectionFilter<ImageType,ImageType,ImageType> RemoveIsolatedByDirectionFilterType;
+  typedef double                                                                PixelType;
+  typedef otb::Image<PixelType, Dimension>                                      ImageType;
+  typedef otb::RemoveIsolatedByDirectionFilter<ImageType, ImageType, ImageType> RemoveIsolatedByDirectionFilterType;
 
   // Instantiating object
   RemoveIsolatedByDirectionFilterType::Pointer object = RemoveIsolatedByDirectionFilterType::New();

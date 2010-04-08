@@ -34,22 +34,22 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   char * outfname3 = argv[6];
 
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension>  ImageType;
-  typedef otb::ImageList<ImageType> ImageListType;
-  typedef itk::MeanImageFilter<ImageType,ImageType> MeanFilterType;
+  typedef unsigned char                              PixelType;
+  typedef otb::Image<PixelType, Dimension>           ImageType;
+  typedef otb::ImageList<ImageType>                  ImageListType;
+  typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
   // IO
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::ImageListToImageListApplyFilter<ImageListType,ImageListType,MeanFilterType>
+  typedef otb::ImageListToImageListApplyFilter<ImageListType, ImageListType, MeanFilterType>
   ImageListToImageListApplyFilterType;
 
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();
 
-  ReaderType::Pointer reader1,reader2,reader3;
+  ReaderType::Pointer reader1, reader2, reader3;
 
   reader1 = ReaderType::New();
   reader1->SetFileName(infname1);
@@ -64,7 +64,6 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   imageList->PushBack(reader1->GetOutput());
   imageList->PushBack(reader2->GetOutput());
   imageList->PushBack(reader3->GetOutput());
-
 
   MeanFilterType::Pointer meanFilter = MeanFilterType::New();
 
@@ -86,7 +85,6 @@ int otbImageListToImageListApplyFilter(int argc, char * argv[])
   writer->SetFileName(outfname3);
   writer->SetInput(filter->GetOutput()->GetNthElement(0));
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

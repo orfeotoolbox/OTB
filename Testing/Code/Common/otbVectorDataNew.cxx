@@ -23,7 +23,7 @@
 int otbVectorDataNew(int argc, char * argv[])
 {
 
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2> VectorDataType;
 
   //Instantiation
   VectorDataType::Pointer data = VectorDataType::New();

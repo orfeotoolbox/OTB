@@ -26,9 +26,9 @@
 
 int otbLandmarkNew(int argc, char* argv[])
 {
-  typedef itk::Point<double,2> PointType;
-  typedef itk::VariableLengthVector<double> PointDataType;
-  typedef otb::Landmark<PointType,PointDataType,double> LandmarkType;
+  typedef itk::Point<double, 2>                           PointType;
+  typedef itk::VariableLengthVector<double>               PointDataType;
+  typedef otb::Landmark<PointType, PointDataType, double> LandmarkType;
 
   // instantiation
   LandmarkType::Pointer landmark = LandmarkType::New();

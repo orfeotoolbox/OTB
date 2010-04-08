@@ -23,15 +23,14 @@
 int otbBSplinesInterpolateTransformDeformationFieldGeneratorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef itk::Array<double> ParametersType;
-  typedef itk::PointSet<ParametersType,Dimension> PointSetType;
-  typedef otb::BSplinesInterpolateTransformDeformationFieldGenerator<PointSetType,ImageType> FilterType;
+  typedef double                                                                              PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                                              ImageType;
+  typedef itk::Array<double>                                                                  ParametersType;
+  typedef itk::PointSet<ParametersType, Dimension>                                            PointSetType;
+  typedef otb::BSplinesInterpolateTransformDeformationFieldGenerator<PointSetType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

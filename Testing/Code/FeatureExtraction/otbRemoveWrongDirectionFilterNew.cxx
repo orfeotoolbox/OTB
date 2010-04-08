@@ -23,13 +23,12 @@
 int otbRemoveWrongDirectionFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::RemoveWrongDirectionFilter<ImageType,ImageType,ImageType> RemoveWrongDirectionFilterType;
+  typedef double                                                           PixelType;
+  typedef otb::Image<PixelType, Dimension>                                 ImageType;
+  typedef otb::RemoveWrongDirectionFilter<ImageType, ImageType, ImageType> RemoveWrongDirectionFilterType;
 
   // Instantiating object
   RemoveWrongDirectionFilterType::Pointer object = RemoveWrongDirectionFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

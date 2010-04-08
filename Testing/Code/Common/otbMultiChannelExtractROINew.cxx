@@ -19,22 +19,18 @@
 #include "itkExceptionObject.h"
 #include "otbMultiChannelExtractROI.h"
 
-
-int otbMultiChannelExtractROINew ( int argc, char * argv[] )
+int otbMultiChannelExtractROINew(int argc, char * argv[])
 {
   //        typedef unsigned char                                    InputPixelType;
   //        typedef unsigned char                                    OutputPixelType;
 
-  typedef std::complex<float>                              InputPixelType;
-  typedef std::complex<double>                      OutputPixelType;
+  typedef std::complex<float>  InputPixelType;
+  typedef std::complex<double> OutputPixelType;
 
-  typedef otb::MultiChannelExtractROI< InputPixelType,
-  OutputPixelType >  ExtractROIFilterType;
-
+  typedef otb::MultiChannelExtractROI<InputPixelType,
+                                      OutputPixelType>  ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-

@@ -23,19 +23,18 @@
 int otbWaveletInverseFilterBankNew(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image< PixelType, Dimension >  ImageType;
+  typedef double                           PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
   /* Wavelet choice */
   //const otb::Wavelet::Wavelet wvltID = otb::Wavelet::HAAR;
   const otb::Wavelet::Wavelet wvltID = otb::Wavelet::SYMLET8;
 
   /* Inverse Transformation */
-  typedef otb::WaveletOperator< wvltID, otb::Wavelet::INVERSE, PixelType, Dimension > WaveletOperator;
-  typedef otb::WaveletFilterBank< ImageType, ImageType, WaveletOperator, otb::Wavelet::INVERSE >
-    FilterType;
+  typedef otb::WaveletOperator<wvltID, otb::Wavelet::INVERSE, PixelType, Dimension> WaveletOperator;
+  typedef otb::WaveletFilterBank<ImageType, ImageType, WaveletOperator, otb::Wavelet::INVERSE>
+  FilterType;
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-

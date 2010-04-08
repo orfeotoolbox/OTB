@@ -41,5 +41,4 @@ void RegisterTests()
   REGISTER_TEST(otbLabelObjectMapVectorizer);
   REGISTER_TEST(otbLabelMapToVectorDataFilter);
 
-
 }

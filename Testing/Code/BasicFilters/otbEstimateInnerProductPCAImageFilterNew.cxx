@@ -18,14 +18,14 @@
 #include "otbEstimateInnerProductPCAImageFilter.h"
 #include "otbVectorImage.h"
 
-int otbEstimateInnerProductPCAImageFilterNew( int argc, char* argv[] )
+int otbEstimateInnerProductPCAImageFilterNew(int argc, char* argv[])
 {
   typedef double PixelType;
   const unsigned int Dimension = 2;
 
   // Typedef
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::EstimateInnerProductPCAImageFilter<ImageType,ImageType> FilterType;
+  typedef otb::VectorImage<PixelType, Dimension>                        ImageType;
+  typedef otb::EstimateInnerProductPCAImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiation object
   FilterType::Pointer filter = FilterType::New();

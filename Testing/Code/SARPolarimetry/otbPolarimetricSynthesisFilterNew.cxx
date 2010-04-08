@@ -26,20 +26,19 @@
 #include "otbVectorImage.h"
 #include "otbPolarimetricSynthesisFilter.h"
 
-int otbPolarimetricSynthesisFilterNew( int argc, char * argv[] )
+int otbPolarimetricSynthesisFilterNew(int argc, char * argv[])
 {
   typedef std::complex<double> InputPixelType;
-  typedef double           OutputPixelType;
-  const   unsigned int         Dimension = 2;
+  typedef double               OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::PolarimetricSynthesisFilter< InputImageType,InputImageType,InputImageType,InputImageType,OutputImageType >   FilterType;
+  typedef otb::PolarimetricSynthesisFilter<InputImageType, InputImageType, InputImageType, InputImageType,
+                                           OutputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

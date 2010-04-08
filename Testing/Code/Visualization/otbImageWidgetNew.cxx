@@ -17,13 +17,13 @@
 =========================================================================*/
 #include "otbImageWidget.h"
 
-int otbImageWidgetNew( int argc, char * argv[] )
+int otbImageWidgetNew(int argc, char * argv[])
 {
   typedef otb::ImageWidget<> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
 
-  std::cout<<widget<<std::endl;
+  std::cout << widget << std::endl;
 
   return EXIT_SUCCESS;
 }

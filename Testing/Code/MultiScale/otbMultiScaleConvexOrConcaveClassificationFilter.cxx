@@ -29,36 +29,35 @@
 
 int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
 {
-  const char * inputFilename = argv[1];
-  const char * outputFilename = argv[2];
+  const char *       inputFilename = argv[1];
+  const char *       outputFilename = argv[2];
   const unsigned int profileSize = atoi(argv[3]);
   const unsigned int initialValue = atoi(argv[4]);
   const unsigned int step = atoi(argv[5]);
-  const double sigma = atof(argv[6]);
-
+  const double       sigma = atof(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double         InputPixelType;
+  typedef double         OutputPixelType;
   typedef unsigned short LabeledPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::Image<LabeledPixelType,2> LabeledImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>            ReaderType;
   typedef otb::StreamingImageFileWriter<LabeledImageType> LabeledWriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::MorphologicalOpeningProfileFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>
   OpeningProfileFilterType;
-  typedef otb::MorphologicalClosingProfileFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>
   ClosingProfileFilterType;
-  typedef otb::ProfileToProfileDerivativeFilter<InputImageType,InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType,OutputImageType,LabeledImageType>
+  typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
   MultiScaleCharacteristicsFilterType;
-  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,LabeledImageType> MultiScaleClassificationFilterType;
-
+  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,
+                                                             LabeledImageType> MultiScaleClassificationFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -99,7 +98,7 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int argc, char * argv[])
   classificationFilter->SetClosingProfileDerivativeMaxima(cmsCharFilter->GetOutput());
   classificationFilter->SetClosingProfileCharacteristics(cmsCharFilter->GetOutputCharacteristics());
   classificationFilter->SetSigma(sigma);
-  classificationFilter->SetLabelSeparator(initialValue+profileSize*step);
+  classificationFilter->SetLabelSeparator(initialValue + profileSize * step);
 
   LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
 

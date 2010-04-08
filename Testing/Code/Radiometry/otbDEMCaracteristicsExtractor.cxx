@@ -22,7 +22,6 @@
 #include "otbStreamingImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-
 int otbDEMCaracteristicsExtractor(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
@@ -31,20 +30,19 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
   const char * outputIncidenceFileName = argv[8];
   const char * outputExitanceFileName = argv[9];
 
-
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double                           PixelType;
   typedef otb::Image<PixelType, Dimension> InputImageType;
 
-  typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::StreamingImageFileWriter<InputImageType> WriterType;
+  typedef otb::DEMCaracteristicsExtractor<InputImageType, InputImageType> DEMCaracteristicsExtractorType;
+  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
+  typedef otb::StreamingImageFileWriter<InputImageType>                   WriterType;
 
-  ReaderType::Pointer input = ReaderType::New();
-  WriterType::Pointer slotWriter = WriterType::New();
-  WriterType::Pointer aspectWriter = WriterType::New();
-  WriterType::Pointer incidenceWriter = WriterType::New();
-  WriterType::Pointer exitanceWriter = WriterType::New();
+  ReaderType::Pointer                     input = ReaderType::New();
+  WriterType::Pointer                     slotWriter = WriterType::New();
+  WriterType::Pointer                     aspectWriter = WriterType::New();
+  WriterType::Pointer                     incidenceWriter = WriterType::New();
+  WriterType::Pointer                     exitanceWriter = WriterType::New();
   DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
 
   slotWriter->SetNumberOfStreamDivisions(1);

@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -28,43 +27,40 @@ template <class TInputMultiSpectral, class TInputMultiSpectralInterp, class TInp
 class NewFunctorTest
 {
 public:
-  NewFunctorTest() {};
-  ~NewFunctorTest() {};
+  NewFunctorTest() {}
+  ~NewFunctorTest() {}
 
-  inline TOutput operator() (const TInputMultiSpectral & A, const TInputMultiSpectralInterp & B, const TInputPanchro & C)
+  inline TOutput operator ()(const TInputMultiSpectral& A, const TInputMultiSpectralInterp& B, const TInputPanchro& C)
   {
-    return(static_cast<TOutput>(A[0]) + static_cast<TOutput>(B[0]) + static_cast<TOutput>(C));
+    return (static_cast<TOutput>(A[0]) + static_cast<TOutput>(B[0]) + static_cast<TOutput>(C));
 
   }
 };
 }
 
-int otbFusionImageBaseNew( int argc, char * argv[] )
+int otbFusionImageBaseNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension>       InputPanchroImageType;
-  typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralImageType;
-  typedef otb::VectorImage<InputPixelType,Dimension> InputMultiSpectralInterpImageType;
-  typedef otb::Image<OutputPixelType,Dimension>      OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>       InputPanchroImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputMultiSpectralImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputMultiSpectralInterpImageType;
+  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
 
   typedef otb::FusionImageBase<InputMultiSpectralImageType,
-  InputMultiSpectralInterpImageType,
-  InputPanchroImageType,
-  OutputImageType,
-  Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
-  InputMultiSpectralInterpImageType::PixelType,
-  InputPanchroImageType::PixelType,
-  OutputImageType::PixelType>
-  >  FusionImageBaseType;
+                               InputMultiSpectralInterpImageType,
+                               InputPanchroImageType,
+                               OutputImageType,
+                               Functor::NewFunctorTest<InputMultiSpectralImageType::PixelType,
+                                                       InputMultiSpectralInterpImageType::PixelType,
+                                                       InputPanchroImageType::PixelType,
+                                                       OutputImageType::PixelType>
+                               >  FusionImageBaseType;
 
   // Instantiation
   FusionImageBaseType::Pointer base = FusionImageBaseType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

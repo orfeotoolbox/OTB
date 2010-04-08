@@ -18,16 +18,12 @@
 #include "otbVectorData.h"
 #include "otbVectorDataExtractROI.h"
 
-int otbVectorDataExtractROINew( int argc, char * argv[] )
+int otbVectorDataExtractROINew(int argc, char * argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
-  typedef otb::VectorDataExtractROI< VectorDataType >  FilterType;
-  
+  typedef otb::VectorData<>                         VectorDataType;
+  typedef otb::VectorDataExtractROI<VectorDataType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -24,11 +24,11 @@
 int otbNonMaxRemovalByDirectionFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::NonMaxRemovalByDirectionFilter<ImageType,ImageType,ImageType> NonMaxRemovalByDirectionFilterType;
+  typedef double                                                               PixelType;
+  typedef otb::Image<PixelType, Dimension>                                     ImageType;
+  typedef otb::ImageFileReader<ImageType>                                      ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                      WriterType;
+  typedef otb::NonMaxRemovalByDirectionFilter<ImageType, ImageType, ImageType> NonMaxRemovalByDirectionFilterType;
 
   // Instantiating object
   ReaderType::Pointer modReader = ReaderType::New();
@@ -42,7 +42,6 @@ int otbNonMaxRemovalByDirectionFilter(int argc, char * argv[])
   filter->SetInputDirection(dirReader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

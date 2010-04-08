@@ -22,18 +22,17 @@
 int otbMorphologicalPyramidSegmenterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
+  typedef unsigned char  InputPixelType;
   typedef unsigned short OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType>
+  typedef otb::MorphologicalPyramid::Segmenter<InputImageType, OutputImageType>
   SegmenterType;
 
   // Instantiation
   SegmenterType::Pointer segmenter = SegmenterType::New();
-
 
   return EXIT_SUCCESS;
 }

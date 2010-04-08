@@ -20,19 +20,18 @@
 #include "otbVectorImage.h"
 #include "otbStreamingShrinkImageFilter.h"
 
-
-int otbStreamingShrinkImageFilter( int argc, char * argv[] )
+int otbStreamingShrinkImageFilter(int argc, char * argv[])
 {
-  char * inputFilename = argv[1];
-  char * outputFilename = argv[2];
-  unsigned int shrinkFactor = atoi(argv[3]);
+  char *             inputFilename = argv[1];
+  char *             outputFilename = argv[2];
+  unsigned int       shrinkFactor = atoi(argv[3]);
   const unsigned int Dimension = 2;
 
-  typedef unsigned int PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
+  typedef unsigned int                                          PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                ImageType;
+  typedef otb::ImageFileReader<ImageType>                       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                       WriterType;
+  typedef otb::StreamingShrinkImageFilter<ImageType, ImageType> ShrinkType;
 
   ReaderType::Pointer reader = ReaderType::New();
   ShrinkType::Pointer shrink = ShrinkType::New();
@@ -46,7 +45,6 @@ int otbStreamingShrinkImageFilter( int argc, char * argv[] )
   writer->SetInput(shrink->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

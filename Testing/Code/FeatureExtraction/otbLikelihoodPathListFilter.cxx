@@ -26,70 +26,69 @@
 int otbLikelihoodPathListFilter(int argc, char * argv[])
 {
 
-  std::cout<<std::endl;
+  std::cout << std::endl;
 
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  typedef std::vector<double> PointsVectorType;
-  typedef std::vector< PointsVectorType > PointsMatrixType;
+  typedef std::vector<double>           PointsVectorType;
+  typedef std::vector<PointsVectorType> PointsMatrixType;
   PointsMatrixType MatricePoints;
   PointsVectorType ListPoints;
 
   int cpt = 3;
   ListPoints.clear();
 
-  while ( argv[cpt] != NULL )
-  {
-    if ( argv[cpt][0] == '|' )
+  while (argv[cpt] != NULL)
     {
-      if ( (ListPoints.size()%2) != 0 )
+    if (argv[cpt][0] == '|')
       {
-        itkGenericExceptionMacro(<<"Missing point in parameters !");
-      }
+      if ((ListPoints.size() % 2) != 0)
+        {
+        itkGenericExceptionMacro(<< "Missing point in parameters !");
+        }
       MatricePoints.push_back(ListPoints);
       ListPoints.clear();
-    }
+      }
     else
-    {
+      {
       ListPoints.push_back(static_cast<double>(::atof(argv[cpt])));
-    }
+      }
     cpt++;
-  }
+    }
   MatricePoints.push_back(ListPoints);
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
-  typedef otb::LikelihoodPathListFilter<PathType,ImageType> LikelihoodPathListFilterType;
-  typedef LikelihoodPathListFilterType::PathListType PathListType;
+  typedef double                                                  PixelType;
+  typedef otb::Image<PixelType, Dimension>                        ImageType;
+  typedef otb::ImageFileReader<ImageType>                         ReaderType;
+  typedef otb::PolyLineParametricPathWithValue<double, Dimension> PathType;
+  typedef otb::LikelihoodPathListFilter<PathType, ImageType>      LikelihoodPathListFilterType;
+  typedef LikelihoodPathListFilterType::PathListType              PathListType;
   PathType::ContinuousIndexType cindex;
-
 
   PathListType::Pointer InputPathList = PathListType::New();
 
   //Generate PathList
-  for (PointsMatrixType::iterator listpos=MatricePoints.begin(); listpos != MatricePoints.end(); ++listpos)
-  {
+  for (PointsMatrixType::iterator listpos = MatricePoints.begin(); listpos != MatricePoints.end(); ++listpos)
+    {
     PathType::Pointer path = PathType::New();
     //Generate PathList
-    std::cout << "List "<<std::endl;
-    for (PointsVectorType::iterator it=(*listpos).begin(); it != (*listpos).end(); ++it)
-    {
+    std::cout << "List " << std::endl;
+    for (PointsVectorType::iterator it = (*listpos).begin(); it != (*listpos).end(); ++it)
+      {
       cindex[0] = *it;
       ++it;
       cindex[1] = *it;
-      std::cout << "Point Index :"<<cindex[0]<<";"<<cindex[1]<<std::endl;
+      std::cout << "Point Index :" << cindex[0] << ";" << cindex[1] << std::endl;
       path->AddVertex(cindex);
-    }
+      }
     InputPathList->PushBack(path);
-  }
+    }
 
   //Instantiating object
   LikelihoodPathListFilterType::Pointer filter = LikelihoodPathListFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                   reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
 
@@ -97,60 +96,59 @@ int otbLikelihoodPathListFilter(int argc, char * argv[])
   filter->SetInputImage(reader->GetOutput());
   filter->Update();
 
-  std::cout<<"Filter execution ended"<<std::endl;
+  std::cout << "Filter execution ended" << std::endl;
 
   PathListType::Pointer OutputPathList = filter->GetOutput();
 
-  typedef PathListType::ConstIterator PathListIteratorType;
-  typedef PathType::VertexListType VertexListType;
+  typedef PathListType::ConstIterator   PathListIteratorType;
+  typedef PathType::VertexListType      VertexListType;
   typedef VertexListType::ConstIterator VertexIteratorType;
 
   std::ofstream file;
   file.open(outfname);
-  unsigned int counter = 1;
+  unsigned int         counter = 1;
   PathListIteratorType pathListIt = InputPathList->Begin();
 
-  file<<"INPUT list of Path "<<": "<<std::endl;
-  while (pathListIt!=InputPathList->End())
-  {
-    file<<"Path "<<counter<<": ";
-    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-         vIt!=pathListIt.Get()->GetVertexList()->End();
-         ++vIt)
+  file << "INPUT list of Path " << ": " << std::endl;
+  while (pathListIt != InputPathList->End())
     {
-      if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
+    file << "Path " << counter << ": ";
+    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+         vIt != pathListIt.Get()->GetVertexList()->End();
+         ++vIt)
       {
-        file<<", ";
+      if (vIt != pathListIt.Get()->GetVertexList()->Begin())
+        {
+        file << ", ";
+        }
+      file << vIt.Value();
       }
-      file<<vIt.Value();
-    }
-    file<<std::endl;
+    file << std::endl;
     ++pathListIt;
     ++counter;
-  }
+    }
   counter = 1;
   pathListIt = OutputPathList->Begin();
-  file<<"OUTPUT list of Path "<<": "<<std::endl;
-  while (pathListIt!=OutputPathList->End())
-  {
-    file<<"Path "<<counter<<": ";
-    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
-         vIt!=pathListIt.Get()->GetVertexList()->End();
-         ++vIt)
+  file << "OUTPUT list of Path " << ": " << std::endl;
+  while (pathListIt != OutputPathList->End())
     {
-      if (vIt!=pathListIt.Get()->GetVertexList()->Begin())
+    file << "Path " << counter << ": ";
+    for (VertexIteratorType vIt = pathListIt.Get()->GetVertexList()->Begin();
+         vIt != pathListIt.Get()->GetVertexList()->End();
+         ++vIt)
       {
-        file<<", ";
+      if (vIt != pathListIt.Get()->GetVertexList()->Begin())
+        {
+        file << ", ";
+        }
+      file << vIt.Value();
       }
-      file<<vIt.Value();
-    }
-    file<< " Value: "<<pathListIt.Get()->GetValue();
-    file<<std::endl;
+    file << " Value: " << pathListIt.Get()->GetValue();
+    file << std::endl;
     ++pathListIt;
     ++counter;
-  }
+    }
   file.close();
-
 
   return EXIT_SUCCESS;
 }

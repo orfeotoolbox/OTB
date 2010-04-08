@@ -23,12 +23,12 @@
 int otbImageToSIFTKeyPointSetFilterNew(int argc, char * argv[])
 {
   typedef float RealType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<RealType,Dimension> ImageType;
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> ImageToSIFTKeyPointSetFilterType;
+  typedef otb::Image<RealType, Dimension>                            ImageType;
+  typedef itk::VariableLengthVector<RealType>                        RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
 
   // Instantiating object
   ImageToSIFTKeyPointSetFilterType::Pointer object = ImageToSIFTKeyPointSetFilterType::New();

@@ -23,10 +23,10 @@
 int otbVectorizationPathListFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
-  typedef otb::VectorizationPathListFilter<ImageType,ImageType,PathType> VectorizationPathListFilterType;
+  typedef double                                                           PixelType;
+  typedef otb::Image<PixelType, Dimension>                                 ImageType;
+  typedef itk::PolyLineParametricPath<Dimension>                           PathType;
+  typedef otb::VectorizationPathListFilter<ImageType, ImageType, PathType> VectorizationPathListFilterType;
 
   // Instantiating object
   VectorizationPathListFilterType::Pointer object = VectorizationPathListFilterType::New();

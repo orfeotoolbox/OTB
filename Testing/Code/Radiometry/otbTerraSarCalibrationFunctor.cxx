@@ -26,18 +26,18 @@ int otbTerraSarCalibrationFunctor(int argc, char * argv[])
   typedef std::complex<ScalarType> ComplexType;
   typedef itk::Index<>             IndexType;
 
-  typedef otb::Functor::TerraSarCalibrationFunctor<ScalarType, ScalarType>   FunctorType;
+  typedef otb::Functor::TerraSarCalibrationFunctor<ScalarType, ScalarType> FunctorType;
 
   FunctorType funct;
-  
+
   IndexType id;
   id[0] = 125;   id[0] = 150;
 
   ScalarType inPix = 150.2;
-  std::cout << inPix << " -> " << funct.operator()(inPix, id, 0.) << std::endl;
+  std::cout << inPix << " -> " << funct.operator ()(inPix, id, 0.) << std::endl;
 
   ComplexType inCplxPix(12, 180);
-  std::cout << inCplxPix << " -> " << funct.operator()(inCplxPix, id,0.) << std::endl;
+  std::cout << inCplxPix << " -> " << funct.operator ()(inCplxPix, id, 0.) << std::endl;
 
   return EXIT_SUCCESS;
 }

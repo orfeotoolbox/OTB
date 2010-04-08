@@ -27,11 +27,10 @@
 #include "itkMacro.h"
 #include "otbSystem.h"
 
-
-int otbSystemTest( int argc, char* argv[] )
+int otbSystemTest(int argc, char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * inputDirName   = argv[2];
+  const char *       inputFileName  = argv[1];
+  const char *       inputDirName   = argv[2];
   itk::OStringStream msg;
 
   // Check instanciation test
@@ -40,25 +39,22 @@ int otbSystemTest( int argc, char* argv[] )
   delete var;
   var = NULL;
 
-  if ( otb::System::IsAFileName( inputFileName ) == false )
-  {
-    itkGenericExceptionMacro( <<"System::IsAFileName() error : the filename "<<inputFileName<<" is not detected.");
-  }
-  if ( otb::System::IsADirName( inputFileName ) == true )
-  {
-    itkGenericExceptionMacro( <<"System::IsADirName() error : the filename "<<inputFileName<<" is detected.");
-  }
-  if ( otb::System::IsAFileName( inputDirName ) == true )
-  {
-    itkGenericExceptionMacro(<< "System::IsAFileName() error : the dirname "<<inputDirName<<" is detected!!");
-  }
-  if ( otb::System::IsADirName( inputDirName ) == false )
-  {
-    itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname "<<inputDirName<<" is not detected!!");
-  }
-
+  if (otb::System::IsAFileName(inputFileName) == false)
+    {
+    itkGenericExceptionMacro(<< "System::IsAFileName() error : the filename " << inputFileName << " is not detected.");
+    }
+  if (otb::System::IsADirName(inputFileName) == true)
+    {
+    itkGenericExceptionMacro(<< "System::IsADirName() error : the filename " << inputFileName << " is detected.");
+    }
+  if (otb::System::IsAFileName(inputDirName) == true)
+    {
+    itkGenericExceptionMacro(<< "System::IsAFileName() error : the dirname " << inputDirName << " is detected!!");
+    }
+  if (otb::System::IsADirName(inputDirName) == false)
+    {
+    itkGenericExceptionMacro(<< "System::IsADirName() error : the dirname " << inputDirName << " is not detected!!");
+    }
 
   return EXIT_SUCCESS;
 }
-
-

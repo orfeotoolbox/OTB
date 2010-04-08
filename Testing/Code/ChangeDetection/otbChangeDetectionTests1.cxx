@@ -26,10 +26,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbCBAMIChangeDetectionTest );
-  REGISTER_TEST(otbCorrelChangeDetectionTest );
-  REGISTER_TEST(otbMeanDiffChangeDetectionTest );
-  REGISTER_TEST(otbMeanRatioChangeDetectionTest );
-  REGISTER_TEST(otbLHMIChangeDetectionTest );
-  REGISTER_TEST(otbJHMIChangeDetectionTest );
+  REGISTER_TEST(otbCBAMIChangeDetectionTest);
+  REGISTER_TEST(otbCorrelChangeDetectionTest);
+  REGISTER_TEST(otbMeanDiffChangeDetectionTest);
+  REGISTER_TEST(otbMeanRatioChangeDetectionTest);
+  REGISTER_TEST(otbLHMIChangeDetectionTest);
+  REGISTER_TEST(otbJHMIChangeDetectionTest);
 }

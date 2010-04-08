@@ -23,14 +23,14 @@
 int otbRadiometricAttributesLabelMapFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  typedef double                         PixelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef otb::VectorImage<PixelType,Dimension>                          VectorImageType;
-  typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType,VectorImageType> RadiometricLabelMapFilterType;
-  
+  typedef unsigned short LabelType;
+  typedef double         PixelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
+  typedef otb::VectorImage<PixelType, Dimension>                                  VectorImageType;
+  typedef otb::RadiometricAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
+
   // Instantiation
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
 

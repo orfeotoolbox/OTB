@@ -24,23 +24,22 @@
 #include "itkVariableLengthVector.h"
 #include "otbImage.h"
 
-int otbKeyPointDensityImageFilterNew(int, char* [] )
+int otbKeyPointDensityImageFilterNew(int, char*[])
 {
 
-  const   unsigned int                                      Dimension = 2;
-  typedef float                                             PixelType;
+  const unsigned int Dimension = 2;
+  typedef float PixelType;
 
-  typedef otb::Image< PixelType, Dimension >                                    ImageType;
-  typedef ImageType::IndexType                                                  IndexType;
-  typedef itk::VariableLengthVector<PixelType>                                  RealVectorType;
-  typedef itk::PointSet<RealVectorType,Dimension>                               PointSetType;
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType>             DetectorType;
+  typedef otb::Image<PixelType, Dimension>                           ImageType;
+  typedef ImageType::IndexType                                       IndexType;
+  typedef itk::VariableLengthVector<PixelType>                       RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> DetectorType;
 
-  typedef otb::KeyPointDensityImageFilter< ImageType, ImageType, DetectorType>   FilterType;
+  typedef otb::KeyPointDensityImageFilter<ImageType, ImageType, DetectorType> FilterType;
 
   /**Instantiation of an object*/
-  FilterType::Pointer    filter =     FilterType::New();
+  FilterType::Pointer filter =     FilterType::New();
 
   return EXIT_SUCCESS;
 }
-

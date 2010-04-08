@@ -24,17 +24,17 @@
 
 int otbImageToVectorImageCastFilter(int argc, char * argv[])
 {
-  const char * infilename = argv[1];
-  const char * outfilename = argv[2];
+  const char *       infilename = argv[1];
+  const char *       outfilename = argv[2];
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 
-  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType> VectorImageCastFilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType> WriterType;
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorImageCastFilterType;
+  typedef otb::ImageFileReader<ImageType>                               ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>                         WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infilename);
@@ -44,7 +44,6 @@ int otbImageToVectorImageCastFilter(int argc, char * argv[])
   writer->SetFileName(outfilename);
   writer->SetInput(cast->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

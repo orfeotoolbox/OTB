@@ -25,16 +25,15 @@
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
 
-int otbPathListToHistogramGeneratorNew( int argc, char* argv[] )
+int otbPathListToHistogramGeneratorNew(int argc, char* argv[])
 {
-  const   unsigned int                                 Dimension = 2;
-  typedef itk::PolyLineParametricPath< Dimension >       PathType;
-  typedef otb::OrientationPathFunction<PathType>         FunctionType;
+  const unsigned int Dimension = 2;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::OrientationPathFunction<PathType> FunctionType;
 
-  typedef otb::PathListToHistogramGenerator< PathType,FunctionType >   GeneratorType;
+  typedef otb::PathListToHistogramGenerator<PathType, FunctionType> GeneratorType;
 
   GeneratorType::Pointer histogram = GeneratorType::New();
-
 
   return EXIT_SUCCESS;
 }

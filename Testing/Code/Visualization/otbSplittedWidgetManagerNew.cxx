@@ -17,10 +17,10 @@
 =========================================================================*/
 #include "otbSplittedWidgetManager.h"
 
-int otbSplittedWidgetManagerNew( int argc, char * argv[] )
+int otbSplittedWidgetManagerNew(int argc, char * argv[])
 {
 
-  typedef otb::SplittedWidgetManager         SplittedWidgetManagerType;
+  typedef otb::SplittedWidgetManager SplittedWidgetManagerType;
 
   SplittedWidgetManagerType::Pointer widgetManager = SplittedWidgetManagerType::New();
 

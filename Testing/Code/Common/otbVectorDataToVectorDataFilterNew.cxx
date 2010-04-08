@@ -22,16 +22,12 @@
 int otbVectorDataToVectorDataFilterNew(int argc, char * argv[])
 {
 
+  typedef otb::VectorData<double>           InputVectorDataType;
+  typedef otb::VectorData<unsigned char, 2> OutputVectorDataType;
 
-  typedef otb::VectorData<double > InputVectorDataType;
-  typedef otb::VectorData<unsigned char,2 > OutputVectorDataType;
-
-  typedef otb::VectorDataToVectorDataFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
+  typedef otb::VectorDataToVectorDataFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
 
   VectorDataFilterType::Pointer vectorData = VectorDataFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -18,23 +18,22 @@
 #include "otbImageRegionTileMapSplitter.h"
 #include <fstream>
 
-int otbImageRegionTileMapSplitter( int argc, char * argv[] )
+int otbImageRegionTileMapSplitter(int argc, char * argv[])
 {
 
-
   const int Dimension = 2;
-  typedef otb::ImageRegionTileMapSplitter< Dimension > FilterType;
-  typedef FilterType::IndexType                        IndexType;
-  typedef FilterType::SizeType                         SizeType;
-  typedef FilterType::RegionType                       RegionType;
+  typedef otb::ImageRegionTileMapSplitter<Dimension> FilterType;
+  typedef FilterType::IndexType                      IndexType;
+  typedef FilterType::SizeType                       SizeType;
+  typedef FilterType::RegionType                     RegionType;
 
-  std::ofstream outfile(argv[1]);
+  std::ofstream       outfile(argv[1]);
   FilterType::Pointer filter = FilterType::New();
 
-  RegionType region, region2;
+  RegionType   region, region2;
   unsigned int nb, nbSplitTheoric, nbAsked;
-  IndexType index;
-  SizeType size;
+  IndexType    index;
+  SizeType     size;
 
   //Case 1
   index[0] = 45;
@@ -47,15 +46,15 @@ int otbImageRegionTileMapSplitter( int argc, char * argv[] )
   region.SetSize(size);
   region.SetIndex(index);
 
-  nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked,nb,region);
+  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+  region2 = filter->GetSplit(nbAsked, nb, region);
 
   outfile << "\nCase 1 \n";
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "Output region: "<< region2<<std::endl;
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output region: " << region2 << std::endl;
 
   //Case 2
   index[0] = 45;
@@ -68,15 +67,15 @@ int otbImageRegionTileMapSplitter( int argc, char * argv[] )
   region.SetSize(size);
   region.SetIndex(index);
 
-  nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked,nb,region);
+  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+  region2 = filter->GetSplit(nbAsked, nb, region);
 
   outfile << "\nCase 2 \n";
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "Output region: "<< region2<<std::endl;
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output region: " << region2 << std::endl;
 
   //Case 3
   index[0] = 45;
@@ -89,16 +88,16 @@ int otbImageRegionTileMapSplitter( int argc, char * argv[] )
   region.SetSize(size);
   region.SetIndex(index);
 
-  nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked,nb,region);
+  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+  region2 = filter->GetSplit(nbAsked, nb, region);
 
   outfile << "\nCase 3 \n";
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "Output region: "<< region2<<std::endl;
-  
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output region: " << region2 << std::endl;
+
   //Case 4
   index[0] = 45;
   index[1] = 45;
@@ -110,15 +109,15 @@ int otbImageRegionTileMapSplitter( int argc, char * argv[] )
   region.SetSize(size);
   region.SetIndex(index);
 
-  nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked,nb,region);
+  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+  region2 = filter->GetSplit(nbAsked, nb, region);
 
   outfile << "\nCase 4 \n";
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "Output region: "<< region2<<std::endl;
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output region: " << region2 << std::endl;
 
   //Case 5
   index[0] = 0;
@@ -131,15 +130,15 @@ int otbImageRegionTileMapSplitter( int argc, char * argv[] )
   region.SetSize(size);
   region.SetIndex(index);
 
-  nb = filter->GetNumberOfSplits(region,nbSplitTheoric);
-  region2 = filter->GetSplit(nbAsked,nb,region);
+  nb = filter->GetNumberOfSplits(region, nbSplitTheoric);
+  region2 = filter->GetSplit(nbAsked, nb, region);
 
   outfile << "\nCase 5 \n";
-  outfile << "Input region: "<<region<<std::endl;
-  outfile << "Input NumberOfSplits: "<<nbSplitTheoric<<std::endl;
-  outfile << "Output GetNumberOfSplits: "<<nb<<std::endl;
-  outfile << "Output GetSplit("<<nbAsked<<","<<nb<<",input region): "<<std::endl;
-  outfile << "Output region: "<< region2<<std::endl;
+  outfile << "Input region: " << region << std::endl;
+  outfile << "Input NumberOfSplits: " << nbSplitTheoric << std::endl;
+  outfile << "Output GetNumberOfSplits: " << nb << std::endl;
+  outfile << "Output GetSplit(" << nbAsked << "," << nb << ",input region): " << std::endl;
+  outfile << "Output region: " << region2 << std::endl;
 
   outfile.close();
 

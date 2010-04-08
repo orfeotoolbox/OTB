@@ -20,21 +20,21 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
+int otbStreamingInnerProductVectorImageFilter(int argc, char* argv[])
 {
   const char * inputFileName = argv[1];
   const char * outfname = argv[2];
-  const bool centerdata = atoi(argv[3]);
+  const bool   centerdata = atoi(argv[3]);
 
   typedef double PixelType;
   const unsigned int Dimension = 2;
 
   // Typedef
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader< ImageType >                     ReaderType;
+  typedef otb::VectorImage<PixelType, Dimension>                 ImageType;
+  typedef otb::ImageFileReader<ImageType>                        ReaderType;
   typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
 
-  ReaderType::Pointer     reader     = ReaderType::New();
+  ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
 
   // Instantiation object
@@ -45,13 +45,12 @@ int otbStreamingInnerProductVectorImageFilter( int argc, char* argv[] )
   filter->SetInput(reader->GetOutput());
   filter->Update();
 
-
   std::ofstream file;
   file.open(outfname);
   file.precision(10);
-  file<<std::fixed;
-  file<<"Inner Product: Dim ["<<filter->GetInnerProduct().size()<<"]:"<<std::endl;
-  file<<filter->GetInnerProduct()<<std::endl;
+  file << std::fixed;
+  file << "Inner Product: Dim [" << filter->GetInnerProduct().size() << "]:" << std::endl;
+  file << filter->GetInnerProduct() << std::endl;
   file.close();
 
   return EXIT_SUCCESS;

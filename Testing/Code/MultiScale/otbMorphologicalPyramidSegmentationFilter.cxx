@@ -26,31 +26,31 @@
 
 int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
 {
-  const char* inputFilename = argv[1];
-  const char* outputFilenamePrefix = argv[2];
-  const char * outputFilenameSuffix = argv[3];
+  const char*        inputFilename = argv[1];
+  const char*        outputFilenamePrefix = argv[2];
+  const char *       outputFilenameSuffix = argv[3];
   const unsigned int numberOfLevels = atoi(argv[4]);
-  const double decimationRatio = atof(argv[5]);
-  const float seedsQuantile = atof(argv[6]);
-  const float segmentationQuantile = atof(argv[7]);
+  const double       decimationRatio = atof(argv[5]);
+  const float        seedsQuantile = atof(argv[6]);
+  const float        segmentationQuantile = atof(argv[7]);
   const unsigned int minObjectSize = atoi(argv[8]);
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
+  typedef double         InputPixelType;
   typedef unsigned short OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, InputImageType, StructuringElementType>
   OpeningClosingFilterType;
-  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,InputImageType,OpeningClosingFilterType>
+  typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType, InputImageType, OpeningClosingFilterType>
   PyramidFilterType;
-  typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,OutputImageType>
+  typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType, OutputImageType>
   SegmentationFilterType;
   typedef SegmentationFilterType::OutputImageListIteratorType OutputListIteratorType;
 
@@ -76,22 +76,21 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
 
   // Output writing
   OutputListIteratorType it = segmentation->GetOutput()->Begin();
-  WriterType::Pointer writer;
-  int index = 1;
-  std::stringstream oss;
-  while (it!=segmentation->GetOutput()->End())
-  {
-    oss<<outputFilenamePrefix<<index<<"."<<outputFilenameSuffix;
+  WriterType::Pointer    writer;
+  int                    index = 1;
+  std::stringstream      oss;
+  while (it != segmentation->GetOutput()->End())
+    {
+    oss << outputFilenamePrefix << index << "." << outputFilenameSuffix;
     writer = WriterType::New();
     writer->SetInput(it.Get());
     writer->SetFileName(oss.str().c_str());
     writer->Update();
-    std::cout<<oss.str()<<" file written."<<std::endl;
+    std::cout << oss.str() << " file written." << std::endl;
     oss.str("");
     ++index;
     ++it;
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }

@@ -24,7 +24,6 @@
 #include "otbQuickLookImageGenerator.h"
 #include "otbVectorImage.h"
 
-
 int otbQuickLookImageGeneratorNew(int argc, char* argv[])
 {
   typedef otb::VectorImage<double, 2>                        ImageType;

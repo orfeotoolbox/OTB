@@ -23,7 +23,6 @@
 #include "otbImageList.h"
 #include "otbImageFileReader.h"
 
-
 int otbImageListToVectorImageFilter2(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
@@ -34,16 +33,16 @@ int otbImageListToVectorImageFilter2(int argc, char * argv[])
   char * infname3 = argv[3];
 //   char * outfname = argv[4];
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 //   typedef VectorImageType::Pointer              VectorImagePointerType;
   typedef otb::ImageList<ImageType> ImageListType;
-  
+
   // IO
   typedef otb::ImageFileReader<ImageType> ReaderType;
 //   typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
-  typedef otb::ImageListToVectorImageFilter<ImageListType,VectorImageType> ImageListToVectorImageFilterType;
+  typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> ImageListToVectorImageFilterType;
 
   // Instantiating object
   ImageListToVectorImageFilterType::Pointer filter = ImageListToVectorImageFilterType::New();
@@ -65,27 +64,25 @@ int otbImageListToVectorImageFilter2(int argc, char * argv[])
   imageList->PushBack(reader1->GetOutput());
   imageList->PushBack(reader2->GetOutput());
   imageList->PushBack(reader3->GetOutput());
-  
+
   filter->SetInput(imageList);
 
   VectorImageType::Pointer m_OutputImage = VectorImageType::New();
   m_OutputImage = filter->GetOutput();
-  
+
   m_OutputImage->UpdateOutputInformation();
-  
+
   unsigned int nbComp1 = m_OutputImage->GetNumberOfComponentsPerPixel();
-  
+
   imageList->PopBack();
 
   m_OutputImage->UpdateOutputInformation();
-  
+
   unsigned int nbComp2 = m_OutputImage->GetNumberOfComponentsPerPixel ();
   std::cout << "component 1: " << nbComp1 << std::endl;
   std::cout << "component 2: " << nbComp2 << std::endl;
-  
-  if ( nbComp2 != nbComp1 - 1)
-    
-    return EXIT_FAILURE;
-    
+
+  if (nbComp2 != nbComp1 - 1) return EXIT_FAILURE;
+
   return EXIT_SUCCESS;
 }

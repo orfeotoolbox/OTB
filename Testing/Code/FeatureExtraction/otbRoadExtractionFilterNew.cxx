@@ -24,14 +24,13 @@
 int otbRoadExtractionFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<double,Dimension> InputImageType;
+  typedef otb::VectorImage<double, Dimension>    InputImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
-  typedef otb::RoadExtractionFilter<InputImageType,PathType> RoadExtractionFilterType;
+  typedef otb::RoadExtractionFilter<InputImageType, PathType> RoadExtractionFilterType;
 
   // Instantiating object
   RoadExtractionFilterType::Pointer object = RoadExtractionFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

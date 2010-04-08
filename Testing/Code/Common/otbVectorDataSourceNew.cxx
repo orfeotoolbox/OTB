@@ -20,17 +20,15 @@
 #include "otbVectorDataSource.h"
 #include "otbVectorData.h"
 
-
 int otbVectorDataSourceNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef otb::VectorData<InputPixelType,Dimension> InputVectorDataType;
+  typedef double                                     InputPixelType;
+  typedef otb::VectorData<InputPixelType, Dimension> InputVectorDataType;
   typedef otb::VectorDataSource<InputVectorDataType> VectorDataSourceType;
 
   // Instantiating VectorDataSource object
   VectorDataSourceType::Pointer VectorData = VectorDataSourceType::New();
-
 
   return EXIT_SUCCESS;
 }

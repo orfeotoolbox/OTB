@@ -19,7 +19,6 @@
 
 #include "otbArcSpatialObject.h"
 
-
 int otbArcSpatialObjectNew(int argc, char * argv[])
 {
   const unsigned int Dimension  = 2;

@@ -22,15 +22,15 @@
 
 int otbOGRVectorDataIOTestCanRead(int argc, char* argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                    VectorDataType;
   typedef otb::OGRVectorDataIO<VectorDataType> OGRVectorDataIOType;
   OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
-  bool lCanRead = object->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::OGRVectorDataIO : impossible to open the file "<<argv[1]<<"."<<std::endl;
+  bool                         lCanRead = object->CanReadFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::OGRVectorDataIO : impossible to open the file " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

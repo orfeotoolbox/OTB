@@ -23,22 +23,22 @@
 int otbImageOfVectorsToMonoChannelExtractROI(int argc, char * argv[])
 {
   const int Dimension = 2;
-  typedef unsigned char ScalarPixelType;
-  typedef itk::Vector<unsigned char,Dimension>    VectorPixelType;
+  typedef unsigned char                         ScalarPixelType;
+  typedef itk::Vector<unsigned char, Dimension> VectorPixelType;
 
   const char * inputImageFileName = argv[1];
   const char * outputImageFileName = argv[7];
-  typedef otb::Image<ScalarPixelType,Dimension> ScalarImageType;
-  typedef otb::Image<VectorPixelType,Dimension> VectorImageType;
+  typedef otb::Image<ScalarPixelType, Dimension>                                       ScalarImageType;
+  typedef otb::Image<VectorPixelType, Dimension>                                       VectorImageType;
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<VectorImageType, ScalarImageType> FilterType;
 
-  typedef otb::ImageFileReader< VectorImageType > ReaderType;
-  typedef otb::ImageFileWriter< ScalarImageType > WriterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ScalarImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( inputImageFileName );
+  reader->SetFileName(inputImageFileName);
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( outputImageFileName );
+  writer->SetFileName(outputImageFileName);
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
 

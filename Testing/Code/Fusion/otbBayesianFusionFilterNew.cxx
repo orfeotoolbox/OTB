@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -25,22 +24,24 @@
 
 #include "otbBayesianFusionFilter.h"
 
-int otbBayesianFusionFilterNew( int argc, char * argv[] )
+int otbBayesianFusionFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-
-  typedef otb::VectorImage<PixelType,Dimension>  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>        PanchroImageType;
-  typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
-  typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
+  typedef otb::VectorImage<PixelType,
+                           Dimension>
+                                                                                                         VectorImageType;
+  typedef otb::Image<PixelType,
+                     Dimension>
+                                                                                                         PanchroImageType;
+  typedef otb::ImageFileReader<VectorImageType>
+                                                                                                         VectorReaderType;
+  typedef otb::ImageFileReader<PanchroImageType>
+                                                                                                         ImageReaderType;
   typedef otb::BayesianFusionFilter<VectorImageType, VectorImageType, PanchroImageType, VectorImageType> FilterType;
 
-  FilterType::Pointer       filter = FilterType::New();
-
+  FilterType::Pointer filter = FilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

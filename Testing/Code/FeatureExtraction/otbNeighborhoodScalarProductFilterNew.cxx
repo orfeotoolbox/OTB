@@ -23,15 +23,14 @@
 int otbNeighborhoodScalarProductFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef itk::CovariantVector<PixelType,Dimension> VectorPixelType;
-  typedef otb::Image<VectorPixelType,Dimension> InputImageType;
-  typedef otb::Image<PixelType,Dimension> OutputImageType;
-  typedef otb::NeighborhoodScalarProductFilter<InputImageType,OutputImageType,OutputImageType> FilterType;
+  typedef double                                                                                 PixelType;
+  typedef itk::CovariantVector<PixelType, Dimension>                                             VectorPixelType;
+  typedef otb::Image<VectorPixelType, Dimension>                                                 InputImageType;
+  typedef otb::Image<PixelType, Dimension>                                                       OutputImageType;
+  typedef otb::NeighborhoodScalarProductFilter<InputImageType, OutputImageType, OutputImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

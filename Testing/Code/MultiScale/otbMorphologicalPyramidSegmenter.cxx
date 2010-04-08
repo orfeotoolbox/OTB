@@ -23,25 +23,25 @@
 
 int otbMorphologicalPyramidSegmenter(int argc, char * argv[])
 {
-  const char* inputFilename = argv[1];
-  const char* originalFilename = argv[2];
-  const char* outputFilename1 = argv[3];
-  const bool segmentDark = atoi(argv[4]);
-  const float seedsQuantile = atof(argv[5]);
-  const float segmentationQuantile = atof(argv[6]);
+  const char*        inputFilename = argv[1];
+  const char*        originalFilename = argv[2];
+  const char*        outputFilename1 = argv[3];
+  const bool         segmentDark = atoi(argv[4]);
+  const float        seedsQuantile = atof(argv[5]);
+  const float        segmentationQuantile = atof(argv[6]);
   const unsigned int minObjectSize = atoi(argv[7]);
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
+  typedef double         InputPixelType;
   typedef unsigned short OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType>
+  typedef otb::MorphologicalPyramid::Segmenter<InputImageType, OutputImageType>
   SegmenterType;
 
   // Input images reading

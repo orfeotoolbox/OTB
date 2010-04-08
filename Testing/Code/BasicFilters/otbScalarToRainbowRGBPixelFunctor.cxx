@@ -24,7 +24,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -46,11 +45,10 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+                                       RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximumInputValue(150);
   colormapper->GetFunctor().SetMinimumInputValue(70);
@@ -59,7 +57,6 @@ int otbScalarToRainbowRGBPixelFunctor(int argc, char * argv[])
   writer->SetInput(colormapper->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

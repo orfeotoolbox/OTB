@@ -21,22 +21,21 @@
 #include "itkConstantBoundaryCondition.h"
 #include "otbImage.h"
 
-
 namespace Function
 {
-template< class TInput=double, class TOutput=double >
+template<class TInput = double, class TOutput = double>
 class SameFunction
 {
 public:
   void SetRadius(unsigned int rad)
   {
     m_Radius = rad;
-  };
+  }
   unsigned int GetRadius() const
   {
     return m_Radius;
-  };
-  inline TOutput operator()( const TInput & A ) const
+  }
+  inline TOutput operator ()(const TInput& A) const
   {
     return static_cast<TOutput>(A);
   }
@@ -47,9 +46,9 @@ public:
 
 int otbWindowedSincInterpolateImageFunctionBaseNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                                                    ImageType;
-  typedef Function::SameFunction<double,double>                                   FunctionType;
-  typedef otb::WindowedSincInterpolateImageFunctionBase<ImageType, FunctionType>  WindowedSincInterpolatorType;
+  typedef otb::Image<double, 2>                                                  ImageType;
+  typedef Function::SameFunction<double, double>                                 FunctionType;
+  typedef otb::WindowedSincInterpolateImageFunctionBase<ImageType, FunctionType> WindowedSincInterpolatorType;
 
   // Instantiating object
   WindowedSincInterpolatorType::Pointer winInterp = WindowedSincInterpolatorType::New();

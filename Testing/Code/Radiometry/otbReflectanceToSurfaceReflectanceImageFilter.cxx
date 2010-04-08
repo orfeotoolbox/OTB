@@ -29,15 +29,16 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   const char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType, OutputImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType,
+                                                          OutputImageType>
+  ReflectanceToSurfaceReflectanceImageFilterType;
   typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
   otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();
-
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -53,14 +54,14 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   DataVectorType downTrans;
   DataVectorType upTrans;
 
-  for ( unsigned int j=0; j<nbChannel; j++)
-  {
-    intrinsic.push_back(static_cast<double>(atof(argv[3+j])));
-    albedo.push_back(static_cast<double>(atof(argv[3+j+nbChannel])));
-    gaseous.push_back(static_cast<double>(atof(argv[3+j+2*nbChannel])));
-    downTrans.push_back(static_cast<double>(atof(argv[3+j+3*nbChannel])));
-    upTrans.push_back(static_cast<double>(atof(argv[3+j+4*nbChannel])));
-  }
+  for (unsigned int j = 0; j < nbChannel; j++)
+    {
+    intrinsic.push_back(static_cast<double>(atof(argv[3 + j])));
+    albedo.push_back(static_cast<double>(atof(argv[3 + j + nbChannel])));
+    gaseous.push_back(static_cast<double>(atof(argv[3 + j + 2 * nbChannel])));
+    downTrans.push_back(static_cast<double>(atof(argv[3 + j + 3 * nbChannel])));
+    upTrans.push_back(static_cast<double>(atof(argv[3 + j + 4 * nbChannel])));
+    }
 
   atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
   atmo->SetSphericalAlbedos(albedo);
@@ -75,7 +76,6 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

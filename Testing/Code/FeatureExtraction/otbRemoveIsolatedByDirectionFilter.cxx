@@ -24,11 +24,11 @@
 int otbRemoveIsolatedByDirectionFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef otb::RemoveIsolatedByDirectionFilter<ImageType,ImageType,ImageType> RemoveIsolatedByDirectionFilterType;
+  typedef double                                                                PixelType;
+  typedef otb::Image<PixelType, Dimension>                                      ImageType;
+  typedef otb::ImageFileReader<ImageType>                                       ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                       WriterType;
+  typedef otb::RemoveIsolatedByDirectionFilter<ImageType, ImageType, ImageType> RemoveIsolatedByDirectionFilterType;
 
   // Instantiating object
   ReaderType::Pointer modReader = ReaderType::New();

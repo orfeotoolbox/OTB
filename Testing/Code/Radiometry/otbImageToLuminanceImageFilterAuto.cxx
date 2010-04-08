@@ -31,14 +31,14 @@ int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
   const char * outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ImageToLuminanceImageFilter<InputImageType,OutputImageType> ImageToLuminanceImageFilterType;
-  typedef ImageToLuminanceImageFilterType::VectorType VectorType;
-  typedef otb::MultiChannelExtractROI<PixelType,PixelType> RoiFilterType;
+  typedef double                                                            PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                            InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
+  typedef otb::ImageToLuminanceImageFilter<InputImageType, OutputImageType> ImageToLuminanceImageFilterType;
+  typedef ImageToLuminanceImageFilterType::VectorType                       VectorType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType>                 RoiFilterType;
 
   ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -59,7 +59,6 @@ int otbImageToLuminanceImageFilterAuto(int argc, char * argv[])
 
   writer->SetInput(roiFilter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

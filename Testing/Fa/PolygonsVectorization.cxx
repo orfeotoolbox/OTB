@@ -47,30 +47,30 @@
 #include "otbStandardWriterWatcher.h"
 #include "otbStandardFilterWatcher.h"
 
-int main( int argc, char * argv[] )
+int main(int argc, char * argv[])
 {
 
-  typedef unsigned char               PixelType;
-  typedef unsigned long               LabelPixelType;
-  typedef unsigned char               PixelTypeOutput;
+  typedef unsigned char PixelType;
+  typedef unsigned long LabelPixelType;
+  typedef unsigned char PixelTypeOutput;
 
-  typedef otb::Image<PixelType,2>            SingleImageType;
-  typedef otb::Image<LabelPixelType,2>       LabeledImageType;
-  typedef otb::Image<PixelTypeOutput,2>      OutputImageType;
+  typedef otb::Image<PixelType, 2>       SingleImageType;
+  typedef otb::Image<LabelPixelType, 2>  LabeledImageType;
+  typedef otb::Image<PixelTypeOutput, 2> OutputImageType;
 
   typedef itk::ImageRegionIterator<LabeledImageType> IteratorType;
 
-  typedef otb::Polygon<double>               PolygonType;
-  typedef PolygonType::Pointer               PolygonPointerType;
-  typedef PolygonType::ContinuousIndexType   PolygonIndexType;
-  typedef otb::ObjectList<PolygonType>       PolygonListType;
-  typedef PolygonListType::Pointer           PolygonListPointerType;
-  typedef itk::ImageRegion<2>                ImageRegionType;
+  typedef otb::Polygon<double>             PolygonType;
+  typedef PolygonType::Pointer             PolygonPointerType;
+  typedef PolygonType::ContinuousIndexType PolygonIndexType;
+  typedef otb::ObjectList<PolygonType>     PolygonListType;
+  typedef PolygonListType::Pointer         PolygonListPointerType;
+  typedef itk::ImageRegion<2>              ImageRegionType;
 
-  typedef otb::PersistentVectorizationImageFilter<LabeledImageType,PolygonType> PersistentVectorizationFilterType;
-  typedef itk::RelabelComponentImageFilter<LabeledImageType,LabeledImageType>   RelabelFilterType;
-  typedef itk::ConnectedComponentImageFilter<LabeledImageType,LabeledImageType> ConnectedFilterType;
-  typedef itk::RescaleIntensityImageFilter<LabeledImageType,OutputImageType>    RescalerType;
+  typedef otb::PersistentVectorizationImageFilter<LabeledImageType, PolygonType> PersistentVectorizationFilterType;
+  typedef itk::RelabelComponentImageFilter<LabeledImageType, LabeledImageType>   RelabelFilterType;
+  typedef itk::ConnectedComponentImageFilter<LabeledImageType, LabeledImageType> ConnectedFilterType;
+  typedef itk::RescaleIntensityImageFilter<LabeledImageType, OutputImageType>    RescalerType;
 /*
   typedef itk::BinaryBallStructuringElement< LabelPixelType, 2 >        StructuringElementType;
   typedef itk::BinaryErodeImageFilter<LabeledImageType,LabeledImageType,StructuringElementType>   ErodeFilterType;
@@ -81,48 +81,46 @@ int main( int argc, char * argv[] )
   typedef otb::ImageFileReader<LabeledImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
- //-----------------------------------------------------------------
+  //-----------------------------------------------------------------
   //Command Line Argument Parser
   try
-  {
+    {
     typedef otb::CommandLineArgumentParser ParserType;
     ParserType::Pointer parser = ParserType::New();
 
     parser->SetProgramDescription("This program remove small objects");
     parser->AddInputImage();
     parser->AddOutputImage();
-    parser->AddOption("--surface","objects surface limit. Default is 100","-s",1,false);
-    parser->AddOption("--outputText","output text file name","-ot",1,false);
+    parser->AddOption("--surface", "objects surface limit. Default is 100", "-s", 1, false);
+    parser->AddOption("--outputText", "output text file name", "-ot", 1, false);
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer  parseResult = ParserResultType::New();
+    ParserResultType::Pointer parseResult = ParserResultType::New();
 
     try
-    {
-      parser->ParseCommandLine(argc,argv,parseResult);
-    }
-    catch( itk::ExceptionObject & err )
-    {
+      {
+      parser->ParseCommandLine(argc, argv, parseResult);
+      }
+    catch (itk::ExceptionObject& err)
+      {
       std::string descriptionException = err.GetDescription();
-      if(descriptionException.find("ParseCommandLine(): Help Parser")
-         != std::string::npos)
-      {
+      if (descriptionException.find("ParseCommandLine(): Help Parser")
+          != std::string::npos)
+        {
         return EXIT_SUCCESS;
-      }
-      if(descriptionException.find("ParseCommandLine(): Version Parser")
-         != std::string::npos)
-      {
+        }
+      if (descriptionException.find("ParseCommandLine(): Version Parser")
+          != std::string::npos)
+        {
         return EXIT_SUCCESS;
-      }
+        }
       return EXIT_FAILURE;
-    }
+      }
 
     //object under this value will be removed
     double surfaceLimit;
-    if (parseResult->IsOptionPresent("--surface"))
-      surfaceLimit = parseResult->GetParameterDouble("--surface");
-    else
-      surfaceLimit = 100;
+    if (parseResult->IsOptionPresent("--surface")) surfaceLimit = parseResult->GetParameterDouble("--surface");
+    else surfaceLimit = 100;
 
     //-----------------------------------------------------------------
     //read image
@@ -144,88 +142,91 @@ int main( int argc, char * argv[] )
     PersistentVectorizationFilterType::Pointer persistentVectorization = PersistentVectorizationFilterType::New();
     persistentVectorization->Reset();
     persistentVectorization->SetInput(connectedFilter->GetOutput());
-    try{
+    try
+      {
       persistentVectorization->Update();
-    }
-    catch ( itk::ExceptionObject &err){
+      }
+    catch (itk::ExceptionObject& err)
+      {
       std::cout << "\nExceptionObject caught !" << std::endl;
       std::cout << err << std::endl;
       return EXIT_FAILURE;
-    }
+      }
 
     PolygonListPointerType OutputPolyList = persistentVectorization->GetPathList();
 
     //Display results
-    std::cout <<"nb objects found = " << OutputPolyList->Size() << std::endl;
+    std::cout << "nb objects found = " << OutputPolyList->Size() << std::endl;
 
     //-------------------
     //DEBUG
     //-------------------
-    unsigned int polygon=0;
+    unsigned int  polygon = 0;
     std::ofstream file;
     if (parseResult->IsOptionPresent("--outputText"))
-    {
+      {
       file.open(parseResult->GetParameterString("--outputText").c_str());
-    }
+      }
 
-    double minSize=-1;
+    double minSize = -1;
     //Initializing the minSize
     if (OutputPolyList->Size() > 0)
-    {
-      minSize=OutputPolyList->GetNthElement(0)->GetArea();
-    }
+      {
+      minSize = OutputPolyList->GetNthElement(0)->GetArea();
+      }
 
-    while(polygon < OutputPolyList->Size()){
+    while (polygon < OutputPolyList->Size())
+      {
       ImageRegionType polygonRegion = OutputPolyList->GetNthElement(polygon)->GetBoundingRegion().GetImageRegion();
       if (OutputPolyList->GetNthElement(polygon)->GetArea() < minSize)
-      {
+        {
         minSize = OutputPolyList->GetNthElement(polygon)->GetArea();
-      }
+        }
       if (parseResult->IsOptionPresent("--outputText"))
-      {
+        {
         file << "polygon " << polygon << "\tnPoints="
-            << OutputPolyList->GetNthElement(polygon)->GetVertexList()->Size() << "\tsurface="
-            << OutputPolyList->GetNthElement(polygon)->GetArea()<< "\tlength="
-            << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
-            << polygonRegion.GetSize() <<"\tregion nb pixel="
-            << polygonRegion.GetNumberOfPixels() << std::endl;
+             << OutputPolyList->GetNthElement(polygon)->GetVertexList()->Size() << "\tsurface="
+             << OutputPolyList->GetNthElement(polygon)->GetArea() << "\tlength="
+             << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
+             << polygonRegion.GetSize() << "\tregion nb pixel="
+             << polygonRegion.GetNumberOfPixels() << std::endl;
 //       file << OutputPolyList->GetNthElement(polygon)<< std::endl << std::endl;
-      }
+        }
       else
-      {
-      std::cout << "polygon " << polygon << "\tnPoints="
-          << OutputPolyList->GetNthElement(polygon)->GetVertexList()->Size() << "\tsurface="
-              << OutputPolyList->GetNthElement(polygon)->GetArea()<< "\tlength="
-              << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
-              << polygonRegion.GetSize() <<"\tregion nb pixel="
-              << polygonRegion.GetNumberOfPixels() << std::endl;
+        {
+        std::cout << "polygon " << polygon << "\tnPoints="
+                  << OutputPolyList->GetNthElement(polygon)->GetVertexList()->Size() << "\tsurface="
+                  << OutputPolyList->GetNthElement(polygon)->GetArea() << "\tlength="
+                  << OutputPolyList->GetNthElement(polygon)->GetLength() << "\tregion size="
+                  << polygonRegion.GetSize() << "\tregion nb pixel="
+                  << polygonRegion.GetNumberOfPixels() << std::endl;
 //       std::cout << OutputPolyList->GetNthElement(polygon)<< std::endl << std::endl;
-      }
+        }
       polygon++;
-    }
+      }
     if (parseResult->IsOptionPresent("--outputText"))
-    {
+      {
       file.close();
-    }
+      }
     //-------------------
     // END DEBUG
     //-------------------
 
     //-----------------------------------------------------------------
     //erase object
-    unsigned int i=0;
-    std::cout <<"erase ..." << std::endl;
-    while(i < OutputPolyList->Size()){
+    unsigned int i = 0;
+    std::cout << "erase ..." << std::endl;
+    while (i < OutputPolyList->Size())
+      {
       if ((OutputPolyList->GetNthElement(i)->GetArea() > surfaceLimit)   //delete big polygon
-      ||(OutputPolyList->GetNthElement(i)->GetArea() == 0))              //delete invalid polygon
+          || (OutputPolyList->GetNthElement(i)->GetArea() == 0))         //delete invalid polygon
         OutputPolyList->Erase(i);
-      else
-        i++;
-    }
+      else i++;
+      }
 
     //Display results after erasure
-    std::cout <<"nb objects found  = " << OutputPolyList->Size() << std::endl;
-    std::cout <<"------------------------------------------------" << std::endl;
+    std::cout << "nb objects found  = " << OutputPolyList->Size() << std::endl;
+    std::cout << "------------------------------------------------" << std::endl;
 
     ///////////////////////////////////////////////////////////////////
     // Output Image Writing
@@ -234,81 +235,80 @@ int main( int argc, char * argv[] )
     //-----------------------------------------------------------------
     //allocate the memory for the output file
     LabeledImageType::Pointer outputImage = LabeledImageType::New();
-    outputImage->SetRegions( reader->GetOutput()->GetRequestedRegion() );
-    outputImage->CopyInformation( reader->GetOutput() );
+    outputImage->SetRegions(reader->GetOutput()->GetRequestedRegion());
+    outputImage->CopyInformation(reader->GetOutput());
     outputImage->Allocate();
     // copy input
-    IteratorType iit(reader->GetOutput(),reader->GetOutput()->GetRequestedRegion());
-    IteratorType oit(outputImage,outputImage->GetRequestedRegion());
+    IteratorType iit(reader->GetOutput(), reader->GetOutput()->GetRequestedRegion());
+    IteratorType oit(outputImage, outputImage->GetRequestedRegion());
 
-    for (iit.GoToBegin(),oit.GoToBegin(); !iit.IsAtEnd(); ++iit,++oit)
-        oit.Set(iit.Get());
+    for (iit.GoToBegin(), oit.GoToBegin(); !iit.IsAtEnd(); ++iit, ++oit)
+      oit.Set(iit.Get());
 
     // erase small polygon
-    for(unsigned int i = 0; i < OutputPolyList->Size(); i++){
-      std::cout << "polygon "<< i << std::endl;
+    for (unsigned int i = 0; i < OutputPolyList->Size(); i++)
+      {
+      std::cout << "polygon " << i << std::endl;
       ImageRegionType polygonRegion = OutputPolyList->GetNthElement(i)->GetBoundingRegion().GetImageRegion();
 
-      IteratorType  outputIt(outputImage,polygonRegion);
+      IteratorType outputIt(outputImage, polygonRegion);
 
       outputIt.GoToBegin();
-      while(!outputIt.IsAtEnd())
-      {
+      while (!outputIt.IsAtEnd())
+        {
         outputIt.Set(0);
         ++outputIt;
-      }
+        }
 
-    }
+      }
 
     //-----------------------------------------------------------------
     //rescale image
     RescalerType::Pointer rescaler = RescalerType::New();
     rescaler->SetOutputMinimum(0);
     rescaler->SetOutputMaximum(255);
-    rescaler->SetInput( outputImage );
+    rescaler->SetInput(outputImage);
     rescaler->Update();
 
     //-----------------------------------------------------------------
     //write image
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(parseResult->GetOutputImage().c_str());
-    writer->SetInput( rescaler->GetOutput() );
+    writer->SetInput(rescaler->GetOutput());
 
     try
-    {
-          otb::StandardWriterWatcher watcher(writer, "Remove small object");
-          writer->Update();
-    }
-    catch ( itk::ExceptionObject &err)
-    {
-            std::cout << "ExceptionObject caught !" << std::endl;
-            std::cout << err << std::endl;
-            return EXIT_FAILURE;
-    }
+      {
+      otb::StandardWriterWatcher watcher(writer, "Remove small object");
+      writer->Update();
+      }
+    catch (itk::ExceptionObject& err)
+      {
+      std::cout << "ExceptionObject caught !" << std::endl;
+      std::cout << err << std::endl;
+      return EXIT_FAILURE;
+      }
 
     if (minSize == 0)
-    {
+      {
       return EXIT_FAILURE;
-    }
+      }
 
-  }//end block try global
-  catch( itk::ExceptionObject & err )
-  {
+    } //end block try global
+  catch (itk::ExceptionObject& err)
+    {
     std::cout << "Following otbException catch :" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-  }
-  catch( std::bad_alloc & err )
-  {
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl;
+    }
+  catch (std::bad_alloc& err)
+    {
+    std::cout << "Exception bad_alloc : " << (char*) err.what() << std::endl;
     return EXIT_FAILURE;
-  }
-  catch( ... )
-  {
+    }
+  catch (...)
+    {
     std::cout << "Unknown Exception found !" << std::endl;
     return EXIT_FAILURE;
-  }
+    }
   return EXIT_SUCCESS;
 }
-
-

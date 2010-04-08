@@ -30,40 +30,40 @@
 int otbRoadExtractionFilter(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<double,Dimension> InputImageType;
-  typedef otb::Image<double,Dimension> OutputImageType;
-  typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
+  typedef otb::VectorImage<double, Dimension>                     InputImageType;
+  typedef otb::Image<double, Dimension>                           OutputImageType;
+  typedef otb::PolyLineParametricPathWithValue<double, Dimension> PathType;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::RoadExtractionFilter<InputImageType,PathType> RoadExtractionFilterType;
-  typedef RoadExtractionFilterType::OutputPathListType OutputPathListType;
-  typedef RoadExtractionFilterType::InputPixelType InputPixelType;
+  typedef otb::ImageFileReader<InputImageType>                                ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef otb::RoadExtractionFilter<InputImageType, PathType>                 RoadExtractionFilterType;
+  typedef RoadExtractionFilterType::OutputPathListType                        OutputPathListType;
+  typedef RoadExtractionFilterType::InputPixelType                            InputPixelType;
   typedef otb::DrawPathListFilter<OutputImageType, PathType, OutputImageType> DrawPathFilterType;
 
   //Parameters
-  const char * inputFileName(argv[1]);
-  const char * outputFileName(argv[2]);
+  const char *   inputFileName(argv[1]);
+  const char *   outputFileName(argv[2]);
   InputPixelType ReferencePixel;
   ReferencePixel.Reserve(4);
-  ReferencePixel.SetElement(0,::atof(argv[3]));
-  ReferencePixel.SetElement(1,::atof(argv[4]));
-  ReferencePixel.SetElement(2,::atof(argv[5]));
-  ReferencePixel.SetElement(3,::atof(argv[6]));
+  ReferencePixel.SetElement(0, ::atof(argv[3]));
+  ReferencePixel.SetElement(1, ::atof(argv[4]));
+  ReferencePixel.SetElement(2, ::atof(argv[5]));
+  ReferencePixel.SetElement(3, ::atof(argv[6]));
   const double Alpha = ::atof(argv[7]);
   const double AmplitudeThreshold = ::atof(argv[8]);
   const double Tolerance = ::atof(argv[9]);
-  const double MaxAngle = ((otb::CONST_PI*::atof(argv[10]))/180.);
+  const double MaxAngle = ((otb::CONST_PI * ::atof(argv[10])) / 180.);
   const double FirstMeanDistanceThreshold  = ::atof(argv[11]);
   const double SecondMeanDistanceThreshold  = ::atof(argv[12]);
-  const double LinkAngularThreshold = ((otb::CONST_PI*::atof(argv[13]))/180.);
+  const double LinkAngularThreshold = ((otb::CONST_PI * ::atof(argv[13])) / 180.);
   const double LinkDistanceThreshold  = ::atof(argv[14]);
 
   // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
   RoadExtractionFilterType::Pointer roadExtraction = RoadExtractionFilterType::New();
-  DrawPathFilterType::Pointer draw = DrawPathFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
+  DrawPathFilterType::Pointer       draw = DrawPathFilterType::New();
+  WriterType::Pointer               writer = WriterType::New();
 
   //Initialization parameters
   reader->SetFileName(inputFileName);
@@ -79,7 +79,6 @@ int otbRoadExtractionFilter(int argc, char * argv[])
   roadExtraction->SetAngularThreshold(LinkAngularThreshold);
   roadExtraction->SetDistanceThreshold(LinkDistanceThreshold);
 
-
   reader->GenerateOutputInformation();
   OutputImageType::Pointer image = OutputImageType::New();
   image->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
@@ -94,7 +93,6 @@ int otbRoadExtractionFilter(int argc, char * argv[])
   writer->SetFileName(outputFileName);
   writer->SetInput(draw->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

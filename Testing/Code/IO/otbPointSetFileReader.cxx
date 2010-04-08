@@ -23,7 +23,7 @@
 
 int otbPointSetFileReader(int argc, char * argv[])
 {
-  typedef itk::PointSet <double, 2> PointSetType;
+  typedef itk::PointSet <double, 2>             PointSetType;
   typedef otb::PointSetFileReader<PointSetType> PointSetFileReaderType;
   PointSetFileReaderType::Pointer reader = PointSetFileReaderType::New();
 
@@ -32,22 +32,20 @@ int otbPointSetFileReader(int argc, char * argv[])
 
   PointSetType::Pointer data = reader->GetOutput();
 
-
   std::ofstream fout (argv[2]);
   unsigned long nPoints = data->GetNumberOfPoints();
   fout << std::setprecision(15) << "Number of points: " << nPoints << std::endl;
 
-  for (unsigned long i=0; i < nPoints; ++i)
-  {
+  for (unsigned long i = 0; i < nPoints; ++i)
+    {
     PointSetType::PointType point;
-    data->GetPoint(i,&point);
+    data->GetPoint(i, &point);
     fout << point << " : ";
     PointSetType::PixelType value(itk::NumericTraits<PointSetType::PixelType>::Zero);
-    data->GetPointData(i,&value);
+    data->GetPointData(i, &value);
     fout << value << std::endl;
-  }
+    }
   fout << std::endl;
   fout.close();
   return EXIT_SUCCESS;
 }
-

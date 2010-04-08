@@ -28,15 +28,14 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   const char * outputAsciiFilenameOtbImage = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef unsigned int PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImportGeoInformationImageFilter<ImageType,ImageType> ImportGeoInformationImageFilterType;
+  typedef unsigned int                                               PixelType;
+  typedef otb::Image<PixelType, Dimension>                           ImageType;
+  typedef otb::ImageFileReader<ImageType>                            ReaderType;
+  typedef otb::ImportGeoInformationImageFilter<ImageType, ImageType> ImportGeoInformationImageFilterType;
 
   // Instantiating objects
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                          reader = ReaderType::New();
   ImportGeoInformationImageFilterType::Pointer import = ImportGeoInformationImageFilterType::New();
-
 
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
@@ -51,7 +50,7 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   black->SetRegions(region);
   black->Allocate();
   black->FillBuffer(128);
-  std::cout<<"black: " <<black->GetLargestPossibleRegion()<<std::endl;
+  std::cout << "black: " << black->GetLargestPossibleRegion() << std::endl;
 
   import->SetInput(black);
   import->SetSource(reader->GetOutput());
@@ -63,14 +62,13 @@ int otbImportGeoInformationImageFilterWithKeywordList(int argc, char * argv[])
   ossimKeywordlist ossim_kwl_image;
   otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
 
-  std::cout << " -> otbImage Ossim key word list copy : "<<ossim_kwl_image<<std::endl;
+  std::cout << " -> otbImage Ossim key word list copy : " << ossim_kwl_image << std::endl;
 
   std::ofstream file;
   file.open(outputAsciiFilenameOtbImage);
   file << "--- OSSIM KEYWORDLIST ---" << std::endl;
   file << ossim_kwl_image;
   file.close();
-
 
   return EXIT_SUCCESS;
 }

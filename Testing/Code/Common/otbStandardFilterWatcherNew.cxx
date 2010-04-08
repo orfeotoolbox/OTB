@@ -25,8 +25,8 @@
 int otbStandardFilterWatcherNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef unsigned char                    PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
@@ -39,7 +39,6 @@ int otbStandardFilterWatcherNew(int argc, char * argv[])
 
   gradient->SetInput(reader->GetOutput());
   gradient->Update();
-
 
   return EXIT_SUCCESS;
 }

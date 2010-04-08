@@ -23,7 +23,7 @@
 int otbSpatialObjectDXFReaderNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef itk::GroupSpatialObject<Dimension> GroupType;
+  typedef itk::GroupSpatialObject<Dimension>     GroupType;
   typedef otb::SpatialObjectDXFReader<GroupType> SpatialObjectDXFReaderType;
 
   // Instantiating object

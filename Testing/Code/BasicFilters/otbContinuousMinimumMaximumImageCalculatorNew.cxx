@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-
 #include "otbImage.h"
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 
@@ -27,10 +26,9 @@ int otbContinuousMinimumMaximumImageCalculatorNew(int argc, char * argv[])
 
   typedef otb::Image<unsigned int, ImageDimension> InputImageType;
 
-  typedef otb::ContinuousMinimumMaximumImageCalculator<InputImageType>   FilterType;
+  typedef otb::ContinuousMinimumMaximumImageCalculator<InputImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 

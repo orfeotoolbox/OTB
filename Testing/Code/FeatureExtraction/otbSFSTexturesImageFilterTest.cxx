@@ -22,26 +22,24 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbSFSTexturesImageFilterTest(int argc, char * argv[])
 {
   typedef double PixelType;
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
 
-  std::string inName            = argv[1];
-  std::string outNameLength     = argv[2];
-  std::string outNameWidth      = argv[3];
-  std::string outNameWMean      = argv[4];
-  std::string outNameRatio      = argv[5];
-  std::string outNameSD         = argv[6];
-  PixelType spectThresh         = atof(argv[7]);
+  std::string  inName            = argv[1];
+  std::string  outNameLength     = argv[2];
+  std::string  outNameWidth      = argv[3];
+  std::string  outNameWMean      = argv[4];
+  std::string  outNameRatio      = argv[5];
+  std::string  outNameSD         = argv[6];
+  PixelType    spectThresh         = atof(argv[7]);
   unsigned int spatialThresh    = atoi(argv[8]);
   unsigned int dirNb            = atoi(argv[9]);
   unsigned int maxConsideration = atoi(argv[10]);
-  double alpha                  = atof(argv[11]);
+  double       alpha                  = atof(argv[11]);
 
-
-  typedef otb::Image<PixelType,Dimension>                   ImageType;
+  typedef otb::Image<PixelType, Dimension>                  ImageType;
   typedef ImageType::PixelType                              InputPixelType;
   typedef otb::ImageFileReader<ImageType>                   ReaderType;
   typedef otb::ImageFileWriter<ImageType>                   WriterType;
@@ -57,7 +55,7 @@ int otbSFSTexturesImageFilterTest(int argc, char * argv[])
 
   reader->SetFileName(inName);
   reader->GenerateOutputInformation();
-   
+
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
@@ -65,29 +63,27 @@ int otbSFSTexturesImageFilterTest(int argc, char * argv[])
   filter->SetAlpha(alpha);
   // disable PSI texture
   filter->SetFeatureStatus(FilterType::PSI, false);
-  filter->SetInput( reader->GetOutput() );
-
+  filter->SetInput(reader->GetOutput());
 
   writerLength->SetFileName(outNameLength);
-  writerLength->SetInput( filter->GetLengthOutput() );
+  writerLength->SetInput(filter->GetLengthOutput());
   writerLength->Update();
 
   writerWidth->SetFileName(outNameWidth);
-  writerWidth->SetInput( filter->GetWidthOutput() );
+  writerWidth->SetInput(filter->GetWidthOutput());
   writerWidth->Update();
 
   writerWMean->SetFileName(outNameWMean);
-  writerWMean->SetInput( filter->GetWMeanOutput() );
+  writerWMean->SetInput(filter->GetWMeanOutput());
   writerWMean->Update();
 
   writerRatio->SetFileName(outNameRatio);
-  writerRatio->SetInput( filter->GetRatioOutput() );
+  writerRatio->SetInput(filter->GetRatioOutput());
   writerRatio->Update();
 
   writerSD->SetFileName(outNameSD);
-  writerSD->SetInput( filter->GetSDOutput() );
+  writerSD->SetInput(filter->GetSDOutput());
   writerSD->Update();
-  
 
   return EXIT_SUCCESS;
 }

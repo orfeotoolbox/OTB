@@ -22,15 +22,15 @@
 
 int otbKMLVectorDataIOTestCanRead(int argc, char* argv[])
 {
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                    VectorDataType;
   typedef otb::KMLVectorDataIO<VectorDataType> KMLVectorDataIOType;
   KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
-  bool lCanRead = object->CanReadFile(argv[1]);
-  if ( lCanRead == false)
-  {
-    std::cerr << "Erreur otb::KMLVectorDataIO : impossible to open the file "<<argv[1]<<"."<<std::endl;
+  bool                         lCanRead = object->CanReadFile(argv[1]);
+  if (lCanRead == false)
+    {
+    std::cerr << "Erreur otb::KMLVectorDataIO : impossible to open the file " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   return EXIT_SUCCESS;
 }

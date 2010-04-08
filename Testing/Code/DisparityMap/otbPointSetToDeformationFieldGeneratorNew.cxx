@@ -23,15 +23,14 @@
 int otbPointSetToDeformationFieldGeneratorNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef ImageType::PointType PointType;
-  typedef itk::PointSet<PointType,Dimension> PointSetType;
-  typedef otb::PointSetToDeformationFieldGenerator<PointSetType,ImageType> FilterType;
+  typedef double                                                            PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                            ImageType;
+  typedef ImageType::PointType                                              PointType;
+  typedef itk::PointSet<PointType, Dimension>                               PointSetType;
+  typedef otb::PointSetToDeformationFieldGenerator<PointSetType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

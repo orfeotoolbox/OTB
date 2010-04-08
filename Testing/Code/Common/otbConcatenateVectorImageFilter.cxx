@@ -24,15 +24,15 @@
 
 int otbConcatenateVectorImageFilter(int argc, char * argv[])
 {
-  const char * filename1 = argv[1];
-  const char * filename2 = argv[2];
-  const char * outputfilename = argv[3];
+  const char *       filename1 = argv[1];
+  const char *       filename2 = argv[2];
+  const char *       outputfilename = argv[3];
   const unsigned int Dimension = 2;
-  typedef unsigned char InputPixelType;
-  typedef otb::VectorImage<InputPixelType,Dimension> VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::StreamingImageFileWriter<VectorImageType> WriterType;
-  typedef otb::ConcatenateVectorImageFilter<VectorImageType,VectorImageType,VectorImageType> FilterType;
+  typedef unsigned char                                                                        InputPixelType;
+  typedef otb::VectorImage<InputPixelType, Dimension>                                          VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>                                                ReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType>                                       WriterType;
+  typedef otb::ConcatenateVectorImageFilter<VectorImageType, VectorImageType, VectorImageType> FilterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();
   ReaderType::Pointer reader2 = ReaderType::New();
@@ -48,7 +48,6 @@ int otbConcatenateVectorImageFilter(int argc, char * argv[])
   writer->SetFileName(outputfilename);
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

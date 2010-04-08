@@ -22,7 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
@@ -31,6 +30,8 @@ void RegisterTests()
   //REGISTER_TEST(otbPointSetFunctionNew);
   REGISTER_TEST(otbPointSetDensityFunctionNew);
   REGISTER_TEST(otbPointSetDensityFunctionTest);
+  REGISTER_TEST(otbPointSetDensityGaussianFunctionNew);
+  REGISTER_TEST(otbPointSetDensityGaussianFunctionTest);
   REGISTER_TEST(otbPointSetToDensityImageFilterNew);
   REGISTER_TEST(otbPointSetToDensityImageFilterTest);
   REGISTER_TEST(otbKeyPointDensityImageFilterNew);

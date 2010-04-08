@@ -31,10 +31,10 @@ int otbPersistentVectorizationFilter(int argc, char * argv[])
   const unsigned int ImageDimension = 2;
   typedef unsigned short LabelType;
 
-  typedef otb::Image<LabelType, ImageDimension> ImageType;
-  typedef otb::Polygon <LabelType> PolygonType;
-  typedef otb::PersistentVectorizationImageFilter<ImageType,PolygonType> FilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::Image<LabelType, ImageDimension>                           ImageType;
+  typedef otb::Polygon <LabelType>                                        PolygonType;
+  typedef otb::PersistentVectorizationImageFilter<ImageType, PolygonType> FilterType;
+  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -51,15 +51,15 @@ int otbPersistentVectorizationFilter(int argc, char * argv[])
   for (PathListType::Iterator it = filter->GetPathList()->Begin();
        it != filter->GetPathList()->End();
        ++it)
-  {
-    for (unsigned int i = 0; i < it.Get()->GetVertexList()->Size();++i)
     {
-      f<<"[ "<<it.Get()->GetVertexList()->GetElement(i)[0]
-      <<", "<<it.Get()->GetVertexList()->GetElement(i)[1]
-      <<"] ";
+    for (unsigned int i = 0; i < it.Get()->GetVertexList()->Size(); ++i)
+      {
+      f << "[ " << it.Get()->GetVertexList()->GetElement(i)[0]
+        << ", " << it.Get()->GetVertexList()->GetElement(i)[1]
+        << "] ";
+      }
+    f << std::endl;
     }
-    f<<std::endl;
-  }
 
   f.close();
 

@@ -18,11 +18,11 @@
 #include "otbUniformAlphaBlendingFunction.h"
 #include "itkRGBPixel.h"
 
-int otbUniformAlphaBlendingFunctionNew( int argc, char * argv[] )
+int otbUniformAlphaBlendingFunctionNew(int argc, char * argv[])
 {
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef otb::Function::UniformAlphaBlendingFunction
-    <RGBPixelType> BlendingFunctionType;
+  <RGBPixelType> BlendingFunctionType;
   BlendingFunctionType::Pointer function = BlendingFunctionType::New();
 
   return EXIT_SUCCESS;

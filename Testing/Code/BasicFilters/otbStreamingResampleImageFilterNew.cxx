@@ -23,17 +23,17 @@
 int otbStreamingResampleImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef double InterpolatorPrecisionType;
+  typedef double                                 InputPixelType;
+  typedef unsigned char                          OutputPixelType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef double                                 InterpolatorPrecisionType;
 
-  typedef otb::StreamingResampleImageFilter<InputImageType,OutputImageType,InterpolatorPrecisionType> StreamingResampleImageFilterType;
+  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
+                                            InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
   StreamingResampleImageFilterType::Pointer object = StreamingResampleImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

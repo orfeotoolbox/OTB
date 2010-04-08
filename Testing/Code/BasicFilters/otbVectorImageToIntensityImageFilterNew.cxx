@@ -23,14 +23,13 @@
 int otbVectorImageToIntensityImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::Image<PixelType,Dimension> OutputImageType;
-  typedef otb::VectorImageToIntensityImageFilter<InputImageType,OutputImageType> FilterType;
+  typedef double                                                                  PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                                  InputImageType;
+  typedef otb::Image<PixelType, Dimension>                                        OutputImageType;
+  typedef otb::VectorImageToIntensityImageFilter<InputImageType, OutputImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer object = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

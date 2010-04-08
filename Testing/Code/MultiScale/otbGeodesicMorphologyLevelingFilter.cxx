@@ -27,12 +27,12 @@ int otbGeodesicMorphologyLevelingFilter(int argc, char * argv[])
   const char * inconcfname = argv[3];
   const char * outfname    = argv[4];
 
-  typedef otb::Image<double,2> ImageType;
-  typedef otb::GeodesicMorphologyLevelingFilter<ImageType,ImageType,ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::Image<double, 2>                                                  ImageType;
+  typedef otb::GeodesicMorphologyLevelingFilter<ImageType, ImageType, ImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType>                                        ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                        WriterType;
 
-  ReaderType::Pointer convreader,concreader,reader;
+  ReaderType::Pointer convreader, concreader, reader;
   reader = ReaderType::New();
   convreader = ReaderType::New();
   concreader = ReaderType::New();
@@ -51,7 +51,6 @@ int otbGeodesicMorphologyLevelingFilter(int argc, char * argv[])
   writer->SetFileName(outfname);
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

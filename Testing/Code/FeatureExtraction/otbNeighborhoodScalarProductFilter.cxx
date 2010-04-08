@@ -32,21 +32,20 @@ int otbNeighborhoodScalarProductFilter(int argc, char * argv[])
   const double sigma = atof(argv[4]);
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef itk::CovariantVector<PixelType,Dimension>                                  VectorPixelType;
-  typedef otb::Image<VectorPixelType,Dimension>                                      VectorImageType;
-  typedef otb::Image<PixelType,Dimension>                                            ImageType;
-  typedef otb::NeighborhoodScalarProductFilter<VectorImageType,ImageType,ImageType>  FilterType;
-  typedef otb::ImageFileReader<ImageType>                                            ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                            WriterType;
-  typedef otb::ImageFileWriter<VectorImageType>                                      TempWriter;
-  typedef itk::GradientRecursiveGaussianImageFilter<ImageType,VectorImageType>       GradientFilterType;
-
+  typedef double                                                                      PixelType;
+  typedef itk::CovariantVector<PixelType, Dimension>                                  VectorPixelType;
+  typedef otb::Image<VectorPixelType, Dimension>                                      VectorImageType;
+  typedef otb::Image<PixelType, Dimension>                                            ImageType;
+  typedef otb::NeighborhoodScalarProductFilter<VectorImageType, ImageType, ImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType>                                             ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                             WriterType;
+  typedef otb::ImageFileWriter<VectorImageType>                                       TempWriter;
+  typedef itk::GradientRecursiveGaussianImageFilter<ImageType, VectorImageType>       GradientFilterType;
 
   // Instantiating object
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  FilterType::Pointer         filter = FilterType::New();
+  ReaderType::Pointer         reader = ReaderType::New();
+  WriterType::Pointer         writer = WriterType::New();
   GradientFilterType::Pointer gradient = GradientFilterType::New();
 
   reader->SetFileName(infname);

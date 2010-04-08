@@ -27,11 +27,11 @@ int otbMorphologicalClosingProfileFilterNew(int argc, char * argv[])
   typedef double InputPixelType;
   typedef double OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
-  typedef otb::MorphologicalClosingProfileFilter<InputImageType,InputImageType,StructuringElementType>
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
+  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>
   ClosingProfileFilterType;
 
   // Instantiation

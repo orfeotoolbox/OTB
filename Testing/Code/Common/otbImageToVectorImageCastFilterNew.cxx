@@ -25,14 +25,13 @@ int otbImageToVectorImageCastFilterNew(int argc, char * argv[])
   typedef double PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 
-  typedef otb::ImageToVectorImageCastFilter<ImageType,VectorImageType> VectorImageCastFilterType;
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorImageCastFilterType;
 
   // Instantiation
   VectorImageCastFilterType::Pointer caster = VectorImageCastFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

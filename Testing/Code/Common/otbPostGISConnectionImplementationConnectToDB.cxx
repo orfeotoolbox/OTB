@@ -33,13 +33,12 @@ int otbPostGISConnectionImplementationConnectToDB(int argc, char * argv[])
   //Instantiation
   GISConnectionType::Pointer connection = GISConnectionType::New();
 
-  connection->SetHost( hostName );
-  connection->SetDBName( dbName );
-  connection->SetUser( userName );
-  connection->SetPassword( userPassword );
+  connection->SetHost(hostName);
+  connection->SetDBName(dbName);
+  connection->SetUser(userName);
+  connection->SetPassword(userPassword);
 
   connection->ConnectToDB();
-
 
   return EXIT_SUCCESS;
 }

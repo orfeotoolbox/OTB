@@ -26,8 +26,7 @@
 
 #include "otbIkonosImageMetadataInterface.h"
 
-
-int otbIkonosImageMetadataInterfaceNew (int argc, char* argv[])
+int otbIkonosImageMetadataInterfaceNew(int argc, char* argv[])
 {
 
   otb::IkonosImageMetadataInterface::Pointer lImageMetadata = otb::IkonosImageMetadataInterface::New();

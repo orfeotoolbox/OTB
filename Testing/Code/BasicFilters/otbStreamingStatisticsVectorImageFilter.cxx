@@ -31,13 +31,12 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::VectorImage<PixelType, Dimension>               ImageType;
+  typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
 
   // Instantiating object
   StreamingStatisticsVectorImageFilterType::Pointer filter = StreamingStatisticsVectorImageFilterType::New();
-
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -47,18 +46,16 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
   filter->SetInput(reader->GetOutput());
   filter->Update();
 
-
   std::ofstream file;
   file.open(outfname);
-  file<<"Minimum: "<<filter->GetMinimum()<<std::endl;
-  file<<"Maximum: "<<filter->GetMaximum()<<std::endl;
-  file<<std::fixed;
+  file << "Minimum: " << filter->GetMinimum() << std::endl;
+  file << "Maximum: " << filter->GetMaximum() << std::endl;
+  file << std::fixed;
   file.precision(5);
-  file<<"Sum: "<<filter->GetSum()<<std::endl;
-  file<<"Mean: "<<filter->GetMean()<<std::endl;
-  file<<"Covariance: "<<filter->GetCovariance()<<std::endl;
+  file << "Sum: " << filter->GetSum() << std::endl;
+  file << "Mean: " << filter->GetMean() << std::endl;
+  file << "Covariance: " << filter->GetCovariance() << std::endl;
   file.close();
-
 
   return EXIT_SUCCESS;
 }

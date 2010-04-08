@@ -32,27 +32,26 @@
 int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
 {
 
-  if (argc < 4 )
-  {
-    std::cout << argv[0] <<" <input vector filename> <input image filename>"
-        << " <output vector filename> "  << std::endl;
+  if (argc < 4)
+    {
+    std::cout << argv[0] << " <input vector filename> <input image filename>"
+              << " <output vector filename> "  << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   //Read the vector data
-  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
   reader->SetFileName(argv[1]);
 
   //Read the image (only for the information)
-  typedef otb::Image<unsigned short int, 2> SensorImageType;
+  typedef otb::Image<unsigned short int, 2>     SensorImageType;
   typedef otb::ImageFileReader<SensorImageType> ImageReaderType;
   ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
-
 
   //Reproject the vector data in the proper projection
   typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> ProjectionFilterType;
@@ -63,10 +62,9 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   projection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   projection->SetOutputSpacing(imageReader->GetOutput()->GetSpacing());
 
-
   //Convert the vector data into an image
-  typedef itk::RGBAPixel< unsigned char > PixelType;
-  typedef otb::Image<PixelType,2> ImageType;
+  typedef itk::RGBAPixel<unsigned char> PixelType;
+  typedef otb::Image<PixelType, 2>      ImageType;
 
   ImageType::SizeType size;
   size[0] = 500;
@@ -81,12 +79,12 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   ImageType::SpacingType spacing;
 //   spacing[0] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/static_cast<double>(size[0]);
 //   spacing[1] = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]/static_cast<double>(size[1]);
-  spacing[0] = 500/static_cast<double>(size[0]);
-  spacing[1] = 500/static_cast<double>(size[1]);
+  spacing[0] = 500 / static_cast<double>(size[0]);
+  spacing[1] = 500 / static_cast<double>(size[1]);
 
-  std::cout << "Size: " << size <<std::endl;
-  std::cout << "Origin: " << origin <<std::endl;
-  std::cout << "Spacing: " << spacing <<std::endl;
+  std::cout << "Size: " << size << std::endl;
+  std::cout << "Origin: " << origin << std::endl;
+  std::cout << "Spacing: " << spacing << std::endl;
 
   typedef otb::VectorDataToImageFilter<VectorDataType, ImageType> VectorDataToImageFilterType;
   VectorDataToImageFilterType::Pointer vectorDataRendering = VectorDataToImageFilterType::New();
@@ -104,7 +102,6 @@ int otbVectorDataToImageFilterSensorModel(int argc, char * argv[])
   writer->SetInput(vectorDataRendering->GetOutput());
   writer->SetFileName(argv[3]);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

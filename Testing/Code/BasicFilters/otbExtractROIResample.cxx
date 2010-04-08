@@ -16,14 +16,12 @@
 
 =========================================================================*/
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbExtractROI.h"
 #include "itkIdentityTransform.h"
 #include "otbStreamingResampleImageFilter.h"
-
 
 // Pipeline reader -> Resampler (with Identity transform) -> ExtractROI
 // -> Writer
@@ -32,25 +30,25 @@
 
 int otbExtractROIResample(int argc, char* argv[])
 {
-  if ( argc < 4 )
-  {
-    std::cout << argv[0] <<" <input filename> <output filename> <use resample>"  << std::endl;
+  if (argc < 4)
+    {
+    std::cout << argv[0] << " <input filename> <output filename> <use resample>"  << std::endl;
     return EXIT_FAILURE;
-  }
+    }
 
   bool useResample = true;
   if (atoi(argv[3]) == 0)
-  {
+    {
     useResample = false;
-  }
+    }
 
   unsigned int startX = 10;
-  unsigned int startY= 10;
+  unsigned int startY = 10;
   unsigned int sizeX = 100;
   unsigned int sizeY = 100;
 
-  typedef double PixelType;
-  typedef otb::Image<PixelType,2> ImageType;
+  typedef double                   PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
@@ -59,8 +57,7 @@ int otbExtractROIResample(int argc, char* argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-
-  typedef itk::IdentityTransform< double, 2 > IdentityTransformType;
+  typedef itk::IdentityTransform<double, 2> IdentityTransformType;
   IdentityTransformType::Pointer transform = IdentityTransformType::New();
 
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> ResampleType;
@@ -78,16 +75,16 @@ int otbExtractROIResample(int argc, char* argv[])
   filterResampleRoi->SetSizeY(sizeY);
 
   if (useResample)
-  {
+    {
     filterResampleRoi->SetInput(filterResample->GetOutput());
-  }
+    }
   else
-  {
+    {
     filterResampleRoi->SetInput(reader->GetOutput());
-  }
+    }
 
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer streamingWriter = WriterType:: New();
+  WriterType::Pointer streamingWriter = WriterType::New();
 
   streamingWriter->SetFileName(argv[2]);
   streamingWriter->SetInput(filterResampleRoi->GetOutput());

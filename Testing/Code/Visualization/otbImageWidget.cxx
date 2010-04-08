@@ -20,14 +20,14 @@
 #include "otbImageFileReader.h"
 #include <FL/Fl.H>
 
-int otbImageWidget( int argc, char * argv[] )
+int otbImageWidget(int argc, char * argv[])
 {
   const char * infname   =      argv[1];
   const bool   useAccel  = atoi(argv[2]);
 
   // typedefs
-  typedef otb::ImageWidget<> WidgetType;
-  typedef WidgetType::InputImageType ImageType;
+  typedef otb::ImageWidget<>              WidgetType;
+  typedef WidgetType::InputImageType      ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Reading the input image
@@ -42,14 +42,14 @@ int otbImageWidget( int argc, char * argv[] )
   widget->SetUseGlAcceleration(useAccel);
 
   // Resize it
-  widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
+  widget->resize(0, 0, region.GetSize()[0], region.GetSize()[1]);
   // Show it
   widget->show();
   // Refresh display
   Fl::check();
 
   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
@@ -57,10 +57,10 @@ int otbImageWidget( int argc, char * argv[] )
 
   // Read only a quater of the image
   ImageType::RegionType::SizeType size = region.GetSize();
-  size[0]/=2;
+  size[0] /= 2;
   region.SetSize(size);
-   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  // Read the OpenGl buffer
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
@@ -68,10 +68,10 @@ int otbImageWidget( int argc, char * argv[] )
 
   // Adding an offset
   ImageType::RegionType::IndexType index = region.GetIndex();
-  index[0]+=size[0];
+  index[0] += size[0];
   region.SetIndex(index);
   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
@@ -79,29 +79,29 @@ int otbImageWidget( int argc, char * argv[] )
 
   // Reading full image, but in half window
   region = reader->GetOutput()->GetLargestPossibleRegion();
-  widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]/2);
+  widget->resize(0, 0, region.GetSize()[0], region.GetSize()[1] / 2);
   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
   Fl::check();
 
   // Reading full image, but in zoomed in widget
-  widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
+  widget->resize(0, 0, region.GetSize()[0], region.GetSize()[1]);
   widget->SetIsotropicZoom(2.);
   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
   Fl::check();
 
   // Reading full image, but in zoomed out widget
-  widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
+  widget->resize(0, 0, region.GetSize()[0], region.GetSize()[1]);
   widget->SetIsotropicZoom(0.5);
   // Read the OpenGl buffer
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   // Redraw it
   widget->redraw();
   // Refresh display
@@ -111,20 +111,20 @@ int otbImageWidget( int argc, char * argv[] )
 //   widget->resize(0,0,region.GetSize()[0],region.GetSize()[1]);
   widget->SetIsotropicZoom(10.0);
   size = region.GetSize();
-  size[0]/=10;
-  size[1]/=10;
+  size[0] /= 10;
+  size[1] /= 10;
   region.SetSize(size);
   index = region.GetIndex();
-  index[0]+=100;
+  index[0] += 100;
   region.SetIndex(index);
-  widget->ReadBuffer(reader->GetOutput(),region);
+  widget->ReadBuffer(reader->GetOutput(), region);
   widget->LinearInterpolationOff();
   // Redraw it
   widget->redraw();
   // Refresh display
   Fl::check();
 
-    // Use nearest neighbor interpolation
+  // Use nearest neighbor interpolation
   widget->LinearInterpolationOn();
   // Redraw it
   widget->redraw();
@@ -132,7 +132,7 @@ int otbImageWidget( int argc, char * argv[] )
   Fl::check();
 
   // Print out widget status
-  std::cout<<widget<<std::endl;
+  std::cout << widget << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -24,13 +24,12 @@
 int otbSpatialObjectToImageDrawingFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef itk::GroupSpatialObject<Dimension> SpatialObjectType;
-  typedef otb::SpatialObjectToImageDrawingFilter<SpatialObjectType,ImageType> SpatialObjectToImageDrawingFilterType;
+  typedef unsigned char                                                        PixelType;
+  typedef otb::Image<PixelType, Dimension>                                     ImageType;
+  typedef itk::GroupSpatialObject<Dimension>                                   SpatialObjectType;
+  typedef otb::SpatialObjectToImageDrawingFilter<SpatialObjectType, ImageType> SpatialObjectToImageDrawingFilterType;
   // Instantiating object
   SpatialObjectToImageDrawingFilterType::Pointer object = SpatialObjectToImageDrawingFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

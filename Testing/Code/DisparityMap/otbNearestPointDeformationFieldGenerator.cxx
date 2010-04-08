@@ -24,23 +24,23 @@
 int otbNearestPointDeformationFieldGenerator(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  const char * outfname = argv[1];
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> ImageType;
-  typedef itk::Array<double> ParamType;
-  typedef itk::PointSet<ParamType,Dimension> PointSetType;
-  typedef PointSetType::PointType PointType;
-  typedef otb::NearestPointDeformationFieldGenerator<PointSetType,ImageType> FilterType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  const char *       outfname = argv[1];
+  typedef double                                                              PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                              ImageType;
+  typedef itk::Array<double>                                                  ParamType;
+  typedef itk::PointSet<ParamType, Dimension>                                 PointSetType;
+  typedef PointSetType::PointType                                             PointType;
+  typedef otb::NearestPointDeformationFieldGenerator<PointSetType, ImageType> FilterType;
+  typedef otb::ImageFileWriter<ImageType>                                     WriterType;
 
   ImageType::SizeType size;
   size.Fill(100);
   double thresh = 0.9;
 
   // Preparing point set
-  PointSetType::Pointer  ps = PointSetType::New();
-  PointType p1,p2,p3,p4,p5;
-  ParamType pd1(3),pd2(3),pd3(3),pd4(3),pd5(3);
+  PointSetType::Pointer ps = PointSetType::New();
+  PointType             p1, p2, p3, p4, p5;
+  ParamType             pd1(3), pd2(3), pd3(3), pd4(3), pd5(3);
 
   p1[0] = 10;
   p1[1] = 10;
@@ -69,17 +69,16 @@ int otbNearestPointDeformationFieldGenerator(int argc, char * argv[])
   pd5[1] = 5;
   pd5[2] = 5;
 
-  ps->SetPoint(0,p1);
-  ps->SetPointData(0,pd1);
-  ps->SetPoint(1,p2);
-  ps->SetPointData(1,pd2);
-  ps->SetPoint(2,p3);
-  ps->SetPointData(2,pd3);
-  ps->SetPoint(3,p4);
-  ps->SetPointData(3,pd4);
-  ps->SetPoint(4,p5);
-  ps->SetPointData(4,pd5);
-
+  ps->SetPoint(0, p1);
+  ps->SetPointData(0, pd1);
+  ps->SetPoint(1, p2);
+  ps->SetPointData(1, pd2);
+  ps->SetPoint(2, p3);
+  ps->SetPointData(2, pd3);
+  ps->SetPoint(3, p4);
+  ps->SetPointData(3, pd4);
+  ps->SetPoint(4, p5);
+  ps->SetPointData(4, pd5);
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();
@@ -91,7 +90,6 @@ int otbNearestPointDeformationFieldGenerator(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

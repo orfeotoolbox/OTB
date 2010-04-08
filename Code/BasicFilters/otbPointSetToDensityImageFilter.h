@@ -34,7 +34,8 @@ namespace otb
  *  \brief Draw the density of a point set on an image
  */
 
-template <class TInputPointSet , class TOutputImage>
+template <class TInputPointSet, class TOutputImage,
+          class TDensityFunction = PointSetDensityFunction<TInputPointSet, typename TOutputImage::PixelType> >
 class ITK_EXPORT PointSetToDensityImageFilter
       : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage >
 {
@@ -62,9 +63,9 @@ public:
   typedef typename  OutputImageType::RegionType   OutputImageRegionType;
 
   /**   typedef filter support*/
-  typedef otb::PointSetDensityFunction<PointSetType , PixelType>   PointSetDensityFunctionType;
-  typedef typename PointSetDensityFunctionType::InputType          InputType;
-  typedef typename PointSetDensityFunctionType::Pointer            PointSetDensityFunctionPointerType;
+  typedef TDensityFunction                                PointSetDensityFunctionType;
+  typedef typename PointSetDensityFunctionType::InputType InputType;
+  typedef typename PointSetDensityFunctionType::Pointer   PointSetDensityFunctionPointerType;
 
 
   /** Set/Get Radius*/

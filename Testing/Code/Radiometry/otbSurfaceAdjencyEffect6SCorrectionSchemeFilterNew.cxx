@@ -21,16 +21,18 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-
 int otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<InputImageType,InputImageType> SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
+  typedef double                                 PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<InputImageType,
+                                                            InputImageType>
+  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
 
   // Instantiating object
-  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer filter = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer filter =
+    SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
 
   return EXIT_SUCCESS;
 }

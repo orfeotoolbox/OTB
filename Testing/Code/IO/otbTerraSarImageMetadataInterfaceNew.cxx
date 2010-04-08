@@ -28,9 +28,9 @@
 #include "otbImageFileReader.h"
 #include "otbTerraSarImageMetadataInterface.h"
 
-int otbTerraSarImageMetadataInterfaceNew (int argc, char* argv[])
+int otbTerraSarImageMetadataInterfaceNew(int argc, char* argv[])
 {
-  
+
   otb::TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
 
   return EXIT_SUCCESS;

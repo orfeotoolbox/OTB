@@ -22,14 +22,11 @@
 int otbObjectListNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
+  typedef unsigned char                    PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ObjectList<ImageType> ImageListType;
+  typedef otb::ObjectList<ImageType>       ImageListType;
 
   ImageListType::Pointer imageList = ImageListType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

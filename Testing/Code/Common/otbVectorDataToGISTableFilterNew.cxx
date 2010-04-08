@@ -25,20 +25,15 @@ int otbVectorDataToGISTableFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
-  
-  typedef otb::VectorData<PixelType > VectorDataType;
-  
-  
-  typedef otb::PostGISConnectionImplementation BdConnection;
+
+  typedef otb::VectorData<PixelType> VectorDataType;
+
+  typedef otb::PostGISConnectionImplementation              BdConnection;
   typedef otb::GISTable<BdConnection, PixelType, Dimension> GISTableType;
-  
- 
+
   typedef otb::VectorDataToGISTableFilter<VectorDataType, GISTableType> VectorDataToGISTableFilterType;
 
   VectorDataToGISTableFilterType::Pointer vectorData = VectorDataToGISTableFilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -29,25 +29,24 @@
 #include "otbImageFileWriter.h"
 #include "otbTouziEdgeDetectorImageFilter.h"
 
-
-int otbTouziEdgeDetector( int argc, char* argv[] )
+int otbTouziEdgeDetector(int argc, char* argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
 
-  typedef unsigned char                                   InputPixelType;
-  typedef double                                 OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef double        OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::TouziEdgeDetectorImageFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::TouziEdgeDetectorImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::SizeType Radius;
   Radius[0] = RadiusX;
@@ -55,21 +54,18 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
 
   FilterType::Pointer filterTouzi = FilterType::New();
 
-  filterTouzi->SetRadius( Radius );
+  filterTouzi->SetRadius(Radius);
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  filterTouzi->SetInput( reader->GetOutput() );
-  writer->SetInput( filterTouzi->GetOutput() );
+  filterTouzi->SetInput(reader->GetOutput());
+  writer->SetInput(filterTouzi->GetOutput());
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

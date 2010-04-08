@@ -22,12 +22,11 @@
 
 int otbWindowedSincInterpolateImageCosineFunctionNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                                            ImageType;
-  typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>      InterpolatorType;
+  typedef otb::Image<double, 2>                                      ImageType;
+  typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType> InterpolatorType;
 
   // Instantiating objects
-  InterpolatorType::Pointer    interp    = InterpolatorType::New();
-
+  InterpolatorType::Pointer interp    = InterpolatorType::New();
 
   return EXIT_SUCCESS;
 }

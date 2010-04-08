@@ -18,16 +18,12 @@
 #include "itkExceptionObject.h"
 #include "otbPrepareSRTMDirectory.h"
 
-
 int otbPrepareSRTMDirectoryNew(int argc, char * argv[])
 {
 
- typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
+  typedef otb::PrepareSRTMDirectory PrepareSRTMDirectoryType;
 
   PrepareSRTMDirectoryType::Pointer prepareSRTM = PrepareSRTMDirectoryType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

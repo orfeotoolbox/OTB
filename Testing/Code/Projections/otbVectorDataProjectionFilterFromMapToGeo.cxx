@@ -24,16 +24,15 @@
 int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
 {
 
-  if (argc < 2  )
-  {
-    std::cout << argv[0] <<" <input vector filename> <output vector filename> "  << std::endl;
+  if (argc < 2)
+    {
+    std::cout << argv[0] << " <input vector filename> <output vector filename> "  << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
-  typedef otb::VectorData<double > InputVectorDataType;
-  typedef otb::VectorData<double > OutputVectorDataType;
-
+  typedef otb::VectorData<double> InputVectorDataType;
+  typedef otb::VectorData<double> OutputVectorDataType;
 
   typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
@@ -41,8 +40,7 @@ int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType,OutputVectorDataType> VectorDataFilterType;
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
   VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
 
   vectorDataProjection->SetInput(reader->GetOutput());
@@ -54,8 +52,5 @@ int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

@@ -20,30 +20,24 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include <iostream>
 
 #include "otbSVMPointSetModelEstimator.h"
 
-
-int otbSVMPointSetModelEstimatorNew( int argc, char* argv[] )
+int otbSVMPointSetModelEstimatorNew(int argc, char* argv[])
 {
-  typedef std::vector<double>                           InputPixelType;
-  typedef double                                        LabelPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef std::vector<double> InputPixelType;
+  typedef double              LabelPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef itk::PointSet< InputPixelType,  Dimension >           MeasurePointSetType;
-  typedef itk::PointSet< LabelPixelType,  Dimension >           LabelPointSetType;
-  typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
-  LabelPointSetType >   EstimatorType;
-
+  typedef itk::PointSet<InputPixelType,  Dimension> MeasurePointSetType;
+  typedef itk::PointSet<LabelPixelType,  Dimension> LabelPointSetType;
+  typedef otb::SVMPointSetModelEstimator<MeasurePointSetType,
+                                         LabelPointSetType>   EstimatorType;
 
   EstimatorType::Pointer estimator = EstimatorType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

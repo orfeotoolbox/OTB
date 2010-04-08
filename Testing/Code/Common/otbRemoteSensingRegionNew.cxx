@@ -18,15 +18,13 @@
 
 #include "otbRemoteSensingRegion.h"
 
-
 int otbRemoteSensingRegionNew(int argc, char * argv[])
 {
-  
-  typedef   double                                Type;
-  typedef   otb::RemoteSensingRegion<Type>                TypedRegion;
-  
-  TypedRegion                     Cartoregion;
-  
+
+  typedef   double                         Type;
+  typedef   otb::RemoteSensingRegion<Type> TypedRegion;
+
+  TypedRegion Cartoregion;
+
   return EXIT_SUCCESS;
 }
-

@@ -24,7 +24,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 #include "otbImage.h"
 
 #include "itkUnaryFunctorImageFilter.h"
@@ -33,19 +32,18 @@
 int otbScalarToRainbowRGBPixelFunctorNew(int argc, char * argv[])
 {
 
-  typedef unsigned char PixelType;
-  typedef itk::RGBPixel<PixelType> RGBPixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
+  typedef unsigned char               PixelType;
+  typedef itk::RGBPixel<PixelType>    RGBPixelType;
+  typedef otb::Image<PixelType, 2>    ImageType;
   typedef otb::Image<RGBPixelType, 2> RGBImageType;
 
   typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
   ColorMapFunctorType;
   typedef itk::UnaryFunctorImageFilter<ImageType,
-  RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+                                       RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
-
 
   return EXIT_SUCCESS;
 }

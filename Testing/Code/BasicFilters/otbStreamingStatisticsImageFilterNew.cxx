@@ -25,12 +25,11 @@ int otbStreamingStatisticsImageFilterNew(int argc, char * argv[])
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension>               ImageType;
   typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
 
   // Instantiating object
   StreamingStatisticsImageFilterType::Pointer object = StreamingStatisticsImageFilterType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -22,16 +22,13 @@
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbImage.h"
 
-
 int otbMRFSamplerRandomMAPNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType, 2>               ImageType;
-  typedef otb::MRFSamplerRandomMAP< ImageType, ImageType> MRFSamplerRandomType;
+  typedef double                                         PixelType;
+  typedef otb::Image<PixelType, 2>                       ImageType;
+  typedef otb::MRFSamplerRandomMAP<ImageType, ImageType> MRFSamplerRandomType;
 
   MRFSamplerRandomType::Pointer object = MRFSamplerRandomType::New();
 
   return EXIT_SUCCESS;
 }
-
-

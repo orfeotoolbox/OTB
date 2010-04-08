@@ -22,12 +22,12 @@
 int otbAttributesMapOpeningLabelMapFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>          OpeningLabelMapFilterType;
-  
+  typedef unsigned short LabelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                              LabelMapType;
+  typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>       OpeningLabelMapFilterType;
+
   // Instantiation
   OpeningLabelMapFilterType::Pointer AttributesMapOpeningLabelMapFilter = OpeningLabelMapFilterType::New();
 

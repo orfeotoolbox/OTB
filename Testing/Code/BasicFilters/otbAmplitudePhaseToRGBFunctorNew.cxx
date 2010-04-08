@@ -24,7 +24,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 #include "otbImage.h"
 
 #include "itkTernaryFunctorImageFilter.h"
@@ -33,20 +32,19 @@
 int otbAmplitudePhaseToRGBFunctorNew(int argc, char * argv[])
 {
 
-  typedef double PixelType;
+  typedef double                   PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2> RGBImageType;
+  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
 
   typedef otb::Functor::AmplitudePhaseToRGBFunctor
-      <PixelType,PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
+  <PixelType, PixelType, PixelType, RGBPixelType> ColorMapFunctorType;
   typedef itk::TernaryFunctorImageFilter
-      <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(150);
   colormapper->GetFunctor().SetMinimum(70);
-
 
   return EXIT_SUCCESS;
 }

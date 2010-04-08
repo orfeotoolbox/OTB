@@ -22,21 +22,21 @@ int otbNCCRegistrationFilterNew(int argc, char* argv[])
 {
   const unsigned int ImageDimension = 2;
 
-  typedef double                                PixelType;
-  typedef itk::Vector<double,ImageDimension>    DeformationPixelType;
+  typedef double                              PixelType;
+  typedef itk::Vector<double, ImageDimension> DeformationPixelType;
 
-  typedef double                   CoordinateRepresentationType;
+  typedef double CoordinateRepresentationType;
 
   //Allocate Images
-  typedef otb::Image<PixelType,ImageDimension>         MovingImageType;
-  typedef otb::Image<PixelType,ImageDimension>         FixedImageType;
+  typedef otb::Image<PixelType, ImageDimension> MovingImageType;
+  typedef otb::Image<PixelType, ImageDimension> FixedImageType;
   typedef otb::Image<DeformationPixelType,
-  ImageDimension>         DeformationFieldType;
+                     ImageDimension>         DeformationFieldType;
 
   //Create the filter
-  typedef otb::NCCRegistrationFilter< FixedImageType,
-  MovingImageType,
-  DeformationFieldType >
+  typedef otb::NCCRegistrationFilter<FixedImageType,
+                                     MovingImageType,
+                                     DeformationFieldType>
   RegistrationFilterType;
 
   // Instantiation

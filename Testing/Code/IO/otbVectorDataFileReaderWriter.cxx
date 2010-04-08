@@ -25,14 +25,13 @@
 int otbVectorDataFileReaderWriter(int argc, char * argv[])
 {
 
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2>                VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> ReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
-
   //Instantiation
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer     reader = ReaderType::New();
+  WriterType::Pointer     writer = WriterType::New();
   VectorDataType::Pointer data = VectorDataType::New();
 
   reader->SetFileName(argv[1]);

@@ -40,46 +40,44 @@
 
 #include <stdio.h>
 
-int otbAlignImageToPath( int argc, char * argv[] )
+int otbAlignImageToPath(int argc, char * argv[])
 {
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
+  typedef double InputPixelType;
+  typedef double OutputPixelType;
+  typedef double RealPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef double                                     InputPixelType;
-  typedef double                               OutputPixelType;
-  typedef double            RealPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef itk::Image<InputPixelType,  Dimension> InputImageType;
+  typedef itk::Image<RealPixelType,  Dimension>  RealImageType;
 
-  typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-  typedef itk::Image< RealPixelType,  Dimension >    RealImageType;
-
-  typedef itk::PolyLineParametricPath< Dimension >  PathType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   typedef PathType::Pointer PathTypePointer;
   PathType::Pointer ltoto = PathType::New();
 
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
-  typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
-  typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> ListAlignFilterType;
+  typedef itk::ImageFileWriter<OutputImageType>                     WriterType;
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer     reader = ReaderType::New();
+  WriterType::Pointer     writer = WriterType::New();
   InputImageType::Pointer ImageIn = InputImageType::New();
 
-  typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>  TestType;
+  typedef otb::ImageToPathListAlignFilter<InputImageType, PathType> TestType;
   TestType::Pointer testList = TestType::New();
 
-  reader->SetFileName( inputFilename  );
+  reader->SetFileName(inputFilename);
 
   //OTB-FA-00010-CS
-  testList->SetInput( reader->GetOutput() );
+  testList->SetInput(reader->GetOutput());
 
-  typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;
-
+  typedef ListAlignFilterType::OutputPathListType ListAlignFilterOutputPathListType;
 
   otbGenericMsgDebugMacro(<< "Before update");
   testList->Update();
@@ -88,24 +86,24 @@ int otbAlignImageToPath( int argc, char * argv[] )
 
   otbGenericMsgDebugMacro(<< "Writing :");
 
-  FILE *file = fopen(outputFilename,"w");
+  FILE *file = fopen(outputFilename, "w");
   if (file == NULL)
-  {
-    fprintf(stderr,"Error, can't open file");
+    {
+    fprintf(stderr, "Error, can't open file");
     exit(-1);
-  }
-  typedef itk::ContinuousIndex< double,2>              VertexType;
-  typedef itk::VectorContainer< unsigned,VertexType >  VertexListType;
-  typedef VertexListType::ConstPointer                 VertexListTypePointer;
+    }
+  typedef itk::ContinuousIndex<double, 2>            VertexType;
+  typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
+  typedef VertexListType::ConstPointer               VertexListTypePointer;
   VertexListTypePointer vertexList;
-  VertexType cindex;
-  double x1,y1,x2,y2;
+  VertexType            cindex;
+  double                x1, y1, x2, y2;
 
   int nbPath = sortiePath->Size();
-  otbGenericMsgDebugMacro(<< "NbSegment: "<<nbPath);
-  fprintf(file,"Nb Segment: %d\n",nbPath);
-  for (int i =0; i<nbPath;i++)
-  {
+  otbGenericMsgDebugMacro(<< "NbSegment: " << nbPath);
+  fprintf(file, "Nb Segment: %d\n", nbPath);
+  for (int i = 0; i < nbPath; i++)
+    {
     vertexList = sortiePath->GetNthElement(i)->GetVertexList();
     cindex = vertexList->GetElement(0);
     x1 = cindex[0];
@@ -113,14 +111,11 @@ int otbAlignImageToPath( int argc, char * argv[] )
     cindex = vertexList->GetElement(1);
     x2 = cindex[0];
     y2 = cindex[1];
-    fprintf(file,"%8.3f %8.3f\n",x1,y1);
-  }
+    fprintf(file, "%8.3f %8.3f\n", x1, y1);
+    }
   fclose(file);
 
   //        writer->Update();
 
-
   return EXIT_SUCCESS;
 }
-
-

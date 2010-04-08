@@ -27,54 +27,53 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
 
-int otbFlusserPath( int argc, char * argv[] )
+int otbFlusserPath(int argc, char * argv[])
 {
-  unsigned int                                           Number;
-  const   unsigned int                                   Dimension = 2;
-  const char * outputFilename  = argv[1];
-  typedef itk::PolyLineParametricPath< Dimension >       PathType;
-  typedef otb::FlusserPathFunction<PathType>             FunctionType;
-  typedef FunctionType::RealType                         RealType;
+  unsigned int       Number;
+  const unsigned int Dimension = 2;
+  const char *       outputFilename  = argv[1];
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef otb::FlusserPathFunction<PathType>     FunctionType;
+  typedef FunctionType::RealType                 RealType;
 
   // Dessiner un carr�:
   PathType::ContinuousIndexType cindex;
-  PathType::Pointer pathElt = PathType::New();
+  PathType::Pointer             pathElt = PathType::New();
 
   pathElt->Initialize();
 
-  cindex[0]=30;
-  cindex[1]=30;
+  cindex[0] = 30;
+  cindex[1] = 30;
   pathElt->AddVertex(cindex);
-  cindex[0]= 30;
-  cindex[1]=130;
+  cindex[0] = 30;
+  cindex[1] = 130;
   pathElt->AddVertex(cindex);
-  cindex[0]=130;
-  cindex[1]=130;
+  cindex[0] = 130;
+  cindex[1] = 130;
   pathElt->AddVertex(cindex);
-  cindex[0]=130;
-  cindex[1]= 30;
+  cindex[0] = 130;
+  cindex[1] = 30;
   pathElt->AddVertex(cindex);
 
-  FunctionType::Pointer function =FunctionType::New();
+  FunctionType::Pointer function = FunctionType::New();
   //OTB-FA-00022-CS
-  function->SetInputPath( pathElt );
+  function->SetInputPath(pathElt);
 
   std::ofstream outputStream(outputFilename);
 
-  outputStream << std::setprecision(10) << "Flusser Path moments: [12]"<<std::endl;
+  outputStream << std::setprecision(10) << "Flusser Path moments: [12]" << std::endl;
 
   RealType Result;
 
-  for (Number = 1;Number<12;Number++)
-  {
+  for (Number = 1; Number < 12; Number++)
+    {
     //OTB-FA-00024-CS
     function->SetMomentNumber(Number);
-    Result = function->Evaluate( );
-    outputStream << "Flusser("<<Number<<") = "<< Result <<std::endl;
-  }
+    Result = function->Evaluate();
+    outputStream << "Flusser(" << Number << ") = " << Result << std::endl;
+    }
 
   outputStream.close();
 
   return EXIT_SUCCESS;
 }
-

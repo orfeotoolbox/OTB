@@ -27,19 +27,18 @@
 
 #include "otbTextureFunctors.h"
 
-
 template<class TInputImage, class TOutputImage, class TFunctor>
 int generic_TextureImageFunction(int argc, char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
 
-  typedef typename TInputImage::SizeType SizeType;
-  typedef typename TInputImage::OffsetType OffsetType;
-  typedef otb::ImageFileReader<TInputImage>  ReaderType;
+  typedef typename TInputImage::SizeType              SizeType;
+  typedef typename TInputImage::OffsetType            OffsetType;
+  typedef otb::ImageFileReader<TInputImage>           ReaderType;
   typedef otb::StreamingImageFileWriter<TOutputImage> WriterType;
 
-  typedef otb::TextureImageFunction<TInputImage, TFunctor> FunctionType;
+  typedef otb::TextureImageFunction<TInputImage, TFunctor>                                    FunctionType;
   typedef otb::FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, FunctionType> FilterType;
   typename FilterType::Pointer filter = FilterType::New();
 
@@ -63,7 +62,6 @@ int generic_TextureImageFunction(int argc, char * argv[])
 
   writer->Update();
 
-
   return EXIT_SUCCESS;
 }
 
@@ -72,104 +70,102 @@ int otbTextureImageFunction(int argc, char * argv[])
   std::string strArgv(argv[1]);
   argc--;
   argv++;
- 
 
   typedef double InputPixelType;
   const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension> ImageType;
-  typedef itk::VariableLengthVector<double> VectorType;
+  typedef otb::Image<InputPixelType, Dimension>     ImageType;
+  typedef itk::VariableLengthVector<double>         VectorType;
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
- 
-  
-  if(strArgv == "ENJ")
+
+  if (strArgv == "ENJ")
     {
-      typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::EnergyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "ENT" )
+  else if (strArgv == "ENT")
     {
-      typedef otb::Functor::EntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::EntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "IMD" )
+  else if (strArgv == "IMD")
     {
-      typedef otb::Functor::InverseDifferenceMomentTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::InverseDifferenceMomentTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "ASM" )
+  else if (strArgv == "ASM")
     {
-      typedef otb::Functor::AngularSecondMomentumTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::AngularSecondMomentumTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "VAR" )
+  else if (strArgv == "VAR")
     {
-      typedef otb::Functor::VarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::VarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
- else if ( strArgv == "COR" )
+  else if (strArgv == "COR")
     {
-      typedef otb::Functor::CorrelationTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::CorrelationTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "CON" )
+  else if (strArgv == "CON")
     {
-      typedef otb::Functor::ContrastTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::ContrastTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "SAV" )
+  else if (strArgv == "SAV")
     {
-      typedef otb::Functor::SumAverageTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::SumAverageTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "DEN" )
+  else if (strArgv == "DEN")
     {
-      typedef otb::Functor::DifferenceEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::DifferenceEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "SEN" )
+  else if (strArgv == "SEN")
     {
-      typedef otb::Functor::SumEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::SumEntropyTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "SVA" )
+  else if (strArgv == "SVA")
     {
-      typedef otb::Functor::SumVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::SumVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "DVA" )
+  else if (strArgv == "DVA")
     {
-      typedef otb::Functor::DifferenceVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::DifferenceVarianceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "IC1" )
+  else if (strArgv == "IC1")
     {
-      typedef otb::Functor::InformationMeasureOfCorrelation1TextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::InformationMeasureOfCorrelation1TextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "IC2" )
+  else if (strArgv == "IC2")
     {
-      typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::InformationMeasureOfCorrelation2TextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "CSH" )
+  else if (strArgv == "CSH")
     {
-      typedef otb::Functor::ClusterShadeTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::ClusterShadeTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "CPR" )
+  else if (strArgv == "CPR")
     {
-      typedef otb::Functor::ClusterProminenceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::ClusterProminenceTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
-  else if ( strArgv == "MEA" )
+  else if (strArgv == "MEA")
     {
-      typedef otb::Functor::MeanTextureFunctor<InputPixelType, InputPixelType> FunctorType;
-      return( generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc,argv) );
+    typedef otb::Functor::MeanTextureFunctor<InputPixelType, InputPixelType> FunctorType;
+    return (generic_TextureImageFunction<ImageType, ImageType, FunctorType>(argc, argv));
     }
   else
     {
-      return EXIT_FAILURE;
+    return EXIT_FAILURE;
     }
-  
+
   return EXIT_SUCCESS;
 }

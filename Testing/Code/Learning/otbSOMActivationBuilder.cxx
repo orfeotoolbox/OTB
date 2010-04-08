@@ -30,26 +30,26 @@
 int otbSOMActivationBuilder(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  char * vectorSetFileName = argv[1];
-  char * mapFileName = argv[2];
-  char * outputFileName = argv[3];
+  char *             vectorSetFileName = argv[1];
+  char *             mapFileName = argv[2];
+  char *             outputFileName = argv[3];
 
-  typedef float ComponentType;
-  typedef unsigned char OutputPixelType;
-  typedef itk::VariableLengthVector<ComponentType> PixelType;
+  typedef float                                         ComponentType;
+  typedef unsigned char                                 OutputPixelType;
+  typedef itk::VariableLengthVector<ComponentType>      PixelType;
   typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
 
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
-  typedef otb::ImageFileReader<MapType> MapReaderType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> MapType;
+  typedef otb::ImageFileReader<MapType>                   MapReaderType;
 
-  typedef otb::VectorImage<ComponentType,Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef itk::Statistics::ListSample<PixelType> ListSampleType;
+  typedef otb::VectorImage<ComponentType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>       ReaderType;
+  typedef itk::Statistics::ListSample<PixelType>     ListSampleType;
 
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
 
-  typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
+  typedef otb::SOMActivationBuilder<ListSampleType, MapType, OutputImageType> SOMActivationBuilderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(vectorSetFileName);
@@ -57,15 +57,15 @@ int otbSOMActivationBuilder(int argc, char* argv[])
 
   ListSampleType::Pointer listSample = ListSampleType::New();
 
-  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-  {
+    {
     listSample->PushBack(it.Get());
     ++it;
-  }
+    }
 
   MapReaderType::Pointer mapReader = MapReaderType::New();
   mapReader->SetFileName(mapFileName);
@@ -78,7 +78,6 @@ int otbSOMActivationBuilder(int argc, char* argv[])
   writer->SetFileName(outputFileName);
   writer->SetInput(somAct->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

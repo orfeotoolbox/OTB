@@ -24,19 +24,18 @@
 int otbSOMMap(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef float InternalPixelType;
-  typedef itk::VariableLengthVector<InternalPixelType> PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-
+  typedef float                                           InternalPixelType;
+  typedef itk::VariableLengthVector<InternalPixelType>    PixelType;
+  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
 
   // Instantiation
   SOMMapType::Pointer somMap = SOMMapType::New();
 
   // Allocation of the som map
   SOMMapType::RegionType region;
-  SOMMapType::IndexType index;
-  SOMMapType::SizeType size;
+  SOMMapType::IndexType  index;
+  SOMMapType::SizeType   size;
   index.Fill(0);
   size.Fill(64);
   region.SetIndex(index);
@@ -56,16 +55,15 @@ int otbSOMMap(int argc, char* argv[])
   winner.SetSize(3);
   winner.Fill(1);
   index.Fill(32);
-  somMap->SetPixel(index,winner);
+  somMap->SetPixel(index, winner);
 
   // Test of the GetWinner method
   SOMMapType::IndexType winnerIndex = somMap->GetWinner(winner);
-  if (winnerIndex!=index)
-  {
-    std::cout<<"Bad GetWinner function return."<<std::endl;
+  if (winnerIndex != index)
+    {
+    std::cout << "Bad GetWinner function return." << std::endl;
     return EXIT_FAILURE;
-  }
-
+    }
 
   return EXIT_SUCCESS;
 }

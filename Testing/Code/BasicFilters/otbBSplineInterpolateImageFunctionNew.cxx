@@ -22,8 +22,8 @@
 
 int otbBSplineInterpolateImageFunctionNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2> ImageType;
-  typedef otb::BSplineInterpolateImageFunction<ImageType,double,double> InterpolatorType;
+  typedef otb::Image<double, 2>                                           ImageType;
+  typedef otb::BSplineInterpolateImageFunction<ImageType, double, double> InterpolatorType;
 
   // Instantiating object
   InterpolatorType::Pointer filter = InterpolatorType::New();

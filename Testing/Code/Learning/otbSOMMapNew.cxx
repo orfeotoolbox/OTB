@@ -23,10 +23,10 @@
 int otbSOMMapNew(int argc, char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef float ComponentType;
-  typedef itk::RGBPixel<ComponentType> PixelType;
-  typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
+  typedef float                                           ComponentType;
+  typedef itk::RGBPixel<ComponentType>                    PixelType;
+  typedef itk::Statistics::EuclideanDistance<PixelType>   DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
 
   // Instantiation
   SOMMapType::Pointer somMap = SOMMapType::New();

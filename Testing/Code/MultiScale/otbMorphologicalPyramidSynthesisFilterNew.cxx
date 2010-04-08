@@ -17,7 +17,6 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-
 #include "otbMorphologicalPyramidSynthesisFilter.h"
 #include "otbImage.h"
 
@@ -27,10 +26,10 @@ int otbMorphologicalPyramidSynthesisFilterNew(int argc, char * argv[])
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
+  typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType, OutputImageType>
   PyramidSynthesisFilterType;
 
   // Instantiation

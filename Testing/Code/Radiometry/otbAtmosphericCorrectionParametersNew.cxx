@@ -26,11 +26,11 @@
 
 int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
 {
-  typedef otb::AtmosphericCorrectionParameters  AtmosphericCorrectionParametersType;
-  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+  typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
+  typedef otb::FilterFunctionValues            FilterFunctionValuesType;
   // Instantiating object
   AtmosphericCorrectionParametersType::Pointer objectAtmo = AtmosphericCorrectionParametersType::New();
-  FilterFunctionValuesType::Pointer objectFilter = FilterFunctionValuesType::New();
+  FilterFunctionValuesType::Pointer            objectFilter = FilterFunctionValuesType::New();
 
   return EXIT_SUCCESS;
 }

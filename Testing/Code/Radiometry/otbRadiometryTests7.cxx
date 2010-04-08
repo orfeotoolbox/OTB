@@ -22,7 +22,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbTestMain.h"
 
 void RegisterTests()
@@ -34,4 +33,3 @@ void RegisterTests()
   REGISTER_TEST(otbIBGAndRAndNIRIndexImageFilter);
   REGISTER_TEST(otbIBMultiChannelGAndRAndNIRIndexImageFilter);
 }
-

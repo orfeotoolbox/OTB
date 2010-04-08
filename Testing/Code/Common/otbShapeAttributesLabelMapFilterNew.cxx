@@ -24,12 +24,12 @@
 int otbShapeAttributesLabelMapFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
-  typedef unsigned short                         LabelType;
-  
-  typedef otb::AttributesMapLabelObject<LabelType,Dimension,double>      LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
-  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>               ShapeLabelMapFilterType;
-  
+  typedef unsigned short LabelType;
+
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                              LabelMapType;
+  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>            ShapeLabelMapFilterType;
+
   // Instantiation
   ShapeLabelMapFilterType::Pointer ShapeLabelMapFilter = ShapeLabelMapFilterType::New();
 

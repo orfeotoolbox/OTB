@@ -24,22 +24,21 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbCloudEstimatorFilter(int argc, char * argv[])
 {
   const unsigned int Dimension                                                   = 2;
-  typedef double                                                                 PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                                  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>                                        ImageType;
-  typedef VectorImageType::PixelType                                             VectorPixelType;
-  typedef otb::Functor::CloudEstimatorFunctor<VectorPixelType,PixelType >        FunctorType;
-  typedef otb::CloudEstimatorFilter<VectorImageType,ImageType,FunctorType >      CloudEstimatorFilterType;
-  typedef otb::ImageFileReader<VectorImageType>                                  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                        WriterType;
+  typedef double                                                             PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                             VectorImageType;
+  typedef otb::Image<PixelType, Dimension>                                   ImageType;
+  typedef VectorImageType::PixelType                                         VectorPixelType;
+  typedef otb::Functor::CloudEstimatorFunctor<VectorPixelType, PixelType>    FunctorType;
+  typedef otb::CloudEstimatorFilter<VectorImageType, ImageType, FunctorType> CloudEstimatorFilterType;
+  typedef otb::ImageFileReader<VectorImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                    WriterType;
 
   //Parameters
-  const char * inputFileName(argv[1]);
-  const char * outputFileName(argv[2]);
+  const char *    inputFileName(argv[1]);
+  const char *    outputFileName(argv[2]);
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
@@ -52,9 +51,9 @@ int otbCloudEstimatorFilter(int argc, char * argv[])
   const double variance = (atof(argv[7]));
 
 // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
   CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer               writer = WriterType::New();
 
   //Initialization parameters
   reader->SetFileName(inputFileName);
@@ -62,7 +61,6 @@ int otbCloudEstimatorFilter(int argc, char * argv[])
   cloudEstimator->SetInput(reader->GetOutput());
   cloudEstimator->SetReferencePixel(referencePixel);
   cloudEstimator->SetVariance(variance);
-
 
   writer->SetFileName(outputFileName);
   writer->SetInput(cloudEstimator->GetOutput());

@@ -22,8 +22,8 @@
 
 int otbTileMapImageSourceNew(int argc, char * argv[])
 {
-  typedef otb::Image<double, 2>               ImageType;
-  typedef otb::TileMapImageSource<ImageType>  TileMapImageSourceType;
+  typedef otb::Image<double, 2>              ImageType;
+  typedef otb::TileMapImageSource<ImageType> TileMapImageSourceType;
 
   // Instantiating object
   TileMapImageSourceType::Pointer object = TileMapImageSourceType::New();

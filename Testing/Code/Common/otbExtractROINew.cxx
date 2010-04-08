@@ -16,24 +16,19 @@
 
 =========================================================================*/
 
-
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 
 #include "otbExtractROI.h"
 
-int otbExtractROINew( int argc, char * argv[] )
+int otbExtractROINew(int argc, char * argv[])
 {
-  typedef std::complex<float>                                  InputPixelType;
-  typedef std::complex<double>                          OutputPixelType;
+  typedef std::complex<float>  InputPixelType;
+  typedef std::complex<double> OutputPixelType;
 
-  typedef otb::ExtractROI< InputPixelType, OutputPixelType >  FilterType;
-
+  typedef otb::ExtractROI<InputPixelType, OutputPixelType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-
-

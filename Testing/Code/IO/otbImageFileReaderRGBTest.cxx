@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
@@ -28,33 +27,30 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-
 int otbImageFileReaderRGBTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
 
-  typedef itk::RGBPixel<unsigned char>                    InputPixelType;
-  typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef itk::RGBPixel<unsigned char> InputPixelType;
+  typedef itk::RGBPixel<unsigned char> OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName( inputFilename  );
-  writer->SetFileName( outputFilename );
+  reader->SetFileName(inputFilename);
+  writer->SetFileName(outputFilename);
 
-  writer->SetInput( reader->GetOutput() );
+  writer->SetInput(reader->GetOutput());
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }
-

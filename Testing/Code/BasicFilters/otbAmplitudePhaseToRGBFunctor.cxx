@@ -24,7 +24,6 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
@@ -37,16 +36,16 @@
 
 int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
 {
-  typedef float PixelType;
+  typedef float                    PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
-  typedef std::complex<PixelType> ComplexPixelType;
+  typedef std::complex<PixelType>         ComplexPixelType;
   typedef otb::Image<ComplexPixelType, 2> ComplexImageType;
 
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2> RGBImageType;
+  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
 
-  typedef otb::ImageFileReader<ComplexImageType> ReaderType;
+  typedef otb::ImageFileReader<ComplexImageType>      ReaderType;
   typedef otb::StreamingImageFileWriter<RGBImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -54,13 +53,11 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-
-  typedef itk::ComplexToModulusImageFilter<ComplexImageType,ImageType> ModulusFilterType;
+  typedef itk::ComplexToModulusImageFilter<ComplexImageType, ImageType> ModulusFilterType;
   ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
   modulusFilter->SetInput(reader->GetOutput());
 
-
-  typedef itk::ComplexToPhaseImageFilter<ComplexImageType,ImageType> PhaseFilterType;
+  typedef itk::ComplexToPhaseImageFilter<ComplexImageType, ImageType> PhaseFilterType;
   PhaseFilterType::Pointer phaseFilter = PhaseFilterType::New();
   phaseFilter->SetInput(reader->GetOutput());
 
@@ -70,13 +67,12 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   constFilter->SetInput(modulusFilter->GetOutput());
 
   typedef otb::Functor::AmplitudePhaseToRGBFunctor
-      <PixelType,PixelType,PixelType,RGBPixelType> ColorMapFunctorType;
+  <PixelType, PixelType, PixelType, RGBPixelType> ColorMapFunctorType;
   typedef itk::TernaryFunctorImageFilter
-      <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximum(4000);
   colormapper->GetFunctor().SetMinimum(0);
-
 
   colormapper->SetInput1(modulusFilter->GetOutput());
   colormapper->SetInput2(constFilter->GetOutput());
@@ -86,7 +82,6 @@ int otbAmplitudePhaseToRGBFunctor(int argc, char * argv[])
   writer->SetInput(colormapper->GetOutput());
 
   writer->Update();
-
 
   return EXIT_SUCCESS;
 }

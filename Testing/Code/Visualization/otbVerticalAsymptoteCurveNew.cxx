@@ -17,10 +17,10 @@
 =========================================================================*/
 #include "otbVerticalAsymptoteCurve.h"
 
-int otbVerticalAsymptoteCurveNew( int argc, char * argv[] )
+int otbVerticalAsymptoteCurveNew(int argc, char * argv[])
 {
 
-  typedef otb::VerticalAsymptoteCurve         VerticalAsymptoteCurveType;
+  typedef otb::VerticalAsymptoteCurve VerticalAsymptoteCurveType;
 
   VerticalAsymptoteCurveType::Pointer vaCurve = VerticalAsymptoteCurveType::New();
 

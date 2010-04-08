@@ -23,7 +23,7 @@
 
 int otbParallelLinePathListFilterNew(int argc, char * argv[])
 {
-  const unsigned int Dimension =2;
+  const unsigned int Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
   typedef otb::ParallelLinePathListFilter<PathType> ParallelLinePathType;

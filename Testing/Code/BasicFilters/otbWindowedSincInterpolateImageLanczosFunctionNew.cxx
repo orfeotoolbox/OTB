@@ -22,12 +22,11 @@
 
 int otbWindowedSincInterpolateImageLanczosFunctionNew(int argc, char * argv[])
 {
-  typedef otb::Image<double,2>                                           ImageType;
-  typedef otb::WindowedSincInterpolateImageLanczosFunction<ImageType>    InterpolatorType;
+  typedef otb::Image<double, 2>                                       ImageType;
+  typedef otb::WindowedSincInterpolateImageLanczosFunction<ImageType> InterpolatorType;
 
   // Instantiating objects
-  InterpolatorType::Pointer    interp    = InterpolatorType::New();
-
+  InterpolatorType::Pointer interp    = InterpolatorType::New();
 
   return EXIT_SUCCESS;
 }

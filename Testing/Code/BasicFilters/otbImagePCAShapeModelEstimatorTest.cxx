@@ -40,7 +40,6 @@
 
 // class to support progress feeback
 
-
 class ShowProgressObject
 {
 public:
@@ -55,8 +54,7 @@ public:
   itk::LightProcessObject::Pointer m_Process;
 };
 
-
-int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
+int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[])
 {
   /*    const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[1]));
       const unsigned int numberOfTrainingImages(atoi(argv[2]));
@@ -74,22 +72,20 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
       }
   */
 
-
   itk::OutputWindow::SetInstance(itk::TextOutput::New().GetPointer());
-
 
   //------------------------------------------------------
   //Create 3 simple test images with
   //------------------------------------------------------
-  typedef itk::Image<double,NDIMENSION> InputImageType;
-  typedef itk::Image<double,NDIMENSION> OutputImageType;
+  typedef itk::Image<double, NDIMENSION> InputImageType;
+  typedef itk::Image<double, NDIMENSION> OutputImageType;
   typedef
-  itk::ImageRegionIterator< InputImageType > InputImageIterator;
+  itk::ImageRegionIterator<InputImageType> InputImageIterator;
 
   typedef
-  itk::ImageRegionIterator< OutputImageType > OutputImageIterator;
+  itk::ImageRegionIterator<OutputImageType> OutputImageIterator;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   // Instantiating object
@@ -122,27 +118,27 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   ImagePCAShapeModelEstimatorType;
 
   ImagePCAShapeModelEstimatorType::Pointer
-  applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
+    applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
 
   //----------------------------------------------------------------------
   //Set the parameters of the clusterer
   //----------------------------------------------------------------------
-  applyPCAShapeEstimator->SetNumberOfTrainingImages( NUMTRAINIMAGES );
-  applyPCAShapeEstimator->SetNumberOfPrincipalComponentsRequired( NUMLARGESTPC + 1 );
-  applyPCAShapeEstimator->SetNumberOfPrincipalComponentsRequired( NUMLARGESTPC );
-  applyPCAShapeEstimator->SetInput(0, reader1->GetOutput() );
-  applyPCAShapeEstimator->SetInput(1, reader2->GetOutput() );
-  applyPCAShapeEstimator->SetInput(2, reader3->GetOutput() );
+  applyPCAShapeEstimator->SetNumberOfTrainingImages(NUMTRAINIMAGES);
+  applyPCAShapeEstimator->SetNumberOfPrincipalComponentsRequired(NUMLARGESTPC + 1);
+  applyPCAShapeEstimator->SetNumberOfPrincipalComponentsRequired(NUMLARGESTPC);
+  applyPCAShapeEstimator->SetInput(0, reader1->GetOutput());
+  applyPCAShapeEstimator->SetInput(1, reader2->GetOutput());
+  applyPCAShapeEstimator->SetInput(2, reader3->GetOutput());
 
   applyPCAShapeEstimator->Update();
 
-  writer1->SetInput(applyPCAShapeEstimator->GetOutput( 0 ));
+  writer1->SetInput(applyPCAShapeEstimator->GetOutput(0));
   writer1->Update();
-  writer2->SetInput(applyPCAShapeEstimator->GetOutput( 1 ));
+  writer2->SetInput(applyPCAShapeEstimator->GetOutput(1));
   writer2->Update();
-  writer3->SetInput(applyPCAShapeEstimator->GetOutput( 2 ));
+  writer3->SetInput(applyPCAShapeEstimator->GetOutput(2));
   writer3->Update();
-  writer4->SetInput(applyPCAShapeEstimator->GetOutput( 3 ));
+  writer4->SetInput(applyPCAShapeEstimator->GetOutput(3));
   writer4->Update();
 
   //Test the printself function to increase coverage
@@ -155,10 +151,10 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   //Print out the number of training images and the number of principal
   //components
   std::cout << "The number of training images are: " <<
-            applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
+  applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
 
   std::cout << "The number of principal components desired are: " <<
-            applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
+  applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
 
   //Print the eigen vectors
   vnl_vector<double> eigenValues =
@@ -167,13 +163,13 @@ int otbImagePCAShapeModelEstimatorTest(int argc, char* argv[] )
   std::cout << "Number of returned eign-values: " << numEigVal << std::endl;
 
   std::cout << "The " <<
-            applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() <<
-            " largest eigen values are:" << std::endl;
+  applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() <<
+  " largest eigen values are:" << std::endl;
 
-  for (unsigned int i= 0; i< vnl_math_min( numEigVal, (unsigned int)NUMLARGESTPC ); i++ )
-  {
-    std::cout << eigenValues[ i ] << std::endl;
-  }
+  for (unsigned int i = 0; i < vnl_math_min(numEigVal, (unsigned int) NUMLARGESTPC); i++)
+    {
+    std::cout << eigenValues[i] << std::endl;
+    }
 
   //Print the MeanImage
 /*

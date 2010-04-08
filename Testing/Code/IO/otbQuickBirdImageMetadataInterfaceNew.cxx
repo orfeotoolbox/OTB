@@ -26,8 +26,7 @@
 
 #include "otbQuickBirdImageMetadataInterface.h"
 
-
-int otbQuickBirdImageMetadataInterfaceNew (int argc, char* argv[])
+int otbQuickBirdImageMetadataInterfaceNew(int argc, char* argv[])
 {
 
   otb::QuickBirdImageMetadataInterface::Pointer lImageMetadata = otb::QuickBirdImageMetadataInterface::New();

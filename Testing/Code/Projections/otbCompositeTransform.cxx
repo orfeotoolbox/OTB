@@ -30,42 +30,40 @@
 #include "otbMapProjections.h"
 #include "otbInverseSensorModel.h"
 
-int otbCompositeTransform( int argc, char* argv[] )
+int otbCompositeTransform(int argc, char* argv[])
 {
 
-  if (argc!=3)
-  {
-    std::cout << argv[0] <<" <input filename> <output filename>"
+  if (argc != 3)
+    {
+    std::cout << argv[0] << " <input filename> <output filename>"
               << std::endl;
 
     return EXIT_FAILURE;
-  }
+    }
 
   char * filename = argv[1];
   char * outFilename = argv[2];
 
-
-  typedef otb::Image<double, 2>     ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  ReaderType::Pointer             reader = ReaderType::New();
+  typedef otb::Image<double, 2>           ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
   typedef otb::UtmInverseProjection MapProjectionType;
 
-  int utmZone = 31;
+  int  utmZone = 31;
   char utmHemisphere = 'N';
 
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   mapProjection->SetZone(utmZone);
   mapProjection->SetHemisphere(utmHemisphere);
 
-
-  typedef otb::InverseSensorModel<double>   SensorModelType;
+  typedef otb::InverseSensorModel<double> SensorModelType;
   SensorModelType::Pointer sensorModel = SensorModelType::New();
   sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-  typedef otb::CompositeTransform< MapProjectionType,SensorModelType> CompositeTransformType;
+  typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();
 
   compositeTransform->SetFirstTransform(mapProjection);
@@ -75,17 +73,14 @@ int otbCompositeTransform( int argc, char* argv[] )
   file.open(outFilename);
 
   file << std::setprecision(15);
-  itk::Point<double,2> point;
-  point[0]=374100;
-  point[1]=4829000;
+  itk::Point<double, 2> point;
+  point[0] = 374100;
+  point[1] = 4829000;
   file << "Standard Composite transform: " << std::endl;
   file << point << " -> ";
   file << compositeTransform->TransformPoint(point);
   file << std::endl << std::endl;
 
-
   file.close();
   return EXIT_SUCCESS;
 }
-
-

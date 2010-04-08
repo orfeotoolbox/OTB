@@ -28,20 +28,18 @@
 #include "itkRandomImageSource.h"
 #include "itkMeanImageFilter.h"
 
-int otbFrostFilterNew( int argc, char * argv[] )
+int otbFrostFilterNew(int argc, char * argv[])
 {
-  typedef unsigned char                                   InputPixelType;
-  typedef unsigned char                             OutputPixelType;
-  const   unsigned int                                  Dimension = 2;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
+  typedef otb::FrostImageFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer frost = FilterType::New();
 
-
   return EXIT_SUCCESS;
 }
-

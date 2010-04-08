@@ -19,17 +19,15 @@
 #include "otbImage.h"
 #include "otbKullbackLeiblerDistanceImageFilter.h"
 
-
 int otbKullbackLeiblerDistanceImageFilterNew(int argc, char * argv[])
 {
   const unsigned int Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::Image<PixelType,Dimension> ImageType;
-  typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,ImageType,ImageType> FilterType;
+  typedef otb::Image<PixelType, Dimension>                                         ImageType;
+  typedef otb::KullbackLeiblerDistanceImageFilter<ImageType, ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
-
 
   return EXIT_SUCCESS;
 }

@@ -22,13 +22,13 @@
 #include "otbLabelizeConnectedThresholdImageFilter.h"
 #include "otbImage.h"
 
-int otbLabelizeConnectedThresholdImageFilterNew( int argc, char * argv[] )
+int otbLabelizeConnectedThresholdImageFilterNew(int argc, char * argv[])
 {
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::LabelizeConnectedThresholdImageFilter

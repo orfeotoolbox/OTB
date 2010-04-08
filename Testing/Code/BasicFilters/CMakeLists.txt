@@ -126,6 +126,9 @@ ADD_TEST(bfTvMeanFunctorImageTest ${BASICFILTERS_TESTS1}
 
 ADD_TEST(bfTvTransformPointSetFilter ${BASICFILTERS_TESTS1}
   otbTransformPointSetFilterTest)
+  
+ADD_TEST(bfTvRandomPointSetSource ${BASICFILTERS_TESTS1}
+  otbRandomPointSetSourceTest)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests2 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1263,7 +1266,21 @@ ADD_TEST(bfTvPointSetDensityFunctionTest ${BASICFILTERS_TESTS11}
 	 otbPointSetDensityFunctionTest
 	 ${TEMP}/bfTvPointSetDensityFunctionOutputAscii.txt
 	 )
+	 
+# -------    otbPointSetDensityGaussianFunction   ----------------------------
+ADD_TEST(bfTuPointSetDensityGaussianFunctionNew ${BASICFILTERS_TESTS11}
+     otbPointSetDensityGaussianFunctionNew
+     )
 
+
+ADD_TEST(bfTvPointSetDensityGaussianFunctionTest ${BASICFILTERS_TESTS11}
+--compare-ascii ${NOTOL}
+         ${BASELINE_FILES}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+        ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+     otbPointSetDensityGaussianFunctionTest
+     ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
+     )
+     
 #------------ otbPointSetToDensityImageFilter ---------------------
 
 ADD_TEST(bfTuPointSetToDensityImageFilterNew ${BASICFILTERS_TESTS11}
@@ -1598,6 +1615,7 @@ otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbMeanFunctorImageTest.cxx
 otbTransformPointSetFilterTest.cxx
+otbRandomPointSetSourceTest.cxx
 )
 
 # A enrichir
@@ -1772,6 +1790,8 @@ otbExtractROIResample.cxx
 #otbPointSetFunctionNew.cxx
 otbPointSetDensityFunctionNew.cxx
 otbPointSetDensityFunctionTest.cxx
+otbPointSetDensityGaussianFunctionNew.cxx
+otbPointSetDensityGaussianFunctionTest.cxx
 otbPointSetToDensityImageFilterNew.cxx
 otbPointSetToDensityImageFilterTest.cxx
 otbKeyPointDensityImageFilterNew.cxx

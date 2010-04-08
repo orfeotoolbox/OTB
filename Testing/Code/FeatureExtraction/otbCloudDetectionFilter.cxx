@@ -24,22 +24,21 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-
 int otbCloudDetectionFilter(int argc, char * argv[])
 {
   const unsigned int Dimension                                                   = 2;
-  typedef double                                                                 PixelType;
-  typedef otb::VectorImage<PixelType,Dimension>                                  VectorImageType;
-  typedef otb::Image<PixelType,Dimension>                                        ImageType;
-  typedef VectorImageType::PixelType                                             VectorPixelType;
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,PixelType >        FunctorType;
-  typedef otb::CloudDetectionFilter<VectorImageType,ImageType,FunctorType >      CloudDetectionFilterType;
-  typedef otb::ImageFileReader<VectorImageType>                                  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                        WriterType;
+  typedef double                                                             PixelType;
+  typedef otb::VectorImage<PixelType, Dimension>                             VectorImageType;
+  typedef otb::Image<PixelType, Dimension>                                   ImageType;
+  typedef VectorImageType::PixelType                                         VectorPixelType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType, PixelType>    FunctorType;
+  typedef otb::CloudDetectionFilter<VectorImageType, ImageType, FunctorType> CloudDetectionFilterType;
+  typedef otb::ImageFileReader<VectorImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                                    WriterType;
 
   //Parameters
-  const char * inputFileName(argv[1]);
-  const char * outputFileName(argv[2]);
+  const char *    inputFileName(argv[1]);
+  const char *    outputFileName(argv[2]);
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
@@ -54,9 +53,9 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   const double maxThreshold = (atof(argv[9]));
 
 // Instantiating object
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer               reader = ReaderType::New();
   CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer               writer = WriterType::New();
 
   //Initialization parameters
   reader->SetFileName(inputFileName);
@@ -66,7 +65,6 @@ int otbCloudDetectionFilter(int argc, char * argv[])
   cloudDetection->SetMinThreshold(minThreshold);
   cloudDetection->SetMaxThreshold(maxThreshold);
   cloudDetection->SetVariance(variance);
-
 
   writer->SetFileName(outputFileName);
   writer->SetInput(cloudDetection->GetOutput());

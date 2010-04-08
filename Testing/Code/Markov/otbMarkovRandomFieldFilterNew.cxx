@@ -22,16 +22,13 @@
 #include "otbMarkovRandomFieldFilter.h"
 #include "otbImage.h"
 
-
 int otbMarkovRandomFieldFilterNew(int argc, char * argv[])
 {
-  typedef double PixelType;
-  typedef otb::Image<PixelType, 2>                             ImageType;
-  typedef otb::MarkovRandomFieldFilter< ImageType, ImageType>  MarkovRandomFieldFilterType;
+  typedef double                                             PixelType;
+  typedef otb::Image<PixelType, 2>                           ImageType;
+  typedef otb::MarkovRandomFieldFilter<ImageType, ImageType> MarkovRandomFieldFilterType;
 
   MarkovRandomFieldFilterType::Pointer object = MarkovRandomFieldFilterType::New();
 
   return EXIT_SUCCESS;
 }
-
-

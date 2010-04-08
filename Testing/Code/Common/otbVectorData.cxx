@@ -23,11 +23,11 @@
 int otbVectorData(int argc, char * argv[])
 {
 
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2>   VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
-  typedef DataNodeType::PointType PointType;
-  typedef DataNodeType::LineType LineType;
-  typedef DataNodeType::PolygonType PolygonType;
+  typedef DataNodeType::PointType      PointType;
+  typedef DataNodeType::LineType       LineType;
+  typedef DataNodeType::PolygonType    PolygonType;
 
   //Instantiation
   VectorDataType::Pointer data = VectorDataType::New();
@@ -37,7 +37,6 @@ int otbVectorData(int argc, char * argv[])
   DataNodeType::Pointer point = DataNodeType::New();
   DataNodeType::Pointer line = DataNodeType::New();
   DataNodeType::Pointer polygon = DataNodeType::New();
-
 
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
@@ -54,7 +53,7 @@ int otbVectorData(int argc, char * argv[])
   PointType p;
   p.Fill(5);
 
-  point->SetPoint(p);;
+  point->SetPoint(p);
 
   LineType::Pointer l = LineType::New();
   line->SetLine(l);
@@ -64,26 +63,26 @@ int otbVectorData(int argc, char * argv[])
 
   DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
 
-  data->GetDataTree()->Add(document,root);
-  data->GetDataTree()->Add(folder,document);
-  data->GetDataTree()->Add(point,folder);
-  data->GetDataTree()->Add(line,folder);
-  data->GetDataTree()->Add(polygon,folder);
+  data->GetDataTree()->Add(document, root);
+  data->GetDataTree()->Add(folder, document);
+  data->GetDataTree()->Add(point, folder);
+  data->GetDataTree()->Add(line, folder);
+  data->GetDataTree()->Add(polygon, folder);
 
   if (argc < 2)
-  {
+    {
     std::cout << data << std::endl;
-  }
+    }
   else
-  {
-    const char * outfile = argv[1];
+    {
+    const char *  outfile = argv[1];
     std::ofstream file;
     file.open(outfile);
 
     file << data << std::endl;
     file.close();
 
-  }
+    }
 
   return EXIT_SUCCESS;
 }
