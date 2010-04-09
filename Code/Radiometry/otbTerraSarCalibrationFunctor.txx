@@ -64,9 +64,11 @@ TerraSarCalibrationFunctor<TInput, TOutput>
 
   // Get polynomial coefficients
   std::vector<double> coefficients = m_NoiseRecord.get_polynomialCoefficients();
-
+  
   // Evaluate
-  double nebn = Horner (coefficients, deltaTau);
+  double nebn = 0.;
+  if ( !vnl_math_isnan(deltaTau) )
+    nebn = Horner (coefficients, deltaTau);
 
   // Do not forget to multiply by the calibration factor
   nebn *= m_CalibrationFactor;
