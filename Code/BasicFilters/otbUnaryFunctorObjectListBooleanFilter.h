@@ -32,16 +32,16 @@ namespace otb
  *
    * \ingroup ObjectListFilter
  */
-template <class TInputList, class TOutputList, class TFunction >
+template <class TInputList, class TOutputList, class TFunction>
 class ITK_EXPORT UnaryFunctorObjectListBooleanFilter :
-    public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+  public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorObjectListBooleanFilter  Self;
-  typedef otb::ObjectListToObjectListFilter<TInputList,TOutputList>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef UnaryFunctorObjectListBooleanFilter                        Self;
+  typedef otb::ObjectListToObjectListFilter<TInputList, TOutputList> Superclass;
+  typedef itk::SmartPointer<Self>                                    Pointer;
+  typedef itk::SmartPointer<const Self>                              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,14 +50,13 @@ public:
   itkTypeMacro(UnaryFunctorObjectListBooleanFilter, ObjectListToObjectListFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
-  typedef TInputList InputListType;
-  typedef TOutputList OutputListType;
-  typedef typename TInputList::ConstPointer InputListPointer;
-  typedef typename TOutputList::Pointer OutputListPointer;
-  typedef typename TInputList::ConstIterator InputListIterator;
+  typedef TFunction                           FunctorType;
+  typedef TInputList                          InputListType;
+  typedef TOutputList                         OutputListType;
+  typedef typename TInputList::ConstPointer   InputListPointer;
+  typedef typename TOutputList::Pointer       OutputListPointer;
+  typedef typename TInputList::ConstIterator  InputListIterator;
   typedef typename TOutputList::ConstIterator OutputListIterator;
-
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -66,11 +65,11 @@ public:
   FunctorType& GetFunctor()
   {
     return m_Functor;
-  };
+  }
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -81,27 +80,23 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-    {
+      {
       m_Functor = functor;
       this->Modified();
-    }
+      }
   }
-
 
 protected:
   UnaryFunctorObjectListBooleanFilter();
-  virtual ~UnaryFunctorObjectListBooleanFilter() {};
-
+  virtual ~UnaryFunctorObjectListBooleanFilter() {}
 
   /** Multi-threading implementation */
-
 
   virtual void AfterThreadedGenerateData();
 
   /** startIndex and stopIndex represent the indices of the Objects to
   examine in thread threadId */
   virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
-
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -111,10 +106,9 @@ protected:
 
   /** End Multi-threading implementation */
 
-
 private:
-  UnaryFunctorObjectListBooleanFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorObjectListBooleanFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
 };

@@ -21,7 +21,6 @@
 #include "itkObject.h"
 #include "otbImageMetadataInterfaceBase.h"
 
-
 namespace otb
 {
 /** \class ImageMetadataInterfaceFactory
@@ -31,7 +30,7 @@ class ITK_EXPORT ImageMetadataInterfaceFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageMetadataInterfaceFactory           Self;
+  typedef ImageMetadataInterfaceFactory Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -47,10 +46,10 @@ public:
   typedef ImageMetadataInterfaceBase::VectorType               VectorType;
   typedef ImageMetadataInterfaceBase::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageMetadataInterfaceBase::ImageKeywordlistType     ImageKeywordlistType;
-  typedef ImageMetadataInterfaceBase::Pointer                       ImageMetadataInterfaceBasePointerType;
- 
+  typedef ImageMetadataInterfaceBase::Pointer                  ImageMetadataInterfaceBasePointerType;
+
   /** Create the appropriate ImageMetadataInterfaceFactory depending on the particulars of the file. */
-  static ImageMetadataInterfaceBasePointerType CreateIMI( const MetaDataDictionaryType & dict );
+  static ImageMetadataInterfaceBasePointerType CreateIMI(const MetaDataDictionaryType& dict);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -60,13 +59,11 @@ protected:
   ~ImageMetadataInterfaceFactory();
 
 private:
-  ImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageMetadataInterfaceFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
-
 } // end namespace otb
-
 
 #endif

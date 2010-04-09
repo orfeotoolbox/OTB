@@ -34,29 +34,29 @@ namespace otb {
  * \sa WaveletOperatorBase
  * \sa WaveletGenerator
  */
-template < Wavelet::Wavelet TMotherWaveletOperator,
-            Wavelet::WaveletDirection TDirectionOfTransformation,
-            class TPixel, unsigned int VDimension,
-            class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+template <Wavelet::Wavelet TMotherWaveletOperator,
+          Wavelet::WaveletDirection TDirectionOfTransformation,
+          class TPixel, unsigned int VDimension,
+          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletLowPassOperator
-  : public WaveletOperatorBase< TMotherWaveletOperator,
-                                TPixel, VDimension, TAllocator >
+  : public WaveletOperatorBase<TMotherWaveletOperator,
+                               TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef WaveletLowPassOperator Self;
-  typedef WaveletOperatorBase< TMotherWaveletOperator,
-                                TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperatorBase<TMotherWaveletOperator,
+                              TPixel, VDimension, TAllocator>  Superclass;
 
   itkTypeMacro(WaveletLowPassOperator, WaveletOperatorBase);
 
   typedef typename Superclass::SizeType SizeType;
-  typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
+  typedef Wavelet::WaveletDirection     DirectionOfTransformationEnumType;
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, TDirectionOfTransformation);
 
 protected:
 
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const
+  virtual void PrintSelf(std::ostream& os, itk::Indent i) const
   {
     os << i << "WaveletLowPassOperator {this=" << this << "}" << std::endl;
     Superclass::PrintSelf(os, i.GetNextIndent());
@@ -67,7 +67,7 @@ protected:
    * work around compiler bug on VC++.
    */
   typedef typename Superclass::CoefficientVector CoefficientVector;
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType         PixelType;
 
   /**
    * Set operator coefficients.
@@ -75,20 +75,20 @@ protected:
   CoefficientVector GenerateCoefficients()
   {
     CoefficientVector coeff;
-    switch ( DirectionOfTransformation )
-    {
-      case Wavelet::FORWARD:
-        this->m_WaveletGenerator->GetLowPassCoefficientVector( coeff );
-        break;
-      case Wavelet::INVERSE:
-        this->m_WaveletGenerator->GetHighPassCoefficientVector( coeff );
-        Superclass::GenerateInverseLowPassFilterFromHighPassFilter( coeff );
-        break;
-      default: // Here to prevent from compilation warnings
-        break;
-    }
+    switch (DirectionOfTransformation)
+      {
+    case Wavelet::FORWARD:
+      this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
+      break;
+    case Wavelet::INVERSE:
+      this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
+      Superclass::GenerateInverseLowPassFilterFromHighPassFilter(coeff);
+      break;
+    default:   // Here to prevent from compilation warnings
+      break;
+      }
 
-    Superclass::UpSamplingCoefficients( coeff );
+    Superclass::UpSamplingCoefficients(coeff);
     return coeff;
   }
 }; // end of class
@@ -96,5 +96,3 @@ protected:
 } // end of namespace otb
 
 #endif
-
-

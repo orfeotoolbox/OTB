@@ -39,29 +39,29 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TInputImage=otb::Image<itk::RGBAPixel<unsigned char>,2 > >
+template <class TInputImage = otb::Image<itk::RGBAPixel<unsigned char>, 2> >
 class ImageWidget
   : public GlWidget
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidget                       Self;
-  typedef GlWidget                          Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef ImageWidget                   Self;
+  typedef GlWidget                      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidget,GlWidget);
+  itkTypeMacro(ImageWidget, GlWidget);
   /** Input image typedef */
-  typedef TInputImage                         InputImageType;
+  typedef TInputImage InputImageType;
   /** Image region typedef */
   typedef typename InputImageType::RegionType RegionType;
   /** Region size & index typedef */
-  typedef typename RegionType::SizeType       SizeType;
-  typedef typename RegionType::IndexType      IndexType;
+  typedef typename RegionType::SizeType  SizeType;
+  typedef typename RegionType::IndexType IndexType;
 
   /** GlComponent typedef */
   typedef GlComponent                                   GlComponentType;
@@ -83,14 +83,14 @@ public:
    * This method fills the m_OpenGl buffer according to the region
    *  size. Buffer in flipped over X axis if OTB_USE_GL_ACCEL is OFF.
    */
-  virtual void ReadBuffer(const InputImageType * image, const RegionType & region);
+  virtual void ReadBuffer(const InputImageType * image, const RegionType& region);
 
   /** Clear the OpenGl buffer */
   void ClearBuffer();
 
   /** Set/Get the Isotropic zoom */
-  itkSetMacro(IsotropicZoom,double);
-  itkGetMacro(IsotropicZoom,double);
+  itkSetMacro(IsotropicZoom, double);
+  itkGetMacro(IsotropicZoom, double);
 
   /** Linear interpolation on or off*/
   void LinearInterpolationOn()
@@ -106,25 +106,24 @@ public:
   }
 
   /** Set/Get the subsampling rate */
-  itkSetMacro(SubsamplingRate,unsigned int);
-  itkGetMacro(SubsamplingRate,unsigned int);
+  itkSetMacro(SubsamplingRate, unsigned int);
+  itkGetMacro(SubsamplingRate, unsigned int);
 
   /** Get the image to screen transform */
-  itkGetObjectMacro(ImageToScreenTransform,AffineTransformType);
-  itkGetObjectMacro(ScreenToImageTransform,AffineTransformType);
+  itkGetObjectMacro(ImageToScreenTransform, AffineTransformType);
+  itkGetObjectMacro(ScreenToImageTransform, AffineTransformType);
 
- /** Get The GlBuffered Region*/
+  /** Get The GlBuffered Region*/
   itkGetMacro(OpenGlBufferedRegion, RegionType);
 
 /** Get the Extent region */
   itkGetMacro(Extent, RegionType);
 
-
   /** Add a GlComponent */
   unsigned int AddGlComponent(GlComponent * glComponent)
   {
     m_GlComponents->PushBack(glComponent);
-    return m_GlComponents->Size()-1;
+    return m_GlComponents->Size() - 1;
   }
 
   /** Get the nth GlComponent */
@@ -168,14 +167,14 @@ protected:
 
   virtual void draw(void);
 
-   /** Compute the linear buffer index according to the 2D region and
-   * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
-   * \param index 2D index
-   * \param region 2D region
-   */
-  static inline unsigned int ComputeBufferIndex(const IndexType& index, const RegionType & region)
+  /** Compute the linear buffer index according to the 2D region and
+  * its 2D index.This method is used when OTB_GL_USE_ACCEL is ON.
+  * \param index 2D index
+  * \param region 2D region
+  */
+  static inline unsigned int ComputeBufferIndex(const IndexType& index, const RegionType& region)
   {
-    return (index[1]-region.GetIndex()[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
+    return (index[1] - region.GetIndex()[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
   }
 
   /** Compute the linear buffer index according to the 2D region and
@@ -184,14 +183,15 @@ protected:
    * \param index 2D index
    * \param region 2D region
    */
-  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& index,const RegionType & region)
+  static inline unsigned int ComputeXAxisFlippedBufferIndex(const IndexType& index, const RegionType& region)
   {
-    return  (region.GetSize()[1]-1+region.GetIndex()[1]-index[1])*3*region.GetSize()[0]+3*(index[0]-region.GetIndex()[0]);
+    return (region.GetSize()[1] - 1 + region.GetIndex()[1] -
+            index[1]) * 3 * region.GetSize()[0] + 3 * (index[0] - region.GetIndex()[0]);
   }
 
 private:
   ImageWidget(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** OpenGl zoom factor */
   double m_IsotropicZoom;
@@ -227,5 +227,3 @@ private:
 #endif
 
 #endif
-
-

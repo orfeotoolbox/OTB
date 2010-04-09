@@ -41,17 +41,17 @@ class BlendingFunctor
 public:
   /** Blending function typedef */
   typedef otb::Function::BlendingFunction<TInputPixel1,
-                                          TInputPixel2,TOutputPixel>          BlendingFunctionType;
+                                          TInputPixel2, TOutputPixel>          BlendingFunctionType;
   /** Blending function pointer typedef */
-  typedef typename BlendingFunctionType::Pointer                              BlendingFunctionPointerType;
+  typedef typename BlendingFunctionType::Pointer BlendingFunctionPointerType;
   /** Default rendering function typedef */
   typedef otb::Function::UniformAlphaBlendingFunction<TInputPixel1,
-                                          TInputPixel2,TOutputPixel>          DefaultBlendingFunctionType;
+                                                      TInputPixel2, TOutputPixel>          DefaultBlendingFunctionType;
 
   /** Scalar pixel operator */
-  inline TOutputPixel operator()(const TInputPixel1 & input1, const TInputPixel2 & input2)
+  inline TOutputPixel operator ()(const TInputPixel1& input1, const TInputPixel2& input2)
   {
-    return m_Function->Evaluate(input1,input2);
+    return m_Function->Evaluate(input1, input2);
   }
 
 /** Constructor */
@@ -97,34 +97,34 @@ private:
 */
 template <class TInputImage1, class TInputImage2 = TInputImage1, class TOutputImage = TInputImage1>
 class BlendingImageFilter
-  : public itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
-                                        Functor::BlendingFunctor
-                                        < typename TInputImage1::PixelType,
+  : public itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                         Functor::BlendingFunctor
+                                         <typename TInputImage1::PixelType,
                                           typename TInputImage2::PixelType,
-                                          typename TOutputImage::PixelType > >
+                                          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
-  typedef BlendingImageFilter                                   Self;
+  typedef BlendingImageFilter Self;
   typedef itk::BinaryFunctorImageFilter
-  <TInputImage1,TInputImage2,TOutputImage, Functor::BlendingFunctor
-   < typename TInputImage1::PixelType,
-     typename TInputImage2::PixelType,
-     typename TOutputImage::PixelType > >                        Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  <TInputImage1, TInputImage2, TOutputImage, Functor::BlendingFunctor
+   <typename TInputImage1::PixelType,
+    typename TInputImage2::PixelType,
+    typename TOutputImage::PixelType> >                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(BlendingImageFilter,itk::BinaryFunctorImageFilter);
+  itkTypeMacro(BlendingImageFilter, itk::BinaryFunctorImageFilter);
 
   /** Blending function typedef */
   typedef Functor::BlendingFunctor
-  < typename TInputImage1::PixelType,
-    typename TInputImage2::PixelType,
-    typename TOutputImage::PixelType >                       BlendingFunctorType;
+  <typename TInputImage1::PixelType,
+   typename TInputImage2::PixelType,
+   typename TOutputImage::PixelType>                       BlendingFunctorType;
   typedef typename BlendingFunctorType::BlendingFunctionType BlendingFunctionType;
 
   /**
@@ -133,7 +133,7 @@ public:
    */
   void SetBlendingFunction(BlendingFunctionType * function)
   {
-    if(function != this->GetFunctor().GetFunction())
+    if (function != this->GetFunctor().GetFunction())
       {
       this->GetFunctor().SetFunction(function);
       this->Modified();
@@ -149,7 +149,7 @@ public:
     return this->GetFunctor().GetFunction();
   }
 
- protected:
+protected:
   /** Constructor */
   BlendingImageFilter() {}
   /** Destructor */
@@ -157,10 +157,8 @@ public:
 
 private:
   BlendingImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 
 #endif
-
-

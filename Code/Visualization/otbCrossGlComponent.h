@@ -37,7 +37,6 @@
 #endif
 #endif
 
-
 namespace otb
 {
 /** \class CrossGlComponent
@@ -60,77 +59,74 @@ public:
   typedef Superclass::RegionType        RegionType;
 
   // affine transform
-  typedef Superclass::AffineTransformType       AffineTransformType;
-  typedef AffineTransformType::InputPointType   PointType;
-  typedef AffineTransformType::InputVectorType  VectorType;
-  typedef Superclass::ColorType                 ColorType;
+  typedef Superclass::AffineTransformType      AffineTransformType;
+  typedef AffineTransformType::InputPointType  PointType;
+  typedef AffineTransformType::InputVectorType VectorType;
+  typedef Superclass::ColorType                ColorType;
 
-  typedef itk::Index<> IndexType;
+  typedef itk::Index<>           IndexType;
   typedef std::vector<IndexType> IndexListType;
   typedef std::vector<ColorType> ColorListType;
 
   /** Runtime information */
-  itkTypeMacro(CrossGlComponent,GlComponent);
+  itkTypeMacro(CrossGlComponent, GlComponent);
 
   /** New macro */
   itkNewMacro(Self);
 
   /// Render the vector data
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
+  virtual void  Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform);
 
   /** Set/Get the grid spacing */
-  itkSetMacro(Spacing,VectorType);
-  itkGetConstReferenceMacro(Spacing,VectorType);
+  itkSetMacro(Spacing, VectorType);
+  itkGetConstReferenceMacro(Spacing, VectorType);
 
   /** Set/Get the grid origin */
-  itkSetMacro(Origin,PointType);
-  itkGetConstReferenceMacro(Origin,PointType);
+  itkSetMacro(Origin, PointType);
+  itkGetConstReferenceMacro(Origin, PointType);
 
   /** Set/Get the index to render */
-  void SetIndexList(IndexListType idList) { m_IndexList = idList; };
-  IndexListType GetIndexList() { return m_IndexList; };
-  void AddIndex(IndexType id) { m_IndexList.push_back(id); m_ColorList.push_back(m_RedColor); };
+  void SetIndexList(IndexListType idList) { m_IndexList = idList; }
+  IndexListType GetIndexList() { return m_IndexList; }
+  void AddIndex(IndexType id) { m_IndexList.push_back(id); m_ColorList.push_back(m_RedColor); }
   void RemoveIndex(unsigned int id)
   {
-    if( id >= m_IndexList.size() )
-      itkExceptionMacro(<<"Index out of size ");
+    if (id >= m_IndexList.size()) itkExceptionMacro(<< "Index out of size ");
 
-    m_IndexList.erase(m_IndexList.begin()+id);
-  };
-  
+    m_IndexList.erase(m_IndexList.begin() + id);
+  }
+
   /** Set/Get the color */
-  void SetColorList(ColorListType colorList) { m_ColorList = colorList; };
-  ColorListType GetColorList() { return m_ColorList; };
+  void SetColorList(ColorListType colorList) { m_ColorList = colorList; }
+  ColorListType GetColorList() { return m_ColorList; }
   void ChangeColor(ColorType color, unsigned int id)
   {
-    if( id >= m_ColorList.size() )
-      itkExceptionMacro(<<"Index out of size ");
+    if (id >= m_ColorList.size()) itkExceptionMacro(<< "Index out of size ");
 
     m_ColorList[id] = color;
-  };
+  }
   void RemoveColor(unsigned int id)
   {
-    if( id >= m_ColorList.size() )
-      itkExceptionMacro(<<"Index out of size ");
+    if (id >= m_ColorList.size()) itkExceptionMacro(<< "Index out of size ");
 
-    m_ColorList.erase(m_ColorList.begin()+id);
-  };
+    m_ColorList.erase(m_ColorList.begin() + id);
+  }
 
   /** Clear all*/
-  void Clear() { m_IndexList.clear(); m_ColorList.clear(); };
+  void Clear() { m_IndexList.clear(); m_ColorList.clear(); }
   void ClearIndex(unsigned int id)
   {
     this->RemoveIndex(id);
     this->RemoveColor(id);
-  };
+  }
 
   /** Set/Get the line width */
-  itkSetMacro(LineWidth,double);
-  itkGetMacro(LineWidth,double);
+  itkSetMacro(LineWidth, double);
+  itkGetMacro(LineWidth, double);
 
   /** Set/Get the cross width */
-  itkSetMacro(CrossWidth,double);
-  itkGetMacro(CrossWidth,double);
+  itkSetMacro(CrossWidth, double);
+  itkGetMacro(CrossWidth, double);
 
 protected:
   /** Constructor */
@@ -140,16 +136,15 @@ protected:
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
   // Recursive rendering method
-  virtual void Render(unsigned int id, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
-
+  virtual void Render(unsigned int id, const RegionType& extent, const AffineTransformType * space2ScreenTransform);
 
 private:
   CrossGlComponent(const Self&); // purposely not implemented
-  void operator=(const Self&);        // purposely not implemented
+  void operator =(const Self&);        // purposely not implemented
 
   /// Index point to render
   IndexListType m_IndexList;
@@ -158,7 +153,7 @@ private:
   VectorType m_Spacing;
 
   /// Origin of the image
-  PointType  m_Origin;
+  PointType m_Origin;
 
   /// The GluTesselator object to render complex polygons
   GLUtesselator * m_GluTesselator;
@@ -171,7 +166,7 @@ private:
 
   /** The cross width for points */
   double m_CrossWidth;
-  
+
   /** Default color : red*/
   ColorType m_RedColor;
 
@@ -179,5 +174,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

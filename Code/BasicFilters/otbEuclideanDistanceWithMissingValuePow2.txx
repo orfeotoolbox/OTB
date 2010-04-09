@@ -27,95 +27,91 @@ namespace otb {
 
 namespace Statistics {
 
-template< class TVector >
+template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2< TVector >
-::Evaluate(const TVector &x1, const TVector &x2) const
+EuclideanDistanceWithMissingValuePow2<TVector>
+::Evaluate(const TVector& x1, const TVector& x2) const
 {
-  if( itk::MeasurementVectorTraits::GetLength( x1 ) !=
-    itk::MeasurementVectorTraits::GetLength( x2 ) )
-  {
-    itkExceptionMacro( << "Vector lengths must be equal." );
-  }
-
-  double temp, distance = itk::NumericTraits< double >::Zero;
-
-  for(unsigned int i = 0; i < x1.Size(); i++ )
-  {
-    if ( !IsMissingValue( x1[i] ) && !IsMissingValue( x2[i] ) )
+  if (itk::MeasurementVectorTraits::GetLength(x1) !=
+      itk::MeasurementVectorTraits::GetLength(x2))
     {
+    itkExceptionMacro(<< "Vector lengths must be equal.");
+    }
+
+  double temp, distance = itk::NumericTraits<double>::Zero;
+
+  for (unsigned int i = 0; i < x1.Size(); i++)
+    {
+    if (!IsMissingValue(x1[i]) && !IsMissingValue(x2[i]))
+      {
       temp = x1[i] - x2[i];
       distance += temp * temp;
+      }
     }
-  }
 
   return distance;
 }
 
-template< class TVector >
+template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2< TVector >
-::Evaluate(const TVector &x) const
+EuclideanDistanceWithMissingValuePow2<TVector>
+::Evaluate(const TVector& x) const
 {
   MeasurementVectorSizeType
     measurementVectorSize = this->GetMeasurementVectorSize();
-  if(measurementVectorSize == 0)
-  {
-    itkExceptionMacro( << "Please set the MeasurementVectorSize first" );
-  }
-  itk::MeasurementVectorTraits::Assert( this->m_Origin, measurementVectorSize,
-    "EuclideanDistance::Evaluate Origin and input vector have different lengths");
-
-  double temp, distance = itk::NumericTraits< double >::Zero;
-
-  for(unsigned int i = 0; i < measurementVectorSize; i++ )
-  {
-    if ( !IsMissingValue( this->GetOrigin()[i] ) && !IsMissingValue( x[i] ) )
+  if (measurementVectorSize == 0)
     {
+    itkExceptionMacro(<< "Please set the MeasurementVectorSize first");
+    }
+  itk::MeasurementVectorTraits::Assert(this->m_Origin, measurementVectorSize,
+                                       "EuclideanDistance::Evaluate Origin and input vector have different lengths");
+
+  double temp, distance = itk::NumericTraits<double>::Zero;
+
+  for (unsigned int i = 0; i < measurementVectorSize; i++)
+    {
+    if (!IsMissingValue(this->GetOrigin()[i]) && !IsMissingValue(x[i]))
+      {
       temp = this->GetOrigin()[i] - x[i];
       distance += temp * temp;
+      }
     }
-  }
 
   return distance;
 }
 
-template< class TVector >
+template<class TVector>
 inline double
-EuclideanDistanceWithMissingValuePow2< TVector >
-::Evaluate( const ValueType &a, const ValueType &b ) const
+EuclideanDistanceWithMissingValuePow2<TVector>
+::Evaluate(const ValueType& a, const ValueType& b) const
 {
   // FIXME throw NaN exception ??
-  if ( IsMissingValue( a ) || IsMissingValue( b ) )
-    return 0.0;
+  if (IsMissingValue(a) || IsMissingValue(b)) return 0.0;
 
   double temp = a - b;
   return temp * temp;
 }
 
-template< class TVector >
+template<class TVector>
 /*static */
 bool
-EuclideanDistanceWithMissingValuePow2< TVector >
-::IsMissingValue ( const ValueType & v)
+EuclideanDistanceWithMissingValuePow2<TVector>
+::IsMissingValue(const ValueType& v)
 {
-  return static_cast<bool>( vnl_math_isnan( static_cast<double>( v ) ) );
+  return static_cast<bool>(vnl_math_isnan(static_cast<double>(v)));
 }
 
-template< class TVector >
+template<class TVector>
 /* static */
 void
-EuclideanDistanceWithMissingValuePow2< TVector >
-::SetToMissingValue ( ValueType & v )
+EuclideanDistanceWithMissingValuePow2<TVector>
+::SetToMissingValue(ValueType& v)
 {
-       v = std::numeric_limits<ValueType>::signaling_NaN();
+  v = std::numeric_limits<ValueType>::signaling_NaN();
 }
-
 
 } // end namespace statistics
 
 } // end namespace otb
 
 #endif
-
-

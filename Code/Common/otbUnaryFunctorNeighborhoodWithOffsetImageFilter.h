@@ -34,23 +34,22 @@ namespace otb
  *
  * \ingroup IntensityImageFilters   Multithreaded
  */
-template <class TInputImage, class TOutputImage, class TFunction >
+template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryFunctorNeighborhoodWithOffsetImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter           Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter      Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorNeighborhoodWithOffsetImageFilter,ImageToImageFilter);
-
+  itkTypeMacro(UnaryFunctorNeighborhoodWithOffsetImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef TFunction                             FunctorType;
@@ -68,8 +67,8 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
-  itkSetMacro(Radius,InputImageSizeType);
-  itkGetMacro(Radius,InputImageSizeType);
+  itkSetMacro(Radius, InputImageSizeType);
+  itkGetMacro(Radius, InputImageSizeType);
 
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
@@ -77,15 +76,14 @@ public:
     m_Radius.Fill(radius);
   }
 
-
   /** Set/Get the offset */
   virtual void SetOffset(InputImageOffsetType off)
   {
     m_Offset = off;
     this->GetFunctor().SetOffset(off);
     this->Modified();
-  };
-  itkGetMacro(Offset,InputImageOffsetType);
+  }
+  itkGetMacro(Offset, InputImageOffsetType);
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -104,7 +102,7 @@ public:
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -118,9 +116,9 @@ public:
     this->Modified();
   }
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage>    NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType  RadiusType;
-  typedef unsigned char                                  RadiusSizeType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
+  typedef unsigned char                                 RadiusSizeType;
 
 protected:
   /**
@@ -130,7 +128,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorNeighborhoodWithOffsetImageFilter() {};
+  virtual ~UnaryFunctorNeighborhoodWithOffsetImageFilter() {}
 
   virtual void BeforeThreadedGenerateData();
 
@@ -144,7 +142,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   /**
    * Pad the input requested region by radius
@@ -153,13 +151,12 @@ protected:
   std::vector<FunctorType> m_FunctorList;
 
 private:
-  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   InputImageSizeType m_Radius;
 
   FunctorType m_Functor;
-
 
   InputImageOffsetType m_Offset;
 };
@@ -169,6 +166,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbUnaryFunctorNeighborhoodWithOffsetImageFilter.txx"
 #endif
-
 
 #endif

@@ -33,70 +33,68 @@ namespace otb
  * \sa VectorData
  */
 
-
-template <class TVectorData >
+template <class TVectorData>
 class ITK_EXPORT VectorDataProperties : public itk::DataObject
 {
-  public:
-    /** Standard class typedefs. */
-    typedef VectorDataProperties Self;
-    typedef itk::LightObject Superclass;
-    typedef itk::SmartPointer<Self>   Pointer;
-    typedef itk::SmartPointer<const Self>  ConstPointer;
-    
-    
-    /** Convenient typedefs */
-    typedef TVectorData                               VectorDataType;
-    typedef typename VectorDataType::Pointer           VectorDataPointerType;
-    typedef typename VectorDataType::ConstPointer     InputVectorDataConstPointer;
-    typedef typename VectorDataType::DataNodeType                  DataNodeType;
-    typedef typename DataNodeType::Pointer                              DataNodePointerType;
-    typedef typename DataNodeType::PolygonType     PolygonType;
-    
-    typedef typename VectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
-    typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
-    
-    typedef typename PolygonType::RegionType        RegionType;
-    typedef typename RegionType::Pointer        RegionPointerType;
-    typedef typename RegionType::IndexType        IndexType;
-    typedef typename RegionType::SizeType        SizeType;
-    typedef typename RegionType::Type        Type;
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+public:
+  /** Standard class typedefs. */
+  typedef VectorDataProperties          Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(VectorDataProperties, LightObject);
+  /** Convenient typedefs */
+  typedef TVectorData                           VectorDataType;
+  typedef typename VectorDataType::Pointer      VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer InputVectorDataConstPointer;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer        DataNodePointerType;
+  typedef typename DataNodeType::PolygonType    PolygonType;
 
-    /** Number of dimensions. */
-    itkStaticConstMacro(VectorDataDimension, unsigned int,
-                        TVectorData::Dimension);
+  typedef typename VectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType     ChildrenListType;
 
-    /** Get/Set the VectorData. */
+  typedef typename PolygonType::RegionType RegionType;
+  typedef typename RegionType::Pointer     RegionPointerType;
+  typedef typename RegionType::IndexType   IndexType;
+  typedef typename RegionType::SizeType    SizeType;
+  typedef typename RegionType::Type        Type;
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
+
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(VectorDataProperties, LightObject);
+
+  /** Number of dimensions. */
+  itkStaticConstMacro(VectorDataDimension, unsigned int,
+                      TVectorData::Dimension);
+
+  /** Get/Set the VectorData. */
 //      itkGetObjectMacro(VectorDataObject, VectorDataType);
-    void SetVectorDataObject(const VectorDataType * v) {m_VectorDataObject=const_cast <VectorDataType *>(v); }
+  void SetVectorDataObject(const VectorDataType * v) {m_VectorDataObject = const_cast <VectorDataType *>(v); }
 //
-    RegionType GetBoundingRegion() {return m_BoundingRegion;}
-    void SetBoundingRegion(RegionType & region) {m_BoundingRegion=region; }
-    
-    void AddRegion(const RegionType & region);
-    void ComputeBoundingRegion();
-  protected:
-    /** Constructor */
-    VectorDataProperties(){};
-    /** Destructor */
-    virtual ~VectorDataProperties() {};
-    /**PrintSelf method */
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    
-    void ProcessNode(InternalTreeNodeType * source);
-    bool IsBoundingRegionNull();
-  private:
-    VectorDataProperties(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
+  RegionType GetBoundingRegion() {return m_BoundingRegion; }
+  void SetBoundingRegion(RegionType& region) {m_BoundingRegion = region; }
 
-    //Pointer to the VectorData
-    VectorDataType * m_VectorDataObject;
-    RegionType m_BoundingRegion;
+  void AddRegion(const RegionType& region);
+  void ComputeBoundingRegion();
+protected:
+  /** Constructor */
+  VectorDataProperties(){};
+  /** Destructor */
+  virtual ~VectorDataProperties() {}
+  /**PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  void ProcessNode(InternalTreeNodeType * source);
+  bool IsBoundingRegionNull();
+private:
+  VectorDataProperties(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
+
+  //Pointer to the VectorData
+  VectorDataType * m_VectorDataObject;
+  RegionType       m_BoundingRegion;
 
 }; // end class
 } // end namespace otb

@@ -61,29 +61,29 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionNonUniformMultidimensionalSplitter: public itk::ImageRegionSplitter<VImageDimension>
+class ITK_EXPORT ImageRegionNonUniformMultidimensionalSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionNonUniformMultidimensionalSplitter              Self;
-  typedef itk::ImageRegionSplitter<VImageDimension>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageRegionNonUniformMultidimensionalSplitter Self;
+  typedef itk::ImageRegionSplitter<VImageDimension>     Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageRegionNonUniformMultidimensionalSplitter,ImageRegionSplitter);
+  itkTypeMacro(ImageRegionNonUniformMultidimensionalSplitter, ImageRegionSplitter);
 
   /** Dimension of the image available at compile time. */
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef itk::Index<VImageDimension>  IndexType;
+  typedef itk::Index<VImageDimension> IndexType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef itk::Size<VImageDimension>  SizeType;
+  typedef itk::Size<VImageDimension> SizeType;
 
   /** Region typedef support.   */
   typedef itk::ImageRegion<VImageDimension> RegionType;
@@ -94,14 +94,14 @@ public:
    * a certain dimensions, then some splits will not be possible. This
    * method returns a number less than or equal to the requested number
    * of pieces.  */
-  virtual unsigned int GetNumberOfSplits(const RegionType &region,
+  virtual unsigned int GetNumberOfSplits(const RegionType& region,
                                          unsigned int requestedNumber);
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
   virtual RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType &region);
+                              const RegionType& region);
 
 protected:
   ImageRegionNonUniformMultidimensionalSplitter() {}
@@ -109,19 +109,18 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageRegionNonUniformMultidimensionalSplitter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageRegionNonUniformMultidimensionalSplitter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 
 // Define instantiation macro for this template.
 #define ITK_TEMPLATE_ImageRegionNonUniformMultidimensionalSplitter(_, EXPORT, x, y) namespace otb { \
-  _(1(class EXPORT ImageRegionNonUniformMultidimensionalSplitter< ITK_TEMPLATE_1 x >)) \
-  namespace Templates { typedef ImageRegionNonUniformMultidimensionalSplitter< ITK_TEMPLATE_1 x > \
-                                               ImageRegionNonUniformMultidimensionalSplitter##y; } \
+  _(1 (class EXPORT ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x>)) \
+  namespace Templates { typedef ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x> \
+                        ImageRegionNonUniformMultidimensionalSplitter ## y; } \
   }
 
 #if ITK_TEMPLATE_EXPLICIT
@@ -133,4 +132,3 @@ private:
 #endif
 
 #endif
-

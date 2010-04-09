@@ -29,22 +29,22 @@ namespace MorphologicalPyramid
 /**
  * Constructor
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 MRToMSConverter<TInputImage, TOutputImage>
 ::MRToMSConverter()
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(2);
   OutputImageListPointerType supFilter = OutputImageListType::New();
-  this->SetNthOutput(0,supFilter.GetPointer());
+  this->SetNthOutput(0, supFilter.GetPointer());
   OutputImageListPointerType infFilter = OutputImageListType::New();
-  this->SetNthOutput(1,infFilter.GetPointer());
+  this->SetNthOutput(1, infFilter.GetPointer());
   OutputImageListPointerType outputList = OutputImageListType::New();
-  this->SetNthOutput(2,outputList.GetPointer());
+  this->SetNthOutput(2, outputList.GetPointer());
   OutputImageListPointerType supDeci =   OutputImageListType::New();
-  this->SetNthOutput(3,supDeci.GetPointer());
+  this->SetNthOutput(3, supDeci.GetPointer());
   OutputImageListPointerType infDeci =   OutputImageListType::New();
-  this->SetNthOutput(4,infDeci.GetPointer());
+  this->SetNthOutput(4, infDeci.GetPointer());
 }
 /**
  * Get The inputList at full resolution.
@@ -52,9 +52,9 @@ MRToMSConverter<TInputImage, TOutputImage>
  * resampled at full resolution.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::OutputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetOutput(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(2));
@@ -65,9 +65,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * resampled at full resolution.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::OutputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetSupFilterFullResolution(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(0));
@@ -78,9 +78,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * resampled at full resolution.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::OutputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetInfFilterFullResolution(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(1));
@@ -91,9 +91,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * resampled at full resolution.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::OutputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetSupDeciFullResolution(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(3));
@@ -104,9 +104,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * resampled at full resolution.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::OutputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetInfDeciFullResolution(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(4));
@@ -117,10 +117,10 @@ MRToMSConverter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::SetInput(InputImageListType * imageList)
 {
-  this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(2, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Set The SupFilter details
@@ -128,10 +128,10 @@ MRToMSConverter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::SetSupFilter(InputImageListType * imageList)
 {
-  this->SetNthInput(0,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(0, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Set The InfFilter details
@@ -139,10 +139,10 @@ MRToMSConverter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::SetInfFilter(InputImageListType * imageList)
 {
-  this->SetNthInput(1,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(1, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Set The SupDeci details
@@ -150,10 +150,10 @@ MRToMSConverter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::SetSupDeci(InputImageListType * imageList)
 {
-  this->SetNthInput(3,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(3, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Set The InfDeci details
@@ -161,19 +161,19 @@ MRToMSConverter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::SetInfDeci(InputImageListType * imageList)
 {
-  this->SetNthInput(4,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(4, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Get the input list.
  * \return The list of the analysed image at each pyramid level.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::InputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetInput(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(2));
@@ -183,9 +183,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * \return The brighter details extracted from the filtering operation
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::InputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetSupFilter(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(0));
@@ -195,9 +195,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * \return The darker details extracted from the filtering operation
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::InputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetInfFilter(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(1));
@@ -207,9 +207,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * \return The brighter details extracted from the resampling operation
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::InputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetSupDeci(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(3));
@@ -219,9 +219,9 @@ MRToMSConverter<TInputImage,TOutputImage>
  * \return The darker details extracted from the resampling operation.
  */
 template <class TInputImage, class TOutputImage>
-typename MRToMSConverter<TInputImage,TOutputImage>
+typename MRToMSConverter<TInputImage, TOutputImage>
 ::InputImageListType*
-MRToMSConverter<TInputImage,TOutputImage>
+MRToMSConverter<TInputImage, TOutputImage>
 ::GetInfDeci(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(4));
@@ -229,127 +229,127 @@ MRToMSConverter<TInputImage,TOutputImage>
 /**
  * Main computation method
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 void
 MRToMSConverter<TInputImage, TOutputImage>
 ::GenerateData()
 {
   // Input images lists pointers
-  InputImageListPointerType  supFilter = this->GetSupFilter();
-  InputImageListPointerType  infFilter = this->GetInfFilter();
-  InputImageListPointerType  supDeci = this->GetSupDeci();
-  InputImageListPointerType  infDeci = this->GetInfDeci();
-  InputImageListPointerType  inputList = this->GetInput();
+  InputImageListPointerType supFilter = this->GetSupFilter();
+  InputImageListPointerType infFilter = this->GetInfFilter();
+  InputImageListPointerType supDeci = this->GetSupDeci();
+  InputImageListPointerType infDeci = this->GetInfDeci();
+  InputImageListPointerType inputList = this->GetInput();
 
   // Output images lists pointers
-  OutputImageListPointerType  supFilterFullResolution = this->GetSupFilterFullResolution();
-  OutputImageListPointerType  infFilterFullResolution = this->GetInfFilterFullResolution();
-  OutputImageListPointerType  supDeciFullResolution = this->GetSupDeciFullResolution();
-  OutputImageListPointerType  infDeciFullResolution = this->GetInfDeciFullResolution();
-  OutputImageListPointerType  outputList = this->GetOutput();
+  OutputImageListPointerType supFilterFullResolution = this->GetSupFilterFullResolution();
+  OutputImageListPointerType infFilterFullResolution = this->GetInfFilterFullResolution();
+  OutputImageListPointerType supDeciFullResolution = this->GetSupDeciFullResolution();
+  OutputImageListPointerType infDeciFullResolution = this->GetInfDeciFullResolution();
+  OutputImageListPointerType outputList = this->GetOutput();
 
   // typedef of the resampling filter
-  typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType> ResamplerType;
+  typedef otb::MorphologicalPyramid::Resampler<InputImageType, OutputImageType> ResamplerType;
 
   // Definition of the resampler filters
   typename ResamplerType::Pointer resampler;
 
   // Full resolution size
   typename InputImageType::SizeType frsize = supFilter->Front()->GetLargestPossibleRegion().GetSize();
-  otbMsgDevMacro(<<"MRToMSConverter: Full resolution size: "<<frsize);
+  otbMsgDevMacro(<< "MRToMSConverter: Full resolution size: " << frsize);
 
   // SupFilter resampling
-  otbMsgDevMacro(<<"MRToMSConverter: SupFilter resampling.");
+  otbMsgDevMacro(<< "MRToMSConverter: SupFilter resampling.");
   InputImageListIteratorType it = supFilter->Begin();
   // The first image does not need any resampling
   supFilterFullResolution->PushBack(it.Get());
   ++it;
-  for (;it!=supFilter->End();++it)
-  {
+  for (; it != supFilter->End(); ++it)
+    {
     resampler = ResamplerType::New();
     resampler->SetSize(frsize);
     resampler->SetInput(it.Get());
     resampler->Update();
     supFilterFullResolution->PushBack(resampler->GetOutput());
-  }
-  otbMsgDevMacro(<<"MRToMSConverter: InfFilter resampling.");
+    }
+  otbMsgDevMacro(<< "MRToMSConverter: InfFilter resampling.");
   // InfFilter resampling
   it = infFilter->Begin();
   // The first image does not need any resampling
   infFilterFullResolution->PushBack(it.Get());
   ++it;
-  for (;it!=infFilter->End();++it)
-  {
+  for (; it != infFilter->End(); ++it)
+    {
     resampler = ResamplerType::New();
     resampler->SetSize(frsize);
     resampler->SetInput(it.Get());
     resampler->Update();
     infFilterFullResolution->PushBack(resampler->GetOutput());
-  }
+    }
 
   if (inputList)
-  {
-    otbMsgDevMacro(<<"MRToMSConverter: Optional inputList resampling.");
+    {
+    otbMsgDevMacro(<< "MRToMSConverter: Optional inputList resampling.");
     // Analyse image resampling
     it = inputList->Begin();
     // The first image does not need any resampling
     outputList->PushBack(it.Get());
     ++it;
-    for (;it!=inputList->End();++it)
-    {
+    for (; it != inputList->End(); ++it)
+      {
       resampler = ResamplerType::New();
       resampler->SetSize(frsize);
       resampler->SetInput(it.Get());
       resampler->Update();
       outputList->PushBack(resampler->GetOutput());
+      }
     }
-  }
 
   if (supDeci)
-  {
-    otbMsgDevMacro(<<"MRToMSConverter: Optional supDeci resampling.");
+    {
+    otbMsgDevMacro(<< "MRToMSConverter: Optional supDeci resampling.");
     // SupDeci resampling
     it = supDeci->Begin();
     // The first image does not need any resampling
     supDeciFullResolution->PushBack(it.Get());
     ++it;
-    for (;it!=supDeci->End();++it)
-    {
+    for (; it != supDeci->End(); ++it)
+      {
       resampler = ResamplerType::New();
       resampler->SetSize(frsize);
       resampler->SetInput(it.Get());
       resampler->Update();
       supDeciFullResolution->PushBack(resampler->GetOutput());
+      }
     }
-  }
 
   if (infDeci)
-  {
-    otbMsgDevMacro(<<"MRToMSConverter: Optional infDeci resampling.");
+    {
+    otbMsgDevMacro(<< "MRToMSConverter: Optional infDeci resampling.");
     // InfDeci resampling
     it = infDeci->Begin();
     // The first image does not need any resampling
     infDeciFullResolution->PushBack(it.Get());
     ++it;
-    for (;it!=infDeci->End();++it)
-    {
+    for (; it != infDeci->End(); ++it)
+      {
       resampler = ResamplerType::New();
       resampler->SetSize(frsize);
       resampler->SetInput(it.Get());
       resampler->Update();
       infDeciFullResolution->PushBack(resampler->GetOutput());
+      }
     }
-  }
 }
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 void
 MRToMSConverter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // End namespace MorphologicalPyramid
 } // End namespace otb

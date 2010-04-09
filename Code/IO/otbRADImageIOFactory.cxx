@@ -21,7 +21,6 @@
 #include "otbRADImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ RADImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

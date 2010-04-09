@@ -39,51 +39,51 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class  ITK_EXPORT DrawLineSpatialObjectFilter :
+class ITK_EXPORT DrawLineSpatialObjectFilter :
   //public itk::SpatialObjectToImageFilter< itk::LineSpatialObject<2>, TOutputImage >
-  public itk::ImageToImageFilter<TInputImage, TOutputImage >
+  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef DrawLineSpatialObjectFilter                                                Self;
+  typedef DrawLineSpatialObjectFilter Self;
   //typedef itk::ImageTo< itk::LineSpatialObject<2>, TOutputImage > Superclass;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self>                                                    Pointer;
-  typedef itk::SmartPointer<const Self>                                              ConstPointer;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
-  
-  /** Return the name of the class. */
-  itkTypeMacro(DrawLineSpatialObjectFilter, /*SpatialObjectToImageFilter*/itk::ImageToImageFilter);
-  
-  /** typedef Support for input & output image*/
-  typedef TInputImage                                                                InputImageType;
 
-  typedef TOutputImage                                                               OutputImageType;
-  typedef typename OutputImageType::PixelType                                        OutputPixelType;
-  
+  /** Return the name of the class. */
+  itkTypeMacro(DrawLineSpatialObjectFilter, /*SpatialObjectToImageFilter*/ itk::ImageToImageFilter);
+
+  /** typedef Support for input & output image*/
+  typedef TInputImage InputImageType;
+
+  typedef TOutputImage                        OutputImageType;
+  typedef typename OutputImageType::PixelType OutputPixelType;
+
   /** Support typedef for input & Output*/
-  typedef itk::LineSpatialObject<2>                                InputLineType;
-  typedef itk::ProcessObject                                                         ProcessObjectType;
+  typedef itk::LineSpatialObject<2> InputLineType;
+  typedef itk::ProcessObject        ProcessObjectType;
 
   /** Typedef Support for lineList Type*/
-  typedef LineSpatialObjectList                                                      LineSpatialObjectListType;
-  typedef typename LineSpatialObjectListType::Pointer                                LineSpatialObjectListPointer;
+  typedef LineSpatialObjectList                       LineSpatialObjectListType;
+  typedef typename LineSpatialObjectListType::Pointer LineSpatialObjectListPointer;
 
   /** Typedef Support for drawLineSpatialObjectListFilter*/
-  typedef otb::DrawLineSpatialObjectListFilter<InputImageType,OutputImageType >     DrawLineSpatialObjectListFilterType;
-  typedef typename DrawLineSpatialObjectListFilterType::Pointer                     DrawLineSpatialObjectListFilterPointerType;
+  typedef otb::DrawLineSpatialObjectListFilter<InputImageType, OutputImageType> DrawLineSpatialObjectListFilterType;
+  typedef typename DrawLineSpatialObjectListFilterType::Pointer
+  DrawLineSpatialObjectListFilterPointerType;
 
-  
   /** Set/Get the image input of this process object. */
   /*   virtual void SetInputImage(const InputImageType *image); */
   /*   const InputImageType * GetInputImage(void); */
@@ -92,25 +92,24 @@ public:
   virtual void SetInputLine(const InputLineType *line);
   InputLineType * GetInputLine(void);
 
-  
   /** Set/Get pixel value */
   itkSetMacro(Value, OutputPixelType);
   itkGetConstReferenceMacro(Value, OutputPixelType);
 
 protected:
   DrawLineSpatialObjectFilter();
-  virtual ~DrawLineSpatialObjectFilter() {};
+  virtual ~DrawLineSpatialObjectFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData();
 
 private:
-  DrawLineSpatialObjectFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DrawLineSpatialObjectFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   OutputPixelType m_Value;
 
-  DrawLineSpatialObjectListFilterPointerType  m_DrawLineListFilter;
+  DrawLineSpatialObjectListFilterPointerType m_DrawLineListFilter;
 
 };
 } // end namespace otb
@@ -118,6 +117,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbDrawLineSpatialObjectFilter.txx"
 #endif
-
 
 #endif

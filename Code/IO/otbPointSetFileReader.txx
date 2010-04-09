@@ -33,11 +33,11 @@ template <class TOutputPointSet>
 PointSetFileReader<TOutputPointSet>
 ::PointSetFileReader() : otb::PointSetSource<TOutputPointSet>()
 {
-  m_NumberOfPoints=-1;
-  m_MinX=0;
-  m_MaxX=0;
-  m_MinY=0;
-  m_MaxY=0;
+  m_NumberOfPoints = -1;
+  m_MinX = 0;
+  m_MaxX = 0;
+  m_MinY = 0;
+  m_MaxY = 0;
 }
 
 template <class TOutputPointSet>
@@ -46,7 +46,6 @@ PointSetFileReader<TOutputPointSet>
 {
 }
 
-
 template <class TOutputPointSet>
 void
 PointSetFileReader<TOutputPointSet>
@@ -54,17 +53,16 @@ PointSetFileReader<TOutputPointSet>
 {
   typename TOutputPointSet::Pointer output = this->GetOutput();
 
-  otbDebugMacro(<<"Reading file for GenerateOutputInformation()" << m_FileName);
+  otbDebugMacro(<< "Reading file for GenerateOutputInformation()" << m_FileName);
 
   // Check to see if we can read the file given the name or prefix
   //
-  if ( m_FileName == "" )
-  {
+  if (m_FileName == "")
+    {
     throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
-  }
+    }
 
   this->TestFileExistanceAndReadability();
-
 
   std::ifstream ifs;
   ifs.open(m_FileName.c_str(), std::ios::in | std::ios::binary);
@@ -84,40 +82,39 @@ PointSetFileReader<TOutputPointSet>
 
 }
 
-
 template <class TOutputPointSet>
 void
 PointSetFileReader<TOutputPointSet>
 ::TestFileExistanceAndReadability()
 {
   // Test if the file exists.
-  if ( ! itksys::SystemTools::FileExists( m_FileName.c_str() ) )
-  {
+  if (!itksys::SystemTools::FileExists(m_FileName.c_str()))
+    {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
-    msg <<"The file doesn't exist. "
-    << std::endl << "Filename = " << m_FileName
-    << std::endl;
+    msg << "The file doesn't exist. "
+        << std::endl << "Filename = " << m_FileName
+        << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
     return;
-  }
+    }
 
   // Test if the file can be open for reading access.
   std::ifstream readTester;
-  readTester.open( m_FileName.c_str() );
-  if ( readTester.fail() )
-  {
+  readTester.open(m_FileName.c_str());
+  if (readTester.fail())
+    {
     readTester.close();
     itk::OStringStream msg;
-    msg <<"The file couldn't be opened for reading. "
-    << std::endl << "Filename: " << m_FileName
-    << std::endl;
-    itk::ImageFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+    msg << "The file couldn't be opened for reading. "
+        << std::endl << "Filename: " << m_FileName
+        << std::endl;
+    itk::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
     return;
 
-  }
+    }
   readTester.close();
 }
 
@@ -140,30 +137,29 @@ void PointSetFileReader<TOutputPointSet>
 
   //If the output pointset is of dimension 2, altitude is stored as information
   if (PointType::PointDimension == 2)
-  {
-    while (reader.ReadNextPoint())
     {
+    while (reader.ReadNextPoint())
+      {
       liblas::LASPoint const& p = reader.GetPoint();
 
       PointType point;
       point[0] = p.GetX();
       point[1] = p.GetY();
 
-
       unsigned long i = output->GetNumberOfPoints();
-      output->SetPoint( i, point );
+      output->SetPoint(i, point);
 
       PixelType V;
-      V = static_cast<PixelType>( p.GetZ() );
-      output->SetPointData( i, V );
+      V = static_cast<PixelType>(p.GetZ());
+      output->SetPointData(i, V);
 
+      }
     }
-  }
   //If the output pointset is of dimension 3, store the altitude as information
   else if (PointType::PointDimension == 3)
-  {
-    while (reader.ReadNextPoint())
     {
+    while (reader.ReadNextPoint())
+      {
       liblas::LASPoint const& p = reader.GetPoint();
 
       PointType point;
@@ -172,22 +168,21 @@ void PointSetFileReader<TOutputPointSet>
       point[2] = p.GetZ();
 
       unsigned long i = output->GetNumberOfPoints();
-      output->SetPoint( i, point );
+      output->SetPoint(i, point);
 
       PixelType V;
-      V = static_cast<PixelType>( p.GetZ() );
-      output->SetPointData( i, V );
+      V = static_cast<PixelType>(p.GetZ());
+      output->SetPointData(i, V);
 
+      }
     }
-  }
   else
-  {
-    itkExceptionMacro(<<"Can't handle pointset dimension other than 2 and 3");
-  }
+    {
+    itkExceptionMacro(<< "Can't handle pointset dimension other than 2 and 3");
+    }
 
   ifs.close();
 }
-
 
 template <class TOutputPointSet>
 void PointSetFileReader<TOutputPointSet>
@@ -206,4 +201,3 @@ void PointSetFileReader<TOutputPointSet>
 } //namespace otb
 
 #endif
-

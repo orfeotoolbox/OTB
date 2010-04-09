@@ -26,7 +26,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 RoadExtractionFilter<TInputImage, TOutputPath>
 ::RoadExtractionFilter()
 {
@@ -38,18 +38,17 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 
 }
 
-
 /**
  * Main computation method
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 void
 RoadExtractionFilter<TInputImage, TOutputPath>
 ::GenerateData()
 {
   // Input images pointers
   typename InputImageType::ConstPointer inputImage     = this->GetInput();
-  typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
+  typename OutputPathListType::Pointer  outputPathList  = this->GetOutput();
 
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
 
@@ -57,23 +56,23 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 
   m_GenericRoadExtractionFilter->Update();
   for (typename GenericRoadExtractionFilterType::OutputPathListType::ConstIterator it
-       = m_GenericRoadExtractionFilter->GetOutput()->Begin();
-       it!=m_GenericRoadExtractionFilter->GetOutput()->End();
+         = m_GenericRoadExtractionFilter->GetOutput()->Begin();
+       it != m_GenericRoadExtractionFilter->GetOutput()->End();
        ++it)
-  {
+    {
     outputPathList->PushBack(it.Get());
-  }
+    }
 }
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 void
 RoadExtractionFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "m_ReferencePixel: "<< m_SpectralAngleDistanceImageFilter->GetReferencePixel() << std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "m_ReferencePixel: " << m_SpectralAngleDistanceImageFilter->GetReferencePixel() << std::endl;
 }
 
 } // End namespace otb

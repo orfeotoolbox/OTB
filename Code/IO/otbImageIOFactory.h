@@ -31,10 +31,10 @@ class ITK_EXPORT ImageIOFactory : public itk::ImageIOFactory
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageIOFactory   Self;
-  typedef itk::ImageIOFactory  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageIOFactory                Self;
+  typedef itk::ImageIOFactory           Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -42,7 +42,7 @@ public:
   itkTypeMacro(ImageIOFactory, itk::ImageIOFactory);
 
   /** Convenient typedefs. */
-  typedef ::itk::ImageIOBase::Pointer ImageIOBasePointer;
+  typedef::itk::ImageIOBase::Pointer ImageIOBasePointer;
 
   /** Mode in which the files is intended to be used */
 //  typedef enum { ReadMode, WriteMode } FileModeType;
@@ -58,11 +58,10 @@ protected:
   ~ImageIOFactory();
 
 private:
-  ImageIOFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageIOFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

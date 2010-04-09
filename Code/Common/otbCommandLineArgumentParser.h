@@ -32,82 +32,80 @@
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 
-
 /** \class CommandLineArgumentParserHelpException
  * \brief This exception is thrown when the help menu is displayed.
  */
 class ITK_EXPORT CommandLineArgumentParserHelpException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro(CommandLineArgumentParserHelpException , ExceptionObject );
+  itkTypeMacro(CommandLineArgumentParserHelpException, ExceptionObject);
 
   /** Constructor. */
   CommandLineArgumentParserHelpException(const char *file, unsigned int line,
                                          const char* message = "Help:",
-                                         const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                                         const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
   /** Constructor. */
-  CommandLineArgumentParserHelpException(const std::string &file, unsigned int line,
+  CommandLineArgumentParserHelpException(const std::string & file, unsigned int line,
                                          const char* message = "Help:",
-                                         const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                                         const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
 };
 
 /** \class CommandLineArgumentParserVersionException
  * \brief This exception is thrown when the version is displayed.
  */
 class ITK_EXPORT CommandLineArgumentParserVersionException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro(CommandLineArgumentParserVersionException , ExceptionObject );
+  itkTypeMacro(CommandLineArgumentParserVersionException, ExceptionObject);
 
   /** Constructor. */
   CommandLineArgumentParserVersionException(const char *file, unsigned int line,
-      const char* message = "Version:",
-      const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                                            const char* message = "Version:",
+                                            const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
   /** Constructor. */
-  CommandLineArgumentParserVersionException(const std::string &file, unsigned int line,
-      const char* message = "Version:",
-      const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+  CommandLineArgumentParserVersionException(const std::string & file, unsigned int line,
+                                            const char* message = "Version:",
+                                            const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
 };
 
 /** \class CommandLineArgumentParserArgumentErrorException
  * \brief This exception is thrown when the version is displayed.
  */
 class ITK_EXPORT CommandLineArgumentParserArgumentErrorException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro(CommandLineArgumentParserArgumentErrorException , ExceptionObject );
+  itkTypeMacro(CommandLineArgumentParserArgumentErrorException, ExceptionObject);
 
   /** Constructor. */
   CommandLineArgumentParserArgumentErrorException(const char *file, unsigned int line,
-      const char* message = "Argument error:",
-      const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                                                  const char* message = "Argument error:",
+                                                  const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
   /** Constructor. */
-  CommandLineArgumentParserArgumentErrorException(const std::string &file, unsigned int line,
-      const char* message = "Argument error:",
-      const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+  CommandLineArgumentParserArgumentErrorException(const std::string & file, unsigned int line,
+                                                  const char* message = "Argument error:",
+                                                  const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
 };
 
 namespace otb
 {
-
 
 //class CommandLineArgumentParser;
 
@@ -119,13 +117,13 @@ namespace otb
 class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
-  typedef CommandLineArgumentParseResult        Self;
-  typedef itk::ProcessObject                  Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef CommandLineArgumentParseResult Self;
+  typedef itk::ProcessObject             Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(CommandLineArgumentParseResult,itk::ProcessObject);
+  itkTypeMacro(CommandLineArgumentParseResult, itk::ProcessObject);
 
   /** Check whether the option was passed in or not */
   bool IsOptionPresent(std::string option) const;
@@ -137,58 +135,55 @@ public:
   bool IsOptionOutputImagePresent(void) const;
 
   /** Check whether the OTBTesting option was passed in or not */
-  bool IsOptionOTBTestingPresent(void)const;
+  bool IsOptionOTBTestingPresent(void) const;
 
   /** Get one of the parameters to the option */
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
   int GetNumberOfParameters(std::string option);
 
-  void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
+  void PrintSelf(std::ostream& os /*, itk::Indent indent*/) const;
 
-#define otbGetParameterMacro(name,type)                                                 \
-  virtual type GetParameter##name (std::string option, unsigned int number=0) const     \
-  {                                                                                     \
-        std::string parameter = this->GetParameterString(option, number);               \
-        type lValeur;                                                                   \
-        ::otb::StringStream flux;                                                       \
-        flux << parameter;                                                              \
-        flux >> lValeur;                                                                \
-        return lValeur;                                                                 \
-  }
+#define otbGetParameterMacro(name, type)                                                 \
+  virtual type GetParameter ## name (std::string option, unsigned int number = 0) const     \
+                                       {                                                                                     \
+                                       std::string parameter = this->GetParameterString(option, number);               \
+                                       type        lValeur;                                                                   \
+                                       ::otb::StringStream flux;                                                       \
+                                       flux << parameter;                                                              \
+                                       flux >> lValeur;                                                                \
+                                       return lValeur;                                                                 \
+                                       }
 
+  otbGetParameterMacro(Char, char);
+  otbGetParameterMacro(Short, short);
+  otbGetParameterMacro(UShort, unsigned short);
+  otbGetParameterMacro(Int, int);
+  otbGetParameterMacro(UInt, unsigned int);
+  otbGetParameterMacro(Long, long);
+  otbGetParameterMacro(ULong, unsigned long);
+  otbGetParameterMacro(Float, float);
+  otbGetParameterMacro(Double, double);
 
-  otbGetParameterMacro(Char,char);
-  otbGetParameterMacro(Short,short);
-  otbGetParameterMacro(UShort,unsigned short);
-  otbGetParameterMacro(Int,int);
-  otbGetParameterMacro(UInt,unsigned int);
-  otbGetParameterMacro(Long,long);
-  otbGetParameterMacro(ULong,unsigned long);
-  otbGetParameterMacro(Float,float);
-  otbGetParameterMacro(Double,double);
+  std::string GetParameterString(std::string option, unsigned int number = 0) const;
 
-
-  std::string           GetParameterString(std::string option, unsigned int number=0) const;
-
-  std::string           GetInputImage(void) const;
-  std::string           GetOutputImage(void) const;
-
+  std::string GetInputImage(void) const;
+  std::string GetOutputImage(void) const;
 
 protected:
   CommandLineArgumentParseResult() {};
-  virtual ~CommandLineArgumentParseResult() {};
+  virtual ~CommandLineArgumentParseResult() {}
 
 private:
 
-  template< typename TypeValeur >
-  TypeValeur GetParameter(std::string option, unsigned int number=0) const;
+  template<typename TypeValeur>
+  TypeValeur GetParameter(std::string option, unsigned int number = 0) const;
 
-  typedef std::vector< std::string > ParameterArrayType;
-  typedef std::map< std::string, ParameterArrayType > OptionMapType;
+  typedef std::vector<std::string>                  ParameterArrayType;
+  typedef std::map<std::string, ParameterArrayType> OptionMapType;
 
   void Clear();
-  void AddOption(const std::string &option);
-  void AddParameter(const std::string &option, const std::string &parameter);
+  void AddOption(const std::string & option);
+  void AddParameter(const std::string & option, const std::string & parameter);
 
   OptionMapType m_OptionMap;
 
@@ -226,29 +221,33 @@ private:
 class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {
 public:
-  typedef CommandLineArgumentParser      Self;
-  typedef itk::ProcessObject                  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef CommandLineArgumentParser     Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(CommandLineArgumentParser,itk::ProcessObject);
+  itkTypeMacro(CommandLineArgumentParser, itk::ProcessObject);
 
   /** Add an input image option */
-  void AddInputImage(bool obligatory=true);
+  void AddInputImage(bool obligatory = true);
   /** Add an output image option */
-  void AddOutputImage(bool obligatory=true);
+  void AddOutputImage(bool obligatory = true);
 
   itkSetStringMacro(ProgramDescription);
   itkGetStringMacro(ProgramDescription);
 
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);
-  // at least one value
+// at least one value
 
-  void AddOption(std::string name, std::string comment, std::string synonim = NULL, int nParameters = 1, bool obligatory =true);
+  void AddOption(std::string name,
+                 std::string comment,
+                 std::string synonim = NULL,
+                 int nParameters = 1,
+                 bool obligatory = true);
   // if -1 we do not know the number of parameters
-  void AddOptionNParams(std::string name, std::string  comment, std::string synonim = NULL, bool obligatory =true);
+  void AddOptionNParams(std::string name, std::string comment, std::string synonim = NULL, bool obligatory = true);
 
   /** Add a different string that envokes the same option (--file and -f) */
 //  void AddSynonim(const char *option, const char *synonim);
@@ -257,23 +256,23 @@ public:
                         CommandLineArgumentParseResult * outResult,
                         bool failOnUnknownTrailingParameters = true);
 
-  void ParseGUI(   CommandLineArgumentParseResult * outResult,
-                   bool failOnUnknownTrailingParameters = true);
+  void ParseGUI(CommandLineArgumentParseResult * outResult,
+                bool failOnUnknownTrailingParameters = true);
 protected:
   CommandLineArgumentParser();
-  virtual ~CommandLineArgumentParser() {};
+  virtual ~CommandLineArgumentParser() {}
 
 private:
 
   void PrintUsage(std::ostream& os) const;
   void PrintVersion(std::ostream& os) const;
-  bool FindOption(const std::string & , int & index);
+  bool FindOption(const std::string&, int& index);
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[],
                            CommandLineArgumentParseResult * outResult,
                            bool reportFailedMsg,
-                           bool failOnUnknownTrailingParameters );
+                           bool failOnUnknownTrailingParameters);
 
   typedef struct
   {
@@ -285,10 +284,9 @@ private:
     bool Obligatory;                    // is the option mandatory ?
     bool Finded;                        // check if the option is present
   } OptionType;
-  typedef std::vector< OptionType> ListOptionType;
+  typedef std::vector<OptionType> ListOptionType;
 
   ListOptionType m_OptionList;
-
 
   std::string m_ProgramName;
   std::string m_ProgramDescription;

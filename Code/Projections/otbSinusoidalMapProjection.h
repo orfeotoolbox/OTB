@@ -30,40 +30,40 @@ namespace otb
  *  It converts coordinates in longitude,latitude (WGS84) to Sinusoidal map coordinates.
  */
 template <InverseOrForwardTransformationEnum transform>
-class ITK_EXPORT SinusoidalMapProjection : public  MapProjection<ossimSinusoidalProjection, transform>
+class ITK_EXPORT SinusoidalMapProjection : public MapProjection<ossimSinusoidalProjection, transform>
 {
-public :
+public:
 
   /** Standard class typedefs. */
-  typedef SinusoidalMapProjection                      Self;
-  typedef MapProjection<ossimSinusoidalProjection, transform>  Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef SinusoidalMapProjection                             Self;
+  typedef MapProjection<ossimSinusoidalProjection, transform> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
-  typedef typename Superclass::ScalarType             ScalarType;
-  typedef itk::Point<ScalarType,2>                  InputPointType;
-  typedef itk::Point<ScalarType,2>                 OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( SinusoidalMapProjection, MapProjection );
+  itkTypeMacro(SinusoidalMapProjection, MapProjection);
 
   virtual void SetFalseEasting(double falseEasting);
   virtual void SetFalseNorthing(double falseNorthing);
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
-  virtual void SetParameters(double falseEasting,double falseNorthing);
+  virtual void SetParameters(double falseEasting, double falseNorthing);
   virtual void SetDefaults();
 
 protected:
   SinusoidalMapProjection();
   virtual ~SinusoidalMapProjection();
 
-private :
-  SinusoidalMapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);            //purposely not implemented
+private:
+  SinusoidalMapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);            //purposely not implemented
 
 };
 

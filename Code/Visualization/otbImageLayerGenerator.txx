@@ -24,11 +24,11 @@
 namespace otb
 {
 
-template < class TImageLayer >
+template <class TImageLayer>
 ImageLayerGenerator<TImageLayer>
 ::ImageLayerGenerator() : m_Layer(), m_Image(), m_Quicklook(),
-                          m_SubsamplingRate(1), m_GenerateQuicklook(true),
-                          m_Resampler(), m_ScreenRatio(0.25)
+  m_SubsamplingRate(1), m_GenerateQuicklook(true),
+  m_Resampler(), m_ScreenRatio(0.25)
 {
   // Intialize output layer
   m_Layer = ImageLayerType::New();
@@ -37,18 +37,18 @@ ImageLayerGenerator<TImageLayer>
 
 }
 
-template < class TImageLayer >
+template <class TImageLayer>
 ImageLayerGenerator<TImageLayer>
 ::~ImageLayerGenerator()
 {}
 
-template < class TImageLayer >
+template <class TImageLayer>
 void
 ImageLayerGenerator<TImageLayer>
 ::GenerateLayer()
 {
 // Check if there is an input image
-  if(m_Image.IsNull())
+  if (m_Image.IsNull())
     {
     return;
     }
@@ -62,13 +62,13 @@ ImageLayerGenerator<TImageLayer>
   this->GenerateQuicklook();
 }
 
-template < class TImageLayer >
+template <class TImageLayer>
 unsigned int
 ImageLayerGenerator<TImageLayer>
 ::GetOptimalSubSamplingRate()
 {
   // Check if there is an input image
-  if(m_Image.IsNull())
+  if (m_Image.IsNull())
     {
     return 1;
     }
@@ -85,25 +85,25 @@ ImageLayerGenerator<TImageLayer>
   typename ImageType::RegionType largestRegion = m_Image->GetLargestPossibleRegion();
 
   // Shannon (finer generation could be added later)
-  unsigned int wrequested = static_cast<unsigned int>(1.5 * wscreen*m_ScreenRatio);
-  unsigned int hrequested = static_cast<unsigned int>(1.5 * hscreen*m_ScreenRatio);
+  unsigned int wrequested = static_cast<unsigned int>(1.5 * wscreen * m_ScreenRatio);
+  unsigned int hrequested = static_cast<unsigned int>(1.5 * hscreen * m_ScreenRatio);
 
   // Compute ratio in both directions
-  unsigned int wratio = m_Image->GetLargestPossibleRegion().GetSize()[0]/wrequested;
-  unsigned int hratio = m_Image->GetLargestPossibleRegion().GetSize()[1]/hrequested;
+  unsigned int wratio = m_Image->GetLargestPossibleRegion().GetSize()[0] / wrequested;
+  unsigned int hratio = m_Image->GetLargestPossibleRegion().GetSize()[1] / hrequested;
 
   // find max ratio
-  unsigned int ratio = std::max(wratio,hratio);
+  unsigned int ratio = std::max(wratio, hratio);
 
   // Ensure a non null ratio
-  if(ratio == 0)
+  if (ratio == 0)
     {
     ratio = 1;
     }
   // return the ratio
   return ratio;
 }
-template < class TImageLayer >
+template <class TImageLayer>
 void
 ImageLayerGenerator<TImageLayer>
 ::GenerateLayerInformation()
@@ -120,20 +120,21 @@ ImageLayerGenerator<TImageLayer>
 
 }
 
-template < class TImageLayer >
+template <class TImageLayer>
 void
 ImageLayerGenerator<TImageLayer>
 ::GenerateQuicklook()
 {
-  if(m_GenerateQuicklook)
+  if (m_GenerateQuicklook)
     {
     // Compute optimal subsampling rate
     unsigned int ssrate = this->GetOptimalSubSamplingRate();
 
     // If no subsampling is needed
-    if(ssrate == 1)
+    if (ssrate == 1)
       {
-      otbMsgDevMacro(<<"ImageLayerGenerator::GenerateQuicklook(): subsampling rate is 1, Image itself is used as quicklook");
+      otbMsgDevMacro(
+        << "ImageLayerGenerator::GenerateQuicklook(): subsampling rate is 1, Image itself is used as quicklook");
       m_Layer->SetHasQuicklook(true);
       m_Layer->SetQuicklookSubsamplingRate(1);
       m_Image->Update();
@@ -146,7 +147,9 @@ ImageLayerGenerator<TImageLayer>
       m_Resampler->SetInput(m_Image);
       m_Resampler->SetShrinkFactor(ssrate);
       m_Resampler->Update();
-      otbMsgDevMacro(<<"ImageLayerGenerator::GenerateQuicklook(): Quicklook generated (ssrate= "<<ssrate<<", size= "<<m_Resampler->GetOutput()->GetLargestPossibleRegion().GetSize()<<")");
+      otbMsgDevMacro(
+        << "ImageLayerGenerator::GenerateQuicklook(): Quicklook generated (ssrate= " << ssrate << ", size= " <<
+        m_Resampler->GetOutput()->GetLargestPossibleRegion().GetSize() << ")");
 
       // Set the quicklook to the layer
       m_Layer->SetQuicklook(m_Resampler->GetOutput());
@@ -158,7 +161,7 @@ ImageLayerGenerator<TImageLayer>
   else
     {
     // If there is a quicklook
-    if(m_Quicklook.IsNotNull())
+    if (m_Quicklook.IsNotNull())
       {
       // Set it to the layer
       m_Layer->SetQuicklook(m_Quicklook);
@@ -173,16 +176,14 @@ ImageLayerGenerator<TImageLayer>
     }
 }
 
-template < class TImageLayer >
+template <class TImageLayer>
 void
 ImageLayerGenerator<TImageLayer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb
 
 #endif
-
-

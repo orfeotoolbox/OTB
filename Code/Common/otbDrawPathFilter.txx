@@ -27,41 +27,39 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage, class TInputPath,class TOutputImage>
-DrawPathFilter<TInputImage,TInputPath,TOutputImage>
+template <class TInputImage, class TInputPath, class TOutputImage>
+DrawPathFilter<TInputImage, TInputPath, TOutputImage>
 ::DrawPathFilter()
 {
   m_Value = static_cast<OutputImagePixelType>(255.0);
 }
 
-template <class TInputImage, class TInputPath,class TOutputImage>
-inline void DrawPathFilter<TInputImage,TInputPath,TOutputImage>
-::SetInputPath( const TInputPath * path)
+template <class TInputImage, class TInputPath, class TOutputImage>
+inline void DrawPathFilter<TInputImage, TInputPath, TOutputImage>
+::SetInputPath(const TInputPath * path)
 {
   this->SetPathInput(path);
 }
 
-
-template <class TInputImage, class TInputPath,class TOutputImage>
-const TInputPath * DrawPathFilter<TInputImage,TInputPath,TOutputImage>
+template <class TInputImage, class TInputPath, class TOutputImage>
+const TInputPath * DrawPathFilter<TInputImage, TInputPath, TOutputImage>
 ::GetInputPath(void)
 {
   return this->GetPathInput();
 }
 
-
 /**
  * Main computation method.
  */
-template <class TInputImage, class TInputPath,class TOutputImage>
+template <class TInputImage, class TInputPath, class TOutputImage>
 void
-DrawPathFilter<TInputImage,TInputPath,TOutputImage>
+DrawPathFilter<TInputImage, TInputPath, TOutputImage>
 ::GenerateData(void)
 {
-  typedef otb::DrawPathListFilter<TInputImage,TInputPath,TOutputImage> DrawListFilterType;
-  typedef typename DrawListFilterType::InputPathListType PathListType;
+  typedef otb::DrawPathListFilter<TInputImage, TInputPath, TOutputImage> DrawListFilterType;
+  typedef typename DrawListFilterType::InputPathListType                 PathListType;
   typename PathListType::Pointer list = PathListType::New();
-  InputPathPointer path = const_cast<TInputPath*>(this->GetPathInput());
+  InputPathPointer               path = const_cast<TInputPath*>(this->GetPathInput());
   list->PushBack(path);
 
   typename DrawListFilterType::Pointer drawer = DrawListFilterType::New();
@@ -76,9 +74,9 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 /**
  * Printself Method
  */
-template <class TInputImage, class TInputPath,class TOutputImage>
+template <class TInputImage, class TInputPath, class TOutputImage>
 void
-DrawPathFilter<TInputImage,TInputPath,TOutputImage>
+DrawPathFilter<TInputImage, TInputPath, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -87,4 +85,3 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 } // end namespace otb
 
 #endif
-

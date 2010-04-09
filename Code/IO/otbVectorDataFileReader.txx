@@ -34,9 +34,9 @@ namespace otb
 template <class TOutputVectorData>
 VectorDataFileReader<TOutputVectorData>
 ::VectorDataFileReader() :
-   m_VectorDataIO(NULL),
-   m_UserSpecifiedVectorDataIO(false),
-   m_FileName("")
+  m_VectorDataIO(NULL),
+  m_UserSpecifiedVectorDataIO(false),
+  m_FileName("")
 {
 }
 
@@ -60,56 +60,55 @@ VectorDataFileReader<TOutputVectorData>
 ::TestFileExistanceAndReadability()
 {
   // Test if the file exists.
-  if ( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
-  {
+  if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
+    {
     VectorDataFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
-    msg <<"The file doesn't exist. "
-    << std::endl << "Filename = " << this->m_FileName
-    << std::endl;
+    msg << "The file doesn't exist. "
+        << std::endl << "Filename = " << this->m_FileName
+        << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
     return;
-  }
+    }
 
   // Test if the file can be open for reading access.
   //Only if m_FileName speciy a filename (not a dirname)
   // FIXME shapefile should be able to open a directory and load the
   // individual shapefiles as layers
-  if ( System::IsAFileName( this->m_FileName ) == true )
-  {
-    std::ifstream readTester;
-    readTester.open( this->m_FileName.c_str() );
-    if ( readTester.fail() )
+  if (System::IsAFileName(this->m_FileName) == true)
     {
+    std::ifstream readTester;
+    readTester.open(this->m_FileName.c_str());
+    if (readTester.fail())
+      {
       readTester.close();
       itk::OStringStream msg;
-      msg <<"The file couldn't be opened for reading. "
-      << std::endl << "Filename: " << this->m_FileName
-      << std::endl;
-      VectorDataFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+      msg << "The file couldn't be opened for reading. "
+          << std::endl << "Filename: " << this->m_FileName
+          << std::endl;
+      VectorDataFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
       throw e;
       return;
 
-    }
+      }
     readTester.close();
-  }
+    }
 }
 
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
-::SetVectorDataIO( VectorDataIOBaseType * vectorDataIO)
+::SetVectorDataIO(VectorDataIOBaseType * vectorDataIO)
 {
-  itkDebugMacro("setting VectorDataIO to " << vectorDataIO );
-  if (this->m_VectorDataIO != vectorDataIO )
-  {
+  itkDebugMacro("setting VectorDataIO to " << vectorDataIO);
+  if (this->m_VectorDataIO != vectorDataIO)
+    {
     this->m_VectorDataIO = vectorDataIO;
     this->Modified();
-  }
+    }
   m_UserSpecifiedVectorDataIO = true;
 }
-
 
 template <class TOutputVectorData>
 void
@@ -118,60 +117,61 @@ VectorDataFileReader<TOutputVectorData>
 {
   typename TOutputVectorData::Pointer output = this->GetOutput();
 
-  itkDebugMacro(<<"Reading file for GenerateOutputInformation()" << m_FileName);
+  itkDebugMacro(<< "Reading file for GenerateOutputInformation()" << m_FileName);
 
   // Check to see if we can read the file given the name or prefix
   //
-  if ( m_FileName == "" )
-  {
+  if (m_FileName == "")
+    {
     throw VectorDataFileReaderException(__FILE__, __LINE__, "FileName must be specified", ITK_LOCATION);
-  }
+    }
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   //
   try
-  {
+    {
     m_ExceptionMessage = "";
     this->TestFileExistanceAndReadability();
-  }
-  catch (itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject & err)
+    {
     m_ExceptionMessage = err.GetDescription();
-  }
+    }
 
-  if ( m_UserSpecifiedVectorDataIO == false ) //try creating via factory
-  {
-    m_VectorDataIO = VectorDataIOFactory<TOutputVectorData>::CreateVectorDataIO( m_FileName.c_str(), VectorDataIOFactory<TOutputVectorData>::ReadMode );
-  }
+  if (m_UserSpecifiedVectorDataIO == false)   //try creating via factory
+    {
+    m_VectorDataIO = VectorDataIOFactory<TOutputVectorData>::CreateVectorDataIO(
+      m_FileName.c_str(), VectorDataIOFactory<TOutputVectorData>::ReadMode);
+    }
 
-  if ( m_VectorDataIO.IsNull() )
-  {
+  if (m_VectorDataIO.IsNull())
+    {
     itk::OStringStream msg;
     msg << " Could not create IO object for file "
-    << m_FileName.c_str() << std::endl;
+        << m_FileName.c_str() << std::endl;
     if (m_ExceptionMessage.size())
-    {
+      {
       msg << m_ExceptionMessage;
-    }
+      }
     else
-    {
+      {
       msg << "  Tried to create one of the following:" << std::endl;
       std::list<itk::LightObject::Pointer> allobjects =
         itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
       for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
            i != allobjects.end(); ++i)
-      {
+        {
         VectorDataIOBase<TOutputVectorData>* io = dynamic_cast<VectorDataIOBase<TOutputVectorData>*>(i->GetPointer());
         msg << "    " << io->GetNameOfClass() << std::endl;
-      }
+        }
       msg << "  You probably failed to set a file suffix, or" << std::endl;
       msg << "    set the suffix to an unsupported type." << std::endl;
-    }
+      }
     VectorDataFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
     throw e;
     return;
-  }
+    }
 
   m_VectorDataIO->SetFileName(m_FileName.c_str());
 
@@ -179,7 +179,6 @@ VectorDataFileReader<TOutputVectorData>
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
 }
-
 
 template <class TOutputVectorData>
 void
@@ -189,19 +188,19 @@ VectorDataFileReader<TOutputVectorData>
 
   typename TOutputVectorData::Pointer output = this->GetOutput();
 
-  itkDebugMacro ( << "VectorDataFileReader::GenerateData() \n");
+  itkDebugMacro (<< "VectorDataFileReader::GenerateData() \n");
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   try
-  {
+    {
     m_ExceptionMessage = "";
     this->TestFileExistanceAndReadability();
-  }
-  catch (itk::ExceptionObject &err)
-  {
+    }
+  catch (itk::ExceptionObject & err)
+    {
     m_ExceptionMessage = err.GetDescription();
-  }
+    }
 
   // Tell the VectorDataIO to read the file
   //
@@ -213,7 +212,6 @@ VectorDataFileReader<TOutputVectorData>
   return;
 }
 
-
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
@@ -222,19 +220,18 @@ VectorDataFileReader<TOutputVectorData>
   Superclass::PrintSelf(os, indent);
 
   if (m_VectorDataIO)
-  {
+    {
     os << indent << "VectorDataIO: \n";
     m_VectorDataIO->Print(os, indent.GetNextIndent());
-  }
+    }
   else
-  {
+    {
     os << indent << "m_VectorDataIO: (null)" << "\n";
-  }
+    }
 
   os << indent << "UserSpecifiedVectorDataIO flag: " << m_UserSpecifiedVectorDataIO << "\n";
   os << indent << "m_FileName: " << m_FileName << "\n";
 }
-
 
 } //namespace otb
 

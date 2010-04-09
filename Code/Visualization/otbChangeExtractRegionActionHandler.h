@@ -37,15 +37,15 @@ class ChangeExtractRegionActionHandler
 public:
   /** Standard class typedefs */
   typedef ChangeExtractRegionActionHandler Self;
-  typedef ImageWidgetActionHandler               Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef ImageWidgetActionHandler         Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ChangeExtractRegionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(ChangeExtractRegionActionHandler, ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
@@ -53,10 +53,9 @@ public:
   typedef typename ModelType::RegionType RegionType;
 
   /** View typedefs */
-  typedef TView                          ViewType;
-  typedef typename ViewType::Pointer     ViewPointerType;
-  typedef typename ViewType::OffsetType  OffsetType;
-
+  typedef TView                         ViewType;
+  typedef typename ViewType::Pointer    ViewPointerType;
+  typedef typename ViewType::OffsetType OffsetType;
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -65,12 +64,13 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive() )
+    if (m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive())
       {
-      if(widgetId == m_View->GetScrollWidget()->GetIdentifier()
-         && event == FL_PUSH && Fl::event_button() == m_MouseButton)
+      if (widgetId == m_View->GetScrollWidget()->GetIdentifier()
+          && event == FL_PUSH && Fl::event_button() == m_MouseButton)
         {
-        otbMsgDevMacro(<<"ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+        otbMsgDevMacro(
+          << "ChangeExtractRegionActionHandler::HandleWidgetEvent(): handling (" << widgetId << ", " << event << ")");
 
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
@@ -81,8 +81,8 @@ public:
 
         // Transform to index
         typename ViewType::IndexType index;
-        index[0]=static_cast<int>(imagePoint[0]);
-        index[1]=static_cast<int>(imagePoint[1]);
+        index[0] = static_cast<int>(imagePoint[0]);
+        index[1] = static_cast<int>(imagePoint[1]);
 
         //Add Offset
         index += m_Offset;
@@ -98,19 +98,19 @@ public:
   }
 
   /** Set/Get the pointer to the view */
-  itkSetObjectMacro(View,ViewType);
-  itkGetObjectMacro(View,ViewType);
+  itkSetObjectMacro(View, ViewType);
+  itkGetObjectMacro(View, ViewType);
 
   /** Set/Get the pointer to the model */
-  itkSetObjectMacro(Model,ModelType);
-  itkGetObjectMacro(Model,ModelType);
+  itkSetObjectMacro(Model, ModelType);
+  itkGetObjectMacro(Model, ModelType);
 
   /** Set/Get Offset */
-  itkSetMacro(Offset,OffsetType);
-  itkGetMacro(Offset,OffsetType);
+  itkSetMacro(Offset, OffsetType);
+  itkGetMacro(Offset, OffsetType);
 
   /** Set the mouse button used */
-  itkSetClampMacro(MouseButton, int,1,3);
+  itkSetClampMacro(MouseButton, int, 1, 3);
   itkGetMacro(MouseButton, int);
 
 protected:
@@ -125,15 +125,15 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   ChangeExtractRegionActionHandler(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   //Offset
-  OffsetType      m_Offset;
+  OffsetType m_Offset;
 
   // Pointer to the view
   ViewPointerType m_View;
@@ -147,5 +147,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

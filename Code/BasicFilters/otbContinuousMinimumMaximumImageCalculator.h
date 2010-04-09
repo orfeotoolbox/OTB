@@ -58,14 +58,14 @@ namespace otb
 
 template <class TInputImage>
 class ITK_EXPORT ContinuousMinimumMaximumImageCalculator :
-      public itk::Object
+  public itk::Object
 {
 public:
   /** Standard class typedefs. */
   typedef ContinuousMinimumMaximumImageCalculator Self;
-  typedef itk::Object  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::Object                             Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,10 +74,10 @@ public:
   itkTypeMacro(ContinuousMinimumMaximumImageCalculator, Object);
 
   /** Type definition for the input image. */
-  typedef TInputImage  ImageType;
+  typedef TInputImage ImageType;
 
   /** Pointer type for the image. */
-  typedef typename TInputImage::Pointer  ImagePointer;
+  typedef typename TInputImage::Pointer ImagePointer;
 
   /** Const Pointer type for the image. */
   typedef typename TInputImage::ConstPointer ImageConstPointer;
@@ -98,7 +98,7 @@ public:
   typedef typename TInputImage::RegionType RegionType;
 
   /** Set the input image. */
-  itkSetConstObjectMacro(Image,ImageType);
+  itkSetConstObjectMacro(Image, ImageType);
 
   /** Compute the minimum value of intensity of the input image. */
   void ComputeMinimum(void);
@@ -110,51 +110,49 @@ public:
   void Compute(void);
 
   /** Return the minimum intensity value. */
-  itkGetMacro(Minimum,PixelType);
+  itkGetMacro(Minimum, PixelType);
 
   /** Return the maximum intensity value. */
-  itkGetMacro(Maximum,PixelType);
+  itkGetMacro(Maximum, PixelType);
 
   /** Return the index of the minimum intensity value. */
-  itkGetConstReferenceMacro(IndexOfMinimum,IndexType);
+  itkGetConstReferenceMacro(IndexOfMinimum, IndexType);
 
   /** Return the index of the maximum intensity value. */
-  itkGetConstReferenceMacro(IndexOfMaximum,IndexType);
+  itkGetConstReferenceMacro(IndexOfMaximum, IndexType);
 
   /** Return the index of the minimum intensity value. */
-  itkGetConstReferenceMacro(ContinuousIndexOfMinimum,ContinuousIndexType);
+  itkGetConstReferenceMacro(ContinuousIndexOfMinimum, ContinuousIndexType);
 
   /** Return the index of the maximum intensity value. */
-  itkGetConstReferenceMacro(ContinuousIndexOfMaximum,ContinuousIndexType);
+  itkGetConstReferenceMacro(ContinuousIndexOfMaximum, ContinuousIndexType);
 
   /** Set the region over which the values will be computed */
-  void SetRegion( const RegionType & region );
+  void SetRegion(const RegionType& region);
 
 protected:
   ContinuousMinimumMaximumImageCalculator();
-  virtual ~ContinuousMinimumMaximumImageCalculator() {};
+  virtual ~ContinuousMinimumMaximumImageCalculator() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  PixelType            m_Minimum;
-  PixelType            m_Maximum;
-  ImageConstPointer    m_ContinuousImage;
+  PixelType         m_Minimum;
+  PixelType         m_Maximum;
+  ImageConstPointer m_ContinuousImage;
 
-  IndexType            m_IndexOfMinimum;
-  IndexType            m_IndexOfMaximum;
-  ContinuousIndexType            m_ContinuousIndexOfMinimum;
-  ContinuousIndexType            m_ContinuousIndexOfMaximum;
-  ImageConstPointer    m_Image;
+  IndexType           m_IndexOfMinimum;
+  IndexType           m_IndexOfMaximum;
+  ContinuousIndexType m_ContinuousIndexOfMinimum;
+  ContinuousIndexType m_ContinuousIndexOfMaximum;
+  ImageConstPointer   m_Image;
 
-  RegionType           m_Region;
-  bool                 m_RegionSetByUser;
+  RegionType m_Region;
+  bool       m_RegionSetByUser;
 
 private:
-  ContinuousMinimumMaximumImageCalculator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  ContinuousMinimumMaximumImageCalculator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

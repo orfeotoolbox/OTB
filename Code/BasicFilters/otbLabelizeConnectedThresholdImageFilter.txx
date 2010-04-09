@@ -34,7 +34,7 @@ LabelizeConnectedThresholdImageFilter<TInputImage, TOutputImage>
   m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::NonpositiveMin();
   m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::max();
 
-  m_ReplaceValue = 5;//itk::NumericTraits<OutputPixelType>::One;
+  m_ReplaceValue = 5; //itk::NumericTraits<OutputPixelType>::One;
 }
 
 /** Region growing
@@ -43,12 +43,12 @@ LabelizeConnectedThresholdImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 LabelizeConnectedThresholdImageFilter<TInputImage, TOutputImage>
-::RegionGrowing( const IndexType indexSeed )
+::RegionGrowing(const IndexType indexSeed)
 {
   InputPixelType threshold = this->GetInput()->GetPixel(indexSeed);
 
-  this->m_RegionGrowingFilter->SetLower(threshold-m_LowerThresholdDelta);
-  this->m_RegionGrowingFilter->SetUpper(threshold+m_UpperThresholdDelta);
+  this->m_RegionGrowingFilter->SetLower(threshold - m_LowerThresholdDelta);
+  this->m_RegionGrowingFilter->SetUpper(threshold + m_UpperThresholdDelta);
 
   this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
   this->m_RegionGrowingFilter->SetSeed(indexSeed);

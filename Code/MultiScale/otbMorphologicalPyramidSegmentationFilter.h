@@ -54,44 +54,44 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSegmentationFilter
-      : public ImageListToImageListFilter<TInputImage,TOutputImage>
+  : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef MorphologicalPyramidSegmentationFilter               Self;
-  typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
+  typedef MorphologicalPyramidSegmentationFilter                Self;
+  typedef ImageListToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(MorphologicalPyramidSegmentationFilter,ImageListToImageListFilter);
+  itkTypeMacro(MorphologicalPyramidSegmentationFilter, ImageListToImageListFilter);
   /** Input image dimension constant macro */
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Output related typedefs */
-  typedef typename Superclass::OutputImageType         OutputImageType;
-  typedef typename OutputImageType::PixelType          OutputPixelType;
-  typedef typename Superclass::OutputImageListType     OutputImageListType;
-  typedef typename OutputImageListType::Pointer        OutputImageListPointerType;
-  typedef typename Superclass::OutputImagePointerType  OutputImagePointerType;
-  typedef typename OutputImageListType::Iterator       OutputImageListIteratorType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename Superclass::OutputImageListType    OutputImageListType;
+  typedef typename OutputImageListType::Pointer       OutputImageListPointerType;
+  typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
+  typedef typename OutputImageListType::Iterator      OutputImageListIteratorType;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType          InputImageType;
-  typedef typename InputImageType::PixelType           InputPixelType;
-  typedef typename InputImageType::Pointer             InputImagePointerType;
-  typedef typename Superclass::InputImageListType      InputImageListType;
-  typedef typename InputImageListType::Pointer         InputImageListPointerType;
+  typedef typename Superclass::InputImageType     InputImageType;
+  typedef typename InputImageType::PixelType      InputPixelType;
+  typedef typename InputImageType::Pointer        InputImagePointerType;
+  typedef typename Superclass::InputImageListType InputImageListType;
+  typedef typename InputImageListType::Pointer    InputImageListPointerType;
   /** Vector of number of objects */
-  typedef std::vector<OutputPixelType>                 NumberOfObjectsVectorType;
+  typedef std::vector<OutputPixelType> NumberOfObjectsVectorType;
   /** Min object size parameter accessor */
-  itkSetMacro(MinimumObjectSize,unsigned long);
-  itkGetMacro(MinimumObjectSize,unsigned long);
+  itkSetMacro(MinimumObjectSize, unsigned long);
+  itkGetMacro(MinimumObjectSize, unsigned long);
   /** Quantile for seeds extraction */
-  itkSetMacro(SeedsQuantile,double);
-  itkGetMacro(SeedsQuantile,double);
+  itkSetMacro(SeedsQuantile, double);
+  itkGetMacro(SeedsQuantile, double);
   /** Quantile for connected thresholding */
-  itkSetMacro(ConnectedThresholdQuantile,double);
-  itkGetMacro(ConnectedThresholdQuantile,double);
+  itkSetMacro(ConnectedThresholdQuantile, double);
+  itkGetMacro(ConnectedThresholdQuantile, double);
   /**
    * Get a vector containing the number of segmented objects for each image.
    * \return The vector.
@@ -137,13 +137,13 @@ protected:
   MorphologicalPyramidSegmentationFilter();
   /** Destructor */
   virtual ~MorphologicalPyramidSegmentationFilter();
-  virtual void GenerateOutputInformation() {}; // does nothing
+  virtual void GenerateOutputInformation() {}  // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 private:
-  unsigned long  m_MinimumObjectSize;
+  unsigned long m_MinimumObjectSize;
   /** Quantile for seeds determination */
   double m_SeedsQuantile;
   /** Quantile to set the connectedThresholdFilter threshold */
@@ -151,7 +151,7 @@ private:
   /** Number of segmented objects per images */
   NumberOfObjectsVectorType m_NumberOfObjectsVector;
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidSegmentationFilter.txx"

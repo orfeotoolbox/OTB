@@ -18,14 +18,13 @@
 #ifndef __otbList_h
 #define __otbList_h
 
-
 namespace otb
 {
 //For backward compatibility only
 // otb::List is deprecated and otb::ObjectList should be used instead
 template <class TObject>
 class ITK_EXPORT List : public ObjectList<TObject>
-      {};
+{};
 }
 
 #endif

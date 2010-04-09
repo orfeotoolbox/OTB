@@ -21,7 +21,6 @@
 #include "otbMath.h"
 #include "otbSpectralAngleFunctor.h"
 
-
 namespace otb
 {
 
@@ -31,15 +30,15 @@ namespace Functor
 /** \class SqrtSpectralAngleFunctor
  *  \brief This functor computes the square root of a spectral angle according to a reference pixel.
  */
-template <class TInputVectorPixel,class TOutputPixel>
+template <class TInputVectorPixel, class TOutputPixel>
 class SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
-  typedef SqrtSpectralAngleFunctor Self;
-  typedef SpectralAngleFunctor<TInputVectorPixel,TOutputPixel> Superclass;
+  typedef SqrtSpectralAngleFunctor                              Self;
+  typedef SpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
 
-  SqrtSpectralAngleFunctor() {};
-  virtual ~SqrtSpectralAngleFunctor() {};
+  SqrtSpectralAngleFunctor() {}
+  virtual ~SqrtSpectralAngleFunctor() {}
 
 protected:
   virtual TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
@@ -55,4 +54,3 @@ protected:
 #endif
 
 #endif
-

@@ -24,7 +24,7 @@ namespace otb
  */
 
 AeronetData
-::AeronetData():
+::AeronetData() :
   m_AngstromCoefficient(0),
   m_Water(0),
   m_AerosolOpticalThickness(0),
@@ -34,7 +34,7 @@ AeronetData
   m_DataDate(""),
   m_EpsilonDate(0.0),
   m_NumberOfDateUsed(0)
-{};
+{}
 
 /**
  * PrintSelf method
@@ -42,9 +42,9 @@ AeronetData
 
 void
 AeronetData
-::PrintSelf( std::ostream& os,itk::Indent indent ) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
   os << "Angstrom coefficient  :              " << m_AngstromCoefficient << std::endl;
   os << "Water data  :                        " << m_Water << std::endl;
   os << "Aerosol optical thickness data:      " << m_AerosolOpticalThickness << std::endl;
@@ -56,4 +56,4 @@ AeronetData
   os << "Number of date used:                 " << m_NumberOfDateUsed << std::endl;
 
 }
-}// end namespace otb
+} // end namespace otb

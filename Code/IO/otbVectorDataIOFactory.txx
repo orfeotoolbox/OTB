@@ -40,41 +40,41 @@ VectorDataIOFactory<TData>
   RegisterBuiltInFactories();
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
-  std::list<itk::LightObject::Pointer> allobjects =
+  std::list<itk::LightObject::Pointer>   allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
   for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
        i != allobjects.end(); ++i)
-  {
+    {
     VectorDataIOBaseType * io = dynamic_cast<VectorDataIOBaseType*>(i->GetPointer());
     if (io)
-    {
+      {
       possibleVectorDataIO.push_back(io);
-    }
+      }
     else
-    {
+      {
       itkGenericExceptionMacro(<< "Error VectorDataIO factory did not return an VectorDataIOBase: "
                                << (*i)->GetNameOfClass());
+      }
     }
-  }
   for (typename std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
        k != possibleVectorDataIO.end(); ++k)
-  {
-    if ( mode == ReadMode )
     {
+    if (mode == ReadMode)
+      {
       if ((*k)->CanReadFile(path))
-      {
+        {
         return *k;
+        }
       }
-    }
-    else if ( mode == WriteMode )
-    {
+    else if (mode == WriteMode)
+      {
       if ((*k)->CanWriteFile(path))
-      {
+        {
         return *k;
-      }
+        }
 
+      }
     }
-  }
   return 0;
 }
 template <class TData>
@@ -85,17 +85,17 @@ VectorDataIOFactory<TData>
   static bool firstTime = true;
 
   static itk::SimpleMutexLock mutex;
-  {
+    {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
-    if ( firstTime )
-    {
-      itk::ObjectFactoryBase::RegisterFactory( OGRVectorDataIOFactory<TData>::New() );
-      itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory<TData>::New() );
+    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    if (firstTime)
+      {
+      itk::ObjectFactoryBase::RegisterFactory(OGRVectorDataIOFactory<TData>::New());
+      itk::ObjectFactoryBase::RegisterFactory(KMLVectorDataIOFactory<TData>::New());
       firstTime = false;
+      }
     }
-  }
 }
 
 } // end namespace otb

@@ -42,42 +42,42 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MorphologicalPyramidSynthesisFilter
-      : public ImageToImageListFilter<TInputImage,TOutputImage>
+  : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef MorphologicalPyramidSynthesisFilter                  Self;
-  typedef ImageToImageListFilter<TInputImage,TOutputImage>     Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
+  typedef MorphologicalPyramidSynthesisFilter               Self;
+  typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(MorphologicalPyramidSynthesisFilter,MorphologicalPyramidSynthesisFilter);
+  itkTypeMacro(MorphologicalPyramidSynthesisFilter, MorphologicalPyramidSynthesisFilter);
   /** Input image dimension constant macro */
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Output related typedefs */
-  typedef typename Superclass::OutputImageType                          OutputImageType;
-  typedef typename Superclass::OutputImageListType                      OutputImageListType;
-  typedef typename OutputImageListType::Pointer                         OutputImageListPointerType;
-  typedef typename Superclass::OutputImagePointerType                   OutputImagePointerType;
-  typedef typename Superclass::OutputImageListType::Iterator            ImageListIterator;
-  typedef typename Superclass::OutputImageListType::ReverseIterator     ImageListReverseIterator;
+  typedef typename Superclass::OutputImageType                      OutputImageType;
+  typedef typename Superclass::OutputImageListType                  OutputImageListType;
+  typedef typename OutputImageListType::Pointer                     OutputImageListPointerType;
+  typedef typename Superclass::OutputImagePointerType               OutputImagePointerType;
+  typedef typename Superclass::OutputImageListType::Iterator        ImageListIterator;
+  typedef typename Superclass::OutputImageListType::ReverseIterator ImageListReverseIterator;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType                           InputImageType;
-  typedef typename Superclass::InputImageRegionType                     InputImageRegionType;
-  typedef typename InputImageType::Pointer                              InputImagePointer;
-  typedef typename InputImageType::ConstPointer                         InputImageConstPointer;
-  typedef typename InputImageType::SizeType                             SizeType;
-  typedef typename InputImageType::ValueType                            ValueType;
-  typedef typename InputImageType::PixelType                            PixelType;
-  typedef typename InputImageType::SpacingType                          SpacingType;
-  typedef otb::ImageList<InputImageType>                                InputImageListType;
-  typedef typename InputImageListType::Pointer                          InputImageListPointerType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef typename InputImageType::Pointer          InputImagePointer;
+  typedef typename InputImageType::ConstPointer     InputImageConstPointer;
+  typedef typename InputImageType::SizeType         SizeType;
+  typedef typename InputImageType::ValueType        ValueType;
+  typedef typename InputImageType::PixelType        PixelType;
+  typedef typename InputImageType::SpacingType      SpacingType;
+  typedef otb::ImageList<InputImageType>            InputImageListType;
+  typedef typename InputImageListType::Pointer      InputImageListPointerType;
   /** Size vector typedefs */
-  typedef std::vector<SizeType>                                         SizeVectorType;
-  typedef typename SizeVectorType::iterator                             SizeIterator;
-  typedef typename SizeVectorType::reverse_iterator                     SizeReverseIterator;
+  typedef std::vector<SizeType>                     SizeVectorType;
+  typedef typename SizeVectorType::iterator         SizeIterator;
+  typedef typename SizeVectorType::reverse_iterator SizeReverseIterator;
   /**
    * Set The SupFilter details
    * \param imageList The brighter details extracted from the filtering operation.
@@ -124,13 +124,13 @@ protected:
   MorphologicalPyramidSynthesisFilter();
   /** Destructor */
   virtual ~MorphologicalPyramidSynthesisFilter();
-  virtual void GenerateOutputInformation() {}; // does nothing
+  virtual void GenerateOutputInformation() {}  // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidSynthesisFilter.txx"

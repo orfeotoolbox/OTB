@@ -31,10 +31,10 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
+UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryImageFunctorWithVectorImageFilter()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }
 
@@ -49,29 +49,29 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 void
-UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
+UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
   // get pointers to the input and output
-  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
-  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
+  typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
 
-  if ( !outputPtr || !inputPtr)
-  {
+  if (!outputPtr || !inputPtr)
+    {
     return;
-  }
+    }
   outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
     inputPtr->GetNumberOfComponentsPerPixel());
 
   // TODO: Check this
   // The Functor vector is not initialised !
-  for (unsigned int i = 0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
-  {
+  for (unsigned int i = 0; i < inputPtr->GetNumberOfComponentsPerPixel(); ++i)
+    {
     FunctorType functor;
     m_FunctorVector.push_back(functor);
-  }
+    }
 }
 
 /**
@@ -79,11 +79,11 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 void
-UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId )
+UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
-  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
-  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
+  typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
 
   // Define the iterators
   itk::ImageRegionConstIterator<InputImageType>  inputIt(inputPtr, outputRegionForThread);
@@ -96,36 +96,36 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
 
   // Null pixel construction
   InputPixelType nullPixel;
-  nullPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
+  nullPixel.SetSize(inputPtr->GetNumberOfComponentsPerPixel());
   nullPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
 
-  while ( !inputIt.IsAtEnd() )
-  {
-    InputPixelType inPixel = inputIt.Get();
+  while (!inputIt.IsAtEnd())
+    {
+    InputPixelType  inPixel = inputIt.Get();
     OutputPixelType outPixel;
-    outPixel.SetSize( inputPtr->GetNumberOfComponentsPerPixel() );
+    outPixel.SetSize(inputPtr->GetNumberOfComponentsPerPixel());
     outPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
     // if the input pixel in null, the output is considered as null ( no sensor informations )
-    if ( inPixel!= nullPixel)
-    {
-      for (unsigned int j=0; j<inputPtr->GetNumberOfComponentsPerPixel(); ++j)
+    if (inPixel != nullPixel)
       {
-        outPixel[j] = m_FunctorVector[j]( inPixel[j] );
+      for (unsigned int j = 0; j < inputPtr->GetNumberOfComponentsPerPixel(); ++j)
+        {
+        outPixel[j] = m_FunctorVector[j](inPixel[j]);
+        }
       }
-    }
     outputIt.Set(outPixel);
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
-  }
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TFunction>
 void
-UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
+UnaryImageFunctorWithVectorImageFilter<TInputImage, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb

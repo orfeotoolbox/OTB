@@ -19,7 +19,6 @@
 #ifndef __otbVectorDataFileWriter_txx
 #define __otbVectorDataFileWriter_txx
 
-
 #include "otbMacro.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbFileName.h"
@@ -33,9 +32,9 @@ namespace otb
 template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :
-    m_FileName(""),
-    m_VectorDataIO(0),
-    m_UserSpecifiedVectorDataIO(false)
+  m_FileName(""),
+  m_VectorDataIO(0),
+  m_UserSpecifiedVectorDataIO(false)
 {
 }
 /**
@@ -47,7 +46,6 @@ VectorDataFileWriter<TInputVectorData>
 {
 }
 
-
 //---------------------------------------------------------
 template <class TInputVectorData>
 void
@@ -56,9 +54,8 @@ VectorDataFileWriter<TInputVectorData>
 {
   // ProcessObject is not const_correct so this cast is required here.
   this->ProcessObject::SetNthInput(0,
-                                   const_cast<TInputVectorData *>(input ) );
+                                   const_cast<TInputVectorData *>(input));
 }
-
 
 //---------------------------------------------------------
 template <class TInputVectorData>
@@ -67,12 +64,12 @@ VectorDataFileWriter<TInputVectorData>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-  {
+    {
     return 0;
-  }
+    }
 
   return static_cast<TInputVectorData*>
-         (this->ProcessObject::GetInput(0));
+           (this->ProcessObject::GetInput(0));
 }
 
 //---------------------------------------------------------
@@ -92,92 +89,94 @@ VectorDataFileWriter<TInputVectorData>
 {
   const InputVectorDataType * input = this->GetInput();
 
-  itkDebugMacro( <<"Writing a vector data file" );
+  itkDebugMacro(<< "Writing a vector data file");
 
   // Make sure input is available
-  if ( input == 0 )
-  {
+  if (input == 0)
+    {
     itkExceptionMacro(<< "No input to writer!");
-  }
+    }
 
   // Make sure that we can write the file given the name
   //
-  if ( m_FileName == "" )
-  {
-    itkExceptionMacro(<<"No filename was specified");
-  }
-
-  if ( m_VectorDataIO.IsNull() ) //try creating via factory
-  {
-    itkDebugMacro(<<"Attempting factory creation of VectorDataIO for file: "
-                  << m_FileName);
-    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(),
-                     VectorDataIOFactory<TInputVectorData>::WriteMode );
-    m_FactorySpecifiedVectorDataIO = true;
-  }
-  else
-  {
-    if ( m_FactorySpecifiedVectorDataIO && !m_VectorDataIO->CanWriteFile( m_FileName.c_str() ) )
+  if (m_FileName == "")
     {
-      itkDebugMacro(<<"VectorDataIO exists but doesn't know how to write file:"
-                    << m_FileName );
-      itkDebugMacro(<<"Attempting creation of VectorDataIO with a factory for file:"
-                    << m_FileName);
-      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(),
-                       VectorDataIOFactory<TInputVectorData>::WriteMode );
-      m_FactorySpecifiedVectorDataIO = true;
+    itkExceptionMacro(<< "No filename was specified");
     }
-  }
 
-  if ( m_VectorDataIO.IsNull() )
-  {
+  if (m_VectorDataIO.IsNull())   //try creating via factory
+    {
+    itkDebugMacro(<< "Attempting factory creation of VectorDataIO for file: "
+                  << m_FileName);
+    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO(
+      m_FileName.c_str(),
+      VectorDataIOFactory<TInputVectorData>::
+      WriteMode);
+    m_FactorySpecifiedVectorDataIO = true;
+    }
+  else
+    {
+    if (m_FactorySpecifiedVectorDataIO && !m_VectorDataIO->CanWriteFile(m_FileName.c_str()))
+      {
+      itkDebugMacro(<< "VectorDataIO exists but doesn't know how to write file:"
+                    << m_FileName);
+      itkDebugMacro(<< "Attempting creation of VectorDataIO with a factory for file:"
+                    << m_FileName);
+      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO(
+        m_FileName.c_str(),
+        VectorDataIOFactory<TInputVectorData>
+        ::WriteMode);
+      m_FactorySpecifiedVectorDataIO = true;
+      }
+    }
+
+  if (m_VectorDataIO.IsNull())
+    {
     VectorDataFileWriterException e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << " Could not create IO object for file "
-    << m_FileName.c_str() << std::endl;
+        << m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
     for (std::list<LightObject::Pointer>::iterator i = allobjects.begin();
          i != allobjects.end(); ++i)
-    {
+      {
       VectorDataIOBase<TInputVectorData>* io = dynamic_cast<VectorDataIOBase<TInputVectorData>*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl;
-    }
+      }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
     e.SetDescription(msg.str().c_str());
     e.SetLocation(ITK_LOCATION);
     throw e;
-  }
+    }
 
   // NOTE: this const_cast<> is due to the lack of const-correctness
   // of the ProcessObject.
   InputVectorDataType * nonConstVectorData = const_cast<InputVectorDataType *>(input);
 
-
   // Make sure the data is up-to-date.
-  if ( nonConstVectorData->GetSource() )
-  {
+  if (nonConstVectorData->GetSource())
+    {
     nonConstVectorData->GetSource()->Update();
-  }
+    }
 
   // Notify start event observers
-  this->InvokeEvent( itk::StartEvent() );
+  this->InvokeEvent(itk::StartEvent());
 
   // Actually do something
   this->GenerateData();
 
   // Notify end event observers
-  this->InvokeEvent( itk::EndEvent() );
+  this->InvokeEvent(itk::EndEvent());
 
   // Release upstream data if requested
-  if ( input->ShouldIReleaseData() )
-  {
+  if (input->ShouldIReleaseData())
+    {
     nonConstVectorData->ReleaseData();
-  }
+    }
 }
-
 
 //---------------------------------------------------------
 template <class TInputVectorData>
@@ -187,7 +186,7 @@ VectorDataFileWriter<TInputVectorData>
 {
   const InputVectorDataType * input = this->GetInput();
 
-  itkDebugMacro(<<"Writing file: " << m_FileName);
+  itkDebugMacro(<< "Writing file: " << m_FileName);
 
   // Setup the vector data IO for writing.
   //
@@ -205,7 +204,6 @@ VectorDataFileWriter<TInputVectorData>
   Superclass::PrintSelf(os, indent);
   os << indent << "VectorDataFileWriter" << std::endl;
 }
-
 
 } //namespace otb
 

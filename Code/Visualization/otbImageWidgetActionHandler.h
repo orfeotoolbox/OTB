@@ -40,16 +40,16 @@ class ImageWidgetActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidgetActionHandler          Self;
-  typedef itk::Object                       Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef ImageWidgetActionHandler      Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidgetActionHandler,Object);
+  itkTypeMacro(ImageWidgetActionHandler, Object);
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -67,41 +67,41 @@ public:
    * \param y new y location
    * \return true if the event is handled
    */
-  virtual bool HandleWidgetMove(std::string /*widgetId*/,int /*x*/,int /*y*/)
+  virtual bool HandleWidgetMove(std::string /*widgetId*/, int /*x*/, int /*y*/)
   {
     return false;
   }
 
- /** Handle widget resize
-   * \param widgetId The id of the resized widget
-   * \param w new width
-   * \param h new height
-   * \return true if the event is handled
-   */
-  virtual bool HandleWidgetResize(std::string /*widgetId*/,int /*w*/, int /*h*/)
+  /** Handle widget resize
+    * \param widgetId The id of the resized widget
+    * \param w new width
+    * \param h new height
+    * \return true if the event is handled
+    */
+  virtual bool HandleWidgetResize(std::string /*widgetId*/, int /*w*/, int /*h*/)
   {
     return false;
   }
 
   /** IsActive Accessors */
-  itkSetMacro(IsActive,bool);
-  itkGetMacro(IsActive,bool);
+  itkSetMacro(IsActive, bool);
+  itkGetMacro(IsActive, bool);
   itkBooleanMacro(IsActive);
 
 protected:
   /** Constructor */
-  ImageWidgetActionHandler(){m_IsActive = true;}
+  ImageWidgetActionHandler(){m_IsActive = true; }
   /** Destructor */
   virtual ~ImageWidgetActionHandler(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   ImageWidgetActionHandler(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** The handler is active or not */
   bool m_IsActive;
@@ -109,5 +109,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

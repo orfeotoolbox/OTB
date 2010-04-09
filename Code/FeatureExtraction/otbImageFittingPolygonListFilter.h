@@ -33,14 +33,14 @@ namespace otb
  */
 template <class TPath, class TImage>
 class ITK_EXPORT ImageFittingPolygonListFilter
-      : public PathListToPathListFilter<TPath>
+  : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
-  typedef ImageFittingPolygonListFilter                Self;
-  typedef PathListToPathListFilter<TPath>       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef ImageFittingPolygonListFilter   Self;
+  typedef PathListToPathListFilter<TPath> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -49,18 +49,18 @@ public:
   itkTypeMacro(ImageFittingPolygonListFilter, PathListToPathListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PathType         PathType;
-  typedef typename Superclass::PathListType     PathListType;
-  typedef typename Superclass::PathPointerType  PathPointerType;
-  typedef typename PathListType::Pointer        PathListPointerType;
-  typedef typename PathListType::ConstIterator IteratorType;
-  typedef typename PathType::VertexType VertexType;
-  typedef typename PathType::VertexListType VertexListType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathListType      PathListType;
+  typedef typename Superclass::PathPointerType   PathPointerType;
+  typedef typename PathListType::Pointer         PathListPointerType;
+  typedef typename PathListType::ConstIterator   IteratorType;
+  typedef typename PathType::VertexType          VertexType;
+  typedef typename PathType::VertexListType      VertexListType;
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
-  typedef double                      RealType;
+  typedef double                                 RealType;
 
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
+  typedef TImage                           ImageType;
+  typedef typename ImageType::Pointer      ImagePointerType;
   typedef typename ImageType::ConstPointer ImageConstPointerType;
 
   typedef itk::LineConstIterator<ImageType> LineConstIteratorType;
@@ -78,35 +78,37 @@ public:
   const ImageType * GetInputImage(void);
 
   /** Set/Get the search radius. */
-  itkSetMacro(Radius,unsigned int);
-  itkGetMacro(Radius,unsigned int);
+  itkSetMacro(Radius, unsigned int);
+  itkGetMacro(Radius, unsigned int);
 
   /** Set/Get the number of iteration. */
-  itkSetMacro(NumberOfIterations,unsigned int);
-  itkGetMacro(NumberOfIterations,unsigned int);
+  itkSetMacro(NumberOfIterations, unsigned int);
+  itkGetMacro(NumberOfIterations, unsigned int);
 
 protected:
   /** Constructor */
   ImageFittingPolygonListFilter();
   /** Destructor */
-  virtual ~ImageFittingPolygonListFilter() {};
+  virtual ~ImageFittingPolygonListFilter() {}
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual double computeValue(ImageConstPointerType image, VertexType middlePoint, VertexType previousPoint, VertexType nextPoint) const;
+  virtual double computeValue(ImageConstPointerType image,
+                              VertexType middlePoint,
+                              VertexType previousPoint,
+                              VertexType nextPoint) const;
 
   unsigned int m_Radius;
   unsigned int m_NumberOfIterations;
 
 private:
-  ImageFittingPolygonListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  ImageFittingPolygonListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFittingPolygonListFilter.txx"
 #endif

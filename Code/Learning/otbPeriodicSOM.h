@@ -53,35 +53,35 @@ namespace otb
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
 template <class TListSample, class TMap,
-class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+          class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
 class ITK_EXPORT PeriodicSOM
-      : public SOM< TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor >
+  : public SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
 public:
   /** Standard typedefs */
   typedef PeriodicSOM Self;
-  typedef SOM< TListSample, TMap,
-  TSOMLearningBehaviorFunctor,
-  TSOMNeighborhoodBehaviorFunctor > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SOM<TListSample, TMap,
+              TSOMLearningBehaviorFunctor,
+              TSOMNeighborhoodBehaviorFunctor> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Runtime informations macro */
-  itkTypeMacro( PeriodicSOM, SOM );
+  itkTypeMacro(PeriodicSOM, SOM);
 
-  typedef TListSample ListSampleType;
+  typedef TListSample                      ListSampleType;
   typedef typename ListSampleType::Pointer ListSamplePointerType;
-  typedef TMap MapType;
-  typedef typename MapType::PixelType NeuronType;
-  typedef typename NeuronType::ValueType ValueType;
-  typedef typename MapType::IndexType IndexType;
-  typedef typename MapType::SizeType SizeType;
-  typedef typename MapType::RegionType RegionType;
-  typedef typename MapType::Pointer MapPointerType;
+  typedef TMap                             MapType;
+  typedef typename MapType::PixelType      NeuronType;
+  typedef typename NeuronType::ValueType   ValueType;
+  typedef typename MapType::IndexType      IndexType;
+  typedef typename MapType::SizeType       SizeType;
+  typedef typename MapType::RegionType     RegionType;
+  typedef typename MapType::Pointer        MapPointerType;
 
 protected:
   /** Constructor */
@@ -89,7 +89,7 @@ protected:
   /** Destructor */
   virtual ~PeriodicSOM() {}
   /** Output information redefinition */
-  virtual void GenerateOutputInformation ()
+  virtual void GenerateOutputInformation()
   {
     Superclass::GenerateOutputInformation ();
   }
@@ -115,17 +115,17 @@ protected:
   */
   virtual void Step(unsigned int currentIteration)
   {
-    Superclass::Step( currentIteration );
+    Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
-  PeriodicSOM(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  PeriodicSOM(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
 }; // end of class
 
@@ -136,5 +136,3 @@ private:
 #endif
 
 #endif
-
-

@@ -39,7 +39,7 @@ namespace Functor
  * \sa StandardImageViewer
  *
  */
-template <class TInputPixel1,class TInputPixel2,class TOutputPixel>
+template <class TInputPixel1, class TInputPixel2, class TOutputPixel>
 class ColorAnaglyphFunctor
 {
 public:
@@ -49,16 +49,16 @@ public:
     m_RedChannelIndex = 0;
     m_GreenChannelIndex = 1;
     m_BlueChannelIndex = 2;
-  };
+  }
   /// Destructor
-  virtual ~ColorAnaglyphFunctor() {};
+  virtual ~ColorAnaglyphFunctor() {}
 
-  inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
+  inline TOutputPixel operator ()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
   {
     TOutputPixel result(3);
-    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_RedChannelIndex]);
-    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_GreenChannelIndex]);
-    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
+    result[0] = static_cast<typename TOutputPixel::ValueType>(pixel1[m_RedChannelIndex]);
+    result[1] = static_cast<typename TOutputPixel::ValueType>(pixel2[m_GreenChannelIndex]);
+    result[2] = static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
     return result;
   }
 
@@ -107,27 +107,27 @@ private:
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT VectorImageToColorAnaglyphVectorImageFilter
-      : public itk::BinaryFunctorImageFilter
-      <  TInputImage1,TInputImage2,TOutputImage,
-      Functor::ColorAnaglyphFunctor<
-      typename TInputImage1::PixelType,
-      typename TInputImage2::PixelType,
-      typename TOutputImage::PixelType
-      > >
+  : public itk::BinaryFunctorImageFilter
+  <TInputImage1, TInputImage2, TOutputImage,
+   Functor::ColorAnaglyphFunctor<
+     typename TInputImage1::PixelType,
+     typename TInputImage2::PixelType,
+     typename TOutputImage::PixelType
+     > >
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageToColorAnaglyphVectorImageFilter  Self;
+  typedef VectorImageToColorAnaglyphVectorImageFilter Self;
 
   typedef itk::BinaryFunctorImageFilter
-  <  TInputImage1,TInputImage2,TOutputImage,
-  Functor::ColorAnaglyphFunctor<
-  typename TInputImage1::PixelType,
-  typename TInputImage2::PixelType,
-  typename TOutputImage::PixelType
-  >  > Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  <TInputImage1, TInputImage2, TOutputImage,
+   Functor::ColorAnaglyphFunctor<
+     typename TInputImage1::PixelType,
+     typename TInputImage2::PixelType,
+     typename TOutputImage::PixelType
+     > > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -141,45 +141,45 @@ public:
     this->GetOutput()->SetNumberOfComponentsPerPixel(3);
   }
 
-  itkSetMacro(RedChannelIndex,unsigned int);
-  itkGetMacro(RedChannelIndex,unsigned int);
-  itkSetMacro(GreenChannelIndex,unsigned int);
-  itkGetMacro(GreenChannelIndex,unsigned int);
-  itkSetMacro(BlueChannelIndex,unsigned int);
-  itkGetMacro(BlueChannelIndex,unsigned int);
+  itkSetMacro(RedChannelIndex, unsigned int);
+  itkGetMacro(RedChannelIndex, unsigned int);
+  itkSetMacro(GreenChannelIndex, unsigned int);
+  itkGetMacro(GreenChannelIndex, unsigned int);
+  itkSetMacro(BlueChannelIndex, unsigned int);
+  itkGetMacro(BlueChannelIndex, unsigned int);
 
 protected:
   /** Constructor */
   VectorImageToColorAnaglyphVectorImageFilter()
-  {
+    {
     m_RedChannelIndex = 0;
     m_GreenChannelIndex = 1;
     m_BlueChannelIndex = 2;
-  };
+    };
 
   virtual void BeforeThreadedGenerateData(void)
   {
     this->GetFunctor().SetRedChannelIndex(m_RedChannelIndex);
     this->GetFunctor().SetGreenChannelIndex(m_GreenChannelIndex);
     this->GetFunctor().SetBlueChannelIndex(m_BlueChannelIndex);
-  };
+  }
 
   /** Destructor */
-  virtual ~VectorImageToColorAnaglyphVectorImageFilter() {};
+  virtual ~VectorImageToColorAnaglyphVectorImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
 
 private:
-  VectorImageToColorAnaglyphVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorImageToColorAnaglyphVectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /// Color composition channels indices
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
 };
-}// End namespace otb
+} // End namespace otb
 #endif

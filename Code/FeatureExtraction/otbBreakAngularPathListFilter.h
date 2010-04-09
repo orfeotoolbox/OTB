@@ -31,14 +31,14 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT BreakAngularPathListFilter
-      : public PathListToPathListFilter<TPath>
+  : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
-  typedef BreakAngularPathListFilter            Self;
-  typedef PathListToPathListFilter<TPath>       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef BreakAngularPathListFilter      Self;
+  typedef PathListToPathListFilter<TPath> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -47,39 +47,41 @@ public:
   itkTypeMacro(BreakAngularPathListFilter, PathListToPathListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PathType         PathType;
-  typedef typename Superclass::PathListType     PathListType;
-  typedef typename Superclass::PathPointerType  PathPointerType;
-  typedef typename PathListType::Pointer        PathListPointerType;
+  typedef typename Superclass::PathType        PathType;
+  typedef typename Superclass::PathListType    PathListType;
+  typedef typename Superclass::PathPointerType PathPointerType;
+  typedef typename PathListType::Pointer       PathListPointerType;
 
   typedef double MaxAngleType;
 
   /** Set/Get the max angle */
-  itkSetMacro(MaxAngle,MaxAngleType);
-  itkGetConstMacro(MaxAngle,MaxAngleType);
+  itkSetMacro(MaxAngle, MaxAngleType);
+  itkGetConstMacro(MaxAngle, MaxAngleType);
 
 protected:
   /** Constructor */
   BreakAngularPathListFilter();
   /** Destructor */
-  virtual ~BreakAngularPathListFilter() {};
+  virtual ~BreakAngularPathListFilter() {}
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  BreakAngularPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BreakAngularPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Calculate break angular for a path */
-  void BreakAngularPath(const MaxAngleType maxAngle, const PathPointerType inputPath, PathListPointerType outputPathList );
+  void BreakAngularPath(const MaxAngleType maxAngle,
+                        const PathPointerType inputPath,
+                        PathListPointerType outputPathList);
 
   /** Max angle value */
   MaxAngleType m_MaxAngle;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbBreakAngularPathListFilter.txx"
 #endif

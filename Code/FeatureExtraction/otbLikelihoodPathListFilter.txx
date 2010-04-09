@@ -41,7 +41,7 @@ void
 LikelihoodPathListFilter<TPath, TImage>
 ::SetInputImage(const ImageType * image)
 {
-  this->itk::ProcessObject::SetNthInput(1,const_cast<ImageType *>(image));
+  this->itk::ProcessObject::SetNthInput(1, const_cast<ImageType *>(image));
 }
 template <class TPath, class TImage>
 const typename LikelihoodPathListFilter<TPath, TImage>
@@ -49,10 +49,10 @@ const typename LikelihoodPathListFilter<TPath, TImage>
 LikelihoodPathListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
-  if (this->GetNumberOfInputs()<1)
-  {
+  if (this->GetNumberOfInputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<const ImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
@@ -64,24 +64,24 @@ LikelihoodPathListFilter<TPath, TImage>
   // I/O wiring
   ImageConstPointerType inputImagePtr = this->GetInputImage();
   const PathListType *  inputPtr  = this->GetInput();
-  PathListType *  outputPtr = this->GetOutput();
+  PathListType *        outputPtr = this->GetOutput();
 
-  typedef otb::PolyLineImageConstIterator<ImageType,PathType> ImageIteratorType;
+  typedef otb::PolyLineImageConstIterator<ImageType, PathType> ImageIteratorType;
 
   for (IteratorType it = inputPtr->Begin(); it != inputPtr->End(); ++it)
-  {
+    {
     PathPointerType path = it.Get();
-    ImageIteratorType imageIt(inputImagePtr,path);
+    ImageIteratorType imageIt(inputImagePtr, path);
     double cumulatedValues = 0.0;
     double nbPoints = 0.0;
-    for (imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt,++nbPoints)
-    {
-      cumulatedValues+=static_cast<double>(imageIt.Get());
-    }
-    itk::MetaDataDictionary & dict = path->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<double>(dict,m_Key,cumulatedValues/nbPoints);
+    for (imageIt.GoToBegin(); !imageIt.IsAtEnd(); ++imageIt, ++nbPoints)
+      {
+      cumulatedValues += static_cast<double>(imageIt.Get());
+      }
+    itk::MetaDataDictionary& dict = path->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<double>(dict, m_Key, cumulatedValues / nbPoints);
     outputPtr->PushBack(path);
-  }
+    }
 }
 /**
  * PrintSelf Method

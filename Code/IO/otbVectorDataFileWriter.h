@@ -32,25 +32,24 @@ class VectorDataFileWriterException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro( VectorDataFileWriterException, ExceptionObject );
+  itkTypeMacro(VectorDataFileWriterException, ExceptionObject);
 
   /** Constructor. */
   VectorDataFileWriterException(const char *file, unsigned int line,
                                 const char* message = "Error in IO",
-                                const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
+                                const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
-  VectorDataFileWriterException(const std::string &file, unsigned int line,
+  VectorDataFileWriterException(const std::string& file, unsigned int line,
                                 const char* message = "Error in IO",
-                                const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
+                                const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
   {
   }
 };
-
 
 /** \class VectorDataFileWriter
  *  \brief This class writes vector data file format (shapefile and KML)
@@ -61,13 +60,13 @@ public:
 template <class TInputVectorData>
 class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
-public :
+public:
 
   /** Standard class typedefs. */
-  typedef VectorDataFileWriter                  Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef VectorDataFileWriter          Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,9 +74,8 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataFileWriter, itk::ProcessObject);
 
-  typedef TInputVectorData InputVectorDataType;
+  typedef TInputVectorData                      InputVectorDataType;
   typedef VectorDataIOBase<InputVectorDataType> VectorDataIOBaseType;
-
 
   /** Set/Get the image input of this writer.  */
   void SetInput(const InputVectorDataType *input);
@@ -94,7 +92,6 @@ public :
     this->Write();
   }
 
-
   /** Specify the name of the output shapefile to write. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
@@ -107,12 +104,12 @@ protected:
 
   std::string m_FileName; // The file to be read
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
-  bool  m_UserSpecifiedVectorDataIO; // track whether the VectorDataIO
+  bool m_UserSpecifiedVectorDataIO;  // track whether the VectorDataIO
   bool m_FactorySpecifiedVectorDataIO;
 
 private:
-  VectorDataFileWriter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataFileWriter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -123,5 +120,3 @@ private:
 #endif
 
 #endif // __otbVectorDataFileWriter_h
-
-

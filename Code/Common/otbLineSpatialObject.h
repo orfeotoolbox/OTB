@@ -30,22 +30,22 @@ namespace otb
  *
  * \sa LineSpatialObjectPoint
  */
-template < unsigned int VDimension = 3 >
+template <unsigned int VDimension = 3>
 class ITK_EXPORT LineSpatialObject
-      : public itk::PointBasedSpatialObject<VDimension>
+  : public itk::PointBasedSpatialObject<VDimension>
 {
 public:
   /** Standard typedefs */
   typedef LineSpatialObject                        Self;
   typedef itk::PointBasedSpatialObject<VDimension> Superclass;
-  typedef itk::SmartPointer< Self >                Pointer;
+  typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Method for creation through the object factory. */
-  itkTypeMacro( LineSpatialObject, PointBasedSpatialObject );
+  itkTypeMacro(LineSpatialObject, PointBasedSpatialObject);
 
   /** Superclass typedefs */
   typedef typename Superclass::SpatialObjectPointType SpatialObjectPointType;
@@ -55,16 +55,16 @@ public:
 
   /** Additional typedefs */
   typedef double                                         ScalarType;
-  typedef itk::LineSpatialObjectPoint< VDimension >      LinePointType;
-  typedef std::vector< LinePointType >                   PointListType;
-  typedef itk::VectorContainer<unsigned long,PointType>  PointContainerType;
+  typedef itk::LineSpatialObjectPoint<VDimension>        LinePointType;
+  typedef std::vector<LinePointType>                     PointListType;
+  typedef itk::VectorContainer<unsigned long, PointType> PointContainerType;
   typedef itk::SmartPointer<PointContainerType>          PointContainerPointer;
 
   /** Returns a reference to the list of the Line points.*/
-  PointListType & GetPoints( void );
+  PointListType& GetPoints(void);
 
   /** Set the list of line points. */
-  void SetPoints( PointListType & newPoints );
+  void SetPoints(PointListType& newPoints);
 
   /** Return a point in the list given the index */
   const SpatialObjectPointType* GetPoint(unsigned long id) const
@@ -86,24 +86,24 @@ public:
 
   /** Returns true if the line is evaluable at the requested point,
    *  false otherwise. */
-  bool IsEvaluableAt( const PointType & point,
-                      unsigned int depth=0, char * name=NULL ) const;
+  bool IsEvaluableAt(const PointType& point,
+                     unsigned int depth = 0, char * name = NULL) const;
 
   /** Returns the value of the line at that point.
    * Currently this function returns a binary value,
    * but it might want to return a degree of membership
    * in case of fuzzy Lines. */
-  bool ValueAt( const PointType & point, double & value,
-                unsigned int depth=0, char * name=NULL ) const;
+  bool ValueAt(const PointType& point, double& value,
+               unsigned int depth = 0, char * name = NULL) const;
 
   /** Returns true if the point is inside the line, false otherwise. */
-  bool IsInside( const PointType & point,
-                 unsigned int depth, char * name) const;
+  bool IsInside(const PointType& point,
+                unsigned int depth, char * name) const;
 
   /** Test whether a point is inside or outside the object
    *  For computational speed purposes, it is faster if the method does not
    *  check the name of the class and the current depth */
-  virtual bool IsInside( const PointType & point) const;
+  virtual bool IsInside(const PointType& point) const;
 
   /** Compute the boundaries of the line.*/
   bool ComputeLocalBoundingBox() const;
@@ -114,16 +114,16 @@ protected:
   /** Destructor */
   virtual ~LineSpatialObject();
   /** Method to print the object. */
-  virtual void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  LineSpatialObject(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LineSpatialObject(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Point list */
-  PointListType   m_Points;
+  PointListType m_Points;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLineSpatialObject.txx"
 #endif

@@ -50,25 +50,25 @@ namespace otb
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT CorrelationChangeDetector :
-      public BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-      Functor::CrossCorrelation<
+  public BinaryFunctorNeighborhoodImageFilter<
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::CrossCorrelation<
       ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
       ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-      ITK_TYPENAME TOutputImage::PixelType>   >
+      ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef CorrelationChangeDetector  Self;
+  typedef CorrelationChangeDetector Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-  TInputImage1,TInputImage2,TOutputImage,
-  Functor::CrossCorrelation<
-  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-  ITK_TYPENAME TOutputImage::PixelType>
-  >  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::CrossCorrelation<
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+      ITK_TYPENAME TOutputImage::PixelType>
+    >  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,12 +78,11 @@ protected:
   virtual ~CorrelationChangeDetector() {}
 
 private:
-  CorrelationChangeDetector(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  CorrelationChangeDetector(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

@@ -18,7 +18,6 @@
 #ifndef __otbPostGISConnectionImplementation_h
 #define __otbPostGISConnectionImplementation_h
 
-
 #include "otbGISConnectionImplementation.h"
 #include <pqxx/pqxx>
 
@@ -32,25 +31,23 @@ namespace otb
  */
 
 class ITK_EXPORT PostGISConnectionImplementation
-  : public GISConnectionImplementation< pqxx::transactor<pqxx::nontransaction > >
+  : public GISConnectionImplementation<pqxx::transactor<pqxx::nontransaction> >
 {
 public:
   /** Standard class typedefs */
-  typedef PostGISConnectionImplementation Self;
-  typedef pqxx::transactor<pqxx::nontransaction> PQXXTransactorType;
+  typedef PostGISConnectionImplementation                 Self;
+  typedef pqxx::transactor<pqxx::nontransaction>          PQXXTransactorType;
   typedef GISConnectionImplementation<PQXXTransactorType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(PostGISConnectionImplementation, GISConnectionImplementation);
 
-
   /** Typedefs */
   typedef pqxx::basic_connection<pqxx::connect_direct> BasicConnectionType;
-  typedef PQXXTransactorType TransactorType;
+  typedef PQXXTransactorType                           TransactorType;
 
   /** Acessors */
   itkGetMacro(Host, std::string);
@@ -79,7 +76,6 @@ public:
 
   BasicConnectionType* GetConnection() const;
 
-
 protected:
   /** Constructor */
   PostGISConnectionImplementation();
@@ -89,9 +85,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PostGISConnectionImplementation(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  PostGISConnectionImplementation(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   std::string m_Host;
   std::string m_DBName;
@@ -102,10 +97,7 @@ private:
 
   BasicConnectionType* m_PostGISConnection;
 
-
 };
-}// end namespace otb
-
+} // end namespace otb
 
 #endif
-

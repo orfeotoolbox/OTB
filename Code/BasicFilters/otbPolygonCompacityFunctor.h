@@ -42,11 +42,11 @@ template <class TInput1>
 class PolygonCompacityFunctor
 {
 public:
-  void SetThreshold(double threshold )
+  void SetThreshold(double threshold)
   {
     m_Threshold = threshold;
   }
-  double GetThreshold(void)const
+  double GetThreshold(void) const
   {
     return m_Threshold;
   }
@@ -54,22 +54,22 @@ public:
   PolygonCompacityFunctor()
   {
     m_Threshold = 0.2;
-  };
-  ~PolygonCompacityFunctor() {};
+  }
+  ~PolygonCompacityFunctor() {}
 
-  inline bool operator()(const TInput1 & input)
+  inline bool operator ()(const TInput1& input)
   {
     double circularityRatio = 4*CONST_PI*input->GetArea()
                               / vnl_math_sqr(input->GetLength());
 
     if (circularityRatio > m_Threshold)
-    {
+      {
       return true;
-    }
+      }
     else
-    {
+      {
       return false;
-    }
+      }
   }
 
 private:

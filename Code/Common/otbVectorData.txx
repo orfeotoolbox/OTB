@@ -26,7 +26,7 @@ namespace otb
 {
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::VectorData()
 {
   m_DataTree = DataTreeType::New();
@@ -39,89 +39,84 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::SetProjectionRef(std::string projectionRef)
 {
-  itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
   this->Modified();
 }
 
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::GetProjectionRef() const
 {
-  const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  const itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
   return projectionRef;
 }
 
-
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetSpacing(const SpacingType & spacing )
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::SetSpacing(const SpacingType& spacing)
 {
   itkDebugMacro("setting Spacing to " << spacing);
-  if ( this->m_Spacing != spacing )
-  {
+  if (this->m_Spacing != spacing)
+    {
     this->m_Spacing = spacing;
     this->Modified();
-  }
+    }
 }
 
-
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetSpacing(const double spacing[2] )
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::SetSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
   this->SetSpacing(s);
 }
 
-
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetSpacing(const float spacing[2] )
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::SetSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
   SpacingType s;
-  s.CastFrom( sf );
+  s.CastFrom(sf);
   this->SetSpacing(s);
 }
 
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetOrigin(const double origin[2] )
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::SetOrigin(const double origin[2])
 {
   OriginType p(origin);
-  this->SetOrigin( p );
+  this->SetOrigin(p);
 }
 
-
 template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        VectorData<TPrecision,VDimension,TValuePrecision>
-  ::SetOrigin(const float origin[2] )
+void
+VectorData<TPrecision, VDimension, TValuePrecision>
+::SetOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
   OriginType p;
-  p.CastFrom( of );
-  this->SetOrigin( p );
+  p.CastFrom(of);
+  this->SetOrigin(p);
 }
-
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::Clear()
 {
   return m_DataTree->Clear();
@@ -129,7 +124,7 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 int
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::Size() const
 {
   return m_DataTree->Count();
@@ -137,27 +132,27 @@ VectorData<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-VectorData<TPrecision,VDimension,TValuePrecision>
+VectorData<TPrecision, VDimension, TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << std::endl;
 
   itk::PreOrderTreeIterator<DataTreeType> it(m_DataTree);
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-  {
-    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool goesOn = true;
-    while (itParent.HasParent() && goesOn )
     {
-      os<<indent;
+    itk::PreOrderTreeIterator<DataTreeType> itParent = it;
+    bool                                    goesOn = true;
+    while (itParent.HasParent() && goesOn)
+      {
+      os << indent;
       goesOn = itParent.GoToParent();
-    }
-    os<<"+"<<it.Get()->GetNodeTypeAsString()<<std::endl;
+      }
+    os << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
     ++it;
-  }
+    }
 }
 } // end namespace otb
 

@@ -35,16 +35,17 @@ namespace otb
  *
  * \ingroup ImageFunctions ImageInterpolators
  */
-template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
+template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>,
+          class TCoordRep = double>
 class ITK_EXPORT GenericInterpolateImageFunction :
-      public itk::InterpolateImageFunction<TInputImage,TCoordRep>
+  public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef GenericInterpolateImageFunction Self;
-  typedef itk::InterpolateImageFunction<TInputImage,TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef GenericInterpolateImageFunction                       Self;
+  typedef itk::InterpolateImageFunction<TInputImage, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericInterpolateImageFunction, itk::InterpolateImageFunction);
@@ -60,18 +61,17 @@ public:
   //itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
   /** Index and typedef support. */
-  typedef typename Superclass::IndexType                                 IndexType;
-  typedef typename InputImageType::SizeType                              SizeType;
-  typedef typename Superclass::RealType                                  RealType;
-  typedef TFunction                                                      FunctionType;
-  typedef itk::ConstNeighborhoodIterator< InputImageType, TBoundaryCondition> IteratorType;
+  typedef typename Superclass::IndexType                                     IndexType;
+  typedef typename InputImageType::SizeType                                  SizeType;
+  typedef typename Superclass::RealType                                      RealType;
+  typedef TFunction                                                          FunctionType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType, TBoundaryCondition> IteratorType;
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Evaluate the function at a ContinuousIndex position
    *
@@ -81,15 +81,14 @@ public:
    *
    * ImageFunction::IsInsideBuffer() can be used to check bounds before
    * calling the method. */
-  virtual OutputType EvaluateAtContinuousIndex( const ContinuousIndexType & index ) const;
-
+  virtual OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& index) const;
 
   /** Set/Get the window radius*/
   virtual void SetRadius(unsigned int rad);
   virtual unsigned int GetRadius() const
   {
     return m_Function.GetRadius();
-  };
+  }
   //unsigned int GetRadius() { return this->GetFunction().GetRadius();};
 
   /** Set/Get the window radius*/
@@ -104,7 +103,6 @@ public:
 
   /** Initialize tables: need to be call explicitely */
   virtual void Initialize();
-
 
   /** Weights normalization accessors*/
   itkSetMacro(NormalizeWeight, bool);
@@ -127,8 +125,8 @@ protected:
   virtual void FillWeightOffsetTable();
 
 private:
-  GenericInterpolateImageFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GenericInterpolateImageFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** Store the window radius. */
   //unsigned int m_Radius;
   // Constant to store twice the radius

@@ -23,7 +23,6 @@
 #include "otbGlWidget.h"
 #include <FL/Fl_Output.H>
 
-
 namespace otb
 {
 /** \class WidgetManager
@@ -32,23 +31,22 @@ namespace otb
 *  \ingroup Visualization
  */
 
-class  WidgetManager
+class WidgetManager
   : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef WidgetManager                        Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef WidgetManager                 Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(WidgetManager,Object);
-
+  itkTypeMacro(WidgetManager, Object);
 
   /** Image widget */
-  typedef otb::GlWidget                                             WidgetType;
-  typedef WidgetType::Pointer                                       WidgetPointerType;
+  typedef otb::GlWidget       WidgetType;
+  typedef WidgetType::Pointer WidgetPointerType;
 
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget) = 0;
@@ -62,32 +60,28 @@ public:
   virtual void SetLabel(const char * label) = 0;
   virtual void UnRegisterAll() = 0;
 
-
 protected:
   /** Constructor */
-  WidgetManager() {};
+  WidgetManager() {}
   /** Destructor */
-  virtual ~WidgetManager(){};
+  virtual ~WidgetManager(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
-  WidgetType*   m_InternalFullWidget;
-  WidgetType*   m_InternalScrollWidget;
-  WidgetType*   m_InternalZoomWidget;
-  WidgetType*   m_InternalCurveWidget;
-  Fl_Output *   m_IntenalPixelWidget;
+  WidgetType* m_InternalFullWidget;
+  WidgetType* m_InternalScrollWidget;
+  WidgetType* m_InternalZoomWidget;
+  WidgetType* m_InternalCurveWidget;
+  Fl_Output * m_IntenalPixelWidget;
 
 private:
   WidgetManager(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
-
+  void operator =(const Self&); // purposely not implemented
 
 }; // end class
 } // end namespace otb
 
 #endif
-
-

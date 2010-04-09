@@ -23,7 +23,6 @@
 namespace otb
 {
 
-
 /** \class TransactorGISTableFunction
  * \brief Evaluates a const transaction on a GISTable using a transactor
  *
@@ -36,12 +35,12 @@ namespace otb
  * \ingroup TransactorGISTableFunctions
  */
 template <
-class TInputTable,
+  class TInputTable,
   class TOutput, class TTransactor
->
+  >
 class ITK_EXPORT TransactorGISTableFunction :
-    public GISTableFunction< TInputTable,
-                       TOutput >
+  public GISTableFunction<TInputTable,
+                          TOutput>
 {
 public:
   /** Dimension underlying input table. */
@@ -49,10 +48,10 @@ public:
                       TInputTable::SpatialDimension);
 
   /** Standard class typedefs. */
-  typedef TransactorGISTableFunction                                  Self;
-  typedef GISTableFunction< TInputTable, TOutput >              Superclass;
-  typedef SmartPointer<Self>                                    Pointer;
-  typedef SmartPointer<const Self>                              ConstPointer;
+  typedef TransactorGISTableFunction             Self;
+  typedef GISTableFunction<TInputTable, TOutput> Superclass;
+  typedef SmartPointer<Self>                     Pointer;
+  typedef SmartPointer<const Self>               ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TransactorGISTableFunction, GISTableFunction);
@@ -71,10 +70,10 @@ public:
   typedef TOutput OutputType;
 
   /** Evaluate the function using the transactor. */
-  virtual TOutput Evaluate( ){
-    m_Table->GetConnection()->PerformTransaction( TransactorType() );
-    };
-
+  virtual TOutput Evaluate()
+  {
+    m_Table->GetConnection()->PerformTransaction(TransactorType());
+  }
 
 protected:
   TransactorGISTableFunction();
@@ -82,15 +81,14 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Const pointer to the input Table. */
-  InputTableConstPointer  m_Table;
+  InputTableConstPointer m_Table;
 
 private:
-  TransactorGISTableFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  TransactorGISTableFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

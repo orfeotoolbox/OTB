@@ -41,8 +41,8 @@ public:
   ProlateFunction()
   {
     m_Radius = 1;
-  };
-  ~ProlateFunction() {};
+  }
+  ~ProlateFunction() {}
 
   typedef std::vector<double> VectorType;
   // Accessors definitions
@@ -64,39 +64,41 @@ public:
   }
   double ComputeEnergy(double resampleRatio) const;
 
-  inline TOutput operator()( const TInput & A ) const
+  inline TOutput operator ()(const TInput& A) const
   {
-    TOutput val = itk::NumericTraits< TOutput >::Zero;
-    if ( A != itk::NumericTraits< TInput >::Zero && vcl_abs(A) != static_cast<TInput>(m_Radius) && m_Radius!=0 )
-    {
-      double ival = static_cast<double>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+    TOutput val = itk::NumericTraits<TOutput>::Zero;
+    if (A != itk::NumericTraits<TInput>::Zero && vcl_abs(A) != static_cast<TInput>(m_Radius) && m_Radius != 0)
+      {
+      double ival = static_cast<double>(m_OriginalProfileSize) * static_cast<double>(vcl_abs(A)) /
+                    static_cast<double>(m_Radius);
       double ivalFloor = vcl_floor(ival);
       double left = ival - ivalFloor;
 
-      if ( ivalFloor < m_OriginalProfileSize-1 )
-      {
-        val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
-      }
-      else
-      {
-        itkGenericExceptionMacro(<<"Out of Profile limits ("<<ivalFloor<<" -1 > 721)");
-
-      }
-    }
-    else
-    {
-      if ( A == itk::NumericTraits< TInput >::Zero || m_Radius==0)
-      {
-        val = m_OriginalProfile[0];
-      }
-      else
-      {
-        if ( vcl_abs(A) == static_cast<TInput>(m_Radius) )
+      if (ivalFloor < m_OriginalProfileSize - 1)
         {
-          val = m_OriginalProfile[m_OriginalProfileSize-1];
+        val = left * m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] +
+              (1 - left) * m_OriginalProfile[static_cast<unsigned int>(ivalFloor) + 1];
+        }
+      else
+        {
+        itkGenericExceptionMacro(<< "Out of Profile limits (" << ivalFloor << " -1 > 721)");
+
         }
       }
-    }
+    else
+      {
+      if (A == itk::NumericTraits<TInput>::Zero || m_Radius == 0)
+        {
+        val = m_OriginalProfile[0];
+        }
+      else
+        {
+        if (vcl_abs(A) == static_cast<TInput>(m_Radius))
+          {
+          val = m_OriginalProfile[m_OriginalProfileSize - 1];
+          }
+        }
+      }
     return val;
   }
 
@@ -110,7 +112,7 @@ private:
 
 };
 
-}//namespace Function
+} //namespace Function
 
 /** \class ProlateInterpolateImageFunction
  * \brief Prolate interpolation of an otb::image.
@@ -122,22 +124,23 @@ private:
  *
  * \ingroup ImageFunctions ImageInterpolators
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double, class TInputInterpolator=double, class TOutputInterpolator=double>
+template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
+           double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT ProlateInterpolateImageFunction :
-      public GenericInterpolateImageFunction< TInputImage,
-      ITK_TYPENAME Function::ProlateFunction< TInputInterpolator, TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep >
+  public GenericInterpolateImageFunction<TInputImage,
+                                         ITK_TYPENAME Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
+                                         TBoundaryCondition,
+                                         TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef ProlateInterpolateImageFunction                                                               Self;
+  typedef ProlateInterpolateImageFunction Self;
   typedef GenericInterpolateImageFunction<TInputImage,
-  Function::ProlateFunction< TInputInterpolator, TOutputInterpolator>,
-  TBoundaryCondition,
-  TCoordRep>                                                    Superclass;
-  typedef itk::SmartPointer<Self>                                                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                                                      ConstPointer;
+                                          Function::ProlateFunction<TInputInterpolator, TOutputInterpolator>,
+                                          TBoundaryCondition,
+                                          TCoordRep>                                                    Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ProlateInterpolateImageFunction, GenericInterpolateImageFunction);
@@ -152,25 +155,25 @@ public:
   typedef TOutputInterpolator                 OutputInterpolatorType;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Superclass typedef inheritance. */
-  typedef typename Superclass::IndexType                                             IndexType;
-  typedef typename Superclass::SizeType                                              SizeType;
-  typedef typename Superclass::RealType                                              RealType;
-  typedef Function::ProlateFunction<InputInterpolatorType, OutputInterpolatorType>   FunctionType;
-  typedef typename Superclass::IteratorType                                          IteratorType;
-  typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
-  typedef typename std::vector<double>                                               VectorType;
+  typedef typename Superclass::IndexType                                           IndexType;
+  typedef typename Superclass::SizeType                                            SizeType;
+  typedef typename Superclass::RealType                                            RealType;
+  typedef Function::ProlateFunction<InputInterpolatorType, OutputInterpolatorType> FunctionType;
+  typedef typename Superclass::IteratorType                                        IteratorType;
+  typedef typename Superclass::ContinuousIndexType                                 ContinuousIndexType;
+  typedef typename std::vector<double>                                             VectorType;
 
   unsigned int GetOriginalProfileSize() const
   {
     return this->GetFunction().GetOriginalProfileSize;
-  };
+  }
   VectorType GetOriginalProfile() const
   {
     return this->GetFunction().GetOriginalProfile();
-  };
+  }
 
 protected:
   ProlateInterpolateImageFunction();
@@ -178,8 +181,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ProlateInterpolateImageFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ProlateInterpolateImageFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

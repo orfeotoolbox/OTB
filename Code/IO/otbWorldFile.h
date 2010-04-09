@@ -22,14 +22,13 @@
 
 namespace otb {
 
-
 /**
  * \class WorldFile
  * \brief Handle the world file that associate geographic information to png, jpg
  *
  */
 
-class ITK_EXPORT WorldFile: public itk::Object
+class ITK_EXPORT WorldFile : public itk::Object
 {
 public:
 
@@ -39,7 +38,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   itkGetMacro(LonOrigin, double)
   itkSetMacro(LonOrigin, double)
@@ -60,13 +59,13 @@ public:
   void Update()
   {
     if (m_ImageFilename.empty())
-    {
+      {
       itkExceptionMacro(<< "The image filename must be provided");
-    }
+      }
 
     std::string worldFilename;
-    int i = m_ImageFilename.find_last_of('.');
-    worldFilename = m_ImageFilename.substr(0,i) + ".wld";
+    int         i = m_ImageFilename.find_last_of('.');
+    worldFilename = m_ImageFilename.substr(0, i) + ".wld";
 
     std::ofstream file;
     file.open(worldFilename.c_str());
@@ -81,16 +80,16 @@ public:
   }
 
 protected:
-  WorldFile(): m_LonOrigin(0.0), m_LatOrigin(0.0),
-               m_LonSpacing(0.0), m_LatSpacing(0.0),
-               m_LonRotation(0.0), m_LatRotation(0.0),
-               m_ImageFilename("")
-  {};
-  ~WorldFile() {};
+  WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0),
+    m_LonSpacing(0.0), m_LatSpacing(0.0),
+    m_LonRotation(0.0), m_LatRotation(0.0),
+    m_ImageFilename("")
+    {};
+  ~WorldFile() {}
 
 private:
-  WorldFile(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WorldFile(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   double      m_LonOrigin;
   double      m_LatOrigin;
   double      m_LonSpacing;

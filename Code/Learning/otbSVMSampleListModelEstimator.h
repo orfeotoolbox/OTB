@@ -37,14 +37,14 @@ template <class TVector>
 class VectorToMeasurementVectorFunctor
 {
 public:
-  typedef TVector             VectorType;
+  typedef TVector                                     VectorType;
   typedef std::vector<typename VectorType::ValueType> MeasurementVectorType;
 
-  inline MeasurementVectorType operator()(const VectorType & value) const
+  inline MeasurementVectorType operator ()(const VectorType& value) const
   {
     MeasurementVectorType output;
 
-    for(unsigned int i = 0; i<value.Size();++i)
+    for (unsigned int i = 0; i < value.Size(); ++i)
       {
       output.push_back(value[i]);
       }
@@ -61,18 +61,18 @@ template <class TVector>
 class VariableLengthVectorToMeasurementVectorFunctor
 {
 public:
-  typedef TVector             VectorType;
+  typedef TVector                                     VectorType;
   typedef std::vector<typename VectorType::ValueType> MeasurementVectorType;
 
-  inline MeasurementVectorType operator()(const VectorType & value) const
+  inline MeasurementVectorType operator ()(const VectorType& value) const
   {
     MeasurementVectorType output;
-    
-    for(unsigned int i = 0; i < value.GetNumberOfElements(); ++i)
+
+    for (unsigned int i = 0; i < value.GetNumberOfElements(); ++i)
       {
       output.push_back(value.GetElement(i));
       }
-   
+
     return output;
   }
 };
@@ -101,19 +101,20 @@ public:
  * \ingroup ClassificationFilters
  */
 template <class TInputSampleList,
-class TTrainingSampleList, class TMeasurementFunctor = Functor::VectorToMeasurementVectorFunctor<typename TInputSampleList::MeasurementVectorType > >
-class ITK_EXPORT SVMSampleListModelEstimator:
-      public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
+          class TTrainingSampleList, class TMeasurementFunctor =
+            Functor::VectorToMeasurementVectorFunctor<typename TInputSampleList::MeasurementVectorType> >
+class ITK_EXPORT SVMSampleListModelEstimator :
+  public SVMModelEstimator<typename TInputSampleList::MeasurementType, typename TTrainingSampleList::MeasurementType>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMSampleListModelEstimator   Self;
+  typedef SVMSampleListModelEstimator Self;
   typedef SVMModelEstimator<typename TInputSampleList::MeasurementType,
-  typename TTrainingSampleList::MeasurementType>
+                            typename TTrainingSampleList::MeasurementType>
   Superclass;
 
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -123,7 +124,7 @@ public:
 
   /** Type definition for the input image. */
   /** Type definitions for the training image. */
-  typedef typename TInputSampleList::Pointer   InputSampleListPointer;
+  typedef typename TInputSampleList::Pointer InputSampleListPointer;
 
   /** Type definitions for the training image. */
   typedef typename TTrainingSampleList::Pointer TrainingSampleListPointer;
@@ -138,7 +139,7 @@ public:
 
   /** Type definitions for the iterators for the input and training images. */
   typedef typename
-  TInputSampleList::ConstIterator  InputSampleListIteratorType;
+  TInputSampleList::ConstIterator InputSampleListIteratorType;
   typedef typename
   TTrainingSampleList::ConstIterator TrainingSampleListIteratorType;
 
@@ -146,17 +147,16 @@ public:
   typedef TMeasurementFunctor MeasurementFunctorType;
 
   /** Set the input image. */
-  itkSetObjectMacro(InputSampleList,TInputSampleList);
+  itkSetObjectMacro(InputSampleList, TInputSampleList);
 
   /** Get the input image. */
-  itkGetObjectMacro(InputSampleList,TInputSampleList);
-
+  itkGetObjectMacro(InputSampleList, TInputSampleList);
 
   /** Set the training image. */
-  itkSetMacro(TrainingSampleList,TrainingSampleListPointer);
+  itkSetMacro(TrainingSampleList, TrainingSampleListPointer);
 
   /** Get the training image. */
-  itkGetMacro(TrainingSampleList,TrainingSampleListPointer);
+  itkGetMacro(TrainingSampleList, TrainingSampleListPointer);
 
 protected:
   /** Constructor */
@@ -170,11 +170,11 @@ protected:
   virtual void PrepareData();
 
 private:
-  SVMSampleListModelEstimator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMSampleListModelEstimator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  TrainingSampleListPointer  m_TrainingSampleList;
-  InputSampleListPointer  m_InputSampleList;
+  TrainingSampleListPointer m_TrainingSampleList;
+  InputSampleListPointer    m_InputSampleList;
 
 }; // class SVMSampleListModelEstimator
 
@@ -184,6 +184,4 @@ private:
 #include "otbSVMSampleListModelEstimator.txx"
 #endif
 
-
 #endif
-

@@ -31,28 +31,28 @@ namespace otb
  */
 template <class TPath, class TPrecision = float>
 class ITK_EXPORT RCC8VertexWithCompacity
-      : public RCC8VertexBase<TPath>
+  : public RCC8VertexBase<TPath>
 {
 public:
   /** Standard class typedefs */
-  typedef RCC8VertexWithCompacity Self;
-  typedef otb::RCC8VertexBase<TPath>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef RCC8VertexWithCompacity       Self;
+  typedef otb::RCC8VertexBase<TPath>    Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8VertexWithCompacity,RCC8VertexBase);
+  itkTypeMacro(RCC8VertexWithCompacity, RCC8VertexBase);
   /** Input image associated typedefs*/
   typedef TPath PathType;
   /** Precision  typedef */
   typedef TPrecision PrecisionType;
   /** char* vector attributes */
-  typedef  typename Superclass::AttributesMapType  AttributesMapType;
+  typedef  typename Superclass::AttributesMapType AttributesMapType;
 
   /** Segmentation image index accessors */
-  itkGetMacro(Compacity,PrecisionType);
-  itkSetMacro(Compacity,PrecisionType);
+  itkGetMacro(Compacity, PrecisionType);
+  itkSetMacro(Compacity, PrecisionType);
   /**
    * Set the VertexWithCompacity attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
@@ -68,7 +68,7 @@ protected:
   /** Constructor */
   RCC8VertexWithCompacity();
   /** Desctructor */
-  ~RCC8VertexWithCompacity() {};
+  ~RCC8VertexWithCompacity() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

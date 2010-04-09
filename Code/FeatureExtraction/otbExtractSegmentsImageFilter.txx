@@ -20,7 +20,6 @@
 
 #include "otbExtractSegmentsImageFilter.h"
 
-
 namespace otb
 {
 
@@ -38,7 +37,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_LocalHough      = LocalHoughType::New();
   m_FillGaps         = FillGapsType::New();
   m_DrawLineList         = DrawLineListType::New();
-  m_Rescaler             =RescaleType::New();
+  m_Rescaler             = RescaleType::New();
 
   m_LineValue = static_cast<typename OutputImageType::PixelType>(255.);
 }
@@ -48,9 +47,9 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::SetInputImage( const InputImageType *image)
+::SetInputImage(const InputImageType *image)
 {
-  this->SetInput(0,image);
+  this->SetInput(0, image);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -58,8 +57,8 @@ const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::InputImage
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GetInputImage(void)
 {
-  return static_cast<const InputImageType * >
-         (this->GetInput(0) );
+  return static_cast<const InputImageType *>
+           (this->GetInput(0));
 }
 
 /**
@@ -67,9 +66,9 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::SetInputImageDirection( const InputImageType *image)
+::SetInputImageDirection(const InputImageType *image)
 {
-  this->SetInput(1,image);
+  this->SetInput(1, image);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -77,8 +76,8 @@ const typename ExtractSegmentsImageFilter<TInputImage, TOutputImage>::InputImage
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GetInputImageDirection(void)
 {
-  return static_cast<const InputImageType * >
-         (this->GetInput(1) );
+  return static_cast<const InputImageType *>
+           (this->GetInput(1));
 }
 
 /**
@@ -210,32 +209,30 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   return (m_FillGaps->GetAngularBeam());
 }
 
-
 template <class TInputImage, class TOutputImage>
 void
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
-  
-  m_PixelSuppression->SetInputImage(  this->GetInputImage() );
-  m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
 
-  m_Rescaler->SetInput( m_PixelSuppression->GetOutput() );
+  m_PixelSuppression->SetInputImage(this->GetInputImage());
+  m_PixelSuppression->SetInputImageDirection(this->GetInputImageDirection());
 
-  m_LocalHough->SetInput( m_Rescaler->GetOutput() );
+  m_Rescaler->SetInput(m_PixelSuppression->GetOutput());
 
-  m_FillGaps->SetInput ( m_LocalHough->GetOutput() );
+  m_LocalHough->SetInput(m_Rescaler->GetOutput());
 
-  m_DrawLineList->SetInput( this->GetInputImage() );
-  m_DrawLineList->SetInputLineSpatialObjectList( m_FillGaps->GetOutput() );
+  m_FillGaps->SetInput (m_LocalHough->GetOutput());
+
+  m_DrawLineList->SetInput(this->GetInputImage());
+  m_DrawLineList->SetInputLineSpatialObjectList(m_FillGaps->GetOutput());
   m_DrawLineList->SetValue(m_LineValue);
 
-  m_DrawLineList->GraftOutput( this->GetOutput() );
+  m_DrawLineList->GraftOutput(this->GetOutput());
   m_DrawLineList->Update();
-  this->GraftOutput(m_DrawLineList->GetOutput() );
+  this->GraftOutput(m_DrawLineList->GetOutput());
 
 }
-
 
 /**
  * Standard "PrintSelf" method
@@ -245,14 +242,12 @@ void
 ExtractSegmentsImageFilter<TInputImage, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   /*  os << indent << "Length: " << m_LengthLine << std::endl;
     os << indent << "Width: " << m_WidthLine << std::endl;*/
 
 }
 
-
 } // end namespace otb
-
 
 #endif

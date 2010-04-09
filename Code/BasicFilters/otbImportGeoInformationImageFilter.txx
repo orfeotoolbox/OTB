@@ -30,7 +30,7 @@ namespace otb
  * Constructor
  */
 template <class TImage, class TSourceImage>
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::ImportGeoInformationImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
@@ -38,14 +38,14 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 
 template <class TImage, class TSourceImage>
 void
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::SetSource(const TSourceImage * source)
 {
-  this->SetNthInput(1,const_cast<TSourceImage *>(source));
+  this->SetNthInput(1, const_cast<TSourceImage *>(source));
 }
 template <class TImage, class TSourceImage>
 const TSourceImage *
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::GetSource()
 {
   return static_cast<const TSourceImage *>(this->itk::ProcessObject::GetInput(1));
@@ -53,14 +53,14 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 
 template <class TImage, class TSourceImage>
 void
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::GenerateInputRequestedRegion(void)
 {
   Superclass::GenerateInputRequestedRegion();
 
   typename SourceImageType::RegionType region;
-  typename SourceImageType::SizeType size;
-  typename SourceImageType::IndexType index;
+  typename SourceImageType::SizeType   size;
+  typename SourceImageType::IndexType  index;
 
   size.Fill(0);
   index.Fill(0);
@@ -73,13 +73,13 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 
 template <class TImage, class TSourceImage>
 void
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
   // Get output and source pointer
-  ImagePointerType outputPtr = this->GetOutput();
-  SourceImageType * sourcePtr =const_cast<SourceImageType *>(this->GetSource());
+  ImagePointerType  outputPtr = this->GetOutput();
+  SourceImageType * sourcePtr = const_cast<SourceImageType *>(this->GetSource());
   // Import metdata
   outputPtr->CopyInformation(sourcePtr);
 
@@ -106,7 +106,7 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
  */
 template <class TImage, class TSourceImage>
 void
-ImportGeoInformationImageFilter<TImage,TSourceImage>
+ImportGeoInformationImageFilter<TImage, TSourceImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

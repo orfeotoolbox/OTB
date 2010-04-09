@@ -22,7 +22,6 @@
 #include "itkImageIOBase.h"
 #include <fstream>
 
-
 namespace otb
 {
 
@@ -43,15 +42,14 @@ public:
 
   /** Standard class typedefs. */
   typedef ONERAImageIO            Self;
-  typedef itk::ImageIOBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::ImageIOBase        Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ONERAImageIO, itk::ImageIOBase);
-
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -63,7 +61,7 @@ public:
   virtual bool CanStreamRead()
   {
     return true;
-  };
+  }
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -84,7 +82,7 @@ public:
   virtual bool CanStreamWrite()
   {
     return true;
-  };
+  }
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -123,41 +121,41 @@ protected:
   std::fstream m_Headerfile;
 
 private:
-  ONERAImageIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ONERAImageIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** M�thode analyse le nom du fichier a ouvrir. S'il s'agit d'un r�pertoire,
     * on regarde s'il contient un produit le fichier ent�te (fichier "ENT...")
     * Dans ce cas, ONERAFileName contient le nom du fichier a ouvrir.
     * Sinon ONERAFileName contient filename
     */
-  void GetOneraImageFileName( const char * filename, std::string & OneraFileName );
+  void GetOneraImageFileName(const char * filename, std::string& OneraFileName);
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
     { \
-        typedef itk::ByteSwapper< StrongType > InternalByteSwapperType; \
-        if ( m_ByteOrder != m_FileByteOrder ) \
+    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType; \
+    if (m_ByteOrder != m_FileByteOrder) \
+      { \
+      if (m_ByteOrder == LittleEndian) \
         { \
-                if ( m_ByteOrder == LittleEndian ) \
-                { \
-                        InternalByteSwapperType::SwapRangeFromSystemToBigEndian( (StrongType *)buffer, buffer_size ); \
-                } \
-                else if ( m_ByteOrder == BigEndian ) \
-                { \
-                        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *)buffer, buffer_size ); \
-                } \
+        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType *) buffer, buffer_size); \
         } \
+      else if (m_ByteOrder == BigEndian) \
+        { \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *) buffer, buffer_size); \
+        } \
+      } \
     }
 
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
-    else if ( this->GetComponentType() == WeakType ) \
+  else if (this->GetComponentType() == WeakType) \
     { \
-        otbSwappFileOrderToSystemOrderMacro( StrongType, buffer, buffer_size )\
+    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
     }
 
   /** Nombre d'octets par pixel */
-  int     m_NbOctetPixel;
-  bool    m_FlagWriteImageInformation;
+  int  m_NbOctetPixel;
+  bool m_FlagWriteImageInformation;
   /** File byte order */
   itk::ImageIOBase::ByteOrder m_FileByteOrder;
 

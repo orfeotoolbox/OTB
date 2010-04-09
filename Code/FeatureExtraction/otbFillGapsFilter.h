@@ -34,25 +34,25 @@ class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
 
 public:
   /** Standard class typedefs. */
-  typedef FillGapsFilter                                Self;
-  typedef itk::ProcessObject                            Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef FillGapsFilter                Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FillGapsFilter,itk::ProcessObject);
+  itkTypeMacro(FillGapsFilter, itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef LineSpatialObjectList                                 LineSpatialObjectListType;
-  typedef LineSpatialObjectListType::Pointer                    LineSpatialObjectListPointer;
-  typedef LineSpatialObjectListType::LineType                   LineSpatialObjectType;
-  typedef LineSpatialObjectType::PointListType                  PointListType;
-  typedef LineSpatialObjectType::LinePointType                  PointType;
+  typedef LineSpatialObjectList                LineSpatialObjectListType;
+  typedef LineSpatialObjectListType::Pointer   LineSpatialObjectListPointer;
+  typedef LineSpatialObjectListType::LineType  LineSpatialObjectType;
+  typedef LineSpatialObjectType::PointListType PointListType;
+  typedef LineSpatialObjectType::LinePointType PointType;
 
-  typedef itk::ProcessObject                                    ProcessObjectType;
+  typedef itk::ProcessObject ProcessObjectType;
 
   void SetInput(const LineSpatialObjectListType * input);
   const LineSpatialObjectListType * GetInput();
@@ -64,20 +64,18 @@ public:
   itkSetMacro(Radius, double);
   itkGetConstReferenceMacro(Radius, double);
 
-
 protected:
   FillGapsFilter();
 
-  virtual ~FillGapsFilter() {};
+  virtual ~FillGapsFilter() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData();
 
-
 private:
-  FillGapsFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  FillGapsFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   double m_AngularBeam;
   double m_Radius;
@@ -87,4 +85,3 @@ private:
 } // end namespace otb
 
 #endif
-

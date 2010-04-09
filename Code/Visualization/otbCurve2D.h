@@ -34,27 +34,27 @@ namespace otb
  */
 
 class Curve2D
-  : public  GlComponent
+  : public GlComponent
 {
 public:
   /** Standard class typedefs */
-  typedef Curve2D                              Self;
-  typedef GlComponent                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
-  typedef itk::ImageRegion<2>                  RegionType;
+  typedef Curve2D                       Self;
+  typedef GlComponent                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::ImageRegion<2>           RegionType;
 
   // affine transform
-  typedef Superclass::AffineTransformType      AffineTransformType;
-  typedef Superclass::PointType                PointType;
-  typedef Superclass::VectorType               VectorType;
-  typedef Superclass::ColorType                ColorType;
+  typedef Superclass::AffineTransformType AffineTransformType;
+  typedef Superclass::PointType           PointType;
+  typedef Superclass::VectorType          VectorType;
+  typedef Superclass::ColorType           ColorType;
 
   /** Runtime information */
-  itkTypeMacro(Curve2D,GlComponent);
+  itkTypeMacro(Curve2D, GlComponent);
 
   /// This method is provided to do some computation before rendering
-  virtual void BeforeRendering() {};
+  virtual void BeforeRendering() {}
 
   /// Get the min for each axis from the data available
   virtual PointType GetMinimum() = 0;
@@ -67,8 +67,8 @@ public:
   itkSetStringMacro(Label);
 
   /// Get/set the label color
-  itkSetMacro(LabelColor,ColorType);
-  itkGetConstReferenceMacro(LabelColor,ColorType);
+  itkSetMacro(LabelColor, ColorType);
+  itkGetConstReferenceMacro(LabelColor, ColorType);
 
 protected:
   /** Constructor */
@@ -82,22 +82,20 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   Curve2D(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /// The curve label
   std::string m_Label;
 
   /// The curve label color
-  ColorType   m_LabelColor;
+  ColorType m_LabelColor;
 
 }; // end class
 } // end namespace otb
 
 #endif
-
-

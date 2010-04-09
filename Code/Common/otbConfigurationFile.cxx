@@ -30,15 +30,15 @@ ConfigurationFile
 
   std::string OTBBinDir(OTB_CONFIG);
   try
-  {
+    {
     m_OTBConfig = new ConfigFile(OTBBinDir + "/otb.conf");
-  }
+    }
 //  catch (ConfigFile::file_not_found& e)
   catch (...)
-  {
+    {
 //    otbMsgDevMacro(<< "Error - File '" << e.filename << "' not found.");
     otbMsgDevMacro(<< "Error - File not found.");
-  }
+    }
 }
 
 ConfigurationFile
@@ -52,12 +52,11 @@ ConfigurationFile
 ::GetInstance()
 {
   if (!Instance)
-  {
+    {
     Instance = Self::New();
-  }
+    }
   return Instance;
 }
-
 
 void
 ConfigurationFile
@@ -66,6 +65,6 @@ ConfigurationFile
   Superclass::PrintSelf(os, indent);
   os << indent;
   os << (*m_OTBConfig);
-      
+
 }
 } // end namespace otb

@@ -22,7 +22,6 @@
 #include "itkObjectFactory.h"
 #include "base/ossimFilename.h"
 
-
 namespace otb
 {
 
@@ -40,7 +39,6 @@ namespace otb
  * versions of ossim. If you need to use it, please let us know the situation.
  */
 
-
 class ITK_EXPORT PrepareSRTMDirectory : public itk::Object
 {
 public:
@@ -55,42 +53,39 @@ public:
 
   itkTypeMacro(PrepareSRTMDirectory, itk::Object);
 
+  itkGetMacro(ULLon, double);
+  itkGetMacro(ULLat, double);
+  itkGetMacro(LRLon, double);
+  itkGetMacro(LRLat, double);
+  itkGetMacro(FullDEMDirectoryPath, std::string);
+  itkGetMacro(DEMDirectoryPath, std::string);
 
-  itkGetMacro( ULLon, double );
-  itkGetMacro( ULLat, double );
-  itkGetMacro( LRLon, double );
-  itkGetMacro( LRLat, double );
-  itkGetMacro( FullDEMDirectoryPath, std::string );
-  itkGetMacro( DEMDirectoryPath, std::string );
-
-  itkSetMacro( ULLon, double );
-  itkSetMacro( ULLat, double );
-  itkSetMacro( LRLon, double );
-  itkSetMacro( LRLat, double );
-  itkSetMacro( FullDEMDirectoryPath, std::string );
-  itkSetMacro( DEMDirectoryPath, std::string );
-
+  itkSetMacro(ULLon, double);
+  itkSetMacro(ULLat, double);
+  itkSetMacro(LRLon, double);
+  itkSetMacro(LRLat, double);
+  itkSetMacro(FullDEMDirectoryPath, std::string);
+  itkSetMacro(DEMDirectoryPath, std::string);
 
   virtual bool Evaluate();
 
 protected:
   PrepareSRTMDirectory();
-  virtual ~PrepareSRTMDirectory() {};
+  virtual ~PrepareSRTMDirectory() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PrepareSRTMDirectory( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  PrepareSRTMDirectory(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
-  double m_ULLon;
-  double m_ULLat;
-  double m_LRLon;
-  double m_LRLat;
+  double      m_ULLon;
+  double      m_ULLat;
+  double      m_LRLon;
+  double      m_LRLat;
   std::string m_FullDEMDirectoryPath;
   std::string m_DEMDirectoryPath;
 };
 
 } // namespace otb
-
 
 #endif

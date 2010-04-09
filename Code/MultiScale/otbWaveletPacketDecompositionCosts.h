@@ -34,22 +34,22 @@ namespace otb {
  *
  * \sa WaveletPacketForwardTransform
  */
-template < class TImage >
+template <class TImage>
 class ITK_EXPORT FullyDecomposedWaveletPacketCost
   : public itk::Object
 {
 public:
   /** Standard typedefs */
   typedef FullyDecomposedWaveletPacketCost Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                      Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(FullyDecomposedWaveletPacketCost,Object);
+  itkTypeMacro(FullyDecomposedWaveletPacketCost, Object);
 
   typedef TImage ImageType;
 
@@ -57,9 +57,9 @@ public:
   static unsigned int NumberOfAllowedDecompositions;
 
   /** Evaluate the cost */
-  bool Evaluate ( unsigned int decomposition, const ImageType * image )
+  bool Evaluate(unsigned int decomposition, const ImageType * image)
   {
-    return ( decomposition < NumberOfAllowedDecompositions );
+    return (decomposition < NumberOfAllowedDecompositions);
   }
 
 protected:
@@ -67,16 +67,14 @@ protected:
   virtual ~FullyDecomposedWaveletPacketCost() {}
 
 private:
-  FullyDecomposedWaveletPacketCost ( const Self & ); // not implemented
-  void operator= ( const Self & );
+  FullyDecomposedWaveletPacketCost (const Self &);   // not implemented
+  void operator =(const Self&);
 
 }; // end of class
 
-template < class TImage >
-unsigned int FullyDecomposedWaveletPacketCost< TImage >::NumberOfAllowedDecompositions = 1;
+template <class TImage>
+unsigned int FullyDecomposedWaveletPacketCost<TImage>::NumberOfAllowedDecompositions = 1;
 
 } // end of namespace otb
 
 #endif
-
-

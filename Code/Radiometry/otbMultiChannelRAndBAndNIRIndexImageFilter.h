@@ -36,19 +36,19 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::ARVI< typename TInputImage::InternalPixelType,
-                                           typename TInputImage::InternalPixelType,
-                                           typename TInputImage::InternalPixelType,
-                                           typename TOutputImage::PixelType>  >
+          class TFunction = Functor::ARVI<typename TInputImage::InternalPixelType,
+                                          typename TInputImage::InternalPixelType,
+                                          typename TInputImage::InternalPixelType,
+                                          typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelRAndBAndNIRIndexImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction>
+  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelRAndBAndNIRIndexImageFilter                          Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+  typedef MultiChannelRAndBAndNIRIndexImageFilter                            Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -57,31 +57,31 @@ public:
   itkTypeMacro(MultiChannelRAndBAndNIRIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
+  typedef TFunction FunctorType;
 
   /** Set/Get the red channel index. Value must be in [1...[ */
-  itkSetMacro(RedIndex,unsigned int);
-  itkGetMacro(RedIndex,unsigned int);
+  itkSetMacro(RedIndex, unsigned int);
+  itkGetMacro(RedIndex, unsigned int);
   /** Set/Get the blue channel index. Value must be in [1...[ */
-  itkSetMacro(BlueIndex,unsigned int);
-  itkGetMacro(BlueIndex,unsigned int);
+  itkSetMacro(BlueIndex, unsigned int);
+  itkGetMacro(BlueIndex, unsigned int);
   /** Set/Get the nir channel index. Value must be in [1...[ */
-  itkSetMacro(NIRIndex,unsigned int);
-  itkGetMacro(NIRIndex,unsigned int);
+  itkSetMacro(NIRIndex, unsigned int);
+  itkGetMacro(NIRIndex, unsigned int);
 
 protected:
   /// Constructor
-  MultiChannelRAndBAndNIRIndexImageFilter(): m_RedIndex(3),m_BlueIndex(1),m_NIRIndex(4) {};
+  MultiChannelRAndBAndNIRIndexImageFilter() : m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
   /// Destructor
-  virtual ~MultiChannelRAndBAndNIRIndexImageFilter() {};
+  virtual ~MultiChannelRAndBAndNIRIndexImageFilter() {}
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
-    if(m_RedIndex < 1 || m_BlueIndex < 1 || m_NIRIndex < 1 ||
-       m_RedIndex > lNbChan || m_BlueIndex > lNbChan || m_NIRIndex > lNbChan)
+    if (m_RedIndex < 1 || m_BlueIndex < 1 || m_NIRIndex < 1 ||
+        m_RedIndex > lNbChan || m_BlueIndex > lNbChan || m_NIRIndex > lNbChan)
       {
-      itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
+      itkExceptionMacro(<< "Channel indices must belong to range [1, ...[");
       }
     this->GetFunctor().SetRedIndex(m_RedIndex);
     this->GetFunctor().SetBlueIndex(m_BlueIndex);
@@ -90,15 +90,15 @@ protected:
   /// PrintSelf
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    this->Superclass::PrintSelf(os,indent);
-    os << indent << "Red  index: "<<m_RedIndex<<std::endl;
-    os << indent << "Blue index: "<<m_BlueIndex<<std::endl;
-    os << indent << "NIR  index: "<<m_NIRIndex<<std::endl;
+    this->Superclass::PrintSelf(os, indent);
+    os << indent << "Red  index: " << m_RedIndex << std::endl;
+    os << indent << "Blue index: " << m_BlueIndex << std::endl;
+    os << indent << "NIR  index: " << m_NIRIndex << std::endl;
   }
 
 private:
-  MultiChannelRAndBAndNIRIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiChannelRAndBAndNIRIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Red channel index */
   unsigned int m_RedIndex;

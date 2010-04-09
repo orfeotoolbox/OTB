@@ -28,103 +28,95 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionIterator.h"
 
-
 namespace otb
 {
 
-template < class TInputImage, class TInputROIImage >
-ROIdataConversion< TInputImage, TInputROIImage >
+template <class TInputImage, class TInputROIImage>
+ROIdataConversion<TInputImage, TInputROIImage>
 ::ROIdataConversion()
 {
   this->SetNumberOfInputs(2);
   this->SetNumberOfRequiredInputs(2);
 }
 
-
-template < class TInputImage, class TInputROIImage >
+template <class TInputImage, class TInputROIImage>
 void
-ROIdataConversion< TInputImage, TInputROIImage >
+ROIdataConversion<TInputImage, TInputROIImage>
 ::GenerateOutputInformation(void)
 {
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
+  typename OutputImageType::Pointer  outputPtr = this->GetOutput();
   typename OutputImageType::SizeType outputSize = outputPtr->GetRequestedRegion().GetSize();
   outputSize[0] = GetNumberOfSample();
-  outputPtr->SetRegions( outputSize );
+  outputPtr->SetRegions(outputSize);
 }
 
-
-template < class TInputImage, class TInputROIImage >
+template <class TInputImage, class TInputROIImage>
 void
-ROIdataConversion< TInputImage, TInputROIImage >
+ROIdataConversion<TInputImage, TInputROIImage>
 ::GenerateInputRequestedRegion(void)
 {
-  typename InputImageType::Pointer inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
+  typename InputImageType::Pointer    inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
   typename InputROIImageType::Pointer inputROIPtr = this->GetROIImage();
   inputImagePtr->SetRequestedRegion(inputImagePtr->GetLargestPossibleRegion());
   inputROIPtr->SetRequestedRegion(inputROIPtr->GetLargestPossibleRegion());
 }
 
-template <class TInputImage, class TInputROIImage >
+template <class TInputImage, class TInputROIImage>
 void
-ROIdataConversion< TInputImage, TInputROIImage >
-::GenerateData ()
+ROIdataConversion<TInputImage, TInputROIImage>
+::GenerateData()
 {
-  typename InputImageType::Pointer inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
+  typename InputImageType::Pointer         inputImagePtr = const_cast<InputImageType *>(this->GetInputImage());
   typename InputROIImageType::ConstPointer inputROIPtr = this->GetROIImage();
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
-  
+  typename OutputImageType::Pointer        outputPtr = this->GetOutput();
+
   outputPtr->Allocate();
   outputPtr->FillBuffer(static_cast<typename InputImageType::PixelType>(0));
 
-
-  itk::ImageRegionConstIterator< InputImageType > inputIter
-  ( inputImagePtr, inputImagePtr->GetRequestedRegion() );
-  itk::ImageRegionConstIterator< InputROIImageType > trainingIter
-  ( inputROIPtr, inputROIPtr->GetRequestedRegion() );
-  itk::ImageRegionIterator< OutputImageType > outputIter
-  ( outputPtr, outputPtr->GetRequestedRegion() );
+  itk::ImageRegionConstIterator<InputImageType> inputIter
+    (inputImagePtr, inputImagePtr->GetRequestedRegion());
+  itk::ImageRegionConstIterator<InputROIImageType> trainingIter
+    (inputROIPtr, inputROIPtr->GetRequestedRegion());
+  itk::ImageRegionIterator<OutputImageType> outputIter
+    (outputPtr, outputPtr->GetRequestedRegion());
 
   inputIter.GoToBegin();
   trainingIter.GoToBegin();
   outputIter.GoToBegin();
 
-  while ( !trainingIter.IsAtEnd() )
-  {
-    if ( trainingIter.Get() != 0 )
+  while (!trainingIter.IsAtEnd())
     {
-      outputIter.Set( inputIter.Get() );
+    if (trainingIter.Get() != 0)
+      {
+      outputIter.Set(inputIter.Get());
       ++outputIter;
-    }
+      }
 
     ++inputIter;
     ++trainingIter;
-  }
+    }
 }
 
-template < class TInputImage, class TInputROIImage >
-typename ROIdataConversion< TInputImage, TInputROIImage >::SizeValueType
-ROIdataConversion< TInputImage, TInputROIImage >
-::GetNumberOfSample ()
+template <class TInputImage, class TInputROIImage>
+typename ROIdataConversion<TInputImage, TInputROIImage>::SizeValueType
+ROIdataConversion<TInputImage, TInputROIImage>
+::GetNumberOfSample()
 {
   InputROIImagePointerType inputROIPtr = GetROIImage();
-  itk::ImageRegionConstIterator< InputROIImageType > trainingIter( inputROIPtr, inputROIPtr->GetRequestedRegion() );
-  
+  itk::ImageRegionConstIterator<InputROIImageType> trainingIter(inputROIPtr, inputROIPtr->GetRequestedRegion());
+
   trainingIter.GoToBegin();
-  
+
   SizeValueType count = 0L;
-  while ( !trainingIter.IsAtEnd() )
-  {
-    if ( trainingIter.Get() != 0 )
-      count++;
+  while (!trainingIter.IsAtEnd())
+    {
+    if (trainingIter.Get() != 0) count++;
     ++trainingIter;
-  }
+    }
 
   return count;
 }
 
-
 } // end of namespace otb
 
 #endif
-
-

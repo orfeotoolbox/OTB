@@ -21,7 +21,6 @@
 #include "otbGDALImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ GDALImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

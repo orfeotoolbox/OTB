@@ -36,18 +36,18 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::NDVI< typename TInputImage::InternalPixelType,
-                                           typename TInputImage::InternalPixelType,
-                                           typename TOutputImage::PixelType>  >
+          class TFunction = Functor::NDVI<typename TInputImage::InternalPixelType,
+                                          typename TInputImage::InternalPixelType,
+                                          typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelRAndNIRIndexImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelRAndNIRIndexImageFilter                               Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                           Pointer;
-  typedef itk::SmartPointer<const Self>                                     ConstPointer;
+  typedef MultiChannelRAndNIRIndexImageFilter                                Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,28 +56,28 @@ public:
   itkTypeMacro(MultiChannelRAndNIRIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
+  typedef TFunction FunctorType;
 
   /** Set/Get the red channel index. Value must be in [1...[ */
-  itkSetMacro(RedIndex,unsigned int);
-  itkGetMacro(RedIndex,unsigned int);
+  itkSetMacro(RedIndex, unsigned int);
+  itkGetMacro(RedIndex, unsigned int);
   /** Set/Get the nir channel index. Value must be in [1...[ */
-  itkSetMacro(NIRIndex,unsigned int);
-  itkGetMacro(NIRIndex,unsigned int);
+  itkSetMacro(NIRIndex, unsigned int);
+  itkGetMacro(NIRIndex, unsigned int);
 
 protected:
   /// Constructor
-  MultiChannelRAndNIRIndexImageFilter(): m_RedIndex(3), m_NIRIndex(4) {};
+  MultiChannelRAndNIRIndexImageFilter() : m_RedIndex(3), m_NIRIndex(4) {};
   /// Destructor
-  virtual ~MultiChannelRAndNIRIndexImageFilter() {};
+  virtual ~MultiChannelRAndNIRIndexImageFilter() {}
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
-    if(m_RedIndex < 1 || m_NIRIndex < 1 ||
-       m_RedIndex > lNbChan || m_NIRIndex > lNbChan)
+    if (m_RedIndex < 1 || m_NIRIndex < 1 ||
+        m_RedIndex > lNbChan || m_NIRIndex > lNbChan)
       {
-      itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
+      itkExceptionMacro(<< "Channel indices must belong to range [1, ...[");
       }
     this->GetFunctor().SetRedIndex(m_RedIndex);
     this->GetFunctor().SetNIRIndex(m_NIRIndex);
@@ -85,13 +85,13 @@ protected:
   /// PrintSelf Method
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    this->Superclass::PrintSelf(os,indent);
-    os << indent << "Red index: "<<m_RedIndex<<std::endl;
-    os << indent << "NIR index: "<<m_NIRIndex<<std::endl;
+    this->Superclass::PrintSelf(os, indent);
+    os << indent << "Red index: " << m_RedIndex << std::endl;
+    os << indent << "NIR index: " << m_NIRIndex << std::endl;
   }
 private:
-  MultiChannelRAndNIRIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiChannelRAndNIRIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** Red channel index */
   unsigned int m_RedIndex;
   /** NIR channel index */

@@ -33,29 +33,29 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TModel >
+template <class TModel>
 class PixelDescriptionView
   : public PixelDescriptionModelListener, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef PixelDescriptionView                 Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef PixelDescriptionView          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(PixelDescriptionView,itk::Object);
+  itkTypeMacro(PixelDescriptionView, itk::Object);
 
   /** Model typedef */
-  typedef TModel                               ModelType;
-  typedef typename ModelType::Pointer          ModelPointerType;
+  typedef TModel                      ModelType;
+  typedef typename ModelType::Pointer ModelPointerType;
 
   /** Pixel description widget typedef */
-  typedef Fl_Multiline_Output                  PixelDescriptionWidgetType;
+  typedef Fl_Multiline_Output PixelDescriptionWidgetType;
 
   /**
    * This method unregister with previous model if any, and
@@ -74,7 +74,7 @@ public:
     return m_PixelDescriptionWidget;
   }
 
- protected:
+protected:
   /** Constructor */
   PixelDescriptionView();
   /** Destructor */
@@ -85,13 +85,13 @@ public:
 
 private:
   PixelDescriptionView(const Self&);      // purposely not implemented
-  void operator=(const Self&);             // purposely not implemented
+  void operator =(const Self&);             // purposely not implemented
 
   /** The description widget */
   PixelDescriptionWidgetType * m_PixelDescriptionWidget;
 
   /** Model pointer */
-  ModelPointerType       m_Model;
+  ModelPointerType m_Model;
 
 }; // end class
 } // end namespace otb
@@ -101,5 +101,3 @@ private:
 #endif
 
 #endif
-
-

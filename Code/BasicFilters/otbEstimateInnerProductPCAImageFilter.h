@@ -29,52 +29,52 @@ namespace otb
  * Implement the itk::ImagePCAShapeModelEstimator algorithms in streaming capabilities
  * Use by the  InnerProductPCAImageFilter composite filter
  */
-template <class TInputImage, class TOutputImage >
-class ITK_EXPORT EstimateInnerProductPCAImageFilter : public itk::ImageToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT EstimateInnerProductPCAImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef EstimateInnerProductPCAImageFilter                    Self;
-  typedef typename itk::ImageToImageFilter < TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef EstimateInnerProductPCAImageFilter                           Self;
+  typedef typename itk::ImageToImageFilter <TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(EstimateInnerProductPCAImageFilter,ImageToImageFilter);
+  itkTypeMacro(EstimateInnerProductPCAImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointer;
-  typedef typename InputImageType::PixelType      InputPixelType;
-  typedef typename InputImageType::RegionType     InputImageRegionType;
-  typedef          TOutputImage                   OutputImageType;
-  typedef typename OutputImageType::Pointer       OutputImagePointer;
-  typedef typename OutputImageType::RegionType    OutputImageRegionType;
-  typedef typename OutputImageType::PixelType     OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
+  typedef          TInputImage                        InputImageType;
+  typedef typename InputImageType::Pointer            InputImagePointer;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef          TOutputImage                       OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
 
   typedef StreamingInnerProductVectorImageFilter<InputImageType> StreamingInnerProductType;
-  typedef typename StreamingInnerProductType::Pointer StreamingInnerProductPointer;
-  typedef typename StreamingInnerProductType::MatrixType MatrixType;
-  typedef typename StreamingInnerProductType::MatrixObjectType MatrixObjectType;
+  typedef typename StreamingInnerProductType::Pointer            StreamingInnerProductPointer;
+  typedef typename StreamingInnerProductType::MatrixType         MatrixType;
+  typedef typename StreamingInnerProductType::MatrixObjectType   MatrixObjectType;
 
   /** Set/Get the number of required largest principal components. The filter produces
    the required number of principal components plus one outputs. Output index 0 represents
    the mean image and the remaining outputs the requested principal components.*/
-  itkSetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
-  itkGetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
+  itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
+  itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
 
   /** Enable/Disable center data */
-  itkSetMacro( CenterData, bool );
-  itkGetMacro( CenterData, bool );
+  itkSetMacro(CenterData, bool);
+  itkGetMacro(CenterData, bool);
   itkBooleanMacro(CenterData);
 
 protected:
   EstimateInnerProductPCAImageFilter();
-  virtual ~EstimateInnerProductPCAImageFilter() {};
+  virtual ~EstimateInnerProductPCAImageFilter() {}
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
@@ -91,8 +91,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  EstimateInnerProductPCAImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  EstimateInnerProductPCAImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The number of output Pricipal Components */
   unsigned int m_NumberOfPrincipalComponentsRequired;
@@ -115,4 +115,3 @@ private:
 #endif
 
 #endif
-

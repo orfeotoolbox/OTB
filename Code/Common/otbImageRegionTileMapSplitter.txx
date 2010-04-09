@@ -31,10 +31,10 @@ namespace otb
 template <unsigned int VImageDimension>
 unsigned int
 ImageRegionTileMapSplitter<VImageDimension>
-::GetNumberOfSplits(const RegionType &region, unsigned int requestedNumber)
+::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
 {
-  const SizeType &regionSize = region.GetSize();
-  const IndexType &regionIndex = region.GetIndex();
+  const SizeType&  regionSize = region.GetSize();
+  const IndexType& regionIndex = region.GetIndex();
 
   // requested number of splits per dimension
   unsigned int numPieces = 1;
@@ -44,13 +44,13 @@ ImageRegionTileMapSplitter<VImageDimension>
     {
 //    otbMsgDevMacro(<< "*** Dimension: " << j-1);
     unsigned long int remainingToDo = vcl_ceil((double) requestedNumber / numPieces);
-    unsigned int maxPieces = (regionIndex[j - 1] + regionSize[j - 1] - 1) / m_AlignStep - regionIndex[j - 1]
-        / m_AlignStep + 1;
+    unsigned int      maxPieces = (regionIndex[j - 1] + regionSize[j - 1] - 1) / m_AlignStep - regionIndex[j - 1]
+                                  / m_AlignStep + 1;
     unsigned int stepPerPiece = 1;
     if (remainingToDo < maxPieces)
       {
       stepPerPiece = static_cast<unsigned int> (vcl_floor(static_cast<double> (maxPieces) / remainingToDo));
-      if ((remainingToDo-1)*(stepPerPiece+1) < maxPieces )
+      if ((remainingToDo - 1) * (stepPerPiece + 1) < maxPieces)
         {
         stepPerPiece += 1;
         }
@@ -65,18 +65,17 @@ ImageRegionTileMapSplitter<VImageDimension>
   return numPieces;
 }
 
-
 /**
    *
  */
 template <unsigned int VImageDimension>
 itk::ImageRegion<VImageDimension>
 ImageRegionTileMapSplitter<VImageDimension>
-::GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType &region)
+::GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region)
 {
   RegionType splitRegion;
-  IndexType splitIndex, regionIndex;
-  SizeType splitSize, regionSize;
+  IndexType  splitIndex, regionIndex;
+  SizeType   splitSize, regionSize;
 
   // Initialize the splitRegion to the requested region
   splitRegion = region;
@@ -99,8 +98,10 @@ ImageRegionTileMapSplitter<VImageDimension>
     unsigned int slicePos = (i % (stackSize * m_SplitsPerDimension[j])) / stackSize;
     stackSize *= m_SplitsPerDimension[j];
 
-    unsigned int generalSplitSize = static_cast<unsigned int> (vcl_ceil(static_cast<double> (regionSize[j]) / (m_SplitsPerDimension[j]
-        * m_AlignStep))) * m_AlignStep;
+    unsigned int generalSplitSize =
+      static_cast<unsigned int> (vcl_ceil(static_cast<double> (regionSize[j]) / (m_SplitsPerDimension[j]
+                                                                                 *
+                                                                                 m_AlignStep))) * m_AlignStep;
     if (slicePos == 0)
       {
       splitIndex[j] = regionIndex[j];
@@ -116,7 +117,7 @@ ImageRegionTileMapSplitter<VImageDimension>
     else if (slicePos == m_SplitsPerDimension[j] - 1)
       {
       splitSize[j] = regionSize[j] - (generalSplitSize - (regionIndex[j] % generalSplitSize))
-          - (m_SplitsPerDimension[j] - 2) * generalSplitSize;
+                     - (m_SplitsPerDimension[j] - 2) * generalSplitSize;
       }
     else
       {
@@ -131,7 +132,6 @@ ImageRegionTileMapSplitter<VImageDimension>
   return splitRegion;
 }
 
-
 /**
        *
  */
@@ -140,9 +140,8 @@ void
 ImageRegionTileMapSplitter<VImageDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 } // end namespace itk
 

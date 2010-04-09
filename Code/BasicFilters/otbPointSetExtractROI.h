@@ -25,61 +25,60 @@ namespace otb
 {
 
 /** \class PointSetExtractROI
- * \brief 
+ * \brief
  *
  * PointSetExtractROI applies a transform to all the points
  * of a PointSet.
  *
  * The additional content of the PointSet is passed untouched.
- * 
- * 
+ *
+ *
  * \ingroup PointSetFilters
  */
 template <class TInputPointSet, class TOutputPointSet>
 class ITK_EXPORT PointSetExtractROI :
-    public PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
+  public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetExtractROI                                       Self;
-  typedef PointSetToPointSetFilter<TInputPointSet,TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
-  
+  typedef PointSetExtractROI                                        Self;
+  typedef PointSetToPointSetFilter<TInputPointSet, TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                                   Pointer;
+  typedef itk::SmartPointer<const Self>                             ConstPointer;
+
   typedef TInputPointSet                       InputPointSetType;
   typedef TOutputPointSet                      OutputPointSetType;
   typedef typename InputPointSetType::Pointer  InputPointSetPointer;
   typedef typename OutputPointSetType::Pointer OutputPointSetPointer;
-  
+
   /** Type for representing coordinates. */
-  typedef typename TInputPointSet::CoordRepType  CoordRepType;
+  typedef typename TInputPointSet::CoordRepType CoordRepType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetExtractROI,PointSetToPointSetFilter);
+  itkTypeMacro(PointSetExtractROI, PointSetToPointSetFilter);
 
   /** Set/Get Start methods */
-  itkSetMacro(StartX,unsigned long);
-  itkSetMacro(StartY,unsigned long);
+  itkSetMacro(StartX, unsigned long);
+  itkSetMacro(StartY, unsigned long);
   /** Set/Get Size methods */
-  itkSetMacro(SizeX,unsigned long);
-  itkSetMacro(SizeY,unsigned long);
+  itkSetMacro(SizeX, unsigned long);
+  itkSetMacro(SizeY, unsigned long);
 
 protected:
   PointSetExtractROI();
-  ~PointSetExtractROI() {};
+  ~PointSetExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
-  /** Generate Requested Data */
-  virtual void GenerateData( void );
 
+  /** Generate Requested Data */
+  virtual void GenerateData(void);
 
 private:
-  PointSetExtractROI(const PointSetExtractROI&); //purposely not implemented
-  void operator=(const PointSetExtractROI&); //purposely not implemented
-  
+  PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented
+  void operator =(const PointSetExtractROI&); //purposely not implemented
+
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
   unsigned long m_StartY;

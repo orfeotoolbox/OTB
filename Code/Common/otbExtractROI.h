@@ -34,39 +34,39 @@ namespace otb
  *
  */
 template <class TInputPixel, class TOutputPixel>
-class ITK_EXPORT ExtractROI:
-      public ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >
+class ITK_EXPORT ExtractROI :
+  public ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2> >
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtractROI         Self;
-  typedef ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ExtractROI                                                     Self;
+  typedef ExtractROIBase<Image<TInputPixel, 2>, Image<TOutputPixel, 2> > Superclass;
+  typedef itk::SmartPointer<Self>                                        Pointer;
+  typedef itk::SmartPointer<const Self>                                  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtractROI,ExtractROIBase);
+  itkTypeMacro(ExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef typename Superclass::InputImageType   InputImageType;
-  typedef typename Superclass::OutputImageType  OutputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
+  typedef typename Superclass::OutputImageType OutputImageType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename OutputImageType::PixelType OutputImagePixelType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename OutputImageType::IndexType OutputImageIndexType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename InputImageType::SizeType InputImageSizeType;
+  typedef typename InputImageType::IndexType  InputImageIndexType;
+  typedef typename OutputImageType::SizeType  OutputImageSizeType;
+  typedef typename InputImageType::SizeType   InputImageSizeType;
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -75,12 +75,11 @@ public:
                       OutputImageType::ImageDimension);
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
-
+                            int threadId);
 
 protected:
   ExtractROI();
-  virtual ~ExtractROI() {};
+  virtual ~ExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** ExtractROI
@@ -89,11 +88,10 @@ protected:
   virtual void GenerateOutputInformation();
 
 private:
-  ExtractROI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ExtractROI(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

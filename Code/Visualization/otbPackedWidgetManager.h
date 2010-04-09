@@ -23,32 +23,31 @@
 
 #include <FL/Fl_Double_Window.H>
 
-
 namespace otb
 {
-  /** \class PackedWidgetManager
-   *   \brief todo
-   *
-   *  \ingroup Visualization
-   */
-class  PackedWidgetManager
-    : public WidgetManager
+/** \class PackedWidgetManager
+ *   \brief todo
+ *
+ *  \ingroup Visualization
+ */
+class PackedWidgetManager
+  : public WidgetManager
 {
- public:
+public:
   /** Standard class typedefs */
-  typedef PackedWidgetManager                        Self;
-  typedef WidgetManager                              Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef PackedWidgetManager           Self;
+  typedef WidgetManager                 Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(PackedWidgetManager,WidgetManager);
+  itkTypeMacro(PackedWidgetManager, WidgetManager);
 
   /** typedef of the fltk file defining all the widget needed*/
-  typedef ImageWidgetPackedManager                  ImageWidgetPackedManagerType;
+  typedef ImageWidgetPackedManager ImageWidgetPackedManagerType;
 
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget);
@@ -62,7 +61,7 @@ class  PackedWidgetManager
   virtual void SetLabel(const char * label);
   virtual void UnRegisterAll();
 
- protected:
+protected:
   /** Constructor */
   PackedWidgetManager();
 
@@ -71,15 +70,14 @@ class  PackedWidgetManager
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
-
- private:
+private:
   PackedWidgetManager(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
-  ImageWidgetPackedManagerType*    m_PackedWidget;
+  ImageWidgetPackedManagerType* m_PackedWidget;
 
 };
 }

@@ -20,7 +20,6 @@
 
 #include "otbTextureImageFunction.h"
 
-
 namespace otb
 {
 
@@ -35,7 +34,6 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
   m_Offset.Fill(0);
 }
 
-
 /**
  *
  */
@@ -44,11 +42,10 @@ void
 TextureImageFunction<TInputImage, TFunctor, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << "Radius: "  << m_Radius << std::endl;
   os << indent << "Offset: "  << m_Offset << std::endl;
 }
-
 
 /**
  *
@@ -59,15 +56,15 @@ typename TextureImageFunction<TInputImage, TFunctor, TCoordRep>
 TextureImageFunction<TInputImage, TFunctor, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  if ( !this->GetInputImage() )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->GetInputImage())
+    {
+    return (itk::NumericTraits<RealType>::max());
+    }
 
-  if ( !this->IsInsideBuffer( index ) )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->IsInsideBuffer(index))
+    {
+    return (itk::NumericTraits<RealType>::max());
+    }
 
   SizeType radiusOff;
   radiusOff[0] = (m_Radius[0]) + vcl_abs(m_Offset[0]);
@@ -77,10 +74,9 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
 
   FunctorType funct;
   funct.SetOffset(m_Offset);
-  
-  return static_cast<RealType>(funct( itOff.GetNeighborhood() ));
-}
 
+  return static_cast<RealType>(funct(itOff.GetNeighborhood()));
+}
 
 } // end namespace otb
 

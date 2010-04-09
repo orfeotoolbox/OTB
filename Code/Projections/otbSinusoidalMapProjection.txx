@@ -30,7 +30,6 @@ SinusoidalMapProjection<transform>
 {
 }
 
-
 template <InverseOrForwardTransformationEnum transform>
 SinusoidalMapProjection<transform>
 ::~SinusoidalMapProjection()
@@ -66,7 +65,7 @@ template <InverseOrForwardTransformationEnum transform>
 double SinusoidalMapProjection<transform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing=this->m_MapProjection->getFalseNorthing();
+  double falseNorthing = this->m_MapProjection->getFalseNorthing();
 
   return falseNorthing;
 }
@@ -76,18 +75,17 @@ template <InverseOrForwardTransformationEnum transform>
 double SinusoidalMapProjection<transform>
 ::GetFalseEasting() const
 {
-  double falseEasting=this->m_MapProjection->getFalseEasting();
+  double falseEasting = this->m_MapProjection->getFalseEasting();
 
   return falseEasting;
 }
 
 template <InverseOrForwardTransformationEnum transform>
 void SinusoidalMapProjection<transform>
-::SetParameters(double falseEasting,double falseNorthing)
+::SetParameters(double falseEasting, double falseNorthing)
 {
-  this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
+  this->m_MapProjection->setFalseEastingNorthing(falseEasting, falseNorthing);
 }
-
 
 }
 #endif

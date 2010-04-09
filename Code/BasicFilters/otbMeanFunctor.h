@@ -25,7 +25,7 @@ namespace otb
  */
 namespace Functor
 {
-template<class TInput,class TOutputValue>
+template<class TInput, class TOutputValue>
 class MeanFunctor
 {
 public:
@@ -33,18 +33,18 @@ public:
 
   MeanFunctor()
   {
-  };
+  }
 
-  ~MeanFunctor() {};
-  inline TOutputValue operator()(const TInput& inPix)
+  ~MeanFunctor() {}
+  inline TOutputValue operator ()(const TInput& inPix)
   {
     double value(0.);
-    if( inPix.Size() <= 0) return static_cast<TOutputValue> (0.);
-    for (unsigned int i = 0; i <inPix.Size(); ++i)
-    {
+    if (inPix.Size() <= 0) return static_cast<TOutputValue> (0.);
+    for (unsigned int i = 0; i < inPix.Size(); ++i)
+      {
       value += static_cast<double>(inPix[i]);
-    }
-    return static_cast<TOutputValue> ( value/static_cast<double>(inPix.Size()));
+      }
+    return static_cast<TOutputValue> (value / static_cast<double>(inPix.Size()));
   }
 
 };

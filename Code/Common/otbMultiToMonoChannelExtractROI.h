@@ -37,17 +37,17 @@ namespace otb
  * The input image has to be an otb::VectorImage, whereas the output image has to be an otb::Image.
  */
 template <class TInputPixelType, class TOutputPixelType>
-class ITK_EXPORT MultiToMonoChannelExtractROI:
+class ITK_EXPORT MultiToMonoChannelExtractROI :
 //    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> >
-      public ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >
+  public ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiToMonoChannelExtractROI                Self;
+  typedef MultiToMonoChannelExtractROI Self;
 //  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> > Superclass;
-  typedef ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> > Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> > Superclass;
+  typedef itk::SmartPointer<Self>                                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                                ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,29 +56,29 @@ public:
   itkTypeMacro(MultiToMonoChannelExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef typename Superclass::InputImageType   InputImageType;
-  typedef typename Superclass::OutputImageType  OutputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
+  typedef typename Superclass::OutputImageType OutputImageType;
 
   /** Pixel type information */
-  typedef typename OutputImageType::ValueType   OutputValueType;
+  typedef typename OutputImageType::ValueType OutputValueType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename OutputImageType::PixelType OutputImagePixelType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename OutputImageType::IndexType OutputImageIndexType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename InputImageType::SizeType InputImageSizeType;
+  typedef typename InputImageType::IndexType  InputImageIndexType;
+  typedef typename OutputImageType::SizeType  OutputImageSizeType;
+  typedef typename InputImageType::SizeType   InputImageSizeType;
 
   /** Selectionne le canal a traiter */
-  itkSetMacro(Channel,unsigned int);
-  itkGetConstMacro(Channel,unsigned int);
+  itkSetMacro(Channel, unsigned int);
+  itkGetConstMacro(Channel, unsigned int);
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -88,7 +88,7 @@ public:
 
 protected:
   MultiToMonoChannelExtractROI();
-  virtual ~MultiToMonoChannelExtractROI() {};
+  virtual ~MultiToMonoChannelExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** ExtractImageFilter can produce an image which is a different
@@ -105,16 +105,15 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  MultiToMonoChannelExtractROI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiToMonoChannelExtractROI(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Channel to process [1...] */
-  unsigned int  m_Channel;
+  unsigned int m_Channel;
 };
-
 
 } // end namespace otb
 

@@ -40,53 +40,52 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10, class TMaskImage = TOutputImage>
 class ITK_EXPORT KMeansImageClassificationFilter
-      : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+  : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef KMeansImageClassificationFilter                      Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef KMeansImageClassificationFilter                    Self;
+  typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(KMeansImageClassificationFilter,InPlaceImageFilter);
+  itkTypeMacro(KMeansImageClassificationFilter, InPlaceImageFilter);
 
   /** The max dimension of the sample to classify.
    *  This filter internally uses itk::FixedArray as input for the classifier,
    *  so the max sample size has to be fixed at compilation time.
    */
-  itkStaticConstMacro(MaxSampleDimension,unsigned int,VMaxSampleDimension);
+  itkStaticConstMacro(MaxSampleDimension, unsigned int, VMaxSampleDimension);
 
   typedef TInputImage                                InputImageType;
   typedef typename InputImageType::ConstPointer      InputImageConstPointerType;
   typedef typename InputImageType::InternalPixelType ValueType;
 
-  typedef TMaskImage                                 MaskImageType;
-  typedef typename MaskImageType::ConstPointer       MaskImageConstPointerType;
-  typedef typename MaskImageType::Pointer            MaskImagePointerType;
+  typedef TMaskImage                           MaskImageType;
+  typedef typename MaskImageType::ConstPointer MaskImageConstPointerType;
+  typedef typename MaskImageType::Pointer      MaskImagePointerType;
 
-  typedef TOutputImage                               OutputImageType;
-  typedef typename OutputImageType::Pointer          OutputImagePointerType;
-  typedef typename OutputImageType::RegionType       OutputImageRegionType;
-  typedef typename OutputImageType::PixelType        LabelType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  LabelType;
 
-
-  typedef itk::FixedArray<ValueType,MaxSampleDimension> SampleType;
-  typedef itk::Array<double>                            KMeansParametersType;
-  typedef std::map<LabelType,SampleType>                CentroidsMapType;
+  typedef itk::FixedArray<ValueType, MaxSampleDimension> SampleType;
+  typedef itk::Array<double>                             KMeansParametersType;
+  typedef std::map<LabelType, SampleType>                CentroidsMapType;
   typedef itk::Statistics::EuclideanDistance<SampleType> DistanceType;
 
   /** Set/Get the centroids */
-  itkSetMacro(Centroids,KMeansParametersType);
-  itkGetConstReferenceMacro(Centroids,KMeansParametersType);
+  itkSetMacro(Centroids, KMeansParametersType);
+  itkGetConstReferenceMacro(Centroids, KMeansParametersType);
 
   /** Set/Get the default label */
-  itkSetMacro(DefaultLabel,LabelType);
-  itkGetMacro(DefaultLabel,LabelType);
+  itkSetMacro(DefaultLabel, LabelType);
+  itkGetMacro(DefaultLabel, LabelType);
 
   /**
    * If set, only pixels within the mask will be classified.
@@ -104,18 +103,18 @@ protected:
   /** Constructor */
   KMeansImageClassificationFilter();
   /** Destructor */
-  virtual ~KMeansImageClassificationFilter() {};
+  virtual ~KMeansImageClassificationFilter() {}
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
   /** Before threaded generate data */
   virtual void BeforeThreadedGenerateData();
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  KMeansImageClassificationFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  KMeansImageClassificationFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Centroids used for classification */
   KMeansParametersType m_Centroids;
@@ -124,7 +123,7 @@ private:
   /** Centroids - labels map */
   CentroidsMapType m_CentroidsMap;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKMeansImageClassificationFilter.txx"
 #endif

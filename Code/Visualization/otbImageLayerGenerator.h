@@ -45,34 +45,34 @@ namespace otb
 *   \sa ImageLayer
 *  \ingroup Visualization
  */
-template < class TImageLayer >
+template <class TImageLayer>
 class ImageLayerGenerator
   : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ImageLayerGenerator                Self;
-  typedef itk::Object                        Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef ImageLayerGenerator           Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageLayerGenerator,Object);
+  itkTypeMacro(ImageLayerGenerator, Object);
 
   /** Image layer typedef */
-  typedef TImageLayer                          ImageLayerType;
-  typedef typename ImageLayerType::Pointer     ImageLayerPointerType;
+  typedef TImageLayer                      ImageLayerType;
+  typedef typename ImageLayerType::Pointer ImageLayerPointerType;
 
   /** Image typedef */
-  typedef typename ImageLayerType::ImageType   ImageType;
-  typedef typename ImageType::Pointer          ImagePointerType;
+  typedef typename ImageLayerType::ImageType ImageType;
+  typedef typename ImageType::Pointer        ImagePointerType;
 
   /** Resampler typedef */
   typedef otb::StreamingShrinkImageFilter
-  <ImageType,ImageType>                        ResampleFilterType;
+  <ImageType, ImageType>                        ResampleFilterType;
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
 
   /** Rendering function typedef */
@@ -81,18 +81,18 @@ public:
   typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
 
   /** Blending function typedef */
-  typedef typename ImageLayerType::OutputPixelType     OutputPixelType;
-  typedef typename ImageLayerType::BlendingFunctionType         BlendingFunctionType;
-  typedef typename BlendingFunctionType::Pointer       BlendingFunctionPointerType;
+  typedef typename ImageLayerType::OutputPixelType      OutputPixelType;
+  typedef typename ImageLayerType::BlendingFunctionType BlendingFunctionType;
+  typedef typename BlendingFunctionType::Pointer        BlendingFunctionPointerType;
 
   /** PixelType typedef */
-  typedef typename ImageLayerType::ScalarType        ScalarType;
-  typedef typename ImageLayerType::VectorPixelType   VectorPixelType;
-  typedef typename ImageLayerType::RGBPixelType      RGBPixelType;
-  typedef typename ImageLayerType::RGBAPixelType     RGBAPixelType;
+  typedef typename ImageLayerType::ScalarType      ScalarType;
+  typedef typename ImageLayerType::VectorPixelType VectorPixelType;
+  typedef typename ImageLayerType::RGBPixelType    RGBPixelType;
+  typedef typename ImageLayerType::RGBAPixelType   RGBAPixelType;
 
   /** Get the generated layer */
-  itkGetObjectMacro(Layer,ImageLayerType);
+  itkGetObjectMacro(Layer, ImageLayerType);
 
   /**
    * Trigger layer generation.
@@ -106,78 +106,77 @@ public:
   virtual unsigned int GetOptimalSubSamplingRate();
 
   /** Set/Get the image */
-  itkSetObjectMacro(Image,ImageType);
-  itkGetObjectMacro(Image,ImageType);
+  itkSetObjectMacro(Image, ImageType);
+  itkGetObjectMacro(Image, ImageType);
 
   /** Set/Get the quicklook (in case GenerateQuicklook is off) */
-  itkSetObjectMacro(Quicklook,ImageType);
-  itkGetObjectMacro(Quicklook,ImageType);
+  itkSetObjectMacro(Quicklook, ImageType);
+  itkGetObjectMacro(Quicklook, ImageType);
 
   /** Set/Get the subsampling rate (in case GenerateQuicklook is off) */
-  itkSetMacro(SubsamplingRate,unsigned int);
-  itkGetMacro(SubsamplingRate,unsigned int);
+  itkSetMacro(SubsamplingRate, unsigned int);
+  itkGetMacro(SubsamplingRate, unsigned int);
 
   /** Activate/deactivate quicklook generation */
-  itkSetMacro(GenerateQuicklook,bool);
+  itkSetMacro(GenerateQuicklook, bool);
   itkBooleanMacro(GenerateQuicklook);
 
   /** Set/Get the screen ratio */
-  itkSetMacro(ScreenRatio,double);
-  itkGetMacro(ScreenRatio,double);
+  itkSetMacro(ScreenRatio, double);
+  itkGetMacro(ScreenRatio, double);
 
   /** Get the generated default rendering function */
 //   itkSetObjectMacro(RenderingFunction,RenderingFunctionType);
 //   itkGetObjectMacro(RenderingFunction,RenderingFunctionType);
   virtual void SetRenderingFunction(RenderingFunctionType* func)
   {
-    if(this->m_Layer.IsNull())
-    {
-      itkExceptionMacro(<<"Layer is not set");
-    }
+    if (this->m_Layer.IsNull())
+      {
+      itkExceptionMacro(<< "Layer is not set");
+      }
     if (this->m_Layer->GetRenderingFunction() != func)
-    {
+      {
       this->m_Layer->SetRenderingFunction(func);
       this->Modified();
-    }
+      }
   }
 
-  virtual RenderingFunctionType * GetRenderingFunction ()
+  virtual RenderingFunctionType * GetRenderingFunction()
   {
-    if(this->m_Layer.IsNull())
-    {
-      itkExceptionMacro(<<"Layer is not set");
-    }
+    if (this->m_Layer.IsNull())
+      {
+      itkExceptionMacro(<< "Layer is not set");
+      }
     return this->m_Layer->GetRenderingFunction();
   }
-
 
   /** Set/Get the blending function */
 //   itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
 //   itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
   virtual void SetBlendingFunction(BlendingFunctionType* func)
   {
-    if(this->m_Layer.IsNull())
-    {
-      itkExceptionMacro(<<"Layer is not set");
-    }
+    if (this->m_Layer.IsNull())
+      {
+      itkExceptionMacro(<< "Layer is not set");
+      }
     if (this->m_Layer->GetBlendingFunction() != func)
-    {
+      {
       this->m_Layer->SetBlendingFunction(func);
       this->Modified();
-    }
+      }
   }
 
-  virtual BlendingFunctionType * GetBlendingFunction ()
+  virtual BlendingFunctionType * GetBlendingFunction()
   {
-    if(this->m_Layer.IsNull())
-    {
-      itkExceptionMacro(<<"Layer is not set");
-    }
+    if (this->m_Layer.IsNull())
+      {
+      itkExceptionMacro(<< "Layer is not set");
+      }
     return this->m_Layer->GetBlendingFunction();
   }
 
   /** Get a hook on the resample filter to report progress */
-  itkGetObjectMacro(Resampler,ResampleFilterType);
+  itkGetObjectMacro(Resampler, ResampleFilterType);
 
 protected:
   /** Constructor */
@@ -203,7 +202,7 @@ protected:
 
 private:
   ImageLayerGenerator(const Self&);     // purposely not implemented
-  void operator=(const Self&);          // purposely not implemented
+  void operator =(const Self&);          // purposely not implemented
 
   /** The generated image layer */
   ImageLayerPointerType m_Layer;
@@ -215,18 +214,18 @@ private:
 //   BlendingFunctionPointerType m_BlendingFunction;
 
   /** The input image */
-  ImagePointerType      m_Image;
+  ImagePointerType m_Image;
 
   /** The quicklook (Will be overriden if GenerateQuicklook is on) */
-  ImagePointerType      m_Quicklook;
+  ImagePointerType m_Quicklook;
 
   /** The quicklook subsampling rate (Will be overriden if
    * GenerateQuicklook is on)
    */
-  unsigned int          m_SubsamplingRate;
+  unsigned int m_SubsamplingRate;
 
   /** if true, the generator will also generate the quicklook */
-  bool                  m_GenerateQuicklook;
+  bool m_GenerateQuicklook;
 
   /** Streaming resample filter */
   ResampleFilterPointerType m_Resampler;
@@ -242,5 +241,3 @@ private:
 #endif
 
 #endif
-
-

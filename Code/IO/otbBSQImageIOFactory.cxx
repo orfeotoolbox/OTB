@@ -21,7 +21,6 @@
 #include "otbBSQImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ BSQImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

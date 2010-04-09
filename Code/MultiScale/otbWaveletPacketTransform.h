@@ -53,24 +53,24 @@ namespace otb {
  * \sa WaveletFilterBank
  * \sa WaveletTransform
  */
-template < class TInputImage, class TOutputImage, class TFilter,
-            Wavelet::WaveletDirection TDirectionOfTransformation,
-            class TCost = FullyDecomposedWaveletPacketCost< TInputImage > >
+template <class TInputImage, class TOutputImage, class TFilter,
+          Wavelet::WaveletDirection TDirectionOfTransformation,
+          class TCost = FullyDecomposedWaveletPacketCost<TInputImage> >
 class ITK_EXPORT WaveletPacketTransform
-  : public itk::ImageSource< TOutputImage >
+  : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletPacketTransform Self;
-  typedef itk::ImageSource< TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletPacketTransform         Self;
+  typedef itk::ImageSource<TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletPacketTransform,ImageSource);
+  itkTypeMacro(WaveletPacketTransform, ImageSource);
 
 protected:
   /** But this class cannot do any thing! No constructor is implemented */
@@ -78,8 +78,8 @@ protected:
   virtual ~WaveletPacketTransform();
 
 private:
-  WaveletPacketTransform ( const Self & );
-  void operator= ( const Self & );
+  WaveletPacketTransform (const Self &);
+  void operator =(const Self&);
 };
 
 /** \class WaveletPacketTransform
@@ -107,22 +107,22 @@ private:
  * \sa WaveletFilterBank
  * \sa WaveletTransform
  */
-template < class TInputImage, class TOutputImage, class TFilter, class TCost >
-class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCost >
-  : public ImageToImageListFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TFilter, class TCost>
+class ITK_EXPORT WaveletPacketTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD, TCost>
+  : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletPacketTransform Self;
-  typedef ImageToImageListFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletPacketTransform                            Self;
+  typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletPacketTransform,ImageToImageListFilter);
+  itkTypeMacro(WaveletPacketTransform, ImageToImageListFilter);
 
   typedef          TInputImage                  InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
@@ -140,29 +140,30 @@ public:
 
   typedef TFilter                           FilterType;
   typedef typename FilterType::Pointer      FilterPointerType;
-  typedef ObjectList< FilterType >          FilterListType;
+  typedef ObjectList<FilterType>            FilterListType;
   typedef typename FilterListType::Pointer  FilterListPointerType;
   typedef typename FilterListType::Iterator FilterListIterator;
 
-  itkGetObjectMacro(FilterList,FilterListType);
+  itkGetObjectMacro(FilterList, FilterListType);
 
-  typedef TCost CostType;
+  typedef TCost                      CostType;
   typedef typename CostType::Pointer CostPointerType;
-  itkGetObjectMacro(Cost,CostType);
+  itkGetObjectMacro(Cost, CostType);
 
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::FORWARD);
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, Wavelet::FORWARD);
 
   /** Get the recursive description of the packet decomposition */
-  const std::vector<bool> & GetWaveletPacketRule () const {
+  const std::vector<bool>& GetWaveletPacketRule() const
+  {
     return this->m_WaveletPacketRule;
   }
 
   /** Get information on the decomposition */
-  itkGetMacro(NumberOfFilters,unsigned int);
-  itkGetMacro(DepthOfDecomposition,unsigned int);
+  itkGetMacro(NumberOfFilters, unsigned int);
+  itkGetMacro(DepthOfDecomposition, unsigned int);
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /**
    * Set/Get the level of down sampling of the image used in forward algorithm.
@@ -172,8 +173,8 @@ public:
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
-  itkGetMacro(SubsampleImageFactor,unsigned int);
-  itkSetMacro(SubsampleImageFactor,unsigned int);
+  itkGetMacro(SubsampleImageFactor, unsigned int);
+  itkSetMacro(SubsampleImageFactor, unsigned int);
 
 protected:
   WaveletPacketTransform();
@@ -183,15 +184,15 @@ protected:
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  virtual void GenerateData ();
+  virtual void GenerateData();
 
   /** Performs (if any) the local decomposition (called recursively) */
-  virtual void GenerateData ( unsigned int depth, OutputImageType * outputPtr,
-                              itk::ProgressAccumulator * accumulator );
+  virtual void GenerateData(unsigned int depth, OutputImageType * outputPtr,
+                            itk::ProgressAccumulator * accumulator);
 
 private:
-  WaveletPacketTransform ( const Self &);
-  void operator= ( const Self & );
+  WaveletPacketTransform (const Self &);
+  void operator =(const Self&);
 
   /**
    * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
@@ -206,9 +207,8 @@ private:
   unsigned int m_DepthOfDecomposition;
 
   FilterListPointerType m_FilterList;
-  CostPointerType m_Cost;
-  std::vector<bool> m_WaveletPacketRule;
-
+  CostPointerType       m_Cost;
+  std::vector<bool>     m_WaveletPacketRule;
 
 }; // end of class
 
@@ -236,32 +236,32 @@ private:
  * \sa WaveletFilterBank
  * \sa WaveletTransform
  */
-template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletPacketTransform< TInputImage, TOutputImage, TFilter,
-                                          Wavelet::INVERSE, FullyDecomposedWaveletPacketCost< TInputImage > >
-  : public ImageListToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TFilter>
+class ITK_EXPORT WaveletPacketTransform<TInputImage, TOutputImage, TFilter,
+                                        Wavelet::INVERSE, FullyDecomposedWaveletPacketCost<TInputImage> >
+  : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletPacketTransform Self;
-  typedef ImageListToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletPacketTransform                            Self;
+  typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletPacketTransform,ImageListToImageFilter);
+  itkTypeMacro(WaveletPacketTransform, ImageListToImageFilter);
 
-  typedef typename Superclass::InputImageType     InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointerType;
-  typedef typename InputImageType::ConstPointer   InputImageConstPointerType;
-  typedef typename InputImageType::RegionType     InputImageRegionType;
-  typedef typename InputImageType::PixelType      InputImagePixelType;
-  typedef typename InputImageType::SizeType       SizeType;
-  typedef typename InputImageType::IndexType      IndexType;
-  typedef typename InputImageType::ValueType      ValueType;
+  typedef typename Superclass::InputImageType   InputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointerType;
+  typedef typename InputImageType::ConstPointer InputImageConstPointerType;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::IndexType    IndexType;
+  typedef typename InputImageType::ValueType    ValueType;
 
   typedef typename Superclass::InputImageListType InputImageListType;
   typedef typename InputImageListType::Pointer    InputImageListPointerType;
@@ -275,21 +275,25 @@ public:
 
   typedef TFilter                           FilterType;
   typedef typename FilterType::Pointer      FilterPointerType;
-  typedef ObjectList< FilterType >          FilterListType;
+  typedef ObjectList<FilterType>            FilterListType;
   typedef typename FilterListType::Pointer  FilterListPointerType;
   typedef typename FilterListType::Iterator FilterListIterator;
 
-  itkGetObjectMacro(FilterList,FilterListType);
+  itkGetObjectMacro(FilterList, FilterListType);
 
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::INVERSE);
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, Wavelet::INVERSE);
 
   /** Get/Set the decomposition rule */
-  const std::vector<bool> & GetWaveletPacketRule () const {
-    return this->m_WaveletPacketRule; }
-  void SetWaveletPacketRule ( const std::vector<bool> & rule ) {
+  const std::vector<bool>& GetWaveletPacketRule() const
+  {
+    return this->m_WaveletPacketRule;
+  }
+  void SetWaveletPacketRule(const std::vector<bool>& rule)
+  {
     this->m_WaveletPacketRule = rule;
-    this->Modified(); }
+    this->Modified();
+  }
 
   /**
    * Set/Get the level of down sampling of the image used in forward algorithm.
@@ -299,14 +303,14 @@ public:
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
-  itkGetMacro(SubsampleImageFactor,unsigned int);
-  itkSetMacro(SubsampleImageFactor,unsigned int);
+  itkGetMacro(SubsampleImageFactor, unsigned int);
+  itkSetMacro(SubsampleImageFactor, unsigned int);
 
   /** Get information on the decomposition */
-  itkGetMacro(NumberOfFilters,unsigned int);
-  itkGetMacro(DepthOfDecomposition,unsigned int);
+  itkGetMacro(NumberOfFilters, unsigned int);
+  itkGetMacro(DepthOfDecomposition, unsigned int);
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
 protected:
   WaveletPacketTransform();
@@ -322,19 +326,19 @@ protected:
    * This class does not performs multi-threading directly. But it uses step by step the
    * GenerateData() of TFilter. If This one can thread, the transformation is threaded
    * (e.g. WaveletFilterBank) */
-  virtual void GenerateData ();
+  virtual void GenerateData();
 
   /** Performs (if any) the local decomposition (called recursively) */
-  virtual unsigned int SetInputFilters ( unsigned int & ruleID, InputImageIterator & inputIter,
-                                          unsigned int filterID );
+  virtual unsigned int SetInputFilters(unsigned int& ruleID, InputImageIterator& inputIter,
+                                       unsigned int filterID);
 
   /** Get the depth of decomposition and the number of filters from m_WaveletPacketRule */
-  void InterpretRule ();
-  void InterpretRule ( unsigned int & ruleID, unsigned int curDepth );
+  void InterpretRule();
+  void InterpretRule(unsigned int& ruleID, unsigned int curDepth);
 
 private:
-  WaveletPacketTransform ( const Self &);
-  void operator= ( const Self & );
+  WaveletPacketTransform (const Self &);
+  void operator =(const Self&);
 
   /**
    * For multiscale decomposition, m_SubsampleImageFactor is set to 1.
@@ -349,7 +353,7 @@ private:
   unsigned int m_DepthOfDecomposition;
 
   FilterListPointerType m_FilterList;
-  std::vector<bool> m_WaveletPacketRule;
+  std::vector<bool>     m_WaveletPacketRule;
 
 }; // end of class
 
@@ -360,5 +364,3 @@ private:
 #endif
 
 #endif
-
-

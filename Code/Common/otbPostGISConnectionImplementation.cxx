@@ -31,12 +31,11 @@ PostGISConnectionImplementation::PostGISConnectionImplementation()
   m_Port = "5432";
   m_Options = "";
 
-  
 }
 
 PostGISConnectionImplementation::~PostGISConnectionImplementation()
 {
- 
+
 }
 
 void PostGISConnectionImplementation::ConnectToDB()
@@ -45,17 +44,13 @@ void PostGISConnectionImplementation::ConnectToDB()
 
   connstring << "host=" << m_Host << " dbname=" << m_DBName << " user=" << m_User;
 
-  if(m_Password!="")
-    connstring << " password=" << m_Password;
+  if (m_Password != "") connstring << " password=" << m_Password;
 
-  if(m_Port!="")
-    connstring << " port=" << m_Port;
+  if (m_Port != "") connstring << " port=" << m_Port;
 
-  if(m_Options!="")
-    connstring << " options=" << m_Options;
+  if (m_Options != "") connstring << " options=" << m_Options;
 
-  if(! m_PostGISConnection )
-    delete m_PostGISConnection;
+  if (!m_PostGISConnection) delete m_PostGISConnection;
 
   m_PostGISConnection = new BasicConnectionType(connstring.str().c_str());
 
@@ -72,13 +67,12 @@ PostGISConnectionImplementation::BasicConnectionType* PostGISConnectionImplement
   return m_PostGISConnection;
 }
 
-
 void PostGISConnectionImplementation::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << std::endl;
 
-  os<<"DB name: " << m_DBName <<std::endl;
+  os << "DB name: " << m_DBName << std::endl;
 
 }
 

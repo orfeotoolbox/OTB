@@ -52,26 +52,26 @@ class ITK_EXPORT StreamingImageFileWriter : public itk::ImageToImageFilter<TInpu
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingImageFileWriter  Self;
-  typedef itk::ImageToImageFilter<TInputImage, TInputImage>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef StreamingImageFileWriter                          Self;
+  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingImageFileWriter,itk::ImageToImageFilter);
+  itkTypeMacro(StreamingImageFileWriter, itk::ImageToImageFilter);
 
   /** Some typedefs for the input and output. */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
-  typedef TInputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef TInputImage                            InputImageType;
+  typedef typename InputImageType::Pointer       InputImagePointer;
+  typedef typename InputImageType::RegionType    InputImageRegionType;
+  typedef typename InputImageType::PixelType     InputImagePixelType;
+  typedef TInputImage                            OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
 
   /** Streaming traits helper typedef */
@@ -82,11 +82,11 @@ public:
                       InputImageType::ImageDimension);
 
   /** SmartPointer to a region splitting object */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef typename SplitterType::Pointer RegionSplitterPointer;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
+  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  void SetBufferMemorySize(unsigned long );
+  void SetBufferMemorySize(unsigned long);
 
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
   void SetBufferNumberOfLinesDivisions(unsigned long);
@@ -124,8 +124,7 @@ public:
    * or ThreadedGenerateData() method.  Instead, all the work is done
    * in UpdateOutputData() since it must update a little, execute a little,
    * update some more, execute some more, etc. */
-  virtual void UpdateOutputData(itk::DataObject *itkNotUsed(output));
-
+  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
   /** ImageFileWriter Methods */
 
@@ -143,15 +142,14 @@ public:
     this->Modified();
   }
 
-
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
-  void SetIORegion(const itk::ImageIORegion & region);
-  itkGetConstReferenceMacro( IORegion, itk::ImageIORegion );
+  void SetIORegion(const itk::ImageIORegion& region);
+  itkGetConstReferenceMacro(IORegion, itk::ImageIORegion);
 
   /** Set the compression On or Off */
-  itkSetMacro(UseCompression,bool);
-  itkGetConstReferenceMacro(UseCompression,bool);
+  itkSetMacro(UseCompression, bool);
+  itkGetConstReferenceMacro(UseCompression, bool);
   itkBooleanMacro(UseCompression);
 
   /** By default the MetaDataDictionary is taken from the input image and
@@ -160,8 +158,8 @@ public:
    *  the ImageSeriesWriter. This flag defined whether the MetaDataDictionary
    *  to use will be the one from the input image or the one already set in
    *  the ImageIO object. */
-  itkSetMacro(UseInputMetaDataDictionary,bool);
-  itkGetConstReferenceMacro(UseInputMetaDataDictionary,bool);
+  itkSetMacro(UseInputMetaDataDictionary, bool);
+  itkGetConstReferenceMacro(UseInputMetaDataDictionary, bool);
   itkBooleanMacro(UseInputMetaDataDictionary);
 
   itkSetObjectMacro(ImageIO, itk::ImageIOBase);
@@ -180,8 +178,8 @@ protected:
   void GenerateData(void);
 
 private:
-  StreamingImageFileWriter(const StreamingImageFileWriter&); //purposely not implemented
-  void operator=(const StreamingImageFileWriter&); //purposely not implemented
+  StreamingImageFileWriter(const StreamingImageFileWriter &); //purposely not implemented
+  void operator =(const StreamingImageFileWriter&); //purposely not implemented
 
   /** This method calculate the number of stream divisions, by using the CalculationDivision type */
   unsigned long CalculateNumberOfStreamDivisions(void);
@@ -197,14 +195,14 @@ private:
   CalculationDivisionEnumType m_CalculationDivision;
 
   /** ImageFileWriter Parameters */
-  std::string        m_FileName;
+  std::string m_FileName;
 
   itk::ImageIOBase::Pointer m_ImageIO;
 
   bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
 
   itk::ImageIORegion m_IORegion;
-  bool m_UserSpecifiedIORegion; //
+  bool               m_UserSpecifiedIORegion; //
   //track whether the region is user specified
   bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
   bool m_UseCompression;

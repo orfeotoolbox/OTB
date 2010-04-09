@@ -27,7 +27,7 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 ImageToModulusAndDirectionImageFilter()
 {
@@ -36,70 +36,72 @@ ImageToModulusAndDirectionImageFilter()
   this->SetNumberOfOutputs(2);
   this->SetNumberOfRequiredOutputs(2);
 
-  this->SetNthOutput(0,OutputImageType::New());
-  this->SetNthOutput(1,OutputImageDirectionType::New());
+  this->SetNthOutput(0, OutputImageType::New());
+  this->SetNthOutput(1, OutputImageDirectionType::New());
 }
 
-
 /** Return the const output image modulus */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType *
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
+const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
+                                                     TOutputImageDirection>::OutputImageType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput() const
 {
   if (this->GetNumberOfOutputs() < 1)
-  {
+    {
     return 0;
-  }
-  return static_cast<const OutputImageType * >
-         (this->itk::ProcessObject::GetOutput(0) );
+    }
+  return static_cast<const OutputImageType *>
+           (this->itk::ProcessObject::GetOutput(0));
 }
 /** Return the output image modulus */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
-  {
+    {
     return 0;
-  }
-  return static_cast<OutputImageType * >
-         (this->itk::ProcessObject::GetOutput(0) );
+    }
+  return static_cast<OutputImageType *>
+           (this->itk::ProcessObject::GetOutput(0));
 }
 
 /** Return the const output image direction */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType *
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
+const typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
+                                                     TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
-GetOutputDirection()const
+GetOutputDirection() const
 {
   if (this->GetNumberOfOutputs() < 2)
-  {
+    {
     return 0;
-  }
-  return static_cast<const OutputImageDirectionType * >
-         (this->itk::ProcessObject::GetOutput(1) );
+    }
+  return static_cast<const OutputImageDirectionType *>
+           (this->itk::ProcessObject::GetOutput(1));
 }
 
 /** Return the output image direction */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
-typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::OutputImageDirectionType *
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
+typename ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
+                                               TOutputImageDirection>::OutputImageDirectionType *
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 GetOutputDirection()
 {
   if (this->GetNumberOfOutputs() < 2)
-  {
+    {
     return 0;
-  }
-  return static_cast<OutputImageDirectionType * >
-         (this->itk::ProcessObject::GetOutput(1) );
+    }
+  return static_cast<OutputImageDirectionType *>
+           (this->itk::ProcessObject::GetOutput(1));
 }
 
 /**
  * Standard "GenerateInputRequestedRegion" method
  */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 void
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::GenerateInputRequestedRegion()
@@ -110,12 +112,12 @@ ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDir
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection>
 void
 ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 
 }
 

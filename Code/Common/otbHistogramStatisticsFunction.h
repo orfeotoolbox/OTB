@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifndef __otbHistogramStatisticsFunction_h
 #define __otbHistogramStatisticsFunction_h
 
@@ -35,19 +34,19 @@ namespace otb
  * \ingroup Function
  */
 
-template< class TInputHistogram, class TOutput >
+template<class TInputHistogram, class TOutput>
 class HistogramStatisticsFunction :
-      public itk::HistogramAlgorithmBase< TInputHistogram >
+  public itk::HistogramAlgorithmBase<TInputHistogram>
 {
 public:
   /**Standard class typedefs. */
-  typedef HistogramStatisticsFunction                      Self;
-  typedef itk::HistogramAlgorithmBase<TInputHistogram>    Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef HistogramStatisticsFunction                  Self;
+  typedef itk::HistogramAlgorithmBase<TInputHistogram> Superclass;
+  typedef itk::SmartPointer<Self>                      Pointer;
+  typedef itk::SmartPointer<const Self>                ConstPointer;
 
-  typedef typename TInputHistogram::MeasurementType  MeasurementType;
-  typedef typename TInputHistogram::FrequencyType    FrequencyType;
+  typedef typename TInputHistogram::MeasurementType              MeasurementType;
+  typedef typename TInputHistogram::FrequencyType                FrequencyType;
   typedef typename itk::NumericTraits<MeasurementType>::RealType RealType;
 
   /**Standard Macros */
@@ -67,14 +66,14 @@ public:
   OutputType GetCovariance();
 
   /** Stores the histogram pointer */
-  void SetInputHistogram( const TInputHistogram * histogram )
+  void SetInputHistogram(const TInputHistogram * histogram)
   {
-    if ( m_InputHistogram != histogram )
-    {
+    if (m_InputHistogram != histogram)
+      {
       m_InputHistogram = histogram;
       this->Modified();
       m_IsModified = true;
-    }
+      }
   }
 
 protected:
@@ -100,7 +99,7 @@ private:
   OutputType m_entropy;
   OutputType m_mean;
   OutputType m_covariance;
-  bool m_IsModified;
+  bool       m_IsModified;
 
   /** Target histogram data pointer */
   typename TInputHistogram::ConstPointer m_InputHistogram;

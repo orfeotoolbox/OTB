@@ -29,41 +29,41 @@ ImageList<TImage>
 ::UpdateOutputData()
 {
   Superclass::UpdateOutputData();
-  for (ConstIterator it = this->Begin(); it!=this->End();++it)
-  {
+  for (ConstIterator it = this->Begin(); it != this->End(); ++it)
+    {
     if (it.Get()->GetUpdateMTime() < it.Get()->GetPipelineMTime()
         || it.Get()->GetDataReleased()
         || it.Get()->RequestedRegionIsOutsideOfTheBufferedRegion())
-    {
-      if (it.Get()->GetSource())
       {
-      it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
+      if (it.Get()->GetSource())
+        {
+        it.Get()->GetSource()->PropagateRequestedRegion(it.Get());
 
-      // Check that the requested region lies within the largest possible region
-      if ( ! it.Get()->VerifyRequestedRegion() )
-  {
-  // invalid requested region, throw an exception
-  itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-  e.SetLocation(ITK_LOCATION);
-  e.SetDataObject(it.Get());
-  e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
-  
-  throw e;
-  }
+        // Check that the requested region lies within the largest possible region
+        if (!it.Get()->VerifyRequestedRegion())
+          {
+          // invalid requested region, throw an exception
+          itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
+          e.SetLocation(ITK_LOCATION);
+          e.SetDataObject(it.Get());
+          e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
 
-      it.Get()->GetSource()->UpdateOutputData(it.Get());
+          throw e;
+          }
+
+        it.Get()->GetSource()->UpdateOutputData(it.Get());
+        }
       }
     }
-  }
 }
 
 template <class TImage>
 void
 ImageList<TImage>
 ::PropagateRequestedRegion() throw (itk::InvalidRequestedRegionError)
-{
+  {
   Superclass::PropagateRequestedRegion();
-}
+  }
 
 template <class TImage>
 void
@@ -74,18 +74,17 @@ ImageList<TImage>
   Superclass::UpdateOutputInformation();
 
   if (this->GetSource())
-  {
-    this->GetSource()->UpdateOutputInformation();
-  }
-  for (ConstIterator it = this->Begin(); it!=this->End();++it)
-  {
-    if (it.Get()->GetSource())
     {
-      it.Get()->GetSource()->UpdateOutputInformation();
+    this->GetSource()->UpdateOutputInformation();
     }
-  }
+  for (ConstIterator it = this->Begin(); it != this->End(); ++it)
+    {
+    if (it.Get()->GetSource())
+      {
+      it.Get()->GetSource()->UpdateOutputInformation();
+      }
+    }
 }
-
 
 } // end namespace otb
 

@@ -79,14 +79,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef GeodesicMorphologyDecompositionImageFilter            Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef GeodesicMorphologyDecompositionImageFilter         Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -95,27 +95,33 @@ public:
   itkTypeMacro(GeodesicMorphologyDecompositionImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef TStructuringElement StructuringElementType;
+  typedef TStructuringElement
+                                                      StructuringElementType;
   typedef typename StructuringElementType::RadiusType RadiusType;
-  typedef itk::OpeningByReconstructionImageFilter<InputImageType,InputImageType,StructuringElementType> OpeningFilterType;
-  typedef itk::ClosingByReconstructionImageFilter<InputImageType,InputImageType,StructuringElementType> ClosingFilterType;
-  typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> ConvexFilterType;
-  typedef itk::SubtractImageFilter<OutputImageType,InputImageType,OutputImageType> ConcaveFilterType;
-  typedef otb::GeodesicMorphologyLevelingFilter<InputImageType,OutputImageType,OutputImageType> LevelingFilterType;
+  typedef itk::OpeningByReconstructionImageFilter<InputImageType, InputImageType,
+                                                  StructuringElementType> OpeningFilterType;
+  typedef itk::ClosingByReconstructionImageFilter<InputImageType, InputImageType,
+                                                  StructuringElementType> ClosingFilterType;
+  typedef itk::SubtractImageFilter<InputImageType, InputImageType,
+                                   OutputImageType>                       ConvexFilterType;
+  typedef itk::SubtractImageFilter<OutputImageType, InputImageType,
+                                   OutputImageType>                      ConcaveFilterType;
+  typedef otb::GeodesicMorphologyLevelingFilter<InputImageType, OutputImageType,
+                                                OutputImageType>         LevelingFilterType;
 
   /** Pointers typedefs*/
-  typedef typename OpeningFilterType::Pointer OpeningFilterPointerType;
-  typedef typename ClosingFilterType::Pointer ClosingFilterPointerType;
+  typedef typename OpeningFilterType::Pointer  OpeningFilterPointerType;
+  typedef typename ClosingFilterType::Pointer  ClosingFilterPointerType;
   typedef typename LevelingFilterType::Pointer LevelingFilterPointerType;
-  typedef typename ConvexFilterType::Pointer ConvexFilterPointerType;
-  typedef typename ConcaveFilterType::Pointer ConcaveFilterPointerType;
+  typedef typename ConvexFilterType::Pointer   ConvexFilterPointerType;
+  typedef typename ConcaveFilterType::Pointer  ConcaveFilterPointerType;
 
   /** Radius of the structuring element */
-  itkSetMacro(Radius,RadiusType);
-  itkGetConstReferenceMacro(Radius,RadiusType);
+  itkSetMacro(Radius, RadiusType);
+  itkGetConstReferenceMacro(Radius, RadiusType);
 
   /**
    * Get the convex likehood map.
@@ -130,11 +136,11 @@ public:
   OutputImageType * GetConcaveMap(void);
 
   /** FullyConnected flag */
-  itkSetMacro(FullyConnected,bool);
-  itkGetMacro(FullyConnected,bool);
+  itkSetMacro(FullyConnected, bool);
+  itkGetMacro(FullyConnected, bool);
   /** Preserve intensities flag */
-  itkSetMacro(PreserveIntensities,bool);
-  itkGetMacro(PreserveIntensities,bool);
+  itkSetMacro(PreserveIntensities, bool);
+  itkGetMacro(PreserveIntensities, bool);
 
 protected:
   /** GenerateData */
@@ -142,13 +148,13 @@ protected:
   /** Constructor */
   GeodesicMorphologyDecompositionImageFilter();
   /** Destructor */
-  virtual ~GeodesicMorphologyDecompositionImageFilter() {};
+  virtual ~GeodesicMorphologyDecompositionImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  GeodesicMorphologyDecompositionImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GeodesicMorphologyDecompositionImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius of the structuring element */
   RadiusType m_Radius;
@@ -168,7 +174,7 @@ private:
   bool m_FullyConnected;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGeodesicMorphologyDecompositionImageFilter.txx"
 #endif

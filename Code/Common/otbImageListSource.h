@@ -33,18 +33,18 @@ namespace otb
  */
 template <class TOutputImage>
 class ITK_EXPORT ImageListSource
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
-  typedef ImageListSource                           Self;
-  typedef itk::ProcessObject                        Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ImageListSource               Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Type macro */
   itkNewMacro(Self);
   /** Creation through object factory macro */
-  itkTypeMacro(ImageListSource,itk::ProcessObject);
+  itkTypeMacro(ImageListSource, itk::ProcessObject);
   /** Data object pointer type */
   typedef itk::DataObject::Pointer DataObjectPointer;
   /** Template parameter typedef*/
@@ -65,8 +65,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageListSource(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageListSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // End namespace otb
 

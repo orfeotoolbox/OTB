@@ -31,7 +31,7 @@ namespace otb
 
 namespace Wavelet
 {
-enum Wavelet{
+enum Wavelet {
   HAAR = 0,
   DAUBECHIES4 = 1, DB4 = 1,
   DAUBECHIES6 = 2, DB6 = 2,
@@ -42,7 +42,7 @@ enum Wavelet{
   SPLINE_BIORTHOGONAL_4_4, // 7
   SYMLET8, // 8
   TotalNumberOfDefinedMotherWavelets
-};
+  };
 }
 
 /** \class WaveletGenerator
@@ -57,25 +57,25 @@ enum Wavelet{
  * exception if the template specialization is not defined
  * according to the wavelet ID.
  */
-template < Wavelet::Wavelet TMotherWaveletOperator >
+template <Wavelet::Wavelet TMotherWaveletOperator>
 class ITK_EXPORT WaveletGenerator
   : public itk::LightObject
 {
 public:
   /** Standard typedefs */
-  typedef WaveletGenerator                Self;
-  typedef itk::LightObject                Superclass;
-  typedef itk::SmartPointer< Self >       Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef WaveletGenerator              Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro( WaveletGenerator, LightObject );
+  itkTypeMacro(WaveletGenerator, LightObject);
 
   /** Typedef similar to itk::NeighborhoodOperator */
-  typedef std::vector< double > CoefficientVector;
+  typedef std::vector<double> CoefficientVector;
 
   /**
    * GetWaveletName
@@ -87,21 +87,21 @@ public:
    * GetLowPassCoefficientVector
    * By default (without template specification) it does nothing usable
    */
-  void GetLowPassCoefficientVector ( CoefficientVector & coeff ) const;
+  void GetLowPassCoefficientVector(CoefficientVector& coeff) const;
 
   /**
    * GetHighPassCoefficientVector
    * By default (without template specification) it does nothing usable
    */
-  void GetHighPassCoefficientVector ( CoefficientVector & coeff ) const;
+  void GetHighPassCoefficientVector(CoefficientVector& coeff) const;
 
 protected:
   WaveletGenerator() {}
   virtual ~WaveletGenerator() {}
 
 private:
-  WaveletGenerator( const Self& ); // not implemented
-  void operator=(const Self &); // not implemented
+  WaveletGenerator(const Self &);  // not implemented
+  void operator =(const Self&); // not implemented
 }; // end of class
 
 } // end of namespace otb
@@ -113,5 +113,3 @@ private:
 */
 
 #endif
-
-

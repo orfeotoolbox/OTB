@@ -35,16 +35,16 @@ namespace otb {
  * \sa ResampleImageFilter
  * \sa SubsampleImageRegionConstIterator
  */
-template < class TInputImage, class TOutputImage >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT DecimateImageFilter :
-  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef DecimateImageFilter Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef DecimateImageFilter                                Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,31 +59,31 @@ public:
                       TOutputImage::ImageDimension);
 
   /** Image typedef support. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage                         InputImageType;
   typedef typename InputImageType::RegionType InputImageRegionType;
 
-  typedef TOutputImage OutputImageType;
+  typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /** Set/Get the DecimateFactor */
-  itkGetMacro(DecimationFactor,unsigned int);
-  itkSetMacro(DecimationFactor,unsigned int);
+  itkGetMacro(DecimationFactor, unsigned int);
+  itkSetMacro(DecimationFactor, unsigned int);
 
 protected:
   DecimateImageFilter ()
-  {
+    {
     m_DecimationFactor = 1;
-  }
+    }
   virtual ~DecimateImageFilter() {}
 
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
   virtual void CallCopyOutputRegionToInputRegion
-    ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
@@ -92,17 +92,16 @@ protected:
 
   /** Allows multithreading */
   virtual void ThreadedGenerateData
-    ( const OutputImageRegionType & outputRegionForThread, int threadId );
+    (const OutputImageRegionType& outputRegionForThread, int threadId);
 
-  virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  DecimateImageFilter ( const Self & ); // purposely not implemented
-  void operator= ( const Self & ); // purposely not implemented
+  DecimateImageFilter (const Self &);   // purposely not implemented
+  void operator =(const Self&);    // purposely not implemented
 
   unsigned int m_DecimationFactor;
 }; // end of class
-
 
 } // end of namespace otb
 
@@ -110,7 +109,4 @@ private:
 #include "otbDecimateImageFilter.txx"
 #endif
 
-
 #endif
-
-

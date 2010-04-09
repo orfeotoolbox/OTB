@@ -26,58 +26,60 @@
 namespace otb
 {
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-::GenericMapProjection() : Superclass(SpaceDimension,ParametersDimension)
+::GenericMapProjection() : Superclass(SpaceDimension, ParametersDimension)
 {
   m_MapProjection = NULL;
   m_ProjectionRefWkt.clear();
-  reinstanciateProjection=true;
+  reinstanciateProjection = true;
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::~GenericMapProjection()
 {
   if (m_MapProjection != NULL)
-  {
+    {
     delete m_MapProjection;
-  }
+    }
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 typename GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OssimMapProjectionType*
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-::GetMapProjection ()
+::GetMapProjection()
 {
-  itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
+  itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((reinstanciateProjection) || (m_MapProjection == NULL))
-  {
+    {
     this->InstanciateProjection();
-  }
+    }
 
   return this->m_MapProjection;
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-const typename GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OssimMapProjectionType*
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
+const typename GenericMapProjection<Transform, TScalarType, NInputDimensions,
+                                    NOutputDimensions>::OssimMapProjectionType*
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-::GetMapProjection () const
+::GetMapProjection() const
 {
-  itkDebugMacro("returning MapProjection address " << this->m_MapProjection );
+  itkDebugMacro("returning MapProjection address " << this->m_MapProjection);
   if ((reinstanciateProjection) || (m_MapProjection == NULL))
-  {
-    itkExceptionMacro(<<"m_MapProjection not up-to-date, call InstanciateProjection() first");
-  }
+    {
+    itkExceptionMacro(<< "m_MapProjection not up-to-date, call InstanciateProjection() first");
+    }
 
   return this->m_MapProjection;
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 std::string
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::GetWkt()
@@ -85,70 +87,72 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
   ossimKeywordlist kwl;
   this->GetMapProjection()->saveState(kwl);
   ossimOgcWktTranslator wktTranslator;
-  std::string wkt;
+  std::string           wkt;
   wkt = wktTranslator.fromOssimKwl(kwl);
   return wkt;
 }
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 void
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::SetWkt(std::string projectionRefWkt)
 {
-  this->m_ProjectionRefWkt=projectionRefWkt;
+  this->m_ProjectionRefWkt = projectionRefWkt;
   reinstanciateProjection = true;
   this->InstanciateProjection();
   this->Modified();
 }
 
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 bool
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::InstanciateProjection()
 {
   if ((this->reinstanciateProjection) || (m_MapProjection == NULL))
-  {
-    ossimKeywordlist kwl;
+    {
+    ossimKeywordlist      kwl;
     ossimOgcWktTranslator wktTranslator;
 
     bool projectionInformationAvailable = wktTranslator.toOssimKwl(m_ProjectionRefWkt, kwl);
 
     if (!projectionInformationAvailable)
-    {
-      otbMsgDevMacro(<<"WARNING: Impossible to create the projection from string: "<< m_ProjectionRefWkt);
+      {
+      otbMsgDevMacro(<< "WARNING: Impossible to create the projection from string: " << m_ProjectionRefWkt);
       return false;
-    }
+      }
 
     //we don't want to have a ossimEquDistCylProjection here:
     //see discussion in May 2009 on ossim list;
     //a better solution might be available...
     if (std::string(kwl.find("type")) == "ossimEquDistCylProjection")
-    {
+      {
       otbMsgDevMacro(<< "WARNING: Not instanciating a ossimEquDistCylProjection");
       return false;
-    }
+      }
 
     m_MapProjection = ossimMapProjectionFactory::instance()->createProjection(kwl);
 
     this->reinstanciateProjection = false;
     return true;
-  }
+    }
   return false;
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 typename GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-::TransformPoint(const InputPointType & point) const
+::TransformPoint(const InputPointType& point) const
 {
   OutputPointType outputPoint;
 
 //     otbMsgDevMacro(<< "DirectionOfMapping: " << DirectionOfMapping);
   switch (DirectionOfMapping)
-  {
+    {
   case INVERSE:
-  {
+    {
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 
     //from "itk::point" to "ossim::ossimDpt"
@@ -156,58 +160,57 @@ GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions
 
     //map projection
     ossimGpt ossimGPoint;
-    ossimGPoint=this->GetMapProjection()->inverse(ossimDPoint);
-    ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84() );
+    ossimGPoint = this->GetMapProjection()->inverse(ossimDPoint);
+    ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84());
 //     otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_MapProjection->print(std::cout));
 
-    outputPoint[0]=ossimGPoint.lon;
-    outputPoint[1]=ossimGPoint.lat;
+    outputPoint[0] = ossimGPoint.lon;
+    outputPoint[1] = ossimGPoint.lat;
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
     if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
-    {
+      {
       outputPoint[2] = point[2];
-    }
+      }
     break;
-  }
+    }
   case FORWARD:
-  {
+    {
 //     otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << point[1] << "," << point[0] << ")");
     //from "itk::point" to "ossim::ossimGpt"
     ossimGpt ossimGPoint(point[1], point[0]);
 
     //map projection
     ossimDpt ossimDPoint;
-    ossimDPoint=this->GetMapProjection()->forward(ossimGPoint);
+    ossimDPoint = this->GetMapProjection()->forward(ossimGPoint);
 //     otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
-    outputPoint[0]=ossimDPoint.x;
-    outputPoint[1]=ossimDPoint.y;
+    outputPoint[0] = ossimDPoint.x;
+    outputPoint[1] = ossimDPoint.y;
 
 //     otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
     if ((InputPointType::PointDimension == 3) && (OutputPointType::PointDimension == 3))
-    {
+      {
       outputPoint[2] = point[2];
+      }
+    break;
     }
-    break;
-  }
   default:
-  {
-    itkExceptionMacro(<<"Model is INVERSE or FORWARD only !!");
+    {
+    itkExceptionMacro(<< "Model is INVERSE or FORWARD only !!");
     break;
-  }
-  }
+    }
+    }
 
   return outputPoint;
 }
 
-
-template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions,
+         unsigned int NOutputDimensions>
 void
 GenericMapProjection<Transform, TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintMap() const
 {
   std::cout << m_MapProjection->print(std::cout);
 }
-
 
 } // namespace otb
 

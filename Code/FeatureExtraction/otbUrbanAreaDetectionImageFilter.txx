@@ -81,14 +81,14 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
   // Threshold
   m_Thresholder->SetInsideValue(0);
   m_Thresholder->SetOutsideValue(1);
-  m_Thresholder->SetLowerThreshold( -10. );
-  m_Thresholder->SetUpperThreshold( m_ThresholdDensity );
+  m_Thresholder->SetLowerThreshold(-10.);
+  m_Thresholder->SetUpperThreshold(m_ThresholdDensity);
 
   // Apply the mask on the input image
   m_MultiplyFilter->SetInput1(this->GetInput());
 
   // Give a threshold to urbanAreaFilter
-  m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold( m_ThresholdValue );
+  m_UrbanAreaExtractionFilter->GetFunctor().SetLowerThreshold(m_ThresholdValue);
 
   // Progress accumulator
   itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
@@ -103,6 +103,5 @@ UrbanAreaDetectionImageFilter<TInputImage, TOutputImage, TFunction>
 }
 
 } // end namespace otb
-
 
 #endif

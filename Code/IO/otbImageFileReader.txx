@@ -59,7 +59,6 @@ ImageFileReader<TOutputImage>
 {
 }
 
-
 template <class TOutputImage>
 ImageFileReader<TOutputImage>
 ::~ImageFileReader()
@@ -73,14 +72,14 @@ void ImageFileReader<TOutputImage>
   Superclass::PrintSelf(os, indent);
 
   if (this->m_ImageIO)
-  {
+    {
     os << indent << "ImageIO: \n";
     this->m_ImageIO->Print(os, indent.GetNextIndent());
-  }
+    }
   else
-  {
+    {
     os << indent << "ImageIO: (null)" << "\n";
-  }
+    }
 
   os << indent << "UserSpecifiedImageIO flag: " << this->m_UserSpecifiedImageIO << "\n";
   os << indent << "m_FileName: " << this->m_FileName << "\n";
@@ -95,7 +94,7 @@ ImageFileReader<TOutputImage>
   typename TOutputImage::Pointer output = this->GetOutput();
 
   // allocate the output buffer
-  output->SetBufferedRegion( output->GetRequestedRegion() );
+  output->SetBufferedRegion(output->GetRequestedRegion());
   output->Allocate();
 
 //otbMsgDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
@@ -116,71 +115,68 @@ ImageFileReader<TOutputImage>
 
 //  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
 
-  itk::ImageIORegion::SizeType ioSize = ioRegion.GetSize();
+  itk::ImageIORegion::SizeType  ioSize = ioRegion.GetSize();
   itk::ImageIORegion::IndexType ioStart = ioRegion.GetIndex();
 
   /* Init IORegion with size or streaming size */
   SizeType dimSize;
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
-  {
+  for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
+    {
     if (i < this->m_ImageIO->GetNumberOfDimensions())
-    {
-      if ( !this->m_ImageIO->CanStreamRead() )
-        dimSize[i] = this->m_ImageIO->GetDimensions(i);
-      else
-        dimSize[i] = output->GetRequestedRegion().GetSize()[i];
-    }
+      {
+      if (!this->m_ImageIO->CanStreamRead()) dimSize[i] = this->m_ImageIO->GetDimensions(i);
+      else dimSize[i] = output->GetRequestedRegion().GetSize()[i];
+      }
     else
-    {
+      {
       // Number of dimensions in the output is more than number of dimensions
       // in the ImageIO object (the file).  Use default values for the size,
       // spacing, and origin for the final (degenerate) dimensions.
       dimSize[i] = 1;
+      }
     }
-  }
 
   for (unsigned int i = 0; i < dimSize.GetSizeDimension(); ++i)
-  {
+    {
     ioSize[i] = dimSize[i];
-  }
+    }
 
-  typedef typename TOutputImage::IndexType   IndexType;
+  typedef typename TOutputImage::IndexType IndexType;
   IndexType start;
-  if ( !this->m_ImageIO->CanStreamRead() )  start.Fill(0);
+  if (!this->m_ImageIO->CanStreamRead()) start.Fill(0);
   else start = output->GetRequestedRegion().GetIndex();
   for (unsigned int i = 0; i < start.GetIndexDimension(); ++i)
-  {
+    {
     ioStart[i] = start[i];
-  }
+    }
 
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
 
 //otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
-
   this->m_ImageIO->SetIORegion(ioRegion);
 
-  typedef itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType >  ConvertPixelTraits;
+  typedef itk::DefaultConvertPixelTraits<ITK_TYPENAME TOutputImage::IOPixelType> ConvertPixelTraits;
 
-  if ( this->m_ImageIO->GetComponentTypeInfo()
-       == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
-       && (this->m_ImageIO->GetNumberOfComponents()
-           == ConvertPixelTraits::GetNumberOfComponents()))
-  {
+  if (this->m_ImageIO->GetComponentTypeInfo()
+      == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
+      && (this->m_ImageIO->GetNumberOfComponents()
+          == ConvertPixelTraits::GetNumberOfComponents()))
+    {
     // allocate a buffer and have the ImageIO read directly into it
     this->m_ImageIO->Read(buffer);
     return;
-  }
+    }
   else // a type conversion is necessary
-  {
+    {
     // note: char is used here because the buffer is read in bytes
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
 
     // Adapte the image size with the region
     std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
-                                   * static_cast<std::streamoff>(region.GetNumberOfPixels());
+                             * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
     char * loadBuffer = new char[nbBytes];
 
@@ -188,10 +184,9 @@ ImageFileReader<TOutputImage>
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 
-    delete [] loadBuffer;
-  }
+    delete[] loadBuffer;
+    }
 }
-
 
 template <class TOutputImage>
 void
@@ -203,19 +198,18 @@ ImageFileReader<TOutputImage>
   // the ImageIO object cannot stream, then set the RequestedRegion to the
   // LargestPossibleRegion
   if (!this->m_ImageIO->CanStreamRead())
-  {
+    {
     if (out)
-    {
-      out->SetRequestedRegion( out->GetLargestPossibleRegion() );
-    }
+      {
+      out->SetRequestedRegion(out->GetLargestPossibleRegion());
+      }
     else
-    {
+      {
       throw itk::ImageFileReaderException(__FILE__, __LINE__,
                                           "Invalid output object type");
+      }
     }
-  }
 }
-
 
 template <class TOutputImage>
 void
@@ -225,61 +219,60 @@ ImageFileReader<TOutputImage>
 
   typename TOutputImage::Pointer output = this->GetOutput();
 
-  itkDebugMacro(<<"Reading file for GenerateOutputInformation()" << this->m_FileName);
+  itkDebugMacro(<< "Reading file for GenerateOutputInformation()" << this->m_FileName);
 
   // Check to see if we can read the file given the name or prefix
   //
-  if ( this->m_FileName == "" )
-  {
+  if (this->m_FileName == "")
+    {
     throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified");
-  }
+    }
 
   // Find real image file name
   // !!!!  Update FileName
   std::string lFileName;
-  bool found = GetGdalReadImageFileName(this->m_FileName,lFileName);
-  if ( found == false )
-  {
-    otbMsgDebugMacro( <<"Filename was NOT unknowed. May be reconize by a Image factory ! ");
-  }
+  bool        found = GetGdalReadImageFileName(this->m_FileName, lFileName);
+  if (found == false)
+    {
+    otbMsgDebugMacro(<< "Filename was NOT unknowed. May be reconize by a Image factory ! ");
+    }
   // Update FileName
   this->m_FileName = lFileName;
 
   std::string lFileNameOssimKeywordlist = this->m_FileName;
-
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   //
   this->TestFileExistanceAndReadability();
 
-  if ( this->m_UserSpecifiedImageIO == false ) //try creating via factory
-  {
-    this->m_ImageIO = ImageIOFactory::CreateImageIO( this->m_FileName.c_str(), itk::ImageIOFactory::ReadMode );
-  }
+  if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
+    {
+    this->m_ImageIO = ImageIOFactory::CreateImageIO(this->m_FileName.c_str(), itk::ImageIOFactory::ReadMode);
+    }
 
-  if ( this->m_ImageIO.IsNull() )
-  {
-    this->Print( std::cerr );
+  if (this->m_ImageIO.IsNull())
+    {
+    this->Print(std::cerr);
     itk::ImageFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << " Could not create IO object for file "
-    << this->m_FileName.c_str() << std::endl;
+        << this->m_FileName.c_str() << std::endl;
     msg << "  Tried to create one of the following:" << std::endl;
     std::list<itk::LightObject::Pointer> allobjects =
       itk::ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
     for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
          i != allobjects.end(); ++i)
-    {
+      {
       itk::ImageIOBase* io = dynamic_cast<itk::ImageIOBase*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl;
-    }
+      }
     msg << "  You probably failed to set a file suffix, or" << std::endl;
     msg << "    set the suffix to an unsupported type." << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
     return;
-  }
+    }
 
   // Got to allocate space for the image. Determine the characteristics of
   // the image.
@@ -290,36 +283,36 @@ ImageFileReader<TOutputImage>
 // THOMAS ceci n'est pas dans ITK !!
 //  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents());
 
-  SizeType dimSize;
-  double spacing[ TOutputImage::ImageDimension ];
-  double origin[ TOutputImage::ImageDimension ];
+  SizeType                             dimSize;
+  double                               spacing[TOutputImage::ImageDimension];
+  double                               origin[TOutputImage::ImageDimension];
   typename TOutputImage::DirectionType direction;
-  std::vector<double> axis;
+  std::vector<double>                  axis;
 
-  for (unsigned int i=0; i<TOutputImage::ImageDimension; ++i)
-  {
-    if ( i < this->m_ImageIO->GetNumberOfDimensions() )
+  for (unsigned int i = 0; i < TOutputImage::ImageDimension; ++i)
     {
+    if (i < this->m_ImageIO->GetNumberOfDimensions())
+      {
       dimSize[i] = this->m_ImageIO->GetDimensions(i);
       spacing[i] = this->m_ImageIO->GetSpacing(i);
       origin[i]  = this->m_ImageIO->GetOrigin(i);
 // Please note: direction cosines are stored as columns of the
 // direction matrix
       axis = this->m_ImageIO->GetDirection(i);
-      for (unsigned j=0; j<TOutputImage::ImageDimension; ++j)
-      {
+      for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
+        {
         if (j < this->m_ImageIO->GetNumberOfDimensions())
-        {
+          {
           direction[j][i] = axis[j];
-        }
+          }
         else
-        {
+          {
           direction[j][i] = 0.0;
+          }
         }
       }
-    }
     else
-    {
+      {
       // Number of dimensions in the output is more than number of dimensions
       // in the ImageIO object (the file).  Use default values for the size,
       // spacing, origin and direction for the final (degenerate) dimensions.
@@ -327,115 +320,113 @@ ImageFileReader<TOutputImage>
       spacing[i] = 1.0;
       origin[i] = 0.0;
       for (unsigned j = 0; j < TOutputImage::ImageDimension; ++j)
-      {
+        {
         if (i == j)
-        {
+          {
           direction[j][i] = 1.0;
-        }
+          }
         else
-        {
+          {
           direction[j][i] = 0.0;
+          }
         }
       }
     }
-  }
 
-  output->SetSpacing( spacing );     // Set the image spacing
-  output->SetOrigin( origin );       // Set the image origin
-  output->SetDirection( direction ); // Set the image direction cosines
+  output->SetSpacing(spacing);       // Set the image spacing
+  output->SetOrigin(origin);         // Set the image origin
+  output->SetDirection(direction);   // Set the image direction cosines
 
   // Trying to read ossim MetaData
-  bool hasMetaData = false;
-  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
+  bool             hasMetaData = false;
+  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2; // = new ossimKeywordlist();
 
   // Test the plugins factory
   /** Before, the pluginfactory was tested if the ossim one returned false.
-      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource 
-      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory 
+      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
+      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
       because the default include factory contains ossimQuickbirdTiffTileSource. */
   ossimProjection * projection = ossimplugins::ossimPluginProjectionFactory::instance()
-                    ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
+                                 ->createProjection(ossimFilename(lFileNameOssimKeywordlist.c_str()), 0);
 
   if (!projection)
     {
-      otbMsgDevMacro( <<"OSSIM Instantiate projection FAILED ! ");
+    otbMsgDevMacro(<< "OSSIM Instantiate projection FAILED ! ");
     }
   else
     {
-      otbMsgDevMacro( <<"OSSIM Instantiate projection SUCCESS ! ");
-      hasMetaData = projection->saveState(geom_kwl);
-      
-      // Free memory
-      delete projection;
-    }
-  
-  if (!hasMetaData)
-    {
-      // Add the radar factory
-      // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
-      
-      
-      ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
-                         ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
-      if (!handler)
-       {
-         otbMsgDevMacro( <<"OSSIM Open Image FAILED ! ");
-       }
-      
-      else
-       {
-         otbMsgDevMacro( <<"OSSIM Open Image SUCCESS ! ");
-         //     hasMetaData = handler->getImageGeometry(geom_kwl);
-         ossimProjection* projection = handler->getImageGeometry()->getProjection();
-         
-         if (projection)
-           {
-#ifdef OTB_USE_CURL
-           if (projection->getClassName() == "ossimTileMapModel")
-             {
-             //FIXME find a better way to do that
-             //we need to pass the depth information which in on the IO to the projection
-             //to be handle throught the kwl
-             typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
-             dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
-             }
-#endif
-           hasMetaData = projection->saveState(geom_kwl);
-//             delete projection; //FIXME find out where this should occur
-           }
-       }
-      // Free memory
-      delete handler;
-    }
-  
-  if (!hasMetaData)
-    {
-    otbMsgDevMacro( <<"OSSIM MetaData not present ! ");
-    }
-  else
-    {
-    otbMsgDevMacro( <<"OSSIM MetaData present ! ");
-    otbMsgDevMacro( << geom_kwl);
+    otbMsgDevMacro(<< "OSSIM Instantiate projection SUCCESS ! ");
+    hasMetaData = projection->saveState(geom_kwl);
 
+    // Free memory
+    delete projection;
+    }
+
+  if (!hasMetaData)
+    {
+    // Add the radar factory
+    // ossimImageHandlerRegistry::instance()->addFactory(ossimImageHandlerSarFactory::instance());
+
+    ossimImageHandler* handler = ossimImageHandlerRegistry::instance()
+                                 ->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
+    if (!handler)
+      {
+      otbMsgDevMacro(<< "OSSIM Open Image FAILED ! ");
+      }
+
+    else
+      {
+      otbMsgDevMacro(<< "OSSIM Open Image SUCCESS ! ");
+      //     hasMetaData = handler->getImageGeometry(geom_kwl);
+      ossimProjection* projection = handler->getImageGeometry()->getProjection();
+
+      if (projection)
+        {
+#ifdef OTB_USE_CURL
+        if (projection->getClassName() == "ossimTileMapModel")
+          {
+          //FIXME find a better way to do that
+          //we need to pass the depth information which in on the IO to the projection
+          //to be handle throught the kwl
+          typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
+          dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
+          }
+#endif
+        hasMetaData = projection->saveState(geom_kwl);
+//             delete projection; //FIXME find out where this should occur
+        }
+      }
+    // Free memory
+    delete handler;
+    }
+
+  if (!hasMetaData)
+    {
+    otbMsgDevMacro(<< "OSSIM MetaData not present ! ");
+    }
+  else
+    {
+    otbMsgDevMacro(<< "OSSIM MetaData present ! ");
+    otbMsgDevMacro(<< geom_kwl);
 
     // Update otb Keywordlist
     ImageKeywordlist otb_kwl;
-    otb_kwl.SetKeywordlist( geom_kwl );
- 
+    otb_kwl.SetKeywordlist(geom_kwl);
+
     // Update itk MetaData Dictionary
 
     itk::MetaDataDictionary& dict = this->m_ImageIO->GetMetaDataDictionary();
- 
-    itk::EncapsulateMetaData< ImageKeywordlist >(dict,
-        MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
- 
+
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict,
+                                               MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
     }
- 
+
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
- 
-  typedef typename TOutputImage::IndexType   IndexType;
+
+  typedef typename TOutputImage::IndexType IndexType;
 
   IndexType start;
   start.Fill(0);
@@ -445,13 +436,13 @@ ImageFileReader<TOutputImage>
   region.SetIndex(start);
 
 // THOMAS : ajout
-  // If a VectorImage, this requires us to set the
-  // VectorLength before allocate
-  if ( strcmp( output->GetNameOfClass(), "VectorImage" ) == 0 )
-  {
+// If a VectorImage, this requires us to set the
+// VectorLength before allocate
+  if (strcmp(output->GetNameOfClass(), "VectorImage") == 0)
+    {
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
-    AccessorFunctorType::SetVectorLength( output, this->m_ImageIO->GetNumberOfComponents() );
-  }
+    AccessorFunctorType::SetVectorLength(output, this->m_ImageIO->GetNumberOfComponents());
+    }
 
   output->SetLargestPossibleRegion(region);
 
@@ -465,95 +456,96 @@ ImageFileReader<TOutputImage>
 // Handle the curl case
 #ifdef OTB_USE_CURL
   // Test if the file a server name
-    if  (this->m_FileName[0]=='h'
-         && this->m_FileName[1]=='t'
-         && this->m_FileName[2]=='t'
-         && this->m_FileName[3]=='p')
+  if  (this->m_FileName[0] == 'h'
+       && this->m_FileName[1] == 't'
+       && this->m_FileName[2] == 't'
+       && this->m_FileName[3] == 'p')
+    {
+    // Set up a curl request
+    CURL *   curl;
+    CURLcode res;
+    curl = curl_easy_init();
+
+    // Set up the browser
+    std::string browser =
+      "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+
+    if (curl)
       {
-      // Set up a curl request
-      CURL *curl;
-      CURLcode res;
-      curl = curl_easy_init();
-           
-      // Set up the browser
-      std::string browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
-      
-      if (curl)
-  {
-  curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
-  curl_easy_setopt(curl, CURLOPT_URL,this->m_FileName.data());
-  // Set the dummy write function
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,&Self::curlDummyWriteFunction);
-  curl_easy_setopt(curl, CURLOPT_MAXFILESIZE,1);
+      curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
+      curl_easy_setopt(curl, CURLOPT_URL, this->m_FileName.data());
+      // Set the dummy write function
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::curlDummyWriteFunction);
+      curl_easy_setopt(curl, CURLOPT_MAXFILESIZE, 1);
 
-  // Perform requet
-  res = curl_easy_perform(curl);
+      // Perform requet
+      res = curl_easy_perform(curl);
 
-  if(res != 0 && res != 63) // 63 stands for filesize exceed
+      if (res != 0 && res != 63) // 63 stands for filesize exceed
+        {
+        itk::ImageFileReaderException e(__FILE__, __LINE__);
+        itk::OStringStream msg;
+        msg << "File name is an http address, but curl fails to connect to it "
+            << std::endl << "Filename = " << this->m_FileName
+            << std::endl << "Curl error code = " << res
+            << std::endl;
+        e.SetDescription(msg.str().c_str());
+        throw e;
+        }
+      return;
+      }
+    }
+#endif
+
+  // Test if the file exists.
+  if (!itksys::SystemTools::FileExists(this->m_FileName.c_str()))
     {
     itk::ImageFileReaderException e(__FILE__, __LINE__);
     itk::OStringStream msg;
-    msg <<"File name is an http address, but curl fails to connect to it "
+    msg << "The file doesn't exist. "
         << std::endl << "Filename = " << this->m_FileName
-        << std::endl << "Curl error code = "<<res
         << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
-    }
-  return;
-  }
-      }
-#endif
-    
-  // Test if the file exists.
-  if ( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
-  {
-    itk::ImageFileReaderException e(__FILE__, __LINE__);
-    itk::OStringStream msg;
-    msg <<"The file doesn't exist. "
-    << std::endl << "Filename = " << this->m_FileName
-    << std::endl;
-    e.SetDescription(msg.str().c_str());
-    throw e;
     return;
-  }
+    }
 
   // Test if the file can be open for reading access.
   //Only if m_FileName specify a filename (not a dirname)
-  if ( System::IsAFileName( this->m_FileName ) == true )
-  {
-    std::ifstream readTester;
-    readTester.open( this->m_FileName.c_str() );
-    if ( readTester.fail() )
+  if (System::IsAFileName(this->m_FileName) == true)
     {
+    std::ifstream readTester;
+    readTester.open(this->m_FileName.c_str());
+    if (readTester.fail())
+      {
       readTester.close();
       itk::OStringStream msg;
-      msg <<"The file couldn't be opened for reading. "
-      << std::endl << "Filename: " << this->m_FileName
-      << std::endl;
-      itk::ImageFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+      msg << "The file couldn't be opened for reading. "
+          << std::endl << "Filename: " << this->m_FileName
+          << std::endl;
+      itk::ImageFileReaderException e(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
       throw e;
       return;
 
-    }
+      }
     readTester.close();
-  }
+    }
 }
 
 template <class TOutputImage>
 bool
 ImageFileReader<TOutputImage>
-::GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName )
+::GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName)
 {
   std::vector<std::string> listFileSearch;
   listFileSearch.push_back("DAT_01.001");
-  listFileSearch.push_back("dat_01.001");// RADARSAT or SAR_ERS2
+  listFileSearch.push_back("dat_01.001"); // RADARSAT or SAR_ERS2
   listFileSearch.push_back("IMAGERY.TIF");
-  listFileSearch.push_back("imagery.tif");//For format SPOT5TIF
+  listFileSearch.push_back("imagery.tif"); //For format SPOT5TIF
 // Not recognised as a supported file format by GDAL.
 //        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
   listFileSearch.push_back("IMAG_01.DAT");
-  listFileSearch.push_back("imag_01.dat");//For format SPOT4
+  listFileSearch.push_back("imag_01.dat"); //For format SPOT4
 
   std::string str_FileName;
   bool fic_trouve(false);
@@ -561,53 +553,52 @@ ImageFileReader<TOutputImage>
   // Si c'est un repertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
   std::vector<std::string> listFileFind;
   listFileFind = System::Readdir(filename);
-  if ( listFileFind.empty() == false )
-  {
-    unsigned int cpt(0);
-    while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
+  if (listFileFind.empty() == false)
     {
+    unsigned int cpt(0);
+    while ((cpt < listFileFind.size()) && (fic_trouve == false))
+      {
       str_FileName = std::string(listFileFind[cpt]);
       for (unsigned int i = 0; i < listFileSearch.size(); ++i)
-      {
-        if (str_FileName.compare(listFileSearch[i]) == 0)
         {
-          GdalFileName = std::string(filename)+str_FileName;//listFileSearch[i];
-          fic_trouve=true;
+        if (str_FileName.compare(listFileSearch[i]) == 0)
+          {
+          GdalFileName = std::string(filename) + str_FileName; //listFileSearch[i];
+          fic_trouve = true;
+          }
         }
-      }
       cpt++;
+      }
     }
-  }
   else
-  {
+    {
     std::string strFileName(filename);
 
     std::string extension = System::GetExtension(strFileName);
-    if ( (extension=="HDR") || (extension=="hdr") )
-    {
+    if ((extension == "HDR") || (extension == "hdr"))
+      {
       //Supprime l'extension
       GdalFileName = System::GetRootName(strFileName);
-    }
+      }
 
     else
-    {
+      {
       // Sinon le filename est le nom du fichier a ouvrir
       GdalFileName = std::string(filename);
+      }
+    fic_trouve = true;
     }
-    fic_trouve=true;
-  }
-  otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
-  otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
-  return( fic_trouve );
+  otbMsgDevMacro(<< "lFileNameGdal : " << GdalFileName.c_str());
+  otbMsgDevMacro(<< "fic_trouve : " << fic_trouve);
+  return (fic_trouve);
 }
 template <class TOutputImage>
 size_t
 ImageFileReader<TOutputImage>
-::curlDummyWriteFunction(void*,size_t,size_t nmemb,void*)
+::curlDummyWriteFunction(void*, size_t, size_t nmemb, void*)
 {
   return nmemb;
 }
-
 
 } //namespace otb
 

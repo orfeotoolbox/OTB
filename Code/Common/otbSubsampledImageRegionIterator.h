@@ -37,14 +37,14 @@ namespace otb {
  * \ingroup ImageIterator
  * \sa SubsampledImageRegionConstIterator
  */
-template < class TImage >
+template <class TImage>
 class ITK_EXPORT SubsampledImageRegionIterator
-        : public SubsampledImageRegionConstIterator< TImage >
+  : public SubsampledImageRegionConstIterator<TImage>
 {
 public:
   /** Standard typedef. */
-  typedef SubsampledImageRegionIterator        Self;
-  typedef SubsampledImageRegionConstIterator< TImage > Superclass;
+  typedef SubsampledImageRegionIterator              Self;
+  typedef SubsampledImageRegionConstIterator<TImage> Superclass;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(SubsampledImageRegionConstIterator, SubsampledImageRegionConstIterator);
@@ -53,44 +53,44 @@ public:
                       Superclass::ImageIteratorDimension);
 
   // typedef redefinition from superclass
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::SizeType SizeType;
-  typedef typename Superclass::RegionType   RegionType;
-  typedef typename Superclass::OffsetType OffsetType;
-  typedef typename Superclass::ImageType ImageType;
-  typedef typename Superclass::PixelContainer         PixelContainer;
-  typedef typename Superclass::PixelContainerPointer  PixelContainerPointer;
-  typedef typename Superclass::InternalPixelType   InternalPixelType;
-  typedef typename Superclass::PixelType   PixelType;
-  typedef typename Superclass::AccessorType     AccessorType;
-  typedef typename Superclass::IndexValueType IndexValueType;
+  typedef typename Superclass::IndexType             IndexType;
+  typedef typename Superclass::SizeType              SizeType;
+  typedef typename Superclass::RegionType            RegionType;
+  typedef typename Superclass::OffsetType            OffsetType;
+  typedef typename Superclass::ImageType             ImageType;
+  typedef typename Superclass::PixelContainer        PixelContainer;
+  typedef typename Superclass::PixelContainerPointer PixelContainerPointer;
+  typedef typename Superclass::InternalPixelType     InternalPixelType;
+  typedef typename Superclass::PixelType             PixelType;
+  typedef typename Superclass::AccessorType          AccessorType;
+  typedef typename Superclass::IndexValueType        IndexValueType;
 
   // Constructors
   SubsampledImageRegionIterator()
-    : SubsampledImageRegionConstIterator< TImage > () { }
+    : SubsampledImageRegionConstIterator<TImage> () {}
 
-  SubsampledImageRegionIterator ( const ImageType *ptr, const RegionType &region )
-    : SubsampledImageRegionConstIterator< TImage > ( ptr, region )
-  {}
+  SubsampledImageRegionIterator (const ImageType * ptr, const RegionType &region)
+    : SubsampledImageRegionConstIterator<TImage> (ptr, region)
+    {}
 
-  SubsampledImageRegionIterator( const itk::ImageIterator<TImage> &it )
-    : SubsampledImageRegionConstIterator< TImage > ( it )
-  {}
+  SubsampledImageRegionIterator(const itk::ImageIterator<TImage> &it)
+    : SubsampledImageRegionConstIterator<TImage> (it)
+    {}
 
-  SubsampledImageRegionIterator( const itk::ImageConstIterator<TImage> &it )
-    : SubsampledImageRegionConstIterator< TImage > ( it )
-  {}
+  SubsampledImageRegionIterator(const itk::ImageConstIterator<TImage> &it)
+    : SubsampledImageRegionConstIterator<TImage> (it)
+    {}
 
   /** Set the current pixel value */
-  void Set( const PixelType & value) const
+  void Set(const PixelType& value) const
   {
-    this->m_PixelAccessorFunctor.Set( *(const_cast<InternalPixelType *>(
-      this->m_Buffer + this->m_Offset ) ), value );
+    this->m_PixelAccessorFunctor.Set(*(const_cast<InternalPixelType *>(
+                                         this->m_Buffer + this->m_Offset)), value);
   }
 
-  PixelType & Value(void)
+  PixelType& Value(void)
   {
-    return *(const_cast<InternalPixelType *>(this->m_Buffer+this->m_Offset));
+    return *(const_cast<InternalPixelType *>(this->m_Buffer + this->m_Offset));
   }
 
 }; // end of class
@@ -98,5 +98,3 @@ public:
 } // end of namespace otb
 
 #endif
-
-

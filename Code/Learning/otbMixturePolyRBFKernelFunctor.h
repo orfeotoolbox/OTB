@@ -39,32 +39,30 @@ namespace otb
  */
 
 class MixturePolyRBFKernelFunctor
-      : public GenericKernelFunctorBase
+  : public GenericKernelFunctorBase
 {
 public:
-  double operator() ( const svm_node * x, const svm_node * y,
-                      const svm_parameter & param ) const;
+  double operator ()(const svm_node * x, const svm_node * y,
+                     const svm_parameter& param) const;
 
   MixturePolyRBFKernelFunctor ();
-  virtual ~MixturePolyRBFKernelFunctor () { }
+  virtual ~MixturePolyRBFKernelFunctor () {}
 
   /** Specific implementation of \code Update \endcode to split m_MapParameters
    * into specific variables to speed up kernel evaluations */
-  void Update ();
+  void Update();
 
 protected:
   double m_Mixture;
   double m_GammaPoly;
   double m_CoefPoly;
-  int m_DegreePoly;
+  int    m_DegreePoly;
   double m_GammaRBF;
 
 private:
-  inline double powi ( double base, int times ) const;
+  inline double powi(double base, int times) const;
 };
 
 } // end of namespace otb
 
-
 #endif
-

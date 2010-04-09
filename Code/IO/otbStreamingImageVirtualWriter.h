@@ -46,26 +46,26 @@ namespace otb
  * \sa PersistentImageStreamingDecorator.
  */
 template <class TInputImage>
-class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage,TInputImage>
+class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingImageVirtualWriter  Self;
-  typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef StreamingImageVirtualWriter                       Self;
+  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingImageVirtualWriter,itk::ImageToImageFilter);
+  itkTypeMacro(StreamingImageVirtualWriter, itk::ImageToImageFilter);
 
   /** Some typedefs for the input and output. */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::Pointer    InputImagePointer;
   typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Streaming traits helper typedef */
   typedef StreamingTraits<InputImageType> StreamingTraitsType;
@@ -80,11 +80,11 @@ public:
   const InputImageType * GetInput(unsigned int idx);
 
   /** SmartPointer to a region splitting object */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef typename SplitterType::Pointer RegionSplitterPointer;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
+  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  void SetBufferMemorySize(unsigned long );
+  void SetBufferMemorySize(unsigned long);
 
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
   void SetBufferNumberOfLinesDivisions(unsigned long);
@@ -117,10 +117,8 @@ public:
   /** Get the helper class for dividing the input into chunks. */
   itkGetObjectMacro(RegionSplitter, SplitterType);
 
-
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
-
 
   virtual void GenerateInputRequestedRegion(void);
 
@@ -132,8 +130,8 @@ protected:
   virtual void GenerateData(void);
 
 private:
-  StreamingImageVirtualWriter(const StreamingImageVirtualWriter&); //purposely not implemented
-  void operator=(const StreamingImageVirtualWriter&); //purposely not implemented
+  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented
+  void operator =(const StreamingImageVirtualWriter&); //purposely not implemented
 
   /** This method calculate the number of stream divisions, by using the CalculationDivision type */
   unsigned long CalculateNumberOfStreamDivisions(void);

@@ -34,25 +34,24 @@ namespace otb
  * \ingroup Radiometry
  */
 class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
   typedef AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
+  typedef itk::ProcessObject                                           Superclass;
+  typedef itk::SmartPointer<Self>                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms,itk::ProcessObject);
+  itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms, itk::ProcessObject);
   /** Creation througth the object factory */
   itkNewMacro(Self);
   /** Template parameters typedefs */
-  typedef AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
+  typedef AtmosphericCorrectionParameters              AtmosphericCorrectionParametersType;
   typedef AtmosphericCorrectionParametersType::Pointer AtmosphericCorrectionParametersPointer;
-  typedef AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
-  typedef AtmosphericRadiativeTermsType::Pointer AtmosphericRadiativeTermsPointer;
+  typedef AtmosphericRadiativeTerms                    AtmosphericRadiativeTermsType;
+  typedef AtmosphericRadiativeTermsType::Pointer       AtmosphericRadiativeTermsPointer;
 
   /** Set the Atmospheric Correction Parameters input of this process object */
   void SetInput(const AtmosphericCorrectionParametersType *object);
@@ -63,7 +62,6 @@ public:
   DataObjectPointer MakeOutput(unsigned int);
   void GraftOutput(itk::DataObject *graft);
   void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
-
 
   /** Get the Atmospheric Radiative Terms output of this process object.  */
   virtual AtmosphericRadiativeTermsType * GetOutput(void);
@@ -81,8 +79,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

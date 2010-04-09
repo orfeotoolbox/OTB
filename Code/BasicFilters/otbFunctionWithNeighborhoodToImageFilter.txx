@@ -30,8 +30,8 @@ namespace otb
 /**
  * Constructor
  */
-template<class TInputImage, class TOutputImage, class TFunction >
-FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
+template<class TInputImage, class TOutputImage, class TFunction>
+FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
 ::FunctionWithNeighborhoodToImageFilter()
 {
   this->InPlaceOff();
@@ -43,45 +43,44 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
 
 }
 
-
-template <class TInputImage, class TOutputImage, class TFunction  >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
+FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
 
   InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
   if (inputPtr.IsNull())
-  {
-    itkExceptionMacro(<< "At least one input is missing."
-                      << " Input is missing :" << inputPtr.GetPointer();)
-
-  }
-  m_Function->SetInputImage(inputPtr);
-  for(unsigned int i = 0; i<static_cast<unsigned int>(this->GetNumberOfThreads()); ++i)
     {
-      FunctionPointerType func = m_Function;
-      m_FunctionList.push_back( func );
+    itkExceptionMacro(<< "At least one input is missing."
+                      << " Input is missing :" << inputPtr.GetPointer(); )
+
+    }
+  m_Function->SetInputImage(inputPtr);
+  for (unsigned int i = 0; i < static_cast<unsigned int>(this->GetNumberOfThreads()); ++i)
+    {
+    FunctionPointerType func = m_Function;
+    m_FunctionList.push_back(func);
     }
 }
 
-template <class TInputImage, class TOutputImage, class TFunction  >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
+FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
 ::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput());
+  InputImagePointer  inputPtr = const_cast<TInputImage *>(this->GetInput());
   OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !inputPtr || !outputPtr )
-  {
+  if (!inputPtr || !outputPtr)
+    {
     return;
-  }
+    }
   // get a copy of the input requested region (should equal the output
   // requested region)
   InputImageRegionType inputRequestedRegion = inputPtr->GetRequestedRegion();
@@ -90,43 +89,42 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   InputImageSizeType maxRad;
   maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
   maxRad[1] = m_Radius[0] + vcl_abs(m_Offset[1]);
-  inputRequestedRegion.PadByRadius( maxRad );
+  inputRequestedRegion.PadByRadius(maxRad);
 
   // crop the input requested region at the input's largest possible region
-  if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-  {
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+    {
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
     // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-    << "::GenerateInputRequestedRegion()";
+        << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-  }
+    }
 }
-
 
 /**
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
-template<class TInputImage, class TOutputImage, class TFunction >
+template<class TInputImage, class TOutputImage, class TFunction>
 void
-FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread,
-                        int threadId)
+FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage, TFunction>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
 {
   // We use dynamic_cast since inputs are stored as DataObjects.
   InputImageConstPointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
@@ -141,13 +139,13 @@ FunctionWithNeighborhoodToImageFilter<TInputImage,TOutputImage,TFunction>
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
-  while ( !inputIt.IsAtEnd() )
+  while (!inputIt.IsAtEnd())
     {
-      outputIt.Set( static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())) );
-      ++inputIt;
-      ++outputIt;
-      
-      progress.CompletedPixel(); // potential exception thrown here
+    outputIt.Set(static_cast<OutputImagePixelType>(m_FunctionList[threadId]->EvaluateAtIndex(inputIt.GetIndex())));
+    ++inputIt;
+    ++outputIt;
+
+    progress.CompletedPixel();   // potential exception thrown here
     }
 }
 } // end namespace otb

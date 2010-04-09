@@ -23,7 +23,6 @@
 namespace otb
 {
 
-
 /** \class PathFunction
  * \brief Evaluates a function of an image over a specific path.
  *
@@ -41,17 +40,17 @@ namespace otb
  * \ingroup PathFunction
  */
 template <class TInputPath,
-class TOutput>
+          class TOutput>
 class ITK_EXPORT PathFunction :
-      public itk::FunctionBase< TInputPath, TOutput >
+  public itk::FunctionBase<TInputPath, TOutput>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef PathFunction                                                 Self;
-  typedef itk::FunctionBase<  TInputPath,TOutput >                     Superclass;
-  typedef itk::SmartPointer<Self>                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                ConstPointer;
+  typedef PathFunction                           Self;
+  typedef itk::FunctionBase<TInputPath, TOutput> Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PathFunction, itk::FunctionBase);
@@ -66,7 +65,7 @@ public:
   typedef typename Superclass::OutputType OutputType;
 
   /** Set the input path. */
-  virtual void SetInputPath( const InputPathType * ptr );
+  virtual void SetInputPath(const InputPathType * ptr);
 
   /** Get the input path. */
   const InputPathType * GetInputPath() const
@@ -79,11 +78,11 @@ protected:
   virtual ~PathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  InputPathConstPointer  m_Path;
+  InputPathConstPointer m_Path;
 
 private:
-  PathFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PathFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

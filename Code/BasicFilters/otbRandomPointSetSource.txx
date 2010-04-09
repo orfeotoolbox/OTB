@@ -47,13 +47,13 @@ RandomPointSetSource<TOutputPointSet>
   outputPointSet->Initialize();
 
   PointsContainerPointer outPoints = outputPointSet->GetPoints();
-  outPoints->Reserve( m_NumberOfPoints );
+  outPoints->Reserve(m_NumberOfPoints);
 
   typename PointsContainerType::Iterator outputPoint = outPoints->Begin();
-  while(outputPoint != outPoints->End() )
+  while (outputPoint != outPoints->End())
     {
     PointType point;
-    for (unsigned int i=0; i<OutputPointSetType::PointDimension; ++i)
+    for (unsigned int i = 0; i < OutputPointSetType::PointDimension; ++i)
       {
       double v = m_Generator->GetVariateWithClosedRange(1.0);
       point[i] = (1.0 - v) * m_MinPoint[i] + v * m_MaxPoint[i];

@@ -43,39 +43,38 @@ namespace otb
  * \ingroup Threading
  * \ingroup Streamed
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageToIntensityImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageToIntensityImageFilter            Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef VectorImageToIntensityImageFilter                  Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(VectorImageToIntensityImageFilter,itk::ImageToImageFilter);
+  itkTypeMacro(VectorImageToIntensityImageFilter, itk::ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
-
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputPixelType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointerType;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::PixelType   OutputPixelType;
 
 protected:
   /** Constructor */
   VectorImageToIntensityImageFilter();
   /** Destructor */
-  virtual ~VectorImageToIntensityImageFilter() {};
+  virtual ~VectorImageToIntensityImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** VectorImageToIntensityImageFilter can be implemented as a multithreaded filter.
@@ -89,14 +88,14 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  VectorImageToIntensityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorImageToIntensityImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorImageToIntensityImageFilter.txx"
 #endif

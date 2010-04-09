@@ -30,48 +30,48 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT BSplinesInterpolateDeformationFieldGenerator
-      : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
+  : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
 public:
   /** Standard typedefs */
-  typedef BSplinesInterpolateDeformationFieldGenerator Self;
-  typedef PointSetToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef BSplinesInterpolateDeformationFieldGenerator                      Self;
+  typedef PointSetToDeformationFieldGenerator<TPointSet, TDeformationField> Superclass;
+  typedef itk::SmartPointer<Self>                                           Pointer;
+  typedef itk::SmartPointer<const Self>                                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(BSplinesInterpolateDeformationFieldGenerator,PointSetToDeformationFieldGenerator);
+  itkTypeMacro(BSplinesInterpolateDeformationFieldGenerator, PointSetToDeformationFieldGenerator);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PointSetType PointSetType;
-  typedef typename Superclass::PointSetPointerType PointSetPointerType;
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
+  typedef typename Superclass::PointSetType                PointSetType;
+  typedef typename Superclass::PointSetPointerType         PointSetPointerType;
+  typedef typename Superclass::DeformationFieldType        DeformationFieldType;
   typedef typename Superclass::DeformationFieldPointerType DeformationFieldPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename DeformationFieldType::PixelType PixelType;
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::PointType PointType;
-  typedef typename Superclass::IndexVectorType IndexVectorType;
-  typedef typename Superclass::DistanceVectorType DistanceVectorType;
+  typedef typename Superclass::IndexType                   IndexType;
+  typedef typename DeformationFieldType::PixelType         PixelType;
+  typedef typename Superclass::ValueType                   ValueType;
+  typedef typename Superclass::PointType                   PointType;
+  typedef typename Superclass::IndexVectorType             IndexVectorType;
+  typedef typename Superclass::DistanceVectorType          DistanceVectorType;
 
 protected:
   /** Constructor */
   BSplinesInterpolateDeformationFieldGenerator() {};
   /** Destructor */
-  virtual ~BSplinesInterpolateDeformationFieldGenerator() {};
+  virtual ~BSplinesInterpolateDeformationFieldGenerator() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
   virtual void GenerateData();
 
 private:
-  BSplinesInterpolateDeformationFieldGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BSplinesInterpolateDeformationFieldGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbBSplinesInterpolateDeformationFieldGenerator.txx"
 #endif

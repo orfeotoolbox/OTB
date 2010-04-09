@@ -39,12 +39,12 @@ namespace otb
  */
 template <class TImage, class TPath>
 class ITK_EXPORT PolyLineImageIterator
-      : public PolyLineImageConstIterator<TImage,TPath>
+  : public PolyLineImageConstIterator<TImage, TPath>
 {
 public:
   /** Standard typedefs */
-  typedef PolyLineImageIterator                    Self;
-  typedef PolyLineImageConstIterator<TImage,TPath> Superclass;
+  typedef PolyLineImageIterator                     Self;
+  typedef PolyLineImageConstIterator<TImage, TPath> Superclass;
 
   itkStaticConstMacro(ImageIteratorDimension, unsigned int,
                       TImage::ImageDimension);
@@ -71,32 +71,32 @@ public:
   typedef typename TImage::AccessorType          AccessorType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolyLineImageIterator,PolyLineImageConstIterator);
+  itkTypeMacro(PolyLineImageIterator, PolyLineImageConstIterator);
 
   /** Set the pixel value */
-  void Set(const PixelType & value)
+  void Set(const PixelType& value)
   {
     this->m_InternalImageIterator.Set(value);
   }
   /** Return a reference to the pixel
    * This method will provide the fastest access to pixel
    * data, but it will NOT support ImageAdaptors. */
-  PixelType & Value(void)
+  PixelType& Value(void)
   {
     return this->m_InternalImageIterator.Value();
   }
-  Self &operator=(const Self& it)
+  Self & operator =(const Self& it)
   {
-    this->Superclass::operator=(it);
+    this->Superclass::operator =(it);
     return *this;
   }
 
   /** Constructor establishes an iterator to walk along a line */
-  PolyLineImageIterator(ImageType *imagePtr,PathType * pathPtr)
-      : Superclass(imagePtr,pathPtr) {};
+  PolyLineImageIterator(ImageType * imagePtr, PathType * pathPtr)
+    : Superclass(imagePtr, pathPtr) {};
   /** Default Destructor. */
-  virtual ~PolyLineImageIterator() {};
+  virtual ~PolyLineImageIterator() {}
 };
-}// End namespace otb
+} // End namespace otb
 
 #endif

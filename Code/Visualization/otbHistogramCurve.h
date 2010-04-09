@@ -36,14 +36,14 @@ class HistogramCurve
 {
 public:
   /** Standard class typedefs */
-  typedef HistogramCurve                       Self;
-  typedef Curve2D                              Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef HistogramCurve                Self;
+  typedef Curve2D                       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Standard class macros
   itkNewMacro(Self);
-  itkTypeMacro(HistogramCurve,Curve2D);
+  itkTypeMacro(HistogramCurve, Curve2D);
 
   /// Superclass typedefs
   typedef typename Superclass::AffineTransformType AffineTransformType;
@@ -51,15 +51,15 @@ public:
   typedef typename Superclass::PointType           PointType;
   typedef typename Superclass::VectorType          VectorType;
   typedef typename Superclass::ColorType           ColorType;
-  typedef itk::ContinuousIndex<double,2>           ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 2>          ContinuousIndexType;
 
   /// Histogram typedef
-  typedef THistogram                               HistogramType;
-  typedef typename HistogramType::Pointer          HistogramPointerType;
-  typedef typename HistogramType::Iterator         HistogramIteratorType;
+  typedef THistogram                       HistogramType;
+  typedef typename HistogramType::Pointer  HistogramPointerType;
+  typedef typename HistogramType::Iterator HistogramIteratorType;
 
   /// Render the curve according to display extent and axis characteristics
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
+  virtual void  Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform);
 
   /// Pre-computation
   virtual void BeforeRendering();
@@ -71,12 +71,12 @@ public:
   virtual PointType GetMaximum();
 
   /** Set/Get the histogram */
-  itkSetObjectMacro(Histogram,HistogramType);
-  itkGetObjectMacro(Histogram,HistogramType);
+  itkSetObjectMacro(Histogram, HistogramType);
+  itkGetObjectMacro(Histogram, HistogramType);
 
   /** Set/Get the histogram color */
-  itkSetMacro(HistogramColor,ColorType);
-  itkGetMacro(HistogramColor,ColorType);
+  itkSetMacro(HistogramColor, ColorType);
+  itkGetMacro(HistogramColor, ColorType);
 
 protected:
   /** Constructor */
@@ -86,22 +86,22 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   HistogramCurve(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   // The histogram to render
   HistogramPointerType m_Histogram;
 
   // The histogram color
-  ColorType            m_HistogramColor;
+  ColorType m_HistogramColor;
 
-  PointType            m_Minimum;
-  PointType            m_Maximum;
-  double               m_BinWidth;
+  PointType m_Minimum;
+  PointType m_Maximum;
+  double    m_BinWidth;
 
 }; // end class
 } // end namespace otb
@@ -111,5 +111,3 @@ private:
 #endif
 
 #endif
-
-

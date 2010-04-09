@@ -21,8 +21,8 @@ namespace otb
 {
 
 GlWidget
-::GlWidget() : Fl_Gl_Window(0,0,0,0), m_Identifier(), m_UseGlAcceleration(false),
-               m_BackgroundColor()
+::GlWidget() : Fl_Gl_Window(0, 0, 0, 0), m_Identifier(), m_UseGlAcceleration(false),
+  m_BackgroundColor()
 {
   m_Identifier = "Default";
 
@@ -42,19 +42,19 @@ GlWidget::~GlWidget()
 void GlWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call the superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
   // Display information about the widget
-  os<<indent<<"Widget "<<m_Identifier<<": "<<std::endl;
+  os << indent << "Widget " << m_Identifier << ": " << std::endl;
   #ifndef OTB_GL_USE_ACCEL
-  os<<indent<<indent<<"OpenGl acceleration is not allowed."<<std::endl;
+  os << indent << indent << "OpenGl acceleration is not allowed." << std::endl;
   #else
-  if(m_UseGlAcceleration)
+  if (m_UseGlAcceleration)
     {
-    os<<indent<<indent<<"OpenGl acceleration is allowed and enabled."<<std::endl;
+    os << indent << indent << "OpenGl acceleration is allowed and enabled." << std::endl;
     }
   else
     {
-    os<<indent<<indent<<"OpenGl acceleration is allowed but disabled."<<std::endl;
+    os << indent << indent << "OpenGl acceleration is allowed but disabled." << std::endl;
     }
   #endif
 }
@@ -63,23 +63,25 @@ void GlWidget::draw()
 {
   // Check if Gl acceleration mode is correct
   #ifndef OTB_GL_USE_ACCEL
-  if(m_UseGlAcceleration)
+  if (m_UseGlAcceleration)
     {
-    itkWarningMacro(<<"Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON. For now, disabling Gl acceleration.");
-    m_UseGlAcceleration=false;
+    itkWarningMacro(
+      <<
+      "Gl acceleration enabled but not allowed. Consider rebuilding with OTB_USE_GL_ACCEL to ON. For now, disabling Gl acceleration.");
+    m_UseGlAcceleration = false;
     }
   #endif
 
   // Set up Gl environement
   if (!this->valid())
-  {
+    {
     valid(1);
     glLoadIdentity();
-    glViewport(0,0,w(),h());
-    glClearColor(m_BackgroundColor[0],m_BackgroundColor[1], m_BackgroundColor[2],m_BackgroundColor[3]);
+    glViewport(0, 0, w(), h());
+    glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], m_BackgroundColor[3]);
     glShadeModel(GL_FLAT);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  }
+    }
   glClear(GL_COLOR_BUFFER_BIT);    //this clears and paints to black
   glMatrixMode(GL_MODELVIEW);      //clear previous 3D draw params
   glLoadIdentity();
@@ -95,28 +97,28 @@ void GlWidget::resize(int x, int y, int w, int h)
   // so we'd rather avoid event flooding here)
   bool reportMove   = false;
   bool reportResize = false;
-  if(this->x() != x || this->y() != y)
+  if (this->x() != x || this->y() != y)
     {
     reportMove = true;
     }
 
-  if(this->w() != w || this->h() != h)
+  if (this->w() != w || this->h() != h)
     {
     reportResize = true;
     }
 
   // First call the superclass implementation
-  Fl_Gl_Window::resize(x,y,w,h);
+  Fl_Gl_Window::resize(x, y, w, h);
   // If There is a controller
-  if(m_Controller.IsNotNull())
+  if (m_Controller.IsNotNull())
     {
-    if(reportMove)
+    if (reportMove)
       {
-      m_Controller->HandleWidgetMove(m_Identifier,x,y);
+      m_Controller->HandleWidgetMove(m_Identifier, x, y);
       }
-    if(reportResize)
+    if (reportResize)
       {
-      m_Controller->HandleWidgetResize(m_Identifier,w,h);
+      m_Controller->HandleWidgetResize(m_Identifier, w, h);
       }
     }
 }
@@ -125,13 +127,13 @@ int GlWidget::handle(int event)
 {
   // Call superclass implementation
   int resp = Fl_Widget::handle(event);
-  
+
   // Check if there is a controller
   // Avoid processing hide events, since it causes segfault (the
   // destructor of the Fl class generates hide events).
-  if(m_Controller.IsNotNull() && event != FL_HIDE)
+  if (m_Controller.IsNotNull() && event != FL_HIDE)
     {
-    resp = m_Controller->HandleWidgetEvent(m_Identifier,event);
+    resp = m_Controller->HandleWidgetEvent(m_Identifier, event);
     }
   return resp;
 }
@@ -143,7 +145,7 @@ GlWidget::PointType GlWidget::GetMousePosition()
   index[0] = Fl::event_x();
   index[1] = Fl::event_y();
   // Flip the y axis
-  index[1]= this->h()-index[1];
+  index[1] = this->h() - index[1];
   return index;
 }
 }

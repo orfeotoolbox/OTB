@@ -25,21 +25,20 @@ FileName::FileName() : ossimFilename()
 {}
 
 FileName::FileName(const FileName& src)
-    : ossimFilename(src)
+  : ossimFilename(src)
 {}
 
 FileName::FileName(const ossimFilename& src)
-    : ossimFilename(src)
+  : ossimFilename(src)
 {}
 
 FileName::FileName(const ossimString& src)
-    : ossimFilename(src)
+  : ossimFilename(src)
 {}
 
 FileName::FileName(const char* src)
-    : ossimFilename(src)
+  : ossimFilename(src)
 {}
-
 
 FileName FileName::ObtainFileNameWithNoExtension() const
 {

@@ -27,12 +27,12 @@
 namespace otb
 {
 
-template< class TListSample,
-          class THistogramMeasurement,
-          class TFrequencyContainer>
-ListSampleToVariableDimensionHistogramGenerator< TListSample,
-                                THistogramMeasurement,
-                                TFrequencyContainer >
+template<class TListSample,
+         class THistogramMeasurement,
+         class TFrequencyContainer>
+ListSampleToVariableDimensionHistogramGenerator<TListSample,
+                                                THistogramMeasurement,
+                                                TFrequencyContainer>
 ::ListSampleToVariableDimensionHistogramGenerator()
 {
   m_Histogram = HistogramType::New();
@@ -40,33 +40,32 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   m_AutoMinMax = true;
 }
 
-
-template< class TListSample,
-          class THistogramMeasurement,
-          class TFrequencyContainer >
+template<class TListSample,
+         class THistogramMeasurement,
+         class TFrequencyContainer>
 void
-ListSampleToVariableDimensionHistogramGenerator< TListSample,
-                                THistogramMeasurement,
-                                TFrequencyContainer >
+ListSampleToVariableDimensionHistogramGenerator<TListSample,
+                                                THistogramMeasurement,
+                                                TFrequencyContainer>
 ::GenerateData()
 {
-  otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Entering");
+  otbMsgDebugMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Entering");
   // TODO : Sanity checks
-  if(m_Sizes.GetSize() != m_List->GetMeasurementVectorSize())
+  if (m_Sizes.GetSize() != m_List->GetMeasurementVectorSize())
     {
     itkExceptionMacro("Sample list measurement vectors and histogram bin sizes vector have different dimensions !");
     }
 
-  if(!m_AutoMinMax)
+  if (!m_AutoMinMax)
     {
-    if(m_HistogramMin.GetSize() != m_List->GetMeasurementVectorSize())
-    {
-    itkExceptionMacro("Sample list measurement vectors and histogram min have different dimensions !");
-    }
-    if(m_HistogramMax.GetSize() != m_List->GetMeasurementVectorSize())
-    {
-    itkExceptionMacro("Sample list measurement vectors and histogram max have different dimensions !");
-    }
+    if (m_HistogramMin.GetSize() != m_List->GetMeasurementVectorSize())
+      {
+      itkExceptionMacro("Sample list measurement vectors and histogram min have different dimensions !");
+      }
+    if (m_HistogramMax.GetSize() != m_List->GetMeasurementVectorSize())
+      {
+      itkExceptionMacro("Sample list measurement vectors and histogram max have different dimensions !");
+      }
     }
 
   typename TListSample::MeasurementVectorType lower(m_List->GetMeasurementVectorSize());
@@ -78,22 +77,22 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
   // must test for the list size to avoid making FindSampleBound() segfault.
   // Also, the min and max can't be found automatically in that case. We can
   // only return an empty histogram
-  if( m_AutoMinMax && m_List->Size() != 0 )
+  if (m_AutoMinMax && m_List->Size() != 0)
     {
     FindSampleBound(m_List, m_List->Begin(),
                     m_List->End(), lower, upper);
     float margin;
 
-    for ( unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i )
+    for (unsigned int i = 0; i < m_List->GetMeasurementVectorSize(); ++i)
       {
-      if ( !itk::NumericTraits< THistogramMeasurement >::is_integer )
+      if (!itk::NumericTraits<THistogramMeasurement>::is_integer)
         {
         margin =
-          ( (THistogramMeasurement)(upper[i] - lower[i]) /
-            (THistogramMeasurement) m_Sizes[i] ) /
+          ((THistogramMeasurement) (upper[i] - lower[i]) /
+           (THistogramMeasurement) m_Sizes[i]) /
           (THistogramMeasurement) m_MarginalScale;
         h_upper[i] = (THistogramMeasurement) (upper[i] + margin);
-        if(h_upper[i] <= upper[i])
+        if (h_upper[i] <= upper[i])
           {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
@@ -107,8 +106,8 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
       else
         {
         h_upper[i] = ((THistogramMeasurement) upper[i]) +
-          itk::NumericTraits< THistogramMeasurement >::One;
-        if(h_upper[i] <= upper[i])
+                     itk::NumericTraits<THistogramMeasurement>::One;
+        if (h_upper[i] <= upper[i])
           {
           // an overflow has occurred therefore set upper to upper
           h_upper[i] = upper[i];
@@ -119,7 +118,7 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
           // computation and clearly the user intended to include min and max.
           }
         }
-      h_lower[i] = ( THistogramMeasurement) lower[i];
+      h_lower[i] = (THistogramMeasurement) lower[i];
       }
     }
   else
@@ -130,26 +129,28 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
 
   // initialize the Histogram object using the sizes and
   // the upper and lower bound from the FindSampleBound function
-  
-  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Initializing histogram with (sizes= "<<m_Sizes<<", lower = "<<h_lower<<", upper = "<<h_upper<<")");
+
+  otbMsgDevMacro(
+    << "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Initializing histogram with (sizes= " <<
+    m_Sizes << ", lower = " << h_lower << ", upper = " << h_upper << ")");
   m_Histogram->Initialize(m_Sizes, h_lower, h_upper);
-  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Histogram initialized");
+  otbMsgDevMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Histogram initialized");
   typename TListSample::ConstIterator iter = m_List->Begin();
   typename TListSample::ConstIterator last = m_List->End();
   typename HistogramType::IndexType index(m_List->GetMeasurementVectorSize());
   typename TListSample::MeasurementVectorType lvector(m_List->GetMeasurementVectorSize());
   typename HistogramType::MeasurementVectorType hvector(m_List->GetMeasurementVectorSize());
   unsigned int i;
-  
-  otbMsgDevMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Filling the histogram");
+
+  otbMsgDevMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Filling the histogram");
   while (iter != last)
     {
     lvector = iter.GetMeasurementVector();
-    for ( i = 0; i < m_List->GetMeasurementVectorSize(); ++i)
+    for (i = 0; i < m_List->GetMeasurementVectorSize(); ++i)
       {
       hvector[i] = (THistogramMeasurement) lvector[i];
       }
-    m_Histogram->GetIndex(hvector,index);
+    m_Histogram->GetIndex(hvector, index);
 
     if (!m_Histogram->IsIndexOutOfBounds(index))
       {
@@ -164,28 +165,26 @@ ListSampleToVariableDimensionHistogramGenerator< TListSample,
     ++iter;
     }
 
-  otbMsgDebugMacro(<<"ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Leaving");
+  otbMsgDebugMacro(<< "ListSampleToVariableDimensionHistogramGenerator::GenerateData(): Leaving");
 }
 
-template< class TListSample,
-          class THistogramMeasurement,
-          class TFrequencyContainer >
+template<class TListSample,
+         class THistogramMeasurement,
+         class TFrequencyContainer>
 void
-ListSampleToVariableDimensionHistogramGenerator< TListSample,
-                                THistogramMeasurement,
-                                TFrequencyContainer >
+ListSampleToVariableDimensionHistogramGenerator<TListSample,
+                                                THistogramMeasurement,
+                                                TFrequencyContainer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
   os << indent << "AutoMinMax: " << m_AutoMinMax << std::endl;
   os << indent << "Sizes: " << m_Sizes << std::endl;
-  os << indent << "MarginalScale: "<< m_MarginalScale << std::endl;
-  os << indent << "HistogramMin: "<< m_HistogramMin << std::endl;
-  os << indent << "HistogramMax: "<< m_HistogramMax << std::endl;
+  os << indent << "MarginalScale: " << m_MarginalScale << std::endl;
+  os << indent << "HistogramMin: " << m_HistogramMin << std::endl;
+  os << indent << "HistogramMax: " << m_HistogramMax << std::endl;
 }
 
 } // end of namespace itk
 
 #endif
-
-

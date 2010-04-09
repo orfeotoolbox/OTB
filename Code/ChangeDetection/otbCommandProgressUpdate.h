@@ -30,22 +30,20 @@ class CommandProgressUpdate : public itk::Command
 {
 public:
   typedef  CommandProgressUpdate   Self;
-  typedef  itk::Command             Superclass;
-  typedef  itk::SmartPointer<Self>  Pointer;
-  itkNewMacro( Self );
+  typedef  itk::Command            Superclass;
+  typedef  itk::SmartPointer<Self> Pointer;
+  itkNewMacro(Self);
 protected:
-  CommandProgressUpdate() {};
+  CommandProgressUpdate() {}
 public:
-  typedef   const TFilter   *           FilterPointer;
+  typedef   const TFilter * FilterPointer;
 
-  void Execute(itk::Object *caller, const itk::EventObject & event);
+  void Execute(itk::Object *caller, const itk::EventObject& event);
 
-  void Execute(const itk::Object * object, const itk::EventObject & event);
+  void Execute(const itk::Object * object, const itk::EventObject& event);
 };
 
-
 } // end namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbCommandProgressUpdate.txx"

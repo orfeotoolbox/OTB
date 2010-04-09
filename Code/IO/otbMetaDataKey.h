@@ -30,7 +30,6 @@
 
 #include "gdal.h"
 
-
 namespace otb
 {
 /** \class MetaDataKey
@@ -46,7 +45,7 @@ public:
   typedef MetaDataKey Self;
 
   MetaDataKey() {};
-  virtual ~MetaDataKey() {};
+  virtual ~MetaDataKey() {}
 
   static const std::string DriverShortNameKey;
   static const std::string DriverLongNameKey;
@@ -78,7 +77,7 @@ public:
   static const std::string VectorDataKeywordlistDelimiterKey;
 
   enum  KeyType
-  {
+    {
     TSTRING,
     TENTIER,
     TDOUBLE,
@@ -86,7 +85,7 @@ public:
     TVECTOR,
     TOSSIMKEYWORDLIST,
     TVECTORDATAKEYWORDLIST,
-  };
+    };
   /*
   typedef struct
   {
@@ -108,16 +107,14 @@ public:
 
   };
 
-
   KeyType GetKeyType(std::string name);
 
-  typedef std::vector<double> VectorType;
+  typedef std::vector<double>               VectorType;
   typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 
 private:
-  MetaDataKey(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  MetaDataKey(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -131,7 +128,6 @@ class ITK_EXPORT OTB_GCP
 {
 public:
 
-
   /** Unique identifier, often numeric */
   std::string m_Id;
 
@@ -139,24 +135,23 @@ public:
   std::string m_Info;
 
   /** Pixel (x) location of GCP on raster */
-  double      m_GCPCol;
+  double m_GCPCol;
 
   /** Line (y) location of GCP on raster */
-  double      m_GCPRow;
+  double m_GCPRow;
 
   /** X position of GCP in georeferenced space */
-  double      m_GCPX;
+  double m_GCPX;
 
   /** Y position of GCP in georeferenced space */
-  double      m_GCPY;
+  double m_GCPY;
 
   /** Elevation of GCP, or zero if not known */
-  double      m_GCPZ;
-
+  double m_GCPZ;
 
   OTB_GCP() {};
-  OTB_GCP( const GDAL_GCP * psGCP )
-  {
+  OTB_GCP(const GDAL_GCP * psGCP)
+    {
     m_Id = std::string(psGCP->pszId);
     m_Info = std::string(psGCP->pszInfo);
     m_GCPRow = psGCP->dfGCPLine;
@@ -164,10 +159,21 @@ public:
     m_GCPX = psGCP->dfGCPX;
     m_GCPY = psGCP->dfGCPY;
     m_GCPZ = psGCP->dfGCPZ;
-  }
-  virtual ~OTB_GCP() {};
+    }
+  virtual ~OTB_GCP() {}
 
-  OTB_GCP(const OTB_GCP& pGcp)
+  OTB_GCP(const OTB_GCP &pGcp)
+    {
+    m_Id = pGcp.m_Id;
+    m_Info = pGcp.m_Info;
+    m_GCPCol = pGcp.m_GCPCol;
+    m_GCPRow = pGcp.m_GCPRow;
+    m_GCPX = pGcp.m_GCPX;
+    m_GCPY = pGcp.m_GCPY;
+    m_GCPZ = pGcp.m_GCPZ;
+    }
+
+  void operator =(const OTB_GCP& pGcp)
   {
     m_Id = pGcp.m_Id;
     m_Info = pGcp.m_Info;
@@ -178,18 +184,7 @@ public:
     m_GCPZ = pGcp.m_GCPZ;
   }
 
-  void operator=(const OTB_GCP& pGcp)
-  {
-    m_Id = pGcp.m_Id;
-    m_Info = pGcp.m_Info;
-    m_GCPCol = pGcp.m_GCPCol;
-    m_GCPRow = pGcp.m_GCPRow;
-    m_GCPX = pGcp.m_GCPX;
-    m_GCPY = pGcp.m_GCPY;
-    m_GCPZ = pGcp.m_GCPZ;
-  }
-
-  void Print(std::ostream& os)const
+  void Print(std::ostream& os) const
   {
     os << "   GCP Id = " << this->m_Id << std::endl;
     os << "   GCP Info =  " << this->m_Info << std::endl;
@@ -200,6 +195,5 @@ public:
 };
 
 } // end namespace otb
-
 
 #endif

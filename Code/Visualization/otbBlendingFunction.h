@@ -43,15 +43,15 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** type macro */
-  itkTypeMacro(BlendingFunction,Object);
+  itkTypeMacro(BlendingFunction, Object);
 
   /** PixelType macros */
-  typedef TInputRGBPixel1              InputPixel1Type;
-  typedef TInputRGBPixel2              InputPixel2Type;
-  typedef TOutputRGBPixel              OutputRGBPixelType;
+  typedef TInputRGBPixel1 InputPixel1Type;
+  typedef TInputRGBPixel2 InputPixel2Type;
+  typedef TOutputRGBPixel OutputRGBPixelType;
 
   /** Evaluate method  */
-  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2) = 0;
+  virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2) = 0;
 
 protected:
   /** Constructor */
@@ -61,11 +61,9 @@ protected:
 
 private:
   BlendingFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace Function
 } // end namepsace otb
 
 #endif
-
-

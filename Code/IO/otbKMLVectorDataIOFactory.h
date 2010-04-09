@@ -29,10 +29,10 @@ template <class TData> class ITK_EXPORT KMLVectorDataIOFactory : public itk::Obj
 {
 public:
   /** Standard class typedefs. */
-  typedef KMLVectorDataIOFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef KMLVectorDataIOFactory        Self;
+  typedef itk::ObjectFactoryBase        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -56,14 +56,12 @@ protected:
   virtual ~KMLVectorDataIOFactory();
 
 private:
-  KMLVectorDataIOFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  KMLVectorDataIOFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
-
 } // end namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKMLVectorDataIOFactory.txx"

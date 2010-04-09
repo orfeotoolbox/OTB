@@ -28,53 +28,53 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT NNearestPointsLinearInterpolateDeformationFieldGenerator
-      : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
+  : public PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
 public:
   /** Standard typedefs */
-  typedef NNearestPointsLinearInterpolateDeformationFieldGenerator Self;
-  typedef PointSetToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef NNearestPointsLinearInterpolateDeformationFieldGenerator          Self;
+  typedef PointSetToDeformationFieldGenerator<TPointSet, TDeformationField> Superclass;
+  typedef itk::SmartPointer<Self>                                           Pointer;
+  typedef itk::SmartPointer<const Self>                                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(NNearestPointsLinearInterpolateDeformationFieldGenerator,PointSetToDeformationFieldGenerator);
+  itkTypeMacro(NNearestPointsLinearInterpolateDeformationFieldGenerator, PointSetToDeformationFieldGenerator);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PointSetType PointSetType;
-  typedef typename Superclass::PointSetPointerType PointSetPointerType;
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
+  typedef typename Superclass::PointSetType                PointSetType;
+  typedef typename Superclass::PointSetPointerType         PointSetPointerType;
+  typedef typename Superclass::DeformationFieldType        DeformationFieldType;
   typedef typename Superclass::DeformationFieldPointerType DeformationFieldPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename DeformationFieldType::PixelType PixelType;
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::PointType PointType;
-  typedef typename Superclass::IndexVectorType IndexVectorType;
-  typedef typename Superclass::DistanceVectorType DistanceVectorType;
+  typedef typename Superclass::IndexType                   IndexType;
+  typedef typename DeformationFieldType::PixelType         PixelType;
+  typedef typename Superclass::ValueType                   ValueType;
+  typedef typename Superclass::PointType                   PointType;
+  typedef typename Superclass::IndexVectorType             IndexVectorType;
+  typedef typename Superclass::DistanceVectorType          DistanceVectorType;
 
-  itkSetMacro(NumberOfPoints,unsigned int);
-  itkGetMacro(NumberOfPoints,unsigned int);
+  itkSetMacro(NumberOfPoints, unsigned int);
+  itkGetMacro(NumberOfPoints, unsigned int);
 
 protected:
   /** Constructor */
   NNearestPointsLinearInterpolateDeformationFieldGenerator() {};
   /** Destructor */
-  virtual ~NNearestPointsLinearInterpolateDeformationFieldGenerator() {};
+  virtual ~NNearestPointsLinearInterpolateDeformationFieldGenerator() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
   virtual void GenerateData();
 
 private:
-  NNearestPointsLinearInterpolateDeformationFieldGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  NNearestPointsLinearInterpolateDeformationFieldGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   unsigned int m_NumberOfPoints;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbNNearestPointsLinearInterpolateDeformationFieldGenerator.txx"
 #endif

@@ -40,18 +40,18 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT EntropyTextureFunctor :
-public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
+  public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   EntropyTextureFunctor(){};
-  virtual ~EntropyTextureFunctor(){};
+  virtual ~EntropyTextureFunctor(){}
 
-  typedef TScalarInputPixelType                  InputScalarType;
-  typedef TScalarOutputPixelType                 OutputScalarType;
+  typedef TScalarInputPixelType                                             InputScalarType;
+  typedef TScalarOutputPixelType                                            OutputScalarType;
   typedef TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
-  typedef typename Superclass::OffsetType        OffsetType;
-  typedef typename Superclass::RadiusType        RadiusType;
-  typedef typename Superclass::NeighborhoodType  NeighborhoodType;
+  typedef typename Superclass::OffsetType                                   OffsetType;
+  typedef typename Superclass::RadiusType                                   RadiusType;
+  typedef typename Superclass::NeighborhoodType                             NeighborhoodType;
   /*
   typedef TIterInput                            IterType;
   typedef TOutput                               OutputType;
@@ -60,25 +60,23 @@ public:
   typedef itk::Neighborhood<InternalPixelType,::itk::GetImageDimension<ImageType>::ImageDimension>    NeighborhoodType;
   */
 
-  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     this->ComputeJointHistogram(neigh, neighOff);
-    double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-    double areaInv = 1/area;
+    double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
+    double areaInv = 1 / area;
     double out = 0.;
-      for (unsigned r = 0; r<this->GetHisto().size(); ++r)
+    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
+      {
+      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
         {
-          for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
-            {
-              double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
-              if (p != 0)
-                out += (p * vcl_log(p));
-            }
+        double p = static_cast<double>(this->GetHisto()[r][s]) * areaInv;
+        if (p != 0) out += (p * vcl_log(p));
         }
-      if (out != 0.)
-        out = -(out);
+      }
+    if (out != 0.) out = -(out);
 
-      return out;
+    return out;
   }
 };
 
@@ -86,4 +84,3 @@ public:
 } // namespace otb
 
 #endif
-

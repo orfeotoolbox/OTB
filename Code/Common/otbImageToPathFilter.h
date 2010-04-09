@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToPathFilter
-      : public itk::PathSource<TOutputPath>
+  : public itk::PathSource<TOutputPath>
 {
 public:
   /// Standard class typedefs
@@ -41,7 +41,7 @@ public:
   /// Method for creation through the object factory
   itkNewMacro(Self);
   /// Runtime information
-  itkTypeMacro(PathToImageFilter,PathSource);
+  itkTypeMacro(PathToImageFilter, PathSource);
   /// template parameters typedefs
   typedef          TInputImage             InputImageType;
   typedef typename InputImageType::Pointer InputImagePointerType;
@@ -55,14 +55,14 @@ public:
 
 protected:
   ImageToPathFilter();
-  virtual ~ImageToPathFilter() {};
+  virtual ~ImageToPathFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageToPathFilter(const Self&);
-  void operator=(const Self&);
+  ImageToPathFilter(const Self &);
+  void operator =(const Self&);
 };
-}// end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToPathFilter.txx"

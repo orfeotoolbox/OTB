@@ -31,30 +31,29 @@ namespace otb
  */
 template <class TLabel, class TPrecision = float>
 class ITK_EXPORT RCC8VertexWithRegionCenter
-      : public RCC8VertexBase<TLabel>
+  : public RCC8VertexBase<TLabel>
 {
 public:
   /** Standard class typedefs */
-  typedef RCC8VertexWithRegionCenter Self;
-  typedef otb::RCC8VertexBase<TLabel>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef RCC8VertexWithRegionCenter    Self;
+  typedef otb::RCC8VertexBase<TLabel>   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8VertexWithRegionCenter,RCC8VertexBase);
+  itkTypeMacro(RCC8VertexWithRegionCenter, RCC8VertexBase);
   /** Input image associated typedefs*/
   typedef TLabel LabelType;
   /** Precision  typedef */
   typedef TPrecision PrecisionType;
   /** char* vector attributes */
-  typedef  typename Superclass::AttributesMapType  AttributesMapType;
+  typedef  typename Superclass::AttributesMapType AttributesMapType;
 
-
-  itkGetMacro(RegionCenterXCoordinate,PrecisionType);
-  itkSetMacro(RegionCenterXCoordinate,PrecisionType);
-  itkGetMacro(RegionCenterYCoordinate,PrecisionType);
-  itkSetMacro(RegionCenterYCoordinate,PrecisionType);
+  itkGetMacro(RegionCenterXCoordinate, PrecisionType);
+  itkSetMacro(RegionCenterXCoordinate, PrecisionType);
+  itkGetMacro(RegionCenterYCoordinate, PrecisionType);
+  itkSetMacro(RegionCenterYCoordinate, PrecisionType);
   /**
    * Set the VertexWithRegionCenter attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
@@ -70,7 +69,7 @@ protected:
   /** Constructor */
   RCC8VertexWithRegionCenter();
   /** Desctructor */
-  ~RCC8VertexWithRegionCenter() {};
+  ~RCC8VertexWithRegionCenter() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

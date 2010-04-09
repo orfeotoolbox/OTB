@@ -26,13 +26,13 @@ namespace otb
 StandardFilterWatcher
 ::StandardFilterWatcher(itk::ProcessObject* process,
                         const char *comment)
-    : FilterWatcherBase(process, comment)
+  : FilterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
 }
 
 StandardFilterWatcher
-::StandardFilterWatcher( const StandardFilterWatcher& watch)
+::StandardFilterWatcher(const StandardFilterWatcher& watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -40,7 +40,7 @@ StandardFilterWatcher
 
 void
 StandardFilterWatcher
-::operator=(const StandardFilterWatcher &watch)
+::operator =(const StandardFilterWatcher& watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -51,30 +51,30 @@ StandardFilterWatcher
 ::ShowProgress()
 {
   if (m_Process)
-  {
-     int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
-     int nbStars = static_cast<int>(m_Process->GetProgress()*m_StarsCount);
-     int nbBlanks = m_StarsCount - nbStars;
+    {
+    int progressPercent = static_cast<int>(m_Process->GetProgress() * 100);
+    int nbStars = static_cast<int>(m_Process->GetProgress() * m_StarsCount);
+    int nbBlanks = m_StarsCount - nbStars;
 
-     if(nbBlanks < 0)
-       {
-       nbBlanks = 0;
-       }
+    if (nbBlanks < 0)
+      {
+      nbBlanks = 0;
+      }
 
-     if(nbStars > m_StarsCount)
-       {
-       nbStars = m_StarsCount;
-       }
+    if (nbStars > m_StarsCount)
+      {
+      nbStars = m_StarsCount;
+      }
 
-     if(progressPercent > 100)
-       {
-       progressPercent = 100;
-       }
+    if (progressPercent > 100)
+      {
+      progressPercent = 100;
+      }
 
-     std::string stars(nbStars,'*');
-     std::string blanks(nbBlanks,' ');
-     std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks<< "]" << std::flush;
-  }
+    std::string stars(nbStars, '*');
+    std::string blanks(nbBlanks, ' ');
+    std::cout << "\rProcessing progress: " << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+    }
 }
 
 void
@@ -90,9 +90,9 @@ void
 StandardFilterWatcher
 ::EndFilter()
 {
-   m_TimeProbe.Stop();
-   std::cout << std::endl << "Filter took "
-             << m_TimeProbe.GetMeanTime()
-             << " seconds." << std::endl;
+  m_TimeProbe.Stop();
+  std::cout << std::endl << "Filter took "
+            << m_TimeProbe.GetMeanTime()
+            << " seconds." << std::endl;
 }
 } // end namespace otb

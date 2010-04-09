@@ -34,15 +34,15 @@ namespace otb
    *
    * \ingroup GISTableFilter
  */
-template <class TInputGISTable, class TOutputGISTable >
+template <class TInputGISTable, class TOutputGISTable>
 class ITK_EXPORT GISTableToGISTableFilter : public otb::GISTableSource<TOutputGISTable>
 {
 public:
   /** Standard class typedefs. */
-  typedef GISTableToGISTableFilter  Self;
-  typedef otb::GISTableSource<TOutputGISTable>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef GISTableToGISTableFilter             Self;
+  typedef otb::GISTableSource<TOutputGISTable> Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -51,29 +51,27 @@ public:
   itkTypeMacro(GISTableToGISTableFilter, GISTableSource);
 
   /** Some typedefs. */
-  typedef TInputGISTable InputGISTableType;
-  typedef TOutputGISTable OutputGISTableType;
+  typedef TInputGISTable                        InputGISTableType;
+  typedef TOutputGISTable                       OutputGISTableType;
   typedef typename TInputGISTable::ConstPointer InputGISTablePointer;
-  typedef typename TOutputGISTable::Pointer OutputGISTablePointer;
+  typedef typename TOutputGISTable::Pointer     OutputGISTablePointer;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
 
-
-  virtual void SetInput( const InputGISTableType *input);
+  virtual void SetInput(const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
-
 
 protected:
   /** Constructor */
   GISTableToGISTableFilter();
   /** Destructor */
-  virtual ~GISTableToGISTableFilter() {};
+  virtual ~GISTableToGISTableFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  GISTableToGISTableFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GISTableToGISTableFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

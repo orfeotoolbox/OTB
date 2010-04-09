@@ -18,7 +18,6 @@
 #ifndef __otbGeodesicMorphologyLevelingFilter_h
 #define __otbGeodesicMorphologyLevelingFilter_h
 
-
 #include "itkTernaryFunctorImageFilter.h"
 
 namespace otb
@@ -36,30 +35,30 @@ class LevelingFunctor
 {
 public:
   /// Constructor
-  LevelingFunctor() {};
+  LevelingFunctor() {}
   /// Destructor
-  virtual ~LevelingFunctor() {};
+  virtual ~LevelingFunctor() {}
 
-  inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
+  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
   {
     TOutput result;
 
-    if (convexPixel>concavePixel)
-    {
-      result = static_cast<TOutput>(pixel-convexPixel);
-    }
-    else if (convexPixel<concavePixel)
-    {
-      result = static_cast<TOutput>(concavePixel+pixel);
-    }
+    if (convexPixel > concavePixel)
+      {
+      result = static_cast<TOutput>(pixel - convexPixel);
+      }
+    else if (convexPixel < concavePixel)
+      {
+      result = static_cast<TOutput>(concavePixel + pixel);
+      }
     else
-    {
+      {
       result = static_cast<TOutput>(pixel);
-    }
+      }
     return result;
   }
 };
-}// end namespace Functor
+} // end namespace Functor
 
 /** \class GeodesicMorphologyLevelingFilter
  *  \brief This filter performs the leveling operation defined in the documentation of
@@ -70,28 +69,28 @@ public:
  */
 template <class TInputImage, class TInputMaps, class TOutputImage>
 class ITK_EXPORT GeodesicMorphologyLevelingFilter
-      : public itk::TernaryFunctorImageFilter<TInputImage,TInputImage,
-      TInputImage,TOutputImage,
-      Functor::LevelingFunctor<typename TInputImage::PixelType,
-      typename TInputMaps::PixelType,
-      typename TOutputImage::PixelType> >
+  : public itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
+                                          TInputImage, TOutputImage,
+                                          Functor::LevelingFunctor<typename TInputImage::PixelType,
+                                                                   typename TInputMaps::PixelType,
+                                                                   typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
-  typedef GeodesicMorphologyLevelingFilter            Self;
-  typedef   itk::TernaryFunctorImageFilter<TInputImage,TInputImage,
-  TInputImage,TOutputImage,
-  Functor::LevelingFunctor<typename TInputImage::PixelType,
-  typename TInputMaps::PixelType,
-  typename TOutputImage::PixelType> >Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef GeodesicMorphologyLevelingFilter Self;
+  typedef   itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
+                                           TInputImage, TOutputImage,
+                                           Functor::LevelingFunctor<typename TInputImage::PixelType,
+                                                                    typename TInputMaps::PixelType,
+                                                                    typename TOutputImage::PixelType> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(GeodesicMorphologyLevelingFilter,TernaryFunctorImageFilter);
+  itkTypeMacro(GeodesicMorphologyLevelingFilter, TernaryFunctorImageFilter);
 
   /**
    * Set the convex membership image.
@@ -119,16 +118,16 @@ protected:
   /** Constructor */
   GeodesicMorphologyLevelingFilter() {};
   /** Destructor */
-  virtual ~GeodesicMorphologyLevelingFilter() {};
+  virtual ~GeodesicMorphologyLevelingFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
-  GeodesicMorphologyLevelingFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GeodesicMorphologyLevelingFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

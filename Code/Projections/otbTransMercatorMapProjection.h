@@ -30,29 +30,29 @@ namespace otb
  *
  */
 template <InverseOrForwardTransformationEnum transform>
-class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform>
+class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection, transform>
 {
-public :
+public:
 
   /** Standard class typedefs. */
-  typedef TransMercatorMapProjection                 Self;
-  typedef MapProjection<ossimTransMercatorProjection, transform>  Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef TransMercatorMapProjection                             Self;
+  typedef MapProjection<ossimTransMercatorProjection, transform> Superclass;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
 
-  typedef typename Superclass::ScalarType           ScalarType;
-  typedef itk::Point<ScalarType,2>                InputPointType;
-  typedef itk::Point<ScalarType,2>               OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( TransMercatorMapProjection, MapProjection );
+  itkTypeMacro(TransMercatorMapProjection, MapProjection);
   virtual void SetFalseEasting(double falseEasting);
   virtual void SetFalseNorthing(double falseNorthing);
   virtual void SetScaleFactor(double scaleFactor);
-  virtual void SetParameters(double falseEasting,double falseNorthing, double scaleFactor);
+  virtual void SetParameters(double falseEasting, double falseNorthing, double scaleFactor);
   virtual void SetDefaults();
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
@@ -62,12 +62,11 @@ protected:
   TransMercatorMapProjection();
   virtual ~TransMercatorMapProjection();
 
-private :
-  TransMercatorMapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);               //purposely not implemented
+private:
+  TransMercatorMapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);               //purposely not implemented
 
 };
-
 
 } // namespace otb
 

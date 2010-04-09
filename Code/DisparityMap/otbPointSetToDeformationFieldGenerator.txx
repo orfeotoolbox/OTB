@@ -47,7 +47,7 @@ void
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::SetPointSet(const TPointSet * pointset)
 {
-  this->itk::ProcessObject::SetNthInput(0,const_cast<PointSetType *>(pointset));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<PointSetType *>(pointset));
 }
 /**
  * Get the pointset containing the disparity.
@@ -66,7 +66,7 @@ void
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::GenerateOutputInformation(void)
 {
-  DeformationFieldPointerType outputPtr = this->GetOutput();
+  DeformationFieldPointerType               outputPtr = this->GetOutput();
   typename DeformationFieldType::RegionType largest;
   largest.SetSize(m_OutputSize);
   IndexType index;
@@ -92,41 +92,41 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
   typedef Functor::DistanceComparisonFunctor ComparisonFunctorType;
   DistanceVectorType distanceVector;
-  IndexVectorType indexVector;
-  IndexVectorType sortVector;
-  unsigned int i =  0;
-  unsigned int j = 0;
+  IndexVectorType    indexVector;
+  IndexVectorType    sortVector;
+  unsigned int       i =  0;
+  unsigned int       j = 0;
 
   typedef typename PointSetType::PointsContainer::ConstIterator PointSetIteratorType;
-  typedef typename PointSetType::PointsContainer PointsContainerType;
+  typedef typename PointSetType::PointsContainer                PointsContainerType;
   PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();
-  for (;it!=this->GetPointSet()->GetPoints()->End();++it)
-  {
-    PointType p;
-    p[0]=it.Value()[0];
-    p[1]=it.Value()[1];
-    if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
+  for (; it != this->GetPointSet()->GetPoints()->End(); ++it)
     {
+    PointType p;
+    p[0] = it.Value()[0];
+    p[1] = it.Value()[1];
+    if (vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0]) >= m_MetricThreshold)
+      {
 
-      distanceVector.push_back(EuclideanDistance(index,p));
+      distanceVector.push_back(EuclideanDistance(index, p));
       sortVector.push_back(i);
       indexVector.push_back(j);
       ++i;
-    }
+      }
     ++j;
-  }
+    }
 
   ComparisonFunctorType comp;
   comp.SetDistanceVector(distanceVector);
-  sort(sortVector.begin(),sortVector.end(),comp);
+  sort(sortVector.begin(), sortVector.end(), comp);
 
   // building output vector
-  unsigned int nbElements = (n<indexVector.size() ? n : indexVector.size());
+  unsigned int    nbElements = (n < indexVector.size() ? n : indexVector.size());
   IndexVectorType output;
-  for (i=0;i<nbElements;++i)
-  {
+  for (i = 0; i < nbElements; ++i)
+    {
     output.push_back(indexVector[sortVector[i]]);
-  }
+    }
   return output;
 }
 
@@ -138,7 +138,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   PointType pprime;
   // our point are expressed in index and not in physical coordinates
   //this->GetOutput()->TransformIndexToPhysicalPoint(index,pprime);
-  return vcl_sqrt(vcl_pow(index[0]-p[0],2)+vcl_pow(index[1]-p[1],2));
+  return vcl_sqrt(vcl_pow(index[0] - p[0], 2) + vcl_pow(index[1] - p[1], 2));
 }
 /**
  * PrintSelf Method

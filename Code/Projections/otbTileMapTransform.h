@@ -43,46 +43,45 @@ namespace otb
  *  \brief to do
  **/
 
-
 template <InverseOrForwardTransformationEnum TTransformDirection,
-class TScalarType = double,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
-class ITK_EXPORT TileMapTransform: public itk::Transform<TScalarType,       // Data type for scalars
-      NInputDimensions,  // Number of dimensions in the input space
-      NOutputDimensions> // Number of dimensions in the output space
+          class TScalarType = double,
+          unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT TileMapTransform : public itk::Transform<TScalarType,       // Data type for scalars
+                                                          NInputDimensions, // Number of dimensions in the input space
+                                                          NOutputDimensions> // Number of dimensions in the output space
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef TileMapTransform                          Self;
-  typedef itk::Transform< TScalarType,
-            NInputDimensions,  NOutputDimensions >  Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef TileMapTransform Self;
+  typedef itk::Transform<TScalarType,
+                         NInputDimensions,  NOutputDimensions>  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
   typedef ossimTileMapModel                         OssimTileMapTransformType;
-  typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
-  typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
+  typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
+  typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( TileMapTransform, Transform );
+  itkTypeMacro(TileMapTransform, Transform);
 
   typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TTransformDirection);
+  itkStaticConstMacro(DirectionOfMapping, DirectionOfMappingEnumType, TTransformDirection);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
   void SetLevel(unsigned int level);
   unsigned int GetLevel() const;
 
-  OutputPointType TransformPoint(const InputPointType &point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const;
   virtual InputPointType Origin();
 
   virtual void PrintMap() const;
@@ -98,9 +97,9 @@ protected:
   virtual ~TileMapTransform();
   OssimTileMapTransformType* m_TileMapTransform;
 
-private :
-  TileMapTransform(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  TileMapTransform(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // namespace otb

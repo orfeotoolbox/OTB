@@ -40,39 +40,39 @@ namespace otb
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT BSplinesInterpolateTransformDeformationFieldGenerator
-      : public PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField>
+  : public PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField>
 {
 public:
   /** Standard typedefs */
-  typedef BSplinesInterpolateTransformDeformationFieldGenerator Self;
-  typedef PointSetWithTransformToDeformationFieldGenerator<TPointSet,TDeformationField> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef BSplinesInterpolateTransformDeformationFieldGenerator                          Self;
+  typedef PointSetWithTransformToDeformationFieldGenerator<TPointSet, TDeformationField> Superclass;
+  typedef itk::SmartPointer<Self>                                                        Pointer;
+  typedef itk::SmartPointer<const Self>                                                  ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(BSplinesInterpolateTransformDeformationFieldGenerator,PointSetWithTransformsToDeformationFieldGenerator);
+  itkTypeMacro(BSplinesInterpolateTransformDeformationFieldGenerator, PointSetWithTransformsToDeformationFieldGenerator);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PointSetType PointSetType;
-  typedef typename Superclass::PointSetPointerType PointSetPointerType;
-  typedef typename Superclass::DeformationFieldType DeformationFieldType;
+  typedef typename Superclass::PointSetType                PointSetType;
+  typedef typename Superclass::PointSetPointerType         PointSetPointerType;
+  typedef typename Superclass::DeformationFieldType        DeformationFieldType;
   typedef typename Superclass::DeformationFieldPointerType DeformationFieldPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename DeformationFieldType::PixelType PixelType;
-  typedef typename Superclass::ValueType ValueType;
-  typedef typename Superclass::PointType PointType;
-  typedef typename Superclass::IndexVectorType IndexVectorType;
-  typedef typename Superclass::DistanceVectorType DistanceVectorType;
-  typedef typename Superclass::ParametersType ParametersType;
+  typedef typename Superclass::IndexType                   IndexType;
+  typedef typename DeformationFieldType::PixelType         PixelType;
+  typedef typename Superclass::ValueType                   ValueType;
+  typedef typename Superclass::PointType                   PointType;
+  typedef typename Superclass::IndexVectorType             IndexVectorType;
+  typedef typename Superclass::DistanceVectorType          DistanceVectorType;
+  typedef typename Superclass::ParametersType              ParametersType;
 
   /** Filters definition */
-  typedef itk::Vector<ValueType,2> PointSetDataType;
-  typedef otb::Image<PointSetDataType,DeformationFieldType::ImageDimension> InternalImageType;
-  typedef itk::PointSet<PointSetDataType,PointSetType::PointDimension> InternalPointSetType;
-  typedef itk::BSplineScatteredDataPointSetToImageFilter<InternalPointSetType,InternalImageType>
+  typedef itk::Vector<ValueType, 2>                                          PointSetDataType;
+  typedef otb::Image<PointSetDataType, DeformationFieldType::ImageDimension> InternalImageType;
+  typedef itk::PointSet<PointSetDataType, PointSetType::PointDimension>      InternalPointSetType;
+  typedef itk::BSplineScatteredDataPointSetToImageFilter<InternalPointSetType, InternalImageType>
   SPlineInterpolateFilterType;
   typedef typename SPlineInterpolateFilterType::Pointer SPlineInterpolateFilterPointerType;
 
@@ -87,18 +87,18 @@ public:
    */
   void RemoveAngularParameter(unsigned int index);
 
-  itkSetMacro(SplineOrder,unsigned int);
-  itkGetMacro(SplineOrder,unsigned int);
-  itkSetMacro(NumberOfControlPoints,unsigned int);
-  itkGetMacro(NumberOfControlPoints,unsigned int);
-  itkSetMacro(NumberOfLevels,unsigned int);
-  itkGetMacro(NumberOfLevels,unsigned int);
+  itkSetMacro(SplineOrder, unsigned int);
+  itkGetMacro(SplineOrder, unsigned int);
+  itkSetMacro(NumberOfControlPoints, unsigned int);
+  itkGetMacro(NumberOfControlPoints, unsigned int);
+  itkSetMacro(NumberOfLevels, unsigned int);
+  itkGetMacro(NumberOfLevels, unsigned int);
 
 protected:
   /** Constructor */
   BSplinesInterpolateTransformDeformationFieldGenerator();
   /** Destructor */
-  virtual ~BSplinesInterpolateTransformDeformationFieldGenerator() {};
+  virtual ~BSplinesInterpolateTransformDeformationFieldGenerator() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
@@ -113,8 +113,8 @@ protected:
   bool IsAngular(unsigned int index);
 
 private:
-  BSplinesInterpolateTransformDeformationFieldGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BSplinesInterpolateTransformDeformationFieldGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   IndexVectorType m_AngularParameters;
 
@@ -122,7 +122,7 @@ private:
   unsigned int m_NumberOfControlPoints;
   unsigned int m_NumberOfLevels;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbBSplinesInterpolateTransformDeformationFieldGenerator.txx"
 #endif

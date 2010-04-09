@@ -27,8 +27,8 @@
 namespace otb
 {
 // TODO: Check memory allocation in this class
-template <class TValue,class TLabel>
-SVMModel<TValue,TLabel>::SVMModel()
+template <class TValue, class TLabel>
+SVMModel<TValue, TLabel>::SVMModel()
 {
   // Default parameters
   this->SetSVMType(C_SVC);
@@ -56,18 +56,18 @@ SVMModel<TValue,TLabel>::SVMModel()
   this->Initialize();
 }
 
-template <class TValue,class TLabel>
-SVMModel<TValue,TLabel>::~SVMModel()
+template <class TValue, class TLabel>
+SVMModel<TValue, TLabel>::~SVMModel()
 {
   this->DeleteModel();
   this->DeleteProblem();
 }
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::Initialize()
+SVMModel<TValue, TLabel>::Initialize()
 {
   // Initialize model
-  if(!m_Model)
+  if (!m_Model)
     {
     m_Model = new struct svm_model;
     m_Model->delete_composed = false;
@@ -83,7 +83,7 @@ SVMModel<TValue,TLabel>::Initialize()
 
     m_ModelUpToDate = false;
 
-  }
+    }
 
   // Intialize problem
   m_Problem.l = 0;
@@ -93,71 +93,69 @@ SVMModel<TValue,TLabel>::Initialize()
   m_ProblemUpToDate = false;
 }
 
-
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::Reset()
+SVMModel<TValue, TLabel>::Reset()
 {
   this->DeleteProblem();
   this->DeleteModel();
 
   // Clear samples
   m_Samples.clear();
-  
+
   // Initialize values
   this->Initialize();
 }
 
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::DeleteModel()
+SVMModel<TValue, TLabel>::DeleteModel()
 {
-  if(m_Model)
+  if (m_Model)
     {
     svm_destroy_model(m_Model);
     m_Model = NULL;
     }
 }
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::DeleteProblem()
+SVMModel<TValue, TLabel>::DeleteProblem()
 {
 // Deallocate any existing problem
-  if(m_Problem.y)
+  if (m_Problem.y)
     {
-    delete [] m_Problem.y;
+    delete[] m_Problem.y;
     m_Problem.y = NULL;
     }
-  
-  if(m_Problem.x)
+
+  if (m_Problem.x)
     {
-    for(int i = 0; i < m_Problem.l;++i)
+    for (int i = 0; i < m_Problem.l; ++i)
       {
-      if(m_Problem.x[i])
-       {
-       delete [] m_Problem.x[i];
-       }
+      if (m_Problem.x[i])
+        {
+        delete[] m_Problem.x[i];
+        }
       }
-    delete [] m_Problem.x;
+    delete[] m_Problem.x;
     m_Problem.x = NULL;
     }
   m_Problem.l = 0;
   m_ProblemUpToDate = false;
 }
 
-
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::AddSample(const MeasurementType & measure, const LabelType & label)
+SVMModel<TValue, TLabel>::AddSample(const MeasurementType& measure, const LabelType& label)
 {
-  SampleType newSample(measure,label);
+  SampleType newSample(measure, label);
   m_Samples.push_back(newSample);
   m_ProblemUpToDate = false;
 }
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::ClearSamples()
+SVMModel<TValue, TLabel>::ClearSamples()
 {
   m_Samples.clear();
   m_ProblemUpToDate = false;
@@ -165,7 +163,7 @@ SVMModel<TValue,TLabel>::ClearSamples()
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::SetSamples(const SamplesVectorType & samples)
+SVMModel<TValue, TLabel>::SetSamples(const SamplesVectorType& samples)
 {
   m_Samples = samples;
   m_ProblemUpToDate = false;
@@ -173,10 +171,10 @@ SVMModel<TValue,TLabel>::SetSamples(const SamplesVectorType & samples)
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::BuildProblem()
+SVMModel<TValue, TLabel>::BuildProblem()
 {
   // Check if problem is up-to-date
-  if(m_ProblemUpToDate)
+  if (m_ProblemUpToDate)
     {
     return;
     }
@@ -184,15 +182,14 @@ SVMModel<TValue,TLabel>::BuildProblem()
   // Get number of samples
   int probl = m_Samples.size();
 
-  if(probl < 1)
+  if (probl < 1)
     {
-    itkExceptionMacro(<<"No samples, can not build SVM problem.");
+    itkExceptionMacro(<< "No samples, can not build SVM problem.");
     }
-  std::cout<<"Rebuilding problem ..."<<std::endl;
+  std::cout << "Rebuilding problem ..." << std::endl;
 
   // Get the size of the samples
-  long int elements = m_Samples[0].first.size()+1;
-
+  long int elements = m_Samples[0].first.size() + 1;
 
   // Deallocate any previous problem
   this->DeleteProblem();
@@ -202,14 +199,14 @@ SVMModel<TValue,TLabel>::BuildProblem()
   m_Problem.y = new double[probl];
   m_Problem.x = new struct svm_node*[probl];
 
-  for(int i = 0; i<probl;++i)
+  for (int i = 0; i < probl; ++i)
     {
     // Initialize labels to 0
     m_Problem.y[i] = 0;
     m_Problem.x[i] = new struct svm_node[elements];
 
     // Intialize elements (value = 0; index = -1)
-    for(unsigned int j = 0; j<static_cast<unsigned int>(elements);++j)
+    for (unsigned int j = 0; j < static_cast<unsigned int>(elements); ++j)
       {
       m_Problem.x[i][j].index = -1;
       m_Problem.x[i][j].value = 0;
@@ -218,44 +215,43 @@ SVMModel<TValue,TLabel>::BuildProblem()
 
   // Iterate on the samples
   typename SamplesVectorType::const_iterator sIt = m_Samples.begin();
-  int sampleIndex = 0;
-  int maxElementIndex = 0;
+  int                                        sampleIndex = 0;
+  int                                        maxElementIndex = 0;
 
-  while(sIt != m_Samples.end())
+  while (sIt != m_Samples.end())
     {
 
     // Get the sample measurement and label
     MeasurementType measure = sIt->first;
-    LabelType label = sIt->second;
-    
+    LabelType       label = sIt->second;
+
     // Set the label
     m_Problem.y[sampleIndex] = label;
 
-     int elementIndex = 0;
-     
-     // Populate the svm nodes
-     for(typename MeasurementType::const_iterator eIt = measure.begin();
-        eIt!=measure.end() && elementIndex < elements; ++eIt,++elementIndex)
-       {
-       m_Problem.x[sampleIndex][elementIndex].index = elementIndex+1;
-       m_Problem.x[sampleIndex][elementIndex].value = (*eIt);
-       }
-     
-     // Get the max index
-     if(elementIndex > maxElementIndex)
-       {
-       maxElementIndex = elementIndex;
-       }
+    int elementIndex = 0;
 
-      ++sampleIndex;
-      ++sIt;
+    // Populate the svm nodes
+    for (typename MeasurementType::const_iterator eIt = measure.begin();
+         eIt != measure.end() && elementIndex < elements; ++eIt, ++elementIndex)
+      {
+      m_Problem.x[sampleIndex][elementIndex].index = elementIndex + 1;
+      m_Problem.x[sampleIndex][elementIndex].value = (*eIt);
+      }
+
+    // Get the max index
+    if (elementIndex > maxElementIndex)
+      {
+      maxElementIndex = elementIndex;
+      }
+
+    ++sampleIndex;
+    ++sIt;
     }
-  
+
   // Compute the kernel gamma from maxElementIndex if necessary
   if (this->GetKernelGamma() == 0
       && this->GetParameters().kernel_type != COMPOSED
-      && this->GetParameters().kernel_type != GENERIC)
-    this->SetKernelGamma(1.0/static_cast<double>(maxElementIndex));
+      && this->GetParameters().kernel_type != GENERIC) this->SetKernelGamma(1.0 / static_cast<double>(maxElementIndex));
 
   // problem is up-to-date
   m_ProblemUpToDate = true;
@@ -263,7 +259,7 @@ SVMModel<TValue,TLabel>::BuildProblem()
 
 template <class TValue, class TLabel>
 double
-SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
+SVMModel<TValue, TLabel>::CrossValidation(unsigned int nbFolders)
 {
   // Build problem
   this->BuildProblem();
@@ -273,94 +269,94 @@ SVMModel<TValue,TLabel>::CrossValidation(unsigned int nbFolders)
 
   // Get the length of the problem
   int length = m_Problem.l;
-    
-    // Temporary memory to store cross validation results
-    double *target = new double[length];
 
-    // Do cross validation
-    svm_cross_validation(&m_Problem,&m_Parameters,nbFolders,target);
+  // Temporary memory to store cross validation results
+  double *target = new double[length];
 
-    // Evaluate accuracy
-    int i;
-    double total_correct = 0.;
-    
-    for(i=0;i<length;i++)
+  // Do cross validation
+  svm_cross_validation(&m_Problem, &m_Parameters, nbFolders, target);
+
+  // Evaluate accuracy
+  int    i;
+  double total_correct = 0.;
+
+  for (i = 0; i < length; i++)
+    {
+    if (target[i] == m_Problem.y[i])
       {
-      if(target[i] == m_Problem.y[i])
-       {
-       ++total_correct;
-       }
+      ++total_correct;
       }
-    double accuracy = total_correct/length;
-    
-    // Free temporary memory
-    delete [] target;
+    }
+  double accuracy = total_correct / length;
 
-    // return accuracy value
-    return accuracy;
+  // Free temporary memory
+  delete[] target;
+
+  // return accuracy value
+  return accuracy;
 }
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::ConsistencyCheck()
+SVMModel<TValue, TLabel>::ConsistencyCheck()
 {
   if (m_Parameters.svm_type == ONE_CLASS && this->GetDoProbabilityEstimates())
     {
-    otbMsgDebugMacro(<<"Disabling SVM probability estimates for ONE_CLASS SVM type.");
+    otbMsgDebugMacro(<< "Disabling SVM probability estimates for ONE_CLASS SVM type.");
     this->DoProbabilityEstimates(false);
     }
-  
-  const char* error_msg = svm_check_parameter(&m_Problem,&m_Parameters);
-  
+
+  const char* error_msg = svm_check_parameter(&m_Problem, &m_Parameters);
+
   if (error_msg)
-  {
-    throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
-  }
+    {
+    throw itk::ExceptionObject(__FILE__, __LINE__, error_msg, ITK_LOCATION);
+    }
 }
 
 template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::Train()
+SVMModel<TValue, TLabel>::Train()
 {
   // If the model is already up-to-date, return
-  if(m_ModelUpToDate)
+  if (m_ModelUpToDate)
     {
     return;
     }
 
   // Build problem
   this->BuildProblem();
-  
+
   // Check consistency
   this->ConsistencyCheck();
-  
+
   // retrieve parameters
   struct svm_parameter parameters = m_Parameters;
-  
+
   // train the model
-  m_Model = svm_train(&m_Problem,&parameters);
-  
+  m_Model = svm_train(&m_Problem, &parameters);
+
   // Reset the parameters
   m_Parameters = parameters;
-    
+
   // Set the model as up-to-date
   m_ModelUpToDate = true;
 }
 
 template <class TValue, class TLabel>
-typename SVMModel<TValue,TLabel>::LabelType
-SVMModel<TValue,TLabel>::EvaluateLabel(const MeasurementType & measure) const
+typename SVMModel<TValue, TLabel>::LabelType
+SVMModel<TValue, TLabel>::EvaluateLabel(const MeasurementType& measure) const
 {
   // Check if model is up-to-date
-  if(!m_ModelUpToDate)
+  if (!m_ModelUpToDate)
     {
-    itkExceptionMacro(<<"Model is not up-to-date, can not predict label");
+    itkExceptionMacro(<< "Model is not up-to-date, can not predict label");
     }
 
   // Check probability prediction
   bool predict_probability = 1;
 
-  if (svm_check_probability_model(m_Model)==0)
+  if (svm_check_probability_model(m_Model) == 0)
     {
     if (this->GetSVMType() == ONE_CLASS)
       {
@@ -369,156 +365,158 @@ SVMModel<TValue,TLabel>::EvaluateLabel(const MeasurementType & measure) const
     else
       {
       throw itk::ExceptionObject(__FILE__, __LINE__,
-                                 "Model does not support probabiliy estimates",ITK_LOCATION);
+                                 "Model does not support probabiliy estimates", ITK_LOCATION);
       }
     }
-  
+
   // Get type and number of classes
-  int svm_type=svm_get_svm_type(m_Model);
-  int nr_class=svm_get_nr_class(m_Model);
- 
+  int svm_type = svm_get_svm_type(m_Model);
+  int nr_class = svm_get_nr_class(m_Model);
+
   // Allocate space for labels
-  double *prob_estimates=NULL;
+  double *prob_estimates = NULL;
 
   // Eventually allocate space for probabilities
   if (predict_probability)
     {
-    if (svm_type==NU_SVR || svm_type==EPSILON_SVR)
+    if (svm_type == NU_SVR || svm_type == EPSILON_SVR)
       {
-       otbMsgDevMacro(<<"Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="<<svm_get_svr_probability(m_Model));
+      otbMsgDevMacro(
+        <<
+        "Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma="
+        << svm_get_svr_probability(m_Model));
       }
     else
       {
       prob_estimates = new double[nr_class];
       }
     }
-  
+
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
-  struct svm_node * x = new struct svm_node[measure.size()+1];
-  
+  struct svm_node * x = new struct svm_node[measure.size() + 1];
+
   int valueIndex = 0;
-  
+
   // Fill the node
-  for(typename MeasurementType::const_iterator mIt = measure.begin();mIt!=measure.end();++mIt,++valueIndex)
+  for (typename MeasurementType::const_iterator mIt = measure.begin(); mIt != measure.end(); ++mIt, ++valueIndex)
     {
-    x[valueIndex].index=valueIndex+1;
-    x[valueIndex].value=(*mIt);
+    x[valueIndex].index = valueIndex + 1;
+    x[valueIndex].value = (*mIt);
     }
-  
+
   // terminate node
   x[measure.size()].index = -1;
   x[measure.size()].value = 0;
 
   LabelType label = 0;
 
-  if(predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
+  if (predict_probability && (svm_type == C_SVC || svm_type == NU_SVC))
     {
-    label = static_cast<LabelType>(svm_predict_probability(m_Model,x,prob_estimates));
+    label = static_cast<LabelType>(svm_predict_probability(m_Model, x, prob_estimates));
     }
   else
     {
-    label = static_cast<LabelType>(svm_predict(m_Model,x));
+    label = static_cast<LabelType>(svm_predict(m_Model, x));
     }
 
   // Free allocated memory
-  delete [] x;
-  
-  if(prob_estimates)
+  delete[] x;
+
+  if (prob_estimates)
     {
-    delete [] prob_estimates;
+    delete[] prob_estimates;
     }
 
   return label;
 }
 
 template <class TValue, class TLabel>
-typename SVMModel<TValue,TLabel>::DistancesVectorType
-SVMModel<TValue,TLabel>::EvaluateHyperplanesDistances(const MeasurementType & measure) const
+typename SVMModel<TValue, TLabel>::DistancesVectorType
+SVMModel<TValue, TLabel>::EvaluateHyperplanesDistances(const MeasurementType& measure) const
 {
   // Check if model is up-to-date
-  if(!m_ModelUpToDate)
+  if (!m_ModelUpToDate)
     {
-    itkExceptionMacro(<<"Model is not up-to-date, can not predict label");
+    itkExceptionMacro(<< "Model is not up-to-date, can not predict label");
     }
 
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
-    struct svm_node * x  = new struct svm_node[measure.size()+1];
+  struct svm_node * x  = new struct svm_node[measure.size() + 1];
 
   int valueIndex = 0;
-  
+
   // Fill the node
-  for(typename MeasurementType::const_iterator mIt = measure.begin();mIt!=measure.end();++mIt,++valueIndex)
+  for (typename MeasurementType::const_iterator mIt = measure.begin(); mIt != measure.end(); ++mIt, ++valueIndex)
     {
-    x[valueIndex].index=valueIndex+1;
-    x[valueIndex].value=(*mIt);
+    x[valueIndex].index = valueIndex + 1;
+    x[valueIndex].value = (*mIt);
     }
-  
+
   // terminate node
   x[measure.size()].index = -1;
   x[measure.size()].value = 0;
-  
+
   // Intialize distances vector
-  DistancesVectorType distances(m_Model->nr_class*(m_Model->nr_class-1)/2);
-  
+  DistancesVectorType distances(m_Model->nr_class*(m_Model->nr_class - 1) / 2);
+
   // predict distances vector
-  svm_predict_values(m_Model,x, (double*)(distances.GetDataPointer()));
- 
+  svm_predict_values(m_Model, x, (double*) (distances.GetDataPointer()));
+
   // Free allocated memory
-  delete [] x;
-  
+  delete[] x;
+
   return (distances);
 }
 
-
 template <class TValue, class TLabel>
-typename SVMModel<TValue,TLabel>::ProbabilitiesVectorType
-SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) const
+typename SVMModel<TValue, TLabel>::ProbabilitiesVectorType
+SVMModel<TValue, TLabel>::EvaluateProbabilities(const MeasurementType& measure) const
 {
   // Check if model is up-to-date
-  if(!m_ModelUpToDate)
+  if (!m_ModelUpToDate)
     {
-    itkExceptionMacro(<<"Model is not up-to-date, can not predict probabilities");
+    itkExceptionMacro(<< "Model is not up-to-date, can not predict probabilities");
     }
 
-  if (svm_check_probability_model(m_Model)==0)
+  if (svm_check_probability_model(m_Model) == 0)
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
-                               "Model does not support probability estimates",ITK_LOCATION);
+                               "Model does not support probability estimates", ITK_LOCATION);
     }
 
   // Get number of classes
-  int nr_class=svm_get_nr_class(m_Model);
+  int nr_class = svm_get_nr_class(m_Model);
 
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
-  struct svm_node * x = new struct svm_node[measure.size()+1];
+  struct svm_node * x = new struct svm_node[measure.size() + 1];
 
   int valueIndex = 0;
 
   // Fill the node
-  for(typename MeasurementType::const_iterator mIt = measure.begin();mIt!=measure.end();++mIt,++valueIndex)
+  for (typename MeasurementType::const_iterator mIt = measure.begin(); mIt != measure.end(); ++mIt, ++valueIndex)
     {
-    x[valueIndex].index=valueIndex+1;
-    x[valueIndex].value=(*mIt);
+    x[valueIndex].index = valueIndex + 1;
+    x[valueIndex].value = (*mIt);
     }
 
   // Termination node
   x[measure.size()].index = -1;
   x[measure.size()].value = 0;
 
-  double* dec_values = new double [nr_class];
-  svm_predict_probability(m_Model,x,dec_values);
+  double* dec_values = new double[nr_class];
+  svm_predict_probability(m_Model, x, dec_values);
 
   // Reorder values in increasing class label
   int* labels = m_Model->label;
   std::vector<int> orderedLabels(nr_class);
-  std::copy( labels, labels + nr_class, orderedLabels.begin() );
-  std::sort( orderedLabels.begin(), orderedLabels.end() );
+  std::copy(labels, labels + nr_class, orderedLabels.begin());
+  std::sort(orderedLabels.begin(), orderedLabels.end());
 
   ProbabilitiesVectorType probabilities(nr_class);
-  for ( int i = 0; i < nr_class; i++ )
+  for (int i = 0; i < nr_class; i++)
     {
     // svm_predict_probability is such that "dec_values[i]" corresponds to label "labels[i]"
     std::vector<int>::iterator it = std::find(orderedLabels.begin(), orderedLabels.end(), labels[i]);
@@ -526,81 +524,78 @@ SVMModel<TValue,TLabel>::EvaluateProbabilities(const MeasurementType & measure) 
     }
 
   // Free allocated memory
-  delete [] x;
-  delete [] dec_values;
+  delete[] x;
+  delete[] dec_values;
 
   return probabilities;
 }
 
-
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::SetModel(struct svm_model* aModel)
+SVMModel<TValue, TLabel>::SetModel(struct svm_model* aModel)
 {
   this->DeleteModel();
   m_Model = svm_copy_model(aModel);
   m_ModelUpToDate = true;
 }
 
-
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::SaveModel(const char* model_file_name) const
+SVMModel<TValue, TLabel>::SaveModel(const char* model_file_name) const
 {
-  if (svm_save_model(model_file_name, m_Model)!=0)
-  {
-    itkExceptionMacro( << "Problem while saving SVM model "
-                       << std::string(model_file_name) );
-  }
+  if (svm_save_model(model_file_name, m_Model) != 0)
+    {
+    itkExceptionMacro(<< "Problem while saving SVM model "
+                      << std::string(model_file_name));
+    }
 }
 
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::LoadModel(const char* model_file_name)
+SVMModel<TValue, TLabel>::LoadModel(const char* model_file_name)
 {
   this->DeleteModel();
   m_Model = svm_load_model(model_file_name, m_Parameters.kernel_generic);
   if (m_Model == 0)
-  {
-    itkExceptionMacro( << "Problem while loading SVM model "
-                       << std::string(model_file_name) );
-  }
+    {
+    itkExceptionMacro(<< "Problem while loading SVM model "
+                      << std::string(model_file_name));
+    }
   m_Parameters = m_Model->param;
   m_ModelUpToDate = true;
 }
 
-template <class TValue,class TLabel>
-typename SVMModel<TValue,TLabel>::Pointer
-SVMModel<TValue,TLabel>::GetCopy() const
+template <class TValue, class TLabel>
+typename SVMModel<TValue, TLabel>::Pointer
+SVMModel<TValue, TLabel>::GetCopy() const
 {
   Pointer modelCopy = New();
-  modelCopy->SetModel( m_Model );
+  modelCopy->SetModel(m_Model);
   // We do not copy the problem to avoid sharing allocated memory
   return modelCopy;
 }
 
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::PrintSelf(std::ostream& os, itk::Indent indent) const
+SVMModel<TValue, TLabel>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector)
+SVMModel<TValue, TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector)
 {
   // TODO: rewrite this to check memory allocation
 
-
   // erase the old SV
   // delete just the first element, it destoyes the whole pointers (cf SV filling with x_space)
-  delete [] (m_Model->SV[0]);
+  delete[] (m_Model->SV[0]);
 
-  for (int n = 0; n<m_Model->l; ++n)
-  {
+  for (int n = 0; n < m_Model->l; ++n)
+    {
     m_Model->SV[n] = NULL;
-  }
+    }
   delete[] (m_Model->SV);
   m_Model->SV = NULL;
 
@@ -611,79 +606,79 @@ SVMModel<TValue,TLabel>::SetSupportVectors(svm_node ** sv, int nbOfSupportVector
 
   // Compute the total number of SV elements.
   unsigned int elements = 0;
-  for (int p=0; p<nbOfSupportVector; ++p)
-  {
-    std::cout<<p<<"  ";
-    const svm_node *tempNode = sv[p];
-    std::cout<<p<<"  ";
-    while (tempNode->index != -1)
+  for (int p = 0; p < nbOfSupportVector; ++p)
     {
+    std::cout << p << "  ";
+    const svm_node *tempNode = sv[p];
+    std::cout << p << "  ";
+    while (tempNode->index != -1)
+      {
       tempNode++;
       ++elements;
+      }
+    ++elements; // for -1 values
     }
-    ++elements;// for -1 values
-  }
 
-  if (m_Model->l>0)
-  {
+  if (m_Model->l > 0)
+    {
     SV[0] = new struct svm_node[elements];
-    memcpy( SV[0],sv[0],sizeof(svm_node*)*elements);
-  }
+    memcpy(SV[0], sv[0], sizeof(svm_node*) * elements);
+    }
   svm_node *x_space =  SV[0];
 
   int j = 0;
-  for (int i=0; i<m_Model->l; ++i)
-  {
+  for (int i = 0; i < m_Model->l; ++i)
+    {
     // SV
     SV[i] = &x_space[j];
     const svm_node *p = sv[i];
-    svm_node *pCpy = SV[i];
+    svm_node *      pCpy = SV[i];
     while (p->index != -1)
-    {
+      {
       pCpy->index = p->index;
       pCpy->value = p->value;
       ++p;
       ++pCpy;
       ++j;
-    }
+      }
     pCpy->index = -1;
     ++j;
-  }
+    }
 
-  if(m_Model->l>0)
+  if (m_Model->l > 0)
     {
-    delete [] SV[0];
+    delete[] SV[0];
     }
 }
 
-template <class TValue,class TLabel>
+template <class TValue, class TLabel>
 void
-SVMModel<TValue,TLabel>::SetAlpha( double ** alpha, int nbOfSupportVector )
+SVMModel<TValue, TLabel>::SetAlpha(double ** alpha, int nbOfSupportVector)
 {
   // TODO: Check memory allocation
 
   // Erase the old sv_coef
-  for (int i=0; i<m_Model->nr_class-1; ++i)
-  {
+  for (int i = 0; i < m_Model->nr_class - 1; ++i)
+    {
     delete[] m_Model->sv_coef[i];
-  }
-  delete [] m_Model->sv_coef;
+    }
+  delete[] m_Model->sv_coef;
 
   // copy new sv_coef values
-  m_Model->sv_coef = new double*[m_Model->nr_class-1];
-  for (int i=0; i<m_Model->nr_class-1; ++i)
+  m_Model->sv_coef = new double*[m_Model->nr_class - 1];
+  for (int i = 0; i < m_Model->nr_class - 1; ++i)
     m_Model->sv_coef[i] = new double[m_Model->l];
 
-  for (int i=0; i<m_Model->l; ++i)
-  {
-    // sv_coef
-    for (int k=0; k<m_Model->nr_class-1; ++k)
+  for (int i = 0; i < m_Model->l; ++i)
     {
+    // sv_coef
+    for (int k = 0; k < m_Model->nr_class - 1; ++k)
+      {
       m_Model->sv_coef[k][i] = alpha[k][i];
+      }
     }
-  }
 }
 
-}// end namespace otb
+} // end namespace otb
 
 #endif

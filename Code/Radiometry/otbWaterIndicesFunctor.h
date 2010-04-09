@@ -47,20 +47,20 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(inputVector[m_Index1-1],static_cast<TInput2>(inputVector[m_Index2-1]));
+    return this->Evaluate(inputVector[m_Index1 - 1], static_cast<TInput2>(inputVector[m_Index2 - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &id1, const TInput2 &id2)
+  inline TOutput operator ()(const TInput1& id1, const TInput2& id2)
   {
-    return this->Evaluate(id1,id2);
-  };
+    return this->Evaluate(id1, id2);
+  }
   /// Constructor
-  WaterIndexBase() {};
+  WaterIndexBase() {}
   /// Desctructor
-  virtual ~WaterIndexBase() {};
+  virtual ~WaterIndexBase() {}
 
   /// Set Index 1
   void SetIndex1(unsigned int channel)
@@ -85,13 +85,12 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & id1, const TInput2 & id2) const = 0;
+  virtual TOutput Evaluate(const TInput1& id1, const TInput2& id2) const = 0;
 
 private:
   unsigned int m_Index1;
   unsigned int m_Index2;
 };
-
 
 /** \class WaterIndexFunctor
  *  \brief This functor will be used for most of water index functors.
@@ -103,22 +102,21 @@ template <class TInput1, class TInput2, class TOutput>
 class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  WaterIndexFunctor() {};
-  virtual ~WaterIndexFunctor() {};
+  WaterIndexFunctor() {}
+  virtual ~WaterIndexFunctor() {}
 protected:
-  inline TOutput Evaluate(const TInput1 &id1, const TInput2 &id2) const
+  inline TOutput Evaluate(const TInput1& id1, const TInput2& id2) const
   {
     double dindex1 = static_cast<double>(id1);
     double dindex2 = static_cast<double>(id2);
     double ddenom = dindex1 + dindex2;
-    if ( ddenom == 0 )
+    if (ddenom == 0)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>((dindex1- dindex2)/ddenom));
+    return (static_cast<TOutput>((dindex1 - dindex2) / ddenom));
   }
 };
-
 
 /** \class SRWI
  *  \brief This functor computes the Simple Ratio Water Index (SRWI)
@@ -131,21 +129,20 @@ template <class TInput1, class TInput2, class TOutput>
 class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  SRWI() {};
-  virtual ~SRWI() {};
+  SRWI() {}
+  virtual ~SRWI() {}
 protected:
-  inline TOutput Evaluate(const TInput1 &rho860, const TInput2 &rho1240) const
+  inline TOutput Evaluate(const TInput1& rho860, const TInput2& rho1240) const
   {
     double drho860 = static_cast<double>(rho860);
     double drho1240 = static_cast<double>(rho1240);
-    if ( drho1240 == 0 )
+    if (drho1240 == 0)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(drho860/drho1240) );
+    return (static_cast<TOutput>(drho860 / drho1240));
   }
 };
-
 
 /** \class NDWI
  *  \brief This functor computes the Normalized Difference Water Index (NDWI)
@@ -160,15 +157,15 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDWI : public WaterIndexBase<TInput1,TInput2,TOutput>
+class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
-  NDWI() {};
+  NDWI() {}
   /// Desctructor
-  virtual ~NDWI() {};
-  WIFunctorType GetWIFunctor(void)const
+  virtual ~NDWI() {}
+  WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
   }
@@ -194,15 +191,14 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &nir, const TInput2 &mir) const
+  inline TOutput Evaluate(const TInput1& nir, const TInput2& mir) const
   {
-    return ( static_cast<TOutput>(GetWIFunctor()(nir,mir)) );
+    return (static_cast<TOutput>(GetWIFunctor() (nir, mir)));
   }
 private:
   // Water Index Classic Functor
   const WIFunctorType m_WIFunctor;
 };
-
 
 /** \class NDWI2
  *  \brief This functor computes the Normalized Difference Water Index (NDWI2)
@@ -213,15 +209,15 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDWI2 : public WaterIndexBase<TInput1,TInput2,TOutput>
+class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
-  NDWI2() {};
+  NDWI2() {}
   /// Desctructor
-  virtual ~NDWI2() {};
-  WIFunctorType GetWIFunctor(void)const
+  virtual ~NDWI2() {}
+  WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
   }
@@ -247,9 +243,9 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &g, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const
   {
-    return ( static_cast<TOutput>(GetWIFunctor()(g,nir)) );
+    return (static_cast<TOutput>(GetWIFunctor() (g, nir)));
   }
 private:
   // Water Index Classic Functor
@@ -265,15 +261,15 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class MNDWI : public WaterIndexBase<TInput1,TInput2,TOutput>
+class MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
-  MNDWI() {};
+  MNDWI() {}
   /// Desctructor
-  virtual ~MNDWI() {};
-  WIFunctorType GetWIFunctor(void)const
+  virtual ~MNDWI() {}
+  WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
   }
@@ -299,15 +295,14 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &g, const TInput2 &mir) const
+  inline TOutput Evaluate(const TInput1& g, const TInput2& mir) const
   {
-    return ( static_cast<TOutput>(GetWIFunctor()(g,mir)) );
+    return (static_cast<TOutput>(GetWIFunctor() (g, mir)));
   }
 private:
   // Water Index Classic Functor
   const WIFunctorType m_WIFunctor;
 };
-
 
 /** \class NDPI
  *  \brief This functor computes the Normalized Difference Pond Index (NDPI)
@@ -318,15 +313,15 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDPI : public WaterIndexBase<TInput1,TInput2,TOutput>
+class NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
-  NDPI() {};
+  NDPI() {}
   /// Desctructor
-  virtual ~NDPI() {};
-  WIFunctorType GetWIFunctor(void)const
+  virtual ~NDPI() {}
+  WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
   }
@@ -340,7 +335,7 @@ public:
   {
     return this->GetIndex1();
   }
- /// Set Index G
+  /// Set Index G
   void SetGIndex(unsigned int channel)
   {
     this->SetIndex2(channel);
@@ -352,15 +347,14 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &mir, const TInput2 &g) const
+  inline TOutput Evaluate(const TInput1& mir, const TInput2& g) const
   {
-    return ( static_cast<TOutput>(GetWIFunctor()(mir,g)) );
+    return (static_cast<TOutput>(GetWIFunctor() (mir, g)));
   }
 private:
   // Water Index Classic Functor
   const WIFunctorType m_WIFunctor;
 };
-
 
 /** \class NDTI
  *  \brief This functor computes the Normalized Difference Turbidity Index (NDTI)
@@ -371,15 +365,15 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDTI : public WaterIndexBase<TInput1,TInput2,TOutput>
+class NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
-  NDTI() {};
+  NDTI() {}
   /// Desctructor
-  virtual ~NDTI() {};
-  WIFunctorType GetWIFunctor(void)const
+  virtual ~NDTI() {}
+  WIFunctorType GetWIFunctor(void) const
   {
     return (m_WIFunctor);
   }
@@ -393,7 +387,7 @@ public:
   {
     return this->GetIndex1();
   }
- /// Set Index G
+  /// Set Index G
   void SetGIndex(unsigned int channel)
   {
     this->SetIndex2(channel);
@@ -405,15 +399,14 @@ public:
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &g) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& g) const
   {
-    return ( static_cast<TOutput>(GetWIFunctor()(r,g)) );
+    return (static_cast<TOutput>(GetWIFunctor() (r, g)));
   }
 private:
   // Water Index Classic Functor
   const WIFunctorType m_WIFunctor;
 };
-
 
 /** \class WaterSqrtSpectralAngleFunctor
  *  \brief This functor uses a spectral angle with a particular reference pixel.
@@ -422,15 +415,16 @@ private:
  *  \ingroup Functor
  * \ingroup Radiometry
  */
-template <class TInputVectorPixel,class TOutputPixel>
-class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel,TOutputPixel>
+template <class TInputVectorPixel, class TOutputPixel>
+class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
 
-  typedef WaterSqrtSpectralAngleFunctor Self;
-  typedef SqrtSpectralAngleFunctor<TInputVectorPixel,TOutputPixel> Superclass;
-  typedef TInputVectorPixel InputVectorPixelType;
-  WaterSqrtSpectralAngleFunctor() {
+  typedef WaterSqrtSpectralAngleFunctor                             Self;
+  typedef SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
+  typedef TInputVectorPixel                                         InputVectorPixelType;
+  WaterSqrtSpectralAngleFunctor()
+  {
 
     //Set the channels indices
     m_BlueChannel = 0;
@@ -442,20 +436,21 @@ public:
     InputVectorPixelType reference;
     reference.SetSize(4);
     reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
-    this->SetReferenceWaterPixel( reference );
-  };
-  virtual ~WaterSqrtSpectralAngleFunctor() {};
+    this->SetReferenceWaterPixel(reference);
+  }
+  virtual ~WaterSqrtSpectralAngleFunctor() {}
 
   /** Set Reference Pixel */
   void SetReferenceWaterPixel(InputVectorPixelType ref)
   {
-    if(ref.GetSize() != 4)
-    {
-    }
+    if (ref.GetSize() != 4)
+      {
+      }
     InputVectorPixelType reference;
     reference.SetSize(4);
-    reference[m_BlueChannel] = ref[0]; reference[m_GreenChannel] = ref[1]; reference[m_RedChannel] = ref[2]; reference[m_NIRChannel] = ref[3];
-    this->SetReferencePixel( reference );
+    reference[m_BlueChannel] = ref[0]; reference[m_GreenChannel] = ref[1]; reference[m_RedChannel] = ref[2];
+    reference[m_NIRChannel] = ref[3];
+    this->SetReferencePixel(reference);
 
   }
 
@@ -506,9 +501,7 @@ protected:
   int m_NIRChannel;
 };
 
-
 } // namespace Functor
 } // namespace otb
 
 #endif
-

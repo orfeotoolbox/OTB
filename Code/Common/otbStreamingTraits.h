@@ -42,14 +42,14 @@ namespace otb
  * this enum defines the different streaming mode available in OTB.
    */
 typedef enum
-{
+  {
   SET_NUMBER_OF_STREAM_DIVISIONS = 1,
   SET_BUFFER_MEMORY_SIZE = 2,
   SET_BUFFER_NUMBER_OF_LINES = 3,
   SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4,
   SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS = 5,
   SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 6
-} StreamingMode;
+  } StreamingMode;
 
 /** \class StreamingTraits
  *  \brief This class is a helper class for terminal streaming filter implementation.
@@ -61,11 +61,11 @@ class ITK_EXPORT StreamingTraits
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingTraits  Self;
+  typedef StreamingTraits Self;
 
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
-  typedef typename ImageType::RegionType RegionType;
+  typedef TImage                                ImageType;
+  typedef typename ImageType::Pointer           ImagePointerType;
+  typedef typename ImageType::RegionType        RegionType;
   typedef typename ImageType::InternalPixelType PixelType;
 
   typedef StreamingMode StreamingModeType;
@@ -74,28 +74,27 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,
                       ImageType::ImageDimension);
 
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>  SplitterType;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)> SplitterType;
   // ITK Interpolators
-  typedef itk::InterpolateImageFunction<TImage,double>                      InterpolationType;
-  typedef itk::BSplineInterpolateImageFunction<TImage,double>               BSplineInterpolationType;
-  typedef itk::LinearInterpolateImageFunction<TImage,double>                LinearInterpolationType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TImage,double>       NearestNeighborInterpolationType;
+  typedef itk::InterpolateImageFunction<TImage, double>                InterpolationType;
+  typedef itk::BSplineInterpolateImageFunction<TImage, double>         BSplineInterpolationType;
+  typedef itk::LinearInterpolateImageFunction<TImage, double>          LinearInterpolationType;
+  typedef itk::NearestNeighborInterpolateImageFunction<TImage, double> NearestNeighborInterpolationType;
   // OTB Interpolators
   // Gaussian Interpolators
-  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>          GaussianInterpolationType;
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType> GaussianInterpolationType;
   // Cosine Interpolators
-  typedef WindowedSincInterpolateImageCosineFunction<ImageType>            CosineInterpolationType;
+  typedef WindowedSincInterpolateImageCosineFunction<ImageType> CosineInterpolationType;
   // Hamming Interpolators
-  typedef WindowedSincInterpolateImageHammingFunction<ImageType>           HammingInterpolationType;
+  typedef WindowedSincInterpolateImageHammingFunction<ImageType> HammingInterpolationType;
   // Welch
-  typedef WindowedSincInterpolateImageWelchFunction<ImageType>             WelchInterpolationType;
+  typedef WindowedSincInterpolateImageWelchFunction<ImageType> WelchInterpolationType;
   // Lanczos
-  typedef WindowedSincInterpolateImageLanczosFunction<ImageType>           LanczosInterpolationType;
+  typedef WindowedSincInterpolateImageLanczosFunction<ImageType> LanczosInterpolationType;
   // Blackman
-  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>          BlackmanInterpolationType;
+  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType> BlackmanInterpolationType;
   // Prolate
-  typedef otb::ProlateInterpolateImageFunction<ImageType>                  ProlateInterpolationType;
-
+  typedef otb::ProlateInterpolateImageFunction<ImageType> ProlateInterpolationType;
 
   /**
    * This method computes the number of streaming divisions, based on
@@ -111,24 +110,22 @@ public:
    * \return The number of streaming divisions.
    */
   static unsigned long CalculateNumberOfStreamDivisions(const TImage * image,
-      RegionType region,
-      SplitterType * splitter,
-      StreamingModeType mode,
-      unsigned long numberOfStreamDivision,
-      unsigned long bufferMemorySize,
-      unsigned long bufferNumberOfLinesDivisions);
-
+                                                        RegionType region,
+                                                        SplitterType * splitter,
+                                                        StreamingModeType mode,
+                                                        unsigned long numberOfStreamDivision,
+                                                        unsigned long bufferMemorySize,
+                                                        unsigned long bufferNumberOfLinesDivisions);
 
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
 
   static std::string GetMethodUseToCalculateNumberOfStreamDivisions(StreamingModeType mode);
 
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingTraits.txx"
 #endif
-
 
 #endif

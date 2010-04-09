@@ -60,89 +60,88 @@ namespace otb
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT RoadExtractionFilter
-      : public ImageToPathListFilter<TInputImage,TOutputPath>
+  : public ImageToPathListFilter<TInputImage, TOutputPath>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef RoadExtractionFilter                                Self;
-  typedef ImageToPathListFilter<TInputImage,TOutputPath>      Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef RoadExtractionFilter                            Self;
+  typedef ImageToPathListFilter<TInputImage, TOutputPath> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(RoadExtractionFilter,ImageToPathListFilter);
+  itkTypeMacro(RoadExtractionFilter, ImageToPathListFilter);
   /** Template parameters typedefs */
-  typedef typename Superclass::InputImageType                         InputImageType;
-  typedef typename Superclass::OutputPathType                         OutputPathType;
-  typedef typename Superclass::OutputPathListType                     OutputPathListType;
-  typedef typename InputImageType::PixelType         InputPixelType;
-  typedef double                                                      InternalPixelType;
+  typedef typename Superclass::InputImageType     InputImageType;
+  typedef typename Superclass::OutputPathType     OutputPathType;
+  typedef typename Superclass::OutputPathListType OutputPathListType;
+  typedef typename InputImageType::PixelType      InputPixelType;
+  typedef double                                  InternalPixelType;
 
-  typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
-  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        SpectralAngleType;
-  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        ModulusType;
-  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        DirectionType;
+  typedef otb::VectorImage<InternalPixelType, InputImageType::ImageDimension> VectorImageType;
+  typedef otb::Image<InternalPixelType, InputImageType::ImageDimension>       SpectralAngleType;
+  typedef otb::Image<InternalPixelType, InputImageType::ImageDimension>       ModulusType;
+  typedef otb::Image<InternalPixelType, InputImageType::ImageDimension>       DirectionType;
 
-  typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension>
+  typedef itk::CovariantVector<InternalPixelType, InputImageType::ImageDimension>
   VectorPixelType;
-  typedef otb::Image<VectorPixelType,InputImageType::ImageDimension>  CovariantVectorImageType;
+  typedef otb::Image<VectorPixelType, InputImageType::ImageDimension> CovariantVectorImageType;
 
   /* Template parameters typedefs for composites filters */
   typedef SpectralAngleDistanceImageFilter<
-  InputImageType,
-  SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
+    InputImageType,
+    SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
 
   typedef GenericRoadExtractionFilter<SpectralAngleType, OutputPathType>
   GenericRoadExtractionFilterType;
 
-
   /** Template parameters typedefs for internals filters */
-  typedef typename GenericRoadExtractionFilterType::SigmaType SigmaType;
-  typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType AmplitudeThresholdType;
-  typedef typename GenericRoadExtractionFilterType::ToleranceType ToleranceType;
-  typedef typename GenericRoadExtractionFilterType::MaxAngleType MaxAngleType;
+  typedef typename GenericRoadExtractionFilterType::SigmaType                 SigmaType;
+  typedef typename GenericRoadExtractionFilterType::AmplitudeThresholdType    AmplitudeThresholdType;
+  typedef typename GenericRoadExtractionFilterType::ToleranceType             ToleranceType;
+  typedef typename GenericRoadExtractionFilterType::MaxAngleType              MaxAngleType;
   typedef typename GenericRoadExtractionFilterType::MeanDistanceThresholdType MeanDistanceThresholdType;
-  typedef typename GenericRoadExtractionFilterType::LinkRealType LinkRealType;
+  typedef typename GenericRoadExtractionFilterType::LinkRealType              LinkRealType;
 
   /** Get/Set the reference pixel (use by the SpectralAngleDistanceImageFilter)*/
-  otbGetObjectMemberConstReferenceMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
-  otbSetObjectMemberMacro(SpectralAngleDistanceImageFilter,ReferencePixel,InputPixelType);
+  otbGetObjectMemberConstReferenceMacro(SpectralAngleDistanceImageFilter, ReferencePixel, InputPixelType);
+  otbSetObjectMemberMacro(SpectralAngleDistanceImageFilter, ReferencePixel, InputPixelType);
 
   /** Get/Set the alpha value */
-  otbGetObjectMemberConstReferenceMacro(GenericRoadExtractionFilter,Alpha,double);
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,Alpha,double);
+  otbGetObjectMemberConstReferenceMacro(GenericRoadExtractionFilter, Alpha, double);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, Alpha, double);
 
   /** Get/Set the amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,AmplitudeThreshold,AmplitudeThresholdType);
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,AmplitudeThreshold,AmplitudeThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, AmplitudeThreshold, AmplitudeThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, AmplitudeThreshold, AmplitudeThresholdType);
 
   /** Get/Set  the tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathListFilter)*/
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,Tolerance,ToleranceType);
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,Tolerance,ToleranceType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, Tolerance, ToleranceType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, Tolerance, ToleranceType);
 
   /** Set/Get the max angle (use bye the BreakAngularPathListFilter)*/
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,MaxAngle,MaxAngleType);
-  otbGetObjectMemberConstMacro(GenericRoadExtractionFilter,MaxAngle,MaxAngleType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, MaxAngle, MaxAngleType);
+  otbGetObjectMemberConstMacro(GenericRoadExtractionFilter, MaxAngle, MaxAngleType);
 
   /** Get/Set the tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathListFilter)*/
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, FirstMeanDistanceThreshold, MeanDistanceThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, FirstMeanDistanceThreshold, MeanDistanceThresholdType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, SecondMeanDistanceThreshold, MeanDistanceThresholdType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, SecondMeanDistanceThreshold, MeanDistanceThresholdType);
 
   /** Get/Set the angular threshold (use by LinkPathFilter)*/
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,AngularThreshold,LinkRealType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, AngularThreshold, LinkRealType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, AngularThreshold, LinkRealType);
   /** Get/Set the distance threshold (use by LinkPathFilter)*/
-  otbSetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
-  otbGetObjectMemberMacro(GenericRoadExtractionFilter,DistanceThreshold,LinkRealType);
+  otbSetObjectMemberMacro(GenericRoadExtractionFilter, DistanceThreshold, LinkRealType);
+  otbGetObjectMemberMacro(GenericRoadExtractionFilter, DistanceThreshold, LinkRealType);
 
 protected:
   /** Constructor */
   RoadExtractionFilter();
   /** Destructor */
-  ~RoadExtractionFilter() {};
+  ~RoadExtractionFilter() {}
 
   /** Prepare main computation method */
   void BeforeGenerateData(void);
@@ -152,19 +151,18 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-private :
+private:
 
-  RoadExtractionFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  RoadExtractionFilter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** SpectralAngleDistanceImageFilter use by the composite filter */
-  typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
+  typename SpectralAngleDistanceImageFilterType::Pointer m_SpectralAngleDistanceImageFilter;
   typename GenericRoadExtractionFilterType::Pointer m_GenericRoadExtractionFilter;
-
 
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbRoadExtractionFilter.txx"

@@ -32,13 +32,13 @@ namespace otb
  * \ingroup VectorImage
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+class ITK_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 
 {
 public:
   /** Standard class typedefs. */
-  typedef NormalizeInnerProductPCAImageFilter             Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage>  Superclass;
+  typedef NormalizeInnerProductPCAImageFilter                Self;
+  typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
@@ -49,34 +49,34 @@ public:
   itkTypeMacro(NormalizeInnerProductPCAImageFilter, itk::InPlaceImageFilter);
 
   /**   Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
- 
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
+
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                           InputPixelType;
-  typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-  typedef typename InputImageType::RegionType                          InputImageRegionType;
-  typedef typename OutputImageType::PixelType                          OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
   /** Typedef for statistic computing. */
-  typedef StreamingStatisticsVectorImageFilter<InputImageType> StreamingStatisticsVectorImageFilterType;
-  typedef typename StreamingStatisticsVectorImageFilterType::Pointer StreamingStatisticsVectorImageFilterPointer;
-  typedef typename StreamingStatisticsVectorImageFilterType::RealType RealType;
-  typedef typename StreamingStatisticsVectorImageFilterType::RealPixelType  RealPixelType;
-  typedef typename StreamingStatisticsVectorImageFilterType::MatrixType  MatrixType;
+  typedef StreamingStatisticsVectorImageFilter<InputImageType>             StreamingStatisticsVectorImageFilterType;
+  typedef typename StreamingStatisticsVectorImageFilterType::Pointer       StreamingStatisticsVectorImageFilterPointer;
+  typedef typename StreamingStatisticsVectorImageFilterType::RealType      RealType;
+  typedef typename StreamingStatisticsVectorImageFilterType::RealPixelType RealPixelType;
+  typedef typename StreamingStatisticsVectorImageFilterType::MatrixType    MatrixType;
 
 protected:
   NormalizeInnerProductPCAImageFilter();
-  virtual ~NormalizeInnerProductPCAImageFilter() {};
+  virtual ~NormalizeInnerProductPCAImageFilter() {}
 
   /** NormalizeInnerProductPCAImageFilter can produce an image which is a different
    * resolution than its input image.  As such, NormalizeInnerProductPCAImageFilter
@@ -88,7 +88,6 @@ protected:
    * \sa ProcessObject::GenerateOutputInformaton()  */
   virtual void GenerateOutputInformation();
 
-
   /** NormalizeInnerProductPCAImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -99,7 +98,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   /** BeforeThreadedGenerateData method */
   void BeforeThreadedGenerateData();

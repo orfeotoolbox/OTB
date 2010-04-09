@@ -60,14 +60,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT InnerProductPCAImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef InnerProductPCAImageFilter            Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef InnerProductPCAImageFilter                         Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -76,39 +76,40 @@ public:
   itkTypeMacro(InnerProductPCAImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef EstimateInnerProductPCAImageFilter<InputImageType,OutputImageType> EstimatePCAFilterType;
-  typedef typename EstimatePCAFilterType::Pointer EstimatePCAFilterPointer;
-  typedef NormalizeInnerProductPCAImageFilter<OutputImageType,OutputImageType> NormalizePCAFilterType;
-  typedef typename NormalizePCAFilterType::Pointer NormalizePCAFilterPointer;
+  typedef EstimateInnerProductPCAImageFilter<InputImageType, OutputImageType>   EstimatePCAFilterType;
+  typedef typename EstimatePCAFilterType::Pointer                               EstimatePCAFilterPointer;
+  typedef NormalizeInnerProductPCAImageFilter<OutputImageType, OutputImageType> NormalizePCAFilterType;
+  typedef typename NormalizePCAFilterType::Pointer                              NormalizePCAFilterPointer;
 
   /** Template parameters typedefs for mean component generation */
-  typedef Image< typename InputImageType::InternalPixelType,::itk::GetImageDimension<InputImageType>::ImageDimension > InternalImageType;
-  typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType >
+  typedef Image<typename InputImageType::InternalPixelType,
+                ::itk::GetImageDimension<InputImageType>::ImageDimension> InternalImageType;
+  typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType>
   MeanFunctorType;
   typedef itk::UnaryFunctorImageFilter<InputImageType, InternalImageType, MeanFunctorType> MeanFilterType;
-  typedef typename MeanFilterType::Pointer MeanFilterPointer;
-  typedef ImageToVectorImageCastFilter<InternalImageType, OutputImageType>  CastFilterType;
-  typedef typename CastFilterType::Pointer CastFilterPointer;
-  typedef ConcatenateVectorImageFilter< OutputImageType, OutputImageType, OutputImageType > ConcatenateFilterType;
-  typedef typename ConcatenateFilterType::Pointer ConcatenateFilterPointer;
+  typedef typename MeanFilterType::Pointer                                                 MeanFilterPointer;
+  typedef ImageToVectorImageCastFilter<InternalImageType, OutputImageType>                 CastFilterType;
+  typedef typename CastFilterType::Pointer                                                 CastFilterPointer;
+  typedef ConcatenateVectorImageFilter<OutputImageType, OutputImageType, OutputImageType>  ConcatenateFilterType;
+  typedef typename ConcatenateFilterType::Pointer                                          ConcatenateFilterPointer;
 
   /** Set/Get the number of required largest principal components. The filter produces
    the required number of principal components plus one outputs. Output index 0 represents
    the mean image and the remaining outputs the requested principal components.*/
-  itkSetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
-  itkGetMacro( NumberOfPrincipalComponentsRequired, unsigned int );
-  
+  itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
+  itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
+
   /** Enable/Disable the generation of the mean component output */
-  itkSetMacro( GenerateMeanComponent, bool );
-  itkGetMacro( GenerateMeanComponent, bool );
+  itkSetMacro(GenerateMeanComponent, bool);
+  itkGetMacro(GenerateMeanComponent, bool);
   itkBooleanMacro(GenerateMeanComponent);
 
   /** Enable/Disable center data */
-  itkSetMacro( CenterData, bool );
-  itkGetMacro( CenterData, bool );
+  itkSetMacro(CenterData, bool);
+  itkGetMacro(CenterData, bool);
   itkBooleanMacro(CenterData);
 
 protected:
@@ -117,7 +118,7 @@ protected:
   /** Constructor */
   InnerProductPCAImageFilter();
   /** Destructor */
-  virtual ~InnerProductPCAImageFilter() {};
+  virtual ~InnerProductPCAImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -132,8 +133,8 @@ protected:
   virtual void GenerateOutputInformation();
 
 private:
-  InnerProductPCAImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  InnerProductPCAImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The number of largest principal components  */
   unsigned int m_NumberOfPrincipalComponentsRequired;
@@ -151,12 +152,12 @@ private:
   bool m_GenerateMeanComponent;
 
   /** Internals filters use to generate mean component output */
-  MeanFilterPointer m_MeanFilter;
-  CastFilterPointer m_CastFilter;
+  MeanFilterPointer        m_MeanFilter;
+  CastFilterPointer        m_CastFilter;
   ConcatenateFilterPointer m_ConcatenateFilter;
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbInnerProductPCAImageFilter.txx"

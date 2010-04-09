@@ -37,22 +37,23 @@ namespace otb
  */
 template<class TImage>
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter
-: public itk::AttributeOpeningLabelMapFilter<TImage,
-             Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> >
+  : public itk::AttributeOpeningLabelMapFilter<TImage,
+                                               Functor::AttributesMapLabelObjectAccessor<typename TImage::
+                                                                                         LabelObjectType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef AttributesMapOpeningLabelMapFilter                       Self;
+  typedef AttributesMapOpeningLabelMapFilter Self;
   typedef itk::AttributeOpeningLabelMapFilter <TImage,
-               Functor::AttributesMapLabelObjectAccessor<TImage> > Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+                                               Functor::AttributesMapLabelObjectAccessor<TImage> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(AttributesMapOpeningLabelMapFilter,itk::AttributeOpeningLabelMapFilter);
+  itkTypeMacro(AttributesMapOpeningLabelMapFilter, itk::AttributeOpeningLabelMapFilter);
 
   /** Set the name of the attribute to perform opening on */
   void SetAttributeName(const char * name)
@@ -73,13 +74,11 @@ protected:
   ~AttributesMapOpeningLabelMapFilter() {}
 
 private:
-  AttributesMapOpeningLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapOpeningLabelMapFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 }; // end of class
 
 } // end namespace otb
 
 #endif
-
-

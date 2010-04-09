@@ -51,42 +51,40 @@ namespace otb
  * \sa VectorDataFileWriter
  *
  */
-template <class TPrecision = double, unsigned int VDimension =2, class TValuePrecision = double>
+template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
 class VectorData
-      : public itk::DataObject
+  : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef VectorData Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef VectorData                    Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(VectorData,DataObject);
+  itkTypeMacro(VectorData, DataObject);
   itkStaticConstMacro(Dimension, unsigned int, VDimension);
 
   /** Template parameters typedef */
-  typedef TPrecision PrecisionType;
+  typedef TPrecision      PrecisionType;
   typedef TValuePrecision ValuePrecisionType;
   //define VDimension Dimension;
-  typedef otb::DataNode<TPrecision,VDimension,TValuePrecision> DataNodeType;
-  typedef typename DataNodeType::Pointer DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
-  typedef typename DataTreeType::Pointer DataTreePointerType;
+  typedef otb::DataNode<TPrecision, VDimension, TValuePrecision> DataNodeType;
+  typedef typename DataNodeType::Pointer                         DataNodePointerType;
+  typedef itk::TreeContainer<DataNodePointerType>                DataTreeType;
+  typedef typename DataTreeType::Pointer                         DataTreePointerType;
 
-  typedef typename DataNodeType::PointType PointType;
-  typedef typename DataNodeType::LineType LineType;
+  typedef typename DataNodeType::PointType   PointType;
+  typedef typename DataNodeType::LineType    LineType;
   typedef typename DataNodeType::PolygonType PolygonType;
 
-
   typedef itk::Vector<double, 2> SpacingType;
-  typedef itk::Point<double, 2> OriginType;
+  typedef itk::Point<double, 2>  OriginType;
 
-  itkGetObjectMacro(DataTree,DataTreeType);
-  itkGetConstObjectMacro(DataTree,DataTreeType);
+  itkGetObjectMacro(DataTree, DataTreeType);
+  itkGetConstObjectMacro(DataTree, DataTreeType);
 
   virtual void SetProjectionRef(std::string projectionRef);
   virtual std::string GetProjectionRef() const;
@@ -95,21 +93,19 @@ public:
    * image coordinates
     * \sa GetOrigin() */
   itkSetMacro(Origin, OriginType);
-  virtual void SetOrigin( const double origin[2] );
-  virtual void SetOrigin( const float origin[2] );
+  virtual void SetOrigin(const double origin[2]);
+  virtual void SetOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(Origin, OriginType);
-
 
   /** Set the spacing of the vector data to put it in the corresponding
    * image coordinates
    * \sa GetSpacing() */
-  virtual void SetSpacing( const SpacingType & spacing );
-  virtual void SetSpacing( const double spacing[2] );
-  virtual void SetSpacing( const float spacing[2] );
+  virtual void SetSpacing(const SpacingType& spacing);
+  virtual void SetSpacing(const double spacing[2]);
+  virtual void SetSpacing(const float spacing[2]);
 
   itkGetConstReferenceMacro(Spacing, SpacingType);
-
 
   /** Clear the vector data  */
   virtual bool Clear();
@@ -127,27 +123,24 @@ protected:
   /** Constructor */
   VectorData();
   /** Destructor */
-  virtual ~VectorData() {};
+  virtual ~VectorData() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   VectorData(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Data tree */
   DataTreePointerType m_DataTree;
 
-
-  SpacingType         m_Spacing;
-  OriginType          m_Origin;
+  SpacingType m_Spacing;
+  OriginType  m_Origin;
 };
-}// end namespace otb
-
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorData.txx"
 #endif
 
 #endif
-

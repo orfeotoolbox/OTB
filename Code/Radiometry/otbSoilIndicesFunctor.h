@@ -49,20 +49,20 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(inputVector[m_GreenIndex-1],static_cast<TInput2>(inputVector[m_RedIndex-1]));
+    return this->Evaluate(inputVector[m_GreenIndex - 1], static_cast<TInput2>(inputVector[m_RedIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &g, const TInput2 &r)
+  inline TOutput operator ()(const TInput1& g, const TInput2& r)
   {
-    return this->Evaluate(g,r);
-  };
+    return this->Evaluate(g, r);
+  }
   /// Constructor
-  GAndRIndexBase() : m_GreenIndex(1), m_RedIndex(2) {};
+  GAndRIndexBase() : m_GreenIndex(1), m_RedIndex(2) {}
   /// Desctructor
-  virtual ~GAndRIndexBase() {};
+  virtual ~GAndRIndexBase() {}
 
   /// Set Green Index
   void SetGreenIndex(unsigned int channel)
@@ -87,13 +87,12 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & g, const TInput2 & r) const = 0;
+  virtual TOutput Evaluate(const TInput1& g, const TInput2& r) const = 0;
 
 private:
   unsigned int m_GreenIndex;
   unsigned int m_RedIndex;
 };
-
 
 /**
  * \class GAndRAndNirIndexBase
@@ -111,20 +110,22 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(static_cast<TInput1>(inputVector[m_GreenIndex-1]),static_cast<TInput2>(inputVector[m_RedIndex-1]),static_cast<TInput3>(inputVector[m_NIRIndex-1]));
+    return this->Evaluate(static_cast<TInput1>(inputVector[m_GreenIndex - 1]),
+                          static_cast<TInput2>(inputVector[m_RedIndex - 1]),
+                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &g, const TInput2 &r, const TInput2 &nir)
+  inline TOutput operator ()(const TInput1& g, const TInput2& r, const TInput2& nir)
   {
-    return this->Evaluate(g,r,nir);
-  };
+    return this->Evaluate(g, r, nir);
+  }
   /// Constructor
-  GAndRAndNirIndexBase() : m_GreenIndex(1), m_RedIndex(2),  m_NIRIndex(3) {};
+  GAndRAndNirIndexBase() : m_GreenIndex(1), m_RedIndex(2),  m_NIRIndex(3) {}
   /// Desctructor
-  virtual ~GAndRAndNirIndexBase() {};
+  virtual ~GAndRAndNirIndexBase() {}
 
   /// Set Green Index
   void SetGreenIndex(unsigned int channel)
@@ -159,14 +160,13 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & g, const TInput2 & r, const TInput2 & nir) const = 0;
+  virtual TOutput Evaluate(const TInput1& g, const TInput2& r, const TInput2& nir) const = 0;
 
 private:
   unsigned int m_GreenIndex;
   unsigned int m_RedIndex;
   unsigned int m_NIRIndex;
 };
-
 
 /** \class IR
  *  \brief This functor computes the Red Index (IR)
@@ -177,25 +177,25 @@ private:
  *  \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class IR : public GAndRIndexBase<TInput1,TInput2,TOutput>
+class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  IR() {};
+  IR() {}
   /// Desctructor
-  virtual ~IR() {};
+  virtual ~IR() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if ( dGreen == 0 )
+    if (dGreen == 0)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>( vcl_pow(dRed,2.)/vcl_pow(dGreen,3.) ) );
+    return (static_cast<TOutput>(vcl_pow(dRed, 2.) / vcl_pow(dGreen, 3.)));
   }
 };
 
@@ -208,25 +208,25 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class IC : public GAndRIndexBase<TInput1,TInput2,TOutput>
+class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  IC() {};
+  IC() {}
   /// Desctructor
-  virtual ~IC() {};
+  virtual ~IC() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if ( dGreen + dRed == 0 )
+    if (dGreen + dRed == 0)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>( (dRed - dGreen)/(dRed + dGreen) ) );
+    return (static_cast<TOutput>((dRed - dGreen) / (dRed + dGreen)));
   }
 };
 
@@ -239,21 +239,21 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class IB : public GAndRIndexBase<TInput1,TInput2,TOutput>
+class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  IB() {};
+  IB() {}
   /// Desctructor
-  virtual ~IB() {};
+  virtual ~IB() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
 
-    return ( static_cast<TOutput>( vcl_sqrt((dRed*dRed + dGreen*dGreen)/2.) ));
+    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
   }
 };
 
@@ -266,25 +266,24 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class IB2 : public GAndRAndNirIndexBase<TInput1,TInput2,TInput3,TOutput>
+class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
   /// Constructor
-  IB2() {};
+  IB2() {}
   /// Desctructor
-  virtual ~IB2() {};
+  virtual ~IB2() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &pGreen, const TInput2 &pRed, const TInput2 &pNir) const
+  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
     double dNir = static_cast<double>(pNir);
 
-    return ( static_cast<TOutput>( vcl_sqrt((dRed*dRed + dGreen*dGreen + dNir*dNir)/3.) ));
+    return (static_cast<TOutput>(vcl_sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
   }
 };
-
 
 } // namespace Functor
 } // namespace otb

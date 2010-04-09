@@ -40,15 +40,15 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ExtractROIBase:
-      public itk::ImageToImageFilter<TInputImage,TOutputImage>
+class ITK_EXPORT ExtractROIBase :
+  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtractROIBase         Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ExtractROIBase                                     Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -62,17 +62,17 @@ public:
 
   /** Typedef to describe the output and input image region types. */
   typedef typename TOutputImage::RegionType OutputImageRegionType;
-  typedef typename TInputImage::RegionType InputImageRegionType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename TOutputImage::PixelType OutputImagePixelType;
-  typedef typename TInputImage::PixelType InputImagePixelType;
+  typedef typename TInputImage::PixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename TOutputImage::IndexType OutputImageIndexType;
-  typedef typename TInputImage::IndexType InputImageIndexType;
-  typedef typename TOutputImage::SizeType OutputImageSizeType;
-  typedef typename TInputImage::SizeType InputImageSizeType;
+  typedef typename TInputImage::IndexType  InputImageIndexType;
+  typedef typename TOutputImage::SizeType  OutputImageSizeType;
+  typedef typename TInputImage::SizeType   InputImageSizeType;
 
   /** ImageDimension enumeration */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -82,7 +82,8 @@ public:
 
   typedef
   itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-  itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
+                                                                itkGetStaticConstMacro(OutputImageDimension)>
+  ExtractROIBaseRegionCopierType;
 
   itkGetMacro(ExtractionRegion, InputImageRegionType);
 
@@ -90,25 +91,22 @@ public:
   void SetExtractionRegion(InputImageRegionType roi);
 
   /** Set/Get Start methods */
-  itkSetMacro(StartX,unsigned long);
-  itkGetConstMacro(StartX,unsigned long);
-  itkSetMacro(StartY,unsigned long);
-  itkGetConstMacro(StartY,unsigned long);
+  itkSetMacro(StartX, unsigned long);
+  itkGetConstMacro(StartX, unsigned long);
+  itkSetMacro(StartY, unsigned long);
+  itkGetConstMacro(StartY, unsigned long);
   /** Set/Get Size methods */
-  itkSetMacro(SizeX,unsigned long);
-  itkGetConstMacro(SizeX,unsigned long);
-  itkSetMacro(SizeY,unsigned long);
-  itkGetConstMacro(SizeY,unsigned long);
-
+  itkSetMacro(SizeX, unsigned long);
+  itkGetConstMacro(SizeX, unsigned long);
+  itkSetMacro(SizeY, unsigned long);
+  itkGetConstMacro(SizeY, unsigned long);
 
 protected:
   ExtractROIBase();
-  virtual ~ExtractROIBase() {};
+  virtual ~ExtractROIBase() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
   virtual void GenerateInputRequestedRegion();
-
 
   /** ExtractROIBase can produce an image which is a different
    * resolution than its input image.  As such, ExtractROIBase
@@ -130,8 +128,8 @@ protected:
    * support output images of a lower dimension that the input.
    *
    * \sa ImageToImageFilter::CallCopyRegion() */
-  virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
-      const OutputImageRegionType &srcRegion);
+  virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
+                                                 const OutputImageRegionType& srcRegion);
 
   /** ExtractROIBase can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -146,11 +144,11 @@ protected:
 //  ATTENTION bizarre
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId )
+                            int threadId)
 
   {
 
-  };
+  }
 
   /** Set/Get the output image region.
    *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
@@ -159,13 +157,12 @@ protected:
    *  ExtractionRegion.Size = 0. */
   void SetInternalExtractionRegion(InputImageRegionType extractRegion);
 
-
-  InputImageRegionType m_ExtractionRegion;
+  InputImageRegionType  m_ExtractionRegion;
   OutputImageRegionType m_OutputImageRegion;
 
 private:
-  ExtractROIBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ExtractROIBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -174,9 +171,7 @@ private:
   unsigned long m_SizeX;
   unsigned long m_SizeY;
 
-
 };
-
 
 } // end namespace otb
 

@@ -32,7 +32,6 @@ PackedWidgetManager
   delete m_PackedWidget;
 }
 
-
 void
 PackedWidgetManager
 ::RegisterFullWidget(WidgetType* fullWidget)
@@ -40,10 +39,9 @@ PackedWidgetManager
   m_InternalFullWidget = fullWidget;
   m_PackedWidget->m_FullGroup->add(fullWidget);
   m_PackedWidget->m_FullGroup->resizable(fullWidget);
-  fullWidget->resize(m_PackedWidget->m_FullGroup->x(),m_PackedWidget->m_FullGroup->y(),
-                     m_PackedWidget->m_FullGroup->w(),m_PackedWidget->m_FullGroup->h());
+  fullWidget->resize(m_PackedWidget->m_FullGroup->x(), m_PackedWidget->m_FullGroup->y(),
+                     m_PackedWidget->m_FullGroup->w(), m_PackedWidget->m_FullGroup->h());
 }
-
 
 void
 PackedWidgetManager
@@ -52,8 +50,8 @@ PackedWidgetManager
   m_InternalScrollWidget = scrollWidget;
   m_PackedWidget->m_QuicklookGroup->add(scrollWidget);
   m_PackedWidget->m_QuicklookGroup->resizable(scrollWidget);
-  scrollWidget->resize(m_PackedWidget->m_QuicklookGroup->x(),m_PackedWidget->m_QuicklookGroup->y(),
-                       m_PackedWidget->m_QuicklookGroup->w(),m_PackedWidget->m_QuicklookGroup->h());
+  scrollWidget->resize(m_PackedWidget->m_QuicklookGroup->x(), m_PackedWidget->m_QuicklookGroup->y(),
+                       m_PackedWidget->m_QuicklookGroup->w(), m_PackedWidget->m_QuicklookGroup->h());
 
 }
 
@@ -64,8 +62,8 @@ PackedWidgetManager
   m_InternalZoomWidget = zoomWidget;
   m_PackedWidget->m_ZoomGroup->add(zoomWidget);
   m_PackedWidget->m_ZoomGroup->resizable(zoomWidget);
-  zoomWidget->resize(m_PackedWidget->m_ZoomGroup->x(),m_PackedWidget->m_ZoomGroup->y(),
-                     m_PackedWidget->m_ZoomGroup->w(),m_PackedWidget->m_ZoomGroup->h());
+  zoomWidget->resize(m_PackedWidget->m_ZoomGroup->x(), m_PackedWidget->m_ZoomGroup->y(),
+                     m_PackedWidget->m_ZoomGroup->w(), m_PackedWidget->m_ZoomGroup->h());
 }
 void
 PackedWidgetManager
@@ -74,8 +72,8 @@ PackedWidgetManager
   m_IntenalPixelWidget = pixelWidget;
   m_PackedWidget->m_PixelDescriptionGroup->add(pixelWidget);
   m_PackedWidget->m_PixelDescriptionGroup->resizable(pixelWidget);
-  pixelWidget->resize(m_PackedWidget->m_PixelDescriptionGroup->x(),m_PackedWidget->m_PixelDescriptionGroup->y(),
-                      m_PackedWidget->m_PixelDescriptionGroup->w(),m_PackedWidget->m_PixelDescriptionGroup->h());
+  pixelWidget->resize(m_PackedWidget->m_PixelDescriptionGroup->x(), m_PackedWidget->m_PixelDescriptionGroup->y(),
+                      m_PackedWidget->m_PixelDescriptionGroup->w(), m_PackedWidget->m_PixelDescriptionGroup->h());
 
 }
 
@@ -86,9 +84,9 @@ PackedWidgetManager
   m_InternalCurveWidget = curveWidget;
   m_PackedWidget->m_HistogramsGroup->add(curveWidget);
   m_PackedWidget->m_HistogramsGroup->resizable(curveWidget);
- curveWidget->resize(m_PackedWidget->m_HistogramsGroup->x(),m_PackedWidget->m_HistogramsGroup->y(),
-                                            m_PackedWidget->m_HistogramsGroup->w(),m_PackedWidget->m_HistogramsGroup->h());
- }
+  curveWidget->resize(m_PackedWidget->m_HistogramsGroup->x(), m_PackedWidget->m_HistogramsGroup->y(),
+                      m_PackedWidget->m_HistogramsGroup->w(), m_PackedWidget->m_HistogramsGroup->h());
+}
 
 void
 PackedWidgetManager
@@ -100,7 +98,7 @@ PackedWidgetManager
   m_InternalFullWidget->show();
   m_InternalScrollWidget->show();
   m_InternalZoomWidget->show();
- }
+}
 
 void
 PackedWidgetManager
@@ -113,11 +111,11 @@ void
 PackedWidgetManager
 ::Refresh()
 {
- m_InternalScrollWidget ->redraw();
- m_InternalFullWidget ->redraw();
- m_InternalZoomWidget->redraw();
- m_IntenalPixelWidget->redraw();
- m_InternalCurveWidget->redraw();
+  m_InternalScrollWidget->redraw();
+  m_InternalFullWidget->redraw();
+  m_InternalZoomWidget->redraw();
+  m_IntenalPixelWidget->redraw();
+  m_InternalCurveWidget->redraw();
 }
 
 void

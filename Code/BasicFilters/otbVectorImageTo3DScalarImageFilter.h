@@ -38,14 +38,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageTo3DScalarImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageTo3DScalarImageFilter                  Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef VectorImageTo3DScalarImageFilter                   Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -54,19 +54,18 @@ public:
   itkTypeMacro(VectorImageTo3DScalarImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::SizeType InputImageSizeType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::IndexType OutputImageIndexType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
-
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::SizeType     InputImageSizeType;
+  typedef typename InputImageType::IndexType    InputImageIndexType;
+  typedef typename InputImageType::PixelType    InputPixelType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointerType;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::IndexType   OutputImageIndexType;
+  typedef typename OutputImageType::SizeType    OutputImageSizeType;
+  typedef typename OutputImageType::PixelType   OutputPixelType;
 
 protected:
 
@@ -78,20 +77,20 @@ protected:
 
   /** Threaded Generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();
   /** Destructor */
-  virtual ~VectorImageTo3DScalarImageFilter() {};
+  virtual ~VectorImageTo3DScalarImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  VectorImageTo3DScalarImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorImageTo3DScalarImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorImageTo3DScalarImageFilter.txx"
 #endif

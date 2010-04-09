@@ -35,7 +35,7 @@ ObjectListSource<TOutputList>
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputImage
   typename TOutputList::Pointer output
-  = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer());
+    = static_cast<TOutputList*>(this->MakeOutput(0).GetPointer());
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, output.GetPointer());
 
@@ -61,12 +61,12 @@ ObjectListSource<TOutputList>
 ::GetOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
-  {
+    {
     return 0;
-  }
+    }
 
   return static_cast<TOutputList*>
-         (this->Superclass::GetOutput(0));
+           (this->Superclass::GetOutput(0));
 }
 
 /**
@@ -78,7 +78,7 @@ ObjectListSource<TOutputList>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<TOutputList*>
-         (this->Superclass::GetOutput(idx));
+           (this->Superclass::GetOutput(idx));
 }
 
 /**
@@ -100,21 +100,21 @@ void
 ObjectListSource<TOutputList>
 ::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
 {
-  if ( idx >= this->GetNumberOfOutputs() )
-  {
-    itkExceptionMacro(<<"Requested to graft output " << idx <<
+  if (idx >= this->GetNumberOfOutputs())
+    {
+    itkExceptionMacro(<< "Requested to graft output " << idx <<
                       " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-  }
+    }
 
-  if ( !graft )
-  {
-    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-  }
+  if (!graft)
+    {
+    itkExceptionMacro(<< "Requested to graft output that is a NULL pointer");
+    }
 
   itk::DataObject * output = this->GetOutput(idx);
 
   // Call GraftImage to copy meta-information, regions, and the pixel container
-  output->Graft( graft );
+  output->Graft(graft);
 }
 
 //----------------------------------------------------------------------------
@@ -127,11 +127,11 @@ ObjectListSource<TOutputList>
   OutputListPointer outputPtr;
 
   // Allocate the output memory
-  for (unsigned int i=0; i < this->GetNumberOfOutputs(); ++i)
-  {
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
+    {
     outputPtr = this->GetOutput(i);
     outputPtr->Clear();
-  }
+    }
 }
 
 /**
@@ -145,7 +145,6 @@ ObjectListSource<TOutputList>
   itkExceptionMacro("subclass should override this method!!!");
 }
 
-
 /**
    * PrintSelf Method
  */
@@ -154,7 +153,7 @@ void
 ObjectListSource<TOutputList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // end namespace otb
 

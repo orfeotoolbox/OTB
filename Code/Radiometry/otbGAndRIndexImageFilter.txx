@@ -31,41 +31,38 @@ namespace otb
  * Constructor
  */
 template <class TInputImageG, class TInputImageR,
-class TOutputImage, class TFunction  >
-GAndRIndexImageFilter<TInputImageG,TInputImageR,TOutputImage,TFunction>
+          class TOutputImage, class TFunction>
+GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 ::GAndRIndexImageFilter()
 {
 }
 
-
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageG, class TInputImageR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-GAndRIndexImageFilter<TInputImageG,TInputImageR,TOutputImage,TFunction>
-::SetInputG( const TInputImageG * image1 )
+GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
+::SetInputG(const TInputImageG * image1)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1( image1 );
+  SetInput1(image1);
 }
-
 
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageG, class TInputImageR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-GAndRIndexImageFilter<TInputImageG,TInputImageR,TOutputImage,TFunction>
-::SetInputR( const TInputImageR * image2 )
+GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
+::SetInputR(const TInputImageR * image2)
 {
   // Process object is not const-correct so the const casting is required.
 //  SetNthInput(1, const_cast<TInputImageR *>( image2 ));
-  SetInput2( image2 );
+  SetInput2(image2);
 }
-
 
 /**
  * ThreadedGenerateData Performs the pixel-wise addition
@@ -109,12 +106,12 @@ GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 
 }
 */
-template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction  >
+template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction>
 void
 GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 }

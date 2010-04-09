@@ -37,24 +37,24 @@ namespace MorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MRToMSConverter
-      : public ImageListToImageListFilter<TInputImage,TOutputImage>
+  : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef MRToMSConverter                                    Self;
-  typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
+  typedef MRToMSConverter                                       Self;
+  typedef ImageListToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(MRToMSConverter,ImageListToImageListFilter);
+  itkTypeMacro(MRToMSConverter, ImageListToImageListFilter);
   /** Input parameters typedefs */
-  typedef TInputImage                                     InputImageType;
-  typedef typename Superclass::InputImagePointer          InputImagePointer;
-  typedef typename Superclass::InputImageListType         InputImageListType;
-  typedef typename Superclass::InputImageListPointerType  InputImageListPointerType;
-  typedef typename InputImageListType::Iterator           InputImageListIteratorType;
+  typedef TInputImage                                    InputImageType;
+  typedef typename Superclass::InputImagePointer         InputImagePointer;
+  typedef typename Superclass::InputImageListType        InputImageListType;
+  typedef typename Superclass::InputImageListPointerType InputImageListPointerType;
+  typedef typename InputImageListType::Iterator          InputImageListIteratorType;
   /** Output parameters typedefs */
   typedef TOutputImage                                    OutputImageType;
   typedef typename Superclass::OutputImagePointer         OutputImagePointerType;
@@ -146,19 +146,19 @@ protected:
   /** Constructor */
   MRToMSConverter();
   /** Destructor */
-  ~MRToMSConverter() {};
+  ~MRToMSConverter() {}
 
   /** Main computation method */
   void GenerateData();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-private :
-  MRToMSConverter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+private:
+  MRToMSConverter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 };
 } // End namespace MorphologicalPyramid
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidMRToMSConverter.txx"

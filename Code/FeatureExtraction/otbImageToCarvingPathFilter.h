@@ -51,10 +51,9 @@ namespace otb
  * \ingroup ImageFilters
  */
 
-
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToCarvingPathFilter
-      : public ImageToPathFilter<TInputImage, TOutputPath>
+  : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
@@ -66,7 +65,7 @@ public:
   /// Creation through the object factory
   itkNewMacro(Self);
   /// Runtime information
-  itkTypeMacro(ImageToCarvingPathFilter,ImageToPathFilter);
+  itkTypeMacro(ImageToCarvingPathFilter, ImageToPathFilter);
 
   /// Template parameters typedef
   typedef typename Superclass::InputImageType        InputImageType;
@@ -74,30 +73,29 @@ public:
   typedef typename Superclass::OutputPathType        OutputPathType;
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
-  typedef typename InputImageType::PixelType     PixelType;
-
+  typedef typename InputImageType::PixelType PixelType;
 
   /** Set and Get foreground value */
-  itkSetMacro(ForegroundValue,PixelType);
-  itkGetConstMacro(ForegroundValue,PixelType);
+  itkSetMacro(ForegroundValue, PixelType);
+  itkGetConstMacro(ForegroundValue, PixelType);
 
   /** Set and Get direction value */
-  itkSetMacro(Direction ,unsigned int);
-  itkGetConstMacro(Direction ,unsigned int);
+  itkSetMacro(Direction, unsigned int);
+  itkGetConstMacro(Direction, unsigned int);
 
   /** Get EnergyPerPix value */
-  itkGetConstMacro(EnergyPerPix ,double);
+  itkGetConstMacro(EnergyPerPix, double);
 
 protected:
   ImageToCarvingPathFilter();
-  virtual ~ImageToCarvingPathFilter() {};
+  virtual ~ImageToCarvingPathFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}; //does nothing
+  virtual void GenerateOutputInformation() {}  //does nothing
   virtual void GenerateData();
 
 private:
-  ImageToCarvingPathFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  ImageToCarvingPathFilter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   PixelType    m_ForegroundValue;
   unsigned int m_Direction;

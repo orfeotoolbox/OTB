@@ -39,28 +39,28 @@ class ITK_EXPORT PointSetToPointSetFilter : public PointSetSource<TOutputPointSe
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetToPointSetFilter         Self;
-  typedef PointSetSource<TOutputPointSet>  Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef PointSetToPointSetFilter        Self;
+  typedef PointSetSource<TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetToPointSetFilter, PointSetSource);
 
   /** Some Image related typedefs. */
-  typedef   TInputPointSet                             InputPointSetType;
-  typedef   typename InputPointSetType::Pointer        InputPointSetPointer;
-  typedef   typename InputPointSetType::ConstPointer   InputPointSetConstPointer;
+  typedef   TInputPointSet                           InputPointSetType;
+  typedef   typename InputPointSetType::Pointer      InputPointSetPointer;
+  typedef   typename InputPointSetType::ConstPointer InputPointSetConstPointer;
 
   /** Some PointSet related typedefs. */
-  typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
-  typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
-  typedef   typename Superclass::PointsContainerType    PointsContainerType;
-  typedef   itk::ProcessObject                          ProcessObjectType;
+  typedef   typename Superclass::OutputPointSetType    OutputPointSetType;
+  typedef   typename Superclass::OutputPointSetPointer OutputPointSetPointer;
+  typedef   typename Superclass::PointsContainerType   PointsContainerType;
+  typedef   itk::ProcessObject                         ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputPointSetType *input);
-  void SetInput( const InputPointSetType *input);
+  void SetInput(const InputPointSetType *input);
 
   /** Get the input image of this process object.  */
   InputPointSetType * GetInput(unsigned int idx);
@@ -68,12 +68,12 @@ public:
 
 protected:
   PointSetToPointSetFilter();
-  virtual ~PointSetToPointSetFilter() {};
+  virtual ~PointSetToPointSetFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PointSetToPointSetFilter(const PointSetToPointSetFilter&); //purposely not implemented
-  void operator=(const PointSetToPointSetFilter&); //purposely not implemented
+  PointSetToPointSetFilter(const PointSetToPointSetFilter &); //purposely not implemented
+  void operator =(const PointSetToPointSetFilter&); //purposely not implemented
 
 };
 

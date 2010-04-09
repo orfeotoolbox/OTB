@@ -24,14 +24,13 @@
 #include "otbMorphologicalPyramidSegmenter.h"
 #include "otbMacro.h"
 
-
 namespace otb
 {
 /**
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::MorphologicalPyramidSegmentationFilter()
 {
   this->SetNumberOfRequiredInputs(3);
@@ -43,7 +42,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * Destructor
  */
 template <class TInputImage, class TOutputImage>
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::~MorphologicalPyramidSegmentationFilter() {}
 
 /**
@@ -52,10 +51,10 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::SetReferenceImage(InputImageType * image)
 {
-  this->SetNthInput(0,const_cast<InputImageType *>(image));
+  this->SetNthInput(0, const_cast<InputImageType *>(image));
 }
 /**
  * Set the brighter details from the pyramid. The brighter details are the supFilter or
@@ -64,10 +63,10 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::SetBrighterDetails(InputImageListType * imageList)
 {
-  this->SetNthInput(1,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(1, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Set the darker details from the pyramid. The darker details are the supFilter or
@@ -76,19 +75,19 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::SetDarkerDetails(InputImageListType * imageList)
 {
-  this->SetNthInput(2,const_cast<InputImageListType *>(imageList));
+  this->SetNthInput(2, const_cast<InputImageListType *>(imageList));
 }
 /**
  * Get the reference image
  * \return The reference image.
  */
 template <class TInputImage, class TOutputImage>
-typename MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+typename MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::InputImageType*
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::GetReferenceImage(void)
 {
   return dynamic_cast<InputImageType *>(this->itk::ProcessObject::GetInput(0));
@@ -99,9 +98,9 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * \param imageList The brighter details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
-typename MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+typename MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::InputImageListType*
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::GetBrighterDetails(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(1));
@@ -112,9 +111,9 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * \return The darker details extracted from the resampling operation.
  */
 template <class TInputImage, class TOutputImage>
-typename MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+typename MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::InputImageListType*
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::GetDarkerDetails(void)
 {
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(2));
@@ -125,9 +124,9 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  * \return The vector.
  */
 template <class TInputImage, class TOutputImage>
-typename MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+typename MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::NumberOfObjectsVectorType
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::GetNumberOfObjectsVector(void)
 {
   return m_NumberOfObjectsVector;
@@ -137,21 +136,21 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::GenerateData(void)
 {
   // Reference image pointer
   InputImagePointerType referenceImage = this->GetReferenceImage();
-  otbMsgDevMacro("SegmentationFilter: reference image size: "<<referenceImage->GetLargestPossibleRegion().GetSize());
+  otbMsgDevMacro("SegmentationFilter: reference image size: " << referenceImage->GetLargestPossibleRegion().GetSize());
 
   // Output images list pointer
   OutputImageListPointerType outputList = this->GetOutput();
 
   // Multi resolution to multi scale filter typedef
-  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,InputImageType> MRToMSConverterType;
+  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType, InputImageType> MRToMSConverterType;
 
   // Segmentation filter typedef
-  typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType> SegmenterType;
+  typedef otb::MorphologicalPyramid::Segmenter<InputImageType, OutputImageType> SegmenterType;
 
   // MR To MS conversion
   typename MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
@@ -166,8 +165,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   // Segmentation filter definition
   typename InputImageListType::Iterator it;
   // Segment the supFilter details
-  for (it= brighter->Begin();it!=brighter->End();++it)
-  {
+  for (it = brighter->Begin(); it != brighter->End(); ++it)
+    {
     typename SegmenterType::Pointer segmenter = SegmenterType::New();
     segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
     segmenter->SetSeedsQuantile(m_SeedsQuantile);
@@ -177,12 +176,11 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
     segmenter->Update();
     m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
     outputList->PushBack(segmenter->GetOutput());
-  }
-
+    }
 
   // Segment the infFilter details
-  for (it= darker->Begin();it!= darker->End();++it)
-  {
+  for (it = darker->Begin(); it != darker->End(); ++it)
+    {
     typename SegmenterType::Pointer segmenter = SegmenterType::New();
     segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
     segmenter->SetSeedsQuantile(m_SeedsQuantile);
@@ -194,14 +192,14 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
     segmenter->Update();
     m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
     outputList->PushBack(segmenter->GetOutput());
-  }
+    }
 }
 /**
  * PrintSelf method
  */
 template <class TInputImage, class TOutputImage>
 void
-MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
+MorphologicalPyramidSegmentationFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -209,4 +207,3 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 } // End namespace otb
 
 #endif
-

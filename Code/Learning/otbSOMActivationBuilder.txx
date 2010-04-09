@@ -27,17 +27,17 @@ namespace otb
  * Constructor.
  */
 template <class TInputImage, class TInputMap, class TOutputImage>
-SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
+SOMActivationBuilder<TInputImage, TInputMap, TOutputImage>
 ::SOMActivationBuilder()
 {
   this->SetNumberOfRequiredInputs(1);
-  this->SetNthOutput(0,OutputImageType::New());
+  this->SetNthOutput(0, OutputImageType::New());
 }
 /**
  * Destructor.
  */
 template <class TInputImage, class TInputMap, class TOutputImage>
-SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
+SOMActivationBuilder<TInputImage, TInputMap, TOutputImage>
 ::~SOMActivationBuilder()
 {}
 /**
@@ -45,11 +45,11 @@ SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
  */
 template <class TInputImage, class TInputMap, class TOutputImage>
 void
-SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
+SOMActivationBuilder<TInputImage, TInputMap, TOutputImage>
 ::GenerateData(void)
 {
   // Retrieve the inputs and output pointers
-  InputMapType *  map = const_cast<InputMapType*>(this->GetInput());
+  InputMapType *         map = const_cast<InputMapType*>(this->GetInput());
   OutputImagePointerType output = this->GetOutput();
 
   // output initialization
@@ -61,28 +61,28 @@ SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   typename InputMapType::IndexType index;
   // Iterators instantiation
-  OutputIteratorType outIt(output,output->GetLargestPossibleRegion());
+  OutputIteratorType outIt(output, output->GetLargestPossibleRegion());
 
   // For each vector in the set
   for (typename ListSampleType::Iterator it = m_ListSample->Begin();
-       it!=m_ListSample->End();++it)
-  {
+       it != m_ListSample->End(); ++it)
+    {
     // Retrieve the index of the winner
     index = map->GetWinner(it.GetMeasurementVector());
     // increment the activation map
     outIt.SetIndex(index);
-    outIt.Set(outIt.Get()+1);
-  }
+    outIt.Set(outIt.Get() + 1);
+    }
 }
 /**
  *PrintSelf method
  */
 template <class TInputImage, class TInputMap, class TOutputImage>
 void
-SOMActivationBuilder<TInputImage,TInputMap,TOutputImage>
+SOMActivationBuilder<TInputImage, TInputMap, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // end namespace otb
 #endif

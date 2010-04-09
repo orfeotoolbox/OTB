@@ -31,41 +31,38 @@ namespace otb
  * Constructor
  */
 template <class TInputImageR, class TInputImageNIR,
-class TOutputImage, class TFunction  >
-RAndNIRIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
+          class TOutputImage, class TFunction>
+RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::RAndNIRIndexImageFilter()
 {
 }
 
-
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-RAndNIRIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
-::SetInputR( const TInputImageR * image1 )
+RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
+::SetInputR(const TInputImageR * image1)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1( image1 );
+  SetInput1(image1);
 }
-
 
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageNIR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-RAndNIRIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunction>
-::SetInputNIR( const TInputImageNIR * image2 )
+RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
+::SetInputNIR(const TInputImageNIR * image2)
 {
   // Process object is not const-correct so the const casting is required.
 //  SetNthInput(1, const_cast<TInputImageNIR *>( image2 ));
-  SetInput2( image2 );
+  SetInput2(image2);
 }
-
 
 /**
  * ThreadedGenerateData Performs the pixel-wise addition
@@ -109,12 +106,12 @@ RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 
 }
 */
-template <class TInputImageR, class TInputImageNIR, class TOutputImage, class TFunction  >
+template <class TInputImageR, class TInputImageNIR, class TOutputImage, class TFunction>
 void
 RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 }

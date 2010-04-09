@@ -30,7 +30,7 @@ SpatialObjectSource<TSpatialObject>
 ::SpatialObjectSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,TSpatialObject::New().GetPointer());
+  this->Superclass::SetNthOutput(0, TSpatialObject::New().GetPointer());
 }
 /**
  * Get the output image list
@@ -41,10 +41,10 @@ typename SpatialObjectSource<TSpatialObject>::SpatialObjectType *
 SpatialObjectSource<TSpatialObject>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<SpatialObjectType *> (this->ProcessObject::GetOutput(0));
 }
 /**
@@ -55,7 +55,7 @@ void
 SpatialObjectSource<TSpatialObject>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-}// end namespace otb
+} // end namespace otb
 #endif

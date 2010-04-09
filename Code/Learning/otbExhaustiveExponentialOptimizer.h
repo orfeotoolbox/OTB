@@ -22,7 +22,7 @@
 
 namespace otb
 {
-  
+
 /** \class ExhaustiveExponentialOptimizer
  * \brief This optimizer performs an exhaustive search on an exponential scale.
  *
@@ -40,71 +40,69 @@ namespace otb
  * \ingroup Numerics Optimizers
  */
 class ITK_EXPORT ExhaustiveExponentialOptimizer :
-                    public itk::SingleValuedNonLinearOptimizer
+  public itk::SingleValuedNonLinearOptimizer
 {
 public:
   /** Standard "Self" typedef. */
-  typedef ExhaustiveExponentialOptimizer                 Self;
+  typedef ExhaustiveExponentialOptimizer      Self;
   typedef itk::SingleValuedNonLinearOptimizer Superclass;
   typedef itk::SmartPointer<Self>             Pointer;
   typedef itk::SmartPointer<const Self>       ConstPointer;
-  
-  typedef itk::Array< unsigned long > StepsType;
+
+  typedef itk::Array<unsigned long> StepsType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
-  itkTypeMacro( ExhaustiveExponentialOptimizer,           SingleValuedNonLinearOptimizer   );
- 
-  virtual void    StartOptimization( void );
+  itkTypeMacro(ExhaustiveExponentialOptimizer,           SingleValuedNonLinearOptimizer);
 
-  void StartWalking( void );
-  void ResumeWalking( void );
+  virtual void    StartOptimization(void);
+
+  void StartWalking(void);
+  void ResumeWalking(void);
   void StopWalking(void);
-  
-  itkSetMacro( GeometricProgression, double );
-  itkSetMacro( NumberOfSteps, StepsType );
-  itkSetMacro( StepLength   , double);
-  itkGetConstReferenceMacro( GeometricProgression, double );
-  itkGetConstReferenceMacro( NumberOfSteps, StepsType );
-  itkGetConstReferenceMacro( StepLength ,   double);
-  itkGetConstReferenceMacro( CurrentValue, MeasureType );
-  itkGetConstReferenceMacro( MaximumMetricValue, MeasureType );
-  itkGetConstReferenceMacro( MinimumMetricValue, MeasureType );
-  itkGetConstReferenceMacro( MinimumMetricValuePosition, ParametersType );
-  itkGetConstReferenceMacro( MaximumMetricValuePosition, ParametersType );
-  itkGetConstReferenceMacro( CurrentIndex, ParametersType );
-  itkGetConstReferenceMacro( MaximumNumberOfIterations, unsigned long );
 
+  itkSetMacro(GeometricProgression, double);
+  itkSetMacro(NumberOfSteps, StepsType);
+  itkSetMacro(StepLength, double);
+  itkGetConstReferenceMacro(GeometricProgression, double);
+  itkGetConstReferenceMacro(NumberOfSteps, StepsType);
+  itkGetConstReferenceMacro(StepLength,   double);
+  itkGetConstReferenceMacro(CurrentValue, MeasureType);
+  itkGetConstReferenceMacro(MaximumMetricValue, MeasureType);
+  itkGetConstReferenceMacro(MinimumMetricValue, MeasureType);
+  itkGetConstReferenceMacro(MinimumMetricValuePosition, ParametersType);
+  itkGetConstReferenceMacro(MaximumMetricValuePosition, ParametersType);
+  itkGetConstReferenceMacro(CurrentIndex, ParametersType);
+  itkGetConstReferenceMacro(MaximumNumberOfIterations, unsigned long);
 
 protected:
   ExhaustiveExponentialOptimizer();
-  virtual ~ExhaustiveExponentialOptimizer() {};
+  virtual ~ExhaustiveExponentialOptimizer() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Advance to the next grid position. */
-  void AdvanceOneStep( void );
-  void IncrementIndex( ParametersType & param );
+  void AdvanceOneStep(void);
+  void IncrementIndex(ParametersType& param);
 
-  
 protected:
-  MeasureType          m_CurrentValue;
-  StepsType            m_NumberOfSteps;
-  double               m_StepLength;
-  unsigned long        m_CurrentIteration;
-  bool                 m_Stop;
-  unsigned int         m_CurrentParameter;
-  double               m_GeometricProgression;
-  ParametersType       m_CurrentIndex;
-  unsigned long        m_MaximumNumberOfIterations;
-  MeasureType          m_MaximumMetricValue;
-  MeasureType          m_MinimumMetricValue;
-  ParametersType       m_MinimumMetricValuePosition;
-  ParametersType       m_MaximumMetricValuePosition;
-  
+  MeasureType    m_CurrentValue;
+  StepsType      m_NumberOfSteps;
+  double         m_StepLength;
+  unsigned long  m_CurrentIteration;
+  bool           m_Stop;
+  unsigned int   m_CurrentParameter;
+  double         m_GeometricProgression;
+  ParametersType m_CurrentIndex;
+  unsigned long  m_MaximumNumberOfIterations;
+  MeasureType    m_MaximumMetricValue;
+  MeasureType    m_MinimumMetricValue;
+  ParametersType m_MinimumMetricValuePosition;
+  ParametersType m_MaximumMetricValuePosition;
+
 private:
-  ExhaustiveExponentialOptimizer(const Self&); //purposely not implemented
-  void operator=(const Self&);//purposely not implemented
+  ExhaustiveExponentialOptimizer(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

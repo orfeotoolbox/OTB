@@ -25,7 +25,6 @@
 namespace otb
 {
 
-
 /** \class SiftFastImageFilter
  *  \brief This class extracts key points from an input image through a pyramidal decomposition
  *
@@ -36,20 +35,20 @@ namespace otb
  */
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT SiftFastImageFilter
-      : public ImageToPointSetFilter<TInputImage,TOutputPointSet>
+  : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
   /** Standard typedefs */
-  typedef SiftFastImageFilter                                Self;
-  typedef ImageToPointSetFilter<TInputImage,TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef SiftFastImageFilter                                 Self;
+  typedef ImageToPointSetFilter<TInputImage, TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(SiftFastImageFilter,ImageToPointSetFilter);
+  itkTypeMacro(SiftFastImageFilter, ImageToPointSetFilter);
 
   /** Template parameters typedefs */
 
@@ -57,26 +56,26 @@ public:
   typedef typename TInputImage::Pointer   InputImagePointerType;
   typedef typename TInputImage::PixelType PixelType;
 
-  typedef TOutputPointSet OutputPointSetType;
-  typedef typename TOutputPointSet::Pointer OutputPointSetPointerType;
-  typedef typename TOutputPointSet::PixelType OutputPixelType;
-  typedef typename TOutputPointSet::PointType OutputPointType;
+  typedef TOutputPointSet                           OutputPointSetType;
+  typedef typename TOutputPointSet::Pointer         OutputPointSetPointerType;
+  typedef typename TOutputPointSet::PixelType       OutputPixelType;
+  typedef typename TOutputPointSet::PointType       OutputPointType;
   typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
 
-  typedef otb::Image<float,2> FloatImageType;
-  typedef std::vector< std::pair<OutputPointType,double> >     OrientationVectorType;
+  typedef otb::Image<float, 2>                             FloatImageType;
+  typedef std::vector<std::pair<OutputPointType, double> > OrientationVectorType;
 
   // Used to rescale data in the [0,1] range
-  typedef itk::RescaleIntensityImageFilter<InputImageType,FloatImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType, FloatImageType> RescalerType;
 
-  itkSetMacro(ScalesNumber,unsigned int);
-  itkGetMacro(ScalesNumber,unsigned int);
+  itkSetMacro(ScalesNumber, unsigned int);
+  itkGetMacro(ScalesNumber, unsigned int);
 
   //Set/Get the Orientation of all KeyPoints
   OrientationVectorType GetOrientationVector()
-    {
-      return m_OrientationVector;
-    }
+  {
+    return m_OrientationVector;
+  }
 
 protected:
   /** Actually process the input */
@@ -93,12 +92,11 @@ protected:
 
 private:
   /** The number of scales */
-  unsigned int                m_ScalesNumber;
-  OrientationVectorType       m_OrientationVector;
-
+  unsigned int          m_ScalesNumber;
+  OrientationVectorType m_OrientationVector;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSiftFastImageFilter.txx"
 #endif

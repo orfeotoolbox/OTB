@@ -34,10 +34,10 @@ class ITK_EXPORT DefaultImageMetadataInterfaceFactory : public itk::ObjectFactor
 {
 public:
   /** Standard class typedefs. */
-  typedef DefaultImageMetadataInterfaceFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef DefaultImageMetadataInterfaceFactory Self;
+  typedef itk::ObjectFactoryBase               Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -61,11 +61,10 @@ protected:
   virtual ~DefaultImageMetadataInterfaceFactory();
 
 private:
-  DefaultImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DefaultImageMetadataInterfaceFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

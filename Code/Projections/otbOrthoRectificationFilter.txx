@@ -50,7 +50,6 @@ void OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterp
   os << indent << "OrthoRectification" << "\n";
 }
 
-
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 void
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
@@ -71,11 +70,11 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 
   // fill up the metadata information for ProjectionRef
   typename TOutputImage::Pointer output = this->GetOutput();
-  itk::MetaDataDictionary & dict = output->GetMetaDataDictionary();
+  itk::MetaDataDictionary&       dict = output->GetMetaDataDictionary();
 
   std::string projectionRef = m_MapProjection->GetWkt();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
   // Set an empty keyword list as the output is not in sensor geometry anymore
 //   ImageKeywordlist otb_kwl;
@@ -83,14 +82,13 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 
 }
 
-
 template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
 void
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
 ::ComputeResampleTransformationModel()
 {
   if (m_IsComputed == false)
-  {
+    {
     otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
 
     typename TInputImage::ConstPointer input = this->GetInput();
@@ -108,7 +106,7 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
     m_CompositeTransform->SetSecondTransform(m_SensorModel);
     this->SetTransform(m_CompositeTransform);
     m_IsComputed = true;
-  }
+    }
 }
 
 } //namespace otb

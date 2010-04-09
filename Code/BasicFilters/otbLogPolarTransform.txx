@@ -30,12 +30,12 @@ namespace otb
 template <class TScalarType>
 LogPolarTransform<TScalarType>
 ::LogPolarTransform()
-    :Superclass(2,4)
+  : Superclass(2, 4)
 {
-  m_Center[0]=0.0;
-  m_Center[1]=0.0;
-  m_Scale[0]=1.0;
-  m_Scale[1]=1.0;
+  m_Center[0] = 0.0;
+  m_Center[1] = 0.0;
+  m_Scale[0] = 1.0;
+  m_Scale[1] = 1.0;
 }
 /**
  * Destructor.
@@ -51,14 +51,14 @@ LogPolarTransform<TScalarType>
 template <class TScalarType>
 void
 LogPolarTransform<TScalarType>
-::SetParameters(const ParametersType &parameters)
+::SetParameters(const ParametersType& parameters)
 {
-  m_Center[0]=parameters[0];
-  m_Center[1]=parameters[1];
-  m_Scale[0] =parameters[2];
-  m_Scale[1] =parameters[3];
-  otbMsgDebugMacro(<<"Call To SetParameters: Center="<<m_Center<<", Scale="<<m_Scale);
-  this->m_Parameters=parameters;
+  m_Center[0] = parameters[0];
+  m_Center[1] = parameters[1];
+  m_Scale[0] = parameters[2];
+  m_Scale[1] = parameters[3];
+  otbMsgDebugMacro(<< "Call To SetParameters: Center=" << m_Center << ", Scale=" << m_Scale);
+  this->m_Parameters = parameters;
   this->Modified();
 }
 /**
@@ -72,10 +72,10 @@ LogPolarTransform<TScalarType>
 ::GetParameters(void) const
 {
   // Filling parameters vector
-  this->m_Parameters[0]=m_Center[0];
-  this->m_Parameters[1]=m_Center[1];
-  this->m_Parameters[2]=m_Scale[0];
-  this->m_Parameters[3]=m_Scale[1];
+  this->m_Parameters[0] = m_Center[0];
+  this->m_Parameters[1] = m_Center[1];
+  this->m_Parameters[2] = m_Scale[0];
+  this->m_Parameters[3] = m_Scale[1];
 
   return this->m_Parameters;
 }
@@ -88,15 +88,15 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputPointType
 LogPolarTransform<TScalarType>
-::TransformPoint(const InputPointType &point) const
+::TransformPoint(const InputPointType& point) const
 {
   OutputPointType result;
-  double theta = point[0]*m_Scale[0]*CONST_PI_180;
-  double logRho   = point[1]*m_Scale[1];
-  result[0]=m_Center[0];
-  result[1]=m_Center[1];
-  result[0]+=vcl_exp(logRho) *vcl_cos(theta);
-  result[1]+=vcl_exp(logRho) *vcl_sin(theta);
+  double          theta = point[0] * m_Scale[0] * CONST_PI_180;
+  double          logRho   = point[1] * m_Scale[1];
+  result[0] = m_Center[0];
+  result[1] = m_Center[1];
+  result[0] += vcl_exp(logRho) * vcl_cos(theta);
+  result[1] += vcl_exp(logRho) * vcl_sin(theta);
   return result;
 }
 /**
@@ -108,15 +108,15 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputVectorType
 LogPolarTransform<TScalarType>
-::TransformVector(const InputVectorType &vector) const
+::TransformVector(const InputVectorType& vector) const
 {
   OutputVectorType result;
-  double theta = vector[0]*m_Scale[0]*CONST_PI_180;
-  double logRho   = vector[1]*m_Scale[1];
-  result[0]=0.;
-  result[1]=0.;
-  result[0]+=vcl_exp(logRho) *vcl_cos(theta);
-  result[1]+=vcl_exp(logRho) *vcl_sin(theta);
+  double           theta = vector[0] * m_Scale[0] * CONST_PI_180;
+  double           logRho   = vector[1] * m_Scale[1];
+  result[0] = 0.;
+  result[1] = 0.;
+  result[0] += vcl_exp(logRho) * vcl_cos(theta);
+  result[1] += vcl_exp(logRho) * vcl_sin(theta);
 
   return result;
 }
@@ -129,16 +129,15 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputVnlVectorType
 LogPolarTransform<TScalarType>
-::TransformVector(const InputVnlVectorType &vector) const
+::TransformVector(const InputVnlVectorType& vector) const
 {
   OutputVnlVectorType result;
-  double theta = vector[0]*m_Scale[0]*CONST_PI_180;
-  double logRho   = vector[1]*m_Scale[1];
-  result[0]=0.;
-  result[1]=0.;
-  result[0]+=vcl_exp(logRho) *vcl_cos(theta);
-  result[1]+=vcl_exp(logRho) *vcl_sin(theta);
-
+  double              theta = vector[0] * m_Scale[0] * CONST_PI_180;
+  double              logRho   = vector[1] * m_Scale[1];
+  result[0] = 0.;
+  result[1] = 0.;
+  result[0] += vcl_exp(logRho) * vcl_cos(theta);
+  result[1] += vcl_exp(logRho) * vcl_sin(theta);
 
   return result;
 }
@@ -148,11 +147,11 @@ LogPolarTransform<TScalarType>
 template <class TScalarType>
 void
 LogPolarTransform<TScalarType>
-::PrintSelf(std::ostream &os,itk::Indent indent) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<indent<<"Center: "<<m_Center<<std::endl;
-  os<<indent<<"Scale: "<<m_Scale<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Center: " << m_Center << std::endl;
+  os << indent << "Scale: " << m_Scale << std::endl;
 }
 
 } // end namespace otb

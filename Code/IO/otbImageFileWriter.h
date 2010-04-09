@@ -35,28 +35,27 @@ namespace otb
  *
  */
 
-
 template <class TInputImage>
 class ITK_EXPORT ImageFileWriter : public itk::ImageFileWriter<TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileWriter                               Self;
-  typedef itk::ImageFileWriter<TInputImage>             Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef ImageFileWriter                   Self;
+  typedef itk::ImageFileWriter<TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFileWriter,itk::ImageFileWriter);
+  itkTypeMacro(ImageFileWriter, itk::ImageFileWriter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::Pointer    InputImagePointer;
   typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -66,8 +65,8 @@ public:
   typedef StreamingTraits<InputImageType> StreamingTraitsType;
 
   /** SmartPointer to a region splitting object */
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef typename SplitterType::Pointer RegionSplitterPointer;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
+  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
 
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
@@ -78,7 +77,7 @@ public:
   virtual void Write(void);
 
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
-  void SetBufferMemorySize(unsigned long );
+  void SetBufferMemorySize(unsigned long);
 
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
   void SetBufferNumberOfLinesDivisions(unsigned long);
@@ -97,7 +96,7 @@ public:
 
   /** Set the tiling automatic mode for streaming division */
 //  void SetTilingStreamDivisions(void);
-  /** Choose number of divisions in tiling streaming division */
+/** Choose number of divisions in tiling streaming division */
 //  void SetTilingStreamDivisions(unsigned long);
 
   /** Return the string to indicate the method use to calculate number of stream divisions. */
@@ -109,8 +108,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageFileWriter(const Self&); //purposely not implemented
-  void operator=(const Self&);  //purposely not implemented
+  ImageFileWriter(const Self &); //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
   /** This method calculate the number of stream divisions, by using the CalculationDivision type */
   unsigned long CalculateNumberOfStreamDivisions(void);
@@ -128,11 +127,8 @@ private:
 
 } // end namespace otb
 
-
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileWriter.txx"
 #endif
 
-
 #endif // __otbImageFileWriter_h
-

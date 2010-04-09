@@ -39,18 +39,18 @@ template <class TInput1, class TInput2, class TOutput>
 class RemoveWrongDirectionFunctor
 {
 public:
-  RemoveWrongDirectionFunctor() {};
-  virtual ~RemoveWrongDirectionFunctor() {};
-  inline TOutput operator()(const TInput1 &A, const TInput2 &B)
+  RemoveWrongDirectionFunctor() {}
+  virtual ~RemoveWrongDirectionFunctor() {}
+  inline TOutput operator ()(const TInput1& A, const TInput2& B)
   {
     if (B < CONST_PI_8)
-    {
+      {
       return 0;
-    }
+      }
     else
-    {
+      {
       return A;
-    }
+      }
   }
 };
 }
@@ -70,11 +70,11 @@ public:
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveWrongDirectionFilter
-      : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
+  : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef RemoveWrongDirectionFilter                                                     Self;
+  typedef RemoveWrongDirectionFilter                                                          Self;
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
@@ -83,26 +83,26 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RemoveWrongDirectionFilter,ModulusAndDirectionImageToImageFilter);
+  itkTypeMacro(RemoveWrongDirectionFilter, ModulusAndDirectionImageToImageFilter);
 
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorImageFilter, which is appropriate here */
   typedef Functor::RemoveWrongDirectionFunctor<
-  typename TInputModulus::PixelType,
-  typename TInputDirection::PixelType,
-  typename TOutputImage::PixelType>  FunctorType;
-  typedef itk::BinaryFunctorImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
+    typename TInputModulus::PixelType,
+    typename TInputDirection::PixelType,
+    typename TOutputImage::PixelType>  FunctorType;
+  typedef itk::BinaryFunctorImageFilter<TInputModulus, TInputDirection, TOutputImage, FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */
   RemoveWrongDirectionFilter() {};
   /** Destructor */
-  virtual ~RemoveWrongDirectionFilter() {};
+  virtual ~RemoveWrongDirectionFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
   /** Main computation method */
   virtual void GenerateData(void)
   {
@@ -115,8 +115,8 @@ protected:
   }
 
 private:
-  RemoveWrongDirectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RemoveWrongDirectionFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

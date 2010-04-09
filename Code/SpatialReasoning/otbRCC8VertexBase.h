@@ -34,34 +34,34 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT RCC8VertexBase
-      : public itk::DataObject
+  : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef RCC8VertexBase Self;
-  typedef itk::DataObject  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef RCC8VertexBase                Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8VertexBase,DataObject);
+  itkTypeMacro(RCC8VertexBase, DataObject);
   /** Input image associated typedefs*/
-  typedef TPath PathType;
-  typedef typename PathType::Pointer PathPointerType;
+  typedef TPath                                  PathType;
+  typedef typename PathType::Pointer             PathPointerType;
   typedef typename PathType::ContinuousIndexType ContinuousIndexType;
 
   /** char* vector attributes */
-  typedef std::map<std::string,std::string> AttributesMapType;
+  typedef std::map<std::string, std::string> AttributesMapType;
 
   /** Segmentation image index accessors */
-  itkGetMacro(SegmentationLevel,unsigned int);
-  itkSetMacro(SegmentationLevel,unsigned int);
-  itkGetMacro(SegmentationType,bool);
-  itkSetMacro(SegmentationType,bool);
+  itkGetMacro(SegmentationLevel, unsigned int);
+  itkSetMacro(SegmentationLevel, unsigned int);
+  itkGetMacro(SegmentationType, bool);
+  itkSetMacro(SegmentationType, bool);
   /** Object label in image accessor */
-  itkGetObjectMacro(Path,PathType);
-  itkSetObjectMacro(Path,PathType);
+  itkGetObjectMacro(Path, PathType);
+  itkSetObjectMacro(Path, PathType);
   /**
    * Set the VertexBase attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
@@ -77,7 +77,7 @@ protected:
   /** Constructor */
   RCC8VertexBase();
   /** Desctructor */
-  virtual ~RCC8VertexBase() {};
+  virtual ~RCC8VertexBase() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -87,7 +87,7 @@ private:
   /** True if bright details, false otherwise */
   bool m_SegmentationType;
   /** The path of the edge of the region */
-  PathPointerType  m_Path;
+  PathPointerType m_Path;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

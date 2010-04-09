@@ -33,31 +33,31 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage >
+template <class TOutputImage>
 class PixelDescriptionModel
-  : public MVCModel<PixelDescriptionModelListener>, public LayerBasedModel< ImageLayerBase< TOutputImage > >
+  : public MVCModel<PixelDescriptionModelListener>, public LayerBasedModel<ImageLayerBase<TOutputImage> >
 {
 public:
   /** Standard class typedefs */
-  typedef PixelDescriptionModel                            Self;
-  typedef LayerBasedModel< ImageLayerBase<TOutputImage > > Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef PixelDescriptionModel                          Self;
+  typedef LayerBasedModel<ImageLayerBase<TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>                        Pointer;
+  typedef itk::SmartPointer<const Self>                  ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(PixelDescriptionModel,LayerBasedModel);
+  itkTypeMacro(PixelDescriptionModel, LayerBasedModel);
 
   /** New macro */
   itkNewMacro(Self);
 
-    /** Layer typedef */
+  /** Layer typedef */
   typedef typename Superclass::LayerType LayerType;
 
   /** We assume that TLayer is has an IndexType definition */
-  typedef typename LayerType::IndexType  IndexType;
+  typedef typename LayerType::IndexType IndexType;
 
-    /** Listener typedef */
-  typedef PixelDescriptionModelListener  ListenerType;
+  /** Listener typedef */
+  typedef PixelDescriptionModelListener ListenerType;
 
   /** Get/Set the viewer name */
   itkGetStringMacro(PixelDescription);
@@ -66,7 +66,7 @@ public:
   void ClearPixelDescription();
 
   /** Update the pixel description */
-  void UpdatePixelDescription(const IndexType & index);
+  void UpdatePixelDescription(const IndexType& index);
 
 protected:
   /** Constructor */
@@ -78,11 +78,11 @@ protected:
   void         PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Notify a registered listener */
-   void        NotifyListener(ListenerType * listener);
+  void        NotifyListener(ListenerType * listener);
 
 private:
   PixelDescriptionModel(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** The pixel description */
   std::string m_PixelDescription;
@@ -95,5 +95,3 @@ private:
 #endif
 
 #endif
-
-

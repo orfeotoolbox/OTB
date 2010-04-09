@@ -35,11 +35,10 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TData DataType;
-  typedef typename DataType::Pointer DataPointerType;
-  typedef otb::VectorDataIOBase<DataType> VectorDataIOBaseType;
+  typedef TData                                  DataType;
+  typedef typename DataType::Pointer             DataPointerType;
+  typedef otb::VectorDataIOBase<DataType>        VectorDataIOBaseType;
   typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
-
 
   /** Class Methods used to interface with the registered factories */
 
@@ -63,11 +62,10 @@ protected:
   ~VectorDataIOFactory();
 
 private:
-  VectorDataIOFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataIOFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

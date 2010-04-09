@@ -43,18 +43,18 @@ namespace otb
  *   \sa PointSet
  *   \sa EuclideanDistance
  */
-template < class TPointSet, class TDistance = itk::Statistics::EuclideanDistance< typename TPointSet::PixelType > >
+template <class TPointSet, class TDistance = itk::Statistics::EuclideanDistance<typename TPointSet::PixelType> >
 class ITK_EXPORT KeyPointSetsMatchingFilter
-      : public ObjectListSource<  ObjectList< Landmark< typename TPointSet::PointType, typename TPointSet::PixelType,double> > >
+  : public ObjectListSource<ObjectList<Landmark<typename TPointSet::PointType, typename TPointSet::PixelType, double> > >
 {
 public:
   /// standard class typedefs
-  typedef KeyPointSetsMatchingFilter             Self;
-  typedef ObjectListSource<  ObjectList<
-  Landmark< typename TPointSet::PointType,
-  typename TPointSet::PixelType,double> > >      Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef KeyPointSetsMatchingFilter Self;
+  typedef ObjectListSource<ObjectList<
+                             Landmark<typename TPointSet::PointType,
+                                      typename TPointSet::PixelType, double> > >      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /// template typedefs
   typedef TPointSet                                      PointSetType;
@@ -67,23 +67,23 @@ public:
   typedef typename PointDataContainerType::ConstIterator PointDataIteratorType;
   typedef TDistance                                      DistanceType;
   typedef typename DistanceType::Pointer                 DistancePointerType;
-  typedef Landmark< typename TPointSet::PointType,
-  typename TPointSet::PixelType,double>                  LandmarkType;
-  typedef typename LandmarkType::Pointer                 LandmarkPointerType;
-  typedef ObjectList<LandmarkType>                       LandmarkListType;
-  typedef typename LandmarkListType::Pointer             LandmarkListPointerType;
-  typedef std::pair<unsigned int,double>                 NeighborSearchResultType;
+  typedef Landmark<typename TPointSet::PointType,
+                   typename TPointSet::PixelType, double>                  LandmarkType;
+  typedef typename LandmarkType::Pointer     LandmarkPointerType;
+  typedef ObjectList<LandmarkType>           LandmarkListType;
+  typedef typename LandmarkListType::Pointer LandmarkListPointerType;
+  typedef std::pair<unsigned int, double>    NeighborSearchResultType;
 
   /// standard macros
   itkNewMacro(Self);
-  itkTypeMacro(KeyPointSetsMatchingFilter,ObjectListSource);
+  itkTypeMacro(KeyPointSetsMatchingFilter, ObjectListSource);
 
   /// Accessors
   itkBooleanMacro(UseBackMatching);
-  itkSetMacro(UseBackMatching,bool);
-  itkGetMacro(UseBackMatching,bool);
-  itkSetMacro(DistanceThreshold,double);
-  itkGetMacro(DistanceThreshold,double);
+  itkSetMacro(UseBackMatching, bool);
+  itkGetMacro(UseBackMatching, bool);
+  itkSetMacro(DistanceThreshold, double);
+  itkGetMacro(DistanceThreshold, double);
 
   /// Set the first pointset
   void SetInput1(const PointSetType * pointset);
@@ -98,7 +98,7 @@ protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  virtual ~KeyPointSetsMatchingFilter() {};
+  virtual ~KeyPointSetsMatchingFilter() {}
   /// PrintSelf method
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -111,10 +111,9 @@ protected:
    */
   NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType * pointset);
 
-
 private:
-  KeyPointSetsMatchingFilter(const Self&); // purposely not implemented
-  void operator=(const Self&);             // purposely not implemented
+  KeyPointSetsMatchingFilter(const Self &); // purposely not implemented
+  void operator =(const Self&);             // purposely not implemented
 
   // Find back matches from 2 to 1 to validate them
   bool m_UseBackMatching;
@@ -132,4 +131,3 @@ private:
 #include "otbKeyPointSetsMatchingFilter.txx"
 #endif
 #endif
-

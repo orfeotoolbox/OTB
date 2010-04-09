@@ -33,46 +33,45 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TViewerModel >
+template <class TViewerModel>
 class ImageView
   : public ListenerBase, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ImageView                            Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef ImageView                     Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageView,itk::Object);
+  itkTypeMacro(ImageView, itk::Object);
 
   /** Model typedef */
-  typedef TViewerModel                         ModelType;
-  typedef typename ModelType::Pointer          ModelPointerType;
-  typedef typename ModelType::OutputImageType  ImageType;
+  typedef TViewerModel                        ModelType;
+  typedef typename ModelType::Pointer         ModelPointerType;
+  typedef typename ModelType::OutputImageType ImageType;
 
   /** Controller typedef */
-  typedef ImageWidgetController                ControllerType;
-  typedef typename ControllerType::Pointer     ControllerPointerType;
+  typedef ImageWidgetController            ControllerType;
+  typedef typename ControllerType::Pointer ControllerPointerType;
 
- /** Image region typedef */
-  typedef typename ImageType::RegionType       RegionType;
+  /** Image region typedef */
+  typedef typename ImageType::RegionType RegionType;
 
   /** Region size & index typedef */
-  typedef typename RegionType::SizeType        SizeType;
-  typedef typename RegionType::IndexType       IndexType;
+  typedef typename RegionType::SizeType  SizeType;
+  typedef typename RegionType::IndexType IndexType;
 
   /** Offset typedef */
-  typedef typename ImageType::OffsetType       OffsetType;
-
+  typedef typename ImageType::OffsetType OffsetType;
 
   /** Image widget */
-  typedef otb::ImageWidget<ImageType>          ImageWidgetType;
-  typedef typename ImageWidgetType::Pointer    ImageWidgetPointerType;
+  typedef otb::ImageWidget<ImageType>       ImageWidgetType;
+  typedef typename ImageWidgetType::Pointer ImageWidgetPointerType;
 
   /** Region gl component typedef */
   typedef RegionGlComponent                       RegionGlComponentType;
@@ -95,16 +94,16 @@ public:
   void Update();
 
   /** Get pointers the widgets */
-  itkGetObjectMacro(ScrollWidget,ImageWidgetType);
-  itkGetObjectMacro(FullWidget,ImageWidgetType);
-  itkGetObjectMacro(ZoomWidget,ImageWidgetType);
-  itkGetObjectMacro(ExtractRegionGlComponent,RegionGlComponentType);
-  itkGetObjectMacro(Model,ModelType);
+  itkGetObjectMacro(ScrollWidget, ImageWidgetType);
+  itkGetObjectMacro(FullWidget, ImageWidgetType);
+  itkGetObjectMacro(ZoomWidget, ImageWidgetType);
+  itkGetObjectMacro(ExtractRegionGlComponent, RegionGlComponentType);
+  itkGetObjectMacro(Model, ModelType);
 
   /** Clear the widgets buffers  */
   void ClearBuffer();
 
- protected:
+protected:
   /** Constructor */
   ImageView();
   /** Destructor */
@@ -126,7 +125,7 @@ public:
 
 private:
   ImageView(const Self&);      // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** The three classical widgets */
   ImageWidgetPointerType m_ScrollWidget;
@@ -134,15 +133,14 @@ private:
   ImageWidgetPointerType m_ZoomWidget;
 
   /** Model pointer */
-  ModelPointerType       m_Model;
+  ModelPointerType m_Model;
 
   /** Controller pointer */
-  ControllerPointerType  m_Controller;
+  ControllerPointerType m_Controller;
 
   /** Viewed region gl components */
   RegionGlComponentPointerType m_ExtractRegionGlComponent;
   RegionGlComponentPointerType m_ScaledExtractRegionGlComponent;
-
 
 }; // end class
 } // end namespace otb
@@ -152,5 +150,3 @@ private:
 #endif
 
 #endif
-
-

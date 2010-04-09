@@ -36,7 +36,6 @@ LambertConformalConicMapProjection<transform>
 {
 }
 
-
 /// Parallel1 specification
 template <InverseOrForwardTransformationEnum transform>
 void LambertConformalConicMapProjection<transform>
@@ -56,9 +55,9 @@ void LambertConformalConicMapProjection<transform>
 /// Specification of the 2 parallels
 template <InverseOrForwardTransformationEnum transform>
 void LambertConformalConicMapProjection<transform>
-::SetStandardParallels(double parallel1Degree,double parallel2Degree)
+::SetStandardParallels(double parallel1Degree, double parallel2Degree)
 {
-  this->m_MapProjection->setStandardParallels(parallel1Degree,parallel2Degree);
+  this->m_MapProjection->setStandardParallels(parallel1Degree, parallel2Degree);
 }
 
 /// False easting specification
@@ -80,7 +79,7 @@ void LambertConformalConicMapProjection<transform>
 /// Set the parameters
 template <InverseOrForwardTransformationEnum transform>
 void LambertConformalConicMapProjection<transform>
-::SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing)
+::SetParameters(double parallel1Degree, double parallel2Degree, double falseEasting, double falseNorthing)
 {
   this->m_MapProjection->setParameters(parallel1Degree, parallel2Degree, falseEasting, falseNorthing);
 }
@@ -98,7 +97,7 @@ template <InverseOrForwardTransformationEnum transform>
 double LambertConformalConicMapProjection<transform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing=this->m_MapProjection->getFalseNorthing();
+  double falseNorthing = this->m_MapProjection->getFalseNorthing();
 
   return falseNorthing;
 }
@@ -108,7 +107,7 @@ template <InverseOrForwardTransformationEnum transform>
 double LambertConformalConicMapProjection<transform>
 ::GetFalseEasting() const
 {
-  double falseEasting=this->m_MapProjection->getFalseEasting();
+  double falseEasting = this->m_MapProjection->getFalseEasting();
   return falseEasting;
 }
 

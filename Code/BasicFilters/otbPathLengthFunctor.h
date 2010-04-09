@@ -37,7 +37,7 @@ class PathLengthFunctor
 {
 public:
 
-  void SetThreshold(double threshold )
+  void SetThreshold(double threshold)
   {
     m_Threshold = threshold;
   }
@@ -49,21 +49,21 @@ public:
   PathLengthFunctor()
   {
     m_Threshold = 10;
-  };
-  ~PathLengthFunctor() {};
+  }
+  ~PathLengthFunctor() {}
 
-  inline bool operator()(const TInput1 & input)
+  inline bool operator ()(const TInput1& input)
   {
     double length = input->GetLength();
 
     if (length > m_Threshold)
-    {
+      {
       return true;
-    }
+      }
     else
-    {
+      {
       return false;
-    }
+      }
   }
 
 private:

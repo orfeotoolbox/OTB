@@ -36,24 +36,24 @@ namespace otb
  * \ingroup Lists
  */
 
-template <class TOutputPath >
+template <class TOutputPath>
 class ITK_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath> >
 {
 public:
   /** Standard class typedefs. */
-  typedef PathListSource                 Self;
-  typedef ObjectListSource<ObjectList<TOutputPath> >              Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef PathListSource                             Self;
+  typedef ObjectListSource<ObjectList<TOutputPath> > Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathListSource,ObjectListSource);
+  itkTypeMacro(PathListSource, ObjectListSource);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer                 DataObjectPointer;
+  typedef itk::DataObject::Pointer DataObjectPointer;
 
   typedef TOutputPath                               OutputPathType;
   typedef typename OutputPathType::Pointer          OutputPathPointerType;
@@ -164,15 +164,14 @@ public:
    * an implementation of MakeOutput(). */
 //   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
-
 protected:
   PathListSource() {};
   virtual ~PathListSource() {}
 //   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PathListSource(const Self&); //purposely not implemented
-  void operator=(const Self&);   //purposely not implemented
+  PathListSource(const Self &); //purposely not implemented
+  void operator =(const Self&);   //purposely not implemented
 };
 
 } // end namespace otb

@@ -21,7 +21,6 @@
 #include "otbTileMapImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ TileMapImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

@@ -41,18 +41,18 @@ template <class TInputPixel, class TOutputPixel>
 class Identity
 {
 public:
-  Identity(){};
-  virtual ~Identity(){};
-  bool operator !=(const Identity &) const
+  Identity(){}
+  virtual ~Identity(){}
+  bool operator !=(const Identity&) const
   {
     return false;
   }
-  bool operator ==(const Identity & other) const
+  bool operator ==(const Identity& other) const
   {
     return !(*this != other);
   }
 
-  inline TOutputPixel operator()(const TInputPixel & A) const
+  inline TOutputPixel operator ()(const TInputPixel& A) const
   {
     return static_cast<TOutputPixel>(A);
   }
@@ -74,39 +74,38 @@ public:
  *  \ingroup Visualization
  */
 template <class TPixel, class TRGBPixel,
-  class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
-  class TTransferFunction = Identity<
-        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
-        typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
-        > >
+          class TPixelRepresentationFunction = ChannelSelectorFunctor<TPixel>,
+          class TTransferFunction = Identity<
+            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType,
+            typename itk::NumericTraits<typename itk::NumericTraits<TPixel>::ValueType>::RealType
+            > >
 class StandardRenderingFunction
   : public RenderingFunction<TPixel, TRGBPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef StandardRenderingFunction                    Self;
-  typedef RenderingFunction<TPixel,TRGBPixel>          Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef StandardRenderingFunction            Self;
+  typedef RenderingFunction<TPixel, TRGBPixel> Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** type macro */
-  itkTypeMacro(StandardRenderingFunction,RenderingFunction);
+  itkTypeMacro(StandardRenderingFunction, RenderingFunction);
 
   /** new macro */
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TRGBPixel                                               OutputPixelType;
-  typedef typename OutputPixelType::ValueType                     OutputValueType;
-  typedef TPixel                                                  PixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType       ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>                   VectorPixelType;
-  typedef itk::RGBPixel<ScalarType>                               RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType>                              RGBAPixelType;
-  typedef typename itk::NumericTraits<ScalarType>::RealType       RealScalarType;
-  typedef itk::VariableLengthVector<RealScalarType>               InternalPixelType;
-  typedef typename Superclass::ParametersType                     ParametersType;
-
+  typedef TRGBPixel                                         OutputPixelType;
+  typedef typename OutputPixelType::ValueType               OutputValueType;
+  typedef TPixel                                            PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>             VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                         RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                        RGBAPixelType;
+  typedef typename itk::NumericTraits<ScalarType>::RealType RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType>         InternalPixelType;
+  typedef typename Superclass::ParametersType               ParametersType;
 
   /** Extrema vector */
   typedef std::vector<RealScalarType>                               ExtremaVectorType;
@@ -117,7 +116,7 @@ public:
   /** Convert the input pixel to a pixel representation that can be displayed on
     *  RGB. For example, channel selection, modulus computation, etc.
     */
-  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType &  spixel) const
+  virtual InternalPixelType EvaluatePixelRepresentation(const PixelType&  spixel) const
   {
     return m_PixelRepresentationFunction(spixel);
   }
@@ -129,21 +128,20 @@ public:
     * If it gives 3 bands, it is interpreted as Red, Green and Blue
     * If there is a fourth band, it is considered as the alpha channel and is not scaled.
     */
-  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType &  spixel) const
+  virtual OutputPixelType EvaluateTransferFunction(const InternalPixelType&  spixel) const
   {
-    if ((spixel.Size() != 1) && (spixel.Size() != 3) && (spixel.Size() != 2)&& (spixel.Size() != 4))
-    {
-      itkExceptionMacro( << "the PixelRepresentation function should give an output of "
-       << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !" );
-    }
+    if ((spixel.Size() != 1) && (spixel.Size() != 3) && (spixel.Size() != 2) && (spixel.Size() != 4))
+      {
+      itkExceptionMacro(<< "the PixelRepresentation function should give an output of "
+                        << "size 1, 3 or 4 otherwise I don't know how to make an RGB of it !");
+      }
     if (spixel.Size() != m_TransferedMinimum.size())
-    {
-      itkExceptionMacro( << " m_TransferedMinimum and pixel size do not correspond"
-         << " spixel.Size(): " << spixel.Size()
-         << " m_TransferedMinimum.size(): " << m_TransferedMinimum.size());
-    }
+      {
+      itkExceptionMacro(<< " m_TransferedMinimum and pixel size do not correspond"
+                        << " spixel.Size(): " << spixel.Size()
+                        << " m_TransferedMinimum.size(): " << m_TransferedMinimum.size());
+      }
     OutputPixelType output(255);
-
 
 //     otbMsgDevMacro(<<"StandardRenderingFunction::EvaluateTransferFunction "
 //            << "m_TransferFunction(spixel[0])" << m_TransferFunction(spixel[0])
@@ -151,24 +149,25 @@ public:
 //            << ", m_TransferedMaximum[0] " << m_TransferedMaximum[0])
 
     if (spixel.Size() == 1)
-    {
-      OutputValueType value = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
+      {
+      OutputValueType value = ClampRescale(m_TransferFunction(
+                                             spixel[0]), m_TransferedMinimum[0], m_TransferedMaximum[0]);
       output[0] = value;
       output[1] = value;
       output[2] = value;
-    }
+      }
     else
-    {
-      output[0] = ClampRescale(m_TransferFunction(spixel[0]),m_TransferedMinimum[0],m_TransferedMaximum[0]);
-      output[1] = ClampRescale(m_TransferFunction(spixel[1]),m_TransferedMinimum[1],m_TransferedMaximum[1]);
-      output[2] = ClampRescale(m_TransferFunction(spixel[2]),m_TransferedMinimum[2],m_TransferedMaximum[2]);
-    }
+      {
+      output[0] = ClampRescale(m_TransferFunction(spixel[0]), m_TransferedMinimum[0], m_TransferedMaximum[0]);
+      output[1] = ClampRescale(m_TransferFunction(spixel[1]), m_TransferedMinimum[1], m_TransferedMaximum[1]);
+      output[2] = ClampRescale(m_TransferFunction(spixel[2]), m_TransferedMinimum[2], m_TransferedMaximum[2]);
+      }
 
     if ((spixel.Size() == 4) && (output.Size() == 4))
-    {
-      assert((spixel[3] >= 0) && (spixel[3] <=255));
-      output[3] = static_cast<OutputValueType>(spixel[3]);//just copy the alpha channel
-    }
+      {
+      assert((spixel[3] >= 0) && (spixel[3] <= 255));
+      output[3] = static_cast<OutputValueType>(spixel[3]); //just copy the alpha channel
+      }
 
     return output;
   }
@@ -178,7 +177,7 @@ public:
     return m_PixelRepresentationFunction.GetOutputSize();
   }
 
-  virtual void Initialize()//FIXME should disappear and be automatic (IsModified())
+  virtual void Initialize() //FIXME should disappear and be automatic (IsModified())
   {
     if ((this->GetMTime() > m_UTime) || (this->GetPixelRepresentationFunction().GetMTime() > m_UTime))
     //NOTE: we assume that Transfer function have no parameters
@@ -212,7 +211,8 @@ public:
         {
         //FIXME check what happen if the m_PixelRepresentationFunction is modified AFTER the Initialize.
 
-        otbMsgDevMacro(<<"Initialize(): "<<nbComps<<" components, quantile= "<<100*m_AutoMinMaxQuantile<<" %");
+        otbMsgDevMacro(
+          << "Initialize(): " << nbComps << " components, quantile= " << 100 * m_AutoMinMaxQuantile << " %");
         // For each components, use the histogram to compute min and max
         m_Minimum.clear();
         m_Maximum.clear();
@@ -229,15 +229,15 @@ public:
           {
           // Compute quantiles
           m_Minimum.push_back(
-                              static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0,
-                                                                                                               m_AutoMinMaxQuantile)));
+            static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0,
+                                                                                             m_AutoMinMaxQuantile)));
           m_Maximum.push_back(static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0, 1
-              - m_AutoMinMaxQuantile)));
-          otbMsgDevMacro(<<"Initialize():"<< " component "<<comp
-              <<", min= "<< static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Minimum.back())
-              <<", max= "<<static_cast< typename itk::NumericTraits<ScalarType >::PrintType>(m_Maximum.back()));
+                                                                                                               -
+                                                                                                               m_AutoMinMaxQuantile)));
+          otbMsgDevMacro(<< "Initialize():" << " component " << comp
+                         << ", min= " << static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(m_Minimum.back())
+                         << ", max= " << static_cast<typename itk::NumericTraits<ScalarType>::PrintType>(m_Maximum.back()));
           }
-
 
         //Check if the rescaling should be applied
         //if all data are already coded on unsigned char
@@ -247,7 +247,7 @@ public:
         bool enoughDynamic = false;
         for (unsigned int comp = 0; comp < nbComps; ++comp)
           {
-          if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false; //take margin for rounding errors
+          if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false;  //take margin for rounding errors
           if (m_Maximum[comp] > 256) allMinMaxWithinDynamic = false;
           if (((m_Maximum[comp] - m_Minimum[comp]) > 1) || (m_Maximum[comp] == m_Minimum[comp])) enoughDynamic = true;
           }
@@ -291,7 +291,7 @@ public:
       }
   }
 
-  const std::string Describe(const PixelType & spixel) const
+  const std::string Describe(const PixelType& spixel) const
   {
     itk::OStringStream oss;
     oss << m_PixelRepresentationFunction.GetDescription() << ": ";
@@ -299,89 +299,89 @@ public:
     channels = m_PixelRepresentationFunction.GetChannelList();
 
     for (unsigned int i = 0; i < channels.size(); ++i)
-    {
+      {
       oss << channels[i] << " ";
-    }
+      }
     oss << std::endl;
 
     // unsigned int inputChannels = VisualizationPixelTraits::PixelSize(spixel);
 
     InternalPixelType spixelRepresentation = this->EvaluatePixelRepresentation(spixel);
-    OutputPixelType spixelDisplay = this->EvaluateTransferFunction(spixelRepresentation);
+    OutputPixelType   spixelDisplay = this->EvaluateTransferFunction(spixelRepresentation);
     oss << otbGetTextMacro("Pixel value") << ":     "
-            << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel) << std::endl;
+        << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(spixel) << std::endl;
     oss << otbGetTextMacro("Value computed") << ": "
-            << static_cast<typename itk::NumericTraits<InternalPixelType>::PrintType>(spixelRepresentation) << std::endl;
+        << static_cast<typename itk::NumericTraits<InternalPixelType>::PrintType>(spixelRepresentation) << std::endl;
     oss << otbGetTextMacro("Value displayed") << ": " << std::endl;
     oss << otbGetTextMacro("R") << " " << std::setw(3)
-      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[0]) << ", ";
+        << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[0]) << ", ";
     oss << otbGetTextMacro("G") << " " << std::setw(3)
-      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[1]) << ", ";
+        << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[1]) << ", ";
     oss << otbGetTextMacro("B") << " " << std::setw(3)
-      << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[2]);
+        << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[2]);
     if (spixelDisplay.Size() == 4)
-    {
+      {
       oss << ", ";
       oss << otbGetTextMacro("A") << " " << std::setw(3)
-        << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[3]);
-    }
+          << static_cast<typename itk::NumericTraits<OutputValueType>::PrintType>(spixelDisplay[3]);
+      }
     oss << std::endl;
     return oss.str();
   }
 
-   /** Set the minimum and maximum for the different bands.
-     * Has to be provided as [minBand0, maxBand0, minBand1, maxBand1,...]
-     */
-   virtual void SetParameters( const ParametersType & parameters)
-   {
-     //Clear the min and max vectors
-     m_Minimum.clear();
-     m_Maximum.clear();
+  /** Set the minimum and maximum for the different bands.
+    * Has to be provided as [minBand0, maxBand0, minBand1, maxBand1,...]
+    */
+  virtual void SetParameters(const ParametersType& parameters)
+  {
+    //Clear the min and max vectors
+    m_Minimum.clear();
+    m_Maximum.clear();
 
-     if (parameters.Size() % 2 != 0)
-     {
-       itkExceptionMacro( << "Min And Max should be provided for every band to display" );
-     }
+    if (parameters.Size() % 2 != 0)
+      {
+      itkExceptionMacro(<< "Min And Max should be provided for every band to display");
+      }
 
-     for (unsigned int i=0; i< parameters.Size(); ++i)
-     {
-       m_Minimum.push_back(parameters[i]);
-       ++i;
-       m_Maximum.push_back(parameters[i]);
-     }
-     m_AutoMinMax = false;
-     UpdateTransferedMinMax();
-     otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
-     this->Modified();
-   }
+    for (unsigned int i = 0; i < parameters.Size(); ++i)
+      {
+      m_Minimum.push_back(parameters[i]);
+      ++i;
+      m_Maximum.push_back(parameters[i]);
+      }
+    m_AutoMinMax = false;
+    UpdateTransferedMinMax();
+    otbMsgDevMacro(<< "StandardRenderingFunction::SetParameters: " << m_Minimum.size() << "; " << m_Maximum.size());
+    this->Modified();
+  }
 
   /**
    * Get Parameters Min and and max for each band
    */
-   virtual ParametersType GetParameters() const
-   {
-     unsigned int nbBands = m_PixelRepresentationFunction.GetOutputSize();
-     ParametersType         param;
-     param.SetSize(2*nbBands);
+  virtual ParametersType GetParameters() const
+  {
+    unsigned int   nbBands = m_PixelRepresentationFunction.GetOutputSize();
+    ParametersType param;
+    param.SetSize(2 * nbBands);
 
-     // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
-     for(unsigned int i = 0; i< nbBands; ++i)
-     {
-       // Min Band
-       param.SetElement(2*i,/*TransferedMinimum*/m_Minimum[i]);
-       // Max Band
-       param.SetElement(2*i+1,/*TransferedMaximum*/m_Maximum[i]);
-     }
-     return param;
-   }
+    // Edit the parameters as [minBand0, maxBand0, minBand1, maxBand1,...]
+    for (unsigned int i = 0; i < nbBands; ++i)
+      {
+      // Min Band
+      param.SetElement(2 * i, /*TransferedMinimum*/ m_Minimum[i]);
+      // Max Band
+      param.SetElement(2 * i + 1, /*TransferedMaximum*/ m_Maximum[i]);
+      }
+    return param;
+  }
 
   virtual void SetChannelList(std::vector<unsigned int>& channels)
   {
     if (m_PixelRepresentationFunction.GetChannelList() != channels)
-    {
+      {
       m_PixelRepresentationFunction.SetChannelList(channels);
       this->Modified();
-    }
+      }
   }
 
   virtual std::vector<unsigned int> GetChannelList()
@@ -400,21 +400,20 @@ public:
     return m_PixelRepresentationFunction;
   }
 
-    /** Set/Get the AutoMinMax mode */
+  /** Set/Get the AutoMinMax mode */
   virtual void SetAutoMinMax(bool val)
   {
-       m_AutoMinMax = val;
-       this->Modified();
+    m_AutoMinMax = val;
+    this->Modified();
   }
-  itkGetMacro(AutoMinMax,bool);
+  itkGetMacro(AutoMinMax, bool);
   itkBooleanMacro(AutoMinMax);
-
 
 protected:
   /** Constructor */
   StandardRenderingFunction() : m_TransferedMinimum(), m_TransferedMaximum(), m_UTime(),
-                                m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
-                                m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
+    m_RedChannelIndex(0), m_GreenChannelIndex(1), m_BlueChannelIndex(2), m_AutoMinMax(true),
+    m_AutoMinMaxQuantile(0.02), m_DefaultChannelsAreSet(false)
   {}
   /** Destructor */
   virtual ~StandardRenderingFunction() {}
@@ -435,9 +434,9 @@ protected:
     else
       {
       return static_cast<OutputValueType> (vcl_floor(
-                         255. * (static_cast<double> (input) - static_cast<double> (min))
-                             / (static_cast<double> (max) - static_cast<double> (min))
-                                            + 0.5));
+                                             255. * (static_cast<double> (input) - static_cast<double> (min))
+                                             / (static_cast<double> (max) - static_cast<double> (min))
+                                             + 0.5));
 
       }
   }
@@ -445,29 +444,29 @@ protected:
   void UpdateTransferedMinMax()
   {
     if (m_Minimum.size() != m_Maximum.size())
-    {
-      itkExceptionMacro( << "m_Minimum and m_Maximum should have the same size" );
-    }
+      {
+      itkExceptionMacro(<< "m_Minimum and m_Maximum should have the same size");
+      }
     m_TransferedMinimum.clear();
     m_TransferedMaximum.clear();
-    for (unsigned int i=0; i<m_Minimum.size(); ++i)
-    {
+    for (unsigned int i = 0; i < m_Minimum.size(); ++i)
+      {
       m_TransferedMinimum.push_back(m_TransferFunction(m_Minimum[i]));
       m_TransferedMaximum.push_back(m_TransferFunction(m_Maximum[i]));
-    }
+      }
   }
 
- /** Transfered min and max */
+  /** Transfered min and max */
   ExtremaVectorType m_TransferedMinimum;
   ExtremaVectorType m_TransferedMaximum;
 
- /** Transfer function
-  *  \note This member is declared mutable because some functors that
-  * can be used as a transfer function but are not const correct.
-  *  Since a const reference is passed to the functor anyway, it is
-  * not harmful to do so and preserves const correctness of the
-  *  Evaluate() methods.
-  */
+  /** Transfer function
+   *  \note This member is declared mutable because some functors that
+   * can be used as a transfer function but are not const correct.
+   *  Since a const reference is passed to the functor anyway, it is
+   * not harmful to do so and preserves const correctness of the
+   *  Evaluate() methods.
+   */
   mutable TransferFunctionType m_TransferFunction;
 
   PixelRepresentationFunctionType m_PixelRepresentationFunction;
@@ -475,10 +474,9 @@ protected:
   /** Update time */
   itk::TimeStamp m_UTime;
 
-
 private:
   StandardRenderingFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Min and max (after pixel representation)*/
   ExtremaVectorType m_Minimum;

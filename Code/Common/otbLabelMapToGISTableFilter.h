@@ -49,42 +49,42 @@ namespace otb {
  * \sa LabelMapToBinaryImageFilter, LabelMapMaskImageFilter
  * \ingroup ImageEnhancement  MathematicalMorphologyImageFilters
  */
-template<class TLabelMap , class TGISTable>
+template<class TLabelMap, class TGISTable>
 class ITK_EXPORT LabelMapToGISTableFilter :
-    public GISTableSource< TGISTable >
+  public GISTableSource<TGISTable>
 {
 public:
   /** Standard class typedefs. */
   typedef LabelMapToGISTableFilter Self;
-  typedef GISTableSource< TGISTable >
+  typedef GISTableSource<TGISTable>
   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TLabelMap InputLabelMapType;
-  typedef TGISTable OutputGISTableType;
-  typedef typename InputLabelMapType::Pointer         InputLabelMapPointer;
-  typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointer;
-  typedef typename OutputGISTableType::Pointer        OutputGISTablePointer;
-  typedef typename OutputGISTableType::ConstPointer   OutputGISTableConstPointer;
+  typedef TLabelMap                                 InputLabelMapType;
+  typedef TGISTable                                 OutputGISTableType;
+  typedef typename InputLabelMapType::Pointer       InputLabelMapPointer;
+  typedef typename InputLabelMapType::ConstPointer  InputLabelMapConstPointer;
+  typedef typename OutputGISTableType::Pointer      OutputGISTablePointer;
+  typedef typename OutputGISTableType::ConstPointer OutputGISTableConstPointer;
 
   //typedef typename InputLabelMapType::DataTreeType::TreeNodeType    InternalTreeNodeType;
   //typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
   //typedef typename InputLabelMapType::DataNodeType  DataNodeType;
   //typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
+  typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
 
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
-  typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
+  typedef typename InputGISConnectionType::Pointer    InputGISConnectionPointerType;
 
-  typedef typename OutputGISTableType::PolygonType  PolygonType;
-  typedef typename PolygonType::Pointer  PolygonPointerType;
+  typedef typename OutputGISTableType::PolygonType PolygonType;
+  typedef typename PolygonType::Pointer            PolygonPointerType;
 
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
-  typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
-  typedef CorrectPolygonFunctor <PolygonType> CorrectFunctorType;
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
+  typedef otb::SimplifyPathFunctor<PolygonType, PolygonType>                      SimplifyFunctorType;
+  typedef ClosePathFunctor <PolygonType, PolygonType>                             CloseFunctorType;
+  typedef CorrectPolygonFunctor <PolygonType>                                     CorrectFunctorType;
   /** ImageDimension constants */
   //itkStaticConstMacro(InputImageDimension, unsigned int,
   //                    TInputImage::ImageDimension);
@@ -113,14 +113,14 @@ public:
   //void setConnection
 
   /** Set/Get the LabelMap input of this process object.  */
-  virtual void SetInput( const InputLabelMapType *input);
-  virtual void SetInput( unsigned int idx, const InputLabelMapType *input);
+  virtual void SetInput(const InputLabelMapType *input);
+  virtual void SetInput(unsigned int idx, const InputLabelMapType *input);
   const InputLabelMapType * GetInput(void);
   const InputLabelMapType * GetInput(unsigned int idx);
 
 protected:
   LabelMapToGISTableFilter();
-  virtual ~LabelMapToGISTableFilter() {};
+  virtual ~LabelMapToGISTableFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LabelMapToAttributeImageFilter needs the entire input be
@@ -135,13 +135,11 @@ protected:
    * to GrayscaleGeodesicErodeImageFilter. */
   void GenerateData();
 
-
 private:
-  LabelMapToGISTableFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapToGISTableFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-
-   /** Remove table before insertion if true  */
+  /** Remove table before insertion if true  */
   bool m_DropExistingGISTable;
 
   /** Connection parameters to the db  */
@@ -157,5 +155,3 @@ private:
 #endif
 
 #endif
-
-

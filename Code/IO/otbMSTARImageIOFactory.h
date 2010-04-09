@@ -30,10 +30,10 @@ class ITK_EXPORT MSTARImageIOFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef MSTARImageIOFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef MSTARImageIOFactory           Self;
+  typedef itk::ObjectFactoryBase        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -57,11 +57,10 @@ protected:
   virtual ~MSTARImageIOFactory();
 
 private:
-  MSTARImageIOFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MSTARImageIOFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

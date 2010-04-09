@@ -26,34 +26,33 @@
 namespace otb
 {
 
-template < class TInputPath, class TOutput>
+template <class TInputPath, class TOutput>
 void
-OrientationPathFunction< TInputPath, TOutput >
+OrientationPathFunction<TInputPath, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
 }
 
-
-template < class TInputPath, class TOutput>
+template <class TInputPath, class TOutput>
 typename OrientationPathFunction<TInputPath,
-TOutput>::OutputType
-OrientationPathFunction<TInputPath,TOutput>
+                                 TOutput>::OutputType
+OrientationPathFunction<TInputPath, TOutput>
 ::Evaluate(const PathType& path) const
 {
-  typedef double                      RealType;
+  typedef double RealType;
 
-  VertexListPointer                   vertexList;
-  VertexType                          cindex;
-  VertexType                          IndexOut;
-  int                                 nbPath;
-  RealType                   Theta;
+  VertexListPointer vertexList;
+  VertexType        cindex;
+  VertexType        IndexOut;
+  int               nbPath;
+  RealType          Theta;
 
   vertexList = path.GetVertexList();
   nbPath = vertexList->Size();
 
-  if (nbPath ==2)
-  {
+  if (nbPath == 2)
+    {
     cindex = vertexList->GetElement(0);
     RealType x1 = cindex[0];
     RealType y1 = cindex[1];
@@ -61,33 +60,32 @@ OrientationPathFunction<TInputPath,TOutput>
     RealType x2 = cindex[0];
     RealType y2 = cindex[1];
 
-    Theta = vcl_atan2(y2-y1,x2-x1);
-  } // IF loop
+    Theta = vcl_atan2(y2 - y1, x2 - x1);
+    } // IF loop
   else
-  {
-    itkExceptionMacro(<<"OrientationPathFunction::Evaluate() FAILED -- path must have 2 points");
-  }
-  return (static_cast<OutputType>(Theta) );
+    {
+    itkExceptionMacro(<< "OrientationPathFunction::Evaluate() FAILED -- path must have 2 points");
+    }
+  return (static_cast<OutputType>(Theta));
 
 }
 
-template < class TInputPath, class TOutput>
+template <class TInputPath, class TOutput>
 typename OrientationPathFunction<TInputPath,
-TOutput>::OutputType
-OrientationPathFunction<TInputPath,TOutput>
+                                 TOutput>::OutputType
+OrientationPathFunction<TInputPath, TOutput>
 ::Evaluate() const
 {
-  if ( !this->GetInputPath() )
-  {
-    otbMsgDevMacro( << "Problem with GetInputPath" );
-    return static_cast<OutputType>(itk::NumericTraits<OutputType>::max() );
-  }
+  if (!this->GetInputPath())
+    {
+    otbMsgDevMacro(<< "Problem with GetInputPath");
+    return static_cast<OutputType>(itk::NumericTraits<OutputType>::max());
+    }
 
-  OutputType Result =  Evaluate( *(this->GetInputPath()) );
+  OutputType Result =  Evaluate(*(this->GetInputPath()));
 
   return Result;
 }
-
 
 } // namespace otb
 

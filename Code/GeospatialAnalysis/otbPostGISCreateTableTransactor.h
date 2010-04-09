@@ -21,10 +21,8 @@
 #include <pqxx/pqxx>
 #include <string>
 
-
 namespace otb
 {
-
 
 /** \class PostGISCreateTableTransactor
  * \brief PQXX-based transactor for creating PostGIS tables
@@ -39,9 +37,9 @@ namespace otb
  */
 
 class PostGISCreateTableTransactor :
-     public pqxx::transactor<pqxx::nontransaction>
+  public pqxx::transactor<pqxx::nontransaction>
 {
-  
+
 public:
 
   typedef pqxx::result ResultType;
@@ -52,10 +50,11 @@ public:
 
   PostGISCreateTableTransactor(const PostGISCreateTableTransactor& pgt);
 
-  PostGISCreateTableTransactor& operator=(const PostGISCreateTableTransactor& pgt) throw();
-  
-  void operator()(pqxx::nontransaction &T);
-  
+  PostGISCreateTableTransactor& operator =(const PostGISCreateTableTransactor& pgt)
+    throw();
+
+  void operator ()(pqxx::nontransaction& T);
+
   void on_commit();
 
   std::string GetTableName() const;
@@ -75,19 +74,18 @@ public:
   bool GetRemoveExistingTable() const;
 
   ResultType GetResult() const;
-  
-  void CreateGISTIndex (pqxx::nontransaction &T);
-    
+
+  void CreateGISTIndex(pqxx::nontransaction& T);
+
 protected:
-  
-  ResultType m_Result;
-  std::string m_TableName;
-  int m_SRID;
+
+  ResultType     m_Result;
+  std::string    m_TableName;
+  int            m_SRID;
   unsigned short m_Dimension;
-  bool m_RemoveExistingTable;
+  bool           m_RemoveExistingTable;
 };
 
 } // end namespace otb
-
 
 #endif

@@ -31,7 +31,7 @@ namespace otb
 
 namespace Wavelet
 {
-  enum WaveletDirection{FORWARD, INVERSE};
+enum WaveletDirection {FORWARD, INVERSE};
 }
 
 /**
@@ -64,44 +64,44 @@ namespace Wavelet
  *
  * \ingroup Operators
  */
-template < Wavelet::Wavelet TMotherWaveletOperator,
-  class TPixel, unsigned int VDimension,
-  class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+template <Wavelet::Wavelet TMotherWaveletOperator,
+          class TPixel, unsigned int VDimension,
+          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletOperatorBase
-        : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletOperatorBase Self;
+  typedef WaveletOperatorBase                                       Self;
   typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> Superclass;
 
-  itkTypeMacro(WaveletOperatorBase,NeighborhoodOperator);
+  itkTypeMacro(WaveletOperatorBase, NeighborhoodOperator);
 
   typedef typename Superclass::SizeType SizeType;
   typedef Wavelet::Wavelet              MotherWaveletOperatorEnumType;
-  itkStaticConstMacro( MotherWaveletOperator, MotherWaveletOperatorEnumType, TMotherWaveletOperator );
+  itkStaticConstMacro(MotherWaveletOperator, MotherWaveletOperatorEnumType, TMotherWaveletOperator);
 
   /** Construction */
   WaveletOperatorBase() :
-    m_UpSampleFactor( 0 )
-  {
+    m_UpSampleFactor(0)
+    {
     m_WaveletGenerator = WaveletGeneratorType::New();
-  }
+    }
 
   /** Construction by copy */
-  WaveletOperatorBase( const Self & other )
+  WaveletOperatorBase(const Self &other)
     : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other),
-      m_UpSampleFactor( other.GetUpSampleFactor() )
-  {
+    m_UpSampleFactor(other.GetUpSampleFactor())
+    {
     m_WaveletGenerator = WaveletGeneratorType::New();
-  }
+    }
 
   virtual ~WaveletOperatorBase() {}
 
   /** Assignment operator */
-  Self &operator=(const Self& other)
+  Self & operator =(const Self& other)
   {
-    Superclass::operator=(other);
+    Superclass::operator =(other);
     m_UpSampleFactor = other.GetUpSampleFactor();
     return *this;
   }
@@ -109,7 +109,7 @@ public:
   /**
    * Get the level of up sampling of the filter
    */
-  unsigned int GetUpSampleFactor () const
+  unsigned int GetUpSampleFactor() const
   {
     return this->m_UpSampleFactor;
   }
@@ -117,7 +117,7 @@ public:
   /**
    * Set the level of up sampling of the filter
    */
-  void SetUpSampleFactor ( unsigned int upSampleFactor )
+  void SetUpSampleFactor(unsigned int upSampleFactor)
   {
     this->m_UpSampleFactor = upSampleFactor;
   }
@@ -125,35 +125,37 @@ public:
   /**
    * Get the name of the wavelet when necessary
    */
-  virtual const char * GetWaveletName () const {
-    return this->m_WaveletGenerator->GetWaveletName(); }
+  virtual const char * GetWaveletName() const
+  {
+    return this->m_WaveletGenerator->GetWaveletName();
+  }
 
 protected:
   /**
    * Prints some debugging information
    */
-  virtual void PrintSelf(std::ostream &os, itk::Indent i) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent i) const;
 
-  typedef WaveletGenerator< TMotherWaveletOperator > WaveletGeneratorType;
-  typedef typename WaveletGeneratorType::Pointer WaveletGeneratorPointerType;
+  typedef WaveletGenerator<TMotherWaveletOperator> WaveletGeneratorType;
+  typedef typename WaveletGeneratorType::Pointer   WaveletGeneratorPointerType;
 
   /**
    * Typedef support for coefficient vector type.  Necessary to
    * work around compiler bug on VC++.
    */
   typedef typename Superclass::CoefficientVector CoefficientVector;
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType         PixelType;
 
   /**
    * Perform the "a-trou" algorithm for shift-invariant transformation.
    * It transforms the filter \f$ H(z) \f$ into \f$ H(z^2) \f$.
    */
-  void UpSamplingCoefficients ( CoefficientVector & coeff );
-  
+  void UpSamplingCoefficients(CoefficientVector& coeff);
+
   /**
    * Performs filter reversion, ie. \f$ H(z^{-1}) \f$.
    */
-  void RevertFilter ( CoefficientVector & coeff );
+  void RevertFilter(CoefficientVector& coeff);
 
   /**
    * Performs the definition of high pass filter in an orthogonal framework
@@ -165,7 +167,7 @@ protected:
    * According to Daubechies'notation, it concerns the synthesis (Inverse)
    * part of the filter banc.
    */
-  void GenerateForwardHighPassFilterFromLowPassFilter ( CoefficientVector & coeff );
+  void GenerateForwardHighPassFilterFromLowPassFilter(CoefficientVector& coeff);
 
   /**
    * Performs the definition of high pass filter in an orthogonal framework
@@ -177,7 +179,7 @@ protected:
    * According to Daubechies'notation, it concerns the synthesis (Inverse)
    * part of the filter banc.
    */
-  void GenerateInverseHighPassFilterFromLowPassFilter ( CoefficientVector & coeff );
+  void GenerateInverseHighPassFilterFromLowPassFilter(CoefficientVector& coeff);
 
   /**
    * Performs the definition of low pass filter in the reconstruction
@@ -185,12 +187,12 @@ protected:
    *
    * It defines filter coefficients as \f$ {\tilde H}(z) = G(-z) \f$.
    */
-  void GenerateInverseLowPassFilterFromHighPassFilter( CoefficientVector & coeff );
+  void GenerateInverseLowPassFilterFromHighPassFilter(CoefficientVector& coeff);
 
   /**
    * Reduce extra zeros on filters
    */
-  void ReduceFilterLength ( CoefficientVector & coeff );
+  void ReduceFilterLength(CoefficientVector& coeff);
 
   /** Arranges coefficients spatially in the memory buffer. */
   void Fill(const CoefficientVector& coeff)
@@ -204,44 +206,43 @@ protected:
    * bi-orthogonal framework (ie. Quadrature mirror filter).
    * It defines filter coefficients as \f$ g_n = (-1)^{n+1} h_{-n} \f$
    */
-  void GetHighPassFilterFromQuadratureLowPassFilter ( CoefficientVector & coeff )
+  void GetHighPassFilterFromQuadratureLowPassFilter(CoefficientVector& coeff)
   {
     unsigned int length = coeff.size();
 
-    CoefficientVector highPassCoeff ( length );
-    int medianPosition = static_cast<int>( length ) / 2;
+    CoefficientVector highPassCoeff (length);
+    int               medianPosition = static_cast<int>(length) / 2;
 
     highPassCoeff[medianPosition] = -coeff[medianPosition];
 
     double sign = 1.;
-    for ( int i = 1; i <= medianPosition; i++ )
-    {
-      highPassCoeff[ medianPosition+i ] = sign * coeff[ medianPosition-i ];
-      highPassCoeff[ medianPosition-i ] = sign * coeff[ medianPosition+i ];
+    for (int i = 1; i <= medianPosition; i++)
+      {
+      highPassCoeff[medianPosition + i] = sign * coeff[medianPosition - i];
+      highPassCoeff[medianPosition - i] = sign * coeff[medianPosition + i];
       sign *= -1.;
-    }
+      }
 
     coeff = highPassCoeff;
   }
-
 
   /**
    * Performs the definition of synthesis filter from analysis one.
    * Input is the forward low pass filter coefficients.
    * It performs \f$ {\tilde G}(z) = -H(-z) \f$.
    */
-  void GetInverseHighPassFilterFromForwardLowPassFilter ( CoefficientVector & coeff )
+  void GetInverseHighPassFilterFromForwardLowPassFilter(CoefficientVector& coeff)
   {
-    unsigned long length = static_cast<unsigned long>( coeff.size() );
-    unsigned long medianPosition = length/2;
+    unsigned long length = static_cast<unsigned long>(coeff.size());
+    unsigned long medianPosition = length / 2;
 
     // Wavelet coefficients are always of add size, so that 2*medianPosition < length
     coeff[medianPosition] *= -1.;
-    for ( unsigned int i = 2; i <= medianPosition; i+=2 )
-    {
+    for (unsigned int i = 2; i <= medianPosition; i += 2)
+      {
       coeff[medianPosition + i] *= -1.;
       coeff[medianPosition - i] *= -1.;
-    }
+      }
   }
 
   /**
@@ -250,17 +251,17 @@ protected:
    * for orthogonal and biorthogonal cases.
    * It performs \f$ {\tilde H}(z) = G(-z) \f$.
    */
-  void GetInverseLowPassFilterFromForwardHighPassFilter ( CoefficientVector & coeff )
+  void GetInverseLowPassFilterFromForwardHighPassFilter(CoefficientVector& coeff)
   {
-    unsigned long length = static_cast<unsigned long>( coeff.size() );
-    unsigned long medianPosition = length/2;
+    unsigned long length = static_cast<unsigned long>(coeff.size());
+    unsigned long medianPosition = length / 2;
 
     // Wavelet coefficients are always of add size, so that 2*medianPosition < length
-    for ( unsigned int i = 1; i <= medianPosition; i+=2 )
-    {
+    for (unsigned int i = 1; i <= medianPosition; i += 2)
+      {
       coeff[medianPosition + i] *= -1.;
       coeff[medianPosition - i] *= -1.;
-    }
+      }
   }
 
   /**
@@ -270,13 +271,13 @@ protected:
    * Input are the inverse low pass filter coefficients.
    * It performs \f$ G(z) = {\tilde H}(-z)\f$.
    */
-  void GetForwardHighPassFilterFromInverseLowPassFilter ( CoefficientVector & coeff )
+  void GetForwardHighPassFilterFromInverseLowPassFilter(CoefficientVector& coeff)
   {
-    GetInverseLowPassFilterFromForwardHighPassFilter( coeff );
+    GetInverseLowPassFilterFromForwardHighPassFilter(coeff);
   }
 #endif
 
-  unsigned int m_UpSampleFactor;
+  unsigned int                m_UpSampleFactor;
   WaveletGeneratorPointerType m_WaveletGenerator;
 };
 
@@ -287,5 +288,3 @@ protected:
 #endif
 
 #endif
-
-

@@ -24,37 +24,37 @@
 
 namespace otb
 {
-  /**
-   *\class ImageViewerFullResolutionEventsInterface
-   * \brief <b>DEPRECATED</b>
-   *
-   *  \deprecated use the new Visualization framework instead.
-   * \sa StandardImageViewer
-   *
-   */
+/**
+ *\class ImageViewerFullResolutionEventsInterface
+ * \brief <b>DEPRECATED</b>
+ *
+ *  \deprecated use the new Visualization framework instead.
+ * \sa StandardImageViewer
+ *
+ */
 class ImageViewerFullResolutionEventsInterface
-      : public itk::Object
+  : public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef ImageViewerFullResolutionEventsInterface Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef itk::Object                              Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Standard type macros */
-  itkTypeMacro(ImageViewerFullResolutionEventsInterface,Superclass);
+  itkTypeMacro(ImageViewerFullResolutionEventsInterface, Superclass);
 
-  typedef itk::ImageRegion<2> RegionType;
+  typedef itk::ImageRegion<2>   RegionType;
   typedef RegionType::IndexType IndexType;
 
-  itkSetMacro(ForwardEvents,bool);
-  itkGetMacro(ForwardEvents,bool);
+  itkSetMacro(ForwardEvents, bool);
+  itkGetMacro(ForwardEvents, bool);
 
   /** Users actions */
-  virtual void RegionSelected(const RegionType & ) {};
-  virtual void ViewedRegionChanged() {};
-  virtual void PixelClicked(const IndexType& ) {};
+  virtual void RegionSelected(const RegionType&) {}
+  virtual void ViewedRegionChanged() {}
+  virtual void PixelClicked(const IndexType&) {}
 
 protected:
   /** Constructor */
@@ -67,7 +67,7 @@ protected:
 
 private:
   ImageViewerFullResolutionEventsInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   bool m_ForwardEvents;
 };

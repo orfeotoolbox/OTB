@@ -63,22 +63,21 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOBase, Superclass);
 
-  typedef TData VectorDataType;
-  typedef typename VectorDataType::Pointer VectorDataPointerType;
+  typedef TData                                 VectorDataType;
+  typedef typename VectorDataType::Pointer      VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
 
   itkStaticConstMacro(VDimension, unsigned int, VectorDataType::DataNodeType::Dimension);
   typedef itk::Vector<double, VDimension> SpacingType;
-  typedef itk::Point<double, VDimension> PointType;
+  typedef itk::Point<double, VDimension>  PointType;
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
 
-
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
-  typedef  enum {BigEndian,LittleEndian,OrderNotApplicable} ByteOrder;
+  typedef  enum {BigEndian, LittleEndian, OrderNotApplicable} ByteOrder;
 
   /** These methods indicate the byte ordering of the file you are
    * trying to read in. These methods will then either swap or not
@@ -91,8 +90,8 @@ public:
    * a VAX or PC, SetByteOrderToLittleEndian() otherwise
    * SetByteOrderToBigEndian().  Some ImageIOBase subclasses
    * ignore these methods. */
-  itkSetEnumMacro(ByteOrder,ByteOrder);
-  itkGetEnumMacro(ByteOrder,ByteOrder);
+  itkSetEnumMacro(ByteOrder, ByteOrder);
+  itkGetEnumMacro(ByteOrder, ByteOrder);
   void SetByteOrderToBigEndian()
   {
     this->SetByteOrder(BigEndian);
@@ -129,7 +128,6 @@ public:
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(VectorDataPointerType data) = 0;
 
-
   /*-------- This part of the interfaces deals with writing data ----- */
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
@@ -152,7 +150,6 @@ public:
    * pointer to the beginning of the image data. */
   virtual void Write(VectorDataConstPointerType data, char ** papszOptions = NULL) = 0;
 
-
 protected:
   VectorDataIOBase();
   virtual ~VectorDataIOBase();
@@ -171,11 +168,9 @@ protected:
   /** Return the object to an initialized state, ready to be used */
   virtual void Reset(const bool freeDynamic = true);
 
-
 private:
-  VectorDataIOBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  VectorDataIOBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

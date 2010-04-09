@@ -18,10 +18,8 @@
 #ifndef __otbCBAMIChangeDetector_h
 #define __otbCBAMIChangeDetector_h
 
-
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include "otbCBAMI.h"
-
 
 namespace otb
 {
@@ -53,25 +51,25 @@ namespace otb
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT CBAMIChangeDetector :
-      public BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-      Functor::CBAMI<
+  public BinaryFunctorNeighborhoodImageFilter<
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::CBAMI<
       ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
       ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-      ITK_TYPENAME TOutputImage::PixelType>   >
+      ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef CBAMIChangeDetector  Self;
+  typedef CBAMIChangeDetector Self;
   typedef BinaryFunctorNeighborhoodImageFilter<
-  TInputImage1,TInputImage2,TOutputImage,
-  Functor::CBAMI<
-  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
-  ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
-  ITK_TYPENAME TOutputImage::PixelType>
-  >  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::CBAMI<
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage1>,
+      ITK_TYPENAME itk::ConstNeighborhoodIterator<TInputImage2>,
+      ITK_TYPENAME TOutputImage::PixelType>
+    >  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -81,12 +79,11 @@ protected:
   virtual ~CBAMIChangeDetector() {}
 
 private:
-  CBAMIChangeDetector(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  CBAMIChangeDetector(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

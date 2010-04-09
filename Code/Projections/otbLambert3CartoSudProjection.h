@@ -18,7 +18,6 @@
 #ifndef __otbLambert3CartoSudProjection_h
 #define __otbLambert3CartoSudProjection_h
 
-
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimLambertConformalConicProjection.h"
 #include "otbMapProjection.h"
@@ -33,31 +32,30 @@ namespace otb
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT Lambert3CartoSudProjection : public LambertConformalConicMapProjection<transform>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef Lambert3CartoSudProjection                  Self;
-  typedef LambertConformalConicMapProjection<transform>   Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef Lambert3CartoSudProjection                    Self;
+  typedef LambertConformalConicMapProjection<transform> Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
-  typedef typename Superclass::ScalarType                 ScalarType;
-  typedef itk::Point<ScalarType,2 >                       InputPointType;
-  typedef itk::Point<ScalarType,2 >                        OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( Lambert3CartoSudProjection, LambertConformalConicMapProjection);
-
+  itkTypeMacro(Lambert3CartoSudProjection, LambertConformalConicMapProjection);
 
 protected:
   Lambert3CartoSudProjection();
   virtual ~Lambert3CartoSudProjection();
 
-private :
-  Lambert3CartoSudProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);                       //purposely not implemented
+private:
+  Lambert3CartoSudProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);                       //purposely not implemented
 };
 
 } // namespace otb

@@ -36,52 +36,51 @@ namespace otb
  *
  */
 
-
 namespace Functor
 {
 /** \class AssociativeSymmetricalSum
  * \brief Functor used with the AssociativeSymmetricalSumImageFilter.
  */
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class ITK_EXPORT AssociativeSymmetricalSum
 {
 public:
   AssociativeSymmetricalSum() {};
-  virtual ~AssociativeSymmetricalSum() {};
+  virtual ~AssociativeSymmetricalSum() {}
 
-  inline TOutput operator()( const TInput1 X,
+  inline TOutput operator ()(const TInput1 X,
                              const TInput2 Y)
   {
 
     TOutput SumXY = 0.;
 
-    SumXY += static_cast<TOutput>((X*Y)/(1.-X-Y+(2*X*Y)));
+    SumXY += static_cast<TOutput>((X * Y) / (1. - X - Y + (2 * X * Y)));
 
-    return ( SumXY );
+    return (SumXY);
   }
 };
 }
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT AssociativeSymmetricalSumImageFilter :
-      public
-      itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
-      Functor::AssociativeSymmetricalSum<
-      typename TInputImage1::PixelType,
-      typename TInputImage2::PixelType,
-      typename TOutputImage::PixelType>   >
+  public
+  itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                Functor::AssociativeSymmetricalSum<
+                                  typename TInputImage1::PixelType,
+                                  typename TInputImage2::PixelType,
+                                  typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef AssociativeSymmetricalSumImageFilter  Self;
-  typedef itk::BinaryFunctorImageFilter<TInputImage1,TInputImage2,TOutputImage,
-  Functor::AssociativeSymmetricalSum<
-  typename TInputImage1::PixelType,
-  typename TInputImage1::PixelType,
-  typename TOutputImage::PixelType>
-  > Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef AssociativeSymmetricalSumImageFilter Self;
+  typedef itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                        Functor::AssociativeSymmetricalSum<
+                                          typename TInputImage1::PixelType,
+                                          typename TInputImage1::PixelType,
+                                          typename TOutputImage::PixelType>
+                                        > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -91,12 +90,11 @@ protected:
   virtual ~AssociativeSymmetricalSumImageFilter() {}
 
 private:
-  AssociativeSymmetricalSumImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AssociativeSymmetricalSumImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

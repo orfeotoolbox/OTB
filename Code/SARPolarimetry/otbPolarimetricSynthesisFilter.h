@@ -56,71 +56,73 @@ namespace otb
  *
  */
 
-template <class TInputImageHH,class TInputImageHV,class TInputImageVH,class TInputImageVV,class TOutputImage,
-class TFunction = Functor::PolarimetricSynthesisFunctor<
-typename TInputImageHH::PixelType,
-typename TInputImageHV::PixelType,
-typename TInputImageVH::PixelType,
-typename TInputImageVV::PixelType,
-typename TOutputImage::PixelType > >
-class ITK_EXPORT PolarimetricSynthesisFilter :  public otb::QuaternaryFunctorImageFilter< TInputImageHH,
-      TInputImageHV, TInputImageVH, TInputImageVV, TOutputImage, TFunction >
+template <class TInputImageHH, class TInputImageHV, class TInputImageVH, class TInputImageVV, class TOutputImage,
+          class TFunction = Functor::PolarimetricSynthesisFunctor<
+            typename TInputImageHH::PixelType,
+            typename TInputImageHV::PixelType,
+            typename TInputImageVH::PixelType,
+            typename TInputImageVV::PixelType,
+            typename TOutputImage::PixelType> >
+class ITK_EXPORT PolarimetricSynthesisFilter :  public otb::QuaternaryFunctorImageFilter<TInputImageHH,
+                                                                                         TInputImageHV, TInputImageVH,
+                                                                                         TInputImageVV, TOutputImage,
+                                                                                         TFunction>
 {
 public:
 
   /** Standard typedefs */
-  typedef PolarimetricSynthesisFilter       Self;
-  typedef otb::QuaternaryFunctorImageFilter< TInputImageHH, TInputImageHV,
-  TInputImageVH, TInputImageVV, TOutputImage, TFunction >  Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef PolarimetricSynthesisFilter Self;
+  typedef otb::QuaternaryFunctorImageFilter<TInputImageHH, TInputImageHV,
+                                            TInputImageVH, TInputImageVV, TOutputImage, TFunction>  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(PolarimetricSynthesisFilter,QuaternaryFunctorImageFilter);
+  itkTypeMacro(PolarimetricSynthesisFilter, QuaternaryFunctorImageFilter);
 
   /** Template parameters typedefs */
-  typedef std::complex <double>                   InputPixelType;
-  typedef otb::Image< InputPixelType,  2 >        InputImageType;
-  typedef typename Superclass::Input1ImageType    HHInputImageType;
-  typedef typename Superclass::Input1ImagePointer HHInputImagePointer;
-  typedef typename Superclass::Input2ImageType    HVInputImageType;
-  typedef typename Superclass::Input2ImagePointer HVInputImagePointer;
-  typedef typename Superclass::Input3ImageType    VHInputImageType;
-  typedef typename Superclass::Input3ImagePointer VHInputImagePointer;
-  typedef typename Superclass::Input4ImageType    VVInputImageType;
-  typedef typename Superclass::Input4ImagePointer VVInputImagePointer;
-  typedef typename Superclass::OutputImageType    OutputImageType;
-  typedef typename OutputImageType::Pointer       OutputImagePointer;
-  typedef typename OutputImageType::RegionType    OutputImageRegionType;
-  typedef typename Superclass::FunctorType        FunctorType;
-  typedef typename std::complex <double>          ComplexType;
-  typedef typename itk::FixedArray<ComplexType,2> ComplexArrayType;
+  typedef std::complex <double>                    InputPixelType;
+  typedef otb::Image<InputPixelType,  2>           InputImageType;
+  typedef typename Superclass::Input1ImageType     HHInputImageType;
+  typedef typename Superclass::Input1ImagePointer  HHInputImagePointer;
+  typedef typename Superclass::Input2ImageType     HVInputImageType;
+  typedef typename Superclass::Input2ImagePointer  HVInputImagePointer;
+  typedef typename Superclass::Input3ImageType     VHInputImageType;
+  typedef typename Superclass::Input3ImagePointer  VHInputImagePointer;
+  typedef typename Superclass::Input4ImageType     VVInputImageType;
+  typedef typename Superclass::Input4ImagePointer  VVInputImagePointer;
+  typedef typename Superclass::OutputImageType     OutputImageType;
+  typedef typename OutputImageType::Pointer        OutputImagePointer;
+  typedef typename OutputImageType::RegionType     OutputImageRegionType;
+  typedef typename Superclass::FunctorType         FunctorType;
+  typedef typename std::complex <double>           ComplexType;
+  typedef typename itk::FixedArray<ComplexType, 2> ComplexArrayType;
 
-  void SetInputHH( const TInputImageHH * image );
-  void SetInputHV( const TInputImageHV * image );
-  void SetInputVH( const TInputImageVH * image );
-  void SetInputVV( const TInputImageVV * image );
+  void SetInputHH(const TInputImageHH * image);
+  void SetInputHV(const TInputImageHV * image);
+  void SetInputVH(const TInputImageVH * image);
+  void SetInputVV(const TInputImageVV * image);
 
   /** Set/Get PsiI */
-  itkSetMacro(PsiI,double);
-  itkGetMacro(PsiI,double);
+  itkSetMacro(PsiI, double);
+  itkGetMacro(PsiI, double);
   /** Set/Get KhiI */
-  itkSetMacro(KhiI,double);
-  itkGetMacro(KhiI,double);
+  itkSetMacro(KhiI, double);
+  itkGetMacro(KhiI, double);
   /** Set/Get PsiR */
-  itkSetMacro(PsiR,double);
-  itkGetMacro(PsiR,double);
+  itkSetMacro(PsiR, double);
+  itkGetMacro(PsiR, double);
   /** Set/Get KhiR */
-  itkSetMacro(KhiR,double);
-  itkGetMacro(KhiR,double);
+  itkSetMacro(KhiR, double);
+  itkGetMacro(KhiR, double);
   /** Set/Get Mode */
-  itkSetMacro(Mode,int);
-  itkGetMacro(Mode,int);
+  itkSetMacro(Mode, int);
+  itkGetMacro(Mode, int);
   /** Set the gain */
-  itkSetMacro(Gain,double);
+  itkSetMacro(Gain, double);
   /** Set the ElectroMagneticField Incident */
   void SetEi(ComplexArrayType ei)
   {
@@ -144,7 +146,7 @@ protected:
   /**  Constructor */
   PolarimetricSynthesisFilter();
   /**  Destructor */
-  virtual ~PolarimetricSynthesisFilter() {};
+  virtual ~PolarimetricSynthesisFilter() {}
 
   virtual void GenerateOutputInformation();
 
@@ -157,7 +159,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    int threadId );
+                                    int threadId);
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
@@ -169,8 +171,8 @@ protected:
 
 private:
 
-  PolarimetricSynthesisFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PolarimetricSynthesisFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Psi Incident */
   double m_PsiI;
@@ -194,7 +196,7 @@ private:
 
   /** Architecture Type */
   PolarimetricData::Pointer m_ArchitectureType;
-  bool m_PresentInputImages[4];
+  bool                      m_PresentInputImages[4];
 
 };
 
@@ -203,6 +205,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolarimetricSynthesisFilter.txx"
 #endif
-
 
 #endif

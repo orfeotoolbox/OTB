@@ -25,7 +25,7 @@
 namespace otb
 {
 /** Main computation method */
-template <class TPointSet,class TDeformationField>
+template <class TPointSet, class TDeformationField>
 void
 NearestPointDeformationFieldGenerator<TPointSet, TDeformationField>
 ::GenerateData(void)
@@ -37,28 +37,28 @@ NearestPointDeformationFieldGenerator<TPointSet, TDeformationField>
   outputPtr->FillBuffer(defaultValue);
 
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
-  IteratorType it(outputPtr,outputPtr->GetRequestedRegion());
+  IteratorType it(outputPtr, outputPtr->GetRequestedRegion());
 
-  for (it.GoToBegin();!it.IsAtEnd();++it)
-  {
-    IndexVectorType indexVector = this->GenerateNearestValidPointsPointSet(it.GetIndex(),1);
-    PixelType p(2);
-    if (indexVector.size()>=1)
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
+    IndexVectorType indexVector = this->GenerateNearestValidPointsPointSet(it.GetIndex(), 1);
+    PixelType p(2);
+    if (indexVector.size() >= 1)
+      {
       p[0] = static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[1]);
       p[1] = static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[2]);
-    }
+      }
     else
-    {
-      p=defaultValue;
-    }
+      {
+      p = defaultValue;
+      }
     it.Set(p);
-  }
+    }
 }
 /**
  * PrintSelf Method
  */
-template <class TPointSet,class TDeformationField>
+template <class TPointSet, class TDeformationField>
 void
 NearestPointDeformationFieldGenerator<TPointSet, TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

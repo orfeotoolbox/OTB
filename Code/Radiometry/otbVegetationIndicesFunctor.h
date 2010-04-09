@@ -44,32 +44,32 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
-  //operators != 
-    bool operator!=( const RAndNIRIndexBase & ) const
-   {
-  return false;
-    }
-  //operator ==
-   bool operator==( const RAndNIRIndexBase & other ) const
-    {
-     return !(*this != other);
-    }
-  // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+
+  //operators !=
+  bool operator !=(const RAndNIRIndexBase&) const
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],static_cast<TInput2>(inputVector[m_NIRIndex-1]));
+    return false;
+  }
+  //operator ==
+  bool operator ==(const RAndNIRIndexBase& other) const
+  {
+    return !(*this != other);
+  }
+  // Operator on vector pixel type
+  inline TOutput operator ()(const InputVectorType& inputVector)
+  {
+    return this->Evaluate(inputVector[m_RedIndex - 1], static_cast<TInput2>(inputVector[m_NIRIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &nir)
+  inline TOutput operator ()(const TInput1& r, const TInput2& nir)
   {
-    return this->Evaluate(r,nir);
-  };
+    return this->Evaluate(r, nir);
+  }
   /// Constructor
   RAndNIRIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_NIRIndex(4) {}
   /// Desctructor
-  virtual ~RAndNIRIndexBase() {};
+  virtual ~RAndNIRIndexBase() {}
 
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -94,7 +94,7 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & r, const TInput2 & nir) const = 0;
+  virtual TOutput Evaluate(const TInput1& r, const TInput2& nir) const = 0;
   double m_EpsilonToBeConsideredAsZero;
 
 private:
@@ -119,35 +119,35 @@ public:
   /// Vector pixel type used to support both vector images and multiple
   /// input images
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
-  
-  //operators != 
-  bool operator!=( const  RAndBAndNIRIndexBase& ) const
-   {
-     return false;
-   }
-  
+
+  //operators !=
+  bool operator !=(const RAndBAndNIRIndexBase&) const
+  {
+    return false;
+  }
+
   //operator ==
-   bool operator==( const  RAndBAndNIRIndexBase& other ) const
+  bool operator ==(const RAndBAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
-  
+
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],
-                          static_cast<TInput2>(inputVector[m_BlueIndex-1]),
-                          static_cast<TInput3>(inputVector[m_NIRIndex-1]));
+    return this->Evaluate(inputVector[m_RedIndex - 1],
+                          static_cast<TInput2>(inputVector[m_BlueIndex - 1]),
+                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
   }
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &b, const TInput2 &nir)
+  inline TOutput operator ()(const TInput1& r, const TInput2& b, const TInput2& nir)
   {
-    return this->Evaluate(r,b,nir);
-  };
+    return this->Evaluate(r, b, nir);
+  }
   /// Constructor
-  RAndBAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {};
+  RAndBAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {}
   /// Desctructor
-  virtual ~RAndBAndNIRIndexBase() {};
+  virtual ~RAndBAndNIRIndexBase() {}
 
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -183,9 +183,9 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & r, const TInput2& b, const TInput3 & nir) const = 0;
+  virtual TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const = 0;
   double m_EpsilonToBeConsideredAsZero;
-  
+
 private:
   unsigned int m_RedIndex;
   unsigned int m_BlueIndex;
@@ -211,22 +211,22 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(inputVector[m_RedIndex-1],
-                          static_cast<TInput2>(inputVector[m_GreenIndex-1]),
-                          static_cast<TInput3>(inputVector[m_NIRIndex-1]));
+    return this->Evaluate(inputVector[m_RedIndex - 1],
+                          static_cast<TInput2>(inputVector[m_GreenIndex - 1]),
+                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &r, const TInput2 &g, const TInput2 &nir)
+  inline TOutput operator ()(const TInput1& r, const TInput2& g, const TInput2& nir)
   {
-    return this->Evaluate(r,g,nir);
-  };
+    return this->Evaluate(r, g, nir);
+  }
   /// Constructor
-  RAndGAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4)  {};
+  RAndGAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4)  {}
   /// Desctructor
-  virtual ~RAndGAndNIRIndexBase() {};
+  virtual ~RAndGAndNIRIndexBase() {}
 
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
@@ -262,7 +262,7 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & r, const TInput2& g, const TInput3 & nir) const = 0;
+  virtual TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const = 0;
   const double m_EpsilonToBeConsideredAsZero;
 
 private:
@@ -280,25 +280,25 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
+class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  NDVI() {};
+  NDVI() {}
   /// Desctructor
-  virtual ~NDVI() {};
+  virtual ~NDVI() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if ( vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero )
+    if (vcl_abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>((dnir-dr)/(dnir+dr)));
+    return (static_cast<TOutput>((dnir - dr) / (dnir + dr)));
   }
 };
 
@@ -314,18 +314,18 @@ template <class TInput1, class TInput2, class TOutput>
 class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  RVI() {};
-  virtual ~RVI() {};
+  RVI() {}
+  virtual ~RVI() {}
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if ( vcl_abs(dr)  < this->m_EpsilonToBeConsideredAsZero  )
+    if (vcl_abs(dr)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(dnir/dr));
+    return (static_cast<TOutput>(dnir / dr));
   }
 };
 
@@ -341,41 +341,41 @@ template <class TInput1, class TInput2, class TOutput>
 class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  PVI() {};
-  virtual ~PVI() {};
+  PVI() {}
+  virtual ~PVI() {}
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
     m_A = A;
-    m_Coeff = 1./(vcl_sqrt(m_A*m_A + 1.));
+    m_Coeff = 1. / (vcl_sqrt(m_A * m_A + 1.));
   }
-  double GetA(void)const
+  double GetA(void) const
   {
-    return (  m_A );
+    return (m_A);
   }
   void SetB(const double B)
   {
     m_B = B;
   }
-  double GetB(void)const
+  double GetB(void) const
   {
-    return (  m_B );
+    return (m_B);
   }
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
-    return ( static_cast<TOutput>(  (dnir - m_A*dr - m_B)*m_Coeff) );
+    return (static_cast<TOutput>((dnir - m_A * dr - m_B) * m_Coeff));
   }
 
 private:
 
   /** A and B parameters */
-  double  m_A;
-  double  m_B;
+  double m_A;
+  double m_B;
   /** Denominator, pre-calculed when the A variable is set */
-  double  m_Coeff;
+  double m_Coeff;
 
 };
 
@@ -391,36 +391,36 @@ template <class TInput1, class TInput2, class TOutput>
 class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  SAVI() : m_L(0.5) {};
-  virtual ~SAVI() {};
+  SAVI() : m_L(0.5) {}
+  virtual ~SAVI() {}
 
   /** Set/Get L correction */
   void SetL(const double L)
   {
     m_L = L;
   }
-  double GetL(void)const
+  double GetL(void) const
   {
-    return (  m_L );
+    return (m_L);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
     double denominator = dnir + dr + m_L;
-    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
+    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(  ((dnir-dr)*(1+m_L))/denominator ) );
+    return (static_cast<TOutput>(((dnir - dr) * (1 + m_L)) / denominator));
   }
 
 private:
 
   /** L correction */
-  double  m_L;
+  double m_L;
 
 };
 
@@ -436,15 +436,15 @@ template <class TInput1, class TInput2, class TOutput>
 class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {};
-  virtual ~TSAVI() {};
+  TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {}
+  virtual ~TSAVI() {}
 
   /** Set/Get S and A parameters */
   void SetS(const double S)
   {
     m_S = S;
   }
-  double GetS(void)const
+  double GetS(void) const
   {
     return (m_S);
   }
@@ -452,7 +452,7 @@ public:
   {
     m_A = A;
   }
-  double GetA(void)const
+  double GetA(void) const
   {
     return (m_A);
   }
@@ -461,31 +461,31 @@ public:
   {
     m_X = X;
   }
-  double GetX(void)const
+  double GetX(void) const
   {
     return (m_X);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
-    double denominator = m_A*dnir + dr + m_X*(1.+m_A*m_A);
-    if ( vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero  )
+    double denominator = m_A * dnir + dr + m_X * (1. + m_A * m_A);
+    if (vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dr - m_S))/denominator ) );
+    return (static_cast<TOutput>((m_A * (dnir - m_A * dr - m_S)) / denominator));
   }
 
 private:
 
   /** A and S parameters */
-  double  m_A;
-  double  m_S;
+  double m_A;
+  double m_S;
   /** X parameter */
-  double  m_X;
+  double m_X;
 
 };
 
@@ -501,20 +501,20 @@ template <class TInput1, class TInput2, class TOutput>
 class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  MSAVI2() {};
-  virtual ~MSAVI2() {};
+  MSAVI2() {}
+  virtual ~MSAVI2() {}
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
-    double sqrt_value = (2*dnir+1)*(2*dnir+1) - 8*(dnir-dr);
-    if ( sqrt_value < 0. )
+    double sqrt_value = (2 * dnir + 1) * (2 * dnir + 1) - 8 * (dnir - dr);
+    if (sqrt_value < 0.)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(  (2*dnir + 1 - vcl_sqrt(sqrt_value))/2. ) );
+    return (static_cast<TOutput>((2 * dnir + 1 - vcl_sqrt(sqrt_value)) / 2.));
   }
 
 };
@@ -531,11 +531,11 @@ template <class TInput1, class TInput2, class TOutput>
 class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  GEMI() {};
-  virtual ~GEMI() {};
+  GEMI() {}
+  virtual ~GEMI() {}
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
@@ -543,22 +543,22 @@ protected:
     double dnu;
     double dnumerateur_nu;
     double ddenominateur_nu = dnir + dr + 0.5;
-    if ( vcl_abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero  )
+    if (vcl_abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero)
       {
-        dnu = 0;
+      dnu = 0;
       }
     else
       {
-        dnumerateur_nu = 2*(dnir*dnir - dr*dr) + 1.5*dnir + 0.5*dr;
-        dnu = dnumerateur_nu / ddenominateur_nu;
+      dnumerateur_nu = 2 * (dnir * dnir - dr * dr) + 1.5 * dnir + 0.5 * dr;
+      dnu = dnumerateur_nu / ddenominateur_nu;
       }
 
     double ddenominateur_GEMI = 1 - dr;
-    if ( vcl_abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero )
-    {
+    if (vcl_abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero)
+      {
       return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>(  (dnu*(1 -0.25*dnu)-(dr-0.125))/ddenominateur_GEMI ) );
+      }
+    return (static_cast<TOutput>((dnu * (1 - 0.25 * dnu) - (dr - 0.125)) / ddenominateur_GEMI));
   }
 
 };
@@ -572,34 +572,34 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class WDVI : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
+class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  WDVI() : m_S(0.4) {};
+  WDVI() : m_S(0.4) {}
   /// Desctructor
-  virtual ~WDVI() {};
+  virtual ~WDVI() {}
   // Operator on r and nir single pixel values
 /** Set/Get Slop of soil line */
-  void SetS( const double s)
+  void SetS(const double s)
   {
     m_S = s;
   }
-  double GetS(void)const
+  double GetS(void) const
   {
     return (m_S);
   }
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
 
-    return (dnir -m_S*dr);
+    return (dnir - m_S * dr);
   }
 private:
   /** Slope of soil line */
-  double  m_S;
+  double m_S;
 };
 
 /** \class MSAVI
@@ -619,54 +619,53 @@ public:
   typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
   MSAVI() : m_S(0.4)
   {
-       m_WDVIfunctor.SetS(m_S);
-  };
-  virtual ~MSAVI() {};
+    m_WDVIfunctor.SetS(m_S);
+  }
+  virtual ~MSAVI() {}
 /** Set/Get Slop of soil line */
-  void SetS( const double s)
+  void SetS(const double s)
   {
     m_S = s;
-       m_WDVIfunctor.SetS(m_S);
+    m_WDVIfunctor.SetS(m_S);
   }
-  double GetS(void)const
+  double GetS(void) const
   {
     return (m_S);
   }
-  NDVIFunctorType GetNDVI(void)const
+  NDVIFunctorType GetNDVI(void) const
   {
     return (m_NDVIfunctor);
   }
-  WDVIFunctorType GetWDVI(void)const
+  WDVIFunctorType GetWDVI(void) const
   {
     return (m_WDVIfunctor);
   }
 
-
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dnir = static_cast<double>(nir);
     double dr = static_cast<double>(r);
 
-    double dNDVI = this->GetNDVI()(r,nir);
-    double dWDVI = this->GetWDVI()(r,nir);
-    double dL = 1 - 2*m_S*dNDVI*dWDVI;
+    double dNDVI = this->GetNDVI() (r, nir);
+    double dWDVI = this->GetWDVI() (r, nir);
+    double dL = 1 - 2 * m_S * dNDVI * dWDVI;
 
     double denominator = dnir + dr + dL;
 
-    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
+    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>(  ((dnir-dr)*(1+dL))/denominator ) );
+    return (static_cast<TOutput>(((dnir - dr) * (1 + dL)) / denominator));
   }
 
 private:
   /** Slope of soil line */
-  double  m_S;
+  double                m_S;
   const NDVIFunctorType m_NDVIfunctor;
-  WDVIFunctorType m_WDVIfunctor;
+  WDVIFunctorType       m_WDVIfunctor;
 
 };
 
@@ -681,17 +680,17 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class AVI : public RAndGAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class AVI : public RAndGAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
-  AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {};
-  virtual ~AVI() {};
+  AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {}
+  virtual ~AVI() {}
 /** Set/Get Lambda red parameter*/
   void SetLambdaR(const double lr)
   {
     m_LambdaR = lr;
   }
-  double GetLambdaR(void)const
+  double GetLambdaR(void) const
   {
     return (m_LambdaR);
   }
@@ -700,7 +699,7 @@ public:
   {
     m_LambdaG = lg;
   }
-  double GetLambdaG(void)const
+  double GetLambdaG(void) const
   {
     return (m_LambdaG);
   }
@@ -709,12 +708,12 @@ public:
   {
     m_LambdaNir = lnir;
   }
-  double GetLambdaNir(void)const
+  double GetLambdaNir(void) const
   {
     return (m_LambdaNir);
   }
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &g, const TInput3 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const
   {
     double dr = static_cast<double>(r);
     double dg = static_cast<double>(g);
@@ -724,37 +723,37 @@ protected:
     double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
     double dterm1;
     double dterm2;
-    if( vcl_abs(dnir-dr)  < this->m_EpsilonToBeConsideredAsZero  )
-    {
+    if (vcl_abs(dnir - dr)  < this->m_EpsilonToBeConsideredAsZero)
+      {
       dterm1 = 0;
-    }
+      }
     else
-    {
-      dterm1 = vcl_atan(dfact1/(dnir - dr));
-    }
+      {
+      dterm1 = vcl_atan(dfact1 / (dnir - dr));
+      }
 
-    if( vcl_abs(dg-dr)  < this->m_EpsilonToBeConsideredAsZero  )
-    {
+    if (vcl_abs(dg - dr)  < this->m_EpsilonToBeConsideredAsZero)
+      {
       dterm2 = 0;
-    }
+      }
     else
-    {
-      dterm2 = vcl_atan(dfact2/(dg - dr));
-    }
+      {
+      dterm2 = vcl_atan(dfact2 / (dg - dr));
+      }
 
-    return static_cast<TOutput>( dterm1 + dterm2 );
+    return static_cast<TOutput>(dterm1 + dterm2);
 
   }
 private:
 
   /**  Central wavelength of the green channel (=Lambda1) */
-  double  m_LambdaG;
+  double m_LambdaG;
 
   /**  Central wavelength of the red channel (=Lambda2) */
-  double  m_LambdaR;
+  double m_LambdaR;
 
   /**  Central wavelength of the nir channel (=Lambda3) */
-  double  m_LambdaNir;
+  double m_LambdaNir;
 };
 
 /** \class ARVI
@@ -768,41 +767,41 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class ARVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class ARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
-  ARVI() : m_Gamma(0.5) {};
-  virtual ~ARVI() {};
+  ARVI() : m_Gamma(0.5) {}
+  virtual ~ARVI() {}
 
   /** Set/Get Gamma parameter */
   void SetGamma(const double gamma)
   {
     m_Gamma = gamma;
   }
-  double GetGamma(void)const
+  double GetGamma(void) const
   {
     return (m_Gamma);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
     double dnir = static_cast<double>(nir);
-    double RHOrb = dr - m_Gamma*(db - dr);
+    double RHOrb = dr - m_Gamma * (db - dr);
     double denominator = dnir + RHOrb;
-    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
+    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
-    return ( static_cast<TOutput>(  (dnir - RHOrb)/denominator ) );
+    return (static_cast<TOutput>((dnir - RHOrb) / denominator));
   }
 
 private:
 
   /** Gamma parameter */
-  double  m_Gamma;
+  double m_Gamma;
 };
 
 /** \class TSARVI
@@ -814,18 +813,18 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class TSARVI: public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
-  TSARVI() : m_X(0.08), m_Gamma(0.5) {};
-  virtual ~TSARVI() {};
+  TSARVI() : m_X(0.08), m_Gamma(0.5) {}
+  virtual ~TSARVI() {}
 
   /** Set/Get A and B parameters */
   void SetA(const double A)
   {
     m_A = A;
   }
-  double GetA(void)const
+  double GetA(void) const
   {
     return (m_A);
   }
@@ -833,7 +832,7 @@ public:
   {
     m_B = B;
   }
-  double GetB(void)const
+  double GetB(void) const
   {
     return (m_B);
   }
@@ -842,7 +841,7 @@ public:
   {
     m_X = X;
   }
-  double GetX(void)const
+  double GetX(void) const
   {
     return (m_X);
   }
@@ -851,35 +850,35 @@ public:
   {
     m_Gamma = gamma;
   }
-  double GetGamma(void)const
+  double GetGamma(void) const
   {
     return (m_Gamma);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
     double dnir = static_cast<double>(nir);
-    double dRB = dr - m_Gamma*(db - dr);
-    double denominator = dRB + m_A*dnir - m_A*m_B + m_X*(1.+m_A*m_A);
-    if ( vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero  )
-    {
+    double dRB = dr - m_Gamma * (db - dr);
+    double denominator = dRB + m_A * dnir - m_A * m_B + m_X * (1. + m_A * m_A);
+    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+      {
       return static_cast<TOutput>(0.);
-    }
-    return ( static_cast<TOutput>(  (m_A*(dnir - m_A*dRB - m_B))/denominator ) );
+      }
+    return (static_cast<TOutput>((m_A * (dnir - m_A * dRB - m_B)) / denominator));
   }
 
 private:
 
   /** A and B parameters */
-  double  m_A;
-  double  m_B;
+  double m_A;
+  double m_B;
   /** X parameter */
-  double  m_X;
+  double m_X;
   /** Gamma parameter */
-  double  m_Gamma;
+  double m_Gamma;
 
 };
 
@@ -894,17 +893,17 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TInput3, class TOutput>
-class EVI : public RAndBAndNIRIndexBase<TInput1,TInput2,TInput3,TOutput>
+class EVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
-  EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {};
-  virtual ~EVI() {};
+  EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {}
+  virtual ~EVI() {}
 /** Set/Get G parameter */
   void SetG(const double g)
   {
     m_G = g;
   }
-  double GetG(void)const
+  double GetG(void) const
   {
     return (m_G);
   }
@@ -913,7 +912,7 @@ public:
   {
     m_C1 = c1;
   }
-  double GetC1(void)const
+  double GetC1(void) const
   {
     return (m_C1);
   }
@@ -922,7 +921,7 @@ public:
   {
     m_C2 = c2;
   }
-  double GetC2(void)const
+  double GetC2(void) const
   {
     return (m_C2);
   }
@@ -931,37 +930,37 @@ public:
   {
     m_L = l;
   }
-  double GetL(void)const
+  double GetL(void) const
   {
     return (m_L);
   }
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &b, const TInput3 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const
   {
     double dr = static_cast<double>(r);
     double db = static_cast<double>(b);
     double dnir = static_cast<double>(nir);
-    double denominator = dnir + m_C1*dr - m_C2*db + m_L;
-    if ( vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero  )
+    double denominator = dnir + m_C1 * dr - m_C2 * db + m_L;
+    if (vcl_abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
       {
-      return ( static_cast<TOutput>(0.) );
+      return (static_cast<TOutput>(0.));
       }
-    return ( static_cast<TOutput>( m_G * (dnir - dr)/denominator ) );
+    return (static_cast<TOutput>(m_G * (dnir - dr) / denominator));
   }
 
 private:
 
   /** Gain factor */
-  double  m_G;
+  double m_G;
 
   /** Coefficient of the aerosol resistance term */
-  double  m_C1;
+  double m_C1;
 
   /** Coefficient of the aerosol resistance term */
-  double  m_C2;
+  double m_C2;
 
   /** Canopy background adjustment */
-  double  m_L;
+  double m_L;
 };
 
 /** \class IPVI
@@ -976,22 +975,22 @@ template <class TInput1, class TInput2, class TOutput>
 class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  IPVI() {};
-  virtual ~IPVI() {};
+  IPVI() {}
+  virtual ~IPVI() {}
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
     double dr = static_cast<double>(r);
     double dnir = static_cast<double>(nir);
-    if (vcl_abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero )
-    {
+    if (vcl_abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero)
+      {
       return static_cast<TOutput>(0.);
-    }
+      }
     else
-    {
-      return ( static_cast<TOutput>( dnir/(dnir+dr) ) );
-    }
+      {
+      return (static_cast<TOutput>(dnir / (dnir + dr)));
+      }
   }
 };
 
@@ -1008,26 +1007,26 @@ class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  TNDVI() {};
-  virtual ~TNDVI() {};
+  TNDVI() {}
+  virtual ~TNDVI() {}
 
-  NDVIFunctorType GetNDVI(void)const
+  NDVIFunctorType GetNDVI(void) const
   {
     return (m_NDVIfunctor);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &r, const TInput2 &nir) const
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
   {
-    double dval = this->GetNDVI()(r,nir) + 0.5;
-    if(dval<0)
-    {
-      return  ( static_cast<TOutput>(0));
-    }
+    double dval = this->GetNDVI() (r, nir) + 0.5;
+    if (dval < 0)
+      {
+      return  (static_cast<TOutput>(0));
+      }
     else
-    {
-      return ( static_cast<TOutput>(vcl_sqrt(dval)));
-    }
+      {
+      return (static_cast<TOutput>(vcl_sqrt(dval)));
+      }
   }
 private:
   const NDVIFunctorType m_NDVIfunctor;

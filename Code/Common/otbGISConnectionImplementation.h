@@ -21,7 +21,6 @@
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 
-
 namespace otb
 {
 /** \class GISConnectionImplementation
@@ -36,16 +35,14 @@ class ITK_EXPORT GISConnectionImplementation
 {
 public:
   /** Standard class typedefs */
-  typedef GISConnectionImplementation Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef GISConnectionImplementation   Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
 
   /** Standard macros */
   itkNewMacro(Self);
-  itkTypeMacro(GISConnectionImplementation,itk::DataObject);
-
+  itkTypeMacro(GISConnectionImplementation, itk::DataObject);
 
   /** Acessors */
   itkGetMacro(Host, std::string);
@@ -68,21 +65,19 @@ public:
 
   /** Using the connection */
 
-  virtual void ConnectToDB(){};
+  virtual void ConnectToDB(){}
 
-  virtual void PerformTransaction(const TransactorType& theTransaction) const {};
-
+  virtual void PerformTransaction(const TransactorType& theTransaction) const {}
 
 protected:
   /** Constructor */
   GISConnectionImplementation(){};
   /** Destructor */
-  virtual ~GISConnectionImplementation(){};
+  virtual ~GISConnectionImplementation(){}
 
 private:
-  GISConnectionImplementation(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  GISConnectionImplementation(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   std::string m_Host;
   std::string m_DBName;
@@ -91,10 +86,7 @@ private:
   std::string m_Port;
   std::string m_Options;
 
-
 };
-}// end namespace otb
-
+} // end namespace otb
 
 #endif
-

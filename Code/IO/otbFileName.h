@@ -38,9 +38,9 @@ class ITK_EXPORT FileName : public ossimFilename
 public:
 
   FileName();
-  FileName(const FileName& src);
-  FileName(const ossimFilename& src);
-  FileName(const ossimString& src);
+  FileName(const FileName &src);
+  FileName(const ossimFilename &src);
+  FileName(const ossimString &src);
   FileName(const char* src);
 
   /**
@@ -53,4 +53,3 @@ public:
 }
 
 #endif
-

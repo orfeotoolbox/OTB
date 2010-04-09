@@ -29,41 +29,40 @@ namespace otb
  *  It converts coordinates in longitude,latitude (WGS84) to Mollweid map coordinates.
  */
 template <InverseOrForwardTransformationEnum transform>
-class ITK_EXPORT MollweidMapProjection : public  MapProjection<ossimMollweidProjection, transform>
+class ITK_EXPORT MollweidMapProjection : public MapProjection<ossimMollweidProjection, transform>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef MollweidMapProjection                  Self;
-  typedef MapProjection<ossimMollweidProjection,transform>  Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef MollweidMapProjection                             Self;
+  typedef MapProjection<ossimMollweidProjection, transform> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
-  typedef typename Superclass::ScalarType       ScalarType;
-  typedef itk::Point<ScalarType,2 >              InputPointType;
-  typedef itk::Point<ScalarType,2 >             OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( MollweidMapProjection, MapProjection );
+  itkTypeMacro(MollweidMapProjection, MapProjection);
   virtual void SetFalseEasting(double falseEasting);
   virtual void SetFalseNorthing(double falseNorthing);
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
-  virtual void SetParameters(double falseEasting,double falseNorthing);
+  virtual void SetParameters(double falseEasting, double falseNorthing);
   virtual void SetDefaults();
 
 protected:
   MollweidMapProjection();
   virtual ~MollweidMapProjection();
 
-private :
-  MollweidMapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);          //purposely not implemented
+private:
+  MollweidMapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);          //purposely not implemented
 
 };
-
 
 } // namespace otb
 

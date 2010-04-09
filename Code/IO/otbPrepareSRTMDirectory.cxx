@@ -46,7 +46,7 @@ void
 PrepareSRTMDirectory
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << " m_ULLon "  << m_ULLon << std::endl;
   os << indent << " m_ULLat "  << m_ULLat << std::endl;
   os << indent << " m_LRLon "  << m_LRLon << std::endl;
@@ -55,21 +55,20 @@ PrepareSRTMDirectory
   os << indent << " m_DEMDirectoryPath"  << m_DEMDirectoryPath  << std::endl;
 }
 
-
 bool PrepareSRTMDirectory::Evaluate()
 {
   // Check directories
-    //
+  //
   ossimFilename fullDir(m_FullDEMDirectoryPath.c_str());
-  if( !fullDir.exists() || !fullDir.isDir() )
+  if (!fullDir.exists() || !fullDir.isDir())
     {
-      itkExceptionMacro(<<"Invalid FullDEMDirectoryPath: "<<m_FullDEMDirectoryPath);
+    itkExceptionMacro(<< "Invalid FullDEMDirectoryPath: " << m_FullDEMDirectoryPath);
     }
-  
+
   ossimFilename DEMDir(m_DEMDirectoryPath.c_str());
-  if( !DEMDir.exists() )
+  if (!DEMDir.exists())
     {
-      DEMDir.createDirectory();
+    DEMDir.createDirectory();
     }
 
   // Check input points
@@ -77,25 +76,24 @@ bool PrepareSRTMDirectory::Evaluate()
   int endX = static_cast<int>(vcl_ceil(m_LRLon));
   int startY = static_cast<int>(vcl_floor(m_LRLat));
   int endY = static_cast<int>(vcl_ceil(m_ULLat));
-  
-  if( startX>endX || startY>endY  )
+
+  if (startX > endX || startY > endY)
     {
-      itkExceptionMacro(<<"Invalid boundariy points");
+    itkExceptionMacro(<< "Invalid boundariy points");
     }
-  if(startX<-180 || startX>180 || endX<-180 || endX>180)
+  if (startX < -180 || startX > 180 || endX < -180 || endX > 180)
     {
-      itkExceptionMacro(<<"Invalid longitude coordinates, must be in [-180; 180].");
+    itkExceptionMacro(<< "Invalid longitude coordinates, must be in [-180; 180].");
     }
-  if(startY<-90 || startY>90 || endY<-90 || endY>90)
+  if (startY < -90 || startY > 90 || endY < -90 || endY > 90)
     {
-       itkExceptionMacro(<<"Invalid latitude coordinates, must be in [-90; 90]");
+    itkExceptionMacro(<< "Invalid latitude coordinates, must be in [-90; 90]");
     }
 
- 
-  for (int j=startY; j<= endY; ++j)
-  {
-    for (int i=startX; i<= endX; ++i)
+  for (int j = startY; j <= endY; ++j)
     {
+    for (int i = startX; i <= endX; ++i)
+      {
       std::ostringstream inputfilename;
       inputfilename << m_FullDEMDirectoryPath;
       inputfilename << "/";
@@ -107,30 +105,30 @@ bool PrepareSRTMDirectory::Evaluate()
 
       // Build the file name
       if (j >= 0)
-      {
+        {
         inputfilename << "N";
         outputfilename << "N";
-      }
+        }
       else
-      {
+        {
         inputfilename << "S";
-       outputfilename << "S";
-      }
-      
+        outputfilename << "S";
+        }
+
       inputfilename << std::setfill('0') << std::setw(2) << vcl_abs(j);
       outputfilename << std::setfill('0') << std::setw(2) << vcl_abs(j);
 
       if (i >= 0)
-      {
+        {
         inputfilename << "E";
         outputfilename << "E";
-      }
+        }
       else
-      {
+        {
         inputfilename << "W";
         outputfilename << "W";
-      }
-      
+        }
+
       inputfilename << std::setfill('0') << std::setw(3) << vcl_abs(i);
       outputfilename << std::setfill('0') << std::setw(3) << vcl_abs(i);
 
@@ -142,18 +140,16 @@ bool PrepareSRTMDirectory::Evaluate()
       //copy input file to output file
       ossimFilename inputFile(inputfilename.str().c_str());
       ossimFilename outputFile(outputfilename.str().c_str());
-      if(!inputFile.exists())
-       {
-         itkExceptionMacro(<<"ERROR, can't find file "<<inputFile);
-       }
+      if (!inputFile.exists())
+        {
+        itkExceptionMacro(<< "ERROR, can't find file " << inputFile);
+        }
       inputFile.copyFileTo(outputFile);
 
-
+      }
     }
-  }
 
   return true;
 }
 
 } // namespace otb
-

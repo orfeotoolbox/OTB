@@ -31,20 +31,19 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputPointSet>
-SiftFastImageFilter<TInputImage,TOutputPointSet>
+SiftFastImageFilter<TInputImage, TOutputPointSet>
 ::SiftFastImageFilter()
-{  }
-
+{}
 
 template <class TInputImage, class TOutputPointSet>
 void
-SiftFastImageFilter<TInputImage,TOutputPointSet>
+SiftFastImageFilter<TInputImage, TOutputPointSet>
 ::GenerateData()
 {
 
   // Get the input image pointer
-  const InputImageType *     inputPtr       = this->GetInput();
-  OutputPointSetPointerType  outputPointSet = this->GetOutput();
+  const InputImageType *    inputPtr       = this->GetInput();
+  OutputPointSetPointerType outputPointSet = this->GetOutput();
 
   typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
 
@@ -55,46 +54,46 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
   rescaler->SetOutputMaximum(1);
   rescaler->Update();
 
-  SiftFastImage siftInputImage = CreateImage(size[1],size[0]);
-  itk::ImageRegionIterator<FloatImageType> inIt(rescaler->GetOutput(),rescaler->GetOutput()->GetLargestPossibleRegion());
+  SiftFastImage siftInputImage = CreateImage(size[1], size[0]);
+  itk::ImageRegionIterator<FloatImageType> inIt(rescaler->GetOutput(), rescaler->GetOutput()->GetLargestPossibleRegion());
 
-  unsigned int index =0;
+  unsigned int index = 0;
 
-  for (inIt.GoToBegin();!inIt.IsAtEnd();++inIt)
-  {
-    siftInputImage->pixels[index]=inIt.Get();
+  for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
+    {
+    siftInputImage->pixels[index] = inIt.Get();
     ++index;
-  }
+    }
 
-  Keypoint keypts = GetKeypoints(siftInputImage,m_ScalesNumber);
+  Keypoint keypts = GetKeypoints(siftInputImage, m_ScalesNumber);
 
   Keypoint key = keypts;
 
   unsigned int numkeys = 0;
 
   while (key)
-  {
+    {
     // Get the key location
-    itk::ContinuousIndex<float,2> keyContIndex;
-    keyContIndex[0]=key->col;
-    keyContIndex[1]=key->row;
+    itk::ContinuousIndex<float, 2> keyContIndex;
+    keyContIndex[0] = key->col;
+    keyContIndex[1] = key->row;
 
     OutputPointType point;
-    inputPtr->TransformContinuousIndexToPhysicalPoint(keyContIndex,point);
+    inputPtr->TransformContinuousIndexToPhysicalPoint(keyContIndex, point);
 
     // Get the key descriptor
     OutputPixelType data;
     data.SetSize(128);
     for (int i = 0; i < 128; ++i)
-    {
-      data[i]=key->descrip[i];
+      {
+      data[i] = key->descrip[i];
 
-    }
-    outputPointSet->SetPoint(numkeys,point);
-    outputPointSet->SetPointData(numkeys,data);
+      }
+    outputPointSet->SetPoint(numkeys, point);
+    outputPointSet->SetPointData(numkeys, data);
 
     //Fill the current point and its orientation
-    std::pair< OutputPointType,double>     pair;
+    std::pair<OutputPointType, double> pair;
     pair.first  = point;
     pair.second = key->ori;
     m_OrientationVector.push_back(pair);
@@ -104,7 +103,7 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
     // go to next key
     ++numkeys;
     key = key->next;
-  }
+    }
   FreeKeypoints(keypts);
   DestroyAllResources();
 }
@@ -113,7 +112,7 @@ SiftFastImageFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-SiftFastImageFilter<TInputImage,TOutputPointSet>
+SiftFastImageFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

@@ -38,8 +38,8 @@ FixedSizeFullImageWidget<TPixel>
   region.SetIndex(index);
   region.SetSize(m_WindowSize);
   this->SetViewedRegion(region);
-  m_ImageLoaded=false;
-  m_ImageOverlayLoaded=false;
+  m_ImageLoaded = false;
+  m_ImageOverlayLoaded = false;
 }
 
 /**
@@ -57,19 +57,19 @@ void
 FixedSizeFullImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
-  m_ImageLoaded=false;
-  m_ImageOverlayLoaded=false;
+  m_ImageLoaded = false;
+  m_ImageOverlayLoaded = false;
   if (!this->GetInput())
-  {
+    {
     itkExceptionMacro("No input image!");
-  }
+    }
   else
-  {
-    Superclass::Init(x,y,w,h,l);
+    {
+    Superclass::Init(x, y, w, h, l);
     this->SetViewedRegion(this->GetInput()->GetLargestPossibleRegion());
     this->label(l);
     this->resize(x, y, w, h);
-  }
+    }
 }
 
 /**
@@ -81,17 +81,17 @@ FixedSizeFullImageWidget<TPixel>
 ::resize(int x, int y, int w, int h)
 {
   //otbMsgDebugMacro(<<"resize: "<<x<<" "<<y<<" "<<w<<" "<<h);
-  m_WindowSize[0]=w;
-  m_WindowSize[1]=h;
+  m_WindowSize[0] = w;
+  m_WindowSize[1] = h;
 
   SizeType viewedSize = this->GetViewedRegion().GetSize();
 
-  double zoom1 = (double)w/(double)viewedSize[0];
-  double zoom2 = (double)h/(double)viewedSize[1];
+  double zoom1 = (double) w / (double) viewedSize[0];
+  double zoom2 = (double) h / (double) viewedSize[1];
 
   this->SetOpenGlIsotropicZoom(zoom1 < zoom2 ? zoom1 : zoom2);
 
-  this->Fl_Gl_Window::resize(x,y,w,h);
+  this->Fl_Gl_Window::resize(x, y, w, h);
   this->redraw();
 }
 /**
@@ -102,15 +102,15 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
-  if (m_ImageLoaded && this->GetBufferedRegion().GetNumberOfPixels()!=0)
-  {
+  if (m_ImageLoaded && this->GetBufferedRegion().GetNumberOfPixels() != 0)
+    {
     return false;
-  }
+    }
   else
-  {
-    m_ImageLoaded=true;
+    {
+    m_ImageLoaded = true;
     return true;
-  }
+    }
 }
 /**
  * Update OpenGlBuffer.

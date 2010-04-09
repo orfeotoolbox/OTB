@@ -22,12 +22,12 @@
 
 namespace otb {
 
-namespace Functor {  
+namespace Functor {
 
 /**
  * \class ReliefColormapFunctor
  * \brief Function object which maps a scalar value into an RGB colormap value for relief representation.
- * 
+ *
  * This code is working with the framework contributed in the Insight Journal paper:
  *
  * "Meeting Andy Warhol Somewhere Over the Rainbow: RGB Colormapping and ITK"
@@ -35,35 +35,35 @@ namespace Functor {
  * http://hdl.handle.net/1926/1452
  *
  */
-template< class TScalar, class TRGBPixel >
+template<class TScalar, class TRGBPixel>
 class ITK_EXPORT ReliefColormapFunctor
-: public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+  : public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
 {
 public:
 
-  typedef ReliefColormapFunctor                              Self;
-  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel>  Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef ReliefColormapFunctor                             Self;
+  typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
-  typedef typename Superclass::RGBPixelType      RGBPixelType;
-  typedef typename Superclass::ScalarType        ScalarType;  
-  typedef typename Superclass::RealType          RealType;
-  
-  virtual RGBPixelType operator()( const TScalar & ) const;
+  typedef typename Superclass::RGBPixelType RGBPixelType;
+  typedef typename Superclass::ScalarType   ScalarType;
+  typedef typename Superclass::RealType     RealType;
+
+  virtual RGBPixelType operator ()(const TScalar&) const;
 
 protected:
   ReliefColormapFunctor(){};
-  ~ReliefColormapFunctor() {};
+  ~ReliefColormapFunctor() {}
 
 private:
-  ReliefColormapFunctor(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ReliefColormapFunctor(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-  
+
 } // end namespace functor
 
 } // end namespace otb

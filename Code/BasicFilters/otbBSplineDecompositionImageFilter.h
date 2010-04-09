@@ -36,29 +36,29 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT BSplineDecompositionImageFilter :
-      public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BSplineDecompositionImageFilter       Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef BSplineDecompositionImageFilter                    Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineDecompositionImageFilter, ImageToImageFilter);
 
   /** New macro for creation of through a Smart Pointer */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Inherit input and output image types from Superclass. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::InputImagePointer InputImagePointer;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::OutputImagePointer     OutputImagePointer;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
@@ -72,24 +72,23 @@ public:
 
 protected:
   BSplineDecompositionImageFilter();
-  virtual ~BSplineDecompositionImageFilter() {};
+  virtual ~BSplineDecompositionImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  void GenerateData( );
+  void GenerateData();
 
   /** These are needed by the smoothing spline routine. */
-  std::vector<double>       m_Scratch;       // temp storage for processing of Coefficients
-  typename TInputImage::SizeType   m_DataLength;  // Image size
-  unsigned int              m_SplineOrder;   // User specified spline order (3rd or cubic is the default)
-  double                    m_SplinePoles[3];// Poles calculated for a given spline order
-  int                       m_NumberOfPoles; // number of poles
-  double                    m_Tolerance;     // Tolerance used for determining initial causal coefficient
-  unsigned int              m_IteratorDirection; // Direction for iterator incrementing
-
+  std::vector<double> m_Scratch;             // temp storage for processing of Coefficients
+  typename TInputImage::SizeType m_DataLength;    // Image size
+  unsigned int m_SplineOrder;                // User specified spline order (3rd or cubic is the default)
+  double       m_SplinePoles[3];             // Poles calculated for a given spline order
+  int          m_NumberOfPoles;              // number of poles
+  double       m_Tolerance;                  // Tolerance used for determining initial causal coefficient
+  unsigned int m_IteratorDirection;              // Direction for iterator incrementing
 
 private:
-  BSplineDecompositionImageFilter( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  BSplineDecompositionImageFilter(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
   /** Determines the poles given the Spline Order. */
   virtual void SetPoles();
@@ -111,13 +110,12 @@ private:
   void CopyImageToImage();
 
   /** Copies a vector of data from the Coefficients image to the m_Scratch vector. */
-  void CopyCoefficientsToScratch( OutputLinearIterator & );
+  void CopyCoefficientsToScratch(OutputLinearIterator&);
 
   /** Copies a vector of data from m_Scratch to the Coefficients image. */
-  void CopyScratchToCoefficients( OutputLinearIterator & );
+  void CopyScratchToCoefficients(OutputLinearIterator&);
 
 };
-
 
 } // namespace itk
 
@@ -126,4 +124,3 @@ private:
 #endif
 
 #endif
-

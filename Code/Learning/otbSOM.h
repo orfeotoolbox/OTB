@@ -51,11 +51,11 @@ namespace otb
  * \sa CzihoSOMLearningBehaviorFunctor
  * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
-template < class TListSample, class TMap,
-class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
+template <class TListSample, class TMap,
+          class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
 class ITK_EXPORT SOM
-      : public itk::ImageSource<TMap>
+  : public itk::ImageSource<TMap>
 {
 public:
   /** Standard typedefs */
@@ -67,52 +67,52 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Runtime informations macro */
-  itkTypeMacro(SOM,ImageSource);
+  itkTypeMacro(SOM, ImageSource);
 
   typedef TListSample                      ListSampleType;
   typedef typename ListSampleType::Pointer ListSamplePointerType;
-  typedef TMap  MapType;
-  typedef typename MapType::PixelType NeuronType;
-  typedef typename NeuronType::ValueType ValueType;
-  typedef typename MapType::IndexType IndexType;
-  typedef typename MapType::SizeType  SizeType;
-  typedef typename MapType::RegionType RegionType;
-  typedef typename MapType::Pointer MapPointerType;
+  typedef TMap                             MapType;
+  typedef typename MapType::PixelType      NeuronType;
+  typedef typename NeuronType::ValueType   ValueType;
+  typedef typename MapType::IndexType      IndexType;
+  typedef typename MapType::SizeType       SizeType;
+  typedef typename MapType::RegionType     RegionType;
+  typedef typename MapType::Pointer        MapPointerType;
 
-  typedef TSOMLearningBehaviorFunctor SOMLearningBehaviorFunctorType;
+  typedef TSOMLearningBehaviorFunctor     SOMLearningBehaviorFunctorType;
   typedef TSOMNeighborhoodBehaviorFunctor SOMNeighborhoodBehaviorFunctorType;
 
   /** Map dimension */
-  itkStaticConstMacro(MapDimension,unsigned int, MapType::ImageDimension);
+  itkStaticConstMacro(MapDimension, unsigned int, MapType::ImageDimension);
 
   /** Accessors */
-  itkSetMacro(NumberOfIterations,unsigned int);
-  itkGetMacro(NumberOfIterations,unsigned int);
-  itkSetMacro(BetaInit,double);
-  itkGetMacro(BetaInit,double);
-  itkSetMacro(BetaEnd,double);
-  itkGetMacro(BetaEnd,double);
-  itkSetMacro(MinWeight,ValueType);
-  itkGetMacro(MinWeight,ValueType);
-  itkSetMacro(MaxWeight,ValueType);
-  itkGetMacro(MaxWeight,ValueType);
-  itkSetMacro(MapSize,SizeType);
-  itkGetMacro(MapSize,SizeType);
-  itkSetMacro(NeighborhoodSizeInit,SizeType);
-  itkGetMacro(NeighborhoodSizeInit,SizeType);
-  itkSetMacro(RandomInit,bool);
-  itkGetMacro(RandomInit,bool);
-  itkSetMacro(Seed,unsigned int);
-  itkGetMacro(Seed,unsigned int);
-  itkGetObjectMacro(ListSample,ListSampleType);
-  itkSetObjectMacro(ListSample,ListSampleType);
+  itkSetMacro(NumberOfIterations, unsigned int);
+  itkGetMacro(NumberOfIterations, unsigned int);
+  itkSetMacro(BetaInit, double);
+  itkGetMacro(BetaInit, double);
+  itkSetMacro(BetaEnd, double);
+  itkGetMacro(BetaEnd, double);
+  itkSetMacro(MinWeight, ValueType);
+  itkGetMacro(MinWeight, ValueType);
+  itkSetMacro(MaxWeight, ValueType);
+  itkGetMacro(MaxWeight, ValueType);
+  itkSetMacro(MapSize, SizeType);
+  itkGetMacro(MapSize, SizeType);
+  itkSetMacro(NeighborhoodSizeInit, SizeType);
+  itkGetMacro(NeighborhoodSizeInit, SizeType);
+  itkSetMacro(RandomInit, bool);
+  itkGetMacro(RandomInit, bool);
+  itkSetMacro(Seed, unsigned int);
+  itkGetMacro(Seed, unsigned int);
+  itkGetObjectMacro(ListSample, ListSampleType);
+  itkSetObjectMacro(ListSample, ListSampleType);
 
-  void SetBetaFunctor ( const SOMLearningBehaviorFunctorType & functor )
+  void SetBetaFunctor(const SOMLearningBehaviorFunctorType& functor)
   {
     m_BetaFunctor = functor;
   }
 
-  void SetNeighborhoodSizeFunctor ( const SOMNeighborhoodBehaviorFunctorType & functor )
+  void SetNeighborhoodSizeFunctor(const SOMNeighborhoodBehaviorFunctorType& functor)
   {
     m_NeighborhoodSizeFunctor = functor;
   }
@@ -123,7 +123,7 @@ protected:
   /** Destructor */
   virtual ~SOM();
   /** Output information redefinition */
-  virtual void GenerateOutputInformation ();
+  virtual void GenerateOutputInformation();
   /** Output allocation redefinition */
   virtual void AllocateOutputs();
   /** Main computation method */
@@ -143,8 +143,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SOM(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  SOM(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
   /** Size of the neurons map */
   SizeType m_MapSize;
   /** Number of iterations */

@@ -28,23 +28,23 @@ namespace otb
  */
 template <class TOutputGraph>
 class ITK_EXPORT RCC8GraphSource
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
-  typedef RCC8GraphSource                           Self;
-  typedef itk::ProcessObject                        Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef RCC8GraphSource               Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Type macro */
   itkNewMacro(Self);
   /** Creation through object factory macro */
-  itkTypeMacro(RCC8GraphSource,itk::ProcessObject);
+  itkTypeMacro(RCC8GraphSource, itk::ProcessObject);
   /** Data object pointer type */
   typedef itk::DataObject::Pointer DataObjectPointer;
   /** Template parameter typedef*/
-  typedef TOutputGraph                               OutputGraphType;
-  typedef typename OutputGraphType::Pointer          OutputGraphPointerType;
+  typedef TOutputGraph                      OutputGraphType;
+  typedef typename OutputGraphType::Pointer OutputGraphPointerType;
   /** Overiding of the GetOutput() method */
   virtual OutputGraphType * GetOutput(void);
 
@@ -57,8 +57,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  RCC8GraphSource(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RCC8GraphSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // End namespace otb
 

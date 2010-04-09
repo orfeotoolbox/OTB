@@ -17,7 +17,7 @@
 =========================================================================*/
 #ifndef __otbIkonosImageMetadataInterfaceFactory_h
 #define __otbIkonosImageMetadataInterfaceFactory_h
-             
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -33,10 +33,10 @@ class ITK_EXPORT IkonosImageMetadataInterfaceFactory : public itk::ObjectFactory
 {
 public:
   /** Standard class typedefs. */
-  typedef IkonosImageMetadataInterfaceFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef IkonosImageMetadataInterfaceFactory Self;
+  typedef itk::ObjectFactoryBase              Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -60,11 +60,10 @@ protected:
   virtual ~IkonosImageMetadataInterfaceFactory();
 
 private:
-  IkonosImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  IkonosImageMetadataInterfaceFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

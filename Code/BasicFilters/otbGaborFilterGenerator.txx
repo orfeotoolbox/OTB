@@ -40,14 +40,14 @@ GaborFilterGenerator<TPrecision>
 }
 template <class TPrecision>
 const typename GaborFilterGenerator<TPrecision>
-::ArrayType &
+::ArrayType&
 GaborFilterGenerator<TPrecision>
 ::GetFilter()
 {
   if (m_NeedToRegenerateFilter)
-  {
+    {
     this->GenerateFilter();
-  }
+    }
   return m_Filter;
 }
 
@@ -56,29 +56,29 @@ void
 GaborFilterGenerator<TPrecision>
 ::GenerateFilter()
 {
-  m_Filter.SetSize((2*m_Radius[0]+1)*(2*m_Radius[1]+1));
+  m_Filter.SetSize((2 * m_Radius[0] + 1) * (2 * m_Radius[1] + 1));
   m_Filter.Fill(0);
 
-  PrecisionType coef,xr,yr,costheta,sintheta;
-  unsigned int k = 0;
+  PrecisionType coef, xr, yr, costheta, sintheta;
+  unsigned int  k = 0;
 
-  costheta = vcl_cos(m_Theta*CONST_PI_180);
-  sintheta = vcl_sin(m_Theta*CONST_PI_180);
+  costheta = vcl_cos(m_Theta * CONST_PI_180);
+  sintheta = vcl_sin(m_Theta * CONST_PI_180);
 
-
-  for (PrecisionType y = - static_cast<PrecisionType>(m_Radius[1]);
-       y<=static_cast<PrecisionType>(m_Radius[1]);y+=1)
-  {
-    for (PrecisionType x = - static_cast<PrecisionType>(m_Radius[0]);
-         x<=static_cast<PrecisionType>(m_Radius[0]);x+=1)
+  for (PrecisionType y = -static_cast<PrecisionType>(m_Radius[1]);
+       y <= static_cast<PrecisionType>(m_Radius[1]); y += 1)
     {
+    for (PrecisionType x = -static_cast<PrecisionType>(m_Radius[0]);
+         x <= static_cast<PrecisionType>(m_Radius[0]); x += 1)
+      {
       xr = x * costheta + y * sintheta;
       yr = y * costheta - x * sintheta;
-      coef = vcl_exp(-CONST_PI*(vcl_pow(m_A*xr,2)+vcl_pow(m_B*yr,2)))*cos(CONST_2PI*(m_U0*x+m_V0*y)+m_Phi);
-      m_Filter.SetElement(k,coef);
+      coef = vcl_exp(-CONST_PI * (vcl_pow(m_A * xr, 2) + vcl_pow(m_B * yr, 2))) * cos(
+        CONST_2PI * (m_U0 * x + m_V0 * y) + m_Phi);
+      m_Filter.SetElement(k, coef);
       ++k;
+      }
     }
-  }
 }
 
 template <class TPrecision>
@@ -95,15 +95,15 @@ void
 GaborFilterGenerator<TPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<indent<<"Radius: "<<m_Radius<<std::endl;
-  os<<indent<<"A: "<<m_A<<std::endl;
-  os<<indent<<"B: "<<m_B<<std::endl;
-  os<<indent<<"Theta: "<<m_Theta<<std::endl;
-  os<<indent<<"U0: "<<m_U0<<std::endl;
-  os<<indent<<"V0: "<<m_V0<<std::endl;
-  os<<indent<<"Phi: "<<m_Phi<<std::endl;
-  os<<"Need to regenerate filter: "<<m_NeedToRegenerateFilter<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "A: " << m_A << std::endl;
+  os << indent << "B: " << m_B << std::endl;
+  os << indent << "Theta: " << m_Theta << std::endl;
+  os << indent << "U0: " << m_U0 << std::endl;
+  os << indent << "V0: " << m_V0 << std::endl;
+  os << indent << "Phi: " << m_Phi << std::endl;
+  os << "Need to regenerate filter: " << m_NeedToRegenerateFilter << std::endl;
 }
 
 }

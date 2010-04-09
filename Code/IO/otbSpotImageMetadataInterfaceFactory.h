@@ -24,7 +24,6 @@
 
 #include "itkObjectFactoryBase.h"
 
-
 namespace otb
 {
 /** \class SpotImageMetadataInterfaceFactory
@@ -34,10 +33,10 @@ class ITK_EXPORT SpotImageMetadataInterfaceFactory : public itk::ObjectFactoryBa
 {
 public:
   /** Standard class typedefs. */
-  typedef SpotImageMetadataInterfaceFactory   Self;
-  typedef itk::ObjectFactoryBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SpotImageMetadataInterfaceFactory Self;
+  typedef itk::ObjectFactoryBase            Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   virtual const char* GetITKSourceVersion(void) const;
@@ -61,11 +60,10 @@ protected:
   virtual ~SpotImageMetadataInterfaceFactory();
 
 private:
-  SpotImageMetadataInterfaceFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpotImageMetadataInterfaceFactory(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

@@ -26,7 +26,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputGraph>
-ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::ImageListToRCC8GraphFilter()
 {
   this->SetNumberOfRequiredInputs(1);
@@ -37,37 +37,37 @@ ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
  */
 template <class TInputImage, class TOutputGraph>
 void
-ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::SetInput(const InputImageListType *imageList)
 {
   // A single input image
-  this->itk::ProcessObject::SetNthInput(0,const_cast<InputImageListType*>(imageList));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<InputImageListType*>(imageList));
 }
 /**
  * Input image retrieval
  * \return The input image.
  */
 template <class TInputImage, class TOutputGraph>
-typename ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>::InputImageListType *
-ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+typename ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>::InputImageListType *
+ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::GetInput(void)
 {
   // If there is no input
-  if (this->GetNumberOfInputs()<1)
-  {
+  if (this->GetNumberOfInputs() < 1)
+    {
     // exit
     return 0;
-  }
+    }
   // else return the first input
-  return static_cast<InputImageListType * >
-         (this->itk::ProcessObject::GetInput(0) );
+  return static_cast<InputImageListType *>
+           (this->itk::ProcessObject::GetInput(0));
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputGraph>
 void
-ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

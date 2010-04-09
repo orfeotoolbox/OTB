@@ -21,7 +21,6 @@
 #ifndef __otbStreamingInnerProductVectorImageFilter_h
 #define __otbStreamingInnerProductVectorImageFilter_h
 
-
 #include "otbPersistentImageFilter.h"
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "itkNumericTraits.h"
@@ -31,7 +30,6 @@
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
 #include "vnl/vnl_matrix.h"
-
 
 namespace otb
 {
@@ -54,51 +52,50 @@ namespace otb
  */
 template<class TInputImage>
 class ITK_EXPORT PersistentInnerProductVectorImageFilter :
-      public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentInnerProductVectorImageFilter           Self;
-  typedef PersistentImageFilter<TInputImage,TInputImage>    Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef PersistentInnerProductVectorImageFilter         Self;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentInnerProductVectorImageFilter,PersistentImageFilter);
+  itkTypeMacro(PersistentInnerProductVectorImageFilter, PersistentImageFilter);
 
   /** Image related typedefs. */
-  typedef TInputImage                                                            ImageType;
-  typedef typename TInputImage::Pointer                                          InputImagePointer;
-  typedef typename TInputImage::RegionType                                       RegionType;
-  typedef typename TInputImage::PixelType                                        PixelType;
+  typedef TInputImage                      ImageType;
+  typedef typename TInputImage::Pointer    InputImagePointer;
+  typedef typename TInputImage::RegionType RegionType;
+  typedef typename TInputImage::PixelType  PixelType;
 
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension );
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
   /** Type definition for a double matrix. */
-  typedef vnl_matrix<double>                            MatrixType;
-  typedef typename std::vector<MatrixType>              ArrayMatrixType;
+  typedef vnl_matrix<double>               MatrixType;
+  typedef typename std::vector<MatrixType> ArrayMatrixType;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
+  typedef itk::SimpleDataObjectDecorator<MatrixType> MatrixObjectType;
 
   /** Return the computed inner product matrix. */
 
   MatrixType GetInnerProduct() const
   {
     return this->GetInnerProductOutput()->Get();
-  };
+  }
   MatrixObjectType* GetInnerProductOutput();
   const MatrixObjectType* GetInnerProductOutput() const;
-
 
   /** Make a DataObject of the correct type to be used as the specified
    * output.
@@ -114,26 +111,25 @@ public:
   virtual void Reset(void);
 
   /** Enable/Disable center data */
-  itkSetMacro( CenterData, bool );
-  itkGetMacro( CenterData, bool );
+  itkSetMacro(CenterData, bool);
+  itkGetMacro(CenterData, bool);
   itkBooleanMacro(CenterData);
 
 protected:
   PersistentInnerProductVectorImageFilter();
-  virtual ~PersistentInnerProductVectorImageFilter() {};
+  virtual ~PersistentInnerProductVectorImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
+  void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
 
 private:
-  PersistentInnerProductVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentInnerProductVectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  ArrayMatrixType    m_ThreadInnerProduct;
+  ArrayMatrixType m_ThreadInnerProduct;
 
   /** Enable/Disable center data */
   bool m_CenterData;
-
 
 }; // end of class PersistentStatisticsVectorImageFilter
 
@@ -159,27 +155,25 @@ private:
 
 template<class TInputImage>
 class ITK_EXPORT StreamingInnerProductVectorImageFilter :
-      public PersistentFilterStreamingDecorator< PersistentInnerProductVectorImageFilter<TInputImage> >
+  public PersistentFilterStreamingDecorator<PersistentInnerProductVectorImageFilter<TInputImage> >
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingInnerProductVectorImageFilter             Self;
+  typedef StreamingInnerProductVectorImageFilter Self;
   typedef PersistentFilterStreamingDecorator
-  < PersistentInnerProductVectorImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
-
+  <PersistentInnerProductVectorImageFilter<TInputImage> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingInnerProductVectorImageFilter,PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingInnerProductVectorImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef TInputImage InputImageType;
-  typedef typename Superclass::FilterType StatFilterType;
+  typedef TInputImage                         InputImageType;
+  typedef typename Superclass::FilterType     StatFilterType;
   typedef typename StatFilterType::MatrixType MatrixType;
-
 
   /** Type of DataObjects used for scalar outputs */
   typedef typename StatFilterType::MatrixObjectType MatrixObjectType;
@@ -197,18 +191,18 @@ public:
   MatrixType GetInnerProduct() const
   {
     return this->GetFilter()->GetInnerProductOutput()->Get();
-  };
+  }
   MatrixObjectType* GetInnerProductOutput()
   {
     return this->GetFilter()->GetInnerProductOutput();
-  };
+  }
   const MatrixObjectType* GetInnerProductOutput() const
   {
     return this->GetFilter()->GetInnerProductOutput();
-  };
+  }
 
   /** Enable/Disable center data */
-  void SetCenterData(bool centerdata )
+  void SetCenterData(bool centerdata)
   {
     this->GetFilter()->SetCenterData(centerdata);
   }
@@ -217,11 +211,11 @@ protected:
   /** Constructor */
   StreamingInnerProductVectorImageFilter() {};
   /** Destructor */
-  virtual ~StreamingInnerProductVectorImageFilter() {};
+  virtual ~StreamingInnerProductVectorImageFilter() {}
 
 private:
-  StreamingInnerProductVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingInnerProductVectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

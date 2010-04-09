@@ -41,24 +41,25 @@ namespace otb
  *
  * \ingroup ImageFunctions
  */
-template <class TInputImage, class TCoordRep = float >
+template <class TInputImage, class TCoordRep = float>
 class ITK_EXPORT BinaryImageDensityFunction :
-  public itk::ImageFunction< TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,TCoordRep >
+  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+                            TCoordRep>
 {
-  public:
+public:
   /** Standard class typedefs. */
-  typedef BinaryImageDensityFunction                   Self;
-  typedef itk::ImageFunction<TInputImage,typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-  TCoordRep >                                          Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
-  
+  typedef BinaryImageDensityFunction Self;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+                             TCoordRep>                                          Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryImageDensityFunction, itk::ImageFunction);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** InputImageType typedef support. */
   typedef TInputImage                              InputImageType;
   typedef typename InputImageType::SizeType        RadiusType;
@@ -66,50 +67,49 @@ class ITK_EXPORT BinaryImageDensityFunction :
   typedef typename Superclass::IndexType           IndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
-  
+
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Datatype used for the density */
   typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType
-      RealType;
+  RealType;
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-  
+  virtual RealType EvaluateAtIndex(const IndexType& index) const;
+
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate( const PointType& point ) const
-    {
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index );
-    }
+  virtual RealType Evaluate(const PointType& point) const
+  {
+    IndexType index;
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
+  }
   virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex ) const
-    {
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index );
-    }
+    const ContinuousIndexType& cindex) const
+  {
+    IndexType index;
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
+  }
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  itkSetMacro( NeighborhoodRadius, RadiusType );
-  itkGetConstReferenceMacro( NeighborhoodRadius, RadiusType );
+  itkSetMacro(NeighborhoodRadius, RadiusType);
+  itkGetConstReferenceMacro(NeighborhoodRadius, RadiusType);
   void SetNeighborhoodRadius(unsigned int rad)
   {
-    m_NeighborhoodRadius.Fill( rad );
+    m_NeighborhoodRadius.Fill(rad);
     this->Modified();
   }
 
- 
 protected:
   BinaryImageDensityFunction();
-  virtual ~BinaryImageDensityFunction(){};
+  virtual ~BinaryImageDensityFunction(){}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  BinaryImageDensityFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  BinaryImageDensityFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
   RadiusType m_NeighborhoodRadius;
 
@@ -122,4 +122,3 @@ private:
 #endif
 
 #endif
-

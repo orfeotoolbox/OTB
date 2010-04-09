@@ -42,7 +42,7 @@ class ITK_EXPORT ImageKeywordlist
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageKeywordlist         Self;
+  typedef ImageKeywordlist Self;
 
   //virtual const char *GetNameOfClass() const
   //{return "ImageKeywordlist";}
@@ -51,13 +51,13 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageKeywordlist, ImageKeywordlist);
-  
+
   /** Get the internal map container */
-  const KeywordlistMap & GetKeywordlist() const
+  const KeywordlistMap& GetKeywordlist() const
   {
     return m_Keywordlist;
   }
-  
+
   void SetKeywordlist(const ossimKeywordlist& kwl)
   {
     m_Keywordlist = kwl.getMap();
@@ -72,19 +72,19 @@ public:
   {
     return m_Keywordlist.size();
   }
-  
+
   /** Get the Data object descriptor corresponding to the given key */
-  const ossimString & GetMetadataByKey(const ossimString & key) const;
-  
+  const ossimString& GetMetadataByKey(const ossimString& key) const;
+
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
 
-  virtual void Print(std::ostream& os, itk::Indent indent=0) const;
+  virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
 
   ImageKeywordlist();
   virtual ~ImageKeywordlist();
 
-  ImageKeywordlist(const Self&);
-  void operator=(const Self&);
+  ImageKeywordlist(const Self &);
+  void operator =(const Self&);
 
 protected:
   /** Methods invoked by Print() to print information about the object
@@ -104,7 +104,7 @@ private:
 
 };
 
-extern std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
+extern std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 } //namespace otb
 

@@ -25,81 +25,78 @@
 #include "itkBinaryFunctorImageFilter.h"
 #include "itkImageToImageFilter.h"
 
-
 namespace otb
 {
 namespace Functor
 {
-template <typename TInput,typename TVectorInput, typename TOutput>
+template <typename TInput, typename TVectorInput, typename TOutput>
 class ITK_EXPORT ImageAndVectorImageOperationFunctor
 {
 public:
-  typedef typename TVectorInput::ValueType InternalInputPixelType;
-  typedef typename TOutput::ValueType      InternalOutputPixelType;
-  typedef enum{MULTIPLICATION, ADDITION, DIVISON, SUBSTRACTION } OperatorType;
-  
+  typedef typename TVectorInput::ValueType                        InternalInputPixelType;
+  typedef typename TOutput::ValueType                             InternalOutputPixelType;
+  typedef enum {MULTIPLICATION, ADDITION, DIVISON, SUBSTRACTION } OperatorType;
+
   ImageAndVectorImageOperationFunctor()
     {
-      m_Operator = ADDITION;//1;
+    m_Operator = ADDITION;  //1;
     };
-  virtual ~ImageAndVectorImageOperationFunctor(){};
+  virtual ~ImageAndVectorImageOperationFunctor(){}
 
- 
   void SetOperator(OperatorType oper)
-    {
-      m_Operator = oper;
-    }
+  {
+    m_Operator = oper;
+  }
   OperatorType GetOperator()
-    {
-      return m_Operator;
-    }
+  {
+    return m_Operator;
+  }
 
-  inline TOutput operator() (const TInput & inPix, const TVectorInput & vInPix)
+  inline TOutput operator ()(const TInput& inPix, const TVectorInput& vInPix)
   {
     TOutput out;
-    out.SetSize( vInPix.Size() );
+    out.SetSize(vInPix.Size());
     TVectorInput vInTmp = vInPix;
 
-    switch(m_Operator)
+    switch (m_Operator)
       {
-      case MULTIPLICATION:
+    case MULTIPLICATION:
       {
-       vInTmp *= static_cast<InternalInputPixelType>(inPix);
-       break;
+      vInTmp *= static_cast<InternalInputPixelType>(inPix);
+      break;
       }
-      case ADDITION:
-       {
-         vInTmp += static_cast<InternalInputPixelType>(inPix);
-         break;
-       }
-      case DIVISON:
-       {
-         if(inPix!=0)
-           vInTmp /= static_cast<InternalInputPixelType>(inPix);
-         else
-           {
-             vInTmp.Fill(0);
-           }
-         break;
-       }
-      case SUBSTRACTION:
-       {
-         vInTmp -= static_cast<InternalInputPixelType>(inPix);
-         break;
-       }
-      default:
-       {
-       }
+    case ADDITION:
+      {
+      vInTmp += static_cast<InternalInputPixelType>(inPix);
+      break;
+      }
+    case DIVISON:
+      {
+      if (inPix != 0) vInTmp /= static_cast<InternalInputPixelType>(inPix);
+      else
+        {
+        vInTmp.Fill(0);
+        }
+      break;
+      }
+    case SUBSTRACTION:
+      {
+      vInTmp -= static_cast<InternalInputPixelType>(inPix);
+      break;
+      }
+    default:
+      {
+      }
       }
 
-    for(unsigned int i=0; i<vInTmp.Size(); i++)
+    for (unsigned int i = 0; i < vInTmp.Size(); i++)
       {
-       out[i] = static_cast<InternalInputPixelType>(vInTmp[i]);
+      out[i] = static_cast<InternalInputPixelType>(vInTmp[i]);
       }
     return out;
   }
 
- protected:
+protected:
   OperatorType m_Operator;
 };
 }
@@ -119,33 +116,34 @@ public:
  */
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-class ITK_EXPORT ImageAndVectorImageOperationFilter:
-public itk::BinaryFunctorImageFilter<TInputImage,
-                                 TVectorInputImage,
-                                 TOutputImage,
-                                 Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
-                                                                        ITK_TYPENAME TVectorInputImage::PixelType,
-                                                                        ITK_TYPENAME TOutputImage::PixelType       > >
+class ITK_EXPORT ImageAndVectorImageOperationFilter :
+  public itk::BinaryFunctorImageFilter<TInputImage,
+                                       TVectorInputImage,
+                                       TOutputImage,
+                                       Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
+                                                                                    ITK_TYPENAME TVectorInputImage::
+                                                                                    PixelType,
+                                                                                    ITK_TYPENAME TOutputImage::
+                                                                                    PixelType> >
 //ImageToImageFilter< TVectorInputImage, TOutputImage >
 {
 public:
 
   /** Standard class typedefs. */
-  typedef ImageAndVectorImageOperationFilter                       Self;
+  typedef ImageAndVectorImageOperationFilter Self;
   //typedef itk::ImageToImageFilter<TVectorInputImage, TOutputImage> Superclass;
   typedef Functor::ImageAndVectorImageOperationFunctor<ITK_TYPENAME TInputImage::PixelType,
                                                        ITK_TYPENAME TVectorInputImage::PixelType,
-                                                 ITK_TYPENAME TOutputImage::PixelType      > FunctorType;
+                                                       ITK_TYPENAME TOutputImage::PixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TVectorInputImage, TOutputImage, FunctorType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>                                                                  Pointer;
+  typedef itk::SmartPointer<const Self>                                                            ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageAndVectorImageOperationFilter,itk::BinaryFunctorImageFilter);
-
+  itkTypeMacro(ImageAndVectorImageOperationFilter, itk::BinaryFunctorImageFilter);
 
   /** Typedef for the images.   */
   typedef TInputImage                              InputImageType;
@@ -155,19 +153,16 @@ public:
   typedef TOutputImage                             OutputImageType;
   typedef typename OutputImageType::PixelType      OutputPixelType;
 
-
   /** Operation type typedef. */
-  typedef typename FunctorType::OperatorType       OperatorType;
-
+  typedef typename FunctorType::OperatorType OperatorType;
 
   /** Set the input images of this process object.  */
-  void SetInput( const InputImageType *input );
-  void SetVectorInput( const VectorInputImageType *input  );
+  void SetInput(const InputImageType *input);
+  void SetVectorInput(const VectorInputImageType *input);
 
   /** Get the input images of this process object.  */
   const InputImageType * GetInput();
   const VectorInputImageType * GetVectorInput();
-
 
   /** Accessors */
   itkGetMacro(UseAddition, bool);
@@ -176,43 +171,41 @@ public:
   itkGetMacro(UseSubstraction, bool);
 
   void UseAddition()
-    {
-      m_UseAddition = true;
-      m_UseMultiplication = false;
-      m_UseDivision = false;
-      m_UseSubstraction = false;
-      this->GetFunctor().SetOperator(static_cast<OperatorType>(1));
-      this->Modified();
-    }
+  {
+    m_UseAddition = true;
+    m_UseMultiplication = false;
+    m_UseDivision = false;
+    m_UseSubstraction = false;
+    this->GetFunctor().SetOperator(static_cast<OperatorType>(1));
+    this->Modified();
+  }
   void UseMultiplication()
-    {
-      m_UseAddition = false;
-      m_UseMultiplication = true;
-      m_UseDivision = false;
-      m_UseSubstraction = false;
-      this->GetFunctor().SetOperator(static_cast<OperatorType>(0));
-      this->Modified();
-    }
+  {
+    m_UseAddition = false;
+    m_UseMultiplication = true;
+    m_UseDivision = false;
+    m_UseSubstraction = false;
+    this->GetFunctor().SetOperator(static_cast<OperatorType>(0));
+    this->Modified();
+  }
   void UseDivision()
-    {
-      m_UseAddition = false;
-      m_UseMultiplication = false;
-      m_UseDivision = true;
-      m_UseSubstraction = false;
-      this->GetFunctor().SetOperator(static_cast<OperatorType>(2));
-      this->Modified();
-    }
+  {
+    m_UseAddition = false;
+    m_UseMultiplication = false;
+    m_UseDivision = true;
+    m_UseSubstraction = false;
+    this->GetFunctor().SetOperator(static_cast<OperatorType>(2));
+    this->Modified();
+  }
   void UseSubstraction()
-    {
-      m_UseAddition = false;
-      m_UseMultiplication = false;
-      m_UseDivision = false;
-      m_UseSubstraction = true;
-      this->GetFunctor().SetOperator(static_cast<OperatorType>(3));
-      this->Modified();
-    }
-  
-
+  {
+    m_UseAddition = false;
+    m_UseMultiplication = false;
+    m_UseDivision = false;
+    m_UseSubstraction = true;
+    this->GetFunctor().SetOperator(static_cast<OperatorType>(3));
+    this->Modified();
+  }
 
 protected:
   ImageAndVectorImageOperationFilter();
@@ -223,11 +216,9 @@ protected:
    * \sa ProcessObject::GenerateOutputInformation() */
   virtual void GenerateOutputInformation();
 
- 
-
 private:
   ImageAndVectorImageOperationFilter(const ImageAndVectorImageOperationFilter &); //purposely not implemented
-  void operator=(const ImageAndVectorImageOperationFilter&); //purposely not implemented
+  void operator =(const ImageAndVectorImageOperationFilter&); //purposely not implemented
 
   bool m_UseAddition;
   bool m_UseMultiplication;
@@ -242,5 +233,3 @@ private:
 #endif
 
 #endif
-
-

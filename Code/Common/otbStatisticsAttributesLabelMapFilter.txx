@@ -32,93 +32,93 @@ namespace Functor
 {
 /** Constructor */
 template <class TLabelObject, class TFeatureImage>
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::StatisticsAttributesLabelObjectFunctor() : m_FeatureName("Default"),
-               m_FeatureImage(),
-               m_ReducedAttributeSet(true)
+  m_FeatureImage(),
+  m_ReducedAttributeSet(true)
 {}
 
 /** Destructor */
 template <class TLabelObject, class TFeatureImage>
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-:: ~StatisticsAttributesLabelObjectFunctor()
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::~StatisticsAttributesLabelObjectFunctor()
 {}
 
 /** The comparators */
 template <class TLabelObject, class TFeatureImage>
-bool 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::operator!=(const Self& self)
-{
+bool
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator != (const Self &self)
+  {
   // Initialize response
   bool resp = true;
-  
+
   resp = resp && (m_FeatureName != self.m_FeatureName);
   resp = resp && (m_FeatureImage != self.m_FeatureImage);
 
   // Return
   return resp;
-}
+  }
 
 template <class TLabelObject, class TFeatureImage>
-bool 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::operator==(const Self& self)
-{
+bool
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator == (const Self &self)
+  {
   // Call the != implementation
   return !(this != self);
-}
+  }
 
 /** This is the functor implementation
- *  Calling the functor on a label object 
+ *  Calling the functor on a label object
  *  will update its statistics attributes */
 template <class TLabelObject, class TFeatureImage>
 void
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::operator()(LabelObjectType * lo) const
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator() (LabelObjectType * lo) const
 {
   typename LabelObjectType::LineContainerType::const_iterator lit;
-  typename LabelObjectType::LineContainerType & lineContainer = lo->GetLineContainer();
+  typename LabelObjectType::LineContainerType&                lineContainer = lo->GetLineContainer();
 
-  FeatureType min = itk::NumericTraits< FeatureType >::max();
-  FeatureType max = itk::NumericTraits< FeatureType >::NonpositiveMin();
-  double sum = 0;
-  double sum2 = 0;
-  double sum3 = 0;
-  double sum4 = 0;
-  unsigned int totalFreq = 0;
+  FeatureType                       min = itk::NumericTraits<FeatureType>::max();
+  FeatureType                       max = itk::NumericTraits<FeatureType>::NonpositiveMin();
+  double                            sum = 0;
+  double                            sum2 = 0;
+  double                            sum3 = 0;
+  double                            sum4 = 0;
+  unsigned int                      totalFreq = 0;
   typename TFeatureImage::IndexType minIdx;
-  minIdx.Fill( 0 );
+  minIdx.Fill(0);
   typename TFeatureImage::IndexType maxIdx;
-  maxIdx.Fill( 0 );
+  maxIdx.Fill(0);
   typename TFeatureImage::PointType centerOfGravity;
-  centerOfGravity.Fill( 0 );
+  centerOfGravity.Fill(0);
   MatrixType centralMoments;
-  centralMoments.Fill( 0 );
+  centralMoments.Fill(0);
   MatrixType principalAxes;
-  principalAxes.Fill( 0 );
+  principalAxes.Fill(0);
   VectorType principalMoments;
-  principalMoments.Fill( 0 );
+  principalMoments.Fill(0);
 
   // iterate over all the lines
-  for( lit = lineContainer.begin(); lit != lineContainer.end(); lit++ )
+  for (lit = lineContainer.begin(); lit != lineContainer.end(); lit++)
     {
-    const typename TFeatureImage::IndexType & firstIdx = lit->GetIndex();
-    unsigned long length = lit->GetLength();
+    const typename TFeatureImage::IndexType& firstIdx = lit->GetIndex();
+    unsigned long                            length = lit->GetLength();
 
     long endIdx0 = firstIdx[0] + length;
-    for( typename TFeatureImage::IndexType idx = firstIdx; idx[0]<endIdx0; idx[0]++)
+    for (typename TFeatureImage::IndexType idx = firstIdx; idx[0] < endIdx0; idx[0]++)
       {
-      const FeatureType & v = m_FeatureImage->GetPixel( idx );
+      const FeatureType& v = m_FeatureImage->GetPixel(idx);
       ++totalFreq;
 
       // update min and max
-      if( v <= min )
+      if (v <= min)
         {
         min = v;
         minIdx = idx;
         }
-      if( v >= max )
+      if (v >= max)
         {
         max = v;
         maxIdx = idx;
@@ -126,18 +126,18 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 
       //increase the sums
       sum += v;
-      sum2 += vcl_pow( (double)v, 2 );
-      sum3 += vcl_pow( (double)v, 3 );
-      sum4 += vcl_pow( (double)v, 4 );
+      sum2 += vcl_pow((double) v, 2);
+      sum3 += vcl_pow((double) v, 3);
+      sum4 += vcl_pow((double) v, 4);
 
       // moments
       typename TFeatureImage::PointType physicalPosition;
       m_FeatureImage->TransformIndexToPhysicalPoint(idx, physicalPosition);
-      for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+      for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
         {
         centerOfGravity[i] += physicalPosition[i] * v;
         centralMoments[i][i] += v * physicalPosition[i] * physicalPosition[i];
-        for(unsigned int j=i+1; j<TFeatureImage::ImageDimension; j++)
+        for (unsigned int j = i + 1; j < TFeatureImage::ImageDimension; j++)
           {
           double weight = v * physicalPosition[i] * physicalPosition[j];
           centralMoments[i][j] += weight;
@@ -150,82 +150,84 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 
   // final computations
   double mean = sum / totalFreq;
-  double variance = ( sum2 - ( vcl_pow( sum, 2 ) / totalFreq ) ) / ( totalFreq - 1 );
-  double sigma = vcl_sqrt( variance );
+  double variance = (sum2 - (vcl_pow(sum, 2) / totalFreq)) / (totalFreq - 1);
+  double sigma = vcl_sqrt(variance);
   double mean2 = mean * mean;
   double skewness = 0;
   double kurtosis = 0;
 
   const double epsilon = 1E-10;
-  if ( vcl_abs(variance) > epsilon )
-  {
-  skewness = ( ( sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2 ) / ( variance * sigma );
-    kurtosis = ( ( sum4 - 4.0 * mean * sum3 + 6.0 * mean2 * sum2) / totalFreq - 3.0 * mean2 * mean2 ) / ( variance * variance ) - 3.0;
+  if (vcl_abs(variance) > epsilon)
+    {
+    skewness = ((sum3 - 3.0 * mean * sum2) / totalFreq + 2.0 * mean * mean2) / (variance * sigma);
+    kurtosis =
+      ((sum4 - 4.0 * mean * sum3 + 6.0 * mean2 *
+        sum2) / totalFreq - 3.0 * mean2 * mean2) / (variance * variance) - 3.0;
     }
 
   double elongation = 0;
-  if( sum != 0 )
+  if (sum != 0)
     {
     // Normalize using the total mass
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
       centerOfGravity[i] /= sum;
-      for(unsigned int j=0; j<TFeatureImage::ImageDimension; j++)
+      for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
         {
         centralMoments[i][j] /= sum;
         }
       }
-  
+
     // Center the second order moments
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
-      for(unsigned int j=0; j<TFeatureImage::ImageDimension; j++)
+      for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
         {
         centralMoments[i][j] -= centerOfGravity[i] * centerOfGravity[j];
         }
       }
-  
+
     // Compute principal moments and axes
-    vnl_symmetric_eigensystem<double> eigen( centralMoments.GetVnlMatrix() );
+    vnl_symmetric_eigensystem<double> eigen(centralMoments.GetVnlMatrix());
     vnl_diag_matrix<double> pm = eigen.D;
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
-  //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
-      principalMoments[i] = pm(i,i);
+      //    principalMoments[i] = 4 * vcl_sqrt( pm(i,i) );
+      principalMoments[i] = pm(i, i);
       }
     principalAxes = eigen.V.transpose();
-  
+
     // Add a final reflection if needed for a proper rotation,
     // by multiplying the last row by the determinant
-    vnl_real_eigensystem eigenrot( principalAxes.GetVnlMatrix() );
-    vnl_diag_matrix< vcl_complex<double> > eigenval = eigenrot.D;
-    vcl_complex<double> det( 1.0, 0.0 );
-  
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+    vnl_real_eigensystem eigenrot(principalAxes.GetVnlMatrix());
+    vnl_diag_matrix<vcl_complex<double> > eigenval = eigenrot.D;
+    vcl_complex<double> det(1.0, 0.0);
+
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
-      det *= eigenval( i, i );
+      det *= eigenval(i, i);
       }
-  
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
-      principalAxes[ TFeatureImage::ImageDimension-1 ][i] *= std::real( det );
+      principalAxes[TFeatureImage::ImageDimension - 1][i] *= std::real(det);
       }
-  
-    if( principalMoments[0] != 0 )
+
+    if (principalMoments[0] != 0)
       {
-  //    elongation = principalMoments[TFeatureImage::ImageDimension-1] / principalMoments[0];
-      elongation = vcl_sqrt(principalMoments[TFeatureImage::ImageDimension-1] / principalMoments[0]);
+      //    elongation = principalMoments[TFeatureImage::ImageDimension-1] / principalMoments[0];
+      elongation = vcl_sqrt(principalMoments[TFeatureImage::ImageDimension - 1] / principalMoments[0]);
       }
     }
   else
     {
     // can't compute anything in that case - just set everything to a default value
     // Normalize using the total mass
-    for(unsigned int i=0; i<TFeatureImage::ImageDimension; i++)
+    for (unsigned int i = 0; i < TFeatureImage::ImageDimension; i++)
       {
       centerOfGravity[i] = 0;
       principalMoments[i] = 0;
-      for(unsigned int j=0; j<TFeatureImage::ImageDimension; j++)
+      for (unsigned int j = 0; j < TFeatureImage::ImageDimension; j++)
         {
         principalAxes[i][j] = 0;
         }
@@ -235,99 +237,99 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 
   // finally put the values in the label object
   oss.str("");
-  oss<<"STATS::"<<m_FeatureName<<"::Mean";
-  lo->SetAttribute(oss.str().c_str(), mean );
-  
-  oss.str("");
-  oss<<"STATS::"<<m_FeatureName<<"::Variance";
-  lo->SetAttribute(oss.str().c_str(), variance );
+  oss << "STATS::" << m_FeatureName << "::Mean";
+  lo->SetAttribute(oss.str().c_str(), mean);
 
   oss.str("");
-  oss<<"STATS::"<<m_FeatureName<<"::Skewness";
-  lo->SetAttribute(oss.str().c_str(), skewness );
+  oss << "STATS::" << m_FeatureName << "::Variance";
+  lo->SetAttribute(oss.str().c_str(), variance);
 
   oss.str("");
-  oss<<"STATS::"<<m_FeatureName<<"::Kurtosis";
-  lo->SetAttribute(oss.str().c_str(),  kurtosis );
+  oss << "STATS::" << m_FeatureName << "::Skewness";
+  lo->SetAttribute(oss.str().c_str(), skewness);
+
+  oss.str("");
+  oss << "STATS::" << m_FeatureName << "::Kurtosis";
+  lo->SetAttribute(oss.str().c_str(),  kurtosis);
 
   // If we want all the features
-  if(!m_ReducedAttributeSet)
+  if (!m_ReducedAttributeSet)
     {
     oss.str("");
-    oss<<"STATS::"<<m_FeatureName<<"::Minimum";
-    lo->SetAttribute(oss.str().c_str(),(double)min );
-    
+    oss << "STATS::" << m_FeatureName << "::Minimum";
+    lo->SetAttribute(oss.str().c_str(), (double) min);
+
     oss.str("");
-    oss<<"STATS::"<<m_FeatureName<<"::Maximum";
-    lo->SetAttribute(oss.str().c_str(), (double)max );
-    
+    oss << "STATS::" << m_FeatureName << "::Maximum";
+    lo->SetAttribute(oss.str().c_str(), (double) max);
+
     oss.str("");
-    oss<<"STATS::"<<m_FeatureName<<"::Sum";
-    lo->SetAttribute(oss.str().c_str(), sum );
-    
+    oss << "STATS::" << m_FeatureName << "::Sum";
+    lo->SetAttribute(oss.str().c_str(), sum);
+
     oss.str("");
-    oss<<"STATS::"<<m_FeatureName<<"::Sigma";
-    lo->SetAttribute(oss.str().c_str(), sigma );
-    
-    for(unsigned int dim = 0;dim < TFeatureImage::ImageDimension;++dim)
+    oss << "STATS::" << m_FeatureName << "::Sigma";
+    lo->SetAttribute(oss.str().c_str(), sigma);
+
+    for (unsigned int dim = 0; dim < TFeatureImage::ImageDimension; ++dim)
       {
       oss.str("");
-      oss<<"STATS::"<<m_FeatureName<<"::CenterOfGravity"<<dim;
+      oss << "STATS::" << m_FeatureName << "::CenterOfGravity" << dim;
       lo->SetAttribute(oss.str().c_str(), centerOfGravity[dim]);
-      
+
       oss.str("");
-      oss<<"STATS::"<<m_FeatureName<<"::PrincipalMoments"<<dim;
-      lo->SetAttribute( oss.str().c_str(),principalMoments[dim]);
-      
+      oss << "STATS::" << m_FeatureName << "::PrincipalMoments" << dim;
+      lo->SetAttribute(oss.str().c_str(), principalMoments[dim]);
+
       oss.str("");
-      oss<<"STATS::"<<m_FeatureName<<"::FirstMinimumIndex"<<dim;
-      lo->SetAttribute(oss.str().c_str(), minIdx[dim] );
-      
+      oss << "STATS::" << m_FeatureName << "::FirstMinimumIndex" << dim;
+      lo->SetAttribute(oss.str().c_str(), minIdx[dim]);
+
       oss.str("");
-      oss<<"STATS::"<<m_FeatureName<<"::FirstMaximumIndex"<<dim;
+      oss << "STATS::" << m_FeatureName << "::FirstMaximumIndex" << dim;
       lo->SetAttribute(oss.str().c_str(), maxIdx[dim]);
-      
-      for(unsigned int dim2 = 0;dim2 < TFeatureImage::ImageDimension;++dim2)
-       {
-       oss.str("");
-       oss<<"STATS::"<<m_FeatureName<<"::PrincipalAxis"<<dim<<dim2;
-       lo->SetAttribute( oss.str().c_str(),principalAxes(dim,dim2));
-       }
+
+      for (unsigned int dim2 = 0; dim2 < TFeatureImage::ImageDimension; ++dim2)
+        {
+        oss.str("");
+        oss << "STATS::" << m_FeatureName << "::PrincipalAxis" << dim << dim2;
+        lo->SetAttribute(oss.str().c_str(), principalAxes(dim, dim2));
+        }
       }
     }
 }
 
 /** Set the name of the feature */
 template <class TLabelObject, class TFeatureImage>
-void 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::SetFeatureName(const std::string & name)
+void
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::SetFeatureName(const std::string& name)
 {
   m_FeatureName = name;
 }
 
 /** Get the feature name */
 template <class TLabelObject, class TFeatureImage>
-const std::string & 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+const std::string&
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::GetFeatureName() const
 {
   return m_FeatureName;
 }
 
-  /** Set the feature image */
+/** Set the feature image */
 template <class TLabelObject, class TFeatureImage>
-void 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+void
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::SetFeatureImage(const TFeatureImage * img)
 {
   m_FeatureImage = img;
 }
 
-  /** Get the feature image */
+/** Get the feature image */
 template <class TLabelObject, class TFeatureImage>
-const TFeatureImage * 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+const TFeatureImage *
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::GetFeatureImage() const
 {
   return m_FeatureImage;
@@ -335,8 +337,8 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 
 /** Set the reduced attribute set */
 template <class TLabelObject, class TFeatureImage>
-void 
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+void
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::SetReducedAttributeSet(bool flag)
 {
   m_ReducedAttributeSet = flag;
@@ -345,13 +347,12 @@ StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 /** Get the reduced attribute set */
 template <class TLabelObject, class TFeatureImage>
 bool
-StatisticsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::GetReducedAttributeSet() const
 {
   return m_ReducedAttributeSet;
 }
 } // End namespace Functor
-
 
 template <class TImage, class TFeatureImage>
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
@@ -365,26 +366,26 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Set the feature image */
 template <class TImage, class TFeatureImage>
-void 
+void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetFeatureImage(const TFeatureImage *input)
 {
   // Set the Nth input
-  this->SetNthInput(1,const_cast<TFeatureImage*>(input));
+  this->SetNthInput(1, const_cast<TFeatureImage*>(input));
 }
 
 /** Get the feature image */
 template <class TImage, class TFeatureImage>
 const typename StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
-:: FeatureImageType * StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+::FeatureImageType * StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetFeatureImage() const
 {
-  return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1)); 
+  return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1));
 }
 
 /** Set Input1 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-void 
+void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetInput1(const TImage * input)
 {
@@ -393,7 +394,7 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Get Input1 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-const TImage * 
+const TImage *
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetInput1() const
 {
@@ -402,7 +403,7 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Set Input2 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-void 
+void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetInput2(const TFeatureImage * input)
 {
@@ -411,21 +412,20 @@ StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Get Input2 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-const TFeatureImage * 
+const TFeatureImage *
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetInput2() const
 {
   return this->GetFeatureImage();
 }
 
-
 /** Set the name of the feature */
 template <class TImage, class TFeatureImage>
 
 void StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
-::SetFeatureName(const std::string & name)
+::SetFeatureName(const std::string& name)
 {
-  if(name != this->GetFunctor().GetFeatureName())
+  if (name != this->GetFunctor().GetFeatureName())
     {
     this->GetFunctor().SetFeatureName(name);
     this->Modified();
@@ -435,7 +435,7 @@ void StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 /** Get the feature name */
 template <class TImage, class TFeatureImage>
 
-const std::string & StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
+const std::string& StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetFeatureName() const
 {
   return this->GetFunctor().GetFeatureName();
@@ -447,7 +447,7 @@ template <class TImage, class TFeatureImage>
 void StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetReducedAttributeSet(bool flag)
 {
-  if(this->GetFunctor().GetReducedAttributeSet() != flag)
+  if (this->GetFunctor().GetReducedAttributeSet() != flag)
     {
     this->GetFunctor().SetReducedAttributeSet(flag);
     this->Modified();
@@ -480,9 +480,8 @@ void
 StatisticsAttributesLabelMapFilter<TImage, TFeatureImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-
-}// end namespace itk
+} // end namespace itk
 #endif

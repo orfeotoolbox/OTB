@@ -32,48 +32,46 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage, class TOutputImage, class TFunction  >
-UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
+template <class TInputImage, class TOutputImage, class TFunction>
+UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
 ::UnaryFunctorNeighborhoodWithOffsetImageFilter()
 {
-  this->SetNumberOfRequiredInputs( 1 );
+  this->SetNumberOfRequiredInputs(1);
   m_Radius.Fill(1);
   m_Offset.Fill(1);
   m_FunctorList.clear();
 }
 
-
-template <class TInputImage, class TOutputImage, class TFunction  >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
+UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
 
-  for (int i =0; i<this->GetNumberOfThreads(); ++i)
-  {
+  for (int i = 0; i < this->GetNumberOfThreads(); ++i)
+    {
     m_FunctorList.push_back(m_Functor);
-  }
+    }
 }
 
-
-template <class TInputImage, class TOutputImage, class TFunction  >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
-UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction>
+UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
 ::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr =
-    const_cast< TInputImage * >( this->GetInput());
+  typename Superclass::InputImagePointer inputPtr =
+    const_cast<TInputImage *>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !inputPtr || !outputPtr )
-  {
+  if (!inputPtr || !outputPtr)
+    {
     return;
-  }
+    }
   // get a copy of the input requested region (should equal the output
   // requested region)
   typename TInputImage::RegionType inputRequestedRegion;
@@ -82,53 +80,53 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,TOutputImage,TFunction
   // pad the input requested region by the operator radius
   InputImageSizeType maxRad;
   maxRad[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
-  maxRad[1] = m_Radius[1] + vcl_abs(m_Offset[1]);;
-  inputRequestedRegion.PadByRadius( maxRad );
+  maxRad[1] = m_Radius[1] + vcl_abs(m_Offset[1]);
+  inputRequestedRegion.PadByRadius(maxRad);
 
   // crop the input requested region at the input's largest possible region
-  if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-  {
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+    {
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
     // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << this->GetNameOfClass()
-    << "::GenerateInputRequestedRegion()";
+        << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str().c_str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-  }
+    }
 }
 
 /**
  * ThreadedGenerateData Performs the neighborhood-wise operation
  */
-template <class TInputImage, class TOutputImage, class TFunction >
+template <class TInputImage, class TOutputImage, class TFunction>
 void
 UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFunction>
-::ThreadedGenerateData( const OutputImageRegionType &outputRegionForThread, int threadId)
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbc;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage> nbcOff;
   // We use dynamic_cast since inputs are stored as DataObjects.  The
   // ImageToImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage so it cannot be used for the second input.
-  InputImagePointer inputPtr = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
+  InputImagePointer  inputPtr = dynamic_cast<const TInputImage*>(ProcessObjectType::GetInput(0));
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
- 
+
   // Neighborhood+offset iterator
   RadiusType rOff;
   rOff[0] = m_Radius[0] + vcl_abs(m_Offset[0]);
@@ -136,7 +134,7 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
   NeighborhoodIteratorType neighInputOffIt;
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType faceListOff;
-  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> bCOff;
+  typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>               bCOff;
   faceListOff = bCOff(inputPtr, outputRegionForThread, rOff);
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>::FaceListType::iterator fitOff;
 
@@ -145,10 +143,10 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  fitOff=faceListOff.begin();
+  fitOff = faceListOff.begin();
 
-  while ( fitOff!=faceListOff.end() )
-  {
+  while (fitOff != faceListOff.end())
+    {
     // Neighborhood+offset iterator
     neighInputOffIt = itk::ConstNeighborhoodIterator<TInputImage>(rOff, inputPtr, *fitOff);
     neighInputOffIt.OverrideBoundaryCondition(&nbcOff);
@@ -156,17 +154,17 @@ UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage, TFuncti
 
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fitOff);
 
-    while ( ! outputIt.IsAtEnd() )
-    {
+    while (!outputIt.IsAtEnd())
+      {
 
-      outputIt.Set( m_FunctorList[threadId]( neighInputOffIt.GetNeighborhood() ) );
+      outputIt.Set(m_FunctorList[threadId](neighInputOffIt.GetNeighborhood()));
 
       ++neighInputOffIt;
       ++outputIt;
       progress.CompletedPixel();
-    }
+      }
     ++fitOff;
-  }
+    }
 }
 
 } // end namespace otb

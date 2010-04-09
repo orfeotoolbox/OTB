@@ -49,7 +49,7 @@ public:
     x = -1;
     y = -1;
   }
-  ~Point_plane() {};
+  ~Point_plane() {}
 
 protected:
 
@@ -64,15 +64,15 @@ private:
 class Shape
 {
 public:
-  char     inferior_type; /* Indicates if it is extracted from a superior or inferior level set */
-  float    value;         /* Limiting gray-level of the level set */
-  char     open;          /* Indicates if the shape meets the border of the image */
-  int      area;          /* Area of the shape = area of the cc of level set + areas of the holes */
-  char     removed;       /* Indicates whether the shape exists or not */
+  char         inferior_type; /* Indicates if it is extracted from a superior or inferior level set */
+  float        value;     /* Limiting gray-level of the level set */
+  char         open;      /* Indicates if the shape meets the border of the image */
+  int          area;      /* Area of the shape = area of the cc of level set + areas of the holes */
+  char         removed;   /* Indicates whether the shape exists or not */
   Point_plane *pixels;    /* The array of pixels contained in the shape */
-  Shape    *parent;
-  Shape    *next_sibling;
-  Shape    *child;
+  Shape *      parent;
+  Shape *      next_sibling;
+  Shape *      child;
   /* Data to include it in a tree. It has a parent (the smallest containing
      shape), children (the largest contained shapes, whose first is pChild
      and the others are its siblings), and siblings (the other children of
@@ -97,11 +97,10 @@ public:
 
   ~Shape()
   {
-    if (pixels != NULL)  delete[] pixels;
+    if (pixels != NULL) delete[] pixels;
     pixels = NULL;
     area   = 0;
   }
-
 
 protected:
 
@@ -117,26 +116,24 @@ private:
 class Shapes
 {
 public:
-  typedef itk::PolyLineParametricPath<2>    PathType;
-  typedef PathType::Pointer        PathPointer;
-  typedef PathType::VertexType     VertexType;
+  typedef itk::PolyLineParametricPath<2> PathType;
+  typedef PathType::Pointer              PathPointer;
+  typedef PathType::VertexType           VertexType;
 
   int nrow;               /* Number of rows (dy) of the image */
   int ncol;               /* Number of columns (dx) of the image */
   int interpolation;      /* Interpolation used for the level lines:
            0=nearest neighbor, 1=bilinear */
   Shape *the_shapes;      /* Array of the shapes.  The root of the tree is at index 0 */
-  int nb_shapes;          /* The number of shapes (the size of the array the_shapes) */
+  int    nb_shapes;       /* The number of shapes (the size of the array the_shapes) */
 
   /* Link between pixels and shapes */
   Shape **smallest_shape; /* An image giving for each pixel the smallest shape containing it */
 
-
 //  Shapes* mw_new_shapes();
-  void   mw_alloc_shapes( int inrow, int incol, float value);
+  void   mw_alloc_shapes(int inrow, int incol, float value);
   void   mw_change_shapes(int inrow, int incol, float value);
-  Shape* mw_get_smallest_shape(int iX,int iY);
-
+  Shape* mw_get_smallest_shape(int iX, int iY);
 
   /* For each shape, find its number of proper pixels */
   void compute_proper_pixels(int *tabNbOfProperPixels);
@@ -152,7 +149,6 @@ public:
   another module, when this field is needed */
   void  flst_pixels();
 
-
   static const int EAST;
   static const int NORTH;
   static const int WEST;
@@ -161,16 +157,16 @@ public:
   void TURN_LEFT(int *dir);
   void TURN_RIGHT(int *dir);
   /* Is the point in the shape? */
-  char point_in_shape(int x,int y,Shape *pShape);
+  char point_in_shape(int x, int y, Shape *pShape);
   void find_next_dual_point(Point_plane *pDualPoint,
                             int *cDirection,
                             Shape *pShape);
-  int find_closed_boundary(Shape *pShape,PathPointer pBoundary);
+  int find_closed_boundary(Shape *pShape, PathPointer pBoundary);
   /* Find an initial point (to follow the boundary) at the border of the image */
   void initial_point_border(Point_plane *pDualPoint,
-                            int *cDirection,Shape *pShape);
+                            int *cDirection, Shape *pShape);
   /* Find an open boundary */
-  void find_open_boundary(Shape *pShape,PathPointer pBoundary);
+  void find_open_boundary(Shape *pShape, PathPointer pBoundary);
   PathPointer flst_shape_boundary(Shape *pShape);
   Shapes()
   {
@@ -184,8 +180,7 @@ public:
 
   ~Shapes()
   {
-    if ((the_shapes != NULL) && (nb_shapes > 0))
-      delete[] (the_shapes[0].pixels);
+    if ((the_shapes != NULL) && (nb_shapes > 0)) delete[] (the_shapes[0].pixels);
     if (the_shapes != NULL) delete[] the_shapes;
     if (smallest_shape != NULL) delete[] smallest_shape;
   }
@@ -194,15 +189,12 @@ protected:
 
 private:
 
-
 };
 
 } // end namespace otb
 
-
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbShape.txx"
 #endif
-
 
 #endif

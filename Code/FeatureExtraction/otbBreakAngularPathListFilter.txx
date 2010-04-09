@@ -32,7 +32,6 @@ BreakAngularPathListFilter<TPath>
 {
 }
 
-
 template <class TPath>
 void
 BreakAngularPathListFilter<TPath>
@@ -49,26 +48,26 @@ BreakAngularPathListFilter<TPath>
 
   double alpha1(0.), alpha2(0.);
 
-  while ( pathIt != vertexList->End() )
-  {
+  while (pathIt != vertexList->End())
+    {
     // Add Pixel 1
     newPath->AddVertex(pathIt.Value());
-    pixel1=pathIt.Value();
+    pixel1 = pathIt.Value();
     ++pathIt;
     if (pathIt != vertexList->End())
-    {
-      pixel2=pathIt.Value();
+      {
+      pixel2 = pathIt.Value();
       ++pathIt;
       if (pathIt != vertexList->End())
-      {
-        pixel3=pathIt.Value();
-
-        alpha1 = vcl_atan2((pixel1[1]-pixel2[1]),(pixel1[0]-pixel2[0]));
-        alpha2 = vcl_atan2((pixel2[1]-pixel3[1]),(pixel2[0]-pixel3[0]));
-        alpha1 = (alpha1 >= 0)?alpha1:(alpha1+CONST_2PI);
-        alpha2 = (alpha2 >= 0)?alpha2:(alpha2+CONST_2PI);
-        if (vcl_abs(alpha1-alpha2) > static_cast<double>(maxAngle) )
         {
+        pixel3 = pathIt.Value();
+
+        alpha1 = vcl_atan2((pixel1[1] - pixel2[1]), (pixel1[0] - pixel2[0]));
+        alpha2 = vcl_atan2((pixel2[1] - pixel3[1]), (pixel2[0] - pixel3[0]));
+        alpha1 = (alpha1 >= 0) ? alpha1 : (alpha1 + CONST_2PI);
+        alpha2 = (alpha2 >= 0) ? alpha2 : (alpha2 + CONST_2PI);
+        if (vcl_abs(alpha1 - alpha2) > static_cast<double>(maxAngle))
+          {
           // Add Pixel 2
           newPath->AddVertex(pixel2);
           //Create new PathType in the out path list
@@ -76,38 +75,37 @@ BreakAngularPathListFilter<TPath>
           // Reinit
           newPath = PathType::New();
 
-        }
+          }
         --pathIt; // Return previous pixel
-      }
+        }
       else
-      {
+        {
         // Add last Pixel (Pixel 2)
         newPath->AddVertex(pixel2);
+        }
       }
     }
-  }
   //Create new PathType in the out list
   outputPathList->PushBack(newPath);
 }
-
 
 template <class TPath>
 void
 BreakAngularPathListFilter<TPath>
 ::GenerateData()
 {
-  const PathListType *  inputPathList  = this->GetInput();
-  PathListType *  outputPathList = this->GetOutput();
+  const PathListType * inputPathList  = this->GetInput();
+  PathListType *       outputPathList = this->GetOutput();
 
   typename PathListType::ConstIterator listIt = inputPathList->Begin();
   outputPathList->Clear();
 
   PathListPointerType newTempPathList = PathListType::New();
-  while ( listIt != inputPathList->End())
-  {
-    (void)BreakAngularPath(m_MaxAngle, listIt.Get(), outputPathList);
+  while (listIt != inputPathList->End())
+    {
+    (void) BreakAngularPath(m_MaxAngle, listIt.Get(), outputPathList);
     ++listIt;
-  }
+    }
 }
 
 /**
@@ -119,7 +117,7 @@ BreakAngularPathListFilter<TPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Angular max value : "<<m_MaxAngle<<std::endl;
+  os << indent << "Angular max value : " << m_MaxAngle << std::endl;
 }
 
 } // End namespace otb

@@ -35,13 +35,13 @@ namespace otb
  *
  * \sa itk::UnaryFunctorImageFilter
  */
-template <class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT UnaryFunctorImageFilter : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+template <class TInputImage, class TOutputImage, class TFunction>
+class ITK_EXPORT UnaryFunctorImageFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
   typedef UnaryFunctorImageFilter                                            Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>  Superclass;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
   typedef itk::SmartPointer<Self>                                            Pointer;
   typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
@@ -53,7 +53,7 @@ public:
 
 protected:
   UnaryFunctorImageFilter() {};
-  virtual ~UnaryFunctorImageFilter() {};
+  virtual ~UnaryFunctorImageFilter() {}
 
   /** UnaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, UnaryFunctorImageFilter
@@ -68,13 +68,12 @@ protected:
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
-        this->GetFunctor().GetOutputSize());
+      this->GetFunctor().GetOutputSize());
   }
 
-
 private:
-  UnaryFunctorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

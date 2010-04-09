@@ -32,9 +32,9 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputPointSet
   AtmosphericRadiativeTermsPointer output
-  = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer());
+    = static_cast<AtmosphericRadiativeTermsType*>(this->MakeOutput(0).GetPointer());
 
-  this->ProcessObject::SetNthOutput( 0, output.GetPointer() );
+  this->ProcessObject::SetNthOutput(0, output.GetPointer());
 
 }
 /**
@@ -57,7 +57,6 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   this->GraftNthOutput(0, graft);
 }
 
-
 /**
  *
  */
@@ -65,21 +64,21 @@ void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
 {
-  if ( idx >= this->GetNumberOfOutputs() )
-  {
-    itkExceptionMacro(<<"Requested to graft output " << idx <<
+  if (idx >= this->GetNumberOfOutputs())
+    {
+    itkExceptionMacro(<< "Requested to graft output " << idx <<
                       " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-  }
+    }
 
-  if ( !graft )
-  {
-    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-  }
+  if (!graft)
+    {
+    itkExceptionMacro(<< "Requested to graft output that is a NULL pointer");
+    }
 
-  itk::DataObject * output = this->GetOutput( idx );
+  itk::DataObject * output = this->GetOutput(idx);
 
   // Call Graft on the PointSet in order to copy meta-information, and containers.
-  output->Graft( graft );
+  output->Graft(graft);
 }
 
 /**
@@ -91,10 +90,10 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms::AtmosphericRadiati
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<AtmosphericRadiativeTermsType *> (this->ProcessObject::GetOutput(0));
 }
 
@@ -109,13 +108,12 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
          (this->itk::ProcessObject::GetOutput(idx));
 }
 
-
 void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::SetInput(const AtmosphericCorrectionParametersType *object)
 {
   // A single input image
-  this->itk::ProcessObject::SetNthInput(0,const_cast<AtmosphericCorrectionParametersType*>(object));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<AtmosphericCorrectionParametersType*>(object));
 }
 
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms::AtmosphericCorrectionParametersType *
@@ -123,16 +121,15 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GetInput(void)
 {
   // If there is no input
-  if (this->GetNumberOfInputs()!=1)
-  {
+  if (this->GetNumberOfInputs() != 1)
+    {
     // exit
     return 0;
-  }
+    }
   // else return the first input
-  return static_cast<AtmosphericCorrectionParametersType * >
-         (this->itk::ProcessObject::GetInput(0) );
+  return static_cast<AtmosphericCorrectionParametersType *>
+         (this->itk::ProcessObject::GetInput(0));
 }
-
 
 void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -140,12 +137,12 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 {
 
   AtmosphericCorrectionParametersPointer input = this->GetInput();
-  AtmosphericRadiativeTermsPointer output = this->GetOutput();
+  AtmosphericRadiativeTermsPointer       output = this->GetOutput();
 
   output->GetValues().clear();
   typedef AtmosphericCorrectionParameters::WavelenghtSpectralBandVectorType WavelenghtSpectralBandVectorType;
   WavelenghtSpectralBandVectorType WavelenghtSpectralBandVector = input->GetWavelenghtSpectralBand();
-  unsigned int NbBand = WavelenghtSpectralBandVector.size();
+  unsigned int                     NbBand = WavelenghtSpectralBandVector.size();
 
   double atmosphericReflectance(0.);
   double atmosphericSphericalAlbedo(0.);
@@ -156,9 +153,9 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   double upwardDirectTransmittance(0.);
   double upwardDiffuseTransmittanceForRayleigh(0.);
   double upwardDiffuseTransmittanceForAerosol(0.);
-  
-  for (unsigned int i=0; i<NbBand; ++i)
-  {
+
+  for (unsigned int i = 0; i < NbBand; ++i)
+    {
     atmosphericReflectance = 0.;
     atmosphericSphericalAlbedo = 0.;
     totalGaseousTransmission = 0.;
@@ -191,20 +188,19 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       upwardDirectTransmittance,                       /** Upward direct transmittance */
       upwardDiffuseTransmittanceForRayleigh,           /** Upward diffuse transmittance for rayleigh */
       upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
-    );
-
+      );
 
     output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
     output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
     output->SetTotalGaseousTransmission(i, totalGaseousTransmission);
     output->SetDownwardTransmittance(i, downwardTransmittance);
     output->SetUpwardTransmittance(i, upwardTransmittance);
-    output->SetUpwardDiffuseTransmittance(i, upwardDiffuseTransmittance );
+    output->SetUpwardDiffuseTransmittance(i, upwardDiffuseTransmittance);
     output->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
-    output->SetUpwardDiffuseTransmittanceForRayleigh(i,upwardDiffuseTransmittanceForRayleigh );
+    output->SetUpwardDiffuseTransmittanceForRayleigh(i, upwardDiffuseTransmittanceForRayleigh);
     output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
 
-  }
+    }
 }
 
 /**
@@ -214,7 +210,7 @@ void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}// end namespace otb
+} // end namespace otb

@@ -31,8 +31,8 @@ namespace otb
 namespace Statistics
 {
 
-template< class TSample >
-ModelComponentBase< TSample >
+template<class TSample>
+ModelComponentBase<TSample>
 ::ModelComponentBase()
 {
   m_Sample = 0;
@@ -41,153 +41,151 @@ ModelComponentBase< TSample >
   m_SampleModified = 0;
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "Sample: ";
-  if ( m_Sample != 0 )
-  {
+  if (m_Sample != 0)
+    {
     os << m_Sample << std::endl;
-  }
+    }
   else
-  {
+    {
     os << "not set." << std::endl;
-  }
+    }
 
   os << indent << "Membership Function for pdf: ";
-  if ( m_PdfFunction != 0 )
-  {
+  if (m_PdfFunction != 0)
+    {
     os << m_PdfFunction << std::endl;
-  }
+    }
   else
-  {
+    {
     os << "not instantiated yet." << std::endl;
-  }
+    }
 
   os << indent << "Membership Function for cdf: ";
-  if ( m_CdfFunction != 0 )
-  {
+  if (m_CdfFunction != 0)
+    {
     os << m_CdfFunction << std::endl;
-  }
+    }
   else
-  {
+    {
     os << "not instantiated yet." << std::endl;
-  }
+    }
 
   os << indent << "Sample are modified and parameters updated: ";
   os << m_SampleModified << std::endl;
 }
 
-template < class TSample >
+template <class TSample>
 void
-ModelComponentBase< TSample >
-::ShowParameters ( std::ostream& os, itk::Indent indent) const
+ModelComponentBase<TSample>
+::ShowParameters(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "Generic class of model-component. Parameters :\n";
-  for ( unsigned int i = 0; i < m_Parameters.Size(); ++i )
+  for (unsigned int i = 0; i < m_Parameters.Size(); ++i)
     os << indent << m_Parameters[i] << "\n";
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::SetSample(const TSample* sample)
 {
   m_Sample = sample;
   m_SampleModified = 1;
 }
 
-template< class TSample >
+template<class TSample>
 const TSample*
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::GetSample() const
 {
   return m_Sample;
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
-::SetParameters(const ParametersType &parameters)
+ModelComponentBase<TSample>
+::SetParameters(const ParametersType& parameters)
 {
-  if ( m_Parameters != parameters )
-    m_Parameters = parameters;
+  if (m_Parameters != parameters) m_Parameters = parameters;
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::SetPdfMembershipFunction(MembershipFunctionType* function)
 {
   m_PdfFunction = function;
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::SetCdfMembershipFunction(MembershipFunctionType* function)
 {
   m_CdfFunction = function;
 }
 
-template< class TSample >
-typename ModelComponentBase< TSample >::MembershipFunctionType*
-ModelComponentBase< TSample >
+template<class TSample>
+typename ModelComponentBase<TSample>::MembershipFunctionType*
+ModelComponentBase<TSample>
 ::GetPdfMembershipFunction()
 {
   return m_PdfFunction;
 }
 
-template< class TSample >
-typename ModelComponentBase< TSample >::MembershipFunctionType*
-ModelComponentBase< TSample >
+template<class TSample>
+typename ModelComponentBase<TSample>::MembershipFunctionType*
+ModelComponentBase<TSample>
 ::GetCdfMembershipFunction()
 {
   return m_CdfFunction;
 }
 
-template< class TSample >
+template<class TSample>
 inline double
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::Pdf(MeasurementVectorType& measurements)
 {
   return this->m_PdfFunction->Evaluate(measurements);
 }
 
-template< class TSample >
+template<class TSample>
 inline double
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::Cdf(MeasurementVectorType& measurements)
 {
   return m_CdfFunction->Evaluate(measurements);
 }
 
-template < class TSample >
+template <class TSample>
 int
-ModelComponentBase< TSample >
-::IsSampleModified ()
+ModelComponentBase<TSample>
+::IsSampleModified()
 {
   return m_SampleModified;
 }
 
-template< class TSample >
+template<class TSample>
 void
-ModelComponentBase< TSample >
+ModelComponentBase<TSample>
 ::Update()
 {
-  if ( m_SampleModified )
-    this->GenerateData();
+  if (m_SampleModified) this->GenerateData();
   m_SampleModified = 0;
 }
 
-template < class TSample >
+template <class TSample>
 void
-ModelComponentBase< TSample >
-::GenerateData ()
+ModelComponentBase<TSample>
+::GenerateData()
 {
   /** subclasses should override this function to perform
    *  parameter estimation. But it allows to switch m_SampleModified
@@ -200,4 +198,3 @@ ModelComponentBase< TSample >
 } // end of namespace otb
 
 #endif
-

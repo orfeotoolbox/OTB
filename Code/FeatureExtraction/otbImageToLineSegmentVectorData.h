@@ -28,7 +28,6 @@
 #include "otbPersistentFilterStreamingDecorator.h"
 #include "otbVectorData.h"
 
-
 namespace otb
 {
 
@@ -42,32 +41,32 @@ namespace otb
  * \sa PersistentImageFilter
  *
  */
-template<class TInputImage, class TPrecision=double >
+template<class TInputImage, class TPrecision = double>
 class ITK_EXPORT PersistentLineSegmentDetector :
-public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TInputImage, TInputImage>
 {
-  public:
+public:
   /** Standard Self typedef */
-  typedef PersistentLineSegmentDetector Self;
-  typedef PersistentImageFilter<TInputImage,TInputImage>        Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
-  
+  typedef PersistentLineSegmentDetector                   Self;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
   itkTypeMacro(PersistentLineSegmentDetector, PersistentImageFilter);
-  
+
   /** Image related typedefs. */
   // First Input
-  typedef TInputImage                                     ImageType;
-  typedef typename TInputImage::Pointer                   ImagePointer;
-  typedef typename TInputImage::RegionType                RegionType;
-  typedef typename TInputImage::SizeType                  SizeType;
-  typedef typename TInputImage::IndexType                 IndexType;
-  typedef typename TInputImage::PixelType                 PixelType;
-  typedef typename TInputImage::InternalPixelType         InternalPixelType;
+  typedef TInputImage                             ImageType;
+  typedef typename TInputImage::Pointer           ImagePointer;
+  typedef typename TInputImage::RegionType        RegionType;
+  typedef typename TInputImage::SizeType          SizeType;
+  typedef typename TInputImage::IndexType         IndexType;
+  typedef typename TInputImage::PixelType         PixelType;
+  typedef typename TInputImage::InternalPixelType InternalPixelType;
 
   // Output path type
   typedef LineSegmentDetector<ImageType, TPrecision>           LineDetectorType;
@@ -77,40 +76,38 @@ public PersistentImageFilter<TInputImage, TInputImage>
   typedef ObjectList<LineSpatialObjectType>                    LineSpatialObjectListType;
   typedef typename LineSpatialObjectListType::Pointer          LineSpatialObjectListPointerType;
 
-  typedef itk::ExtractImageFilter<ImageType, ImageType>        ExtractorType;
-  typedef typename ExtractorType::Pointer                      ExtractorPointerType;
+  typedef itk::ExtractImageFilter<ImageType, ImageType> ExtractorType;
+  typedef typename ExtractorType::Pointer               ExtractorPointerType;
 
-  typedef ObjectList<ExtractorType>                            ExtractorListType;
-  typedef ObjectList<LineDetectorType>                         LineDetectorListType;
+  typedef ObjectList<ExtractorType>    ExtractorListType;
+  typedef ObjectList<LineDetectorType> LineDetectorListType;
 
   // Vector of region
-  typedef std::vector<RegionType>                              RegionListType;
+  typedef std::vector<RegionType> RegionListType;
 
   virtual void Reset(void);
   virtual void Synthetize(void);
 
-  itkGetObjectMacro(LineSpatialObjectList,LineSpatialObjectListType);
+  itkGetObjectMacro(LineSpatialObjectList, LineSpatialObjectListType);
   RegionListType GetRegionList()
   {
     return m_RegionList;
   }
 
-  void AllocateOutputs(){};
+  void AllocateOutputs(){}
   void GenerateOutputInformation();
   // Override since the filter needs all the data for the algorithm
   virtual void GenerateInputRequestedRegion();
 
-
 protected:
   PersistentLineSegmentDetector();
-  virtual ~PersistentLineSegmentDetector() {};
+  virtual ~PersistentLineSegmentDetector() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
-
+  virtual void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
 
 private:
-  PersistentLineSegmentDetector(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentLineSegmentDetector(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // line detector filter
   //LineDetectorPointerType m_LineDetector;
@@ -145,41 +142,40 @@ private:
  * \ingroup MathematicalStatisticsImageFilters
  */
 
-template<class TInputImage, class TPrecision=double>
+template<class TInputImage, class TPrecision = double>
 class ITK_EXPORT ImageToLineSegmentVectorData :
-      public PersistentFilterStreamingDecorator< PersistentLineSegmentDetector<TInputImage, TPrecision> >
+  public PersistentFilterStreamingDecorator<PersistentLineSegmentDetector<TInputImage, TPrecision> >
 {
-  public:
+public:
   /** Standard Self typedef */
-  typedef ImageToLineSegmentVectorData             Self;
+  typedef ImageToLineSegmentVectorData Self;
   typedef PersistentFilterStreamingDecorator
-  < PersistentLineSegmentDetector<TInputImage, TPrecision> > Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
-
+  <PersistentLineSegmentDetector<TInputImage, TPrecision> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ImageToLineSegmentVectorData,PersistentFilterStreamingDecorator);
+  itkTypeMacro(ImageToLineSegmentVectorData, PersistentFilterStreamingDecorator);
 
-  typedef TInputImage                                       InputImageType;
-  typedef typename TInputImage::SizeType                    SizeType;
+  typedef TInputImage                    InputImageType;
+  typedef typename TInputImage::SizeType SizeType;
 
-  typedef typename Superclass::FilterType                   LSDFilterType;
+  typedef typename Superclass::FilterType LSDFilterType;
   /** Type of DataObjects used for scalar outputs */
   typedef typename LSDFilterType::LineSpatialObjectListType LineSpatialObjectListType;
   typedef typename LineSpatialObjectListType::Pointer       LineSpatialObjectListPointerType;
   typedef typename LSDFilterType::LineSpatialObjectType     LineSpatialObjectType;
   typedef typename LSDFilterType::RegionListType            RegionListType;
 
-  typedef VectorData<TPrecision>                            VectorDataType;
-  typedef typename VectorDataType::Pointer                  VectorDataPointerType;
-  typedef typename VectorDataType::DataNodeType             DataNodeType;
-  typedef typename DataNodeType::Pointer                    DataNodePointerType;
-  typedef typename DataNodeType::LineType                   LineType;
-  typedef typename LineType::VertexType                     VertexType;
+  typedef VectorData<TPrecision>                VectorDataType;
+  typedef typename VectorDataType::Pointer      VectorDataPointerType;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer        DataNodePointerType;
+  typedef typename DataNodeType::LineType       LineType;
+  typedef typename LineType::VertexType         VertexType;
 
   void SetInput(TInputImage * input)
   {
@@ -190,11 +186,10 @@ class ITK_EXPORT ImageToLineSegmentVectorData :
     return this->GetFilter()->GetInput();
   }
 
- 
- LineSpatialObjectListPointerType GetLines()
+  LineSpatialObjectListPointerType GetLines()
   {
     return this->GetFilter()->GetLineSpatialObjectList();
-  };
+  }
   RegionListType GetRegionList()
   {
     return this->GetFilter()->GetRegionList();
@@ -210,11 +205,11 @@ protected:
   /** Constructor */
   ImageToLineSegmentVectorData();
   /** Destructor */
-  virtual ~ImageToLineSegmentVectorData() {};
+  virtual ~ImageToLineSegmentVectorData() {}
 
 private:
-  ImageToLineSegmentVectorData(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToLineSegmentVectorData(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** tolerance to fuse 2 lines in 2 threads. */
   double m_ThreadDistanceThreshold;

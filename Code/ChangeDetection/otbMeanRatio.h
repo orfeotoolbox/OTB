@@ -36,27 +36,26 @@ namespace otb
 namespace Functor
 {
 
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class MeanRatio
 {
 public:
-  MeanRatio() {};
-  virtual ~MeanRatio() {};
-  inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB)
+  MeanRatio() {}
+  virtual ~MeanRatio() {}
+  inline TOutput operator ()(const TInput1& itA,
+                             const TInput2& itB)
   {
 
     TOutput meanA = 0.0;
     TOutput meanB = 0.0;
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
       meanA += static_cast<TOutput>(itA.GetPixel(pos));
       meanB += static_cast<TOutput>(itB.GetPixel(pos));
 
-
-    }
+      }
 
     meanA /= itA.Size();
     meanB /= itB.Size();
@@ -65,17 +64,14 @@ public:
 
     TOutput ratio;
 
-    if(meanA == meanB)
-      ratio = 0.;
-    else if (meanA>meanB)
-      ratio = static_cast<TOutput>(1.0 - meanB/meanA);
-    else ratio = static_cast<TOutput>(1.0 - meanA/meanB);
+    if (meanA == meanB) ratio = 0.;
+    else if (meanA > meanB) ratio = static_cast<TOutput>(1.0 - meanB / meanA);
+    else ratio = static_cast<TOutput>(1.0 - meanA / meanB);
 
     return ratio;
   }
 };
 }
 } // end namespace otb
-
 
 #endif

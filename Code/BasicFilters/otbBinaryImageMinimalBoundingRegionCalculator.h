@@ -37,46 +37,46 @@ namespace otb
  */
 template <class TInputImage>
 class ITK_EXPORT BinaryImageMinimalBoundingRegionCalculator
-      : public itk::ImageToImageFilter<TInputImage,TInputImage>
+  : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard typedefs */
-  typedef BinaryImageMinimalBoundingRegionCalculator Self;
-  typedef itk::ImageToImageFilter<TInputImage,TInputImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef BinaryImageMinimalBoundingRegionCalculator        Self;
+  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
   itkTypeMacro(BinaryImageMinimalBoundingRegionCalculator, ImageToImageFilter);
 
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::PixelType PixelType;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::PixelType  PixelType;
   typedef typename InputImageType::RegionType RegionType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename InputImageType::Pointer    InputImagePointerType;
   /** Toogle the pad option */
-  itkGetMacro(Region,RegionType);
-  itkSetMacro(InsideValue,PixelType);
-  itkGetMacro(InsideValue,PixelType);
-  itkSetMacro(Pad,unsigned int);
-  itkGetMacro(Pad,unsigned int);
+  itkGetMacro(Region, RegionType);
+  itkSetMacro(InsideValue, PixelType);
+  itkGetMacro(InsideValue, PixelType);
+  itkSetMacro(Pad, unsigned int);
+  itkGetMacro(Pad, unsigned int);
 
 protected:
   /** Constructor */
   BinaryImageMinimalBoundingRegionCalculator();
   /** Destructor */
-  virtual ~BinaryImageMinimalBoundingRegionCalculator() {};
+  virtual ~BinaryImageMinimalBoundingRegionCalculator() {}
   /** Main computation method */
   void GenerateData(void);
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 private:
-  BinaryImageMinimalBoundingRegionCalculator(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  BinaryImageMinimalBoundingRegionCalculator(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
   /** The computed region */
   RegionType m_Region;
   /** Toogle if pad wanted */
-  unsigned int  m_Pad;
+  unsigned int m_Pad;
   /** Inside value */
   PixelType m_InsideValue;
 };

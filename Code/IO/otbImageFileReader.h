@@ -37,9 +37,9 @@ class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileReader                     Self;
-  typedef itk::ImageFileReader<TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
+  typedef ImageFileReader                    Self;
+  typedef itk::ImageFileReader<TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -51,10 +51,10 @@ public:
   typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
   /** The size of the output image. */
-  typedef typename TOutputImage::SizeType  SizeType;
+  typedef typename TOutputImage::SizeType SizeType;
 
   /** The region of the output image. */
-  typedef typename TOutputImage::RegionType  ImageRegionType;
+  typedef typename TOutputImage::RegionType ImageRegionType;
 
   /** The pixel type of the output image. */
   //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
@@ -72,7 +72,6 @@ public:
    * enlarge the RequestedRegion to the size of the image on disk. */
   virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
 
-
 protected:
   ImageFileReader();
   virtual ~ImageFileReader();
@@ -89,18 +88,16 @@ private:
   /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */
-  bool GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName );
+  bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
 
   // This is a dummy function to prevent curl from writing data to disk
   // when testing http adresses
-  static size_t curlDummyWriteFunction(void*,size_t,size_t nmemb,void*);
+  static size_t curlDummyWriteFunction(void*, size_t, size_t nmemb, void*);
 
-
-  ImageFileReader(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageFileReader(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } //namespace otb
 

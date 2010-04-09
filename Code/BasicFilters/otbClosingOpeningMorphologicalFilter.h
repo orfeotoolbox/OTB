@@ -40,31 +40,31 @@ namespace otb
  * MorphologicalPyramidAnalysisFilter
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-class  ITK_EXPORT ClosingOpeningMorphologicalFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+class ITK_EXPORT ClosingOpeningMorphologicalFilter
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef ClosingOpeningMorphologicalFilter                   Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>   Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef ClosingOpeningMorphologicalFilter                  Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ClosingOpeningMorphologicalFilter,ImageToImageFilter);
+  itkTypeMacro(ClosingOpeningMorphologicalFilter, ImageToImageFilter);
 
   /** Template parameter typedefs */
-  typedef TInputImage                                         InputImageType;
-  typedef TOutputImage                                        OutputImageType;
-  typedef TKernel                                             KernelType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
+  typedef TKernel      KernelType;
 
   /** Useful typedefs */
-  typedef typename InputImageType::Pointer                    InputImagePointer;
-  typedef typename OutputImageType::RegionType                OutputImageRegionType;
-  typedef typename TInputImage::PixelType                     PixelType;
+  typedef typename InputImageType::Pointer     InputImagePointer;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename TInputImage::PixelType      PixelType;
 
   /** Kernel accessors */
   itkSetMacro(Kernel, KernelType);
@@ -74,7 +74,7 @@ protected:
   /** Constructor */
   ClosingOpeningMorphologicalFilter();
   /** Destructor */
-  ~ClosingOpeningMorphologicalFilter() {};
+  ~ClosingOpeningMorphologicalFilter() {}
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
@@ -84,13 +84,13 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-private :
-  ClosingOpeningMorphologicalFilter(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  ClosingOpeningMorphologicalFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** Morphological operation kernel  */
   KernelType m_Kernel;
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbClosingOpeningMorphologicalFilter.txx"

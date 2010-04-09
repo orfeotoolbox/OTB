@@ -30,7 +30,7 @@ ImageListSource<TOutputImage>
 ::ImageListSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,ImageList<TOutputImage>::New().GetPointer());
+  this->Superclass::SetNthOutput(0, ImageList<TOutputImage>::New().GetPointer());
 }
 /**
  * Get the output image list
@@ -41,10 +41,10 @@ typename ImageListSource<TOutputImage>::OutputImageListType *
 ImageListSource<TOutputImage>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<OutputImageListType *> (this->ProcessObject::GetOutput(0));
 }
 /**
@@ -55,7 +55,7 @@ void
 ImageListSource<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-}// End namespace otb
+} // End namespace otb
 #endif

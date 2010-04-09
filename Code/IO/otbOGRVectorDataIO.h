@@ -40,14 +40,14 @@ namespace otb
  *
  */
 template <class TData> class ITK_EXPORT OGRVectorDataIO
-      : public VectorDataIOBase<TData>
+  : public VectorDataIOBase<TData>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef OGRVectorDataIO          Self;
-  typedef VectorDataIOBase<TData>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef OGRVectorDataIO               Self;
+  typedef VectorDataIOBase<TData>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -57,31 +57,30 @@ public:
   itkTypeMacro(OGRVectorDataIO, VectorDataIOBase);
 
   /** Byte order typedef */
-  typedef typename Superclass::ByteOrder  ByteOrder;
+  typedef typename Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
-  typedef TData VectorDataType;
-  typedef typename VectorDataType::DataTreeType  DataTreeType;
-  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
-  typedef typename DataTreeType::Pointer         DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
-  typedef typename VectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename DataNodeType::PointType       PointType;
-  typedef typename DataNodeType::LineType        LineType;
-  typedef typename LineType::VertexListType      VertexListType;
-  typedef typename VertexListType::ConstPointer  VertexListConstPointerType;
-  typedef typename LineType::Pointer             LinePointerType;
-  typedef typename DataNodeType::PolygonType     PolygonType;
-  typedef typename PolygonType::Pointer          PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType PolygonListType;
-  typedef typename PolygonListType::Pointer      PolygonListPointerType;
-  typedef typename VectorDataType::Pointer       VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
-  typedef typename Superclass::SpacingType       SpacingType;
-  typedef typename Superclass::PointType         OriginType;
-
+  typedef TData                                           VectorDataType;
+  typedef typename VectorDataType::DataTreeType           DataTreeType;
+  typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
+  typedef typename DataTreeType::Pointer                  DataTreePointerType;
+  typedef typename DataTreeType::ConstPointer             DataTreeConstPointerType;
+  typedef typename VectorDataType::DataNodeType           DataNodeType;
+  typedef typename DataNodeType::Pointer                  DataNodePointerType;
+  typedef typename DataNodeType::PointType                PointType;
+  typedef typename DataNodeType::LineType                 LineType;
+  typedef typename LineType::VertexListType               VertexListType;
+  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
+  typedef typename LineType::Pointer                      LinePointerType;
+  typedef typename DataNodeType::PolygonType              PolygonType;
+  typedef typename PolygonType::Pointer                   PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType          PolygonListType;
+  typedef typename PolygonListType::Pointer               PolygonListPointerType;
+  typedef typename VectorDataType::Pointer                VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer           VectorDataConstPointerType;
+  typedef typename Superclass::SpacingType                SpacingType;
+  typedef typename Superclass::PointType                  OriginType;
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -112,8 +111,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  OGRVectorDataIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OGRVectorDataIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   std::string GetOGRDriverName(std::string name) const;
 

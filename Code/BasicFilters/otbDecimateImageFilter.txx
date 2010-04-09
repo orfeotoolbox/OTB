@@ -28,113 +28,112 @@
 #include "itkImageRegionIterator.h"
 #include "itkProgressReporter.h"
 
-
 namespace otb {
 
 template <class TInputImage, class TOutputImage>
 void
-DecimateImageFilter< TInputImage, TOutputImage >
-::PrintSelf( std::ostream & os, itk::Indent indent ) const
+DecimateImageFilter<TInputImage, TOutputImage>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "DecimationFactor = " << m_DecimationFactor << "\n";
 }
 
 template <class TInputImage, class TOutputImage>
 void
-DecimateImageFilter< TInputImage, TOutputImage >
+DecimateImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
-  if ( GetDecimationFactor() > 1 )
-  {
-    this->GetOutput()->CopyInformation( this->GetInput() );
+  if (GetDecimationFactor() > 1)
+    {
+    this->GetOutput()->CopyInformation(this->GetInput());
 
     OutputImageRegionType newRegion;
-    this->CallCopyInputRegionToOutputRegion( newRegion, this->GetInput()->GetLargestPossibleRegion() );
-    this->GetOutput()->SetRegions( newRegion );
+    this->CallCopyInputRegionToOutputRegion(newRegion, this->GetInput()->GetLargestPossibleRegion());
+    this->GetOutput()->SetRegions(newRegion);
 
-    for ( unsigned int i = 0; i < OutputImageDimension; ++i )
-    {
-      otbGenericMsgDebugMacro( << "Image Output size [" << i << "] = " << newRegion.GetSize(i) );
+    for (unsigned int i = 0; i < OutputImageDimension; ++i)
+      {
+      otbGenericMsgDebugMacro(<< "Image Output size [" << i << "] = " << newRegion.GetSize(i));
+      }
     }
-  }
 }
 
 template <class TInputImage, class TOutputImage>
 void
-DecimateImageFilter< TInputImage, TOutputImage >
+DecimateImageFilter<TInputImage, TOutputImage>
 ::CallCopyOutputRegionToInputRegion
-( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion )
+  (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion)
 {
-  Superclass::CallCopyOutputRegionToInputRegion( destRegion, srcRegion );
+  Superclass::CallCopyOutputRegionToInputRegion(destRegion, srcRegion);
 
   typename OutputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
-  typename OutputImageRegionType::SizeType srcSize = srcRegion.GetSize();
+  typename OutputImageRegionType::SizeType  srcSize = srcRegion.GetSize();
 
   typename InputImageRegionType::IndexType destIndex;
-  typename InputImageRegionType::SizeType destSize;
+  typename InputImageRegionType::SizeType  destSize;
 
-  for ( unsigned int i = 0; i < InputImageDimension; ++i )
-  {
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
+    {
     destIndex[i] = srcIndex[i] * GetDecimationFactor();
-    destSize[i] = ( srcSize[i] - 1 ) * GetDecimationFactor() + 1;
-  }
+    destSize[i] = (srcSize[i] - 1) * GetDecimationFactor() + 1;
+    }
 
-  destRegion.SetIndex( destIndex );
-  destRegion.SetSize( destSize );
+  destRegion.SetIndex(destIndex);
+  destRegion.SetSize(destSize);
 }
 
 template <class TInputImage, class TOutputImage>
 void
-DecimateImageFilter< TInputImage, TOutputImage >
+DecimateImageFilter<TInputImage, TOutputImage>
 ::CallCopyInputRegionToOutputRegion
-( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion )
+  (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion)
 {
-  Superclass::CallCopyInputRegionToOutputRegion( destRegion, srcRegion );
+  Superclass::CallCopyInputRegionToOutputRegion(destRegion, srcRegion);
 
   typename InputImageRegionType::IndexType srcIndex = srcRegion.GetIndex();
-  typename InputImageRegionType::SizeType srcSize = srcRegion.GetSize();
+  typename InputImageRegionType::SizeType  srcSize = srcRegion.GetSize();
 
   typename OutputImageRegionType::IndexType destIndex;
-  typename OutputImageRegionType::SizeType destSize;
+  typename OutputImageRegionType::SizeType  destSize;
 
-  for ( unsigned int i = 0; i < InputImageDimension; ++i )
-  {
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
+    {
     destIndex[i] = srcIndex[i] / GetDecimationFactor();
-    destSize[i] = ( srcSize[i] - 1 ) / GetDecimationFactor() + 1;
-  }
+    destSize[i] = (srcSize[i] - 1) / GetDecimationFactor() + 1;
+    }
 
-  destRegion.SetIndex( destIndex );
-  destRegion.SetSize( destSize );
+  destRegion.SetIndex(destIndex);
+  destRegion.SetSize(destSize);
 }
 
 template <class TInputImage, class TOutputImage>
 void
-DecimateImageFilter< TInputImage, TOutputImage >
+DecimateImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
   InputImageRegionType inputRegionForThread;
-        this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
-  SubsampledImageRegionConstIterator< InputImageType > decimationIterator
-    ( this->GetInput(), inputRegionForThread );
-  decimationIterator.SetSubsampleFactor( GetDecimationFactor() );
+  SubsampledImageRegionConstIterator<InputImageType> decimationIterator
+    (this->GetInput(), inputRegionForThread);
+  decimationIterator.SetSubsampleFactor(GetDecimationFactor());
   decimationIterator.GoToBegin();
 
-  itk::ImageRegionIterator< InputImageType > outputIter
-    ( this->GetOutput(), outputRegionForThread );
+  itk::ImageRegionIterator<InputImageType> outputIter
+    (this->GetOutput(), outputRegionForThread);
   outputIter.GoToBegin();
 
-  while ( !decimationIterator.IsAtEnd() && !outputIter.IsAtEnd() )
-  {
-    outputIter.Set( static_cast< OutputPixelType >( decimationIterator.Get() ) );
+  while (!decimationIterator.IsAtEnd() && !outputIter.IsAtEnd())
+    {
+    outputIter.Set(static_cast<OutputPixelType>(decimationIterator.Get()));
 
     ++outputIter;
     ++decimationIterator;
-  }
+    }
 }
 
 } // end of namespace otb

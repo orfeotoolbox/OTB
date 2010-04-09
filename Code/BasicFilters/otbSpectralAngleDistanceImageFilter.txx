@@ -31,46 +31,44 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
+SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
 ::SpectralAngleDistanceImageFilter()
 {
-  m_ReferencePixel=0;
+  m_ReferencePixel = 0;
 }
 
 template <class TInputImage, class TOutputImage>
 void
-SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
+SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  if ( this->GetInput()->GetNumberOfComponentsPerPixel() == 1 )
-  {
-    itkExceptionMacro(<<"Not valid input image : mono channel image gives a nul output image.");
-  }
+  if (this->GetInput()->GetNumberOfComponentsPerPixel() == 1)
+    {
+    itkExceptionMacro(<< "Not valid input image : mono channel image gives a nul output image.");
+    }
 }
-
 
 template <class TInputImage, class TOutputImage>
 void
-SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId)
+SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
 
   if (m_ReferencePixel == 0)
-  {
-    itkExceptionMacro(<<"Reference pixel is not set!");
-  }
+    {
+    itkExceptionMacro(<< "Reference pixel is not set!");
+    }
 
-  InputImageConstPointerType  inputPtr = this->GetInput();
-  OutputImagePointerType outputPtr = this->GetOutput();
+  InputImageConstPointerType inputPtr = this->GetInput();
+  OutputImagePointerType     outputPtr = this->GetOutput();
 
   //inputPtr->UpdateOutputInformation();
   // Check if the reference pixel size matches the input image number of components.
   if (m_ReferencePixel.GetSize() != inputPtr->GetNumberOfComponentsPerPixel())
-  {
-    itkExceptionMacro(<<"Reference pixel size ("<<m_ReferencePixel.GetSize()<<" and input image pixel size ("
-                      <<inputPtr->GetNumberOfComponentsPerPixel()<<") don't match!");
-  }
-
+    {
+    itkExceptionMacro(<< "Reference pixel size (" << m_ReferencePixel.GetSize() << " and input image pixel size ("
+                      << inputPtr->GetNumberOfComponentsPerPixel() << ") don't match!");
+    }
 
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
@@ -87,29 +85,29 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
   outputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
-  {
-    double dist=0.0;
-    double scalarProd=0.0;
-    double normProd=0.0;
-    double normProd1=0.0;
-    double normProd2=0.0;
-    InputPixelType pixel = inputIt.Get();
-    for (unsigned int i=0; i<pixel.Size(); ++i)
     {
-      scalarProd += pixel[i]*m_ReferencePixel[i];
-      normProd1 += pixel[i]*pixel[i];
-      normProd2 += m_ReferencePixel[i]*m_ReferencePixel[i];
-    }
+    double         dist = 0.0;
+    double         scalarProd = 0.0;
+    double         normProd = 0.0;
+    double         normProd1 = 0.0;
+    double         normProd2 = 0.0;
+    InputPixelType pixel = inputIt.Get();
+    for (unsigned int i = 0; i < pixel.Size(); ++i)
+      {
+      scalarProd += pixel[i] * m_ReferencePixel[i];
+      normProd1 += pixel[i] * pixel[i];
+      normProd2 += m_ReferencePixel[i] * m_ReferencePixel[i];
+      }
     normProd = normProd1 * normProd2;
 
-    if ( normProd == 0.0)
-    {
+    if (normProd == 0.0)
+      {
       dist = 0.0;
-    }
+      }
     else
-    {
-      dist = vcl_acos(scalarProd/vcl_sqrt(normProd));
-    }
+      {
+      dist = vcl_acos(scalarProd / vcl_sqrt(normProd));
+      }
     //------ This part was supressed since the filter must perform only the spectral angle computation ---
     // Spectral angle normalization
     // dist = dist/(CONST_PI_2);
@@ -119,14 +117,14 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
-  }
+    }
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage>
 void
-SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
+SpectralAngleDistanceImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

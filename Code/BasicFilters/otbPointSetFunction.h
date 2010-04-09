@@ -31,14 +31,15 @@ namespace otb
  *
  * \ingroup SpatialFunctions
  */
-template <class TPointSet, class  TOutput>
+template <class TPointSet, class TOutput>
 class ITK_EXPORT PointSetFunction :
-      public itk::SpatialFunction< TOutput , 2/* TODO : change 2 by PointType::PointDimension*/, typename TPointSet::PointType >
+  public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/,
+                              typename TPointSet::PointType>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetFunction                                       Self;
-  typedef itk::SpatialFunction< TOutput, 2 ,  typename TPointSet::PointType >       Superclass;
+  typedef PointSetFunction                                                 Self;
+  typedef itk::SpatialFunction<TOutput, 2,  typename TPointSet::PointType> Superclass;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetFunction, itk::SpatialFunction);
@@ -48,10 +49,10 @@ public:
   typedef typename  PointSetType::ConstPointer PointSetPointerType;
 
   /** TOutput typedef suppoty*/
-  typedef TOutput           OutputType;
+  typedef TOutput OutputType;
 
   /** Set the input image (reimplemented since we need to set the detector input) */
-  itkGetConstObjectMacro(PointSet,PointSetType);
+  itkGetConstObjectMacro(PointSet, PointSetType);
 
   void SetPointSet(PointSetType * PointSet)
   {
@@ -66,25 +67,22 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() {};
+  ~PointSetFunction() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
 private:
-  PointSetFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  PointSetFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
-  PointSetPointerType  m_PointSet;
+  PointSetPointerType m_PointSet;
 
 };
 
 } // end namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPointSetFunction.txx"
 #endif
 
 #endif
-

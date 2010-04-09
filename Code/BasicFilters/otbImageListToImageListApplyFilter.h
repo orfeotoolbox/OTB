@@ -20,7 +20,6 @@
 
 #include "otbImageListToImageListFilter.h"
 
-
 namespace otb
 {
 /** \class ImageListToImageListApplyFilter
@@ -41,16 +40,16 @@ namespace otb
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter
-      : public ImageListToImageListFilter<typename TInputImageList::ImageType,
-      typename TOutputImageList::ImageType>
+  : public ImageListToImageListFilter<typename TInputImageList::ImageType,
+                                      typename TOutputImageList::ImageType>
 {
 public:
   /** Standard typedefs */
-  typedef ImageListToImageListApplyFilter            Self;
+  typedef ImageListToImageListApplyFilter Self;
   typedef ImageListToImageListFilter<typename TInputImageList::ImageType,
-  typename TOutputImageList::ImageType> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+                                     typename TOutputImageList::ImageType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -59,21 +58,21 @@ public:
   itkTypeMacro(ImageListToImageListApplyFilter, ImageListToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImageList InputImageListType;
-  typedef typename InputImageListType::Pointer InputImageListPointerType;
-  typedef typename InputImageListType::ImageType InputImageType;
-  typedef TOutputImageList OutputImageListType;
-  typedef typename OutputImageListType::Pointer OutputImageListPointerType;
+  typedef TInputImageList                         InputImageListType;
+  typedef typename InputImageListType::Pointer    InputImageListPointerType;
+  typedef typename InputImageListType::ImageType  InputImageType;
+  typedef TOutputImageList                        OutputImageListType;
+  typedef typename OutputImageListType::Pointer   OutputImageListPointerType;
   typedef typename OutputImageListType::ImageType OutputImageType;
-  typedef TFilter FilterType;
-  typedef typename FilterType::Pointer FilterPointerType;
+  typedef TFilter                                 FilterType;
+  typedef typename FilterType::Pointer            FilterPointerType;
 
   /** Accessors */
-  itkSetObjectMacro(Filter,FilterType);
-  itkGetObjectMacro(Filter,FilterType);
+  itkSetObjectMacro(Filter, FilterType);
+  itkGetObjectMacro(Filter, FilterType);
 
-  itkGetMacro(OutputIndex,unsigned int);
-  itkSetMacro(OutputIndex,unsigned int);
+  itkGetMacro(OutputIndex, unsigned int);
+  itkSetMacro(OutputIndex, unsigned int);
 
   /** Generate output information for the ImageList and for each image
       in the list. */
@@ -88,20 +87,20 @@ protected:
   /** Constructor */
   ImageListToImageListApplyFilter();
   /** Destructor */
-  virtual ~ImageListToImageListApplyFilter() {};
+  virtual ~ImageListToImageListApplyFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageListToImageListApplyFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageListToImageListApplyFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The processing filter */
   FilterPointerType m_Filter;
   /** The index of the output of the filter to use */
   unsigned int m_OutputIndex;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageListToImageListApplyFilter.txx"
 #endif

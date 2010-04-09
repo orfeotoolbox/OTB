@@ -41,34 +41,34 @@ namespace otb
  *
  */
 template <class TScalarType,
-unsigned int NInputDimensions=3,
-unsigned int NOutputDimensions=2>
+          unsigned int NInputDimensions = 3,
+          unsigned int NOutputDimensions = 2>
 class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>
+                                                         NInputDimensions,
+                                                         NOutputDimensions>
 {
 
-public :
+public:
 
   /** Standard class typedefs. */
-  typedef SensorModelBase                             Self;
-  typedef itk::Transform< TScalarType,
-  NInputDimensions,
-  NOutputDimensions >         Superclass;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
+  typedef SensorModelBase Self;
+  typedef itk::Transform<TScalarType,
+                         NInputDimensions,
+                         NOutputDimensions>         Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
-  typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;
+  typedef itk::Point<TScalarType, NInputDimensions>  InputPointType;
+  typedef itk::Point<TScalarType, NOutputDimensions> OutputPointType;
 
-  typedef DEMHandler         DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer     DEMHandlerPointerType;
+  typedef DEMHandler                       DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer DEMHandlerPointerType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( SensorModelBase, Transform );
+  itkTypeMacro(SensorModelBase, Transform);
 
   itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
@@ -81,10 +81,10 @@ public :
   ossimProjection* GetOssimModel(void);
 
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-  virtual void SetImageGeometry(const ImageKeywordlist &image_kwl);
+  virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
 
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-  virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
+  virtual void SetImageGeometry(const ossimKeywordlist& geom_kwl);
 
   /** Set/Get the average elevation if the DEM is not used*/
   itkSetMacro(AverageElevation, TScalarType);
@@ -93,7 +93,7 @@ public :
   virtual void SetDEMDirectory(const std::string& directory)
   {
     m_DEMHandler->OpenDEMDirectory(directory.c_str());
-    m_DEMIsLoaded=true;
+    m_DEMIsLoaded = true;
     this->EnableDEM();
   }
 
@@ -105,8 +105,7 @@ public :
 
   virtual void EnableDEM()
   {
-    if (m_DEMIsLoaded)
-      m_UseDEM = true;
+    if (m_DEMIsLoaded) m_UseDEM = true;
     this->Modified();
   }
 
@@ -115,7 +114,7 @@ protected:
   virtual ~SensorModelBase();
 
   /** Create the projection ( m_Model). Called by the SetImageGeometry methods */
-  void CreateProjection(const ImageKeywordlist & image_kwl);
+  void CreateProjection(const ImageKeywordlist& image_kwl);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -137,9 +136,9 @@ protected:
   /** Specify if DEM is loaded */
   bool m_DEMIsLoaded;
 
-private :
-  SensorModelBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  SensorModelBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -148,6 +147,5 @@ private :
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSensorModelBase.txx"
 #endif
-
 
 #endif

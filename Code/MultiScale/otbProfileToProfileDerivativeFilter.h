@@ -40,14 +40,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ProfileToProfileDerivativeFilter
-      : public ImageListToImageListFilter<TInputImage,TOutputImage>
+  : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ProfileToProfileDerivativeFilter            Self;
-  typedef ImageListToImageListFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef ProfileToProfileDerivativeFilter                      Self;
+  typedef ImageListToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                               Pointer;
+  typedef itk::SmartPointer<const Self>                         ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -56,19 +56,19 @@ public:
   itkTypeMacro(ProfileToProfileDerivativeFilter, ImageListToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::InputImageListType InputImageListType;
-  typedef typename InputImageListType::Pointer InputImageListPointerType;
+  typedef typename Superclass::InputImageListType  InputImageListType;
+  typedef typename InputImageListType::Pointer     InputImageListPointerType;
   typedef typename Superclass::OutputImageListType OutputImageListType;
-  typedef typename OutputImageListType::Pointer OutputImageListPointerType;
-  typedef typename OutputImageListType::ImageType OutputImageType;
-  typedef typename InputImageListType::ImageType InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename OutputImageListType::Pointer    OutputImageListPointerType;
+  typedef typename OutputImageListType::ImageType  OutputImageType;
+  typedef typename InputImageListType::ImageType   InputImageType;
+  typedef typename InputImageType::Pointer         InputImagePointerType;
 
   /** typedefs of the filters used for the derivative */
-  typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> SubtractFilterType;
-  typedef itk::AbsImageFilter<InputImageType,InputImageType> AbsFilterType;
-  typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
-  typedef typename AbsFilterType::Pointer AbsFilterPointerType;
+  typedef itk::SubtractImageFilter<InputImageType, InputImageType, InputImageType> SubtractFilterType;
+  typedef itk::AbsImageFilter<InputImageType, InputImageType>                      AbsFilterType;
+  typedef typename SubtractFilterType::Pointer                                     SubtractFilterPointerType;
+  typedef typename AbsFilterType::Pointer                                          AbsFilterPointerType;
 
   /** Generate output information for the ImageList and for each image
       in the list. */
@@ -83,20 +83,20 @@ protected:
   /** Constructor */
   ProfileToProfileDerivativeFilter();
   /** Destructor */
-  virtual ~ProfileToProfileDerivativeFilter() {};
+  virtual ~ProfileToProfileDerivativeFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ProfileToProfileDerivativeFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ProfileToProfileDerivativeFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Subtract filter for the dervivative */
   SubtractFilterPointerType m_SubtractFilter;
   /** Abs filter for the derivative */
   AbsFilterPointerType m_AbsFilter;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbProfileToProfileDerivativeFilter.txx"
 #endif

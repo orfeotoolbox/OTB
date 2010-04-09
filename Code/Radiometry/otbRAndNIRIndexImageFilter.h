@@ -31,41 +31,42 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
-class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
-typename TInputImageNIR::PixelType,
-typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndNIRIndexImageFilter :  public itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >
+          class TFunction = Functor::NDVI<typename TInputImageR::PixelType,
+                                          typename TInputImageNIR::PixelType,
+                                          typename TOutputImage::PixelType> >
+class ITK_EXPORT RAndNIRIndexImageFilter :  public itk::BinaryFunctorImageFilter<TInputImageR, TInputImageNIR,
+                                                                                 TOutputImage, TFunction>
 {
 public:
 
   /** Standard typedefs */
-  typedef RAndNIRIndexImageFilter      Self;
-  typedef itk::BinaryFunctorImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >  Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef RAndNIRIndexImageFilter                                                              Self;
+  typedef itk::BinaryFunctorImageFilter<TInputImageR, TInputImageNIR, TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                                              Pointer;
+  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RAndNIRIndexImageFilter,BinaryFunctorImageFilter);
+  itkTypeMacro(RAndNIRIndexImageFilter, BinaryFunctorImageFilter);
 
-  void SetInputR( const TInputImageR * image1 );
-  void SetInputNIR( const TInputImageNIR * image2 );
+  void SetInputR(const TInputImageR * image1);
+  void SetInputNIR(const TInputImageNIR * image2);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::Input1ImageType RInputImageType;
-  typedef typename Superclass::Input1ImagePointer RInputImagePointer;
-  typedef typename Superclass::Input2ImageType NIRInputImageType;
-  typedef typename Superclass::Input2ImagePointer NIRInputImagePointer;
-  typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
-  typedef typename Superclass::FunctorType FunctorType;
+  typedef typename Superclass::Input1ImageType       RInputImageType;
+  typedef typename Superclass::Input1ImagePointer    RInputImagePointer;
+  typedef typename Superclass::Input2ImageType       NIRInputImageType;
+  typedef typename Superclass::Input2ImagePointer    NIRInputImagePointer;
+  typedef typename Superclass::OutputImageType       OutputImageType;
+  typedef typename Superclass::OutputImagePointer    OutputImagePointer;
+  typedef typename Superclass::FunctorType           FunctorType;
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
 
 protected:
   RAndNIRIndexImageFilter();
-  virtual ~RAndNIRIndexImageFilter() {};
+  virtual ~RAndNIRIndexImageFilter() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -73,9 +74,8 @@ protected:
                               int threadId );
   */
 private:
-  RAndNIRIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  RAndNIRIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -84,6 +84,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbRAndNIRIndexImageFilter.txx"
 #endif
-
 
 #endif

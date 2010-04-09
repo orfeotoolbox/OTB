@@ -21,10 +21,8 @@
 #include <pqxx/pqxx>
 #include <string>
 
-
 namespace otb
 {
-
 
 /** \class PostGISFromStringTransactor
  * \brief PQXX-based transactor for executing PostGIS queries.
@@ -39,9 +37,9 @@ namespace otb
  */
 
 class PostGISFromStringTransactor :
-     public pqxx::transactor<pqxx::nontransaction>
+  public pqxx::transactor<pqxx::nontransaction>
 {
-  
+
 public:
 
   typedef pqxx::result ResultType;
@@ -52,26 +50,25 @@ public:
 
   PostGISFromStringTransactor(const PostGISFromStringTransactor& pgt);
 
-  PostGISFromStringTransactor& operator=(const PostGISFromStringTransactor& pgt) throw();
-  
-  void operator()(pqxx::nontransaction &T);
-  
+  PostGISFromStringTransactor& operator =(const PostGISFromStringTransactor& pgt)
+    throw();
+
+  void operator ()(pqxx::nontransaction& T);
+
   void on_commit();
 
   std::string GetTransactionString() const;
 
   void SetTransactionString(const std::string& trans);
 
-
   ResultType GetResult() const;
-    
+
 protected:
-  
-  ResultType m_Result;
+
+  ResultType  m_Result;
   std::string m_TransactionString;
 };
 
 } // end namespace otb
-
 
 #endif

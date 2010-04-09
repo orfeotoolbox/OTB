@@ -31,8 +31,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::ComplexMomentImageFunction()
 {
   m_P = 0;
@@ -42,39 +42,38 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 /**
    *
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << " p indice value      : "  << m_P << std::endl;
   os << indent << " q indice value      : "  << m_Q << std::endl;
 }
 
-
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>::ComplexType
-ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>::ComplexType
+ComplexMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  typename TInput::SizeType           ImageSize;
-  ComplexPrecisionType                Sum;
-  ComplexPrecisionType                ValP;
-  ComplexPrecisionType                ValQ;
-  PrecisionType                       Norm;
-  IndexType                           IndexValue;
-  IndexType                           indexPos = index;
-  typename TInput::SizeType           kernelSize;
+  typename TInput::SizeType ImageSize;
+  ComplexPrecisionType      Sum;
+  ComplexPrecisionType      ValP;
+  ComplexPrecisionType      ValQ;
+  PrecisionType             Norm;
+  IndexType                 IndexValue;
+  IndexType                 indexPos = index;
+  typename TInput::SizeType kernelSize;
 
-  if ( !this->GetInputImage() )
-  {
-    otbMsgDevMacro( << "Pb with GetInputImage" );
-    return ( ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero ) );
-  }
+  if (!this->GetInputImage())
+    {
+    otbMsgDevMacro(<< "Pb with GetInputImage");
+    return (ComplexType(itk::NumericTraits<PrecisionType>::Zero, itk::NumericTraits<PrecisionType>::Zero));
+    }
 
-  if (this->GetNeighborhoodRadius()<0)
-  {
+  if (this->GetNeighborhoodRadius() < 0)
+    {
     ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
 
     indexPos[0] = ImageSize[0] / 2;
@@ -82,49 +81,47 @@ ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 
     kernelSize[0] = indexPos[0];
     kernelSize[1] = indexPos[1];
-  }
+    }
   else
-  {
-    kernelSize.Fill( this->GetNeighborhoodRadius() );
-  }
+    {
+    kernelSize.Fill(this->GetNeighborhoodRadius());
+    }
 
   itk::ConstNeighborhoodIterator<TInput>
   it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
 
-
   // Set the iterator at the desired location
   it.SetLocation(indexPos);
-  Sum = ComplexPrecisionType(0.0,0.0);
+  Sum = ComplexPrecisionType(0.0, 0.0);
   Norm = 0;
 
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
-  {
+    {
     IndexValue = it.GetIndex(i);
-    ValP = ComplexPrecisionType(1.0,0.0);
-    ValQ = ComplexPrecisionType(1.0,0.0);
+    ValP = ComplexPrecisionType(1.0, 0.0);
+    ValQ = ComplexPrecisionType(1.0, 0.0);
     unsigned int p  = m_P;
-    while (p>0)
-    {
-      ValP *= ComplexPrecisionType(IndexValue[0]-indexPos[0], IndexValue[1]-indexPos[1]);
+    while (p > 0)
+      {
+      ValP *= ComplexPrecisionType(IndexValue[0] - indexPos[0], IndexValue[1] - indexPos[1]);
       --p;
-    }
+      }
     unsigned int q  = m_Q;
-    while (q>0)
-    {
-      ValQ *= ComplexPrecisionType(IndexValue[0]-indexPos[0], -IndexValue[1]-indexPos[1]);
+    while (q > 0)
+      {
+      ValQ *= ComplexPrecisionType(IndexValue[0] - indexPos[0], -IndexValue[1] - indexPos[1]);
       --q;
+      }
+
+    Sum += (ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)), 0.0));
+    Norm += it.GetPixel(i);
     }
 
-    Sum += ( ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)),0.0) );
-    Norm+=it.GetPixel(i);
-  }
+  Norm = vcl_pow(Norm, ((PrecisionType) m_P + (PrecisionType) m_Q) / 2.);
 
-  Norm = vcl_pow(Norm,((PrecisionType)m_P+(PrecisionType)m_Q)/2.);
-
-  return (static_cast<ComplexType>(Sum/Norm));
+  return (static_cast<ComplexType>(Sum / Norm));
 }
-
 
 } // namespace otb
 

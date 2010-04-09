@@ -28,14 +28,14 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT PathListToPathListFilter
-      : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
+  : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
 {
 public:
   /** Standard typedefs */
-  typedef PathListToPathListFilter      Self;
-  typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >         Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef PathListToPathListFilter                                            Self;
+  typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> > Superclass;
+  typedef itk::SmartPointer<Self>                                             Pointer;
+  typedef itk::SmartPointer<const Self>                                       ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -44,26 +44,26 @@ public:
   itkTypeMacro(PathListToPathListFilter, ObjectListToObjectListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::InputObjectType PathType;
-  typedef typename Superclass::InputListType PathListType;
-  typedef typename PathType::Pointer PathPointerType;
-  typedef typename PathListType::Pointer PathListPointerType;
-  typedef typename PathListType::ConstPointer PathListConstPointerType;
-  typedef typename Superclass::OutputObjectType OutputPathType;
-  typedef typename PathType::Pointer OutputPathPointerType;
-  typedef typename Superclass::OutputListType OutputPathListType;
+  typedef typename Superclass::InputObjectType   PathType;
+  typedef typename Superclass::InputListType     PathListType;
+  typedef typename PathType::Pointer             PathPointerType;
+  typedef typename PathListType::Pointer         PathListPointerType;
+  typedef typename PathListType::ConstPointer    PathListConstPointerType;
+  typedef typename Superclass::OutputObjectType  OutputPathType;
+  typedef typename PathType::Pointer             OutputPathPointerType;
+  typedef typename Superclass::OutputListType    OutputPathListType;
   typedef typename Superclass::OutputListPointer OutputPathListPointerType;
 
 protected:
   /** Constructor */
   PathListToPathListFilter() {};
   /** Destructor */
-  virtual ~PathListToPathListFilter() {};
+  virtual ~PathListToPathListFilter() {}
 
 private:
-  PathListToPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PathListToPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 
 #endif

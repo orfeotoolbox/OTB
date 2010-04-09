@@ -46,11 +46,11 @@ FilterWatcherBase
 
   // Assign the callbacks
   m_StartFilterCommand->SetCallbackFunction(this,
-      &FilterWatcherBase::StartFilter);
+                                            &FilterWatcherBase::StartFilter);
   m_EndFilterCommand->SetCallbackFunction(this,
                                           &FilterWatcherBase::EndFilter);
   m_ProgressFilterCommand->SetCallbackFunction(this,
-      &FilterWatcherBase::ShowProgress);
+                                               &FilterWatcherBase::ShowProgress);
 
   // Add the commands as observers
   m_StartTag = m_Process->AddObserver(itk::StartEvent(),
@@ -64,13 +64,13 @@ FilterWatcherBase
 }
 
 FilterWatcherBase
-::FilterWatcherBase( const FilterWatcherBase& watch)
+::FilterWatcherBase(const FilterWatcherBase& watch)
 {
   // Remove any observers we have on the old process object
   if (m_Process)
-  {
-  m_Process->RemoveAllObservers(); 
-  }
+    {
+    m_Process->RemoveAllObservers();
+    }
 
   // Initialize state
   m_TimeProbe = watch.m_TimeProbe;
@@ -83,36 +83,36 @@ FilterWatcherBase
 
   // Create a series of commands
   if (m_Process)
-  {
+    {
     m_StartFilterCommand = CommandType::New();
     m_EndFilterCommand = CommandType::New();
     m_ProgressFilterCommand = CommandType::New();
 
     // Assign the callbacks
     m_StartFilterCommand->SetCallbackFunction(this,
-        &FilterWatcherBase::StartFilter);
+                                              &FilterWatcherBase::StartFilter);
     m_EndFilterCommand->SetCallbackFunction(this,
                                             &FilterWatcherBase::EndFilter);
     m_ProgressFilterCommand->SetCallbackFunction(this,
-        &FilterWatcherBase::ShowProgress);
+                                                 &FilterWatcherBase::ShowProgress);
 
     // Add the commands as observers
     m_StartTag = m_Process->AddObserver(itk::StartEvent(), m_StartFilterCommand);
     m_EndTag = m_Process->AddObserver(itk::EndEvent(), m_EndFilterCommand);
     m_ProgressTag
-    = m_Process->AddObserver(itk::ProgressEvent(), m_ProgressFilterCommand);
-  }
+      = m_Process->AddObserver(itk::ProgressEvent(), m_ProgressFilterCommand);
+    }
 }
 
 void
 FilterWatcherBase
-::operator=(const FilterWatcherBase &watch)
+::operator =(const FilterWatcherBase& watch)
 {
   // Remove any observers we have on the old process object
   if (m_Process)
-  {
-  m_Process->RemoveAllObservers(); 
-  }
+    {
+    m_Process->RemoveAllObservers();
+    }
 
   // Initialize state
   m_TimeProbe = watch.m_TimeProbe;
@@ -125,25 +125,25 @@ FilterWatcherBase
 
   // Create a series of commands
   if (m_Process)
-  {
+    {
     m_StartFilterCommand = CommandType::New();
     m_EndFilterCommand = CommandType::New();
     m_ProgressFilterCommand = CommandType::New();
 
     // Assign the callbacks
     m_StartFilterCommand->SetCallbackFunction(this,
-        &FilterWatcherBase::StartFilter);
+                                              &FilterWatcherBase::StartFilter);
     m_EndFilterCommand->SetCallbackFunction(this,
                                             &FilterWatcherBase::EndFilter);
     m_ProgressFilterCommand->SetCallbackFunction(this,
-        &FilterWatcherBase::ShowProgress);
+                                                 &FilterWatcherBase::ShowProgress);
 
     // Add the commands as observers
     m_StartTag = m_Process->AddObserver(itk::StartEvent(), m_StartFilterCommand);
     m_EndTag = m_Process->AddObserver(itk::EndEvent(), m_EndFilterCommand);
     m_ProgressTag
-    = m_Process->AddObserver(itk::ProgressEvent(), m_ProgressFilterCommand);
-  }
+      = m_Process->AddObserver(itk::ProgressEvent(), m_ProgressFilterCommand);
+    }
 }
 
 FilterWatcherBase
@@ -151,9 +151,9 @@ FilterWatcherBase
 {
   // Remove any observers we have on the old process object
   if (m_Process)
-  {   
-  m_Process->RemoveAllObservers();
-  }
+    {
+    m_Process->RemoveAllObservers();
+    }
 }
 
 } // end namespace otb

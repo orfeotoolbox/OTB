@@ -50,28 +50,27 @@ namespace otb
  * \ingroup IntensityImageFilters Multithreaded
  */
 
-
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT JoinHistogramMIImageFilter :
-      public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
-      TInputImage1,TInputImage2,TOutputImage,
-      Functor::JoinHistogramMI<
+  public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::JoinHistogramMI<
       typename itk::ConstNeighborhoodIterator<TInputImage1>,
       typename itk::ConstNeighborhoodIterator<TInputImage2>,
-      typename TOutputImage::PixelType>   >
+      typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef JoinHistogramMIImageFilter  Self;
+  typedef JoinHistogramMIImageFilter Self;
   typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter<
-  TInputImage1,TInputImage2,TOutputImage,
-  Functor::JoinHistogramMI<
-  typename itk::ConstNeighborhoodIterator<TInputImage1>,
-  typename itk::ConstNeighborhoodIterator<TInputImage2>,
-  typename TOutputImage::PixelType>
-  >  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    TInputImage1, TInputImage2, TOutputImage,
+    Functor::JoinHistogramMI<
+      typename itk::ConstNeighborhoodIterator<TInputImage1>,
+      typename itk::ConstNeighborhoodIterator<TInputImage2>,
+      typename TOutputImage::PixelType>
+    >  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -81,12 +80,11 @@ protected:
   virtual ~JoinHistogramMIImageFilter() {}
 
 private:
-  JoinHistogramMIImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  JoinHistogramMIImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

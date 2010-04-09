@@ -36,6 +36,4 @@
 #include "otbClusterProminenceTextureFunctor.h"
 #include "otbMeanTextureFunctor.h"
 
-
 #endif
-

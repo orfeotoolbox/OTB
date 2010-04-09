@@ -22,10 +22,10 @@
 
 namespace otb
 {
-template < class TViewerModel >
+template <class TViewerModel>
 ImageView<TViewerModel>
 ::ImageView() : m_ScrollWidget(), m_FullWidget(), m_ZoomWidget(),
-                m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
+  m_Model(), m_Controller(), m_ExtractRegionGlComponent(), m_ScaledExtractRegionGlComponent()
 {
   // Initializing the widgets
   m_ScrollWidget = ImageWidgetType::New();
@@ -46,30 +46,30 @@ ImageView<TViewerModel>
   m_ZoomWidget->SetIdentifier("Zoom");
 }
 
-template < class TViewerModel >
+template <class TViewerModel>
 ImageView<TViewerModel>
 ::~ImageView()
 {
-  
+
 }
 
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::SetModel(ModelType * model)
 {
   // Unregister from previous model if nay
-  if(m_Model.IsNotNull())
+  if (m_Model.IsNotNull())
     {
     m_Model->UnRegisterListener(this);
     }
-  
+
   // Set and register with new model
   m_Model = model;
   m_Model->RegisterListener(this);
 }
 
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::SetController(ControllerType * controller)
@@ -80,17 +80,16 @@ ImageView<TViewerModel>
   m_ZoomWidget->SetController(m_Controller);
 }
 
-template < class TViewerModel>
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call the superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::Notify()
@@ -98,7 +97,7 @@ ImageView<TViewerModel>
   this->Update();
 }
 
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::Update()
@@ -108,36 +107,36 @@ ImageView<TViewerModel>
   this->UpdateZoomWidget();
 }
 
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::UpdateScrollWidget()
 {
   // If the model has a quicklook
-  if(m_Model->GetHasQuicklook())
+  if (m_Model->GetHasQuicklook())
     {
-      otbMsgDevMacro(<<"ImageView::UpdateScrollWidget(): redrawing scroll widget");
+    otbMsgDevMacro(<< "ImageView::UpdateScrollWidget(): redrawing scroll widget");
 
     // Read the buffer
     const RegionType qlRegion =  m_Model->GetRasterizedQuicklook()
-      ->GetLargestPossibleRegion();
-    m_ScrollWidget->ReadBuffer(m_Model->GetRasterizedQuicklook(),qlRegion);
+                                ->GetLargestPossibleRegion();
+    m_ScrollWidget->ReadBuffer(m_Model->GetRasterizedQuicklook(), qlRegion);
 
     // Compute the appropriate scale
-    const double wratio = static_cast<double>(m_ScrollWidget->w())/static_cast<double>(qlRegion.GetSize()[0]);
-    const double hratio = static_cast<double>(m_ScrollWidget->h())/static_cast<double>(qlRegion.GetSize()[1]);
-    const double scale = std::min(wratio,hratio);
+    const double wratio = static_cast<double>(m_ScrollWidget->w()) / static_cast<double>(qlRegion.GetSize()[0]);
+    const double hratio = static_cast<double>(m_ScrollWidget->h()) / static_cast<double>(qlRegion.GetSize()[1]);
+    const double scale = std::min(wratio, hratio);
     m_ScrollWidget->SetIsotropicZoom(scale);
     m_ScrollWidget->SetSubsamplingRate(m_Model->GetSubsamplingRate());
 
     // Setting widget label
     std::string label = m_ScrollWidget->GetIdentifier();
-    label+=(" - ");
-    label+=m_Model->GetName();
+    label += (" - ");
+    label += m_Model->GetName();
     m_ScrollWidget->label(label.c_str());
 
     // display the zoom rectangle if necessary
-    if(m_Model->GetHasExtract())
+    if (m_Model->GetHasExtract())
       {
       m_ExtractRegionGlComponent->SetVisible(true);
       m_ExtractRegionGlComponent->SetRegion(m_Model->GetExtractRegion());
@@ -153,31 +152,30 @@ ImageView<TViewerModel>
     // Ensure to reset buffer
     m_ScrollWidget->ClearBuffer();
     }
-    
-    // Redraw
-    m_ScrollWidget->redraw();
+
+  // Redraw
+  m_ScrollWidget->redraw();
 }
 
-
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::UpdateFullWidget()
 {
-  if(m_Model->GetHasExtract())
+  if (m_Model->GetHasExtract())
     {
-    otbMsgDevMacro(<<"ImageView::UpdateFullWidget(): redrawing full widget");
-    m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(),m_Model->GetRasterizedExtract()
+    otbMsgDevMacro(<< "ImageView::UpdateFullWidget(): redrawing full widget");
+    m_FullWidget->ReadBuffer(m_Model->GetRasterizedExtract(), m_Model->GetRasterizedExtract()
                              ->GetLargestPossibleRegion());
 
-   // Setting widget label
+    // Setting widget label
     std::string label = m_FullWidget->GetIdentifier();
-    label+=(" - ");
-    label+=m_Model->GetName();
+    label += (" - ");
+    label += m_Model->GetName();
     m_FullWidget->label(label.c_str());
 
     // display the zoom rectangle if necessary
-    if(m_Model->GetHasScaledExtract())
+    if (m_Model->GetHasScaledExtract())
       {
       m_ScaledExtractRegionGlComponent->SetVisible(true);
       m_ScaledExtractRegionGlComponent->SetRegion(m_Model->GetScaledExtractRegion());
@@ -195,24 +193,24 @@ ImageView<TViewerModel>
     }
 
   // redraw the widget
-    m_FullWidget->redraw();
- }
+  m_FullWidget->redraw();
+}
 
-template < class TViewerModel >
+template <class TViewerModel>
 void
 ImageView<TViewerModel>
 ::UpdateZoomWidget()
 {
-  if(m_Model->GetHasScaledExtract())
+  if (m_Model->GetHasScaledExtract())
     {
-    otbMsgDevMacro(<<"ImageView::UpdateZoomWidget(): redrawing zoom widget");
-    m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(),m_Model->GetRasterizedScaledExtract()
+    otbMsgDevMacro(<< "ImageView::UpdateZoomWidget(): redrawing zoom widget");
+    m_ZoomWidget->ReadBuffer(m_Model->GetRasterizedScaledExtract(), m_Model->GetRasterizedScaledExtract()
                              ->GetLargestPossibleRegion());
 
     // Setting widget label
     std::string label = m_ZoomWidget->GetIdentifier();
-    label+=(" - ");
-    label+=m_Model->GetName();
+    label += (" - ");
+    label += m_Model->GetName();
     m_ZoomWidget->label(label.c_str());
     }
   else
@@ -221,7 +219,7 @@ ImageView<TViewerModel>
     // Ensure to reset buffer
     m_ZoomWidget->ClearBuffer();
     }
-   
+
   m_ZoomWidget->redraw();
 }
 

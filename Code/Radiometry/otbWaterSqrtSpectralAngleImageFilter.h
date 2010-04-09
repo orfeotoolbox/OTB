@@ -35,39 +35,37 @@ namespace otb
  *  \sa SpectralAngleDistanceImageFilter
  */
 
-template < class TInputVectorImage, class TOutputImage,
-           class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
-                                        typename TInputVectorImage::PixelType,
-                                        typename TOutputImage::PixelType > >
+template <class TInputVectorImage, class TOutputImage,
+          class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
+            typename TInputVectorImage::PixelType,
+            typename TOutputImage::PixelType> >
 class ITK_EXPORT WaterSqrtSpectralAngleImageFilter :
-public itk::UnaryFunctorImageFilter< TInputVectorImage, TOutputImage, TFunction >
+  public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef WaterSqrtSpectralAngleImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter<TInputVectorImage,TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaterSqrtSpectralAngleImageFilter                                        Self;
+  typedef itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                                  Pointer;
+  typedef itk::SmartPointer<const Self>                                            ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(WaterSqrtSpectralAngleImageFilter,itk::UnaryFunctorImageFilter);
+  itkTypeMacro(WaterSqrtSpectralAngleImageFilter, itk::UnaryFunctorImageFilter);
 
   /** Some convenient typedef. */
-  typedef TInputVectorImage InputVectorImageType;
+  typedef TInputVectorImage                        InputVectorImageType;
   typedef typename InputVectorImageType::PixelType InputVectorPixelType;
-  typedef TOutputImage OutputImageType;
-
+  typedef TOutputImage                             OutputImageType;
 
 protected:
   WaterSqrtSpectralAngleImageFilter() {};
-  ~WaterSqrtSpectralAngleImageFilter() {};
-
+  ~WaterSqrtSpectralAngleImageFilter() {}
 
 private:
-  WaterSqrtSpectralAngleImageFilter(Self&); // purposely not implemented
-  void operator=(const Self&);    // purposely not implemented
+  WaterSqrtSpectralAngleImageFilter(Self &); // purposely not implemented
+  void operator =(const Self&);    // purposely not implemented
 
 };
 }  // end namespace otb
@@ -76,4 +74,3 @@ private:
 #endif
 
 #endif
-

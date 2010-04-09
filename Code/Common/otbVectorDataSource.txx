@@ -31,7 +31,7 @@ VectorDataSource<TOutputVectorData>
 ::VectorDataSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,OutputVectorDataType::New().GetPointer());
+  this->Superclass::SetNthOutput(0, OutputVectorDataType::New().GetPointer());
 }
 
 template <class TOutputVectorData>
@@ -48,13 +48,12 @@ VectorDataSource<TOutputVectorData>
   OutputVectorDataPointer outputPtr;
 
   // Allocate the output memory
-  for (unsigned int i=0; i < this->GetNumberOfOutputs(); ++i)
-  {
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
+    {
     outputPtr = this->GetOutput(i);
     outputPtr->Clear();
-  }
+    }
 }
-
 
 /**
  * Get the output vector data
@@ -65,10 +64,10 @@ typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
 VectorDataSource<TOutputVectorData>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
 }
 
@@ -78,7 +77,7 @@ VectorDataSource<TOutputVectorData>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<OutputVectorDataType*>
-         (this->Superclass::GetOutput(idx));
+           (this->Superclass::GetOutput(idx));
 }
 
 /**
@@ -89,9 +88,9 @@ void
 VectorDataSource<TOutputVectorData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}// End namespace otb
+} // End namespace otb
 
 #endif

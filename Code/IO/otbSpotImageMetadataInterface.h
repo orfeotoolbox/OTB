@@ -24,7 +24,6 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 
-
 namespace otb
 {
 /** \class SpotImageMetadataInterface
@@ -36,10 +35,10 @@ class ITK_EXPORT SpotImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
 
-  typedef SpotImageMetadataInterface Self;
-  typedef ImageMetadataInterfaceBase Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SpotImageMetadataInterface    Self;
+  typedef ImageMetadataInterfaceBase    Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -53,70 +52,67 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-
   /** Get the radiometric bias from the ossim metadata */
-  VariableLengthVectorType GetPhysicalBias( const MetaDataDictionaryType & dict ) const;
-  
-  /** Get the radiometric gain from the ossim metadata */
-  VariableLengthVectorType GetPhysicalGain( const MetaDataDictionaryType & dict ) const;
-  
-  /** Get the solar irradiance from the ossim metadata */
-  VariableLengthVectorType GetSolarIrradiance( const MetaDataDictionaryType & dict ) const;
-  
-  /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetDay( const MetaDataDictionaryType & dict ) const;
-  
-  /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMonth( const MetaDataDictionaryType & dict ) const;
-  
-  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetYear( const MetaDataDictionaryType & dict ) const;
-    
-  /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetHour( const MetaDataDictionaryType & dict ) const;
- 
-  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
-  int GetMinute( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetPhysicalBias(const MetaDataDictionaryType& dict) const;
 
-   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay( const MetaDataDictionaryType & dict ) const;
-  
+  /** Get the radiometric gain from the ossim metadata */
+  VariableLengthVectorType GetPhysicalGain(const MetaDataDictionaryType& dict) const;
+
+  /** Get the solar irradiance from the ossim metadata */
+  VariableLengthVectorType GetSolarIrradiance(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable */
+  int GetDay(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable */
+  int GetMonth(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
+  int GetYear(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable */
+  int GetHour(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
+  int GetMinute(const MetaDataDictionaryType& dict) const;
+
+  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  int GetProductionDay(const MetaDataDictionaryType& dict) const;
+
   /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth( const MetaDataDictionaryType & dict ) const;
-  
+  int GetProductionMonth(const MetaDataDictionaryType& dict) const;
+
   /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear( const MetaDataDictionaryType & dict ) const;
+  int GetProductionYear(const MetaDataDictionaryType& dict) const;
 
   /** Get the sat elevation from the ossim metadata */
-  double GetSatElevation( const MetaDataDictionaryType & dict ) const;
-  
+  double GetSatElevation(const MetaDataDictionaryType& dict) const;
+
   /** Get the sat azimuth from the ossim metadata */
-  double GetSatAzimuth( const MetaDataDictionaryType & dict ) const;
-  
+  double GetSatAzimuth(const MetaDataDictionaryType& dict) const;
+
   /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths( const MetaDataDictionaryType & dict ) const;
-  
+  VariableLengthVectorType GetFirstWavelengths(const MetaDataDictionaryType& dict) const;
+
   /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths( const MetaDataDictionaryType & dict ) const;
+  VariableLengthVectorType GetLastWavelengths(const MetaDataDictionaryType& dict) const;
 
   /** Get Instrument */
-  std::string GetInstrument( const MetaDataDictionaryType & dict ) const;
+  std::string GetInstrument(const MetaDataDictionaryType& dict) const;
 
   /** Get Instrument Index */
-  unsigned int GetInstrumentIndex( const MetaDataDictionaryType & dict ) const;
+  unsigned int GetInstrumentIndex(const MetaDataDictionaryType& dict) const;
 
-  bool CanRead( const MetaDataDictionaryType & dict) const;
+  bool CanRead(const MetaDataDictionaryType& dict) const;
 
-  
 protected:
   SpotImageMetadataInterface();
-  virtual ~SpotImageMetadataInterface() {};
+  virtual ~SpotImageMetadataInterface() {}
 
-  
 private:
 
-  SpotImageMetadataInterface(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpotImageMetadataInterface(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

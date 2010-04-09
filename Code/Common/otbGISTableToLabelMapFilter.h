@@ -40,33 +40,33 @@ namespace otb {
  * \sa LabelMapSource
  * \ingroup Common, GeospatialAnalysis
  */
-template<class TGISTable, class TLabelMap >
+template<class TGISTable, class TLabelMap>
 class ITK_EXPORT GISTableToLabelMapFilter :
-    public LabelMapSource< TLabelMap >
+  public LabelMapSource<TLabelMap>
 {
 public:
   /** Standard class typedefs. */
   typedef GISTableToLabelMapFilter Self;
-  typedef LabelMapSource< TLabelMap >
+  typedef LabelMapSource<TLabelMap>
   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /**typedefs related to the GISTableToVectorDataFilter*/
-  typedef VectorData <typename TGISTable::PrecisionType ,  TGISTable::Dimension> TVectorData;
-  typedef GISTableToVectorDataFilter<TGISTable, TVectorData> GISTableToVectorDataFilterType;
-  typedef VectorDataToLabelMapFilter<TVectorData, TLabelMap> VectorDataToLabelMapFilterType;
+  typedef VectorData <typename TGISTable::PrecisionType,  TGISTable::Dimension> TVectorData;
+  typedef GISTableToVectorDataFilter<TGISTable, TVectorData>                    GISTableToVectorDataFilterType;
+  typedef VectorDataToLabelMapFilter<TVectorData, TLabelMap>                    VectorDataToLabelMapFilterType;
   /** Some convenient typedefs. */
-  typedef TGISTable InputGISTableType;
-  typedef TLabelMap OutputLabelMapType;
-  typedef typename OutputLabelMapType::Pointer        OutputLabelMapPointer;
-  typedef typename OutputLabelMapType::ConstPointer   OutputLabelMapConstPointer;
+  typedef TGISTable                                 InputGISTableType;
+  typedef TLabelMap                                 OutputLabelMapType;
+  typedef typename OutputLabelMapType::Pointer      OutputLabelMapPointer;
+  typedef typename OutputLabelMapType::ConstPointer OutputLabelMapConstPointer;
 
-  typedef typename InputGISTableType::ConnectionType ConnectionType;
+  typedef typename InputGISTableType::ConnectionType        ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
 
-  typedef typename OutputLabelMapType::PixelType       OutputLabelMapPixelType;
-  typedef typename OutputLabelMapType::IndexType                               IndexType;
+  typedef typename OutputLabelMapType::PixelType OutputLabelMapPixelType;
+  typedef typename OutputLabelMapType::IndexType IndexType;
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -75,12 +75,11 @@ public:
   itkTypeMacro(GISTableToLabelMapFilter,
                LabelMapSource);
 
-
   /** Image size typedef. */
   typedef itk::Size<TGISTable::Dimension> SizeType;
   //typedef typename IndexType::Pointer                                 IndexPointerType;
 
-  typedef typename InputGISTableType::PointType                     PointType;
+  typedef typename InputGISTableType::PointType PointType;
 
   /**
    * Set/Get the value used as "background" in the output image.
@@ -90,14 +89,14 @@ public:
   itkGetConstMacro(BackgroundValue, OutputLabelMapPixelType);
 
   /** Set the size of the output image. */
-  itkSetMacro( Size, SizeType );
+  itkSetMacro(Size, SizeType);
 
   /** Set the starting index of the output image. */
-  itkSetMacro( StartIndex, IndexType );
+  itkSetMacro(StartIndex, IndexType);
 
   /** Set/Get the GISTable input of this process object.  */
-  virtual void SetInput( const InputGISTableType *input);
-  virtual void SetInput( unsigned int idx, const InputGISTableType *input);
+  virtual void SetInput(const InputGISTableType *input);
+  virtual void SetInput(unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
   const InputGISTableType * GetInput(unsigned int idx);
 
@@ -105,7 +104,7 @@ public:
 
 protected:
   GISTableToLabelMapFilter();
-  virtual ~GISTableToLabelMapFilter() {};
+  virtual ~GISTableToLabelMapFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** GISTableToLabelMapFilter needs the entire input be
@@ -117,18 +116,17 @@ protected:
    * to the OGR driver. */
   void GenerateData();
 
-
 private:
-  GISTableToLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GISTableToLabelMapFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   typename GISTableToVectorDataFilterType::Pointer m_GISTableToVectorDataFilter;
   typename VectorDataToLabelMapFilterType::Pointer m_VectorDataToLabelMapFilter;
 
   OutputLabelMapPixelType m_BackgroundValue;
 
-  SizeType            m_Size;
-  IndexType           m_StartIndex;
+  SizeType  m_Size;
+  IndexType m_StartIndex;
 }; // end of class
 
 } // end namespace otb

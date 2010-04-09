@@ -36,17 +36,17 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputPath,
-class TOutput      = double>
+template <class TInputPath,
+          class TOutput      = double>
 class ITK_EXPORT CompacityPathFunction :
-      public PathFunction< TInputPath, TOutput >
+  public PathFunction<TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef CompacityPathFunction                         Self;
-  typedef PathFunction<TInputPath, TOutput>             Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef CompacityPathFunction             Self;
+  typedef PathFunction<TInputPath, TOutput> Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(CompacityPathFunction, PathFunction);
@@ -55,28 +55,27 @@ public:
   itkNewMacro(Self);
 
   /** InputPathType typedef support. */
-  typedef typename Superclass::InputPathType            PathType;
-  typedef typename Superclass::InputPathConstPointer    PathConstPointer;
-  typedef typename PathType::ContinuousIndexType        VertexType;
-  typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
-  typedef typename VertexListType::ConstPointer         VertexListPointer;
-  typedef TOutput                                       OutputType;
+  typedef typename Superclass::InputPathType         PathType;
+  typedef typename Superclass::InputPathConstPointer PathConstPointer;
+  typedef typename PathType::ContinuousIndexType     VertexType;
+  typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
+  typedef typename VertexListType::ConstPointer      VertexListPointer;
+  typedef TOutput                                    OutputType;
 
-  typedef double                                        RealType;
-
+  typedef double RealType;
 
   /** Evaluate the function at non-integer positions */
-  virtual OutputType Evaluate( const PathType& path) const;
-  virtual OutputType Evaluate( ) const;
+  virtual OutputType Evaluate(const PathType& path) const;
+  virtual OutputType Evaluate() const;
 
 protected:
   CompacityPathFunction() {};
-  virtual ~CompacityPathFunction() {};
+  virtual ~CompacityPathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  CompacityPathFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  CompacityPathFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
 };
 

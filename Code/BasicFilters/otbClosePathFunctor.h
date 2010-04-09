@@ -38,37 +38,35 @@ class ClosePathFunctor
 public:
 
   typedef typename TInput::VertexListType::ConstIterator VertexListConstIteratorType;
-  typedef typename TInput::VertexListType::ConstPointer VertexListConstPointerType;
-  typedef TOutput OutputPathType;
-  typedef typename OutputPathType::Pointer OutputPathPointerType;
-
+  typedef typename TInput::VertexListType::ConstPointer  VertexListConstPointerType;
+  typedef TOutput                                        OutputPathType;
+  typedef typename OutputPathType::Pointer               OutputPathPointerType;
 
   ClosePathFunctor()
-  {};
-  virtual ~ClosePathFunctor() {};
+  {}
+  virtual ~ClosePathFunctor() {}
 
-  inline OutputPathPointerType operator()(const TInput * input)
+  inline OutputPathPointerType operator ()(const TInput * input)
   {
     OutputPathPointerType newPath = OutputPathType::New();
     newPath->Initialize();
     typename TInput::VertexType lastVertex;
 
     for (VertexListConstIteratorType vertexIt = input->GetVertexList()->Begin();
-           vertexIt!= input->GetVertexList()->End();
-           ++vertexIt)
-    {
+         vertexIt != input->GetVertexList()->End();
+         ++vertexIt)
+      {
       newPath->AddVertex(vertexIt.Value());
       lastVertex = vertexIt.Value();
-    }
+      }
     if (lastVertex != input->GetVertexList()->Begin().Value())
-    {
+      {
       newPath->AddVertex(input->GetVertexList()->Begin().Value());
-    }
+      }
 
     newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());
     return newPath;
   }
-
 
 };
 

@@ -47,25 +47,25 @@ namespace otb
  *
  **/
 
-template <class TPanImageType,class TXsImageType,class TOutputImageType>
+template <class TPanImageType, class TXsImageType, class TOutputImageType>
 class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
-      public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
+  public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:
-  typedef SimpleRcsPanSharpeningFusionImageFilter   Self;
+  typedef SimpleRcsPanSharpeningFusionImageFilter Self;
   typedef itk::ImageToImageFilter
   <TXsImageType, TOutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
-  
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
   //typedef otb::Image<double,2>                InternalImageType;
   //typedef otb::VectorImage<double>            InternalVectorImageType;
-  typedef otb::Image<double,TPanImageType::ImageDimension>          InternalImageType;
-  typedef otb::VectorImage<double,TPanImageType::ImageDimension>    InternalVectorImageType;
+  typedef otb::Image<double, TPanImageType::ImageDimension>       InternalImageType;
+  typedef otb::VectorImage<double, TPanImageType::ImageDimension> InternalVectorImageType;
 
-  typedef typename InternalImageType::PixelType InternalPixelType;
+  typedef typename InternalImageType::PixelType                    InternalPixelType;
   typedef typename itk::NumericTraits<InternalPixelType>::RealType InternalRealType;
-  typedef typename itk::Array<InternalRealType> ArrayType;
+  typedef typename itk::Array<InternalRealType>                    ArrayType;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -75,22 +75,22 @@ public:
                itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   typedef typename InternalImageType::SizeType RadiusType;
 
   /** Set the filter radius  */
-  itkGetMacro( Radius, RadiusType);
-  itkSetMacro( Radius, RadiusType);
+  itkGetMacro(Radius, RadiusType);
+  itkSetMacro(Radius, RadiusType);
 
   /** Set the input filter */
   itkSetMacro(Filter, ArrayType);
   itkGetConstReferenceMacro(Filter, ArrayType);
 
-  virtual void SetPanInput( const TPanImageType * image);
+  virtual void SetPanInput(const TPanImageType * image);
   const TPanImageType * GetPanInput(void) const;
 
-  virtual void SetXsInput( const TXsImageType * path);
+  virtual void SetXsInput(const TXsImageType * path);
   const TXsImageType * GetXsInput(void) const;
 
 protected:
@@ -100,11 +100,10 @@ protected:
   typedef otb::ConvolutionImageFilter
   <TPanImageType, InternalImageType> ConvolutionFilterType;
   typedef itk::DivideImageFilter
-  <TXsImageType,InternalImageType,
-  InternalVectorImageType> DivideFilterType;
+  <TXsImageType, InternalImageType,
+   InternalVectorImageType> DivideFilterType;
   typedef itk::MultiplyImageFilter
-  <InternalVectorImageType,TPanImageType,TOutputImageType> MultiplyFilterType;
-
+  <InternalVectorImageType, TPanImageType, TOutputImageType> MultiplyFilterType;
 
 //  Software Guide : EndCodeSnippet
 
@@ -112,15 +111,15 @@ protected:
 
 private:
 
-  SimpleRcsPanSharpeningFusionImageFilter(Self&);   // intentionally not implemented
-  void operator=(const Self&);          // intentionally not implemented
+  SimpleRcsPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
+  void operator =(const Self&);          // intentionally not implemented
 
-  typename ConvolutionFilterType::Pointer     m_ConvolutionFilter;
-  typename DivideFilterType::Pointer    m_DivideFilter;
-  typename MultiplyFilterType::Pointer     m_MultiplyFilter;
+  typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
+  typename DivideFilterType::Pointer m_DivideFilter;
+  typename MultiplyFilterType::Pointer m_MultiplyFilter;
 
   RadiusType m_Radius;
-  ArrayType m_Filter;
+  ArrayType  m_Filter;
 
 };
 
@@ -131,4 +130,3 @@ private:
 #endif
 
 #endif
-

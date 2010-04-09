@@ -35,53 +35,53 @@ class ITK_EXPORT AeronetData :  public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
-  typedef AeronetData                           Self;
-  typedef itk::DataObject                       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef AeronetData                   Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(AeronetData,itk::DataObject);
+  itkTypeMacro(AeronetData, itk::DataObject);
 
   /** Set/Get Solar Zenith Angle data */
-  itkSetMacro(SolarZenithAngle,double);
-  itkGetMacro(SolarZenithAngle,double);
+  itkSetMacro(SolarZenithAngle, double);
+  itkGetMacro(SolarZenithAngle, double);
   /**  Set/Get Angst data */
-  itkSetMacro(AngstromCoefficient,double);
-  itkGetMacro(AngstromCoefficient,double);
+  itkSetMacro(AngstromCoefficient, double);
+  itkGetMacro(AngstromCoefficient, double);
   /**  Set/Get Water data */
-  itkSetMacro(Water,double);
-  itkGetMacro(Water,double);
+  itkSetMacro(Water, double);
+  itkGetMacro(Water, double);
   /**  Set/Get AerosolOpticalThickness data */
-  itkSetMacro(AerosolOpticalThickness,double);
-  itkGetMacro(AerosolOpticalThickness,double);
+  itkSetMacro(AerosolOpticalThickness, double);
+  itkGetMacro(AerosolOpticalThickness, double);
   /** Statistic : Standard deviation data */
-  itkSetMacro(StdDev,double);
-  itkGetMacro(StdDev,double);
+  itkSetMacro(StdDev, double);
+  itkGetMacro(StdDev, double);
 
   /**  Set/Get Cloud estimation data */
-  itkSetMacro(CloudEstimation,bool);
-  itkGetMacro(CloudEstimation,bool);
+  itkSetMacro(CloudEstimation, bool);
+  itkGetMacro(CloudEstimation, bool);
 
   /** Set/Get Data Date */
-  itkSetMacro(DataDate,std::string);
-  itkGetMacro(DataDate,std::string);
+  itkSetMacro(DataDate, std::string);
+  itkGetMacro(DataDate, std::string);
 
   /** Set/Get Number of date used */
-  itkSetMacro(NumberOfDateUsed,unsigned int);
-  itkGetMacro(NumberOfDateUsed,unsigned int);
+  itkSetMacro(NumberOfDateUsed, unsigned int);
+  itkGetMacro(NumberOfDateUsed, unsigned int);
   /** Statistic : Epsilon date */
-  itkSetMacro(EpsilonDate,double);
-  itkGetMacro(EpsilonDate,double);
+  itkSetMacro(EpsilonDate, double);
+  itkGetMacro(EpsilonDate, double);
 
 protected:
   /** Constructor */
   AeronetData();
   /** Destructor */
-  ~AeronetData() {};
+  ~AeronetData() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

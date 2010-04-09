@@ -33,25 +33,25 @@ class ITK_EXPORT RCC8Edge : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef RCC8Edge Self;
-  typedef itk::DataObject  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef RCC8Edge                      Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8Edge,DataObject);
+  itkTypeMacro(RCC8Edge, DataObject);
   /** RCC8 values typedef */
   typedef RCC8Value RCC8ValueType;
   /** RCC8 relation value accessors */
-  itkGetMacro(Value,RCC8ValueType);
-  itkSetMacro(Value,RCC8ValueType);
+  itkGetMacro(Value, RCC8ValueType);
+  itkSetMacro(Value, RCC8ValueType);
 
 protected:
   /** Constructor */
   RCC8Edge();
   /** Desctructor */
-  ~RCC8Edge() {};
+  ~RCC8Edge() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

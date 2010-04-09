@@ -32,7 +32,7 @@ LabelMapSource<TOutputLabelMap>
 {
   //std::cout <<"labelsource constructor"<<std::endl;
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,OutputLabelMapType::New().GetPointer());
+  this->Superclass::SetNthOutput(0, OutputLabelMapType::New().GetPointer());
 }
 
 template <class TOutputLabelMap>
@@ -49,15 +49,14 @@ LabelMapSource<TOutputLabelMap>
   OutputLabelMapPointer outputPtr;
 
   // Allocate the output memory
-  for (unsigned int i=0; i < this->GetNumberOfOutputs(); ++i)
-  {
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
+    {
     outputPtr = this->GetOutput(i);
-    
+
     //TODO Need to implement the Clear Method in the class itk::LabelMap
     //outputPtr->Clear();
-  }
+    }
 }
-
 
 /**
  * Get the output LabelMap
@@ -68,10 +67,10 @@ typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType *
 LabelMapSource<TOutputLabelMap>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   //std::cout << "labelsource: get output..." <<std::endl;
   return static_cast<OutputLabelMapType *> (this->ProcessObject::GetOutput(0));
 }
@@ -82,7 +81,7 @@ LabelMapSource<TOutputLabelMap>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<OutputLabelMapType*>
-         (this->Superclass::GetOutput(idx));
+           (this->Superclass::GetOutput(idx));
 }
 
 /**
@@ -93,9 +92,9 @@ void
 LabelMapSource<TOutputLabelMap>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}// End namespace otb
+} // End namespace otb
 
 #endif

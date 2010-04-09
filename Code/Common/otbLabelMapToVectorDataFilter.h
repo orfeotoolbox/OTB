@@ -45,36 +45,36 @@ namespace otb {
    * \sa VectorDataSource
  * \ingroup GeoSpatialAnalysis
  */
-template<class TLabelMap, class TVectorData >
+template<class TLabelMap, class TVectorData>
 class ITK_EXPORT LabelMapToVectorDataFilter :
-    public VectorDataSource< TVectorData >
+  public VectorDataSource<TVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef LabelMapToVectorDataFilter Self;
-  typedef VectorDataSource< TVectorData >
+  typedef VectorDataSource<TVectorData>
   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TLabelMap InputLabelMapType;
-  typedef TVectorData OutputVectorDataType;
-  typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
-  typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
+  typedef TLabelMap                                   InputLabelMapType;
+  typedef TVectorData                                 OutputVectorDataType;
+  typedef typename OutputVectorDataType::Pointer      OutputVectorDataPointer;
+  typedef typename OutputVectorDataType::ConstPointer OutputVectorDataConstPointer;
 
-  typedef typename InputLabelMapType::LabelObjectType   LabelObjectType;
+  typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
 
-  typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename DataNodeType::PolygonType  PolygonType;
-  typedef typename PolygonType::Pointer  PolygonPointerType;
+  typedef typename OutputVectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer              DataNodePointerType;
+  typedef typename DataNodeType::PolygonType          PolygonType;
+  typedef typename PolygonType::Pointer               PolygonPointerType;
   /** Some typedefs specific to functors*/
-  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType,PolygonType> FunctorType;
-  typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
+  typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
+  typedef otb::CorrectPolygonFunctor<PolygonType>                                 CorrectFunctorType;
 //   typedef otb::SimplifyPathFunctor<PolygonType,PolygonType> SimplifyFunctorType;
 //   typedef ClosePathFunctor <PolygonType,PolygonType> CloseFunctorType;
-  /** ImageDimension constants */
+/** ImageDimension constants */
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -83,16 +83,15 @@ public:
   itkTypeMacro(LabelMapToVectorDataFilter,
                VectorDataSource);
 
-
   /** Set/Get the LabelMap input of this process object.  */
-  virtual void SetInput( const InputLabelMapType *input);
-  virtual void SetInput( unsigned int idx, const InputLabelMapType *input);
+  virtual void SetInput(const InputLabelMapType *input);
+  virtual void SetInput(unsigned int idx, const InputLabelMapType *input);
   const InputLabelMapType * GetInput(void);
   const InputLabelMapType * GetInput(unsigned int idx);
 
 protected:
   LabelMapToVectorDataFilter();
-  virtual ~LabelMapToVectorDataFilter() {};
+  virtual ~LabelMapToVectorDataFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LabelMapToAttributeImageFilter needs the entire input be
@@ -106,11 +105,9 @@ protected:
   /** Single-threaded version of GenerateData.  The functor is not thread safe. */
   void GenerateData();
 
-
 private:
-  LabelMapToVectorDataFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  LabelMapToVectorDataFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 }; // end of class
 
@@ -121,5 +118,3 @@ private:
 #endif
 
 #endif
-
-

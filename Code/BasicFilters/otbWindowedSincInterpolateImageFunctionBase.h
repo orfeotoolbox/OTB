@@ -131,19 +131,20 @@ namespace otb
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
  */
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double>
+template<class TInputImage, class TWindowFunction, class TBoundaryCondition =
+           itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double>
 class ITK_EXPORT WindowedSincInterpolateImageFunctionBase :
-      public GenericInterpolateImageFunction< TInputImage,
-      TWindowFunction,
-      TBoundaryCondition,
-      TCoordRep >
+  public GenericInterpolateImageFunction<TInputImage,
+                                         TWindowFunction,
+                                         TBoundaryCondition,
+                                         TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef WindowedSincInterpolateImageFunctionBase                                                      Self;
-  typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>  Superclass;
-  typedef itk::SmartPointer<Self>                                                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                                                 ConstPointer;
+  typedef WindowedSincInterpolateImageFunctionBase                                                     Self;
+  typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>                                                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(WindowedSincInterpolateImageFunctionBase, GenericInterpolateImageFunction);
@@ -156,21 +157,20 @@ public:
   typedef typename Superclass::OutputType     OutputType;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Superclass typedef inheritance. */
-  typedef typename Superclass::IndexType                                             IndexType;
-  typedef typename Superclass::SizeType                                              SizeType;
-  typedef typename Superclass::RealType                                              RealType;
-  typedef typename Superclass::IteratorType                                          IteratorType;
-  typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
+  typedef typename Superclass::IndexType           IndexType;
+  typedef typename Superclass::SizeType            SizeType;
+  typedef typename Superclass::RealType            RealType;
+  typedef typename Superclass::IteratorType        IteratorType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   //typedef typename TWindowFunction                                                   FunctionType;
-  typedef typename Superclass::FunctionType                                          FunctionType;
-  typedef typename std::vector<double>                                               VectorType;
+  typedef typename Superclass::FunctionType FunctionType;
+  typedef typename std::vector<double>      VectorType;
 
   /** Compute a resampled profil according to the window size.*/
 //   virtual void ComputeResampledWindowedSincProfil();
-
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
@@ -178,8 +178,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  WindowedSincInterpolateImageFunctionBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageFunctionBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace itk

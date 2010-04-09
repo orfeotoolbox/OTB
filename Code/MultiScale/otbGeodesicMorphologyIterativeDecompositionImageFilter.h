@@ -62,47 +62,49 @@ namespace otb
  */
 template <class TImage, class TStructuringElement>
 class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter
-      : public ImageToImageListFilter<TImage,TImage>
+  : public ImageToImageListFilter<TImage, TImage>
 {
 public:
   /** Standard typedefs */
   typedef GeodesicMorphologyIterativeDecompositionImageFilter Self;
-  typedef ImageToImageListFilter<TImage,TImage>               Superclass;
+  typedef ImageToImageListFilter<TImage, TImage>              Superclass;
   typedef itk::SmartPointer<Self>                             Pointer;
   typedef itk::SmartPointer<const Self>                       ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(GeodesicMorphologyIterativeDecompositionImageFilter,ImageToImageListFilter);
+  itkTypeMacro(GeodesicMorphologyIterativeDecompositionImageFilter, ImageToImageListFilter);
   /** Input image dimension constant macro */
-  itkStaticConstMacro(InputImageDimension, unsigned int,TImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TImage::ImageDimension);
   /** Output related typedefs */
-  typedef typename Superclass::OutputImageType         OutputImageType;
-  typedef typename Superclass::OutputImageListType     OutputImageListType;
-  typedef typename OutputImageListType::Pointer        OutputImageListPointerType;
-  typedef typename Superclass::OutputImagePointerType  OutputImagePointerType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::OutputImageListType    OutputImageListType;
+  typedef typename OutputImageListType::Pointer       OutputImageListPointerType;
+  typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType          InputImageType;
-  typedef typename Superclass::InputImageRegionType    InputImageRegionType;
-  typedef typename InputImageType::Pointer             InputImagePointerType;
-  typedef typename InputImageType::ConstPointer        InputImageConstPointerType;
-  typedef typename InputImageType::SizeType            SizeType;
-  typedef typename InputImageType::ValueType           ValueType;
-  typedef typename InputImageType::PixelType           PixelType;
-  typedef typename InputImageType::SpacingType         SpacingType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef typename InputImageType::Pointer          InputImagePointerType;
+  typedef typename InputImageType::ConstPointer     InputImageConstPointerType;
+  typedef typename InputImageType::SizeType         SizeType;
+  typedef typename InputImageType::ValueType        ValueType;
+  typedef typename InputImageType::PixelType        PixelType;
+  typedef typename InputImageType::SpacingType      SpacingType;
 
   typedef TStructuringElement StructuringElementType;
 
   /** Typedef of the decomposition filter */
-  typedef GeodesicMorphologyDecompositionImageFilter<InputImageType,InputImageType,StructuringElementType> DecompositionFilterType;
-  typedef typename DecompositionFilterType::Pointer DecompositionFilterPointerType;
+  typedef GeodesicMorphologyDecompositionImageFilter<InputImageType, InputImageType,
+                                                     StructuringElementType> DecompositionFilterType;
+  typedef typename DecompositionFilterType::Pointer
+                                                                             DecompositionFilterPointerType;
 
   /** Accessors */
-  itkSetMacro(Step,unsigned int);
-  itkGetMacro(Step,unsigned int);
-  itkSetMacro(InitialValue,unsigned int);
-  itkGetMacro(InitialValue,unsigned int);
-  itkSetMacro(NumberOfIterations,unsigned int);
+  itkSetMacro(Step, unsigned int);
+  itkGetMacro(Step, unsigned int);
+  itkSetMacro(InitialValue, unsigned int);
+  itkGetMacro(InitialValue, unsigned int);
+  itkSetMacro(NumberOfIterations, unsigned int);
   itkGetMacro(NumberOfIterations, unsigned int);
 
   /**
@@ -125,7 +127,7 @@ protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
-  virtual ~GeodesicMorphologyIterativeDecompositionImageFilter() {};
+  virtual ~GeodesicMorphologyIterativeDecompositionImageFilter() {}
   /** Generate output information */
   virtual void GenerateOutputInformation();
   /** Generate input requested region */
@@ -144,7 +146,7 @@ private:
   unsigned int m_NumberOfIterations;
 
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGeodesicMorphologyIterativeDecompositionImageFilter.txx"

@@ -27,8 +27,8 @@ template <InverseOrForwardTransformationEnum transform>
 TransMercatorMapProjection<transform>
 ::TransMercatorMapProjection()
 {
-  ossimEllipsoid ellipsoid= *(ossimEllipsoidFactory::instance()->create("WE"));
-  ossimGpt origin(49.83,6.16); //TODO check where this is coming from
+  ossimEllipsoid ellipsoid = *(ossimEllipsoidFactory::instance()->create("WE"));
+  ossimGpt origin(49.83, 6.16); //TODO check where this is coming from
   this->m_MapProjection->setEllipsoid(ellipsoid);
   this->m_MapProjection->setOrigin(origin);
 }
@@ -39,7 +39,6 @@ TransMercatorMapProjection<transform>
 ::~TransMercatorMapProjection()
 {
 }
-
 
 ///Set the false Easting
 template <InverseOrForwardTransformationEnum transform>
@@ -68,7 +67,7 @@ void TransMercatorMapProjection<transform>
 ///Set the parameters
 template <InverseOrForwardTransformationEnum transform>
 void TransMercatorMapProjection<transform>
-::SetParameters(double falseEasting,double falseNorthing,double scaleFactor)
+::SetParameters(double falseEasting, double falseNorthing, double scaleFactor)
 {
   this->m_MapProjection->setParameters(falseEasting, falseNorthing, scaleFactor);
 }
@@ -87,7 +86,7 @@ double TransMercatorMapProjection<transform>
 ::GetScaleFactor() const
 {
   double scaleFactor;
-  scaleFactor=this->m_MapProjection->getScaleFactor();
+  scaleFactor = this->m_MapProjection->getScaleFactor();
 
   return scaleFactor;
 }
@@ -97,7 +96,7 @@ template <InverseOrForwardTransformationEnum transform>
 double TransMercatorMapProjection<transform>
 ::GetFalseNorthing() const
 {
-  double falseNorthing=this->m_MapProjection->getFalseNorthing();
+  double falseNorthing = this->m_MapProjection->getFalseNorthing();
 
   return falseNorthing;
 }
@@ -107,7 +106,7 @@ template <InverseOrForwardTransformationEnum transform>
 double TransMercatorMapProjection<transform>
 ::GetFalseEasting() const
 {
-  double falseEasting=this->m_MapProjection->getFalseEasting();
+  double falseEasting = this->m_MapProjection->getFalseEasting();
 
   return falseEasting;
 }

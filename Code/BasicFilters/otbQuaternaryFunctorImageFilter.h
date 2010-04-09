@@ -39,17 +39,17 @@ namespace otb
  * \ingroup IntensityImageFilters Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-class TInputImage3, class TInputImage4,
-class TOutputImage, class TFunction    >
+          class TInputImage3, class TInputImage4,
+          class TOutputImage, class TFunction>
 class ITK_EXPORT QuaternaryFunctorImageFilter :
-      public itk::InPlaceImageFilter<TInputImage1,TOutputImage>
+  public itk::InPlaceImageFilter<TInputImage1, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef QuaternaryFunctorImageFilter  Self;
-  typedef itk::InPlaceImageFilter<TInputImage1,TOutputImage>   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef QuaternaryFunctorImageFilter                        Self;
+  typedef itk::InPlaceImageFilter<TInputImage1, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,39 +58,39 @@ public:
   itkTypeMacro(QuaternaryFunctorImageFilter, InPlaceImageFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
-  typedef TInputImage1 Input1ImageType;
+  typedef TFunction                              FunctorType;
+  typedef TInputImage1                           Input1ImageType;
   typedef typename Input1ImageType::ConstPointer Input1ImagePointer;
-  typedef typename Input1ImageType::RegionType Input1ImageRegionType;
-  typedef typename Input1ImageType::PixelType Input1ImagePixelType;
-  typedef TInputImage2 Input2ImageType;
+  typedef typename Input1ImageType::RegionType   Input1ImageRegionType;
+  typedef typename Input1ImageType::PixelType    Input1ImagePixelType;
+  typedef TInputImage2                           Input2ImageType;
   typedef typename Input2ImageType::ConstPointer Input2ImagePointer;
-  typedef typename Input2ImageType::RegionType Input2ImageRegionType;
-  typedef typename Input2ImageType::PixelType Input2ImagePixelType;
-  typedef TInputImage3 Input3ImageType;
+  typedef typename Input2ImageType::RegionType   Input2ImageRegionType;
+  typedef typename Input2ImageType::PixelType    Input2ImagePixelType;
+  typedef TInputImage3                           Input3ImageType;
   typedef typename Input3ImageType::ConstPointer Input3ImagePointer;
-  typedef typename Input3ImageType::RegionType Input3ImageRegionType;
-  typedef typename Input3ImageType::PixelType Input3ImagePixelType;
-  typedef TInputImage4 Input4ImageType;
+  typedef typename Input3ImageType::RegionType   Input3ImageRegionType;
+  typedef typename Input3ImageType::PixelType    Input3ImagePixelType;
+  typedef TInputImage4                           Input4ImageType;
   typedef typename Input4ImageType::ConstPointer Input4ImagePointer;
-  typedef typename Input4ImageType::RegionType Input4ImageRegionType;
-  typedef typename Input4ImageType::PixelType Input4ImagePixelType;
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename Input4ImageType::RegionType   Input4ImageRegionType;
+  typedef typename Input4ImageType::PixelType    Input4ImagePixelType;
+  typedef TOutputImage                           OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
 
   /** Connect one of the operands for pixel-wise addition. */
-  void SetInput1( const TInputImage1 *image1);
+  void SetInput1(const TInputImage1 *image1);
 
   /** Connect one of the operands for pixel-wise addition. */
-  void SetInput2( const TInputImage2 *image2);
+  void SetInput2(const TInputImage2 *image2);
 
   /** Connect one of the operands for pixel-wise addition. */
-  void SetInput3( const TInputImage3 *image3);
+  void SetInput3(const TInputImage3 *image3);
 
   /** Connect one of the operands for pixel-wise addition. */
-  void SetInput4( const TInputImage4 *image4);
+  void SetInput4(const TInputImage4 *image4);
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -99,7 +99,7 @@ public:
   FunctorType& GetFunctor(void)
   {
     return m_Functor;
-  };
+  }
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -108,7 +108,7 @@ public:
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -118,11 +118,11 @@ public:
    * appropriate). */
   void SetFunctor(const FunctorType& functor)
   {
-    if (! (functor == m_Functor) )
-    {
+    if (!(functor == m_Functor))
+      {
       m_Functor = functor;
       this->Modified();
-    }
+      }
   }
 
   /** Image dimensions */
@@ -139,7 +139,7 @@ public:
 
 protected:
   QuaternaryFunctorImageFilter();
-  virtual ~QuaternaryFunctorImageFilter() {};
+  virtual ~QuaternaryFunctorImageFilter() {}
 
   /** Validate the presence of all three inputs. If one or more inputs
    * are missing, throw an exception. */
@@ -156,11 +156,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  QuaternaryFunctorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  QuaternaryFunctorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
 };

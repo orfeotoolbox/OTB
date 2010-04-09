@@ -25,7 +25,6 @@
 namespace otb
 {
 
-
 template<class TDEMImage, class TMapProjection>
 DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::DEMToOrthoImageGenerator()
@@ -39,14 +38,14 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::BeforeThreadedGenerateData()
 {
   if (!m_MapProjection)
-  {
-    itkExceptionMacro( <<
-                       "Please set map projection!" );
-  }
-  DEMImagePointerType  DEMImage = this->GetOutput();
+    {
+    itkExceptionMacro(<<
+                      "Please set map projection!");
+    }
+  DEMImagePointerType DEMImage = this->GetOutput();
 
   // allocate the output buffer
-  DEMImage->SetBufferedRegion( DEMImage->GetRequestedRegion() );
+  DEMImage->SetBufferedRegion(DEMImage->GetRequestedRegion());
   DEMImage->Allocate();
   DEMImage->FillBuffer(0);
 }
@@ -59,8 +58,7 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
                        int threadId)
 {
 
-
-  DEMImagePointerType  DEMImage = this->GetOutput();
+  DEMImagePointerType DEMImage = this->GetOutput();
 
   // Create an iterator that will walk the output region
   ImageIteratorType outIt = ImageIteratorType(DEMImage, outputRegionForThread);
@@ -71,11 +69,11 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
   // Walk the output image, evaluating the height at each pixel
   IndexType currentindex;
   PointType cartoPoint;
-  double height;
+  double    height;
   PointType geoPoint;
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
-  {
-    currentindex=outIt.GetIndex();
+    {
+    currentindex = outIt.GetIndex();
 
     DEMImage->TransformIndexToPhysicalPoint(currentindex, cartoPoint);
 
@@ -85,22 +83,22 @@ DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 
 //     otbMsgDevMacro(<< "GeoPoint: (" << geoPoint[0] << "," << geoPoint[1] << ")");
 
-    height = this-> m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude calculation
+    height = this->m_DEMHandler->GetHeightAboveMSL(geoPoint);  // Altitude calculation
 //     otbMsgDevMacro(<< "height: " << height);
     // MNT sets a default value (-32768) at point where it doesn't have altitude information.
     // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
     if (!ossim::isnan(height))
-    {
+      {
       // Fill the image
-      DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );
-    }
+      DEMImage->SetPixel(currentindex, static_cast<PixelType>(height));
+      }
     else
-    {
+      {
       // Back to the MNT default value
       DEMImage->SetPixel(currentindex, this->m_DefaultUnknownValue);
-    }
+      }
     progress.CompletedPixel();
-  }
+    }
 }
 
 template <class TDEMImage, class TMapProjection>
@@ -108,8 +106,8 @@ void
 DEMToOrthoImageGenerator<TDEMImage, TMapProjection>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "Map projection:" <<  m_MapProjection-> GetWkt() << std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Map projection:" <<  m_MapProjection->GetWkt() << std::endl;
 }
 
 } // namespace otb

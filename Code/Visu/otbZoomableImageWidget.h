@@ -31,24 +31,24 @@ namespace otb
  */
 template <class TPixel>
 class ZoomableImageWidget
-      : public ImageWidgetBase<TPixel>
+  : public ImageWidgetBase<TPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef ZoomableImageWidget Self;
-  typedef ImageWidgetBase<TPixel> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ZoomableImageWidget           Self;
+  typedef ImageWidgetBase<TPixel>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ZoomableImageWidget,ImageWidgetBase);
+  itkTypeMacro(ZoomableImageWidget, ImageWidgetBase);
 
   /** Superclass typedefs */
-  typedef typename Superclass::SizeType SizeType;
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::SizeType   SizeType;
+  typedef typename Superclass::IndexType  IndexType;
   typedef typename Superclass::RegionType RegionType;
 
   /** Unlarge OpenGlBuffer */
@@ -71,7 +71,7 @@ public:
    * \param index The upper left corner of the viewed region.
    */
   void SetZoomUpperLeftCorner(IndexType index);
-  itkGetMacro(ZoomUpperLeftCorner,IndexType);
+  itkGetMacro(ZoomUpperLeftCorner, IndexType);
 
 protected:
   /** Constructor. */
@@ -80,8 +80,8 @@ protected:
   virtual ~ZoomableImageWidget();
 
 private:
-  ZoomableImageWidget(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  ZoomableImageWidget(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   IndexType m_ZoomUpperLeftCorner;
 };

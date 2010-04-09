@@ -36,15 +36,16 @@ namespace otb
  * \ingroup IntensityImageFilters   Multithreaded
  */
 template <class TInputImage1, class TInputImage2,
-class TOutputImage, class TFunction    >
-class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
+          class TOutputImage, class TFunction>
+class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,
+                                                                                                    TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter  Self;
-  typedef itk::ImageToImageFilter<TInputImage1,TOutputImage>   Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter   Self;
+  typedef itk::ImageToImageFilter<TInputImage1, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -52,31 +53,30 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryFunctorNeighborhoodJoinHistogramImageFilter, ImageToImageFilter);
 
-
   /** Some convenient typedefs. */
-  typedef TFunction   FunctorType;
-  typedef TInputImage1 Input1ImageType;
+  typedef TFunction                              FunctorType;
+  typedef TInputImage1                           Input1ImageType;
   typedef typename Input1ImageType::Pointer      Input1ImagePointer;
   typedef typename Input1ImageType::ConstPointer Input1ImageConstPointer;
-  typedef typename Input1ImageType::RegionType Input1ImageRegionType;
-  typedef typename Input1ImageType::PixelType Input1ImagePixelType;
-  typedef TInputImage2 Input2ImageType;
+  typedef typename Input1ImageType::RegionType   Input1ImageRegionType;
+  typedef typename Input1ImageType::PixelType    Input1ImagePixelType;
+  typedef TInputImage2                           Input2ImageType;
   typedef typename Input2ImageType::Pointer      Input2ImagePointer;
   typedef typename Input2ImageType::ConstPointer Input2ImageConstPointer;
-  typedef typename Input2ImageType::RegionType Input2ImageRegionType;
-  typedef typename Input2ImageType::PixelType Input2ImagePixelType;
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
+  typedef typename Input2ImageType::RegionType   Input2ImageRegionType;
+  typedef typename Input2ImageType::PixelType    Input2ImagePixelType;
+  typedef TOutputImage                           OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
 
   typedef itk::ProcessObject ProcessObjectType;
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput1( const TInputImage1 * image1);
+  void SetInput1(const TInputImage1 * image1);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput2( const TInputImage2 * image2);
+  void SetInput2(const TInputImage2 * image2);
 
   /** Get the inputs */
   const TInputImage1 * GetInput1();
@@ -89,7 +89,7 @@ public:
   FunctorType& GetFunctor()
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -103,14 +103,13 @@ public:
     this->Modified();
   }
 
-
   typedef itk::ConstNeighborhoodIterator<TInputImage1>
   NeighborhoodIteratorType1;
   typedef itk::ConstNeighborhoodIterator<TInputImage2>
   NeighborhoodIteratorType2;
 
-  typedef typename NeighborhoodIteratorType1::RadiusType  RadiusType1;
-  typedef typename NeighborhoodIteratorType2::RadiusType  RadiusType2;
+  typedef typename NeighborhoodIteratorType1::RadiusType RadiusType1;
+  typedef typename NeighborhoodIteratorType2::RadiusType RadiusType2;
 
   typedef unsigned char RadiusSizeType;
 
@@ -125,32 +124,31 @@ public:
 
   /** Sets the histogram size. Note this function must be called before
     \c Initialize(). */
-  itkSetMacro( HistogramSize, HistogramSizeType );
+  itkSetMacro(HistogramSize, HistogramSizeType);
 
   /** Gets the histogram size. */
-  itkGetConstReferenceMacro( HistogramSize, HistogramSizeType );
+  itkGetConstReferenceMacro(HistogramSize, HistogramSizeType);
 
   /** Factor to increase the upper bound for the samples in the histogram.
       Default value is 0.001 */
-  itkSetMacro( UpperBoundIncreaseFactor, double );
-  itkGetMacro( UpperBoundIncreaseFactor, double );
+  itkSetMacro(UpperBoundIncreaseFactor, double);
+  itkGetMacro(UpperBoundIncreaseFactor, double);
 
   /** The padding value. */
-  itkSetMacro( PaddingValue, Input1ImagePixelType );
+  itkSetMacro(PaddingValue, Input1ImagePixelType);
 
   /** Returns the padding value. */
-  itkGetConstReferenceMacro( PaddingValue, Input1ImagePixelType );
+  itkGetConstReferenceMacro(PaddingValue, Input1ImagePixelType);
 
   /** Set whether the padding value should be used to determine which pixels
       should be ignored when calculating the similarity measure. Those pixels
       in the fixed image which have the padding value will be ignored. */
-  itkSetMacro( UsePaddingValue, bool );
-  itkGetMacro( UsePaddingValue, bool );
-
+  itkSetMacro(UsePaddingValue, bool);
+  itkGetMacro(UsePaddingValue, bool);
 
 protected:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter();
-  virtual ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() {};
+  virtual ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() {}
 
   /** BinaryFunctorNeighborhoodJoinHistogramImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -163,7 +161,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    int threadId );
+                                    int threadId);
 
   /**
    * Pad the inputs requested regions by radius
@@ -184,8 +182,8 @@ protected:
   double m_UpperBoundIncreaseFactor;
 
 private:
-  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
 

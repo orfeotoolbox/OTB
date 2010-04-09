@@ -25,13 +25,13 @@
 #include "itkMatrix.h"
 #include "itkVector.h"
 
-namespace otb 
+namespace otb
 {
 namespace Functor
 {
 /** \class StatisticsAttributesLabelObjectFunctor
 *   \brief Functor to compute statistics attributes of one LabelObject.
-* 
+*
 *   \sa StatisticsAttributesLabelMapFilter
 */
 template <class TLabelObject, class TFeatureImage>
@@ -39,21 +39,21 @@ class StatisticsAttributesLabelObjectFunctor
 {
 public:
   // Self typedef
-  typedef StatisticsAttributesLabelObjectFunctor      Self;
+  typedef StatisticsAttributesLabelObjectFunctor Self;
 
   // Matrix typedef
   typedef typename itk::Matrix<double,
                                TFeatureImage::ImageDimension,
-             TFeatureImage::ImageDimension> MatrixType;
+                               TFeatureImage::ImageDimension> MatrixType;
   // Vector typedef
   typedef typename itk::Vector<double,
-      TFeatureImage::ImageDimension>        VectorType;
+                               TFeatureImage::ImageDimension>        VectorType;
 
   /// Typedef of the feature image type
-  typedef typename TFeatureImage::PixelType            FeatureType;
+  typedef typename TFeatureImage::PixelType FeatureType;
 
   /// Typedef of the label object
-  typedef TLabelObject                                 LabelObjectType;
+  typedef TLabelObject LabelObjectType;
 
   /** Constructor */
   StatisticsAttributesLabelObjectFunctor();
@@ -62,19 +62,19 @@ public:
   virtual ~StatisticsAttributesLabelObjectFunctor();
 
   /** The comparators */
-  bool operator!=(const Self& self);
-  bool operator==(const Self& self);
+  bool operator !=(const Self& self);
+  bool operator ==(const Self& self);
 
   /** This is the functor implementation
-   *  Calling the functor on a label object 
+   *  Calling the functor on a label object
    *  will update its statistics attributes */
-  inline void operator()(LabelObjectType * lo) const;
+  inline void operator ()(LabelObjectType * lo) const;
 
   /** Set the name of the feature */
-  void SetFeatureName(const std::string & name);
+  void SetFeatureName(const std::string& name);
 
   /** Get the feature name */
-  const std::string & GetFeatureName() const;
+  const std::string& GetFeatureName() const;
 
   /** Set the feature image */
   void SetFeatureImage(const TFeatureImage * img);
@@ -88,7 +88,7 @@ public:
   /** Get the reduced attribute set */
   bool GetReducedAttributeSet() const;
 
-private:  
+private:
   // The name of the feature
   std::string m_FeatureName;
 
@@ -99,7 +99,6 @@ private:
   bool m_ReducedAttributeSet;
 };
 } // End namespace Functor
-
 
 /** \class StatisticsAttributesLabelMapFilter
  * \brief This class is a fork of itk::StasticsLabelMapFilter to support AttributesMapLabelObject.
@@ -121,37 +120,37 @@ private:
 template<class TImage, class TFeatureImage>
 class ITK_EXPORT StatisticsAttributesLabelMapFilter :
   public LabelMapFeaturesFunctorImageFilter
-  < TImage,
-    typename Functor::StatisticsAttributesLabelObjectFunctor
-    < typename TImage::LabelObjectType, TFeatureImage > >
+  <TImage,
+   typename Functor::StatisticsAttributesLabelObjectFunctor
+   <typename TImage::LabelObjectType, TFeatureImage> >
 {
 public:
   /** Some convenient typedefs. */
-  typedef TImage                                  ImageType;
-  typedef typename ImageType::LabelObjectType     LabelObjectType;
-  typedef TFeatureImage                           FeatureImageType;
-    
+  typedef TImage                              ImageType;
+  typedef typename ImageType::LabelObjectType LabelObjectType;
+  typedef TFeatureImage                       FeatureImageType;
+
   /** Functor typedef */
   typedef Functor::StatisticsAttributesLabelObjectFunctor
-  <LabelObjectType,FeatureImageType>              FunctorType;
+  <LabelObjectType, FeatureImageType>              FunctorType;
 
   /** Standard class typedefs. */
-  typedef StatisticsAttributesLabelMapFilter      Self;
+  typedef StatisticsAttributesLabelMapFilter Self;
   typedef LabelMapFeaturesFunctorImageFilter
-  <ImageType,FunctorType>                         Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  <ImageType, FunctorType>                         Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StatisticsAttributesLabelMapFilter,LabelMapFeaturesFunctorImageFilter);
+  itkTypeMacro(StatisticsAttributesLabelMapFilter, LabelMapFeaturesFunctorImageFilter);
 
-   /** Set the feature image */
+  /** Set the feature image */
   void SetFeatureImage(const TFeatureImage *input);
 
   /** Get the feature image */
@@ -170,17 +169,17 @@ public:
   const TFeatureImage * GetInput2() const;
 
   /** Set the name of the feature */
-  void SetFeatureName(const std::string & name);
+  void SetFeatureName(const std::string& name);
 
   /** Get the feature name */
-  const std::string & GetFeatureName() const;
+  const std::string& GetFeatureName() const;
 
   /** Set the reduced attribute set */
   void SetReducedAttributeSet(bool flag);
 
   /** Get the reduced attribute set */
   bool GetReducedAttributeSet() const;
-  
+
   itkBooleanMacro(ReducedAttributeSet);
 
 protected:
@@ -197,16 +196,14 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  StatisticsAttributesLabelMapFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 }; // end of class
 
 } // end namespace otb
-  
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStatisticsAttributesLabelMapFilter.txx"
 #endif
 
 #endif
-
-

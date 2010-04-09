@@ -72,123 +72,120 @@ namespace otb
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT GenericRoadExtractionFilter
-      : public ImageToPathListFilter<TInputImage,TOutputPath>
+  : public ImageToPathListFilter<TInputImage, TOutputPath>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef GenericRoadExtractionFilter                                Self;
-  typedef ImageToPathListFilter<TInputImage,TOutputPath>      Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef GenericRoadExtractionFilter                     Self;
+  typedef ImageToPathListFilter<TInputImage, TOutputPath> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(GenericRoadExtractionFilter,ImageToPathListFilter);
+  itkTypeMacro(GenericRoadExtractionFilter, ImageToPathListFilter);
   /** Template parameters typedefs */
-  typedef typename Superclass::InputImageType                         InputImageType;
-  typedef typename Superclass::OutputPathType                         OutputPathType;
-  typedef typename Superclass::OutputPathListType                     OutputPathListType;
-  typedef typename InputImageType::PixelType         InputPixelType;
-  typedef double                                                      InternalPixelType;
+  typedef typename Superclass::InputImageType     InputImageType;
+  typedef typename Superclass::OutputPathType     OutputPathType;
+  typedef typename Superclass::OutputPathListType OutputPathListType;
+  typedef typename InputImageType::PixelType      InputPixelType;
+  typedef double                                  InternalPixelType;
 
-  typedef otb::VectorImage<InternalPixelType,InputImageType::ImageDimension>  VectorImageType;
-  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        ModulusType;
-  typedef otb::Image<InternalPixelType,InputImageType::ImageDimension>        DirectionType;
+  typedef otb::VectorImage<InternalPixelType, InputImageType::ImageDimension> VectorImageType;
+  typedef otb::Image<InternalPixelType, InputImageType::ImageDimension>       ModulusType;
+  typedef otb::Image<InternalPixelType, InputImageType::ImageDimension>       DirectionType;
 
-  typedef itk::CovariantVector<InternalPixelType,InputImageType::ImageDimension>
+  typedef itk::CovariantVector<InternalPixelType, InputImageType::ImageDimension>
   VectorPixelType;
-  typedef otb::Image<VectorPixelType,InputImageType::ImageDimension>  CovariantVectorImageType;
-
+  typedef otb::Image<VectorPixelType, InputImageType::ImageDimension> CovariantVectorImageType;
 
   typedef itk::SqrtImageFilter<
-  InputImageType,
-  InputImageType>                      SquareRootImageFilterType;
+    InputImageType,
+    InputImageType>                      SquareRootImageFilterType;
 
   typedef itk::GradientRecursiveGaussianImageFilter<
-  InputImageType,
-  CovariantVectorImageType>               GradientFilterType;
+    InputImageType,
+    CovariantVectorImageType>               GradientFilterType;
 
   typedef NeighborhoodScalarProductFilter<
-  CovariantVectorImageType,
-  ModulusType,
-  DirectionType>                          NeighborhoodScalarProductFilterType;
+    CovariantVectorImageType,
+    ModulusType,
+    DirectionType>                          NeighborhoodScalarProductFilterType;
 
   typedef RemoveIsolatedByDirectionFilter<
-  ModulusType,
-  DirectionType,
-  ModulusType >                           RemoveIsolatedByDirectionFilterType;
+    ModulusType,
+    DirectionType,
+    ModulusType>                           RemoveIsolatedByDirectionFilterType;
 
   typedef RemoveWrongDirectionFilter<
-  ModulusType,
-  DirectionType,
-  ModulusType>                            RemoveWrongDirectionFilterType;
+    ModulusType,
+    DirectionType,
+    ModulusType>                            RemoveWrongDirectionFilterType;
 
   typedef NonMaxRemovalByDirectionFilter<
-  ModulusType,
-  DirectionType,
-  ModulusType >                           NonMaxRemovalByDirectionFilterType;
+    ModulusType,
+    DirectionType,
+    ModulusType>                           NonMaxRemovalByDirectionFilterType;
 
   typedef VectorizationPathListFilter<
-  ModulusType,
-  DirectionType,
-  OutputPathType >                        VectorizationPathListFilterType;
+    ModulusType,
+    DirectionType,
+    OutputPathType>                        VectorizationPathListFilterType;
 
-  typedef SimplifyPathListFilter<OutputPathType>              SimplifyPathListFilterType;
-  typedef BreakAngularPathListFilter<OutputPathType>          BreakAngularPathListFilterType;
-  typedef RemoveTortuousPathListFilter<OutputPathType>        RemoveTortuousPathListFilterType;
-  typedef LinkPathListFilter<OutputPathType>                  LinkPathListFilterType;
-  typedef LikelihoodPathListFilter<OutputPathType, ModulusType>  LikelihoodPathListFilterType;
+  typedef SimplifyPathListFilter<OutputPathType>                SimplifyPathListFilterType;
+  typedef BreakAngularPathListFilter<OutputPathType>            BreakAngularPathListFilterType;
+  typedef RemoveTortuousPathListFilter<OutputPathType>          RemoveTortuousPathListFilterType;
+  typedef LinkPathListFilter<OutputPathType>                    LinkPathListFilterType;
+  typedef LikelihoodPathListFilter<OutputPathType, ModulusType> LikelihoodPathListFilterType;
 
   /** Template parameters typedefs for internals filters */
-  typedef typename GradientFilterType::RealType SigmaType;
+  typedef typename GradientFilterType::RealType                    SigmaType;
   typedef typename VectorizationPathListFilterType::InputPixelType AmplitudeThresholdType;
 //     typedef typename SimplifyPathListFilterType::ToleranceType ToleranceType;
-  typedef double ToleranceType;
+  typedef double                                                ToleranceType;
   typedef typename BreakAngularPathListFilterType::MaxAngleType MaxAngleType;
 //     typedef typename RemoveTortuousPathListFilterType::MeanDistanceThresholdType MeanDistanceThresholdType;
-  typedef double MeanDistanceThresholdType;
+  typedef double                                    MeanDistanceThresholdType;
   typedef typename LinkPathListFilterType::RealType LinkRealType;
 
-
   /** Get/Set the alpha value */
-  itkGetConstReferenceMacro(Alpha,double);
-  itkSetMacro(Alpha,double);
+  itkGetConstReferenceMacro(Alpha, double);
+  itkSetMacro(Alpha, double);
 
   /** Get/Set the amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-  itkSetMacro(AmplitudeThreshold,AmplitudeThresholdType);
-  itkGetMacro(AmplitudeThreshold,AmplitudeThresholdType);
+  itkSetMacro(AmplitudeThreshold, AmplitudeThresholdType);
+  itkGetMacro(AmplitudeThreshold, AmplitudeThresholdType);
 
   /** Get/Set  the tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathListFilter)*/
-  itkGetMacro(Tolerance,ToleranceType);
-  itkSetMacro(Tolerance,ToleranceType);
+  itkGetMacro(Tolerance, ToleranceType);
+  itkSetMacro(Tolerance, ToleranceType);
 
   /** Get/Set  the resolution */
-  itkGetMacro(Resolution,double);
-  itkSetMacro(Resolution,double);
+  itkGetMacro(Resolution, double);
+  itkSetMacro(Resolution, double);
 
   /** Set/Get the max angle (use bye the BreakAngularPathListFilter)*/
-  itkSetMacro(MaxAngle,MaxAngleType);
-  itkGetConstMacro(MaxAngle,MaxAngleType);
+  itkSetMacro(MaxAngle, MaxAngleType);
+  itkGetConstMacro(MaxAngle, MaxAngleType);
 
   /** Get/Set the tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathListFilter)*/
-  itkGetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkSetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkGetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
-  itkSetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+  itkGetMacro(FirstMeanDistanceThreshold, MeanDistanceThresholdType);
+  itkSetMacro(FirstMeanDistanceThreshold, MeanDistanceThresholdType);
+  itkGetMacro(SecondMeanDistanceThreshold, MeanDistanceThresholdType);
+  itkSetMacro(SecondMeanDistanceThreshold, MeanDistanceThresholdType);
 
   /** Get/Set the angular threshold (use by LinkPathFilter)*/
-  itkSetMacro(AngularThreshold,LinkRealType);
-  itkGetMacro(AngularThreshold,LinkRealType);
+  itkSetMacro(AngularThreshold, LinkRealType);
+  itkGetMacro(AngularThreshold, LinkRealType);
   /** Get/Set the distance threshold (use by LinkPathFilter)*/
-  itkSetMacro(DistanceThreshold,LinkRealType);
-  itkGetMacro(DistanceThreshold,LinkRealType);
-
+  itkSetMacro(DistanceThreshold, LinkRealType);
+  itkGetMacro(DistanceThreshold, LinkRealType);
 
 protected:
   /** Constructor */
   GenericRoadExtractionFilter();
   /** Destructor */
-  ~GenericRoadExtractionFilter() {};
+  ~GenericRoadExtractionFilter() {}
 
   /** Prepare main computation method */
   void BeforeGenerateData(void);
@@ -198,27 +195,25 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-private :
+private:
 
-  GenericRoadExtractionFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  GenericRoadExtractionFilter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
-
-  typename SquareRootImageFilterType::Pointer                 m_SquareRootImageFilter;
-  typename GradientFilterType::Pointer                        m_GradientFilter;
-  typename NeighborhoodScalarProductFilterType::Pointer       m_NeighborhoodScalarProductFilter;
-  typename RemoveIsolatedByDirectionFilterType::Pointer       m_RemoveIsolatedByDirectionFilter;
-  typename RemoveWrongDirectionFilterType::Pointer            m_RemoveWrongDirectionFilter;
-  typename NonMaxRemovalByDirectionFilterType::Pointer        m_NonMaxRemovalByDirectionFilter;
-  typename VectorizationPathListFilterType::Pointer           m_VectorizationPathListFilter;
-  typename SimplifyPathListFilterType::Pointer                m_FirstSimplifyPathListFilter;
-  typename SimplifyPathListFilterType::Pointer                m_SecondSimplifyPathListFilter;
-  typename BreakAngularPathListFilterType::Pointer            m_BreakAngularPathListFilter;
-  typename RemoveTortuousPathListFilterType::Pointer          m_FirstRemoveTortuousPathListFilter;
-  typename RemoveTortuousPathListFilterType::Pointer          m_SecondRemoveTortuousPathListFilter;
-  typename LinkPathListFilterType::Pointer                    m_LinkPathListFilter;
-  typename LikelihoodPathListFilterType::Pointer     m_LikelihoodPathListFilter;
-
+  typename SquareRootImageFilterType::Pointer m_SquareRootImageFilter;
+  typename GradientFilterType::Pointer m_GradientFilter;
+  typename NeighborhoodScalarProductFilterType::Pointer m_NeighborhoodScalarProductFilter;
+  typename RemoveIsolatedByDirectionFilterType::Pointer m_RemoveIsolatedByDirectionFilter;
+  typename RemoveWrongDirectionFilterType::Pointer m_RemoveWrongDirectionFilter;
+  typename NonMaxRemovalByDirectionFilterType::Pointer m_NonMaxRemovalByDirectionFilter;
+  typename VectorizationPathListFilterType::Pointer m_VectorizationPathListFilter;
+  typename SimplifyPathListFilterType::Pointer m_FirstSimplifyPathListFilter;
+  typename SimplifyPathListFilterType::Pointer m_SecondSimplifyPathListFilter;
+  typename BreakAngularPathListFilterType::Pointer m_BreakAngularPathListFilter;
+  typename RemoveTortuousPathListFilterType::Pointer m_FirstRemoveTortuousPathListFilter;
+  typename RemoveTortuousPathListFilterType::Pointer m_SecondRemoveTortuousPathListFilter;
+  typename LinkPathListFilterType::Pointer m_LinkPathListFilter;
+  typename LikelihoodPathListFilterType::Pointer m_LikelihoodPathListFilter;
 
   /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
   AmplitudeThresholdType m_AmplitudeThreshold;
@@ -245,7 +240,7 @@ private :
 
 };
 
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGenericRoadExtractionFilter.txx"

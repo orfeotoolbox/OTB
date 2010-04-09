@@ -45,36 +45,35 @@ namespace otb {
  * \sa GISTableSource
  * \ingroup Common, GeospatialAnalysis
  */
-template<class TVectorData , class TGISTable>
+template<class TVectorData, class TGISTable>
 class ITK_EXPORT VectorDataToGISTableFilter :
-    public GISTableSource< TGISTable >
+  public GISTableSource<TGISTable>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorDataToGISTableFilter Self;
-  typedef GISTableSource< TGISTable >
+  typedef GISTableSource<TGISTable>
   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TVectorData InputVectorDataType;
-  typedef TGISTable OutputGISTableType;
-  typedef typename InputVectorDataType::Pointer         InputVectorDataPointer;
-  typedef typename InputVectorDataType::ConstPointer    InputVectorDataConstPointer;
-  typedef typename OutputGISTableType::Pointer        OutputGISTablePointer;
-  typedef typename OutputGISTableType::ConstPointer   OutputGISTableConstPointer;
+  typedef TVectorData                                InputVectorDataType;
+  typedef TGISTable                                  OutputGISTableType;
+  typedef typename InputVectorDataType::Pointer      InputVectorDataPointer;
+  typedef typename InputVectorDataType::ConstPointer InputVectorDataConstPointer;
+  typedef typename OutputGISTableType::Pointer       OutputGISTablePointer;
+  typedef typename OutputGISTableType::ConstPointer  OutputGISTableConstPointer;
 
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
-  typedef typename InputVectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
-
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType          ChildrenListType;
+  typedef typename InputVectorDataType::DataNodeType               DataNodeType;
+  typedef typename DataNodeType::Pointer                           DataNodePointerType;
 
   typedef typename OutputGISTableType::ConnectionType InputGISConnectionType;
-  typedef typename InputGISConnectionType::Pointer InputGISConnectionPointerType;
+  typedef typename InputGISConnectionType::Pointer    InputGISConnectionPointerType;
 
-  typedef OGRVectorDataIO<InputVectorDataType> OGRVectorDataIOType;
+  typedef OGRVectorDataIO<InputVectorDataType>  OGRVectorDataIOType;
   typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
 
   /** Standard New method. */
@@ -99,14 +98,14 @@ public:
   //void setConnection
 
   /** Set/Get the VectorData input of this process object.  */
-  virtual void SetInput( const InputVectorDataType *input);
-  virtual void SetInput( unsigned int idx, const InputVectorDataType *input);
+  virtual void SetInput(const InputVectorDataType *input);
+  virtual void SetInput(unsigned int idx, const InputVectorDataType *input);
   const InputVectorDataType * GetInput(void);
   const InputVectorDataType * GetInput(unsigned int idx);
 
 protected:
   VectorDataToGISTableFilter();
-  virtual ~VectorDataToGISTableFilter() {};
+  virtual ~VectorDataToGISTableFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** VectorDataToGISTAbleFilter needs the entire input be
@@ -114,17 +113,14 @@ protected:
    * GenerateInputRequestedRegion(). */
   void GenerateInputRequestedRegion();
 
-
   /** Single-threaded version of GenerateData.  */
   void GenerateData();
 
-
 private:
-  VectorDataToGISTableFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataToGISTableFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-
-   /** Remove table before insertion if true  (Not use for now, need access to specific options of OGR connection*/
+  /** Remove table before insertion if true  (Not use for now, need access to specific options of OGR connection*/
   bool m_DropExistingGISTable;
 
   /** Connection parameters to the db*/
@@ -140,5 +136,3 @@ private:
 #endif
 
 #endif
-
-

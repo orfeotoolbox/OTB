@@ -46,28 +46,28 @@ namespace otb
  *
  */
 
-template< class TSample, class TLabel >
+template<class TSample, class TLabel>
 class ITK_EXPORT SVMClassifier :
-      public itk::Statistics::SampleClassifier< TSample >
+  public itk::Statistics::SampleClassifier<TSample>
 {
 public:
   /** Standard class typedef*/
-  typedef SVMClassifier Self;
-  typedef itk::Statistics::SampleClassifier< TSample > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SVMClassifier                              Self;
+  typedef itk::Statistics::SampleClassifier<TSample> Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
 
   /** Standard macros */
   itkTypeMacro(SVMClassifier, itk::Statistics::SampleClassifier);
   itkNewMacro(Self);
 
   /** Output type for GetClassSample method */
-  typedef itk::Statistics::MembershipSample< TSample > OutputType;
+  typedef itk::Statistics::MembershipSample<TSample> OutputType;
 
   /** typedefs from TSample object */
-  typedef typename TSample::MeasurementType MeasurementType;
+  typedef typename TSample::MeasurementType       MeasurementType;
   typedef typename TSample::MeasurementVectorType MeasurementVectorType;
-   
+
   /** typedefs from Superclass */
   typedef typename Superclass::MembershipFunctionPointerVector
   MembershipFunctionPointerVector;
@@ -80,11 +80,11 @@ public:
   void SetOutput(OutputType* output);
 
   /** Type definitions for the SVM Model. */
-  typedef SVMModel<MeasurementType,ClassLabelType> SVMModelType;
-  typedef typename SVMModelType::Pointer           SVMModelPointer;
+  typedef SVMModel<MeasurementType, ClassLabelType> SVMModelType;
+  typedef typename SVMModelType::Pointer            SVMModelPointer;
 
   /** Set the model */
-  itkSetObjectMacro(Model,SVMModelType);
+  itkSetObjectMacro(Model, SVMModelType);
 
   /** Get the number of classes. */
   itkGetObjectMacro(Model, SVMModelType);
@@ -108,14 +108,10 @@ private:
   SVMModelPointer m_Model;
 }; // end of class
 
-
 } // end of namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSVMClassifier.txx"
 #endif
 
 #endif
-
-

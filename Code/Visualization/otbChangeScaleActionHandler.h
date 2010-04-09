@@ -36,16 +36,16 @@ class ChangeScaleActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef ChangeScaleActionHandler Self;
-  typedef ImageWidgetActionHandler               Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef ChangeScaleActionHandler      Self;
+  typedef ImageWidgetActionHandler      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ChangeScaleActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(ChangeScaleActionHandler, ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
@@ -53,9 +53,8 @@ public:
   typedef typename ModelType::RegionType RegionType;
 
   /** View typedefs */
-  typedef TView                          ViewType;
-  typedef typename ViewType::Pointer     ViewPointerType;
-
+  typedef TView                      ViewType;
+  typedef typename ViewType::Pointer ViewPointerType;
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -64,28 +63,29 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive() )
+    if (m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive())
       {
-      if(widgetId == m_View->GetZoomWidget()->GetIdentifier()
-         && event == FL_MOUSEWHEEL)
+      if (widgetId == m_View->GetZoomWidget()->GetIdentifier()
+          && event == FL_MOUSEWHEEL)
         {
-        otbMsgDevMacro(<<"ChangeScaleActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+        otbMsgDevMacro(
+          << "ChangeScaleActionHandler::HandleWidgetEvent(): handling (" << widgetId << ", " << event << ")");
         // Get the mousewhell offset
         int dy = Fl::event_dy();
 
         // Compute new scale
-        double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio,-dy);
-        if(newScale>=1.0)
+        double newScale = m_View->GetZoomWidget()->GetIsotropicZoom() * vcl_pow(m_ScaleRatio, -dy);
+        if (newScale >= 1.0)
           {
           m_View->GetZoomWidget()->SetIsotropicZoom(newScale);
           RegionType region = m_Model->GetScaledExtractRegion();
 
           typename RegionType::IndexType index = region.GetIndex();
           typename RegionType::SizeType size = region.GetSize();
-          index[0]+=size[0]/2;
-          index[1]+=size[1]/2;
-          size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w()/m_View->GetZoomWidget()->GetIsotropicZoom());
-          size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h()/m_View->GetZoomWidget()->GetIsotropicZoom());
+          index[0] += size[0] / 2;
+          index[1] += size[1] / 2;
+          size[0] = static_cast<unsigned int>(m_View->GetZoomWidget()->w() / m_View->GetZoomWidget()->GetIsotropicZoom());
+          size[1] = static_cast<unsigned int>(m_View->GetZoomWidget()->h() / m_View->GetZoomWidget()->GetIsotropicZoom());
           region.SetSize(size);
           m_Model->SetScaledExtractRegion(region);
           m_Model->SetScaledExtractRegionCenter(index);
@@ -99,16 +99,16 @@ public:
   }
 
   /** Set/Get the pointer to the view */
-  itkSetObjectMacro(View,ViewType);
-  itkGetObjectMacro(View,ViewType);
+  itkSetObjectMacro(View, ViewType);
+  itkGetObjectMacro(View, ViewType);
 
   /** Set/Get the pointer to the model */
-  itkSetObjectMacro(Model,ModelType);
-  itkGetObjectMacro(Model,ModelType);
+  itkSetObjectMacro(Model, ModelType);
+  itkGetObjectMacro(Model, ModelType);
 
   /** Set/Get scale ratio */
-  itkSetMacro(ScaleRatio,double);
-  itkGetMacro(ScaleRatio,double);
+  itkSetMacro(ScaleRatio, double);
+  itkGetMacro(ScaleRatio, double);
 
 protected:
   /** Constructor */
@@ -120,12 +120,12 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   ChangeScaleActionHandler(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   // Pointer to the view
   ViewPointerType m_View;
@@ -139,5 +139,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

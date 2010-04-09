@@ -17,10 +17,8 @@
 =========================================================================*/
 #include "otbImageKeywordlist.h"
 
-
 namespace otb
 {
-
 
 ImageKeywordlist
 ::ImageKeywordlist()
@@ -28,10 +26,9 @@ ImageKeywordlist
 }
 
 ImageKeywordlist
-::ImageKeywordlist(const Self& p): m_Keywordlist(p.m_Keywordlist) //m_Keywordlist(Self.m_Keywordlist), m_Delimiter(Self.m_Delimiter)
+::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist) //m_Keywordlist(Self.m_Keywordlist), m_Delimiter(Self.m_Delimiter)
 {
 }
-
 
 ImageKeywordlist
 ::~ImageKeywordlist()
@@ -40,22 +37,22 @@ ImageKeywordlist
 
 void
 ImageKeywordlist::
-operator=(const Self& p)
+operator =(const Self& p)
 {
   m_Keywordlist = p.m_Keywordlist;
 }
 
-const ossimString & 
+const ossimString&
 ImageKeywordlist::
-GetMetadataByKey(const ossimString & key) const
+GetMetadataByKey(const ossimString& key) const
 {
   // Search for the key in the output map
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
   // If the key can not be found, throw an exception
-  if(it == m_Keywordlist.end())
+  if (it == m_Keywordlist.end())
     {
-    itkExceptionMacro(<<"Keywordlist has no output with key "<<key);
+    itkExceptionMacro(<< "Keywordlist has no output with key " << key);
     }
 
   // Then if everything is ok, return the ossinString
@@ -81,16 +78,15 @@ PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   ossimKeywordlist kwl;
   convertToOSSIMKeywordlist(kwl);
-  os << indent << " Ossim Keyword list:"<<std::endl;
+  os << indent << " Ossim Keyword list:" << std::endl;
   os << indent << kwl;
 }
 
 std::ostream &
-operator<<(std::ostream &os, const ImageKeywordlist &kwl)
+operator <<(std::ostream& os, const ImageKeywordlist& kwl)
 {
   kwl.Print(os);
   return os;
 }
-
 
 } //namespace otb

@@ -23,7 +23,6 @@
 #include <string>
 #include <vector>
 
-
 #include "kml/dom.h"
 #include "kml/base/file.h"
 
@@ -37,14 +36,14 @@ namespace otb
  */
 template <class TData>
 class ITK_EXPORT KMLVectorDataIO
-      : public VectorDataIOBase<TData>
+  : public VectorDataIOBase<TData>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef KMLVectorDataIO          Self;
-  typedef VectorDataIOBase<TData>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef KMLVectorDataIO               Self;
+  typedef VectorDataIOBase<TData>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -54,30 +53,29 @@ public:
   itkTypeMacro(KMLVectorDataIO, VectorDataIOBase);
 
   /** Byte order typedef */
-  typedef typename Superclass::ByteOrder  ByteOrder;
+  typedef typename Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
-  typedef TData VectorDataType;
-  typedef typename VectorDataType::DataTreeType  DataTreeType;
-  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename InternalTreeNodeType::ChildrenListType        ChildrenListType;
-  typedef typename DataTreeType::Pointer         DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
-  typedef typename VectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename DataNodeType::PointType       PointType;
-  typedef typename DataNodeType::LineType        LineType;
-  typedef typename LineType::VertexListType      VertexListType;
-  typedef typename VertexListType::ConstPointer  VertexListConstPointerType;
-  typedef typename LineType::Pointer             LinePointerType;
-  typedef typename LineType::VertexType          VertexType;
-  typedef typename DataNodeType::PolygonType     PolygonType;
-  typedef typename PolygonType::Pointer          PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType PolygonListType;
-  typedef typename PolygonListType::Pointer      PolygonListPointerType;
-  typedef typename VectorDataType::Pointer       VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
-
+  typedef TData                                           VectorDataType;
+  typedef typename VectorDataType::DataTreeType           DataTreeType;
+  typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
+  typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
+  typedef typename DataTreeType::Pointer                  DataTreePointerType;
+  typedef typename DataTreeType::ConstPointer             DataTreeConstPointerType;
+  typedef typename VectorDataType::DataNodeType           DataNodeType;
+  typedef typename DataNodeType::Pointer                  DataNodePointerType;
+  typedef typename DataNodeType::PointType                PointType;
+  typedef typename DataNodeType::LineType                 LineType;
+  typedef typename LineType::VertexListType               VertexListType;
+  typedef typename VertexListType::ConstPointer           VertexListConstPointerType;
+  typedef typename LineType::Pointer                      LinePointerType;
+  typedef typename LineType::VertexType                   VertexType;
+  typedef typename DataNodeType::PolygonType              PolygonType;
+  typedef typename PolygonType::Pointer                   PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType          PolygonListType;
+  typedef typename PolygonListType::Pointer               PolygonListPointerType;
+  typedef typename VectorDataType::Pointer                VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer           VectorDataConstPointerType;
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -117,7 +115,6 @@ protected:
 
   void WalkContainer(const kmldom::ContainerPtr& container, DataNodePointerType father);
 
-
   /** Conversion tools */
   DataNodePointerType ConvertGeometryToPointNode(const kmldom::GeometryPtr& geometry);
   DataNodePointerType ConvertGeometryToLineStringNode(const kmldom::GeometryPtr& geometry);
@@ -125,14 +122,13 @@ protected:
   DataNodePointerType ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry);
   /** end conversion tools */
 
-
   void ProcessNodeWrite(InternalTreeNodeType * source, kmldom::KmlFactory* factory,
                         kmldom::KmlPtr kml, kmldom::DocumentPtr currentDocument, kmldom::FolderPtr currentFolder,
                         kmldom::MultiGeometryPtr currentMultiGeometry);
 
 private:
-  KMLVectorDataIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  KMLVectorDataIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   DataTreePointerType m_Tree;
 

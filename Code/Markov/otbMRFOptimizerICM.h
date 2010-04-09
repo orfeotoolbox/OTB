@@ -45,21 +45,19 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(MRFOptimizerICM,MRFOptimizer);
-
+  itkTypeMacro(MRFOptimizerICM, MRFOptimizer);
 
   inline bool Compute(double deltaEnergy)
   {
     if (deltaEnergy < 0)
-    {
+      {
       return true;
-    }
+      }
     else
-    {
+      {
       return false;
-    }
+      }
   }
-
 
 protected:
   MRFOptimizerICM() {}
@@ -70,4 +68,3 @@ protected:
 }
 
 #endif
-

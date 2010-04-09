@@ -31,9 +31,9 @@ namespace otb
  *
  * The class TLandmarkData can be used to store any information on the matching.
  */
-template <class TPoint, class TPointData, class TLandmarkData=TPointData>
+template <class TPoint, class TPointData, class TLandmarkData = TPointData>
 class ITK_EXPORT Landmark
-      : public itk::DataObject
+  : public itk::DataObject
 {
 public:
   /// standard class typedefs
@@ -44,7 +44,7 @@ public:
 
   /// Standard macros
   itkNewMacro(Self);
-  itkTypeMacro(Landmark,DataObject);
+  itkTypeMacro(Landmark, DataObject);
 
   /// template typedefs
   typedef TPoint        PointType;
@@ -52,16 +52,16 @@ public:
   typedef TLandmarkData LandmarkDataType;
 
   /// Accessors
-  itkSetMacro(Point1,PointType);
-  itkGetConstReferenceMacro(Point1,PointType);
-  itkSetMacro(PointData1,PointDataType);
-  itkGetConstReferenceMacro(PointData1,PointDataType);
-  itkSetMacro(Point2,PointType);
-  itkGetConstReferenceMacro(Point2,PointType);
-  itkSetMacro(PointData2,PointDataType);
-  itkGetConstReferenceMacro(PointData2,PointDataType);
-  itkSetMacro(LandmarkData,LandmarkDataType);
-  itkGetConstReferenceMacro(LandmarkData,LandmarkDataType);
+  itkSetMacro(Point1, PointType);
+  itkGetConstReferenceMacro(Point1, PointType);
+  itkSetMacro(PointData1, PointDataType);
+  itkGetConstReferenceMacro(PointData1, PointDataType);
+  itkSetMacro(Point2, PointType);
+  itkGetConstReferenceMacro(Point2, PointType);
+  itkSetMacro(PointData2, PointDataType);
+  itkGetConstReferenceMacro(PointData2, PointDataType);
+  itkSetMacro(LandmarkData, LandmarkDataType);
+  itkGetConstReferenceMacro(LandmarkData, LandmarkDataType);
 
 protected:
   /// Constructor
@@ -71,22 +71,22 @@ protected:
   /// PrintSelf method
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"Landmark: P1= "<<m_Point1<<" P2= "<<m_Point2<<std::endl;
+    Superclass::PrintSelf(os, indent);
+    os << indent << "Landmark: P1= " << m_Point1 << " P2= " << m_Point2 << std::endl;
   }
 
 private:
-  Landmark(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Landmark(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /// First landmark point
-  PointType        m_Point1;
+  PointType m_Point1;
   /// Second landmark point
-  PointType        m_Point2;
+  PointType m_Point2;
   /// First landmark point data
-  PointDataType    m_PointData1;
+  PointDataType m_PointData1;
   /// Second landmark point data
-  PointDataType    m_PointData2;
+  PointDataType m_PointData2;
   /// Landmark data
   LandmarkDataType m_LandmarkData;
 };

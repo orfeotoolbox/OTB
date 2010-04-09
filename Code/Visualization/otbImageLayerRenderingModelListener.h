@@ -39,13 +39,13 @@ public:
 
 protected:
   /** Constructor */
-  ImageLayerRenderingModelListener() {};
+  ImageLayerRenderingModelListener() {}
   /** Destructor */
-  virtual ~ImageLayerRenderingModelListener() {};
+  virtual ~ImageLayerRenderingModelListener() {}
 
 private:
   ImageLayerRenderingModelListener(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

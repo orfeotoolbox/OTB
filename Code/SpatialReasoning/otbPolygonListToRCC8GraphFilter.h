@@ -24,7 +24,6 @@
 #include "otbRCC8InEdgeIterator.h"
 #include "otbRCC8OutEdgeIterator.h"
 
-
 namespace otb
 {
 /**
@@ -34,7 +33,7 @@ namespace otb
  */
 template <class TPolygonList, class TOutputGraph>
 class ITK_EXPORT PolygonListToRCC8GraphFilter
-      : public RCC8GraphSource<TOutputGraph>
+  : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standard class typedefs. */
@@ -45,7 +44,7 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolygonListToRCC8GraphFilter,RCC8GraphSource);
+  itkTypeMacro(PolygonListToRCC8GraphFilter, RCC8GraphSource);
 
   /** Input related typedef */
   typedef TPolygonList                           PolygonListType;
@@ -54,37 +53,37 @@ public:
   typedef typename PolygonType::Pointer          PolygonPointerType;
 
   /** Output related typedefs */
-  typedef TOutputGraph OutputGraphType;
-  typedef typename OutputGraphType::Pointer OutputGraphPointerType;
-  typedef typename OutputGraphType::VertexType VertexType;
-  typedef typename VertexType::Pointer VertexPointerType;
-  typedef typename VertexType::PathType PathType;
+  typedef TOutputGraph                                   OutputGraphType;
+  typedef typename OutputGraphType::Pointer              OutputGraphPointerType;
+  typedef typename OutputGraphType::VertexType           VertexType;
+  typedef typename VertexType::Pointer                   VertexPointerType;
+  typedef typename VertexType::PathType                  PathType;
   typedef typename OutputGraphType::VertexDescriptorType VertexDescriptorType;
 
   /** Knowledge enum typedef */
-  typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
-  typedef enum {NO_INFO,LEVEL_1,LEVEL_3,FULL} KnowledgeValueType;
-  typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType;
+  typedef typename OutputGraphType::RCC8ValueType      RCC8ValueType;
+  typedef enum {NO_INFO, LEVEL_1, LEVEL_3, FULL}       KnowledgeValueType;
+  typedef std::pair<KnowledgeValueType, RCC8ValueType> KnowledgeStateType;
 
   /** RCC8 calculator typedef */
   typedef PolygonToPolygonRCC8Calculator<PolygonType> RCC8CalculatorType;
 
   /** Graph iterators typedefs */
-  typedef RCC8VertexIterator<OutputGraphType>         VertexIteratorType;
-  typedef RCC8InEdgeIterator<OutputGraphType>         InEdgeIteratorType;
-  typedef RCC8OutEdgeIterator<OutputGraphType>        OutEdgeIteratorType;
+  typedef RCC8VertexIterator<OutputGraphType>  VertexIteratorType;
+  typedef RCC8InEdgeIterator<OutputGraphType>  InEdgeIteratorType;
+  typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
 
-  typedef std::pair<unsigned int, unsigned int>       EdgePairType;
-  typedef std::map<EdgePairType,RCC8ValueType>        EdgeMapType;
-  typedef std::vector<EdgeMapType>                    EdgeMapVectorType;
+  typedef std::pair<unsigned int, unsigned int> EdgePairType;
+  typedef std::map<EdgePairType, RCC8ValueType> EdgeMapType;
+  typedef std::vector<EdgeMapType>              EdgeMapVectorType;
 
-  typedef std::vector<unsigned int>                   SegmentationRangesType;
+  typedef std::vector<unsigned int> SegmentationRangesType;
 
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
-  itkSetMacro(Optimisation,bool);
+  itkSetMacro(Optimisation, bool);
   itkBooleanMacro(UseInverted);
-  itkSetMacro(UseInverted,bool);
+  itkSetMacro(UseInverted, bool);
 
   void SetSegmentationRanges(SegmentationRangesType ranges)
   {
@@ -109,7 +108,7 @@ public:
   unsigned int GetNumberOfRelations(void);
 
   /** Set the input of the filter */
-  virtual void SetInput( const PolygonListType *input);
+  virtual void SetInput(const PolygonListType *input);
   /** Get the input of the filter */
   const PolygonListType * GetInput(void);
 
@@ -129,19 +128,18 @@ protected:
 
   /** startIndex and stopIndex represent the indeces of the vertex to
   examine in thread threadId */
-  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex,int threadId);
+  virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void *arg);
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
   {
     Pointer Filter;
   };
-
 
   /** End Multi-threading implementation */
 
@@ -157,8 +155,8 @@ protected:
 
 private:
   /** Optimisation flag */
-  bool m_Optimisation;
-  unsigned int m_Accumulator[8];
+  bool              m_Optimisation;
+  unsigned int      m_Accumulator[8];
   EdgeMapVectorType m_EdgesPerThread;
 
   /** This array stores the indices corresponding to each segmentation */

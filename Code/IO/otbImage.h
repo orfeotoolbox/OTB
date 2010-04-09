@@ -34,26 +34,25 @@ namespace otb
  *
  */
 
-template <class TPixel,unsigned int VImageDimension=2>
-class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>
+template <class TPixel, unsigned int VImageDimension = 2>
+class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef Image   Self;
-  typedef itk::Image<TPixel, VImageDimension>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
+  typedef Image                               Self;
+  typedef itk::Image<TPixel, VImageDimension> Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef itk::WeakPointer<const Self>        ConstWeakPointer;
 
-  typedef DefaultImageMetadataInterface::VectorType  VectorType;
-  typedef DefaultImageMetadataInterface::ImageKeywordlistType  ImageKeywordlistType;
+  typedef DefaultImageMetadataInterface::VectorType           VectorType;
+  typedef DefaultImageMetadataInterface::ImageKeywordlistType ImageKeywordlistType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(Image, itk::Image);
-
 
   /** Pixel typedef support. Used to declare pixel type in filters
    * or other operations. */
@@ -76,9 +75,8 @@ public:
   //typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::NeighborhoodAccessorFunctor< Self >
+  typedef itk::NeighborhoodAccessorFunctor<Self>
   NeighborhoodAccessorFunctorType;
-
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type
@@ -90,19 +88,19 @@ public:
   typedef typename Superclass::PixelContainer PixelContainer;
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef typename Superclass::IndexType  IndexType;
+  typedef typename Superclass::IndexType IndexType;
 
   /** Offset typedef support. An offset is used to access pixel values. */
   typedef typename Superclass::OffsetType OffsetType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef typename Superclass::SizeType  SizeType;
+  typedef typename Superclass::SizeType SizeType;
 
   /** Direction typedef support. A matrix of direction cosines. */
-  typedef typename Superclass::DirectionType  DirectionType;
+  typedef typename Superclass::DirectionType DirectionType;
 
   /** Region typedef support. A region is used to specify a subset of an image. */
-  typedef typename Superclass::RegionType  RegionType;
+  typedef typename Superclass::RegionType RegionType;
 
   /** Spacing typedef support.  Spacing holds the size of a pixel.  The
    * spacing is the geometric distance between image samples. */
@@ -113,7 +111,7 @@ public:
   typedef typename Superclass::PointType PointType;
 
   /** A pointer to the pixel container. */
-  typedef typename PixelContainer::Pointer PixelContainerPointer;
+  typedef typename PixelContainer::Pointer      PixelContainerPointer;
   typedef typename PixelContainer::ConstPointer PixelContainerConstPointer;
 
   /** Offset typedef (relative position between indices) */
@@ -143,33 +141,32 @@ public:
     return NeighborhoodAccessorFunctorType();
   }
 
-
   /** Get the projection coordinate system of the image. */
-  virtual std::string GetProjectionRef( void ) const;
+  virtual std::string GetProjectionRef(void) const;
 
   /** Get the GCP projection coordinates of the image. */
-  virtual std::string GetGCPProjection( void ) const;
+  virtual std::string GetGCPProjection(void) const;
 
-  virtual unsigned int GetGCPCount( void ) const;
+  virtual unsigned int GetGCPCount(void) const;
 
-  virtual OTB_GCP & GetGCPs ( unsigned int GCPnum );
+  virtual OTB_GCP& GetGCPs(unsigned int GCPnum);
 
-  virtual std::string GetGCPId( unsigned int GCPnum ) const;
-  virtual std::string GetGCPInfo( unsigned int GCPnum ) const;
-  virtual double GetGCPRow( unsigned int GCPnum ) const;
-  virtual double GetGCPCol( unsigned int GCPnum ) const;
-  virtual double GetGCPX( unsigned int GCPnum ) const;
-  virtual double GetGCPY( unsigned int GCPnum ) const;
-  virtual double GetGCPZ( unsigned int GCPnum ) const;
+  virtual std::string GetGCPId(unsigned int GCPnum) const;
+  virtual std::string GetGCPInfo(unsigned int GCPnum) const;
+  virtual double GetGCPRow(unsigned int GCPnum) const;
+  virtual double GetGCPCol(unsigned int GCPnum) const;
+  virtual double GetGCPX(unsigned int GCPnum) const;
+  virtual double GetGCPY(unsigned int GCPnum) const;
+  virtual double GetGCPZ(unsigned int GCPnum) const;
 
   /** Get the six coefficients of affine geoTtransform. */
-  virtual VectorType GetGeoTransform( void ) const;
+  virtual VectorType GetGeoTransform(void) const;
 
   /** Get image corners. */
-  virtual VectorType GetUpperLeftCorner( void ) const;
-  virtual VectorType GetUpperRightCorner( void ) const;
-  virtual VectorType GetLowerLeftCorner( void ) const;
-  virtual VectorType GetLowerRightCorner( void ) const;
+  virtual VectorType GetUpperLeftCorner(void) const;
+  virtual VectorType GetUpperRightCorner(void) const;
+  virtual VectorType GetLowerLeftCorner(void) const;
+  virtual VectorType GetLowerRightCorner(void) const;
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);
@@ -182,20 +179,18 @@ public:
 
 protected:
   Image();
-  virtual ~Image() {};
-
+  virtual ~Image() {}
 
 private:
-  Image(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  
+  Image(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
   /** Only here to have access to projection and coordinates datas.
   Those method will disappear.
   Use Default because don't need to know the sensor type*/
   typename DefaultImageMetadataInterface::Pointer m_ImageMetadataInterface;
 
 };
-
 
 } // end namespace otb
 

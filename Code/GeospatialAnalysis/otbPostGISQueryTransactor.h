@@ -26,7 +26,6 @@
 namespace otb
 {
 
-
 /** \class PostGISQueryTransactor
  * \brief PQXX-based transactor for executing PostGIS queries.
  *
@@ -40,11 +39,11 @@ namespace otb
  */
 
 class PostGISQueryTransactor :
-     public otb::PostGISFromStringTransactor
+  public otb::PostGISFromStringTransactor
 {
-  
+
 public:
-  
+
   typedef PostGISFromStringTransactor Superclass;
   //typedef pqxx::transactor<pqxx::nontransaction> Superclass;
   //typedef pqxx::result ResultType;
@@ -52,28 +51,26 @@ public:
 
   PostGISQueryTransactor(const PostGISQueryTransactor& pgt);
 
-  PostGISQueryTransactor& operator=(const PostGISQueryTransactor& pgt) throw();
-  
-  void operator()(pqxx::nontransaction &T);
-  
+  PostGISQueryTransactor& operator =(const PostGISQueryTransactor& pgt)
+    throw();
+
+  void operator ()(pqxx::nontransaction& T);
+
   void SetRemoveExistingView(bool val);
 
   bool GetRemoveExistingView() const;
-  
+
   void SetViewName(const std::string& aName);
-  
+
   std::string GetViewName() const;
-  
+
   //void CreateView(pqxx::nontransaction &T);
-  
-  
-    
+
 protected:
   std::string m_ViewName;
-  bool m_RemoveExistingView;
+  bool        m_RemoveExistingView;
 };
 
 } // end namespace otb
-
 
 #endif

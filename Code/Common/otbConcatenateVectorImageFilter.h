@@ -27,22 +27,22 @@ namespace otb
  * \brief This filter concatenates the vector pixel of the first
  * image with the vector pixel of the second image.
  */
-template<class TInputImage1,class TInputImage2,class TOutputImage>
+template<class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT ConcatenateVectorImageFilter
-      : public itk::ImageToImageFilter<TInputImage1,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ConcatenateVectorImageFilter Self;
-  typedef itk::ImageToImageFilter<TInputImage1,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ConcatenateVectorImageFilter                        Self;
+  typedef itk::ImageToImageFilter<TInputImage1, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorImageToImagePixelAccessor,ImageToImageFilter);
+  itkTypeMacro(VectorImageToImagePixelAccessor, ImageToImageFilter);
 
   /** Template related typedefs */
   typedef TInputImage1 InputImage1Type;
@@ -96,8 +96,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ConcatenateVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConcatenateVectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

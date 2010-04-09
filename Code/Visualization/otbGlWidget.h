@@ -51,50 +51,48 @@ class GlWidget
 {
 public:
   /** Standard class typedefs */
-  typedef GlWidget                          Self;
-  typedef itk::Object                       Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef GlWidget                      Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(GlWidget,Object);
+  itkTypeMacro(GlWidget, Object);
 
   /** Controller typedef */
-  typedef otb::ImageWidgetController        ControllerType;
-  typedef ControllerType::Pointer           ControllerPointerType;
+  typedef otb::ImageWidgetController ControllerType;
+  typedef ControllerType::Pointer    ControllerPointerType;
 
   /** Index typedef */
-  typedef itk::Point<double,2>              PointType;
+  typedef itk::Point<double, 2> PointType;
 
   /** Color typedef (used to draw the rectangle, 4th channel is alpha) */
-  typedef itk::FixedArray<float,4>          ColorType;
+  typedef itk::FixedArray<float, 4> ColorType;
 
   /** Set/Get the Controller */
-  itkSetObjectMacro(Controller,ControllerType);
-  itkGetObjectMacro(Controller,ControllerType);
+  itkSetObjectMacro(Controller, ControllerType);
+  itkGetObjectMacro(Controller, ControllerType);
 
   /** Handle resizing event. This method is used by FLTK routines and
    *  should not be called on its own.
    */
   virtual void resize(int x, int y, int w, int h);
 
-
   /** Enable/disable Gl acceleration */
-  itkSetMacro(UseGlAcceleration,bool);
-  itkGetMacro(UseGlAcceleration,bool);
+  itkSetMacro(UseGlAcceleration, bool);
+  itkGetMacro(UseGlAcceleration, bool);
   itkBooleanMacro(UseGlAcceleration);
 
-   /** Set/Get the identifier */
+  /** Set/Get the identifier */
   itkSetStringMacro(Identifier);
   itkGetStringMacro(Identifier);
 
   /** Set/Get the background color */
-  itkSetMacro(BackgroundColor,ColorType);
-  itkGetMacro(BackgroundColor,ColorType);
-
+  itkSetMacro(BackgroundColor, ColorType);
+  itkGetMacro(BackgroundColor, ColorType);
 
   /** Fltk y axis is flipped, therefore we use this function to get
    *  the cursor position using gl axis */
@@ -116,9 +114,9 @@ protected:
     */
   virtual int  handle(int event);
 
-  private:
+private:
   GlWidget(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Widget identifier */
   std::string m_Identifier;
@@ -136,5 +134,3 @@ protected:
 } // end namespace otb
 
 #endif
-
-

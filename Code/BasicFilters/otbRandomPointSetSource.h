@@ -40,7 +40,7 @@ namespace otb
 
 template <class TOutputPointSet>
 class ITK_EXPORT RandomPointSetSource
-      : public PointSetSource<TOutputPointSet>
+  : public PointSetSource<TOutputPointSet>
 {
 
 public:
@@ -73,19 +73,19 @@ public:
   itkGetMacro(MaxPoint, PointType)
 
   void SetSeed(ITK_UINT32 seed)
-    {
+  {
     m_Generator->SetSeed(seed);
-    }
+  }
 
 protected:
   RandomPointSetSource();
-  virtual ~RandomPointSetSource() {};
+  virtual ~RandomPointSetSource() {}
 
-  virtual void GenerateData( void );
+  virtual void GenerateData(void);
 
 private:
-  RandomPointSetSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RandomPointSetSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   unsigned int m_NumberOfPoints;
 

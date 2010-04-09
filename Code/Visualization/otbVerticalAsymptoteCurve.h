@@ -31,19 +31,19 @@ namespace otb
 *  \ingroup Visualization
  */
 
-class ITK_EXPORT  VerticalAsymptoteCurve
+class ITK_EXPORT VerticalAsymptoteCurve
   : public Curve2D
 {
 public:
   /** Standard class typedefs */
-  typedef VerticalAsymptoteCurve               Self;
-  typedef Curve2D                              Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef VerticalAsymptoteCurve        Self;
+  typedef Curve2D                       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Standard class macros
   itkNewMacro(Self);
-  itkTypeMacro(VerticalAsymptoteCurve,Curve2D);
+  itkTypeMacro(VerticalAsymptoteCurve, Curve2D);
 
   /// Superclass typedefs
   typedef  Superclass::AffineTransformType AffineTransformType;
@@ -51,14 +51,14 @@ public:
   typedef  Superclass::PointType           PointType;
   typedef  Superclass::VectorType          VectorType;
   typedef  Superclass::ColorType           ColorType;
-  typedef itk::ContinuousIndex<double,2>   ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 2>  ContinuousIndexType;
 
   /// Render the curve according to display extent and axis characteristics
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
+  virtual void  Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform);
 
   /// Pre-computation
   virtual void BeforeRendering();
-  
+
   /// Get the min for each axis from the data available
   virtual PointType GetMinimum();
 
@@ -66,41 +66,38 @@ public:
   virtual PointType GetMaximum();
 
   /// Set/Get the Asymptote color
-  itkSetMacro(VerticalAsymptoteColor,ColorType);
-  itkGetMacro(VerticalAsymptoteColor,ColorType);
+  itkSetMacro(VerticalAsymptoteColor, ColorType);
+  itkGetMacro(VerticalAsymptoteColor, ColorType);
 
   /// Set the abcisse
-  itkSetMacro(Abcisse,double);
-  itkGetMacro(Abcisse,double);
-  
+  itkSetMacro(Abcisse, double);
+  itkGetMacro(Abcisse, double);
+
 protected:
   /** Constructor */
   VerticalAsymptoteCurve();
   /** Destructor */
-  virtual  ~VerticalAsymptoteCurve(){};
+  virtual ~VerticalAsymptoteCurve(){}
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
-  VerticalAsymptoteCurve(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  VerticalAsymptoteCurve(const Self &);     // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   // The histogram color
-  ColorType            m_VerticalAsymptoteColor;
+  ColorType m_VerticalAsymptoteColor;
 
-  PointType            m_Minimum;
-  PointType            m_Maximum;
+  PointType m_Minimum;
+  PointType m_Maximum;
 
-  double               m_Abcisse;
-  double               m_SpaceAbcisse;
-  
+  double m_Abcisse;
+  double m_SpaceAbcisse;
+
 }; // end class
 } // end namespace otb
 
-
 #endif
-
-

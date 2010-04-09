@@ -21,32 +21,31 @@
 #include "otbWidgetManager.h"
 #include "otbImageWidgetSplittedManager.h"
 
-
 namespace otb
 {
-    /** \class SplittedWidgetManager
-   *   \brief todo
-   *
-   *  \ingroup Visualization
-     */
-class  SplittedWidgetManager
-    : public WidgetManager
+/** \class SplittedWidgetManager
+*   \brief todo
+*
+*  \ingroup Visualization
+ */
+class SplittedWidgetManager
+  : public WidgetManager
 {
- public:
+public:
   /** Standard class typedefs */
-  typedef SplittedWidgetManager                      Self;
-  typedef WidgetManager                              Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef SplittedWidgetManager         Self;
+  typedef WidgetManager                 Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(SplittedWidgetManager,WidgetManager);
+  itkTypeMacro(SplittedWidgetManager, WidgetManager);
 
   /** typedef of the fltk file defining all the widget needed*/
-  typedef ImageWidgetSplittedManager                 ImageWidgetSplittedManagerType;
+  typedef ImageWidgetSplittedManager ImageWidgetSplittedManagerType;
 
   /** Register Wigets*/
   virtual void RegisterFullWidget(WidgetType* fullWidget);
@@ -60,8 +59,7 @@ class  SplittedWidgetManager
   virtual void SetLabel(const char * label);
   virtual void UnRegisterAll();
 
-
- protected:
+protected:
   /** Constructor */
   SplittedWidgetManager();
 
@@ -70,15 +68,14 @@ class  SplittedWidgetManager
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
-
- private:
+private:
   SplittedWidgetManager(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
-  ImageWidgetSplittedManagerType*    m_SplittedWidget;
+  ImageWidgetSplittedManagerType* m_SplittedWidget;
 
 };
 }

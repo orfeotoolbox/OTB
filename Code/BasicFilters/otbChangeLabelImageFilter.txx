@@ -38,10 +38,10 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
-::SetChange( const InputPixelType & original, const OutputPixelType & result )
+::SetChange(const InputPixelType& original, const OutputPixelType& result)
 {
-  OutputPixelType  current = this->GetFunctor().GetChange(original);
-  if ( current != result )
+  OutputPixelType current = this->GetFunctor().GetChange(original);
+  if (current != result)
     {
     this->GetFunctor().SetChange(original, result);
     this->Modified();
@@ -54,7 +54,7 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
-::SetChangeMap( const ChangeMapType & changeMap )
+::SetChangeMap(const ChangeMapType& changeMap)
 {
   //If the whole map is being set then we assume that a real change is made
   this->GetFunctor().SetChangeMap(changeMap);
@@ -67,7 +67,7 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
-::ClearChangeMap( )
+::ClearChangeMap()
 {
   //If the whole map is being set then we assume that a real change is made
   this->GetFunctor().ClearChangeMap();
@@ -83,10 +83,9 @@ ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  
+
   this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
 }
-
 
 /**
  *
@@ -96,8 +95,8 @@ void
 ChangeLabelImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<indent<<"Number of components per pixel: "<<m_NumberOfComponentsPerPixel;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Number of components per pixel: " << m_NumberOfComponentsPerPixel;
 
 }
 

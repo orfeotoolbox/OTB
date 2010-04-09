@@ -30,43 +30,43 @@ namespace otb
  *
  */
 template <InverseOrForwardTransformationEnum transform>
-class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,transform>
+class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,
+                                                                           transform>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef LambertConformalConicMapProjection                  Self;
-  typedef MapProjection<ossimLambertConformalConicProjection,transform>   Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef LambertConformalConicMapProjection                             Self;
+  typedef MapProjection<ossimLambertConformalConicProjection, transform> Superclass;
+  typedef itk::SmartPointer<Self>                                        Pointer;
+  typedef itk::SmartPointer<const Self>                                  ConstPointer;
 
-  typedef typename Superclass::ScalarType                 ScalarType;
-  typedef itk::Point<ScalarType,2 >                       InputPointType;
-  typedef itk::Point<ScalarType,2 >                        OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( LambertConformalConicMapProjection, MapProjection );
+  itkTypeMacro(LambertConformalConicMapProjection, MapProjection);
 
-  void   SetStandardParallel1 (double degree);
-  void   SetStandardParallel2 (double degree);
-  void   SetStandardParallels (double parallel1Degree,double parallel2Degree);
+  void   SetStandardParallel1(double degree);
+  void   SetStandardParallel2(double degree);
+  void   SetStandardParallels(double parallel1Degree, double parallel2Degree);
   void   SetFalseEasting(double falseEasting);
   void   SetFalseNorthing(double falseNorthing);
   double GetFalseNorthing() const;
   double GetFalseEasting() const;
-  void  SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
+  void  SetParameters(double parallel1Degree, double parallel2Degree, double falseEasting, double falseNorthing);
   void  SetDefaults();
-
 
 protected:
   LambertConformalConicMapProjection();
   virtual ~LambertConformalConicMapProjection();
 
-private :
-  LambertConformalConicMapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);                       //purposely not implemented
+private:
+  LambertConformalConicMapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);                       //purposely not implemented
 };
 
 } // namespace otb

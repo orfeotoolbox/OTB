@@ -40,7 +40,7 @@ public:
    */
   template <class TPixel>
   static inline void
-  FloatArrayToPixel(const float * data, unsigned int index, TPixel & pixel,
+  FloatArrayToPixel(const float * data, unsigned int index, TPixel& pixel,
                     const unsigned int /*nbComp*/, double scale)
   {
     pixel = static_cast<TPixel>(scale * data[index]);
@@ -50,9 +50,9 @@ public:
    */
   template <class TPixel>
   static inline void
-  PixelToFloatArray(float * data, unsigned int index, const TPixel & pixel, double scale)
+  PixelToFloatArray(float * data, unsigned int index, const TPixel& pixel, double scale)
   {
-    data[index]=static_cast<float>(scale * pixel);
+    data[index] = static_cast<float>(scale * pixel);
   }
 };
 }
@@ -106,53 +106,53 @@ public:
  */
 
 template <class TInputImage, class TOutputImage,
-class TLabeledOutput = otb::Image<unsigned short,2>,
-class TBufferConverter = MeanShift::ScalarBufferConverter>
+          class TLabeledOutput = otb::Image<unsigned short, 2>,
+          class TBufferConverter = MeanShift::ScalarBufferConverter>
 class ITK_EXPORT MeanShiftImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef MeanShiftImageFilter                              Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef MeanShiftImageFilter                               Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftImageFilter,ImageToImageFilter);
+  itkTypeMacro(MeanShiftImageFilter, ImageToImageFilter);
   itkNewMacro(Self);
 
   /** Template parameters typedefs */
-  typedef TInputImage                                  InputImageType;
-  typedef typename InputImageType::Pointer             InputImagePointerType;
-  typedef typename InputImageType::PixelType           InputPixelType;
-  typedef typename InputImageType::PointType           PointType;
-  typedef TOutputImage                                 OutputImageType;
-  typedef typename OutputImageType::Pointer            OutputImagePointerType;
-  typedef typename OutputImageType::PixelType          OutputPixelType;
-  typedef typename OutputImageType::RegionType         RegionType;
-  typedef TLabeledOutput                               LabeledOutputType;
-  typedef typename LabeledOutputType::Pointer          LabeledOutputPointerType;
-  typedef typename LabeledOutputType::PixelType        LabelType;
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointerType;
+  typedef typename InputImageType::PixelType    InputPixelType;
+  typedef typename InputImageType::PointType    PointType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointerType;
+  typedef typename OutputImageType::PixelType   OutputPixelType;
+  typedef typename OutputImageType::RegionType  RegionType;
+  typedef TLabeledOutput                        LabeledOutputType;
+  typedef typename LabeledOutputType::Pointer   LabeledOutputPointerType;
+  typedef typename LabeledOutputType::PixelType LabelType;
 
   /** Typedefs for vectorized output */
-  typedef otb::Polygon<InputPixelType>                 PolygonType;
-  typedef typename PolygonType::Pointer                PolygonPointerType;
-  typedef otb::ObjectList<PolygonType>                 PolygonListType;
-  typedef typename PolygonListType::Pointer            PolygonListPointerType;
+  typedef otb::Polygon<InputPixelType>      PolygonType;
+  typedef typename PolygonType::Pointer     PolygonPointerType;
+  typedef otb::ObjectList<PolygonType>      PolygonListType;
+  typedef typename PolygonListType::Pointer PolygonListPointerType;
 
   /** Typedef for mean-shift modes map */
-  typedef std::map<LabelType,InputPixelType>           ModeMapType;
+  typedef std::map<LabelType, InputPixelType> ModeMapType;
 
   /** Setters / Getters */
-  itkSetMacro(SpatialRadius,unsigned int);
-  itkGetMacro(SpatialRadius,unsigned int);
-  itkSetMacro(RangeRadius,double);
-  itkGetMacro(RangeRadius,double);
-  itkSetMacro(MinimumRegionSize,unsigned int);
-  itkGetMacro(MinimumRegionSize,unsigned int);
-  itkSetMacro(Scale,double);
-  itkGetMacro(Scale,double);
+  itkSetMacro(SpatialRadius, unsigned int);
+  itkGetMacro(SpatialRadius, unsigned int);
+  itkSetMacro(RangeRadius, double);
+  itkGetMacro(RangeRadius, double);
+  itkSetMacro(MinimumRegionSize, unsigned int);
+  itkGetMacro(MinimumRegionSize, unsigned int);
+  itkSetMacro(Scale, double);
+  itkGetMacro(Scale, double);
 
   /** Return the const clustered image output */
   const OutputImageType * GetClusteredOutput() const;
@@ -177,7 +177,7 @@ protected:
    * input requested region */
   virtual void GenerateInputRequestedRegion();
   /** Threaded generate data (handle the filtering part) */
-  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread,int threadId);
+  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
   /** After threaded generate data (handle the clustering part) */
   virtual void AfterThreadedGenerateData();
   /** Allocate the outputs (need to be reimplemented since outputs have differents type) */
@@ -192,14 +192,14 @@ protected:
   /** Constructor */
   MeanShiftImageFilter();
   /** destructor */
-  virtual ~MeanShiftImageFilter() {};
+  virtual ~MeanShiftImageFilter() {}
 
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  MeanShiftImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);             //purposely not implemented
+  MeanShiftImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&);             //purposely not implemented
 
   /** Spatial radius for mean shift convergence */
   unsigned int m_SpatialRadius;
@@ -212,8 +212,7 @@ private:
   /** A map of the different modes by segmented regions */
   ModeMapType m_Modes;
 };
-}// end namespace otb
-
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMeanShiftImageFilter.txx"

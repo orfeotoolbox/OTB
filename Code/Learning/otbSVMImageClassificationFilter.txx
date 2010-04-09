@@ -28,7 +28,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TMaskImage>
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::SVMImageClassificationFilter()
 {
   this->SetNumberOfInputs(2);
@@ -38,94 +38,94 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::SetInputMask(const MaskImageType * mask)
 {
-  this->itk::ProcessObject::SetNthInput(1,const_cast<MaskImageType *>(mask));
+  this->itk::ProcessObject::SetNthInput(1, const_cast<MaskImageType *>(mask));
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-const typename SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+const typename SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::MaskImageType *
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::GetInputMask()
 {
-  if (this->GetNumberOfInputs()<2)
-  {
+  if (this->GetNumberOfInputs() < 2)
+    {
     return 0;
-  }
-  return  static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
+    }
+  return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::BeforeThreadedGenerateData()
 {
   if (!m_Model)
-  {
-    itkGenericExceptionMacro(<<"No model for classification");
-  }
+    {
+    itkGenericExceptionMacro(<< "No model for classification");
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId)
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
   // Get the input pointers
   InputImageConstPointerType inputPtr     = this->GetInput();
-  MaskImageConstPointerType inputMaskPtr  = this->GetInputMask();
+  MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
   OutputImagePointerType     outputPtr    = this->GetOutput();
 
   // Progress reporting
-  itk::ProgressReporter progress(this,threadId,outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Define iterators
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
-  typedef itk::ImageRegionConstIterator<MaskImageType> MaskIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  typedef itk::ImageRegionConstIterator<MaskImageType>  MaskIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
 
-  InputIteratorType inIt(inputPtr,outputRegionForThread);
-  OutputIteratorType outIt(outputPtr,outputRegionForThread);
+  InputIteratorType inIt(inputPtr, outputRegionForThread);
+  OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
   // Eventually iterate on masks
   MaskIteratorType maskIt;
   if (inputMaskPtr)
-  {
-    maskIt = MaskIteratorType(inputMaskPtr,outputRegionForThread);
+    {
+    maskIt = MaskIteratorType(inputMaskPtr, outputRegionForThread);
     maskIt.GoToBegin();
-  }
+    }
 
   bool validPoint = true;
 
   // Walk the part of the image
-  for (inIt.GoToBegin(),outIt.GoToBegin();!inIt.IsAtEnd()&&!outIt.IsAtEnd();++inIt,++outIt)
-  {
-  // Check pixel validity
-  if (inputMaskPtr)
+  for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd(); ++inIt, ++outIt)
     {
-    validPoint = maskIt.Get()>0;
-    ++maskIt;
-    }
-  // If point is valid
-  if (validPoint)
-    {
-    // Classifify
-    typename ModelType::MeasurementType measure;
-    for(unsigned int i = 0; i<inIt.Get().Size();++i)
+    // Check pixel validity
+    if (inputMaskPtr)
       {
-      measure.push_back(inIt.Get()[i]);
+      validPoint = maskIt.Get() > 0;
+      ++maskIt;
       }
-    outIt.Set(m_Model->EvaluateLabel(measure));
+    // If point is valid
+    if (validPoint)
+      {
+      // Classifify
+      typename ModelType::MeasurementType measure;
+      for (unsigned int i = 0; i < inIt.Get().Size(); ++i)
+        {
+        measure.push_back(inIt.Get()[i]);
+        }
+      outIt.Set(m_Model->EvaluateLabel(measure));
+      }
+    else
+      {
+      // else, set default value
+      outIt.Set(m_DefaultLabel);
+      }
+    progress.CompletedPixel();
     }
-  else
-    {
-    // else, set default value
-    outIt.Set(m_DefaultLabel);
-    }
-  progress.CompletedPixel();
-  }
 
 }
 /**
@@ -133,7 +133,7 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
  */
 template <class TInputImage, class TOutputImage, class TMaskImage>
 void
-SVMImageClassificationFilter<TInputImage,TOutputImage,TMaskImage>
+SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

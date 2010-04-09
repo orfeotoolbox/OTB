@@ -27,12 +27,11 @@ namespace otb
  * Constructor
  */
 template <class TInputPath, class TOutput>
-PathFunction< TInputPath,TOutput>
+PathFunction<TInputPath, TOutput>
 ::PathFunction()
 {
   m_Path = NULL;
 }
-
 
 /**
  * Standard "PrintSelf" method
@@ -42,7 +41,7 @@ void
 PathFunction<TInputPath, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "InputPath: " << m_Path.GetPointer() << std::endl;
 }
 
@@ -52,14 +51,12 @@ PathFunction<TInputPath, TOutput>
 template <class TInputPath, class TOutput>
 void
 PathFunction<TInputPath, TOutput>
-::SetInputPath(const InputPathType * ptr )
+::SetInputPath(const InputPathType * ptr)
 {
   // set the input path
   m_Path = ptr;
 }
 
-
 } // end namespace otb
 
 #endif
-

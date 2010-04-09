@@ -40,7 +40,7 @@ LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-::RegionGrowing( const IndexType indexSeed )
+::RegionGrowing(const IndexType indexSeed)
 {
   this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
   this->m_RegionGrowingFilter->SetSeed(indexSeed);

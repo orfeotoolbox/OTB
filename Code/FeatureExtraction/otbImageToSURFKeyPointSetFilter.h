@@ -56,66 +56,65 @@
 
 namespace otb
 {
-template <class TInputImage , class TOutputPointSet>
+template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT ImageToSURFKeyPointSetFilter
-      : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+  : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 
 public:
 
   /** Standard class typedefs. */
-  typedef ImageToSURFKeyPointSetFilter                                Self;
-  typedef ImageToPointSetFilter<TInputImage,TOutputPointSet>          Superclass;
-  typedef itk::SmartPointer<Self>                                     Pointer;
-  typedef itk::SmartPointer<const Self>                               ConstPointer;
+  typedef ImageToSURFKeyPointSetFilter                        Self;
+  typedef ImageToPointSetFilter<TInputImage, TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToSURFKeyPointSetFilter,ImageToPointSetFilter);
-
+  itkTypeMacro(ImageToSURFKeyPointSetFilter, ImageToPointSetFilter);
 
   /** Template parameters typedefs*/
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer             InputImagePointerType;
-  typedef typename InputImageType::IndexType           PixelIndex;
-  typedef typename InputImageType::IndexType           IndexType;
-  typedef typename InputImageType::PixelType           PixelValue;
-  typedef typename InputImageType::SpacingType         SpacingType;
-  typedef typename InputImageType::SizeType            SizeType;
-  typedef typename InputImageType::PointType           PointImageType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::Pointer     InputImagePointerType;
+  typedef typename InputImageType::IndexType   PixelIndex;
+  typedef typename InputImageType::IndexType   IndexType;
+  typedef typename InputImageType::PixelType   PixelValue;
+  typedef typename InputImageType::SpacingType SpacingType;
+  typedef typename InputImageType::SizeType    SizeType;
+  typedef typename InputImageType::PointType   PointImageType;
 
-  typedef TOutputPointSet OutputPointSetType;
-  typedef typename TOutputPointSet::Pointer            OutputPointSetPointerType;
-  typedef typename TOutputPointSet::PixelType          OutputPixelType;
-  typedef typename TOutputPointSet::PointType          OutputPointType;
-  typedef typename TOutputPointSet::PointIdentifier    OutputPointIdentifierType;
+  typedef TOutputPointSet                           OutputPointSetType;
+  typedef typename TOutputPointSet::Pointer         OutputPointSetPointerType;
+  typedef typename TOutputPointSet::PixelType       OutputPixelType;
+  typedef typename TOutputPointSet::PointType       OutputPointType;
+  typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
 
   /** Set/Get the number of Octaves */
-  itkSetMacro(OctavesNumber,int);
-  itkGetMacro(OctavesNumber,int);
+  itkSetMacro(OctavesNumber, int);
+  itkGetMacro(OctavesNumber, int);
 
   /** Set/Get the number of scales*/
-  itkSetMacro(ScalesNumber,int);
-  itkGetMacro(ScalesNumber,int);
+  itkSetMacro(ScalesNumber, int);
+  itkGetMacro(ScalesNumber, int);
 
   /** Get the number of KeyPoints detected*/
-  itkGetMacro(NumberOfPoints,int);
+  itkGetMacro(NumberOfPoints, int);
 
   /** Internal filters typedefs */
-  typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType>      NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
 
-  typedef otb::ImageToHessianDeterminantImageFilter<InputImageType ,InputImageType > ImageToDetHessianImageType;
-  typedef typename ImageToDetHessianImageType::Pointer DetHessianPointerFilter;
+  typedef otb::ImageToHessianDeterminantImageFilter<InputImageType, InputImageType> ImageToDetHessianImageType;
+  typedef typename ImageToDetHessianImageType::Pointer                              DetHessianPointerFilter;
 
   /** Filter for  resampling images for the multi-scale analysis */
-  typedef itk::ResampleImageFilter<InputImageType,InputImageType> ResampleFilterType;
-  typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+  typedef itk::ResampleImageFilter<InputImageType, InputImageType> ResampleFilterType;
+  typedef typename ResampleFilterType::Pointer                     ResampleFilterPointerType;
 
   /** ImageList  to store the Hessian determinant image at each scale (sigma width)*/
-  typedef otb::ImageList< InputImageType > ImageListType;
+  typedef otb::ImageList<InputImageType>  ImageListType;
   typedef typename ImageListType::Pointer ImageListTypePointer;
 
   /** */
@@ -140,7 +139,6 @@ protected:
    */
   virtual void  GenerateData();
 
-
   /** Check local extremum for 8 neighbors (current)
    *
    *  \param currentScale
@@ -148,7 +146,6 @@ protected:
    *  \return true if the Central pixel is extremum
    */
   virtual bool IsLocalExtremum(const NeighborhoodType& neigh);
-
 
   /** Check local extremum for 8 neighbors (Previous or Scale)
    *
@@ -159,7 +156,6 @@ protected:
    */
   virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
                                      double CenterValue);
-
 
   /** AssignOrientation
    *
@@ -185,12 +181,12 @@ protected:
   /**
    * Compute min a b c
    */
-  virtual int GetMin( int a , int b , int c);
+  virtual int GetMin(int a, int b, int c);
 
 private:
 
-  ImageToSURFKeyPointSetFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToSURFKeyPointSetFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Number of octaves */
   int m_OctavesNumber;
@@ -222,5 +218,3 @@ private:
 #endif
 
 #endif
-
-

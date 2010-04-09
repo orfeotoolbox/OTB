@@ -22,35 +22,35 @@
 
 namespace otb
 {
-template < class TInputPixelDescription >
+template <class TInputPixelDescription>
 PixelDescriptionView<TInputPixelDescription>
 ::PixelDescriptionView() : m_PixelDescriptionWidget(NULL), m_Model()
 {
   // build a widget with a default size
-  m_PixelDescriptionWidget = new Fl_Multiline_Output(0,0,200,40);
+  m_PixelDescriptionWidget = new Fl_Multiline_Output(0, 0, 200, 40);
   m_PixelDescriptionWidget->textsize(10);
   m_PixelDescriptionWidget->textfont(FL_SCREEN);
   m_PixelDescriptionWidget->deactivate();
 }
 
-template < class TInputPixelDescription >
+template <class TInputPixelDescription>
 PixelDescriptionView<TInputPixelDescription>
 ::~PixelDescriptionView()
 {
-  if(m_PixelDescriptionWidget != NULL)
+  if (m_PixelDescriptionWidget != NULL)
     {
 //     delete m_PixelDescriptionWidget;//FIXME
-      //NOTE segfault with the previous line, why?
+    //NOTE segfault with the previous line, why?
     }
 }
 
-template < class TInputPixelDescription >
+template <class TInputPixelDescription>
 void
 PixelDescriptionView<TInputPixelDescription>
 ::SetModel(ModelType * model)
 {
   // Unregister from previous model if nay
-  if(m_Model.IsNotNull())
+  if (m_Model.IsNotNull())
     {
     m_Model->UnRegisterListener(this);
     }
@@ -60,8 +60,7 @@ PixelDescriptionView<TInputPixelDescription>
   m_Model->RegisterListener(this);
 }
 
-
-template < class TInputPixelDescription >
+template <class TInputPixelDescription>
 void
 PixelDescriptionView<TInputPixelDescription>
 ::Notify()
@@ -69,7 +68,7 @@ PixelDescriptionView<TInputPixelDescription>
   this->Update();
 }
 
-template < class TInputPixelDescription >
+template <class TInputPixelDescription>
 void
 PixelDescriptionView<TInputPixelDescription>
 ::Update()

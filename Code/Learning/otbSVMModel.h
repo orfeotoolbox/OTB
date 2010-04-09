@@ -64,41 +64,41 @@ class ITK_EXPORT SVMModel : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMModel                       Self;
-  typedef itk::DataObject                Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SVMModel                      Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Value type */
-  typedef TValue                               ValueType;
+  typedef TValue ValueType;
   /** Label Type */
-  typedef TLabel                               LabelType;
-  typedef std::vector<ValueType>               MeasurementType;
-  typedef std::pair<MeasurementType,LabelType> SampleType;
-  typedef std::vector<SampleType>              SamplesVectorType;
+  typedef TLabel                                LabelType;
+  typedef std::vector<ValueType>                MeasurementType;
+  typedef std::pair<MeasurementType, LabelType> SampleType;
+  typedef std::vector<SampleType>               SamplesVectorType;
   /** Cache vector type */
-  typedef std::vector<struct svm_node *>       CacheVectorType;
+  typedef std::vector<struct svm_node *> CacheVectorType;
 
   /** Distances vector */
-  typedef itk::VariableLengthVector<double>    ProbabilitiesVectorType;
-  typedef itk::VariableLengthVector<double>    DistancesVectorType;
+  typedef itk::VariableLengthVector<double> ProbabilitiesVectorType;
+  typedef itk::VariableLengthVector<double> DistancesVectorType;
 
-  typedef struct svm_node *                    NodeCacheType;
+  typedef struct svm_node * NodeCacheType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
-  itkTypeMacro(SVMModel,itk::DataObject);
+  itkTypeMacro(SVMModel, itk::DataObject);
 
   /** Get the number of classes. */
   unsigned int GetNumberOfClasses(void) const
   {
-    return (unsigned int)(m_Model->nr_class);
+    return (unsigned int) (m_Model->nr_class);
   }
 
   /** Get the number of hyperplane. */
   unsigned int GetNumberOfHyperplane(void) const
   {
-    return (unsigned int)(m_Model->nr_class*(m_Model->nr_class-1)/2);
+    return (unsigned int) (m_Model->nr_class * (m_Model->nr_class - 1) / 2);
   }
 
   /** Set a new model. To avoid pointers holding conflicts, this
@@ -112,19 +112,18 @@ public:
   }
 
   /** Gets the parameters */
-  struct svm_parameter & GetParameters()
+  struct svm_parameter& GetParameters()
   {
     return m_Parameters;
   }
   /** Gets the parameters */
-  const struct svm_parameter & GetParameters() const
-    {
-      return m_Parameters;
-    }
+  const struct svm_parameter& GetParameters() const
+  {
+    return m_Parameters;
+  }
 
   /** Saves the model to a file */
   void SaveModel(const char* model_file_name) const;
-
 
   /** Loads the model from a file */
   void LoadModel(const char* model_file_name);
@@ -280,7 +279,6 @@ public:
     return static_cast<bool>(m_Parameters.shrinking);
   }
 
-
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
@@ -295,7 +293,7 @@ public:
   }
 
   /** Get/Set methods for generic kernel functor */
-  virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
+  virtual GenericKernelFunctorBase * GetKernelFunctor(void) const
   {
     return m_Parameters.kernel_generic;
   }
@@ -310,7 +308,7 @@ public:
   {
     return m_Model->l;
   }
- 
+
   /** Return rho values */
   double * GetRho(void) const
   {
@@ -325,12 +323,12 @@ public:
   void SetSupportVectors(svm_node ** sv, int nbOfSupportVector);
 
   /** Return the alphas values (SV Coef) */
-  double ** GetAlpha (void)
+  double ** GetAlpha(void)
   {
     return m_Model->sv_coef;
   }
   /** Set the alphas values (SV Coef) */
-  void SetAlpha( double ** alpha, int nbOfSupportVector );
+  void SetAlpha(double ** alpha, int nbOfSupportVector);
 
   /** Return the labels lists */
   int * GetLabels()
@@ -344,7 +342,7 @@ public:
     return m_Model->nSV;
   }
 
-  struct svm_problem & GetProblem()
+  struct svm_problem& GetProblem()
   {
     return m_Problem;
   }
@@ -372,13 +370,13 @@ public:
 * thread safe. If you want to run multiple concurrent instances of
 * this method, please consider using the GetCopy() method to clone the
 * model.)*/
-  LabelType EvaluateLabel(const MeasurementType & measure) const;
+  LabelType EvaluateLabel(const MeasurementType& measure) const;
 
   /** Evaluate hyperplan distances (Please note that due to caching this method is not
 * thread safe. If you want to run multiple concurrent instances of
 * this method, please consider using the GetCopy() method to clone the
 * model.)**/
-  DistancesVectorType EvaluateHyperplanesDistances(const MeasurementType & measure) const;
+  DistancesVectorType EvaluateHyperplanesDistances(const MeasurementType& measure) const;
 
   /** Evaluate probabilities of each class. Returns a probability vector ordered
    * by increasing class label value
@@ -386,16 +384,16 @@ public:
    * If you want to run multiple concurrent instances of
    * this method, please consider using the GetCopy() method to clone the
    * model.)**/
-  ProbabilitiesVectorType EvaluateProbabilities(const MeasurementType & measure) const;
+  ProbabilitiesVectorType EvaluateProbabilities(const MeasurementType& measure) const;
 
   /** Add a new sample to the list */
-  void AddSample(const MeasurementType & measure, const LabelType & label);
- 
+  void AddSample(const MeasurementType& measure, const LabelType& label);
+
   /** Clear all samples */
   void ClearSamples();
 
   /** Set the samples vector */
-  void SetSamples(const SamplesVectorType & samples);
+  void SetSamples(const SamplesVectorType& samples);
 
   /** Reset all the model, leaving it in the same state that just
    * before constructor call */
@@ -411,7 +409,7 @@ protected:
 
 /** Delete any allocated problem */
   void DeleteProblem();
-  
+
   /** Delete any allocated model */
   void DeleteModel();
 
@@ -419,8 +417,8 @@ protected:
   void Initialize();
 
 private:
-  SVMModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMModel(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Container to hold the SVM model itself */
   struct svm_model* m_Model;
@@ -438,12 +436,10 @@ private:
   bool m_ProblemUpToDate;
 
   /** Contains the samples */
-  SamplesVectorType   m_Samples;
+  SamplesVectorType m_Samples;
 }; // class SVMModel
 
-
 } // namespace otb
-
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSVMModel.txx"

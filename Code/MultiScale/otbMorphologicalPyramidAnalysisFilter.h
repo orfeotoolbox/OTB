@@ -48,37 +48,37 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>
 class ITK_EXPORT MorphologicalPyramidAnalysisFilter
-      : public ImageToImageListFilter<TInputImage,TOutputImage>
+  : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef MorphologicalPyramidAnalysisFilter                    Self;
-  typedef ImageToImageListFilter<TInputImage,TOutputImage>     Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
+  typedef MorphologicalPyramidAnalysisFilter                Self;
+  typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(MorphologicalPyramidAnalysisFilter,MorphologicalPyramidAnalysisFilter);
+  itkTypeMacro(MorphologicalPyramidAnalysisFilter, MorphologicalPyramidAnalysisFilter);
   /** Input image dimension constant macro */
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Template parameters typedefs */
-  typedef TMorphoFilter MorphoFilterType;
+  typedef TMorphoFilter                         MorphoFilterType;
   typedef typename MorphoFilterType::KernelType KernelType;
   /** Output related typedefs */
-  typedef typename Superclass::OutputImageType         OutputImageType;
-  typedef typename Superclass::OutputImageListType     OutputImageListType;
-  typedef typename OutputImageListType::Pointer        OutputImageListPointerType;
-  typedef typename Superclass::OutputImagePointerType  OutputImagePointerType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::OutputImageListType    OutputImageListType;
+  typedef typename OutputImageListType::Pointer       OutputImageListPointerType;
+  typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
   /** Input related typedefs */
-  typedef typename Superclass::InputImageType          InputImageType;
-  typedef typename Superclass::InputImageRegionType    InputImageRegionType;
-  typedef typename InputImageType::Pointer             InputImagePointerType;
-  typedef typename InputImageType::ConstPointer        InputImageConstPointerType;
-  typedef typename InputImageType::SizeType            SizeType;
-  typedef typename InputImageType::ValueType           ValueType;
-  typedef typename InputImageType::PixelType           PixelType;
-  typedef typename InputImageType::SpacingType         SpacingType;
+  typedef typename Superclass::InputImageType       InputImageType;
+  typedef typename Superclass::InputImageRegionType InputImageRegionType;
+  typedef typename InputImageType::Pointer          InputImagePointerType;
+  typedef typename InputImageType::ConstPointer     InputImageConstPointerType;
+  typedef typename InputImageType::SizeType         SizeType;
+  typedef typename InputImageType::ValueType        ValueType;
+  typedef typename InputImageType::PixelType        PixelType;
+  typedef typename InputImageType::SpacingType      SpacingType;
   /** Accessors */
   itkSetMacro(NumberOfLevels, int);
   itkSetMacro(DecimationRatio, double);
@@ -115,7 +115,7 @@ protected:
   MorphologicalPyramidAnalysisFilter();
   /** Destructor */
   virtual ~MorphologicalPyramidAnalysisFilter();
-  virtual void GenerateOutputInformation() {}; // does nothing
+  virtual void GenerateOutputInformation() {}  // does nothing
   /** Main computation method */
   virtual void GenerateData();
   /** Printself method */
@@ -127,7 +127,7 @@ private:
   /** Subsampling scale used */
   double m_DecimationRatio;
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidAnalysisFilter.txx"

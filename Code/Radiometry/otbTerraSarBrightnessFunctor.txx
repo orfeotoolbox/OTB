@@ -36,53 +36,49 @@ TerraSarBrightnessFunctor<TInput, TOutput>
   m_DefaultValue = 0.00001; // Default value is 10^-5
 }
 
-
 template <class TInput, class TOutput>
 TOutput
 TerraSarBrightnessFunctor<TInput, TOutput>
-::operator() (const TInput & inPix)
-{
+::operator() (const TInput &inPix)
+  {
   // Formula: Beta^0 = Ks * |DN|²
 
   // First, square the input pixel
-  double squareInPix = vcl_pow( static_cast<double>(inPix), 2.);
+  double squareInPix = vcl_pow(static_cast<double>(inPix), 2.);
 
   // Then apply the calibration factor
-  double beta = m_CalibrationFactor*squareInPix;
+  double beta = m_CalibrationFactor * squareInPix;
 
-  if( beta<=0 )
-    beta = m_DefaultValue;
-    
+  if (beta <= 0) beta = m_DefaultValue;
 
   // Results in decibels case
-  if(m_ResultsInDecibels)
+  if (m_ResultsInDecibels)
     {
-      beta = 10 * vcl_log10(beta);
+    beta = 10 * vcl_log10(beta);
     }
 
-  return static_cast<TOutput>(beta); 
-}
-
+  return static_cast<TOutput>(beta);
+  }
 
 template <class TInput, class TOutput>
 std::complex<TOutput>
 TerraSarBrightnessFunctor<TInput, TOutput>
-::operator() (const std::complex<TInput> & inPix)
-{
+::operator() (const std::complex<TInput> &inPix)
+  {
   // First, extract modulus and phase
-  double modulus = vcl_sqrt(inPix.real()*inPix.real() + inPix.imag()*inPix.imag());
-  double phase   = vcl_atan2(inPix.imag(),inPix.real());
+  double modulus = vcl_sqrt(inPix.real() * inPix.real() + inPix.imag() * inPix.imag());
+  double phase   = vcl_atan2(inPix.imag(), inPix.real());
 
   // Then, calibrate the modulus
-  double beta = this->operator()(modulus);
-  
+  double beta = this->operator() (modulus);
+
   // Last, put back the phase
-  std::complex<TOutput> out(std::polar(beta,phase));
+  std::complex<TOutput> out(std::polar(beta, phase));
 
   return out;
-}
+  }
 
-}// namespace Functor
+} // namespace Functor
 
 } // namespace otb
 #endif

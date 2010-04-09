@@ -41,12 +41,12 @@ LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
 template <class TInputImage, class TOutputImage>
 void
 LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
-::RegionGrowing( const IndexType indexSeed )
+::RegionGrowing(const IndexType indexSeed)
 {
   InputPixelType threshold = this->GetInput()->GetPixel(indexSeed);
 
-  this->m_RegionGrowingFilter->SetLower(threshold-m_LowerThresholdDelta);
-  this->m_RegionGrowingFilter->SetUpper(threshold+m_UpperThresholdDelta);
+  this->m_RegionGrowingFilter->SetLower(threshold - m_LowerThresholdDelta);
+  this->m_RegionGrowingFilter->SetUpper(threshold + m_UpperThresholdDelta);
 
   this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
   this->m_RegionGrowingFilter->SetSeed(indexSeed);

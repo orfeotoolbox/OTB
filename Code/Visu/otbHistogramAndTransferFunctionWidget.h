@@ -24,7 +24,6 @@
 #include "FL/Fl_Gl_Window.H"
 #include "otbMacro.h"
 
-
 namespace otb
 {
 /** \class HistogramAndTransferFunctionWidget
@@ -36,38 +35,37 @@ namespace otb
  */
 template <class THistogram, class TPixel>
 class ITK_EXPORT HistogramAndTransferFunctionWidget
-      : public Fl_Gl_Window, public itk::ProcessObject
+  : public Fl_Gl_Window, public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
   typedef HistogramAndTransferFunctionWidget Self;
-  typedef itk::ProcessObject                  Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef itk::ProcessObject                 Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(HistogramAndTransferFunctionWidget,ProcessObject);
+  itkTypeMacro(HistogramAndTransferFunctionWidget, ProcessObject);
 
   /** Template parameters typedefs */
-  typedef TPixel PixelType;
-  typedef THistogram HistogramType;
-  typedef typename HistogramType::ValueType HistogramValueType;
+  typedef TPixel                                 PixelType;
+  typedef THistogram                             HistogramType;
+  typedef typename HistogramType::ValueType      HistogramValueType;
   typedef typename HistogramValueType::ValueType ValueType;
-  typedef typename HistogramType::ConstPointer HistogramConstPointerType;
-  typedef typename HistogramType::ConstIterator HistogramIteratorType;
-  typedef itk::FixedArray<double,3> ColorType;
+  typedef typename HistogramType::ConstPointer   HistogramConstPointerType;
+  typedef typename HistogramType::ConstIterator  HistogramIteratorType;
+  typedef itk::FixedArray<double, 3>             ColorType;
 
-  typedef otb::ImageWidgetTransferFunction<PixelType> TransferFunctionType;
-  typedef typename TransferFunctionType::Pointer TransferFunctionPointerType;
+  typedef otb::ImageWidgetTransferFunction<PixelType>       TransferFunctionType;
+  typedef typename TransferFunctionType::Pointer            TransferFunctionPointerType;
   typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
 
-
-  itkSetMacro(Histogram,HistogramConstPointerType);
-  itkGetMacro(Histogram,HistogramConstPointerType);
-  itkGetMacro(TransferFunction,TransferFunctionPointerType);
+  itkSetMacro(Histogram, HistogramConstPointerType);
+  itkGetMacro(Histogram, HistogramConstPointerType);
+  itkGetMacro(TransferFunction, TransferFunctionPointerType);
 
   virtual void SetTransferFunction(TransferFunctionType * function)
   {
@@ -75,39 +73,39 @@ public:
     this->Modified();
   }
 
-  itkSetMacro(HistogramColor,ColorType);
-  itkGetMacro(HistogramColor,ColorType);
-  itkSetMacro(BackgroundColor,ColorType);
-  itkGetMacro(BackgroundColor,ColorType);
-  itkSetMacro(AxisColor,ColorType);
-  itkGetMacro(AxisColor,ColorType);
-  itkSetMacro(TextColor,ColorType);
-  itkGetMacro(TextColor,ColorType);
-  itkSetMacro(TransferFunctionColor,ColorType);
-  itkGetMacro(TransferFunctionColor,ColorType);
+  itkSetMacro(HistogramColor, ColorType);
+  itkGetMacro(HistogramColor, ColorType);
+  itkSetMacro(BackgroundColor, ColorType);
+  itkGetMacro(BackgroundColor, ColorType);
+  itkSetMacro(AxisColor, ColorType);
+  itkGetMacro(AxisColor, ColorType);
+  itkSetMacro(TextColor, ColorType);
+  itkGetMacro(TextColor, ColorType);
+  itkSetMacro(TransferFunctionColor, ColorType);
+  itkGetMacro(TransferFunctionColor, ColorType);
 
-  itkSetMacro(Label,std::string);
-  itkGetMacro(Label,std::string);
-  itkSetMacro(TransferFunctionLabel,std::string);
-  itkGetMacro(TransferFunctionLabel,std::string);
+  itkSetMacro(Label, std::string);
+  itkGetMacro(Label, std::string);
+  itkSetMacro(TransferFunctionLabel, std::string);
+  itkGetMacro(TransferFunctionLabel, std::string);
 
-  itkSetMacro(MarginX,double);
-  itkGetMacro(MarginX,double);
-  itkSetMacro(MarginY,double);
-  itkGetMacro(MarginY,double);
-  itkSetMacro(OutputHistogramMargin,double);
-  itkGetMacro(OutputHistogramMargin,double);
+  itkSetMacro(MarginX, double);
+  itkGetMacro(MarginX, double);
+  itkSetMacro(MarginY, double);
+  itkGetMacro(MarginY, double);
+  itkSetMacro(OutputHistogramMargin, double);
+  itkGetMacro(OutputHistogramMargin, double);
 
-  itkSetMacro(GridSizeX,unsigned int);
-  itkGetMacro(GridSizeX,unsigned int);
-  itkSetMacro(GridSizeY,unsigned int);
-  itkGetMacro(GridSizeY,unsigned int);
+  itkSetMacro(GridSizeX, unsigned int);
+  itkGetMacro(GridSizeX, unsigned int);
+  itkSetMacro(GridSizeY, unsigned int);
+  itkGetMacro(GridSizeY, unsigned int);
 
 protected:
   /** Constructor */
   HistogramAndTransferFunctionWidget();
   /** Destructor */
-  virtual ~HistogramAndTransferFunctionWidget() {};
+  virtual ~HistogramAndTransferFunctionWidget() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -133,8 +131,8 @@ protected:
   virtual void TransferFunctionLabelRendering(void);
 
 private:
-  HistogramAndTransferFunctionWidget(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  HistogramAndTransferFunctionWidget(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The histogram to draw */
   HistogramConstPointerType m_Histogram;
@@ -158,7 +156,7 @@ private:
   unsigned int m_GridSizeX;
   unsigned int m_GridSizeY;
   /** Percentage of the max frequency beeing thresholded */
-  double  m_HistogramClamping;
+  double m_HistogramClamping;
   /** Updating flag */
   bool m_Updating;
   /** Label of the histogram */
@@ -167,7 +165,7 @@ private:
   std::string m_TransferFunctionLabel;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbHistogramAndTransferFunctionWidget.txx"
 #endif

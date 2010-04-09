@@ -50,7 +50,7 @@ namespace Functor
  * \f]
  *
  */
-template<class TInput,class TOutput>
+template<class TInput, class TOutput>
 class ConvexOrConcaveDecisionRule
 {
 
@@ -68,25 +68,25 @@ public:
   /**
    * Destructor
    */
-  virtual ~ConvexOrConcaveDecisionRule() {};
+  virtual ~ConvexOrConcaveDecisionRule() {}
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
    * \param x The image value
    * \param xlevel The leveling value
    */
-  inline TOutput operator()(const TInput& x, const TInput& xlevel)
+  inline TOutput operator ()(const TInput& x, const TInput& xlevel)
   {
     TOutput resp = m_FlatLabel;
 
-    if (static_cast<double>(x-xlevel)>m_Sigma)
-    {
+    if (static_cast<double>(x - xlevel) > m_Sigma)
+      {
       resp = m_ConvexLabel;
-    }
-    else if (static_cast<double>(xlevel-x)>m_Sigma)
-    {
+      }
+    else if (static_cast<double>(xlevel - x) > m_Sigma)
+      {
       resp = m_ConcaveLabel;
-    }
+      }
     return resp;
   }
   /**
@@ -95,7 +95,7 @@ public:
    */
   void SetConvexLabel(const TOutput& label)
   {
-    m_ConvexLabel=label;
+    m_ConvexLabel = label;
   }
   /**
    * Get the convex label
@@ -111,7 +111,7 @@ public:
    */
   void SetConcaveLabel(const TOutput& label)
   {
-    m_ConcaveLabel=label;
+    m_ConcaveLabel = label;
   }
   /**
    * Get the concave label
@@ -127,7 +127,7 @@ public:
    */
   void SetFlatLabel(const TOutput& label)
   {
-    m_FlatLabel=label;
+    m_FlatLabel = label;
   }
   /**
    * Get the flat label
@@ -141,7 +141,7 @@ public:
    * Set the tolerance value
    * \param sigma the tolerance value
    */
-  void SetSigma(const double & sigma)
+  void SetSigma(const double& sigma)
   {
     m_Sigma = sigma;
   }
@@ -176,31 +176,32 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter
-      : public itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> >
+  : public itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
+                                         Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+                                                                              typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef ConvexOrConcaveClassificationFilter Self;
-  typedef itk::BinaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,
-  Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-  typename TOutputImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
+                                        Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+                                                                             typename TOutputImage::PixelType> >
+  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ConvexOrConcaveClassificationFilter,BinaryFunctorImageFilter);
+  itkTypeMacro(ConvexOrConcaveClassificationFilter, BinaryFunctorImageFilter);
 
   /** Template class typedef */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                         InputImageType;
+  typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
   typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-  typename TOutputImage::PixelType> DecisionFunctorType;
+                                               typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the input image
    * \param image the input image
@@ -220,17 +221,17 @@ public:
     this->SetInput2(leveling);
   }
   /** Set/Get the convex label */
-  itkSetMacro(ConvexLabel,LabelType);
-  itkGetMacro(ConvexLabel,LabelType);
+  itkSetMacro(ConvexLabel, LabelType);
+  itkGetMacro(ConvexLabel, LabelType);
   /** Set/Get the concave label */
-  itkSetMacro(ConcaveLabel,LabelType);
-  itkGetMacro(ConcaveLabel,LabelType);
+  itkSetMacro(ConcaveLabel, LabelType);
+  itkGetMacro(ConcaveLabel, LabelType);
   /** Set/Get the flat label */
-  itkSetMacro(FlatLabel,LabelType);
-  itkGetMacro(FlatLabel,LabelType);
+  itkSetMacro(FlatLabel, LabelType);
+  itkGetMacro(FlatLabel, LabelType);
   /** Set/Get the tolerance value */
-  itkSetMacro(Sigma,double);
-  itkGetMacro(Sigma,double);
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
   virtual void BeforeThreadedGenerateData(void)
@@ -244,27 +245,27 @@ public:
 protected:
   /** Constructor */
   ConvexOrConcaveClassificationFilter()
-  {
+    {
     m_ConvexLabel  = 1;
     m_ConcaveLabel = 2;
     m_FlatLabel    = 0;
     m_Sigma        = 0.0;
-  };
+    };
   /** Destructor */
-  virtual ~ConvexOrConcaveClassificationFilter() {};
+  virtual ~ConvexOrConcaveClassificationFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"ConvexLabel: "<<m_ConvexLabel<<std::endl;
-    os<<indent<<"ConcaveLabel: "<<m_ConcaveLabel<<std::endl;
-    os<<indent<<"FlatLabel: "<<m_FlatLabel<<std::endl;
-    os<<indent<<"Sigma: "<<m_Sigma<<std::endl;
+    Superclass::PrintSelf(os, indent);
+    os << indent << "ConvexLabel: " << m_ConvexLabel << std::endl;
+    os << indent << "ConcaveLabel: " << m_ConcaveLabel << std::endl;
+    os << indent << "FlatLabel: " << m_FlatLabel << std::endl;
+    os << indent << "Sigma: " << m_Sigma << std::endl;
   }
 
 private:
-  ConvexOrConcaveClassificationFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Label of the convex class */
   LabelType m_ConvexLabel;
@@ -275,5 +276,5 @@ private:
   /** Tolerance value */
   double m_Sigma;
 };
-}// End namespace otb
+} // End namespace otb
 #endif

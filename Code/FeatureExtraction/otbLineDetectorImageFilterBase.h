@@ -24,12 +24,11 @@
 #include "otbImage.h"
 #include "itkNumericTraits.h"
 
-#define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))
-#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))
-#define ROTATION(_x,_y,_theta,_xout,_yout) \
-    (_xout) = (_x)*vcl_cos(_theta) - (_y)*vcl_sin(_theta); \
-    (_yout) = (_x)*vcl_sin(_theta) + (_y)*vcl_cos(_theta)
-
+#define MINI(_A, _B) ((_A) < (_B) ? (_A) : (_B))
+#define MAXI(_A, _B) ((_A) > (_B) ? (_A) : (_B))
+#define ROTATION(_x, _y, _theta, _xout, _yout) \
+  (_xout) = (_x) * vcl_cos(_theta) - (_y) * vcl_sin(_theta); \
+  (_yout) = (_x) * vcl_sin(_theta) + (_y) * vcl_cos(_theta)
 
 namespace otb
 {
@@ -54,25 +53,26 @@ namespace otb
  */
 
 template <class TInputImage,
-class TOutputImage,
-class TOutputImageDirection = TOutputImage,
-class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
+          class TOutputImage,
+          class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
+                                                                                             TOutputImageDirection>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef LineDetectorImageFilterBase Self;
-  typedef ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LineDetectorImageFilterBase                                                             Self;
+  typedef ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection> Superclass;
+  typedef itk::SmartPointer<Self>                                                                 Pointer;
+  typedef itk::SmartPointer<const Self>                                                           ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -80,25 +80,23 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LineDetectorImageFilterBase, ImageToModulusAndDirectionImageFilter);
 
-  typedef typename Superclass::InputImageType         InputImageType;
-  typedef typename Superclass::OutputImageType        OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
-  typedef TInterpolator                   InterpolatorType;
+  typedef typename Superclass::InputImageType           InputImageType;
+  typedef typename Superclass::OutputImageType          OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType OutputImageDirectionType;
+  typedef TInterpolator                                 InterpolatorType;
 
   /** Typedefs to describe and access Interpolator */
-  typedef typename InterpolatorType::Pointer InterpolatorPointer;
+  typedef typename InterpolatorType::Pointer      InterpolatorPointer;
   typedef typename InterpolatorType::CoordRepType CoordRepType;
 
   typedef typename InputImageType::PointType TPoint;
 
-
   /** Definition of the input and output images */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef typename OutputImageType::Pointer   OutputImagePointerType;
 
-
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Definition of the size of the images. */
@@ -122,7 +120,6 @@ public:
   /** Get the radius of one zone. */
   itkGetConstReferenceMacro(Radius, SizeType);
 
-
   /** Set the radius of one zone. */
   itkSetMacro(Threshold, OutputPixelType);
 
@@ -135,12 +132,12 @@ public:
   /** Get the numbero of drections for line detection. */
   itkGetConstReferenceMacro(NumberOfDirections, unsigned int);
 
-
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError);
 
 protected:
   LineDetectorImageFilterBase();
-  virtual ~LineDetectorImageFilterBase() {};
+  virtual ~LineDetectorImageFilterBase() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void BeforeThreadedGenerateData();
@@ -155,7 +152,7 @@ protected:
    * \sa    ImageToImageFilter::GenerateData()
   */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 
@@ -175,9 +172,8 @@ protected:
 
   unsigned int m_NumberOfDirections;
 private:
-  LineDetectorImageFilterBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  LineDetectorImageFilterBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 } // end namespace otb
@@ -185,6 +181,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLineDetectorImageFilterBase.txx"
 #endif
-
 
 #endif

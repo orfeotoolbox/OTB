@@ -24,9 +24,10 @@
 namespace otb
 {
 
-PostGISCreateTableTransactor::PostGISCreateTableTransactor() : PostGISCreateTableTransactor::Superclass("CreateTable") {
+PostGISCreateTableTransactor::PostGISCreateTableTransactor() : PostGISCreateTableTransactor::Superclass("CreateTable")
+{
   m_RemoveExistingTable = false;
-};
+}
 
 PostGISCreateTableTransactor::PostGISCreateTableTransactor(const PostGISCreateTableTransactor& pgt)
   : PostGISCreateTableTransactor::Superclass("CreateTable")
@@ -37,54 +38,54 @@ PostGISCreateTableTransactor::PostGISCreateTableTransactor(const PostGISCreateTa
   m_RemoveExistingTable = pgt.GetRemoveExistingTable();
 }
 
-PostGISCreateTableTransactor& PostGISCreateTableTransactor::operator=(const PostGISCreateTableTransactor& pgt) throw() {
-    m_TableName = pgt.GetTableName();
-    m_SRID = pgt.GetSRID();
-    m_Dimension = pgt.GetDimension();
-    m_RemoveExistingTable = pgt.GetRemoveExistingTable();
+PostGISCreateTableTransactor & PostGISCreateTableTransactor::operator =(const PostGISCreateTableTransactor& pgt)
+throw()
+{
+  m_TableName = pgt.GetTableName();
+  m_SRID = pgt.GetSRID();
+  m_Dimension = pgt.GetDimension();
+  m_RemoveExistingTable = pgt.GetRemoveExistingTable();
   return *this;
 }
 
-void PostGISCreateTableTransactor::operator()(pqxx::nontransaction &T)
+void PostGISCreateTableTransactor::operator ()(pqxx::nontransaction& T)
 {
 
-  if(m_RemoveExistingTable)
+  if (m_RemoveExistingTable)
     {
     std::stringstream dropCommand;
 
     //dropCommand << "DROP TABLE " << m_TableName;
     dropCommand << "DROP TABLE IF EXISTS " << m_TableName;
-    
-    otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
+
+    otbGenericMsgDebugMacro(<< "Drop Command " << dropCommand.str());
 
     m_Result = T.exec(dropCommand.str());
     }
 
   std::stringstream createCommand;
 
-  createCommand << "CREATE TABLE "<< m_TableName
-              <<" (id serial PRIMARY KEY, genre TEXT);";
+  createCommand << "CREATE TABLE " << m_TableName
+                << " (id serial PRIMARY KEY, genre TEXT);";
 
-  otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
+  otbGenericMsgDebugMacro(<< "Create Command " << createCommand.str());
   m_Result = T.exec(createCommand.str());
 
   std::stringstream addGeometryCommand;
 
-  addGeometryCommand << "SELECT AddGeometryColumn( '"<< m_TableName <<
-    "', 'the_geom', "<< m_SRID <<", 'GEOMETRY',"<< m_Dimension <<" );";
+  addGeometryCommand << "SELECT AddGeometryColumn( '" << m_TableName <<
+  "', 'the_geom', " << m_SRID << ", 'GEOMETRY'," << m_Dimension << " );";
 
-  
-  
-  
   m_Result = T.exec(addGeometryCommand.str());
 
   /** creation index GIST */
   std::stringstream addGISTIndexCommand;
-  
-  addGISTIndexCommand << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName << " USING gist( the_geom );";
 
-  otbGenericMsgDebugMacro(<<"Create Command " << addGISTIndexCommand.str());
-  
+  addGISTIndexCommand << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName <<
+  " USING gist( the_geom );";
+
+  otbGenericMsgDebugMacro(<< "Create Command " << addGISTIndexCommand.str());
+
   m_Result = T.exec(addGISTIndexCommand.str());
 }
 
@@ -139,12 +140,11 @@ PostGISCreateTableTransactor::ResultType PostGISCreateTableTransactor::GetResult
   return m_Result;
 }
 
-
-void PostGISCreateTableTransactor::CreateGISTIndex (pqxx::nontransaction &T)
+void PostGISCreateTableTransactor::CreateGISTIndex(pqxx::nontransaction& T)
 {
   /*
   std::stringstream addGISTIndexCmd;
-  
+
   addGISTIndexCmd << "CREATE INDEX idx_" << m_TableName << "_the_geom ON " << m_TableName << " USING gist( the_geom );";
 
   otbGenericMsgDebugMacro(<<"Create Command " << addGISTIndexCmd.str());
@@ -154,5 +154,3 @@ void PostGISCreateTableTransactor::CreateGISTIndex (pqxx::nontransaction &T)
 }
 
 } // end namespace otb
-
-

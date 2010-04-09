@@ -46,9 +46,9 @@ class ITK_EXPORT JPEG2000ImageIO : public itk::ImageIOBase
 public:
 
   /** Standard class typedefs. */
-  typedef JPEG2000ImageIO            Self;
-  typedef itk::ImageIOBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef JPEG2000ImageIO         Self;
+  typedef itk::ImageIOBase        Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -66,7 +66,7 @@ public:
   virtual bool CanStreamRead()
   {
     return true;
-  };
+  }
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -87,7 +87,7 @@ public:
   virtual bool CanStreamWrite()
   {
     return true;
-  };
+  }
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -106,8 +106,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  JPEG2000ImageIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  JPEG2000ImageIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Openjpeg decoder parameters */
   opj_dparameters_t m_Parameters;

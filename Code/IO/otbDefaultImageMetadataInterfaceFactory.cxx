@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -32,7 +31,6 @@
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -43,7 +41,7 @@ DefaultImageMetadataInterfaceFactory
                          "otbDefaultImageMetadataInterface",
                          "Default Meteada Interface",
                          1,
-                         itk::CreateObjectFunction<DefaultImageMetadataInterface >::New());
+                         itk::CreateObjectFunction<DefaultImageMetadataInterface>::New());
 }
 
 DefaultImageMetadataInterfaceFactory

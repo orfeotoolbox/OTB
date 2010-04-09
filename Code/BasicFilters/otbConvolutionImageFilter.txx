@@ -37,7 +37,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::ConvolutionImageFilter()
 {
   m_Radius.Fill(1);
-  m_Filter.SetSize(3*3);
+  m_Filter.SetSize(3 * 3);
   m_Filter.Fill(1);
   m_NormalizeFilter = false;
 }
@@ -46,19 +46,19 @@ template <class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
 ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
-{
+  {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
   typename Superclass::InputImagePointer inputPtr =
-    const_cast< TInputImage * >( this->GetInput() );
+    const_cast<TInputImage *>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !inputPtr || !outputPtr )
-  {
+  if (!inputPtr || !outputPtr)
+    {
     return;
-  }
+    }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -66,23 +66,23 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_Radius );
-  otbMsgDevMacro(<<"Padding by " << m_Radius );
-  otbMsgDevMacro(<<"Region is now " << inputRequestedRegion.GetIndex() << ", "<< inputRequestedRegion.GetSize() );
+  inputRequestedRegion.PadByRadius(m_Radius);
+  otbMsgDevMacro(<< "Padding by " << m_Radius);
+  otbMsgDevMacro(<< "Region is now " << inputRequestedRegion.GetIndex() << ", " << inputRequestedRegion.GetSize());
 
   // crop the input requested region at the input's largest possible region
-  if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-  {
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+    {
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
     // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
@@ -90,21 +90,20 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
+    }
   }
-}
 
-
-template< class TInputImage, class TOutputImage, class TBoundaryCondition>
+template<class TInputImage, class TOutputImage, class TBoundaryCondition>
 void
-ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
   unsigned int i;
 
   // Allocate output
-  typename OutputImageType::Pointer output = this->GetOutput();
-  typename  InputImageType::ConstPointer input  = this->GetInput();
+  typename OutputImageType::Pointer     output = this->GetOutput();
+  typename InputImageType::ConstPointer input  = this->GetInput();
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -122,38 +121,38 @@ ConvolutionImageFilter< TInputImage, TOutputImage, TBoundaryCondition>
   unsigned int neighborhoodSize = inputIt.Size();
 
   // Compute the norm of the filter
-  if(m_NormalizeFilter)
-  {
+  if (m_NormalizeFilter)
+    {
     norm = itk::NumericTraits<InputRealType>::Zero;
     for (i = 0; i < neighborhoodSize; ++i)
-    {
-     norm += static_cast<InputRealType>( vcl_abs(m_Filter(i)) );
+      {
+      norm += static_cast<InputRealType>(vcl_abs(m_Filter(i)));
+      }
     }
-  }
 
-  while ( ! inputIt.IsAtEnd() )
-  {
+  while (!inputIt.IsAtEnd())
+    {
     sum = itk::NumericTraits<InputRealType>::Zero;
 
     for (i = 0; i < neighborhoodSize; ++i)
-    {
-      sum += static_cast<InputRealType>( inputIt.GetPixel(i)*m_Filter(i) );
-    }
+      {
+      sum += static_cast<InputRealType>(inputIt.GetPixel(i) * m_Filter(i));
+      }
 
     // get the mean value
     if (m_NormalizeFilter)
-    {
-      outputIt.Set( static_cast<OutputPixelType>(sum / double(norm)) );
-    }
+      {
+      outputIt.Set(static_cast<OutputPixelType>(sum / double(norm)));
+      }
     else
-    {
-      outputIt.Set( static_cast<OutputPixelType>(sum));
-    }
+      {
+      outputIt.Set(static_cast<OutputPixelType>(sum));
+      }
 
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();
-  }
+    }
 }
 
 /**
@@ -164,7 +163,7 @@ void
 ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << std::endl;
 
 }

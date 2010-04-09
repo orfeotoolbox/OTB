@@ -42,36 +42,36 @@ namespace otb
  */
 template <class TVertex>
 class ITK_EXPORT RCC8Graph  :
-      public itk::DataObject
+  public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
-  typedef RCC8Graph                              Self;
-  typedef itk::DataObject                        Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef RCC8Graph                     Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8Graph,itk::DataObject);
+  itkTypeMacro(RCC8Graph, itk::DataObject);
   /** Vertex typedef */
-  typedef TVertex VertexType;
+  typedef TVertex                      VertexType;
   typedef typename VertexType::Pointer VertexPointerType;
   /** Edge typedef */
-  typedef RCC8Edge EdgeType;
-  typedef typename EdgeType::Pointer EdgePointerType;
+  typedef RCC8Edge                         EdgeType;
+  typedef typename EdgeType::Pointer       EdgePointerType;
   typedef typename EdgeType::RCC8ValueType RCC8ValueType;
   /** Typedef for the boost graph representation */
   typedef boost::adjacency_list
-  <boost::vecS,boost::vecS,boost::bidirectionalS,
-  VertexPointerType,EdgePointerType> InternalGraphType;
+  <boost::vecS, boost::vecS, boost::bidirectionalS,
+   VertexPointerType, EdgePointerType> InternalGraphType;
   /** Edges and vertices descriptors typedefs (boost objects)*/
-  typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
-  typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
+  typedef typename InternalGraphType::vertex_descriptor VertexDescriptorType;
+  typedef typename InternalGraphType::edge_descriptor   EdgeDescriptorType;
 
   /** Getters and Setters for the number of vertices */
-  itkSetMacro(NumberOfVertices,unsigned int);
-  itkGetConstReferenceMacro(NumberOfVertices,unsigned int);
+  itkSetMacro(NumberOfVertices, unsigned int);
+  itkGetConstReferenceMacro(NumberOfVertices, unsigned int);
 
   /**
    *  Return the internal boost graph object.
@@ -80,7 +80,7 @@ public:
   InternalGraphType * GetGraph(void)
   {
     return &m_Graph;
-  };
+  }
   /**
    * Since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
@@ -116,15 +116,14 @@ protected:
   /** Constructor */
   RCC8Graph();
   /** Destructor */
-  ~RCC8Graph() {};
+  ~RCC8Graph() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /**
    * Initialize a range of vertex.
    * \param num The index of the last vertices to intialize.
    */
-  void Initialize( unsigned int num);
-
+  void Initialize(unsigned int num);
 
 private:
 
@@ -138,6 +137,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbRCC8Graph.txx"
 #endif
-
 
 #endif

@@ -26,7 +26,7 @@ namespace otb
 {
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-      GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::GISTable()
 {
   m_TableName = "";
@@ -34,44 +34,41 @@ template <class TConnectionImplementation, class TPrecision, unsigned int Spatia
   m_Srid = -1;
 }
 
-
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
 GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::SetProjectionRef(std::string projectionRef)
+::SetProjectionRef(std::string projectionRef)
 {
-  itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
   this->Modified();
 }
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 std::string
 GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
-  ::GetProjectionRef() const
+::GetProjectionRef() const
 {
-  const itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
+  const itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
+  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
 
   return projectionRef;
 }
 
 template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
 void
-    GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << std::endl;
 
-
-  os<<"Table name: "<< m_TableName<<std::endl;
+  os << "Table name: " << m_TableName << std::endl;
 
 }
-
 
 } // end namespace otb
 

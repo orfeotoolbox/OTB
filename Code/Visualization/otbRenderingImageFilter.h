@@ -50,18 +50,18 @@ class RenderingFunctor
 {
 public:
   /** Rendering function typedef */
-  typedef otb::Function::RenderingFunction<TPixel,TRGBPixel>       RenderingFunctionType;
+  typedef otb::Function::RenderingFunction<TPixel, TRGBPixel> RenderingFunctionType;
   /** Rendering function pointer typedef */
-  typedef typename RenderingFunctionType::Pointer                  RenderingFunctionPointerType;
+  typedef typename RenderingFunctionType::Pointer RenderingFunctionPointerType;
   /** Default rendering function typedef */
-  typedef TPixel                                                   PixelType;
-  typedef typename itk::NumericTraits<PixelType>::ValueType        ScalarPixelType;
-  typedef itk::VariableLengthVector<ScalarPixelType>               VectorPixelType;
-  typedef itk::RGBPixel<ScalarPixelType>                           RGBPixelType;
-  typedef itk::RGBAPixel<ScalarPixelType>                          RGBAPixelType;
+  typedef TPixel                                            PixelType;
+  typedef typename itk::NumericTraits<PixelType>::ValueType ScalarPixelType;
+  typedef itk::VariableLengthVector<ScalarPixelType>        VectorPixelType;
+  typedef itk::RGBPixel<ScalarPixelType>                    RGBPixelType;
+  typedef itk::RGBAPixel<ScalarPixelType>                   RGBAPixelType;
 
   /** Pixel operator */
-  inline TRGBPixel operator()(const PixelType & pixel) const
+  inline TRGBPixel operator ()(const PixelType& pixel) const
   {
     return m_Function->Evaluate(pixel);
   }
@@ -115,33 +115,33 @@ private:
 *   \sa RenderingFunction
 *
 */
-template <class TInputImage, class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
+template <class TInputImage, class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2> >
 class RenderingImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
+  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
                                         Functor::RenderingFunctor
-                                        < typename TInputImage ::PixelType,
-                                          typename TOutputImage::PixelType > >
+                                        <typename TInputImage::PixelType,
+                                         typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
-  typedef RenderingImageFilter                                   Self;
+  typedef RenderingImageFilter Self;
   typedef itk::UnaryFunctorImageFilter
-  <TInputImage,TOutputImage, Functor::RenderingFunctor
-                 < typename TInputImage ::PixelType,
-                   typename TOutputImage::PixelType > >          Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  <TInputImage, TOutputImage, Functor::RenderingFunctor
+   <typename TInputImage::PixelType,
+    typename TOutputImage::PixelType> >          Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RenderingImageFilter,itk::UnaryFunctorImageFilter);
+  itkTypeMacro(RenderingImageFilter, itk::UnaryFunctorImageFilter);
 
   /** Rendering function typedef */
   typedef Functor::RenderingFunctor
-  < typename TInputImage ::PixelType,
-    typename TOutputImage::PixelType >                         RenderingFunctorType;
+  <typename TInputImage::PixelType,
+   typename TOutputImage::PixelType>                         RenderingFunctorType;
   typedef typename RenderingFunctorType::RenderingFunctionType RenderingFunctionType;
 
   /**
@@ -154,7 +154,6 @@ public:
     this->Modified();
   }
 
-
   /**
    * Get the rendering function
    * \return The rendering function.
@@ -162,9 +161,9 @@ public:
   RenderingFunctionType * GetRenderingFunction(void)
   {
     if (this->GetFunctor().GetFunction() == NULL)
-    {
+      {
       this->SetDefaultRenderingFunction();
-    }
+      }
     return this->GetFunctor().GetFunction();
   }
 
@@ -177,55 +176,55 @@ public:
     Superclass::BeforeThreadedGenerateData();
 
     if (this->GetFunctor().GetFunction() == NULL)
-    {
-      otbMsgDevMacro(<<"RenderingFunction set to default");
+      {
+      otbMsgDevMacro(<< "RenderingFunction set to default");
       this->SetDefaultRenderingFunction();
-    }
+      }
 
     // Initialize the rendering function
     this->GetFunctor().InitializeFunction();
-    otbMsgDevMacro(<<"RenderingImageFilter::BeforeThreadedGenerateData():");
+    otbMsgDevMacro(<< "RenderingImageFilter::BeforeThreadedGenerateData():");
     otbMsgDevMacro(<< " - Output functor size "
-            << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());
-    otbMsgDevMacro(<<"Rendering Funtion:" << this->GetFunctor().GetFunction());
+                   << (this->GetFunctor().GetFunction())->GetPixelRepresentationSize());
+    otbMsgDevMacro(<< "Rendering Funtion:" << this->GetFunctor().GetFunction());
 
     //Check if the rendering function channels are compatible with the image
     //might want to be more generic here one day.
 //     unsigned int numberOfInputChannels = this->GetInput()->GetNumberOfComponentsPerPixel();
-    itk::ImageRegionConstIterator<TInputImage> it(this->GetInput(),this->GetInput()->GetBufferedRegion());
-    unsigned int numberOfInputChannels = VisualizationPixelTraits::PixelSize(it.Get());
-    std::vector<unsigned int> channels = (this->GetFunctor().GetFunction())->GetChannelList();
-    for (unsigned int i=0; i<channels.size(); ++i)
-    {
-      if(channels[i] >= numberOfInputChannels)
+    itk::ImageRegionConstIterator<TInputImage> it(this->GetInput(), this->GetInput()->GetBufferedRegion());
+    unsigned int                               numberOfInputChannels = VisualizationPixelTraits::PixelSize(it.Get());
+    std::vector<unsigned int>                  channels = (this->GetFunctor().GetFunction())->GetChannelList();
+    for (unsigned int i = 0; i < channels.size(); ++i)
       {
-        itkExceptionMacro(<<"Channels specified as input (" << channels[i] << ") is not compatible "
-           << "with the size of the image: " << numberOfInputChannels);
+      if (channels[i] >= numberOfInputChannels)
+        {
+        itkExceptionMacro(<< "Channels specified as input (" << channels[i] << ") is not compatible "
+                          << "with the size of the image: " << numberOfInputChannels);
+        }
       }
-    }
 
   }
 
- protected:
+protected:
   /** Constructor */
   RenderingImageFilter() {}
   /** Destructor */
   virtual ~RenderingImageFilter() {}
 
   typedef Function::StandardRenderingFunction<
-     typename TInputImage::PixelType,
-     typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+    typename TInputImage::PixelType,
+    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
 
   void SetDefaultRenderingFunction()
   {
-    otbMsgDevMacro(<<"WARNING: using the default rendering function");
+    otbMsgDevMacro(<< "WARNING: using the default rendering function");
 
-    this->GetFunctor().SetFunction(DefaultRenderingFunctionType::New() );
+    this->GetFunctor().SetFunction(DefaultRenderingFunctionType::New());
   }
 
 private:
   RenderingImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 } // end namespace otb
 

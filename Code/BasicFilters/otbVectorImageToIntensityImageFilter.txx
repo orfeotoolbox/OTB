@@ -31,7 +31,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
+VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
 ::VectorImageToIntensityImageFilter()
 {
 
@@ -39,14 +39,12 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,int threadId)
+VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId)
 {
 
-
-  InputImageConstPointerType  inputPtr = this->GetInput();
-  OutputImagePointerType outputPtr = this->GetOutput();
-
+  InputImageConstPointerType inputPtr = this->GetInput();
+  OutputImagePointerType     outputPtr = this->GetOutput();
 
   // Define the portion of the input to walk for this thread, using
   // the CallCopyOutputRegionToInputRegion method allows for the input
@@ -63,28 +61,27 @@ VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
   outputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
-  {
-    double sum=0.0;
-    InputPixelType pixel = inputIt.Get();
-    for (unsigned int i=0; i<pixel.Size(); ++i)
     {
+    double         sum = 0.0;
+    InputPixelType pixel = inputIt.Get();
+    for (unsigned int i = 0; i < pixel.Size(); ++i)
+      {
       sum += pixel[i];
-    }
+      }
     sum /= pixel.Size();
-
 
     outputIt.Set(static_cast<OutputPixelType>(sum));
     ++inputIt;
     ++outputIt;
     progress.CompletedPixel();  // potential exception thrown here
-  }
+    }
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage>
 void
-VectorImageToIntensityImageFilter<TInputImage,TOutputImage>
+VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

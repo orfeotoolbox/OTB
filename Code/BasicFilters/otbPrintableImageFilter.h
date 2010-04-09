@@ -41,14 +41,14 @@ namespace Functor
 template<class TInputPixel, class TMaskPixel, class TOutputPixel>
 class ITK_EXPORT MaskFunctor
 {
-  public :
-    MaskFunctor()
+public:
+  MaskFunctor()
     {
-      m_BackgroundValue = 0;
-      m_ObjectColor.SetSize(3);
-      m_ObjectColor.Fill(255);
+    m_BackgroundValue = 0;
+    m_ObjectColor.SetSize(3);
+    m_ObjectColor.Fill(255);
     };
-  ~MaskFunctor(){};
+  ~MaskFunctor(){}
 
   typedef TInputPixel                         InputPixelType;
   typedef TMaskPixel                          MaskPixelType;
@@ -56,48 +56,47 @@ class ITK_EXPORT MaskFunctor
   typedef typename OutputPixelType::ValueType OutputInternalPixelType;
 
   MaskPixelType GetBackgroundValue()
-    {
-      return m_BackgroundValue;
-    }
-  void SetBackgroundValue( MaskPixelType val )
-    {
-      m_BackgroundValue = val;
-    }
+  {
+    return m_BackgroundValue;
+  }
+  void SetBackgroundValue(MaskPixelType val)
+  {
+    m_BackgroundValue = val;
+  }
 
- OutputPixelType GetObjectColor()
-    {
-      return m_ObjectColor;
-    }
-  void SetObjectColor( OutputPixelType val )
-    {
-      m_ObjectColor = val;
-    }
+  OutputPixelType GetObjectColor()
+  {
+    return m_ObjectColor;
+  }
+  void SetObjectColor(OutputPixelType val)
+  {
+    m_ObjectColor = val;
+  }
 
-  inline OutputPixelType operator()(InputPixelType inPix, MaskPixelType maskPix) const
-    {
-      OutputPixelType outPix;
-      if( maskPix==m_BackgroundValue )
-       {
-         outPix.SetSize( inPix.Size() );
-         for(unsigned int i=0; i<outPix.Size(); i++)
-           {
-             outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
-           }
-       }
-      else
-       {
-         outPix = m_ObjectColor;
-       }
+  inline OutputPixelType operator ()(InputPixelType inPix, MaskPixelType maskPix) const
+  {
+    OutputPixelType outPix;
+    if (maskPix == m_BackgroundValue)
+      {
+      outPix.SetSize(inPix.Size());
+      for (unsigned int i = 0; i < outPix.Size(); i++)
+        {
+        outPix[i] = static_cast<OutputInternalPixelType>(inPix[i]);
+        }
+      }
+    else
+      {
+      outPix = m_ObjectColor;
+      }
 
-      return outPix;
-    }
+    return outPix;
+  }
 
- protected:
+protected:
   MaskPixelType   m_BackgroundValue;
   OutputPixelType m_ObjectColor;
 };
 }
-
 
 /**
  * \class PrintableImageFilter
@@ -114,41 +113,40 @@ class ITK_EXPORT MaskFunctor
  * \sa itkImageToImageFilter
  **/
 
-template <class TInputImage , class TMaskImage = otb::Image<unsigned char, 2> >
+template <class TInputImage, class TMaskImage = otb::Image<unsigned char, 2> >
 class ITK_EXPORT PrintableImageFilter :
-public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
+  public itk::ImageToImageFilter<TInputImage, otb::VectorImage<unsigned char, 2> >
 {
 public:
-  typedef PrintableImageFilter                            Self;
+  typedef PrintableImageFilter Self;
   typedef itk::ImageToImageFilter
-  <TInputImage, otb::VectorImage<unsigned char,2> >       Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  <TInputImage, otb::VectorImage<unsigned char, 2> >       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
-  typedef typename InputImageType::PixelType              InputPixelType;
-  typedef typename InputImageType::InternalPixelType      InputInternalPixelType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::PixelType         InputPixelType;
+  typedef typename InputImageType::InternalPixelType InputInternalPixelType;
 //   typedef typename itk::NumericTraits<InputPixelType>::ValueType InputInternalPixelType;
-  typedef unsigned char                                   OutputInternalPixelType;
-  typedef VectorImage<OutputInternalPixelType,2>          OutputImageType;
-  typedef OutputImageType::PixelType                      OutputPixelType;
+  typedef unsigned char                           OutputInternalPixelType;
+  typedef VectorImage<OutputInternalPixelType, 2> OutputImageType;
+  typedef OutputImageType::PixelType              OutputPixelType;
 
-  typedef TMaskImage                                      MaskImageType;
-  typedef typename MaskImageType::Pointer                 MaskImagePointerType;
-  typedef typename MaskImageType::PixelType               MaskPixelType;
-
+  typedef TMaskImage                        MaskImageType;
+  typedef typename MaskImageType::Pointer   MaskImagePointerType;
+  typedef typename MaskImageType::PixelType MaskPixelType;
 
   typedef otb::MultiChannelExtractROI<InputInternalPixelType,
                                       InputInternalPixelType>               ChannelExtractorType;
-  typedef typename ChannelExtractorType::ChannelsType                       ChannelsType;
+  typedef typename ChannelExtractorType::ChannelsType ChannelsType;
 
   typedef VectorRescaleIntensityImageFilter
-          <typename ChannelExtractorType::OutputImageType,OutputImageType>  VectorRescalerType;
+  <typename ChannelExtractorType::OutputImageType, OutputImageType>  VectorRescalerType;
 
-  typedef Functor::MaskFunctor<InputPixelType,MaskPixelType,OutputPixelType> FunctorType;
+  typedef Functor::MaskFunctor<InputPixelType, MaskPixelType, OutputPixelType> FunctorType;
   typedef itk::BinaryFunctorImageFilter<OutputImageType, MaskImageType,
-                                        OutputImageType, FunctorType   >     FunctorFilterType;
-  typedef typename FunctorFilterType::Pointer                                FunctorFilterPointerType;
+                                        OutputImageType, FunctorType>     FunctorFilterType;
+  typedef typename FunctorFilterType::Pointer FunctorFilterPointerType;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -158,18 +156,17 @@ public:
                itk::ImageToImageFilter);
 
   /** Display */
-  void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  void SetChannel( unsigned int channel);
+  void SetChannel(unsigned int channel);
   const ChannelsType GetChannels(void) const;
 
-  otbSetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
-  otbGetObjectMemberMacro(Rescaler,AutomaticInputMinMaxComputation,bool);
-  otbSetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
-  otbGetObjectMemberMacro(Rescaler,InputMinimum,InputPixelType);
-  otbSetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
-  otbGetObjectMemberMacro(Rescaler,InputMaximum,InputPixelType);
-
+  otbSetObjectMemberMacro(Rescaler, AutomaticInputMinMaxComputation, bool);
+  otbGetObjectMemberMacro(Rescaler, AutomaticInputMinMaxComputation, bool);
+  otbSetObjectMemberMacro(Rescaler, InputMinimum, InputPixelType);
+  otbGetObjectMemberMacro(Rescaler, InputMinimum, InputPixelType);
+  otbSetObjectMemberMacro(Rescaler, InputMaximum, InputPixelType);
+  otbGetObjectMemberMacro(Rescaler, InputMaximum, InputPixelType);
 
   /**
    * If set, only pixels within the mask will be classified.
@@ -191,33 +188,33 @@ public:
     return m_ChannelList;
   }
   /* Set the selected channle index (order is important) */
-  void SetChannelList( ChannelsType chList )
+  void SetChannelList(ChannelsType chList)
   {
-    if(chList.size() != 3)
+    if (chList.size() != 3)
       {
-       itkExceptionMacro(<<"Invalid channel list, size is "<<chList.size()<<" instead of 3");
+      itkExceptionMacro(<< "Invalid channel list, size is " << chList.size() << " instead of 3");
       }
     m_ChannelList = chList;
     this->Modified();
   }
 
   /** Output Mask Object color. */
-  void SetObjectColor( OutputPixelType val )
+  void SetObjectColor(OutputPixelType val)
   {
-    if(val.GetSize() != 3)
-    {
-      itkExceptionMacro(<<"Invalid object color, size is "<<val.Size()<<" instead of 3");
-    }
+    if (val.GetSize() != 3)
+      {
+      itkExceptionMacro(<< "Invalid object color, size is " << val.Size() << " instead of 3");
+      }
     m_ObjectColor = val;
-    m_MaskFilter->GetFunctor().SetObjectColor( val );
+    m_MaskFilter->GetFunctor().SetObjectColor(val);
     this->Modified();
   }
   itkGetMacro(ObjectColor, OutputPixelType);
 
-  void SetBackgroundMaskValue( MaskPixelType val )
+  void SetBackgroundMaskValue(MaskPixelType val)
   {
     m_BackgroundMaskValue = val;
-    m_MaskFilter->GetFunctor().SetBackgroundValue( val );
+    m_MaskFilter->GetFunctor().SetBackgroundValue(val);
     this->Modified();
   }
   itkGetMacro(BackgroundMaskValue, MaskPixelType);
@@ -241,13 +238,13 @@ protected:
 
 private:
 
-  PrintableImageFilter(Self&);   // intentionally not implemented
-  void operator=(const Self&);          // intentionally not implemented
+  PrintableImageFilter(Self &);   // intentionally not implemented
+  void operator =(const Self&);          // intentionally not implemented
 
-  typename VectorRescalerType::Pointer   m_Rescaler;
+  typename VectorRescalerType::Pointer m_Rescaler;
   typename ChannelExtractorType::Pointer m_Extractor;
   // Foreground mask value
-  FunctorFilterPointerType              m_MaskFilter;
+  FunctorFilterPointerType m_MaskFilter;
   // Objects (of the mask) will be displayer with the choosen color.
   OutputPixelType m_ObjectColor;
   // Use mask

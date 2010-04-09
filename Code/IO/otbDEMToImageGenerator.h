@@ -27,7 +27,6 @@
 #include "otbDEMHandler.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
-
 namespace otb
 {
 /** \class DEMToImageGenerator
@@ -44,64 +43,63 @@ namespace otb
  *
  */
 template <class TDEMImage>
-class ITK_EXPORT DEMToImageGenerator:
-      public itk::ImageSource<TDEMImage>
+class ITK_EXPORT DEMToImageGenerator :
+  public itk::ImageSource<TDEMImage>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef TDEMImage                          DEMImageType;
-  typedef typename DEMImageType::Pointer     DEMImagePointerType;
-  typedef typename DEMImageType::PixelType   PixelType;
+  typedef TDEMImage                        DEMImageType;
+  typedef typename DEMImageType::Pointer   DEMImagePointerType;
+  typedef typename DEMImageType::PixelType PixelType;
 
-  typedef DEMToImageGenerator                Self;
-  typedef itk::ImageSource<DEMImageType>     Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
-  typedef DEMImageType                       OutputImageType;
+  typedef DEMToImageGenerator            Self;
+  typedef itk::ImageSource<DEMImageType> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef DEMImageType                   OutputImageType;
 
-  typedef typename Superclass::Pointer                      OutputImagePointer;
-  typedef typename OutputImageType::SpacingType             SpacingType;
-  typedef typename OutputImageType::SizeType                SizeType;
-  typedef typename OutputImageType::PointType               PointType;
-  typedef typename OutputImageType::IndexType               IndexType;
-  typedef typename Superclass::OutputImageRegionType        OutputImageRegionType;
-  typedef itk::ImageRegionIteratorWithIndex< DEMImageType > ImageIteratorType;
+  typedef typename Superclass::Pointer                    OutputImagePointer;
+  typedef typename OutputImageType::SpacingType           SpacingType;
+  typedef typename OutputImageType::SizeType              SizeType;
+  typedef typename OutputImageType::PointType             PointType;
+  typedef typename OutputImageType::IndexType             IndexType;
+  typedef typename Superclass::OutputImageRegionType      OutputImageRegionType;
+  typedef itk::ImageRegionIteratorWithIndex<DEMImageType> ImageIteratorType;
 
-  typedef otb::DEMHandler                                   DEMHandlerType;
+  typedef otb::DEMHandler DEMHandlerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DEMToImageGenerator,ImageSource);
+  itkTypeMacro(DEMToImageGenerator, ImageSource);
 
   /** Set/Get the Output Origin coordinates. */
-  itkSetMacro(OutputOrigin,PointType);
-  itkGetConstReferenceMacro(OutputOrigin,PointType);
+  itkSetMacro(OutputOrigin, PointType);
+  itkGetConstReferenceMacro(OutputOrigin, PointType);
 
   /** Set/Get the Output Size. */
-  itkSetMacro(OutputSize,SizeType);
-  itkGetConstReferenceMacro(OutputSize,SizeType);
+  itkSetMacro(OutputSize, SizeType);
+  itkGetConstReferenceMacro(OutputSize, SizeType);
 
   /** Set/Get the Output Spacing. */
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetConstReferenceMacro(OutputSpacing,SpacingType);
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
   /** Set/Get the Default Unknown Value. */
-  itkSetMacro(DefaultUnknownValue,PixelType);
-  itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
+  itkSetMacro(DefaultUnknownValue, PixelType);
+  itkGetConstReferenceMacro(DefaultUnknownValue, PixelType);
 
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
 
-
 protected:
   DEMToImageGenerator();
-  virtual ~DEMToImageGenerator(){};
+  virtual ~DEMToImageGenerator(){}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId);
+                            int threadId);
   virtual void GenerateOutputInformation();
 
   DEMHandlerType::Pointer m_DEMHandler;
@@ -111,8 +109,8 @@ protected:
   PixelType               m_DefaultUnknownValue;
 
 private:
-  DEMToImageGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DEMToImageGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // namespace otb

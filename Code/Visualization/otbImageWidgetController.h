@@ -39,16 +39,16 @@ class ImageWidgetController
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidgetController             Self;
-  typedef itk::Object                       Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef ImageWidgetController         Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidgetController,Object);
+  itkTypeMacro(ImageWidgetController, Object);
 
   /** Handler typedef */
   typedef otb::ImageWidgetActionHandler      ActionHandlerType;
@@ -82,21 +82,19 @@ public:
    */
   void HandleWidgetResize(std::string widgetId, int w, int h);
 
-   /** Handle widget move
-   * \param widgetId The id of the resized widget
-   * \param x new x location
-   * \param y new y location
-   */
+  /** Handle widget move
+  * \param widgetId The id of the resized widget
+  * \param x new x location
+  * \param y new y location
+  */
   void HandleWidgetMove(std::string widgetId, int x, int y);
 
   /** Activate action all the handlers */
   void ActivateActionHandlers();
- 
+
   /** Deactivate action all the handlers */
   void DeactivateActionHandlers();
 
- 
-  
 protected:
   /** Constructor */
   ImageWidgetController();
@@ -107,7 +105,7 @@ protected:
 
 private:
   ImageWidgetController(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Action handlers list */
   ActionHandlerListPointerType m_ActionHandlersList;
@@ -115,5 +113,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

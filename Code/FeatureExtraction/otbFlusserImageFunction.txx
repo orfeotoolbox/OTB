@@ -30,203 +30,200 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::FlusserImageFunction()
 {
-  m_MomentNumber =-1;
+  m_MomentNumber = -1;
 }
 
 /**
    *
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
-
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>::RealType
-FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>::RealType
+FlusserImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
 
   RealType                            FlusserValue(itk::NumericTraits<RealType>::Zero);
   ComplexType                         FlusserValueComplex(itk::NumericTraits<ComplexType>::Zero);
 
-  typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;
-  typename CMType::Pointer function =CMType::New();
+  typedef otb::ComplexMomentImageFunction<InputType, ComplexType> CMType;
+  typename CMType::Pointer function = CMType::New();
 
-  if ( !this->GetInputImage() )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->GetInputImage())
+    {
+    return (itk::NumericTraits<RealType>::max());
+    }
 
-  if ( !this->IsInsideBuffer( index ) )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->IsInsideBuffer(index))
+    {
+    return (itk::NumericTraits<RealType>::max());
+    }
 
   assert(m_MomentNumber > 0);
   assert(m_MomentNumber < 12);
 
-  function->SetInputImage( this->GetInputImage() );
-  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
+  function->SetInputImage(this->GetInputImage());
+  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius());
 
   switch (m_MomentNumber)
-  {
-  case 1 :
-  {
+    {
+  case 1:
+    {
     ComplexType C11;
     function->SetP(1);
     function->SetQ(1);
-    C11 = function->EvaluateAtIndex( index );
+    C11 = function->EvaluateAtIndex(index);
     FlusserValue = C11.real();
-  }
-  break;
+    }
+    break;
   case 2:
-  {
-    ComplexType C21,C12;
+    {
+    ComplexType C21, C12;
     function->SetP(2);
     function->SetQ(1);
-    C21 = function->EvaluateAtIndex( index );
+    C21 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    FlusserValue = vcl_abs( C21 * C12 );
-  }
-  break;
+    FlusserValue = vcl_abs(C21 * C12);
+    }
+    break;
   case 3:
-  {
-    ComplexType C20,C12;
+    {
+    ComplexType C20, C12;
     function->SetP(2);
     function->SetQ(0);
-    C20 = function->EvaluateAtIndex( index );
+    C20 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C20 * vcl_pow(C12,2);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C20 * vcl_pow(C12, 2);
     FlusserValue = FlusserValueComplex.real();
-  }
-  break;
+    }
+    break;
   case 4:
-  {
-    ComplexType C20,C12;
+    {
+    ComplexType C20, C12;
     function->SetP(2);
     function->SetQ(0);
-    C20 = function->EvaluateAtIndex( index );
+    C20 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C20 * vcl_pow(C12,2);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C20 * vcl_pow(C12, 2);
     FlusserValue = FlusserValueComplex.imag();
-  }
-  break;
+    }
+    break;
   case 5:
-  {
-    ComplexType C30,C12;
+    {
+    ComplexType C30, C12;
     function->SetP(3);
     function->SetQ(0);
-    C30 = function->EvaluateAtIndex( index );
+    C30 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    FlusserValueComplex = C30 * vcl_pow(C12,3);
+    FlusserValueComplex = C30 * vcl_pow(C12, 3);
     FlusserValue = FlusserValueComplex.real();
-  }
-  break;
+    }
+    break;
   case 6:
-  {
-    ComplexType C30,C12;
+    {
+    ComplexType C30, C12;
     function->SetP(3);
     function->SetQ(0);
-    C30 = function->EvaluateAtIndex( index );
+    C30 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    FlusserValueComplex = C30 * vcl_pow(C12,3);
+    FlusserValueComplex = C30 * vcl_pow(C12, 3);
     FlusserValue = FlusserValueComplex.imag();
-  }
-  break;
-  case 7 :
-  {
+    }
+    break;
+  case 7:
+    {
     ComplexType C22;
     function->SetP(2);
     function->SetQ(2);
-    C22 = function->EvaluateAtIndex( index );
+    C22 = function->EvaluateAtIndex(index);
     FlusserValue = C22.real();
-  }
-  break;
+    }
+    break;
   case 8:
-  {
-    ComplexType C31,C12;
+    {
+    ComplexType C31, C12;
     function->SetP(3);
     function->SetQ(1);
-    C31 = function->EvaluateAtIndex( index );
+    C31 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C31 * vcl_pow(C12,2);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C31 * vcl_pow(C12, 2);
     FlusserValue = FlusserValueComplex.real();
-  }
-  break;
+    }
+    break;
   case 9:
-  {
-    ComplexType C31,C12;
+    {
+    ComplexType C31, C12;
     function->SetP(3);
     function->SetQ(1);
-    C31 = function->EvaluateAtIndex( index );
+    C31 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C31 * vcl_pow(C12,2);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C31 * vcl_pow(C12, 2);
     FlusserValue = FlusserValueComplex.imag();
-  }
-  break;
+    }
+    break;
   case 10:
-  {
-    ComplexType C40,C12;
+    {
+    ComplexType C40, C12;
     function->SetP(4);
     function->SetQ(0);
-    C40 = function->EvaluateAtIndex( index );
+    C40 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C40 * vcl_pow(C12,4);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C40 * vcl_pow(C12, 4);
     FlusserValue = FlusserValueComplex.real();
-  }
-  break;
+    }
+    break;
   case 11:
-  {
-    ComplexType C40,C12;
+    {
+    ComplexType C40, C12;
     function->SetP(4);
     function->SetQ(0);
-    C40 = function->EvaluateAtIndex( index );
+    C40 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
-    FlusserValueComplex = C40 * vcl_pow(C12,4);
+    C12 = function->EvaluateAtIndex(index);
+    FlusserValueComplex = C40 * vcl_pow(C12, 4);
     FlusserValue = FlusserValueComplex.imag();
-  }
-  break;
+    }
+    break;
 
   default:
     itkWarningMacro("Hu's invariant parameters are between 1 and 7");
-  }
+    }
 
-
-  return (static_cast<RealType>(FlusserValue) );
+  return (static_cast<RealType>(FlusserValue));
 
 }
-
 
 } // namespace otb
 

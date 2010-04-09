@@ -22,59 +22,57 @@
 #include "itkDataObject.h"
 #include "itkConstNeighborhoodIterator.h"
 
-
 namespace otb
 {
 /** \class BinaryImageToDensityImageFilter
  *  \brief This class performs a streaming isotropic shrinking operation without smoothing.
  *
  */
-template <class TInputImage,class TOutputImage   , class TCountFunction>
+template <class TInputImage, class TOutputImage, class TCountFunction>
 class ITK_EXPORT BinaryImageToDensityImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage  >
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
 
   /** Standard typedefs */
-  typedef BinaryImageToDensityImageFilter                     Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>   Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef BinaryImageToDensityImageFilter                    Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(BinaryImageToDensityImageFilter,itk::ImageToImageFilter);
+  itkTypeMacro(BinaryImageToDensityImageFilter, itk::ImageToImageFilter);
 
   /** Template parameter typedefs */
-  typedef TInputImage                                          InputImageType;
-  typedef typename InputImageType::RegionType                  InputImageRegionType;
-  typedef typename InputImageType::Pointer                     InputImagePointerType;
-  typedef typename InputImageType::SizeType                    InputImageSizeType;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::Pointer    InputImagePointerType;
+  typedef typename InputImageType::SizeType   InputImageSizeType;
 
-  typedef TOutputImage                                         OutputImageType;
-  typedef typename OutputImageType::Pointer                    OutputImagePointerType;
+  typedef TOutputImage                      OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
 
-  typedef TCountFunction                                       CountFunctionType;
-  typedef typename CountFunctionType::Pointer                  CountFunctionPointerType;
+  typedef TCountFunction                      CountFunctionType;
+  typedef typename CountFunctionType::Pointer CountFunctionPointerType;
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
 
   /** Shrink factor accessor */
   itkSetMacro(NeighborhoodRadius, RadiusType);
   itkGetMacro(NeighborhoodRadius, RadiusType);
 
   void SetNeighborhoodRadius(unsigned int rad)
-    {
-      m_NeighborhoodRadius.Fill(rad);
-      this->Modified();
-    }
-
+  {
+    m_NeighborhoodRadius.Fill(rad);
+    this->Modified();
+  }
 
   /** Main computation method */
-  virtual void ThreadedGenerateData( const InputImageRegionType &outputRegionForThread, int threadId );
+  virtual void ThreadedGenerateData(const InputImageRegionType& outputRegionForThread, int threadId);
   virtual void BeforeThreadedGenerateData();
   virtual void GenerateInputRequestedRegion();
 
@@ -87,10 +85,10 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  BinaryImageToDensityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BinaryImageToDensityImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  CountFunctionPointerType    m_CountFunction;
+  CountFunctionPointerType m_CountFunction;
 
   /** The shrink factor */
   RadiusType m_NeighborhoodRadius;

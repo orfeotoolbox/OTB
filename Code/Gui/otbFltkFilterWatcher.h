@@ -43,13 +43,12 @@ public:
 
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  FltkFilterWatcher(itk::ProcessObject* process,
-                    int x, int y, int w,int h,
-                    const char *comment="");
+  FltkFilterWatcher(itk::ProcessObject * process,
+                    int x, int y, int w, int h,
+                    const char *comment = "");
 
   /** Destructor. */
   virtual ~FltkFilterWatcher();
-
 
   /** Callback method to show the EndEvent */
   virtual void EndFilter()
@@ -63,10 +62,10 @@ protected:
   virtual void ShowProgress()
   {
     if (m_Process)
-    {
+      {
       m_Progress->value(m_Process->GetProgress());
       Fl::check();
-    }
+      }
   }
 
   /** Callback method to show the StartEvent */
@@ -76,10 +75,9 @@ protected:
     m_Progress->show();
   }
 
-
 private:
 
-  Fl_Window * m_Window;
+  Fl_Window *   m_Window;
   Fl_Progress * m_Progress;
 };
 

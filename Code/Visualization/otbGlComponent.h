@@ -39,27 +39,27 @@ class GlComponent
 {
 public:
   /** Standard class typedefs */
-  typedef GlComponent                          Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
-  typedef itk::ImageRegion<2>                  RegionType;
+  typedef GlComponent                   Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::ImageRegion<2>           RegionType;
 
   // affine transform
-  typedef itk::AffineTransform<double,2>       AffineTransformType;
+  typedef itk::AffineTransform<double, 2>      AffineTransformType;
   typedef AffineTransformType::InputPointType  PointType;
   typedef AffineTransformType::InputVectorType VectorType;
-  typedef itk::FixedArray<double,4>             ColorType;
+  typedef itk::FixedArray<double, 4>           ColorType;
 
   /** Runtime information */
-  itkTypeMacro(GlComponent,Object);
+  itkTypeMacro(GlComponent, Object);
 
   /// Render the curve according to display extent and axis characteristics
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform) = 0;
+  virtual void  Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform) = 0;
 
   /** Set/Get the visible status */
-  itkSetMacro(Visible,bool);
-  itkGetMacro(Visible,bool);
+  itkSetMacro(Visible, bool);
+  itkGetMacro(Visible, bool);
   itkBooleanMacro(Visible);
 
 protected:
@@ -71,12 +71,12 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   GlComponent(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /// Is the component visible ?
   bool m_Visible;
@@ -85,5 +85,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

@@ -38,23 +38,23 @@ namespace otb {
  * \ingroup Streamed
  * \ingroup Threaded
  */
-template < class TInputImage, class TOutputImage, class TMaskImage = TOutputImage >
+template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
 class ITK_EXPORT SVMImageClassificationWithRuleFilter
-   : public SVMImageClassificationFilter< TInputImage, TOutputImage, TMaskImage >
+  : public SVMImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
 {
 public:
   /** Standard typedefs */
-  typedef SVMImageClassificationWithRuleFilter        Self;
-  typedef SVMImageClassificationFilter< TInputImage,
-              TOutputImage, TMaskImage >              Superclass;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
+  typedef SVMImageClassificationWithRuleFilter Self;
+  typedef SVMImageClassificationFilter<TInputImage,
+                                       TOutputImage, TMaskImage>              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(SVMImageClassificationWithRuleFilter,SVMImageClassificationFilter);
+  itkTypeMacro(SVMImageClassificationWithRuleFilter, SVMImageClassificationFilter);
 
   typedef typename Superclass::InputImageType             InputImageType;
   typedef typename Superclass::InputImageConstPointerType InputImageConstPointerType;
@@ -64,51 +64,50 @@ public:
   typedef typename Superclass::MaskImageConstPointerType MaskImageConstPointerType;
   typedef typename Superclass::MaskImagePointerType      MaskImagePointerType;
 
-  typedef typename Superclass::OutputImageType          OutputImageType;
-  typedef typename Superclass::OutputImagePointerType   OutputImagePointerType;
-  typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
-  typedef typename Superclass::LabelType                LabelType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
+  typedef typename Superclass::OutputImageRegionType  OutputImageRegionType;
+  typedef typename Superclass::LabelType              LabelType;
 
-  typedef typename Superclass::ModelType                ModelType;
-  typedef typename Superclass::ModelPointerType         ModelPointerType;
-  typedef typename ModelType::NodeCacheType             NodeCacheType;
-  typedef typename ModelType::MeasurementType           MeasurementType;
-  typedef typename ModelType::DistancesVectorType       DistanceValueType;
-  typedef typename DistanceValueType::ValueType         RuleValueType;
+  typedef typename Superclass::ModelType          ModelType;
+  typedef typename Superclass::ModelPointerType   ModelPointerType;
+  typedef typename ModelType::NodeCacheType       NodeCacheType;
+  typedef typename ModelType::MeasurementType     MeasurementType;
+  typedef typename ModelType::DistancesVectorType DistanceValueType;
+  typedef typename DistanceValueType::ValueType   RuleValueType;
 
-  typedef VectorImage< RuleValueType, OutputImageType::ImageDimension >
-                                                        OutputRuleImageType;
-  typedef typename OutputRuleImageType::Pointer         OutputRuleImagePointerType;
-  typedef typename OutputRuleImageType::RegionType      OutputRuleImageRegionType;
-  typedef typename OutputRuleImageType::PixelType       RuleType;
-
+  typedef VectorImage<RuleValueType, OutputImageType::ImageDimension>
+  OutputRuleImageType;
+  typedef typename OutputRuleImageType::Pointer    OutputRuleImagePointerType;
+  typedef typename OutputRuleImageType::RegionType OutputRuleImageRegionType;
+  typedef typename OutputRuleImageType::PixelType  RuleType;
 
   /** Access to the Rule image */
-  itkGetObjectMacro(OutputRule,OutputRuleImageType);
+  itkGetObjectMacro(OutputRule, OutputRuleImageType);
 
 protected:
   /** Constructor */
   SVMImageClassificationWithRuleFilter();
   /** Destructor */
-  virtual ~SVMImageClassificationWithRuleFilter() {};
+  virtual ~SVMImageClassificationWithRuleFilter() {}
 
   /** GenerateOutputInformation
         * Set the number of bands of the output rule image.
         * Copy informations from the input image if existing.
         **/
-       virtual void GenerateOutputInformation();
+  virtual void GenerateOutputInformation();
 
-       /** AllocateOutputs
-        * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
-        **/
-       virtual void AllocateOutputs();
+  /** AllocateOutputs
+   * Output allocation redefinition for VectorImage (used in TOutputRuleImage)
+   **/
+  virtual void AllocateOutputs();
 
   /** Threaded generate data */
-  virtual void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,int threadId);
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
 private:
-  SVMImageClassificationWithRuleFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMImageClassificationWithRuleFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   OutputRuleImagePointerType m_OutputRule;
 
@@ -120,7 +119,4 @@ private:
 #include "otbSVMImageClassificationWithRuleFilter.txx"
 #endif
 
-
 #endif
-
-

@@ -28,7 +28,7 @@
 #include "itkDenseFrequencyContainer.h"
 #include "itkNumericTraits.h"
 
-namespace otb{
+namespace otb {
 
 /** \class ListSampleToVariableDimensionHistogramGenerator
  *  \brief Generates a VariableDimensionHistogram from a ListSample
@@ -45,40 +45,40 @@ namespace otb{
  *
  * \sa VariableDimensionHistogram, ListSample, ListSampleToHistogramGenerator
  */
-template< class TListSample,
-          class THistogramMeasurement,
-          class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
+template<class TListSample,
+         class THistogramMeasurement,
+         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer>
 class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
-    public itk::Object
+  public itk::Object
 {
 public:
   /** Standard typedefs */
   typedef ListSampleToVariableDimensionHistogramGenerator Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-  
+  typedef itk::Object                                     Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToVariableDimensionHistogramGenerator, Object);
-  
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-   /** Type needed for defining the limits of the histogram bins */
-  typedef typename itk::NumericTraits< THistogramMeasurement >::RealType
-                                                 HistogramMeasurementRealType;
+  /** Type needed for defining the limits of the histogram bins */
+  typedef typename itk::NumericTraits<THistogramMeasurement>::RealType
+  HistogramMeasurementRealType;
 
-  typedef itk::Statistics::VariableDimensionHistogram< HistogramMeasurementRealType,
-                     TFrequencyContainer > HistogramType;
+  typedef itk::Statistics::VariableDimensionHistogram<HistogramMeasurementRealType,
+                                                      TFrequencyContainer> HistogramType;
 
-  typedef typename HistogramType::SizeType               HistogramSizeType;
-  typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
+  typedef typename HistogramType::SizeType              HistogramSizeType;
+  typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
 
   /** plug in the ListSample object */
   void SetListSample(const TListSample* list)
-    {
-     m_List = list;
-    }
+  {
+    m_List = list;
+  }
 
   void SetMarginalScale(float scale)
   { m_MarginalScale = scale; }
@@ -92,21 +92,20 @@ public:
   void Update()
   { this->GenerateData(); }
 
-  itkSetMacro(AutoMinMax,bool);
-  itkGetConstReferenceMacro(AutoMinMax,bool);
+  itkSetMacro(AutoMinMax, bool);
+  itkGetConstReferenceMacro(AutoMinMax, bool);
 
-  void SetHistogramMin(const MeasurementVectorType & histogramMin)
-    {
+  void SetHistogramMin(const MeasurementVectorType& histogramMin)
+  {
     m_HistogramMin = histogramMin;
     m_AutoMinMax = false;
-    }
+  }
 
-  void SetHistogramMax(const MeasurementVectorType & histogramMax)
-    {
+  void SetHistogramMax(const MeasurementVectorType& histogramMax)
+  {
     m_HistogramMax = histogramMax;
     m_AutoMinMax = false;
-    }
-
+  }
 
 protected:
   ListSampleToVariableDimensionHistogramGenerator();
@@ -117,11 +116,11 @@ protected:
 private:
   const TListSample* m_List;
   typename HistogramType::Pointer m_Histogram;
-  HistogramSizeType m_Sizes;
-  float m_MarginalScale;
+  HistogramSizeType     m_Sizes;
+  float                 m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;
-  bool m_AutoMinMax;
+  bool                  m_AutoMinMax;
 
 }; // end of class
 

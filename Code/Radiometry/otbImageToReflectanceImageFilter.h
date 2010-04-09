@@ -29,7 +29,6 @@
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 
-
 namespace otb
 {
 namespace Functor
@@ -49,47 +48,47 @@ template <class TInput, class TOutput>
 class ImageToReflectanceImageFunctor
 {
 public:
-  ImageToReflectanceImageFunctor() {};
-  virtual ~ImageToReflectanceImageFunctor() {};
+  ImageToReflectanceImageFunctor() {}
+  virtual ~ImageToReflectanceImageFunctor() {}
 
-  typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>        ImToLumFunctorType;
-  typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput>  LumToReflecFunctorType;
+  typedef Functor::ImageToLuminanceImageFunctor<TInput, TOutput>       ImToLumFunctorType;
+  typedef Functor::LuminanceToReflectanceImageFunctor<TInput, TOutput> LumToReflecFunctorType;
 
   void SetAlpha(double alpha)
   {
     m_ImToLumFunctor.SetAlpha(alpha);
-  };
+  }
   void SetBeta(double beta)
   {
     m_ImToLumFunctor.SetBeta(beta);
-  };
+  }
   void SetSolarIllumination(double solarIllumination)
   {
     m_LumToReflecFunctor.SetSolarIllumination(solarIllumination);
-  };
+  }
   void SetIlluminationCorrectionCoefficient(double coef)
   {
     m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef);
-  };
+  }
 
   double GetAlpha()
   {
     return m_ImToLumFunctor.GetAlpha();
-  };
+  }
   double GetBeta()
   {
     return m_ImToLumFunctor.GetBeta();
-  };
+  }
   double GetSolarIllumination()
   {
-    return  m_LumToReflecFunctor.GetSolarIllumination();
-  };
+    return m_LumToReflecFunctor.GetSolarIllumination();
+  }
   double GetIlluminationCorrectionCoefficient()
   {
     return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();
-  };
+  }
 
-  inline TOutput operator() (const TInput & inPixel) const
+  inline TOutput operator ()(const TInput& inPixel) const
   {
     TOutput outPixel;
     TOutput tempPix;
@@ -100,9 +99,8 @@ public:
   }
 
 private:
-  ImToLumFunctorType m_ImToLumFunctor;
+  ImToLumFunctorType     m_ImToLumFunctor;
   LumToReflecFunctorType m_LumToReflecFunctor;
-
 
 };
 }
@@ -126,28 +124,31 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToReflectanceImageFilter :
-      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
-      TOutputImage,
-      ITK_TYPENAME Functor::ImageToReflectanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
-      ITK_TYPENAME TOutputImage::InternalPixelType > >
+  public UnaryImageFunctorWithVectorImageFilter<TInputImage,
+                                                TOutputImage,
+                                                ITK_TYPENAME Functor::ImageToReflectanceImageFunctor<ITK_TYPENAME
+                                                                                                     TInputImage::
+                                                                                                     InternalPixelType,
+                                                                                                     ITK_TYPENAME
+                                                                                                     TOutputImage::
+                                                                                                     InternalPixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
   typedef typename Functor::ImageToReflectanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
-
+                                                           ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef ImageToReflectanceImageFilter Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageToReflectanceImageFilter                                                        Self;
+  typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
+  typedef itk::SmartPointer<Self>                                                              Pointer;
+  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -156,15 +157,14 @@ public:
   itkTypeMacro(ImageToReflectanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                           InputPixelType;
-  typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-  typedef typename InputImageType::RegionType                          InputImageRegionType;
-  typedef typename OutputImageType::PixelType                          OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
-
-  typedef typename itk::VariableLengthVector<double>                   VectorType;
+  typedef typename itk::VariableLengthVector<double> VectorType;
 
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
@@ -194,10 +194,10 @@ public:
   {
     double zenithalAngle = 90.0 - elevationAngle;
     if (this->m_ZenithalSolarAngle != zenithalAngle)
-    {
+      {
       this->m_ZenithalSolarAngle = zenithalAngle;
       this->Modified();
-    }
+      }
   }
 
   virtual double GetElevationSolarAngle() const
@@ -211,7 +211,7 @@ public:
     m_FluxNormalizationCoefficient = coef;
     m_IsSetFluxNormalizationCoefficient = true;
     this->Modified();
-  };
+  }
 
   /** Set the acquisition day. */
   itkSetClampMacro(Day, int, 1, 31);
@@ -222,108 +222,110 @@ public:
   /** Set the  acquisition mounth. */
   itkGetConstReferenceMacro(Month, int);
 
-
 protected:
   /** Constructor */
-  ImageToReflectanceImageFilter():
-    m_ZenithalSolarAngle(120.),//invalid value which will lead to negative radiometry
+  ImageToReflectanceImageFilter() :
+    m_ZenithalSolarAngle(120.), //invalid value which will lead to negative radiometry
     m_FluxNormalizationCoefficient(1.),
     m_IsSetFluxNormalizationCoefficient(false),
     m_Day(0),
     m_Month(0)
-  {
+    {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
     m_SolarIllumination.SetSize(0);
-  };
+    };
 
   /** Destructor */
-  virtual ~ImageToReflectanceImageFilter() {};
+  virtual ~ImageToReflectanceImageFilter() {}
 
   /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
 
-    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
-    if(m_Alpha.GetSize() == 0)
-    {
+    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+      this->GetInput()->GetMetaDataDictionary());
+    if (m_Alpha.GetSize() == 0)
+      {
       m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
-    if(m_Beta.GetSize() == 0)
-    {
+    if (m_Beta.GetSize() == 0)
+      {
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
     if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
-    {
+      {
       m_Day = imageMetadataInterface->GetDay(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
     if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
-    {
+      {
       m_Month = imageMetadataInterface->GetMonth(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
-    if(m_SolarIllumination.GetSize() == 0)
-    {
+    if (m_SolarIllumination.GetSize() == 0)
+      {
       m_SolarIllumination = imageMetadataInterface->GetSolarIrradiance(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
-    if(m_ZenithalSolarAngle == 120.0)
-    {
+    if (m_ZenithalSolarAngle == 120.0)
+      {
       //the zenithal angle is the complementary of the elevation angle
-      m_ZenithalSolarAngle = 90.0-imageMetadataInterface->GetSunElevation(this->GetInput()->GetMetaDataDictionary());
-    }
+      m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation(this->GetInput()->GetMetaDataDictionary());
+      }
 
-    otbMsgDevMacro( << "Using correction parameters: ");
-    otbMsgDevMacro( << "Alpha (gain): " << m_Alpha);
-    otbMsgDevMacro( << "Beta (bias):  " << m_Beta);
-    otbMsgDevMacro( << "Day:               " << m_Day);
-    otbMsgDevMacro( << "Month:             " << m_Month);
-    otbMsgDevMacro( << "Solar irradiance:  " << m_SolarIllumination);
-    otbMsgDevMacro( << "Zenithal angle:    " << m_ZenithalSolarAngle);
+    otbMsgDevMacro(<< "Using correction parameters: ");
+    otbMsgDevMacro(<< "Alpha (gain): " << m_Alpha);
+    otbMsgDevMacro(<< "Beta (bias):  " << m_Beta);
+    otbMsgDevMacro(<< "Day:               " << m_Day);
+    otbMsgDevMacro(<< "Month:             " << m_Month);
+    otbMsgDevMacro(<< "Solar irradiance:  " << m_SolarIllumination);
+    otbMsgDevMacro(<< "Zenithal angle:    " << m_ZenithalSolarAngle);
 
     if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-         || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-         || (m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
-    {
-      itkExceptionMacro(<<"Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
-    }
+        || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
+        || (m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+      {
+      itkExceptionMacro(
+        << "Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
+      }
 
     this->GetFunctorVector().clear();
-    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-    {
+    for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+      {
       FunctorType functor;
-      double coefTemp = 0.;
+      double      coefTemp = 0.;
       if (!m_IsSetFluxNormalizationCoefficient)
-      {
-        if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
         {
+        if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
+          {
           otb_6s_doublereal dsol = 0.;
-          otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
-          otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
-          int cr(0);
+          otb_6s_integer    day = static_cast<otb_6s_integer>(m_Day);
+          otb_6s_integer    month = static_cast<otb_6s_integer>(m_Month);
+          int               cr(0);
           cr = otb_6s_varsol_(&day, &month, &dsol);
-          coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI_180)*static_cast<double>(dsol);
-        }
+          coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * static_cast<double>(dsol);
+          }
         else
-        {
-          itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+          {
+          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+          }
         }
-      }
       else
-      {
-        coefTemp = vcl_cos(m_ZenithalSolarAngle*CONST_PI_180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
-      }
+        {
+        coefTemp =
+          vcl_cos(m_ZenithalSolarAngle *
+                  CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
+        }
       functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       functor.SetSolarIllumination(m_SolarIllumination[i]);
       this->GetFunctorVector().push_back(functor);
-    }
+      }
   }
-
 
 private:
   /** Ponderation declaration*/

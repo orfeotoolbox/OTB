@@ -39,18 +39,18 @@ class ITK_EXPORT VectorDataModel
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataModel                         Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef VectorDataModel               Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::VectorData<double,2> VectorDataType;
+  typedef otb::VectorData<double, 2>   VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
-  typedef VectorDataType::PolygonType PolygonType;
-  typedef PolygonType::VertexType VertexType;
+  typedef VectorDataType::PolygonType  PolygonType;
+  typedef PolygonType::VertexType      VertexType;
 
   /** Runtime information */
-  itkTypeMacro(VectorDataModel,Object);
+  itkTypeMacro(VectorDataModel, Object);
 
   /** New macro */
   itkNewMacro(Self);
@@ -59,8 +59,8 @@ public:
   void Update(void);
 
   /** Set/Get the node type used */
-  itkSetMacro(CurrentNodeType,NodeType);
-  itkGetMacro(CurrentNodeType,NodeType);
+  itkSetMacro(CurrentNodeType, NodeType);
+  itkGetMacro(CurrentNodeType, NodeType);
 
   /** Return a pointer to the vector data */
   itkGetObjectMacro(VectorData, VectorDataType);
@@ -79,15 +79,14 @@ protected:
   VectorDataModel();
 
   /** Destructor */
-  virtual ~VectorDataModel(){};
-
+  virtual ~VectorDataModel(){}
 
 private:
-  VectorDataModel(const Self&);
-  void operator=(const Self&);
+  VectorDataModel(const Self &);
+  void operator =(const Self&);
 
   VectorDataType::Pointer m_VectorData;
-  NodeType m_CurrentNodeType;
+  NodeType                m_CurrentNodeType;
 
   /** Node where the next geometry should be attached */
   DataNodeType::Pointer m_CurrentRootNode;

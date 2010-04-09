@@ -44,16 +44,16 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT FrostImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT FrostImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage InputImageType;
@@ -61,10 +61,10 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for standard classes. */
-  typedef FrostImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef FrostImageFilter                                         Self;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   /** "object factory" management method. */
   itkNewMacro(Self);
@@ -73,12 +73,12 @@ public:
   itkTypeMacro(FrostImageFilter, ImageToImageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
   /** "typedef" to define a real. */
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
 
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** "typedef" to define an image size. */
@@ -98,11 +98,12 @@ public:
   /** To be allowed to use the pipeline method FrostImageFilter needs
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError);
 
 protected:
   FrostImageFilter();
-  virtual ~FrostImageFilter() {};
+  virtual ~FrostImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** FrostImageFilter can be implemented for a multithreaded filter treatment.
@@ -114,11 +115,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  FrostImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  FrostImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius declaration */
   SizeType m_Radius;
@@ -130,6 +131,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFrostImageFilter.txx"
 #endif
-
 
 #endif

@@ -32,37 +32,36 @@ namespace otb
 /** \class LineSpatialObjectList
  */
 
-class ITK_EXPORT LineSpatialObjectList :        public std::list< itk::LineSpatialObject<2>::Pointer >,
-      public itk::DataObject
+class ITK_EXPORT LineSpatialObjectList :        public std::list<itk::LineSpatialObject<2>::Pointer>,
+  public itk::DataObject
 
 {
 public:
   /** Standard class typedefs. */
-  typedef LineSpatialObjectList                         Self;
-  typedef itk::DataObject                               Superclass;
+  typedef LineSpatialObjectList Self;
+  typedef itk::DataObject       Superclass;
 
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LineSpatialObjectList,itk::DataObject);
+  itkTypeMacro(LineSpatialObjectList, itk::DataObject);
 
   /** Some convenient typedefs. */
-  typedef itk::LineSpatialObject<2>                     LineType;
+  typedef itk::LineSpatialObject<2> LineType;
 
-protected :
+protected:
   LineSpatialObjectList() {};
-  ~LineSpatialObjectList() {};
+  ~LineSpatialObjectList() {}
 
 private:
-  LineSpatialObjectList(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LineSpatialObjectList(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

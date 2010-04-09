@@ -30,21 +30,26 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConnectedThresholdImageFilter
-      : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
+  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                        itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeConnectedThresholdImageFilter Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage,TOutputImage, itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LabelizeConnectedThresholdImageFilter
+                                                                                                       Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                       itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>
+                                                                                                       Pointer;
+  typedef itk::SmartPointer<const Self>
+                                                                                                       ConstPointer;
 
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef typename TInputImage::PixelType InputPixelType;
+  typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
-  typedef typename TInputImage::IndexType IndexType;
+  typedef typename TInputImage::IndexType  IndexType;
 
   /** "object factory" management method. */
   itkNewMacro(Self);
@@ -72,15 +77,15 @@ public:
 
 protected:
   LabelizeConnectedThresholdImageFilter();
-  virtual ~LabelizeConnectedThresholdImageFilter() {};
+  virtual ~LabelizeConnectedThresholdImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Region growing */
-  virtual void RegionGrowing( const IndexType indexSeed );
+  virtual void RegionGrowing(const IndexType indexSeed);
 
 private:
-  LabelizeConnectedThresholdImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelizeConnectedThresholdImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Delta + threshold for growing region */
   InputPixelType m_UpperThresholdDelta;

@@ -30,55 +30,55 @@ namespace otb
  */
 
 template <class TInputImage,
-class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
+          class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType, 2> >
 class ITK_EXPORT ThresholdImageToPointSetFilter :
-      public ImageToPointSetFilter< TInputImage,TOutputPointSet >
+  public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
 
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
 
-  typedef TInputImage     InputImageType;
+  typedef TInputImage InputImageType;
 
-  typedef ThresholdImageToPointSetFilter                             Self;
-  typedef ImageToPointSetFilter< InputImageType, TOutputPointSet>    Superclass;
-  typedef typename Superclass::OutputPointSetType                    OutputPointSetType;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef ThresholdImageToPointSetFilter                         Self;
+  typedef ImageToPointSetFilter<InputImageType, TOutputPointSet> Superclass;
+  typedef typename Superclass::OutputPointSetType                OutputPointSetType;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
 
   itkNewMacro(Self);
 
   itkTypeMacro(ThresholdImageToPointSetFilter, ImageToPointSetFilter);
 
-  typedef typename Superclass::InputImagePixelType        InputPixelType;
-  typedef typename Superclass::InputImagePointer          InputImagePointer;
-  typedef typename Superclass::InputImageRegionType       InputImageRegionType;
-  typedef typename Superclass::InputImageConstPointer     InputImageConstPointer;
-  typedef typename Superclass::InputImageType::SizeType   SizeType;
-  typedef typename Superclass::InputImageType::IndexType  IndexType;
+  typedef typename Superclass::InputImagePixelType       InputPixelType;
+  typedef typename Superclass::InputImagePointer         InputImagePointer;
+  typedef typename Superclass::InputImageRegionType      InputImageRegionType;
+  typedef typename Superclass::InputImageConstPointer    InputImageConstPointer;
+  typedef typename Superclass::InputImageType::SizeType  SizeType;
+  typedef typename Superclass::InputImageType::IndexType IndexType;
 
-  typedef typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
-  typedef typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
-  typedef typename Superclass::PointsContainerType            PointsContainerType;
+  typedef typename Superclass::OutputPointSetPointer         OutputPointSetPointer;
+  typedef typename Superclass::OutputPointSetType::PixelType OutputPointSetPixelType;
+  typedef typename Superclass::PointsContainerType           PointsContainerType;
 
-  itkSetMacro(LowerThreshold,InputPixelType);
+  itkSetMacro(LowerThreshold, InputPixelType);
   itkGetConstReferenceMacro(LowerThreshold, InputPixelType);
-  itkSetMacro(UpperThreshold,InputPixelType);
+  itkSetMacro(UpperThreshold, InputPixelType);
   itkGetConstReferenceMacro(UpperThreshold, InputPixelType);
 
 protected:
   ThresholdImageToPointSetFilter();
-  virtual ~ThresholdImageToPointSetFilter() {};
+  virtual ~ThresholdImageToPointSetFilter() {}
 
-  virtual void ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ThresholdImageToPointSetFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ThresholdImageToPointSetFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   InputPixelType m_LowerThreshold;
   InputPixelType m_UpperThreshold;
@@ -88,6 +88,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbThresholdImageToPointSetFilter.txx"
 #endif
-
 
 #endif

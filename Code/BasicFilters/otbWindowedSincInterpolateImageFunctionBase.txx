@@ -18,7 +18,6 @@
 #ifndef __otbWindowedSincInterpolateImageFunctionBase_txx
 #define __otbWindowedSincInterpolateImageFunctionBase_txx
 
-
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 
 namespace otb
@@ -42,8 +41,8 @@ void
 WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
-}//namespace otb
+} //namespace otb
 #endif

@@ -31,28 +31,28 @@ namespace otb
  */
 template <class TPixel>
 class FixedSizeFullImageWidget
-      : public ImageWidgetBase<TPixel>
+  : public ImageWidgetBase<TPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef FixedSizeFullImageWidget Self;
-  typedef ImageWidgetBase<TPixel> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef FixedSizeFullImageWidget      Self;
+  typedef ImageWidgetBase<TPixel>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(FixedSizeFullImageWidget,ImageWidgetBase);
+  itkTypeMacro(FixedSizeFullImageWidget, ImageWidgetBase);
 
   /** Superclass typedefs */
-  typedef typename Superclass::SizeType SizeType;
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::SizeType   SizeType;
+  typedef typename Superclass::IndexType  IndexType;
   typedef typename Superclass::RegionType RegionType;
 
-  itkSetMacro(WindowSize,SizeType);
-  itkGetMacro(WindowSize,SizeType);
+  itkSetMacro(WindowSize, SizeType);
+  itkGetMacro(WindowSize, SizeType);
 
   /** Unlarge OpenGlBuffer */
   virtual void UpdateOpenGlBufferedRegion(void);
@@ -74,35 +74,35 @@ protected:
   {
     if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
         > this->w() / static_cast<float>(this->h()))
-    {
+      {
       return this->w();
-    }
+      }
     else
-    {
-      return this->h()*this->GetViewedRegion().GetSize()[0] / this->GetViewedRegion().GetSize()[1];
-    }
+      {
+      return this->h() * this->GetViewedRegion().GetSize()[0] / this->GetViewedRegion().GetSize()[1];
+      }
   }
 
   int hDisplayed()
   {
     if (this->GetViewedRegion().GetSize()[0] / static_cast<float>(this->GetViewedRegion().GetSize()[1])
         > this->w() / static_cast<float>(this->h()))
-    {
-      return this->w()*this->GetViewedRegion().GetSize()[1] / this->GetViewedRegion().GetSize()[0];
-    }
+      {
+      return this->w() * this->GetViewedRegion().GetSize()[1] / this->GetViewedRegion().GetSize()[0];
+      }
     else
-    {
+      {
       return this->h();
-    }
+      }
   }
 
 private:
-  FixedSizeFullImageWidget(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  FixedSizeFullImageWidget(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   SizeType m_WindowSize;
-  bool m_ImageLoaded;
-  bool m_ImageOverlayLoaded;
+  bool     m_ImageLoaded;
+  bool     m_ImageOverlayLoaded;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

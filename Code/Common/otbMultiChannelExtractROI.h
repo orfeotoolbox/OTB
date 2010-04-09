@@ -38,15 +38,15 @@ namespace otb
  * \note The image manipulated inside this class are of type otb::VectorImage.
  */
 template <class TInputPixelType, class TOutputPixelType>
-class ITK_EXPORT MultiChannelExtractROI:
-      public ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> >
+class ITK_EXPORT MultiChannelExtractROI :
+  public ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2> >
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelExtractROI                Self;
-  typedef ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> > Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef MultiChannelExtractROI                                                             Self;
+  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2> > Superclass;
+  typedef itk::SmartPointer<Self>                                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,30 +55,30 @@ public:
   itkTypeMacro(MultiChannelExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef typename Superclass::InputImageType   InputImageType;
-  typedef typename Superclass::OutputImageType  OutputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
+  typedef typename Superclass::OutputImageType OutputImageType;
 
   /** Pixel type information */
-  typedef typename OutputImageType::InternalPixelType   OutputValueType;
+  typedef typename OutputImageType::InternalPixelType OutputValueType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
 
   /** Typedef to describe the type of pixel. */
   typedef typename OutputImageType::PixelType OutputImagePixelType;
-  typedef typename InputImageType::PixelType InputImagePixelType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Typedef to describe the output and input image index and size types. */
   typedef typename OutputImageType::IndexType OutputImageIndexType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename InputImageType::SizeType InputImageSizeType;
+  typedef typename InputImageType::IndexType  InputImageIndexType;
+  typedef typename OutputImageType::SizeType  OutputImageSizeType;
+  typedef typename InputImageType::SizeType   InputImageSizeType;
 
   void SetFirstChannel(unsigned int id);
-  itkGetConstMacro(FirstChannel,unsigned int);
+  itkGetConstMacro(FirstChannel, unsigned int);
   void SetLastChannel(unsigned int id);
-  itkGetConstMacro(LastChannel,unsigned int);
+  itkGetConstMacro(LastChannel, unsigned int);
 
   /** MultiChannelExtractROI can produce an image which is a different
    * resolution than its input image.  As such, MultiChannelExtractROI
@@ -94,13 +94,13 @@ public:
   typedef typename std::vector<unsigned int> ChannelsType;
 
   /** \return The list of processed channels */
-  ChannelsType GetChannels()const
+  ChannelsType GetChannels() const
   {
     return (m_Channels);
   }
 
   /** \return The number of processed channels */
-  unsigned int GetNbChannels()const
+  unsigned int GetNbChannels() const
   {
     return (m_Channels.size());
   }
@@ -120,7 +120,7 @@ public:
 
 protected:
   MultiChannelExtractROI();
-  virtual ~MultiChannelExtractROI() {};
+  virtual ~MultiChannelExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Reinitialize channels vector for multiple Update.*/
@@ -132,24 +132,22 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
-
+                            int threadId);
 
 private:
-  MultiChannelExtractROI(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiChannelExtractROI(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** First/ last channel to process [1...] */
-  unsigned int  m_FirstChannel;
-  unsigned int  m_LastChannel;
+  unsigned int m_FirstChannel;
+  unsigned int m_LastChannel;
   /** List of channels to process  [1...] */
-  ChannelsType  m_Channels;
+  ChannelsType m_Channels;
   /** List of channels actually being processed [1...] */
-  ChannelsType  m_ChannelsWorks;
+  ChannelsType m_ChannelsWorks;
   /** Used to know if the user has set m_First/LastChannel (1) or m_Channels (3)*/
   int m_ChannelsKind;
 };
-
 
 } // end namespace otb
 

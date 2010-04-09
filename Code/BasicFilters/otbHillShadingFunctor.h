@@ -34,14 +34,14 @@ namespace Functor
  *  \ingroup Functor
  *  \example BasicFilters/HillShadingExample.cxx
 */
-template< class TInput1, class TInput2=TInput1, class TOutput=TInput1>
+template<class TInput1, class TInput2 = TInput1, class TOutput = TInput1>
 class HillShadeModulationFunctor
 {
 public:
   HillShadeModulationFunctor() {}
   ~HillShadeModulationFunctor() {}
 
-  inline TOutput operator()( const TInput1 & A, const TInput2 & B) const
+  inline TOutput operator ()(const TInput1& A, const TInput2& B) const
   {
     TOutput out;
     out.SetRed(A.GetRed() * B);
@@ -70,8 +70,8 @@ public:
   typedef TNeighIter                       IteratorType;
   typedef typename IteratorType::PixelType PixelType;
 
-  HillShadingFunctor(): m_AzimuthLight(30.0/180.0*CONST_PI), m_ElevationLight(45.0/180.0*CONST_PI),
-                        m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
+  HillShadingFunctor() : m_AzimuthLight(30.0 / 180.0 * CONST_PI), m_ElevationLight(45.0 / 180.0 * CONST_PI),
+    m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
   {
     m_SinElev = vcl_sin(m_ElevationLight);
     m_CosElev = vcl_cos(m_ElevationLight);
@@ -110,37 +110,40 @@ public:
     m_Scale = scale;
   }
 
-  inline TOutput operator()(const TNeighIter & it) const
+  inline TOutput operator ()(const TNeighIter& it) const
   {
-    const typename IteratorType::OffsetType LEFT   ={{-1,0}};
-    const typename IteratorType::OffsetType RIGHT  ={{1,0}};
-    const typename IteratorType::OffsetType UP     ={{0,-1}};
-    const typename IteratorType::OffsetType DOWN   ={{0,1}};
-    const typename IteratorType::OffsetType LEFTUP   ={{-1,-1}};
-    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}};
-    const typename IteratorType::OffsetType RIGHTUP  ={{1,-1}};
-    const typename IteratorType::OffsetType LEFTDOWN ={{-1,1}};
+    const typename IteratorType::OffsetType LEFT   = {{-1, 0}};
+    const typename IteratorType::OffsetType RIGHT  = {{1, 0}};
+    const typename IteratorType::OffsetType UP     = {{0, -1}};
+    const typename IteratorType::OffsetType DOWN   = {{0, 1}};
+    const typename IteratorType::OffsetType LEFTUP   = {{-1, -1}};
+    const typename IteratorType::OffsetType RIGHTDOWN = {{1, 1}};
+    const typename IteratorType::OffsetType RIGHTUP  = {{1, -1}};
+    const typename IteratorType::OffsetType LEFTDOWN = {{-1, 1}};
 //    const typename IteratorType::OffsetType CENTER ={{0,0}};
 
-    float xSlope = ((makeValid(it.GetPixel(LEFTUP))+2*makeValid(it.GetPixel(LEFT))+makeValid(it.GetPixel(RIGHTDOWN)))
-        -(makeValid(it.GetPixel(RIGHTUP))+2*makeValid(it.GetPixel(RIGHT))+makeValid(it.GetPixel(RIGHTDOWN))))
-        /(m_XRes*m_Scale);
+    float xSlope =
+      ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(RIGHTDOWN)))
+        - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) +
+           makeValid(it.GetPixel(RIGHTDOWN))))
+      / (m_XRes * m_Scale);
     // - as the azimuth is given compared to y axis pointing up
-    float ySlope = -((makeValid(it.GetPixel(LEFTUP))+2*makeValid(it.GetPixel(UP))+makeValid(it.GetPixel(RIGHTUP)))
-        -(makeValid(it.GetPixel(LEFTDOWN))+2*makeValid(it.GetPixel(DOWN))+makeValid(it.GetPixel(RIGHTDOWN))))
-        /(m_YRes*m_Scale);
+    float ySlope = -((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(UP)) + makeValid(it.GetPixel(RIGHTUP)))
+                     - (makeValid(it.GetPixel(LEFTDOWN)) + 2 * makeValid(it.GetPixel(DOWN)) +
+                        makeValid(it.GetPixel(RIGHTDOWN))))
+                   / (m_YRes * m_Scale);
 
     // permutation between x and y as the azimuth angle is given compared to the north-south axis
-    float lambertian = ((m_SinElev*m_CosAz*ySlope)+(m_SinElev*m_SinAz*xSlope)+m_CosElev)
-        / vcl_sqrt(xSlope*xSlope+ySlope*ySlope+1);
+    float lambertian = ((m_SinElev * m_CosAz * ySlope) + (m_SinElev * m_SinAz * xSlope) + m_CosElev)
+                       / vcl_sqrt(xSlope * xSlope + ySlope * ySlope + 1);
 
-    return (lambertian+1)/2; //normalize between 0 and 1
+    return (lambertian + 1) / 2; //normalize between 0 and 1
 
   }
 
 private:
   HillShadingFunctor(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   inline PixelType makeValid(PixelType v) const
   {

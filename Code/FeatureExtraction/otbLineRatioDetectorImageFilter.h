@@ -22,10 +22,8 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "otbLineDetectorImageFilterBase.h"
 
-
 namespace otb
 {
-
 
 /** \class LineRatioDetectorImageFilter
  * \brief Application of detection of linear features based on the
@@ -62,25 +60,27 @@ namespace otb
  *
  */
 template <class TInputImage,
-class TOutputImage,
-class TOutputImageDirection = TOutputImage,
-class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+          class TOutputImage,
+          class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+class ITK_EXPORT LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
+                                                                                    TOutputImageDirection,
+                                                                                    TInterpolator>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef LineRatioDetectorImageFilter Self;
-  typedef LineDetectorImageFilterBase< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LineRatioDetectorImageFilter                                                                 Self;
+  typedef LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator> Superclass;
+  typedef itk::SmartPointer<Self>                                                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -88,24 +88,22 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LineRatioDetectorImageFilter, LineDetectorImageFilterBase);
 
-  typedef typename Superclass::InputImageType       InputImageType;
-  typedef typename Superclass::OutputImageType      OutputImageType;
-  typedef typename Superclass::OutputImageDirectionType   OutputImageDirectionType;
-  typedef typename Superclass::InterpolatorType                 InterpolatorType;
+  typedef typename Superclass::InputImageType           InputImageType;
+  typedef typename Superclass::OutputImageType          OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType OutputImageDirectionType;
+  typedef typename Superclass::InterpolatorType         InterpolatorType;
 
   /** Typedefs to describe and access Interpolator */
-  typedef typename InterpolatorType::Pointer InterpolatorPointer;
+  typedef typename InterpolatorType::Pointer      InterpolatorPointer;
   typedef typename InterpolatorType::CoordRepType CoordRepType;
 
   typedef typename InputImageType::PointType TPoint;
 
-
   /** Definition of the input and output images */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** Definition of the size of the images. */
@@ -113,15 +111,14 @@ public:
 
 protected:
   LineRatioDetectorImageFilter();
-  virtual ~LineRatioDetectorImageFilter() {};
+  virtual ~LineRatioDetectorImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 
 private:
-  LineRatioDetectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  LineRatioDetectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 } // end namespace otb
@@ -129,6 +126,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLineRatioDetectorImageFilter.txx"
 #endif
-
 
 #endif

@@ -46,52 +46,52 @@ namespace otb
  *
  */
 
-template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision=double>
+template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision = double>
 class ITK_EXPORT OrthoRectificationFilter :
-      public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
+  public StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>
 {
-public :
+public:
   /** Standard class typedefs */
   typedef StreamingResampleImageFilter<TInputImage,
-  TOutputImage,
-  TInterpolatorPrecision>  Superclass;
-  typedef OrthoRectificationFilter              Self;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+                                       TOutputImage,
+                                       TInterpolatorPrecision>  Superclass;
+  typedef OrthoRectificationFilter      Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename TInputImage::IndexType     IndexType;
-  typedef typename TInputImage::SizeType      SizeType;
-  typedef typename TInputImage::SpacingType   SpacingType;
-  typedef typename TInputImage::PointType    PointType;
-  typedef typename TInputImage::RegionType    RegionType;
+  typedef typename TInputImage::IndexType   IndexType;
+  typedef typename TInputImage::SizeType    SizeType;
+  typedef typename TInputImage::SpacingType SpacingType;
+  typedef typename TInputImage::PointType   PointType;
+  typedef typename TInputImage::RegionType  RegionType;
 
-  typedef typename TOutputImage::PixelType    OutputPixelType;
+  typedef typename TOutputImage::PixelType OutputPixelType;
 
-  typedef TMapProjection        MapProjectionType;
-  typedef typename TMapProjection::Pointer    MapProjectionPointerType;
+  typedef TMapProjection                   MapProjectionType;
+  typedef typename TMapProjection::Pointer MapProjectionPointerType;
 
-  typedef InverseSensorModel<double>          SensorModelType;
-  typedef typename SensorModelType::Pointer   SensorModelPointerType;
+  typedef InverseSensorModel<double>        SensorModelType;
+  typedef typename SensorModelType::Pointer SensorModelPointerType;
 
-  typedef CompositeTransform< MapProjectionType,SensorModelType> CompositeTransformType;
+  typedef CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   typedef typename CompositeTransformType::Pointer               CompositeTransformPointerType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( OrthoRectificationFilter, StreamingResampleImageFilter );
+  itkTypeMacro(OrthoRectificationFilter, StreamingResampleImageFilter);
 
   /** Accessors */
-  virtual void SetMapProjection (MapProjectionType* arg)
+  virtual void SetMapProjection(MapProjectionType* arg)
   {
     if (this->m_MapProjection != arg)
-    {
+      {
       this->m_MapProjection = arg;
       m_CompositeTransform->SetFirstTransform(arg);
       m_IsComputed = false;
       this->Modified();
-    }
+      }
   }
 
   itkGetObjectMacro(MapProjection, MapProjectionType);
@@ -117,7 +117,6 @@ public :
     this->Modified();
   }
 
-
   /** Specify average elevation.*/
   virtual void SetAverageElevation(double elevation)
   {
@@ -125,18 +124,17 @@ public :
     this->Modified();
   }
 
-
 protected:
   OrthoRectificationFilter();
   virtual ~OrthoRectificationFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateInputRequestedRegion();
-  virtual void GenerateOutputInformation( void );
+  virtual void GenerateOutputInformation(void);
 
 private:
-  OrthoRectificationFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OrthoRectificationFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Calculate transformation model from sensor model and map projection  composition */
   void ComputeResampleTransformationModel();

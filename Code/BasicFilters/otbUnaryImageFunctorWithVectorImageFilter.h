@@ -39,36 +39,35 @@ namespace otb
  * \ingroup VectorImage
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryImageFunctorWithVectorImageFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+class ITK_EXPORT UnaryImageFunctorWithVectorImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 
 {
 public:
   /** Standard class typedefs. */
   typedef UnaryImageFunctorWithVectorImageFilter             Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage>  Superclass;
+  typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                            Pointer;
   typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-
   /**   Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
-  typedef TFunction           FunctorType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
+  typedef TFunction    FunctorType;
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                           InputPixelType;
-  typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-  typedef typename InputImageType::RegionType                          InputImageRegionType;
-  typedef typename OutputImageType::PixelType                          OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
@@ -86,7 +85,7 @@ public:
 
 protected:
   UnaryImageFunctorWithVectorImageFilter();
-  virtual ~UnaryImageFunctorWithVectorImageFilter() {};
+  virtual ~UnaryImageFunctorWithVectorImageFilter() {}
 
   /** UnaryImageFunctorWithVectorImageFilter can produce an image which is a different
    * resolution than its input image.  As such, UnaryImageFunctorWithVectorImageFilter
@@ -98,7 +97,6 @@ protected:
    * \sa ProcessObject::GenerateOutputInformaton()  */
   virtual void GenerateOutputInformation();
 
-
   /** UnaryImageFunctorWithVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
@@ -109,7 +107,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

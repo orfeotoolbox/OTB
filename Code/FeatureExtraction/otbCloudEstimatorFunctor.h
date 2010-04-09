@@ -30,7 +30,7 @@ namespace otb
  */
 namespace Functor
 {
-template<class TInput,class TOutputValue>
+template<class TInput, class TOutputValue>
 class CloudEstimatorFunctor
 {
 public:
@@ -43,45 +43,45 @@ public:
     m_RefNorm = 2.0;
     m_Variance = 1.0;
     m_Denom = 1.0;
-  };
+  }
 
-  virtual ~CloudEstimatorFunctor() {};
-  inline TOutputValue operator()(const TInput& inPix)
+  virtual ~CloudEstimatorFunctor() {}
+  inline TOutputValue operator ()(const TInput& inPix)
   {
 
     TOutputValue lOut;
-    double lRes = 0.0;
-    double lCurPixNorm = 0.0;
-    double lGaussianCoef = 1.0;
+    double       lRes = 0.0;
+    double       lCurPixNorm = 0.0;
+    double       lGaussianCoef = 1.0;
 
     // Compute the Gaussian Coef
-    for (unsigned int i=0; i<std::min(inPix.Size(),m_ReferencePixel.Size()); ++i)
-    {
-      lCurPixNorm += inPix[i]*inPix[i];
-    }
+    for (unsigned int i = 0; i < std::min(inPix.Size(), m_ReferencePixel.Size()); ++i)
+      {
+      lCurPixNorm += inPix[i] * inPix[i];
+      }
     lCurPixNorm = vcl_sqrt(static_cast<double>(lCurPixNorm));
-    lGaussianCoef = vcl_exp(- vcl_pow((lCurPixNorm-m_RefNorm),2) / m_Denom );
+    lGaussianCoef = vcl_exp(-vcl_pow((lCurPixNorm - m_RefNorm), 2) / m_Denom);
 
     // Reverse the SpectralAngle values and set them between [0;1]
-    lRes =  lGaussianCoef * ((CONST_PI-m_SpectralAngleFunctor(inPix)) / CONST_PI);
+    lRes =  lGaussianCoef * ((CONST_PI - m_SpectralAngleFunctor(inPix)) / CONST_PI);
 
     lOut = static_cast<TOutputValue>(lRes);
     return lOut;
 
   }
 
-  void SetReferencePixel( TInput ref )
+  void SetReferencePixel(TInput ref)
   {
     m_ReferencePixel = ref;
     m_SpectralAngleFunctor.SetReferencePixel(ref);
     m_RefNorm = 0.0;
-    for (unsigned int i = 0; i<ref.Size(); ++i)
-    {
-      m_RefNorm += ref[i]*ref[i];
-    }
+    for (unsigned int i = 0; i < ref.Size(); ++i)
+      {
+      m_RefNorm += ref[i] * ref[i];
+      }
     m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
     SetVariance(m_Variance);
-  };
+  }
 
   void SetVariance(double variance)
   {
@@ -92,23 +92,22 @@ public:
   TInput GetReferencePixel()
   {
     return m_ReferencePixel;
-  };
+  }
   double GetVariance()
   {
     return m_Variance;
-  };
+  }
 
 protected:
   SpectralAngleFunctorType m_SpectralAngleFunctor;
-  TInput m_ReferencePixel;
-  double m_RefNorm;
-  double m_Variance;
-  double m_Denom;
+  TInput                   m_ReferencePixel;
+  double                   m_RefNorm;
+  double                   m_Variance;
+  double                   m_Denom;
 
 };
 
 } // end namespace functor
 } // end namespace otb
-
 
 #endif

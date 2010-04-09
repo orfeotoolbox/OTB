@@ -34,19 +34,18 @@ namespace otb
 
 typedef
 enum
-{
-  ROOT=0,
-  DOCUMENT=1,
-  FOLDER=2,
-  FEATURE_POINT=3,
-  FEATURE_LINE=4,
-  FEATURE_POLYGON=5,
-  FEATURE_MULTIPOINT=6,
-  FEATURE_MULTILINE=7,
-  FEATURE_MULTIPOLYGON=8,
-  FEATURE_COLLECTION=9
-} NodeType;
-
+  {
+  ROOT = 0,
+  DOCUMENT = 1,
+  FOLDER = 2,
+  FEATURE_POINT = 3,
+  FEATURE_LINE = 4,
+  FEATURE_POLYGON = 5,
+  FEATURE_MULTIPOINT = 6,
+  FEATURE_MULTILINE = 7,
+  FEATURE_MULTIPOLYGON = 8,
+  FEATURE_COLLECTION = 9
+  } NodeType;
 
 /** \class DataNode
  *  \brief This class represents a node of data in a vector data hierarchy.
@@ -67,43 +66,42 @@ enum
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
 class DataNode
-      : public itk::Object
+  : public itk::Object
 {
 public:
   /** Standard class typedef */
-  typedef DataNode Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef DataNode                      Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
   itkNewMacro(Self);
-  itkTypeMacro(DataNode,Object);
+  itkTypeMacro(DataNode, Object);
 
   /** Template parameters typedefs */
-  typedef TPrecision PrecisionType;
+  typedef TPrecision      PrecisionType;
   typedef TValuePrecision ValuePrecisionType;
   itkStaticConstMacro(Dimension, unsigned int, VDimension);
 
-
   /** Internal data typedef */
-  typedef itk::Point<PrecisionType,VDimension>       PointType;
-  typedef otb::PolyLineParametricPathWithValue<ValuePrecisionType,VDimension>    LineType;
-  typedef typename LineType::Pointer                 LinePointerType;
-  typedef typename LineType::ConstPointer            LineConstPointerType;
-  typedef Polygon<ValuePrecisionType>                PolygonType;
-  typedef typename PolygonType::Pointer              PolygonPointerType;
-  typedef typename PolygonType::ConstPointer         PolygonConstPointerType;
-  typedef ObjectList<PolygonType>                    PolygonListType;
-  typedef typename PolygonListType::Pointer          PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer     PolygonListConstPointerType;
+  typedef itk::Point<PrecisionType, VDimension>                                PointType;
+  typedef otb::PolyLineParametricPathWithValue<ValuePrecisionType, VDimension> LineType;
+  typedef typename LineType::Pointer                                           LinePointerType;
+  typedef typename LineType::ConstPointer                                      LineConstPointerType;
+  typedef Polygon<ValuePrecisionType>                                          PolygonType;
+  typedef typename PolygonType::Pointer                                        PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                                   PolygonConstPointerType;
+  typedef ObjectList<PolygonType>                                              PolygonListType;
+  typedef typename PolygonListType::Pointer                                    PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer                               PolygonListConstPointerType;
 
   /** Fields typedef */
 //   typedef std::map<std::string,std::string>          FieldMapType;
 //   typedef std::pair<std::string,std::string>         FieldType;
 
   /** Accessors */
-  itkGetMacro(NodeType,NodeType);
+  itkGetMacro(NodeType, NodeType);
   itkGetStringMacro(NodeId);
   itkSetStringMacro(NodeId);
 
@@ -209,76 +207,75 @@ public:
    * \param key The name of the field.
    * \return The value of the field. A default value is returned if the key was not found.
    */
-   std::string GetFieldAsString(std::string key) const;
+  std::string GetFieldAsString(std::string key) const;
 
-   /**
-    * Add a field to the node.
-    * \param key The name of the field.
-    * \param value The value of the field.
-    */
-   void SetFieldAsInt(std::string key, int value);
-   /**
-    * Returns the value associated with a field name.
-    * \param key The name of the field.
-    * \return The value of the field. A default value is returned if the key was not found.
-    */
-    int GetFieldAsInt(std::string key) const;
-
+  /**
+   * Add a field to the node.
+   * \param key The name of the field.
+   * \param value The value of the field.
+   */
+  void SetFieldAsInt(std::string key, int value);
+  /**
+   * Returns the value associated with a field name.
+   * \param key The name of the field.
+   * \return The value of the field. A default value is returned if the key was not found.
+   */
+  int GetFieldAsInt(std::string key) const;
 
   /**
    * Remove the field associated with the given key, if possible.
    * \param key The name of the field.
    */
 //   void RemoveField(std::string key);
-  /**
-   * \return True if the node contains the field named after the given key.
-   * \param key The name of the field.
-   */
+/**
+ * \return True if the node contains the field named after the given key.
+ * \param key The name of the field.
+ */
   bool HasField(std::string key) const;
   /**
    * \return the nth field of the node as a std::pair of (key,value).
    * \param index the index of the field to return.
    */
 //   FieldType GetNthField(unsigned int index) const;
-  /**
-   * \return the number of fields in the node.
-   */
+/**
+ * \return the number of fields in the node.
+ */
 //   unsigned int GetNumberOfFields() const;
-  /**
-   * Clear all fields.
-   */
+/**
+ * Clear all fields.
+ */
 //   void ClearFields();
 
 protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() {};
+  ~DataNode() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   DataNode(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** typedef of the data associated with the node */
   typedef struct
   {
-    bool      valid;
+    bool valid;
     PointType point;
     LinePointerType line;
-    PolygonPointerType  exteriorRing;
-    PolygonListPointerType  interiorRings;
+    PolygonPointerType exteriorRing;
+    PolygonListPointerType interiorRings;
   } DataType;
 
   /** The node type */
-  NodeType             m_NodeType;
+  NodeType m_NodeType;
 
   /** The node id */
-  std::string          m_NodeId;
+  std::string m_NodeId;
 
   /** The data associated with the node */
-  DataType             m_Data;
+  DataType m_Data;
 
   /** The fields map */
 //   FieldMapType         m_FieldMap;

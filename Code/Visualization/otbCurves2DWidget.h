@@ -36,20 +36,20 @@ class Curves2DWidget
 {
 public:
   /** Standard class typedefs */
-  typedef Curves2DWidget                    Self;
-  typedef GlWidget                          Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef Curves2DWidget                Self;
+  typedef GlWidget                      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Curve typedef */
-  typedef Curve2D                        CurveType;
-  typedef Curve2D::Pointer               CurvePointerType;
+  typedef Curve2D          CurveType;
+  typedef Curve2D::Pointer CurvePointerType;
   /** Curve list typedef */
-  typedef ObjectList<CurveType>          CurveListType;
-   typedef CurveListType::Pointer        CurveListPointerType;
+  typedef ObjectList<CurveType>  CurveListType;
+  typedef CurveListType::Pointer CurveListPointerType;
 
   /** Color typedef */
   typedef CurveType::ColorType           ColorType;
@@ -69,41 +69,41 @@ public:
   itkGetStringMacro(YAxisLabel);
 
   /// Set/Get the widget margins
-  itkSetMacro(Margins,SizeType);
-  itkGetConstReferenceMacro(Margins,SizeType);
+  itkSetMacro(Margins, SizeType);
+  itkGetConstReferenceMacro(Margins, SizeType);
 
   /// Set/Get the axis origin
-  itkSetMacro(AxisOrigin,PointType);
-  itkGetConstReferenceMacro(AxisOrigin,PointType);
+  itkSetMacro(AxisOrigin, PointType);
+  itkGetConstReferenceMacro(AxisOrigin, PointType);
 
   /// Set§get the axis length
-  itkSetMacro(AxisLength,VectorType);
-  itkGetConstReferenceMacro(AxisLength,VectorType);
+  itkSetMacro(AxisLength, VectorType);
+  itkGetConstReferenceMacro(AxisLength, VectorType);
 
   /// Set/Get the grid origin
-  itkSetMacro(GridOrigin,PointType);
-  itkGetConstReferenceMacro(GridOrigin,PointType);
+  itkSetMacro(GridOrigin, PointType);
+  itkGetConstReferenceMacro(GridOrigin, PointType);
 
   /// Set/Get the grid spacing
-  itkSetMacro(GridSpacing,VectorType);
-  itkGetConstReferenceMacro(GridSpacing,VectorType);
+  itkSetMacro(GridSpacing, VectorType);
+  itkGetConstReferenceMacro(GridSpacing, VectorType);
 
   /// Set/Get the axis color
-  itkSetMacro(AxisColor,ColorType);
-  itkGetConstReferenceMacro(AxisColor,ColorType);
+  itkSetMacro(AxisColor, ColorType);
+  itkGetConstReferenceMacro(AxisColor, ColorType);
 
   /// Set/Get the grid color
-  itkSetMacro(GridColor,ColorType);
-  itkGetConstReferenceMacro(GridColor,ColorType);
+  itkSetMacro(GridColor, ColorType);
+  itkGetConstReferenceMacro(GridColor, ColorType);
 
   /// Should axis cross at zero or at their origin ?
-  itkSetMacro(ZeroCrossingAxis,bool);
-  itkGetMacro(ZeroCrossingAxis,bool);
+  itkSetMacro(ZeroCrossingAxis, bool);
+  itkGetMacro(ZeroCrossingAxis, bool);
   itkBooleanMacro(ZeroCrossingAxis);
 
   // Should axis auto scale to best fit the curves ?
-  itkSetMacro(AutoScale,bool);
-  itkGetMacro(AutoScale,bool);
+  itkSetMacro(AutoScale, bool);
+  itkGetMacro(AutoScale, bool);
   itkBooleanMacro(AutoScale);
 
   /** Add a new curve to the widget
@@ -118,13 +118,13 @@ public:
   void ClearAllCurves();
 
   /** Get the number of curves */
- unsigned int GetNumberOfCurves();
+  unsigned int GetNumberOfCurves();
 
- /** TransformPoint */
- PointType TransformPoint(PointType spacePoint)
-   {
-     return m_SpaceToScreenTransform->TransformPoint(spacePoint);
-   }
+  /** TransformPoint */
+  PointType TransformPoint(PointType spacePoint)
+  {
+    return m_SpaceToScreenTransform->TransformPoint(spacePoint);
+  }
 
 protected:
   /** Constructor */
@@ -156,18 +156,18 @@ protected:
 
 private:
   Curves2DWidget(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** List of the curves */
-  CurveListPointerType  m_Curves;
+  CurveListPointerType m_Curves;
   // X axis label
-  std::string         m_XAxisLabel;
+  std::string m_XAxisLabel;
   // Y axis label
-  std::string         m_YAxisLabel;
+  std::string m_YAxisLabel;
   // Margins around graph
-  SizeType            m_Margins;
+  SizeType m_Margins;
   // The extent of the display where curves are drawn
-  RegionType          m_Extent;
+  RegionType m_Extent;
   // Axis range start
   PointType m_AxisOrigin;
   // Axis range length
@@ -178,12 +178,12 @@ private:
   VectorType m_GridSpacing;
   // If true, axis will cross in their zeros
   // Else they will be sticked left and lower
-  bool                m_ZeroCrossingAxis;
+  bool m_ZeroCrossingAxis;
   // Automatic axis scaling
-  bool                m_AutoScale;
+  bool m_AutoScale;
   // Colors
-  ColorType           m_AxisColor;
-  ColorType           m_GridColor;
+  ColorType m_AxisColor;
+  ColorType m_GridColor;
 
   // Space to screen transform
   AffineTransformPointerType m_SpaceToScreenTransform;
@@ -192,5 +192,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

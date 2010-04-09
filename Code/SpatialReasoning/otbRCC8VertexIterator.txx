@@ -30,7 +30,7 @@ RCC8VertexIterator<TGraph>
 ::RCC8VertexIterator()
 {
   m_Graph = GraphType::New();
-  tie(m_Iter,m_End)= vertices(*(m_Graph->GetGraph()));
+  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Copy operator.
@@ -39,9 +39,9 @@ template <class TGraph>
 RCC8VertexIterator<TGraph>
 ::RCC8VertexIterator(const Self& iter)
 {
-  m_Iter=iter.m_Iter;
-  m_Graph=iter.m_Graph;
-  m_End=iter.m_End;
+  m_Iter = iter.m_Iter;
+  m_Graph = iter.m_Graph;
+  m_End = iter.m_End;
 }
 /**
  *Constructor with input graph
@@ -50,15 +50,15 @@ template <class TGraph>
 RCC8VertexIterator<TGraph>
 ::RCC8VertexIterator(TGraph * graph)
 {
-  m_Graph=graph;
-  tie(m_Iter,m_End)=vertices(*(m_Graph->GetGraph()));
+  m_Graph = graph;
+  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Get the current object.
  * \return The current object pointed by the iterator.
  */
 template <class TGraph>
-typename  RCC8VertexIterator<TGraph>
+typename RCC8VertexIterator<TGraph>
 ::VertexPointerType
 RCC8VertexIterator<TGraph>
 ::Get(void)
@@ -74,19 +74,19 @@ void
 RCC8VertexIterator<TGraph>
 ::Set(VertexPointerType vertex)
 {
-  (*(m_Graph->GetGraph()))[*m_Iter]=vertex;
+  (*(m_Graph->GetGraph()))[*m_Iter] = vertex;
 }
 /**
  * Get the current vertex index.
  * \return The current vertex index.
  */
 template <class TGraph>
-typename  RCC8VertexIterator<TGraph>
+typename RCC8VertexIterator<TGraph>
 ::VertexDescriptorType
 RCC8VertexIterator<TGraph>
 ::GetIndex(void)
 {
-  IndexMapType index = get(boost::vertex_index,(*m_Graph->GetGraph()));
+  IndexMapType index = get(boost::vertex_index, (*m_Graph->GetGraph()));
   return index[*m_Iter];
 }
 /**
@@ -98,7 +98,7 @@ bool
 RCC8VertexIterator<TGraph>
 ::IsAtEnd(void)
 {
-  return (m_Iter==m_End);
+  return (m_Iter == m_End);
 }
 /**
  * Go to the beginning.
@@ -108,7 +108,7 @@ void
 RCC8VertexIterator<TGraph>
 ::GoToBegin(void)
 {
-  tie(m_Iter,m_End)=vertices(*(m_Graph->GetGraph()));
+  tie(m_Iter, m_End) = vertices(*(m_Graph->GetGraph()));
 }
 /**
  * Increment.
@@ -117,11 +117,11 @@ template <class TGraph>
 typename RCC8VertexIterator<TGraph>
 ::Self&
 RCC8VertexIterator<TGraph>
-::operator++()
-{
+::operator++ ()
+  {
   ++m_Iter;
   return *this;
-}
+  }
 /**
  * Decrement.
  */
@@ -129,11 +129,11 @@ template <class TGraph>
 typename RCC8VertexIterator<TGraph>
 ::Self&
 RCC8VertexIterator<TGraph>
-::operator--()
-{
+::operator-- ()
+  {
   --m_Iter;
   return *this;
-}
+  }
 /**
  * Add
  */
@@ -141,11 +141,11 @@ template <class TGraph>
 typename RCC8VertexIterator<TGraph>
 ::Self&
 RCC8VertexIterator<TGraph>
-::operator+(int i)
-{
-  m_Iter=m_Iter+i;
+::operator + (int i)
+  {
+  m_Iter = m_Iter + i;
   return *this;
-}
+  }
 /**
  * Remove
  */
@@ -153,31 +153,31 @@ template <class TGraph>
 typename RCC8VertexIterator<TGraph>
 ::Self&
 RCC8VertexIterator<TGraph>
-::operator-(int i)
-{
-  m_Iter=m_Iter-i;
+::operator - (int i)
+  {
+  m_Iter = m_Iter - i;
   return *this;
-}
+  }
 /**
  * Difference comparison operator.
  */
 template <class TGraph>
 bool
 RCC8VertexIterator<TGraph>
-::operator!=(const Self& iter)
-{
+::operator != (const Self &iter)
+  {
   return (m_Iter != iter.m_Iter);
-}
+  }
 /**
  * Equality comparison operator.
  */
 template <class TGraph>
 bool
 RCC8VertexIterator<TGraph>
-::operator==(const Self& iter)
-{
+::operator == (const Self &iter)
+  {
   return (m_Iter == iter.m_Iter);
-}
+  }
 /**
  * Instantiation operator.
  */
@@ -185,10 +185,10 @@ template <class TGraph>
 typename RCC8VertexIterator<TGraph>
 ::Self&
 RCC8VertexIterator<TGraph>
-::operator=(const Self& iter)
-{
+::operator = (const Self &iter)
+  {
   m_Iter = iter.m_Iter;
   return *this;
-}
+  }
 } // End namespace otb
 #endif

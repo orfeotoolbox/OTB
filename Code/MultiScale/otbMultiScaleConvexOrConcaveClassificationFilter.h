@@ -52,7 +52,7 @@ namespace Functor
  * This functor is the decision rule used for multi-scale classification using
  * morphological profiles.
  */
-template<class TInput,class TLabeled>
+template<class TInput, class TLabeled>
 class MultiScaleConvexOrConcaveDecisionRule
 {
 
@@ -68,7 +68,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~MultiScaleConvexOrConcaveDecisionRule() {};
+  virtual ~MultiScaleConvexOrConcaveDecisionRule() {}
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
@@ -77,25 +77,28 @@ public:
    * \param opDeChar The characteristic of the opening profile
    * \param cloDeChar The characteristic of the closing profile
    */
-  inline TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax,const TLabeled& opDeChar, const TLabeled& cloDeChar)
+  inline TLabeled operator ()(const TInput& opDeMax,
+                              const TInput& cloDeMax,
+                              const TLabeled& opDeChar,
+                              const TLabeled& cloDeChar)
   {
     TLabeled resp = 0;
 
-    if ( opDeMax>cloDeMax && static_cast<double>(opDeMax)>m_Sigma)
-    {
+    if (opDeMax > cloDeMax && static_cast<double>(opDeMax) > m_Sigma)
+      {
       resp = m_LabelSeparator + opDeChar;
-    }
-    else if (cloDeMax>opDeMax && static_cast<double>(cloDeMax)>m_Sigma)
-    {
+      }
+    else if (cloDeMax > opDeMax && static_cast<double>(cloDeMax) > m_Sigma)
+      {
       resp = cloDeChar;
-    }
+      }
     return resp;
   }
   /**
    * Set the tolerance value
    * \param sigma the tolerance value
    */
-  void SetSigma(const double & sigma)
+  void SetSigma(const double& sigma)
   {
     m_Sigma = sigma;
   }
@@ -141,31 +144,32 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
-      : public QuaternaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,TOutputImage,TOutputImage,
-      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> >
+  : public QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
+                                        Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+                                                                                       typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef MultiScaleConvexOrConcaveClassificationFilter Self;
-  typedef QuaternaryFunctorImageFilter<TInputImage,TInputImage, TOutputImage,TOutputImage,TOutputImage,
-  Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-  typename TOutputImage::PixelType> >Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
+                                       Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+                                                                                      typename TOutputImage::PixelType> >
+  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter,QuaternaryFunctorImageFilter);
+  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, QuaternaryFunctorImageFilter);
 
   /** Template class typedef */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                         InputImageType;
+  typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
   typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-  typename TOutputImage::PixelType> DecisionFunctorType;
+                                                         typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the opening profile derivative maxima image
    * \param derivativeMaxima the opening profile derivative maxima image
@@ -204,12 +208,11 @@ public:
   }
 
   /** Set/Get the tolerance value */
-  itkSetMacro(Sigma,double);
-  itkGetMacro(Sigma,double);
+  itkSetMacro(Sigma, double);
+  itkGetMacro(Sigma, double);
   /** Set/Get the label separator */
-  itkSetMacro(LabelSeparator,LabelType);
-  itkGetMacro(LabelSeparator,LabelType);
-
+  itkSetMacro(LabelSeparator, LabelType);
+  itkGetMacro(LabelSeparator, LabelType);
 
   /** Set the functor parameters before calling the ThreadedGenerateData() */
   virtual void BeforeThreadedGenerateData(void)
@@ -221,28 +224,28 @@ public:
 protected:
   /** Constructor */
   MultiScaleConvexOrConcaveClassificationFilter()
-  {
+    {
     m_LabelSeparator = 10;
     m_Sigma          = 0.0;
-  };
+    };
   /** Destructor */
-  virtual ~MultiScaleConvexOrConcaveClassificationFilter() {};
+  virtual ~MultiScaleConvexOrConcaveClassificationFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"LabelSeparator: "<<m_LabelSeparator<<std::endl;
-    os<<indent<<"Sigma: "<<m_Sigma<<std::endl;
+    Superclass::PrintSelf(os, indent);
+    os << indent << "LabelSeparator: " << m_LabelSeparator << std::endl;
+    os << indent << "Sigma: " << m_Sigma << std::endl;
   }
 
 private:
-  MultiScaleConvexOrConcaveClassificationFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiScaleConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Label separator between convex and concave labels */
   LabelType m_LabelSeparator;
   /** Tolerance value */
   double m_Sigma;
 };
-}// End namespace otb
+} // End namespace otb
 #endif

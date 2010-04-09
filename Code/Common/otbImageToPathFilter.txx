@@ -39,7 +39,7 @@ void
 ImageToPathFilter<TInputImage, TOutputPath>
 ::SetInput(const InputImageType * image)
 {
-  this->ProcessObjectType::SetNthInput(0,const_cast<InputImageType *>(image));
+  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType *>(image));
 }
 /**
  * Input image getter.
@@ -56,11 +56,11 @@ ImageToPathFilter<TInputImage, TOutputPath>
  */
 template <class TInputImage, class TOutputPath>
 void
-ImageToPathFilter<TInputImage,TOutputPath>
+ImageToPathFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-}// end namespace otb
+} // end namespace otb
 
 #endif

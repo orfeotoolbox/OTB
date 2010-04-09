@@ -18,7 +18,6 @@
 #ifndef __otbSVY21MapProjection_h
 #define __otbSVY21MapProjection_h
 
-
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimTransMercatorProjection.h"
 #include "otbMapProjection.h"
@@ -33,31 +32,30 @@ namespace otb
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT SVY21MapProjection : public TransMercatorMapProjection<transform>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef SVY21MapProjection                  Self;
-  typedef TransMercatorMapProjection<transform>   Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef SVY21MapProjection                    Self;
+  typedef TransMercatorMapProjection<transform> Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
-  typedef typename Superclass::ScalarType                 ScalarType;
-  typedef itk::Point<ScalarType,2 >                       InputPointType;
-  typedef itk::Point<ScalarType,2 >                        OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( SVY21MapProjection, TransMercatorMapProjection );
-
+  itkTypeMacro(SVY21MapProjection, TransMercatorMapProjection);
 
 protected:
   SVY21MapProjection();
   virtual ~SVY21MapProjection();
 
-private :
-  SVY21MapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&);                       //purposely not implemented
+private:
+  SVY21MapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&);                       //purposely not implemented
 };
 
 } // namespace otb

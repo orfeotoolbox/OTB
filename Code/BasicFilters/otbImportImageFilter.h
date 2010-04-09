@@ -39,38 +39,37 @@ namespace otb
  */
 
 template <typename TOutputImageType>
-class ITK_EXPORT ImportImageFilter:
-      public itk::ImageSource< TOutputImageType >
+class ITK_EXPORT ImportImageFilter :
+  public itk::ImageSource<TOutputImageType>
 {
 public:
   /** Typedef for the output image.   */
-  typedef TOutputImageType OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointer;
+  typedef TOutputImageType                      OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointer;
   typedef typename OutputImageType::SpacingType SpacingType;
   typedef typename OutputImageType::PointType   OriginType;
 
-
   /** Standard class typedefs. */
-  typedef ImportImageFilter   Self;
-  typedef itk::ImageSource<OutputImageType>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImportImageFilter                 Self;
+  typedef itk::ImageSource<OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImportImageFilter,itk::ImageSource);
+  itkTypeMacro(ImportImageFilter, itk::ImageSource);
 
   /** Index typedef support. An index is used to access pixel values. */
-  typedef itk::Index<OutputImageType::ImageDimension>  IndexType;
+  typedef itk::Index<OutputImageType::ImageDimension> IndexType;
 
   /** Size typedef support. A size is used to define region bounds. */
-  typedef itk::Size<OutputImageType::ImageDimension>  SizeType;
+  typedef itk::Size<OutputImageType::ImageDimension> SizeType;
 
   /** Region typedef support. A region is used to specify a
    * subset of an image. */
-  typedef itk::ImageRegion<OutputImageType::ImageDimension>  RegionType;
+  typedef itk::ImageRegion<OutputImageType::ImageDimension> RegionType;
 
   /** Type of the output image pixel type. */
   typedef typename OutputImageType::PixelType TPixel;
@@ -92,14 +91,14 @@ public:
    * for the imported image. This will serve as the LargestPossibleRegion,
    * the BufferedRegion, and the RequestedRegion.
    * \sa ImageRegion */
-  void SetRegion(const RegionType &region)
+  void SetRegion(const RegionType& region)
   {
     if (m_Region != region)
-    {
+      {
       m_Region = region;
       this->Modified();
-    }
-  };
+      }
+  }
 
   /** Get the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
@@ -108,7 +107,7 @@ public:
   const RegionType& GetRegion() const
   {
     return m_Region;
-  };
+  }
 
   /** Set the spacing (size of a pixel) of the image.
    * \sa GetSpacing() */
@@ -118,13 +117,13 @@ public:
   /** Get the spacing (size of a pixel) of the image.
    * \sa SetSpacing() */
   itkGetVectorMacro(Spacing, const double, OutputImageType::ImageDimension);
-  void SetSpacing( const SpacingType & spacing );
+  void SetSpacing(const SpacingType& spacing);
 
   /** Set the origin of the image.
    * \sa GetOrigin() */
   itkSetVectorMacro(Origin, const double, OutputImageType::ImageDimension);
   itkSetVectorMacro(Origin, const float, OutputImageType::ImageDimension);
-  void SetOrigin( const OriginType & origin );
+  void SetOrigin(const OriginType& origin);
 
   /** Get the origin of the image.
    * \sa SetOrigin() */
@@ -134,7 +133,7 @@ public:
 
   /** Set the direction of the image
    * \sa GetDirection() */
-  virtual void SetDirection( const DirectionType direction );
+  virtual void SetDirection(const DirectionType direction);
   /**  Get the direction of the image
    * \sa SetDirection */
   itkGetConstReferenceMacro(Direction, DirectionType);
@@ -164,15 +163,15 @@ protected:
 
 private:
   ImportImageFilter(const ImportImageFilter &); //purposely not implemented
-  void operator=(const ImportImageFilter&); //purposely not implemented
+  void operator =(const ImportImageFilter&); //purposely not implemented
 
-  RegionType  m_Region;
-  double   m_Spacing[OutputImageType::ImageDimension];
-  double   m_Origin[OutputImageType::ImageDimension];
+  RegionType    m_Region;
+  double        m_Spacing[OutputImageType::ImageDimension];
+  double        m_Origin[OutputImageType::ImageDimension];
   DirectionType m_Direction;
 
-  TPixel*  m_ImportPointer;
-  bool     m_FilterManageMemory;
+  TPixel*       m_ImportPointer;
+  bool          m_FilterManageMemory;
   unsigned long m_Size;
 };
 
@@ -183,5 +182,3 @@ private:
 #endif
 
 #endif
-
-

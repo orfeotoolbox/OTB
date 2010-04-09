@@ -44,17 +44,20 @@ namespace otb
  *
  * \ingroup ClassificationFilters
  */
-template <class TInputPointSet,class TTrainingPointSet>
+template <class TInputPointSet, class TTrainingPointSet>
 class ITK_EXPORT SVMPointSetModelEstimator :
-      public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
+  public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMPointSetModelEstimator      Self;
-  typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType> Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-                     
+  typedef SVMPointSetModelEstimator Self;
+  typedef SVMModelEstimator<typename TInputPointSet::PixelType::value_type,
+                            typename TTrainingPointSet::PixelType> Superclass;
+  typedef itk::SmartPointer<Self>
+  Pointer;
+  typedef itk::SmartPointer<const Self>
+  ConstPointer;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -62,7 +65,7 @@ public:
   itkTypeMacro(SVMPointSetModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
-  typedef typename TInputPointSet::Pointer   InputPointSetPointer;
+  typedef typename TInputPointSet::Pointer InputPointSetPointer;
 
   /** Type definitions for the training image. */
   typedef typename TTrainingPointSet::Pointer TrainingPointSetPointer;
@@ -78,7 +81,7 @@ public:
 
   /** Type definitions for the iterators for the input and training images. */
   typedef typename
-  TInputPointSet::PointsContainerConstIterator  InputPointSetIteratorType;
+  TInputPointSet::PointsContainerConstIterator InputPointSetIteratorType;
   typedef typename
   TTrainingPointSet::PointsContainerConstIterator TrainingPointSetIteratorType;
 
@@ -93,7 +96,7 @@ public:
 
   /** Get the training image */
   const TTrainingPointSet * GetTrainingPointSet();
-  
+
 protected:
   /** Constructor */
   SVMPointSetModelEstimator();
@@ -105,8 +108,8 @@ protected:
   virtual void PrepareData();
 
 private:
-  SVMPointSetModelEstimator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMPointSetModelEstimator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 }; // class SVMPointSetModelEstimator
 
@@ -116,6 +119,4 @@ private:
 #include "otbSVMPointSetModelEstimator.txx"
 #endif
 
-
 #endif
-

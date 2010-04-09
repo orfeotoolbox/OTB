@@ -70,82 +70,87 @@ namespace otb
  */
 template <class TPixel, class TLabel = double>
 class ITK_EXPORT ImageViewerBase
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewerBase    Self;
-  typedef itk::ProcessObject                 Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef ImageViewerBase               Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageViewerBase,itk::ProcessObject);
+  itkTypeMacro(ImageViewerBase, itk::ProcessObject);
 
   /// Template pixel type
-  typedef TPixel InputPixelType;
-  typedef TLabel LabelType;
-  typedef otb::ImageViewerScrollWidget<InputPixelType,LabelType> ScrollWidgetType;
-  typedef otb::ImageViewerZoomWidget<InputPixelType,LabelType> ZoomWidgetType;
-  typedef otb::ImageViewerFullWidget<InputPixelType,LabelType> FullWidgetType;
-  typedef Fl_Output * FlOutputPointerType;
+  typedef TPixel                                                  InputPixelType;
+  typedef TLabel                                                  LabelType;
+  typedef otb::ImageViewerScrollWidget<InputPixelType, LabelType> ScrollWidgetType;
+  typedef otb::ImageViewerZoomWidget<InputPixelType, LabelType>   ZoomWidgetType;
+  typedef otb::ImageViewerFullWidget<InputPixelType, LabelType>   FullWidgetType;
+  typedef Fl_Output *                                             FlOutputPointerType;
 
-  typedef typename ScrollWidgetType::ImageType ImageType;
-  typedef typename ScrollWidgetType::OverlayImageType OverlayImageType;
-  typedef typename ScrollWidgetType::TransferFunctionListType TransferFunctionListType;
-  typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
+  typedef typename ScrollWidgetType::ImageType                  ImageType;
+  typedef typename ScrollWidgetType::OverlayImageType           OverlayImageType;
+  typedef typename ScrollWidgetType::TransferFunctionListType   TransferFunctionListType;
+  typedef typename TransferFunctionListType::Pointer            TransferFunctionListPointerType;
   typedef typename ScrollWidgetType::AffineTransferFunctionType AffineTransferFunctionType;
-  typedef typename ImageType::Pointer ImagePointerType;
-  typedef typename OverlayImageType::Pointer OverlayImagePointerType;
-  typedef typename ImageType::IndexType IndexType;
-  typedef typename ImageType::PointType PointType;
-  typedef typename ImageType::SizeType SizeType;
-  typedef typename ImageType::PixelType PixelType;
-  typedef typename ImageType::RegionType RegionType;
-  typedef typename ImageType::OffsetType OffsetType;
-  typedef typename ScrollWidgetType::VectorPixelType VectorPixelType;
-  typedef typename ScrollWidgetType::ViewModelType ViewModelType;
-  typedef typename ScrollWidgetType::Pointer ScrollWidgetPointerType;
-  typedef typename ZoomWidgetType::Pointer ZoomWidgetPointerType;
-  typedef typename FullWidgetType::Pointer FullWidgetPointerType;
-  itkStaticConstMacro(ImageDimension,unsigned int,ImageType::ImageDimension);
+  typedef typename ImageType::Pointer                           ImagePointerType;
+  typedef typename OverlayImageType::Pointer                    OverlayImagePointerType;
+  typedef typename ImageType::IndexType                         IndexType;
+  typedef typename ImageType::PointType                         PointType;
+  typedef typename ImageType::SizeType                          SizeType;
+  typedef typename ImageType::PixelType                         PixelType;
+  typedef typename ImageType::RegionType                        RegionType;
+  typedef typename ImageType::OffsetType                        OffsetType;
+  typedef typename ScrollWidgetType::VectorPixelType            VectorPixelType;
+  typedef typename ScrollWidgetType::ViewModelType              ViewModelType;
+  typedef typename ScrollWidgetType::Pointer                    ScrollWidgetPointerType;
+  typedef typename ZoomWidgetType::Pointer                      ZoomWidgetPointerType;
+  typedef typename FullWidgetType::Pointer                      FullWidgetPointerType;
+  itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
-
-  typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
-  typedef itk::Vector<typename itk::NumericTraits<InputPixelType>::RealType,1> MeasurementVectorType;
-  typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-  typedef float HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
-  itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-  typedef otb::ObjectList<ListSampleType> ListSampleListType;
-  typedef otb::ObjectList<HistogramGeneratorType> HistogramGeneratorListType;
-  typedef typename HistogramGeneratorListType::Pointer HistogramGeneratorListPointerType;
+  typedef itk::ImageRegionConstIterator<ImageType>                              InputIteratorType;
+  typedef itk::Vector<typename itk::NumericTraits<InputPixelType>::RealType, 1> MeasurementVectorType;
+  typedef itk::Statistics::ListSample<MeasurementVectorType>                    ListSampleType;
+  typedef float                                                                 HistogramMeasurementType;
+  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType, HistogramMeasurementType,
+                                                          itk::Statistics::DenseFrequencyContainer,
+                                                          1> HistogramGeneratorType;
+  typedef otb::ObjectList<ListSampleType>
+                                                         ListSampleListType;
+  typedef otb::ObjectList<HistogramGeneratorType>
+                                                         HistogramGeneratorListType;
+  typedef typename HistogramGeneratorListType::Pointer
+                                                         HistogramGeneratorListPointerType;
   typedef typename HistogramGeneratorType::HistogramType HistogramType;
-  typedef otb::ImageViewerHistogramAndTransferFunctionWidget<HistogramType,InputPixelType,LabelType> HistogramWidgetType;
-  typedef typename HistogramWidgetType::Pointer HistogramWidgetPointerType;
+  typedef otb::ImageViewerHistogramAndTransferFunctionWidget<HistogramType, InputPixelType,
+                                                             LabelType> HistogramWidgetType;
+  typedef typename HistogramWidgetType::Pointer
+  HistogramWidgetPointerType;
 
   /// Support for conversion from otb::Image to otb::VectorImage
-  typedef typename PixelType::ValueType ValueType;
-  typedef otb::Image<ValueType,ImageDimension> SingleImageType;
-  typedef typename SingleImageType::Pointer SingleImagePointerType;
-  typedef otb::ImageToVectorImageCastFilter<SingleImageType,ImageType> VectorCastFilterType;
-  typedef typename VectorCastFilterType::Pointer VectorCastFilterPointerType;
+  typedef typename PixelType::ValueType                                 ValueType;
+  typedef otb::Image<ValueType, ImageDimension>                         SingleImageType;
+  typedef typename SingleImageType::Pointer                             SingleImagePointerType;
+  typedef otb::ImageToVectorImageCastFilter<SingleImageType, ImageType> VectorCastFilterType;
+  typedef typename VectorCastFilterType::Pointer                        VectorCastFilterPointerType;
 
   /// Definition of streaming shrink image filter
-  typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkFilterType;
-  typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
-  typedef otb::StreamingShrinkImageFilter<OverlayImageType,OverlayImageType> OverlayShrinkFilterType;
-  typedef typename OverlayShrinkFilterType::Pointer OverlayShrinkFilterPointerType;
+  typedef otb::StreamingShrinkImageFilter<ImageType, ImageType>               ShrinkFilterType;
+  typedef typename ShrinkFilterType::Pointer                                  ShrinkFilterPointerType;
+  typedef otb::StreamingShrinkImageFilter<OverlayImageType, OverlayImageType> OverlayShrinkFilterType;
+  typedef typename OverlayShrinkFilterType::Pointer                           OverlayShrinkFilterPointerType;
 
   /// Definition of box form to represent displayed regions.
-  typedef otb::ImageWidgetBoxForm BoxType;
+  typedef otb::ImageWidgetBoxForm   BoxType;
   typedef typename BoxType::Pointer BoxPointerType;
 
   /// List of linked viewer typedef
-  typedef otb::ObjectList<Self> ViewerListType;
+  typedef otb::ObjectList<Self>            ViewerListType;
   typedef typename ViewerListType::Pointer ViewerListPointerType;
 
   /// Linked viewer offset list
@@ -153,94 +158,94 @@ public:
 
   /// Type for the overlay list
   typedef typename FullWidgetType::FormListType FormListType;
-  typedef typename FormListType::Pointer FormListPointerType;
-  typedef typename FormListType::Iterator FormListIteratorType;
+  typedef typename FormListType::Pointer        FormListPointerType;
+  typedef typename FormListType::Iterator       FormListIteratorType;
 
   /// type for the list of the polygon ROI
-  typedef otb::Polygon<LabelType> PolygonType;
+  typedef otb::Polygon<LabelType>                           PolygonType;
   typedef typename PolygonType::VertexListConstIteratorType PolygonIteratorType;
-  typedef otb::ObjectList<PolygonType> PolygonListType;
-  typedef typename PolygonListType::Pointer PolygonListPointerType;
-  typedef typename PolygonListType::Iterator PolygonListIteratorType;
-  typedef ImageWidgetPolygonForm<LabelType> ImageWidgetPolygonFormType;
-  typedef typename ImageWidgetPolygonFormType::Pointer ImageWidgetPolygonFormPointerType;
-  typedef typename ImageWidgetPolygonFormType::ColorType ColorType;
-  typedef ImageWidgetCircleForm ImageWidgetCircleFormType;
-  typedef typename ImageWidgetCircleFormType::Pointer ImageWidgetCircleFormPointerType;
-  typedef std::map<LabelType,ColorType> ROIColorMapType;
+  typedef otb::ObjectList<PolygonType>                      PolygonListType;
+  typedef typename PolygonListType::Pointer                 PolygonListPointerType;
+  typedef typename PolygonListType::Iterator                PolygonListIteratorType;
+  typedef ImageWidgetPolygonForm<LabelType>                 ImageWidgetPolygonFormType;
+  typedef typename ImageWidgetPolygonFormType::Pointer      ImageWidgetPolygonFormPointerType;
+  typedef typename ImageWidgetPolygonFormType::ColorType    ColorType;
+  typedef ImageWidgetCircleForm                             ImageWidgetCircleFormType;
+  typedef typename ImageWidgetCircleFormType::Pointer       ImageWidgetCircleFormPointerType;
+  typedef std::map<LabelType, ColorType>                    ROIColorMapType;
 
-  typedef otb::PolyLineParametricPathWithValue<double,2> PathType;
-  typedef typename PathType::VertexListConstIteratorType PathIteratorType;
-  typedef otb::ObjectList<PathType> PathListType;
-  typedef typename PathListType::Pointer PathListPointerType;
-  typedef typename PathListType::Iterator PathListIteratorType;
-  typedef ImageWidgetPolylineForm<double> ImageWidgetPolylineFormType;
-  typedef typename ImageWidgetPolylineFormType::Pointer ImageWidgetPolylineFormPointerType;
+  typedef otb::PolyLineParametricPathWithValue<double, 2> PathType;
+  typedef typename PathType::VertexListConstIteratorType  PathIteratorType;
+  typedef otb::ObjectList<PathType>                       PathListType;
+  typedef typename PathListType::Pointer                  PathListPointerType;
+  typedef typename PathListType::Iterator                 PathListIteratorType;
+  typedef ImageWidgetPolylineForm<double>                 ImageWidgetPolylineFormType;
+  typedef typename ImageWidgetPolylineFormType::Pointer   ImageWidgetPolylineFormPointerType;
 
   /// Accessors
-  itkGetMacro(Built,bool);
-  itkGetMacro(ShrinkFactor,unsigned int);
-  itkSetMacro(RedChannelIndex,unsigned int);
-  itkGetMacro(RedChannelIndex,unsigned int);
-  itkSetMacro(GreenChannelIndex,unsigned int);
-  itkGetMacro(GreenChannelIndex,unsigned int);
-  itkSetMacro(BlueChannelIndex,unsigned int);
-  itkGetMacro(BlueChannelIndex,unsigned int);
-  itkSetMacro(Label,std::string);
-  itkGetMacro(Label,std::string);
-  itkSetMacro(QuicklookRatioCoef,double);
-  itkGetMacro(QuicklookRatioCoef,double);
-  itkSetMacro(NormalizationFactor,double);
-  itkGetMacro(NormalizationFactor,double);
-  itkGetMacro(Updating,bool);
-  itkGetMacro(UseScroll,bool);
+  itkGetMacro(Built, bool);
+  itkGetMacro(ShrinkFactor, unsigned int);
+  itkSetMacro(RedChannelIndex, unsigned int);
+  itkGetMacro(RedChannelIndex, unsigned int);
+  itkSetMacro(GreenChannelIndex, unsigned int);
+  itkGetMacro(GreenChannelIndex, unsigned int);
+  itkSetMacro(BlueChannelIndex, unsigned int);
+  itkGetMacro(BlueChannelIndex, unsigned int);
+  itkSetMacro(Label, std::string);
+  itkGetMacro(Label, std::string);
+  itkSetMacro(QuicklookRatioCoef, double);
+  itkGetMacro(QuicklookRatioCoef, double);
+  itkSetMacro(NormalizationFactor, double);
+  itkGetMacro(NormalizationFactor, double);
+  itkGetMacro(Updating, bool);
+  itkGetMacro(UseScroll, bool);
   itkGetObjectMacro(PolygonROIList, PolygonListType);
   itkSetObjectMacro(PolygonROIList, PolygonListType);
   itkGetObjectMacro(PathList, PathListType);
   itkSetObjectMacro(PathList, PathListType);
-  itkGetObjectMacro(InterfaceBoxesList,FormListType);
-  itkSetObjectMacro(InterfaceBoxesList,FormListType);
-  itkSetMacro(InterfaceBoxesColor,ColorType);
-  itkGetMacro(InterfaceBoxesColor,ColorType);
-  itkSetMacro(DefaultROIColor,ColorType);
-  itkGetMacro(DefaultROIColor,ColorType);
-  itkSetMacro(NextROILabel,LabelType);
-  itkGetMacro(NextROILabel,LabelType);
-  itkGetMacro(FullWidget,FullWidgetPointerType);
-  itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
-  itkGetMacro(ZoomWidget,ZoomWidgetPointerType);
-  itkGetMacro(RedHistogramWidget,HistogramWidgetPointerType);
-  itkGetMacro(GreenHistogramWidget,HistogramWidgetPointerType);
-  itkGetMacro(BlueHistogramWidget,HistogramWidgetPointerType);
-  itkGetMacro(ZoomMaxInitialSize,unsigned int);
-  itkSetMacro(ZoomMaxInitialSize,unsigned int);
-  itkGetMacro(ScrollMaxInitialSize,unsigned int);
-  itkSetMacro(ScrollMaxInitialSize,unsigned int);
-  itkGetMacro(FullMaxInitialSize,unsigned int);
-  itkSetMacro(FullMaxInitialSize,unsigned int);
-  itkSetMacro(ScrollLimitSize,unsigned int);
-  itkGetMacro(ScrollLimitSize,unsigned int);
-  itkGetMacro(PixLocOutput,FlOutputPointerType);
-  itkSetMacro(PixLocOutput,FlOutputPointerType);
-  itkSetMacro(RectangularROISelectionMode,bool);
-  itkGetMacro(RectangularROISelectionMode,bool);
-  itkSetMacro(PolygonalROISelectionMode,bool);
-  itkGetMacro(PolygonalROISelectionMode,bool);
-  itkGetObjectMacro(InputImage,ImageType);
-  itkGetMacro(ImageGeometry,double);
-  itkSetMacro(ShowZoomWidget,bool);
-  itkGetMacro(ShowZoomWidget,bool);
-  itkSetMacro(ShowFullWidget,bool);
-  itkGetMacro(ShowFullWidget,bool);
-  itkSetMacro(ShowScrollWidget,bool);
-  itkGetMacro(ShowScrollWidget,bool);
-  itkSetMacro(UseImageOverlay,bool);
-  itkGetMacro(UseImageOverlay,bool);
-  itkSetMacro(ShowHistograms,bool);
-  itkGetMacro(ShowHistograms,bool);
-  itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
-  itkSetMacro(LineWidth,double);
-  itkGetMacro(LineWidth,double);
+  itkGetObjectMacro(InterfaceBoxesList, FormListType);
+  itkSetObjectMacro(InterfaceBoxesList, FormListType);
+  itkSetMacro(InterfaceBoxesColor, ColorType);
+  itkGetMacro(InterfaceBoxesColor, ColorType);
+  itkSetMacro(DefaultROIColor, ColorType);
+  itkGetMacro(DefaultROIColor, ColorType);
+  itkSetMacro(NextROILabel, LabelType);
+  itkGetMacro(NextROILabel, LabelType);
+  itkGetMacro(FullWidget, FullWidgetPointerType);
+  itkGetMacro(ScrollWidget, ScrollWidgetPointerType);
+  itkGetMacro(ZoomWidget, ZoomWidgetPointerType);
+  itkGetMacro(RedHistogramWidget, HistogramWidgetPointerType);
+  itkGetMacro(GreenHistogramWidget, HistogramWidgetPointerType);
+  itkGetMacro(BlueHistogramWidget, HistogramWidgetPointerType);
+  itkGetMacro(ZoomMaxInitialSize, unsigned int);
+  itkSetMacro(ZoomMaxInitialSize, unsigned int);
+  itkGetMacro(ScrollMaxInitialSize, unsigned int);
+  itkSetMacro(ScrollMaxInitialSize, unsigned int);
+  itkGetMacro(FullMaxInitialSize, unsigned int);
+  itkSetMacro(FullMaxInitialSize, unsigned int);
+  itkSetMacro(ScrollLimitSize, unsigned int);
+  itkGetMacro(ScrollLimitSize, unsigned int);
+  itkGetMacro(PixLocOutput, FlOutputPointerType);
+  itkSetMacro(PixLocOutput, FlOutputPointerType);
+  itkSetMacro(RectangularROISelectionMode, bool);
+  itkGetMacro(RectangularROISelectionMode, bool);
+  itkSetMacro(PolygonalROISelectionMode, bool);
+  itkGetMacro(PolygonalROISelectionMode, bool);
+  itkGetObjectMacro(InputImage, ImageType);
+  itkGetMacro(ImageGeometry, double);
+  itkSetMacro(ShowZoomWidget, bool);
+  itkGetMacro(ShowZoomWidget, bool);
+  itkSetMacro(ShowFullWidget, bool);
+  itkGetMacro(ShowFullWidget, bool);
+  itkSetMacro(ShowScrollWidget, bool);
+  itkGetMacro(ShowScrollWidget, bool);
+  itkSetMacro(UseImageOverlay, bool);
+  itkGetMacro(UseImageOverlay, bool);
+  itkSetMacro(ShowHistograms, bool);
+  itkGetMacro(ShowHistograms, bool);
+  itkGetObjectMacro(TransferFunctionList, TransferFunctionListType);
+  itkSetMacro(LineWidth, double);
+  itkGetMacro(LineWidth, double);
 
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -371,15 +376,14 @@ public:
    * \param label The label
    * \param color the color to associate the label with
    */
-  virtual void AddROIColorMapEntry(const LabelType &label, const ColorType &color);
-
+  virtual void AddROIColorMapEntry(const LabelType& label, const ColorType& color);
 
   /**
    * Remove a new color-label combination in the ROI color map. If the label
    * is not present, does nothing.
    * \param label The label
    */
-  virtual void RemoveROIColorMapEntry(const LabelType &label);
+  virtual void RemoveROIColorMapEntry(const LabelType& label);
 
   /**
    * Fill the color parameter with the color entry associated with the label. Returns
@@ -388,21 +392,18 @@ public:
    * \param color The color
    * \return true if the label was found.
    */
-  virtual bool GetROIColorMapEntry(const LabelType &label, ColorType &color);
-
+  virtual bool GetROIColorMapEntry(const LabelType& label, ColorType& color);
 
   /**
    * Clear the ROI color map.
    */
   virtual void ClearROIColorMap(void);
 
-
   /**
    * Set the image overlay opacity of all widgets
    * \param opacity
    */
   virtual void SetImageOverlayOpacity(unsigned char opacity);
-
 
 protected:
 
@@ -419,7 +420,7 @@ protected:
    * \param viewer The viewer to link with.
    * \param backwardLinkFlag Link back to this viewer.
    */
-  virtual void Unlink(Self * viewer,bool backwardLinkFlag);
+  virtual void Unlink(Self * viewer, bool backwardLinkFlag);
 
   // Constructor and destructor
   ImageViewerBase();
@@ -429,8 +430,8 @@ protected:
   double m_LineWidth;
 
 private:
-  ImageViewerBase(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageViewerBase(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /// Label
   std::string m_Label;
@@ -462,10 +463,10 @@ private:
   /// Image geomerty ratio
   double m_ImageGeometry;
   /// Limit size for the scroll view
-  unsigned int m_ScrollLimitSize;
+  unsigned int        m_ScrollLimitSize;
   FlOutputPointerType m_PixLocOutput;
   /// Pointer to the shrink filters
-  ShrinkFilterPointerType m_Shrink;
+  ShrinkFilterPointerType        m_Shrink;
   OverlayShrinkFilterPointerType m_ShrinkOverlay;
 
   /// The shrink factor
@@ -477,9 +478,9 @@ private:
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
   /// Quicklook quality factor
-  double       m_QuicklookRatioCoef;
+  double m_QuicklookRatioCoef;
   /// Normalization quality factor
-  double       m_NormalizationFactor;
+  double m_NormalizationFactor;
   /// Converter from otb::Image to otb::VectorImage
   VectorCastFilterPointerType m_VectorCastFilter;
   VectorCastFilterPointerType m_VectorCastFilterOverlay;
@@ -520,7 +521,6 @@ private:
   HistogramWidgetPointerType m_GreenHistogramWidget;
 
 };
-
 
 } // end namespace otb
 

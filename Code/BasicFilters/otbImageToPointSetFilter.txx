@@ -27,13 +27,13 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPointSet>
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ImageToPointSetFilter()
 {
   this->ProcessObjectType::SetNumberOfRequiredInputs(1);
 
   OutputPointSetPointer output
-  = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
+    = dynamic_cast<OutputPointSetType*>(this->MakeOutput(0).GetPointer());
 
   ProcessObjectType::SetNumberOfRequiredOutputs(1);
   ProcessObjectType::SetNthOutput(0, output.GetPointer());
@@ -41,7 +41,6 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>::New();
 
-
 }
 
 /**
@@ -49,13 +48,13 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
-::SetInput(unsigned int idx,const InputImageType *input)
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
+::SetInput(unsigned int idx, const InputImageType *input)
 {
   // process object is not const-correct, the const_cast
   // is required here.
   this->ProcessObjectType::SetNthInput(idx,
-                                       const_cast< InputImageType * >(input) );
+                                       const_cast<InputImageType *>(input));
 }
 
 /**
@@ -63,41 +62,40 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::SetInput(const InputImageType *input)
 {
   // process object is not const-correct, the const_cast
   // is required here.
   this->ProcessObjectType::SetNthInput(0,
-                                       const_cast< InputImageType * >(input) );
+                                       const_cast<InputImageType *>(input));
 }
 
 /**
  *
  */
 template <class TInputImage, class TOutputPointSet>
-const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageType *
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+const typename ImageToPointSetFilter<TInputImage, TOutputPointSet>::InputImageType *
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GetInput(unsigned int idx)
 {
 
   return dynamic_cast<const InputImageType*>
-         (this->ProcessObjectType::GetInput(idx));
+           (this->ProcessObjectType::GetInput(idx));
 }
 
 /**
  *
  */
 template <class TInputImage, class TOutputPointSet>
-const typename ImageToPointSetFilter<TInputImage,TOutputPointSet>::InputImageType *
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+const typename ImageToPointSetFilter<TInputImage, TOutputPointSet>::InputImageType *
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1)
-    return 0;
+  if (this->GetNumberOfInputs() < 1) return 0;
 
   return dynamic_cast<const InputImageType*>
-         (this->ProcessObjectType::GetInput(0));
+           (this->ProcessObjectType::GetInput(0));
 }
 
 /**
@@ -105,10 +103,10 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 /**
@@ -118,7 +116,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateOutputInformation()
 {
 }
@@ -128,7 +126,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
  */
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateData(void)
 {
 
@@ -139,11 +137,11 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 
   unsigned int numDivisions;
   numDivisions =  StreamingTraitsType
-           ::CalculateNumberOfStreamDivisions(this->GetInput(),
-                                              this->GetInput()->GetLargestPossibleRegion(),
-                                              m_RegionSplitter,
-                                              SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS,
-                                              0, 0, 0);
+                 ::CalculateNumberOfStreamDivisions(this->GetInput(),
+                                                    this->GetInput()->GetLargestPossibleRegion(),
+                                                    m_RegionSplitter,
+                                                    SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS,
+                                                    0, 0, 0);
 
   // Input is an image, cast away the constness so we can set
   // the requested region.
@@ -153,20 +151,20 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
-  unsigned int piece;
+  unsigned int         piece;
   InputImageRegionType streamRegion;
   for (piece = 0;
        piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
-  {
+    {
     streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions, inputRegion);
     typedef itk::ImageToImageFilterDetail::ImageRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-                        itkGetStaticConstMacro(InputImageDimension)> OutputToInputRegionCopierType;
+                                                             itkGetStaticConstMacro(InputImageDimension)>
+    OutputToInputRegionCopierType;
     OutputToInputRegionCopierType regionCopier;
-    InputImageRegionType inputRegion;
+    InputImageRegionType          inputRegion;
     regionCopier(inputRegion, streamRegion);
-    input->SetRequestedRegion( inputRegion );
-
+    input->SetRequestedRegion(inputRegion);
 
     // Call a method that can be overridden by a subclass to perform
     // some calculations prior to splitting the main computations into
@@ -180,8 +178,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
     // Initializing object per thread
     typename PointsContainerType::Pointer defaultPointsContainer = PointsContainerType::New();
     this->m_PointsContainerPerThread
-          = OutputPointsContainerForThreadType(this->GetNumberOfThreads(),defaultPointsContainer);
-
+      = OutputPointsContainerForThreadType(this->GetNumberOfThreads(), defaultPointsContainer);
 
     // Setting up multithreader
     this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
@@ -193,13 +190,13 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
     // Call a method that can be overridden by a subclass to perform
     // some calculations after all the threads have completed
     this->AfterThreadedGenerateData();
-  }
+    }
 
 }
 
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::BeforeThreadedGenerateData(void)
 {
 
@@ -207,31 +204,31 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::AfterThreadedGenerateData(void)
 {
   // copy the lists to the output
   PointsContainerType * outputPointsContainer = this->GetOutput()->GetPoints();
 
   typedef typename PointsContainerType::ConstIterator OutputPointsContainerIterator;
-  for (unsigned int i=0; i< this->m_PointsContainerPerThread.size(); ++i)
-  {
-    if (this->m_PointsContainerPerThread[i].IsNotNull())
+  for (unsigned int i = 0; i < this->m_PointsContainerPerThread.size(); ++i)
     {
+    if (this->m_PointsContainerPerThread[i].IsNotNull())
+      {
       for (OutputPointsContainerIterator it = this->m_PointsContainerPerThread[i]->Begin();
            it != this->m_PointsContainerPerThread[i]->End();
            ++it)
-      {
+        {
         outputPointsContainer->push_back(it.Value());
+        }
       }
     }
-  }
 
 }
 
 template <class TInputImage, class TOutputPointSet>
 void
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreadedGenerateData(const InputImageRegionType&, int)
 {
   // The following code is equivalent to:
@@ -240,23 +237,23 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   // 'noreturn' function does return
   itk::OStringStream message;
   message << "itk::ERROR: " << this->GetNameOfClass()
-  << "(" << this << "): " << "Subclass should override this method!!!";
-  itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(),ITK_LOCATION);
+          << "(" << this << "): " << "Subclass should override this method!!!";
+  itk::ExceptionObject e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION);
   throw e_;
 
 }
 
 template <class TInputImage, class TOutputPointSet>
 ITK_THREAD_RETURN_TYPE
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
-::ThreaderCallback( void *arg )
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
+::ThreaderCallback(void *arg)
 {
   ThreadStruct *str;
-  int total, threadId, threadCount;
+  int           total, threadId, threadCount;
 
-  threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
-  str = (ThreadStruct *)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+  threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
 
   // execute the actual method with appropriate output region
   // first find out how many pieces extent can be split into.
@@ -265,9 +262,9 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
                                             splitRegion);
 
   if (threadId < total)
-  {
-      str->Filter->ThreadedGenerateData(splitRegion, threadId);
-  }
+    {
+    str->Filter->ThreadedGenerateData(splitRegion, threadId);
+    }
   // else
   //   {
   //   otherwise don't use this thread. Sometimes the threads dont
@@ -280,7 +277,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 
 template <class TInputImage, class TOutputPointSet>
 int
-ImageToPointSetFilter<TInputImage,TOutputPointSet>
+ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::SplitRequestedRegion(int i, int num, InputImageRegionType& splitRegion)
 {
   // Get the output pointer
@@ -288,9 +285,9 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   const typename TInputImage::SizeType& requestedRegionSize
     = inputPtr->GetRequestedRegion().GetSize();
 
-  int splitAxis;
+  int                             splitAxis;
   typename TInputImage::IndexType splitIndex;
-  typename TInputImage::SizeType splitSize;
+  typename TInputImage::SizeType  splitSize;
 
   // Initialize the splitRegion to the output requested region
   splitRegion = inputPtr->GetRequestedRegion();
@@ -311,27 +308,28 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
 
   // determine the actual number of pieces that will be generated
   typename TInputImage::SizeType::SizeValueType range = requestedRegionSize[splitAxis];
-  int valuesPerThread = (int)::vcl_ceil(range/(double)num);
-  int maxThreadIdUsed = (int)::vcl_ceil(range/(double)valuesPerThread) - 1;
+  int                                           valuesPerThread = (int) ::vcl_ceil(range / (double) num);
+  int                                           maxThreadIdUsed =
+    (int) ::vcl_ceil(range / (double) valuesPerThread) - 1;
 
   // Split the region
   if (i < maxThreadIdUsed)
     {
-    splitIndex[splitAxis] += i*valuesPerThread;
+    splitIndex[splitAxis] += i * valuesPerThread;
     splitSize[splitAxis] = valuesPerThread;
     }
   if (i == maxThreadIdUsed)
     {
-    splitIndex[splitAxis] += i*valuesPerThread;
+    splitIndex[splitAxis] += i * valuesPerThread;
     // last thread needs to process the "rest" dimension being split
-    splitSize[splitAxis] = splitSize[splitAxis] - i*valuesPerThread;
+    splitSize[splitAxis] = splitSize[splitAxis] - i * valuesPerThread;
     }
 
   // set the split region ivars
-  splitRegion.SetIndex( splitIndex );
-  splitRegion.SetSize( splitSize );
+  splitRegion.SetIndex(splitIndex);
+  splitRegion.SetSize(splitSize);
 
-  itkDebugMacro("  Split Piece: " << splitRegion );
+  itkDebugMacro("  Split Piece: " << splitRegion);
 
   return maxThreadIdUsed + 1;
 }

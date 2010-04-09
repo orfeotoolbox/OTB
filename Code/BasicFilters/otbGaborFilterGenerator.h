@@ -68,42 +68,42 @@ namespace otb
 
 template <class TPrecision>
 class GaborFilterGenerator
-      : public itk::Object
+  : public itk::Object
 {
 public:
   // Standard class typedefs
-  typedef GaborFilterGenerator Self;
-  typedef itk::Object          Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef GaborFilterGenerator          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Standard new and type macro
   itkNewMacro(Self);
-  itkTypeMacro(GaborFilterGenerator,Object);
+  itkTypeMacro(GaborFilterGenerator, Object);
 
   // usefull typedefs
-  typedef TPrecision PrecisionType;
+  typedef TPrecision                PrecisionType;
   typedef itk::Array<PrecisionType> ArrayType;
   typedef itk::Size<2>              RadiusType;
 
   /** Setters/Getters */
-  itkSetMacro(A,PrecisionType);
-  itkGetMacro(A,PrecisionType);
-  itkSetMacro(B,PrecisionType);
-  itkGetMacro(B,PrecisionType);
-  itkSetMacro(Theta,PrecisionType);
-  itkGetMacro(Theta,PrecisionType);
-  itkSetMacro(Phi,PrecisionType);
-  itkGetMacro(Phi,PrecisionType);
-  itkSetMacro(U0,PrecisionType);
-  itkGetMacro(U0,PrecisionType);
-  itkSetMacro(V0,PrecisionType);
-  itkGetMacro(V0,PrecisionType);
-  itkSetMacro(Radius,RadiusType);
-  itkGetConstReferenceMacro(Radius,RadiusType);
+  itkSetMacro(A, PrecisionType);
+  itkGetMacro(A, PrecisionType);
+  itkSetMacro(B, PrecisionType);
+  itkGetMacro(B, PrecisionType);
+  itkSetMacro(Theta, PrecisionType);
+  itkGetMacro(Theta, PrecisionType);
+  itkSetMacro(Phi, PrecisionType);
+  itkGetMacro(Phi, PrecisionType);
+  itkSetMacro(U0, PrecisionType);
+  itkGetMacro(U0, PrecisionType);
+  itkSetMacro(V0, PrecisionType);
+  itkGetMacro(V0, PrecisionType);
+  itkSetMacro(Radius, RadiusType);
+  itkGetConstReferenceMacro(Radius, RadiusType);
 
   /** Get The generated filter */
-  const ArrayType & GetFilter();
+  const ArrayType& GetFilter();
 
 protected:
   /** constructor */
@@ -123,7 +123,7 @@ protected:
 
 private:
   GaborFilterGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius of the filter */
   RadiusType m_Radius;

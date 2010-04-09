@@ -18,7 +18,6 @@
 #ifndef __otbForwardSensorModel_txx
 #define __otbForwardSensorModel_txx
 
-
 #include "otbForwardSensorModel.h"
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
@@ -26,25 +25,24 @@
 namespace otb
 {
 
-template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
-ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 ::ForwardSensorModel()
 {
   m_Epsilon = 0.0001;
   m_NbIter = 1;
 }
 
-template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
-ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 ::~ForwardSensorModel()
 {
 }
 
-
-template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
-typename ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
-::TransformPoint(const InputPointType &point) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
+::TransformPoint(const InputPointType& point) const
 {
 //   otbMsgDevMacro(<< "Point in sensor geometry: (" << point[0] << "," <<  point[1] << ")");
 
@@ -54,29 +52,28 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
   // Calculation
   ossimGpt ossimGPoint;
 
-  if ( this->m_Model == NULL)
-  {
-    itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
-  }
+  if (this->m_Model == NULL)
+    {
+    itkExceptionMacro(<< "TransformPoint(): Invalid Model pointer m_Model == NULL !");
+    }
 
   //Use of DEM: need iteration to reach the correct point
   if (this->m_UseDEM)
-  {
+    {
     this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint);
     ossimGpt ossimGPointRef = ossimGPoint;
     double height(0.), heightTmp(0.);
-    double diffHeight = 100; // arbitrary value
+    double                diffHeight = 100; // arbitrary value
     itk::Point<double, 2> currentPoint;
-    int nbIter = 0;
+    int                   nbIter = 0;
 
     otbMsgDevMacro(<< "USING DEM ! ");
 
     while ((diffHeight > m_Epsilon)  && (nbIter < m_NbIter))
-    {
+      {
       otbMsgDevMacro(<< "Iter " << nbIter);
 
-      if (nbIter != 0)
-        height = heightTmp;
+      if (nbIter != 0) height = heightTmp;
 
 //       otbMsgDevMacro(<< "PointG Before iter : (" << ossimGPointRef.lat << "," << ossimGPointRef.lon <<")");
 
@@ -95,45 +92,43 @@ ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
       diffHeight = fabs(heightTmp - height);
 
       ++nbIter;
+      }
+    ossimGPoint = ossimGPointRef;
     }
-     ossimGPoint = ossimGPointRef;
-  }
   //Altitude of the point is provided (in the sensor coordinate)
   else if (InputPointType::PointDimension == 3)
-  {
+    {
     this->m_Model->lineSampleHeightToWorld(ossimPoint, point[2], ossimGPoint);
-  }
+    }
   //Use of average elevation
   else if (this->m_AverageElevation != -32768.0)
-  {
+    {
     this->m_Model->lineSampleHeightToWorld(ossimPoint, this->m_AverageElevation, ossimGPoint);
-  }
+    }
   //Otherwise, just don't consider the altitude
   else
-  {
+    {
     this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint);
-  }
-
+    }
 
   // "OutputPointType" storage.
   OutputPointType outputPoint;
-  outputPoint[0]=ossimGPoint.lon;
-  outputPoint[1]=ossimGPoint.lat;
+  outputPoint[0] = ossimGPoint.lon;
+  outputPoint[1] = ossimGPoint.lat;
 
 //   otbMsgDevMacro(<< "Geographic point lon/lat : (" << outputPoint[1] << "," <<  outputPoint[0] << ")");
 
   return outputPoint;
 }
 
-template < class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions >
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void
-ForwardSensorModel< TScalarType, NInputDimensions, NOutputDimensions>
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // namespace otb
 
 #endif
-

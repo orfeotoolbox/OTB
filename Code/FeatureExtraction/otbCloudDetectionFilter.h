@@ -27,35 +27,35 @@ namespace otb
  * \brief Applies cloud detection functor to an image.
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::CloudDetectionFunctor<
-ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
-class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter< TInputImage, TOutputImage, TFunction >
+            ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
+class ITK_EXPORT CloudDetectionFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef CloudDetectionFilter                          Self;
-  typedef typename itk::UnaryFunctorImageFilter < TInputImage, TOutputImage, TFunction >
+  typedef CloudDetectionFilter Self;
+  typedef typename itk::UnaryFunctorImageFilter <TInputImage, TOutputImage, TFunction>
   Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(CloudDetectionFilter,UnaryFunctorImageFilter);
+  itkTypeMacro(CloudDetectionFilter, UnaryFunctorImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointer;
-  typedef typename InputImageType::PixelType      InputPixelType;
-  typedef          TOutputImage                   OutputImageType;
-  typedef typename OutputImageType::Pointer       OutputImagePointer;
-  typedef typename OutputImageType::RegionType    OutputImageRegionType;
-  typedef typename OutputImageType::PixelType     OutputPixelType;
+  typedef          TInputImage                 InputImageType;
+  typedef typename InputImageType::Pointer     InputImagePointer;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef          TOutputImage                OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointer;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /** Getters/Setters */
-  void SetReferencePixel( InputPixelType ref );
-  void SetVariance( double var );
+  void SetReferencePixel(InputPixelType ref);
+  void SetVariance(double var);
   void SetMinThreshold(double threshold);
   void SetMaxThreshold(double threshold);
   InputPixelType GetReferencePixel();
@@ -66,16 +66,15 @@ public:
 protected:
   CloudDetectionFilter();
 
-  virtual ~CloudDetectionFilter() {};
+  virtual ~CloudDetectionFilter() {}
 
   virtual void BeforeThreadedGenerateData();
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  CloudDetectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  CloudDetectionFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -86,4 +85,3 @@ private:
 #endif
 
 #endif
-

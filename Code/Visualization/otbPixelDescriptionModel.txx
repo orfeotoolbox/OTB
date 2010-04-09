@@ -47,20 +47,20 @@ PixelDescriptionModel<TOutputImage>
 template <class TOutputImage>
 void
 PixelDescriptionModel<TOutputImage>
-::UpdatePixelDescription(const IndexType & index)
+::UpdatePixelDescription(const IndexType& index)
 {
   // The output stringstream
   itk::OStringStream oss;
-  oss<< otbGetTextMacro("Index") << ": "<<index<<std::endl;
+  oss << otbGetTextMacro("Index") << ": " << index << std::endl;
   // Report pixel info for each visible layer
-  for(typename Superclass::LayerIteratorType it = this->GetLayers()->Begin();
-      it != this->GetLayers()->End(); ++it)
+  for (typename Superclass::LayerIteratorType it = this->GetLayers()->Begin();
+       it != this->GetLayers()->End(); ++it)
     {
     // If the layer is visible
-    if(it.Get()->GetVisible())
+    if (it.Get()->GetVisible())
       {
       // Get the pixel description
-      oss<<it.Get()->GetPixelDescription(index)<<std::endl;
+      oss << it.Get()->GetPixelDescription(index) << std::endl;
       }
     }
   m_PixelDescription = oss.str();
@@ -74,7 +74,7 @@ void
 PixelDescriptionModel<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 template <class TOutputImage>

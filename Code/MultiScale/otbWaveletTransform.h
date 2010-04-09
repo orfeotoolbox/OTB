@@ -47,23 +47,23 @@ namespace otb {
  * \sa WaveletPacketTransform
  *
  */
-template < class TInputImage, class TOutputImage, class TFilter,
-            Wavelet::WaveletDirection TDirectionOfTransformation >
+template <class TInputImage, class TOutputImage, class TFilter,
+          Wavelet::WaveletDirection TDirectionOfTransformation>
 class ITK_EXPORT WaveletTransform
-  : public itk::ImageSource< TOutputImage >
+  : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletTransform Self;
-  typedef itk::ImageSource< TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletTransform               Self;
+  typedef itk::ImageSource<TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletTransform,ImageSource);
+  itkTypeMacro(WaveletTransform, ImageSource);
 
 protected:
   /** But this class cannot do any thing! No constructor is implemented */
@@ -71,8 +71,8 @@ protected:
   virtual ~WaveletTransform();
 
 private:
-  WaveletTransform ( const Self & );
-  void operator= ( const Self & );
+  WaveletTransform (const Self &);
+  void operator =(const Self&);
 };
 
 /** \class WaveletTransform
@@ -97,22 +97,22 @@ private:
  * \sa WaveletPacketTransform
  *
  */
-template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::FORWARD >
-  : public ImageToImageListFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TFilter>
+class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
+  : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletTransform Self;
-  typedef ImageToImageListFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletTransform                                  Self;
+  typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletTransform,ImageToImageListFilter);
+  itkTypeMacro(WaveletTransform, ImageToImageListFilter);
 
   typedef          TInputImage                  InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
@@ -130,29 +130,29 @@ public:
 
   typedef TFilter                           FilterType;
   typedef typename FilterType::Pointer      FilterPointerType;
-  typedef ObjectList< FilterType >          FilterListType;
+  typedef ObjectList<FilterType>            FilterListType;
   typedef typename FilterListType::Pointer  FilterListPointerType;
   typedef typename FilterListType::Iterator FilterListIterator;
 
-  itkGetObjectMacro(FilterList,FilterListType);
-  FilterType * GetNthFilter ( unsigned int idx ) const
+  itkGetObjectMacro(FilterList, FilterListType);
+  FilterType * GetNthFilter(unsigned int idx) const
   {
-    if ( idx >= m_NumberOfDecompositions )
-    {
-      itkExceptionMacro( << "Impossible to GetNthFilter with the index element "
-        << idx << "; this element don't exist, the size of the filter list is "
-        << m_FilterList->Size() << "." );
-    }
-    return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
+    if (idx >= m_NumberOfDecompositions)
+      {
+      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element "
+                        << idx << "; this element don't exist, the size of the filter list is "
+                        << m_FilterList->Size() << ".");
+      }
+    return static_cast<FilterType*>(m_FilterList->GetNthElement(idx));
   }
 
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::FORWARD);
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, Wavelet::FORWARD);
 
-  itkGetMacro(NumberOfDecompositions,unsigned int);
-  itkSetMacro(NumberOfDecompositions,unsigned int);
+  itkGetMacro(NumberOfDecompositions, unsigned int);
+  itkSetMacro(NumberOfDecompositions, unsigned int);
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /**
    * Set/Get the level of down sampling of the image used in forward algorithm.
@@ -162,19 +162,19 @@ public:
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
-  itkGetMacro(SubsampleImageFactor,unsigned int);
-  itkSetMacro(SubsampleImageFactor,unsigned int);
+  itkGetMacro(SubsampleImageFactor, unsigned int);
+  itkSetMacro(SubsampleImageFactor, unsigned int);
 
 protected:
   WaveletTransform();
   virtual ~WaveletTransform() {}
 
   /** Generate data redefinition */
-  virtual void GenerateData ();
+  virtual void GenerateData();
 
 private:
-  WaveletTransform ( const Self &);
-  void operator= ( const Self & );
+  WaveletTransform (const Self &);
+  void operator =(const Self&);
 
   /**
    * Number of decomposition of the multi-scale/-resolution decomposition.
@@ -221,22 +221,22 @@ private:
  * \sa WaveletPacketTransform
  *
  */
-template < class TInputImage, class TOutputImage, class TFilter >
-class ITK_EXPORT WaveletTransform< TInputImage, TOutputImage, TFilter, Wavelet::INVERSE >
-  : public ImageListToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TFilter>
+class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
+  : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletTransform Self;
-  typedef ImageListToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef WaveletTransform                                  Self;
+  typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletTransform,ImageListToImageFilter);
+  itkTypeMacro(WaveletTransform, ImageListToImageFilter);
 
   typedef          TInputImage                  InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
@@ -260,28 +260,28 @@ public:
 
   typedef TFilter                           FilterType;
   typedef typename FilterType::Pointer      FilterPointerType;
-  typedef ObjectList< FilterType >          FilterListType;
+  typedef ObjectList<FilterType>            FilterListType;
   typedef typename FilterListType::Pointer  FilterListPointerType;
   typedef typename FilterListType::Iterator FilterListIterator;
 
-  itkGetObjectMacro(FilterList,FilterListType);
-  FilterType * GetNthFilter ( unsigned int idx ) const
+  itkGetObjectMacro(FilterList, FilterListType);
+  FilterType * GetNthFilter(unsigned int idx) const
   {
-    if ( idx >= m_NumberOfDecompositions )
-    {
-      itkExceptionMacro( << "Impossible to GetNthFilter with the index element "
-        << idx << "; this element don't exist, the size of the filter list is "
-        << m_FilterList->Size() << "." );
-    }
-    return static_cast< FilterType* >( m_FilterList->GetNthElement( idx ) );
+    if (idx >= m_NumberOfDecompositions)
+      {
+      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element "
+                        << idx << "; this element don't exist, the size of the filter list is "
+                        << m_FilterList->Size() << ".");
+      }
+    return static_cast<FilterType*>(m_FilterList->GetNthElement(idx));
   }
 
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,Wavelet::INVERSE);
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, Wavelet::INVERSE);
 
-  itkGetMacro(NumberOfDecompositions,unsigned int);
+  itkGetMacro(NumberOfDecompositions, unsigned int);
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /**
    * Set/Get the level of down sampling of the image used in forward algorithm.
@@ -291,8 +291,8 @@ public:
    * then m_SubsampleImageFactor is most likely to be 1 or 2... but in any case integer
    * and not real...
    */
-  itkGetMacro(SubsampleImageFactor,unsigned int);
-  itkSetMacro(SubsampleImageFactor,unsigned int);
+  itkGetMacro(SubsampleImageFactor, unsigned int);
+  itkSetMacro(SubsampleImageFactor, unsigned int);
 
 protected:
   WaveletTransform();
@@ -305,11 +305,11 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Generate data redefinition */
-  virtual void GenerateData ();
+  virtual void GenerateData();
 
 private:
-  WaveletTransform ( const Self &);
-  void operator= ( const Self & );
+  WaveletTransform (const Self &);
+  void operator =(const Self&);
 
   /**
    * Number of decomposition of the multi-scale/-resolution decomposition.
@@ -337,5 +337,3 @@ private:
 #endif
 
 #endif
-
-

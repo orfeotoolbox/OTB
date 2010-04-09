@@ -46,7 +46,7 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(FilterFunctionValues,DataObject);
+  itkTypeMacro(FilterFunctionValues, DataObject);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -55,56 +55,54 @@ public:
   typedef std::vector<WavelenghtSpectralBandType> ValuesVectorType;
 
   /** Set vector that contains the filter function value. */
-  void SetFilterFunctionValues(const ValuesVectorType & vect)
+  void SetFilterFunctionValues(const ValuesVectorType& vect)
   {
     m_FilterFunctionValues = vect;
     this->Modified();
-  };
+  }
   /** Get vector that contains the filter function value. */
-  const ValuesVectorType & GetFilterFunctionValues() const
+  const ValuesVectorType& GetFilterFunctionValues() const
   {
     return m_FilterFunctionValues;
-  };
+  }
   /** Get vector that contains the filter function value 6S. */
-  void SetFilterFunctionValues6S(const ValuesVectorType & vect)
+  void SetFilterFunctionValues6S(const ValuesVectorType& vect)
   {
     m_FilterFunctionValues6S = vect;
     this->Modified();
-  };
+  }
   /** Get vector that contains the filter function value 6S. */
-  const ValuesVectorType & GetFilterFunctionValues6S() const
+  const ValuesVectorType& GetFilterFunctionValues6S() const
   {
     return m_FilterFunctionValues6S;
-  };
+  }
 
   /** Set minimum spectral value. */
-  itkSetMacro(MinSpectralValue,WavelenghtSpectralBandType);
+  itkSetMacro(MinSpectralValue, WavelenghtSpectralBandType);
   /** Get minimum spectral value. */
-  itkGetMacro(MinSpectralValue,WavelenghtSpectralBandType);
+  itkGetMacro(MinSpectralValue, WavelenghtSpectralBandType);
   /** Set maximum spectral value. This value is automatically computed.*/
-  itkSetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
+  itkSetMacro(MaxSpectralValue, WavelenghtSpectralBandType);
   /** Get maximum spectral value. This value is automatically computed.*/
-  itkGetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
+  itkGetMacro(MaxSpectralValue, WavelenghtSpectralBandType);
   /** Set user step between each wavelenght spectral band values. */
-  itkSetMacro(UserStep,WavelenghtSpectralBandType);
+  itkSetMacro(UserStep, WavelenghtSpectralBandType);
   /** Get user step between each wavelenght spectral band values. */
-  itkGetMacro(UserStep,WavelenghtSpectralBandType);
-
+  itkGetMacro(UserStep, WavelenghtSpectralBandType);
 
 protected:
   /** Constructor */
   FilterFunctionValues();
   /** Destructor */
-  ~FilterFunctionValues() {};
+  ~FilterFunctionValues() {}
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
 private:
-  FilterFunctionValues(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-     
+  FilterFunctionValues(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+
   /** Vector that contains the filter function value. */
   ValuesVectorType m_FilterFunctionValues;
   /** Vector that contains the filter function value in 6S format (step of 0.0025µm).
@@ -118,7 +116,6 @@ private:
   /** User step between each wavelenght spectral band values. (in µm) */
   WavelenghtSpectralBandType m_UserStep;
 };
-
 
 /** \class AtmosphericCorrectionParameters
  *  \brief This class contains all atmospheric correction parameters.
@@ -134,136 +131,137 @@ class ITK_EXPORT AtmosphericCorrectionParameters : public itk::DataObject
 public:
   /** Standard typedefs */
   typedef AtmosphericCorrectionParameters Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::DataObject                 Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(AtmosphericCorrectionParameters,DataObject);
+  itkTypeMacro(AtmosphericCorrectionParameters, DataObject);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef enum {NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5} AerosolModelType;
-  typedef std::vector<FilterFunctionValues::Pointer>                      WavelenghtSpectralBandVectorType;
+  typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
+  typedef std::vector<FilterFunctionValues::Pointer>
+  WavelenghtSpectralBandVectorType;
 
   /**
    * Set/Get the solar zenithal angle.
    */
-  itkSetMacro(SolarZenithalAngle,double);
-  itkGetMacro(SolarZenithalAngle,double);
+  itkSetMacro(SolarZenithalAngle, double);
+  itkGetMacro(SolarZenithalAngle, double);
   /**
    * Set/Get the solar azimutal angle.
    */
-  itkSetMacro(SolarAzimutalAngle,double);
-  itkGetMacro(SolarAzimutalAngle,double);
+  itkSetMacro(SolarAzimutalAngle, double);
+  itkGetMacro(SolarAzimutalAngle, double);
 
   /**
    * Set/Get the viewing zenithal angle.
    */
-  itkSetMacro(ViewingZenithalAngle,double);
-  itkGetMacro(ViewingZenithalAngle,double);
+  itkSetMacro(ViewingZenithalAngle, double);
+  itkGetMacro(ViewingZenithalAngle, double);
   /**
    * Set/Get the viewing azimutal angle.
    */
-  itkSetMacro(ViewingAzimutalAngle,double);
-  itkGetMacro(ViewingAzimutalAngle,double);
+  itkSetMacro(ViewingAzimutalAngle, double);
+  itkGetMacro(ViewingAzimutalAngle, double);
 
   /**
    * Set/Get the month.
    */
-  itkSetClampMacro(Month,unsigned int,1,12);
-  itkGetMacro(Month,unsigned int);
+  itkSetClampMacro(Month, unsigned int, 1, 12);
+  itkGetMacro(Month, unsigned int);
 
   /**
    * Set/Get the day.
    */
-  itkSetClampMacro(Day,unsigned int,1,31);
-  itkGetMacro(Day,unsigned int);
+  itkSetClampMacro(Day, unsigned int, 1, 31);
+  itkGetMacro(Day, unsigned int);
 
   /**
    * Set/Get the atmospheric pressure.
    */
-  itkSetMacro(AtmosphericPressure,double);
-  itkGetMacro(AtmosphericPressure,double);
+  itkSetMacro(AtmosphericPressure, double);
+  itkGetMacro(AtmosphericPressure, double);
 
   /**
    * Set/Get the water vapor amount.
    */
-  itkSetMacro(WaterVaporAmount,double);
-  itkGetMacro(WaterVaporAmount,double);
+  itkSetMacro(WaterVaporAmount, double);
+  itkGetMacro(WaterVaporAmount, double);
 
   /**
    * Set/Get the ozone amount.
    */
-  itkSetMacro(OzoneAmount,double);
-  itkGetMacro(OzoneAmount,double);
+  itkSetMacro(OzoneAmount, double);
+  itkGetMacro(OzoneAmount, double);
 
   /**
    * Set/Get the aerosol model.
    */
-  itkSetEnumMacro(AerosolModel,AerosolModelType);
-  itkGetEnumMacro(AerosolModel,AerosolModelType);
+  itkSetEnumMacro(AerosolModel, AerosolModelType);
+  itkGetEnumMacro(AerosolModel, AerosolModelType);
 
   /**
    * Set/Get the aerosol optical.
    */
-  itkSetMacro(AerosolOptical,double);
-  itkGetMacro(AerosolOptical,double);
+  itkSetMacro(AerosolOptical, double);
+  itkGetMacro(AerosolOptical, double);
 
   /**
    * Set/Get the wavelenght spectral band.
    */
-  void SetWavelenghtSpectralBand( const WavelenghtSpectralBandVectorType & waveband)
+  void SetWavelenghtSpectralBand(const WavelenghtSpectralBandVectorType& waveband)
   {
     m_WavelenghtSpectralBand = waveband;
-  };
-  void SetWavelenghtSpectralBandWithIndex( unsigned int id, const FilterFunctionValues::Pointer & function)
+  }
+  void SetWavelenghtSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
   {
-    if (m_WavelenghtSpectralBand.size() <  id+1)
-    {
-      for (unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());++j)
+    if (m_WavelenghtSpectralBand.size() <  id + 1)
       {
+      for (unsigned int j = 0; j < (id + 1 - m_WavelenghtSpectralBand.size()); ++j)
+        {
         FilterFunctionValues::Pointer temp;
         m_WavelenghtSpectralBand.push_back(temp);
+        }
       }
-    }
     m_WavelenghtSpectralBand[id] = function;
-  };
+  }
   WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand()
   {
     return m_WavelenghtSpectralBand;
-  };
+  }
   WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef()
   {
     return &m_WavelenghtSpectralBand;
-  };
+  }
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
-  void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute, double epsi );
-  void UpdateAeronetData( std::string file, int year, int month, int day, int hour, int minute )
+  void UpdateAeronetData(std::string file, int year, int month, int day, int hour, int minute, double epsi);
+  void UpdateAeronetData(std::string file, int year, int month, int day, int hour, int minute)
   {
-         this->UpdateAeronetData( file, year, month, day, hour, minute, 0.4 );
-  };
-  void UpdateAeronetData( std::string file, int year, int hour, int minute, double epsi )
+    this->UpdateAeronetData(file, year, month, day, hour, minute, 0.4);
+  }
+  void UpdateAeronetData(std::string file, int year, int hour, int minute, double epsi)
   {
-         this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, epsi );
-  };
-  void UpdateAeronetData( std::string file, int year, int hour, int minute )
+    this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, epsi);
+  }
+  void UpdateAeronetData(std::string file, int year, int hour, int minute)
   {
-         this->UpdateAeronetData( file, year, m_Month, m_Day, hour, minute, 0.4 );
-  };
-    
+    this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
+  }
+
   /** Read a file that contains filter function values.
    *  Format is MinSpectralValue MaxSpectralValue UserStep and then the list of coefficients for each band.
    *  NB : if no UserStep writen, the default value will be 0,0025µm
    */
-   void LoadFilterFunctionValue( std::string filename );
-     
+  void LoadFilterFunctionValue(std::string filename);
+
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
-  ~AtmosphericCorrectionParameters() {};
+  ~AtmosphericCorrectionParameters() {}
 
 protected:
 
@@ -271,8 +269,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericCorrectionParameters(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AtmosphericCorrectionParameters(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The Solar zenithal angle */
   double m_SolarZenithalAngle;
@@ -303,5 +301,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

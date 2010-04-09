@@ -26,26 +26,27 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 void
-TerraSarBrightnessImageFilter<TInputImage,TOutputImage>
+TerraSarBrightnessImageFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
 
   // Load metada
   TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
-  bool mdIsAvailable = lImageMetadata->CanRead(this->GetInput()->GetMetaDataDictionary());
+  bool                                    mdIsAvailable = lImageMetadata->CanRead(
+    this->GetInput()->GetMetaDataDictionary());
 
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
-  if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero) 
+  if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero)
     {
-      if (mdIsAvailable)
-        {
-          this->SetCalibrationFactor( lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()) );
-        }
-      else
-        {
-          itkExceptionMacro(<<"Invalid input image. Only TerraSar images are supproted");
-        }
+    if (mdIsAvailable)
+      {
+      this->SetCalibrationFactor(lImageMetadata->GetCalibrationFactor(this->GetInput()->GetMetaDataDictionary()));
+      }
+    else
+      {
+      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supproted");
+      }
     }
 }
 

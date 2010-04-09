@@ -19,13 +19,14 @@
 #include <sstream>
 #include "otbMacro.h"
 
-
 namespace otb
 {
 
-PostGISFromStringTransactor::PostGISFromStringTransactor() : PostGISFromStringTransactor::Superclass("FromStringTransactor") {
+PostGISFromStringTransactor::PostGISFromStringTransactor() : PostGISFromStringTransactor::Superclass(
+    "FromStringTransactor")
+{
   m_TransactionString = "";
-   };
+}
 
 PostGISFromStringTransactor::PostGISFromStringTransactor(const PostGISFromStringTransactor& pgt)
   : PostGISFromStringTransactor::Superclass("FromStringTransactor")
@@ -33,29 +34,31 @@ PostGISFromStringTransactor::PostGISFromStringTransactor(const PostGISFromString
   m_TransactionString = pgt.GetTransactionString();
 }
 
-PostGISFromStringTransactor& PostGISFromStringTransactor::operator=(const PostGISFromStringTransactor& pgt) throw() {
-    m_TransactionString = pgt.GetTransactionString();
-    return *this;
+PostGISFromStringTransactor & PostGISFromStringTransactor::operator =(const PostGISFromStringTransactor& pgt)
+throw()
+{
+  m_TransactionString = pgt.GetTransactionString();
+  return *this;
 }
-  
-void PostGISFromStringTransactor::operator()(pqxx::nontransaction &T)
+
+void PostGISFromStringTransactor::operator ()(pqxx::nontransaction& T)
 {
 
-  if(m_TransactionString!="")
+  if (m_TransactionString != "")
     {
-  
-    otbGenericMsgDebugMacro(<<"Transaction Command " << m_TransactionString);
-  
+
+    otbGenericMsgDebugMacro(<< "Transaction Command " << m_TransactionString);
+
     m_Result = T.exec(m_TransactionString);
     }
-  
+
 }
 
 void PostGISFromStringTransactor::on_commit()
 {
   std::cout << "\t Transaction \t"  << std::endl;
-  std::cout << "\t "<< m_TransactionString  << std::endl;
-  
+  std::cout << "\t " << m_TransactionString  << std::endl;
+
 }
 
 std::string PostGISFromStringTransactor::GetTransactionString() const
@@ -73,7 +76,4 @@ PostGISFromStringTransactor::ResultType PostGISFromStringTransactor::GetResult()
   return m_Result;
 }
 
-
 } // end namespace otb
-
-

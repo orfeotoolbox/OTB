@@ -46,10 +46,10 @@ namespace otb {
  * \sa WaveletLowPassOperator
  * \sa WaveletHighPassOperator
  */
-template < Wavelet::Wavelet TMotherWaveletOperator,
-  Wavelet::WaveletDirection TDirectionOfTransformation,
-  class TPixel, unsigned int VDimension,
-  class TAllocator = itk::NeighborhoodAllocator< TPixel > >
+template <Wavelet::Wavelet TMotherWaveletOperator,
+          Wavelet::WaveletDirection TDirectionOfTransformation,
+          class TPixel, unsigned int VDimension,
+          class TAllocator = itk::NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT WaveletOperator
 {
 public:
@@ -58,13 +58,13 @@ public:
 
   /** Typedefs redirections */
   typedef WaveletLowPassOperator<
-          TMotherWaveletOperator, TDirectionOfTransformation,
-          TPixel, VDimension, TAllocator >
-    LowPassOperator;
+    TMotherWaveletOperator, TDirectionOfTransformation,
+    TPixel, VDimension, TAllocator>
+  LowPassOperator;
   typedef WaveletHighPassOperator<
-          TMotherWaveletOperator, TDirectionOfTransformation,
-          TPixel, VDimension, TAllocator >
-    HighPassOperator;
+    TMotherWaveletOperator, TDirectionOfTransformation,
+    TPixel, VDimension, TAllocator>
+  HighPassOperator;
 
 private:
   /**
@@ -72,12 +72,10 @@ private:
    * Intentionally not implemented
    */
   WaveletOperator ();
-  WaveletOperator ( const Self & );
+  WaveletOperator (const Self &);
   ~WaveletOperator();
 };
 
 } // end of namespace otb
 
 #endif
-
-

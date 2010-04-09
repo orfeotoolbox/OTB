@@ -38,33 +38,33 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
 class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
-      : public ImageListToImageFilter<TInputImage, TOutputImage>
+  : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ProfileDerivativeToMultiScaleCharacteristicsFilter  Self;
-  typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef ProfileDerivativeToMultiScaleCharacteristicsFilter Self;
+  typedef ImageListToImageFilter<TInputImage, TOutputImage>  Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ProfileDerivativeToMultiScaleCharacteristicsFilter,ImageToImageListFilter);
+  itkTypeMacro(ProfileDerivativeToMultiScaleCharacteristicsFilter, ImageToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef TLabeledImage LabeledImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
-  typedef typename LabeledImageType::Pointer LabeledImagePointerType;
+  typedef TInputImage                             InputImageType;
+  typedef TOutputImage                            OutputImageType;
+  typedef TLabeledImage                           LabeledImageType;
+  typedef typename InputImageType::Pointer        InputImagePointerType;
+  typedef typename OutputImageType::Pointer       OutputImagePointerType;
+  typedef typename LabeledImageType::Pointer      LabeledImagePointerType;
   typedef typename Superclass::InputImageListType InputImageListType;
-  typedef typename InputImageListType::Pointer InputImageListPointerType;
-  typedef typename OutputImageType::RegionType RegionType;
-  typedef typename LabeledImageType::PixelType LabeledPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageListType::Pointer    InputImageListPointerType;
+  typedef typename OutputImageType::RegionType    RegionType;
+  typedef typename LabeledImageType::PixelType    LabeledPixelType;
+  typedef typename OutputImageType::PixelType     OutputPixelType;
 
   /**
    * Returns the characteristics image.
@@ -73,12 +73,11 @@ public:
   virtual TLabeledImage * GetOutputCharacteristics(void);
 
   /** Set/Get the initial profile value */
-  itkSetMacro(InitialValue,LabeledPixelType);
-  itkGetMacro(InitialValue,LabeledPixelType);
+  itkSetMacro(InitialValue, LabeledPixelType);
+  itkGetMacro(InitialValue, LabeledPixelType);
   /** Set/Get the profile step */
-  itkSetMacro(Step,LabeledPixelType);
-  itkGetMacro(Step,LabeledPixelType);
-
+  itkSetMacro(Step, LabeledPixelType);
+  itkGetMacro(Step, LabeledPixelType);
 
 protected:
   /** Main computation method */
@@ -99,20 +98,20 @@ protected:
   /** Constructor */
   ProfileDerivativeToMultiScaleCharacteristicsFilter();
   /** Destructor */
-  virtual ~ProfileDerivativeToMultiScaleCharacteristicsFilter() {};
+  virtual ~ProfileDerivativeToMultiScaleCharacteristicsFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The initial value of the profile */
   LabeledPixelType m_InitialValue;
   /** The step of the profile */
   LabeledPixelType m_Step;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbProfileDerivativeToMultiScaleCharacteristicsFilter.txx"
 #endif

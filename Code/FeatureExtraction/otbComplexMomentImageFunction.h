@@ -45,19 +45,19 @@ namespace otb
  *
  * \ingroup ImageFunctions
  */
-template < class TInput,
-class TOutput = std::complex<double>,
-class TPrecision = double,
-class TCoordRep = float >
+template <class TInput,
+          class TOutput = std::complex<double>,
+          class TPrecision = double,
+          class TCoordRep = float>
 class ITK_EXPORT ComplexMomentImageFunction :
-      public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
+  public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexMomentImageFunction                                 Self;
-  typedef GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>    Superclass;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef ComplexMomentImageFunction                                           Self;
+  typedef GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>                                              Pointer;
+  typedef itk::SmartPointer<const Self>                                        ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComplexMomentImageFunction, GeometricMomentImageFunction);
@@ -66,35 +66,35 @@ public:
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType            InputType;
-  typedef typename Superclass::IndexType            IndexType;
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
+  typedef typename Superclass::InputType           InputType;
+  typedef typename Superclass::IndexType           IndexType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType           ComplexType;
+  typedef typename Superclass::OutputType ComplexType;
 
   /** Type for calculation precision */
-  typedef typename Superclass::PrecisionType        PrecisionType;
+  typedef typename Superclass::PrecisionType PrecisionType;
 
   /** ComplexType for calculation precision */
-  typedef std::complex<PrecisionType>               ComplexPrecisionType;
+  typedef std::complex<PrecisionType> ComplexPrecisionType;
 
   /** Evalulate the function at specified index */
-  virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;
+  virtual ComplexType EvaluateAtIndex(const IndexType& index) const;
 
   /** Evaluate the function at non-integer positions */
-  virtual ComplexType Evaluate( const PointType& point ) const
+  virtual ComplexType Evaluate(const PointType& point) const
   {
     IndexType index;
-    this->ConvertPointToNearestIndex( point, index );
-    return this->EvaluateAtIndex( index );
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
   }
   virtual ComplexType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex ) const
+    const ContinuousIndexType& cindex) const
   {
     IndexType index;
-    this->ConvertContinuousIndexToNearestIndex( cindex, index );
-    return this->EvaluateAtIndex( index );
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
   }
 
   itkSetMacro(P, unsigned int);
@@ -102,15 +102,14 @@ public:
   itkSetMacro(Q, unsigned int);
   itkGetConstReferenceMacro(Q, unsigned int);
 
-
 protected:
   ComplexMomentImageFunction();
-  virtual ~ComplexMomentImageFunction() {};
+  virtual ~ComplexMomentImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ComplexMomentImageFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  ComplexMomentImageFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
   unsigned int m_P;
   unsigned int m_Q;
@@ -124,4 +123,3 @@ private:
 #endif
 
 #endif
-

@@ -37,12 +37,12 @@ namespace Functor
  *  TInput and TOutput type are supposed to be of type itk::VariableLengthVector.
  *
  */
-template< typename TInput, typename  TOutput>
+template<typename TInput, typename  TOutput>
 class VectorAffineTransform
 {
 public:
   /// Real type typedef
-  typedef typename itk::NumericTraits< typename TInput::ValueType >::RealType RealType;
+  typedef typename itk::NumericTraits<typename TInput::ValueType>::RealType RealType;
 
   /// Constructor
   VectorAffineTransform() {}
@@ -50,11 +50,11 @@ public:
   virtual ~VectorAffineTransform() {}
 
   /// Accessors
-  void SetOutputMaximum( TOutput a )
+  void SetOutputMaximum(TOutput a)
   {
     m_OutputMaximum = a;
   }
-  void SetOutputMinimum( TOutput a)
+  void SetOutputMinimum(TOutput a)
   {
     m_OutputMinimum = a;
   }
@@ -83,95 +83,94 @@ public:
     return m_InputMaximum;
   }
 
-
-  bool operator!=( const VectorAffineTransform & other ) const
+  bool operator !=(const VectorAffineTransform& other) const
   {
     if (m_OutputMaximum.Size() == other.GetOutputMinimum().Size())
-    {
+      {
       for (unsigned int i = 0; i < m_OutputMinimum.Size(); ++i)
-      {
-        if ( m_OutputMinimum[i] != other.GetOutputMinimum()[i] )
         {
+        if (m_OutputMinimum[i] != other.GetOutputMinimum()[i])
+          {
           return true;
+          }
         }
       }
-    }
     if (m_OutputMaximum.Size() == other.GetOutputMaximum().Size())
-    {
+      {
       for (unsigned int i = 0; i < m_OutputMaximum.Size(); ++i)
-      {
-        if ( m_OutputMaximum[i] != other.GetOutputMaximum()[i] )
         {
+        if (m_OutputMaximum[i] != other.GetOutputMaximum()[i])
+          {
           return true;
+          }
         }
       }
-    }
     if (m_InputMinimum.Size() == other.GetInputMinimum().Size())
-    {
+      {
       for (unsigned int i = 0; i < m_InputMinimum.Size(); ++i)
-      {
-        if ( m_InputMinimum[i] != other.GetInputMinimum()[i] )
         {
+        if (m_InputMinimum[i] != other.GetInputMinimum()[i])
+          {
           return true;
+          }
         }
       }
-    }
     if (m_InputMaximum.Size() == other.GetInputMaximum().Size())
-    {
-      for (unsigned int i = 0; i < m_InputMaximum.Size(); ++i)
       {
-        if ( m_InputMaximum[i] != other.GetInputMaximum()[i] )
+      for (unsigned int i = 0; i < m_InputMaximum.Size(); ++i)
         {
+        if (m_InputMaximum[i] != other.GetInputMaximum()[i])
+          {
           return true;
+          }
         }
       }
-    }
     return false;
   }
-  bool operator==( const VectorAffineTransform & other ) const
+  bool operator ==(const VectorAffineTransform& other) const
   {
     return !(*this != other);
   }
 
   // main computation method
-  inline TOutput operator()( const TInput & x )
+  inline TOutput operator ()(const TInput& x)
   {
     // output instantiation
-    TOutput  result;
+    TOutput result;
     result.SetSize(x.GetSize());
 
     // consistency checking
-    if (   result.GetSize() != m_OutputMinimum.GetSize()
-           || result.GetSize() != m_OutputMaximum.GetSize()
-           || result.GetSize() != m_InputMinimum.GetSize()
-           || result.GetSize() != m_InputMaximum.GetSize())
-    {
-      itkGenericExceptionMacro(<<"Pixel size different from scale or shift size !");
-    }
+    if (result.GetSize() != m_OutputMinimum.GetSize()
+        || result.GetSize() != m_OutputMaximum.GetSize()
+        || result.GetSize() != m_InputMinimum.GetSize()
+        || result.GetSize() != m_InputMaximum.GetSize())
+      {
+      itkGenericExceptionMacro(<< "Pixel size different from scale or shift size !");
+      }
 
     // transformation
-    for (unsigned int i=0; i<x.GetSize();++i)
-    {
-      if (x[i]<m_InputMinimum[i])
+    for (unsigned int i = 0; i < x.GetSize(); ++i)
       {
+      if (x[i] < m_InputMinimum[i])
+        {
         result[i] = m_OutputMinimum[i];
-      }
-      else if (x[i]>m_InputMaximum[i])
-      {
+        }
+      else if (x[i] > m_InputMaximum[i])
+        {
         result[i] = m_OutputMaximum[i];
-      }
-      else if (m_InputMaximum[i]==m_InputMinimum[i])
-      {
-        result[i]=m_OutputMinimum[i];
-      }
+        }
+      else if (m_InputMaximum[i] == m_InputMinimum[i])
+        {
+        result[i] = m_OutputMinimum[i];
+        }
       else
-      {
-        const RealType scaledComponent = static_cast<RealType>( x[i]-m_InputMinimum[i] )
+        {
+        const RealType scaledComponent = static_cast<RealType>(x[i] - m_InputMinimum[i])
                                          * static_cast<RealType> (m_OutputMaximum[i] - m_OutputMinimum[i])
                                          / static_cast<RealType> (m_InputMaximum[i] - m_InputMinimum[i]);
-        result[i]= static_cast< typename TOutput::ValueType >( scaledComponent+m_OutputMinimum[i] );
+        result[i] = static_cast<typename TOutput::ValueType>(scaledComponent + m_OutputMinimum[i]);
+        }
       }
-    }
     return result;
   }
 private:
@@ -181,7 +180,6 @@ private:
   TInput  m_InputMaximum;
 };
 }  // end namespace functor
-
 
 /** \class VectorRescaleIntensityImageFilter
  *  \brief This filter performs a rescaling of a vector image on a per band basis.
@@ -195,21 +193,21 @@ private:
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded
  */
-template <class TInputImage, class TOutputImage=TInputImage>
+template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT VectorRescaleIntensityImageFilter
-      :  public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
-      Functor::VectorAffineTransform<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType>   >
+  :  public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                         Functor::VectorAffineTransform<
+                                           typename TInputImage::PixelType,
+                                           typename TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorRescaleIntensityImageFilter                                   Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage,
-         Functor::VectorAffineTransform< typename TInputImage::PixelType, 
-                                         typename TOutputImage::PixelType> >  Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef VectorRescaleIntensityImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Functor::VectorAffineTransform<typename TInputImage::PixelType,
+                                                                      typename TOutputImage::PixelType> >  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename TOutputImage::PixelType                       OutputPixelType;
   typedef typename TInputImage::PixelType                        InputPixelType;
@@ -221,23 +219,22 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkSetMacro( OutputMaximum, OutputPixelType );
-  itkGetConstReferenceMacro( OutputMaximum, OutputPixelType );
-  itkSetMacro( OutputMinimum, OutputPixelType );
-  itkGetConstReferenceMacro( OutputMinimum, OutputPixelType );
-  itkSetMacro(AutomaticInputMinMaxComputation,bool);
-  itkGetMacro(AutomaticInputMinMaxComputation,bool);
+  itkSetMacro(OutputMaximum, OutputPixelType);
+  itkGetConstReferenceMacro(OutputMaximum, OutputPixelType);
+  itkSetMacro(OutputMinimum, OutputPixelType);
+  itkGetConstReferenceMacro(OutputMinimum, OutputPixelType);
+  itkSetMacro(AutomaticInputMinMaxComputation, bool);
+  itkGetMacro(AutomaticInputMinMaxComputation, bool);
   itkBooleanMacro(AutomaticInputMinMaxComputation);
 
-  itkGetMacro(ClampThreshold,double);
-  itkSetMacro(ClampThreshold,double);
+  itkGetMacro(ClampThreshold, double);
+  itkSetMacro(ClampThreshold, double);
 
-  itkGetMacro(InputMinimum,InputPixelType);
-  itkSetMacro(InputMinimum,InputPixelType);
+  itkGetMacro(InputMinimum, InputPixelType);
+  itkSetMacro(InputMinimum, InputPixelType);
 
-  itkGetMacro(InputMaximum,InputPixelType);
-  itkSetMacro(InputMaximum,InputPixelType);
-
+  itkGetMacro(InputMaximum, InputPixelType);
+  itkSetMacro(InputMaximum, InputPixelType);
 
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
@@ -253,18 +250,18 @@ public:
 
 protected:
   VectorRescaleIntensityImageFilter();
-  virtual ~VectorRescaleIntensityImageFilter() {};
+  virtual ~VectorRescaleIntensityImageFilter() {}
 
 private:
-  VectorRescaleIntensityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorRescaleIntensityImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  OutputPixelType        m_OutputMinimum;
-  OutputPixelType        m_OutputMaximum;
-  InputPixelType         m_InputMinimum;
-  InputPixelType         m_InputMaximum;
-  double                 m_ClampThreshold;
-  bool                   m_AutomaticInputMinMaxComputation;
+  OutputPixelType m_OutputMinimum;
+  OutputPixelType m_OutputMaximum;
+  InputPixelType  m_InputMinimum;
+  InputPixelType  m_InputMaximum;
+  double          m_ClampThreshold;
+  bool            m_AutomaticInputMinMaxComputation;
 
 };
 

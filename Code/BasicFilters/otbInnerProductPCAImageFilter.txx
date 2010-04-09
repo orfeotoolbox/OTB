@@ -26,11 +26,11 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-InnerProductPCAImageFilter<TInputImage,TOutputImage>
+InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::InnerProductPCAImageFilter()
 {
   this->SetNumberOfOutputs(1);
-  this->SetNthOutput(0,OutputImageType::New());
+  this->SetNthOutput(0, OutputImageType::New());
   m_EstimatePCAFilter  = EstimatePCAFilterType::New();
   m_NormalizePCAFilter  = NormalizePCAFilterType::New();
   m_CenterData = true;
@@ -44,14 +44,13 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
  */
 template<class TInputImage, class TOutputImage>
 void
-InnerProductPCAImageFilter<TInputImage,TOutputImage>
+InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
-  if( m_GenerateMeanComponent == false )
-    this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired);
-  else
-    this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired + 1);
+  if (m_GenerateMeanComponent == false) this->GetOutput()->SetNumberOfComponentsPerPixel(
+      m_NumberOfPrincipalComponentsRequired);
+  else this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired + 1);
 }
 
 /**
@@ -59,7 +58,7 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-InnerProductPCAImageFilter<TInputImage,TOutputImage>
+InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::GenerateData()
 {
   m_EstimatePCAFilter->SetInput(this->GetInput());
@@ -68,14 +67,14 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
 
   m_NormalizePCAFilter->SetInput(m_EstimatePCAFilter->GetOutput());
 
-  if( (m_CenterData == false) || ( (m_CenterData == true) && (m_GenerateMeanComponent == false) ) )
-  {
+  if ((m_CenterData == false) || ((m_CenterData == true) && (m_GenerateMeanComponent == false)))
+    {
     m_NormalizePCAFilter->GraftOutput(this->GetOutput());
     m_NormalizePCAFilter->Update();
     this->GraftOutput(m_NormalizePCAFilter->GetOutput());
-  }
+    }
   else
-  {
+    {
     m_MeanFilter->SetInput(this->GetInput());
     m_CastFilter->SetInput(m_MeanFilter->GetOutput());
 
@@ -85,7 +84,7 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
     m_ConcatenateFilter->GraftOutput(this->GetOutput());
     m_ConcatenateFilter->Update();
     this->GraftOutput(m_ConcatenateFilter->GetOutput());
-  }
+    }
 }
 
 /**
@@ -93,7 +92,7 @@ InnerProductPCAImageFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-InnerProductPCAImageFilter<TInputImage,TOutputImage>
+InnerProductPCAImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

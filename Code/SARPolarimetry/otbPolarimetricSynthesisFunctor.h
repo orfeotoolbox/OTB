@@ -38,17 +38,17 @@ class PolarimetricSynthesisFunctor
 {
 public:
   /** Some typedefs. */
-  typedef typename     std::complex <double>       ComplexType;
-  typedef typename     itk::FixedArray<ComplexType,2>    ComplexArrayType;
+  typedef typename     std::complex <double>           ComplexType;
+  typedef typename     itk::FixedArray<ComplexType, 2> ComplexArrayType;
 
   /** Set the ElectroMagneticField Incident */
-  void SetEi( ComplexArrayType ei )
+  void SetEi(ComplexArrayType ei)
   {
     m_Ei = ei;
   }
 
   /** Set the ElectroMagneticField Reflected */
-  void SetEr( ComplexArrayType er )
+  void SetEr(ComplexArrayType er)
   {
     m_Er = er;
   }
@@ -58,22 +58,22 @@ public:
   {
     m_Ei.Fill(1);
     m_Er.Fill(1);
-  };
+  }
   /** Destructor */
-  virtual ~PolarimetricSynthesisFunctor() {};
-  inline TOutput operator()(const TInput1 &Shh, const TInput2 &Shv, const TInput3 &Svh, const TInput4 &Svv)
+  virtual ~PolarimetricSynthesisFunctor() {}
+  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv)
   {
     ComplexType tmp;
-    double scalar;
+    double      scalar;
 
-    tmp = vcl_conj(m_Er[0])*( m_Ei[0]*Shh + m_Ei[1]*Shv ) + vcl_conj(m_Er[1])*( m_Ei[0]*Svh + m_Ei[1]*Svv );
+    tmp = vcl_conj(m_Er[0]) * (m_Ei[0] * Shh + m_Ei[1] * Shv) + vcl_conj(m_Er[1]) * (m_Ei[0] * Svh + m_Ei[1] * Svv);
 
-    scalar=(double) ( vcl_pow( vcl_abs(tmp),2) );
+    scalar = (double) (vcl_pow(vcl_abs(tmp), 2));
 
-    return ( static_cast<TOutput>(scalar) );
+    return (static_cast<TOutput>(scalar));
   }
 
-private :
+private:
   /** Electromagnetic Field Incident */
   ComplexArrayType m_Ei;
   /** Electromagnetic Field Reflected */
@@ -85,4 +85,3 @@ private :
 } // namespace otb
 
 #endif
-

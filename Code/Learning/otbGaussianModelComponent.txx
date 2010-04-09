@@ -31,8 +31,8 @@ namespace otb
 namespace Statistics
 {
 
-template< class TSample >
-GaussianModelComponent< TSample >
+template<class TSample>
+GaussianModelComponent<TSample>
 ::GaussianModelComponent()
 {
   m_MeanEstimator = 0;
@@ -40,9 +40,9 @@ GaussianModelComponent< TSample >
   m_GaussianDensityFunction = 0;
 }
 
-template< class TSample >
+template<class TSample>
 void
-GaussianModelComponent< TSample >
+GaussianModelComponent<TSample>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -52,47 +52,47 @@ GaussianModelComponent< TSample >
   os << indent << "GaussianDensityFunction: " << m_GaussianDensityFunction << std::endl;
 }
 
-template < class TSample >
+template <class TSample>
 void
-GaussianModelComponent< TSample >
-::ShowParameters ( std::ostream& os, itk::Indent indent) const
+GaussianModelComponent<TSample>
+::ShowParameters(std::ostream& os, itk::Indent indent) const
 {
-  unsigned int i,j;
+  unsigned int i, j;
   os << indent << "Gaussian model component : \n";
   os << indent << "Mean : ";
-  for ( i = 0; i < m_Mean.Size(); ++i )
+  for (i = 0; i < m_Mean.Size(); ++i)
     os << m_Mean[i] << "\t";
   os << "\n" << indent << "Covariance : ";
-  for ( i = 0; i < m_Mean.Size(); ++i )
-  {
-    for ( j = 0; j < m_Mean.Size(); ++j )
-      os << m_Covariance(i,j) << "\t";
+  for (i = 0; i < m_Mean.Size(); ++i)
+    {
+    for (j = 0; j < m_Mean.Size(); ++j)
+      os << m_Covariance(i, j) << "\t";
     os << "\n" << indent << "              ";
-  }
+    }
   os << "\n";
 }
 
-template< class TSample >
+template<class TSample>
 void
-GaussianModelComponent< TSample >
+GaussianModelComponent<TSample>
 ::SetSample(const TSample* sample)
 {
   Superclass::SetSample(sample);
 
   const MeasurementVectorSizeType measurementVectorLength
-  = sample->GetMeasurementVectorSize();
+    = sample->GetMeasurementVectorSize();
 
-  this->m_Parameters.SetSize( measurementVectorLength
-                              * ( 1 + measurementVectorLength ) );
+  this->m_Parameters.SetSize(measurementVectorLength
+                             * (1 + measurementVectorLength));
 
-  m_Mean.SetSize( measurementVectorLength );
+  m_Mean.SetSize(measurementVectorLength);
 
   m_MeanEstimator = MeanEstimatorType::New();
   m_MeanEstimator->SetInputSample(sample);
   //m_MeanEstimator->Update();
 
-  m_Covariance.SetSize( measurementVectorLength,
-                        measurementVectorLength );
+  m_Covariance.SetSize(measurementVectorLength,
+                       measurementVectorLength);
 
   m_CovarianceEstimator = CovarianceEstimatorType::New();
   m_CovarianceEstimator->SetInputSample(sample);
@@ -102,16 +102,16 @@ GaussianModelComponent< TSample >
   m_GaussianDensityFunction = NativeMembershipFunctionType::New();
   this->m_PdfFunction = (MembershipFunctionType *) m_GaussianDensityFunction;
   m_GaussianDensityFunction->SetMeasurementVectorSize(
-    measurementVectorLength );
-  this->SetPdfMembershipFunction( (MembershipFunctionType *)
-                                  m_GaussianDensityFunction.GetPointer() );
+    measurementVectorLength);
+  this->SetPdfMembershipFunction((MembershipFunctionType *)
+                                 m_GaussianDensityFunction.GetPointer());
 
 }
 
-template< class TSample >
+template<class TSample>
 void
-GaussianModelComponent< TSample >
-::SetParameters(const ParametersType &parameters)
+GaussianModelComponent<TSample>
+::SetParameters(const ParametersType& parameters)
 {
   Superclass::SetParameters(parameters);
 
@@ -119,51 +119,50 @@ GaussianModelComponent< TSample >
   unsigned int i, j;
 
   MeasurementVectorSizeType measurementVectorSize
-  = this->GetSample()->GetMeasurementVectorSize();
+    = this->GetSample()->GetMeasurementVectorSize();
 
-  m_Mean.SetSize ( measurementVectorSize );
-  for ( i = 0; i < measurementVectorSize; ++i)
-  {
+  m_Mean.SetSize (measurementVectorSize);
+  for (i = 0; i < measurementVectorSize; ++i)
+    {
     m_Mean[i] = parameters[paramIndex];
     ++paramIndex;
-  }
+    }
 
-  m_Covariance.SetSize( measurementVectorSize, measurementVectorSize );
-  for ( i = 0; i < measurementVectorSize; ++i )
-    for ( j = 0; j < measurementVectorSize; ++j )
-    {
+  m_Covariance.SetSize(measurementVectorSize, measurementVectorSize);
+  for (i = 0; i < measurementVectorSize; ++i)
+    for (j = 0; j < measurementVectorSize; ++j)
+      {
       m_Covariance(i, j) = parameters[paramIndex];
       ++paramIndex;
-    }
+      }
 
   this->m_GaussianDensityFunction->SetMean(&m_Mean);
   this->m_GaussianDensityFunction->SetCovariance(&m_Covariance);
 
 }
 
-template< class TSample >
+template<class TSample>
 void
-GaussianModelComponent< TSample >
-::GenerateData ()
+GaussianModelComponent<TSample>
+::GenerateData()
 {
-  if ( this->IsSampleModified() == 0 )
-    return;
+  if (this->IsSampleModified() == 0) return;
 
   MeasurementVectorSizeType measurementVectorSize
-  = this->GetSample()->GetMeasurementVectorSize();
+    = this->GetSample()->GetMeasurementVectorSize();
 
   unsigned int i, j;
-  int paramIndex  = 0;
+  int          paramIndex  = 0;
 
   m_MeanEstimator->Update();
   // m_Mean.SetSize( m_MeanEstimator->GetOutput()->GetSize() );
 
   MeanType * mean = m_MeanEstimator->GetOutput();
-  for ( i = 0; i < measurementVectorSize; ++i)
-  {
+  for (i = 0; i < measurementVectorSize; ++i)
+    {
     this->m_Parameters[paramIndex] = m_Mean[i] = mean->GetElement(i);
     ++paramIndex;
-  }
+    }
 
   m_CovarianceEstimator->SetMean(&m_Mean);
   m_CovarianceEstimator->Update();
@@ -172,14 +171,14 @@ GaussianModelComponent< TSample >
 
   const CovarianceType * covariance = m_CovarianceEstimator->GetOutput();
 
-  for ( i = 0; i < measurementVectorSize; ++i )
-    for ( j = 0; j < measurementVectorSize; ++j )
-    {
+  for (i = 0; i < measurementVectorSize; ++i)
+    for (j = 0; j < measurementVectorSize; ++j)
+      {
       this->m_Parameters[paramIndex]
-      = m_Covariance(i,j)
-        = covariance->GetVnlMatrix().get(i, j);
+        = m_Covariance(i, j)
+            = covariance->GetVnlMatrix().get(i, j);
       ++paramIndex;
-    }
+      }
 
   this->m_GaussianDensityFunction->SetMean(&m_Mean);
   this->m_GaussianDensityFunction->SetCovariance(&m_Covariance);
@@ -191,5 +190,3 @@ GaussianModelComponent< TSample >
 } // end of namesapce otb
 
 #endif
-
-

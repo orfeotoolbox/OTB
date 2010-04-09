@@ -32,14 +32,14 @@ namespace otb
   *
   * \ingroup ObjectListFilter
  */
-template <class TInputList, class TOutputList, class TFunction >
+template <class TInputList, class TOutputList, class TFunction>
 class ITK_EXPORT UnaryFunctorObjectListFilter :
-    public otb::ObjectListToObjectListFilter<TInputList,TOutputList>
+  public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
 {
 public:
   /** Standard class typedefs. */
   typedef UnaryFunctorObjectListFilter                               Self;
-  typedef otb::ObjectListToObjectListFilter<TInputList,TOutputList>  Superclass;
+  typedef otb::ObjectListToObjectListFilter<TInputList, TOutputList> Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
@@ -57,7 +57,6 @@ public:
   typedef typename TOutputList::Pointer       OutputListPointer;
   typedef typename TInputList::ConstIterator  InputListIterator;
   typedef typename TOutputList::ConstIterator OutputListIterator;
-
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -82,19 +81,17 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-    {
+      {
       m_Functor = functor;
       this->Modified();
-    }
+      }
   }
-
 
 protected:
   UnaryFunctorObjectListFilter();
-  virtual ~UnaryFunctorObjectListFilter() {};
+  virtual ~UnaryFunctorObjectListFilter() {}
 
   /** Multi-threading implementation */
-
 
   virtual void AfterThreadedGenerateData();
 
@@ -102,12 +99,11 @@ protected:
   examine in thread threadId */
   virtual void ThreadedGenerateData(unsigned int startIndex, unsigned int stopIndex, int threadId);
 
-
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorObjectListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
 

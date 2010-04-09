@@ -34,7 +34,7 @@ namespace Function
  * \f[ w(x) = 0.42 + 0.5 cos(\frac{\pi x}{m}) + 0.08 cos(\frac{2 \pi x}{m}) \f]
  * \sa WindowedSincInterpolateImageBlackmanFunction
  */
-template< class TInput=double, class TOutput=double >
+template<class TInput = double, class TOutput = double>
 class BlackmanWindowFunction
 {
 public:
@@ -47,17 +47,17 @@ public:
   unsigned int  GetRadius() const
   {
     return m_Radius;
-  };
+  }
   double GetFactor1()
   {
     return m_Factor1;
-  };
+  }
   double GetFactor2()
   {
     return m_Factor2;
-  };
+  }
 
-  inline TOutput operator()( const TInput & A ) const
+  inline TOutput operator ()(const TInput& A) const
   {
     double x = static_cast<double>(A);
     double px = CONST_PI * x;
@@ -71,8 +71,7 @@ private:
   // Equal to \f$ \frac{2 \pi}{m} \f$
   double m_Factor2;
 };
-}//namespace Function
-
+} //namespace Function
 
 /**
  * \class WindowedSincInterpolateImageBlackmanFunction
@@ -87,23 +86,26 @@ private:
  * \sa Function::BlackmanWindowFunction
  * \ingroup ImageFunctionBases ImageInterpolators
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep=double, class TInputInterpolator=double, class TOutputInterpolator=double>
+template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
+           double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageBlackmanFunction :
-      public WindowedSincInterpolateImageFunctionBase< TInputImage,
-      ITK_TYPENAME Function::BlackmanWindowFunction< TInputInterpolator, TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep >
+  public WindowedSincInterpolateImageFunctionBase<TInputImage,
+                                                  ITK_TYPENAME Function::BlackmanWindowFunction<TInputInterpolator,
+                                                                                                TOutputInterpolator>,
+                                                  TBoundaryCondition,
+                                                  TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef WindowedSincInterpolateImageBlackmanFunction                                                                  Self;
+  typedef WindowedSincInterpolateImageBlackmanFunction Self;
   typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-  ITK_TYPENAME Function::BlackmanWindowFunction< TInputInterpolator,
-  TOutputInterpolator>,
-  TBoundaryCondition,
-  TCoordRep>                                                           Superclass;
-  typedef itk::SmartPointer<Self>                                                                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                                                                 ConstPointer;
+                                                   ITK_TYPENAME Function::BlackmanWindowFunction<TInputInterpolator,
+                                                                                                 TOutputInterpolator>,
+                                                   TBoundaryCondition,
+                                                   TCoordRep>
+  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(WindowedSincInterpolateImageBlackmanFunction, WindowedSincInterpolateImageFunctionBase);
@@ -116,30 +118,28 @@ public:
   typedef typename Superclass::OutputType     OutputType;
 
   /** Dimension underlying input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Superclass typedef inheritance. */
-  typedef typename Superclass::IndexType                  IndexType;
-  typedef typename Superclass::SizeType                   SizeType;
-  typedef typename Superclass::RealType                   RealType;
-  typedef typename Superclass::IteratorType               IteratorType;
-  typedef typename Superclass::ContinuousIndexType        ContinuousIndexType;
-
+  typedef typename Superclass::IndexType           IndexType;
+  typedef typename Superclass::SizeType            SizeType;
+  typedef typename Superclass::RealType            RealType;
+  typedef typename Superclass::IteratorType        IteratorType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
 protected:
   WindowedSincInterpolateImageBlackmanFunction() {};
-  ~WindowedSincInterpolateImageBlackmanFunction() {};
+  ~WindowedSincInterpolateImageBlackmanFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf( os, indent );
-  };
+    Superclass::PrintSelf(os, indent);
+  }
 
 private:
-  WindowedSincInterpolateImageBlackmanFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageBlackmanFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb
-
 
 #endif

@@ -32,24 +32,24 @@ namespace otb
  * \brief Base exception class for Aeronet problems during reading.
  */
 class ITK_EXPORT AeronetFileReaderException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro( AeronetFileReaderException, ExceptionObject );
+  itkTypeMacro(AeronetFileReaderException, ExceptionObject);
 
   /** Constructor. */
   AeronetFileReaderException(const char *file, unsigned int line,
-                               const char* message = "Error in Radiometry IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                             const char* message = "Error in Radiometry IO",
+                             const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
   /** Constructor. */
-  AeronetFileReaderException(const std::string &file, unsigned int line,
-                               const char* message = "Error in Radiometry IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+  AeronetFileReaderException(const std::string & file, unsigned int line,
+                             const char* message = "Error in Radiometry IO",
+                             const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+     {}
 };
 
 /**
@@ -74,14 +74,14 @@ class ITK_EXPORT AeronetFileReader : public itk::ProcessObject
 {
 public:
   /** Standards typedef */
-  typedef AeronetFileReader                     Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef AeronetFileReader             Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
   /** Runtime type informations */
-  itkTypeMacro(AeronetFileReader,itk::ProcessObject);
+  itkTypeMacro(AeronetFileReader, itk::ProcessObject);
 
   /** Overiding of the GetOutput() method */
   virtual AeronetData * GetOutput(void);
@@ -92,28 +92,28 @@ public:
   itkGetStringMacro(FileName);
 
   /** Set/Get the day value */
-  itkSetMacro(Day,int);
-  itkGetMacro(Day,int);
+  itkSetMacro(Day, int);
+  itkGetMacro(Day, int);
 
   /** Set/Get the month value */
-  itkSetMacro(Month,int);
-  itkGetMacro(Month,int);
+  itkSetMacro(Month, int);
+  itkGetMacro(Month, int);
 
   /** Set/Get the year value */
-  itkSetMacro(Year,int);
-  itkGetMacro(Year,int);
+  itkSetMacro(Year, int);
+  itkGetMacro(Year, int);
 
   /** Set/Get the hour value */
-  itkSetMacro(Hour,int);
-  itkGetMacro(Hour,int);
+  itkSetMacro(Hour, int);
+  itkGetMacro(Hour, int);
 
   /** Set/Get the minute value */
-  itkSetMacro(Minute,int);
-  itkGetMacro(Minute,int);
+  itkSetMacro(Minute, int);
+  itkGetMacro(Minute, int);
 
   /** Set/Get the epsilon for the time (tolerance for one hour) */
-  itkSetMacro(Epsilon,double);
-  itkGetMacro(Epsilon,double);
+  itkSetMacro(Epsilon, double);
+  itkGetMacro(Epsilon, double);
 
 protected:
   /** Constructor */
@@ -130,24 +130,30 @@ private:
 
   /** Standards privates typedefs */
   typedef std::vector<std::string>  VectorString;
-  typedef std::vector<double>  VectorDouble;
-  typedef std::vector< VectorString > MatrixString;
+  typedef std::vector<double>       VectorDouble;
+  typedef std::vector<VectorString> MatrixString;
 
   /** Parse the string and return a list of strings which separated by ',' char */
-  VectorString ParseLine(const std::string & line)const;
+  VectorString ParseLine(const std::string& line) const;
 
   /** Parse the string and return the date and time */
-  ossimLocalTm ParseDate(const std::string & date, const std::string & time)const;
+  ossimLocalTm ParseDate(const std::string& date, const std::string& time) const;
 
 /**
  * Parse valid line method
  */
-  void ParseValidLine(const double & ref_date, const VectorString & line, const double & epsilon, VectorDouble & water, VectorDouble & angst, VectorDouble & tau_day, VectorDouble & solarZenithAngle)const;
+  void ParseValidLine(const double& ref_date,
+                      const VectorString& line,
+                      const double& epsilon,
+                      VectorDouble& water,
+                      VectorDouble& angst,
+                      VectorDouble& tau_day,
+                      VectorDouble& solarZenithAngle) const;
 
 /**
  * Compute statistics method (mean and stddev)
  */
-  void GetStatistics(const VectorDouble & vec, double & mean, double & stddev)const;
+  void GetStatistics(const VectorDouble& vec, double& mean, double& stddev) const;
 
   /** File name */
   std::string m_FileName;

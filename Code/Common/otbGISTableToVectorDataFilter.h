@@ -38,28 +38,28 @@ namespace otb {
  * \sa VectorDataSource
  * \ingroup Common, GeospatialAnalysis
  */
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 class ITK_EXPORT GISTableToVectorDataFilter :
-    public VectorDataSource< TVectorData >
+  public VectorDataSource<TVectorData>
 {
 public:
   /** Standard class typedefs. */
   typedef GISTableToVectorDataFilter Self;
-  typedef VectorDataSource< TVectorData >
+  typedef VectorDataSource<TVectorData>
   Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TGISTable InputGISTableType;
-  typedef TVectorData OutputVectorDataType;
-  typedef typename OutputVectorDataType::Pointer        OutputVectorDataPointer;
-  typedef typename OutputVectorDataType::ConstPointer   OutputVectorDataConstPointer;
+  typedef TGISTable                                   InputGISTableType;
+  typedef TVectorData                                 OutputVectorDataType;
+  typedef typename OutputVectorDataType::Pointer      OutputVectorDataPointer;
+  typedef typename OutputVectorDataType::ConstPointer OutputVectorDataConstPointer;
 
-  typedef typename OutputVectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer              DataNodePointerType;
 
-  typedef typename InputGISTableType::ConnectionType ConnectionType;
+  typedef typename InputGISTableType::ConnectionType        ConnectionType;
   typedef typename InputGISTableType::ConnectionPointerType ConnectionPointerType;
 
   typedef OGRVectorDataIO<OutputVectorDataType> OGRVectorDataIOType;
@@ -68,7 +68,6 @@ public:
   typedef VectorDataFileReader<OutputVectorDataType> VectorDataFileReaderType;
   /** ImageDimension constants */
 
-
   /** Standard New method. */
   itkNewMacro(Self);
 
@@ -76,16 +75,15 @@ public:
   itkTypeMacro(GISTableToVectorDataFilter,
                VectorDataSource);
 
-
   /** Set/Get the GISTable input of this process object.  */
-  virtual void SetInput( const InputGISTableType *input);
-  virtual void SetInput( unsigned int idx, const InputGISTableType *input);
+  virtual void SetInput(const InputGISTableType *input);
+  virtual void SetInput(unsigned int idx, const InputGISTableType *input);
   const InputGISTableType * GetInput(void);
   const InputGISTableType * GetInput(unsigned int idx);
 
 protected:
   GISTableToVectorDataFilter();
-  virtual ~GISTableToVectorDataFilter() {};
+  virtual ~GISTableToVectorDataFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** GISTableToVectorDataFilter needs the entire input be
@@ -97,10 +95,9 @@ protected:
    * to the OGR driver. */
   void GenerateData();
 
-
 private:
-  GISTableToVectorDataFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GISTableToVectorDataFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   typename VectorDataFileReaderType::Pointer m_Reader;
 }; // end of class

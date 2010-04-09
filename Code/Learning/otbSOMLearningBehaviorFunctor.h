@@ -21,7 +21,6 @@
 #ifndef __otbSOMLearningBehaviorFunctor_h
 #define __otbSOMLearningBehaviorFunctor_h
 
-
 namespace otb
 {
 
@@ -43,19 +42,19 @@ namespace Functor
 */
 class SOMLearningBehaviorFunctor
 {
-public :
+public:
   /** Empty constructor / descructor */
-  CzihoSOMLearningBehaviorFunctor () { }
-  virtual ~CzihoSOMLearningBehaviorFunctor() { }
+  CzihoSOMLearningBehaviorFunctor () {}
+  virtual ~CzihoSOMLearningBehaviorFunctor() {}
 
   /** Functor */
-  virtual double operator() ( unsigned int currentIteration,
-                              unsigned int numberOfIterations,
-                              double betaInit, double betaEnd ) const
+  virtual double operator ()(unsigned int currentIteration,
+                             unsigned int numberOfIterations,
+                             double betaInit, double betaEnd) const
   {
-    return betaInit + ( betaEnd - betaInit )
-           * static_cast<double>( currentIteration )
-           / static_cast<double>(  numberOfIterations );
+    return betaInit + (betaEnd - betaInit)
+           * static_cast<double>(currentIteration)
+           / static_cast<double>(numberOfIterations);
   }
 
 }; // end of class SOMLearningBehaviorFunctor
@@ -65,5 +64,3 @@ public :
 } // end namespace otb
 
 #endif
-
-

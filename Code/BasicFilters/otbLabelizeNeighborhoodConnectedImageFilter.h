@@ -36,21 +36,26 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeNeighborhoodConnectedImageFilter
-      : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> >
+  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                        itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> >
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeNeighborhoodConnectedImageFilter Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage,TOutputImage, itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LabelizeNeighborhoodConnectedImageFilter
+                                                                                                          Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                       itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>
+                                                                                                          Pointer;
+  typedef itk::SmartPointer<const Self>
+                                                                                                          ConstPointer;
 
   /** typedef to simplify variables definition and declaration. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   typedef typename TInputImage::PixelType InputPixelType;
-  typedef typename TInputImage::SizeType InputSizeType;
+  typedef typename TInputImage::SizeType  InputSizeType;
   typedef typename TInputImage::IndexType IndexType;
 
   typedef typename TOutputImage::PixelType OutputPixelType;
@@ -86,24 +91,23 @@ public:
   }
 
   /** Set radius */
-  void SetRadius( const InputSizeType radius )
+  void SetRadius(const InputSizeType radius)
   {
     this->m_RegionGrowingFilter->SetRadius(radius);
     this->Modified();
   }
 
-
 protected:
   LabelizeNeighborhoodConnectedImageFilter();
-  virtual ~LabelizeNeighborhoodConnectedImageFilter() {};
+  virtual ~LabelizeNeighborhoodConnectedImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Region growing */
-  virtual void RegionGrowing( const IndexType indexSeed );
+  virtual void RegionGrowing(const IndexType indexSeed);
 
 private:
-  LabelizeNeighborhoodConnectedImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelizeNeighborhoodConnectedImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Delta + threshold for growing region */
   InputPixelType m_UpperThresholdDelta;
@@ -113,7 +117,6 @@ private:
 
   /** Intial replace value*/
   OutputPixelType m_ReplaceValue;
-
 
 }; // end class LabelizeconnectedThresholdImageFilter
 

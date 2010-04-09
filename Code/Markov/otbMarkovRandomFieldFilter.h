@@ -84,67 +84,66 @@ namespace otb
 
 template <class TInputImage, class TClassifiedImage>
 class ITK_EXPORT MarkovRandomFieldFilter :
-      public itk::ImageToImageFilter<TInputImage,TClassifiedImage>
+  public itk::ImageToImageFilter<TInputImage, TClassifiedImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MarkovRandomFieldFilter                            Self;
-  typedef itk::ImageToImageFilter<TInputImage,TClassifiedImage> Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
-  typedef typename Superclass::OutputImagePointer               OutputImagePointer;
+  typedef MarkovRandomFieldFilter                                Self;
+  typedef itk::ImageToImageFilter<TInputImage, TClassifiedImage> Superclass;
+  typedef itk::SmartPointer<Self>                                Pointer;
+  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef typename Superclass::OutputImagePointer                OutputImagePointer;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MarkovRandomFieldFilter,itk::ImageToImageFilter);
+  itkTypeMacro(MarkovRandomFieldFilter, itk::ImageToImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-
   /** Type definition for the input image. */
-  typedef TInputImage InputImageType;
-  typedef typename TInputImage::Pointer              InputImagePointer;
-  typedef typename TInputImage::ConstPointer         InputImageConstPointer;
+  typedef TInputImage                        InputImageType;
+  typedef typename TInputImage::Pointer      InputImagePointer;
+  typedef typename TInputImage::ConstPointer InputImageConstPointer;
 
   /** Type definition for the input image pixel type. */
-  typedef typename TInputImage::PixelType            InputImagePixelType;
+  typedef typename TInputImage::PixelType InputImagePixelType;
 
   /** Type definition for the input image region type. */
-  typedef typename TInputImage::RegionType           InputImageRegionType;
+  typedef typename TInputImage::RegionType InputImageRegionType;
 
   /** Type definition for the input image region iterator */
-  typedef itk::ImageRegionIterator<TInputImage>       InputImageRegionIterator;
-  typedef itk::ImageRegionConstIterator<TInputImage>  InputImageRegionConstIterator;
+  typedef itk::ImageRegionIterator<TInputImage>      InputImageRegionIterator;
+  typedef itk::ImageRegionConstIterator<TInputImage> InputImageRegionConstIterator;
 
   /** Image dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type definitions for the training image. */
-  typedef TClassifiedImage                           TrainingImageType;
-  typedef typename TClassifiedImage::Pointer         TrainingImagePointer;
+  typedef TClassifiedImage                   TrainingImageType;
+  typedef typename TClassifiedImage::Pointer TrainingImagePointer;
 
   /** Type definitions for the training image pixel type. */
-  typedef typename TClassifiedImage::PixelType       TrainingImagePixelType;
+  typedef typename TClassifiedImage::PixelType TrainingImagePixelType;
 
   /** Type definitions for the labelled image.
    * It is derived from the training image. */
-  typedef TClassifiedImage                           LabelledImageType;
-  typedef typename TClassifiedImage::Pointer         LabelledImagePointer;
+  typedef TClassifiedImage                   LabelledImageType;
+  typedef typename TClassifiedImage::Pointer LabelledImagePointer;
 
   /** Type definitions for the classified image pixel type.
    * It has to be the same type as the training image. */
-  typedef typename TClassifiedImage::PixelType       LabelledImagePixelType;
+  typedef typename TClassifiedImage::PixelType LabelledImagePixelType;
 
   /** Type definitions for the classified image pixel type.
    * It has to be the same type as the training image. */
-  typedef typename TClassifiedImage::RegionType      LabelledImageRegionType;
+  typedef typename TClassifiedImage::RegionType LabelledImageRegionType;
 
   /** Type definition for the classified image index type. */
-  typedef typename TClassifiedImage::IndexType       LabelledImageIndexType;
-  typedef typename LabelledImageIndexType::IndexValueType    IndexValueType;
+  typedef typename TClassifiedImage::IndexType            LabelledImageIndexType;
+  typedef typename LabelledImageIndexType::IndexValueType IndexValueType;
 
   /** Type definition for the classified image offset type. */
-  typedef typename TClassifiedImage::OffsetType      LabelledImageOffsetType;
+  typedef typename TClassifiedImage::OffsetType LabelledImageOffsetType;
 
   /** Type definition for the input image region iterator */
   typedef itk::ImageRegionIterator<TClassifiedImage>
@@ -158,7 +157,7 @@ public:
                       TClassifiedImage::ImageDimension);
 
   /** Type definitions for classifier to be used for the MRF lavbelling. */
-  typedef itk::ImageClassifierBase<TInputImage,TClassifiedImage> ClassifierType;
+  typedef itk::ImageClassifierBase<TInputImage, TClassifiedImage> ClassifierType;
 
   /** Size and value typedef support. */
   typedef typename TInputImage::SizeType SizeType;
@@ -167,14 +166,13 @@ public:
   typedef typename TInputImage::SizeType NeighborhoodRadiusType;
 
   /** Input image neighborhood iterator and kernel size typedef */
-  typedef itk::ConstNeighborhoodIterator< TInputImage >
+  typedef itk::ConstNeighborhoodIterator<TInputImage>
   InputImageNeighborhoodIterator;
-
 
   typedef typename InputImageNeighborhoodIterator::RadiusType
   InputImageNeighborhoodRadiusType;
 
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator< TInputImage >
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>
   InputImageFacesCalculator;
 
   typedef typename InputImageFacesCalculator::FaceListType
@@ -184,13 +182,13 @@ public:
   InputImageFaceListIterator;
 
   /** Labelled image neighborhood interator typedef */
-  typedef itk::NeighborhoodIterator< TClassifiedImage >
+  typedef itk::NeighborhoodIterator<TClassifiedImage>
   LabelledImageNeighborhoodIterator;
 
   typedef typename LabelledImageNeighborhoodIterator::RadiusType
   LabelledImageNeighborhoodRadiusType;
 
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator< TClassifiedImage >
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TClassifiedImage>
   LabelledImageFacesCalculator;
 
   typedef typename LabelledImageFacesCalculator::FaceListType
@@ -202,40 +200,36 @@ public:
   /** Typedef for random values. */
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
 
-
   /** Set the pointer to the classifer being used. */
-  void SetClassifier( typename ClassifierType::Pointer ptrToClassifier );
-
+  void SetClassifier(typename ClassifierType::Pointer ptrToClassifier);
 
   /** Set pipeline elements */
-  typedef MRFEnergy< TClassifiedImage, TClassifiedImage> EnergyRegularizationType;
-  typedef MRFEnergy< TInputImage, TClassifiedImage> EnergyFidelityType;
+  typedef MRFEnergy<TClassifiedImage, TClassifiedImage> EnergyRegularizationType;
+  typedef MRFEnergy<TInputImage, TClassifiedImage>      EnergyFidelityType;
 
   typedef typename EnergyRegularizationType::Pointer EnergyRegularizationPointer;
-  typedef typename EnergyFidelityType::Pointer EnergyFidelityPointer;
+  typedef typename EnergyFidelityType::Pointer       EnergyFidelityPointer;
 
-  typedef MRFSampler< TInputImage, TClassifiedImage> SamplerType;
-  typedef typename SamplerType::Pointer SamplerPointer;
+  typedef MRFSampler<TInputImage, TClassifiedImage> SamplerType;
+  typedef typename SamplerType::Pointer             SamplerPointer;
 
-  typedef MRFOptimizer OptimizerType;
+  typedef MRFOptimizer                    OptimizerType;
   typedef typename OptimizerType::Pointer OptimizerPointer;
-
 
   /**
   ************ ACCESSORS ************
   */
-  itkSetObjectMacro( EnergyRegularization, EnergyRegularizationType);
-  itkGetObjectMacro( EnergyRegularization, EnergyRegularizationType);
+  itkSetObjectMacro(EnergyRegularization, EnergyRegularizationType);
+  itkGetObjectMacro(EnergyRegularization, EnergyRegularizationType);
 
-  itkSetObjectMacro( EnergyFidelity, EnergyFidelityType);
-  itkGetObjectMacro( EnergyFidelity, EnergyFidelityType);
+  itkSetObjectMacro(EnergyFidelity, EnergyFidelityType);
+  itkGetObjectMacro(EnergyFidelity, EnergyFidelityType);
 
-  itkSetObjectMacro( Sampler, SamplerType);
-  itkGetObjectMacro( Sampler, SamplerType);
+  itkSetObjectMacro(Sampler, SamplerType);
+  itkGetObjectMacro(Sampler, SamplerType);
 
-  itkSetObjectMacro( Optimizer, OptimizerType);
-  itkGetObjectMacro( Optimizer, OptimizerType);
-
+  itkSetObjectMacro(Optimizer, OptimizerType);
+  itkGetObjectMacro(Optimizer, OptimizerType);
 
   /** Set/Get the number of classes. */
   itkSetMacro(NumberOfClasses, unsigned int);
@@ -261,27 +255,25 @@ public:
   itkSetMacro(Lambda, double);
   itkGetMacro(Lambda, double);
 
-
   /** Set the neighborhood radius */
-  void SetNeighborhoodRadius(const NeighborhoodRadiusType &);
+  void SetNeighborhoodRadius(const NeighborhoodRadiusType&);
 
   /** Sets the radius for the neighborhood, calculates size from the
    * radius, and allocates storage. */
 
-  void SetNeighborhoodRadius( const unsigned long );
-  void SetNeighborhoodRadius( const unsigned long *radiusArray );
+  void SetNeighborhoodRadius(const unsigned long);
+  void SetNeighborhoodRadius(const unsigned long *radiusArray);
 
   /** Get the neighborhood radius */
   const NeighborhoodRadiusType GetNeighborhoodRadius() const
   {
     NeighborhoodRadiusType m_NeighborhoodRadius;
 
-    for (int i=0; i<InputImageDimension; ++i)
+    for (int i = 0; i < InputImageDimension; ++i)
       m_NeighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
 
     return m_NeighborhoodRadius;
   }
-
 
   /** Set training image for the starting point. This is not compulsory:
    * if the starting image is not specified, a random image will be used
@@ -290,23 +282,22 @@ public:
    * image should contain values corresponding to the class number (consecutive
    * integers).
   */
-  virtual void SetTrainingInput( const TrainingImageType * trainingImage);
+  virtual void SetTrainingInput(const TrainingImageType * trainingImage);
   const TrainingImageType* GetTrainingInput(void);
-
 
   //Enum to get the stopping condition of the MRF filter
   typedef enum
-  {
-    MaximumNumberOfIterations=1,
+    {
+    MaximumNumberOfIterations = 1,
     ErrorTolerance
-  } StopConditionType;
+    } StopConditionType;
 
   /** Get condition that stops the MRF filter (Number of Iterations
    * / Error tolerance ) */
-  itkGetConstReferenceMacro( StopCondition, StopConditionType );
+  itkGetConstReferenceMacro(StopCondition, StopConditionType);
 
   /** Get macro for number of iterations */
-  itkGetConstReferenceMacro( NumberOfIterations, unsigned int );
+  itkGetConstReferenceMacro(NumberOfIterations, unsigned int);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -335,7 +326,7 @@ public:
 
 protected:
   MarkovRandomFieldFilter();
-  virtual ~MarkovRandomFieldFilter(){};
+  virtual ~MarkovRandomFieldFilter(){}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Allocate memory for labelled images. This is automatically called
@@ -346,51 +337,47 @@ protected:
   /** Connect the pipeline and propagate the required parameters. This
   * is automatically called in GenerateData().
   */
-  void Initialize() throw (itk::ExceptionObject);
-
+  void Initialize()
+    throw (itk::ExceptionObject);
 
   virtual void ApplyMarkovRandomFieldFilter();
 
-
   virtual void GenerateData();
   virtual void GenerateInputRequestedRegion();
-  virtual void EnlargeOutputRequestedRegion( itk::DataObject * );
+  virtual void EnlargeOutputRequestedRegion(itk::DataObject *);
   virtual void GenerateOutputInformation();
 
-
-  MarkovRandomFieldFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MarkovRandomFieldFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   typedef typename TInputImage::SizeType InputImageSizeType;
 
+  InputImageNeighborhoodRadiusType    m_InputImageNeighborhoodRadius;
+  LabelledImageNeighborhoodRadiusType m_LabelledImageNeighborhoodRadius;
 
-  InputImageNeighborhoodRadiusType       m_InputImageNeighborhoodRadius;
-  LabelledImageNeighborhoodRadiusType    m_LabelledImageNeighborhoodRadius;
+  unsigned int m_NumberOfClasses;
+  unsigned int m_MaximumNumberOfIterations;
 
-  unsigned int              m_NumberOfClasses;
-  unsigned int              m_MaximumNumberOfIterations;
+  int    m_ErrorCounter;
+  double m_ImageDeltaEnergy;
 
-  int                       m_ErrorCounter;
-  double                    m_ImageDeltaEnergy;
+  int    m_NeighborhoodRadius;
+  int    m_TotalNumberOfValidPixelsInOutputImage;
+  int    m_TotalNumberOfPixelsInInputImage;
+  double m_ErrorTolerance;
+  double m_SmoothingFactor;
 
-  int                       m_NeighborhoodRadius;
-  int                       m_TotalNumberOfValidPixelsInOutputImage;
-  int                       m_TotalNumberOfPixelsInInputImage;
-  double                    m_ErrorTolerance;
-  double                    m_SmoothingFactor;
+  unsigned int m_NumberOfIterations;
 
-  unsigned int              m_NumberOfIterations;
+  double            m_Lambda;
+  bool              m_ExternalClassificationSet;
+  StopConditionType m_StopCondition;
 
+  TrainingImagePointer m_TrainingImage;
 
-  double                    m_Lambda;
-  bool                      m_ExternalClassificationSet;
-  StopConditionType         m_StopCondition;
-
-  TrainingImagePointer      m_TrainingImage;
-
-  std::vector<double>       m_MRFNeighborhoodWeight;
-  std::vector<double>       m_NeighborInfluence;
-  std::vector<double>       m_DummyVector;
+  std::vector<double> m_MRFNeighborhoodWeight;
+  std::vector<double> m_NeighborInfluence;
+  std::vector<double> m_DummyVector;
 
   RandomGeneratorType::Pointer m_Generator;
 
@@ -407,7 +394,6 @@ private:
 
 }; // class MarkovRandomFieldFilter
 
-
 } // namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
@@ -415,4 +401,3 @@ private:
 #endif
 
 #endif
-

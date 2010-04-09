@@ -30,7 +30,7 @@ namespace otb
 namespace Functor
 {
 
-template< class TInput, class TOutput >
+template<class TInput, class TOutput>
 class HessianToScalar
 {
 public:
@@ -38,18 +38,18 @@ public:
   {
     m_Alpha = 1.0;
   }
-  virtual ~HessianToScalar() {};
-  inline TOutput operator()( const TInput & Hessian )
+  virtual ~HessianToScalar() {}
+  inline TOutput operator ()(const TInput& Hessian)
   {
 
     TOutput det;
     TOutput trace;
     TOutput result;
 
-    det   = static_cast<TOutput>( Hessian(0,0) * Hessian(1,1) - Hessian(0,1) * Hessian(1,0) );
-    trace = static_cast<TOutput>( Hessian(0,0) + Hessian(1,1) );
+    det   = static_cast<TOutput>(Hessian(0, 0) * Hessian(1, 1) - Hessian(0, 1) * Hessian(1, 0));
+    trace = static_cast<TOutput>(Hessian(0, 0) + Hessian(1, 1));
 
-    result = det - ( static_cast<TOutput>(m_Alpha) * trace * trace );
+    result = det - (static_cast<TOutput>(m_Alpha) * trace * trace);
 
     return result;
   }
@@ -58,60 +58,58 @@ public:
   {
     m_Alpha = Alpha;
   }
-  double GetAlpha(void)const
+  double GetAlpha(void) const
   {
-    return (  m_Alpha );
+    return (m_Alpha);
   }
 
 private:
-  double  m_Alpha;
+  double m_Alpha;
 };
 }
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT HessianToScalarImageFilter :
-      public itk::UnaryFunctorImageFilter<
-      TInputImage,TOutputImage,
-      Functor::HessianToScalar<
+  public itk::UnaryFunctorImageFilter<
+    TInputImage, TOutputImage,
+    Functor::HessianToScalar<
       ITK_TYPENAME TInputImage::PixelType,
-      ITK_TYPENAME TOutputImage::PixelType>   >
+      ITK_TYPENAME TOutputImage::PixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef HessianToScalarImageFilter                                      Self;
+  typedef HessianToScalarImageFilter Self;
   typedef typename itk::UnaryFunctorImageFilter<
-  TInputImage,
-  TOutputImage,
-  Functor::HessianToScalar<
-  ITK_TYPENAME TInputImage::PixelType,
-  ITK_TYPENAME TOutputImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+    TInputImage,
+    TOutputImage,
+    Functor::HessianToScalar<
+      ITK_TYPENAME TInputImage::PixelType,
+      ITK_TYPENAME TOutputImage::PixelType> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   void SetAlpha(double Alpha)
   {
-    this->GetFunctor().SetAlpha( Alpha );
+    this->GetFunctor().SetAlpha(Alpha);
     this->Modified();
   }
-  double GetAlpha(void)const
+  double GetAlpha(void) const
   {
-    return( this->GetFunctor().GetAlpha() );
+    return (this->GetFunctor().GetAlpha());
   }
 protected:
   HessianToScalarImageFilter() {}
   virtual ~HessianToScalarImageFilter() {}
 
 private:
-  HessianToScalarImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  HessianToScalarImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #endif

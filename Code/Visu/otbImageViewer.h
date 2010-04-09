@@ -53,21 +53,21 @@ namespace otb
  */
 template <class TPixel, class TLabel = double>
 class ITK_EXPORT ImageViewer
-      : public ImageViewerBase<TPixel,TLabel>
+  : public ImageViewerBase<TPixel, TLabel>
 {
 public:
   /** Standard class typedefs */
-  typedef ImageViewer    Self;
-  typedef ImageViewerBase<TPixel,TLabel>     Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef ImageViewer                     Self;
+  typedef ImageViewerBase<TPixel, TLabel> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   typedef typename Superclass::ViewModelType ViewModelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageViewer,ImageViewerBase);
+  itkTypeMacro(ImageViewer, ImageViewerBase);
 
   /** Show the viewer */
   virtual void Show(void);
@@ -85,15 +85,15 @@ protected:
   virtual ~ImageViewer();
 
 private:
-  ImageViewer(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageViewer(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /// Fltk surrounding windows
-  Fl_Window * m_FullWindow;
-  Fl_Window * m_ScrollWindow;
-  Fl_Window * m_ZoomWindow;
-  Fl_Window * m_PixLocWindow;
-  Fl_Window * m_HistogramWindow;
+  Fl_Window *           m_FullWindow;
+  Fl_Window *           m_ScrollWindow;
+  Fl_Window *           m_ZoomWindow;
+  Fl_Window *           m_PixLocWindow;
+  Fl_Window *           m_HistogramWindow;
   Fl_Multiline_Output * m_PixLocOutput;
 };
 } // end namespace otb

@@ -32,11 +32,11 @@ namespace otb
  *
  */
 class ITK_EXPORT ImageWidgetCircleForm
-      : public ImageWidgetFormBase
+  : public ImageWidgetFormBase
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidgetCircleForm        Self;
+  typedef ImageWidgetCircleForm         Self;
   typedef ImageWidgetFormBase           Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -48,20 +48,18 @@ public:
   itkTypeMacro(ImageWidgetCircleForm, ImageWidgetFormBase);
 
   /** Usefull typedef. */
-  typedef itk::ContinuousIndex<double,2> ContinuousIndexType;
+  typedef itk::ContinuousIndex<double, 2> ContinuousIndexType;
 
   /** Accessors */
-  itkSetMacro(Solid,bool);
-  itkGetMacro(Solid,bool);
-  itkSetMacro(Radius,double);
-  itkGetMacro(Radius,double);
-  itkSetMacro(Center,ContinuousIndexType);
-  itkGetMacro(Center,ContinuousIndexType);
-
+  itkSetMacro(Solid, bool);
+  itkGetMacro(Solid, bool);
+  itkSetMacro(Radius, double);
+  itkGetMacro(Radius, double);
+  itkSetMacro(Center, ContinuousIndexType);
+  itkGetMacro(Center, ContinuousIndexType);
 
   /** Actually draw the polygon */
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
-
 
 protected:
   /** Constructor. */
@@ -70,8 +68,8 @@ protected:
   ~ImageWidgetCircleForm();
 
 private:
-  ImageWidgetCircleForm(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  ImageWidgetCircleForm(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /// true if needed to draw a solid polygon
   bool m_Solid;

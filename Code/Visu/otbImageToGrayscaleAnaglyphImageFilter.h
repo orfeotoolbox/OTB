@@ -35,22 +35,21 @@ namespace Functor
    * \sa StandardImageViewer
    *
  */
-template <class TInputPixel1,class TInputPixel2,class TOutputPixel>
+template <class TInputPixel1, class TInputPixel2, class TOutputPixel>
 class GrayscaleAnaglyphFunctor
 {
 public:
   /// Constructor
-  GrayscaleAnaglyphFunctor() {};
+  GrayscaleAnaglyphFunctor() {}
   /// Destructor
-  virtual ~GrayscaleAnaglyphFunctor() {};
+  virtual ~GrayscaleAnaglyphFunctor() {}
 
-
-  inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
+  inline TOutputPixel operator ()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
   {
     TOutputPixel result(3);
-    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1);
-    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2);
-    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2);
+    result[0] = static_cast<typename TOutputPixel::ValueType>(pixel1);
+    result[1] = static_cast<typename TOutputPixel::ValueType>(pixel2);
+    result[2] = static_cast<typename TOutputPixel::ValueType>(pixel2);
     return result;
   }
 };
@@ -64,27 +63,27 @@ public:
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT ImageToGrayscaleAnaglyphImageFilter
-      : public itk::BinaryFunctorImageFilter
-      <  TInputImage1,TInputImage2,TOutputImage,
-      Functor::GrayscaleAnaglyphFunctor<
-      typename TInputImage1::PixelType,
-      typename TInputImage2::PixelType,
-      typename TOutputImage::PixelType
-      > >
+  : public itk::BinaryFunctorImageFilter
+  <TInputImage1, TInputImage2, TOutputImage,
+   Functor::GrayscaleAnaglyphFunctor<
+     typename TInputImage1::PixelType,
+     typename TInputImage2::PixelType,
+     typename TOutputImage::PixelType
+     > >
 {
 public:
   /** Standard typedefs */
-  typedef ImageToGrayscaleAnaglyphImageFilter  Self;
+  typedef ImageToGrayscaleAnaglyphImageFilter Self;
 
   typedef itk::BinaryFunctorImageFilter
-  <  TInputImage1,TInputImage2,TOutputImage,
-  Functor::GrayscaleAnaglyphFunctor<
-  typename TInputImage1::PixelType,
-  typename TInputImage2::PixelType,
-  typename TOutputImage::PixelType
-  >  > Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  <TInputImage1, TInputImage2, TOutputImage,
+   Functor::GrayscaleAnaglyphFunctor<
+     typename TInputImage1::PixelType,
+     typename TInputImage2::PixelType,
+     typename TOutputImage::PixelType
+     > > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -101,16 +100,16 @@ protected:
   /** Constructor */
   ImageToGrayscaleAnaglyphImageFilter() {};
   /** Destructor */
-  virtual ~ImageToGrayscaleAnaglyphImageFilter() {};
+  virtual ~ImageToGrayscaleAnaglyphImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
 
 private:
-  ImageToGrayscaleAnaglyphImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToGrayscaleAnaglyphImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

@@ -47,18 +47,18 @@ namespace otb
  * to the smallest set needed to determine the relation.
  */
 template <class TInputImage>
-class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
+class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToImageRCC8Calculator Self;
-  typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageToImageRCC8Calculator                        Self;
+  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageToImageRCC8Calculator,ImageToImageFilter);
+  itkTypeMacro(ImageToImageRCC8Calculator, ImageToImageFilter);
   /** Types definitions for the input image. */
   typedef TInputImage                      ImageType;
   typedef typename ImageType::Pointer      ImagePointerType;
@@ -67,9 +67,9 @@ public:
   typedef typename ImageType::IndexType    IndexType;
   typedef typename ImageType::RegionType   RegionType;
   /** Internal bool image type */
-  typedef bool BoolPixelType;
-  typedef otb::Image<BoolPixelType,ImageType::ImageDimension> BoolImageType;
-  typedef typename BoolImageType::Pointer BoolImagePointerType;
+  typedef bool                                                 BoolPixelType;
+  typedef otb::Image<BoolPixelType, ImageType::ImageDimension> BoolImageType;
+  typedef typename BoolImageType::Pointer                      BoolImagePointerType;
 
   /** RCC8 values type */
   typedef RCC8Value RCC8ValueType;
@@ -99,21 +99,21 @@ public:
    */
   ImageType * GetInput2(void);
   /** Set/Get the inside value of the region of image 1*/
-  itkSetMacro(InsideValue1,PixelType);
-  itkGetMacro(InsideValue1,PixelType);
+  itkSetMacro(InsideValue1, PixelType);
+  itkGetMacro(InsideValue1, PixelType);
   /** Set/Get the inside value of the region of image 2*/
-  itkSetMacro(InsideValue2,PixelType);
-  itkGetMacro(InsideValue2,PixelType);
+  itkSetMacro(InsideValue2, PixelType);
+  itkGetMacro(InsideValue2, PixelType);
   /** Set external knowledge to help the decision process */
-  itkSetMacro(Level1APrioriKnowledge,bool);
-  itkSetMacro(Level3APrioriKnowledge,bool);
-  itkGetMacro(Level1APrioriKnowledge,bool);
-  itkGetMacro(Level3APrioriKnowledge,bool);
+  itkSetMacro(Level1APrioriKnowledge, bool);
+  itkSetMacro(Level3APrioriKnowledge, bool);
+  itkGetMacro(Level1APrioriKnowledge, bool);
+  itkGetMacro(Level3APrioriKnowledge, bool);
 protected:
   /** Constructor */
   ImageToImageRCC8Calculator();
   /** Destructor */
-  virtual ~ImageToImageRCC8Calculator() {};
+  virtual ~ImageToImageRCC8Calculator() {}
   /**
    * Compute the minimal image region required.
    * \return The minimal region required.

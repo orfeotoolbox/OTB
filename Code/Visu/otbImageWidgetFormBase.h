@@ -35,7 +35,7 @@ namespace otb
  *
  */
 class ITK_EXPORT ImageWidgetFormBase
-      : public itk::DataObject
+  : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
@@ -45,19 +45,18 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(ImageWidgetFormBase,DataObject);
+  itkTypeMacro(ImageWidgetFormBase, DataObject);
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
+  typedef itk::FixedArray<float, 4> ColorType;
+  typedef itk::ImageRegion<2>       RegionType;
 
-  typedef itk::FixedArray<float,4> ColorType;
-  typedef itk::ImageRegion<2> RegionType;
-
-  itkSetMacro(Visible,bool);
-  itkGetMacro(Visible,bool);
-  itkSetMacro(Color,ColorType);
-  itkGetMacro(Color,ColorType);
+  itkSetMacro(Visible, bool);
+  itkGetMacro(Visible, bool);
+  itkSetMacro(Color, ColorType);
+  itkGetMacro(Color, ColorType);
 
   /**
    * Set the form color.
@@ -68,10 +67,10 @@ public:
    */
   virtual void SetColor(float r, float g, float b, float a)
   {
-    m_Color[0]=r;
-    m_Color[1]=g;
-    m_Color[2]=b;
-    m_Color[3]=a;
+    m_Color[0] = r;
+    m_Color[1] = g;
+    m_Color[2] = b;
+    m_Color[3] = a;
   }
   /**
    * Draw the form in opengl context.
@@ -81,38 +80,40 @@ public:
    * \param windowh The window height,
    *  \param ss_rate The subsampling rate.
    */
-  virtual void Draw(double /*openGlZoom*/, unsigned int /*originx*/, unsigned int /*originy*/, unsigned int /*windowh*/, unsigned int /*ss_rate*/) {};
+  virtual void Draw(double /*openGlZoom*/,
+                    unsigned int /*originx*/,
+                    unsigned int /*originy*/,
+                    unsigned int /*windowh*/,
+                    unsigned int /*ss_rate*/) {}
 
   virtual RegionType GetRegion(void)
   {
     itkExceptionMacro("Method must be implemented in subclasses!");
-  };
+  }
 
 protected:
   /** Constructor. */
   ImageWidgetFormBase()
-  {
-    m_Visible=true;
-    m_Color[0]=1;
-    m_Color[1]=0;
-    m_Color[2]=0;
-    m_Color[3]=1;
-  };
+    {
+    m_Visible = true;
+    m_Color[0] = 1;
+    m_Color[1] = 0;
+    m_Color[2] = 0;
+    m_Color[3] = 1;
+    };
 
   /** Destructor. */
   virtual ~ImageWidgetFormBase()
-  {};
+     {}
 
   ColorType m_Color;
 
 private:
-  ImageWidgetFormBase(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
-
+  ImageWidgetFormBase(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   bool m_Visible;
 
 };
 } // end namespace otb
 #endif
-

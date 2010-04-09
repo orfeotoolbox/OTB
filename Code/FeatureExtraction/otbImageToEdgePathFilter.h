@@ -49,14 +49,13 @@ namespace otb
  * \sa ImageToPathFilter
  */
 
-
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToEdgePathFilter
-      : public ImageToPathFilter<TInputImage, TOutputPath>
+  : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
-  typedef ImageToEdgePathFilter                 Self;
+  typedef ImageToEdgePathFilter                       Self;
   typedef ImageToPathFilter<TInputImage, TOutputPath> Superclass;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
@@ -64,31 +63,31 @@ public:
   /// Creation througth the object factory
   itkNewMacro(Self);
   /// Runtime information
-  itkTypeMacro(ImageToEdgePathFilter,ImageToPathFilter);
+  itkTypeMacro(ImageToEdgePathFilter, ImageToPathFilter);
 
   /// Template parameters typedef
-  typedef typename Superclass::InputImageType        InputImageType;
-  typedef typename Superclass::InputImagePointerType InputImagePointerType;
-  typedef typename Superclass::OutputPathType        OutputPathType;
-  typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
+  typedef typename Superclass::InputImageType          InputImageType;
+  typedef typename Superclass::InputImagePointerType   InputImagePointerType;
+  typedef typename Superclass::OutputPathType          OutputPathType;
+  typedef typename Superclass::OutputPathPointerType   OutputPathPointerType;
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
 
-  typedef typename InputImageType::PixelType     PixelType;
+  typedef typename InputImageType::PixelType PixelType;
 
   /** Set and Get foreground value */
-  itkSetMacro(ForegroundValue,PixelType);
-  itkGetConstMacro(ForegroundValue,PixelType);
+  itkSetMacro(ForegroundValue, PixelType);
+  itkGetConstMacro(ForegroundValue, PixelType);
 
 protected:
   ImageToEdgePathFilter();
-  virtual ~ImageToEdgePathFilter() {};
+  virtual ~ImageToEdgePathFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}; //does nothing
+  virtual void GenerateOutputInformation() {}  //does nothing
   virtual void GenerateData();
 
 private:
-  ImageToEdgePathFilter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  ImageToEdgePathFilter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   PixelType m_ForegroundValue;
 };

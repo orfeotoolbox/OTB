@@ -60,35 +60,35 @@ public:
   itkNewMacro(Self);
 
   /** Type definitions for the SVM Model. */
-  typedef TModel                                     SVMModelType;
-  typedef typename SVMModelType::Pointer             SVMModelPointer;
+  typedef TModel                         SVMModelType;
+  typedef typename SVMModelType::Pointer SVMModelPointer;
 
   /** Superclass typedefs */
-  typedef typename Superclass::MeasureType           MeasurementType;
-  typedef typename Superclass::ParametersType        ParametersType;
-  typedef typename Superclass::ParametersValueType   ParametersValueType;
-  typedef typename Superclass::DerivativeType        DerivativeType;
+  typedef typename Superclass::MeasureType         MeasurementType;
+  typedef typename Superclass::ParametersType      ParametersType;
+  typedef typename Superclass::ParametersValueType ParametersValueType;
+  typedef typename Superclass::DerivativeType      DerivativeType;
 
   /** Set the model */
-  itkSetObjectMacro(Model,SVMModelType);
-  itkGetObjectMacro(Model,SVMModelType);
-  
+  itkSetObjectMacro(Model, SVMModelType);
+  itkGetObjectMacro(Model, SVMModelType);
+
   /** Set/Get the number of cross validation folders */
-  itkSetMacro(NumberOfCrossValidationFolders,unsigned int);
-  itkGetMacro(NumberOfCrossValidationFolders,unsigned int);
+  itkSetMacro(NumberOfCrossValidationFolders, unsigned int);
+  itkGetMacro(NumberOfCrossValidationFolders, unsigned int);
 
   /** Set/Get the derivative step */
-  itkSetMacro(DerivativeStep,ParametersValueType);
-  itkGetMacro(DerivativeStep,ParametersValueType);
+  itkSetMacro(DerivativeStep, ParametersValueType);
+  itkGetMacro(DerivativeStep, ParametersValueType);
 
   /** \return The accuracy value corresponding the parameters */
-  virtual MeasureType GetValue(const ParametersType &parameters) const;
+  virtual MeasureType GetValue(const ParametersType& parameters) const;
 
   /** \return The accuracy derivative corresponding to the parameters */
-  virtual void GetDerivative(const ParametersType &parameters, DerivativeType &derivative) const;
-  
+  virtual void GetDerivative(const ParametersType& parameters, DerivativeType& derivative) const;
+
   /** \return the number of parameters to optimize */
-  virtual unsigned int GetNumberOfParameters (void) const;
+  virtual unsigned int GetNumberOfParameters(void) const;
 
 protected:
   /// Constructor
@@ -98,11 +98,11 @@ protected:
 
   /** Update svm parameters struct according to the input parameters
     */
-  virtual void UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType & parameters) const;
+  virtual void UpdateParameters(struct svm_parameter& svm_parameters, const ParametersType& parameters) const;
 
 private:
-  SVMCrossValidationCostFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMCrossValidationCostFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /**Pointer to the SVM model to optimize */
   SVMModelPointer m_Model;
@@ -122,4 +122,3 @@ private:
 #endif
 
 #endif
-

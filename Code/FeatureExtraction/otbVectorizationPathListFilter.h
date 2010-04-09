@@ -41,14 +41,14 @@ namespace otb
  */
 template <class TInputModulus, class TInputDirection, class TOutputPath>
 class ITK_EXPORT VectorizationPathListFilter
-      : public PathListSource<TOutputPath>
+  : public PathListSource<TOutputPath>
 {
 public:
   /** Standard typedefs */
-  typedef VectorizationPathListFilter    Self;
-  typedef PathListSource<TOutputPath>    Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef VectorizationPathListFilter   Self;
+  typedef PathListSource<TOutputPath>   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -57,7 +57,7 @@ public:
   itkTypeMacro(VectorizationPathListFilter, PathListSource);
 
   /** Template parameters typedefs */
-  typedef TInputModulus InputModulusType;
+  typedef TInputModulus                           InputModulusType;
   typedef typename InputModulusType::ConstPointer InputModulusConstPointerType;
   typedef typename InputModulusType::PixelType    InputPixelType;
   typedef typename InputModulusType::PointType    PointType;
@@ -81,14 +81,14 @@ public:
   void SetInputDirection(InputDirectionType * inputDirection);
   const InputDirectionType * GetInputDirection(void);
 
-  itkSetMacro(AmplitudeThreshold,InputPixelType);
-  itkGetMacro(AmplitudeThreshold,InputPixelType);
+  itkSetMacro(AmplitudeThreshold, InputPixelType);
+  itkGetMacro(AmplitudeThreshold, InputPixelType);
 
 protected:
 
   /** Other internal useful typedefs */
-  typedef otb::Image<bool,InputModulusType::ImageDimension> FlagImageType;
-  typedef typename FlagImageType::Pointer                   FlagImagePointerType;
+  typedef otb::Image<bool, InputModulusType::ImageDimension> FlagImageType;
+  typedef typename FlagImageType::Pointer                    FlagImagePointerType;
 
   typedef itk::ImageRegionConstIterator<InputModulusType>   ModRegionIteratorType;
   typedef itk::ImageRegionConstIterator<InputDirectionType> DirRegionIteratorType;
@@ -98,9 +98,9 @@ protected:
   typedef itk::ConstantBoundaryCondition<InputDirectionType> DirBCType;
   typedef itk::ConstantBoundaryCondition<FlagImageType>      FlagBCType;
 
-  typedef itk::ConstNeighborhoodIterator<InputModulusType,ModBCType>   ModNeighborhoodIteratorType;
-  typedef itk::ConstNeighborhoodIterator<InputDirectionType,ModBCType> DirNeighborhoodIteratorType;
-  typedef itk::NeighborhoodIterator<FlagImageType,FlagBCType>          FlagNeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<InputModulusType, ModBCType>   ModNeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<InputDirectionType, ModBCType> DirNeighborhoodIteratorType;
+  typedef itk::NeighborhoodIterator<FlagImageType, FlagBCType>          FlagNeighborhoodIteratorType;
 
   typedef typename ModNeighborhoodIteratorType::RadiusType RadiusType;
   typedef typename ModNeighborhoodIteratorType::OffsetType OffsetType;
@@ -113,7 +113,7 @@ protected:
   /** Constructor */
   VectorizationPathListFilter();
   /** Destructor */
-  virtual ~VectorizationPathListFilter() {};
+  virtual ~VectorizationPathListFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
@@ -133,12 +133,12 @@ protected:
    */
   OffsetVectorType GetThreeNeighborOffsetFromDirection(double direction, unsigned int flagReverse);
 private:
-  VectorizationPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorizationPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** Amplitude threshold to start following a path */
   InputPixelType m_AmplitudeThreshold;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorizationPathListFilter.txx"
 #endif

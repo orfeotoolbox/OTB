@@ -36,25 +36,25 @@ template <class TInput1, class TInput2, class TOutput>
 class NonMaxRemovalByDirectionFunctor
 {
 public:
-  NonMaxRemovalByDirectionFunctor() {};
-  virtual ~NonMaxRemovalByDirectionFunctor() {};
-  inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
+  NonMaxRemovalByDirectionFunctor() {}
+  virtual ~NonMaxRemovalByDirectionFunctor() {}
+  inline TOutput operator ()(const TInput1& itA, const TInput2& itB)
   {
     TOutput resp = 0;
     if (itA.GetCenterPixel() != 0)
-    {
-      typename TInput1::OffsetType offset1,offset2;
+      {
+      typename TInput1::OffsetType offset1, offset2;
       int neighborhoodNumber;
       if (itB.GetCenterPixel() > 0)
-      {
-        neighborhoodNumber = static_cast<int>(itB.GetCenterPixel()/(CONST_PI_4)-1);
-      }
+        {
+        neighborhoodNumber = static_cast<int>(itB.GetCenterPixel() / (CONST_PI_4) -1);
+        }
       else
-      {
-        neighborhoodNumber = static_cast<int>((itB.GetCenterPixel()+CONST_PI)/(CONST_PI_4)-1);
-      }
-      switch ( neighborhoodNumber )
-      {
+        {
+        neighborhoodNumber = static_cast<int>((itB.GetCenterPixel() + CONST_PI) / (CONST_PI_4) -1);
+        }
+      switch (neighborhoodNumber)
+        {
       case 0:
         offset1[0] =  1;
         offset1[1] = -1;
@@ -79,13 +79,13 @@ public:
         offset2[0] =  0;
         offset2[1] = -1;
         break;
-      }
+        }
       if ((itA.GetCenterPixel() > itA.GetPixel(offset1))
           && (itA.GetCenterPixel() > itA.GetPixel(offset2)))
-      {
+        {
         resp =  itA.GetCenterPixel();
+        }
       }
-    }
     return resp;
   }
 };
@@ -99,11 +99,11 @@ public:
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT NonMaxRemovalByDirectionFilter
-      : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
+  : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef NonMaxRemovalByDirectionFilter                                                     Self;
+  typedef NonMaxRemovalByDirectionFilter                                                      Self;
   typedef ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                                             Pointer;
   typedef itk::SmartPointer<const Self>                                                       ConstPointer;
@@ -112,26 +112,27 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(NonMaxRemovalByDirectionFilter,ModulusAndDirectionImageToImageFilter);
+  itkTypeMacro(NonMaxRemovalByDirectionFilter, ModulusAndDirectionImageToImageFilter);
 
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::NonMaxRemovalByDirectionFunctor<
-  typename itk::ConstNeighborhoodIterator<TInputModulus>,
-  typename itk::ConstNeighborhoodIterator<TInputDirection>,
-  typename TOutputImage::PixelType>  FunctorType;
-  typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
+    typename itk::ConstNeighborhoodIterator<TInputModulus>,
+    typename itk::ConstNeighborhoodIterator<TInputDirection>,
+    typename TOutputImage::PixelType>  FunctorType;
+  typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection, TOutputImage,
+                                                    FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */
   NonMaxRemovalByDirectionFilter() {};
   /** Destructor */
-  virtual ~NonMaxRemovalByDirectionFilter() {};
+  virtual ~NonMaxRemovalByDirectionFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
   /** Main computation method */
   virtual void GenerateData(void)
   {
@@ -144,8 +145,8 @@ protected:
   }
 
 private:
-  NonMaxRemovalByDirectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  NonMaxRemovalByDirectionFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

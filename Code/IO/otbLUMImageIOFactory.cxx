@@ -21,7 +21,6 @@
 #include "otbLUMImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ LUMImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

@@ -42,14 +42,14 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT LinkPathListFilter
-      : public PathListToPathListFilter<TPath>
+  : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
-  typedef LinkPathListFilter            Self;
-  typedef PathListToPathListFilter<TPath>       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef LinkPathListFilter              Self;
+  typedef PathListToPathListFilter<TPath> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -58,20 +58,20 @@ public:
   itkTypeMacro(LinkPathListFilter, PathListToPathListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PathType         PathType;
-  typedef typename Superclass::PathListType     PathListType;
-  typedef typename Superclass::PathPointerType  PathPointerType;
-  typedef typename PathListType::Pointer        PathListPointerType;
-  typedef typename PathListType::ConstIterator IteratorType;
-  typedef typename PathType::VertexType VertexType;
-  typedef typename PathType::VertexListType VertexListType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathListType      PathListType;
+  typedef typename Superclass::PathPointerType   PathPointerType;
+  typedef typename PathListType::Pointer         PathListPointerType;
+  typedef typename PathListType::ConstIterator   IteratorType;
+  typedef typename PathType::VertexType          VertexType;
+  typedef typename PathType::VertexListType      VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
-  typedef double                 RealType;
+  typedef double                                 RealType;
 
-  itkSetMacro(AngularThreshold,RealType);
-  itkGetMacro(AngularThreshold,RealType);
-  itkSetMacro(DistanceThreshold,RealType);
-  itkGetMacro(DistanceThreshold,RealType);
+  itkSetMacro(AngularThreshold, RealType);
+  itkGetMacro(AngularThreshold, RealType);
+  itkSetMacro(DistanceThreshold, RealType);
+  itkGetMacro(DistanceThreshold, RealType);
   itkSetMacro(ModuloPI, bool);
   itkGetMacro(ModuloPI, bool);
 
@@ -79,7 +79,7 @@ protected:
   /** Constructor */
   LinkPathListFilter();
   /** Destructor */
-  virtual ~LinkPathListFilter() {};
+  virtual ~LinkPathListFilter() {}
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
@@ -103,11 +103,11 @@ protected:
    * \param revert2 wether p2 need to be reverted or not,
    * \return the linked path.
    */
-  PathPointerType LinkPath(PathPointerType p1,bool revert1, PathPointerType p2, bool revert2);
+  PathPointerType LinkPath(PathPointerType p1, bool revert1, PathPointerType p2, bool revert2);
 
 private:
-  LinkPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LinkPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;
@@ -116,7 +116,7 @@ private:
   bool m_ModuloPI;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLinkPathListFilter.txx"
 #endif

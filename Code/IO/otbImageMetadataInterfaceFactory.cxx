@@ -38,40 +38,39 @@ namespace otb
 {
 ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
 ImageMetadataInterfaceFactory
-::CreateIMI( const MetaDataDictionaryType & dict )
+::CreateIMI(const MetaDataDictionaryType& dict)
 {
   RegisterBuiltInFactories();
 
   std::list<ImageMetadataInterfaceBasePointerType> possibleIMI;
-  std::list<itk::LightObject::Pointer> allobjects =
+  std::list<itk::LightObject::Pointer>             allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("ImageMetadataInterfaceBase");
   for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
        i != allobjects.end(); ++i)
-  {
+    {
     ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
     if (io)
-    {
+      {
       possibleIMI.push_back(io);
-    }
+      }
     else
-    {
+      {
       itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: "
                                << (*i)->GetNameOfClass());
+      }
     }
-  }
   for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
        k != possibleIMI.end(); ++k)
-  {
-    if ((*k)->CanRead(dict))
     {
+    if ((*k)->CanRead(dict))
+      {
       return *k;
+      }
     }
-  }
 
   DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
-
 
 void
 ImageMetadataInterfaceFactory
@@ -80,20 +79,19 @@ ImageMetadataInterfaceFactory
   static bool firstTime = true;
 
   static itk::SimpleMutexLock mutex;
-  {
+    {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
-    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
-    if ( firstTime )
-    {
-      itk::ObjectFactoryBase::RegisterFactory( IkonosImageMetadataInterfaceFactory::New() );
-      itk::ObjectFactoryBase::RegisterFactory( SpotImageMetadataInterfaceFactory::New() );
-      itk::ObjectFactoryBase::RegisterFactory( QuickBirdImageMetadataInterfaceFactory::New() );
+    itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    if (firstTime)
+      {
+      itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(SpotImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(QuickBirdImageMetadataInterfaceFactory::New());
       //itk::ObjectFactoryBase::RegisterFactory( TerraSarImageMetadataInterfaceFactory::New() );
       firstTime = false;
+      }
     }
-  }
 }
 
 } // end namespace otb
-

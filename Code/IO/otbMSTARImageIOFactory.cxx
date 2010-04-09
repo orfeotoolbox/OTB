@@ -20,7 +20,6 @@
 #include "otbMSTARImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -50,4 +49,3 @@ MSTARImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

@@ -32,25 +32,25 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TLayer >
+template <class TLayer>
 class LayerBasedModel
   : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef LayerBasedModel                      Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef LayerBasedModel               Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(LayerBasedModel,Object);
+  itkTypeMacro(LayerBasedModel, Object);
 
   /** New macro */
   itkNewMacro(Self);
 
   /** Layer typedef */
-  typedef TLayer                               LayerType;
+  typedef TLayer LayerType;
 
   /** Layer list typedef */
   typedef otb::ObjectList<LayerType>            LayerListType;
@@ -97,9 +97,8 @@ public:
   virtual unsigned int GetNumberOfLayers(void);
 
   /** Set/Get the layers stack */
-  itkSetObjectMacro(Layers,LayerListType);
-  itkGetObjectMacro(Layers,LayerListType);
-
+  itkSetObjectMacro(Layers, LayerListType);
+  itkGetObjectMacro(Layers, LayerListType);
 
 protected:
   /** Constructor */
@@ -111,14 +110,14 @@ protected:
   void          PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 /** Get the layer list (Convenience for subclasses) */
-  itkGetConstObjectMacro(Layers,LayerListType);
+  itkGetConstObjectMacro(Layers, LayerListType);
 
 private:
   LayerBasedModel(const Self&);     // purposely not implemented
-  void operator=(const Self&);      // purposely not implemented
+  void operator =(const Self&);      // purposely not implemented
 
   /** Layer list */
-  LayerListPointerType  m_Layers;
+  LayerListPointerType m_Layers;
 
 }; // end class
 } // end namespace otb
@@ -128,5 +127,3 @@ private:
 #endif
 
 #endif
-
-

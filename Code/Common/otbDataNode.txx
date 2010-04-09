@@ -25,7 +25,7 @@
 namespace otb
 {
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::DataNode()
 {
   m_NodeType = ROOT;
@@ -35,7 +35,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetNodeType(NodeType type)
 {
   m_NodeType = type;
@@ -44,7 +44,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetPoint(PointType point)
 {
   m_NodeType = FEATURE_POINT;
@@ -53,7 +53,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-void DataNode<TPrecision,VDimension,TValuePrecision>
+void DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetLine(LineType* line)
 {
   m_NodeType = FEATURE_LINE;
@@ -62,173 +62,173 @@ void DataNode<TPrecision,VDimension,TValuePrecision>
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetPolygonExteriorRing(PolygonType* polygon)
 {
   m_NodeType = FEATURE_POLYGON;
   m_Data.exteriorRing = polygon;
   if (!m_Data.interiorRings)
-  {
+    {
     m_Data.interiorRings = PolygonListType::New();
-  }
+    }
   m_Data.valid = true;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::SetPolygonInteriorRings(PolygonListType* polygonList)
 {
   m_NodeType = FEATURE_POLYGON;
   m_Data.interiorRings = polygonList;
   if (!m_Data.exteriorRing)
-  {
+    {
     m_Data.exteriorRing = PolygonType::New();
-  }
+    }
   m_Data.valid = true;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-typename DataNode<TPrecision,VDimension,TValuePrecision>
+typename DataNode<TPrecision, VDimension, TValuePrecision>
 ::PointType
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetPoint() const
 {
   if (!IsPointFeature())
-  {
-    itkGenericExceptionMacro(<<"Node "<<m_NodeId<<" is not a point.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Node " << m_NodeId << " is not a point.");
+    }
   if (!m_Data.valid)
-  {
-    itkGenericExceptionMacro(<<"Invalid point node.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Invalid point node.");
+    }
   return m_Data.point;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-typename DataNode<TPrecision,VDimension,TValuePrecision>
+typename DataNode<TPrecision, VDimension, TValuePrecision>
 ::LinePointerType
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetLine() const
 {
   if (!IsLineFeature())
-  {
-    itkGenericExceptionMacro(<<"Node "<<m_NodeId<<" is not a line.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Node " << m_NodeId << " is not a line.");
+    }
   if (!m_Data.valid)
-  {
-    itkGenericExceptionMacro(<<"Invalid line node.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Invalid line node.");
+    }
   return m_Data.line;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-typename DataNode<TPrecision,VDimension,TValuePrecision>
+typename DataNode<TPrecision, VDimension, TValuePrecision>
 ::PolygonPointerType
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetPolygonExteriorRing() const
 {
   if (!IsPolygonFeature())
-  {
-    itkGenericExceptionMacro(<<"Node "<<m_NodeId<<" is not a polygon.");
-  }
-  if (!m_Data.valid || !m_Data.exteriorRing )
-  {
-    itkGenericExceptionMacro(<<"Invalid polygon node.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Node " << m_NodeId << " is not a polygon.");
+    }
+  if (!m_Data.valid || !m_Data.exteriorRing)
+    {
+    itkGenericExceptionMacro(<< "Invalid polygon node.");
+    }
   return m_Data.exteriorRing;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-typename DataNode<TPrecision,VDimension,TValuePrecision>
+typename DataNode<TPrecision, VDimension, TValuePrecision>
 ::PolygonListPointerType
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetPolygonInteriorRings() const
 {
   if (!IsPolygonFeature())
-  {
-    itkGenericExceptionMacro(<<"Node "<<m_NodeId<<" is not a polygon.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Node " << m_NodeId << " is not a polygon.");
+    }
   if (!m_Data.valid || !m_Data.interiorRings)
-  {
-    itkGenericExceptionMacro(<<"Invalid polygon node.");
-  }
+    {
+    itkGenericExceptionMacro(<< "Invalid polygon node.");
+    }
   return m_Data.interiorRings;
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 void
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  os<<indent<<this->GetNodeTypeAsString();
+  os << indent << this->GetNodeTypeAsString();
 }
-
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 std::string
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::GetNodeTypeAsString() const
 {
   itk::OStringStream oss;
   switch (m_NodeType)
-  {
-    case ROOT:
     {
-      oss<<"Root ("<<m_NodeId<<")";
-      break;
-    }
-    case DOCUMENT:
+  case ROOT:
     {
-      oss<<"Document ("<<m_NodeId<<")";
-      break;
+    oss << "Root (" << m_NodeId << ")";
+    break;
     }
-    case FOLDER:
+  case DOCUMENT:
     {
-      oss<<"Folder ("<<m_NodeId<<")";
-      break;
+    oss << "Document (" << m_NodeId << ")";
+    break;
     }
-    case FEATURE_POINT:
+  case FOLDER:
     {
-      oss<<"Point ("<<m_NodeId<<") "<<m_Data.point;
-      break;
+    oss << "Folder (" << m_NodeId << ")";
+    break;
     }
-    case FEATURE_LINE:
+  case FEATURE_POINT:
     {
-      oss<<"Line ("<<m_NodeId<<") "<<m_Data.line->GetVertexList()->Size()<<" points";
-      break;
+    oss << "Point (" << m_NodeId << ") " << m_Data.point;
+    break;
     }
-    case FEATURE_POLYGON:
+  case FEATURE_LINE:
     {
-      oss<<"Polygon ("<<m_NodeId<<") "<<this->GetPolygonExteriorRing()->GetVertexList()->Size()<<" points, "<<this->GetPolygonInteriorRings()->Size()<<" interior rings";
-      break;
+    oss << "Line (" << m_NodeId << ") " << m_Data.line->GetVertexList()->Size() << " points";
+    break;
     }
-    case FEATURE_MULTIPOINT:
+  case FEATURE_POLYGON:
     {
-      oss<<"MultiPoint ("<<m_NodeId<<")";
-      break;
+    oss << "Polygon (" << m_NodeId << ") " << this->GetPolygonExteriorRing()->GetVertexList()->Size() << " points, " <<
+    this->GetPolygonInteriorRings()->Size() << " interior rings";
+    break;
     }
-    case FEATURE_MULTILINE:
+  case FEATURE_MULTIPOINT:
     {
-      oss<<"MultiLine ("<<m_NodeId<<")";
-      break;
+    oss << "MultiPoint (" << m_NodeId << ")";
+    break;
     }
-    case FEATURE_MULTIPOLYGON:
+  case FEATURE_MULTILINE:
     {
-      oss<<"MultiPolygon ("<<m_NodeId<<")";
-      break;
+    oss << "MultiLine (" << m_NodeId << ")";
+    break;
     }
-    case FEATURE_COLLECTION:
+  case FEATURE_MULTIPOLYGON:
     {
-      oss<<"Collection ("<<m_NodeId<<")";
-      break;
+    oss << "MultiPolygon (" << m_NodeId << ")";
+    break;
     }
-  }
-  if(GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
-  {
+  case FEATURE_COLLECTION:
+    {
+    oss << "Collection (" << m_NodeId << ")";
+    break;
+    }
+    }
+  if (GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
+    {
     VectorDataKeywordlist kwl;
     itk::ExposeMetaData<VectorDataKeywordlist>(GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
-    oss<< "\n  -> Metadata: " << kwl;
-  }
+    oss << "\n  -> Metadata: " << kwl;
+    }
   return oss.str();
 }
 /*
@@ -242,35 +242,35 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 */
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        DataNode<TPrecision,VDimension,TValuePrecision>
-  ::SetFieldAsString(std::string key, std::string value)
+void
+DataNode<TPrecision, VDimension, TValuePrecision>
+::SetFieldAsString(std::string key, std::string value)
 {
   otb::VectorDataKeywordlist kwl;
-  itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-      MetaDataKey::VectorDataKeywordlistKey,
-      kwl);
+  itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                             MetaDataKey::VectorDataKeywordlistKey,
+                                             kwl);
   kwl.SetFieldAsString(key, value);
-  itk::EncapsulateMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-      MetaDataKey::VectorDataKeywordlistKey,
-      kwl);
+  itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                                  MetaDataKey::VectorDataKeywordlistKey,
+                                                  kwl);
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    void
-        DataNode<TPrecision,VDimension,TValuePrecision>
-  ::SetFieldAsInt(std::string key, int value)
+void
+DataNode<TPrecision, VDimension, TValuePrecision>
+::SetFieldAsInt(std::string key, int value)
 {
   otb::VectorDataKeywordlist kwl;
-  itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-      MetaDataKey::VectorDataKeywordlistKey,
-      kwl);
+  itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                             MetaDataKey::VectorDataKeywordlistKey,
+                                             kwl);
   std::ostringstream os;
   os << value;
-  kwl.SetFieldAsString(key,os.str() );//FIXME the int is currently saved as string in the OGR data
-  itk::EncapsulateMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-      MetaDataKey::VectorDataKeywordlistKey,
-      kwl);
+  kwl.SetFieldAsString(key, os.str()); //FIXME the int is currently saved as string in the OGR data
+  itk::EncapsulateMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                                  MetaDataKey::VectorDataKeywordlistKey,
+                                                  kwl);
 }
 
 /*
@@ -290,35 +290,35 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 }*/
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    std::string
-        DataNode<TPrecision,VDimension,TValuePrecision>
-  ::GetFieldAsString(std::string key) const
+std::string
+DataNode<TPrecision, VDimension, TValuePrecision>
+::GetFieldAsString(std::string key) const
 {
   VectorDataKeywordlist keywordlist;
   if (HasField(key))
-  {
-    itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-                                              MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+    {
+    itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey, keywordlist);
     return keywordlist.GetFieldAsString(key);
-  }
+    }
   return "";
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    int
-        DataNode<TPrecision,VDimension,TValuePrecision>
-  ::GetFieldAsInt(std::string key) const
+int
+DataNode<TPrecision, VDimension, TValuePrecision>
+::GetFieldAsInt(std::string key) const
 {
   VectorDataKeywordlist keywordlist;
   if (HasField(key))
-  {
-    itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-                                              MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+    {
+    itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey, keywordlist);
     std::istringstream is(keywordlist.GetFieldAsString(key));
     int value;
     is >> value;
     return value;
-  }
+    }
   return 0;
 }
 
@@ -340,17 +340,17 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 */
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-    bool
-        DataNode<TPrecision,VDimension,TValuePrecision>
-  ::HasField(std::string key) const
+bool
+DataNode<TPrecision, VDimension, TValuePrecision>
+::HasField(std::string key) const
 {
   VectorDataKeywordlist keywordlist;
   if (this->GetMetaDataDictionary().HasKey(MetaDataKey::VectorDataKeywordlistKey))
-  {
-    itk::ExposeMetaData< VectorDataKeywordlist >(this->GetMetaDataDictionary(),
-                                              MetaDataKey::VectorDataKeywordlistKey, keywordlist);
+    {
+    itk::ExposeMetaData<VectorDataKeywordlist>(this->GetMetaDataDictionary(),
+                                               MetaDataKey::VectorDataKeywordlistKey, keywordlist);
     return keywordlist.HasField(key);
-  }
+    }
   return false;
 }
 
@@ -389,42 +389,42 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 }*/
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsDocument() const
 {
   return m_NodeType == DOCUMENT;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsRoot() const
 {
   return m_NodeType == ROOT;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsFolder() const
 {
   return m_NodeType == FOLDER;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsPointFeature() const
 {
   return m_NodeType == FEATURE_POINT;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsLineFeature() const
 {
   return m_NodeType == FEATURE_LINE;
 }
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsPolygonFeature() const
 {
   return m_NodeType == FEATURE_POLYGON;
@@ -432,7 +432,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsMultiPointFeature() const
 {
   return m_NodeType == FEATURE_MULTIPOINT;
@@ -440,7 +440,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsMultiLineFeature() const
 {
   return m_NodeType == FEATURE_MULTILINE;
@@ -448,7 +448,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsMultiPolygonFeature() const
 {
   return m_NodeType == FEATURE_MULTIPOLYGON;
@@ -456,7 +456,7 @@ DataNode<TPrecision,VDimension,TValuePrecision>
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
 bool
-DataNode<TPrecision,VDimension,TValuePrecision>
+DataNode<TPrecision, VDimension, TValuePrecision>
 ::IsCollectionFeature() const
 {
   return m_NodeType == FEATURE_COLLECTION;

@@ -39,11 +39,11 @@ namespace Functor
 /**
  * \class TerraSarCalibrationFunctor
  *  \brief Compute sigma naught coefficient.
- * 
+ *
  * This functor is intended to be used by the
  * TerrasarCalibrationImageFilter.
- * 
- * For more information on Terrasar calibration, 
+ *
+ * For more information on Terrasar calibration,
  * please refer to the
  * documentation of this filter.
  *
@@ -58,14 +58,14 @@ public:
   /** Constructor */
   TerraSarCalibrationFunctor();
   /** Destructor */
-  virtual ~TerraSarCalibrationFunctor() {};
+  virtual ~TerraSarCalibrationFunctor() {}
 
   /** Typedef to define the noise records map */
-  typedef ossimplugins::ImageNoise                  ImageNoiseType;
-  
+  typedef ossimplugins::ImageNoise ImageNoiseType;
+
   /** Typedef for image size and index */
-  typedef itk::Size<2>                              SizeType;
-  typedef itk::Index<2>                             IndexType;
+  typedef itk::Size<2>  SizeType;
+  typedef itk::Index<2> IndexType;
 
   /** Typedef for the brightness functor */
   typedef TerraSarBrightnessFunctor<double, double> BrightnessFunctorType;
@@ -81,58 +81,58 @@ public:
   /**
    * Get the noise record
    */
-  const ImageNoiseType &  GetNoiseRecord() const
+  const ImageNoiseType& GetNoiseRecord() const
   {
     return m_NoiseRecord;
   }
 
   /** Set the calibration factor */
-  void SetCalibrationFactor( double val ) 
-  { 
-    m_CalibrationFactor =  val; 
-    m_Brightness.SetCalibrationFactor(val); 
+  void SetCalibrationFactor(double val)
+  {
+    m_CalibrationFactor =  val;
+    m_Brightness.SetCalibrationFactor(val);
   }
-  
+
   /** Get the calibration factor */
-  double GetCalibrationFactor() const 
-  { 
-    return m_CalibrationFactor; 
+  double GetCalibrationFactor() const
+  {
+    return m_CalibrationFactor;
   }
-   
+
   /** Set the image size */
-  void SetOriginalProductSize( SizeType size ) 
-  { 
-    m_OriginalProductSize = size; 
+  void SetOriginalProductSize(SizeType size)
+  {
+    m_OriginalProductSize = size;
   }
-  
+
   /** Get the image size */
-  const SizeType & GetOriginalProductSize() const 
-  { 
-    return m_OriginalProductSize; 
+  const SizeType& GetOriginalProductSize() const
+  {
+    return m_OriginalProductSize;
   }
-  
+
   /** Set the UseFastCalibration flag */
-  void SetUseFastCalibration( bool b ) 
-  { 
-    m_UseFastCalibration = b; 
+  void SetUseFastCalibration(bool b)
+  {
+    m_UseFastCalibration = b;
   }
-  
+
   /** Get the UseFastCalibration flag */
-  bool GetUseFastCalibration() const 
-  { 
-    return m_UseFastCalibration; 
+  bool GetUseFastCalibration() const
+  {
+    return m_UseFastCalibration;
   }
 
   /** Set the ResultsInDecibels flag */
-  void SetResultsInDecibels( bool b ) 
-  { 
-    m_ResultsInDecibels = b; 
+  void SetResultsInDecibels(bool b)
+  {
+    m_ResultsInDecibels = b;
   }
-  
+
   /** Get the ResultsInDecibelsMethod flag */
-  bool GetResultsInDecibels() const 
-  { 
-    return m_ResultsInDecibels; 
+  bool GetResultsInDecibels() const
+  {
+    return m_ResultsInDecibels;
   }
 
   /** Set the default value */
@@ -146,12 +146,12 @@ public:
   {
     return m_DefaultValue;
   }
-  
+
   /** Perform the calibration for one pixel (scalar -> modulus image) */
-  inline TOutput operator() (const TInput & inPix, const IndexType& index, double angle);
+  inline TOutput operator ()(const TInput& inPix, const IndexType& index, double angle);
 
   /** Perform the calibration for one pixel (complex -> complex image) */
-  inline std::complex<TOutput> operator() (const std::complex<TInput> & inPix, const IndexType& index, double angle);
+  inline std::complex<TOutput> operator ()(const std::complex<TInput>& inPix, const IndexType& index, double angle);
 
 private:
   /** Return the current range position */
@@ -159,9 +159,9 @@ private:
 
   /** Return the current NEBN value */
   inline double ComputeNoiseEquivalentBetaNaught(double range) const;
-  
+
   /** Evaluate polynom with Horner scheme*/
-  inline double Horner(std::vector<double> & coefficients, const double nebn) const;
+  inline double Horner(std::vector<double>& coefficients, const double nebn) const;
 
   /** Calibration Factor */
   double m_CalibrationFactor;
@@ -187,7 +187,7 @@ private:
   double m_DefaultValue;
 };
 
-}// end namespace functor
+} // end namespace functor
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

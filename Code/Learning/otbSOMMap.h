@@ -45,18 +45,18 @@ namespace otb
  * \sa SOM
  * \sa SOMActivationBuilder
  */
-template <class TNeuron=itk::VariableLengthVector<double>,
-class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
-unsigned int VMapDimension=2>
+template <class TNeuron = itk::VariableLengthVector<double>,
+          class TDistance = itk::Statistics::EuclideanDistance<TNeuron>,
+          unsigned int VMapDimension = 2>
 class ITK_EXPORT SOMMap
-      : public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
+  : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>
 {
 public:
   /** Standard typedefs */
-  typedef SOMMap  Self;
-  typedef otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SOMMap                                                           Self;
+  typedef otb::VectorImage<typename TNeuron::ComponentType, VMapDimension> Superclass;
+  typedef itk::SmartPointer<Self>                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                    ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -67,17 +67,17 @@ public:
    * */
 
   /** Template parameters related typedefs */
-  typedef TNeuron NeuronType;
-  typedef TDistance DistanceType;
+  typedef TNeuron                        NeuronType;
+  typedef TDistance                      DistanceType;
   typedef typename DistanceType::Pointer DistancePointerType;
 
   /** Superclass related typedefs */
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::SizeType SizeType;
+  typedef typename Superclass::IndexType     IndexType;
+  typedef typename Superclass::SizeType      SizeType;
   typedef typename Superclass::DirectionType DirectionType;
-  typedef typename Superclass::RegionType RegionType;
-  typedef typename Superclass::SpacingType SpacingType;
-  typedef typename Superclass::PointType PointType;
+  typedef typename Superclass::RegionType    RegionType;
+  typedef typename Superclass::SpacingType   SpacingType;
+  typedef typename Superclass::PointType     PointType;
   /**
    * Get The index of the winning neuron for a sample.
    * \param sample the sample.
@@ -94,8 +94,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SOMMap(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  SOMMap(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 };
 } // end namespace otb
 

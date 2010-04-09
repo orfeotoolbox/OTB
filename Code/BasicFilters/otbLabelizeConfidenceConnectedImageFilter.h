@@ -32,22 +32,27 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConfidenceConnectedImageFilter
-      : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> >
+  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                        itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> >
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeConfidenceConnectedImageFilter Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage,TOutputImage, itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LabelizeConfidenceConnectedImageFilter
+                                                                                                        Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
+                                       itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
+  typedef itk::SmartPointer<Self>
+                                                                                                        Pointer;
+  typedef itk::SmartPointer<const Self>
+                                                                                                        ConstPointer;
 
   /** typedef to simplify variables definition and declaration. */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef typename TInputImage::PixelType InputPixelType;
+  typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
-  typedef typename TInputImage::IndexType IndexType;
+  typedef typename TInputImage::IndexType  IndexType;
 
   /** "object factory" management method. */
   itkNewMacro(Self);
@@ -74,7 +79,7 @@ public:
   }
 
   /** Set number of iterations */
-  void SetNumberOfIterations( const unsigned int iteration )
+  void SetNumberOfIterations(const unsigned int iteration)
   {
     this->m_RegionGrowingFilter->SetNumberOfIterations(iteration);
   }
@@ -92,22 +97,22 @@ public:
   }
 
   /** Set initial neigborhood radius */
-  void SetInitialNeighborhoodRadius(const unsigned int initial )
+  void SetInitialNeighborhoodRadius(const unsigned int initial)
   {
     this->m_RegionGrowingFilter->SetInitialNeighborhoodRadius(initial);
   }
 
 protected:
   LabelizeConfidenceConnectedImageFilter();
-  virtual ~LabelizeConfidenceConnectedImageFilter() {};
+  virtual ~LabelizeConfidenceConnectedImageFilter() {}
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Region growing */
-  virtual void RegionGrowing( const IndexType indexSeed );
+  virtual void RegionGrowing(const IndexType indexSeed);
 
 private:
-  LabelizeConfidenceConnectedImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelizeConfidenceConnectedImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Intial replace value*/
   OutputPixelType m_ReplaceValue;

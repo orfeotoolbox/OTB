@@ -26,66 +26,65 @@
 
 namespace otb {
 
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 GISTableToVectorDataFilter<TGISTable, TVectorData>
-  ::GISTableToVectorDataFilter()
-{/*
+::GISTableToVectorDataFilter()
+{ /*
   m_BackgroundValue = NumericTraits<OutputImagePixelType>::NonpositiveMin();*/
   m_Reader = VectorDataFileReaderType::New();
 }
 
-
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
-  ::SetInput(const InputGISTableType *input)
+::SetInput(const InputGISTableType *input)
 {
 // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast< InputGISTableType * >( input ) );
+                                        const_cast<InputGISTableType *>(input));
 }
 
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
-  ::SetInput(unsigned int idx, const InputGISTableType *input)
+::SetInput(unsigned int idx, const InputGISTableType *input)
 {
-    // Process object is not const-correct so the const_cast is required here
+  // Process object is not const-correct so the const_cast is required here
   this->itk::ProcessObject::SetNthInput(idx,
-                                         const_cast< InputGISTableType * >( input ) );
+                                        const_cast<InputGISTableType *>(input));
 }
 
-template<class TGISTable, class TVectorData >
-    const typename GISTableToVectorDataFilter<TGISTable, TVectorData>::InputGISTableType *
-GISTableToVectorDataFilter<TGISTable, TVectorData>
-  ::GetInput(void)
-{
-  if (this->GetNumberOfInputs() < 1)
-  {
-    return 0;
-  }
-
-  return static_cast<const TGISTable * >
-      (this->itk::ProcessObject::GetInput(0) );
-}
-
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 const typename GISTableToVectorDataFilter<TGISTable, TVectorData>::InputGISTableType *
 GISTableToVectorDataFilter<TGISTable, TVectorData>
-  ::GetInput(unsigned int idx)
+::GetInput(void)
 {
-  return static_cast<const TGISTable * >
-      (this->itk::ProcessObject::GetInput(idx) );
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+
+  return static_cast<const TGISTable *>
+           (this->itk::ProcessObject::GetInput(0));
 }
 
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
+const typename GISTableToVectorDataFilter<TGISTable, TVectorData>::InputGISTableType *
+GISTableToVectorDataFilter<TGISTable, TVectorData>
+::GetInput(unsigned int idx)
+{
+  return static_cast<const TGISTable *>
+           (this->itk::ProcessObject::GetInput(idx));
+}
+
+template<class TGISTable, class TVectorData>
 void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GenerateInputRequestedRegion()
-{/*
+{ /*
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
-  
+
   // We need all the input.
   InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
   if ( !input )
@@ -104,18 +103,18 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 }
 */
 
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
 ::GenerateData()
 {
-  
+
   // Allocate the output
   //this->AllocateOutputs();
-  
-  OutputVectorDataType * output = this->GetOutput();
+
+  OutputVectorDataType *    output = this->GetOutput();
   const InputGISTableType * input = this->GetInput();
-  
+
   /**Create usual root elements of the output vectordata*/
 //   DataNodePointerType document = DataNodeType::New();
 //   DataNodePointerType folder1 = DataNodeType::New();
@@ -127,41 +126,39 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
 //
 //   output->GetDataTree()->Add(document,root);
 //   output->GetDataTree()->Add(folder1,document);
-  
-  
-  OGRVectorDataIOPointerType gisReader=OGRVectorDataIOType::New();
-  
-  const std::string inputOGRConnStr=input->GetOGRStrConnection();
+
+  OGRVectorDataIOPointerType gisReader = OGRVectorDataIOType::New();
+
+  const std::string inputOGRConnStr = input->GetOGRStrConnection();
   //Try  if the Db is readable
 //   std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
-  if ( gisReader->CanReadFile( inputOGRConnStr.data() ) )
-  {
+  if (gisReader->CanReadFile(inputOGRConnStr.data()))
+    {
     //Read GISTable data and copy in the output VectorData
-    
+
     gisReader->SetFileName(inputOGRConnStr);
 //     std::cout << "read ogr!!: " << inputOGRConnStr << std::endl;
     gisReader->Read(output);
-  }
+    }
   else
-  {
-    itkExceptionMacro(<<"The OGR connection is not valid;ogrconnection = " << inputOGRConnStr);
-  }
-  
+    {
+    itkExceptionMacro(<< "The OGR connection is not valid;ogrconnection = " << inputOGRConnStr);
+    }
+
 //   const std::string inputOGRConnStr=input->GetOGRStrConnection();
-  //Try  if the Db is readable
-  //std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
-  
+//Try  if the Db is readable
+//std::cout << "ogr connection: " << inputOGRConnStr[0] << std::endl;
+
 //   m_Reader->SetFileName( inputOGRConnStr.data() );
 //   m_Reader->Update();
-  
+
   output = m_Reader->GetOutput();
 }
 
-
-template<class TGISTable, class TVectorData >
+template<class TGISTable, class TVectorData>
 void
 GISTableToVectorDataFilter<TGISTable, TVectorData>
-::PrintSelf(std::ostream &os, itk::Indent indent) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 /*
@@ -169,5 +166,5 @@ GISTableToVectorDataFilter<TGISTable, TVectorData>
   */
 }
 
-}// end namespace otb
+} // end namespace otb
 #endif

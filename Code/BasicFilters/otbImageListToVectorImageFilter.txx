@@ -32,33 +32,33 @@ namespace otb
  */
 template <class TImageList, class TVectorImage>
 void
-ImageListToVectorImageFilter<TImageList,TVectorImage>
+ImageListToVectorImageFilter<TImageList, TVectorImage>
 ::GenerateOutputInformation(void)
 {
   if (this->GetOutput())
-  {
-    if (this->GetInput()->Size()>0)
     {
+    if (this->GetInput()->Size() > 0)
+      {
       this->GetOutput()->CopyInformation(this->GetInput()->GetNthElement(0));
       this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->Size());
       this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
+      }
     }
-  }
 }
 /**
  * GenerateInputRequestedRegion
  */
 template <class TImageList, class TVectorImage>
 void
-ImageListToVectorImageFilter<TImageList,TVectorImage>
+ImageListToVectorImageFilter<TImageList, TVectorImage>
 ::GenerateInputRequestedRegion(void)
 {
-  InputImageListPointerType inputPtr = this->GetInput();
+  InputImageListPointerType                  inputPtr = this->GetInput();
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-  while (inputListIt!=inputPtr->End())
+  while (inputListIt != inputPtr->End())
     {
-      inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-      ++inputListIt;
+    inputListIt.Get()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+    ++inputListIt;
     }
 }
 /**
@@ -66,14 +66,14 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
  */
 template <class TImageList, class TVectorImage>
 void
-ImageListToVectorImageFilter<TImageList,TVectorImage>
+ImageListToVectorImageFilter<TImageList, TVectorImage>
 ::GenerateData(void)
 {
 
-  InputImageListPointerType inputPtr = this->GetInput();
+  InputImageListPointerType    inputPtr = this->GetInput();
   OutputVectorImagePointerType outputPtr = this->GetOutput();
 
-  itk::ProgressReporter progress(this,0,outputPtr->GetRequestedRegion().GetNumberOfPixels());
+  itk::ProgressReporter progress(this, 0, outputPtr->GetRequestedRegion().GetNumberOfPixels());
 
   // Output image initializations
   typename OutputVectorImageType::PixelType black;
@@ -84,7 +84,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   outputPtr->FillBuffer(black);
 
   // defines input and output iterators
-  typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
+  typedef itk::ImageRegionConstIterator<InputImageType>   InputIteratorType;
   typedef itk::ImageRegionIterator<OutputVectorImageType> OutputIteratorType;
 
   typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
@@ -94,42 +94,42 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   InputIteratorListType inputIteratorList;
 
   // fills the vector of input iterators
-  for (;inputListIt!=inputPtr->End();++inputListIt)
-  {
-    inputIteratorList.push_back(InputIteratorType(inputListIt.Get(),outputPtr->GetRequestedRegion()));
+  for (; inputListIt != inputPtr->End(); ++inputListIt)
+    {
+    inputIteratorList.push_back(InputIteratorType(inputListIt.Get(), outputPtr->GetRequestedRegion()));
     inputIteratorList.back().GoToBegin();
-  }
+    }
 
   // walk through the output image
-  OutputIteratorType outputIt(outputPtr,outputPtr->GetRequestedRegion());
+  OutputIteratorType outputIt(outputPtr, outputPtr->GetRequestedRegion());
   outputIt.GoToBegin();
 
   while (!outputIt.IsAtEnd())
-  {
+    {
     typename OutputVectorImageType::PixelType pixel = outputIt.Get();
-    unsigned int counter = 0;
+    unsigned int                              counter = 0;
     // for each input iterator, fill the right component
     for (typename InputIteratorListType::iterator it = inputIteratorList.begin();
-         it != inputIteratorList.end();++it)
-    {
-      if (!it->IsAtEnd())
+         it != inputIteratorList.end(); ++it)
       {
-        pixel[counter]=static_cast<typename OutputVectorImageType::InternalPixelType>(it->Get());
+      if (!it->IsAtEnd())
+        {
+        pixel[counter] = static_cast<typename OutputVectorImageType::InternalPixelType>(it->Get());
         ++(*it);
         ++counter;
+        }
       }
-    }
     outputIt.Set(pixel);
     progress.CompletedPixel();
     ++outputIt;
-  }
+    }
 }
 /**
  * PrintSelf Method
  */
 template <class TVectorImageType, class TImageList>
 void
-ImageListToVectorImageFilter<TVectorImageType,TImageList>
+ImageListToVectorImageFilter<TVectorImageType, TImageList>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

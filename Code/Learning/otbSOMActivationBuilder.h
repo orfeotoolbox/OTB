@@ -34,36 +34,36 @@ namespace otb
  */
 template <class TListSample, class TInputMap, class TOutputImage>
 class ITK_EXPORT SOMActivationBuilder
-      : public itk::ImageToImageFilter<TInputMap,TOutputImage>
+  : public itk::ImageToImageFilter<TInputMap, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef SOMActivationBuilder Self;
-  typedef itk::ImageToImageFilter<TInputMap,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SOMActivationBuilder                             Self;
+  typedef itk::ImageToImageFilter<TInputMap, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                          Pointer;
+  typedef itk::SmartPointer<const Self>                    ConstPointer;
 
   /** Creation through object factory */
   itkNewMacro(Self);
 
   /** Runtime information macro */
-  itkTypeMacro(SOMActivationBuilder,ImageToImageFilter);
+  itkTypeMacro(SOMActivationBuilder, ImageToImageFilter);
 
   /** Template related typedefs */
-  typedef TListSample ListSampleType;
+  typedef TListSample  ListSampleType;
   typedef TOutputImage OutputImageType;
-  typedef TInputMap InputMapType;
+  typedef TInputMap    InputMapType;
 
   typedef typename ListSampleType::Pointer  ListSamplePointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
-  typedef typename InputMapType::Pointer InputMapPointerType;
+  typedef typename InputMapType::Pointer    InputMapPointerType;
 
   /** Image Dimension */
-  itkStaticConstMacro(ImageDimension,unsigned int, InputMapType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputMapType::ImageDimension);
 
   /** ListSample accessor */
-  itkSetObjectMacro(ListSample,ListSampleType);
-  itkGetObjectMacro(ListSample,ListSampleType);
+  itkSetObjectMacro(ListSample, ListSampleType);
+  itkGetObjectMacro(ListSample, ListSampleType);
 
 protected:
   /** Constructor */
@@ -76,8 +76,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SOMActivationBuilder(const Self&); // purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  SOMActivationBuilder(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
   /** ListSample object */
   ListSamplePointerType m_ListSample;
 };

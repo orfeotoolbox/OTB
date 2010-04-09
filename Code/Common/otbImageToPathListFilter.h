@@ -35,10 +35,10 @@ class ITK_EXPORT ImageToPathListFilter : public PathListSource<TOutputPath>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToPathListFilter             Self;
-  typedef PathListSource<TOutputPath>      Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef ImageToPathListFilter         Self;
+  typedef PathListSource<TOutputPath>   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::ProcessObject ProcessObjectType;
 
@@ -49,34 +49,34 @@ public:
   itkTypeMacro(ImageToPathListFilter, PathListSource);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::ConstPointer   InputImagePointer;
-  typedef typename InputImageType::RegionType     InputImageRegionType;
-  typedef typename InputImageType::PixelType      InputImagePixelType;
-  typedef typename InputImageType::SizeType           SizeType;
-  typedef typename InputImageType::ValueType          ValueType;
+  typedef          TInputImage                  InputImageType;
+  typedef typename InputImageType::ConstPointer InputImagePointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename InputImageType::SizeType     SizeType;
+  typedef typename InputImageType::ValueType    ValueType;
 
-  typedef typename Superclass::OutputPathType         OutputPathType;
-  typedef typename Superclass::OutputPathListType     OutputPathListType;
-  typedef typename Superclass::OutputPathPointerType  OutputPathPointerType;
+  typedef typename Superclass::OutputPathType        OutputPathType;
+  typedef typename Superclass::OutputPathListType    OutputPathListType;
+  typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
 
   /** Set/Get the image input of this process object. */
-  virtual void SetInput( const InputImageType * image);
+  virtual void SetInput(const InputImageType * image);
   const InputImageType * GetInput(void);
 
 protected:
   ImageToPathListFilter();
-  virtual ~ImageToPathListFilter() {};
+  virtual ~ImageToPathListFilter() {}
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageToPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

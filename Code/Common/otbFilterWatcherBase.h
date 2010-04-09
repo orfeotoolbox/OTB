@@ -45,7 +45,7 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   FilterWatcherBase(itk::ProcessObject* process,
-                    const char *comment="");
+                    const char *comment = "");
 
   /** Default constructor */
   FilterWatcherBase();
@@ -54,14 +54,14 @@ public:
   FilterWatcherBase(const FilterWatcherBase&);
 
   /** operator=  */
-  void operator=(const FilterWatcherBase& );
+  void operator =(const FilterWatcherBase&);
 
   /** Destructor. */
   virtual ~FilterWatcherBase();
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess ()
+  itk::ProcessObject *GetProcess()
   {
     return m_Process.GetPointer();
   }
@@ -73,7 +73,7 @@ public:
   }
 
   /** Get a reference to the TimeProbe */
-  itk::TimeProbe &GetTimeProbe()
+  itk::TimeProbe& GetTimeProbe()
   {
     return m_TimeProbe;
   }

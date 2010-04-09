@@ -50,19 +50,19 @@ ZoomableImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
   if (!this->GetInput())
-  {
+    {
     itkExceptionMacro("No input image!");
-  }
+    }
   else
-  {
-    Superclass::Init(x,y,w,h,l);
+    {
+    Superclass::Init(x, y, w, h, l);
 //       if(this->GetImageOverlayVisible())
 //   {
 //     this->GetInputOverlay()->Update();
 //   }
     this->label(l);
     this->resize(x, y, w, h);
-  }
+    }
 }
 /**
  * Resize the widget.
@@ -74,14 +74,14 @@ ZoomableImageWidget<TPixel>
 {
   //otbMsgDebugMacro(<<"resize: "<<x<<" "<<y<<" "<<w<<" "<<h);
   SizeType size;
-  size[0]=static_cast<unsigned int>((double)w/this->GetOpenGlIsotropicZoom())+1;
-  size[1]=static_cast<unsigned int>((double)h/this->GetOpenGlIsotropicZoom())+1;
+  size[0] = static_cast<unsigned int>((double) w / this->GetOpenGlIsotropicZoom()) + 1;
+  size[1] = static_cast<unsigned int>((double) h / this->GetOpenGlIsotropicZoom()) + 1;
   RegionType region;
   region.SetSize(size);
   region.SetIndex(m_ZoomUpperLeftCorner);
   region.Crop(this->GetInput()->GetLargestPossibleRegion());
   this->SetViewedRegion(region);
-  this->Fl_Gl_Window::resize(x,y,w,h);
+  this->Fl_Gl_Window::resize(x, y, w, h);
   this->redraw();
 }
 /**
@@ -94,10 +94,10 @@ ZoomableImageWidget<TPixel>
 {
   RegionType viewed = this->GetViewedRegion();
   RegionType buffered = this->GetBufferedRegion();
-  IndexType viewedULCorner = viewed.GetIndex();
-  IndexType bufferedULCorner = buffered.GetIndex();
-  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
+  IndexType  viewedULCorner = viewed.GetIndex();
+  IndexType  bufferedULCorner = buffered.GetIndex();
+  IndexType  viewedRDCorner = viewed.GetIndex() + viewed.GetSize();
+  IndexType  bufferedRDCorner = buffered.GetIndex() + buffered.GetSize();
 //  return ( viewedULCorner[0]<bufferedULCorner[0]
 //       ||viewedULCorner[1]<bufferedULCorner[1]
 //       ||viewedRDCorner[0]>bufferedRDCorner[0]
@@ -125,25 +125,24 @@ void
 ZoomableImageWidget<TPixel>
 ::SetZoomFactor(double zoomFactor)
 {
-  if (zoomFactor<1)
-    itkExceptionMacro(<<"Zoom factor must be >1 !");
+  if (zoomFactor < 1) itkExceptionMacro(<< "Zoom factor must be >1 !");
 
   RegionType region = this->GetViewedRegion();
 
-  SizeType newSize;
+  SizeType   newSize;
   RegionType newRegion;
 
-  newSize[0] = static_cast<unsigned int>((double)this->w()/zoomFactor);
-  newSize[1] = static_cast<unsigned int>((double)this->h()/zoomFactor);
+  newSize[0] = static_cast<unsigned int>((double) this->w() / zoomFactor);
+  newSize[1] = static_cast<unsigned int>((double) this->h() / zoomFactor);
 //  otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
   newRegion.SetIndex(m_ZoomUpperLeftCorner);
   newRegion.SetSize(newSize);
   /// Bug correction, segfault zooming out too much
   if (this->GetInput() && this->GetInput()->GetLargestPossibleRegion().IsInside(newRegion))
-  {
+    {
     this->SetViewedRegion(newRegion);
     this->SetOpenGlIsotropicZoom(zoomFactor);
-  }
+    }
 }
 /**
  * Set the zoom upper-left corner.
@@ -154,7 +153,7 @@ void
 ZoomableImageWidget<TPixel>
 ::SetZoomUpperLeftCorner(IndexType index)
 {
-  SizeType size;
+  SizeType   size;
   RegionType newRegion;
 
   size = this->GetViewedRegion().GetSize();
@@ -166,7 +165,6 @@ ZoomableImageWidget<TPixel>
   this->SetViewedRegion(newRegion);
   m_ZoomUpperLeftCorner = index;
 }
-
 
 } // end namespace otb
 #endif

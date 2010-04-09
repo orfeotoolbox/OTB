@@ -33,12 +33,12 @@ namespace otb
 {
 
 template <class TImage, class TOutputImage>
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::ImageLayer() : m_Quicklook(), m_Image(), m_ListSample(), m_ListSampleProvided(false), m_RenderingFunction(),
-                 m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
-                 m_ExtractFilter(), m_ScaledExtractFilter()
+  m_QuicklookRenderingFilter(), m_ExtractRenderingFilter(), m_ScaledExtractRenderingFilter(),
+  m_ExtractFilter(), m_ScaledExtractFilter()
 {
- // Rendering filters
+  // Rendering filters
   m_QuicklookRenderingFilter = RenderingFilterType::New();
   m_ExtractRenderingFilter = RenderingFilterType::New();
   m_ScaledExtractRenderingFilter = RenderingFilterType::New();
@@ -47,7 +47,7 @@ ImageLayer<TImage,TOutputImage>
 
   // Default rendering function
   typedef Function::StandardRenderingFunction<PixelType,
-                                    typename TOutputImage::PixelType> DefaultRenderingFunctionType;
+                                              typename TOutputImage::PixelType> DefaultRenderingFunctionType;
   m_RenderingFunction = DefaultRenderingFunctionType::New();
   m_QuicklookRenderingFilter->SetRenderingFunction(m_RenderingFunction);
   m_ExtractRenderingFilter->SetRenderingFunction(m_RenderingFunction);
@@ -69,22 +69,21 @@ ImageLayer<TImage,TOutputImage>
 }
 
 template <class TImage, class TOutputImage>
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::~ImageLayer()
 {}
 
-
 template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::Render()
 {
   // Render the histogram
@@ -99,23 +98,22 @@ ImageLayer<TImage,TOutputImage>
 
 template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::RenderImages()
 {
 //   if (m_ListSample.IsNull()) //FIXME make sure that it is not necessary
 //   {
 //     this->UpdateListSample();
 //   }
-  // Render quicklook
+// Render quicklook
 
-
-  if(this->GetHasQuicklook())
+  if (this->GetHasQuicklook())
     {
     itk::TimeProbe probe;
     probe.Start();
 
     // Impacting modified on the the rendering function
-    if(m_RenderingFunction->GetMTime() > m_QuicklookRenderingFilter->GetOutput()->GetUpdateMTime())
+    if (m_RenderingFunction->GetMTime() > m_QuicklookRenderingFilter->GetOutput()->GetUpdateMTime())
       {
       m_QuicklookRenderingFilter->Modified();
       }
@@ -123,17 +121,17 @@ ImageLayer<TImage,TOutputImage>
     m_QuicklookRenderingFilter->Update();
     this->SetRenderedQuicklook(m_QuicklookRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
-        << " quicklook regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
+                   << " quicklook regenerated (" << probe.GetMeanTime() << " s.)");
     }
   // If there are pixels to render
-  if(this->GetExtractRegion().GetNumberOfPixels() > 0)
+  if (this->GetExtractRegion().GetNumberOfPixels() > 0)
     {
     itk::TimeProbe probe;
     probe.Start();
 
     // Impacting modified on the the rendering function
-    if(m_RenderingFunction->GetMTime() > m_ExtractRenderingFilter->GetOutput()->GetUpdateMTime())
+    if (m_RenderingFunction->GetMTime() > m_ExtractRenderingFilter->GetOutput()->GetUpdateMTime())
       {
       m_ExtractRenderingFilter->Modified();
       }
@@ -142,8 +140,8 @@ ImageLayer<TImage,TOutputImage>
     m_ExtractRenderingFilter->Update();
     this->SetRenderedExtract(m_ExtractRenderingFilter->GetOutput());
     probe.Stop();
-    otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
-        << " extract regenerated ("<<probe.GetMeanTime()<<" s.)");
+    otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
+                   << " extract regenerated (" << probe.GetMeanTime() << " s.)");
     this->SetHasExtract(true);
     }
   else
@@ -152,24 +150,24 @@ ImageLayer<TImage,TOutputImage>
     }
   // Render scaled extract
   // If there are pixels to render
-  if(this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
-      {
-      itk::TimeProbe probe;
-      probe.Start();
+  if (this->GetScaledExtractRegion().GetNumberOfPixels() > 0)
+    {
+    itk::TimeProbe probe;
+    probe.Start();
     // Impacting modified on the the rendering function
-    if(m_RenderingFunction->GetMTime() > m_ScaledExtractRenderingFilter->GetOutput()->GetUpdateMTime())
+    if (m_RenderingFunction->GetMTime() > m_ScaledExtractRenderingFilter->GetOutput()->GetUpdateMTime())
       {
       m_ScaledExtractRenderingFilter->Modified();
       }
 
-      m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
-      m_ScaledExtractRenderingFilter->Update();
-      this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
-      this->SetHasScaledExtract(true);
-      probe.Stop();
-      otbMsgDevMacro(<<"ImageLayer::RenderImages():"<<" ("<<this->GetName()<<")"
-          << " scaled extract regenerated ("<<probe.GetMeanTime()<<" s.)");
-      }
+    m_ScaledExtractRenderingFilter->GetOutput()->SetRequestedRegion(this->GetScaledExtractRegion());
+    m_ScaledExtractRenderingFilter->Update();
+    this->SetRenderedScaledExtract(m_ScaledExtractRenderingFilter->GetOutput());
+    this->SetHasScaledExtract(true);
+    probe.Stop();
+    otbMsgDevMacro(<< "ImageLayer::RenderImages():" << " (" << this->GetName() << ")"
+                   << " scaled extract regenerated (" << probe.GetMeanTime() << " s.)");
+    }
   else
     {
     this->SetHasScaledExtract(false);
@@ -178,17 +176,17 @@ ImageLayer<TImage,TOutputImage>
 
 template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::UpdateListSample()
 {
-  if(!m_ListSampleProvided)
-  {
-  //   otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
+  if (!m_ListSampleProvided)
+    {
+    //   otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"<< " Entering method");
     // Declare the source of the histogram
     ImagePointerType histogramSource;
 
     // if there is a quicklook, use it for histogram generation
-    if(m_Quicklook.IsNotNull())
+    if (m_Quicklook.IsNotNull())
       {
       histogramSource = m_Quicklook;
       }
@@ -204,16 +202,17 @@ ImageLayer<TImage,TOutputImage>
       }
 
     // Check if we need to generate the histogram again
-    if( m_ListSample.IsNull() || m_ListSample->Size() == 0 || (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()) )
+    if (m_ListSample.IsNull() || m_ListSample->Size() == 0 ||
+        (histogramSource->GetUpdateMTime() < histogramSource->GetPipelineMTime()))
       {
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample():"<<" ("<<this->GetName()<<")"
-          << " Regenerating histogram due to pippeline update.");
+      otbMsgDevMacro(<< "ImageLayer::UpdateListSample():" << " (" << this->GetName() << ")"
+                     << " Regenerating histogram due to pippeline update.");
 
       // Update the histogram source
       histogramSource->Update();
 
       // Iterate on the image
-      itk::ImageRegionConstIterator<ImageType> it(histogramSource,histogramSource->GetBufferedRegion());
+      itk::ImageRegionConstIterator<ImageType> it(histogramSource, histogramSource->GetBufferedRegion());
 
       // declare a list to store the samples
       m_ListSample->Clear();
@@ -223,119 +222,124 @@ ImageLayer<TImage,TOutputImage>
 
       // Fill the samples list
       it.GoToBegin();
-      while(!it.IsAtEnd())
-      {
+      while (!it.IsAtEnd())
+        {
         SampleType sample(sampleSize);
-        VisualizationPixelTraits::Convert( it.Get(), sample );
+        VisualizationPixelTraits::Convert(it.Get(), sample);
         m_ListSample->PushBack(sample);
         ++it;
-      }
-      otbMsgDevMacro(<<"ImageLayer::UpdateListSample()"<<" ("<<this->GetName()<<")"
-          << " Sample list generated ("<<m_ListSample->Size()<<" samples, "<< sampleSize <<" bands)");
+        }
+      otbMsgDevMacro(<< "ImageLayer::UpdateListSample()" << " (" << this->GetName() << ")"
+                     << " Sample list generated (" << m_ListSample->Size() << " samples, " << sampleSize << " bands)");
 
       m_RenderingFunction->SetListSample(m_ListSample);
 
       }
-  }
+    }
 }
-
 
 template <class TImage, class TOutputImage>
 std::string
-ImageLayer<TImage,TOutputImage>
-::GetPixelDescription(const IndexType & index)
+ImageLayer<TImage, TOutputImage>
+::GetPixelDescription(const IndexType& index)
 {
   //FIXME only if necessary
-    this->UpdateListSample();
+  this->UpdateListSample();
 
   // Ensure rendering function intialization
   m_RenderingFunction->Initialize(); //FIXME check, but the call must be done in the generator. To be moved to the layer?
   // The ouptut stringstream
   itk::OStringStream oss;
-  oss<< otbGetTextMacro("Layer") << ": "<<this->GetName();
-  oss<<std::endl<< otbGetTextMacro("Image size") << ": " <<m_Image->GetLargestPossibleRegion().GetSize();
+  oss << otbGetTextMacro("Layer") << ": " << this->GetName();
+  oss << std::endl << otbGetTextMacro("Image size") << ": " << m_Image->GetLargestPossibleRegion().GetSize();
   // If we are inside the buffered region
-  if(m_Image->GetBufferedRegion().IsInside(index))
+  if (m_Image->GetBufferedRegion().IsInside(index))
     {
-    oss<<std::endl<<m_RenderingFunction->Describe(m_Image->GetPixel(index));
+    oss << std::endl << m_RenderingFunction->Describe(m_Image->GetPixel(index));
     }
-  else if(m_Quicklook.IsNotNull())
-    // Else we extrapolate the value from the quicklook
+  else if (m_Quicklook.IsNotNull())
+  // Else we extrapolate the value from the quicklook
     {
     IndexType ssindex = index;
     ssindex[0] /= this->GetQuicklookSubsamplingRate();
     ssindex[1] /= this->GetQuicklookSubsamplingRate();
 
-    if(m_Quicklook->GetBufferedRegion().IsInside(ssindex))
+    if (m_Quicklook->GetBufferedRegion().IsInside(ssindex))
       {
-      oss<<" (ql)"<<std::endl<<m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
+      oss << " (ql)" << std::endl << m_RenderingFunction->Describe(m_Quicklook->GetPixel(ssindex));
       }
     }
   //here, we consider that if the transform is not ready (call to InitTransform)
   //the user of the class don't want to use it
   if (m_Transform->IsUpToDate())
-  {
-    if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
     {
+    if (m_Transform->GetTransformAccuracy() != Projection::UNKNOWN)
+      {
       PointType point = this->GetPixelLocation(index);
-      // add the x and y spacing 
+      // add the x and y spacing
       //Get the PIxel location of the first pixel
-      IndexType indexSrcX,indexSrcY;
-      indexSrcX[0] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[0] - index[0])));   // x position
+      IndexType indexSrcX, indexSrcY;
+      indexSrcX[0] =
+        static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[0] -
+                                                                 index[0])));                                                                   // x position
       indexSrcX[1] = index[1];   // y position
 
       indexSrcY[0] = index[0];   // x position
-      indexSrcY[1] = static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[1] - index[1])));   // y position
-      
+      indexSrcY[1] =
+        static_cast<IndexValueType>(vcl_fabs(static_cast<double>(m_Image->GetLargestPossibleRegion().GetSize()[1] -
+                                                                 index[1])));                                                                   // y position
+
       PointType pointSrcX = this->GetPixelLocation(indexSrcX);
       PointType pointSrcY = this->GetPixelLocation(indexSrcY);
-      
-      double R = 6371000; // m
-      double deg2radCoef = CONST_PI/180;
 
-      double dX = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcX[1]*deg2radCoef) + 
-                  vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcX[1]*deg2radCoef) *
-                  vcl_cos((pointSrcX[0]-point[0])*deg2radCoef)) * R );
-      double dY = (vcl_acos(vcl_sin(point[1]*deg2radCoef)*vcl_sin(pointSrcY[1]*deg2radCoef) + 
-                  vcl_cos(point[1]*deg2radCoef)*vcl_cos(pointSrcY[1]*deg2radCoef) *
-                  vcl_cos((pointSrcY[0]-point[0])*deg2radCoef)) * R );
+      double R = 6371000; // m
+      double deg2radCoef = CONST_PI / 180;
+
+      double dX = (vcl_acos(vcl_sin(point[1] * deg2radCoef) * vcl_sin(pointSrcX[1] * deg2radCoef) +
+                            vcl_cos(point[1] * deg2radCoef) * vcl_cos(pointSrcX[1] * deg2radCoef) *
+                            vcl_cos((pointSrcX[0] - point[0]) * deg2radCoef)) * R);
+      double dY = (vcl_acos(vcl_sin(point[1] * deg2radCoef) * vcl_sin(pointSrcY[1] * deg2radCoef) +
+                            vcl_cos(point[1] * deg2radCoef) * vcl_cos(pointSrcY[1] * deg2radCoef) *
+                            vcl_cos((pointSrcY[0] - point[0]) * deg2radCoef)) * R);
       // Get now the x and y spacing
-      oss<< setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX / (vcl_fabs(static_cast<double>(indexSrcX[0] - index[0]))) << std::endl;
-      oss<< setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY / (vcl_fabs(static_cast<double>(indexSrcY[1] - index[1]))) << std::endl;
-      
-      oss<< setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: "<< point[1] << std::endl;
-      
-      if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss<< "(precise location)" << std::endl;
-      if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss<< "(estimated location)" << std::endl;
+      oss << setiosflags(ios::fixed) << setprecision(2) << "x spacing (in meter): " << dX /
+      (vcl_fabs(static_cast<double>(indexSrcX[0] - index[0]))) << std::endl;
+      oss << setiosflags(ios::fixed) << setprecision(2) << "y spacing (in meter): " << dY /
+      (vcl_fabs(static_cast<double>(indexSrcY[1] - index[1]))) << std::endl;
+
+      oss << setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;
+
+      if (m_Transform->GetTransformAccuracy() == Projection::PRECISE) oss << "(precise location)" << std::endl;
+      if (m_Transform->GetTransformAccuracy() == Projection::ESTIMATE) oss << "(estimated location)" << std::endl;
 
       // We do not want to refresh the location if we are pointing in the scroll view
       if (m_Image->GetBufferedRegion().IsInside(index))
-      {
-        if (m_CoordinateToName->SetLonLat(point))
         {
+        if (m_CoordinateToName->SetLonLat(point))
+          {
           m_CoordinateToName->Evaluate();
+          }
         }
-      }
 
       m_PlaceName = m_CoordinateToName->GetPlaceName();
       m_CountryName = m_CoordinateToName->GetCountryName();
 
       if (m_PlaceName != "") oss << otbGetTextMacro("Near") << " " << m_PlaceName << std::endl;
       if (m_CountryName != "") oss << " " << otbGetTextMacro("in") << " " << m_CountryName << std::endl;
-    }
+      }
     else
-    {
+      {
       oss << otbGetTextMacro("Location unknown") << std::endl;
+      }
     }
-  }
-  
+
   return oss.str();
 }
 
 template <class TImage, class TOutputImage>
-typename ImageLayer<TImage,TOutputImage>::PointType
-ImageLayer<TImage,TOutputImage>
-::GetPixelLocation(const IndexType & index)
+typename ImageLayer<TImage, TOutputImage>::PointType
+ImageLayer<TImage, TOutputImage>
+::GetPixelLocation(const IndexType& index)
 {
   PointType inputPoint;
   inputPoint[0] = index[0];
@@ -343,13 +347,12 @@ ImageLayer<TImage,TOutputImage>
   return m_Transform->TransformPoint(inputPoint);
 }
 
-
 template <class TImage, class TOutputImage>
 void
-ImageLayer<TImage,TOutputImage>
+ImageLayer<TImage, TOutputImage>
 ::InitTransform()
 {
-  const itk::MetaDataDictionary & inputDict = m_Image->GetMetaDataDictionary();
+  const itk::MetaDataDictionary& inputDict = m_Image->GetMetaDataDictionary();
   m_Transform->SetInputDictionary(inputDict);
   m_Transform->SetInputOrigin(m_Image->GetOrigin());
   m_Transform->SetInputSpacing(m_Image->GetSpacing());

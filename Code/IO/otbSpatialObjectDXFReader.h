@@ -33,13 +33,13 @@ namespace otb
  */
 template <class TSpatialObject>
 class ITK_EXPORT SpatialObjectDXFReader
-      : public SpatialObjectSource< TSpatialObject >
+  : public SpatialObjectSource<TSpatialObject>
 {
 public:
-  typedef SpatialObjectDXFReader Self;
+  typedef SpatialObjectDXFReader              Self;
   typedef SpatialObjectSource<TSpatialObject> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
@@ -48,7 +48,7 @@ public:
   itkTypeMacro(SpatialObjectDXFReader, SpatialObjectSource);
 
   /** Superclass Typedefs */
-  typedef TSpatialObject GroupSpatialObjectType;
+  typedef TSpatialObject                           GroupSpatialObjectType;
   typedef typename GroupSpatialObjectType::Pointer GroupSpatialObjectPointerType;
 
   /** Set the filename  */
@@ -75,8 +75,8 @@ protected:
   virtual void GenerateData();
 
 private:
-  SpatialObjectDXFReader(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpatialObjectDXFReader(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Test whether the given filename exist and it is readable,
       this is intended to be called before attempting to use
@@ -86,7 +86,7 @@ private:
   void TestFileExistanceAndReadability();
 
   std::string m_FileName;
-  std::string  m_LayerName;
+  std::string m_LayerName;
 };
 } // end namespace otb
 

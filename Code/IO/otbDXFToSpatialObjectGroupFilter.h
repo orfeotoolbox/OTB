@@ -30,7 +30,6 @@
 #include "itkLineSpatialObjectPoint.h"
 #include "otbArcSpatialObject.h"
 
-
 namespace otb
 {
 /** \class DXFToSpatialObjectGroupFilter
@@ -39,38 +38,37 @@ namespace otb
  */
 template <class TSpatialObject>
 class ITK_EXPORT DXFToSpatialObjectGroupFilter
-      : public DL_CreationAdapter, public SpatialObjectSource<TSpatialObject>
+  : public DL_CreationAdapter, public SpatialObjectSource<TSpatialObject>
 {
 public:
   /** Standard typedefs */
-  typedef DXFToSpatialObjectGroupFilter                              Self;
-  typedef SpatialObjectSource< TSpatialObject > Superclass;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef DXFToSpatialObjectGroupFilter       Self;
+  typedef SpatialObjectSource<TSpatialObject> Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SpatialObjectReader,SpatialObjectSource);
+  itkTypeMacro(SpatialObjectReader, SpatialObjectSource);
 
   /** Spatial objects typedefs */
-  typedef TSpatialObject                            GroupSpatialObjectType;
-  typedef typename GroupSpatialObjectType::Pointer  GroupPointer;
-  typedef itk::SpatialObjectPoint<TSpatialObject::ObjectDimension>       PointType;
-  typedef itk::LandmarkSpatialObject<TSpatialObject::ObjectDimension>    LandmarkType;
-  typedef typename LandmarkType::Pointer            LandmarkPointer;
-  typedef typename  LandmarkType::PointListType     LandmarkListType;
-  typedef LineSpatialObject<TSpatialObject::ObjectDimension>             LineType;
-  typedef typename LineType::Pointer                LinePointer;
-  typedef itk::LineSpatialObjectPoint<TSpatialObject::ObjectDimension>   LinePointType;
-  typedef typename LineType::PointListType          LineListType;
-  typedef otb::ArcSpatialObject<TSpatialObject::ObjectDimension>         ArcType;
-  typedef typename ArcType::Pointer                 ArcPointer;
-  typedef itk::EllipseSpatialObject<TSpatialObject::ObjectDimension>     EllipseType;
-  typedef typename EllipseType::Pointer             EllipsePointer;
-  typedef std::vector< LinePointType >              PointListType;
-
+  typedef TSpatialObject                                               GroupSpatialObjectType;
+  typedef typename GroupSpatialObjectType::Pointer                     GroupPointer;
+  typedef itk::SpatialObjectPoint<TSpatialObject::ObjectDimension>     PointType;
+  typedef itk::LandmarkSpatialObject<TSpatialObject::ObjectDimension>  LandmarkType;
+  typedef typename LandmarkType::Pointer                               LandmarkPointer;
+  typedef typename  LandmarkType::PointListType                        LandmarkListType;
+  typedef LineSpatialObject<TSpatialObject::ObjectDimension>           LineType;
+  typedef typename LineType::Pointer                                   LinePointer;
+  typedef itk::LineSpatialObjectPoint<TSpatialObject::ObjectDimension> LinePointType;
+  typedef typename LineType::PointListType                             LineListType;
+  typedef otb::ArcSpatialObject<TSpatialObject::ObjectDimension>       ArcType;
+  typedef typename ArcType::Pointer                                    ArcPointer;
+  typedef itk::EllipseSpatialObject<TSpatialObject::ObjectDimension>   EllipseType;
+  typedef typename EllipseType::Pointer                                EllipsePointer;
+  typedef std::vector<LinePointType>                                   PointListType;
 
   virtual void addLayer(const DL_LayerData& data);
   virtual void addPoint(const DL_PointData& data);
@@ -98,14 +96,14 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  DXFToSpatialObjectGroupFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-  int m_CurrentObjectType;
-  LineListType m_PointList;
+  DXFToSpatialObjectGroupFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
+  int           m_CurrentObjectType;
+  LineListType  m_PointList;
   LinePointType m_PremierPoint;
-  int m_PolylineClosed; //(=1 if the polyline is closed,else =0 );
-  const char* m_layer;
-  bool layerspecified;
+  int           m_PolylineClosed; //(=1 if the polyline is closed,else =0 );
+  const char*   m_layer;
+  bool          layerspecified;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
@@ -113,4 +111,3 @@ private:
 #endif
 
 #endif
-

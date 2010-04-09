@@ -43,16 +43,16 @@ class ITK_EXPORT PointSetSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetSource                 Self;
-  typedef itk::ProcessObject             Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef PointSetSource                Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PointSetSource,itk::ProcessObject);
+  itkTypeMacro(PointSetSource, itk::ProcessObject);
 
   /** Some convenient typedefs. */
   typedef itk::DataObject::Pointer                     DataObjectPointer;
@@ -132,15 +132,14 @@ protected:
   void GenerateInputRequestedRegion();
 
 private:
-  PointSetSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PointSetSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Used by streaming: The requested region of the output being processed
    * by the execute method. Set in the GenerateInputRequestedRegion method. */
   int m_GenerateDataRegion;
   int m_GenerateDataNumberOfRegions;
 };
-
 
 } // end namespace otb
 

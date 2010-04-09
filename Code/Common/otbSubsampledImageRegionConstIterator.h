@@ -37,13 +37,13 @@ namespace otb {
  * \ingroup ImageIterator
  * \sa WaveletFilterBank
  */
-template < class TImage >
+template <class TImage>
 class ITK_EXPORT SubsampledImageRegionConstIterator
-        : public itk::ImageRegionConstIterator< TImage >
+  : public itk::ImageRegionConstIterator<TImage>
 {
 public:
   /** Standard typedef. */
-  typedef SubsampledImageRegionConstIterator        Self;
+  typedef SubsampledImageRegionConstIterator    Self;
   typedef itk::ImageRegionConstIterator<TImage> Superclass;
 
   /** Run-time type information (and related methods). */
@@ -65,7 +65,7 @@ public:
   typedef typename Superclass::SizeType SizeType;
 
   /** Region typedef support. */
-  typedef typename Superclass::RegionType   RegionType;
+  typedef typename Superclass::RegionType RegionType;
 
   /** Image typedef support. While this was already typdef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc. */
@@ -76,22 +76,21 @@ public:
   //typedef typename Superclass::OffsetType OffsetType;
   typedef unsigned long OffsetType;
 
-
   /** PixelContainer typedef support. Used to refer to the container for
    * the pixel data. While this was already typdef'ed in the superclass
    * it needs to be redone here for this subclass to compile properly with gcc. */
-  typedef typename Superclass::PixelContainer         PixelContainer;
-  typedef typename Superclass::PixelContainerPointer  PixelContainerPointer;
-  
+  typedef typename Superclass::PixelContainer        PixelContainer;
+  typedef typename Superclass::PixelContainerPointer PixelContainerPointer;
+
   /** Internal Pixel Type */
-  typedef typename Superclass::InternalPixelType   InternalPixelType;
+  typedef typename Superclass::InternalPixelType InternalPixelType;
 
   /** External Pixel Type */
-  typedef typename Superclass::PixelType   PixelType;
+  typedef typename Superclass::PixelType PixelType;
 
   /**  Accessor type that convert data between internal and external
    *  representations. */
-  typedef typename Superclass::AccessorType     AccessorType;
+  typedef typename Superclass::AccessorType AccessorType;
 
   /** Index value used for pixel location */
   typedef typename Superclass::IndexValueType IndexValueType;
@@ -101,7 +100,7 @@ public:
 
   /** Constructor establishes an iterator to walk a particular image and a
    * particular region of that image. */
-  SubsampledImageRegionConstIterator ( const ImageType *ptr, const RegionType &region);
+  SubsampledImageRegionConstIterator (const ImageType * ptr, const RegionType &region);
 
   /** Constructor that can be used to cast from an ImageIterator to an
    * SubsampledImageRegionConstIterator. Many routines return an ImageIterator
@@ -109,7 +108,7 @@ public:
    * Rather than provide overloaded APIs that return different types of Iterators, itk
    * returns ImageIterators and uses constructors to cast from an
    * ImageIterator to a SubsampledImageRegionConstIterator. */
-  SubsampledImageRegionConstIterator( const itk::ImageIterator<TImage> &it );
+  SubsampledImageRegionConstIterator(const itk::ImageIterator<TImage> &it);
 
   /** Constructor that can be used to cast from an ImageConstIterator to an
    * SubsampledImageRegionConstIterator. Many routines return an ImageIterator
@@ -117,15 +116,15 @@ public:
    * Rather than provide overloaded APIs that return different types of Iterators, itk
    * returns ImageIterators and uses constructors to cast from an
    * ImageIterator to a SubsampledImageRegionConstIterator. */
-  SubsampledImageRegionConstIterator( const itk::ImageConstIterator<TImage> &it );
+  SubsampledImageRegionConstIterator(const itk::ImageConstIterator<TImage> &it);
 
   /** Set an isotropic subsampling factor */
-  void SetSubsampleFactor ( typename IndexType::IndexValueType factor );
+  void SetSubsampleFactor (typename IndexType::IndexValueType factor);
 
   /** Set / Get the subsample factor */
-  void SetSubsampleFactor ( const IndexType & factor );
+  void SetSubsampleFactor(const IndexType& factor);
 
-  const IndexType & GetSubsampleFactor () const
+  const IndexType& GetSubsampleFactor() const
   {
     return this->m_SubsampleFactor;
   }
@@ -146,9 +145,9 @@ public:
    */
   bool IsAtBegin(void) const
   {
-    return ( this->m_Offset <= m_SubSampledBeginOffset );
+    return (this->m_Offset <= m_SubSampledBeginOffset);
   }
- 
+
   /** Is the iterator at the end of the region?
    * "End" is defined as past the last candidate pixel
    * of the region (under the subsample point of view).
@@ -158,20 +157,19 @@ public:
    */
   bool IsAtEnd(void) const
   {
-    return ( this->m_Offset >= m_SubSampledEndOffset );
+    return (this->m_Offset >= m_SubSampledEndOffset);
   }
 
   /** Set the index.
    * It is moved to the next available (usable) index.
    * \sa GetIndex */
-  void SetIndex(const IndexType &ind);
+  void SetIndex(const IndexType& ind);
 
   /** Get the Index. */
   IndexType GetIndex() const
   {
     return Superclass::GetIndex();
   }
-
 
   /** Increment (prefix) the fastest moving dimension of the iterator's index.
    * This operator will constrain the iterator within the region (i.e. the
@@ -180,19 +178,19 @@ public:
    * tries to moves past the last pixel of the region.  Here, the iterator
    * will be set to be one pixel past the end of the region.
    * \sa operator++(int) */
-  Self & operator++()
+  Self & operator ++()
   {
     // On the contrary to itk::ImageRegionConstIterator, m_Offset to
     // not incremented before the test
-    if( this->m_Offset + m_SubsampleFactor[0] >= this->m_SpanEndOffset )
-    {
+    if (this->m_Offset + m_SubsampleFactor[0] >= this->m_SpanEndOffset)
+      {
       this->Increment();
-    }
+      }
     else
-    {
+      {
       // Now, the increment is performed
       this->m_Offset += m_SubsampleFactor[0];
-    }
+      }
     return *this;
   }
 
@@ -203,27 +201,27 @@ public:
    * tries to moves past the first pixel of the region.  Here, the iterator
    * will be set to be one pixel past the beginning of the region.
    * \sa operator--(int) */
-  Self & operator--()
+  Self & operator --()
   {
     // On the contrary to itk::ImageRegionConstIterator, m_Offset
     // is not decremented here (it may become negative!)
-    if ( this->m_Offset < this->m_SpanBeginOffset + m_SubsampleFactor[0] )
-    {
+    if (this->m_Offset < this->m_SpanBeginOffset + m_SubsampleFactor[0])
+      {
       this->Decrement();
-    }
+      }
     else
-    {
+      {
       // Now we can
       this->m_Offset -= m_SubsampleFactor[0];
-    }
+      }
     return *this;
   }
 
   /** This iterator give the possibility to Set/Get the current location if scanning.
    * No Bound checking is performed when setting the position.
    */
-  void SetOffset ( const OffsetType & offset );
-  const OffsetType & GetOffset() const
+  void SetOffset(const OffsetType& offset);
+  const OffsetType& GetOffset() const
   {
     return this->m_Offset;
   }
@@ -231,15 +229,15 @@ public:
   /** GenerateOutputInformation.
    * In order to help copy into a new Image, give the new region parameters
    */
-  RegionType GenerateOutputInformation () const;
+  RegionType GenerateOutputInformation() const;
 
 protected:
-  IndexType m_SubsampleFactor;
+  IndexType     m_SubsampleFactor;
   unsigned long m_SubSampledBeginOffset;
   //unsigned long m_SubSampledReverseEndOffset;
   unsigned long m_SubSampledEndOffset;
-  IndexType m_FirstUsableIndex;
-  IndexType m_LastUsableIndex;
+  IndexType     m_FirstUsableIndex;
+  IndexType     m_LastUsableIndex;
 
 private:
   void Increment(); // jump in a direction other than the fastest moving
@@ -253,4 +251,3 @@ private:
 #endif
 
 #endif
-

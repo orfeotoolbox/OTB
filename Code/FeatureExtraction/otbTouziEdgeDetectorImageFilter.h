@@ -22,9 +22,8 @@
 #include "otbImage.h"
 #include "itkNumericTraits.h"
 
-#define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))
-#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))
-
+#define MINI(_A, _B) ((_A) < (_B) ? (_A) : (_B))
+#define MAXI(_A, _B) ((_A) > (_B) ? (_A) : (_B))
 
 namespace otb
 {
@@ -56,23 +55,24 @@ namespace otb
  *
  */
 
-template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage >
-class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage>
+class ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
+                                                                                              TOutputImageDirection>
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef TouziEdgeDetectorImageFilter Self;
-  typedef ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef TouziEdgeDetectorImageFilter                                                            Self;
+  typedef ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection> Superclass;
+  typedef itk::SmartPointer<Self>                                                                 Pointer;
+  typedef itk::SmartPointer<const Self>                                                           ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -81,30 +81,29 @@ public:
   itkTypeMacro(TouziEdgeDetectorImageFilter, ImageToModulusAndDirectionImageFilter);
 
   /** typedef to simplify variables definition and declaration. */
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::OutputImageType OutputImageType;
+  typedef typename Superclass::InputImageType           InputImageType;
+  typedef typename Superclass::OutputImageType          OutputImageType;
   typedef typename Superclass::OutputImageDirectionType OutputImageDirectionType;
 
-  typedef typename InputImageType::SizeType SizeType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::SizeType            SizeType;
+  typedef typename OutputImageType::RegionType         OutputImageRegionType;
+  typedef typename OutputImageType::PixelType          OutputPixelType;
   typedef typename OutputImageDirectionType::PixelType OutputPixelDirectionType;
-
 
   /** Set/Get radius methods */
   itkSetMacro(Radius, SizeType);
   itkGetConstReferenceMacro(Radius, SizeType);
 
-
   /** To be allowed to use the pipeline method TouziEdgeDetectorImageFilter needs
    * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError);
 
 protected:
   TouziEdgeDetectorImageFilter();
-  virtual ~TouziEdgeDetectorImageFilter() {};
+  virtual ~TouziEdgeDetectorImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void BeforeThreadedGenerateData();
@@ -118,11 +117,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  TouziEdgeDetectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  TouziEdgeDetectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius declaration */
   SizeType m_Radius;
@@ -134,6 +133,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbTouziEdgeDetectorImageFilter.txx"
 #endif
-
 
 #endif

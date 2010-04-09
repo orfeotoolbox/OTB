@@ -63,57 +63,54 @@ namespace otb
 
 template <class TInputVectorData, class TOutputVectorData>
 class ITK_EXPORT VectorDataProjectionFilter :
-      public otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>
+  public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 
 public:
   /** Standard class typedefs. */
-  typedef VectorDataProjectionFilter  Self;
-  typedef otb::VectorDataToVectorDataFilter<TInputVectorData,TOutputVectorData>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef VectorDataProjectionFilter                                             Self;
+  typedef otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData> Superclass;
+  typedef itk::SmartPointer<Self>                                                Pointer;
+  typedef itk::SmartPointer<const Self>                                          ConstPointer;
 
-  typedef TInputVectorData InputVectorDataType;
-  typedef TOutputVectorData OutputVectorDataType;
+  typedef TInputVectorData                        InputVectorDataType;
+  typedef TOutputVectorData                       OutputVectorDataType;
   typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
-  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
+  typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
   /** Some typedefs. */
-  typedef itk::Transform<double, 2, 2> GenericTransformType;
+  typedef itk::Transform<double, 2, 2>           GenericTransformType;
   typedef typename GenericTransformType::Pointer GenericTransformPointerType;
 //   typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
-  typedef otb::GenericRSTransform<double, 2, 2> InternalTransformType;
+  typedef otb::GenericRSTransform<double, 2, 2>   InternalTransformType;
   typedef typename InternalTransformType::Pointer InternalTransformPointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
-  typedef itk::Point<double, 2> OriginType;
+  typedef itk::Point<double, 2>  OriginType;
 
-  typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType>       InputTreeIteratorType;
-  typedef typename InputVectorDataType::DataNodePointerType InputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataNodeType OutputDataNodeType;
-  typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
+  typedef itk::PreOrderTreeIterator<typename InputVectorDataType::DataTreeType> InputTreeIteratorType;
+  typedef typename InputVectorDataType::DataNodePointerType                     InputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataNodeType                           OutputDataNodeType;
+  typedef typename OutputVectorDataType::DataNodePointerType                    OutputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataTreePointerType                    OutputDataTreePointerType;
 
-
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InputInternalTreeNodeType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType   OutputInternalTreeNodeType;
-  typedef typename InputInternalTreeNodeType::ChildrenListType        InputChildrenListType;
-
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename InputInternalTreeNodeType::ChildrenListType      InputChildrenListType;
 
   typedef typename OutputDataNodeType::PointType PointType;
 
-  typedef typename OutputDataNodeType::LineType LineType;
+  typedef typename OutputDataNodeType::LineType             LineType;
   typedef typename OutputDataNodeType::LineConstPointerType LineConstPointerType;
-  typedef typename OutputDataNodeType::LinePointerType LinePointerType;
+  typedef typename OutputDataNodeType::LinePointerType      LinePointerType;
 
-  typedef typename OutputDataNodeType::PolygonType PolygonType;
+  typedef typename OutputDataNodeType::PolygonType             PolygonType;
   typedef typename OutputDataNodeType::PolygonConstPointerType PolygonConstPointerType;
-  typedef typename OutputDataNodeType::PolygonPointerType PolygonPointerType;
+  typedef typename OutputDataNodeType::PolygonPointerType      PolygonPointerType;
 
-  typedef typename OutputDataNodeType::PolygonListType PolygonListType;
+  typedef typename OutputDataNodeType::PolygonListType             PolygonListType;
   typedef typename OutputDataNodeType::PolygonListConstPointerType PolygonListConstPointerType;
-  typedef typename OutputDataNodeType::PolygonListPointerType PolygonListPointerType;
-
+  typedef typename OutputDataNodeType::PolygonListPointerType      PolygonListPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -134,15 +131,14 @@ public:
   itkSetMacro(AverageElevation, double);
   itkGetMacro(AverageElevation, double);
 
-
-  itkGetMacro(InputKeywordList,ImageKeywordlist);
+  itkGetMacro(InputKeywordList, ImageKeywordlist);
   void SetInputKeywordList(ImageKeywordlist kwl)
   {
     this->m_InputKeywordList = kwl;
     this->Modified();
   }
 
-  itkGetMacro(OutputKeywordList,ImageKeywordlist);
+  itkGetMacro(OutputKeywordList, ImageKeywordlist);
   void SetOutputKeywordList(ImageKeywordlist kwl)
   {
     this->m_OutputKeywordList = kwl;
@@ -152,42 +148,38 @@ public:
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
   itkSetMacro(InputOrigin, OriginType);
-  virtual void SetInputOrigin( const double origin[2] );
-  virtual void SetInputOrigin( const float origin[2] );
+  virtual void SetInputOrigin(const double origin[2]);
+  virtual void SetInputOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(InputOrigin, OriginType);
 
-
   /** Set the spacing (size of a pixel) of the vector data.
    * \sa GetSpacing() */
-  virtual void SetInputSpacing (const SpacingType & spacing);
-  virtual void SetInputSpacing (const double spacing[2]);
-  virtual void SetInputSpacing (const float spacing[2]);
+  virtual void SetInputSpacing(const SpacingType& spacing);
+  virtual void SetInputSpacing(const double spacing[2]);
+  virtual void SetInputSpacing(const float spacing[2]);
 
   itkGetConstReferenceMacro(InputSpacing, SpacingType);
-
 
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
   itkSetMacro(OutputOrigin, OriginType);
-  virtual void SetOutputOrigin( const double origin[2] );
-  virtual void SetOutputOrigin( const float origin[2] );
+  virtual void SetOutputOrigin(const double origin[2]);
+  virtual void SetOutputOrigin(const float origin[2]);
 
   itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
-
   /** Set the spacing (size of a pixel) of the vector data.
    * \sa GetSpacing() */
-  virtual void SetOutputSpacing (const SpacingType & spacing);
-  virtual void SetOutputSpacing (const double spacing[2]);
-  virtual void SetOutputSpacing (const float spacing[2]);
+  virtual void SetOutputSpacing(const SpacingType& spacing);
+  virtual void SetOutputSpacing(const double spacing[2]);
+  virtual void SetOutputSpacing(const float spacing[2]);
 
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
-
 protected:
   VectorDataProjectionFilter();
-  virtual ~VectorDataProjectionFilter() {};
+  virtual ~VectorDataProjectionFilter() {}
 
   PointType ReprojectPoint(PointType point) const;
   LinePointerType ReprojectLine(LinePointerType line) const;
@@ -202,24 +194,24 @@ protected:
   void ProcessNode(InputInternalTreeNodeType * source, OutputInternalTreeNodeType * destination);
 
 private:
-  VectorDataProjectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataProjectionFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   InternalTransformPointerType m_Transform;
-  GenericTransformPointerType m_InputTransform;
-  GenericTransformPointerType m_OutputTransform;
-  std::string m_InputProjectionRef;
-  std::string m_OutputProjectionRef;
-  ImageKeywordlist m_InputKeywordList;
-  ImageKeywordlist m_OutputKeywordList;
+  GenericTransformPointerType  m_InputTransform;
+  GenericTransformPointerType  m_OutputTransform;
+  std::string                  m_InputProjectionRef;
+  std::string                  m_OutputProjectionRef;
+  ImageKeywordlist             m_InputKeywordList;
+  ImageKeywordlist             m_OutputKeywordList;
 
   std::string m_DEMDirectory;
-  double m_AverageElevation;
+  double      m_AverageElevation;
 
-  SpacingType         m_InputSpacing;
-  OriginType          m_InputOrigin;
-  SpacingType         m_OutputSpacing;
-  OriginType          m_OutputOrigin;
+  SpacingType m_InputSpacing;
+  OriginType  m_InputOrigin;
+  SpacingType m_OutputSpacing;
+  OriginType  m_OutputOrigin;
 
 };
 

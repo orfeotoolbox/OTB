@@ -45,7 +45,7 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ChangeScaledExtractRegionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(ChangeScaledExtractRegionActionHandler, ImageWidgetActionHandler);
 
   /** Model typedefs */
   typedef TModel                         ModelType;
@@ -53,9 +53,9 @@ public:
   typedef typename ModelType::RegionType RegionType;
 
   /** View typedefs */
-  typedef TView                          ViewType;
-  typedef typename ViewType::Pointer     ViewPointerType;
-  typedef typename ViewType::OffsetType  OffsetType;
+  typedef TView                         ViewType;
+  typedef typename ViewType::Pointer    ViewPointerType;
+  typedef typename ViewType::OffsetType OffsetType;
 
   /** Handle widget event
    * \param widgetId The id of the moved widget
@@ -64,12 +64,14 @@ public:
    */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if( m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive() )
+    if (m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive())
       {
-      if(widgetId == m_View->GetFullWidget()->GetIdentifier()
-         && event == FL_PUSH && Fl::event_button() == m_MouseButton)
+      if (widgetId == m_View->GetFullWidget()->GetIdentifier()
+          && event == FL_PUSH && Fl::event_button() == m_MouseButton)
         {
-        otbMsgDevMacro(<<"ChangeScaledExtractRegionActionHandler::HandleWidgetEvent(): handling ("<<widgetId<<", "<<event<<")");
+        otbMsgDevMacro(
+          << "ChangeScaledExtractRegionActionHandler::HandleWidgetEvent(): handling (" << widgetId << ", " << event <<
+          ")");
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
         screenPoint = m_View->GetFullWidget()->GetMousePosition();
@@ -79,8 +81,8 @@ public:
 
         // Transform to index
         typename ViewType::IndexType index;
-        index[0]=static_cast<int>(imagePoint[0]);
-        index[1]=static_cast<int>(imagePoint[1]);
+        index[0] = static_cast<int>(imagePoint[0]);
+        index[1] = static_cast<int>(imagePoint[1]);
 
         //Add an offset if any
         index += m_Offset;
@@ -96,19 +98,19 @@ public:
   }
 
   /** Set/Get the pointer to the view */
-  itkSetObjectMacro(View,ViewType);
-  itkGetObjectMacro(View,ViewType);
+  itkSetObjectMacro(View, ViewType);
+  itkGetObjectMacro(View, ViewType);
 
   /** Set/Get the pointer to the model */
-  itkSetObjectMacro(Model,ModelType);
-  itkGetObjectMacro(Model,ModelType);
+  itkSetObjectMacro(Model, ModelType);
+  itkGetObjectMacro(Model, ModelType);
 
   /** Set/Get Offset */
-  itkSetMacro(Offset,OffsetType);
-  itkGetMacro(Offset,OffsetType);
+  itkSetMacro(Offset, OffsetType);
+  itkGetMacro(Offset, OffsetType);
 
   /** Set the mouse button used */
-  itkSetClampMacro(MouseButton,int,1,3);
+  itkSetClampMacro(MouseButton, int, 1, 3);
   itkGetMacro(MouseButton, int);
 
 protected:
@@ -123,15 +125,15 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   ChangeScaledExtractRegionActionHandler(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   //Offset
-  OffsetType      m_Offset;
+  OffsetType m_Offset;
 
   // Pointer to the view
   ViewPointerType m_View;
@@ -145,5 +147,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

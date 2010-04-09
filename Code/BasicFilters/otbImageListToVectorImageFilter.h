@@ -35,29 +35,29 @@ namespace otb
  */
 template <class TImageList, class TVectorImage>
 class ITK_EXPORT ImageListToVectorImageFilter
-      : public ImageListToImageFilter<typename TImageList::ImageType, TVectorImage>
+  : public ImageListToImageFilter<typename TImageList::ImageType, TVectorImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageListToVectorImageFilter      Self;
+  typedef ImageListToVectorImageFilter Self;
   typedef ImageListToImageFilter<typename TImageList::ImageType,
-  TVectorImage>        Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+                                 TVectorImage>        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(ImageListToVectorImageFilter,ImageToImageListFilter);
+  itkTypeMacro(ImageListToVectorImageFilter, ImageToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TVectorImage OutputVectorImageType;
+  typedef TVectorImage                            OutputVectorImageType;
   typedef typename OutputVectorImageType::Pointer OutputVectorImagePointerType;
-  typedef TImageList InputImageListType;
-  typedef typename InputImageListType::Pointer InputImageListPointerType;
-  typedef typename InputImageListType::ImageType InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef TImageList                              InputImageListType;
+  typedef typename InputImageListType::Pointer    InputImageListPointerType;
+  typedef typename InputImageListType::ImageType  InputImageType;
+  typedef typename InputImageType::Pointer        InputImagePointerType;
 
 protected:
 
@@ -79,15 +79,15 @@ protected:
   /** Constructor */
   ImageListToVectorImageFilter() {};
   /** Destructor */
-  virtual ~ImageListToVectorImageFilter() {};
+  virtual ~ImageListToVectorImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageListToVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageListToVectorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageListToVectorImageFilter.txx"
 #endif

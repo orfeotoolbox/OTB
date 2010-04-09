@@ -31,62 +31,62 @@ namespace otb
    *    \brief Manage OTB ConfigurationFile file
 */
 
-  class ConfigurationFile
+class ConfigurationFile
   : public itk::Object
+{
+public:
+  /** Standard class typedef */
+
+  typedef ConfigurationFile             Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Standard macro */
+  itkTypeMacro(ConfigurationFile, Object);
+
+  /** Get the unique instanc1e of the model */
+  static Pointer GetInstance();
+
+  ConfigFile * GetOTBConfig()
   {
-    public:
-      /** Standard class typedef */
+    return m_OTBConfig;
+  }
 
-      typedef ConfigurationFile Self;
-      typedef itk::Object Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Get parameter*/
+  template<typename T> T GetParameter(const std::string& key) const
+  {
 
-
-      /** Standard macro */
-      itkTypeMacro(ConfigurationFile,Object);
-      
-
-      /** Get the unique instanc1e of the model */
-      static Pointer GetInstance();
-
-      ConfigFile * GetOTBConfig()
+    if (m_OTBConfig == NULL)
       {
-        return m_OTBConfig;
-      };
-      
-      /** Get parameter*/
-      template<typename T> T GetParameter(const std::string & key) const {
-       
-       if(m_OTBConfig == NULL)
-         {
-         itkExceptionMacro(<<"Configuration file not found.");
-         }
-        
-       try
-        {
-          return m_OTBConfig->read<T>( key );
-        }
-        catch( ConfigFile::key_not_found& e ) {
-          itkExceptionMacro(<< "Error - Key '" << e.key << "' not found.");
-        }
-        
-      };
+      itkExceptionMacro(<< "Configuration file not found.");
+      }
 
-    protected:
-      /** This is protected for the singleton. Use GetInstance() instead. */
-      itkNewMacro(Self);
-      /** Constructor */
-      ConfigurationFile();
-      
-      /** Destructor */
-      ~ConfigurationFile();
-      /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const;
-    private:
-      /** The instance singleton */
-      static Pointer Instance;
-      ConfigFile * m_OTBConfig;
+    try
+      {
+      return m_OTBConfig->read<T>(key);
+      }
+    catch (ConfigFile::key_not_found& e)
+      {
+      itkExceptionMacro(<< "Error - Key '" << e.key << "' not found.");
+      }
+
+  }
+
+protected:
+  /** This is protected for the singleton. Use GetInstance() instead. */
+  itkNewMacro(Self);
+  /** Constructor */
+  ConfigurationFile();
+
+  /** Destructor */
+  ~ConfigurationFile();
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+private:
+  /** The instance singleton */
+  static Pointer Instance;
+  ConfigFile *   m_OTBConfig;
 };
-}// end namespace
+} // end namespace
 #endif

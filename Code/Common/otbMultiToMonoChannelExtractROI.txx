@@ -27,9 +27,9 @@ namespace otb
  *
  */
 template<class TInputPixelType, class TOutputPixelType>
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
-::MultiToMonoChannelExtractROI() :    ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >(),
-    m_Channel(1)
+MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
+::MultiToMonoChannelExtractROI() :    ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >(),
+  m_Channel(1)
 {
 
 }
@@ -39,12 +39,11 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
  */
 template<class TInputPixelType, class TOutputPixelType>
 void
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
+MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /**
  * ExtractImageFilter can produce an image which is a different resolution
@@ -57,34 +56,33 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
  */
 template<class TInputPixelType, class TOutputPixelType>
 void
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
+MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::GenerateOutputInformation()
 {
-  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
+  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
   // Bounds checking for the channel to process
-  if ( (m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength() ) )
-  {
+  if ((m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength()))
+    {
     itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
-                      << "The selected channel must in the range [1;"<<inputPtr->GetVectorLength()<<"] "
-                      << typeid(itk::ImageBase<InputImageDimension>*).name() );
-  }
+                      << "The selected channel must in the range [1;" << inputPtr->GetVectorLength() << "] "
+                      << typeid(itk::ImageBase<InputImageDimension>*).name());
+    }
 
   // Calling the superclass method
   Superclass::GenerateOutputInformation();
 }
 
-
 template<class TInputPixelType, class TOutputPixelType>
 void
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
+MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-  itkDebugMacro(<<"Actually executing");
+  itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
-  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -94,29 +92,28 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators.
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIterator;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
   // Parcours des canaux a traiter
-  unsigned int channelIn(m_Channel-1);
+  unsigned int channelIn(m_Channel - 1);
 
-  InputImagePixelType  pixelInput;
-  while ( !outIt.IsAtEnd() )
-  {
+  InputImagePixelType pixelInput;
+  while (!outIt.IsAtEnd())
+    {
     OutputImagePixelType pixelOutput;
     pixelInput = inIt.Get();
     pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
-    outIt.Set( pixelOutput );
+    outIt.Set(pixelOutput);
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-  }
+    }
 
 }
-
 
 } // end namespace otb
 

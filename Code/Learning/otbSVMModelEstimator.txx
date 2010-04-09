@@ -25,13 +25,12 @@
 #include "otbMacro.h"
 #include "itkCommand.h"
 
-
 namespace otb
 {
 template<class InputPixelType, class LabelPixelType>
 SVMModelEstimator<InputPixelType, LabelPixelType>
-::SVMModelEstimator(void):
-    m_NumberOfClasses( 0 )
+::SVMModelEstimator(void) :
+  m_NumberOfClasses(0)
 {
   // Cross validation accuracy measures
   m_InitialCrossValidationAccuracy = 0.;
@@ -43,15 +42,15 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   this->SetNumberOfInputs(0);
   this->SetNumberOfOutputs(1);
-  this->SetNthOutput(0,ModelType::New());
+  this->SetNthOutput(0, ModelType::New());
 }
 
 template<class InputPixelType, class LabelPixelType>
-typename SVMModelEstimator<InputPixelType,LabelPixelType>::ModelType *
+typename SVMModelEstimator<InputPixelType, LabelPixelType>::ModelType *
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GetModel()
 {
-  if(this->GetNumberOfOutputs()<1)
+  if (this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
@@ -59,11 +58,11 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 }
 
 template<class InputPixelType, class LabelPixelType>
-const typename SVMModelEstimator<InputPixelType,LabelPixelType>::ModelType *
+const typename SVMModelEstimator<InputPixelType, LabelPixelType>::ModelType *
 SVMModelEstimator<InputPixelType, LabelPixelType>
 ::GetModel() const
 {
-  if(this->GetNumberOfOutputs()<1)
+  if (this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
@@ -81,12 +80,11 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 template<class InputPixelType, class LabelPixelType>
 void
 SVMModelEstimator<InputPixelType, LabelPixelType>
-::PrintSelf( std::ostream& os, itk::Indent indent ) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
-}// end PrintSelf
-
+} // end PrintSelf
 
 /**
  * Generate data (start the model building process)
@@ -94,7 +92,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 template<class InputPixelType, class LabelPixelType>
 void
 SVMModelEstimator<InputPixelType, LabelPixelType>
-::GenerateData( )
+::GenerateData()
 {
   // Get the pointer to the output model
   ModelType * outputPtr = this->GetModel();
@@ -104,15 +102,14 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   // Prepare data
   this->PrepareData();
- 
+
   // Compute accuracy and eventually optimize parameters
   this->OptimizeParameters();
 
   // Train the model
   outputPtr->Train();
 
-}// end Generate data
-
+} // end Generate data
 
 template<class InputPixelType, class LabelPixelType>
 void
@@ -128,52 +125,52 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   typename CrossValidationFunctionType::ParametersType initialParameters, coarseBestParameters, fineBestParameters;
 
-  switch(this->GetModel()->GetKernelType())
-      {
-      case LINEAR:
-       // C
-       initialParameters.SetSize(1);
-       initialParameters[0] = this->GetModel()->GetC();
-       break;
+  switch (this->GetModel()->GetKernelType())
+    {
+  case LINEAR:
+    // C
+    initialParameters.SetSize(1);
+    initialParameters[0] = this->GetModel()->GetC();
+    break;
 
-      case POLY:
-       // C, gamma and coef0
-       initialParameters.SetSize(3);
-       initialParameters[0] = this->GetModel()->GetC();
-       initialParameters[1] = this->GetModel()->GetKernelGamma();
-       initialParameters[2] = this->GetModel()->GetKernelCoef0();
-       break;
+  case POLY:
+    // C, gamma and coef0
+    initialParameters.SetSize(3);
+    initialParameters[0] = this->GetModel()->GetC();
+    initialParameters[1] = this->GetModel()->GetKernelGamma();
+    initialParameters[2] = this->GetModel()->GetKernelCoef0();
+    break;
 
-      case RBF:
-       // C and gamma
-       initialParameters.SetSize(2);
-       initialParameters[0] = this->GetModel()->GetC();
-       initialParameters[1] = this->GetModel()->GetKernelGamma();
-       break;
+  case RBF:
+    // C and gamma
+    initialParameters.SetSize(2);
+    initialParameters[0] = this->GetModel()->GetC();
+    initialParameters[1] = this->GetModel()->GetKernelGamma();
+    break;
 
-      case SIGMOID:
-       // C, gamma and coef0
-       initialParameters.SetSize(3);
-       initialParameters[0] = this->GetModel()->GetC();
-       initialParameters[1] = this->GetModel()->GetKernelGamma();
-       initialParameters[2] = this->GetModel()->GetKernelCoef0();
-       break;
+  case SIGMOID:
+    // C, gamma and coef0
+    initialParameters.SetSize(3);
+    initialParameters[0] = this->GetModel()->GetC();
+    initialParameters[1] = this->GetModel()->GetKernelGamma();
+    initialParameters[2] = this->GetModel()->GetKernelCoef0();
+    break;
 
-      default:
-       // Only C
-       initialParameters.SetSize(1);
-       initialParameters[0] = this->GetModel()->GetC();
-       break;
-      }
+  default:
+    // Only C
+    initialParameters.SetSize(1);
+    initialParameters[0] = this->GetModel()->GetC();
+    break;
+    }
 
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
   m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
 
-  otbMsgDebugMacro(<<"Initial accuracy : "<<m_InitialCrossValidationAccuracy);
+  otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy);
 
-  if(m_ParametersOptimization)
+  if (m_ParametersOptimization)
     {
-    otbMsgDebugMacro(<<"Model parameters optimization");
+    otbMsgDebugMacro(<< "Model parameters optimization");
 
     typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType coarseNbSteps(initialParameters.Size());
@@ -186,8 +183,12 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
     coarseBestParameters = coarseOptimizer->GetMaximumMetricValuePosition();
 
-    otbMsgDevMacro(<<"Coarse minimum accuracy: "<< coarseOptimizer->GetMinimumMetricValue() <<" "<< coarseOptimizer->GetMinimumMetricValuePosition());
-    otbMsgDevMacro(<<"Coarse maximum accuracy: "<< coarseOptimizer->GetMaximumMetricValue() <<" "<< coarseOptimizer->GetMaximumMetricValuePosition());
+    otbMsgDevMacro(
+      << "Coarse minimum accuracy: " << coarseOptimizer->GetMinimumMetricValue() << " " <<
+      coarseOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDevMacro(
+      << "Coarse maximum accuracy: " << coarseOptimizer->GetMaximumMetricValue() << " " <<
+      coarseOptimizer->GetMaximumMetricValuePosition());
 
     typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
@@ -201,48 +202,51 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     fineOptimizer->SetInitialPosition(coarseBestParameters);
     fineOptimizer->StartOptimization();
 
-
-    otbMsgDevMacro(<<"Fine minimum accuracy: "<< fineOptimizer->GetMinimumMetricValue() << " " << fineOptimizer->GetMinimumMetricValuePosition());
-    otbMsgDevMacro(<<"Fine maximum accuracy: "<< fineOptimizer->GetMaximumMetricValue() << " " << fineOptimizer->GetMaximumMetricValuePosition());
+    otbMsgDevMacro(
+      << "Fine minimum accuracy: " << fineOptimizer->GetMinimumMetricValue() << " " <<
+      fineOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDevMacro(
+      << "Fine maximum accuracy: " << fineOptimizer->GetMaximumMetricValue() << " " <<
+      fineOptimizer->GetMaximumMetricValuePosition());
 
     fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
 
     m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
 
-    switch(this->GetModel()->GetKernelType())
+    switch (this->GetModel()->GetKernelType())
       {
-      case LINEAR:
-       // C
-       this->GetModel()->SetC(fineBestParameters[0]);
-       break;
+    case LINEAR:
+      // C
+      this->GetModel()->SetC(fineBestParameters[0]);
+      break;
 
-      case POLY:
-       // C, gamma and coef0
-       this->GetModel()->SetC(fineBestParameters[0]);
-       this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-       this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
-       break;
+    case POLY:
+      // C, gamma and coef0
+      this->GetModel()->SetC(fineBestParameters[0]);
+      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+      this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
+      break;
 
-      case RBF:
-       // C and gamma
-       this->GetModel()->SetC(fineBestParameters[0]);
-       this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-       break;
+    case RBF:
+      // C and gamma
+      this->GetModel()->SetC(fineBestParameters[0]);
+      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+      break;
 
-      case SIGMOID:
-       // C, gamma and coef0
-       this->GetModel()->SetC(fineBestParameters[0]);
-       this->GetModel()->SetKernelGamma(fineBestParameters[1]);
-       this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
-       break;
+    case SIGMOID:
+      // C, gamma and coef0
+      this->GetModel()->SetC(fineBestParameters[0]);
+      this->GetModel()->SetKernelGamma(fineBestParameters[1]);
+      this->GetModel()->SetKernelCoef0(fineBestParameters[2]);
+      break;
 
-      default:
-       // Only C
-       this->GetModel()->SetC(fineBestParameters[0]);
-       break;
+    default:
+      // Only C
+      this->GetModel()->SetC(fineBestParameters[0]);
+      break;
       }
     }
 }
 
-}//End namespace OTB
+} //End namespace OTB
 #endif

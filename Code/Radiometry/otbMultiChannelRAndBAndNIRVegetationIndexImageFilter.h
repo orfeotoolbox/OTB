@@ -35,12 +35,12 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-          class TFunction = Functor::ARVI< typename TInputImage::InternalPixelType,
-                                           typename TInputImage::InternalPixelType,
-                                           typename TInputImage::InternalPixelType,
-                                           typename TOutputImage::PixelType>  >
+          class TFunction = Functor::ARVI<typename TInputImage::InternalPixelType,
+                                          typename TInputImage::InternalPixelType,
+                                          typename TInputImage::InternalPixelType,
+                                          typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelRAndBAndNIRVegetationIndexImageFilter
-  : public MultiChannelRAndBAndNIRIndexImageFilter<TInputImage,TOutputImage,TFunction>
+  : public MultiChannelRAndBAndNIRIndexImageFilter<TInputImage, TOutputImage, TFunction>
 {
 };
 

@@ -37,24 +37,32 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PanTexTextureImageFilter :
-public UnaryFunctorNeighborhoodWithOffsetImageFilter< TInputImage, TOutputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME TInputImage::InternalPixelType, ITK_TYPENAME TOutputImage::InternalPixelType> >
+  public UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage, TOutputImage,
+                                                       ITK_TYPENAME Functor::PanTexTextureFunctor<ITK_TYPENAME
+                                                                                                  TInputImage::
+                                                                                                  InternalPixelType,
+                                                                                                  ITK_TYPENAME
+                                                                                                  TOutputImage::
+                                                                                                  InternalPixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef PanTexTextureImageFilter                      Self;
+  typedef PanTexTextureImageFilter Self;
   typedef UnaryFunctorNeighborhoodWithOffsetImageFilter<TInputImage,
                                                         TOutputImage,
-                                                        typename Functor::PanTexTextureFunctor<typename TInputImage::InternalPixelType,
-                                                                                               typename TOutputImage::InternalPixelType>  > Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+                                                        typename Functor::PanTexTextureFunctor<typename TInputImage::
+                                                                                               InternalPixelType,
+                                                                                               typename TOutputImage::
+                                                                                               InternalPixelType> >
+  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PanTexTextureImageFilter,UnaryFunctorNeighborhoodWithOffsetImageFilter);
-
+  itkTypeMacro(PanTexTextureImageFilter, UnaryFunctorNeighborhoodWithOffsetImageFilter);
 
   /** Some convenient typedefs. */
   typedef TInputImage                                             InputImageType;
@@ -62,23 +70,22 @@ public:
   typedef typename itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
   typedef typename OutputImageType::PixelType                     OutputPixelType;
 
-  typedef typename InputImageType::RegionType                     InputImageRegionType;
-  typedef typename InputImageType::PixelType                      InputImagePixelType;
-  typedef typename InputImageType::SizeType                       InputImageSizeType;
-  typedef typename InputImageType::OffsetType                     InputImageOffsetType;
-  typedef typename OutputImageType::Pointer                       OutputImagePointer;
-  typedef typename OutputImageType::RegionType                    OutputImageRegionType;
-  typedef typename OutputImageType::PixelType                     OutputImagePixelType;
-  typedef typename Superclass::RadiusType                         RadiusType;
-  typedef typename Superclass::InputImageOffsetType               OffsetType;
+  typedef typename InputImageType::RegionType       InputImageRegionType;
+  typedef typename InputImageType::PixelType        InputImagePixelType;
+  typedef typename InputImageType::SizeType         InputImageSizeType;
+  typedef typename InputImageType::OffsetType       InputImageOffsetType;
+  typedef typename OutputImageType::Pointer         OutputImagePointer;
+  typedef typename OutputImageType::RegionType      OutputImageRegionType;
+  typedef typename OutputImageType::PixelType       OutputImagePixelType;
+  typedef typename Superclass::RadiusType           RadiusType;
+  typedef typename Superclass::InputImageOffsetType OffsetType;
 
   typedef itk::ProcessObject ProcessObjectType;
-
 
 protected:
 
   PanTexTextureImageFilter();
-  virtual ~PanTexTextureImageFilter() {};
+  virtual ~PanTexTextureImageFilter() {}
 
   /** UnaryFunctorNeighborhoodWithOffsetImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -90,19 +97,18 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
-
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
 private:
 
-  PanTexTextureImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PanTexTextureImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   //Offset is setted to [2,2] in the publication
   virtual void SetOffset(OffsetType off)
-    {
-      Superclass::SetOffset(off);
-    };
+  {
+    Superclass::SetOffset(off);
+  }
 };
 
 } // namespace otb
@@ -110,6 +116,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPanTexTextureImageFilter.txx"
 #endif
-
 
 #endif

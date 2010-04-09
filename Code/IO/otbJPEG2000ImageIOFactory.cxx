@@ -21,7 +21,6 @@
 #include "otbJPEG2000ImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ JPEG2000ImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

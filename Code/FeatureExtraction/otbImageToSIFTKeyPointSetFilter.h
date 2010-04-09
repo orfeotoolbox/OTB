@@ -44,14 +44,14 @@ namespace Functor
 /** \class MagnitudeFunctor
  *  \brief This functor computes the magnitude of a covariant vector.
  */
-template <class TInputPixel,class TOutputPixel>
+template <class TInputPixel, class TOutputPixel>
 class MagnitudeFunctor
 {
 public:
 
-  inline TOutputPixel operator()(const TInputPixel& input)
+  inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    return vcl_sqrt(input[0]*input[0]+input[1]*input[1]);
+    return vcl_sqrt(input[0] * input[0] + input[1] * input[1]);
   }
 };
 
@@ -59,23 +59,23 @@ public:
  *  \brief This functor computes the orientation of a cavariant vector<br>
  *   Orientation values lies between 0 and 2*Pi.
  */
-template <class TInputPixel,class TOutputPixel>
+template <class TInputPixel, class TOutputPixel>
 class OrientationFunctor
 {
 public:
 
-  inline TOutputPixel operator()(const TInputPixel& input)
+  inline TOutputPixel operator ()(const TInputPixel& input)
   {
-    TOutputPixel resp = vcl_atan2(input[1],input[0]);
-    if (resp<0)
-    {
-      resp+=CONST_2PI;
-    }
+    TOutputPixel resp = vcl_atan2(input[1], input[0]);
+    if (resp < 0)
+      {
+      resp += CONST_2PI;
+      }
 
     return resp;
   }
 };
-}// end namespace Functor
+} // end namespace Functor
 
 /** \class ImageToSIFTKeyPointSetFilter
  *  \brief This class extracts key points from an input image, trough a pyramidal decomposition.
@@ -107,33 +107,33 @@ public:
  */
 template <class TInputImage, class TOutputPointSet>
 class ITK_EXPORT ImageToSIFTKeyPointSetFilter
-      : public ImageToPointSetFilter<TInputImage,TOutputPointSet>
+  : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
   /** Standard typedefs */
-  typedef ImageToSIFTKeyPointSetFilter                       Self;
-  typedef ImageToPointSetFilter<TInputImage,TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef ImageToSIFTKeyPointSetFilter                        Self;
+  typedef ImageToPointSetFilter<TInputImage, TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                             Pointer;
+  typedef itk::SmartPointer<const Self>                       ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(ImageToSIFTKeyPointSetFilter,ImageToPointSetFilter);
+  itkTypeMacro(ImageToSIFTKeyPointSetFilter, ImageToPointSetFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
-  typedef typename TInputImage::Pointer InputImagePointerType;
+  typedef TInputImage                     InputImageType;
+  typedef typename TInputImage::Pointer   InputImagePointerType;
   typedef typename TInputImage::PixelType PixelType;
 
-  typedef TOutputPointSet OutputPointSetType;
-  typedef typename TOutputPointSet::Pointer OutputPointSetPointerType;
-  typedef typename TOutputPointSet::PixelType OutputPixelType;
-  typedef typename TOutputPointSet::PointType OutputPointType;
+  typedef TOutputPointSet                           OutputPointSetType;
+  typedef typename TOutputPointSet::Pointer         OutputPointSetPointerType;
+  typedef typename TOutputPointSet::PixelType       OutputPixelType;
+  typedef typename TOutputPointSet::PointType       OutputPointType;
   typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
 
-  typedef itk::Vector<PixelType,3> VectorPointType;
+  typedef itk::Vector<PixelType, 3> VectorPointType;
 
   /** Set/Get the number of octaves */
   itkSetMacro(OctavesNumber, unsigned int);
@@ -177,39 +177,43 @@ public:
 
   /** Internal typedefs */
   typedef itk::ExpandImageFilter<TInputImage, TInputImage> ExpandFilterType;
-  typedef typename ExpandFilterType::Pointer ExpandFilterPointerType;
+  typedef typename ExpandFilterType::Pointer               ExpandFilterPointerType;
 
   typedef itk::ShrinkImageFilter<InputImageType, InputImageType> ShrinkFilterType;
-  typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
+  typedef typename ShrinkFilterType::Pointer                     ShrinkFilterPointerType;
 
-  typedef itk::RecursiveGaussianImageFilter<InputImageType,InputImageType> GaussianFilterType;
-  typedef typename GaussianFilterType::Pointer GaussianFilterPointerType;
+  typedef itk::RecursiveGaussianImageFilter<InputImageType, InputImageType> GaussianFilterType;
+  typedef typename GaussianFilterType::Pointer                              GaussianFilterPointerType;
 
-  typedef otb::ImageList<InputImageType> ImageListType;
+  typedef otb::ImageList<InputImageType>  ImageListType;
   typedef typename ImageListType::Pointer ImageListPointerType;
 
-  typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> SubtractFilterType;
-  typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
+  typedef itk::SubtractImageFilter<InputImageType, InputImageType, InputImageType> SubtractFilterType;
+  typedef typename SubtractFilterType::Pointer                                     SubtractFilterPointerType;
 
-  typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType>      NeighborhoodIteratorType;
   typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
-  typedef typename NeighborhoodType::OffsetType OffsetType;
+  typedef typename NeighborhoodType::OffsetType               OffsetType;
 
   typedef itk::ImageRegionConstIterator<InputImageType> RegionIteratorType;
 
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinimumMaximumCalculatorType;
-  typedef typename MinimumMaximumCalculatorType::Pointer MinimumMaximumCalculatorPointerType;
+  typedef typename MinimumMaximumCalculatorType::Pointer     MinimumMaximumCalculatorPointerType;
 
-  typedef itk::GradientImageFilter<InputImageType,PixelType,PixelType> GradientFilterType;
-  typedef typename GradientFilterType::Pointer GradientFilterPointerType;
-  typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
+  typedef itk::GradientImageFilter<InputImageType, PixelType, PixelType> GradientFilterType;
+  typedef typename GradientFilterType::Pointer                           GradientFilterPointerType;
+  typedef typename GradientFilterType::OutputImageType                   GradientOutputImageType;
 
-  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-  Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > MagnitudeFilterType;
+  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType, InputImageType,
+                                       Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,
+                                                                 typename InputImageType::PixelType> >
+  MagnitudeFilterType;
   typedef typename MagnitudeFilterType::Pointer MagnitudeFilterPointerType;
 
-  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
-  Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
+  typedef itk::UnaryFunctorImageFilter<GradientOutputImageType, InputImageType,
+                                       Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,
+                                                                   typename InputImageType::PixelType> >
+  OrientationFilterType;
   typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
 
 protected:
@@ -235,7 +239,7 @@ protected:
   void ComputeDifferenceOfGaussian(InputImagePointerType input);
 
   /** Localize key point */
-  void DetectKeyPoint( const unsigned int octave );
+  void DetectKeyPoint(const unsigned int octave);
 
   /** Check local extremum for 26 neighbors (current and adjacents scales)
    *
@@ -245,9 +249,9 @@ protected:
    *
    *  \return true if the pixel is extremum
    */
-  bool IsLocalExtremum( const NeighborhoodIteratorType& currentScale,
-                        const NeighborhoodIteratorType& previousScale,
-                        const NeighborhoodIteratorType& nextScale ) const;
+  bool IsLocalExtremum(const NeighborhoodIteratorType& currentScale,
+                       const NeighborhoodIteratorType& previousScale,
+                       const NeighborhoodIteratorType& nextScale) const;
 
   /** Refine location key point
    *
@@ -262,10 +266,10 @@ protected:
    *
    *  \return true if key point is accepted, false otherwise
    */
-  bool RefineLocationKeyPoint( const NeighborhoodIteratorType& currentScale,
-                               const NeighborhoodIteratorType& previousScale,
-                               const NeighborhoodIteratorType& nextScale,
-                               VectorPointType& solution);
+  bool RefineLocationKeyPoint(const NeighborhoodIteratorType& currentScale,
+                              const NeighborhoodIteratorType& previousScale,
+                              const NeighborhoodIteratorType& nextScale,
+                              VectorPointType& solution);
 
   /** Assign key point orientation
    *
@@ -276,8 +280,8 @@ protected:
    * \return orientation key point orientation
    */
   std::vector<PixelType> ComputeKeyPointOrientations(const NeighborhoodIteratorType& currentScale,
-      const unsigned int scale,
-      const PixelType translation);
+                                                     const unsigned int scale,
+                                                     const PixelType translation);
 
   /** Compute local image descriptor
    *
@@ -288,12 +292,12 @@ protected:
    * \return histogram descriptor
    */
   std::vector<PixelType> ComputeKeyPointDescriptor(const NeighborhoodIteratorType& currentScale,
-      const unsigned int scale,
-      const PixelType& orientation);
+                                                   const unsigned int scale,
+                                                   const PixelType& orientation);
 
 private:
-  ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToSIFTKeyPointSetFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Number of octaves */
   unsigned int m_OctavesNumber;
@@ -317,7 +321,7 @@ private:
   double m_RatioEdgeThreshold;
 
   /** Histogram sift keys descriptors gradient magnitude threshold */
-  PixelType  m_GradientMagnitudeThreshold;
+  PixelType m_GradientMagnitudeThreshold;
 
   /** Sigma 0 */
   typename GaussianFilterType::ScalarRealType m_Sigma0;
@@ -383,7 +387,7 @@ private:
   /** Offsets vector, conveniance datas */
   static const OffsetType m_Offsets[8];
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToSIFTKeyPointSetFilter.txx"
 #endif

@@ -39,7 +39,7 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 /*-------------------------------------------------------
  * GenerateData
  --------------------------------------------------------*/
-template <class TInputPointSet , class TOutputImage, class TDensityFunction>
+template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 void
 PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::GenerateData(void)
@@ -55,8 +55,8 @@ template <class TInputPointSet, class TOutputImage, class TDensityFunction>
 void
 PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::ThreadedGenerateData(
-    const   OutputImageRegionType&     outputRegionForThread,
-    int   threadId)
+  const OutputImageRegionType&     outputRegionForThread,
+  int threadId)
 {
 //  sleep(threadId);
 //  std::cerr << threadId << " -> " << outputRegionForThread.GetIndex() << std::endl;
@@ -74,18 +74,18 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
   InputType pCenter;
   IndexType index;
   itk::ImageRegionIterator<OutputImageType> itOut(outPtr,
-      outputRegionForThread);
+                                                  outputRegionForThread);
   itOut.GoToBegin();
 
   while (!itOut.IsAtEnd())
-  {
+    {
     index = itOut.GetIndex();
     outPtr->TransformIndexToPhysicalPoint(index, pCenter);
 
     itOut.Set(densityComputeFunction->Evaluate(pCenter));
     ++itOut;
     progress.CompletedPixel();
-  }
+    }
 }
 
 /*----------------------------------------------------------------
@@ -97,15 +97,15 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 ::GenerateOutputInformation(void)
 {
   //Superclass::GenerateOutputInformation();
-  typename  Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !outputPtr )
-  {
+  if (!outputPtr)
+    {
     return;
-  }
+    }
 
   typename OutputImageType::RegionType region;
-  IndexType start;
+  IndexType                            start;
   start.Fill(0);
 
   region.SetSize(this->GetSize());
@@ -113,9 +113,8 @@ PointSetToDensityImageFilter<TInputPointSet, TOutputImage, TDensityFunction>
 
   outputPtr->SetOrigin(this->GetOrigin());
   outputPtr->SetSpacing(this->GetSpacing());
-  outputPtr->SetRegions( region );
+  outputPtr->SetRegions(region);
 }
-
 
 /*----------------------------------------------------------------
   PrintSelf

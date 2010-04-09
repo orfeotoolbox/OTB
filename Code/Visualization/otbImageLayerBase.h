@@ -34,96 +34,96 @@ namespace otb
 *  \ingroup Visualization
  */
 
-template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2 > >
+template <class TOutputImage = Image<itk::RGBAPixel<unsigned char>, 2> >
 class ImageLayerBase
   : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ImageLayerBase                       Self;
-  typedef itk::Object                          Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef ImageLayerBase                Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(ImageLayerBase,Object);
+  itkTypeMacro(ImageLayerBase, Object);
 
   /** Output image typedef */
-  typedef TOutputImage                           OutputImageType;
-  typedef typename OutputImageType::Pointer      OutputImagePointerType;
-  typedef typename OutputImageType::RegionType   RegionType;
-  typedef typename RegionType::SizeType          SizeType;
-  typedef typename RegionType::IndexType         IndexType;
-  typedef typename OutputImageType::PixelType    OutputPixelType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::RegionType RegionType;
+  typedef typename RegionType::SizeType        SizeType;
+  typedef typename RegionType::IndexType       IndexType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /** Blending function typedef */
-  typedef Function::BlendingFunction<OutputPixelType>  BlendingFunctionType;
-  typedef typename BlendingFunctionType::Pointer BlendingFunctionPointerType;
+  typedef Function::BlendingFunction<OutputPixelType> BlendingFunctionType;
+  typedef typename BlendingFunctionType::Pointer      BlendingFunctionPointerType;
 
   /** Actually render the layer */
   virtual void Render() = 0;
 
   /** Get the pixel description */
-  virtual std::string GetPixelDescription(const IndexType & index) = 0;
+  virtual std::string GetPixelDescription(const IndexType& index) = 0;
 
   itkGetObjectMacro(RenderedQuicklook,     OutputImageType);
   itkGetObjectMacro(RenderedExtract,       OutputImageType);
   itkGetObjectMacro(RenderedScaledExtract, OutputImageType);
 
-  itkSetMacro(HasQuicklook,bool);
-  itkGetMacro(HasQuicklook,bool);
+  itkSetMacro(HasQuicklook, bool);
+  itkGetMacro(HasQuicklook, bool);
   itkBooleanMacro(HasQuicklook);
 
-  itkSetMacro(HasExtract,bool);
-  itkGetMacro(HasExtract,bool);
+  itkSetMacro(HasExtract, bool);
+  itkGetMacro(HasExtract, bool);
   itkBooleanMacro(HasExtract);
 
-  itkSetMacro(HasScaledExtract,bool);
-  itkGetMacro(HasScaledExtract,bool);
+  itkSetMacro(HasScaledExtract, bool);
+  itkGetMacro(HasScaledExtract, bool);
   itkBooleanMacro(HasScaledExtract);
 
-  itkSetMacro(Visible,bool);
-  itkGetMacro(Visible,bool);
+  itkSetMacro(Visible, bool);
+  itkGetMacro(Visible, bool);
   itkBooleanMacro(Visible);
 
   itkSetStringMacro(Name);
   itkGetStringMacro(Name);
 
-  itkSetMacro(QuicklookSize,SizeType);
-  itkGetConstReferenceMacro(QuicklookSize,SizeType);
+  itkSetMacro(QuicklookSize, SizeType);
+  itkGetConstReferenceMacro(QuicklookSize, SizeType);
 
-  itkSetMacro(Extent,RegionType);
-  itkGetConstReferenceMacro(Extent,RegionType);
+  itkSetMacro(Extent, RegionType);
+  itkGetConstReferenceMacro(Extent, RegionType);
 
   /** This parameters should be reported to the appropriate filters in
   implementations. Therefore this method is marked as virtual. */
-  virtual void SetExtractRegion(const RegionType & region)
+  virtual void SetExtractRegion(const RegionType& region)
   {
     m_ExtractRegion = region;
   }
-  itkGetConstReferenceMacro(ExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ExtractRegion, RegionType);
 
   /** This parameters should be reported to the appropriate filters in
   implementations. Therefore this method is marked as virtual. */
-  virtual void SetScaledExtractRegion(const RegionType & region)
+  virtual void SetScaledExtractRegion(const RegionType& region)
   {
     m_ScaledExtractRegion = region;
   }
-  itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
+  itkGetConstReferenceMacro(ScaledExtractRegion, RegionType);
 
-  itkSetMacro(QuicklookSubsamplingRate,unsigned int);
-  itkGetMacro(QuicklookSubsamplingRate,unsigned int);
+  itkSetMacro(QuicklookSubsamplingRate, unsigned int);
+  itkGetMacro(QuicklookSubsamplingRate, unsigned int);
 
-  itkSetObjectMacro(BlendingFunction,BlendingFunctionType);
-  itkGetObjectMacro(BlendingFunction,BlendingFunctionType);
+  itkSetObjectMacro(BlendingFunction, BlendingFunctionType);
+  itkGetObjectMacro(BlendingFunction, BlendingFunctionType);
 
 protected:
   /** Constructor */
   ImageLayerBase() : m_Name("Default"), m_Visible(false), m_Extent(),
-            m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
-            m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
-            m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
-            m_BlendingFunction()
+    m_RenderedQuicklook(), m_HasQuicklook(false), m_QuicklookSize(),  m_QuicklookSubsamplingRate(1),
+    m_RenderedExtract(),   m_HasExtract(false),   m_ExtractRegion(),
+    m_RenderedScaledExtract(), m_HasScaledExtract(false), m_ScaledExtractRegion(),
+    m_BlendingFunction()
   {
     // Default blending function
     m_BlendingFunction = Function::UniformAlphaBlendingFunction<OutputPixelType>::New();
@@ -133,11 +133,11 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os<<indent<<"ImageLayerBase "<<m_Name<<":"<<std::endl;
-    os<<indent<<indent<<"Has a quicklook: "     <<(m_HasQuicklook     ? "true" : "false") << std::endl;
-    os<<indent<<indent<<"Has an extract: "      <<(m_HasExtract       ? "true" : "false") << std::endl;
-    os<<indent<<indent<<"Has a scaled extract: "<<(m_HasScaledExtract ? "true" : "false") << std::endl;
+    Superclass::PrintSelf(os, indent);
+    os << indent << "ImageLayerBase " << m_Name << ":" << std::endl;
+    os << indent << indent << "Has a quicklook: "     << (m_HasQuicklook     ? "true" : "false") << std::endl;
+    os << indent << indent << "Has an extract: "      << (m_HasExtract       ? "true" : "false") << std::endl;
+    os << indent << indent << "Has a scaled extract: " << (m_HasScaledExtract ? "true" : "false") << std::endl;
   }
 
   // These are protected to prevent from unwanted usage
@@ -147,16 +147,16 @@ protected:
 
 private:
   ImageLayerBase(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** The layer name */
-  std::string            m_Name;
+  std::string m_Name;
 
   /** Is the layer visible ? */
-  bool                   m_Visible;
+  bool m_Visible;
 
   /** Data extent */
-  RegionType             m_Extent;
+  RegionType m_Extent;
 
   /** Rendered quicklook */
   OutputImagePointerType m_RenderedQuicklook;
@@ -181,5 +181,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

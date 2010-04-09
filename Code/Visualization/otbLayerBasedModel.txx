@@ -48,7 +48,7 @@ LayerBasedModel<TLayer>
   m_Layers->PushBack(layer);
 
   // Return the layer index
-  return m_Layers->Size()-1;
+  return m_Layers->Size() - 1;
 }
 
 template <class TLayer>
@@ -58,7 +58,7 @@ LayerBasedModel<TLayer>
 ::GetLayer(unsigned int index)
 {
   // Check if not out of bound and return the ith element
-  if(index >= m_Layers->Size())
+  if (index >= m_Layers->Size())
     {
     return NULL;
     }
@@ -73,7 +73,7 @@ LayerBasedModel<TLayer>
 ::DeleteLayer(unsigned int index)
 {
 // Check if not out of bound and delete the ith element
-  if(index >= m_Layers->Size())
+  if (index >= m_Layers->Size())
     {
     return false;
     }
@@ -90,14 +90,14 @@ typename LayerBasedModel<TLayer>
 LayerBasedModel<TLayer>
 ::GetLayerByName(std::string name)
 {
-  LayerType * resp = NULL;
+  LayerType *       resp = NULL;
   LayerIteratorType it = m_Layers->Begin();
-  bool found  = false;
+  bool              found  = false;
 
   // Look for the layer named after name
-  while(it!=m_Layers->End() && !found)
+  while (it != m_Layers->End() && !found)
     {
-    if(it.Get()->GetName() == name)
+    if (it.Get()->GetName() == name)
       {
       resp = it.Get();
       found = true;
@@ -113,23 +113,23 @@ LayerBasedModel<TLayer>
 ::DeleteLayerByName(std::string name)
 {
   LayerIteratorType it = m_Layers->Begin();
-  bool found  = false;
-  unsigned int index = 0;
+  bool              found  = false;
+  unsigned int      index = 0;
 
   // Look for the layer named after name
-  while(it!=m_Layers->End() && !found)
+  while (it != m_Layers->End() && !found)
     {
-    if(it.Get()->GetName() == name)
+    if (it.Get()->GetName() == name)
       {
       found = true;
       }
     ++index;
     ++it;
     }
-  
-  if(found)
+
+  if (found)
     {
-    m_Layers->Erase(index-1);
+    m_Layers->Erase(index - 1);
     }
   return found;
 }
@@ -158,7 +158,7 @@ LayerBasedModel<TLayer>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb

@@ -26,7 +26,6 @@
 #include "otbPointSetDensityFunction.h"
 #include "itkPoint.h"
 
-
 namespace otb
 {
 
@@ -37,16 +36,16 @@ namespace otb
 template <class TInputPointSet, class TOutputImage,
           class TDensityFunction = PointSetDensityFunction<TInputPointSet, typename TOutputImage::PixelType> >
 class ITK_EXPORT PointSetToDensityImageFilter
-      : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage >
+  : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage>
 {
 
 public:
 
   /** Standard class typedefs. */
-  typedef PointSetToDensityImageFilter                                Self;
-  typedef itk::PointSetToImageFilter<TInputPointSet, TOutputImage>    Superclass;
-  typedef itk::SmartPointer<Self>                                     Pointer;
-  typedef itk::SmartPointer<const Self>                               ConstPointer;
+  typedef PointSetToDensityImageFilter                             Self;
+  typedef itk::PointSetToImageFilter<TInputPointSet, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,18 +54,17 @@ public:
   itkTypeMacro(PointSetToDensityImageFilter, itk::PointSetToImageFilter);
 
   /**   typedefs parameters support */
-  typedef TInputPointSet                          PointSetType;
+  typedef TInputPointSet PointSetType;
 
-  typedef TOutputImage                            OutputImageType;
-  typedef typename  OutputImageType::PixelType    PixelType;
-  typedef typename  OutputImageType::IndexType    IndexType;
-  typedef typename  OutputImageType::RegionType   OutputImageRegionType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename  OutputImageType::PixelType  PixelType;
+  typedef typename  OutputImageType::IndexType  IndexType;
+  typedef typename  OutputImageType::RegionType OutputImageRegionType;
 
   /**   typedef filter support*/
   typedef TDensityFunction                                PointSetDensityFunctionType;
   typedef typename PointSetDensityFunctionType::InputType InputType;
   typedef typename PointSetDensityFunctionType::Pointer   PointSetDensityFunctionPointerType;
-
 
   /** Set/Get Radius*/
   itkGetMacro(Radius, unsigned int);
@@ -81,7 +79,7 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~PointSetToDensityImageFilter() {};
+  virtual ~PointSetToDensityImageFilter() {}
   /**
    * Standard PrintSelf method.
    */
@@ -96,20 +94,19 @@ protected:
    * Main computation method.
    */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
   /**
   * Main computation method.
   */
   virtual void  GenerateOutputInformation();
 
-
 private:
 
-  PointSetToDensityImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PointSetToDensityImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  unsigned int                   m_Radius;
+  unsigned int m_Radius;
   typename PointSetType::Pointer m_PointSet;
 };
 }

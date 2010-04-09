@@ -21,7 +21,6 @@
 #include "otbONERAImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ ONERAImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

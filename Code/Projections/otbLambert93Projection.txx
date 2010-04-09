@@ -28,18 +28,16 @@ template <InverseOrForwardTransformationEnum transform>
 Lambert93Projection<transform>
 ::Lambert93Projection()
 {
-  itk::Point<double,2> origin;
-  origin[0]=3;
-  origin[1]=46.5;
+  itk::Point<double, 2> origin;
+  origin[0] = 3;
+  origin[1] = 46.5;
   std::string datum = "WE"; //WGS84 datum
 
-
-  double parall1=44;
-  double parall2=49;
-  double falseEasting=700000;
-  double falseNorthing=6600000;
+  double      parall1 = 44;
+  double      parall2 = 49;
+  double      falseEasting = 700000;
+  double      falseNorthing = 6600000;
   std::string ellipsoid = "RF"; //GRS-80 ellipsoid
-
 
   //TODO: 29-02-2008 Emmanuel: when ossim version > 1.7.2 only
   // SetOrigin required (remove SetEllipsoid)
@@ -53,7 +51,6 @@ Lambert93Projection<transform>
 ::~Lambert93Projection()
 {
 }
-
 
 } // namespace otb
 

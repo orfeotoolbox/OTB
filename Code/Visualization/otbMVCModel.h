@@ -35,9 +35,9 @@ class MVCModel
 {
 public:
   /** Standard class typedefs */
-  typedef MVCModel    Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef MVCModel                      Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Define the listener type
@@ -49,7 +49,7 @@ public:
   /** Register a new listener */
   virtual bool RegisterListener(ListenerType * listener)
   {
-    return(m_RegisteredListeners.insert(listener).second);
+    return (m_RegisteredListeners.insert(listener).second);
   }
 
   /** Unregister a listener */
@@ -67,18 +67,18 @@ public:
   virtual void NotifyAll()
   {
     for (typename ListenersSetType::iterator it = m_RegisteredListeners.begin();
-         it!=m_RegisteredListeners.end();
+         it != m_RegisteredListeners.end();
          ++it)
-    {
+      {
       this->NotifyListener(*it);
-    }
+      }
   }
 
   /** Notify changes to a given listerner */
   virtual void NotifyListener(ListenerType * listener)
   {
-     listener->Notify();
-  };
+    listener->Notify();
+  }
 
 protected:
   /** Constructor */
@@ -88,8 +88,7 @@ protected:
 
 private:
   MVCModel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  void operator =(const Self&); //purposely not implemented
 
   /** Registered liteners */
   ListenersSetType m_RegisteredListeners;

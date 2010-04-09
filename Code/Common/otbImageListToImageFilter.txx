@@ -26,7 +26,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-ImageListToImageFilter<TInputImage,TOutputImage>
+ImageListToImageFilter<TInputImage, TOutputImage>
 ::ImageListToImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
@@ -37,37 +37,37 @@ ImageListToImageFilter<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-ImageListToImageFilter<TInputImage,TOutputImage>
+ImageListToImageFilter<TInputImage, TOutputImage>
 ::SetInput(const InputImageListType *image)
 {
   // A single input image
-  this->itk::ProcessObject::SetNthInput(0,const_cast<InputImageListType*>(image));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<InputImageListType*>(image));
 }
 /**
  * Input image retrieval
  * \return The input image.
  */
 template <class TInputImage, class TOutputImage>
-typename ImageListToImageFilter<TInputImage,TOutputImage>::InputImageListType *
-ImageListToImageFilter<TInputImage,TOutputImage>
+typename ImageListToImageFilter<TInputImage, TOutputImage>::InputImageListType *
+ImageListToImageFilter<TInputImage, TOutputImage>
 ::GetInput(void)
 {
   // If there is no input
-  if (this->GetNumberOfInputs()<1)
-  {
+  if (this->GetNumberOfInputs() < 1)
+    {
     // exit
     return 0;
-  }
+    }
   // else return the first input
-  return static_cast<InputImageListType * >
-         (this->itk::ProcessObject::GetInput(0) );
+  return static_cast<InputImageListType *>
+           (this->itk::ProcessObject::GetInput(0));
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage>
 void
-ImageListToImageFilter<TInputImage,TOutputImage>
+ImageListToImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

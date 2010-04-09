@@ -40,14 +40,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter = unsigned int>
 class ITK_EXPORT ImageToProfileFilter
-      : public ImageToImageListFilter<TInputImage,TOutputImage>
+  : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageToProfileFilter                             Self;
-  typedef ImageToImageListFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef ImageToProfileFilter                              Self;
+  typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -56,36 +56,36 @@ public:
   itkTypeMacro(ImageToProfileFilter, ImageToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef TParameter   ParameterType;
-  typedef TFilter      FilterType;
-  typedef typename     FilterType::Pointer FilterPointerType;
-  typedef typename     Superclass::OutputImageListType OutputImageListType;
+  typedef TInputImage                                         InputImageType;
+  typedef TOutputImage                                        OutputImageType;
+  typedef TParameter                                          ParameterType;
+  typedef TFilter                                             FilterType;
+  typedef typename     FilterType::Pointer                    FilterPointerType;
+  typedef typename     Superclass::OutputImageListType        OutputImageListType;
   typedef typename     Superclass::OutputImageListPointerType OutputImageListPointerType;
-  typedef typename     Superclass::InputImagePointer InputImagePointerType;
+  typedef typename     Superclass::InputImagePointer          InputImagePointerType;
 
   /** Get/Set the initial value */
-  itkSetMacro(InitialValue,ParameterType);
-  itkGetMacro(InitialValue,ParameterType);
+  itkSetMacro(InitialValue, ParameterType);
+  itkGetMacro(InitialValue, ParameterType);
   /** Get/Set the profile size */
-  itkSetMacro(ProfileSize,unsigned int);
-  itkGetMacro(ProfileSize,unsigned int);
+  itkSetMacro(ProfileSize, unsigned int);
+  itkGetMacro(ProfileSize, unsigned int);
   /** Get/Set the profile step */
-  itkSetMacro(Step,ParameterType);
-  itkGetMacro(Step,ParameterType);
+  itkSetMacro(Step, ParameterType);
+  itkGetMacro(Step, ParameterType);
   /** Get/Set the output index */
-  itkSetMacro(OutputIndex,unsigned int);
-  itkGetMacro(OutputIndex,unsigned int);
+  itkSetMacro(OutputIndex, unsigned int);
+  itkGetMacro(OutputIndex, unsigned int);
 
 protected:
   /**
    * Set the profile parameter
    * \param param The parameter to set
    */
-  virtual void SetProfileParameter(ParameterType param) {};
+  virtual void SetProfileParameter(ParameterType param) {}
   /** Get the pointer to the filter */
-  itkGetObjectMacro(Filter,FilterType);
+  itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */
   virtual void GenerateData(void);
   /** GenerateOutputInformation method */
@@ -95,13 +95,13 @@ protected:
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  virtual ~ImageToProfileFilter() {};
+  virtual ~ImageToProfileFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ImageToProfileFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToProfileFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The filter used to compute the profile */
   FilterPointerType m_Filter;
@@ -115,7 +115,7 @@ private:
   unsigned int m_OutputIndex;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToProfileFilter.txx"
 #endif

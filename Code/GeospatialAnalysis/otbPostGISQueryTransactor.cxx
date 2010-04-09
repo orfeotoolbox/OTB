@@ -19,7 +19,6 @@
 #include <sstream>
 #include "otbMacro.h"
 
-
 namespace otb
 {
 
@@ -35,37 +34,37 @@ PostGISQueryTransactor::PostGISQueryTransactor(const PostGISQueryTransactor& pgt
   m_ViewName = pgt.GetViewName();
 }
 
-PostGISQueryTransactor& PostGISQueryTransactor::operator=(const PostGISQueryTransactor& pgt) throw() {
-    m_TransactionString = pgt.GetTransactionString();
-    m_ViewName = pgt.GetViewName();
-    return *this;
+PostGISQueryTransactor & PostGISQueryTransactor::operator =(const PostGISQueryTransactor& pgt)
+throw()
+{
+  m_TransactionString = pgt.GetTransactionString();
+  m_ViewName = pgt.GetViewName();
+  return *this;
 }
 
-void PostGISQueryTransactor::operator()(pqxx::nontransaction &T)
+void PostGISQueryTransactor::operator ()(pqxx::nontransaction& T)
 {
 
-  if(m_RemoveExistingView)
-  {
+  if (m_RemoveExistingView)
+    {
     std::stringstream dropCommand;
 
     //dropCommand << "DROP TABLE " << m_ViewName;
     dropCommand << "DROP VIEW IF EXISTS " << m_ViewName;
-    
-    otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
+
+    otbGenericMsgDebugMacro(<< "Drop Command " << dropCommand.str());
 
     m_Result = T.exec(dropCommand.str());
-  }
+    }
 
   std::stringstream createCommand;
 
-  createCommand << "CREATE VIEW  "<< m_ViewName
-      <<" AS " << m_TransactionString;
+  createCommand << "CREATE VIEW  " << m_ViewName
+                << " AS " << m_TransactionString;
 
-  otbGenericMsgDebugMacro(<<"Create Command " << createCommand.str());
+  otbGenericMsgDebugMacro(<< "Create Command " << createCommand.str());
   m_Result = T.exec(createCommand.str());
 
-
-  
 }
 
 /*
@@ -73,7 +72,7 @@ void PostGISQueryTransactor::on_commit()
 {
   std::cout << "\t Transaction \t"  << std::endl;
   std::cout << "\t "<< m_TransactionString  << std::endl;
-  
+
 }
 
 std::string PostGISQueryTransactor::GetTransactionString() const
@@ -114,7 +113,7 @@ void PostGISQueryTransactor::CreateView(pqxx::nontransaction &T)
 
     //dropCommand << "DROP TABLE " << m_ViewName;
     dropCommand << "DROP VIEW IF EXISTS " << m_ViewName;
-    
+
     otbGenericMsgDebugMacro(<<"Drop Command " << dropCommand.str());
 
     m_Result = T.exec(dropCommand.str());
@@ -131,5 +130,3 @@ void PostGISQueryTransactor::CreateView(pqxx::nontransaction &T)
 }
 */
 } // end namespace otb
-
-

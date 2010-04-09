@@ -25,7 +25,7 @@
 namespace otb
 {
 /** Main computation method */
-template <class TPointSet,class TDeformationField>
+template <class TPointSet, class TDeformationField>
 void
 NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
 ::GenerateData(void)
@@ -37,38 +37,38 @@ NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
   outputPtr->FillBuffer(defaultValue);
 
   typedef itk::ImageRegionIteratorWithIndex<DeformationFieldType> IteratorType;
-  IteratorType it(outputPtr,outputPtr->GetRequestedRegion());
+  IteratorType it(outputPtr, outputPtr->GetRequestedRegion());
 
-  for (it.GoToBegin();!it.IsAtEnd();++it)
-  {
-    IndexVectorType indexVector = this->GenerateNearestValidPointsPointSet(it.GetIndex(),1);
+  for (it.GoToBegin(); !it.IsAtEnd(); ++it)
+    {
+    IndexVectorType indexVector = this->GenerateNearestValidPointsPointSet(it.GetIndex(), 1);
     PixelType pixel(2);
-    if (indexVector.size()>=1)
-    {
-      ParametersType params(this->GetTransform()->GetNumberOfParameters());
-      for (unsigned int  i = 0; i<this->GetTransform()->GetNumberOfParameters();++i)
+    if (indexVector.size() >= 1)
       {
-        params[i] = this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[i+3];
-      }
+      ParametersType params(this->GetTransform()->GetNumberOfParameters());
+      for (unsigned int i = 0; i < this->GetTransform()->GetNumberOfParameters(); ++i)
+        {
+        params[i] = this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[i + 3];
+        }
       this->GetTransform()->SetParameters(params);
-      PointType sourcePoint,targetPoint;
+      PointType sourcePoint, targetPoint;
 
-      outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(),sourcePoint);
+      outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(), sourcePoint);
       targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
-      pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);
-      pixel[1] = static_cast<ValueType>(targetPoint[1]-sourcePoint[1]);
-    }
+      pixel[0] = static_cast<ValueType>(targetPoint[0] - sourcePoint[0]);
+      pixel[1] = static_cast<ValueType>(targetPoint[1] - sourcePoint[1]);
+      }
     else
-    {
-      pixel=defaultValue;
-    }
+      {
+      pixel = defaultValue;
+      }
     it.Set(pixel);
-  }
+    }
 }
 /**
  * PrintSelf Method
  */
-template <class TPointSet,class TDeformationField>
+template <class TPointSet, class TDeformationField>
 void
 NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

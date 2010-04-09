@@ -39,43 +39,43 @@ namespace otb
  * \ingroup ImageObjects
  */
 template<class TImage>
-class ITK_EXPORT  MirrorBoundaryCondition
-      : public itk::ImageBoundaryCondition<TImage>
+class ITK_EXPORT MirrorBoundaryCondition
+  : public itk::ImageBoundaryCondition<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MirrorBoundaryCondition Self;
+  typedef MirrorBoundaryCondition             Self;
   typedef itk::ImageBoundaryCondition<TImage> Superclass;
 
   /** Extract information from the image type. */
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType        PixelType;
   typedef typename Superclass::PixelPointerType PixelPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::OffsetType OffsetType;
+  typedef typename Superclass::IndexType        IndexType;
+  typedef typename Superclass::OffsetType       OffsetType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
 
   typedef typename Superclass::NeighborhoodAccessorFunctorType
   NeighborhoodAccessorFunctorType;
 
   /** Extract information from the image type. */
-  itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Default constructor. */
   MirrorBoundaryCondition() {}
 
   /** Computes and returns a neighborhood of appropriate values from
    * neighborhood iterator data.. */
-  virtual PixelType operator()(const OffsetType& point_index,
-                               const OffsetType& boundary_offset,
-                               const NeighborhoodType *data) const;
+  virtual PixelType operator ()(const OffsetType& point_index,
+                                const OffsetType& boundary_offset,
+                                const NeighborhoodType *data) const;
 
   /** Computes and returns the appropriate pixel value from
    * neighborhood iterator data, using the functor. */
-  virtual PixelType operator()(
+  virtual PixelType operator ()(
     const OffsetType& point_index,
     const OffsetType& boundary_offset,
     const NeighborhoodType *data,
-    const NeighborhoodAccessorFunctorType &neighborhoodAccessorFunctor) const;
+    const NeighborhoodAccessorFunctorType& neighborhoodAccessorFunctor) const;
 };
 
 } // end namespace itk

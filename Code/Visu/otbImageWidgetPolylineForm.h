@@ -34,11 +34,11 @@ namespace otb
  */
 template<class TValue = double>
 class ITK_EXPORT ImageWidgetPolylineForm
-      : public ImageWidgetFormBase
+  : public ImageWidgetFormBase
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidgetPolylineForm        Self;
+  typedef ImageWidgetPolylineForm       Self;
   typedef ImageWidgetFormBase           Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -51,25 +51,24 @@ public:
   itkTypeMacro(ImageWidgetPolylineForm, ImageWidgetFormBase);
 
   /** Usefull typedef. */
-  typedef itk::Size<2>                               SizeType;
-  typedef itk::Index<2>                              IndexType;
-  typedef PolyLineParametricPathWithValue<ValueType,2> PolylineType;
-  typedef typename PolylineType::Pointer              PolylinePointerType;
-  typedef typename PolylineType::VertexType           VertexType;
-  typedef typename PolylineType::VertexListType       VertexListType;
-  typedef typename VertexListType::ConstIterator     VertexListConstIteratorType;
-  typedef typename PolylineType::ContinuousIndexType  ContinuousIndexType;
+  typedef itk::Size<2>                                  SizeType;
+  typedef itk::Index<2>                                 IndexType;
+  typedef PolyLineParametricPathWithValue<ValueType, 2> PolylineType;
+  typedef typename PolylineType::Pointer                PolylinePointerType;
+  typedef typename PolylineType::VertexType             VertexType;
+  typedef typename PolylineType::VertexListType         VertexListType;
+  typedef typename VertexListType::ConstIterator        VertexListConstIteratorType;
+  typedef typename PolylineType::ContinuousIndexType    ContinuousIndexType;
 
   /** Accessors */
   itkSetMacro(Polyline, PolylinePointerType);
   itkGetMacro(Polyline, PolylinePointerType);
-  itkSetMacro(InternalValueToAlphaChannel,bool);
-  itkGetMacro(InternalValueToAlphaChannel,bool);
-  itkSetMacro(LineWidth,double);
-  itkGetMacro(LineWidth,double);
+  itkSetMacro(InternalValueToAlphaChannel, bool);
+  itkGetMacro(InternalValueToAlphaChannel, bool);
+  itkSetMacro(LineWidth, double);
+  itkGetMacro(LineWidth, double);
   /** Actually draw the polyline */
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
-
 
 protected:
   /** Constructor. */
@@ -81,8 +80,8 @@ protected:
   double m_LineWidth;
 
 private:
-  ImageWidgetPolylineForm(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  ImageWidgetPolylineForm(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Internal pointer to the otb::Polyline data structure */
   PolylinePointerType m_Polyline;

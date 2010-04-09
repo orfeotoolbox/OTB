@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -29,10 +28,8 @@
 #include "otbIkonosImageMetadataInterfaceFactory.h"
 #include "otbIkonosImageMetadataInterface.h"
 
-
 #include "itkCreateObjectFunction.h"
 #include "itkVersion.h"
-
 
 namespace otb
 {
@@ -46,7 +43,7 @@ IkonosImageMetadataInterfaceFactory
                          "otbIkonosImageMetadataInterface",
                          "Ikonos Meteada Interface",
                          1,
-                         itk::CreateObjectFunction<IkonosImageMetadataInterface >::New());
+                         itk::CreateObjectFunction<IkonosImageMetadataInterface>::New());
 }
 
 IkonosImageMetadataInterfaceFactory

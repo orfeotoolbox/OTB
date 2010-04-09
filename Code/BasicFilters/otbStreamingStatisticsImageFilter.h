@@ -47,12 +47,12 @@ namespace otb
  */
 template<class TInputImage>
 class ITK_EXPORT PersistentStatisticsImageFilter :
-      public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
   typedef PersistentStatisticsImageFilter                 Self;
-  typedef PersistentImageFilter<TInputImage,TInputImage>  Superclass;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -60,10 +60,10 @@ public:
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PersistentStatisticsImageFilter,PersistentImageFilter);
+  itkTypeMacro(PersistentStatisticsImageFilter, PersistentImageFilter);
 
   /** Image related typedefs. */
-  typedef TInputImage ImageType;
+  typedef TInputImage                   ImageType;
   typedef typename TInputImage::Pointer InputImagePointer;
 
   typedef typename TInputImage::RegionType RegionType;
@@ -76,7 +76,7 @@ public:
 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension );
+                      TInputImage::ImageDimension);
 
   /** Type to use for computations. */
   typedef typename itk::NumericTraits<PixelType>::RealType RealType;
@@ -150,17 +150,17 @@ public:
 
 protected:
   PersistentStatisticsImageFilter();
-  virtual ~PersistentStatisticsImageFilter() {};
+  virtual ~PersistentStatisticsImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData (const RegionType&
-                              outputRegionForThread,
-                              int threadId);
+  void  ThreadedGenerateData(const RegionType&
+                             outputRegionForThread,
+                             int threadId);
 
 private:
-  PersistentStatisticsImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentStatisticsImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   itk::Array<RealType>  m_ThreadSum;
   itk::Array<RealType>  m_SumOfSquares;
@@ -201,26 +201,26 @@ private:
 
 template<class TInputImage>
 class ITK_EXPORT StreamingStatisticsImageFilter :
-      public PersistentFilterStreamingDecorator< PersistentStatisticsImageFilter<TInputImage> >
+  public PersistentFilterStreamingDecorator<PersistentStatisticsImageFilter<TInputImage> >
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingStatisticsImageFilter           Self;
+  typedef StreamingStatisticsImageFilter Self;
   typedef PersistentFilterStreamingDecorator
-  < PersistentStatisticsImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  <PersistentStatisticsImageFilter<TInputImage> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingStatisticsImageFilter,PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingStatisticsImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef typename Superclass::FilterType StatFilterType;
+  typedef typename Superclass::FilterType    StatFilterType;
   typedef typename StatFilterType::PixelType PixelType;
-  typedef typename StatFilterType::RealType RealType;
-  typedef TInputImage InputImageType;
+  typedef typename StatFilterType::RealType  RealType;
+  typedef TInputImage                        InputImageType;
 
   /** Type of DataObjects used for scalar outputs */
   typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
@@ -313,16 +313,15 @@ public:
     return this->GetFilter()->GetSumOutput();
   }
 
-
 protected:
   /** Constructor */
   StreamingStatisticsImageFilter() {};
   /** Destructor */
-  virtual ~StreamingStatisticsImageFilter() {};
+  virtual ~StreamingStatisticsImageFilter() {}
 
 private:
-  StreamingStatisticsImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingStatisticsImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

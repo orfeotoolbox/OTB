@@ -42,18 +42,18 @@ namespace MorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT Resampler
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef Resampler                                         Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef Resampler                                          Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(Resampler,ImageToImageFilter);
+  itkTypeMacro(Resampler, ImageToImageFilter);
   /** Template parameters typedefs */
   typedef TInputImage                           InputImageType;
   typedef TOutputImage                          OutputImageType;
@@ -65,32 +65,32 @@ public :
   typedef typename OutputImageType::SizeType    SizeType;
   typedef typename OutputImageType::SpacingType SpacingType;
   /** Size parameter accessor */
-  itkSetMacro(Size,SizeType);
-  itkGetMacro(Size,SizeType);
+  itkSetMacro(Size, SizeType);
+  itkGetMacro(Size, SizeType);
 
 protected:
   /** Constructor */
   Resampler();
   /** Destructor */
-  virtual ~Resampler() {};
+  virtual ~Resampler() {}
   /** Generate output information */
   virtual void GenerateOutputInformation();
   /** Configure input requested region to be the largest possible region */
   virtual void GenerateInputRequestedRegion();
   /** Configure output requested region to be the largest possible region */
-  virtual void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
+  virtual void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output));
   /** Main computation method */
   void GenerateData();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-private :
-  Resampler(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+private:
+  Resampler(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
   /// Output image size
   SizeType m_Size;
 };
 } // End namespace MorphologicalPyramid
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidResampler.txx"

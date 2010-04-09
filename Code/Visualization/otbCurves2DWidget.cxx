@@ -20,13 +20,13 @@
 namespace otb
 {
 Curves2DWidget::Curves2DWidget() : m_Curves(), m_XAxisLabel("X axis"), m_YAxisLabel("Y axis"), m_Margins(),
-                                 m_Extent(), m_AxisOrigin(), m_AxisLength(),
-                                 m_GridOrigin(), m_GridSpacing(), m_ZeroCrossingAxis(true),
-                                   m_AutoScale(true),m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform()
+  m_Extent(), m_AxisOrigin(), m_AxisLength(),
+  m_GridOrigin(), m_GridSpacing(), m_ZeroCrossingAxis(true),
+  m_AutoScale(true), m_AxisColor(), m_GridColor(), m_SpaceToScreenTransform()
 {
   // Build the curves list
   m_Curves = CurveListType::New();
-  
+
   // Prefer a white background
   ColorType white;
   white.Fill(1);
@@ -76,7 +76,6 @@ unsigned int Curves2DWidget::GetNumberOfCurves()
   return m_Curves->Size();
 }
 
-  
 void Curves2DWidget::draw()
 {
   // Call superclass implementation for gl init
@@ -84,12 +83,12 @@ void Curves2DWidget::draw()
 
   // Call the before rendering method for each curve
   CurveListType::Iterator it = m_Curves->Begin();
-  while(it != m_Curves->End())
+  while (it != m_Curves->End())
     {
     it.Get()->BeforeRendering();
     ++it;
     }
-  if(m_AutoScale)
+  if (m_AutoScale)
     {
     this->AutoScale();
     }
@@ -108,7 +107,7 @@ void Curves2DWidget::draw()
 void Curves2DWidget::AutoScale()
 {
 
-  if(m_Curves->Size()<1)
+  if (m_Curves->Size() < 1)
     {
     // No curves available, retrun
     return;
@@ -121,44 +120,39 @@ void Curves2DWidget::AutoScale()
   max = it.Get()->GetMaximum();
 
   // Get the absolute min/max
-  while(it != m_Curves->End())
+  while (it != m_Curves->End())
     {
     newMin = it.Get()->GetMinimum();
     newMax = it.Get()->GetMaximum();
 
-    if(newMin[0]< min[0])
-      min[0]=newMin[0];
-    if(newMin[1]< min[1])
-      min[1]=newMin[1];
-    if(newMax[0]> max[0])
-      max[0]=newMax[0];
-    if(newMax[1]> max[1])
-      max[1]=newMax[1];
+    if (newMin[0] < min[0]) min[0] = newMin[0];
+    if (newMin[1] < min[1]) min[1] = newMin[1];
+    if (newMax[0] > max[0]) max[0] = newMax[0];
+    if (newMax[1] > max[1]) max[1] = newMax[1];
 
     ++it;
     }
 
   // Autoscale
   m_AxisOrigin = min;
-  m_AxisLength = max-min;
-  m_GridSpacing = m_AxisLength/10;
+  m_AxisLength = max - min;
+  m_GridSpacing = m_AxisLength / 10;
   m_GridOrigin = min;
 }
-
 
 void Curves2DWidget::UpdateSpaceToScreenTransform()
 {
   // Update Extent
   RegionType::IndexType extentIndex;
-  RegionType::SizeType extentSize;
-  
+  RegionType::SizeType  extentSize;
+
   // Extent index
-  extentIndex[0]=m_Margins[0];
-  extentIndex[1]=m_Margins[1];
+  extentIndex[0] = m_Margins[0];
+  extentIndex[1] = m_Margins[1];
 
   // Extent size
-  extentSize[0] = this->w()-2*m_Margins[0];
-  extentSize[1] = this->h()-2*m_Margins[1];
+  extentSize[0] = this->w() - 2 * m_Margins[0];
+  extentSize[1] = this->h() - 2 * m_Margins[1];
 
   // Set the display extent
   m_Extent.SetIndex(extentIndex);
@@ -167,14 +161,14 @@ void Curves2DWidget::UpdateSpaceToScreenTransform()
   // Set the matrix
   AffineTransformType::MatrixType matrix;
   matrix.Fill(0);
-  matrix(0,0)=(static_cast<double>(m_Extent.GetSize()[0]))/m_AxisLength[0];
-  matrix(1,1)=(static_cast<double>(m_Extent.GetSize()[1]))/m_AxisLength[1];
+  matrix(0, 0) = (static_cast<double>(m_Extent.GetSize()[0])) / m_AxisLength[0];
+  matrix(1, 1) = (static_cast<double>(m_Extent.GetSize()[1])) / m_AxisLength[1];
   m_SpaceToScreenTransform->SetMatrix(matrix);
-  
+
   // Set the translation
   AffineTransformType::OutputVectorType translation;
-  translation[0]=m_Extent.GetIndex()[0]-m_AxisOrigin[0];
-  translation[1]=m_Extent.GetIndex()[1]-m_AxisOrigin[1];
+  translation[0] = m_Extent.GetIndex()[0] - m_AxisOrigin[0];
+  translation[1] = m_Extent.GetIndex()[1] - m_AxisOrigin[1];
   m_SpaceToScreenTransform->SetTranslation(translation);
 
   // Set the center
@@ -193,37 +187,37 @@ void Curves2DWidget::RenderAxis()
   PointType screenCenter = m_SpaceToScreenTransform->TransformPoint(spaceCenter);
 
   // Update zero crossing coords
-  if(m_ZeroCrossingAxis)
+  if (m_ZeroCrossingAxis)
     {
 
-    if(m_AxisOrigin[0] < 0 && m_AxisOrigin[0]+m_AxisLength[0] > 0)
+    if (m_AxisOrigin[0] < 0 && m_AxisOrigin[0] + m_AxisLength[0] > 0)
       {
       yAxisXPos = screenCenter[0];
       }
-    if(m_AxisOrigin[1] < 0 && m_AxisOrigin[1]+m_AxisLength[1] > 0)
+    if (m_AxisOrigin[1] < 0 && m_AxisOrigin[1] + m_AxisLength[1] > 0)
       {
       xAxisYPos = screenCenter[1];
       }
     }
   glBegin(GL_LINES);
-  glColor4d(m_AxisColor[0],m_AxisColor[1],m_AxisColor[2],m_AxisColor[3]);
-  glVertex2d(m_Margins[0],yAxisXPos);
-  glVertex2d(this->w()-m_Margins[0],yAxisXPos);
-  glVertex2d(xAxisYPos,m_Margins[1]);
-  glVertex2d(xAxisYPos,this->h()-m_Margins[1]);
+  glColor4d(m_AxisColor[0], m_AxisColor[1], m_AxisColor[2], m_AxisColor[3]);
+  glVertex2d(m_Margins[0], yAxisXPos);
+  glVertex2d(this->w() - m_Margins[0], yAxisXPos);
+  glVertex2d(xAxisYPos, m_Margins[1]);
+  glVertex2d(xAxisYPos, this->h() - m_Margins[1]);
   glEnd();
 
-  gl_font(FL_COURIER_BOLD,10);
+  gl_font(FL_COURIER_BOLD, 10);
   //Draw the y axis legend
   PointType screenLabelPosition;
-  screenLabelPosition[0]=yAxisXPos+10;
-  screenLabelPosition[1]=this->h()-m_Margins[1]-10;
-  gl_draw(m_YAxisLabel.c_str(),(float)screenLabelPosition[0],(float)screenLabelPosition[1]);
+  screenLabelPosition[0] = yAxisXPos + 10;
+  screenLabelPosition[1] = this->h() - m_Margins[1] - 10;
+  gl_draw(m_YAxisLabel.c_str(), (float) screenLabelPosition[0], (float) screenLabelPosition[1]);
 
   //Draw the x axis legend
-  screenLabelPosition[0]=this->w()-m_Margins[0] - 5*m_XAxisLabel.size();
-  screenLabelPosition[1]=xAxisYPos - 10;
-  gl_draw(m_XAxisLabel.c_str(),(float)screenLabelPosition[0],(float)screenLabelPosition[1]);
+  screenLabelPosition[0] = this->w() - m_Margins[0] - 5 * m_XAxisLabel.size();
+  screenLabelPosition[1] = xAxisYPos - 10;
+  gl_draw(m_XAxisLabel.c_str(), (float) screenLabelPosition[0], (float) screenLabelPosition[1]);
 }
 
 void Curves2DWidget::RenderGrid()
@@ -232,25 +226,25 @@ void Curves2DWidget::RenderGrid()
   PointType screenGridOrigin = m_SpaceToScreenTransform->TransformPoint(m_GridOrigin);
   // Get the grid screen spacing
   VectorType screenGridSpacing = m_SpaceToScreenTransform->TransformVector(m_GridSpacing);
-  
+
   // Render the grid
   glBegin(GL_LINES);
-  glColor4d(m_GridColor[0],m_GridColor[1],m_GridColor[2],m_GridColor[3]);
+  glColor4d(m_GridColor[0], m_GridColor[1], m_GridColor[2], m_GridColor[3]);
   double pos = screenGridOrigin[0];
-  while(pos <= this->w()-m_Margins[0])
+  while (pos <= this->w() - m_Margins[0])
     {
-    glVertex2d(pos,m_Margins[1]);
-    glVertex2d(pos,this->h()-m_Margins[1]);
-    pos+=screenGridSpacing[0];
+    glVertex2d(pos, m_Margins[1]);
+    glVertex2d(pos, this->h() - m_Margins[1]);
+    pos += screenGridSpacing[0];
     }
 
   pos = screenGridOrigin[1];
 
-  while(pos <= this->h()-m_Margins[1])
+  while (pos <= this->h() - m_Margins[1])
     {
-    glVertex2d(m_Margins[0],pos);
-    glVertex2d(this->w()-m_Margins[0],pos);
-    pos+=screenGridSpacing[1];
+    glVertex2d(m_Margins[0], pos);
+    glVertex2d(this->w() - m_Margins[0], pos);
+    pos += screenGridSpacing[1];
     }
 
   glEnd();
@@ -258,19 +252,18 @@ void Curves2DWidget::RenderGrid()
 
 void Curves2DWidget::RenderCurves()
 {
-  for(CurveListType::Iterator it = m_Curves->Begin();
-      it!=m_Curves->End(); ++it)
+  for (CurveListType::Iterator it = m_Curves->Begin();
+       it != m_Curves->End(); ++it)
     {
-    if(it.Get()->GetVisible())
+    if (it.Get()->GetVisible())
       {
-      it.Get()->Render(m_Extent,m_SpaceToScreenTransform);
+      it.Get()->Render(m_Extent, m_SpaceToScreenTransform);
       }
     }
 }
 
 void Curves2DWidget::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // end namespace otb
-

@@ -40,54 +40,54 @@ namespace Function
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2, class TOutputRGBPixel = TInputRGBPixel1>
 class AlphaBlendingFunction
-  : public BlendingFunction<TInputRGBPixel1,TInputRGBPixel2,TOutputRGBPixel>
+  : public BlendingFunction<TInputRGBPixel1, TInputRGBPixel2, TOutputRGBPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef AlphaBlendingFunction                 Self;
+  typedef AlphaBlendingFunction Self;
   typedef BlendingFunction<TInputRGBPixel1,
                            TInputRGBPixel2,
                            TOutputRGBPixel>            Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** type macro */
-  itkTypeMacro(AlphaBlendingFunction,BlendingFunction);
+  itkTypeMacro(AlphaBlendingFunction, BlendingFunction);
 
   /** new macro */
   itkNewMacro(Self);
 
   /** PixelType macros */
-  typedef TInputRGBPixel1                       InputPixel1Type;
+  typedef TInputRGBPixel1                        InputPixel1Type;
   typedef TInputRGBPixel2                        InputPixel2Type;
   typedef TOutputRGBPixel                        OutputRGBPixelType;
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
   /** Evaluate method  */
-  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
+  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2)
   {
     OutputRGBPixelType resp;
     resp.Fill(itk::NumericTraits<OutputValueType>::max());
-    double alpha = static_cast<double>(input2.GetAlpha())/255.0 * m_Alpha;
+    double alpha = static_cast<double>(input2.GetAlpha()) / 255.0 * m_Alpha;
 
-    resp.SetRed(  static_cast<OutputValueType>(vcl_floor(0.5+
-                  (1.0-alpha) * static_cast<double>(input1.GetRed())
-                 + alpha * static_cast<double>(input2.GetRed())
-                                                        )));
-    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(0.5+
-                  (1.0-alpha) * static_cast<double>(input1.GetGreen())
-                 + alpha * static_cast<double>(input2.GetGreen())
-                                                        )));
-    resp.SetBlue( static_cast<OutputValueType>(vcl_floor(0.5+
-                  (1.0-alpha) * static_cast<double>(input1.GetBlue())
-                 + alpha * static_cast<double>(input2.GetBlue())
+    resp.SetRed(static_cast<OutputValueType>(vcl_floor(0.5 +
+                                                       (1.0 - alpha) * static_cast<double>(input1.GetRed())
+                                                       + alpha * static_cast<double>(input2.GetRed())
+                                                       )));
+    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(0.5 +
+                                                         (1.0 - alpha) * static_cast<double>(input1.GetGreen())
+                                                         + alpha * static_cast<double>(input2.GetGreen())
+                                                         )));
+    resp.SetBlue(static_cast<OutputValueType>(vcl_floor(0.5 +
+                                                        (1.0 - alpha) * static_cast<double>(input1.GetBlue())
+                                                        + alpha * static_cast<double>(input2.GetBlue())
                                                         )));
     return resp;
   }
 
   /** Set/Get the alpha value */
-  itkSetClampMacro(Alpha,double,0.,1.);
-  itkGetMacro(Alpha,double);
+  itkSetClampMacro(Alpha, double, 0., 1.);
+  itkGetMacro(Alpha, double);
 
 protected:
   /** Constructor */
@@ -96,7 +96,7 @@ protected:
   virtual ~AlphaBlendingFunction() {}
 private:
   AlphaBlendingFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Alpha value for blending (should be in the range [0,1] */
   double m_Alpha;
@@ -106,5 +106,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

@@ -48,11 +48,11 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   WriterWatcherBase(itk::ProcessObject* process,
-                    const char *comment="");
+                    const char *comment = "");
 
   /** This other constructor is provided so that the user can set a different processing filter than the one
   just before process in the pipeline */
-  WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source,const char *comment="");
+  WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source, const char *comment = "");
 
   /** Default constructor */
   WriterWatcherBase();
@@ -61,14 +61,14 @@ public:
   WriterWatcherBase(const WriterWatcherBase&);
 
   /** operator=  */
-  void operator=(const WriterWatcherBase& );
+  void operator =(const WriterWatcherBase&);
 
   /** Destructor. */
   virtual ~WriterWatcherBase();
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess ()
+  itk::ProcessObject *GetProcess()
   {
     return m_Process.GetPointer();
   }
@@ -80,7 +80,7 @@ public:
   }
 
   /** Get a reference to the TimeProbe */
-  itk::TimeProbe &GetTimeProbe()
+  itk::TimeProbe& GetTimeProbe()
   {
     return m_TimeProbe;
   }

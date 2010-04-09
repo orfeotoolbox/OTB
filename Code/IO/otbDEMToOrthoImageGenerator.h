@@ -27,7 +27,6 @@
 #include "otbDEMHandler.h"
 #include "itkImageRegionIteratorWithIndex.h"
 
-
 namespace otb
 {
 /** \class DEMToOrthoImageGenerator
@@ -44,41 +43,41 @@ namespace otb
  *
  */
 template <class TDEMImage, class TMapProjection>
-class ITK_EXPORT DEMToOrthoImageGenerator:
-      public otb::DEMToImageGenerator<TDEMImage>
+class ITK_EXPORT DEMToOrthoImageGenerator :
+  public otb::DEMToImageGenerator<TDEMImage>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef itk::Indent                                        Indent;
-  typedef TDEMImage                                          DEMImageType;
-  typedef typename DEMImageType::Pointer                     DEMImagePointerType;
-  typedef typename DEMImageType::PixelType                   PixelType;
+  typedef itk::Indent                      Indent;
+  typedef TDEMImage                        DEMImageType;
+  typedef typename DEMImageType::Pointer   DEMImagePointerType;
+  typedef typename DEMImageType::PixelType PixelType;
 
-  typedef TMapProjection                                     MapProjectionType;
-  typedef typename MapProjectionType::Pointer                MapProjectionPointerType;
+  typedef TMapProjection                      MapProjectionType;
+  typedef typename MapProjectionType::Pointer MapProjectionPointerType;
 
-  typedef DEMToOrthoImageGenerator                           Self;
-  typedef otb::DEMToImageGenerator<DEMImageType>             Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
-  typedef Image<PixelType,2>                                 OutputImageType;
+  typedef DEMToOrthoImageGenerator               Self;
+  typedef otb::DEMToImageGenerator<DEMImageType> Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef Image<PixelType, 2>                    OutputImageType;
 
-  typedef typename Superclass::Pointer                       OutputImagePointer;
-  typedef typename OutputImageType::SpacingType              SpacingType;
-  typedef typename OutputImageType::SizeType                 SizeType;
-  typedef typename OutputImageType::PointType                PointType;
-  typedef typename OutputImageType::IndexType                IndexType;
-  typedef typename Superclass::OutputImageRegionType         OutputImageRegionType;
-  typedef itk::ImageRegionIteratorWithIndex< DEMImageType >  ImageIteratorType;
+  typedef typename Superclass::Pointer                    OutputImagePointer;
+  typedef typename OutputImageType::SpacingType           SpacingType;
+  typedef typename OutputImageType::SizeType              SizeType;
+  typedef typename OutputImageType::PointType             PointType;
+  typedef typename OutputImageType::IndexType             IndexType;
+  typedef typename Superclass::OutputImageRegionType      OutputImageRegionType;
+  typedef itk::ImageRegionIteratorWithIndex<DEMImageType> ImageIteratorType;
 
-  typedef otb::DEMHandler                                    DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer                   DEMHandlerPointerType;
+  typedef otb::DEMHandler                  DEMHandlerType;
+  typedef typename DEMHandlerType::Pointer DEMHandlerPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DEMToOrthoImageGenerator,ImageSource);
+  itkTypeMacro(DEMToOrthoImageGenerator, ImageSource);
 
   /** Set/Get the projection*/
   itkSetMacro(MapProjection, MapProjectionPointerType);
@@ -86,20 +85,20 @@ public :
 
 protected:
   DEMToOrthoImageGenerator();
-  virtual ~DEMToOrthoImageGenerator(){};
+  virtual ~DEMToOrthoImageGenerator(){}
 
   void PrintSelf(std::ostream& os, Indent indent) const;
 //  virtual void GenerateOutputInformation();
 //   void AllocateOutputs();
   void BeforeThreadedGenerateData();
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       int threadId);
+                            int threadId);
 
   MapProjectionPointerType m_MapProjection;
 
 private:
-  DEMToOrthoImageGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  DEMToOrthoImageGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // namespace otb

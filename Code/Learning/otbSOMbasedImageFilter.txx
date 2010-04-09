@@ -27,50 +27,50 @@ namespace otb {
 
 namespace Functor {
 
-template < class TInput, class TOutput, class TDistanceMetric, class TMap >
+template <class TInput, class TOutput, class TDistanceMetric, class TMap>
 TOutput
-SOMbasedImageFilterFunctor< TInput, TOutput, TDistanceMetric, TMap >
-::operator () ( const TInput & input )
-{
-  return static_cast<TOutput>( GetMap()->GetPixel( this->GetWinner( input ) ) );
-}
+SOMbasedImageFilterFunctor<TInput, TOutput, TDistanceMetric, TMap>
+::operator() (const TInput &input)
+  {
+  return static_cast<TOutput>(GetMap()->GetPixel(this->GetWinner(input)));
+  }
 
-template < class TInput, class TOutput, class TDistanceMetric, class TMap >
+template <class TInput, class TOutput, class TDistanceMetric, class TMap>
 void
-SOMbasedImageFilterFunctor< TInput, TOutput, TDistanceMetric, TMap >
-::SetMap ( const MapType * theMap )
+SOMbasedImageFilterFunctor<TInput, TOutput, TDistanceMetric, TMap>
+::SetMap(const MapType * theMap)
 {
-  m_Map = const_cast<MapType *>( theMap );
+  m_Map = const_cast<MapType *>(theMap);
   m_Distance = DistanceType::New();
 }
 
-template < class TInput, class TOutput, class TDistanceMetric, class TMap >
-typename SOMbasedImageFilterFunctor< TInput, TOutput, TDistanceMetric, TMap >::IndexType
-SOMbasedImageFilterFunctor< TInput, TOutput, TDistanceMetric, TMap >
-::GetWinner ( const NeuronType & sample )
+template <class TInput, class TOutput, class TDistanceMetric, class TMap>
+typename SOMbasedImageFilterFunctor<TInput, TOutput, TDistanceMetric, TMap>::IndexType
+SOMbasedImageFilterFunctor<TInput, TOutput, TDistanceMetric, TMap>
+::GetWinner(const NeuronType& sample)
 {
   typedef itk::ImageRegionIteratorWithIndex<MapType> IteratorType;
-  IteratorType it ( GetMap(), GetMap()->GetLargestPossibleRegion() );
+  IteratorType it(GetMap(), GetMap()->GetLargestPossibleRegion());
   it.GoToBegin();
 
   IndexType minPos = it.GetIndex();
 
   double tempDistance,
-    minDistance = GetDistance()->Evaluate( sample, it.Get() );
+         minDistance = GetDistance()->Evaluate(sample, it.Get());
   ++it;
 
-  while ( !it.IsAtEnd() )
-  {
-    tempDistance = GetDistance()->Evaluate( sample, it.Get() );
-
-    if ( tempDistance < minDistance )
+  while (!it.IsAtEnd())
     {
+    tempDistance = GetDistance()->Evaluate(sample, it.Get());
+
+    if (tempDistance < minDistance)
+      {
       minDistance = tempDistance;
       minPos = it.GetIndex();
-    }
+      }
 
     ++it;
-  }
+    }
 
   return minPos;
 }
@@ -80,34 +80,32 @@ SOMbasedImageFilterFunctor< TInput, TOutput, TDistanceMetric, TMap >
 /*
  * Implementation of the class SOMbasedImageFilter
  */
-template < class TInputImage, class TOutputImage, class TDistanceMetric, class TMap >
-SOMbasedImageFilter< TInputImage, TOutputImage, TDistanceMetric, TMap >
+template <class TInputImage, class TOutputImage, class TDistanceMetric, class TMap>
+SOMbasedImageFilter<TInputImage, TOutputImage, TDistanceMetric, TMap>
 ::SOMbasedImageFilter ()
 {
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
 }
 
-template < class TInputImage, class TOutputImage, class TDistanceMetric, class TMap >
+template <class TInputImage, class TOutputImage, class TDistanceMetric, class TMap>
 void
-SOMbasedImageFilter< TInputImage, TOutputImage, TDistanceMetric, TMap >
-::SetMap ( const MapType * theMap )
+SOMbasedImageFilter<TInputImage, TOutputImage, TDistanceMetric, TMap>
+::SetMap(const MapType * theMap)
 {
-  m_Map = const_cast<MapType *>( theMap );
+  m_Map = const_cast<MapType *>(theMap);
   this->Modified();
 }
 
-template < class TInputImage, class TOutputImage, class TDistanceMetric, class TMap >
+template <class TInputImage, class TOutputImage, class TDistanceMetric, class TMap>
 void
-SOMbasedImageFilter< TInputImage, TOutputImage, TDistanceMetric, TMap >
-::BeforeThreadedGenerateData ()
+SOMbasedImageFilter<TInputImage, TOutputImage, TDistanceMetric, TMap>
+::BeforeThreadedGenerateData()
 {
   m_Map->Update();
-  this->GetFunctor().SetMap( m_Map );
+  this->GetFunctor().SetMap(m_Map);
 }
 
 } // end of namespace otb
 
 #endif
-
-

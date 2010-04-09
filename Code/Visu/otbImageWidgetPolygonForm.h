@@ -39,7 +39,7 @@ namespace otb
  */
 template<class TValue = double>
 class ITK_EXPORT ImageWidgetPolygonForm
-      : public ImageWidgetFormBase
+  : public ImageWidgetFormBase
 {
 public:
   /** Standard class typedefs */
@@ -56,26 +56,25 @@ public:
   itkTypeMacro(ImageWidgetPolygonForm, ImageWidgetFormBase);
 
   /** Usefull typedef. */
-  typedef itk::Size<2>                               SizeType;
-  typedef itk::Index<2>                              IndexType;
-  typedef Polygon<ValueType>                         PolygonType;
-  typedef typename PolygonType::Pointer              PolygonPointerType;
-  typedef typename PolygonType::VertexType           VertexType;
-  typedef typename PolygonType::VertexListType       VertexListType;
-  typedef typename VertexListType::ConstIterator     VertexListConstIteratorType;
-  typedef typename PolygonType::ContinuousIndexType  ContinuousIndexType;
+  typedef itk::Size<2>                              SizeType;
+  typedef itk::Index<2>                             IndexType;
+  typedef Polygon<ValueType>                        PolygonType;
+  typedef typename PolygonType::Pointer             PolygonPointerType;
+  typedef typename PolygonType::VertexType          VertexType;
+  typedef typename PolygonType::VertexListType      VertexListType;
+  typedef typename VertexListType::ConstIterator    VertexListConstIteratorType;
+  typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
 
   /** Accessors */
   itkSetMacro(Polygon, PolygonPointerType);
   itkGetMacro(Polygon, PolygonPointerType);
-  itkSetMacro(Solid,bool);
-  itkGetMacro(Solid,bool);
-  itkSetMacro(InternalValueToAlphaChannel,bool);
-  itkGetMacro(InternalValueToAlphaChannel,bool);
+  itkSetMacro(Solid, bool);
+  itkGetMacro(Solid, bool);
+  itkSetMacro(InternalValueToAlphaChannel, bool);
+  itkGetMacro(InternalValueToAlphaChannel, bool);
 
   /** Actually draw the polygon */
   void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
-
 
 protected:
   /** Constructor. */
@@ -84,8 +83,8 @@ protected:
   ~ImageWidgetPolygonForm();
 
 private:
-  ImageWidgetPolygonForm(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  ImageWidgetPolygonForm(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Internal pointer to the otb::Polygon data structure */
   PolygonPointerType m_Polygon;

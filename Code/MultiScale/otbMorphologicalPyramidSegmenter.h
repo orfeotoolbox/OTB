@@ -44,18 +44,18 @@ namespace MorphologicalPyramid
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT Segmenter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
-public :
+public:
   /** Standard typedefs */
-  typedef Segmenter                                       Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef Segmenter                                          Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(Segmenter,ImageToImageFilter);
+  itkTypeMacro(Segmenter, ImageToImageFilter);
   /** Template parameters typedefs */
   typedef TInputImage                           InputImageType;
   typedef typename InputImageType::PixelType    InputPixelType;
@@ -96,26 +96,26 @@ public :
   InputImageType * GetOriginalImage(void);
 
   /** Min object size parameter accessor */
-  itkSetMacro(MinimumObjectSize,unsigned long);
-  itkGetMacro(MinimumObjectSize,unsigned long);
+  itkSetMacro(MinimumObjectSize, unsigned long);
+  itkGetMacro(MinimumObjectSize, unsigned long);
   /** Quantile for seeds extraction */
-  itkSetMacro(SeedsQuantile,double);
-  itkGetMacro(SeedsQuantile,double);
+  itkSetMacro(SeedsQuantile, double);
+  itkGetMacro(SeedsQuantile, double);
   /** Quantile for connected thresholding */
-  itkSetMacro(ConnectedThresholdQuantile,double);
-  itkGetMacro(ConnectedThresholdQuantile,double);
+  itkSetMacro(ConnectedThresholdQuantile, double);
+  itkGetMacro(ConnectedThresholdQuantile, double);
   /** Toogle the darker detail segmentation */
-  itkSetMacro(SegmentDarkDetailsBool,bool);
-  itkGetMacro(SegmentDarkDetailsBool,bool);
+  itkSetMacro(SegmentDarkDetailsBool, bool);
+  itkGetMacro(SegmentDarkDetailsBool, bool);
   itkBooleanMacro(SegmentDarkDetailsBool);
   /** Get the number of segmented objects */
-  itkGetMacro(NumberOfObjects,OutputPixelType);
+  itkGetMacro(NumberOfObjects, OutputPixelType);
 
 protected:
   /** Constructor */
   Segmenter();
   /** Destructor */
-  ~Segmenter() {};
+  ~Segmenter() {}
   /** Main computation method */
   void GenerateData(void);
   /** PrintSelf method */
@@ -129,11 +129,11 @@ protected:
    */
   void EnlargeOutputRequestedRegion(void);
 
-private :
-  Segmenter(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+private:
+  Segmenter(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
   /** Minimum size for the segmented object */
-  unsigned long  m_MinimumObjectSize;
+  unsigned long m_MinimumObjectSize;
   /** Quantile for seeds determination */
   double m_SeedsQuantile;
   /** Quantile to set the connectedThresholdFilter threshold */
@@ -144,7 +144,7 @@ private :
   OutputPixelType m_NumberOfObjects;
 };
 } // End namespace MorphologicalPyramid
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidSegmenter.txx"

@@ -28,24 +28,24 @@ namespace otb
  * \brief Base exception class for IO problems during writing.
  */
 class ITK_EXPORT RCC8GraphFileWriterException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro( RCC8GraphFileWriterException, ExceptionObject );
+  itkTypeMacro(RCC8GraphFileWriterException, ExceptionObject);
 
   /** Constructor. */
   RCC8GraphFileWriterException(const char *file, unsigned int line,
                                const char* message = "Error in IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                               const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+    {}
   /** Constructor. */
-  RCC8GraphFileWriterException(const std::string &file, unsigned int line,
+  RCC8GraphFileWriterException(const std::string & file, unsigned int line,
                                const char* message = "Error in IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                               const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+    {}
 };
 /**
  * \class RCC8GraphFileWriter
@@ -62,26 +62,26 @@ public:
  */
 template <class TInputGraph>
 class ITK_EXPORT RCC8GraphFileWriter
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standards typedefs */
-  typedef RCC8GraphFileWriter Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef RCC8GraphFileWriter           Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Method for creation through the object factory */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RCC8GraphFileWriter,ProcessObject);
+  itkTypeMacro(RCC8GraphFileWriter, ProcessObject);
   /** Typedefs for the output graph type */
-  typedef TInputGraph InputGraphType;
-  typedef typename InputGraphType::Pointer InputGraphPointerType;
-  typedef typename InputGraphType::VertexType VertexType;
-  typedef typename VertexType::Pointer VertexPointerType;
+  typedef TInputGraph                                   InputGraphType;
+  typedef typename InputGraphType::Pointer              InputGraphPointerType;
+  typedef typename InputGraphType::VertexType           VertexType;
+  typedef typename VertexType::Pointer                  VertexPointerType;
   typedef typename InputGraphType::VertexDescriptorType VertexDescriptorType;
-  typedef typename InputGraphType::RCC8ValueType RCC8ValueType;
-  typedef typename VertexType::AttributesMapType AttributesMapType;
+  typedef typename InputGraphType::RCC8ValueType        RCC8ValueType;
+  typedef typename VertexType::AttributesMapType        AttributesMapType;
 
   /** Set the filename */
   itkSetStringMacro(FileName);
@@ -123,7 +123,7 @@ protected:
    * \param target The index of the target vertex.
    * \param value  The value of the edge.
    */
-  void WriteEdge(std::ofstream& of,VertexDescriptorType source,
+  void WriteEdge(std::ofstream& of, VertexDescriptorType source,
                  VertexDescriptorType target, RCC8ValueType value);
   /**
    * Write a vertex to file.

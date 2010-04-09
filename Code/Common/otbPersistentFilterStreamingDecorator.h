@@ -40,33 +40,33 @@ namespace otb
  */
 template <class TFilter>
 class ITK_EXPORT PersistentFilterStreamingDecorator
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
-  typedef PersistentFilterStreamingDecorator          Self;
-  typedef itk::ProcessObject                Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef PersistentFilterStreamingDecorator Self;
+  typedef itk::ProcessObject                 Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(PersistentFilterStreamingDecorator,ProcessObject);
+  itkTypeMacro(PersistentFilterStreamingDecorator, ProcessObject);
 
   /** Template parameters typedefs */
-  typedef TFilter FilterType;
-  typedef typename FilterType::Pointer FilterPointerType;
+  typedef TFilter                             FilterType;
+  typedef typename FilterType::Pointer        FilterPointerType;
   typedef typename FilterType::InputImageType ImageType;
 
   typedef StreamingImageVirtualWriter<ImageType> StreamerType;
-  typedef typename StreamerType::Pointer StreamerPointerType;
+  typedef typename StreamerType::Pointer         StreamerPointerType;
 
-  itkSetObjectMacro(Filter,FilterType);
-  itkGetObjectMacro(Filter,FilterType);
-  itkGetConstObjectMacro(Filter,FilterType);
-  itkGetObjectMacro(Streamer,StreamerType);
+  itkSetObjectMacro(Filter, FilterType);
+  itkGetObjectMacro(Filter, FilterType);
+  itkGetConstObjectMacro(Filter, FilterType);
+  itkGetObjectMacro(Streamer, StreamerType);
 
   void SetInput(const ImageType *input);
   const ImageType * GetInput(void);
@@ -78,15 +78,15 @@ protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
-  virtual ~PersistentFilterStreamingDecorator() {};
+  virtual ~PersistentFilterStreamingDecorator() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData(void);
 
 private:
-  PersistentFilterStreamingDecorator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentFilterStreamingDecorator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /// Object responsible for streaming
   StreamerPointerType m_Streamer;
@@ -94,7 +94,7 @@ private:
   /// Object responsible for computation
   FilterPointerType m_Filter;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPersistentFilterStreamingDecorator.txx"
 #endif

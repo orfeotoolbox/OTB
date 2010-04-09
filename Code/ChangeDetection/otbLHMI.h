@@ -24,7 +24,6 @@
 #include <math.h>
 #include "itkHistogram.h"
 
-
 namespace otb
 {
 
@@ -41,28 +40,27 @@ namespace Functor
  *
  */
 
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class LHMI
 {
 
 public:
 
-  typedef typename std::vector<TOutput> VectorType;
-  typedef typename VectorType::iterator IteratorType;
-  typedef typename std::vector<VectorType> VectorOfVectorType;
-  typedef typename VectorOfVectorType::iterator VecOfVecIteratorType;
-  typedef double HistogramFrequencyType;
+  typedef typename std::vector<TOutput>                                  VectorType;
+  typedef typename VectorType::iterator                                  IteratorType;
+  typedef typename std::vector<VectorType>                               VectorOfVectorType;
+  typedef typename VectorOfVectorType::iterator                          VecOfVecIteratorType;
+  typedef double                                                         HistogramFrequencyType;
   typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
   typedef typename HistogramType::MeasurementVectorType
   MeasurementVectorType;
-  typedef typename HistogramType::SizeType    HistogramSizeType;
-  typedef typename HistogramType::Iterator    HistogramIteratorType;
+  typedef typename HistogramType::SizeType HistogramSizeType;
+  typedef typename HistogramType::Iterator HistogramIteratorType;
 
-
-  LHMI() {};
-  virtual ~LHMI() {};
-  inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB)
+  LHMI() {}
+  virtual ~LHMI() {}
+  inline TOutput operator ()(const TInput1& itA,
+                             const TInput2& itB)
   {
     HistogramType::Pointer histogram;
 
@@ -82,42 +80,35 @@ public:
     TOutput maxB = itB.GetPixel(0);
     TOutput minB = itB.GetPixel(0);
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
       TOutput value = static_cast<TOutput>(itA.GetPixel(pos));
 
-      if (value > maxA)
-        maxA = value;
-      else if (value < minA)
-        minA = value;
+      if (value > maxA) maxA = value;
+      else if (value < minA) minA = value;
 
       value = static_cast<TOutput>(itB.GetPixel(pos));
 
-      if (value > maxB)
-        maxB = value;
-      else if (value < minB)
-        minB = value;
+      if (value > maxB) maxB = value;
+      else if (value < minB) minB = value;
 
-
-    }
-
+      }
 
     // Initialize the upper and lower bounds of the histogram.
     lowerBound[0] = minA;
     lowerBound[1] = minB;
     upperBound[0] =
-      maxA + (maxA - minA ) * upperBoundIncreaseFactor;
+      maxA + (maxA - minA) * upperBoundIncreaseFactor;
     upperBound[1] =
-      maxB + (maxB - minB ) * upperBoundIncreaseFactor;
-
+      maxB + (maxB - minB) * upperBoundIncreaseFactor;
 
     histogram = HistogramType::New();
 
     histogram->Initialize(histogramSize, lowerBound, upperBound);
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
       typename HistogramType::MeasurementVectorType sample;
       sample[0] = itA.GetPixel(pos);
@@ -126,54 +117,52 @@ public:
          sample[1]!=NumericTraits<TOutput>::Zero)*/
       histogram->IncreaseFrequency(sample, 1);
 
-    }
+      }
 
-
-    TOutput entropyX = itk::NumericTraits<TOutput>::Zero;
-    TOutput entropyY = itk::NumericTraits<TOutput>::Zero;
-    TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
+    TOutput                entropyX = itk::NumericTraits<TOutput>::Zero;
+    TOutput                entropyY = itk::NumericTraits<TOutput>::Zero;
+    TOutput                jointEntropy = itk::NumericTraits<TOutput>::Zero;
     HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 
     for (unsigned int i = 0; i < histogram->GetSize()[0]; ++i)
-    {
+      {
       HistogramFrequencyType freq = histogram->GetFrequency(i, 0);
       if (freq > 0)
-      {
-        entropyX += freq*vcl_log(freq);
+        {
+        entropyX += freq * vcl_log(freq);
+        }
       }
-    }
 
-    entropyX = -entropyX/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
+    entropyX = -entropyX / static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
 
     for (unsigned int i = 0; i < histogram->GetSize()[1]; ++i)
-    {
+      {
       HistogramFrequencyType freq = histogram->GetFrequency(i, 1);
       if (freq > 0)
-      {
-        entropyY += freq*vcl_log(freq);
+        {
+        entropyY += freq * vcl_log(freq);
+        }
       }
-    }
 
-    entropyY = -entropyY/static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
+    entropyY = -entropyY / static_cast<TOutput>(totalFreq) + vcl_log(totalFreq);
 
     HistogramIteratorType it = histogram->Begin();
     HistogramIteratorType end = histogram->End();
     while (it != end)
-    {
+      {
       HistogramFrequencyType freq = it.GetFrequency();
       if (freq > 0)
-      {
-        jointEntropy += freq*vcl_log(freq);
-      }
+        {
+        jointEntropy += freq * vcl_log(freq);
+        }
       ++it;
-    }
+      }
 
-    jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
+    jointEntropy = -jointEntropy / static_cast<TOutput>(totalFreq) +
                    vcl_log(totalFreq);
 
-    return static_cast<TOutput>( jointEntropy/(entropyX + entropyY) );
+    return static_cast<TOutput>(jointEntropy / (entropyX + entropyY));
   }
-
 
 };
 }

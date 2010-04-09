@@ -42,19 +42,19 @@ template <class TInputImage, class TOutputImage>
 void
 VarianceImageFilter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
-{
+  {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
   typename Superclass::InputImagePointer inputPtr =
-    const_cast< TInputImage * >( this->GetInput() );
+    const_cast<TInputImage *>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !inputPtr || !outputPtr )
-  {
+  if (!inputPtr || !outputPtr)
+    {
     return;
-  }
+    }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -62,21 +62,21 @@ VarianceImageFilter<TInputImage, TOutputImage>
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
   // pad the input requested region by the operator radius
-  inputRequestedRegion.PadByRadius( m_Radius );
+  inputRequestedRegion.PadByRadius(m_Radius);
 
   // crop the input requested region at the input's largest possible region
-  if ( inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
-  {
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+  if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
+    {
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-  }
+    }
   else
-  {
+    {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
     // store what we tried to request (prior to trying to crop)
-    inputPtr->SetRequestedRegion( inputRequestedRegion );
+    inputPtr->SetRequestedRegion(inputRequestedRegion);
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
@@ -84,29 +84,28 @@ VarianceImageFilter<TInputImage, TOutputImage>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
+    }
   }
-}
 
-
-template< class TInputImage, class TOutputImage>
+template<class TInputImage, class TOutputImage>
 void
-VarianceImageFilter< TInputImage, TOutputImage>
+VarianceImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-  unsigned int i;
+  unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
 
   itk::ConstNeighborhoodIterator<InputImageType> bit;
-  itk::ImageRegionIterator<OutputImageType> it;
+  itk::ImageRegionIterator<OutputImageType>      it;
 
   // Allocate output
-  typename OutputImageType::Pointer output = this->GetOutput();
-  typename  InputImageType::ConstPointer input  = this->GetInput();
+  typename OutputImageType::Pointer     output = this->GetOutput();
+  typename InputImageType::ConstPointer input  = this->GetInput();
 
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType faceList;
-  itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
+  itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>                        bC;
   faceList = bC(input, outputRegionForThread, m_Radius);
 
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator fit;
@@ -119,35 +118,35 @@ VarianceImageFilter< TInputImage, TOutputImage>
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
-  for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-  {
+  for (fit = faceList.begin(); fit != faceList.end(); ++fit)
+    {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
-          input, *fit);
+                                                         input, *fit);
     unsigned int neighborhoodSize = bit.Size();
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
-    while ( ! bit.IsAtEnd() )
-    {
+    while (!bit.IsAtEnd())
+      {
       sum = itk::NumericTraits<InputRealType>::Zero;
       sumOfSquares = itk::NumericTraits<InputRealType>::Zero;
       for (i = 0; i < neighborhoodSize; ++i)
-      {
-        const InputRealType value = static_cast<InputRealType>( bit.GetPixel(i) );
+        {
+        const InputRealType value = static_cast<InputRealType>(bit.GetPixel(i));
         sum += value;
         sumOfSquares += value * value;
-      }
+        }
 
       // get the mean value
-      const double num = static_cast<double>( neighborhoodSize );
-      it.Set( static_cast<OutputPixelType>(  sumOfSquares - ( sum*sum / num ) ) / ( num - 1.0 ) );
+      const double num = static_cast<double>(neighborhoodSize);
+      it.Set(static_cast<OutputPixelType>(sumOfSquares - (sum * sum / num)) / (num - 1.0));
 
       ++bit;
       ++it;
       progress.CompletedPixel();
+      }
     }
-  }
 }
 
 /**
@@ -160,7 +159,7 @@ VarianceImageFilter<TInputImage, TOutput>
   std::ostream& os,
   itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << std::endl;
 
 }

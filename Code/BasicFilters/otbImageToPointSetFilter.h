@@ -39,32 +39,32 @@ class ITK_EXPORT ImageToPointSetFilter : public PointSetSource<TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageToPointSetFilter            Self;
-  typedef PointSetSource<TOutputPointSet>  Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef ImageToPointSetFilter           Self;
+  typedef PointSetSource<TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToPointSetFilter, PointSetSource);
 
   /** Some Image related typedefs. */
-  typedef   TInputImage                             InputImageType;
-  typedef   typename InputImageType::Pointer        InputImagePointer;
-  typedef   typename InputImageType::ConstPointer   InputImageConstPointer;
-  typedef   typename InputImageType::RegionType     InputImageRegionType;
-  typedef   typename InputImageType::PixelType      InputImagePixelType;
+  typedef   TInputImage                           InputImageType;
+  typedef   typename InputImageType::Pointer      InputImagePointer;
+  typedef   typename InputImageType::ConstPointer InputImageConstPointer;
+  typedef   typename InputImageType::RegionType   InputImageRegionType;
+  typedef   typename InputImageType::PixelType    InputImagePixelType;
   itkStaticConstMacro(InputImageDimension, unsigned int,
-                         TInputImage::ImageDimension);
+                      TInputImage::ImageDimension);
 
   /** Some PointSet related typedefs. */
-  typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
-  typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
-  typedef   typename Superclass::PointsContainerType    PointsContainerType;
-  typedef   itk::ProcessObject                          ProcessObjectType;
+  typedef   typename Superclass::OutputPointSetType    OutputPointSetType;
+  typedef   typename Superclass::OutputPointSetPointer OutputPointSetPointer;
+  typedef   typename Superclass::PointsContainerType   PointsContainerType;
+  typedef   itk::ProcessObject                         ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);
-  void SetInput( const InputImageType *input);
+  void SetInput(const InputImageType *input);
 
   /** Get the input image of this process object.  */
   const InputImageType * GetInput(unsigned int idx);
@@ -75,7 +75,7 @@ public:
 
 protected:
   ImageToPointSetFilter();
-  virtual ~ImageToPointSetFilter() {};
+  virtual ~ImageToPointSetFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   virtual void GenerateData(void);
@@ -90,12 +90,12 @@ protected:
 
   virtual int SplitRequestedRegion(int i, int num, InputImageRegionType& splitRegion);
 
-  virtual void ThreadedGenerateData(const InputImageRegionType &inputRegionForThread, int threadId);
+  virtual void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, int threadId);
 
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback( void *arg );
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void *arg);
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -108,14 +108,14 @@ protected:
   /** End Multi-threading implementation */
 
   /** Setup for streaming */
-  typedef StreamingTraits<InputImageType>                                        StreamingTraitsType;
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef typename SplitterType::Pointer                                         RegionSplitterPointer;
+  typedef StreamingTraits<InputImageType>                                       StreamingTraitsType;
+  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)> SplitterType;
+  typedef typename SplitterType::Pointer                                        RegionSplitterPointer;
   RegionSplitterPointer m_RegionSplitter;
 
 private:
-  ImageToPointSetFilter(const ImageToPointSetFilter&); //purposely not implemented
-  void operator=(const ImageToPointSetFilter&); //purposely not implemented
+  ImageToPointSetFilter(const ImageToPointSetFilter &); //purposely not implemented
+  void operator =(const ImageToPointSetFilter&); //purposely not implemented
 
 };
 

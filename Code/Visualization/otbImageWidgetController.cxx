@@ -58,17 +58,17 @@ int ImageWidgetController::HandleWidgetEvent(std::string widgetId, int event)
   // The action handler found
   ActionHandlerType * handler;
 
-  while(it!=m_ActionHandlersList->End())
+  while (it != m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    bool newFound = handler->HandleWidgetEvent(widgetId,event);
+    bool newFound = handler->HandleWidgetEvent(widgetId, event);
     found   =  found || newFound;
     ++it;
     }
   // If an handler was found, use it
-  if(found)
+  if (found)
     {
     return 1;
     }
@@ -83,49 +83,48 @@ void ImageWidgetController::HandleWidgetResize(std::string widgetId, int w, int 
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
 
-   // The action handler found
+  // The action handler found
   ActionHandlerType * handler;
 
-  while(it!=m_ActionHandlersList->End())
+  while (it != m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
     // try to handle the event with the current handler
-    handler->HandleWidgetResize(widgetId,w,h);
+    handler->HandleWidgetResize(widgetId, w, h);
     ++it;
     }
 }
 
 void ImageWidgetController::HandleWidgetMove(std::string widgetId, int x, int y)
 {
-  otbMsgDevMacro(<<"ImageWidgetController::HandleWidgetMove(): ("<<widgetId<<", "<<x<<", "<<y<<")");
+  otbMsgDevMacro(<< "ImageWidgetController::HandleWidgetMove(): (" << widgetId << ", " << x << ", " << y << ")");
   // Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
 
   // The action handler found
   ActionHandlerType * handler;
 
-  while(it!=m_ActionHandlersList->End())
+  while (it != m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
     // Check if it listens to (widget,event)
-    handler->HandleWidgetMove(widgetId,x,y);
+    handler->HandleWidgetMove(widgetId, x, y);
     ++it;
     }
 }
 
-
 void ImageWidgetController::ActivateActionHandlers()
 {
 //   otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
-  // Define an iterator on the action handlers list
+// Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
 
   // The action handler found
   ActionHandlerType * handler;
 
-  while(it!=m_ActionHandlersList->End())
+  while (it != m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
@@ -138,13 +137,13 @@ void ImageWidgetController::ActivateActionHandlers()
 void ImageWidgetController::DeactivateActionHandlers()
 {
 //   otbMsgDevMacro(<<"ImageWidgetController::DectivateActionHandler(): ("<<widgetId<<")");
-  // Define an iterator on the action handlers list
+// Define an iterator on the action handlers list
   ActionHandlerListType::Iterator it = m_ActionHandlersList->Begin();
 
   // The action handler found
   ActionHandlerType * handler;
 
-  while(it!=m_ActionHandlersList->End())
+  while (it != m_ActionHandlersList->End())
     {
     // Get the current handler
     handler = it.Get();
@@ -154,12 +153,10 @@ void ImageWidgetController::DeactivateActionHandlers()
     }
 }
 
-
 void ImageWidgetController::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<indent<<"Number of action handlers: "<<m_ActionHandlersList->Size()<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "Number of action handlers: " << m_ActionHandlersList->Size() << std::endl;
 }
-
 
 } // end namespace otb

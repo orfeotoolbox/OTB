@@ -33,23 +33,22 @@ namespace otb
  *
  * \ingroup IntensityImageFilters   Multithreaded
  */
-template <class TInputImage, class TOutputImage, class TFunction >
+template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryFunctorWithIndexImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorWithIndexImageFilter           Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef UnaryFunctorWithIndexImageFilter                   Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorWithIndexImageFilter,ImageToImageFilter);
-
+  itkTypeMacro(UnaryFunctorWithIndexImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef TFunction                             FunctorType;
@@ -83,7 +82,7 @@ public:
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -97,7 +96,7 @@ public:
     this->Modified();
   }
 
-  typedef itk::ImageRegionConstIteratorWithIndex<TInputImage>   IteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<TInputImage> IteratorType;
 
 protected:
   /**
@@ -107,7 +106,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorWithIndexImageFilter() {};
+  virtual ~UnaryFunctorWithIndexImageFilter() {}
 
   /** UnaryFunctorWithIndexImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -119,7 +118,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   /**
    * Pad the input requested region by radius
@@ -127,8 +126,8 @@ protected:
   virtual void GenerateInputRequestedRegion(void);
 
 private:
-  UnaryFunctorWithIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorWithIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   FunctorType m_Functor;
 };
@@ -138,6 +137,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbUnaryFunctorWithIndexImageFilter.txx"
 #endif
-
 
 #endif

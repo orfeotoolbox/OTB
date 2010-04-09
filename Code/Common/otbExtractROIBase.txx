@@ -33,59 +33,56 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-ExtractROIBase<TInputImage,TOutputImage>
-::ExtractROIBase() : itk::ImageToImageFilter<TInputImage,TOutputImage>(),
-    m_StartX(0),
-    m_StartY(0),
-    m_SizeX(0),
-    m_SizeY(0)
+ExtractROIBase<TInputImage, TOutputImage>
+::ExtractROIBase() : itk::ImageToImageFilter<TInputImage, TOutputImage>(),
+  m_StartX(0),
+  m_StartY(0),
+  m_SizeX(0),
+  m_SizeY(0)
 {
 }
-
 
 /**
  *
  */
 template <class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
+ExtractROIBase<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "ExtractionRegion: " << m_ExtractionRegion << std::endl;
   os << indent << "OutputImageRegion: " << m_OutputImageRegion << std::endl;
 }
 
-
 template<class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
-::CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
-                                    const OutputImageRegionType &srcRegion)
+ExtractROIBase<TInputImage, TOutputImage>
+::CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
+                                    const OutputImageRegionType& srcRegion)
 {
   destRegion = srcRegion;
 
   OutputImageIndexType index = destRegion.GetIndex();
 
   for (unsigned int i = 0; i < InputImageDimension; ++i)
-  {
-    index[i]+=m_ExtractionRegion.GetIndex()[i];
-  }
+    {
+    index[i] += m_ExtractionRegion.GetIndex()[i];
+    }
   destRegion.SetIndex(index);
 }
 
-
 template <class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
+ExtractROIBase<TInputImage, TOutputImage>
 ::SetInternalExtractionRegion(InputImageRegionType extractRegion)
 {
   m_ExtractionRegion = extractRegion;
 
-  unsigned int nonzeroSizeCount = 0;
-  InputImageSizeType inputSize = extractRegion.GetSize();
-  OutputImageSizeType outputSize;
+  unsigned int         nonzeroSizeCount = 0;
+  InputImageSizeType   inputSize = extractRegion.GetSize();
+  OutputImageSizeType  outputSize;
   OutputImageIndexType outputIndex;
 
   /**
@@ -93,19 +90,19 @@ ExtractROIBase<TInputImage,TOutputImage>
    * matches the number of dimensions in the output image.
    **/
   for (unsigned int i = 0; i < InputImageDimension; ++i)
-  {
-    if (inputSize[i])
     {
+    if (inputSize[i])
+      {
       outputSize[nonzeroSizeCount] = inputSize[i];
-      outputIndex[nonzeroSizeCount] =0;
+      outputIndex[nonzeroSizeCount] = 0;
       nonzeroSizeCount++;
+      }
     }
-  }
 
   if (nonzeroSizeCount != OutputImageDimension)
-  {
+    {
     itkExceptionMacro("Extraction Region not consistent with output image");
-  }
+    }
 
   m_OutputImageRegion.SetSize(outputSize);
   m_OutputImageRegion.SetIndex(outputIndex);
@@ -113,10 +110,9 @@ ExtractROIBase<TInputImage,TOutputImage>
   this->Modified();
 }
 
-
 template <class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
+ExtractROIBase<TInputImage, TOutputImage>
 ::SetExtractionRegion(InputImageRegionType roi)
 {
   m_SizeX = roi.GetSize()[0];
@@ -129,39 +125,38 @@ ExtractROIBase<TInputImage,TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
+ExtractROIBase<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 
   typename Superclass::InputImagePointer  inputPtr  = const_cast<InputImageType*>(this->GetInput());
-  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-  if ( !inputPtr )
-  {
+  if (!inputPtr)
+    {
     return;
-  }
-  if ( !outputPtr )
-  {
+    }
+  if (!outputPtr)
+    {
     return;
-  }
+    }
   InputImageRegionType requestedRegion = outputPtr->GetRequestedRegion();
-  InputImageIndexType index = requestedRegion.GetIndex();
-  InputImageIndexType offset = m_ExtractionRegion.GetIndex();
+  InputImageIndexType  index = requestedRegion.GetIndex();
+  InputImageIndexType  offset = m_ExtractionRegion.GetIndex();
 
-  for (unsigned int i=0; i < InputImageDimension; ++i)
-  {
-    index[i]+=offset[i];
-  }
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
+    {
+    index[i] += offset[i];
+    }
   requestedRegion.SetIndex(index);
   inputPtr->SetRequestedRegion(requestedRegion);
 
   otbMsgDevMacro(<< "InputRequestedRegion (otbExtractROIBase): ");
-  otbMsgDevMacro(<< "  - index: " << requestedRegion.GetIndex() );
-  otbMsgDevMacro(<< "  - size:  " << requestedRegion.GetSize() );
+  otbMsgDevMacro(<< "  - index: " << requestedRegion.GetIndex());
+  otbMsgDevMacro(<< "  - size:  " << requestedRegion.GetSize());
 
 }
-
 
 /**
  * ExtractROIBase can produce an image which is a different resolution
@@ -174,33 +169,33 @@ ExtractROIBase<TInputImage,TOutputImage>
  */
 template <class TInputImage, class TOutputImage>
 void
-ExtractROIBase<TInputImage,TOutputImage>
+ExtractROIBase<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  
+
   // Compute the area to extract
   // If SizeX/Y == 0, then set SizeX/Y to image size
-  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
 
   // Check if input exists or not before doing anything
   if (!inputPtr)
-  {
+    {
     return;
-  }
-  
+    }
+
   // Get the input image
   //const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
   const InputImageRegionType& inputRegion = inputPtr->GetLargestPossibleRegion();
 
-  if ( (m_SizeX == 0) || (m_SizeX > (inputRegion.GetSize()[0] - m_StartX)) )
-  {
+  if ((m_SizeX == 0) || (m_SizeX > (inputRegion.GetSize()[0] - m_StartX)))
+    {
     m_SizeX = inputRegion.GetSize()[0] - m_StartX;
-  }
-  if ( (m_SizeY == 0) || (m_SizeY > (inputRegion.GetSize()[1] - m_StartY)) )
-  {
+    }
+  if ((m_SizeY == 0) || (m_SizeY > (inputRegion.GetSize()[1] - m_StartY)))
+    {
     m_SizeY = inputRegion.GetSize()[1] - m_StartY;
-  }
+    }
 
   InputImageIndexType start;
   start[0] = m_StartX;
@@ -209,39 +204,38 @@ ExtractROIBase<TInputImage,TOutputImage>
   size[0] = m_SizeX;
   size[1] = m_SizeY;
   InputImageRegionType desiredRegion;
-  desiredRegion.SetSize(  size  );
-  desiredRegion.SetIndex( start );
+  desiredRegion.SetSize(size);
+  desiredRegion.SetIndex(start);
   // Call to the base class method for region initialization
-  this->SetInternalExtractionRegion( desiredRegion );
-
+  this->SetInternalExtractionRegion(desiredRegion);
 
   // do not call the superclass' implementation of this method since
   // this filter allows the input the output to be of different dimensions
 
   // get pointers to the input and output
-  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 //  typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
-  if ( !inputPtr )
-  {
+  if (!inputPtr)
+    {
     return;
-  }
-  if ( !outputPtr )
-  {
+    }
+  if (!outputPtr)
+    {
     return;
-  }
+    }
 
   // Set the output image size to the same value as the extraction region.
-  outputPtr->SetLargestPossibleRegion( m_OutputImageRegion );
+  outputPtr->SetLargestPossibleRegion(m_OutputImageRegion);
 
   // Set the output spacing and origin
   const itk::ImageBase<InputImageDimension> *phyData;
 
   phyData
-  = dynamic_cast<const itk::ImageBase<InputImageDimension>*>(this->GetInput());
+    = dynamic_cast<const itk::ImageBase<InputImageDimension>*>(this->GetInput());
 
   if (phyData)
-  {
+    {
     // Copy what we can from the image from spacing and origin of the input
     // This logic needs to be augmented with logic that select which
     // dimensions to copy
@@ -253,75 +247,74 @@ ExtractROIBase<TInputImage,TOutputImage>
     const typename InputImageType::PointType&
     inputOrigin = inputPtr->GetOrigin();
 
-    typename OutputImageType::SpacingType outputSpacing;
+    typename OutputImageType::SpacingType   outputSpacing;
     typename OutputImageType::DirectionType outputDirection;
-    typename OutputImageType::PointType outputOrigin;
+    typename OutputImageType::PointType     outputOrigin;
 
-    if ( static_cast<unsigned int>(OutputImageDimension) >
-         static_cast<unsigned int>(InputImageDimension )    )
-    {
+    if (static_cast<unsigned int>(OutputImageDimension) >
+        static_cast<unsigned int>(InputImageDimension))
+      {
       // copy the input to the output and fill the rest of the
       // output with zeros.
-      for (i=0; i < InputImageDimension; ++i)
-      {
-        outputSpacing[i] = inputSpacing[i];
-        outputOrigin[i] = inputOrigin[i]+static_cast<double>(m_ExtractionRegion.GetIndex()[i])*outputSpacing[i];
-        for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
+      for (i = 0; i < InputImageDimension; ++i)
         {
+        outputSpacing[i] = inputSpacing[i];
+        outputOrigin[i] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) * outputSpacing[i];
+        for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
+          {
           outputDirection[i][dim] = inputDirection[i][dim];
+          }
         }
-      }
       for (; i < OutputImageDimension; ++i)
-      {
+        {
         outputSpacing[i] = 1.0;
         outputOrigin[i] = 0.0;
         for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
-        {
+          {
           outputDirection[i][dim] = 0.0;
-        }
+          }
         outputDirection[i][i] = 1.0;
+        }
       }
-    }
     else
-    {
+      {
       // copy the non-collapsed part of the input spacing and origing to the output
       int nonZeroCount = 0;
-      for (i=0; i < InputImageDimension; ++i)
-      {
-        if (m_ExtractionRegion.GetSize()[i])
+      for (i = 0; i < InputImageDimension; ++i)
         {
-          outputSpacing[nonZeroCount] = inputSpacing[i];
-          outputOrigin[nonZeroCount] = inputOrigin[i]+static_cast<double>(m_ExtractionRegion.GetIndex()[i])*outputSpacing[i];
-          for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
+        if (m_ExtractionRegion.GetSize()[i])
           {
+          outputSpacing[nonZeroCount] = inputSpacing[i];
+          outputOrigin[nonZeroCount] = inputOrigin[i] + static_cast<double>(m_ExtractionRegion.GetIndex()[i]) *
+                                       outputSpacing[i];
+          for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
+            {
             outputDirection[nonZeroCount][dim] =
               inputDirection[nonZeroCount][dim];
-          }
+            }
           nonZeroCount++;
+          }
         }
       }
-    }
 
     // set the spacing and origin
-    outputPtr->SetSpacing( outputSpacing );
-    outputPtr->SetDirection( outputDirection );
-    outputPtr->SetOrigin( outputOrigin );
+    outputPtr->SetSpacing(outputSpacing);
+    outputPtr->SetDirection(outputDirection);
+    outputPtr->SetOrigin(outputOrigin);
 // THOMAS : dans ITK ce code est present, mais pas dans notre cas, car le nombre de composantes/pixel depend des canaux selectionnes par l'utilisateur
 //          ce parametre est renseignes dans les classes sous-jacentes
 //    outputPtr->SetNumberOfComponentsPerPixel(
 //       inputPtr->GetNumberOfComponentsPerPixel() );
-  }
+    }
   else
-  {
+    {
     // pointer could not be cast back down
     itkExceptionMacro(<< "otb::ExtractROIBase::GenerateOutputInformation "
                       << "cannot cast input to "
-                      << typeid(itk::ImageBase<InputImageDimension>*).name() );
-  }
-
+                      << typeid(itk::ImageBase<InputImageDimension>*).name());
+    }
 
 }
-
 
 } // end namespace otb
 

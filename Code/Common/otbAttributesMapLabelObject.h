@@ -37,7 +37,7 @@ namespace Functor
  *
  * \sa AttributesMapLabelObject
  */
-template< class TLabelObject >
+template<class TLabelObject>
 class ITK_EXPORT AttributesMapLabelObjectAccessor
 {
 public:
@@ -50,11 +50,11 @@ public:
    * \param labelObject The pointer to the label object
    * \return The attribute value.
    */
-  inline const AttributeValueType operator()( LabelObjectType * labelObject ) const
-    {
+  inline const AttributeValueType operator ()(LabelObjectType * labelObject) const
+  {
     return labelObject->GetAttribute(m_AttributeName.c_str());
-    }
-  
+  }
+
   /// Set the name of the attribute to retrieve
   void SetAttributeName(const char * name)
   {
@@ -92,18 +92,18 @@ private:
  *
  * \ingroup DataRepresentation
  */
-template < class TLabel, unsigned int VImageDimension, class TAttributesValue >
+template <class TLabel, unsigned int VImageDimension, class TAttributesValue>
 class ITK_EXPORT AttributesMapLabelObject
-: public itk::LabelObject< TLabel, VImageDimension >
+  : public itk::LabelObject<TLabel, VImageDimension>
 {
 public:
   /** Standard class typedefs */
-  typedef AttributesMapLabelObject                    Self;
-  typedef itk::LabelObject< TLabel, VImageDimension > Superclass;
-  typedef typename Superclass::LabelObjectType        LabelObjectType;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
-  typedef itk::WeakPointer <const Self>               ConstWeakPointer;
+  typedef AttributesMapLabelObject                  Self;
+  typedef itk::LabelObject<TLabel, VImageDimension> Superclass;
+  typedef typename Superclass::LabelObjectType      LabelObjectType;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef itk::WeakPointer <const Self>             ConstWeakPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -114,26 +114,26 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
 
   /// Type of a label map using an AttributesMapLabelObject
-  typedef itk::LabelMap< Self >                      LabelMapType;
+  typedef itk::LabelMap<Self> LabelMapType;
 
   /// Template parameters typedef
-  typedef TLabel                                     LabelType;
-  typedef TAttributesValue                           AttributesValueType;
-  
+  typedef TLabel           LabelType;
+  typedef TAttributesValue AttributesValueType;
+
   // Convenient inherited typedefs
-  typedef typename Superclass::IndexType             IndexType;
-  typedef typename Superclass::LineType              LineType;
-  typedef typename Superclass::LengthType            LengthType;
-  typedef typename Superclass::LineContainerType     LineContainerType;
+  typedef typename Superclass::IndexType         IndexType;
+  typedef typename Superclass::LineType          LineType;
+  typedef typename Superclass::LengthType        LengthType;
+  typedef typename Superclass::LineContainerType LineContainerType;
 
   /// Map container typedefs
-  typedef std::map<std::string,AttributesValueType>  AttributesMapType;
+  typedef std::map<std::string, AttributesValueType> AttributesMapType;
   typedef typename AttributesMapType::iterator       AttributesMapIteratorType;
   typedef typename AttributesMapType::const_iterator AttributesMapConstIteratorType;
 
   // The polygon corresponding to the label object
-  typedef Polygon<double>                            PolygonType;
-  typedef typename PolygonType::Pointer              PolygonPointerType;
+  typedef Polygon<double>               PolygonType;
+  typedef typename PolygonType::Pointer PolygonPointerType;
 
   /**
    * Set an attribute value.
@@ -141,7 +141,7 @@ public:
    */
   void SetAttribute(const char * name, AttributesValueType value)
   {
-    m_Attributes[name]=value;
+    m_Attributes[name] = value;
   }
 
   /**
@@ -150,13 +150,13 @@ public:
   AttributesValueType GetAttribute(const char * name) const
   {
     AttributesMapConstIteratorType it = m_Attributes.find(name);
-    if (it!=m_Attributes.end())
+    if (it != m_Attributes.end())
       {
       return it->second;
       }
     else
       {
-      itkExceptionMacro(<<"Could not find attribute named "<<name<<".");
+      itkExceptionMacro(<< "Could not find attribute named " << name << ".");
       }
   }
 
@@ -174,32 +174,32 @@ public:
   std::vector<std::string> GetAvailableAttributes() const
   {
     std::vector<std::string> attributesNames;
-    
+
     AttributesMapConstIteratorType it = m_Attributes.begin();
 
-    while(it!=m_Attributes.end())
+    while (it != m_Attributes.end())
       {
       attributesNames.push_back(it->first);
       ++it;
       }
     return attributesNames;
   }
-  
+
   /**
   * This method is overloaded to add the copy of the attributes map.
   */
-  virtual void CopyAttributesFrom( const LabelObjectType * lo)
-    {
-    Superclass::CopyAttributesFrom( lo );
+  virtual void CopyAttributesFrom(const LabelObjectType * lo)
+  {
+    Superclass::CopyAttributesFrom(lo);
 
     // copy the data of the current type if possible
-    const Self * src = dynamic_cast<const Self *>( lo );
-    if( src == NULL )
+    const Self * src = dynamic_cast<const Self *>(lo);
+    if (src == NULL)
       {
       return;
       }
-      m_Attributes = src->m_Attributes;
-    }
+    m_Attributes = src->m_Attributes;
+  }
 
   /** Return the polygon (const version) */
   const PolygonType * GetPolygon() const
@@ -222,24 +222,24 @@ public:
 protected:
   /** Constructor */
   AttributesMapLabelObject() : m_Attributes(), m_Polygon(PolygonType::New())
-    {}
+      {}
   /** Destructor */
   virtual ~AttributesMapLabelObject() {}
-  
+
   /** The printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
-    {
-    Superclass::PrintSelf( os, indent );
-    os << indent << "Attributes: "<< std::endl;
-    for(AttributesMapConstIteratorType it = m_Attributes.begin();
-       it!=m_Attributes.end();++it)
+  {
+    Superclass::PrintSelf(os, indent);
+    os << indent << "Attributes: " << std::endl;
+    for (AttributesMapConstIteratorType it = m_Attributes.begin();
+         it != m_Attributes.end(); ++it)
       {
-      os<<indent<<indent<<it->first<<" = "<<it->second<<std::endl;
+      os << indent << indent << it->first << " = " << it->second << std::endl;
       }
-    }
+  }
 private:
-  AttributesMapLabelObject(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapLabelObject(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The attributes map */
   AttributesMapType m_Attributes;

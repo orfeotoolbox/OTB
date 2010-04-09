@@ -27,47 +27,47 @@ namespace Functor
 {
 /** Constructor */
 template <class TLabelObject, class TFeatureImage>
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::MultiStatsAttributesLabelObjectFunctor() : m_ReducedAttributeSet(true),
-              m_StatsFunctorsMap()
+  m_StatsFunctorsMap()
 {}
 
 /** Destructor */
 template <class TLabelObject, class TFeatureImage>
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::~MultiStatsAttributesLabelObjectFunctor(){}
 
 /** The comparators */
 template <class TLabelObject, class TFeatureImage>
 bool
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::operator!=(const Self& self)
-{
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator != (const Self &self)
+  {
   bool resp = true;
   resp = resp && (m_ReducedAttributeSet != self.m_ReducedAttributeSet);
   resp = resp && (m_StatsFunctorsMap != self.m_StatsFunctorsMap);
   return resp;
-}
+  }
 
 template <class TLabelObject, class TFeatureImage>
-bool 
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::operator==(const Self& self)
-{
+bool
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator == (const Self &self)
+  {
   return !(this != self);
-}
+  }
 
 /** This is the functor implementation
- *  Calling the functor on a label object 
+ *  Calling the functor on a label object
  *  will update its statistics attributes */
 template <class TLabelObject, class TFeatureImage>
-void 
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-:: operator()(LabelObjectType * lo) const
+void
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::operator() (LabelObjectType * lo) const
 {
   // Walk every registered functors
- for(typename StatsFunctorsMapType::const_iterator it = m_StatsFunctorsMap.begin();
-      it!=m_StatsFunctorsMap.end(); ++it)
+  for (typename StatsFunctorsMapType::const_iterator it = m_StatsFunctorsMap.begin();
+       it != m_StatsFunctorsMap.end(); ++it)
     {
     (it->second)(lo);
     }
@@ -76,15 +76,15 @@ MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 /** Add a feature with the given name */
 template <class TLabelObject, class TFeatureImage>
 void
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::AddFeature(const std::string & name, const TFeatureImage * img)
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::AddFeature(const std::string& name, const TFeatureImage * img)
 {
   // Create a new functor
   StatsFunctorType newFunctor;
 
   // Set the reduced attribute set option
   newFunctor.SetReducedAttributeSet(m_ReducedAttributeSet);
-  
+
   // Set the feature and its name
   newFunctor.SetFeatureName(name);
 
@@ -92,35 +92,35 @@ MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
   newFunctor.SetFeatureImage(img);
 
   // Add it to the map
-  m_StatsFunctorsMap[name]=newFunctor;
+  m_StatsFunctorsMap[name] = newFunctor;
 }
 
 /** Remove the feature with this name if it exists */
 template <class TLabelObject, class TFeatureImage>
 bool
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::RemoveFeature(const std::string & name)
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::RemoveFeature(const std::string& name)
 {
   return (m_StatsFunctorsMap.erase(name) == 1);
 }
 
 /** Get the feature image with this name */
 template <class TLabelObject, class TFeatureImage>
-const TFeatureImage * 
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
-::GetFeature(const std::string & name) const
+const TFeatureImage *
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
+::GetFeature(const std::string& name) const
 {
-  if(m_StatsFunctorsMap.count(name) == 0)
+  if (m_StatsFunctorsMap.count(name) == 0)
     {
-    itkGenericExceptionMacro(<<"No feature named "<<name<<" in map.");
+    itkGenericExceptionMacro(<< "No feature named " << name << " in map.");
     }
   return m_StatsFunctorsMap[name].GetFeatureImage();
 }
-  
+
 /** Clear all the features */
 template <class TLabelObject, class TFeatureImage>
-void 
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+void
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::ClearAllFeatures()
 {
   m_StatsFunctorsMap.clear();
@@ -129,7 +129,7 @@ MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 /** Get the number of features */
 template <class TLabelObject, class TFeatureImage>
 unsigned int
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::GetNumberOfFeatures() const
 {
   return m_StatsFunctorsMap.size();
@@ -138,36 +138,35 @@ MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
 /** Set the reduced attribute set */
 template <class TLabelObject, class TFeatureImage>
 void
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::SetReducedAttributeSet(bool flag)
 {
   // Set the flag
   m_ReducedAttributeSet = flag;
 
   // Set the flag to all the already existing functors
-  for(typename StatsFunctorsMapType::iterator it = m_StatsFunctorsMap.begin();
-      it!=m_StatsFunctorsMap.end(); ++it)
+  for (typename StatsFunctorsMapType::iterator it = m_StatsFunctorsMap.begin();
+       it != m_StatsFunctorsMap.end(); ++it)
     {
     it->second.SetReducedAttributeSet(m_ReducedAttributeSet);
     }
 }
 /** Get the reduced attribute set */
 template <class TLabelObject, class TFeatureImage>
-bool 
-MultiStatsAttributesLabelObjectFunctor<TLabelObject,TFeatureImage>
+bool
+MultiStatsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage>
 ::GetReducedAttributeSet() const
 {
   return m_ReducedAttributeSet;
 }
 } // End namespace Functor
 
-
 template <class TImage, class TFeatureImage>
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
-::RadiometricAttributesLabelMapFilter() : m_RedChannelIndex(2), 
-            m_GreenChannelIndex(1), 
-            m_BlueChannelIndex(0), 
-            m_NIRChannelIndex(3)
+::RadiometricAttributesLabelMapFilter() : m_RedChannelIndex(2),
+  m_GreenChannelIndex(1),
+  m_BlueChannelIndex(0),
+  m_NIRChannelIndex(3)
 {
   this->SetNumberOfRequiredInputs(2);
 }
@@ -179,22 +178,22 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetFeatureImage(const TFeatureImage *input)
 {
   // Set the Nth input
-  this->SetNthInput(1,const_cast<TFeatureImage*>(input));
+  this->SetNthInput(1, const_cast<TFeatureImage*>(input));
 }
 
 /** Get the feature image */
 template <class TImage, class TFeatureImage>
 const typename RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
-::FeatureImageType * 
+::FeatureImageType *
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetFeatureImage() const
 {
-  return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1)); 
+  return static_cast<const TFeatureImage *>(this->itk::ProcessObject::GetInput(1));
 }
 
 /** Set Input1 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-void 
+void
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetInput1(const TImage * input)
 {
@@ -203,7 +202,7 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Get Input1 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-const TImage * 
+const TImage *
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetInput1() const
 {
@@ -212,7 +211,7 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Set Input2 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-void 
+void
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetInput2(const TFeatureImage * input)
 {
@@ -221,7 +220,7 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Get Input2 (for backward compatibility) */
 template <class TImage, class TFeatureImage>
-const TFeatureImage * 
+const TFeatureImage *
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetInput2() const
 {
@@ -230,11 +229,11 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Set the reduced attribute set */
 template <class TImage, class TFeatureImage>
-void 
+void
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::SetReducedAttributeSet(bool flag)
 {
-  if(this->GetFunctor().GetReducedAttributeSet() != flag)
+  if (this->GetFunctor().GetReducedAttributeSet() != flag)
     {
     this->GetFunctor().SetReducedAttributeSet(flag);
     this->Modified();
@@ -243,7 +242,7 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
 /** Get the reduced attribute set */
 template <class TImage, class TFeatureImage>
-bool 
+bool
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::GetReducedAttributeSet() const
 {
@@ -263,89 +262,89 @@ RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 
   // Gemi
   GEMIFilterPointerType gemi = GEMIFilterType::New();
-  gemi->SetRedIndex(m_RedChannelIndex+1);
-  gemi->SetNIRIndex(m_NIRChannelIndex+1);
+  gemi->SetRedIndex(m_RedChannelIndex + 1);
+  gemi->SetNIRIndex(m_NIRChannelIndex + 1);
   gemi->SetInput(this->GetFeatureImage());
   gemi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   gemi->Update();
-  this->GetFunctor().AddFeature("Gemi",gemi->GetOutput());
+  this->GetFunctor().AddFeature("Gemi", gemi->GetOutput());
 
   // Ndvi
   NDVIFilterPointerType ndvi = NDVIFilterType::New();
-  ndvi->SetRedIndex(m_RedChannelIndex+1);
-  ndvi->SetNIRIndex(m_NIRChannelIndex+1);
+  ndvi->SetRedIndex(m_RedChannelIndex + 1);
+  ndvi->SetNIRIndex(m_NIRChannelIndex + 1);
   ndvi->SetInput(this->GetFeatureImage());
   ndvi->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   ndvi->Update();
-  this->GetFunctor().AddFeature("Ndvi",ndvi->GetOutput());
-  
+  this->GetFunctor().AddFeature("Ndvi", ndvi->GetOutput());
+
   // IR
   IRFilterPointerType ir = IRFilterType::New();
-  ir->SetGreenIndex(m_GreenChannelIndex+1);
-  ir->SetRedIndex(m_RedChannelIndex+1);
+  ir->SetGreenIndex(m_GreenChannelIndex + 1);
+  ir->SetRedIndex(m_RedChannelIndex + 1);
   ir->SetInput(this->GetFeatureImage());
   ir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   ir->Update();
-  this->GetFunctor().AddFeature("Redness",ir->GetOutput());
- 
+  this->GetFunctor().AddFeature("Redness", ir->GetOutput());
+
   // IC
   ICFilterPointerType ic = ICFilterType::New();
-  ic->SetGreenIndex(m_GreenChannelIndex+1);
-  ic->SetRedIndex(m_RedChannelIndex+1);
+  ic->SetGreenIndex(m_GreenChannelIndex + 1);
+  ic->SetRedIndex(m_RedChannelIndex + 1);
   ic->SetInput(this->GetFeatureImage());
   ic->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   ic->Update();
-  this->GetFunctor().AddFeature("Color",ic->GetOutput());
+  this->GetFunctor().AddFeature("Color", ic->GetOutput());
 
   // IB
   IBFilterPointerType ib = IBFilterType::New();
-  ib->SetGreenIndex(m_GreenChannelIndex+1);
-  ib->SetRedIndex(m_RedChannelIndex+1);
+  ib->SetGreenIndex(m_GreenChannelIndex + 1);
+  ib->SetRedIndex(m_RedChannelIndex + 1);
   ib->SetInput(this->GetFeatureImage());
   ib->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   ib->Update();
-  this->GetFunctor().AddFeature("Brightness",ib->GetOutput());
+  this->GetFunctor().AddFeature("Brightness", ib->GetOutput());
 
   // NDWI2
   NDWI2FilterPointerType ndwi2 = NDWI2FilterType::New();
-  ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex+1);
-  ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex+1);
+  ndwi2->GetFunctor().SetGIndex(m_GreenChannelIndex + 1);
+  ndwi2->GetFunctor().SetNIRIndex(m_NIRChannelIndex + 1);
   ndwi2->SetInput(this->GetFeatureImage());
   ndwi2->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   ndwi2->Update();
-  this->GetFunctor().AddFeature("Ndwi2",ndwi2->GetOutput());
-  
+  this->GetFunctor().AddFeature("Ndwi2", ndwi2->GetOutput());
+
   // Red
   ChannelFilterPointerType red = ChannelFilterType::New();
-  red->SetChannel(m_RedChannelIndex+1);
+  red->SetChannel(m_RedChannelIndex + 1);
   red->SetInput(this->GetFeatureImage());
   red->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   red->Update();
-  this->GetFunctor().AddFeature("Red",red->GetOutput());
+  this->GetFunctor().AddFeature("Red", red->GetOutput());
 
   // Green
   ChannelFilterPointerType green = ChannelFilterType::New();
-  green->SetChannel(m_GreenChannelIndex+1);
+  green->SetChannel(m_GreenChannelIndex + 1);
   green->SetInput(this->GetFeatureImage());
   green->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   green->Update();
-  this->GetFunctor().AddFeature("Green",green->GetOutput());
+  this->GetFunctor().AddFeature("Green", green->GetOutput());
 
   // Blue
   ChannelFilterPointerType blue = ChannelFilterType::New();
-  blue->SetChannel(m_BlueChannelIndex+1);
+  blue->SetChannel(m_BlueChannelIndex + 1);
   blue->SetInput(this->GetFeatureImage());
   blue->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   blue->Update();
-    this->GetFunctor().AddFeature("Blue",blue->GetOutput());
+  this->GetFunctor().AddFeature("Blue", blue->GetOutput());
 
   // Nir
   ChannelFilterPointerType nir = ChannelFilterType::New();
-  nir->SetChannel(m_NIRChannelIndex+1);
+  nir->SetChannel(m_NIRChannelIndex + 1);
   nir->SetInput(this->GetFeatureImage());
   nir->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
   nir->Update();
-  this->GetFunctor().AddFeature("NIR",nir->GetOutput());
+  this->GetFunctor().AddFeature("NIR", nir->GetOutput());
 }
 
 template <class TImage, class TFeatureImage>
@@ -353,8 +352,8 @@ void
 RadiometricAttributesLabelMapFilter<TImage, TFeatureImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}// end namespace itk
+} // end namespace itk
 #endif

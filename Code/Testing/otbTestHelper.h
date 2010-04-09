@@ -31,7 +31,7 @@
 
 namespace otb
 {
-class /*ITK_EXPORT*/TestHelper
+class /*ITK_EXPORT*/ TestHelper
 {
 public:
   TestHelper() :
@@ -45,35 +45,35 @@ public:
   std::map<std::string, int> RegressionTestbaselines(char *baselineFilename) const;
 
   int RegressionTestImage(int cpt, const char *testImageFilename, const char *baselineImageFilename,
-      const double toleranceDiffPixelImage) const;
+                          const double toleranceDiffPixelImage) const;
 
   int RegressionTestOgrFile(const char *testOgrFilename, const char *baselineOgrFilename,
-    const double toleranceDiffValue) const;
+                            const double toleranceDiffValue) const;
 
   int RegressionTestBinaryFile(const char * testBinaryFileName, const char * baselineBinaryFileName) const;
 
   int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName,
-      const double epsilon, std::vector<std::string> ignoredLines) const;
+                              const double epsilon, std::vector<std::string> ignoredLines) const;
 
   int RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
-      const double toleranceDiffPixelImage) const;
+                             const double toleranceDiffPixelImage) const;
 
   void ReportErrorsOn()
   {
-    m_ReportErrors=true;
+    m_ReportErrors = true;
   }
   void ReportErrorsOff()
   {
-    m_ReportErrors=false;
+    m_ReportErrors = false;
   }
 
   void IgnoreLineOrderOn()
   {
-    m_IgnoreLineOrder=true;
+    m_IgnoreLineOrder = true;
   }
   void IgnoreLineOrderOff()
   {
-    m_IgnoreLineOrder=false;
+    m_IgnoreLineOrder = false;
   }
 
   void SetEpsilonBoundaryChecking(double epsilonBoundary)
@@ -91,17 +91,23 @@ private:
   bool isHexaPointerAddress(std::string str) const;
   std::string VectorToString(otb::MetaDataKey::VectorType vector) const;
   //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
-  bool CompareLines(std::string strfileref, std::string strfiletest, int& nbdiff, std::ofstream& fluxfilediff, int& numLine,
-       std::vector<std::string>& listStrDiffLineFileRef, std::vector<std::string>& listStrDiffLineFileTest,
-       double epsilon) const;
+  bool CompareLines(std::string strfileref,
+                    std::string strfiletest,
+                    int& nbdiff,
+                    std::ofstream& fluxfilediff,
+                    int& numLine,
+                    std::vector<std::string>& listStrDiffLineFileRef,
+                    std::vector<std::string>& listStrDiffLineFileTest,
+                    double epsilon) const;
 
   void
-      ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
-          OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter, int & nbdiff) const;
+  ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
+                   OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
+                   int& nbdiff) const;
 
   double m_EpsilonBoundaryChecking;
-  bool m_ReportErrors;
-  bool m_IgnoreLineOrder;
+  bool   m_ReportErrors;
+  bool   m_IgnoreLineOrder;
 
 };
 }

@@ -27,24 +27,24 @@ namespace otb
  * \brief Base exception class for IO problems during reading.
  */
 class ITK_EXPORT RCC8GraphFileReaderException
-      : public itk::ExceptionObject
+  : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro( RCC8GraphFileReaderException, ExceptionObject );
+  itkTypeMacro(RCC8GraphFileReaderException, ExceptionObject);
 
   /** Constructor. */
   RCC8GraphFileReaderException(const char *file, unsigned int line,
                                const char* message = "Error in IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                               const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+    {}
   /** Constructor. */
-  RCC8GraphFileReaderException(const std::string &file, unsigned int line,
+  RCC8GraphFileReaderException(const std::string & file, unsigned int line,
                                const char* message = "Error in IO",
-                               const char* loc = "Unknown" ) :
-      ExceptionObject(file, line, message, loc)
-  {}
+                               const char* loc = "Unknown") :
+    ExceptionObject(file, line, message, loc)
+    {}
 };
 /**
  * \class RCC8GraphFileReader
@@ -63,20 +63,20 @@ class ITK_EXPORT RCC8GraphFileReader : public RCC8GraphSource<TOutputGraph>
 {
 public:
   /** Standards typedef */
-  typedef RCC8GraphFileReader Self;
+  typedef RCC8GraphFileReader           Self;
   typedef RCC8GraphSource<TOutputGraph> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through the object factory */
   itkNewMacro(Self);
   /** Runtime type informations */
-  itkTypeMacro(RCC8GraphFileReader,RCC8GraphSource);
+  itkTypeMacro(RCC8GraphFileReader, RCC8GraphSource);
   /** Output related typedefs */
-  typedef TOutputGraph OutputGraphType;
+  typedef TOutputGraph                                OutputGraphType;
   typedef typename Superclass::OutputGraphPointerType OutputGraphPointerType;
-  typedef typename OutputGraphType::VertexType VertexType;
-  typedef typename VertexType::Pointer VertexPointerType;
-  typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
+  typedef typename OutputGraphType::VertexType        VertexType;
+  typedef typename VertexType::Pointer                VertexPointerType;
+  typedef typename OutputGraphType::RCC8ValueType     RCC8ValueType;
 
   /** Set the filename  */
   itkSetStringMacro(FileName);

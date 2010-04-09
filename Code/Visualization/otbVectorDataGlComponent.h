@@ -37,7 +37,6 @@
 #endif
 #endif
 
-
 namespace otb
 {
 /** \class VectorDataGlComponent
@@ -55,67 +54,67 @@ class VectorDataGlComponent
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataGlComponent                 Self;
-  typedef GlComponent                           Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
-  typedef typename Superclass::RegionType       RegionType;
+  typedef VectorDataGlComponent           Self;
+  typedef GlComponent                     Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef typename Superclass::RegionType RegionType;
 
   // affine transform
-  typedef Superclass::AffineTransformType       AffineTransformType;
-  typedef AffineTransformType::InputPointType   PointType;
-  typedef AffineTransformType::InputVectorType  VectorType;
-  typedef Superclass::ColorType                 ColorType;
+  typedef Superclass::AffineTransformType      AffineTransformType;
+  typedef AffineTransformType::InputPointType  PointType;
+  typedef AffineTransformType::InputVectorType VectorType;
+  typedef Superclass::ColorType                ColorType;
 
   /** VectorData typedef */
-  typedef TVectorData                             VectorDataType;
-  typedef typename VectorDataType::Pointer        VectorDataPointerType;
-  typedef typename VectorDataType::DataNodeType   DataNodeType;
-  typedef typename DataNodeType::Pointer          DataNodePointerType;
-  typedef typename DataNodeType::ConstPointer          DataNodeConstPointerType;
-  typedef typename VectorDataType::DataTreeType   DataTreeType;
-  typedef typename DataNodeType::LineType         LineType;
-  typedef typename DataNodeType::PolygonType      PolygonType;
-  typedef typename DataNodeType::PolygonListType  PolygonListType;
-  typedef typename DataTreeType::TreeNodeType     InternalTreeNodeType;
+  typedef TVectorData                                     VectorDataType;
+  typedef typename VectorDataType::Pointer                VectorDataPointerType;
+  typedef typename VectorDataType::DataNodeType           DataNodeType;
+  typedef typename DataNodeType::Pointer                  DataNodePointerType;
+  typedef typename DataNodeType::ConstPointer             DataNodeConstPointerType;
+  typedef typename VectorDataType::DataTreeType           DataTreeType;
+  typedef typename DataNodeType::LineType                 LineType;
+  typedef typename DataNodeType::PolygonType              PolygonType;
+  typedef typename DataNodeType::PolygonListType          PolygonListType;
+  typedef typename DataTreeType::TreeNodeType             InternalTreeNodeType;
   typedef typename InternalTreeNodeType::ChildrenListType ChildrenListType;
 
   /** Runtime information */
-  itkTypeMacro(VectorDataGlComponent,GlComponent);
+  itkTypeMacro(VectorDataGlComponent, GlComponent);
 
   /** New macro */
   itkNewMacro(Self);
 
   /// Render the vector data
-  virtual void  Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform);
+  virtual void  Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform);
 
   /** Set/Get the grid spacing */
-  itkSetMacro(Spacing,VectorType);
-  itkGetConstReferenceMacro(Spacing,VectorType);
+  itkSetMacro(Spacing, VectorType);
+  itkGetConstReferenceMacro(Spacing, VectorType);
 
   /** Set/Get the grid origin */
-  itkSetMacro(Origin,PointType);
-  itkGetConstReferenceMacro(Origin,PointType);
+  itkSetMacro(Origin, PointType);
+  itkGetConstReferenceMacro(Origin, PointType);
 
   /** Set/Get the VectorData to render */
-  itkSetObjectMacro(VectorData,VectorDataType);
-  itkGetObjectMacro(VectorData,VectorDataType);
+  itkSetObjectMacro(VectorData, VectorDataType);
+  itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Set/Get the color */
-  itkSetMacro(Color,ColorType);
-  itkGetConstReferenceMacro(Color,ColorType);
+  itkSetMacro(Color, ColorType);
+  itkGetConstReferenceMacro(Color, ColorType);
 
   /** Set/Get the line width */
-  itkSetMacro(LineWidth,double);
-  itkGetMacro(LineWidth,double);
+  itkSetMacro(LineWidth, double);
+  itkGetMacro(LineWidth, double);
 
   /** Set/Get the cross width */
-  itkSetMacro(CrossWidth,double);
-  itkGetMacro(CrossWidth,double);
+  itkSetMacro(CrossWidth, double);
+  itkGetMacro(CrossWidth, double);
 
   /** Should we render only polygons boundaries ? */
-  itkSetMacro(RenderPolygonBoundariesOnly,bool);
-  itkGetMacro(RenderPolygonBoundariesOnly,bool);
+  itkSetMacro(RenderPolygonBoundariesOnly, bool);
+  itkGetMacro(RenderPolygonBoundariesOnly, bool);
   itkBooleanMacro(RenderPolygonBoundariesOnly);
 
 protected:
@@ -126,18 +125,24 @@ protected:
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
   /// Render a point
-  virtual void RenderPoint(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPoint(DataNodePointerType dataNode,
+                           const RegionType& extent,
+                           const AffineTransformType * transform);
   /// Render a polyline
-  virtual void RenderLine(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderLine(DataNodePointerType dataNode, const RegionType& extent, const AffineTransformType * transform);
   // Render a complex polygon (with holes)
-  virtual void RenderPolygon(DataNodePointerType dataNode, const RegionType & extent, const AffineTransformType * transform);
+  virtual void RenderPolygon(DataNodePointerType dataNode,
+                             const RegionType& extent,
+                             const AffineTransformType * transform);
 
   // Recursive rendering method
-  virtual void Render(InternalTreeNodeType * node, const RegionType & extent, const AffineTransformType * space2ScreenTransform);
+  virtual void Render(InternalTreeNodeType * node,
+                      const RegionType& extent,
+                      const AffineTransformType * space2ScreenTransform);
 
   /// Frame a given point using the frame width and color (point
   /// should be in gl screen coordinates)
@@ -145,13 +150,16 @@ protected:
 
 private:
   VectorDataGlComponent(const Self&); // purposely not implemented
-  void operator=(const Self&);        // purposely not implemented
+  void operator =(const Self&);        // purposely not implemented
 
   // Function pointer typedef
   typedef GLvoid (CALLBACK * FunctionPointerType)();
 
   // Static Combine callback for tesselation
-  static void CALLBACK TesselationCombineCallback(GLdouble coords[3],GLdouble * /*data*/[4], GLfloat /*weights*/[4],GLdouble **dataOut)
+  static void CALLBACK TesselationCombineCallback(GLdouble coords[3],
+                                                  GLdouble * /*data*/[4],
+                                                  GLfloat /*weights*/[4],
+                                                  GLdouble **dataOut)
   {
     GLdouble * vertex = new GLdouble[3];
     vertex[0] = coords[0];
@@ -164,15 +172,15 @@ private:
   static void CALLBACK TesselationErrorCallback(GLenum errorCode)
   {
     const GLubyte * estring = gluErrorString(errorCode);
-    itkGenericExceptionMacro(<<"Glu Tesselation error: "<<estring);
+    itkGenericExceptionMacro(<< "Glu Tesselation error: " << estring);
   }
-  
+
   // Static begin callback for tesselation
   static void CALLBACK BeginCallback(GLenum prim)
   {
     glBegin(prim);
   }
-  
+
   // Static end callback for tesselation
   static void CALLBACK EndCallback()
   {
@@ -182,9 +190,8 @@ private:
   // static vertex callback for tesselation
   static void CALLBACK VertexCallback(void * data)
   {
-    glVertex3dv((GLdouble*)data);
+    glVertex3dv((GLdouble*) data);
   }
-
 
   /// Pointer to the vector data to render
   VectorDataPointerType m_VectorData;
@@ -193,7 +200,7 @@ private:
   VectorType m_Spacing;
 
   /// Origin of the image
-  PointType  m_Origin;
+  PointType m_Origin;
 
   /// The GluTesselator object to render complex polygons
   GLUtesselator * m_GluTesselator;
@@ -218,5 +225,3 @@ private:
 #endif
 
 #endif
-
-

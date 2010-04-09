@@ -42,21 +42,20 @@ namespace otb
   *
  */
 class ITK_EXPORT GluPolygonDrawingHelper
-      : public itk::Object
+  : public itk::Object
 {
 public:
 
-  typedef GluPolygonDrawingHelper Self;
-  typedef itk::Object             Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef GluPolygonDrawingHelper       Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::Point<double,3> PointType;
-  typedef std::vector<PointType> PointVectorType;
+  typedef itk::Point<double, 3>         PointType;
+  typedef std::vector<PointType>        PointVectorType;
 
-  itkTypeMacro(GluPolygonDrawingHelper,Object);
+  itkTypeMacro(GluPolygonDrawingHelper, Object);
 
   itkNewMacro(Self);
-
 
   /**
    * Set the current color.
@@ -88,7 +87,7 @@ public:
    * \param x position
    * \param y position
    */
-  void Vertex2d(double x,double y);
+  void Vertex2d(double x, double y);
 
   /**
    * Set the the winding rule for the tesselator.
@@ -119,9 +118,8 @@ protected:
    */
   ~GluPolygonDrawingHelper();
 
-  GluPolygonDrawingHelper(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
-
+  GluPolygonDrawingHelper(const Self &); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
 private:
   /** Store the point of the polygon */

@@ -36,18 +36,18 @@ namespace otb
    * \ingroup Radiometry
  */
 template <class TInputImage, class TOutputImage,
-      class TFunction = Functor::IR< typename TInputImage::InternalPixelType,
-                       typename TInputImage::InternalPixelType,
-                       typename TOutputImage::PixelType>  >
+          class TFunction = Functor::IR<typename TInputImage::InternalPixelType,
+                                        typename TInputImage::InternalPixelType,
+                                        typename TOutputImage::PixelType> >
 class ITK_EXPORT MultiChannelGAndRIndexImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction>
+  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelGAndRIndexImageFilter                                 Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage,TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                           Pointer;
-  typedef itk::SmartPointer<const Self>                                     ConstPointer;
+  typedef MultiChannelGAndRIndexImageFilter                                  Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
+  typedef itk::SmartPointer<Self>                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,28 +56,28 @@ public:
   itkTypeMacro(MultiChannelGAndRIndexImageFilter, UnaryFunctorImageFilter);
 
   /** Some typedefs. */
-  typedef TFunction   FunctorType;
+  typedef TFunction FunctorType;
 
   /** Set/Get the Green channel index. Value must be in [1...[ */
-  itkSetMacro(GreenIndex,unsigned int);
-  itkGetMacro(GreenIndex,unsigned int);
+  itkSetMacro(GreenIndex, unsigned int);
+  itkGetMacro(GreenIndex, unsigned int);
   /** Set/Get the Red channel index. Value must be in [1...[ */
-  itkSetMacro(RedIndex,unsigned int);
-  itkGetMacro(RedIndex,unsigned int);
+  itkSetMacro(RedIndex, unsigned int);
+  itkGetMacro(RedIndex, unsigned int);
 
 protected:
   /// Constructor
-  MultiChannelGAndRIndexImageFilter(): m_GreenIndex(1), m_RedIndex(2) {};
+  MultiChannelGAndRIndexImageFilter() : m_GreenIndex(1), m_RedIndex(2) {};
   /// Destructor
-  virtual ~MultiChannelGAndRIndexImageFilter() {};
+  virtual ~MultiChannelGAndRIndexImageFilter() {}
   /// Before generating data, set functor parameters
   virtual void BeforeThreadedGenerateData()
   {
     unsigned int lNbChan = this->GetInput()->GetNumberOfComponentsPerPixel();
-    if(m_GreenIndex < 1 || m_RedIndex < 1 ||
-       m_GreenIndex > lNbChan || m_RedIndex > lNbChan )
+    if (m_GreenIndex < 1 || m_RedIndex < 1 ||
+        m_GreenIndex > lNbChan || m_RedIndex > lNbChan)
       {
-      itkExceptionMacro(<<"Channel indices must belong to range [1, ...[");
+      itkExceptionMacro(<< "Channel indices must belong to range [1, ...[");
       }
     this->GetFunctor().SetGreenIndex(m_GreenIndex);
     this->GetFunctor().SetRedIndex(m_RedIndex);
@@ -85,13 +85,13 @@ protected:
   /// PrintSelf Method
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    this->Superclass::PrintSelf(os,indent);
-    os << indent << "Green index: "<<m_GreenIndex<<std::endl;
-    os << indent << "Red index: "<<m_RedIndex<<std::endl;
+    this->Superclass::PrintSelf(os, indent);
+    os << indent << "Green index: " << m_GreenIndex << std::endl;
+    os << indent << "Red index: " << m_RedIndex << std::endl;
   }
 private:
-  MultiChannelGAndRIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiChannelGAndRIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
   /** Green channel index */
   unsigned int m_GreenIndex;
   /** Red channel index */

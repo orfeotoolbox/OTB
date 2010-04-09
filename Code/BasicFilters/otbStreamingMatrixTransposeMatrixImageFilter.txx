@@ -28,7 +28,6 @@
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 
-
 namespace otb
 {
 
@@ -58,14 +57,13 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   m_NumberOfComponents2 = 0;
 }
 
-
 template<class TInputImage, class TInputImage2>
 itk::DataObject::Pointer
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
-  {
+    {
   case 0:
     return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
     break;
@@ -76,7 +74,7 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
     // might as well make an image
     return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
     break;
-  }
+    }
 
 }
 template<class TInputImage, class TInputImage2>
@@ -95,7 +93,6 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-
 template<class TInputImage, class TInputImage2>
 void
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
@@ -103,13 +100,13 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 {
   Superclass::GenerateInputRequestedRegion();
 
-  if ( this->GetFirstInput() && this->GetSecondInput() )
-  {
-    InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetFirstInput() );
-    InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );
+  if (this->GetFirstInput() && this->GetSecondInput())
+    {
+    InputImagePointer image = const_cast<typename Superclass::InputImageType *>(this->GetFirstInput());
+    InputImagePointer image2 = const_cast<typename Superclass::InputImageType *>(this->GetSecondInput());
     image->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
     image2->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  }
+    }
 }
 template<class TInputImage, class TInputImage2>
 void
@@ -117,16 +114,16 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  if ( this->GetFirstInput() )
-  {
+  if (this->GetFirstInput())
+    {
     this->GetOutput()->CopyInformation(this->GetFirstInput());
     this->GetOutput()->SetLargestPossibleRegion(this->GetFirstInput()->GetLargestPossibleRegion());
-  }
+    }
 
-  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-  {
+  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
+    {
     this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-  }
+    }
 }
 
 template<class TInputImage, class TInputImage2>
@@ -147,37 +144,37 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::Reset()
 {
 
-  TInputImage * inputPtr1 = const_cast<TInputImage * >(this->GetFirstInput());
+  TInputImage * inputPtr1 = const_cast<TInputImage *>(this->GetFirstInput());
   inputPtr1->UpdateOutputInformation();
-  TInputImage2 * inputPtr2 = const_cast<TInputImage2 * >(this->GetSecondInput());
+  TInputImage2 * inputPtr2 = const_cast<TInputImage2 *>(this->GetSecondInput());
   inputPtr2->UpdateOutputInformation();
 
-  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-  {
+  if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
+    {
     this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-  }
+    }
 
-  if ( inputPtr1->GetLargestPossibleRegion().GetSize() !=  inputPtr2->GetLargestPossibleRegion().GetSize() )
-  {
-    itkExceptionMacro( <<" Can't multiply the transposed matrix of a "
-                       << inputPtr1->GetLargestPossibleRegion().GetSize()
-                       << " and a "
-                       << inputPtr2->GetLargestPossibleRegion().GetSize()
-                       << " matrix " );
-  }
+  if (inputPtr1->GetLargestPossibleRegion().GetSize() !=  inputPtr2->GetLargestPossibleRegion().GetSize())
+    {
+    itkExceptionMacro(<< " Can't multiply the transposed matrix of a "
+                      << inputPtr1->GetLargestPossibleRegion().GetSize()
+                      << " and a "
+                      << inputPtr2->GetLargestPossibleRegion().GetSize()
+                      << " matrix ");
+    }
 
   m_NumberOfComponents1 = inputPtr1->GetNumberOfComponentsPerPixel();
   m_NumberOfComponents2 = inputPtr2->GetNumberOfComponentsPerPixel();
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
-  if ( m_UsePadFirstInput == true )
-  {
+  if (m_UsePadFirstInput == true)
+    {
     m_NumberOfComponents1++;
-  }
-  if ( m_UsePadSecondInput == true )
-  {
+    }
+  if (m_UsePadSecondInput == true)
+    {
     m_NumberOfComponents2++;
-  }
+    }
 
   MatrixType tempMatrix, initMatrix;
   tempMatrix.SetSize(m_NumberOfComponents1, m_NumberOfComponents2);
@@ -186,9 +183,8 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
   initMatrix.SetSize(m_NumberOfComponents2, m_NumberOfComponents2);
   initMatrix.Fill(itk::NumericTraits<RealType>::Zero);
-  this->GetResultOutput()->Set( initMatrix );
+  this->GetResultOutput()->Set(initMatrix);
 }
-
 
 template<class TInputImage, class TInputImage2>
 void
@@ -196,27 +192,26 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::Synthetize()
 {
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-  MatrixType resultMatrix;
+  MatrixType   resultMatrix;
   resultMatrix.SetSize(m_NumberOfComponents1, m_NumberOfComponents2);
   resultMatrix.Fill(itk::NumericTraits<RealType>::Zero);
 
-
-  for ( unsigned int thread = 0; thread < numberOfThreads; thread++)
-  {
+  for (unsigned int thread = 0; thread < numberOfThreads; thread++)
+    {
     /** TODO
      * To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
      * resultMatrix += m_ThreadSum[thread];
      **/
-    for (unsigned int i=0; i<resultMatrix.Rows(); ++i)
-    {
-      for (unsigned int j=0; j<resultMatrix.Cols(); ++j)
+    for (unsigned int i = 0; i < resultMatrix.Rows(); ++i)
       {
+      for (unsigned int j = 0; j < resultMatrix.Cols(); ++j)
+        {
         resultMatrix(i, j) += m_ThreadSum[thread](i, j);
+        }
       }
-    }
     /********END TODO ******/
-  }
-  this->GetResultOutput()->Set( resultMatrix );
+    }
+  this->GetResultOutput()->Set(resultMatrix);
 }
 
 template<class TInputImage, class TInputImage2>
@@ -227,8 +222,8 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   /**
    * Grab the input
    */
-  InputImagePointer input1Ptr = const_cast< TInputImage * >( this->GetFirstInput() );
-  InputImagePointer input2Ptr = const_cast< TInputImage2 * >( this->GetSecondInput() );
+  InputImagePointer input1Ptr = const_cast<TInputImage *>(this->GetFirstInput());
+  InputImagePointer input2Ptr = const_cast<TInputImage2 *>(this->GetSecondInput());
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -239,56 +234,56 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   input2Ptr->PropagateRequestedRegion();
   input2Ptr->UpdateOutputData();
 
-  itk::ImageRegionConstIterator<TInputImage> it1 (input1Ptr, outputRegionForThread);
-  itk::ImageRegionConstIterator<TInputImage2> it2 (input2Ptr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TInputImage> it1(input1Ptr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TInputImage2> it2(input2Ptr, outputRegionForThread);
   it1.GoToBegin();
   it2.GoToBegin();
 
   // loop the second image and get one pixel a time
   while (!it1.IsAtEnd())
-  {
-    PixelType vectorValue1 = it1.Get();
+    {
+    PixelType  vectorValue1 = it1.Get();
     PixelType2 vectorValue2 = it2.Get();
 
     // Add a first component to vectorValue2 and vectorValue1 filled with ones.
     if (m_UsePadFirstInput == true)
-    {
-      PixelType vectortemp1(vectorValue1.Size()+1);
-      vectortemp1[0] = 1;
-      for (unsigned int n=0; n<vectorValue1.Size(); ++n)
       {
-        vectortemp1[n+1] = vectorValue1[n];
+      PixelType vectortemp1(vectorValue1.Size() + 1);
+      vectortemp1[0] = 1;
+      for (unsigned int n = 0; n < vectorValue1.Size(); ++n)
+        {
+        vectortemp1[n + 1] = vectorValue1[n];
 
-      }
+        }
       vectorValue1.SetSize(vectortemp1.Size());
       vectorValue1 = vectortemp1;
-    }
+      }
 
     if (m_UsePadSecondInput == true)
-    {
-      PixelType2 vectortemp2(vectorValue2.Size()+1);
-      vectortemp2[0] = 1;
-      for (unsigned int m=0; m<vectorValue2.Size(); m++)
       {
-        vectortemp2[m+1] = vectorValue2[m];
+      PixelType2 vectortemp2(vectorValue2.Size() + 1);
+      vectortemp2[0] = 1;
+      for (unsigned int m = 0; m < vectorValue2.Size(); m++)
+        {
+        vectortemp2[m + 1] = vectorValue2[m];
 
-      }
+        }
       vectorValue2.SetSize(vectortemp2.Size());
       vectorValue2 = vectortemp2;
-    }
-
-    for (unsigned int i=0; i<vectorValue1.Size(); ++i)
-    {
-      for (unsigned int j=0; j<vectorValue2.Size(); ++j)
-      {
-        m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
       }
 
-    }
+    for (unsigned int i = 0; i < vectorValue1.Size(); ++i)
+      {
+      for (unsigned int j = 0; j < vectorValue2.Size(); ++j)
+        {
+        m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i]) * static_cast<RealType>(vectorValue2[j]);
+        }
+
+      }
     ++it1;
     ++it2;
     progress.CompletedPixel();
-  }
+    }
 }
 
 template<class TInputImage, class TInputImage2>
@@ -296,11 +291,10 @@ void
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
-  os << indent << "Result: "  <<this->GetResultOutput()->Get()<< std::endl;
+  os << indent << "Result: "  << this->GetResultOutput()->Get() << std::endl;
 }
 
-
-}// end namespace otb
+} // end namespace otb
 #endif

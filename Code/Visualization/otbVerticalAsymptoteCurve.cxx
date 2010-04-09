@@ -26,55 +26,53 @@ VerticalAsymptoteCurve::VerticalAsymptoteCurve()
   m_VerticalAsymptoteColor.Fill(0.5);
   m_Abcisse = 0.;
 }
- 
+
 // VerticalAsymptoteCurve::~VerticalAsymptoteCurve()
 // {}
- 
-void  VerticalAsymptoteCurve::Render(const RegionType& extent,const AffineTransformType * space2ScreenTransform)
+
+void VerticalAsymptoteCurve::Render(const RegionType& extent, const AffineTransformType * space2ScreenTransform)
 {
   PointType spacePoint, screenPoint;
-  
+
   // Rendering bounds
-  glColor3d(m_VerticalAsymptoteColor[0],m_VerticalAsymptoteColor[1],m_VerticalAsymptoteColor[2]);
+  glColor3d(m_VerticalAsymptoteColor[0], m_VerticalAsymptoteColor[1], m_VerticalAsymptoteColor[2]);
   glBegin(GL_LINES);
   // UL
   spacePoint[0] = m_Abcisse;
   spacePoint[1] = extent.GetIndex()[1];
   screenPoint   = space2ScreenTransform->TransformPoint(spacePoint);
-  glVertex2d(screenPoint[0],spacePoint[1]);
+  glVertex2d(screenPoint[0], spacePoint[1]);
 
   // LL
-  spacePoint[1] = extent.GetIndex()[1]+ extent.GetSize()[1];
+  spacePoint[1] = extent.GetIndex()[1] + extent.GetSize()[1];
   screenPoint   = space2ScreenTransform->TransformPoint(spacePoint);
-  glVertex2d(screenPoint[0],spacePoint[1]);
+  glVertex2d(screenPoint[0], spacePoint[1]);
   glEnd();
 }
- 
+
 void
 VerticalAsymptoteCurve::BeforeRendering()
 {
   // Initialize
   m_Minimum[0] = 100;
   m_Minimum[1] = 100;
-  
+
   m_Maximum[1] = -10;
   m_Maximum[0] = -10;
 }
 
- 
 VerticalAsymptoteCurve::PointType
 VerticalAsymptoteCurve
 ::GetMinimum()
 {
   return m_Minimum;
 }
- 
+
 VerticalAsymptoteCurve::PointType
 VerticalAsymptoteCurve
 ::GetMaximum()
 {
   return m_Maximum;
 }
-
 
 } // end namespace otb

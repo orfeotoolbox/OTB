@@ -39,9 +39,9 @@ namespace otb
  *
  * This filter computes the beta naught (\f$ \beta^{0} \f$) using the following formula:
  * \f[\beta^{0} =  k_{s} \cdot |DN|^{2} \f]
- * 
- * Where \f$ k_{s} \f$ is the calibration factor, which is imported 
- * from the input image metadata, even if one can set different values 
+ *
+ * Where \f$ k_{s} \f$ is the calibration factor, which is imported
+ * from the input image metadata, even if one can set different values
  * using the proper accessors.
  *
  * Results can be obtained either in linear or logarithmic scale
@@ -62,19 +62,19 @@ namespace otb
  * \ingroup Multithreaded
  * \ingroup Radiometry
  */
-template <class TInputImage, class TOutputImage >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT TerraSarBrightnessImageFilter :
   public itk::UnaryFunctorImageFilter<
-  TInputImage,
-  TOutputImage,
-  ITK_TYPENAME Functor::TerraSarBrightnessFunctor< 
-  ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
-  ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType > >
+    TInputImage,
+    TOutputImage,
+    ITK_TYPENAME Functor::TerraSarBrightnessFunctor<
+      ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TInputImage::InternalPixelType>::ValueType,
+      ITK_TYPENAME itk::NumericTraits<ITK_TYPENAME TOutputImage::InternalPixelType>::ValueType> >
 {
 public:
   /** Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage                                                      InputImageType;
@@ -84,15 +84,15 @@ public:
   typedef typename  itk::NumericTraits<InputInternalPixelType>::ValueType  InputValueType;
   typedef typename  itk::NumericTraits<OutputInternalPixelType>::ValueType OutputValueType;
   typedef typename Functor::TerraSarBrightnessFunctor
-  < InputValueType, OutputValueType>                                       FunctorType;
-    typedef itk::MetaDataDictionary                                        MetaDataDictionaryType;
+  <InputValueType, OutputValueType>                                       FunctorType;
+  typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
   /** "typedef" for standard classes. */
-  typedef TerraSarBrightnessImageFilter                                    Self;
-  typedef itk::UnaryFunctorImageFilter< InputImageType, 
-                                   OutputImageType, FunctorType >     Superclass;
-  typedef itk::SmartPointer<Self>                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+  typedef TerraSarBrightnessImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter<InputImageType,
+                                       OutputImageType, FunctorType>     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -102,11 +102,11 @@ public:
 
   /** Set the calibration factor*/
   void SetCalibrationFactor(double pCalibrationFactor)
-    {
-      this->GetFunctor().SetCalibrationFactor( pCalibrationFactor );
-      this->Modified();
-    }
-  
+  {
+    this->GetFunctor().SetCalibrationFactor(pCalibrationFactor);
+    this->Modified();
+  }
+
   /** Get the calibration factor */
   double GetCalibrationFactor()
   {
@@ -128,29 +128,28 @@ public:
 
   /** Set the default value (replacing negative beta) */
   void SetDefaultValue(double value)
-    {
-      this->GetFunctor().SetResultsInDecibels(value);
-      this->Modified();
-    }
-  
-  double GetDefaultValue()
-    {
-      return this->GetFunctor().SetResultsInDecibels();
-    }
+  {
+    this->GetFunctor().SetResultsInDecibels(value);
+    this->Modified();
+  }
 
+  double GetDefaultValue()
+  {
+    return this->GetFunctor().SetResultsInDecibels();
+  }
 
 protected:
   /** Constructor */
   TerraSarBrightnessImageFilter(){};
   /** Destructor */
-  virtual ~TerraSarBrightnessImageFilter() {};
+  virtual ~TerraSarBrightnessImageFilter() {}
 
   /** Initialize the functor vector */
   void BeforeThreadedGenerateData();
 
 private:
-  TerraSarBrightnessImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  TerraSarBrightnessImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

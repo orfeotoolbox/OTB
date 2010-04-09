@@ -43,8 +43,8 @@ namespace otb
    * \ingroup Markov
  */
 
-template< class TInput1, class TInput2>
-class ITK_EXPORT MRFSamplerRandomMAP: public MRFSampler< TInput1, TInput2>
+template<class TInput1, class TInput2>
+class ITK_EXPORT MRFSamplerRandomMAP : public MRFSampler<TInput1, TInput2>
 {
 public:
 
@@ -65,30 +65,27 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(MRFSamplerRandomMAP,MRFSampler);
-
+  itkTypeMacro(MRFSamplerRandomMAP, MRFSampler);
 
   void SetNumberOfClasses(const unsigned int nClasses)
   {
     if ((nClasses != this->m_NumberOfClasses) || (m_EnergiesInvalid == true))
-    {
+      {
       this->m_NumberOfClasses = nClasses;
-      if (m_Energy != NULL)
-        free(m_Energy);
-      if (m_RepartitionFunction != NULL)
-        free(m_RepartitionFunction);
+      if (m_Energy != NULL) free(m_Energy);
+      if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
       m_Energy = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       m_RepartitionFunction = (double *) calloc(this->m_NumberOfClasses, sizeof(double));
       this->Modified();
-    }
+      }
   }
 
-  inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul)
   {
     if (this->m_NumberOfClasses == 0)
-    {
-      itkExceptionMacro(<<"NumberOfClasse has to be greater than 0.");
-    }
+      {
+      itkExceptionMacro(<< "NumberOfClasse has to be greater than 0.");
+      }
 
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
     this->m_EnergyBefore += this->m_Lambda
@@ -99,44 +96,47 @@ public:
     this->m_Value = itRegul.GetCenterPixel();
 
     //Compute probability for each possibility
-    double totalProba=0.0;
-    unsigned int  valueCurrent = 0;
+    double       totalProba = 0.0;
+    unsigned int valueCurrent = 0;
     for (valueCurrent = 0; valueCurrent < this->m_NumberOfClasses; ++valueCurrent)
-    {
+      {
       this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, static_cast<LabelledImagePixelType>(valueCurrent));
       this->m_EnergyCurrent += this->m_Lambda
-                               * this->m_EnergyRegularization->GetValue(itRegul, static_cast<LabelledImagePixelType>(valueCurrent));
+                               * this->m_EnergyRegularization->GetValue(itRegul,
+                                                                        static_cast<LabelledImagePixelType>(
+                                                                          valueCurrent));
 
       m_Energy[valueCurrent] = this->m_EnergyCurrent;
-      m_RepartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent)+totalProba;
+      m_RepartitionFunction[valueCurrent] = vcl_exp(-this->m_EnergyCurrent) + totalProba;
       totalProba = m_RepartitionFunction[valueCurrent];
 
-    }
+      }
 
     //Pick a value according to probability
 
     //double select = (m_Generator->GetIntegerVariate()/(double(RAND_MAX)+1) * totalProba);
-    double select = (m_Generator->GetIntegerVariate()/(double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max())+1) * totalProba);
+    double select =
+      (m_Generator->GetIntegerVariate() /
+       (double(itk::NumericTraits<RandomGeneratorType::IntegerType>::max()) + 1) * totalProba);
     valueCurrent = 0;
-    while ( (valueCurrent < this->GetNumberOfClasses()) 
-         && (m_RepartitionFunction[valueCurrent] <= select))
-    {
+    while ((valueCurrent < this->GetNumberOfClasses())
+           && (m_RepartitionFunction[valueCurrent] <= select))
+      {
       valueCurrent++;
-    }
+      }
 
-    if ( valueCurrent == this->GetNumberOfClasses() )
-    {
-      valueCurrent = this->GetNumberOfClasses()-1;
-    }
+    if (valueCurrent == this->GetNumberOfClasses())
+      {
+      valueCurrent = this->GetNumberOfClasses() - 1;
+      }
 
-
-    if ( this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
-    {
+    if (this->m_Value != static_cast<LabelledImagePixelType>(valueCurrent))
+      {
       this->m_Value = static_cast<LabelledImagePixelType>(valueCurrent);
       this->m_EnergyAfter = m_Energy[static_cast<unsigned int>(valueCurrent)];
-    }
+      }
 
-    this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+    this->m_DeltaEnergy =  this->m_EnergyAfter - this->m_EnergyBefore;
 
     return 0;
   }
@@ -153,26 +153,24 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFSamplerRandomMAP():
+  MRFSamplerRandomMAP() :
     m_RepartitionFunction(NULL),
     m_Energy(NULL),
     m_EnergiesInvalid(true)
-  {
+    {
     m_Generator = RandomGeneratorType::New();
     m_Generator->SetSeed();
-  }
+    }
   virtual ~MRFSamplerRandomMAP()
-  {
-    if (m_Energy != NULL)
-      free(m_Energy);
-    if (m_RepartitionFunction != NULL)
-      free(m_RepartitionFunction);
-  }
+    {
+    if (m_Energy != NULL) free(m_Energy);
+    if (m_RepartitionFunction != NULL) free(m_RepartitionFunction);
+    }
 
 private:
-  double * m_RepartitionFunction;
-  double * m_Energy;
-  bool m_EnergiesInvalid;
+  double *                     m_RepartitionFunction;
+  double *                     m_Energy;
+  bool                         m_EnergiesInvalid;
   RandomGeneratorType::Pointer m_Generator;
 };
 }

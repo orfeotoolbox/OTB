@@ -26,7 +26,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
+PerBandVectorImageFilter<TInputImage, TOutputImage, TFilter>
 ::PerBandVectorImageFilter()
 {
   m_Filter = FilterType::New();
@@ -35,11 +35,11 @@ PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
 
 template <class TInputImage, class TOutputImage, class TFilter>
 void
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
+PerBandVectorImageFilter<TInputImage, TOutputImage, TFilter>
 ::GenerateOutputInformation()
 {
   if (this->GetInput())
-  {
+    {
     // Create a false monoband image
     typename InputImageType::Pointer dummyInputImage = InputImageType::New();
     dummyInputImage->CopyInformation(this->GetInput());
@@ -48,15 +48,15 @@ PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
     m_Filter->UpdateOutputInformation();
     this->GetOutput()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
     this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
-  }
+    }
 }
 
 template <class TInputImage, class TOutputImage, class TFilter>
 void
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
+PerBandVectorImageFilter<TInputImage, TOutputImage, TFilter>
 ::GenerateInputRequestedRegion()
 {
-  InputVectorImageType * inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
+  InputVectorImageType *           inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
   typename InputImageType::Pointer dummyInputImage = InputImageType::New();
   dummyInputImage->CopyInformation(this->GetInput());
   dummyInputImage->SetNumberOfComponentsPerPixel(1);
@@ -70,13 +70,13 @@ PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 void
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
+PerBandVectorImageFilter<TInputImage, TOutputImage, TFilter>
 ::GenerateData()
 {
-  InputVectorImageType * inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
-  OutputVectorImagePointerType outputPtr =  this->GetOutput();
+  InputVectorImageType *         inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
+  OutputVectorImagePointerType   outputPtr =  this->GetOutput();
   DecompositionFilterPointerType decomposer = DecompositionFilterType::New();
-  ProcessingFilterPointerType processor = ProcessingFilterType::New();
+  ProcessingFilterPointerType    processor = ProcessingFilterType::New();
   RecompositionFilterPointerType recomposer = RecompositionFilterType::New();
 
   inputPtr->UpdateOutputData();
@@ -97,7 +97,7 @@ PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
  */
 template <class TInputImage, class TOutputImage, class TFilter>
 void
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
+PerBandVectorImageFilter<TInputImage, TOutputImage, TFilter>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

@@ -29,7 +29,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputGraph>
 class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter
-      : public ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
+  : public ImageListToRCC8GraphFilter<TInputImage, TOutputGraph>
 {
 public:
   /** Standard class typedefs. */
@@ -40,28 +40,28 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageMultiSegmentationToRCC8GraphFilter,ImageListToRCC8GraphFilter);
+  itkTypeMacro(ImageMultiSegmentationToRCC8GraphFilter, ImageListToRCC8GraphFilter);
   /** Input related typedefs */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::PixelType PixelType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef typename Superclass::InputImageListType InputImageListType;
-  typedef typename InputImageListType::Pointer InputImageListPointerType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::PixelType         PixelType;
+  typedef typename InputImageType::Pointer           InputImagePointerType;
+  typedef typename Superclass::InputImageListType    InputImageListType;
+  typedef typename InputImageListType::Pointer       InputImageListPointerType;
   typedef typename InputImageListType::ConstIterator ConstListIteratorType;
   /** Output related typedefs */
-  typedef TOutputGraph OutputGraphType;
-  typedef typename OutputGraphType::Pointer OutputGraphPointerType;
-  typedef typename OutputGraphType::VertexType VertexType;
-  typedef typename VertexType::Pointer VertexPointerType;
-  typedef typename VertexType::PathType PathType;
+  typedef TOutputGraph                                   OutputGraphType;
+  typedef typename OutputGraphType::Pointer              OutputGraphPointerType;
+  typedef typename OutputGraphType::VertexType           VertexType;
+  typedef typename VertexType::Pointer                   VertexPointerType;
+  typedef typename VertexType::PathType                  PathType;
   typedef typename OutputGraphType::VertexDescriptorType VertexDescriptorType;
   /** Knowledge enum typedef */
-  typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
-  typedef enum {NO_INFO,LEVEL_1,LEVEL_3,FULL} KnowledgeValueType;
-  typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType;
+  typedef typename OutputGraphType::RCC8ValueType      RCC8ValueType;
+  typedef enum {NO_INFO, LEVEL_1, LEVEL_3, FULL}       KnowledgeValueType;
+  typedef std::pair<KnowledgeValueType, RCC8ValueType> KnowledgeStateType;
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
-  itkSetMacro(Optimisation,bool);
+  itkSetMacro(Optimisation, bool);
 
   /**
    * Get the number of occurences of the given value
@@ -94,7 +94,7 @@ protected:
 
 private:
   /** Optimisation flag */
-  bool m_Optimisation;
+  bool         m_Optimisation;
   unsigned int m_Accumulator[8];
 
 };

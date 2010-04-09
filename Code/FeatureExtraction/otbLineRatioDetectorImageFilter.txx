@@ -37,8 +37,8 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
-LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
+LineRatioDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::LineRatioDetectorImageFilter()
 {
   this->m_Radius.Fill(1);
@@ -47,9 +47,9 @@ LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, 
   this->m_FaceList.Fill(0);
 }
 
-template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 double
-LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+LineRatioDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
 {
 
@@ -66,8 +66,8 @@ LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, 
   std::vector<double>::iterator m3It = m3->begin();
   std::vector<double>::iterator m3End = m3->end();
 
-  while ( m1It!=m1End && m2It!=m2End && m3It!=m3End )
-  {
+  while (m1It != m1End && m2It != m2End && m3It != m3End)
+    {
 
     M1 += (*m1It);
     ++m1It;
@@ -78,7 +78,7 @@ LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, 
     M3 += (*m3It);
     ++m3It;
 
-  }
+    }
 
   M1 /= m1->size();
   M2 /= m2->size();
@@ -86,42 +86,33 @@ LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, 
 
   double R12 = 0.0;
   double R13 = 0.0;
-  
+
   double epsilon = 0.0000000001;
-  if (( vcl_abs(M1) > epsilon ) && (vcl_abs(M2) > epsilon ))
-    R12 = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
-  else if (( vcl_abs(M1) > epsilon ) || (vcl_abs(M2) > epsilon ))
-    R12 = 1.0;
+  if ((vcl_abs(M1) > epsilon) && (vcl_abs(M2) > epsilon)) R12 = static_cast<double>(1 - MIN((M1 / M2), (M2 / M1)));
+  else if ((vcl_abs(M1) > epsilon) || (vcl_abs(M2) > epsilon)) R12 = 1.0;
   else R12 = 0.;
 
-
-  if (( vcl_abs(M1) > epsilon ) && (vcl_abs(M3) > epsilon ))
-    R13 = static_cast<double>( 1 - MIN( (M1/M3), (M3/M1) ) );
-  else if (( vcl_abs(M1) > epsilon ) || (vcl_abs(M3) > epsilon ))
-    R13 = 1.0;
+  if ((vcl_abs(M1) > epsilon) && (vcl_abs(M3) > epsilon)) R13 = static_cast<double>(1 - MIN((M1 / M3), (M3 / M1)));
+  else if ((vcl_abs(M1) > epsilon) || (vcl_abs(M3) > epsilon)) R13 = 1.0;
   else R13 = 0.;
 
-
   // Determination of the minimum intensity of detection between R12 et R13
-  return static_cast<double>( MIN( R12, R13 ) );
+  return static_cast<double>(MIN(R12, R13));
 
 }
-
 
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 void
-LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+LineRatioDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 
 }
 
-
 } // end namespace otb
-
 
 #endif

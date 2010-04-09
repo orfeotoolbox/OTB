@@ -26,18 +26,18 @@ namespace otb
 namespace Functor
 {
 
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class JoinHistogramMI
 {
 public:
-  typedef double HistogramFrequencyType;
+  typedef double                                                         HistogramFrequencyType;
   typedef typename itk::Statistics::Histogram<HistogramFrequencyType, 2> HistogramType;
-  JoinHistogramMI() {};
-  virtual ~JoinHistogramMI() {};
-  inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB, const HistogramType* histogram)
+  JoinHistogramMI() {}
+  virtual ~JoinHistogramMI() {}
+  inline TOutput operator ()(const TInput1& itA,
+                             const TInput2& itB, const HistogramType* histogram)
   {
-    TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
+    TOutput                jointEntropy = itk::NumericTraits<TOutput>::Zero;
     HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 
     /*    for(unsigned long pos = 0; pos< itA.Size(); ++pos)
@@ -82,27 +82,25 @@ public:
 
         return entropyX + entropyY - jointEntropy;*/
 
-
     typename HistogramType::MeasurementVectorType sample;
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
       double valueA = static_cast<double>(itA.GetPixel(pos));
       double valueB = static_cast<double>(itB.GetPixel(pos));
 
       sample[0] = valueA;
       sample[1] = valueB;
 
-
       HistogramFrequencyType freq = histogram->GetFrequency(
-                                      histogram->GetIndex(sample));
+        histogram->GetIndex(sample));
       if (freq > 0)
-      {
-        jointEntropy += freq*vcl_log(freq);
+        {
+        jointEntropy += freq * vcl_log(freq);
+        }
+
       }
 
-    }
-
-    jointEntropy = -jointEntropy/static_cast<TOutput>(totalFreq) +
+    jointEntropy = -jointEntropy / static_cast<TOutput>(totalFreq) +
                    vcl_log(totalFreq);
 
     return jointEntropy;
@@ -118,7 +116,7 @@ public:
 
 
           }*/
-    return static_cast<TOutput>( 0 );
+    return static_cast<TOutput>(0);
   }
 
   /*  void SetHistogram(HistogramType* histo)
@@ -131,6 +129,5 @@ public:
 };
 }
 } // end namespace otb
-
 
 #endif

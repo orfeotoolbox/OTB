@@ -57,11 +57,11 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
 
   // Compute points set
   m_ThresholdPointSetFilter->SetInput(0, this->GetInput());
-  m_ThresholdPointSetFilter->SetLowerThreshold( m_LowerThreshold );
-  m_ThresholdPointSetFilter->SetUpperThreshold( m_UpperThreshold );
+  m_ThresholdPointSetFilter->SetLowerThreshold(m_LowerThreshold);
+  m_ThresholdPointSetFilter->SetUpperThreshold(m_UpperThreshold);
   m_ThresholdPointSetFilter->Update();
   m_PointSet = m_ThresholdPointSetFilter->GetOutput();
-  m_ObjectCount=0;
+  m_ObjectCount = 0;
 
   // Iterate Point set
   typedef typename PointSetType::PointsContainer ContainerType;
@@ -71,16 +71,16 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
 
   typename OutputImageType::Pointer outputImage = m_MultiplyFilter->GetOutput();
 
-  while ( itList != pointsContainer->End() )
-  {
-    typename PointSetType::PointType pCoordinate = (itList.Value());
+  while (itList != pointsContainer->End())
+    {
+    typename PointSetType::PointType   pCoordinate = (itList.Value());
     typename InputImageType::IndexType index;
 
     index[0] = static_cast <int> (pCoordinate[0]);
     index[1] = static_cast <int> (pCoordinate[1]);
     if (outputImage->GetPixel(index) ==
-        itk::NumericTraits<OutputPixelType>::ZeroValue() )
-    {
+        itk::NumericTraits<OutputPixelType>::ZeroValue())
+      {
       this->RegionGrowing(index);
 
       AddImageFilterPointerType addImage = AddImageFilterType::New();
@@ -89,9 +89,9 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
       addImage->Update();
       outputImage = addImage->GetOutput();
       ++m_ObjectCount;
-    }
+      }
     ++itList;
-  }
+    }
 
   this->GraftOutput(outputImage);
 }

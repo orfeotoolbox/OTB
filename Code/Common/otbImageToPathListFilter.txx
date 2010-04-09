@@ -29,7 +29,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPath>
-ImageToPathListFilter<TInputImage,TOutputPath>
+ImageToPathListFilter<TInputImage, TOutputPath>
 ::ImageToPathListFilter()
 {
   // Modify superclass default values, can be overridden by subclasses
@@ -41,29 +41,28 @@ ImageToPathListFilter<TInputImage,TOutputPath>
  */
 template <class TInputImage, class TOutputPath>
 void
-ImageToPathListFilter<TInputImage,TOutputPath>
+ImageToPathListFilter<TInputImage, TOutputPath>
 ::SetInput(const InputImageType *image)
 {
   // We have 1 input:  an image
 
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObjectType::SetNthInput(0,const_cast< InputImageType * >( image ) );
+  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType *>(image));
 }
 
 template <class TInputImage, class TOutputPath>
-const typename ImageToPathListFilter<TInputImage,TOutputPath>::InputImageType *
-ImageToPathListFilter<TInputImage,TOutputPath>
+const typename ImageToPathListFilter<TInputImage, TOutputPath>::InputImageType *
+ImageToPathListFilter<TInputImage, TOutputPath>
 ::GetInput(void)
 {
 
-
   if (this->GetNumberOfInputs() < 1)
-  {
+    {
     return 0;
-  }
+    }
 
-  return static_cast<const TInputImage * >
-         (this->ProcessObjectType::GetInput(0) );
+  return static_cast<const TInputImage *>
+           (this->ProcessObjectType::GetInput(0));
 }
 
 /**
@@ -71,12 +70,11 @@ ImageToPathListFilter<TInputImage,TOutputPath>
  */
 template <class TInputImage, class TOutputPath>
 void
-ImageToPathListFilter<TInputImage,TOutputPath>
+ImageToPathListFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-
 
 } // end namespace otb
 

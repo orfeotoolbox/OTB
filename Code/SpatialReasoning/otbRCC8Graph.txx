@@ -28,7 +28,7 @@ RCC8Graph<TVertex>
 ::RCC8Graph()
 {
   m_NumberOfVertices = 0;
-};
+}
 /**
  * since the number of vertices is mandatory to instantiate the
  * internal boost representation, the build method has to be called
@@ -39,7 +39,7 @@ void
 RCC8Graph<TVertex>
 ::Build(void)
 {
-  this->Initialize(m_NumberOfVertices-1);
+  this->Initialize(m_NumberOfVertices - 1);
 }
 /**
  * Initialize a range of vertex.
@@ -48,14 +48,14 @@ RCC8Graph<TVertex>
 template <class TVertex>
 void
 RCC8Graph<TVertex>
-::Initialize( unsigned int num)
+::Initialize(unsigned int num)
 {
-  for (unsigned int i = boost::num_vertices(m_Graph); i<=num;++i)
-  {
+  for (unsigned int i = boost::num_vertices(m_Graph); i <= num; ++i)
+    {
     VertexDescriptorType id = boost::add_vertex(m_Graph);
-    VertexPointerType vertex = VertexType::New();
-    m_Graph[id]=vertex;
-  }
+    VertexPointerType    vertex = VertexType::New();
+    m_Graph[id] = vertex;
+    }
 }
 /**
  * Set a vertex.
@@ -67,13 +67,13 @@ void
 RCC8Graph<TVertex>
 ::SetVertex(unsigned int index, VertexPointerType vertex)
 {
-  if (index>=m_NumberOfVertices)
-  {
+  if (index >= m_NumberOfVertices)
+    {
     this->Initialize(index);
-    m_NumberOfVertices = index+1;
-  }
+    m_NumberOfVertices = index + 1;
+    }
   VertexDescriptorType v = *boost::vertices(m_Graph).first;
-  m_Graph[v+index]= vertex;
+  m_Graph[v + index] = vertex;
 }
 /**
  * Get a vertex.
@@ -87,7 +87,7 @@ RCC8Graph<TVertex>
 ::GetVertex(unsigned int index)
 {
   VertexDescriptorType v = *boost::vertices(m_Graph).first;
-  return m_Graph[v+index];
+  return m_Graph[v + index];
 }
 /**
  * Add an edge in the graph.
@@ -100,10 +100,10 @@ void
 RCC8Graph<TVertex>
 ::AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r)
 {
-  EdgeDescriptorType e = boost::add_edge(index1,index2,m_Graph).first;
-  EdgeType::Pointer edge = EdgeType::New();
+  EdgeDescriptorType e = boost::add_edge(index1, index2, m_Graph).first;
+  EdgeType::Pointer  edge = EdgeType::New();
   edge->SetValue(r);
-  m_Graph[e]=edge;
+  m_Graph[e] = edge;
 }
 /**
   * Get number of edges
@@ -122,9 +122,9 @@ RCC8Graph<TVertex>
 template <class TVertex>
 void
 RCC8Graph<TVertex>
-::PrintSelf( std::ostream& os,itk::Indent indent ) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-}// end namespace otb
+} // end namespace otb
 #endif

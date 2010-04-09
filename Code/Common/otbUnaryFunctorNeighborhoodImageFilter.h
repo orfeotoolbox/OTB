@@ -34,23 +34,22 @@ namespace otb
  *
  * \ingroup IntensityImageFilters   Multithreaded
  */
-template <class TInputImage, class TOutputImage, class TFunction >
+template <class TInputImage, class TOutputImage, class TFunction>
 class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorNeighborhoodImageFilter           Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage >  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef UnaryFunctorNeighborhoodImageFilter                Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,ImageToImageFilter);
-
+  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef TFunction                             FunctorType;
@@ -67,8 +66,8 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
-  itkSetMacro(Radius,InputImageSizeType);
-  itkGetMacro(Radius,InputImageSizeType);
+  itkSetMacro(Radius, InputImageSizeType);
+  itkGetMacro(Radius, InputImageSizeType);
 
   /** Set unsinged int radius */
   void SetRadius(unsigned int radius)
@@ -93,7 +92,7 @@ public:
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -107,9 +106,9 @@ public:
     this->Modified();
   }
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
-  typedef unsigned char RadiusSizeType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
+  typedef unsigned char                                 RadiusSizeType;
 
 protected:
   /**
@@ -119,7 +118,7 @@ protected:
   /**
    * Destructor
    */
-  virtual ~UnaryFunctorNeighborhoodImageFilter() {};
+  virtual ~UnaryFunctorNeighborhoodImageFilter() {}
 
   /** UnaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -131,7 +130,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
 
   /**
    * Pad the input requested region by radius
@@ -139,11 +138,11 @@ protected:
   virtual void GenerateInputRequestedRegion(void);
 
 private:
-  UnaryFunctorNeighborhoodImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  UnaryFunctorNeighborhoodImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   InputImageSizeType m_Radius;
-  FunctorType m_Functor;
+  FunctorType        m_Functor;
 };
 
 } // namespace otb
@@ -151,6 +150,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbUnaryFunctorNeighborhoodImageFilter.txx"
 #endif
-
 
 #endif

@@ -40,23 +40,23 @@ public:
   ScalarVectorImageTextureFunctor()
   {
     m_FeatureIndex.clear();
-  };
-  ~ScalarVectorImageTextureFunctor() { };
+  }
+  ~ScalarVectorImageTextureFunctor() {}
 
-  typedef std::vector<int> IndexSelectFeaturesType;
-  typedef TInputImage InputImageType;
-  typedef typename itk::Statistics::ScalarImageTextureCalculator< InputImageType> TextureCalcType;
+  typedef std::vector<int>                                                       IndexSelectFeaturesType;
+  typedef TInputImage                                                            InputImageType;
+  typedef typename itk::Statistics::ScalarImageTextureCalculator<InputImageType> TextureCalcType;
 
-  void SetFeatureIndex(const IndexSelectFeaturesType & listIndex)
+  void SetFeatureIndex(const IndexSelectFeaturesType& listIndex)
   {
     m_FeatureIndex = listIndex;
-  };
-  const IndexSelectFeaturesType & GetFeatureIndex()
+  }
+  const IndexSelectFeaturesType& GetFeatureIndex()
   {
     return m_FeatureIndex;
-  };
+  }
 
-  inline TOutput operator()(const TNeighIter & it)
+  inline TOutput operator ()(const TNeighIter& it)
   {
     unsigned int neighborhoodSize = it.Size();
 
@@ -70,17 +70,17 @@ public:
     region = it.GetBoundingBoxAsImageRegion();
     region.SetIndex(index);
 
-    image->SetRegions( region );
+    image->SetRegions(region);
     image->Allocate();
 
-    typedef itk::ImageRegionIterator< InputImageType > IteratorrrType;
-    IteratorrrType inputIt( image, image->GetLargestPossibleRegion() );
+    typedef itk::ImageRegionIterator<InputImageType> IteratorrrType;
+    IteratorrrType inputIt(image, image->GetLargestPossibleRegion());
     inputIt.GoToBegin();
     for (unsigned int i = 0; i < neighborhoodSize; ++i)
-    {
+      {
       inputIt.Set(it.GetPixel(i));
       ++inputIt;
-    }
+      }
 
     textureFilter->FastCalculationsOn();
     textureFilter->SetInput(image);
@@ -90,10 +90,10 @@ public:
     resultvalue.SetSize(m_FeatureIndex.size());
     resultvalue.AllocateElements(m_FeatureIndex.size());
 
-    for (unsigned int cpt=0; cpt < m_FeatureIndex.size(); cpt++)
-    {
+    for (unsigned int cpt = 0; cpt < m_FeatureIndex.size(); cpt++)
+      {
       resultvalue[cpt] = textureFilter->GetFeatureMeans()->at(m_FeatureIndex[cpt]);
-    }
+      }
 
     return (static_cast<TOutput>(resultvalue));
 

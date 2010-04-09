@@ -43,9 +43,8 @@ void
 ExtractROI<TInputPixel, TOutputPixel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-
 
 /**
  * ExtractROI can produce an image which is a different resolution
@@ -71,11 +70,11 @@ ExtractROI<TInputPixel, TOutputPixel>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {
-  itkDebugMacro(<<"Actually executing");
+  itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
-  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
@@ -85,23 +84,22 @@ ExtractROI<TInputPixel, TOutputPixel>
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators.
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIterator;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
   // walk the output region, and sample the input image
-  while ( !outIt.IsAtEnd() )
-  {
+  while (!outIt.IsAtEnd())
+    {
     // copy the input pixel to the output
-    outIt.Set( inIt.Get());
+    outIt.Set(inIt.Get());
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-  }
+    }
 }
-
 
 } // end namespace otb
 

@@ -35,7 +35,7 @@ namespace otb
 {
 template<class TData>
 OGRVectorDataIO<TData>
-::OGRVectorDataIO():
+::OGRVectorDataIO() :
   m_DataSource(NULL)
 {
   // OGR factory registration
@@ -53,7 +53,7 @@ OGRVectorDataIO<TData>::~OGRVectorDataIO()
 
 template<class TData>
 bool
-OGRVectorDataIO<TData>::CanReadFile( const char* filename ) const
+OGRVectorDataIO<TData>::CanReadFile(const char* filename) const
 {
   OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
   if (poDS == NULL)
@@ -64,7 +64,6 @@ OGRVectorDataIO<TData>::CanReadFile( const char* filename ) const
   OGRDataSource::DestroyDataSource(poDS);
   return true;
 }
-
 
 // Used to print information about this object
 template<class TData>
@@ -82,22 +81,22 @@ OGRVectorDataIO<TData>
 {
   // Destroy previous opened data source
   if (m_DataSource != NULL)
-  {
+    {
     OGRDataSource::DestroyDataSource(m_DataSource);
-  }
+    }
 
   m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), FALSE);
 
   if (m_DataSource == NULL)
-  {
-    itkExceptionMacro(<<"Failed to open data file "<<this->m_FileName);
-  }
+    {
+    itkExceptionMacro(<< "Failed to open data file " << this->m_FileName);
+    }
 
-  otbMsgDebugMacro( <<"Driver to read: OGR");
-  otbMsgDebugMacro( <<"Reading  file: "<< this->m_FileName);
+  otbMsgDebugMacro(<< "Driver to read: OGR");
+  otbMsgDebugMacro(<< "Reading  file: " << this->m_FileName);
 
   // Reading layers
-  otbMsgDevMacro(<<"Number of layers: "<<m_DataSource->GetLayerCount());
+  otbMsgDevMacro(<< "Number of layers: " << m_DataSource->GetLayerCount());
 
   // Retrieving root node
   DataTreePointerType tree = data->GetDataTree();
@@ -108,40 +107,38 @@ OGRVectorDataIO<TData>
   oSRS = m_DataSource->GetLayer(0)->GetSpatialRef();
 
   if (oSRS != NULL)
-  {
+    {
     char * projectionRefChar;
     oSRS->exportToWkt(&projectionRefChar);
     std::string projectionRef = projectionRefChar;
     OGRFree(projectionRefChar);
-    itk::MetaDataDictionary & dict = data->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef );
-  }
+    itk::MetaDataDictionary& dict = data->GetMetaDataDictionary();
+    itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
+    }
   else
-  {
+    {
     otbMsgDevMacro(<< "Can't retrieve the OGRSpatialReference from the shapefile");
-  }
-
+    }
 
   std::string projectionRefWkt = data->GetProjectionRef();
-
 
   bool projectionInformationAvailable = !projectionRefWkt.empty();
 
   if (projectionInformationAvailable)
-  {
+    {
     otbMsgDevMacro(<< "Projection information : " << projectionRefWkt);
-  }
+    }
   else
-  {
+    {
     otbMsgDevMacro(<< "Projection information unavailable: assuming WGS84");
-  }
+    }
 
   // For each layer
   for (int layerIndex = 0; layerIndex < m_DataSource->GetLayerCount(); ++layerIndex)
-  {
+    {
     /** retrieving layer and property */
     OGRLayer * layer = m_DataSource->GetLayer(layerIndex);
-    otbMsgDevMacro(<<"Number of features: " << layer->GetFeatureCount());
+    otbMsgDevMacro(<< "Number of features: " << layer->GetFeatureCount());
 
     OGRFeatureDefn * dfn = layer->GetLayerDefn();
 
@@ -160,47 +157,48 @@ OGRVectorDataIO<TData>
 //     }
 
     /** Adding the layer to the data tree */
-    tree->Add(document,root);
+    tree->Add(document, root);
 
     /// This is not good but we do not have the choice if we want to
     /// get a hook on the internal structure
     InternalTreeNodeType * documentPtr = const_cast<InternalTreeNodeType *>(tree->GetNode(document));
-    
+
     /** IO class helper to convert ogr layer*/
     OGRIOHelper<VectorDataType> OGRConversion;
     OGRConversion.ConvertOGRLayerToDataTreeNode(layer, documentPtr);
-    
-  }// end For each layer
+
+    } // end For each layer
 
   OGRDataSource::DestroyDataSource(m_DataSource);
   m_DataSource = NULL;
 }
 
 template<class TData>
-bool OGRVectorDataIO<TData>::CanWriteFile( const char* filename ) const
+bool OGRVectorDataIO<TData>::CanWriteFile(const char* filename) const
 {
-  
+
   std::string lFileName(filename);
-  if ( System::IsADirName(lFileName) == true )
-  {
+  if (System::IsADirName(lFileName) == true)
+    {
     return false;
-  }
-  
-  return ( this->GetOGRDriverName(filename) != "NOT-FOUND" );
+    }
+
+  return (this->GetOGRDriverName(filename) != "NOT-FOUND");
 }
 
 template<class TData>
-    void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** papszOptions)
+void OGRVectorDataIO<TData>::Write(const VectorDataConstPointerType data, char ** papszOptions)
 {
   itk::TimeProbe chrono;
   chrono.Start();
-  
+
   //Find first the OGR driver
-  OGRSFDriver * ogrDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(this->GetOGRDriverName( this->m_FileName).data());
+  OGRSFDriver * ogrDriver =
+    OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == NULL)
     {
-    itkExceptionMacro(<<"No OGR driver found to write file "<<this->m_FileName);
+    itkExceptionMacro(<< "No OGR driver found to write file " << this->m_FileName);
     }
 
   // free an existing previous data source, if any
@@ -226,17 +224,18 @@ template<class TData>
   // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
   m_DataSource = ogrDriver->CreateDataSource(this->m_FileName.c_str(), papszOptions);
 
-
   // check the created data source
   if (m_DataSource == NULL)
     {
-    itkExceptionMacro(<<"Failed to create OGR data source for file "<<this->m_FileName<<". Since OGR can not overwrite existing file, be sure that this file does not already exist");
+    itkExceptionMacro(
+      << "Failed to create OGR data source for file " << this->m_FileName <<
+      ". Since OGR can not overwrite existing file, be sure that this file does not already exist");
     }
 
   // Retrieve data required for georeferencing
 
   std::string projectionRefWkt = data->GetProjectionRef();
-  bool projectionInformationAvailable = !projectionRefWkt.empty();
+  bool        projectionInformationAvailable = !projectionRefWkt.empty();
 
   if (projectionInformationAvailable)
     {
@@ -248,48 +247,47 @@ template<class TData>
     }
 
   //TODO georeference here from OGRSpatialReference http://www.gdal.org/ogr/classOGRDataSource.html
-  OGRSpatialReference * oSRS =NULL;
+  OGRSpatialReference * oSRS = NULL;
   if (projectionInformationAvailable)
     {
-      oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
+    oSRS = new OGRSpatialReference(projectionRefWkt.c_str());
     }
 
   // Retrieving root node
   DataTreeConstPointerType tree = data->GetDataTree();
   if (tree->GetRoot() == NULL)
     {
-    itkExceptionMacro(<<"Data tree is empty: Root == NULL");
+    itkExceptionMacro(<< "Data tree is empty: Root == NULL");
     }
   DataNodePointerType root = tree->GetRoot()->Get();
 
   unsigned int layerKept = 0;
-  OGRLayer * ogrCurrentLayer = NULL;
+  OGRLayer *   ogrCurrentLayer = NULL;
 //   OGRFeatureVectorType ogrFeatures;
   OGRGeometryCollection * ogrCollection = NULL;
   // OGRGeometry * ogrCurrentGeometry = NULL;
 
   // Get the input tree root
   InternalTreeNodeType * inputRoot = const_cast<InternalTreeNodeType *>(tree->GetRoot());
-  
-  
+
   //Refactoring SHPIO Manuel
   OGRIOHelper<VectorDataType> IOConversion;
   layerKept = IOConversion.ProcessNodeWrite(inputRoot, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
-  OGRDataSource::DestroyDataSource( m_DataSource );
+  OGRDataSource::DestroyDataSource(m_DataSource);
   m_DataSource = NULL;
 
   if (oSRS != NULL)
-  {
+    {
     delete oSRS;
-  }
+    }
 
   chrono.Stop();
-  std::cout<<"OGRVectorDataIO: file saved in "<<chrono.GetMeanTime()<<" seconds. (" << layerKept << " elements)"<<std::endl;
+  std::cout << "OGRVectorDataIO: file saved in " << chrono.GetMeanTime() << " seconds. (" << layerKept <<
+  " elements)" << std::endl;
 
-  otbMsgDevMacro( <<" OGRVectorDataIO::Write()  ");
+  otbMsgDevMacro(<< " OGRVectorDataIO::Write()  ");
 }
-
 
 template<class TData>
 std::string
@@ -297,32 +295,27 @@ OGRVectorDataIO<TData>::GetOGRDriverName(std::string name) const
 {
   std::string extension;
   std::string driverOGR;
-  
+
   std::string upperName;
-  upperName=name;
-  std::transform(name.begin(),name.end(),upperName.begin(),(int(*)(int)) toupper);
-  
+  upperName = name;
+  std::transform(name.begin(), name.end(), upperName.begin(), (int (*)(int))toupper);
+
   //Test of PostGIS connection string
-  if (upperName.substr(0,3) == "PG:")
-  {
-    driverOGR="PostgreSQL";
-  }
+  if (upperName.substr(0, 3) == "PG:")
+    {
+    driverOGR = "PostgreSQL";
+    }
   else
-  {
+    {
     extension = System::GetExtension(upperName);
-    if (extension=="SHP")
-      driverOGR="ESRI Shapefile";
-    else if ( (extension=="TAB") )
-      driverOGR="MapInfo File";
-    else if (extension=="GML")
-      driverOGR="GML";
-    else if (extension=="GPX")
-      driverOGR="GPX";
+    if (extension == "SHP") driverOGR = "ESRI Shapefile";
+    else if ((extension == "TAB")) driverOGR = "MapInfo File";
+    else if (extension == "GML") driverOGR = "GML";
+    else if (extension == "GPX") driverOGR = "GPX";
 //    else if (extension=="KML")
 //      driverOGR="KML";
-    else
-      driverOGR="NOT-FOUND";
-  }
+    else driverOGR = "NOT-FOUND";
+    }
   //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0,3) << std::endl;
   return driverOGR;
 }

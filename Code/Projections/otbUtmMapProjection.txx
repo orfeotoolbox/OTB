@@ -22,7 +22,6 @@
 #include "otbUtmMapProjection.h"
 #include "otbMapProjections.h"
 
-
 namespace otb
 {
 template <InverseOrForwardTransformationEnum transform>
@@ -49,11 +48,11 @@ void UtmMapProjection<transform>
 ///Set the zone
 template <InverseOrForwardTransformationEnum transform>
 void UtmMapProjection<transform>
-::SetZone(const InputPointType &ground)
+::SetZone(const InputPointType& ground)
 {
   ossimGpt ossimGround;
-  ossimGround.lon=ground[0];
-  ossimGround.lat=ground[1];
+  ossimGround.lon = ground[0];
+  ossimGround.lat = ground[1];
   this->m_MapProjection->setZone(ossimGround);
   this->Modified();
 }
@@ -69,16 +68,14 @@ void UtmMapProjection<transform>
 
 template <InverseOrForwardTransformationEnum transform>
 void UtmMapProjection<transform>
-::SetZoneAndHemisphereFromGeoPoint(const InputPointType &geoPoint)
+::SetZoneAndHemisphereFromGeoPoint(const InputPointType& geoPoint)
 {
   double latitude = geoPoint[1];
-  char hemisphere;
-  int zone;
+  char   hemisphere;
+  int    zone;
 
-  if (latitude > 0.)
-    hemisphere = 'N';
-  else
-    hemisphere = 'S';
+  if (latitude > 0.) hemisphere = 'N';
+  else hemisphere = 'S';
   this->SetHemisphere(hemisphere);
 
   zone = this->GetZoneFromGeoPoint(geoPoint);
@@ -96,14 +93,13 @@ geoPoint = this->TransformPoint(cartoPoint);
 this->SetZoneAndHemisphereFromGeoPoint(geoPoint);
 }  */
 
-
 ///\return the zone
 template <InverseOrForwardTransformationEnum transform>
 long UtmMapProjection<transform>
 ::GetZone()
 {
   long zone;
-  zone=this->m_MapProjection->getZone();
+  zone = this->m_MapProjection->getZone();
 
   return zone;
 }
@@ -113,12 +109,11 @@ template <InverseOrForwardTransformationEnum transform>
 const char UtmMapProjection<transform>
 ::GetHemisphere() const
 {
-  char hemisphere=0;
-  hemisphere=this->m_MapProjection->getHemisphere();
+  char hemisphere = 0;
+  hemisphere = this->m_MapProjection->getHemisphere();
 
   return hemisphere;
 }
-
 
 template <InverseOrForwardTransformationEnum transform>
 int UtmMapProjection<transform>
@@ -131,7 +126,7 @@ int UtmMapProjection<transform>
   // Each UTM zone is a narrow zone of 6 degrees in width
   // Zone 31 is between 0 and 6 degrees (lon)
   // There is 60 zones in each hemisphere
-  zone = ((static_cast<int>(floor(longitude/6))+30)%60+60)%60+1;
+  zone = ((static_cast<int>(floor(longitude / 6)) + 30) % 60 + 60) % 60 + 1;
 
   return zone;
 }
@@ -142,7 +137,6 @@ int UtmMapProjection<transform>
   {
   this->SetZoneAndHemisphereFromCartoPoint(middlePoint);
 }*/
-
 
 }
 #endif

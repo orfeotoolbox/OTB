@@ -23,7 +23,6 @@
 
 #include "itkWin32Header.h"
 
-
 #ifdef _WIN
 #define OTB_FILE_SEPARATOR '\\'
 #else
@@ -32,7 +31,6 @@
 
 namespace otb
 {
-
 
 /** \class System
  * \brief System operations.
@@ -45,30 +43,29 @@ class ITK_EXPORT System
 public:
 
   /** Standard class typedefs. */
-  typedef System  Self;
+  typedef System Self;
 
   /** Return true if the parameter 'pszPath' specify a directory name) */
   static bool IsADirName(const std::string& pszPath);
   /** Return true if the parameter 'pszPath' specify a file name) */
   static bool IsAFileName(const std::string& pszPath);
   /** Get the extension of the file name */
-  static std::string GetExtension( const std::string& filename );
+  static std::string GetExtension(const std::string& filename);
   /** Get the root name */
-  static std::string GetRootName( const std::string& filename );
+  static std::string GetRootName(const std::string& filename);
   /** Get the Path of the file name */
-  static std::string GetPathName( const std::string& filename );
+  static std::string GetPathName(const std::string& filename);
   /** Get the short filename of the file name */
-  static std::string GetShortFileName( const std::string& filename );
+  static std::string GetShortFileName(const std::string& filename);
   /** Set to upper a string */
-  static std::string SetToUpper( const std::string& str );
+  static std::string SetToUpper(const std::string& str);
   /** Set to upper a string */
-  static std::string SetToLower( const std::string& str );
+  static std::string SetToLower(const std::string& str);
 
   /** Get list of file find in a directory */
   static std::vector<std::string> Readdir(const std::string& pszPath);
 };
 
 } // namespace otb
-
 
 #endif

@@ -53,18 +53,18 @@ public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   StandardWriterWatcher(itk::ProcessObject* process,
-                        const char *comment="");
-  StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
-                        const char *comment="");
+                        const char *comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
+                        const char *comment = "");
 
   /** Copy constructor */
   StandardWriterWatcher(const StandardWriterWatcher&);
 
   /** operator=  */
-  void operator=(const StandardWriterWatcher& );
+  void operator =(const StandardWriterWatcher&);
 
   /** Get/Set number of stars */
-  void SetStars( int count )
+  void SetStars(int count)
   {
     m_StarsCount = count;
   }
@@ -88,10 +88,10 @@ protected:
   virtual void ShowFilterProgress();
 
   /** Callback method to show the StartEvent */
-  virtual void StartFilter() {};
+  virtual void StartFilter() {}
 
   /** Callback method to show the EndEvent */
-  virtual void EndFilter() {};
+  virtual void EndFilter() {}
 
   /** This is the method invoked by ShowFilterProgress() and ShowWriterProgress() */
   virtual void ShowProgress();

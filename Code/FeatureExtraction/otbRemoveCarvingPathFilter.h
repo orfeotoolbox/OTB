@@ -56,14 +56,13 @@ namespace otb
   * \ingroup ImageFilters
   */
 
-
-template <class TInputImage, class TInputPath,class TOutputImage>
-class ITK_EXPORT RemoveCarvingPathFilter : public itk::ImageAndPathToImageFilter<TInputImage,TInputPath,TOutputImage>
+template <class TInputImage, class TInputPath, class TOutputImage>
+class ITK_EXPORT RemoveCarvingPathFilter : public itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef RemoveCarvingPathFilter                                                        Self;
-  typedef itk::ImageAndPathToImageFilter<TInputImage,TInputPath,TOutputImage>   Superclass;
+  typedef RemoveCarvingPathFilter                                               Self;
+  typedef itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                               Pointer;
   typedef itk::SmartPointer<const Self>                                         ConstPointer;
 
@@ -74,57 +73,56 @@ public:
   itkTypeMacro(RemoveCarvingPathFilter, itk::ImageAndPathToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::Pointer        InputImagePointer;
-  typedef typename InputImageType::ConstPointer   InputImageConstPointer;
-  typedef typename InputImageType::RegionType     InputImageRegionType;
-  typedef typename InputImageType::PixelType      InputImagePixelType;
-  typedef          TInputPath                     InputPathType;
-  typedef typename InputPathType::Pointer         InputPathPointer;
-  typedef typename InputPathType::ConstPointer    InputPathConstPointer;
-  typedef typename InputPathType::InputType       InputPathInputType;
-  typedef typename InputPathType::OutputType      InputPathOutputType;
-  typedef typename InputPathType::IndexType       InputPathIndexType;
-  typedef typename InputPathType::OffsetType      InputPathOffsetType;
-  typedef          TOutputImage                   OutputImageType;
-  typedef typename OutputImageType::Pointer       OutputImagePointer;
-  typedef typename OutputImageType::ConstPointer  OutputImageConstPointer;
+  typedef          TInputImage                   InputImageType;
+  typedef typename InputImageType::Pointer       InputImagePointer;
+  typedef typename InputImageType::ConstPointer  InputImageConstPointer;
+  typedef typename InputImageType::RegionType    InputImageRegionType;
+  typedef typename InputImageType::PixelType     InputImagePixelType;
+  typedef          TInputPath                    InputPathType;
+  typedef typename InputPathType::Pointer        InputPathPointer;
+  typedef typename InputPathType::ConstPointer   InputPathConstPointer;
+  typedef typename InputPathType::InputType      InputPathInputType;
+  typedef typename InputPathType::OutputType     InputPathOutputType;
+  typedef typename InputPathType::IndexType      InputPathIndexType;
+  typedef typename InputPathType::OffsetType     InputPathOffsetType;
+  typedef          TOutputImage                  OutputImageType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::ConstPointer OutputImageConstPointer;
 
-  typedef typename OutputImageType::RegionType    OutputImageRegionType;
-  typedef typename OutputImageType::PixelType     OutputImagePixelType;
-  typedef typename OutputImageType::ValueType     OutputImageValueType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  OutputImagePixelType;
+  typedef typename OutputImageType::ValueType  OutputImageValueType;
 
 //   typedef typename itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
 //   typedef typename itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   typedef typename itk::ImageSliceConstIteratorWithIndex<InputImageType> InputIteratorType;
-  typedef typename itk::ImageSliceIteratorWithIndex<OutputImageType> OutputIteratorType;
+  typedef typename itk::ImageSliceIteratorWithIndex<OutputImageType>     OutputIteratorType;
 
   /** Set/Get the path input of this process object.
       Note: these methods are adding to get the proper name */
-  void SetInputPath( const TInputPath * path);
+  void SetInputPath(const TInputPath * path);
 
   const TInputPath * GetInputPath(void);
-
 
   itkSetMacro(Value, OutputImagePixelType);
   itkGetConstReferenceMacro(Value, OutputImagePixelType);
 
   /** Set and Get direction value */
-  itkSetMacro(Direction ,unsigned int);
-  itkGetConstMacro(Direction ,unsigned int);
+  itkSetMacro(Direction, unsigned int);
+  itkGetConstMacro(Direction, unsigned int);
 
   virtual void GenerateOutputInformation();
 
 protected:
   RemoveCarvingPathFilter();
-  virtual ~RemoveCarvingPathFilter() {};
+  virtual ~RemoveCarvingPathFilter() {}
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void GenerateData();
 
 private:
-  RemoveCarvingPathFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RemoveCarvingPathFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   OutputImagePixelType m_Value;
   unsigned int         m_Direction;

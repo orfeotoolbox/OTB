@@ -21,7 +21,6 @@
 #include "otbMWImageIO.h"
 #include "itkVersion.h"
 
-
 namespace otb
 {
 
@@ -51,4 +50,3 @@ MWImageIOFactory::GetDescription() const
 }
 
 } // end namespace otb
-

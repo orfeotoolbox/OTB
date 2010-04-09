@@ -20,7 +20,6 @@
 
 #include "itkImageToImageFilter.h"
 
-
 namespace otb
 {
 
@@ -35,24 +34,24 @@ namespace otb
  *
  */
 template <class TInputImage,
-class TInputImageDirection,
-class TOutputImage >
-class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+          class TInputImageDirection,
+          class TOutputImage>
+class ITK_EXPORT ModulusAndDirectionImageToImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef ModulusAndDirectionImageToImageFilter Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ModulusAndDirectionImageToImageFilter              Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -60,24 +59,24 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(ModulusAndDirectionImageToImageFilter, itk::ImageToImageFilter);
 
-  typedef typename Superclass::InputImageType   InputImageType;
-  typedef TInputImageDirection             InputImageDirectionType;
-  typedef typename Superclass::OutputImageType  OutputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
+  typedef TInputImageDirection                 InputImageDirectionType;
+  typedef typename Superclass::OutputImageType OutputImageType;
 
   /** Set/Get the image input of this process object.  */
-  virtual void SetInput( const InputImageType *input);
-  virtual void SetInputDirection( const InputImageDirectionType *direction);
+  virtual void SetInput(const InputImageType *input);
+  virtual void SetInputDirection(const InputImageDirectionType *direction);
   const InputImageType * GetInput(void);
   const InputImageDirectionType * GetInputDirection(void);
 
 protected:
   ModulusAndDirectionImageToImageFilter();
-  virtual ~ModulusAndDirectionImageToImageFilter() {};
+  virtual ~ModulusAndDirectionImageToImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  ModulusAndDirectionImageToImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ModulusAndDirectionImageToImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 } // end namespace otb
@@ -85,6 +84,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbModulusAndDirectionImageToImageFilter.txx"
 #endif
-
 
 #endif

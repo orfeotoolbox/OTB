@@ -26,7 +26,7 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage, class TPrecision>
-ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::ImageToHessianDeterminantImageFilter()
 {
   // Filter intialization
@@ -41,14 +41,13 @@ ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::~ImageToHessianDeterminantImageFilter()
 {}
 
-
 template <class TInputImage, class TOutputImage, class TPrecision>
 void
-ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::GenerateData(void)
 {
   // Execute minipipeline
@@ -60,13 +59,13 @@ ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
 }
 
 /*PrintSelf*/
-template <class TInputImage, class TOutputImage, class TPrecision  >
+template <class TInputImage, class TOutputImage, class TPrecision>
 void
-ImageToHessianDeterminantImageFilter<TInputImage,TOutputImage,TPrecision>
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent <<"Sigma: " << m_Sigma << std::endl;
+  os << indent << "Sigma: " << m_Sigma << std::endl;
 }
 
 }

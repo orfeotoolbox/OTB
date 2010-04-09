@@ -27,13 +27,12 @@
 
 #include "vcl_cmath.h"
 
-namespace otb{
+namespace otb {
 
 // For Windows MSVC, defines these macros.
 #ifdef _USE_MATH_DEFINES
 #define _MATH_DEFINES_DEFINED
 #endif
-
 
 /** Define constants if not define in the "vcl_cmath.h" */
 

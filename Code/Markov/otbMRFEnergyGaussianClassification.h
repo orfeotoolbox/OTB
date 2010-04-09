@@ -40,20 +40,20 @@ namespace otb
  * \ingroup Markov
  */
 
-template< class TInput1, class TInput2>
-class ITK_EXPORT MRFEnergyGaussianClassification:public MRFEnergy< TInput1, TInput2>
+template<class TInput1, class TInput2>
+class ITK_EXPORT MRFEnergyGaussianClassification : public MRFEnergy<TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyGaussianClassification       Self;
-  typedef MRFEnergy< TInput1, TInput2>          Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef MRFEnergyGaussianClassification Self;
+  typedef MRFEnergy<TInput1, TInput2>     Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   typedef TInput1                               InputImageType;
   typedef TInput2                               LabelledImageType;
   typedef typename InputImageType::PixelType    InputImagePixelType;
   typedef typename LabelledImageType::PixelType LabelledImagePixelType;
-  typedef itk::Array < double >                 ParametersType;
+  typedef itk::Array <double>                   ParametersType;
 
   itkNewMacro(Self);
 
@@ -66,28 +66,25 @@ public:
     this->Modified();
   }
 
-
-  double GetSingleValue(const InputImagePixelType & value1, const LabelledImagePixelType & value2)
+  double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2)
   {
-    if ((unsigned int)value2 >= this->GetNumberOfParameters()/2)
-    {
-      itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
-    }
+    if ((unsigned int) value2 >= this->GetNumberOfParameters() / 2)
+      {
+      itkExceptionMacro(<< "Number of parameters does not correspond to number of classes");
+      }
     double val1 = static_cast<double>(value1);
 
-    double result = vnl_math_sqr(val1-this->m_Parameters[2*static_cast<int>(value2)])
-                    / (2*vnl_math_sqr(this->m_Parameters[2*static_cast<int>(value2)+1]))
-                    + vcl_log(vcl_sqrt(CONST_2PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
+    double result = vnl_math_sqr(val1 - this->m_Parameters[2 * static_cast<int>(value2)])
+                    / (2 * vnl_math_sqr(this->m_Parameters[2 * static_cast<int>(value2) + 1]))
+                    + vcl_log(vcl_sqrt(CONST_2PI) * this->m_Parameters[2 * static_cast<int>(value2) + 1]);
 
-    return static_cast<double>( result );
+    return static_cast<double>(result);
   }
-
-
 
 protected:
   // The constructor and destructor.
   MRFEnergyGaussianClassification() {};
-  virtual ~MRFEnergyGaussianClassification() {};
+  virtual ~MRFEnergyGaussianClassification() {}
 
 };
 }

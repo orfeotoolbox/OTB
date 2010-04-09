@@ -42,22 +42,22 @@ namespace otb
  *
  */
 
-class ITK_EXPORT DEMHandler: public itk::Object
+class ITK_EXPORT DEMHandler : public itk::Object
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef DEMHandler                            Self;
-  typedef itk::Object                           Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef DEMHandler                    Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Point<double, 2>                 PointType;
+  typedef itk::Point<double, 2> PointType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DEMHandler,Object);
+  itkTypeMacro(DEMHandler, Object);
 
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
@@ -73,7 +73,7 @@ public :
 
 protected:
   DEMHandler();
-  virtual ~DEMHandler() {};
+  virtual ~DEMHandler() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -82,6 +82,5 @@ protected:
 };
 
 } // namespace otb
-
 
 #endif

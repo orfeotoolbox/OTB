@@ -43,75 +43,72 @@ namespace Functor
 
 template <class TScalarInputPixelType, class TScalarOutputPixelType>
 class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor :
-public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
+  public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
   InformationMeasureOfCorrelation2TextureFunctor(){};
-  virtual ~InformationMeasureOfCorrelation2TextureFunctor(){};
+  virtual ~InformationMeasureOfCorrelation2TextureFunctor(){}
 
   typedef EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType> Superclass;
   typedef typename Superclass::NeighborhoodType                                NeighborhoodType;
 
-  virtual double ComputeOverSingleChannel(const NeighborhoodType &neigh, const NeighborhoodType &neighOff)
+  virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff)
   {
     double HXY = Superclass::ComputeOverSingleChannel(neigh, neighOff);
 
-    double area = static_cast<double>(neigh.GetSize()[0]*neigh.GetSize()[1]);
-    double areaInv = 1/area;
+    double area = static_cast<double>(neigh.GetSize()[0] * neigh.GetSize()[1]);
+    double areaInv = 1 / area;
     double out = 0.;
     // Stores marginal proba values
     std::vector<double> PxVector;
     std::vector<double> PyVector;
 
     // Computes HX
-    for (unsigned r = 0; r<this->GetHisto()[0].size(); ++r)
+    for (unsigned r = 0; r < this->GetHisto()[0].size(); ++r)
       {
-        double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto().size(); ++s)
-          {
-            sumTemp += this->GetHisto()[s][r]*areaInv;
-          }
-        PxVector.push_back( sumTemp );
+      double sumTemp = 0.;
+      for (unsigned s = 0; s < this->GetHisto().size(); ++s)
+        {
+        sumTemp += this->GetHisto()[s][r] * areaInv;
+        }
+      PxVector.push_back(sumTemp);
       }
 
     // Computes HY
-    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
+    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
-        double sumTemp = 0.;
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
-          {
-            sumTemp += this->GetHisto()[r][s]*areaInv;
-          }
-        PyVector.push_back( sumTemp );
+      double sumTemp = 0.;
+      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
+        {
+        sumTemp += this->GetHisto()[r][s] * areaInv;
+        }
+      PyVector.push_back(sumTemp);
       }
 
     // Computes HXY2
     double HXY2 = 0.;
-    for (unsigned r = 0; r<this->GetHisto().size(); ++r)
+    for (unsigned r = 0; r < this->GetHisto().size(); ++r)
       {
-        for (unsigned s = 0; s<this->GetHisto()[r].size(); ++s)
+      for (unsigned s = 0; s < this->GetHisto()[r].size(); ++s)
+        {
+        double PxPy = PyVector[r] * PxVector[s];
+        if (PxPy != 0.)
           {
-            double PxPy = PyVector[r]*PxVector[s];
-            if( PxPy != 0. )
-              {
-                HXY2 += PxPy * vcl_log( PxPy );
-              }
-
+          HXY2 += PxPy * vcl_log(PxPy);
           }
-      }
-    if ( HXY2 != 0. )
-      HXY2 = -HXY2;
 
-    out = vcl_sqrt( vcl_abs(1-vcl_exp( -2.*(HXY2-HXY))) );
+        }
+      }
+    if (HXY2 != 0.) HXY2 = -HXY2;
+
+    out = vcl_sqrt(vcl_abs(1 - vcl_exp(-2. * (HXY2 - HXY))));
 
     return out;
   }
 
 };
 
-
 } // namespace Functor
 } // namespace otb
 
 #endif
-

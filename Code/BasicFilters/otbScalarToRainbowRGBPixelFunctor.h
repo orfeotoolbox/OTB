@@ -28,85 +28,85 @@ namespace otb
 namespace Functor
 {
 
-  /**
-   * \class HSVToRGBFunctor
-   * \brief Function object to convert HSV value to RGB.
-   *
-   *
-   * \sa ScalarToRainbowRGBPixelFunctor
-   *
-   */
-  template< class TRGBPixel >
-  class ITK_EXPORT HSVToRGBFunctor
+/**
+ * \class HSVToRGBFunctor
+ * \brief Function object to convert HSV value to RGB.
+ *
+ *
+ * \sa ScalarToRainbowRGBPixelFunctor
+ *
+ */
+template<class TRGBPixel>
+class ITK_EXPORT HSVToRGBFunctor
+{
+public:
+  HSVToRGBFunctor(){};
+  ~HSVToRGBFunctor(){}
+  inline TRGBPixel operator ()(double h, double s, double v) const
   {
-    public:
-      HSVToRGBFunctor(){};
-      ~HSVToRGBFunctor(){};
-      inline TRGBPixel operator()(double h, double s, double v) const
+    const double onethird = 1.0 / 3.0;
+    const double onesixth = 1.0 / 6.0;
+    const double twothird = 2.0 / 3.0;
+    const double fivesixth = 5.0 / 6.0;
+    double       r, g, b;
+
+    // compute RGB from HSV
+    if (h > onesixth && h <= onethird)     // green/red
       {
-        const double onethird = 1.0 / 3.0;
-        const double onesixth = 1.0 / 6.0;
-        const double twothird = 2.0 / 3.0;
-        const double fivesixth = 5.0 / 6.0;
-        double r, g, b;
+      g = 1.0;
+      r = (onethird - h) / onesixth;
+      b = 0.0;
+      }
+    else if (h > onethird && h <= 0.5)     // green/blue
+      {
+      g = 1.0;
+      b = (h - onethird) / onesixth;
+      r = 0.0;
+      }
+    else if (h > 0.5 && h <= twothird)     // blue/green
+      {
+      b = 1.0;
+      g = (twothird - h) / onesixth;
+      r = 0.0;
+      }
+    else if (h > twothird && h <= fivesixth)     // blue/red
+      {
+      b = 1.0;
+      r = (h - twothird) / onesixth;
+      g = 0.0;
+      }
+    else if (h > fivesixth && h <= 1.0)     // red/blue
+      {
+      r = 1.0;
+      b = (1.0 - h) / onesixth;
+      g = 0.0;
+      }
+    else     // red/green
+      {
+      r = 1.0;
+      g = h / onesixth;
+      b = 0.0;
+      }
 
-        // compute RGB from HSV
-        if (h > onesixth && h <= onethird) // green/red
-        {
-          g = 1.0;
-          r = (onethird - h) / onesixth;
-          b = 0.0;
-        }
-        else if (h > onethird && h <= 0.5) // green/blue
-        {
-          g = 1.0;
-          b = (h - onethird) / onesixth;
-          r = 0.0;
-        }
-        else if (h > 0.5 && h <= twothird) // blue/green
-        {
-          b = 1.0;
-          g = (twothird - h) / onesixth;
-          r = 0.0;
-        }
-        else if (h > twothird && h <= fivesixth) // blue/red
-        {
-          b = 1.0;
-          r = (h - twothird) / onesixth;
-          g = 0.0;
-        }
-        else if (h > fivesixth && h <= 1.0) // red/blue
-        {
-          r = 1.0;
-          b = (1.0 - h) / onesixth;
-          g = 0.0;
-        }
-        else // red/green
-        {
-          r = 1.0;
-          g = h / onesixth;
-          b = 0.0;
-        }
+    // add Saturation to the equation.
+    r = (s * r + (1.0 - s));
+    g = (s * g + (1.0 - s));
+    b = (s * b + (1.0 - s));
 
-        // add Saturation to the equation.
-        r = (s * r + (1.0 - s));
-        g = (s * g + (1.0 - s));
-        b = (s * b + (1.0 - s));
-
-        r *= v;
-        g *= v;
-        b *= v;
+    r *= v;
+    g *= v;
+    b *= v;
 
 //         std::cout << h << ", " << s << ", " << v << " -> " << r << ", " << g << ", " << b << std::endl;
 
-        TRGBPixel ans;
-        typedef typename TRGBPixel::ComponentType RGBComponentType;
-        ans[0] = static_cast<RGBComponentType>( r );
-        ans[1] = static_cast<RGBComponentType>( g );
-        ans[2] = static_cast<RGBComponentType>( b );
-        return ans;
+    TRGBPixel ans;
+    typedef typename TRGBPixel::ComponentType RGBComponentType;
+    ans[0] = static_cast<RGBComponentType>(r);
+    ans[1] = static_cast<RGBComponentType>(g);
+    ans[2] = static_cast<RGBComponentType>(b);
+    return ans;
 
-      }
+  }
 };
 }
 
@@ -126,14 +126,14 @@ namespace Functor
  * \example BasicFilters/DEMToRainbowExample.cxx
  *
  */
-template< class TScalar , class TRGBPixel=itk::RGBPixel<unsigned char> >
+template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
 class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
-: public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
+  : public itk::Functor::ColormapFunctor<TScalar, TRGBPixel>
 //      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() {};
+  ~ScalarToRainbowRGBPixelFunctor() {}
 
   typedef ScalarToRainbowRGBPixelFunctor                    Self;
   typedef itk::Functor::ColormapFunctor<TScalar, TRGBPixel> Superclass;
@@ -141,15 +141,14 @@ public:
   typedef itk::SmartPointer<const Self>                     ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   typedef TRGBPixel                            RGBPixelType;
   typedef typename RGBPixelType::ComponentType RGBComponentType;
   typedef TScalar                              ScalarType;
   typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
 
-
-  RGBPixelType operator()( const TScalar &) const;
+  RGBPixelType operator ()(const TScalar&) const;
 
   /** Set the input maximum to be mapped to red
    * \deprecated use SetMaximumInputValue() */
@@ -169,8 +168,8 @@ protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:
-  ScalarToRainbowRGBPixelFunctor(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ScalarToRainbowRGBPixelFunctor(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };

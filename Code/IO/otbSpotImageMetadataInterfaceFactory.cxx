@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -41,7 +40,7 @@ SpotImageMetadataInterfaceFactory
                          "otbSpotImageMetadataInterface",
                          "Spot Meteada Interface",
                          1,
-                         itk::CreateObjectFunction<SpotImageMetadataInterface >::New());
+                         itk::CreateObjectFunction<SpotImageMetadataInterface>::New());
 }
 
 SpotImageMetadataInterfaceFactory
@@ -60,6 +59,5 @@ SpotImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Spot Metadata Interface Factory, handle Spot metadata in OTB";
 }
-
 
 } // end namespace otb

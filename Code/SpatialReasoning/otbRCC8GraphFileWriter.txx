@@ -53,7 +53,7 @@ void
 RCC8GraphFileWriter<TInputGraph>
 ::SetInput(const InputGraphType * graph)
 {
-  this->itk::ProcessObject::SetNthInput(0,const_cast<TInputGraph *>(graph));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<TInputGraph *>(graph));
 }
 /**
  * Get the input graph.
@@ -89,20 +89,20 @@ RCC8GraphFileWriter<TInputGraph>
 {
   InputGraphType * input = this->GetInput();
 
-  itkDebugMacro( <<"Writing a RCC8Graph file" );
+  itkDebugMacro(<< "Writing a RCC8Graph file");
 
   // Make sure input is available
-  if ( input == 0 )
-  {
+  if (input == 0)
+    {
     itkExceptionMacro(<< "No input to writer!");
-  }
+    }
 
   // Make sure that we can write the file given the name
   //
-  if ( m_FileName == "" )
-  {
-    itkExceptionMacro(<<"No filename was specified");
-  }
+  if (m_FileName == "")
+    {
+    itkExceptionMacro(<< "No filename was specified");
+    }
 
   // Pipeline updating sequence
   input->UpdateOutputInformation();
@@ -119,13 +119,13 @@ void
 RCC8GraphFileWriter<TInputGraph>
 ::GenerateData()
 {
-  otbMsgDevMacro(<<"RCC8GraphFileWriter: GenerateData call");
+  otbMsgDevMacro(<< "RCC8GraphFileWriter: GenerateData call");
   // input graph pointer
   InputGraphPointerType input = this->GetInput();
 
   // iterators typedefs
   typedef otb::RCC8VertexIterator<InputGraphType> VertexIteratorType;
-  typedef otb::RCC8EdgeIterator<InputGraphType> EdgeIteratorType;
+  typedef otb::RCC8EdgeIterator<InputGraphType>   EdgeIteratorType;
 
   // Output file stream
   std::ofstream out;
@@ -135,37 +135,37 @@ RCC8GraphFileWriter<TInputGraph>
 
   // Test if the file has been opened correctly
   if (!out)
-  {
+    {
     RCC8GraphFileWriterException e(__FILE__, __LINE__);
     itk::OStringStream msg;
     msg << " Could not create IO object for file ";
-    msg<<m_FileName<<"."<<std::endl;
+    msg << m_FileName << "." << std::endl;
     e.SetDescription(msg.str().c_str());
     throw e;
     return;
-  }
+    }
 
   // Start writing the graph to file
-  out<<"digraph G {"<<std::endl;
+  out << "digraph G {" << std::endl;
 
   // For each vertex in the graph
   VertexIteratorType vIt(input);
-  for (vIt.GoToBegin();!vIt.IsAtEnd();++vIt)
-  {
-    this->WriteVertex(out,vIt.GetIndex(),vIt.Get());
-  }
+  for (vIt.GoToBegin(); !vIt.IsAtEnd(); ++vIt)
+    {
+    this->WriteVertex(out, vIt.GetIndex(), vIt.Get());
+    }
 
   // For each edge in the graph
   EdgeIteratorType eIt(input);
-  for (eIt.GoToBegin();!eIt.IsAtEnd();++eIt)
-  {
+  for (eIt.GoToBegin(); !eIt.IsAtEnd(); ++eIt)
+    {
     this->WriteEdge(out, eIt.GetSourceIndex(),
                     eIt.GetTargetIndex(),
                     eIt.GetValue());
-  }
+    }
 
   // Ends the graph writing
-  out<<"}"<<std::endl;
+  out << "}" << std::endl;
 
   // Close the file
   out.close();
@@ -180,13 +180,13 @@ RCC8GraphFileWriter<TInputGraph>
 template <class TInputGraph>
 void
 RCC8GraphFileWriter<TInputGraph>
-::WriteEdge(std::ofstream& of,VertexDescriptorType source,
+::WriteEdge(std::ofstream& of, VertexDescriptorType source,
             VertexDescriptorType target, RCC8ValueType value)
 {
-  otbMsgDevMacro(<<"RCC8GraphFileWriter: WriteEdge call: "<<source<<" "<<target<<" "<<value);
-  of<<source<<" -> "<<target<<" ";
-  of<<"[Value=\""<<value<<"\"];";
-  of<<std::endl;
+  otbMsgDevMacro(<< "RCC8GraphFileWriter: WriteEdge call: " << source << " " << target << " " << value);
+  of << source << " -> " << target << " ";
+  of << "[Value=\"" << value << "\"];";
+  of << std::endl;
 }
 /**
  * Write a vertex to file.
@@ -201,25 +201,25 @@ RCC8GraphFileWriter<TInputGraph>
               VertexPointerType vertex)
 {
   typedef typename VertexType::AttributesMapType AttributesMapType;
-  typedef typename AttributesMapType::iterator IteratorType;
+  typedef typename AttributesMapType::iterator   IteratorType;
   AttributesMapType attr = vertex->GetAttributesMap();
-  otbMsgDevMacro(<<"RCC8GraphFileWriter: WriteVertex call: "<<index);
-  of<<index<<" [";
+  otbMsgDevMacro(<< "RCC8GraphFileWriter: WriteVertex call: " << index);
+  of << index << " [";
   IteratorType it = attr.begin();
-  while (it!=attr.end())
-  {
-    of<<(*it).first<<"=\"";
-    of<<(*it).second<<"\"";
+  while (it != attr.end())
+    {
+    of << (*it).first << "=\"";
+    of << (*it).second << "\"";
     ++it;
-    if (it==attr.end())
-    {
-      of<<"];"<<std::endl;
-    }
+    if (it == attr.end())
+      {
+      of << "];" << std::endl;
+      }
     else
-    {
-      of<<",";
+      {
+      of << ",";
+      }
     }
-  }
 }
 /**
  * PrintSelf method
@@ -227,9 +227,9 @@ RCC8GraphFileWriter<TInputGraph>
 template <class TInputGraph>
 void
 RCC8GraphFileWriter<TInputGraph>
-::PrintSelf( std::ostream& os,itk::Indent indent ) const
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // namespace otb
 #endif

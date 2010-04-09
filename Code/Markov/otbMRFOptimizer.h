@@ -42,24 +42,25 @@ public:
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::Array< double >          ParametersType;
+  typedef itk::Array<double>            ParametersType;
 
   itkTypeMacro(MRFOptimizer, itk::Object);
 
   itkGetConstMacro(NumberOfParameters, unsigned int);
 
   // Get the parameters
-  const ParametersType& GetParameters( void ) const
+  const ParametersType& GetParameters(void) const
   {
     return this->m_Parameters;
   }
 
-  virtual void SetParameters( const ParametersType & parameters )
+  virtual void SetParameters(const ParametersType& parameters)
   {
-    if ( parameters.GetSize() != m_NumberOfParameters )
-    {
-      itkExceptionMacro(<<"Invalid number of parameters ("<<parameters.GetSize()<<" , "<<m_NumberOfParameters<<")");
-    }
+    if (parameters.GetSize() != m_NumberOfParameters)
+      {
+      itkExceptionMacro(
+        << "Invalid number of parameters (" << parameters.GetSize() << " , " << m_NumberOfParameters << ")");
+      }
     m_Parameters = parameters;
     this->Modified();
   }
@@ -70,13 +71,12 @@ protected:
   MRFOptimizer() :
     m_NumberOfParameters(1),
     m_Parameters(1)
-  {}
+     {}
   virtual ~MRFOptimizer() {}
-  unsigned int m_NumberOfParameters;
+  unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 
 };
 }
 
 #endif
-

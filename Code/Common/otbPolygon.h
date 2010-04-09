@@ -20,7 +20,6 @@
 
 #include "otbPolyLineParametricPathWithValue.h"
 
-
 namespace otb
 {
 /** \class Polygon
@@ -36,17 +35,17 @@ namespace otb
  *
  * \sa otb::PolyLineParametricPathWithValue
  */
-template<class TValue=double>
+template<class TValue = double>
 class ITK_EXPORT Polygon
-      : public PolyLineParametricPathWithValue<TValue,2>
+  : public PolyLineParametricPathWithValue<TValue, 2>
 {
 public:
   /** Standard typedefs */
-  typedef Polygon                                   Self;
-  typedef PolyLineParametricPathWithValue<TValue,2> Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
-  typedef TValue                                    ValueType;
+  typedef Polygon                                    Self;
+  typedef PolyLineParametricPathWithValue<TValue, 2> Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef TValue                                     ValueType;
   /** Type macro */
   itkNewMacro(Self);
 
@@ -54,14 +53,13 @@ public:
   itkTypeMacro(Polygon, PolyLineParametricPathWithValue);
 
   /** Derived typedefs */
-  typedef typename Superclass::VertexType          VertexType;
-  typedef typename Superclass::VertexListType      VertexListType;
-  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename Superclass::VertexListConstIteratorType   VertexListConstIteratorType;
+  typedef typename Superclass::VertexType                  VertexType;
+  typedef typename Superclass::VertexListType              VertexListType;
+  typedef typename Superclass::ContinuousIndexType         ContinuousIndexType;
+  typedef typename Superclass::VertexListConstIteratorType VertexListConstIteratorType;
 
-
-  itkSetMacro(Epsilon,double);
-  itkGetMacro(Epsilon,double);
+  itkSetMacro(Epsilon, double);
+  itkGetMacro(Epsilon, double);
 
   /**
    * Check wether point is strictly inside the polygon.
@@ -113,7 +111,6 @@ public:
    */
   bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2) const;
 
-
   /**
   * Return the polygon area.
   * \return The area.
@@ -136,20 +133,19 @@ public:
   */
   virtual double GetLength() const;
 
-
-  void  AddVertex (const ContinuousIndexType &vertex);
+  void  AddVertex(const ContinuousIndexType& vertex);
 
 protected:
   /** Constructor */
   Polygon()
-  {
+    {
     m_Epsilon = 0.000001;
     m_Area = -1.0;
     m_AreaIsValid = false;
-  };
+    };
 
   /** Destructor */
-  virtual ~Polygon() {};
+  virtual ~Polygon() {}
 
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -158,15 +154,15 @@ protected:
   virtual void Modified();
 
 private:
-  Polygon(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  Polygon(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  double m_Epsilon;
+  double         m_Epsilon;
   mutable double m_Area;
-  mutable bool m_AreaIsValid;
+  mutable bool   m_AreaIsValid;
 
 };
-}// End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolygon.txx"

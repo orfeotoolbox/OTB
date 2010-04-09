@@ -25,12 +25,12 @@
 namespace otb
 {
 
-template <class TImage,class TVectorData,class TWidgetManager>
-StandardImageViewer<TImage,TVectorData,TWidgetManager>
+template <class TImage, class TVectorData, class TWidgetManager>
+StandardImageViewer<TImage, TVectorData, TWidgetManager>
 ::StandardImageViewer() : m_Label("Default label"), m_Image(), m_VectorData(),
-                          m_ImageLayer(), m_RenderingModel(),m_PixelDescriptionModel(),
-                          m_View(), m_PixelDescriptionView(), m_CurveWidget(),
-                          m_Controller(), m_RenderingFunction(), m_DisplayWindow()
+  m_ImageLayer(), m_RenderingModel(), m_PixelDescriptionModel(),
+  m_View(), m_PixelDescriptionView(), m_CurveWidget(),
+  m_Controller(), m_RenderingFunction(), m_DisplayWindow()
 {
   // Build a new rendering model
   m_RenderingModel = RenderingModelType::New();
@@ -59,19 +59,19 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_Controller->AddActionHandler(resizingHandler);
 
   // Add the change scaled region handler
-  ChangeScaledRegionHandlerType::Pointer changeScaledHandler =ChangeScaledRegionHandlerType::New();
+  ChangeScaledRegionHandlerType::Pointer changeScaledHandler = ChangeScaledRegionHandlerType::New();
   changeScaledHandler->SetModel(m_RenderingModel);
   changeScaledHandler->SetView(m_View);
   m_Controller->AddActionHandler(changeScaledHandler);
 
   // Add the change extract region handler
-  ChangeRegionHandlerType::Pointer changeHandler =ChangeRegionHandlerType::New();
+  ChangeRegionHandlerType::Pointer changeHandler = ChangeRegionHandlerType::New();
   changeHandler->SetModel(m_RenderingModel);
   changeHandler->SetView(m_View);
   m_Controller->AddActionHandler(changeHandler);
 
   // Add the change scaled handler
-  ChangeScaleHandlerType::Pointer changeScaleHandler =ChangeScaleHandlerType::New();
+  ChangeScaleHandlerType::Pointer changeScaleHandler = ChangeScaleHandlerType::New();
   changeScaleHandler->SetModel(m_RenderingModel);
   changeScaleHandler->SetView(m_View);
   m_Controller->AddActionHandler(changeScaleHandler);
@@ -97,48 +97,47 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   m_DisplayWindow->RegisterHistogramWidget(m_CurveWidget);
 }
 
-template <class TImage,class TVectorData,class TWidgetManager>
-StandardImageViewer<TImage,TVectorData,TWidgetManager>
+template <class TImage, class TVectorData, class TWidgetManager>
+StandardImageViewer<TImage, TVectorData, TWidgetManager>
 ::~StandardImageViewer()
 {}
 
-template <class TImage,class TVectorData,class TWidgetManager>
+template <class TImage, class TVectorData, class TWidgetManager>
 void
-StandardImageViewer<TImage,TVectorData,TWidgetManager>
+StandardImageViewer<TImage, TVectorData, TWidgetManager>
 ::Update()
 {
   // First check if there is actually an input image
-  if(m_Image.IsNull())
+  if (m_Image.IsNull())
     {
-    itkExceptionMacro(<<"The image pointer is null, there is nothing to display. You probably forget to set the image.");
+    itkExceptionMacro(
+      << "The image pointer is null, there is nothing to display. You probably forget to set the image.");
     }
 
   // Update image info for further use
   m_Image->UpdateOutputInformation();
 
-
   typename VectorDataProjectionFilterType::Pointer vproj;
-  typename VectorDataExtractROIType::Pointer vdextract;
+  typename VectorDataExtractROIType::Pointer       vdextract;
 
   // Colors
-  typename HistogramCurveType::ColorType red,green,blue,gray;
+  typename HistogramCurveType::ColorType red, green, blue, gray;
   red.Fill(0);
-  red[0]=1.;
-  red[3]=0.5;
+  red[0] = 1.;
+  red[3] = 0.5;
 
   green.Fill(0);
-  green[1]=1.;
-  green[3]=0.5;
+  green[1] = 1.;
+  green[3] = 0.5;
 
   blue.Fill(0);
-  blue[2]=1.;
-  blue[3]=0.5;
+  blue[2] = 1.;
+  blue[3] = 0.5;
 
   gray.Fill(0.6);
-  
 
   // If there is a VectorData
-  if(m_VectorData.IsNotNull())
+  if (m_VectorData.IsNotNull())
     {
     // Extract The part of the VectorData that actually overlaps with
     // the image extent
@@ -149,30 +148,30 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
 
     // Ge the index of the corner of the image
     typename ImageType::IndexType ul, ur, ll, lr;
-    typename ImageType::PointType pul,pur,pll,plr;
+    typename ImageType::PointType pul, pur, pll, plr;
     ul = m_Image->GetLargestPossibleRegion().GetIndex();
     ur = ul;
     ll = ul;
     lr = ul;
-    ur[0]+=m_Image->GetLargestPossibleRegion().GetSize()[0];
-    lr[0]+=m_Image->GetLargestPossibleRegion().GetSize()[0];
-    lr[1]+=m_Image->GetLargestPossibleRegion().GetSize()[1];
-    ll[1]+=m_Image->GetLargestPossibleRegion().GetSize()[1];
+    ur[0] += m_Image->GetLargestPossibleRegion().GetSize()[0];
+    lr[0] += m_Image->GetLargestPossibleRegion().GetSize()[0];
+    lr[1] += m_Image->GetLargestPossibleRegion().GetSize()[1];
+    ll[1] += m_Image->GetLargestPossibleRegion().GetSize()[1];
 
     // Transform to physical point
-    m_Image->TransformIndexToPhysicalPoint(ul,pul);
-    m_Image->TransformIndexToPhysicalPoint(ur,pur);
-    m_Image->TransformIndexToPhysicalPoint(ll,pll);
-    m_Image->TransformIndexToPhysicalPoint(lr,plr);
+    m_Image->TransformIndexToPhysicalPoint(ul, pul);
+    m_Image->TransformIndexToPhysicalPoint(ur, pur);
+    m_Image->TransformIndexToPhysicalPoint(ll, pll);
+    m_Image->TransformIndexToPhysicalPoint(lr, plr);
 
     // Build the cartographic region
-    RemoteSensingRegionType rsRegion;
+    RemoteSensingRegionType                     rsRegion;
     typename RemoteSensingRegionType::IndexType rsOrigin;
     typename RemoteSensingRegionType::SizeType  rsSize;
-    rsOrigin[0]= min(pul[0],plr[0]);
-    rsOrigin[1]= min(pul[1],plr[1]);
-    rsSize[0]=vcl_abs(pul[0]-plr[0]);
-    rsSize[1]=vcl_abs(pul[1]-plr[1]);
+    rsOrigin[0] = min(pul[0], plr[0]);
+    rsOrigin[1] = min(pul[1], plr[1]);
+    rsSize[0] = vcl_abs(pul[0] - plr[0]);
+    rsSize[1] = vcl_abs(pul[1] - plr[1]);
 
     rsRegion.SetOrigin(rsOrigin);
     rsRegion.SetSize(rsSize);
@@ -194,20 +193,20 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
     vproj->SetDEMDirectory(m_DEMDirectory);
     vproj->Update();
 
-     // Create a VectorData gl component
-     typename VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
-     vgl->SetVectorData(vproj->GetOutput());
-     vgl->SetColor(blue);
-     // Add it to the image view
-      m_View->GetScrollWidget()->AddGlComponent(vgl);
-      m_View->GetFullWidget()->AddGlComponent(vgl);
-      m_View->GetZoomWidget()->AddGlComponent(vgl);
+    // Create a VectorData gl component
+    typename VectorDataGlComponentType::Pointer vgl = VectorDataGlComponentType::New();
+    vgl->SetVectorData(vproj->GetOutput());
+    vgl->SetColor(blue);
+    // Add it to the image view
+    m_View->GetScrollWidget()->AddGlComponent(vgl);
+    m_View->GetFullWidget()->AddGlComponent(vgl);
+    m_View->GetZoomWidget()->AddGlComponent(vgl);
     }
 
   // Generate the layer
   ImageLayerGeneratorPointerType generator = ImageLayerGeneratorType::New();
   generator->SetImage(m_Image);
-  FltkFilterWatcher qlwatcher(generator->GetResampler(),0,0,200,20,"Generating QuickLook ...");
+  FltkFilterWatcher qlwatcher(generator->GetResampler(), 0, 0, 200, 20, "Generating QuickLook ...");
   generator->GenerateLayer();
   m_ImageLayer = generator->GetLayer();
   m_RenderingFunction = generator->GetRenderingFunction();
@@ -228,40 +227,40 @@ StandardImageViewer<TImage,TVectorData,TWidgetManager>
   // adding histograms rendering
   unsigned int listSize = m_ImageLayer->GetHistogramList()->Size();
 
-  if(listSize>0)
+  if (listSize > 0)
     {
-      if(listSize==1)
-       {
-         typename HistogramCurveType::Pointer grayhistogram = HistogramCurveType::New();
-         grayhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
-         grayhistogram->SetHistogramColor(gray);
-         grayhistogram->SetLabelColor(gray);
-         m_CurveWidget->AddCurve(grayhistogram);
-       }
-      else
-       {
-         typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
-         rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
-         rhistogram->SetHistogramColor(red);
-         rhistogram->SetLabelColor(red);
-         m_CurveWidget->AddCurve(rhistogram);
-       }
-      if(listSize>1)
-       {
-         typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
-         ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
-         ghistogram->SetHistogramColor(green);
-         ghistogram->SetLabelColor(green);
-         m_CurveWidget->AddCurve(ghistogram);
-       }        
-      if(listSize>2)
-       {
-         typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
-         bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
-         bhistogram->SetHistogramColor(blue);
-         bhistogram->SetLabelColor(blue);
-         m_CurveWidget->AddCurve(bhistogram);
-       }
+    if (listSize == 1)
+      {
+      typename HistogramCurveType::Pointer grayhistogram = HistogramCurveType::New();
+      grayhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+      grayhistogram->SetHistogramColor(gray);
+      grayhistogram->SetLabelColor(gray);
+      m_CurveWidget->AddCurve(grayhistogram);
+      }
+    else
+      {
+      typename HistogramCurveType::Pointer rhistogram = HistogramCurveType::New();
+      rhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(0));
+      rhistogram->SetHistogramColor(red);
+      rhistogram->SetLabelColor(red);
+      m_CurveWidget->AddCurve(rhistogram);
+      }
+    if (listSize > 1)
+      {
+      typename HistogramCurveType::Pointer ghistogram = HistogramCurveType::New();
+      ghistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(1));
+      ghistogram->SetHistogramColor(green);
+      ghistogram->SetLabelColor(green);
+      m_CurveWidget->AddCurve(ghistogram);
+      }
+    if (listSize > 2)
+      {
+      typename HistogramCurveType::Pointer bhistogram = HistogramCurveType::New();
+      bhistogram->SetHistogram(m_ImageLayer->GetHistogramList()->GetNthElement(2));
+      bhistogram->SetHistogramColor(blue);
+      bhistogram->SetLabelColor(blue);
+      m_CurveWidget->AddCurve(bhistogram);
+      }
     }
 
   m_CurveWidget->SetXAxisLabel("Pixels");

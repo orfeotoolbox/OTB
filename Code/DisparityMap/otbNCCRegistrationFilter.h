@@ -65,34 +65,34 @@ namespace otb
  */
 template<class TFixedImage, class TMovingImage, class TDeformationField>
 class ITK_EXPORT NCCRegistrationFilter :
-      public itk::PDEDeformableRegistrationFilter< TFixedImage, TMovingImage,
-      TDeformationField>
+  public itk::PDEDeformableRegistrationFilter<TFixedImage, TMovingImage,
+                                              TDeformationField>
 {
 public:
   /** Standard class typedefs. */
-  typedef NCCRegistrationFilter    Self;
+  typedef NCCRegistrationFilter Self;
   typedef itk::PDEDeformableRegistrationFilter<
-  TFixedImage, TMovingImage,TDeformationField>    Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+    TFixedImage, TMovingImage, TDeformationField>    Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( NCCRegistrationFilter,
-                itk::PDEDeformableRegistrationFilter );
+  itkTypeMacro(NCCRegistrationFilter,
+               itk::PDEDeformableRegistrationFilter);
 
   /** Inherit types from superclass. */
-  typedef typename Superclass::TimeStepType  TimeStepType;
+  typedef typename Superclass::TimeStepType TimeStepType;
 
   /** FixedImage image type. */
-  typedef typename Superclass::FixedImageType   FixedImageType;
-  typedef typename Superclass::FixedImagePointer  FixedImagePointer;
+  typedef typename Superclass::FixedImageType    FixedImageType;
+  typedef typename Superclass::FixedImagePointer FixedImagePointer;
 
   /** MovingImage image type. */
   typedef typename Superclass::MovingImageType    MovingImageType;
-  typedef typename Superclass::MovingImagePointer  MovingImagePointer;
+  typedef typename Superclass::MovingImagePointer MovingImagePointer;
 
   /** Deformation field type. */
   typedef typename Superclass::DeformationFieldType
@@ -105,8 +105,8 @@ public:
   FiniteDifferenceFunctionType;
 
   /** NCCRegistrationFilterFunction type. */
-  typedef NCCRegistrationFunction<FixedImageType,MovingImageType,
-  DeformationFieldType>  NCCRegistrationFunctionType;
+  typedef NCCRegistrationFunction<FixedImageType, MovingImageType,
+                                  DeformationFieldType>  NCCRegistrationFunctionType;
 
   typedef typename NCCRegistrationFunctionType::RadiusType RadiusType;
 
@@ -141,18 +141,14 @@ protected:
   /** Apply update. */
   virtual void ApplyUpdate(TimeStepType dt);
 
-
   /** Update the Input requested region. */
   virtual void GenerateInputRequestedRegion();
 
-
 private:
-  NCCRegistrationFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  NCCRegistrationFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // end namespace otb
 

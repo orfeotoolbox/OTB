@@ -24,7 +24,6 @@
 namespace otb
 {
 
-
 /** \class GISTableFunction
  * \brief Evaluates a const transaction on a GISTable
  *
@@ -40,12 +39,12 @@ namespace otb
  * \ingroup GISTableFunctions
  */
 template <
-class TInputTable,
-class TOutput
->
+  class TInputTable,
+  class TOutput
+  >
 class ITK_EXPORT GISTableFunction :
-    public FunctionBase< TInputTable,
-                       TOutput >
+  public FunctionBase<TInputTable,
+                      TOutput>
 {
 public:
   /** Dimension underlying input table. */
@@ -53,12 +52,12 @@ public:
                       TInputTable::SpatialDimension);
 
   /** Standard class typedefs. */
-  typedef GISTableFunction                                         Self;
+  typedef GISTableFunction Self;
   typedef FunctionBase<
     TInputTable,
-    TOutput >                                                   Superclass;
-  typedef SmartPointer<Self>                                    Pointer;
-  typedef SmartPointer<const Self>                              ConstPointer;
+    TOutput>                                                   Superclass;
+  typedef SmartPointer<Self>       Pointer;
+  typedef SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GISTableFunction, FunctionBase);
@@ -76,16 +75,15 @@ public:
   typedef TOutput OutputType;
 
   /** Set the input table. */
-  virtual void SetInputTable( const InputTableType* ptr );
+  virtual void SetInputTable(const InputTableType* ptr);
 
   /** Get the input Table. */
   const InputTableType * GetInputTable() const
-    { return m_Table.GetPointer(); }
+  { return m_Table.GetPointer(); }
 
   /** Evaluate the function.
    * Subclasses must provide this method. */
-  virtual TOutput Evaluate( ) const = 0;
-
+  virtual TOutput Evaluate() const = 0;
 
 protected:
   GISTableFunction();
@@ -93,16 +91,15 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** Const pointer to the input table. */
-  InputTableConstPointer  m_Table;
+  InputTableConstPointer m_Table;
 
 private:
-  GISTableFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GISTableFunction(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
 } // end namespace otb
-
 
 #if OTB_MANUAL_INSTANTIATION
 # include "itkGISTableFunction.txx"

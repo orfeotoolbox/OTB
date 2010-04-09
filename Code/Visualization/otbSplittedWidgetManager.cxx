@@ -32,7 +32,6 @@ SplittedWidgetManager
   delete m_SplittedWidget;
 }
 
-
 void
 SplittedWidgetManager
 ::RegisterFullWidget(WidgetType* fullWidget)
@@ -40,9 +39,8 @@ SplittedWidgetManager
   m_InternalFullWidget = fullWidget;
   m_SplittedWidget->m_FullGroup->add(fullWidget);
   m_SplittedWidget->m_FullGroup->resizable(fullWidget);
-  fullWidget->resize(0,0, m_SplittedWidget->m_FullGroup->w(),m_SplittedWidget->m_FullGroup->h());
+  fullWidget->resize(0, 0, m_SplittedWidget->m_FullGroup->w(), m_SplittedWidget->m_FullGroup->h());
 }
-
 
 void
 SplittedWidgetManager
@@ -51,7 +49,7 @@ SplittedWidgetManager
   m_InternalScrollWidget = scrollWidget;
   m_SplittedWidget->m_QuicklookGroup->add(scrollWidget);
   m_SplittedWidget->m_QuicklookGroup->resizable(scrollWidget);
-  scrollWidget->resize(0,0, m_SplittedWidget->m_QuicklookGroup->w(),m_SplittedWidget->m_QuicklookGroup->h());
+  scrollWidget->resize(0, 0, m_SplittedWidget->m_QuicklookGroup->w(), m_SplittedWidget->m_QuicklookGroup->h());
 
 }
 
@@ -62,7 +60,7 @@ SplittedWidgetManager
   m_InternalZoomWidget = zoomWidget;
   m_SplittedWidget->m_ZoomGroup->add(zoomWidget);
   m_SplittedWidget->m_ZoomGroup->resizable(zoomWidget);
-  zoomWidget->resize(0,0,m_SplittedWidget->m_ZoomGroup->w(),m_SplittedWidget->m_ZoomGroup->h());
+  zoomWidget->resize(0, 0, m_SplittedWidget->m_ZoomGroup->w(), m_SplittedWidget->m_ZoomGroup->h());
 }
 void
 SplittedWidgetManager
@@ -71,7 +69,8 @@ SplittedWidgetManager
   m_IntenalPixelWidget = pixelWidget;
   m_SplittedWidget->m_PixelDescriptionGroup->add(pixelWidget);
   m_SplittedWidget->m_PixelDescriptionGroup->resizable(pixelWidget);
-  pixelWidget->resize(0,0, m_SplittedWidget->m_PixelDescriptionGroup->w(),m_SplittedWidget->m_PixelDescriptionGroup->h());
+  pixelWidget->resize(0, 0,
+                      m_SplittedWidget->m_PixelDescriptionGroup->w(), m_SplittedWidget->m_PixelDescriptionGroup->h());
 
 }
 
@@ -82,8 +81,8 @@ SplittedWidgetManager
   m_InternalCurveWidget = curveWidget;
   m_SplittedWidget->m_HistogramsGroup->add(curveWidget);
   m_SplittedWidget->m_HistogramsGroup->resizable(curveWidget);
-  curveWidget->resize(0,0,m_SplittedWidget->m_HistogramsGroup->w(),m_SplittedWidget->m_HistogramsGroup->h());
- }
+  curveWidget->resize(0, 0, m_SplittedWidget->m_HistogramsGroup->w(), m_SplittedWidget->m_HistogramsGroup->h());
+}
 
 void
 SplittedWidgetManager
@@ -94,7 +93,7 @@ SplittedWidgetManager
   m_SplittedWidget->m_PixelDescriptionGroup->show();
   m_SplittedWidget->m_QuicklookGroup->show();
   m_SplittedWidget->m_HistogramsGroup->show();
-  
+
   m_InternalCurveWidget->show();
   m_IntenalPixelWidget->show();
   m_InternalFullWidget->show();
@@ -117,11 +116,11 @@ void
 SplittedWidgetManager
 ::Refresh()
 {
- m_InternalFullWidget ->redraw();
- m_InternalScrollWidget ->redraw();
- m_InternalZoomWidget->redraw();
- m_IntenalPixelWidget->redraw();
- m_InternalCurveWidget->redraw();
+  m_InternalFullWidget->redraw();
+  m_InternalScrollWidget->redraw();
+  m_InternalZoomWidget->redraw();
+  m_IntenalPixelWidget->redraw();
+  m_InternalCurveWidget->redraw();
 }
 
 void
@@ -130,27 +129,27 @@ SplittedWidgetManager
 {
   itk::OStringStream oss1;
   oss1.str("");
-  oss1 << "Full Widget - "<< label;
+  oss1 << "Full Widget - " << label;
   m_SplittedWidget->m_FullGroup->copy_label(oss1.str().c_str());
-  
+
   itk::OStringStream oss2;
   oss2.str("");
   oss2 << "Zoom Widget - " << label;
   m_SplittedWidget->m_ZoomGroup->copy_label(oss2.str().c_str());
-  
+
   itk::OStringStream oss3;
   oss3.str("");
-  oss3 << "Pixel Information Widget - "<< label;
+  oss3 << "Pixel Information Widget - " << label;
   m_SplittedWidget->m_PixelDescriptionGroup->copy_label(oss3.str().c_str());
 
   itk::OStringStream oss4;
   oss4.str("");
-  oss4 << "Scroll Widget - "<< label;
+  oss4 << "Scroll Widget - " << label;
   m_SplittedWidget->m_QuicklookGroup->copy_label(oss4.str().c_str());
-  
+
   itk::OStringStream oss5;
   oss5.str("");
-  oss5 << "Histogram Widget - "<< label;
+  oss5 << "Histogram Widget - " << label;
   m_SplittedWidget->m_HistogramsGroup->copy_label(oss5.str().c_str());
 }
 

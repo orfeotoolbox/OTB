@@ -42,16 +42,16 @@ namespace otb {
  * \ingroup Streamed
  * \sa EuclideanDistanceWithMissingValue
  */
-template < class TInputImage >
+template <class TInputImage>
 class ITK_EXPORT BoxAndWhiskerImageFilter
-  : public itk::InPlaceImageFilter< TInputImage >
+  : public itk::InPlaceImageFilter<TInputImage>
 {
-  public :
+public:
   /** Standard class typedefs. */
-  typedef BoxAndWhiskerImageFilter Self;
-  typedef typename itk::InPlaceImageFilter< TInputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef BoxAndWhiskerImageFilter                      Self;
+  typedef typename itk::InPlaceImageFilter<TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -60,20 +60,20 @@ class ITK_EXPORT BoxAndWhiskerImageFilter
   itkTypeMacro(BoxAndWhiskerImageFilter, InPlaceImageFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::OutputImagePointer OutputImagePointer;
+  typedef typename Superclass::OutputImageType       OutputImageType;
+  typedef typename Superclass::OutputImagePointer    OutputImagePointer;
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
-  typedef typename Superclass::OutputImagePixelType OutputImagePixelType;
+  typedef typename Superclass::OutputImagePixelType  OutputImagePixelType;
 
-  typedef typename Superclass::InputImageType InputImageType;
-  typedef typename Superclass::InputImagePointer InputImagePointer;
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename Superclass::InputImagePointer      InputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
-  typedef typename Superclass::InputImageRegionType InputImageRegionType;
-  typedef typename Superclass::InputImagePixelType InputImagePixelType;
+  typedef typename Superclass::InputImageRegionType   InputImageRegionType;
+  typedef typename Superclass::InputImagePixelType    InputImagePixelType;
 
-  typedef typename InputImageType::PixelType PixelType;
-  typedef typename PixelType::ValueType ValueType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename InputImageType::PixelType  PixelType;
+  typedef typename PixelType::ValueType       ValueType;
+  typedef typename InputImageType::SizeType   SizeType;
   typedef typename InputImageType::RegionType RegionType;
 
   /** Dimension */
@@ -84,28 +84,28 @@ class ITK_EXPORT BoxAndWhiskerImageFilter
   itkGetConstReferenceMacro(Radius, SizeType);
 
   /** Fix the whisker */
-  itkGetConstMacro(Beta,double);
-  itkSetMacro(Beta,double);
-  itkGetConstMacro(NumberFound,unsigned int);
+  itkGetConstMacro(Beta, double);
+  itkSetMacro(Beta, double);
+  itkGetConstMacro(NumberFound, unsigned int);
 
-  protected:
+protected:
   BoxAndWhiskerImageFilter ();
   virtual ~BoxAndWhiskerImageFilter () {}
 
   /** Main computation method implemented as a multithreaded filter */
-  virtual void ThreadedGenerateData ( const OutputImageRegionType& outputRegionForThread, int threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId);
   virtual void GenerateOutputInformation();
   virtual void AllocateOutputs();
 
   /** Perform the outlier detection */
-  PixelType PerformBoxAndWhiskerDetection ( const PixelType & pixel );
+  PixelType PerformBoxAndWhiskerDetection(const PixelType& pixel);
 
-  private:
-  BoxAndWhiskerImageFilter ( const Self & );
-  void operator= ( const Self & ); // not implemented
-  
+private:
+  BoxAndWhiskerImageFilter (const Self &);
+  void operator =(const Self&);    // not implemented
+
   SizeType m_Radius;
-  double m_Beta;
+  double   m_Beta;
   long int m_NumberFound;
 
 }; // end of class BoxAndWhiskerImageFilter
@@ -117,5 +117,3 @@ class ITK_EXPORT BoxAndWhiskerImageFilter
 #endif
 
 #endif
-
-

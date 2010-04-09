@@ -28,16 +28,15 @@ template <InverseOrForwardTransformationEnum transform>
 Lambert3CartoSudProjection<transform>
 ::Lambert3CartoSudProjection()
 {
-  itk::Point<double,2> origin;
-  origin[0]=3;
-  origin[1]=46.5;
+  itk::Point<double, 2> origin;
+  origin[0] = 3;
+  origin[1] = 46.5;
   std::string datum = "WE"; //WGS84 datum
 
-
-  double parall1=43.1992913888888888888888888889;
-  double parall2=44.9960938888888888888888888888;
-  double falseEasting=600000;
-  double falseNorthing=3200000;
+  double      parall1 = 43.1992913888888888888888888889;
+  double      parall2 = 44.9960938888888888888888888888;
+  double      falseEasting = 600000;
+  double      falseNorthing = 3200000;
   std::string ellipsoid = "CE";
 
   //TODO: 29-02-2008 Emmanuel: when ossim version > 1.7.2 only
@@ -52,7 +51,6 @@ Lambert3CartoSudProjection<transform>
 ::~Lambert3CartoSudProjection()
 {
 }
-
 
 } // namespace otb
 

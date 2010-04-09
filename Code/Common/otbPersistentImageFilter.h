@@ -38,22 +38,22 @@ namespace otb
  * \sa StatisticsImageFilter
  * \sa StatisticsVectorImageFilter
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT PersistentImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef PersistentImageFilter                             Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef PersistentImageFilter                              Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Creation through object factory macro */
-  itkTypeMacro(PersistentImageFilter,ImageToImageFilter);
+  itkTypeMacro(PersistentImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
   /**
    * Reset the persistent data of the filter.
@@ -68,17 +68,17 @@ protected:
   /** Constructor */
   PersistentImageFilter() {};
   /** Destructor */
-  virtual ~PersistentImageFilter() {};
+  virtual ~PersistentImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
 
 private:
-  PersistentImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 
 #endif

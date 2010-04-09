@@ -64,9 +64,9 @@ public:
   typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
- 
+
   /** Model typedef */
-  typedef SVMModel<InputPixelType,LabelPixelType> ModelType;
+  typedef SVMModel<InputPixelType, LabelPixelType> ModelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,29 +78,29 @@ public:
   const ModelType * GetModel() const;
 
   /** Type definitions for the SVM Model. */
-  typedef SVMModel< InputPixelType, LabelPixelType > SVMModelType;
-  typedef typename SVMModelType::Pointer             SVMModelPointer;
+  typedef SVMModel<InputPixelType, LabelPixelType> SVMModelType;
+  typedef typename SVMModelType::Pointer           SVMModelPointer;
 
   /** Get the cross validation accuracy measures */
-  itkGetMacro(InitialCrossValidationAccuracy,double);
-  itkGetMacro(FinalCrossValidationAccuracy,double);
+  itkGetMacro(InitialCrossValidationAccuracy, double);
+  itkGetMacro(FinalCrossValidationAccuracy, double);
 
   /** Activate/Deactivate parameters optimization */
-  itkSetMacro(ParametersOptimization,bool);
-  itkGetMacro(ParametersOptimization,bool);
+  itkSetMacro(ParametersOptimization, bool);
+  itkGetMacro(ParametersOptimization, bool);
   itkBooleanMacro(ParametersOptimization);
 
   /** Set/Get the number of steps for the coarse optimization */
-  itkSetMacro(CoarseOptimizationNumberOfSteps,unsigned int);
-  itkGetMacro(CoarseOptimizationNumberOfSteps,unsigned int);
+  itkSetMacro(CoarseOptimizationNumberOfSteps, unsigned int);
+  itkGetMacro(CoarseOptimizationNumberOfSteps, unsigned int);
 
   /** Set/Get the number of steps for the fine optimization */
-  itkSetMacro(FineOptimizationNumberOfSteps,unsigned int);
-  itkGetMacro(FineOptimizationNumberOfSteps,unsigned int);
+  itkSetMacro(FineOptimizationNumberOfSteps, unsigned int);
+  itkGetMacro(FineOptimizationNumberOfSteps, unsigned int);
 
   /** Set/Get the number of cross validation folders */
-  itkSetMacro(NumberOfCrossValidationFolders,unsigned int);
-  itkGetMacro(NumberOfCrossValidationFolders,unsigned int);
+  itkSetMacro(NumberOfCrossValidationFolders, unsigned int);
+  itkGetMacro(NumberOfCrossValidationFolders, unsigned int);
 
   /** Set the number of classes. This method is deprecated and is
    * maintained for backward compatibility only */
@@ -148,7 +148,6 @@ public:
     this->GetModel()->SetPolynomialKernelDegree(degree);
     this->Modified();
   }
-
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void)
@@ -233,7 +232,6 @@ public:
     return this->GetModel()->GetEpsilon();
   }
 
-
   /* Set the value of p for EPSILON_SVR */
   void SetP(double p)
   {
@@ -241,7 +239,6 @@ public:
     this->GetModel()->SetP(p);
     this->Modified();
   }
-
 
   /* Get the value of p for EPSILON_SVR */
   double GetP(void)
@@ -262,7 +259,6 @@ public:
     return (this->GetModel()->GetDoShrinking());
   }
 
-
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
@@ -277,7 +273,7 @@ public:
   }
 
   /** Get/Set methods for generic kernel functor */
-  virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
+  virtual GenericKernelFunctorBase * GetKernelFunctor(void) const
   {
     return this->GetModel()->GetKernelFunctor();
   }
@@ -305,17 +301,17 @@ protected:
 
   /** This virtual function must be implemented in subclasses to
   populate the model with samples */
-  virtual void  PrepareData(){};
+  virtual void  PrepareData(){}
 
   /** Optimize parameters */
   void OptimizeParameters();
-  
+
   /** The number of classes */
-  unsigned int         m_NumberOfClasses;
+  unsigned int m_NumberOfClasses;
 
 private:
-  SVMModelEstimator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SVMModelEstimator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Initial cross validation accuracy
   double m_InitialCrossValidationAccuracy;
@@ -328,7 +324,7 @@ private:
 
   // Number of steps for the coarse search
   unsigned int m_CoarseOptimizationNumberOfSteps;
-  
+
   // Number of steps for the fine search
   unsigned int m_FineOptimizationNumberOfSteps;
 
@@ -343,6 +339,4 @@ private:
 #include "otbSVMModelEstimator.txx"
 #endif
 
-
 #endif
-

@@ -25,67 +25,67 @@ namespace otb
 {
 
 /** \class TransformPointSetFilter
- * \brief 
+ * \brief
  *
  * TransformPointSetFilter applies a transform to all the points
  * of a PointSet.
  *
  * The additional content of the PointSet is passed untouched.
- * 
+ *
  * PointSets that have added information like normal vector on the points, will
  * have to take care of transforming this data by other means.
- * 
+ *
  * \ingroup PointSetFilters
  */
 template <class TInputPointSet, class TOutputPointSet, class TTransform>
 class ITK_EXPORT TransformPointSetFilter :
-    public PointSetToPointSetFilter<TInputPointSet,TOutputPointSet>
+  public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformPointSetFilter                                  Self;
-  typedef PointSetToPointSetFilter<TInputPointSet,TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
-  
+  typedef TransformPointSetFilter                                   Self;
+  typedef PointSetToPointSetFilter<TInputPointSet, TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                                   Pointer;
+  typedef itk::SmartPointer<const Self>                             ConstPointer;
+
   typedef TInputPointSet                       InputPointSetType;
   typedef TOutputPointSet                      OutputPointSetType;
   typedef typename InputPointSetType::Pointer  InputPointSetPointer;
   typedef typename OutputPointSetType::Pointer OutputPointSetPointer;
-  
+
   /** Type for representing coordinates. */
-  typedef typename TInputPointSet::CoordRepType  CoordRepType;
+  typedef typename TInputPointSet::CoordRepType CoordRepType;
 
   /** Type of the transform. */
-  typedef TTransform  TransformType;
+  typedef TTransform TransformType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TransformPointSetFilter,PointSetToPointSetFilter);
+  itkTypeMacro(TransformPointSetFilter, PointSetToPointSetFilter);
 
   /** Set transform. */
-  itkSetObjectMacro(Transform, TransformType); 
+  itkSetObjectMacro(Transform, TransformType);
 
   /** Get transform. */
-  itkGetObjectMacro(Transform,TransformType);
+  itkGetObjectMacro(Transform, TransformType);
 
 protected:
   TransformPointSetFilter();
-  ~TransformPointSetFilter() {};
+  ~TransformPointSetFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
+
   /** Generate Requested Data */
-  virtual void GenerateData( void );
+  virtual void GenerateData(void);
 
   /** Transform to apply to all the PointSet points. */
-  typename TransformType::Pointer   m_Transform;
+  typename TransformType::Pointer m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter&); //purposely not implemented
-  void operator=(const TransformPointSetFilter&); //purposely not implemented
-  
+  TransformPointSetFilter(const TransformPointSetFilter &); //purposely not implemented
+  void operator =(const TransformPointSetFilter&); //purposely not implemented
+
 };
 
 } // end namespace otb

@@ -34,14 +34,14 @@ namespace otb
  */
 template <class TPath, class TImage>
 class ITK_EXPORT LikelihoodPathListFilter
-      : public PathListToPathListFilter<TPath>
+  : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
-  typedef LikelihoodPathListFilter                Self;
-  typedef PathListToPathListFilter<TPath>       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef LikelihoodPathListFilter        Self;
+  typedef PathListToPathListFilter<TPath> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -50,18 +50,18 @@ public:
   itkTypeMacro(LikelihoodPathListFilter, PathListToPathListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PathType         PathType;
-  typedef typename Superclass::PathListType     PathListType;
-  typedef typename Superclass::PathPointerType  PathPointerType;
-  typedef typename PathListType::Pointer        PathListPointerType;
-  typedef typename PathListType::ConstIterator IteratorType;
-  typedef typename PathType::VertexType VertexType;
-  typedef typename PathType::VertexListType VertexListType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathListType      PathListType;
+  typedef typename Superclass::PathPointerType   PathPointerType;
+  typedef typename PathListType::Pointer         PathListPointerType;
+  typedef typename PathListType::ConstIterator   IteratorType;
+  typedef typename PathType::VertexType          VertexType;
+  typedef typename PathType::VertexListType      VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
-  typedef double                      RealType;
+  typedef double                                 RealType;
 
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
+  typedef TImage                           ImageType;
+  typedef typename ImageType::Pointer      ImagePointerType;
   typedef typename ImageType::ConstPointer ImageConstPointerType;
 
   /**
@@ -80,19 +80,19 @@ protected:
   /** Constructor */
   LikelihoodPathListFilter();
   /** Destructor */
-  virtual ~LikelihoodPathListFilter() {};
+  virtual ~LikelihoodPathListFilter() {}
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  LikelihoodPathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LikelihoodPathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   std::string m_Key;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLikelihoodPathListFilter.txx"
 #endif

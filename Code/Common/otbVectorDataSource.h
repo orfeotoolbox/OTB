@@ -40,13 +40,13 @@ namespace otb
 template <class TOutputVectorData>
 class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 {
-  public :
+public:
 
   /** Standard class typedefs. */
-  typedef VectorDataSource                      Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef VectorDataSource              Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,8 +71,8 @@ protected:
   virtual void  AllocateOutputs();
 
 private:
-  VectorDataSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

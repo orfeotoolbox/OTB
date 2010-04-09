@@ -42,7 +42,7 @@ class ITK_EXPORT PolyLineImageConstIterator
 {
 public:
   /** Standard typedefs */
-  typedef PolyLineImageConstIterator  Self;
+  typedef PolyLineImageConstIterator Self;
 
   itkStaticConstMacro(ImageIteratorDimension, unsigned int,
                       TImage::ImageDimension);
@@ -82,7 +82,7 @@ public:
     return m_InternalImageIterator.GetIndex();
   }
   /** Get the pixel value */
-  const PixelType & Get(void) const
+  const PixelType& Get(void) const
   {
     return m_InternalImageIterator.Get();
   }
@@ -95,14 +95,14 @@ public:
   /** Move an iterator to the beginning of the line. */
   void GoToBegin();
   /** Walk forward along the line to the next index in the image. */
-  void operator++();
+  void operator ++();
   /** operator= is provided to make sure the handle to the image is properly
    * reference counted. */
-  Self &operator=(const Self& it);
+  Self& operator =(const Self& it);
   /** Constructor establishes an iterator to walk along a line */
-  PolyLineImageConstIterator(const ImageType *imagePtr,const PathType * pathPtr);
+  PolyLineImageConstIterator(const ImageType * imagePtr, const PathType * pathPtr);
   /** Default Destructor. */
-  virtual ~PolyLineImageConstIterator() {};
+  virtual ~PolyLineImageConstIterator() {}
 
 protected: //made protected so other iterators can access
 
@@ -111,11 +111,11 @@ protected: //made protected so other iterators can access
 
   /** Smart pointer to the path */
   typename PathType::ConstPointer m_Path;
-  InternalImageIteratorType       m_InternalImageIterator;
-  VertexIteratorType              m_InternalVertexIterator;
+  InternalImageIteratorType m_InternalImageIterator;
+  VertexIteratorType        m_InternalVertexIterator;
 };
 
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolyLineImageConstIterator.txx"
 #endif

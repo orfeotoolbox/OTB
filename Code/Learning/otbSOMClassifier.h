@@ -38,15 +38,15 @@ namespace otb
  * \sa SOM, SOMMap, SOMActivationBuilder.
  */
 
-template< class TSample, class TSOMMap, class TLabel>
+template<class TSample, class TSOMMap, class TLabel>
 class ITK_EXPORT SOMClassifier :
-      public itk::ProcessObject
+  public itk::ProcessObject
 {
 public:
   /** Standard class typedef*/
-  typedef SOMClassifier Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
+  typedef SOMClassifier                 Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macros */
@@ -54,19 +54,19 @@ public:
   itkNewMacro(Self);
 
   /** typedefs from TSample object */
-  typedef TSample SampleType;
-  typedef typename SampleType::Pointer SamplePointerType;
-  typedef typename SampleType::MeasurementType MeasurementType;
-  typedef typename SampleType::MeasurementVectorType MeasurementVectorType;
+  typedef TSample                                               SampleType;
+  typedef typename SampleType::Pointer                          SamplePointerType;
+  typedef typename SampleType::MeasurementType                  MeasurementType;
+  typedef typename SampleType::MeasurementVectorType            MeasurementVectorType;
   typedef typename SampleType::MeasurementVectorType::ValueType InputPixelType;
 
   /** SOM Map typedefs */
-  typedef TSOMMap SOMMapType;
+  typedef TSOMMap                      SOMMapType;
   typedef typename SOMMapType::Pointer SOMMapPointerType;
 
   /** Output typedefs */
   typedef itk::Statistics::MembershipSample<SampleType> OutputType;
-  typedef typename OutputType::Pointer OutputPointerType;
+  typedef typename OutputType::Pointer                  OutputPointerType;
 
   /** Label type typedef */
   typedef TLabel ClassLabelType;
@@ -74,10 +74,10 @@ public:
   /// Accessors
   void SetMap(SOMMapType * sommap);
   SOMMapType * GetMap(void);
-  itkSetObjectMacro(Sample,SampleType);
-  itkGetObjectMacro(Sample,SampleType);
-  itkSetObjectMacro(Output,OutputType);
-  itkGetObjectMacro(Output,OutputType);
+  itkSetObjectMacro(Sample, SampleType);
+  itkGetObjectMacro(Sample, SampleType);
+  itkSetObjectMacro(Output, OutputType);
+  itkGetObjectMacro(Output, OutputType);
 
 protected:
   /** Constructor */
@@ -103,5 +103,3 @@ private:
 #endif
 
 #endif
-
-

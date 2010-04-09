@@ -23,7 +23,6 @@
 #include "itkMacro.h"
 #include <vector>
 
-
 namespace otb
 {
 
@@ -39,84 +38,81 @@ class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
 {
 public:
   /** Standard typedefs */
-  typedef AtmosphericRadiativeTermsSingleChannel     Self;
-  typedef itk::DataObject                            Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef AtmosphericRadiativeTermsSingleChannel Self;
+  typedef itk::DataObject                        Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(AtmosphericRadiativeTermsSingleChannel,DataObject);
+  itkTypeMacro(AtmosphericRadiativeTermsSingleChannel, DataObject);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-
   /**
    * Set/Get the intrinsic atmospheric reflectance.
    */
-  itkSetMacro(IntrinsicAtmosphericReflectance,double);
-  itkGetMacro(IntrinsicAtmosphericReflectance,double);
-
+  itkSetMacro(IntrinsicAtmosphericReflectance, double);
+  itkGetMacro(IntrinsicAtmosphericReflectance, double);
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
    */
-  itkSetMacro(SphericalAlbedo,double);
-  itkGetMacro(SphericalAlbedo,double);
+  itkSetMacro(SphericalAlbedo, double);
+  itkGetMacro(SphericalAlbedo, double);
   /**
    * Set/Get the total gaseous transmission.
    */
-  itkSetMacro(TotalGaseousTransmission,double);
-  itkGetMacro(TotalGaseousTransmission,double);
+  itkSetMacro(TotalGaseousTransmission, double);
+  itkGetMacro(TotalGaseousTransmission, double);
 
   /**
   * Set/Get the downward transmittance of the atmosphere.
   */
-  itkSetMacro(DownwardTransmittance,double);
-  itkGetMacro(DownwardTransmittance,double);
+  itkSetMacro(DownwardTransmittance, double);
+  itkGetMacro(DownwardTransmittance, double);
 
   /**
    * Set/Get the upward transmittance of the atmosphere.
    */
-  itkSetMacro(UpwardTransmittance,double);
-  itkGetMacro(UpwardTransmittance,double);
+  itkSetMacro(UpwardTransmittance, double);
+  itkGetMacro(UpwardTransmittance, double);
 
   /**
    * Set/Get the upward diffuse transmittance
    */
-  itkSetMacro(UpwardDiffuseTransmittance,double);
-  itkGetMacro(UpwardDiffuseTransmittance,double);
+  itkSetMacro(UpwardDiffuseTransmittance, double);
+  itkGetMacro(UpwardDiffuseTransmittance, double);
 
   /**
    * Set/Get the upward direct transmittance
    */
-  itkSetMacro(UpwardDirectTransmittance,double);
-  itkGetMacro(UpwardDirectTransmittance,double);
+  itkSetMacro(UpwardDirectTransmittance, double);
+  itkGetMacro(UpwardDirectTransmittance, double);
 
   /**
    * Set/Get the upward diffuse transmittance for rayleigh
    */
-  itkSetMacro(UpwardDiffuseTransmittanceForRayleigh,double);
-  itkGetMacro(UpwardDiffuseTransmittanceForRayleigh,double);
+  itkSetMacro(UpwardDiffuseTransmittanceForRayleigh, double);
+  itkGetMacro(UpwardDiffuseTransmittanceForRayleigh, double);
 
   /**
    * Set/Get the upward diffuse transmittance for aerosols
    */
-  itkSetMacro(UpwardDiffuseTransmittanceForAerosol,double);
-  itkGetMacro(UpwardDiffuseTransmittanceForAerosol,double);
+  itkSetMacro(UpwardDiffuseTransmittanceForAerosol, double);
+  itkGetMacro(UpwardDiffuseTransmittanceForAerosol, double);
 
 protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() {};
+  ~AtmosphericRadiativeTermsSingleChannel() {}
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericRadiativeTermsSingleChannel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The intrinsic atmospheric reflectance. */
   double m_IntrinsicAtmosphericReflectance;
@@ -146,7 +142,6 @@ private:
   double m_UpwardDiffuseTransmittanceForAerosol;
 };
 
-
 /** \class AtmosphericRadiativeTerms
  *  \brief This class is a vector of AtmosphericRadiativeTermsSingleChannel,
  *         it contains all atmospheric radiative terms for each studied channel.
@@ -155,67 +150,66 @@ private:
  * \ingroup Radiometry
  */
 
-
 class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
 {
 public:
   /** Standard typedefs */
-  typedef AtmosphericRadiativeTerms        Self;
-  typedef itk::DataObject                  Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef AtmosphericRadiativeTerms     Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(AtmosphericRadiativeTerms,DataObject);
+  itkTypeMacro(AtmosphericRadiativeTerms, DataObject);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef AtmosphericRadiativeTermsSingleChannel::Pointer   ValueType;
-  typedef std::vector<ValueType>                            VectorValueType;
-  typedef std::vector<double>                               DataVectorType;
+  typedef AtmosphericRadiativeTermsSingleChannel::Pointer ValueType;
+  typedef std::vector<ValueType>                          VectorValueType;
+  typedef std::vector<double>                             DataVectorType;
   /**
    * Set/Get the values.
    */
-  void SetValues( const VectorValueType & val)
+  void SetValues(const VectorValueType& val)
   {
     m_Values = val;
     this->Modified();
-  };
-  VectorValueType & GetValues()
+  }
+  VectorValueType& GetValues()
   {
     return m_Values;
-  };
-  const VectorValueType & GetValues() const
+  }
+  const VectorValueType& GetValues() const
   {
     return m_Values;
-  };
+  }
 
   /** Set/Get the data classified by channel. */
   /** Set methods with vectors. */
-  void SetIntrinsicAtmosphericReflectances(const DataVectorType & vect);
-  void SetSphericalAlbedos(const DataVectorType & vect);
-  void SetTotalGaseousTransmissions(const DataVectorType & vect);
-  void SetDownwardTransmittances(const DataVectorType & vect);
-  void SetUpwardTransmittances(const DataVectorType & vect);
+  void SetIntrinsicAtmosphericReflectances(const DataVectorType& vect);
+  void SetSphericalAlbedos(const DataVectorType& vect);
+  void SetTotalGaseousTransmissions(const DataVectorType& vect);
+  void SetDownwardTransmittances(const DataVectorType& vect);
+  void SetUpwardTransmittances(const DataVectorType& vect);
 
-  void SetUpwardDiffuseTransmittances(const DataVectorType & vect);
-  void SetUpwardDirectTransmittances(const DataVectorType & vect);
-  void SetUpwardDiffuseTransmittancesForRayleigh(const DataVectorType & vect);
-  void SetUpwardDiffuseTransmittancesForAerosol(const DataVectorType & vect);
+  void SetUpwardDiffuseTransmittances(const DataVectorType& vect);
+  void SetUpwardDirectTransmittances(const DataVectorType& vect);
+  void SetUpwardDiffuseTransmittancesForRayleigh(const DataVectorType& vect);
+  void SetUpwardDiffuseTransmittancesForAerosol(const DataVectorType& vect);
 
   /** Set methods with index. */
-  void SetValueByIndex(unsigned int id, const ValueType & val);
-  void SetIntrinsicAtmosphericReflectance(unsigned int id, const double & val);
-  void SetSphericalAlbedo(unsigned int id, const double & val);
-  void SetTotalGaseousTransmission(unsigned int id, const double & val);
-  void SetDownwardTransmittance(unsigned int id, const double & val );
-  void SetUpwardTransmittance(unsigned int id, const  double & val );
+  void SetValueByIndex(unsigned int id, const ValueType& val);
+  void SetIntrinsicAtmosphericReflectance(unsigned int id, const double& val);
+  void SetSphericalAlbedo(unsigned int id, const double& val);
+  void SetTotalGaseousTransmission(unsigned int id, const double& val);
+  void SetDownwardTransmittance(unsigned int id, const double& val);
+  void SetUpwardTransmittance(unsigned int id, const double& val);
 
-  void SetUpwardDiffuseTransmittance(unsigned int id, const  double & val );
-  void SetUpwardDirectTransmittance(unsigned int id, const  double & val );
-  void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const  double & val );
-  void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const  double & val );
+  void SetUpwardDiffuseTransmittance(unsigned int id, const double& val);
+  void SetUpwardDirectTransmittance(unsigned int id, const double& val);
+  void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const double& val);
+  void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const double& val);
 
   /** Get methods with vectors. */
   DataVectorType GetIntrinsicAtmosphericReflectances();
@@ -249,13 +243,13 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() {};
+  ~AtmosphericRadiativeTerms() {}
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericRadiativeTerms(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AtmosphericRadiativeTerms(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The vector containing each channel information. */
   VectorValueType m_Values;
@@ -263,9 +257,6 @@ private:
   bool m_IsInitialized;
 };
 
-
 } // end namespace otb
 
 #endif
-
-

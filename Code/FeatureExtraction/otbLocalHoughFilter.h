@@ -30,7 +30,6 @@
 #include "otbExtractROI.h"
 #include "otbImage.h"
 
-
 namespace otb
 {
 /** \class LocalHoughFilter
@@ -52,10 +51,9 @@ class ITK_EXPORT LocalHoughFilter : public ImageToLineSpatialObjectListFilter<TI
 {
 public:
 
-
   /** Standard class typedefs. */
   typedef LocalHoughFilter                                Self;
-  typedef ImageToLineSpatialObjectListFilter<TInputImage>  Superclass;
+  typedef ImageToLineSpatialObjectListFilter<TInputImage> Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -65,51 +63,47 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(LocalHoughFilter, ImageToLineSpatialObjectListFilter);
 
-
   /** Definition of the list of lines. */
-  typedef typename Superclass::LinesListType   LinesListType;
+  typedef typename Superclass::LinesListType     LinesListType;
   typedef typename LinesListType::const_iterator LineIterator;
 
-  typedef typename LinesListType::LineType   LineType;
-  typedef typename LineType::Pointer        LinePointer;
+  typedef typename LinesListType::LineType LineType;
+  typedef typename LineType::Pointer       LinePointer;
 
-  typedef typename LineType::PointListType    PointListType;
-  typedef typename LineType::LinePointType      LinePointType;
+  typedef typename LineType::PointListType PointListType;
+  typedef typename LineType::LinePointType LinePointType;
 
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
 
   typedef TInputImage InputImageType;
 
   //------------------------------------------------------------
-  typedef  unsigned char    OutputPixelType;
-  typedef  otb::Image< OutputPixelType, 2 > OutputImageType;
+  typedef  unsigned char                  OutputPixelType;
+  typedef  otb::Image<OutputPixelType, 2> OutputImageType;
   //-----------------------------------------------
 
   /** Definition of the pixel type of the input and output images */
-  typedef typename InputImageType::PixelType   InputPixelType;
-  typedef   float                 AccumulatorPixelType;
+  typedef typename InputImageType::PixelType InputPixelType;
+  typedef   float                            AccumulatorPixelType;
 
-  typedef typename InputImageType::RegionType  InputImageRegionType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
 
-  typedef typename InputImageType::RegionType::IndexType  IndexType;
+  typedef typename InputImageType::RegionType::IndexType IndexType;
 
   /** Typedefs to define the extract ROI filter. */
-  typedef ExtractROI< InputPixelType, InputPixelType>  ROIFilterType;
-
+  typedef ExtractROI<InputPixelType, InputPixelType> ROIFilterType;
 
   /** Set the radius of the local region where to apply the Hough filter. */
   itkSetMacro(Radius, SizeType);
 
   /** Get the radius of the local region. */
   itkGetConstReferenceMacro(Radius, SizeType);
-
 
   /** Set the radius of the overlap of the local region where to apply the Hough filter. */
   itkSetMacro(Overlap, SizeType);
@@ -125,17 +119,15 @@ public:
 
   /** Set/Get the radius of the disc to remove from the accumulator
    *  for each line found */
-  itkSetMacro(DiscRadius,float);
-  itkGetMacro(DiscRadius,float);
-
+  itkSetMacro(DiscRadius, float);
+  itkGetMacro(DiscRadius, float);
 
   /** Set/Get the variance of the gaussian bluring for the accumulator */
-  itkSetMacro(Variance,float);
-  itkGetMacro(Variance,float);
+  itkSetMacro(Variance, float);
+  itkGetMacro(Variance, float);
 
-  itkSetMacro(Threshold,float);
-  itkGetMacro(Threshold,float);
-
+  itkSetMacro(Threshold, float);
+  itkGetMacro(Threshold, float);
 
 protected:
   LocalHoughFilter();
@@ -143,15 +135,13 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Definition of the Hough Filter. */
-  typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType>  HoughFilterType;
-
+  typedef itk::HoughTransform2DLinesImageFilter<InputPixelType, AccumulatorPixelType> HoughFilterType;
 
   virtual void GenerateData();
 
-
 private:
-  LocalHoughFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LocalHoughFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius used to define the local region. */
   SizeType m_Radius;
@@ -160,7 +150,7 @@ private:
   SizeType m_Overlap;
 
   /** Parameter of the Hough filter : number of lines we are looking for. */
-  unsigned int  m_NumberOfLines;
+  unsigned int m_NumberOfLines;
 
   /** Variance of the accumulator blurring (default = 5). */
   float m_Variance;
@@ -173,9 +163,7 @@ private:
 
   LinePointer LinePointResearch(LineIterator itLines, InputImageType *localImage, IndexType origin);
 
-
 };
-
 
 } // end namespace otb
 

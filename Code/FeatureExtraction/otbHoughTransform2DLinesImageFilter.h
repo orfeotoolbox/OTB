@@ -61,7 +61,7 @@ namespace otb
 
 template<typename TInputPixelType, typename TOutputPixelType>
 class ITK_EXPORT HoughTransform2DLinesImageFilter :
-      public itk::ImageToImageFilter< itk::Image<TInputPixelType,2>, itk::Image<TOutputPixelType,2> >
+  public itk::ImageToImageFilter<itk::Image<TInputPixelType, 2>, itk::Image<TOutputPixelType, 2> >
 {
 public:
 
@@ -69,26 +69,26 @@ public:
   typedef HoughTransform2DLinesImageFilter Self;
 
   /** Input Image typedef */
-  typedef itk::Image<TInputPixelType,2> InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef itk::Image<TInputPixelType, 2>        InputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
 
   /** Output Image typedef */
-  typedef itk::Image<TOutputPixelType,2> OutputImageType;
+  typedef itk::Image<TOutputPixelType, 2>   OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointer;
 
   /** Smart pointer typedef support. */
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Line typedef */
-  typedef itk::LineSpatialObject<2>         LineType;
-  typedef typename LineType::Pointer   LinePointer;
-  typedef std::list<LinePointer>       LinesListType;
-  typedef LineType::LinePointType      LinePointType;
+  typedef itk::LineSpatialObject<2>  LineType;
+  typedef typename LineType::Pointer LinePointer;
+  typedef std::list<LinePointer>     LinesListType;
+  typedef LineType::LinePointType    LinePointType;
 
   /** Standard "Superclass" typedef. */
-  typedef itk::ImageToImageFilter<InputImageType, OutputImageType>  Superclass;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
 
   /** Image index typedef */
   typedef typename InputImageType::IndexType IndexType;
@@ -100,7 +100,7 @@ public:
   typedef typename InputImageType::RegionType OutputImageRegionType;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( HoughTransform2DLinesImageFilter, ImageToImageFilter );
+  itkTypeMacro(HoughTransform2DLinesImageFilter, ImageToImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -110,63 +110,63 @@ public:
 
   /** Accessors for the threshold above which the filter should consider
       the point as a valid point */
-  itkSetMacro(Threshold,float);
-  itkGetMacro(Threshold,float);
+  itkSetMacro(Threshold, float);
+  itkGetMacro(Threshold, float);
 
   /** Accessors for the parameters of the angle axis.
       The Hough space describes (in the angle direction)
       [AngleAxisMinimum,AngleAxisMaximum[ with AngleAxisSize values */
   /** Accessors for the size of the angle axis */
-  itkSetMacro(AngleAxisSize,unsigned int);
-  itkGetMacro(AngleAxisSize,unsigned int);
+  itkSetMacro(AngleAxisSize, unsigned int);
+  itkGetMacro(AngleAxisSize, unsigned int);
 
   /** Accessors for the minimum of the angle axis */
-  itkSetMacro(AngleAxisMinimum,double);
-  itkGetMacro(AngleAxisMinimum,double);
+  itkSetMacro(AngleAxisMinimum, double);
+  itkGetMacro(AngleAxisMinimum, double);
 
   /** Accessors for the maximum of the angle axis */
-  itkSetMacro(AngleAxisMaximum,double);
-  itkGetMacro(AngleAxisMaximum,double);
+  itkSetMacro(AngleAxisMaximum, double);
+  itkGetMacro(AngleAxisMaximum, double);
 
   /** Accessors for the parameters of the distance axis.
       The Hough space describes (in the distance direction)
       [DistanceAxisMinimum,DistanceAxisMaximum[ with DistanceAxisSize values */
   /** Accessors for the actual size of the Distance axis */
-  itkSetMacro(DistanceAxisSize,unsigned int);
-  itkGetMacro(DistanceAxisSize,unsigned int);
+  itkSetMacro(DistanceAxisSize, unsigned int);
+  itkGetMacro(DistanceAxisSize, unsigned int);
 
   /** Accessors for the maximum size of the Distance axis */
-  itkGetMacro(DistanceAxisMaximumSize,unsigned int);
+  itkGetMacro(DistanceAxisMaximumSize, unsigned int);
 
   /** Accessors for the minimum of the Distance axis */
-  itkSetMacro(DistanceAxisMinimum,double);
-  itkGetMacro(DistanceAxisMinimum,double);
+  itkSetMacro(DistanceAxisMinimum, double);
+  itkGetMacro(DistanceAxisMinimum, double);
 
   /** Accessors for the maximum of the Distance axis */
-  itkSetMacro(DistanceAxisMaximum,double);
-  itkGetMacro(DistanceAxisMaximum,double);
+  itkSetMacro(DistanceAxisMaximum, double);
+  itkGetMacro(DistanceAxisMaximum, double);
 
   /** Set/Get the number of lines to extract */
-  itkSetMacro(NumberOfLines,unsigned int);
-  itkGetMacro(NumberOfLines,unsigned int);
+  itkSetMacro(NumberOfLines, unsigned int);
+  itkGetMacro(NumberOfLines, unsigned int);
 
   /** Set/Get the radius of the disc to remove from the accumulator
    *  for each line found */
-  itkSetMacro(DiscRadius,float);
-  itkGetMacro(DiscRadius,float);
+  itkSetMacro(DiscRadius, float);
+  itkGetMacro(DiscRadius, float);
 
   /** Set/Get the variance of the gaussian bluring for the accumulator */
-  itkSetMacro(Variance,float);
-  itkGetMacro(Variance,float);
+  itkSetMacro(Variance, float);
+  itkGetMacro(Variance, float);
 
   /** Simplify the accumulator */
   void Simplify(void);
 
   /** Get the Simplified accumulator */
-  itkGetObjectMacro(SimplifyAccumulator,OutputImageType);
+  itkGetObjectMacro(SimplifyAccumulator, OutputImageType);
 
   /** Get the list of lines. This recomputes the lines */
-  LinesListType & GetLines(unsigned int n=0);
+  LinesListType& GetLines(unsigned int n = 0);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -182,10 +182,10 @@ public:
 protected:
 
   HoughTransform2DLinesImageFilter();
-  virtual ~HoughTransform2DLinesImageFilter() {};
+  virtual ~HoughTransform2DLinesImageFilter() {}
 
-  HoughTransform2DLinesImageFilter(const Self&) {}
-  void operator=(const Self&) {}
+  HoughTransform2DLinesImageFilter(const Self &) {}
+  void operator =(const Self&) {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -215,23 +215,23 @@ protected:
 
 private:
 
-  unsigned int  m_AngleAxisSize;
-  double  m_AngleAxisMinimum;
-  double  m_AngleAxisMaximum;
-  double  m_AngleAxisIncrement;
-  unsigned int  m_DistanceAxisSize;
-  unsigned int  m_DistanceAxisMaximumSize;
-  double  m_DistanceAxisMinimum;
-  double  m_DistanceAxisMaximum;
-  double  m_DistanceAxisIncrement;
-  float m_Threshold;
+  unsigned int       m_AngleAxisSize;
+  double             m_AngleAxisMinimum;
+  double             m_AngleAxisMaximum;
+  double             m_AngleAxisIncrement;
+  unsigned int       m_DistanceAxisSize;
+  unsigned int       m_DistanceAxisMaximumSize;
+  double             m_DistanceAxisMinimum;
+  double             m_DistanceAxisMaximum;
+  double             m_DistanceAxisIncrement;
+  float              m_Threshold;
   OutputImagePointer m_SimplifyAccumulator;
-  LinesListType m_LinesList;
-  unsigned int  m_NumberOfLines;
-  float         m_DiscRadius;
-  float         m_Variance;
-  unsigned long m_OldModifiedTime;
-  unsigned long m_OldNumberOfLines;
+  LinesListType      m_LinesList;
+  unsigned int       m_NumberOfLines;
+  float              m_DiscRadius;
+  float              m_Variance;
+  unsigned long      m_OldModifiedTime;
+  unsigned long      m_OldNumberOfLines;
 };
 
 } // end namespace otb

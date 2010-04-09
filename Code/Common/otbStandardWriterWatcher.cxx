@@ -26,21 +26,21 @@ namespace otb
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
                         const char *comment)
-    : WriterWatcherBase(process, comment)
+  : WriterWatcherBase(process, comment)
 {
   m_StarsCount = 50;
 }
 
 StandardWriterWatcher
-::StandardWriterWatcher(itk::ProcessObject* process,itk::ProcessObject * source,
+::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const char *comment)
-    : WriterWatcherBase(process,source,comment)
+  : WriterWatcherBase(process, source, comment)
 {
   m_StarsCount = 50;
 }
 
 StandardWriterWatcher
-::StandardWriterWatcher( const StandardWriterWatcher& watch)
+::StandardWriterWatcher(const StandardWriterWatcher& watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -48,7 +48,7 @@ StandardWriterWatcher
 
 void
 StandardWriterWatcher
-::operator=(const StandardWriterWatcher &watch)
+::operator =(const StandardWriterWatcher& watch)
 {
   // Initialize state
   m_StarsCount = watch.m_StarsCount;
@@ -74,55 +74,55 @@ StandardWriterWatcher
 {
   itk::OStringStream oss;
   oss.str("");
-  oss<<"\r";
+  oss << "\r";
 
   if (m_SourceProcess)
-  {
-    double progress = m_SourceProcess->GetProgress();
-    int progressPercent = static_cast<int>(progress*100);
-    std::string stars(static_cast<int>(progress*m_StarsCount),'*');
-    std::string blanks(m_StarsCount - stars.length(),' ');
+    {
+    double      progress = m_SourceProcess->GetProgress();
+    int         progressPercent = static_cast<int>(progress * 100);
+    std::string stars(static_cast<int>(progress * m_StarsCount), '*');
+    std::string blanks(m_StarsCount - stars.length(), ' ');
     oss << "Current Tile: ";
-    if (progressPercent<10)
-    {
-      oss<<" ";
+    if (progressPercent < 10)
+      {
+      oss << " ";
+      }
+    if (progressPercent < 100)
+      {
+      oss << " ";
+      }
+    oss << progressPercent << "% [" << stars << blanks << "]  ";
     }
-    if (progressPercent<100)
-    {
-      oss<<" ";
-    }
-    oss<<progressPercent << "% [" << stars << blanks << "]  ";
-  }
 
   if (m_Process)
-  {
-    double progress = m_Process->GetProgress();
-    int progressPercent = static_cast<int>(progress*100);
-    std::string stars(static_cast<int>(progress*m_StarsCount),'*');
-    std::string blanks(m_StarsCount - stars.length(),' ');
+    {
+    double      progress = m_Process->GetProgress();
+    int         progressPercent = static_cast<int>(progress * 100);
+    std::string stars(static_cast<int>(progress * m_StarsCount), '*');
+    std::string blanks(m_StarsCount - stars.length(), ' ');
     oss << "Writing: ";
-    if (progressPercent<10)
-    {
-      oss<<" ";
+    if (progressPercent < 10)
+      {
+      oss << " ";
+      }
+    if (progressPercent < 100)
+      {
+      oss << " ";
+      }
+    oss << progressPercent << "% [" << stars << blanks << "]" << std::flush;
     }
-    if (progressPercent<100)
-    {
-      oss<<" ";
-    }
-    oss<< progressPercent << "% [" << stars << blanks << "]" << std::flush;
-  }
-  std::cout<<oss.str();
+  std::cout << oss.str();
 }
-
 
 void
 StandardWriterWatcher
 ::StartWriter()
 {
   m_TimeProbe.Start();
-  std::cout<<"Writing task: "<< " \"" << m_Comment << "\" " << std::endl;
-  std::cout << "Writer type: "<<(m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None")<< std::endl;
-  std::cout << "Filter type: "<<(m_SourceProcess.GetPointer() ? m_SourceProcess->GetNameOfClass() : "None")<< std::endl;
+  std::cout << "Writing task: " << " \"" << m_Comment << "\" " << std::endl;
+  std::cout << "Writer type: " << (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None") << std::endl;
+  std::cout << "Filter type: " << (m_SourceProcess.GetPointer() ? m_SourceProcess->GetNameOfClass() : "None") <<
+  std::endl;
 }
 
 void

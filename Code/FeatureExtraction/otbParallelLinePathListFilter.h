@@ -47,14 +47,14 @@ namespace otb
  */
 template <class TPath>
 class ITK_EXPORT ParallelLinePathListFilter
-      : public PathListToPathListFilter<TPath>
+  : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
-  typedef ParallelLinePathListFilter            Self;
-  typedef PathListToPathListFilter<TPath>       Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef ParallelLinePathListFilter      Self;
+  typedef PathListToPathListFilter<TPath> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -63,29 +63,28 @@ public:
   itkTypeMacro(ParallelLinePathListFilter, PathListToPathListFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::PathType         PathType;
-  typedef typename Superclass::PathListType     PathListType;
-  typedef typename Superclass::PathPointerType  PathPointerType;
-  typedef typename PathListType::Pointer        PathListPointerType;
-  typedef typename PathListType::ConstIterator IteratorType;
-  typedef typename PathType::VertexType VertexType;
-  typedef typename PathType::VertexListType VertexListType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathListType      PathListType;
+  typedef typename Superclass::PathPointerType   PathPointerType;
+  typedef typename PathListType::Pointer         PathListPointerType;
+  typedef typename PathListType::ConstIterator   IteratorType;
+  typedef typename PathType::VertexType          VertexType;
+  typedef typename PathType::VertexListType      VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
-  typedef double                 RealType;
+  typedef double                                 RealType;
 
-  itkSetMacro(AngularThreshold,RealType);
-  itkGetMacro(AngularThreshold,RealType);
-  itkSetMacro(DistanceThreshold,RealType);
-  itkGetMacro(DistanceThreshold,RealType);
-  itkSetMacro(CommonDistanceThreshold,RealType);
-  itkGetMacro(CommonDistanceThreshold,RealType);
-
+  itkSetMacro(AngularThreshold, RealType);
+  itkGetMacro(AngularThreshold, RealType);
+  itkSetMacro(DistanceThreshold, RealType);
+  itkGetMacro(DistanceThreshold, RealType);
+  itkSetMacro(CommonDistanceThreshold, RealType);
+  itkGetMacro(CommonDistanceThreshold, RealType);
 
 protected:
   /** Constructor */
   ParallelLinePathListFilter();
   /** Destructor */
-  virtual ~ParallelLinePathListFilter() {};
+  virtual ~ParallelLinePathListFilter() {}
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
@@ -140,15 +139,15 @@ protected:
   PathPointerType WriteParallelPath(PathPointerType p1);
 
 private:
-  ParallelLinePathListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ParallelLinePathListFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   RealType m_AngularThreshold;
   RealType m_DistanceThreshold;
   RealType m_CommonDistanceThreshold;
 
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbParallelLinePathListFilter.txx"
 #endif

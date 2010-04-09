@@ -35,20 +35,20 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage,
-class TFunction = Functor::PolarimetricSynthesisFunctor<
-typename TInputImage::InternalPixelType,
-typename TInputImage::InternalPixelType,
-typename TInputImage::InternalPixelType,
-typename TInputImage::InternalPixelType,
-typename TOutputImage::PixelType>  >
-class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage,TOutputImage>
+          class TFunction = Functor::PolarimetricSynthesisFunctor<
+            typename TInputImage::InternalPixelType,
+            typename TInputImage::InternalPixelType,
+            typename TInputImage::InternalPixelType,
+            typename TInputImage::InternalPixelType,
+            typename TOutputImage::PixelType> >
+class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelsPolarimetricSynthesisFilter Self;
-  typedef itk::InPlaceImageFilter<TInputImage,TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef MultiChannelsPolarimetricSynthesisFilter           Self;
+  typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -57,20 +57,19 @@ public:
   itkTypeMacro(MultiChannelsPolarimetricSynthesisFilter, InPlaceImageFilter);
 
   /** Some typedefs. */
-  typedef std::complex <double>                   InputPixelType;
-  typedef TFunction    FunctorType;
-  typedef TInputImage  InputImageType;
-  typedef typename     InputImageType::ConstPointer   InputImagePointer;
-  typedef typename     InputImageType::RegionType     InputImageRegionType;
-  typedef typename     InputImageType::PixelType      InputImagePixelType;
-  typedef TOutputImage                                OutputImageType;
-  typedef typename     OutputImageType::Pointer       OutputImagePointer;
-  typedef typename     OutputImageType::RegionType    OutputImageRegionType;
-  typedef typename     OutputImageType::PixelType     OutputImagePixelType;
-  typedef typename     std::complex <double>          ComplexType;
-  typedef typename     itk::FixedArray<ComplexType,2> ComplexArrayType;
-  typedef typename     itk::FixedArray<int,4>         IndexArrayType;
-
+  typedef std::complex <double>                        InputPixelType;
+  typedef TFunction                                    FunctorType;
+  typedef TInputImage                                  InputImageType;
+  typedef typename     InputImageType::ConstPointer    InputImagePointer;
+  typedef typename     InputImageType::RegionType      InputImageRegionType;
+  typedef typename     InputImageType::PixelType       InputImagePixelType;
+  typedef TOutputImage                                 OutputImageType;
+  typedef typename     OutputImageType::Pointer        OutputImagePointer;
+  typedef typename     OutputImageType::RegionType     OutputImageRegionType;
+  typedef typename     OutputImageType::PixelType      OutputImagePixelType;
+  typedef typename     std::complex <double>           ComplexType;
+  typedef typename     itk::FixedArray<ComplexType, 2> ComplexArrayType;
+  typedef typename     itk::FixedArray<int, 4>         IndexArrayType;
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -79,12 +78,11 @@ public:
   FunctorType& GetFunctor()
   {
     return m_Functor;
-  };
+  }
   const FunctorType& GetFunctor() const
   {
     return m_Functor;
-  };
-
+  }
 
   /** Set the functor object.  This replaces the current Functor with a
    * copy of the specified Functor. This allows the user to specify a
@@ -95,10 +93,10 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-    {
+      {
       m_Functor = functor;
       this->Modified();
-    }
+      }
   }
   /** Set the Incident ElectroMagneticField */
   void SetEi(ComplexArrayType ei)
@@ -116,40 +114,39 @@ public:
   }
 
   /** Set/Get PsiI */
-  itkSetMacro(PsiI,double);
-  itkGetMacro(PsiI,double);
+  itkSetMacro(PsiI, double);
+  itkGetMacro(PsiI, double);
   /** Set/Get KhiI */
-  itkSetMacro(KhiI,double);
-  itkGetMacro(KhiI,double);
+  itkSetMacro(KhiI, double);
+  itkGetMacro(KhiI, double);
   /** Set/Get PsiR */
-  itkSetMacro(PsiR,double);
-  itkGetMacro(PsiR,double);
+  itkSetMacro(PsiR, double);
+  itkGetMacro(PsiR, double);
   /** Set/Get KhiR */
-  itkSetMacro(KhiR,double);
-  itkGetMacro(KhiR,double);
+  itkSetMacro(KhiR, double);
+  itkGetMacro(KhiR, double);
   /** Set/Get EmissionH */
-  itkSetMacro(EmissionH,bool);
-  itkGetMacro(EmissionH,bool);
+  itkSetMacro(EmissionH, bool);
+  itkGetMacro(EmissionH, bool);
   /** Set/Get EmissionV */
-  itkSetMacro(EmissionV,bool);
-  itkGetMacro(EmissionV,bool);
+  itkSetMacro(EmissionV, bool);
+  itkGetMacro(EmissionV, bool);
   /** Set/Get Mode */
-  itkSetMacro(Mode,int);
-  itkGetMacro(Mode,int);
+  itkSetMacro(Mode, int);
+  itkGetMacro(Mode, int);
   /** Set the gain */
-  itkSetMacro(Gain,double);
-  itkGetMacro(Gain,double);
+  itkSetMacro(Gain, double);
+  itkGetMacro(Gain, double);
   /** Force the copolar mode */
   void ForceCoPolar();
   /** Force the crosspolar mode */
   void ForceCrossPolar();
 
-
 protected:
   /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
   /** Destructor */
-  virtual ~MultiChannelsPolarimetricSynthesisFilter() {};
+  virtual ~MultiChannelsPolarimetricSynthesisFilter() {}
 
   /** MultiChannelsPolarimetricSynthesisFilter can produce an image
    * which is a synthesis of channels HH, HV, VH and VV.
@@ -176,7 +173,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
@@ -188,8 +185,8 @@ protected:
 
   void Print();
 
-private :
-  MultiChannelsPolarimetricSynthesisFilter(const Self&); //purposely not implemented
+private:
+  MultiChannelsPolarimetricSynthesisFilter(const Self &); //purposely not implemented
 
   /** Psi Incident */
   double m_PsiI;

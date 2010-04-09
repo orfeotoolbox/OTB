@@ -57,22 +57,22 @@ FullResolutionImageWidget<TPixel>
 {
 
   if (!this->GetInput())
-  {
-    itkExceptionMacro("No input image!");
-  }
-  else
-  {
-    Superclass::Init(x,y,w,h,l);
-    if (this->GetImageOverlayVisible())
     {
-      if (!this->GetInputOverlay())
-      {
-        itkExceptionMacro("No input image overlay!");
-      }
+    itkExceptionMacro("No input image!");
     }
+  else
+    {
+    Superclass::Init(x, y, w, h, l);
+    if (this->GetImageOverlayVisible())
+      {
+      if (!this->GetInputOverlay())
+        {
+        itkExceptionMacro("No input image overlay!");
+        }
+      }
     this->label(l);
     this->resize(x, y, w, h);
-  }
+    }
 }
 /**
  * Resize the widget.
@@ -85,8 +85,8 @@ FullResolutionImageWidget<TPixel>
   //otbMsgDebugMacro(<<"resize: "<<x<<" "<<y<<" "<<w<<" "<<h);
   // IndexType index;
   SizeType size;
-  size[0]=w;
-  size[1]=h;
+  size[0] = w;
+  size[1] = h;
   RegionType region;
   region.SetSize(size);
   region.SetIndex(m_UpperLeftCorner);
@@ -109,14 +109,14 @@ FullResolutionImageWidget<TPixel>
 {
   RegionType viewed = this->GetViewedRegion();
   RegionType buffered = this->GetBufferedRegion();
-  IndexType viewedULCorner = viewed.GetIndex();
-  IndexType bufferedULCorner = buffered.GetIndex();
-  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-  return ( viewedULCorner[0]<bufferedULCorner[0]
-           ||viewedULCorner[1]<bufferedULCorner[1]
-           ||viewedRDCorner[0]>bufferedRDCorner[0]
-           ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  IndexType  viewedULCorner = viewed.GetIndex();
+  IndexType  bufferedULCorner = buffered.GetIndex();
+  IndexType  viewedRDCorner = viewed.GetIndex() + viewed.GetSize();
+  IndexType  bufferedRDCorner = buffered.GetIndex() + buffered.GetSize();
+  return (viewedULCorner[0] < bufferedULCorner[0]
+          || viewedULCorner[1] < bufferedULCorner[1]
+          || viewedRDCorner[0] > bufferedRDCorner[0]
+          || viewedRDCorner[1] > bufferedRDCorner[1]);
 }
 
 /**
@@ -139,7 +139,7 @@ void
 FullResolutionImageWidget<TPixel>
 ::SetUpperLeftCorner(IndexType index)
 {
-  m_UpperLeftCorner=index;
+  m_UpperLeftCorner = index;
   RegionType region = this->GetViewedRegion();
   region.SetIndex(index);
   region.Crop(this->GetInput()->GetLargestPossibleRegion());

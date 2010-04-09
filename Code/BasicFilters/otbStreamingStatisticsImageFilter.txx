@@ -33,34 +33,34 @@ namespace otb
 
 template<class TInputImage>
 PersistentStatisticsImageFilter<TInputImage>
-::PersistentStatisticsImageFilter(): m_ThreadSum(1), m_SumOfSquares(1), m_Count(1), m_ThreadMin(1), m_ThreadMax(1)
+::PersistentStatisticsImageFilter() : m_ThreadSum(1), m_SumOfSquares(1), m_Count(1), m_ThreadMin(1), m_ThreadMax(1)
 {
   // first output is a copy of the image, DataObject created by
   // superclass
   //
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
-  for (int i=1; i < 3; ++i)
-  {
+  for (int i = 1; i < 3; ++i)
+    {
     typename PixelObjectType::Pointer output
-    = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
+      = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
     this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
-  }
+    }
   // allocate the data objects for the outputs which are
   // just decorators around real types
-  for (int i=3; i < 7; ++i)
-  {
+  for (int i = 3; i < 7; ++i)
+    {
     typename RealObjectType::Pointer output
-    = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
+      = static_cast<RealObjectType*>(this->MakeOutput(i).GetPointer());
     this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
-  }
+    }
 
-  this->GetMinimumOutput()->Set( itk::NumericTraits<PixelType>::max() );
-  this->GetMaximumOutput()->Set( itk::NumericTraits<PixelType>::NonpositiveMin() );
-  this->GetMeanOutput()->Set( itk::NumericTraits<RealType>::max() );
-  this->GetSigmaOutput()->Set( itk::NumericTraits<RealType>::max() );
-  this->GetVarianceOutput()->Set( itk::NumericTraits<RealType>::max() );
-  this->GetSumOutput()->Set( itk::NumericTraits<RealType>::Zero );
+  this->GetMinimumOutput()->Set(itk::NumericTraits<PixelType>::max());
+  this->GetMaximumOutput()->Set(itk::NumericTraits<PixelType>::NonpositiveMin());
+  this->GetMeanOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetSigmaOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetVarianceOutput()->Set(itk::NumericTraits<RealType>::max());
+  this->GetSumOutput()->Set(itk::NumericTraits<RealType>::Zero);
 
   this->Reset();
 }
@@ -71,7 +71,7 @@ PersistentStatisticsImageFilter<TInputImage>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
-  {
+    {
   case 0:
     return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
     break;
@@ -91,9 +91,8 @@ PersistentStatisticsImageFilter<TInputImage>
     // might as well make an image
     return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
     break;
-  }
+    }
 }
-
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
@@ -111,7 +110,6 @@ PersistentStatisticsImageFilter<TInputImage>
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::PixelObjectType*
 PersistentStatisticsImageFilter<TInputImage>
@@ -127,7 +125,6 @@ PersistentStatisticsImageFilter<TInputImage>
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
-
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
@@ -145,7 +142,6 @@ PersistentStatisticsImageFilter<TInputImage>
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
-
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
@@ -162,7 +158,6 @@ PersistentStatisticsImageFilter<TInputImage>
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
-
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
 PersistentStatisticsImageFilter<TInputImage>
@@ -178,7 +173,6 @@ PersistentStatisticsImageFilter<TInputImage>
 {
   return static_cast<const RealObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
-
 
 template<class TInputImage>
 typename PersistentStatisticsImageFilter<TInputImage>::RealObjectType*
@@ -201,16 +195,16 @@ PersistentStatisticsImageFilter<TInputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  if ( this->GetInput() )
-  {
+  if (this->GetInput())
+    {
     this->GetOutput()->CopyInformation(this->GetInput());
     this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 
-    if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-    {
+    if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
+      {
       this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+      }
     }
-  }
 }
 template<class TInputImage>
 void
@@ -229,8 +223,8 @@ void
 PersistentStatisticsImageFilter<TInputImage>
 ::Synthetize()
 {
-  int i;
-  long count;
+  int      i;
+  long     count;
   RealType sumOfSquares;
 
   int numberOfThreads = this->GetNumberOfThreads();
@@ -249,36 +243,36 @@ PersistentStatisticsImageFilter<TInputImage>
   // sum of squares
   minimum = itk::NumericTraits<PixelType>::max();
   maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
-  for ( i = 0; i < numberOfThreads; ++i)
-  {
+  for (i = 0; i < numberOfThreads; ++i)
+    {
     count += m_Count[i];
     sum += m_ThreadSum[i];
     sumOfSquares += m_SumOfSquares[i];
 
     if (m_ThreadMin[i] < minimum)
-    {
+      {
       minimum = m_ThreadMin[i];
-    }
+      }
     if (m_ThreadMax[i] > maximum)
-    {
+      {
       maximum = m_ThreadMax[i];
+      }
     }
-  }
   // compute statistics
   mean = sum / static_cast<RealType>(count);
 
   // unbiased estimate
-  variance = (sumOfSquares - (sum*sum / static_cast<RealType>(count)))
+  variance = (sumOfSquares - (sum * sum / static_cast<RealType>(count)))
              / (static_cast<RealType>(count) - 1);
   sigma = vcl_sqrt(variance);
 
   // Set the outputs
-  this->GetMinimumOutput()->Set( minimum );
-  this->GetMaximumOutput()->Set( maximum );
-  this->GetMeanOutput()->Set( mean );
-  this->GetSigmaOutput()->Set( sigma );
-  this->GetVarianceOutput()->Set( variance );
-  this->GetSumOutput()->Set( sum );
+  this->GetMinimumOutput()->Set(minimum);
+  this->GetMaximumOutput()->Set(maximum);
+  this->GetMeanOutput()->Set(mean);
+  this->GetSigmaOutput()->Set(sigma);
+  this->GetVarianceOutput()->Set(variance);
+  this->GetSumOutput()->Set(sum);
 }
 
 template<class TInputImage>
@@ -303,7 +297,6 @@ PersistentStatisticsImageFilter<TInputImage>
   m_ThreadMax.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
 }
 
-
 template<class TInputImage>
 void
 PersistentStatisticsImageFilter<TInputImage>
@@ -313,52 +306,52 @@ PersistentStatisticsImageFilter<TInputImage>
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr =  const_cast< TInputImage * >( this->GetInput(0) );
+  InputImagePointer inputPtr =  const_cast<TInputImage *>(this->GetInput(0));
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  RealType realValue;
+  RealType  realValue;
   PixelType value;
 
-  itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TInputImage> it(inputPtr, outputRegionForThread);
 
   it.GoToBegin();
   // do the work
   while (!it.IsAtEnd())
-  {
+    {
     value = it.Get();
-    realValue = static_cast<RealType>( value );
+    realValue = static_cast<RealType>(value);
     if (value < m_ThreadMin[threadId])
-    {
+      {
       m_ThreadMin[threadId] = value;
-    }
+      }
     if (value > m_ThreadMax[threadId])
-    {
+      {
       m_ThreadMax[threadId] = value;
-    }
+      }
 
     m_ThreadSum[threadId] += realValue;
     m_SumOfSquares[threadId] += (realValue * realValue);
     m_Count[threadId]++;
     ++it;
     progress.CompletedPixel();
-  }
+    }
 }
 template <class TImage>
 void
 PersistentStatisticsImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
   os << indent << "Minimum: "
-  << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
+     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
   os << indent << "Maximum: "
-  << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
+     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
   os << indent << "Sum: "      << this->GetSum() << std::endl;
   os << indent << "Mean: "     << this->GetMean() << std::endl;
   os << indent << "Sigma: "    << this->GetSigma() << std::endl;
   os << indent << "Variance: " << this->GetVariance() << std::endl;
 }
-}// end namespace otb
+} // end namespace otb
 #endif

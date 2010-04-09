@@ -23,7 +23,6 @@
 #include <string>
 #include <vector>
 
-
 namespace otb
 {
 
@@ -41,12 +40,12 @@ class ITK_EXPORT BSQImageIO : public itk::ImageIOBase
 public:
 
   /** Standard class typedefs. */
-  typedef BSQImageIO            Self;
-  typedef itk::ImageIOBase  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef BSQImageIO              Self;
+  typedef itk::ImageIOBase        Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
   /** Byte order typedef */
-  typedef Superclass::ByteOrder  ByteOrder;
+  typedef Superclass::ByteOrder ByteOrder;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,7 +63,7 @@ public:
   virtual bool CanStreamRead()
   {
     return true;
-  };
+  }
 
   /** Set the spacing and dimention information for the set filename. */
   virtual void ReadImageInformation();
@@ -85,7 +84,7 @@ public:
   virtual bool CanStreamWrite()
   {
     return true;
-  };
+  }
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -114,49 +113,47 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  BSQImageIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BSQImageIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Internal method to read header informations */
-  bool InternalReadHeaderInformation(const std::string & file_name, std::fstream & file, const bool reportError);
-
+  bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);
 
 #define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
     { \
-        typedef itk::ByteSwapper< StrongType > InternalByteSwapperType; \
-        if ( m_ByteOrder != m_FileByteOrder ) \
+    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType; \
+    if (m_ByteOrder != m_FileByteOrder) \
+      { \
+      if (m_ByteOrder == LittleEndian) \
         { \
-                if ( m_ByteOrder == LittleEndian ) \
-                { \
-                        InternalByteSwapperType::SwapRangeFromSystemToBigEndian( (StrongType *)buffer, buffer_size ); \
-                } \
-                else if ( m_ByteOrder == BigEndian ) \
-                { \
-                        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *)buffer, buffer_size ); \
-                } \
+        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType *) buffer, buffer_size); \
         } \
+      else if (m_ByteOrder == BigEndian) \
+        { \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *) buffer, buffer_size); \
+        } \
+      } \
     }
 
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
-    else if ( this->GetComponentType() == WeakType ) \
+  else if (this->GetComponentType() == WeakType) \
     { \
-        otbSwappFileOrderToSystemOrderMacro( StrongType, buffer, buffer_size )\
+    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
     }
 
 #define otbSetTypeBsqMacro(WeakType, CAI_VALUE) \
-    else if ( this->GetComponentType() == WeakType ) \
+  else if (this->GetComponentType() == WeakType) \
     { \
-        m_TypeBsq = CAI_VALUE; \
+    m_TypeBsq = CAI_VALUE; \
     }
 
-
-  bool    m_FlagWriteImageInformation;
+  bool                        m_FlagWriteImageInformation;
   itk::ImageIOBase::ByteOrder m_FileByteOrder;
-  std::fstream m_HeaderFile;
-  std::string m_TypeBsq;
-  std::vector< std::string >  m_ChannelsFileName;
+  std::fstream                m_HeaderFile;
+  std::string                 m_TypeBsq;
+  std::vector<std::string>    m_ChannelsFileName;
 //  std::vector< std::fstream >  m_ChannelsFile;
-  std::fstream *  m_ChannelsFile;
+  std::fstream * m_ChannelsFile;
 //std::fstream  file;
 //        char* value;
 

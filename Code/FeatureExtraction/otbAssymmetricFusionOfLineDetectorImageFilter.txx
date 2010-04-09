@@ -20,7 +20,6 @@
 
 #include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-
 namespace otb
 {
 
@@ -45,22 +44,21 @@ void
 AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::GenerateData()
 {
-  m_LineRatio->SetInput( this->GetInput() );
-  m_LineRatio->SetLengthLine( this->m_LengthLine );
-  m_LineRatio->SetWidthLine( this->m_WidthLine );
+  m_LineRatio->SetInput(this->GetInput());
+  m_LineRatio->SetLengthLine(this->m_LengthLine);
+  m_LineRatio->SetWidthLine(this->m_WidthLine);
 
-  m_LineCorrelation->SetInput( this->GetInput() );
-  m_LineCorrelation->SetLengthLine( this->m_LengthLine );
-  m_LineCorrelation->SetWidthLine( this->m_WidthLine );
+  m_LineCorrelation->SetInput(this->GetInput());
+  m_LineCorrelation->SetLengthLine(this->m_LengthLine);
+  m_LineCorrelation->SetWidthLine(this->m_WidthLine);
 
-  m_AssSymSum->SetInput1( m_LineRatio->GetOutput() );
-  m_AssSymSum->SetInput2( m_LineCorrelation->GetOutput() );
+  m_AssSymSum->SetInput1(m_LineRatio->GetOutput());
+  m_AssSymSum->SetInput2(m_LineCorrelation->GetOutput());
 
-  m_AssSymSum->GraftOutput(this->GetOutput() );
+  m_AssSymSum->GraftOutput(this->GetOutput());
   m_AssSymSum->Update();
-  this->GraftOutput(m_AssSymSum->GetOutput() );
+  this->GraftOutput(m_AssSymSum->GetOutput());
 }
-
 
 /**
  * Standard "PrintSelf" method
@@ -70,11 +68,9 @@ void
 AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
 
-
 } // end namespace otb
-
 
 #endif

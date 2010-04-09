@@ -31,9 +31,9 @@ RCC8Edge::RCC8Edge()
  * PrintSelf method
  */
 void
-RCC8Edge::PrintSelf( std::ostream& os,itk::Indent indent ) const
+RCC8Edge::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os<<indent<<"RCC8 Value: "<<m_Value<<std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "RCC8 Value: " << m_Value << std::endl;
 }
 } // end namespace otb

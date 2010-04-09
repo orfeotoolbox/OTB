@@ -23,7 +23,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkVariableLengthVector.h"
 
-
 namespace otb
 {
 
@@ -37,17 +36,18 @@ namespace otb
  * \ingroup ImageFunctions
    * \ingroup Textures
  */
-template <class TInputImage, class TFunctor, class TCoordRep = float >
+template <class TInputImage, class TFunctor, class TCoordRep = float>
 class ITK_EXPORT TextureImageFunction :
-  public itk::ImageFunction< TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep >
+  public itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
+                            TCoordRep>
 {
-  public:
+public:
   /** Standard class typedefs. */
   typedef TextureImageFunction Self;
   typedef itk::ImageFunction<TInputImage, ITK_TYPENAME itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-  TCoordRep > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+                             TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(TextureImageFunction, itk::ImageFunction);
@@ -56,79 +56,75 @@ class ITK_EXPORT TextureImageFunction :
   itkNewMacro(Self);
 
   /** typedef support. */
-  typedef TInputImage                              InputImageType;
-  typedef TFunctor                                 FunctorType;
-  typedef typename InputImageType::OffsetType      OffsetType;
-  typedef typename InputImageType::SizeType        SizeType;
-  typedef typename InputImageType::PixelType       PixelType;
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename Superclass::IndexType           IndexType;
-  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  typedef typename Superclass::PointType           PointType;
-  typedef itk::ConstNeighborhoodIterator<InputImageType>                             IteratorType;
-  typedef typename IteratorType::NeighborhoodType                                    NeighborhoodType;
-  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType  RealType;
-
+  typedef TInputImage                                                               InputImageType;
+  typedef TFunctor                                                                  FunctorType;
+  typedef typename InputImageType::OffsetType                                       OffsetType;
+  typedef typename InputImageType::SizeType                                         SizeType;
+  typedef typename InputImageType::PixelType                                        PixelType;
+  typedef typename Superclass::OutputType                                           OutputType;
+  typedef typename Superclass::IndexType                                            IndexType;
+  typedef typename Superclass::ContinuousIndexType                                  ContinuousIndexType;
+  typedef typename Superclass::PointType                                            PointType;
+  typedef itk::ConstNeighborhoodIterator<InputImageType>                            IteratorType;
+  typedef typename IteratorType::NeighborhoodType                                   NeighborhoodType;
+  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType RealType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
-
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
+  virtual RealType EvaluateAtIndex(const IndexType& index) const;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate( const PointType& point ) const
+  virtual RealType Evaluate(const PointType& point) const
   {
     IndexType index;
-    this->ConvertPointToNearestIndex( point, index );
-    return this->EvaluateAtIndex( index );
-  };
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
+  }
   virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex ) const
+    const ContinuousIndexType& cindex) const
   {
     IndexType index;
-    this->ConvertContinuousIndexToNearestIndex( cindex, index );
-    return this->EvaluateAtIndex( index );
-  };
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
+  }
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  void SetRadius(SizeType & rad)
+  void SetRadius(SizeType& rad)
   {
     m_Radius = rad;
     this->Modified();
-  };
+  }
 
-  void SetOffset(OffsetType & off)
+  void SetOffset(OffsetType& off)
   {
     m_Offset = off;
     this->Modified();
-  };
+  }
 
-  itkGetMacro( Radius, SizeType);
-  itkGetMacro( Offset, OffsetType);
+  itkGetMacro(Radius, SizeType);
+  itkGetMacro(Offset, OffsetType);
 
 protected:
   TextureImageFunction();
-  virtual ~TextureImageFunction() {};
+  virtual ~TextureImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  TextureImageFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  TextureImageFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
-  SizeType m_Radius;
+  SizeType   m_Radius;
   OffsetType m_Offset;
 
 };
 
 } // end namespace otb
 
-
 #ifndef OTB_MANUAL_INSTANTIATION
 # include "otbTextureImageFunction.txx"
 #endif
 
 #endif
-

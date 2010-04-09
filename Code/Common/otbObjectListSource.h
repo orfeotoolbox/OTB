@@ -38,15 +38,15 @@ namespace otb
    *
    * \ingroup ObjectListFilter
  */
-template <class TOutputList >
+template <class TOutputList>
 class ITK_EXPORT ObjectListSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ObjectListSource  Self;
-  typedef itk::ProcessObject  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ObjectListSource              Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,7 +55,7 @@ public:
   itkTypeMacro(ObjectListSource, ProcessObject);
 
   /** Some typedefs. */
-  typedef TOutputList OutputListType;
+  typedef TOutputList                   OutputListType;
   typedef typename TOutputList::Pointer OutputListPointer;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
@@ -162,12 +162,11 @@ public:
   OutputListType * GetOutput(void);
   OutputListType * GetOutput(unsigned int idx);
 
-
 protected:
   /** Constructor */
   ObjectListSource();
   /** Destructor */
-  virtual ~ObjectListSource() {};
+  virtual ~ObjectListSource() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -186,10 +185,9 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
   virtual void GenerateData(void);
 
-
 private:
-  ObjectListSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ObjectListSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

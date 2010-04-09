@@ -16,7 +16,6 @@
 
 =========================================================================*/
 
-
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -78,12 +77,12 @@ const std::string MetaDataKey::VectorDataKeywordlistDelimiterKey = "VectorDataKe
 
   }; */
 const MetaDataKey::KeyTypeDef Types[] =
-{
+  {
   MetaDataKey::KeyTypeDef(MetaDataKey::DriverShortNameKey,    MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey,     MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey,     MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey,     MetaDataKey::TSTRING),
-  MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey ,       MetaDataKey::TOTB_GCP),
+  MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey,       MetaDataKey::TOTB_GCP),
   MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey,          MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey,        MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey,          MetaDataKey::TSTRING),
@@ -95,31 +94,28 @@ const MetaDataKey::KeyTypeDef Types[] =
   MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey,     MetaDataKey::TENTIER),
   MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey,      MetaDataKey::TVECTOR),
   MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey,    MetaDataKey::TOSSIMKEYWORDLIST),
-  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING),
+  MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey, MetaDataKey::TSTRING),
   MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey,    MetaDataKey::TVECTORDATAKEYWORDLIST),
-  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey,MetaDataKey::TSTRING)
-};
-
+  MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING)
+  };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 {
   MetaDataKey::KeyType ktype(MetaDataKey::TSTRING);
 
-  for ( unsigned int i=0; i<NBKEYS; ++i)
-  {
+  for (unsigned int i = 0; i < NBKEYS; ++i)
+    {
 //      if ( strcmp(name.c_str(),Types[i].keyname.c_str()) == 0 )
 
-
-    if ( (name.find(Types[i].keyname) >= 0 ) &&
-         (name.find(Types[i].keyname) <= name.size() ) )
-    {
+    if ((name.find(Types[i].keyname) >= 0) &&
+        (name.find(Types[i].keyname) <= name.size()))
+      {
       ktype = Types[i].type;
       break;
+      }
+
     }
-
-  }
-  return(ktype);
+  return (ktype);
 }
-
 
 } // end namespace otb

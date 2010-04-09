@@ -29,7 +29,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage,class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel>
 ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::ClosingOpeningMorphologicalFilter()
 {
@@ -39,16 +39,16 @@ ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 /**
  * Main computation method
  */
-template <class TInputImage,class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel>
 void
 ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::GenerateData()
 {
   // Filters Typedefs (this class is actually a composite filter)
-  typedef itk::GrayscaleMorphologicalOpeningImageFilter<InputImageType,OutputImageType, KernelType> OpenFilterType;
-  typedef itk::GrayscaleMorphologicalClosingImageFilter<InputImageType,OutputImageType,KernelType> CloseFilterType;
+  typedef itk::GrayscaleMorphologicalOpeningImageFilter<InputImageType, OutputImageType, KernelType> OpenFilterType;
+  typedef itk::GrayscaleMorphologicalClosingImageFilter<InputImageType, OutputImageType, KernelType> CloseFilterType;
   // Filters initialization
-  typename OpenFilterType::Pointer opening = OpenFilterType::New();
+  typename OpenFilterType::Pointer  opening = OpenFilterType::New();
   typename CloseFilterType::Pointer closing = CloseFilterType::New();
   // Set the kernel
   opening->SetKernel(this->GetKernel());
@@ -69,13 +69,13 @@ ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOutputImage, class TKernel>
+template <class TInputImage, class TOutputImage, class TKernel>
 void
 ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
   os << indent << "Kernel: " << m_Kernel << std::endl;
 }
-}// End namespace otb
+} // End namespace otb
 #endif

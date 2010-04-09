@@ -40,26 +40,25 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
-
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** standard class typedefs */
-  typedef LeeImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef LeeImageFilter                                           Self;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   /** Object factory management */
   itkNewMacro(Self);
@@ -67,12 +66,12 @@ public:
   /** typemacro */
   itkTypeMacro(LeeImageFilter, ImageToImageFilter);
 
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::PixelType                    InputPixelType;
+  typedef typename OutputImageType::PixelType                   OutputPixelType;
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename InputImageType::RegionType                   InputImageRegionType;
+  typedef typename OutputImageType::RegionType                  OutputImageRegionType;
+  typedef typename InputImageType::SizeType                     SizeType;
 
   /** Set the radius of the neighborhood used in this filter */
   itkSetMacro(Radius, SizeType);
@@ -91,11 +90,12 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError);
 
 protected:
   LeeImageFilter();
-  virtual ~LeeImageFilter() {};
+  virtual ~LeeImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LeeImageFilter can be multithreaded.
@@ -109,11 +109,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  LeeImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LeeImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Radius of the filter */
   SizeType m_Radius;
@@ -125,6 +125,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLeeImageFilter.txx"
 #endif
-
 
 #endif

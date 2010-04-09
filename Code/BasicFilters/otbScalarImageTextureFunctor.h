@@ -18,7 +18,6 @@
 #ifndef __otbScalarImageTextureFunctor_h
 #define __otbScalarImageTextureFunctor_h
 
-
 #include "itkScalarImageTextureCalculator.h"
 #include "itkImageRegionIterator.h"
 namespace otb
@@ -36,24 +35,24 @@ class ScalarImageTextureFunctor
 {
 public:
 
-  typedef ScalarImageTextureFunctor  Self;
+  typedef ScalarImageTextureFunctor Self;
 
-  ScalarImageTextureFunctor(): m_FeatureIndex(0) {};
-  ~ScalarImageTextureFunctor() {};
+  ScalarImageTextureFunctor() : m_FeatureIndex(0) {}
+  ~ScalarImageTextureFunctor() {}
 
   void SetFeatureIndex(int i)
   {
     m_FeatureIndex = i;
-  };
+  }
   int GetFeatureIndex()
   {
     return m_FeatureIndex;
-  };
+  }
 
-  typedef TInputImage InputImageType;
-  typedef typename itk::Statistics::ScalarImageTextureCalculator< InputImageType> TextureCalcType;
+  typedef TInputImage                                                            InputImageType;
+  typedef typename itk::Statistics::ScalarImageTextureCalculator<InputImageType> TextureCalcType;
 
-  inline TOutput operator()(const TNeighIter & it) const
+  inline TOutput operator ()(const TNeighIter& it) const
   {
     unsigned int neighborhoodSize = it.Size();
 
@@ -67,17 +66,17 @@ public:
     region = it.GetBoundingBoxAsImageRegion();
     region.SetIndex(index);
 
-    image->SetRegions( region );
+    image->SetRegions(region);
     image->Allocate();
 
-    typedef itk::ImageRegionIterator< InputImageType > IteratorType;
-    IteratorType inputIt( image, image->GetLargestPossibleRegion() );
+    typedef itk::ImageRegionIterator<InputImageType> IteratorType;
+    IteratorType inputIt(image, image->GetLargestPossibleRegion());
     inputIt.GoToBegin();
     for (unsigned int i = 0; i < neighborhoodSize; ++i)
-    {
+      {
       inputIt.Set(it.GetPixel(i));
       ++inputIt;
-    }
+      }
 
     textureFilter->FastCalculationsOn();
     textureFilter->SetInput(image);
@@ -88,7 +87,7 @@ public:
   }
 private:
   ScalarImageTextureFunctor(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   int m_FeatureIndex;
 

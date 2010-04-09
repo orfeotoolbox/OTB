@@ -37,87 +37,87 @@ namespace otb
  */
 template <class TPixel>
 class ImageWidgetBase
-      : public Fl_Gl_Window, public itk::Object
+  : public Fl_Gl_Window, public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ImageWidgetBase Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ImageWidgetBase               Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(ImageWidgetBase,Object);
+  itkTypeMacro(ImageWidgetBase, Object);
 
   /** Template related typedef */
-  typedef TPixel     PixelType;
-  typedef otb::VectorImage<PixelType,2> ImageType;
-  typedef typename ImageType::PixelType VectorPixelType;
-  typedef typename ImageType::Pointer ImagePointerType;
-  typedef typename ImageType::SizeType SizeType;
-  typedef typename ImageType::IndexType IndexType;
+  typedef TPixel                         PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef typename ImageType::PixelType  VectorPixelType;
+  typedef typename ImageType::Pointer    ImagePointerType;
+  typedef typename ImageType::SizeType   SizeType;
+  typedef typename ImageType::IndexType  IndexType;
   typedef typename ImageType::RegionType RegionType;
 
   /// TODO: the type of this image should be templated
-  typedef otb::VectorImage<unsigned char,2> OverlayImageType;
+  typedef otb::VectorImage<unsigned char, 2> OverlayImageType;
   typedef typename OverlayImageType::Pointer OverlayImagePointerType;
 
   /** View model */
-  enum ViewModelType {GRAYSCALE,COMPLEX_MODULUS,COMPLEX_PHASE,RGB};
+  enum ViewModelType {GRAYSCALE, COMPLEX_MODULUS, COMPLEX_PHASE, RGB};
 
   /** Form overlay typedef */
-  typedef ImageWidgetFormBase FormType;
-  typedef FormType::Pointer FormPointerType;
-  typedef ObjectList<FormType> FormListType;
-  typedef typename FormListType::Pointer FormListPointerType;
+  typedef ImageWidgetFormBase                    FormType;
+  typedef FormType::Pointer                      FormPointerType;
+  typedef ObjectList<FormType>                   FormListType;
+  typedef typename FormListType::Pointer         FormListPointerType;
   typedef typename FormListType::ReverseIterator ReverseIteratorType;
-  typedef typename FormListType::Iterator IteratorType;
+  typedef typename FormListType::Iterator        IteratorType;
 
-  typedef otb::ImageWidgetTransferFunction<PixelType> TransferFunctionType;
+  typedef otb::ImageWidgetTransferFunction<PixelType>       TransferFunctionType;
   typedef otb::ImageWidgetAffineTransferFunction<PixelType> AffineTransferFunctionType;
-  typedef ObjectList<TransferFunctionType> TransferFunctionListType;
-  typedef typename TransferFunctionListType::Pointer TransferFunctionListPointerType;
+  typedef ObjectList<TransferFunctionType>                  TransferFunctionListType;
+  typedef typename TransferFunctionListType::Pointer        TransferFunctionListPointerType;
 
-  itkSetMacro(BufferedRegion,RegionType);
-  itkGetMacro(BufferedRegion,RegionType);
+  itkSetMacro(BufferedRegion, RegionType);
+  itkGetMacro(BufferedRegion, RegionType);
 
-  itkSetMacro(ViewedRegion,RegionType);
-  itkGetMacro(ViewedRegion,RegionType);
+  itkSetMacro(ViewedRegion, RegionType);
+  itkGetMacro(ViewedRegion, RegionType);
 
-  itkSetMacro(RedChannelIndex,unsigned int);
-  itkGetMacro(RedChannelIndex,unsigned int);
+  itkSetMacro(RedChannelIndex, unsigned int);
+  itkGetMacro(RedChannelIndex, unsigned int);
 
-  itkSetMacro(GreenChannelIndex,unsigned int);
-  itkGetMacro(GreenChannelIndex,unsigned int);
+  itkSetMacro(GreenChannelIndex, unsigned int);
+  itkGetMacro(GreenChannelIndex, unsigned int);
 
-  itkSetMacro(BlueChannelIndex,unsigned int);
-  itkGetMacro(BlueChannelIndex,unsigned int);
+  itkSetMacro(BlueChannelIndex, unsigned int);
+  itkGetMacro(BlueChannelIndex, unsigned int);
 
-  itkSetMacro(FormOverlayVisible,bool);
-  itkGetMacro(FormOverlayVisible,bool);
+  itkSetMacro(FormOverlayVisible, bool);
+  itkGetMacro(FormOverlayVisible, bool);
 
-  itkSetMacro(ImageOverlayVisible,bool);
-  itkGetMacro(ImageOverlayVisible,bool);
+  itkSetMacro(ImageOverlayVisible, bool);
+  itkGetMacro(ImageOverlayVisible, bool);
 
-  itkSetMacro(BlackTransparency,bool);
-  itkGetMacro(BlackTransparency,bool);
+  itkSetMacro(BlackTransparency, bool);
+  itkGetMacro(BlackTransparency, bool);
 
   itkGetMacro(SubSamplingRate, unsigned int);
   itkSetMacro(SubSamplingRate, unsigned int);
 
-  itkSetMacro(ViewModel,ViewModelType);
-  itkGetMacro(ViewModel,ViewModelType);
+  itkSetMacro(ViewModel, ViewModelType);
+  itkGetMacro(ViewModel, ViewModelType);
 
-  itkGetMacro(ImageOverlayOpacity,unsigned char);
-  itkSetMacro(ImageOverlayOpacity,unsigned char);
+  itkGetMacro(ImageOverlayOpacity, unsigned char);
+  itkSetMacro(ImageOverlayOpacity, unsigned char);
 
-  itkGetObjectMacro(FormList,FormListType);
-  itkGetObjectMacro(TransferFunctionList,TransferFunctionListType);
+  itkGetObjectMacro(FormList, FormListType);
+  itkGetObjectMacro(TransferFunctionList, TransferFunctionListType);
 
-  itkGetMacro(OpenGlIsotropicZoom,double);
+  itkGetMacro(OpenGlIsotropicZoom, double);
 
   /** Set the input image.
    * \param image The image to view.
@@ -167,14 +167,15 @@ public:
   /** Get the buffer index from the iterator position and the buffered region */
   inline unsigned int GetBufferIndex(const IndexType& iteratorIndex)
   {
-    return (iteratorIndex[1]-m_BufferedRegion.GetIndex()[1])*4*m_BufferedRegion.GetSize()[0]
-           + 4*(iteratorIndex[0]-m_BufferedRegion.GetIndex()[0]);
+    return (iteratorIndex[1] - m_BufferedRegion.GetIndex()[1]) * 4 * m_BufferedRegion.GetSize()[0]
+           + 4 * (iteratorIndex[0] - m_BufferedRegion.GetIndex()[0]);
   }
 
   inline unsigned int GetRevertedBufferIndex(const IndexType& iteratorIndex)
   {
-    return  (m_BufferedRegion.GetSize()[1]-1+m_BufferedRegion.GetIndex()[1]-iteratorIndex[1])*4*m_BufferedRegion.GetSize()[0]
-            + 4*(iteratorIndex[0]-m_BufferedRegion.GetIndex()[0]);
+    return (m_BufferedRegion.GetSize()[1] - 1 + m_BufferedRegion.GetIndex()[1] -
+            iteratorIndex[1]) * 4 * m_BufferedRegion.GetSize()[0]
+           + 4 * (iteratorIndex[0] - m_BufferedRegion.GetIndex()[0]);
   }
 protected:
   /** Constructor */
@@ -206,24 +207,23 @@ protected:
   // PURE VIRTUAL METHODS
 
   // User is not supposed to be allowed to move the zoom in the generic implementation
-  itkSetMacro(OpenGlIsotropicZoom,double);
-
+  itkSetMacro(OpenGlIsotropicZoom, double);
 
   /** Unlarge OpenGlBuffer */
-  virtual void UpdateOpenGlBufferedRegion(void) {};
+  virtual void UpdateOpenGlBufferedRegion(void) {}
   /** Test if the buffer has to be enlarged */
   virtual bool UpdateOpenGlBufferedRegionRequested(void)
   {
     return 1;
-  };
+  }
 
   /** Resize the widget */
-  virtual void resize(int /*x*/, int /*y*/, int /*w*/, int /*h*/) {};
+  virtual void resize(int /*x*/, int /*y*/, int /*w*/, int /*h*/) {}
 
   // END PURE VIRTUAL METHODS
 private:
   ImageWidgetBase(const Self&); // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Pointer to the viewed image */
   ImagePointerType m_Image;
@@ -252,7 +252,7 @@ private:
   /** Set black to transparent*/
   bool m_BlackTransparency;
   /** The image Overlay opacity */
-  unsigned char  m_ImageOverlayOpacity;
+  unsigned char m_ImageOverlayOpacity;
   /** Pointer to the overlay image */
   OverlayImagePointerType m_ImageOverlay;
   /** OpenGl image overlay buffer */

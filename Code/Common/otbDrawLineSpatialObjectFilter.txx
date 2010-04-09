@@ -20,7 +20,6 @@
 
 #include "otbDrawLineSpatialObjectFilter.h"
 
-
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
 #include "itkImageRegionIterator.h"
@@ -28,7 +27,6 @@
 #include "itkImageConstIteratorWithIndex.h"
 
 #include <math.h>
-
 
 namespace otb
 {
@@ -52,9 +50,8 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputLine(const InputLineType *line)
 {
   this->ProcessObjectType::SetNthInput(1,
-                                       const_cast< InputLineType * >( line ) );
+                                       const_cast<InputLineType *>(line));
 }
-
 
 template <class TInputImage, class TOutputImage>
 typename DrawLineSpatialObjectFilter<TInputImage, TOutputImage>::InputLineType *
@@ -62,9 +59,8 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GetInputLine(void)
 {
   return static_cast<InputLineType *>
-         (this->ProcessObjectType::GetInput(1) );
+           (this->ProcessObjectType::GetInput(1));
 }
-
 
 template <class TInputImage, class TOutputImage>
 void
@@ -72,25 +68,24 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GenerateData(void)
 {
 
-  typename InputImageType::ConstPointer        input    = this->GetInput();
-  InputLineType *                              line     = this->GetInputLine();
-  
-  typename OutputImageType::Pointer            output   = this->GetOutput();
-    
+  typename InputImageType::ConstPointer input    = this->GetInput();
+  InputLineType *                       line     = this->GetInputLine();
+
+  typename OutputImageType::Pointer output   = this->GetOutput();
+
   /** Create a new list line with one line*/
-  LineSpatialObjectListPointer  lineList = LineSpatialObjectListType::New();
+  LineSpatialObjectListPointer lineList = LineSpatialObjectListType::New();
   lineList->push_back(line);
 
   /** Invoke the DrawLineSpatialObjectListFilter to draw the line */
   m_DrawLineListFilter->SetInput(input);
   m_DrawLineListFilter->SetInputLineSpatialObjectList(lineList);
-  
+
   m_DrawLineListFilter->GraftOutput(this->GetOutput());
   m_DrawLineListFilter->Update();
   this->GraftOutput(m_DrawLineListFilter->GetOutput());
-  
-}
 
+}
 
 /**
  * Standard "PrintSelf" method
@@ -103,8 +98,6 @@ DrawLineSpatialObjectFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, i
   os << indent << "Path Value: " << m_Value << std::endl;
 }
 
-
 } // end namespace otb
-
 
 #endif

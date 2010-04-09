@@ -33,7 +33,6 @@ GISTableFunction<TInputTable, TOutput>
   m_Table = NULL;
 }
 
-
 /**
  * Standard "PrintSelf" method
  */
@@ -44,11 +43,10 @@ GISTableFunction<TInputTable, TOutput>
   std::ostream& os,
   Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "InputTable: " << m_Table.GetPointer() << std::endl;
 
 }
-
 
 /**
  * Initialize by setting the input table
@@ -57,13 +55,12 @@ template <class TInputTable, class TOutput>
 void
 GISTableFunction<TInputTable, TOutput>
 ::SetInputTable(
-  const InputTableType* ptr )
+  const InputTableType* ptr)
 {
   // set the input table
   m_Table = ptr;
 
 }
-
 
 } // end namespace itk
 

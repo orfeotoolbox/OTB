@@ -30,7 +30,7 @@ RCC8GraphSource<TOutputGraph>
 ::RCC8GraphSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,TOutputGraph::New().GetPointer());
+  this->Superclass::SetNthOutput(0, TOutputGraph::New().GetPointer());
 }
 /**
  * Get the output Graph
@@ -41,10 +41,10 @@ typename RCC8GraphSource<TOutputGraph>::OutputGraphType *
 RCC8GraphSource<TOutputGraph>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<OutputGraphType *> (this->ProcessObject::GetOutput(0));
 }
 /**
@@ -55,7 +55,7 @@ void
 RCC8GraphSource<TOutputGraph>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
-}// End namespace otb
+} // End namespace otb
 #endif

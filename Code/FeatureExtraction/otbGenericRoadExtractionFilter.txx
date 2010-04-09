@@ -26,7 +26,7 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::GenericRoadExtractionFilter()
 {
@@ -49,7 +49,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_LikelihoodPathListFilter = LikelihoodPathListFilterType::New();
 
   /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
-  m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005 );
+  m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(0.00005);
   /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
   m_Tolerance = static_cast<ToleranceType>(1.);
   /** Max angle (use bye the BreakAngularPathListFilter)*/
@@ -73,7 +73,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 /**
  * Prepare main computation method
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 void
 GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::BeforeGenerateData()
@@ -82,25 +82,25 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
   // Getting x Spacing for the resolution
   m_Resolution = static_cast<double>(spacing[0]);
-  if ( m_Resolution == 0. )
-  {
+  if (m_Resolution == 0.)
+    {
     itkWarningMacro(<< "The image spacing is zero. So the resolution used in the filter is forced to 1.");
     m_Resolution = 1.;
-  }
+    }
 
 }
 
 /**
  * Main computation method
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 void
 GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::GenerateData()
 {
   // // Input images pointers
   typename InputImageType::ConstPointer inputImage     = this->GetInput();
-  typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
+  typename OutputPathListType::Pointer  outputPathList  = this->GetOutput();
 
   ///////////////////////////////////////
   //// Algorithm for road extraction ////
@@ -112,7 +112,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 
   m_GradientFilter->SetInput(m_SquareRootImageFilter->GetOutput());
   /** Sigma calculated with the alpha and image resolution parameters */
-  m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2/m_Resolution + 1.) ));
+  m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2 / m_Resolution + 1.)));
 
   m_NeighborhoodScalarProductFilter->SetInput(m_GradientFilter->GetOutput());
 
@@ -140,7 +140,7 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
 
   m_LinkPathListFilter->SetInput(m_FirstRemoveTortuousPathListFilter->GetOutput());
   m_LinkPathListFilter->SetAngularThreshold(m_AngularThreshold);
-  m_LinkPathListFilter->SetDistanceThreshold( static_cast<LinkRealType>(m_DistanceThreshold/m_Resolution) );
+  m_LinkPathListFilter->SetDistanceThreshold(static_cast<LinkRealType>(m_DistanceThreshold / m_Resolution));
 
   m_SecondSimplifyPathListFilter->SetInput(m_LinkPathListFilter->GetOutput());
   m_SecondSimplifyPathListFilter->GetFunctor().SetTolerance(m_Tolerance);
@@ -157,31 +157,31 @@ GenericRoadExtractionFilter<TInputImage, TOutputPath>
   m_LikelihoodPathListFilter->Update();
   // outputPathList =  m_LikelihoodPathListFilter->GetOutput();
   for (typename LikelihoodPathListFilterType::PathListType::ConstIterator it
-       = m_LikelihoodPathListFilter->GetOutput()->Begin();
-       it!=m_LikelihoodPathListFilter->GetOutput()->End();
+         = m_LikelihoodPathListFilter->GetOutput()->Begin();
+       it != m_LikelihoodPathListFilter->GetOutput()->End();
        ++it)
-  {
+    {
     outputPathList->PushBack(it.Get());
-  }
+    }
 }
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOutputPath>
+template <class TInputImage, class TOutputPath>
 void
 GenericRoadExtractionFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
-  os << indent << "m_Alpha:"<< m_Alpha << std::endl;
-  os << indent << "m_Resolution:"<< m_Resolution << std::endl;
-  os << indent << "m_AmplitudeThreshold: "<< m_AmplitudeThreshold << std::endl;
-  os << indent << "m_Tolerance: "<< m_Tolerance << std::endl;
-  os << indent << "m_MaxAngle: "<< m_MaxAngle << std::endl;
-  os << indent << "m_FirstMeanDistanceThreshold: "<< m_FirstMeanDistanceThreshold << std::endl;
-  os << indent << "m_SecondMeanDistanceThreshold: "<< m_SecondMeanDistanceThreshold << std::endl;
-  os << indent << "m_DistanceThreshold: "<<m_DistanceThreshold<< std::endl;
-  os << indent << "m_AngularThreshold: "<<m_AngularThreshold<< std::endl;
+  Superclass::PrintSelf(os, indent);
+  os << indent << "m_Alpha:" << m_Alpha << std::endl;
+  os << indent << "m_Resolution:" << m_Resolution << std::endl;
+  os << indent << "m_AmplitudeThreshold: " << m_AmplitudeThreshold << std::endl;
+  os << indent << "m_Tolerance: " << m_Tolerance << std::endl;
+  os << indent << "m_MaxAngle: " << m_MaxAngle << std::endl;
+  os << indent << "m_FirstMeanDistanceThreshold: " << m_FirstMeanDistanceThreshold << std::endl;
+  os << indent << "m_SecondMeanDistanceThreshold: " << m_SecondMeanDistanceThreshold << std::endl;
+  os << indent << "m_DistanceThreshold: " << m_DistanceThreshold << std::endl;
+  os << indent << "m_AngularThreshold: " << m_AngularThreshold << std::endl;
 
 }
 } // End namespace otb

@@ -47,20 +47,20 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator()(const InputVectorType & inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector)
   {
-    return this->Evaluate(inputVector[m_TM4Index-1],static_cast<TInput2>(inputVector[m_TM5Index-1]));
+    return this->Evaluate(inputVector[m_TM4Index - 1], static_cast<TInput2>(inputVector[m_TM5Index - 1]));
   }
 
   // Binary operator
-  inline TOutput operator()(const TInput1 &tm4, const TInput2 &tm5)
+  inline TOutput operator ()(const TInput1& tm4, const TInput2& tm5)
   {
-    return this->Evaluate(tm4,tm5);
-  };
+    return this->Evaluate(tm4, tm5);
+  }
   /// Constructor
-  TM4AndTM5IndexBase() : m_TM4Index(4), m_TM5Index(5) {};
+  TM4AndTM5IndexBase() : m_TM4Index(4), m_TM5Index(5) {}
   /// Desctructor
-  virtual ~TM4AndTM5IndexBase() {};
+  virtual ~TM4AndTM5IndexBase() {}
 
   /// Set TM4 Index
   void SetIndex1(unsigned int channel)
@@ -85,13 +85,12 @@ public:
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
-  virtual TOutput Evaluate(const TInput1 & tm4, const TInput2 & tm5) const = 0;
+  virtual TOutput Evaluate(const TInput1& tm4, const TInput2& tm5) const = 0;
 
 private:
   unsigned int m_TM4Index;
   unsigned int m_TM5Index;
 };
-
 
 /** \class NDBI
  *  \brief This functor computes the Normalized Difference Built Up Index (NDBI)
@@ -102,25 +101,25 @@ private:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class NDBI : public TM4AndTM5IndexBase<TInput1,TInput2,TOutput>
+class NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  NDBI() {};
+  NDBI() {}
   /// Desctructor
-  virtual ~NDBI() {};
+  virtual ~NDBI() {}
   // Operator on r and nir single pixel values
 protected:
-  inline TOutput Evaluate(const TInput1 &pTM4, const TInput2 &pTM5) const
+  inline TOutput Evaluate(const TInput1& pTM4, const TInput2& pTM5) const
   {
     double dTM4 = static_cast<double>(pTM4);
     double dTM5 = static_cast<double>(pTM5);
-    if ( dTM5+dTM4 == 0 )
+    if (dTM5 + dTM4 == 0)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>((dTM5-dTM4)/(dTM5+dTM4)) );
+    return (static_cast<TOutput>((dTM5 - dTM4) / (dTM5 + dTM4)));
   }
 };
 
@@ -133,51 +132,50 @@ protected:
  * \ingroup Radiometry
  */
 template <class TInput1, class TInput2, class TOutput>
-class ISU : public RAndNIRIndexBase<TInput1,TInput2,TOutput>
+class ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
   /// Constructor
-  ISU() : m_A(100.), m_B(25.) {};
+  ISU() : m_A(100.), m_B(25.) {}
   /// Desctructor
-  virtual ~ISU() {};
+  virtual ~ISU() {}
 
   /** Set/Get A correction */
   void SetA(const double pA)
   {
     m_A = pA;
   }
-  double GetA(void)const
+  double GetA(void) const
   {
-    return ( m_A );
+    return (m_A);
   }
   /** Set/Get B correction */
   void SetB(const double pB)
   {
     m_B = pB;
   }
-  double GetB(void)const
+  double GetB(void) const
   {
-    return ( m_B );
+    return (m_B);
   }
 
 protected:
-  inline TOutput Evaluate(const TInput1 &pRed, const TInput2 &pNIR) const
+  inline TOutput Evaluate(const TInput1& pRed, const TInput2& pNIR) const
   {
     double dRed = static_cast<double>(pRed);
     double dNIR = static_cast<double>(pNIR);
-    if ( dNIR == 0 )
+    if (dNIR == 0)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return ( static_cast<TOutput>(m_A - (m_B*dRed)/(dNIR)) );
+    return (static_cast<TOutput>(m_A - (m_B * dRed) / (dNIR)));
   }
 
 private:
   double m_A;
   double m_B;
 };
-
 
 } // namespace Functor
 } // namespace otb

@@ -38,7 +38,7 @@ PersistentFilterStreamingDecorator<TFilter>
 ::SetInput(const ImageType *input)
 {
   // ProcessObject is not const_correct so this cast is required here.
-  this->ProcessObject::SetNthInput(0,const_cast<ImageType *>(input ) );
+  this->ProcessObject::SetNthInput(0, const_cast<ImageType *>(input));
 }
 template <class TFilter>
 const typename PersistentFilterStreamingDecorator<TFilter>::ImageType *
@@ -46,9 +46,9 @@ PersistentFilterStreamingDecorator<TFilter>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-  {
+    {
     return 0;
-  }
+    }
 
   return static_cast<ImageType*>(this->ProcessObject::GetInput(0));
 }

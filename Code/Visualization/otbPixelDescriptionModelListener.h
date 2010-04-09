@@ -38,13 +38,13 @@ public:
 
 protected:
   /** Constructor */
-  PixelDescriptionModelListener() {};
+  PixelDescriptionModelListener() {}
   /** Destructor */
-  virtual ~PixelDescriptionModelListener() {};
+  virtual ~PixelDescriptionModelListener() {}
 
 private:
   PixelDescriptionModelListener(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

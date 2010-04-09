@@ -30,23 +30,23 @@ namespace otb
  */
 template <class TSpatialObject>
 class ITK_EXPORT SpatialObjectSource
-      : public itk::ProcessObject
+  : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
-  typedef SpatialObjectSource Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SpatialObjectSource           Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation througth the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(SpatialObjectSource,itk::ProcessObject);
+  itkTypeMacro(SpatialObjectSource, itk::ProcessObject);
 
   /** Template parameters typedefs */
-  typedef TSpatialObject SpatialObjectType;
+  typedef TSpatialObject                      SpatialObjectType;
   typedef typename SpatialObjectType::Pointer SpatialObjectPointerType;
 
   /** Data object pointer */
@@ -58,7 +58,6 @@ public:
    */
   virtual SpatialObjectType * GetOutput(void);
 
-
 protected:
   /** Constructor */
   SpatialObjectSource();
@@ -68,8 +67,8 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SpatialObjectSource(const Self&);//purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SpatialObjectSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 } // end namespace otb

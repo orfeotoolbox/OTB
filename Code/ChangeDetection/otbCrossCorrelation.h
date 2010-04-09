@@ -18,10 +18,8 @@
 #ifndef __otbCrossCorrelation_h
 #define __otbCrossCorrelation_h
 
-
 namespace otb
 {
-
 
 namespace Functor
 {
@@ -37,28 +35,26 @@ namespace Functor
  *
  */
 
-
-template< class TInput1, class TInput2, class TOutput>
+template<class TInput1, class TInput2, class TOutput>
 class CrossCorrelation
 {
 public:
-  CrossCorrelation() {};
-  virtual ~CrossCorrelation() {};
-  inline TOutput operator()( const TInput1 & itA,
-                             const TInput2 & itB)
+  CrossCorrelation() {}
+  virtual ~CrossCorrelation() {}
+  inline TOutput operator ()(const TInput1& itA,
+                             const TInput2& itB)
   {
 
     TOutput meanA = itk::NumericTraits<TOutput>::Zero;
     TOutput meanB = itk::NumericTraits<TOutput>::Zero;
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
       meanA += static_cast<TOutput>(itA.GetPixel(pos));
       meanB += static_cast<TOutput>(itB.GetPixel(pos));
 
-
-    }
+      }
 
     meanA /= itA.Size();
     meanB /= itB.Size();
@@ -66,36 +62,42 @@ public:
     TOutput varA = itk::NumericTraits<TOutput>::Zero;
     TOutput varB = itk::NumericTraits<TOutput>::Zero;
 
-    for (unsigned long pos = 0; pos< itA.Size(); ++pos)
-    {
+    for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+      {
 
-      varA += static_cast<TOutput>( vcl_pow( static_cast<double>(itA.GetPixel(pos))-static_cast<double>(meanA),static_cast<double>(2.0)));
-      varB += static_cast<TOutput>( vcl_pow( static_cast<double>(itB.GetPixel(pos))-static_cast<double>(meanB),static_cast<double>(2.0)));
+      varA +=
+        static_cast<TOutput>(vcl_pow(static_cast<double>(itA.GetPixel(pos)) - static_cast<double>(meanA),
+                                     static_cast<double>(2.0)));
+      varB +=
+        static_cast<TOutput>(vcl_pow(static_cast<double>(itB.GetPixel(pos)) - static_cast<double>(meanB),
+                                     static_cast<double>(2.0)));
 
-    }
+      }
 
     varA /= itA.Size();
     varB /= itB.Size();
 
     TOutput crossCorrel = itk::NumericTraits<TOutput>::Zero;
 
-    if (varA!= itk::NumericTraits<TOutput>::Zero && varB!= itk::NumericTraits<TOutput>::Zero)
-    {
-      for (unsigned long pos = 0; pos< itA.Size(); ++pos)
+    if (varA != itk::NumericTraits<TOutput>::Zero && varB != itk::NumericTraits<TOutput>::Zero)
       {
-        crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(static_cast<double>(varA*varB)));
+      for (unsigned long pos = 0; pos < itA.Size(); ++pos)
+        {
+        crossCorrel +=
+          (static_cast<TOutput>(itA.GetPixel(pos)) -
+            meanA) *
+          (static_cast<TOutput>(itB.GetPixel(pos)) - meanB) / (itA.Size() * vcl_sqrt(static_cast<double>(varA * varB)));
+        }
       }
-    }
-    else if (varA==itk::NumericTraits<TOutput>::Zero && varB==itk::NumericTraits<TOutput>::Zero)
-    {
+    else if (varA == itk::NumericTraits<TOutput>::Zero && varB == itk::NumericTraits<TOutput>::Zero)
+      {
       crossCorrel = itk::NumericTraits<TOutput>::One;
-    }
-    return static_cast<TOutput>( itk::NumericTraits<TOutput>::One - crossCorrel );
+      }
+    return static_cast<TOutput>(itk::NumericTraits<TOutput>::One - crossCorrel);
   }
 };
 }
 
 } // end namespace otb
-
 
 #endif

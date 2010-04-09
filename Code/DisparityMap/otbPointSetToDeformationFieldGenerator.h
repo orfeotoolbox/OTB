@@ -31,11 +31,11 @@ namespace Functor
 class DistanceComparisonFunctor
 {
 public:
-  DistanceComparisonFunctor() {};
-  virtual ~DistanceComparisonFunctor() {};
+  DistanceComparisonFunctor() {}
+  virtual ~DistanceComparisonFunctor() {}
   typedef std::vector<double> DistanceVectorType;
 
-  void SetDistanceVector(DistanceVectorType &vec)
+  void SetDistanceVector(DistanceVectorType& vec)
   {
     m_DistanceVector = vec;
   }
@@ -43,9 +43,9 @@ public:
   {
     return m_DistanceVector;
   }
-  inline bool operator()(const unsigned int a1, const unsigned int a2)
+  inline bool operator ()(const unsigned int a1, const unsigned int a2)
   {
-    return m_DistanceVector[a1]<m_DistanceVector[a2];
+    return m_DistanceVector[a1] < m_DistanceVector[a2];
   }
 
 private:
@@ -61,7 +61,7 @@ private:
  */
 template <class TPointSet, class TDeformationField>
 class ITK_EXPORT PointSetToDeformationFieldGenerator
-      : public itk::ImageSource<TDeformationField>
+  : public itk::ImageSource<TDeformationField>
 {
 public:
   /** Standard typedefs */
@@ -77,19 +77,19 @@ public:
   itkTypeMacro(PointSetToDeformationFieldGenerator, ImageSource);
 
   /** Template parameters typedefs */
-  typedef TPointSet PointSetType;
+  typedef TPointSet                      PointSetType;
   typedef typename PointSetType::Pointer PointSetPointerType;
 
-  typedef TDeformationField DeformationFieldType;
-  typedef typename DeformationFieldType::Pointer DeformationFieldPointerType;
-  typedef typename DeformationFieldType::IndexType IndexType;
-  typedef typename DeformationFieldType::SizeType SizeType;
-  typedef typename DeformationFieldType::SpacingType SpacingType;
-  typedef typename DeformationFieldType::PointType PointType;
+  typedef TDeformationField                                DeformationFieldType;
+  typedef typename DeformationFieldType::Pointer           DeformationFieldPointerType;
+  typedef typename DeformationFieldType::IndexType         IndexType;
+  typedef typename DeformationFieldType::SizeType          SizeType;
+  typedef typename DeformationFieldType::SpacingType       SpacingType;
+  typedef typename DeformationFieldType::PointType         PointType;
   typedef typename DeformationFieldType::InternalPixelType ValueType;
 
   /** More typedefs */
-  typedef std::vector<double> DistanceVectorType;
+  typedef std::vector<double>       DistanceVectorType;
   typedef std::vector<unsigned int> IndexVectorType;
 
   /**
@@ -103,23 +103,22 @@ public:
    */
   const TPointSet * GetPointSet(void);
 
-
-  itkSetMacro(MetricThreshold,double);
-  itkGetMacro(MetricThreshold,double);
-  itkSetMacro(DefaultValue,ValueType);
-  itkGetMacro(DefaultValue,ValueType);
-  itkSetMacro(OutputSize,SizeType);
-  itkGetConstReferenceMacro(OutputSize,SizeType);
-  itkSetMacro(OutputSpacing,SpacingType);
-  itkGetConstReferenceMacro(OutputSpacing,SpacingType);
-  itkSetMacro(OutputOrigin,PointType);
-  itkGetConstReferenceMacro(OutputOrigin,PointType);
+  itkSetMacro(MetricThreshold, double);
+  itkGetMacro(MetricThreshold, double);
+  itkSetMacro(DefaultValue, ValueType);
+  itkGetMacro(DefaultValue, ValueType);
+  itkSetMacro(OutputSize, SizeType);
+  itkGetConstReferenceMacro(OutputSize, SizeType);
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetConstReferenceMacro(OutputSpacing, SpacingType);
+  itkSetMacro(OutputOrigin, PointType);
+  itkGetConstReferenceMacro(OutputOrigin, PointType);
 
 protected:
   /** Constructor */
   PointSetToDeformationFieldGenerator();
   /** Destructor */
-  virtual ~PointSetToDeformationFieldGenerator() {};
+  virtual ~PointSetToDeformationFieldGenerator() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Generate output information */
@@ -136,8 +135,8 @@ protected:
   double EuclideanDistance(IndexType index, PointType p);
 
 private:
-  PointSetToDeformationFieldGenerator(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PointSetToDeformationFieldGenerator(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /**
    * The threshold of metric value.
@@ -152,7 +151,7 @@ private:
   /** Default value */
   ValueType m_DefaultValue;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPointSetToDeformationFieldGenerator.txx"
 #endif

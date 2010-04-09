@@ -28,11 +28,10 @@ namespace otb
 template <class TData>
 VectorDataIOBase<TData>
 ::VectorDataIOBase() :
-    m_ByteOrder(OrderNotApplicable)
+  m_ByteOrder(OrderNotApplicable)
 {
   Reset(false);
 }
-
 
 template <class TData>
 void
@@ -56,7 +55,7 @@ VectorDataIOBase<TData>
 {
   std::string s;
   switch (t)
-  {
+    {
   case BigEndian:
     return s = "BigEndian";
   case LittleEndian:
@@ -64,10 +63,9 @@ VectorDataIOBase<TData>
   case OrderNotApplicable:
   default:
     return s = "OrderNotApplicable";
-  }
-  return s="OrderNotApplicable";
+    }
+  return s = "OrderNotApplicable";
 }
-
 
 template <class TData>
 void

@@ -53,19 +53,19 @@ namespace otb
  */
 //  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 
-template < class TInput,
-class TOutput    = double,
-class TPrecision = double,
-class TCoordRep  = float >
+template <class TInput,
+          class TOutput    = double,
+          class TPrecision = double,
+          class TCoordRep  = float>
 class ITK_EXPORT HuImageFunction :
-      public RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >
+  public RealMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef HuImageFunction                                           Self;
-  typedef RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >      Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef HuImageFunction                                                 Self;
+  typedef RealMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>                                         Pointer;
+  typedef itk::SmartPointer<const Self>                                   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(HuImageFunction, RealMomentImageFunction);
@@ -74,54 +74,52 @@ public:
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef TInput                                    InputType;
-  typedef typename Superclass::IndexType            IndexType;
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
+  typedef TInput                                   InputType;
+  typedef typename Superclass::IndexType           IndexType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::RealType             RealType;
-  typedef typename std::complex<RealType>           ComplexType;
+  typedef typename Superclass::RealType   RealType;
+  typedef typename std::complex<RealType> ComplexType;
 
   /** Type for calculation precision */
-  typedef typename Superclass::PrecisionType        PrecisionType;
+  typedef typename Superclass::PrecisionType PrecisionType;
 
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);
 
-
   /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
+  virtual RealType EvaluateAtIndex(const IndexType& index) const;
 
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate( const PointType& point ) const
+  virtual RealType Evaluate(const PointType& point) const
   {
     IndexType index;
-    this->ConvertPointToNearestIndex( point, index );
-    return this->EvaluateAtIndex( index );
+    this->ConvertPointToNearestIndex(point, index);
+    return this->EvaluateAtIndex(index);
   }
   virtual RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex ) const
+    const ContinuousIndexType& cindex) const
   {
     IndexType index;
-    this->ConvertContinuousIndexToNearestIndex( cindex, index );
-    return this->EvaluateAtIndex( index );
+    this->ConvertContinuousIndexToNearestIndex(cindex, index);
+    return this->EvaluateAtIndex(index);
   }
-
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  itkSetClampMacro(MomentNumber,short,1,7);
-  itkGetConstReferenceMacro( MomentNumber, short );
+  itkSetClampMacro(MomentNumber, short, 1, 7);
+  itkGetConstReferenceMacro(MomentNumber, short);
 
 protected:
   HuImageFunction();
-  virtual ~HuImageFunction() {};
+  virtual ~HuImageFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  HuImageFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  HuImageFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
   short m_MomentNumber;
 };
@@ -133,4 +131,3 @@ private:
 #endif
 
 #endif
-

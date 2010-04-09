@@ -95,11 +95,11 @@ void
 ObjectList<TObject>
 ::PopBack(void)
 {
-  if ( m_InternalContainer.size() > 0 )
-  {
+  if (m_InternalContainer.size() > 0)
+    {
     m_InternalContainer.pop_back();
     this->Modified();
-  }
+    }
 }
 
 /**
@@ -110,13 +110,15 @@ ObjectList<TObject>
 template <class TObject>
 void
 ObjectList<TObject>
-::SetNthElement(unsigned int index,ObjectPointerType element)
+::SetNthElement(unsigned int index, ObjectPointerType element)
 {
-  if ( index >= m_InternalContainer.size() )
-  {
-    itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
-  }
-  m_InternalContainer[index]=element;
+  if (index >= m_InternalContainer.size())
+    {
+    itkExceptionMacro(
+      << "Impossible to SetNthElement with the index element " << index <<
+      "; this element don't exist, the size of the list is " << m_InternalContainer.size() << ".");
+    }
+  m_InternalContainer[index] = element;
   this->Modified();
 }
 /**
@@ -127,13 +129,15 @@ ObjectList<TObject>
 template <class TObject>
 void
 ObjectList<TObject>
-::SetNthElement(unsigned int index,const ObjectType * element)
+::SetNthElement(unsigned int index, const ObjectType * element)
 {
-  if ( index >= m_InternalContainer.size() )
-  {
-    itkExceptionMacro(<<"Impossible to SetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
-  }
-  m_InternalContainer[index]=const_cast<ObjectType*>(element);
+  if (index >= m_InternalContainer.size())
+    {
+    itkExceptionMacro(
+      << "Impossible to SetNthElement with the index element " << index <<
+      "; this element don't exist, the size of the list is " << m_InternalContainer.size() << ".");
+    }
+  m_InternalContainer[index] = const_cast<ObjectType*>(element);
   this->Modified();
 }
 
@@ -147,10 +151,12 @@ typename ObjectList<TObject>::ObjectPointerType
 ObjectList<TObject>
 ::GetNthElement(unsigned int index) const
 {
-  if ( index >= m_InternalContainer.size() )
-  {
-    itkExceptionMacro(<<"Impossible to GetNthElement with the index element "<<index<<"; this element don't exist, the size of the list is "<<m_InternalContainer.size()<<"." );
-  }
+  if (index >= m_InternalContainer.size())
+    {
+    itkExceptionMacro(
+      << "Impossible to GetNthElement with the index element " << index <<
+      "; this element don't exist, the size of the list is " << m_InternalContainer.size() << ".");
+    }
   return m_InternalContainer[index];
 }
 /**
@@ -185,11 +191,13 @@ void
 ObjectList<TObject>
 ::Erase(unsigned int index)
 {
-  if ( index >= m_InternalContainer.size() )
-  {
-    itkExceptionMacro(<<"Impossible to erase the index element "<<index<<"; the size of the list is "<<m_InternalContainer.size()<<"." );
-  }
-  m_InternalContainer.erase(m_InternalContainer.begin()+index);
+  if (index >= m_InternalContainer.size())
+    {
+    itkExceptionMacro(
+      << "Impossible to erase the index element " << index << "; the size of the list is " <<
+      m_InternalContainer.size() << ".");
+    }
+  m_InternalContainer.erase(m_InternalContainer.begin() + index);
   this->Modified();
 }
 /**
@@ -212,7 +220,7 @@ typename ObjectList<TObject>::Iterator
 ObjectList<TObject>
 ::Insert(Iterator position, ObjectPointerType element)
 {
-  Iterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  Iterator iter(m_InternalContainer.insert(position.GetIter(), element));
   this->Modified();
   return iter;
 }
@@ -225,7 +233,7 @@ typename ObjectList<TObject>::ReverseIterator
 ObjectList<TObject>
 ::Insert(ReverseIterator position, ObjectPointerType element)
 {
-  ReverseIterator iter ( m_InternalContainer.insert( position.GetIter(), element ) );
+  ReverseIterator iter(m_InternalContainer.insert(position.GetIter(), element));
   this->Modified();
   return iter;
 }
@@ -261,7 +269,7 @@ ObjectList<TObject>
 template <class TObject>
 typename ObjectList<TObject>::ReverseIterator
 ObjectList<TObject>
-:: ReverseBegin(void)
+::ReverseBegin(void)
 {
   ReverseIterator iter(m_InternalContainer.rbegin());
   return iter;
@@ -285,7 +293,7 @@ ObjectList<TObject>
 template <class TObject>
 typename ObjectList<TObject>::Iterator
 ObjectList<TObject>
-:: End(void)
+::End(void)
 {
   Iterator iter(m_InternalContainer.end());
   return iter;
@@ -336,7 +344,7 @@ void
 ObjectList<TObject>
 ::Erase(Iterator begin, Iterator end)
 {
-  m_InternalContainer.erase(begin.GetIter(),end.GetIter());
+  m_InternalContainer.erase(begin.GetIter(), end.GetIter());
   this->Modified();
 }
 /**
@@ -358,18 +366,18 @@ void
 ObjectList<TObject>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
   os << indent << "Size: " << m_InternalContainer.size() << std::endl;
   os << indent << "List contains : " << std::endl;
   ConstIterator iter = this->Begin();
-  while (iter!=this->End())
-  {
+  while (iter != this->End())
+    {
     os << indent.GetNextIndent() << iter.Get().GetPointer() << std::endl;
     os << indent.GetNextIndent() << iter.Get() << std::endl;
 //                iter.Get()->PrintSelf(os,indent.GetNextIndent());
 //                iter.Get()->Print(os,indent.GetNextIndent());
     ++iter;
-  }
+    }
 }
 } // end namespace otb
 

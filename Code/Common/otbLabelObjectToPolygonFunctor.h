@@ -54,7 +54,7 @@ namespace Functor
  * Please be aware that this functor is not thread-safe.
  *
  */
-template <class TLabelObject, class TPolygon >
+template <class TLabelObject, class TPolygon>
 class LabelObjectToPolygonFunctor
 {
 public:
@@ -66,106 +66,114 @@ public:
   typedef TPolygon                                    PolygonType;
   typedef typename PolygonType::Pointer               PolygonPointerType;
   typedef typename PolygonType::VertexType            VertexType;
-  typedef itk::Point<double,2>                        PointType;
-  typedef itk::Vector<double,2>                       SpacingType;
+  typedef itk::Point<double, 2>                       PointType;
+  typedef itk::Vector<double, 2>                      SpacingType;
   typedef itk::Index<2>                               RegionIndexType;
- 
+
   /**
    * \param labelObject the label object to vectorize
    * \return The vectorized label object as a polygon.
    */
-  inline PolygonType * operator()(const LabelObjectType * labelObject);
-  
+  inline PolygonType * operator ()(const LabelObjectType * labelObject);
+
   /** Set the start index of the underlying image */
-  void SetStartIndex(const RegionIndexType & index)
+  void SetStartIndex(const RegionIndexType& index)
   {
     m_StartIndex = index;
   }
   /** Get the start index */
-  const RegionIndexType & GetStartIndex() const
+  const RegionIndexType& GetStartIndex() const
   {
     return m_StartIndex;
   }
   /** Set the origin of the underlying image */
-  void SetOrigin(const PointType & origin)
+  void SetOrigin(const PointType& origin)
   {
     m_Origin = origin;
   }
   /** Get the origin */
-  const PointType & GetOrigin() const
+  const PointType& GetOrigin() const
   {
     return m_Origin;
   }
   /** Set the spacing of the underlying image */
-  void SetSpacing(const SpacingType & spacing)
+  void SetSpacing(const SpacingType& spacing)
   {
     m_Spacing = spacing;
   }
   /** Get the spacing */
-  const SpacingType & GetSpacing() const
+  const SpacingType& GetSpacing() const
   {
     return m_Spacing;
   }
 
   /** Constructor */
   LabelObjectToPolygonFunctor() : m_Polygon(NULL),
-          m_CurrentState(UP_LEFT),
-          m_PositionFlag(LEFT_END),
-          m_StartingPoint(),
-          m_CurrentPoint(),
-          m_CurrentRun(),
-          m_CurrentLine(0),
-          m_Solution(),
-          m_LineOffset(0),
-          m_StartIndex(),
-          m_Origin(),
-          m_Spacing(1.)
+    m_CurrentState(UP_LEFT),
+    m_PositionFlag(LEFT_END),
+    m_StartingPoint(),
+    m_CurrentPoint(),
+    m_CurrentRun(),
+    m_CurrentLine(0),
+    m_Solution(),
+    m_LineOffset(0),
+    m_StartIndex(),
+    m_Origin(),
+    m_Spacing(1.)
   {}
 
   /** Destructor */
   virtual ~LabelObjectToPolygonFunctor(){}
-  
+
 private:
   /// Internal structures
-  typedef std::vector<LineType>                       RunsPerLineType;
-  typedef std::vector<RunsPerLineType>                RunsPerLineVectorType;
-  typedef std::vector<IndexType>                      IndexVectorType;
+  typedef std::vector<LineType>        RunsPerLineType;
+  typedef std::vector<RunsPerLineType> RunsPerLineVectorType;
+  typedef std::vector<IndexType>       IndexVectorType;
 
   /// Internal enums
-  enum StateType{UP_LEFT,UP_RIGHT,DOWN_LEFT,DOWN_RIGHT};
-  enum PositionFlagType{LEFT_END,RIGHT_END};
+  enum StateType {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
+  enum PositionFlagType {LEFT_END, RIGHT_END};
 
- /// Compare two line in the lexicographical order
-  static bool LexicographicalLineCompare(const LineType &  l1, const LineType & l2);
+  /// Compare two line in the lexicographical order
+  static bool LexicographicalLineCompare(const LineType&  l1, const LineType& l2);
 
   /// Check if the given run index (index in line,line) is valid
-  inline bool IsRunIndexValid(const IndexType & index) const;
+  inline bool IsRunIndexValid(const IndexType& index) const;
 
   /// Check if the point lies within the range of the line
-  inline IndexType Within(const IndexType & point, unsigned int line);
-  
+  inline IndexType Within(const IndexType& point, unsigned int line);
+
   /// Return the left-end of the run
-  inline IndexType LeftEnd(const IndexType & runIndex) const;
+  inline IndexType LeftEnd(const IndexType& runIndex) const;
 
   /// Return the right-end of the run
-  inline IndexType RightEnd(const IndexType & runIndex) const;
- 
+  inline IndexType RightEnd(const IndexType& runIndex) const;
+
   /** Return the right-most run whose left end lies within the range of
    * the given run.
    */
-  inline IndexType RightMostLeftEndInside(unsigned int line, const IndexType & point, const IndexType & run) const;
+  inline IndexType RightMostLeftEndInside(unsigned int line, const IndexType& point, const IndexType& run) const;
 
   /** Return the left-most run whose right end lies within the range of
    * the given run.
    */
-  inline IndexType LeftMostRightEndInside(unsigned int line, const IndexType & point, const IndexType & run) const;
-  
+  inline IndexType LeftMostRightEndInside(unsigned int line, const IndexType& point, const IndexType& run) const;
+
   /// Walk left to update the finite states machine.
-  inline void WalkLeft(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state);
+  inline void WalkLeft(unsigned int line,
+                       const IndexType& startPoint,
+                       const IndexType& endPoint,
+                       PolygonType * polygon,
+                       const StateType state);
 
   /// Walk right to update the finite states machine.
-  inline void WalkRight(unsigned int line,const IndexType & startPoint, const IndexType & endPoint, PolygonType * polygon, const StateType state);
- 
+  inline void WalkRight(unsigned int line,
+                        const IndexType& startPoint,
+                        const IndexType& endPoint,
+                        PolygonType * polygon,
+                        const StateType state);
+
   // Apply origin and spacing
   VertexType IndexToPoint(const VertexType& index) const;
 
@@ -175,34 +183,32 @@ private:
   RunsPerLineVectorType m_InternalDataSet;
 
   /// The current state
-  StateType             m_CurrentState;
+  StateType m_CurrentState;
   /// The position flag
-  PositionFlagType      m_PositionFlag;
-  
+  PositionFlagType m_PositionFlag;
+
   // The starting point for vectorization
-  IndexType             m_StartingPoint;
-  
+  IndexType m_StartingPoint;
+
   /// The current point for vectorization
-  IndexType             m_CurrentPoint;
-  
+  IndexType m_CurrentPoint;
+
   /// The current run for vectorization
-  IndexType             m_CurrentRun;
-  
+  IndexType m_CurrentRun;
+
   /// The current line for vectorization
-  unsigned int          m_CurrentLine;
-  
+  unsigned int m_CurrentLine;
+
   /// The vector of vectorized boundaries
-  IndexVectorType       m_Solution;
+  IndexVectorType m_Solution;
 
   /// The line offset from start of the region
-  unsigned int          m_LineOffset;
+  unsigned int m_LineOffset;
 
   // The following will be used for coordinate transform
-  RegionIndexType       m_StartIndex;
-  PointType             m_Origin;
-  SpacingType           m_Spacing;
-
-  
+  RegionIndexType m_StartIndex;
+  PointType       m_Origin;
+  SpacingType     m_Spacing;
 
 }; // end class LabelObjectToPolygonFunctor
 
@@ -215,5 +221,3 @@ private:
 #endif
 
 #endif
-
-

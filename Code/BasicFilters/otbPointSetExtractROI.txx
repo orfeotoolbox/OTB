@@ -23,39 +23,37 @@
 
 namespace otb
 {
-  
+
 /**
  *
  */
 template <class TInputPointSet, class TOutputPointSet>
-PointSetExtractROI<TInputPointSet,TOutputPointSet>
+PointSetExtractROI<TInputPointSet, TOutputPointSet>
 ::PointSetExtractROI()
 {
 }
 
-
 /**
  *
  */
 template <class TInputPointSet, class TOutputPointSet>
-void 
-PointSetExtractROI<TInputPointSet,TOutputPointSet>
+void
+PointSetExtractROI<TInputPointSet, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 
 }
-
 
 /**
  * This method causes the filter to generate its output.
  */
 template <class TInputPointSet, class TOutputPointSet>
-void 
-PointSetExtractROI<TInputPointSet,TOutputPointSet>
-::GenerateData(void) 
+void
+PointSetExtractROI<TInputPointSet, TOutputPointSet>
+::GenerateData(void)
 {
-  
+
   typedef typename TInputPointSet::PointsContainer  InputPointsContainer;
   typedef typename TOutputPointSet::PointsContainer OutputPointsContainer;
 
@@ -68,41 +66,40 @@ PointSetExtractROI<TInputPointSet,TOutputPointSet>
   typedef typename TInputPointSet::PointDataContainerPointer  InputPointDataContainerPointer;
   typedef typename TOutputPointSet::PointDataContainerPointer OutputPointDataContainerPointer;
 
-  InputPointSetPointer    inputPointSet      =  this->GetInput();
-  OutputPointSetPointer   outputPointSet     =  this->GetOutput();
-  
-  if( !inputPointSet )
+  InputPointSetPointer  inputPointSet      =  this->GetInput();
+  OutputPointSetPointer outputPointSet     =  this->GetOutput();
+
+  if (!inputPointSet)
     {
-    itkExceptionMacro(<<"Missing Input PointSet");
+    itkExceptionMacro(<< "Missing Input PointSet");
     }
 
-  if( !outputPointSet )
+  if (!outputPointSet)
     {
-    itkExceptionMacro(<<"Missing Output PointSet");
+    itkExceptionMacro(<< "Missing Output PointSet");
     }
 
-  outputPointSet->SetBufferedRegion( outputPointSet->GetRequestedRegion() );//TODO update outputRegion
+  outputPointSet->SetBufferedRegion(outputPointSet->GetRequestedRegion());  //TODO update outputRegion
 
-  InputPointsContainerPointer  inPoints  = inputPointSet->GetPoints();
-  InputPointDataContainerPointer inData    = inputPointSet->GetPointData();
-  OutputPointsContainerPointer outPoints = outputPointSet->GetPoints();
+  InputPointsContainerPointer     inPoints  = inputPointSet->GetPoints();
+  InputPointDataContainerPointer  inData    = inputPointSet->GetPointData();
+  OutputPointsContainerPointer    outPoints = outputPointSet->GetPoints();
   OutputPointDataContainerPointer outData = outputPointSet->GetPointData();
 
-
-  typename InputPointsContainer::ConstIterator  inputPoint  = inPoints->Begin();
+  typename InputPointsContainer::ConstIterator    inputPoint  = inPoints->Begin();
   typename InputPointDataContainer::ConstIterator inputData;
   if (inData.IsNotNull())
     {
     inputData = inData->Begin();
     }
 
-  while( inputPoint != inPoints->End() ) 
+  while (inputPoint != inPoints->End())
     {
     typename InputPointsContainer::Element point = inputPoint.Value();
     if ((((point[0] >= m_StartX) && (point[0] < m_StartX + m_SizeX))
-        || ((point[0] <= m_StartX) && (point[0] > m_StartX + m_SizeX))) //cover the case when size<0
-      && (((point[1] >= m_StartY) && (point[1] < m_StartY + m_SizeY))
-          || ((point[1] <= m_StartY) && (point[1] > m_StartY + m_SizeY))))
+         || ((point[0] <= m_StartX) && (point[0] > m_StartX + m_SizeX))) //cover the case when size<0
+        && (((point[1] >= m_StartY) && (point[1] < m_StartY + m_SizeY))
+            || ((point[1] <= m_StartY) && (point[1] > m_StartY + m_SizeY))))
       {
       outPoints->push_back(inputPoint.Value());
       if (inData.IsNotNull())

@@ -36,14 +36,14 @@ namespace otb
  */
 template <class TImage, class TSourceImage>
 class ITK_EXPORT ImportGeoInformationImageFilter
-      : public itk::CastImageFilter<TImage,TImage>
+  : public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImportGeoInformationImageFilter Self;
-  typedef itk::CastImageFilter<TImage,TImage> Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef ImportGeoInformationImageFilter      Self;
+  typedef itk::CastImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -52,11 +52,11 @@ public:
   itkTypeMacro(ImportGeoInformationImageFilter, CastImageFilter);
 
   /** Template parameters typedefs */
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
+  typedef TImage                           ImageType;
+  typedef typename ImageType::Pointer      ImagePointerType;
   typedef typename ImageType::ConstPointer ImageConstPointerType;
-  typedef TSourceImage SourceImageType;
-  typedef SourceImageType SourceImagePointerType;
+  typedef TSourceImage                     SourceImageType;
+  typedef SourceImageType                  SourceImagePointerType;
 
   /**
    * Set the source for geo information.
@@ -73,7 +73,7 @@ protected:
   /** Constructor */
   ImportGeoInformationImageFilter();
   /** Destructor */
-  virtual ~ImportGeoInformationImageFilter() {};
+  virtual ~ImportGeoInformationImageFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Generate input requested region */
@@ -83,10 +83,10 @@ protected:
   /*   /\** Generate data *\/ */
   /*   virtual void GenerateData(void); */
 private:
-  ImportGeoInformationImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImportGeoInformationImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImportGeoInformationImageFilter.txx"
 #endif

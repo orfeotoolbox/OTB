@@ -31,7 +31,7 @@ GISTableSource<TOutputGISTable>
 ::GISTableSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,OutputGISTableType::New().GetPointer());
+  this->Superclass::SetNthOutput(0, OutputGISTableType::New().GetPointer());
 }
 
 template <class TOutputGISTable>
@@ -48,13 +48,12 @@ GISTableSource<TOutputGISTable>
   OutputGISTablePointer outputPtr;
 
   // Allocate the output memory
-  for (unsigned int i=0; i < this->GetNumberOfOutputs(); ++i)
-  {
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
+    {
     outputPtr = this->GetOutput(i);
     outputPtr->Clear();
-  }
+    }
 }
-
 
 /**
  * Get the output vector data
@@ -65,10 +64,10 @@ typename GISTableSource<TOutputGISTable>::OutputGISTableType *
 GISTableSource<TOutputGISTable>
 ::GetOutput(void)
 {
-  if (this->GetNumberOfOutputs()<1)
-  {
+  if (this->GetNumberOfOutputs() < 1)
+    {
     return 0;
-  }
+    }
   return static_cast<OutputGISTableType *> (this->ProcessObject::GetOutput(0));
 }
 
@@ -78,7 +77,7 @@ GISTableSource<TOutputGISTable>
 ::GetOutput(unsigned int idx)
 {
   return static_cast<OutputGISTableType*>
-         (this->Superclass::GetOutput(idx));
+           (this->Superclass::GetOutput(idx));
 }
 
 /**
@@ -89,9 +88,9 @@ void
 GISTableSource<TOutputGISTable>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-}// End namespace otb
+} // End namespace otb
 
 #endif

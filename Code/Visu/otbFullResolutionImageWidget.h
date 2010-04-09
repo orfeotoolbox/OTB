@@ -31,24 +31,24 @@ namespace otb
  */
 template <class TPixel>
 class FullResolutionImageWidget
-      : public ImageWidgetBase<TPixel>
+  : public ImageWidgetBase<TPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef FullResolutionImageWidget Self;
-  typedef ImageWidgetBase<TPixel> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef FullResolutionImageWidget     Self;
+  typedef ImageWidgetBase<TPixel>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(FullResolutionImageWidget,ImageWidgetBase);
+  itkTypeMacro(FullResolutionImageWidget, ImageWidgetBase);
 
   /** Superclass typedefs */
-  typedef typename Superclass::SizeType SizeType;
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::SizeType   SizeType;
+  typedef typename Superclass::IndexType  IndexType;
   typedef typename Superclass::RegionType RegionType;
   //typedef typename Superclass::ImageType ImageType;
 
@@ -66,7 +66,7 @@ public:
    * \param index the upper left corner index.
    */
   virtual void SetUpperLeftCorner(IndexType index);
-  itkGetMacro(UpperLeftCorner,IndexType);
+  itkGetMacro(UpperLeftCorner, IndexType);
 
 protected:
   /** Constructor. */
@@ -75,8 +75,8 @@ protected:
   virtual ~FullResolutionImageWidget();
 
 private:
-  FullResolutionImageWidget(const Self&);// purposely not implemented
-  void operator=(const Self&);// purposely not implemented
+  FullResolutionImageWidget(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   IndexType m_UpperLeftCorner;
 };

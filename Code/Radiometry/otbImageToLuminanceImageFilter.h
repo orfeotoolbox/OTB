@@ -31,7 +31,6 @@
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbImageMetadataInterfaceFactory.h"
 
-
 #include <fstream>
 
 namespace otb
@@ -51,36 +50,35 @@ template <class TInput, class TOutput>
 class ImageToLuminanceImageFunctor
 {
 public:
-  ImageToLuminanceImageFunctor():
+  ImageToLuminanceImageFunctor() :
     m_Alpha(1.),
     m_Beta(0.)
-  {};
+  {}
 
-  virtual ~ImageToLuminanceImageFunctor() {};
+  virtual ~ImageToLuminanceImageFunctor() {}
 
   void SetAlpha(double alpha)
   {
     m_Alpha = alpha;
-  };
+  }
   void SetBeta(double beta)
   {
     m_Beta = beta;
-  };
+  }
   double GetAlpha()
   {
     return m_Alpha;
-  };
+  }
   double GetBeta()
   {
     return m_Beta;
-  };
+  }
 
-
-  inline TOutput operator() (const TInput & inPixel) const
+  inline TOutput operator ()(const TInput& inPixel) const
   {
     TOutput outPixel;
-    double temp;
-    temp = static_cast<double>(inPixel)/m_Alpha + m_Beta;
+    double  temp;
+    temp = static_cast<double>(inPixel) / m_Alpha + m_Beta;
     outPixel = static_cast<TOutput>(temp);
     return outPixel;
   }
@@ -106,28 +104,31 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter :
-      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
-      TOutputImage,
-      ITK_TYPENAME Functor::ImageToLuminanceImageFunctor< ITK_TYPENAME TInputImage::InternalPixelType,
-      ITK_TYPENAME TOutputImage::InternalPixelType > >
+  public UnaryImageFunctorWithVectorImageFilter<TInputImage,
+                                                TOutputImage,
+                                                ITK_TYPENAME Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME
+                                                                                                   TInputImage::
+                                                                                                   InternalPixelType,
+                                                                                                   ITK_TYPENAME
+                                                                                                   TOutputImage::
+                                                                                                   InternalPixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
   typedef typename Functor::ImageToLuminanceImageFunctor<ITK_TYPENAME InputImageType::InternalPixelType,
-  ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
-
+                                                         ITK_TYPENAME OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef ImageToLuminanceImageFilter Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImageToLuminanceImageFilter                                                          Self;
+  typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
+  typedef itk::SmartPointer<Self>                                                              Pointer;
+  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -136,15 +137,14 @@ public:
   itkTypeMacro(ImageToLuminanceImageFilter, UnaryImageFunctorWithVectorImageFiltermageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                           InputPixelType;
-  typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-  typedef typename InputImageType::RegionType                          InputImageRegionType;
-  typedef typename OutputImageType::PixelType                          OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
-
-  typedef typename itk::VariableLengthVector<double>                   VectorType;
+  typedef typename itk::VariableLengthVector<double> VectorType;
 
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
@@ -160,52 +160,51 @@ public:
   /** Give the absolute calibration bias. */
   itkGetConstReferenceMacro(Beta, VectorType);
 
-
 protected:
   /** Constructor */
   ImageToLuminanceImageFilter()
-  {
+    {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
-  };
+    };
 
   /** Destructor */
-  virtual ~ImageToLuminanceImageFilter() {};
+  virtual ~ImageToLuminanceImageFilter() {}
 
   /** Update the functor list and input parameters */
   virtual void BeforeThreadedGenerateData(void)
   {
-    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
-    if(m_Alpha.GetSize() == 0)
-    {
+    ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(
+      this->GetInput()->GetMetaDataDictionary());
+    if (m_Alpha.GetSize() == 0)
+      {
       m_Alpha = imageMetadataInterface->GetPhysicalGain(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
-    if(m_Beta.GetSize() == 0)
-    {
+    if (m_Beta.GetSize() == 0)
+      {
       m_Beta = imageMetadataInterface->GetPhysicalBias(this->GetInput()->GetMetaDataDictionary());
-    }
+      }
 
     if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-      || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
-    {
-      itkExceptionMacro(<<"Alpha and Beta parameters should have the same size as the number of bands");
-    }
+        || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+      {
+      itkExceptionMacro(<< "Alpha and Beta parameters should have the same size as the number of bands");
+      }
 
-    otbMsgDevMacro( << "Using correction parameters: ");
-    otbMsgDevMacro( << "Alpha (gain): " << m_Alpha);
-    otbMsgDevMacro( << "Beta (bias):  " << m_Beta);
+    otbMsgDevMacro(<< "Using correction parameters: ");
+    otbMsgDevMacro(<< "Alpha (gain): " << m_Alpha);
+    otbMsgDevMacro(<< "Beta (bias):  " << m_Beta);
 
     this->GetFunctorVector().clear();
-    for (unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
-    {
+    for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
+      {
       FunctorType functor;
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       this->GetFunctorVector().push_back(functor);
-    }
+      }
   }
-
 
 private:
   /** Ponderation declaration*/

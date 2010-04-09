@@ -37,18 +37,18 @@ class VectorCast
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;
-  VectorCast() {};
-  virtual ~VectorCast() {};
+  VectorCast() {}
+  virtual ~VectorCast() {}
 
-  bool operator!=(const VectorCast&) const
+  bool operator !=(const VectorCast&) const
   {
     return false;
   }
-  bool operator==(const VectorCast& other) const
+  bool operator ==(const VectorCast& other) const
   {
-    return(*this != other);
+    return (*this != other);
   }
-  inline TOutput operator () (const TInput & A)
+  inline TOutput operator ()(const TInput& A)
   {
     TOutput output;
     output.SetSize(1);
@@ -65,22 +65,25 @@ public:
  */
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter
-      : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-      Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::PixelType> >
+  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
+                                        Functor::VectorCast<typename TInputImage::PixelType,
+                                                            typename TOutputVectorImage::PixelType> >
 {
 public:
   /// Standard class typedefs
   typedef ImageToVectorImageCastFilter Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage, Functor::VectorCast<typename TInputImage::PixelType,
-  typename TOutputVectorImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
+                                       Functor::VectorCast<typename TInputImage::PixelType,
+                                                           typename TOutputVectorImage
+                                                           ::PixelType> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /// Method for creation through the object factory
   itkNewMacro(Self);
 
   /// Runtime information
-  itkTypeMacro(ImageToVectorImageCastFilter,itk::UnaryFunctorImageFilter);
+  itkTypeMacro(ImageToVectorImageCastFilter, itk::UnaryFunctorImageFilter);
 
 protected:
   /// Constructor
@@ -97,17 +100,17 @@ protected:
   virtual void GenerateInputRequestedRegion(void)
   {
     if (this->GetInput())
-    {
+      {
       typename TInputImage::Pointer input = const_cast<TInputImage *>(this->GetInput());
       typename TInputImage::RegionType inputRegion;
-      this->CallCopyOutputRegionToInputRegion(inputRegion,this->GetOutput()->GetRequestedRegion());
+      this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
       input->SetRequestedRegion(inputRegion);
-    }
+      }
   }
 
 private:
-  ImageToVectorImageCastFilter(const Self&); //purposely not implemented
-  void operator = (const Self&); // purposely not implemented
+  ImageToVectorImageCastFilter(const Self &); //purposely not implemented
+  void operator =(const Self&);  // purposely not implemented
 };
-}// end namespace otb
+} // end namespace otb
 #endif

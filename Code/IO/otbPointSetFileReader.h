@@ -21,7 +21,6 @@
 #include "otbPointSetSource.h"
 #include "itkImageFileReader.h"
 
-
 namespace otb
 {
 /**
@@ -35,13 +34,13 @@ namespace otb
  */
 
 template<class TOutputPointSet>
-class ITK_EXPORT PointSetFileReader: public otb::PointSetSource< TOutputPointSet >
+class ITK_EXPORT PointSetFileReader : public otb::PointSetSource<TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetFileReader         Self;
-  typedef otb::PointSetSource<TOutputPointSet>  Superclass;
-  typedef itk::SmartPointer<Self>  Pointer;
+  typedef PointSetFileReader                   Self;
+  typedef otb::PointSetSource<TOutputPointSet> Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -49,9 +48,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetFileReader, PointSetSource);
 
-
   /** Typedef */
-  typedef TOutputPointSet PointSetType;
+  typedef TOutputPointSet                  PointSetType;
   typedef typename PointSetType::PointType PointType;
   typedef typename PointSetType::PixelType PixelType;
 
@@ -60,18 +58,16 @@ public:
   itkGetStringMacro(FileName);
 
   /** Get Macro*/
-  itkGetMacro( NumberOfPoints, long int );
-  itkGetMacro( MinX, double );
-  itkGetMacro( MaxX, double );
-  itkGetMacro( MinY, double );
-  itkGetMacro( MaxY, double );
-
+  itkGetMacro(NumberOfPoints, long int);
+  itkGetMacro(MinX, double);
+  itkGetMacro(MaxX, double);
+  itkGetMacro(MinY, double);
+  itkGetMacro(MaxY, double);
 
   virtual void GenerateOutputInformation(void);
 
   /** Does the real work. */
   virtual void GenerateData();
-
 
 protected:
   PointSetFileReader();
@@ -81,15 +77,15 @@ protected:
   void TestFileExistanceAndReadability();
 
   std::string m_FileName; // The file to be read
-  long int m_NumberOfPoints;
-  double m_MinX;
-  double m_MaxX;
-  double m_MinY;
-  double m_MaxY;
+  long int    m_NumberOfPoints;
+  double      m_MinX;
+  double      m_MaxX;
+  double      m_MinY;
+  double      m_MaxY;
 
 private:
-  PointSetFileReader(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PointSetFileReader(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   std::string m_ExceptionMessage;
 
@@ -102,4 +98,3 @@ private:
 #endif
 
 #endif
-

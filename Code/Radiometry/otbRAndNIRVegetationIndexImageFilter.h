@@ -31,13 +31,13 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageNIR, class TOutputImage,
-class TFunction = Functor::NDVI<              typename TInputImageR::PixelType,
-typename TInputImageNIR::PixelType,
-typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndNIRVegetationIndexImageFilter :  public RAndNIRIndexImageFilter< TInputImageR, TInputImageNIR, TOutputImage, TFunction >
+          class TFunction = Functor::NDVI<typename TInputImageR::PixelType,
+                                          typename TInputImageNIR::PixelType,
+                                          typename TOutputImage::PixelType> >
+class ITK_EXPORT RAndNIRVegetationIndexImageFilter :  public RAndNIRIndexImageFilter<TInputImageR, TInputImageNIR,
+                                                                                     TOutputImage, TFunction>
 {
 };
 } // end namespace otb
-
 
 #endif

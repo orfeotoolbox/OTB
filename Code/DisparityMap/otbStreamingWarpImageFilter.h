@@ -45,14 +45,14 @@ namespace otb
 
 template <class TInputImage, class TOutputImage, class TDeformationField>
 class ITK_EXPORT StreamingWarpImageFilter
-      :  public itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField >
+  :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDeformationField>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingWarpImageFilter                                            Self;
-  typedef itk::WarpImageFilter< TInputImage, TOutputImage, TDeformationField> Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef StreamingWarpImageFilter                                           Self;
+  typedef itk::WarpImageFilter<TInputImage, TOutputImage, TDeformationField> Superclass;
+  typedef itk::SmartPointer<Self>                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -70,14 +70,14 @@ public:
   typedef typename DeformationFieldType::Pointer   DeformationFieldPointerType;
 
   /** Accessors */
-  itkSetMacro(MaximumDeformation,DeformationValueType);
-  itkGetConstReferenceMacro(MaximumDeformation,DeformationValueType);
+  itkSetMacro(MaximumDeformation, DeformationValueType);
+  itkGetConstReferenceMacro(MaximumDeformation, DeformationValueType);
 
 protected:
   /** Constructor */
   StreamingWarpImageFilter();
   /** Destructor */
-  virtual ~StreamingWarpImageFilter() {};
+  virtual ~StreamingWarpImageFilter() {}
   /** PrintSelf */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /**
@@ -87,8 +87,8 @@ protected:
   virtual void GenerateInputRequestedRegion();
 
 private:
-  StreamingWarpImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingWarpImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Assesment of the maximum deformation for streaming
   DeformationValueType m_MaximumDeformation;
@@ -99,6 +99,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingWarpImageFilter.txx"
 #endif
-
 
 #endif

@@ -30,162 +30,158 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::HuImageFunction()
 {
-  m_MomentNumber =-1;
+  m_MomentNumber = -1;
 }
 
 /**
    *
    */
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  this->Superclass::PrintSelf(os,indent);
+  this->Superclass::PrintSelf(os, indent);
   os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
-
-template < class TInput, class TOutput, class TPrecision, class TCoordRep>
-typename HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>::RealType
-HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
+template <class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>::RealType
+HuImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   //typename InputType::SizeType        ImageSize;
-  RealType                         HuValue = 0.;
-  ComplexType                      HuValueComplex;
+  RealType    HuValue = 0.;
+  ComplexType HuValueComplex;
 
-  typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;
-  typename CMType::Pointer function =CMType::New();
+  typedef otb::ComplexMomentImageFunction<InputType, ComplexType> CMType;
+  typename CMType::Pointer function = CMType::New();
 
-  if ( !this->GetInputImage() )
-  {
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->GetInputImage())
+    {
+    return (itk::NumericTraits<RealType>::max());
+    }
 
-
-  if ( !this->IsInsideBuffer( index ) )
-  {
-    otbMsgDevMacro( << index );
-    return ( itk::NumericTraits<RealType>::max() );
-  }
+  if (!this->IsInsideBuffer(index))
+    {
+    otbMsgDevMacro(<< index);
+    return (itk::NumericTraits<RealType>::max());
+    }
 
   assert(m_MomentNumber > 0);
   assert(m_MomentNumber < 8);
 
-  function->SetInputImage( this->GetInputImage() );
-  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
+  function->SetInputImage(this->GetInputImage());
+  function->SetNeighborhoodRadius(this->GetNeighborhoodRadius());
 
   switch (m_MomentNumber)
-  {
-  case 1 :
-  {
+    {
+  case 1:
+    {
     ComplexType C11;
     function->SetP(1);
     function->SetQ(1);
-    C11 = function->EvaluateAtIndex( index );
+    C11 = function->EvaluateAtIndex(index);
     HuValue = C11.real();
-  }
-  break;
+    }
+    break;
   case 2:
-  {
-    ComplexType C20,C02;
+    {
+    ComplexType C20, C02;
     function->SetP(2);
     function->SetQ(0);
-    C20 = function->EvaluateAtIndex( index );
+    C20 = function->EvaluateAtIndex(index);
     function->SetP(0);
     function->SetQ(2);
-    C02 = function->EvaluateAtIndex( index );
+    C02 = function->EvaluateAtIndex(index);
 
-    HuValue = vcl_abs( C20 * C02 );
+    HuValue = vcl_abs(C20 * C02);
 
-  }
-  break;
+    }
+    break;
   case 3:
-  {
-    ComplexType C30,C03;
+    {
+    ComplexType C30, C03;
     function->SetP(3);
     function->SetQ(0);
-    C30 = function->EvaluateAtIndex( index );
+    C30 = function->EvaluateAtIndex(index);
     function->SetP(0);
     function->SetQ(3);
-    C03 = function->EvaluateAtIndex( index );
+    C03 = function->EvaluateAtIndex(index);
 
-    HuValue = vcl_abs( C30 * C03 );
-  }
-  break;
+    HuValue = vcl_abs(C30 * C03);
+    }
+    break;
   case 4:
-  {
-    ComplexType C21,C12;
+    {
+    ComplexType C21, C12;
     function->SetP(2);
     function->SetQ(1);
-    C21 = function->EvaluateAtIndex( index );
+    C21 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    HuValue = vcl_abs( C21 * C12 );
-  }
-  break;
+    HuValue = vcl_abs(C21 * C12);
+    }
+    break;
 
   case 5:
-  {
-    ComplexType C30,C12;
+    {
+    ComplexType C30, C12;
     function->SetP(3);
     function->SetQ(0);
-    C30 = function->EvaluateAtIndex( index );
+    C30 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    HuValueComplex = C30 * vcl_pow(C12,3);
+    HuValueComplex = C30 * vcl_pow(C12, 3);
     HuValue = HuValueComplex.real();
-  }
-  break;
+    }
+    break;
 
   case 6:
-  {
-    ComplexType C20,C12;
+    {
+    ComplexType C20, C12;
     function->SetP(2);
     function->SetQ(0);
-    C20 = function->EvaluateAtIndex( index );
+    C20 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    HuValueComplex = C20 * vcl_pow( C12 ,2 );
+    HuValueComplex = C20 * vcl_pow(C12, 2);
     HuValue = HuValueComplex.real();
-  }
-  break;
+    }
+    break;
 
   case 7:
-  {
-    ComplexType C30,C12;
+    {
+    ComplexType C30, C12;
     function->SetP(3);
     function->SetQ(0);
-    C30 = function->EvaluateAtIndex( index );
+    C30 = function->EvaluateAtIndex(index);
     function->SetP(1);
     function->SetQ(2);
-    C12 = function->EvaluateAtIndex( index );
+    C12 = function->EvaluateAtIndex(index);
 
-    HuValueComplex = C30 * vcl_pow( C12 , 3);
+    HuValueComplex = C30 * vcl_pow(C12, 3);
     HuValue = HuValueComplex.imag();
-  }
-  break;
+    }
+    break;
 
   default:
     itkWarningMacro("Hu's invariant parameters are between 1 and 7");
-  }
+    }
 
-
-  return (static_cast<RealType>(HuValue) );
+  return (static_cast<RealType>(HuValue));
 
 }
-
 
 } // namespace otb
 

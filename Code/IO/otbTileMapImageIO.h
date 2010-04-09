@@ -36,10 +36,10 @@
 namespace otb
 {
 
-  namespace TileMapAdressingStyle
-  {
-    enum TileMapAdressingStyle{GM=0, OSM=1, NEARMAP=2, LOCAL=3};
-  }
+namespace TileMapAdressingStyle
+{
+enum TileMapAdressingStyle {GM = 0, OSM = 1, NEARMAP = 2, LOCAL = 3};
+}
 
 /** \class TileMapImageIO
    *
@@ -54,9 +54,9 @@ public:
   typedef unsigned char InputPixelType;
 
   /** Standard class typedefs. */
-  typedef TileMapImageIO            Self;
-  typedef itk::ImageIOBase          Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;  
+  typedef TileMapImageIO          Self;
+  typedef itk::ImageIOBase        Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -70,36 +70,34 @@ public:
    *  0-9; 0 = none, 9 = maximum. */
   itkSetMacro(CompressionLevel, int);
   itkGetMacro(CompressionLevel, int);
-  
-  
+
   /** Set/Get the maximum number of connections */
   itkSetMacro(MaxConnect, int);
   itkGetMacro(MaxConnect, int);
 
-
-  virtual void SetCacheDirectory (const char* _arg)
+  virtual void SetCacheDirectory(const char* _arg)
   {
-    if ( _arg && (_arg == this->m_CacheDirectory) )
-    {
+    if (_arg && (_arg == this->m_CacheDirectory))
+      {
       return;
-    }
+      }
     if (_arg)
-    {
+      {
       this->m_CacheDirectory = _arg;
-      this->m_UseCache=true;
-    }
+      this->m_UseCache = true;
+      }
     else
-    {
+      {
       this->m_CacheDirectory = "";
-      this->m_UseCache=false;
-    }
+      this->m_UseCache = false;
+      }
     this->Modified();
   }
 
-  virtual void SetCacheDirectory (const std::string & _arg)
+  virtual void SetCacheDirectory(const std::string& _arg)
   {
-    this->SetCacheDirectory( _arg.c_str() );
-    this->m_UseCache=true;
+    this->SetCacheDirectory(_arg.c_str());
+    this->m_UseCache = true;
   }
   itkGetStringMacro(CacheDirectory);
 
@@ -143,7 +141,6 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
-
 protected:
   /** Constructor.*/
   TileMapImageIO();
@@ -157,11 +154,11 @@ protected:
   void InternalWriteImageInformation();
 
   virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                                       const ImageIORegion &pasteRegion) const;
+                                                                       const ImageIORegion& pasteRegion) const;
 
   virtual ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
                                                                unsigned int numberOfActualSplits,
-                                                               const ImageIORegion &pasteRegion) const;
+                                                               const ImageIORegion& pasteRegion) const;
 
   /** Number of bands of the image*/
   int m_NbBands;
@@ -181,11 +178,11 @@ private:
     std::string filename;
   } TileNameAndCoordType;
 
-  TileMapImageIO(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  TileMapImageIO(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   void InternalWrite(double x, double y, const void* buffer);
-  void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache=true) const;
+  void BuildFileName(const std::ostringstream& quad, std::ostringstream& filename, bool inCache = true) const;
   void FillCacheFaults(void* buffer) const;
   int XYToQuadTree(double x, double y, std::ostringstream& quad) const;
   int XYToQuadTree2(double x, double y, std::ostringstream& quad) const;
@@ -199,8 +196,7 @@ private:
   void Cleanup();
   void GenerateBuffer(unsigned char * p);
   void ReadTile(std::string filename, void * buffer);
-  
-  
+
   CURLM *                           m_MultiHandle;
   std::vector<CURL *>               m_ListCurlHandles;
   std::vector<FILE *>               m_ListFiles;
@@ -210,7 +206,7 @@ private:
   int                               m_MaxConnect;
 
   /** Byte per pixel pixel */
-  int                                          m_BytePerPixel;
+  int m_BytePerPixel;
 
   /** Resolution depth*/
   int                                          m_Depth;
@@ -220,10 +216,9 @@ private:
   std::string                                  m_FileSuffix;
   TileMapAdressingStyle::TileMapAdressingStyle m_AddressMode;
 
-  bool                                         m_FlagWriteImageInformation;
-  
-  bool                                         m_FileNameIsServerName;
+  bool m_FlagWriteImageInformation;
 
+  bool m_FileNameIsServerName;
 
   typedef otb::ImageRegionTileMapSplitter<2> SplitterType;
   SplitterType::Pointer m_TileMapSplitter;

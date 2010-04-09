@@ -32,47 +32,50 @@ namespace otb
  */
 
 template <class TInputImageR, class TInputImageG, class TInputImageNIR, class TOutputImage,
-class TFunction = Functor::AVI<              typename TInputImageR::PixelType,
-typename TInputImageG::PixelType,
-typename TInputImageNIR::PixelType,
-typename TOutputImage::PixelType > >
-class ITK_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter< TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction >
+          class TFunction = Functor::AVI<typename TInputImageR::PixelType,
+                                         typename TInputImageG::PixelType,
+                                         typename TInputImageNIR::PixelType,
+                                         typename TOutputImage::PixelType> >
+class ITK_EXPORT RAndGAndNIRIndexImageFilter :  public itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG,
+                                                                                      TInputImageNIR, TOutputImage,
+                                                                                      TFunction>
 {
 public:
 
   /** Standard typedefs */
-  typedef RAndGAndNIRIndexImageFilter      Self;
-  typedef itk::TernaryFunctorImageFilter< TInputImageR, TInputImageG, TInputImageNIR, TOutputImage, TFunction >  Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef RAndGAndNIRIndexImageFilter Self;
+  typedef itk::TernaryFunctorImageFilter<TInputImageR, TInputImageG, TInputImageNIR, TOutputImage,
+                                         TFunction> Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<const Self>
+  ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RAndGAndNIRIndexImageFilter,TernaryFunctorImageFilter);
+  itkTypeMacro(RAndGAndNIRIndexImageFilter, TernaryFunctorImageFilter);
 
-  void SetInputR( const TInputImageR * image );
-  void SetInputG( const TInputImageG * image );
-  void SetInputNIR( const TInputImageNIR * image );
+  void SetInputR(const TInputImageR * image);
+  void SetInputG(const TInputImageG * image);
+  void SetInputNIR(const TInputImageNIR * image);
 
   /** Template parameters typedefs */
   typedef typename Superclass::Input1ImageType RInputImageType;
   typedef typename Superclass::Input2ImageType GInputImageType;
   typedef typename Superclass::Input3ImageType NIRInputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
-  typedef typename Superclass::FunctorType FunctorType;
+  typedef typename Superclass::FunctorType     FunctorType;
 
 protected:
   RAndGAndNIRIndexImageFilter();
-  virtual ~RAndGAndNIRIndexImageFilter() {};
+  virtual ~RAndGAndNIRIndexImageFilter() {}
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  RAndGAndNIRIndexImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  RAndGAndNIRIndexImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -81,6 +84,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbRAndGAndNIRIndexImageFilter.txx"
 #endif
-
 
 #endif

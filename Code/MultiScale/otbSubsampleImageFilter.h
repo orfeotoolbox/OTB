@@ -45,17 +45,17 @@ namespace otb {
  * \sa SubsampleImageRegionConstIterator
  * \sa DecimateImageFilter
  */
-template < class TInputImage, class TOutputImage,
-            Wavelet::WaveletDirection TDirectionOfTransformation >
+template <class TInputImage, class TOutputImage,
+          Wavelet::WaveletDirection TDirectionOfTransformation>
 class ITK_EXPORT SubsampleImageFilter :
-  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef SubsampleImageFilter Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef SubsampleImageFilter                               Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,49 +71,49 @@ public:
 
   /** Direction definition */
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
-  itkStaticConstMacro(DirectionOfTransformation,DirectionOfTransformationEnumType,TDirectionOfTransformation);
+  itkStaticConstMacro(DirectionOfTransformation, DirectionOfTransformationEnumType, TDirectionOfTransformation);
 
   /** Image typedef support. */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::IndexType InputImageIndexType;
+  typedef TInputImage                                  InputImageType;
+  typedef typename InputImageType::RegionType          InputImageRegionType;
+  typedef typename InputImageType::IndexType           InputImageIndexType;
   typedef typename InputImageIndexType::IndexValueType InputImageIndexValueType;
 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::SizeType OutputImageSizeType;
-  typedef typename OutputImageType::IndexType OutputImageIndexType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageType::SizeType   OutputImageSizeType;
+  typedef typename OutputImageType::IndexType  OutputImageIndexType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /** Set/Get the SubsampleFactor */
-  itkGetMacro(SubsampleFactor,const InputImageIndexType &);
-  itkSetMacro(SubsampleFactor,InputImageIndexType &);
-  void SetSubSampleFactor( InputImageIndexValueType factor )
+  itkGetMacro(SubsampleFactor, const InputImageIndexType &);
+  itkSetMacro(SubsampleFactor, InputImageIndexType &);
+  void SetSubSampleFactor(InputImageIndexValueType factor)
   {
     InputImageIndexType indexFactor;
-    indexFactor.Fill( factor );
-    SetSubSampleFactor( indexFactor );
+    indexFactor.Fill(factor);
+    SetSubSampleFactor(indexFactor);
   }
 
 protected:
   SubsampleImageFilter ()
-  {
-    m_SubsampleFactor.Fill( 1 );
+    {
+    m_SubsampleFactor.Fill(1);
     //this->SetNumberOfThreads(1);
-  }
+    }
   virtual ~SubsampleImageFilter() {}
 
   /** Internal test function to check if there is any direction to subsample */
-  bool IsSubsampleFactorOne () const;
+  bool IsSubsampleFactorOne() const;
 
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
   virtual void CallCopyOutputRegionToInputRegion
-    ( InputImageRegionType & destRegion, const OutputImageRegionType & srcRegion );
+    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
   virtual void CallCopyInputRegionToOutputRegion
-    ( OutputImageRegionType & destRegion, const InputImageRegionType & srcRegion );
+    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
@@ -121,17 +121,17 @@ protected:
   virtual void GenerateOutputInformation();
 
   /** Set output image to 0 before processing */
-  virtual void BeforeThreadedGenerateData ();
+  virtual void BeforeThreadedGenerateData();
 
   /** Allows multithreading */
   virtual void ThreadedGenerateData
-    ( const OutputImageRegionType & outputRegionForThread, int threadId );
+    (const OutputImageRegionType& outputRegionForThread, int threadId);
 
-  virtual void PrintSelf( std::ostream & os, itk::Indent indent ) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  SubsampleImageFilter ( const Self & ); // purposely not implemented
-  void operator= ( const Self & ); // purposely not implemented
+  SubsampleImageFilter (const Self &);   // purposely not implemented
+  void operator =(const Self&);    // purposely not implemented
 
   InputImageIndexType m_SubsampleFactor;
 }; // end of class
@@ -142,7 +142,4 @@ private:
 #include "otbSubsampleImageFilter.txx"
 #endif
 
-
 #endif
-
-

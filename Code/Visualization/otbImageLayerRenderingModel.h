@@ -42,32 +42,32 @@ namespace otb
  */
 
 template <class TOutputImage,
-          class TLayer = otb::ImageLayerBase<TOutputImage>  >
+          class TLayer = otb::ImageLayerBase<TOutputImage> >
 class ImageLayerRenderingModel
-  : public MVCModel<ListenerBase>, public LayerBasedModel< TLayer >
+  : public MVCModel<ListenerBase>, public LayerBasedModel<TLayer>
 {
 public:
   /** Standard class typedefs */
-  typedef ImageLayerRenderingModel                         Self;
-  typedef LayerBasedModel<TLayer>                          Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef ImageLayerRenderingModel      Self;
+  typedef LayerBasedModel<TLayer>       Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information */
-  itkTypeMacro(ImageLayerRenderingModel,LayerBasedModel);
+  itkTypeMacro(ImageLayerRenderingModel, LayerBasedModel);
 
   /** New macro */
   itkNewMacro(Self);
 
   /** Output image typedef */
-  typedef TOutputImage                          OutputImageType;
-  typedef typename OutputImageType::Pointer     OutputImagePointerType;
+  typedef TOutputImage                      OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
 
   /** Layer typedef */
-  typedef typename Superclass::LayerType        LayerType;
-  typedef typename LayerType::RegionType        RegionType;
-  typedef typename RegionType::IndexType        IndexType;
-  typedef typename RegionType::SizeType         SizeType;
+  typedef typename Superclass::LayerType LayerType;
+  typedef typename LayerType::RegionType RegionType;
+  typedef typename RegionType::IndexType IndexType;
+  typedef typename RegionType::SizeType  SizeType;
 
   /** Layer list typedef */
   typedef typename Superclass::LayerListType    LayerListType;
@@ -75,7 +75,7 @@ public:
   typedef typename LayerListType::ConstIterator LayerIteratorType;
 
   /** Listener typedef */
-  typedef ListenerBase                          ListenerType;
+  typedef ListenerBase ListenerType;
 
   /** Blending filter typedef */
   typedef otb::BlendingImageFilter<OutputImageType> BlendingFilterType;
@@ -90,23 +90,22 @@ public:
   itkSetStringMacro(Name);
 
   /** Get the rasterized views */
-  itkGetObjectMacro(RasterizedQuicklook,OutputImageType);
-  itkGetObjectMacro(RasterizedExtract,OutputImageType);
-  itkGetObjectMacro(RasterizedScaledExtract,OutputImageType);
-
+  itkGetObjectMacro(RasterizedQuicklook, OutputImageType);
+  itkGetObjectMacro(RasterizedExtract, OutputImageType);
+  itkGetObjectMacro(RasterizedScaledExtract, OutputImageType);
 
   /** Set/Get the Extract Region */
-  itkSetMacro(ExtractRegion,RegionType);
-  itkGetConstReferenceMacro(ExtractRegion,RegionType);
+  itkSetMacro(ExtractRegion, RegionType);
+  itkGetConstReferenceMacro(ExtractRegion, RegionType);
 
   /** Set/Get the Scaled Extract Region */
-  itkSetMacro(ScaledExtractRegion,RegionType);
-  itkGetConstReferenceMacro(ScaledExtractRegion,RegionType);
+  itkSetMacro(ScaledExtractRegion, RegionType);
+  itkGetConstReferenceMacro(ScaledExtractRegion, RegionType);
 
   /** Get the state of each view */
-  itkGetMacro(HasQuicklook,bool);
-  itkGetMacro(HasExtract,bool);
-  itkGetMacro(HasScaledExtract,bool);
+  itkGetMacro(HasQuicklook, bool);
+  itkGetMacro(HasExtract, bool);
+  itkGetMacro(HasScaledExtract, bool);
 
   /** Update will render all visible layers, rasterize all visible
    * layers and notify all listeners. */
@@ -114,15 +113,15 @@ public:
 
   /** Change the Scaled extract region by giving the center of the
    * region */
-  virtual void SetScaledExtractRegionCenter(const IndexType & index);
+  virtual void SetScaledExtractRegionCenter(const IndexType& index);
 
   /** Change the extract region by giving the center of the
    * region */
-  virtual void SetExtractRegionCenter(const IndexType & index);
+  virtual void SetExtractRegionCenter(const IndexType& index);
 
   /** Change the extract region by giving the 2 points of the
    * region */
-  virtual void SetExtractRegionByIndex(const IndexType & startIndex, const IndexType & stopIndex );
+  virtual void SetExtractRegionByIndex(const IndexType& startIndex, const IndexType& stopIndex);
 
   /** Get the sumbsampling rate */
   virtual unsigned int GetSubsamplingRate();
@@ -146,14 +145,14 @@ protected:
   virtual void         RasterizeVisibleLayers(void);
 
   /** Notify a registered listener */
-  virtual  void         NotifyListener(ListenerType * listener);
+  virtual void         NotifyListener(ListenerType * listener);
 
   /** Constrains the given region to the largest possible one. */
-  virtual RegionType    ConstrainRegion(const RegionType & region, const RegionType & largest);
+  virtual RegionType    ConstrainRegion(const RegionType& region, const RegionType& largest);
 
 private:
   ImageLayerRenderingModel(const Self&);     // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   /** Viewer name */
   std::string m_Name;
@@ -172,9 +171,8 @@ private:
   bool                   m_HasScaledExtract;
   RegionType             m_ScaledExtractRegion;
 
-
   /** Wether the model is currently updating or not */
-  bool                   m_Updating;
+  bool m_Updating;
 
   /** Lists of the active blending filters */
   BlendingFilterListPointerType m_QuicklookBlendingFilterList;
@@ -189,5 +187,3 @@ private:
 #endif
 
 #endif
-
-

@@ -36,21 +36,21 @@ class PixelDescriptionActionHandler
 {
 public:
   /** Standard class typedefs */
-  typedef PixelDescriptionActionHandler       Self;
-  typedef ImageWidgetActionHandler          Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef PixelDescriptionActionHandler Self;
+  typedef ImageWidgetActionHandler      Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(PixelDescriptionActionHandler,ImageWidgetActionHandler);
+  itkTypeMacro(PixelDescriptionActionHandler, ImageWidgetActionHandler);
 
   /** Model typedefs */
-  typedef TModel                         ModelType;
-  typedef typename ModelType::Pointer    ModelPointerType;
-  typedef typename ModelType::IndexType  IndexType;
+  typedef TModel                        ModelType;
+  typedef typename ModelType::Pointer   ModelPointerType;
+  typedef typename ModelType::IndexType IndexType;
 
   /** View typedef */
   typedef TView                                     ViewType;
@@ -58,45 +58,45 @@ public:
   typedef typename ViewType::OffsetType             OffsetType;
   typedef typename ViewType::ImageWidgetPointerType WidgetPointerType;
 
-   /** Handle widget event
-   */
+  /** Handle widget event
+  */
   virtual bool HandleWidgetEvent(std::string widgetId, int event)
   {
-    if(m_Model.IsNotNull() &&  m_View.IsNotNull() && this->GetIsActive())
+    if (m_Model.IsNotNull() &&  m_View.IsNotNull() && this->GetIsActive())
       {
       // Find the source widget
       WidgetPointerType sourceWidget;
-      bool handle = false;
-      if(widgetId == m_View->GetScrollWidget()->GetIdentifier() )
+      bool              handle = false;
+      if (widgetId == m_View->GetScrollWidget()->GetIdentifier())
         {
         sourceWidget = m_View->GetScrollWidget();
         handle = true;
         }
-      else if(widgetId == m_View->GetFullWidget()->GetIdentifier() )
+      else if (widgetId == m_View->GetFullWidget()->GetIdentifier())
         {
         sourceWidget = m_View->GetFullWidget();
         handle = true;
         }
-      else if(widgetId == m_View->GetZoomWidget()->GetIdentifier() )
+      else if (widgetId == m_View->GetZoomWidget()->GetIdentifier())
         {
         sourceWidget = m_View->GetZoomWidget();
         handle = true;
         }
-      if(handle)
+      if (handle)
         {
-        switch(event)
+        switch (event)
           {
-          case FL_ENTER:
-          {
-          return true;
-          break;
-          }
-          case FL_LEAVE:
+        case FL_ENTER:
           {
           return true;
           break;
           }
-          case FL_MOVE:
+        case FL_LEAVE:
+          {
+          return true;
+          break;
+          }
+        case FL_MOVE:
           {
           // Get the clicked index
           typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
@@ -107,8 +107,8 @@ public:
 
           // Transform to index
           typename ViewType::IndexType index;
-          index[0]=static_cast<int>(imagePoint[0]);
-          index[1]=static_cast<int>(imagePoint[1]);
+          index[0] = static_cast<int>(imagePoint[0]);
+          index[1] = static_cast<int>(imagePoint[1]);
 
           //Add the offset
           index += m_Offset;
@@ -119,7 +119,7 @@ public:
           return true;
           break;
           }
-          default:
+        default:
           {
           break;
           }
@@ -130,16 +130,16 @@ public:
   }
 
   /** Set/Get the pointer to the model */
-  itkSetObjectMacro(Model,ModelType);
-  itkGetObjectMacro(Model,ModelType);
+  itkSetObjectMacro(Model, ModelType);
+  itkGetObjectMacro(Model, ModelType);
 
-   /** Set/Get the pointer to the view */
-  itkSetObjectMacro(View,ViewType);
-  itkGetObjectMacro(View,ViewType);
+  /** Set/Get the pointer to the view */
+  itkSetObjectMacro(View, ViewType);
+  itkGetObjectMacro(View, ViewType);
 
   /** Set/Get Offset */
-  itkSetMacro(Offset,OffsetType);
-  itkGetMacro(Offset,OffsetType);
+  itkSetMacro(Offset, OffsetType);
+  itkGetMacro(Offset, OffsetType);
 
 protected:
   /** Constructor */
@@ -153,15 +153,15 @@ protected:
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
   PixelDescriptionActionHandler(const Self&);    // purposely not implemented
-  void operator=(const Self&); // purposely not implemented
+  void operator =(const Self&); // purposely not implemented
 
   //Offset
-  OffsetType      m_Offset;
+  OffsetType m_Offset;
 
   // Pointer to the view
   ViewPointerType m_View;
@@ -172,5 +172,3 @@ private:
 }; // end class
 } // end namespace otb
 #endif
-
-

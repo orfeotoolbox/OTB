@@ -35,28 +35,28 @@ template <class TInput1, class TInput2, class TOutput>
 class RemoveIsolatedByDirectionFunctor
 {
 public:
-  RemoveIsolatedByDirectionFunctor() {};
-  virtual ~RemoveIsolatedByDirectionFunctor() {};
-  inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
+  RemoveIsolatedByDirectionFunctor() {}
+  virtual ~RemoveIsolatedByDirectionFunctor() {}
+  inline TOutput operator ()(const TInput1& itA, const TInput2& itB)
   {
     double currentDirection = itB.GetCenterPixel();
-    int nEqualNeighbors = 0;
-    for (int neighborhoodIndex=0; neighborhoodIndex < 9; ++neighborhoodIndex)
-    {
-      if (itB.GetPixel(neighborhoodIndex) == currentDirection)
+    int    nEqualNeighbors = 0;
+    for (int neighborhoodIndex = 0; neighborhoodIndex < 9; ++neighborhoodIndex)
       {
+      if (itB.GetPixel(neighborhoodIndex) == currentDirection)
+        {
         ++nEqualNeighbors;
+        }
       }
-    }
     if (nEqualNeighbors <= 1)
-    {
+      {
       //should never be 0 as it is at least equal to itself
       return 0;
-    }
+      }
     else
-    {
+      {
       return static_cast<TOutput>(itA.GetCenterPixel());
-    }
+      }
   }
 };
 }
@@ -74,7 +74,7 @@ public:
  */
 template <class TInputModulus, class TInputDirection, class TOutputImage>
 class ITK_EXPORT RemoveIsolatedByDirectionFilter
-      : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
+  : public ModulusAndDirectionImageToImageFilter<TInputModulus, TInputDirection, TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -87,26 +87,27 @@ public:
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(RemoveIsolatedByDirectionFilter,ModulusAndDirectionImageToImageFilter);
+  itkTypeMacro(RemoveIsolatedByDirectionFilter, ModulusAndDirectionImageToImageFilter);
 
   /** typedef of the computing filter (this allows us to derive from ModulusAndDirectionToImageFilter as well as
       using the BinaryFunctorNeighBorhoodImageFilter, which is appropriate here */
   typedef Functor::RemoveIsolatedByDirectionFunctor<
-  typename itk::ConstNeighborhoodIterator<TInputModulus>,
-  typename itk::ConstNeighborhoodIterator<TInputDirection>,
-  typename TOutputImage::PixelType>  FunctorType;
-  typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection,TOutputImage,FunctorType> ComputingFilterType;
+    typename itk::ConstNeighborhoodIterator<TInputModulus>,
+    typename itk::ConstNeighborhoodIterator<TInputDirection>,
+    typename TOutputImage::PixelType>  FunctorType;
+  typedef otb::BinaryFunctorNeighborhoodImageFilter<TInputModulus, TInputDirection, TOutputImage,
+                                                    FunctorType> ComputingFilterType;
 
 protected:
   /** Constructor */
   RemoveIsolatedByDirectionFilter() {};
   /** Destructor */
-  virtual ~RemoveIsolatedByDirectionFilter() {};
+  virtual ~RemoveIsolatedByDirectionFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
   /** Main computation method */
   virtual void GenerateData(void)
   {
@@ -119,8 +120,8 @@ protected:
   }
 
 private:
-  RemoveIsolatedByDirectionFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RemoveIsolatedByDirectionFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

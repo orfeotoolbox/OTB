@@ -50,22 +50,22 @@ class ITK_EXPORT PolygonToPolygonRCC8Calculator : public itk::Object
 public:
   /** Standard class typedefs. */
   typedef PolygonToPolygonRCC8Calculator Self;
-  typedef itk::Object  Superclass;
-  typedef itk::SmartPointer<Self>   Pointer;
+  typedef itk::Object                    Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PolygonToPolygonRCC8Calculator,Object);
+  itkTypeMacro(PolygonToPolygonRCC8Calculator, Object);
   /** Types definitions for the input image. */
-  typedef TInputPolygon                      PolygonType;
-  typedef typename PolygonType::Pointer      PolygonPointerType;
-  typedef typename PolygonType::ConstPointer PolygonConstPointerType;
-  typedef typename PolygonType::VertexListType    VertexListType;
-  typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
+  typedef TInputPolygon                                     PolygonType;
+  typedef typename PolygonType::Pointer                     PolygonPointerType;
+  typedef typename PolygonType::ConstPointer                PolygonConstPointerType;
+  typedef typename PolygonType::VertexListType              VertexListType;
+  typedef typename PolygonType::ContinuousIndexType         ContinuousIndexType;
   typedef typename PolygonType::RegionType::ImageRegionType RegionType;
-  typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
-  typedef std::vector<bool> BoolVectorType;
+  typedef typename VertexListType::ConstIterator            VertexListConstIteratorType;
+  typedef std::vector<bool>                                 BoolVectorType;
 
   /** RCC8 values type */
   typedef RCC8Value RCC8ValueType;
@@ -77,22 +77,22 @@ public:
   RCC8ValueType GetValue(void);
 
   /** Set external knowledge to help the decision process */
-  itkSetMacro(Level1APrioriKnowledge,bool);
-  itkSetMacro(Level3APrioriKnowledge,bool);
-  itkGetMacro(Level1APrioriKnowledge,bool);
-  itkGetMacro(Level3APrioriKnowledge,bool);
+  itkSetMacro(Level1APrioriKnowledge, bool);
+  itkSetMacro(Level3APrioriKnowledge, bool);
+  itkGetMacro(Level1APrioriKnowledge, bool);
+  itkGetMacro(Level3APrioriKnowledge, bool);
 
-  itkSetObjectMacro(Polygon1,PolygonType);
-  itkSetObjectMacro(Polygon2,PolygonType);
-  itkGetObjectMacro(Polygon1,PolygonType);
-  itkGetObjectMacro(Polygon2,PolygonType);
+  itkSetObjectMacro(Polygon1, PolygonType);
+  itkSetObjectMacro(Polygon2, PolygonType);
+  itkGetObjectMacro(Polygon1, PolygonType);
+  itkGetObjectMacro(Polygon2, PolygonType);
 
   /** Main computation method */
   void Compute(void);
 
   virtual bool ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool);
 
-  virtual bool ComputeInterExter(PolygonPointerType path1,PolygonPointerType path2);
+  virtual bool ComputeInterExter(PolygonPointerType path1, PolygonPointerType path2);
 
   virtual bool ComputeEdgeEdge(PolygonPointerType path1, PolygonPointerType path2);
 
@@ -104,7 +104,7 @@ protected:
   /** Constructor */
   PolygonToPolygonRCC8Calculator();
   /** Destructor */
-  virtual ~PolygonToPolygonRCC8Calculator() {};
+  virtual ~PolygonToPolygonRCC8Calculator() {}
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

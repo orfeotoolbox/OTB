@@ -24,7 +24,6 @@
 #include "itkSmartPointer.h"
 #include "itkObject.h"
 
-
 namespace otb
 {
 
@@ -42,39 +41,38 @@ namespace otb
  * \ingroup Projection
  */
 template <class TScalarType,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
+          unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
 class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>
+                                                             NInputDimensions,
+                                                             NOutputDimensions>
 {
 
-public :
+public:
   /** Standard class typedefs. */
-  typedef InverseSensorModel                         Self;
-  typedef SensorModelBase< TScalarType,
+  typedef InverseSensorModel Self;
+  typedef SensorModelBase<TScalarType,
                           NInputDimensions,
                           NOutputDimensions>         Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputPointType        InputPointType;
-  typedef typename Superclass::OutputPointType       OutputPointType;
+  typedef typename Superclass::InputPointType  InputPointType;
+  typedef typename Superclass::OutputPointType OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( InverseSensorModel, SensorModelBase );
+  itkTypeMacro(InverseSensorModel, SensorModelBase);
 
   itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   // Transform of geographic point in image sensor index
-  virtual OutputPointType TransformPoint(const InputPointType &point) const;
+  virtual OutputPointType TransformPoint(const InputPointType& point) const;
   // Transform of geographic point in image sensor index -- Backward Compatibility
   //  OutputPointType TransformPoint(const InputPointType &point, double height) const;
-
 
 protected:
   InverseSensorModel();
@@ -83,10 +81,10 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-private :
+private:
 
-  InverseSensorModel(const Self&); //purposely not implemented
-  void operator=(const Self&);     //purposely not implemented
+  InverseSensorModel(const Self &); //purposely not implemented
+  void operator =(const Self&);     //purposely not implemented
 
 };
 
@@ -95,6 +93,5 @@ private :
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbInverseSensorModel.txx"
 #endif
-
 
 #endif

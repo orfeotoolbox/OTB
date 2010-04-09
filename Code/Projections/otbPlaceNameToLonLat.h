@@ -31,15 +31,13 @@ namespace otb
 
  */
 
-
 class ITK_EXPORT PlaceNameToLonLat : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef PlaceNameToLonLat                                      Self;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
-
+  typedef PlaceNameToLonLat             Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Object Superclass;
 
@@ -47,33 +45,33 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  itkGetMacro( Lon, double );
-  itkGetMacro( Lat, double );
-  itkGetMacro( PlaceName, std::string );
+  itkGetMacro(Lon, double);
+  itkGetMacro(Lat, double);
+  itkGetMacro(PlaceName, std::string);
 
-  itkSetMacro( PlaceName, std::string );
+  itkSetMacro(PlaceName, std::string);
 
-  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum;//Not implemented yet TODO
+  typedef enum {ALL, GEONAMES, GOOGLE, YAHOO} SearchMethodEnum; //Not implemented yet TODO
 
   virtual bool Evaluate();
 
 protected:
   PlaceNameToLonLat();
-  virtual ~PlaceNameToLonLat() {};
+  virtual ~PlaceNameToLonLat() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void RetrieveXML(std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();
-  void ParseXMLGeonames();//Not implemented yet TODO
+  void ParseXMLGeonames(); //Not implemented yet TODO
 
 private:
-  PlaceNameToLonLat( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  PlaceNameToLonLat(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
-  double m_Lon;
-  double m_Lat;
-  std::string m_PlaceName;
-  SearchMethodEnum m_SearchMethod;//Not implemented yet TODO
+  double           m_Lon;
+  double           m_Lat;
+  std::string      m_PlaceName;
+  SearchMethodEnum m_SearchMethod; //Not implemented yet TODO
 };
 
 } // namespace otb

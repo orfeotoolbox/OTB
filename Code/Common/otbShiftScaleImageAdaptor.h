@@ -22,7 +22,6 @@
 #include <itkImageAdaptor.h>
 #include "vnl/vnl_math.h"
 
-
 namespace otb
 {
 
@@ -42,7 +41,7 @@ namespace Accessor
  *
  * \ingroup ImageAdaptors
  */
-template <class TPixelType, class TExternalType >
+template <class TPixelType, class TExternalType>
 class ITK_EXPORT ShiftScalePixelAccessor
 {
 public:
@@ -72,15 +71,14 @@ public:
     m_Scale = value;
   }
 
-
-  inline void Set(InternalType & output, const ExternalType & input)
+  inline void Set(InternalType& output, const ExternalType& input)
   {
-    output = static_cast<InternalType>(m_Scale*(static_cast<InternalType>(input)+m_Shift));
+    output = static_cast<InternalType>(m_Scale * (static_cast<InternalType>(input) + m_Shift));
   }
 
-  inline const ExternalType Get(const InternalType & input) const
+  inline const ExternalType Get(const InternalType& input) const
   {
-    return static_cast<ExternalType>(m_Scale*(static_cast<InternalType>(input)+m_Shift));
+    return static_cast<ExternalType>(m_Scale * (static_cast<InternalType>(input) + m_Shift));
   }
 
 private:
@@ -101,63 +99,62 @@ private:
  */
 template <class TImage, class TOutputPixelType>
 class ITK_EXPORT ShiftScaleImageAdaptor : public
-      itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<
-      typename TImage::PixelType,
-      TOutputPixelType >  >
+  itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<
+                      typename TImage::PixelType,
+                      TOutputPixelType> >
 {
 public:
   /** Standard class typedefs. */
-  typedef ShiftScaleImageAdaptor                                 Self;
+  typedef ShiftScaleImageAdaptor Self;
   typedef itk::ImageAdaptor<
-           TImage,
-           Accessor::ShiftScalePixelAccessor< typename TImage::PixelType, TOutputPixelType >
-                           >                                    Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
-  typedef typename TImage::PixelType                            InternalType;
-  typedef typename Superclass::IndexType                        IndexType;
+    TImage,
+    Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>
+    >                                    Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef typename TImage::PixelType     InternalType;
+  typedef typename Superclass::IndexType IndexType;
   typedef typename Accessor::ShiftScalePixelAccessor<
-                             typename TImage::PixelType,
-                             TOutputPixelType >                 AccessorType;
-  typedef typename AccessorType::ExternalType                   PixelType;
+    typename TImage::PixelType,
+    TOutputPixelType>                 AccessorType;
+  typedef typename AccessorType::ExternalType PixelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( ShiftScaleImageAdaptor, ImageAdaptor );
+  itkTypeMacro(ShiftScaleImageAdaptor, ImageAdaptor);
 
-  typename TImage::PixelType GetShift () const
+  typename TImage::PixelType GetShift() const
   {
-    itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift() );
+    itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift());
     return this->GetPixelAccessor().GetShift();
   }
 
-  virtual void SetShift (typename TImage::PixelType value)
+  virtual void SetShift(typename TImage::PixelType value)
   {
     itkDebugMacro("setting m_Shift to " << value);
     if (this->GetPixelAccessor().GetShift() != value)
-    {
+      {
       this->GetPixelAccessor().SetShift(value);
       this->Modified();
-    }
+      }
   }
 
-  typename TImage::PixelType GetScale () const
+  typename TImage::PixelType GetScale() const
   {
-    itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale() );
+    itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale());
     return this->GetPixelAccessor().GetScale();
   }
 
-
-  virtual void SetScale (typename TImage::PixelType value)
+  virtual void SetScale(typename TImage::PixelType value)
   {
     itkDebugMacro("setting m_Scale to " << value);
     if (this->GetPixelAccessor().GetScale() != value)
-    {
+      {
       this->GetPixelAccessor().SetScale(value);
       this->Modified();
-    }
+      }
   }
 
 protected:
@@ -165,8 +162,8 @@ protected:
   virtual ~ShiftScaleImageAdaptor() {}
 
 private:
-  ShiftScaleImageAdaptor(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ShiftScaleImageAdaptor(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

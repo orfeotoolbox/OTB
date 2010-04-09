@@ -57,29 +57,29 @@ namespace Statistics
  * \sa FIXME: StochasticExpectationMaximizationMixtureModelEstimator
  */
 
-template< class TSample >
+template<class TSample>
 class ITK_EXPORT ModelComponentBase :
-      public itk::Object
+  public itk::Object
 {
 public:
   /**Standard class typedefs. */
-  typedef ModelComponentBase Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ModelComponentBase            Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /**Standard Macros */
   itkNewMacro(Self);
   itkTypeMacro(ModelComponentBase, Object);
 
-  typedef typename TSample::MeasurementVectorType    MeasurementVectorType;
+  typedef typename TSample::MeasurementVectorType     MeasurementVectorType;
   typedef typename TSample::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** typedef for the MembershipFunctionBase */
-  typedef itk::Statistics::MembershipFunctionBase< MeasurementVectorType >
+  typedef itk::Statistics::MembershipFunctionBase<MeasurementVectorType>
   MembershipFunctionType;
 
-  typedef itk::Array< double > ParametersType;
+  typedef itk::Array<double> ParametersType;
 
   /** stores the sample pointer (does not update the estimation by itself) */
   virtual void SetSample(const TSample* sample);
@@ -99,28 +99,28 @@ public:
    * object after dynamic creation, when available (the Pdf part is
    * protected as soon as it consodered to be known for all
    * ModelComponent)*/
-  void SetCdfMembershipFunction( MembershipFunctionType* function );
+  void SetCdfMembershipFunction(MembershipFunctionType* function);
 
   /** Gets/Sets the parameter(s) required for the component */
-  void SetParameters(const ParametersType &parameters);
+  void SetParameters(const ParametersType& parameters);
   ParametersType GetParameters()
   {
     return m_Parameters;
   }
 
   /** returns the pdf of the "measurements" vector */
-  double Evaluate ( MeasurementVectorType & measurements );
-  double Pdf( MeasurementVectorType& measurements );
+  double Evaluate(MeasurementVectorType& measurements);
+  double Pdf(MeasurementVectorType& measurements);
 
   /** returns the cdf of the "measurements" vector */
-  double Cdf( MeasurementVectorType& measurements );
+  double Cdf(MeasurementVectorType& measurements);
 
   /** Update parameter estimation if necessary
    * (mainly when sample has changed) */
   virtual void Update();
 
   /** Show the parameters in a minimal form in comparison to PrintSelf */
-  virtual void ShowParameters ( std::ostream& os, itk::Indent indent) const;
+  virtual void ShowParameters(std::ostream& os, itk::Indent indent) const;
 
   // TODO: Distance entre distribution via une sorte de fonction membre...
 
@@ -129,7 +129,7 @@ protected:
   virtual ~ModelComponentBase() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  virtual  void GenerateData ();
+  virtual void GenerateData();
 
   /** stores the pointer to the membership function.
    * subclasses use this funtion to store their membership function
@@ -137,7 +137,7 @@ protected:
   void SetPdfMembershipFunction(MembershipFunctionType* function);
 
   /** Test on new data */
-  int IsSampleModified ();
+  int IsSampleModified();
 
   /** Set of parameters necessary for the statistical models */
   ParametersType m_Parameters;
@@ -164,4 +164,3 @@ protected:
 #endif
 
 #endif
-

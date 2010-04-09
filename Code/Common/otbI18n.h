@@ -27,62 +27,62 @@
 #endif
 
 //To enable stringization after macro replacement
-#define _QUOTEME(x) #x
+#define _QUOTEME(x) # x
 #define QUOTEME(x) _QUOTEME(x)
 
 #if defined(OTB_I18N)
 // Don't use the setlocale() method for windows, it works another way.
 #if defined(_WIN32)
 #define otbI18nMacro() \
-{\
-  typedef otb::ConfigurationFile        ConfigurationType;\
-  ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
-  std::string lang;\
-  try\
-    {\
-    lang = conf->GetParameter<std::string>("OTB_LANG");\
-    }\
-  catch(...)\
-    {\
-    lang = QUOTEME(OTB_LANG);\
-    }\
-  bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
-  textdomain( "otb" );\
-  std::cout << "Language: " << lang << std::endl;\
-  std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;\
-}
+    { \
+    typedef otb::ConfigurationFile ConfigurationType; \
+    ConfigurationType::Pointer conf = ConfigurationType::GetInstance(); \
+    std::string                lang; \
+    try \
+      { \
+      lang = conf->GetParameter<std::string>("OTB_LANG"); \
+      } \
+    catch (...) \
+      { \
+      lang = QUOTEME(OTB_LANG); \
+      } \
+    bindtextdomain("otb", QUOTEME(OTB_LANG_LOCATION)); \
+    textdomain("otb"); \
+    std::cout << "Language: " << lang << std::endl; \
+    std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl; \
+    }
 #else
 #define otbI18nMacro() \
-{\
-  typedef otb::ConfigurationFile        ConfigurationType;\
-  ConfigurationType::Pointer conf = ConfigurationType::GetInstance();\
-  std::string lang;\
-  try\
-    {\
-    lang = conf->GetParameter<std::string>("OTB_LANG");\
-    }\
-  catch(...)\
-    {\
-    lang = QUOTEME(OTB_LANG);\
-    }\
-  setlocale( LC_MESSAGES, lang.c_str() );\
-  bindtextdomain( "otb", QUOTEME(OTB_LANG_LOCATION) );\
-  textdomain( "otb" );\
-  std::cout << "Language: " << lang << std::endl;\
-  std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl;\
-}
+    { \
+    typedef otb::ConfigurationFile ConfigurationType; \
+    ConfigurationType::Pointer conf = ConfigurationType::GetInstance(); \
+    std::string                lang; \
+    try \
+      { \
+      lang = conf->GetParameter<std::string>("OTB_LANG"); \
+      } \
+    catch (...) \
+      { \
+      lang = QUOTEME(OTB_LANG); \
+      } \
+    setlocale(LC_MESSAGES, lang.c_str()); \
+    bindtextdomain("otb", QUOTEME(OTB_LANG_LOCATION)); \
+    textdomain("otb"); \
+    std::cout << "Language: " << lang << std::endl; \
+    std::cout << "Language location: " << QUOTEME(OTB_LANG_LOCATION) << std::endl; \
+    }
 #endif
 #else
-#define otbI18nMacro()\
-std::cout << "No internationalization" << std::endl;
+#define otbI18nMacro() \
+  std::cout << "No internationalization" << std::endl;
 #endif
 
 #if defined(OTB_I18N)
-#define otbGetTextMacro(msgString)\
-gettext(msgString)
+#define otbGetTextMacro(msgString) \
+  gettext(msgString)
 #else
-#define otbGetTextMacro(msgString)\
-msgString
+#define otbGetTextMacro(msgString) \
+  msgString
 #endif
 
 #endif

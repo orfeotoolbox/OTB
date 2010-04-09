@@ -31,23 +31,24 @@ namespace otb
  * This class add streaming aspect on it::ResampleImageFilter
  */
 
-template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType=double>
-class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType = double>
+class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter<TInputImage, TOutputImage,
+                                                                                 TInterpolatorPrecisionType>
 {
 public:
 
   /** Standard class typedefs. */
-  typedef StreamingResampleImageFilter Self;
-  typedef itk::ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef StreamingResampleImageFilter                                                    Self;
+  typedef itk::ResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType> Superclass;
+  typedef itk::SmartPointer<Self>                                                         Pointer;
+  typedef itk::SmartPointer<const Self>                                                   ConstPointer;
 
   /** Image related typedefs. */
-  typedef typename TInputImage::Pointer InputImagePointer;
+  typedef typename TInputImage::Pointer  InputImagePointer;
   typedef typename TOutputImage::Pointer OutputImagePointer;
 
   typedef typename TInputImage::IndexType IndexType;
-  typedef typename TInputImage::SizeType SizeType;
+  typedef typename TInputImage::SizeType  SizeType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,20 +57,20 @@ public:
   itkTypeMacro(StreamingResampleImageFilter, itk::ResampleImageFilter);
 
   /** Type definitions */
-  typedef typename TInputImage::PixelType InputPixelType;
+  typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-  typedef typename TInputImage::RegionType InputImageRegionType;
+  typedef typename TInputImage::RegionType  InputImageRegionType;
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
   typedef typename Superclass::InterpolatorType InterpolatorType;
   typedef typename InterpolatorType::PointType  PointType;
 
-  itkSetMacro(InterpolatorNeighborhoodRadius,unsigned int);
-  itkGetMacro(InterpolatorNeighborhoodRadius,unsigned int);
+  itkSetMacro(InterpolatorNeighborhoodRadius, unsigned int);
+  itkGetMacro(InterpolatorNeighborhoodRadius, unsigned int);
 
-  itkSetMacro(AddedRadius,unsigned int);
-  itkGetMacro(AddedRadius,unsigned int);
+  itkSetMacro(AddedRadius, unsigned int);
+  itkGetMacro(AddedRadius, unsigned int);
 
   /** ResampleImageFilter needs a different input requested region than
    * the output requested region.  As such, ResampleImageFilter needs
@@ -81,13 +82,12 @@ public:
 
 protected:
   StreamingResampleImageFilter();
-  virtual ~StreamingResampleImageFilter() {};
+  virtual ~StreamingResampleImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
 private:
-  StreamingResampleImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingResampleImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Determine size of pad needed for interpolators neighborhood
   unsigned int m_InterpolatorNeighborhoodRadius;
@@ -102,6 +102,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingResampleImageFilter.txx"
 #endif
-
 
 #endif

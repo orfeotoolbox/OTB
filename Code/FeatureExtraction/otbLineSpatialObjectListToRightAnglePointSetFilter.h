@@ -32,48 +32,48 @@
 
 namespace otb
 {
-template <class TImage, class TLinesList , class TPointSet>
+template <class TImage, class TLinesList, class TPointSet>
 class ITK_EXPORT LineSpatialObjectListToRightAnglePointSetFilter
-      : public otb::LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>
+  : public otb::LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>
 {
 
 public:
 
   /** Standard class typedefs. */
-  typedef LineSpatialObjectListToRightAnglePointSetFilter                                Self;
-  typedef LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet>                  Superclass;
-  typedef itk::SmartPointer<Self>                                                        Pointer;
-  typedef itk::SmartPointer<const Self>                                                  ConstPointer;
+  typedef LineSpatialObjectListToRightAnglePointSetFilter               Self;
+  typedef LineSpatialObjectListToPointSetFilter <TLinesList, TPointSet> Superclass;
+  typedef itk::SmartPointer<Self>                                       Pointer;
+  typedef itk::SmartPointer<const Self>                                 ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(LineSpatialObjectListToRightAnglePointSetFilter,LineSpatialObjectListToPointSetFilter);
-  
+  itkTypeMacro(LineSpatialObjectListToRightAnglePointSetFilter, LineSpatialObjectListToPointSetFilter);
+
   /** Typedef support for ProcessObject*/
-  typedef itk::ProcessObject                            ProcessObjectType;
+  typedef itk::ProcessObject ProcessObjectType;
 
   /** Template parameters typedefs*/
-  typedef TLinesList                                    InputLinesListType;
-  typedef typename InputLinesListType::LineType         LineType;
-  typedef std::vector<LineType*>                        VectorLineType;
+  typedef TLinesList                            InputLinesListType;
+  typedef typename InputLinesListType::LineType LineType;
+  typedef std::vector<LineType*>                VectorLineType;
   //typedef typename LineType::PointListType            InputPointListType;
-  typedef typename InputLinesListType::const_iterator   InputLinesListTypeIterator;
+  typedef typename InputLinesListType::const_iterator InputLinesListTypeIterator;
 
   /**  Typdedef for The input image  :
    *   (ONLY USED FOR THE LINE ITERATOR -> To check if the index is inside the region)
    */
-  typedef TImage                                        InputImageType;
-  typedef typename InputImageType::IndexType            InputIndexType;
-  
+  typedef TImage                             InputImageType;
+  typedef typename InputImageType::IndexType InputIndexType;
+
   /** Typedef support for output PointSet*/
-  typedef TPointSet                                     OutputPointSetType;
-  typedef typename OutputPointSetType::PointType        PointType;
-  typedef typename OutputPointSetType::Pointer          OutputPointSetPointerType;
+  typedef TPointSet                              OutputPointSetType;
+  typedef typename OutputPointSetType::PointType PointType;
+  typedef typename OutputPointSetType::Pointer   OutputPointSetPointerType;
 
   /** Typedef Support  for Checking couple of segments used*/
-  typedef itk::VariableSizeMatrix<unsigned int>         checkMatrixType;
+  typedef itk::VariableSizeMatrix<unsigned int> checkMatrixType;
 
   /**
    *  Public Methods :
@@ -83,11 +83,10 @@ public:
 
   virtual void SetInputImage(InputImageType *);
 
-
   /** Set/Get the thresholds*/
   itkGetMacro(ThresholdDistance, double);
   itkSetMacro(ThresholdDistance, double);
-  
+
   itkGetMacro(ThresholdAngle, double);
   itkSetMacro(ThresholdAngle, double);
 
@@ -101,8 +100,8 @@ protected:
    * the aim of the GenerateOutputInformation below is to avoid the guilty static_cast
    *
    */
-  
-  virtual void GenerateOutputInformation(){};
+
+  virtual void GenerateOutputInformation(){}
 
   /**
    * Constructor.
@@ -111,7 +110,7 @@ protected:
   /**
    * Destructor.
    */
-  virtual ~LineSpatialObjectListToRightAnglePointSetFilter(){};
+  virtual ~LineSpatialObjectListToRightAnglePointSetFilter(){}
   /**
    * Standard PrintSelf method.
    */
@@ -123,15 +122,15 @@ protected:
   /**
    * Angle computation
    */
-  virtual double ComputeAngleFormedBySegments(LineType * lineDst , LineType * lineSrc);
+  virtual double ComputeAngleFormedBySegments(LineType * lineDst, LineType * lineSrc);
   /**
    *  When we find a right angle, one compute the coordinate of the segments intersection
    */
-  virtual  PointType ComputeAngleRightCoordinate(LineType * lineDst , LineType * lineSrc);
+  virtual PointType ComputeAngleRightCoordinate(LineType * lineDst, LineType * lineSrc);
   /**
    * AddRightAngleToPointSet
    */
-  virtual void AddRightAngleToPointSet(PointType rAngle  , LineType * LineDst , LineType* LineCur );
+  virtual void AddRightAngleToPointSet(PointType rAngle, LineType * LineDst, LineType* LineCur);
   /**
    * Compute the orienation of a segment
    */
@@ -139,19 +138,19 @@ protected:
   /**
    * Distance From a point rAngle to a segment line
    */
-  virtual double ComputeDistanceFromPointToSegment(PointType rAngle ,LineType * line);
+  virtual double ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line);
 
 private:
 
-  LineSpatialObjectListToRightAnglePointSetFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LineSpatialObjectListToRightAnglePointSetFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Smart pointer on the output PointSet*/
-  OutputPointSetPointerType     m_OutputPointSet;
+  OutputPointSetPointerType m_OutputPointSet;
 
   double m_ThresholdDistance;
   double m_ThresholdAngle;
-    
+
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
@@ -159,5 +158,3 @@ private:
 #endif
 
 #endif
-
-

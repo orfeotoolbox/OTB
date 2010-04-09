@@ -22,10 +22,9 @@
 #include "itkImage.h"
 #include "itkNumericTraits.h"
 
-#define TRANSITION_MATRIX(_x,_y,_theta,_xout,_yout) \
-    (_xout) = (_x)*vcl_cos(_theta) + (_y)*vcl_sin(_theta); \
-    (_yout) = - (_x)*vcl_sin(_theta) + (_y)*vcl_cos(_theta)
-
+#define TRANSITION_MATRIX(_x, _y, _theta, _xout, _yout) \
+  (_xout) = (_x) * vcl_cos(_theta) + (_y) * vcl_sin(_theta); \
+  (_yout) = -(_x) * vcl_sin(_theta) + (_y) * vcl_cos(_theta)
 
 namespace otb
 {
@@ -48,26 +47,25 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimensions */
-  itkStaticConstMacro(    InputImageDimension,
-                          unsigned int,
-                          TInputImage::ImageDimension);
-  itkStaticConstMacro(    OutputImageDimension,
-                          unsigned int,
-                          TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension,
+                      unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension,
+                      unsigned int,
+                      TOutputImage::ImageDimension);
 
-
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** typedef for the classes standards. */
-  typedef PixelSuppressionByDirectionImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef PixelSuppressionByDirectionImageFilter                   Self;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>                                  Pointer;
+  typedef itk::SmartPointer<const Self>                            ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -76,12 +74,12 @@ public:
   itkTypeMacro(PixelSuppressionByDirectionImageFilter, ImageToImageFilter);
 
   /** Definition of the input and output images */
-  typedef typename InputImageType::PixelType InputPixelType;
+  typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
 
-  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   typedef typename InputImageType::SizeType SizeType;
@@ -97,26 +95,26 @@ public:
   itkGetConstReferenceMacro(AngularBeam, InputRealType);
 
   /** Set/Get the image input of this process object.  */
-  void SetInputImage( const InputImageType *image);
+  void SetInputImage(const InputImageType *image);
   const InputImageType * GetInputImage(void);
 
-  void SetInputImageDirection( const InputImageType *image);
+  void SetInputImageDirection(const InputImageType *image);
   const InputImageType * GetInputImageDirection(void);
 
-
-  virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  virtual void GenerateInputRequestedRegion()
+    throw(itk::InvalidRequestedRegionError);
 
 protected:
   PixelSuppressionByDirectionImageFilter();
-  virtual ~PixelSuppressionByDirectionImageFilter() {};
+  virtual ~PixelSuppressionByDirectionImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            int threadId );
+                            int threadId);
 
 private:
-  PixelSuppressionByDirectionImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PixelSuppressionByDirectionImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Radius of the region
   SizeType m_Radius;
@@ -129,6 +127,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPixelSuppressionByDirectionImageFilter.txx"
 #endif
-
 
 #endif

@@ -44,14 +44,14 @@ namespace otb
  */
 template<class TInputImage, class TOutputPath>
 class ITK_EXPORT PersistentVectorizationImageFilter :
-      public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentVectorizationImageFilter Self;
-  typedef PersistentImageFilter<TInputImage,TInputImage>        Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef PersistentVectorizationImageFilter              Self;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -61,38 +61,38 @@ public:
 
   /** Image related typedefs. */
   // First Input
-  typedef TInputImage                                                             ImageType;
-  typedef typename TInputImage::Pointer                                           InputImagePointer;
-  typedef typename TInputImage::RegionType                                        RegionType;
-  typedef typename TInputImage::SizeType                                          SizeType;
-  typedef typename TInputImage::IndexType                                         IndexType;
-  typedef typename TInputImage::PixelType                                         PixelType;
-  typedef typename TInputImage::InternalPixelType                                 InternalPixelType;
+  typedef TInputImage                             ImageType;
+  typedef typename TInputImage::Pointer           InputImagePointer;
+  typedef typename TInputImage::RegionType        RegionType;
+  typedef typename TInputImage::SizeType          SizeType;
+  typedef typename TInputImage::IndexType         IndexType;
+  typedef typename TInputImage::PixelType         PixelType;
+  typedef typename TInputImage::InternalPixelType InternalPixelType;
 
   // Output path type
-  typedef TOutputPath                                                             PathType;
-  typedef otb::ObjectList<PathType>                                               PathListType;
-  typedef typename PathListType::Pointer                                          PathListPointerType;
-  typedef typename PathType::Pointer                                              PathPointerType;
-  typedef itk::MinimumMaximumImageFilter<ImageType>                               MinMaxFilterType;
-  typedef typename MinMaxFilterType::Pointer                                      MinMaxFilterPointerType;
-  typedef otb::ImageToEdgePathFilter<ImageType,PathType>                          ImageToEdgePathFilterType;
-  typedef typename ImageToEdgePathFilterType::Pointer                             ImageToEdgePathFilterPointerType;
+  typedef TOutputPath                                     PathType;
+  typedef otb::ObjectList<PathType>                       PathListType;
+  typedef typename PathListType::Pointer                  PathListPointerType;
+  typedef typename PathType::Pointer                      PathPointerType;
+  typedef itk::MinimumMaximumImageFilter<ImageType>       MinMaxFilterType;
+  typedef typename MinMaxFilterType::Pointer              MinMaxFilterPointerType;
+  typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
+  typedef typename ImageToEdgePathFilterType::Pointer     ImageToEdgePathFilterPointerType;
 
   virtual void Reset(void);
   virtual void Synthetize(void);
 
-  itkGetObjectMacro(PathList,PathListType);
+  itkGetObjectMacro(PathList, PathListType);
 
 protected:
   PersistentVectorizationImageFilter();
-  virtual ~PersistentVectorizationImageFilter() {};
+  virtual ~PersistentVectorizationImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   virtual void GenerateData();
 
 private:
-  PersistentVectorizationImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentVectorizationImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   // Min max filter (the mini-pipeline)
   MinMaxFilterPointerType m_MinMaxFilter;

@@ -37,8 +37,8 @@ namespace otb
    * \ingroup Markov
  */
 
-template< class TInput1, class TInput2>
-class ITK_EXPORT MRFSamplerRandom: public MRFSampler< TInput1, TInput2>
+template<class TInput1, class TInput2>
+class ITK_EXPORT MRFSamplerRandom : public MRFSampler<TInput1, TInput2>
 {
 public:
   typedef MRFSamplerRandom                  Self;
@@ -59,9 +59,9 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(MRFSamplerRandom,MRFSampler);
+  itkTypeMacro(MRFSamplerRandom, MRFSampler);
 
-  inline int Compute( const InputImageNeighborhoodIterator & itData, const LabelledImageNeighborhoodIterator & itRegul)
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul)
   {
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
     this->m_EnergyBefore += this->m_Lambda
@@ -70,7 +70,7 @@ public:
     this->m_Value = static_cast<LabelledImagePixelType>(m_Generator->GetIntegerVariate() % this->m_NumberOfClasses);
     this->m_EnergyAfter = this->m_EnergyFidelity->GetValue(itData, this->m_Value);
     this->m_EnergyAfter +=  this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, this->m_Value);
-    this->m_DeltaEnergy=  this->m_EnergyAfter - this->m_EnergyBefore;
+    this->m_DeltaEnergy =  this->m_EnergyAfter - this->m_EnergyBefore;
 
     return 0;
   }
@@ -88,12 +88,11 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerRandom()
-  {
+    {
     m_Generator = RandomGeneratorType::New();
     m_Generator->SetSeed();
-  }
+    }
   virtual ~MRFSamplerRandom() {}
-
 
 private:
   RandomGeneratorType::Pointer m_Generator;

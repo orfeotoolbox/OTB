@@ -34,13 +34,13 @@ public:
   typedef RCC8OutEdgeIterator Self;
 
   /** Graph typedef */
-  typedef TGraph GraphType;
-  typedef typename GraphType::InternalGraphType InternalGraphType;
-  typedef typename GraphType::Pointer GraphPointerType;
-  typedef typename GraphType::EdgePointerType EdgePointerType;
-  typedef typename GraphType::VertexPointerType VertexPointerType;
+  typedef TGraph                                   GraphType;
+  typedef typename GraphType::InternalGraphType    InternalGraphType;
+  typedef typename GraphType::Pointer              GraphPointerType;
+  typedef typename GraphType::EdgePointerType      EdgePointerType;
+  typedef typename GraphType::VertexPointerType    VertexPointerType;
   typedef typename GraphType::VertexDescriptorType VertexDescriptorType;
-  typedef typename GraphType::RCC8ValueType RCC8ValueType;
+  typedef typename GraphType::RCC8ValueType        RCC8ValueType;
   /** typedef of the internal iterator */
   typedef typename boost::graph_traits<InternalGraphType>::out_edge_iterator InternalIteratorType;
   /** Typedef of the index map */
@@ -49,9 +49,9 @@ public:
   /** Constructor */
   RCC8OutEdgeIterator();
   /** Copy constructor */
-  RCC8OutEdgeIterator(const Self& iter);
+  RCC8OutEdgeIterator(const Self &iter);
   /**  Constructor with input graph */
-  RCC8OutEdgeIterator(VertexDescriptorType vertex,TGraph * graph);
+  RCC8OutEdgeIterator(VertexDescriptorType vertex, TGraph * graph);
   /**
    * Get the current edge value.
    * \return The value of the current edge pointed by the iterator.
@@ -80,31 +80,31 @@ public:
   /**
    * Increment.
    */
-  Self& operator++();
+  Self& operator ++();
   /**
    * Decrement.
    */
-  Self& operator--();
+  Self& operator --();
   /**
    * Add
    */
-  Self& operator+(int i);
+  Self& operator +(int i);
   /**
    * Remove
    */
-  Self& operator-(int i);
+  Self& operator -(int i);
   /**
    * Difference comparison operator.
    */
-  bool operator!=(const Self& it);
+  bool operator !=(const Self& it);
   /**
    * Equality comparison operator.
    */
-  bool operator==(const Self& it);
+  bool operator ==(const Self& it);
   /**
    * Instantiation operator.
    */
-  Self& operator=(const Self& it);
+  Self& operator =(const Self& it);
 private:
   // End
   InternalIteratorType m_End;

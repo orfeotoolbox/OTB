@@ -27,57 +27,55 @@ namespace otb
  * Constructor
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-class TOutputImage, class TFunction  >
-RAndBAndNIRIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
+          class TOutputImage, class TFunction>
+RAndBAndNIRIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
 ::RAndBAndNIRIndexImageFilter()
 {
 }
 
-
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-RAndBAndNIRIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputR( const TInputImageR * image )
+RAndBAndNIRIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
+::SetInputR(const TInputImageR * image)
 {
   // Process object is not const-correct so the const casting is required.
-  SetInput1( image );
-}
-
-
-/**
- * Connect one of the operands for pixel-wise addition
- */
-template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-class TOutputImage, class TFunction  >
-void
-RAndBAndNIRIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputB( const TInputImageB * image )
-{
-  SetInput2( image );
+  SetInput1(image);
 }
 
 /**
  * Connect one of the operands for pixel-wise addition
  */
 template <class TInputImageR, class TInputImageB, class TInputImageNIR,
-class TOutputImage, class TFunction  >
+          class TOutputImage, class TFunction>
 void
-RAndBAndNIRIndexImageFilter<TInputImageR,TInputImageB,TInputImageNIR,TOutputImage,TFunction>
-::SetInputNIR( const TInputImageNIR * image )
+RAndBAndNIRIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
+::SetInputB(const TInputImageB * image)
 {
-  SetInput3( image );
+  SetInput2(image);
 }
 
-template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage, class TFunction  >
+/**
+ * Connect one of the operands for pixel-wise addition
+ */
+template <class TInputImageR, class TInputImageB, class TInputImageNIR,
+          class TOutputImage, class TFunction>
+void
+RAndBAndNIRIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
+::SetInputNIR(const TInputImageNIR * image)
+{
+  SetInput3(image);
+}
+
+template <class TInputImageR, class TInputImageB, class TInputImageNIR, class TOutputImage, class TFunction>
 void
 RAndBAndNIRIndexImageFilter<TInputImageR, TInputImageB, TInputImageNIR, TOutputImage, TFunction>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 }

@@ -54,53 +54,52 @@ namespace otb
  **/
 
 template <class TOssimMapProjection,
-InverseOrForwardTransformationEnum TDirectionOfMapping,
-class TScalarType = double,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
-class ITK_EXPORT MapProjection: public itk::Transform<TScalarType,       // Data type for scalars
-      NInputDimensions,  // Number of dimensions in the input space
-      NOutputDimensions> // Number of dimensions in the output space
+          InverseOrForwardTransformationEnum TDirectionOfMapping,
+          class TScalarType = double,
+          unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT MapProjection : public itk::Transform<TScalarType,       // Data type for scalars
+                                                       NInputDimensions, // Number of dimensions in the input space
+                                                       NOutputDimensions> // Number of dimensions in the output space
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef itk::Transform< TScalarType,
-  NInputDimensions,
-  NOutputDimensions >       Superclass;
-  typedef MapProjection                              Self;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef itk::Transform<TScalarType,
+                         NInputDimensions,
+                         NOutputDimensions>       Superclass;
+  typedef MapProjection                 Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
   typedef TOssimMapProjection                       OssimMapProjectionType;
   typedef ossimRefPtr<OssimMapProjectionType>       OssimMapProjectionPointerType;
-  typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
-  typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
+  typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
+  typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( MapProjection, itk::Transform );
+  itkTypeMacro(MapProjection, itk::Transform);
 
-  virtual const OssimMapProjectionType* GetMapProjection () const;
-  virtual OssimMapProjectionType* GetMapProjection ();
+  virtual const OssimMapProjectionType* GetMapProjection() const;
+  virtual OssimMapProjectionType* GetMapProjection();
 
   typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TDirectionOfMapping);
+  itkStaticConstMacro(DirectionOfMapping, DirectionOfMappingEnumType, TDirectionOfMapping);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
-
-  virtual void SetEllipsoid ();
-  void SetEllipsoid (const ossimEllipsoid &ellipsoid);
+  virtual void SetEllipsoid();
+  void SetEllipsoid(const ossimEllipsoid& ellipsoid);
   void SetEllipsoid(std::string code);
-  void SetEllipsoid(const double &major_axis, const double &minor_axis);
+  void SetEllipsoid(const double& major_axis, const double& minor_axis);
 
-  OutputPointType TransformPoint(const InputPointType &point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const;
   virtual InputPointType Origin();
   virtual double GetFalseNorthing() const;
   virtual double GetFalseEasting() const;
@@ -114,17 +113,25 @@ public :
   virtual OutputPointType GetMetersPerPixel() const;
   virtual OutputPointType GetDecimalDegreesPerPixel() const;
   virtual void SetAB(double a, double b);
-  virtual void SetOrigin(const InputPointType &origin);
-  virtual void SetOrigin(const InputPointType &origin, std::string datumCode);
-  virtual void SetMetersPerPixel(const OutputPointType &point);
-  virtual void SetDecimalDegreesPerPixel(const OutputPointType &point);
-  virtual void ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon);
-  virtual void ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
-  virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
+  virtual void SetOrigin(const InputPointType& origin);
+  virtual void SetOrigin(const InputPointType& origin, std::string datumCode);
+  virtual void SetMetersPerPixel(const OutputPointType& point);
+  virtual void SetDecimalDegreesPerPixel(const OutputPointType& point);
+  virtual void ComputeDegreesPerPixel(const InputPointType& ground,
+                                      const OutputPointType& metersPerPixel,
+                                      double& deltaLat,
+                                      double& deltaLon);
+  virtual void ComputeMetersPerPixel(const InputPointType& center,
+                                     double deltaDegreesPerPixelLat,
+                                     double deltaDegreesPerPixelLon,
+                                     OutputPointType& metersPerPixel);
+  virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat,
+                                     double deltaDegreesPerPixelLon,
+                                     OutputPointType& metersPerPixel);
   //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
   virtual void SetFalseEasting(double falseEasting)
   {
-    itkExceptionMacro(<<"Subclasses should override this method");
+    itkExceptionMacro(<< "Subclasses should override this method");
   }
 
   /** Return the Wkt representation of the projection*/
@@ -135,20 +142,18 @@ public :
 
   virtual void PrintMap() const;
 
-
 protected:
   MapProjection();
   virtual ~MapProjection();
   OssimMapProjectionPointerType m_MapProjection;
-  std::string m_ProjectionRefWkt;
+  std::string                   m_ProjectionRefWkt;
   virtual void InstanciateProjection();
 
-private :
-  MapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  MapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // namespace otb
 

@@ -45,30 +45,30 @@ namespace otb {
  */
 template<class TImage, class TFunctor>
 class ITK_EXPORT LabelMapFeaturesFunctorImageFilter :
-    public itk::InPlaceLabelMapFilter<TImage>
+  public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapFeaturesFunctorImageFilter      Self;
-  typedef itk::InPlaceLabelMapFilter<TImage>      Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef LabelMapFeaturesFunctorImageFilter Self;
+  typedef itk::InPlaceLabelMapFilter<TImage> Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TImage                                  ImageType;
-  typedef typename  ImageType::LabelObjectType    LabelObjectType;
-  typedef TFunctor                                FunctorType;
+  typedef TImage                               ImageType;
+  typedef typename  ImageType::LabelObjectType LabelObjectType;
+  typedef TFunctor                             FunctorType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(ImageDimension, unsigned int,TImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapFeaturesFunctorImageFilter,InPlaceLabelMapFilter);
+  itkTypeMacro(LabelMapFeaturesFunctorImageFilter, InPlaceLabelMapFilter);
 
   /** Set the functor */
   void SetFunctor(FunctorType& functor)
   {
-    if(m_Functor != functor)
+    if (m_Functor != functor)
       {
       m_Functor = functor;
       this->Modified();
@@ -76,17 +76,17 @@ public:
   }
 
   /** Get the functor (const version) */
-  const FunctorType & GetFunctor() const
+  const FunctorType& GetFunctor() const
   {
     return m_Functor;
   }
 
   /** Get a reference to the functor (non const version) */
-  FunctorType & GetFunctor()
+  FunctorType& GetFunctor()
   {
     return m_Functor;
   }
-  
+
 protected:
   /** Constructor */
   LabelMapFeaturesFunctorImageFilter() : m_Functor() {}
@@ -95,9 +95,9 @@ protected:
   ~LabelMapFeaturesFunctorImageFilter() {}
 
   /** Threaded generate data */
-  virtual void ThreadedProcessLabelObject( LabelObjectType * labelObject )
+  virtual void ThreadedProcessLabelObject(LabelObjectType * labelObject)
   {
-    // Call the functor 
+    // Call the functor
     m_Functor(labelObject);
   }
 
@@ -105,12 +105,12 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     // Call superclass implementation
-    Superclass::PrintSelf(os,indent);
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
-  LabelMapFeaturesFunctorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapFeaturesFunctorImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The functor */
   FunctorType m_Functor;
@@ -120,5 +120,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

@@ -49,48 +49,47 @@ namespace otb
  *
  **/
 
-typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
+typedef enum {FORWARD = 0, INVERSE = 1} InverseOrForwardTransformationEnum;
 
 template <InverseOrForwardTransformationEnum TDirectionOfMapping,
-class TScalarType = double,
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
-class ITK_EXPORT GenericMapProjection: public itk::Transform<TScalarType,       // Data type for scalars
-      NInputDimensions,  // Number of dimensions in the input space
-      NOutputDimensions> // Number of dimensions in the output space
+          class TScalarType = double,
+          unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT GenericMapProjection : public itk::Transform<TScalarType,       // Data type for scalars
+                                                              NInputDimensions, // Number of dimensions in the input space
+                                                              NOutputDimensions> // Number of dimensions in the output space
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef itk::Transform< TScalarType,
-  NInputDimensions,
-  NOutputDimensions >       Superclass;
-  typedef GenericMapProjection                      Self;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef itk::Transform<TScalarType,
+                         NInputDimensions,
+                         NOutputDimensions>       Superclass;
+  typedef GenericMapProjection          Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
   typedef ossimProjection                           OssimMapProjectionType;
-  typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
-  typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;
+  typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
+  typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( GenericMapProjection, itk::Transform );
+  itkTypeMacro(GenericMapProjection, itk::Transform);
 
-  itkSetObjectMacro(MapProjection,OssimMapProjectionType);
-  virtual OssimMapProjectionType* GetMapProjection ();
-  virtual const OssimMapProjectionType* GetMapProjection () const;
+  itkSetObjectMacro(MapProjection, OssimMapProjectionType);
+  virtual OssimMapProjectionType* GetMapProjection();
+  virtual const OssimMapProjectionType* GetMapProjection() const;
 
   typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 
-  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,TDirectionOfMapping);
+  itkStaticConstMacro(DirectionOfMapping, DirectionOfMappingEnumType, TDirectionOfMapping);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
-
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
 
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt();
@@ -100,7 +99,7 @@ public :
 
   virtual void PrintMap() const;
 
-  OutputPointType TransformPoint(const InputPointType &point) const;
+  OutputPointType TransformPoint(const InputPointType& point) const;
 
   virtual bool InstanciateProjection();
 
@@ -108,16 +107,15 @@ protected:
   GenericMapProjection();
   virtual ~GenericMapProjection();
   OssimMapProjectionType* m_MapProjection;
-  std::string m_ProjectionRefWkt;
+  std::string             m_ProjectionRefWkt;
 
   bool reinstanciateProjection;
 
-private :
-  GenericMapProjection(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  GenericMapProjection(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
-
 
 } // namespace otb
 

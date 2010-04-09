@@ -56,14 +56,12 @@ ImageFileWriter<TInputImage>
   this->Superclass::SetNumberOfStreamDivisions(10);
 }
 
-
 //---------------------------------------------------------
 template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::~ImageFileWriter()
 {
 }
-
 
 //---------------------------------------------------------
 template <class TInputImage>
@@ -77,7 +75,7 @@ ImageFileWriter<TInputImage>
 
   // Update the meta data
   nonConstInput->UpdateOutputInformation();
-  if(this->GetImageIO() == NULL)
+  if (this->GetImageIO() == NULL)
     {
     this->SetImageIO(ImageIOFactory::CreateImageIO(this->GetFileName(), itk::ImageIOFactory::WriteMode));
     this->SetNumberOfStreamDivisions(static_cast<unsigned int> (CalculateNumberOfStreamDivisions()));
@@ -123,7 +121,7 @@ void
 ImageFileWriter<TInputImage>
 ::SetNumberOfStreamDivisions(unsigned long nb_divisions)
 {
-  this->Superclass::SetNumberOfStreamDivisions( nb_divisions );
+  this->Superclass::SetNumberOfStreamDivisions(nb_divisions);
   m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
   this->Modified();
 }
@@ -175,7 +173,7 @@ unsigned long
 ImageFileWriter<TInputImage>
 ::GetNumberOfStreamDivisions(void)
 {
-  return(CalculateNumberOfStreamDivisions());
+  return (CalculateNumberOfStreamDivisions());
 }
 
 /**
@@ -208,14 +206,13 @@ ImageFileWriter<TInputImage>
                                             m_BufferNumberOfLinesDivisions);
 }
 
-
 //---------------------------------------------------------
 template <class TInputImage>
 void
 ImageFileWriter<TInputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 } // end namespace otb

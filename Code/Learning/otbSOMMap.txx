@@ -28,15 +28,15 @@ namespace otb
 /**
  * Constructor
  */
-template <class TNeuron, class TDistance,unsigned int VMapDimension>
-SOMMap<TNeuron,TDistance,VMapDimension>
+template <class TNeuron, class TDistance, unsigned int VMapDimension>
+SOMMap<TNeuron, TDistance, VMapDimension>
 ::SOMMap()
 {}
 /**
  * Destructor
  */
-template <class TNeuron, class TDistance,unsigned int VMapDimension>
-SOMMap<TNeuron,TDistance,VMapDimension>
+template <class TNeuron, class TDistance, unsigned int VMapDimension>
+SOMMap<TNeuron, TDistance, VMapDimension>
 ::~SOMMap()
 {}
 /**
@@ -44,10 +44,10 @@ SOMMap<TNeuron,TDistance,VMapDimension>
  * \param the sample.
  * \return The index of the winning neuron.
  */
-template <class TNeuron,class TDistance, unsigned int VMapDimension>
-typename SOMMap<TNeuron,TDistance,VMapDimension>
-:: IndexType
-SOMMap<TNeuron,TDistance,VMapDimension>
+template <class TNeuron, class TDistance, unsigned int VMapDimension>
+typename SOMMap<TNeuron, TDistance, VMapDimension>
+::IndexType
+SOMMap<TNeuron, TDistance, VMapDimension>
 ::GetWinner(const NeuronType& sample)
 {
   // Some typedefs
@@ -57,33 +57,33 @@ SOMMap<TNeuron,TDistance,VMapDimension>
   DistancePointerType activation = DistanceType::New();
 
   // Define the iterator used to walk through the map
-  IteratorType it(this,this->GetLargestPossibleRegion());
+  IteratorType it(this, this->GetLargestPossibleRegion());
   it.GoToBegin();
 
   // Define the minimum distance and position
   IndexType minPos = it.GetIndex();
 
-  double minDistance = activation->Evaluate(sample,it.Get());
+  double minDistance = activation->Evaluate(sample, it.Get());
 
   // Iterate through the map to get the minimum distance position
-  for (;!it.IsAtEnd();++it)
-  {
-    double tempDistance = activation->Evaluate(sample,it.Get());
-    if (tempDistance<=minDistance)
+  for (; !it.IsAtEnd(); ++it)
     {
+    double tempDistance = activation->Evaluate(sample, it.Get());
+    if (tempDistance <= minDistance)
+      {
       minDistance = tempDistance;
       minPos = it.GetIndex();
+      }
     }
-  }
   // Return the index of the winner
   return minPos;
 }
-template <class TNeuron, class TDistance,unsigned int VMapDimension>
+template <class TNeuron, class TDistance, unsigned int VMapDimension>
 void
-SOMMap<TNeuron,TDistance,VMapDimension>
-::PrintSelf( std::ostream& os,itk::Indent indent ) const
+SOMMap<TNeuron, TDistance, VMapDimension>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 } // end namespace otb
 #endif

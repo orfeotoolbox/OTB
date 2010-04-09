@@ -40,13 +40,13 @@ namespace otb
 template <class TOutputGISTable>
 class ITK_EXPORT GISTableSource : public itk::ProcessObject
 {
-  public :
+public:
 
   /** Standard class typedefs. */
-  typedef GISTableSource                        Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef GISTableSource                Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,7 +54,7 @@ class ITK_EXPORT GISTableSource : public itk::ProcessObject
   /** Run-time type information (and related methods). */
   itkTypeMacro(GISTableSource, itk::ProcessObject);
 
-  typedef TOutputGISTable     OutputGISTableType;
+  typedef TOutputGISTable                   OutputGISTableType;
   typedef typename TOutputGISTable::Pointer OutputGISTablePointer;
 
   /** Overriding GetOutput() method */
@@ -71,8 +71,8 @@ protected:
   virtual void  AllocateOutputs();
 
 private:
-  GISTableSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  GISTableSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 

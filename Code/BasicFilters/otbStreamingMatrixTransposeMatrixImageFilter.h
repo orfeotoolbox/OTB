@@ -52,14 +52,14 @@ namespace otb
  */
 template<class TInputImage, class TInputImage2>
 class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter :
-      public PersistentImageFilter<TInputImage, TInputImage>
+  public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentMatrixTransposeMatrixImageFilter           Self;
-  typedef PersistentImageFilter<TInputImage,TInputImage>       Superclass;
-  typedef itk::SmartPointer<Self>                              Pointer;
-  typedef itk::SmartPointer<const Self>                        ConstPointer;
+  typedef PersistentMatrixTransposeMatrixImageFilter      Self;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,33 +69,32 @@ public:
 
   /** Image related typedefs. */
   // First Input
-  typedef TInputImage                                                             ImageType;
-  typedef typename TInputImage::Pointer                                           InputImagePointer;
-  typedef typename TInputImage::RegionType                                        RegionType;
-  typedef typename TInputImage::SizeType                                          SizeType;
-  typedef typename TInputImage::IndexType                                         IndexType;
-  typedef typename TInputImage::PixelType                                         PixelType;
-  typedef typename TInputImage::InternalPixelType                                 InternalPixelType;
+  typedef TInputImage                             ImageType;
+  typedef typename TInputImage::Pointer           InputImagePointer;
+  typedef typename TInputImage::RegionType        RegionType;
+  typedef typename TInputImage::SizeType          SizeType;
+  typedef typename TInputImage::IndexType         IndexType;
+  typedef typename TInputImage::PixelType         PixelType;
+  typedef typename TInputImage::InternalPixelType InternalPixelType;
 
-  typedef typename TInputImage2::IndexType                                        IndexType2;
-  typedef typename TInputImage2::PixelType                                        PixelType2;
-  typedef typename TInputImage2::InternalPixelType                                InternalPixelType2;
+  typedef typename TInputImage2::IndexType         IndexType2;
+  typedef typename TInputImage2::PixelType         PixelType2;
+  typedef typename TInputImage2::InternalPixelType InternalPixelType2;
 
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
-  itkSetMacro(UsePadFirstInput,bool);
-  itkGetMacro(UsePadFirstInput,bool);
-  itkSetMacro(UsePadSecondInput,bool);
-  itkGetMacro(UsePadSecondInput,bool);
+  itkSetMacro(UsePadFirstInput, bool);
+  itkGetMacro(UsePadFirstInput, bool);
+  itkSetMacro(UsePadSecondInput, bool);
+  itkGetMacro(UsePadSecondInput, bool);
 
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension );
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
   // First Input
-  typedef double                                                   RealType;
-  typedef itk::VariableLengthVector<RealType>                      RealPixelType;
-
+  typedef double                              RealType;
+  typedef itk::VariableLengthVector<RealType> RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
@@ -110,15 +109,13 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType>     PixelObjectType;
   typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
 
-
   /** Return the computed transpose(Image1)*Image2. */
   MatrixType GetResult() const
   {
     return this->GetResultOutput()->Get();
-  };
+  }
   MatrixObjectType* GetResultOutput();
   const MatrixObjectType* GetResultOutput() const;
-
 
   /** Make a DataObject of the correct type to be used as the specified
    * output.
@@ -138,47 +135,45 @@ public:
   /** Input wrapper */
   void SetFirstInput(const TInputImage  *input1)
   {
-    this->SetInput(0, input1 );
-  };
+    this->SetInput(0, input1);
+  }
   void SetSecondInput(const TInputImage2 *input2)
   {
-    this->SetInput(1, input2 );
-  };
+    this->SetInput(1, input2);
+  }
 
   const TInputImage* GetFirstInput()
   {
-    if ( this->GetNumberOfInputs() < 1 )
-    {
+    if (this->GetNumberOfInputs() < 1)
+      {
       return 0;
-    }
-    else
-      return( static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)) );
+      }
+    else return (static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)));
   }
 
   const TInputImage2* GetSecondInput()
   {
-    if ( this->GetNumberOfInputs() < 2 )
-    {
+    if (this->GetNumberOfInputs() < 2)
+      {
       return 0;
-    }
-    else
-      return( static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)) );
+      }
+    else return (static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)));
   }
 
 protected:
   PersistentMatrixTransposeMatrixImageFilter();
-  virtual ~PersistentMatrixTransposeMatrixImageFilter() {};
+  virtual ~PersistentMatrixTransposeMatrixImageFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Multi-thread version GenerateData. */
-  virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
+  virtual void  ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId);
 
 private:
-  PersistentMatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  PersistentMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
-  ArrayMatrixType  m_ThreadSum;
-  bool             m_UsePadFirstInput;
-  bool             m_UsePadSecondInput;
+  ArrayMatrixType m_ThreadSum;
+  bool            m_UsePadFirstInput;
+  bool            m_UsePadSecondInput;
 
   /** Nulber Of Component per Pixel. Change for padding */
   unsigned int m_NumberOfComponents1;
@@ -206,29 +201,28 @@ private:
  * \ingroup MathematicalStatisticsImageFilters
  */
 
-
 template<class TInputImage1, class TInputImage2>
 class ITK_EXPORT StreamingMatrixTransposeMatrixImageFilter :
-      public PersistentFilterStreamingDecorator
-      < PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> >
+  public PersistentFilterStreamingDecorator
+  <PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> >
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingMatrixTransposeMatrixImageFilter       Self;
+  typedef StreamingMatrixTransposeMatrixImageFilter Self;
   typedef PersistentFilterStreamingDecorator
-  < PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> > Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  <PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> > Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(StreamingMatrixTransposeMatrixImageFilter,PersistentFilterStreamingDecorator);
+  itkTypeMacro(StreamingMatrixTransposeMatrixImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef typename Superclass::FilterType MatrixToTransposeMatrixFilterType;
+  typedef typename Superclass::FilterType                        MatrixToTransposeMatrixFilterType;
   typedef typename MatrixToTransposeMatrixFilterType::MatrixType MatrixType;
-  typedef itk::SimpleDataObjectDecorator<MatrixType> MatrixObjectType;
+  typedef itk::SimpleDataObjectDecorator<MatrixType>             MatrixObjectType;
 
   typedef TInputImage1 InputImage1Type;
   typedef TInputImage2 InputImage2Type;
@@ -275,11 +269,11 @@ protected:
   /** Constructor */
   StreamingMatrixTransposeMatrixImageFilter() {};
   /** Destructor */
-  virtual ~StreamingMatrixTransposeMatrixImageFilter() {};
+  virtual ~StreamingMatrixTransposeMatrixImageFilter() {}
 
 private:
-  StreamingMatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingMatrixTransposeMatrixImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
 
 } // end namespace otb

@@ -20,7 +20,6 @@
 
 #include "otbHarrisImageToPointSetFilter.h"
 
-
 namespace otb
 {
 
@@ -50,20 +49,19 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   typename OutputPointSetType::Pointer pointList = this->GetOutput();
 
-  m_HarrisFilter->SetInput( 0, this->GetInput(0) );
-  m_HarrisFilter->SetSigmaD( m_SigmaD );
-  m_HarrisFilter->SetSigmaI( m_SigmaI );
-  m_HarrisFilter->SetAlpha(  m_Alpha  );
+  m_HarrisFilter->SetInput(0, this->GetInput(0));
+  m_HarrisFilter->SetSigmaD(m_SigmaD);
+  m_HarrisFilter->SetSigmaI(m_SigmaI);
+  m_HarrisFilter->SetAlpha(m_Alpha);
 
-  m_ThresholdFilter->SetInput(0,m_HarrisFilter->GetOutput() );
+  m_ThresholdFilter->SetInput(0, m_HarrisFilter->GetOutput());
   m_ThresholdFilter->SetLowerThreshold(m_LowerThreshold);
   m_ThresholdFilter->SetUpperThreshold(m_UpperThreshold);
 
-  m_ThresholdFilter->SetOutput(pointList );
+  m_ThresholdFilter->SetOutput(pointList);
   m_ThresholdFilter->Update();
 
 }
-
 
 /**
  * Standard "PrintSelf" method
@@ -73,7 +71,7 @@ void
 HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
   os << indent << "Sigma_D    : " << this->m_SigmaD    << std::endl;
   os << indent << "Sigma_I    : " << this->m_SigmaI    << std::endl;
   os << indent << "Alpha      : " << this->m_Alpha     << std::endl;
@@ -81,8 +79,6 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   os << indent << "UpperThreshold  : " << this->m_UpperThreshold << std::endl;
 }
 
-
 } // end namespace otb
-
 
 #endif

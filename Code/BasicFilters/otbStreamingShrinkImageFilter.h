@@ -36,31 +36,31 @@ namespace otb
  * For example, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels
  * instead of the whole image.
  */
-template <class TInputImage,class TOutputImage>
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT StreamingShrinkImageFilter
-      : public itk::ImageToImageFilter<TInputImage,TOutputImage>
+  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef StreamingShrinkImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>   Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef StreamingShrinkImageFilter                         Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
   /** Type macro */
-  itkTypeMacro(StreamingShrinkImageFilter,ImageToImageFilter);
+  itkTypeMacro(StreamingShrinkImageFilter, ImageToImageFilter);
 
   /** Template parameter typedefs */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                       InputImageType;
+  typedef typename InputImageType::Pointer  InputImagePointerType;
+  typedef TOutputImage                      OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
 
   /** Shrink factor accessor */
-  itkSetMacro(ShrinkFactor,unsigned int);
+  itkSetMacro(ShrinkFactor, unsigned int);
   itkGetMacro(ShrinkFactor, unsigned int);
 
   /**
@@ -72,7 +72,7 @@ public:
 
   virtual void GenerateInputRequestedRegion(void);
   /** Main computation method */
-  virtual void UpdateOutputData(itk::DataObject *itkNotUsed(output));
+  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
 
 protected:
   /** Constructor */
@@ -83,8 +83,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  StreamingShrinkImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  StreamingShrinkImageFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** The shrink factor */
   unsigned int m_ShrinkFactor;

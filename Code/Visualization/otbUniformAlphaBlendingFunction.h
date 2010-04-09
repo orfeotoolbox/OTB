@@ -35,19 +35,19 @@ namespace Function
  */
 template <class TInputRGBPixel1, class TInputRGBPixel2 = TInputRGBPixel1, class TOutputRGBPixel = TInputRGBPixel1>
 class UniformAlphaBlendingFunction
-  : public BlendingFunction<TInputRGBPixel1,TInputRGBPixel2,TOutputRGBPixel>
+  : public BlendingFunction<TInputRGBPixel1, TInputRGBPixel2, TOutputRGBPixel>
 {
 public:
   /** Standard class typedefs */
-  typedef UniformAlphaBlendingFunction                 Self;
+  typedef UniformAlphaBlendingFunction Self;
   typedef BlendingFunction<TInputRGBPixel1,
                            TInputRGBPixel2,
                            TOutputRGBPixel>            Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** type macro */
-  itkTypeMacro(UniformAlphaBlendingFunction,BlendingFunction);
+  itkTypeMacro(UniformAlphaBlendingFunction, BlendingFunction);
 
   /** new macro */
   itkNewMacro(Self);
@@ -59,19 +59,22 @@ public:
   typedef typename OutputRGBPixelType::ValueType OutputValueType;
 
   /** Evaluate method  */
-  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type & input2)
+  inline virtual const OutputRGBPixelType Evaluate(const InputPixel1Type& input1, const InputPixel2Type& input2)
   {
     OutputRGBPixelType resp;
     resp.Fill(itk::NumericTraits<OutputValueType>::max());
-    resp.SetRed(  static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetRed())   +(1-m_Alpha)*static_cast<double>(input2.GetRed())  +0.5)));
-    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetGreen()) +(1-m_Alpha)*static_cast<double>(input2.GetGreen())+0.5)));
-    resp.SetBlue( static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetBlue())  +(1-m_Alpha)*static_cast<double>(input2.GetBlue()) +0.5)));
+    resp.SetRed(static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetRed())   +
+                                                       (1 - m_Alpha) * static_cast<double>(input2.GetRed())  + 0.5)));
+    resp.SetGreen(static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetGreen()) +
+                                                         (1 - m_Alpha) * static_cast<double>(input2.GetGreen()) + 0.5)));
+    resp.SetBlue(static_cast<OutputValueType>(vcl_floor(m_Alpha * static_cast<double>(input1.GetBlue())  +
+                                                        (1 - m_Alpha) * static_cast<double>(input2.GetBlue()) + 0.5)));
     return resp;
   }
 
   /** Set/Get the alpha value */
-  itkSetClampMacro(Alpha,double,0.,1.);
-  itkGetMacro(Alpha,double);
+  itkSetClampMacro(Alpha, double, 0., 1.);
+  itkGetMacro(Alpha, double);
 
 protected:
   /** Constructor */
@@ -80,7 +83,7 @@ protected:
   virtual ~UniformAlphaBlendingFunction() {}
 private:
   UniformAlphaBlendingFunction(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
   /** Alpha value for blending (should be in the range [0,1] */
   double m_Alpha;
@@ -90,5 +93,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

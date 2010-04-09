@@ -40,13 +40,13 @@ namespace otb
 template <class TOutputLabelMap>
 class ITK_EXPORT LabelMapSource : public itk::ProcessObject
 {
-public :
+public:
 
   /** Standard class typedefs. */
-  typedef LabelMapSource                      Self;
-  typedef itk::ProcessObject                    Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef LabelMapSource                Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,7 +54,7 @@ public :
   /** Run-time type information (and related methods). */
   itkTypeMacro(LabelMapSource, itk::ProcessObject);
 
-  typedef TOutputLabelMap     OutputLabelMapType;
+  typedef TOutputLabelMap                   OutputLabelMapType;
   typedef typename TOutputLabelMap::Pointer OutputLabelMapPointer;
 
   /** Overriding GetOutput() method */
@@ -71,8 +71,8 @@ protected:
   virtual void  AllocateOutputs();
 
 private:
-  LabelMapSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapSource(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 
 };
 
@@ -83,5 +83,3 @@ private:
 #endif
 
 #endif // __otbLabelMapSource_h
-
-

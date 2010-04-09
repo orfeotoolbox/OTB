@@ -43,30 +43,30 @@ namespace otb
  * \sa ImageToProfileFilter
  * \sa itk::ClosingByReconstructionImageFilter
  */
-template <class TInputImage,class TOutputImage, class TStructuringElement>
+template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT MorphologicalClosingProfileFilter
-      : public ImageToProfileFilter<TInputImage,TOutputImage,
-      itk::ClosingByReconstructionImageFilter
-      <TInputImage, TOutputImage, TStructuringElement>,
-      unsigned int>
+  : public ImageToProfileFilter<TInputImage, TOutputImage,
+                                itk::ClosingByReconstructionImageFilter
+                                <TInputImage, TOutputImage, TStructuringElement>,
+                                unsigned int>
 {
 public:
   /** Standard typedefs */
-  typedef MorphologicalClosingProfileFilter  Self;
-  typedef ImageToProfileFilter<TInputImage,TOutputImage,
-  itk::ClosingByReconstructionImageFilter
-  <TInputImage, TOutputImage, TStructuringElement>,
-  unsigned int> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef MorphologicalClosingProfileFilter Self;
+  typedef ImageToProfileFilter<TInputImage, TOutputImage,
+                               itk::ClosingByReconstructionImageFilter
+                               <TInputImage, TOutputImage, TStructuringElement>,
+                               unsigned int> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(MorphologicalClosingProfileFilter,ImageToProfileFilter);
+  itkTypeMacro(MorphologicalClosingProfileFilter, ImageToProfileFilter);
 
-  typedef TStructuringElement StructuringElementType;
+  typedef TStructuringElement                StructuringElementType;
   typedef typename Superclass::ParameterType ParameterType;
 
 protected:
@@ -77,20 +77,20 @@ protected:
     se.SetRadius(param);
     se.CreateStructuringElement();
     this->GetFilter()->SetKernel(se);
-  };
+  }
   /** Constructor */
   MorphologicalClosingProfileFilter() {};
   /** Destructor */
-  virtual ~MorphologicalClosingProfileFilter() {};
+  virtual ~MorphologicalClosingProfileFilter() {}
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-  };
+    Superclass::PrintSelf(os, indent);
+  }
 
 private:
-  MorphologicalClosingProfileFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MorphologicalClosingProfileFilter(const Self &); //purposely not implemented
+  void operator =(const Self&); //purposely not implemented
 };
-}// End namespace otb
+} // End namespace otb
 #endif

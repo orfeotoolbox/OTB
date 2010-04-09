@@ -21,7 +21,6 @@
 #include "otbGeometricMomentPathFunction.h"
 #include "itkVectorContainer.h"
 
-
 namespace otb
 {
 
@@ -32,50 +31,49 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputPath,
-class TOutput      = double,
-class TPrecision   = double>
+template <class TInputPath,
+          class TOutput      = double,
+          class TPrecision   = double>
 class ITK_EXPORT RealMomentPathFunction :
-      public GeometricMomentPathFunction< TInputPath, TOutput, TPrecision>
+  public GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>
 {
 public:
   /** Standard class typedefs. */
-  typedef RealMomentPathFunction                                      Self;
-  typedef GeometricMomentPathFunction< TInputPath, TOutput, TPrecision> Superclass;
-  typedef itk::SmartPointer<Self>                                     Pointer;
-  typedef itk::SmartPointer<const Self>                               ConstPointer;
+  typedef RealMomentPathFunction                                       Self;
+  typedef GeometricMomentPathFunction<TInputPath, TOutput, TPrecision> Superclass;
+  typedef itk::SmartPointer<Self>                                      Pointer;
+  typedef itk::SmartPointer<const Self>                                ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RealMomentPathFunction, GeometricMomentPathFunction);
 
   /** InputPathType typedef support. */
-  typedef typename Superclass::PathType                 PathType;
-  typedef typename Superclass::PathConstPointer         PathConstPointer;
-  typedef typename PathType::ContinuousIndexType        VertexType;
-  typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
-  typedef typename VertexListType::ConstPointer         VertexListPointer;
+  typedef typename Superclass::PathType              PathType;
+  typedef typename Superclass::PathConstPointer      PathConstPointer;
+  typedef typename PathType::ContinuousIndexType     VertexType;
+  typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
+  typedef typename VertexListType::ConstPointer      VertexListPointer;
 
   /** Type for calculation precision */
-  typedef typename Superclass::PrecisionType            PrecisionType;
+  typedef typename Superclass::PrecisionType PrecisionType;
 
   /** OutputType typedef support. */
-  typedef typename Superclass::OutputType               RealType;
+  typedef typename Superclass::OutputType RealType;
 
 protected:
   RealMomentPathFunction()
-  {}
-  ~RealMomentPathFunction() {};
+    {}
+  ~RealMomentPathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf( os, indent );
+    Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RealMomentPathFunction( const Self& ); //purposely not implemented
-  void operator=( const Self& );               //purposely not implemented
+  RealMomentPathFunction(const Self &);  //purposely not implemented
+  void operator =(const Self&);                //purposely not implemented
 };
 
 } // namespace otb
 
 #endif
-

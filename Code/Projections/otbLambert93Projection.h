@@ -18,7 +18,6 @@
 #ifndef __otbLambert93Projection_h
 #define __otbLambert93Projection_h
 
-
 #include "projection/ossimMapProjection.h"
 #include "projection/ossimLambertConformalConicProjection.h"
 #include "otbMapProjection.h"
@@ -33,31 +32,30 @@ namespace otb
 template <InverseOrForwardTransformationEnum transform>
 class ITK_EXPORT Lambert93Projection : public LambertConformalConicMapProjection<transform>
 {
-public :
+public:
   /** Standard class typedefs. */
-  typedef Lambert93Projection                  Self;
-  typedef LambertConformalConicMapProjection<transform>   Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef Lambert93Projection                           Self;
+  typedef LambertConformalConicMapProjection<transform> Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
 
-  typedef typename Superclass::ScalarType                 ScalarType;
-  typedef itk::Point<ScalarType,2 >                       InputPointType;
-  typedef itk::Point<ScalarType,2 >                        OutputPointType;
+  typedef typename Superclass::ScalarType ScalarType;
+  typedef itk::Point<ScalarType, 2>       InputPointType;
+  typedef itk::Point<ScalarType, 2>       OutputPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( Lambert93Projection, LambertConformalConicMapProjection);
-
+  itkTypeMacro(Lambert93Projection, LambertConformalConicMapProjection);
 
 protected:
   Lambert93Projection();
   virtual ~Lambert93Projection();
 
-private :
-  Lambert93Projection(const Self&); //purposely not implemented
-  void operator=(const Self&);                       //purposely not implemented
+private:
+  Lambert93Projection(const Self &); //purposely not implemented
+  void operator =(const Self&);                       //purposely not implemented
 };
 
 } // namespace otb

@@ -39,19 +39,29 @@ namespace otb
    * \ingroup Textures
  */
 
-template <class TInputImage, class TOutputImage, class TCoordRep = float >
+template <class TInputImage, class TOutputImage, class TCoordRep = float>
 class ITK_EXPORT PanTexTextureImageFunctionFilter :
-public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage,
-                                              TextureImageFunction<TInputImage, ITK_TYPENAME Functor::PanTexTextureFunctor< ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType>, TCoordRep  > >
+  public FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage,
+                                               TextureImageFunction<TInputImage,
+                                                                    ITK_TYPENAME Functor::PanTexTextureFunctor<
+                                                                      ITK_TYPENAME TInputImage::PixelType,
+                                                                      ITK_TYPENAME
+                                                                      TOutputImage::PixelType>, TCoordRep> >
 
 {
-  public:
+public:
   /** Standard class typedefs. */
   typedef PanTexTextureImageFunctionFilter Self;
-  typedef FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage,
-                                              TextureImageFunction<TInputImage, typename Functor::PanTexTextureFunctor< typename TInputImage::PixelType, typename TOutputImage::PixelType >, TCoordRep  > >  Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef FunctionWithNeighborhoodToImageFilter<TInputImage, TOutputImage,
+                                                TextureImageFunction<TInputImage,
+                                                                     typename Functor::PanTexTextureFunctor<typename
+                                                                                                            TInputImage
+                                                                                                            ::PixelType,
+                                                                                                            typename
+                                                                                                            TOutputImage
+                                                                                                            ::PixelType>, TCoordRep> >  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PanTexTextureImageFunctionFilter, TextureImageFunction);
@@ -60,18 +70,17 @@ public FunctionWithNeighborhoodToImageFilter< TInputImage, TOutputImage,
   itkNewMacro(Self);
 
   /** typedef support. */
-  typedef TInputImage                          InputImageType;
-  typedef TOutputImage                         OutputImageType;
-  typedef typename InputImageType::OffsetType  OffsetType;
-  typedef typename InputImageType::SizeType    SizeType;
+  typedef TInputImage                         InputImageType;
+  typedef TOutputImage                        OutputImageType;
+  typedef typename InputImageType::OffsetType OffsetType;
+  typedef typename InputImageType::SizeType   SizeType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,InputImageType::ImageDimension);
-
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
 protected:
   PanTexTextureImageFunctionFilter()
-  {
+    {
     OffsetType off;
     off.Fill(2);
     this->SetOffset(off);
@@ -79,15 +88,15 @@ protected:
     radius.Fill(4);
     this->SetRadius(radius);
 
-  };
-  virtual ~PanTexTextureImageFunctionFilter() {};
+    };
+  virtual ~PanTexTextureImageFunctionFilter() {}
   //void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PanTexTextureImageFunctionFilter( const Self& ); //purposely not implemented
-  void operator=( const Self& ); //purposely not implemented
+  PanTexTextureImageFunctionFilter(const Self &);  //purposely not implemented
+  void operator =(const Self&);  //purposely not implemented
 
-  virtual void SetOffset( OffsetType off )
+  virtual void SetOffset(OffsetType off)
   {
     Superclass::SetOffset(off);
   }
@@ -95,6 +104,4 @@ private:
 
 } // end namespace otb
 
-
 #endif
-
