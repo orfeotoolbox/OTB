@@ -132,7 +132,7 @@ ENDIF( ITK_USE_MINC2 )
 
 
 # Put "." in the rpath of all ITK shared libraries.
-LINK_DIRECTORIES(.)
+#LINK_DIRECTORIES(.)
 
 #-----------------------------------------------------------------------------
 # ITK build configuration options.
