@@ -481,8 +481,8 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS6}
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
-#ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6}
-#         otbFourierMellinImageFilterNew)
+ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6}
+         otbFourierMellinImageFilterNew)
 
 #ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS6}
 # --compare-n-images ${NOTOL} 2
