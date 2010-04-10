@@ -123,6 +123,10 @@ ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
         otbSVMPointSetModelEstimatorTrain
 	${TEMP}/leTvsvm_model_pointset)
 
+# -------            otb::SVMSampleListModelEstimator   --------------------  
+
+ADD_TEST(leTuSVMSampleListModelEstimatorNew ${LEARNING_TESTS2}
+        otbSVMSampleListModelEstimatorNew)   
 
 # -------            otb::SVMClassifier   -----------------------------
 
@@ -419,6 +423,7 @@ SET(BasicLearning_SRCS2
 otbLearningTests2.cxx
 otbSVMPointSetModelEstimatorNew.cxx
 otbSVMPointSetModelEstimatorTrain.cxx
+otbSVMSampleListModelEstimatorNew.cxx
 otbSVMClassifierNew.cxx
 otbSVMClassifierImage.cxx
 otbSVMClassifierPointSet.cxx

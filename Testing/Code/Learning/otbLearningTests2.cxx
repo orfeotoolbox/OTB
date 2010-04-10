@@ -28,6 +28,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSVMPointSetModelEstimatorNew);
   REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
+  REGISTER_TEST(otbSVMSampleListModelEstimatorNew);
   REGISTER_TEST(otbSVMClassifierNew);
   REGISTER_TEST(otbSVMClassifierImage);
   REGISTER_TEST(otbSVMClassifierPointSet);
