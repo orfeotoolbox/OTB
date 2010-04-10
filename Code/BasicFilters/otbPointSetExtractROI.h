@@ -61,9 +61,13 @@ public:
   itkTypeMacro(PointSetExtractROI, PointSetToPointSetFilter);
 
   /** Set/Get Start methods */
+  itkGetMacro(StartX, unsigned long);
+  itkGetMacro(StartY, unsigned long);
   itkSetMacro(StartX, unsigned long);
   itkSetMacro(StartY, unsigned long);
   /** Set/Get Size methods */
+  itkGetMacro(SizeX, unsigned long);
+  itkGetMacro(SizeY, unsigned long);
   itkSetMacro(SizeX, unsigned long);
   itkSetMacro(SizeY, unsigned long);
 
