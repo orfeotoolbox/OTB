@@ -40,4 +40,5 @@ void RegisterTests()
   REGISTER_TEST(otbMeanFunctorImageTest);
   REGISTER_TEST(otbTransformPointSetFilterTest);
   REGISTER_TEST(otbRandomPointSetSourceTest);
+  REGISTER_TEST(otbPointSetExtractROITest);
 }
