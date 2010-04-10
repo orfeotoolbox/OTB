@@ -32,6 +32,8 @@ void RegisterTests()
   REGISTER_TEST(otbPointSetDensityFunctionTest);
   REGISTER_TEST(otbPointSetDensityGaussianFunctionNew);
   REGISTER_TEST(otbPointSetDensityGaussianFunctionTest);
+  REGISTER_TEST(otbPointSetDensityEpanechnikovFunctionNew);
+  REGISTER_TEST(otbPointSetDensityEpanechnikovFunctionTest);
   REGISTER_TEST(otbPointSetToDensityImageFilterNew);
   REGISTER_TEST(otbPointSetToDensityImageFilterTest);
   REGISTER_TEST(otbKeyPointDensityImageFilterNew);
