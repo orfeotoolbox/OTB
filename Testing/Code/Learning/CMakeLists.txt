@@ -8,13 +8,13 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
+SET(NOTOL 0.0)
 
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
 SET(EPSILON 0.0000000001)
-SET(EPSILON_10e3 0.001)
-SET(EPSILON_10e4 0.0001)
-SET(EPSILON_10e5 0.00001)
+SET(EPSILON_3 0.001)
+SET(EPSILON_4 0.0001)
+SET(EPSILON_5 0.00001)
 
 
 SET(LEARNING_TESTS1 ${CXX_TEST_PATH}/otbLearningTests1)
@@ -35,7 +35,7 @@ ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS1}
 	${INPUTDATA}/svm_model)
 
 ADD_TEST(leTvSVMModelAccessor ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e5}  ${BASELINE_FILES}/leSVMModelAccessor.txt
+--compare-ascii ${EPSILON_5}  ${BASELINE_FILES}/leSVMModelAccessor.txt
                         ${TEMP}/leSVMModelAccessor.txt
         otbSVMModelAccessor
 	${INPUTDATA}/svm_model
@@ -43,21 +43,21 @@ ADD_TEST(leTvSVMModelAccessor ${LEARNING_TESTS1}
 
 
 ADD_TEST(leTvSVMModelLoadSave ${LEARNING_TESTS1}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
                         ${TEMP}/svmmodel_test
         otbSVMModelLoadSave
 	${INPUTDATA}/svm_model
 	${TEMP}/svmmodel_test)
 
 ADD_TEST(leTvSVMModelWithGenericKeywordKernelLoadSave ${LEARNING_TESTS1}
---compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvmmodel_image_generic_version_test
+--compare-ascii ${NOTOL}  ${BASELINE_FILES}/leTvsvmmodel_image_generic_version_test
                         ${TEMP}/leTvsvmmodel_image_generic_version_test
         otbSVMModelGenericKernelLoadSave
 	${INPUTDATA}/svm_model_image_generic_version
 	${TEMP}/leTvsvmmodel_image_generic_version_test)
 
 ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS1}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model_image_generic_kernel
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model_image_generic_kernel
                         ${TEMP}/leTvsvmmodel_image_generic_kernel_test
         otbSVMModelGenericKernelLoadSave
 	${INPUTDATA}/svm_model_image_generic_kernel
@@ -71,7 +71,7 @@ ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS1}
 
 
 ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image
+--compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image
                         ${TEMP}/leTvsvm_model_image
 --ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
@@ -81,7 +81,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS1}
 	0 )
 
 ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
+--compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_opt
                         ${TEMP}/leTvsvm_model_image_opt
 --ignore-lines-with 2 probA probB
         otbSVMImageModelEstimatorTrain
@@ -91,7 +91,7 @@ ADD_TEST(leTlSVMImageModelEstimatorTrainWithOptimization ${LEARNING_TESTS1}
 	1 )
 
 ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class
+--compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_image_one_class
                         ${TEMP}/leTvsvm_model_image_one_class
         otbSVMImageModelEstimatorTrainOneClass
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -99,7 +99,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrainOneClass ${LEARNING_TESTS1}
 	${TEMP}/leTvsvm_model_image_one_class)
 
 ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS1}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
+--compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
                         ${TEMP}/leSVMModelEstimatorModelAccessor.txt
         otbSVMImageModelEstimatorModelAccessor
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -117,7 +117,7 @@ ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS2}
         otbSVMPointSetModelEstimatorNew)
 
 ADD_TEST(leTvSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
---compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset
+--compare-ascii ${EPSILON_3}  ${BASELINE_FILES}/leTvsvm_model_pointset
                         ${TEMP}/leTvsvm_model_pointset
 --ignore-lines-with 2 probA probB
         otbSVMPointSetModelEstimatorTrain
@@ -134,7 +134,7 @@ ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}
         otbSVMClassifierNew)
 
 ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}
---compare-image ${TOL}
+--compare-image ${NOTOL}
 		${BASELINE}/leSVMClassifierImageOutput.png
 		${TEMP}/leSVMClassifierImageOutput.png
         otbSVMClassifierImage
@@ -143,7 +143,7 @@ ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}
 	${TEMP}/leSVMClassifierImageOutput.png)
 
 ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}
---compare-image ${TOL}
+--compare-image ${NOTOL}
 		${BASELINE}/leSVMClassifierImageOneClassOutput.png
 		${TEMP}/leSVMClassifierImageOneClassOutput.png
         otbSVMClassifierImage
@@ -152,7 +152,7 @@ ADD_TEST(leTvSVMClassifierImageOneClass ${LEARNING_TESTS2}
 	${TEMP}/leSVMClassifierImageOneClassOutput.png)
 
 ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}
---compare-image ${TOL}  ${BASELINE}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
+--compare-image ${NOTOL}  ${BASELINE}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
                         ${TEMP}/leTvSVMClassifierImageWithGenericKernalLinearOutput.png
 	otbSVMClassifierImage
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -208,7 +208,7 @@ ADD_TEST(leTuSOMActivationBuilderNew ${LEARNING_TESTS2}
         otbSOMActivationBuilderNew)
 
 ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS2}
-        --compare-image ${TOL}
+        --compare-image ${NOTOL}
 	${BASELINE}/leSOMPoupeesSubActivationMap1.hdr
 	${TEMP}/leSOMPoupeesSubActivationMap1.hdr
 	otbSOMActivationBuilder
@@ -238,7 +238,7 @@ ADD_TEST(leTuSOMClassifierNew ${LEARNING_TESTS3}
         otbSOMClassifierNew)
 
 ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS3}
-        --compare-image ${TOL}
+        --compare-image ${NOTOL}
 	${BASELINE}/leSOMPoupeesClassified.hdr
 	${TEMP}/leSOMPoupeesClassified.hdr
 	otbSOMClassifier
@@ -253,7 +253,7 @@ ADD_TEST(leTuSOMImageClassificationFilterNew ${LEARNING_TESTS3}
         otbSOMImageClassificationFilterNew)
 
 ADD_TEST(leTvSOMImageClassificationFilter ${LEARNING_TESTS3}
-        --compare-image ${TOL}
+        --compare-image ${NOTOL}
 	${BASELINE}/leSOMPoupeesClassified.hdr
 	${TEMP}/leSOMImageClassificationFilterOuptut.hdr
 	otbSOMImageClassificationFilter
@@ -269,7 +269,7 @@ ADD_TEST(leTuKMeansImageClassificationFilterNew ${LEARNING_TESTS3}
         otbKMeansImageClassificationFilterNew)
 
 ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}
-        --compare-image ${TOL}
+        --compare-image ${NOTOL}
 	${BASELINE}/leKMeansImageClassificationFilterOuptut.hdr
 	${TEMP}/leKMeansImageClassificationFilterOuptut.hdr
 	otbKMeansImageClassificationFilter
@@ -285,7 +285,6 @@ ADD_TEST(leTvKMeansImageClassificationFilter ${LEARNING_TESTS3}
 ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS3}
         otbSEMClassifierNew)
 
-# -----------------------------------------------------------------------
 
 # ------- otb::SVMImageClassificationFilter ---------------------------
 
@@ -293,7 +292,7 @@ ADD_TEST(leTuSVMImageClassificationFilterNew ${LEARNING_TESTS3}
 	otbSVMImageClassificationFilterNew)
 
 ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
-	--compare-image ${TOL}
+	--compare-image ${NOTOL}
 	${BASELINE}/leSVMImageClassificationFilterOutput.tif
 	${TEMP}/leSVMImageClassificationFilterOutput.tif
 	otbSVMImageClassificationFilter
@@ -301,8 +300,13 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_image
 	${TEMP}/leSVMImageClassificationFilterOutput.tif)
 
+# ------- otb::SVMImageClassificationWithRuleFilter ---------------------- 
+
+ADD_TEST(leTuSVMImageClassificationWithRuleFilterNew ${LEARNING_TESTS3}
+          otbSVMImageClassificationWithRuleFilterNew) 
+
 ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
-    --compare-n-ascii ${TOL} 13
+    --compare-n-ascii ${NOTOL} 13
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest1.txt
         ${TEMP}/leTvSVMModelGenericKernelsTest1.txt
         ${BASELINE_FILES}/leTvSVMModelGenericKernelsTest2.txt
@@ -347,21 +351,21 @@ ADD_TEST(leTvSVMModelGenericKernelsTest ${LEARNING_TESTS3}
 
 
 ADD_TEST(leTvSVMModelCopy ${LEARNING_TESTS3}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model
                         ${TEMP}/svmcopymodel_test
         otbSVMModelCopyTest
 	${INPUTDATA}/svm_model
 	${TEMP}/svmcopymodel_test)
 
 ADD_TEST(leTvSVMModelCopyGenericKernel ${LEARNING_TESTS3}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model_generic
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model_generic
                         ${TEMP}/svmcopygeneric_test
         otbSVMModelCopyGenericKernelTest
 	${INPUTDATA}/svm_model_generic
 	${TEMP}/svmcopygeneric_test)
 
 ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
---compare-ascii ${TOL}  ${INPUTDATA}/svm_model_composed
+--compare-ascii ${NOTOL}  ${INPUTDATA}/svm_model_composed
                         ${TEMP}/svmcopycomposed_test
         otbSVMModelCopyComposedKernelTest
 	${INPUTDATA}/svm_model_composed
@@ -390,7 +394,7 @@ ADD_TEST(leTuROIdataConversionNew ${LEARNING_TESTS4}
         otbROIdataConversionNew)
 
 ADD_TEST(leTvROIdataConversion ${LEARNING_TESTS4}
- --compare-ascii ${TOL}
+ --compare-ascii ${NOTOL}
 	${BASELINE_FILES}/leTvROIdataConversion.txt
 	${TEMP}/leTvROIdataConversion.txt
         otbROIdataConversion
@@ -449,6 +453,7 @@ otbKMeansImageClassificationFilter.cxx
 otbSEMClassifierNew.cxx
 otbSVMImageClassificationFilterNew.cxx
 otbSVMImageClassificationFilter.cxx
+otbSVMImageClassificationWithRuleFilterNew.cxx
 otbSVMModelGenericKernelsTest.cxx
 otbSVMModelCopyTest.cxx
 otbSVMModelCopyGenericKernelTest.cxx
