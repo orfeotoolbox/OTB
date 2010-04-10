@@ -17,17 +17,11 @@
 =========================================================================*/
 
 #include "otbVectorDataFileReader.h"
-//#include "otbImageFileWriter.h"
 #include "otbVectorData.h"
-//#include "otbVectorDataProjectionFilter.h"
-//#include "otbVectorDataExtractROI.h"
 #include <fstream>
 #include <iostream>
 
-//#include "itkRGBAPixel.h"
-//#include "otbImage.h"
 #include "otbVectorDataToGISTableFilter.h"
-//#include "itkAttributeLabelObject.h"
 #include "otbPostGISConnectionImplementation.h"
 #include "otbPostGISTable.h"
 
