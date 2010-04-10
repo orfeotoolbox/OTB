@@ -1844,7 +1844,7 @@ SET(BasicFeatureExtraction_SRCS6
 otbFeatureExtractionTests6.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
-#otbFourierMellinImageFilterNew.cxx #Comment because generate error "duplicate vnl_fft_base<3...>" with otbFourierMellinImageFilter.cxx test on Mac OSX platform
+otbFourierMellinImageFilterNew.cxx #Comment because generate error "duplicate vnl_fft_base<3...>" with otbFourierMellinImageFilter.cxx test on Mac OSX platform
 #otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
