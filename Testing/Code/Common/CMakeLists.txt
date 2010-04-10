@@ -827,7 +827,7 @@ ENDIF(OTB_USE_MAPNIK)
 IF(OTB_USE_PQXX)
 
 ADD_TEST(coTuPostGISConnectionImplementationNew ${COMMON_TESTS10}
-otbPostGISConnectionImplementationNew
+  otbPostGISConnectionImplementationNew
 )
 
 #This test need a runing PostGIS server on the localhost with trusted potgres user and an ecisting testgis base
@@ -849,16 +849,17 @@ ADD_TEST(coTvPostGISConnectionImplementationPerformTransaction ${COMMON_TESTS10}
 
 
 ADD_TEST(coTuGISTableNew ${COMMON_TESTS10}
-otbGISTableNew
+  otbGISTableNew
 )
 
 ADD_TEST(coTuPostGISTableNew ${COMMON_TESTS10}
-otbPostGISTableNew
+  otbPostGISTableNew
 )
 
 ADD_TEST(coTuVectorDataToGISTableFilterNew ${COMMON_TESTS10}
-otbVectorDataToGISTableFilterNew
+  otbVectorDataToGISTableFilterNew
 )
+
 
 # ADD_TEST(coTuVectorDataToGISTableFilter ${COMMON_TESTS10}
 # otbVectorDataToGISTableFilter
@@ -868,25 +869,30 @@ otbVectorDataToGISTableFilterNew
 # postgres
 # )
 
+ADD_TEST(coTuGISTableToGISTableFilterNew ${COMMON_TESTS10}
+  otbGISTableToGISTableFilterNew
+)
+
+
 ADD_TEST(coTuLabelMapToGISTableFilterNew ${COMMON_TESTS10}
-otbLabelMapToGISTableFilterNew
+  otbLabelMapToGISTableFilterNew
 )
 
 ADD_TEST(coTuGISTableToLabelMapFilterNew ${COMMON_TESTS10}
-otbGISTableToLabelMapFilterNew
+  otbGISTableToLabelMapFilterNew
 )
 
 ADD_TEST(coTuGISTableToVectorDataFilterNew ${COMMON_TESTS10}
-otbGISTableToVectorDataFilterNew
+  otbGISTableToVectorDataFilterNew
 )
 
 ADD_TEST(coTvLabelMapToGISTableFilter ${COMMON_TESTS10}
-otbLabelMapToGISTableFilter
-${INPUTDATA}/rcc8_mire1.png
-orfeotoolbox_test
-labelmaptogis_test_table
-orfeotoolbox_test_user
-Bidfeud0
+  otbLabelMapToGISTableFilter
+    ${INPUTDATA}/rcc8_mire1.png
+    orfeotoolbox_test
+    labelmaptogis_test_table
+    orfeotoolbox_test_user
+    Bidfeud0
 )
 
 
@@ -1112,6 +1118,7 @@ otbGISTableNew.cxx
 otbPostGISTableNew.cxx
 otbVectorDataToGISTableFilterNew.cxx
 # otbVectorDataToGISTableFilter.cxx
+otbGISTableToGISTableFilterNew.cxx
 otbLabelMapToGISTableFilterNew.cxx
 otbGISTableToLabelMapFilterNew.cxx
 otbGISTableToVectorDataFilterNew.cxx

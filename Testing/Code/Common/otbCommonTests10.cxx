@@ -33,6 +33,7 @@ void RegisterTests()
   REGISTER_TEST(otbPostGISTableNew);
   REGISTER_TEST(otbVectorDataToGISTableFilterNew);
 //   REGISTER_TEST(otbVectorDataToGISTableFilter);
+  REGISTER_TEST(otbGISTableToGISTableFilterNew);
   REGISTER_TEST(otbLabelMapToGISTableFilterNew);
   REGISTER_TEST(otbGISTableToVectorDataFilterNew);
   REGISTER_TEST(otbGISTableToLabelMapFilterNew);
