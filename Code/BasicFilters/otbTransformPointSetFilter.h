@@ -25,12 +25,10 @@ namespace otb
 {
 
 /** \class TransformPointSetFilter
- * \brief
+ * \brief TransformPointSetFilter applies a transform to all the
+ * points of a PointSet.
  *
- * TransformPointSetFilter applies a transform to all the points
- * of a PointSet.
- *
- * The additional content of the PointSet is passed untouched.
+ * The additional content of the PointSet is left untouched.
  *
  * PointSets that have added information like normal vector on the points, will
  * have to take care of transforming this data by other means.
