@@ -2242,6 +2242,7 @@ ADD_TEST(ioTvOssimJpegFileRessourceLeak ${IO_TESTS18}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS19 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+IF(OTB_USE_CURL)
 
 ADD_TEST(ioTvImageFileReaderServerNameHTTPTest ${IO_TESTS19}
 	otbImageFileReaderServerName
@@ -2250,8 +2251,6 @@ ADD_TEST(ioTvImageFileReaderServerNameHTTPTest ${IO_TESTS19}
 ADD_TEST(ioTvImageFileReaderServerNameOTBTest ${IO_TESTS19}
 	otbImageFileReaderServerName
 	${OTB_DATA_ROOT}/Examples/osmfile.otb)
-
-IF(OTB_USE_CURL)
 
 ADD_TEST(ioTuTileMapImageSourceNew ${IO_TESTS19}
         otbTileMapImageSourceNew )
