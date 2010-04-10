@@ -523,6 +523,11 @@ ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS5}
 		${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
 		)
 
+# -------            otb::UnaryFunctorImageFilter   ----------------------------
+
+ADD_TEST(bfTuUnaryFunctorImageFilterNew ${BASICFILTERS_TESTS5}
+         otbUnaryFunctorImageFilterNew)
+
 # -------            otb::PrintableImageFilter   ------------------------------
 
 ADD_TEST(bfTuPrintableImageFilterNew ${BASICFILTERS_TESTS5}
@@ -1677,6 +1682,7 @@ otbMatrixTransposeMatrixImageFilterNew.cxx
 otbMatrixTransposeMatrixImageFilter.cxx
 otbUnaryImageFunctorWithVectorImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilter.cxx
+otbUnaryFunctorImageFilterNew.cxx
 otbPrintableImageFilterNew.cxx
 otbPrintableImageFilter.cxx
 otbPrintableImageFilterWithMask.cxx

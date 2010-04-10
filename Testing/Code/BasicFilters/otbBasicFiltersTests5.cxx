@@ -36,6 +36,7 @@ void RegisterTests()
   REGISTER_TEST(otbMatrixTransposeMatrixImageFilter);
   REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilterNew);
   REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
+  REGISTER_TEST(otbUnaryFunctorImageFilterNew);
   REGISTER_TEST(otbPrintableImageFilterNew);
   REGISTER_TEST(otbPrintableImageFilter);
   REGISTER_TEST(otbPrintableImageFilterWithMask);
