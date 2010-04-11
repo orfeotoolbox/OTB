@@ -25,10 +25,10 @@ namespace otb
 {
 
 /** \class PointSetExtractROI
- * \brief
+ * \brief Extract a part of the points specified by a region
  *
- * PointSetExtractROI applies a transform to all the points
- * of a PointSet.
+ * PointSetExtractROI extract all the points of a PointSet that are
+ * in a given region.
  *
  * The additional content of the PointSet is passed untouched.
  *
@@ -73,7 +73,7 @@ public:
 
 protected:
   PointSetExtractROI();
-  ~PointSetExtractROI() {}
+  virtual ~PointSetExtractROI() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Generate Requested Data */

@@ -28,7 +28,7 @@ namespace otb
 {
 
 /** \class PolarimetricSynthesisFilter
- * \brief
+ * \brief Compute the polarimetric synthesis from two to four radar images
  *
  * This class compute the polarimetric synthesis from two to four radar images,
  * depening on the polarimetric architecture:

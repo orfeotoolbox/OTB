@@ -27,7 +27,7 @@ WriterWatcherBase
 ::WriterWatcherBase()
 {
   // Initialize state
-  m_Comment = "Not watching an object";
+  m_Comment = "Not watching any object";
   m_Process = 0;
 }
 

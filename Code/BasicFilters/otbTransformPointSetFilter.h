@@ -71,7 +71,7 @@ public:
 
 protected:
   TransformPointSetFilter();
-  ~TransformPointSetFilter() {}
+  virtual ~TransformPointSetFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Generate Requested Data */

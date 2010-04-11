@@ -26,12 +26,20 @@ namespace otb
 {
 
 /** \class WaterSqrtSpectralAngleImageFilter
- *  \brief Calculates a radiometric water indice
+ *  \brief Compute a radiometric water indice
  *
- *  This filter calculates a pixel wise water indice by calculating the spectral angle distance with a reference radiometrie.
- *  This class is templated over the input multispectral image type, and the output image type.
- *  By default, the filter use the channel 0 as blue, the channel 1 as green, the channel 2 as red, and the channel 3 as near infrared. It can be changed with the SetBlue, SetGreen, SetRed and SetIR methodes.
- *  In the output image, the more the value is near to zero, the higher is the probability to be water.
+ *  This filter calculates a pixel wise water indice by calculating
+ *  the spectral angle distance with a reference radiometry.
+ *  This class is templated over the input multispectral image type, 
+ *  and the output image type.
+ *  By default, the filter use the channel 0 as blue, the channel 1 as
+ *  green, the channel 2 as red, and the channel 3 as near
+ *  infrared. It can be changed with the SetBlue, SetGreen, SetRed and
+ *  SetIR methods.
+ *
+ *  In the output image, value clse to zero denotes a highest
+ *  probability of water.
+ *
  *  \sa SpectralAngleDistanceImageFilter
  */
 
@@ -60,8 +68,8 @@ public:
   typedef TOutputImage                             OutputImageType;
 
 protected:
-  WaterSqrtSpectralAngleImageFilter() {};
-  ~WaterSqrtSpectralAngleImageFilter() {}
+  WaterSqrtSpectralAngleImageFilter() {}
+  virtual ~WaterSqrtSpectralAngleImageFilter() {}
 
 private:
   WaterSqrtSpectralAngleImageFilter(Self &); // purposely not implemented
