@@ -67,7 +67,7 @@ TerraSarCalibrationFunctor<TInput, TOutput>
   
   // Evaluate
   double nebn = 0.;
-  if ( !vnl_math_isnan(deltaTau) )
+  if ( !vnl_math_isnan(deltaTau) && coefficients.size() > 0 )
     nebn = Horner (coefficients, deltaTau);
 
   // Do not forget to multiply by the calibration factor
@@ -85,7 +85,7 @@ double TerraSarCalibrationFunctor<TInput, TOutput>
   double                                      res = *(coefIt);
   ++coefIt;
 
-  while (coefIt != coefficients.rend())
+  while (coefIt < coefficients.rend())
     {
     // Cumulate polynomial
     res = res * nebn + (*coefIt);
