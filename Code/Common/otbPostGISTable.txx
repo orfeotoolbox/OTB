@@ -78,7 +78,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   std::stringstream sqlCmd;
   this->InsertBegin(sqlCmd);
   sqlCmd << "POINT( ";
-  for (uint i = 0; i < SpatialDimension; i++)
+  for (unsigned int i = 0; i < SpatialDimension; i++)
     {
     sqlCmd << pt[i] << " ";
     }
@@ -103,7 +103,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   VertexIterator itVertex = l->GetVertexList()->Begin();
   while (itVertex != l->GetVertexList()->End())
     {
-    for (uint i = 0; i < SpatialDimension; i++)
+    for (unsigned int i = 0; i < SpatialDimension; i++)
       {
       sqlCmd << itVertex.Value()[i] << " ";
       ++itVertex;
@@ -146,7 +146,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
     {
     //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
     //std::cout << "vertex: " << itVertex.Value()<< std::endl;
-    for (uint i = 0; i < SpatialDimension; ++i)
+    for (unsigned int i = 0; i < SpatialDimension; ++i)
       {
       sqlCmd << itVertex.Value()[i] << " ";
       //++itVertex;
@@ -181,7 +181,7 @@ PostGISTable<TConnectionImplementation, TPrecision, SpatialDimension>
       while (itVertex != correctCurrentPolygonIntRing->GetVertexList()->End())
         {
         //polygon->line_to(itVertex.Value()[0],m_SensorModelFlip*itVertex.Value()[1]);
-        for (uint i = 0; i < SpatialDimension; i++)
+        for (unsigned int i = 0; i < SpatialDimension; i++)
           {
           sqlCmd << itVertex.Value()[i] << " ";
           ++itVertex;
