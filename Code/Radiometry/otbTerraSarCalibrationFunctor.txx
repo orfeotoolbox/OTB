@@ -81,7 +81,7 @@ template <class TInput, class TOutput>
 double TerraSarCalibrationFunctor<TInput, TOutput>
 ::Horner(std::vector<double>& coefficients, const double nebn) const
 {
-  std::vector<double>::const_reverse_iterator coefIt = coefficients.rbegin();
+  std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
   double                                      res = *(coefIt);
   ++coefIt;
 
