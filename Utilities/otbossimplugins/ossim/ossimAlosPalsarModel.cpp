@@ -100,6 +100,11 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
 
   const char* dopcen_str = kwl.find(prefix, "alt_dopcen[0]");
   double dopcen = atof(dopcen_str);
+  const char* dopcenLinear_str = kwl.find(prefix, "alt_dopcen[1]");
+  double dopcenLinear;
+  if (dopcenLinear_str != NULL) {
+	  dopcenLinear = atof(dopcenLinear_str);
+  }
 
   if (_sensor != NULL)
   {
@@ -149,6 +154,7 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   _sensor->set_semiMinorAxis(ellip_min) ;
 
   _sensor->set_dopcen(dopcen);
+  _sensor->set_dopcenLinear(dopcenLinear);
 
   return true;
 }

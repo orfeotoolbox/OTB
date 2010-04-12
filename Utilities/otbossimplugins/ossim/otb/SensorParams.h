@@ -163,10 +163,32 @@ public:
      return _dopcen;
    }
 
+   double get_dopcenLinear() const
+   {
+	   return _dopcenLinear;
+   }
+
    void set_dopcen(double value)
    {
      _dopcen = value;
    }
+
+   void set_dopcenLinear(double value)
+   {
+	   _dopcenLinear = value;
+   }
+
+   double get_rangeToFirstData() const
+   {
+	   return _rangeToFirstData;
+   }
+
+   void set_rangeToFirstData(double value)
+   {
+	   _rangeToFirstData = value;
+   }
+
+
    /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.
@@ -239,6 +261,17 @@ protected:
     * @brief Doppler centroid
     */
    double _dopcen;
+
+   /**
+    * @brief Doppler centroid linear term (wrt range pixel)
+    */
+   double _dopcenLinear;
+
+   /**
+    * @brief Slant range to first data sample
+    */
+   double _rangeToFirstData;
+
 
 private:
 };
