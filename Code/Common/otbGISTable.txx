@@ -25,8 +25,8 @@
 namespace otb
 {
 
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
-GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int TSpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
 ::GISTable()
 {
   m_TableName = "";
@@ -34,9 +34,9 @@ GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   m_Srid = -1;
 }
 
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int TSpatialDimension>
 void
-GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
 ::SetProjectionRef(std::string projectionRef)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
@@ -45,9 +45,9 @@ GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   this->Modified();
 }
 
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int TSpatialDimension>
 std::string
-GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
 ::GetProjectionRef() const
 {
   const itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
@@ -58,9 +58,9 @@ GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
   return projectionRef;
 }
 
-template <class TConnectionImplementation, class TPrecision, unsigned int SpatialDimension>
+template <class TConnectionImplementation, class TPrecision, unsigned int TSpatialDimension>
 void
-GISTable<TConnectionImplementation, TPrecision, SpatialDimension>
+GISTable<TConnectionImplementation, TPrecision, TSpatialDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

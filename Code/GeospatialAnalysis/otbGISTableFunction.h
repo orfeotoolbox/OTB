@@ -49,7 +49,7 @@ class ITK_EXPORT GISTableFunction :
 public:
   /** Dimension underlying input table. */
   itkStaticConstMacro(TableDimension, unsigned int,
-                      TInputTable::SpatialDimension);
+                      TInputTable::TSpatialDimension);
 
   /** Standard class typedefs. */
   typedef GISTableFunction Self;

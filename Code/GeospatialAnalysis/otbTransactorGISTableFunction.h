@@ -45,7 +45,7 @@ class ITK_EXPORT TransactorGISTableFunction :
 public:
   /** Dimension underlying input table. */
   itkStaticConstMacro(TableDimension, unsigned int,
-                      TInputTable::SpatialDimension);
+                      TInputTable::TSpatialDimension);
 
   /** Standard class typedefs. */
   typedef TransactorGISTableFunction             Self;

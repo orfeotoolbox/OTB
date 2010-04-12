@@ -35,7 +35,7 @@ namespace otb
  * \sa GISTableFileWriter
  *
  */
-template <class TConnectionImplementation, class TPrecision = double, unsigned int SpatialDimension = 2>
+template <class TConnectionImplementation, class TPrecision = double, unsigned int TSpatialDimension = 2>
 class GISTable
   : public itk::DataObject
 {
@@ -49,7 +49,7 @@ public:
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(GISTable, DataObject);
-  itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
+  itkStaticConstMacro(Dimension, unsigned int, TSpatialDimension);
 
   /** Typedefs */
   typedef TPrecision PrecisionType;
@@ -59,8 +59,8 @@ public:
 
   //typedef TConnectionImplementation::TransactionType TransactionType;
 
-  typedef itk::Point<TPrecision, SpatialDimension>                       PointType;
-  typedef PolyLineParametricPathWithValue <TPrecision, SpatialDimension> LineType;
+  typedef itk::Point<TPrecision, TSpatialDimension>                       PointType;
+  typedef PolyLineParametricPathWithValue <TPrecision, TSpatialDimension> LineType;
   typedef typename LineType::Pointer                                     LinePointerType;
 
   typedef Polygon <TPrecision>                   PolygonType;
@@ -71,7 +71,7 @@ public:
   typedef typename PolygonListType::ConstPointer PolygonListConstPointerType;
   /** Acessors */
 
-  //itkStaticConstMacro(GISDimension, unsigned int, SpatialDimension);
+  //itkStaticConstMacro(GISDimension, unsigned int, TSpatialDimension);
 
   itkGetConstMacro(TableName, std::string);
   itkSetMacro(TableName, std::string);

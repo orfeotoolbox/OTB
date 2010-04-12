@@ -31,27 +31,27 @@ namespace otb
  * \sa GISTableFileWriter
  *
  */
-template <class TConnectionImplementation, class TPrecision = double, unsigned int SpatialDimension = 2>
+template <class TConnectionImplementation, class TPrecision = double, unsigned int TSpatialDimension = 2>
 class ITK_EXPORT PostGISTable
-  : public GISTable <TConnectionImplementation, TPrecision, SpatialDimension>
+  : public GISTable <TConnectionImplementation, TPrecision, TSpatialDimension>
 {
 public:
   /** Standard class typedefs */
   typedef PostGISTable                                                       Self;
-  typedef GISTable <TConnectionImplementation, TPrecision, SpatialDimension> Superclass;
+  typedef GISTable <TConnectionImplementation, TPrecision, TSpatialDimension> Superclass;
   typedef itk::SmartPointer<Self>                                            Pointer;
   typedef itk::SmartPointer<const Self>                                      ConstPointer;
 
   /** Standard macros */
   itkNewMacro(Self);
   itkTypeMacro(PostGISTable, GISTable);
-  itkStaticConstMacro(Dimension, unsigned int, SpatialDimension);
+  itkStaticConstMacro(Dimension, unsigned int, TSpatialDimension);
 
   /** Some convenient typedefs */
   typedef TConnectionImplementation                                      ConnectionType;
   typedef typename ConnectionType::Pointer                               ConnectionPointerType;
-  typedef itk::Point<TPrecision, SpatialDimension>                       PointType;
-  typedef PolyLineParametricPathWithValue <TPrecision, SpatialDimension> LineType;
+  typedef itk::Point<TPrecision, TSpatialDimension>                       PointType;
+  typedef PolyLineParametricPathWithValue <TPrecision, TSpatialDimension> LineType;
   typedef typename LineType::Pointer                                     LinePointerType;
   typedef Polygon <TPrecision>                                           PolygonType;
   typedef typename PolygonType::Pointer                                  PolygonPointerType;
