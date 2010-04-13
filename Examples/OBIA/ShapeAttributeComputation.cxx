@@ -65,7 +65,6 @@ int main(int argc, char * argv[])
   typedef itk::LabelMap<LabelObjectType>        LabelMapType;
   typedef itk::LabelImageToLabelMapFilter
   <ImageType, LabelMapType> ConverterType;
-
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex

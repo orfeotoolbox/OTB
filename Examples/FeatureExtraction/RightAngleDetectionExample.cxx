@@ -136,7 +136,6 @@ int main(int argc, char * argv[])
                                                                LinesListType,
                                                                PointSetType>
   RightAngleFilterType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //

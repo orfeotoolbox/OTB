@@ -360,7 +360,7 @@ void TileMapImageIO::FetchTiles()
   while (
     CURLM_CALL_MULTI_PERFORM == curl_multi_perform(m_MultiHandle, &lStillRunning)
     )
-    ;
+   ;
 
   // Now get that URL
   while (lStillRunning)
@@ -398,7 +398,7 @@ void TileMapImageIO::FetchTiles()
       while (
         CURLM_CALL_MULTI_PERFORM == curl_multi_perform(m_MultiHandle, &lStillRunning)
         )
-        ;
+       ;
       break;
       }
     }

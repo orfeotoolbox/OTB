@@ -174,7 +174,6 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 

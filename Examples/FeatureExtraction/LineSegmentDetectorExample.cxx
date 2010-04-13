@@ -83,7 +83,6 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
-
   typedef otb::LineSegmentDetector<ImageType,
                                    PrecisionType> LsdFilterType;
 

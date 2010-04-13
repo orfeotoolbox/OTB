@@ -261,7 +261,6 @@ int main(int argc, char* argv[])
   //
   // Software Guide : EndLatex
   // Software Guide : BeginCodeSnippet
-
   typedef itk::Point<double, 2>                                 MyPointType;
   typedef otb::LeastSquareAffineTransformEstimator<MyPointType> EstimatorType;
 
@@ -276,7 +275,6 @@ int main(int argc, char* argv[])
 
   // Trigger computation
   estimator->Compute();
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -339,7 +337,6 @@ int main(int argc, char* argv[])
 
   ofs.close();
   // Software Guide : BeginCodeSnippet
-
   ImageType::Pointer fixedImage = fixedReader->GetOutput();
 
   resampler->SetTransform(estimator->GetAffineTransform());

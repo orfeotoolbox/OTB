@@ -71,7 +71,6 @@ int main(int argc, char* argv[])
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType>  WriterType;
-
   // Software Guide : EndCodeSnippet
   // Software Guide : BeginLatex
   //
@@ -83,7 +82,6 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-
   typedef itk::VariableLengthVector<PixelType>     RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType>

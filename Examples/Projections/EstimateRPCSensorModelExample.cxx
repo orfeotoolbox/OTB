@@ -129,7 +129,6 @@ int main(int argc, char* argv[])
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
-
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
