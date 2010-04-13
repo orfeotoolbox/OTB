@@ -141,6 +141,8 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
+  /** Correspondance between depth and scale for the quad tree paradigm*/
+  virtual const std::string ConvertDepthToScale(const unsigned int depth) const;
 protected:
   /** Constructor.*/
   TileMapImageIO();
@@ -186,7 +188,7 @@ private:
   void FillCacheFaults(void* buffer) const;
   int XYToQuadTree(double x, double y, std::ostringstream& quad) const;
   int XYToQuadTree2(double x, double y, std::ostringstream& quad) const;
-
+  
   /** CURL Multi */
   void GenerateTileInfo(double x, double y, int numTileX, int numTileY);
   bool CanReadFromCache(std::string filename);

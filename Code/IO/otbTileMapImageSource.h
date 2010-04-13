@@ -23,13 +23,12 @@
 
 namespace otb
 {
-/** \class ImageListToImageFilter
+/** \class TileMapImageSource
  *
- *  \brief Base class for all the filters taking an images list as input to
+ *  \brief Base class for all the ImageIO object for reading and writing TileMap images
  *  produce an image.
  *
- * \ingroup Images
- * \ingroup Lists
+ * \ingroup IO
  */
 template <class TOutputImage>
 class ITK_EXPORT TileMapImageSource
