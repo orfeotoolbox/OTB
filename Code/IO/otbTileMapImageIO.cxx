@@ -990,7 +990,6 @@ const std::string TileMapImageIO::ConvertDepthToScale(const unsigned int depth) 
         return "1 : 222 million";
         break;
     }
-
 }  
     
 unsigned int
