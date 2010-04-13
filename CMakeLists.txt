@@ -842,9 +842,6 @@ SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 INCLUDE_DIRECTORIES( ${OTB_LIBRARY_PATH} )
 
-# Put "." in the rpath of all OTB shared libraries.
-#LINK_DIRECTORIES(.)
-
 #-----------------------------------------------------------------------------
 # Option for display all developpment message !!!
 OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)

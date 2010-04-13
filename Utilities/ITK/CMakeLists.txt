@@ -130,10 +130,6 @@ IF( ITK_USE_MINC2 )
   ENDIF( NOT MINC2_FOUND )
 ENDIF( ITK_USE_MINC2 )
 
-
-# Put "." in the rpath of all ITK shared libraries.
-#LINK_DIRECTORIES(.)
-
 #-----------------------------------------------------------------------------
 # ITK build configuration options.
 OPTION(BUILD_SHARED_LIBS "Build ITK with shared libraries." OFF)
