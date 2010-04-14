@@ -163,10 +163,22 @@ public:
      return _dopcen;
    }
 
+   double get_dopcenLinear() const
+   {
+	   return _dopcenLinear;
+   }
+
    void set_dopcen(double value)
    {
      _dopcen = value;
    }
+
+   void set_dopcenLinear(double value)
+   {
+	   _dopcenLinear = value;
+   }
+
+
    /**
     * @brief Method to save object state to a keyword list.
     * @param kwl Keyword list to save to.
@@ -236,9 +248,15 @@ protected:
    double _nRangeLook ;
 
    /**
-    * @brief Doppler centroid
+    * @brief Doppler centroid (at range 0)
     */
    double _dopcen;
+
+   /**
+    * @brief Doppler centroid linear term (wrt range in km)
+    */
+   double _dopcenLinear;
+
 
 private:
 };

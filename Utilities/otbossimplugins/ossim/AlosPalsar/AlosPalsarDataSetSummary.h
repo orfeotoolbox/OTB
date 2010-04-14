@@ -666,7 +666,15 @@ public:
   };
 
   /**
-  * @Data from 1735 to 4096 to be added
+  * @brief Along track Doppler frequency terms (in range unit: km)
+  */
+  const double*   get_dopcen_range() const
+  {
+    return _dopcen_range;
+  };
+
+  /**
+  * @Data from 1767 to 4096 to be added
   */
 
 
@@ -1001,7 +1009,12 @@ protected:
   std::string   _rngcmp_desg;
 
   /**
-  * @Data from 1735 to 4096 to be added
+  * @brief Cross track Doppler frequency terms (in range unit: km)
+  */
+  double   _dopcen_range[2];
+
+  /**
+  * @Data from 1767 to 4096 to be added
   */
 
 private:
