@@ -178,16 +178,6 @@ public:
 	   _dopcenLinear = value;
    }
 
-   double get_rangeToFirstData() const
-   {
-	   return _rangeToFirstData;
-   }
-
-   void set_rangeToFirstData(double value)
-   {
-	   _rangeToFirstData = value;
-   }
-
 
    /**
     * @brief Method to save object state to a keyword list.
@@ -258,19 +248,14 @@ protected:
    double _nRangeLook ;
 
    /**
-    * @brief Doppler centroid
+    * @brief Doppler centroid (at range 0)
     */
    double _dopcen;
 
    /**
-    * @brief Doppler centroid linear term (wrt range pixel)
+    * @brief Doppler centroid linear term (wrt range in km)
     */
    double _dopcenLinear;
-
-   /**
-    * @brief Slant range to first data sample
-    */
-   double _rangeToFirstData;
 
 
 private:

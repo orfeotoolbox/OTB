@@ -21,9 +21,6 @@
 #include <otb/GeodesicCoordinate.h>
 #include <complex>
 
-// FIXME
-#include <iostream>
-// Just for testing
 
 namespace ossimplugins
 {
@@ -59,24 +56,7 @@ int SarSensor::ImageToWorld(double distance, JSDDateTime time, double height, do
   double dopcenLinear = _params->get_dopcenLinear();
   if (dopcenLinear != 0.0)
   {
-	  const double C = 2.99792458e+8 ;
-
-	  double prf = _params->get_prf();
-	  double sf = _params->get_sf();
-	  double range0 = _params->get_rangeToFirstData();
-
-	  int rangePix = (distance - range0) * 2 * sf / C;
-
-	  dopplerCentroid += dopcenLinear * rangePix;
-
-	  //FIXME nrangelooks?
-	  std::cout << "dopcenLinear = " << dopcenLinear << std::endl;
-	  std::cout << "prf = " << prf << std::endl;
-	  std::cout << "sf = " << sf << std::endl;
-	  std::cout << "range0 = " << range0 << std::endl;
-	  std::cout << "rangePix = " << rangePix << std::endl;
-	  std::cout << "dopplerCentroid = " << dopplerCentroid << std::endl;
-	  //Testing
+	  dopplerCentroid += dopcenLinear * distance/1000; // Hz/km
   }
 
   // note : the Doppler frequency is set to zero

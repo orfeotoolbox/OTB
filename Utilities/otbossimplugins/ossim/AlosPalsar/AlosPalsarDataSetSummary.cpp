@@ -190,8 +190,11 @@ std::ostream& operator<<(std::ostream& os, const AlosPalsarDataSetSummary& data)
 
   os << "rngcmp_desg:" << data._rngcmp_desg.c_str() << std::endl;
 
+
+  os << "dopcen_range[0]:" << data._dopcen_range[0] << std::endl;
+  os << "dopcen_range[1]:" << data._dopcen_range[1] << std::endl;
   /**
-  * @Data from 1735 to 4096 to be added
+  * @Data from 1767 to 4096 to be added
   */
 
   return os;
@@ -208,8 +211,8 @@ std::istream& operator>>(std::istream& is, AlosPalsarDataSetSummary& data)
   buf8[8] = '\0';
   char buf4[5];
   buf4[4] = '\0';
-  char buf2362[2363];  //data skip from  1735 to 4096//
-  buf2362[2362] = '\0';   //data skip from  1735 to 4096//
+  char buf2330[2331];  //data skip from  1767 to 4096//
+  buf2330[2330] = '\0';   //data skip from  1767 to 4096//
 
   is.read(buf4, 4);
   data._seq_num = atoi(buf4);
@@ -513,11 +516,17 @@ std::istream& operator>>(std::istream& is, AlosPalsarDataSetSummary& data)
   is.read(buf16, 16);
   data._rngcmp_desg = buf16;
 
+  is.read(buf16, 16);
+  data._dopcen_range[0] = atof(buf16);
+
+  is.read(buf16, 16);
+  data._dopcen_range[1] = atof(buf16);
+
   /**
-  * @Data from 1735 to 4096 to be added
+  * @Data from 1767 to 4096 to be added
   */
 
-  is.read(buf2362, 2362);
+  is.read(buf2330, 2330);
 
   return is;
 }
@@ -599,6 +608,7 @@ AlosPalsarDataSetSummary::AlosPalsarDataSetSummary(const AlosPalsarDataSetSummar
     _pix_spacing(rhs._pix_spacing),
     _rngcmp_desg(rhs._rngcmp_desg)
 
+
 //to be added//
 
 {
@@ -630,6 +640,10 @@ AlosPalsarDataSetSummary::AlosPalsarDataSetSummary(const AlosPalsarDataSetSummar
   _crt_rate[0] = rhs._crt_rate[0];
   _crt_rate[1] = rhs._crt_rate[1];
   _crt_rate[2] = rhs._crt_rate[2];
+
+  _dopcen_range[0] = rhs._dopcen_range[0];
+  _dopcen_range[1] = rhs._dopcen_range[1];
+
 }
 
 AlosPalsarDataSetSummary& AlosPalsarDataSetSummary::operator=(const AlosPalsarDataSetSummary& rhs)
@@ -736,6 +750,9 @@ AlosPalsarDataSetSummary& AlosPalsarDataSetSummary::operator=(const AlosPalsarDa
   _crt_rate[0] = rhs._crt_rate[0];
   _crt_rate[1] = rhs._crt_rate[1];
   _crt_rate[2] = rhs._crt_rate[2];
+
+  _dopcen_range[0] = rhs._dopcen_range[0];
+  _dopcen_range[1] = rhs._dopcen_range[1];
 
 //to be added//
 

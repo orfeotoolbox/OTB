@@ -33,13 +33,8 @@ static ossimTrace traceDebug("ossimAlosPalsarModel:debug");
 #include <string>
 #include <algorithm>
 
-// FIXME
-#include <iostream>
-// Testing
-
 namespace ossimplugins
 {
-
 
 RTTI_DEF1(ossimAlosPalsarModel, "ossimAlosPalsarModel", ossimGeometricSarSensorModel);
 
@@ -102,20 +97,10 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
   const char* ellip_min_str = kwl.find(prefix, "ellip_min");
   double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
 
-  const char* dopcen_str = kwl.find(prefix, "crt_dopcen[0]");
+  const char* dopcen_str = kwl.find(prefix, "dopcen_range[0]");
   double dopcen = atof(dopcen_str);
-  const char* dopcenLinear_str = kwl.find(prefix, "crt_dopcen[1]");
-  const char* rangeToFirstData_str = kwl.find(prefix, "slant_range_to_1st_data_sample");
-  double dopcenLinear;
-  double rangeToFirstData;
-  if (dopcenLinear_str != NULL) {
-	  dopcenLinear = atof(dopcenLinear_str);
-	  if (rangeToFirstData_str != NULL) {
-		  rangeToFirstData = atof(rangeToFirstData_str);
-	  }
-	  std::cout << "dopcenLinear = " << dopcenLinear << std::endl;
-	  std::cout << "rangeToFirstData = " << rangeToFirstData << std::endl;
-  }
+  const char* dopcenLinear_str = kwl.find(prefix, "dopcen_range[1]");
+  double dopcenLinear = atof(dopcenLinear_str);
 
   if (_sensor != NULL)
   {
@@ -166,7 +151,6 @@ bool ossimAlosPalsarModel::InitSensorParams(const ossimKeywordlist &kwl, const c
 
   _sensor->set_dopcen(dopcen);
   _sensor->set_dopcenLinear(dopcenLinear);
-  _sensor->set_rangeToFirstData(rangeToFirstData);
 
   return true;
 }

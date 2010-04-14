@@ -176,6 +176,8 @@ bool AlosPalsarLeader::saveState(ossimKeywordlist& kwl,
     kwl.add(prefix, "alt_dopcen[0]", datasetSummary->get_alt_dopcen()[0], true);
     kwl.add(prefix, "crt_dopcen[0]", datasetSummary->get_crt_dopcen()[0], true);
     kwl.add(prefix, "crt_dopcen[1]", datasetSummary->get_crt_dopcen()[1], true);
+    kwl.add(prefix, "dopcen_range[0]", datasetSummary->get_dopcen_range()[0], true);
+    kwl.add(prefix, "dopcen_range[1]", datasetSummary->get_dopcen_range()[1], true);
     //FIXME check if those data are available
 //     kwl.add(prefix, "zero_dop_range_time_f_pixel", datasetSummary->get_zero_dop_range_time_f_pixel(),true);
 //     kwl.add(prefix, "zero_dop_range_time_c_pixel", datasetSummary->get_zero_dop_range_time_c_pixel(),true);

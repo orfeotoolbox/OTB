@@ -44,8 +44,7 @@ SensorParams::SensorParams():
    _nAzimuthLook(1),
    _nRangeLook(1),
    _dopcen(0.0),
-   _dopcenLinear(0.0),
-   _rangeToFirstData(0.0)
+   _dopcenLinear(0.0)
 {
 }
 
@@ -65,8 +64,7 @@ SensorParams::SensorParams(const SensorParams& rhs):
    _nAzimuthLook(rhs._nAzimuthLook),
    _nRangeLook(rhs._nRangeLook),
    _dopcen(rhs._dopcen),
-   _dopcenLinear(rhs._dopcenLinear),
-   _rangeToFirstData(rhs._rangeToFirstData)
+   _dopcenLinear(rhs._dopcenLinear)
 {
 }
 
@@ -86,7 +84,6 @@ SensorParams& SensorParams::operator=(const SensorParams& rhs)
    _semiMinorAxis = rhs._semiMinorAxis;
    _dopcen = rhs._dopcen;
    _dopcenLinear = rhs._dopcenLinear;
-   _rangeToFirstData = rhs._rangeToFirstData;
    return *this;
 }
 
@@ -111,7 +108,6 @@ bool SensorParams::saveState(ossimKeywordlist& kwl, const char* prefix) const
    kwl.add(pfx.c_str(), NUM_RANGE_LOOKS_KW, _nRangeLook);
    kwl.add(pfx.c_str(), DOPCEN_KW, _dopcen);
    kwl.add(pfx.c_str(), DOPCENLINEAR_KW, _dopcenLinear);
-   kwl.add(pfx.c_str(), RANGETOFIRSTDATA_KW, _rangeToFirstData);
    return true;
 }
 
@@ -263,18 +259,6 @@ bool SensorParams::loadState(const ossimKeywordlist& kwl, const char* prefix)
    {
       s = lookup;
       _dopcenLinear = s.toDouble();
-   }
-   else
-   {
-      result = false;
-   }
-   return result;
-
-   lookup = kwl.find(pfx.c_str(), RANGETOFIRSTDATA_KW);
-   if (lookup)
-   {
-      s = lookup;
-      _rangeToFirstData = s.toDouble();
    }
    else
    {

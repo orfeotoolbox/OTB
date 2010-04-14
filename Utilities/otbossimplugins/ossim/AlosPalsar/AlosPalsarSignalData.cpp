@@ -42,9 +42,6 @@ std::istream& operator>>(std::istream& is, AlosPalsarSignalData& data)
   ossim_uint32 tmpuint32;
   ossimEndian oe;
 
-  std::cout << std::endl << "File pointer location = " << is.tellg() << std::endl;
-  std::cout << std::endl;
-
   is.read(reinterpret_cast<char*>(&tmpuint32), 4);
   if (oe.getSystemEndianType() == OSSIM_LITTLE_ENDIAN)
   {
