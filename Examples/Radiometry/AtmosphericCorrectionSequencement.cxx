@@ -63,7 +63,7 @@
 #include "otbImageToLuminanceImageFilter.h"
 #include "otbLuminanceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-#include "otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -499,7 +499,7 @@ int main(int argc, char *argv[])
 //-------------------------------
 // Software Guide : BeginLatex
 // Next (and last step) is the neighborhood correction.
-// For this, the SurfaceAdjencyEffect6SCorrectionSchemeFilter class is used.
+// For this, the SurfaceAdjacencyEffect6SCorrectionSchemeFilter class is used.
 // The previous surface reflectance inversion is performed under the assumption of a
 // homogeneous ground environment. The following step allows to correct the adjacency
 // effect on the radiometry of pixels. The method is based on the decomposition of
@@ -530,16 +530,16 @@ int main(int argc, char *argv[])
 // \end{itemize}
 // \end{itemize}
 // The neighborhood consideration window size is given by the window radius.
-// An instance of \doxygen{otb}{SurfaceAdjencyEffect6SCorrectionSchemeFilter} is created.
+// An instance of \doxygen{otb}{SurfaceAdjacencyEffect6SCorrectionSchemeFilter} is created.
 // Software Guide : EndLatex
 
   //  Software Guide : BeginCodeSnippet
-  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType,
+  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<ImageType,
                                                             ImageType>
-  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
-  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer
-    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter
-    = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer
+    filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter
+    = SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
   //  Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -553,14 +553,14 @@ int main(int argc, char *argv[])
   // \end{itemize}
   //
   // Software Guide : EndLatex
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->
   SetAtmosphericRadiativeTerms(
     filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
     dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv
                                                                            [17]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->
   SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
 
 //-------------------------------
@@ -580,11 +580,11 @@ int main(int argc, char *argv[])
   filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
   filterReflectanceToSurfaceReflectanceImageFilter->SetInput(
     filterLuminanceToReflectance->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetInput(
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(
     filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 
   writer->SetInput(
-    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->GetOutput());
+    filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex

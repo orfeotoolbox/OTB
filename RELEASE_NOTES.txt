@@ -344,7 +344,7 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
           equivalent to the pipeline process ImageToLuminanceImageFilter 
           and LuminanceToReflectanceImageFilter filters
         - Reflectance estimation TOC: otb::ReflectanceToSurfaceReflectanceImageFilter
-        - 6S effect correction: otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter
+        - 6S effect correction: otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter
         - DEM slope and shading estimations: otb::DEMCaracteriticsExtractor
 
 *Common:

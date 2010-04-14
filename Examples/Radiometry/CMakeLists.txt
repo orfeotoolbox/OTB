@@ -111,7 +111,7 @@ ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
         1
         0.199854
 # ReflectanceToSurfaceReflectance parameters
-# SurfaceAdjencyEffect6SCorrectionSchemeFilter parameters
+# SurfaceAdjacencyEffect6SCorrectionSchemeFilter parameters
 	2       # Radius;
 	0.020   # pixel spacing in kilometers
         )

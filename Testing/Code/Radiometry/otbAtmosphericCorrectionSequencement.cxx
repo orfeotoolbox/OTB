@@ -29,7 +29,7 @@
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
-#include "otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.h"
+#include "otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter.h"
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -210,24 +210,24 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
   filterReflectanceToSurfaceReflectanceImageFilter->SetInput(filterLuminanceToReflectance->GetOutput());
 
 //-------------------------------
-  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType,
-                                                            ImageType> SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
-  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer filterSurfaceAdjencyEffect6SCorrectionSchemeFilter =
-    SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+  typedef otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter<ImageType,
+                                                            ImageType> SurfaceAdjacencyEffect6SCorrectionSchemeFilterType;
+  SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::Pointer filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter =
+    SurfaceAdjacencyEffect6SCorrectionSchemeFilterType::New();
 
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(
     filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[17]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[17]));
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(
     dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetInput(
+  filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->SetInput(
     filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 
 //-------------------------------
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
-  writer->SetInput(filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->GetOutput());
+  writer->SetInput(filterSurfaceAdjacencyEffect6SCorrectionSchemeFilter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
