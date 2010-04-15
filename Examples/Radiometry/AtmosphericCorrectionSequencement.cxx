@@ -44,7 +44,7 @@
 // \item luminance to refletance image conversion;
 // \item atmospheric correction for TOA (top of atmosphere) to TOC (top of canopy)
 // reflectance estimation;
-// \item correction of the adjency effects taking into account the neighborhood contribution.
+// \item correction of the adjacency effects taking into account the neighborhood contribution.
 // \end{itemize}
 //
 // The manipulation of each class used for the different steps and the

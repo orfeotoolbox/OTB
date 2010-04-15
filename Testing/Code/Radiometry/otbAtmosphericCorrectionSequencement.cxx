@@ -48,7 +48,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  <<
     std::endl;
     std::cerr <<
-    "    wavelenghtSpectralBandFileName , adjencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
+    "    wavelenghtSpectralBandFileName , adjacencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
     std::cerr << std::endl;
     return 1;
     }
