@@ -208,6 +208,16 @@ ADD_TEST(raTvImageToLuminanceImageFilterAutoIkonos ${RADIOMETRY_TESTS2}
          )
 ENDIF(OTB_DATA_USE_LARGEINPUT)
 
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(raTvImageToLuminanceImageFilterAutoWV2 ${RADIOMETRY_TESTS2}
+  #--compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+   #                       ${TEMP}/raTvImageToLuminanceImageFilterAutoIkonos.tif
+        otbImageToLuminanceImageFilterAuto
+        ${LARGEINPUT}/WORLDVIEW2/VERSAILLES/052310006010_01_P001_PAN/10MAR01111601-P1BS-052310006010_01_P001.TIF
+        ${TEMP}/raTvImageToLuminanceImageFilterAutoWV2.tif
+         )
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
 # -------            otb::LuminanceToReflectanceImageFilter   ------------------------------
 ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}
         otbLuminanceToReflectanceImageFilterNew

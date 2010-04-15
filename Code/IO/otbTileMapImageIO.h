@@ -141,8 +141,6 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
-  /** Correspondance between depth and scale for the quad tree paradigm*/
-  virtual const std::string ConvertDepthToScale(const unsigned int depth) const;
 protected:
   /** Constructor.*/
   TileMapImageIO();
