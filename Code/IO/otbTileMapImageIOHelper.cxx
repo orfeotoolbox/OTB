@@ -25,69 +25,69 @@ namespace otb
 const std::string TileMapImageIOHelper::ConvertDepthToScale(const unsigned int depth) const
 {
   std::string res;
-  res+= "level ";
+  res += "level ";
   std::stringstream out;
   out << depth;
-  res+= out.str();
-  res+= " (around 1 : ";
+  res += out.str();
+  res += " (around 1 : ";
   switch (depth)
     {
       case 1:
-        res+= "222 million)"; 
+        res += "222 million)"; 
         break;
       case 2:
-        res+= "111 million)"; 
+        res += "111 million)"; 
         break;
       case 3:
-        res+= "55 million)"; 
+        res += "55 million)"; 
         break;
       case 4:
-        res+= "28 million"; 
+        res += "28 million"; 
         break;
       case 5:
-        res+= "14 million"; 
+        res += "14 million"; 
         break;
       case 6:
-        res+= "7 million)"; 
+        res += "7 million)"; 
         break;
       case 7:
-        res+= "3 million)"; 
+        res += "3 million)"; 
         break;
       case 8:
-        res+= "2 million)"; 
+        res += "2 million)"; 
         break;
       case 9:
-        res+= "867,000)"; 
+        res += "867,000)"; 
         break;
       case 10:
-        res+= "433,000)"; 
+        res += "433,000)"; 
         break;
       case 11:
-        res+= "217,000)"; 
+        res += "217,000)"; 
         break;
       case 12:
-        res+= "108,000)"; 
+        res += "108,000)"; 
         break;
       case 13:
-        res+= "54,000)"; 
+        res += "54,000)"; 
         break;
       case 14:
-        res+= "27,000)"; 
+        res += "27,000)"; 
         break;
       case 15:
-        res+= "14,000)"; 
+        res += "14,000)"; 
         break;
       case 16:
-        res+= "6,771)"; 
+        res += "6,771)"; 
         break;
       case 17:
-        res+= "3,385)"; 
+        res += "3,385)"; 
         break;
       case 18:
-        res+= "1,693)"; 
+        res += "1,693)"; 
         break;
       default:
-        res+= "222 million)"; 
+        res += "222 million)"; 
         break;
     }
     return res;
