@@ -54,6 +54,7 @@ IF(OTB_USE_CURL)
   SET(IO_TESTS19    ${CXX_TEST_PATH}/otbIOTests19)
 ENDIF(OTB_USE_CURL)
 
+SET(IO_TESTS20    ${CXX_TEST_PATH}/otbIOTests20)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2310,6 +2311,40 @@ ENDIF(OTB_DATA_USE_LARGEINPUT)
 ENDIF(OTB_USE_CURL)
 
 #----------------------------------------------------------------------------------
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS20 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+IF(OTB_DATA_USE_LARGEINPUT)
+ADD_TEST(ioTvImageFileReaderTestSensorPixelValueQB ${IO_TESTS20}
+otbImageFileReaderTestSensorPixelValue
+       ${LARGEDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+       ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
+       OPTIC
+       QB
+       PAN
+       1
+       1024
+       1024
+)
+
+ADD_TEST(ioTvImageFileReaderTestSensorPixelValueIKONOS ${IO_TESTS20}
+otbImageFileReaderTestSensorPixelValue
+       ${LARGEDATA}/IKONOS/PARIS/po_79039_pan_0000000.tif
+       ${BASELINE_FILES}/ioTvSensorsPixelValue.ini
+       OPTIC
+       IKONOS
+       PAN
+       1
+       1024
+       1024
+)
+
+ENDIF(OTB_DATA_USE_LARGEINPUT)
+
+
+#----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbIOTests1.cxx
 otbImageFileReaderERS.cxx
@@ -2497,6 +2532,11 @@ otbTileMapWriter.cxx
 )
 ENDIF(OTB_USE_CURL)
 
+SET(BasicIO_SRCS20
+otbIOTests20.cxx
+otbImageFileReaderTestSensorPixelValue.cxx
+)
+
 OTB_ADD_EXECUTABLE(otbIOTests1 "${BasicIO_SRCS1}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests2 "${BasicIO_SRCS2}" "OTBIO;OTBTesting")
 OTB_ADD_EXECUTABLE(otbIOTests3 "${BasicIO_SRCS3}" "OTBIO;OTBTesting")
@@ -2534,6 +2574,8 @@ OTB_ADD_EXECUTABLE(otbIOTests18 "${BasicIO_SRCS18}" "OTBIO;OTBTesting")
 IF(OTB_USE_CURL)
   OTB_ADD_EXECUTABLE(otbIOTests19 "${BasicIO_SRCS19}" "OTBIO;OTBTesting")
 ENDIF(OTB_USE_CURL)
+
+OTB_ADD_EXECUTABLE(otbIOTests20 "${BasicIO_SRCS20}" "OTBIO;OTBTesting")
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 
