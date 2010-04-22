@@ -36,7 +36,7 @@ namespace otb
  * Data".
  *
  * This filter computes the sigma naught (\f$ \sigma^{0} \f$) using the following formula:
- * \f[\sigma^{0} = ( k_{s} \cdot |DN|^{2} - NEBN) \cdot sin(\theta_{loc}\f]
+ * \f[\sigma^{0} = ( k_{s} \cdot |DN|^{2} - NEBN) \cdot \sin(\theta_{loc})\f]
  *
  * Where \f$ k_{s} \f$ is the calibration factor, \f$NEBN\f$ is the
  * Noise Equivalent Beta Naugth and \f$ \theta_{loc} \f$ is the local
