@@ -65,7 +65,7 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:522
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:577
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:54
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:48
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:48
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:56
 #: Code/Modules/otbOrthorectificationGUI.cxx:400
 #: Code/Modules/otbWriterViewGroup.cxx:284
@@ -230,8 +230,8 @@ msgstr ""
 #: Code/Application/otbInputViewGroup.cxx:42
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1837
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:356
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:337
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:477
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:337
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:477
 #: Code/Modules/otbReaderModuleGUI.cxx:66
 #: Code/Modules/otbGCPToSensorModelViewGroup.cxx:509
 #: Code/Modules/otbExtractROIModuleGUI.cxx:42
@@ -271,8 +271,8 @@ msgstr ""
 #: Code/Modules/otbSpeckleFilteringViewGUI.cxx:114
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1815
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:345
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:467
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:729
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:467
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:729
 #: Code/Modules/otbExtractROIModuleGUI.cxx:34
 #: Code/Modules/otbOrthorectificationGUI.cxx:391
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:790
@@ -304,8 +304,8 @@ msgstr ""
 #: PolarimetricSynthesis/otbPolarimetricSynthesisApplicationViewGroup.cxx:1144
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:559
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:572
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:566
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:579
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:566
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:579
 #: Code/Modules/otbReaderModuleGUI.cxx:74
 #: Code/Modules/otbGCPToSensorModelViewGroup.cxx:499
 #: Code/Modules/otbSuperimpositionModuleGUI.cxx:79
@@ -1049,8 +1049,8 @@ msgstr ""
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:293
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:341
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:284
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:44
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:407
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:44
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:407
 msgid "Viewer setup"
 msgstr ""
 
@@ -1115,7 +1115,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:693
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:347
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:291
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:413
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:413
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:605
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:654
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:703
@@ -1131,7 +1131,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:312
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:348
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:292
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:414
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:414
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:823
 #: Code/Modules/otbViewerModuleGroup.cxx:283
 msgid "Swith the image viewer mode to grayscale"
@@ -1147,7 +1147,7 @@ msgstr ""
 #: ChangeDetection/otbInteractiveChangeDetectionGUI.cxx:700
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:357
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:300
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:423
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:423
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:612
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:661
 #: Code/Modules/otbInteractiveChangeDetectionGUI.cxx:710
@@ -1163,7 +1163,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:322
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:358
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:301
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:424
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:424
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:834
 #: Code/Modules/otbViewerModuleGroup.cxx:293
 msgid "Switch the image viewer mode to RGB composition"
@@ -1177,8 +1177,8 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:330
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:366
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:310
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:432
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:592
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:432
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:592
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:843
 #: Code/Modules/otbViewerModuleGroup.cxx:301
 msgid "Channel index"
@@ -1191,7 +1191,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:331
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:367
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:311
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:433
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:433
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:844
 #: Code/Modules/otbViewerModuleGroup.cxx:302
 msgid "Select the band to view in grayscale mode"
@@ -1233,7 +1233,7 @@ msgstr ""
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1385
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1521
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:318
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:440
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:440
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:851
 #: Code/Modules/otbViewerModuleGroup.cxx:308
 msgid "Red channel"
@@ -1247,7 +1247,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:338
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:374
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:319
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:441
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:441
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:852
 #: Code/Modules/otbViewerModuleGroup.cxx:309
 msgid "Select band for red channel in RGB composition"
@@ -1275,7 +1275,7 @@ msgstr ""
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1509
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1529
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:327
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:449
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:449
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:860
 #: Code/Modules/otbViewerModuleGroup.cxx:316
 msgid "Green channel"
@@ -1289,7 +1289,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:346
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:382
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:328
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:450
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:450
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:861
 #: Code/Modules/otbViewerModuleGroup.cxx:317
 msgid "Select band for green channel in RGB composition"
@@ -1308,7 +1308,7 @@ msgstr ""
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1159
 #: Code/Modules/otbFeatureExtractionViewGroup.cxx:1220
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:336
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:458
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:458
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:869
 #: Code/Modules/otbViewerModuleGroup.cxx:324
 msgid "Blue channel"
@@ -1321,7 +1321,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:354
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:390
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:337
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:459
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:459
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:870
 #: Code/Modules/otbViewerModuleGroup.cxx:325
 msgid "Select band for blue channel in RGB composition"
@@ -1336,7 +1336,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:362
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:398
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:346
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:468
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:468
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:879
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1004
 #: Code/Modules/otbViewerModuleGroup.cxx:333
@@ -1364,7 +1364,7 @@ msgstr ""
 #: Testing/ViewerManagerOld/otbImageViewerManagerGUI.cxx:380
 #: ViewerManager/otbImageViewerManagerViewGroup.cxx:416
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:357
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:478
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:478
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:806
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:890
 msgid "Leave viewer set up interface without saving changes"
@@ -1886,7 +1886,7 @@ msgstr ""
 #: FeatureExtraction/otbFeatureExtractionViewGroup.cxx:42
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:28
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:150
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:42
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:42
 msgid "Menu"
 msgstr ""
 
@@ -2209,7 +2209,7 @@ msgstr ""
 #: Segmentation/otbSVMBasedRegionGrowingSegmentationViewGroup.cxx:167
 #: Segmentation/otbRegionGrowingSegmentationViewGroup.cxx:185
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:353
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:360
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:360
 #: Code/Modules/otbProjectionGroup.cxx:455
 #: Code/Modules/GCPToSensorModel/otbGCPToSensorModelModule.cxx:46
 #: Code/Modules/SarCalibration/otbSarCalibrationModule.cxx:36
@@ -3179,43 +3179,43 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:78
 #: UrbanAreaExtraction/otbUrbanAreaExtractionViewGroup.cxx:82
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:43
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:43
 #: Code/Modules/otbProjectionGroup.cxx:757
 msgid "Settings"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:80
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:45
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:45
 msgid "Coef. setup"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:156
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:140
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:140
 msgid "NO AEROSOL"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:157
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:141
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:141
 msgid "CONTINENTAL"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:158
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:142
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:142
 msgid "MARITIME"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:159
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:143
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:143
 msgid "URBAN"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:160
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:144
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:144
 msgid "DESERTIC"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:207
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:191
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:191
 msgid "0"
 msgstr ""
 
@@ -3225,50 +3225,50 @@ msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:281
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:167
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:259
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:259
 msgid "Navigation view"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:289
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:297
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:175
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:267
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:275
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:267
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:275
 msgid "Zoom view"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:305
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:283
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:283
 msgid "Histograms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:313
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:291
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:291
 msgid "Pixel information"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:321
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:299
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:299
 msgid "Result pixel information"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:361
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:368
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:368
 msgid "Luminance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:369
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:376
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:376
 msgid "TOA reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:377
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:384
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:384
 msgid "TOC reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:385
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:392
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:392
 msgid "TOA - TOC"
 msgstr ""
 
@@ -3277,189 +3277,189 @@ msgid "Radiometric Coefficients Setup"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:492
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:499
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:499
 msgid "Correction parameters"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:498
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:499
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:505
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:506
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:505
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:506
 msgid "Aerosol model"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:507
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:514
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:514
 msgid "Ozone amount"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:508
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:515
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:515
 msgid "Ozone Amount (cm.atm)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:516
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:523
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:523
 msgid "Atmo. pressure"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:517
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:524
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:524
 msgid "Atmospheric pressure (mbar)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:530
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:537
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:537
 msgid "Aerosol thickness"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:531
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:538
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:538
 msgid "Aerosol optical thickness at 550nm.."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:541
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:548
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:548
 msgid "Water amount"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:542
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:549
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:549
 msgid "Water vapor amount (g/cm2)."
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:552
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:559
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:559
 msgid "Aeronet file"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:565
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:572
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:572
 msgid "Filter function values file"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:578
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:740
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:585
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:747
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:585
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:747
 msgid "Radiative terms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:600
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:607
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:607
 msgid "Intrinsic refl"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:601
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:608
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:608
 msgid "Intrinsic atmospheric reflectance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:611
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:618
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:618
 msgid "Albedo"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:612
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:619
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:619
 msgid "Shperical albedo of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:622
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:629
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:629
 msgid "Gaseous trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:623
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:630
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:630
 msgid "Total gaseous transmission"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:633
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:640
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:640
 msgid "Down trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:634
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:641
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:641
 msgid "Downward transmittance of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:644
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:651
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:651
 msgid "Up trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:645
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:652
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:652
 msgid "Upward transmittance of the atmosphere"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:655
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:662
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:662
 msgid "Up diffuse trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:656
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:663
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:663
 msgid "Upward diffuse transmittance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:666
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:673
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:673
 msgid "Up direct trans"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:667
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:674
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:674
 msgid "Upward direct transmittance"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:677
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:684
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:684
 msgid "Up diff. trans. (Rayleigh)"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:678
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:685
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:685
 msgid "Upward diffuse transmittance for Rayleigh"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:688
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:695
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:695
 msgid "Up diff trans. (aerososl)"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:689
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:696
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:696
 msgid "Upward diffuse transmittance for aerosols"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:701
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:708
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:708
 msgid "Reload channel radiative terms"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:714
 #: Classification/otbSupervisedClassificationAppliGUI.cxx:1027
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:271
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:721
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:721
 #: Code/Modules/otbSupervisedClassificationAppliGUI.cxx:1003
 msgid "Close"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:715
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:722
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:722
 msgid "Close the window"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:723
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:730
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:730
 msgid "Set up radiometric parameters"
 msgstr ""
 
 #: RadiometricCalibration/otbRadiometricCalibrationViewGroup.cxx:732
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:739
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:739
 msgid "Atmospheric parameters"
 msgstr ""
 
@@ -5495,7 +5495,7 @@ msgid "View Manager"
 msgstr ""
 
 #: Code/Modules/otbMeanShiftModuleViewGroup.cxx:30
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:47
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:47
 msgid "Save and quit"
 msgstr ""
 
@@ -5535,20 +5535,20 @@ msgstr ""
 msgid "Display Cluster"
 msgstr ""
 
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:238
-msgid "Optic calibration module"
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:238
+msgid "Optical calibration module"
 msgstr ""
 
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:328
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:328
 msgid "Save-Quit"
 msgstr ""
 
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:346
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:346
 msgid "Reflectances * 1000"
 msgstr ""
 
-#: Code/Modules/otbOpticCalibrationViewGroup.cxx:488
-msgid "Optic Coefficients Setup"
+#: Code/Modules/otbOpticalCalibrationViewGroup.cxx:488
+msgid "Optical Coefficients Setup"
 msgstr ""
 
 #: Code/Modules/otbReaderModuleGUI.cxx:42
@@ -6280,7 +6280,7 @@ msgid "Visualization/Viewer"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:141
-msgid "Calibration/Optic Calibration"
+msgid "Calibration/Optical Calibration"
 msgstr ""
 
 #: Code/Application/Monteverdi.cxx:142
@@ -6438,35 +6438,35 @@ msgstr ""
 msgid "Cached data from"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:41
-msgid "Image to apply OpticCalibration on"
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:41
+msgid "Image to apply OpticalCalibration on"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:502
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:502
 msgid "Luminance image"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:518
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:518
 msgid "TOA image (*1000)"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:519
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:519
 msgid "TOC image (*1000)"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:520
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:520
 msgid "Difference TOA-TOC image (*1000)"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:524
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:524
 msgid "TOA Image"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:525
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:525
 msgid "TOC Image"
 msgstr ""
 
-#: Code/Modules/OpticCalibration/otbOpticCalibrationModule.cxx:526
+#: Code/Modules/OpticalCalibration/otbOpticalCalibrationModule.cxx:526
 msgid "Difference TOA-TOC image"
 msgstr ""
 
