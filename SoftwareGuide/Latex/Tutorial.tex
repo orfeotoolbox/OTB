@@ -113,8 +113,12 @@ Now, create a \code{Pipeline.cxx} file.
 Once this file is written you just have to run \code{make}. The
 \code{ccmake} call is not required anymore.
 
-Get one image from the \code{OTB/Examples/Data} directory in the OTB sources.
-For example get \code{QB\_Suburb.png}.
+Get one image from the \code{OTB-Data/Examples} directory from the OTB-Data
+repository. You can get it either by cloning the OTB data repository 
+(\code{hg clone http://hg.orfeo-toolbox.org/OTB-Data}), but that might be quite 
+long as this also gets the data to run the tests. Alternatively, you can get it from 
+\url{http://www.orfeo-toolbox.org/packages/OTB-Data-Examples.tgz}.
+Take for example get \code{QB\_Suburb.png}.
 
 Now, run your new program as \code{Pipeline QB\_Suburb.png output.png}. You
 obtain the file \code{output.png} which is the same image as
