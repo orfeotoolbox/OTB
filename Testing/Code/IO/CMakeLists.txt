@@ -2083,7 +2083,7 @@ ADD_TEST(ioTvTerraSarImageMetadataInterface_TORONTO ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
          ${TEMP}/ioTvImageKeywordlistSpot5.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistSpot5.txt
@@ -2096,7 +2096,7 @@ ADD_TEST(ioTvImageKeywordlistSpot5 ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
          ${TEMP}/ioTvImageKeywordlistQuickbird.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistQuickbird.txt
@@ -2109,7 +2109,7 @@ ADD_TEST(ioTvImageKeywordlistQuickbird ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
          ${TEMP}/ioTvImageKeywordlistIkonos.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistIkonos.txt
@@ -2122,7 +2122,7 @@ ADD_TEST(ioTvImageKeywordlistIkonos ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
          ${TEMP}/ioTvImageKeywordlistRapidEye.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRapidEye.txt
@@ -2134,7 +2134,7 @@ ADD_TEST(ioTvImageKeywordlistRapidEye ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
          ${TEMP}/ioTvImageKeywordlistEnvisatAsar.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistEnvisatAsar.txt
@@ -2146,7 +2146,7 @@ ADD_TEST(ioTvImageKeywordlistEnvisatAsar ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
          ${TEMP}/ioTvImageKeywordlistAlosPalsar.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistAlosPalsar.txt
@@ -2158,7 +2158,7 @@ ADD_TEST(ioTvImageKeywordlistAlosPalsar ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat1.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat1.txt
@@ -2170,7 +2170,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat1 ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
          ${TEMP}/ioTvImageKeywordlistRadarSat2.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistRadarSat2.txt
@@ -2183,7 +2183,7 @@ ADD_TEST(ioTvImageKeywordlistRadarSat2 ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX.txt
@@ -2196,7 +2196,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Upsala.txt
@@ -2208,7 +2208,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Upsala ${IO_TESTS18}
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Upsala_saveState_loadState.txt
 )
 ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${TEMP}/ioTvImageKeywordlistTerraSarX_Toronto.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistTerraSarX_Toronto.txt
@@ -2221,7 +2221,7 @@ ADD_TEST(ioTvImageKeywordlistTerraSarX_Toronto ${IO_TESTS18}
 )
 
 ADD_TEST(ioTvImageKeywordlistErs ${IO_TESTS18}
-  --compare-n-ascii ${NOTOL} 2
+  --ignore-order --compare-n-ascii ${NOTOL} 2
          ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt
          ${TEMP}/ioTvImageKeywordlistErs.txt
          ${BASELINE_FILES}/ioTvImageKeywordlistErs.txt

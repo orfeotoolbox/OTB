@@ -96,7 +96,7 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
         )
 
 ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelSpot5.txt
          ${TEMP}/prTvSensorModelSpot5.txt
 --ignore-lines-with 3 support_data.metadata_file meters_per_pixel_x meters_per_pixel_y
@@ -106,7 +106,7 @@ ADD_TEST(prTvSensorModelSpot5 ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelQuickbird.txt
          ${TEMP}/prTvSensorModelQuickbird.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
@@ -116,7 +116,7 @@ ADD_TEST(prTvSensorModelQuickbird ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelIkonos.txt
          ${TEMP}/prTvSensorModelIkonos.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
@@ -126,7 +126,7 @@ ADD_TEST(prTvSensorModelIkonos ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRapidEye.txt
          ${TEMP}/prTvSensorModelRapidEye.txt
          --ignore-lines-with 2 meters_per_pixel_x meters_per_pixel_y
@@ -136,7 +136,7 @@ ADD_TEST(prTvSensorModelRapidEye ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelEnvisatAsar.txt
          ${TEMP}/prTvSensorModelEnvisatAsar.txt
     otbSensorModel
@@ -145,7 +145,7 @@ ADD_TEST(prTvSensorModelEnvisatAsar ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
-  --compare-ascii ${EPSILON_6}
+  --ignore-order --compare-ascii ${EPSILON_6}
          ${BASELINE_FILES}/prTvSensorModelAlosPalsar.txt
          ${TEMP}/prTvSensorModelAlosPalsar.txt
     otbSensorModel
@@ -154,7 +154,7 @@ ADD_TEST(prTvSensorModelAlosPalsar ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat1.txt
          ${TEMP}/prTvSensorModelRadarSat1.txt
     otbSensorModel
@@ -163,7 +163,7 @@ ADD_TEST(prTvSensorModelRadarSat1 ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelRadarSat2.txt
          ${TEMP}/prTvSensorModelRadarSat2.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
@@ -173,7 +173,7 @@ ADD_TEST(prTvSensorModelRadarSat2 ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelTerraSarX.txt
          ${TEMP}/prTvSensorModelTerraSarX.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
@@ -183,7 +183,7 @@ ADD_TEST(prTvSensorModelTerraSarX ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Upsala.txt
         ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
@@ -192,7 +192,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Upsala ${PROJECTIONS_TESTS1}
          ${TEMP}/prTvSensorModelTerraSarX_Upsala.txt
 )
 ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
         ${BASELINE_FILES}/prTvSensorModelTerraSarX_Toronto.txt
         ${TEMP}/prTvSensorModelTerraSarX_Toronto.txt
         --ignore-lines-with 3 product_xml_filename meters_per_pixel_x meters_per_pixel_y
@@ -202,7 +202,7 @@ ADD_TEST(prTvSensorModelTerraSarX_Toronto ${PROJECTIONS_TESTS1}
 )
 
 ADD_TEST(prTvSensorModelErs ${PROJECTIONS_TESTS1}
-  --compare-ascii ${NOTOL}
+  --ignore-order --compare-ascii ${NOTOL}
          ${BASELINE_FILES}/prTvSensorModelErs.txt
          ${TEMP}/prTvSensorModelErs.txt
     otbSensorModel
