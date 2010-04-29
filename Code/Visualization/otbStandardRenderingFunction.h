@@ -247,10 +247,16 @@ public:
         bool enoughDynamic = false;
         for (unsigned int comp = 0; comp < nbComps; ++comp)
           {
-          if (m_Minimum[comp] < -1) allMinMaxWithinDynamic = false;  //take margin for rounding errors
+          if (m_Minimum[comp] < 0) allMinMaxWithinDynamic = false;  //take margin for rounding errors
           if (m_Maximum[comp] > 256) allMinMaxWithinDynamic = false;
           if (((m_Maximum[comp] - m_Minimum[comp]) > 1) || (m_Maximum[comp] == m_Minimum[comp])) enoughDynamic = true;
+          
+           otbMsgDevMacro(<< "allMinMaxWithinDynamic= " <<  allMinMaxWithinDynamic
+                         << ", enoughDynamic= " << enoughDynamic
+                         << ", min= " << m_Minimum[comp]
+                         << ", max= " << m_Maximum[comp]);
           }
+         
         if (allMinMaxWithinDynamic && enoughDynamic)
           {
           this->AutoMinMaxOff();
