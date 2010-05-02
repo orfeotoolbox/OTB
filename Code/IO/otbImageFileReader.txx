@@ -28,20 +28,15 @@
 #include "otbMetaDataKey.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
-// #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
-// #include "ossim/projection/ossimProjectionFactoryRegistry.h"
-// #include "ossim/ossimPluginProjectionFactory.h"
 #include "projection/ossimProjection.h"
 #include "projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
-#ifdef OTB_USE_CURL
 #include "otbTileMapImageIO.h" //FIXME find a better way
 #include "projection/ossimTileMapModel.h"
-#endif
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -380,7 +375,6 @@ ImageFileReader<TOutputImage>
 
       if (projection)
         {
-#ifdef OTB_USE_CURL
         if (projection->getClassName() == "ossimTileMapModel")
           {
           //FIXME find a better way to do that
@@ -389,7 +383,6 @@ ImageFileReader<TOutputImage>
           typename TileMapImageIO::Pointer imageIO = dynamic_cast<TileMapImageIO*>(this->GetImageIO());
           dynamic_cast<ossimTileMapModel*>(projection)->setDepth(imageIO->GetDepth());
           }
-#endif
         hasMetaData = projection->saveState(geom_kwl);
 //             delete projection; //FIXME find out where this should occur
         }
