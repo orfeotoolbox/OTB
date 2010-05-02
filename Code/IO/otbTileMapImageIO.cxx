@@ -174,8 +174,8 @@ void TileMapImageIO::Read(void* buffer)
       // Try to read tile from cache
       if (!this->CanReadFromCache(m_ListTiles.back().filename))
         {
-	this->GenerateURL(m_ListTiles.back().x, m_ListTiles.back().y);
-	m_ListFilename.push_back(m_ListTiles.back().filename);
+        this->GenerateURL(m_ListTiles.back().x, m_ListTiles.back().y);
+        m_ListFilename.push_back(m_ListTiles.back().filename);
         }
       }
     }

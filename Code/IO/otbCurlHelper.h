@@ -46,7 +46,7 @@ public:
   int RetrieveFile(const std::string& urlString, std::string filename) const;
 
   int RetrieveFileMulti(const std::vector<std::string>& listURLs, 
-			const std::vector<std::string>& listFiles,
+                        const std::vector<std::string>& listFiles,
                         int maxConnect) const;
 protected:
   CurlHelper() {}
