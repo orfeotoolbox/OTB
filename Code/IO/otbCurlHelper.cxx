@@ -27,11 +27,41 @@
 namespace otb
 {
 
+int CurlHelper::TestUrlAvailability(const std::string& url) const
+{
+#ifdef OTB_USE_CURL
+  // Set up a curl request
+  CURL *   curl;
+  CURLcode res = CURL_LAST;
+  curl = curl_easy_init();
+
+  // Set up the browser
+  std::string browser =
+    "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+
+  if (curl)
+    {
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, browser.data());
+    curl_easy_setopt(curl, CURLOPT_URL, url.data());
+    // Set the dummy write function
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &Self::curlDummyWriteFunction);
+    curl_easy_setopt(curl, CURLOPT_MAXFILESIZE, 1);
+
+    // Perform requet
+    res = curl_easy_perform(curl);
+    }
+  return res;
+#else
+  otbMsgDevMacro(<< "Curl is not available, compile with OTB_USE_CURL to ON");
+  return -1;
+#endif
+}
+
 int CurlHelper::RetrieveFile(const std::ostringstream& urlStream, std::string filename) const
 {
 #ifdef OTB_USE_CURL
   CURL *   curl;
-  CURLcode res;
+  CURLcode res = CURL_LAST;
 
   FILE* output_file = fopen(filename.c_str(), "w");
   curl = curl_easy_init();

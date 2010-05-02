@@ -41,15 +41,22 @@ public:
   itkTypeMacro(CurlHelper, itk::Object);
   itkNewMacro(Self);
 
+  int TestUrlAvailability(const std::string& url) const;
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const;
 
 protected:
   CurlHelper() {}
   ~CurlHelper() {}
 
+
 private:
   CurlHelper(const Self &);  //purposely not implemented
   void operator =(const Self&);  //purposely not implemented
+
+  size_t curlDummyWriteFunction(void*, size_t, size_t nmemb, void*)
+  {
+    return nmemb;
+  }
 
 };
 }
