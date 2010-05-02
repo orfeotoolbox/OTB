@@ -38,6 +38,8 @@
 #include "base/ossimFilename.h"
 
 #include "itkTimeProbe.h"
+#include "otbCurlHelper.h"
+
 
 namespace otb
 {
@@ -78,8 +80,6 @@ TileMapImageIO::TileMapImageIO()
 
   m_FileNameIsServerName = false;
 
-  // Initialize browser
-  m_Browser = "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
   // Set maximum of connections to 10
   m_MaxConnect = 10;
 
@@ -152,17 +152,9 @@ void TileMapImageIO::Read(void* buffer)
   int nTilesX = (int) ceil(totSamples / 256.) + 1;
   int nTilesY = (int) ceil(totLines / 256.) + 1;
 
-  // Initialize curl multi handle
-  m_MultiHandle = curl_multi_init();
-
-  if (!m_MultiHandle)
-    {
-    itkExceptionMacro(<< "Tile Map IO : Curl mutli handle init error.");
-    }
 
   // Clear vectors
-  m_ListCurlHandles.clear();
-  m_ListFiles.clear();
+  m_ListFilename.clear();
   m_ListURLs.clear();
   m_ListTiles.clear();
 
@@ -182,17 +174,16 @@ void TileMapImageIO::Read(void* buffer)
       // Try to read tile from cache
       if (!this->CanReadFromCache(m_ListTiles.back().filename))
         {
-        // Generate curl handle for this tile
-        this->GenerateCURLHandle(m_ListTiles.back());
+	this->GenerateURL(m_ListTiles.back().x, m_ListTiles.back().y);
+	m_ListFilename.push_back(m_ListTiles.back().filename);
         }
       }
     }
 
-  // Fetch tiles from net
-  this->FetchTiles();
+  CurlHelper::Pointer curlHelper = CurlHelper::New();
+  curlHelper->RetrieveFileMulti(m_ListURLs, m_ListFilename, m_MaxConnect);
 
-  // Cleanup datas use to download tiles
-  this->Cleanup();
+  m_ListURLs.clear();
 
   // Generate buffer
   this->GenerateBuffer(p);
@@ -246,48 +237,6 @@ bool TileMapImageIO::CanReadFromCache(std::string filename)
   lCanRead = imageIO->CanReadFile(filename.c_str());
 
   return lCanRead;
-}
-
-/*
- * This method generate curl handles and add to multi handle
- */
-void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
-{
-  // Generate URL
-  this->GenerateURL(tileInfo.x, tileInfo.y);
-
-
-  // Create file
-  FILE* lOutputFile = fopen(tileInfo.filename.c_str(), "w");
-
-  if (lOutputFile == NULL)
-    {
-    itkExceptionMacro(<< "TileMap read : bad file name.");
-    }
-
-  // Add file to vector
-  m_ListFiles.push_back(lOutputFile);
-
-  // Initialize curl handle
-  CURL * lEasyHandle;
-  lEasyHandle = curl_easy_init();
-
-  if (!lEasyHandle)
-    {
-    itkExceptionMacro(<< "Tile Map IO : Curl easy handle init error.");
-    }
-
-
-  // Param easy handle
-  curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
-  curl_easy_setopt(lEasyHandle, CURLOPT_URL, m_ListURLs.back().data());
-  curl_easy_setopt(lEasyHandle, CURLOPT_WRITEDATA, m_ListFiles.back());
-
-  // Add easy handle to multi handle
-  curl_multi_add_handle(m_MultiHandle, lEasyHandle);
-
-  // Add hanle to vector
-  m_ListCurlHandles.push_back(lEasyHandle);
 }
 
 /*
@@ -345,108 +294,6 @@ void TileMapImageIO::GenerateURL(double x, double y)
 
   // Add url to vector
   m_ListURLs.push_back(urlStream.str());
-}
-
-/*
- * This method perform curl multi handle
- */
-void TileMapImageIO::FetchTiles()
-{
-  // Configure multi handle - set the maximum connections
-  curl_multi_setopt(m_MultiHandle, CURLMOPT_MAXCONNECTS, m_MaxConnect);
-  curl_multi_setopt(m_MultiHandle, CURLMOPT_PIPELINING, 0);
-
-  // Perform
-  int lStillRunning;
-
-  while (
-    CURLM_CALL_MULTI_PERFORM == curl_multi_perform(m_MultiHandle, &lStillRunning)
-    )
-    ;
-
-  // Now get that URL
-  while (lStillRunning)
-    {
-    struct timeval timeout;
-    int            rc; // Return code
-
-    fd_set fdread;
-    fd_set fdwrite;
-    fd_set fdexcep;
-    int    maxfd;
-
-    FD_ZERO(&fdread);
-    FD_ZERO(&fdwrite);
-    FD_ZERO(&fdexcep);
-
-    /* set a suitable timeout to play around with */
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 1;
-
-    /* get file descriptors from the transfers */
-    curl_multi_fdset(m_MultiHandle, &fdread, &fdwrite, &fdexcep, &maxfd);
-
-    rc = select(maxfd + 1, &fdread, &fdwrite, &fdexcep, &timeout);
-
-    switch (rc)
-      {
-    case -1:
-      /* select error */
-      break;
-    case 0:
-    /* timeout */
-    default:
-      /* timeout or readable/writable sockets */
-      while (
-        CURLM_CALL_MULTI_PERFORM == curl_multi_perform(m_MultiHandle, &lStillRunning)
-        )
-        ;
-      break;
-      }
-    }
-
-  int      remaining_msgs = 1;
-  int      error = 0;
-  CURLMsg *msg;
-  while (remaining_msgs)
-    {
-    msg = curl_multi_info_read(m_MultiHandle, &remaining_msgs);
-    if (msg != NULL)
-      {
-      if (CURLE_OK != msg->data.result) error = 1;
-      }
-    }
-
-  if (error != 0)
-    {
-    itkExceptionMacro(<< "TileMapImageIO : Error occurs while perform Multi handle");
-    }
-}
-
-/*
- * This method cleanup datas
- */
-void TileMapImageIO::Cleanup()
-{
-  // Close files
-  for (unsigned int currentFile = 0; currentFile < m_ListFiles.size(); currentFile++)
-    {
-    fclose(m_ListFiles[currentFile]);
-    }
-  m_ListFiles.clear();
-
-  // Cleanup easy handles
-  for (unsigned int currentHandle = 0; currentHandle < m_ListCurlHandles.size(); currentHandle++)
-    {
-    curl_easy_cleanup(m_ListCurlHandles[currentHandle]);
-    }
-  m_ListCurlHandles.clear();
-
-  // Cleanup multi handle
-  curl_multi_cleanup(m_MultiHandle);
-
-  // Cleanup url vector
-  m_ListURLs.clear();
 }
 
 /*

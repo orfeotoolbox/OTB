@@ -366,6 +366,10 @@ IF(OTB_USE_CURL)
 
         INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
 
+        # TODO add test to check if curl multi is available
+        OPTION(OTB_CURL_MULTI_AVAILABLE "Whether or not the curl has curlmulti capabilities" ON)
+        MARK_AS_ADVANCED(OTB_CURL_MULTI_AVAILABLE)
+        ADD_DEFINITIONS(-DOTB_CURL_MULTI_AVAILABLE)
 ENDIF(OTB_USE_CURL)
 
 #-------------------------------
