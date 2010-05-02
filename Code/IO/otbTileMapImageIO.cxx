@@ -256,14 +256,6 @@ void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
   // Generate URL
   this->GenerateURL(tileInfo.x, tileInfo.y);
 
-  // Initialize curl handle
-  CURL * lEasyHandle;
-  lEasyHandle = curl_easy_init();
-
-  if (!lEasyHandle)
-    {
-    itkExceptionMacro(<< "Tile Map IO : Curl easy handle init error.");
-    }
 
   // Create file
   FILE* lOutputFile = fopen(tileInfo.filename.c_str(), "w");
@@ -275,6 +267,16 @@ void TileMapImageIO::GenerateCURLHandle(TileNameAndCoordType tileInfo)
 
   // Add file to vector
   m_ListFiles.push_back(lOutputFile);
+
+  // Initialize curl handle
+  CURL * lEasyHandle;
+  lEasyHandle = curl_easy_init();
+
+  if (!lEasyHandle)
+    {
+    itkExceptionMacro(<< "Tile Map IO : Curl easy handle init error.");
+    }
+
 
   // Param easy handle
   curl_easy_setopt(lEasyHandle, CURLOPT_USERAGENT, m_Browser.data());
