@@ -458,9 +458,10 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
   int firstSample = this->GetIORegion().GetIndex()[0];
   int nComponents = this->GetNumberOfComponents();
 
+  unsigned char * bufferTile = new unsigned char[256 * 256 * nComponents];
   for (unsigned int currentTile = 0; currentTile < m_ListTiles.size(); currentTile++)
     {
-    unsigned char * bufferTile = new unsigned char[256 * 256 * nComponents];
+
 
     // Read tile from cache
     this->ReadTile(m_ListTiles[currentTile].filename, bufferTile);
@@ -495,8 +496,8 @@ void TileMapImageIO::GenerateBuffer(unsigned char *p)
           }
         }
       } //end of tile copy
-    delete[] bufferTile;
     } //end of full image copy
+  delete[] bufferTile;
 }
 
 /*
