@@ -113,7 +113,7 @@ protected:
   CoordinateToName();
   virtual ~CoordinateToName() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void RetrieveXML(std::ostringstream& urlStream) const;
+  void RetrieveXML(const std::ostringstream& urlStream) const;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
   virtual void DoEvaluate();
