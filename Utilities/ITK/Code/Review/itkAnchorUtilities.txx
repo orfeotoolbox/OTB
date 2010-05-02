@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnchorUtilities.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-08 19:48:04 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-03-02 03:40:37 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,10 +26,10 @@
 namespace itk {
 
 /**
-* \class AnchorUtilities 
- * \brief functionality in common for anchor openings/closings and
- * erosions/dilation
- *
+* AnchorUtilities 
+* functionality in common for anchor openings/closings and
+* erosions/dilation
+*
 **/
 #if 0
 template <class TImage, class TBres, class TLine>

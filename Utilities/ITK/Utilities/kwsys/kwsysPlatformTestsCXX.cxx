@@ -1,3 +1,14 @@
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
+
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
+
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 // Setup for tests that use result of stl namespace test.
 #if defined(KWSYS_STL_HAVE_STD)
 # if KWSYS_STL_HAVE_STD
@@ -100,6 +111,15 @@ int main() { return 0; }
 #include <cstddef>
 void f(size_t) {}
 int main() { return 0; }
+#endif
+
+#ifdef TEST_KWSYS_CXX_HAS_LONG_LONG
+long long f(long long n) { return n; }
+int main()
+{
+  long long n = 0;
+  return static_cast<int>(f(n));
+}
 #endif
 
 #ifdef TEST_KWSYS_CXX_HAS_NULL_TEMPLATE_ARGS

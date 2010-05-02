@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-12 09:44:02 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2010-02-03 18:57:22 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,8 @@
 #define __itkScalarChanAndVeseLevelSetFunction_h
 
 #include "itkScalarRegionBasedLevelSetFunction.h"
+#include "itkScalarChanAndVeseLevelSetFunctionData.h"
+#include "itkConstrainedRegionBasedLevelSetFunctionSharedData.h"
 
 namespace itk {
 
@@ -35,7 +37,7 @@ namespace itk {
  *
  *        "An active contour model without edges"
  *         T. Chan and L. Vese.
- *         In Scale-Space Theories in Computer Vision, pages 141–151, 1999.
+ *         In Scale-Space Theories in Computer Vision, pages 141-151, 1999.
  *
  *         "Segmenting and Tracking Fluorescent Cells in Dynamic 3-D
  *          Microscopy With Coupled Active Surfaces"
@@ -64,7 +66,8 @@ namespace itk {
  */
 template < class TInputImage,
 class TFeatureImage,
-class TSharedData >
+class TSharedData=ConstrainedRegionBasedLevelSetFunctionSharedData< TInputImage, TFeatureImage,
+     ScalarChanAndVeseLevelSetFunctionData< TInputImage, TFeatureImage > > >
 class ITK_EXPORT ScalarChanAndVeseLevelSetFunction
 : public ScalarRegionBasedLevelSetFunction< TInputImage, TFeatureImage, TSharedData >
 {

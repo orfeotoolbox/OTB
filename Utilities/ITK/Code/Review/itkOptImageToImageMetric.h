@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-20 09:08:41 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2010-03-05 16:15:37 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -319,6 +319,14 @@ public:
   itkSetMacro(UseCachingOfBSplineWeights,bool);
   itkGetConstReferenceMacro(UseCachingOfBSplineWeights,bool);
   itkBooleanMacro(UseCachingOfBSplineWeights);
+      
+  typedef MultiThreader               MultiThreaderType;
+  /** Get the Threader. */
+  itkGetConstObjectMacro( Threader, MultiThreaderType );
+  const TransformPointer* GetThreaderTransform()
+    {
+    return m_ThreaderTransform;
+    }
 
 protected:
   ImageToImageMetric();
@@ -358,13 +366,13 @@ protected:
   typedef std::vector<FixedImageSamplePoint> FixedImageSampleContainer;
 
   /** Uniformly select a sample set from the fixed image domain. */
-  virtual void SampleFixedImageDomain( FixedImageSampleContainer & samples) const;
+  virtual void SampleFixedImageRegion( FixedImageSampleContainer & samples) const;
 
   virtual void SampleFixedImageIndexes( FixedImageSampleContainer & 
                                            samples) const;
 
   /** Gather all the pixels from the fixed image domain. */
-  virtual void SampleFullFixedImageDomain( FixedImageSampleContainer & 
+  virtual void SampleFullFixedImageRegion( FixedImageSampleContainer & 
                                            samples) const;
 
   /** Container to store a set of points and fixed image values. */
@@ -507,8 +515,6 @@ protected:
    * Types and variables related to multi-threading
    */
 
-  typedef MultiThreader               MultiThreaderType;
-
   struct MultiThreaderParameterType
     {
     ImageToImageMetric                   * metric;
@@ -570,7 +576,7 @@ protected:
   /** Synchronizes the threader transforms with the transform
    *   member variable.
    */
-  void SynchronizeTransforms() const;
+  virtual void SynchronizeTransforms() const;
 
 private:
   ImageToImageMetric(const Self&); //purposely not implemented

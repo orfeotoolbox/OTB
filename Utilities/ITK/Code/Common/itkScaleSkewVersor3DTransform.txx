@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleSkewVersor3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:08 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkScaleSkewVersor3DTransform_txx
 
 #include "itkScaleSkewVersor3DTransform.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -29,8 +30,8 @@ ScaleSkewVersor3DTransform<TScalarType>
 ::ScaleSkewVersor3DTransform() :
   Superclass(OutputSpaceDimension, ParametersDimension)
 {
-  m_Scale.Fill( 1.0 );
-  m_Skew.Fill( 0.0 );
+  m_Scale.Fill( NumericTraits<TScalarType>::One );
+  m_Skew.Fill( NumericTraits<TScalarType>::Zero );
 }
 
 
@@ -120,6 +121,7 @@ ScaleSkewVersor3DTransform<TScalarType>
   newTranslation[0] = parameters[3];
   newTranslation[1] = parameters[4];
   newTranslation[2] = parameters[5];
+
   this->SetVarTranslation(newTranslation);
   this->ComputeMatrix();
   this->ComputeOffset();
@@ -178,8 +180,8 @@ void
 ScaleSkewVersor3DTransform<TScalarType>
 ::SetIdentity()
 {
-  m_Scale.Fill( 1.0 );
-  m_Skew.Fill( 0.0 );
+  m_Scale.Fill( NumericTraits< ScaleVectorValueType >::One );
+  m_Skew.Fill( NumericTraits< SkewVectorValueType >::Zero );
   Superclass::SetIdentity();
 }
 

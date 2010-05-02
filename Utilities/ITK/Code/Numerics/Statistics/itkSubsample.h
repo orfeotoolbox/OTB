@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubsample.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 19:29:54 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2010-01-21 22:26:12 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,7 +130,7 @@ public:
   
   void Swap(int index1, int index2);
   
-  MeasurementVectorType GetMeasurementVectorByIndex(int index) const;
+  const MeasurementVectorType & GetMeasurementVectorByIndex(int index) const;
 
   FrequencyType GetFrequencyByIndex(int index) const;
 

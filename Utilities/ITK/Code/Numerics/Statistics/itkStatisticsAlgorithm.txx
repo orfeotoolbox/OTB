@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStatisticsAlgorithm.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 19:29:54 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2010-01-22 22:16:14 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -548,8 +548,11 @@ inline void InsertSort(TSubsample* sample,
     backwardIndex = backwardSearchBegin;
     while (backwardIndex > beginIndex) 
       {
-      if (sample->GetMeasurementVectorByIndex(backwardIndex)[activeDimension] < 
-          sample->GetMeasurementVectorByIndex(backwardIndex - 1)[activeDimension])
+      typedef typename TSubsample::MeasurementType MeasurementType;
+      const MeasurementType value1 = sample->GetMeasurementVectorByIndex(backwardIndex)[activeDimension];
+      const MeasurementType value2 = sample->GetMeasurementVectorByIndex(backwardIndex - 1)[activeDimension];
+
+      if( value1 < value2 )
         {
         sample->Swap(backwardIndex, backwardIndex - 1);
         }

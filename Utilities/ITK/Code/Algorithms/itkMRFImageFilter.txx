@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMRFImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 07:58:47 $
-  Version:   $Revision: 1.68 $
+  Date:      $Date: 2009-10-27 16:06:46 $
+  Version:   $Revision: 1.69 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -456,9 +456,8 @@ MRFImageFilter<TInputImage, TClassifiedImage>
     totalNumberOfPixelsInInputImage *= static_cast<int>(inputImageSize[ i ]);
     }
 
-  int maxNumPixelError = 
-    static_cast<int>( Math::Round( m_ErrorTolerance * 
-                      m_TotalNumberOfValidPixelsInOutputImage) );
+  int maxNumPixelError = Math::Round<int>( m_ErrorTolerance * 
+                      m_TotalNumberOfValidPixelsInOutputImage);
 
   m_NumberOfIterations = 0;
   do

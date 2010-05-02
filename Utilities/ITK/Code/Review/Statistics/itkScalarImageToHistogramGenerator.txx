@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-17 18:29:01 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-12-11 23:33:55 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,6 +77,7 @@ ScalarImageToHistogramGenerator< TImage >
 {
   typedef typename GeneratorType::HistogramMeasurementVectorType     MeasurementVectorType;
   MeasurementVectorType minVector;
+  MeasurementVectorTraits::SetLength(minVector,1);
   minVector[0] = minimumValue;
   m_HistogramGenerator->SetHistogramBinMinimum( minVector );
 }
@@ -89,6 +90,7 @@ ScalarImageToHistogramGenerator< TImage >
 {
   typedef typename GeneratorType::HistogramMeasurementVectorType     MeasurementVectorType;
   MeasurementVectorType maxVector;
+  MeasurementVectorTraits::SetLength(maxVector,1);
   maxVector[0] = maximumValue;
   m_HistogramGenerator->SetHistogramBinMaximum( maxVector );
 }

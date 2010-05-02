@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshToTriangleMeshFilter.h,v $
 Language:  C++
-Date:      $Date: 2009-06-13 17:42:56 $
-Version:   $Revision: 1.9 $
+Date:      $Date: 2009-09-17 11:14:56 $
+Version:   $Revision: 1.10 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,11 +17,11 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef __itkSimplexMeshToTriangleMeshFilter_h
 #define __itkSimplexMeshToTriangleMeshFilter_h
 
-#include <itkMesh.h>
-#include <itkLineCell.h>
-#include <itkPolygonCell.h>
-#include <itkVertexCell.h>
-#include <itkMapContainer.h>
+#include "itkMesh.h"
+#include "itkLineCell.h"
+#include "itkPolygonCell.h"
+#include "itkVertexCell.h"
+#include "itkMapContainer.h"
 
 #include "itkSimplexMesh.h"
 #include "itkMeshToMeshFilter.h"
@@ -67,7 +67,7 @@ public:
 
 
   typedef TInputMesh                                     InputMeshType;
-  typedef typename InputMeshType::Pointer                InputMeshPointer;
+  typedef typename InputMeshType::ConstPointer           InputMeshConstPointer;
   typedef typename InputMeshType::PointType              InputPointType;
   typedef typename InputMeshType::PixelType              InputPixelType;
   typedef typename InputMeshType::MeshTraits::CellTraits InputCellTraitsType;
@@ -139,14 +139,14 @@ public:
       return m_CenterMap;
       }
 
-    void SetMesh(InputMeshPointer mesh)
+    void SetMesh( const InputMeshType * mesh)
       {
       this->m_Mesh = mesh;
       }
 
     protected:
-      InputMeshPointer m_Mesh;
-      PointMapPointer m_CenterMap; 
+      InputMeshConstPointer m_Mesh;
+      PointMapPointer       m_CenterMap; 
   };
 
     typedef itk::CellInterfaceVisitorImplementation<InputPixelType,

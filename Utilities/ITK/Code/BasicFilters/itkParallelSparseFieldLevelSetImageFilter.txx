@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParallelSparseFieldLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:48 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-09-30 16:07:13 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1198,6 +1198,7 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
 
       // Create the temporary output image
       str->Filter->m_OutputImageTemp = OutputImageType::New();
+      str->Filter->m_OutputImageTemp->CopyInformation(str->Filter->m_OutputImage);
       str->Filter->m_OutputImageTemp->SetRegions(str->Filter->m_OutputImage->GetRequestedRegion());
       str->Filter->m_OutputImageTemp->Allocate();
       }
@@ -2636,7 +2637,8 @@ ParallelSparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   Superclass::PrintSelf(os, indent);
 
   unsigned int i;
-  os << indent << "m_IsoSurfaceValue: " << m_IsoSurfaceValue << std::endl;
+  os << indent << "m_NumberOfLayers: " << NumericTraits<StatusType>::PrintType(this->GetNumberOfLayers()) << std::endl;
+  os << indent << "m_IsoSurfaceValue: " << this->GetIsoSurfaceValue() << std::endl;
   os << indent << "m_LayerNodeStore: " << m_LayerNodeStore;
   unsigned int ThreadId;
   for (ThreadId=0; ThreadId < m_NumOfThreads; ThreadId++)

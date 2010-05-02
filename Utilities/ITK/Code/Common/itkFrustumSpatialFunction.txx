@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFrustumSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-11-24 02:27:27 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,13 +27,13 @@ FrustumSpatialFunction<VImageDimension,TInput>::FrustumSpatialFunction()
 {
   for (unsigned int i = 0; i < m_Apex.GetPointDimension(); i++)
     {
-    m_Apex[i] = 0.0;
+    m_Apex[i] = 0.0f;
     }
-  m_AngleZ = 0.0;
-  m_ApertureAngleX = 0.0;
-  m_ApertureAngleY = 0.0;
-  m_TopPlane = 0.0;
-  m_BottomPlane = 0.0;
+  m_AngleZ = 0.0f;
+  m_ApertureAngleX = 0.0f;
+  m_ApertureAngleY = 0.0f;
+  m_TopPlane = 0.0f;
+  m_BottomPlane = 0.0f;
   m_RotationPlane = RotateInXZPlane;
 
 }

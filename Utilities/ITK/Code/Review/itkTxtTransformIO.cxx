@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTxtTransformIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-11 16:37:34 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-02-08 20:24:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,11 +122,21 @@ Read()
   TmpFixedParameterArray.clear();
   bool haveFixedParameters = false;
   bool haveParameters = false;
- 
+  //
+  // check for line end convention
+  std::string line_end("\n");
+  if(data.find('\n') == std::string::npos)
+    {
+    if(data.find('\r') == std::string::npos)
+      {
+      itkExceptionMacro ( "No line ending character found, not a valid ITK Transform TXT file" );
+      }
+    line_end = "\r";
+    }
   while ( position < data.size() )
     {
     // Find the next string
-    std::string::size_type end = data.find ( "\n", position );
+    std::string::size_type end = data.find ( line_end, position );
     std::string line = trim ( data.substr ( position, end - position ) );
     position = end+1;
     itkDebugMacro ("Found line: \"" << line << "\"" );

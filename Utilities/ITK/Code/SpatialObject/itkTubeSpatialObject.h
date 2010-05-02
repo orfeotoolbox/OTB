@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTubeSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-07 14:34:17 $
-  Version:   $Revision: 1.47 $
+  Date:      $Date: 2010-01-21 22:33:38 $
+  Version:   $Revision: 1.48 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -154,7 +154,6 @@ public:
 
 
 protected:
-
   PointListType     m_Points;
   int               m_ParentPoint;
   unsigned int      m_EndType;
@@ -171,7 +170,11 @@ protected:
   /** TimeStamps */
   mutable unsigned long m_OldMTime;
   mutable unsigned long m_IndexToWorldTransformMTime;
-  
+
+private:
+  TubeSpatialObject(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
 };
 
 } // end namespace itk

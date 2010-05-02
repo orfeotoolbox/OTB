@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMap.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-14 21:08:43 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-12-10 10:55:21 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -267,6 +267,11 @@ public:
     {
     this->PrintLabelObjects( std::cerr );
     }
+
+  /**
+   * Optimize the line representation of all the lable objects referenced in the LabelMap
+   */
+  void Optimize();
 
 protected:
   LabelMap();

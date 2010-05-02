@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDeformableTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 22:04:48 $
-  Version:   $Revision: 1.45 $
+  Date:      $Date: 2010-03-05 18:38:59 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,6 +136,40 @@ BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
 }
 
 
+// Explicit New() method, used here because we need to split the itkNewMacro()
+// in order to overload the CreateAnother() method.
+template<class TScalarType, unsigned int NDimensions, unsigned int VSplineOrder>
+typename BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>::Pointer
+BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
+::New(void) 
+{
+  Pointer smartPtr = ::itk::ObjectFactory< Self >::Create();
+  if(smartPtr.IsNull())
+    {
+    smartPtr = static_cast<Pointer>(new Self);
+    }
+  smartPtr->UnRegister();
+  return smartPtr;
+}
+
+
+// Explicit New() method, used here because we need to split the itkNewMacro()
+// in order to overload the CreateAnother() method.
+template<class TScalarType, unsigned int NDimensions, unsigned int VSplineOrder>
+::itk::LightObject::Pointer
+BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
+::CreateAnother(void) const
+{
+  ::itk::LightObject::Pointer smartPtr;
+  Pointer copyPtr = Self::New().GetPointer();
+
+  copyPtr->m_BulkTransform =  this->GetBulkTransform(); 
+  
+  smartPtr = static_cast<Pointer>(copyPtr);
+
+  return smartPtr;
+}
+
 // Get the number of parameters
 template<class TScalarType, unsigned int NDimensions, unsigned int VSplineOrder>
 unsigned int
@@ -188,7 +222,7 @@ BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
     // when spline order is even.
     // The valid interval for evaluation is [start+offset, last-offset)
     // when spline order is odd.
-    // Where offset = vcl_floor(spline / 2 ).
+    // Where offset = floor(spline / 2 ).
     // Note that the last pixel is not included in the valid region
     // with odd spline orders.
     typename RegionType::SizeType size = m_GridRegion.GetSize();
@@ -341,10 +375,12 @@ BSplineDeformableTransform<TScalarType, NDimensions, VSplineOrder>
   // expected number of parameters
   if ( parameters.Size() != this->GetNumberOfParameters() )
     {
-    itkExceptionMacro(<<"Mismatched between parameters size "
-                      << parameters.size()
-                      << " and region size "
-                      << m_GridRegion.GetNumberOfPixels() );
+    itkExceptionMacro(<<"Mismatch between parameters size "
+                      << parameters.Size()
+                      << " and expected number of parameters "
+                      << this->GetNumberOfParameters()
+                      << (m_GridRegion.GetNumberOfPixels() == 0 ?
+                          ". \nSince the size of the grid region is 0, perhaps you forgot to SetGridRegion or SetFixedParameters before setting the Parameters." : ""));
     }
 
   // Clean up buffered parameters

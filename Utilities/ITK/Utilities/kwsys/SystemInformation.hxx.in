@@ -1,18 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: SystemInformation.hxx.in,v $
-  Language:  C++
-  Date:      $Date: 2009-03-20 02:48:05 $
-  Version:   $Revision: 1.9 $
-  Copyright (c) 2005 Insight Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #ifndef @KWSYS_NAMESPACE@_SystemInformation_h
 #define @KWSYS_NAMESPACE@_SystemInformation_h
 
@@ -23,6 +19,7 @@
 # define kwsys_ios @KWSYS_NAMESPACE@_ios
 #endif
 #include <@KWSYS_NAMESPACE@/stl/string>
+#include <stddef.h> /* size_t */
 
 namespace @KWSYS_NAMESPACE@
 {
@@ -67,10 +64,10 @@ public:
   bool DoesCPUSupportCPUID();
 
   // Retrieve memory information in megabyte.
-  unsigned long GetTotalVirtualMemory();
-  unsigned long GetAvailableVirtualMemory();
-  unsigned long GetTotalPhysicalMemory();
-  unsigned long GetAvailablePhysicalMemory();  
+  size_t GetTotalVirtualMemory();
+  size_t GetAvailableVirtualMemory();
+  size_t GetTotalPhysicalMemory();
+  size_t GetAvailablePhysicalMemory();  
 
   /** Run the different checks */
   void RunCPUCheck();

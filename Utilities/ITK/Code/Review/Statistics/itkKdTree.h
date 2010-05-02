@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKdTree.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-02 05:43:56 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2010-02-04 20:21:48 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -326,7 +326,10 @@ struct KdTreeTerminalNode: public KdTreeNode< TSample >
 
   KdTreeTerminalNode() {}
 
-  virtual ~KdTreeTerminalNode() {}
+  virtual ~KdTreeTerminalNode()
+    { 
+    this->m_InstanceIdentifiers.clear();
+    }
 
   bool IsTerminal() const
     {
@@ -574,7 +577,11 @@ public:
    * KdTreeGenerator or WeightedCentroidKdTreeGenerator. */
   void SetRoot(KdTreeNodeType* root)
     {
-    m_Root = root;
+    if( this->m_Root )
+      {
+      this->DeleteNode( this->m_Root );
+      }
+    this->m_Root = root;
     }
 
   /** Returns the pointer to the root node. */
@@ -682,7 +689,7 @@ public:
     {
     ConstIterator iter = m_Sample->End();
     return iter;
-    } 
+    }
 
 protected:
   /** Constructor */

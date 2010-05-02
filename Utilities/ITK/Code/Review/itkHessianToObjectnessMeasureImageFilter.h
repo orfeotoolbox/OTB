@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessianToObjectnessMeasureImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-01 12:43:38 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-01-31 12:39:34 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@ namespace itk
  * images, with M<N.  
  * The filter takes an image of a Hessian pixels ( SymmetricSecondRankTensor pixels
  * pixels ) and produces an enhanced image. The Hessian input image can be produced 
- * using itkHessianSmoothedRecursiveGaussianImageFilter. 
+ * using itk::HessianRecursiveGaussianImageFilter. 
  *  
  *
  * \par References
@@ -85,6 +85,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Runtime information support. */
+  itkTypeMacro( HessianToObjectnessMeasureImageFilter, ImageToImageFilter );
+   
   /** Set/Get Alpha, the weight corresponding to R_A 
    * (the ratio of the smallest eigenvalue that has to be large to the larger ones). 
    * Smaller values lead to increased sensitivity to the object dimensionality. */

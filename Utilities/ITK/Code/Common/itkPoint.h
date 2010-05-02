@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPoint.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-14 11:52:00 $
-  Version:   $Revision: 1.69 $
+  Date:      $Date: 2010-03-24 21:51:55 $
+  Version:   $Revision: 1.70 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -231,7 +231,7 @@ public:
     for(unsigned int i=0; i<NPointDimension; i++ )
       {
       const RealType component =  static_cast< RealType >( pa[i] );
-      const ValueType difference = (*this)[i] - component;
+      const RealType difference = static_cast< RealType >( (*this)[i] ) - component;
       sum += difference * difference;
       }
     return sum;

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkPolygonSpatialObject.txx,v $
 Language:  C++
-Date:      $Date: 2009-04-08 18:27:47 $
-Version:   $Revision: 1.26 $
+Date:      $Date: 2009-12-03 06:15:25 $
+Version:   $Revision: 1.29 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,6 +29,11 @@ PolygonGroupOrientation
 PolygonSpatialObject<TDimension>
 ::Plane() const
 {
+  if (Self::ObjectDimension == 2)
+    {
+    return Axial;
+    }
+
   PolygonGroupOrientation plane;
   // local typedef to shut up the compiler...
   
@@ -58,11 +63,11 @@ PolygonSpatialObject<TDimension>
     }
   else if(min[0] != max[0] && min[1] == max[1] && min[2] != max[2])
     {
-    plane = Axial;
+    plane = Coronal;
     }
   else if(min[0] != max[0] && min[1] != max[1] && min[2] == max[2])
     {
-    plane = Coronal;
+    plane = Axial;
     }
   else
     {
@@ -149,10 +154,10 @@ PolygonSpatialObject<TDimension>
       X = 1; Y = 2;
       break;
     case Axial:
-      X = 0; Y = 2;
+      X = 0; Y = 1;
       break;
     case Coronal:
-      X = 0; Y = 1;
+      X = 0; Y = 2;
       break;
     default:
       ExceptionObject exception(__FILE__, __LINE__);
@@ -417,10 +422,10 @@ PolygonSpatialObject<TDimension>
       X = 1; Y = 2;
       break;
     case Axial:
-      X = 0; Y = 2;
+      X = 0; Y = 1;
       break;
     case Coronal:
-      X = 0; Y = 1;
+      X = 0; Y = 2;
       break;
     default:
       ExceptionObject exception(__FILE__, __LINE__);
@@ -481,6 +486,7 @@ PolygonSpatialObject<TDimension>
         }
       }
     }
+
   return oddNodes;
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshTopologyChecker.txx,v $
   Language:  C++
-  Date:      $Date: 2007-12-16 05:14:14 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-11-22 23:27:38 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,7 +56,10 @@ QuadEdgeMeshTopologyChecker< TMesh >
   // Number of USED faces
   unsigned long numFaces  = m_Mesh->ComputeNumberOfFaces( );
   // Number of Boundaries
-  unsigned long numBounds = boundaryEdges->Evaluate( (*m_Mesh) )->size( );
+  typename BoundaryEdges::OutputType 
+    listOfBoundaries = boundaryEdges->Evaluate( (*m_Mesh) );
+  unsigned long numBounds = listOfBoundaries->size( );
+  delete listOfBoundaries;
 
   /**
    * Number of points

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-12 10:52:52 $
-  Version:   $Revision: 1.81 $
+  Date:      $Date: 2009-12-14 16:28:26 $
+  Version:   $Revision: 1.83 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -387,7 +387,7 @@ public:
         sum += this->m_PhysicalPointToIndex[i][j] * (point[j] - this->m_Origin[j]);
         }
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      index[i] = static_cast< IndexValueType>( itk::Math::RoundHalfIntegerUp( sum ) );
+      index[i] = Math::RoundHalfIntegerUp< IndexValueType>( sum );
 #else
       index[i] = static_cast< IndexValueType>( sum );
 #endif
@@ -556,6 +556,15 @@ public:
    * times, LargestPossibleRegions, and any extra meta data like spacing,
    * origin, etc. */
   virtual void UpdateOutputInformation();
+
+  /** Overriden from base class to check if the requested image region
+   * has zero pixels.
+   *
+   * This is needed so that filters can set an input's requested
+   * region to zero, to indicate that it does not need to be updated
+   * or executed.
+   */
+  virtual void UpdateOutputData();
 
   /** Set the RequestedRegion to the LargestPossibleRegion.  This
    * forces a filter to produce all of the output in one execution

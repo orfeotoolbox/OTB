@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:52 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-09-16 15:19:20 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -183,9 +183,9 @@ LBFGSOptimizer
 /** Return Current Value */
 LBFGSOptimizer::MeasureType
 LBFGSOptimizer
-::GetValue()
+::GetValue() const
 {
-  return this->GetNonConstCostFunctionAdaptor()->f(this->GetCurrentPosition());
+  return this->GetCachedValue();
 }
 
 /**

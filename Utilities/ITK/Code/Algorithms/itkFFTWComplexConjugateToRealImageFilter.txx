@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTWComplexConjugateToRealImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2010-02-26 23:50:55 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,6 +23,7 @@
 #include "itkIndent.h"
 #include "itkMetaDataObject.h"
 #include "itkImageRegionIterator.h"
+#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -40,6 +41,10 @@ GenerateData()
     {
     return;
     }
+
+  // we don't have a nice progress to report, but at least this simple line
+  // reports the begining and the end of the process
+  ProgressReporter progress(this, 0, 1);
 
   // allocate output buffer memory
   outputPtr->SetBufferedRegion( outputPtr->GetRequestedRegion() );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFileReader.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-11 12:45:07 $
-  Version:   $Revision: 1.88 $
+  Date:      $Date: 2010-04-12 13:10:45 $
+  Version:   $Revision: 1.90 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -329,8 +329,12 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ImageIOAdaptor::Convert( m_ActualIORegion, streamableRegion, largestRegion.GetIndex() );
   
   // Check whether the imageRequestedRegion is fully contained inside the
-  // streamable region
-  if( !streamableRegion.IsInside( imageRequestedRegion ) )
+  // streamable region. Since, ImageRegion::IsInside regards zero
+  // sized regions, as not being inside any other region, we must
+  // specially check this condition to enable zero sized regions to
+  // pass the region propagation phase of the pipeline.
+  if( !streamableRegion.IsInside( imageRequestedRegion ) 
+      && imageRequestedRegion.GetNumberOfPixels() != 0)
     {
     // we must use a InvalidRequestedRegionError since
     // DataObject::PropagateRequestedRegion() has an exception
@@ -357,7 +361,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 {
 
   typename TOutputImage::Pointer output = this->GetOutput();  
-  typename TOutputImage::RegionType requestedRegion = output->GetRequestedRegion();
 
   itkDebugMacro ( << "ImageFileReader::GenerateData() \n" 
                   << "Allocating the buffer with the EnlargedRequestedRegion \n" 
@@ -387,7 +390,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 
   itkDebugMacro (<< "Setting imageIO IORegion to: " << m_ActualIORegion ); 
   m_ImageIO->SetIORegion( m_ActualIORegion );
-  
+
   char *loadBuffer = 0;
   // the size of the buffer is computed based on the actual number of
   // pixels to be read and the actual size of the pixels to be read
@@ -411,10 +414,13 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
       loadBuffer = new char[ sizeOfActualIORegion ];
       m_ImageIO->Read( static_cast< void *>(loadBuffer) );
       
-      this->DoConvertBuffer(static_cast< void *>(loadBuffer), m_ActualIORegion.GetNumberOfPixels() );
+      // See note below as to why the buffered region is needed and
+      // not actualIOregion
+      this->DoConvertBuffer(static_cast< void *>(loadBuffer), output->GetBufferedRegion().GetNumberOfPixels() );
       }
-    else if ( m_ActualIORegion.GetNumberOfPixels() != requestedRegion.GetNumberOfPixels() ) 
+    else if ( m_ActualIORegion.GetNumberOfPixels() != output->GetBufferedRegion().GetNumberOfPixels() ) 
       {
+      // NOTE:
       // for the number of pixels read and the number of pixels
       // requested to not match, the dimensions of the two regions may
       // be different, therefore we buffer and copy the pixels

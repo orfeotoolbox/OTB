@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleSkewVersor3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:08 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-11-24 15:25:11 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,6 +95,14 @@ public:
   typedef Vector<TScalarType, 3> 
                                                       ScaleVectorType;
   typedef Vector<TScalarType, 6 >                     SkewVectorType;
+
+  typedef typename ScaleVectorType::ValueType         ScaleVectorValueType;
+  typedef typename SkewVectorType::ValueType          SkewVectorValueType;
+  typedef typename TranslationType::ValueType         TranslationValueType;
+
+  typedef typename Superclass::AxisValueType          AxisValueType;
+  typedef typename Superclass::ParameterValueType     ParameterValueType;
+
 
  /** Directly set the matrix of the transform.
   *

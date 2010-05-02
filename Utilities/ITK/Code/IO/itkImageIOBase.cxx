@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-19 19:26:25 $
-  Version:   $Revision: 1.85 $
+  Date:      $Date: 2010-02-24 14:40:36 $
+  Version:   $Revision: 1.89 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -581,7 +581,7 @@ ImageIOBase
 ::ReadBufferAsBinary(std::istream& is, void *buffer, ImageIOBase::SizeType num)
 {
 
-  const std::streamsize numberOfBytesToBeRead = static_cast< std::streamsize>( num );
+  const std::streamsize numberOfBytesToBeRead = Math::CastWithRangeCheck< std::streamsize>( num );
 
   is.read( static_cast<char *>( buffer ), numberOfBytesToBeRead );
 
@@ -751,10 +751,12 @@ template <class TComponent>
 void WriteBuffer(std::ostream& os, const TComponent *buffer, ImageIOBase::SizeType num)
 {
   const TComponent *ptr = buffer;
+  typedef typename itk::NumericTraits<TComponent>::PrintType PrintType;
   for (ImageIOBase::SizeType i=0; i < num; i++)
     {
-    if ( !(i%6) && i ) os << "\n";
-    os << *ptr++ << " ";
+    if ( !(i%6) && i ) 
+      os << "\n";
+    os << PrintType(*ptr++) << " ";
     }
 }
 }
@@ -853,10 +855,14 @@ void ImageIOBase::WriteBufferAsASCII(std::ostream& os, const void *buffer,
 template <class TComponent>
 void ReadBuffer(std::istream& is, TComponent *buffer, ImageIOBase::SizeType num)
 {
+
+  typedef typename itk::NumericTraits<TComponent>::PrintType PrintType;
+  PrintType temp;
   TComponent *ptr = buffer;
   for( ImageIOBase::SizeType i=0; i < num; i++, ptr++ )
     {
-    is >> *ptr;
+    is >> temp;
+    *ptr = static_cast<TComponent>( temp );
     }
 }
 
@@ -965,8 +971,8 @@ ImageIOBase::GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int number
   
   // determine the actual number of pieces that will be generated
   ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = (int)vcl_ceil(range/double(numberOfRequestedSplits));
-  int maxPieceUsed = (int)vcl_ceil(range/double(valuesPerPiece)) - 1;
+  int valuesPerPiece = Math::Ceil<int>(range/double(numberOfRequestedSplits));
+  int maxPieceUsed = Math::Ceil<int>(range/double(valuesPerPiece)) - 1;
   
   return maxPieceUsed+1;
 }
@@ -1024,8 +1030,8 @@ ImageIOBase::GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
 
   // determine the actual number of pieces that will be generated
   ImageIORegion::SizeType::value_type range = regionSize[splitAxis];
-  int valuesPerPiece = (int)vcl_ceil(range/(double)numberOfActualSplits);
-  int maxPieceUsed = (int)vcl_ceil(range/(double)valuesPerPiece) - 1;
+  int valuesPerPiece = Math::Ceil<int>(range/(double)numberOfActualSplits);
+  int maxPieceUsed = Math::Ceil<int>(range/(double)valuesPerPiece) - 1;
 
   // Split the region
   if ((int) ithPiece < maxPieceUsed)

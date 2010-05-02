@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshSmoothing.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-22 01:41:45 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-09-22 20:57:29 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,6 +17,8 @@
 
 #ifndef __itkQuadEdgeMeshSmoothing_txx
 #define __itkQuadEdgeMeshSmoothing_txx
+
+#include "itkQuadEdgeMeshSmoothing.h"
 
 namespace itk
 {
@@ -42,7 +44,7 @@ template< class TInputMesh, class TOutputMesh >
 void QuadEdgeMeshSmoothing< TInputMesh, TOutputMesh >::
 GenerateData()
 {
-  OutputMeshPointer mesh;
+  OutputMeshPointer mesh = OutputMeshType::New();
 
   OutputPointsContainerPointer temp = OutputPointsContainer::New();
   temp->Reserve( this->GetInput()->GetNumberOfPoints() );
@@ -85,7 +87,7 @@ GenerateData()
       }
     else
       {
-      mesh = this->GetInput();
+      this->CopyMeshToMesh(this->GetInput(), mesh);
       }
     }
 

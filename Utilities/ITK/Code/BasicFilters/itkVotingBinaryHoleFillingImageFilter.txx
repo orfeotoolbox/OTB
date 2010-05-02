@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryHoleFillingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:50:03 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-04-01 20:51:27 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -162,7 +162,8 @@ void
 VotingBinaryHoleFillingImageFilter< TInputImage, TOutputImage>
 ::AfterThreadedGenerateData()
 {
-  this->m_NumberOfPixelsChanged = 0;
+  this->m_NumberOfPixelsChanged = NumericTraits< SizeValueType >::Zero;
+
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   this->m_Count.SetSize(numberOfThreads);
   for(unsigned int t=0; t<numberOfThreads; t++)

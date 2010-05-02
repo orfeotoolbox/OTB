@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:04:56 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2009-10-19 14:26:45 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -226,19 +226,8 @@ public:
 #endif
 
 protected:
-  FiniteDifferenceImageFilter()
-    {
-    m_UseImageSpacing    = false;
-    m_ElapsedIterations  = 0;
-    m_DifferenceFunction = 0;
-    m_NumberOfIterations = NumericTraits<unsigned int>::max();
-    m_MaximumRMSError = 0.0;
-    m_RMSChange = 0.0;
-    m_State = UNINITIALIZED;
-    m_ManualReinitialization = false;
-    this->InPlaceOff();
-    }
-  ~FiniteDifferenceImageFilter() {}
+  FiniteDifferenceImageFilter();
+  ~FiniteDifferenceImageFilter();
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** This method allocates a temporary update container in the subclass. */
@@ -351,6 +340,10 @@ private:
   FiniteDifferenceImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Initialize the values of the Function coefficients. This function will
+   * also take care of checking whether the image spacing should be taken into
+   * account or not. */
+  void InitializeFunctionCoefficients();
 
   /** Control whether derivatives use spacing of the input image in
       its calculation. */

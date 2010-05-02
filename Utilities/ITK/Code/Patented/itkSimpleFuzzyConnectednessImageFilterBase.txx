@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFuzzyConnectednessImageFilterBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-01 13:08:41 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-09-16 20:46:14 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -194,6 +194,8 @@ SimpleFuzzyConnectednessImageFilterBase<TInputImage,TOutputImage>
   m_FuzzyScene->SetRegions( region );
   m_FuzzyScene->Allocate();  
   m_FuzzyScene->FillBuffer( 0 );
+
+  m_FuzzyScene->CopyInformation(m_InputImage);
 
   RegionType region1;
   region1.SetSize(m_Size);

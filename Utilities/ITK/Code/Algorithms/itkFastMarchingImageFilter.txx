@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.52 $
+  Date:      $Date: 2010-01-13 14:19:09 $
+  Version:   $Revision: 1.53 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,6 @@
 #include "itkNumericTraits.h"
 #include "vnl/vnl_math.h"
 #include <algorithm>
-
 
 namespace itk
 {
@@ -238,8 +237,13 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
         continue;
         }
 
+#ifdef ITK_USE_DEPRECATED_FAST_MARCHING
       // make this a trial point
       m_LabelImage->SetPixel( node.GetIndex(), TrialPoint );
+#else
+      // make this an initial trial point
+      m_LabelImage->SetPixel( node.GetIndex(), InitialTrialPoint );
+#endif
 
       outputPixel = node.GetValue();
       output->SetPixel( node.GetIndex(), outputPixel );
@@ -289,7 +293,11 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
       } 
 
     // is this node already alive ?
+#ifdef ITK_USE_DEPRECATED_FAST_MARCHING
     if ( m_LabelImage->GetPixel( node.GetIndex() ) != TrialPoint ) 
+#else
+    if ( m_LabelImage->GetPixel( node.GetIndex() ) == AlivePoint )
+#endif
       {
       continue;
       }
@@ -349,7 +357,12 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
       {
       neighIndex[j] = index[j] - 1;
       }
+#ifdef ITK_USE_DEPRECATED_FAST_MARCHING
     if ( m_LabelImage->GetPixel( neighIndex ) != AlivePoint )
+#else
+    unsigned char label = m_LabelImage->GetPixel( neighIndex );
+    if ( label != AlivePoint && label != InitialTrialPoint )
+#endif
       {
       this->UpdateValue( neighIndex, speedImage, output );
       }
@@ -359,7 +372,12 @@ FastMarchingImageFilter<TLevelSet,TSpeedImage>
       {
       neighIndex[j] = index[j] + 1;
       }
+#ifdef ITK_USE_DEPRECATED_FAST_MARCHING
     if ( m_LabelImage->GetPixel( neighIndex ) != AlivePoint )
+#else
+    label = m_LabelImage->GetPixel( neighIndex );
+    if ( label != AlivePoint && label != InitialTrialPoint )
+#endif
       {
       this->UpdateValue( neighIndex, speedImage, output );
       }

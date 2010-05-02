@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2008-05-14 09:26:05 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-10-29 11:18:40 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,7 +69,8 @@ public:
   typedef typename Superclass::PointType PointType;
 
   /** Index typedef support. */
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::IndexType      IndexType;
+  typedef typename Superclass::IndexValueType IndexValueType;
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;

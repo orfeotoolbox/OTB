@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkScaleTransform_txx
 
 #include "itkScaleTransform.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -49,6 +50,7 @@ void
 ScaleTransform<ScalarType, NDimensions>
 ::SetParameters( const ParametersType & parameters )
 {
+  typedef typename ParametersType::ValueType ParameterValueType;
   for( unsigned int i=0; i<SpaceDimension; i++ )
     {
     m_Scale[i] = parameters[i];
@@ -193,7 +195,7 @@ GetInverse(Self* inverse) const
 
   for( unsigned int i=0; i<SpaceDimension; i++ )
     {
-    inverse->m_Scale[i] = 1.0 / m_Scale[i];
+    inverse->m_Scale[i] = NumericTraits< double >::One / m_Scale[i];
     }
 
   return true;
@@ -206,7 +208,11 @@ ScaleTransform<ScalarType, NDimensions>
 ::GetInverseTransform() const
 {
   Pointer inv = New();
-  return GetInverse(inv) ? inv.GetPointer() : NULL;
+  if( this->GetInverse(inv) )
+    {
+    return inv.GetPointer();
+    }
+  return NULL;
 }
 
 

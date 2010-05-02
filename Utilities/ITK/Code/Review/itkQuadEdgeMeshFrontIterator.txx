@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshFrontIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-10 05:07:50 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-12-15 15:37:47 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,6 +52,17 @@ QuadEdgeMeshFrontBaseIterator( MeshType* mesh,
   m_IsPointVisited->SetElement( seed->GetOrigin( ), true );
   m_IsPointVisited->SetElement( seed->GetDestination( ), true );
   m_CurrentEdge = seed;
+}
+
+// ---------------------------------------------------------------------
+template< class TMesh, class TQE >
+QuadEdgeMeshFrontBaseIterator< TMesh, TQE >::
+~QuadEdgeMeshFrontBaseIterator( )
+{
+  if( m_Front )
+    {
+    delete m_Front;
+    }
 }
 
 // ---------------------------------------------------------------------

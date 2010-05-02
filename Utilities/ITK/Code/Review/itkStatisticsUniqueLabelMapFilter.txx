@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStatisticsUniqueLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-07 13:57:20 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-09-19 19:13:11 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkStatisticsUniqueLabelMapFilter_txx
 
 #include "itkStatisticsUniqueLabelMapFilter.h"
+#include "itkStatisticsLabelObjectAccessors.h"
 
 
 namespace itk {

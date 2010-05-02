@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-09-08 01:00:58 $
-  Version:   $Revision: 1.72 $
+  Date:      $Date: 2009-11-28 15:53:16 $
+  Version:   $Revision: 1.73 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,6 +95,7 @@ public:
 
   /** Type of the input parameters. */
   typedef  typename Superclass::ParametersType         ParametersType;
+  typedef  typename Superclass::ParametersValueType    ParametersValueType;
 
   /** Type of the Jacobian matrix. */
   typedef  Array2D< double >                           JacobianType;

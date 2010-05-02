@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaArray.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-06-21 21:54:05 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-11-21 18:59:39 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1156,7 +1156,7 @@ M_ReadElements(METAIO_STREAM::ifstream * _fstream, void * _data,
       }
 
     unsigned char* compr = new unsigned char[m_CompressedElementDataSize];
-    _fstream->read((char *)compr, m_CompressedElementDataSize);
+    _fstream->read((char *)compr, (size_t)m_CompressedElementDataSize);
     
     MET_PerformUncompression(compr, m_CompressedElementDataSize,
                              (unsigned char *)_data, readSize);
@@ -1198,7 +1198,7 @@ M_ReadElements(METAIO_STREAM::ifstream * _fstream, void * _data,
 //
 bool MetaArray::
 M_WriteElements(METAIO_STREAM::ofstream * _fstream, const void * _data,
-               int _dataQuantity)
+               METAIO_STL::streamoff _dataQuantity)
   {
   bool localData = false;
   METAIO_STREAM::ofstream* tmpWriteStream;
@@ -1256,7 +1256,7 @@ M_WriteElements(METAIO_STREAM::ofstream * _fstream, const void * _data,
     }
    else
     {
-    tmpWriteStream->write( (const char *)_data, _dataQuantity );  
+    tmpWriteStream->write( (const char *)_data, (size_t)_dataQuantity );  
     } 
 
   if(!localData)

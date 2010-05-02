@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLog10ImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:01 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-09-19 19:56:20 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace Accessor {
  *
  * Log10PixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
- * applies the funtion to it and cast the result according 
+ * applies the function to it and cast the result according 
  * to the types defined as template parameters
  *
  * \ingroup ImageAdaptors

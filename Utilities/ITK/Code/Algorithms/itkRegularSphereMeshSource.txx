@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegularSphereMeshSource.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-08 23:03:40 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-09-17 11:04:02 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -297,6 +297,8 @@ RegularSphereMeshSource<TOutputMesh>
 
     // set output
     outputMesh->Graft(result);
+
+    result->SetCells( NULL );
     }
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorRigid3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-13 23:41:53 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2009-11-24 15:25:15 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,6 +91,10 @@ public:
   typedef typename Superclass::AxisType               AxisType;
   typedef typename Superclass::AngleType              AngleType;
   
+  typedef typename Superclass::AxisValueType          AxisValueType;
+  typedef typename Superclass::TranslationValueType   TranslationValueType;
+  typedef typename Superclass::ParameterValueType     ParameterValueType;
+
   /** Set the transformation from a container of parameters
    * This is typically used by optimizers.
    * There are 6 parameters. The first three represent the

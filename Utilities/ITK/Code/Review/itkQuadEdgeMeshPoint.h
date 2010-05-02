@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshPoint.h,v $
   Language:  C++
-  Date:      $Date: 2009-09-08 20:00:56 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2010-02-19 19:42:45 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,6 +72,9 @@ public:
  
   /** Accessor on m_Edge */
   void SetEdge( TQuadEdge * inputEdge );
+
+  /** Set the coordinates from a standard itk::Point */
+  void SetPoint( const Superclass & point );
 
   /** Accessor on m_Edge */
   TQuadEdge * GetEdge();

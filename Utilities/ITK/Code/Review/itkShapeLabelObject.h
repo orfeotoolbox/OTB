@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeLabelObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-11 14:24:44 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-12-18 19:14:48 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -546,12 +546,12 @@ protected:
     os << indent << "BinaryPrincipalMoments: " << m_BinaryPrincipalMoments << std::endl;
     os << indent << "BinaryPrincipalAxes: " << std::endl << m_BinaryPrincipalAxes;
     os << indent << "BinaryElongation: " << m_BinaryElongation << std::endl;
+    os << indent << "BinaryFlatness: " << m_BinaryFlatness << std::endl;
     os << indent << "Perimeter: " << m_Perimeter << std::endl;
     os << indent << "Roundness: " << m_Roundness << std::endl;
     os << indent << "EquivalentRadius: " << m_EquivalentRadius << std::endl;
     os << indent << "EquivalentPerimeter: " << m_EquivalentPerimeter << std::endl;
     os << indent << "EquivalentEllipsoidSize: " << m_EquivalentEllipsoidSize << std::endl;
-    os << indent << "BinaryFlatness: " << m_BinaryElongation << std::endl;
     }
 
 private:

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformationFieldSource.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-14 19:20:33 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-11-21 21:21:56 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,6 +94,7 @@ public:
   /** Image spacing typedef */
   typedef typename TOutputImage::SpacingType      SpacingType;
   typedef typename TOutputImage::PointType        OriginPointType;
+  typedef typename TOutputImage::DirectionType    DirectionType;
   
   /** Set the coordinate transformation.
    * Set the KernelBase spline used for resampling the deformation grid.
@@ -119,6 +120,10 @@ public:
   /** Set the output image origin. */
   itkSetMacro(OutputOrigin, OriginPointType);
   virtual void SetOutputOrigin( const double* values);
+
+  /** Set the output direciton cosine matrix. */
+  itkSetMacro( OutputDirection, DirectionType );
+  itkGetConstReferenceMacro( OutputDirection, DirectionType );
 
   /** Get the output image origin. */
   itkGetConstReferenceMacro( OutputOrigin, OriginPointType );
@@ -163,6 +168,7 @@ private:
   OutputImageRegionType         m_OutputRegion;      // Region of the output image
   SpacingType                   m_OutputSpacing;     // output image spacing
   OriginPointType               m_OutputOrigin;      // output image origin
+  DirectionType                 m_OutputDirection;   // output image direction cosines
 
   LandmarkContainerPointer      m_SourceLandmarks;   // List of source landmarks
   LandmarkContainerPointer      m_TargetLandmarks;   // List of target landmarks

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkParametricSpaceToImageSpaceMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 16:30:48 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-09-17 11:14:56 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh,TOutputMesh>
   typedef typename TInputMesh::PointDataContainerPointer  InputPointDataContainerPointer;
   typedef typename TOutputMesh::PointDataContainerPointer OutputPointDataContainerPointer;
 
-  InputMeshPointer    inputMesh      =  this->GetInput();
+  const InputMeshType * inputMesh    =  this->GetInput();
   OutputMeshPointer   outputMesh     =  this->GetOutput();
   
   if( !inputMesh )
@@ -83,12 +83,12 @@ ParametricSpaceToImageSpaceMeshFilter<TInputMesh,TOutputMesh>
 
   outputMesh->SetBufferedRegion( outputMesh->GetRequestedRegion() );
 
-  InputPointsContainerPointer  inPoints  = inputMesh->GetPoints();
+  const InputPointsContainer *  inPoints = inputMesh->GetPoints();
   OutputPointsContainerPointer outPoints = OutputPointsContainer::New();
 
   outPoints->Reserve( inputMesh->GetNumberOfPoints() );
                          
-  InputPointDataContainerPointer  inData  = inputMesh->GetPointData();
+  const InputPointDataContainer *  inData = inputMesh->GetPointData();
   OutputPointDataContainerPointer outData = OutputPointDataContainer::New();
 
   outData->Reserve( inputMesh->GetNumberOfPoints() );

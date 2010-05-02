@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraits.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-12 10:48:39 $
-  Version:   $Revision: 1.58 $
+  Date:      $Date: 2010-04-05 18:05:48 $
+  Version:   $Revision: 1.65 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -140,8 +140,8 @@ public:
   static bool NonpositiveMin() { return false; }
   static bool IsPositive(bool val) { return val; }
   static bool IsNonpositive(bool val) { return !val; }
-  static bool IsNegative(bool /* val */) { return false; }
-  static bool IsNonnegative(bool /*val*/) {return true; }
+  static bool IsNegative(bool val) { return val ? false : false; }
+  static bool IsNonnegative(bool val) {return val ? true : true; }
   static bool ZeroValue() { return Zero; }
   static bool OneValue() { return One; }
 };
@@ -245,8 +245,8 @@ public:
   static unsigned char NonpositiveMin() { return vcl_numeric_limits<ValueType>::min(); }
   static bool IsPositive(unsigned char val) { return val != Zero; }
   static bool IsNonpositive(unsigned char val) { return val == Zero; }
-  static bool IsNegative(unsigned char /* val */) { return false; }
-  static bool IsNonnegative(unsigned char /*val */) {return true; }
+  static bool IsNegative(unsigned char val ) { return val ? false : false; }
+  static bool IsNonnegative(unsigned char val) {return val ? true : true; }
   static unsigned char  ZeroValue() { return Zero; }
   static unsigned char OneValue() { return One; }
   static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
@@ -304,10 +304,10 @@ public:
 
   itkNUMERIC_TRAITS_MIN_MAX_MACRO();
   static unsigned short NonpositiveMin() { return vcl_numeric_limits<ValueType>::min(); }
-  static unsigned short IsPositive(unsigned short val) { return val != Zero; }
+  static bool IsPositive(unsigned short val) { return val != Zero; }
   static bool IsNonpositive(unsigned short val) { return val == Zero; }
-  static bool IsNegative(unsigned short/* val*/) { return false; }
-  static bool IsNonnegative(unsigned short /*val*/) {return true; }
+  static bool IsNegative(unsigned short val) { return val ? false : false; }
+  static bool IsNonnegative(unsigned short val) {return val ? true : true; }
   static unsigned short  ZeroValue() { return Zero; }
   static unsigned short OneValue() { return One; }
   static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
@@ -370,8 +370,8 @@ public:
   static unsigned int NonpositiveMin() { return 0; }
   static bool IsPositive(unsigned int val) { return val != Zero; }
   static bool IsNonpositive(unsigned int val) { return  val == Zero; }
-  static bool IsNegative(unsigned int /*val*/) { return false; }
-  static bool IsNonnegative(unsigned int /*val*/) {return true; }
+  static bool IsNegative(unsigned int val) { return val ? false : false; }
+  static bool IsNonnegative(unsigned int val) {return val ? true : true; }
   static unsigned int  ZeroValue() { return Zero; }
   static unsigned int OneValue() { return One; }
   static ValueType Clamp(ValueType val,ValueType minVal, ValueType maxVal)
@@ -620,42 +620,65 @@ public:
   }
 };
 
-
-#if 0
-#ifndef ITK_TYPE_SAME_LONG_AND___INT64
-/** \class NumericTraits< __int64 >
- * \brief Define traits for type std::complex<double>.
+#ifdef ITK_TYPE_USE_LONG_LONG
+/** \class NumericTraits<long long>
+ * \brief Define traits for type long long.
  * \ingroup DataRepresentation
  */
 template <>
-class NumericTraits< __int64 >  {
+class NumericTraits<long long> 
+: public vcl_numeric_limits<long long> {
 public:
-  typedef __int64               TheType;
-  typedef __int64               ValueType;
-  typedef TheType               PrintType;
-  typedef __int64               AbsType;
-  typedef TheType               AccumulateType;
-  typedef double                RealType;
-  typedef double                ScalarRealType;
-  typedef double                FloatType;
+  typedef long long          ValueType;
+  typedef long long          PrintType;
+  typedef long long          AbsType;
+  typedef long long          AccumulateType;
+  typedef double             RealType;
+  typedef RealType           ScalarRealType; 
+  typedef float              FloatType;
 
-  static const TheType ITKCommon_EXPORT Zero;
-  static const TheType ITKCommon_EXPORT One;
+  static const ValueType ITKCommon_EXPORT Zero;
+  static const ValueType ITKCommon_EXPORT One;
 
-  static TheType min( TheType ) { return vcl_numeric_limits<ValueType>::min(); }
-  static TheType max( TheType ) { return vcl_numeric_limits<ValueType>::max(); }
-  static TheType NonpositiveMin() {
-    return TheType(-NumericTraits<double>::NonpositiveMin(),0.0); }
-  static bool IsPositive(TheType val) { return val.real() > 0.0; }
-  static bool IsNonpositive(TheType val) { return val.real() <= 0.0; }
-  static bool IsNegative(TheType val) { return val.real() < 0.0; }
-  static bool IsNonnegative(TheType val) {return val.real() >= 0.0; }
-  static TheType ZeroValue() { return Zero; }
-  static TheType OneValue() { return One; }
+  itkNUMERIC_TRAITS_MIN_MAX_MACRO();
+  static ValueType NonpositiveMin() { return vcl_numeric_limits<ValueType>::min(); }
+  static bool IsPositive(ValueType val) { return val > Zero; }
+  static bool IsNonpositive(ValueType val) { return val <= Zero; }
+  static bool IsNegative(ValueType val) { return val < Zero; }
+  static bool IsNonnegative(ValueType val) {return val >= Zero; }
+  static ValueType  ZeroValue() { return Zero; }
+  static ValueType  OneValue() { return One; }
 };
-#endif
-#endif
 
+/** \class NumericTraits<unsigned long long>
+ * \brief Define traits for type unsigned long long.
+ * \ingroup DataRepresentation
+ */
+template <>
+class NumericTraits<unsigned long long> 
+  : public vcl_numeric_limits<unsigned long long> {
+public:
+  typedef unsigned long long ValueType;
+  typedef unsigned long long PrintType;
+  typedef unsigned long long AbsType;
+  typedef unsigned long long AccumulateType;
+  typedef double             RealType;
+  typedef RealType           ScalarRealType;
+  typedef float              FloatType;
+
+  static const ValueType ITKCommon_EXPORT Zero;
+  static const ValueType ITKCommon_EXPORT One;
+
+  itkNUMERIC_TRAITS_MIN_MAX_MACRO();
+  static ValueType NonpositiveMin() { return vcl_numeric_limits<ValueType>::min(); }
+  static bool IsPositive(ValueType val) { return val != Zero; }
+  static bool IsNonpositive(ValueType val) { return val == Zero; }
+  static bool IsNegative(ValueType) { return false; }
+  static bool IsNonnegative(ValueType) {return true; }
+  static ValueType ZeroValue() { return Zero; }
+  static ValueType OneValue() { return One; }
+};
+#endif /* #ifdef ITK_TYPE_USE_LONG_LONG */
 
 } // end namespace itk
 

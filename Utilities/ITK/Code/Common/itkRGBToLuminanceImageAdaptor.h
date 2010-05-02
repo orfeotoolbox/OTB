@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBToLuminanceImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:08:44 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-09-19 19:56:20 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@ namespace Accessor {
  * \brief Give access to Luminance of a color pixel type.
  *
  * RGBToLuminancePixelAccessor is templated over an internal type and an
- * external type representation. This class cast the input applies the funtion
+ * external type representation. This class cast the input applies the function
  * to it and cast the result according to the types defined as template
  * parameters. The input pixel type must support the GetLuminance() method.
  * This is the case of the RGBPixel class for example.

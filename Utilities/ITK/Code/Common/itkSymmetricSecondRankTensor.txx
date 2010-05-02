@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricSecondRankTensor.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:43 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2010-03-17 16:34:47 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,18 +22,6 @@
 
 namespace itk
 {
-
-/**
- * Assignment Operator
- */
-template<class T,unsigned int NDimension>
-SymmetricSecondRankTensor<T,NDimension>&
-SymmetricSecondRankTensor<T,NDimension>
-::operator= (const Self& r)
-{
-  BaseArray::operator=(r);
-  return *this;
-}
 
 
 /**

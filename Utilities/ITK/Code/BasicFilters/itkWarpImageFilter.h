@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:28:12 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2009-10-29 11:19:00 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,6 +109,7 @@ public:
   typedef typename Superclass::OutputImagePointer     OutputImagePointer;
   typedef typename Superclass::InputImageConstPointer InputImageConstPointer;
   typedef typename OutputImageType::IndexType         IndexType;
+  typedef typename OutputImageType::IndexValueType    IndexValueType;
   typedef typename OutputImageType::SizeType          SizeType;
   typedef typename OutputImageType::PixelType         PixelType;
   typedef typename OutputImageType::SpacingType       SpacingType;

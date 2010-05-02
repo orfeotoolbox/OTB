@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-08-23 12:25:21 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2009-12-23 14:55:37 $
+  Version:   $Revision: 1.60 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -141,11 +141,8 @@ ObjectFactoryBase
           i = m_RegisteredFactories->begin();
         i != m_RegisteredFactories->end(); ++i )
     {
-    LightObject::Pointer newobject = (*i)->CreateObject(itkclassname);
-    if(newobject)
-      {
-      created.push_back(newobject);
-      }
+    std::list<LightObject::Pointer> moreObjects = (*i)->CreateAllObject( itkclassname );
+    created.splice( created.end(), moreObjects );
     }
   return created;
 }
@@ -571,6 +568,25 @@ ObjectFactoryBase
   return 0;
 }
 
+
+std::list<LightObject::Pointer>
+ObjectFactoryBase
+::CreateAllObject(const char* itkclassname)
+{
+  OverRideMap::iterator start = m_OverrideMap->lower_bound(itkclassname);
+  OverRideMap::iterator end = m_OverrideMap->upper_bound(itkclassname);
+
+  std::list<LightObject::Pointer> created;
+
+  for ( OverRideMap::iterator i = start; i != end; ++i )
+    {
+    if ( i != m_OverrideMap->end() && (*i).second.m_EnabledFlag)
+      {
+      created.push_back( (*i).second.m_CreateObject->CreateObject() );
+      }
+    }
+  return created;
+}
 
 /**
  *

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkTriangleMeshToSimplexMeshFilter.h,v $
 Language:  C++
-Date:      $Date: 2009-05-12 17:23:01 $
-Version:   $Revision: 1.6 $
+Date:      $Date: 2009-09-17 11:14:56 $
+Version:   $Revision: 1.7 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,9 +70,10 @@ public:
 
   typedef typename TInputMesh::BoundaryAssignmentsContainerPointer InputBoundaryAssignmentsContainerPointer;
 
-  typedef typename TInputMesh::PointsContainer    InputPointsContainer;
-  typedef typename InputPointsContainer::Pointer  InputPointsContainerPointer;
-  typedef typename InputPointsContainer::Iterator InputPointsContainerIterator;
+  typedef typename TInputMesh::PointsContainer          InputPointsContainer;
+  typedef typename InputPointsContainer::Pointer        InputPointsContainerPointer;
+  typedef typename InputPointsContainer::Iterator       InputPointsContainerIterator;
+  typedef typename InputPointsContainer::ConstIterator  InputPointsContainerConstIterator;
 
   typedef typename TOutputMesh::Pointer                   OutputMeshPointer;
   typedef typename TOutputMesh::PointType                 OutputPointType;

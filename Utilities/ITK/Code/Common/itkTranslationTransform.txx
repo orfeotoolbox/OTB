@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTranslationTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:26 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkTranslationTransform_txx
 
 #include "itkTranslationTransform.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -58,6 +59,7 @@ void
 TranslationTransform<TScalarType, NDimensions>
 ::SetParameters( const ParametersType & parameters )
 {
+  typedef typename ParametersType::ValueType  ParameterValueType;
   bool modified = false;
   for( unsigned int i=0; i<SpaceDimension; i++ )
     {

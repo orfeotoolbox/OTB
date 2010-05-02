@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsRECImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-19 14:20:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-01-22 10:03:46 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,7 +81,8 @@ public:
    * 4 = Special/Processed. */
   typedef vnl_vector_fixed< int, 8 >              ImageTypesType;
   typedef vnl_vector_fixed< int, 8 >              ScanningSequencesType;
-  typedef std::vector< int >                      SliceIndexType;
+  typedef Superclass::IndexValueType              IndexValueType;
+  typedef std::vector< IndexValueType >           SliceIndexType;
   typedef vnl_vector_fixed< double, 3 >           ImageTypeRescaleValuesType;
   
   typedef VectorContainer< unsigned int, ImageTypeRescaleValuesType >
@@ -118,7 +119,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this ImageIO implementation.
-       * \param FileNameToWrite The name of the file to test for writing.
+       * FileNameToWrite The name of the file to test for writing.
        * \author Don C. Bigler
        * \post This function will always return false (Not implemented).
        * \return Returns true if this ImageIO can write the file specified.
@@ -151,7 +152,7 @@ private:
   PhilipsRECImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   void SwapBytesIfNecessary(void * buffer, unsigned long numberOfPixels);
-  int GetSliceIndex(int index);
+  IndexValueType GetSliceIndex(IndexValueType index) const;
 
   SliceIndexType *          m_SliceIndex;
   ImageIOBase::ByteOrder    m_MachineByteOrder;

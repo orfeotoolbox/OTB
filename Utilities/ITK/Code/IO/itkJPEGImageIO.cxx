@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJPEGImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 15:21:52 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-12-15 20:01:01 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -451,10 +451,8 @@ void JPEGImageIO::WriteImageInformation(void)
 
 void JPEGImageIO::Write(const void* buffer)
 {
-  ImageIORegion ioRegion = this->GetIORegion();
-
-  // Make sure the region to be written is 2D
-  if ( ioRegion.GetRegionDimension() != 2 )
+  // the IORegion is not requred to be set so we must use GetNumberOfDimensions
+  if ( this->GetNumberOfDimensions() != 2 )
     {
     itkExceptionMacro(<<"JPEG Writer can only write 2-dimensional images");
     }

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -222,8 +222,8 @@ void
 Rigid2DTransform<TScalarType>
 ::ComputeMatrix( void )
 {
-  const double ca = vcl_cos(m_Angle );
-  const double sa = vcl_sin(m_Angle );
+  const MatrixValueType ca = vcl_cos(m_Angle);
+  const MatrixValueType sa = vcl_sin(m_Angle);
 
   MatrixType rotationMatrix;
   rotationMatrix[0][0]= ca; rotationMatrix[0][1]=-sa;
@@ -242,10 +242,12 @@ SetParameters( const ParametersType & parameters )
   itkDebugMacro( << "Setting parameters " << parameters );
 
   // Set angle
-  this->SetVarAngle( parameters[0] );
+  const TScalarType angle = parameters[0];
+  this->SetVarAngle( angle );
  
   // Set translation
   OutputVectorType translation;
+
   for(unsigned int i=0; i < OutputSpaceDimension; i++) 
     {
     translation[i] = parameters[i+1];

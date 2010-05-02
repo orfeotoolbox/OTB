@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-06 01:46:47 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2010-02-24 22:42:16 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -188,7 +188,7 @@ public:
   TimeStepType ComputeGlobalTimeStep(void *GlobalData) const;
 
   /** Compute the equation value. */
-  PixelType ComputeUpdate(const NeighborhoodType &neighborhood,
+  virtual PixelType ComputeUpdate(const NeighborhoodType &neighborhood,
     void *globalData, const FloatOffsetType& = FloatOffsetType(0.0));
 
   void SetInitialImage(InputImageType *f)

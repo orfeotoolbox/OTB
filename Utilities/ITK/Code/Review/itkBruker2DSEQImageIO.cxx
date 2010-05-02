@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBruker2DSEQImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-16 17:11:53 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-12-01 18:04:54 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <algorithm>
+#include <locale>
 
 /**
  * \author Don C. Bigler
@@ -258,8 +259,9 @@ void Bruker2DSEQImageIO::Read(void* buffer)
   itksys::SystemTools::ConvertToUnixSlashes(file2Dseq);
   /* Try to open the file */
   std::ifstream   twodseq_InputStream;
-  twodseq_InputStream.open( file2Dseq.c_str(),
-                            std::ios::in | std::ios::binary );
+  twodseq_InputStream.imbue(std::locale::classic());
+  twodseq_InputStream.open( file2Dseq.c_str(), std::ios::in | std::ios::binary );
+
   if( twodseq_InputStream.fail() )
     {
     OStringStream message;
@@ -271,7 +273,9 @@ void Bruker2DSEQImageIO::Read(void* buffer)
                               ITK_LOCATION);
     throw exception;
     }
-  twodseq_InputStream.read(p, this->GetImageSizeInBytes());
+
+  twodseq_InputStream.read(p, Math::CastWithRangeCheck< std::streamsize, SizeType >( this->GetImageSizeInBytes() ) );
+
   if( twodseq_InputStream.fail() )
     {
     OStringStream message;
@@ -331,6 +335,7 @@ bool Bruker2DSEQImageIO::CanReadFile( const char* FileNameToRead )
     {
     return false;
     }
+  reco_InputStream.imbue(std::locale::classic());
   while( !reco_InputStream.eof() )
     {
     reco_InputStream.getline(readFileBuffer, sizeof(readFileBuffer));
@@ -388,6 +393,7 @@ bool Bruker2DSEQImageIO::CanReadFile( const char* FileNameToRead )
     {
     return false;
     }
+  d3proc_InputStream.imbue(std::locale::classic());
   while( !d3proc_InputStream.eof() )
     {
     d3proc_InputStream.getline(readFileBuffer, sizeof(readFileBuffer));
@@ -570,6 +576,7 @@ void Bruker2DSEQImageIO::ReadImageInformation()
                               ITK_LOCATION);
     throw exception;
     }
+  d3proc_InputStream.imbue(std::locale::classic());
   while( !d3proc_InputStream.eof() )
     {
     d3proc_InputStream.getline(readFileBuffer, sizeof(readFileBuffer));
@@ -694,6 +701,7 @@ void Bruker2DSEQImageIO::ReadImageInformation()
                               ITK_LOCATION);
     throw exception;
     }
+  reco_InputStream.imbue(std::locale::classic());
   while( !reco_InputStream.eof() )
     {
     reco_InputStream.getline(readFileBuffer, sizeof(readFileBuffer));
@@ -1027,6 +1035,7 @@ void Bruker2DSEQImageIO::ReadImageInformation()
                               ITK_LOCATION);
     throw exception;
     }
+  acqp_InputStream.imbue(std::locale::classic());
   while( !acqp_InputStream.eof() )
     {
     int numEchoes = 0;

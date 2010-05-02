@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: String.hxx.in,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #ifndef @KWSYS_NAMESPACE@_String_hxx
 #define @KWSYS_NAMESPACE@_String_hxx
 
@@ -27,7 +25,7 @@ namespace @KWSYS_NAMESPACE@
  * simply a subclass of this type with the same interface so that the
  * name is shorter in debugging symbols and error messages.
  */
-class @KWSYS_NAMESPACE@_EXPORT String: public @KWSYS_NAMESPACE@_stl::string
+class String: public @KWSYS_NAMESPACE@_stl::string
 {
   /** The original string type.  */
   typedef @KWSYS_NAMESPACE@_stl::string stl_string;

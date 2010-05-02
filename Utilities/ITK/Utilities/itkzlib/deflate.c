@@ -47,7 +47,7 @@
  *
  */
 
-/* @(#) $Id: deflate.c,v 1.2 2007-08-14 14:02:42 seanmcbride Exp $ */
+/* @(#) $Id: deflate.c,v 1.3 2010-01-20 17:49:37 partyd Exp $ */
 
 #include "deflate.h"
 
@@ -285,6 +285,13 @@ int ZEXPORT deflateInit2_(strm, level, method, windowBits, memLevel, strategy,
     s->hash_shift =  ((s->hash_bits+MIN_MATCH-1)/MIN_MATCH);
 
     s->window = (Bytef *) ZALLOC(strm, s->w_size, 2*sizeof(Byte));
+        
+    // The following memset eliminates the valgrind uninitialized warning
+    // "swept under the carpet" here:
+    // http://www.zlib.net/zlib_faq.html#faq36
+    //
+    memset(s->window, 0, s->w_size*2*sizeof(Byte));
+
     s->prev   = (Posf *)  ZALLOC(strm, s->w_size, sizeof(Pos));
     s->head   = (Posf *)  ZALLOC(strm, s->hash_size, sizeof(Pos));
 

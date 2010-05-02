@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptResampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-24 13:49:19 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-09-16 15:34:33 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -126,6 +126,20 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   this->SetOutputOrigin( p );
 }
 
+/** Helper method to set the output parameters based on this image */
+template <class TInputImage,
+          class TOutputImage,
+          class TInterpolatorPrecisionType>
+void
+ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
+::SetOutputParametersFromImage ( const ImageBaseType * image )
+{
+  this->SetOutputOrigin ( image->GetOrigin() );
+  this->SetOutputSpacing ( image->GetSpacing() );
+  this->SetOutputDirection ( image->GetDirection() );
+  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+  this->SetSize ( image->GetLargestPossibleRegion().GetSize() );
+}
 
 /**
  * Set up state of filter before multi-threading.

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConformalFlatteningMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-07-09 20:17:38 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-09-17 11:14:57 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,7 +54,7 @@ public:
   typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
-  typedef typename InputMeshType::Pointer      InputMeshPointer;
+  typedef typename InputMeshType::ConstPointer InputMeshConstPointer;
   typedef typename OutputMeshType::Pointer     OutputMeshPointer;
   typedef typename InputMeshType::PointType    InputPointType;
   typedef typename OutputMeshType::PointType   OutputPointType;
@@ -68,8 +68,6 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConformalFlatteningMeshFilter,MeshToMeshFilter);
-
-  void SetInput(TInputMesh *input);
 
   /** Convenient constants obtained from TMeshTraits template parameter. */
   itkStaticConstMacro(InputPointDimension, unsigned int,

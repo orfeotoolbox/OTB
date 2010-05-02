@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 17:31:02 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2009-09-17 11:14:56 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,7 +83,7 @@ WarpMeshFilter<TInputMesh,TOutputMesh,TDeformationField>
   typedef typename TInputMesh::PointsContainerPointer  InputPointsContainerPointer;
   typedef typename TOutputMesh::PointsContainerPointer OutputPointsContainerPointer;
 
-  InputMeshPointer    inputMesh      =  this->GetInput();
+  const InputMeshType *  inputMesh   =  this->GetInput();
   OutputMeshPointer   outputMesh     =  this->GetOutput();
   DeformationFieldPointer fieldPtr   =  this->GetDeformationField();
   
@@ -99,7 +99,7 @@ WarpMeshFilter<TInputMesh,TOutputMesh,TDeformationField>
 
   outputMesh->SetBufferedRegion( outputMesh->GetRequestedRegion() );
 
-  InputPointsContainerPointer  inPoints  = inputMesh->GetPoints();
+  const InputPointsContainer * inPoints  = inputMesh->GetPoints();
   OutputPointsContainerPointer outPoints = outputMesh->GetPoints();
 
   outPoints->Reserve( inputMesh->GetNumberOfPoints() );
@@ -140,13 +140,10 @@ WarpMeshFilter<TInputMesh,TOutputMesh,TDeformationField>
 
   // Create duplicate references to the rest of data on the mesh
 
-  outputMesh->SetPointData(  inputMesh->GetPointData() );
-  
-  outputMesh->SetCellLinks(  inputMesh->GetCellLinks() );
-  
-  outputMesh->SetCells(  inputMesh->GetCells() );
-  outputMesh->SetCellData(  inputMesh->GetCellData() );
-  
+  this->CopyInputMeshToOutputMeshPointData();
+  this->CopyInputMeshToOutputMeshCells();
+  this->CopyInputMeshToOutputMeshCellLinks();
+  this->CopyInputMeshToOutputMeshCellData();
   
   unsigned int maxDimension = TInputMesh::MaxTopologicalDimension;
 

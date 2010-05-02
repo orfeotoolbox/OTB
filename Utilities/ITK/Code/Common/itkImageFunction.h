@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-01 13:39:10 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2009-10-29 11:18:33 $
+  Version:   $Revision: 1.50 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,7 +94,8 @@ public:
   typedef TCoordRep CoordRepType;
 
   /** Index Type. */
-  typedef typename InputImageType::IndexType IndexType;
+  typedef typename InputImageType::IndexType      IndexType;
+  typedef typename InputImageType::IndexValueType IndexValueType;
 
   /** ContinuousIndex Type. */
   typedef ContinuousIndex<TCoordRep,itkGetStaticConstMacro(ImageDimension)>

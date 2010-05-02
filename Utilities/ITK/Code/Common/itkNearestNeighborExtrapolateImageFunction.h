@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNearestNeighborExtrapolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-08 14:29:02 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-10-29 17:37:04 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,7 +63,8 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
   /** Index typedef support. */
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::IndexType      IndexType;
+  typedef typename Superclass::IndexValueType IndexValueType;
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
@@ -78,11 +79,10 @@ public:
   virtual OutputType EvaluateAtContinuousIndex( 
     const ContinuousIndexType & index ) const
     {
-    typedef typename IndexType::IndexValueType ValueType;
     IndexType nindex;
     for ( unsigned int j = 0; j < ImageDimension; j++ )
       {
-      nindex[j] = static_cast<ValueType>( itk::Math::RoundHalfIntegerUp( index[j] ) );
+      nindex[j] = Math::RoundHalfIntegerUp<IndexValueType>( index[j] );
       if ( nindex[j] < this->GetStartIndex()[j] ) 
         { 
         nindex[j] = this->GetStartIndex()[j]; 

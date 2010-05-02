@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:00 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-11-24 02:27:27 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -284,7 +284,7 @@ public:
 protected:
   LevelSetFunction()
     {
-    m_EpsilonMagnitude = 1.0e-5;
+    m_EpsilonMagnitude = static_cast<ScalarValueType>( 1.0e-5 );
     m_AdvectionWeight = m_PropagationWeight 
       = m_CurvatureWeight = m_LaplacianSmoothingWeight 
       = NumericTraits<ScalarValueType>::Zero;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-11-29 01:38:00 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,6 +59,7 @@ public:
   
   /** Types taken from the Superclass */
   typedef typename Superclass::ParametersType               ParametersType;
+  typedef typename Superclass::ParametersValueType          ParametersValueType;
   typedef typename Superclass::JacobianType                 JacobianType;
   typedef typename Superclass::ScalarType                   ScalarType;
   typedef typename Superclass::InputVectorType              InputVectorType;
@@ -71,12 +72,15 @@ public:
   typedef typename Superclass::InputVnlVectorType           InputVnlVectorType;
   typedef typename Superclass::OutputVnlVectorType          OutputVnlVectorType;
   typedef typename Superclass::InputPointType               InputPointType;
+  typedef typename Superclass::InputPointValueType          InputPointValueType;
+  typedef typename Superclass::OutputVectorValueType        OutputVectorValueType;
   typedef typename Superclass::OutputPointType              OutputPointType;
   typedef typename Superclass::MatrixType                   MatrixType;
+  typedef typename Superclass::MatrixValueType              MatrixValueType;
   typedef typename Superclass::OffsetType                   OffsetType;
 
   /** Base inverse transform type. This type should not be changed to the
-   * concrete inverse transform type or inheritance would be lost.*/
+   * concrete inverse transform type or inheritance would be lost. */
   typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
   typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageKmeansImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-02 05:43:55 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-01-31 19:29:05 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -65,10 +65,10 @@ namespace itk
  * 
  * \ingroup ClassificationFilters 
  */
-template <class TInputImage >
+template <class TInputImage,
+          class TOutputImage=Image<unsigned char, ::itk::GetImageDimension<TInputImage>::ImageDimension> >
 class ITK_EXPORT ScalarImageKmeansImageFilter :
-    public ImageToImageFilter< TInputImage, Image<unsigned char,
-             ::itk::GetImageDimension<TInputImage>::ImageDimension> >
+    public ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** Extract dimension from input and output image. */
@@ -76,9 +76,8 @@ public:
                       TInputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
-  typedef TInputImage InputImageType;
-  typedef Image<unsigned char,
-             ::itk::GetImageDimension<TInputImage>::ImageDimension> OutputImageType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
   typedef ScalarImageKmeansImageFilter                         Self;

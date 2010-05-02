@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMattesMutualInformationImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-25 11:48:31 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-10-26 02:57:19 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -466,16 +466,21 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
     double windowTerm = static_cast<double>( (*iter).value )
                         / m_FixedImageBinSize
                         - m_FixedImageNormalizedMin;
-    unsigned int pindex = static_cast<unsigned int>( windowTerm );
+    OffsetValueType pindex = static_cast<OffsetValueType>( windowTerm );
 
     // Make sure the extreme values are in valid bins
     if ( pindex < 2 )
       {
       pindex = 2;
       }
-    else if ( pindex > (m_NumberOfHistogramBins - 3) )
+    else 
       {
-      pindex = m_NumberOfHistogramBins - 3;
+      const OffsetValueType nindex = 
+        static_cast< OffsetValueType >( this->m_NumberOfHistogramBins ) - 3;
+      if ( pindex > nindex )
+        {
+        pindex = nindex;
+        }
       }
 
     (*iter).valueIndex = pindex;
@@ -542,15 +547,20 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
                                        / m_MovingImageBinSize
                                        - m_MovingImageNormalizedMin;
   // Same as floor
-  unsigned int movingImageParzenWindowIndex =
-    static_cast<unsigned int>( movingImageParzenWindowTerm );
+  OffsetValueType movingImageParzenWindowIndex =
+    static_cast<OffsetValueType>( movingImageParzenWindowTerm );
   if( movingImageParzenWindowIndex < 2 )
     {
     movingImageParzenWindowIndex = 2;
     }
-  else if( movingImageParzenWindowIndex > (m_NumberOfHistogramBins - 3) )
+  else 
     {
-    movingImageParzenWindowIndex = m_NumberOfHistogramBins - 3;
+    const OffsetValueType nindex = 
+      static_cast< OffsetValueType >( this->m_NumberOfHistogramBins ) - 3;
+    if( movingImageParzenWindowIndex > nindex )
+      {
+      movingImageParzenWindowIndex = nindex;
+      }
     }
 
   unsigned int fixedImageParzenWindowIndex =
@@ -837,17 +847,22 @@ MattesMutualInformationImageToImageMetric<TFixedImage,TMovingImage>
   double movingImageParzenWindowTerm = movingImageValue
                                        / m_MovingImageBinSize
                                        - m_MovingImageNormalizedMin;
-  unsigned int movingImageParzenWindowIndex =
-    static_cast<unsigned int>( movingImageParzenWindowTerm );
+  OffsetValueType movingImageParzenWindowIndex =
+    static_cast<OffsetValueType>( movingImageParzenWindowTerm );
 
   // Make sure the extreme values are in valid bins
   if ( movingImageParzenWindowIndex < 2 )
     {
     movingImageParzenWindowIndex = 2;
     }
-  else if ( movingImageParzenWindowIndex > (m_NumberOfHistogramBins - 3) )
+  else
     {
-    movingImageParzenWindowIndex = m_NumberOfHistogramBins - 3;
+    const OffsetValueType nindex = 
+      static_cast< OffsetValueType >( this->m_NumberOfHistogramBins ) - 3;
+    if ( movingImageParzenWindowIndex > nindex )
+      {
+      movingImageParzenWindowIndex = nindex;
+      }
     }
 
   // Since a zero-order BSpline (box car) kernel is used for

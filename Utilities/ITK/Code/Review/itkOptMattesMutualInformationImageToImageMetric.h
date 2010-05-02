@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMattesMutualInformationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-28 21:47:09 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-11-02 15:37:04 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -158,6 +158,8 @@ public:
   typedef typename Superclass::WeightsValueType         WeightsValueType;
   typedef typename Superclass::IndexValueType           IndexValueType;
 
+  typedef typename FixedImageType::OffsetValueType      OffsetValueType;
+
   /** The moving image dimension. */
   itkStaticConstMacro( MovingImageDimension, unsigned int,
                        MovingImageType::ImageDimension );
@@ -183,9 +185,13 @@ public:
                               MeasureType & Value,
                               DerivativeType & Derivative ) const;
 
-  /** Number of bins to used in the histogram. Typical value is 50. */
+  /** Number of bins to used in the histogram. Typical value is
+   * 50. The minimum value is 5 due to the padding required by the Parzen
+   * windowing with a cubic-BSpline kernel. Note that even if the metric
+   * is used on binary images, the number of bins should at least be
+   * equal to five. */
   itkSetClampMacro( NumberOfHistogramBins, unsigned long,
-                    1, NumericTraits<unsigned long>::max() );
+                    5, NumericTraits<unsigned long>::max() );
   itkGetConstReferenceMacro( NumberOfHistogramBins, unsigned long);   
 
   /** This variable selects the method to be used for computing the Metric

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBruker2DSEQImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-23 22:04:35 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2010-01-22 10:03:46 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -151,7 +151,7 @@ public:
   /*-------- This part of the interfaces deals with writing data. ----- */
 
   /** Determine if the file can be written with this ImageIO implementation.
-       * \param FileNameToWrite The name of the file to test for writing.
+       * FileNameToWrite The name of the file to test for writing.
        * \author Don C. Bigler
        * \post This function will always return false (Not implemented).
        * \return Returns true if this ImageIO can write the file specified.

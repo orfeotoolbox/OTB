@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:34 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2010-01-30 21:05:25 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -169,6 +169,9 @@ public:
    * to the posterior image */
   void SetSmoothingFilter( SmoothingFilterType * );
   itkGetConstMacro( SmoothingFilter, SmoothingFilterPointer );
+
+  /** Set the priors **/
+  virtual void SetPriors( const PriorsImageType * );
 
   /** Number of iterations to apply the smoothing filter */
   itkSetMacro( NumberOfSmoothingIterations, unsigned int );

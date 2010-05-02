@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFixedArray.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-09 18:06:39 $
-  Version:   $Revision: 1.45 $
+  Date:      $Date: 2009-11-28 09:15:37 $
+  Version:   $Revision: 1.46 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -140,6 +140,7 @@ public:
   /** Constructors */
   FixedArray();
   FixedArray(const ValueType r[VLength]);
+  FixedArray(const ValueType& r);
 
   /** Constructor to initialize a fixed array from another of any data type */
   template< class TFixedArrayValueType >

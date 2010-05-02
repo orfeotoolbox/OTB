@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:52 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2009-09-23 15:07:36 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -329,19 +329,19 @@ OnePlusOneEvolutionaryOptimizer
     {
     os << indent << "Random Generator  " << "(none)" << std::endl;
     }
-  os << indent << "Maximum Iteration " << m_MaximumIteration << std::endl;
-  os << indent << "Epsilon           " << m_Epsilon          << std::endl;
-  os << indent << "Initial Radius    " << m_InitialRadius    << std::endl;
-  os << indent << "Growth Fractor    " << m_GrowthFactor     << std::endl;
-  os << indent << "Shrink Fractor    " << m_ShrinkFactor     << std::endl;
-  os << indent << "Initialized       " << m_Initialized      << std::endl;
-  os << indent << "Current Cost      " << m_CurrentCost      << std::endl;
-  os << indent << "Current Iteration " << m_CurrentIteration << std::endl;
-  os << indent << "Frobenius Norm    " << m_FrobeniusNorm    << std::endl;
-  os << indent << "Maximize On/Off   " << m_Maximize         << std::endl;
-  os << indent << "CatchGetValueException   " << m_CatchGetValueException 
+  os << indent << "Maximum Iteration " << GetMaximumIteration() << std::endl;
+  os << indent << "Epsilon           " << GetEpsilon()          << std::endl;
+  os << indent << "Initial Radius    " << GetInitialRadius()    << std::endl;
+  os << indent << "Growth Fractor    " << GetGrowthFactor()     << std::endl;
+  os << indent << "Shrink Fractor    " << GetShrinkFactor()     << std::endl;
+  os << indent << "Initialized       " << GetInitialized()      << std::endl;
+  os << indent << "Current Cost      " << GetCurrentCost()      << std::endl;
+  os << indent << "Current Iteration " << GetCurrentIteration() << std::endl;
+  os << indent << "Frobenius Norm    " << GetFrobeniusNorm()    << std::endl;
+  os << indent << "Maximize On/Off   " << GetMaximize()         << std::endl;
+  os << indent << "CatchGetValueException   " << GetCatchGetValueException() 
                << std::endl;
-  os << indent << "MetricWorstPossibleValue " << m_MetricWorstPossibleValue 
+  os << indent << "MetricWorstPossibleValue " << GetMetricWorstPossibleValue() 
                << std::endl;
 }
 

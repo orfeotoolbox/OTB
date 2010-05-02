@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFiniteDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 23:25:41 $
-  Version:   $Revision: 1.47 $
+  Date:      $Date: 2009-10-19 15:32:55 $
+  Version:   $Revision: 1.51 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,28 @@
 #include "itkFiniteDifferenceImageFilter.h"
 
 namespace itk {
-  
+
+template <class TInputImage, class TOutputImage>
+FiniteDifferenceImageFilter<TInputImage, TOutputImage>
+::FiniteDifferenceImageFilter()
+{ 
+  m_UseImageSpacing    = false;
+  m_ElapsedIterations  = 0;
+  m_DifferenceFunction = 0;
+  m_NumberOfIterations = NumericTraits<unsigned int>::max();
+  m_MaximumRMSError = 0.0;
+  m_RMSChange = 0.0;
+  m_State = UNINITIALIZED;
+  m_ManualReinitialization = false;
+  this->InPlaceOff();
+}
+
+template <class TInputImage, class TOutputImage>
+FiniteDifferenceImageFilter<TInputImage, TOutputImage>
+::~FiniteDifferenceImageFilter()
+{
+}
+
 template <class TInputImage, class TOutputImage>
 void
 FiniteDifferenceImageFilter<TInputImage, TOutputImage>
@@ -39,30 +60,15 @@ FiniteDifferenceImageFilter<TInputImage, TOutputImage>
 
   if (this->GetState() == UNINITIALIZED)
     {
-    // Set the coefficients for the deriviatives
-    double coeffs[TInputImage::ImageDimension];
-    if (m_UseImageSpacing)
-      {
-      for (unsigned int i = 0; i < TInputImage::ImageDimension; i++)
-        {
-        coeffs[i] = 1.0 / this->GetInput()->GetSpacing()[i];
-        }
-      }
-    else
-      {
-      for (unsigned int i = 0; i < TInputImage::ImageDimension; i++)
-        {
-        coeffs[i] = 1.0;
-        }
-      }
-    m_DifferenceFunction->SetScaleCoefficients(coeffs);
-
     // Allocate the output image
     this->AllocateOutputs();
 
     // Copy the input image to the output image.  Algorithms will operate
     // directly on the output image and the update buffer.
     this->CopyInputToOutput();
+
+    // Set the coefficients of the Function and consider the use of images spacing.
+    this->InitializeFunctionCoefficients();
 
     // Perform any other necessary pre-iteration initialization.
     this->Initialize();
@@ -234,6 +240,40 @@ FiniteDifferenceImageFilter<TInputImage, TOutputImage>
     }
 }
 
+
+template <class TInputImage, class TOutputImage>
+void
+FiniteDifferenceImageFilter<TInputImage, TOutputImage>
+::InitializeFunctionCoefficients()
+{
+  // Set the coefficients for the derivatives
+  double coeffs[TOutputImage::ImageDimension];
+  
+  if ( this->m_UseImageSpacing )
+    {
+    const TOutputImage * outputImage =  this->GetOutput();
+    if( outputImage == NULL )
+      {
+      itkExceptionMacro("Output image is NULL");
+      }
+
+    typedef typename TOutputImage::SpacingType SpacingType;
+    const SpacingType spacing = outputImage->GetSpacing();
+    
+    for (unsigned int i = 0; i < TOutputImage::ImageDimension; i++)
+      {
+      coeffs[i] = 1.0 / spacing[i];
+      }
+    }
+  else
+    {
+    for (unsigned int i = 0; i < TOutputImage::ImageDimension; i++)
+      {
+      coeffs[i] = 1.0;
+      }
+    }
+  m_DifferenceFunction->SetScaleCoefficients(coeffs);
+}
 
 template <class TInputImage, class TOutputImage>
 void

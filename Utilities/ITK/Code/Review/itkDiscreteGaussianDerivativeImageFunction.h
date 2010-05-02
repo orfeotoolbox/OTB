@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiscreteGaussianDerivativeImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:43:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-10-29 11:19:14 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,6 +71,7 @@ public:
   typedef typename Superclass::InputImageType       InputImageType;
   typedef typename Superclass::InputPixelType       InputPixelType;
   typedef typename Superclass::IndexType            IndexType;
+  typedef typename Superclass::IndexValueType       IndexValueType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
 

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkVnlFFTRealToComplexConjugateImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2009-01-27 19:30:16 $
-Version:   $Revision: 1.12 $
+Date:      $Date: 2010-02-26 23:50:55 $
+Version:   $Revision: 1.13 $
 
 Copyright (c) 2002 Insight Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "vnl/algo/vnl_fft_1d.h"
 #include "vnl/algo/vnl_fft_2d.h"
 #include "vnl_fft_3d.h"
+#include "itkProgressReporter.h"
 
 namespace itk
 {
@@ -72,6 +73,10 @@ GenerateData()
     return;
     }
   
+  // we don't have a nice progress to report, but at least this simple line
+  // reports the begining and the end of the process
+  ProgressReporter progress(this, 0, 1);
+
   const typename Superclass::TInputImageType::SizeType&   inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
   unsigned int num_dims = inputPtr->GetImageDimension();

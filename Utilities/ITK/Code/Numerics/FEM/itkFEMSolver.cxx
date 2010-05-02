@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMSolver.cxx,v $
   Language:  C++
-  Date:  $Date: 2009-01-30 21:53:03 $
-  Version:   $Revision: 1.57 $
+  Date:  $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.59 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -619,7 +619,7 @@ void Solver::UpdateDisplacements()
 
 Solver::Float Solver::GetDeformationEnergy(unsigned int SolutionIndex)
 {
-  float U=0.0;
+  Solver::Float U = 0.0f;
   Element::MatrixType LocalSolution;
 
   for(ElementArray::iterator e=el.begin(); e != el.end(); e++)

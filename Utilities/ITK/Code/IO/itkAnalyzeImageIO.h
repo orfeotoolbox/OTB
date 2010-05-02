@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAnalyzeImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-22 05:53:41 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2010-01-27 15:18:36 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -178,7 +178,7 @@ private:
 
 AnalyzeImageIO(const Self&); //purposely not implemented
 void operator=(const Self&); //purposely not implemented
-void SwapBytesIfNecessary(void * buffer, unsigned long numberOfPixels);
+void SwapBytesIfNecessary(void * buffer, SizeType numberOfPixels);
 /**
  * \author Hans J. Johnson
  * Performs byte swapping of the Analyze Image header if necessary.

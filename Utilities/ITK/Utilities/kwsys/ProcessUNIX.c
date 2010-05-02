@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: ProcessUNIX.c,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #include "kwsysPrivate.h"
 #include KWSYS_HEADER(Process.h)
 #include KWSYS_HEADER(System.h)
@@ -1877,9 +1875,8 @@ static int kwsysProcessSetupOutputPipeFile(int* p, const char* name)
   /* Close the existing descriptor.  */
   kwsysProcessCleanupDescriptor(p);
 
-  /* Open a file for the pipe to write (permissions 644).  */
-  if((fout = open(name, O_WRONLY | O_CREAT | O_TRUNC,
-                  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)) < 0)
+  /* Open a file for the pipe to write.  */
+  if((fout = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0666)) < 0)
     {
     return 0;
     }
@@ -1923,7 +1920,7 @@ static int kwsysProcessGetTimeoutTime(kwsysProcess* cp, double* userTimeout,
 {
   /* The first time this is called, we need to calculate the time at
      which the child will timeout.  */
-  if(cp->Timeout && cp->TimeoutTime.tv_sec < 0)
+  if(cp->Timeout > 0 && cp->TimeoutTime.tv_sec < 0)
     {
     kwsysProcessTime length = kwsysProcessTimeFromDouble(cp->Timeout);
     cp->TimeoutTime = kwsysProcessTimeAdd(cp->StartTime, length);
@@ -2376,12 +2373,17 @@ static pid_t kwsysProcessFork(kwsysProcess* cp,
    Here we define the command to call on each platform and the
    corresponding parsing format string.  The parsing format should
    have two integers to store: the pid and then the ppid.  */
-#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__)
+#if defined(__linux__) || defined(__APPLE__) || defined(__FreeBSD__) \
+   || defined(__FreeBSD_kernel__)
 # define KWSYSPE_PS_COMMAND "ps axo pid,ppid"
 # define KWSYSPE_PS_FORMAT  "%d %d\n"
-#elif defined(__hpux) || defined(__sparc) || defined(__sgi) || defined(_AIX)
+#elif defined(__hpux) || defined(__sun__) || defined(__sgi) || defined(_AIX) \
+   || defined(__sparc)
 # define KWSYSPE_PS_COMMAND "ps -ef"
 # define KWSYSPE_PS_FORMAT  "%*s %d %d %*[^\n]\n"
+#elif defined(__QNX__)
+# define KWSYSPE_PS_COMMAND "ps -Af"
+# define KWSYSPE_PS_FORMAT  "%*d %d %d %*[^\n]\n"
 #elif defined(__CYGWIN__)
 # define KWSYSPE_PS_COMMAND "ps aux"
 # define KWSYSPE_PS_FORMAT  "%d %d %*[^\n]\n"
@@ -2394,13 +2396,8 @@ static void kwsysProcessKill(pid_t process_id)
   DIR* procdir;
 #endif
 
-  /* Kill the process now to make sure it does not create more
-     children.  Do not reap it yet so we can identify its existing
-     children.  There is a small race condition here.  If the child
-     forks after we begin looking for children below but before it
-     receives this kill signal we might miss a child.  Also we might
-     not be able to catch up to a fork bomb.  */
-  kill(process_id, SIGKILL);
+  /* Suspend the process to be sure it will not create more children.  */
+  kill(process_id, SIGSTOP);
 
   /* Kill all children if we can find them.  */
 #if defined(__linux__) || defined(__CYGWIN__)
@@ -2488,6 +2485,19 @@ static void kwsysProcessKill(pid_t process_id)
       }
 #endif
     }
+
+  /* Kill the process.  */
+  kill(process_id, SIGKILL);
+
+#if defined(__APPLE__)
+  /* On OS X 10.3 the above SIGSTOP occasionally prevents the SIGKILL
+     from working.  Just in case, we resume the child and kill it
+     again.  There is a small race condition in this obscure case.  If
+     the child manages to fork again between these two signals, we
+     will not catch its children.  */
+  kill(process_id, SIGCONT);
+  kill(process_id, SIGKILL);
+#endif
 }
 
 /*--------------------------------------------------------------------------*/
@@ -2712,7 +2722,7 @@ static void kwsysProcessesSignalHandler(int signum
     kwsysProcess_ssize_t status=
       read(cp->PipeReadEnds[KWSYSPE_PIPE_SIGNAL], &buf, 1);
     status=write(cp->SignalPipe, &buf, 1);
-    
+    (void)status;
     }
   }
 

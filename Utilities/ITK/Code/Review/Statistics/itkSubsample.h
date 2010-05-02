@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubsample.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-15 12:40:37 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2010-01-21 22:03:39 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ public:
   
   InstanceIdentifier GetInstanceIdentifier( unsigned int index );
   
-  MeasurementVectorType GetMeasurementVectorByIndex(unsigned int index) const;
+  const MeasurementVectorType & GetMeasurementVectorByIndex(unsigned int index) const;
 
   AbsoluteFrequencyType GetFrequencyByIndex(unsigned int index) const;
 

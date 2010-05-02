@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiphaseDenseFiniteDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-29 15:13:55 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2010-02-25 14:19:24 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,7 +108,7 @@ public:
   /** Standard class typedefs */
   typedef MultiphaseDenseFiniteDifferenceImageFilter        Self;
   typedef MultiphaseFiniteDifferenceImageFilter< TInputImage,
-    TFeatureImage, TOutputImage, TFunction >                Superclass;
+    TFeatureImage, TOutputImage, TFunction, TIdCell >       Superclass;
   typedef SmartPointer<Self>                                Pointer;
   typedef SmartPointer<const Self>                          ConstPointer;
 
@@ -188,14 +188,20 @@ public:
   /** End concept checking */
 #endif
 
+  itkSetMacro( ReinitializeCounter, unsigned int );
+  itkGetMacro( ReinitializeCounter, unsigned int );
+
 protected:
   MultiphaseDenseFiniteDifferenceImageFilter()
     {
     this->m_ReinitializeCounter = 1;
-    this->m_UpdateCounter = 0;        // FIXME: Should this be a bool ?
+    // FIXME: this->m_UpdateCounter really used?
+    // this->m_UpdateCounter = 0;        // FIXME: Should this be a bool ?
     }
 
   ~MultiphaseDenseFiniteDifferenceImageFilter() {}
+
+  virtual void PrintSelf( std::ostream&, Indent indent ) const;
 
   /** A simple method to copy the data from the input to the output.  ( Supports
    * "read-only" image adaptors in the case where the input image type converts
@@ -209,7 +215,7 @@ protected:
   virtual void ApplyUpdate(TimeStepType dt);
 
   unsigned int m_ReinitializeCounter;  // FIXME: Should this be a boolean ?
-  unsigned int m_UpdateCounter;        // FIXME: Should this be a boolean ?
+  // unsigned int m_UpdateCounter;        // FIXME: Should this be a boolean ?
 
 private:
   MultiphaseDenseFiniteDifferenceImageFilter(const Self&);

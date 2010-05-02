@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: SystemTools.hxx.in,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #ifndef @KWSYS_NAMESPACE@_SystemTools_hxx
 #define @KWSYS_NAMESPACE@_SystemTools_hxx
 
@@ -275,7 +273,17 @@ public:
    * not a directory.  If isFile = false, then return true
    * if it is a file or a directory.
    */
-  static bool FileExists(const char* filename, bool isFile=false);
+  static bool FileExists(const char* filename, bool isFile);
+  static bool FileExists(const char* filename);
+
+  /**
+   * Converts Cygwin path to Win32 path. Uses dictionary container for
+   * caching and calls to cygwin_conv_to_win32_path from Cygwin dll
+   * for actual translation.  Returns true on success, else false.
+   */
+#ifdef __CYGWIN__
+  static bool PathCygwinToWin32(const char *path, char *win32_path);
+#endif
 
   /**
    * Return file length
@@ -890,6 +898,9 @@ private:
    */
   static SystemToolsTranslationMap *TranslationMap;
   static SystemToolsTranslationMap *LongPathMap;
+#ifdef __CYGWIN__
+  static SystemToolsTranslationMap *Cyg2Win32Map;
+#endif
   friend class SystemToolsManager;
 };
 

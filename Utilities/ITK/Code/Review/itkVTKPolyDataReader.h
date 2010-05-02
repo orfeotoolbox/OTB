@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataReader.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-15 19:10:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-09-16 19:25:13 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,8 +29,10 @@ namespace itk
  * \brief
  * Reads a vtkPolyData file and create an itkMesh.
  *
- * Caveat: itkVTKPolyDataReader can only read triangle meshes.
- *         Use vtkTriangleFilter to convert your mesh to a triangle mesh.
+ * Caveat1: itkVTKPolyDataReader can only read triangle meshes.
+ *          Use vtkTriangleFilter to convert your mesh to a triangle mesh.
+ * Caviet2: itkVTKPolyDataReader can only read vtk legacy files.
+ * Caveat3: itkVTKPolyDataReader cannot read binary vtk files.
  */
 template <class TOutputMesh>
 class VTKPolyDataReader : public MeshSource<TOutputMesh>
@@ -86,6 +88,12 @@ public:
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
 
+  /** Get the file version line */
+  itkGetStringMacro(Version);
+
+  /** Get the file header line */
+  itkGetStringMacro(Header);
+
 protected:
   VTKPolyDataReader();
   ~VTKPolyDataReader() {}
@@ -95,11 +103,15 @@ protected:
   void GenerateData();
 
   /** Filename to read */
-  std::string m_FileName;
 
 private:
   VTKPolyDataReader(const Self&); // purposely not implemented
   void operator=(const Self&); // purposely not implemented
+
+  std::string m_FileName;
+  std::string m_Header;
+  std::string m_Version;
+
 };
 
 } // end namespace itk

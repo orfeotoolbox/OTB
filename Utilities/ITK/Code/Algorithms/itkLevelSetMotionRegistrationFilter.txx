@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetMotionRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-10-20 20:39:08 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,9 +79,11 @@ LevelSetMotionRegistrationFilter<TFixedImage,TMovingImage,TDeformationField>
       << "Could not cast difference function to LevelSetMotionRegistrationFunction" );
     }
   
-  /*
-   * Smooth the deformation field
-   */
+  drfp->SetUseImageSpacing( this->GetUseImageSpacing() );
+
+  //
+  // Smooth the deformation field
+  // 
   if ( this->GetSmoothDeformationField() )
     {
     this->SmoothDeformationField();

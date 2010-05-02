@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsRGBAPixel.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-30 20:51:30 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2010-04-09 02:47:24 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,58 +52,40 @@ public: \
  \
   typedef ElementRealType ScalarRealType; \
  \
-  static const Self max( const Self & a ) \
+  static const Self max( const Self & ) \
     {  \
-      Self b;  \
-      b.Fill( NumericTraits< T >::max() ); \
-      return b; \
+      return Self( NumericTraits< T >::max() );      \
     } \
-  static const Self min( const Self & a ) \
+  static const Self min( const Self & ) \
     {  \
-      Self b;  \
-      b.Fill( NumericTraits< T >::min() ); \
-      return b; \
+      return Self( NumericTraits< T >::min() );      \
     } \
   static const Self max() \
     {  \
-      Self b;  \
-      b.Fill( NumericTraits< T >::max() ); \
-      return b; \
+      return Self( NumericTraits< T >::max() );      \
     } \
   static const Self min() \
     {  \
-      Self b;  \
-      b.Fill( NumericTraits< T >::min() ); \
-      return b; \
+      return Self( NumericTraits< T >::min() );      \
     } \
   static const Self NonpositiveMin() \
     {  \
-      return NumericTraits< Self >::min(); \
+      return Self ( NumericTraits< ValueType >::NonpositiveMin() );   \
     } \
   static const Self ZeroValue() \
   {  \
-    Self b; \
-    b.Fill( NumericTraits< T >::Zero ); \
-    return b; \
+    return Self( NumericTraits< T >::Zero );         \
   } \
   static const Self OneValue() \
   {  \
-    Self b; \
-    b.Fill( NumericTraits< T >::One ); \
-    return b; \
+    return Self( NumericTraits< T >::One );          \
   } \
   static const Self ITKCommon_EXPORT Zero; \
   static const Self ITKCommon_EXPORT One; \
 };
 
 
-//
-// Visual Studio 6.0 is not capable of managing the template implementation
-// defined at the end of this file. Therefore we provide an alternative
-// primitive implementation based on macros that define explicit
-// instantiations.
-//
-#if defined( _MSC_VER ) && ( _MSC_VER < 1310 )
+#ifndef ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
 
 // These two symbols below are defined empty on purpose
 #define _TYPENAME_
@@ -130,8 +112,8 @@ itkNumericTraitsRGBAPixelMacro( double );
 // NumericTraits from the original RGBAPixel components. This implementation
 // doesn't require specializations, since it is based on the concept that 
 //
-//    NumericTraits< RGBAPixle< T > >  is defined piecewise by
-//    RGBAPixle< NumericTraits< T > >
+//    NumericTraits< RGBAPixel< T > >  is defined piecewise by
+//    RGBAPixel< NumericTraits< T > >
 //
 //
 // By defining the following symbols, the Macro above gets customized to become
@@ -145,7 +127,7 @@ itkNumericTraitsRGBAPixelMacro( double );
 //
 itkNumericTraitsRGBAPixelMacro( T );
 
-#endif
+#endif // ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
 
 //
 // Finally, to avoid contamination of other files with the symbols defined

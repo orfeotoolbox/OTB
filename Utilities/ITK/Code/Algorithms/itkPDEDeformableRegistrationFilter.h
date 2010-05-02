@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPDEDeformableRegistrationFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:36 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-10-19 15:18:52 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -128,7 +128,7 @@ public:
   const MovingImageType * GetMovingImage(void) const;
 
   /** Set initial deformation field. */
-  void SetInitialDeformationField( DeformationFieldType * ptr )
+  void SetInitialDeformationField( const DeformationFieldType * ptr )
   { this->SetInput( ptr ); }
 
   /** Get output deformation field. */

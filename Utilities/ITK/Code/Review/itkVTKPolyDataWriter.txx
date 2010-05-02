@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-15 19:12:49 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-12-02 18:13:21 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,6 +99,7 @@ VTKPolyDataWriter<TInputMesh>
     return;
     }
 
+  outputFile.imbue(std::locale::classic());
   outputFile << "# vtk DataFile Version 2.0" << std::endl;
   outputFile << "File written by itkVTKPolyDataWriter" << std::endl;
   outputFile << "ASCII" << std::endl;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshPoint.txx,v $
   Language:  C++
-  Date:      $Date: 2008-07-19 14:49:01 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2010-02-19 19:42:45 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,8 +85,8 @@ QuadEdgeMeshPoint< TCoordRep, VPointDimension, TQuadEdge >
 ::operator=( const ValueType r[VPointDimension] )
 {
   this->Superclass::operator=( r );
-    this->Initialize( );
-    return( *this );
+  this->Initialize( );
+  return( *this );
 }
 
 template< class TCoordRep, unsigned int VPointDimension, typename TQuadEdge >
@@ -152,6 +152,19 @@ QuadEdgeMeshPoint< TCoordRep, VPointDimension, TQuadEdge >
 { 
   return(m_Edge); 
 }
+
+
+/** Set Point Coordinates
+ *  
+ */
+template< class TCoordRep, unsigned int VPointDimension, typename TQuadEdge >
+void
+QuadEdgeMeshPoint< TCoordRep, VPointDimension, TQuadEdge >
+::SetPoint( const Superclass & point ) 
+{ 
+  this->Superclass::operator=( point );
+}
+
 
 } 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,10 +52,12 @@ CenteredSimilarity2DTransform<TScalarType>
   itkDebugMacro( << "Setting parameters " << parameters );
 
   // Set scale
-  this->SetVarScale(parameters[0]);
+  const TScalarType scale = parameters[0];
+  this->SetVarScale( scale );
  
   // Set angle
-  this->SetVarAngle( parameters[1] );
+  const TScalarType angle = parameters[1];
+  this->SetVarAngle( angle );
 
   InputPointType center;
   for(unsigned int j=0; j < SpaceDimension; j++) 
@@ -66,6 +68,7 @@ CenteredSimilarity2DTransform<TScalarType>
 
   // Set translation
   OffsetType translation;
+
   for(unsigned int i=0; i < SpaceDimension; i++) 
     {
     translation[i] = parameters[i+4];
@@ -209,10 +212,9 @@ GetInverse( Self* inverse) const
     }
 
   inverse->SetCenter( this->GetCenter() );  // inverse have the same center
-  inverse->SetScale( 1.0 / this->GetScale() );
+  inverse->SetScale(  NumericTraits<double>::One / this->GetScale() );
   inverse->SetAngle( -this->GetAngle() );
-  inverse->SetTranslation( -( this->GetInverseMatrix() 
-                                                  * this->GetTranslation() ) );
+  inverse->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
   return true;
 }
 
@@ -223,7 +225,11 @@ CenteredSimilarity2DTransform<TScalarType>
 ::GetInverseTransform() const
 {
   Pointer inv = New();
-  return GetInverse(inv) ? inv.GetPointer() : NULL;
+  if( this->GetInverse(inv) )
+    {
+    return inv.GetPointer();
+    }
+  return NULL;
 }
 
 // Create and return a clone of the transformation

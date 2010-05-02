@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-01 14:36:37 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-03-02 03:40:37 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,10 @@
 
 namespace itk
 {
-  
+
+namespace Functor 
+{  
+
 /** \class SimilarVectorsFunctor
  *
  *  \brief A connected components filter that labels the
@@ -35,8 +38,6 @@ namespace itk
  *         threshold.  Vectors that are 180 degrees out of phase
  *         are similar.  Assumes that vectors are normalized.
  */
-
-namespace Functor {  
   
 template<class TInput>
 class SimilarVectorsFunctor
@@ -72,6 +73,14 @@ protected:
 
 } // end namespace Functor 
 
+/** \class VectorConnectedComponentImageFilter
+ *
+ *  \brief A connected components filter that labels the
+ *         objects in a vector image.  Two vectors are pointing
+ *         similar directions if one minus their dot product is less than a
+ *         threshold.  Vectors that are 180 degrees out of phase
+ *         are similar.  Assumes that vectors are normalized.
+ */
 template <class TInputImage, class TOutputImage, class TMaskImage=TInputImage>
 class ITK_EXPORT VectorConnectedComponentImageFilter :
     public ConnectedComponentFunctorImageFilter<TInputImage,TOutputImage,

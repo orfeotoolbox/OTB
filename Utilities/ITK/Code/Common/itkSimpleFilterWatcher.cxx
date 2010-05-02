@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFilterWatcher.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:25 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-10-04 13:12:33 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,6 +31,7 @@ SimpleFilterWatcher
   m_Steps = 0;
   m_Comment = comment;
   m_TestAbort = false;
+  m_Iterations = 0;
 #if defined(_COMPILER_VERSION) && (_COMPILER_VERSION == 730)
   m_Quiet = true;
 #else
@@ -76,6 +77,7 @@ SimpleFilterWatcher
   m_Steps = 0;
   m_Comment = "Not watching an object";
   m_TestAbort = false;
+  m_Iterations = 0;
 #if defined(_COMPILER_VERSION) && (_COMPILER_VERSION == 730)
   m_Quiet = true;
 #else
@@ -117,6 +119,7 @@ SimpleFilterWatcher
   m_TimeProbe = watch.m_TimeProbe;
   m_Process = watch.m_Process;
   m_Steps = watch.m_Steps;
+  m_Iterations = watch.m_Iterations;
   m_Comment = watch.m_Comment;
   m_TestAbort = watch.m_TestAbort;
   m_Quiet = watch.m_Quiet;
@@ -194,6 +197,7 @@ SimpleFilterWatcher
   m_TimeProbe = watch.m_TimeProbe;
   m_Process = watch.m_Process;
   m_Steps = watch.m_Steps;
+  m_Iterations = watch.m_Iterations;
   m_Comment = watch.m_Comment;
   m_TestAbort = watch.m_TestAbort;
   m_Quiet = watch.m_Quiet;

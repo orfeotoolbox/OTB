@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMapContainer.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-05 19:05:01 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2009-11-22 15:36:04 $
+  Version:   $Revision: 1.50 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,8 +108,7 @@ public:
   
   /** \class Iterator
    * \brief The non-const iterator type for the map. */
-  class Iterator
-  {
+  class Iterator {
   public:
     Iterator() {}
     Iterator( const MapIterator& i ): m_Iter(i) {}

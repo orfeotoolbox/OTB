@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2010-03-16 08:49:50 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,6 +58,7 @@ public:
   itkStaticConstMacro(ParametersDimension, unsigned int, 9);
 
   typedef typename Superclass::ParametersType             ParametersType;
+  typedef typename Superclass::ParametersValueType        ParametersValueType;
   typedef typename Superclass::JacobianType               JacobianType;
   typedef typename Superclass::ScalarType                 ScalarType;
   typedef typename Superclass::InputVectorType            InputVectorType;
@@ -75,23 +76,28 @@ public:
   typedef typename Superclass::InverseMatrixType          InverseMatrixType;
   typedef typename Superclass::CenterType                 CenterType;
   typedef typename Superclass::TranslationType            TranslationType;
+  typedef typename Superclass::TranslationValueType       TranslationValueType;
   typedef typename Superclass::OffsetType                 OffsetType;
 
   /** Base inverse transform type. This type should not be changed to the
-   * concrete inverse transform type or inheritance would be lost.*/
+   * concrete inverse transform type or inheritance would be lost. */
   typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
   typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
 
   /** Set the transformation from a container of parameters
-   * This is typically used by optimizers.
-   * There are six parameters. The first three represent the
-   * rotation and the last three represent the translation. */
+   * This is typically used by optimizers.  There are nine parameters. The first
+   * three represent the angles of rotation (in radians) around each one of the
+   * axes (X,Y,Z), the next three parameters represent the coordinates of the
+   * center of rotation and the last three parameters represent the
+   * translation. */
   void SetParameters( const ParametersType & parameters );
 
   /** Get the parameters that uniquely define the transform
-   * This is typically used by optimizers.
-   * There are six parameters. The first three represent the
-   * rotation and the last three represent the translation. */
+   * This is typically used by optimizers. There are nine parameters. The first
+   * three represent the angles of rotation (in radians) around each one of the
+   * axes (X,Y,Z), the next three parameters represent the coordinates of the
+   * center of rotation and the last three parameters represent the
+   * translation. */
   const ParametersType & GetParameters( void ) const;
 
   /** This method computes the Jacobian matrix of the transformation.

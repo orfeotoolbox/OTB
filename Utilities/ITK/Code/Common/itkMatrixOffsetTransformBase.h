@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixOffsetTransformBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2009-11-28 15:58:04 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,6 +103,7 @@ public:
   
   /** Parameters Type   */
   typedef typename Superclass::ParametersType                  ParametersType;
+  typedef typename Superclass::ParametersValueType             ParametersValueType;
 
   /** Jacobian Type   */
   typedef typename Superclass::JacobianType                    JacobianType;
@@ -115,6 +116,7 @@ public:
                  itkGetStaticConstMacro(InputSpaceDimension)>  InputVectorType;
   typedef Vector<TScalarType,
                  itkGetStaticConstMacro(OutputSpaceDimension)> OutputVectorType;
+  typedef typename OutputVectorType::ValueType                 OutputVectorValueType;
   
   /** Standard covariant vector type for this class   */
   typedef CovariantVector<TScalarType,
@@ -136,14 +138,17 @@ public:
   typedef Point<TScalarType,
                 itkGetStaticConstMacro(InputSpaceDimension)>   
                                                     InputPointType;
+  typedef typename InputPointType::ValueType        InputPointValueType;
   typedef Point<TScalarType,
                 itkGetStaticConstMacro(OutputSpaceDimension)>  
                                                     OutputPointType;
+  typedef typename OutputPointType::ValueType       OutputPointValueType;
   
   /** Standard matrix type for this class   */
   typedef Matrix<TScalarType, itkGetStaticConstMacro(OutputSpaceDimension),
                  itkGetStaticConstMacro(InputSpaceDimension)>  
                                                     MatrixType;
+  typedef typename MatrixType::ValueType            MatrixValueType;
 
   /** Standard inverse matrix type for this class   */
   typedef Matrix<TScalarType, itkGetStaticConstMacro(InputSpaceDimension),
@@ -153,11 +158,14 @@ public:
   typedef InputPointType                            CenterType;
 
   typedef OutputVectorType                          OffsetType;
+  typedef typename OffsetType::ValueType            OffsetValueType;
 
   typedef OutputVectorType                          TranslationType;
 
+  typedef typename TranslationType::ValueType       TranslationValueType;
+
   /** Base inverse transform type. This type should not be changed to the
-   * concrete inverse transform type or inheritance would be lost.*/
+   * concrete inverse transform type or inheritance would be lost. */
   typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
   typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
 

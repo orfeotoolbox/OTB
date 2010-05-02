@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmentTreeGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:38 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2010-03-02 03:40:36 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace watershed
 {
  
 /**
- * \class WatershedSegmentTreeGenerator
+ * \class SegmentTreeGenerator
  * This filter is a process object class that implements a step in the N-d
  * watershed segmentation algorithm.  It produces an ordered list (SegmentTree)
  * of binary merges between segments at increasing saliency levels. This

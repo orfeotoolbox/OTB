@@ -1,4 +1,4 @@
-/* $Id: tif_unix.c,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Id: tif_unix.c,v 1.2 2009-11-15 21:04:22 ibanez Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -110,7 +110,7 @@ static void
 _tiffUnmapProc(thandle_t fd, tdata_t base, toff_t size)
 {
   (void) fd;
-  (void) munmap(base, (off_t) size);
+  (void) munmap(base, (size_t) size);
 }
 #else /* !HAVE_MMAP */
 static int

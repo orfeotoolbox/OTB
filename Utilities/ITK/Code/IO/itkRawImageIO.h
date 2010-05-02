@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRawImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:25:45 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2009-09-29 14:43:53 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ namespace itk
  *
  * This class reads and writes 2D or 3D images. Because raw data has 
  * little useful information built into the format,
- * so the user is responsible for specifying pixel type, 
+ * the user is responsible for specifying pixel type, 
  * dimensions, spacing, origin, header type, and so on. (Note: the
  * pixel type and image dimension is defined via the template parameter.)
  *

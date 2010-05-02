@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:43:42 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-09-16 15:34:33 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,6 +99,9 @@ public:
                       TOutputImage::ImageDimension);
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
+
+  /** base type for images of the current ImageDimension */
+  typedef ImageBase<itkGetStaticConstMacro(ImageDimension)> ImageBaseType;
 
   /** Image pixel value typedef. */
   typedef typename TOutputImage::PixelType              PixelType;
@@ -202,22 +205,7 @@ public:
   itkGetConstReferenceMacro(OutputDirection, DirectionType);
 
   /** Helper method to set the output parameters based on this image */
-  void SetOutputParametersFromImage ( typename OutputImageType::Pointer Image )
-    {
-    this->SetOutputOrigin ( Image->GetOrigin() );
-    this->SetOutputSpacing ( Image->GetSpacing() );
-    this->SetOutputDirection ( Image->GetDirection() );
-    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
-    }
-
-  /** Helper method to set the output parameters based on this image */
-  void SetOutputParametersFromConstImage ( typename OutputImageType::ConstPointer Image )
-    {
-    this->SetOutputOrigin ( Image->GetOrigin() );
-    this->SetOutputSpacing ( Image->GetSpacing() );
-    this->SetOutputDirection ( Image->GetDirection() );
-    this->SetSize ( Image->GetLargestPossibleRegion().GetSize() );
-    }
+  void SetOutputParametersFromImage ( const ImageBaseType * image );
 
   /** Set the start index of the output largest possible region.
    * The default is an index of all zeros. */

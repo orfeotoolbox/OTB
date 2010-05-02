@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:53 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2009-09-23 16:07:39 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,6 +92,16 @@ public:
   /** Set if the Optimizer should Maximize the metric */
   itkSetMacro( Maximize, bool );
   itkBooleanMacro( Maximize );
+  itkGetConstReferenceMacro( Maximize, bool );
+
+  bool GetMinimize( ) const
+    { return !m_Maximize; }
+  void SetMinimize(bool v)
+    { this->SetMaximize(!v); }
+  void    MinimizeOn(void) 
+    { SetMaximize( false ); }
+  void    MinimizeOff(void) 
+    { SetMaximize( true ); }
 
   /** Set/Get maximum iteration limit. */
   itkSetMacro( MaximumIteration, unsigned int );
@@ -135,6 +145,9 @@ public:
   /** Return Current Iteration */
   itkGetConstReferenceMacro( CurrentIteration, unsigned int);
 
+  /** Return if optimizer has been initialized */
+  itkGetConstReferenceMacro( Initialized, bool);
+
   /** Start optimization.
    * Optimization will stop when it meets either of two termination conditions,
    * the maximum iteration limit or epsilon (minimal search radius)  */
@@ -146,10 +159,10 @@ public:
   void StopOptimization() 
     { m_Stop = true; }
 
-  itkGetMacro(CatchGetValueException, bool);
+  itkGetConstReferenceMacro(CatchGetValueException, bool);
   itkSetMacro(CatchGetValueException, bool);
 
-  itkGetMacro(MetricWorstPossibleValue, double);
+  itkGetConstReferenceMacro(MetricWorstPossibleValue, double);
   itkSetMacro(MetricWorstPossibleValue, double);
 
   const std::string GetStopConditionDescription() const;

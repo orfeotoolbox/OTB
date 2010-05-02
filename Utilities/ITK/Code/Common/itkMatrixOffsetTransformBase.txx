@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixOffsetTransformBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,6 +20,7 @@
 #include "itkNumericTraits.h"
 #include "itkMatrixOffsetTransformBase.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -139,9 +140,9 @@ MatrixOffsetTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
   m_Matrix.SetIdentity();
   m_MatrixMTime.Modified();
-  m_Offset.Fill( 0.0 );
-  m_Translation.Fill( 0.0 );
-  m_Center.Fill( 0.0 );
+  m_Offset.Fill( NumericTraits< OutputVectorValueType >::Zero );
+  m_Translation.Fill( NumericTraits< OutputVectorValueType >::Zero );
+  m_Center.Fill( NumericTraits< InputPointValueType >::Zero );
   m_Singular = false;
   m_InverseMatrix.SetIdentity();
   m_InverseMatrixMTime = m_MatrixMTime;
@@ -313,6 +314,7 @@ MatrixOffsetTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
   this->m_FixedParameters = fp;
   InputPointType c;
+  typedef typename ParametersType::ValueType ParameterValueType;
   for ( unsigned int i = 0; i < NInputDimensions; i++ )
     {
     c[i] = this->m_FixedParameters[i];

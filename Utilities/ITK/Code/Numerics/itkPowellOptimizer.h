@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPowellOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:54 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-09-23 16:07:42 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,6 +82,7 @@ public:
 
   /** Set if the Optimizer should Maximize the metric */
   itkSetMacro( Maximize, bool );
+  itkBooleanMacro( Maximize);
   itkGetConstReferenceMacro( Maximize, bool );
 
   /** Set/Get maximum iteration limit. */
@@ -127,10 +128,10 @@ public:
   void StopOptimization() 
     { m_Stop = true; }
 
-  itkGetMacro(CatchGetValueException, bool);
+  itkGetConstReferenceMacro(CatchGetValueException, bool);
   itkSetMacro(CatchGetValueException, bool);
 
-  itkGetMacro(MetricWorstPossibleValue, double);
+  itkGetConstReferenceMacro(MetricWorstPossibleValue, double);
   itkSetMacro(MetricWorstPossibleValue, double);
 
   const std::string GetStopConditionDescription() const;

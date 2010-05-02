@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMattesMutualInformationImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-26 21:45:51 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-11-02 18:46:33 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -159,6 +159,7 @@ public:
 
   /** Index and Point typedef support. */
   typedef typename FixedImageType::IndexType           FixedImageIndexType;
+  typedef typename FixedImageType::OffsetValueType     OffsetValueType;
   typedef typename FixedImageIndexType::IndexValueType FixedImageIndexValueType;
   typedef typename MovingImageType::IndexType          MovingImageIndexType;
   typedef typename TransformType::InputPointType       FixedImagePointType;
@@ -194,9 +195,12 @@ public:
                     1, NumericTraits<unsigned long>::max() );
   itkGetConstReferenceMacro( NumberOfSpatialSamples, unsigned long); 
 
-  /** Number of bins to used in the histogram. Typical value is 50. */
+  /** Number of bins to used in the histogram. Typical value is 50. The minimum
+   * value is 5 due to the padding required by the Parzen windowing with a
+   * cubic-BSpline kernel. Note that even if the metric is used on binary images,
+   * the number of bins should at least be equal to five. */
   itkSetClampMacro( NumberOfHistogramBins, unsigned long,
-                    1, NumericTraits<unsigned long>::max() );
+                    5, NumericTraits<unsigned long>::max() );
   itkGetConstReferenceMacro( NumberOfHistogramBins, unsigned long);   
 
   /** Reinitialize the seed of the random number generator that selects the

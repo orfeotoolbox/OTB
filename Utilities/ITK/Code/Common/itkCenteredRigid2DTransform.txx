@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredRigid2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,9 +60,11 @@ CenteredRigid2DTransform<TScalarType>
   this->m_Parameters = parameters;
 
   // Set the angle
-  this->SetVarAngle( parameters[0] );
+  const TScalarType angle = parameters[0];
+  this->SetVarAngle( angle );
   // Set the center
   InputPointType center;
+
   for(unsigned int i=0; i < SpaceDimension; i++) 
     {
     center[i] = parameters[i+1];
@@ -71,6 +73,7 @@ CenteredRigid2DTransform<TScalarType>
   
   // Set the translation
   OutputVectorType translation;
+
   for(unsigned int j=0; j < SpaceDimension; j++) 
     {
     translation[j] = parameters[j+1+SpaceDimension];

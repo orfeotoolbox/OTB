@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIndex.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-12 10:52:52 $
-  Version:   $Revision: 1.64 $
+  Date:      $Date: 2009-10-27 16:06:22 $
+  Version:   $Revision: 1.66 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include "itkOffset.h"
 #include "itkSize.h"
 #include "itkFixedArray.h"
+#include "itkMath.h"
 
 #include <memory>
 
@@ -269,7 +270,7 @@ public:
 #else
     for(unsigned int i=0;i < VIndexDimension; ++i)
       {
-      m_Index[i] = static_cast< IndexValueType>( itk::Math::Round( point[i] ) );
+      m_Index[i] = Math::Round<IndexValueType>( point[i] );
       }
 #endif
     }

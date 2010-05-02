@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChangeLabelLabelMapFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-04 20:25:11 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-10-12 18:55:34 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,14 +104,6 @@ protected:
 private:
   ChangeLabelLabelMapFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  void MoveLabelsToTemporaryArray();
-  void ChangeBackgroundIfNeeded();
-  void RestoreLabelObjectsAndChangeLabels();
-
-  typedef typename std::deque< typename LabelObjectType::Pointer > VectorType;
-
-  VectorType            m_LabelObjectsToBeRelabeled;
 
 }; // end of class
 

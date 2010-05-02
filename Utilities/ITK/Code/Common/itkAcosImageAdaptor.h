@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAcosImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 04:36:58 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-09-19 19:56:20 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace Accessor {
  *
  * AcosPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
- * applies the funtion to it and cast the result according 
+ * applies the function to it and cast the result according 
  * to the types defined as template parameters
  * 
  * \ingroup ImageAdaptors */

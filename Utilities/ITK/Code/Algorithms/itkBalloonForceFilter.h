@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBalloonForceFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:34 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2009-11-22 18:19:44 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,9 +34,9 @@ namespace itk
  * \brief
  *
  * BalloonForceFilter is used to apply balloon force and the potential
- * force onto the 2D deformable model. For 3D (multi-slices) segmentation
- * please use BalloonForce3DFilter
- * The balloon force is vertical to the surface of the model. The potential
+ * force onto the 2D surface model embedded in a 3D space.
+ *
+ * The balloon force is normal to the surface of the model. The potential
  * force is given out by the estimated boundary points. These two will meet
  * a balance at the boundary, thus the deformable model will fit to the
  * boundary.
@@ -77,6 +77,10 @@ public:
   InputPointsContainerPointer;
   typedef typename InputMeshType::PointsContainer::Iterator
   InputPointsContainerIterator;
+  typedef typename InputMeshType::PointsContainerConstPointer
+  InputPointsContainerConstPointer;
+  typedef typename InputMeshType::PointsContainer::ConstIterator
+  InputPointsContainerConstIterator;
   typedef typename InputMeshType::PointDataContainerPointer
   InputPointDataContainerPointer;
   typedef typename InputMeshType::PointDataContainer::Iterator
@@ -89,6 +93,15 @@ public:
   InputCellDataContainerPointer;
   typedef typename InputMeshType::CellDataContainer::Iterator
   InputCellDataContainerIterator;
+  typedef typename InputMeshType::CellsContainerConstPointer
+  InputCellsContainerConstPointer;
+  typedef typename InputMeshType::CellsContainer::ConstIterator
+  InputCellsContainerConstIterator;
+  typedef typename InputMeshType::CellDataContainerConstPointer
+  InputCellDataContainerConstPointer;
+  typedef typename InputMeshType::CellDataContainer::ConstIterator
+  InputCellDataContainerConstIterator;
+
   typedef typename OutputMeshType::PointsContainerPointer
   OutputPointsContainerPointer;
   typedef typename OutputMeshType::PointsContainer::Iterator
@@ -102,6 +115,7 @@ public:
   typedef CovariantVector<PixelType, 2>         GradientType;
   typedef Image<GradientType, 2>                GradientImageType;
   typedef typename InputMeshType::Pointer       InputMeshPointer;
+  typedef typename InputMeshType::ConstPointer  InputMeshConstPointer;
   typedef typename OutputMeshType::Pointer      OutputMeshPointer;
   typedef typename ImageType::Pointer           ImagePointer;
   typedef typename ImageType::IndexType         IndexType;

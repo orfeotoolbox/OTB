@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFixedArray.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-16 13:28:49 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-11-28 09:15:37 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,6 +31,19 @@ template <typename TValueType, unsigned int VLength>
 FixedArray<TValueType, VLength>
 ::FixedArray()
 {
+}
+
+/**
+ * Constructor to initialize entire array to one value.
+ */
+template <typename TValueType, unsigned int VLength>
+FixedArray<TValueType, VLength>
+::FixedArray(const ValueType& r)
+{
+  for(Iterator i = Begin(); i != End(); ++i)
+    {
+    *i = r;
+    }
 }
 
 /**

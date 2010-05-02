@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDecompositionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:27:05 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2010-03-19 07:06:01 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,16 +104,11 @@ public:
   /** Begin concept checking */
   itkConceptMacro(DimensionCheck,
     (Concept::SameDimension<ImageDimension, OutputImageDimension>));
-//   itkConceptMacro(InputConvertibleToDoubleCheck,
-//     (Concept::Convertible<typename TInputImage::PixelType, double>));
-//   itkConceptMacro(OutputConvertibleToDoubleCheck,
-//     (Concept::Convertible<typename TOutputImage::PixelType, double>));
-//   itkConceptMacro(InputConvertibleToOutputCheck,
-//      (Concept::Convertible<typename TInputImage::PixelType,
-//                            typename TOutputImage::PixelType>));
-//FIXME probably need a fix in the OptBSplineInterpolateImageFilter
-  itkConceptMacro(DoubleConvertibleToOutputCheck,
-    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+//  itkConceptMacro(InputConvertibleToOutputCheck,
+//     (Concept::Convertible<typename TInputImage::PixelType,
+//                           typename TOutputImage::PixelType>));
+//  itkConceptMacro(DoubleConvertibleToOutputCheck,
+//    (Concept::Convertible<double, typename TOutputImage::PixelType>));
   /** End concept checking */
 #endif
 
@@ -131,7 +126,7 @@ protected:
   void EnlargeOutputRequestedRegion( DataObject *output ); 
 
   /** These are needed by the smoothing spline routine. */
-  std::vector<CoeffType>              m_Scratch;       // temp storage for processing of Coefficients
+  std::vector<CoeffType>           m_Scratch;       // temp storage for processing of Coefficients
   typename TInputImage::SizeType   m_DataLength;  // Image size
 
   unsigned int              m_SplineOrder;   // User specified spline order (3rd or cubic is the default)

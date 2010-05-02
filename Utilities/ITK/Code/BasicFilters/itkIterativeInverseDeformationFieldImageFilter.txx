@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeInverseDeformationFieldImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-07 19:39:44 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2010-02-15 15:18:46 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,7 +118,6 @@ void IterativeInverseDeformationFieldImageFilter<TInputImage, TOutputImage>
       }
 
     ProgressReporter progress(this, 0,
-                              m_NumberOfIterations *
                               inputPtr->GetLargestPossibleRegion().GetNumberOfPixels());
     OutputIterator OutputIt = OutputIterator(outputPtr, outputPtr->GetRequestedRegion());
     FieldInterpolatorPointer inputFieldInterpolator = FieldInterpolatorType::New();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-07-29 07:38:01 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2009-10-29 11:18:43 $
+  Version:   $Revision: 1.45 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,12 +83,12 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
    * Compute base index = closet index below point
    * Compute distance from point to base index
    */
-  signed long baseIndex[ImageDimension];
+  IndexType baseIndex;
   double distance[ImageDimension];
 
   for( dim = 0; dim < ImageDimension; dim++ )
     {
-    baseIndex[dim] = Math::Floor( index[dim] );
+    baseIndex[dim] = Math::Floor< IndexValueType >( index[dim] );
     distance[dim] = index[dim] - static_cast< double >( baseIndex[dim] );
     }
   

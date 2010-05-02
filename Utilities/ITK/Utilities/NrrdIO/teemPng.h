@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -22,6 +22,7 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
+
 /*
 ** the end result of this is that the source file which includes
 ** this can be sure that TEEM_ZLIB is set, so that the required
@@ -32,4 +33,8 @@
 #  ifndef TEEM_ZLIB
 #    error TEEM_PNG set, but TEEM_ZLIB not set 
 #  endif
+#endif
+
+#if TEEM_PNG && TEEM_VTK_MANGLE
+#include "vtk_png_mangle.h"
 #endif

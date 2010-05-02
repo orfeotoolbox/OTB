@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMersenneTwisterRandomVariateGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-08 15:25:34 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-12-14 18:34:54 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -111,7 +111,7 @@ public:
   typedef SmartPointer<Self>                    Pointer;
   typedef SmartPointer<const Self>              ConstPointer;
 
-  typedef ITK_UINT32 IntegerType;
+  typedef uint32_t IntegerType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MersenneTwisterRandomVariateGenerator, 

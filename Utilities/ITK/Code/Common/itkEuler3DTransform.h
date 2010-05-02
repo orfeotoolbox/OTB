@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 15:36:31 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-11-28 15:53:14 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,6 +67,7 @@ public:
   itkStaticConstMacro(ParametersDimension, unsigned int, 6);
 
   typedef typename Superclass::ParametersType             ParametersType;
+  typedef typename Superclass::ParametersValueType        ParametersValueType;
   typedef typename Superclass::JacobianType               JacobianType;
   typedef typename Superclass::ScalarType                 ScalarType;
   typedef typename Superclass::InputVectorType            InputVectorType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdSegmentationLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-27 19:30:16 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-11-22 13:36:06 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,24 +80,24 @@ public:
 
   /** Set/Get threshold values */
   void SetUpperThreshold(FeatureScalarType f)
-  { m_UpperThreshold = f; }
+    { m_UpperThreshold = f; }
   FeatureScalarType GetUpperThreshold() const
-  { return m_UpperThreshold; }
+    { return m_UpperThreshold; }
   void SetLowerThreshold(FeatureScalarType f)
-  { m_LowerThreshold = f; }
+    { m_LowerThreshold = f; }
   FeatureScalarType GetLowerThreshold() const
-  { return m_LowerThreshold; }
+    { return m_LowerThreshold; }
 
   virtual void CalculateSpeedImage();
 
   virtual void Initialize(const RadiusType &r)
-  {
+    {
     Superclass::Initialize(r);
     
     this->SetAdvectionWeight( NumericTraits<ScalarValueType>::Zero);
     this->SetPropagationWeight(-1.0 * NumericTraits<ScalarValueType>::One);
     this->SetCurvatureWeight(NumericTraits<ScalarValueType>::One);
-  }
+    }
 
   /** Set/Get the weight applied to the edge (Laplacian) attractor in the speed
    *  term function. Zero will turn this term off. */

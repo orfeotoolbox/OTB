@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStreamingImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-02-04 16:34:09 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-12-07 22:10:01 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ StreamingImageFilter<TInputImage,TOutputImage>
   // we don't call GenerateInputRequestedRegion since the requested
   // regions are manage when the pipeline is execute
   
-  // we don't call inputs PopafateRequestedRegion either
+  // we don't call inputs PropagateRequestedRegion either
   // because the pipeline managed later
 }
 

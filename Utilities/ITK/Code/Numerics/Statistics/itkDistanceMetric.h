@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDistanceMetric.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 15:23:46 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-02-02 13:45:16 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,6 +60,8 @@ public:
   /** Standard typedefs */
   typedef DistanceMetric                    Self;
   typedef MembershipFunctionBase< TVector > Superclass;
+  typedef SmartPointer< Self >              Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
   typedef typename Superclass::MeasurementVectorSizeType
                                              MeasurementVectorSizeType;
 

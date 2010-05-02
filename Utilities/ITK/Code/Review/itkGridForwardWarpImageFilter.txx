@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGridForwardWarpImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 07:58:47 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-10-27 18:12:48 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,6 +97,8 @@ GridForwardWarpImageFilter<TDeformationField,TOutputImage>
   // Bresenham line iterator
   typedef LineIterator<OutputImageType> LineIteratorType;
 
+  typedef typename IndexType::IndexValueType IndexValueType;
+
   IndexType index, refIndex, targetIndex;
   ContinuousIndex<float, ImageDimension> contindex;
   DisplacementType displacement;
@@ -129,7 +131,7 @@ GridForwardWarpImageFilter<TDeformationField,TOutputImage>
           inside = false;
           break;
           }
-        refIndex[j] = Math::Round(contindex[j]);
+        refIndex[j] = Math::Round<IndexValueType>(contindex[j]);
         }
 
       if( inside )
@@ -156,7 +158,7 @@ GridForwardWarpImageFilter<TDeformationField,TOutputImage>
                 targetIn = false;
                 break;
                 }
-              targetIndex[j] = Math::Round(contindex[j]);
+              targetIndex[j] = Math::Round<IndexValueType>(contindex[j]);
               }
 
             if( targetIn ) 

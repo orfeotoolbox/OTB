@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedSegmenter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:38 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2010-03-02 03:40:36 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace itk
 {
 namespace watershed
 {
-/** \class WatershedSegmenter
+/** \class Segmenter
  *
  * This filter implements the first step in the N-d watershed segmentation 
  * algorithm.  It produces a segmented, labeled image from a scalar-valued

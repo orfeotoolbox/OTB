@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionMultidimensionalSplitter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:46:38 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-11-03 12:24:19 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,8 +99,7 @@ ImageRegionMultidimensionalSplitter<VImageDimension>
     else
       {
       splits[j] = (unsigned int) splitsPerDimension;
-      pixelsPerSplit[j] = (unsigned int) vcl_ceil(regionSize[j]
-                                              / (double) splits[j]);
+      pixelsPerSplit[j] = Math::Ceil<unsigned int>( regionSize[j] / (double) splits[j] );
       numPieces *= (unsigned int) splitsPerDimension;
       }
     }

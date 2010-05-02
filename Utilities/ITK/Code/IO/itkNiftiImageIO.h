@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNiftiImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:25:44 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2009-11-03 19:07:08 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,6 +114,7 @@ private:
   void  DefineHeaderObjectDataType();
   void  SetNIfTIOrientationFromImageIO(unsigned short int origdims, unsigned short int dims);
   void  SetImageIOOrientationFromNIfTI(unsigned short int dims);
+  void  SetImageIOMetadataFromNIfTI();
 
   nifti_image *     m_NiftiImage;
   double            m_RescaleSlope;

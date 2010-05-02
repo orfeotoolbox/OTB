@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: ProcessWin32.c,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #include "kwsysPrivate.h"
 #include KWSYS_HEADER(Process.h)
 #include KWSYS_HEADER(System.h)
@@ -2518,6 +2516,11 @@ struct _SYSTEM_PROCESS_INFORMATION
 /*--------------------------------------------------------------------------*/
 /* Toolhelp32 API definitions.  */
 #define TH32CS_SNAPPROCESS  0x00000002
+#if defined(_WIN64)
+typedef unsigned __int64 ProcessULONG_PTR;
+#else
+typedef unsigned long ProcessULONG_PTR;
+#endif
 typedef struct tagPROCESSENTRY32 PROCESSENTRY32;
 typedef PROCESSENTRY32* LPPROCESSENTRY32;
 struct tagPROCESSENTRY32
@@ -2525,7 +2528,7 @@ struct tagPROCESSENTRY32
   DWORD dwSize;
   DWORD cntUsage;
   DWORD th32ProcessID;
-  DWORD th32DefaultHeapID;
+  ProcessULONG_PTR th32DefaultHeapID;
   DWORD th32ModuleID;
   DWORD cntThreads;
   DWORD th32ParentProcessID;

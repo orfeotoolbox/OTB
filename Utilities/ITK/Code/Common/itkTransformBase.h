@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:10:26 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-11-28 15:53:16 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,7 +46,8 @@ public:
   typedef SmartPointer< const Self >  ConstPointer;
 
   /** Type of the input parameters. */
-  typedef  Array< double >           ParametersType;
+  typedef  double                          ParametersValueType;
+  typedef  Array< ParametersValueType >    ParametersType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro( TransformBase, Object );

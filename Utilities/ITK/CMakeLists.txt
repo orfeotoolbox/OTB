@@ -47,7 +47,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^2\\.4$")
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "3")
-SET(ITK_VERSION_MINOR "16")
+SET(ITK_VERSION_MINOR "18")
 SET(ITK_VERSION_PATCH "0")
 
 # Version string should not include patch level.  The major.minor is
@@ -110,7 +110,13 @@ OPTION(USE_FFTWD "Use double precision FFTW if found" OFF)
 MARK_AS_ADVANCED(USE_FFTWF)
 OPTION(USE_FFTWF "Use single precision FFTW if found" OFF)
 IF( USE_FFTWD OR USE_FFTWF )
-    FIND_PACKAGE( FFTW )
+  SET(msg "ATTENTION: You have enabled the use of FFTW,")
+  SET(msg "${msg} this library is distributed under a GPL license.")
+  SET(msg "${msg} By enabling this option, the binary of the ITK libraries")
+  SET(msg "${msg} that you are going to build will be covered by a GPL license,")
+  SET(msg "${msg} and so it will be any executable that you link against these libraries.")
+  MESSAGE("${msg}")
+  FIND_PACKAGE( FFTW )
 ENDIF( USE_FFTWD OR USE_FFTWF )
 
 # Deal with SGI SCSL Options
@@ -130,6 +136,7 @@ IF( ITK_USE_MINC2 )
   ENDIF( NOT MINC2_FOUND )
 ENDIF( ITK_USE_MINC2 )
 
+
 #-----------------------------------------------------------------------------
 # ITK build configuration options.
 OPTION(BUILD_SHARED_LIBS "Build ITK with shared libraries." OFF)
@@ -138,7 +145,7 @@ SET(ITK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 IF(NOT ITK_NO_LIBRARY_VERSION)
   # This setting of SOVERSION assumes that any API change
   # will increment either the minor or major version number of ITK.
-  SET(ITK_LIBRARY_PROPERTIES
+  SET(ITK_LIBRARY_PROPERTIES 
       VERSION   "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}.${ITK_VERSION_PATCH}"
       SOVERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
      )
@@ -274,6 +281,10 @@ MARK_AS_ADVANCED(ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING)
 OPTION(ITK_USE_DEPRECATED_LEVELSET_INTERPOLATION "Turn on the use of a sparse field level set surface interpolation method that has been deprecated since ITK 3.6. Turn this flag ON to exactly replicate the behavior of ITK<=3.4." OFF)
 MARK_AS_ADVANCED(ITK_USE_DEPRECATED_LEVELSET_INTERPOLATION)
 
+OPTION(ITK_USE_DEPRECATED_FAST_MARCHING "Turn on incorrect handling of TrialPoints in itk::FastMarchingImageFilter result of a bug fixed in ITK 3.18. Turn this flag ON to exactly replicate the behavior of ITK<=3.16." OFF)
+MARK_AS_ADVANCED(ITK_USE_DEPRECATED_FAST_MARCHING)
+
+
 #-----------------------------------------------------------------------------
 # Installation vars.
 # ITK_INSTALL_BIN_DIR          - binary dir (executables)
@@ -284,6 +295,9 @@ MARK_AS_ADVANCED(ITK_USE_DEPRECATED_LEVELSET_INTERPOLATION)
 # ITK_INSTALL_NO_DEVELOPMENT   - do not install development files
 # ITK_INSTALL_NO_RUNTIME       - do not install runtime files
 # ITK_INSTALL_NO_DOCUMENTATION - do not install documentation files
+
+OPTION(ITK_USE_FLAT_DIRECTORY_INSTALL  "When ON, ITK will install all the header files in a single directory. This reduces the number of directories that must be searched for headers in projects based on ITK" OFF)
+MARK_AS_ADVANCED(ITK_USE_FLAT_DIRECTORY_INSTALL)
 
 IF(NOT ITK_INSTALL_BIN_DIR)
   # Solaris: unlike libraries, 64 bit executables should be installed in "bin${sun64}" only
@@ -317,10 +331,9 @@ IF(NOT ITK_INSTALL_LIB_DIR)
       MESSAGE("Warning: Unknown processor '${sunproc}'. The libraries may not be installed in the right place.")
     ENDIF("${sun64}" STREQUAL "")
   ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*" AND CMAKE_SIZEOF_VOID_P EQUAL 8)
-
 # OTB Modifications
-#   SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit${sun64}")
-  SET(ITK_INSTALL_LIB_DIR "/lib/otb${sun64}")
+#  SET(ITK_INSTALL_LIB_DIR "/lib/InsightToolkit${sun64}")
+  SET(ITK_INSTALL_LIB_DIR "/lib/otb${sun64}") 
 ENDIF(NOT ITK_INSTALL_LIB_DIR)
 
 IF(NOT ITK_INSTALL_DATA_DIR)
@@ -398,16 +411,16 @@ SET(ITK_DIR "${CMAKE_BINARY_DIR}" CACHE INTERNAL "ITK dir to be used by subproje
 # be particulary useful to distributed prebuilt ITK witk extended languages
 # support enable
 #
-# INCLUDE(InstallRequiredSystemLibraries)
-# SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
-# SET(CPACK_PACKAGE_VENDOR "ISC")
-# SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
-# SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
-# SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
-# SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
-# # SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
-# SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
-# INCLUDE(CPack)
+#INCLUDE(InstallRequiredSystemLibraries)
+#SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit")
+#SET(CPACK_PACKAGE_VENDOR "ISC")
+#SET(CPACK_PACKAGE_VERSION_MAJOR "${ITK_VERSION_MAJOR}")
+#SET(CPACK_PACKAGE_VERSION_MINOR "${ITK_VERSION_MINOR}")
+#SET(CPACK_PACKAGE_VERSION_PATCH "${ITK_VERSION_PATCH}")
+#SET(CPACK_PACKAGE_INSTALL_DIRECTORY "InsightToolkit-${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}")
+# SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
+#SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/Copyright/ITKCopyright.txt")
+#INCLUDE(CPack)
 
 
 #-----------------------------------------------------------------------------
@@ -477,7 +490,7 @@ ITK_THIRD_PARTY_OPTION(LIBXML2 libxml2)
 
 #-----------------------------------------------------------------------------
 # If choose to build documentation, then search for Doxygen executables.
-# OTB Modifications
+# OTB Modifications 
 #OPTION(BUILD_DOXYGEN "Build Doxygen Documentation" OFF)
 #IF(BUILD_DOXYGEN)
 #  FIND_PACKAGE(Doxygen)
@@ -489,12 +502,10 @@ SUBDIRS(Utilities Code)
 
 SUBDIRS(Wrapping)
 
-# OTB Modifications
 #IF (BUILD_TESTING)
 #  SUBDIRS(Testing)
 #ENDIF (BUILD_TESTING)
 
-# OTB Modifications
 #IF(BUILD_EXAMPLES)
 #  SUBDIRS(Examples)
 #ENDIF(BUILD_EXAMPLES)
@@ -506,30 +517,30 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -ftemplate-depth-50 -Wall")
   INCLUDE(${ITK_SOURCE_DIR}/CMake/itkCheckCXXAcceptsFlags.cmake)
   itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-deprecated" CXX_HAS_DEPRECATED_FLAG)
-  IF(CXX_HAS_DEPRECATED_FLAG)
+  IF(CXX_HAS_DEPRECATED_FLAG)    
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-deprecated")
-  ENDIF(CXX_HAS_DEPRECATED_FLAG)
+  ENDIF(CXX_HAS_DEPRECATED_FLAG)    
   IF(APPLE)
     # -no-cpp-precomp and -Wno-long-double were compiler flags present
     # only in Apple's gcc and not in the FSF gcc. The flags are obsolete
     # and totally removed in gcc 4.2 and later. I believe they are only
     # needed with gcc 3.3 and earlier.
     itkCHECK_CXX_ACCEPTS_FLAGS("-no-cpp-precomp" CXX_HAS_CPP_PRECOMP_FLAG)
-    IF(CXX_HAS_CPP_PRECOMP_FLAG)
+    IF(CXX_HAS_CPP_PRECOMP_FLAG)    
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -no-cpp-precomp")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
-    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)
+    ENDIF(CXX_HAS_CPP_PRECOMP_FLAG)    
     itkCHECK_CXX_ACCEPTS_FLAGS("-Wno-long-double" CXX_HAS_LONGDOUBLE_FLAG)
-    IF(CXX_HAS_LONGDOUBLE_FLAG)
+    IF(CXX_HAS_LONGDOUBLE_FLAG)    
       SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -Wno-long-double")
       SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -Wno-long-double")
-    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)
+    ENDIF(CXX_HAS_LONGDOUBLE_FLAG)    
 
     OPTION(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
     MARK_AS_ADVANCED(ITK_USE_64BITS_APPLE_TRUNCATION_WARNING)
 
   ENDIF(APPLE)
-
+  
   # gcc must have -msse2 option to enable sse2 support
   IF(VNL_CONFIG_ENABLE_SSE2 OR VNL_CONFIG_ENABLE_SSE2_ROUNDING)
     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -msse2")
@@ -635,7 +646,7 @@ IF(MINGW)
 ENDIF(MINGW)
 
 #-----------------------------------------------------------------------------
-# Find platform-specific differences in the handling of IEEE floating point
+# Find platform-specific differences in the handling of IEEE floating point 
 # special values.
 INCLUDE(${ITK_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
 CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${ITK_SOURCE_DIR}/CMake)
@@ -655,75 +666,21 @@ ENDIF(QNANHIBIT_VALUE)
 
 INCLUDE(CheckTypeSize)
 
-CHECK_TYPE_SIZE("long long" ITK_SIZEOF_LONG_LONG)
-CHECK_TYPE_SIZE("__int64"   ITK_SIZEOF___INT64)
 
-IF(ITK_SIZEOF___INT64)
-  IF("ITK_TYPE_SAME_LONG_AND___INT64" MATCHES "^ITK_TYPE_SAME_LONG_AND___INT64$")
-    MESSAGE(STATUS "Checking whether long and __int64 are the same type")
-    TRY_COMPILE(ITK_TYPE_SAME_LONG_AND___INT64
-      ${ITK_BINARY_DIR}/CMakeTmp
-      ${ITK_SOURCE_DIR}/CMake/itkTestCompareTypes.cxx
-      COMPILE_DEFINITIONS
-      -DITK_TEST_COMPARE_TYPE_1=long
-      -DITK_TEST_COMPARE_TYPE_2=__int64
-      OUTPUT_VARIABLE OUTPUT)
-    IF(ITK_TYPE_SAME_LONG_AND___INT64)
-      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- yes")
-      SET(ITK_TYPE_SAME_LONG_AND___INT64 1 CACHE INTERNAL "Whether long and __int64 are the same type")
-    ELSE(ITK_TYPE_SAME_LONG_AND___INT64)
-      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- no")
-      SET(ITK_TYPE_SAME_LONG_AND___INT64 0 CACHE INTERNAL "Whether long and __int64 are the same type")
-      WRITE_FILE(${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
-        "Determining whether long and __int64 are the same type "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(ITK_TYPE_SAME_LONG_AND___INT64)
-  ENDIF("ITK_TYPE_SAME_LONG_AND___INT64" MATCHES "^ITK_TYPE_SAME_LONG_AND___INT64$")
-ENDIF(ITK_SIZEOF___INT64)
+#-----------------------------------------------------------------------------
+#
+# Check types such as long long and __int64
+INCLUDE(${ITK_SOURCE_DIR}/CMake/itkTestTypes.cmake)
 
-IF(ITK_SIZEOF_LONG_LONG)
-  CONFIGURE_FILE(${ITK_SOURCE_DIR}/CMake/itkTestStreamLongLong.cxx.in
-    ${ITK_BINARY_DIR}/CMake/itkTestStreamLongLong.cxx @ONLY IMMEDIATE)
-  IF("ITK_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^ITK_OSTREAM_SUPPORTS_LONG_LONG$")
-    MESSAGE(STATUS "Checking if ostream supports long long")
-    TRY_COMPILE(ITK_OSTREAM_SUPPORTS_LONG_LONG
-      ${ITK_BINARY_DIR}
-      ${ITK_BINARY_DIR}/CMake/itkTestStreamLongLong.cxx
-      COMPILE_DEFINITIONS -DITK_TEST_OSTREAM_LONG_LONG
-      OUTPUT_VARIABLE OUTPUT)
-    IF(ITK_OSTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if ostream supports long long -- yes")
-      SET(ITK_OSTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether ostream supports long long")
-    ELSE(ITK_OSTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if ostream supports long long -- no")
-      SET(ITK_OSTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether ostream supports long long")
-      WRITE_FILE(${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
-        "Determining if ostream supports long long "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(ITK_OSTREAM_SUPPORTS_LONG_LONG)
-  ENDIF("ITK_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^ITK_OSTREAM_SUPPORTS_LONG_LONG$")
-  IF("ITK_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^ITK_ISTREAM_SUPPORTS_LONG_LONG$")
-    MESSAGE(STATUS "Checking if istream supports long long")
-    TRY_COMPILE(ITK_ISTREAM_SUPPORTS_LONG_LONG
-      ${ITK_BINARY_DIR}
-      ${ITK_BINARY_DIR}/CMake/itkTestStreamLongLong.cxx
-      COMPILE_DEFINITIONS -DITK_TEST_ISTREAM_LONG_LONG
-      OUTPUT_VARIABLE OUTPUT)
-    IF(ITK_ISTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if istream supports long long -- yes")
-      SET(ITK_ISTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether istream supports long long")
-    ELSE(ITK_ISTREAM_SUPPORTS_LONG_LONG)
-      MESSAGE(STATUS "Checking if istream supports long long -- no")
-      SET(ITK_ISTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether istream supports long long")
-      WRITE_FILE(${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
-        "Determining if istream supports long long "
-        "failed with the following output:\n"
-        "${OUTPUT}\n" APPEND)
-    ENDIF(ITK_ISTREAM_SUPPORTS_LONG_LONG)
-  ENDIF("ITK_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^ITK_ISTREAM_SUPPORTS_LONG_LONG$")
-ENDIF(ITK_SIZEOF_LONG_LONG)
+
+#-----------------------------------------------------------------------------
+# check if the platform has the header file "fenv.h" which has been added as part of the C99 standard
+INCLUDE(CheckIncludeFiles)
+CHECK_INCLUDE_FILES(fenv.h HAVE_FENV_H)
+
+#-----------------------------------------------------------------------------
+# check if the platform has some widely used header files
+CHECK_INCLUDE_FILES("unistd.h" HAVE_UNISTD_H)
 
 #
 # See if compiler preprocessor has the __FUNCTION__ directive used by itkExceptionMacro
@@ -745,6 +702,39 @@ TRY_COMPILE(ITK_SUPPORTS_TEMPLATE_PARTIAL_SPECIALIZATION
 #
 INCLUDE(${ITK_SOURCE_DIR}/CMake/itkTestFriendTemplatedFunction.cmake)
 
+
+#-----------------------------------------------------------------------------
+# check if the platform has c style IO functions that uses wchar_t * filenames
+# For some reason I can't manage to get a usable result from CHECK_FUNCTION_EXISTS
+TRY_COMPILE(ITK_SUPPORTS_WCHAR_T_FILENAME_CSTYLEIO
+      ${ITK_BINARY_DIR}/CMakeTmp
+      ${ITK_SOURCE_DIR}/CMake/itkTestCStyleIOWCharFilename.cxx
+      OUTPUT_VARIABLE ITK_SUPPORTS_WCHAR_T_FILENAME_CSTYLEIO_OUTPUT)
+
+#-----------------------------------------------------------------------------
+# check if the platform has IO streams constructors that uses wchar_t * filenames
+TRY_COMPILE(ITK_SUPPORTS_WCHAR_T_FILENAME_IOSTREAMS_CONSTRUCTORS
+      ${ITK_BINARY_DIR}/CMakeTmp
+      ${ITK_SOURCE_DIR}/CMake/itkTestIOStreamsWCharFilenameConstructors.cxx
+      OUTPUT_VARIABLE ITK_SUPPORTS_WCHAR_T_FILENAME_IOSTREAMS_CONSTRUCTORS_OUTPUT)
+
+#-----------------------------------------------------------------------------
+# check if the platform can compile fdstream.hpp
+IF(HAVE_UNISTD_H)
+  TRY_COMPILE(ITK_SUPPORTS_FDSTREAM_HPP
+    ${ITK_BINARY_DIR}/CMakeTmp
+    ${ITK_SOURCE_DIR}/CMake/itkTestFDStream.cxx
+    CMAKE_FLAGS -DINCLUDE_DIRECTORIES:STRING=${ITK_SOURCE_DIR}/Utilities/itkExtHdrs
+    COMPILE_DEFINITIONS -DITK_HAVE_UNISTD_H=${HAVE_UNISTD_H}
+    OUTPUT_VARIABLE ITK_SUPPORTS_FDSTREAM_HPP_OUTPUT)
+ELSE(HAVE_UNISTD_H)
+  TRY_COMPILE(ITK_SUPPORTS_FDSTREAM_HPP
+    ${ITK_BINARY_DIR}/CMakeTmp
+    ${ITK_SOURCE_DIR}/CMake/itkTestFDStream.cxx
+    CMAKE_FLAGS -DINCLUDE_DIRECTORIES:STRING=${ITK_SOURCE_DIR}/Utilities/itkExtHdrs
+    OUTPUT_VARIABLE ITK_SUPPORTS_FDSTREAM_HPP_OUTPUT)
+ENDIF(HAVE_UNISTD_H)
+
 #-----------------------------------------------------------------------------
 # Configure the default ITK_DATA_ROOT for the location of ITK Data.
 FIND_PATH(ITK_DATA_ROOT ITKData.readme ${ITK_SOURCE_DIR}/Testing/Data $ENV{ITK_DATA_ROOT})
@@ -753,7 +743,7 @@ MARK_AS_ADVANCED(ITK_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # Configure the default ITK_BRAINWEB_DATA_ROOT for the location of ITK Data.
 # When this data is available, additional 3D tests are enabled.
-FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha
+FIND_PATH(ITK_BRAINWEB_DATA_ROOT brainweb165a10f17.mha 
   DOC "Directory with data taken from http://public.kitware.com/pub/itk/Data/BrainWeb/")
 MARK_AS_ADVANCED(ITK_BRAINWEB_DATA_ROOT)
 
@@ -784,12 +774,12 @@ MARK_AS_ADVANCED(ITK_VISIBLEHUMAN_DATA_ROOT)
 #-----------------------------------------------------------------------------
 # This flag is used in particular, to enable some tests that require large memory to run.
 # This probably can be discovered at configuration time by CMake. (Check with CMake developers).
-SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes")
+SET(ITK_COMPUTER_MEMORY_SIZE 1 CACHE STRING "Provide here the size of your RAM Memory in GigaBytes") 
 MARK_AS_ADVANCED(ITK_COMPUTER_MEMORY_SIZE)
 
 #-----------------------------------------------------------------------------
 # Configure files with settings for use by the build.
-CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in
+CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in 
   ${ITK_BINARY_DIR}/itkConfigure.h)
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES ${ITK_BINARY_DIR}/itkConfigure.h
@@ -815,7 +805,7 @@ INCLUDE_DIRECTORIES(
 
 #-----------------------------------------------------------------------------
 # ITK_USE_SYSTEM_GDCM is provided so that you can use an installed or external
-# version of gdcm. If its on, you must specify the variables
+# version of gdcm. If its on, you must specify the variables 
 # Important: INCLUDE(${GDCM_USE_FILE}) *has* to be set after the
 # INCLUDE_DIRECTORIES that sets all the include paths for ITK, otherwise
 # if GDCM was build with VTK support, including it will bring the VTK

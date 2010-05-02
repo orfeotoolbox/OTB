@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:35 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2010-01-13 14:19:09 $
+  Version:   $Revision: 1.41 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -162,7 +162,7 @@ public:
    * away points; TrialPoints represent points within a narrowband of the
    * propagating front; and AlivePoints represent points which have already
    * been processed. */
-  enum LabelType { FarPoint, AlivePoint, TrialPoint };
+  enum LabelType { FarPoint, AlivePoint, TrialPoint, InitialTrialPoint };
 
   /** LabelImage typedef support. */
   typedef Image<unsigned char, itkGetStaticConstMacro(SetDimension)> LabelImageType;

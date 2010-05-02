@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedMiniPipelineProgressCommand.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 20:21:46 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-11-28 16:23:24 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,9 +27,12 @@ void WatershedMiniPipelineProgressCommand
   
   if( typeid(event) == typeid ( ProgressEvent)  )
     {
-    m_Filter->UpdateProgress( (m_Count + po->GetProgress()) /
-                              m_NumberOfFilters);
-    if (po->GetProgress() == 1.0) m_Count += 1.0;
+    m_Filter->UpdateProgress( 
+      static_cast<float>( (m_Count + po->GetProgress()) / m_NumberOfFilters ));
+    if( po->GetProgress() == 1.0 )
+      {
+      m_Count += 1.0;
+      }
     }
 }
 
@@ -41,9 +44,12 @@ void WatershedMiniPipelineProgressCommand
   
   if( typeid(event) == typeid ( ProgressEvent)  )
     {
-    m_Filter->UpdateProgress( (m_Count + po->GetProgress()) /
-                              m_NumberOfFilters);
-    if (po->GetProgress() == 1.0) m_Count += 1.0;
+    m_Filter->UpdateProgress( 
+      static_cast<float>( (m_Count + po->GetProgress()) / m_NumberOfFilters) );
+    if (po->GetProgress() == 1.0)
+      {
+      m_Count += 1.0;
+      }
     }
 }
 

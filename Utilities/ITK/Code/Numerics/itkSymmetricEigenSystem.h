@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricEigenSystem.h,v $
   Language:  C++
-  Date:      $Date: 2007-03-22 21:39:38 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-11-22 13:34:53 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,16 +92,16 @@ public:
 
   /** returns the eigen vectors in a 2D array */
   EigenVectorArrayType* GetEigenVectors()
-  { return &m_EigenVectors; } 
+    { return &m_EigenVectors; } 
 
   /** returns the eigen values in an 1D array */
   EigenValueArrayType* GetEigenValues()
-  { return &m_EigenValues; }
+    { return &m_EigenValues; }
 
   /** dummy method that calls the GenerateData method to 
    * produce the eigen vectors and values. */
   void Update()
-  { this->GenerateData(); }
+    { this->GenerateData(); }
 
 protected:
   SymmetricEigenSystem();

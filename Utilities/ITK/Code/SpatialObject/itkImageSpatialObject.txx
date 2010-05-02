@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-07 14:34:02 $
-  Version:   $Revision: 1.61 $
+  Date:      $Date: 2010-02-02 19:07:36 $
+  Version:   $Revision: 1.62 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -178,11 +178,13 @@ ImageSpatialObject< TDimension,  PixelType >
 ::ValueAt( const PointType & point, double & value, unsigned int depth,
            char * name ) const
 {
+  bool returnValue = false;
+
   if( IsEvaluableAt( point, 0, name ) )
     {
     if( !this->SetInternalInverseTransformToWorldToIndexTransform() )
       {
-      return false;
+      return returnValue;
       }
 
     PointType p = this->GetInternalInverseTransform()->TransformPoint(point);
@@ -198,7 +200,7 @@ ImageSpatialObject< TDimension,  PixelType >
       DefaultConvertPixelTraits<InterpolatorOutputType>::GetScalarValue(
         m_Interpolator->EvaluateAtContinuousIndex(index)));
 
-    return true;
+    returnValue = true;
     }
   else
     {
@@ -207,15 +209,15 @@ ImageSpatialObject< TDimension,  PixelType >
       double val;
       Superclass::ValueAt(point, val, depth, name);
       value = val;
-      return true;
+      returnValue = true;
       }
     else
       {
       value = this->GetDefaultOutsideValue();
-      return false;
+      returnValue = false;
       }
     }
-  return false;
+  return returnValue;
 }
 
 /** Compute the bounds of the image */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionSplitter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:46:38 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-11-03 12:24:21 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,8 +48,8 @@ ImageRegionSplitter<VImageDimension>
 
   // determine the actual number of pieces that will be generated
   SizeValueType range = regionSize[splitAxis];
-  int valuesPerPiece = (int)vcl_ceil(range/(double)requestedNumber);
-  int maxPieceUsed = (int)vcl_ceil(range/(double)valuesPerPiece) - 1;
+  int valuesPerPiece = Math::Ceil<int>(range/(double)requestedNumber);
+  int maxPieceUsed = Math::Ceil<int>(range/(double)valuesPerPiece) - 1;
 
   return maxPieceUsed + 1;
 }
@@ -90,8 +90,8 @@ ImageRegionSplitter<VImageDimension>
 
   // determine the actual number of pieces that will be generated
   SizeValueType range = regionSize[splitAxis];
-  int valuesPerPiece = (int)vcl_ceil(range/(double)numberOfPieces);
-  int maxPieceUsed = (int)vcl_ceil(range/(double)valuesPerPiece) - 1;
+  int valuesPerPiece = Math::Ceil<int>(range/(double)numberOfPieces);
+  int maxPieceUsed = Math::Ceil<int>(range/(double)valuesPerPiece) - 1;
 
   // Split the region
   if ((int) i < maxPieceUsed)

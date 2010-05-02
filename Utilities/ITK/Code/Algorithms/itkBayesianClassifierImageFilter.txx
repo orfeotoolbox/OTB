@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-13 14:26:51 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2010-01-30 21:05:25 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -197,7 +197,7 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType,
     
     while( !itrMembershipImage.IsAtEnd() )
       {
-      PosteriorsPixelType posteriors;
+      PosteriorsPixelType posteriors(numberOfClasses);
       const PriorsPixelType      priors      = itrPriorsImage.Get();
       const MembershipPixelType  memberships = itrMembershipImage.Get();
       for( unsigned int i=0; i<numberOfClasses; i++)
@@ -247,6 +247,22 @@ BayesianClassifierImageFilter<TInputVectorImage, TLabelsType,
 {
   this->m_SmoothingFilter = smoothingFilter;
   this->m_UserProvidedSmoothingFilter = true;
+  this->Modified();
+}
+
+
+/** 
+  * Set the prior image
+  */
+template < class TInputVectorImage, class TLabelsType, 
+           class TPosteriorsPrecisionType, class TPriorsPrecisionType >
+void 
+BayesianClassifierImageFilter<TInputVectorImage, TLabelsType, 
+                              TPosteriorsPrecisionType, TPriorsPrecisionType >
+::SetPriors( const PriorsImageType * priors ) 
+{
+  this->ProcessObject::SetNthInput(1, const_cast< PriorsImageType * >( priors ) );
+  this->m_UserProvidedPriors = true;
   this->Modified();
 }
 

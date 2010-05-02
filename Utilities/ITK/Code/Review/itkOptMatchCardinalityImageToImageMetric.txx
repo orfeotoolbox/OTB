@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptMatchCardinalityImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:46:38 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-10-29 15:03:32 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -226,8 +226,8 @@ MatchCardinalityImageToImageMetric<TFixedImage, TMovingImage>
 
   // determine the actual number of pieces that will be generated
   typename FixedImageRegionType::SizeType::SizeValueType range = fixedRegionSize[splitAxis];
-  int valuesPerThread = (int)vcl_ceil(range/(double)num);
-  int maxThreadIdUsed = (int)vcl_ceil(range/(double)valuesPerThread) - 1;
+  int valuesPerThread = Math::Ceil<int>(range/(double)num);
+  int maxThreadIdUsed = Math::Ceil<int>(range/(double)valuesPerThread) - 1;
 
   // Split the region
   if (i < maxThreadIdUsed)

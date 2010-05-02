@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -22,14 +22,8 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-#if defined(__GNUC__) && (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)
-#pragma GCC diagnostic ignored "-Warray-bounds"
-#endif
-
 #include "NrrdIO.h"
 #include "privateNrrd.h"
-
-#include "teem32bit.h"
 
 /*
 ******** nrrdInvertPerm()
@@ -41,31 +35,32 @@
 */
 int
 nrrdInvertPerm(unsigned int *invp, const unsigned int *pp, unsigned int nn) {
-  char me[]="nrrdInvertPerm", err[AIR_STRLEN_MED];
+  static const char me[]="nrrdInvertPerm";
   int problem;
   unsigned int ii;
 
   if (!(invp && pp && nn > 0)) {
-    sprintf(err, "%s: got NULL pointer or non-positive nn (%d)", me, nn);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: got NULL pointer or non-positive nn (%d)", me, nn);
+    return 1;
   }
   
   /* use the given array "invp" as a temp buffer for validity checking */
   memset(invp, 0, nn*sizeof(int));
   for (ii=0; ii<nn; ii++) {
     if (!( pp[ii] <= nn-1)) {
-      sprintf(err, "%s: permutation element #%d == %d out of bounds [0,%d]",
-              me, ii, pp[ii], nn-1);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD,
+               "%s: permutation element #%d == %d out of bounds [0,%d]",
+               me, ii, pp[ii], nn-1);
+      return 1;
     }
     invp[pp[ii]]++;
   }
   problem = AIR_FALSE;
   for (ii=0; ii<nn; ii++) {
     if (1 != invp[ii]) {
-      sprintf(err, "%s: element #%d mapped to %d times (should be once)",
-              me, ii, invp[ii]);
-      biffAdd(NRRD, err); problem = AIR_TRUE;
+      biffAddf(NRRD, "%s: element #%d mapped to %d times (should be once)",
+               me, ii, invp[ii]);
+      problem = AIR_TRUE;
     }
   }
   if (problem) {
@@ -89,28 +84,30 @@ nrrdInvertPerm(unsigned int *invp, const unsigned int *pp, unsigned int nn) {
 */
 int
 nrrdAxesInsert(Nrrd *nout, const Nrrd *nin, unsigned int axis) {
-  char me[]="nrrdAxesInsert", func[]="axinsert", err[AIR_STRLEN_MED];
+  static const char me[]="nrrdAxesInsert", func[]="axinsert";
   unsigned int ai;
   
   if (!(nout && nin)) {
-    sprintf(err, "%s: got NULL pointer", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: got NULL pointer", me);
+    return 1;
   }
   if (!( axis <= nin->dim )) {
-    sprintf(err, "%s: given axis (%d) outside valid range [0, %d]",
-            me, axis, nin->dim);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: given axis (%d) outside valid range [0, %d]",
+             me, axis, nin->dim);
+    return 1;
   }
   if (NRRD_DIM_MAX == nin->dim) {
-    sprintf(err, "%s: given nrrd already at NRRD_DIM_MAX (%d)",
-            me, NRRD_DIM_MAX);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: given nrrd already at NRRD_DIM_MAX (%d)",
+             me, NRRD_DIM_MAX);
+    return 1;
   }
   if (nout != nin) {
     if (_nrrdCopy(nout, nin, (NRRD_BASIC_INFO_COMMENTS_BIT
-                              | NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT))) {
-      sprintf(err, "%s:", me);
-      biffAdd(NRRD, err); return 1;
+                              | (nrrdStateKeyValuePairsPropagate
+                                 ? 0
+                                 : NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT)))) {
+      biffAddf(NRRD, "%s:", me);
+      return 1;
     }
   }
   nout->dim = 1 + nin->dim;
@@ -125,9 +122,9 @@ nrrdAxesInsert(Nrrd *nout, const Nrrd *nin, unsigned int axis) {
     nout->axis[axis].kind = nrrdKindStub;
   }
   nout->axis[axis].size = 1;
-  if (nrrdContentSet(nout, func, nin, "%d", axis)) {
-    sprintf(err, "%s:", me);
-    biffAdd(NRRD, err); return 1;
+  if (nrrdContentSet_va(nout, func, nin, "%d", axis)) {
+    biffAddf(NRRD, "%s:", me);
+    return 1;
   }
   /* all basic info has already been copied by nrrdCopy() above */
   return 0;
@@ -154,20 +151,19 @@ nrrdAxesInsert(Nrrd *nout, const Nrrd *nin, unsigned int axis) {
 */
 int
 nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
-  char me[]="nrrdAxesPermute", func[]="permute", err[AIR_STRLEN_MED],
-    buff1[NRRD_DIM_MAX*30], buff2[AIR_STRLEN_SMALL];
+  static const char me[]="nrrdAxesPermute", func[]="permute";
+  char buff1[NRRD_DIM_MAX*30], buff2[AIR_STRLEN_SMALL];
   size_t idxOut, idxIn,      /* indices for input and output scanlines */
     lineSize,                /* size of block of memory which can be
                                 moved contiguously from input to output,
                                 thought of as a "scanline" */
     numLines,                /* how many "scanlines" there are to permute */
     szIn[NRRD_DIM_MAX], *lszIn,
-    szOut[NRRD_DIM_MAX], *lszOut;
-  char *dataIn, *dataOut;
-  int axmap[NRRD_DIM_MAX];
-  unsigned int
+    szOut[NRRD_DIM_MAX], *lszOut,
     cIn[NRRD_DIM_MAX],
     cOut[NRRD_DIM_MAX];
+  char *dataIn, *dataOut;
+  int axmap[NRRD_DIM_MAX];
   unsigned int
     ai,                      /* running index along dimensions */
     lowPax,                  /* lowest axis which is "p"ermutated */
@@ -179,18 +175,18 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
 
   mop = airMopNew();
   if (!(nin && nout && axes)) {
-    sprintf(err, "%s: got NULL pointer", me);
-    biffAdd(NRRD, err); airMopError(mop); return 1;
+    biffAddf(NRRD, "%s: got NULL pointer", me);
+    airMopError(mop); return 1;
   }
   /* we don't actually need ip[], computing it is for error checking */
   if (nrrdInvertPerm(ip, axes, nin->dim)) {
-    sprintf(err, "%s: couldn't compute axis permutation inverse", me);
-    biffAdd(NRRD, err); airMopError(mop); return 1;
+    biffAddf(NRRD, "%s: couldn't compute axis permutation inverse", me);
+    airMopError(mop); return 1;
   }
-  /* this shouldn't actually be necessary ... */
+  /* this shouldn't actually be necessary .. */
   if (!nrrdElementSize(nin)) {
-    sprintf(err, "%s: nrrd reports zero element size!", me);
-    biffAdd(NRRD, err); airMopError(mop); return 1;
+    biffAddf(NRRD, "%s: nrrd reports zero element size!", me);
+    airMopError(mop); return 1;
   }
   
   for (ai=0; ai<nin->dim && axes[ai] == ai; ai++)
@@ -200,15 +196,15 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
   /* allocate output by initial copy */
   if (nout != nin) {
     if (nrrdCopy(nout, nin)) {
-      sprintf(err, "%s: trouble copying input", me);
-      biffAdd(NRRD, err); airMopError(mop); return 1;      
+      biffAddf(NRRD, "%s: trouble copying input", me);
+      airMopError(mop); return 1;      
     }
     dataIn = (char*)nin->data;
   } else {
     dataIn = (char*)calloc(nrrdElementNumber(nin), nrrdElementSize(nin));
     if (!dataIn) {
-      sprintf(err, "%s: couldn't create local copy of data", me);
-      biffAdd(NRRD, err); airMopError(mop); return 1;
+      biffAddf(NRRD, "%s: couldn't create local copy of data", me);
+      airMopError(mop); return 1;
     }
     airMopAdd(mop, dataIn, airFree, airMopAlways);
     memcpy(dataIn, nin->data, nrrdElementNumber(nin)*nrrdElementSize(nin));
@@ -222,8 +218,8 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
     }
     nrrdAxisInfoGet_nva(nin, nrrdAxisInfoSize, szIn);
     if (nrrdAxisInfoCopy(nout, nin, axmap, NRRD_AXIS_INFO_NONE)) {
-      sprintf(err, "%s:", me);
-      biffAdd(NRRD, err); airMopError(mop); return 1;
+      biffAddf(NRRD, "%s:", me);
+      airMopError(mop); return 1;
     }
     nrrdAxisInfoGet_nva(nout, nrrdAxisInfoSize, szOut);
     /* the skinny */
@@ -236,13 +232,13 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
     lszIn = szIn + lowPax;
     lszOut = szOut + lowPax;
     ldim = nin->dim - lowPax;
-    memset(laxes, 0, NRRD_DIM_MAX*sizeof(int));
+    memset(laxes, 0, NRRD_DIM_MAX*sizeof(unsigned int));
     for (ai=0; ai<ldim; ai++) {
       laxes[ai] = axes[ai+lowPax]-lowPax;
     }
     dataOut = (char *)nout->data;
-    memset(cIn, 0, NRRD_DIM_MAX*sizeof(int));
-    memset(cOut, 0, NRRD_DIM_MAX*sizeof(int));
+    memset(cIn, 0, NRRD_DIM_MAX*sizeof(size_t));
+    memset(cOut, 0, NRRD_DIM_MAX*sizeof(size_t));
     for (idxOut=0; idxOut<numLines; idxOut++) {
       /* in our representation of the coordinates of the start of the
          scanlines that we're copying, we are not even storing all the
@@ -261,9 +257,9 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
       sprintf(buff2, "%s%d", (ai ? "," : ""), axes[ai]);
       strcat(buff1, buff2);
     }
-    if (nrrdContentSet(nout, func, nin, "%s", buff1)) {
-      sprintf(err, "%s:", me);
-      biffAdd(NRRD, err); airMopError(mop); return 1;
+    if (nrrdContentSet_va(nout, func, nin, "%s", buff1)) {
+      biffAddf(NRRD, "%s:", me);
+      airMopError(mop); return 1;
     }
     if (nout != nin) {
       if (nrrdBasicInfoCopy(nout, nin,
@@ -273,9 +269,11 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
                             | NRRD_BASIC_INFO_DIMENSION_BIT
                             | NRRD_BASIC_INFO_CONTENT_BIT
                             | NRRD_BASIC_INFO_COMMENTS_BIT
-                            | NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT)) {
-        sprintf(err, "%s:", me);
-        biffAdd(NRRD, err); airMopError(mop); return 1;
+                            | (nrrdStateKeyValuePairsPropagate
+                               ? 0
+                               : NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT))) {
+        biffAddf(NRRD, "%s:", me);
+        airMopError(mop); return 1;
       }
     }
   }
@@ -304,8 +302,23 @@ nrrdAxesPermute(Nrrd *nout, const Nrrd *nin, const unsigned int *axes) {
 int
 nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
             const size_t *perm) {
-  char me[]="nrrdShuffle", func[]="shuffle", err[AIR_STRLEN_MED],
-    buff1[NRRD_DIM_MAX*30], buff2[AIR_STRLEN_SMALL];
+  static const char me[]="nrrdShuffle", func[]="shuffle";
+  char buff2[AIR_STRLEN_SMALL];
+  /* Sun Feb 8 13:13:58 CST 2009: There was a memory bug here caused
+     by using the same buff1[NRRD_DIM_MAX*30] declaration that had
+     worked fine for nrrdAxesPermute and nrrdReshape, but does NOT
+     work here because now samples along an axes are re-ordered, not
+     axes, so its often not allocated for long enough to hold the
+     string that's printed to it. Ideally there'd be another argument
+     that says whether to document the shuffle in the content string,
+     which would mean an API change.  Or, we can use a secret
+     heuristic (or maybe later a nrrdState variable) for determining
+     when an axis is short enough to make documenting the shuffle
+     interesting.  This is useful since functions like nrrdFlip()
+     probably do *not* need the shuffle (the sample reversal) to be
+     documented for long axes */
+#define LONGEST_INTERESTING_AXIS 42
+  char buff1[LONGEST_INTERESTING_AXIS*30];
   unsigned int 
     ai, ldim, len,
     cIn[NRRD_DIM_MAX+1],
@@ -314,41 +327,41 @@ nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
   char *dataIn, *dataOut;
 
   if (!(nin && nout && perm)) {
-    sprintf(err, "%s: got NULL pointer", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: got NULL pointer", me);
+    return 1;
   }
   if (nout == nin) {
-    sprintf(err, "%s: nout==nin disallowed", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: nout==nin disallowed", me);
+    return 1;
   }
   if (!( axis < nin->dim )) {
-    sprintf(err, "%s: axis %d outside valid range [0,%d]", 
-            me, axis, nin->dim-1);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: axis %d outside valid range [0,%d]", 
+             me, axis, nin->dim-1);
+    return 1;
   }
-  len = (unsigned int)(nin->axis[axis].size);
+  len = AIR_CAST(unsigned int, nin->axis[axis].size);
   for (ai=0; ai<len; ai++) {
     if (!( perm[ai] < len )) {
-      sprintf(err, "%s: perm[%d] (" _AIR_SIZE_T_CNV
-              ") outside valid range [0,%d]", me, ai, perm[ai], len-1);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: perm[%d] (" _AIR_SIZE_T_CNV
+               ") outside valid range [0,%d]", me, ai, perm[ai], len-1);
+      return 1;
     }
   }
-  /* this shouldn't actually be necessary ... */
+  /* this shouldn't actually be necessary .. */
   if (!nrrdElementSize(nin)) {
-    sprintf(err, "%s: nrrd reports zero element size!", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: nrrd reports zero element size!", me);
+    return 1;
   }
   /* set information in new volume */
   nout->blockSize = nin->blockSize;
   nrrdAxisInfoGet_nva(nin, nrrdAxisInfoSize, size);
   if (nrrdMaybeAlloc_nva(nout, nin->type, nin->dim, size)) {
-    sprintf(err, "%s: failed to allocate output", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s: failed to allocate output", me);
+    return 1;
   }
   if (nrrdAxisInfoCopy(nout, nin, NULL, NRRD_AXIS_INFO_NONE)) {
-    sprintf(err, "%s:", me);
-    biffAdd(NRRD, err); return 1;
+    biffAddf(NRRD, "%s:", me);
+    return 1;
   }
   /* the min and max along the shuffled axis are now meaningless */
   nout->axis[axis].min = nout->axis[axis].max = AIR_NAN;
@@ -385,21 +398,29 @@ nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
   memset(cOut, 0, (NRRD_DIM_MAX+1)*sizeof(int));
   for (idxOut=0; idxOut<numLines; idxOut++) {
     memcpy(cIn, cOut, ldim*sizeof(int));
-    cIn[0] = (unsigned int)(perm[cOut[0]]);
+    cIn[0] = AIR_CAST(unsigned int, perm[cOut[0]]);
     NRRD_INDEX_GEN(idxIn, cIn, lsize, ldim);
     NRRD_INDEX_GEN(idxOut, cOut, lsize, ldim);
     memcpy(dataOut + idxOut*lineSize, dataIn + idxIn*lineSize, lineSize);
     NRRD_COORD_INCR(cOut, lsize, ldim, 0);
   }
-  /* content */
-  strcpy(buff1, "");
-  for (ai=0; ai<nin->dim; ai++) {
-    sprintf(buff2, "%s" _AIR_SIZE_T_CNV, (ai ? "," : ""), perm[ai]);
-    strcat(buff1, buff2);
-  }
-  if (nrrdContentSet(nout, func, nin, "%s", buff1)) {
-    sprintf(err, "%s:", me);
-    biffAdd(NRRD, err); return 1;
+  /* Set content. The LONGEST_INTERESTING_AXIS hack avoids the
+     previous array out-of-bounds bug */
+  if (len <= LONGEST_INTERESTING_AXIS) {
+    strcpy(buff1, "");
+    for (ai=0; ai<len; ai++) {
+      sprintf(buff2, "%s" _AIR_SIZE_T_CNV, (ai ? "," : ""), perm[ai]);
+      strcat(buff1, buff2);
+    }
+    if (nrrdContentSet_va(nout, func, nin, "%s", buff1)) {
+      biffAddf(NRRD, "%s:", me);
+      return 1;
+    }
+  } else {
+    if (nrrdContentSet_va(nout, func, nin, "")) {
+      biffAddf(NRRD, "%s:", me);
+      return 1;
+    }
   }
   if (nrrdBasicInfoCopy(nout, nin,
                         NRRD_BASIC_INFO_DATA_BIT
@@ -408,11 +429,14 @@ nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
                         | NRRD_BASIC_INFO_DIMENSION_BIT
                         | NRRD_BASIC_INFO_CONTENT_BIT
                         | NRRD_BASIC_INFO_COMMENTS_BIT
-                        | NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT)) {
-    sprintf(err, "%s:", me);
-    biffAdd(NRRD, err); return 1;
+                        | (nrrdStateKeyValuePairsPropagate
+                           ? 0
+                           : NRRD_BASIC_INFO_KEYVALUEPAIRS_BIT))) {
+    biffAddf(NRRD, "%s:", me);
+    return 1;
   }
-
+  
   return 0;
+#undef LONGEST_INTERESTING_AXIS
 }
 

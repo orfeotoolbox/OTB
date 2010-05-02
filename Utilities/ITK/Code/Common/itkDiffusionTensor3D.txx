@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3D.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 09:09:39 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2010-03-17 16:34:47 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,16 +39,6 @@ DiffusionTensor3D<T>
  */
 template<class T>
 DiffusionTensor3D<T>
-::DiffusionTensor3D( const Self & r ):SymmetricSecondRankTensor<T,3>(r)
-{
-}
-
-
-/**
- * Constructor with initialization
- */
-template<class T>
-DiffusionTensor3D<T>
 ::DiffusionTensor3D( const Superclass & r ):SymmetricSecondRankTensor<T,3>(r)
 {
 }
@@ -71,19 +61,6 @@ template<class T>
 DiffusionTensor3D<T>
 ::DiffusionTensor3D( const ComponentArrayType r ):SymmetricSecondRankTensor<T,3>(r)
 {
-}
-
-
-/**
- * Assignment Operator
- */
-template<class T>
-DiffusionTensor3D<T>&
-DiffusionTensor3D<T>
-::operator= (const Self& r)
-{
-  Superclass::operator=(r);
-  return *this;
 }
 
 

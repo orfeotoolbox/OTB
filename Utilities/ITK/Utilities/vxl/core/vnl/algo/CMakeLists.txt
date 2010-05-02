@@ -26,7 +26,10 @@ IF(NETLIB_FOUND)
 # vnl_svd_economy                  csvdc_ dsvdc_ ssvdc_ zsvdc_
 # vnl_symmetric_eigensystem        rs_
 
-  INCLUDE_DIRECTORIES( ${NETLIB_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( 
+    ${NETLIB_INCLUDE_DIR}
+    ${NETLIB_INCLUDE_DIR}/linalg
+    )
 
   SET( vnl_algo_sources
     vnl_algo_fwd.h
@@ -63,7 +66,6 @@ IF(NETLIB_FOUND)
     vnl_brent_minimizer.cxx vnl_brent_minimizer.h
 
     # equation solvers
-    vnl_rpoly_roots.cxx vnl_rpoly_roots.h
     vnl_cpoly_roots.cxx vnl_cpoly_roots.h
     vnl_rnpoly_solve.cxx vnl_rnpoly_solve.h
     vnl_fit_parabola.h
@@ -92,7 +94,7 @@ IF(NETLIB_FOUND)
   AUX_SOURCE_DIRECTORY(Templates vnl_algo_sources)
 
   ADD_LIBRARY( itkvnl_algo ${vnl_algo_sources})
-  TARGET_LINK_LIBRARIES( itkvnl_algo ${NETLIB_LIBRARIES} itkvnl )
+  TARGET_LINK_LIBRARIES( itkvnl_algo ${NETLIB_LIBRARIES} itkvnl itkv3p_lsqr )
   IF(ITK_LIBRARY_PROPERTIES)
     SET_TARGET_PROPERTIES(itkvnl_algo PROPERTIES ${ITK_LIBRARY_PROPERTIES})
   ENDIF(ITK_LIBRARY_PROPERTIES)
