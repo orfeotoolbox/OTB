@@ -16,7 +16,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
-#include <boost/graph/edmunds_karp_max_flow.hpp>
+#include <boost/graph/edmonds_karp_max_flow.hpp>
 
 namespace boost {
 
@@ -132,14 +132,15 @@ namespace boost {
     detail::neighbors(g, S.begin(), S.end(), 
                       std::inserter(neighbor_S, neighbor_S.begin()));
 
-    std::set_difference(vertices(g).first, vertices(g).second,
+    tie(vi, vi_end) = vertices(g);
+    std::set_difference(vi, vi_end,
                         neighbor_S.begin(), neighbor_S.end(),
                         std::back_inserter(non_neighbor_S));
 
     while (!non_neighbor_S.empty()) { // at most n - 1 times
       k = non_neighbor_S.front();
 
-      alpha_S_k = edmunds_karp_max_flow
+      alpha_S_k = edmonds_karp_max_flow
         (flow_g, p, k, cap, res_cap, rev_edge, &color[0], &pred[0]);
 
       if (alpha_S_k < alpha_star) {
@@ -153,7 +154,8 @@ namespace boost {
       neighbor_S.insert(k);
       detail::neighbors(g, k, std::inserter(neighbor_S, neighbor_S.begin()));
       non_neighbor_S.clear();
-      std::set_difference(vertices(g).first, vertices(g).second,
+      tie(vi, vi_end) = vertices(g);
+      std::set_difference(vi, vi_end,
                           neighbor_S.begin(), neighbor_S.end(),
                           std::back_inserter(non_neighbor_S));
     }

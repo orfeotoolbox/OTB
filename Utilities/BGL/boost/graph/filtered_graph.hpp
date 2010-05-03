@@ -192,8 +192,6 @@ namespace boost {
     > edge_iterator;
     typedef typename Traits::edges_size_type           edges_size_type;
 
-    typedef typename ::boost::edge_property_type<Graph>::type   edge_property_type;
-    typedef typename ::boost::vertex_property_type<Graph>::type vertex_property_type;
     typedef filtered_graph_tag graph_tag;
 
 #ifndef BOOST_GRAPH_NO_BUNDLED_PROPERTIES
@@ -209,10 +207,31 @@ namespace boost {
     { return this->m_g[x]; }
 #endif // BOOST_GRAPH_NO_BUNDLED_PROPERTIES
 
+    static vertex_descriptor null_vertex()
+    {
+       return Graph::null_vertex();
+    }
+
     //private:
     EdgePredicate m_edge_pred;
     VertexPredicate m_vertex_pred;
   };
+
+  // Do not instantiate these unless needed
+  template <typename Graph, 
+            typename EdgePredicate,
+            typename VertexPredicate>
+  struct vertex_property_type<filtered_graph<Graph, EdgePredicate, VertexPredicate> > {
+    typedef typename vertex_property_type<Graph>::type type;
+  };
+
+  template <typename Graph, 
+            typename EdgePredicate,
+            typename VertexPredicate>
+  struct edge_property_type<filtered_graph<Graph, EdgePredicate, VertexPredicate> > {
+    typedef typename edge_property_type<Graph>::type type;
+  };
+
 
 #ifndef BOOST_GRAPH_NO_BUNDLED_PROPERTIES
   template<typename Graph, typename EdgePredicate, typename VertexPredicate>
@@ -239,6 +258,17 @@ namespace boost {
   inline filtered_graph<Graph, EdgePredicate, VertexPredicate>
   make_filtered_graph(Graph& g, EdgePredicate ep, VertexPredicate vp) {
     return filtered_graph<Graph, EdgePredicate, VertexPredicate>(g, ep, vp);
+  }
+
+  template <typename Graph, typename EdgePredicate>
+  inline filtered_graph<const Graph, EdgePredicate>
+  make_filtered_graph(const Graph& g, EdgePredicate ep) {
+    return filtered_graph<const Graph, EdgePredicate>(g, ep);
+  }
+  template <typename Graph, typename EdgePredicate, typename VertexPredicate>
+  inline filtered_graph<const Graph, EdgePredicate, VertexPredicate>
+  make_filtered_graph(const Graph& g, EdgePredicate ep, VertexPredicate vp) {
+    return filtered_graph<const Graph, EdgePredicate, VertexPredicate>(g, ep, vp);
   }
 
   template <typename G, typename EP, typename VP>
@@ -484,6 +514,23 @@ namespace boost {
     return Filter(g, keep_all(), p);
   }
 
+  // Filter that uses a property map whose value_type is a boolean
+  template <typename PropertyMap>
+  struct property_map_filter {
+    
+    property_map_filter() { }
+      
+    property_map_filter(const PropertyMap& property_map) :
+      m_property_map(property_map) { }
+    
+    template <typename Key>
+    bool operator()(const Key& key) const {
+      return (get(m_property_map, key));
+    }
+    
+  private :
+    PropertyMap m_property_map;
+  };
 
 } // namespace boost
 

@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2009 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -30,13 +30,21 @@ namespace detail{
 namespace allocator{
 
 /* partial_std_allocator_wrapper inherits the functionality of a std
- * allocator while providing a templatized ctor.
+ * allocator while providing a templatized ctor and other bits missing
+ * in some stdlib implementation or another.
  */
 
 template<typename Type>
 class partial_std_allocator_wrapper:public std::allocator<Type>
 {
 public:
+  /* Oddly enough, STLport does not define std::allocator<void>::value_type
+   * when configured to work without partial template specialization.
+   * No harm in supplying the definition here unconditionally.
+   */
+
+  typedef Type value_type;
+
   partial_std_allocator_wrapper(){};
 
   template<typename Other>
@@ -170,11 +178,30 @@ void construct(void* p,const Type& t)
   new (p) Type(t);
 }
 
+#if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1500))
+/* MSVC++ issues spurious warnings about unreferencend formal parameters
+ * in destroy<Type> when Type is a class with trivial dtor.
+ */
+
+#pragma warning(push)
+#pragma warning(disable:4100)  
+#endif
+
 template<typename Type>
 void destroy(const Type* p)
 {
+
+#if BOOST_WORKAROUND(__SUNPRO_CC,BOOST_TESTED_AT(0x590))
+  const_cast<Type*>(p)->~Type();
+#else
   p->~Type();
+#endif
+
 }
+
+#if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1500))
+#pragma warning(pop)
+#endif
 
 } /* namespace boost::detail::allocator */
 

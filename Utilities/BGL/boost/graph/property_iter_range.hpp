@@ -1,10 +1,10 @@
 
-// (C) Copyright François Faure, iMAGIS-GRAVIR / UJF, 2001. Permission
-// to copy, use, modify, sell and distribute this software is granted
-// provided this copyright notice appears in all copies. This software
-// is provided "as is" without express or implied warranty, and with
-// no claim as to its suitability for any purpose.
-
+// (C) Copyright Francois Faure, iMAGIS-GRAVIR / UJF, 2001.
+//
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//
 // Revision History:
 // 03 May 2001   Jeremy Siek
 //      Generalized the property map iterator and moved that
@@ -12,15 +12,15 @@
 //      differentiate between const/mutable graphs and
 //      added a workaround to avoid partial specialization.
 
-// 02 May 2001   François Faure
+// 02 May 2001   Francois Faure
 //     Initial version.
 
 #ifndef BOOST_GRAPH_PROPERTY_ITER_RANGE_HPP
 #define BOOST_GRAPH_PROPERTY_ITER_RANGE_HPP
 
-#include <boost/property_map_iterator.hpp>
+#include <boost/property_map/property_map_iterator.hpp>
 #include <boost/graph/properties.hpp>
-#include <boost/pending/ct_if.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/type_traits/same_traits.hpp>
 
 namespace boost {
@@ -34,7 +34,7 @@ namespace boost {
     typedef typename property_map<Graph, PropertyTag>::const_type 
       const_map_type;
     typedef typename property_kind<PropertyTag>::type Kind;
-    typedef typename ct_if<is_same<Kind, vertex_property_tag>::value,
+    typedef typename mpl::if_c<is_same<Kind, vertex_property_tag>::value,
        typename graph_traits<Graph>::vertex_iterator,
        typename graph_traits<Graph>::edge_iterator>::type iter;
   public:

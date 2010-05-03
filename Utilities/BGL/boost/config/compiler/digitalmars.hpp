@@ -36,13 +36,57 @@
 #define BOOST_HAS_WINTHREADS
 #endif
 
+#if (__DMC__ >= 0x847)
+#define BOOST_HAS_EXPM1
+#define BOOST_HAS_LOG1P
+#endif
+
+//
+// Is this really the best way to detect whether the std lib is in namespace std?
+//
+#include <cstddef>
+#if !defined(__STL_IMPORT_VENDOR_CSTD) && !defined(_STLP_IMPORT_VENDOR_CSTD)
+#  define BOOST_NO_STDC_NAMESPACE
+#endif
+
 
 // check for exception handling support:
 #ifndef _CPPUNWIND
 #  define BOOST_NO_EXCEPTIONS
 #endif
 
-#if (__DMC__ < 0x840)
+//
+// C++0x features
+//
+#define BOOST_NO_AUTO_DECLARATIONS
+#define BOOST_NO_AUTO_MULTIDECLARATIONS
+#define BOOST_NO_CHAR16_T
+#define BOOST_NO_CHAR32_T
+#define BOOST_NO_CONCEPTS
+#define BOOST_NO_CONSTEXPR
+#define BOOST_NO_DECLTYPE
+#define BOOST_NO_DEFAULTED_FUNCTIONS
+#define BOOST_NO_DELETED_FUNCTIONS
+#define BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
+#define BOOST_NO_EXTERN_TEMPLATE
+#define BOOST_NO_INITIALIZER_LISTS
+#define BOOST_NO_LAMBDAS
+#define BOOST_NO_NULLPTR
+#define BOOST_NO_RAW_LITERALS
+#define BOOST_NO_RVALUE_REFERENCES
+#define BOOST_NO_SCOPED_ENUMS
+#define BOOST_NO_SFINAE_EXPR
+#define BOOST_NO_STATIC_ASSERT
+#define BOOST_NO_TEMPLATE_ALIASES
+#define BOOST_NO_UNICODE_LITERALS
+#define BOOST_NO_VARIADIC_TEMPLATES
+
+#if __DMC__ < 0x800
+#error "Compiler not supported or configured - please reconfigure"
+#endif
+//
+// last known and checked version is ...:
+#if (__DMC__ > 0x848)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif

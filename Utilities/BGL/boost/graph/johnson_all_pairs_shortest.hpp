@@ -23,21 +23,24 @@
 #define BOOST_GRAPH_JOHNSON_HPP
 
 #include <boost/graph/graph_traits.hpp>
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
+#include <boost/property_map/shared_array_property_map.hpp>
 #include <boost/graph/bellman_ford_shortest_paths.hpp>
 #include <boost/graph/dijkstra_shortest_paths.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <boost/pending/ct_if.hpp>
 #include <boost/type_traits/same_traits.hpp>
 
 namespace boost {
 
   template <class VertexAndEdgeListGraph, class DistanceMatrix,
-            class VertexID, class Weight, class DistanceZero>
+            class VertexID, class Weight, typename BinaryPredicate, 
+            typename BinaryFunction, typename Infinity, class DistanceZero>
   bool
   johnson_all_pairs_shortest_paths(VertexAndEdgeListGraph& g1, 
                DistanceMatrix& D,
-               VertexID id1, Weight w1, DistanceZero zero)
+               VertexID id1, Weight w1, const BinaryPredicate& compare, 
+               const BinaryFunction& combine, const Infinity& inf,
+               DistanceZero zero)
   {
     typedef graph_traits<VertexAndEdgeListGraph> Traits1;
     typedef typename property_traits<Weight>::value_type DT;
@@ -92,19 +95,15 @@ namespace boost {
     }
     typename Traits2::vertex_iterator v, v_end, u, u_end;
     typename Traits2::edge_iterator e, e_end;
-    std::vector<DT> h_vec(num_vertices(g2));
-    typedef typename std::vector<DT>::iterator iter_t;
-    iterator_property_map<iter_t,VertexID2,DT,DT&> h(h_vec.begin(), id2);
+    shared_array_property_map<DT,VertexID2> h(num_vertices(g2), id2);
 
-    DT inf = (std::numeric_limits<DT>::max)();
     for (tie(v, v_end) = vertices(g2); v != v_end; ++v)
-      d[*v] = inf;
+      put(d, *v, inf);
 
     put(d, s, zero);
     // Using the non-named parameter versions of bellman_ford and
     // dijkstra for portability reasons.
-    dummy_property_map pred; closed_plus<DT> combine;
-    std::less<DT> compare; bellman_visitor<> bvis;
+    dummy_property_map pred; bellman_visitor<> bvis;
     if (bellman_ford_shortest_paths
         (g2, num_vertices(g2), w, pred, d, combine, compare, bvis)) {
       for (tie(v, v_end) = vertices(g2); v != v_end; ++v)
@@ -113,7 +112,7 @@ namespace boost {
       for (tie(e, e_end) = edges(g2); e != e_end; ++e) {
         typename Traits2::vertex_descriptor a = source(*e, g2),
           b = target(*e, g2);
-        put(w_hat, *e, get(w, *e) + get(h, a) - get(h, b));
+        put(w_hat, *e, combine(get(w, *e), (get(h, a) - get(h, b))));
       }
       for (tie(u, u_end) = vertices(g2); u != u_end; ++u) {
         dijkstra_visitor<> dvis;
@@ -122,14 +121,29 @@ namespace boost {
         for (tie(v, v_end) = vertices(g2); v != v_end; ++v) {
           if (*u != s && *v != s) {
             typename Traits1::vertex_descriptor u1, v1;
-            u1 = verts1[id2[*u]]; v1 = verts1[id2[*v]];
-            D[id2[*u]-1][id2[*v]-1] = get(d, *v) + get(h, *v) - get(h, *u);
+            u1 = verts1[get(id2, *u)]; v1 = verts1[get(id2, *v)];
+            D[get(id2, *u)-1][get(id2, *v)-1] = combine(get(d, *v), (get(h, *v) - get(h, *u)));
           }
         }
       }
       return true;
     } else
       return false;
+  }
+
+  template <class VertexAndEdgeListGraph, class DistanceMatrix,
+            class VertexID, class Weight, class DistanceZero>
+  bool
+  johnson_all_pairs_shortest_paths(VertexAndEdgeListGraph& g1, 
+               DistanceMatrix& D,
+               VertexID id1, Weight w1, DistanceZero zero)
+  {
+    typedef typename property_traits<Weight>::value_type WT;
+    return johnson_all_pairs_shortest_paths(g1, D, id1, w1, 
+                                            std::less<WT>(),
+                                            closed_plus<WT>(),
+                                            (std::numeric_limits<WT>::max)(),
+                                            zero);
   }
 
   namespace detail {
@@ -147,6 +161,12 @@ namespace boost {
       
       return johnson_all_pairs_shortest_paths
         (g, D, id, w,
+        choose_param(get_param(params, distance_compare_t()), 
+          std::less<WT>()),
+        choose_param(get_param(params, distance_combine_t()), 
+          closed_plus<WT>()),
+        choose_param(get_param(params, distance_inf_t()), 
+          std::numeric_limits<WT>::max BOOST_PREVENT_MACRO_SUBSTITUTION()),
          choose_param(get_param(params, distance_zero_t()), WT()) );
     }
 

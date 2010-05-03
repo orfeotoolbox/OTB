@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_FOR_EACH_HPP_INCLUDED
 #define BOOST_MPL_FOR_EACH_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,20 +10,22 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-// $Source: /cvsroot/boost/boost/boost/mpl/for_each.hpp,v $
-// $Date: 2004/09/04 01:33:46 $
-// $Revision: 1.9 $
+// $Id: for_each.hpp 55648 2009-08-18 05:16:53Z agurtovoy $
+// $Date: 2009-08-18 01:16:53 -0400 (Tue, 18 Aug 2009) $
+// $Revision: 55648 $
 
+#include <boost/mpl/is_sequence.hpp>
 #include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/identity.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/aux_/unwrap.hpp>
 
 #include <boost/type_traits/is_same.hpp>
-#include <boost/butility/value_init.hpp>
+#include <boost/utility/value_init.hpp>
 
 namespace boost { namespace mpl {
 
@@ -74,7 +76,7 @@ struct for_each_impl<false>
         
         typedef typename mpl::next<Iterator>::type iter;
         for_each_impl<boost::is_same<iter,LastIterator>::value>
-            ::execute((iter*)0, (LastIterator*)0, (TransformFunc*)0, f);
+            ::execute( static_cast<iter*>(0), static_cast<LastIterator*>(0), static_cast<TransformFunc*>(0), f);
     }
 };
 
@@ -90,11 +92,13 @@ template<
 inline
 void for_each(F f, Sequence* = 0, TransformOp* = 0)
 {
+    BOOST_MPL_ASSERT(( is_sequence<Sequence> ));
+
     typedef typename begin<Sequence>::type first;
     typedef typename end<Sequence>::type last;
 
     aux::for_each_impl< boost::is_same<first,last>::value >
-        ::execute((first*)0, (last*)0, (TransformOp*)0, f);
+        ::execute(static_cast<first*>(0), static_cast<last*>(0), static_cast<TransformOp*>(0), f);
 }
 
 template<
