@@ -254,15 +254,13 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   // Cleanup multi handle
   curl_multi_cleanup(multiHandle);
 
-
-
 #else
   //fallback on non curl multi
   otbMsgDevMacro(<< "Curl multi is not available, fallback on standard");
   std::vector<std::string>::const_iterator url;
-  std::vector<FILE *>::const_iterator file;
+  std::vector<std::string>::const_iterator file;
   url = listURLs.begin();
-  file = listFiles.begin();
+  file = listFilename.begin();
   while ( (url != listURLs.end()) && (file != listFiles.end() ))
     {
     RetrieveFile(*url, *file);
@@ -274,6 +272,4 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
 #endif
 }
 
-
 }
-
