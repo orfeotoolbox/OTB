@@ -126,11 +126,12 @@ IF (BUILD_FIGURES)
   SUBDIRS(Examples)
   SUBDIRS(Art)
   SUBDIRS(Latex)
-
+  #SUBDIRS(MonteverdiGuide)
 ELSE( BUILD_FIGURES )
   SUBDIRS(Art)
   SUBDIRS(Examples)
   SUBDIRS(Latex)
+  #SUBDIRS(MonteverdiGuide)
 ENDIF( BUILD_FIGURES )
 
 #
