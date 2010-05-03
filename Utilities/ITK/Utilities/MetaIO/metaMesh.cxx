@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaMesh.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-04-24 19:13:40 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2009-11-21 18:59:39 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -701,7 +701,7 @@ M_Read(void)
     }
     }
 
-  long int pos = m_ReadStream->tellg();
+  METAIO_STL::streampos pos = m_ReadStream->tellg();
 
   // Now reading the cell links
   MetaObject::ClearFields();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTWComplexToComplexImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-13 03:19:20 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2010-02-26 05:28:25 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@
 namespace itk
 {
 /** \class FFTWComplexToComplexImageFilter
- *  /brief Implements an API to enable the Fourier transform or the inverse
+ *  \brief Implements an API to enable the Fourier transform or the inverse
  *  Fourier transform of images with complex valued voxels to be computed using
  *  either FFTW from MIT or the FFTW interface in Intel MKL.
  *

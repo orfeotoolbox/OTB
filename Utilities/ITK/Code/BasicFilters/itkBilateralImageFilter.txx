@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-07 15:27:48 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-10-27 16:06:37 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -305,7 +305,7 @@ BilateralImageFilter<TInputImage, TOutputImage>
           {
           // look up the range gaussian in a table
           tableArg = rangeDistance * distanceToTableIndex;
-          rangeGaussian = m_RangeGaussianTable[Math::Floor(tableArg)];
+          rangeGaussian = m_RangeGaussianTable[Math::Floor<size_t>(tableArg)];
           
           // normalization factor so filter integrates to one
           // (product of the domain and the range gaussian)

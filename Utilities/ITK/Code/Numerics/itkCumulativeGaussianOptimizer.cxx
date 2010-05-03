@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-08-07 15:27:39 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-10-27 16:05:46 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 
 #include "itkCumulativeGaussianOptimizer.h"
 #include "assert.h"
+#include "itkMath.h"
 
 namespace itk
 {

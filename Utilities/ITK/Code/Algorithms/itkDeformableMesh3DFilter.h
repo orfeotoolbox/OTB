@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableMesh3DFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-28 17:42:50 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2009-09-17 11:04:00 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,8 +76,12 @@ public:
   typedef TInputMesh                          InputMeshType;
   typedef typename InputMeshType::PointsContainerPointer
                                               InputPointsContainerPointer;
+  typedef typename InputMeshType::PointsContainerConstPointer
+                                              InputPointsContainerConstPointer;
   typedef typename InputMeshType::PointsContainer::Iterator
                                               InputPointsContainerIterator;
+  typedef typename InputMeshType::PointsContainer::ConstIterator
+                                              InputPointsContainerConstIterator;
   typedef typename InputMeshType::PointDataContainerPointer
                                               InputPointDataContainerPointer;
   typedef typename InputMeshType::PointDataContainer::Iterator
@@ -86,10 +90,18 @@ public:
                                               InputCellsContainerPointer;
   typedef typename InputMeshType::CellsContainer::Iterator
                                               InputCellsContainerIterator;
+  typedef typename InputMeshType::CellsContainerConstPointer
+                                              InputCellsContainerConstPointer;
+  typedef typename InputMeshType::CellsContainer::ConstIterator
+                                              InputCellsContainerConstIterator;
   typedef typename InputMeshType::CellDataContainerPointer
                                               InputCellDataContainerPointer;
   typedef typename InputMeshType::CellDataContainer::Iterator
                                               InputCellDataContainerIterator;
+  typedef typename InputMeshType::CellDataContainerConstPointer
+                                              InputCellDataContainerConstPointer;
+  typedef typename InputMeshType::CellDataContainer::ConstIterator
+                                              InputCellDataContainerConstIterator;
 
   typedef TOutputMesh                         OutputMeshType;
   typedef typename OutputMeshType::PointsContainerPointer
@@ -124,9 +136,10 @@ public:
   typedef CovariantVector<double, 3>                   double3DVector;
 
   /* Mesh pointer definition. */
-  typedef typename InputMeshType::Pointer     InputMeshPointer;
-  typedef typename OutputMeshType::Pointer    OutputMeshPointer;
-  typedef typename GradientImageType::Pointer GradientImagePointer;
+  typedef typename InputMeshType::Pointer           InputMeshPointer;
+  typedef typename InputMeshType::ConstPointer      InputMeshConstPointer;
+  typedef typename OutputMeshType::Pointer          OutputMeshPointer;
+  typedef typename GradientImageType::Pointer       GradientImagePointer;
 
   /* Stiffness Matrix Type definition */
   typedef vnl_matrix_fixed<double, 4, 4>  StiffnessMatrixType;

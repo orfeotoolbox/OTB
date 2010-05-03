@@ -3,8 +3,8 @@
 Program: Insight Segmentation & Registration Toolkit
 Module:$RCSfile: itkTubeSpatialObjectPoint.txx,v $
 Language:C++
-Date:$Date: 2004-12-14 00:31:22 $
-Version: $Revision: 1.10 $
+Date:$Date: 2010-01-21 22:29:55 $
+Version: $Revision: 1.11 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -172,6 +172,14 @@ TubeSpatialObjectPoint< TPointDimension >
 {
   m_Normal2[0] = v20;
   m_Normal2[1] = v21;
+}
+
+template< unsigned int TPointDimension >
+unsigned short int
+TubeSpatialObjectPoint< TPointDimension >
+::GetNumDimensions( void ) const
+{
+  return m_NumDimensions;
 }
 
 template< unsigned int TPointDimension >

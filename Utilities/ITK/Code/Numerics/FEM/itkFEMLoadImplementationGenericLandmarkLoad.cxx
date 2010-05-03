@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadImplementationGenericLandmarkLoad.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-01-30 21:10:18 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-11-28 23:13:15 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -35,7 +35,9 @@ LoadImplementationGenericLandmarkLoad
   const unsigned int NnDOF=element->GetNumberOfDegreesOfFreedomPerNode();
   const unsigned int Nnodes=element->GetNumberOfNodes();
 
-  Element::VectorType force( NnDOF, 0.0 ), disp( NnDOF, 0.0 ), new_source (NnDOF, 0.0);
+  Element::VectorType force( NnDOF, 0.0 );
+  Element::VectorType disp( NnDOF, 0.0 );
+  Element::VectorType new_source (NnDOF, 0.0);
   Element::VectorType shapeF;
 
   Fe.set_size(element->GetNumberOfDegreesOfFreedom());
@@ -65,8 +67,11 @@ LoadImplementationGenericLandmarkLoad
   new_source = (load->GetTarget() - new_source);
 //  std::cout << " force = " << force <<  " distance  " << new_source.magnitude() << std::endl;
   
-  float curdist=new_source.magnitude();
-  if (curdist < 1.0) force.fill(0.0);
+  Element::Float curdist = new_source.magnitude();
+  if ( curdist < 1.0 )
+    {
+    force.fill(0.0);
+    }
   std::cout <<  " LM distance  " << curdist << std::endl;
   
   // "Integrate" at the location of the point load

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-02 13:16:48 $
-  Version:   $Revision: 1.54 $
+  Date:      $Date: 2009-11-29 15:51:11 $
+  Version:   $Revision: 1.56 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,6 +69,10 @@ public:
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+
+  /** Types for managing image size and image index components. */
+  typedef   long              IndexValueType;
+  typedef   unsigned long     SizeValueType;
 
   /**
    * \class UnknownType
@@ -247,6 +251,9 @@ public:
 
   /** Type for representing size of bytes, and or positions along a file */
   typedef std::streamoff SizeType;
+
+  /** Type for representing size of bytes, and or positions along a memory buffer */
+  typedef size_t    BufferSizeType;
 
   /** Convenient method for accessing the number of bytes to get to
    * the next pixel. Returns m_Strides[1]; 
@@ -436,7 +443,7 @@ protected:
   ImageIORegion m_IORegion;
 
   /** The array which stores the number of pixels in the x, y, z directions. */
-  std::vector<unsigned int> m_Dimensions;
+  std::vector< SizeValueType > m_Dimensions;
 
   /** The array which stores the spacing of pixels in the 
    * x, y, z directions. */

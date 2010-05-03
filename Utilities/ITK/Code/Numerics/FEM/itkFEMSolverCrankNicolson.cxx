@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMSolverCrankNicolson.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 23:09:19 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2010-03-30 15:20:01 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

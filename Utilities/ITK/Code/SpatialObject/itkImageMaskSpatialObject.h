@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMaskSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-07 14:34:01 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-11-03 12:20:44 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,6 +52,7 @@ public:
   typedef typename Superclass::ImagePointer           ImagePointer;
   typedef typename Superclass::IndexType              IndexType;
   typedef typename Superclass::RegionType             RegionType;
+  typedef typename Superclass::SizeType               SizeType;
   typedef typename Superclass::TransformType          TransformType;
   typedef typename Superclass::PointType              PointType;
   typedef typename Superclass::BoundingBoxType        BoundingBoxType;

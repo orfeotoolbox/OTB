@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRegionBasedLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-06 16:09:56 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2010-02-24 19:27:48 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -414,7 +414,8 @@ RegionBasedLevelSetFunction< TInput, TFeature, TSharedData >
 const ScalarValueType& itkNotUsed( inputPixel ),
 const InputIndexType& inputIndex )
 {
-  ScalarValueType product = 1; // computes if it belongs to background
+  // computes if it belongs to background
+  ScalarValueType product = 1; 
 
   // Assuming only 1 level set function to be present
   FeatureIndexType featIndex = static_cast< FeatureIndexType >( inputIndex );
@@ -426,8 +427,7 @@ const InputIndexType& inputIndex )
 
   // This conditional statement computes the amount of overlap s
   // and the presence of background pr
-  if ( ( this->m_SharedData->m_FunctionCount > 1 ) &&
-     ( this->m_OverlapPenaltyWeight != NumericTraits<ScalarValueType>::Zero ) )
+  if( this->m_SharedData->m_FunctionCount > 1 )
     {
     featIndex = this->m_SharedData->m_LevelSetDataPointerVector[this->m_FunctionId]->GetFeatureIndex( inputIndex );
     overlapTerm = this->m_OverlapPenaltyWeight *

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKdTree.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 15:23:51 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2010-02-04 20:09:18 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,6 +55,9 @@ namespace Statistics {
  * \c MeasurementVectorSize  has been removed to allow the length of a measurement
  * vector to be specified at run time. The \c typedef for \c CentroidType has
  * been changed from Array to FixedArray.
+ * 
+ * \warning This class has been reported as not being thread safe. See 
+ * http://www.itk.org/pipermail/insight-users/2009-November/034247.html
  *
  * \sa KdTreeNonterminalNode, KdTreeWeightedCentroidNonterminalNode,
  * KdTreeTerminalNode
@@ -214,7 +217,10 @@ struct KdTreeWeightedCentroidNonterminalNode: public KdTreeNode< TSample >
                                          Superclass* right,
                                          CentroidType &centroid,
                                          unsigned int size);
-  virtual ~KdTreeWeightedCentroidNonterminalNode() {}
+  virtual ~KdTreeWeightedCentroidNonterminalNode()
+    {
+    }
+
 
   virtual bool IsTerminal() const
     { return false; }
@@ -289,7 +295,10 @@ struct KdTreeTerminalNode: public KdTreeNode< TSample >
 
   KdTreeTerminalNode() {}
 
-  virtual ~KdTreeTerminalNode() {}
+  virtual ~KdTreeTerminalNode()
+    { 
+    this->m_InstanceIdentifiers.clear();
+    }
 
   bool IsTerminal() const
     { return true; }
@@ -503,7 +512,13 @@ public:
   /** Sets the root node of the KdTree that is a result of
    * KdTreeGenerator or WeightedCentroidKdTreeGenerator. */
   void SetRoot(KdTreeNodeType* root)
-    { m_Root = root; }
+    { 
+    if( this->m_Root )
+      {
+      this->DeleteNode( this->m_Root );
+      }
+    this->m_Root = root;
+    }
 
   /** Returns the pointer to the root node. */
   KdTreeNodeType* GetRoot()

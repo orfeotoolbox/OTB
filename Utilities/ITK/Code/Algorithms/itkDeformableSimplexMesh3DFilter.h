@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableSimplexMesh3DFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 17:26:20 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-10-29 18:40:34 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,9 +92,9 @@ public:
   typedef TInputMesh  InputMeshType;
   typedef TOutputMesh OutputMeshType;
 
-  typedef typename InputMeshType::PointsContainerPointer     InputPointsContainerPointer;
-  typedef typename InputMeshType::PointsContainer            InputPointsContainer;
-  typedef typename InputMeshType::PointsContainer::Iterator  InputPointsContainerIterator;
+  typedef typename InputMeshType::PointsContainerPointer          InputPointsContainerPointer;
+  typedef typename InputMeshType::PointsContainer                 InputPointsContainer;
+  typedef typename InputMeshType::PointsContainer::ConstIterator  InputPointsContainerConstIterator;
 
   /** Other definitions. */
   typedef typename SimplexMeshGeometry::PointType     PointType;
@@ -189,7 +189,7 @@ public:
   itkGetConstMacro(Rigidity, unsigned int);
 
   itkSetObjectMacro(Data, GeometryMapType );
-  itkGetObjectMacro(Data, GeometryMapType );
+  itkGetConstObjectMacro(Data, GeometryMapType );
      
   /** Width, height and depth of image */
   itkGetConstMacro(ImageWidth,int);

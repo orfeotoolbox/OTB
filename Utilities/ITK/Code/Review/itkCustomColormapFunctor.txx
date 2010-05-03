@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCustomColormapFunctor.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-15 02:47:59 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2009-10-29 15:03:32 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,9 +40,9 @@ CustomColormapFunctor<TScalar, TRGBPixel>
   else if ( this->m_RedChannel.size() > 1 )
     {
     RealType size = static_cast<RealType>( this->m_RedChannel.size() );
-    RealType index = vcl_ceil( value * ( size - 1.0 ) );
-    RealType p1 = this->m_RedChannel[static_cast<unsigned int>( index )];
-    RealType m1 = this->m_RedChannel[static_cast<unsigned int>( index-1 )];
+    unsigned int index = Math::Ceil<unsigned int>( value * ( size - 1.0 ) );
+    RealType p1 = this->m_RedChannel[index];
+    RealType m1 = this->m_RedChannel[index-1u];
     RealType d = p1 - m1;
     red = d * ( size - 1.0 ) * ( value - ( index - 1.0 )/( size - 1.0 ) )
       + m1;
@@ -56,9 +56,9 @@ CustomColormapFunctor<TScalar, TRGBPixel>
   else if ( this->m_GreenChannel.size() > 1 )
     {
     RealType size = static_cast<RealType>( this->m_GreenChannel.size() );
-    RealType index = vcl_ceil( value * ( size - 1.0 ) );
-    RealType p1 = this->m_GreenChannel[static_cast<unsigned int>( index )];
-    RealType m1 = this->m_GreenChannel[static_cast<unsigned int>( index-1 )];
+    unsigned int index = Math::Ceil<unsigned int>( value * ( size - 1.0 ) );
+    RealType p1 = this->m_GreenChannel[index];
+    RealType m1 = this->m_GreenChannel[index-1u];
     RealType d = p1 - m1;
     green = d * ( size - 1.0 ) * ( value - ( index - 1.0 )/( size - 1.0 ) )
       + m1;
@@ -72,9 +72,9 @@ CustomColormapFunctor<TScalar, TRGBPixel>
   else if ( this->m_BlueChannel.size() > 1 )
     {
     RealType size = static_cast<RealType>( this->m_BlueChannel.size() );
-    RealType index = vcl_ceil( value * ( size - 1.0 ) );
-    RealType p1 = this->m_BlueChannel[static_cast<unsigned int>( index )];
-    RealType m1 = this->m_BlueChannel[static_cast<unsigned int>( index-1 )];
+    unsigned int index = Math::Ceil<unsigned int>( value * ( size - 1.0 ) );
+    RealType p1 = this->m_BlueChannel[index];
+    RealType m1 = this->m_BlueChannel[index-1u];
     RealType d = p1 - m1;
     blue = d * ( size - 1.0 ) * ( value - ( index - 1.0 )/( size - 1.0 ) )
       + m1;

@@ -30,9 +30,6 @@
 #include "itkImageIOBase.h"
 #include "otbImageRegionTileMapSplitter.h"
 
-/* Curl Library*/
-#include <curl/curl.h>
-
 namespace otb
 {
 
@@ -190,19 +187,13 @@ private:
   /** CURL Multi */
   void GenerateTileInfo(double x, double y, int numTileX, int numTileY);
   bool CanReadFromCache(std::string filename);
-  void GenerateCURLHandle(TileNameAndCoordType tileInfo);
   void GenerateURL(double x, double y);
-  void FetchTiles();
-  void Cleanup();
   void GenerateBuffer(unsigned char * p);
   void ReadTile(std::string filename, void * buffer);
 
-  CURLM *                           m_MultiHandle;
-  std::vector<CURL *>               m_ListCurlHandles;
-  std::vector<FILE *>               m_ListFiles;
+  std::vector<std::string>          m_ListFilename;
   std::vector<std::string>          m_ListURLs;
   std::vector<TileNameAndCoordType> m_ListTiles;
-  std::string                       m_Browser;
   int                               m_MaxConnect;
 
   /** Byte per pixel pixel */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEllipsoidInteriorExteriorSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-07 12:03:53 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-11-24 02:27:27 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,8 +28,8 @@ EllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>
 ::EllipsoidInteriorExteriorSpatialFunction()
 {
   m_Orientations = NULL;
-  m_Axes.Fill(1.0);   // Lengths of ellipsoid axes.
-  m_Center.Fill(0.0); // Origin of ellipsoid
+  m_Axes.Fill(1.0f);   // Lengths of ellipsoid axes.
+  m_Center.Fill(0.0f); // Origin of ellipsoid
 }
 
 template <unsigned int VDimension, typename TInput >

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTransformMeshFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-10-18 16:11:15 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-09-17 11:14:56 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,11 +62,11 @@ TransformMeshFilter<TInputMesh,TOutputMesh,TTransform>
   typedef typename TInputMesh::PointsContainer  InputPointsContainer;
   typedef typename TOutputMesh::PointsContainer OutputPointsContainer;
 
-  typedef typename TInputMesh::PointsContainerPointer  InputPointsContainerPointer;
+  typedef typename TInputMesh::PointsContainerConstPointer  InputPointsContainerConstPointer;
   typedef typename TOutputMesh::PointsContainerPointer OutputPointsContainerPointer;
 
-  InputMeshPointer    inputMesh      =  this->GetInput();
-  OutputMeshPointer   outputMesh     =  this->GetOutput();
+  const InputMeshType * inputMesh   =  this->GetInput();
+  OutputMeshPointer    outputMesh   =  this->GetOutput();
   
   if( !inputMesh )
     {
@@ -80,7 +80,7 @@ TransformMeshFilter<TInputMesh,TOutputMesh,TTransform>
 
   outputMesh->SetBufferedRegion( outputMesh->GetRequestedRegion() );
 
-  InputPointsContainerPointer  inPoints  = inputMesh->GetPoints();
+  InputPointsContainerConstPointer  inPoints  = inputMesh->GetPoints();
   OutputPointsContainerPointer outPoints = outputMesh->GetPoints();
 
   outPoints->Reserve( inputMesh->GetNumberOfPoints() );
@@ -101,13 +101,14 @@ TransformMeshFilter<TInputMesh,TOutputMesh,TTransform>
 
 
   // Create duplicate references to the rest of data on the mesh
+  this->CopyInputMeshToOutputMeshPointData();
+  this->CopyInputMeshToOutputMeshCellLinks();
+  this->CopyInputMeshToOutputMeshCells();
+  this->CopyInputMeshToOutputMeshCellData();
 
-  outputMesh->SetPointData(  inputMesh->GetPointData() );
-  
-  outputMesh->SetCellLinks(  inputMesh->GetCellLinks() );
-  
-  outputMesh->SetCells(  inputMesh->GetCells() );
-  outputMesh->SetCellData(  inputMesh->GetCellData() );
+  // FIXME: DELETEME outputMesh->SetCellLinks(  inputMesh->GetCellLinks() );
+  // FIXME: DELETEME outputMesh->SetCells(  inputMesh->GetCells() );
+  // FIXME: DELETEME outputMesh->SetCellData(  inputMesh->GetCellData() );
   
   
   unsigned int maxDimension = TInputMesh::MaxTopologicalDimension;
@@ -119,6 +120,7 @@ TransformMeshFilter<TInputMesh,TOutputMesh,TTransform>
     }
 }
 
+ 
 } // end namespace itk
 
 #endif

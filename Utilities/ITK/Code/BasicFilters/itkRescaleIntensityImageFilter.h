@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRescaleIntensityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-01 14:36:31 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2010-01-25 23:37:03 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,6 +85,14 @@ private:
  * is defined by the user in terms of the minimum and maximum values that 
  * the output image should have.
  * 
+ * The following equation gives the mapping of the intensity values
+ *
+ * \par
+ * \f[ 
+ *  \[ outputPixel = ( inputPixel - inputMin) \times 
+ *  \frac{(outputMax - outputMin )}{(inputMax - inputMin)} + outputMin \]
+ * \f]
+ *
  * All computations are performed in the precison of the input pixel's 
  * RealType. Before assigning the computed value to the output pixel. 
  *
@@ -93,7 +101,7 @@ private:
  * supposed to set those values in this filter. If you need a filter where you
  * can set the minimum and maximum values of the input, please use the
  * IntensityWindowingImageFilter. If you want a filter that can use a
- * user-defined linear transformation for the intensity, then please use teh
+ * user-defined linear transformation for the intensity, then please use the
  * ShiftScaleImageFilter.
  *
  * \sa IntensityWindowingImageFilter

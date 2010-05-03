@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioCellBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-20 21:50:21 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2010-03-30 15:20:03 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 
 #include "vnl/vnl_math.h"
 #include "vnl/vnl_sample.h"
+#include "itkMath.h"
 
 namespace itk {
 
@@ -276,9 +277,9 @@ CellBase
  
   SetMaximumGenerationLimit( 40 ); // it should use Teleomeres for implementing this
 
-  WellNourishedColor.Set(    0.0, 0.0, 1.0 );
-  HopefullColor.Set(         0.0, 1.0, 0.0 );
-  StarvingColor.Set(         1.0, 0.0, 0.0 );
+  WellNourishedColor.Set(    0.0f, 0.0f, 1.0f );
+  HopefullColor.Set(         0.0f, 1.0f, 0.0f );
+  StarvingColor.Set(         1.0f, 0.0f, 0.0f );
 
   SetDefaultColor( HopefullColor );
 
@@ -574,9 +575,11 @@ void
 CellBase
 ::SecreteProducts(void) 
 {
-  m_Color.SetRed(    m_Genome->GetExpressionLevel( RedGene   ) );
-  m_Color.SetGreen(  m_Genome->GetExpressionLevel( GreenGene ) );
-  m_Color.SetBlue(   m_Genome->GetExpressionLevel( BlueGene  ) );
+  typedef ColorType::ValueType ColorValueType;
+
+  m_Color.SetRed(   ColorValueType( m_Genome->GetExpressionLevel( RedGene   ) ) );
+  m_Color.SetGreen( ColorValueType( m_Genome->GetExpressionLevel( GreenGene ) ) );
+  m_Color.SetBlue(  ColorValueType( m_Genome->GetExpressionLevel( BlueGene  ) ) );
 }
 
 /**

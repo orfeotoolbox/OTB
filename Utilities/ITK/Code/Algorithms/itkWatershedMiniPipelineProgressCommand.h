@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedMiniPipelineProgressCommand.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 20:21:46 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-11-28 16:23:24 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,8 +59,8 @@ public:
   itkGetConstMacro(NumberOfFilters, double);
   
 protected:
-  WatershedMiniPipelineProgressCommand() : m_Count(0.0), m_Filter(0),
-                                           m_NumberOfFilters(1) {}
+  WatershedMiniPipelineProgressCommand() : m_Count(0.0), m_Filter(NULL),
+                                           m_NumberOfFilters(1.0) {}
   virtual ~WatershedMiniPipelineProgressCommand() {}
   void PrintSelf(std::ostream& os, Indent indent) const;
   

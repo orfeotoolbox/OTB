@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: Configure.h.in,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #ifndef @KWSYS_NAMESPACE@_Configure_h
 #define @KWSYS_NAMESPACE@_Configure_h
 
@@ -26,6 +24,9 @@
 #if defined(KWSYS_NAMESPACE)
 # if defined(__BORLANDC__)
 #  pragma warn -8027 /* function not inlined.  */
+# endif
+# if defined(__INTEL_COMPILER)
+#  pragma warning (disable: 1572) /* floating-point equality test */
 # endif
 #endif
 
@@ -87,11 +88,17 @@
 #endif
 
 /* Setup the export macro.  */
-#if defined(_WIN32) && @KWSYS_BUILD_SHARED@
-# if defined(@KWSYS_NAMESPACE@_EXPORTS)
-#  define @KWSYS_NAMESPACE@_EXPORT __declspec(dllexport)
+#if @KWSYS_BUILD_SHARED@
+# if defined(_WIN32) || defined(__CYGWIN__)
+#  if defined(@KWSYS_NAMESPACE@_EXPORTS)
+#   define @KWSYS_NAMESPACE@_EXPORT __declspec(dllexport)
+#  else
+#   define @KWSYS_NAMESPACE@_EXPORT __declspec(dllimport)
+#  endif
+# elif __GNUC__ >= 4
+#  define @KWSYS_NAMESPACE@_EXPORT __attribute__ ((visibility("default")))
 # else
-#  define @KWSYS_NAMESPACE@_EXPORT __declspec(dllimport)
+#  define @KWSYS_NAMESPACE@_EXPORT
 # endif
 #else
 # define @KWSYS_NAMESPACE@_EXPORT

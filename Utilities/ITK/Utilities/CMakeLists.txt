@@ -53,7 +53,7 @@ ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
 
 #
 # Handle the special case of building libxml2
-#  Fetch libxml2 using subversion if requested
+#  Fetch libxml2 using subversion if requested 
 IF(ITK_USE_LIBXML2)
   IF(NOT ITK_USE_SYSTEM_LIBXML2)
     IF(EXISTS "${ITK_BINARY_DIR}/Utilities/itklibxml2/VERSION_2_6_27_1.txt")
@@ -78,7 +78,7 @@ IF(ITK_USE_LIBXML2)
       SET(svnDir "${ITK_BINARY_DIR}/Utilities")
       FILE(WRITE ${ITK_BINARY_DIR}/Utilities/t "t\n")
       EXECUTE_PROCESS(
-            COMMAND "${SVNCOMMAND}" ${svnCmd} ${svnRevFlag} ${svnRevNum} ${svnSite} ${svnDir}
+            COMMAND "${SVNCOMMAND}" ${svnCmd} ${svnRevFlag} ${svnRevNum} ${svnSite} ${svnDir} 
             INPUT_FILE ${ITK_BINARY_DIR}/Utilities/t
             OUTPUT_VARIABLE svnOutput
             ERROR_VARIABLE svnError
@@ -86,7 +86,7 @@ IF(ITK_USE_LIBXML2)
             )
       # Result should be 0 on success
       IF(NOT svnResult)
-        ADD_SUBDIRECTORY( "${ITK_BINARY_DIR}/Utilities/itklibxml2"
+        ADD_SUBDIRECTORY( "${ITK_BINARY_DIR}/Utilities/itklibxml2" 
                           "${ITK_BINARY_DIR}/Utilities/itklibxml2" )
       ELSE(NOT svnResult)
         MESSAGE(FATAL_ERROR "SVN checkout of itklibxml2 failed with error = ${svnError}")
@@ -148,6 +148,14 @@ IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
 ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
+
+IF(ITK_USE_FLAT_DIRECTORY_INSTALL)
+  SET( ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES ${ITK_INSTALL_INCLUDE_DIR_CM24})
+ELSE(ITK_USE_FLAT_DIRECTORY_INSTALL)
+  SET( ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES ${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities)
+ENDIF(ITK_USE_FLAT_DIRECTORY_INSTALL)
+
+
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   INSTALL(FILES
     ${ITK_BINARY_DIR}/Utilities/itkThirdParty.h
@@ -156,13 +164,13 @@ IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
     ${ITK_SOURCE_DIR}/Utilities/itk_png.h
     ${ITK_SOURCE_DIR}/Utilities/metaIOConfig.h
     ${ITK_BINARY_DIR}/Utilities/NrrdIO/NrrdConfigure.h
-    DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities
+    DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES}
     COMPONENT Development
     )
   IF(ITK_USE_LIBXML2)
     INSTALL(FILES
       "${ITK_BINARY_DIR}/Utilities/itk_libxml2.h"
-      DESTINATION "${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities"
+      DESTINATION "${ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES}"
       COMPONENT Development
       )
   ENDIF(ITK_USE_LIBXML2)

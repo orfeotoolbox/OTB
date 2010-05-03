@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkLevelSetFunction.txx,v $
 Language:  C++
-Date:      $Date: 2009-02-05 19:05:00 $
-Version:   $Revision: 1.33 $
+Date:      $Date: 2010-03-30 15:20:02 $
+Version:   $Revision: 1.35 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -322,11 +322,13 @@ LevelSetFunction< TImageType >
     gd->m_dx[i] = 0.5 * (it.GetPixel( positionA ) - 
                          it.GetPixel( positionB ) ) * neighborhoodScales[i]; 
     gd->m_dxy[i][i] = ( it.GetPixel( positionA )
-                      + it.GetPixel( positionB ) - 2.0 * center_value ) *
-                                            vnl_math_sqr(neighborhoodScales[i]);
+                        + it.GetPixel( positionB ) - 2.0 * center_value ) *
+                        vnl_math_sqr(neighborhoodScales[i]);
 
     gd->m_dx_forward[i]  = ( it.GetPixel( positionA ) - center_value ) * neighborhoodScales[i];
+
     gd->m_dx_backward[i] = ( center_value - it.GetPixel( positionB ) ) * neighborhoodScales[i];
+
     gd->m_GradMagSqr += gd->m_dx[i] * gd->m_dx[i];
 
     for( j = i+1; j < ImageDimension; j++ )

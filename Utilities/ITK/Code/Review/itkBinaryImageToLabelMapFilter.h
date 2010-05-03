@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryImageToLabelMapFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-22 21:25:55 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2010-02-27 22:02:33 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,8 @@
 #include <map>
 #include "itkProgressReporter.h"
 #include "itkBarrier.h"
+#include "itkLabelMap.h"
+#include "itkLabelObject.h"
 
 //PATCH OTB
 #include "itkLabelMap.h"

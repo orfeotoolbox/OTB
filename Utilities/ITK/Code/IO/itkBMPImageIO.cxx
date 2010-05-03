@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBMPImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 07:58:47 $
-  Version:   $Revision: 1.32 $  
+  Date:      $Date: 2009-10-27 16:05:53 $
+  Version:   $Revision: 1.33 $  
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -877,10 +877,8 @@ BMPImageIO
   // The specification calls for a signed integer, but
   // here we force it to be an unsigned integer to avoid
   // dealing with directions in a subterraneous way.
-  const unsigned int horizontalResolution = 
-    static_cast<unsigned int>( Math::Round( 1000.0 / m_Spacing[0] ) );
-  const unsigned int verticalResolution =
-    static_cast<unsigned int>( Math::Round( 1000.0 / m_Spacing[1] ) );
+  const unsigned int horizontalResolution = Math::Round<unsigned int>( 1000.0 / m_Spacing[0] );
+  const unsigned int verticalResolution = Math::Round<unsigned int>( 1000.0 / m_Spacing[1] );
 
   this->Write32BitsInteger( horizontalResolution );
   this->Write32BitsInteger( verticalResolution );

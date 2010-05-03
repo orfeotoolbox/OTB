@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiscreteGaussianDerivativeImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-06 13:28:10 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-10-29 11:19:15 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -229,29 +229,13 @@ DiscreteGaussianDerivativeImageFunction<TInputImage,TOutput>
 
     // Compute base index = closet index below point
     // Compute distance from point to base index
-    signed long baseIndex[ImageDimension2];
+    IndexType baseIndex;
     double distance[ImageDimension2];
-    long tIndex;
 
     for( dim = 0; dim < ImageDimension2; dim++ )
       {
-      // The following "if" block is equivalent to the following line without
-      // having to call floor.
-      //    baseIndex[dim] = (long) vcl_floor(index[dim] );
-      if (cindex[dim] >= 0.0)
-        {
-        baseIndex[dim] = (long) cindex[dim];
-        }
-      else
-        {
-        tIndex = (long) cindex[dim];
-        if (double(tIndex) != cindex[dim])
-          {
-          tIndex--;
-          }
-        baseIndex[dim] = tIndex;
-        }
-      distance[dim] = cindex[dim] - double( baseIndex[dim] );
+      baseIndex[dim] = Math::Floor<signed long>( cindex[dim] );
+      distance[dim] = cindex[dim] - static_cast< double >( baseIndex[dim] );
       }
 
     // Interpolated value is the weighted sum of each of the surrounding

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-03-30 15:20:03 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

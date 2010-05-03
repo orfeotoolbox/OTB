@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleLogarithmicTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:07 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-11-24 02:27:27 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,12 +61,14 @@ public:
 
   /** Parameters type. */
   typedef typename Superclass::ParametersType  ParametersType;
+  typedef typename ParametersType::ValueType   ParametersValueType;
 
   /** Jacobian type. */
   typedef typename Superclass::JacobianType  JacobianType;
 
   /** Standard vector type for this class. */
   typedef typename Superclass::ScaleType              ScaleType;
+  typedef typename ScaleType::ValueType               ScalesValueType;
 
   /** Standard vector type for this class. */
   typedef typename Superclass::InputVectorType          InputVectorType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DCirclesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:27:26 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-02-03 18:53:41 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -163,9 +163,6 @@ protected:
   HoughTransform2DCirclesImageFilter();
   virtual ~HoughTransform2DCirclesImageFilter() {};
 
-  HoughTransform2DCirclesImageFilter(const Self&) {}
-  void operator=(const Self&) {}
-
   void PrintSelf(std::ostream& os, Indent indent) const;
 
   /** HoughTransform2DCirclesImageFilter needs the entire input. Therefore
@@ -180,6 +177,9 @@ protected:
   void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));
   
 private:
+
+  HoughTransform2DCirclesImageFilter(const Self&);
+  void operator=(const Self&);
 
   float  m_SweepAngle;
   double m_MinimumRadius;

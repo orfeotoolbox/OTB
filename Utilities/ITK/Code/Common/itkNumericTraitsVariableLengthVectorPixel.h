@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsVariableLengthVectorPixel.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-30 20:51:30 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2009-12-01 16:53:10 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,13 +91,7 @@ public: \
 };
 
 
-//
-// Visual Studio 6.0 is not capable of managing the template implementation
-// defined at the end of this file. Therefore we provide an alternative
-// primitive implementation based on macros that define explicit
-// instantiations.
-//
-#if defined( _MSC_VER ) && ( _MSC_VER < 1310 )
+#ifndef ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
 
 // These two symbols below are defined empty on purpose
 #define _TYPENAME_
@@ -140,7 +134,7 @@ itkNumericTraitsVariableLengthVectorPixelMacro( double );
 //
 itkNumericTraitsVariableLengthVectorPixelMacro( T );
 
-#endif
+#endif // ITK_USE_NUMERIC_TRAITS_PARTIAL_SPECIALIZATION
 
 //
 // Finally, to avoid contamination of other files with the symbols defined

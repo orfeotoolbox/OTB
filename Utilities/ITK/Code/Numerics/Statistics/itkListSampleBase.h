@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkListSampleBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 15:23:53 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2010-02-02 13:45:16 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,6 +51,8 @@ public:
   /** Standard class typedef. */
   typedef ListSampleBase               Self;
   typedef Sample< TMeasurementVector > Superclass;
+  typedef SmartPointer< Self >         Pointer;
+  typedef SmartPointer<const Self>     ConstPointer;
 
   /** Standard macros */
   itkTypeMacro(ListSampleBase, Sample);

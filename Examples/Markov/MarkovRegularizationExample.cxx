@@ -27,7 +27,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
 //    OUTPUTS: {MarkovRegularization.png}, {MarkovRegularization-scaled.png}
-//    0.2 20 1.0 1
+//    0.2 20 0.0 1
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -139,7 +139,7 @@ int main(int argc, char* argv[])
   unsigned int nClass = labelledStat->GetNumberOfLabels();
   // Software Guide : EndCodeSnippet
 
-  optimizer->SetParameters(atoi(argv[6]));
+  optimizer->SetSingleParameter(0.0);
   markovFilter->SetNumberOfClasses(nClass);
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(0.0);

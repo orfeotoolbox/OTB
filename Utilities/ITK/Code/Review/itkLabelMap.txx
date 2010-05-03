@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelMap.txx,v $
   Language:  C++
-  Date:      $Date: 2009-07-07 18:41:40 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-12-10 10:55:21 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ void
 LabelMap<TLabelObject>
 ::Initialize()
 {
-  m_LabelObjectContainer.clear();
+  this->ClearLabels();
 }
 
 
@@ -420,7 +420,11 @@ void
 LabelMap<TLabelObject>
 ::ClearLabels()
 {
-  m_LabelObjectContainer.clear();
+  if( !m_LabelObjectContainer.empty() )
+    {
+    m_LabelObjectContainer.clear();
+    this->Modified();
+    }
 }
 
 
@@ -497,6 +501,21 @@ LabelMap<TLabelObject>
     itkAssertOrThrowMacro( (it->second.IsNotNull()), "Null label" );
     it->second->Print( os );
     os << std::endl;
+    }
+}
+
+
+template<class TLabelObject >
+void 
+LabelMap<TLabelObject>
+::Optimize()
+{
+  for( typename LabelObjectContainerType::const_iterator it = m_LabelObjectContainer.begin();
+    it != m_LabelObjectContainer.end();
+    it++ )
+    {
+    itkAssertOrThrowMacro( (it->second.IsNotNull()), "Null label" );
+    it->second->Optimize();
     }
 }
 

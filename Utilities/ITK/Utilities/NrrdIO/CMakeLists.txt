@@ -9,8 +9,8 @@ INCLUDE_REGULAR_EXPRESSION("^.*.h$")
 #
 
 SET(nrrdio_SRCS 754.c mop.c array.c parseAir.c dio.c sane.c endianAir.c 
-string.c enum.c miscAir.c biffbiff.c accessors.c defaultsNrrd.c enumsNrrd.c 
-arraysNrrd.c methodsNrrd.c reorder.c axis.c simple.c comment.c 
+string.c enum.c miscAir.c biffbiff.c biffmsg.c accessors.c defaultsNrrd.c 
+enumsNrrd.c arraysNrrd.c methodsNrrd.c reorder.c axis.c simple.c comment.c 
 keyvalue.c endianNrrd.c parseNrrd.c gzio.c read.c write.c format.c 
 formatNRRD.c encoding.c encodingRaw.c encodingAscii.c encodingHex.c 
 encodingGzip.c subset.c encodingBzip2.c formatEPS.c formatPNG.c 
@@ -30,11 +30,11 @@ INCLUDE_DIRECTORIES(
 )
 
 # Set compiler flags for endian-ness.
-IF(CMAKE_WORDS_BIGENDIAN)
-  ADD_DEFINITIONS(-DTEEM_ENDIAN=4321)
-ELSE(CMAKE_WORDS_BIGENDIAN)
-  ADD_DEFINITIONS(-DTEEM_ENDIAN=1234)
-ENDIF(CMAKE_WORDS_BIGENDIAN)
+#IF(CMAKE_WORDS_BIGENDIAN)
+#  ADD_DEFINITIONS(-DTEEM_ENDIAN=4321)
+#ELSE(CMAKE_WORDS_BIGENDIAN)
+#  ADD_DEFINITIONS(-DTEEM_ENDIAN=1234)
+#ENDIF(CMAKE_WORDS_BIGENDIAN)
 
 #The QNANHIBIT variable is configured by the root level CMakeLists.txt
 IF(QNANHIBIT)
@@ -71,10 +71,17 @@ IF(NOT ITK_INSTALL_NO_LIBRARIES)
     )
 ENDIF(NOT ITK_INSTALL_NO_LIBRARIES)
 
+IF(ITK_USE_FLAT_DIRECTORY_INSTALL)
+  SET( ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES_NRRDIO ${ITK_INSTALL_INCLUDE_DIR_CM24})
+ELSE(ITK_USE_FLAT_DIRECTORY_INSTALL)
+  SET( ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES_NRRDIO ${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities/NrrdIO)
+ENDIF(ITK_USE_FLAT_DIRECTORY_INSTALL)
+
+
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
   INSTALL(FILES ${__files}
-    DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/Utilities/NrrdIO
+    DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24_UTILITIES_NRRDIO}
     COMPONENT Development)
 ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
 

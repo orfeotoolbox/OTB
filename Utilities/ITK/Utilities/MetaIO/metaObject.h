@@ -3,8 +3,8 @@
   Program:   MetaIO
   Module:    $RCSfile: metaObject.h,v $
   Language:  C++
-  Date:      $Date: 2008-04-09 01:44:29 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-11-21 18:59:39 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,7 +82,7 @@ class METAIO_EXPORT MetaObject
 
       bool  m_BinaryDataByteOrderMSB;
 
-      unsigned int m_CompressedDataSize;
+      METAIO_STL::streamoff m_CompressedDataSize;
       // Used internally to set if the dataSize should be written
       bool m_WriteCompressedDataSize; 
       bool m_CompressedData;

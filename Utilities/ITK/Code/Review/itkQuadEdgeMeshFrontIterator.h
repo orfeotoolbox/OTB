@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshFrontIterator.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-05 20:26:37 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-12-15 15:37:44 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -128,7 +128,7 @@ protected:
   typedef FrontType*                   FrontTypePointer;
 
   /** Whether an Origin (i.e. a vertex or a face since we either deal with
-   *  primal or dual edges) was allready visited.
+   *  primal or dual edges) was already visited.
    */
   typedef MapContainer< QEOriginType, bool >       IsVisitedContainerType;
   typedef typename IsVisitedContainerType::Pointer IsVisitedPointerType;
@@ -138,7 +138,7 @@ public:
   QuadEdgeMeshFrontBaseIterator( MeshType* mesh  = (MeshType*)0,
                                  bool      start = true,
                                  QEType*   seed  = (QEType*)0 );
-  virtual ~QuadEdgeMeshFrontBaseIterator( ) { }
+  virtual ~QuadEdgeMeshFrontBaseIterator( );
 
   Self& operator=( const Self& r )
     {

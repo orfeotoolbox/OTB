@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageTransformHelper.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-07 14:03:45 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-10-27 20:25:10 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,15 +32,16 @@ template <unsigned int NImageDimension, unsigned int R, unsigned int C>
 class ImageTransformHelper
 {
 public:
-  typedef ImageBase<NImageDimension>                       ImageType;
-  typedef typename ImageType::IndexType                    IndexType;
-  typedef typename ImageType::SpacingType                  SpacingType;
-  typedef Matrix<double, NImageDimension, NImageDimension> MatrixType;
-  typedef typename ImageType::PointType                    OriginType;
-  typedef Point<double, NImageDimension>                   DoublePoint;
-  typedef Point<float, NImageDimension>                    FloatPoint;
-  typedef Concept::Detail::UniqueType_bool<false>          UniqueTypeBoolFalse;
-  typedef Concept::Detail::UniqueType_bool<true>           UniqueTypeBoolTrue;
+  typedef ImageBase<NImageDimension>                          ImageType;
+  typedef typename ImageType::IndexType                       IndexType;
+  typedef typename ImageBase<NImageDimension>::IndexValueType IndexValueType;
+  typedef typename ImageType::SpacingType                     SpacingType;
+  typedef Matrix<double, NImageDimension, NImageDimension>    MatrixType;
+  typedef typename ImageType::PointType                       OriginType;
+  typedef Point<double, NImageDimension>                      DoublePoint;
+  typedef Point<float, NImageDimension>                       FloatPoint;
+  typedef Concept::Detail::UniqueType_bool<false>             UniqueTypeBoolFalse;
+  typedef Concept::Detail::UniqueType_bool<true>              UniqueTypeBoolTrue;
 
   //
   // Methods with DoublePoint
@@ -175,9 +176,9 @@ public:
     const UniqueTypeBoolTrue& )
     {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      index[R] = static_cast<typename IndexType::IndexValueType>( itk::Math::RoundHalfIntegerUp( rindex[R] ) );
+      index[R] = Math::RoundHalfIntegerUp<IndexValueType>( rindex[R] );
 #else
-      index[R] = static_cast<typename IndexType::IndexValueType>(rindex[R]);
+      index[R] = static_cast<IndexValueType>(rindex[R]);
 #endif
     }
 
@@ -314,10 +315,9 @@ public:
     const UniqueTypeBoolTrue& )
     {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-    index[R] = static_cast<typename IndexType::IndexValueType>(
-                     itk::Math::RoundHalfIntegerUp(rindex[R]) );
+    index[R] = Math::RoundHalfIntegerUp<IndexValueType>(rindex[R]);
 #else
-    index[R] = static_cast<typename IndexType::IndexValueType>(rindex[R]);
+    index[R] = static_cast<IndexValueType>(rindex[R]);
 #endif
     }
 

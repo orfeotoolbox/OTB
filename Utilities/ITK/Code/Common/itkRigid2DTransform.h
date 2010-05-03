@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.23 $
+  Date:      $Date: 2009-11-29 01:38:00 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,20 +80,24 @@ public:
   typedef typename Superclass::ScalarType  ScalarType;
 
   /** Parameters type. */
-  typedef typename Superclass::ParametersType  ParametersType;
+  typedef typename Superclass::ParametersType       ParametersType;
+  typedef typename Superclass::ParametersValueType  ParametersValueType;
 
   /** Jacobian type. */
   typedef typename Superclass::JacobianType  JacobianType;
 
   /// Standard matrix type for this class
-  typedef typename Superclass::MatrixType MatrixType;
+  typedef typename Superclass::MatrixType         MatrixType;
+  typedef typename Superclass::MatrixValueType    MatrixValueType;
 
   /// Standard vector type for this class
-  typedef typename Superclass::OffsetType OffsetType;
+  typedef typename Superclass::OffsetType         OffsetType;
+  typedef typename Superclass::OffsetValueType    OffsetValueType;
 
   /// Standard vector type for this class
-  typedef typename Superclass::InputVectorType  InputVectorType;
-  typedef typename Superclass::OutputVectorType OutputVectorType;
+  typedef typename Superclass::InputVectorType        InputVectorType;
+  typedef typename Superclass::OutputVectorType       OutputVectorType;
+  typedef typename Superclass::OutputVectorValueType  OutputVectorValueType;
 
   /// Standard covariant vector type for this class
   typedef typename Superclass::InputCovariantVectorType InputCovariantVectorType;
@@ -108,7 +112,7 @@ public:
   typedef typename Superclass::OutputPointType OutputPointType;
 
   /** Base inverse transform type. This type should not be changed to the
-   * concrete inverse transform type or inheritance would be lost.*/
+   * concrete inverse transform type or inheritance would be lost. */
   typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
   typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
 

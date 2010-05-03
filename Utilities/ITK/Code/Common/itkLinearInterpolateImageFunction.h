@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-29 07:38:01 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2009-10-29 11:18:41 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,7 +81,8 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
 
   /** Index typedef support. */
-  typedef typename Superclass::IndexType IndexType;
+  typedef typename Superclass::IndexType      IndexType;
+  typedef typename Superclass::IndexValueType IndexValueType;
 
   /** ContinuousIndex typedef support. */
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;

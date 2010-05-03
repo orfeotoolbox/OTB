@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalableAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -181,19 +181,19 @@ ScalableAffineTransform<TScalarType, NDimensions>
   if ( i < NDimensions ) 
     { 
     MatrixType mat;
+    typename MatrixType::InternalMatrixType & imat = mat.GetVnlMatrix();
     for (i=0; i<NDimensions; i++)
       {
       if(m_MatrixScale[i] != 0 && m_Scale[i] != 0)
         {
-        mat.GetVnlMatrix().put(i, i, m_Scale[i]/m_MatrixScale[i]
-                                     * this->GetMatrix()[i][i]);
+        imat.put(i, i, m_Scale[i]/m_MatrixScale[i] * this->GetMatrix()[i][i]);
         m_MatrixScale[i] = m_Scale[i];
         }
       else
         {
         m_Scale[i] = 1;
         m_MatrixScale[i] = 1;
-        mat.GetVnlMatrix().put(i, i, this->GetMatrix()[i][i]);
+        imat.put(i, i, this->GetMatrix()[i][i]);
         }
       }
     Superclass::SetVarMatrix(mat);

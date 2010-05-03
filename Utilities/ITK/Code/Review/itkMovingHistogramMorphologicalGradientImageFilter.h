@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMovingHistogramMorphologicalGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-03 12:48:05 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-09-19 19:10:37 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,8 @@ class MorphologicalGradientHistogram
 public:
   MorphologicalGradientHistogram()
     {
-    if( UseVectorBasedAlgorithm() )
+    m_UseVectorBasedAlgorithm = UseVectorBasedAlgorithm();
+    if( m_UseVectorBasedAlgorithm )
       { initVector(); }
     }
   ~MorphologicalGradientHistogram(){}
@@ -51,7 +52,7 @@ public:
 
   inline void AddPixel( const TInputPixel &p )
     {
-    if( UseVectorBasedAlgorithm() )
+    if( m_UseVectorBasedAlgorithm )
       { AddPixelVector( p ); }
     else
       { AddPixelMap( p ); }
@@ -59,7 +60,7 @@ public:
 
   inline void RemovePixel( const TInputPixel &p )
     {
-    if( UseVectorBasedAlgorithm() )
+    if( m_UseVectorBasedAlgorithm )
       { RemovePixelVector( p ); }
     else
       { RemovePixelMap( p ); }
@@ -67,7 +68,7 @@ public:
 
   inline TInputPixel GetValue( const TInputPixel & )
     {
-    if( UseVectorBasedAlgorithm() )
+    if( m_UseVectorBasedAlgorithm )
       { return GetValueVector(); }
     else
       { return GetValueMap(); }
@@ -85,7 +86,8 @@ public:
         || typeid(TInputPixel) == typeid(bool);
     }
 
-
+  bool m_UseVectorBasedAlgorithm;
+  
   //
   // the map based algorithm
   //

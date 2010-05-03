@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuler3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:39 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -165,7 +165,7 @@ Euler3DTransform<TScalarType>
       }
     else
       {
-      m_AngleX = 0;
+      m_AngleX = NumericTraits< ScalarType >::Zero;
       double x = this->GetMatrix()[1][1];
       double y = -this->GetMatrix()[0][1];
       m_AngleZ = vcl_atan2(y,x);
@@ -187,7 +187,7 @@ Euler3DTransform<TScalarType>
       }
     else
       {
-      m_AngleZ = 0;
+      m_AngleZ = NumericTraits< ScalarType >::Zero;
       double x = this->GetMatrix()[0][0];
       double y = this->GetMatrix()[1][0];
       m_AngleY = vcl_atan2(y,x);
@@ -204,29 +204,31 @@ Euler3DTransform<TScalarType>
 ::ComputeMatrix( void )
 {
   // need to check if angles are in the right order
-  const double cx = vcl_cos(m_AngleX);
-  const double sx = vcl_sin(m_AngleX);
-  const double cy = vcl_cos(m_AngleY);
-  const double sy = vcl_sin(m_AngleY); 
-  const double cz = vcl_cos(m_AngleZ);
-  const double sz = vcl_sin(m_AngleZ);
+  const ScalarType cx = vcl_cos(m_AngleX);
+  const ScalarType sx = vcl_sin(m_AngleX);
+  const ScalarType cy = vcl_cos(m_AngleY);
+  const ScalarType sy = vcl_sin(m_AngleY);
+  const ScalarType cz = vcl_cos(m_AngleZ);
+  const ScalarType sz = vcl_sin(m_AngleZ);
+  const ScalarType one = NumericTraits< ScalarType >::One;
+  const ScalarType zero = NumericTraits< ScalarType >::Zero;
 
   Matrix<TScalarType,3,3> RotationX;
-  RotationX[0][0]=1;RotationX[0][1]=0;RotationX[0][2]=0;
-  RotationX[1][0]=0;RotationX[1][1]=cx;RotationX[1][2]=-sx;
-  RotationX[2][0]=0;RotationX[2][1]=sx;RotationX[2][2]=cx;
+  RotationX[0][0]=one;  RotationX[0][1]=zero; RotationX[0][2]=zero;
+  RotationX[1][0]=zero; RotationX[1][1]=cx;   RotationX[1][2]=-sx;
+  RotationX[2][0]=zero; RotationX[2][1]=sx;   RotationX[2][2]=cx;
 
 
   Matrix<TScalarType,3,3> RotationY;
-  RotationY[0][0]=cy;RotationY[0][1]=0;RotationY[0][2]=sy;
-  RotationY[1][0]=0;RotationY[1][1]=1;RotationY[1][2]=0;
-  RotationY[2][0]=-sy;RotationY[2][1]=0;RotationY[2][2]=cy;
+  RotationY[0][0]=cy;   RotationY[0][1]=zero; RotationY[0][2]=sy;
+  RotationY[1][0]=zero; RotationY[1][1]=one;  RotationY[1][2]=zero;
+  RotationY[2][0]=-sy;  RotationY[2][1]=zero; RotationY[2][2]=cy;
 
   
   Matrix<TScalarType,3,3> RotationZ;
-  RotationZ[0][0]=cz;RotationZ[0][1]=-sz;RotationZ[0][2]=0;
-  RotationZ[1][0]=sz;RotationZ[1][1]=cz;RotationZ[1][2]=0;
-  RotationZ[2][0]=0;RotationZ[2][1]=0;RotationZ[2][2]=1;
+  RotationZ[0][0]=cz;   RotationZ[0][1]=-sz;  RotationZ[0][2]=zero;
+  RotationZ[1][0]=sz;   RotationZ[1][1]=cz;   RotationZ[1][2]=zero;
+  RotationZ[2][0]=zero; RotationZ[2][1]=zero; RotationZ[2][2]=one;
 
   /** Aply the rotation first around Y then X then Z */
   if(m_ComputeZYX)

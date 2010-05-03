@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalableAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:21 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-11-28 15:58:04 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,6 +63,7 @@ public:
 
   /** Types taken from the Superclass */
   typedef typename Superclass::ParametersType            ParametersType;
+  typedef typename Superclass::ParametersValueType       ParametersValueType;
   typedef typename Superclass::JacobianType              JacobianType;
   typedef typename Superclass::ScalarType                ScalarType;
   typedef typename Superclass::InputVectorType           InputVectorType;
@@ -74,13 +75,14 @@ public:
   typedef typename Superclass::InputPointType            InputPointType;
   typedef typename Superclass::OutputPointType           OutputPointType;
   typedef typename Superclass::MatrixType                MatrixType;
+  typedef typename Superclass::MatrixValueType           MatrixValueType;
   typedef typename Superclass::InverseMatrixType         InverseMatrixType;
   typedef typename Superclass::CenterType                CenterType;
   typedef typename Superclass::OffsetType                OffsetType;
   typedef typename Superclass::TranslationType           TranslationType;
 
   /** Base inverse transform type. This type should not be changed to the
-   * concrete inverse transform type or inheritance would be lost.*/
+   * concrete inverse transform type or inheritance would be lost.  */
   typedef typename Superclass::InverseTransformBaseType InverseTransformBaseType;
   typedef typename InverseTransformBaseType::Pointer    InverseTransformBasePointer;
     

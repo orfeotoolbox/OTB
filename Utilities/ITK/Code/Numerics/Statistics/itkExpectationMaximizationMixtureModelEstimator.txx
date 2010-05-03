@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpectationMaximizationMixtureModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 15:23:47 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-09-19 19:39:36 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ typename ExpectationMaximizationMixtureModelEstimator< TSample >::ProportionVect
 ExpectationMaximizationMixtureModelEstimator< TSample >
 ::GetInitialProportions() 
 {
-  return m_InitialProportions;
+  return &m_InitialProportions;
 }
 
 template< class TSample >

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshBorderTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-22 01:41:44 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2009-11-22 23:27:38 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,7 +60,7 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
   BoundaryRepresentativeEdgesPointer
     boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
 
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
   InputEdgeListType* list = boundaryRepresentativeEdges->Evaluate( *input );
 
   InputQEType* bdryEdge = ( *list->begin( ) );
@@ -75,6 +75,7 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
     }
 
   this->m_Border.resize( i );
+  delete list;
 }
 
 
@@ -95,9 +96,9 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >::
 ComputeLongestBorder( )
 {
   BoundaryRepresentativeEdgesPointer
-        boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
+    boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
 
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
 
   InputEdgeListPointerType list = boundaryRepresentativeEdges->Evaluate( *input );
 
@@ -134,9 +135,9 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >::
 ComputeLargestBorder( )
 {
   BoundaryRepresentativeEdgesPointer
-            boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
+    boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
 
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
     
   InputEdgeListType* list = boundaryRepresentativeEdges->Evaluate( *input );
 
@@ -164,8 +165,9 @@ ComputeLargestBorder( )
       oborder_it = b_it;
       }
     }
-  return oborder_it;
 
+  delete list;
+  return oborder_it;
 }
 
 
@@ -175,11 +177,11 @@ void
 QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
 ::DiskTransform( )
 {
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
 
   size_t NbBoundaryPt = this->m_BoundaryPtMap.size( );
 
-  InputCoordRepType r = RadiusMaxSquare( );
+  InputCoordRepType r = this->RadiusMaxSquare( );
 
   InputCoordRepType two_r = 2.0 * r;
   InputCoordRepType inv_two_r = 1.0 / two_r;
@@ -248,9 +250,9 @@ typename QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >::InputCoordRepTy
 QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
 ::RadiusMaxSquare( )
 {
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
 
-  InputPointType center = GetMeshBarycentre( );
+  InputPointType center = this->GetMeshBarycentre( );
 
   InputCoordRepType oRmax( 0.), r;
 
@@ -282,19 +284,18 @@ typename QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >::InputPointType
 QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
 ::GetMeshBarycentre( )
 {
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
 
   InputPointType oCenter;
   oCenter.Fill( 0.0 );
 
-  InputPointsContainer* points = input->GetPoints( );
+  const InputPointsContainer * points = input->GetPoints( );
 
   InputPointType pt;
   unsigned int i;
   
-  for( InputPointsContainerConstIterator PointIterator = points->Begin( );
-       PointIterator != points->End( );
-       ++PointIterator )
+  InputPointsContainerConstIterator PointIterator = points->Begin( );
+  while( PointIterator != points->End( ) )
     {
     pt = PointIterator.Value( );
 
@@ -302,6 +303,7 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
       {
       oCenter[i] += pt[i];
       }
+    ++PointIterator;
     }
 
   InputCoordRepType invNbOfPoints = 1.0 /
@@ -327,12 +329,15 @@ void QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
     {
     default:
     case SQUARE_BORDER_TRANSFORM:
-        ArcLengthSquareTransform( );
-        break;
-
+      {
+      this->ArcLengthSquareTransform( );
+      break;
+      }
     case DISK_BORDER_TRANSFORM:
-        DiskTransform( );
-        break;
+      {
+      this->DiskTransform( );
+      break;
+      }
     }
 }
 
@@ -346,7 +351,7 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
   BoundaryRepresentativeEdgesPointer
       boundaryRepresentativeEdges = BoundaryRepresentativeEdgesType::New( );
 
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
   InputEdgeListType* list = boundaryRepresentativeEdges->Evaluate( *input );
 
   InputQEType* bdryEdge = ( *list->begin( ) );
@@ -430,6 +435,8 @@ QuadEdgeMeshBorderTransform< TInputMesh, TOutputMesh >
     pt[1] = - this->m_Radius + ( Length[i] - 3.0 * EdgeLength );
     this->m_Border[ i++ ] = pt;
     }
+
+  delete list;
 }
 
 

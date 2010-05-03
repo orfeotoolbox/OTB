@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshParamMatrixCoefficients.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-03 21:55:06 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-09-17 11:14:57 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,7 +41,7 @@ public:
   virtual ~MatrixCoefficients( ) {}
 
   virtual InputCoordRepType operator ( )
-      ( InputMeshType* iMesh, InputQEType* iEdge ) const = 0;
+      ( const InputMeshType* iMesh, InputQEType* iEdge ) const = 0;
 };
 
 /** \class OnesMatrixCoefficients
@@ -67,7 +67,7 @@ public:
    * \param[in] iEdge
    * \return \f$ 1 \f$
    */
-  InputCoordRepType operator ( ) ( InputMeshType * itkNotUsed( iMesh ),
+  InputCoordRepType operator ( ) ( const InputMeshType * itkNotUsed( iMesh ),
                                    InputQEType *   itkNotUsed( iEdge ) ) const
     {
     return 1.0;
@@ -101,7 +101,7 @@ public:
    * \param[in] iEdge
    * \return \f$ \frac{1}{\|\boldsymbol{p1} - \boldsymbol{p2} \|} \f$
    */
-  InputCoordRepType operator () ( InputMeshType* iMesh, InputQEType* iEdge ) const
+  InputCoordRepType operator () ( const InputMeshType* iMesh, InputQEType* iEdge ) const
     {
     InputPointIdentifier id1 = iEdge->GetOrigin( );
     InputPointIdentifier id2 = iEdge->GetDestination( );
@@ -141,7 +141,7 @@ public:
    * \param[in] iEdge
    * \return \f$ \text{cot} \alpha_{ij} + \text{cot} \beta_{ij} \f$
    */
-  InputCoordRepType operator ( ) ( InputMeshType* iMesh, InputQEType* iEdge ) const
+  InputCoordRepType operator ( ) ( const InputMeshType* iMesh, InputQEType* iEdge ) const
     {
     InputPointIdentifier id1 = iEdge->GetOrigin( );
     InputPointIdentifier id2 = iEdge->GetDestination( );
@@ -194,7 +194,7 @@ public:
    * \return \f$ \frac{\text{cot} \gamma_{ij} + \text{cot}
    \delta_{ij}}{\|\boldsymbol{p1} - \boldsymbol{p2} \|} \f$
    */
-  InputCoordRepType operator ( ) ( InputMeshType* iMesh, InputQEType* iEdge ) const
+  InputCoordRepType operator ( ) ( const InputMeshType* iMesh, InputQEType* iEdge ) const
     {
     InputPointIdentifier id1 = iEdge->GetOrigin( );
     InputPointType pt1 = iMesh->GetPoint( id1 );
@@ -245,7 +245,7 @@ public:
       m_Lambda( iLambda )
     { }
 
-  InputCoordRepType operator ( ) ( InputMeshType* iMesh,
+  InputCoordRepType operator ( ) ( const InputMeshType* iMesh,
                                   InputQEType* iEdge ) const
     {
     AuthalicMatrixCoefficients< TInputMesh >   authalic;
@@ -284,7 +284,7 @@ public:
   HarmonicMatrixCoefficients() { }
 
 
-  InputCoordRepType operator () ( InputMeshType* iMesh, InputQEType* iEdge ) const
+  InputCoordRepType operator () ( const InputMeshType* iMesh, InputQEType* iEdge ) const
     {
     InputPointIdentifier id1 = iEdge->GetOrigin( );
     InputPointIdentifier id2 = iEdge->GetDestination( );

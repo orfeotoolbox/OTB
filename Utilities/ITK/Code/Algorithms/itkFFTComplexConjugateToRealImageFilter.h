@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTComplexConjugateToRealImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-12 17:26:20 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2010-02-27 00:09:41 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@
 namespace itk
 {
 /** \class FFTComplexConjugateToRealImageFilter
- * /brief 
+ * \brief 
  *
  * \ingroup 
  */
@@ -84,6 +84,7 @@ public:
 protected:
   FFTComplexConjugateToRealImageFilter() : m_ActualXDimensionIsOdd(false) {}
   virtual ~FFTComplexConjugateToRealImageFilter(){}
+  void EnlargeOutputRequestedRegion(DataObject *itkNotUsed(output));  
 
 private:
   bool m_ActualXDimensionIsOdd;

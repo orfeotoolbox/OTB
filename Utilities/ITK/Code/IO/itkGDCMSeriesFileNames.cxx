@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMSeriesFileNames.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-01 12:26:11 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2010-02-25 00:55:49 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -299,6 +299,14 @@ void GDCMSeriesFileNames::PrintSelf(std::ostream& os, Indent indent) const
     os << indent << "OutputFilenames[" << i << "]: " << m_OutputFileNames[i] << std::endl;
     }
 }
+
+void GDCMSeriesFileNames::SetUseSeriesDetails( bool useSeriesDetails)
+{
+  m_UseSeriesDetails = useSeriesDetails;
+  m_SerieHelper->SetUseSeriesDetails( m_UseSeriesDetails );
+  m_SerieHelper->CreateDefaultUniqueSeriesIdentifier();
+}
+
 } //namespace ITK
 
 #endif

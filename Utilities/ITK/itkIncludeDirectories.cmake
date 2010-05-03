@@ -32,8 +32,8 @@ SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS_BUILD_TREE}
   ${ITK_BINARY_DIR}/Utilities/NrrdIO
   ${ITK_SOURCE_DIR}/Utilities/DICOMParser
   ${ITK_BINARY_DIR}/Utilities/DICOMParser
-#   ${ITK_BINARY_DIR}/Utilities/expat
-#   ${ITK_SOURCE_DIR}/Utilities/expat
+#  ${ITK_BINARY_DIR}/Utilities/expat
+#  ${ITK_SOURCE_DIR}/Utilities/expat
   ${ITK_SOURCE_DIR}/../otbexpat
   ${ITK_SOURCE_DIR}/Utilities/nifti/niftilib
   ${ITK_SOURCE_DIR}/Utilities/nifti/znzlib
@@ -147,7 +147,7 @@ SET(ITK_INCLUDE_RELATIVE_DIRS ${ITK_INCLUDE_RELATIVE_DIRS}
   Utilities/MetaIO
   Utilities/NrrdIO
   Utilities/DICOMParser
-#   Utilities/expat
+#  Utilities/expat
   ../otbexpat
   Utilities/nifti/niftilib
   Utilities/nifti/znzlib

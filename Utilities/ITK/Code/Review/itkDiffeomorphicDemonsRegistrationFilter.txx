@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffeomorphicDemonsRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 23:09:19 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-10-29 15:03:32 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -301,7 +301,7 @@ DiffeomorphicDemonsRegistrationFilter<TFixedImage,TMovingImage,TDeformationField
       unsigned int numiter = 0;
       if ( numiterfloat > 0.0 )
         {
-        numiter = static_cast<unsigned int>( vcl_ceil(numiterfloat) );
+        numiter = Math::Ceil<unsigned int>( numiterfloat );
         }
       
       m_Exponentiator->AutomaticNumberOfIterationsOff();

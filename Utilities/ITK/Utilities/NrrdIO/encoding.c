@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -37,7 +37,7 @@
 **     or vice versa.
 ** -- respect nrrdStateVerboseIO with messages to stderr, if possible
 ** -- in case of error, put text error messages into biff via
-**    biffAdd(NRRD, <error char*>)
+**    biffAddf(NRRD, <error char*> ...)
 **
 ** The "unknown" encoding below is intended to serve as a template for 
 ** any new encodings being developed.
@@ -55,7 +55,7 @@ int
 _nrrdEncodingUnknown_read(FILE *file, void *data,
                           size_t elementNum, Nrrd *nrrd,
                           struct NrrdIoState_t *nio) {
-  char me[]="_nrrdEncodingUnknown_read", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdEncodingUnknown_read";
 
   /* insert code here, and remove error handling below */
   AIR_UNUSED(file);
@@ -64,8 +64,7 @@ _nrrdEncodingUnknown_read(FILE *file, void *data,
   AIR_UNUSED(nrrd);
   AIR_UNUSED(nio);
 
-  sprintf(err, "%s: ERROR!!! trying to read unknown encoding", me);
-  biffAdd(NRRD, err);
+  biffAddf(NRRD, "%s: ERROR!!! trying to read unknown encoding", me);
   return 1;
 }
 
@@ -73,7 +72,7 @@ int
 _nrrdEncodingUnknown_write(FILE *file, const void *data,
                            size_t elementNum, const Nrrd *nrrd,
                            struct NrrdIoState_t *nio) {
-  char me[]="_nrrdEncodingUnknown_write", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdEncodingUnknown_write";
 
   /* insert code here, and remove error handling below */
   AIR_UNUSED(file);
@@ -82,8 +81,7 @@ _nrrdEncodingUnknown_write(FILE *file, const void *data,
   AIR_UNUSED(nrrd);
   AIR_UNUSED(nio);
 
-  sprintf(err, "%s: ERROR!!! trying to write unknown encoding", me);
-  biffAdd(NRRD, err);
+  biffAddf(NRRD, "%s: ERROR!!! trying to write unknown encoding", me);
   return 1;
 }
 

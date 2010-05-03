@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-14 13:28:21 $
-  Version:   $Revision: 1.151 $
+  Date:      $Date: 2010-04-09 23:22:45 $
+  Version:   $Revision: 1.152 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -284,7 +284,7 @@ public:
 protected:
   Image();
   void PrintSelf(std::ostream& os, Indent indent) const;
-  virtual ~Image() {};
+  virtual ~Image() {}
 
   /** Compute helper matrices used to transform Index coordinates to
    * PhysicalPoint coordinates and back. This method is virtual and will be

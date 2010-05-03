@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLBFGSOptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:52 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-09-16 15:19:20 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,7 +95,7 @@ public:
   itkGetMacro( DefaultStepLength, double );
 
   /** Return Current Value */
-  MeasureType GetValue();
+  MeasureType GetValue() const;
 
   /** Get the reason for termination */
   const std::string GetStopConditionDescription() const;

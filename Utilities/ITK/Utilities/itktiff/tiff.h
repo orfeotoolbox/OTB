@@ -1,5 +1,5 @@
 #include  "itk_tiff_mangle.h"
-/* $Id: tiff.h,v 1.1 2006-09-28 15:30:39 king Exp $ */
+/* $Id: tiff.h,v 1.2 2009-11-20 17:52:41 glehmann Exp $ */
 
 /*
  * Copyright (c) 1988-1997 Sam Leffler
@@ -82,7 +82,7 @@ typedef  signed char int8;  /* NB: non-ANSI compilers may not grok */
 typedef  unsigned char uint8;
 typedef  short int16;
 typedef  unsigned short uint16;  /* sizeof (uint16) must == 2 */
-#if defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64) || defined(__LP64__) || defined(__arch64__)
+#if defined(__amd64) || defined(__alpha) || (defined(_MIPS_SZLONG) && _MIPS_SZLONG == 64) || defined(__LP64__) || defined(__arch64__)
 typedef  int int32;
 typedef  unsigned int uint32;  /* sizeof (uint32) must == 4 */
 #else

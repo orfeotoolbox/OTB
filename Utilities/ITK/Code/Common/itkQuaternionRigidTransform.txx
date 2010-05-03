@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuaternionRigidTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:08:28 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.

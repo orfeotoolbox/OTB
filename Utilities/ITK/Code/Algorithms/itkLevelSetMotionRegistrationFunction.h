@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLevelSetMotionRegistrationFunction.h,v $
   Language:  C++
-  Date:      $Date: 2009-01-24 20:02:58 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-10-20 20:39:08 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -193,7 +193,14 @@ FloatOffsetType(0.0));
    * image prior to calculating gradients. */
   virtual void SetGradientSmoothingStandardDeviations(double);
   virtual double GetGradientSmoothingStandardDeviations() const;
-  
+
+  /** Use the image spacing information in calculations. Use this option if you
+   * want derivatives in physical space. Default is UseImageSpacing ON, due to a
+   * backward compatibility state. */
+  void SetUseImageSpacing( bool);
+  bool GetUseImageSpacing() const;
+
+
 protected:
   LevelSetMotionRegistrationFunction();
   ~LevelSetMotionRegistrationFunction() {}
@@ -253,6 +260,7 @@ private:
   /** Mutex lock to protect modification to metric. */
   mutable SimpleFastMutexLock     m_MetricCalculationLock;
 
+  bool                            m_UseImageSpacing;
 };
 
 

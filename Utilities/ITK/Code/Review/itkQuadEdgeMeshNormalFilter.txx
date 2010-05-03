@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshNormalFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-22 01:41:45 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-03-17 19:51:07 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -169,8 +169,11 @@ QuadEdgeMeshNormalFilter< TInputMesh, TOutputMesh >
           {
           default:
           case GOURAUD:
+            {
             return static_cast< OutputVertexNormalComponentType >( 1. );
+            }
           case THURMER:
+            {
             // this implementation may be included inside itkTriangle
             switch( internal_id )
               {
@@ -187,11 +190,27 @@ QuadEdgeMeshNormalFilter< TInputMesh, TOutputMesh >
                 v = pt[1] - pt[2];
                 break;
               }
+            typename OutputVectorType::RealValueType norm2_u = u.GetSquaredNorm();
+            if( norm2_u > vnl_math::eps )
+              {
+              norm2_u = 1. / norm2_u;
+              u *= norm2_u;
+              }
+
+            typename OutputVectorType::RealValueType norm2_v = v.GetSquaredNorm();
+            if( norm2_v > vnl_math::eps )
+              {
+              norm2_v = 1. / norm2_v;
+              v *= norm2_v;
+              }
             return static_cast< OutputVertexNormalComponentType >(
               vcl_acos( u * v ) );
+            }
           case AREA:
+            {
             return static_cast< OutputVertexNormalComponentType >(
               TriangleType::ComputeArea( pt[0], pt[1], pt[2] ) );
+            }
           }
         }
       else

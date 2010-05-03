@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkSimplexMeshToTriangleMeshFilter.txx,v $
 Language:  C++
-Date:      $Date: 2008-10-17 20:49:56 $
-Version:   $Revision: 1.6 $
+Date:      $Date: 2009-09-17 11:14:56 $
+Version:   $Revision: 1.7 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,9 +62,9 @@ void SimplexMeshToTriangleMeshFilter<TInputMesh, TOutputMesh>
   typename AutoMeshSourceType::Pointer meshSource = AutoMeshSourceType::New();
   typename AutoMeshSourceType::PointType p1,p2,p3;
 
-  typename TInputMesh::Pointer inputMesh = this->GetInput(0);
-  typename InputPointsContainer::Pointer points = inputMesh->GetPoints();
-  typename TInputMesh::PointsContainerIterator pointsIt = points->Begin();
+  typename TInputMesh::ConstPointer inputMesh = this->GetInput(0);
+  typename InputPointsContainer::ConstPointer points = inputMesh->GetPoints();
+  typename TInputMesh::PointsContainerConstIterator pointsIt = points->Begin();
 
   meshSource->Update();
 

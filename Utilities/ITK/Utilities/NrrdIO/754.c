@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -21,7 +21,6 @@
  
   3. This notice may not be removed or altered from any source distribution.
 */
-
 
 #include "NrrdIO.h"
 #include "privateAir.h"
@@ -350,13 +349,13 @@ airFPClass_d(double val) {
 
   f.v = val;
   sign = f.c.sign; 
-  expo = f.c.expo;  /* this seems to be a WIN32 bug: on a quiet-NaN, f.c.exp
-                       should be non-zero, but it was completely zero, so that
-                       this function returned airFP_NEG_DENORM instead of
-                       airFP_QNAN */
+  expo = f.c.expo; /* this seems to be a WIN32 bug: on a quiet-NaN, f.c.exp
+                      should be non-zero, but it was completely zero, so 
+                      that this function returned airFP_NEG_DENORM instead
+                      of airFP_QNAN */
   mant0 = f.c.mant0;
   mant1 = f.c.mant1;
-  hibit = mant0 >> 20;
+  hibit = mant0 >> 19;
 
   index = ((!!sign) << 2) | ((!!expo) << 1) | (!!mant0 || !!mant1);
   switch(index) {

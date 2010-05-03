@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.h,v $
   Language:  C++
-  Date:      $Date: 2007-11-08 16:50:05 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2009-12-23 14:55:37 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -152,7 +152,13 @@ protected:
    * It should create the named itk object or return 0 if that object
    * is not supported by the factory implementation. */
   virtual LightObject::Pointer CreateObject(const char* itkclassname );
-  
+
+  /** This method creates all the objects with the class overide of
+   * itkclass name, which are provide by this object 
+   */
+  virtual std::list<LightObject::Pointer>
+  CreateAllObject(const char* itkclassname);  
+
   ObjectFactoryBase();
   virtual ~ObjectFactoryBase();
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeasurementVectorTraits.h,v $
   Language:  C++
-  Date:      $Date: 2009-08-08 14:39:59 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-11-18 12:46:05 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,47 +30,6 @@
 #include "itkNumericTraits.h"
 #include "itkSize.h"
 #include <vector>
-
-
-/** THIS DECLARATION OF NUMERICTRAITS IS HERE TEMPORARILY 
- * 
- * It should be moved to the Insight/Code/Common/itkNumericTraits.h file
- * when the new framework is integrated into ITK
- *
- */
-#ifdef _WIN64
-
-namespace itk { 
-
-/** \class NumericTraits<unsigned long>
- * \brief Define traits for type unsigned long.
- * \ingroup DataRepresentation 
- */
-template <>
-class NumericTraits< std::vector<int>::size_type > : public vcl_numeric_limits< std::vector<int>::size_type > {
-public:
-  typedef std::vector<int>::size_type SelfType; 
-  typedef SelfType                    ValueType;
-  typedef SelfType                    PrintType;
-  typedef SelfType                    AbsType;
-  typedef SelfType                    AccumulateType;
-  typedef long double                 RealType;
-  typedef RealType                    ScalarRealType;
-  typedef long double                 FloatType;
-
-  static const SelfType ITKCommon_EXPORT Zero;
-  static const SelfType ITKCommon_EXPORT One;
-
-  static SelfType NonpositiveMin() { return min(); }
-  static bool IsPositive(SelfType val) { return val != Zero; }
-  static bool IsNonpositive(SelfType val) { return val == Zero; }
-  static bool IsNegative(SelfType) { return false; }
-  static bool IsNonnegative(SelfType) {return true; }
-  static SelfType ZeroValue() { return Zero; }
-};
-}
-
-#endif
 
 
 namespace itk

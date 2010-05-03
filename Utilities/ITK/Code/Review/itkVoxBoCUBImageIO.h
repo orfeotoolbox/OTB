@@ -3,7 +3,7 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoxBoCUBImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2008-06-18 19:28:57 $
+  Date:      $Date: 2009-11-29 02:06:56 $
   Version:   $1.0$
 
   Copyright (c) Insight Software Consortium. All rights reserved.
@@ -114,7 +114,7 @@ private:
   InverseOrientationMap     m_InverseOrientationMap;
 
   // Method to swap bytes in read buffer
-  void SwapBytesIfNecessary(void *buffer, unsigned long numberOfBytes);
+  void SwapBytesIfNecessary(void *buffer, BufferSizeType numberOfBytes);
 
   // Strings used in VoxBo files
   static const char * m_VB_IDENTIFIER_SYSTEM;

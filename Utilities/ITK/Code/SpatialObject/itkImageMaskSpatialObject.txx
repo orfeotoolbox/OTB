@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageMaskSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2009-01-28 20:10:27 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-11-03 12:20:44 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,9 +123,11 @@ ImageMaskSpatialObject< TDimension >
   
   ImagePointer image = this->GetImage();
 
-  IndexType index;
-  typename RegionType::SizeType  size;
+  typedef typename SizeType::SizeValueType    SizeValueType;
   
+  IndexType index;
+  SizeType  size;
+
   if( ImageType::ImageDimension == 3)
     {
     
@@ -220,8 +222,19 @@ ImageMaskSpatialObject< TDimension >
         IndexType tmpIndex = it.GetIndex();
         for ( unsigned int i = 0; i < ImageType::ImageDimension; ++i )
           {
-          index[ i ] = index[ i ] < tmpIndex[ i ] ? index[ i ] : tmpIndex[ i ];
-          size[ i ]  = (long)size[ i ]  > tmpIndex[ i ] ? size[ i ]  : tmpIndex[ i ];
+
+          if ( index[ i ] > tmpIndex[ i ] )
+            {
+            index[ i ] = tmpIndex[ i ];
+            }
+
+          const SizeValueType tmpSize = static_cast< SizeValueType >( tmpIndex[ i ] );
+
+          if ( size[ i ]  < tmpSize )
+            {
+            size[ i ]  = tmpSize;
+            }
+
           }
         }
       ++it;

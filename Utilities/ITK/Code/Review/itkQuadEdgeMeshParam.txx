@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshParam.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-13 21:52:25 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2009-09-17 11:14:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,9 +54,9 @@ void
 QuadEdgeMeshParam< TInputMesh, TOutputMesh, TSolverTraits >
 ::ComputeListOfInteriorVertices( )
 {
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
 
-  typename InputPointsContainer::Pointer points = input->GetPoints( );
+  typename InputPointsContainer::ConstPointer points = input->GetPoints( );
 
   InputPointIdentifier k( 0 );
   InputPointIdentifier id( 0 );
@@ -93,7 +93,7 @@ void
 QuadEdgeMeshParam< TInputMesh, TOutputMesh, TSolverTraits >
 ::FillMatrix( MatrixType& iM, VectorType& ioBx, VectorType& ioBy )
 {
-  InputMeshPointer input   = this->GetInput( );
+  InputMeshConstPointer input   = this->GetInput( );
   OutputMeshPointer output = this->GetOutput( );
 
   SolverTraits traits;
@@ -167,7 +167,7 @@ QuadEdgeMeshParam< TInputMesh, TOutputMesh, TSolverTraits >
 {
   this->CopyInputMeshToOutputMesh( );
 
-  InputMeshPointer input = this->GetInput( );
+  InputMeshConstPointer input = this->GetInput( );
   OutputMeshType* output = this->GetOutput( );
 
   if( m_BorderTransform.IsNotNull( ) )

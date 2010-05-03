@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelStatisticsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-05-05 18:16:17 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-02-05 18:18:37 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -238,14 +238,14 @@ public:
   itkBooleanMacro(UseHistograms);
   
   /** Set the label image */
-  void SetLabelInput(TLabelImage *input)
+  void SetLabelInput(const TLabelImage *input)
     {
       // Process object is not const-correct so the const casting is required.
       this->SetNthInput(1, const_cast<TLabelImage *>(input) );
     }
 
   /** Get the label image */
-  LabelImageType * GetLabelInput()
+  const LabelImageType * GetLabelInput() const
     {
       return static_cast<LabelImageType*>(const_cast<DataObject *>(this->ProcessObject::GetInput(1)));
     }

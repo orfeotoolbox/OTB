@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFilterWatcher.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:09:25 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2009-10-02 12:39:50 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,8 @@ namespace itk
 {
 
 /** \class SimpleFilterWatcher
- * \brief Simple mechanism for monitoring the pipeline events of a filter and reporting these events to std::cout
+ * \brief Simple mechanism for monitoring the pipeline events of a filter
+ * and reporting these events to std::cout.
  *
  * SimpleFilterWatcher provides a simple mechanism for monitoring the
  * execution of filter.  SimpleFilterWatcher is a stack-based object
@@ -110,7 +111,7 @@ public:
   void SetIterations(int val) {m_Iterations=val;}
   int GetIterations() {return m_Iterations;}
 
-  /** Set/Get the quiet mode boolean. If true, verbose progess is
+  /** Set/Get the quiet mode boolean. If true, verbose progress is
     * reported. */
   void SetQuiet(bool val) {m_Quiet=val;}
   bool GetQuiet() {return m_Quiet;}

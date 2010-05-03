@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilterBase.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 14:57:53 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2010-02-26 05:28:24 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@ namespace itk
 {
 
 /** \class VoronoiSegmentationImageFilterBase
- * /brief Base class for VoronoiSegmentationImageFilter
+ * \brief Base class for VoronoiSegmentationImageFilter
  * 
  * Voronoi SegmentationImageFilter is a class of segmenation algorithms that 
  * works on 2D image. 

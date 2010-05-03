@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshLineCell.txx,v $
   Language:  C++
-  Date:      $Date: 2009-07-30 21:17:33 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-12-13 15:28:13 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,16 +75,22 @@ QuadEdgeMeshLineCell< TCellInterface >
         else
           {
           FoundNullPointer = true;
+          delete m_QuadEdgeGeom->GetRot( )->GetRot( );            //e2
+          delete m_QuadEdgeGeom->GetRot( );                       //e1
+          delete m_QuadEdgeGeom;
           }
         }
       else
         {
         FoundNullPointer = true;
+        delete m_QuadEdgeGeom->GetRot( );                       //e1
+        delete m_QuadEdgeGeom;
         }
       }
     else
       {
       FoundNullPointer = true;
+      delete m_QuadEdgeGeom;
       }
     }
   else

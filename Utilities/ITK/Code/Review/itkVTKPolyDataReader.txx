@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKPolyDataReader.txx,v $
   Language:  C++
-  Date:      $Date: 2009-06-02 12:48:35 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-12-02 18:13:18 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,7 @@ VTKPolyDataReader<TOutputMesh>
 
   if( m_FileName == "" )
     {
-    itkExceptionMacro("No input FileName");
+    itkExceptionMacro(<< "No input FileName");
     }
 
   //
@@ -62,22 +62,67 @@ VTKPolyDataReader<TOutputMesh>
 
   if( !inputFile.is_open() )
     {
-    itkExceptionMacro("Unable to open file\n"
-        "inputFilename= " << m_FileName );
+    itkExceptionMacro(<< "Unable to open file\n"
+                      << "inputFilename= " << m_FileName );
     }
 
+  inputFile.imbue(std::locale::classic());
   std::string line;
 
+  // The first line must be "# vtk DataFile Version x.x" where x.x can
+  // vary
+  std::getline( inputFile, m_Version, '\n' );
+  if (inputFile.fail())
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nUnexpected end-of-file trying to read first line.");
+    }
+  if (m_Version.find("# vtk DataFile Version ") == std::string::npos)
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nOnly vtk legacy format files can be read."
+                      << "\nThis file does not start with the line: # vtk DataFile Version x.x where x.x is the version.");
+    }
+
+  // Next is a one line description
+  std::getline( inputFile, m_Header, '\n' );
+  if (inputFile.eof())
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nUnexpected end-of-file trying to read header.");
+    }
+  
+  // Next is the file format
+  std::getline( inputFile, line, '\n' );
+  if (inputFile.eof())
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nUnexpected end-of-file trying to file format.");
+    }
+  if (line.find("ASCII") == std::string::npos)
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nFile format is " << line
+                      << " but only ASCII files can be read.");
+    }
+  
+  bool foundPoints = false;
   while( !inputFile.eof() )
     {
-    std::getline( inputFile, line );
+    std::getline( inputFile, line, '\n' );
 
     if( line.find("POINTS") != std::string::npos )
       {
+      foundPoints = true;
       break;
       }
     }
 
+  if (!foundPoints)
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nUnexpected end-of-file before finding POINTS.");
+    }
   itkDebugMacro("POINTS line" << line );
 
   std::string pointLine( line, strlen("POINTS "), line.length() );
@@ -87,16 +132,18 @@ VTKPolyDataReader<TOutputMesh>
 
   if( sscanf(pointLine.c_str(),"%d",&numberOfPoints) != 1 )
     {
-    itkExceptionMacro("ERROR: Failed to read numberOfPoints\n"
-        "       pointLine= " << pointLine );
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nFailed to read numberOfPoints.\n"
+                      << "       pointLine= " << pointLine );
     }
 
   itkDebugMacro("numberOfPoints= " << numberOfPoints );
 
   if( numberOfPoints < 1 )
     {
-    itkExceptionMacro("numberOfPoints < 1"
-        << "       numberOfPoints= " << numberOfPoints );
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "numberOfPoints < 1"
+                      << "       numberOfPoints line= " << numberOfPoints );
     }
 
   outputMesh->GetPoints()->Reserve( numberOfPoints );
@@ -110,13 +157,35 @@ VTKPolyDataReader<TOutputMesh>
   for( int i=0; i < numberOfPoints; i++ )
     {
     inputFile >> point;
+    if (inputFile.eof())
+      {
+      itkExceptionMacro(<< "Error while reading file: " << m_FileName
+                        << "\nUnexpected end-of-file trying to read points.");
+      }
+    if (inputFile.fail())
+      {
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nInput could not be interpreted as a point.");
+      }
     outputMesh->SetPoint( i, point );
     }
 
   // Continue searching for the POLYGONS line
-  while( !inputFile.eof() && line.find("POLYGONS") == std::string::npos )
+  bool foundPolygons = false;
+  while( !inputFile.eof() )
     {
-    std::getline( inputFile, line );
+    std::getline( inputFile, line, '\n' );
+    if (line.find("POLYGONS") != std::string::npos )
+      {
+      foundPolygons = true;
+      break;
+      }
+    }
+
+  if (!foundPolygons)
+    {
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nUnexpected end-of-file before finding POLYGONS.");
     }
 
   itkDebugMacro( "POLYGONS line" << line );
@@ -134,8 +203,9 @@ VTKPolyDataReader<TOutputMesh>
   if( sscanf( polygonLine.c_str(), "%ld %ld", &numberOfPolygons,
         &numberOfIndices ) != 2 )
     {
-    itkExceptionMacro("ERROR: Failed to read numberOfPolygons from subline2"
-        "\npolygonLine= " << polygonLine );
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nFailed to read numberOfPolygons from subline2"
+                      << "\npolygonLine = " << polygonLine );
     }
 
   itkDebugMacro("numberOfPolygons " << numberOfPolygons );
@@ -143,15 +213,17 @@ VTKPolyDataReader<TOutputMesh>
 
   if( numberOfPolygons < 1 )
     {
-    itkExceptionMacro("ERROR: numberOfPolygons < 1\nnumberOfPolygons= "
-        << numberOfPolygons );
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nnumberOfPolygons < 1\nnumberOfPolygons= "
+                      << numberOfPolygons );
     }
 
   if( numberOfIndices < numberOfPolygons )
     {
-    itkExceptionMacro("ERROR: numberOfIndices < numberOfPolygons\n"
-        << "numberOfIndices= " << numberOfIndices << "\n"
-        << "numberOfPolygons= " << numberOfPolygons );
+    itkExceptionMacro(<< "Error reading file: " << m_FileName
+                      << "\nnumberOfIndices < numberOfPolygons\n"
+                      << "numberOfIndices= " << numberOfIndices << "\n"
+                      << "numberOfPolygons= " << numberOfPolygons );
     }
 
   //
@@ -163,49 +235,56 @@ VTKPolyDataReader<TOutputMesh>
 
   for(CellIdentifier i=0; i<numberOfPolygons; i++)
     {
+    std::getline( inputFile, line, '\n' );
     if( inputFile.eof() )
       {
-      itkExceptionMacro("Failed to read " << numberOfPolygons
-          << " polygons before the end of file");
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nFailed to read " << numberOfPolygons
+                        << " polygons before the end of file."
+                        << " Only read " << i+1);
       }
-
-    std::getline( inputFile, line );
 
     if( line.find("DATA") != std::string::npos )
       {
-      itkExceptionMacro("Read keyword DATA");
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nRead keyword DATA");
       }
 
     int got;
     if( (got = sscanf( line.c_str(), "%ld %ld %ld %ld", &numberOfCellPoints,
                        &ids[0], &ids[1], &ids[2] )) != 4 )
       {
-      itkExceptionMacro("Error parsing POLYGON cell. Expected 4 items but got "
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nError parsing POLYGON cell. Expected 4 items but got "
                         << got << std::endl
                         << "Line is: " << line);
       }
 
     if( numberOfCellPoints != 3 )
       {
-      itkExceptionMacro("ERROR: numberOfCellPoints != 3\n"
-          << "numberOfCellPoints= " << numberOfCellPoints
-          << "itkVTKPolyDataReader can only read triangles");
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nnumberOfCellPoints != 3\n"
+                        << "numberOfCellPoints= " << numberOfCellPoints
+                        << ". VTKPolyDataReader can only read triangles");
       }
 
     if( static_cast<long>(ids[0]) < 0 ||
         static_cast<long>(ids[1]) < 0 ||
         static_cast<long>(ids[2]) < 0 )
       {
-      itkExceptionMacro("ERROR: Incorrect point ids\n"
-          "ids=" << ids[0] << " " << ids[1] << " " << ids[2]);
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "point ids must be >= 0.\n"
+                        "ids=" << ids[0] << " " << ids[1] << " " << ids[2]);
       }
 
     if( static_cast<long>(ids[0]) >= numberOfPoints ||
         static_cast<long>(ids[1]) >= numberOfPoints ||
         static_cast<long>(ids[2]) >= numberOfPoints )
       {
-      itkExceptionMacro("ERROR: Incorrect point ids\n"
-          << "ids=" << ids[0] << " " << ids[1] << " " << ids[2]);
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "Point ids must be < number of points: "
+                        << numberOfPoints
+                        << "\nids= " << ids[0] << " " << ids[1] << " " << ids[2]);
       }
 
     CellAutoPointer cell;
@@ -223,7 +302,7 @@ VTKPolyDataReader<TOutputMesh>
 
   while( !inputFile.eof() )
     {
-    std::getline( inputFile, line );
+    std::getline( inputFile, line, '\n' );
 
     if( line.find("POINT_DATA") != std::string::npos )
       {
@@ -244,19 +323,21 @@ VTKPolyDataReader<TOutputMesh>
     // Skip two lines
     if (!inputFile.eof())
       {
-      std::getline( inputFile, line );
+      std::getline( inputFile, line, '\n' );
       }
     else
       {
-      itkExceptionMacro("Unexpected end-of-file while trying to read POINT_DATA.");
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nUnexpected end-of-file while trying to read POINT_DATA.");
       }
     if (!inputFile.eof())
       {
-      std::getline( inputFile, line );
+      std::getline( inputFile, line, '\n' );
       }
     else
       {
-      itkExceptionMacro("Unexpected end-of-file while trying to read POINT_DATA.");
+      itkExceptionMacro(<< "Error reading file: " << m_FileName
+                        << "\nUnexpected end-of-file while trying to read POINT_DATA.");
       }
 
     double pointData;
@@ -265,13 +346,14 @@ VTKPolyDataReader<TOutputMesh>
       {
       if (inputFile.eof())
         {
-        itkExceptionMacro("Unexpected end-of-file while trying to read POINT_DATA." << "Failed while trying to reading point data for id: " << pid);
+        itkExceptionMacro(<< "Error reading file: " << m_FileName
+                          << "\nUnexpected end-of-file while trying to read POINT_DATA."
+                          << "Failed while trying to reading point data for id: " << pid);
         }
       inputFile >> pointData;
       outputMesh->SetPointData( pid, pointData );
       }
     }
-
   inputFile.close();
 }
 
@@ -283,6 +365,8 @@ VTKPolyDataReader<TOutputMesh>
   Superclass::PrintSelf(os,indent);
 
   os << indent << "FileName: " << m_FileName << std::endl;
+  os << indent << "Version: " << m_Version << std::endl;
+  os << indent << "Header: " << m_Header << std::endl;
 }
 
 } //end of namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006-08-09 04:35:32 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2010-03-30 15:20:44 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkVersorTransform_txx
 
 #include "itkVersorTransform.h"
+#include "itkMath.h"
 
 
 namespace itk

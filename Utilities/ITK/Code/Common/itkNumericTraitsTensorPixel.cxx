@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsTensorPixel.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:13 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2010-04-10 16:22:29 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,8 +18,24 @@
 
 namespace itk
 {
-const SymmetricSecondRankTensor<double , 2>  
-  NumericTraits<SymmetricSecondRankTensor<double, 2> >::Zero = 
-  SymmetricSecondRankTensor<double , 2>( NumericTraits<double >::Zero ); 
+
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, unsigned char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, signed char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, short );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, unsigned short );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, int );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, unsigned int );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, long );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( SymmetricSecondRankTensor, unsigned long );
+
+//
+//    Subsequent Types can be found in the file
+//
+//                itkNumericTraitsTensorPixel2.cxx
+//
+//    This was split in two files in order to help the Sun CC 5.6 compiler to
+//    manage the size of the compilation unit.
+//
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-08-20 08:20:53 $
-  Version:   $Revision: 1.161 $
+  Date:      $Date: 2009-12-03 14:09:13 $
+  Version:   $Revision: 1.170 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 =========================================================================*/
 #include "gdcmFile.h"
 
+#include "itkVersion.h"
 #include "itkGDCMImageIO.h"
 #include "itkIOCommon.h"
 #include "itkPoint.h"
@@ -42,6 +43,8 @@
 #include "gdcmDictSet.h"  // access to dictionary
 #else
 #include "gdcmImageHelper.h"
+#include "gdcmFileExplicitFilter.h"
+#include "gdcmImageChangeTransferSyntax.h"
 #include "gdcmDataSetHelper.h"
 #include "gdcmStringFilter.h"
 #include "gdcmImageApplyLookupTable.h"
@@ -72,9 +75,11 @@ public:
 };
 
 // Initialize static members
-/*
+
+/* WARNING GDCM 1.x only WARNING Those options have no effect on GDCM 2.x as parsing is fast enough
+ *
  * m_LoadPrivateTagsDefault:
- * When this flag is set to false, GDCM will try to use the value stored in each private Group Length attribute value.
+ * When this flag is set to false, GDCM 1.x will try to use the value stored in each private Group Length attribute value.
  * This is a modest optimization feature that can be found in some ACR-NEMA file and/or DICOM pre-2008 file.
  * Because it is required by the standard that DICOM file reader can read file where Group Length attribute value
  * would be invalid, turning this flag to off, on the one hand might lead to some speed improvement, but on the
@@ -1201,7 +1206,8 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
        * Old behavior was to skip SQ, Pixel Data element. I decided that it is not safe to mime64
        * VR::UN element. There used to be a bug in gdcm 1.2.0 and VR:UN element.
        */
-      if ( tag.IsPublic() && vr != gdcm::VR::SQ && tag != gdcm::Tag(0x7fe0,0x0010) /* && vr != gdcm::VR::UN*/ )
+      if ( (m_LoadPrivateTags || tag.IsPublic()) && vr != gdcm::VR::SQ 
+        && tag != gdcm::Tag(0x7fe0,0x0010) /* && vr != gdcm::VR::UN*/ )
         {
         const gdcm::ByteValue *bv = ref.GetByteValue();
         if( bv )
@@ -1226,7 +1232,7 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
     else /* if ( vr & gdcm::VR::VRASCII ) */
       {
       // Only copying field from the public DICOM dictionary
-      if( tag.IsPublic() )
+      if( m_LoadPrivateTags || tag.IsPublic() )
         {
         EncapsulateMetaData<std::string>(dico, PrintAsPipeSeparatedString(tag), sf.ToString( tag ) );
         }
@@ -1492,24 +1498,24 @@ void GDCMImageIO::Write(const void* buffer)
     {
     str.str("");
     str << m_Direction[0][0] << "\\"
-      << m_Direction[1][0] << "\\";
+      << m_Direction[0][1] << "\\";
     /*
      * This is where the 3rd component of the direction is being lost
      * ITK mechanism does not support 2D image, placed in 3D world...
      */
     if( m_Direction.size() == 3 )
       {
-      str << m_Direction[2][0] << "\\";
+      str << m_Direction[0][2] << "\\";
       }
     else
       {
       str << 0. << "\\";
       }
-    str << m_Direction[0][1] << "\\"
+    str << m_Direction[1][0] << "\\"
       << m_Direction[1][1] << "\\";
     if( m_Direction.size() == 3 )
       {
-      str << m_Direction[2][1];
+      str << m_Direction[1][2];
       }
     else
       {
@@ -1844,6 +1850,11 @@ void GDCMImageIO::Write(const void* buffer)
   // global static:
   gdcm::UIDGenerator::SetRoot( m_UIDPrefix.c_str() );
 
+  // echo "ITK" | od -b
+  gdcm::FileMetaInformation::AppendImplementationClassUID( "111.124.113" );
+  const std::string project_name = std::string("GDCM/ITK ") + itk::Version::GetITKVersion();
+  gdcm::FileMetaInformation::SetSourceApplicationEntityTitle( project_name.c_str() );
+
   gdcm::ImageWriter writer;
   gdcm::DataSet &header = writer.GetFile().GetDataSet();
   gdcm::Global &g = gdcm::Global::GetInstance();
@@ -1856,6 +1867,9 @@ void GDCMImageIO::Write(const void* buffer)
   //Smarter approach using real iterators
   itk::MetaDataDictionary::ConstIterator itr = dict.Begin();
   itk::MetaDataDictionary::ConstIterator end = dict.End();
+  gdcm::StringFilter sf;
+  sf.SetFile( writer.GetFile() );
+
   while(itr != end)
     {
     const std::string &key = itr->first; //Needed for bcc32
@@ -1902,8 +1916,15 @@ void GDCMImageIO::Write(const void* buffer)
         if(!tag.IsGroupLength()) // Get rid of group length, they are not useful
           {
           gdcm::DataElement de( tag );
+          if( dictEntry.GetVR().IsVRFile() )
+            de.SetVR( dictEntry.GetVR() );
+#if GDCM_MAJOR_VERSION == 2 && GDCM_MINOR_VERSION <= 12
+          // This will not work in the vast majority of cases but to get at least something working in GDCM 2.0.12
           de.SetByteValue( value.c_str(), value.size() );
-          de.SetVR( dictEntry.GetVR() );
+#else
+          std::string si = sf.FromString( tag, value.c_str(), value.size() );
+          de.SetByteValue( si.c_str(), si.size() );
+#endif
           header.Insert( de ); //value, tag.GetGroup(), tag.GetElement());
           }
         }
@@ -1950,7 +1971,9 @@ void GDCMImageIO::Write(const void* buffer)
   //std::cout << header << std::endl;
 
   //this->SetNumberOfDimensions(3);
-  gdcm::Image &image = writer.GetImage();
+  //gdcm::Image &image = writer.GetImage();
+  gdcm::SmartPointer<gdcm::Image> simage = new gdcm::Image;
+  gdcm::Image &image = *simage;
   image.SetNumberOfDimensions( 2 ); // good default
   image.SetDimension(0, m_Dimensions[0] );
   image.SetDimension(1, m_Dimensions[1] );
@@ -1967,6 +1990,56 @@ void GDCMImageIO::Write(const void* buffer)
     image.SetNumberOfDimensions( 3 );
     image.SetDimension(2, m_Dimensions[2] );
     }
+
+  // Do the direction now:
+  image.SetDirectionCosines(0,m_Direction[0][0]);
+  image.SetDirectionCosines(1,m_Direction[0][1]);
+  image.SetDirectionCosines(2,m_Direction[0][2]);
+  image.SetDirectionCosines(3,m_Direction[1][0]);
+  image.SetDirectionCosines(4,m_Direction[1][1]);
+  image.SetDirectionCosines(5,m_Direction[1][2]);
+
+  // reset any previous value:
+  m_RescaleSlope = 1.0;
+  m_RescaleIntercept = 0.0;
+
+  // Get user defined rescale slope/intercept
+  std::string rescaleintercept;
+  ExposeMetaData<std::string>(dict, "0028|1052" , rescaleintercept);
+  std::string rescaleslope;
+  ExposeMetaData<std::string>(dict, "0028|1053" , rescaleslope);
+  if( rescaleintercept != "" && rescaleslope != "" )
+    {
+    itksys_ios::stringstream sstr1;
+    sstr1 << rescaleintercept;
+    if( ! (sstr1 >> m_RescaleIntercept) )
+      {
+      itkExceptionMacro( "Problem reading RescaleIntercept: " << rescaleintercept );
+      }
+    itksys_ios::stringstream sstr2;
+    sstr2 << rescaleslope;
+    if( !(sstr2 >> m_RescaleSlope) )
+      {
+      itkExceptionMacro( "Problem reading RescaleSlope: " << rescaleslope );
+      }
+    // header->InsertValEntry( "US", 0x0028, 0x1054 ); // Rescale Type
+    }
+  else if( rescaleintercept != "" || rescaleslope != "" ) // xor
+    {
+    itkExceptionMacro( "Both RescaleSlope & RescaleIntercept need to be present" );
+    }
+ 
+  // Handle the bitDepth:
+  std::string bitsAllocated;
+  std::string bitsStored;
+  std::string highBit;
+  std::string pixelRep;
+  // Get user defined bit representation:
+  ExposeMetaData<std::string>(dict, "0028|0100", bitsAllocated);
+  ExposeMetaData<std::string>(dict, "0028|0101", bitsStored);
+  ExposeMetaData<std::string>(dict, "0028|0102", highBit);
+  ExposeMetaData<std::string>(dict, "0028|0103", pixelRep);
+
   gdcm::PixelFormat pixeltype = gdcm::PixelFormat::UNKNOWN;
   switch (this->GetComponentType())
     {
@@ -1989,8 +2062,12 @@ void GDCMImageIO::Write(const void* buffer)
     pixeltype = gdcm::PixelFormat::UINT32;
     break;
     //Disabling FLOAT and DOUBLE for now...
-    //case ImageIOBase::FLOAT:
-    //case ImageIOBase::DOUBLE:
+  case ImageIOBase::FLOAT:
+    pixeltype = gdcm::PixelFormat::FLOAT32;
+    break;
+  case ImageIOBase::DOUBLE:
+    pixeltype = gdcm::PixelFormat::FLOAT64;
+    break;
   default:
     itkExceptionMacro(<<"DICOM does not support this component type");
     }
@@ -2011,17 +2088,94 @@ void GDCMImageIO::Write(const void* buffer)
     }
   pixeltype.SetSamplesPerPixel( this->GetNumberOfComponents() );
 
+  // Compute the outpixeltype
+  gdcm::PixelFormat outpixeltype = gdcm::PixelFormat::UNKNOWN;
+  if( pixeltype == gdcm::PixelFormat::FLOAT32 || pixeltype == gdcm::PixelFormat::FLOAT64 )
+    {
+    if( bitsAllocated != "" && bitsStored != "" && highBit != "" && pixelRep != "" )
+      {
+      outpixeltype.SetBitsAllocated( atoi(bitsAllocated.c_str()) );
+      outpixeltype.SetBitsStored( atoi(bitsStored.c_str()) );
+      outpixeltype.SetHighBit( atoi(highBit.c_str()) );
+      outpixeltype.SetPixelRepresentation( atoi(pixelRep.c_str()) );
+      if( this->GetNumberOfComponents() != 1 )
+        {
+        itkExceptionMacro(<<"Sorry Dave I can't do that" );
+        }
+      assert( outpixeltype != gdcm::PixelFormat::UNKNOWN );
+      }
+    else
+      {
+      itkExceptionMacro(<<"A Floating point buffer was passed but the stored pixel type was not specified."
+        "This is currently not supported" );
+      }
+    }
+
   image.SetPhotometricInterpretation( pi );
-  image.SetPixelFormat( pixeltype );
+  if( outpixeltype != gdcm::PixelFormat::UNKNOWN )
+    image.SetPixelFormat( outpixeltype );
+  else
+    image.SetPixelFormat( pixeltype );
   unsigned long len = image.GetBufferLength();
 
   size_t numberOfBytes = this->GetImageSizeInBytes();
-  assert( len == numberOfBytes );
 
   gdcm::DataElement pixeldata( gdcm::Tag(0x7fe0,0x0010) );
-  // only do a straight copy:
-  pixeldata.SetByteValue( (char*)buffer, numberOfBytes );
+  // Handle rescaler here:
+  // Whenever shift / scale is needed... do it !
+  if( m_RescaleIntercept != 0 || m_RescaleSlope != 1 )
+    {
+    // rescale from float to unsigned short
+    gdcm::Rescaler ir;
+    ir.SetIntercept( m_RescaleIntercept );
+    ir.SetSlope( m_RescaleSlope );
+    ir.SetPixelFormat( pixeltype );
+    ir.SetMinMaxForPixelType( outpixeltype.GetMin(), outpixeltype.GetMax() );
+    image.SetIntercept( m_RescaleIntercept );
+    image.SetSlope( m_RescaleSlope );
+    char* copy = new char[len];
+    ir.InverseRescale(copy,(char*)buffer,numberOfBytes );
+    pixeldata.SetByteValue( copy, len);
+    delete[] copy;
+    }
+  else
+    {
+    assert( len == numberOfBytes );
+    // only do a straight copy:
+    pixeldata.SetByteValue( (char*)buffer, numberOfBytes );
+    }
   image.SetDataElement( pixeldata );
+
+
+  // Handle compression here:
+  // If user ask to use compression:
+  if( m_UseCompression )
+    {
+    gdcm::ImageChangeTransferSyntax change;
+    if( m_CompressionType == JPEG )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEGLosslessProcess14_1 );
+      }
+    else if ( m_CompressionType == JPEG2000 )
+      {
+      change.SetTransferSyntax( gdcm::TransferSyntax::JPEG2000Lossless );
+      }
+    else
+      {
+      itkExceptionMacro(<< "Unknown compression type" );
+      }
+    change.SetInput( image );
+    bool b = change.Change();
+    if( !b )
+      {
+      itkExceptionMacro(<< "Could not change the Transfer Syntax for Compression" );
+      }
+    writer.SetImage( change.GetOutput() );
+    }
+  else
+    {
+    writer.SetImage( image );
+    }
 
   if( !m_KeepOriginalUID )
     {
@@ -2037,20 +2191,31 @@ void GDCMImageIO::Write(const void* buffer)
       m_FrameOfReferenceInstanceUID = uid.Generate();
       }
     //std::string uid = uid.Generate();
-  const char *studyuid = m_StudyInstanceUID.c_str();
-    {
-    gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
-    de.SetByteValue( studyuid, strlen(studyuid) );
-    de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
-    header.Insert( de );
+    const char *studyuid = m_StudyInstanceUID.c_str();
+      {
+      gdcm::DataElement de( gdcm::Tag(0x0020,0x000d) ); // Study
+      de.SetByteValue( studyuid, strlen(studyuid) );
+      de.SetVR( gdcm::Attribute<0x0020, 0x000d>::GetVR() );
+      header.Insert( de );
+      }
+    const char *seriesuid = m_SeriesInstanceUID.c_str();
+      {
+      gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
+      de.SetByteValue( seriesuid, strlen(seriesuid) );
+      de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
+      header.Insert( de );
+      }
     }
-  const char *seriesuid = m_SeriesInstanceUID.c_str();
+
+  if( image.GetTransferSyntax() != gdcm::TransferSyntax::ImplicitVRLittleEndian )
     {
-    gdcm::DataElement de( gdcm::Tag(0x0020,0x000e) ); // Series
-    de.SetByteValue( seriesuid, strlen(seriesuid) );
-    de.SetVR( gdcm::Attribute<0x0020, 0x000e>::GetVR() );
-    header.Insert( de );
-    }
+    gdcm::FileExplicitFilter fef;
+    //fef.SetChangePrivateTags( true );
+    fef.SetFile( writer.GetFile() );
+    if(!fef.Change())
+      {
+      itkExceptionMacro(<<"Failed to change to Explicit Transfer Syntax");
+      }
     }
 
   const char *filename = m_FileName.c_str();

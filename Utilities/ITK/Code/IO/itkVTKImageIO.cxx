@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVTKImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:48 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2009-11-29 15:54:05 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -367,8 +367,6 @@ void VTKImageIO::Read(void* buffer)
 {
   std::ifstream file;
 
-  typedef ::size_t   BufferSizeType;
-
   this->InternalReadImageInformation(file);
   
   //We are positioned at the data. The data is read depending on whether 
@@ -506,7 +504,7 @@ void VTKImageIO::Write(const void* buffer)
   else //binary
     {
     int size = this->GetComponentSize();
-    typedef ::size_t   BufferSizeType;
+
     const BufferSizeType numbytes = static_cast<BufferSizeType>( this->GetImageSizeInBytes() );
     char * tempmemory=new char[numbytes];
     memcpy(tempmemory,buffer,numbytes);

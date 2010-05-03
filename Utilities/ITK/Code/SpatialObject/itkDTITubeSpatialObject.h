@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDTITubeSpatialObject.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-07 14:33:56 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-01-26 13:57:57 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,6 +75,10 @@ protected:
   /** Method to print the object.*/
   virtual void PrintSelf( std::ostream& os, Indent indent ) const;
   
+private:
+  DTITubeSpatialObject(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
 };
 
 } // end namespace itk

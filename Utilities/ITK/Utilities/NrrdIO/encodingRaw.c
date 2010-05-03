@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -34,10 +34,13 @@ _nrrdEncodingRaw_available(void) {
 int
 _nrrdEncodingRaw_read(FILE *file, void *data, size_t elementNum,
                       Nrrd *nrrd, NrrdIoState *nio) {
-  char me[]="_nrrdEncodingRaw_read", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdEncodingRaw_read";
   size_t ret, bsize;
   int fd, dio, car;
   long savePos;
+  char *data_c;
+  size_t elementSize, maxChunkSize, remainder, chunkSize;
+  size_t retTmp;
 
   bsize = nrrdElementSize(nrrd)*elementNum;
   if (nio->format->usesDIO) {
@@ -53,11 +56,11 @@ _nrrdEncodingRaw_read(FILE *file, void *data, size_t elementNum,
     }
     ret = airDioRead(fd, data, bsize);
     if (ret != bsize) {
-      sprintf(err, "%s: airDioRead got read only "
-              _AIR_SIZE_T_CNV " of " _AIR_SIZE_T_CNV " bytes "
-              "(%g%% of expected)", me,
-              ret, bsize, 100.0*ret/bsize);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: airDioRead got read only "
+               _AIR_SIZE_T_CNV " of " _AIR_SIZE_T_CNV " bytes "
+               "(%g%% of expected)", me,
+               ret, bsize, 100.0*ret/bsize);
+      return 1;
     }
   } else {
     if (2 <= nrrdStateVerboseIO) {
@@ -65,15 +68,47 @@ _nrrdEncodingRaw_read(FILE *file, void *data, size_t elementNum,
         fprintf(stderr, "with fread(), not DIO: %s ...", airNoDioErr(dio));
       }
     }
+
+    /* HEY: There's a bug in fread/fwrite in gcc 4.2.1 (with SnowLeopard).
+            When it reads/writes a >=2GB data array, it pretends to succeed
+            (i.e. the return value is the right number) but it hasn't
+            actually read/written the data.  The work-around is to loop
+            over the data, reading/writing 1GB (or smaller) chunks.         */
+    ret = 0;
+    data_c = (char *)data;
+    elementSize = nrrdElementSize(nrrd);
+    maxChunkSize = 1024 * 1024 * 1024 / elementSize;
+    while(ret < elementNum) {
+      remainder = elementNum-ret;
+      if (remainder < maxChunkSize) {
+  chunkSize = remainder;
+      } else {
+  chunkSize = maxChunkSize;
+      }
+      retTmp = 
+  fread(&(data_c[ret*elementSize]), elementSize, chunkSize, file);
+      ret += retTmp;
+      if (retTmp != chunkSize) {
+  biffAddf(NRRD, "%s: fread got read only "
+                 _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not "
+                 _AIR_SIZE_T_CNV " (%g%% of expected)", me,
+                 ret, nrrdElementSize(nrrd), elementNum,
+                 100.0*ret/elementNum);
+  return 1;
+      }
+    }
+    /* HEY: Here's the old version of the above code. 
     ret = fread(data, nrrdElementSize(nrrd), elementNum, file);
     if (ret != elementNum) {
-      sprintf(err, "%s: fread got read only "
-              _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not "
-              _AIR_SIZE_T_CNV " (%g%% of expected)", me,
-              ret, nrrdElementSize(nrrd), elementNum,
-              100.0*ret/elementNum);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: fread got read only "
+               _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not "
+               _AIR_SIZE_T_CNV " (%g%% of expected)", me,
+               ret, nrrdElementSize(nrrd), elementNum,
+               100.0*ret/elementNum);
+      return 1;
     }
+    */
+
     car = fgetc(file);
     if (1 <= nrrdStateVerboseIO && EOF != car) {
       fprintf(stderr, "%s: WARNING: finished reading raw data, "
@@ -96,9 +131,12 @@ _nrrdEncodingRaw_read(FILE *file, void *data, size_t elementNum,
 int
 _nrrdEncodingRaw_write(FILE *file, const void *data, size_t elementNum,
                        const Nrrd *nrrd, NrrdIoState *nio) {
-  char me[]="_nrrdEncodingRaw_write", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdEncodingRaw_write";
   int fd, dio;
   size_t ret, bsize;
+  char *data_c;
+  size_t elementSize, maxChunkSize, remainder, chunkSize;
+  size_t retTmp;
   
   bsize = nrrdElementSize(nrrd)*elementNum;
   if (nio->format->usesDIO) {
@@ -114,11 +152,11 @@ _nrrdEncodingRaw_write(FILE *file, const void *data, size_t elementNum,
     }
     ret = airDioWrite(fd, data, bsize);
     if (ret != bsize) {
-      sprintf(err, "%s: airDioWrite wrote only "
-              _AIR_SIZE_T_CNV " of " _AIR_SIZE_T_CNV " bytes "
-              "(%g%% of expected)", me,
-              ret, bsize, 100.0*ret/bsize);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: airDioWrite wrote only "
+               _AIR_SIZE_T_CNV " of " _AIR_SIZE_T_CNV " bytes "
+               "(%g%% of expected)", me,
+               ret, bsize, 100.0*ret/bsize);
+      return 1;
     }
   } else {
     if (2 <= nrrdStateVerboseIO) {
@@ -126,20 +164,52 @@ _nrrdEncodingRaw_write(FILE *file, const void *data, size_t elementNum,
         fprintf(stderr, "with fread(), not DIO: %s ...", airNoDioErr(dio));
       }
     }
+
+    /* HEY: There's a bug in fread/fwrite in gcc 4.2.1 (with SnowLeopard).
+            When it reads/writes a >=2GB data array, it pretends to succeed
+            (i.e. the return value is the right number) but it hasn't
+            actually read/written the data.  The work-around is to loop
+            over the data, reading/writing 1GB (or smaller) chunks.         */
+    ret = 0;
+    data_c = (char *)data;
+    elementSize = nrrdElementSize(nrrd);
+    maxChunkSize = 1024 * 1024 * 1024 / elementSize;
+    while(ret < elementNum) {
+      remainder = elementNum-ret;
+      if (remainder < maxChunkSize) {
+  chunkSize = remainder;
+      } else {
+  chunkSize = maxChunkSize;
+      }
+      retTmp = 
+  fwrite(&(data_c[ret*elementSize]), elementSize, chunkSize, file);
+      ret += retTmp;
+      if (retTmp != chunkSize) {
+  biffAddf(NRRD, "%s: fwrite wrote only "
+                 _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not "
+                 _AIR_SIZE_T_CNV " (%g%% of expected)", me,
+                 ret, nrrdElementSize(nrrd), elementNum,
+                 100.0*ret/elementNum);
+  return 1;
+      }
+    }
+    /* HEY: Here's the old version of the above code.
     ret = fwrite(data, nrrdElementSize(nrrd), elementNum, file);
     if (ret != elementNum) {
-      sprintf(err, "%s: fwrite wrote read only "
-              _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not " 
-              _AIR_SIZE_T_CNV " (%g%% of expected)", me,
-              ret, nrrdElementSize(nrrd), elementNum,
-              100.0*ret/elementNum);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: fwrite wrote only "
+               _AIR_SIZE_T_CNV " " _AIR_SIZE_T_CNV "-sized things, not " 
+               _AIR_SIZE_T_CNV " (%g%% of expected)", me,
+               ret, nrrdElementSize(nrrd), elementNum,
+               100.0*ret/elementNum);
+      return 1;
     }
+    */
+
     fflush(file);
     /*
     if (ferror(file)) {
-      sprintf(err, "%s: ferror returned non-zero", me);
-      biffAdd(NRRD, err); return 1;
+      biffAddf(NRRD, "%s: ferror returned non-zero", me);
+      return 1;
     }
     */
   }

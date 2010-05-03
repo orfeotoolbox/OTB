@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSubsample.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-04 19:29:54 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2010-01-21 22:26:14 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,7 +54,7 @@ Subsample< TSample >
 }
 
 template< class TSample >
-inline typename Subsample< TSample >::MeasurementVectorType
+inline const typename Subsample< TSample >::MeasurementVectorType &
 Subsample< TSample >
 ::GetMeasurementVectorByIndex(int index) const
 {

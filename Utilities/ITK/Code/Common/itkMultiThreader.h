@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiThreader.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-14 08:50:53 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2009-11-22 13:34:19 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,10 +88,11 @@ namespace itk
 #define ITK_MAX_THREADS 128 
 #endif
 
-// mingw threads cause crashes  so limit to 1
+// at one point, mingw threads caused crashes so limit was set to 1
+// as of July 2009, all tests are passing with threads enabled
 #if defined(__MINGW32__)
 #undef ITK_MAX_THREADS
-#define ITK_MAX_THREADS 1 
+#define ITK_MAX_THREADS 128
 #endif
   
 // On some sgi machines, threads and stl don't mix so limit to 1
@@ -204,9 +205,9 @@ public:
   
 #ifdef ITK_USE_SPROC
   static bool GetInitialized()
-  { return m_Initialized; }
+    { return m_Initialized; }
   static usptr_t * GetThreadArena()
-  { return m_ThreadArena; }
+    { return m_ThreadArena; }
 
   static void Initialize();
 #endif

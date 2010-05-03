@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSharedMorphologyUtilities.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-06 13:46:38 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-10-29 15:03:32 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -378,7 +378,7 @@ FaceCalculatorType;
       {
       if (i != NonFaceDim)
         {
-        int Pad = (int)vcl_ceil((float)(NonFaceLen) * line[i]/vcl_fabs(line[NonFaceDim])); 
+        int Pad = Math::Ceil<int>((float)(NonFaceLen) * line[i]/vcl_fabs(line[NonFaceDim])); 
         if (Pad < 0)
           {
           // just increase the size - no need to change the start

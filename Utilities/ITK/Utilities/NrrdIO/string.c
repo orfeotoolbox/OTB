@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -143,8 +143,7 @@ airStrntok(const char *_s, const char *ct) {
 
 char *
 airStrtrans(char *s, char from, char to) {
-  size_t i;  // to match the signature of strlen in 64 bits
-  size_t l;
+  size_t i, l;
   
   if (s) {
     l = strlen(s);
@@ -181,7 +180,7 @@ airEndsWith(const char *s, const char *suff) {
 */
 char *
 airUnescape(char *s) {
-  size_t i, j, len; // to match signature of strlen in 64 bits
+  size_t i, j, len;
   int found=0;
 
   len = airStrlen(s);
@@ -217,7 +216,7 @@ airUnescape(char *s) {
 */
 char *
 airOneLinify(char *s) {
-  size_t i, j, len; // to match the signature of airStrlen()
+  size_t i, j, len;
 
   len = airStrlen(s);
   if (!len) 
@@ -225,11 +224,11 @@ airOneLinify(char *s) {
 
   /* convert white space to space (' '), and delete unprintables */
   for (i=0; i<len; i++) {
-    if (isspace((int) s[i])) {
+    if (isspace(AIR_CAST(int, s[i]))) {
       s[i] = ' ';
       continue;
     }
-    if (!isprint((int) s[i])) {
+    if (!isprint(AIR_CAST(int, s[i]))) {
       for (j=i; j<len; j++) {
         /* this will copy the '\0' at the end */
         s[j] = s[j+1];
@@ -249,9 +248,9 @@ airOneLinify(char *s) {
   }
 
   /* lose trailing white space */
-  len = airStrlen(s);
-  for (i=len-1; ((int)i)>=0 && ' ' == s[i]; i--) {
-    s[i] = '\0';
+  i = airStrlen(s);
+  if (' ' == s[i-1]) {
+    s[i-1] = '\0';
   }
 
   return s;
@@ -270,7 +269,7 @@ airToLower(char *str) {
   if (str) {
     c = str;
     while (*c) {
-      *c = tolower(*c);
+      *c = tolower((int) *c);
       c++;
     }
   }
@@ -290,7 +289,7 @@ airToUpper(char *str) {
   if (str) {
     c = str;
     while (*c) {
-      *c = toupper(*c);
+      *c = toupper((int) *c);
       c++;
     }
   }

@@ -20,10 +20,8 @@
 #include "otbMacro.h"
 #include <sstream>
 
-#ifdef OTB_USE_CURL
 #include "tinyxml.h"
-#include <curl/curl.h>
-#endif
+#include "otbCurlHelper.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -110,59 +108,34 @@ void CoordinateToName::DoEvaluate()
   m_IsValid = true;
 }
 
-void CoordinateToName::RetrieveXML(std::ostringstream& urlStream) const
+void CoordinateToName::RetrieveXML(const std::ostringstream& urlStream) const
 {
-#ifdef OTB_USE_CURL
-  CURL *   curl;
-  CURLcode res;
-
-  FILE* output_file = fopen(m_TempFileName.c_str(), "w");
-  curl = curl_easy_init();
-
-  char url[256];
-  strcpy(url, urlStream.str().data());
-
-//   std::cout << url << std::endl;
-  if (curl)
-    {
-    std::vector<char> chunk;
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-
-    // Set 5s timeout
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
-
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
-    res = curl_easy_perform(curl);
-
-    fclose(output_file);
-    /* always cleanup */
-    curl_easy_cleanup(curl);
-    }
-#endif
+  CurlHelper::Pointer curlHelper = CurlHelper::New();
+  curlHelper->RetrieveFile(urlStream, m_TempFileName);
 }
 
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
 {
-#ifdef OTB_USE_CURL
   TiXmlDocument doc(m_TempFileName.c_str());
-  doc.LoadFile();
-  TiXmlHandle docHandle(&doc);
+  if (doc.LoadFile())
+    {
+    TiXmlHandle docHandle(&doc);
 
-  TiXmlElement* childName = docHandle.FirstChild("geonames").FirstChild("geoname").
-                            FirstChild("name").Element();
-  if (childName)
-    {
-    placeName = childName->GetText();
-    }
-  TiXmlElement* childCountryName = docHandle.FirstChild("geonames").FirstChild("geoname").
+    TiXmlElement* childName = docHandle.FirstChild("geonames").FirstChild("geoname").
+                              FirstChild("name").Element();
+    if (childName)
+      {
+      placeName = childName->GetText();
+      }
+    TiXmlElement* childCountryName = docHandle.FirstChild("geonames").FirstChild("geoname").
                                    FirstChild("countryName").Element();
-  if (childCountryName)
-    {
-    countryName = childCountryName->GetText();
+    if (childCountryName)
+      {
+      countryName = childCountryName->GetText();
+      }
+    otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
+    remove(m_TempFileName.c_str());
     }
-  otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
-  remove(m_TempFileName.c_str());
-#endif
 }
 
 } // namespace otb

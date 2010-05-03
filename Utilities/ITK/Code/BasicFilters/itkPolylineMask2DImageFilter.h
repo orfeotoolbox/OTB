@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolylineMask2DImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-01-20 18:00:40 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2010-01-20 23:54:11 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,6 +34,11 @@ namespace itk
  * value of pixels outside the masked region will be set to zero.
  * 
  * \warning The Polygon represented by the input Polyline must be a convex polygon.
+ * \warning The Polygon's inside is defined by the standard clock-wise
+ * convention. That is, when walking along the polygon, the inside of the
+ * polygon is at the right-hand side. Note also that this must be interpreted
+ * in the natural coordinate system used by ITK, not the one used in computer
+ * graphics.
  * 
  * \ingroup ImageToImageFilter
  * \sa  PolylineMaskImageFilter

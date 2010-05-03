@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMSeriesFileNames.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-25 12:25:42 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2010-02-25 00:55:49 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,12 +119,7 @@ public:
    *   and SeriesName to identify when a single SeriesUID contains
    *   multiple 3D volumes - as can occur with perfusion and DTI imaging
    */
-  void SetUseSeriesDetails( bool useSeriesDetails)
-    {
-    m_UseSeriesDetails = useSeriesDetails;
-    m_SerieHelper->SetUseSeriesDetails( m_UseSeriesDetails );
-    m_SerieHelper->CreateDefaultUniqueSeriesIdentifier();
-    }
+  void SetUseSeriesDetails( bool useSeriesDetails);
 
   /** Returns true if using additional series information such as ProtocolName
    *   and SeriesName to identify when a single SeriesUID contains

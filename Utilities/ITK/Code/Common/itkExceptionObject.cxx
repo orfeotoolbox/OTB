@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExceptionObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-10-13 15:36:31 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2009-09-21 13:33:11 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -186,8 +186,10 @@ ExceptionObject &
 ExceptionObject::operator= ( const ExceptionObject &orig )
 {
   // Note: there is no superclass assignment here, because std::exception::operator= 
-  // appears have a bug on some platforms, including MSVC 2003. As reported by Jouni Kiviniemi:
-  // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=328570
+  // appears have a bug on some platforms, including MSVC 2003. The MSVC 2003 bug is
+  // described at the Usenet newsgroup microsoft.public.vc.language, June 2, 2008,
+  // subject "VC7.1 std::exception assignment operator bug (crash) a known issue?"
+  // http://groups.google.com/group/microsoft.public.vc.language/msg/15b927c8c1130e88
 
   // Assigns its smart pointer:
   m_ExceptionData = orig.m_ExceptionData;

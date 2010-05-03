@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSPSAOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-06-24 12:02:54 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-10-27 16:05:45 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,8 +21,9 @@
 #include "itkCommand.h"
 #include "itkEventObject.h"
 #include "itkExceptionObject.h"
+#include "itkMath.h"
 
-#include "vnl/vnl_math.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -349,7 +350,7 @@ void SPSAOptimizer
   for ( unsigned int j = 0; j < spaceDimension; j++ )
     {
     /** Generate randomly -1 or 1. */
-    m_Delta[ j ] = 2 * Math::Round( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
+    m_Delta[ j ] = 2 * Math::Round<int>( this->m_Generator->GetUniformVariate (0.0f, 1.0f) ) - 1;
 
     /**
      * Take scales into account. The perturbation of a parameter that has a

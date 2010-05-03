@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShapeLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-02 14:57:08 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2009-11-06 22:22:47 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -384,7 +384,8 @@ ShapeLabelMapFilter<TImage, TLabelImage>
   labelObject->SetEquivalentEllipsoidSize( ellipsoidSize );
   labelObject->SetBinaryFlatness( flatness );
 
-  if( m_ComputeFeretDiameter )
+  // Don't compute the Feret Diameter on the 0 label!
+  if( m_ComputeFeretDiameter && labelObject->GetLabel() != 0 )
     {
     this->ComputeFeretDiameter( labelObject );
     }

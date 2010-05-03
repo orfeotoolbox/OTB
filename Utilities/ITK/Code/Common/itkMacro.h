@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMacro.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 07:58:46 $
-  Version:   $Revision: 1.97 $
+  Date:      $Date: 2009-10-28 16:05:57 $
+  Version:   $Revision: 1.100 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,6 @@
 #include <cassert>
 #endif
 
-#include "vnl/vnl_math.h"
 
 // Determine type of string stream to use.
 #if !defined(CMAKE_NO_ANSI_STRING_STREAM)
@@ -970,24 +969,6 @@ private:
 #endif
 
 
-namespace itk
-{
-namespace Math
-{
-inline int RoundHalfIntegerUp(float   x) { return vnl_math_rnd_halfintup(x); }
-inline int RoundHalfIntegerUp(double  x) { return vnl_math_rnd_halfintup(x); }
-inline int RoundHalfIntegerToEven(float   x) { return vnl_math_rnd_halfinttoeven(x); }
-inline int RoundHalfIntegerToEven(double  x) { return vnl_math_rnd_halfinttoeven(x); }
-inline int Round(float   x) { return RoundHalfIntegerUp(x); }
-inline int Round(double  x) { return RoundHalfIntegerUp(x); }
-inline int Floor(float   x) { return vnl_math_floor(x); }
-inline int Floor(double  x) { return vnl_math_floor(x); }
-inline int Ceil(float   x) { return vnl_math_ceil(x); }
-inline int Ceil(double  x) { return vnl_math_ceil(x); }
-} // end namespace Math
-} // end namespace itk
-
-
 #ifdef ITK_USE_TEMPLATE_META_PROGRAMMING_LOOP_UNROLLING
 //--------------------------------------------------------------------------------
 //  Helper macros for Template Meta-Programming techniques of for-loops unrolling
@@ -1017,7 +998,7 @@ inline int Ceil(double  x) { return vnl_math_ceil(x); }
 #define itkForLoopRoundingAndAssignmentMacro(DestinationType,Sourcrnd_halfintup,DestinationElementType,DestinationArray,SourceArray,NumberOfIterations) \
     for(unsigned int i=0;i < NumberOfIterations; ++i) \
       { \
-      DestinationArray[i] = static_cast< DestinationElementType >( itk::Math::Round( SourceArray[i] ) ); \
+      DestinationArray[i] = itk::Math::Round< DestinationElementType >( SourceArray[i] ); \
       }
 
 #endif

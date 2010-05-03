@@ -1,16 +1,14 @@
-/*=========================================================================
+/*============================================================================
+  KWSys - Kitware System Library
+  Copyright 2000-2009 Kitware, Inc., Insight Software Consortium
 
-  Program:   KWSys - Kitware System Library
-  Module:    $RCSfile: SystemTools.cxx,v $
+  Distributed under the OSI-approved BSD License (the "License");
+  see accompanying file Copyright.txt for details.
 
-  Copyright (c) Kitware, Inc., Insight Consortium.  All rights reserved.
-  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
+  This software is distributed WITHOUT ANY WARRANTY; without even the
+  implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  See the License for more information.
+============================================================================*/
 #include "kwsysPrivate.h"
 #include KWSYS_HEADER(RegularExpression.hxx)
 #include KWSYS_HEADER(SystemTools.hxx)
@@ -64,9 +62,16 @@
 #include <signal.h>    /* sigprocmask */
 #endif
 
-// Windows API.  Some parts used even on cygwin.
+// Windows API.
 #if defined(_WIN32)
 # include <windows.h>
+#elif defined (__CYGWIN__)
+# include <windows.h>
+# undef _WIN32
+#endif
+
+#ifdef __CYGWIN__
+extern "C" void cygwin_conv_to_win32_path(const char *path, char *win32_path);
 #endif
 
 // getpwnam doesn't exist on Windows and Cray Xt3/Catamount
@@ -282,7 +287,7 @@ extern int putenv (char *__string) __THROW;
 #    define FTIME _ftime
 #    define TIMEB _timeb
 #  endif
-#elif defined( __CYGWIN__ ) || defined( __linux__ )
+#elif defined( __CYGWIN__ ) || defined( __linux__ ) || defined(__APPLE__)
 #  include <sys/time.h>
 #  include <time.h>
 #  define HAVE_GETTIMEOFDAY
@@ -410,11 +415,13 @@ public:
 
 kwsysDeletingCharVector::~kwsysDeletingCharVector()
 {
+#ifndef KWSYS_DO_NOT_CLEAN_PUTENV
   for(kwsys_stl::vector<char*>::iterator i = this->begin();
       i != this->end(); ++i)
     {
     delete []*i;
     }
+#endif
 }
 bool SystemTools::PutEnv(const char* value)
 { 
@@ -892,39 +899,69 @@ bool SystemTools::SameFile(const char* file1, const char* file2)
 #endif
 }
 
-
-// return true if the file exists
-bool SystemTools::FileExists(const char* filename, bool isFile)
+//----------------------------------------------------------------------------
+#if defined(_WIN32) || defined(__CYGWIN__)
+static bool WindowsFileExists(const char* filename)
 {
-#ifdef _MSC_VER
-# define access _access
-#endif
-#ifndef R_OK
-# define R_OK 04
+  WIN32_FILE_ATTRIBUTE_DATA fd;
+  return GetFileAttributesExA(filename, GetFileExInfoStandard, &fd) != 0;
+}
 #endif
 
-#ifdef __SYLLABLE__
-  if ((filename !=0) && (*filename == 0))
-    {
-    return false;
-  }
-#endif
-
-  if ( access(filename, R_OK) != 0 )
+//----------------------------------------------------------------------------
+bool SystemTools::FileExists(const char* filename)
+{
+  if(!(filename && *filename))
     {
     return false;
     }
-  else
+#if defined(__CYGWIN__)
+  // Convert filename to native windows path if possible.
+  char winpath[MAX_PATH];
+  if(SystemTools::PathCygwinToWin32(filename, winpath))
+    {
+    return WindowsFileExists(winpath);
+    }
+  return access(filename, R_OK) == 0;
+#elif defined(_WIN32)
+  return WindowsFileExists(filename);
+#else
+  return access(filename, R_OK) == 0;
+#endif
+}
+
+//----------------------------------------------------------------------------
+bool SystemTools::FileExists(const char* filename, bool isFile)
+{
+  if(SystemTools::FileExists(filename))
     {
     // If isFile is set return not FileIsDirectory,
     // so this will only be true if it is a file
-    if(isFile)
-      {
-      return !SystemTools::FileIsDirectory(filename);
-      }
-    return true;
+    return !isFile || !SystemTools::FileIsDirectory(filename);
     }
+  return false;
 }
+
+//----------------------------------------------------------------------------
+#ifdef __CYGWIN__
+bool SystemTools::PathCygwinToWin32(const char *path, char *win32_path)
+{
+  SystemToolsTranslationMap::iterator i =
+    SystemTools::Cyg2Win32Map->find(path);
+
+  if (i != SystemTools::Cyg2Win32Map->end())
+    {
+    strncpy(win32_path, i->second.c_str(), MAX_PATH);
+    }
+  else
+    {
+    cygwin_conv_to_win32_path(path, win32_path);
+    SystemToolsTranslationMap::value_type entry(path, win32_path);
+    SystemTools::Cyg2Win32Map->insert(entry);
+    }
+  return win32_path[0] != 0;
+}
+#endif
 
 bool SystemTools::Touch(const char* filename, bool create)
 {
@@ -2577,7 +2614,7 @@ bool SystemTools::FileIsDirectory(const char* name)
   struct stat fs;
   if(stat(name, &fs) == 0)
     {
-#if defined( _WIN32 )
+#if defined( _WIN32 ) && !defined(__CYGWIN__)
     return ((fs.st_mode & _S_IFDIR) != 0);
 #else
     return S_ISDIR(fs.st_mode);
@@ -3028,38 +3065,35 @@ kwsys_stl::string SystemTools::RelativePath(const char* local, const char* remot
   return relativePath;
 }
 
-// OK, some fun stuff to get the actual case of a given path.
-// Basically, you just need to call ShortPath, then GetLongPathName,
-// However, GetLongPathName is not implemented on windows NT and 95,
-// so we have to simulate it on those versions
 #ifdef _WIN32
-int OldWindowsGetLongPath(kwsys_stl::string const& shortPath,
-                          kwsys_stl::string& longPath  )
+static int GetCasePathName(const kwsys_stl::string & pathIn,
+                            kwsys_stl::string & casePath)
 {
-  kwsys_stl::string::size_type iFound = shortPath.rfind('/');
-  if (iFound > 1  && iFound != shortPath.npos)
+  kwsys_stl::string::size_type iFound = pathIn.rfind('/');
+  if (iFound > 1  && iFound != pathIn.npos)
     {
     // recurse to peel off components
     //
-    if (OldWindowsGetLongPath(shortPath.substr(0, iFound), longPath) > 0)
+    if (GetCasePathName(pathIn.substr(0, iFound), casePath) > 0)
       {
-      longPath += '/';
-      if (shortPath[1] != '/')
+      casePath += '/';
+      if (pathIn[1] != '/')
         {
         WIN32_FIND_DATA findData;
 
         // append the long component name to the path
         //
-        if (INVALID_HANDLE_VALUE != ::FindFirstFile
-            (shortPath.c_str(), &findData))
+        HANDLE hFind = ::FindFirstFile(pathIn.c_str(), &findData);
+        if (INVALID_HANDLE_VALUE != hFind)
           {
-          longPath += findData.cFileName;
+          casePath += findData.cFileName;
+          ::FindClose(hFind);
           }
         else
           {
           // if FindFirstFile fails, return the error code
           //
-          longPath = "";
+          casePath = "";
           return 0;
           }
         }
@@ -3067,37 +3101,9 @@ int OldWindowsGetLongPath(kwsys_stl::string const& shortPath,
     }
   else
     {
-    longPath = shortPath;
+    casePath = pathIn;
     }
-  return (int)longPath.size();
-}
-
-
-int PortableGetLongPathName(const char* pathIn,
-                            kwsys_stl::string & longPath)
-{ 
-  HMODULE lh = LoadLibrary("Kernel32.dll");
-  if(lh)
-    {
-    FARPROC proc =  GetProcAddress(lh, "GetLongPathNameA");
-    if(proc)
-      {
-      typedef  DWORD (WINAPI * GetLongFunctionPtr) (LPCSTR,LPSTR,DWORD); 
-      GetLongFunctionPtr func = (GetLongFunctionPtr)proc;
-      char buffer[MAX_PATH+1];
-      int len = (*func)(pathIn, buffer, MAX_PATH+1);
-      if(len == 0 || len > MAX_PATH+1)
-        {
-        FreeLibrary(lh);
-        return 0;
-        }
-      longPath = buffer;
-      FreeLibrary(lh);
-      return len;
-      }
-    FreeLibrary(lh);
-    }
-  return OldWindowsGetLongPath(pathIn, longPath);
+  return (int)casePath.size();
 }
 #endif
 
@@ -3116,29 +3122,19 @@ kwsys_stl::string SystemTools::GetActualCaseForPath(const char* p)
     {
     return i->second;
     }
-  kwsys_stl::string shortPath;
-  if(!SystemTools::GetShortPath(p, shortPath))
-    {
-    return p;
-    }
-  kwsys_stl::string longPath;
-  int len = PortableGetLongPathName(shortPath.c_str(), longPath);
+  kwsys_stl::string casePath;
+  int len = GetCasePathName(p, casePath);
   if(len == 0 || len > MAX_PATH+1)
     {
     return p;
     }
-  // Use original path if conversion back to a long path failed.
-  if(longPath == shortPath)
-    {
-    longPath = p;
-    }
   // make sure drive letter is always upper case
-  if(longPath.size() > 1 && longPath[1] == ':')
+  if(casePath.size() > 1 && casePath[1] == ':')
     {
-    longPath[0] = toupper(longPath[0]);
+    casePath[0] = toupper(casePath[0]);
     }
-  (*SystemTools::LongPathMap)[p] = longPath;
-  return longPath;
+  (*SystemTools::LongPathMap)[p] = casePath;
+  return casePath;
 #endif  
 }
 
@@ -3922,7 +3918,20 @@ bool SystemTools::GetLineFromStream(kwsys_ios::istream& is,
   line = "";
 
   long leftToRead = sizeLimit;
-  
+
+  // Early short circuit return if stream is no good. Just return
+  // false and the empty line. (Probably means caller tried to
+  // create a file stream with a non-existent file name...)
+  //
+  if(!is)
+    {
+    if(has_newline)
+      {
+      *has_newline = false;
+      }
+    return false;
+    }
+
   // If no characters are read from the stream, the end of file has
   // been reached.  Clear the fail bit just before reading.
   while(!haveNewline &&
@@ -4536,6 +4545,9 @@ bool SystemTools::ParseURL( const kwsys_stl::string& URL,
 unsigned int SystemToolsManagerCount;
 SystemToolsTranslationMap *SystemTools::TranslationMap;
 SystemToolsTranslationMap *SystemTools::LongPathMap;
+#ifdef __CYGWIN__
+SystemToolsTranslationMap *SystemTools::Cyg2Win32Map;
+#endif
 
 // SystemToolsManager manages the SystemTools singleton.
 // SystemToolsManager should be included in any translation unit
@@ -4581,6 +4593,9 @@ void SystemTools::ClassInitialize()
   // Allocate the translation map first.
   SystemTools::TranslationMap = new SystemToolsTranslationMap;
   SystemTools::LongPathMap = new SystemToolsTranslationMap;
+#ifdef __CYGWIN__
+  SystemTools::Cyg2Win32Map = new SystemToolsTranslationMap;
+#endif
 
   // Add some special translation paths for unix.  These are not added
   // for windows because drive letters need to be maintained.  Also,
@@ -4637,6 +4652,9 @@ void SystemTools::ClassFinalize()
 {
   delete SystemTools::TranslationMap;
   delete SystemTools::LongPathMap;
+#ifdef __CYGWIN__
+  delete SystemTools::Cyg2Win32Map;
+#endif
 }
 
 

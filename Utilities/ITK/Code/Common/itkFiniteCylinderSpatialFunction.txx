@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkFiniteCylinderSpatialFunction.txx,v $
 Language:  C++
-Date:      $Date: 2009-04-06 16:49:29 $
-Version:   $Revision: 1.10 $
+Date:      $Date: 2009-11-24 02:27:27 $
+Version:   $Revision: 1.11 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,10 +27,10 @@ template <unsigned int VDimension, typename TInput>
 FiniteCylinderSpatialFunction<VDimension, TInput>
 ::FiniteCylinderSpatialFunction()
 {
-  m_Orientation.Fill(1.0);
-  m_AxisLength = 1.0;   // Length of cylinder axis.
-  m_Radius = 1.0;   // Radius of cylinder.
-  m_Center.Fill(0.0); // Origin of cylinder
+  m_Orientation.Fill(1.0f);
+  m_AxisLength = 1.0f;   // Length of cylinder axis.
+  m_Radius = 1.0f;   // Radius of cylinder.
+  m_Center.Fill(0.0f); // Origin of cylinder
 }
 
 template <unsigned int VDimension, typename TInput >

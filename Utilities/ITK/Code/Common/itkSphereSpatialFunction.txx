@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSphereSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2003-09-10 14:29:26 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2009-11-24 02:27:28 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,7 @@ SphereSpatialFunction<VImageDimension,TInput>
 {
   m_Radius = 1.0;
 
-  m_Center.Fill(0.0);
+  m_Center.Fill(0.0f);
 }
 
 template <unsigned int VImageDimension,typename TInput>

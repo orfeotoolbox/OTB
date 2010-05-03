@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid3DPerspectiveTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:08:59 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -84,7 +84,7 @@ Rigid3DPerspectiveTransform<TScalarType>
   axis[1] = parameters[1];
   norm += parameters[2]*parameters[2];
   axis[2] = parameters[2];
-  if( norm > 0)
+  if( norm > NumericTraits<double>::Zero )
     {
     norm = vcl_sqrt(norm);
     }

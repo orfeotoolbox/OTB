@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-24 21:48:17 $
-  Version:   $Revision: 1.33 $
+  Date:      $Date: 2009-10-29 11:19:10 $
+  Version:   $Revision: 1.34 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -215,19 +215,19 @@ WarpImageFilter<TInputImage,TOutputImage,TDeformationField>
    * Compute base index = closest index below point
    * Compute distance from point to base index
    */
-  signed long baseIndex[ImageDimension];
+  IndexType baseIndex;
   IndexType neighIndex;
   double distance[ImageDimension];
 
   for( dim = 0; dim < ImageDimension; dim++ )
     {
-    baseIndex[dim] = (long) vcl_floor(index[dim] );
+    baseIndex[dim] = Math::Floor< IndexValueType >( index[dim] );
 
     if( baseIndex[dim] >=  m_StartIndex[dim] )
       {
       if( baseIndex[dim] <  m_EndIndex[dim] )
         {
-        distance[dim] = index[dim] - double( baseIndex[dim] );
+        distance[dim] = index[dim] - static_cast<double>( baseIndex[dim] );
         }
       else
         {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleCell.txx,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:11:04 $
-  Version:   $Revision: 1.55 $
+  Date:      $Date: 2009-11-24 02:27:28 $
+  Version:   $Revision: 1.56 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -520,6 +520,7 @@ TriangleCell< TCellInterface >
   // u32 is orthogonal to v12
   //
   const double dotproduct =  v12 * v32;
+  typedef typename VectorType::ValueType VectorValueType;
   VectorType u12 = v12 - v32 * ( dotproduct / v32.GetSquaredNorm() );
   VectorType u32 = v32 - v12 * ( dotproduct / v12.GetSquaredNorm() );
 

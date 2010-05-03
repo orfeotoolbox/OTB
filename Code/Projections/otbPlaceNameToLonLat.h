@@ -59,7 +59,7 @@ protected:
   PlaceNameToLonLat();
   virtual ~PlaceNameToLonLat() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  void RetrieveXML(std::ostringstream& urlStream);
+  void RetrieveXML(const std::ostringstream& urlStream);
   void ParseXMLYahoo();
   void ParseXMLGoogle();
   void ParseXMLGeonames(); //Not implemented yet TODO

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersor.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-18 04:34:28 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include "itkVector.h" 
 #include "itkNumericTraits.h" 
 #include "itkExceptionObject.h"
+#include "itkMath.h"
 
 
 namespace itk
@@ -412,7 +413,7 @@ Versor<T>
     if( m(0,0) > m(1,1) && m(0,0) > m(2,2) )
       {
       const double s = 2.0 * vcl_sqrt(1.0 + m(0,0) - m(1,1) - m(2,2));
-      m_X = 0.25 * s;
+      m_X =0.25 * s;
       m_Y = (m(0,1) + m(1,0)) / s;
       m_Z = (m(0,2) + m(2,0)) / s;
       m_W = (m(1,2) - m(2,1)) / s;
@@ -447,9 +448,9 @@ void
 Versor<T>
 ::Set( const VectorType & axis )
 {
-
+  typedef typename VectorType::RealValueType  VectorRealValueType;
   const ValueType sinangle2 =  axis.GetNorm();
-  if( sinangle2 > 1.0 )
+  if( sinangle2 > NumericTraits<ValueType>::One )
     {
     ExceptionObject exception;
     exception.SetDescription("Trying to initialize a Versor with " \
@@ -458,7 +459,7 @@ Versor<T>
     throw exception;
     }
   
-  const ValueType cosangle2 =  vcl_sqrt(1.0 - sinangle2 * sinangle2 );
+  const ValueType cosangle2 =  vcl_sqrt( NumericTraits<double>::One - sinangle2 * sinangle2 );
   
   m_X = axis[0];
   m_Y = axis[1];

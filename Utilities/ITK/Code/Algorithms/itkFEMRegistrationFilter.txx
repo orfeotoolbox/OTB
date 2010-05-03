@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-06-15 22:11:29 $
-  Version:   $Revision: 1.59 $
+  Date:      $Date: 2010-04-01 22:17:59 $
+  Version:   $Revision: 1.60 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -579,7 +579,7 @@ int FEMRegistrationFilter<TMovingImage,TFixedImage>::WriteDisplacementField(unsi
   fieldImage = fieldCaster->GetOutput();
 
   // Set up the output filename
-  std::string outfile=m_DisplacementsFileName+static_cast<char>('x'+index)+std::string("vec.hdr");
+  std::string outfile=m_DisplacementsFileName+static_cast<char>('x'+index)+std::string("vec.mhd");
   std::cout << "Writing displacements to " << outfile;
 
   typedef typename FloatImageType::PixelType FType;
@@ -1611,7 +1611,7 @@ void FEMRegistrationFilter<TMovingImage,TFixedImage>::WriteWarpedImage(const cha
 
   // for image output
   std::ofstream fbin;
-  std::string exte=".hdr";
+  std::string exte=".mhd";
   std::string fnum;
 
   OStringStream buf;

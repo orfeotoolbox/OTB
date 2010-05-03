@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFFTComplexConjugateToRealImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2008-12-21 19:13:11 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2010-02-27 00:09:41 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -161,6 +161,15 @@ GenerateInputRequestedRegion()
     {
     inputPtr->SetRequestedRegionToLargestPossibleRegion();
     }
+}
+
+template <class TPixel, unsigned int VDimension>
+void
+FFTComplexConjugateToRealImageFilter<TPixel,VDimension>::
+EnlargeOutputRequestedRegion(DataObject *)
+{
+  this->GetOutput()
+    ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
 }
 
 }

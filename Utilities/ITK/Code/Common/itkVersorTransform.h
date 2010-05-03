@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-06-14 12:30:09 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2009-11-24 02:27:28 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,6 +94,8 @@ public:
   typedef Versor<TScalarType>                   VersorType;
   typedef typename VersorType::VectorType       AxisType;
   typedef typename VersorType::ValueType        AngleType;
+  typedef typename AxisType::ValueType          AxisValueType;
+  typedef typename ParametersType::ValueType    ParameterValueType;
 
   /**
    * Set the transformation from a container of parameters

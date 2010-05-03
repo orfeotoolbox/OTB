@@ -77,7 +77,7 @@ ADD_TEST(maTeMarkovRegularizationExampleTest ${EXE_TESTS}
        ${TEMP}/MarkovRegularization-scaled.png
        0.2
        20
-       1.0
+       0.0
        1 # true to use always the same rand() sample, false otherwis
 )
 

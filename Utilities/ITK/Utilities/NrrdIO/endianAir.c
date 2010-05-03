@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -22,7 +22,6 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-
 #include "NrrdIO.h"
 #include "teemEndian.h"
 
@@ -37,28 +36,28 @@ const int airMyEndian = 1234;
 const int airMyEndian = 4321;
 #endif
 
-char
-_airEndianStr[][AIR_STRLEN_SMALL] = {
+const char *
+_airEndianStr[] = {
   "(unknown endian)",
   "little",
   "big"
 };
 
-char
-_airEndianDesc[][AIR_STRLEN_MED] = {
+const char *
+_airEndianDesc[] = {
   "unknown endianness",
   "Intel and compatible",
   "Everyone besides Intel and compatible"
 };
 
-int
+const int
 _airEndianVal[] = {
   airEndianUnknown,
   airEndianLittle,
   airEndianBig,
 };
 
-airEnum
+const airEnum
 _airEndian = {
   "endian",
   2,
@@ -68,6 +67,6 @@ _airEndian = {
   AIR_FALSE
 };
 
-airEnum *
+const airEnum *const
 airEndian = &_airEndian;
 

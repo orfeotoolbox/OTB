@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPhilipsPAR.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-29 12:17:22 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-11-22 13:42:42 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -2203,7 +2203,7 @@ bool PhilipsPAR::GetDiffusionGradientOrientationAndBValues(std::string parFile,
         lineIncrement = 101;
       }
 
-     try
+    try
       {
       this->ReadPAR(parFile, &tempPar);
       }
@@ -2262,7 +2262,7 @@ bool PhilipsPAR::GetLabelTypesASL(std::string parFile,
     int aslLabelNumber = -1;
     int lineIncrement = 101;
 
-     try
+    try
       {
       this->ReadPAR(parFile, &tempPar);
       }

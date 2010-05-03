@@ -18,7 +18,7 @@
 
 #include "otbPlaceNameToLonLat.h"
 #include "tinyxml.h"
-#include <curl/curl.h>
+#include "otbCurlHelper.h"
 
 namespace otb
 {
@@ -105,42 +105,10 @@ curlHandlerWriteMemoryCallback(void *ptr, size_t size, size_t nmemb,
 }
 */
 
-void PlaceNameToLonLat::RetrieveXML(std::ostringstream& urlStream)
+void PlaceNameToLonLat::RetrieveXML(const std::ostringstream& urlStream)
 {
-
-  CURL *   curl;
-  CURLcode res;
-
-  FILE* output_file = fopen("out.xml", "w");
-  curl = curl_easy_init();
-
-//   std::cout << "URL data " << urlStream.str().data() << std::endl;
-
-  char url[256];
-  strcpy(url, urlStream.str().data());
-
-//   std::cout << url << std::endl;
-  if (curl)
-    {
-    std::vector<char> chunk;
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    /*
-    //Step needed to handle curl without temporary file
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION,this->curlHandlerWriteMemoryCallback);
-    curl_easy_setopt(curl, CURLOPT_FILE, (void *)&chunk);
-    */
-
-    // Set 5s timeout
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5);
-
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
-    res = curl_easy_perform(curl);
-
-    fclose(output_file);
-    /* always cleanup */
-    curl_easy_cleanup(curl);
-    }
-
+  CurlHelper::Pointer curlHelper = CurlHelper::New();
+  curlHelper->RetrieveFile(urlStream, "out.xml");
 }
 
 void PlaceNameToLonLat::ParseXMLYahoo()

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkBinaryMask3DMeshSource.txx,v $
 Language:  C++
-Date:      $Date: 2009-04-12 03:55:23 $
-Version:   $Revision: 1.29 $
+Date:      $Date: 2009-10-06 19:11:58 $
+Version:   $Revision: 1.30 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,7 +56,7 @@ BinaryMask3DMeshSource<TInputImage,TOutputMesh>
   this->GetOutput()->GetPoints()->Reserve(m_NodeLimit);
   this->GetOutput()->GetCells()->Reserve(m_CellLimit);
 
-  m_ObjectValue = NumericTraits< InputPixelType >::Zero;
+  m_ObjectValue = NumericTraits< InputPixelType >::One;
 }
 
 template<class TInputImage, class TOutputMesh>

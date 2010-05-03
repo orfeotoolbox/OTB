@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryImageToLabelMapFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-24 13:34:42 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2009-10-13 09:59:46 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -124,7 +124,7 @@ BinaryImageToLabelMapFilter< TInputImage, TOutputImage >
   SizeValueType pixelcountForThread = outputRegionForThread.GetNumberOfPixels();
   SizeValueType xsizeForThread = outputRegionForThread.GetSize()[0];
   SizeValueType linecountForThread = pixelcountForThread/xsizeForThread;
-  ProgressReporter progress(this, threadId, linecountForThread);
+  ProgressReporter progress(this, threadId, linecountForThread, 75, 0.0f, 0.75f);
 
   // find the split axis
   IndexType outputRegionIdx = output->GetRequestedRegion().GetIndex();
@@ -340,13 +340,14 @@ BinaryImageToLabelMapFilter< TInputImage, TOutputImage >
   SizeValueType xsize = output->GetRequestedRegion().GetSize()[0];
   SizeValueType linecount = pixelcount/xsize;
   unsigned long int totalLabs = CreateConsecutive();
-  ProgressReporter progress(this, 0, linecount);
+  ProgressReporter progress(this, 0, linecount, 25, 0.75f, 0.25f);
   // check for overflow exception here
   if( totalLabs > static_cast<unsigned long int>(
           NumericTraits<OutputPixelType>::max() ) )
     {
     itkExceptionMacro(
-      << "Number of objects greater than maximum of output pixel type " );
+      << "Number of objects (" << totalLabs << ") greater than maximum of output pixel type ("
+      << static_cast<typename NumericTraits<OutputImagePixelType>::PrintType>(NumericTraits<OutputPixelType>::max()) << ")." );
     }
 
   for (SizeValueType ThisIdx = 0; ThisIdx<linecount; ThisIdx++)
@@ -481,18 +482,18 @@ BinaryImageToLabelMapFilter< TInputImage, TOutputImage >
       OffsetValueType nStart = nIt->where[0];
       OffsetValueType nLast = nStart + nIt->length - 1;
       // there are a few ways that neighbouring lines might overlap
-      //   neighbor      S                  E
-      //   current    S                        E
-      //------------------------------------------
-      //   neighbor      S                  E
-      //   current    S                E
-      //------------------------------------------
-      //   neighbor      S                  E
-      //   current             S                  E
-      //------------------------------------------
-      //   neighbor      S                  E
-      //   current             S       E
-      //------------------------------------------
+      //   neighbor      S------------------E
+      //   current    S------------------------E
+      //-------------
+      //   neighbor      S------------------E
+      //   current    S----------------E
+      //-------------
+      //   neighbor      S------------------E
+      //   current             S------------------E
+      //-------------
+      //   neighbor      S------------------E
+      //   current             S-------E
+      //-------------
       OffsetValueType ss1 = nStart - offset;
       // OffsetValueType ss2 = nStart + offset;
       OffsetValueType ee1 = nLast - offset;
@@ -504,30 +505,22 @@ BinaryImageToLabelMapFilter< TInputImage, TOutputImage >
         // case 1
         eq = true;
         } 
-      else 
+      else if ((ss1 <= cStart) && (ee2 >= cLast))
         {
-        if ((ss1 <= cLast) && (ee2 >= cLast))
-          {
-          // case 2
-          eq = true;
-          }
-        else 
-          {
-          if ((ss1 <= cStart) && (ee2 >= cStart))
-            {
-            // case 3 
-            eq = true;
-            }
-          else 
-            {
-            if ((ss1 <= cStart) && (ee2 >= cLast))
-              {
-              // case 4
-              eq = true;
-              }
-            }
-          }
+        // case 4 - must be tested before case 2 to not be detected as a case 2
+        eq = true;
         }
+      else if ((ss1 <= cLast) && (ee2 >= cLast))
+        {
+        // case 2
+        eq = true;
+        }
+      else if ((ss1 <= cStart) && (ee2 >= cStart))
+        {
+        // case 3 
+        eq = true;
+        }
+
       if (eq) 
         {
         LinkLabels(nIt->label, cIt->label);

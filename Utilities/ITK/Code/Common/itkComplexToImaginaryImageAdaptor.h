@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToImaginaryImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2006-03-19 23:24:29 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2009-09-19 19:56:20 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace Accessor {
  *
  * ComplexToImaginaryPixelAccessor is templated over an internal type and an
  * external type representation. The internal type is an std::complex<T> and
- * the external part is a type T. This class cast the input applies the funtion
+ * the external part is a type T. This class cast the input applies the function
  * to it and cast the result according to the types defined as template
  * parameters
  *

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkConvolutionImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2009-02-23 18:40:36 $
-Version:   $Revision: 1.9 $
+Date:      $Date: 2009-10-29 15:03:32 $
+Version:   $Revision: 1.10 $
 
 Copyright (c) Insight Software Consortium. All rights reser
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for detail.
@@ -60,8 +60,8 @@ ConvolutionImageFilter<TInputImage, TOutputImage>
   RadiusType radius;
   for( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    radius[i] = static_cast< SizeValueType >( vcl_floor( 0.5 *
-      this->GetImageKernelInput()->GetLargestPossibleRegion().GetSize()[i] ) );
+    radius[i] = Math::Floor< SizeValueType >( 0.5 *
+      this->GetImageKernelInput()->GetLargestPossibleRegion().GetSize()[i] );
     }
 
   double scalingFactor = 1.0;

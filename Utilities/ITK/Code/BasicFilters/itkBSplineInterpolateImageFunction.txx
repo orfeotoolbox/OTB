@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2008-11-10 16:55:00 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2009-10-13 07:39:24 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,6 +105,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     }
   else
     {
+    m_CoefficientFilter->GetOutput()->DisconnectPipeline();
     m_Coefficients = NULL;
     }
 }

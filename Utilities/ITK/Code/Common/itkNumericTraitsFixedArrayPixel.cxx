@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraitsFixedArrayPixel.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-08 00:34:38 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2010-04-10 16:22:29 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,4 +19,22 @@
 namespace itk
 {
 
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, unsigned char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, signed char );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, short );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, unsigned short );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, int );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, unsigned int );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, long );
+itkStaticNumericTraitsGenericArrayDimensionsMacro( FixedArray, unsigned long );
+
+//
+//    Subsequent Types can be found in 
+//  
+//               itkNumericTraitsFixedArrayPixel2.cxx
+//
+//    This was split in two files in order to help the Sun CC 5.6 compiler to
+//    manage the size of the compilation unit.
+//
 } // end namespace itk

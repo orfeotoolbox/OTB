@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNonUniformBSpline.h,v $
   Language:  C++
-  Date:      $Date: 2009-02-06 20:53:13 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2010-03-25 14:57:49 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,17 +73,14 @@ public:
   itkTypeMacro( NonUniformBSpline, Object );
 
   /**
-  Set points which the spline will attempt to interpolate.
-  */
+   * Set points which the spline will attempt to interpolate.
+   */
   void SetPoints( PointListType & newPoints );
 
   /**
-  Get the points the spline is trying to interpolate.
-  */
-  PointListType& GetPoints()
-    {
-    return m_Points;
-    }
+   * Get the points the spline is trying to interpolate.
+   */
+  itkGetConstReferenceMacro( Points, PointListType );
 
   /**
    * Set the knot vector. Knots may be nonuniformly spaced.
@@ -121,10 +118,7 @@ public:
   /**
    * Get the control points for the spline
    */
-  ControlPointListType& GetControlPoints()
-    { 
-    return m_ControlPoints;
-    }
+  itkGetConstReferenceMacro( ControlPoints, ControlPointListType );
 
   /**
    * Evaluate the basis functions directly. 
@@ -137,19 +131,9 @@ public:
   /**
    * Set the order of the spline.
    */
-  void SetSplineOrder(unsigned int order)
-    {
-    m_SplineOrder = order;
-    this->Modified();
-    }
+  itkSetMacro( SplineOrder, unsigned int );
+  itkGetConstReferenceMacro( SplineOrder, unsigned int );
 
-  /**
-   * Get the order of the spline.
-   */
-  unsigned int GetSplineOrder()
-    {
-    return m_SplineOrder;
-    }
 
 protected:
 

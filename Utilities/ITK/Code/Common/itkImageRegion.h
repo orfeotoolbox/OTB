@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-12 23:19:57 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2009-12-18 19:56:48 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -180,7 +180,7 @@ public:
         {
         return false;
         }
-      if( index[i] >= (m_Index[i] + static_cast<long>(m_Size[i])) )
+      if( index[i] >= (m_Index[i] + static_cast<IndexValueType>(m_Size[i])) )
         {
         return false;
         }
@@ -200,7 +200,7 @@ public:
     for(unsigned int i=0; i<ImageDimension; i++)
       {
 #ifdef ITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY
-      if( itk::Math::RoundHalfIntegerUp(index[i]) < static_cast<int>( m_Index[i] ) )
+      if( Math::RoundHalfIntegerUp<IndexValueType>(index[i]) < static_cast<IndexValueType>( m_Index[i] ) )
 #else
       if( index[i] < static_cast<TCoordRepType>( m_Index[i] ) )
 #endif
@@ -213,7 +213,7 @@ public:
          m_Index[i] + m_Size[i] - 0.5);
 #else
       const TCoordRepType bound = static_cast<TCoordRepType>(
-         m_Index[i] + static_cast<long>(m_Size[i]) - 1);
+         m_Index[i] + static_cast<IndexValueType>(m_Size[i]) - 1);
 #endif
 
       if( index[i] > bound )
@@ -224,7 +224,10 @@ public:
     return true;
     }
 
-  /** Test if a region (the argument) is completely inside of this region */
+  /** Test if a region (the argument) is completely inside of this region. If
+   * the region that is passed as argument to this method, has a size of value
+   * zero, then it will not be considered to be inside of the current region,
+   * even its starting index is inside. */
   bool
   IsInside(const Self &region) const
     {

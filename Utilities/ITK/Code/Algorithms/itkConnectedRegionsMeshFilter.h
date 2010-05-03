@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedRegionsMeshFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-23 03:53:34 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2009-09-17 11:04:00 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ public:
    */
   typedef TInputMesh                               InputMeshType;
   typedef TOutputMesh                              OutputMeshType;
-  typedef typename TInputMesh::Pointer             InputMeshPointer;
+  typedef typename TInputMesh::ConstPointer        InputMeshConstPointer;
   typedef typename TOutputMesh::Pointer            OutputMeshPointer;
 
   itkStaticConstMacro( PointDimension, unsigned int,
@@ -76,14 +76,18 @@ public:
 
   typedef typename TInputMesh::PointType           InputMeshPointType;
   typedef typename TInputMesh::PointIdentifier     InputMeshPointIdentifier;
-  typedef typename TInputMesh::PointsContainerPointer 
-                                                   InputMeshPointsContainerPointer;
+  typedef typename TInputMesh::PointsContainerConstPointer 
+                                                   InputMeshPointsContainerConstPointer;
   typedef typename TInputMesh::CellsContainer      InputMeshCellsContainer;
   typedef typename TInputMesh::CellsContainerPointer 
                                                    InputMeshCellsContainerPointer;
+  typedef typename TInputMesh::CellsContainerConstPointer 
+                                                   InputMeshCellsContainerConstPointer;
   typedef typename TInputMesh::CellDataContainer   InputMeshCellDataContainer;
   typedef typename TInputMesh::CellDataContainerPointer 
                                                    InputMeshCellDataContainerPointer;
+  typedef typename TInputMesh::CellDataContainerConstPointer 
+                                                   InputMeshCellDataContainerConstPointer;
   typedef typename InputMeshType::PointsContainer::ConstIterator 
                                                    PointsContainerConstIterator;
   typedef typename InputMeshType::CellsContainer::ConstIterator
@@ -93,8 +97,8 @@ public:
   typedef typename TInputMesh::CellAutoPointer     InputMeshCellPointer;
   typedef typename TInputMesh::CellTraits::PointIdConstIterator 
                                                    InputMeshPointIdConstIterator;
-  typedef typename TInputMesh::CellLinksContainerPointer
-                                                   InputMeshCellLinksContainerPointer;
+  typedef typename TInputMesh::CellLinksContainerConstPointer
+                                                   InputMeshCellLinksContainerConstPointer;
   typedef typename TInputMesh::PointCellLinksContainer
                                                    InputMeshCellLinksContainer;
   typedef typename TInputMesh::CellIdentifier      InputMeshCellIdentifier;

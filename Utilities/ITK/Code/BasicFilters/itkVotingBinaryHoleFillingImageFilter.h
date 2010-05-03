@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryHoleFillingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2008-10-17 20:50:03 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2010-04-01 20:51:27 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,7 +69,8 @@ public:
   typedef typename InputImageType::RegionType  InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  typedef typename InputImageType::SizeType InputSizeType;
+  typedef typename InputImageType::SizeType       InputSizeType;
+  typedef typename InputImageType::SizeValueType  SizeValueType;
 
 
   /** Majority threshold. It is the number of pixels over 50% that will decide
@@ -83,7 +84,7 @@ public:
 
 
   /** Returns the number of pixels that changed when the filter was executed. */
-  itkGetConstReferenceMacro( NumberOfPixelsChanged, unsigned int );
+  itkGetConstReferenceMacro( NumberOfPixelsChanged, SizeValueType );
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -130,12 +131,12 @@ private:
   VotingBinaryHoleFillingImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int m_MajorityThreshold;
+  unsigned int            m_MajorityThreshold;
 
-  unsigned int m_NumberOfPixelsChanged;
+  SizeValueType           m_NumberOfPixelsChanged;
 
   // Auxiliary array for multi-threading
-  Array<unsigned int>     m_Count;
+  Array<SizeValueType>    m_Count;
 };
   
 } // end namespace itk

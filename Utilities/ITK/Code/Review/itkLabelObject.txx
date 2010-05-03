@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelObject.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-10 16:38:36 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2009-12-04 14:21:07 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,8 +105,6 @@ void
 LabelObject<TLabel, VImageDimension>::
 AddIndex( const IndexType & idx ) 
 {
-  itkAssertOrThrowMacro( (!this->HasIndex( idx )), "Index out of range" );
-
   if( !m_LineContainer.empty() )
     {
     // can we use the last line to add that index ?
@@ -141,7 +139,6 @@ void
 LabelObject<TLabel, VImageDimension>::
 AddLine( const LineType & line )
 {
-  // TODO: add an assert to be sure that some indexes in the line are not already stored here
   m_LineContainer.push_back( line );
 }
   

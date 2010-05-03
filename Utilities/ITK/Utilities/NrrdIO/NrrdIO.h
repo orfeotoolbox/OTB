@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -31,11 +31,27 @@
 #include <stdarg.h>
 #include <float.h>
 
-#define TEEM_VERSION_MAJOR    1       /* 1 digit */
-#define TEEM_VERSION_MINOR    9       /* 1 or 2 digits */
-#define TEEM_VERSION_RELEASE  0       /* 1 or 2 digits */
-#define TEEM_VERSION          10900   /* can be compared numerically */
-#define TEEM_VERSION_STRING  "1.9.0"  /* cannot be compared numerically */
+/*
+******** TEEM_VERSION 
+**
+** TEEM_VERSION is a single (decimal) number that will always increase
+** monotically, and the _MAJOR, _MINOR, _PATCH are also numbers that
+** can be used to implement pre-processor logic about specifc
+** versions.  The TEEM_VERSION_STRING is used in the (existing) char
+** *airTeemVersion (added in version 1.9.0).  Yes, keeping these in
+** sync is currently a manual operation.
+**
+** NOTE: Significant API changes (aside from API additions) should NOT
+** occur with changes in patch level, only with major or minor version
+** changes.
+**
+** NOTE: ../../CMakeLists.txt's Teem_VERSION variables must be in sync
+*/
+#define TEEM_VERSION_MAJOR       1   /* must be 1 digit */
+#define TEEM_VERSION_MINOR      11   /* 1 or 2 digits */
+#define TEEM_VERSION_PATCH      00   /* 1 or 2 digits */
+#define TEEM_VERSION         11100   /* can be easily compared numerically */
+#define TEEM_VERSION_STRING "1.11.0" /* cannot be so easily compared */
 
 /* THE FOLLOWING INCLUDE IS ONLY FOR THE ITK DISTRIBUTION.
    This header mangles the symbols in the NrrdIO library, preventing
@@ -46,16 +62,15 @@
 extern "C" {
 #endif
 
-/* define TEEM_API */
 #define TEEM_BUILD 1
 #if defined(_WIN32) && !defined(__CYGWIN__) && !defined(TEEM_STATIC)
-#  if defined(TEEM_BUILD)
-#    define TEEM_API extern __declspec(dllexport)
+#  if defined(TEEM_BUILD) || defined(air_EXPORTS) || defined(teem_EXPORTS)
+#    define NRRDIO_EXPORT extern __declspec(dllexport)
 #  else
-#    define TEEM_API extern __declspec(dllimport)
+#    define NRRDIO_EXPORT extern __declspec(dllimport)
 #  endif
 #else /* TEEM_STATIC || UNIX */
-#  define TEEM_API extern
+#  define NRRDIO_EXPORT extern
 #endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__) && !defined(__MINGW32__)
@@ -85,7 +100,7 @@ typedef unsigned long long airULLong;
 
 /* enum.c: enum value <--> string conversion utility */  
 typedef struct {
-  char name[AIR_STRLEN_SMALL];
+  const char *name;
                /* what are these things? */
   unsigned int M;
                /* If "val" is NULL, the the valid enum values are from 1 
@@ -95,15 +110,16 @@ typedef struct {
                   represented by strings str[1] through str[M]), and the
                   unknown/invalid value is val[0].  In both cases, str[0]
                   is the string to represent an unknown/invalid value */
-  char (*str)[AIR_STRLEN_SMALL]; 
+  const char **str; 
                /* "canonical" textual representation of the enum values */
-  int *val;    /* non-NULL iff valid values in the enum are not [1..M], and/or
+  const int *val;
+               /* non-NULL iff valid values in the enum are not [1..M], and/or
                   if value for unknown/invalid is not zero */
-  char (*desc)[AIR_STRLEN_MED];
+  const char **desc;
                /* desc[i] is a short description of the enum values represented
                   by str[i] (thereby starting with the unknown value), to be
                   used to by things like hest */
-  char (*strEqv)[AIR_STRLEN_SMALL];  
+  const char **strEqv;  
                /* All the variations in strings recognized in mapping from
                   string to value (the values in valEqv).  This **MUST** be
                   terminated by a zero-length string ("") so as to signify
@@ -111,7 +127,8 @@ typedef struct {
                   for unknown/invalid.  If "strEqv" is NULL, then mapping
                   from string to value is done by traversing "str", and 
                   "valEqv" is ignored. */
-  int *valEqv; /* The values corresponding to the strings in strEqv; there
+  const int *valEqv;
+               /* The values corresponding to the strings in strEqv; there
                   should be one integer for each non-zero-length string in
                   strEqv: strEqv[i] is a valid string representation for
                   value valEqv[i]. This should not contain the value for
@@ -119,13 +136,16 @@ typedef struct {
                   NULL. */
   int sense;   /* require case matching on strings */
 } airEnum;
-TEEM_API int airEnumUnknown(airEnum *enm);
-TEEM_API int airEnumValCheck(airEnum *enm, int val);
-TEEM_API const char *airEnumStr(airEnum *enm, int val);
-TEEM_API const char *airEnumDesc(airEnum *enm, int val);
-TEEM_API int airEnumVal(airEnum *enm, const char *str);
-TEEM_API char *airEnumFmtDesc(airEnum *enm, int val, int canon,
-                              const char *fmt);
+NRRDIO_EXPORT int airEnumUnknown(const airEnum *enm);
+NRRDIO_EXPORT int airEnumLast(const airEnum *enm);
+NRRDIO_EXPORT int airEnumValCheck(const airEnum *enm, int val);
+NRRDIO_EXPORT const char *airEnumStr(const airEnum *enm, int val);
+NRRDIO_EXPORT const char *airEnumDesc(const airEnum *enm, int val);
+NRRDIO_EXPORT int airEnumVal(const airEnum *enm, const char *str);
+NRRDIO_EXPORT char *airEnumFmtDesc(const airEnum *enm, int val, int canon,
+                                const char *fmt);
+NRRDIO_EXPORT void airEnumPrint(FILE *file, const airEnum *enm);
+
 
 /*
 ******** airEndian enum
@@ -141,8 +161,8 @@ enum {
   airEndianLast
 };
 /* endianAir.c */
-TEEM_API airEnum *airEndian;
-TEEM_API const int airMyEndian;
+NRRDIO_EXPORT const airEnum *const airEndian;
+NRRDIO_EXPORT const int airMyEndian;
 
 /* array.c: poor-man's dynamically resizable arrays */
 typedef struct {
@@ -183,17 +203,17 @@ typedef struct {
   void (*doneCB)(void *);  /* called on addresses of invalidated elements */
 
 } airArray;
-TEEM_API airArray *airArrayNew(void **dataP, unsigned int *lenP, size_t unit,
-                               unsigned int incr);
-TEEM_API void airArrayStructCB(airArray *a, void (*initCB)(void *),
-                               void (*doneCB)(void *));
-TEEM_API void airArrayPointerCB(airArray *a, void *(*allocCB)(void),
-                                void *(*freeCB)(void *));
-TEEM_API void airArrayLenSet(airArray *a, unsigned int newlen);
-TEEM_API void airArrayLenPreSet(airArray *a, unsigned int newlen);
-TEEM_API unsigned int airArrayLenIncr(airArray *a, int delta);
-TEEM_API airArray *airArrayNix(airArray *a);
-TEEM_API airArray *airArrayNuke(airArray *a);
+NRRDIO_EXPORT airArray *airArrayNew(void **dataP, unsigned int *lenP, size_t unit,
+                                 unsigned int incr);
+NRRDIO_EXPORT void airArrayStructCB(airArray *a, void (*initCB)(void *),
+                                 void (*doneCB)(void *));
+NRRDIO_EXPORT void airArrayPointerCB(airArray *a, void *(*allocCB)(void),
+                                  void *(*freeCB)(void *));
+NRRDIO_EXPORT void airArrayLenSet(airArray *a, unsigned int newlen);
+NRRDIO_EXPORT void airArrayLenPreSet(airArray *a, unsigned int newlen);
+NRRDIO_EXPORT unsigned int airArrayLenIncr(airArray *a, int delta);
+NRRDIO_EXPORT airArray *airArrayNix(airArray *a);
+NRRDIO_EXPORT airArray *airArrayNuke(airArray *a);
 
 
 /*
@@ -206,7 +226,7 @@ TEEM_API airArray *airArrayNuke(airArray *a);
 ** ieee.h, ieeefp.h, fp_class.h.  This is because IEEE 754 hasn't
 ** defined standard values for these, so everyone does it differently.
 ** 
-** This enum uses underscores (against teem convention) to help
+** This enum uses underscores (against Teem convention) to help
 ** legibility while also conforming to the spirit of the somewhat
 ** standard naming conventions
 */
@@ -233,37 +253,37 @@ typedef union {
   airULLong i;
   double d;
 } airDouble;
-TEEM_API const int airMyQNaNHiBit;
-TEEM_API float airFPPartsToVal_f(unsigned int sign, 
-                                 unsigned int expo, 
-                                 unsigned int mant);
-TEEM_API void airFPValToParts_f(unsigned int *signP, 
-                                unsigned int *expoP, 
-                                unsigned int *mantP, float v);
-TEEM_API double airFPPartsToVal_d(unsigned int sign, 
-                                  unsigned int expo,
-                                  unsigned int mant0,
-                                  unsigned int mant1);
-TEEM_API void airFPValToParts_d(unsigned int *signP, 
-                                unsigned int *expoP,
-                                unsigned int *mant0P,
-                                unsigned int *mant1P,
-                                double v);
-TEEM_API float airFPGen_f(int cls);
-TEEM_API double airFPGen_d(int cls);
-TEEM_API int airFPClass_f(float val);
-TEEM_API int airFPClass_d(double val);
-TEEM_API void airFPFprintf_f(FILE *file, float val);
-TEEM_API void airFPFprintf_d(FILE *file, double val);
-TEEM_API const airFloat airFloatQNaN;
-TEEM_API const airFloat airFloatSNaN;
-TEEM_API const airFloat airFloatPosInf;
-TEEM_API const airFloat airFloatNegInf;
-TEEM_API float airNaN(void);
-TEEM_API int airIsNaN(double d);
-TEEM_API int airIsInf_f(float f);
-TEEM_API int airIsInf_d(double d);
-TEEM_API int airExists(double d);
+NRRDIO_EXPORT const int airMyQNaNHiBit;
+NRRDIO_EXPORT float airFPPartsToVal_f(unsigned int sign, 
+                                   unsigned int expo, 
+                                   unsigned int mant);
+NRRDIO_EXPORT void airFPValToParts_f(unsigned int *signP, 
+                                  unsigned int *expoP, 
+                                  unsigned int *mantP, float v);
+NRRDIO_EXPORT double airFPPartsToVal_d(unsigned int sign, 
+                                    unsigned int expo,
+                                    unsigned int mant0,
+                                    unsigned int mant1);
+NRRDIO_EXPORT void airFPValToParts_d(unsigned int *signP, 
+                                  unsigned int *expoP,
+                                  unsigned int *mant0P,
+                                  unsigned int *mant1P,
+                                  double v);
+NRRDIO_EXPORT float airFPGen_f(int cls);
+NRRDIO_EXPORT double airFPGen_d(int cls);
+NRRDIO_EXPORT int airFPClass_f(float val);
+NRRDIO_EXPORT int airFPClass_d(double val);
+NRRDIO_EXPORT void airFPFprintf_f(FILE *file, float val);
+NRRDIO_EXPORT void airFPFprintf_d(FILE *file, double val);
+NRRDIO_EXPORT const airFloat airFloatQNaN;
+NRRDIO_EXPORT const airFloat airFloatSNaN;
+NRRDIO_EXPORT const airFloat airFloatPosInf;
+NRRDIO_EXPORT const airFloat airFloatNegInf;
+NRRDIO_EXPORT float airNaN(void);
+NRRDIO_EXPORT int airIsNaN(double d);
+NRRDIO_EXPORT int airIsInf_f(float f);
+NRRDIO_EXPORT int airIsInf_d(double d);
+NRRDIO_EXPORT int airExists(double d);
 
 
 /*
@@ -278,64 +298,65 @@ enum {
   airTypeBool,      /*  1 */
   airTypeInt,       /*  2 */
   airTypeUInt,      /*  3 */
-  airTypeSize_t,    /*  4 */
-  airTypeFloat,     /*  5 */
-  airTypeDouble,    /*  6 */
-  airTypeChar,      /*  7 */
-  airTypeString,    /*  8 */
-  airTypeEnum,      /*  9 */
-  airTypeOther,     /* 10 */
+  airTypeLongInt,   /*  4 */
+  airTypeSize_t,    /*  5 */
+  airTypeFloat,     /*  6 */
+  airTypeDouble,    /*  7 */
+  airTypeChar,      /*  8 */
+  airTypeString,    /*  9 */
+  airTypeEnum,      /* 10 */
+  airTypeOther,     /* 11 */
   airTypeLast
 };
-#define AIR_TYPE_MAX   10
+#define AIR_TYPE_MAX   11
 /* parseAir.c */
-TEEM_API double airAtod(const char *str);
-TEEM_API int airSingleSscanf(const char *str, const char *fmt, void *ptr);
-TEEM_API airEnum *airBool;
-TEEM_API unsigned int airParseStrB(int *out, const char *s,
-                                   const char *ct, unsigned int n, 
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrI(int *out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrUI(unsigned int *out, const char *s,
-                                    const char *ct, unsigned int n,
-                                    ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrZ(size_t *out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrF(float *out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrD(double *out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrC(char *out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* (nothing used) */);
-TEEM_API unsigned int airParseStrS(char **out, const char *s,
-                                   const char *ct, unsigned int n,
-                                   ... /* REQUIRED even if n>1: int greedy */);
-TEEM_API unsigned int airParseStrE(int *out, const char *s,
-                                   const char *ct, unsigned int n, 
-                                   ... /* REQUIRED: airEnum *e */);
-TEEM_API unsigned int (*airParseStr[AIR_TYPE_MAX+1])(void *, const char *,
-                                                     const char *,
-                                                     unsigned int, ...);
+NRRDIO_EXPORT double airAtod(const char *str);
+NRRDIO_EXPORT int airSingleSscanf(const char *str, const char *fmt, void *ptr);
+NRRDIO_EXPORT const airEnum *const airBool;
+NRRDIO_EXPORT unsigned int airParseStrB(int *out, const char *s,
+                                     const char *ct, unsigned int n, 
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrI(int *out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrUI(unsigned int *out, const char *s,
+                                      const char *ct, unsigned int n,
+                                      ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrZ(size_t *out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrF(float *out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrD(double *out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrC(char *out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* (nothing used) */);
+NRRDIO_EXPORT unsigned int airParseStrS(char **out, const char *s,
+                                     const char *ct, unsigned int n,
+                                     ... /* REQ'D even if n>1: int greedy */);
+NRRDIO_EXPORT unsigned int airParseStrE(int *out, const char *s,
+                                     const char *ct, unsigned int n, 
+                                     ... /* REQUIRED: airEnum *e */);
+NRRDIO_EXPORT unsigned int (*airParseStr[AIR_TYPE_MAX+1])(void *, const char *,
+                                                       const char *,
+                                                       unsigned int, ...);
 
 /* string.c */
-TEEM_API char *airStrdup(const char *s);
-TEEM_API size_t airStrlen(const char *s);
-TEEM_API int airStrtokQuoting;
-TEEM_API char *airStrtok(char *s, const char *ct, char **last);
-TEEM_API unsigned int airStrntok(const char *s, const char *ct);
-TEEM_API char *airStrtrans(char *s, char from, char to);
-TEEM_API int airEndsWith(const char *s, const char *suff);
-TEEM_API char *airUnescape(char *s);
-TEEM_API char *airOneLinify(char *s);
-TEEM_API char *airToLower(char *str);
-TEEM_API char *airToUpper(char *str);
-TEEM_API unsigned int airOneLine(FILE *file, char *line, int size);
+NRRDIO_EXPORT char *airStrdup(const char *s);
+NRRDIO_EXPORT size_t airStrlen(const char *s);
+NRRDIO_EXPORT int airStrtokQuoting;
+NRRDIO_EXPORT char *airStrtok(char *s, const char *ct, char **last);
+NRRDIO_EXPORT unsigned int airStrntok(const char *s, const char *ct);
+NRRDIO_EXPORT char *airStrtrans(char *s, char from, char to);
+NRRDIO_EXPORT int airEndsWith(const char *s, const char *suff);
+NRRDIO_EXPORT char *airUnescape(char *s);
+NRRDIO_EXPORT char *airOneLinify(char *s);
+NRRDIO_EXPORT char *airToLower(char *str);
+NRRDIO_EXPORT char *airToUpper(char *str);
+NRRDIO_EXPORT unsigned int airOneLine(FILE *file, char *line, int size);
 
 /* sane.c */
 /*
@@ -353,26 +374,27 @@ enum {
   airInsane_FltDblFPClass, /*  5: double -> float assignment messed up the
                                airFPClass_f() of the value */
   airInsane_QNaNHiBit,     /*  6: airMyQNaNHiBit is wrong */
-  airInsane_dio,           /*  7: airMyDio set to something invalid */
-  airInsane_32Bit,         /*  8: airMy32Bit is wrong */
-  airInsane_UCSize,        /*  9: unsigned char isn't 8 bits */
-  airInsane_FISize,        /* 10: sizeof(float), sizeof(int) not 4 */
-  airInsane_DLSize         /* 11: sizeof(double), sizeof(airLLong) not 8 */
+  airInsane_AIR_NAN,       /*  7: airFPClass_f(AIR_QNAN,AIR_SNAN) wrong */
+  airInsane_dio,           /*  8: airMyDio set to something invalid */
+  airInsane_32Bit,         /*  9: airMy32Bit is wrong */
+  airInsane_UCSize,        /* 10: unsigned char isn't 8 bits */
+  airInsane_FISize,        /* 11: sizeof(float), sizeof(int) not 4 */
+  airInsane_DLSize         /* 12: sizeof(double), sizeof(airLLong) not 8 */
 };
-#define AIR_INSANE_MAX        11
-TEEM_API const char *airInsaneErr(int insane);
-TEEM_API int airSanity(void);
+#define AIR_INSANE_MAX        12
+NRRDIO_EXPORT const char *airInsaneErr(int insane);
+NRRDIO_EXPORT int airSanity(void);
 
 /* miscAir.c */
-TEEM_API const char *airTeemVersion;
-TEEM_API const char *airTeemReleaseDate;
-TEEM_API void *airNull(void);
-TEEM_API void *airSetNull(void **ptrP);
-TEEM_API void *airFree(void *ptr);
-TEEM_API FILE *airFopen(const char *name, FILE *std, const char *mode);
-TEEM_API FILE *airFclose(FILE *file);
-TEEM_API int airSinglePrintf(FILE *file, char *str, const char *fmt, ...);
-TEEM_API const int airMy32Bit;
+NRRDIO_EXPORT const char *airTeemVersion;
+NRRDIO_EXPORT const char *airTeemReleaseDate;
+NRRDIO_EXPORT void *airNull(void);
+NRRDIO_EXPORT void *airSetNull(void **ptrP);
+NRRDIO_EXPORT void *airFree(void *ptr);
+NRRDIO_EXPORT FILE *airFopen(const char *name, FILE *std, const char *mode);
+NRRDIO_EXPORT FILE *airFclose(FILE *file);
+NRRDIO_EXPORT int airSinglePrintf(FILE *file, char *str, const char *fmt, ...);
+NRRDIO_EXPORT const int airMy32Bit;
 
 /* dio.c */
 /*
@@ -397,14 +419,14 @@ enum {
   airNoDio_disable  /* 12: someone disabled it with airDisableDio */
 };
 #define AIR_NODIO_MAX  12
-TEEM_API const char *airNoDioErr(int noDio);
-TEEM_API const int airMyDio;
-TEEM_API int airDisableDio;
-TEEM_API void airDioInfo(int *align, int *min, int *max, int fd);
-TEEM_API int airDioTest(int fd, const void *ptr, size_t size);
-TEEM_API void *airDioMalloc(size_t size, int fd);
-TEEM_API size_t airDioRead(int fd, void *ptr, size_t size);
-TEEM_API size_t airDioWrite(int fd, const void *ptr, size_t size);
+NRRDIO_EXPORT const char *airNoDioErr(int noDio);
+NRRDIO_EXPORT const int airMyDio;
+NRRDIO_EXPORT int airDisableDio;
+NRRDIO_EXPORT void airDioInfo(int *align, int *min, int *max, int fd);
+NRRDIO_EXPORT int airDioTest(int fd, const void *ptr, size_t size);
+NRRDIO_EXPORT void *airDioMalloc(size_t size, int fd);
+NRRDIO_EXPORT size_t airDioRead(int fd, void *ptr, size_t size);
+NRRDIO_EXPORT size_t airDioWrite(int fd, const void *ptr, size_t size);
 
 /* mop.c: clean-up utilities */
 enum {
@@ -419,16 +441,16 @@ typedef struct {
   airMopper mop;     /* the function to which does the processing */
   int when;          /* from the airMopWhen enum */
 } airMop;
-TEEM_API airArray *airMopNew(void);
-TEEM_API void airMopAdd(airArray *arr, void *ptr, airMopper mop, int when);
-TEEM_API void airMopSub(airArray *arr, void *ptr, airMopper mop);
-TEEM_API void airMopMem(airArray *arr, void *_ptrP, int when);
-TEEM_API void airMopUnMem(airArray *arr, void *_ptrP);
-TEEM_API void airMopPrint(airArray *arr, const void *_str, int when);
-TEEM_API void airMopDone(airArray *arr, int error);
-TEEM_API void airMopError(airArray *arr);
-TEEM_API void airMopOkay(airArray *arr);
-TEEM_API void airMopDebug(airArray *arr);
+NRRDIO_EXPORT airArray *airMopNew(void);
+NRRDIO_EXPORT int airMopAdd(airArray *arr, void *ptr, airMopper mop, int when);
+NRRDIO_EXPORT void airMopSub(airArray *arr, void *ptr, airMopper mop);
+NRRDIO_EXPORT void airMopMem(airArray *arr, void *_ptrP, int when);
+NRRDIO_EXPORT void airMopUnMem(airArray *arr, void *_ptrP);
+NRRDIO_EXPORT void airMopPrint(airArray *arr, const void *_str, int when);
+NRRDIO_EXPORT void airMopDone(airArray *arr, int error);
+NRRDIO_EXPORT void airMopError(airArray *arr);
+NRRDIO_EXPORT void airMopOkay(airArray *arr);
+NRRDIO_EXPORT void airMopDebug(airArray *arr);
 
 /*******     the interminable sea of defines and macros     *******/
 
@@ -445,12 +467,30 @@ TEEM_API void airMopDebug(airArray *arr);
 #define AIR_UNUSED(x) (void)(x)
 
 /*
+******** AIR_CAST
+**
+** just a cast, but with the added ability to grep for it more easily,
+** since casts should probably always be revisited and reconsidered.
+*/
+#define AIR_CAST(t, v) ((t)(v))
+
+/*
+******** AIR_CALLOC
+**
+** slightly simpler wrapper around cast and calloc
+**
+** HEY note that "T" is not guarded by parentheses in its first usage,
+** as arguments in Teem macros normally are
+*/
+#define AIR_CALLOC(N, T) (T*)(calloc((N), sizeof(T)))
+
+/*
 ******** AIR_ENDIAN, AIR_QNANHIBIT, AIR_DIO
 **
 ** These reflect particulars of hardware which we're running on.
 ** The reason to have these in addition to TEEM_ENDIAN, TEEM_DIO, etc.,
 ** is that those are not by default defined for every source-file
-** compilation: the teem library has to define NEED_ENDIAN, NEED_DIO, etc,
+** compilation: the Teem library has to define NEED_ENDIAN, NEED_DIO, etc,
 ** and these in turn generate appropriate compile command-line flags
 ** by Common.mk. By having these defined here, they become available
 ** to anyone who simply links against the air library (and includes air.h),
@@ -497,10 +537,7 @@ TEEM_API void airMopDebug(airArray *arr);
 ** (80-bit) floating point registers, such as Intel chips- where the
 ** same initial value 1) directly read from the register, versus 2)
 ** saved to memory and loaded back, may end up being different.  I
-** have yet to produce this behavior, or convince myself it can't
-** happen.  If you have problems, then use the version of the macro
-** which is a function call to airExists_d(), and please email me:
-** gk@bwh.harvard.edu
+** have yet to produce this behavior, or convince myself it can't happen.
 **
 ** The reason to #define AIR_EXISTS as airExists_d is that on some
 ** optimizing compilers, the !((x) - (x)) doesn't work.  This has been
@@ -530,7 +567,7 @@ TEEM_API void airMopDebug(airArray *arr);
 */
 #define AIR_MAX(a,b) ((a) > (b) ? (a) : (b))
 #define AIR_MIN(a,b) ((a) < (b) ? (a) : (b))
-#define AIR_ABS(a) ((a) > 0 ? (a) : -(a))
+#define AIR_ABS(a) ((a) > 0.0f ? (a) : -(a))
 
 /*
 ******** AIR_COMPARE(a,b)
@@ -550,7 +587,7 @@ TEEM_API void airMopDebug(airArray *arr);
 ** defined by the first and third arguments
 ** 
 ** AIR_IN_OP is new name for old AIR_BETWEEN
-** AIR_IN_CL is new name for odl AIR_INSIDE
+** AIR_IN_CL is new name for old AIR_INSIDE
 */
 #define AIR_IN_OP(a,b,c) ((a) < (b) && (b) < (c))     /* closed interval */
 #define AIR_IN_CL(a,b,c) ((a) <= (b) && (b) <= (c))   /* open interval */
@@ -601,6 +638,10 @@ TEEM_API void airMopDebug(airArray *arr);
 ** It is the callers responsibility to make sure I-i and O-o are 
 ** both non-zero.  Strictly speaking, real problems arise only when
 ** when I-i is zero: division by zero generates either NaN or infinity
+**
+** NOTE that "x" is evaluated only once (which makes this more useful),
+** as is "I" and "O" (usually not so important); "i" and "o" are each
+** evaluated twice
 */
 #define AIR_AFFINE(i,x,I,o,O) ( \
 ((double)(O)-(o))*((double)(x)-(i)) / ((double)(I)-(i)) + (o))
@@ -618,6 +659,8 @@ TEEM_API void airMopDebug(airArray *arr);
 **
 ** It is the callers responsibility to make sure I-i and O-o are 
 ** both non-zero
+**
+** NOTE that all arguments are evaluated only once
 */
 #define AIR_DELTA(i,x,I,o,O) ( \
 ((double)(O)-(o))*((double)(x)) / ((double)(I)-(i)) )
@@ -629,44 +672,50 @@ TEEM_API void airMopDebug(airArray *arr);
 */
 #define AIR_ROUNDUP(x)   ((int)(floor((x)+0.5)))
 #define AIR_ROUNDDOWN(x) ((int)(ceil((x)-0.5)))
+#define AIR_ROUNDUP_UI(x)   ((unsigned int)(floor((x)+0.5)))
+#define AIR_ROUNDDOWN_UI(x) ((unsigned int)(ceil((x)-0.5)))
 
 /*
 ******** _AIR_SIZE_T_CNV, _AIR_PTRDIFF_T_CNV, 
 **
-** Conversion sequence to use when printf/fprintf/sprintf-ing a value of
+** Format specifiers to use when printf/fprintf/sprintf-ing a value of
 ** type size_t or ptrdiff_t.  In C99, this is done with "%z" and "%t",
-** respecitvely.
+** respectively.
 **
-** This is not a useful macro for the world at large- only for teem
+** This is not a useful macro for the world at large- only for Teem
 ** source files.  Why: we need to leave this as a bare string, so that
 ** we can exploit C's implicit string concatenation in forming a
 ** format string.  Therefore, unlike the definition of AIR_ENDIAN,
-** AIR_DIO, etc, AIR_SIZE_T_CNV can NOT just refer to a const variable
+** AIR_DIO, etc, _AIR_SIZE_T_CNV can NOT just refer to a const variable
 ** (like airMyEndian).  Therefore, TEEM_32BIT has to be defined for
-** ALL source files which want to use AIR_SIZE_T_CNV, and to be
-** conservative, that's all teem files.  The converse is, since there is
-** no expectation that other projects which use teem will be defining
-** TEEM_32BIT, this is not useful outside teem, thus the leading _.
+** ALL source files which want to use _AIR_SIZE_T_CNV, and to be safe,
+** that's all Teem files.  The converse is, since there is no
+** expectation that other projects which use Teem will be defining
+** TEEM_32BIT, this is not useful outside Teem, thus the leading _.
+**
+** http://www.viva64.com/art-1-2-710804781.html for size conventions.
+**
+** It appears that 32 bit APPLE uses ld for size_t and int for ptrdiff.
 */
-#ifdef __APPLE__
-#  define _AIR_SIZE_T_CNV "%lu"
-#  define _AIR_PTRDIFF_T_CNV "%d"
-#else
-#  if TEEM_32BIT == 0
-#    ifdef _WIN64
-#      define _AIR_SIZE_T_CNV "%I64u"
-#      define _AIR_PTRDIFF_T_CNV "%I64d"
-#    else
-#      define _AIR_SIZE_T_CNV "%lu"
-#      define _AIR_PTRDIFF_T_CNV "%ld"
-#    endif
-#  elif TEEM_32BIT == 1
-#    define _AIR_SIZE_T_CNV "%u"
+#if TEEM_32BIT == 0
+#  ifdef _WIN64
+#    define _AIR_SIZE_T_CNV "%I64u"
+#    define _AIR_PTRDIFF_T_CNV "%I64d"
+#  else
+#    define _AIR_SIZE_T_CNV "%lu"
+#    define _AIR_PTRDIFF_T_CNV "%ld"
+#  endif
+#elif TEEM_32BIT == 1
+#  ifdef __APPLE__
+#    define _AIR_SIZE_T_CNV "%lu"
 #    define _AIR_PTRDIFF_T_CNV "%d"
 #  else
-#    define _AIR_SIZE_T_CNV "(no _AIR_SIZE_T_CNV w/out TEEM_32BIT %*d)"
-#    define _AIR_PTRDIFF_T_CNV "(no _AIR_PTRDIFF_T_CNV w/out TEEM_32BIT %*d)"
+#    define _AIR_SIZE_T_CNV "%u"
+#    define _AIR_PTRDIFF_T_CNV "%d"
 #  endif
+#else
+#  define _AIR_SIZE_T_CNV "(no _AIR_SIZE_T_CNV w/out TEEM_32BIT %*d)"
+#  define _AIR_PTRDIFF_T_CNV "(no _AIR_PTRDIFF_T_CNV w/out TEEM_32BIT %*d)"
 #endif
 
 #ifdef __cplusplus
@@ -681,20 +730,81 @@ TEEM_API void airMopDebug(airArray *arr);
 extern "C" {
 #endif
 
-#define BIFF_MAXKEYLEN 128  /* maximum allowed key length (not counting 
-                               the null termination) */
+/*
+** biffMsg struct
+**
+** externally usable thing for holding error messages
+*/
+typedef struct {
+  char *key;                   /* string for identifying the general source
+                                  of the error message; set once, at time 
+                                  of biffMsg creation */
+  char **err;                  /* array of error strings; the err array itself
+                                  is NOT null-terminated */
+  unsigned int errNum;         /* length of "err" == # strings stored */
+  airArray *errArr;            /* air array for err and num */
+} biffMsg;
 
-TEEM_API void biffAdd(const char *key, const char *err);
-TEEM_API void biffMaybeAdd(const char *key, const char *err, int useBiff);
-TEEM_API int biffCheck(const char *key);
-TEEM_API void biffDone(const char *key);
-TEEM_API void biffMove(const char *destKey, const char *err,
-                       const char *srcKey);
-TEEM_API char *biffGet(const char *key);
-TEEM_API int biffGetStrlen(const char *key);
-TEEM_API void biffSetStr(char *str, const char *key);
-TEEM_API char *biffGetDone(const char *key);
-TEEM_API void biffSetStrDone(char *str, const char *key);
+/* biffmsg.c */
+NRRDIO_EXPORT biffMsg *biffMsgNew(const char *key);
+NRRDIO_EXPORT biffMsg *biffMsgNix(biffMsg *msg);
+NRRDIO_EXPORT void biffMsgAdd(biffMsg *msg, const char *err);
+NRRDIO_EXPORT void biffMsgAddVL(biffMsg *msg, const char *errfmt, va_list args);
+NRRDIO_EXPORT void biffMsgAddf(biffMsg *msg, const char *errfmt, ...)
+#ifdef __GNUC__
+__attribute__ ((format(printf,2,3)))
+#endif
+;
+NRRDIO_EXPORT void biffMsgClear(biffMsg *msg);
+NRRDIO_EXPORT unsigned int biffMsgLineLenMax(const biffMsg *msg);
+NRRDIO_EXPORT void biffMsgMove(biffMsg *dest, biffMsg *src,
+                             const char *err);
+NRRDIO_EXPORT void biffMsgMoveVL(biffMsg *dest, biffMsg *src,
+                               const char *errfmt, va_list args);
+NRRDIO_EXPORT void biffMsgMovef(biffMsg *dest, biffMsg *src,
+                                const char *errfmt, ...)
+#ifdef __GNUC__
+__attribute__ ((format(printf,3,4)))
+#endif
+;
+NRRDIO_EXPORT unsigned int biffMsgStrlen(const biffMsg *msg);
+NRRDIO_EXPORT char *biffMsgStrAlloc(const biffMsg *msg);
+NRRDIO_EXPORT void biffMsgStrSet(char *ret, const biffMsg *msg);
+NRRDIO_EXPORT char *biffMsgStrGet(const biffMsg *msg);
+NRRDIO_EXPORT biffMsg *biffMsgNoop;
+
+/* biffbiff.c */
+NRRDIO_EXPORT void biffAdd(const char *key, const char *err);
+NRRDIO_EXPORT void biffAddVL(const char *key, const char *errfmt, va_list args);
+NRRDIO_EXPORT void biffAddf(const char *key, const char *errfmt, ...)
+#ifdef __GNUC__
+  __attribute__ ((format(printf,2,3)))
+#endif
+;
+NRRDIO_EXPORT void biffMaybeAdd(const char *key, const char *err, int useBiff);
+NRRDIO_EXPORT void biffMaybeAddf(int useBiff, const char *key,
+                               const char *errfmt, ... )
+#ifdef __GNUC__
+__attribute__ ((format(printf,3,4)))
+#endif
+;
+NRRDIO_EXPORT char *biffGet(const char *key);
+NRRDIO_EXPORT int biffGetStrlen(const char *key);
+NRRDIO_EXPORT void biffSetStr(char *str, const char *key);
+NRRDIO_EXPORT int biffCheck(const char *key);
+NRRDIO_EXPORT void biffDone(const char *key);
+NRRDIO_EXPORT void biffMove(const char *destKey, const char *err,
+                          const char *srcKey);
+NRRDIO_EXPORT void biffMoveVL(const char *destKey, const char *srcKey,
+                            const char *errfmt, va_list args);
+NRRDIO_EXPORT void biffMovef(const char *destKey, const char *srcKey,
+                            const char *errfmt, ...)
+#ifdef __GNUC__
+__attribute__ ((format(printf,3,4)))
+#endif
+;
+NRRDIO_EXPORT char *biffGetDone(const char *key);
+NRRDIO_EXPORT void biffSetStrDone(char *str, const char *key);
 
 #ifdef __cplusplus
 }
@@ -729,7 +839,7 @@ extern "C" {
                                       (that is more like 3), but is
                                       the max number of parms of any
                                       NrrdKernel used by anyone using
-                                      teem, such as in gage.
+                                      Teem, such as in gage.
                                       Enforcing one global max
                                       simplifies implementation. */
 
@@ -841,7 +951,7 @@ enum {
 };
 
 /*
-******** nrrdFormatType enum
+******** nrrdFormatType* enum
 **
 ** the different file formats which nrrd supports
 */
@@ -859,7 +969,7 @@ enum {
 #define NRRD_FORMAT_TYPE_MAX    6
 
 /*
-******** nrrdBoundary enum
+******** nrrdBoundary* enum
 **
 ** when resampling, how to deal with the ends of a scanline
 */
@@ -871,12 +981,13 @@ enum {
   nrrdBoundaryWeight,   /* 4: normalize the weighting on the existing samples;
                            ONLY sensible for a strictly positive kernel
                            which integrates to unity (as in blurring) */
+  nrrdBoundaryMirror,   /* 5: mirror folding */
   nrrdBoundaryLast
 };
-#define NRRD_BOUNDARY_MAX  4
+#define NRRD_BOUNDARY_MAX  5
 
 /*
-******** nrrdType enum
+******** nrrdType* enum
 **
 ** all the different types, identified by integer
 **
@@ -1018,7 +1129,7 @@ enum {
   nrrdKind3Gradient,         /* 20: 3-component covariant vector */
   nrrdKind3Normal,           /* 21: 3-component covector, assumed normalized */
   nrrdKind4Vector,           /* 22: 4-component vector */
-  nrrdKindQuaternion,        /* 23: (x,y,z,w), not necessarily normalized */
+  nrrdKindQuaternion,        /* 23: (w,x,y,z), not necessarily normalized */
   nrrdKind2DSymMatrix,       /* 24: Mxx Mxy Myy */
   nrrdKind2DMaskedSymMatrix, /* 25: mask Mxx Mxy Myy */
   nrrdKind2DMatrix,          /* 26: Mxx Mxy Myx Myy */
@@ -1288,6 +1399,7 @@ enum {
                                          space */
   nrrdSpacingStatusLast
 };
+#define NRRD_SPACING_STATUS_MAX          4
 
 /*
 ******** nrrdOriginStatus* enum
@@ -1415,16 +1527,21 @@ do {                                           \
 ** and dimension "dim", calculates the linear index, and stores it in
 ** "I".
 */
-#define NRRD_INDEX_GEN(I, coord, size, dim)   \
-do {                                          \
-  int d;                                      \
-  for (d=(dim)-1, (I)=(coord)[d--];           \
-       d >= 0;                                \
-       d--) {                                 \
-    (I) = (coord)[d] + (size)[d]*(I);         \
-  }                                           \
-} while (0)
-
+#define NRRD_INDEX_GEN(I, coord, size, dim)     \
+{                                               \
+  int d;                                        \
+  d = (dim) - 1;                                \
+  if ( (d) >= 0 )                               \
+  {                                             \
+    (I) = (coord)[d];                           \
+    d--;                                        \
+    while( d >= 0 )                             \
+    {                                           \
+    (I) = (coord)[d] + (size)[d] * (I);         \
+    d--;                                        \
+    }                                           \
+  }                                             \
+}
 /*
 ******** NRRD_COORD_GEN
 **
@@ -1451,9 +1568,9 @@ do {                                          \
 
 
 #include <errno.h>
-
-
 #include <stddef.h>      /* for ptrdiff_t */
+
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -1462,7 +1579,7 @@ extern "C" {
 #define NRRD nrrdBiffKey
 
 /*
-******** NrrdAxis struct
+******** NrrdAxisInfo struct
 **
 ** all the information which can sensibly be associated with
 ** one axis of a nrrd.  The only member which MUST be explicitly
@@ -1579,9 +1696,11 @@ typedef struct {
                                        in the "measurement frame" to those in
                                        the world space described by spaceDim
                                        (and hopefully space).  Coeff [i][j] is
-                                       column i and row j.  There are no
-                                       semantics linking this to the "kind" of
-                                       any axis, for a variety of reasons */
+                                       *column* i & *row* j, which is probably
+                                       the *transpose* of what you expect.
+                                       There are no semantics linking this to
+                                       the "kind" of any axis, for a variety
+                                       of reasons */
   size_t blockSize;                 /* for nrrdTypeBlock, block byte size */
   double oldMin, oldMax;            /* if non-NaN, and if nrrd is of integral
                                        type, extremal values for the array
@@ -1702,11 +1821,22 @@ typedef struct NrrdIoState_t {
                                style format string, not in the sense of a 
                                file format.  This may need header-relative
                                path processing. */
-    **dataFN;               /* ON READ + WRITE: array of data filenames. These
+    **dataFN,               /* ON READ + WRITE: array of data filenames. These
                                are not passed directly to fopen, they may need
                                header-relative path processing. Like the
                                cmtArr in the Nrrd, this array is not NULL-
                                terminated */
+    *headerStringWrite;     /* ON WRITE: string from to which the header can
+                               be written.  On write, it is assumed allocated
+                               for as long as it needs to be (probably via a
+                               first pass with learningHeaderStrlen). NOTE:
+                               It is the non-NULL-ity of this which signifies
+                               the intent to do string-based writing */
+  const char
+    *headerStringRead;      /* ON READ: like headerStringWrite, but for
+                               reading the header from.  NOTE: It is the
+                               non-NULL-ity of this which signifies the
+                               intent to do string-based reading */
   airArray *dataFNArr;      /* for managing the above */
 
   FILE *headerFile,         /* if non-NULL, the file from which the NRRD
@@ -1731,13 +1861,21 @@ typedef struct NrrdIoState_t {
                                something with the formatting, then
                                what is the max number of values to
                                write on a line */
-    lineSkip;               /* if dataFile non-NULL, the number of
+    lineSkip,               /* if dataFile non-NULL, the number of
                                lines in dataFile that should be
                                skipped over (so as to bypass another
                                form of ASCII header preceeding raw
                                data) */
-  int dataFNMin,            /* used with dataFNFormat to identify ...*/
-    dataFNMax,              /* ... all the multiple detached datafiles */
+    headerStrlen,           /* ON WRITE, for NRRDs, if learningHeaderStrlen,
+                               the learned strlen of the header so far */
+    headerStrpos;           /* ON READ, for NRRDs, if headerStringRead is
+                               non-NULL, the current location of reading
+                               in the header */
+  long int byteSkip;        /* exactly like lineSkip, but bytes
+                               instead of lines.  First the lines are
+                               skipped, then the bytes */
+  int dataFNMin,            /* used with dataFNFormat to identify .. */
+    dataFNMax,              /* .. all the multiple detached datafiles */
     dataFNStep,             /* how to step from max to min */
     dataFNIndex,            /* which of the data files are being read */
     pos,                    /* line[pos] is beginning of stuff which
@@ -1745,9 +1883,6 @@ typedef struct NrrdIoState_t {
     endian,                 /* endian-ness of the data in file, for
                                those encoding/type combinations for
                                which it matters (from nrrdEndian) */
-    byteSkip,               /* exactly like lineSkip, but bytes
-                               instead of lines.  First the lines are
-                               skipped, then the bytes */
     seen[NRRD_FIELD_MAX+1], /* for error checking in header parsing */
     detachedHeader,         /* ON WRITE: request for file (NRRD format only)
                                to be split into distinct header and data. 
@@ -1780,9 +1915,12 @@ typedef struct NrrdIoState_t {
     zlibStrategy,           /* zlib compression strategy, can be one
                                of the nrrdZlibStrategy enums, default is
                                nrrdZlibStrategyDefault. */
-    bzip2BlockSize;         /* block size used for compression, 
+    bzip2BlockSize,         /* block size used for compression, 
                                roughly equivalent to better but slower
                                (1-9, -1 for default[9]). */
+    learningHeaderStrlen;   /* ON WRITE, for nrrds, learn and save the total
+                               length of header into headerStrlen. This is
+                               used to allocate a buffer for header */
   void *oldData;            /* ON READ: if non-NULL, pointer to space that 
                                has already been allocated for oldDataSize */
   size_t oldDataSize;       /* ON READ: size of mem pointed to by oldData */
@@ -1795,21 +1933,22 @@ typedef struct NrrdIoState_t {
 } NrrdIoState;
 
 
-/******** defaults (nrrdDef..) and state (nrrdState..) */
+/******** defaults (nrrdDefault..) and state (nrrdState..) */
 /* defaultsNrrd.c */
-TEEM_API const NrrdEncoding *nrrdDefWriteEncoding;
-TEEM_API int nrrdDefWriteBareText;
-TEEM_API int nrrdDefWriteCharsPerLine;
-TEEM_API int nrrdDefWriteValsPerLine;
-TEEM_API int nrrdDefCenter;
-TEEM_API double nrrdDefSpacing;
-TEEM_API int nrrdStateVerboseIO;
-TEEM_API int nrrdStateAlwaysSetContent;
-TEEM_API int nrrdStateDisableContent;
-TEEM_API char *nrrdStateUnknownContent;
-TEEM_API int nrrdStateGrayscaleImage3D;
-TEEM_API int nrrdStateKeyValueReturnInternalPointers;
-TEEM_API int nrrdStateKindNoop;
+NRRDIO_EXPORT int nrrdDefaultWriteEncodingType;
+NRRDIO_EXPORT int nrrdDefaultWriteBareText;
+NRRDIO_EXPORT unsigned int nrrdDefaultWriteCharsPerLine;
+NRRDIO_EXPORT unsigned int nrrdDefaultWriteValsPerLine;
+NRRDIO_EXPORT int nrrdDefaultCenter;
+NRRDIO_EXPORT double nrrdDefaultSpacing;
+NRRDIO_EXPORT int nrrdStateVerboseIO;
+NRRDIO_EXPORT int nrrdStateKeyValuePairsPropagate;
+NRRDIO_EXPORT int nrrdStateAlwaysSetContent;
+NRRDIO_EXPORT int nrrdStateDisableContent;
+NRRDIO_EXPORT char *nrrdStateUnknownContent;
+NRRDIO_EXPORT int nrrdStateGrayscaleImage3D;
+NRRDIO_EXPORT int nrrdStateKeyValueReturnInternalPointers;
+NRRDIO_EXPORT int nrrdStateKindNoop;
 
 /******** all the airEnums used through-out nrrd */
 /* 
@@ -1818,214 +1957,266 @@ TEEM_API int nrrdStateKindNoop;
 ** name is best used for the airEnums here
 */
 /* enumsNrrd.c */
-TEEM_API airEnum *nrrdFormatType;
-TEEM_API airEnum *nrrdType;
-TEEM_API airEnum *nrrdEncodingType;
-TEEM_API airEnum *nrrdCenter;
-TEEM_API airEnum *nrrdKind;
-TEEM_API airEnum *nrrdField;
-TEEM_API airEnum *nrrdSpace;
+NRRDIO_EXPORT const airEnum *const nrrdFormatType;
+NRRDIO_EXPORT const airEnum *const nrrdType;
+NRRDIO_EXPORT const airEnum *const nrrdEncodingType;
+NRRDIO_EXPORT const airEnum *const nrrdCenter;
+NRRDIO_EXPORT const airEnum *const nrrdKind;
+NRRDIO_EXPORT const airEnum *const nrrdField;
+NRRDIO_EXPORT const airEnum *const nrrdSpace;
+NRRDIO_EXPORT const airEnum *const nrrdSpacingStatus;
 
 /******** arrays of things (poor-man's functions/predicates) */
 /* arraysNrrd.c */
-TEEM_API const char nrrdTypePrintfStr[][AIR_STRLEN_SMALL];
-TEEM_API const size_t nrrdTypeSize[];
-TEEM_API const double nrrdTypeMin[];
-TEEM_API const double nrrdTypeMax[];
-TEEM_API const int nrrdTypeIsIntegral[];
-TEEM_API const int nrrdTypeIsUnsigned[];
-TEEM_API const double nrrdTypeNumberOfValues[];
+NRRDIO_EXPORT const char nrrdTypePrintfStr[][AIR_STRLEN_SMALL];
+NRRDIO_EXPORT const size_t nrrdTypeSize[];
+NRRDIO_EXPORT const double nrrdTypeMin[];
+NRRDIO_EXPORT const double nrrdTypeMax[];
+NRRDIO_EXPORT const int nrrdTypeIsIntegral[];
+NRRDIO_EXPORT const int nrrdTypeIsUnsigned[];
+NRRDIO_EXPORT const double nrrdTypeNumberOfValues[];
 
 /******** pseudo-constructors, pseudo-destructors, and such */
 /* methodsNrrd.c */
-TEEM_API NrrdIoState *nrrdIoStateNew(void);
-TEEM_API void nrrdIoStateInit(NrrdIoState *nio);
-TEEM_API NrrdIoState *nrrdIoStateNix(NrrdIoState *nio);
-TEEM_API void nrrdInit(Nrrd *nrrd);
-TEEM_API Nrrd *nrrdNew(void);
-TEEM_API Nrrd *nrrdNix(Nrrd *nrrd);
-TEEM_API Nrrd *nrrdEmpty(Nrrd *nrrd);
-TEEM_API Nrrd *nrrdNuke(Nrrd *nrrd);
-TEEM_API int nrrdWrap_nva(Nrrd *nrrd, void *data, int type,
-                          unsigned int dim, const size_t *size);
-TEEM_API int nrrdWrap(Nrrd *nrrd, void *data, int type, unsigned int dim,
-                      ... /* sx, sy, .., axis(dim-1) size */);
-TEEM_API void nrrdBasicInfoInit(Nrrd *nrrd, int excludeBitflag);
-TEEM_API int nrrdBasicInfoCopy(Nrrd *nout, const Nrrd *nin,
-                               int excludeBitflag);
-TEEM_API int nrrdCopy(Nrrd *nout, const Nrrd *nin);
-TEEM_API int nrrdAlloc_nva(Nrrd *nrrd, int type, unsigned int dim,
-                           const size_t *size);
-TEEM_API int nrrdAlloc(Nrrd *nrrd, int type, unsigned int dim,
-                       ... /* sx, sy, .., axis(dim-1) size */);
-TEEM_API int nrrdMaybeAlloc_nva(Nrrd *nrrd, int type, unsigned int dim,
-                                const size_t *size);
-TEEM_API int nrrdMaybeAlloc(Nrrd *nrrd, int type, unsigned int dim,
-                            ... /* sx, sy, .., axis(dim-1) size */);
-TEEM_API int nrrdPPM(Nrrd *, size_t sx, size_t sy);
-TEEM_API int nrrdPGM(Nrrd *, size_t sx, size_t sy);
+NRRDIO_EXPORT NrrdIoState *nrrdIoStateNew(void);
+NRRDIO_EXPORT void nrrdIoStateInit(NrrdIoState *nio);
+NRRDIO_EXPORT NrrdIoState *nrrdIoStateNix(NrrdIoState *nio);
+NRRDIO_EXPORT void nrrdInit(Nrrd *nrrd);
+NRRDIO_EXPORT Nrrd *nrrdNew(void);
+NRRDIO_EXPORT Nrrd *nrrdNix(Nrrd *nrrd);
+NRRDIO_EXPORT Nrrd *nrrdEmpty(Nrrd *nrrd);
+NRRDIO_EXPORT Nrrd *nrrdNuke(Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdWrap_nva(Nrrd *nrrd, void *data, int type,
+                             unsigned int dim, const size_t *size);
+NRRDIO_EXPORT int nrrdWrap_va(Nrrd *nrrd, void *data, int type, unsigned int dim,
+                            ... /* size_t sx, sy, .., axis(dim-1) size */);
+NRRDIO_EXPORT void nrrdBasicInfoInit(Nrrd *nrrd, int excludeBitflag);
+NRRDIO_EXPORT int nrrdBasicInfoCopy(Nrrd *nout, const Nrrd *nin,
+                                  int excludeBitflag);
+NRRDIO_EXPORT int nrrdCopy(Nrrd *nout, const Nrrd *nin);
+NRRDIO_EXPORT int nrrdAlloc_nva(Nrrd *nrrd, int type, unsigned int dim,
+                              const size_t *size);
+NRRDIO_EXPORT int nrrdAlloc_va(Nrrd *nrrd, int type, unsigned int dim,
+                             ... /* size_t sx, sy, .., axis(dim-1) size */);
+NRRDIO_EXPORT int nrrdMaybeAlloc_nva(Nrrd *nrrd, int type, unsigned int dim,
+                                   const size_t *size);
+NRRDIO_EXPORT int nrrdMaybeAlloc_va(Nrrd *nrrd, int type, unsigned int dim,
+                                  ... /* size_t sx, sy, .., ax(dim-1) size */);
+NRRDIO_EXPORT int nrrdPPM(Nrrd *, size_t sx, size_t sy);
+NRRDIO_EXPORT int nrrdPGM(Nrrd *, size_t sx, size_t sy);
 
 /******** axis info related */
 /* axis.c */
-TEEM_API int nrrdKindIsDomain(int kind);
-TEEM_API unsigned int nrrdKindSize(int kind);
-TEEM_API int nrrdAxisInfoCopy(Nrrd *nout, const Nrrd *nin,
-                              const int *axmap, int excludeBitflag);
-TEEM_API void nrrdAxisInfoSet_nva(Nrrd *nin, int axInfo, const void *info);
-TEEM_API void nrrdAxisInfoSet(Nrrd *nin, int axInfo,
-                              ... /* const void* */);
-TEEM_API void nrrdAxisInfoGet_nva(const Nrrd *nrrd, int axInfo, void *info);
-TEEM_API void nrrdAxisInfoGet(const Nrrd *nrrd, int axInfo,
-                              ... /* void* */);
-TEEM_API double nrrdAxisInfoPos(const Nrrd *nrrd, unsigned int ax, double idx);
-TEEM_API double nrrdAxisInfoIdx(const Nrrd *nrrd, unsigned int ax, double pos);
-TEEM_API void nrrdAxisInfoPosRange(double *loP, double *hiP,
-                                   const Nrrd *nrrd, unsigned int ax,
-                                   double loIdx, double hiIdx);
-TEEM_API void nrrdAxisInfoIdxRange(double *loP, double *hiP,
-                                   const Nrrd *nrrd, unsigned int ax,
-                                   double loPos, double hiPos);
-TEEM_API void nrrdAxisInfoSpacingSet(Nrrd *nrrd, unsigned int ax);
-TEEM_API void nrrdAxisInfoMinMaxSet(Nrrd *nrrd, unsigned int ax,
-                                    int defCenter);
-TEEM_API unsigned int nrrdDomainAxesGet(Nrrd *nrrd,
-                                        unsigned int axisIdx[NRRD_DIM_MAX]);
-TEEM_API unsigned int nrrdRangeAxesGet(Nrrd *nrrd,
-                                       unsigned int axisIdx[NRRD_DIM_MAX]);
-TEEM_API int nrrdSpacingCalculate(const Nrrd *nrrd, unsigned int ax,
-                                  double *spacing,
-                                  double vector[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT int nrrdKindIsDomain(int kind);
+NRRDIO_EXPORT unsigned int nrrdKindSize(int kind);
+NRRDIO_EXPORT int nrrdAxisInfoCopy(Nrrd *nout, const Nrrd *nin,
+                                 const int *axmap, int excludeBitflag);
+NRRDIO_EXPORT void nrrdAxisInfoSet_nva(Nrrd *nin, int axInfo, const void *info);
+NRRDIO_EXPORT void nrrdAxisInfoSet_va(Nrrd *nin, int axInfo,
+                                    ... /* const void* */);
+NRRDIO_EXPORT void nrrdAxisInfoGet_nva(const Nrrd *nrrd, int axInfo, void *info);
+NRRDIO_EXPORT void nrrdAxisInfoGet_va(const Nrrd *nrrd, int axInfo,
+                                    ... /* ??? */);
+NRRDIO_EXPORT double nrrdAxisInfoPos(const Nrrd *nrrd, unsigned int ax,
+                                   double idx);
+NRRDIO_EXPORT double nrrdAxisInfoIdx(const Nrrd *nrrd, unsigned int ax,
+                                   double pos);
+NRRDIO_EXPORT void nrrdAxisInfoPosRange(double *loP, double *hiP,
+                                      const Nrrd *nrrd, unsigned int ax,
+                                      double loIdx, double hiIdx);
+NRRDIO_EXPORT void nrrdAxisInfoIdxRange(double *loP, double *hiP,
+                                      const Nrrd *nrrd, unsigned int ax,
+                                      double loPos, double hiPos);
+NRRDIO_EXPORT void nrrdAxisInfoSpacingSet(Nrrd *nrrd, unsigned int ax);
+NRRDIO_EXPORT void nrrdAxisInfoMinMaxSet(Nrrd *nrrd, unsigned int ax,
+                                       int defCenter);
+NRRDIO_EXPORT unsigned int nrrdDomainAxesGet(const Nrrd *nrrd,
+                                           unsigned int axisIdx[NRRD_DIM_MAX]);
+NRRDIO_EXPORT unsigned int nrrdRangeAxesGet(const Nrrd *nrrd,
+                                          unsigned int axisIdx[NRRD_DIM_MAX]);
+NRRDIO_EXPORT unsigned int nrrdSpatialAxesGet(const Nrrd *nrrd,
+                                            unsigned int
+                                            axisIdx[NRRD_DIM_MAX]);
+NRRDIO_EXPORT unsigned int nrrdNonSpatialAxesGet(const Nrrd *nrrd,
+                                               unsigned int
+                                               axisIdx[NRRD_DIM_MAX]);
+NRRDIO_EXPORT int nrrdSpacingCalculate(const Nrrd *nrrd, unsigned int ax,
+                                     double *spacing,
+                                     double vector[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT int nrrdOrientationReduce(Nrrd *nout, const Nrrd *nin,
+                                      int setMinsFromOrigin);
 
 /******** simple things */
 /* simple.c */
-TEEM_API const char *nrrdBiffKey;
-TEEM_API unsigned int nrrdSpaceDimension(int space);
-TEEM_API int nrrdSpaceSet(Nrrd *nrrd, int space);
-TEEM_API int nrrdSpaceDimensionSet(Nrrd *nrrd, unsigned int spaceDim);
-TEEM_API void nrrdSpaceGet(const Nrrd *nrrd, int *space,
-                           unsigned int *spaceDim);
-TEEM_API unsigned int nrrdSpaceOriginGet(const Nrrd *nrrd,
-                                         double vector[NRRD_SPACE_DIM_MAX]);
-TEEM_API int nrrdSpaceOriginSet(Nrrd *nrrd,
-                                double vector[NRRD_SPACE_DIM_MAX]);
-TEEM_API int nrrdOriginCalculate(const Nrrd *nrrd,
-                                 unsigned int *axisIdx,
-                                 unsigned int axisIdxNum,
-                                 int defaultCenter, double *origin);
-TEEM_API int nrrdContentSet(Nrrd *nout, const char *func,
-                            const Nrrd *nin, const char *format,
-                            ... /* printf-style arg list */ );
-TEEM_API void nrrdDescribe(FILE *file, const Nrrd *nrrd);
-TEEM_API int nrrdCheck(const Nrrd *nrrd);
-TEEM_API int _nrrdCheck(const Nrrd *nrrd, int checkData, int useBiff);
-TEEM_API size_t nrrdElementSize(const Nrrd *nrrd);
-TEEM_API size_t nrrdElementNumber(const Nrrd *nrrd);
-TEEM_API int nrrdSanity(void);
-TEEM_API int nrrdSameSize(const Nrrd *n1, const Nrrd *n2, int useBiff);
+NRRDIO_EXPORT const char *nrrdBiffKey;
+NRRDIO_EXPORT unsigned int nrrdSpaceDimension(int space);
+NRRDIO_EXPORT int nrrdSpaceSet(Nrrd *nrrd, int space);
+NRRDIO_EXPORT int nrrdSpaceDimensionSet(Nrrd *nrrd, unsigned int spaceDim);
+NRRDIO_EXPORT unsigned int nrrdSpaceOriginGet(const Nrrd *nrrd,
+                                            double vector[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT int nrrdSpaceOriginSet(Nrrd *nrrd,
+                                   double vector[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT int nrrdOriginCalculate(const Nrrd *nrrd,
+                                    unsigned int *axisIdx,
+                                    unsigned int axisIdxNum,
+                                    int defaultCenter, double *origin);
+NRRDIO_EXPORT int nrrdContentSet_va(Nrrd *nout, const char *func,
+                                  const Nrrd *nin, const char *format,
+                                  ... /* printf-style arg list */ );
+NRRDIO_EXPORT void nrrdDescribe(FILE *file, const Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdCheck(const Nrrd *nrrd);
+NRRDIO_EXPORT int _nrrdCheck(const Nrrd *nrrd, int checkData, int useBiff);
+NRRDIO_EXPORT size_t nrrdElementSize(const Nrrd *nrrd);
+NRRDIO_EXPORT size_t nrrdElementNumber(const Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdSanity(void);
+NRRDIO_EXPORT int nrrdSameSize(const Nrrd *n1, const Nrrd *n2, int useBiff);
+NRRDIO_EXPORT void nrrdSpaceVecCopy(double dst[NRRD_SPACE_DIM_MAX], 
+                                  const double src[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT void nrrdSpaceVecScaleAdd2(double sum[NRRD_SPACE_DIM_MAX], 
+                                       double sclA, 
+                                       const double vecA[NRRD_SPACE_DIM_MAX],
+                                       double sclB, 
+                                       const double vecB[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT void nrrdSpaceVecScale(double out[NRRD_SPACE_DIM_MAX], 
+                                   double scl, 
+                                   const double vec[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT double nrrdSpaceVecNorm(int sdim,
+                                    const double vec[NRRD_SPACE_DIM_MAX]);
+NRRDIO_EXPORT void nrrdSpaceVecSetNaN(double vec[NRRD_SPACE_DIM_MAX]);
 
 /******** comments related */
 /* comment.c */
-TEEM_API int nrrdCommentAdd(Nrrd *nrrd, const char *str);
-TEEM_API void nrrdCommentClear(Nrrd *nrrd);
-TEEM_API int nrrdCommentCopy(Nrrd *nout, const Nrrd *nin);
+NRRDIO_EXPORT int nrrdCommentAdd(Nrrd *nrrd, const char *str);
+NRRDIO_EXPORT void nrrdCommentClear(Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdCommentCopy(Nrrd *nout, const Nrrd *nin);
 
 /******** key/value pairs */
 /* keyvalue.c */
-TEEM_API unsigned int nrrdKeyValueSize(const Nrrd *nrrd);
-TEEM_API int nrrdKeyValueAdd(Nrrd *nrrd, const char *key, const char *value);
-TEEM_API char *nrrdKeyValueGet(const Nrrd *nrrd, const char *key);
-TEEM_API void nrrdKeyValueIndex(const Nrrd *nrrd, 
-                                char **keyP, char **valueP, unsigned int ki);
-TEEM_API int nrrdKeyValueErase(Nrrd *nrrd, const char *key);
-TEEM_API void nrrdKeyValueClear(Nrrd *nrrd);
-TEEM_API int nrrdKeyValueCopy(Nrrd *nout, const Nrrd *nin);
+NRRDIO_EXPORT unsigned int nrrdKeyValueSize(const Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdKeyValueAdd(Nrrd *nrrd,
+                                const char *key, const char *value);
+NRRDIO_EXPORT char *nrrdKeyValueGet(const Nrrd *nrrd, const char *key);
+NRRDIO_EXPORT void nrrdKeyValueIndex(const Nrrd *nrrd, 
+                                   char **keyP, char **valueP,
+                                   unsigned int ki);
+NRRDIO_EXPORT int nrrdKeyValueErase(Nrrd *nrrd, const char *key);
+NRRDIO_EXPORT void nrrdKeyValueClear(Nrrd *nrrd);
+NRRDIO_EXPORT int nrrdKeyValueCopy(Nrrd *nout, const Nrrd *nin);
 
 /******** endian related */
 /* endianNrrd.c */
-TEEM_API void nrrdSwapEndian(Nrrd *nrrd);
+NRRDIO_EXPORT void nrrdSwapEndian(Nrrd *nrrd);
 
 /******** getting information to and from files */
 /* formatXXX.c */
-TEEM_API const NrrdFormat *const nrrdFormatNRRD;
-TEEM_API const NrrdFormat *const nrrdFormatPNM;
-TEEM_API const NrrdFormat *const nrrdFormatPNG;
-TEEM_API const NrrdFormat *const nrrdFormatVTK;
-TEEM_API const NrrdFormat *const nrrdFormatText;
-TEEM_API const NrrdFormat *const nrrdFormatEPS;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatNRRD;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatPNM;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatPNG;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatVTK;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatText;
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatEPS;
 /* format.c */
-TEEM_API const NrrdFormat *const nrrdFormatUnknown;
-TEEM_API const NrrdFormat *
+NRRDIO_EXPORT const NrrdFormat *const nrrdFormatUnknown;
+NRRDIO_EXPORT const NrrdFormat *
   const nrrdFormatArray[NRRD_FORMAT_TYPE_MAX+1];
+
 /* encodingXXX.c */
-TEEM_API const NrrdEncoding *const nrrdEncodingRaw;
-TEEM_API const NrrdEncoding *const nrrdEncodingAscii;
-TEEM_API const NrrdEncoding *const nrrdEncodingHex;
-TEEM_API const NrrdEncoding *const nrrdEncodingGzip;
-TEEM_API const NrrdEncoding *const nrrdEncodingBzip2;
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingRaw;
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingAscii;
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingHex;
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingGzip;
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingBzip2;
 /* encoding.c */
-TEEM_API const NrrdEncoding *const nrrdEncodingUnknown;
-TEEM_API const NrrdEncoding *
+NRRDIO_EXPORT const NrrdEncoding *const nrrdEncodingUnknown;
+NRRDIO_EXPORT const NrrdEncoding *
   const nrrdEncodingArray[NRRD_ENCODING_TYPE_MAX+1];
+
 /* parseNrrd.c */
 /* this needs the "FILE *file" first arg for the sole reason that
    parsing a "data file: " field which identifies a LIST must then
    read in all the data filenames from the same file */
-TEEM_API int (*nrrdFieldInfoParse[NRRD_FIELD_MAX+1])(FILE *file, Nrrd *nrrd,
-                                                     NrrdIoState *nio,
-                                                     int useBiff);
+NRRDIO_EXPORT int (*nrrdFieldInfoParse[NRRD_FIELD_MAX+1])(FILE *file, Nrrd *nrrd,
+                                                        NrrdIoState *nio,
+                                                        int useBiff);
+NRRDIO_EXPORT unsigned int _nrrdDataFNNumber(NrrdIoState *nio);
+NRRDIO_EXPORT int _nrrdContainsPercentThisAndMore(const char *str, char thss);
+NRRDIO_EXPORT int _nrrdDataFNCheck(NrrdIoState *nio, Nrrd *nrrd, int useBiff);
+
 /* read.c */
-TEEM_API int nrrdLineSkip(FILE *dataFile, NrrdIoState *nio);
-TEEM_API int nrrdByteSkip(FILE *dataFile, Nrrd *nrrd, NrrdIoState *nio);
-TEEM_API int nrrdLoad(Nrrd *nrrd, const char *filename, NrrdIoState *nio);
-TEEM_API int nrrdRead(Nrrd *nrrd, FILE *file, NrrdIoState *nio);
+NRRDIO_EXPORT int _nrrdOneLine(unsigned int *lenP, NrrdIoState *nio, FILE *file);
+NRRDIO_EXPORT int nrrdLineSkip(FILE *dataFile, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdByteSkip(FILE *dataFile, Nrrd *nrrd, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdLoad(Nrrd *nrrd, const char *filename, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdLoadMulti(Nrrd *const *nin, unsigned int ninLen,
+                              const char *fnameFormat,
+                              unsigned int numStart, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdRead(Nrrd *nrrd, FILE *file, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdStringRead(Nrrd *nrrd, const char *string,
+                               NrrdIoState *nio);
+
 /* write.c */
-TEEM_API int nrrdIoStateSet(NrrdIoState *nio, int parm, int value);
-TEEM_API int nrrdIoStateEncodingSet(NrrdIoState *nio,
-                                    const NrrdEncoding *encoding);
-TEEM_API int nrrdIoStateFormatSet(NrrdIoState *nio, 
-                                  const NrrdFormat *format);
-TEEM_API int nrrdIoStateGet(NrrdIoState *nio, int parm);
-TEEM_API const NrrdEncoding *nrrdIoStateEncodingGet(NrrdIoState *nio);
-TEEM_API const NrrdFormat *nrrdIoStateFormatGet(NrrdIoState *nio);
-TEEM_API int nrrdSave(const char *filename, const Nrrd *nrrd, 
-                      NrrdIoState *nio);
-TEEM_API int nrrdWrite(FILE *file, const Nrrd *nrrd, 
-                       NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdIoStateSet(NrrdIoState *nio, int parm, int value);
+NRRDIO_EXPORT int nrrdIoStateEncodingSet(NrrdIoState *nio,
+                                       const NrrdEncoding *encoding);
+NRRDIO_EXPORT int nrrdIoStateFormatSet(NrrdIoState *nio, 
+                                     const NrrdFormat *format);
+NRRDIO_EXPORT int nrrdIoStateGet(NrrdIoState *nio, int parm);
+NRRDIO_EXPORT const NrrdEncoding *nrrdIoStateEncodingGet(NrrdIoState *nio);
+NRRDIO_EXPORT const NrrdFormat *nrrdIoStateFormatGet(NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdSave(const char *filename, const Nrrd *nrrd, 
+                         NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdSaveMulti(const char *fnameFormat,
+                              const Nrrd *const *nin, unsigned int ninLen,
+                              unsigned int numStart, NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdWrite(FILE *file, const Nrrd *nrrd, 
+                          NrrdIoState *nio);
+NRRDIO_EXPORT int nrrdStringWrite(char **stringP, const Nrrd *nrrd,
+                                NrrdIoState *nio);
 
 /******** getting value into and out of an array of general type, and
    all other simplistic functionality pseudo-parameterized by type */
 /* accessors.c */
-TEEM_API int    (*nrrdILoad[NRRD_TYPE_MAX+1])(const void *v);
-TEEM_API float  (*nrrdFLoad[NRRD_TYPE_MAX+1])(const void *v);
-TEEM_API double (*nrrdDLoad[NRRD_TYPE_MAX+1])(const void *v);
-TEEM_API int    (*nrrdIStore[NRRD_TYPE_MAX+1])(void *v, int j);
-TEEM_API float  (*nrrdFStore[NRRD_TYPE_MAX+1])(void *v, float f);
-TEEM_API double (*nrrdDStore[NRRD_TYPE_MAX+1])(void *v, double d);
-TEEM_API int    (*nrrdILookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
-TEEM_API float  (*nrrdFLookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
-TEEM_API double (*nrrdDLookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
-TEEM_API int    (*nrrdIInsert[NRRD_TYPE_MAX+1])(void *v, size_t I, int j);
-TEEM_API float  (*nrrdFInsert[NRRD_TYPE_MAX+1])(void *v, size_t I, float f);
-TEEM_API double (*nrrdDInsert[NRRD_TYPE_MAX+1])(void *v, size_t I, double d);
-TEEM_API int    (*nrrdSprint[NRRD_TYPE_MAX+1])(char *, const void *);
+NRRDIO_EXPORT double (*nrrdDLoad[NRRD_TYPE_MAX+1])(const void *v);
+NRRDIO_EXPORT float  (*nrrdFLoad[NRRD_TYPE_MAX+1])(const void *v);
+NRRDIO_EXPORT int    (*nrrdILoad[NRRD_TYPE_MAX+1])(const void *v);
+NRRDIO_EXPORT unsigned int (*nrrdUILoad[NRRD_TYPE_MAX+1])(const void *v);
+NRRDIO_EXPORT double (*nrrdDStore[NRRD_TYPE_MAX+1])(void *v, double d);
+NRRDIO_EXPORT float  (*nrrdFStore[NRRD_TYPE_MAX+1])(void *v, float f);
+NRRDIO_EXPORT int    (*nrrdIStore[NRRD_TYPE_MAX+1])(void *v, int j);
+NRRDIO_EXPORT unsigned int (*nrrdUIStore[NRRD_TYPE_MAX+1])(void *v,
+                                                         unsigned int j);
+NRRDIO_EXPORT double (*nrrdDLookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
+NRRDIO_EXPORT float  (*nrrdFLookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
+NRRDIO_EXPORT int    (*nrrdILookup[NRRD_TYPE_MAX+1])(const void *v, size_t I);
+NRRDIO_EXPORT unsigned int (*nrrdUILookup[NRRD_TYPE_MAX+1])(const void *v,
+                                                          size_t I);
+NRRDIO_EXPORT double (*nrrdDInsert[NRRD_TYPE_MAX+1])(void *v, size_t I,
+                                                   double d);
+NRRDIO_EXPORT float  (*nrrdFInsert[NRRD_TYPE_MAX+1])(void *v, size_t I,
+                                                   float f);
+NRRDIO_EXPORT int    (*nrrdIInsert[NRRD_TYPE_MAX+1])(void *v, size_t I,
+                                                   int j);
+NRRDIO_EXPORT unsigned int (*nrrdUIInsert[NRRD_TYPE_MAX+1])(void *v, size_t I,
+                                                          unsigned int j);
+NRRDIO_EXPORT int    (*nrrdSprint[NRRD_TYPE_MAX+1])(char *, const void *);
 
 
 /******** permuting, shuffling, and all flavors of reshaping */
 /* reorder.c */
-TEEM_API int nrrdAxesInsert(Nrrd *nout, const Nrrd *nin, unsigned int ax);
-TEEM_API int nrrdInvertPerm(unsigned int *invp, const unsigned int *perm,
-                            unsigned int n);
-TEEM_API int nrrdAxesPermute(Nrrd *nout, const Nrrd *nin,
-                             const unsigned int *axes);
-TEEM_API int nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
-                         const size_t *perm);
+NRRDIO_EXPORT int nrrdAxesInsert(Nrrd *nout, const Nrrd *nin, unsigned int ax);
+NRRDIO_EXPORT int nrrdInvertPerm(unsigned int *invp, const unsigned int *perm,
+                               unsigned int n);
+NRRDIO_EXPORT int nrrdAxesPermute(Nrrd *nout, const Nrrd *nin,
+                                const unsigned int *axes);
+NRRDIO_EXPORT int nrrdShuffle(Nrrd *nout, const Nrrd *nin, unsigned int axis,
+                            const size_t *perm);
 
 /******** sampling, slicing, cropping */
 /* subset.c */
-TEEM_API int nrrdSlice(Nrrd *nout, const Nrrd *nin,
-                       unsigned int axis, size_t pos);
-TEEM_API int nrrdCrop(Nrrd *nout, const Nrrd *nin,
-                      size_t *min, size_t *max);
+NRRDIO_EXPORT int nrrdSlice(Nrrd *nout, const Nrrd *nin,
+                          unsigned int axis, size_t pos);
+NRRDIO_EXPORT int nrrdCrop(Nrrd *nout, const Nrrd *nin,
+                         size_t *min, size_t *max);
 
 #ifdef __cplusplus
 }

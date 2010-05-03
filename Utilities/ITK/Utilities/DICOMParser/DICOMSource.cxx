@@ -3,8 +3,8 @@
   Program:   DICOMParser
   Module:    $RCSfile: DICOMSource.cxx,v $
   Language:  C++
-  Date:      $Date: 2009-04-05 10:56:58 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2009-11-21 19:44:58 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) 2003 Matt Turek
   All rights reserved.
@@ -142,7 +142,7 @@ quadbyte DICOMSource::ReadNBytes(int len)
 
 float DICOMSource::ReadAsciiFloat(int len) 
 {
-  float ret=0.0;
+  float ret=0.0f;
 
 
   char* val = new char[len+1];

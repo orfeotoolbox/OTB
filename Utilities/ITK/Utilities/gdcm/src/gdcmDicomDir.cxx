@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmDicomDir.cxx,v $
   Language:  C++
-  Date:      $Date: 2008-05-26 00:47:50 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2009-11-21 20:00:35 $
+  Version:   $Revision: 1.14 $
   
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -739,7 +739,7 @@ void DicomDir::Initialize()
    ProgressArg             = NULL;
    EndArg                  = NULL;
 
-   Progress = 0.0;
+   Progress = 0.0f;
    Abort = false;
 
    MetaElems = NULL;   

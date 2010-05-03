@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOptImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-24 17:42:02 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2010-03-27 20:54:43 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -105,6 +105,18 @@ ImageToImageMetric<TFixedImage,TMovingImage>
     delete [] m_ThreaderTransform;
     }
   m_ThreaderTransform = NULL;
+
+  if( this->m_ThreaderBSplineTransformWeights != NULL )
+    {
+    delete [] this->m_ThreaderBSplineTransformWeights;
+    }
+  this->m_ThreaderBSplineTransformWeights = NULL;
+  
+  if( this->m_ThreaderBSplineTransformIndices != NULL )
+    {
+    delete [] this->m_ThreaderBSplineTransformIndices;
+    }
+  this->m_ThreaderBSplineTransformIndices = NULL;
 }
 
 /**
@@ -388,7 +400,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
     // Take all the pixels within the fixed image region)
     // to create the sample points list.
     // 
-    SampleFullFixedImageDomain( m_FixedImageSamples );
+    SampleFullFixedImageRegion( m_FixedImageSamples );
     }
   else
     {
@@ -406,7 +418,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
       // Uniformly sample the fixed image (within the fixed image region)
       // to create the sample points list.
       // 
-      SampleFixedImageDomain( m_FixedImageSamples );
+      SampleFixedImageRegion( m_FixedImageSamples );
       }
     }
 
@@ -489,11 +501,13 @@ ImageToImageMetric<TFixedImage,TMovingImage>
       {
       delete [] this->m_ThreaderBSplineTransformWeights;
       }
-
+    this->m_ThreaderBSplineTransformWeights = NULL;
+    
     if( this->m_ThreaderBSplineTransformIndices != NULL )
       {
       delete [] this->m_ThreaderBSplineTransformIndices;
       }
+    this->m_ThreaderBSplineTransformIndices = NULL;
 
     if( this->m_UseCachingOfBSplineWeights )
       {
@@ -570,7 +584,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
 template < class TFixedImage, class TMovingImage >
 void
 ImageToImageMetric<TFixedImage,TMovingImage>
-::SampleFixedImageDomain( FixedImageSampleContainer & samples ) const
+::SampleFixedImageRegion( FixedImageSampleContainer & samples ) const
 {
   if( samples.size() != m_NumberOfFixedImageSamples )
     {
@@ -686,7 +700,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
 template < class TFixedImage, class TMovingImage >
 void
 ImageToImageMetric<TFixedImage,TMovingImage>
-::SampleFullFixedImageDomain( FixedImageSampleContainer& samples ) const
+::SampleFullFixedImageRegion( FixedImageSampleContainer& samples ) const
 {
 
   if( samples.size() != m_NumberOfFixedImageSamples )
@@ -1193,7 +1207,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
   this->SynchronizeTransforms();
 
   m_Threader->SetSingleMethod(GetValueMultiThreaded,
-                              (void *)(&m_ThreaderParameter));
+                              const_cast<void *>(static_cast<const void *>(&m_ThreaderParameter)));
   m_Threader->SingleMethodExecute();
 
   for( unsigned int threadID = 0; threadID<m_NumberOfThreads-1; threadID++ )
@@ -1208,7 +1222,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
 ::GetValueMultiThreadedPostProcessInitiate( void ) const
 {
   m_Threader->SetSingleMethod(GetValueMultiThreadedPostProcess,
-                              (void *)(&m_ThreaderParameter));
+                              const_cast<void *>(static_cast<const void *>(&m_ThreaderParameter)));
   m_Threader->SingleMethodExecute();
 }
 
@@ -1357,7 +1371,7 @@ ImageToImageMetric<TFixedImage,TMovingImage>
   this->SynchronizeTransforms();
 
   m_Threader->SetSingleMethod(GetValueAndDerivativeMultiThreaded,
-                              (void *)(&m_ThreaderParameter));
+                              const_cast<void *>(static_cast<const void *>(&m_ThreaderParameter)));
   m_Threader->SingleMethodExecute();
 
   for( unsigned int threadID = 0; threadID<m_NumberOfThreads-1; threadID++ )

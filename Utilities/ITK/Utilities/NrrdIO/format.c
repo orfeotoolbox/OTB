@@ -1,6 +1,6 @@
 /*
   NrrdIO: stand-alone code for basic nrrd functionality
-  Copyright (C) 2005  Gordon Kindlmann
+  Copyright (C) 2008, 2007, 2006, 2005  Gordon Kindlmann
   Copyright (C) 2004, 2003, 2002, 2001, 2000, 1999, 1998  University of Utah
  
   This software is provided 'as-is', without any express or implied
@@ -64,12 +64,11 @@ _nrrdFormatUnknown_nameLooksLike(const char *filename) {
 int
 _nrrdFormatUnknown_fitsInto(const Nrrd *nrrd, const NrrdEncoding *encoding,
                             int useBiff) {
-  char me[]="_nrrdFormatUnknown_fitsInto", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdFormatUnknown_fitsInto";
   
   if (!(nrrd && encoding)) {
-    sprintf(err, "%s: got NULL nrrd (%p) or encoding (%p)",
-            me, nrrd, encoding);
-    biffMaybeAdd(NRRD, err, useBiff); 
+    biffMaybeAddf(useBiff, NRRD, "%s: got NULL nrrd (%p) or encoding (%p)",
+                  me, AIR_CAST(void*, nrrd), AIR_CAST(void*, encoding)); 
     return AIR_FALSE;
   }
 
@@ -90,30 +89,28 @@ _nrrdFormatUnknown_contentStartsLike(NrrdIoState *nio) {
 int
 _nrrdFormatUnknown_read(FILE *file, Nrrd *nrrd,
                         NrrdIoState *nio) {
-  char me[]="_nrrdFormatUnknown_read", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdFormatUnknown_read";
 
   /* insert code here, and remove error handling below */
   AIR_UNUSED(file);
   AIR_UNUSED(nrrd);
   AIR_UNUSED(nio);
 
-  sprintf(err, "%s: ERROR!!! trying to read unknown format", me);
-  biffAdd(NRRD, err);
+  biffAddf(NRRD, "%s: ERROR!!! trying to read unknown format", me);
   return 1;
 }
 
 int
 _nrrdFormatUnknown_write(FILE *file, const Nrrd *nrrd,
                          NrrdIoState *nio) {
-  char me[]="_nrrdFormatUnknown_write", err[AIR_STRLEN_MED];
+  static const char me[]="_nrrdFormatUnknown_write";
 
   /* insert code here, and remove error handling below */
   AIR_UNUSED(file);
   AIR_UNUSED(nrrd);
   AIR_UNUSED(nio);
 
-  sprintf(err, "%s: ERROR!!! trying to write unknown format", me);
-  biffAdd(NRRD, err);
+  biffAddf(NRRD, "%s: ERROR!!! trying to write unknown format", me);
   return 1;
 }
 

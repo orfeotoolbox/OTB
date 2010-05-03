@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraits.cxx,v $
   Language:  C++
-  Date:      $Date: 2007-12-23 17:59:29 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2009-11-30 15:29:34 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,17 +57,20 @@ const double NumericTraits<double>::One = 1.0;
 
 const long double NumericTraits<long double>::Zero = 0.0;
 const long double NumericTraits<long double>::One = 1.0;
-  
-#ifdef _WIN64
-typedef std::string::size_type size_type;
-const size_type NumericTraits<size_type>::Zero = 0.0;
-const size_type NumericTraits<size_type>::One = 1.0;
-#endif
 
 const std::complex<float>  NumericTraits< std::complex<float> >::Zero = std::complex<float>(0.0f,0.0f);
 const std::complex<float>  NumericTraits< std::complex<float> >::One  = std::complex<float>(1.0f,0.0f);
 
 const std::complex<double>  NumericTraits< std::complex<double> >::Zero = std::complex<double>(0.0,0.0);
 const std::complex<double>  NumericTraits< std::complex<double> >::One  = std::complex<double>(1.0,0.0);
+
+
+#ifdef ITK_TYPE_USE_LONG_LONG
+const long long NumericTraits<long long>::Zero = 0LL;
+const long long NumericTraits<long long>::One = 1LL;
+const unsigned long long NumericTraits<unsigned long long>::Zero = 0ULL;
+const unsigned long long NumericTraits<unsigned long long>::One = 1ULL;
+#endif 
+
 
 } // end namespace itk

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2009-04-09 09:23:20 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2010-03-30 15:20:02 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,9 +75,13 @@ CenteredEuler3DTransform<TScalarType>
 {
   itkDebugMacro( << "Setting parameters " << parameters );
 
-  this->SetVarRotation(parameters[0], parameters[1], parameters[2]);
+  const ScalarType angleX = parameters[0];
+  const ScalarType angleY = parameters[1];
+  const ScalarType angleZ = parameters[2];
+  this->SetVarRotation( angleX, angleY, angleZ );
 
   CenterType newCenter;
+  typedef typename CenterType::ValueType  CenterValueType;
   newCenter[0] = parameters[3];
   newCenter[1] = parameters[4];
   newCenter[2] = parameters[5];

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkQuadEdgeMeshDiscreteCurvatureEstimator.h,v $
   Language:  C++
-  Date:      $Date: 2009-04-22 01:41:45 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2010-01-14 18:19:08 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -120,12 +120,15 @@ protected:
     OutputMeshPointer output = this->GetOutput();
 
     OutputPointsContainerPointer points = output->GetPoints();
+    OutputPointsContainerIterator p_it = points->Begin();
 
-    for( OutputPointsContainerIterator p_it = points->Begin();
-        p_it != points->End();
-        p_it++ )
+    OutputCurvatureType curvature;
+
+    while( p_it != points->End() )
       {
-      output->SetPointData( p_it->Index(), EstimateCurvature( p_it->Value() ) );
+      curvature = EstimateCurvature( p_it->Value() );
+      output->SetPointData( p_it->Index(), curvature );
+      ++p_it;
       }
     }
 

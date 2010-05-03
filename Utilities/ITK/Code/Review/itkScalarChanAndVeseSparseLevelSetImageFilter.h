@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarChanAndVeseSparseLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2009-07-29 15:14:15 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2010-02-22 23:40:23 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,7 +20,10 @@
 
 #include "itkMultiphaseSparseFiniteDifferenceImageFilter.h"
 #include "itkRegionOfInterestImageFilter.h"
+#include "itkScalarChanAndVeseLevelSetFunction.h"
 
+namespace itk
+{
 /** \class ScalarChanAndVeseSparseLevelSetImageFilter
  * \brief Sparse implementation of the Chan and Vese multiphase level set image filter.
  *
@@ -29,7 +32,7 @@
  *
  *        "An active contour model without edges"
  *         T. Chan and L. Vese.
- *         In Scale-Space Theories in Computer Vision, pages 141–151, 1999.
+ *         In Scale-Space Theories in Computer Vision, pages 141-151, 1999.
  *
  * \author Mosaliganti K., Smith B., Gelas A., Gouaillard A., Megason S.
  *
@@ -52,10 +55,10 @@
  *      http://hdl.handle.net/1926/1533
  *
  */
-namespace itk
-{
-template < class TInputImage, class TFeatureImage, class TOutputImage, class TFunction,
-  class TSharedData, typename TIdCell = unsigned int >
+template < class TInputImage, class TFeatureImage, class TOutputImage,
+     class TFunction=ScalarChanAndVeseLevelSetFunction< TInputImage, TFeatureImage >,
+     class TSharedData=ITK_TYPENAME TFunction::SharedDataType,
+     typename TIdCell = unsigned int >
 class ITK_EXPORT ScalarChanAndVeseSparseLevelSetImageFilter :
 public MultiphaseSparseFiniteDifferenceImageFilter< TInputImage, TFeatureImage,
   TOutputImage, TFunction, TIdCell >

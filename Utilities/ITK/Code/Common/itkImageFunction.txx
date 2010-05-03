@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-05-07 14:03:44 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2009-11-24 02:27:27 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,8 +32,8 @@ ImageFunction<TInputImage, TOutput, TCoordRep>
   m_Image = NULL;
   m_StartIndex.Fill(0);
   m_EndIndex.Fill(0);
-  m_StartContinuousIndex.Fill(0.0);
-  m_EndContinuousIndex.Fill(0.0);
+  m_StartContinuousIndex.Fill(0.0f);
+  m_EndContinuousIndex.Fill(0.0f);
 }
 
 
@@ -70,7 +70,6 @@ ImageFunction<TInputImage, TOutput, TCoordRep>
 
   if ( ptr )
     {
-    typedef typename IndexType::IndexValueType IndexValueType;
     typename InputImageType::SizeType size = ptr->GetBufferedRegion().GetSize();
     m_StartIndex = ptr->GetBufferedRegion().GetIndex();
 

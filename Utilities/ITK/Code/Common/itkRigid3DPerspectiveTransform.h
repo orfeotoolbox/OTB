@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid3DPerspectiveTransform.h,v $
   Language:  C++
-  Date:      $Date: 2009-03-03 15:08:57 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2009-11-28 15:53:15 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,6 +69,7 @@ public:
 
   /** Parameters type. */
   typedef typename Superclass::ParametersType  ParametersType;
+  typedef typename ParametersType::ValueType   ParameterValueType;
 
   /** Jacobian type. */
   typedef typename Superclass::JacobianType  JacobianType;
@@ -78,13 +79,14 @@ public:
 
   /** Standard vector type for this class. */
   typedef Vector<TScalarType, itkGetStaticConstMacro(InputSpaceDimension)> OffsetType;
+  typedef typename OffsetType::ValueType                                   OffsetValueType;
 
   /** Standard vector type for this class. */
-  typedef Vector<TScalarType, itkGetStaticConstMacro(InputSpaceDimension)> InputVectorType;
-  typedef Vector<TScalarType, itkGetStaticConstMacro(OutputSpaceDimension)> OutputVectorType;
+  typedef Vector<TScalarType, itkGetStaticConstMacro(InputSpaceDimension)>    InputVectorType;
+  typedef Vector<TScalarType, itkGetStaticConstMacro(OutputSpaceDimension)>   OutputVectorType;
   
   /** Standard coordinate point type for this class. */
-  typedef Point<TScalarType, itkGetStaticConstMacro(InputSpaceDimension)>    InputPointType;
+  typedef Point<TScalarType, itkGetStaticConstMacro(InputSpaceDimension)>     InputPointType;
   typedef Point<TScalarType, itkGetStaticConstMacro(OutputSpaceDimension)>    OutputPointType;
   
   /** Standard vnl_quaternion type. */
@@ -94,6 +96,7 @@ public:
   typedef Versor<TScalarType>              VersorType;
   typedef typename VersorType::VectorType  AxisType;
   typedef typename VersorType::ValueType   AngleType;
+  typedef typename AxisType::ValueType     AxisValueType;
   
   /** Get offset of an Rigid3DPerspectiveTransform
    * This method returns the value of the offset of the

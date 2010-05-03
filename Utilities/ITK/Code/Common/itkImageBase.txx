@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.txx,v $
   Language:  C++
-  Date:      $Date: 2009-08-15 08:03:36 $
-  Version:   $Revision: 1.60 $
+  Date:      $Date: 2010-01-21 15:51:32 $
+  Version:   $Revision: 1.63 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -258,6 +258,38 @@ ImageBase<VImageDimension>
     }
 }
 
+template<unsigned int VImageDimension>
+void
+ImageBase<VImageDimension>
+::UpdateOutputData()
+{
+  // If the requested region does not contain any pixels then there is
+  // no reason to Update the output data. This is needed so that
+  // filters don't need to update all inputs. This occours in
+  // ImageBase as  oppose to DataObject, but cause this statement
+  // requires the specific GetNumberOfPixels methods ( as oppose to a
+  // generic Region::IsEmpty method ).
+  //
+  // Also note, the check of the largest possible region is needed so
+  // that an exception will be thrown in the process object when no
+  // input has been set. ( This part of the statement could be removed
+  // if this check happened earlier in the pipeline )
+  if( this->GetRequestedRegion().GetNumberOfPixels() > 0 
+      || this->GetLargestPossibleRegion().GetNumberOfPixels() == 0 )
+    {
+    this->Superclass::UpdateOutputData();
+    }
+// if ITK_LEGACY_SILENT or ITK_LEGACY_REMOVE is enabled then we don't
+// print the waring message
+#if !defined(ITK_LEGACY_SILENT)  && !defined(ITK_LEGACY_REMOVE)
+  else 
+    {
+    // Let us try to give a warning of this change in behavior.
+    itkWarningMacro(<<"Not executing UpdateOutputData due to zero pixel condition RequestedRegion:" 
+                    <<  this->GetRequestedRegion() << " BufferedRegion: " << this->GetBufferedRegion());
+    }
+#endif // !ITK_LEGACY_SILENT && !ITK_LEGACY_REMOVE
+}
 
 //----------------------------------------------------------------------------
 template<unsigned int VImageDimension>

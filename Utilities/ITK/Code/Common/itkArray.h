@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkArray.h,v $
   Language:  C++
-  Date:      $Date: 2006-07-09 01:35:05 $
-  Version:   $Revision: 1.47 $
+  Date:      $Date: 2010-03-15 19:02:09 $
+  Version:   $Revision: 1.48 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,7 @@ public:
   Array(); 
 
   /** Constructor with size. Size can only be changed by assignment */
-  Array(unsigned int dimension);
+  explicit Array(unsigned int dimension);
 
   /** Constructor that initializes array with contents from a user supplied
    * buffer. The pointer to the buffer and the length is specified. By default,

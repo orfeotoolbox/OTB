@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolationWeightFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2009-06-16 08:01:55 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2009-10-27 18:12:49 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -20,6 +20,7 @@
 #include "itkBSplineInterpolationWeightFunction.h"
 #include "itkImage.h"
 #include "itkMatrix.h"
+#include "itkMath.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace itk
@@ -119,14 +120,14 @@ void BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension,
   WeightsType & weights, 
   IndexType & startIndex ) const
 {
+  typedef typename IndexType::IndexValueType IndexValueType;
 
   unsigned int j, k;
 
   // Find the starting index of the support region
   for ( j = 0; j < SpaceDimension; j++ )
     {
-    startIndex[j] = static_cast<typename IndexType::IndexValueType>(
-       Math::Floor( index[j] - static_cast<double>( SplineOrder - 1 ) / 2.0 ) );
+    startIndex[j] = Math::Floor<IndexValueType> ( index[j] - static_cast<double>( SplineOrder - 1 ) / 2.0 );
     }
 
   // Compute the weights
