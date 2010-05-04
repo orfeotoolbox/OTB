@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include
   ${OTB_BINARY_DIR}/Utilities/otbossim/include
 )
+INCLUDE_DIRECTORIES(AFTER ${GEOTIFF_INCLUDE_DIRS})
 
 SET(ossimplugins_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
@@ -21,7 +22,7 @@ SET(ossimplugins_SOURCES
 )
 
 ADD_LIBRARY(otbossimplugins ${ossimplugins_SOURCES} )
-TARGET_LINK_LIBRARIES(otbossimplugins ${GDAL_LIBRARY} ${OGR_LIBRARY} otbossim)
+TARGET_LINK_LIBRARIES(otbossimplugins ${GDAL_LIBRARY} ${OGR_LIBRARY} ${GEOTIFF_LIBRARY} otbossim)
 #TARGET_LINK_LIBRARIES(otbossimplugins otbossim)
 
 IF(OTB_LIBRARY_PROPERTIES)
