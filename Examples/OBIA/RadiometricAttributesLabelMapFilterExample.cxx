@@ -289,7 +289,8 @@ int main(int argc, char * argv[])
 //
 // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
 // the object selection based on radiometric attributes.
-// \begin{figure} \center
+// \begin{figure} [htbp] 
+// \center
 // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_Radiometry_pretty.eps}
 // \includegraphics[width=0.44\textwidth]{OBIARadiometricAttribute1.eps}
 // \itkcaption[Object based extraction based on ]{Vegetation mask resulting from processing.}
