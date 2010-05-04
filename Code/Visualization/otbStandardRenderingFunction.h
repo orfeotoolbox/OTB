@@ -43,11 +43,11 @@ class Identity
 public:
   Identity(){}
   virtual ~Identity(){}
-  bool operator !=(const Identity&) const
+  bool operator!=(const Identity&) const
   {
     return false;
   }
-  bool operator ==(const Identity& other) const
+  bool operator==(const Identity& other) const
   {
     return !(*this != other);
   }
@@ -234,7 +234,6 @@ public:
           m_Maximum.push_back(static_cast<ScalarType> (this->GetHistogramList()->GetNthElement(comp)->Quantile(0, 1
                                                                                                                -
                                                                                                                m_AutoMinMaxQuantile)));
-     
           }
 
         //Check if the rescaling should be applied
