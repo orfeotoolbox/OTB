@@ -261,7 +261,7 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   std::vector<std::string>::const_iterator file;
   url = listURLs.begin();
   file = listFilename.begin();
-  while ( (url != listURLs.end()) && (file != listFiles.end() ))
+  while ( (url != listURLs.end()) && (file != listFilename.end() ))
     {
     RetrieveFile(*url, *file);
     }
