@@ -4,7 +4,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/libs/butility for documentation.
+//  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
 //  12 Jan 01 added <cstddef> for std::ptrdiff_t (Jens Maurer)
@@ -52,7 +52,7 @@ namespace boost
 
   template <class Category, class T, class Distance = std::ptrdiff_t,
             class Pointer = T*, class Reference = T&>
-   struct iterator : detail::iterator_base<Category, T, Distance, Pointer, Reference> {};
+  struct iterator : boost::detail::iterator_base<Category, T, Distance, Pointer, Reference> {};
 # endif
 } // namespace boost
 

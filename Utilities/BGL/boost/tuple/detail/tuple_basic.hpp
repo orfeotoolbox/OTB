@@ -1,6 +1,6 @@
 //  tuple_basic.hpp -----------------------------------------------------
 
-// Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+// Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -213,7 +213,7 @@ struct element_impl<0, T, true /* IsConst */>
 
 
 template<int N, class T>
-struct element: 
+struct element:
   public detail::element_impl<N, T, ::boost::is_const<T>::value>
 {
 };
@@ -362,7 +362,7 @@ struct cons {
 
   template <class T2, class T3, class T4, class T5,
             class T6, class T7, class T8, class T9, class T10>
-  cons( const null_type& t1, T2& t2, T3& t3, T4& t4, T5& t5,
+  cons( const null_type& /*t1*/, T2& t2, T3& t3, T4& t4, T5& t5,
         T6& t6, T7& t7, T8& t8, T9& t9, T10& t10 )
     : head (),
       tail (t2, t3, t4, t5, t6, t7, t8, t9, t10, detail::cnull())
@@ -489,10 +489,19 @@ struct length<tuple<> > {
 };
 
 template<>
+struct length<tuple<> const> {
+  BOOST_STATIC_CONSTANT(int, value = 0);
+};
+
+template<>
 struct length<null_type> {
   BOOST_STATIC_CONSTANT(int, value = 0);
 };
 
+template<>
+struct length<null_type const> {
+  BOOST_STATIC_CONSTANT(int, value = 0);
+};
 
 namespace detail {
 

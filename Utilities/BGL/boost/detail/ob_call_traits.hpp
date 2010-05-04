@@ -3,10 +3,10 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
-//  See http://www.boost.org/libs/butility for most recent version including documentation.
+//  See http://www.boost.org/libs/utility for most recent version including documentation.
 //
 //  Crippled version for crippled compilers:
-//  see libs/butility/call_traits.htm
+//  see libs/utility/call_traits.htm
 //
 
 /* Release notes:

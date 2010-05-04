@@ -3,8 +3,8 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
-//  See http://www.boost.org/libs/butility for most recent version including documentation.
-//  see libs/butility/compressed_pair.hpp
+//  See http://www.boost.org/libs/utility for most recent version including documentation.
+//  see libs/utility/compressed_pair.hpp
 //
 /* Release notes:
    20 Jan 2001:

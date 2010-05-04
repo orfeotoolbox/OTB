@@ -4,7 +4,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-//  See http://www.boost.org/libs/butility for documentation.
+//  See http://www.boost.org/libs/utility for documentation.
 
 //  Revision History
 //  13 Dec 2003  Added next(x, n) and prior(x, n) (Daniel Walker)

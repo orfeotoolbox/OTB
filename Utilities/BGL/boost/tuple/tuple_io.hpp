@@ -1,6 +1,6 @@
 // tuple_io.hpp --------------------------------------------------------------
 
-// Copyright (C) 2001 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+// Copyright (C) 2001 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 //               2001 Gary Powell (gary.powell@sierra.com)
 //
 // Distributed under the Boost Software License, Version 1.0. (See
@@ -285,6 +285,21 @@ print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, T2>& t) {
 } // namespace detail
 
 #if defined (BOOST_NO_TEMPLATED_STREAMS)
+
+inline std::ostream& operator<<(std::ostream& o, const null_type& t) {
+  if (!o.good() ) return o;
+ 
+  const char l = 
+    detail::format_info::get_manipulator(o, detail::format_info::open);
+  const char r = 
+    detail::format_info::get_manipulator(o, detail::format_info::close);
+   
+  o << l;
+  o << r;
+
+  return o;
+}
+
 template<class T1, class T2>
 inline std::ostream& operator<<(std::ostream& o, const cons<T1, T2>& t) {
   if (!o.good() ) return o;
@@ -304,6 +319,23 @@ inline std::ostream& operator<<(std::ostream& o, const cons<T1, T2>& t) {
 }
 
 #else
+
+template<class CharType, class CharTrait>
+inline std::basic_ostream<CharType, CharTrait>& 
+operator<<(std::basic_ostream<CharType, CharTrait>& o, 
+           const null_type& t) {
+  if (!o.good() ) return o;
+ 
+  const CharType l = 
+    detail::format_info::get_manipulator(o, detail::format_info::open);
+  const CharType r = 
+    detail::format_info::get_manipulator(o, detail::format_info::close);
+   
+  o << l;
+  o << r;
+
+  return o;
+}
 
 template<class CharType, class CharTrait, class T1, class T2>
 inline std::basic_ostream<CharType, CharTrait>& 
@@ -349,7 +381,7 @@ extract_and_check_delimiter(
   char c;
   if (is_delimiter) { 
     is >> c; 
-    if (c!=d) {
+    if (is.good() && c!=d) {
       is.setstate(std::ios::failbit);
     } 
   }
@@ -443,7 +475,7 @@ extract_and_check_delimiter(
   CharType c;
   if (is_delimiter) { 
     is >> c;
-    if (c!=d) { 
+    if (is.good() && c!=d) { 
       is.setstate(std::ios::failbit);
     }
   }
