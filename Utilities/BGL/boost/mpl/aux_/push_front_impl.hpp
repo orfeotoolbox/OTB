@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_AUX_PUSH_FRONT_IMPL_HPP_INCLUDED
 #define BOOST_MPL_AUX_PUSH_FRONT_IMPL_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2008
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -10,17 +10,22 @@
 //
 // See http://www.boost.org/libs/mpl for documentation.
 
-// $Source: /cvsroot/boost/boost/boost/mpl/aux_/push_front_impl.hpp,v $
-// $Date: 2004/09/02 15:40:44 $
-// $Revision: 1.4 $
+// $Id: push_front_impl.hpp 55679 2009-08-20 07:50:16Z agurtovoy $
+// $Date: 2009-08-20 03:50:16 -0400 (Thu, 20 Aug 2009) $
+// $Revision: 55679 $
 
 #include <boost/mpl/push_front_fwd.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/aux_/has_type.hpp>
 #include <boost/mpl/aux_/traits_lambda_spec.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 
+#include <boost/type_traits/is_same.hpp>
+
 namespace boost { namespace mpl {
+
+struct has_push_front_arg {};
 
 // agurt 05/feb/04: no default implementation; the stub definition is needed 
 // to enable the default 'has_push_front' implementation below
@@ -28,7 +33,17 @@ namespace boost { namespace mpl {
 template< typename Tag >
 struct push_front_impl
 {
-    template< typename Sequence, typename T > struct apply {};
+    template< typename Sequence, typename T > struct apply
+    {
+        // should be instantiated only in the context of 'has_push_front_impl';
+        // if you've got an assert here, you are requesting a 'push_front' 
+        // specialization that doesn't exist.
+        BOOST_MPL_ASSERT_MSG(
+              ( boost::is_same< T, has_push_front_arg >::value )
+            , REQUESTED_PUSH_FRONT_SPECIALIZATION_FOR_SEQUENCE_DOES_NOT_EXIST
+            , ( Sequence )
+            );
+    };
 };
 
 template< typename Tag >
@@ -36,13 +51,13 @@ struct has_push_front_impl
 {
     template< typename Seq > struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-        : aux::has_type< push_front<Seq,int> >
+        : aux::has_type< push_front< Seq, has_push_front_arg > >
     {
 #else
     {
-        typedef aux::has_type< push_front<Seq,int> > type;
+        typedef aux::has_type< push_front< Seq, has_push_front_arg > > type;
         BOOST_STATIC_CONSTANT(bool, value = 
-              (aux::has_type< push_front<Seq,int> >::value)
+              (aux::has_type< push_front< Seq, has_push_front_arg > >::value)
             );
 #endif
     };

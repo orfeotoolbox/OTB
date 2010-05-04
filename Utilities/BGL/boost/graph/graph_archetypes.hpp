@@ -10,8 +10,10 @@
 #ifndef BOOST_GRAPH_ARCHETYPES_HPP
 #define BOOST_GRAPH_ARCHETYPES_HPP
 
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <boost/concept_archetype.hpp>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/properties.hpp>
 
 namespace boost { // should use a different namespace for this
 

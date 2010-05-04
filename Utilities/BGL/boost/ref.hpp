@@ -8,13 +8,14 @@
 #endif
 
 #include <boost/config.hpp>
-#include <boost/butility/addressof.hpp>
+#include <boost/utility/addressof.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/detail/workaround.hpp>
 
 //
 //  ref.hpp - ref/cref, useful helper functions
 //
-//  Copyright (C) 1999, 2000 Jaakko Järvi (jaakko.jarvi@cs.utu.fi)
+//  Copyright (C) 1999, 2000 Jaakko Jarvi (jaakko.jarvi@cs.utu.fi)
 //  Copyright (C) 2001, 2002 Peter Dimov
 //  Copyright (C) 2002 David Abrahams
 //
@@ -33,7 +34,7 @@ template<class T> class reference_wrapper
 public:
     typedef T type;
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
+#if defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1300 )
 
     explicit reference_wrapper(T& t): t_(&t) {}
 
@@ -54,7 +55,7 @@ private:
     T* t_;
 };
 
-# if defined(__BORLANDC__) && (__BORLANDC__ <= 0x570)
+# if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
 #  define BOOST_REF_CONST
 # else
 #  define BOOST_REF_CONST const
@@ -171,6 +172,17 @@ class unwrap_reference
 {};
 
 # endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+template <class T> inline typename unwrap_reference<T>::type&
+unwrap_ref(T& t)
+{
+    return t;
+}
+
+template<class T> inline T* get_pointer( reference_wrapper<T> const & r )
+{
+    return r.get_pointer();
+}
 
 } // namespace boost
 

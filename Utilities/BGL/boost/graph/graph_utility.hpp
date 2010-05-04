@@ -17,9 +17,15 @@
 #include <assert.h>
 #include <boost/config.hpp>
 #include <boost/tuple/tuple.hpp>
-#ifndef BOOST_NO_SLIST
-#  include <slist> // shouldn't have to include this... -JGS
+
+#if !defined BOOST_NO_SLIST
+#  ifdef BOOST_SLIST_HEADER
+#    include BOOST_SLIST_HEADER
+#  else
+#    include <slist>
+#  endif
 #endif
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/properties.hpp>
 #include <boost/pending/container_traits.hpp>
@@ -379,7 +385,7 @@ namespace boost {
         if (*ui != *vi) {
           for (tie(ci, ci_end) = vertices(g); ci != ci_end; ++ci) 
             put(color, *ci, Color::white());
-          if (! is_reachable(*ui, *vi, color))
+          if (! is_reachable(*ui, *vi, g, color))
             return false;
         }
     return true;
@@ -413,6 +419,91 @@ namespace boost {
   std::pair<T1,std::pair<T2,std::pair<T3,std::pair<T4,T5> > > > 
   make_list(const T1& t1, const T2& t2, const T3& t3, const T4& t4, const T5& t5)
     { return std::make_pair(t1, std::make_pair(t2, std::make_pair(t3, std::make_pair(t4, t5)))); }
+
+  namespace graph {
+    
+    // Functor for remove_parallel_edges: edge property of the removed edge is added to the remaining
+    template <typename EdgeProperty>
+    struct add_removed_edge_property
+    {
+      add_removed_edge_property(EdgeProperty ep) : ep(ep) {}
+      
+      template <typename Edge>
+      void operator() (Edge stay, Edge away)
+      {
+        put(ep, stay, get(ep, stay) + get(ep, away));
+      }
+      EdgeProperty  ep;
+    };
+
+    // Same as above: edge property is capacity here
+    template <typename Graph>
+    struct add_removed_edge_capacity
+      : add_removed_edge_property<typename property_map<Graph, edge_capacity_t>::type>
+    {
+      typedef add_removed_edge_property<typename property_map<Graph, edge_capacity_t>::type> base;
+      add_removed_edge_capacity(Graph& g) : base(get(edge_capacity, g)) {}
+    };    
+
+    template <typename Graph>
+    bool has_no_vertices(const Graph& g) {
+      typedef typename boost::graph_traits<Graph>::vertex_iterator vi;
+      std::pair<vi, vi> p = vertices(g);
+      return (p.first == p.second);
+    }
+
+    template <typename Graph>
+    bool has_no_edges(const Graph& g) {
+      typedef typename boost::graph_traits<Graph>::edge_iterator ei;
+      std::pair<ei, ei> p = edges(g);
+      return (p.first == p.second);
+    }
+
+    template <typename Graph>
+    bool has_no_out_edges(const typename boost::graph_traits<Graph>::vertex_descriptor& v, const Graph& g) {
+      typedef typename boost::graph_traits<Graph>::out_edge_iterator ei;
+      std::pair<ei, ei> p = out_edges(v, g);
+      return (p.first == p.second);
+    }
+
+  } // namespace graph
+
+  #include <boost/graph/iteration_macros.hpp>
+
+  template <class PropertyIn, class PropertyOut, class Graph>
+  void copy_vertex_property(PropertyIn p_in, PropertyOut p_out, Graph& g)
+  {
+    BGL_FORALL_VERTICES_T(u, g, Graph)
+      put(p_out, u, get(p_in, g));
+  }
+
+  template <class PropertyIn, class PropertyOut, class Graph>
+  void copy_edge_property(PropertyIn p_in, PropertyOut p_out, Graph& g)
+  {
+    BGL_FORALL_EDGES_T(e, g, Graph)
+      put(p_out, e, get(p_in, g));
+  }
+
+  // Return true if property_map1 and property_map2 differ
+  // for any of the vertices in graph.
+  template <typename PropertyMapFirst,
+            typename PropertyMapSecond,
+            typename Graph>
+  bool are_property_maps_different
+  (const PropertyMapFirst property_map1,
+   const PropertyMapSecond property_map2,
+   const Graph& graph) {
+  
+    BGL_FORALL_VERTICES_T(vertex, graph, Graph) {
+      if (get(property_map1, vertex) !=
+          get(property_map2, vertex)) {
+
+        return (true);
+      }
+    }
+
+    return (false);
+  }
 
 } /* namespace boost */
 

@@ -9,7 +9,15 @@
 #ifndef BOOST_GRAPH_DETAIL_IS_SAME_HPP
 #define BOOST_GRAPH_DETAIL_IS_SAME_HPP
 
-#include <boost/pending/ct_if.hpp>
+// Deprecate the use of this header.
+// TODO: Remove this file from trunk/release in 1.41/1.42.
+#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(__DMC__)
+#  pragma message ("Warning: This header is deprecated. Please use: boost/type_traits/is_same.hpp")
+#elif defined(__GNUC__) || defined(__HP_aCC) || defined(__SUNPRO_CC) || defined(__IBMCPP__)
+#  warning "This header is deprecated. Please use: boost/type_traits/is_same.hpp"
+#endif
+
+#include <boost/mpl/if.hpp>
 
 namespace boost {
   struct false_tag;
@@ -30,7 +38,7 @@ namespace boost {
     template <class U, class V>
     struct is_same {
       enum { Unum = U::num, Vnum = V::num };
-      typedef typename boost::ct_if< (Unum == Vnum),
+      typedef typename mpl::if_c< (Unum == Vnum),
                boost::true_tag, boost::false_tag>::type is_same_tag;
     };
 #endif

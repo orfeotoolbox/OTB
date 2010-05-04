@@ -1,35 +1,19 @@
-//
 //=======================================================================
 // Copyright 1997, 1998, 1999, 2000 University of Notre Dame.
-// Authors: Andrew Lumsdaine, Lie-Quan Lee, Jeremy G. Siek
+// Copyright 2004, 2005 Trustees of Indiana University
+// Authors: Andrew Lumsdaine, Lie-Quan Lee, Jeremy G. Siek,
 //          Doug Gregor, D. Kevin McGrath
 //
-// This file is part of the Boost Graph Library
-//
-// You should have received a copy of the License Agreement for the
-// Boost Graph Library along with the software; see the file LICENSE.
-// If not, contact Office of Research, University of Notre Dame, Notre
-// Dame, IN 46556.
-//
-// Permission to modify the code and to distribute modified code is
-// granted, provided the text of this NOTICE is retained, a notice that
-// the code was modified is included with the above COPYRIGHT NOTICE and
-// with the COPYRIGHT NOTICE in the LICENSE file, and that the LICENSE
-// file is distributed with the modified code.
-//
-// LICENSOR MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED.
-// By way of example, but not limitation, Licensor MAKES NO
-// REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY
-// PARTICULAR PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE COMPONENTS
-// OR DOCUMENTATION WILL NOT INFRINGE ANY PATENTS, COPYRIGHTS, TRADEMARKS
-// OR OTHER RIGHTS.
-//=======================================================================
-//
+// Distributed under the Boost Software License, Version 1.0. (See
+// accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//=======================================================================//
 #ifndef BOOST_GRAPH_KING_HPP
 #define BOOST_GRAPH_KING_HPP
 
 #include <boost/config.hpp>
 #include <boost/graph/detail/sparse_ordering.hpp>
+#include <boost/graph/graph_utility.hpp>
 
 /*
   King Algorithm for matrix reordering
@@ -63,7 +47,7 @@ namespace boost {
         //heap the vertices already there
         std::make_heap(rbegin, rend, boost::bind<bool>(comp, _2, _1));
 
-        int i = 0;
+        unsigned i = 0;
         
         for(i = index_begin; i != Qptr->size(); ++i){
           colors[get(vertex_map, (*Qptr)[i])] = 1;
@@ -165,7 +149,7 @@ namespace boost {
         int child_location = Qlocation[vertex];
         int heap_child_location = Qptr->size() - child_location;
         int heap_parent_location = (int)(heap_child_location/2);
-        int parent_location = Qptr->size() - heap_parent_location; 
+        unsigned parent_location = Qptr->size() - heap_parent_location; 
 
         bool valid = (heap_parent_location != 0 && child_location > index_begin + offset && 
                       parent_location < Qptr->size());
@@ -210,18 +194,18 @@ namespace boost {
                 ColorMap color, DegreeMap degree,
                 VertexIndexMap index_map)
   {
-    typedef typename property_traits<DegreeMap>::value_type DS;
+    typedef typename property_traits<DegreeMap>::value_type ds_type;
     typedef typename property_traits<ColorMap>::value_type ColorValue;
     typedef color_traits<ColorValue> Color;
     typedef typename graph_traits<Graph>::vertex_descriptor Vertex;
-    typedef iterator_property_map<typename std::vector<DS>::iterator, VertexIndexMap, DS, DS&> PseudoDegreeMap;
-    typedef indirect_cmp<PseudoDegreeMap, std::less<DS> > Compare;
+    typedef iterator_property_map<typename std::vector<ds_type>::iterator, VertexIndexMap, ds_type, ds_type&> PseudoDegreeMap;
+    typedef indirect_cmp<PseudoDegreeMap, std::less<ds_type> > Compare;
     typedef typename boost::sparse::sparse_ordering_queue<Vertex> queue;
     typedef typename detail::bfs_king_visitor<OutputIterator, queue, Compare,             
       PseudoDegreeMap, std::vector<int>, VertexIndexMap > Visitor;
     typedef typename graph_traits<Graph>::vertices_size_type
       vertices_size_type;
-    std::vector<DS> pseudo_degree_vec(num_vertices(g));
+    std::vector<ds_type> pseudo_degree_vec(num_vertices(g));
     PseudoDegreeMap pseudo_degree(pseudo_degree_vec.begin(), index_map);
     
     typename graph_traits<Graph>::vertex_iterator ui, ui_end;    
@@ -279,7 +263,7 @@ namespace boost {
   king_ordering(const Graph& G, OutputIterator permutation, 
                 ColorMap color, DegreeMap degree, VertexIndexMap index_map)
   {
-    if (vertices(G).first == vertices(G).second)
+    if (has_no_vertices(G))
       return permutation;
 
     typedef typename boost::graph_traits<Graph>::vertex_descriptor Vertex;
@@ -315,7 +299,7 @@ namespace boost {
   king_ordering(const Graph& G, OutputIterator permutation, 
                 VertexIndexMap index_map)
   {
-    if (vertices(G).first == vertices(G).second)
+    if (has_no_vertices(G))
       return permutation;
 
     typedef out_degree_property_map<Graph> DegreeMap;

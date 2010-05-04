@@ -1,7 +1,7 @@
 // Copyright 2002 Rensselaer Polytechnic Institute
 
-// Use, modification and distribution is subject to the Boost Software
-// License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
 //  Authors: Lauren Foutz
@@ -29,16 +29,22 @@
 #ifndef BOOST_GRAPH_FLOYD_WARSHALL_HPP
 #define BOOST_GRAPH_FLOYD_WARSHALL_HPP
 
-#include <boost/property_map.hpp>
+#include <boost/property_map/property_map.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/named_function_params.hpp>
 #include <boost/graph/graph_concepts.hpp>
 #include <boost/graph/relax.hpp>
-#include <algorithm> // for std::min and std::max
 
 namespace boost
 {
   namespace detail {
+    template<typename T, typename BinaryPredicate>
+    T min_with_compare(const T& x, const T& y, const BinaryPredicate& compare)
+    {
+      if (compare(x, y)) return x; 
+      else return y;
+    }
+
     template<typename VertexListGraph, typename DistanceMatrix, 
       typename BinaryPredicate, typename BinaryFunction,
       typename Infinity, typename Zero>
@@ -47,21 +53,21 @@ namespace boost
       const BinaryFunction &combine, const Infinity& inf, 
       const Zero& zero)
     {
-      BOOST_USING_STD_MIN();
-
       typename graph_traits<VertexListGraph>::vertex_iterator 
         i, lasti, j, lastj, k, lastk;
     
       
       for (tie(k, lastk) = vertices(g); k != lastk; k++)
         for (tie(i, lasti) = vertices(g); i != lasti; i++)
-          for (tie(j, lastj) = vertices(g); j != lastj; j++)
-          {
-            d[*i][*j] = min BOOST_PREVENT_MACRO_SUBSTITUTION
-                         (d[*i][*j], combine(d[*i][*k], d[*k][*j]));
-          }
+          if(d[*i][*k] != inf)
+            for (tie(j, lastj) = vertices(g); j != lastj; j++)
+              if(d[*k][*j] != inf)
+                d[*i][*j] = 
+                  detail::min_with_compare(d[*i][*j], 
+                                           combine(d[*i][*k], d[*k][*j]),
+                                           compare);
       
-    
+      
       for (tie(i, lasti) = vertices(g); i != lasti; i++)
         if (compare(d[*i][*i], zero))
           return false;
@@ -95,8 +101,6 @@ namespace boost
     const BinaryPredicate& compare, const BinaryFunction& combine, 
     const Infinity& inf, const Zero& zero)
   {
-    BOOST_USING_STD_MIN();
-
     function_requires<VertexListGraphConcept<VertexAndEdgeListGraph> >();
     function_requires<EdgeListGraphConcept<VertexAndEdgeListGraph> >();
     function_requires<IncidenceGraphConcept<VertexAndEdgeListGraph> >();
@@ -112,16 +116,18 @@ namespace boost
     
     
     for(tie(firstv, lastv) = vertices(g); firstv != lastv; firstv++)
-      d[*firstv][*firstv] = 0;
+      d[*firstv][*firstv] = zero;
     
     
     for(tie(first, last) = edges(g); first != last; first++)
     {
-      if (d[source(*first, g)][target(*first, g)] != inf)
+      if (d[source(*first, g)][target(*first, g)] != inf) {
         d[source(*first, g)][target(*first, g)] = 
-          min BOOST_PREVENT_MACRO_SUBSTITUTION(get(w, *first), 
-            d[source(*first, g)][target(*first, g)]);
-      else 
+          detail::min_with_compare(
+            get(w, *first), 
+            d[source(*first, g)][target(*first, g)],
+            compare);
+      } else 
         d[source(*first, g)][target(*first, g)] = get(w, *first);
     }
     
@@ -134,8 +140,10 @@ namespace boost
       {
         if (d[target(*first, g)][source(*first, g)] != inf)
           d[target(*first, g)][source(*first, g)] = 
-            min BOOST_PREVENT_MACRO_SUBSTITUTION(get(w, *first), 
-            d[target(*first, g)][source(*first, g)]);
+            detail::min_with_compare(
+              get(w, *first), 
+              d[target(*first, g)][source(*first, g)],
+              compare);
         else 
           d[target(*first, g)][source(*first, g)] = get(w, *first);
       }
@@ -151,7 +159,7 @@ namespace boost
     template <class VertexListGraph, class DistanceMatrix, 
       class WeightMap, class P, class T, class R>
     bool floyd_warshall_init_dispatch(const VertexListGraph& g, 
-      DistanceMatrix& d, WeightMap w, 
+      DistanceMatrix& d, WeightMap /*w*/, 
       const bgl_named_params<P, T, R>& params)
     {
       typedef typename property_traits<WeightMap>::value_type WM;

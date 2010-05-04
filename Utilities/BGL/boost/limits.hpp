@@ -6,7 +6,7 @@
 //
 // use this header as a workaround for missing <limits>
 
-//  See http://www.boost.org/libs/butility/limits.html for documentation.
+//  See http://www.boost.org/libs/compatibility/index.html for documentation.
 
 #ifndef BOOST_LIMITS
 #define BOOST_LIMITS
@@ -29,6 +29,8 @@
 #  define BOOST_LLT  ::boost::long_long_type
 #  define BOOST_ULLT  ::boost::ulong_long_type
 #endif
+
+#include <climits>  // for CHAR_BIT
 
 namespace std
 {
@@ -76,8 +78,8 @@ namespace std
       static BOOST_LLT denorm_min() throw() { return 0; };
 
       BOOST_STATIC_CONSTANT(bool, is_iec559 = false);
-      BOOST_STATIC_CONSTANT(bool, is_bounded = false);
-      BOOST_STATIC_CONSTANT(bool, is_modulo = false);
+      BOOST_STATIC_CONSTANT(bool, is_bounded = true);
+      BOOST_STATIC_CONSTANT(bool, is_modulo = true);
 
       BOOST_STATIC_CONSTANT(bool, traps = false);
       BOOST_STATIC_CONSTANT(bool, tinyness_before = false);
@@ -129,8 +131,8 @@ namespace std
       static BOOST_ULLT denorm_min() throw() { return 0; };
 
       BOOST_STATIC_CONSTANT(bool, is_iec559 = false);
-      BOOST_STATIC_CONSTANT(bool, is_bounded = false);
-      BOOST_STATIC_CONSTANT(bool, is_modulo = false);
+      BOOST_STATIC_CONSTANT(bool, is_bounded = true);
+      BOOST_STATIC_CONSTANT(bool, is_modulo = true);
 
       BOOST_STATIC_CONSTANT(bool, traps = false);
       BOOST_STATIC_CONSTANT(bool, tinyness_before = false);
@@ -141,3 +143,4 @@ namespace std
 #endif 
 
 #endif
+
