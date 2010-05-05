@@ -70,10 +70,17 @@ SET(OTB_VERSION_MAJOR "3")
 SET(OTB_VERSION_MINOR "2")
 SET(OTB_VERSION_PATCH "1")
 
-
-# Version string should not include patch level.  The major.minor is
-# enough to distinguish available features of the toolkit.
-SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+FIND_PACKAGE(Mercurial)
+IF(Mercurial_FOUND)
+  Mercurial_WC_IDENTIFY(${PROJECT_SOURCE_DIR} OTB)
+  MESSAGE("Mercurial version is ${Mercurial_VERSION_HG}")
+  MESSAGE("Repository revision is ${Project_WC_REVISION}")
+  SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}.${Project_WC_REVISION}")
+ELSE(Mercurial_FOUND)
+  # Version string should not include patch level.  The major.minor is
+  # enough to distinguish available features of the toolkit.
+  SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+ENDIF(Mercurial_FOUND)
 
 OPTION(BUILD_TESTING "Build testing." OFF)
 
