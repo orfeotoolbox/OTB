@@ -19,6 +19,13 @@
 #define __otbRCC8Graph_h
 
 #include "otbRCC8Edge.h"
+
+//fix compilation in VS7.1 for boost 1.42
+//similar to the fix in Monteverdi
+#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#endif
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
