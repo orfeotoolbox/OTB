@@ -442,18 +442,18 @@ QuickBirdImageMetadataInterface
     itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
     }
 
-  ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
-  int         TDILevel = keywordStringTDILevel.toInt();
-  if (TDILevel != 10 && TDILevel != 13 && TDILevel != 18 && TDILevel != 24 && TDILevel != 32)
-    {
-    itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
-    }
-
   std::string keyBId = "support_data.band_id";
   ossimString keywordStringBId = kwl.find(keyBId.c_str());
   if (keywordStringBId != ossimString("P") && keywordStringBId != ossimString("Multi"))
     {
     itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
+    }
+    
+  ossimString keywordStringTDILevel = kwl.find("support_data.TDI_level");
+  int         TDILevel = keywordStringTDILevel.toInt();
+  if (keywordStringBId == ossimString("P") && TDILevel != 10 && TDILevel != 13 && TDILevel != 18 && TDILevel != 24 && TDILevel != 32)
+    {
+    itkExceptionMacro(<< "Invalid TDILevel " << TDILevel);
     }
 
   VariableLengthVectorType outputValuesVariableLengthVector;
