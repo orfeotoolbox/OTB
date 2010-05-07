@@ -260,12 +260,12 @@ int CurlHelper::RetrieveFileMulti(const std::vector<std::string>& listURLs,
   std::vector<std::string>::const_iterator file;
   url = listURLs.begin();
   file = listFilename.begin();
-  CURLcode res = CURLE_OK;
-  CURLcode resTmp = CURL_LAST;
+  int res = 0;
+  int resTmp = -1;
   while ( (url != listURLs.end()) && (file != listFilename.end() ))
     {
     resTmp = RetrieveFile(*url, *file);
-    if (res == CURLE_OK) res = resTmp;  
+    if (res == 0) res = resTmp;  
     }
   return res;
 #endif
