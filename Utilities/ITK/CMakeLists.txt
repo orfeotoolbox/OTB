@@ -115,7 +115,8 @@ IF( USE_FFTWD OR USE_FFTWF )
   SET(msg "${msg} By enabling this option, the binary of the ITK libraries")
   SET(msg "${msg} that you are going to build will be covered by a GPL license,")
   SET(msg "${msg} and so it will be any executable that you link against these libraries.")
-  MESSAGE("${msg}")
+# OTB modification: the GPL warning is not relevant here (already the case for OTB)
+#  MESSAGE("${msg}")
   FIND_PACKAGE( FFTW )
 ENDIF( USE_FFTWD OR USE_FFTWF )
 
@@ -207,7 +208,7 @@ IF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)
   SET(msg "${msg} Please look at the files in the Examples/Review directory for further details.")
 
 # display the message during the setup
-MESSAGE("${msg}")
+#MESSAGE("${msg}")
 
 
 ENDIF(ITK_USE_OPTIMIZED_REGISTRATION_METHODS)

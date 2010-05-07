@@ -155,7 +155,7 @@ SET(msg "${msg} drastically as it get code reviews from the developers.")
 SET(msg "${msg} Please set ITK_USE_REVIEW to OFF if you don't want to use these files.")
 
 # display the message during the setup
-MESSAGE("${msg}")
+#MESSAGE("${msg}")
 
 # and also display it during the install
 INSTALL(CODE "MESSAGE(\"${msg}\")")
