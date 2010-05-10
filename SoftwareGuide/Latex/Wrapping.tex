@@ -5,7 +5,7 @@ The project is based on CMake. SWIG, CableSwig and finally OTB that must be alre
  The OTB-wrapping project is an extension of the project WrapITK \url{http://code.google.com/p/wrapitk/}. 
 It allows the Python, Java and Tcl users to have program written in their own language to use the classes and 
 the capabilities of OTB.
-Since OTB-Wrapping provides an interface to some c++ compiled code, execution times are very similar to c++ 
+Since OTB-Wrapping provides an interface to some C++ compiled code, execution times are very similar to C++ 
 pure programs in most of cases.
 Once the project compiled, one can use the wrapped classes to write programs in your favorite language.
 The OTB Tutorials were translated in Java and can use the OTB capabilities to show how to use the 
@@ -91,14 +91,14 @@ Now we can execute the java class compiled, it needs some options too.
 \begin{landscape}
 \subsection{Example}
 
-Here is a simple example written in c++, and its translation in Java. 
+Here is a simple example written in C++, and its translation in Java. 
 
 
 \begin{table}[!htbp]
 \begin{center}
 \begin{tabular}{|m{8.35cm}|m{9.75cm}|}
 \hline
-Example in c++                  &  Example translated in Java  \\
+Example in C++                  &  Example translated in Java  \\
 \hline
 
 \verb$#include "otbImage.h"$                &       \verb$import org.otb.otbimage.*;$                                 \\
@@ -135,7 +135,7 @@ Example in c++                  &  Example translated in Java  \\
  
 \hline 
 \end{tabular}
-\caption{c++ code translation.}\label{tab:translatedexample}
+\caption{C++ code translation.}\label{tab:translatedexample}
 \end{center}
 \end{table}
 
@@ -152,7 +152,7 @@ OTB-Wrapping required the release 3.2 of the Orfeo Toolbox or greater. This proj
 and libraries : 
 \begin{itemize}
 \item CMake (\verb!>2.6!) to configure the compilation system.
-\item CableSwig (\verb!>0.1.0!) for parsing and automatic instanciation of c++ templates. The source code is available 
+\item CableSwig (\verb!>0.1.0!) for parsing and automatic instanciation of C++ templates. The source code is available 
   here
 \item SWIG  (\verb!>1.3.40!) for language binding
 \item Target Language developement libraries (JRE for Java, Python 2.5 for Python).
@@ -350,8 +350,8 @@ There are other several well documented macros defined in the file TypedefMacros
 
 \subsubsection{OTB-Wrapping predefined variables}
 OTB-Wrapping defines some pairs of variables for each basic type the developer may have
-to manipulate: the c++ type, and its template parameter name. The name of the type
-is stored in variable \verb$ITKM_*$, and the c++ type in the variable \verb$ITKT_*$.
+to manipulate: the C++ type, and its template parameter name. The name of the type
+is stored in variable \verb$ITKM_*$, and the C++ type in the variable \verb$ITKT_*$.
 
 For example, for \verb$unsigned char$, \verb$ITKM_UC$ and \verb$ITKT_UC$
 are defined, with \verb|${ITKM_UC} = "UC"|  and \verb|${ITKT_UC} = "unsigned char"|.
@@ -443,7 +443,7 @@ With the MANGLE\_NAME Macro, it will be in two steps :
 \subsection{HTML JavaDoc generation}
 
 All the classes wrapped in Java language (in Python too) contains the comments 
-present in the c++ source code. The tags in the comments were translated to be 
+present in the C++ source code. The tags in the comments were translated to be 
 specific to the tool Javadoc (@param, @return, @see...). 
 In order to handle the Latex formulas present in the comments, the tool JavaDoc alone 
 does not convert the Tex formulas to PNG. The taglet LatexLet allows to use Latex within 
