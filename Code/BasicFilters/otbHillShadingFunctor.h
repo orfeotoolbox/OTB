@@ -166,8 +166,6 @@ public:
   }
 
 private:
-  HillShadingFunctor(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
 
   inline PixelType makeValid(PixelType v) const
   {
