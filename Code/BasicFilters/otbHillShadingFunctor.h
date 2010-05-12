@@ -55,7 +55,7 @@ public:
  *  \brief Unary neighborhood functor to compute the lambertian of a surface
  *
  *  The light source is assumed to be at a given elevation and azimuth
- *  (by default 45 and 30 respectively). This is used to generate hill shading
+ *  (by default \f$ \pi/4 \f$ and \f$ \pi/6 \f$  respectively). This is used to generate hill shading
  *  representation of relief. The output is a value between 0 and 1.
  *
  *  \ingroup Functor
@@ -108,6 +108,30 @@ public:
   void SetScale(double scale)
   {
     m_Scale = scale;
+  }
+
+  double GetAzimuthLight() const
+  {
+    return m_AzimuthLight;
+  }
+
+  void SetAzimuthLight(double az)
+  {
+    m_AzimuthLight = az;
+    m_SinAz = vcl_sin(m_AzimuthLight);
+    m_CosAz = vcl_cos(m_AzimuthLight);
+  }
+
+  double GetElevationLight() const
+  {
+    return m_ElevationLight;
+  }
+
+  void SetElevationLight(double el)
+  {
+    m_ElevationLight = el;
+    m_SinElev = vcl_sin(m_ElevationLight);
+    m_CosElev = vcl_cos(m_ElevationLight);
   }
 
   inline TOutput operator ()(const TNeighIter& it) const

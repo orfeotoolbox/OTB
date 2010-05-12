@@ -49,8 +49,7 @@
 #include "otbStreamingImageFileWriter.h"
 
 #include "otbDEMToImageGenerator.h"
-#include "otbHillShadingFunctor.h"
-#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbHillShadingFilter.h"
 
 #include "itkScalarToRGBColormapImageFilter.h"
 #include "otbReliefColormapFunctor.h"
@@ -130,20 +129,13 @@ int main(int argc, char * argv[])
   //
   // After generating the dem image as in the DEMToImageGenerator example, you can declare
   // the hill shading mechanism. The hill shading is implemented as a functor doing some
-  // operations in its neighborhood. This functor is used in the
-  // \doxygen{otb}{UnaryFunctorNeighborhoodImageFilter} that will be in charge of processing
-  // the whole image.
+  // operations in its neighborhood. A convenient filter called \doxygen{otb}{HillShadingFilter}
+  // is defined around this mechanism.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ConstNeighborhoodIterator<ImageType>
-                                                      IterType;
-  typedef otb::Functor::HillShadingFunctor<IterType, ImageType,
-                                           PixelType> FunctorType;
-  typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType,
-                                                   FunctorType>
-                                                      HillShadingFilterType;
+  typedef otb::HillShadingFilter<ImageType, ImageType> HillShadingFilterType;
   HillShadingFilterType::Pointer hillShading = HillShadingFilterType::New();
   hillShading->SetRadius(1);
   hillShading->SetInput(demToImage->GetOutput());
