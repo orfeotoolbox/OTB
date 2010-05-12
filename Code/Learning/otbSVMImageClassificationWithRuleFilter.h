@@ -26,7 +26,7 @@
 
 namespace otb {
 
-/** \class SVMImageClassificationWithRuleFiler
+/** \class SVMImageClassificationWithRuleFilter
  * \brief SVM Image Classification that yield distance to hyperplanes
  *
  * This class comes from SVMImageClassificationFilter that performs
