@@ -42,10 +42,6 @@ namespace otb
  * as a vector image with a single element for every vector. The classified
  * image is treated as a single band scalar image.
  *
- * EstimateModels() is a pure virtual function making this an abstract class.
- * The template parameter is the type of a membership function the
- * Model populates.
- *
  * A membership function represents a specific knowledge about
  * a class. In other words, it should tell us how "likely" is that a
  * measurement vector (pattern) belong to the class.

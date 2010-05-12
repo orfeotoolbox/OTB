@@ -26,10 +26,8 @@ namespace otb
 /** \class SVMImageClassificationFilter
  *  \brief This filter performs the classification of a VectorImage using a SVM Model.
  *
- *  This filter is streamed and threaded, allowing to classify huge images. Because the
- *  internal sample type has to be an itk::FixedArray, one must specify at compilation time
- *  the maximum sample dimension. It is up to the user to specify a MaxSampleDimension sufficiently
- *  high to integrate all its features. This filter internally use one SVMClassifier per thread.
+ *  This filter is streamed and threaded, allowing to classify huge images
+ *  while fully using several core.
  *
  * \sa SVMClassifier
  * \ingroup Streamed
