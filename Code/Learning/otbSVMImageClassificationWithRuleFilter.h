@@ -29,9 +29,9 @@ namespace otb {
 /** \class SVMImageClassificationWithRuleFiler
  * \brief SVM Image Classification that yield distance to hyperplanes
  *
- * This class comes from \subdoxygen{otb}{SVMImageClassificationFilter} that performs
+ * This class comes from SVMImageClassificationFilter that performs
  * SVM classification on image. Here, the class add in ThreadedGenerateData an other output
- * (a \subdoxygen{otb}{VectorImage}) that gives the value for \$ f(x) \$ without the majority
+ * (a VectorImage) that gives the value for \f$ f(x) \f$ without the majority
  * vote decision on class belonging.
  *
  * \sa SVMImageClassificationFilter
