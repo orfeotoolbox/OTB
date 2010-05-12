@@ -32,8 +32,6 @@
 
 int otbSVMClassifierPointSet(int argc, char* argv[])
 {
-  namespace stat = itk::Statistics;
-
   if (argc != 2)
     {
     std::cout << "Usage : " << argv[0] << " modelFile"

@@ -59,8 +59,6 @@ public:
 
 int otbSVMClassifierImage(int argc, char* argv[])
 {
-  namespace stat = itk::Statistics;
-
   if (argc != 4)
     {
     std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
