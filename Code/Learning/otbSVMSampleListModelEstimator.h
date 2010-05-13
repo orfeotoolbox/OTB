@@ -30,6 +30,7 @@ namespace Functor
 /** \class VectorToMeasurementVectorFunctor
 *   \brief Helper class to convert itk::Vector and itk::FixedArray samples to internal
 *   training vector type.
+*
 *   \sa Vector
 *   \sa FixedArray
 */
@@ -79,24 +80,21 @@ public:
 
 }
 
-/** \class SVMSampleListModelEstimator
-
- * \brief Class for SVM model
- * estimation from SampleLists used for classification.
+/**
+ * \class SVMSampleListModelEstimator
+ * \brief Class for SVM model estimation from SampleLists used for classification.
  *
  *
  * The basic functionality of the SVMSampleListModelEstimator is to
  * generate the models used in SVM classification. It
  * requires one input poinset and a training pointset to be provided by the
- * user.  This object supports data handling of multiband data. The
- * object accepts the input image in vector format only, where each
+ * user. This object supports data handling of multiband data. The
+ * object accepts the input image as a VectorImage only, where each
  * pixel is a vector and each element of the vector corresponds to an
  * entry from 1 particular band of a multiband dataset. A single band
  * data set is treated as a vector with a single element for every
  * vector. The classified data is treated as a single band scalar
  * data.
- *
- * EstimateModels() uses the libsvm library for SVM learning.
  *
  * \ingroup ClassificationFilters
  */
@@ -123,7 +121,6 @@ public:
   itkTypeMacro(SVMSampleListModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
-  /** Type definitions for the training image. */
   typedef typename TInputSampleList::Pointer InputSampleListPointer;
 
   /** Type definitions for the training image. */

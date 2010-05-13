@@ -38,9 +38,9 @@ namespace otb
  * - Gaussian kernel : C, Gamma, coef0
  * - Other kernels : C
  *
- * Please note that this function is only defined on $R_{+}^{*}$.
+ * Please note that this function is only defined on \f$ R_{+}^{*} \f$.
  *
- * The GetValueAndDerivatives() uses the GetValue() function to
+ * The GetDerivative() uses the GetValue() function to
  * compute the partial derivatives. as such, it can be quite intensive.
  *
  * \ingroup ClassificationFilters

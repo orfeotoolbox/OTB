@@ -32,15 +32,13 @@ namespace otb
  * The basic functionality of the SVMPointSetModelEstimator is to
  * generate the models used in SVM classification. It
  * requires one input poinset and a training pointset to be provided by the
- * user.  This object supports data handling of multiband data. The
- * object accepts the input image in vector format only, where each
+ * user. This object supports data handling of multiband data. The
+ * object accepts the input image as a VectorImage only, where each
  * pixel is a vector and each element of the vector corresponds to an
  * entry from 1 particular band of a multiband dataset. A single band
  * data set is treated as a vector with a single element for every
  * vector. The classified data is treated as a single band scalar
  * data.
- *
- * EstimateModels() uses the libsvm library for SVM learning.
  *
  * \ingroup ClassificationFilters
  */

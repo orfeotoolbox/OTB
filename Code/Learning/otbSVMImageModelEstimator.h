@@ -33,15 +33,13 @@ namespace otb
  * The basic functionality of the SVMImageModelEstimator is to
  * generate the models used in SVM classification. It
  * requires input images and a training image to be provided by the
- * user.  This object supports data handling of multiband images. The
- * object accepts the input image in vector format only, where each
+ * user. This object supports data handling of multiband images. The
+ * object accepts the input image as a VectorImage only, where each
  * pixel is a vector and each element of the vector corresponds to an
  * entry from 1 particular band of a multiband dataset. A single band
  * image is treated as a vector image with a single element for every
  * vector. The classified image is treated as a single band scalar
  * image.
- *
- * EstimateModels() uses the libsvm library for SVM learning.
  *
  * \ingroup ClassificationFilters
  */
@@ -66,7 +64,6 @@ public:
   itkTypeMacro(SVMImageModelEstimator, otb::SVMModelEstimator);
 
   /** Type definition for the input image. */
-  /** Type definitions for the training image. */
   typedef typename TInputImage::Pointer InputImagePointer;
 
   /** Type definitions for the training image. */

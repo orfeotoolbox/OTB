@@ -41,7 +41,6 @@ int otbSVMModelAccessor(int argc, char* argv[])
 
   ptrModel->LoadModel(argv[1]);
 
-  // ototo
 
   std::ofstream f;
   unsigned int  nbClass = ptrModel->GetNumberOfClasses();

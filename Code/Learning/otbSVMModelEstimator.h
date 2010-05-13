@@ -38,7 +38,6 @@ namespace otb
  * as a vector image with a single element for every vector. The classified
  * image is treated as a single band scalar image.
  *
- * EstimateModels() is a pure virtual function making this an abstract class.
  * The template parameter is the type of a membership function the
  * ModelEstimator populates.
  *
@@ -51,7 +50,6 @@ namespace otb
  * calculator becomes the class label for the class that is represented
  * by the membership calculator.
  *
-
  *
  * \ingroup ClassificationFilters
  */
@@ -126,10 +124,11 @@ public:
   }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
-  linear: u'*v
-  polynomial: (gamma*u'*v + coef0)^degree
-  radial basis function: exp(-gamma*|u-v|^2)
-  sigmoid: tanh(gamma*u'*v + coef0)*/
+   * - linear: \f$ u'*v \f$
+   * - polynomial: \f$ (\gamma*u'*v + coef0)^{degree} \f$
+   * - radial basis function: \f$ exp(-\gamma*|u-v|^2) \f$
+   * - sigmoid: \f$ tanh(\gamma*u'*v + coef0) \f$
+   */
   void SetKernelType(int kerneltype)
   {
     this->GetModel()->SetKernelType(kerneltype);
