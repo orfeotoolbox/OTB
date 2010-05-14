@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class VectorData
- * \brief this class represents a hierarchy of vector data.
+ * \brief This class represents a hierarchy of vector data.
  *
  * This class contains an itk::TreeContainer templated with otb::DataNode.
  * It represents a tree structure of vector data. These data can be read from
@@ -42,7 +42,7 @@ namespace otb
  * polygons (by default: double)
  *
  * The elements in the VectorData have their coordinates in the projection
- * specified by the Wkt string. This class also offer the possibility to store
+ * specified by the WKT string. This class also offer the possibility to store
  * the coordinates directly into an image coordinate system, using the origin and
  * spacing in a similar way as the corresponding image.
  *

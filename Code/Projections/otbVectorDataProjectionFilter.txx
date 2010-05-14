@@ -22,16 +22,11 @@
 #include "itkProgressReporter.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "otbGenericMapProjection.h"
-#include "itkIdentityTransform.h"
-#include "otbForwardSensorModel.h"
-#include "otbInverseSensorModel.h"
 #include "otbDataNode.h"
 #include "itkTimeProbe.h"
 
 namespace otb
 {
-
 /**
    * Constructor
  */
@@ -319,7 +314,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
   //If the projection information for the output is provided, propagate it
 
-  if (m_OutputKeywordList.GetSize()  != 0)
+  if (m_OutputKeywordList.GetSize() != 0)
     {
     ossimKeywordlist kwl;
     m_OutputKeywordList.convertToOSSIMKeywordlist (kwl);
