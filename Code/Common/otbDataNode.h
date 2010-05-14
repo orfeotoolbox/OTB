@@ -49,12 +49,13 @@ enum
 
 /** \class DataNode
  *  \brief This class represents a node of data in a vector data hierarchy.
- *   A DataNode has a type represented by the NodeType enumeration. Depending on
+ *
+ *  A DataNode has a type represented by the NodeType enumeration. Depending on
  *  its type, it can have associated data such as Point, Line or Polygon.
  *
  *  A flag indicates if the data are valid or not.
  *
- *  A DataNode has also a dictionnary of fields which can be used to store associated data.
+ *  A DataNode has also a dictionary of fields which can be used to store associated data.
  *  Depending on the writing vector data file format, fields will be used by the writing driver.
  *
  * The three templates indicate

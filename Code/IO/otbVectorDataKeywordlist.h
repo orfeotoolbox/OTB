@@ -61,7 +61,7 @@ public:
   /**
     * Returns the value associated with a field name.
     * \param key The name of the field.
-    * \return The value of the field. A default value is retuned if the key was not found.
+    * \return The value of the field. A default value is returned if the key was not found.
     */
   std::string GetFieldAsString(std::string key) const;
 

@@ -31,7 +31,7 @@ namespace otb
  * It then uses the otb::PolyLineImageIterator to draw each polyline. This iterator uses
  * the general Bresenham algorithm known to be efficient in segment drawing.
  *
- * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of
+ * If the UsePathInternalValue is toggled, the filter check if the metadata dictionary of
  * the input path has a "Value" key. If it is the case, it will use this value to draw the
  * Path instead of the default value. If not, it will use the default value.
  *
@@ -120,7 +120,7 @@ private:
   /** Default value to draw */
   OutputImagePixelType m_PathValue;
 
-  /** If set to true, the algorithm try to use path internal metadata dictionnary value */
+  /** If set to true, the algorithm try to use path internal metadata dictionary value */
   bool m_UseInternalPathValue;
 
   bool m_AddValue;
