@@ -19,12 +19,12 @@
 // Software Guide : BeginLatex
 //
 // In previous examples, we have used the
-// \doxygen{otb}{SVMClassifier}, which uses the ITK classifcation
+// \doxygen{otb}{SVMClassifier}, which uses the ITK classification
 // framework. This good for compatibility with the ITK framework, but
 // introduces the limitations of not being able to use streaming and
 // being able to know at compilation time the number of bands of the
 // image to be classified. In OTB we have avoided this limitation by
-// developping the \doxygen{otb}{SVMImageClassificationFilter}. In
+// developing the \doxygen{otb}{SVMImageClassificationFilter}. In
 // this example we will illustrate its use. We start by including the
 // appropriate header file.
 //
@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
 //
-// Our classifier will be genric enough to be able to process images
+// Our classifier will be generic enough to be able to process images
 // with any number of bands. We read the images as
 // \doxygen{otb}{VectorImage}s. The labeled image will be a scalar image.
 //
