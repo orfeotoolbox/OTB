@@ -40,7 +40,7 @@ public:
 
   virtual ~SpectralAngleFunctor() {}
   // Binary operator
-  inline TOutputValue operator ()(const TInput& inPix)
+  inline TOutputValue operator ()(const TInput& inPix) const
   {
     return this->Evaluate(inPix);
   }
@@ -55,7 +55,7 @@ public:
       }
     m_RefNorm = vcl_sqrt(static_cast<double>(m_RefNorm));
   }
-  TInput GetReferencePixel()
+  TInput GetReferencePixel() const
   {
     return m_ReferencePixel;
   }

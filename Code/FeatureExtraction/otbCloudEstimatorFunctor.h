@@ -23,13 +23,16 @@
 
 namespace otb
 {
-/** \class CloudEstimatorFunctor
- *  \brief This functor first computes the spectral angle according to a reference pixel.
- *  \brief Then multiplies the result by a gaussian coefficient
- *  \brief And reverse the pixel values.
- */
 namespace Functor
 {
+/** \class CloudEstimatorFunctor
+ *  \brief Functor to help with the cloud detection
+ *
+ *  This functor first computes the spectral angle according to a reference pixel.
+ *  Then multiplies the result by a Gaussian coefficient
+ *  And reverse the pixel values.
+ */
+
 template<class TInput, class TOutputValue>
 class CloudEstimatorFunctor
 {
@@ -46,7 +49,7 @@ public:
   }
 
   virtual ~CloudEstimatorFunctor() {}
-  inline TOutputValue operator ()(const TInput& inPix)
+  inline TOutputValue operator ()(const TInput& inPix) const
   {
 
     TOutputValue lOut;
@@ -89,11 +92,11 @@ public:
     m_Denom = 2 * variance * variance * m_RefNorm * m_RefNorm;
   }
 
-  TInput GetReferencePixel()
+  TInput GetReferencePixel() const
   {
     return m_ReferencePixel;
   }
-  double GetVariance()
+  double GetVariance() const
   {
     return m_Variance;
   }

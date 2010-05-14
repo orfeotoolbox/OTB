@@ -70,6 +70,7 @@ CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
 ::SetVariance(double var)
 {
   this->GetFunctor().SetVariance(var);
+  this->Modified();
 }
 
 /**
@@ -78,7 +79,7 @@ CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 double
 CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
-::GetVariance()
+::GetVariance() const
 {
   return this->GetFunctor().GetVariance();
 }
@@ -92,6 +93,7 @@ CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
 ::SetReferencePixel(InputPixelType ref)
 {
   this->GetFunctor().SetReferencePixel(ref);
+  this->Modified();
 }
 
 /**
@@ -100,7 +102,7 @@ CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
 template <class TInputImage, class TOutputImage, class TFunction>
 typename CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>::InputPixelType
 CloudEstimatorFilter<TInputImage, TOutputImage, TFunction>
-::GetReferencePixel()
+::GetReferencePixel() const
 {
   return this->GetFunctor().GetReferencePixel();
 }

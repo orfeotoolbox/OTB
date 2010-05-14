@@ -24,9 +24,13 @@
 namespace otb
 {
 /** \class CloudEstimatorFilter
- * \brief Applies spectral angle functor to an image.
- * \brief Multiplies by a gaussian coefficient
- * \brief Applies a color reversal.
+ *  \brief Filter to help with the cloud detection
+ *
+ * Applies spectral angle functor to an image.
+ * Multiplies by a Gaussian coefficient
+ * Applies a color reversal.
+ *
+ * \example FeatureExtraction/CloudDetectionExample.cxx
  */
 template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
             ITK_TYPENAME TInputImage::PixelType, ITK_TYPENAME TOutputImage::PixelType> >
@@ -57,9 +61,9 @@ public:
 
   /** Getters/Setters */
   void SetReferencePixel(InputPixelType ref);
-  InputPixelType GetReferencePixel();
+  InputPixelType GetReferencePixel() const;
   void SetVariance(double var);
-  double GetVariance();
+  double GetVariance() const;
 
 protected:
   CloudEstimatorFilter();
