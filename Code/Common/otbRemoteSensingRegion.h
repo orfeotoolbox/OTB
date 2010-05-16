@@ -1,13 +1,14 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkImageIORegion.h,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2007-08-22 17:47:20 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
@@ -227,7 +228,7 @@ public:
 
   /** Compare two regions. */
   bool
-  operator ==(const Self& region) const
+  operator == (const Self& region) const
   {
     bool same = 1;
     same = (m_Index == region.m_Index);
@@ -237,7 +238,7 @@ public:
 
   /** Compare two regions. */
   bool
-  operator !=(const Self& region) const
+  operator != (const Self& region) const
   {
     bool same = 1;
     same = (m_Index == region.m_Index);
@@ -366,6 +367,37 @@ std::ostream & operator <<(std::ostream& os, const RemoteSensingRegion<TType>& r
   region.Print(os);
   return os;
 }
+
+template<class ImageType, class RemoteSensingRegionType >
+typename ImageType::RegionType 
+TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, const ImageType* image)
+{
+  typename ImageType::RegionType outputRegion;
+  typename ImageType::RegionType::IndexType index;
+  typename ImageType::RegionType::IndexType index2;
+
+  typename ImageType::PointType point;
+  point[0] = region.GetIndex()[0];
+  point[1] = region.GetIndex()[1];
+  image->TransformPhysicalPointToIndex(point, index);
+
+
+  point[0] = region.GetIndex()[0] + region.GetSize()[0];
+  point[1] = region.GetIndex()[1] + region.GetSize()[1];
+  image->TransformPhysicalPointToIndex(point, index2);
+
+  typename ImageType::RegionType::SizeType size;
+  size[0] = std::abs(index2[0] - index[0]);
+  size[1] = std::abs(index2[1] - index[1]);
+
+  index[0] = std::min(index2[0], index[0]);
+  index[1] = std::min(index2[1], index[1]);
+
+  outputRegion.SetIndex(index);
+  outputRegion.SetSize(size);
+  return outputRegion;
+}
+
 
 } // end namespace otb
 
