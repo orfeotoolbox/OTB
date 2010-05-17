@@ -287,6 +287,12 @@ public:
   {
     this->GetModel()->SaveModel(fname);
   }
+  virtual void SaveModel(std::string fname)
+  {
+    //implemented in term of const char * version
+    this->SaveModel(fname.c_str());
+  }
+
 
 protected:
   /** Constructor */
