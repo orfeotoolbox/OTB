@@ -30,15 +30,15 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
-::ReflectanceToSurfaceReflectanceImageFilter()
+::ReflectanceToSurfaceReflectanceImageFilter():
+   m_IsSetAtmosphericRadiativeTerms(false),
+   m_AeronetFileName(""),
+   m_FilterFunctionValuesFileName(""),
+   m_UseGenerateParameters(true)
 {
   m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
   m_CorrectionParameters      = AtmosphericCorrectionParameters::New();
-  m_IsSetAtmosphericRadiativeTerms = false;
-  m_AeronetFileName = "";
-  m_FilterFunctionValuesFileName = "";
   m_FilterFunctionCoef.clear();
-  m_UseGenerateParameters = true;
 }
 
 template <class TInputImage, class TOutputImage>

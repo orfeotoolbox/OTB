@@ -228,11 +228,11 @@ public:
       }
     m_WavelenghtSpectralBand[id] = function;
   }
-  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand()
+  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand() const
   {
     return m_WavelenghtSpectralBand;
   }
-  WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef()
+  const WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef() const
   {
     return &m_WavelenghtSpectralBand;
   }
@@ -254,7 +254,7 @@ public:
 
   /** Read a file that contains filter function values.
    *  Format is MinSpectralValue MaxSpectralValue UserStep and then the list of coefficients for each band.
-   *  NB : if no UserStep writen, the default value will be 0,0025µm
+   *  NB : if no UserStep written, the default value will be 0,0025µm
    */
   void LoadFilterFunctionValue(std::string filename);
 

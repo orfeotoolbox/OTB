@@ -200,7 +200,7 @@ public:
     m_FilterFunctionCoef = vect;
     this->Modified();
   }
-  FilterFunctionCoefVectorType GetFilterFunctionCoef()
+  FilterFunctionCoefVectorType GetFilterFunctionCoef() const
   {
     return m_FilterFunctionCoef;
   }
@@ -235,9 +235,8 @@ protected:
   void UpdateFunctors();
 
 private:
-  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
-  CorrectionParametersPointerType      m_CorrectionParameters;
-  bool                                 m_IsSetAtmosphericRadiativeTerms;
+
+  bool m_IsSetAtmosphericRadiativeTerms;
   /** Path to an Aeronet data file, allows to compute aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
   /** Path to an filter function values file. */
@@ -248,6 +247,9 @@ private:
    *  Useful for image view that call GenerateOutputInformation each time you move the full area.
    */
   bool m_UseGenerateParameters;
+
+  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
+  CorrectionParametersPointerType      m_CorrectionParameters;
 };
 
 } // end namespace otb
