@@ -46,6 +46,10 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateAtmosphericRadiativeTerms()
 {
+  if (this->GetInput() == NULL)
+    {
+    itkExceptionMacro(<< "Input must be set before updating the atmospheric radiative terms");
+    }
   MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
 
   ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
