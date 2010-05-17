@@ -513,6 +513,7 @@ void
 AtmosphericRadiativeTerms
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
+  os << m_Values.size() << " channels:" << std::endl;
   for (unsigned int i = 0; i < m_Values.size(); ++i)
     {
     os << "Channel " << i << " : " << std::endl;

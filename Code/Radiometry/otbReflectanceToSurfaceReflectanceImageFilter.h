@@ -40,6 +40,7 @@ namespace Functor
    *
    * \ingroup Functor
    * \ingroup Radiometry
+   *
  */
 template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
@@ -107,6 +108,7 @@ private:
   double m_Residu;
 };
 }
+
 /** \class ReflectanceToSurfaceReflectanceImageFilter
  *  \brief Calculates the slope, the orientation incidence and exitance radius values for each pixel.
  *
@@ -116,6 +118,8 @@ private:
  * \ingroup LuminanceToReflectanceImageFilter
  * \ingroup ImageToReflectanceImageFilter
  * \ingroup Radiometry
+ *
+ * \example Radiometry/AtmosphericCorrectionSequencement.cxx
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :
@@ -201,16 +205,18 @@ public:
     return m_FilterFunctionCoef;
   }
 
-  /** Compute radiative terms if necessary and then updtae functors attibuts. */
+  /** Compute radiative terms if necessary and then update functors attributs. */
   void GenerateParameters();
 
   /** Set/Get UseGenerateParameters. */
   itkSetMacro(UseGenerateParameters, bool);
   itkGetMacro(UseGenerateParameters, bool);
+  itkBooleanMacro(UseGenerateParameters);
 
   /** Set/Get IsSetAtmosphericRadiativeTerms */
   itkSetMacro(IsSetAtmosphericRadiativeTerms, bool);
   itkGetMacro(IsSetAtmosphericRadiativeTerms, bool);
+  itkBooleanMacro(IsSetAtmosphericRadiativeTerms);
 
 protected:
   /** Constructor */
@@ -236,10 +242,10 @@ private:
   std::string m_AeronetFileName;
   /** Path to an filter function values file. */
   std::string m_FilterFunctionValuesFileName;
-  /** Contains the filter function values (each element is a vector and represnts the values for each channel) */
+  /** Contains the filter function values (each element is a vector and represents the values for each channel) */
   FilterFunctionCoefVectorType m_FilterFunctionCoef;
   /** Enable/Disable GenerateParameters in GenerateOutputInformation.
-   *  Usefull for image view that call GenerateOutputInformation each time you move the full area.
+   *  Useful for image view that call GenerateOutputInformation each time you move the full area.
    */
   bool m_UseGenerateParameters;
 };

@@ -142,8 +142,8 @@ public:
   itkNewMacro(Self);
 
   typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
-  typedef std::vector<FilterFunctionValues::Pointer>
-  WavelenghtSpectralBandVectorType;
+
+  typedef std::vector<FilterFunctionValues::Pointer> WavelenghtSpectralBandVectorType;
 
   /**
    * Set/Get the solar zenithal angle.

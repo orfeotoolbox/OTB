@@ -49,6 +49,7 @@ namespace Functor
    *
    * \ingroup Functor
    * \ingroup Radiometry
+   *
  */
 template <class TInput, class TOutput>
 class LuminanceToReflectanceImageFunctor
@@ -111,6 +112,8 @@ private:
  *
  * \ingroup ImageToLuminanceImageFunctor
  * \ingroup Radiometry
+ *
+ * \example Radiometry/AtmosphericCorrectionSequencement.cxx
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LuminanceToReflectanceImageFilter :
