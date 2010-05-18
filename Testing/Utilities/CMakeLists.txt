@@ -485,7 +485,9 @@ kmlsimplifylines.cc
 kmlsortplacemarks.cc
 siftfast.cpp
 ijObjectLabelAttributeValuesTest.cxx
+classifyKNN2.cxx
 )
+
 
 IF(OTB_COMPILE_JPEG2000)
   SET(UtilitiesTests_SRCS ${UtilitiesTests_SRCS}  openJpegEncoder.cxx openJpegDecoder.cxx)

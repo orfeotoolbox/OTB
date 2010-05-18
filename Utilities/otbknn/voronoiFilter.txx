@@ -6,8 +6,8 @@
  ==========================================*/
 
 
-#ifndef _voronoiFilter_cxx
-#define _voronoiFilter_cxx
+#ifndef _voronoiFilter_txx
+#define _voronoiFilter_txx
 
 #include "voronoiFilter.h"
 #include "itkImageToImageFilter.h"

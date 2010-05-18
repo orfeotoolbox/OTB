@@ -96,7 +96,7 @@ ListType m_Prototipos;
 
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "classifyKNNCore.cxx"
+#include "classifyKNNCore.txx"
 #endif
 
 #endif

@@ -111,7 +111,7 @@ struct element {
 } //end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "voronoiFilter.cxx"
+#include "voronoiFilter.txx"
 #endif
 
 #endif

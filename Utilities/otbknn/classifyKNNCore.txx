@@ -6,8 +6,8 @@
  ==========================================*/
 
 
-#ifndef _classifyKNNCore_cxx
-#define _classifyKNNCore_cxx
+#ifndef _classifyKNNCore_txx
+#define _classifyKNNCore_txx
 
 #include <iostream>
 #include "classifyKNNCore.h"

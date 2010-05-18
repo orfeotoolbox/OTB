@@ -107,7 +107,7 @@ protected:
 
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "classifyKNNFilter.cxx"
+#include "classifyKNNFilter.txx"
 #endif
 
 #endif

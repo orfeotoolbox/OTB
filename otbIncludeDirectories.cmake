@@ -66,6 +66,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbedison/edge
   ${OTB_SOURCE_DIR}/Utilities/otbsiftfast
   ${OTB_SOURCE_DIR}/Utilities/otbconfigfile
+  ${OTB_SOURCE_DIR}/Utilities/otbknn
   ${OTB_BINARY_DIR}/Code/Visualization
 )
 
@@ -320,6 +321,7 @@ SET(OTB_INCLUDE_RELATIVE_DIRS ${OTB_INCLUDE_RELATIVE_DIRS}
   Utilities/otbsiftfast
   Utilities/dxflib
   Utilities/otbconfigfile
+  Utilities/otbknn
 )
 
 IF(OTB_COMPILE_JPEG2000)

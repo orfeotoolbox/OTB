@@ -5,8 +5,8 @@
  http://creativecommons.org/licenses/by/2.5
  ==========================================*/
 
-#ifndef _classifyKNNFilter_cxx
-#define _classifyKNNFilter_cxx
+#ifndef _classifyKNNFilter_txx
+#define _classifyKNNFilter_txx
 
 #include <iostream>
 #include "classifyKNNFilter.h"

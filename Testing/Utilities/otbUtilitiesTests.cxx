@@ -77,5 +77,6 @@ REGISTER_TEST(kmlsortplacemarks);
 
 REGISTER_TEST(SiftFast);
 REGISTER_TEST(ijObjectLabelAttributeValuesTest);
+REGISTER_TEST(classifyKNN2);
 }
 

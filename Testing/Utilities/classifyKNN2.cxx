@@ -99,7 +99,7 @@ int getFloatString(int numFloats, const char *flts, float *tgts)
   return 0; /* Success */
 }
 
-int main( int argc, char *argv[] ){
+int classifyKNN2( int argc, char *argv[] ){
  struct timeval start;
  struct timeval end;
   if( argc!= 6 ){
