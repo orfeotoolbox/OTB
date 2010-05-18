@@ -140,9 +140,9 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   AtmosphericRadiativeTermsPointer       output = this->GetOutput();
 
   output->GetValues().clear();
-  typedef AtmosphericCorrectionParameters::WavelenghtSpectralBandVectorType WavelenghtSpectralBandVectorType;
-  WavelenghtSpectralBandVectorType WavelenghtSpectralBandVector = input->GetWavelenghtSpectralBand();
-  unsigned int                     NbBand = WavelenghtSpectralBandVector.size();
+  typedef AtmosphericCorrectionParameters::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
+  WavelengthSpectralBandVectorType WavelengthSpectralBandVector = input->GetWavelengthSpectralBand();
+  unsigned int                     NbBand = WavelengthSpectralBandVector.size();
 
   double atmosphericReflectance(0.);
   double atmosphericSphericalAlbedo(0.);
@@ -176,9 +176,9 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       input->GetWaterVaporAmount(),                    /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
       input->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
       input->GetAerosolModel(),                        /** The Aerosol model */
-      input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-      input->GetWavelenghtSpectralBand()[i],           /** Wavelenght for the spectral band definition */
-      /** Note : The Max wavelenght spectral band value must be updated ! */
+      input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
+      input->GetWavelengthSpectralBand()[i],           /** Wavelength for the spectral band definition */
+      /** Note : The Max wavelength spectral band value must be updated ! */
       atmosphericReflectance,                          /** Atmospheric reflectance */
       atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */
       totalGaseousTransmission,                        /** Total gaseous transmission */

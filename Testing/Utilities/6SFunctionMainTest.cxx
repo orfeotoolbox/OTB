@@ -49,7 +49,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
         otb_6s_integer iinf(0), isup(0);
         const unsigned int S_SIZE=1501;
-        std::vector<otb_6s_doublereal> vector_wavelenght;
+        std::vector<otb_6s_doublereal> vector_wavelength;
 
         std::ifstream fin;
         std::ofstream fout;
@@ -76,7 +76,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         while (fin.good())
         {
                 fin >> value;
-                vector_wavelenght.push_back(value);
+                vector_wavelength.push_back(value);
         }
         fin.close();
 
@@ -92,7 +92,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         otb_6s_integer cpt=iinf-1;
         for(unsigned int i=0 ; cpt<isup ; i++)
         {
-                s[cpt] = vector_wavelenght[i];
+                s[cpt] = vector_wavelength[i];
                 cpt++;
         }
 
@@ -149,10 +149,10 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         fout << "   ----->  upward diffuse transmittance for rayleigh : "<<tdif_up_ray<<std::endl;
         fout << "   ----->  upward diffuse transmittance for aerosols : "<<tdif_up_aer<<std::endl;
         fout <<" ---------------------------------------------------------"<<std::endl;
-        fout << "   ----->  Inputs wavelenght values ["<<vector_wavelenght.size()<<"]"<<std::endl;
-        for(unsigned int i=0 ; i<vector_wavelenght.size() ; i++)
+        fout << "   ----->  Inputs wavelength values ["<<vector_wavelength.size()<<"]"<<std::endl;
+        for(unsigned int i=0 ; i<vector_wavelength.size() ; i++)
         {
-                fout << "            "<<vector_wavelenght[i]<<std::endl;
+                fout << "            "<<vector_wavelength[i]<<std::endl;
         }
 
         fout.close();

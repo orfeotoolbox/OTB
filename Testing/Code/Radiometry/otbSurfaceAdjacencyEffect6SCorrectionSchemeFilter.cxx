@@ -54,7 +54,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
   typedef CorrectionParametersType::AerosolModelType                        AerosolModelType;
-  typedef FilterFunctionValuesType::WavelenghtSpectralBandType              ValueType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
   typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;
 
   RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
@@ -150,7 +150,7 @@ int otbSurfaceAdjacencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(val);
 
-    param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+    param->SetWavelengthSpectralBandWithIndex(j, functionValues);
     }
 
   corrToRadia->SetInput(param);

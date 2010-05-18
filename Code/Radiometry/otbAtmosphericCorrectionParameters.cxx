@@ -42,7 +42,7 @@ FilterFunctionValues
 {
   os << indent << "Minimum spectral value       : " << m_MinSpectralValue << std::endl;
   os << indent << "Maximum spectral value       : " << m_MaxSpectralValue << std::endl;
-  os << indent << "Wavelenght spectral band step: " << m_UserStep << std::endl;
+  os << indent << "Wavelength spectral band step: " << m_UserStep << std::endl;
   os << indent << "Filter function values: " << std::endl;
   for (unsigned int i = 0; i < m_FilterFunctionValues.size(); ++i)
     {
@@ -74,7 +74,7 @@ AtmosphericCorrectionParameters
   m_OzoneAmount          = 0.28;
   m_AerosolModel         = CONTINENTAL;
   m_AerosolOptical       = 0.2;
-  m_WavelenghtSpectralBand.clear();
+  m_WavelengthSpectralBand.clear();
 }
 
 /** Get data from aeronet file*/
@@ -104,7 +104,7 @@ void
 AtmosphericCorrectionParameters
 ::LoadFilterFunctionValue(std::string filename)
 {
-  m_WavelenghtSpectralBand.clear();
+  m_WavelengthSpectralBand.clear();
   FilterFunctionValues::Pointer ffv = FilterFunctionValues::New();
 
   ossimFilename fname(filename);
@@ -120,7 +120,7 @@ AtmosphericCorrectionParameters
 
   FilterFunctionValues::Pointer          function = FilterFunctionValues::New();
   FilterFunctionValues::ValuesVectorType vect;
-  m_WavelenghtSpectralBand.clear();
+  m_WavelengthSpectralBand.clear();
   vect.clear();
 
   while (std::getline(file, line))
@@ -133,7 +133,7 @@ AtmosphericCorrectionParameters
       if (bandId != 0)
         {
         function->SetFilterFunctionValues(vect);
-        m_WavelenghtSpectralBand.push_back(function);
+        m_WavelengthSpectralBand.push_back(function);
         function = FilterFunctionValues::New();
         vect.clear();
         }
@@ -146,7 +146,7 @@ AtmosphericCorrectionParameters
     else if (keywordStrings.size() != 0) itkExceptionMacro("File " << filename << " not valid.");
     }
   function->SetFilterFunctionValues(vect);
-  m_WavelenghtSpectralBand.push_back(function);
+  m_WavelengthSpectralBand.push_back(function);
 }
 
 /**PrintSelf method */
@@ -168,10 +168,10 @@ AtmosphericCorrectionParameters
 
   // Function values print :
   os << "Filter function values: " << std::endl;
-  for (unsigned int i = 0; i < m_WavelenghtSpectralBand.size(); ++i)
+  for (unsigned int i = 0; i < m_WavelengthSpectralBand.size(); ++i)
     {
     os << indent << "Channel " << i + 1 << " : " << std::endl;
-    os << indent << m_WavelenghtSpectralBand[i] << std::endl;
+    os << indent << m_WavelengthSpectralBand[i] << std::endl;
     }
 }
 } // end namespace otb

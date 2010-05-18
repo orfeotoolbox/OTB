@@ -51,7 +51,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
   typedef otb::AtmosphericRadiativeTerms                       RadiativeTermsType;
   typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
   typedef CorrectionParametersType::AerosolModelType           AerosolModelType;
-  typedef FilterFunctionValuesType::WavelenghtSpectralBandType ValueType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;
   typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType;
 
   RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
@@ -143,7 +143,7 @@ int otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter(int argc, char *
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(val);
 
-    param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+    param->SetWavelengthSpectralBandWithIndex(j, functionValues);
     }
 
   corrToRadia->SetInput(param);

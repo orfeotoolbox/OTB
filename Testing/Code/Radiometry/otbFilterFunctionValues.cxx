@@ -28,7 +28,7 @@
 int otbFilterFunctionValuesTest(int argc, char * argv[])
 {
   char *       outname   = argv[1];
-  const double SIXSStepOfWavelenghtSpectralBandValues(0.0025);
+  const double SIXSStepOfWavelengthSpectralBandValues(0.0025);
 
   typedef otb::FilterFunctionValues FilterFunctionValuesType;
   // Instantiating object
@@ -46,8 +46,8 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   object->SetFilterFunctionValues(vect);
 
   // Call interpolate
-  otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
-    SIXSStepOfWavelenghtSpectralBandValues,
+  otb::SIXSTraits::ComputeWavelengthSpectralBandValuesFor6S(
+    SIXSStepOfWavelengthSpectralBandValues,
     object);
 
   // Writing output file

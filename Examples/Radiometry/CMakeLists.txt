@@ -94,7 +94,7 @@ ADD_TEST(raTeAtmosphericCorrectionSequencementTest ${EXE_TESTS}
 	${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
-        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
+        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt
 
 # ImageToLuminance parameters
 # LuminanceToReflectance parameters

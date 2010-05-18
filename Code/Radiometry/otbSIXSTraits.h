@@ -39,10 +39,10 @@ public:
   /** Standard class typedefs. */
   typedef SIXSTraits Self;
 
-  typedef FilterFunctionValues                               WavelenghtSpectralType;
+  typedef FilterFunctionValues                               WavelengthSpectralType;
   typedef AtmosphericCorrectionParameters::AerosolModelType  AerosolModelType;
-  typedef WavelenghtSpectralType::WavelenghtSpectralBandType WavelenghtSpectralBandType;
-  typedef WavelenghtSpectralType::ValuesVectorType           ValuesVectorType;
+  typedef WavelengthSpectralType::WavelengthSpectralBandType WavelengthSpectralBandType;
+  typedef WavelengthSpectralType::ValuesVectorType           ValuesVectorType;
 
   /** Call 6S main function */
   static void ComputeAtmosphericParameters(
@@ -56,9 +56,9 @@ public:
     const double WaterVaporAmount,                                          /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
     const double OzoneAmount,                                               /** The Ozone amount (Stratospheric ozone layer content) */
     const AerosolModelType&      AerosolModel,                              /** The Aerosol model */
-    const double AerosolOptical,                                            /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-    WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
-    /** Note : The Max wavelenght spectral band value must be updated ! */
+    const double AerosolOptical,                                            /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
+    WavelengthSpectralType* WavelengthSpectralBand,                 /** Wavelength for the spectral band definition */
+    /** Note : The Max wavelength spectral band value must be updated ! */
     double&                AtmosphericReflectance,                  /** Atmospheric reflectance */
     double&                AtmosphericSphericalAlbedo,              /** atmospheric spherical albedo */
     double&                TotalGaseousTransmission,                /** Total gaseous transmission */
@@ -75,12 +75,12 @@ public:
   * the interval number between min and max.
   * If the vector step is not at 0.0025, the new values are computed.
   * The output vector values is store in the m_FilterFunctionValues6S
-  * of WavelenghtSpectralBand
+  * of WavelengthSpectralBand
   *
   */
-  static void ComputeWavelenghtSpectralBandValuesFor6S(
-    const double SIXSStepOfWavelenghtSpectralBandValues,
-    WavelenghtSpectralType* WavelenghtSpectralBand
+  static void ComputeWavelengthSpectralBandValuesFor6S(
+    const double SIXSStepOfWavelengthSpectralBandValues,
+    WavelengthSpectralType* WavelengthSpectralBand
     );
 
   static void ComputeEnvironmentalContribution(const double diffuseTransmittanceForRayleighScattering,

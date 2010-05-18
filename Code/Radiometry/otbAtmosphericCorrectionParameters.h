@@ -51,8 +51,8 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef double                                  WavelenghtSpectralBandType;
-  typedef std::vector<WavelenghtSpectralBandType> ValuesVectorType;
+  typedef double                                  WavelengthSpectralBandType;
+  typedef std::vector<WavelengthSpectralBandType> ValuesVectorType;
 
   /** Set vector that contains the filter function value. */
   void SetFilterFunctionValues(const ValuesVectorType& vect)
@@ -78,17 +78,17 @@ public:
   }
 
   /** Set minimum spectral value. */
-  itkSetMacro(MinSpectralValue, WavelenghtSpectralBandType);
+  itkSetMacro(MinSpectralValue, WavelengthSpectralBandType);
   /** Get minimum spectral value. */
-  itkGetMacro(MinSpectralValue, WavelenghtSpectralBandType);
+  itkGetMacro(MinSpectralValue, WavelengthSpectralBandType);
   /** Set maximum spectral value. This value is automatically computed.*/
-  itkSetMacro(MaxSpectralValue, WavelenghtSpectralBandType);
+  itkSetMacro(MaxSpectralValue, WavelengthSpectralBandType);
   /** Get maximum spectral value. This value is automatically computed.*/
-  itkGetMacro(MaxSpectralValue, WavelenghtSpectralBandType);
-  /** Set user step between each wavelenght spectral band values. */
-  itkSetMacro(UserStep, WavelenghtSpectralBandType);
-  /** Get user step between each wavelenght spectral band values. */
-  itkGetMacro(UserStep, WavelenghtSpectralBandType);
+  itkGetMacro(MaxSpectralValue, WavelengthSpectralBandType);
+  /** Set user step between each wavelength spectral band values. */
+  itkSetMacro(UserStep, WavelengthSpectralBandType);
+  /** Get user step between each wavelength spectral band values. */
+  itkGetMacro(UserStep, WavelengthSpectralBandType);
 
 protected:
   /** Constructor */
@@ -110,11 +110,11 @@ private:
     */
   ValuesVectorType m_FilterFunctionValues6S;
   /** Minimum spectral value (in µm). */
-  WavelenghtSpectralBandType m_MinSpectralValue;
+  WavelengthSpectralBandType m_MinSpectralValue;
   /** Maximum spectral value (in µm). */
-  WavelenghtSpectralBandType m_MaxSpectralValue;
-  /** User step between each wavelenght spectral band values. (in µm) */
-  WavelenghtSpectralBandType m_UserStep;
+  WavelengthSpectralBandType m_MaxSpectralValue;
+  /** User step between each wavelength spectral band values. (in µm) */
+  WavelengthSpectralBandType m_UserStep;
 };
 
 /** \class AtmosphericCorrectionParameters
@@ -143,7 +143,7 @@ public:
 
   typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
 
-  typedef std::vector<FilterFunctionValues::Pointer> WavelenghtSpectralBandVectorType;
+  typedef std::vector<FilterFunctionValues::Pointer> WavelengthSpectralBandVectorType;
 
   /**
    * Set/Get the solar zenithal angle.
@@ -210,31 +210,31 @@ public:
   itkGetMacro(AerosolOptical, double);
 
   /**
-   * Set/Get the wavelenght spectral band.
+   * Set/Get the wavelength spectral band.
    */
-  void SetWavelenghtSpectralBand(const WavelenghtSpectralBandVectorType& waveband)
+  void SetWavelengthSpectralBand(const WavelengthSpectralBandVectorType& waveband)
   {
-    m_WavelenghtSpectralBand = waveband;
+    m_WavelengthSpectralBand = waveband;
   }
-  void SetWavelenghtSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
+  void SetWavelengthSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
   {
-    if (m_WavelenghtSpectralBand.size() <  id + 1)
+    if (m_WavelengthSpectralBand.size() <  id + 1)
       {
-      for (unsigned int j = 0; j < (id + 1 - m_WavelenghtSpectralBand.size()); ++j)
+      for (unsigned int j = 0; j < (id + 1 - m_WavelengthSpectralBand.size()); ++j)
         {
         FilterFunctionValues::Pointer temp;
-        m_WavelenghtSpectralBand.push_back(temp);
+        m_WavelengthSpectralBand.push_back(temp);
         }
       }
-    m_WavelenghtSpectralBand[id] = function;
+    m_WavelengthSpectralBand[id] = function;
   }
-  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand() const
+  WavelengthSpectralBandVectorType GetWavelengthSpectralBand() const
   {
-    return m_WavelenghtSpectralBand;
+    return m_WavelengthSpectralBand;
   }
-  const WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef() const
+  const WavelengthSpectralBandVectorType * GetWavelengthSpectralBandRef() const
   {
-    return &m_WavelenghtSpectralBand;
+    return &m_WavelengthSpectralBand;
   }
 
   /** Read the aeronet data and extract aerosol optical and water vapor amount. */
@@ -292,10 +292,10 @@ private:
   double m_OzoneAmount;
   /** The Aerosol model */
   AerosolModelType m_AerosolModel;
-  /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
+  /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
   double m_AerosolOptical;
-  /** Wavelenght for the each spectral band definition */
-  WavelenghtSpectralBandVectorType m_WavelenghtSpectralBand;
+  /** Wavelength for the each spectral band definition */
+  WavelengthSpectralBandVectorType m_WavelengthSpectralBand;
 };
 
 } // end namespace otb

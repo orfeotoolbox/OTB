@@ -35,7 +35,7 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
   typedef CorrectionParametersType::AerosolModelType                        AerosolModelType;
   typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelenghtSpectralBandType              ValueType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
   typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;
 
   // Instantiating object
@@ -101,7 +101,7 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   functionValues->SetMinSpectralValue(minSpectralValue);
   functionValues->SetMaxSpectralValue(maxSpectralValue);
   functionValues->SetUserStep(val);
-  param->SetWavelenghtSpectralBandWithIndex(0, functionValues);
+  param->SetWavelengthSpectralBandWithIndex(0, functionValues);
   //}
 
   //aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
@@ -165,13 +165,13 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   fout << "   ----->  MaxSpectralValue update :                         " << functionValues->GetMaxSpectralValue() <<
   std::endl;
   fout << " ---------------------------------------------------------" << std::endl;
-  fout << "Input wavelenght band values [" << functionValues->GetFilterFunctionValues().size() << "]:" << std::endl;
+  fout << "Input wavelength band values [" << functionValues->GetFilterFunctionValues().size() << "]:" << std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues().size(); i++)
     {
     fout << "    " << functionValues->GetFilterFunctionValues()[i] << std::endl;
     }
   fout << " ---------------------------------------------------------" << std::endl;
-  fout << "Output wavelenght band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" <<
+  fout << "Output wavelength band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" <<
   std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues6S().size(); i++)
     {

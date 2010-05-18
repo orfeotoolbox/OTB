@@ -158,7 +158,7 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
       functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);
       functionValues->SetMaxSpectralValue(imageMetadataInterface->GetLastWavelengths(dict)[i]);
 
-      m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+      m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
       }
     }
 

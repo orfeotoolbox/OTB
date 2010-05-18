@@ -25,7 +25,7 @@
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {Romania_Extract.tif}
 //  OUTPUTS: {AtmosphericCorrectionSequencement.tif}
-//  ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_solar_illumination.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt 27.3 4 12 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
+//  ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_solar_illumination.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt 27.3 4 12 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0] << std::endl;
     std::cerr <<
-    " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt SolarZenithalAngle day month SolarAzimuthalAngle ViewingZenithalAngle ViewingAzimuthalAngle AtmosphericPresure WaterVaporAmount OzoneAmount AerosolModel AerosolOpticalThickness WindowRadiusForAdjacencyCorrection PixelSpacing"
+    " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt SolarZenithalAngle day month SolarAzimuthalAngle ViewingZenithalAngle ViewingAzimuthalAngle AtmosphericPresure WaterVaporAmount OzoneAmount AerosolModel AerosolOpticalThickness WindowRadiusForAdjacencyCorrection PixelSpacing"
               << std::endl;
     std::cerr << std::endl;
     return 1;
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(userStep);
-    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(
+    dataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(
       i,
       functionValues);
     }

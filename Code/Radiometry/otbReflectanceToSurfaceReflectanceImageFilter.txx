@@ -96,7 +96,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
     m_CorrectionParameters->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
     }
   // the user has set the filter function values
-  else if (m_CorrectionParameters->GetWavelenghtSpectralBand().size() !=
+  else if (m_CorrectionParameters->GetWavelengthSpectralBand().size() !=
            this->GetInput()->GetNumberOfComponentsPerPixel())
     {
     bool ffvfOK = true;
@@ -116,7 +116,7 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
         functionValues->SetUserStep(functionValues->GetMaxSpectralValue() - functionValues->GetMinSpectralValue() / 2.);
         }
 
-      m_CorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+      m_CorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
       }
 
     }

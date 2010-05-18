@@ -48,7 +48,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  <<
     std::endl;
     std::cerr <<
-    "    wavelenghtSpectralBandFileName , adjacencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
+    "    wavelengthSpectralBandFileName , adjacencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
     std::cerr << std::endl;
     return 1;
     }
@@ -173,7 +173,7 @@ int otbAtmosphericCorrectionSequencementTest(int argc, char *argv[])
     functionValues->SetMinSpectralValue(minSpectralValue);
     functionValues->SetMaxSpectralValue(maxSpectralValue);
     functionValues->SetUserStep(userStep);
-    dataAtmosphericCorrectionParameters->SetWavelenghtSpectralBandWithIndex(i, functionValues);
+    dataAtmosphericCorrectionParameters->SetWavelengthSpectralBandWithIndex(i, functionValues);
     }
 
   fin.close();

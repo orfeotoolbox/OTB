@@ -444,10 +444,10 @@ ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMET
 		${BASELINE}/raTvRomania_Reflectance.tif
 		${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
 		${INPUTDATA}/romania_parameter.txt                           # atmo param;
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelenghts, channel 3
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelenghts, channel 2
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelenghts, channel 1
-		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelenghts, channel 4
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
       )
 
 # -------            otb::SurfaceAdjacencyEffect6SCorrectionSchemeFilter   ------------------------------
@@ -466,10 +466,10 @@ ADD_TEST(raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS3}
 	2                                                            # Radius;
 	0.020                                                        # pixel spacing in kilometers
 	${INPUTDATA}/romania_parameter.txt                           # atmo param;
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelenghts, channel 3
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelenghts, channel 2
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelenghts, channel 1
-	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelenghts, channel 4
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt   # wavelengths, channel 3
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt   # wavelengths, channel 2
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt   # wavelengths, channel 1
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelengths, channel 4
 	# FOR plateform verification only : to remove when OK
 	${TEMP}/raTvSurfaceAdjacencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
 )
@@ -513,7 +513,7 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}
         0.34400
         1
         0.199854
-        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
+        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt
 # ReflectanceToSurfaceReflectance parameters
 # SurfaceAdjacencyEffect6SCorrectionSchemeFilter parameters
 	2       # Radius;
