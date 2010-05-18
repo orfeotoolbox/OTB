@@ -642,7 +642,7 @@ LineSegmentDetector<TInputImage, TPrecision>
   /** Compute the orientation of the region*/
   double theta = this->ComputeRegionOrientation(region, x, y, angleRegion);
 
-  /* Lenght & Width of the rectangle **/
+  /* Length & Width of the rectangle **/
 
   typedef std::vector<MagnitudePixelType> MagnitudeVector;
 

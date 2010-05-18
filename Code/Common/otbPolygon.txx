@@ -477,7 +477,7 @@ Polygon<TValue>
 }
 
 /**
- * Lenght computation (difference with path is in the last addition)
+ * Length computation (difference with path is in the last addition)
  */
 template <class TValue>
 double Polygon<TValue>

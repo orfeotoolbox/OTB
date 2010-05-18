@@ -832,7 +832,7 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>
     ++lIterMagnitude;
     }
 
-  // normalize histogram to unit lenght
+  // normalize histogram to unit length
   typename std::vector<PixelType>::iterator lIterHisto = lHistogram.begin();
   float                                     lNorm = 0.0;
 

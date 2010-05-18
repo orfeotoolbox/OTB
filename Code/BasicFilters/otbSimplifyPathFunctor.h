@@ -113,10 +113,10 @@ private:
       {
       double crossProduct = (end.Value()[0] - begin.Value()[0]) * (segmentIt.Value()[1] - begin.Value()[1])
                             - (end.Value()[1] - begin.Value()[1]) * (segmentIt.Value()[0] - begin.Value()[0]);
-      double lenghtSeg = (end.Value()[0] - begin.Value()[0]) * (end.Value()[0] - begin.Value()[0])
+      double lengthSeg = (end.Value()[0] - begin.Value()[0]) * (end.Value()[0] - begin.Value()[0])
                          + (end.Value()[1] - begin.Value()[1]) * (end.Value()[1] - begin.Value()[1]);
-      if (lenghtSeg == 0) return false;
-      double distsq = crossProduct * crossProduct / lenghtSeg;
+      if (lengthSeg == 0) return false;
+      double distsq = crossProduct * crossProduct / lengthSeg;
       if (distsq > static_cast<double>(m_Tolerance))
         {
         return false;

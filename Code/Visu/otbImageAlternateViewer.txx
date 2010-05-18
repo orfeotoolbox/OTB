@@ -393,9 +393,9 @@ ImageAlternateViewer<TPixel>
     bufferedUpperLeft[1] = origin[1] + static_cast<double>(m_BufferedRegion.GetIndex()[1]) * spacing[1];
 
     unsigned char * newBuffer = NULL;
-    unsigned int    bufferLenght = 3 * m_BufferedRegion.GetSize()[0] * m_BufferedRegion.GetSize()[1];
+    unsigned int    bufferLength = 3 * m_BufferedRegion.GetSize()[0] * m_BufferedRegion.GetSize()[1];
 
-    newBuffer = new unsigned char[bufferLenght];
+    newBuffer = new unsigned char[bufferLength];
     typename ImageListType::Pointer bandList;
     unsigned int                    index = 0;
     PixelType                       interpolatedValue = 0;
@@ -672,14 +672,14 @@ ImageAlternateViewer<TPixel>
   total.Start();
   unsigned char * result = NULL;
 
-  unsigned int bufferLenght = 3 * region.GetSize()[0] * region.GetSize()[1];
+  unsigned int bufferLength = 3 * region.GetSize()[0] * region.GetSize()[1];
 
-  if (bufferLenght == 0)
+  if (bufferLength == 0)
     {
     return result;
     }
 
-  result = new unsigned char[bufferLenght];
+  result = new unsigned char[bufferLength];
 
   filter.Start();
   typename ImageListType::Pointer bandList = m_DecompositionFilter->GetOutput();

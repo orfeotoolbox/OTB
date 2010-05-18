@@ -462,9 +462,9 @@ ImageWidgetBase<TPixel>
     delete[] m_OpenGlBuffer;
     }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
-  unsigned int bufferLenght = 4 * m_BufferedRegion.GetNumberOfPixels();
-  //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
-  m_OpenGlBuffer = new unsigned char[bufferLenght];
+  unsigned int bufferLength = 4 * m_BufferedRegion.GetNumberOfPixels();
+  //otbMsgDebugMacro(<<"New buffer length: "<<bufferLength);
+  m_OpenGlBuffer = new unsigned char[bufferLength];
 
   typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
   IteratorType it(m_Image, m_BufferedRegion);
@@ -542,9 +542,9 @@ ImageWidgetBase<TPixel>
     delete[] m_OpenGlImageOverlayBuffer;
     }
   //otbMsgDebugMacro(<<"Buffered region: "<<m_BufferedRegion);
-  unsigned int bufferLenght = 4 * m_BufferedRegion.GetNumberOfPixels();
-  //otbMsgDebugMacro(<<"New buffer lenght: "<<bufferLenght);
-  m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
+  unsigned int bufferLength = 4 * m_BufferedRegion.GetNumberOfPixels();
+  //otbMsgDebugMacro(<<"New buffer length: "<<bufferLength);
+  m_OpenGlImageOverlayBuffer = new unsigned char[bufferLength];
 
   typedef itk::ImageRegionConstIteratorWithIndex<OverlayImageType> IteratorType;
   IteratorType it(m_ImageOverlay, m_BufferedRegion);
