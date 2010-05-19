@@ -142,7 +142,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   output->GetValues().clear();
   typedef AtmosphericCorrectionParameters::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
   WavelengthSpectralBandVectorType WavelengthSpectralBandVector = input->GetWavelengthSpectralBand();
-  unsigned int                     NbBand = WavelengthSpectralBandVector.size();
+  unsigned int                     NbBand = WavelengthSpectralBandVector->Size();
 
   double atmosphericReflectance(0.);
   double atmosphericSphericalAlbedo(0.);
@@ -177,7 +177,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       input->GetOzoneAmount(),                         /** The Ozone amount (Stratospheric ozone layer content) */
       input->GetAerosolModel(),                        /** The Aerosol model */
       input->GetAerosolOptical(),                      /** The Aerosol optical (radiative impact of aerosol for the reference wavelength 550-nm) */
-      input->GetWavelengthSpectralBand()[i],           /** Wavelength for the spectral band definition */
+      input->GetWavelengthSpectralBand()->GetNthElement(i),/** Wavelength for the spectral band definition */
       /** Note : The Max wavelength spectral band value must be updated ! */
       atmosphericReflectance,                          /** Atmospheric reflectance */
       atmosphericSphericalAlbedo,                      /** atmospheric spherical albedo */

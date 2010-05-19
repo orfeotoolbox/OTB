@@ -23,6 +23,7 @@
 #include "itkMacro.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
+#include "otbObjectList.h"
 #include <vector>
 #include <iostream>
 
@@ -143,7 +144,8 @@ public:
 
   typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 5} AerosolModelType;
 
-  typedef std::vector<FilterFunctionValues::Pointer> WavelengthSpectralBandVectorType;
+  typedef ObjectList<FilterFunctionValues> InternalWavelengthSpectralBandVectorType;
+  typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
   /**
    * Set/Get the solar zenithal angle.
@@ -218,15 +220,15 @@ public:
   }
   void SetWavelengthSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
   {
-    if (m_WavelengthSpectralBand.size() <  id + 1)
+    if (m_WavelengthSpectralBand->Size() <  id + 1)
       {
-      for (unsigned int j = 0; j < (id + 1 - m_WavelengthSpectralBand.size()); ++j)
+      for (unsigned int j = 0; j < (id + 1 - m_WavelengthSpectralBand->Size()); ++j)
         {
         FilterFunctionValues::Pointer temp;
-        m_WavelengthSpectralBand.push_back(temp);
+        m_WavelengthSpectralBand->PushBack(temp);
         }
       }
-    m_WavelengthSpectralBand[id] = function;
+    m_WavelengthSpectralBand->SetNthElement(id, function);
   }
   WavelengthSpectralBandVectorType GetWavelengthSpectralBand() const
   {
@@ -252,9 +254,8 @@ public:
     this->UpdateAeronetData(file, year, m_Month, m_Day, hour, minute, 0.4);
   }
 
-  /** Read a file that contains filter function values.
-   *  Format is MinSpectralValue MaxSpectralValue UserStep and then the list of coefficients for each band.
-   *  NB : if no UserStep written, the default value will be 0,0025µm
+  /**
+   * Read a file that contains filter function values on the 6S format.
    */
   void LoadFilterFunctionValue(std::string filename);
 

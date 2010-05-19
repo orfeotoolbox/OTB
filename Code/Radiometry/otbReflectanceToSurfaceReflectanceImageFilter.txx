@@ -90,19 +90,19 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
                                               imageMetadataInterface->GetHour(dict),
                                               imageMetadataInterface->GetMinute(dict));
 
-  // load fiter function values
+  // load filter function values
   if (m_FilterFunctionValuesFileName != "")
     {
     m_CorrectionParameters->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
     }
   // the user has set the filter function values
-  else if (m_CorrectionParameters->GetWavelengthSpectralBand().size() !=
+  else if (m_CorrectionParameters->GetWavelengthSpectralBand()->Size() !=
            this->GetInput()->GetNumberOfComponentsPerPixel())
     {
     bool ffvfOK = true;
     if (m_FilterFunctionCoef.size() == 0) ffvfOK = false;
     else if (m_FilterFunctionCoef.size() != this->GetInput()->GetNumberOfComponentsPerPixel()) itkExceptionMacro(
-        << "Function Values and Input image size dismatch");
+        << "Function Values and Input image size mismatch");
 
     for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); i++)
       {

@@ -19,6 +19,7 @@
 #include "otbAtmosphericCorrectionParameters.h"
 
 #include "otbAeronetFileReader.h"
+#include "otbSpectralSensitivityReader.h"
 #include "base/ossimFilename.h"
 #include <fstream>
 
@@ -74,7 +75,10 @@ AtmosphericCorrectionParameters
   m_OzoneAmount          = 0.28;
   m_AerosolModel         = CONTINENTAL;
   m_AerosolOptical       = 0.2;
-  m_WavelengthSpectralBand.clear();
+
+  m_WavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
+  m_WavelengthSpectralBand->Clear();
+
 }
 
 /** Get data from aeronet file*/
@@ -104,49 +108,11 @@ void
 AtmosphericCorrectionParameters
 ::LoadFilterFunctionValue(std::string filename)
 {
-  m_WavelengthSpectralBand.clear();
-  FilterFunctionValues::Pointer ffv = FilterFunctionValues::New();
-
-  ossimFilename fname(filename);
-  if (!fname.exists()) itkExceptionMacro("Filename " << filename << " doesn not exist.");
-
-  std::ifstream file(filename.c_str());
-
-  if (!file) itkExceptionMacro("Enable to read " << filename << " file.");
-
-  int         bandId = 0;
-  std::string line;
-  ossimString separatorList = " ";
-
-  FilterFunctionValues::Pointer          function = FilterFunctionValues::New();
-  FilterFunctionValues::ValuesVectorType vect;
-  m_WavelengthSpectralBand.clear();
-  vect.clear();
-
-  while (std::getline(file, line))
-    {
-    ossimString              osLine(line);
-    std::vector<ossimString> keywordStrings = osLine.split(separatorList);
-
-    if (keywordStrings.size() == 2 || keywordStrings.size() == 3)
-      {
-      if (bandId != 0)
-        {
-        function->SetFilterFunctionValues(vect);
-        m_WavelengthSpectralBand.push_back(function);
-        function = FilterFunctionValues::New();
-        vect.clear();
-        }
-      bandId++;
-      function->SetMinSpectralValue(keywordStrings[0].toDouble());
-      function->SetMaxSpectralValue(keywordStrings[1].toDouble());
-      if (keywordStrings.size() == 3) function->SetUserStep(keywordStrings[2].toDouble());
-      }
-    else if (keywordStrings.size() == 1) vect.push_back(keywordStrings[0].toDouble());
-    else if (keywordStrings.size() != 0) itkExceptionMacro("File " << filename << " not valid.");
-    }
-  function->SetFilterFunctionValues(vect);
-  m_WavelengthSpectralBand.push_back(function);
+  m_WavelengthSpectralBand->Clear();
+  SpectralSensitivityReader::Pointer spectralSensitivityReader = SpectralSensitivityReader::New();
+  spectralSensitivityReader->SetFileName(filename);
+  spectralSensitivityReader->Update();
+  m_WavelengthSpectralBand = spectralSensitivityReader->GetOutput();
 }
 
 /**PrintSelf method */
@@ -168,10 +134,10 @@ AtmosphericCorrectionParameters
 
   // Function values print :
   os << "Filter function values: " << std::endl;
-  for (unsigned int i = 0; i < m_WavelengthSpectralBand.size(); ++i)
+  for (unsigned int i = 0; i < m_WavelengthSpectralBand->Size(); ++i)
     {
     os << indent << "Channel " << i + 1 << " : " << std::endl;
-    os << indent << m_WavelengthSpectralBand[i] << std::endl;
+    os << indent << m_WavelengthSpectralBand->GetNthElement(i) << std::endl;
     }
 }
 } // end namespace otb

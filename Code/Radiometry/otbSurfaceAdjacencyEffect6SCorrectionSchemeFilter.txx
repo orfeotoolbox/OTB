@@ -139,7 +139,7 @@ SurfaceAdjacencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
                                               imageMetadataInterface->GetMinute(dict));
     }
 
-  // load fiter function values
+  // load filter function values
   if (m_FilterFunctionValuesFileName != "")
     {
     m_CorrectionParameters->LoadFilterFunctionValue(m_FilterFunctionValuesFileName);
