@@ -108,7 +108,10 @@ ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
       {
       FilterFunctionValuesType::Pointer functionValues = FilterFunctionValuesType::New();
 
-      if (ffvfOK) functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+      if (ffvfOK)
+        {
+        functionValues->SetFilterFunctionValues(m_FilterFunctionCoef[i]);
+        }
       else    // if no ffvf set, compute the step to be sure that the valueswavelength are between min and max and 1 as coef
         {
         functionValues->SetMinSpectralValue(imageMetadataInterface->GetFirstWavelengths(dict)[i]);

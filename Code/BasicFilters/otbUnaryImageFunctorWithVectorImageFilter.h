@@ -31,9 +31,13 @@
 namespace otb
 {
 /** \class UnaryImageFunctorWithVectorImageFilter
- *  \brief  The aim of the class is to work with vector images but with a functor that uses as input a component of the pixel.
+ *  \brief Applies a functor to a VectorImage
  *
- *  For N components pixel, the functor will be called N times and completes the Nth component the corresponding output pixel.
+ *  The aim of the class is to work with vector images but with a functor
+ *  that uses as input a component of the pixel.
+ *
+ *  For N components pixel, an array of functor is defined and each is applied to
+ *  the corresponding component of the output pixel.
  *
  * \ingroup Functor
  * \ingroup VectorImage
