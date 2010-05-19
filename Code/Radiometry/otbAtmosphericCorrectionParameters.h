@@ -91,6 +91,9 @@ public:
   /** Get user step between each wavelength spectral band values. */
   itkGetMacro(UserStep, WavelengthSpectralBandType);
 
+  /** Compute the center wavelength value for the filter */
+  WavelengthSpectralBandType GetCenterSpectralValue() const;
+
 protected:
   /** Constructor */
   FilterFunctionValues();

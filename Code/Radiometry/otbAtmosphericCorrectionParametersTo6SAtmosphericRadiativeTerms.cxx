@@ -199,10 +199,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
     output->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
     output->SetUpwardDiffuseTransmittanceForRayleigh(i, upwardDiffuseTransmittanceForRayleigh);
     output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
-    output->SetWavelengthSpectralBand(i,
-                                      (input->GetWavelengthSpectralBand()->GetNthElement(i)->GetMaxSpectralValue()-
-                                      input->GetWavelengthSpectralBand()->GetNthElement(i)->GetMinSpectralValue())/2
-                                      );//rougthly compute the center of the spectral band for reference only
+    output->SetWavelengthSpectralBand(i, input->GetWavelengthSpectralBand()->GetNthElement(i)->GetCenterSpectralValue());
     }
 }
 

@@ -36,6 +36,29 @@ FilterFunctionValues
   m_UserStep = 0.0025;
 }
 
+FilterFunctionValues::WavelengthSpectralBandType
+FilterFunctionValues
+::GetCenterSpectralValue() const
+{
+  // The computation is done by taking the weighted average of the
+  // filter. The computation is done each time the value is requested.
+  // It is anticipated that this method won't be called much and that
+  // the cost will be negligible compared to the rest of the processing
+  double total = 0;
+  for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
+    {
+    total += m_FilterFunctionValues6S[i];
+    }
+  unsigned int centerIndex = 0;
+  double total2 = 0;
+  for (centerIndex = 0; centerIndex < m_FilterFunctionValues6S.size(); ++centerIndex)
+    {
+    total2 += m_FilterFunctionValues6S[centerIndex];
+    if (total2 > total/2) break;
+    }
+  return m_MinSpectralValue + m_UserStep * centerIndex;
+}
+
 /**PrintSelf method */
 void
 FilterFunctionValues
