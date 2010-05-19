@@ -29,7 +29,12 @@ namespace otb
  * \class AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
  * \brief This class computes the atmospheric radiative terms with 6S.
  *
+ * It enables to compute a AtmosphericRadiativeTerms from a AtmosphericCorrectionParameters,
+ * which is used in the ReflectanceToSurfaceReflectanceImageFilter.
  *
+ * \sa AtmosphericRadiativeTerms
+ * \sa AtmosphericCorrectionParameters
+ * \sa ReflectanceToSurfaceReflectanceImageFilter
  * \ingroup DataSources
  * \ingroup Radiometry
  */
@@ -45,7 +50,7 @@ public:
 
   /** Runtime information */
   itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms, itk::ProcessObject);
-  /** Creation througth the object factory */
+  /** Creation through the object factory */
   itkNewMacro(Self);
   /** Template parameters typedefs */
   typedef AtmosphericCorrectionParameters              AtmosphericCorrectionParametersType;

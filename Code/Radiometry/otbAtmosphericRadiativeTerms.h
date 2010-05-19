@@ -29,9 +29,10 @@ namespace otb
 /** \class AtmosphericRadiativeTermsSingleChannel
  *  \brief This class contains all atmospheric radiative terms for one channel.
  *
- * Each value can be deducted from the atmospheric correction parameters (using 6S) or directly set by the user.
+ * Each value can be deducted from the atmospheric correction parameters (using 6S)
+ * or directly set by the user.
  *
-   * \ingroup Radiometry
+ * \ingroup Radiometry
  */
 
 class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
@@ -102,6 +103,12 @@ public:
   itkSetMacro(UpwardDiffuseTransmittanceForAerosol, double);
   itkGetMacro(UpwardDiffuseTransmittanceForAerosol, double);
 
+  /**
+   * Set/Get the wavelength
+   */
+  itkSetMacro(WavelengthSpectralBand, double);
+  itkGetMacro(WavelengthSpectralBand, double);
+
 protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
@@ -140,6 +147,9 @@ private:
 
   /** The upward diffuse transmittance for aerosols. */
   double m_UpwardDiffuseTransmittanceForAerosol;
+
+  /** Wavelength associated with the data: not used in the computation, for reference only */
+  double m_WavelengthSpectralBand;
 };
 
 /** \class AtmosphericRadiativeTerms
@@ -197,6 +207,7 @@ public:
   void SetUpwardDirectTransmittances(const DataVectorType& vect);
   void SetUpwardDiffuseTransmittancesForRayleigh(const DataVectorType& vect);
   void SetUpwardDiffuseTransmittancesForAerosol(const DataVectorType& vect);
+  void SetWavelengthSpectralBand(const DataVectorType& vect);
 
   /** Set methods with index. */
   void SetValueByIndex(unsigned int id, const ValueType& val);
@@ -210,6 +221,7 @@ public:
   void SetUpwardDirectTransmittance(unsigned int id, const double& val);
   void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const double& val);
   void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const double& val);
+  void SetWavelengthSpectralBand(unsigned int id, const double& val);
 
   /** Get methods with vectors. */
   DataVectorType GetIntrinsicAtmosphericReflectances() const;
@@ -222,6 +234,7 @@ public:
   DataVectorType GetUpwardDirectTransmittances() const;
   DataVectorType GetUpwardDiffuseTransmittancesForRayleigh() const;
   DataVectorType GetUpwardDiffuseTransmittancesForAerosol() const;
+  DataVectorType GetWavelengthSpectralBand() const;
 
   /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectance(unsigned int id) const;
@@ -233,6 +246,7 @@ public:
   double GetUpwardDirectTransmittance(unsigned int id) const;
   double GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id) const;
   double GetUpwardDiffuseTransmittanceForAerosol(unsigned int id) const;
+  double GetWavelengthSpectralBand(unsigned int id) const;
 
   const ValueType GetValueByIndex(unsigned int id) const;
 

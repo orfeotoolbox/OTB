@@ -39,7 +39,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Creation througth the object factory */
+  /** Creation through the object factory */
   itkNewMacro(Self);
 
   /** Runtime information */

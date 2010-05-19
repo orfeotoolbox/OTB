@@ -22,18 +22,18 @@ namespace otb
 {
 /*********************************** AtmosphericRadiativeTermsSingleChannel***********************************************/
 /** Constructor */
-AtmosphericRadiativeTermsSingleChannel
-::AtmosphericRadiativeTermsSingleChannel()
+AtmosphericRadiativeTermsSingleChannel::AtmosphericRadiativeTermsSingleChannel() :
+  m_IntrinsicAtmosphericReflectance(0.04),
+  m_SphericalAlbedo(0.09),
+  m_TotalGaseousTransmission(0.95),
+  m_DownwardTransmittance(0.91),
+  m_UpwardTransmittance(0.94),
+  m_UpwardDiffuseTransmittance(0.09),
+  m_UpwardDirectTransmittance(0.85),
+  m_UpwardDiffuseTransmittanceForRayleigh(0.05),
+  m_UpwardDiffuseTransmittanceForAerosol(0.04),
+  m_WavelengthSpectralBand(0.0)
 {
-  m_IntrinsicAtmosphericReflectance       = 0.04;
-  m_SphericalAlbedo                       = 0.09;
-  m_TotalGaseousTransmission              = 0.95;
-  m_DownwardTransmittance                 = 0.91;
-  m_UpwardTransmittance                   = 0.94;
-  m_UpwardDiffuseTransmittance            = 0.09;
-  m_UpwardDirectTransmittance             = 0.85;
-  m_UpwardDiffuseTransmittanceForRayleigh = 0.05;
-  m_UpwardDiffuseTransmittanceForAerosol  = 0.04;
 }
 
 /**PrintSelf method */
@@ -194,6 +194,19 @@ AtmosphericRadiativeTerms
     m_Values[nbChannel]->SetUpwardDiffuseTransmittanceForAerosol(vect[nbChannel]);
     }
 }
+void
+AtmosphericRadiativeTerms
+::SetWavelengthSpectralBand(const DataVectorType& vect)
+{
+  if (!m_IsInitialized)
+    {
+    this->ValuesInitialization(vect.size());
+    }
+  for (unsigned int nbChannel = 0; nbChannel < vect.size(); ++nbChannel)
+    {
+    m_Values[nbChannel]->SetWavelengthSpectralBand(vect[nbChannel]);
+    }
+}
 
 /** SET ACCESSORS WITH INDEX. */
 void
@@ -343,6 +356,20 @@ AtmosphericRadiativeTerms
     }
   m_Values[id]->SetUpwardDiffuseTransmittanceForAerosol(val);
 }
+void
+AtmosphericRadiativeTerms
+::SetWavelengthSpectralBand(unsigned int id, const double& val)
+{
+  if (m_Values.size() < id + 1)
+    {
+    for (unsigned int j = 0; j < (id + 1 - m_Values.size()); ++j)
+      {
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+      }
+    }
+  m_Values[id]->SetWavelengthSpectralBand(val);
+}
 
 /** GET ACCESSORS WITH VECTORS. */
 AtmosphericRadiativeTerms::DataVectorType
@@ -444,6 +471,17 @@ AtmosphericRadiativeTerms
     }
   return vect;
 }
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetWavelengthSpectralBand() const
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
+    {
+    vect[nbChannel] = m_Values[nbChannel]->GetWavelengthSpectralBand();
+    }
+  return vect;
+}
 
 /** GET ACCESSORS WITH INDEX. */
 double
@@ -500,6 +538,12 @@ AtmosphericRadiativeTerms
 {
   return m_Values[id]->GetUpwardDiffuseTransmittanceForAerosol();
 }
+double
+AtmosphericRadiativeTerms
+::GetWavelengthSpectralBand(unsigned int id) const
+{
+  return m_Values[id]->GetWavelengthSpectralBand();
+}
 
 const AtmosphericRadiativeTerms::ValueType
 AtmosphericRadiativeTerms
@@ -518,21 +562,26 @@ AtmosphericRadiativeTerms
     {
     os << "Channel " << i << " : " << std::endl;
     //ValueType::(os,indent);
-    os << indent << "Intrinsic Atmospheric Reflectance     : " << m_Values[i]->GetIntrinsicAtmosphericReflectance() <<
-    std::endl;
-    os << indent << "Shperical Albedo of the Atmosphere    : " << m_Values[i]->GetSphericalAlbedo() << std::endl;
-    os << indent << "Total Gaseous Transmission            : " << m_Values[i]->GetTotalGaseousTransmission() <<
-    std::endl;
-    os << indent << "Atmosphere Downward Transmittance     : " << m_Values[i]->GetDownwardTransmittance() << std::endl;
-    os << indent << "Atmosphere Upward Transmittance       : " << m_Values[i]->GetUpwardTransmittance() << std::endl;
-    os << indent << "Upward Diffuse Transmittance          : " << m_Values[i]->GetUpwardDiffuseTransmittance() <<
-    std::endl;
-    os << indent << "Upward Direct Transmittance           : " << m_Values[i]->GetUpwardDirectTransmittance() <<
-    std::endl;
-    os << indent << "Rayleigh Upward Diffuse Transmittance : " <<
-    m_Values[i]->GetUpwardDiffuseTransmittanceForRayleigh() << std::endl;
-    os << indent << "Aerosols Upward Diffuse Transmittance : " <<
-    m_Values[i]->GetUpwardDiffuseTransmittanceForAerosol() << std::endl;
+    os << indent << "Intrinsic Atmospheric Reflectance     : "
+        << m_Values[i]->GetIntrinsicAtmosphericReflectance() << std::endl;
+    os << indent << "Shperical Albedo of the Atmosphere    : "
+        << m_Values[i]->GetSphericalAlbedo() << std::endl;
+    os << indent << "Total Gaseous Transmission            : "
+        << m_Values[i]->GetTotalGaseousTransmission() << std::endl;
+    os << indent << "Atmosphere Downward Transmittance     : "
+        << m_Values[i]->GetDownwardTransmittance() << std::endl;
+    os << indent << "Atmosphere Upward Transmittance       : "
+        << m_Values[i]->GetUpwardTransmittance() << std::endl;
+    os << indent << "Upward Diffuse Transmittance          : "
+        << m_Values[i]->GetUpwardDiffuseTransmittance() << std::endl;
+    os << indent << "Upward Direct Transmittance           : "
+        << m_Values[i]->GetUpwardDirectTransmittance() << std::endl;
+    os << indent << "Rayleigh Upward Diffuse Transmittance : "
+        << m_Values[i]->GetUpwardDiffuseTransmittanceForRayleigh() << std::endl;
+    os << indent << "Aerosols Upward Diffuse Transmittance : "
+        << m_Values[i]->GetUpwardDiffuseTransmittanceForAerosol() << std::endl;
+    os << indent << "Wavelength           : "
+        << m_Values[i]->GetWavelengthSpectralBand() << std::endl;
     }
 }
 
