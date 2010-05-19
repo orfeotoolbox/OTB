@@ -212,27 +212,27 @@ public:
   void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const double& val);
 
   /** Get methods with vectors. */
-  DataVectorType GetIntrinsicAtmosphericReflectances();
-  DataVectorType GetSphericalAlbedos();
-  DataVectorType GetTotalGaseousTransmissions();
-  DataVectorType GetDownwardTransmittances();
-  DataVectorType GetUpwardTransmittances();
+  DataVectorType GetIntrinsicAtmosphericReflectances() const;
+  DataVectorType GetSphericalAlbedos() const;
+  DataVectorType GetTotalGaseousTransmissions() const;
+  DataVectorType GetDownwardTransmittances() const;
+  DataVectorType GetUpwardTransmittances() const;
 
-  DataVectorType GetUpwardDiffuseTransmittances();
-  DataVectorType GetUpwardDirectTransmittances();
-  DataVectorType GetUpwardDiffuseTransmittancesForRayleigh();
-  DataVectorType GetUpwardDiffuseTransmittancesForAerosol();
+  DataVectorType GetUpwardDiffuseTransmittances() const;
+  DataVectorType GetUpwardDirectTransmittances() const;
+  DataVectorType GetUpwardDiffuseTransmittancesForRayleigh() const;
+  DataVectorType GetUpwardDiffuseTransmittancesForAerosol() const;
 
   /** Get methods with index. */
-  double GetIntrinsicAtmosphericReflectance(unsigned int id);
-  double GetSphericalAlbedo(unsigned int id);
-  double GetTotalGaseousTransmission(unsigned int id);
-  double GetDownwardTransmittance(unsigned int id);
-  double GetUpwardTransmittance(unsigned int id);
-  double GetUpwardDiffuseTransmittance(unsigned int id);
-  double GetUpwardDirectTransmittance(unsigned int id);
-  double GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id);
-  double GetUpwardDiffuseTransmittanceForAerosol(unsigned int id);
+  double GetIntrinsicAtmosphericReflectance(unsigned int id) const;
+  double GetSphericalAlbedo(unsigned int id) const;
+  double GetTotalGaseousTransmission(unsigned int id) const;
+  double GetDownwardTransmittance(unsigned int id) const;
+  double GetUpwardTransmittance(unsigned int id) const;
+  double GetUpwardDiffuseTransmittance(unsigned int id) const;
+  double GetUpwardDirectTransmittance(unsigned int id) const;
+  double GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id) const;
+  double GetUpwardDiffuseTransmittanceForAerosol(unsigned int id) const;
 
   const ValueType GetValueByIndex(unsigned int id) const;
 

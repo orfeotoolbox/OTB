@@ -347,7 +347,7 @@ AtmosphericRadiativeTerms
 /** GET ACCESSORS WITH VECTORS. */
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetIntrinsicAtmosphericReflectances()
+::GetIntrinsicAtmosphericReflectances() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -358,7 +358,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetSphericalAlbedos()
+::GetSphericalAlbedos() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -369,7 +369,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetTotalGaseousTransmissions()
+::GetTotalGaseousTransmissions() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -380,7 +380,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetDownwardTransmittances()
+::GetDownwardTransmittances() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -391,7 +391,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetUpwardTransmittances()
+::GetUpwardTransmittances() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -402,7 +402,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittances()
+::GetUpwardDiffuseTransmittances() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -413,7 +413,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetUpwardDirectTransmittances()
+::GetUpwardDirectTransmittances() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -424,7 +424,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittancesForRayleigh()
+::GetUpwardDiffuseTransmittancesForRayleigh() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -435,7 +435,7 @@ AtmosphericRadiativeTerms
 }
 AtmosphericRadiativeTerms::DataVectorType
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittancesForAerosol()
+::GetUpwardDiffuseTransmittancesForAerosol() const
 {
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel = 0; nbChannel < m_Values.size(); ++nbChannel)
@@ -448,55 +448,55 @@ AtmosphericRadiativeTerms
 /** GET ACCESSORS WITH INDEX. */
 double
 AtmosphericRadiativeTerms
-::GetIntrinsicAtmosphericReflectance(unsigned int id)
+::GetIntrinsicAtmosphericReflectance(unsigned int id) const
 {
   return m_Values[id]->GetIntrinsicAtmosphericReflectance();
 }
 double
 AtmosphericRadiativeTerms
-::GetSphericalAlbedo(unsigned int id)
+::GetSphericalAlbedo(unsigned int id) const
 {
   return m_Values[id]->GetSphericalAlbedo();
 }
 double
 AtmosphericRadiativeTerms
-::GetTotalGaseousTransmission(unsigned int id)
+::GetTotalGaseousTransmission(unsigned int id) const
 {
   return m_Values[id]->GetTotalGaseousTransmission();
 }
 double
 AtmosphericRadiativeTerms
-::GetDownwardTransmittance(unsigned int id)
+::GetDownwardTransmittance(unsigned int id) const
 {
   return m_Values[id]->GetDownwardTransmittance();
 }
 double
 AtmosphericRadiativeTerms
-::GetUpwardTransmittance(unsigned int id)
+::GetUpwardTransmittance(unsigned int id) const
 {
   return m_Values[id]->GetUpwardTransmittance();
 }
 double
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittance(unsigned int id)
+::GetUpwardDiffuseTransmittance(unsigned int id) const
 {
   return m_Values[id]->GetUpwardDiffuseTransmittance();
 }
 double
 AtmosphericRadiativeTerms
-::GetUpwardDirectTransmittance(unsigned int id)
+::GetUpwardDirectTransmittance(unsigned int id) const
 {
   return m_Values[id]->GetUpwardDirectTransmittance();
 }
 double
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id)
+::GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id) const
 {
   return m_Values[id]->GetUpwardDiffuseTransmittanceForRayleigh();
 }
 double
 AtmosphericRadiativeTerms
-::GetUpwardDiffuseTransmittanceForAerosol(unsigned int id)
+::GetUpwardDiffuseTransmittanceForAerosol(unsigned int id) const
 {
   return m_Values[id]->GetUpwardDiffuseTransmittanceForAerosol();
 }
