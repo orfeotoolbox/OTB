@@ -27,6 +27,7 @@
 
 #include "otbSpotImageMetadataInterface.h"
 #include "itkMetaDataObject.h"
+#include "base/ossimKeywordlist.h"
 
 namespace otb
 {

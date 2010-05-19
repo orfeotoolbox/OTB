@@ -30,6 +30,7 @@
 #include "itkMetaDataObject.h"
 #include "otbVectorDataKeywordlist.h"
 #include "base/ossimDate.h"
+#include "base/ossimKeywordlist.h"
 
 namespace otb
 {

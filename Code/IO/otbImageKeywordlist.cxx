@@ -17,6 +17,8 @@
 =========================================================================*/
 #include "otbImageKeywordlist.h"
 
+#include "base/ossimKeywordlist.h"
+
 namespace otb
 {
 
@@ -40,6 +42,13 @@ ImageKeywordlist::
 operator =(const Self& p)
 {
   m_Keywordlist = p.m_Keywordlist;
+}
+
+void
+ImageKeywordlist::
+SetKeywordlist(const ossimKeywordlist& kwl)
+{
+  m_Keywordlist = kwl.getMap();
 }
 
 const ossimString&

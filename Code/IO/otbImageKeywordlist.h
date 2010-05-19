@@ -19,12 +19,15 @@
 #define __otbImageKeywordlist_h
 
 #include <iostream>
+#include <map>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#include "base/ossimString.h"
-#include "base/ossimKeywordlist.h"
 
-#include <map>
+#include "base/ossimString.h"
+
+//forward declaration
+class ossimKeywordlist;
 
 namespace otb
 {
@@ -58,10 +61,7 @@ public:
     return m_Keywordlist;
   }
 
-  void SetKeywordlist(const ossimKeywordlist& kwl)
-  {
-    m_Keywordlist = kwl.getMap();
-  }
+  void SetKeywordlist(const ossimKeywordlist& kwl);
 
   void Clear(void)
   {
@@ -104,7 +104,7 @@ private:
 
 };
 
-extern std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
+std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
 
 } //namespace otb
 
