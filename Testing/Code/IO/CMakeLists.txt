@@ -573,6 +573,9 @@ ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS5} otbGDALImageIOTestCanRead
 ADD_TEST(ioTuGDALImageIOCanRead_HFA ${IO_TESTS5} otbGDALImageIOTestCanRead
 	${INPUTDATA}/HFAGeoreferenced.img)
 
+
+ADD_TEST(ioTvThreadsTest ${IO_TESTS5} otbThreadsTest)
+        
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTests6 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2384,6 +2387,7 @@ otbPNGIndexedNbBandsTest.cxx
 SET(BasicIO_SRCS5
 otbIOTests5.cxx
 otbGDALImageIOTestCanRead.cxx
+otbThreadsTest.cxx
 )
 SET(BasicIO_SRCS6
 otbIOTests6.cxx
