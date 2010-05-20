@@ -165,7 +165,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginLatex
 //
-// We can now instatiate the filter.
+// We can now instantiate the filter.
 //
 // Software Guide : EndLatex
 

@@ -41,7 +41,7 @@ namespace otb
  * Like its parent ImageToImageFilter, this class functions in the filtering
  * pipeline and produces a unique output image.
  *
- * The function hs to inherite from itkImageFunction
+ * The function has to inherit from itkImageFunction
  *
  * \sa SpatialFunctionImageEvaluatorFilter
  * \sa SpatialFunctionImageFilter
