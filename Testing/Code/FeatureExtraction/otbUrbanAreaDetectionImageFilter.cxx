@@ -19,7 +19,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbUrbanAreaDetectionImageFilter.h"
 
 int otbUrbanAreaDetectionImageFilter(int argc, char * argv[])

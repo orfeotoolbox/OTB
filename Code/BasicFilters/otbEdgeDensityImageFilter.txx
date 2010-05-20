@@ -21,7 +21,6 @@
 #define __otbEdgeDensityImageFilter_txx
 
 #include "otbEdgeDensityImageFilter.h"
-#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -55,7 +54,6 @@ void
 EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
 ::GenerateData()
 {
-  typename ImageFileWriter<TInputImage>::Pointer writer = ImageFileWriter<TInputImage>::New();
   m_Detector->SetInput(this->GetInput());
 
   m_DensityImageFilter->SetNeighborhoodRadius(m_NeighborhoodRadius);
