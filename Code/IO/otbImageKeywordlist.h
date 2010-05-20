@@ -19,9 +19,8 @@
 #define __otbImageKeywordlist_h
 
 #include <iostream>
-#include <map>
 
-#include "itkObject.h"
+#include "itkLightObject.h"
 #include "itkObjectFactory.h"
 
 #include "base/ossimString.h"
@@ -41,19 +40,21 @@ namespace otb
  * \ingroup Projections
  *
  */
-class ITK_EXPORT ImageKeywordlist
+class ITK_EXPORT ImageKeywordlist : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageKeywordlist Self;
+  typedef ImageKeywordlist              Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  //virtual const char *GetNameOfClass() const
-  //{return "ImageKeywordlist";}
+  /** Creation through the object factory */
+  itkNewMacro(Self);
+  /** Standard type macros */
+  itkTypeMacro(ImageKeywordlist, itk::LightObject);
 
   typedef std::map<ossimString, ossimString> KeywordlistMap;
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageKeywordlist, ImageKeywordlist);
 
   /** Get the internal map container */
   const KeywordlistMap& GetKeywordlist() const
