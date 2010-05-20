@@ -438,6 +438,12 @@ ImageMetadataInterfaceBase::GetYPixelSpacing(const MetaDataDictionaryType& dict)
   return keywordString.toDouble();
 }
 
+unsigned int
+ImageMetadataInterfaceBase::BandIndexToWavelengthPosition(unsigned int i) const
+{
+  return i;
+}
+
 void
 ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict) const
 {

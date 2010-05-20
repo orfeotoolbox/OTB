@@ -41,7 +41,7 @@ IkonosImageMetadataInterfaceFactory
 {
   this->RegisterOverride("ImageMetadataInterfaceBase",
                          "otbIkonosImageMetadataInterface",
-                         "Ikonos Meteada Interface",
+                         "Ikonos Metadata Interface",
                          1,
                          itk::CreateObjectFunction<IkonosImageMetadataInterface>::New());
 }

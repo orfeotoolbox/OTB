@@ -103,6 +103,13 @@ public:
   /** Get Instrument Index */
   unsigned int GetInstrumentIndex(const MetaDataDictionaryType& dict) const;
 
+  /** This method is to handle the permutation of the spectral band by some image provider
+   * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
+   *  2 1 0 3 in the tiff file, this method which is overloaded for SPOT enables to retrieve the
+   *  proper band. */
+  virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
+
+
   bool CanRead(const MetaDataDictionaryType& dict) const;
 
 protected:

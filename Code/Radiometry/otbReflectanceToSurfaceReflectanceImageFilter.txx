@@ -144,21 +144,30 @@ void
 ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>
 ::UpdateFunctors()
 {
+  if (this->GetInput() == NULL)
+    {
+    itkExceptionMacro(<< "Input must be set before updating the functors");
+    }
+  MetaDataDictionaryType dict = this->GetInput()->GetMetaDataDictionary();
+
+  ImageMetadataInterfaceBase::Pointer imageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(dict);
+
   this->GetFunctorVector().clear();
 
   for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
     {
     double coef;
     double res;
-    coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
-                               * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
-                               * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i));
+    unsigned int wavelengthPosition = imageMetadataInterface->BandIndexToWavelengthPosition(i);
+    coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(wavelengthPosition)
+                               * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(wavelengthPosition)
+                               * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(wavelengthPosition));
     coef = 1. / coef;
-    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
+    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(wavelengthPosition) * coef;
     FunctorType functor;
     functor.SetCoefficient(coef);
     functor.SetResidu(res);
-    functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
+    functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(wavelengthPosition)));
 
     this->GetFunctorVector().push_back(functor);
     }

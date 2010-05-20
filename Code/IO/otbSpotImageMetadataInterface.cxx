@@ -618,6 +618,7 @@ SpotImageMetadataInterface
   else if (nbBands > 1 && nbBands < 5)
     {
     wavel.SetSize(4);
+    //FIXME is that supposed to correspond to the bands in the files?
     wavel[0] = 0.500;
     wavel[1] = 0.610;
     wavel[2] = 0.780;
@@ -663,6 +664,7 @@ SpotImageMetadataInterface
     }
   else if (nbBands > 1 && nbBands < 5)
     {
+    //FIXME is that supposed to correspond to the bands in the files?
     wavel.SetSize(4);
     wavel[0] = 0.590;
     wavel[1] = 0.680;
@@ -672,6 +674,16 @@ SpotImageMetadataInterface
   else itkExceptionMacro(<< "Invalid number of bands...");
 
   return wavel;
+}
+
+unsigned int
+SpotImageMetadataInterface
+::BandIndexToWavelengthPosition(unsigned int i) const
+{
+  otbMsgDevMacro(<< "SPOT detected: band 0 and 2 inverted");
+  if (i == 0) return 2;
+  if (i == 2) return 0;
+  return i;
 }
 
 } // end namespace otb
