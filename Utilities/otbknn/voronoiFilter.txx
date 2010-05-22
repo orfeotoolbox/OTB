@@ -213,9 +213,18 @@ namespace itk
 
       for(i=0;i<m_K;i++) {
 	Element[index].DObj[i]=0;  
-      }      
+      }  
+      //Insert 1st element properly
       
-      dominio[index]=domainIt.Get();
+      if(dominio.size()==0)
+      {
+		dominio.insert(dominio.begin(),domainIt.Get());
+      }    
+      else
+      {
+		dominio.insert(dominio.end(),domainIt.Get());
+	  }
+	  
       if (dominio[index] != m_BackgroundValue) {
 	CurrentIndex=domainIt.GetIndex();
 	Element[index].icur=1;

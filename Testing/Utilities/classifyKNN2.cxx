@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include "itkMinimumMaximumImageCalculator.h"
 
+
 #ifdef WIN32
 #include <winsock.h>
 #else
@@ -295,6 +296,7 @@ struct nodeDataNew {
       {
 	std::cerr << "Exception caught " << std::endl;
 	std::cerr << ee << std::endl;
+	return EXIT_FAILURE;
       }
 
 #ifdef WIN32
@@ -305,4 +307,5 @@ struct nodeDataNew {
    print_timing(stdout, start, end);
 #endif
   
+   return EXIT_SUCCESS;
 }//end main 
