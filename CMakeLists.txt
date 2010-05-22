@@ -76,6 +76,12 @@ IF(Mercurial_FOUND)
   MESSAGE("Mercurial version is ${Mercurial_VERSION_HG}")
   MESSAGE("Repository revision is ${OTB_WC_REVISION}")
   SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}.${OTB_WC_REVISION}")
+  IF(OTB_WC_STATUS)
+    MESSAGE("Local file modifications:")
+    MESSAGE(${OTB_WC_STATUS})
+  ELSE(OTB_WC_STATUS)
+    MESSAGE("No files modified locally")
+  ENDIF(OTB_WC_STATUS)
 ELSE(Mercurial_FOUND)
   # Version string should not include patch level.  The major.minor is
   # enough to distinguish available features of the toolkit.
