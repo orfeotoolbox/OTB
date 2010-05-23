@@ -24,7 +24,10 @@ namespace otb
 {
 
 /** \class MultiChannelRAndBAndNIRVegetationIndexImageFilter
-   * \brief DEPRECATED : use otbMultiChannelRAndBAndNIRIndexImageFilter. Implements mutli channel R and B and NIR pixel-wise generic vegetation index operation on one vector image.
+   * \brief <b>DEPRECATED:</b> use otbMultiChannelRAndBAndNIRIndexImageFilter.
+   * 
+   * Implements multi channel R and B and NIR pixel-wise generic
+   * vegetation index operation on one vector image.
    *
    * This class is parameterized over the type of the input image and
    * the type of the output image.  It is also parameterized by the

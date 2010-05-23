@@ -20,6 +20,7 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
+#include "otbBandName.h"
 
 namespace otb
 {
@@ -49,13 +50,13 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector) const
   {
     return this->Evaluate(inputVector[m_GreenIndex - 1], static_cast<TInput2>(inputVector[m_RedIndex - 1]));
   }
 
   // Binary operator
-  inline TOutput operator ()(const TInput1& g, const TInput2& r)
+  inline TOutput operator ()(const TInput1& g, const TInput2& r) const
   {
     return this->Evaluate(g, r);
   }
@@ -70,7 +71,7 @@ public:
     m_GreenIndex = channel;
   }
   /// Get Green Index
-  unsigned int GetGreenIndex()
+  unsigned int GetGreenIndex() const
   {
     return m_GreenIndex;
   }
@@ -80,10 +81,37 @@ public:
     m_RedIndex = channel;
   }
   /// Get Red Index
-  unsigned int GetRedIndex()
+  unsigned int GetRedIndex() const
   {
     return m_RedIndex;
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::GREEN)
+      {
+      m_GreenIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::GREEN)
+      {
+      return m_GreenIndex;
+      }
+  }
+
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -110,7 +138,7 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector) const
   {
     return this->Evaluate(static_cast<TInput1>(inputVector[m_GreenIndex - 1]),
                           static_cast<TInput2>(inputVector[m_RedIndex - 1]),
@@ -118,7 +146,7 @@ public:
   }
 
   // Binary operator
-  inline TOutput operator ()(const TInput1& g, const TInput2& r, const TInput2& nir)
+  inline TOutput operator ()(const TInput1& g, const TInput2& r, const TInput2& nir) const
   {
     return this->Evaluate(g, r, nir);
   }
@@ -133,7 +161,7 @@ public:
     m_GreenIndex = channel;
   }
   /// Get Green Index
-  unsigned int GetGreenIndex()
+  unsigned int GetGreenIndex() const
   {
     return m_GreenIndex;
   }
@@ -143,7 +171,7 @@ public:
     m_RedIndex = channel;
   }
   /// Get Red Index
-  unsigned int GetRedIndex()
+  unsigned int GetRedIndex() const
   {
     return m_RedIndex;
   }
@@ -153,10 +181,45 @@ public:
     m_NIRIndex = channel;
   }
   /// Get Nir Index
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return m_NIRIndex;
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::GREEN)
+      {
+      m_GreenIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::GREEN)
+      {
+      return m_GreenIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
+
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value

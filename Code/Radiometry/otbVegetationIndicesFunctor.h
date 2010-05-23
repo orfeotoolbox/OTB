@@ -20,11 +20,14 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
+#include "otbBandName.h"
 
 namespace otb
 {
+
 namespace Functor
 {
+
 /**
    * \class RAndNIRIndexBase
    * \brief Base class for R And NIR based Index
@@ -46,12 +49,12 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   //operators !=
-  bool operator !=(const RAndNIRIndexBase&) const
+  bool operator != (const RAndNIRIndexBase&) const
   {
     return false;
   }
   //operator ==
-  bool operator ==(const RAndNIRIndexBase& other) const
+  bool operator == (const RAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
@@ -71,13 +74,38 @@ public:
   /// Desctructor
   virtual ~RAndNIRIndexBase() {}
 
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
     m_RedIndex = channel;
   }
   /// Get Red Index
-  unsigned int GetRedIndex()
+  unsigned int GetRedIndex() const
   {
     return m_RedIndex;
   }
@@ -87,7 +115,7 @@ public:
     m_NIRIndex = channel;
   }
   /// Get NIR Index
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return m_NIRIndex;
   }
@@ -121,13 +149,13 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   //operators !=
-  bool operator !=(const RAndBAndNIRIndexBase&) const
+  bool operator != (const RAndBAndNIRIndexBase&) const
   {
     return false;
   }
 
   //operator ==
-  bool operator ==(const RAndBAndNIRIndexBase& other) const
+  bool operator == (const RAndBAndNIRIndexBase& other) const
   {
     return !(*this != other);
   }
@@ -149,13 +177,46 @@ public:
   /// Desctructor
   virtual ~RAndBAndNIRIndexBase() {}
 
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::BLUE)
+      {
+      m_BlueIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::BLUE)
+      {
+      return m_BlueIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
     m_RedIndex = channel;
   }
   /// Get Red Index
-  unsigned int GetRedIndex()
+  unsigned int GetRedIndex() const
   {
     return m_RedIndex;
   }
@@ -165,7 +226,7 @@ public:
     m_BlueIndex = channel;
   }
   /// Get Blue Index
-  unsigned int GetBlueIndex()
+  unsigned int GetBlueIndex() const
   {
     return m_BlueIndex;
   }
@@ -176,7 +237,7 @@ public:
     m_NIRIndex = channel;
   }
   /// Get NIR Index
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return m_NIRIndex;
   }
@@ -228,13 +289,47 @@ public:
   /// Desctructor
   virtual ~RAndGAndNIRIndexBase() {}
 
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::GREEN)
+      {
+      m_GreenIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::GREEN)
+      {
+      return m_GreenIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
+
+
   /// Set Red Index
   void SetRedIndex(unsigned int channel)
   {
     m_RedIndex = channel;
   }
   /// Get Red Index
-  unsigned int GetRedIndex()
+  unsigned int GetRedIndex() const
   {
     return m_RedIndex;
   }
@@ -244,7 +339,7 @@ public:
     m_GreenIndex = channel;
   }
   /// Get Green Index
-  unsigned int GetGreenIndex()
+  unsigned int GetGreenIndex() const
   {
     return m_GreenIndex;
   }
@@ -255,7 +350,7 @@ public:
     m_NIRIndex = channel;
   }
   /// Get NIR Index
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return m_NIRIndex;
   }

@@ -26,7 +26,7 @@ namespace otb
 {
 
 /** \class MultiChannelGAndRIndexImageFilter
-   * \brief Implements mutli channel G and R  pixel-wise generic index operation on one vector image.
+   * \brief Implements multi channel G and R  pixel-wise generic index operation on one vector image.
    *
    * This class is parameterized over the type of the input image and
    * the type of the output image.  It is also parameterized by the
@@ -64,6 +64,32 @@ public:
   /** Set/Get the Red channel index. Value must be in [1...[ */
   itkSetMacro(RedIndex, unsigned int);
   itkGetMacro(RedIndex, unsigned int);
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::GREEN)
+      {
+      m_GreenIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::GREEN)
+      {
+      return m_GreenIndex;
+      }
+  }
+
 
 protected:
   /// Constructor

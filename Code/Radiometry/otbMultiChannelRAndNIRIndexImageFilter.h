@@ -26,7 +26,7 @@ namespace otb
 {
 
 /** \class MultiChannelRAndNIRIndexImageFilter
-   * \brief Implements mutli channel R and NIR  pixel-wise generic index operation on one vector image.
+   * \brief Implements multi channel R and NIR  pixel-wise generic index operation on one vector image.
    *
    * This class is parameterized over the type of the input image and
    * the type of the output image.  It is also parameterized by the
@@ -64,6 +64,31 @@ public:
   /** Set/Get the nir channel index. Value must be in [1...[ */
   itkSetMacro(NIRIndex, unsigned int);
   itkGetMacro(NIRIndex, unsigned int);
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
 
 protected:
   /// Constructor

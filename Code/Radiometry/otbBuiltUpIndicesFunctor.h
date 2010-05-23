@@ -28,7 +28,8 @@ namespace Functor
 {
 /**
    * \class TM4AndTM5IndexBase
-   * \brief Base class for Green And Red channels of Spot Images
+   * \brief Base class for TM4 And TM5 channels of Land Sat
+   * (equivalent to Red and NIR of SPOT5)
    *
    *  Implement operators for UnaryFunctorImageFilter templated with a
    *  VectorImage and BinaryFunctorImageFilter templated with single
@@ -47,13 +48,13 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector) const
   {
     return this->Evaluate(inputVector[m_TM4Index - 1], static_cast<TInput2>(inputVector[m_TM5Index - 1]));
   }
 
   // Binary operator
-  inline TOutput operator ()(const TInput1& tm4, const TInput2& tm5)
+  inline TOutput operator ()(const TInput1& tm4, const TInput2& tm5) const
   {
     return this->Evaluate(tm4, tm5);
   }
@@ -68,7 +69,7 @@ public:
     m_TM4Index = channel;
   }
   /// Get TM4 Index
-  unsigned int GetIndex1()
+  unsigned int GetIndex1() const
   {
     return m_TM4Index;
   }
@@ -78,10 +79,36 @@ public:
     m_TM5Index = channel;
   }
   /// Get TM5 Index
-  unsigned int GetIndex2()
+  unsigned int GetIndex2() const
   {
     return m_TM5Index;
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_TM4Index = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_TM5Index = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_TM4Index;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_TM5Index;
+      }
+  }
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value

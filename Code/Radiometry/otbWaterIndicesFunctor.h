@@ -21,6 +21,7 @@
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
 #include "otbSqrtSpectralAngleFunctor.h"
+#include "otbBandName.h"
 
 namespace otb
 {
@@ -47,13 +48,13 @@ public:
   typedef itk::VariableLengthVector<TInput1> InputVectorType;
 
   // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
+  inline TOutput operator ()(const InputVectorType& inputVector) const
   {
     return this->Evaluate(inputVector[m_Index1 - 1], static_cast<TInput2>(inputVector[m_Index2 - 1]));
   }
 
   // Binary operator
-  inline TOutput operator ()(const TInput1& id1, const TInput2& id2)
+  inline TOutput operator ()(const TInput1& id1, const TInput2& id2) const
   {
     return this->Evaluate(id1, id2);
   }
@@ -68,7 +69,7 @@ public:
     m_Index1 = channel;
   }
   /// Get Index 1
-  unsigned int GetIndex1()
+  unsigned int GetIndex1() const
   {
     return m_Index1;
   }
@@ -78,7 +79,7 @@ public:
     m_Index2 = channel;
   }
   /// Get Index 2
-  unsigned int GetIndex2()
+  unsigned int GetIndex2() const
   {
     return m_Index2;
   }
@@ -175,7 +176,7 @@ public:
     this->SetIndex1(channel);
   }
   /// Get Index NIR
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return this->GetIndex1();
   }
@@ -185,9 +186,34 @@ public:
     this->SetIndex2(channel);
   }
   /// Get Index MIR
-  unsigned int GetMIRIndex()
+  unsigned int GetMIRIndex() const
   {
     return this->GetIndex2();
+  }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::NIR)
+      {
+      this->SetIndex1(channel);
+      }
+    if (band == BandName::MIR)
+      {
+      this->SetIndex2(channel);
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::NIR)
+      {
+      return this->GetIndex1();
+      }
+    if (band == BandName::MIR)
+      {
+      return this->GetIndex2();
+      }
   }
 
 protected:
@@ -227,7 +253,7 @@ public:
     this->SetIndex1(channel);
   }
   /// Get Index G
-  unsigned int GetGIndex()
+  unsigned int GetGIndex() const
   {
     return this->GetIndex1();
   }
@@ -237,10 +263,36 @@ public:
     this->SetIndex2(channel);
   }
   /// Get Index NIR
-  unsigned int GetNIRIndex()
+  unsigned int GetNIRIndex() const
   {
     return this->GetIndex2();
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::GREEN)
+      {
+      this->SetIndex1(channel);
+      }
+    if (band == BandName::NIR)
+      {
+      this->SetIndex2(channel);
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::GREEN)
+      {
+      return this->GetIndex1();
+      }
+    if (band == BandName::NIR)
+      {
+      return this->GetIndex2();
+      }
+  }
+
 
 protected:
   inline TOutput Evaluate(const TInput1& g, const TInput2& nir) const
@@ -279,7 +331,7 @@ public:
     this->SetIndex1(channel);
   }
   /// Get Index G
-  unsigned int GetGIndex()
+  unsigned int GetGIndex() const
   {
     return this->GetIndex1();
   }
@@ -289,10 +341,36 @@ public:
     this->SetIndex2(channel);
   }
   /// Get Index MIR
-  unsigned int GetMIRIndex()
+  unsigned int GetMIRIndex() const
   {
     return this->GetIndex2();
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::GREEN)
+      {
+      this->SetIndex1(channel);
+      }
+    if (band == BandName::MIR)
+      {
+      this->SetIndex2(channel);
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::GREEN)
+      {
+      return this->GetIndex1();
+      }
+    if (band == BandName::MIR)
+      {
+      return this->GetIndex2();
+      }
+  }
+
 
 protected:
   inline TOutput Evaluate(const TInput1& g, const TInput2& mir) const
@@ -331,7 +409,7 @@ public:
     this->SetIndex1(channel);
   }
   /// Get Index MIR
-  unsigned int GetMIRIndex()
+  unsigned int GetMIRIndex() const
   {
     return this->GetIndex1();
   }
@@ -341,10 +419,36 @@ public:
     this->SetIndex2(channel);
   }
   /// Get Index G
-  unsigned int GetGIndex()
+  unsigned int GetGIndex() const
   {
     return this->GetIndex2();
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::MIR)
+      {
+      this->SetIndex1(channel);
+      }
+    if (band == BandName::GREEN)
+      {
+      this->SetIndex2(channel);
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::MIR)
+      {
+      return this->GetIndex1();
+      }
+    if (band == BandName::GREEN)
+      {
+      return this->GetIndex2();
+      }
+  }
+
 
 protected:
   inline TOutput Evaluate(const TInput1& mir, const TInput2& g) const
@@ -377,13 +481,15 @@ public:
   {
     return (m_WIFunctor);
   }
+  // FIXME why now using Red and Green fully spelled as everywhere
+  //else ???
   /// Set Index R
   void SetRIndex(unsigned int channel)
   {
     this->SetIndex1(channel);
   }
   /// Get Index R
-  unsigned int GetRIndex()
+  unsigned int GetRIndex() const
   {
     return this->GetIndex1();
   }
@@ -393,10 +499,36 @@ public:
     this->SetIndex2(channel);
   }
   /// Get Index G
-  unsigned int GetGIndex()
+  unsigned int GetGIndex() const
   {
     return this->GetIndex2();
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      this->SetIndex1(channel);
+      }
+    if (band == BandName::GREEN)
+      {
+      this->SetIndex2(channel);
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return this->GetIndex1();
+      }
+    if (band == BandName::GREEN)
+      {
+      return this->GetIndex2();
+      }
+  }
+
 
 protected:
   inline TOutput Evaluate(const TInput1& r, const TInput2& g) const
@@ -427,10 +559,10 @@ public:
   {
 
     //Set the channels indices
-    m_BlueChannel = 0;
-    m_GreenChannel = 1;
-    m_RedChannel = 2;
-    m_NIRChannel = 3;
+    m_BlueIndex = 0;
+    m_GreenIndex = 1;
+    m_RedIndex = 2;
+    m_NIRIndex = 3;
 
     //Set reference water value
     InputVectorPixelType reference;
@@ -448,8 +580,8 @@ public:
       }
     InputVectorPixelType reference;
     reference.SetSize(4);
-    reference[m_BlueChannel] = ref[0]; reference[m_GreenChannel] = ref[1]; reference[m_RedChannel] = ref[2];
-    reference[m_NIRChannel] = ref[3];
+    reference[m_BlueIndex] = ref[0]; reference[m_GreenIndex] = ref[1]; reference[m_RedIndex] = ref[2];
+    reference[m_NIRIndex] = ref[3];
     this->SetReferencePixel(reference);
 
   }
@@ -457,36 +589,78 @@ public:
   /** Getters and setters */
   void SetBlueChannel(unsigned int channel)
   {
-    m_BlueChannel = channel;
+    m_BlueIndex = channel;
   }
-  unsigned int GetBlueChannel()
+  unsigned int GetBlueChannel() const
   {
-    return m_BlueChannel;
+    return m_BlueIndex;
   }
   void SetGreenChannel(unsigned int channel)
   {
-    m_GreenChannel = channel;
+    m_GreenIndex = channel;
   }
-  unsigned int GetGreenChannel()
+  unsigned int GetGreenChannel() const
   {
-    return m_GreenChannel;
+    return m_GreenIndex;
   }
   void SetRedChannel(unsigned int channel)
   {
-    m_RedChannel = channel;
+    m_RedIndex = channel;
   }
-  unsigned int GetRedChannel()
+  unsigned int GetRedChannel() const
   {
-    return m_RedChannel;
+    return m_RedIndex;
   }
   void SetNIRChannel(unsigned int channel)
   {
-    m_NIRChannel = channel;
+    m_NIRIndex = channel;
   }
-  unsigned int GetNIRChannel()
+  unsigned int GetNIRChannel() const
   {
-    return m_NIRChannel;
+    return m_NIRIndex;
   }
+
+  /** Set index, generic method */
+  void SetIndex(BandName::BandName band, unsigned int channel)
+  {
+    if (band == BandName::RED)
+      {
+      m_RedIndex = channel;
+      }
+    if (band == BandName::GREEN)
+      {
+      m_GreenIndex = channel;
+      }
+    if (band == BandName::BLUE)
+      {
+      m_BlueIndex = channel;
+      }
+    if (band == BandName::NIR)
+      {
+      m_NIRIndex = channel;
+      }
+  }
+  /** Get index, generic method */
+  unsigned int GetIndex(BandName::BandName band) const
+  {
+    if (band == BandName::RED)
+      {
+      return m_RedIndex;
+      }
+    if (band == BandName::GREEN)
+      {
+      return m_GreenIndex;
+      }
+    if (band == BandName::BLUE)
+      {
+      return m_BlueIndex;
+      }
+    if (band == BandName::NIR)
+      {
+      return m_NIRIndex;
+      }
+  }
+
 
 protected:
   inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const
@@ -495,10 +669,10 @@ protected:
   }
 
   /** Channels */
-  int m_BlueChannel;
-  int m_GreenChannel;
-  int m_RedChannel;
-  int m_NIRChannel;
+  int m_BlueIndex;
+  int m_GreenIndex;
+  int m_RedIndex;
+  int m_NIRIndex;
 };
 
 } // namespace Functor
