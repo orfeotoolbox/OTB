@@ -429,6 +429,10 @@ protected:
  *
  *  [Richardson et Wiegand, 1977]
  *
+ * Default values for A and B are from
+ * C. L. Wiegand, A. J. Richardson, D. E. Escobar, and A. H. Gerbermann,
+ * "Vegetation Indices in Crop Assessments", REMOTE SENS. ENVIRON. 35:105-119 (1991)
+ *
  *  \ingroup Functor2
  * \ingroup Radiometry
  */
@@ -436,7 +440,7 @@ template <class TInput1, class TInput2, class TOutput>
 class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
-  PVI() {}
+  PVI(): m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
   virtual ~PVI() {}
   /** Set/Get A and B parameters */
   void SetA(const double A)
@@ -911,7 +915,7 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
-  TSARVI() : m_X(0.08), m_Gamma(0.5) {}
+  TSARVI() : m_A(0.0), m_B(0.0), m_X(0.08), m_Gamma(0.5) {}
   virtual ~TSARVI() {}
 
   /** Set/Get A and B parameters */

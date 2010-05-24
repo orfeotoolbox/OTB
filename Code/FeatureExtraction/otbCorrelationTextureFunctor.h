@@ -66,12 +66,11 @@ public:
         double p =  static_cast<double>(this->GetHisto()[r][s]) * areaInv;
         sumProb += p;
         double pixProd =
-          ((static_cast<double>(r) +
-            0.5) * this->GetOffsetBinLength()) * ((static_cast<double>(s) + 0.5) * this->GetNeighBinLength());
+          ((static_cast<double>(r) + 0.5) * this->GetOffsetBinLength())
+          * ((static_cast<double>(s) + 0.5) * this->GetNeighBinLength());
         out += pixProd * p;
         }
       }
-
     double meanPOff = sumProb / static_cast<double>(this->GetHisto().size());
     double meanPNeigh = sumProb / static_cast<double>(this->GetHisto()[0].size());
 

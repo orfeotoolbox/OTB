@@ -41,6 +41,8 @@ enum BandName {BLUE, GREEN, RED, NIR, MIR};
 // TM8 = Panchro
 // TM9 = Cirrus
 //
+// Spot at
+// http://www.spotimage.com/web/en/233-resolution-and-spectral-bands.php
 }
 
 }

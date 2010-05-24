@@ -336,7 +336,7 @@ private:
   /** Bins length */
   double m_NeighBinLength;
   double m_OffsetBinLength;
-  /** Joint histogramm */
+  /** Joint histogram */
   IntVectorVectorType m_Histo;
 };
 
