@@ -61,7 +61,7 @@ public:
     return this->Evaluate(g, r);
   }
   /// Constructor
-  GAndRIndexBase() : m_GreenIndex(1), m_RedIndex(2) {}
+  GAndRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_GreenIndex(1), m_RedIndex(2) {}
   /// Desctructor
   virtual ~GAndRIndexBase() {}
 
@@ -118,6 +118,7 @@ protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
   virtual TOutput Evaluate(const TInput1& g, const TInput2& r) const = 0;
+  double m_EpsilonToBeConsideredAsZero;
 
 private:
   unsigned int m_GreenIndex;
@@ -153,7 +154,7 @@ public:
     return this->Evaluate(g, r, nir);
   }
   /// Constructor
-  GAndRAndNirIndexBase() : m_GreenIndex(1), m_RedIndex(2),  m_NIRIndex(3) {}
+  GAndRAndNirIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_GreenIndex(1), m_RedIndex(2),  m_NIRIndex(3) {}
   /// Desctructor
   virtual ~GAndRAndNirIndexBase() {}
 
@@ -229,6 +230,8 @@ protected:
   // compute the index value
   virtual TOutput Evaluate(const TInput1& g, const TInput2& r, const TInput2& nir) const = 0;
 
+  double m_EpsilonToBeConsideredAsZero;
+
 private:
   unsigned int m_GreenIndex;
   unsigned int m_RedIndex;
@@ -236,9 +239,13 @@ private:
 };
 
 /** \class IR
- *  \brief This functor computes the Red Index (IR)
+ *  \brief This functor computes the Redness Index (IR)
  *
- *  [ ]
+ *  [Pouget et al., "Caracteristiques spectrales des surfaces sableuses
+ *   de la region cotiere nord-ouest de l'Egypte: application aux donnees
+ *   satellitaires Spot, In: 2eme Journeees de Teledetection: Caracterisation
+ *   et suivi des milieux terrestres en regions arides et tropicales. 4-6/12/1990
+ *   Ed. ORSTOM, Collection Colloques et Seminaires, Paris, pp. 27-38]
  *
  *  \ingroup Functor
  *  \ingroup Radiometry
@@ -263,19 +270,23 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (dGreen == 0)
+    if (dGreen < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return (static_cast<TOutput>(vcl_pow(dRed, 2.) / vcl_pow(dGreen, 3.)));
+    return static_cast<TOutput>( dRed*dRed/ (dGreen*dGreen*dGreen) );
   }
 };
 
 /** \class IC
  *  \brief This functor computes the Color Index (IC)
  *
- *  [ ]
+ *  [Pouget et al., "Caracteristiques spectrales des surfaces sableuses
+ *   de la region cotiere nord-ouest de l'Egypte: application aux donnees
+ *   satellitaires Spot, In: 2eme Journeees de Teledetection: Caracterisation
+ *   et suivi des milieux terrestres en regions arides et tropicales. 4-6/12/1990
+ *   Ed. ORSTOM, Collection Colloques et Seminaires, Paris, pp. 27-38]
  *
  *  \ingroup Functor
  * \ingroup Radiometry
@@ -300,7 +311,7 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (dGreen + dRed == 0)
+    if (dGreen + dRed < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
