@@ -29,6 +29,12 @@ class ITK_EXPORT FunctorTest :
   public otb::Functor::TextureFunctorBase<TScalarInput, TScalarOutput>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "TextureFunctorTest";
+  }
+
   FunctorTest(){};
   ~FunctorTest(){}
 

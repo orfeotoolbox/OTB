@@ -46,6 +46,12 @@ class ITK_EXPORT CorrelationTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "CorrelationTexture";
+  }
+
   CorrelationTextureFunctor(){};
   virtual ~CorrelationTextureFunctor(){}
 

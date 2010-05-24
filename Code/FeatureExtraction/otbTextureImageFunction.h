@@ -107,6 +107,13 @@ public:
   itkGetMacro(Radius, SizeType);
   itkGetMacro(Offset, OffsetType);
 
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    FunctorType funct;
+    return funct.GetName();
+  }
+
 protected:
   TextureImageFunction();
   virtual ~TextureImageFunction() {}

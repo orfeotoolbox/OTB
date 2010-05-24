@@ -319,6 +319,9 @@ public:
 
   virtual double ComputeOverSingleChannel(const NeighborhoodType& neigh, const NeighborhoodType& neighOff) = 0;
 
+  /** Return the texture name */
+  virtual std::string GetName() const = 0;
+
 private:
   OffsetType m_Offset;
   /** Stores min/max neighborhood area values */

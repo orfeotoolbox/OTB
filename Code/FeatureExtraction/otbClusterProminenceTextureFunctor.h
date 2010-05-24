@@ -45,6 +45,12 @@ class ITK_EXPORT ClusterProminenceTextureFunctor :
   public MeanTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "ClusterProminenceTexture";
+  }
+
   ClusterProminenceTextureFunctor(){};
   virtual ~ClusterProminenceTextureFunctor(){}
 

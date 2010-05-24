@@ -29,6 +29,12 @@ template <class TInputScalarType, class TOutputScalarType> //IterInput1, class T
 class TextureFunctorTest
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "TextureFunctorTest";
+  }
+
   TextureFunctorTest()
   {
     m_Offset.Fill(1);

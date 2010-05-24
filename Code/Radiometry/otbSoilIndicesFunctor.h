@@ -270,7 +270,7 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (dGreen < this->m_EpsilonToBeConsideredAsZero)
+    if (vcl_abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -311,7 +311,7 @@ protected:
   {
     double dGreen = static_cast<double>(pGreen);
     double dRed = static_cast<double>(pRed);
-    if (dGreen + dRed < this->m_EpsilonToBeConsideredAsZero)
+    if (vcl_abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }

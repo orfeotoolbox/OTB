@@ -44,6 +44,12 @@ class ITK_EXPORT SumVarianceTextureFunctor :
   public SumAverageTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "SumVarianceTexture";
+  }
+
   SumVarianceTextureFunctor(){};
   virtual ~SumVarianceTextureFunctor(){}
 

@@ -46,6 +46,12 @@ class ITK_EXPORT InformationMeasureOfCorrelation2TextureFunctor :
   public EntropyTextureFunctor<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "InformationMeasureOfCorrelation2Texture";
+  }
+
   InformationMeasureOfCorrelation2TextureFunctor(){};
   virtual ~InformationMeasureOfCorrelation2TextureFunctor(){}
 

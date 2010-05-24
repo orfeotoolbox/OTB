@@ -42,6 +42,12 @@ class ITK_EXPORT AngularSecondMomentumTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "AngularSecondMomentumTexture";
+  }
+
   AngularSecondMomentumTextureFunctor(){};
   virtual ~AngularSecondMomentumTextureFunctor(){}
 

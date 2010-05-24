@@ -43,6 +43,12 @@ class ITK_EXPORT MeanTextureFunctor :
   public TextureFunctorBase<TScalarInputPixelType, TScalarOutputPixelType>
 {
 public:
+  /** Return the texture name */
+  virtual std::string GetName() const
+  {
+    return "MeanTexture";
+  }
+
   MeanTextureFunctor(){};
   virtual ~MeanTextureFunctor(){}
 
