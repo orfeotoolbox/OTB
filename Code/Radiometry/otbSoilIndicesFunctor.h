@@ -111,6 +111,8 @@ public:
       }
   }
 
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
 
 protected:
   // This method must be reimplemented in subclasses to actually
@@ -219,6 +221,8 @@ public:
       }
   }
 
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
 
 protected:
   // This method must be reimplemented in subclasses to actually
@@ -243,6 +247,12 @@ template <class TInput1, class TInput2, class TOutput>
 class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "IR";
+  }
+
   /// Constructor
   IR() {}
   /// Desctructor
@@ -274,6 +284,12 @@ template <class TInput1, class TInput2, class TOutput>
 class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "IC";
+  }
+
   /// Constructor
   IC() {}
   /// Desctructor
@@ -305,6 +321,12 @@ template <class TInput1, class TInput2, class TOutput>
 class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "IB";
+  }
+
   /// Constructor
   IB() {}
   /// Desctructor
@@ -332,6 +354,12 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "IB2";
+  }
+
   /// Constructor
   IB2() {}
   /// Desctructor

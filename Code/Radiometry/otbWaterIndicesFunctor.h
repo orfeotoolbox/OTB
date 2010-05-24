@@ -83,6 +83,10 @@ public:
   {
     return m_Index2;
   }
+
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -103,6 +107,12 @@ template <class TInput1, class TInput2, class TOutput>
 class WaterIndexFunctor : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "WaterIndexFunctor";
+  }
+
   WaterIndexFunctor() {}
   virtual ~WaterIndexFunctor() {}
 protected:
@@ -130,6 +140,12 @@ template <class TInput1, class TInput2, class TOutput>
 class SRWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "SRWI";
+  }
+
   SRWI() {}
   virtual ~SRWI() {}
 protected:
@@ -161,6 +177,12 @@ template <class TInput1, class TInput2, class TOutput>
 class NDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDWI";
+  }
+
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
   NDWI() {}
@@ -238,6 +260,12 @@ template <class TInput1, class TInput2, class TOutput>
 class NDWI2 : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDWI2";
+  }
+
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
   NDWI2() {}
@@ -316,6 +344,12 @@ template <class TInput1, class TInput2, class TOutput>
 class MNDWI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MNDWI";
+  }
+
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
   MNDWI() {}
@@ -394,6 +428,12 @@ template <class TInput1, class TInput2, class TOutput>
 class NDPI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDPI";
+  }
+
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
   NDPI() {}
@@ -472,6 +512,12 @@ template <class TInput1, class TInput2, class TOutput>
 class NDTI : public WaterIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDTI";
+  }
+
   typedef WaterIndexFunctor<TInput1, TInput2, TOutput> WIFunctorType;
   /// Constructor
   NDTI() {}
@@ -551,7 +597,11 @@ template <class TInputVectorPixel, class TOutputPixel>
 class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
-
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "WaterSqrtSpectralAngleFunctor";
+  }
   typedef WaterSqrtSpectralAngleFunctor                             Self;
   typedef SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
   typedef TInputVectorPixel                                         InputVectorPixelType;

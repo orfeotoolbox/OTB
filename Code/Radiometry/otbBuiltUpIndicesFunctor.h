@@ -109,6 +109,9 @@ public:
       }
   }
 
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -131,6 +134,12 @@ template <class TInput1, class TInput2, class TOutput>
 class NDBI : public TM4AndTM5IndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDBI";
+  }
+
   /// Constructor
   NDBI() {}
   /// Desctructor
@@ -162,6 +171,12 @@ template <class TInput1, class TInput2, class TOutput>
 class ISU : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "ISU";
+  }
+
   /// Constructor
   ISU() : m_A(100.), m_B(25.) {}
   /// Desctructor

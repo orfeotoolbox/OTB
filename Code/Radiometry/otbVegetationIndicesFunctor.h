@@ -119,6 +119,10 @@ public:
   {
     return m_NIRIndex;
   }
+
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -241,6 +245,10 @@ public:
   {
     return m_NIRIndex;
   }
+
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -354,6 +362,10 @@ public:
   {
     return m_NIRIndex;
   }
+
+  /** Return the index name */
+  virtual std::string GetName() const = 0;
+
 protected:
   // This method must be reimplemented in subclasses to actually
   // compute the index value
@@ -365,6 +377,7 @@ private:
   unsigned int m_GreenIndex;
   unsigned int m_NIRIndex;
 };
+
 
 /** \class NDVI
  *  \brief This functor computes the NormalizeD Vegetation Index (NDVI)
@@ -378,6 +391,13 @@ template <class TInput1, class TInput2, class TOutput>
 class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "NDVI";
+  }
+
   /// Constructor
   NDVI() {}
   /// Desctructor
@@ -409,6 +429,13 @@ template <class TInput1, class TInput2, class TOutput>
 class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "RVI";
+  }
+
   RVI() {}
   virtual ~RVI() {}
 protected:
@@ -440,6 +467,12 @@ template <class TInput1, class TInput2, class TOutput>
 class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "PVI";
+  }
+
   PVI(): m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
   virtual ~PVI() {}
   /** Set/Get A and B parameters */
@@ -490,6 +523,13 @@ template <class TInput1, class TInput2, class TOutput>
 class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "SAVI";
+  }
+
   SAVI() : m_L(0.5) {}
   virtual ~SAVI() {}
 
@@ -535,6 +575,13 @@ template <class TInput1, class TInput2, class TOutput>
 class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "TSAVI";
+  }
+
   TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {}
   virtual ~TSAVI() {}
 
@@ -600,6 +647,12 @@ template <class TInput1, class TInput2, class TOutput>
 class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MSAVI2";
+  }
+
   MSAVI2() {}
   virtual ~MSAVI2() {}
 
@@ -630,6 +683,12 @@ template <class TInput1, class TInput2, class TOutput>
 class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "GEMI";
+  }
+
   GEMI() {}
   virtual ~GEMI() {}
 
@@ -674,6 +733,12 @@ template <class TInput1, class TInput2, class TOutput>
 class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "WDVI";
+  }
+
   /// Constructor
   WDVI() : m_S(0.4) {}
   /// Desctructor
@@ -713,6 +778,12 @@ template <class TInput1, class TInput2, class TOutput>
 class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MSAVI";
+  }
+
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
   typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
@@ -782,6 +853,12 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class AVI : public RAndGAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "AVI";
+  }
+
   AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {}
   virtual ~AVI() {}
 /** Set/Get Lambda red parameter*/
@@ -869,6 +946,12 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class ARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "ARVI";
+  }
+
   ARVI() : m_Gamma(0.5) {}
   virtual ~ARVI() {}
 
@@ -915,6 +998,12 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "TSARVI";
+  }
+
   TSARVI() : m_A(0.0), m_B(0.0), m_X(0.08), m_Gamma(0.5) {}
   virtual ~TSARVI() {}
 
@@ -995,6 +1084,12 @@ template <class TInput1, class TInput2, class TInput3, class TOutput>
 class EVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "EVI";
+  }
+
   EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {}
   virtual ~EVI() {}
 /** Set/Get G parameter */
@@ -1074,6 +1169,12 @@ template <class TInput1, class TInput2, class TOutput>
 class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "IPVI";
+  }
+
   IPVI() {}
   virtual ~IPVI() {}
 
@@ -1105,6 +1206,12 @@ template <class TInput1, class TInput2, class TOutput>
 class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
 public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "TNDVI";
+  }
+
   typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
   TNDVI() {}
   virtual ~TNDVI() {}
