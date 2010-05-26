@@ -187,7 +187,7 @@ struct nodeDataNew {
 };
   int pclass = -1;
   float prob = 0.0;
-  int i,pdim;
+  int pdim;
 //  int* marker = (int*)malloc(sizeof(int)*input->GetRequestedRegion().GetSize(0)*input->GetRequestedRegion().GetSize(1));
   char *straux,*end2;
   FILE *fp = NULL;
@@ -229,7 +229,7 @@ struct nodeDataNew {
 	  index_espacial[0]=strtol(straux+4,(char**)&end2,10);//col
        	}
 
-	for (i=0;i<pdim;i++) {
+	for (unsigned int i=0; i<pdim; i++) {
 	  index[i] = (int)prototypeNodeData[numPrototypes].d[i];
 	}
 
@@ -262,7 +262,7 @@ struct nodeDataNew {
   inputvoronoi->Allocate();   
   inputvoronoi->FillBuffer(-1);   
 
-    for (i=0;i<proto.size();i++){
+    for (unsigned int i=0; i<proto.size(); i++){
       inputvoronoi->SetPixel(proto[i].index_intensity,i);
     }
 

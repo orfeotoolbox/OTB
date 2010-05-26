@@ -110,15 +110,13 @@ namespace itk
     return sqrt(sum);    
 
   }
-
-
   
   template <class TDomain, typename MapElement, unsigned int m_ImageDimension> 
   void
   voronoiFilter<TDomain, MapElement, m_ImageDimension> 
   ::GenerateData()
   {
-    int j,i,l,d,next,dist,dist_2,asignacion,icurold,icurnew,icuraux,r,aux_j,rechazar,index,newIndex;
+    int j,l,d,next,dist,dist_2,asignacion,icurold,icurnew,icuraux,r,aux_j,rechazar,index,newIndex;
     int numrechazos=0;
     float distreal,distreal_2;
     IndexType CurrentIndex, newMapIndex;
@@ -173,7 +171,7 @@ namespace itk
 
     float **maps;
     maps = (float**)malloc(sizeof(float*)*auxiliar);
-    for (i=0;i<auxiliar;i++) {
+    for (int i=0;i<auxiliar;i++) {
       maps[i] = (float*)malloc(sizeof(float)*m_K);
     }
 
@@ -211,7 +209,7 @@ namespace itk
       Element[index].DObj=std::vector<float>(m_K);
       Element[index].PosObj=std::vector<IndexType>(m_K);
 
-      for(i=0;i<m_K;i++) {
+      for(unsigned short i=0; i<m_K; i++) {
 	Element[index].DObj[i]=0;  
       }  
       //Insert 1st element properly
@@ -253,7 +251,7 @@ namespace itk
 	//Propagate8
 	offsetBucle.Fill(-1);
 	icurold=0;
-	for (i=Element[index].icur;i>0;i--) {
+	for (int i=Element[index].icur;i>0;i--) {
 	  if (maps[index][i-1]==l){
 	    icurold=i;
 	    break;
@@ -278,7 +276,7 @@ namespace itk
 
 	      rechazar=0;
 
-	      for (j=1;j<=icurnew;j++) {	
+	      for (j=1;j<=icurnew;j++) {
 		aux_j = j>0?j-1:0;
 		if (maps[newIndex][aux_j] == l) { 
 		  numrechazos++; 
@@ -361,7 +359,7 @@ namespace itk
 	  offsetBucle[0]=offsetBucle[0]+1;
 	  if (offsetBucle[0]!=2) { continue; }
 	  offsetBucle[0]=-1;
-	  for (i=1;i<m_ImageDimension;i++) {
+	  for (unsigned int i=1; i<m_ImageDimension; i++) {
 	    offsetBucle[i]=offsetBucle[i]+1;
 	    if (offsetBucle[i]!=2) break;
 	    offsetBucle[i]=-1;
@@ -385,7 +383,7 @@ namespace itk
 
 
     for (index=0, mapIt.GoToBegin(); !mapIt.IsAtEnd(); ++mapIt, index++) {
-      for (i=0; i<m_K; i++) {
+      for (unsigned short i=0; i<m_K; i++) {
 	MapAuxValue[i]=(MapElement)maps[index][i];
       }
       mapIt.Set(MapAuxValue);
