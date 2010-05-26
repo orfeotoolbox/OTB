@@ -112,6 +112,7 @@ namespace otb
 /**
  * \class CommandLineArgumentParseResult
  * \brief Object returned by CommandLineArgumentParser
+ *
  * \see CommandLineArgumentParser
  */
 class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
@@ -193,6 +194,7 @@ private:
 /**
  * \class CommandLineArgumentParser
  * \brief Utility to Parse command line argument.
+ *
  * Usage:
  *  - Initialize the parser:
  * \code
