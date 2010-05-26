@@ -446,6 +446,21 @@ ADD_TEST( utTvKmlprintgeometry   ${UTILITIES_TESTS}
 #                 ijObjectLabelAttributeValuesTest
 # )
 
+# -------  KNN classification from Insight Journal  --------------------
+# The data are those submitted with the pape for the case 2D classification
+# with 2 features.
+ADD_TEST( utTvClassifyKNN2   ${UTILITIES_TESTS}
+        --compare-image ${NOTOL}
+           ${BASELINE}/output2D_2ch.mhd
+           ${TEMP}/output2D_2ch.mhd
+        classifyKNN2
+        ${INPUTDATA}/mapfile.t1t2_139_2
+        ${INPUTDATA}/mst1139.mhd
+        ${INPUTDATA}/mst2139.mhd
+        ${TEMP}/output2D_2ch.mhd
+        4
+        )
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
