@@ -5,10 +5,10 @@
  http://creativecommons.org/licenses/by/2.5
  ==========================================*/
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkVector.h"
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "classifyKNNCore.h"
 #include "voronoiFilter.h"
@@ -128,19 +128,19 @@ int classifyKNN2( int argc, char *argv[] ){
 #endif
 
   //Definition of the Image types
-  typedef itk::Image<InputPixelType, Dimension> InputImageType;
-  typedef itk::Image<Ch1PixelType, Dimension> Ch1ImageType;
-  typedef itk::Image<Ch2PixelType, Dimension> Ch2ImageType;
-  typedef itk::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef itk::Image<InputPixelType, Dimension_int> VoronoiInputType;
-  typedef itk::Image< std::vector<int> , Dimension_int>  DiagramImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<Ch1PixelType, Dimension> Ch1ImageType;
+  typedef otb::Image<Ch2PixelType, Dimension> Ch2ImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::Image<InputPixelType, Dimension_int> VoronoiInputType;
+  typedef otb::Image< std::vector<int> , Dimension_int>  DiagramImageType;
   typedef VoronoiInputType::IndexType IndexType;
 
   //Definition of the Domain and Prototypes readers 
-  typedef itk::ImageFileReader< InputImageType  >  InputReaderType;
-  typedef itk::ImageFileReader< Ch1ImageType  >  Ch1ReaderType;
-  typedef itk::ImageFileReader< Ch2ImageType  >  Ch2ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType  >  OutputWriterType;
+  typedef otb::ImageFileReader< InputImageType  >  InputReaderType;
+  typedef otb::ImageFileReader< Ch1ImageType  >  Ch1ReaderType;
+  typedef otb::ImageFileReader< Ch2ImageType  >  Ch2ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType  >  OutputWriterType;
   
   // En una dimension porque solo hay un canal: 
   typedef itk::voronoiFilter<VoronoiInputType, VoronoiInputType::PixelType, Dimension_int> VoronoiFilterType;

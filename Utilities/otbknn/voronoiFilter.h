@@ -9,7 +9,7 @@
 #define __voronoiFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 //
 //TMap must accept negative pixel values
@@ -20,7 +20,7 @@ namespace itk
 
 template <class TDomain, typename MapElement, unsigned int m_ImageDimension>
 class ITK_EXPORT voronoiFilter :
-    public ImageToImageFilter< TDomain, Image<std::vector<MapElement> ,m_ImageDimension> > 
+    public ImageToImageFilter< TDomain, otb::Image<std::vector<MapElement> ,m_ImageDimension> >
 {
  
 public:
@@ -31,7 +31,7 @@ public:
   typedef typename DomainType::RegionType DomainRegionType; 
   typedef typename DomainType::PixelType DomainPixelType; 
   typedef typename DomainType::SizeType DomainSizeType;
-  typedef Image<std::vector<MapElement> ,m_ImageDimension> MapType;
+  typedef otb::Image<std::vector<MapElement> ,m_ImageDimension> MapType;
   typedef typename MapType::Pointer MapPointer;
   typedef typename MapType::RegionType MapRegionType;
   typedef typename MapType::PixelType MapPixelType;

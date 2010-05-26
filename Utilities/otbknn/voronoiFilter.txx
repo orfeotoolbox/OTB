@@ -11,7 +11,7 @@
 
 #include "voronoiFilter.h"
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "itkVector.h"
