@@ -87,7 +87,7 @@ int generic_main_convert(otb::CommandLineArgumentParseResult* parseResult)
 
 
 
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int main(int argc, char * argv[])
