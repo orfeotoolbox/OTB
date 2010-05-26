@@ -229,7 +229,7 @@ struct nodeDataNew {
 	  index_espacial[0]=strtol(straux+4,(char**)&end2,10);//col
        	}
 
-	for (unsigned int i=0; i<pdim; i++) {
+	for (int i=0; i<pdim; i++) {
 	  index[i] = (int)prototypeNodeData[numPrototypes].d[i];
 	}
 
