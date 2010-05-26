@@ -227,17 +227,27 @@ ImageFileReader<TOutputImage>
   bool        found = GetGdalReadImageFileName(this->m_FileName, lFileName);
   if (found == false)
     {
-    otbMsgDebugMacro(<< "Filename was NOT unknowed. May be reconize by a Image factory ! ");
+    otbMsgDebugMacro(<< "Filename was NOT unknown. May be recognized by a Image factory ! ");
     }
   // Update FileName
   this->m_FileName = lFileName;
 
   std::string lFileNameOssimKeywordlist = this->m_FileName;
 
-  // Test if the file exist and if it can be open.
-  // and exception will be thrown otherwise.
-  //
-  this->TestFileExistanceAndReadability();
+  // Test if the file exists and if it can be opened.
+  // An exception will be thrown otherwise.
+  // We catch the exception because some ImageIO's may not actually
+  // open a file. Still reports file error if no ImageIO is loaded.
+
+  try
+    {
+    m_ExceptionMessage = "";
+    this->TestFileExistanceAndReadability();
+    }
+  catch (itk::ExceptionObject &err)
+    {
+    m_ExceptionMessage = err.GetDescription();
+    }
 
   if (this->m_UserSpecifiedImageIO == false)   //try creating via factory
     {
@@ -511,7 +521,7 @@ ImageFileReader<TOutputImage>
   listFileSearch.push_back("dat_01.001"); // RADARSAT or SAR_ERS2
   listFileSearch.push_back("IMAGERY.TIF");
   listFileSearch.push_back("imagery.tif"); //For format SPOT5TIF
-// Not recognised as a supported file format by GDAL.
+// Not recognized as a supported file format by GDAL.
 //        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
   listFileSearch.push_back("IMAG_01.DAT");
   listFileSearch.push_back("imag_01.dat"); //For format SPOT4

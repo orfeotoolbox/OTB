@@ -93,6 +93,8 @@ private:
   ImageFileReader(const Self &); //purposely not implemented
   void operator =(const Self&); //purposely not implemented
 
+  std::string m_ExceptionMessage;
+
 };
 
 } //namespace otb
