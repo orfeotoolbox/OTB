@@ -67,6 +67,7 @@ int generic_main_concatenate(otb::CommandLineArgumentParseResult* parseResult)
   imageWriter->SetInput(iL2VI->GetOutput());
   imageWriter->Update();
 
+  return EXIT_SUCCESS;
 }
 
 int main(int argc, char* argv[])
