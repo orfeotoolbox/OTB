@@ -89,7 +89,8 @@ public:
     oss << std::fixed << std::setprecision(3);
 
     // Loop over each component
-    for (unsigned int j = 0; j < outPixel.GetSize(); ++j)
+    const unsigned int size = outPixel.GetSize();
+    for (unsigned int j = 0; j < size; ++j)
       {
       oss.str("");
       contribution = 0;
