@@ -25,6 +25,7 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbCommandLineArgumentParser.h"
+#include "otbStandardFilterWatcher.h"
 
 template<typename PixelType>
 int generic_main_concatenate(otb::CommandLineArgumentParseResult* parseResult)
@@ -42,9 +43,9 @@ int generic_main_concatenate(otb::CommandLineArgumentParseResult* parseResult)
   std::cout << "Concat of " << NbImages << " images into a multi-band image " << std::endl;
 
   const unsigned int Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef otb::Image<PixelType, Dimension>     InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
-  typedef otb::ObjectList<ImageReaderType> ReaderListType;
+  typedef otb::ObjectList<ImageReaderType>     ReaderListType;
 
   typename ReaderListType::Pointer readerList = ReaderListType::New();
 
@@ -83,6 +84,8 @@ int generic_main_concatenate(otb::CommandLineArgumentParseResult* parseResult)
 
   imageWriter->SetBufferMemorySize(size);
   imageWriter->SetInput(iL2VI->GetOutput());
+
+  otb::StandardFilterWatcher watcher(imageWriter, "Writing");
   imageWriter->Update();
 
   return EXIT_SUCCESS;
@@ -98,7 +101,8 @@ int main(int argc, char* argv[])
   parser->AddOutputImage();
   parser->AddOptionNParams("--InputImagesList", "Images list to concatenate", "-il", true);
   parser->AddOption("--OutputPixelType",
-                    "OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 2",
+                    "OutputPixelType: unsigned char (1), short int (2), int (3), float (4),"
+                    " double (5), unsigned short int (12), unsigned int (13); default 2",
                     "-t", 1, false);
   parser->AddOption("--OutputNameList",
                     "Text file containing the name of the images used to generate the output in the same order",
@@ -161,4 +165,3 @@ int main(int argc, char* argv[])
 
   return EXIT_SUCCESS;
 }
-
