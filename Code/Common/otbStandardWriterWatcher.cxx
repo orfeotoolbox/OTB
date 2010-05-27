@@ -40,6 +40,22 @@ StandardWriterWatcher
 }
 
 StandardWriterWatcher
+::StandardWriterWatcher(itk::ProcessObject* process,
+                        const std::string& comment)
+  : WriterWatcherBase(process, comment.c_str())
+{
+  m_StarsCount = 50;
+}
+
+StandardWriterWatcher
+::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
+                        const std::string& comment)
+  : WriterWatcherBase(process, source, comment.c_str())
+{
+  m_StarsCount = 50;
+}
+
+StandardWriterWatcher
 ::StandardWriterWatcher(const StandardWriterWatcher& watch)
 {
   // Initialize state

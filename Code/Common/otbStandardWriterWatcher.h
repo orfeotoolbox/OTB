@@ -57,6 +57,11 @@ public:
   StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const char *comment = "");
 
+  StandardWriterWatcher(itk::ProcessObject* process,
+                        const std::string& comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
+                        const std::string& comment = "");
+
   /** Copy constructor */
   StandardWriterWatcher(const StandardWriterWatcher&);
 

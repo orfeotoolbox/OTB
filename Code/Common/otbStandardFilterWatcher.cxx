@@ -32,6 +32,14 @@ StandardFilterWatcher
 }
 
 StandardFilterWatcher
+::StandardFilterWatcher(itk::ProcessObject* process,
+                        const std::string& comment)
+ : FilterWatcherBase(process, comment.c_str())
+{
+  m_StarsCount = 50;
+}
+
+StandardFilterWatcher
 ::StandardFilterWatcher(const StandardFilterWatcher& watch)
 {
   // Initialize state
