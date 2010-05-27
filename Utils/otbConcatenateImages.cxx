@@ -1,3 +1,21 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+
 #include <iostream>
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -80,7 +98,7 @@ int main(int argc, char* argv[])
   parser->AddOutputImage();
   parser->AddOptionNParams("--InputImagesList", "Images list to concatenate", "-il", true);
   parser->AddOption("--OutputPixelType",
-                    "OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 1",
+                    "OutputPixelType: unsigned char (1), short int (2), int (3), float (4), double (5), unsigned short int (12), unsigned int (13); default 2",
                     "-t", 1, false);
   parser->AddOption("--OutputNameList",
                     "Text file containing the name of the images used to generate the output in the same order",
