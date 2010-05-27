@@ -69,6 +69,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Macro defining the type*/
+  itkTypeMacro(SVMModelEstimator,SuperClass);
+
   /** Get the output model */
   ModelType * GetModel();
 

@@ -74,6 +74,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Macro defining the type*/
+  itkTypeMacro(CBAMIChangeDetector,SuperClass);
+
 protected:
   CBAMIChangeDetector() {}
   virtual ~CBAMIChangeDetector() {}

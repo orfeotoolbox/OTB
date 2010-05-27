@@ -71,6 +71,9 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
+  /** Macro defining the type*/
+  itkTypeMacro(MeanRatioImageFilter,SuperClass);
+
 protected:
   MeanRatioImageFilter() {}
   virtual ~MeanRatioImageFilter() {}
