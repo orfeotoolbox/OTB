@@ -23,6 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbCommandLineArgumentParser.h"
 #include "otbMultiToMonoChannelExtractROI.h"
+#include "otbStandardFilterWatcher.h"
 
 template<typename PixelType>
 int generic_main_split(otb::CommandLineArgumentParseResult* parseResult)
@@ -41,8 +42,6 @@ int generic_main_split(otb::CommandLineArgumentParseResult* parseResult)
     base = baseName;
     extension = "";
     }
-  std::cout << "Base: " << base << ", extension: " <<  extension << std::endl;
-
 
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<PixelType, Dimension> InputImageType;
@@ -60,15 +59,18 @@ int generic_main_split(otb::CommandLineArgumentParseResult* parseResult)
   typename ImageWriterType::Pointer writer = ImageWriterType::New();
   writer->SetInput(filter->GetOutput());
 
+
   for (unsigned int i = 0;
       i < reader->GetOutput()->GetNumberOfComponentsPerPixel();
       ++i )
     {
+
+
        std::stringstream filename;// = baseName + "-" + str()
        filename << base << "-" << i << extension;
-       std::cout << "Writing " << filename.str() << std::endl;
        filter->SetChannel(i+1);//FIXME change the convention
        writer->SetFileName(filename.str());
+       otb::StandardFilterWatcher watcher(writer, "Writing "+filename.str());
        writer->Update();
     }
 
