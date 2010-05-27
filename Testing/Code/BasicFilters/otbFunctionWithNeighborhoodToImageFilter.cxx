@@ -36,7 +36,7 @@ public:
   }
 
   FunctorTest(){};
-  ~FunctorTest(){}
+  virtual ~FunctorTest(){}
 
   typedef itk::Neighborhood<TScalarInput, 2> NeighborhoodType;
 

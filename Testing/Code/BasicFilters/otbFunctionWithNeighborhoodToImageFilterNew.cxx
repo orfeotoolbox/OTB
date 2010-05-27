@@ -39,7 +39,7 @@ public:
   {
     m_Offset.Fill(1);
   }
-  ~TextureFunctorTest() {}
+  virtual ~TextureFunctorTest() {}
 
   typedef itk::Offset<>                          OffsetType;
   typedef itk::Neighborhood<TInputScalarType, 2> NeighborhoodType;
