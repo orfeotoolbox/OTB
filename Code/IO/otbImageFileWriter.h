@@ -102,6 +102,13 @@ public:
   /** Return the string to indicate the method use to calculate number of stream divisions. */
   std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
 
+  /**
+   * Enable/disable writing of a .geom file with the ossim keyword list along with the written image
+   */
+  itkSetMacro(WriteGeomFile, bool);
+  itkGetMacro(WriteGeomFile, bool);
+  itkBooleanMacro(WriteGeomFile);
+
 protected:
   ImageFileWriter();
   virtual ~ImageFileWriter();
@@ -123,6 +130,7 @@ private:
   /** Use to determine method of calculation number of divisions */
   CalculationDivisionEnumType m_CalculationDivision;
 
+  bool m_WriteGeomFile;
 };
 
 } // end namespace otb

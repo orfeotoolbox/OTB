@@ -94,7 +94,7 @@ ImageFileReader<TOutputImage>
 //otbMsgDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
 
   // Test if the file exist and if it can be open.
-  // and exception will be thrown otherwise.
+  // An exception will be thrown otherwise.
   this->TestFileExistanceAndReadability();
 
   // Tell the ImageIO to read the file
@@ -157,17 +157,17 @@ ImageFileReader<TOutputImage>
       && (this->m_ImageIO->GetNumberOfComponents()
           == ConvertPixelTraits::GetNumberOfComponents()))
     {
-    // allocate a buffer and have the ImageIO read directly into it
+    // Have the ImageIO read directly into the allocated buffer
     this->m_ImageIO->Read(buffer);
     return;
     }
   else // a type conversion is necessary
     {
     // note: char is used here because the buffer is read in bytes
-    // regardles of the actual type of the pixels.
+    // regardless of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
 
-    // Adapte the image size with the region
+    // Adapt the image size with the region
     std::streamoff nbBytes = (this->m_ImageIO->GetComponentSize() * this->m_ImageIO->GetNumberOfComponents())
                              * static_cast<std::streamoff>(region.GetNumberOfPixels());
 
@@ -188,7 +188,7 @@ ImageFileReader<TOutputImage>
 {
   typename TOutputImage::Pointer out = dynamic_cast<TOutputImage*>(output);
 
-  // the ImageIO object cannot stream, then set the RequestedRegion to the
+  // If the ImageIO object cannot stream, then set the RequestedRegion to the
   // LargestPossibleRegion
   if (!this->m_ImageIO->CanStreamRead())
     {

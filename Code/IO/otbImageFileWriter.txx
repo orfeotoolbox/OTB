@@ -25,7 +25,6 @@
 #include "vnl/vnl_vector.h"
 
 #include "imaging/ossimImageHandlerRegistry.h"
-// #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "imaging/ossimImageHandler.h"
 #include "init/ossimInit.h"
 #include "base/ossimKeywordlist.h"
@@ -43,7 +42,7 @@ namespace otb
 template <class TInputImage>
 ImageFileWriter<TInputImage>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>()
-
+, m_WriteGeomFile(false)
 {
   m_BufferMemorySize = 0;
   m_BufferNumberOfLinesDivisions = 0;
@@ -82,9 +81,28 @@ ImageFileWriter<TInputImage>
     }
 
   this->Superclass::Write();
-  //TODO: Force ImageIO desctructor. Should be fixed once GDALImageIO
+  //TODO: Force ImageIO destructor. Should be fixed once GDALImageIO
   //will be refactored.
   this->SetImageIO(NULL);
+
+  if (m_WriteGeomFile)
+    {
+    // Write the image keyword list if any
+    ossimKeywordlist geom_kwl;
+    ImageKeywordlist otb_kwl;
+
+    itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
+    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+    otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
+
+    if(geom_kwl.getSize()>0)
+      {
+      otbMsgDevMacro(<<"Exporting keywordlist ...");
+      ossimFilename geomFileName(this->GetFileName());
+      geomFileName.setExtension(".geom");
+      geom_kwl.write(geomFileName.chars());
+      }
+    }
 }
 
 /**
