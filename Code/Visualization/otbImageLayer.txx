@@ -280,9 +280,6 @@ ImageLayer<TImage, TOutputImage>
       {
       PointType point = this->GetPixelLocation (index);
 
-      m_GroundSpacing->SetInputImage(m_Image);
-      m_GroundSpacing->SetTransform(m_Transform);
-      
       oss << setiosflags(ios::fixed) << setprecision(2) << "Ground spacing(in m): " << m_GroundSpacing->EvaluateAtIndex(index) << std::endl;
       
       oss << setiosflags(ios::fixed) << setprecision(6) << "Lon: " << point[0] << " Lat: " << point[1] << std::endl;
@@ -336,6 +333,12 @@ ImageLayer<TImage, TOutputImage>
   m_Transform->SetInputSpacing(m_Image->GetSpacing());
   //  m_Transform->SetDEMDirectory(m_DEMDirectory);
   m_Transform->InstanciateTransform();
+  
+  //Set parameters of the ground spacing image calculators
+  m_GroundSpacing->SetInputImage(m_Image);
+  m_GroundSpacing->SetTransform(m_Transform);
+      
+      
 }
 
 }
