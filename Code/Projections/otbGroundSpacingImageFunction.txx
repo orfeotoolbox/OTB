@@ -64,13 +64,8 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 {
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<std::complex<float> >::max());
+    return (itk::NumericTraits<std::complex<float> >::min());
     }
-
-//   if (!this->IsInsideBuffer(index))
-//     {
-//     return (itk::NumericTraits<std::complex<float> >::max());
-//     }
 
   PointType point = this->GetPixelLocation(index);
   

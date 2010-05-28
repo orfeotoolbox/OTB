@@ -73,9 +73,10 @@ public:
   typedef typename ImageType::IndexType                     IndexType;
   typedef typename IndexType::IndexValueType                IndexValueType;
 
-  typedef itk::Point<double, 2>           PointType;
-  typedef otb::GenericRSTransform<double> TransformType;
-  typedef otb::GroundSpacingImageFunction<ImageType>             GroundSpacingImageType;
+  typedef itk::Point<double, 2>                             PointType;
+  typedef otb::GenericRSTransform<double>                   TransformType;
+  typedef otb::GroundSpacingImageFunction<ImageType>        GroundSpacingImageType;
+  typedef typename GroundSpacingImageType::FloatType        FloatType;
   /** Output image typedef */
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType OutputPixelType;
@@ -214,6 +215,7 @@ protected:
 
   virtual void InitTransform();
 
+  virtual void ComputeApproximativeGroundSpacing();
   /** Find out the histogram size from the pixel */
   unsigned int PixelSize(ImagePointerType image, ScalarType* v) const;
   unsigned int PixelSize(ImagePointerType image, VectorPixelType* v) const;
@@ -256,7 +258,8 @@ private:
   
   /** Ground spacing calculator */
   typename GroundSpacingImageType::Pointer m_GroundSpacing; //FIXME the call should be done by a more general method outside of the layer
-
+  FloatType m_ApproxGroundSpacing;
+  
 }; // end class
 } // end namespace otb
 
