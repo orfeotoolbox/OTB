@@ -31,6 +31,8 @@
 
 #include "otbCoordinateToName.h"
 
+#include "otbGroundSpacingImageFunction.h"
+
 namespace otb
 {
 /** \class ImageLayer
@@ -73,7 +75,7 @@ public:
 
   typedef itk::Point<double, 2>           PointType;
   typedef otb::GenericRSTransform<double> TransformType;
-
+  typedef otb::GroundSpacingImageFunction<ImageType>             GroundSpacingImageType;
   /** Output image typedef */
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType OutputPixelType;
@@ -251,6 +253,9 @@ private:
   /** General info about the image*/
   std::string m_PlaceName; //FIXME the call should be done by a more general method outside of the layer
   std::string m_CountryName; //which would also handle the dependance to curl
+  
+  /** Ground spacing calculator */
+  typename GroundSpacingImageType::Pointer m_GroundSpacing; //FIXME the call should be done by a more general method outside of the layer
 
 }; // end class
 } // end namespace otb
