@@ -64,7 +64,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
 {
   if (!this->GetInputImage())
     {
-    return (itk::NumericTraits<std::complex<float> >::min());
+    return (itk::NumericTraits<FloatType>::min());
     }
 
   PointType point = this->GetPixelLocation(index);
@@ -86,16 +86,19 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>
   ValueType dLatX = (vcl_fabs(pointSrcX[1] - point[1])) * m_deg2radCoef;
   ValueType dLonX = (vcl_fabs(pointSrcX[0] - point[0])) * m_deg2radCoef;
   
-  ValueType aX = vcl_sin(dLatX/2.) * vcl_sin(dLatX/2.) + vcl_cos( point[1] * m_deg2radCoef) * vcl_cos(pointSrcX[1] * m_deg2radCoef) * vcl_sin(dLonX/2.) * vcl_sin(dLonX/2.); 
-  ValueType cX = 2. * vcl_atan2(vcl_sqrt(aX), vcl_sqrt(1.-aX)); 
+  const ValueType One = itk::NumericTraits<ValueType>::One;
+  const ValueType Two = One + One;
+
+  ValueType aX = vcl_sin(dLatX/Two) * vcl_sin(dLatX/Two) + vcl_cos( point[1] * m_deg2radCoef) * vcl_cos(pointSrcX[1] * m_deg2radCoef) * vcl_sin(dLonX/Two) * vcl_sin(dLonX/Two);
+  ValueType cX = Two * vcl_atan2(vcl_sqrt(aX), vcl_sqrt(One-aX));
   ValueType dX = m_R * cX;
 
 
   ValueType dLatY = (vcl_fabs(pointSrcY[1] - point[1])) * m_deg2radCoef;
   ValueType dLonY = (vcl_fabs(pointSrcY[0] - point[0])) * m_deg2radCoef;
   
-  ValueType aY = vcl_sin(dLatY/2.) * vcl_sin(dLatY/2.) + vcl_cos( point[1] * m_deg2radCoef) * vcl_cos(pointSrcY[1] * m_deg2radCoef) * vcl_sin(dLonY/2.) * vcl_sin(dLonY/2.); 
-  ValueType cY = 2. * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(1.-aY)); 
+  ValueType aY = vcl_sin(dLatY/Two) * vcl_sin(dLatY/Two) + vcl_cos( point[1] * m_deg2radCoef) * vcl_cos(pointSrcY[1] * m_deg2radCoef) * vcl_sin(dLonY/Two) * vcl_sin(dLonY/Two);
+  ValueType cY = Two * vcl_atan2(vcl_sqrt(aY), vcl_sqrt(One-aY));
   ValueType dY = m_R * cY;
   
   FloatType var (dX / (vcl_fabs(static_cast<ValueType>(indexSrcX[0] - index[0]))), dY / (vcl_fabs(static_cast<ValueType>(indexSrcY[1] - index[1]))));
