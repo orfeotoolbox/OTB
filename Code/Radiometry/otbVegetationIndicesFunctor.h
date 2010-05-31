@@ -380,7 +380,7 @@ private:
 
 
 /** \class NDVI
- *  \brief This functor computes the NormalizeD Vegetation Index (NDVI)
+ *  \brief This functor computes the Normalized Difference Vegetation Index (NDVI)
  *
  *  [Pearson et Miller, 1972]
  *
