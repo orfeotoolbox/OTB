@@ -636,6 +636,51 @@ private:
 };
 
 
+/** \class WDVI
+ *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
+ *
+ *  [Clevers, 1988]
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ */
+template <class TInput1, class TInput2, class TOutput>
+class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "WDVI";
+  }
+
+  /// Constructor
+  WDVI() : m_S(0.4) {}
+  /// Desctructor
+  virtual ~WDVI() {}
+  // Operator on r and nir single pixel values
+/** Set/Get Slop of soil line */
+  void SetS(const double s)
+  {
+    m_S = s;
+  }
+  double GetS(void) const
+  {
+    return (m_S);
+  }
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+    double dr = static_cast<double>(r);
+    double dnir = static_cast<double>(nir);
+
+    return (dnir - m_S * dr);
+  }
+private:
+  /** Slope of soil line */
+  double m_S;
+};
+
 /** \class MSAVI
  *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
  *
@@ -644,6 +689,7 @@ private:
  *  \ingroup Functor
  * \ingroup Radiometry
  */
+
 template <class TInput1, class TInput2, class TOutput>
 class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
 {
@@ -794,51 +840,6 @@ protected:
     return (static_cast<TOutput>((dnu * (1 - 0.25 * dnu) - (dr - 0.125)) / ddenominateur_GEMI));
   }
 
-};
-
-/** \class WDVI
- *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
- *
- *  [Clevers, 1988]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- */
-template <class TInput1, class TInput2, class TOutput>
-class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
-{
-public:
-  /** Return the index name */
-  virtual std::string GetName() const
-  {
-    return "WDVI";
-  }
-
-  /// Constructor
-  WDVI() : m_S(0.4) {}
-  /// Desctructor
-  virtual ~WDVI() {}
-  // Operator on r and nir single pixel values
-/** Set/Get Slop of soil line */
-  void SetS(const double s)
-  {
-    m_S = s;
-  }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
-  {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-
-    return (dnir - m_S * dr);
-  }
-private:
-  /** Slope of soil line */
-  double m_S;
 };
 
 /** \class AVI
