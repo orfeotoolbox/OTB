@@ -17,15 +17,98 @@ available. They are presented in this chapter.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Vegetation Index}
+\section{Radiometric Indices}
 \label{sec:VegetationIndex}
+\label{sec:RadiometricIndex}
 
 \subsection{Introduction}
+
+With multispectral sensors, several indices can be computed, combining several
+spectral bands to show features that are not obvious using only one band.
+Indices can show:
+\begin{itemize}
+  \item Vegetation (Tab~\ref{tab:vegetationindices})
+  \item Soil (Tab~\ref{tab:soilindices})
+  \item Water (Tab~\ref{tab:waterindices})
+  \item Built up areas (Tab~\ref{tab:builtupindices})
+\end{itemize}
+
 A vegetation index is a quantitative measure used to measure biomass
 or vegetative vigor, usually formed from combinations of several
 spectral bands, whose values are added, divided, or multiplied in
 order to yield a single value that indicates the amount or vigor of
 vegetation.
+
+Numerous indices are available in OTB and are listed in
+table~\ref{tab:vegetationindices} to \ref{tab:builtupindices} with their
+references.
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+NDVI &  Normalized Difference Vegetation Index \cite{Rouse1973-NDVI} \\
+RVI &  Ratio Vegetation Index \cite{Pearson1972-RVI }\\
+PVI & Perpendicular Vegetation Index \cite{Richardson1977-PVI,Wiegand1991-PVI}\\ 
+SAVI & Soil Adjusted Vegetation Index \cite{Huete1988-SAVI} \\
+TSAVI & Transformed Soil Adjusted Vegetation Index \cite{Baret1989-TSAVI,Baret1991-TSAVI} \\ MSAVI & Modified Soil Adjusted Vegetation Index  \cite{Qi1994-MSAVI} \\
+MSAVI2 & Modified Soil Adjusted Vegetation Index  \cite{Qi1994-MSAVI} \\
+GEMI &   Global Environment Monitoring Index \cite{Pinty1992-GEMI} \\
+WDVI & Weighted Difference Vegetation Index  \cite{Clevers1988-WDVI,Clevers1991-WDVI} \\ 
+AVI & Angular Vegetation Index  \cite{AVI}\\
+ARVI & Atmospherically Resistant  Vegetation Index \cite{ARVI} \\
+TSARVI & Transformed Soil Adjusted Vegetation Index   \cite{ARVI} \\
+EVI & Enhanced Vegetation Index \cite{Huete1994-EVI,Justice1998-EVI} \\
+IPVI & Infrared Percentage Vegetation Index  \cite{Crippen1990-IPVI} \\
+TNDVI & Transformed NDVI  \cite{Deering1975-TNDVI} \\
+\hline
+\end{tabular}
+\caption{Vegetation indices}\label{tab:vegetationindices}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+IR &  Redness Index  \cite{Pouget1990-IRIC} \\
+IC &  Color Index  \cite{Pouget1990-IRIC} \\
+IB & Brilliance Index  \cite{Nicoloyanni1990-IB} \\
+IB2 & Brilliance Index  \cite{Nicoloyanni1990-IB} \\
+\hline
+\end{tabular}
+\caption{Soil indices}\label{tab:soilindices}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+SRWI & Simple Ratio Water Index \cite{ZarcoTejada2001-SRWI} \\
+NDWI & Normalized Difference Water Index  \cite{Gao1996-NDWI} \\
+NDWI2 &  Normalized Difference Water Index \cite{McFeeters1996-NDWI2} \\
+MNDWI &  Modified Normalized Difference Water Index  \cite{Xu2006-MNDWI} \\
+NDPI &  Normalized Difference Pond Index \cite{Lacaux2007-NDTI} \\
+NDTI &  Normalized Difference Turbidity Index  \cite{Lacaux2007-NDTI} \\
+SA & Spectral Angle \\
+\hline
+\end{tabular}
+\caption{Water indices}\label{tab:waterindices}
+\end{table}
+
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|l|}
+\hline
+NDBI &  Normalized Difference Built Up Index \cite{Zha2003-NDBI} \\
+ISU &  Index Surfaces Built \cite{Abdellaoui1997-ISU} \\
+\hline
+\end{tabular}
+\caption{Built-up indices}\label{tab:builtupindices}
+\end{table}
+
+
+The use of the different indices is very similar, and only few example are
+given in the next sections.
 
 \subsection{NDVI}
 \label{secNDVI}
@@ -45,6 +128,8 @@ can be a rather more complex undertaking if not done properly.
 \subsection{AVI}
 \label{secAVI}
 \input{AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.tex}
+
+
 
 
 \section{Atmospheric Corrections}
