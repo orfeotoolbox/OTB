@@ -133,6 +133,8 @@ protected:
  *  \brief This functor computes the Simple Ratio Water Index (SRWI)
  *  \brief For MODIS bands 860 & 1240
  *
+ *   [Zarco-Tejada 2001]
+ *
  *  \ingroup Functor
  * \ingroup Radiometry
  */
