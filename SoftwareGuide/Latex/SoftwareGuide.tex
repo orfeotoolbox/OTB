@@ -56,6 +56,16 @@
        floatplacement=!h
        }
 }
+\newcommand{\lstsetpython}
+{
+\lstset{language=Python
+        }
+}
+\newcommand{\lstsetjava}
+{
+\lstset{language=Java
+        }
+}
 
 
 \newif\ifitkFullVersion
@@ -284,6 +294,8 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 %Comment generation of wrapping documentation for release 3.2
 \chapter{Wrappings to other languages}
+%Set the code style to Java for the Wrapping
+\lstsetjava
 \input{Wrapping.tex}
 
 \input{Contributors.tex}
