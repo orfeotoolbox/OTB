@@ -50,6 +50,13 @@ SetDEMDirectoryPath(const char* DEMDirectory)
 {
   m_DEMHandler->OpenDEMDirectory(DEMDirectory);
 }
+template<class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>::
+SetDEMDirectoryPath(const std::string& DEMDirectory)
+{
+  this->SetDEMDirectoryPath(DEMDirectory.c_str());
+}
 
 // GenerateOutputInformation method
 template <class TDEMImage>
