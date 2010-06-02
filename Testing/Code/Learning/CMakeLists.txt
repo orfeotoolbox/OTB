@@ -424,6 +424,7 @@ ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
     0
 )
 
+ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4} otbConfusionMatrixCalculatorNew)
 
 # A enrichir
 SET(BasicLearning_SRCS1
@@ -485,6 +486,7 @@ otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
 otbListSampleGenerator.cxx
+otbConfusionMatrixCalculatorTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
