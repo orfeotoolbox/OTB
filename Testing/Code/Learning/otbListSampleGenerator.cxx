@@ -28,7 +28,7 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
 
-int otbSampleListGenerator(int argc, char* argv[])
+int otbListSampleGenerator(int argc, char* argv[])
 {
 
   if (argc != 7)

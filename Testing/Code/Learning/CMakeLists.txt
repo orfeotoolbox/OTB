@@ -411,14 +411,14 @@ ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
 ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
 
-ADD_TEST(leTvSampleListGenerator1 ${LEARNING_TESTS4}
+ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
  --compare-ascii ${NOTOL}
-    ${BASELINE_FILES}/leTvSampleListGenerator1.txt
-    ${TEMP}/leTvSampleListGenerator1.txt
-        otbSampleListGenerator
+    ${BASELINE_FILES}/leTvListSampleGenerator1.txt
+    ${TEMP}/leTvListSampleGenerator1.txt
+        otbListSampleGenerator
     ${EXAMPLEDATA}/qb_RoadExtract.tif
     ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
-    ${TEMP}/leTvSampleListGenerator1.txt
+    ${TEMP}/leTvListSampleGenerator1.txt
     -1
     -1
     0
@@ -484,7 +484,7 @@ otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
-otbSampleListGenerator.cxx
+otbListSampleGenerator.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
