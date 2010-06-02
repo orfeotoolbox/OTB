@@ -1,9 +1,9 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0107
-i18n_type 1
-i18n_include "otbI18n.h"
-i18n_function otbGetTextMacro
-header_name {.h}
+version 1.0109 
+i18n_type 1 
+i18n_include "otbI18n.h" 
+i18n_function otbGetTextMacro 
+header_name {.h} 
 code_name {.cxx}
 class ImageViewerManagerViewGroup {open
 } {
@@ -11,8 +11,8 @@ class ImageViewerManagerViewGroup {open
   } {
     Fl_Window guiMainWindow {
       label otbImageViewerManagerView
-      callback {this->Quit()} open selected
-      xywh {160 106 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
+      callback {this->Quit()} open
+      xywh {366 65 610 460} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 resizable visible
     } {
       Fl_Text_Display guiViewerInformation {
         label Information
@@ -102,8 +102,8 @@ class ImageViewerManagerViewGroup {open
       }
     }
     Fl_Window guiViewerSetupWindow {
-      label {Viewer setup}
-      xywh {885 215 705 230} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 hide
+      label {Viewer setup} open
+      xywh {885 215 705 230} type Double box UP_BOX color 52 selection_color 7 labelcolor 187 visible
     } {
       Fl_Round_Button guiViewerSetupGrayscaleMode {
         label {Grayscale mode}
@@ -115,22 +115,22 @@ class ImageViewerManagerViewGroup {open
         callback {RGBSet();}
         tooltip {Switch the image viewer mode to RGB composition} xywh {460 17 184 24} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
       }
-      Fl_Input_Choice guiGrayscaleChannelChoice {
-        label {Channel index} open
-        tooltip {Select the band to view in grayscale mode} xywh {118 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187
-      } {}
-      Fl_Input_Choice guiRedChannelChoice {
-        label {Red channel} open
-        tooltip {Select band for red channel in RGB composition} xywh {602 51 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Input_Choice guiGreenChannelChoice {
-        label {Green channel} open
-        tooltip {Select band for green channel in RGB composition} xywh {602 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Input_Choice guiBlueChannelChoice {
-        label {Blue channel} open
-        tooltip {Select band for blue channel in RGB composition} xywh {602 95 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
+      Fl_Spinner guiGrayscaleChannelChoice {
+        label {Channel index}
+        tooltip {Select the band to view in grayscale mode} xywh {118 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1
+      }
+      Fl_Spinner guiRedChannelChoice {
+        label {Red channel}
+        tooltip {Select band for red channel in RGB composition} xywh {602 51 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+      }
+      Fl_Spinner guiGreenChannelChoice {
+        label {Green channel}
+        tooltip {Select band for green channel in RGB composition} xywh {602 73 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+      }
+      Fl_Spinner guiBlueChannelChoice {
+        label {Blue channel}
+        tooltip {Select band for blue channel in RGB composition} xywh {602 95 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+      }
       Fl_Return_Button guiViewerSetupOk {
         label Ok
         callback {ViewerSetupOk();}
@@ -150,14 +150,14 @@ class ImageViewerManagerViewGroup {open
         callback {ComplexSet();}
         tooltip {Switch the image viewer mode to complex composition} xywh {215 17 210 26} box ROUND_UP_BOX down_box ROUND_DOWN_BOX color 23 selection_color 22 labelcolor 186
       }
-      Fl_Input_Choice guiRealChannelChoice {
-        label {Real channel index} open
-        tooltip {Select band for real channel in complex composition} xywh {375 74 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
-      Fl_Input_Choice guiImaginaryChannelChoice {
-        label {Imaginary channel index} open
-        tooltip {Select band for imaginary channel in complex composition} xywh {375 96 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 deactivate
-      } {}
+      Fl_Spinner guiRealChannelChoice {
+        label {Real channel index}
+        tooltip {Select band for real channel in complex composition} xywh {375 74 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+      }
+      Fl_Spinner guiImaginaryChannelChoice {
+        label {Imaginary channel index}
+        tooltip {Select band for imaginary channel in complex composition} xywh {375 96 57 24} box EMBOSSED_BOX color 7 selection_color 55 labelcolor 187 value 1 deactivate
+      }
       Fl_Round_Button bAmplitude {
         label Amplitude
         callback {bPhase->clear();}
@@ -229,7 +229,7 @@ class ImageViewerManagerViewGroup {open
         tooltip {Next image in diaporama} xywh {140 55 105 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff56 color 23 selection_color 23 labelcolor 186
       }
       Fl_Return_Button {} {
-        label {Quit}
+        label Quit
         callback {DiaporamaQuit();}
         tooltip {Leave diaporama mode} xywh {262 55 105 25} box ROUND_UP_BOX down_box ROUND_DOWN_BOX shortcut 0xff1b color 23 selection_color 23 labelcolor 186
       }
@@ -286,4 +286,4 @@ class ImageViewerManagerViewGroup {open
   } {}
   Function {PackedViewMode()} {open return_type {virtual void}
   } {}
-}
+} 

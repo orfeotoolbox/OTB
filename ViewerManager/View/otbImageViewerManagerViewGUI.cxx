@@ -759,36 +759,20 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::UpdateViewerSetupWindow(unsigned int selectedItem)
  {
-
    ImageViewerManagerModelType::ReaderPointerType reader = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pReader;
    unsigned int nbComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
-   itk::OStringStream oss;
-   oss.str("");
+   // Constrain min and max
+   guiGrayscaleChannelChoice->range(1, nbComponent);
 
-   //Clear all the choices
-   guiGrayscaleChannelChoice->clear();
-   guiRedChannelChoice->clear();
-   guiGreenChannelChoice->clear();
-   guiBlueChannelChoice->clear();
-   //guiGrayscaleChannelChoice->clear();
-   guiRealChannelChoice->clear();
-   guiImaginaryChannelChoice->clear();
+   guiRedChannelChoice->range(1, nbComponent);
+   guiGreenChannelChoice->range(1, nbComponent);
+   guiBlueChannelChoice->range(1, nbComponent);
 
-   for (unsigned int i = 0;i<nbComponent;++i)
-   {
-     oss.str("");
-     oss<<i+1;
-     guiGrayscaleChannelChoice->add(oss.str().c_str());
-     guiRedChannelChoice->add(oss.str().c_str());
-     guiGreenChannelChoice->add(oss.str().c_str());
-     guiBlueChannelChoice->add(oss.str().c_str());
-     guiGrayscaleChannelChoice->add(oss.str().c_str());
-     guiRealChannelChoice->add(oss.str().c_str());
-     guiImaginaryChannelChoice->add(oss.str().c_str());
-   }
+   guiRealChannelChoice->range(1, nbComponent);
+   guiImaginaryChannelChoice->range(1, nbComponent);
+
    guiViewerSetupWindow->redraw();
-   //guiGrayscaleChannelChoice->redraw();
 
    switch(nbComponent){
    case 1 :
@@ -818,6 +802,8 @@ ImageViewerManagerViewGUI
  ImageViewerManagerViewGUI
  ::RGBSet()
  {
+   std::cout << "RGBSet" << std::endl;
+
    unsigned int selectedItem = guiImageList->value();
    if (selectedItem == 0)
      {
@@ -845,18 +831,19 @@ ImageViewerManagerViewGUI
 
    RenderingFunctionType::Pointer renderingFunction = m_ImageViewerManagerModel->GetObjectList().at(selectedItem-1).pRenderFunction;
 
+   // Get the current channel list (may have been already set by the user in case of a re-opening of the viewer)
    ChannelListType channels = renderingFunction->GetChannelList();
-   unsigned int i=0;
+
+   unsigned int i = 0;
    while (channels.size() < 3)
    {
      channels.push_back(i);
      ++i;
    }
 
-
-   guiRedChannelChoice->value(std::min(channels[0],nbComponent-1));
-   guiGreenChannelChoice->value(std::min(channels[1],nbComponent-1));
-   guiBlueChannelChoice->value(std::min(channels[2],nbComponent-1));
+   guiRedChannelChoice->value(std::min(channels[0] + 1,nbComponent));
+   guiGreenChannelChoice->value(std::min(channels[1] + 1,nbComponent));
+   guiBlueChannelChoice->value(std::min(channels[2] + 1,nbComponent));
 
  }
 
@@ -900,7 +887,7 @@ ImageViewerManagerViewGUI
      channels.push_back(0);
    }
 
-   guiGrayscaleChannelChoice->value(std::min(channels[0],nbComponent-1));
+   guiGrayscaleChannelChoice->value(std::min(channels[0] + 1,nbComponent));
  }
 
 
@@ -941,8 +928,8 @@ ImageViewerManagerViewGUI
      ++i;
    }
 
-   guiRealChannelChoice->value(std::min(channels[0],nbComponent-1));
-   guiImaginaryChannelChoice->value(std::min(channels[1],nbComponent-1));
+   guiRealChannelChoice->value(std::min(channels[0] + 1,nbComponent));
+   guiImaginaryChannelChoice->value(std::min(channels[1] + 1,nbComponent));
  }
 
 
@@ -968,37 +955,35 @@ ImageViewerManagerViewGUI
  {
    unsigned int selectedItem = guiImageList->value();
    if (selectedItem == 0)
-   {
+     {
      // no image selected, return
      return;
-   }
+     }
 
    if (guiViewerSetupColorMode->value())
      {
-       m_ImageViewerManagerController->UpdateRGBChannelOrder(atoi(guiRedChannelChoice->value())-1,
-							     atoi(guiGreenChannelChoice->value())-1,
-							     atoi(guiBlueChannelChoice->value())-1,
-							     selectedItem);
+     int redChoice = static_cast<int>(guiRedChannelChoice->value() - 1);
+     int greenChoice = static_cast<int>(guiGreenChannelChoice->value() - 1);
+     int blueChoice = static_cast<int>(guiBlueChannelChoice->value() - 1);
+     m_ImageViewerManagerController->UpdateRGBChannelOrder(redChoice, greenChoice, blueChoice, selectedItem);
      }
    else if (guiViewerSetupGrayscaleMode->value())
      {
-       m_ImageViewerManagerController->UpdateGrayScaleChannelOrder(atoi(guiGrayscaleChannelChoice->value())-1,
-								   selectedItem);
+     int choice = static_cast<int>(guiGrayscaleChannelChoice->value() - 1);
+     m_ImageViewerManagerController->UpdateGrayScaleChannelOrder(choice, selectedItem);
      }
    else if (guiViewerSetupComplexMode->value())
      {
-       if (bAmplitude->value())
-	 {
-	   m_ImageViewerManagerController->UpdateAmplitudeChannelOrder(atoi(guiRealChannelChoice->value())-1,
-								    atoi(guiImaginaryChannelChoice->value())-1,
-								    selectedItem);
-	 }
+     int realChoice = static_cast<int>(guiRealChannelChoice->value() - 1);
+     int imagChoice = static_cast<int>(guiImaginaryChannelChoice->value() - 1);
+     if (bAmplitude->value())
+	     {
+ 	     m_ImageViewerManagerController->UpdateAmplitudeChannelOrder(realChoice, imagChoice, selectedItem);
+	     }
        else
-	 {
-	   m_ImageViewerManagerController->UpdatePhaseChannelOrder(atoi(guiRealChannelChoice->value())-1,
-								   atoi(guiImaginaryChannelChoice->value())-1,
-								   selectedItem);
-	 }
+	     {
+	     m_ImageViewerManagerController->UpdatePhaseChannelOrder(realChoice, imagChoice, selectedItem);
+	     }
      }
  }
 
