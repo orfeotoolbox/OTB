@@ -1,5 +1,5 @@
 // exact C++ implementation of lowe's sift program
-// author: zerofrog(@gmail.com), Sep 2008
+// Copyright (C) zerofrog(@gmail.com), 2008-2009
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -102,8 +102,7 @@ typedef struct KeypointSt {
 
 
 int DoubleImSize = 1;
-// was int Scales = 3
-int Scales = 6;
+int Scales = 3;
 float InitSigma = 1.6f;
 float PeakThresh;
 
@@ -174,11 +173,11 @@ extern "C" {
 Image CreateImage(int rows, int cols);
 Image CreateImageFromMatlabData(double* pdata, int rows, int cols);
 void DestroyAllImages();
-Keypoint GetKeypoints(Image porgimage,unsigned int nbScales);
+Keypoint GetKeypoints(Image porgimage, unsigned int nbScales);
 Image SiftDoubleSize(Image p);
 Image SiftCopyImage(Image p);
 Image HalfImageSize(Image curimage);
-Keypoint OctaveKeypoints(Image pimage, Image* phalfimage, float fscale, Keypoint prevkeypts,unsigned int nbScales);
+Keypoint OctaveKeypoints(Image pimage, Image* phalfimage, float fscale, Keypoint prevkeypts, unsigned int nbScales);
 void SubtractImage(Image imgdst, Image img0, Image img1);
 void GaussianBlur(Image imgdst, Image image, float fblur);
 void ConvHorizontal(Image imgdst, Image image, float* kernel, int ksize);
@@ -186,13 +185,13 @@ void ConvHorizontalFast(Image imgdst, Image image, float* kernel, int ksize);
 void ConvVertical(Image image, float* kernel, int ksize);
 void ConvVerticalFast(Image image, float* kernel, int ksize);
 void ConvBuffer(float* buf, float* kernel, int cols, int ksize);
-Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint prevkeypts, unsigned int nbScales);
+Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint prevkeypts,unsigned int nbScales);
 void GradOriImages(Image imgaus, Image imgrad, Image imorient);
 void GradOriImagesFast(Image imgaus, Image imgrad, Image imorient);
 int LocalMaxMin(float fval, Image imdiff, int row, int col);
 int NotOnEdge(Image imdiff, int row, int col);
 Keypoint InterpKeyPoint(Image* imdiff, int index, int rowstart, int colstart,
-                        Image imgrad, Image imorient, char* pMaxMinArray, float fscale,Keypoint keypts, int steps,unsigned int nbScales);
+                        Image imgrad, Image imorient, char* pMaxMinArray, float fscale,Keypoint keypts, int steps, unsigned int nbScales);
 float FitQuadratic(float* X, Image* imdiff, int index, int rowstart, int colstart);
 void SolveLinearSystem(float* Y, float* H, int dim);
 Keypoint AssignOriHist(Image imgrad, Image imorient, float fscale, float fSize,
@@ -247,10 +246,11 @@ Image CreateImageFromMatlabData(double* pdata, int rows, int cols)
 {
     Image image = CreateImage(rows,cols);
     float* pixels = image->pixels;
-    
+    int stride = image->stride;
+
 #ifdef __SSE2__
-    for(int i = 0; i < (rows&~1); i += 2, pixels+=2*image->stride) {
-        for(int j = 0; j < cols; j += 4) {
+    for(int i = 0; i < (rows&~1); i += 2, pixels+=2*stride) {
+        for(int j = 0; j < (cols&~3); j += 4) {
             double* pf = &pdata[i+j*rows];
 #ifdef ALIGNED_IMAGE_ROWS
             __m128d m0 = _mm_load_pd(pf);
@@ -268,7 +268,12 @@ Image CreateImageFromMatlabData(double* pdata, int rows, int cols)
             __m128 mrows1 = _mm_shuffle_ps(_mm_cvtpd_ps(m2),_mm_cvtpd_ps(m3),0x44);
 
             _mm_storeu_ps(pixels+j,_mm_shuffle_ps(mrows0,mrows1,0x88));
-            _mm_storeu_ps(pixels+j+image->stride,_mm_shuffle_ps(mrows0,mrows1,0xdd));
+            _mm_storeu_ps(pixels+j+stride,_mm_shuffle_ps(mrows0,mrows1,0xdd));
+        }
+
+        for(int j = (cols&~3); j < cols; j++) {
+            pixels[j] = pdata[i+j*rows];
+            pixels[j+stride] = pdata[i+j*rows+1];
         }
     }
 
@@ -277,7 +282,7 @@ Image CreateImageFromMatlabData(double* pdata, int rows, int cols)
             pixels[j] = (float)pdata[rows-1+j*rows];
     }
 #else
-    for(int i = 0; i < rows; ++i, pixels+=image->stride) {
+    for(int i = 0; i < rows; ++i, pixels+=stride) {
         for(int j = 0; j < cols; ++j)
             pixels[j] = (float)pdata[i+j*rows];
     }
@@ -292,51 +297,70 @@ static char* s_MaxMinArray = NULL;
 
 Keypoint GetKeypoints(Image porgimage, unsigned int nbScales)
 {
-    DVSTARTPROFILE();
-
-    PeakThresh = 0.04f/(float)nbScales;
-    s_imgaus = new Image[((27 + 4*nbScales)&0xfffffff0)/4];
-    s_imdiff = new Image[((23 + 4*nbScales)&0xfffffff0)/4];
-
+#ifdef DVPROFILE
+    DVProfClear();
+#endif
+    
     Image pimage = NULL;
     float fscale = 1.0f;
     Image halfimage = NULL;
     Keypoint keypts = 0;
 
-    if( DoubleImSize ) {
-        pimage = SiftDoubleSize(porgimage);
-        fscale = 0.5f;
-    }
-    else
-        pimage = SiftCopyImage(porgimage);
+    {
+        DVSTARTPROFILE();
+
+        PeakThresh = 0.04f/(float)nbScales;
+        s_imgaus = new Image[((27 + 4*nbScales)&0xfffffff0)/4];
+        s_imdiff = new Image[((23 + 4*nbScales)&0xfffffff0)/4];
+
+        if( DoubleImSize ) {
+            pimage = SiftDoubleSize(porgimage);
+            fscale = 0.5f;
+        }
+        else
+            pimage = SiftCopyImage(porgimage);
     
-    float fnewscale = 1.0f;
-    if( !DoubleImSize )
-        fnewscale = 0.5f;
+        float fnewscale = 1.0f;
+        if( !DoubleImSize )
+            fnewscale = 0.5f;
     
-    if( InitSigma > fnewscale ) {
-        GaussianBlur(pimage, pimage, sqrtf(InitSigma*InitSigma - fnewscale*fnewscale));
+        if( InitSigma > fnewscale ) {
+            GaussianBlur(pimage, pimage, sqrtf(InitSigma*InitSigma - fnewscale*fnewscale));
+//            {
+//                FILE* f = fopen("test.txt","w");
+//                int rows = pimage->rows, cols = pimage->cols, stride = pimage->stride;
+//                float *_pdst = pimage->pixels;
+//                for(int j = 0; j < rows; ++j, _pdst += stride ) {
+//                    for(int k = 0; k < cols; ++k) {
+//                        fprintf(f,"%f ",_pdst[k]);
+//                    }
+//                    fprintf(f,"\n");
+//                }
+//                fclose(f);
+//            }
+        }
+
+        // create the images
+        s_imgaus[0] = pimage;
+        for(int i = 1; i < (int)nbScales+3; ++i)
+            s_imgaus[i] = CreateImage(pimage->rows,pimage->cols);
+        for(int i = 0; i < (int)nbScales+2; ++i)
+            s_imdiff[i] = CreateImage(pimage->rows,pimage->cols);
+        s_imgrad = CreateImage(pimage->rows,pimage->cols);
+        s_imorient = CreateImage(pimage->rows,pimage->cols);
+        s_MaxMinArray = (char*)sift_aligned_malloc(pimage->rows*pimage->cols,16);
+
+        while( pimage->rows > 12 && pimage->cols > 12 ) {
+            keypts = OctaveKeypoints(pimage, &halfimage, fscale, keypts,nbScales);
+            pimage = HalfImageSize(halfimage);
+            fscale += fscale;
+        }
+
+        delete[] s_imgaus;
+        delete[] s_imdiff;
+        sift_aligned_free(s_MaxMinArray);
+
     }
-
-    // create the images
-    s_imgaus[0] = pimage;
-    for(int i = 1; i < (int)nbScales+3; ++i)
-        s_imgaus[i] = CreateImage(pimage->rows,pimage->cols);
-    for(int i = 0; i < (int)nbScales+2; ++i)
-        s_imdiff[i] = CreateImage(pimage->rows,pimage->cols);
-    s_imgrad = CreateImage(pimage->rows,pimage->cols);
-    s_imorient = CreateImage(pimage->rows,pimage->cols);
-    s_MaxMinArray = (char*)sift_aligned_malloc(pimage->rows*pimage->cols,16);
-
-    while( pimage->rows > 12 && pimage->cols > 12 ) {
-        keypts = OctaveKeypoints(pimage, &halfimage, fscale, keypts,nbScales);
-        pimage = HalfImageSize(halfimage);
-        fscale += fscale;
-    }
-
-    delete[] s_imgaus;
-    delete[] s_imdiff;
-    sift_aligned_free(s_MaxMinArray);
 
 #ifdef DVPROFILE
     DVProfWrite("prof.txt");
@@ -737,7 +761,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
 
     DVSTARTPROFILE();
 
-    int convsize = max(100000,32*(image->rows + ksize));
+    int convsize = max(100000,32*(image->rows + ksize+4));
 
     if( s_listconvbuf.size() == 0 || s_convbufsize < convsize ) {
         for(LISTBUF::iterator it = s_listconvbuf.begin(); it != s_listconvbuf.end(); ++it)
@@ -749,7 +773,6 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
         s_listconvbuf.push_back((float*)sift_aligned_malloc(convsize,16));
         s_convbufsize = convsize;
     }
-
 
 #ifdef _OPENMP
     for(int i = s_listconvbuf.size(); i < omp_get_max_threads(); ++i) {
@@ -772,7 +795,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
         
 #ifdef _OPENMP
         float* pconvbuf;
-        
+
         // need to get a free buffer
         #pragma omp critical
         {
@@ -826,15 +849,18 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
             _mm_store_ps(buf,mprev);
             buf += 8;
         }
+        // have to pad rest with zeros
+        memset(buf,0,convsize-((char*)buf-(char*)pconvbuf));
 
         //// finally convolve
         buf = pconvbuf;
+
         for(int i = 0; i < rows; ++i, buf += 8) {
             __m128 maccum = _mm_load_ps(buf+4);
             if( ksize > 3 ) {
-                for(int j = 3; j < ksize; j += 4) {
-                    float* psrc = buf + 8*j;
-                    __m128 mkerall = _mm_load_ps(kernel+j);
+                for(int k = 3; k < ksize; k += 4) {
+                    float* psrc = buf + 8*k;
+                    __m128 mkerall = _mm_load_ps(kernel+k);
                     __m128 mnew0 = _mm_load_ps(psrc);
                     mker0 = _mm_shuffle_ps(mkerall,mkerall,0);
                     __m128 mnew1 = _mm_load_ps(psrc + 8);
@@ -873,7 +899,7 @@ void ConvVerticalFast(Image image, float* kernel, int ksize)
 
 #endif
 
-Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,unsigned int nbScales)
+Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts, unsigned int nbScales)
 {
     DVSTARTPROFILE();
 
@@ -881,14 +907,14 @@ Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,
     memset(s_MaxMinArray,0,rows*cols);
 
     for( int index = 1; index < (int)nbScales+1; ++index) {
-        
-#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__)
+
+#if !defined(_MSC_VER) && defined(__SSE__)
         GradOriImagesFast(imgaus[index],s_imgrad,s_imorient);
 #else
         GradOriImages(imgaus[index],s_imgrad,s_imorient);
 #endif
         assert( imdiff[index]->stride == stride );
-        float* _diffpixels = imdiff[index]->pixels;
+        float* _diffpixels = imdiff[index]->pixels;        
         
 //        for(int i = 0; i < rows; ++i) {
 //            for(int j = 0; j < cols; ++j) {
@@ -905,7 +931,7 @@ Keypoint FindMaxMin(Image* imdiff, Image* imgaus, float fscale, Keypoint keypts,
 ////                }
 //            }
 //        }
-        
+
         #pragma omp parallel for schedule(dynamic,8)
         for( int rowstart = 5; rowstart < rows-5; ++rowstart ) {
             Keypoint newkeypts = NULL;
@@ -976,7 +1002,7 @@ void GradOriImages(Image image, Image imgrad, Image imorient)
     }
 }
 
-#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__)
+#if !defined(_MSC_VER) && defined(__SSE__)
 void GradOriImagesFast(Image image, Image imgrad, Image imorient)
 {
     DVSTARTPROFILE();
@@ -1166,7 +1192,7 @@ Keypoint InterpKeyPoint(Image* imdiff, int index, int rowstart, int colstart,
     // check if local min/max is stable at (newrow,newcol). If not and steps haven't surprassed,
     // recompute at new location
     if( steps > 0 && (newrow != rowstart || newcol != colstart) )
-        return InterpKeyPoint(imdiff,index,newrow,newcol,imgrad,imorient,pMaxMinArray,fscale,keypts,steps-1,nbScales);
+      return InterpKeyPoint(imdiff,index,newrow,newcol,imgrad,imorient,pMaxMinArray,fscale,keypts,steps-1,nbScales);
 
     if(fabsf(X[0]) <= 1.5f && fabsf(X[1]) <= 1.5f && fabsf(X[2]) <= 1.5f && fabsf(fquadvalue) >= PeakThresh ) {
         
@@ -1677,7 +1703,7 @@ void DestroyAllResources()
     s_listKeypoints.clear();
 }
 
-#if !defined(OTB_DISABLE_FAST_FUNCTIONS) && !defined(_MSC_VER) && defined(__SSE__) && !defined(SIMDMATH_H) // copied from libsimdmath
+#if !defined(_MSC_VER) && defined(__SSE__) && !defined(SIMDMATH_H) // copied from libsimdmath
 
 #define DEF_CONST(a,b) static  const vec_float4 a = {b,b,b,b};
 #define DEI_CONST(a,b) static  const vec_int4   a = {b,b,b,b};
@@ -1746,10 +1772,10 @@ inline vec_float4 __attribute__((__always_inline__))
       /* make argument positive and save the sign */
       vec_int4 sign = _signf4( x );
       VEC_XOR(x, sign);
- 
+      
       /* range reduction */
-      a1 = VEC_GT (x , CF4_2414213562373095 );
-      a2 = VEC_GT (x , CF4_04142135623730950 );
+      a1 = (vec_int4)VEC_GT (x , CF4_2414213562373095 );
+      a2 = (vec_int4)VEC_GT (x , CF4_04142135623730950 );
       a3 = ~a2; 
       a2 ^= a1;
 
@@ -1787,8 +1813,8 @@ inline vec_float4  __attribute__((__always_inline__))
       vec_float4 y_negativ_2 = CF4_2;
       VEC_AND(y_negativ_2, VEC_GT( CF4_0, y ));
 
-      vec_int4 i_x_zero  = VEC_EQ ( CF4_0, x );
-      vec_int4 i_y_zero  = VEC_EQ ( CF4_0, y );
+      vec_int4 i_x_zero  = (vec_int4)VEC_EQ ( CF4_0, x );
+      vec_int4 i_y_zero  = (vec_int4)VEC_EQ ( CF4_0, y );
       vec_float4 x_zero_PIO2 = CF4_PIO2F;
       VEC_AND(x_zero_PIO2, i_x_zero);
       vec_float4 y_zero    = CF4_1;

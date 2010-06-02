@@ -57,6 +57,16 @@ ADD_TEST(dmTeEstimateAffineTransformationExampleTest ${EXE_TESTS}
 	 2 3 0 0 0.5 1	 
 )
 
+ADD_TEST(dmTeSIFTDisparityMapEstimationTest ${EXE_TESTS}
+  --compare-image ${TOL}
+   ${BASELINE}/SIFTdeformationFieldOutput.png
+   ${TEMP}/SIFTdeformationFieldOutput.png
+SIFTDisparityMapEstimationTest
+   ${INPUTDATA}/ROISpot5.png
+   ${INPUTDATA}/ROISpot5Warped.png
+   ${TEMP}/SIFTdeformationFieldOutput.png
+)
+
 INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Testing/Code)
 ADD_EXECUTABLE(otbDisparityMapExamplesTests otbDisparityMapExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbDisparityMapExamplesTests  ITKAlgorithms ITKStatistics OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBTesting)
