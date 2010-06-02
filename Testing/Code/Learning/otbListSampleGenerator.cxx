@@ -22,6 +22,8 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileReader.h"
 
+#include "otbListSampleGenerator.h"
+
 //temporary
 #include "itkPreOrderTreeIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
@@ -67,100 +69,44 @@ int otbListSampleGenerator(int argc, char* argv[])
 
   std::cout << "Number of elements in the tree: " << vectorReader->GetOutput()->Size() << std::endl;
 
-  //Gather some information about the relative size of the classes
-  //we would like to have the same number of samples per class
-  std::map<int, double> classesSize;
+  typedef otb::ListSampleGenerator<ImageType, VectorDataType> ListSampleGeneratorType;
+  ListSampleGeneratorType::Pointer generator = ListSampleGeneratorType::New();
+  generator->SetMaxTrainingSize(maxTrainingSize);
+  generator->SetMaxValidationSize(maxValidationSize);
+  generator->SetValidationTrainingRatio(validationTrainingRatio);
 
-  typedef itk::PreOrderTreeIterator<VectorDataType::DataTreeType> TreeIteratorType;
-  TreeIteratorType itVector(vectorReader->GetOutput()->GetDataTree());
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
-    {
-    if (itVector.Get()->IsPolygonFeature())
-      {
-      classesSize[itVector.Get()->GetFieldAsInt(classKey)] += itVector.Get()->GetPolygonExteriorRing()->GetArea()
-          / 1000000.;
-      std::cout << itVector.Get()->GetFieldAsInt(classKey) << std::endl;
-      std::cout << itVector.Get()->GetPolygonExteriorRing()->GetArea() / 1000000. << " km2" << std::endl;
-      }
-    ++itVector;
-    }
+  generator->SetInput(reader->GetOutput());
+  generator->SetInputVectorData(vectorReader->GetOutput());
+  std::cout << generator << std::endl;
 
-  double minSize = -1;
-  for (std::map<int, double>::iterator itmap = classesSize.begin(); itmap != classesSize.end(); ++itmap)
-    {
-    std::cout << itmap->first << ": " << itmap->second << std::endl;
-    if ((minSize < 0) || (minSize > itmap->second))
-      {
-      minSize = itmap->second;
-      }
-    }
-  std::cout << "MinSize: " << minSize << std::endl;
+  generator->Update();
+  std::cout << generator << std::endl;
 
-  //Compute the probability selection for each class
-  std::map<int, double> classesProb;
-  for (std::map<int, double>::iterator itmap = classesSize.begin(); itmap != classesSize.end(); ++itmap)
-    {
-    classesProb[itmap->first] = minSize / itmap->second;
-    }
+  ListSampleGeneratorType::ListSamplePointerType samples = generator->GetTrainingListSample();
+  ListSampleGeneratorType::ListLabelPointerType  labels  = generator->GetTrainingListLabel();
 
-
+  typedef ListSampleGeneratorType::ListSampleType::ConstIterator SampleIterator;
+  typedef ListSampleGeneratorType::ListLabelType::ConstIterator  LabelIterator;
+  
   std::ofstream trainingFile;
   trainingFile.open(outputSampleList.c_str());
-
-  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGenType;
-  RandomGenType::Pointer randomGen = RandomGenType::GetInstance();
-  randomGen->SetSeed(1234);
-
-  std::map<int, int> classesSamplesNumber;
-
-  itVector.GoToBegin();
-  while (!itVector.IsAtEnd())
+  
+  SampleIterator sampleIt = samples->Begin();
+  LabelIterator labelIt = labels->Begin();
+  while (sampleIt != samples->End())
     {
-    if (itVector.Get()->IsPolygonFeature())
+    trainingFile << labelIt.GetMeasurementVector()[0];
+    for (unsigned int i = 0; i < sampleIt.GetMeasurementVector().Size(); i++)
       {
-
-      ImageType::RegionType polygonRegion =
-          otb::TransformPhysicalRegionToIndexRegion(itVector.Get()->GetPolygonExteriorRing()->GetBoundingRegion(),
-                                                    reader->GetOutput());
-
-      reader->GetOutput()->SetRequestedRegion(polygonRegion);
-      reader->GetOutput()->PropagateRequestedRegion();
-      reader->GetOutput()->UpdateOutputData();
-
-      typedef itk::ImageRegionConstIteratorWithIndex<ImageType> IteratorType;
-      IteratorType it(reader->GetOutput(), polygonRegion);
-      it.GoToBegin();
-      while (!it.IsAtEnd())
-        {
-        itk::ContinuousIndex<double, 2> point;
-        reader->GetOutput()->TransformIndexToPhysicalPoint(it.GetIndex(), point);
-        if (itVector.Get()->GetPolygonExteriorRing()->IsInside(point) && (randomGen->GetUniformVariate(0.0, 1.0))
-            < classesProb[itVector.Get()->GetFieldAsInt(classKey)])
-          {
-          classesSamplesNumber[itVector.Get()->GetFieldAsInt(classKey)] += 1;
-          int trainingClass = itVector.Get()->GetFieldAsInt(classKey);
-          trainingFile << trainingClass;
-          for (unsigned int i = 0; i < it.Get().Size(); i++)
-            {
-            // Careful, the numbering is 1..N in libsvm
-            trainingFile << " " << i + 1 << ":" << it.Get()[i];
-            }
-          trainingFile << "\n";
-          }
-        ++it;
-        }
+      // Careful, the numbering is 1..N in libsvm
+      trainingFile << " " << i + 1 << ":" << sampleIt.GetMeasurementVector()[i];
       }
-    ++itVector;
+    trainingFile << "\n";
+    ++sampleIt;
+    ++labelIt;
     }
-
-  std::cout << "1: " << classesSamplesNumber[1] << std::endl;
-  std::cout << "2: " << classesSamplesNumber[2] << std::endl;
-  std::cout << "3: " << classesSamplesNumber[3] << std::endl;
-  std::cout << "4: " << classesSamplesNumber[4] << std::endl;
-  std::cout << "5: " << classesSamplesNumber[5] << std::endl;
-
+  
   trainingFile.close();
-
-  return EXIT_SUCCESS;
+  
+   return EXIT_SUCCESS;
 }
