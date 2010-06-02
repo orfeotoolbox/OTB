@@ -61,17 +61,17 @@ public:
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   /** Make a DataObject of the correct type to used as the specified
-           * output.  Every ProcessObject subclass must be able to create a
-           * DataObject that can be used as a specified output. This method
-           * is automatically called when DataObject::DisconnectPipeline() is
-           * called.  DataObject::DisconnectPipeline, disconnects a data object
-           * from being an output of its current source.  When the data object
-           * is disconnected, the ProcessObject needs to construct a replacement
-           * output data object so that the ProcessObject is in a valid state.
-           * So DataObject::DisconnectPipeline eventually calls
-           * ProcessObject::MakeOutput. Note that MakeOutput always returns a
-           * SmartPointer to a DataObject. If a subclass of ImageSource has
-           * multiple outputs of different types, then that class must provide
+   * output.  Every ProcessObject subclass must be able to create a
+   * DataObject that can be used as a specified output. This method
+   * is automatically called when DataObject::DisconnectPipeline() is
+   * called.  DataObject::DisconnectPipeline, disconnects a data object
+   * from being an output of its current source.  When the data object
+   * is disconnected, the ProcessObject needs to construct a replacement
+   * output data object so that the ProcessObject is in a valid state.
+   * So DataObject::DisconnectPipeline eventually calls
+   * ProcessObject::MakeOutput. Note that MakeOutput always returns a
+   * SmartPointer to a DataObject. If a subclass of ImageSource has
+   * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
 
