@@ -79,6 +79,8 @@ public:
   itkSetMacro(MaxValidationSize, int);
   itkGetMacro(ValidationTrainingRatio, double);
   itkSetMacro(ValidationTrainingRatio, double);
+
+  itkGetMacro(NumberOfClasses, unsigned short);
   
   itkGetObjectMacro(TrainingListSample, ListSampleType);
   itkGetObjectMacro(TrainingListLabel, ListLabelType);
@@ -100,6 +102,8 @@ private:
   int    m_MaxTrainingSize;
   int    m_MaxValidationSize;
   double m_ValidationTrainingRatio;
+
+  unsigned short        m_NumberOfClasses;
   
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;

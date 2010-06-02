@@ -82,6 +82,8 @@ int otbListSampleGenerator(int argc, char* argv[])
   generator->Update();
   std::cout << generator << std::endl;
 
+  std::cout << "Number of classes: " << generator->GetNumberOfClasses() << std::endl;
+
   ListSampleGeneratorType::ListSamplePointerType samples = generator->GetTrainingListSample();
   ListSampleGeneratorType::ListLabelPointerType  labels  = generator->GetTrainingListLabel();
 

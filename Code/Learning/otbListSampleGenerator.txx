@@ -28,6 +28,7 @@ namespace otb
 template<class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>
 ::ListSampleGenerator() :
+  m_NumberOfClasses(2),
   m_MaxTrainingSize(-1), m_MaxValidationSize(-1), m_ValidationTrainingRatio(0.0)//FIXME not used yet
 {
   this->SetNumberOfRequiredInputs(2);
@@ -136,6 +137,8 @@ ListSampleGenerator<TImage,TVectorData>
     ++itVector;
     }
 
+  m_NumberOfClasses = classesSize.size();
+  
   double minSize = -1;
   for (std::map<int, double>::iterator itmap = classesSize.begin(); itmap != classesSize.end(); ++itmap)
     {
