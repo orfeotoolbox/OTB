@@ -23,7 +23,7 @@
 
 #include "siftfast.h"
 #include "itkContinuousIndex.h"
-#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
 
 namespace otb
 {
@@ -32,7 +32,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputPointSet>
 SiftFastImageFilter<TInputImage, TOutputPointSet>
-::SiftFastImageFilter()
+::SiftFastImageFilter() : m_ScalesNumber(1)
 {}
 
 template <class TInputImage, class TOutputPointSet>
@@ -47,21 +47,14 @@ SiftFastImageFilter<TInputImage, TOutputPointSet>
 
   typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
 
-  // Rescale data in the [0,1] range
-  typename RescalerType::Pointer rescaler = RescalerType::New();
-  rescaler->SetInput(inputPtr);
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(1);
-  rescaler->Update();
-
   SiftFastImage siftInputImage = CreateImage(size[1], size[0]);
-  itk::ImageRegionIterator<FloatImageType> inIt(rescaler->GetOutput(), rescaler->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<TInputImage> inIt(inputPtr, inputPtr->GetBufferedRegion());
 
   unsigned int index = 0;
 
   for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
     {
-    siftInputImage->pixels[index] = inIt.Get();
+    siftInputImage->pixels[index] = static_cast<float>(inIt.Get());
     ++index;
     }
 

@@ -1,5 +1,5 @@
 // exact C++ implementation of lowe's sift program
-// author: zerofrog(@gmail.com), Sep 2008
+// Copyright (C) zerofrog(@gmail.com), 2008-2009
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Lesser General Public License as published by
@@ -64,10 +64,10 @@ void SkipComments(FILE *fp)
 }
 
 // code from david lowe
-SiftFastImage ReadPGM(FILE *fp)
+Image ReadPGM(FILE *fp)
 {
     int char1, char2, width, height, max, c1, c2, c3, r, c;
-    SiftFastImage image, nextimage;
+    Image image, nextimage;
 
     char1 = fgetc(fp);
     char2 = fgetc(fp);
@@ -111,14 +111,14 @@ int main(int argc, char **argv)
      _setmode(_fileno(stdin),_O_BINARY);
 #endif
 
-    SiftFastImage image = ReadPGM(stdin);
+    Image image = ReadPGM(stdin);
     Keypoint keypts;
     float fproctime;
 
     cerr << "Finding keypoints (image " << image->cols << "x" << image->rows << ")..." << endl;
     {
         u32 basetime = timeGetTime();
-        keypts = GetKeypoints(image,3);
+        keypts = GetKeypoints(image);
         fproctime = (timeGetTime()-basetime)*0.001f;
     }
 
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
         for(int i = 0; i < 128; ++i) {
             int intdesc = (int)(key->descrip[i]*512.0f);
             assert( intdesc >= 0 );
-
+            
             if( intdesc > 255 )
                 intdesc = 255;
             cout << intdesc << " ";

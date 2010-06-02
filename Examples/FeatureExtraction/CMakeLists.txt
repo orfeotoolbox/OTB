@@ -323,6 +323,17 @@ ADD_TEST(feTeScaleInvariantFeatureImageFilterTest ${EXE_TESTS2}
 	1 10 0.5 0
 )
 
+
+ADD_TEST(feTeSIFTFastExampleTest ${EXE_TESTS2}
+  --compare-image ${TOL}
+   ${BASELINE}/ROISpot5SiftFast.png
+   ${TEMP}/ROISpot5SiftFast.png
+  SIFTFastExampleTest
+   ${INPUTDATA}/ROISpot5.png
+   ${TEMP}/ROISpot5SiftFast.png
+   3
+)
+
 # ------- CloudDetectionExampleTest----------
 
 ADD_TEST(feTeCloudDetectionExampleTest ${EXE_TESTS2}
