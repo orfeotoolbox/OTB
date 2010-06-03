@@ -675,6 +675,7 @@ unsigned int OGRIOHelper<TVectorData>
       }
     case FEATURE_POLYGON:
       {
+      
       //Build the ogrObject
       OGRPolygon *               ogrPolygon = new OGRPolygon();
       OGRLinearRing *            ogrExternalRing = new OGRLinearRing();
@@ -685,6 +686,7 @@ unsigned int OGRIOHelper<TVectorData>
       while (vIt != vertexList->End())
         {
         OGRPoint ogrPoint;
+	std::cout <<"OgrPoint " <<vIt.Value()[0] << ","<< vIt.Value()[1] << std::endl;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
@@ -753,7 +755,7 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multipoint.");
         }
-      ogrCollection = new OGRMultiPoint();
+      //ogrCollection = new OGRMultiPoint();
 
       OGRFeature *ogrFeature;
 
@@ -776,7 +778,9 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multiline.");
         }
-      ogrCollection = new OGRMultiLineString();
+      // Comment this line :  the ogrCollection has not to be
+      // recreated since it is created once when we process the node ROOT
+      //ogrCollection = new OGRMultiLineString();
 
       OGRFeature *ogrFeature;
 
@@ -788,8 +792,7 @@ unsigned int OGRIOHelper<TVectorData>
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
-
+        }      
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
@@ -799,7 +802,9 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multipolygon.");
         }
-      ogrCollection = new OGRMultiPolygon();
+      // Comment this line :  the ogrCollection has not to be
+      // recreated since it is created once when we process the node ROOT
+      //ogrCollection = new OGRMultiPolygon();
 
       OGRFeature *ogrFeature;
 
@@ -812,7 +817,6 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
@@ -822,7 +826,10 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating collection.");
         }
-      ogrCollection = new OGRMultiPoint();  //Why is is a multipoint?
+      // Comment this line :  the ogrCollection has not to be
+      // recreated since it is created once when we process the node ROOT
+      //ogrCollection = new OGRMultiPolygon();
+      
 
       OGRFeature *ogrFeature;
 
