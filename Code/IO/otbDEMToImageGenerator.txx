@@ -38,7 +38,7 @@ DEMToImageGenerator<TDEMImage>
   m_OutputOrigin[0] = 0;
   m_OutputOrigin[1] = 0;
 
-  // Value defined in the norm for points strm doesn't have information.
+  // Value defined in the norm for points SRTM doesn't have information.
   m_DefaultUnknownValue = static_cast<PixelType>(-32768);
 }
 
@@ -49,6 +49,13 @@ DEMToImageGenerator<TDEMImage>::
 SetDEMDirectoryPath(const char* DEMDirectory)
 {
   m_DEMHandler->OpenDEMDirectory(DEMDirectory);
+}
+template<class TDEMImage>
+void
+DEMToImageGenerator<TDEMImage>::
+SetDEMDirectoryPath(const std::string& DEMDirectory)
+{
+  this->SetDEMDirectoryPath(DEMDirectory.c_str());
 }
 
 // GenerateOutputInformation method

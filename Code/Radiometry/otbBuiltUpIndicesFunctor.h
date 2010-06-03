@@ -125,7 +125,7 @@ private:
 /** \class NDBI
  *  \brief This functor computes the Normalized Difference Built Up Index (NDBI)
  *
- *  [ ]
+ *  [Zha 2003]
  *
  *  \ingroup Functor
  * \ingroup Radiometry
@@ -162,7 +162,7 @@ protected:
 /** \class ISU
  *  \brief This functor computes the Index surfaces built (ISU)
  *
- *  [ ]
+ *  [Abdellaoui 1997 ]
  *
  *  \ingroup Functor
  * \ingroup Radiometry

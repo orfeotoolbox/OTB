@@ -19,7 +19,6 @@
 #define __otbSiftFastImageFilter_h
 
 #include "otbImageToPointSetFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
 
 namespace otb
@@ -29,7 +28,18 @@ namespace otb
  *  \brief This class extracts key points from an input image through a pyramidal decomposition
  *
  * This class implements the SIFT key point detector proposed by David G. Lowe in proceedings of International
- * Conference on Computer Vision, Corfu, september 1999.
+ * Conference on Computer Vision, Corfu, september 1999. The
+ * implementation used is provided by the external library libsiftfast
+ * (http://sourceforge.net/projects/libsift/),
+ * using the 1.2 release.
+ *
+ * The code has been slightly modified in order to allow the user to
+ * tune the number of scales used in pyramidal decomposition.
+ *
+ * Please note that OTB provides also a home-brewed version of the
+ * SIFT (\doxygen{otb}{ImageToSIFTKeyPointSetFilter}).
+ *
+ * \sa ImageToSIFTKeyPointSetFilter
  *
  * \example FeatureExtraction/SIFTFastExample.cxx
  */
@@ -64,9 +74,6 @@ public:
 
   typedef otb::Image<float, 2>                             FloatImageType;
   typedef std::vector<std::pair<OutputPointType, double> > OrientationVectorType;
-
-  // Used to rescale data in the [0,1] range
-  typedef itk::RescaleIntensityImageFilter<InputImageType, FloatImageType> RescalerType;
 
   itkSetMacro(ScalesNumber, unsigned int);
   itkGetMacro(ScalesNumber, unsigned int);

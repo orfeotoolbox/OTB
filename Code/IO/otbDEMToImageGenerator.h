@@ -92,6 +92,7 @@ public:
 
   /** Set the DEM directory. */
   virtual void SetDEMDirectoryPath(const char* DEMDirectory);
+  virtual void SetDEMDirectoryPath(const std::string& DEMDirectory);
 
 protected:
   DEMToImageGenerator();

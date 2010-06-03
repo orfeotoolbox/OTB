@@ -382,7 +382,7 @@ private:
 /** \class NDVI
  *  \brief This functor computes the Normalized Difference Vegetation Index (NDVI)
  *
- *  [Pearson et Miller, 1972]
+ *  [Rouse et al., 1973]
  *
  *  \ingroup Functor
  * \ingroup Radiometry
@@ -420,7 +420,7 @@ protected:
 /** \class RVI
  *  \brief This functor computes the Ratio Vegetation Index (RVI)
  *
- *  [Rouse et al., 1973]
+ *  [Pearson et Miller, 1972]
  *
  *  \ingroup Functor
  * \ingroup Radiometry
@@ -635,6 +635,127 @@ private:
 
 };
 
+
+/** \class WDVI
+ *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
+ *
+ *  [Clevers, 1988]
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ */
+template <class TInput1, class TInput2, class TOutput>
+class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "WDVI";
+  }
+
+  /// Constructor
+  WDVI() : m_S(0.4) {}
+  /// Desctructor
+  virtual ~WDVI() {}
+  // Operator on r and nir single pixel values
+/** Set/Get Slop of soil line */
+  void SetS(const double s)
+  {
+    m_S = s;
+  }
+  double GetS(void) const
+  {
+    return (m_S);
+  }
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+    double dr = static_cast<double>(r);
+    double dnir = static_cast<double>(nir);
+
+    return (dnir - m_S * dr);
+  }
+private:
+  /** Slope of soil line */
+  double m_S;
+};
+
+/** \class MSAVI
+ *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
+ *
+ *  [Qi et al., 1994]
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ */
+
+template <class TInput1, class TInput2, class TOutput>
+class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+{
+public:
+  /** Return the index name */
+  virtual std::string GetName() const
+  {
+    return "MSAVI";
+  }
+
+  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
+  typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
+  typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
+  MSAVI() : m_S(0.4)
+  {
+    m_WDVIfunctor.SetS(m_S);
+  }
+  virtual ~MSAVI() {}
+/** Set/Get Slop of soil line */
+  void SetS(const double s)
+  {
+    m_S = s;
+    m_WDVIfunctor.SetS(m_S);
+  }
+  double GetS(void) const
+  {
+    return (m_S);
+  }
+  NDVIFunctorType GetNDVI(void) const
+  {
+    return (m_NDVIfunctor);
+  }
+  WDVIFunctorType GetWDVI(void) const
+  {
+    return (m_WDVIfunctor);
+  }
+
+protected:
+  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
+  {
+    double dnir = static_cast<double>(nir);
+    double dr = static_cast<double>(r);
+
+    double dNDVI = this->GetNDVI() (r, nir);
+    double dWDVI = this->GetWDVI() (r, nir);
+    double dL = 1 - 2 * m_S * dNDVI * dWDVI;
+
+    double denominator = dnir + dr + dL;
+
+    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+      {
+      return static_cast<TOutput>(0.);
+      }
+
+    return (static_cast<TOutput>(((dnir - dr) * (1 + dL)) / denominator));
+  }
+
+private:
+  /** Slope of soil line */
+  double                m_S;
+  const NDVIFunctorType m_NDVIfunctor;
+  WDVIFunctorType       m_WDVIfunctor;
+
+};
+
+
 /** \class MSAVI2
  *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI2)
  *
@@ -718,124 +839,6 @@ protected:
       }
     return (static_cast<TOutput>((dnu * (1 - 0.25 * dnu) - (dr - 0.125)) / ddenominateur_GEMI));
   }
-
-};
-
-/** \class WDVI
- *  \brief This functor computes the Weighted Difference Vegetation Index (WDVI)
- *
- *  [Clevers, 1988]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- */
-template <class TInput1, class TInput2, class TOutput>
-class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
-{
-public:
-  /** Return the index name */
-  virtual std::string GetName() const
-  {
-    return "WDVI";
-  }
-
-  /// Constructor
-  WDVI() : m_S(0.4) {}
-  /// Desctructor
-  virtual ~WDVI() {}
-  // Operator on r and nir single pixel values
-/** Set/Get Slop of soil line */
-  void SetS(const double s)
-  {
-    m_S = s;
-  }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
-  {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-
-    return (dnir - m_S * dr);
-  }
-private:
-  /** Slope of soil line */
-  double m_S;
-};
-
-/** \class MSAVI
- *  \brief This functor computes the Modified Soil Adjusted Vegetation Index (MSAVI)
- *
- *  [Qi et al., 1994]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- */
-template <class TInput1, class TInput2, class TOutput>
-class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
-{
-public:
-  /** Return the index name */
-  virtual std::string GetName() const
-  {
-    return "MSAVI";
-  }
-
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
-  typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
-  MSAVI() : m_S(0.4)
-  {
-    m_WDVIfunctor.SetS(m_S);
-  }
-  virtual ~MSAVI() {}
-/** Set/Get Slop of soil line */
-  void SetS(const double s)
-  {
-    m_S = s;
-    m_WDVIfunctor.SetS(m_S);
-  }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-  NDVIFunctorType GetNDVI(void) const
-  {
-    return (m_NDVIfunctor);
-  }
-  WDVIFunctorType GetWDVI(void) const
-  {
-    return (m_WDVIfunctor);
-  }
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-
-    double dNDVI = this->GetNDVI() (r, nir);
-    double dWDVI = this->GetWDVI() (r, nir);
-    double dL = 1 - 2 * m_S * dNDVI * dWDVI;
-
-    double denominator = dnir + dr + dL;
-
-    if (vcl_abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
-      {
-      return static_cast<TOutput>(0.);
-      }
-
-    return (static_cast<TOutput>(((dnir - dr) * (1 + dL)) / denominator));
-  }
-
-private:
-  /** Slope of soil line */
-  double                m_S;
-  const NDVIFunctorType m_NDVIfunctor;
-  WDVIFunctorType       m_WDVIfunctor;
 
 };
 
@@ -1158,7 +1161,7 @@ private:
 };
 
 /** \class IPVI
- *  \brief This functor computes the Infrared Percentage VI (IPVI)
+ *  \brief This functor computes the Infrared Percentage Vegetation Index (IPVI)
  *
  *  [Crippen, 1990]
  *

@@ -4,6 +4,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND BUILD_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(EXAMPLEDATA ${OTB_DATA_ROOT}/Examples)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
@@ -410,6 +411,21 @@ ADD_TEST(leTuSVMCrossValidationCostFunctionNew ${LEARNING_TESTS4}
 ADD_TEST(leTuExhaustiveExponentialOptimizerNew ${LEARNING_TESTS4}
         otbExhaustiveExponentialOptimizerNew)
 
+ADD_TEST(leTvListSampleGenerator1 ${LEARNING_TESTS4}
+ --compare-ascii ${NOTOL}
+    ${BASELINE_FILES}/leTvListSampleGenerator1.txt
+    ${TEMP}/leTvListSampleGenerator1.txt
+        otbListSampleGenerator
+    ${EXAMPLEDATA}/qb_RoadExtract.tif
+    ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+    ${TEMP}/leTvListSampleGenerator1.txt
+    -1
+    -1
+    0
+)
+
+ADD_TEST(leTuConfusionMatrixCalculatorNew ${LEARNING_TESTS4} otbConfusionMatrixCalculatorNew)
+
 # A enrichir
 SET(BasicLearning_SRCS1
 otbLearningTests1.cxx
@@ -469,6 +485,8 @@ otbROIdataConversionNew.cxx
 otbROIdataConversion.cxx
 otbSVMCrossValidationCostFunctionNew.cxx
 otbExhaustiveExponentialOptimizerNew.cxx
+otbListSampleGenerator.cxx
+otbConfusionMatrixCalculatorTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbLearningTests1 "${BasicLearning_SRCS1}" "OTBLearning;OTBIO;OTBTesting")
