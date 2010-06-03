@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class ListSampleGenerator
- *  \brief TODO
+ *  \brief Produces a ListSample from a VectorImage and a VectorData
  *
  */
 template < class TImage, class TVectorData > 
@@ -81,6 +81,9 @@ public:
   itkSetMacro(ValidationTrainingRatio, double);
 
   itkGetMacro(NumberOfClasses, unsigned short);
+
+  itkGetStringMacro(ClassKey);
+  itkSetStringMacro(ClassKey);
   
   itkGetObjectMacro(TrainingListSample, ListSampleType);
   itkGetObjectMacro(TrainingListLabel, ListLabelType);
@@ -104,7 +107,8 @@ private:
   double m_ValidationTrainingRatio;
 
   unsigned short        m_NumberOfClasses;
-  
+  std::string           m_ClassKey;
+
   ListSamplePointerType m_TrainingListSample;
   ListLabelPointerType  m_TrainingListLabel;
   ListSamplePointerType m_ValidationListSample;

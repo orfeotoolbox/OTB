@@ -28,8 +28,11 @@ namespace otb
 template<class TImage, class TVectorData>
 ListSampleGenerator<TImage, TVectorData>
 ::ListSampleGenerator() :
-  m_NumberOfClasses(2),
-  m_MaxTrainingSize(-1), m_MaxValidationSize(-1), m_ValidationTrainingRatio(0.0)//FIXME not used yet
+  m_MaxTrainingSize(-1), 
+  m_MaxValidationSize(-1), 
+  m_ValidationTrainingRatio(0.0),//FIXME not used yet
+  m_NumberOfClasses(0),
+  m_ClassKey("Class")
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
@@ -111,8 +114,6 @@ void
 ListSampleGenerator<TImage,TVectorData>
 ::GenerateData()
 {
-  std::string classKey = "Class"; //FIXME switch to member
-  
   typename VectorDataType::ConstPointer vectorData = this->GetInputVectorData();
   std::cout << "******** Number of elements in the tree: " << vectorData->Size() << std::endl;
   
@@ -128,9 +129,9 @@ ListSampleGenerator<TImage,TVectorData>
     {
     if (itVector.Get()->IsPolygonFeature())
       {
-      classesSize[itVector.Get()->GetFieldAsInt(classKey)] += 
+      classesSize[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 
           itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.;// in km2
-      std::cout << itVector.Get()->GetFieldAsInt(classKey) << std::endl;
+      std::cout << itVector.Get()->GetFieldAsInt(m_ClassKey) << std::endl;
       std::cout << itVector.Get()->GetPolygonExteriorRing()->GetArea()/1000000.  
           << " km2" << std::endl;
       }
@@ -190,12 +191,11 @@ ListSampleGenerator<TImage,TVectorData>
         itk::ContinuousIndex<double,2 > point;
         image->TransformIndexToPhysicalPoint(it.GetIndex(), point);
         if ( itVector.Get()->GetPolygonExteriorRing()->IsInside(point)
-           && (randomGen->GetUniformVariate(0.0,1.0)) < classesProb[itVector.Get()->GetFieldAsInt(classKey)])
+           && (randomGen->GetUniformVariate(0.0,1.0)) < classesProb[itVector.Get()->GetFieldAsInt(m_ClassKey)])
           {
           m_TrainingListSample->PushBack(it.Get());
-          m_TrainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(classKey));
-//          std::cout << "Add sample: " << it.Get() << " in " <<  itVector.Get()->GetFieldAsInt(classKey) << std::endl;
-          classesSamplesNumber[itVector.Get()->GetFieldAsInt(classKey)] += 1;
+          m_TrainingListLabel->PushBack(itVector.Get()->GetFieldAsInt(m_ClassKey));
+          classesSamplesNumber[itVector.Get()->GetFieldAsInt(m_ClassKey)] += 1;
           }
         ++it;
         }
