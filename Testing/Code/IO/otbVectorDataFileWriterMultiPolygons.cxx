@@ -21,7 +21,7 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataFileWriterPolygons(int argc, char * argv[])
+int otbVectorDataFileWriterMutliPolygons(int argc, char * argv[])
 {
 
   typedef otb::VectorData<double, 2>                VectorDataType;
