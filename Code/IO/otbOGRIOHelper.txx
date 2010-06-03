@@ -686,6 +686,7 @@ unsigned int OGRIOHelper<TVectorData>
       while (vIt != vertexList->End())
         {
         OGRPoint ogrPoint;
+	std::cout <<"OgrPoint " <<vIt.Value()[0] << ","<< vIt.Value()[1] << std::endl;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
@@ -754,14 +755,15 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multipoint.");
         }
-      //ogrCollection = new OGRMultiPoint();
+      
+      OGRMultiPoint*  ogrMultiPoint= new OGRMultiPoint();
 
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
-      ogrFeature->SetGeometry(ogrCollection);
+      ogrFeature->SetGeometry(ogrMultiPoint);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
@@ -777,16 +779,16 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multiline.");
         }
-      // Comment this line :  the ogrCollection has not to be
-      // recreated since it is created once when we process the node ROOT
-      //ogrCollection = new OGRMultiLineString();
+
+      // Instanciate a new  ogrMultiLineString feature
+      OGRMultiLineString*  ogrMultiLineString= new OGRMultiLineString();
 
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
-      ogrFeature->SetGeometry(ogrCollection);
+      ogrFeature->SetGeometry(ogrMultiLineString);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
@@ -801,16 +803,16 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating multipolygon.");
         }
-      // Comment this line :  the ogrCollection has not to be
-      // recreated since it is created once when we process the node ROOT
-      //ogrCollection = new OGRMultiPolygon();
+      
+      // Instanciate a new multipolygon feature
+      OGRMultiPolygon* ogrMutliPolygon = new OGRMultiPolygon();
 
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
-      ogrFeature->SetGeometry(ogrCollection);
+      ogrFeature->SetGeometry(ogrMutliPolygon);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
@@ -825,17 +827,15 @@ unsigned int OGRIOHelper<TVectorData>
         {
         itkExceptionMacro(<< "Problem while creating collection.");
         }
-      // Comment this line :  the ogrCollection has not to be
-      // recreated since it is created once when we process the node ROOT
-      //ogrCollection = new OGRMultiPolygon();
-      
 
+      OGRGeometryCollection  ogrCollectionGeometry = new OGRGeometryCollection();
+      
       OGRFeature *ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
-      ogrFeature->SetGeometry(ogrCollection);
+      ogrFeature->SetGeometry(ogrCollectionGeometry);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
         {
