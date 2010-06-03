@@ -686,7 +686,6 @@ unsigned int OGRIOHelper<TVectorData>
       while (vIt != vertexList->End())
         {
         OGRPoint ogrPoint;
-	std::cout <<"OgrPoint " <<vIt.Value()[0] << ","<< vIt.Value()[1] << std::endl;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
