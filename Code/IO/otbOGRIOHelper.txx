@@ -828,7 +828,7 @@ unsigned int OGRIOHelper<TVectorData>
         itkExceptionMacro(<< "Problem while creating collection.");
         }
 
-      OGRGeometryCollection  ogrCollectionGeometry = new OGRGeometryCollection();
+      OGRGeometryCollection*  ogrCollectionGeometry = new OGRGeometryCollection();
       
       OGRFeature *ogrFeature;
 
