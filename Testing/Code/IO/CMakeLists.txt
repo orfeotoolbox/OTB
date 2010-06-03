@@ -1771,6 +1771,14 @@ ADD_TEST(ioTvVectorDataFileWriterPolygons ${IO_TESTS15}
     ${TEMP}/ioTvVectorDataFileWriterPolygonsOutput.shp
     )
 
+ADD_TEST(ioTvVectorDataFileWriterMultiPolygons ${IO_TESTS15}
+        --compare-ogr  ${EPSILON_9}
+            ${BASELINE_FILES}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
+            ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
+        otbVectorDataFileWriterMultiPolygons
+    ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
+    )
+
 
 IF(OTB_DATA_USE_LARGEINPUT)
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15}
@@ -2477,6 +2485,7 @@ otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
 otbVectorDataFileWriter.cxx
 otbVectorDataFileWriterPolygons.cxx
+otbVectorDataFileWriterMultiPolygons.cxx
 otbVectorDataFileReaderWriter.cxx
 otbVectorDataFileGeoReaderWriter.cxx
 otbOGRVectorDataIONew.cxx
