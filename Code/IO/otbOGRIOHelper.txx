@@ -698,6 +698,8 @@ unsigned int OGRIOHelper<TVectorData>
         ++vIt;
         }
       ogrPolygon->addRing(ogrExternalRing);
+      // Close the polygon
+      ogrPolygon->closeRings();
       delete ogrExternalRing;
 
       // Retrieving internal rings as well
