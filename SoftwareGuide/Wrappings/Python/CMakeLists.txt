@@ -20,7 +20,7 @@ ADD_CUSTOM_TARGET(SoftwareGuideWrapping  ALL echo)
 #
 #FILE( GLOB_RECURSE OTB_EXAMPLES_SRCS  ${OTB_SOURCE_DIR}/Examples/*.cxx)
 
-MESSAGE("In python before ")
+#MESSAGE("In python before ")
 
 SET(OTB_PYTHON_EXAMPLES_SRCS
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/HelloWorld.py
@@ -32,7 +32,7 @@ SET(OTB_PYTHON_EXAMPLES_SRCS
   ${OTB-Wrapping_SOURCE_DIR}/Languages/Python/Tutorials/OrthoFusion.py
 )
 
-MESSAGE("In python after ")
+#MESSAGE("In python after ")
 
 #
 # Parse Latex file for latex includes
