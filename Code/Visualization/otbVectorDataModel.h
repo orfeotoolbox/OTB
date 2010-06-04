@@ -47,6 +47,7 @@ public:
   typedef otb::VectorData<double, 2>   VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef VectorDataType::PolygonType  PolygonType;
+  typedef VectorDataType::LineType     LineType;
   typedef PolygonType::VertexType      VertexType;
 
   /** Runtime information */
@@ -59,7 +60,7 @@ public:
   void Update(void);
 
   /** Set/Get the node type used */
-  itkSetMacro(CurrentNodeType, NodeType);
+  itkSetMacro(CurrentNodeType,NodeType);
   itkGetMacro(CurrentNodeType, NodeType);
 
   /** Return a pointer to the vector data */

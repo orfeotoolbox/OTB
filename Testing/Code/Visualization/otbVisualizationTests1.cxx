@@ -70,4 +70,5 @@ void RegisterTests()
   REGISTER_TEST(otbSplittedWidgetManagerNew);
   REGISTER_TEST(otbVerticalAsymptoteCurveNew);
   REGISTER_TEST(otbVectorDataModelNew);
+  REGISTER_TEST(otbVectorDataModelTest);
 }

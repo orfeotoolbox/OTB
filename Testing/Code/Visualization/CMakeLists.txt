@@ -342,10 +342,17 @@ ADD_TEST(vrTuVerticalAsymptoteCurveNew ${VISUREFAC_TESTS1}
 otbVerticalAsymptoteCurveNew
 )
 
-#---------- otb::VerticalAsymptote --------
+#---------- otb::VectorDataModel ----------
 ADD_TEST(vrTuVectorDataModelNew ${VISUREFAC_TESTS1}
 otbVectorDataModelNew
 )
+
+ADD_TEST(vrTvVectorDataModelTest ${VISUREFAC_TESTS1}
+otbVectorDataModelTest
+${LARGEINPUTDATA}/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+200 500 200 0
+)
+
 
 # Testing srcs
 SET(Visualization_SRCS1
@@ -395,6 +402,7 @@ otbPackedWidgetManagerNew.cxx
 otbSplittedWidgetManagerNew.cxx
 otbVerticalAsymptoteCurveNew.cxx
 otbVectorDataModelNew.cxx
+otbVectorDataModelTest.cxx
 )
 
 OTB_ADD_EXECUTABLE(otbVisualizationTests1 "${Visualization_SRCS1}" "OTBVisualization;OTBIO;OTBTesting")

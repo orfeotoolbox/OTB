@@ -65,22 +65,34 @@ public:
   {
     if (m_View.IsNotNull() && m_Model.IsNotNull() && this->GetIsActive())
       {
+      typename ViewType::ImageWidgetType::Pointer sourceWidget = NULL;
+
+      if(widgetId == m_View->GetFullWidget()->GetIdentifier())
+        {
+        sourceWidget = m_View->GetFullWidget();
+        }
+      else if(widgetId == m_View->GetZoomWidget()->GetIdentifier())
+        {
+        sourceWidget = m_View->GetZoomWidget();
+        }
+
+
       //Left click
-      if (widgetId == m_View->GetFullWidget()->GetIdentifier() && event
-          == FL_PUSH && Fl::event_button() == 1)
+      if (sourceWidget
+          && event == FL_PUSH && Fl::event_button() == 1)
         {
         otbMsgDevMacro(
           << "VectorDataActionHandler::HandleWidgetEvent(): left click handling (" << widgetId << ", " << event << ")");
 
         // Get the clicked index
         typename ViewType::ImageWidgetType::PointType screenPoint, imagePoint;
-        screenPoint = m_View->GetFullWidget()->GetMousePosition();
+        screenPoint = sourceWidget->GetMousePosition();
 
         //FIXME: check if the index is inside the widget
 
         // Transform to image point
         imagePoint
-          = m_View->GetFullWidget()->GetScreenToImageTransform()->TransformPoint(
+          = sourceWidget->GetScreenToImageTransform()->TransformPoint(
           screenPoint);
 
         // Transform to index
@@ -99,8 +111,8 @@ public:
         return true;
         }
       //Right click
-      if (widgetId == m_View->GetFullWidget()->GetIdentifier() && event
-          == FL_PUSH && Fl::event_button() == 3)
+      if (sourceWidget
+          && event == FL_PUSH && Fl::event_button() == 3)
         {
         otbMsgDevMacro(
           << "VectorDataActionHandler::HandleWidgetEvent(): right click handling (" << widgetId << ", " << event << ")");
@@ -123,6 +135,29 @@ public:
           return true;
           break;
           }
+        case FL_F + 1:
+          {
+          m_Model->SetCurrentNodeType(FEATURE_POINT);
+          otbMsgDevMacro(
+              << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to point");
+          break;
+          }
+        case FL_F + 2:
+          {
+          m_Model->SetCurrentNodeType(FEATURE_LINE);
+          otbMsgDevMacro(
+              << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to line");
+          break;
+          }
+        case FL_F + 3:
+          {
+          m_Model->SetCurrentNodeType(FEATURE_POLYGON);
+          otbMsgDevMacro(
+              << "VectorDataActionHandler::HandleWidgetEvent() : changing node type to polygon");
+          break;
+          }
+        default:
+          break;
           }
         }
 

@@ -41,6 +41,12 @@ void VectorDataModel::Update(void)
 
 void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 {
+  // Check if current node type changed, and if so, close current geometry first
+  if(m_CurrentGeometry.IsNotNull() && m_CurrentNodeType != m_CurrentGeometry->GetNodeType())
+    {
+    this->EndGeometry();
+    }
+
   if  (m_CurrentNodeType == FEATURE_POINT)
     {
     otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating and adding new point");
@@ -74,6 +80,21 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
     otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << vertex);
     m_CurrentGeometry->GetPolygonExteriorRing()->AddVertex(vertex);
     }
+  else if (m_CurrentNodeType == FEATURE_LINE)
+    {
+    if(m_CurrentGeometry.IsNull())
+      {
+      otbMsgDevMacro(<< "VectorDataModel::AddPointToGeometry: Creating new line");
+      m_CurrentGeometry = DataNodeType::New();
+      m_CurrentGeometry->SetNodeId("FEATURE_LINE");
+      m_CurrentGeometry->SetNodeType(FEATURE_LINE);
+      LineType::Pointer line = LineType::New();
+      m_CurrentGeometry->SetLine(line);
+      m_VectorData->GetDataTree()->Add(m_CurrentGeometry,m_CurrentRootNode);
+      }
+    otbMsgDevMacro(<< "VectorDataModel::AddPoint: Adding point " << vertex);
+    m_CurrentGeometry->GetLine()->AddVertex(vertex);
+    }
   else
     {
     itkExceptionMacro(<< "Node type not (yet) supported: " << m_CurrentNodeType);
@@ -83,11 +104,17 @@ void VectorDataModel::AddPointToGeometry(VertexType& vertex)
 
 void VectorDataModel::EndGeometry(void)
 {
-  if  (m_CurrentNodeType == FEATURE_POINT)
+  // Avoid multiple endings
+  if(!m_CurrentGeometry)
+    {
+    return;
+    }
+
+  if  (m_CurrentGeometry->GetNodeType() == FEATURE_POINT)
     {
     otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Point don't need the geometry to be ended");
     }
-  else if (m_CurrentNodeType == FEATURE_POLYGON)
+  else if (m_CurrentGeometry->GetNodeType() == FEATURE_POLYGON)
     {
     if (m_CurrentGeometry->GetPolygonExteriorRing()->GetVertexList()->Size()
         <= 2)
@@ -95,6 +122,17 @@ void VectorDataModel::EndGeometry(void)
       itkExceptionMacro(<< "Polygon must have at least 3 points");
       }
     otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Ending polygon and adding to vector data");
+
+    m_CurrentGeometry = NULL;
+    }
+  else if (m_CurrentGeometry->GetNodeType() == FEATURE_LINE)
+    {
+    if (m_CurrentGeometry->GetLine()->GetVertexList()->Size()
+        < 2)
+      {
+      itkExceptionMacro(<< "Line must have at least 2 points");
+      }
+    otbMsgDevMacro(<< "VectorDataModel::EndGeometry: Ending line and adding to vector data");
 
     m_CurrentGeometry = NULL;
     }
@@ -142,6 +180,8 @@ void VectorDataModel::DeleteGeometry(void)
 
       currentRootNode->GetChildrenList().pop_back();
       }
+    // Clear current geometry as well
+    m_CurrentGeometry = NULL;
     }
   this->Modified();
   this->Update();
