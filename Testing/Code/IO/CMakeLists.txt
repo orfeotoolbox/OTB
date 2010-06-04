@@ -1810,7 +1810,7 @@ ADD_TEST(ioTvVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
 	)
 
 ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
-        --compare-ogr  ${EPSILON_9}
+        --compare-ascii  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
             ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput.kml
         otbVectorDataFileGeoReaderWriter
@@ -1819,7 +1819,7 @@ ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter ${IO_TESTS15}
 	)
 
 ADD_TEST(ioTvKMLVectorDataFileGeoReaderWriter2 ${IO_TESTS15}
-        --compare-ogr  ${EPSILON_9}
+        --compare-ascii  ${EPSILON_9}
             ${BASELINE_FILES}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
             ${TEMP}/ioTvKMLVectorDataFileGeoReaderWriterOutput2.kml
         otbVectorDataFileGeoReaderWriter
