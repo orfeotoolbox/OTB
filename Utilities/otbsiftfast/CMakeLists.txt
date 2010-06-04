@@ -38,6 +38,32 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 include(CheckCXXSourceRuns)
 
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
+  # TRY  COMPILE libsiftfast.cpp (depend of gcc version)
+    SET(IS_SIFTFAST_COMPILE 0)
+    TRY_COMPILE(IS_SIFTFAST_COMPILE
+              ${CMAKE_CURRENT_BINARY_DIR}
+              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              OUTPUT_VARIABLE OUTPUT)
+    IF(IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp -- yes.")
+    ELSE(IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp -- no.")
+        TRY_COMPILE(IS_SIFTFAST_COMPILE2
+              ${CMAKE_CURRENT_BINARY_DIR}
+              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              COMPILE_DEFINITIONS -DOTB_DISABLE_FAST_FUNCTIONS
+              OUTPUT_VARIABLE OUTPUT)
+        IF(IS_SIFTFAST_COMPILE2)
+            MESSAGE(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- yes.")
+        ELSE(IS_SIFTFAST_COMPILE2)
+            MESSAGE(STATUS "Try to compile libsiftfast.cpp with disabling fast functions (add CFLAGS -DOTB_DISABLE_FAST_FUNCTIONS) -- no.")
+            MESSAGE(FATAL_ERROR "Impossible to compile libsiftfast. Contact OTB development team")
+        ENDIF(IS_SIFTFAST_COMPILE2)
+        SET(OTB_DISABLE_FAST_FUNCTIONS_VALUE 1)
+    ELSE(NOT IS_SIFTFAST_COMPILE)
+        MESSAGE(STATUS "Try to compile libsiftfast.cpp done.")
+    ENDIF(IS_SIFTFAST_COMPILE)
+
   set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
   add_definitions(" -Wall -fPIC ")
 
