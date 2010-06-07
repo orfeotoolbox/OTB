@@ -19,13 +19,11 @@
 #include "itkListSample.h"
 #include "otbConfusionMatrixCalculator.h"
 
-
-
 int otbConfusionMatrixCalculatorNew(int argc, char* argv[])
 {
 
-  typedef itk::FixedArray<int, 1>                 LabelType;
-  typedef itk::Statistics::ListSample<LabelType>  ListLabelType;
+  typedef itk::FixedArray<int, 1>                         LabelType;
+  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
   typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
@@ -41,8 +39,8 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                 LabelType;
-  typedef itk::Statistics::ListSample<LabelType>  ListLabelType;
+  typedef itk::FixedArray<int, 1>                         LabelType;
+  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
   typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
@@ -75,8 +73,8 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                 LabelType;
-  typedef itk::Statistics::ListSample<LabelType>  ListLabelType;
+  typedef itk::FixedArray<int, 1>                         LabelType;
+  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
   typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
@@ -159,9 +157,9 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
       for(int j=0; j<nbClasses; j++)
 	{
 	double goodValue = 0.0;
-	if(i==j)
-	  goodValue = nbSamples/nbClasses;
-	if( confmat(i,j)!= goodValue)
+        if(i==j)
+          goodValue = nbSamples/nbClasses;
+        if( confmat(i,j)!= goodValue )
 	  totalError+=confmat(i,j);
 	}
 
