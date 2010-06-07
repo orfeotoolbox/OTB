@@ -117,8 +117,8 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
     }
-  typedef itk::FixedArray<int, 1>                 LabelType;
-  typedef itk::Statistics::ListSample<LabelType>  ListLabelType;
+  typedef itk::FixedArray<int, 1>                         LabelType;
+  typedef itk::Statistics::ListSample<LabelType>          ListLabelType;
   typedef otb::ConfusionMatrixCalculator< ListLabelType > CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
@@ -159,8 +159,8 @@ int otbConfusionMatrixCalculatorUpdate(int argc, char* argv[])
 	double goodValue = 0.0;
         if(i==j)
           goodValue = nbSamples/nbClasses;
-        if( confmat(i,j)!= goodValue )
-	  totalError+=confmat(i,j);
+        if( confmat( i,j )!= goodValue )
+	  totalError+=confmat( i,j );
 	}
 
   if( totalError > 0.001 )

@@ -60,7 +60,7 @@ ConfusionMatrixCalculator<TListLabel>
   if( m_ReferenceLabels->Size() != m_ProducedLabels->Size() )
     {
     otbMsgDebugMacro(<< "refLabels size = " << m_ReferenceLabels->Size() <<
-		     " / proLabels size = " << m_ProducedLabels->Size());
+                        " / proLabels size = " << m_ProducedLabels->Size());
         throw itk::ExceptionObject(__FILE__, __LINE__, "ListSample size missmatch", ITK_LOCATION);
     }
 
@@ -95,16 +95,13 @@ ConfusionMatrixCalculator<TListLabel>
     int refPos = m_MapOfClasses[refLabel];
     int prodPos = m_MapOfClasses[prodLabel];
 
-    m_ConfusionMatrix(refPos,prodPos)+=1;
+    m_ConfusionMatrix( refPos,prodPos )+=1;
 
     ++refIterator;
     ++prodIterator;
 
     }
   
-
-
-
 }
 
 
